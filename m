@@ -1,168 +1,135 @@
-Return-Path: <linux-kselftest+bounces-8721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF9E68AF5E0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 19:57:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A8C8AF621
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 20:02:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6807A1F25111
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 17:57:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 380171C23346
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 18:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9814813E02B;
-	Tue, 23 Apr 2024 17:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE307144315;
+	Tue, 23 Apr 2024 17:59:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtH+ihZm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YIH3ZZDb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4E113D88A;
-	Tue, 23 Apr 2024 17:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB87143891;
+	Tue, 23 Apr 2024 17:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713895068; cv=none; b=KjpU0Oq/4oOP3lM7pcxI9EkiDmsuPDxGmxeNoH/45R2hjtOwrXLdM/5PeqnvGcWmmL4Ux+fuP5ibB6/NB4azivJM6tFaGJa0ftYG4p22cQ/goXxQcDYMfwPArWZeCIe2phcVFwd5oENOyPXHnUwAFHaOPCTTRIzNtgx31t1M89s=
+	t=1713895172; cv=none; b=VjUdEnxZN0hAiDLL411OEiyJ+T0uTkhr6OrSpF52o1iAU4i/07OBLxEq0ZmAX8OYkmapWOXwDFriYLhu526B4hO27ojEtKX0Rj483Cr99DW63h88hzo9AD0NkdetHDv76naiS4VPawLzGgNid7y3HbQ/9IzhkUBTGKzHj9mp9xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713895068; c=relaxed/simple;
-	bh=ukjuO26jgon0wpjky2t60XqXUoz2/Ht6XKoq7YcOQhM=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=c5J00vk9h0C++Em6KbGIaNWb0KLC+2xXe9hjGdSgwuVGIk9DKSKXVkWP3NngTNWfAERrBVvzz0dz/PtkiPseO3bvrTY68QV/OHhwBjFao7PT70K5YziCXufCPtQ5fSGWCuf4GInxFWX2dJeT575RWx5XLAtltA7tvM6t6IjZrvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QtH+ihZm; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-437b3f256easo29551791cf.0;
-        Tue, 23 Apr 2024 10:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713895066; x=1714499866; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lCq/PCbFgz4O8/YgzTB5xOi6bKv32RP1D/qh+aPHEgQ=;
-        b=QtH+ihZmx/geoRnRG2WZl4B8lH/y2tku1ePtK/cWE+RqfsLl4ynPJ0vfRHiLCOjHpg
-         91n4mfnbHDChBI6XwQDMlcRhmTQzaKrXEIHd/I9WJSJC+zJlxDI8qsXHqddbNDHRJryD
-         13lKGyLUFS9YYknqR3sdjrHnvDtL1TUb3Bmmoz35Aen9Mw4C8H1CsIbCE/xxKuf1vLnz
-         asighUw8qaqpQcn2BGz4oIPytgQNB/y/t5zsRpeKPWMm1Hr1COb4mvweYrOw6e6dtrbz
-         Xqblt+RvY5ngH53uSYoTWP4sJlJfSDori04wtrhMKHF2aL67poN7/sr5aRwzQr7NLAvG
-         8QyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713895066; x=1714499866;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lCq/PCbFgz4O8/YgzTB5xOi6bKv32RP1D/qh+aPHEgQ=;
-        b=lgbraJ0Ge5AcTvRUECk2ogwRVZ+Otdq5VbUZLQ7JPz22ScmJlVSVkAG+xf80idnZhI
-         tefVVd0eozvElVaKV0fXuQx2otB5PUOzLHgRmbLG/KGk9yUuW0GgE9vvPb6s13uQR/4N
-         ktfpm/nZhUDYygWt8J+v7dkbWsybOKZreOHN/Z8HEZIOXjMKL64uAqrHI9fCvU7krTP3
-         ggpLpYungITrLMi1ecqsRI5pw8IUMrLNLtuRgLfE650tCYSLmmZP1MkhnZppGZDDBQdL
-         m43evqfBp6U+6DKzNRZ1vG8LNh+Vn1pUIbGtqKD6gsIw81elTu8NHIvNbNVWKvxewgNI
-         cTtg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbPqKOc/56buMNPMGQfLy75DcpuXeCRQ27gb6JyI0d8YonmECWui7w7vIXaYY6zA97cEM0I8m9ln78QkwAu3Lic19WBGMU88YBZRvOIcDz
-X-Gm-Message-State: AOJu0Yz7/px2GKaZd5vlOaFKghEgcGM2FxGqVVFyFomUAyhwMmG51uLA
-	iCFZ+0cs4FOUcjL9FsHOV1JSZo22fDTLLjawl5lJ5c9NzAUV5DtPZ1NfeQ==
-X-Google-Smtp-Source: AGHT+IFiU8fYAdqThQp32rJsLeYsD7PbA91dCOHnspJFmZeFRqsc4Y3S+fuBk/ZIIA3mntoGDzkmXQ==
-X-Received: by 2002:a05:622a:1a9b:b0:439:f37c:18c4 with SMTP id s27-20020a05622a1a9b00b00439f37c18c4mr199988qtc.17.1713895065811;
-        Tue, 23 Apr 2024 10:57:45 -0700 (PDT)
-Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
-        by smtp.gmail.com with ESMTPSA id jt56-20020a05622aa03800b00434ec509ce9sm5404545qtb.46.2024.04.23.10.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 10:57:45 -0700 (PDT)
-Date: Tue, 23 Apr 2024 13:57:45 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- petrm@nvidia.com, 
- linux-kselftest@vger.kernel.org, 
- willemdebruijn.kernel@gmail.com, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <6627f699278fe_1759e9294e3@willemb.c.googlers.com.notmuch>
-In-Reply-To: <662526f58a70c_1dff9929430@willemb.c.googlers.com.notmuch>
-References: <20240420025237.3309296-1-kuba@kernel.org>
- <662526f58a70c_1dff9929430@willemb.c.googlers.com.notmuch>
-Subject: Re: [PATCH net-next v5 0/7] selftests: drv-net: support testing with
- a remote system
+	s=arc-20240116; t=1713895172; c=relaxed/simple;
+	bh=VBa5Uoa7nnDAfK4MeWFM8DIP6qDVEtvWS57pRdVdN+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lETkiAob8eUdzExJL2qYu1yFAX+DhitwG3OL1H75TpNI+wDqNCswCAn2fW/i1JtCogRo0XvwgLt0rN+UjQ8WqpCCC48ZnUeqP6TBgC7/oL86S49Io1g0WfP+zir7szuhlBp/8NMNGmiGNU0Q6v8trbqOtqw7R08/bZW0vTE9e/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YIH3ZZDb; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713895171; x=1745431171;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VBa5Uoa7nnDAfK4MeWFM8DIP6qDVEtvWS57pRdVdN+U=;
+  b=YIH3ZZDbtUqDnTzkpGwzL2jScsL9pFgiXlTui11QQOnXS37gga7Z56D7
+   vQUO3KOZ30ovzgpJejhlJ7nCmR9wND2w5GvXjiLNUjimAQerceqKpxYkT
+   EMfv5vIQWEQBbnu1O+G81Rj+XwVCHJ4fTtM1y7mVjTGynMrRshwbFw44h
+   gSvr56D6vXPcgWNxHqgAnJAZp9WXxwniQzv8z9iO3ENLO/+uCkMsHowMD
+   ASrKfXjSvrNeQnHSTu+mD3JEJA1qk37CJbWc4LANAcAv0yuYHH2LkgeQy
+   npT6bs05PmW8MIbXVcgecTtA1nKQYNHZm7sG+2R9QmCk7PFuq9jptD2Ee
+   A==;
+X-CSE-ConnectionGUID: ztWXMs/FRLS5/mSiksbcqg==
+X-CSE-MsgGUID: /xIv8WtpRoWcM3LfuuKBeg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9370605"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="9370605"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 10:59:23 -0700
+X-CSE-ConnectionGUID: 88MXJqjRTQSFVr9BMJbdpg==
+X-CSE-MsgGUID: 771S65yCQu2CZpw3IpeGFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24895532"
+Received: from soc-cp83kr3.jf.intel.com (HELO [10.24.10.60]) ([10.24.10.60])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 10:59:22 -0700
+Message-ID: <cdc6c880-c666-4ff2-99f3-56c6b4f7576d@intel.com>
+Date: Tue, 23 Apr 2024 10:59:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] KVM: selftests: Add KVM/PV clock selftest to prove
+ timer drift correction
+To: David Woodhouse <dwmw2@infradead.org>, Jack Allister
+ <jalliste@amazon.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240408220705.7637-1-jalliste@amazon.com>
+ <20240408220705.7637-3-jalliste@amazon.com>
+ <3664e8ec-1fa1-48c0-a80d-546b7f6cd671@intel.com>
+ <17F1A2E9-6BAD-40E7-ACDD-B110CFC124B3@infradead.org>
+ <65FF4D51-05A8-42E0-9D07-6E42913CC75E@infradead.org>
+ <6dca783b-6532-4fa7-9e04-1c0a382a00b0@intel.com>
+ <c863ffcfd4edda9a1a46e3351766a655c5523f7d.camel@infradead.org>
+ <71260288-3666-4419-8283-6565e91aaba4@intel.com>
+ <06864883c53cc4042e1939c04ecbd5ef0f8acf3b.camel@infradead.org>
+Content-Language: en-US
+From: "Chen, Zide" <zide.chen@intel.com>
+In-Reply-To: <06864883c53cc4042e1939c04ecbd5ef0f8acf3b.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > Hi!
-> > 
-> > Implement support for tests which require access to a remote system /
-> > endpoint which can generate traffic.
-> > This series concludes the "groundwork" for upstream driver tests.
-> > 
-> > I wanted to support the three models which came up in discussions:
-> >  - SW testing with netdevsim
-> >  - "local" testing with two ports on the same system in a loopback
-> >  - "remote" testing via SSH
-> > so there is a tiny bit of an abstraction which wraps up how "remote"
-> > commands are executed. Otherwise hopefully there's nothing surprising.
-> > 
-> > I'm only adding a ping test. I had a bigger one written but I was
-> > worried we'll get into discussing the details of the test itself
-> > and how I chose to hack up netdevsim, instead of the test infra...
-> > So that test will be a follow up :)
-> > 
-> > v5:
-> >  - fix rand port generation, and wrap it in a helper in case
-> >    the random thing proves to be flaky
-> >  - reuseaddr
-> >  - explicitly select the address family
-> > v4: https://lore.kernel.org/all/20240418233844.2762396-1-kuba@kernel.org
-> >  - improve coding style of patch 5
-> >  - switch from netcat to socat (patch 6)
-> >  - support exit_wait for bkg() in context manager
-> >  - add require_XYZ() helpers (patch 7)
-> >  - increase timeouts a little (1,3 -> 5 sec)
-> > v3: https://lore.kernel.org/all/20240417231146.2435572-1-kuba@kernel.org
-> >  - first two patches are new
-> >  - make Remote::cmd() return Popen() object (patch 3)
-> >  - always operate on absolute paths (patch 3)
-> >  - last two patches are new
-> > v2: https://lore.kernel.org/all/20240416004556.1618804-1-kuba@kernel.org
-> >  - rename endpoint -> remote
-> >  - use 2001:db8:: v6 prefix
-> >  - add a note about persistent SSH connections
-> >  - add the kernel config
-> > v1: https://lore.kernel.org/all/20240412233705.1066444-1-kuba@kernel.org
-> > 
-> > Jakub Kicinski (7):
-> >   selftests: drv-net: define endpoint structures
-> >   selftests: drv-net: factor out parsing of the env
-> >   selftests: drv-net: construct environment for running tests which
-> >     require an endpoint
-> >   selftests: drv-net: add a trivial ping test
-> >   selftests: net: support matching cases by name prefix
-> >   selftests: drv-net: add a TCP ping test case (and useful helpers)
-> >   selftests: drv-net: add require_XYZ() helpers for validating env
+
+
+On 4/23/2024 12:49 AM, David Woodhouse wrote:
+>> If I restored the KVM_REQ_GLOBAL_CLOCK_UPDATE request from
+>> kvm_arch_vcpu_load(), the selftest works for me, and I ran the test for
+>> 1000+ iterations, w/ or w/o TSC scaling, the TEST_ASSERT(delta_corrected
+>>  <= ±1) never got hit. This is awesome!
+>>
+>> However, without KVM_REQ_GLOBAL_CLOCK_UPDATE, it still fails on creating
+>> a VM. Maybe the init sequence sill needs some rework.
 > 
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> That one confuses me. The crash is actually in debugfs, as it's
+> registering the per-vm or per-vcpu stats. I can't imagine *how* that's
+> occurring. Or see why the availability of TSC scaling would cause it to
+> show up for you and not me. Can I have your .config please?
+> 
+> First thought would be that there's some change in the KVM structures
+> and you have some stale object files using the old struct, but then I
+> realise I forgot to actually *remove* the now-unused
+> kvmclock_update_work from x86's struct kvm_arch anyway.
+> 
+> I'll try to reproduce, as I think I want to *know* what's going on
+> here, even if I am going to drop that patch as mentioned in 
+> https://lore.kernel.org/kvm/a6723ac9e0169839cb33e8022a47c2de213866ac.camel@infradead.org
+> 
+> Are you able to load that vmlinux in gdb and
+> (gdb) list *start_creating+0x80
+> (gdb) list *kvm_create_vm_debugfs+0x28b
+> 
+> Thanks again.
 
-Too late, but 
+My apologies, it turns out the KVM_REQ_GLOBAL_CLOCK_UPDATE is not
+needed. Today I can't reproduce the issue after removing it.  Yesterday
+I thought it may miss something related to pfncache.
 
-Tested-by: Willem de Bruijn <willemb@google.com>
-
-I tried this yesterday on a pair of Google cloud instances. In
-anticipation of converting some of my tests, like csum to this.
-
-Only possible non-obvious observation is that some kselftests expect
-as root, and the ssh remote logic extends that to expecting ssh
-root access to the remote host.
-
-Would it make sense to explicitly add sudo for all privileged
-operations, to allow for non-root ssh and scp?
-
+To be clear, with the above mentioned change to
+kvm_scale_tsc(master_tsc_scaling_ratio), the selftest runs reliably
+regardless TSC scaling is enabled or not.
 
