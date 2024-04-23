@@ -1,424 +1,323 @@
-Return-Path: <linux-kselftest+bounces-8737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66D9C8AFC96
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 01:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AAB58AFCE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 01:50:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 608EEB23662
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 23:29:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A906B24A7C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 23:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC236143886;
-	Tue, 23 Apr 2024 23:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997C854645;
+	Tue, 23 Apr 2024 23:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iGdBF4WA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e5cdYMNi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7DD54668
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 23:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2365537F1
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 23:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713914876; cv=none; b=jK7GMhfT0kDIGE8KA8josCQ1C0cc6wRNPw3Z2GxFDVJ34hz6tXMbXzzXjaSpd9avAnQb4IQR25R1Xlob4gHVL3n4aYBZRF4ywhsYIURtzcpeRCcpWZxduyxXd+b83zyyZOLVWRfNvuj1EcslpPklxZE1vxbvUS9gs3PhpwYqcyE=
+	t=1713916223; cv=none; b=jF6L0jreL4dMAqj4V3dyhE6ULit6gfG+Zik9VYQzqqzafydXS7/T6tLMm9zR+uIukUgeJ5vAkdNAm1cG9H/TOvyVjqg1Bm4k+fORWvjgU/CamXrf4NSTIdiUNZKMhSejerLgHjb6d9CNR7059JDolCwFgycYg8ae/8wB72jg6MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713914876; c=relaxed/simple;
-	bh=O+d59qShzTvBafQqHxGHCWx9WOV1oznH7Tjy6QhzJ58=;
+	s=arc-20240116; t=1713916223; c=relaxed/simple;
+	bh=I2QIzgpb/mSP4CG+9bGvMJ9ef//nb7Nd1NdK/yAqP+o=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rlIxRtxijiBKpHISqArjjBkJnD31TAPcoViupwGeuOgRWACtsthwiLVCRr84zekhWf511o+sNg6Z1H51LHTxq/ErWfq4EiEzR8QRzik2ISQ3xAxSjl8wA6tGKmpsFV0mKZgeHsKOcdIRWvyICrhEJ4hry3xrgalCkYgY/6axQK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iGdBF4WA; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=MR1lu2LGRzXU1NYMh07YgwIepHV5xNmMVG07NXa79CIpvhboE6pwfJiyIH7AgI0Edmg5a3y7x0n8suV6z0KjDmV0S4Q/2YNx3p3VsyOku2VcIB7AOYFB86H8CBXi6G0QK4k1S1i7OsVoK6g99JH8kKKVnNkC8aJI9xGd5A7B4xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e5cdYMNi; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vdonnefort.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-618891b439eso101512457b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 16:27:52 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6ed4298be39so5489607b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 16:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713914872; x=1714519672; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1713916220; x=1714521020; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZdtNgS1ADfpekPvRs2FP/KMWugpYNDTTPI4F/Zzcws=;
-        b=iGdBF4WADy66ubK97qz5M9irhx2m11xFzWTb1LUPY05WcMrZachbRHxRJtBGk/qPEi
-         AbPaSmDZLBCGMjUGCQjUMpMpHAupLK9cSINkLhdBIHADjRlUCgs2mQ/2dWPvb70f/cwL
-         n1+4C6qUHtlD87gUJvUuAC1dq+wwofzcvMUqsw2ylJsYDStVjcKcryxxgs5aKThrGSj8
-         VAcFvjh+1vvyHCjmIJrF1pkEKXRQ2UhXqT6fF78sbXU9kNMePNhujXVTtemhu2HvAv8S
-         OKzwMBcVLqGagGnr4IjjY36fqL5Ysp2YP+AJfBSUoPwQ3lJssWcAoGrpjsiaXwTa0O28
-         RLkw==
+        bh=S0XgZKcpp0Rc9lwkgVkwCs//I4YyNrUEqhi1oEZOUlk=;
+        b=e5cdYMNifn+b/6IfY9LI0VxitVnxys7/K5a6RB+sKyocuSUN0upyXhMKYyYxhQJ5kd
+         fVLup5BWI7w5RB0Z4iAzcCBeoubMRyMS2dS9sTuLe098hXMWdehC7Hk5bOUs+3epm+9W
+         5cFK5MEV1CgWZOMLMr0fjLVZMqbr/XDLXOweZ15iWOZvD85v/AwTSX/2nZxidhZ4JhVS
+         LUCdaZE34/wMWaoY065BDGmh+f7G4Rm9BWYcuU4tbUjDpsvQnwDg4jmpsUZYGA0eOknj
+         DmhTGriflCtOezLY3gwloOo8WQXLTPg/mxdaMrc1bNliMvFEvDXViiaVdjI1TE8ayADe
+         tC4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713914872; x=1714519672;
+        d=1e100.net; s=20230601; t=1713916220; x=1714521020;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZdtNgS1ADfpekPvRs2FP/KMWugpYNDTTPI4F/Zzcws=;
-        b=lOO06qRbViyS2JumjJkeIK5o13KOrX6aYu6IuXa+6EVGcK6RG+vdZbhHepHpStw2IX
-         LwAd7E1IaYAzsuC9K56Wr6UVfF0wWg5NBXfgdL4qq/rq3WPnw277ZGd0Uz6I5PR4SNyp
-         QsZKXQGDkTQsK1w5baMcq+oBHMIcWtyFmbW+YC3kzwg5I+P1DSwB6PuvafTIEEyYl4ZE
-         Fl5/b3AChwHb8aFHL6V1aqGhjaqKeuhFv/6jH4Z4RNrcBHoDWkGoJbA0tNQeho5uAqcS
-         HNgjuGqzSm4h8yC/Pj9fCBVROiq5iFl91Njg4kbqYqPmEV4NGeQVM1lqFPMNnl5A+71V
-         cjQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVhmnVLXSsNWL4l0upZbHj7e37SzKvhxh80MRzUQVImYwG0sD0QSWNgmYrdoLWbqSjojJC83fesjJMk9zs+8KoT32TjOLZOhuBJShFaFAu
-X-Gm-Message-State: AOJu0Yz6WjR3sRjGyqg0HrwHIa5sh3BRMSv4qf6+GRkzrMoJ11qpfY5U
-	QuEFLNEGeKrRniNOqBqecoa14kSyNxdi1sSw+bYdiSI4nlFxB3rcPHU5vB8/hkYRB6gJNgM7MRe
-	ha+29sGQrcfgK6k8z8Q==
-X-Google-Smtp-Source: AGHT+IH4/mAx1hYl3afF7Qar39Gq1rc/svAz1+g2LLqjYvaMe23uDdtQOlrMd2cLvxAmncxfRuv3qRqHypQexyVI
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a0d:d6d5:0:b0:61b:1722:cbfd with SMTP
- id y204-20020a0dd6d5000000b0061b1722cbfdmr205760ywd.7.1713914871746; Tue, 23
- Apr 2024 16:27:51 -0700 (PDT)
-Date: Wed, 24 Apr 2024 00:27:28 +0100
-In-Reply-To: <20240423232728.1492340-1-vdonnefort@google.com>
+        bh=S0XgZKcpp0Rc9lwkgVkwCs//I4YyNrUEqhi1oEZOUlk=;
+        b=EOgXZPT4U9WjbxbiyhqH2myh6wgK4Q2DD6GOV5+N9c6QjqYzYOSMI6LUe6qq10w4Yc
+         NBrSYbaSktIpUboD7TiPEOfNEWvIPo1KabePo7/8tc2s3eEh1Uh/ggFjV4q42cC3DggW
+         fe7FR3rEANfPacXldIaULPz49jXpNztl0vbSDcT9e7KnmOEATRdlX2izmEMszDtNBUz3
+         8omF3P2tp3hpBGimj7IDPHfS87wXlVDGpB3BA/WfIm6ilaX4uIW+y0jgJiaY7kq9WlVt
+         nHBkwq2xC9f5Pvc6J6+iFXVrnjCPB1bmqGwCoq5k9ZC9hViKQBjyIcFdZbT1ilsW46/N
+         Kc2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUjwmL0K5bElO/v3mo2vE2ehfhfs1xNQTO6BONRuoIimLCPiCSCcvdgdwqv8swLtt+5vxGcXqiwPHrWqogskjMrt0GtDv+RelX7V1ggwhlG
+X-Gm-Message-State: AOJu0YwfU8Dm1cEXLBg9oER8ayOqnZ7MtL0uBdhWDpNkqy89k84ucw4n
+	mXiP3duMzbnPiPNyWCgAVOvjfq//l/7qZByLbbroun1JBFjcFTGbx0QgosejCt3rxy8Br9+Ll3t
+	NBQ==
+X-Google-Smtp-Source: AGHT+IHXAum89R+L84ez8ZLdeYXwHg5utst71NXVdIMIUYfKYaITD4P0qipj/L5juka0M2ylpFOroAjDd0c=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:3cc1:b0:6ea:c43c:a666 with SMTP id
+ ln1-20020a056a003cc100b006eac43ca666mr112162pfb.6.1713916220080; Tue, 23 Apr
+ 2024 16:50:20 -0700 (PDT)
+Date: Tue, 23 Apr 2024 16:50:18 -0700
+In-Reply-To: <20240409133959.2888018-7-pgonda@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240423232728.1492340-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240423232728.1492340-6-vdonnefort@google.com>
-Subject: [PATCH v21 5/5] ring-buffer/selftest: Add ring-buffer mapping test
-From: Vincent Donnefort <vdonnefort@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Cc: mathieu.desnoyers@efficios.com, kernel-team@android.com, 
-	rdunlap@infradead.org, rppt@kernel.org, david@redhat.com, 
-	Vincent Donnefort <vdonnefort@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20240409133959.2888018-1-pgonda@google.com> <20240409133959.2888018-7-pgonda@google.com>
+Message-ID: <ZihJOorvMU8GpUBN@google.com>
+Subject: Re: [PATCH 6/6] Add ability for SEV-ES guests to use ucalls via GHCB
+From: Sean Christopherson <seanjc@google.com>
+To: Peter Gonda <pgonda@google.com>
+Cc: linux-kernel@vger.kernel.org, Vishal Annapurve <vannapurve@google.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Carlos Bilbao <carlos.bilbao@amd.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-This test maps a ring-buffer and validate the meta-page after reset and
-after emitting few events.
+On Tue, Apr 09, 2024, Peter Gonda wrote:
+> Modifies ucall handling for SEV-ES VMs. 
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Acked-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Please follow the preferred changelog style as described in
+Documentation/process/maintainer-kvm-x86.rst
 
-diff --git a/tools/testing/selftests/ring-buffer/.gitignore b/tools/testing/selftests/ring-buffer/.gitignore
-new file mode 100644
-index 000000000000..3aed1a2a6c67
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/.gitignore
-@@ -0,0 +1 @@
-+map_test
-diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
-new file mode 100644
-index 000000000000..627c5fa6d1ab
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -Wl,-no-as-needed -Wall
-+CFLAGS += $(KHDR_INCLUDES)
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS = map_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
-new file mode 100644
-index 000000000000..d936f8f00e78
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/config
-@@ -0,0 +1,2 @@
-+CONFIG_FTRACE=y
-+CONFIG_TRACER_SNAPSHOT=y
-diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-new file mode 100644
-index 000000000000..b95eedddbb8c
---- /dev/null
-+++ b/tools/testing/selftests/ring-buffer/map_test.c
-@@ -0,0 +1,288 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ring-buffer memory mapping tests
-+ *
-+ * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
-+ */
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/trace_mmap.h>
-+
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+
-+#include "../user_events/user_events_selftests.h" /* share tracefs setup */
-+#include "../kselftest_harness.h"
-+
-+#define TRACEFS_ROOT "/sys/kernel/tracing"
-+
-+static int __tracefs_write(const char *path, const char *value)
-+{
-+	int fd, ret;
-+
-+	fd = open(path, O_WRONLY | O_TRUNC);
-+	if (fd < 0)
-+		return fd;
-+
-+	ret = write(fd, value, strlen(value));
-+
-+	close(fd);
-+
-+	return ret == -1 ? -errno : 0;
-+}
-+
-+static int __tracefs_write_int(const char *path, int value)
-+{
-+	char *str;
-+	int ret;
-+
-+	if (asprintf(&str, "%d", value) < 0)
-+		return -1;
-+
-+	ret = __tracefs_write(path, str);
-+
-+	free(str);
-+
-+	return ret;
-+}
-+
-+#define tracefs_write_int(path, value) \
-+	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
-+
-+#define tracefs_write(path, value) \
-+	ASSERT_EQ(__tracefs_write((path), (value)), 0)
-+
-+static int tracefs_reset(void)
-+{
-+	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/trace", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
-+		return -1;
-+	if (__tracefs_write(TRACEFS_ROOT"/current_tracer", "nop"))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+struct tracefs_cpu_map_desc {
-+	struct trace_buffer_meta	*meta;
-+	int				cpu_fd;
-+};
-+
-+int tracefs_cpu_map(struct tracefs_cpu_map_desc *desc, int cpu)
-+{
-+	int page_size = getpagesize();
-+	char *cpu_path;
-+	void *map;
-+
-+	if (asprintf(&cpu_path,
-+		     TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
-+		     cpu) < 0)
-+		return -ENOMEM;
-+
-+	desc->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
-+	free(cpu_path);
-+	if (desc->cpu_fd < 0)
-+		return -ENODEV;
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, desc->cpu_fd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	desc->meta = (struct trace_buffer_meta *)map;
-+
-+	return 0;
-+}
-+
-+void tracefs_cpu_unmap(struct tracefs_cpu_map_desc *desc)
-+{
-+	munmap(desc->meta, desc->meta->meta_page_size);
-+	close(desc->cpu_fd);
-+}
-+
-+FIXTURE(map) {
-+	struct tracefs_cpu_map_desc	map_desc;
-+	bool				umount;
-+};
-+
-+FIXTURE_VARIANT(map) {
-+	int	subbuf_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
-+	.subbuf_size = 4,
-+};
-+
-+FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
-+	.subbuf_size = 8,
-+};
-+
-+FIXTURE_SETUP(map)
-+{
-+	int cpu = sched_getcpu();
-+	cpu_set_t cpu_mask;
-+	bool fail, umount;
-+	char *message;
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+
-+	ASSERT_GE(cpu, 0);
-+
-+	ASSERT_EQ(tracefs_reset(), 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
-+
-+	ASSERT_EQ(tracefs_cpu_map(&self->map_desc, cpu), 0);
-+
-+	/*
-+	 * Ensure generated events will be found on this very same ring-buffer.
-+	 */
-+	CPU_ZERO(&cpu_mask);
-+	CPU_SET(cpu, &cpu_mask);
-+	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
-+}
-+
-+FIXTURE_TEARDOWN(map)
-+{
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+
-+	tracefs_cpu_unmap(&self->map_desc);
-+}
-+
-+TEST_F(map, meta_page_check)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	int cnt = 0;
-+
-+	ASSERT_EQ(desc->meta->entries, 0);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 0);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+	ASSERT_EQ(desc->meta->reader.read, 0);
-+
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+	ASSERT_EQ(desc->meta->reader.id, 0);
-+
-+	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
-+	for (int i = 0; i < 16; i++)
-+		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
-+again:
-+	ASSERT_EQ(ioctl(desc->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
-+
-+	ASSERT_EQ(desc->meta->entries, 16);
-+	ASSERT_EQ(desc->meta->overrun, 0);
-+	ASSERT_EQ(desc->meta->read, 16);
-+
-+	ASSERT_EQ(desc->meta->reader.id, 1);
-+
-+	if (!(cnt++))
-+		goto again;
-+}
-+
-+TEST_F(map, data_mmap)
-+{
-+	struct tracefs_cpu_map_desc *desc = &self->map_desc;
-+	unsigned long meta_len, data_len;
-+	void *data;
-+
-+	meta_len = desc->meta->meta_page_size;
-+	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
-+
-+	/* Map all the available subbufs */
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_NE(data, MAP_FAILED);
-+	munmap(data, data_len);
-+
-+	/* Map all the available subbufs - 1 */
-+	data_len -= desc->meta->subbuf_size;
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_NE(data, MAP_FAILED);
-+	munmap(data, data_len);
-+
-+	/* Overflow the available subbufs by 1 */
-+	meta_len += desc->meta->subbuf_size * 2;
-+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-+		    desc->cpu_fd, meta_len);
-+	ASSERT_EQ(data, MAP_FAILED);
-+}
-+
-+FIXTURE(snapshot) {
-+	bool	umount;
-+};
-+
-+FIXTURE_SETUP(snapshot)
-+{
-+	bool fail, umount;
-+	struct stat sb;
-+	char *message;
-+
-+	if (stat(TRACEFS_ROOT"/snapshot", &sb))
-+		SKIP(return, "Skipping: %s", "snapshot not available");
-+
-+	if (!tracefs_enabled(&message, &fail, &umount)) {
-+		if (fail) {
-+			TH_LOG("Tracefs setup failed: %s", message);
-+			ASSERT_FALSE(fail);
-+		}
-+		SKIP(return, "Skipping: %s", message);
-+	}
-+
-+	self->umount = umount;
-+}
-+
-+FIXTURE_TEARDOWN(snapshot)
-+{
-+	__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+			"!snapshot");
-+	tracefs_reset();
-+
-+	if (self->umount)
-+		tracefs_unmount();
-+}
-+
-+TEST_F(snapshot, excludes_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_GE(cpu, 0);
-+	tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+		      "snapshot");
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), -EBUSY);
-+}
-+
-+TEST_F(snapshot, excluded_by_map)
-+{
-+	struct tracefs_cpu_map_desc map_desc;
-+	int cpu = sched_getcpu();
-+
-+	ASSERT_EQ(tracefs_cpu_map(&map_desc, cpu), 0);
-+
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/events/sched/sched_switch/trigger",
-+				  "snapshot"), -EBUSY);
-+	ASSERT_EQ(__tracefs_write(TRACEFS_ROOT"/snapshot",
-+				  "1"), -EBUSY);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.44.0.769.g3c40516874-goog
+> Instead of using an out instruction and storing the ucall pointer in RDI,
+> SEV-ES guests use a outsb VMGEXIT to move the ucall pointer as the data.
 
+Explain _why_.  After poking around, I think I agree that string I/O is the least
+awful choice, but string I/O is generally unpleasant.  E.g. my initial reaction
+to this
+		addr = *(uint64_t *)((uint8_t *)(run) + run->io.data_offset);
+
+was quite literally, "LOL, what?".
+
+We could use MMIO, because there is no *real* instruction in the guest, it's all
+make believe, i.e. there doesn't actually need to be MMIO anywhere.  But then we
+need to define an address; it could simply be the ucall address, but then SEV-ES
+ends up with a completely different flow then the regular magic I/O port.
+
+The changelog should capture explain why string I/O was chosen over the "obvious"
+alternatives so that readers and reviewers aren't left wondering why on earth
+we *chose* to use string I/O.
+
+> Allows for SEV-ES to use ucalls instead of relying the SEV-ES MSR based
+> termination protocol.
+> 
+> Cc: Vishal Annapurve <vannapurve@google.com>
+> Cc: Ackerley Tng <ackerleytng@google.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Carlos Bilbao <carlos.bilbao@amd.com>
+> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> Cc: Michael Roth <michael.roth@amd.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> ---
+>  .../selftests/kvm/include/x86_64/sev.h        |  2 +
+>  tools/testing/selftests/kvm/lib/x86_64/sev.c  | 67 ++++++++++++++++++-
+>  .../testing/selftests/kvm/lib/x86_64/ucall.c  | 17 +++++
+>  .../selftests/kvm/x86_64/sev_smoke_test.c     | 17 +----
+>  4 files changed, 84 insertions(+), 19 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
+> index 691dc005e2a1..26447caccd40 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/sev.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
+> @@ -109,4 +109,6 @@ static inline void sev_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
+>  bool is_sev_enabled(void);
+>  bool is_sev_es_enabled(void);
+>  
+> +void sev_es_ucall_port_write(uint32_t port, uint64_t data);
+> +
+>  #endif /* SELFTEST_KVM_SEV_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
+> index 5b3f0a8a931a..276477f2c2cf 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
+> @@ -8,11 +8,18 @@
+>  #include "svm.h"
+>  #include "svm_util.h"
+>  
+> +#define IOIO_TYPE_STR (1 << 2)
+> +#define IOIO_SEG_DS (1 << 11 | 1 << 10)
+> +#define IOIO_DATA_8 (1 << 4)
+> +#define IOIO_REP (1 << 3)
+> +
+> +#define SW_EXIT_CODE_IOIO 0x7b
+> +
+>  struct ghcb_entry {
+>  	struct ghcb ghcb;
+>  
+>  	/* Guest physical address of this GHCB. */
+> -	void *gpa;
+> +	uint64_t gpa;
+>  
+>  	/* Host virtual address of this struct. */
+>  	struct ghcb_entry *hva;
+> @@ -45,16 +52,22 @@ void ghcb_init(struct kvm_vm *vm)
+>  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+>  		entry = &hdr->ghcbs[i];
+>  		entry->hva = entry;
+> -		entry->gpa = addr_hva2gpa(vm, &entry->ghcb);
+> +		entry->gpa = (uint64_t)addr_hva2gpa(vm, &entry->ghcb);
+>  	}
+>  
+>  	write_guest_global(vm, ghcb_pool, (struct ghcb_header *)vaddr);
+>  }
+>  
+> +static void sev_es_terminate(void)
+> +{
+> +	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
+> +}
+> +
+>  static struct ghcb_entry *ghcb_alloc(void)
+>  {
+>  	return &ghcb_pool->ghcbs[0];
+>  	struct ghcb_entry *entry;
+> +	struct ghcb *ghcb;
+>  	int i;
+>  
+>  	if (!ghcb_pool)
+> @@ -63,12 +76,18 @@ static struct ghcb_entry *ghcb_alloc(void)
+>  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+>  		if (!test_and_set_bit(i, ghcb_pool->in_use)) {
+>  			entry = &ghcb_pool->ghcbs[i];
+> -			memset(&entry->ghcb, 0, sizeof(entry->ghcb));
+> +			ghcb = &entry->ghcb;
+> +
+> +			memset(&ghcb, 0, sizeof(*ghcb));
+> +			ghcb->ghcb_usage = 0;
+> +			ghcb->protocol_version = 1;
+> +
+>  			return entry;
+>  		}
+>  	}
+>  
+>  ucall_failed:
+> +	sev_es_terminate();
+>  	return NULL;
+>  }
+>  
+> @@ -200,3 +219,45 @@ bool is_sev_es_enabled(void)
+>  	return is_sev_enabled() &&
+>  	       rdmsr(MSR_AMD64_SEV) & MSR_AMD64_SEV_ES_ENABLED;
+>  }
+> +
+> +static uint64_t setup_exitinfo1_portio(uint32_t port)
+> +{
+> +	uint64_t exitinfo1 = 0;
+> +
+> +	exitinfo1 |= IOIO_TYPE_STR;
+> +	exitinfo1 |= ((port & 0xffff) << 16);
+> +	exitinfo1 |= IOIO_SEG_DS;
+> +	exitinfo1 |= IOIO_DATA_8;
+> +	exitinfo1 |= IOIO_REP;
+> +
+> +	return exitinfo1;
+> +}
+> +
+> +static void do_vmg_exit(uint64_t ghcb_gpa)
+> +{
+> +	wrmsr(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
+> +	__asm__ __volatile__("rep; vmmcall");
+> +}
+> +
+> +void sev_es_ucall_port_write(uint32_t port, uint64_t data)
+> +{
+> +	struct ghcb_entry *entry;
+> +	struct ghcb *ghcb;
+> +	const uint64_t exitinfo1 = setup_exitinfo1_portio(port);
+> +
+> +	entry = ghcb_alloc();
+> +	ghcb = &entry->ghcb;
+> +
+> +	ghcb_set_sw_exit_code(ghcb, SW_EXIT_CODE_IOIO);
+> +	ghcb_set_sw_exit_info_1(ghcb, exitinfo1);
+> +	ghcb_set_sw_exit_info_2(ghcb, sizeof(data));
+> +
+> +	// Setup the SW Stratch buffer pointer.
+> +	ghcb_set_sw_scratch(ghcb,
+> +			    entry->gpa + offsetof(struct ghcb, shared_buffer));
+> +	memcpy(&ghcb->shared_buffer, &data, sizeof(data));
+> +
+> +	do_vmg_exit(entry->gpa);
+> +
+> +	ghcb_free(entry);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> index 1265cecc7dd1..24da2f4316d8 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> @@ -5,6 +5,8 @@
+>   * Copyright (C) 2018, Red Hat, Inc.
+>   */
+>  #include "kvm_util.h"
+> +#include "processor.h"
+> +#include "sev.h"
+>  
+>  #define UCALL_PIO_PORT ((uint16_t)0x1000)
+>  
+> @@ -21,6 +23,10 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
+>  #define HORRIFIC_L2_UCALL_CLOBBER_HACK	\
+>  	"rcx", "rsi", "r8", "r9", "r10", "r11"
+>  
+> +	if (is_sev_es_enabled()) {
+
+No curly braces needed.
+
+> +		sev_es_ucall_port_write(UCALL_PIO_PORT, uc);
+> +	}
+
+This will clearly fall through to the standard IN, which I suspect is wrong and
+only "works" because the only usage is a single GUEST_DONE(), i.e. no test
+actually resumes to this point.
+
+> +
+>  	asm volatile("push %%rbp\n\t"
+>  		     "push %%r15\n\t"
+>  		     "push %%r14\n\t"
+> @@ -48,8 +54,19 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+>  
+>  	if (run->exit_reason == KVM_EXIT_IO && run->io.port == UCALL_PIO_PORT) {
+>  		struct kvm_regs regs;
+> +		uint64_t addr;
+> +
+> +		if (vcpu->vm->subtype == VM_SUBTYPE_SEV_ES) {
+> +			TEST_ASSERT(
+
+No Google3 style please.  I'm going to start charging folks for these violations.
+I don't know _how_, but darn it, I'll find a way :-)
+
+> +				run->io.count == 8 && run->io.size == 1,
+> +				"SEV-ES ucall exit requires 8 byte string out\n");
+> +
+> +			addr = *(uint64_t *)((uint8_t *)(run) + run->io.data_offset);
+
+Rather than this amazing bit of casting, I'm tempted to say we should add
+kvm_vcpu_arch{} and then map the PIO page in vm_arch_vcpu_add().  Then this
+is more sanely:
+
+			return *(uint64_t *)vcpu->arch.pio);
+
+where vcpu->arch.pio is a "void *".  At least, I think that would work?
+
+
+> +			return (void *)addr;
+> +		}
+>  
+>  		vcpu_regs_get(vcpu, &regs);
+> +
+
+Spurious whitespace.
 
