@@ -1,186 +1,113 @@
-Return-Path: <linux-kselftest+bounces-8724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8725-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BE1B8AF718
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 21:15:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37D68AF74D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 21:28:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B68F31F253C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 19:15:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68C6E1F24853
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 19:28:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9459613FD8C;
-	Tue, 23 Apr 2024 19:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C1613FD7D;
+	Tue, 23 Apr 2024 19:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H91vs80+"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gpV1IuAE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45F13F458
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 19:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F32C13D884
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 19:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713899751; cv=none; b=sD42MgTUbU49mA9L3nd5Hw7U33TrNwtpcHbGFjrxSY6soYh2nOHrSHdgG0ZBMjC4FuYDSjpSxZjnegp4WFSTVYsH4slYOtsebpzaPsmVUearEPvHZhuoElsOS4vAgYE8Q5IsAIxzv+Uli+rLPi2zTN5StmU96LYA1dvqAMXvxOw=
+	t=1713900513; cv=none; b=U+fkeMStilB0P9drGuL6E8CUilOkDLrkWRklr3ZwO9F+q7zI9LwzpGguBF12Fuftc8tPmbUcve4fyEMN7dCGCocNils8moAAOwp+bjOWgkLZE3nlFVFRwydO44/3aeSIzNKS+dfuqNRet3QCdAetbsz0IYCBEw4YqkCIR8haIYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713899751; c=relaxed/simple;
-	bh=pyZkFd0ABGXFz76xB8ZWfDAQUqX2Kd3JVR9/s4wDQ0Y=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SvKbMwsU+9eZ6KHHrFMkfQjJ29OYcXcHJ2unF1mU6tNhP+DBhQJCEXYLrh27B5DCkptcvw4MDIUd+E9P6Qbw94WPs4gzUCU9ks1ErImuwWYKZ2iAx1eeYcaeXKy9djXOIuiMyQvVeEjmnToSaK+K2wsNvScB7Im4fXHgWfP5KZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H91vs80+; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61510f72bb3so131173147b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 12:15:49 -0700 (PDT)
+	s=arc-20240116; t=1713900513; c=relaxed/simple;
+	bh=ioDp2zvravNrsh/E9O7tBaulM8yrXPk0EyfmhqkCrFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m8vTn3SsevhaxK7V5ze02+ilK+xPeYd5GrP1Z9uCXp9BTKYmUNP/OLi+noHJmn+kUNbSV4QCzKcDW1TVT+tQcghN+Dn9Om8EFwoJff1JNYkTu7qwbhJ+Q68iGRiejHY0KjFCzoAZ7JN908FIPH9LGXc/WPhLWPz9o8l181I6sJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gpV1IuAE; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e36b7e7dd2so53802315ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 12:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713899749; x=1714504549; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tK2a7Yr/IypNmsegnHAW+Bnt+5x2FeODOQAPDg+FlVY=;
-        b=H91vs80+0vhLlQRld5mKn0esvXzuo53+damSa4uR9KQk3+XTq7XIfiHK7tixMkn6Nh
-         mvTytOiFPvDlordDYdYMFT0xAFTdBvgEqF0xd6mWrg/9+bjFznB5YYT2VULbt494w6mj
-         Ln5GDvEqcw8uaYc8edieTZKSlIEXOEEsHD8P3F63tLh0o8S0owdhnEI6cklZGVtXVxkI
-         ER+xFbFkzBn+WGCwKYJ6gs3ZOZkmQUrzavGU4zvCGqN6g4sh0eZsRLRoSO9gCN4/p60D
-         QDPQwoBjvhrq8vfQhA0NfbEBZ19M5EMGV1BCF8pJIDenLFhZebVXnW7aikXenjIbHI/y
-         nYPw==
+        d=chromium.org; s=google; t=1713900510; x=1714505310; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=INEaC4vRYJbuCJSHXmVmjM1IzdorHSDwN4KG1bY/7BU=;
+        b=gpV1IuAEVzF5ES2P+hm2Ri4Qpwn0QUZjRdsHl1936Ky7hG62vkPF8LJTqFl0mtqs+K
+         dLIemQLRETLtInSSmwypDaTRr/zRcnrw4ezcXr8GbTuPv75Tpey+A+LKZCgDwXVplzib
+         BtzflTZQ7YXxgC2fi1q98dpLlhVoStokMv+gs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713899749; x=1714504549;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tK2a7Yr/IypNmsegnHAW+Bnt+5x2FeODOQAPDg+FlVY=;
-        b=WmHntFSseQSDwAlB0fB+bJNfDx7bhLRWvWIdKrO2HA50Y4plcE44dlNIlWnoW85++B
-         cIoW5E889GkZOVnL/aV9bKYdQBOQJO9z9dhJk9xO/SR5PeVRwuSTS21T+7Y4Ocflu8j0
-         t54smge9K2bgWbS95JUsdSFPPADwEYgJE3NTMpbuQC5xRBI2+3oqk4f+r72ECjUb5eNs
-         bUZWdXplXZo117FUlDJui88UbrG+0kDsEoUnU8ITdVRyzNCRp5xpQToHCgnKOLUq2pl6
-         qBkG8ONKT0eKx1+l7pAU2fnM5VmDKCbAPpR4mksW5IwifGC0gW5ZQo8KBxU4i4yoqBAW
-         XUiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVc9wawz+pKxbR9a2aEkIuDZXgp+q5XDYJNGLohvztx2vUQ+ZrrKqzHFyvbLGLx6LmiYV1w1ijlEIeHGsgGAvH1+Mz92oEMYR20k9RBDQrW
-X-Gm-Message-State: AOJu0YwYv+I09CZQKPy9UXgv5R1XlX3xFwFOC4MoMqaWmUReQjnf24U6
-	ZNDOH1UZg0gieGcQoa7RYglOnR/ADPefnXLYnWV+Nrh5btOLxLrZYMr4jF6cka6TD49MRXYOHBZ
-	eqg==
-X-Google-Smtp-Source: AGHT+IEvSlfNjEiKtO0MizSy6GuLnGVpFnCxv9glIn50ZYKyRHDelAswgazaeeQioA8vby3KBnB39hEe4k8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:52d1:0:b0:61a:d420:3b3e with SMTP id
- g200-20020a8152d1000000b0061ad4203b3emr106057ywb.5.1713899749077; Tue, 23 Apr
- 2024 12:15:49 -0700 (PDT)
-Date: Tue, 23 Apr 2024 12:15:47 -0700
-In-Reply-To: <20240423-0db9024011213dcffe815c5c@orel>
+        d=1e100.net; s=20230601; t=1713900510; x=1714505310;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=INEaC4vRYJbuCJSHXmVmjM1IzdorHSDwN4KG1bY/7BU=;
+        b=MA4XbM+oJqswJr6+fs8/ciIlUselgT1hGqgJqRmbm6TwCkaXPlaZRhbHY3Z3rB1WQ/
+         pcg3lij78wRrdPpPSefojtShasP71dvRjQomp7TIUf+4w6rVXmIBBIL6XwgnBxiCddFL
+         9ZbmPHFGsY4I328tKDd06iYrlfgE4oLrW3xnptPdeGjP6cbZoqhXmqzI22PwUuMoUzjX
+         rApVfDkGyDUze4SKQDKxt52/bdl8oV1YYkkw1014Y6bafB0xnBeY/OlC+U853ah/A8xR
+         EQFsifvZZ6scxc/PiisMAJtDiNtN4g+vHr5DLYqzvfmKVbO9mZ70e2iSDpGac+68Fii8
+         1mSw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBgz7G2iEaRkB1LyK4RiKbL0oYJFlXzlgyFlbUB33HpO6mv2TARu4ROSvctQ8hg5Zew8XQIaASBWby4kQ0NtIBKgRQeYq7645vppWJPWGc
+X-Gm-Message-State: AOJu0YynPbX/S0upqDeuNQM4lh5w1dc5jeoD7HC4CiDNzR2vmcJgYIYt
+	xUj6ri6Y/iWNK/+sLJHvCRBsA3m+JsVGIygAXu/hTIE/Tr1hfOZt/NhWH7BpeQ==
+X-Google-Smtp-Source: AGHT+IEkE3aR6EiB4AJEjVJJ8sF6fQHY6EOemKKBgKAsbSrWePAwJS1gaw+g+V8bS3l1Sz65QGVH+A==
+X-Received: by 2002:a17:902:bb83:b0:1e6:34f9:f766 with SMTP id m3-20020a170902bb8300b001e634f9f766mr451932pls.57.1713900510547;
+        Tue, 23 Apr 2024 12:28:30 -0700 (PDT)
+Received: from localhost (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
+        by smtp.gmail.com with UTF8SMTPSA id bf6-20020a170902b90600b001e86e5dcb81sm10357738plb.283.2024.04.23.12.28.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Apr 2024 12:28:30 -0700 (PDT)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	pedro.falcato@gmail.com
+Cc: jeffxu@google.com,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v1 0/1] branch prediction hint
+Date: Tue, 23 Apr 2024 19:28:24 +0000
+Message-ID: <20240423192825.1273679-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240423073952.2001989-1-chentao@kylinos.cn> <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
- <ZifMAWn32tZBQHs0@google.com> <20240423-0db9024011213dcffe815c5c@orel>
-Message-ID: <ZigI48_cI7Twb9gD@google.com>
-Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in test_vmx_nested_state
-From: Sean Christopherson <seanjc@google.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, Kunwu Chan <chentao@kylinos.cn>, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Kunwu Chan <kunwu.chan@hotmail.com>, Anup Patel <anup@brainfault.org>, 
-	Thomas Huth <thuth@redhat.com>, Oliver Upton <oliver.upton@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 23, 2024, Andrew Jones wrote:
-> On Tue, Apr 23, 2024 at 07:56:01AM -0700, Sean Christopherson wrote:
-> > +others
-> >=20
-> > On Tue, Apr 23, 2024, Markus Elfring wrote:
-> > > =E2=80=A6
-> > > > This patch will add the malloc failure checking
-> > > =E2=80=A6
-> > >=20
-> > > * Please use a corresponding imperative wording for the change descri=
-ption.
-> > >=20
-> > > * Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
-> >=20
-> > Nah, don't bother with Fixes.  OOM will cause the test to fail regardle=
-ss, the
-> > fact that it gets an assert instead a NULL pointer deref is nice to hav=
-e, but by
-> > no means does it fix a bug.
-> >=20
-> > > > +++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.=
-c
-> > > > @@ -91,6 +91,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
-> > > >  	const int state_sz =3D sizeof(struct kvm_nested_state) + getpages=
-ize();
-> > > >  	struct kvm_nested_state *state =3D
-> > > >  		(struct kvm_nested_state *)malloc(state_sz);
-> > > > +	TEST_ASSERT(state, "-ENOMEM when allocating kvm state");
-> > > =E2=80=A6
-> > >=20
-> > > Can =E2=80=9Cerrno=E2=80=9D be relevant for the error message constru=
-ction?
-> >=20
-> > Probably not, but there's also no reason to assume ENOMEM.  TEST_ASSERT=
-() spits
-> > out the actual errno, and we can just say something like "malloc() fail=
-ed for
-> > blah blah blah". =20
-> >=20
-> > But rather than keeping playing whack-a-mole, what if we add macros to =
-perform
-> > allocations and assert on the result?  I have zero interest in chasing =
-down all
-> > of the "unsafe" allocations, and odds are very good that we'll collecti=
-vely fail
-> > to enforce checking on new code.
-> >=20
-> > E.g. something like (obviously won't compile, just for demonstration pu=
-rposes)
-> >=20
-> > #define kvm_malloc(x)
-> > ({
-> > 	void *__ret;
-> >=20
-> > 	__ret  =3D malloc(x);
-> > 	TEST_ASSERT(__ret, "Failed malloc(" #x ")\n");
-> > 	__ret;
-> > })
-> >=20
-> > #define kvm_calloc(x, y)
-> > ({
-> > 	void *__ret;
-> >=20
-> > 	__ret  =3D calloc(x, y);
-> > 	TEST_ASSERT(__ret, "Failed calloc(" #x ", " #y ")\n");
-> > 	__ret;
-> > })
->=20
-> Sounds good to me, but I'd call them test_malloc, test_calloc, etc. and
-> put them in include/test_util.h
+From: Jeff Xu <jeffxu@chromium.org>
 
-Possibly terrible idea: what if we used kmalloc() and kcalloc()?  K is for =
-KVM :-)
+This is followup patch on discussion happened during mseal v10 discussion [1]
 
-I like test_* more than kvm_*, but I'm mildly concerned that readers will b=
-e
-confused by "test", e.g. initially thinking the "test" means it's just "tes=
-ting"
-if allocation is possible.
+Add branch perdiction hint to mseal code.
 
-The obvious counter-argument is that people might also get tripped by kmall=
-oc(),
-e.g. thinking that selftests is somehow doing a kernel allocation.
+Please apply on top of mseal v10 patch
+(which already in mm-unstable)
 
-I almost wonder if we should just pick a prefix that's less obviously conne=
-cted
-to KVM and/or selftests, but unique and short.
 
-Hmm, tmalloc(), i.e t[est]malloc()?  tcalloc() gets a bit close to Google's
-TCMalloc[*], but I suspect that any confusion would be entirely limited to
-Googlers, and I'll volunteer us to suck it up and deal with it :-)
+[1]
+https://lore.kernel.org/lkml/CAJuCfpFLwJg4n7wPpT+u9vC4XHoLE_BPPZ0tDKf7W45hGky4_Q@mail.gmail.com/T/#m20917ddbc4f817ebeb99276108b1f3ceffacb5c1
 
-[*] https://github.com/google/tcmalloc
+Thanks!
+-Jeff
+
+Jeff Xu (1):
+  mseal: Add branch prediction hint.
+
+ mm/madvise.c  | 2 +-
+ mm/mmap.c     | 4 ++--
+ mm/mprotect.c | 2 +-
+ mm/mremap.c   | 4 ++--
+ mm/mseal.c    | 6 +++---
+ 5 files changed, 9 insertions(+), 9 deletions(-)
+
+-- 
+2.44.0.769.g3c40516874-goog
+
 
