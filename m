@@ -1,55 +1,40 @@
-Return-Path: <linux-kselftest+bounces-8666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC31E8AE02B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:46:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A418AE039
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:49:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19FA51C2270E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 08:46:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E9F028349C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 08:49:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A8C56B95;
-	Tue, 23 Apr 2024 08:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nrXmo/ZS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06E556443;
+	Tue, 23 Apr 2024 08:49:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F7656B6C;
-	Tue, 23 Apr 2024 08:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47C0524A6;
+	Tue, 23 Apr 2024 08:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713861874; cv=none; b=OydYdb5KQuq3vnQ3VVrAvoZgqgVczJqk2PC86cFd14G9FqrYDFUHE7DyBcD6FwMiYKXwGu9xA/jRXTOYgH5VULLjBye5+L/wuGUWJPFOOk2dtgS0tQphZRH3JZ8KNt035f4RebK5K3fijv22ZsLG1zm17/43KBHYCWFCIru6JX0=
+	t=1713862151; cv=none; b=h+eEAhcXU834ObEZROS+EBVN1cPmYEolmte8vwNBdXJmo6LA36UORNxKqbXB9xpwVw9htTnSFdBjcqB3tbItikZ5Etxnd3P/43lGy0K2bwhlD++r1ImyTq85JSztVQ0IupLxCJK9s356a8lsX2pQt8Ol4s9klARqD2cGMmR0Qok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713861874; c=relaxed/simple;
-	bh=jdsWPAe/3j9MrIf+j6Di+jr1djPe2ZWvG4ZRKncHSZw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=J+IyhE2sCnYB7A3vBN6ox1wsVfx3muZZ4TtoYr28JJHUZiwMfq1KMJwowK4qlNpxzG0er2gONa+q3jqsyvqKn0HAiZ/9JedoSyXMQ542Jtfw6b1c1nGNBHHh8DNZRW/uhS73OUu96mAvFkBxIR5XnUP5/hHKf9vFW9vwfD2jt10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nrXmo/ZS; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713861870;
-	bh=jdsWPAe/3j9MrIf+j6Di+jr1djPe2ZWvG4ZRKncHSZw=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=nrXmo/ZS8hSxgaHZp775l+2tsr1u0AKR1FBzyAeNOAHkxniKvx4afpIYlmCKRCzNS
-	 gif67zp9wHteIi/soXRfikZnU754o+FdB2N/T48RDzpEtNb4V58afnB5DWvsN/26sK
-	 a3HFSKNAMvX5Kq/+Uyn4r5Ypwqd6kHFkwD+k6Yvchrnk6+BC0SN/bQisu52M+4AChF
-	 cba/VP+MBV6PdWD6rmPdfC6TiTL/LPuORWQOy3us320eNpf1Kxn9o6bTTl6MJ3EEiF
-	 SzkAzumMb56+fLrvXRSnDoJ7t8zm/TO0J4OqCKaH0JAn8VE463+2DyXesr3R8IkDpB
-	 9HFSp7bWGcTGQ==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 705E337820AB;
-	Tue, 23 Apr 2024 08:44:26 +0000 (UTC)
-Message-ID: <e1d6b5ea-5816-433d-8c61-602c42ee204d@collabora.com>
-Date: Tue, 23 Apr 2024 13:44:54 +0500
+	s=arc-20240116; t=1713862151; c=relaxed/simple;
+	bh=Tgt7XtMEAaRR8592T/vdx2u5zNhrU+QC1fto751OEbk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AVaN8fR044CThHZRjXihAMeblPgUxWv6iCQcp4gcXSb4KyOnNi/BH/u1B6zlmyu3SqiQfTMRHeY6MQCBW40nDQnjXr9DEFcEcGcNgeUhoKqFrOP4iFfaHdPhpdREADASfmKOhFksv6N/s5u7n+bvIh4hsdWRjF9et44H34sUf/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC426339;
+	Tue, 23 Apr 2024 01:49:36 -0700 (PDT)
+Received: from [10.57.74.127] (unknown [10.57.74.127])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDECA3F64C;
+	Tue, 23 Apr 2024 01:49:06 -0700 (PDT)
+Message-ID: <9e73ad2f-198c-4ab5-a462-2e238edd9b34@arm.com>
+Date: Tue, 23 Apr 2024 09:49:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,77 +42,168 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] selftests/mm: soft-dirty should fail if a testcase
- fails
-To: Ryan Roberts <ryan.roberts@arm.com>, David Hildenbrand
- <david@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
- Ard Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+Subject: Re: [PATCH v1 0/5] arm64/mm: uffd write-protect and soft-dirty
+ tracking
+Content-Language: en-GB
+To: David Hildenbrand <david@redhat.com>, Mike Rapoport <rppt@linux.ibm.com>
+Cc: Shivansh Vij <shivanshvij@outlook.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
  Anshuman Khandual <anshuman.khandual@arm.com>,
- Shivansh Vij <shivanshvij@outlook.com>
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
 References: <20240419074344.2643212-1-ryan.roberts@arm.com>
- <20240419074344.2643212-6-ryan.roberts@arm.com>
- <aaeb2611-e096-475c-9055-4e8dd9509b01@redhat.com>
- <6a08436e-c984-43aa-bbfa-05cfea34516a@arm.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <6a08436e-c984-43aa-bbfa-05cfea34516a@arm.com>
+ <24999e38-e4f7-4616-8eae-dfdeba327558@arm.com>
+ <MW4PR12MB6875618342F088BE6F4ECBB2B90D2@MW4PR12MB6875.namprd12.prod.outlook.com>
+ <c936083b-68b7-4d8f-a8fc-d188e646f390@redhat.com>
+ <ZiKcNJ0Qw2awRwaa@linux.ibm.com>
+ <ac4ffd88-2d13-4764-bb4e-18d0c4b9948d@redhat.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <ac4ffd88-2d13-4764-bb4e-18d0c4b9948d@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 4/23/24 1:24 PM, Ryan Roberts wrote:
-> On 22/04/2024 10:33, David Hildenbrand wrote:
->> On 19.04.24 09:43, Ryan Roberts wrote:
->>> Previously soft-dirty was unconditionally exiting with success, even if
->>> one of it's testcases failed. Let's fix that so that failure can be
->>> reported to automated systems properly.
+On 19/04/2024 18:12, David Hildenbrand wrote:
+> On 19.04.24 18:30, Mike Rapoport wrote:
+>> On Fri, Apr 19, 2024 at 11:45:14AM +0200, David Hildenbrand wrote:
+>>> On 19.04.24 10:33, Shivansh Vij wrote:
+>>>>> On 19/04/2024 08:43, Ryan Roberts wrote:
+>>>>>> Hi All,
+>>>>>>
+>>>>>> This series adds uffd write-protect and soft-dirty tracking support for
+>>>>>> arm64. I
+>>>>>> consider the soft-dirty support (patches 3 and 4) as RFC - see rationale
+>>>>>> below.
+>>>>>>
+>>>>>> That said, these are the last 2 SW bits and we may want to keep 1 bit in
+>>>>>> reserve
+>>>>>> for future use. soft-dirty is only used for CRIU to my knowledge, and it is
+>>>>>> thought that their use case could be solved with the more generic uffd-wp. So
+>>>>>> unless somebody makes a clear case for the inclusion of soft-dirty
+>>>>>> support, we
+>>>>>> are probably better off dropping patches 3 and 4 and keeping bit 63 for
+>>>>>> future
+>>>>>> use. Although note that the most recent attempt to add soft-dirty for
+>>>>>> arm64 was
+>>>>>> last month [1] so I'd like to give Shivansh Vij the opportunity to make the
+>>>>>> case.
+>>>>
+>>>> Appreciate the opportunity to provide input here.
+>>>>
+>>>> I picked option one (dirty tracking in arm) because it seems to be the
+>>>> simplest way to move forward, whereas it would be a relatively heavy
+>>>> effort to add uffd-wp support to CRIU.
+>>>>
+>>>>  From a performance perspective I am also a little worried that uffd
+>>>> will be slower than just tracking the dirty bits asynchronously with
+>>>> sw dirty, but maybe that's not as much of a concern with the addition
+>>>> of uffd-wp async.
+>>>>
+>>>> With all this being said, I'll defer to the wisdom of the crowd about
+>>>> which approach makes more sense - after all, with this patch we should
+>>>> get uffd-wp support on arm so at least there will be _a_ way forward
+>>>> for CRIU (albeit one requiring slightly more work).
 >>>
->>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> Ccing Mike and Peter. In 2017, Mike gave a presentation "Memory tracking for
+>>> iterative container migration"[1] at LPC
+>>>
+>>> Some key points are still true I think:
+>>> (1) More flexible and robust than soft-dirty
+>>> (2) May obsolete soft-dirty
+>>>
+>>> We further recently added a new UFFD_FEATURE_WP_ASYNC feature as part of
+>>> [2], because getting soft-dirty return reliable results in some cases turned
+>>> out rather hard to fix.
 
->>> ---
->>>   tools/testing/selftests/mm/soft-dirty.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
+But it sounds like the current soft-dirty semantic is sufficient for CRIU on
+other arches? If I understood correctly from my brief scan of the linked post,
+the problem is that soft-dirty can sometimes provide false-positives? So could
+result in uneccessary copy, but never lost data?
+
 >>>
->>> diff --git a/tools/testing/selftests/mm/soft-dirty.c
->>> b/tools/testing/selftests/mm/soft-dirty.c
->>> index 7dbfa53d93a0..bdfa5d085f00 100644
->>> --- a/tools/testing/selftests/mm/soft-dirty.c
->>> +++ b/tools/testing/selftests/mm/soft-dirty.c
->>> @@ -209,5 +209,5 @@ int main(int argc, char **argv)
+>>> We might still have to optimize that approach for some very sparse large
+>>> VMAs, but that should be solvable.
 >>>
->>>       close(pagemap_fd);
+>>>   "The major defect of this approach of dirty tracking is we need to
+>>>   populate the pgtables when tracking starts. Soft-dirty doesn't do it
+>>>   like that. It's unwanted in the case where the range of memory to track
+>>>   is huge and unpopulated (e.g., tracking updates on a 10G file with
+>>>   mmap() on top, without having any page cache installed yet). One way to
+>>>   improve this is to allow pte markers exist for larger than PTE level
+>>>   for PMD+. That will not change the interface if to implemented, so we
+>>>   can leave that for later.")[3]
 >>>
->>> -    return ksft_exit_pass();
->>> +    ksft_finished();
->>>   }
->>> -- 
->>> 2.25.1
 >>>
+>>> If we can avoid adding soft-dirty on arm64 that would be great. This will
+>>> require work on the CRIU side. One downside of uffd-wp is that it is
+>>> currently not as avilable on architectures as soft-dirty.
 >>
->> Guess that makes sense independent of all the other stuff?
+>> Using uffd-wp instead of soft-dirty in CRIU will require quite some work on
+>> CRIU side and probably on the kernel side too.
+>>
+>> And as of now we'll anyway have to maintain soft-dirty because powerpc and
+>> s390 don't have uffd-wp.
+>>
+>> With UFFD_FEATURE_WP_ASYNC the concern that uffd-wp will be slower than
+>> soft-dirty probably doesn't exist, but we won't know for sure until
+>> somebody will try.
+>>
+>> But there were other limitations, the most prominent was checkpointing an
+>> application that uses uffd. If CRIU is to use uffd-wp for tracking of the
+>> dirty pages, there should be some support for multiple uffd contexts for a
+>> VMA and that's surely a lot of work.
 > 
-> Yes definitely. What's the process here? Do I need to re-post as a stand-alone
-> patch? Or perhaps, Shuah, you could take this into your tree as is?
-She can. But if she misses it or you want to post v2 of this current
-series, you can just send this one separately. Usually I try to send
-separate patches for trivial and discussion required patches so that there
-isn't confusion of this kind.
+> Is it even already supported to checkpoint an application that is using uffd?
+> Hard to believe, what if the monitor is running in a completely different
+> process than the one being checkpointed?
+
+Shivansh, do you speak for CRIU? Are you able to comment on whether CRIU
+supports checkpointing an app that uses uffd?
+
+> 
+> Further ... isn't CRIU already using uffd in some cases? ...documentation
+> mentions [1] that it is used for "lazy (or post-copy) restore in CRIU". At least
+> if the documentation is correct and its actually implemented.
+> 
+> [1] https://criu.org/Userfaultfd
+
+Shivansh, same question - do you know the current CRIU status/plans for using
+uffd-wp instead of soft-dirty? If CRIU doesn't currently implement it and has no
+current plans to, how can we guage interest in making a plan?
 
 > 
 >>
->> Reviewed-by: David Hildenbrand <david@redhat.com>
-> 
-> Thanks!
-> 
-> 
-> 
+>>> But I'll throw in another idea: do we really need soft-dirty and uffd-wp to
+>>> exist at the same time in the same process (or the VMA?). In theory, we
 
--- 
-BR,
-Muhammad Usama Anjum
+My instinct is that MUXing a PTE bit like this will lead to some subtle problems
+that won't appear on arches that support either one or both of the features
+independently and unconditionally. Surely better to limit ourselves to either
+"arm64 will only support uffd-wp" or "arm64 will support both uffd-wp and
+soft-dirty". That way, we could move ahead with reviewing/merging the uffd-wp
+support asynchronously to deciding whether we want to support soft-dirty.
+
+>>
+>> For instance to have dirty memory tracking in CRIU for an application that
+>> uses uffd-wp :)
+>>
+> 
+> Hah! Not a concern for application on architectures where uffd-wp does not exist
+> yet! Well, initially, until these applications exist and make use of it :P
+> 
+> Also, I'm not sure if CRIU can checkpoint each and every application ... I
+> suspect one has to draw a line what can be supported and what not.
+> 
+> Case in point: how should CRIU checkpoint an application that is using softdirty
+> tracking itself? If I'm not missing something important, that might not work ....
+> 
+> If the answer is "no other application is using soft-dirty tracking", then it's
+> really a shame we have to carry this baggage (+waste precious PTE bits) only for
+> one application ...
+
+
 
