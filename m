@@ -1,158 +1,115 @@
-Return-Path: <linux-kselftest+bounces-8714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F9E8AEA73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 17:15:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 262678AEAB9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 17:18:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47EDE1C21D25
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 15:15:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71DB4B21BA9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 15:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937A613BAF6;
-	Tue, 23 Apr 2024 15:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65CC213C3CC;
+	Tue, 23 Apr 2024 15:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="J9u1MPcJ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZyvvSgpz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFA813BAD9
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 15:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFAE5820E;
+	Tue, 23 Apr 2024 15:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713885297; cv=none; b=MXeiU5nO9homhNCchiRoNdDViKE+Gw884mLxlhqu3J8eN7wLJWo45dGI1tIvosiQs3K3TSKS4lEfMn25at2zMuudsQpjwdFMo6DbfeC/36pJPThcCuPc2GW8hmShzdqNvCQ/GuQZYJuIeuGjWP0+bNHUlkxbPrikoanMbThXq78=
+	t=1713885418; cv=none; b=Niz4XSU0rbzHyYYD4rzfDT6g/ytAO+XlxjriMPpTuXcZp5X+z2QOzCKbY9ZmKDeozZLsuapERrRBNpU1u0mL0kxVUf3c6iOS+cCIXdwQfg9rYLcnqiSyF9oTErRtedfZ9I+gGDsIsaMBU6s01bmu+kxhB8eeWW5VYxUmW18x1jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713885297; c=relaxed/simple;
-	bh=a5cD2LaaptC8wxD989v/1J0kMmeKcCSfjFsf7Y0J2sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JhuGQTAwNvxy2FBIvcF5VrknwyIWOW0u0MivEh8PYrnHpPFeRyG3dLlT1JMkAN1VpzjHoZZK+9WRzZLAGE33EmpLLBMlUDjt6P+jwHObeKGzb9pKoTYKONfh8eRVBkvzJOkni1s0fBe99u7MUi87ulpS0z/3cINJgnwZVoqpEV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=J9u1MPcJ; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-51abd9fcbf6so8034541e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 08:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1713885294; x=1714490094; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4zF9sVBcXt3p+LHo6Ft4b30wlVpGZC//wb02folK/K8=;
-        b=J9u1MPcJPHT4dqSrXs9JbKZQOQPoeKh8fZhf6X/xPGM6EC4GoPa5mPsAVtR0dJ9V8Z
-         ndgB/rntHyKyzRtWG9WbHwmcqIisFZlBzJEx8wBNrjgECM8PsqWXxOixqqulZxix6C31
-         c5wWtxooo67YWl6eF5zsKPCDRk551DkmwsqfBrX7LL0iHIH0moGcXYt69vehaVbrY2aY
-         Sm9P4AvxFFBJFsLnubzucGRLHGwOEF7fwhX17DNqKYrlWdPkjqzQJ+br2cbITA1LWUbz
-         FGRdmvjbfTCpHJEI1zWheelIS5Lb+BWqCyjGkBdQ8ukCjacEYsEgZpENTBGTh+CSRiDP
-         RChg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713885294; x=1714490094;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4zF9sVBcXt3p+LHo6Ft4b30wlVpGZC//wb02folK/K8=;
-        b=cSHW00rhPp4eftnAn3L02y7KxB58EJsNKMHFuKrlHOTMSj5+61NehtF6bkHlkXG0E4
-         4a2xlukHpkpSKdGFA/si7EnBixHUAwHae8iUeXK2nJ/1cs45oriF6AZlSw9qkNy6cOii
-         D2YrHtf5MrSqbTQQ/9uRcIfnB5cKTzPCLqLcRQId/GrJaoZHd8TRVAEvxLykQu7hAAKp
-         1JTBOdwR0sGMRq0Z0HfKfjcTjFML8hV2xin2IjLw3/x1qbwFLHE1tSbMNPY4v0xiVJTz
-         C7t/p0ODKaAI8/X2+Y7iSuNKgtOg6Cr85OpdbflfrEDp+VCoFnEm76zUdPyAm0QulrzY
-         cwHw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0CucwzBLJlRJrg+xcVnLM8Ni50Udg6WOI/PrJXaQ74vx4pLOP6KE3dN3FrExw4arnNfpojuTwCdaUPH4tPZ3nxycv0WXXBII8bQtBC8za
-X-Gm-Message-State: AOJu0Yye+Yfc5yuWZ/zTpIUzVlco4CIIjVJY0XFUqgtgTwkW6H9En1YP
-	+PgUjs+DScH+Gfjs8in93A9qZmFVS4WaXQCQR6dhWOh2GbpoqXuowORhijsSkkYxjqL8enoUoWt
-	mAII=
-X-Google-Smtp-Source: AGHT+IF1/35Nlkwm9xUrkG3SYoD/oQBvgVGLdQGrEiz/Yiw++BMQpMgPiC/tA6FalJ2ScXPHHIEd6A==
-X-Received: by 2002:a05:6512:483:b0:518:e7ed:3c7c with SMTP id v3-20020a056512048300b00518e7ed3c7cmr10661458lfq.14.1713885293863;
-        Tue, 23 Apr 2024 08:14:53 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id g10-20020a1709067c4a00b00a4e5866448bsm7115652ejp.155.2024.04.23.08.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 08:14:53 -0700 (PDT)
-Date: Tue, 23 Apr 2024 17:14:52 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, 
-	Kunwu Chan <chentao@kylinos.cn>, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, Muhammad Usama Anjum <usama.anjum@collabora.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <kunwu.chan@hotmail.com>, 
-	Anup Patel <anup@brainfault.org>, Thomas Huth <thuth@redhat.com>, 
-	Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in
- test_vmx_nested_state
-Message-ID: <20240423-0db9024011213dcffe815c5c@orel>
-References: <20240423073952.2001989-1-chentao@kylinos.cn>
- <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
- <ZifMAWn32tZBQHs0@google.com>
+	s=arc-20240116; t=1713885418; c=relaxed/simple;
+	bh=h4yQKZsodwASQ8BaWwplG73xDGyXx08Io8ws3yHb43k=;
+	h=Message-ID:Date:MIME-Version:Cc:To:From:Subject:Content-Type; b=IHk2xpZGR5VkFiGcU0bAKXH3pZM5x9tBy/0uB8yZ7/33Tz0b+3E68/MGguCBxB6WEAFhlgH6siUoyfVR9sJmq6EJPsAsMZXrcuy/60ABrh7DMGFs8fskSstitKlzt4sln6X05w2qaOukpms2i4+OOcxVcO3T1Nyys5pQ/yD/q+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZyvvSgpz; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713885413;
+	bh=h4yQKZsodwASQ8BaWwplG73xDGyXx08Io8ws3yHb43k=;
+	h=Date:Cc:To:From:Subject:From;
+	b=ZyvvSgpzomYyJOPD5OJaqVcG/9zmB0NKqRCIboLLNkHkNpvggR7JbbJMXNckipZci
+	 wJg66TIZOOBf+DFQ9fOkSala8QAu0vnDDKlI+IGG8+iwNTpan0OSMC76ZsHHfotZkF
+	 X9IyhcCfyfXjoadBS+Pzr3s/V1iE1A54TUaG+EfzhyJycL6uDyKcq69uC6l+VQL0e1
+	 faMnqXVkHCQrWhvlruBdwDeELAuM0FcBju/dnNu7iNYP9YGh74D9IFh+5CEeJIC9re
+	 aUU37CgTkP3pOw0Hv8QfPxl9S2ge/Yku/kbMw/MgGs0FNPaOHj06t8NKmAtLAzyHe7
+	 JNDeqd9nzAbUw==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6B7CE37811D1;
+	Tue, 23 Apr 2024 15:16:49 +0000 (UTC)
+Message-ID: <02c3926c-84fe-4526-a746-6964f5290c14@collabora.com>
+Date: Tue, 23 Apr 2024 20:17:18 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZifMAWn32tZBQHs0@google.com>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ automated-testing@lists.yoctoproject.org,
+ "kernel@collabora.com" <kernel@collabora.com>, kernelci@lists.linux.dev,
+ open list <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+To: Shuah Khan <shuah@kernel.org>, gustavo.padovan@collabora.com,
+ "open list : KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Laura Nao <laura.nao@collabora.com>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Helen Mae Koike Fornazier <helen.koike@collabora.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Improving the testing quality of the kernel
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 23, 2024 at 07:56:01AM -0700, Sean Christopherson wrote:
-> +others
-> 
-> On Tue, Apr 23, 2024, Markus Elfring wrote:
-> > …
-> > > This patch will add the malloc failure checking
-> > …
-> > 
-> > * Please use a corresponding imperative wording for the change description.
-> > 
-> > * Would you like to add the tag “Fixes” accordingly?
-> 
-> Nah, don't bother with Fixes.  OOM will cause the test to fail regardless, the
-> fact that it gets an assert instead a NULL pointer deref is nice to have, but by
-> no means does it fix a bug.
-> 
-> > > +++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-> > > @@ -91,6 +91,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
-> > >  	const int state_sz = sizeof(struct kvm_nested_state) + getpagesize();
-> > >  	struct kvm_nested_state *state =
-> > >  		(struct kvm_nested_state *)malloc(state_sz);
-> > > +	TEST_ASSERT(state, "-ENOMEM when allocating kvm state");
-> > …
-> > 
-> > Can “errno” be relevant for the error message construction?
-> 
-> Probably not, but there's also no reason to assume ENOMEM.  TEST_ASSERT() spits
-> out the actual errno, and we can just say something like "malloc() failed for
-> blah blah blah".  
-> 
-> But rather than keeping playing whack-a-mole, what if we add macros to perform
-> allocations and assert on the result?  I have zero interest in chasing down all
-> of the "unsafe" allocations, and odds are very good that we'll collectively fail
-> to enforce checking on new code.
-> 
-> E.g. something like (obviously won't compile, just for demonstration purposes)
-> 
-> #define kvm_malloc(x)
-> ({
-> 	void *__ret;
-> 
-> 	__ret  = malloc(x);
-> 	TEST_ASSERT(__ret, "Failed malloc(" #x ")\n");
-> 	__ret;
-> })
-> 
-> #define kvm_calloc(x, y)
-> ({
-> 	void *__ret;
-> 
-> 	__ret  = calloc(x, y);
-> 	TEST_ASSERT(__ret, "Failed calloc(" #x ", " #y ")\n");
-> 	__ret;
-> })
+Hi,
 
-Sounds good to me, but I'd call them test_malloc, test_calloc, etc. and
-put them in include/test_util.h
+I've been working with colleagues at Collabora to improve the testing
+quality overall for kselftests since several months. We had identified
+following key points to improve:
+* Make non-TAP conformant tests, TAP conformant to catch the bugs/failures
+in the CI and non-CI environment. Without clear success or failure message,
+it is difficult and at times impossible to notice the bugs and which part
+of the test or sub-test has failed.
+* Add config fragment if it is already isn't present.
+* Improve ancient tests to be robust. KernelCI helps a lot in finding
+flakiness or non-robust pieces of code by building it in range of
+configurations and running it on range of hardware.
 
-Thanks,
-drew
+As new KernelCI is in works, we are identifying which kselftest suites
+could be most suitable to be enabled in the start to keep the noise to a
+minimum. The criteria to enable a suite on KernelCI is:
+* The test suite is TAP compliant
+* The test suite passes in preliminary testing on x86_64 and ARM64 platforms
+* The test suite builds fine with Clang in-addition to gcc
+
+To facilitate transparency and track our progress, I am diligently
+maintaining a spreadsheet [1] with detailed information about each suite's
+status and requirements.
+
+Furthermore, I have commenced exploration into KUnit testing, and initial
+results are promising. I plan to delve deeper into KUnit testing and will
+provide further updates in the coming days.
+
+Your feedback, insights and collaboration on any aspect of these
+initiatives would be highly valuable. We greatly appreciate your
+collaboration and support as we continue to enhance the testing quality of
+kselftests.
+
+[1]
+https://docs.google.com/spreadsheets/d/1XRCgxlY1b74aIOIXQ7qDR-62KTJmuV1ow9st4fpeVhA/edit?usp=sharing
+
+-- 
+BR,
+Muhammad Usama Anjum
 
