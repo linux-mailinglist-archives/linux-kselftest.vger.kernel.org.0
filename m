@@ -1,113 +1,116 @@
-Return-Path: <linux-kselftest+bounces-8692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8693-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43E0F8AE32C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 12:56:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26AE18AE392
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 13:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AC1DB21A0E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:56:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58D9C1C21DBD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 11:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E64D6519D;
-	Tue, 23 Apr 2024 10:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424E182888;
+	Tue, 23 Apr 2024 11:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="GWjWXBv7"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZTwkbU5H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CB6629E6
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 10:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BF4823D9;
+	Tue, 23 Apr 2024 11:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713869795; cv=none; b=OooAJ2+15Yk4KMmcKfFpSpAEhefjsGOLDlYUBntSOhdKjHUo6eKZdzZ+NG8PGqCbZcPvlECeFfSdU8FaAygdNt+c0WmvoFFaUl3STOGhthecg5GX/y7jsUCDLCJLkxoIQy3EAk8dh4R7CJJ3FE3+fv4gvg9avZ2oQKd8DPrxOLQ=
+	t=1713870685; cv=none; b=nK/Tt1xSTDc1T8zYSaiYn5hXw9tavHmvr8CC72nGiCaZm/vC9B6d/G9e5ptMLuRhlgFDsK9B7tG/4seNDI2WA4s7hsA1+M5oqhV2+vC7U9uNiz8m/Zw0Wi5Aa9OiALLHk+tQgWZCUs+t9GxGV31MUsoPzIKWfEYJxJAJm7tuXLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713869795; c=relaxed/simple;
-	bh=o3+E/pVcXMqGN2IqmycMoE4DCLdrwAivCv4tvzqB9Rk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=piKZBBiz2f2sf2Z0kx3oePyvuDfPD6QTLPuQCVL+NC2jKR+XSCeHkgaGybquXZxg8ViJKsQexHTtdBmDi+8qj4NgsN69KGxClfJE2V9yakdyr1tlvEO1MSxx40reWFHTPiF+orccmrCrdZWcfx2mNqOlFqxEM6jnuw4c1K8t4WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=GWjWXBv7; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a51addddbd4so553054966b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 03:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1713869792; x=1714474592; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7A3dJbrWY/9z1NTPLr/SP8VA+syiS13CnbQZQzTmh4=;
-        b=GWjWXBv7Cn/wPbJp28rCO/HzDYzjI29GOdYQTrarblqKOgDeYn3CMGmc/GwGIkH4It
-         iB3UMMD6o4gBTSzyTAEtPmdUsIT2n0REd682t2ojxM4ti9Dm/fCioytcnGeCadF8Qcjn
-         BpIBgOr0VFARD/PwKTh7SXuBs8aHgvSqqdh0f42hJm7nDib5NCjiC60yYWVYaaH4MUys
-         D+SXlayKn1e3Do3FKERf/5Gpxhj/xYw+NqF2h6vvfqEx9ZO+s0abjW2tbqyjiCAWdSVl
-         BrPOEbTJ3p9kwUvePL8lXjN2ZBgRJNamoLAcGjwbn8i8Ynaw8PSDXBTbMCdblEqWu7F4
-         7wCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713869792; x=1714474592;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f7A3dJbrWY/9z1NTPLr/SP8VA+syiS13CnbQZQzTmh4=;
-        b=hZAK67tdH/VfUDKWExrDYI0cmkdGqAOLAqlvmbSRsvmljyD0E6eTtOc0jOia8VVO1L
-         Yeu9iw5tv9GyIUpCH+qEfzmxJJuYVjAx9H6rMErykCTw5XBJyznRgjhoNXuSmWqJrhji
-         Vv2JfxeIwWrtzv1YUIlUhMPTygX5r0pLs4MvwX9JYRWX46HOXQfVDSLz7KAMJc130AF5
-         B7jE8KVMRuVzcfwjHyzgmdJdtCoLro/UUeEX1DVUd+m0AUj35E5YBVsPKZfit9LRlOOH
-         35OHjPRe30GJyMOzJBiDNT0ZjNn4Zfay8xh32OGNVqWqYzNBRYRFi3icjIUwRg1MFjgG
-         OXlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX9DHPf9IHmbH+IZcmkdcrcMiebwDwFZDhBi2NdagKFlybNEpfAhMohZ8DETyV+U2eRoszao8Nm5lSmIbBqviYPkq9GCg0lLgtC7g2Ma97Q
-X-Gm-Message-State: AOJu0YwW/JHiNi+802bY0y7jQ3nz2HomGgimn9avo/QptW8QKlqQWaJ8
-	lBGJk1eAVhA0NC1saQBCPo0ir5YW6q8pbLc6XPitESdR8iIGIWdcFzSrkW6KZ68=
-X-Google-Smtp-Source: AGHT+IGuxCj+bPVMezQTiiqaIkHubBLsXlhj+D610GPwkEGBc0PyN8R4nZYOrEBNLFuAizVxpXXs2w==
-X-Received: by 2002:a17:906:3502:b0:a52:22c4:8158 with SMTP id r2-20020a170906350200b00a5222c48158mr8092139eja.56.1713869791624;
-        Tue, 23 Apr 2024 03:56:31 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id c27-20020a170906d19b00b00a5557bc8920sm6916846ejz.54.2024.04.23.03.56.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 03:56:31 -0700 (PDT)
-Date: Tue, 23 Apr 2024 12:56:30 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org, 
-	Ajay Kaher <ajay.kaher@broadcom.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Anup Patel <anup@brainfault.org>, samuel.holland@sifive.com, 
-	Conor Dooley <conor.dooley@microchip.com>, Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, Will Deacon <will@kernel.org>, 
-	x86@kernel.org
-Subject: Re: [PATCH v8 24/24] KVM: riscv: selftests: Add commandline option
- for SBI PMU test
-Message-ID: <20240423-b25d0b1540d2092f5370afa5@orel>
-References: <20240420151741.962500-1-atishp@rivosinc.com>
- <20240420151741.962500-25-atishp@rivosinc.com>
- <724a4797-18dc-4011-ba48-445c1cb6a976@collabora.com>
+	s=arc-20240116; t=1713870685; c=relaxed/simple;
+	bh=UDo4ttePVrWsxEKCfdj9YbfYm7P0gTSM0kHtg8yETyA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=dCEJJefOyTxWszdGBAiJul96LBZb1DjFQ+z5HRFHKjJwhu1o0RqqA/IFY1fuxbJdnGmOCibHdwbct9XsZLnhRvTIUYzZ9nPJ5tWmuBloCNmBbFTKBboLsiiKqB+sbGx8l5eABf2P1jT//EQTCzfaFWO9PDvLrINRxiLerUI5+Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZTwkbU5H; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713870662; x=1714475462; i=markus.elfring@web.de;
+	bh=bf3YKUE5/YWw3/wAqQRtyDRSqezcCOIeyAX/DQ1RA2k=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ZTwkbU5HVxfSh/PuYC7rMfmzvhOfGYbYwyBJG70I2KNCyB8eZOXThrC5mwsJ6sFh
+	 h5m83a1gynykRAPXphMDy9H5Ln0/4rHfQxZ9G8NUc8hCD0kiOYrPKi66sqFO+XF1v
+	 LL5cT00iEpTaH02rG8ErBcLDF9+OTVeUx0Kr50yKgPYui5leYvNFFmpD8b3P5VZ/q
+	 K/VRdM84RLnKcUVND9u4q7MAWOavHtYggGJNk8d/MTbamQQUbZXFoPKdOWbk7xTiA
+	 gAzL/lEayxWkEHrXt9kaqei6WU6P3qB/spZpkhJ8K/7Bjur8SjnuXWtc0R/7cKj5v
+	 VH+jqwKNBQPgjEXMzQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Myf3x-1svAGR0unV-012Tcc; Tue, 23
+ Apr 2024 13:11:02 +0200
+Message-ID: <5750611d-4c41-449a-ab37-9b234360929d@web.de>
+Date: Tue, 23 Apr 2024 13:10:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <724a4797-18dc-4011-ba48-445c1cb6a976@collabora.com>
+User-Agent: Mozilla Thunderbird
+To: Kunwu Chan <chentao@kylinos.cn>, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <kunwu.chan@hotmail.com>
+References: <20240423073721.2001016-1-chentao@kylinos.cn>
+Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in config_name
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240423073721.2001016-1-chentao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l7n+uNb7WPk8WMmPsKcv3FItmU8s3wBeJuQKloutvOu88sqOFek
+ ma6yKedgGQjTUdyQWtjy8BF1xDicIjkFcatqrZezmShYJtLNxhgYTjzxfe3ySgCb3ZGlWuD
+ bm50wV9+4wM1VFiu2dB7Ar6T23rUC3ubw2/Fb5davcs/2oXMuMaI7KQZV+ybC7JQGuqzMQf
+ 0Rkx944rQwEadYHfTJdVw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:DN1wGof/WPs=;nJ1KDJsPeLt79srODva1rkmJKI4
+ 7lse3jXCi6+hORSlFZ3FSnlF3FBXPgXmDBN5BPROgVhIkrVcSz7+keFYRREDdVN9HhpG9ewoL
+ 2DBzjm6dRZNijkypsvt+1T3Yx/e8JKHv+XJz1kwmQ0rrjuVw+/k6nPNPMKhKhHwDAajVVJJ/m
+ iJ6EL/fkgir9DzN6cL2VgFg0r3D592gpjcx8cIlED+l7y7z2T0K3mmnSjBQ0FNfQt/ZjFyRfS
+ 2LcViB6rB0Tw5YHuYneUSXDAXsJjhGu27QczqfhCKuOSyE03c/1OeW94ZjbaFkV/ZPRhd7ePf
+ 7JpTbexWeIem+3+0W0C4SilGskqCyK5PEFEu4PlnsCyUBwhCXoyGHZcvYNJjk1ut8WYnqARgL
+ PPHDM0ZS89kyf3khFzCNDG64e7GvtDVRxA34oHyVULX4Er9BHLgl8JMnbc7hpEcPb0f12vUGO
+ azyADWcheuk0wPzj1jhNBYbDpwh/CHwXyVcOZ/TCQI+E7NinKAFbydeARoLet8ob4jSb4Nz/h
+ amJbqiU5N8f4B6Y5nkGxO1kbUL9AeJ1or10F4E7bB1vudHU1tF4y/nRxATli7rNB8rhnDzA2l
+ UfUdcHwRvxQCSqcHA6dlZqYGoVAQlSyLoEfQOG8Rw9VJSKmguGkWz+ngw0y/ZPEhqgpXD8SpA
+ hbyzuHXwAc9/ig+C4xCOSCdHsZrFYG0yHW1akuR/tHuJ8HRYlMHj8anZ70K+/hxbPYGPkSnmz
+ VqFBbvVVVcOS0gm+Zuey37IgOJcWJEjXQWnUSlL1Bm5bKwX98r49qID8q7x4I0nGH4IvbNo+b
+ lRqVOneO7oQlLXwhxqYXmeLNe7dRHXzkMxiXM0afvorbA=
 
-On Tue, Apr 23, 2024 at 02:03:29PM +0500, Muhammad Usama Anjum wrote:
-...
-> > +	pr_info("Usage: %s [-h] [-d <test name>]\n", name);
-> A little weird that we have pr_info named helper to print logs when it is a
-> userspace application, not kernel code. I'll check it in the source who
-> added it to the KVM tests.
+=E2=80=A6
+> This patch will add the malloc failure checking
+=E2=80=A6
+
+* Please use a corresponding imperative wording for the change description=
+.
+
+* Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
+
+
+=E2=80=A6
+> +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> @@ -66,6 +66,7 @@ static const char *config_name(struct vcpu_reg_list *c=
+)
+>  		len +=3D strlen(s->name) + 1;
 >
+>  	c->name =3D malloc(len);
+> +	TEST_ASSERT(c->name, "-ENOMEM when allocating config name");
+=E2=80=A6
 
-It was me, as git-blame will easily show you. Why is it "weird"?
-Applications have needs for pr_info-like functions too, and the pr_info
-name isn't reserved for the kernel. The only thing weird I see is that
-I didn't differentiate pr_debug and pr_info messages. I probably should
-have at least given pr_debug output a 'debug:' prefix.
+Can =E2=80=9Cerrno=E2=80=9D be relevant for the error message construction=
+?
 
-Thanks,
-drew
+Regards,
+Markus
 
