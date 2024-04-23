@@ -1,156 +1,130 @@
-Return-Path: <linux-kselftest+bounces-8711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92F608AE9E2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 16:56:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB388AEA22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 17:05:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C49DE1C21DE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 14:56:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D93992856D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 15:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF3D13BC12;
-	Tue, 23 Apr 2024 14:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAEC13B7A3;
+	Tue, 23 Apr 2024 15:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="waP6Xy+M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iouqw4mQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08BD13B7BD
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 14:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4735F12EBE7;
+	Tue, 23 Apr 2024 15:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713884165; cv=none; b=lUQIHbWqB5CeF25mIxzXQyMEYufCXpLDwdZgiI2kVOuhwhqz0DY6kuLmjSyTnUWze16gRs7l93I0YPhQx4LyErAI+txwvEYZ4tdqU57BzcHcQAkvb78dcynUao3066YMel8Wx+86O6QBNgZl3ZQv1qRaO1N0x4NFRKxZmtmtoY8=
+	t=1713884733; cv=none; b=b3AyBeOlp3+g58tgDa/UooU2NboKC6DW47Aukq2sl68LOwCc5vHYQ02Shapnt+IpX5ewMyVm8NrKZbQvAlcyz5QoTaToiwMZvbGNFuGtN4CxR/lcwh07eRRqOyy6Jt/Xf1hVwj8AW9kpVV+iSlWXVuDLt0qMuATPI5RIdTnwlRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713884165; c=relaxed/simple;
-	bh=zb89nfLrW3+wAcpukVR4Q7BqXQCPFLkFUFrPmhqKtu8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=exWsDJ29F9iqKBmv+f+RZ8o5JnlHajCAyzun2YrFIcGN4d32DxWoEpATvbeq7zN/oeV/37UymAfMyrXTbunErYqbdBV9alHhTcxcdPWqACc/83oA9FLM0LKapbMFgR2gN6MPecDS+VJ+6BBj85Nzkbi13V82F0xqkeWVBed/yKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=waP6Xy+M; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-6ed2f4e685bso5436510b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 07:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713884163; x=1714488963; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QL1KGuBF3PiImvOWnmAJwJ7TVqcvvvJM7lUaOvdwil4=;
-        b=waP6Xy+M8P8WLgHTdwUDaGx+EbTdSV+wYBhQc7Cr+H5OdljkNJf+bNVI76pVXHcqcV
-         3svmuMy3K4sy6iTgUHrUFw3D31i3PprJN8g6Pcs6YE2w6ZRo0gc8ogd8FgTli8Py3GOZ
-         jSHh3bxxA5X39RZyrxqvgk0Q/o3fiLKOf8bUB0hBJUqsMj413Z/4Qb1kD5aMQIrnByLD
-         ssihZ5H1SKM8XDO8MpmyFoNR8Gyox9xyUU+OwnIemO5RCmKO6a41YDMUWOCp0JI6mvei
-         23Dq+JeJKUzvGLzCDytQgEsSw5u/4v2Ox7IRYzC30FCWqnYUEns8Xksnlcx+NuhM0SJo
-         ty6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713884163; x=1714488963;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QL1KGuBF3PiImvOWnmAJwJ7TVqcvvvJM7lUaOvdwil4=;
-        b=AwMuOtB1QAT6Gqqaj03/LHXJpmkK6glEG1naEncR+fs+wsKKN06Cnq3Kr9vge9EgYk
-         gx8+IpKVg22oMqixgkjqKFLeb4XboDBejw3GAXSmlcr+mcoJd3iucIwtDfvbwO85f5tW
-         Iqq4ARPQv3x6ipyQxeg4dqN+34z1bM7PKazDfrIaPJZYOxc4xLhuSzCbevm0li7Dhrrw
-         Y5lobni4Ed55S+BHqzC5jLAViM6Hk3lY1UhuzLFiPdX2SO7KmOZQsANQo/J4C90T73J6
-         2tblXmvwKiaumBMke7PNarQr1ucqqZ+tMWpJf2dk5pWh4vaR4iIC87NppZWDDp4rgOPR
-         XXRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVnq68/LXCzLm2Ecwnktn/utNJh2HQLfuB+iTaYR6JDfEr/iIEI9zsF98hxigLd6jXkN1cqeJwvSHKmy+kF/eT4Zup9RiRMu4CtRENO5l+A
-X-Gm-Message-State: AOJu0YxdgkderrW74NVTDWm30DeXJeRpRe076gwRIvrM/GUh/dXQPuKB
-	xDipROtE38V9q+TggByIWdTOlC09Lv7CDYjyk0Myt3gN6dprZUgZJ8bvc2VRjMv6XztEZetqLEW
-	bsw==
-X-Google-Smtp-Source: AGHT+IEofZ+0phYC5RHnU3tk4kyICMGRgIj0E0NU+50sKVZM05N3Vtemrp3mHgtpb6tSAfXkGXRAJET7QAU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:8713:b0:6ec:f3e8:46a8 with SMTP id
- hj19-20020a056a00871300b006ecf3e846a8mr21432pfb.1.1713884162882; Tue, 23 Apr
- 2024 07:56:02 -0700 (PDT)
-Date: Tue, 23 Apr 2024 07:56:01 -0700
-In-Reply-To: <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
+	s=arc-20240116; t=1713884733; c=relaxed/simple;
+	bh=rhecxeD2cGyz50/rzIf8qdv6WpuU26577Z2AHZCuTww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JVZmo0FfgCdKkzQNBCH+I82WAZJYWnZ3qCUVbF04P1c313ZgHZaxT+6Hj+1E6lw8RVVo23VCFwotT7VQ5UsQ+3yRKBVAFbzgongK2kkLSktSBITf/U1UFb4Ji1OMiFHQX6bSvWUQ9Epo2bPBQBAdW9sHXCf2WwISDQiE7hKWEnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iouqw4mQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D6AC2BD10;
+	Tue, 23 Apr 2024 15:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713884732;
+	bh=rhecxeD2cGyz50/rzIf8qdv6WpuU26577Z2AHZCuTww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Iouqw4mQZBJgFmb3LgZ98QJhyGYQvc+EInq511gxjyPNMtiaum2vNq2Bl+Mg4qHXk
+	 Ens6L+4d3LJ7hd+zWQCJaLT5DrWIFqiasL0rRDPLSEGmWCxVidMINn/MTcMgW5Q2Cu
+	 RGf/Kj7hBmo/dOIJI842Lz+RqBecO4Fa0SOseDLKHnYJY1Mn1/wiXg6lEOMPfVPv03
+	 WFA65VhAAb12rWp+V2bSkIzQQF6bLEP6T7d3S743Jo0auOzhv5OawT9x5btL8kC5Yw
+	 prpPY5s0WmWhGzwv2S5B6ZRNvPXnaWhn7II8vvJR1gvk6bWGd2Xzaj2sclfCpVFcZa
+	 rh5X9WIN6nOwQ==
+Date: Tue, 23 Apr 2024 10:05:30 -0500
+From: Rob Herring <robh@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Maxime Ripard <maxime@cerno.tech>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
+	David Gow <davidgow@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	kunit-dev@googlegroups.com, patches@lists.linux.dev,
+	linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Daniel Latypov <dlatypov@google.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 01/10] of: Add test managed wrappers for
+ of_overlay_apply()/of_node_put()
+Message-ID: <171388470076.215446.15104256542666415343.robh@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org>
+ <20240422232404.213174-2-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240423073952.2001989-1-chentao@kylinos.cn> <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
-Message-ID: <ZifMAWn32tZBQHs0@google.com>
-Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in test_vmx_nested_state
-From: Sean Christopherson <seanjc@google.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Kunwu Chan <chentao@kylinos.cn>, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Kunwu Chan <kunwu.chan@hotmail.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Anup Patel <anup@brainfault.org>, Thomas Huth <thuth@redhat.com>, 
-	Oliver Upton <oliver.upton@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240422232404.213174-2-sboyd@kernel.org>
 
-+others
 
-On Tue, Apr 23, 2024, Markus Elfring wrote:
-> =E2=80=A6
-> > This patch will add the malloc failure checking
-> =E2=80=A6
->=20
-> * Please use a corresponding imperative wording for the change descriptio=
-n.
->=20
-> * Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
+On Mon, 22 Apr 2024 16:23:54 -0700, Stephen Boyd wrote:
+> Add test managed wrappers for of_overlay_apply() that automatically
+> removes the overlay when the test is finished. This API is intended for
+> use by KUnit tests that test code which relies on 'struct device_node's
+> and of_*() APIs.
+> 
+> KUnit tests will call of_overlay_apply_kunit() to load an overlay that's
+> been built into the kernel image. When the test is complete, the overlay
+> will be removed.
+> 
+> This has a few benefits:
+> 
+>  1) It keeps the tests hermetic because the overlay is removed when the
+>     test is complete. Tests won't even be aware that an overlay was
+>     loaded in another test.
+> 
+>  2) The overlay code can live right next to the unit test that loads it.
+>     The overlay and the unit test can be compiled into one kernel module
+>     if desired.
+> 
+>  3) We can test different device tree configurations by loading
+>     different overlays. The overlays can be written for a specific test,
+>     and there can be many of them loaded per-test without needing to jam
+>     all possible combinations into one DTB.
+> 
+>  4) It also allows KUnit to test device tree dependent code on any
+>     architecture, not just UML. This allows KUnit tests to test
+>     architecture specific device tree code.
+> 
+> There are some potential pitfalls though. Test authors need to be
+> careful to not overwrite properties in the live tree. The easiest way to
+> do this is to add and remove nodes with a 'kunit-' prefix, almost
+> guaranteeing that the same node won't be present in the tree loaded at
+> boot.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  Documentation/dev-tools/kunit/api/index.rst | 11 +++
+>  Documentation/dev-tools/kunit/api/of.rst    | 13 +++
+>  drivers/of/Makefile                         |  1 +
+>  drivers/of/of_kunit.c                       | 99 +++++++++++++++++++++
+>  include/kunit/of.h                          | 94 +++++++++++++++++++
+>  5 files changed, 218 insertions(+)
+>  create mode 100644 Documentation/dev-tools/kunit/api/of.rst
+>  create mode 100644 drivers/of/of_kunit.c
+>  create mode 100644 include/kunit/of.h
+> 
 
-Nah, don't bother with Fixes.  OOM will cause the test to fail regardless, =
-the
-fact that it gets an assert instead a NULL pointer deref is nice to have, b=
-ut by
-no means does it fix a bug.
-
-> > +++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-> > @@ -91,6 +91,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
-> >  	const int state_sz =3D sizeof(struct kvm_nested_state) + getpagesize(=
-);
-> >  	struct kvm_nested_state *state =3D
-> >  		(struct kvm_nested_state *)malloc(state_sz);
-> > +	TEST_ASSERT(state, "-ENOMEM when allocating kvm state");
-> =E2=80=A6
->=20
-> Can =E2=80=9Cerrno=E2=80=9D be relevant for the error message constructio=
-n?
-
-Probably not, but there's also no reason to assume ENOMEM.  TEST_ASSERT() s=
-pits
-out the actual errno, and we can just say something like "malloc() failed f=
-or
-blah blah blah". =20
-
-But rather than keeping playing whack-a-mole, what if we add macros to perf=
-orm
-allocations and assert on the result?  I have zero interest in chasing down=
- all
-of the "unsafe" allocations, and odds are very good that we'll collectively=
- fail
-to enforce checking on new code.
-
-E.g. something like (obviously won't compile, just for demonstration purpos=
-es)
-
-#define kvm_malloc(x)
-({
-	void *__ret;
-
-	__ret  =3D malloc(x);
-	TEST_ASSERT(__ret, "Failed malloc(" #x ")\n");
-	__ret;
-})
-
-#define kvm_calloc(x, y)
-({
-	void *__ret;
-
-	__ret  =3D calloc(x, y);
-	TEST_ASSERT(__ret, "Failed calloc(" #x ", " #y ")\n");
-	__ret;
-})
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
