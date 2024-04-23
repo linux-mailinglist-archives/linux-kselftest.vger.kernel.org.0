@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026EF8AE253
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 12:35:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7A058AE252
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 12:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D16AB21C1C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:35:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C5A1C218FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B1565194;
-	Tue, 23 Apr 2024 10:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA1F433DD;
+	Tue, 23 Apr 2024 10:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PO+sEYic"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHew82RZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C738366;
-	Tue, 23 Apr 2024 10:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E796343AA4;
+	Tue, 23 Apr 2024 10:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713868542; cv=none; b=AXIpuN1BO/xJRvXJ4Hd6PW2LihPf/xXcZK4rxOZ3bLegNzTkLfY4iEi1eXI0x2GBjdn6sdj0XgWAgtXvxgiOtj2cdrp48KFCRH/GM36bPFomajD6FsF2msvbrTLhuNcpBnDzn3zx8SGWV5HYycucfvaF/z6AQ2wX8q/Tf1ah45g=
+	t=1713868549; cv=none; b=bvyzLpYU0HIryiqweoV1WcAbvl6Kq7yEyGDPe+kZuftZGPVtYDQ1lmr6WaUD1ENXc65iV8RrB3qsgseWAkwqUcnJnS2YRILkuaKb/YJkD++xy9C55c6C0dleQejruUla24mAmKXZwKi52GTk5gaYEQdkkuuktAGd/umqH/r1jbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713868542; c=relaxed/simple;
-	bh=927GFhMfXfYMLNk8yOCLs07K8ZIVRkvX1yZMSNtPvws=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fQQjDlRd3XHKoO4Ml09BqapDL2PhbWhgfC9VY0+S7HFLgPTOdfvAV40ADPQn5tuzIy4KdNwD5oYghKJrjr59991q6HbmU/BeT0rRtxOmgDuATNavF49C2DPjjcTTVmlO0mOl07YmMnGqdPlL6I9FRlgpKoKOVMqwmb3DexLKdDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PO+sEYic; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBB2C116B1;
-	Tue, 23 Apr 2024 10:35:35 +0000 (UTC)
+	s=arc-20240116; t=1713868549; c=relaxed/simple;
+	bh=RnU0yw+p+L7lm3tXso2OTfDmGPtvlCK4XIxpxQPqHJ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iaqr0qE8EfIg8HRkEvH8/n9Ran0fPbUAUVXM5EjK8mmm/3HJy6qydlSKEGz0S4QYsqh2zVWCJWcOo88K2eGT87UA1eAy11tIhawcoJUjeqn99QBBHU04Ltuoe7iB45I/8FllGHyq3DzjfLhbbUELx4eqa5dtFKuCBWSeOgFVTYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHew82RZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747C7C2BD11;
+	Tue, 23 Apr 2024 10:35:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713868541;
-	bh=927GFhMfXfYMLNk8yOCLs07K8ZIVRkvX1yZMSNtPvws=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PO+sEYicL5QEcnvszlRUvtw3GUAVmOYpKsmwOI/isSBENCuZJKZwil696KwTVz4th
-	 Xye1UItw99OduKqTHpfYn/pT4SpiwXZIGtDHGDX02VR/Me4YXm2Ws3AKCrdzr+R06B
-	 x7ytVSnRAvSI6/Z7qSOKibFCc90U6OAHPQf9K2id3pAZbYcj5bIEOgbIbNMfvRWrRp
-	 3KN24mks9An7duCumXiPL6b7kj6Lo2SF/Rlf/VvmJ9GiTfM9gO+TrxGTGOV+dN6otb
-	 ISSFOJAfwANsZcj3nhxgdJrGlPafWxy7ENVe2HOk3FxrmF+zyy6swxpwektbsSkfvZ
-	 lX2+CDPgJ8ywQ==
+	s=k20201202; t=1713868548;
+	bh=RnU0yw+p+L7lm3tXso2OTfDmGPtvlCK4XIxpxQPqHJ8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sHew82RZl4BK1b5Y7tD/SY7HcmdslIg/CPfbuifqexOBFrpKgQ4m5k+yS62jDOqFU
+	 V7U/PKV/gZHRpstBPasypckJLd3l5pGXF28otJjdk6DUtLQk/mD9pdRfhif9lla8Wr
+	 hoJGVdjRxXCp+TMUsxbxTcnXkVruxd3YJ2zzY0jLbXhkndOBl5ERx5GDR5W13fff0i
+	 gHDLsAwwFKKMbs53TT7ZOWwIgFHci8w+D1Vui29SVhytrc4qhl6iZHEnvaDllpg2Xl
+	 RakxM3x5cwC+o5zrQ35aS2fRrFjiPcHYz3ep/qNnE7efw5HPcodMJTWmQQ5bs5VixH
+	 gaRTw1dUt7gKA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,10 +60,12 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next v2 0/5] use network helpers, part 2
-Date: Tue, 23 Apr 2024 18:35:26 +0800
-Message-Id: <cover.1713868264.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 1/5] selftests/bpf: Fix a fd leak in error paths in open_netns
+Date: Tue, 23 Apr 2024 18:35:27 +0800
+Message-Id: <a104040b47c3c34c67f3f125cdfdde244a870d3c.1713868264.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <cover.1713868264.git.tanggeliang@kylinos.cn>
+References: <cover.1713868264.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,35 +76,30 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patchset uses more network helpers in test_sock_addr.c, but
-first of all, patch 2 is needed to make network_helpers.c independent
-of test_progs.c. Then network_helpers.h can be included into
-test_sock_addr.c without compile errors.
+As Martin mentioned in review comment, there is an existing bug that
+orig_netns_fd will be leaked in the later "goto fail;" case after
+open("/proc/self/ns/net") in open_netns() in network_helpers.c. This
+patch adds "close(token->orig_netns_fd);" before "free(token);" to
+fix it.
 
-Patch 1 and patch 2 address Martin's comments for the previous series
-too.
+Fixes: a30338840fa5 ("selftests/bpf: Move open_netns() and close_netns() into network_helpers.c")
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v2:
- - Only a few minor cleanups to patch 5.
-
-Geliang Tang (5):
-  selftests/bpf: Fix a fd leak in error paths in open_netns
-  selftests/bpf: Use log_err in open_netns/close_netns
-  selftests/bpf: Use start_server_addr in test_sock_addr
-  selftests/bpf: Use connect_to_addr in test_sock_addr
-  selftests/bpf: Use make_sockaddr in test_sock_addr
-
- tools/testing/selftests/bpf/Makefile          |   3 +-
- tools/testing/selftests/bpf/network_helpers.c |  20 ++-
- tools/testing/selftests/bpf/network_helpers.h |   1 +
- .../selftests/bpf/prog_tests/empty_skb.c      |   2 +
- .../bpf/prog_tests/ip_check_defrag.c          |   2 +
- .../selftests/bpf/prog_tests/tc_redirect.c    |   2 +-
- .../selftests/bpf/prog_tests/test_tunnel.c    |   4 +
- .../selftests/bpf/prog_tests/xdp_metadata.c   |  16 ++
- tools/testing/selftests/bpf/test_sock_addr.c  | 138 +++---------------
- 9 files changed, 63 insertions(+), 125 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 9d63d2ac13d8..b2f531a6a4c7 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -478,6 +478,7 @@ struct nstoken *open_netns(const char *name)
+ 
+ 	return token;
+ fail:
++	close(token->orig_netns_fd);
+ 	free(token);
+ 	return NULL;
+ }
 -- 
 2.40.1
 
