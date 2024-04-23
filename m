@@ -1,118 +1,113 @@
-Return-Path: <linux-kselftest+bounces-8691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AAFC8AE2D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 12:49:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43E0F8AE32C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 12:56:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D86CF282357
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:49:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AC1DB21A0E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 10:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D773131BA1;
-	Tue, 23 Apr 2024 10:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E64D6519D;
+	Tue, 23 Apr 2024 10:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="cmbeqjF9"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="GWjWXBv7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BEF12F585;
-	Tue, 23 Apr 2024 10:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CB6629E6
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 10:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713869183; cv=none; b=CjHciFAqJZfVC8Q5sA03GHAj0p46mxWVkiJGBkRKLH2shPqXdFfZ33yc/vBVOjqKyVVWUOvbJspcQv0mT+X2clD2dai33Fzn+IeEnKcKntGuyyYq/HU+cSRERjxcF5PJF/yBZcGRNfjfkZPGNzznLnRZ/0OQWjQOjrmovDhesHo=
+	t=1713869795; cv=none; b=OooAJ2+15Yk4KMmcKfFpSpAEhefjsGOLDlYUBntSOhdKjHUo6eKZdzZ+NG8PGqCbZcPvlECeFfSdU8FaAygdNt+c0WmvoFFaUl3STOGhthecg5GX/y7jsUCDLCJLkxoIQy3EAk8dh4R7CJJ3FE3+fv4gvg9avZ2oQKd8DPrxOLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713869183; c=relaxed/simple;
-	bh=mmjotz2m/s2wCzaIz5vGpF6Ju6kc+foSpiaBrorBsdg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=EOJ88/iTVglr5lmE+8pvjfrKMim0wo2FVEaHquQ5h2o21IvRhMHpdQ3XZPP7lCgo6X1p7L1G6rUilndWcWdBeWnsJb5SJjxcUbt/ll+fqPBRhaDidQsSY3zuG+oytYtIqyLKFHIquZGOXzFQOPAZnCqEClkksd2nmPwGM6cRHcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=cmbeqjF9; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1713869161; x=1714473961; i=markus.elfring@web.de;
-	bh=Z2QfoNYsNXaask8xcpoAL8dlyuCS+LFLGRl6vuwhzKs=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=cmbeqjF9MI/4Xc/cWfQvZU4+GjT1LN+3fohkWCFX1fVX7qGZFUI3WyZhRGRzzgz6
-	 SBcwU3rH2wvfa9QG1QMKAhP3JlELYBNEoDz6YTlm4eXjJ9MuFe667qbJSBj0sMKf/
-	 MZ5TSLbujJJcrnyw9E+NS2n+eM5qbaiCOnpqaLmc5kgd1kRZBN4z5BYFeBfecdidS
-	 +pxRD7OQyTs2eZk/ChX9Njo+BFAFud0LxFUW3QP/RoaHkq6CzIU6bWB+IEDM3nZaa
-	 8rPeFCH1ehIcGWqkd1HewCblSY6geGGmmRxhmicU5zAKM9HGeyq3IYj1Zw+/of5k7
-	 3FbGLrVVJ/bGcpNa1w==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MALeR-1rrq3m0BfH-00BpJG; Tue, 23
- Apr 2024 12:46:01 +0200
-Message-ID: <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
-Date: Tue, 23 Apr 2024 12:45:58 +0200
+	s=arc-20240116; t=1713869795; c=relaxed/simple;
+	bh=o3+E/pVcXMqGN2IqmycMoE4DCLdrwAivCv4tvzqB9Rk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=piKZBBiz2f2sf2Z0kx3oePyvuDfPD6QTLPuQCVL+NC2jKR+XSCeHkgaGybquXZxg8ViJKsQexHTtdBmDi+8qj4NgsN69KGxClfJE2V9yakdyr1tlvEO1MSxx40reWFHTPiF+orccmrCrdZWcfx2mNqOlFqxEM6jnuw4c1K8t4WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=GWjWXBv7; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a51addddbd4so553054966b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 03:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1713869792; x=1714474592; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f7A3dJbrWY/9z1NTPLr/SP8VA+syiS13CnbQZQzTmh4=;
+        b=GWjWXBv7Cn/wPbJp28rCO/HzDYzjI29GOdYQTrarblqKOgDeYn3CMGmc/GwGIkH4It
+         iB3UMMD6o4gBTSzyTAEtPmdUsIT2n0REd682t2ojxM4ti9Dm/fCioytcnGeCadF8Qcjn
+         BpIBgOr0VFARD/PwKTh7SXuBs8aHgvSqqdh0f42hJm7nDib5NCjiC60yYWVYaaH4MUys
+         D+SXlayKn1e3Do3FKERf/5Gpxhj/xYw+NqF2h6vvfqEx9ZO+s0abjW2tbqyjiCAWdSVl
+         BrPOEbTJ3p9kwUvePL8lXjN2ZBgRJNamoLAcGjwbn8i8Ynaw8PSDXBTbMCdblEqWu7F4
+         7wCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713869792; x=1714474592;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f7A3dJbrWY/9z1NTPLr/SP8VA+syiS13CnbQZQzTmh4=;
+        b=hZAK67tdH/VfUDKWExrDYI0cmkdGqAOLAqlvmbSRsvmljyD0E6eTtOc0jOia8VVO1L
+         Yeu9iw5tv9GyIUpCH+qEfzmxJJuYVjAx9H6rMErykCTw5XBJyznRgjhoNXuSmWqJrhji
+         Vv2JfxeIwWrtzv1YUIlUhMPTygX5r0pLs4MvwX9JYRWX46HOXQfVDSLz7KAMJc130AF5
+         B7jE8KVMRuVzcfwjHyzgmdJdtCoLro/UUeEX1DVUd+m0AUj35E5YBVsPKZfit9LRlOOH
+         35OHjPRe30GJyMOzJBiDNT0ZjNn4Zfay8xh32OGNVqWqYzNBRYRFi3icjIUwRg1MFjgG
+         OXlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9DHPf9IHmbH+IZcmkdcrcMiebwDwFZDhBi2NdagKFlybNEpfAhMohZ8DETyV+U2eRoszao8Nm5lSmIbBqviYPkq9GCg0lLgtC7g2Ma97Q
+X-Gm-Message-State: AOJu0YwW/JHiNi+802bY0y7jQ3nz2HomGgimn9avo/QptW8QKlqQWaJ8
+	lBGJk1eAVhA0NC1saQBCPo0ir5YW6q8pbLc6XPitESdR8iIGIWdcFzSrkW6KZ68=
+X-Google-Smtp-Source: AGHT+IGuxCj+bPVMezQTiiqaIkHubBLsXlhj+D610GPwkEGBc0PyN8R4nZYOrEBNLFuAizVxpXXs2w==
+X-Received: by 2002:a17:906:3502:b0:a52:22c4:8158 with SMTP id r2-20020a170906350200b00a5222c48158mr8092139eja.56.1713869791624;
+        Tue, 23 Apr 2024 03:56:31 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id c27-20020a170906d19b00b00a5557bc8920sm6916846ejz.54.2024.04.23.03.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Apr 2024 03:56:31 -0700 (PDT)
+Date: Tue, 23 Apr 2024 12:56:30 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org, 
+	Ajay Kaher <ajay.kaher@broadcom.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Anup Patel <anup@brainfault.org>, samuel.holland@sifive.com, 
+	Conor Dooley <conor.dooley@microchip.com>, Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Mark Rutland <mark.rutland@arm.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, Will Deacon <will@kernel.org>, 
+	x86@kernel.org
+Subject: Re: [PATCH v8 24/24] KVM: riscv: selftests: Add commandline option
+ for SBI PMU test
+Message-ID: <20240423-b25d0b1540d2092f5370afa5@orel>
+References: <20240420151741.962500-1-atishp@rivosinc.com>
+ <20240420151741.962500-25-atishp@rivosinc.com>
+ <724a4797-18dc-4011-ba48-445c1cb6a976@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kunwu Chan <chentao@kylinos.cn>, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <kunwu.chan@hotmail.com>
-References: <20240423073952.2001989-1-chentao@kylinos.cn>
-Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in
- test_vmx_nested_state
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240423073952.2001989-1-chentao@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:n0vG778YO3AlCLa1Kkm9T2tHkc4o+LBjG5klT6TJdU77Jh8Dora
- QFIaJiH85W6Xc7fjQoiRabVVD44o4/UHu0iWfxFwNJowQmmXfs0A6Zn3Qys8CPRvwkLLNsu
- whyjAWIuocz1zh22880mu8XUXCZp6MUK0I8Zj8OZLMETQNwHawKPxzyHeTfXq0gEPLqycpa
- mH4Kkq7K0eOyfe9mfJ+ng==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:RYvcZeMOHFQ=;vIuz/LWBBbAEi+MLP3uR5HcF0S2
- fKZlZqWia6HX2nKjYaSheqvvCWSVJV9WAWF8z6c1ycLowSt34X3TIYZIGzw/tsXNfX9C/Qm8W
- 2O0oDDLWY1lkZ/WiwmhlEwXOMHFVBegFFdRNfI5dwg/p9Is4PS7W5wyb0W+Wodwzi9AG2AAcl
- FzaxKtx7aeMfzoXu7TytaH5hkA4LQrqmKtGc71tM2IZtDz4f1xYy9p7IoMWZ/UI4cgk1xGRcI
- Qpz5gKeK0ZHibwOxRsZ4kwiHzEWl+m+5uu5+gndOvc9QtMF1HCm0/wyT8M/wPdqhQpWfFrkZf
- srcFX4IdTU9rrMRYlEAMOU8APeEk/ePBp8sqRDxJGK7Q3HwrAf1vfqiQvBnmy31jVjcn5tavj
- 1chOk5dyfcpLXeG20VJo+OXde0ot7jumObxz4Ba5RtkakzOg7T+tyhfgfYnqdyMDcgiqvrpQw
- ZVlqlggxlj+STKT1+/QAnY7LqOWkFNU+xPP6WLe7OB1T7zF8YlfnTaUnTP5erR0T68Sl40K0M
- KkVDpeJQu8hH8fWw1x3YQG7FEbc5iXANOK5FmE8yHzCubDlz0uKKdhp0zQDPIJRhkFjUVbKJF
- a0NbfPGE8ArC+miv6ZN6F/JuH277QhWYLZUtM5X8FVFPJSO/YWqfQDw6yBtAKmbZupBIfvoHd
- Gx6uKztEiPZj0goQVz5KmDmhA82JwhiMugOl8xJMKjDu4vU4vpa6o6RDppRgvQZlIUOXYZf7Z
- hq4MTWC2LtvIfYgXECGjFrb0fgkYWWRF8JQvlX8CLY97yJgavGFGxjnS96jI8PKl1N62SnUK6
- 56j7kMp+kepa+px+bg02Nkzo2DG+BXdhxfc7N+CiS0w2Q=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <724a4797-18dc-4011-ba48-445c1cb6a976@collabora.com>
 
-=E2=80=A6
-> This patch will add the malloc failure checking
-=E2=80=A6
+On Tue, Apr 23, 2024 at 02:03:29PM +0500, Muhammad Usama Anjum wrote:
+...
+> > +	pr_info("Usage: %s [-h] [-d <test name>]\n", name);
+> A little weird that we have pr_info named helper to print logs when it is a
+> userspace application, not kernel code. I'll check it in the source who
+> added it to the KVM tests.
+>
 
-* Please use a corresponding imperative wording for the change description=
-.
+It was me, as git-blame will easily show you. Why is it "weird"?
+Applications have needs for pr_info-like functions too, and the pr_info
+name isn't reserved for the kernel. The only thing weird I see is that
+I didn't differentiate pr_debug and pr_info messages. I probably should
+have at least given pr_debug output a 'debug:' prefix.
 
-* Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
-
-
-=E2=80=A6
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-> @@ -91,6 +91,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
->  	const int state_sz =3D sizeof(struct kvm_nested_state) + getpagesize()=
-;
->  	struct kvm_nested_state *state =3D
->  		(struct kvm_nested_state *)malloc(state_sz);
-> +	TEST_ASSERT(state, "-ENOMEM when allocating kvm state");
-=E2=80=A6
-
-Can =E2=80=9Cerrno=E2=80=9D be relevant for the error message construction=
-?
-
-Regards,
-Markus
+Thanks,
+drew
 
