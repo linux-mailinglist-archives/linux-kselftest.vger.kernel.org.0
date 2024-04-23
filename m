@@ -1,204 +1,162 @@
-Return-Path: <linux-kselftest+bounces-8679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF18E8AE087
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 11:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D9348AE0A3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 11:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35715B2454F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 09:03:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC16DB25EE2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 09:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DD055C3A;
-	Tue, 23 Apr 2024 09:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C6D59B4D;
+	Tue, 23 Apr 2024 09:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JjjwOQ6i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M5S60Rmp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A180456448;
-	Tue, 23 Apr 2024 09:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AE35823F
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 09:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713862995; cv=none; b=LUUPZKbrTxiloqXUk5tXzsAgxTJw6eHlocjsGFAwteAKiMeW9lGIwdLcgLb+npZMHlqX0Ihq+ryNeluJwM6chmbqhXM+L+OGRY1v1DVxXZpcbbyp+J8zUhJohdUb57QqRfdVwkN9Yvk7JX1wM/c46ADVif0NrMtLgSBF104kaH0=
+	t=1713863296; cv=none; b=PkFf+2Wp10/LgDOaScLe3Yn5v5LSgcSp/ZeX+C6/ml4cwG6hdDEA0vKngQ+kdJ4kbHdhXg5u/yH+38BNs7leXtVW5Uzt5HYNgxfnAL/EZ1j44E/6T92RRwXjPBTbQi7EqunLKXuWqqFUQgtWkfC9cE0fBmV+BxyVJIACsWWG22g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713862995; c=relaxed/simple;
-	bh=ZhShH3/3rdnIjiL1nxztMfl3ZOxaEjovEywEq+0BN6o=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Ud96GHdEvhp16NgvTwoRZ8BEY/yBoZqsICuTSM5gCuj6Ww5BCZC0EcX6xd69j/NVg2y8wLYeovgd3ZoIxRu4TkIfp9vsyUr++qk2F4FFoGoI1FIOdXuwJog4tLojy4XqecIuXEo0RJetg71p49V4tlB8nkSV9ONayxSHPzGxYC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JjjwOQ6i; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713862991;
-	bh=ZhShH3/3rdnIjiL1nxztMfl3ZOxaEjovEywEq+0BN6o=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=JjjwOQ6isr691Bw4kJAkfAfT+SMmu4biuU/dRrtYswGHFCulY/PdgxGcX7HKyBifO
-	 JpcFVgdz+L5UZ1seL02TMghlOJ1RnaqNfBt/0h9MoR3tlfaGB3kt3DkcmFSg3AdEmP
-	 dQkGwNTYGvF3QOLGsV6kT0azFNIQ29hcFiVUfJ0xFl31fDTnQtLR22Ulu2RQErtIYP
-	 tI72e/U7ymSlS91ObLPs7XjPbWXVpfdPN3lcG0UNk3sQ/+uMr7pfuO5mWdwUMg68lt
-	 AwqhJDFzmDtKqkKk9QWP1rbSD8/vD+8MeVr0YM8EiwX4Ls5FgkZgrLRmMvxI2kem5J
-	 Nmyrk4NP97tEQ==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C2BD83780016;
-	Tue, 23 Apr 2024 09:03:01 +0000 (UTC)
-Message-ID: <724a4797-18dc-4011-ba48-445c1cb6a976@collabora.com>
-Date: Tue, 23 Apr 2024 14:03:29 +0500
+	s=arc-20240116; t=1713863296; c=relaxed/simple;
+	bh=0rV1Ku+pcVQFW3sVe5g2nnNHm4ytFcT2WipJXX42ZRk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gru282T6yUfonR7XKBGQbpbDy+K0/f8KRjLHX7pXyEaRfTjoQ7uFk7w952ENSaIwgkKRuew3qjHU2YqJMuKTsnXC8rh5geunvYp9ZbbW2Zumo4snQAKWQjfB3d5JSCk1k06Et6gY21Z7teka/INXlaHTNoZgGsdGzA/Ch4xIoZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M5S60Rmp; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcdc3db67f0so8615739276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 02:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713863293; x=1714468093; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fVAaYYUYRjsITzR+rLStFX9oltnbfPIIpZ1fuxXV7XI=;
+        b=M5S60RmpzD8ZgBm3CSJU+/oXKdMchLrX1cFpQGpFulesF/MfM1Akkbt90ys3wkTRIu
+         1jaTJrt2AO+9rRc1i7JAkV1qTmE9MklvKS+CfjrsR1U7aCrEyc1rYyipY27QP8B6zTVr
+         Hzjseug4YncjOFim+3t1lqdy7YLUadWhmk3uyv7GqINASNR5OeOEiLbfnN8+quDR3XC2
+         UZQCULFZ5n6B//Xg02QifcAWoiSmHx5S8nduS/KWRAd27+IpnGn0M4BbsYm/zv9p+98e
+         nT7IX82+J6WfQOi7+hKFRQ66AhZGHwfL8MgLgGN5VjC2scMb/oPQO3EFvmQq+VwZ5lCT
+         86uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713863293; x=1714468093;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fVAaYYUYRjsITzR+rLStFX9oltnbfPIIpZ1fuxXV7XI=;
+        b=cvvgVNKTYUhABOIQL/9NaSyPVke8gtt7uEI7WsYML8+jgB5Ti5H5FnX7TD4ebTolTk
+         eWjAiBSSt9ntyZDKjMLP05g6fWW6veDaZEEkRkbk1UWwrwpV8m1pOcBtDLDIiRKBndem
+         MqTDtVu/flsnbHOS91mW90qAR7kxBTpylaYo6Fu3ZWmwwG6b58KRuVOd9wfmoMnuiFV/
+         0gRcJjFMeMujiTxa/Moi8Frlzk2OvNDchCCwJJKgg1wLNQ5xMR/c9eSP0vJf7HNANLB0
+         A7uYOhSEkpIIcHl9x4bKzH+O8DZkc11WEoBpYgVEWZqi+fucuEK9RqKCExZ/C7hnqp2i
+         oI2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWKff70LbYsMx+8hNrQrEgnhK2AS4FigAyHJCWQVFK2RmUh/opBgX8ZalMZFDkkrqRXNyNPyrSE11WbukRVU98xrRbfVP3EsjYzzcYgYp3E
+X-Gm-Message-State: AOJu0YwDHhJWAoDYZr4ym5qK2J+VXBfvAqHyDHI6lHAUIzoux8JoBci9
+	4WfzDtxLNGNHxNVXQOF23/1tK0sXxiz2qCafqLs1cichQSbHD4hI2KzI79sDtZbKvB9XhQd3RL1
+	7i7rndAhgCA==
+X-Google-Smtp-Source: AGHT+IFU0jlOyX9I+mwd40yApvsRfjBwt5t4OBU5P727dBTc45GWW4TdEtasewfwzzhy5LM65oNmgOpmVDst6g==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1023:b0:dda:c4ec:7db5 with SMTP
+ id x3-20020a056902102300b00ddac4ec7db5mr691696ybt.4.1713863293622; Tue, 23
+ Apr 2024 02:08:13 -0700 (PDT)
+Date: Tue, 23 Apr 2024 17:08:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Jones <ajones@ventanamicro.com>, Ajay Kaher
- <ajay.kaher@broadcom.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alexghiti@rivosinc.com>, Anup Patel <anup@brainfault.org>,
- samuel.holland@sifive.com, Conor Dooley <conor.dooley@microchip.com>,
- Juergen Gross <jgross@suse.com>, kvm-riscv@lists.infradead.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-riscv@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>,
- virtualization@lists.linux.dev, Will Deacon <will@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH v8 24/24] KVM: riscv: selftests: Add commandline option
- for SBI PMU test
-To: Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org
-References: <20240420151741.962500-1-atishp@rivosinc.com>
- <20240420151741.962500-25-atishp@rivosinc.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240420151741.962500-25-atishp@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240423090808.242389-1-davidgow@google.com>
+Subject: [PATCH] kunit: test: Move fault tests behind KUNIT_FAULT_TEST Kconfig option
+From: David Gow <davidgow@google.com>
+To: Rae Moar <rmoar@google.com>, 
+	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Guenter Roeck <linux@roeck-us.net>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/20/24 8:17 PM, Atish Patra wrote:
-> SBI PMU test comprises of multiple tests and user may want to run
-> only a subset depending on the platform. The most common case would
-> be to run all to validate all the tests. However, some platform may
-> not support all events or all ISA extensions.
-> 
-> The commandline option allows user to disable any set of tests if
-> they want to.
-> 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-LGTM
+The NULL dereference tests in kunit_fault deliberately trigger a kernel
+BUG(), and therefore print the associated stack trace, even when the
+test passes. This is both annoying (as it bloats the test output), and
+can confuse some test harnesses, which assume any BUG() is a failure.
 
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Allow these tests to be specifically disabled (without disabling all
+of KUnit's other tests), by placing them behind the
+CONFIG_KUNIT_FAULT_TEST Kconfig option. This is enabled by default, but
+can be set to 'n' to disable the test. An empty 'kunit_fault' suite is
+left behind, which will automatically be marked 'skipped'.
 
-> ---
->  .../selftests/kvm/riscv/sbi_pmu_test.c        | 73 ++++++++++++++++---
->  1 file changed, 64 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> index 0fd9b76ae838..69bb94e6b227 100644
-> --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> @@ -33,6 +33,13 @@ static unsigned long counter_mask_available;
->  
->  static bool illegal_handler_invoked;
->  
-> +#define SBI_PMU_TEST_BASIC	BIT(0)
-> +#define SBI_PMU_TEST_EVENTS	BIT(1)
-> +#define SBI_PMU_TEST_SNAPSHOT	BIT(2)
-> +#define SBI_PMU_TEST_OVERFLOW	BIT(3)
-> +
-> +static int disabled_tests;
-> +
->  unsigned long pmu_csr_read_num(int csr_num)
->  {
->  #define switchcase_csr_read(__csr_num, __val)		{\
-> @@ -608,19 +615,67 @@ static void test_vm_events_overflow(void *guest_code)
->  	test_vm_destroy(vm);
->  }
->  
-> -int main(void)
-> +static void test_print_help(char *name)
-> +{
-> +	pr_info("Usage: %s [-h] [-d <test name>]\n", name);
-A little weird that we have pr_info named helper to print logs when it is a
-userspace application, not kernel code. I'll check it in the source who
-added it to the KVM tests.
+As the fault tests already were disabled under UML (as they weren't
+compatible with its fault handling), we can simply adapt those
+conditions, and add a dependency on !UML for our new option.
 
-> +	pr_info("\t-d: Test to disable. Available tests are 'basic', 'events', 'snapshot', 'overflow'\n");
-> +	pr_info("\t-h: print this help screen\n");
-> +}
-> +
-> +static bool parse_args(int argc, char *argv[])
-> +{
-> +	int opt;
-> +
-> +	while ((opt = getopt(argc, argv, "hd:")) != -1) {
-> +		switch (opt) {
-> +		case 'd':
-> +			if (!strncmp("basic", optarg, 5))
-> +				disabled_tests |= SBI_PMU_TEST_BASIC;
-> +			else if (!strncmp("events", optarg, 6))
-> +				disabled_tests |= SBI_PMU_TEST_EVENTS;
-> +			else if (!strncmp("snapshot", optarg, 8))
-> +				disabled_tests |= SBI_PMU_TEST_SNAPSHOT;
-> +			else if (!strncmp("overflow", optarg, 8))
-> +				disabled_tests |= SBI_PMU_TEST_OVERFLOW;
-> +			else
-> +				goto done;
-> +			break;
-> +		case 'h':
-> +		default:
-> +			goto done;
-> +		}
-> +	}
-> +
-> +	return true;
-> +done:
-> +	test_print_help(argv[0]);
-> +	return false;
-> +}
-> +
-> +int main(int argc, char *argv[])
->  {
-> -	test_vm_basic_test(test_pmu_basic_sanity);
-> -	pr_info("SBI PMU basic test : PASS\n");
-> +	if (!parse_args(argc, argv))
-> +		exit(KSFT_SKIP);
-> +
-> +	if (!(disabled_tests & SBI_PMU_TEST_BASIC)) {
-> +		test_vm_basic_test(test_pmu_basic_sanity);
-> +		pr_info("SBI PMU basic test : PASS\n");
-> +	}
->  
-> -	test_vm_events_test(test_pmu_events);
-> -	pr_info("SBI PMU event verification test : PASS\n");
-> +	if (!(disabled_tests & SBI_PMU_TEST_EVENTS)) {
-> +		test_vm_events_test(test_pmu_events);
-> +		pr_info("SBI PMU event verification test : PASS\n");
-> +	}
->  
-> -	test_vm_events_snapshot_test(test_pmu_events_snaphost);
-> -	pr_info("SBI PMU event verification with snapshot test : PASS\n");
-> +	if (!(disabled_tests & SBI_PMU_TEST_SNAPSHOT)) {
-> +		test_vm_events_snapshot_test(test_pmu_events_snaphost);
-> +		pr_info("SBI PMU event verification with snapshot test : PASS\n");
-> +	}
->  
-> -	test_vm_events_overflow(test_pmu_events_overflow);
-> -	pr_info("SBI PMU event verification with overflow test : PASS\n");
-> +	if (!(disabled_tests & SBI_PMU_TEST_OVERFLOW)) {
-> +		test_vm_events_overflow(test_pmu_events_overflow);
-> +		pr_info("SBI PMU event verification with overflow test : PASS\n");
-> +	}
->  
->  	return 0;
->  }
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/all/928249cc-e027-4f7f-b43f-502f99a1ea63@roeck-us.net/
+Fixes: 82b0beff3497 ("kunit: Add tests for fault")
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/Kconfig      | 11 +++++++++++
+ lib/kunit/kunit-test.c |  8 ++++----
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 68a6daec0aef..34d7242d526d 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -24,6 +24,17 @@ config KUNIT_DEBUGFS
+ 	  test suite, which allow users to see results of the last test suite
+ 	  run that occurred.
+ 
++config KUNIT_FAULT_TEST
++	bool "Enable KUnit tests which print BUG stacktraces"
++	depends on KUNIT_TEST
++	depends on !UML
++	default y
++	help
++	  Enables fault handling tests for the KUnit framework. These tests may
++	  trigger a kernel BUG(), and the associated stack trace, even when they
++	  pass. If this conflicts with your test infrastrcture (or is confusing
++	  or annoying), they can be disabled by setting this to N.
++
+ config KUNIT_TEST
+ 	tristate "KUnit test for KUnit" if !KUNIT_ALL_TESTS
+ 	default KUNIT_ALL_TESTS
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 0fdca5fffaec..e3412e0ca399 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -109,7 +109,7 @@ static struct kunit_suite kunit_try_catch_test_suite = {
+ 	.test_cases = kunit_try_catch_test_cases,
+ };
+ 
+-#ifndef CONFIG_UML
++#if IS_ENABLED(CONFIG_KUNIT_FAULT_TEST)
+ 
+ static void kunit_test_null_dereference(void *data)
+ {
+@@ -136,12 +136,12 @@ static void kunit_test_fault_null_dereference(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, ctx->function_called);
+ }
+ 
+-#endif /* !CONFIG_UML */
++#endif /* CONFIG_KUNIT_FAULT_TEST */
+ 
+ static struct kunit_case kunit_fault_test_cases[] = {
+-#ifndef CONFIG_UML
++#if IS_ENABLED(CONFIG_KUNIT_FAULT_TEST)
+ 	KUNIT_CASE(kunit_test_fault_null_dereference),
+-#endif /* !CONFIG_UML */
++#endif /* CONFIG_KUNIT_FAULT_TEST */
+ 	{}
+ };
+ 
 -- 
-BR,
-Muhammad Usama Anjum
+2.44.0.769.g3c40516874-goog
+
 
