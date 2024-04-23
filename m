@@ -1,126 +1,104 @@
-Return-Path: <linux-kselftest+bounces-8658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ABA78ADB36
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 02:43:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 632568ADE58
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 09:37:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DDC283F88
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 00:43:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6D8AB20D5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Apr 2024 07:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4467B3FF4;
-	Tue, 23 Apr 2024 00:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KxGac3A9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD8B4778C;
+	Tue, 23 Apr 2024 07:37:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B9F14F98;
-	Tue, 23 Apr 2024 00:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6B147772;
+	Tue, 23 Apr 2024 07:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713833023; cv=none; b=ozQ+1ozc7pJKq6q7tRE7Vd/DY3c1Jb1F0J+qbnpbt060BkhkUEmaRH6+vbf+mTwh1iFB0NyVb0/ogUSuZr+Zi4O7oJcjm0QphgVS/kKSLNPfmpijPNVUW5+0Nmx3RQB0SmW3YlQ3HOHSjsYMFRvLUiFQ7R8cp+oWs0Lnlstbdnw=
+	t=1713857861; cv=none; b=af8QeoZcAuyjtIw2DzBipd8qpGG3A6lfxLCKw910ns5I5Qzss5b0O3+TLE/bwYsT3Kh7xFcw4qWF8hhO93bOMTU0sjlMCLstcx9Vr/eWotGIYJFMJc7knMdVcnXhvcOV9pn+bqsL2sTPA9kM3JYBYLxAVmj++5eJJGe9HsXpIR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713833023; c=relaxed/simple;
-	bh=b69z8MKu5WCo7Cd2DA4gTZQA8lpYkKyRqYcx1dxF34w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=syJVGsCNYg9S9VBSFiD1wylnR/mKawTXNlI3Cc0lFxsCjTvkhDrBUfNTJSv0iszcc3vQT8bKwF35cwSaSfUniLJggPkTvSbqFm/B3krZv/IlFNz9jNvtHw9DFE1wwL5BeQDwNvVvEmg5Y1KaLbnewxLRkSJ4zYms1HoIIEVo/ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KxGac3A9; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed691fb83eso3992371b3a.1;
-        Mon, 22 Apr 2024 17:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713833020; x=1714437820; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=84vJQPmZeH4flu8huGOV5q9Ft8py+u51GWOsQbHslr0=;
-        b=KxGac3A9r0gl3ptsFB0rbrAVkxelN/Bcj5qFPEv10E7SAkPs1ZNvfK4qSYOgsqVC/c
-         gVgcFkm27qTIijIwNxAoqgzpYu5u7bmtnTQpSaDPYlmyfLA/QnallktYE5mllmXKSOA8
-         al8THU2STO8Sp3GJqxwIdxV5ag13r5Sh2vNvNNn0XsZo4vT/0aKWV8sjn1kzKN6aUnoG
-         Wf0Vuz/jFJMO9FfzU9E/RGXrsfT8aUUYsE3VRxImNKSPPzwMqlz2o8cjwDZd4BYhR/dr
-         Zhr5hkCjTAxqxOakslwTG0UskTgwbB/Whe66I4klBicr7zIUSErWvZ1ma9qJxY1EprBP
-         +dng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713833020; x=1714437820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=84vJQPmZeH4flu8huGOV5q9Ft8py+u51GWOsQbHslr0=;
-        b=EUwWvHgCHsTQEYZazTR/9rEdWlxy21MWbcLHZpn9u/C2Ep8DzbBeBKO1ecU9J+lF8M
-         KVavfyfCgYQW4FUrgtQXELULaTpmIX5tkoJyIS2CauWfy6Fom85/F9ktl6OtYhJ0BV6b
-         WUx6Jf6A+s01sSfG/s5lSid61HeRfuHfZ8HLP2PE+SZ2kuS80MvZ8LUV/ovsZ/LpDe3t
-         ZksRLsFjl2yU4JjON/IKm2CzeIo5ig2ZYaes0Jysk2CGXqYdQyrqMFQUG+T8WdSmIngP
-         8Jd9ER8eFU5EIUcaVwS/px38jncKXa9vj8Up4FV1KVYaV16y0uwSCb+sxHUQSYunasC2
-         8TfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWkLz8ZjyWJhaFWC18JGuFGvPQLz1PnEbNJjf74il115kcALG00ut4vpw6hjWi4CEqccJ1D/PkBwZONf7reI/wpzgHv3cSiRkHr2zrcKMTvTqKUybgcuxtoYehXBPLeERK81ojtVACdCmSIQLmKuj2cOV/F+CuJidT8WWK+I//rTcGXbt4C5adHWqsfxu4HJIYmETWnkSSGNBGBv7KEgFLLpUChIRnm4xr/JLSah1lLyyupeeeL1ibCuYNHLH/3/kx/Byk=
-X-Gm-Message-State: AOJu0YwrACmE/i/ujLkEQX0z4WEr1/peJAPygfy08+m1PrcO7kf3+sZF
-	IRqnQgMtf8koMiJb0kjaRte+rPlELjYkKaY9Nj2gCd1rf9/UR2wkWUA8W69JXm3vGTnHxLKht7O
-	Dg9ZeFT0lFWODY4cJFqPh7EBFgzI=
-X-Google-Smtp-Source: AGHT+IGxeORm1TBskNYFb9Q9UnxlPWh+xAzteXrnLfX4ZhQxPREhBxwkngicmnabL/j5mMF9OrXzpySLTVciO2cdmAw=
-X-Received: by 2002:a05:6a20:9f43:b0:1a7:6a90:8820 with SMTP id
- ml3-20020a056a209f4300b001a76a908820mr13612612pzb.4.1713833019802; Mon, 22
- Apr 2024 17:43:39 -0700 (PDT)
+	s=arc-20240116; t=1713857861; c=relaxed/simple;
+	bh=xy1GcLvjBjJXjiL/7OVsqPvJYIeiFhB5hYNxFZjPnY8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pqEKpSmAlKaJ/XubgGfmlnNnuR7nVe6/5ar98xjpV1EpaCnFozP71RWjZEtJ9dxyDD8KOe/W/qOHFyJ9ai03TbWikwSNh3qF60roJriXjscmqBMgs2zl/Ad4vMHIejp/sFlGuXUz4zTiEXDhNuc0bklql2dbYjSqJ4aLyvV2bJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 54a3e73a014411ef9305a59a3cc225df-20240423
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:5c1badbe-41c9-45d4-b027-0d1082d0c4ae,IP:20,
+	URL:0,TC:0,Content:-5,EDM:-30,RT:0,SF:1,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-14
+X-CID-INFO: VERSION:1.1.37,REQID:5c1badbe-41c9-45d4-b027-0d1082d0c4ae,IP:20,UR
+	L:0,TC:0,Content:-5,EDM:-30,RT:0,SF:1,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-14
+X-CID-META: VersionHash:6f543d0,CLOUDID:78bbcd68642dc5561833052310f5a086,BulkI
+	D:240423153729G2ISWZO1,BulkQuantity:0,Recheck:0,SF:43|74|66|38|24|72|19|10
+	2,TC:nil,Content:0,EDM:2,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:n
+	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 54a3e73a014411ef9305a59a3cc225df-20240423
+Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw.kylinos.cn
+	(envelope-from <chentao@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 942058463; Tue, 23 Apr 2024 15:37:26 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id D5712E000EB9;
+	Tue, 23 Apr 2024 15:37:25 +0800 (CST)
+X-ns-mid: postfix-66276535-657266450
+Received: from kernel.. (unknown [10.42.12.206])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 235EEE000EB9;
+	Tue, 23 Apr 2024 15:37:25 +0800 (CST)
+From: Kunwu Chan <chentao@kylinos.cn>
+To: kunwu.chan@hotmail.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kunwu Chan <chentao@kylinos.cn>
+Subject: [PATCH] KVM: selftests: Add 'malloc' failure check in config_name
+Date: Tue, 23 Apr 2024 15:37:21 +0800
+Message-Id: <20240423073721.2001016-1-chentao@kylinos.cn>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422091215.526688-1-ojeda@kernel.org>
-In-Reply-To: <20240422091215.526688-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 23 Apr 2024 02:42:34 +0200
-Message-ID: <CANiq72=xkmSGNCiJOr5+YZhKUVYjMwfBZJVCXbDfdf7qEGBAag@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: rust: remove unneeded `@rustc_cfg` to avoid ICE
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, David Gow <davidgow@google.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, linux-kbuild@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 22, 2024 at 11:13=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wr=
-ote:
->
-> When KUnit tests are enabled, under very big kernel configurations
-> (e.g. `allyesconfig`), we can trigger a `rustdoc` ICE [1]:
->
->       RUSTDOC TK rust/kernel/lib.rs
->     error: the compiler unexpectedly panicked. this is a bug.
->
-> The reason is that this build step has a duplicated `@rustc_cfg` argument=
-,
-> which contains the kernel configuration, and thus a lot of arguments. The
-> factor 2 happens to be enough to reach the ICE.
->
-> Thus remove the unneeded `@rustc_cfg`. By doing so, we clean up the
-> command and workaround the ICE.
->
-> The ICE has been fixed in the upcoming Rust 1.79 [2].
->
-> Cc: stable@vger.kernel.org
-> Fixes: a66d733da801 ("rust: support running Rust documentation tests as K=
-Unit ones")
-> Link: https://github.com/rust-lang/rust/issues/122722 [1]
-> Link: https://github.com/rust-lang/rust/pull/122840 [2]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+There is a 'malloc' call in config_name function, which can
+be unsuccessful. This patch will add the malloc failure checking
+to avoid possible null dereference and give more information
+about test fail reasons.
 
-Applied to `rust-fixes` early to start getting some testing in -next.
-Please feel free to send tags for this one.
+Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+---
+ tools/testing/selftests/kvm/get-reg-list.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cheers,
-Miguel
+diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/s=
+elftests/kvm/get-reg-list.c
+index 91f05f78e824..22398696ffd6 100644
+--- a/tools/testing/selftests/kvm/get-reg-list.c
++++ b/tools/testing/selftests/kvm/get-reg-list.c
+@@ -66,6 +66,7 @@ static const char *config_name(struct vcpu_reg_list *c)
+ 		len +=3D strlen(s->name) + 1;
+=20
+ 	c->name =3D malloc(len);
++	TEST_ASSERT(c->name, "-ENOMEM when allocating config name");
+=20
+ 	len =3D 0;
+ 	for_each_sublist(c, s) {
+--=20
+2.40.1
+
 
