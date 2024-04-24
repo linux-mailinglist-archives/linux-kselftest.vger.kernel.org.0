@@ -1,140 +1,168 @@
-Return-Path: <linux-kselftest+bounces-8805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848A18B1196
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 19:59:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C6618B11BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 20:11:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 427A828BFCC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 17:59:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01A71F22CDE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 18:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9501916DEBB;
-	Wed, 24 Apr 2024 17:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C4B16D9B7;
+	Wed, 24 Apr 2024 18:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gOYxPown"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9/cA3vg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A7916D9DE;
-	Wed, 24 Apr 2024 17:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2359815CD6E;
+	Wed, 24 Apr 2024 18:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713981572; cv=none; b=Boaat6uK44nqI3oHovLyjl+mG8qJQFKKLrTz4WwhdSS1CNM6EbPG6LWuzyAsGmS5qWTRQmfVrBWoO/4eZJsVlKVYNHnlcO8PTV7h/xFBNkxztdIAFvIQTokN6NI4j1TUbBJnqeobL3T2DNNf01GZH9B2so+BlURf2pr2FoM2Y88=
+	t=1713982284; cv=none; b=VfBuvPAVdv4ju1Ni57jS7+qeY1KCbF+yBi2GudsQlrMFUcSZHjBDAzcynEB7usO66VIkb3xAyro20qJpTwcsUceIGrZDgAnD1PwIzMvLCqk47+EhSej9sfIuD9APR/PBHJ7zmbk4WtWtDq89SY7f2pbzMomAqQc5Y34FXdi11jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713981572; c=relaxed/simple;
-	bh=cAkAYiHazk+6ficSxW+gfWAABuq28aURZDIh57H/oqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A9qFLER+HF6e6cZjSYN602E+EzSwDMzd2tbk/NFNw4ArBp4YmWTIGZh/kUtOY1CCI5oRs8tQwbblAyxoogWdE+zDHRBOP3SmzJEFklf5ppIztO2BSTgMNhqncLwAP95CI/I8JkUfEHs4TPlB6C+hveuHjAYLcnF3c8lIBka0Ev8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gOYxPown; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-69b2f6d31c1so903556d6.0;
-        Wed, 24 Apr 2024 10:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713981570; x=1714586370; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UviPyNamfMTO0wa9/YHBUwdb+S4+5wLBQZutMKBqdto=;
-        b=gOYxPownoOGZMxtVNEI0ftKZVUcCqe02JwKNdb/PKzbJ5pmMhvHe/T+OrRkwokBzAv
-         3vhT1Maz6THPTXffruT4JIBeu4u1cs6y7OFgcSavajmv88zHwacQmXZEr56FcZ2Qd4/k
-         ObzN6HqxfJvLwqCJyfrtf017wKXtAJpkuNPUZdmqTRJGXE+BNWy5AZ/UVY84EWIXOSYA
-         vsQykZUwfkxv8NSeuH5Ile5FVMHK8XVJUdaimUXu2/MGabx6Q2MVRkDSYpYZoBpWn5WS
-         RbBNg89RDoEpTikcPXheqGf29Ucq03XJYynFAX6LPY6ZUSIzZZzz8GxYskamnwSvhp20
-         WiCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713981570; x=1714586370;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UviPyNamfMTO0wa9/YHBUwdb+S4+5wLBQZutMKBqdto=;
-        b=uKXW9whDFt5wLksf/IsJR/P9NUi1TU/WEiW2UXnvtS/Vzs42BDk/Kul+bZYgjhT361
-         z0E342phb9XSdvDYvPrp+mX0KXEWTfxm0NTbMYRCD+9A2YGH4p0rP8VeYIgMtmequqoA
-         Xkw8zvu5MEeS7kdfD2uBLGlFiLSmcjp/oxyzPLLDclZUzL2UPkvjy98pR4k0DTJPoWaK
-         F7nzUKfiKoTsoWxaQ+ARl9JQG2ynqPI5rZ194MBPHaDbqEMfsP0OsD1Eo6tdiJ1Bi7K0
-         9eXvVLRMlD6+38jFRjDTISipKt3K+AROkgDY/bcauTsSh+9eK1l2Cki0hixo5JBKkR0P
-         1Rlw==
-X-Forwarded-Encrypted: i=1; AJvYcCVEH2kshxN5asav5T95wKjMWMF370ye3X8jBPCTRZ+wgQ84MfiLhISW4cUgWvVbkhrwoanzD+IqIYECMZpOf02p0HuNGR09844lmi8d3NyONHQzGW90foWgRbXUr7oTJ9qNQPp5kE6A
-X-Gm-Message-State: AOJu0YzjOSAcYRbW1o08nolOuIwAB0I0gwhrDaTLXJoaovKNNIpPSXNj
-	ZhxwUdN/K7RlQPSO3d1Kd+jPvVMbEltyHgnBmSHpNbJHjHxFlWp2xlSZfXZa
-X-Google-Smtp-Source: AGHT+IHlkCkzPkV5Rdejgq9/gyOM3k6umMmvXMnEMrQSZsY8zKh/9VlyjWKU1mZ0dZRQgCvKLDnv1A==
-X-Received: by 2002:ad4:430f:0:b0:6a0:5fea:9892 with SMTP id c15-20020ad4430f000000b006a05fea9892mr3273972qvs.6.1713981570132;
-        Wed, 24 Apr 2024 10:59:30 -0700 (PDT)
-Received: from localhost (24-122-67-147.resi.cgocable.ca. [24.122.67.147])
-        by smtp.gmail.com with ESMTPSA id i11-20020a0cab4b000000b0069b59897310sm6252616qvb.63.2024.04.24.10.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 10:59:29 -0700 (PDT)
-Date: Wed, 24 Apr 2024 13:59:29 -0400
-From: Benjamin Poirier <benjamin.poirier@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Aaron Conole <aconole@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	dev@openvswitch.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>
-Subject: Re: [ovs-dev] selftests: openvswitch: Questions about possible
- enhancements
-Message-ID: <ZilIgbIvB04iUal2@f4>
-References: <20240424164405.GN42092@kernel.org>
- <20240424173715.GP42092@kernel.org>
+	s=arc-20240116; t=1713982284; c=relaxed/simple;
+	bh=7ItkOO8ka84a13QOYC/aAIFtqzRRzJtyWXnNHVtkfXs=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=uTsUL3CUGMDxhrs5Tz2UyRjsJ+cjQiEkO3b7zSYACJUDH7n8IrE33GJVW9pD8kQwIE3+iEczv8xXw0Pusdyz2dmq4Fx3J7NsAIwMxmGwYF8qjMfkzXuabMW3AUbuzYTaCEFTRj2jOVRnUPuOmr3wIn0C5sON/68FL9OyAqjCw0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9/cA3vg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C6EC113CD;
+	Wed, 24 Apr 2024 18:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713982283;
+	bh=7ItkOO8ka84a13QOYC/aAIFtqzRRzJtyWXnNHVtkfXs=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=k9/cA3vgWEuYDIlY9xYTJDAcqk4oed74YCEJbNg6AYjrBBi0bPg1rwO7LF11gJ2po
+	 kDUMN1//9aKMK217sOAG0VamcjNYaNNMW5W/ZVGCJDX7HjeaxPaHLZ4TtYZttkBF7e
+	 l3aodjBreSbnFH01sWt608pHXaX8+W6QGTiG4ndnQhnCpu4zoBEEJVJsuHeWS9yvNy
+	 ILSDfQWmpN7GDDvQtUvh0qKXAzwadxoGNkBFhE6+HUM1+5XotZ7RMLT/b/Qte4q3yg
+	 ChagwXxCFOmGxp9Gx0p8gU+y26SnIyFME+hoH9Vcm/CvVBk2dYsQsh59UZxSWv5zkX
+	 7R/oie8nU6Nkw==
+Message-ID: <128dc42a50bfe166993205108a5b23cd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240424173715.GP42092@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240422232404.213174-6-sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-6-sboyd@kernel.org>
+Subject: Re: [PATCH v4 05/10] platform: Add test managed platform_device/driver APIs
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
+To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Date: Wed, 24 Apr 2024 11:11:21 -0700
+User-Agent: alot/0.10
 
-On 2024-04-24 18:37 +0100, Simon Horman wrote:
-> On Wed, Apr 24, 2024 at 05:44:05PM +0100, Simon Horman wrote:
-> > Hi Aaron, Jakub, all,
-> > 
-> > I have recently been exercising the Open vSwitch kernel selftests,
-> > using vng, something like this:
-> > 
-> > 	TESTDIR="tools/testing/selftests/net/openvswitch"
-> > 
-> >         vng -v --run . --user root --cpus 2 \
-> >                 --overlay-rwdir "$PWD" -- \
-> >                 "modprobe openvswitch && \
-> > 		 echo \"timeout=90\" >> \"${TESTDIR}/settings\" && \
-> >                  make -C \"$TESTDIR\" run_tests"
-> > 
-> > And I have some observations that I'd like to ask about.
-> > 
-> > 1. Building the kernel using the following command does not
-> >    build the openvswitch kernel module.
-> > 
-> > 	vng -v --build \
-> > 		--config tools/testing/selftests/net/config
-> > 
-> >    All that seems to be missing is CONFIG_OPENVSWITCH=m
-> >    and I am wondering what the best way of resolving this is.
-> > 
-> >    Perhaps I am doing something wrong.
-> >    Or perhaps tools/testing/selftests/net/openvswitch/config
-> >    should be created? If so, should it include (most of?) what is in
-> >    tools/testing/selftests/net/config, or just CONFIG_OPENVSWITCH=m?
-
-I noticed something similar when testing Jiri's virtio_net selftests
-patchset [1].
-
-drivers/net/virtio_net/config includes virtio options but the
-test also needs at least CONFIG_NET_VRF=y which is part of net/config.
-
-Whatever the answer to your question, all config files should be
-coherent on this matter.
-
-[1] https://lore.kernel.org/netdev/20240424104049.3935572-1-jiri@resnulli.us/
-
+Quoting Stephen Boyd (2024-04-22 16:23:58)
+> diff --git a/drivers/base/test/platform_kunit.c b/drivers/base/test/platf=
+orm_kunit.c
+> new file mode 100644
+> index 000000000000..54af6db2a6d8
+> --- /dev/null
+> +++ b/drivers/base/test/platform_kunit.c
+> @@ -0,0 +1,174 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test managed platform driver
+> + */
+> +
 [...]
-> 
->   5. openvswitch.sh starts with "#!/bin/sh".
->      But substitutions such as "${ns:0:1}0"  fail if /bin/sh is dash.
->      Perhaps we should change openvswitch.sh to use bash?
+> +
+> +/**
+> + * platform_driver_register_kunit() - Register a KUnit test managed plat=
+form driver
+> + * @test: test context
+> + * @drv: platform driver to register
+> + *
+> + * Register a test managed platform driver. This allows callers to embed=
+ the
+> + * @drv in a container structure and use container_of() in the probe fun=
+ction
+> + * to pass information to KUnit tests. It can be assumed that the driver=
+ has
+> + * probed when this function returns.
+> + *
+> + * Example
+> + *
+> + * .. code-block:: c
+> + *
+> + *     struct kunit_test_context {
+> + *             struct platform_driver pdrv;
+> + *             const char *data;
+> + *     };
+> + *
+> + *     static inline struct kunit_test_context *
+> + *     to_test_context(struct platform_device *pdev)
+> + *     {
+> + *             return container_of(to_platform_driver(pdev->dev.driver),
+> + *                                 struct kunit_test_context,
+> + *                                 pdrv);
+> + *     }
+> + *
+> + *     static int kunit_platform_driver_probe(struct platform_device *pd=
+ev)
+> + *     {
+> + *             struct kunit_test_context *ctx;
+> + *
+> + *             ctx =3D to_test_context(pdev);
+> + *             ctx->data =3D "test data";
+> + *
+> + *             return 0;
+> + *     }
+> + *
+> + *     static void kunit_platform_driver_test(struct kunit *test)
+> + *     {
+> + *             struct kunit_test_context *ctx;
+> + *
+> + *             ctx =3D kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+> + *             KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+> + *
+> + *             ctx->pdrv.probe =3D kunit_platform_driver_probe;
+> + *             ctx->pdrv.driver.name =3D "kunit-platform";
+> + *             ctx->pdrv.driver.owner =3D THIS_MODULE;
+> + *
+> + *             KUNIT_EXPECT_EQ(test, 0, platform_driver_register_kunit(t=
+est, &ctx->pdrv));
+> + *             KUNIT_EXPECT_STREQ(test, ctx->data, "test data");
+> + *     }
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int platform_driver_register_kunit(struct kunit *test,
+> +                                  struct platform_driver *drv)
+> +{
+> +       int ret;
+> +
+> +       ret =3D platform_driver_register(drv);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /*
+> +        * Wait for the driver to probe (or at least flush out of the def=
+erred
+> +        * workqueue)
+> +        */
+> +       wait_for_device_probe();
 
-I think so. A similar change was done in
-c2518da8e6b0 selftests: bonding: Change script interpreter (v6.8-rc1)
+Should this be removed? I was thinking that this isn't a pure wrapper
+around platform_driver_register() because it has this wait call.  Maybe
+it's better to have some other kunit API that can wait for a specific
+device to probe and timeout if it doesn't happen in that amount of time.
+That API would use the bus notifiers and look for
+BUS_NOTIFY_BOUND_DRIVER. Or maybe that function could setup a completion
+that the test can wait on.
+
+> +
+> +       return kunit_add_action_or_reset(test,
+> +                                        (kunit_action_t *)&platform_driv=
+er_unregister,
+> +                                        drv);
+> +}
+> +EXPORT_SYMBOL_GPL(platform_driver_register_kunit);
 
