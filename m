@@ -1,180 +1,186 @@
-Return-Path: <linux-kselftest+bounces-8739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C61C98AFD2A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 02:09:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F1F08AFD81
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 02:58:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACFAFB24832
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 00:09:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EAE51F239CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 00:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BD64C9F;
-	Wed, 24 Apr 2024 00:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0E24A24;
+	Wed, 24 Apr 2024 00:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j+K2Frah"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lPM3EqdX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D514C9B
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 00:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9728FB656
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 00:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713917341; cv=none; b=He1G7HGw87VQ/FSPIkonVLmRW4oqvZUW6diB3hrYzVmaSuN3FxprjdbFAJ+jNgt5KReB+V7egtUt+P9SE+dD2iORdKQn0vRVyYFV89uFjUj+bCB3qp725gYtATt53tGtfYNq8PawJotvQio2EeU6SwIcIWL/L5s/SmPRLaiuTRw=
+	t=1713920320; cv=none; b=tMuzoVhTMdkmGqNpdRuid4c5YZjzgDzB3hwaPqvjt0eH0RU5KsSqMFePxy/aUgizeltP+iSDlLbScVBaYtWy7wPrzwdRM6pj/VYDN8lYZ/FLfwhQRjnevSBI7LRprugGGPrPmNf1tDSJotGxtsl1MZ1edaTDk7o/UhVH2v8edm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713917341; c=relaxed/simple;
-	bh=WuC6QqfK+pdGVz8dMnui9Hwnm6f9hjG6QgtzdNXnKXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t1B+qRQJLYa8nwXXccnLrUOF01q/SbyihjlJK+SFtsT5Y/puzJFMz8XlGW73ojMDuqli0LRNh1AjbrLp522el+Snr+hM4MKPryHGak6CqNgAk4w0qVFdPRO1qbsM22U7fxZa3fFRgmuGDnPvsvka2P05uFCUa/Kval5HJhTLPVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j+K2Frah; arc=none smtp.client-ip=209.85.160.179
+	s=arc-20240116; t=1713920320; c=relaxed/simple;
+	bh=mmJKzpn56Y05MfN/M7Ttwvc9Q1m+oN3OU+dsYQVNYzc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EgPOeJi8jpBcdiESeLSkiNjlBGbI7Ctjc+iyKE2zhK/N8HR6FG9h/nFfS1HclAwPeU/cq2vsiGhSnC6NCbkHK3Fj8OwSxRzSG001Ew2r8uyXGtewx2QCbpzPa5OBy4nMRKebgXfNQ7u+R8M/r3NWnGORfQzKkR4rIxoAeWB5//M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lPM3EqdX; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-436ed871225so77321cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 17:08:59 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc6b26783b4so9003731276.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Apr 2024 17:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713917338; x=1714522138; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuC6QqfK+pdGVz8dMnui9Hwnm6f9hjG6QgtzdNXnKXI=;
-        b=j+K2Frah+wQAkVPcGyRlP3JjU/BuT64Wc4LC6jtULlaxPeBEEzXqX2sgYyU/X/XN26
-         JiOv3f6XkfhZ+Qus2EL4eXrpv7UYsv/jVTzMKGa7ECzp8Ns9gXKG4ksL0Oh0ti19m0Lt
-         m1ONBqJxkVAegeUZMfozgCMNYL/DKDtEScCd53sxpp8rxtpKBSpcGyVD5hOGVBQHD0Qd
-         V+kDUzpfZ3v9NYAE3djE/ueRFm4iJu9Wxl9oGaWvjhR/bN6NdCXj8FfFmTSOllPNmUi7
-         GPEdnNfiSuRZd1zBa2RkrMG7cL3iIkNxA0yCwcEpeNiQfczlvjZUTdpHezTc5ZJWCFWT
-         MLmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713917338; x=1714522138;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=google.com; s=20230601; t=1713920317; x=1714525117; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WuC6QqfK+pdGVz8dMnui9Hwnm6f9hjG6QgtzdNXnKXI=;
-        b=ZHikeUU5ACvzzPtpDGgsfsWxKJTnzOhSwHsUnATXMNjalQuhJJFmw9F5CAISzLFcd5
-         va8dSGzXGnTBXv/O0iHcF0zfvRgCbhC0BCbvKeUyxTfOkpouhPvupMRjnVsfW7BgYu3p
-         fLZUXMkYqGmvnrAuw6jnJnfEg5ADva51II5bq/L363ngZUAXpZsAmT+mfyUH7YNnz2tM
-         APbdYGktUWBs6EjvTdlSlMvsJNWKk77cuWeKEk1726hQhrOxrgT0PdNMhEG35AxEdS/Z
-         Ym/oIL0pN/H/1FPGU1jIB7DU85xdq+3aUc+4I+QeHbAEKUvbJm6cPRM5D3rp6m020oWR
-         S/Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCWBGR41H4Mt0KFYwr3/1cS5g+DtXe3AsaNeAzODCOMNmfu07NsDnXymP3pL5s/F/nOcNzTOrJRo6vTNvkCWFhZMhenKmxxjEH15R8UuPL69
-X-Gm-Message-State: AOJu0YyahNzXV6yBhO1chVSEknSSkZMd60eboOmV8raf6ZK6Yr0Myqvb
-	wTrehD0XPjh7t9ECN+jQZwBJBy6Uk8s4qICHJjIqlLBKlBhRdI1NH6xBkID/SXeeaDT10iNYsBE
-	pVRx8EZLZs6QexdB55/L7Pb2B7spSKg6QEzTi
-X-Google-Smtp-Source: AGHT+IH7dOnl/Y7ZysLM4AS3F5R+ukVGbNppMA98YTr9eUSDpvST6EcGlHB3XmAe7QRwbACa2Z5yte9Labejxrq6olY=
-X-Received: by 2002:ac8:7f0a:0:b0:437:99b7:c872 with SMTP id
- f10-20020ac87f0a000000b0043799b7c872mr145976qtk.24.1713917338467; Tue, 23 Apr
- 2024 17:08:58 -0700 (PDT)
+        bh=TnFfv2/q8HD4zI2T3k05GE/1OzMTYZ/cFvDzD1pFbjs=;
+        b=lPM3EqdX9usy5i4BxZs60X0T1U1uzOBVuHsbEiL1Ef6R6q70HUNdU5AYUGvEKhdC+J
+         sEdIKWkNBhsACpEeNWzM4hY3VzkNHUFJxxw/tNRJq2Z4BO6rLSkNK9S5F5VH7KBLsMmz
+         IaFshJMY/BT94Folc61L31lkOO5g2J7ak4a0LhMhKWMyB5z5txP+1YHGsLeAcTdIScjj
+         Wn9IKuiCyDogZv3NA9Nm2JoegRpK0If5gFFTFT7VVI+C9f4tApXsMZRPj61EmBRl8UtK
+         VW1b4dnLnQ9O7gIVovlGj/ElQMZlKK7EAjQwaIIQ26PyZAHVtrGv9AWTNVsGts6gOZiQ
+         sr4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713920317; x=1714525117;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TnFfv2/q8HD4zI2T3k05GE/1OzMTYZ/cFvDzD1pFbjs=;
+        b=An9iCHSNh7xAWm/HJF2sWi9tbdysCeR6DfyassIO9bQW1TObY9BlAVEZLmzEz57R5l
+         d+GgSzS7Zs4A5xqXp5GElEEPfFWjdSqxMoVJ6OjjsUdWyojNb7Q0GmEZ0SWSryMEjIiQ
+         KOKgjF3vwR1pZyPYqH34xMPDsbwbNtmwfVzVmuOF/MHAr7s71hH2k7fhPpucJpSVy5bo
+         n7lMd6zW61zWKb4So1otbkuxnMI5bsiKjlPgi1D22YRAUY5N1ENuo1R8zcu6d6Sia2oB
+         aAuC7A7ODlnYFKUu7/WOMdn2nOAY0gGwUaSUiVWpUjit4eTB8Ym1ERjIan0Nkym7oROz
+         hUeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVHHkjfzhYnzTLWx2upxUbMQkj1WLqpt7hnmBd9ka/mQtLSKrmnsRLPdNNGwpHFRlsoq4MvC2HndCMzDvXcJVHOdlPjtMGSgBY7ewyUKXg4
+X-Gm-Message-State: AOJu0Yy9eBdasdd3hQU/9a/fRplC73/6PzUR+JQFDLybd2bvW/hOvnCo
+	tYxuIorNk5WKToBXzRnSFFP+bosbTlnUBVli/9YHbm635BijYXxygUoUrYrSHp0F0GSNx30C3+u
+	n6Q==
+X-Google-Smtp-Source: AGHT+IEvNw3J6I/yHHAfvdURbb8jj1wTGZNW3lbpolt8uCEne9ZqLnMsHy6ndjJrs5y4tOm7Z4sHLAK8DkM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ab2b:0:b0:dcc:8927:7496 with SMTP id
+ u40-20020a25ab2b000000b00dcc89277496mr138421ybi.5.1713920317559; Tue, 23 Apr
+ 2024 17:58:37 -0700 (PDT)
+Date: Tue, 23 Apr 2024 17:58:35 -0700
+In-Reply-To: <20240409133959.2888018-5-pgonda@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240423182701.38359-1-ivan.orlov0322@gmail.com>
-In-Reply-To: <20240423182701.38359-1-ivan.orlov0322@gmail.com>
-From: David Gow <davidgow@google.com>
-Date: Wed, 24 Apr 2024 08:08:45 +0800
-Message-ID: <CABVgOS=UykT=Dx2cYxRuqy-H5o6gcNFii7WFX4JTAFKq1oYbYA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: string-stream-test: use KUNIT_DEFINE_ACTION_WRAPPER
-To: Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc: brendan.higgins@linux.dev, rmoar@google.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002828f70616cc7aa9"
+Mime-Version: 1.0
+References: <20240409133959.2888018-1-pgonda@google.com> <20240409133959.2888018-5-pgonda@google.com>
+Message-ID: <ZihZOygvuDs1wIrh@google.com>
+Subject: Re: [PATCH 4/6] Add GHCB allocations and helpers
+From: Sean Christopherson <seanjc@google.com>
+To: Peter Gonda <pgonda@google.com>
+Cc: linux-kernel@vger.kernel.org, Vishal Annapurve <vannapurve@google.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Carlos Bilbao <carlos.bilbao@amd.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
---0000000000002828f70616cc7aa9
-Content-Type: text/plain; charset="UTF-8"
+On Tue, Apr 09, 2024, Peter Gonda wrote:
+> Add GHCB management functionality similar to the ucall management.
+> Allows for selftest vCPUs to acquire GHCBs for their usage.
 
-On Wed, 24 Apr 2024 at 02:27, Ivan Orlov <ivan.orlov0322@gmail.com> wrote:
->
-> Use KUNIT_DEFINE_ACTION_WRAPPER macro to define the 'kfree' and
-> 'string_stream_destroy' wrappers for kunit_add_action.
->
-> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-> ---
+Do we actually need a dedicated pool of GHCBs?  The conundrum with ucalls i=
+s that
+we have no place in the guest to store the pointer on all architectures.  O=
+r rather,
+we were too lazy to find one. :-)
 
-Acked-by: David Gow <davidgow@google.com>
+But for SEV-ES, we have MSR_AMD64_SEV_ES_GHCB, and any test that clobbers t=
+hat
+obviously can't use ucalls anyways.  Argh, but we can't get a value in that=
+ MSR
+from the host.
 
-Thanks,
--- David
+Hmm, that seems like a KVM flaw.  KVM should advertise its supported GHCB p=
+rotocol
+to *userspace*, but userspace should control the actual information exposed=
+ to
+the guest.
 
---0000000000002828f70616cc7aa9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Oof, and doesn't SNP support effectively *require* version 2?  I.e. shouldn=
+'t
+the KVM patch[*] that adds support for the AP reset MSR protocol bump the v=
+ersion?
+The GHCB spec very cleary states that that's v2+.
 
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
-mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
-wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
-5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
-ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIPhd56TP8jYOyrJfQi+FVD05EhSz2ISOBPnGe1AGhzK4MBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDQyNDAwMDg1OFowaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBXuCfK
-H9cWC4SSnz7H6YCxENoFE1cQT67qpPiWmoo4bk/8iJH/FWy08JXc64WE9N5j2pAQXa2kkgBcTjgR
-8jtNFvGeHCA5klYVUdYYyTPw4S4EZLpaq2oSnODqmKmgMt9pcjNnTfF15x4iYkj97zuI3X8EPR1a
-HBr8n8smq9Yy9LrOfTDB67KAjhLY8BMF6kv/rQyTWrIZ+PeoEu4G7wkyznXsFOTpXADIKBzVO8k/
-Mipim2g5VgfFnK2mmyQcCifHHMMvAdeRvTUSeltPRBykLCKHn/IPFIhUK9FhpDOESUVQ0Bb5AMrF
-X8tQA0WZ0dHp81iPn1427jv0oBeih/JM
---0000000000002828f70616cc7aa9--
+And what if userspace wants to advertise v2 to an SEV-ES guest?  KVM should=
+n't
+switch *all* SEV-ES guests to v2, without a way back.  And the GHCB spec cl=
+early
+states that some of the features are in scope for SEV-ES, e.g.
+
+  In addition to hypervisor feature advertisement, version 2 provides:
+
+  SEV-ES enhancements:
+     o GHCB Format Version 2:
+        =E2=96=AA The addition of the XSS MSR value (if supported) when CPU=
+ID 0xD is
+          requested.
+        =E2=96=AA The shared area specified in the GHCB SW_SCRATCH field mu=
+st reside in the
+          GHCB SharedBuffer area of the GHCB.
+     o MSR protocol support for AP reset hold.
+
+So I'm pretty sure KVM needs to let userspace set the initial value for
+MSR_AMD64_SEV_ES_GHCB.  I suppose we could do that indirectly, e.g. through=
+ a
+capability.  Hrm, but even if userspace can set the initial value, KVM woul=
+d need
+to parse the min/max version so that KVM knows what *it* should support, wh=
+ich
+means that throwing in a GPA for selftests would screw things up.
+
+Blech.  Why do CPU folks insist on using ascending version numbers to bundl=
+e
+features?
+
+Anyways, back to selftests.  Since we apparently can't stuff MSR_AMD64_SEV_=
+ES_GHCB
+from host userspace, what if we instead use a trampoline?  Instead having
+vcpu_arch_set_entry_point() point directly at guest_code, point it at a tra=
+mpoline
+for SEV-ES guests, and then have the trampoline set MSR_AMD64_SEV_ES_GHCB t=
+o
+the vCPU-specific GHCB before invoking guest_code().
+
+Then we just need a register to stuff the GHCB into.  Ah, and the actual gu=
+est=20
+entry point.  GPRs are already part of selftest's "ABI", since they're set =
+by
+vcpu_args_set().  And this is all 64-bit only, so we can use r10+.
+
+Ugh, the complication is that the trampoline would need to save/restore RAX=
+, RCX,
+and RDX in order to preserve the values from vcpu_args_set(), but that's ju=
+st
+annoying, not hard.  And I think it'd be less painful overall than
+having to create a GHCB pool?
+
+In rough pseudo-asm, something like this?
+
+static void vcpu_sev_es_guest_trampoline(void)
+{
+	asm volatile(<save rax, rcx, rdx>
+		     "mov %%r15d, %%eax\n\t"
+		     "shr %%r15, $32\n\t"
+		     "mov %%r15d, %%eax\n\t"
+		     "mov $MSR_AMD64_SEV_ES_GHCB, %%ecx\n\t"
+		     <restore rax, rcx, rdx>
+		     "jmp %%r14")
+}
+
+[*] https://lore.kernel.org/all/20240421180122.1650812-3-michael.roth@amd.c=
+om
 
