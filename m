@@ -1,40 +1,55 @@
-Return-Path: <linux-kselftest+bounces-8762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 835B18B077F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 12:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 941AD8B078D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 12:41:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B52891C221EF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 10:40:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5F751C230EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 10:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30952159579;
-	Wed, 24 Apr 2024 10:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F0A1598E2;
+	Wed, 24 Apr 2024 10:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="bOecWuZf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B142A15921D;
-	Wed, 24 Apr 2024 10:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD38158D79;
+	Wed, 24 Apr 2024 10:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713955213; cv=none; b=DiM7OK/nCoUyr/lXLyfr7UxWssrgZibq0C4UaTsMFNS2bJ/Z4Soa6K8VQ2gCA5kikCH4RNvcJV6HT4i+hw3fcCRxMur2P3CiBqbM0kriCbuC/3zKY5XuViNL6gNfqWn8rh3R4y9xvDe3rFcziaqVQHSCEkPvYP/ZP/reNJkjia8=
+	t=1713955286; cv=none; b=FCJWHOKTUpULE5MdbazFoMtlYpIyuUeyv3kCYCPm9+qMt09n6OTfvzTTAiwyWFrgfYUuZWqb0dgn3QT01cpWoc0vWv73aTDd7zrMYpsgp6OJOlAdKUGJirZs5Zm8ErSNHWJCJA+EBxMLPBgwXGjf/Prx0Ej9y+wB46e18EeHIUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713955213; c=relaxed/simple;
-	bh=X4SRxIGKm5AoohF2nk+YEs1df8CVMox+kXQ7mvA7pNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oO0b/Q60eX/7HctyyDKGYoCja3mNBDjG8bVUPT76xX1rcF3D2kmKwwgBUz8+XA1SPZAGZUVhVgjNCePh5DoP/hFXW+D0ehNow0v74JDtLIqUPQjhC1/Z2BIDFLh4M+V74Xiy9xB9CxfqKYdDhSan1Z0WTyXMLYnSOBBuzQrJIDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D54B2339;
-	Wed, 24 Apr 2024 03:40:38 -0700 (PDT)
-Received: from [10.1.25.156] (unknown [10.1.25.156])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 647B53F73F;
-	Wed, 24 Apr 2024 03:40:09 -0700 (PDT)
-Message-ID: <b05f9474-60a7-491c-a79f-752a3967ad0e@arm.com>
-Date: Wed, 24 Apr 2024 11:40:08 +0100
+	s=arc-20240116; t=1713955286; c=relaxed/simple;
+	bh=gsav1q+OWEOJtX/pSWXDQyWAdTBjh5T232CUi+Qjpqg=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=KqjH/fDb7h73dkM+caU2jFp3mbt9ZZF5SZAjqde4dTiHg8VqwNSnUf2W5W4K4pNZ2wnMtMpRmTzpflqvidIGd818CQ8Ch6KVVp+mTNfhFvc9xvsiAGackmmvY2DjIvick6o4Zf82wQ+fbku4cyxwy5LZj7Qw6NbceoqpZzm1d5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=bOecWuZf; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713955247; x=1714560047; i=markus.elfring@web.de;
+	bh=rZct520GkxHWSg4fBJJGCvQQErp8qMa+Y2cRVIRPDzw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=bOecWuZf3P3HntuFAd6jzLSgMN4NiW2pdxshFrw601Co4ORc86riKP8aU0Q6KkPT
+	 kbkYasTJjW8k2rrN0+NqX68pwexygZsVWR6D+fzjzl2rrBG0Bz8xcVnFVvHMKA6GJ
+	 i7I6vxyv97eBC4gy8+15lr6bEPm1d3/y4TdsK0d20VMBeqndSC7YA68mKKoDLbf2G
+	 TKwEGLwCTFiTaFg9P4312qIMJJrnEDTURuV1gLBmkwjZ5wtySBdXeivsgL3NgMKCF
+	 bSLsvyjS1fQJyaOIu/rcPK0k8m1h5hzfd2FAHu3kWxY/BhgKw1hqhrL4SsfDVUOA2
+	 A9zpvIq0s4MLXeOT6g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MwR0J-1srY5K2o4L-00sA6C; Wed, 24
+ Apr 2024 12:40:47 +0200
+Message-ID: <94b34c96-da3b-44ee-9d7e-8daadba52aa6@web.de>
+Date: Wed, 24 Apr 2024 12:40:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,83 +57,73 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/5] selftests/mm: soft-dirty should fail if a testcase
- fails
+To: Kunwu Chan <chentao@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Yonghong Song <yonghong.song@linux.dev>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kunwu Chan <kunwu.chan@hotmail.com>
+References: <20240424020444.2375773-4-chentao@kylinos.cn>
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Add a null pointer check for
+ the load_btf_spec
 Content-Language: en-GB
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- David Hildenbrand <david@redhat.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Joey Gouly <joey.gouly@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Shivansh Vij <shivanshvij@outlook.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20240419074344.2643212-1-ryan.roberts@arm.com>
- <20240419074344.2643212-6-ryan.roberts@arm.com>
- <aaeb2611-e096-475c-9055-4e8dd9509b01@redhat.com>
- <6a08436e-c984-43aa-bbfa-05cfea34516a@arm.com>
- <e1d6b5ea-5816-433d-8c61-602c42ee204d@collabora.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <e1d6b5ea-5816-433d-8c61-602c42ee204d@collabora.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240424020444.2375773-4-chentao@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xxCxRGV5wfBGsiC7m2RkEkH+vBPfmQhlEtFngofT2wXCyKxvoOo
+ ldhyXJ1+fr1rh1HBJ3RCfeLhoaWPkng8IVsJ00riwBiPfx5TQ0Ng3836wBHoBx+Zl1KPH7d
+ ogCIM/rDvpYOOqcsHTDY6q8/Sxj7Hqi+mhfGY1Uu7UEiXxvSo33HhET3ZSb5//POb/9iV1d
+ B2lQw8OtThP87oCtyfD+w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:iKQsKfhqij0=;BCBZmIUY3JHFGpTp6Fp5sVT606A
+ SmjWFzy5tu6Ka3klf9Tnlpo1B/hJi5x3dFuRkJSZSS4jzEy0WqkIX+HIlXf/g2OzqIZM9oQ54
+ NscOy5igVn5e3GXPXL4zDGgcUboLGGTrl35A7c1UwbcS9pJybw+Mx55Te0+wGnXjsQntNpe3b
+ dHruKg38SPOAVJ+U9ORFIqb6jlmgLA0ug3cAjIE28TG1GWi4xWFN263csmTsyZesg/7tLVmAF
+ dmu9M2ZVIfxqeQWkc1Wzns7QZhC90+FdN9ePYQQOM0ZUbGGbYLWPbv2GEfb02c8WnohG2WfmP
+ LNBfMAtCM9gOkIO51FW1IfZpzww1cl/GwcOjc74BWhTJ2BeCcc0T93bz6tFvJlfKNfgOMHD6N
+ vjTvJoUKm+gPfvZp00uzF8r2zi4g4pQoVhAA7zsiERUWeC4eKwHZuHANe2EZk56YI5BnA/vwC
+ mMfoRi3svAcjxYt/FyfA87lU18us9yY2c15DiZXd2tzosb3ByMuRv8cb6H2klkUos2pju07Y+
+ l9UPluL2GFe/NLia/MokMOUGapBVqAxy//9v0pKWVGt9zCu94hwqdLOW5H16owHWRfSSFPomo
+ nGYC6CyHoe3Xb6xti3kLwqZDLIaxnWW51Yvh1rI9EzbGwCObrvj36bUyp0LJWNug6o6/hoVKC
+ rVD5dapFoTx/ym8fi0qQXodUX8amP1fK4M8cZVXQ05r07ID459NegPRevOpkEQvX85My7AvnV
+ zKcH+kqQla/bXMxYkihsoSmWeL+DAfFpHAHemEP/VfaWVOIc9PqJln3oShg9krYAQEbk0kXqE
+ fyMVERCMuOqHkLcEP14wmhtN5YHIVfftz1dnuEyziQye4=
 
-On 23/04/2024 09:44, Muhammad Usama Anjum wrote:
-> On 4/23/24 1:24 PM, Ryan Roberts wrote:
->> On 22/04/2024 10:33, David Hildenbrand wrote:
->>> On 19.04.24 09:43, Ryan Roberts wrote:
->>>> Previously soft-dirty was unconditionally exiting with success, even if
->>>> one of it's testcases failed. Let's fix that so that failure can be
->>>> reported to automated systems properly.
->>>>
->>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+=E2=80=A6
+> Add the malloc failure checking to avoid possible null
+> dereference.
+=E2=80=A6
 
-Thanks!
+How do you think about the following wording variant?
 
-> 
->>>> ---
->>>>   tools/testing/selftests/mm/soft-dirty.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/soft-dirty.c
->>>> b/tools/testing/selftests/mm/soft-dirty.c
->>>> index 7dbfa53d93a0..bdfa5d085f00 100644
->>>> --- a/tools/testing/selftests/mm/soft-dirty.c
->>>> +++ b/tools/testing/selftests/mm/soft-dirty.c
->>>> @@ -209,5 +209,5 @@ int main(int argc, char **argv)
->>>>
->>>>       close(pagemap_fd);
->>>>
->>>> -    return ksft_exit_pass();
->>>> +    ksft_finished();
->>>>   }
->>>> -- 
->>>> 2.25.1
->>>>
->>>
->>> Guess that makes sense independent of all the other stuff?
->>
->> Yes definitely. What's the process here? Do I need to re-post as a stand-alone
->> patch? Or perhaps, Shuah, you could take this into your tree as is?
-> She can. But if she misses it or you want to post v2 of this current
-> series, you can just send this one separately. Usually I try to send
-> separate patches for trivial and discussion required patches so that there
-> isn't confusion of this kind.
+   Add a return value check so that a null pointer dereference will be avo=
+ided
+   after a memory allocation failure.
 
-Thanks - I'll do that.
 
-> 
->>
->>>
->>> Reviewed-by: David Hildenbrand <david@redhat.com>
->>
->> Thanks!
->>
->>
->>
-> 
+Would you like to add the tag =E2=80=9CFixes=E2=80=9D accordingly?
 
+
+=E2=80=A6
+> +++ b/tools/testing/selftests/bpf/test_verifier.c
+> @@ -762,6 +762,8 @@ static int load_btf_spec(__u32 *types, int types_len=
+,
+>  	);
+>
+>  	raw_btf =3D malloc(sizeof(hdr) + types_len + strings_len);
+> +	if (!raw_btf)
+> +		return -ENOMEM;
+=E2=80=A6
+
+How do you think about to reuse the variable =E2=80=9Cerrno=E2=80=9D in su=
+ch an error case?
+
+Regards,
+Markus
 
