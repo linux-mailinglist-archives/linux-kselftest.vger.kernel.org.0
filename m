@@ -1,248 +1,136 @@
-Return-Path: <linux-kselftest+bounces-8785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8330D8B0F53
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 18:03:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDE468B0F62
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 18:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37CC7293D85
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 16:03:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56F5A1F2122C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 16:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB55916EBE7;
-	Wed, 24 Apr 2024 16:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0FF15E1EA;
+	Wed, 24 Apr 2024 16:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qjzz91bB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fSQNh+xZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F0816E886
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 16:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7355815FD15
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 16:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713974423; cv=none; b=aQI/hcHifwe7miiRLqrDkjgi7czpOlIRvV8jE68/AAXMI8bOYFAt/D6Fs6IiQwCZk6EeVRnEqiLx2eRiGMHoSHotVeaCJJzg+AokkriFZiFv50zAq8thY+iudIFosxFdaAotvUq2bJsdDnz1oMDSuBrmYRVuRYaGO4XSVPloVkA=
+	t=1713974901; cv=none; b=fM/AiUv70rW28mhHHZ3VLf1ZcQQAsanDZ9daR5jyFBx4ytvNHd/OsIRHRJCzr6VTY+PEEtM+SMZw3Szbt6zan2J3jsRp11XHZba2Cuh++siI3ER2ThQYS1bxHkwEwCsKAe9F3y9YdYroTvHURz5Ay+C4RmR9B/o9HkpZIkiJMHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713974423; c=relaxed/simple;
-	bh=xoLdkUYFk5RZBDCISpGx424cY6NvUVaAOejPC6YvY0o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sbQpkC990UVLHBMPtJa+tpza6FIZeswGngjCwkrBep97YHdqkiHYHp9PtHFGc3+DOLAcAcSNH+1DSSGLpJnZbT9HrLn4IFh5CS74H2u43F7QLiUbxz/joUNL/vGj3IDaCAzDEovIz3wE0nT886guCtFBXYEMFnCC++f+WoXFpF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qjzz91bB; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ab6f586602so9456a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 09:00:20 -0700 (PDT)
+	s=arc-20240116; t=1713974901; c=relaxed/simple;
+	bh=UX+RSQsTZIoCgA4sTAjvIrhaan3lVSfzg+9u2yHW7fw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=g8F25uo5kIl3OqiGzWQ0ujG5nyyLipuQtqXcEJMnJ3EYocsPpeKQIF6+J18tZdyRIHJJwRX3NxDZMP4gIFkKyPT1nCu9Fw145G7VZrsVpjcGEtLpgSLLPYFgDdGfZJVYRCSOKq1EseecivNjC5r8nEKdWgCq6t4Zrpc8oHWxq84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fSQNh+xZ; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-de54ccab44aso55372276.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 09:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1713974420; x=1714579220; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=35eDMi2/q83wJ4GUHa2jqX6/eKKmPqQTJX+6m9vKCdE=;
-        b=Qjzz91bBmBLu/+gQvaTQVvlx6fiVbcQhjVQtHUX0MfBd8ALX7Lpa8mS1G+lSt4Es0Q
-         xgtjvai5Qy4rGSglhkKvUVR1bNNCrLlicrOWWY54shdLQRy5IceyZNWRL5UdAQCt2bXR
-         c8SUYoUd5zvLClvKUm5gr4ra0IdQXvPIQhBj8=
+        d=google.com; s=20230601; t=1713974899; x=1714579699; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bk3EKgsQGWnjS0MB5E+L5+lH/YRrJ8wTPFpK6fCHC/0=;
+        b=fSQNh+xZyICEaLyAYJ9j8B5Dpz9iGvXe9AekGvZfUPSkhGUTKrJ2lWayZW7QAOpQOf
+         Q8M9BTKg6GMvNXkaD9RUJ1roLQLTBheXYP90tNemuaJnFJSGeXEHf5U6w/G8ikG57+hX
+         W/ZzL5/4l3gLhcXPfwq+bEcEFadq6++lmanCmdo/KIZDV3aU2zV7kIT6eEz9zfIpPkXU
+         LjwDPyGXrm6hdmyc3QkSm+PodXwkdjiQ8stX3PaKWkIe2b584IuIkiqHXxhX4rcfzUJe
+         HfikG0tr0eilK8dW+/r2DUtDQCvS/X8YSGThyZQo/jrugYDs0TXEhbrObWtF24v19B28
+         yj8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713974420; x=1714579220;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=35eDMi2/q83wJ4GUHa2jqX6/eKKmPqQTJX+6m9vKCdE=;
-        b=o8CfsiNGOzmEEQgu3U54w3vjT+rgQR2TI3XLdb76IcWAwZFyLu6yglNDSvGUfPm9nZ
-         TtOvIdPxJe7p8tqe8aPcpz0EE6JVLVhVXEbWidiFTp1p1kTvGOn0AuWw7QIvLk0F3UTD
-         odc6YiG9vjQzO8SiG8ztM78Q9jj1YNyDQpDH+CINyHsjr8ujw36RhsiImQhTn3KK+zgd
-         w3bz9v3oYApNwzmd6KHD/HdrPNaLeZDiJc+/CL1a8XKQ9H4t4RQZSnsHzYiHCqjE0cok
-         wP5tAVy+rqn1pzcANqf4SzVU4caCXh0OHhOoHjE4XhDoDcHfV9jys8g+SqWrXGFy1XSz
-         lLPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU59f1GC6YSTb98eMq0637n529+6Sc37Badmwxz9/S2FMiLSVpRPJMCsnTJjGUBmnM1mdG50Pbo34YI1W2jB7B/yTTqOw+Eg2TpD4HYmHge
-X-Gm-Message-State: AOJu0Yya1ERq4c2NzaoB9RPYPMNDblwNpaAJwgUj3SQvkQIXS9OCBW7A
-	Oq191ZCmvSK9vcB6uZkvj0+SL911LE1RHXfFjbk2oe2cOUt5GGp1RopOOdmq16k=
-X-Google-Smtp-Source: AGHT+IGeah6Znyank5/1D413kUlUkY/1RPj9CkwgSALF8YxSMDdoqn7V4afIyUbB8wHmTj8YqHpqQw==
-X-Received: by 2002:a17:902:b095:b0:1dd:b54c:df51 with SMTP id p21-20020a170902b09500b001ddb54cdf51mr3044405plr.4.1713974420201;
-        Wed, 24 Apr 2024 09:00:20 -0700 (PDT)
-Received: from [192.168.43.82] ([223.185.79.208])
-        by smtp.gmail.com with ESMTPSA id o4-20020a1709026b0400b001e81c778784sm12047040plk.67.2024.04.24.09.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 09:00:19 -0700 (PDT)
-Message-ID: <ba14458b-8f69-4947-ade2-d77e3290d4ed@linuxfoundation.org>
-Date: Wed, 24 Apr 2024 10:00:12 -0600
+        d=1e100.net; s=20230601; t=1713974899; x=1714579699;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bk3EKgsQGWnjS0MB5E+L5+lH/YRrJ8wTPFpK6fCHC/0=;
+        b=A+Tx8YojafKGXjIOL+Tr5anKfhyF1d3G90K5yRJ5M44PQo0AFi5pKgN8JclqCwT/Cz
+         c1hht9pM1pPcWaY+rOOT/B+N/L9+zMB+mlWn0Y5XNy8m+I0Ht0RQzdSo587wEECR1jp8
+         VSSFBykrfOHdvvakzDJg6PS6d7wEARGB7gJWM2V3Cd+yZTJhr8LXeU+4FgUxUdEP6yyL
+         GXXmLqnAdBR6Sg5u7ppdYJ3CkGLZ1zuWIT0SEhb9fdFj6/R4R/3vhN1K5tMmTOV1YfSs
+         87yVSgcdLJQRJgDe/2xAG6J/Xh3qqmBJHlVAY/PoUKDL4g0SAd6aallKLWhKH7m/DuxN
+         /S1w==
+X-Forwarded-Encrypted: i=1; AJvYcCV3FNhBRKL+nj5Jh7AgRjeyLyUV60vyhsqDpx84SVTUNUyWdh2yANvzw4ElQzDk3PXDvld5Tm3QwRQRTwqgXdFkGEmtOPC8iG2/NYwHG1o/
+X-Gm-Message-State: AOJu0YwmaHzmK+pDvYCPslstq5npFMe4+qDo56h8vPmf8CGa9QI66pSv
+	nI4zMJUlMknxprmx8DgDUBtPkuGJuLLA5ZbRlAqcmIVCVB9OB5QHMATcGYdMR70iw0ZMwlkJpDA
+	sEg==
+X-Google-Smtp-Source: AGHT+IHUEHWaTgZwPWeVlQZLsmhgBLdJhdqkgpe+SOVJ7NnX/mE1lLDAZaofyhrlTH6Xy2nYNweVj/XvttU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:706:b0:dcd:3172:7265 with SMTP id
+ k6-20020a056902070600b00dcd31727265mr1002573ybt.8.1713974899485; Wed, 24 Apr
+ 2024 09:08:19 -0700 (PDT)
+Date: Wed, 24 Apr 2024 09:08:18 -0700
+In-Reply-To: <20240329201854.f24ZDY24JtVE3gfa0i3m1MOFYfXVhCKdkXd0j5c-B6I@z>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Make ksft_exit functions return void instead
- of int
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: shuah@kernel.org, tglx@linutronix.de, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240417-ksft-exit-int-to-void-v1-1-eff48fdbab39@kernel.org>
- <bb5fd480-bd43-42c9-b326-2ee7addcda33@linuxfoundation.org>
- <20240424150513.GA304587@dev-arch.thelio-3990X>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240424150513.GA304587@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-26-xin3.li@intel.com>
+ <20240329201854.f24ZDY24JtVE3gfa0i3m1MOFYfXVhCKdkXd0j5c-B6I@z>
+Message-ID: <Zikucr6zpwBxOUiy@google.com>
+Subject: Re: [PATCH v2 25/25] KVM: selftests: Add fred exception tests
+From: Sean Christopherson <seanjc@google.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	pbonzini@redhat.com, corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	shuah@kernel.org, vkuznets@redhat.com, peterz@infradead.org, 
+	ravi.v.shankar@intel.com, xin@zytor.com
+Content-Type: text/plain; charset="us-ascii"
 
-On 4/24/24 09:05, Nathan Chancellor wrote:
-> On Wed, Apr 24, 2024 at 07:44:31AM -0600, Shuah Khan wrote:
->> On 4/17/24 09:37, Nathan Chancellor wrote:
->>> Commit f7d5bcd35d42 ("selftests: kselftest: Mark functions that
->>> unconditionally call exit() as __noreturn") marked functions that call
->>> exit() as __noreturn but it did not change the return type of these
->>> functions from 'void' to 'int' like it should have (since a noreturn
->>> function by definition cannot return an integer because it does not
->>> return...) because there are many tests that return the result of the
->>> ksft_exit function, even though it has never been used due to calling
->>> exit().
->>>
->>> Prior to adding __noreturn, the compiler would not know that the functions
->>> that call exit() will not return, so code like
->>>
->>>     void ksft_exit_fail(void)
->>>     {
->>>       exit(1);
->>>     }
->>>
->>>     void ksft_exit_pass(void)
->>>     {
->>>       exit(0);
->>>     }
->>>
->>>     int main(void)
->>>     {
->>>       int ret;
->>>
->>>       ret = foo();
->>>       if (ret)
->>>         ksft_exit_fail();
->>>       ksft_exit_pass();
->>>     }
->>>
->>> would cause the compiler to complain that main() does not return an
->>> integer, even though when ksft_exit_pass() is called, exit() will cause
->>> the program to terminate. So ksft_exit_...() returns int to make the
->>> compiler happy.
->>>
->>>     int ksft_exit_fail(void)
->>>     {
->>>       exit(1);
->>>     }
->>>
->>>     int ksft_exit_pass(void)
->>>     {
->>>       exit(0);
->>>     }
->>>
->>>     int main(void)
->>>     {
->>>       int ret;
->>>
->>>       ret = foo();
->>>       if (ret)
->>>         return ksft_exit_fail();
->>>       return ksft_exit_pass();
->>>     }
->>>
->>> While this results in no warnings, it is weird semantically and it has
->>> issues as noted in the aforementioned __noreturn change. Now that
->>> __noreturn has been added to these functions, it is much cleaner to
->>> change the functions to 'void' and eliminate the return statements, as
->>> it has been made clear to the compiler that these functions terminate
->>> the program. Drop the return before all instances of ksft_exit_...() in
->>> a mechanical way. Only two manually changes were made to transform
->>>
->>>     return !ret ? ksft_exit_pass() : ksft_exit_fail();
->>>
->>> into the more idiomatic
->>>
->>>     if (ret)
->>>       ksft_exit_fail();
->>>     ksft_exit_pass();
->>>
->>> as well as a few style clean ups now that the code is shorter.
->>>
->>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->>> ---
->>>    tools/testing/selftests/clone3/clone3_clear_sighand.c        |  2 +-
->>>    tools/testing/selftests/clone3/clone3_set_tid.c              |  4 +++-
->>>    tools/testing/selftests/ipc/msgque.c                         | 11 +++++------
->>>    tools/testing/selftests/kselftest.h                          | 12 ++++++------
->>>    .../selftests/membarrier/membarrier_test_multi_thread.c      |  2 +-
->>>    .../selftests/membarrier/membarrier_test_single_thread.c     |  2 +-
->>>    tools/testing/selftests/mm/compaction_test.c                 |  6 +++---
->>>    tools/testing/selftests/mm/cow.c                             |  2 +-
->>>    tools/testing/selftests/mm/gup_longterm.c                    |  2 +-
->>>    tools/testing/selftests/mm/gup_test.c                        |  4 ++--
->>>    tools/testing/selftests/mm/ksm_functional_tests.c            |  2 +-
->>>    tools/testing/selftests/mm/madv_populate.c                   |  2 +-
->>>    tools/testing/selftests/mm/mkdirty.c                         |  2 +-
->>>    tools/testing/selftests/mm/pagemap_ioctl.c                   |  4 ++--
->>>    tools/testing/selftests/mm/soft-dirty.c                      |  2 +-
->>>    tools/testing/selftests/pidfd/pidfd_fdinfo_test.c            |  2 +-
->>>    tools/testing/selftests/pidfd/pidfd_open_test.c              |  4 +++-
->>>    tools/testing/selftests/pidfd/pidfd_poll_test.c              |  2 +-
->>>    tools/testing/selftests/pidfd/pidfd_test.c                   |  2 +-
->>>    tools/testing/selftests/resctrl/resctrl_tests.c              |  6 +++---
->>>    tools/testing/selftests/sync/sync_test.c                     |  3 +--
->>>    tools/testing/selftests/timers/adjtick.c                     |  4 ++--
->>>    tools/testing/selftests/timers/alarmtimer-suspend.c          |  4 ++--
->>>    tools/testing/selftests/timers/change_skew.c                 |  4 ++--
->>>    tools/testing/selftests/timers/freq-step.c                   |  4 ++--
->>>    tools/testing/selftests/timers/leap-a-day.c                  | 10 +++++-----
->>>    tools/testing/selftests/timers/leapcrash.c                   |  4 ++--
->>>    tools/testing/selftests/timers/mqueue-lat.c                  |  4 ++--
->>>    tools/testing/selftests/timers/posix_timers.c                | 12 ++++++------
->>>    tools/testing/selftests/timers/raw_skew.c                    |  6 +++---
->>>    tools/testing/selftests/timers/set-2038.c                    |  4 ++--
->>>    tools/testing/selftests/timers/set-tai.c                     |  4 ++--
->>>    tools/testing/selftests/timers/set-timer-lat.c               |  4 ++--
->>>    tools/testing/selftests/timers/set-tz.c                      |  4 ++--
->>>    tools/testing/selftests/timers/skew_consistency.c            |  4 ++--
->>>    tools/testing/selftests/timers/threadtest.c                  |  2 +-
->>>    tools/testing/selftests/timers/valid-adjtimex.c              |  6 +++---
->>>    tools/testing/selftests/x86/lam.c                            |  2 +-
->>>    38 files changed, 81 insertions(+), 79 deletions(-)
->>>
->>
->> Please generate separate patches for each test so it is easy to apply
->> them and also reduce merge conflicts.
-> 
-> Is applying 30+ patches easier than applying just one? It is not a
-> trivial amount of work for me to break this series up into individual
-> patches but I will do so if you really want me to. I based this on the
-> kselftest tree directly so that it would apply cleanly.
-> 
+On Sat, Mar 30, 2024, Muhammad Usama Anjum wrote:
+> On 2/7/24 10:26 PM, Xin Li wrote:
+> > Add tests for FRED event data and VMX nested-exception.
+> > 
+> > FRED is designed to save a complete event context in its stack frame,
+> > e.g., FRED saves the faulting linear address of a #PF into a 64-bit
+> > event data field defined in FRED stack frame.  As such, FRED VMX adds
+> > event data handling during VMX transitions.
+> > 
+> > Besides, FRED introduces event stack levels to dispatch an event handler
+> > onto a stack baesd on current stack level and stack levels defined in
+> > IA32_FRED_STKLVLS MSR for each exception vector.  VMX nested-exception
+> > support ensures a correct event stack level is chosen when a VM entry
+> > injects a nested exception, which is regarded as occurred in ring 0.
+> > 
+> > To fully test the underlying FRED VMX code, this test should be run one
+> > more round with EPT disabled to inject page faults as nested exceptions.
+> > 
+> > Originally-by: Shan Kang <shan.kang@intel.com>
+> > Signed-off-by: Xin Li <xin3.li@intel.com>
+> Thank you for the new test patch. We have been trying to ensure TAP
+> conformance for tests which cannot be achieved if new tests aren't using
+> TAP already.
 
-I am not asking each file to be a separate patch.
-> How does breaking apart the changes reduce merge conflicts? The diff is
-> going to be the same and semantic conflicts can still occur due to the
-> kselftest.h changes.
+Who is "we"?
 
-selftest patches go through various repos. With this patch touching
-several tests, there will be conflicts with multiple trees.
+> Please make your test TAP compliant.
 
-If this patch can't be split due to dependency on kselftest.h, I will
-pull it in, but I do need you to include all the maintainers.
+This isn't entirely reasonable feedback.  I'm all for getting KVM selftests
+TAP-friendly, but the current reality is that the KVM selftests infrastructure
+doesn't make it easy to be TAP compliant.  We're working on improving things,
+i.e. I do hope/want to get to a state where it's a hard requirement for KVM
+selftests to be TAP compliant, but we aren't there yet.
 
-> 
->> You are missing maintainers for clone3, mm, pidfd tests. I can take these
->> through kselftest tree, but I need the changes split.
-> 
-> Fair enough, I should have CC'd them, although given this is a change to
-> the kselftest API, I was not sure they would care too much.
-> 
+If you have specific feedback on _how_ to make a test TAP compliant, then by all
+means provide that feedback.  But a drive-by "make your test TAP compliant" isn't
+super helpful.
 
-The reason for cc'ing the maintainers is to keep them in the loop about this
-change that could result in merge conflicts between kselftest tree and theirs.
+> > ---
+> >  tools/testing/selftests/kvm/Makefile          |   1 +
+> >  .../selftests/kvm/include/x86_64/processor.h  |  32 ++
+> >  .../testing/selftests/kvm/x86_64/fred_test.c  | 297 ++++++++++++++++++
+> Add generated binary object to .gitignore.
 
-Besides I would rather not have developers make calls on who should or shouldn't
-care about a change. :)
-
-thanks,
--- Shuah
-
+This should be unnecessary (though I haven't actually verified by building), as
+KVM selftests ignore most everything by default since commit 43e96957e8b8
+("KVM: selftests: Use pattern matching in .gitignore").
 
