@@ -1,112 +1,136 @@
-Return-Path: <linux-kselftest+bounces-8778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDC58B0D2B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 16:51:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36FE58B0D35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 16:52:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49F1728B210
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 14:51:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01711F270D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 14:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC32715ECE0;
-	Wed, 24 Apr 2024 14:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFE515F409;
+	Wed, 24 Apr 2024 14:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X78OGA4f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="otlWOyP+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DAA15ECDB
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 14:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760BE15EFB5;
+	Wed, 24 Apr 2024 14:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713970307; cv=none; b=VwnJueuuyo9pi49UuzT4W/NP44XUxZlJehfHWrXXxEs0N0TB6AgAD4xwdY+0hhL8dbR5kVmPSeSnz6f8iCDfYCUX9elN6wMqIyHCP8mxjdVPLtTy4ZIYJKWTHd2lCG7UlOMAAQMQS0Hk7Js36W7Kd43KKv4Oys2NPn2LkvJWK0c=
+	t=1713970321; cv=none; b=RXMBI8p4Ezzz2oxEgXPTDbMDwPPSekb6j/maHc5ecnwgtclLd/TWYFvRXv89x4LXAywkRBzXsBF1oNo31xnY2t4zWEDuF7k30uTkxE83U9R5t7UEnqkowlOrMBB1dSwLttAfzxjqSgiNTz3XCeoS86FJo6sChRlEICQkfLPidLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713970307; c=relaxed/simple;
-	bh=L5PgwQXqh35ljEV/QfjmAhY+dATTVZXtCGt9GLB66PA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=T5/RTTS3lQYMyH2eICiIrGvF3ISEew9QUdtq1geZi+gGyCID8P9GPK4UqdK6/iB0VWaBz9ZYo+zm7TN1fHWsv4Wj8HHOoqljTV52/rlCgIT+7pyYiS29SGjeJFUAtXIiJdVCjAF7Y30u+nAAeFZAVxCk/F1iVPXwxEezdKtv6K8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X78OGA4f; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2a4b4418a69so7576790a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 07:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713970306; x=1714575106; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CI1RTUkbvNrBSkw+K5Z39nzZbpfRzSvThM/4gtY5VFY=;
-        b=X78OGA4fwe0/X+KjwaAwYyNgu+35YHb0vTrhK7LdBdREAUTNLhIidK7p4XiJuHKZ81
-         Qe/87ErcEWReDflfs7bIzsVt8t5zNZzeBfw4zdxhfh9YONQwgcD/95LmhAVah6txl0mi
-         36cPnqW0mIY3wfpor/TJA36iN1JfTlMEKwzLZK5Crw+cDWAwgHbElwzwtZnyOnfRHuvg
-         RaQCcXFzJJ9d8yq2m6ctIQf0CRfonqe+1BAquEjLISrBJKbcIP6NnR26/6cROr4UHIm5
-         dj+Jf1P/mmlbKwOPEwO4t0tvn0q6NqL9AvZ3Yf1Zfrbl4/asZ5wi2wzaJ/e5Zkngj83/
-         nKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713970306; x=1714575106;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CI1RTUkbvNrBSkw+K5Z39nzZbpfRzSvThM/4gtY5VFY=;
-        b=Pi2TgOAFnqb1Ddz6wuopkJBMqLMUVrLC+B19q0hKPJL94I4EpCBXzCCjiF+tinSate
-         lV4J+Uk1jlUFA1MissfOps8O6/WozLjHk5cNmZR2/xdFVz3z32G2UDzTXsyPR6Wyi4Lj
-         gYtYlNm/6qW9EGu+lv1St2kL+qVm+ujr6/yPkF7rGsAmys/XNmtog5dyNlkHra1bHOYV
-         SNRmb8ax4ctb1X+MdQcD9wuVrcKrt+9SosG0j2A1ghRkB++ip3NU7BgZGaZPQnAnf/mK
-         kyoFmYy5L4SdLHYeaH2TDPIahRj082olIGldy1TTzkkCIKaPsB3aOyIPWTCcputDwlGt
-         JCTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWesT8Ln3plmstsDMQfYrv5n84YzEisfH4pnes6KWbO0u4csToJE81CNnDVFyRZkSqiP8BKKGVsmpnLzrpEJg54Xscafy8lzt9wuKyieYQ8
-X-Gm-Message-State: AOJu0YwXFe+3t61WAIM0QFofvHVWkLzmCZmmcAnLZ9e9K1lwRORSlkUp
-	4Ehg+95GnFwWE8EnS4AKus6pAn6R9Qqw76t33oO8xYSpEzaXJ4drekRbI3cKrV6asSwybVuNTVZ
-	b9w==
-X-Google-Smtp-Source: AGHT+IEkGEBGl103CCfB1x44lCEAhqJw73hICMcBVrYM5jo0ROCAmB4Ygu81wDS3jT7KCqkV6HSuf6vVHaE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9f8d:b0:2ae:cb7e:b5b3 with SMTP id
- o13-20020a17090a9f8d00b002aecb7eb5b3mr10285pjp.6.1713970305856; Wed, 24 Apr
- 2024 07:51:45 -0700 (PDT)
-Date: Wed, 24 Apr 2024 07:51:44 -0700
-In-Reply-To: <20240424-e31c64bda7872b0be52e4c16@orel>
+	s=arc-20240116; t=1713970321; c=relaxed/simple;
+	bh=xPav91uI1ZNG9OJ6vetVcvDnMQMHSyXYAwBYPIfWJAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ws3b4USsO36b7fAOEaymwozxMn7f9kfcjltrqCpuemefG7hXud47ecwLj256cgi72boCkUNwaiL298xeKZsYodwCATG9/Z+bWhS/IHA2BBTz2iFK5oIcEncM2/HKJDjnGr47CPzU332WfnSxptNoQ7YVZbhWNORSthABHUmbzQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=otlWOyP+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCF5C2BD10;
+	Wed, 24 Apr 2024 14:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713970321;
+	bh=xPav91uI1ZNG9OJ6vetVcvDnMQMHSyXYAwBYPIfWJAY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=otlWOyP+tAKLOQY2jJz85UVBDjxfaJSShJb8fCwhde1QoWBVcXV9L8kOXZ7YiktDq
+	 CRFb4dulN7XW95JUfM340CSKNKybZ2dJ/b22SsZmQHhpqofEEHEXAqU2wibXzCVcS4
+	 HMfrS42NqBU81/dRPTkCtrvTtS8gTilQE5Db4nHV+I76fiYJBhDWN3DjU9kCwIeHh6
+	 4jJBSNhlOmgAMqensikb4v8l+gbU3+tw7ozUQMwFHWkUnxOIf1FA6OpSCkGWp9J4rL
+	 qB5hmqfwunYdSCmCdXGDOuwRopsL05J5I6EI7VnQPgdbplKA3I0ae1TvQI8BIOQKJG
+	 eF4loR+GluPmg==
+Date: Wed, 24 Apr 2024 15:51:54 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Charlie Jenkins <charlie@rivosinc.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 06/17] riscv: Fix extension subset checking
+Message-ID: <20240424-wildly-goofy-c81aac6f8cd7@spud>
+References: <20240420-dev-charlie-support_thead_vector_6_9-v3-0-67cff4271d1d@rivosinc.com>
+ <20240420-dev-charlie-support_thead_vector_6_9-v3-6-67cff4271d1d@rivosinc.com>
+ <6c624361-a968-498b-a9fb-ea2aaec70ce8@ghiti.fr>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240423073952.2001989-1-chentao@kylinos.cn> <878bf83c-cd5b-48d0-8b4e-77223f1806dc@web.de>
- <ZifMAWn32tZBQHs0@google.com> <20240423-0db9024011213dcffe815c5c@orel>
- <ZigI48_cI7Twb9gD@google.com> <20240424-e31c64bda7872b0be52e4c16@orel>
-Message-ID: <ZikcgIhyRbz5APPZ@google.com>
-Subject: Re: [PATCH] KVM: selftests: Add 'malloc' failure check in test_vmx_nested_state
-From: Sean Christopherson <seanjc@google.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, Kunwu Chan <chentao@kylinos.cn>, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Kunwu Chan <kunwu.chan@hotmail.com>, Anup Patel <anup@brainfault.org>, 
-	Thomas Huth <thuth@redhat.com>, Oliver Upton <oliver.upton@linux.dev>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ISCd5ZrJR7K6TsSY"
+Content-Disposition: inline
+In-Reply-To: <6c624361-a968-498b-a9fb-ea2aaec70ce8@ghiti.fr>
 
-On Wed, Apr 24, 2024, Andrew Jones wrote:
-> On Tue, Apr 23, 2024 at 12:15:47PM -0700, Sean Christopherson wrote:
-> ...
-> > I almost wonder if we should just pick a prefix that's less obviously connected
-> > to KVM and/or selftests, but unique and short.
-> >
-> 
-> How about kvmsft_ ? It's based on the ksft_ prefix of kselftest.h. Maybe
-> it's too close to ksft though and would be confusing when using both in
-> the same test?
 
-I would prefer something short, and for whatever reason I have a mental block
-with ksft.  I always read it as "k soft", which is completely nonsensical :-)
+--ISCd5ZrJR7K6TsSY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I'm not a huge fan of capital letters, but we could also do something like
-> MALLOC()/CALLOC().
+On Wed, Apr 24, 2024 at 04:22:02PM +0200, Alexandre Ghiti wrote:
+> Hi Charlie,
+>=20
+> On 21/04/2024 03:04, Charlie Jenkins wrote:
+> > This loop is supposed to check if ext->subset_ext_ids[j] is valid, rath=
+er
+> > than if ext->subset_ext_ids[i] is valid, before setting the extension
+> > id ext->subset_ext_ids[j] in isainfo->isa.
+> >=20
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > Fixes: 0d8295ed975b ("riscv: add ISA extension parsing for scalar crypt=
+o")
+> > ---
+> >   arch/riscv/kernel/cpufeature.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
+ure.c
+> > index 48874aac4871..b537731cadef 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -609,7 +609,7 @@ static int __init riscv_fill_hwcap_from_ext_list(un=
+signed long *isa2hwcap)
+> >   			if (ext->subset_ext_size) {
+> >   				for (int j =3D 0; j < ext->subset_ext_size; j++) {
+> > -					if (riscv_isa_extension_check(ext->subset_ext_ids[i]))
+> > +					if (riscv_isa_extension_check(ext->subset_ext_ids[j]))
+> >   						set_bit(ext->subset_ext_ids[j], isainfo->isa);
+> >   				}
+> >   			}
+> >=20
+>=20
+> I think this should go into -fixes, let's check with Palmer if he wants to
+> take this patch only or if you should send the patch on its own.
 
-Hmm, I'm not usually a fan either, but that could actually work quite well in this
-case.  It would be quite intuitive, easy to visually parse whereas tmalloc() vs
-malloc() kinda looks like a typo, and would more clearly communicate that they're
-macros.
+I think splitting out this and patch 1 into a new series targeting fixes
+would probably make things clearer?
+
+--ISCd5ZrJR7K6TsSY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZikcigAKCRB4tDGHoIJi
+0lY6AP9fxMZ4oOWAWRpbaYHs+Q77SeZ+QaOXEZh098c2I789WAEAmdgrmjjeEcJ4
+b2LKa6uCXOLW9VEFR/QJlfNVN9MYwgU=
+=Z23p
+-----END PGP SIGNATURE-----
+
+--ISCd5ZrJR7K6TsSY--
 
