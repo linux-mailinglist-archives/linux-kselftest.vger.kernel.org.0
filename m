@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0268B15F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 00:15:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD8BB8B15F4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 00:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D08D1C21BB3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 22:14:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88EFA284441
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Apr 2024 22:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31BC2168B06;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3ED16D4EA;
 	Wed, 24 Apr 2024 22:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUK/rBrT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qq74QV7Q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06912165FB3;
-	Wed, 24 Apr 2024 22:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CAC16D32A;
+	Wed, 24 Apr 2024 22:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713996892; cv=none; b=McAPZwFVHlTbkj9NuA5m8I8ey7z0tER8DEzvRm123Yjr++bXzywtz9emVh/sCUPizbk2FIbIlAziW2lGvEZn86vSAJ0kNoJ2N4cUxIUNbv6MFuNfCbIVuFXTlAq4f6JI+140ndolz7Swcn4tMCPjJ1IjUysSf1qHQSBwc0My2AI=
+	t=1713996892; cv=none; b=uN6U07zdKGxI/PYajtxOd5EhyST9IG/4oJ8kkU/u2qDxKfhLV/ZGfYYyKAIvnm+KwwwtXS7M1h/KHNIItEy5RgI7VEX4faADmHYt6UdFT+UIAJ2E2S9iM64Qj6JGi54oKGSfDvmaEgpGCP3YoYVDUJh8oWhh1Aqdu37qUOuurFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713996892; c=relaxed/simple;
-	bh=mLF7JiYV3aL5gRVzXWPg4mgGT5YCnXvtblk/EeSsU2U=;
+	bh=fhHMUm9DEAJsvgFZ3Tc+NqLDyywCnTct5uhYXaxImII=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h/ctaDyWUrjxhVAqPdniXryDMBtqczAQXSKnOGZxMAXp5Xrq6yLH/tshFboT8cZQLFrHfK85FECo2uRe6WFCvJi4q9wDHJbNyvodaXz2HVPWgQYSciDC4ZCQKFU4ZwtibH1kvmWkBk5Kr7pJXlIWYxDkkLPiRSx7YwyNcPh9ZSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUK/rBrT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED7BC113CE;
+	 MIME-Version; b=qloceMJ/AilGvrfmNR1o+CLsy8/AV6DgSgZa+K/f//7gbCTGTk5/yc8WK51juln7UWfH2WdO++vwEjM3PX2Jjg8IesIKesoxCIejJfYnYvCOtPqwza2l1tw7qin1YbJEtSF4qrmOGAjA/vNe2EYRQYBitYZdWx4cXIwtlCQUN9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qq74QV7Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF6BC32782;
 	Wed, 24 Apr 2024 22:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713996891;
-	bh=mLF7JiYV3aL5gRVzXWPg4mgGT5YCnXvtblk/EeSsU2U=;
+	s=k20201202; t=1713996892;
+	bh=fhHMUm9DEAJsvgFZ3Tc+NqLDyywCnTct5uhYXaxImII=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GUK/rBrTA0SlRvjCJLNmlKSsxjI5Al8WXWOjCgQndqY0ICe6+QpbO0nmxKC38h3O8
-	 inesWIm5+i+xR+/TfaGC9xjLYaSUgPFCF/p0IH8xAaQ8XkoMTP4G5NFMyav2DY2wXW
-	 84BnufNmI4sFpIq8cSdCbPlAjcoqiNSrQvvD0ai7YQVbd8OHmsOIeemvEXKVKjSNdE
-	 Q0YjN3/HfBUmQCgAEJb/5QGD0WiN/qUHfx6E+pSD5+vN13EqOZT8pb6GMjCF1iv5yN
-	 AQucUBrkmE5izdmAPTOQUemoaMch6rKnLfLUy9Q/5X2SFA8gXkruyIPNp2syOdeOtT
-	 8dkweKLc54bJA==
+	b=qq74QV7QaA+P7VH6kTfIQVYF0WNg3MLBBNunDrv18CAfhcATu+w/PzKJj59gtCuqn
+	 8mJyJvafW2jK0HENKiuFseRHejBYYll3J23E8nj5GGQZRRibbqkLM9vPAn2Jv1N+so
+	 xaV7AoSQCrjbJ9co1o0J5+blYS54N/7v1MGjdD5t0AA+BW5ccR0LnHukKMclEqa1QZ
+	 0y32U3G5YcyZec7/Z3MUMCrP/kX0vV1z85SnrXfCDO6S/FVHYLd+PLMQSp4N9Ck99F
+	 U6K0HCLM+YR8xR5jRZZ2PQh3Muqr6XbJjUPcMTEwdqxT+kCbUxqRGT0HHErqYgRkMv
+	 i1M+VRMpsx8GA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/4] selftests: drv-net: extend the README with more info and example
-Date: Wed, 24 Apr 2024 15:14:42 -0700
-Message-ID: <20240424221444.4194069-3-kuba@kernel.org>
+Subject: [PATCH net-next 3/4] selftests: drv-net: reimplement the config parser
+Date: Wed, 24 Apr 2024 15:14:43 -0700
+Message-ID: <20240424221444.4194069-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240424221444.4194069-1-kuba@kernel.org>
 References: <20240424221444.4194069-1-kuba@kernel.org>
@@ -63,138 +63,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add more info to the README. It's also now copied to GitHub for
-increased visibility:
-
- https://github.com/linux-netdev/nipa/wiki/Running-driver-tests
+The shell lexer is not helping much, do very basic parsing
+manually.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../testing/selftests/drivers/net/README.rst  | 97 ++++++++++++++++---
- 1 file changed, 85 insertions(+), 12 deletions(-)
+ .../selftests/drivers/net/lib/py/env.py       | 26 ++++++++++---------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index 0cbab33dad1f..3b6a29e6564b 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -1,18 +1,42 @@
--Running tests
--=============
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index a3db1bb1afeb..a6a5a5f9c6db 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
--Tests are executed within kselftest framework like any other tests.
--By default tests execute against software drivers such as netdevsim.
--All tests must support running against a real device (SW-only tests
--should instead be placed in net/ or drivers/net/netdevsim, HW-only
--tests in drivers/net/hw).
-+Running driver tests
-+====================
+ import os
+-import shlex
+ from pathlib import Path
+ from lib.py import KsftSkipEx
+ from lib.py import cmd, ip
+@@ -16,17 +15,20 @@ from .remote import Remote
+     if not (src_dir / "net.config").exists():
+         return env
  
--Set appropriate variables to point the tests at a real device.
-+Networking driver tests are executed within kselftest framework like any
-+other tests. They support testing both real device drivers and emulated /
-+software drivers (latter mostly to test the core parts of the stack).
-+
-+SW mode
-+~~~~~~~
-+
-+By default, when no extra parameters are set or exported, tests execute
-+against software drivers such as netdevsim. No extra preparation is required
-+the software devices are created and destroyed as part of the test.
-+In this mode the tests are indistinguishable from other selftests and
-+(for example) can be run under ``virtme-ng`` like the core networking selftests.
-+
-+HW mode
-+~~~~~~~
-+
-+Executing tests against a real device requires external preparation.
-+The netdevice against which tests will be run must exist, be running
-+(in UP state) and be configured with an IP address.
-+
-+Refer to list of :ref:`Variables` later in this file to set up running
-+the tests against a real device.
-+
-+Both modes required
-+~~~~~~~~~~~~~~~~~~~
-+
-+All tests in drivers/net must support running both against a software device
-+and a real device. SW-only tests should instead be placed in net/ or
-+drivers/net/netdevsim, HW-only tests in drivers/net/hw.
+-    lexer = shlex.shlex(open((src_dir / "net.config").as_posix(), 'r').read())
+-    k = None
+-    for token in lexer:
+-        if k is None:
+-            k = token
+-            env[k] = ""
+-        elif token == "=":
+-            pass
+-        else:
+-            env[k] = token
+-            k = None
++    with open((src_dir / "net.config").as_posix(), 'r') as fp:
++        for line in fp.readlines():
++            full_file = line
++            # Strip comments
++            pos = line.find("#")
++            if pos >= 0:
++                line = line[:pos]
++            line = line.strip()
++            if not line:
++                continue
++            pos = line.find("=")
++            if pos <= 0:
++                raise Exception("Can't parse configuration line:", full_file)
++            env[line[:pos]] = line[pos+1:]
+     return env
  
- Variables
- =========
  
--Variables can be set in the environment or by creating a net.config
-+The variables can be set in the environment or by creating a net.config
- file in the same directory as this README file. Example::
- 
-   $ NETIF=eth0 ./some_test.sh
-@@ -23,9 +47,9 @@ Variables can be set in the environment or by creating a net.config
-   # Variable set in a file
-   NETIF=eth0
- 
--Please note that the config parser is very simple, if there are
--any non-alphanumeric characters in the value it needs to be in
--double quotes.
-+Local test (which don't require endpoint for sending / receiving traffic)
-+need only the ``NETIF`` variable. Remaining variables define the endpoint
-+and communication method.
- 
- NETIF
- ~~~~~
-@@ -61,3 +85,52 @@ Arguments used to construct the communication channel.
- 
-   for netns - name of the "remote" namespace
-   for ssh - name/address of the remote host
-+
-+Example
-+=======
-+
-+Build the selftests::
-+
-+  # make -C tools/testing/selftests/ TARGETS="drivers/net drivers/net/hw"
-+
-+"Install" the tests and copy them over to the target machine::
-+
-+  # make -C tools/testing/selftests/ TARGETS="drivers/net drivers/net/hw" \
-+     install INSTALL_PATH=/tmp/ksft-net-drv
-+
-+  # rsync -ra --delete /tmp/ksft-net-drv root@192.168.1.1:/root/
-+
-+On the target machine, running the tests will use netdevsim by default::
-+
-+  [/root] # ./ksft-net-drv/run_kselftest.sh -t drivers/net:ping.py
-+  TAP version 13
-+  1..1
-+  # timeout set to 45
-+  # selftests: drivers/net: ping.py
-+  # KTAP version 1
-+  # 1..3
-+  # ok 1 ping.test_v4
-+  # ok 2 ping.test_v6
-+  # ok 3 ping.test_tcp
-+  # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-+  ok 1 selftests: drivers/net: ping.py
-+
-+Create a config with remote info::
-+
-+  [/root] # cat > ./ksft-net-drv/drivers/net/net.config <<EOF
-+  NETIF=eth0
-+  LOCAL_V4=192.168.1.1
-+  REMOTE_V4=192.168.1.2
-+  REMOTE_TYPE=ssh
-+  REMOTE_ARGS=root@192.168.1.2
-+  EOF
-+
-+Run the test::
-+
-+  [/root] # ./ksft-net-drv/drivers/net/ping.py
-+  KTAP version 1
-+  1..3
-+  ok 1 ping.test_v4
-+  ok 2 ping.test_v6 # SKIP Test requires IPv6 connectivity
-+  ok 3 ping.test_tcp
-+  # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:1 error:0
 -- 
 2.44.0
 
