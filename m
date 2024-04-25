@@ -1,100 +1,58 @@
-Return-Path: <linux-kselftest+bounces-8847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 749038B1ACF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 08:19:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AECD8B1BF1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 09:33:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 998F71C21795
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 06:19:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37C581F2303D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 07:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2673FBB7;
-	Thu, 25 Apr 2024 06:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931EE6CDC1;
+	Thu, 25 Apr 2024 07:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="CwuXZPem"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxEbHlTZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B294F3D388
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 06:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8526EB4A;
+	Thu, 25 Apr 2024 07:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714025959; cv=none; b=S25C+8KAbnBZ2bP22cinwfOb+9VHWwpmZmjKcyXOHrJXQlWdsxn/RPm2ZFgsJjz1I9htaJGDjX9RPyUrcZgPWgY8X03f1TILXBs78NqYnsLukEahbOXwHTrhuOkgcP/+FFU5Y0EwxFUr79/TEkE/02P60q8D2WZsFZDn0BhxstU=
+	t=1714030401; cv=none; b=ZARGfsWkHWtDFIo2XHlwcDv+o48BiHQJrGWcLkkcE+keMiGsPEQQ1pifHNB+zunx9w2RUkIodxaXQ4rrFvGC6EvBZu7cQxuNuP86NoS1r6iqx87c9VHydBXJv8+BUJFScIkuwAqh0RB2nYzXv9/73FrBaEWCMMa9CmGJViIH4U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714025959; c=relaxed/simple;
-	bh=//DNsUlBgI0vlLJDyF69vHpBDYm1UWrZbGpkoCdLwuo=;
+	s=arc-20240116; t=1714030401; c=relaxed/simple;
+	bh=IvDFJUyMXiZoCo3+3WAO6o6mM1VGEGQ/JIWJuBcDiww=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ldFjyJWBiHYUZzJyq7WwO3JoEMxBT3CbiUpl0maWim8snYX7M3TlNFT8kM29PiAhte4ifZ+AFNJ9QDbtU3LIjFg+rAPpMUioaMBoMw0eiFTy/dvDFzITGBESAVN+DDtRl6As6S9uCVE41zOuT4+kU+NsZ7ytG/AMrvcX2SKQVYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=CwuXZPem; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 604B13FE53
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 06:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1714025949;
-	bh=HoVegtVV8p+Gh2AomBAcQ2xl6o91liRpQqxeqe2byac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=CwuXZPemIJqjgsV2TDJ7MM0quiF/bUSR7AlpLSpOV1ldX5Od2QfumOXanazVcyvHl
-	 TLZk7HoKbFOlUnVQNCIcIWbtYycGXohlTHpshCF8PJnsjZvHglKOutgnISvtQDhcDE
-	 tDxoXST1Bpj7Y9oniPG6hzSIjLy0PAWWHF9kwF9zvxnflOmMfmQqKp0xu4xZgeZ5tA
-	 SSWyRYMK/mZF0u2ZiBZ0R9ZC6b2Cd8taE3suM/6Roc0TCahzKB16LtguDf/3a34w1U
-	 23u1LDTNEsZly1oDug7tI+VVZIexRPhUwqdMeos2kYHeboApbcOntXxT7fqniETVGt
-	 4fRdWBMncGWaw==
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-57233475b0dso210758a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Apr 2024 23:19:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714025949; x=1714630749;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HoVegtVV8p+Gh2AomBAcQ2xl6o91liRpQqxeqe2byac=;
-        b=asrSuny+95JSvweuhDqy3KYxbz9rC1kW2dYEi4y8E4MD1mPQLFgpoOoZ/5FUgHh8X9
-         5uSplLqMwJ0DFLooEl4x/s030FgY8ZIqDADqhnrxP4Rw5xAMy3nWoFZyjBkrGq3GWGqJ
-         2OMylDTEe0oO+aTYMf4nOa3XIIwEyCt9dvVY4kf5TkYejOyeeOJrEhfc93D/XEQJXs5r
-         gXdvj508FLgllMKdgaHrhLhSayLuS6s51PXAUacA08B2Q2VYD7qd5GQr+03fsmf31c6F
-         QSG5DPGfarAfPEQGqUYN2R3gLtVfv2i2hBexf7V3msSsgjKrC3u/R3aMnyUYd0bDoX1C
-         IzOg==
-X-Forwarded-Encrypted: i=1; AJvYcCX5hibZlhGDDiNjePWY51oyWaaOG8XgivafpfIKewrqRlTJRCY47c7riomd2yg7CC4S5P5qMjRxmutjOuz5ol3A1mFSbU6juSXbk0iG2qbF
-X-Gm-Message-State: AOJu0YxFtzUKcfpD8vKcEL8cmlI4xqJLTS9DmD2iajg5vIgiJhgfRyey
-	rBl+k2yZwnkwx/nZW9hGDz1QNXd2JChtorw0x/+1N1DgaJzq9WnDM3jGQ1O4ajbU122W6rDTTDh
-	riYHw2maqbnwfki0kKwIxl4YdO6rZiaKicmbT389/K1ib62paeLL+c6fieSCfY9FE3yGtGGNRR+
-	eObyY/Rg==
-X-Received: by 2002:a05:6402:2033:b0:572:325a:851a with SMTP id ay19-20020a056402203300b00572325a851amr2448513edb.10.1714025948827;
-        Wed, 24 Apr 2024 23:19:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEmz2xFXYeIc9DsevrrNqsLxot9gX+ty/nFrxSqWAYAoTEBo9LkdsRfBz18/zGUn4b5HLfSjA==
-X-Received: by 2002:a05:6402:2033:b0:572:325a:851a with SMTP id ay19-20020a056402203300b00572325a851amr2448483edb.10.1714025948178;
-        Wed, 24 Apr 2024 23:19:08 -0700 (PDT)
-Received: from localhost (host-82-49-69-7.retail.telecomitalia.it. [82.49.69.7])
-        by smtp.gmail.com with ESMTPSA id c7-20020a0564021f8700b0057000ecadb0sm8680895edc.8.2024.04.24.23.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 23:19:07 -0700 (PDT)
-Date: Thu, 25 Apr 2024 08:19:04 +0200
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: Add ring_buffer__consume_n test.
-Message-ID: <Zin12J-emVljvVrJ@gpd>
-References: <20240420155904.1450768-1-andrea.righi@canonical.com>
- <ZiVy9bYrX-w24huD@krava>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jjXdHWzqGY3aWCgT6ZPsNnqQ8dSN6igSSO+SNra9UqHglbtB1FH6S5J7ub1dMhbQGRU6WoTShA78zJqPS+IjBg5mBcAkYv1P7T73HTreXSCL9UW5Dt/WaeOyIE8IXcUdKOpw//LpxcKvIYF6T/6PXTiSpquR//GHL+EkVFLQmkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxEbHlTZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 664DBC113CC;
+	Thu, 25 Apr 2024 07:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714030400;
+	bh=IvDFJUyMXiZoCo3+3WAO6o6mM1VGEGQ/JIWJuBcDiww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qxEbHlTZpkqN3noZ8+q1aOqtL9WoUhJp6u9GrZ2/UfHErnHsXpJdNBl3wJAawuHo3
+	 duH2DK+B6BiCibp3F7TQmgvrslQ98lqIwuHxG39LLez2NaDnTfE9ByWIw/4+5hk1Z0
+	 ReIzcNQvMKTWffr48hGdkeSZNjDgYyOo/iDCQ3gTN5H6EEBhjhHe6MV3aFW5zMJsD2
+	 DqRWMVlsFywKVpFCWATdXPZ0IlRXrkCV9ZnFGB0ArAqw3cr9LRoIDNVtAePLi+mi47
+	 a8eyS3hEDWjUE//wC5SovyW7JOFOWTsAIYBcy7ymmazi90mZbCpGLIMcxpKRADxeYT
+	 uCHX9sNjHpfpg==
+Date: Thu, 25 Apr 2024 08:33:17 +0100
+From: Simon Horman <horms@kernel.org>
+To: Benjamin Poirier <benjamin.poirier@gmail.com>
+Cc: Aaron Conole <aconole@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	dev@openvswitch.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Jiri Pirko <jiri@resnulli.us>
+Subject: Re: [ovs-dev] selftests: openvswitch: Questions about possible
+ enhancements
+Message-ID: <20240425073317.GS42092@kernel.org>
+References: <20240424164405.GN42092@kernel.org>
+ <20240424173715.GP42092@kernel.org>
+ <ZilIgbIvB04iUal2@f4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -103,126 +61,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZiVy9bYrX-w24huD@krava>
+In-Reply-To: <ZilIgbIvB04iUal2@f4>
 
-On Sun, Apr 21, 2024 at 10:11:33PM +0200, Jiri Olsa wrote:
-...
-> >  static struct test_ringbuf_map_key_lskel *skel_map_key;
-> > +static struct test_ringbuf_n_lskel *skel_n;
+On Wed, Apr 24, 2024 at 01:59:29PM -0400, Benjamin Poirier wrote:
+> On 2024-04-24 18:37 +0100, Simon Horman wrote:
+> > On Wed, Apr 24, 2024 at 05:44:05PM +0100, Simon Horman wrote:
+> > > Hi Aaron, Jakub, all,
+> > > 
+> > > I have recently been exercising the Open vSwitch kernel selftests,
+> > > using vng, something like this:
+> > > 
+> > > 	TESTDIR="tools/testing/selftests/net/openvswitch"
+> > > 
+> > >         vng -v --run . --user root --cpus 2 \
+> > >                 --overlay-rwdir "$PWD" -- \
+> > >                 "modprobe openvswitch && \
+> > > 		 echo \"timeout=90\" >> \"${TESTDIR}/settings\" && \
+> > >                  make -C \"$TESTDIR\" run_tests"
+> > > 
+> > > And I have some observations that I'd like to ask about.
+> > > 
+> > > 1. Building the kernel using the following command does not
+> > >    build the openvswitch kernel module.
+> > > 
+> > > 	vng -v --build \
+> > > 		--config tools/testing/selftests/net/config
+> > > 
+> > >    All that seems to be missing is CONFIG_OPENVSWITCH=m
+> > >    and I am wondering what the best way of resolving this is.
+> > > 
+> > >    Perhaps I am doing something wrong.
+> > >    Or perhaps tools/testing/selftests/net/openvswitch/config
+> > >    should be created? If so, should it include (most of?) what is in
+> > >    tools/testing/selftests/net/config, or just CONFIG_OPENVSWITCH=m?
 > 
-> seems like there's no need for this to be static variable
-
-Can you elaborate more? I think we want these pointers to be static to
-limit the scope to this file, no?
-
+> I noticed something similar when testing Jiri's virtio_net selftests
+> patchset [1].
 > 
-> >  static struct test_ringbuf_lskel *skel;
-> >  static struct ring_buffer *ringbuf;
-> >  
-> > @@ -326,6 +328,67 @@ static void ringbuf_subtest(void)
-> >  	test_ringbuf_lskel__destroy(skel);
-> >  }
-> >  
-> > +/*
-> > + * Test ring_buffer__consume_n() by producing N_TOT_SAMPLES samples in the ring
-> > + * buffer, via getpid(), and consuming them in chunks of N_SAMPLES.
-> > + */
-> > +#define N_TOT_SAMPLES	32
-> > +#define N_SAMPLES	4
-> > +
-> > +/* Sample value to verify the callback validity */
-> > +#define SAMPLE_VALUE	42L
-> > +
-> > +static int process_n_sample(void *ctx, void *data, size_t len)
-> > +{
-> > +	struct sample *s = data;
-> > +
-> > +	CHECK(s->value != SAMPLE_VALUE,
-> > +	      "sample_value", "exp %ld, got %ld\n", SAMPLE_VALUE, s->value);
+> drivers/net/virtio_net/config includes virtio options but the
+> test also needs at least CONFIG_NET_VRF=y which is part of net/config.
 > 
-> I think we should use ASSERT macros instead in the new code
+> Whatever the answer to your question, all config files should be
+> coherent on this matter.
 
-Good catch, I'll change this to an ASSERT_EQ().
+Yes, agreed. That is the main reason I'm asking about this.
 
+> [1] https://lore.kernel.org/netdev/20240424104049.3935572-1-jiri@resnulli.us/
 > 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void ringbuf_n_subtest(void)
-> > +{
-> > +	int err, i;
-> > +
-> > +	skel_n = test_ringbuf_n_lskel__open();
-> > +	if (!ASSERT_OK_PTR(skel_n, "test_ringbuf_n_lskel__open"))
-> > +		return;
-> > +
-> > +	skel_n->maps.ringbuf.max_entries = getpagesize();
-> > +	skel_n->bss->pid = getpid();
-> > +
-> > +	err = test_ringbuf_n_lskel__load(skel_n);
-> > +	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__load"))
-> > +		goto cleanup;
-> > +
-> > +	ringbuf = ring_buffer__new(skel_n->maps.ringbuf.map_fd,
-> > +				   process_n_sample, NULL, NULL);
-> > +	if (!ASSERT_OK_PTR(ringbuf, "ring_buffer__new"))
-> > +		goto cleanup;
-> > +
-> > +	err = test_ringbuf_n_lskel__attach(skel_n);
-> > +	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__attach"))
-> > +		goto cleanup_ringbuf;
-> > +
-> > +	/* Produce N_TOT_SAMPLES samples in the ring buffer by calling getpid() */
-> > +	skel->bss->value = SAMPLE_VALUE;
+> [...]
+> > 
+> >   5. openvswitch.sh starts with "#!/bin/sh".
+> >      But substitutions such as "${ns:0:1}0"  fail if /bin/sh is dash.
+> >      Perhaps we should change openvswitch.sh to use bash?
 > 
-> skel_n ?
+> I think so. A similar change was done in
+> c2518da8e6b0 selftests: bonding: Change script interpreter (v6.8-rc1)
 
-Absolutely... I'm suprised that it works actually, I guess pure luck
-(unluck) to reuse the old pointer and have value mapped to the same
-location. Anyway, I'll fix this.
-
-> 
-> > +	for (i = 0; i < N_TOT_SAMPLES; i++)
-> > +		syscall(__NR_getpgid);
-> > +
-> > +	/* Consume all samples from the ring buffer in batches of N_SAMPLES */
-> > +	for (i = 0; i < N_TOT_SAMPLES; i += err) {
-> > +		err = ring_buffer__consume_n(ringbuf, N_SAMPLES);
-> > +		ASSERT_EQ(err, N_SAMPLES, "rb_consume");
-> > +	}
-> > +
-> 
-> SNIP
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_n.c b/tools/testing/selftests/bpf/progs/test_ringbuf_n.c
-> > new file mode 100644
-> > index 000000000000..b98b5bb20699
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/test_ringbuf_n.c
-> > @@ -0,0 +1,52 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +// Copyright (c) 2024 Andrea Righi <andrea.righi@canonical.com>
-> > +
-> > +#include <linux/bpf.h>
-> > +#include <sched.h>
-> > +#include <unistd.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +#include "bpf_misc.h"
-> > +
-> > +char _license[] SEC("license") = "GPL";
-> > +
-> > +#define TASK_COMM_LEN 16
-> > +
-> > +struct sample {
-> > +	int pid;
-> > +	int seq;
-> 
-> seq does not seem to be checked, is it needed?
-
-seq is not used at all, I can definitely drop it.
-
-Thanks for the review! I'll send a v2.
-
--Andrea
+Thanks, this one seems straightforward.
 
