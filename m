@@ -1,172 +1,122 @@
-Return-Path: <linux-kselftest+bounces-8878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CD658B2922
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 21:48:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA968B293F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 21:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FB1A1C213A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 19:48:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEA221C21441
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 19:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F017215250D;
-	Thu, 25 Apr 2024 19:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF2D152166;
+	Thu, 25 Apr 2024 19:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQkvF1UN"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Nweo078U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5F314D70C;
-	Thu, 25 Apr 2024 19:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2890915250B
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 19:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714074531; cv=none; b=PN7UVJaKiBiqpzFzFS/C70zY6dp2waoQpBGJcm5I1dL1rjFrA5WVWXojg4poC8AtmtZclPGJa/k35K9KPxlSV9MYo4FTMfpLXG9tdjPLrdQBdYu1RZPFIqnOGb2qvr+NKNJNiiRgwNQ2oGPcQFt4ZwiXzBMtzKkY6SayGdGmji8=
+	t=1714075127; cv=none; b=pmndl7mNmG9/tepzWhpAVEtAWXkpHscy2y9NpA5i1zv3suE0X57xk2djqhzK6linENROBMfQ1NFxJbI0bdTUuUgFsLKVZddSwVJdDWYCCXuXUvRvSCHlgpnJ5cjkUq2JkfztyVCMRgJeu3QKjXg15RNN55fPOVgU7VHGFjKexeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714074531; c=relaxed/simple;
-	bh=f06bKjxosNqzVCgffaQZfH2FehyF+hFriMTlQfc5egQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IJce1msIQlS+4lP5UqK66TkV7pomP1Jfs3FwAgwOnbY7h8RNiY7wN+ss/xSwIGe07Xvo5aGkKS1tPG3EbNW0lhEno7TLRSTFQwIVaxMk/o+AO+2ypB9+BkXLQ/C7TrU901EpRFXEAVBuKk4ept720QTMVBktx3LN7yKR0VJX/vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQkvF1UN; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3499f1bed15so1509979f8f.1;
-        Thu, 25 Apr 2024 12:48:50 -0700 (PDT)
+	s=arc-20240116; t=1714075127; c=relaxed/simple;
+	bh=nA0EButQZ1tC8ouxJfYydhjZwNEli15W2Azor/y6KZY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KXW9KyV7SLXoNeZYffBlisybAy+Owzc0xUmHQL3YaMPcNULlvpeUKYBnKchMuvJVaMNGRfrLG+dtb3xEmaHEimZiazRWvOjrrtCvyuNdwcuaJlSI9aKjLEh1aNj514NOb3nDwXkG1qXFfoFHyxAYVjPRL5ky3ZYs8rL123d3YsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Nweo078U; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e4266673bbso12547425ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 12:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714074529; x=1714679329; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=htAT7EtjhF7pbsJMji3zhseRMQK3h5kfe4HgcsBoeuU=;
-        b=kQkvF1UN8bnvTP79VUWkZIXxqrzuVeIRQMZiDjUfPc4I3so1cy4R4hHbL5f0uAfRcA
-         pufwbjODgIZ7P7UyPZjPZT6savhFpdprmdmyWqIFZPNe8hU7fbWRxUcKT1jhqckSYskX
-         udkFKWyM8RH1UfxZfQ2AfM/QN7Ed/OmTjOVtfAhv/LowlFbnjfTGfsbIijm6ZcCJwdKI
-         T7lTKQzq10bxPBKRWU0mTGP3jRIbsvG/ZBoOKv1ikpJZzOAgwpaVlpntvybWjBtHHgLP
-         59hAMvb/dp0dw6hJJ9WTRSCJWpaLNSrqPF3MMRKaEcjlJ1Seg4oBa8UV3tyZZw2l4o6J
-         wLLg==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714075125; x=1714679925; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NZH4f99IF0WKrj7O85gUWonm//e5lpeuhKVLijLk2E=;
+        b=Nweo078UWkJl5uZKvMSdw6n6ypTywgu+XYsEchWDJMFyPBBD12I+49BpCTJJhWYdaP
+         jhYnPXwcepEXQdwIL6NGBP8UoVo0D5FNV45BM+JhhwBr1cyuQhW15Q0vI/QkPisNvQMw
+         33OfyaOrv6lsUcpT07u8WYda3C8CizTaLHtg00LODCCgA3kKyMsZYGz53GjK8sR8hM6R
+         BCADOgAlUWaF9KHB1DDKZ6AVJbRyd8Fed6fsjtLGABfH9SJWtVuqoJj94uNgACvUKldx
+         LgGHBFKP48e0IrnnDz6KNZkGoafmGoHzXHcBEsexxWqtYQwZ6EL0mHvP7kngS+zg8rgq
+         IleA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714074529; x=1714679329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=htAT7EtjhF7pbsJMji3zhseRMQK3h5kfe4HgcsBoeuU=;
-        b=r4ZYqBjfQM2oN22GvHRDKg5kPTt0vgX+g/RxLJCsVRSPkb40fJ3mFONgGWDGtpHQmO
-         5blunDdf68RvJjVlk1KF499iLjDJDUXTi3rfpsh3JaikfUfxp12Tk8THRA4fFM1OsAxG
-         IX0k3DRD6Rx+IO93qsfbYPDbGqAnx0K8/4fc5NnVarTLsNrKzwJYK1Bc3iuk6S5UZcvu
-         idAWmSssoQ/QktwyTXsoXg5wwKVuMnxBxJF3fSVvEmdrkAB0nHk/54O0an4MfFW3fxpg
-         CTzl+uO5Elkk2ZKTryvNuf/ix0CYxsPVQ65W12+u2KJX7CkzuheyvDNK9hH/miFQnRta
-         bLOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDe6mydpQS3Ew+Vx20onqOdhUVBx5meTmUtV9FwQr7Weh1pPLugYjB+wCILRULeDeyb1v1UCgJN6IrPM+thwO/S3aNmXAydyyRUBvA9R6VGymp20zsoTEzVugPZjYAGEzeAze7ISFjGe61RV0Yit3OkorGt14DWCz7+TsOL/02lG3l
-X-Gm-Message-State: AOJu0Yw2/rAZAbAcOLfU5sYt/BQWPl6dIaaINbfPprjLbcn/YQttgOD0
-	YXamRupRTt0HXVnkLg/BvZEsZpwynLJr6SUzSyI/navxvVKabC2Y5GiYv7XDr3iYivHN74QEKEP
-	xOo1D+yWrO8nkctNgLtOhYe8Ouyc=
-X-Google-Smtp-Source: AGHT+IFrP+6/kMSMo6TgTTZPw2wLhZbtWDvCatg0SXqfZLi8tOu5tq/3vWf3YdbuA2Ph4CeUWPu5BQ38TxpsnwCOCq0=
-X-Received: by 2002:a05:6000:1567:b0:34a:5d48:a708 with SMTP id
- 7-20020a056000156700b0034a5d48a708mr914529wrz.0.1714074528359; Thu, 25 Apr
- 2024 12:48:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714075125; x=1714679925;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0NZH4f99IF0WKrj7O85gUWonm//e5lpeuhKVLijLk2E=;
+        b=uFD0fV7YMHy37F9MCnjuM0w3OS2YGfa3SWVobioiJ+20GuBkuY5fyQrFovPRJCSgZL
+         2AwywbpG8Qb/j6woeinIPhFTQdEGZ3HQB7KZ+qrgeHt2ZRvTrwDaxaPCZWAM9EUHzORG
+         v/ZS4I4JMeXhs80D7fcqtJmTaUtnDNwWmofakr/tuJfvJ1hIZAgsxRs20+XGSjI4xdVp
+         yBDDerBb8lcRSvjdFbidLfrtSx8nTNgwLhD8ix/F/4bn9tLI9Ru+wNjLK7ZNSxgfnV2e
+         533d0bpM+c06EfJ031HpEqVinU7FoBn6HlwPH+l1DkFlfVJ+Tfn6fMW/9vtksGmZD5lM
+         JmuQ==
+X-Gm-Message-State: AOJu0YxNMAhO19r2/Qpvq9vdEmDEiSVgK8vl+kS4zsOfANnzjV8zqZAW
+	4HiDCvy31t+To6+tWoHz9uk8a5s2i3fgBD7jIxx7Id4onbnjQDsWC/PchRjFAPY=
+X-Google-Smtp-Source: AGHT+IECF4sLhnfZeY8g6vk2fi/Z9puc/V7awMpO2ZhBa2zz101/n/Rq4S5Hho5iCaLR2kaBPAoHRQ==
+X-Received: by 2002:a17:902:e54d:b0:1e4:6938:6fe3 with SMTP id n13-20020a170902e54d00b001e469386fe3mr719133plf.58.1714075125454;
+        Thu, 25 Apr 2024 12:58:45 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170903248400b001dd88a5dc47sm14152176plw.290.2024.04.25.12.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Apr 2024 12:58:44 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Thu, 25 Apr 2024 12:58:03 -0700
+Subject: [PATCH] riscv: selftests: Add hwprobe binaries to .gitignore
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240425-bpf-next-v1-0-1d8330e6c643@kernel.org> <20240425-bpf-next-v1-2-1d8330e6c643@kernel.org>
-In-Reply-To: <20240425-bpf-next-v1-2-1d8330e6c643@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 25 Apr 2024 12:48:36 -0700
-Message-ID: <CAADnVQK_7byWSkjVbmUFYLNA1+ER4xWz3dCE=K6ZCWLW=YMCBA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf: do not walk twice the hash map on free
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240425-gitignore_hwprobe_artifacts-v1-1-dfc5a20da469@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAMq1KmYC/x3MQQqAIBAAwK/EnhPM8lBfiQizVfeisUoF0d+Tj
+ nOZBzIyYYapeYDxpEwpVnRtAzaY6FHQXg1KqkEOSgtPhXxMjGu4Dk4broYLOWNLFm6TTtm913K
+ 0UIeD0dH97/Pyvh9r8BpEbQAAAA==
+To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Andrew Jones <ajones@ventanamicro.com>
+Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1714075124; l=933;
+ i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
+ bh=nA0EButQZ1tC8ouxJfYydhjZwNEli15W2Azor/y6KZY=;
+ b=EMBx4wRw1BijgV83w/DHcSmBFo1pgAnUefy+7FE1WoOwc0GghpU0GN3buJtNdf5uyLReFKFc8
+ Ek2BHtYsvTBBwL2lzcL85G7/HKa4/x2hUALseg3IMLy0cbQDJ9zs7ic
+X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
+ pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
 
-On Thu, Apr 25, 2024 at 6:59=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
-org> wrote:
->
-> If someone stores both a timer and a workqueue in a hash map, on free, we
-> would walk it twice.
-> Add a check in htab_free_malloced_timers_or_wq and free the timers
-> and workqueues if they are present.
->
-> Fixes: 246331e3f1ea ("bpf: allow struct bpf_wq to be embedded in arraymap=
-s and hashmaps")
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> ---
->  kernel/bpf/hashtab.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
->
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 0179183c543a..20162ae741e9 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -1515,7 +1515,7 @@ static void delete_all_elements(struct bpf_htab *ht=
-ab)
->         migrate_enable();
->  }
->
-> -static void htab_free_malloced_timers_or_wq(struct bpf_htab *htab, bool =
-is_timer)
-> +static void htab_free_malloced_timers_or_wq(struct bpf_htab *htab)
->  {
->         int i;
->
-> @@ -1527,10 +1527,10 @@ static void htab_free_malloced_timers_or_wq(struc=
-t bpf_htab *htab, bool is_timer
->
->                 hlist_nulls_for_each_entry(l, n, head, hash_node) {
->                         /* We only free timer on uref dropping to zero */
-> -                       if (is_timer)
-> +                       if (btf_record_has_field(htab->map.record, BPF_TI=
-MER))
->                                 bpf_obj_free_timer(htab->map.record,
->                                                    l->key + round_up(htab=
-->map.key_size, 8));
-> -                       else
-> +                       if (btf_record_has_field(htab->map.record, BPF_WO=
-RKQUEUE))
->                                 bpf_obj_free_workqueue(htab->map.record,
->                                                        l->key + round_up(=
-htab->map.key_size, 8));
->                 }
-> @@ -1544,18 +1544,12 @@ static void htab_map_free_timers_and_wq(struct bp=
-f_map *map)
->         struct bpf_htab *htab =3D container_of(map, struct bpf_htab, map)=
-;
->
->         /* We only free timer and workqueue on uref dropping to zero */
-> -       if (btf_record_has_field(htab->map.record, BPF_TIMER)) {
-> +       if (btf_record_has_field(htab->map.record, BPF_TIMER | BPF_WORKQU=
-EUE)) {
->                 if (!htab_is_prealloc(htab))
-> -                       htab_free_malloced_timers_or_wq(htab, true);
-> +                       htab_free_malloced_timers_or_wq(htab);
->                 else
->                         htab_free_prealloced_timers(htab);
->         }
-> -       if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE)) {
-> -               if (!htab_is_prealloc(htab))
-> -                       htab_free_malloced_timers_or_wq(htab, false);
-> -               else
-> -                       htab_free_prealloced_wq(htab);
+The cbo and which-cpu hwprobe selftests leave their artifacts in the
+kernel tree and end up being tracked by git. Add the binaries to the
+hwprobe selftest .gitignore so this no longer happens.
 
-This looks wrong.
-htab_free_prealloced_wq() is now unused as compiler says:
-../kernel/bpf/hashtab.c:243:13: warning: =E2=80=98htab_free_prealloced_wq=
-=E2=80=99
-defined but not used [-Wunused-function]
-  243 | static void htab_free_prealloced_wq(struct bpf_htab *htab)
-      |             ^~~~~~~~~~~~~~~~~~~~~~~
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Fixes: a29e2a48afe3 ("RISC-V: selftests: Add CBO tests")
+Fixes: ef7d6abb2cf5 ("RISC-V: selftests: Add which-cpus hwprobe test")
+---
+ tools/testing/selftests/riscv/hwprobe/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-and prealloced maps with wq leak wq-s.
+diff --git a/tools/testing/selftests/riscv/hwprobe/.gitignore b/tools/testing/selftests/riscv/hwprobe/.gitignore
+index 8113dc3bdd03..6e384e80ea1a 100644
+--- a/tools/testing/selftests/riscv/hwprobe/.gitignore
++++ b/tools/testing/selftests/riscv/hwprobe/.gitignore
+@@ -1 +1,3 @@
+ hwprobe
++cbo
++which-cpus
 
-pw-bot: cr
+---
+base-commit: ed30a4a51bb196781c8058073ea720133a65596f
+change-id: 20240425-gitignore_hwprobe_artifacts-fb0f2cd3509c
+-- 
+- Charlie
+
 
