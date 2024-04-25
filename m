@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-8830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8831-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 501F18B1883
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 03:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96FBE8B1889
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 03:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B9C01C214C4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 01:43:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C825A1C21C2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 01:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87678E56A;
-	Thu, 25 Apr 2024 01:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7EAF9F0;
+	Thu, 25 Apr 2024 01:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RccAAbAy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G26FYc8y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C426AB9;
-	Thu, 25 Apr 2024 01:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FB310A16;
+	Thu, 25 Apr 2024 01:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714009388; cv=none; b=HWgoYru1c3IXPfakxxLeEYFyDuVNL5ser7OhHu3fzzAmhdNBHYcBP8kZF6pM9loBOMwaPsh82O5VjeWDB+Jzk4Vns/rzSHi3mnbyk2eZ+tfUSfRuy4R5QRmPD5nK9zfXs4THMXGikV41xKcC9APEh9BINNuVk+CuH2DiNtp1vgM=
+	t=1714009438; cv=none; b=DojCCGwHm7aGnjefpM1K/Go6Uu+3ZATKPzBsa3PkguG0/lDlpZoQen7YWmcHFVujOIWySpU9fnL/LNteyrlJwSWerKkMPWw2QP5CDJRxpiH3fXKMk4Q/5oVOlD2neJobZr4EeIEY17HkByN2IDWsPgEZwJeewXgQRj3MN96gVbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714009388; c=relaxed/simple;
-	bh=WTiS/OqaxaKqgUfxTjUllxbnKiWSzcXskK15D5kUzgg=;
+	s=arc-20240116; t=1714009438; c=relaxed/simple;
+	bh=fNOjgKxmz6/XvU4Sk5V4cQmWoQN4xmUGSdy00ZVGpsY=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sCS0tB6V0s4+s2oVIHrsNwroC50LnNiV5+U93MAztwv4EPdIvHLlBK5c9mtGai5fBfIO6cHMjTF8EA9UcRPU5tObiTPqc/mATe03tdWpODumSFzFDMZBdzJdXpzb+u4tcKNoxW0U2Z3RLn2VWNiw0Bt+niUKyNkeNgZFSUwC32M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RccAAbAy; arc=none smtp.client-ip=209.85.222.172
+	 Mime-Version:Content-Type; b=KimOwImmQ3eCEsOxiFfrNT2cxk3zFSvWqBtcPzCC46aOnH5NU/uYee8BkUKOonJkJ+Ly9YJmLBPUFU8Bvy9ifDedGQ1JsvdIiy4gg0a8R/cEmdur79B21qt5SS2vXdilrZhNazMHMHJUKnz6gOBLlWkGNxqo6IrxG3fJHxuYiYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G26FYc8y; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-78f04924a96so34237385a.0;
-        Wed, 24 Apr 2024 18:43:06 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-437274f3bd4so5336141cf.1;
+        Wed, 24 Apr 2024 18:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714009386; x=1714614186; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714009436; x=1714614236; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=62NZG8CsMCdvSnNIt6hH75YB5ujg8R6XbQq14L7TtKc=;
-        b=RccAAbAyQyyA+PCbb1tRZX0iWIYt7MEEYE6iwish4XWk5h/sVkab+tifmXcecHKP5Y
-         6TI+J/4j1hEb85nrStGqS54K2d2MPFSUOfaA4cb7pRpL0kHZuDGuvmb5BBQakVHjWtg9
-         76K7JXEgGLl1AP3QKgO3PzcO0fFiwXczRcCT0T0Tao0QLtjp3ST/99KFhZkI1eujjVVN
-         n0vf/Io9sp/muOaOEO3oLzBg+NfMVN8CZ7AsPwJHGb85AZHvLAiyT9s3ZhPQLNcFj75D
-         jb5Ht15SqKoUchGfzmBb1y2MVAO9ttDY3/Yianm0W9ahuCzrbKymJxzugU34oQSKBS4k
-         jHfQ==
+        bh=DL8Zijm8xfKunCI2j8BQiY+QhLbVEzSZEL3FU2+1KEc=;
+        b=G26FYc8y7EfSAeG4oO2YRirM6Ew7+w87heTgmN3nEzzUVlVN7VT4qNg/17VhvFQrNq
+         DijF5FQZ/isocq9wDHWoUZPkBvH/H6SXhmZQ3rBWnRzENQf8Ra/uVP3pdy6T5YrAO/jf
+         QL3Stnbe+B3+e/44mOApKLuwqkcG0aSBwyh+63LvS86uE7VDGXcyzhYrlAqFEaJkgynw
+         wI10KHWP58+G7SyGG01wIsXK9Fd1Ye7QBZVQZaf3HQnrKwkJUiPvGy8nZKeW6bHvP8vF
+         LMKfuyJ7YRlF3LuvLNmV6U/gRgqdGOA/lHUUlLWOumhMGQh2077ganp5DF5HVFgnkZd/
+         Ko5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714009386; x=1714614186;
+        d=1e100.net; s=20230601; t=1714009436; x=1714614236;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=62NZG8CsMCdvSnNIt6hH75YB5ujg8R6XbQq14L7TtKc=;
-        b=k8hyccGTBIuPUVkW5IzyfmwZGgTJMS0FEyLVZlP4IKNooDZKDSOQfumj0wZUqaYii4
-         HWFOjx7uPUkRnOgUKuinE2Pl53ZnsEGmuYfRxV+9dPJiv5AWyRy1Dy4dDUb0ZwtXbEWr
-         vv+s04K3i4iZZmsy/6eJezWXibnDP5D03Yo7do404iRRch5Lkc3gSZW/x3OMbxg9oXVR
-         1u6upxMweXOLz+gOAFDa7qz0a2Yc79MwTkdgyna+P94hpCkuJRD9TyCRfcU+PdPPKpZh
-         5iO189ltHb1Iz9w6P82hF7u2/ijKNk+DgafCHlKXt0Z55pQ8FPxAckGSMK653LMcqJCc
-         W/Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCUG6K4poEeuSmvkOVkWaSIGkeketKb4gEeSbqrq//NR+rWtZotgl0/iT4kSG4AFLsSc4Qd3HEqD0vOARduyywQZFgtmPpszc6ePzeHxtz2x
-X-Gm-Message-State: AOJu0Yx2qTTE4w+Wd+CVgy1B67qwvjvCN94r+gmD4wdxwDcVVw3gH8+x
-	3FDF5hBeQvpxWR0pu2WcXAfDr5PMdW/s6bwqpXI7AsuLPMCJGk6e
-X-Google-Smtp-Source: AGHT+IEiYL2fun9BuQAnFIi1BOvG7WfKdfItEt3fc6NbTxbcg8hVKzUxt7CIU4T59bP61iJDVv4kCg==
-X-Received: by 2002:ae9:e643:0:b0:790:88e9:5b68 with SMTP id x3-20020ae9e643000000b0079088e95b68mr4322051qkl.2.1714009385771;
-        Wed, 24 Apr 2024 18:43:05 -0700 (PDT)
+        bh=DL8Zijm8xfKunCI2j8BQiY+QhLbVEzSZEL3FU2+1KEc=;
+        b=Qgqfu1Yd06CwAbSkrX4n+1q3NAIUWQLd2dbluAMJvpPWg1VAkXPMSqqt3gsmgBcT2R
+         xHASPam8FDhEMxBHUMo0w3dRoyzzYtRw9grCIW1YV65cKFTlHzUOlf51v+RWrOofjqeb
+         2BdaKvNEzbzRlyJrX2ZlddRldB5EymMWshqCZRPEjdefVzKP4DVTkqFu4A54k0VbQn34
+         HSWxzZFHZ43ZX++ethxFeZ7+0hPqI1YG2nTv0Sa1mTBXrj+WBh22P92nZr6xAT+KboYd
+         Mygl3bwdlj98aJoNiRUVjHRmnrzmqG4V5fsvIYblQJyfFkAyybyF0MOqQtWwraVX9TSI
+         wVBg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgZJFurut+gb8Ye7/cfd9eb7kiFsNM0I0hzJln/opHg3dSmh0S1o9SjbymN6QqB4G1LHj8Rp07OT8qyrBziG7m8nIP6vcGWS3RDigeheFD
+X-Gm-Message-State: AOJu0Yyn6+cer3JWnx+zO9PH/GN743oiC0KQBU5hMd0uUAfEi122/Q8O
+	BuaDDrV6Oyyfy9C4qjmGX/XgMs/6Y2gjHajh3sP/bGHCW7DEK5us
+X-Google-Smtp-Source: AGHT+IHj4TVBSXkEznMmNPbQ1QaQFiIsuGqpKZPfGJvRMKtR6izb7aEg0yASUiRdQtQJJlTOhJ+A5g==
+X-Received: by 2002:ac8:5a46:0:b0:43a:1377:60f5 with SMTP id o6-20020ac85a46000000b0043a137760f5mr2090874qta.12.1714009436355;
+        Wed, 24 Apr 2024 18:43:56 -0700 (PDT)
 Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
-        by smtp.gmail.com with ESMTPSA id y8-20020a05620a44c800b0078d54a6bb76sm6581094qkp.117.2024.04.24.18.43.05
+        by smtp.gmail.com with ESMTPSA id o20-20020ac86d14000000b0043842dc662esm5323949qtt.4.2024.04.24.18.43.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 18:43:05 -0700 (PDT)
-Date: Wed, 24 Apr 2024 21:43:05 -0400
+        Wed, 24 Apr 2024 18:43:56 -0700 (PDT)
+Date: Wed, 24 Apr 2024 21:43:55 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>, 
  davem@davemloft.net
@@ -77,12 +77,11 @@ Cc: netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  willemdebruijn.kernel@gmail.com, 
  Jakub Kicinski <kuba@kernel.org>
-Message-ID: <6629b5291e1a7_1bd6b0294a5@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240424221444.4194069-4-kuba@kernel.org>
+Message-ID: <6629b55be33b5_1bd6b029419@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240424221444.4194069-5-kuba@kernel.org>
 References: <20240424221444.4194069-1-kuba@kernel.org>
- <20240424221444.4194069-4-kuba@kernel.org>
-Subject: Re: [PATCH net-next 3/4] selftests: drv-net: reimplement the config
- parser
+ <20240424221444.4194069-5-kuba@kernel.org>
+Subject: Re: [PATCH net-next 4/4] selftests: drv-net: validate the environment
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,57 +93,55 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Jakub Kicinski wrote:
-> The shell lexer is not helping much, do very basic parsing
-> manually.
+> Throw a slightly more helpful exception when env variables
+> are partially populated. Prior to this change we'd get
+> a dictionary key exception somewhere later on.
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  .../selftests/drivers/net/lib/py/env.py       | 26 ++++++++++---------
->  1 file changed, 14 insertions(+), 12 deletions(-)
+>  .../selftests/drivers/net/lib/py/env.py       | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-> index a3db1bb1afeb..a6a5a5f9c6db 100644
+> index a6a5a5f9c6db..fda4967503de 100644
 > --- a/tools/testing/selftests/drivers/net/lib/py/env.py
 > +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-> @@ -1,7 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
+> @@ -88,6 +88,7 @@ from .remote import Remote
+>          self._ns_peer = None
 >  
->  import os
-> -import shlex
->  from pathlib import Path
->  from lib.py import KsftSkipEx
->  from lib.py import cmd, ip
-> @@ -16,17 +15,20 @@ from .remote import Remote
->      if not (src_dir / "net.config").exists():
->          return env
+>          if "NETIF" in self.env:
+> +            self._check_env()
+>              self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
 >  
-> -    lexer = shlex.shlex(open((src_dir / "net.config").as_posix(), 'r').read())
-> -    k = None
-> -    for token in lexer:
-> -        if k is None:
-> -            k = token
-> -            env[k] = ""
-> -        elif token == "=":
-> -            pass
-> -        else:
-> -            env[k] = token
-> -            k = None
-> +    with open((src_dir / "net.config").as_posix(), 'r') as fp:
-> +        for line in fp.readlines():
-> +            full_file = line
-> +            # Strip comments
-> +            pos = line.find("#")
-> +            if pos >= 0:
-> +                line = line[:pos]
-> +            line = line.strip()
-> +            if not line:
-> +                continue
-> +            pos = line.find("=")
-> +            if pos <= 0:
-> +                raise Exception("Can't parse configuration line:", full_file)
-> +            env[line[:pos]] = line[pos+1:]
+>              self.v4 = self.env.get("LOCAL_V4")
+> @@ -143,6 +144,25 @@ from .remote import Remote
+>          ip(f"-6 addr add dev {self._ns_peer.nsims[0].ifname} {self.nsim_v6_pfx}2/64 nodad", ns=self._netns)
+>          ip(f"   link set dev {self._ns_peer.nsims[0].ifname} up", ns=self._netns)
+>  
+> +    def _check_env(self):
+> +        vars_needed = [
+> +            ["LOCAL_V4", "LOCAL_V6"],
+> +            ["REMOTE_V4", "REMOTE_V6"],
+> +            ["REMOTE_TYPE"],
+> +            ["REMOTE_ARGS"]
+> +        ]
+> +        missing = []
+> +
+> +        for choice in vars_needed:
+> +            for entry in choice:
+> +                if entry in self.env:
+> +                    break
+> +            else:
+> +                missing.append(choice)
+> +        if missing:
+> +            raise Exception("Invalid environment, missing configuration:", missing,
+> +                            "Please see tools/testing/selftests/drivers/net/README.rst")
+> +
 
-Or line.split. But bikeshedding python is a deep rabbit hole :)
+I suppose this could still reach the exception if a file contains
+LOCAL_V4 and REMOTE_V6 or vice versa.
+
+But this is best effort anyway.
 
 
 
