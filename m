@@ -1,173 +1,180 @@
-Return-Path: <linux-kselftest+bounces-8883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 390AE8B297D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 22:12:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB8918B298E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 22:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D5C61C21325
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 20:12:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0FEF2820B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 20:17:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6707152DF3;
-	Thu, 25 Apr 2024 20:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDEC153834;
+	Thu, 25 Apr 2024 20:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="gN+MnxIc"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wzcPx2gP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2088.outbound.protection.outlook.com [40.107.102.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C2E152E18
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 20:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714075959; cv=none; b=e+EHWNaQ1xYrBL8a/BZZR4FSknhax2wSISuN8HOpL4UYdeMuTGtK5KH4lKg98E6YZx0PhWhiq9Bbf4eA1S2Z95ueWpJTfgW5nsXIAyvN7FE6/coke8IZuXyXkwJoBc9BeTWuDe6fOS4Y/SqZ1mt/NcLrY6J+wsbVm/JQ6VctYQs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714075959; c=relaxed/simple;
-	bh=LQMNL24CL+osLBg292NUUAZjCTTOPr7F9KBHA/bQFTQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hIg2WfPT6w3UNAn6iaZTrgEQGCfi7Ku5tpdCMMatPEUCl3OWsfWYBHG4V33/5tpAQcPGAMRo9o36vMsuFGm/7531ptaVfgIDhcCuVjlzlLlIOitNRtyMv28L7ahKsvkP0kCoVWWUBEr7TN1O5gje5sCQk0oOezX4TiOHeWvwcuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=gN+MnxIc; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA3773F8DF
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 20:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1714075955;
-	bh=XQBoevb+USW2ffiD4QLRp2t0k75BnseUBr4iry6tC6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=gN+MnxIcO9AFxc9CjgwCawhegMga+470GSd0pbcvB/R+Q6tQ52RumnJSlFZnt4STu
-	 pPKDVfygAPbs5gvwxfhytfr1G7UCFQ3C3Dz/F+GYPPWxfjM2z/O81vLEYM9EW6jg2l
-	 J8/Ga9oZQGLHWJylqTUpDgERxAs/1ueMmE0e4w8GHSMlhzQRUYQ9Ohxs3G8janQbgo
-	 oL3FiYUdEyyACW6W06s96XdxRyg9qCwVfO93hHnEo9xnG37BSx766IAULiSlN1sP3m
-	 TUQRW09sLK769EXKqrZ1SGEz8Hn+oj5TJaZ9F2LN+fkzI8hFVicRyqVgAML5vg7otA
-	 FQifcOoA6y52Q==
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a5564a2e3a5so102400766b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 13:12:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714075955; x=1714680755;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQBoevb+USW2ffiD4QLRp2t0k75BnseUBr4iry6tC6k=;
-        b=bQYnhbU5/jr5HR5pD9wZwiXd7eL9tzFoiNJdZOiofs+dM2JZUOCpB0oCFyCEFqwuqn
-         M+++7jyWMVi+1kBa0VuJKIoDspLp9abgeShSoJQ2Ne6X8EWStnQoXtrgUMDLPfu3V0Vv
-         6arF5aZT0naXAJpFe+vV9o/LFs2mRq03hZXXuItCpajb45hFSh+4T8TH8CJCQGce9lGz
-         wTbfBdijGyRPLToWLhyvKRllWA9U6WUGD/rSVibcXtWH+wEBaFGdheRZSgkQ3FJj6mTl
-         PgAjyfrp48Sc7lGMRmSfqE2TYsnD3NpjcP1rd/u0WGqDFih2HUZGbk98dfM4ycKVzLHp
-         hRXA==
-X-Forwarded-Encrypted: i=1; AJvYcCVR9Fq3Ap7ymQqOEewGfPytBOVReb8ZSYXBdtx7cpTZZnqujl62wHrOHCtBaLzKPPY341/pMjlQMBafpzDIweV9mM4Qn7xfz0ZMez97oX9v
-X-Gm-Message-State: AOJu0YydTfDLl9W/1jeVU/uI44dLscQW3dahxbL/TXSRDNTmo3CchNIY
-	bdDmIw5cgpw4VJy0SE32ynfWsexYefM3JthzM/YlI82mDrbAAsyczdKvRyPYOSsWXCNRHios7Tp
-	oTPTVi2b6sPjwyHGQN0KMspQXi/o5VaAuZ48rlNllaSl+6jUy9rrAq7zA2bKJIQlbullIjBNZNd
-	jwmNtgzQ==
-X-Received: by 2002:a17:906:3391:b0:a58:aa82:778d with SMTP id v17-20020a170906339100b00a58aa82778dmr465575eja.63.1714075955339;
-        Thu, 25 Apr 2024 13:12:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGdIMz095ulb0g5HF4BtTjFGYe+I2OvSiQHWWq0t8YGwnvWGcKMvzBMfvmfgP35M3ocRtkqxQ==
-X-Received: by 2002:a17:906:3391:b0:a58:aa82:778d with SMTP id v17-20020a170906339100b00a58aa82778dmr465551eja.63.1714075954779;
-        Thu, 25 Apr 2024 13:12:34 -0700 (PDT)
-Received: from localhost (host-82-49-69-7.retail.telecomitalia.it. [82.49.69.7])
-        by smtp.gmail.com with ESMTPSA id qu20-20020a170907111400b00a5242ec4573sm9813171ejb.29.2024.04.25.13.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 13:12:34 -0700 (PDT)
-Date: Thu, 25 Apr 2024 22:12:33 +0200
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/bpf: Add ring_buffer__consume_n test.
-Message-ID: <Ziq5MVRnraMPzGMS@gpd>
-References: <20240425140627.112728-1-andrea.righi@canonical.com>
- <CAEf4BzYO=yo15WidtJqe_QaMrj+h7VUyufw7xN2XS0GG8Xh8fQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DAA1534F9;
+	Thu, 25 Apr 2024 20:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714076242; cv=fail; b=UGNGlt4Z909Dyy0jb0cF32TxKm7fvMIFXQG56+A6MzvQDV12l2ZtgEOF9qt4N+oSxbqwAo5FidamhvDtk+Ab8m9uz4g8QUI4JvEm7UbTiR9oq57rQhv2NhW1QEXk7UxyAFgkwZrtnOoO7vfrksFl2nPEXcDTVJIOWB974H7OyPI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714076242; c=relaxed/simple;
+	bh=F3f5h8reMschUPK3e7+c9iNVgk51YiBeqhXLlyouEII=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AuxBvTiSJ1YIQD19WGt0Sq917lLyIRLO5S04+R8H4OArWIBPylMEh4k3VrDDlCS9v5yWpd8eWXx8Urd1we73PPOznT7AoFLhxlrB4ugZW6S1UAhcVY9Eo5Ehz0nbwhNrCKCKPCxRyBbKYO5bEy7gGudmsWc/KdX5gdDwXHzN+Yw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wzcPx2gP; arc=fail smtp.client-ip=40.107.102.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SZAZ3PgwYt79+8Ur5bSIXy5CYO80NBe2ug4x+tqrop3CsmztN/tvanfckGPPDmX3z4hyP+KzJ4koPfFexTLUK+7XfLnfXNjCdCLeNMVaFEjbItr4EaL9XmjJIg4++e3FzbmL+Z+KFgEQ7D+Kz3vpFqWgyukw/lOi/nlkV8v/i2YEQUlS5vrsBgosDJAmGZ9gKUdJfg7JQMrGNGmQKO0rP9LEa0+z+6/TGVA9OtClzOh58ruRl+KvMOLJMlFXUer+UOw3pD+0kVe20RwrAN1looDVtzgoHLiqwh49/g8SVFB3K9XgpqNYNWf7Pcw7yPm9nbpfnwXwJuvLGDpmYxCDBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bcNahZo6O+lTVlvaqJ9+d5hSn+Kru65CFHHZoEggtC4=;
+ b=Ji+i5xYedR4PDFnoo8oJf0r92iGV8O6fi12+7jAxUeTcJ08NftfEdJzfviLHu3mmESjUe8cJgoCVodk5duyY55El9qWKFHJcejERSL4zkuyJZ93jDwxWv0bEUhnD75BYIjO15Oi1T8bJqjIrvkJiF/W3dKKXhW8BwhJGhrZICs/+0TP33hrin0+m7gCmoXw2dzRc+PQgNKtP1xoVM8nEMCZXAVRk+RDAaAFOnhD5hPP19Dm1gjM7GWMP99T8S2hqjWm1gJQpnpQ0W/7aQttfOXfztSMzGNqydi6RZv8Iwz9NnV9KoA5bmKiUUekD60XNStzPL0Rfzrelswte19ZN9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bcNahZo6O+lTVlvaqJ9+d5hSn+Kru65CFHHZoEggtC4=;
+ b=wzcPx2gP2fEqavnJJr2b7Q/DQ8G+2VHVvUTHuTZq7W/MB3e9Wjknyk1Q4SccpmXku1eBcnSvOOUJxa+RzKM+/kt9hnGmtJeDkGKZDRHgwcjMqQ8MibCN/YrZlgzjb3ITJAw/fy7nA8/Omt1k273Oh3p4UVGyRxuARkzyNStd3sM=
+Received: from MN2PR19CA0060.namprd19.prod.outlook.com (2603:10b6:208:19b::37)
+ by SN7PR12MB7023.namprd12.prod.outlook.com (2603:10b6:806:260::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Thu, 25 Apr
+ 2024 20:17:16 +0000
+Received: from BL02EPF0001A101.namprd05.prod.outlook.com
+ (2603:10b6:208:19b:cafe::9c) by MN2PR19CA0060.outlook.office365.com
+ (2603:10b6:208:19b::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.23 via Frontend
+ Transport; Thu, 25 Apr 2024 20:17:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A101.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7519.19 via Frontend Transport; Thu, 25 Apr 2024 20:17:16 +0000
+Received: from bmoger-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 25 Apr
+ 2024 15:17:16 -0500
+From: Babu Moger <babu.moger@amd.com>
+To: <fenghua.yu@intel.com>, <reinette.chatre@intel.com>, <shuah@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<ilpo.jarvinen@linux.intel.com>, <babu.moger@amd.com>,
+	<maciej.wieczor-retman@intel.com>, <peternewman@google.com>,
+	<eranian@google.com>
+Subject: [PATCH v2 0/4] selftests/resctrl: Enable MBM and MBA tests on AMD
+Date: Thu, 25 Apr 2024 15:16:58 -0500
+Message-ID: <cover.1714073751.git.babu.moger@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1708637563.git.babu.moger@amd.com>
+References: <cover.1708637563.git.babu.moger@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYO=yo15WidtJqe_QaMrj+h7VUyufw7xN2XS0GG8Xh8fQ@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A101:EE_|SN7PR12MB7023:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1b59ebf-8615-474f-d828-08dc6564b3c5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?C1Ypqb9pllalvaeoqjrKaFSWN2aZdstZenZE7tYYxrTUf9zN74WYXsFvevfZ?=
+ =?us-ascii?Q?LUdsj8KSlN/0t58YNqoH5QNqRQlu1dBrARrUiKYChSR2aiBxIfv5OMq3MTbS?=
+ =?us-ascii?Q?z+STI0EM4kXzmUHt1jqdhHbnGxE1CUqjNJgnR8J0Vyhhe+V8A2n1n04C0zXV?=
+ =?us-ascii?Q?XZI8cgZeW2rfNUQF3N81UsQBfWRkg5dT0vytOShNDDSUsve/yA+mllhq3NwN?=
+ =?us-ascii?Q?7cWPQwtbb7zIpkEg6Ijrc/D6KFfYdnF3LKqEC3ii/5KHAFPHdhS6WJUosZ4Q?=
+ =?us-ascii?Q?/c2SCSdNdKB8l7FRHSHjkvVDK8IE9g0HpYWjap9fyvJcnZKVeVh8KQ/CAth6?=
+ =?us-ascii?Q?9m+tqrU4UnMlOCEsDAP7XlOQsQNe7m8FgCRHw/qMQ+hFoWXKGqQGOtNSop8N?=
+ =?us-ascii?Q?tHl1H4a1gpo/smy9QZuIy8/YXDt0wYXMUoI7Fu+irG6KZUjh6U3XytiWm0L/?=
+ =?us-ascii?Q?xj0/6zMND8dVo0phmU1kLwgiomE3xV/FANjapEmRLqssa7xnmA/tE7thLCVM?=
+ =?us-ascii?Q?jmECSLzWZruXktOZiDgJYKWD8u2pTMhAiivdC92xMg4r7CaE47ABr8+9WYKf?=
+ =?us-ascii?Q?5gH20YHBuCJ5K3FyWD0Dynif/hTthXvLDRSxwkUvO+H4uE18ZLb8Eu2/IEgg?=
+ =?us-ascii?Q?p6lexvehY4Kk7rSwwhKUjoSwAz37KpMqu0HhGdvIQ7mvVrlm9KSBKzfvj0OV?=
+ =?us-ascii?Q?el2o8SMz33ZkvnhjPP7HkY2dJdbbZeKsaGZR4/aenqg8nH5XFE6EHrrqk8rZ?=
+ =?us-ascii?Q?S2dn9juuBwxspOmvuS2icUth2UVPqXJMIllk5AnjJTAkf1iNkN+MQQmyY2xv?=
+ =?us-ascii?Q?kU8toe1h6Ytf2xfOzAfJkReVvFcU/ktzfX/JesvQWnXnePqqwu7lHG50yZkS?=
+ =?us-ascii?Q?rKchUH2f9nHyX8y0AQB4wGck6rfdj614mH86xbDs77Zjne4eRdjSzKwsFPCn?=
+ =?us-ascii?Q?Tb5zPKbGBEMMsOf2yWA232ewtMLsn3TcxgoD3qeWwezGo2nPNcUKfsm0KMIK?=
+ =?us-ascii?Q?lTXVmQmE8tK8Qxcl5EMnyBzs+ZfzmWpaX4Opgli8sonS4UPr/3mV6hGUSf6u?=
+ =?us-ascii?Q?DexcxIa43UqzWsNqIqJE96p29cDB8ry1/l+DLnrxc6OsADh0R81Txz/21LDB?=
+ =?us-ascii?Q?CgZL7TUIGX/gMijR+tmslJdF9wyT+CoLuP04xY+tvlto3tQe8xIZtQADJrjx?=
+ =?us-ascii?Q?TXN8K35+/qm9cS9QgrUsAxJ5UMSERD8+MeiQjdC0Nyx8Tew3FMjt93Wr6Mc9?=
+ =?us-ascii?Q?oQGtm0JQtMmWMPmjUmcdp6ZAMUfNfCJqeL4DI092a4BM1FCG9SPawJeREBCq?=
+ =?us-ascii?Q?LqzSlgJadyl3yGku7A7dNDEVa3gPURLiTJYkxqUyOIv7RQH6I6oiyvmbSZ89?=
+ =?us-ascii?Q?T5UPn4uNsniQgBXsJrMDKmg+cT+L?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(36860700004)(82310400014)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2024 20:17:16.6521
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1b59ebf-8615-474f-d828-08dc6564b3c5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A101.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7023
 
-On Thu, Apr 25, 2024 at 11:47:07AM -0700, Andrii Nakryiko wrote:
-> On Thu, Apr 25, 2024 at 7:06 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > Add a testcase for the ring_buffer__consume_n() API.
-> >
-> > The test produces multiple samples in a ring buffer, using a
-> > sys_getpid() fentry prog, and consumes them from user-space in batches,
-> > rather than consuming all of them greedily, like ring_buffer__consume()
-> > does.
-> >
-> > Link: https://lore.kernel.org/lkml/CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com
-> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile          |  2 +-
-> >  .../selftests/bpf/prog_tests/ringbuf.c        | 64 +++++++++++++++++++
-> >  .../selftests/bpf/progs/test_ringbuf_n.c      | 47 ++++++++++++++
-> >  3 files changed, 112 insertions(+), 1 deletion(-)
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_n.c
-> >
-> > ChangeLog v2 -> v3:
-> >  - move skel_n inside ringbuf_n_subtest()
-> >
-> > ChangeLog v1 -> v2:
-> >  - replace CHECK() with ASSERT_EQ()
-> >  - fix skel -> skel_n
-> >  - drop unused "seq" field from struct sample
-> >
-> 
-> [...]
-> 
-> > +       /* Produce N_TOT_SAMPLES samples in the ring buffer by calling getpid() */
-> > +       skel_n->bss->value = SAMPLE_VALUE;
-> > +       for (i = 0; i < N_TOT_SAMPLES; i++)
-> > +               syscall(__NR_getpgid);
-> > +
-> > +       /* Consume all samples from the ring buffer in batches of N_SAMPLES */
-> > +       for (i = 0; i < N_TOT_SAMPLES; i += err) {
-> > +               err = ring_buffer__consume_n(ringbuf, N_SAMPLES);
-> > +               ASSERT_EQ(err, N_SAMPLES, "rb_consume");
-> 
-> if something goes wrong and err is < 0, we might end up with a very
-> long loop. I changed this to:
-> 
-> if (!ASSERT_EQ(...))
->     goto cleanup_ringbuf;
-> 
-> to avoid this problem
 
-Looks good, tested, just in case, and it works a expected.
+The MBM (Memory Bandwidth Monitoring) and MBA (Memory Bandwidth Allocation)
+features are not enabled for AMD systems. The reason was lack of perf
+counters to compare the resctrl test results.
 
-Thanks!
--Andrea
+Starting with the commit
+25e56847821f ("perf/x86/amd/uncore: Add memory controller support"), AMD
+now supports the UMC (Unified Memory Controller) perf events. These events
+can be used to compare the test results.
 
-> 
-> > +       }
-> > +
-> > +cleanup_ringbuf:
-> > +       ring_buffer__free(ringbuf);
-> > +cleanup:
-> > +       test_ringbuf_n_lskel__destroy(skel_n);
-> > +}
-> > +
-> 
-> [...]
+This series adds the support to detect the UMC events and enable MBM/MBA
+tests for AMD systems.
+
+v2: Changes.
+    a. Rebased on top of tip/master (Apr 25, 2024)
+    b. Addressed Ilpo comments except the one about close call.
+       It seems more clear to keep READ and WRITE separate.
+       https://lore.kernel.org/lkml/8e4badb7-6cc5-61f1-e041-d902209a90d5@linux.intel.com/
+    c. Used ksft_perror call when applicable.
+    d. Added vendor check for non contiguous CBM check.
+  
+v1: https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
+
+Babu Moger (4):
+  selftests/resctrl: Rename variable imcs and num_of_imcs() to generic
+    names
+  selftests/resctrl: Pass sysfs controller name of the vendor
+  selftests/resctrl: Add support for MBM and MBA tests on AMD
+  selftests/resctrl: Enable MBA/MBA tests on AMD
+
+ tools/testing/selftests/resctrl/cat_test.c    |   2 +-
+ tools/testing/selftests/resctrl/mba_test.c    |   1 -
+ tools/testing/selftests/resctrl/mbm_test.c    |   1 -
+ tools/testing/selftests/resctrl/resctrl_val.c | 142 +++++++++++++-----
+ 4 files changed, 103 insertions(+), 43 deletions(-)
+
+-- 
+2.34.1
+
 
