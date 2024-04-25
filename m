@@ -1,64 +1,62 @@
-Return-Path: <linux-kselftest+bounces-8852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341EC8B1D11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 10:51:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D8468B1D22
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 10:53:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3EC11F23D04
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 08:51:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9EFC286256
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 08:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B889284047;
-	Thu, 25 Apr 2024 08:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AA88005B;
+	Thu, 25 Apr 2024 08:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWLRYv8J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BgQ6XWu4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A96F83CD2;
-	Thu, 25 Apr 2024 08:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4E47FBB4;
+	Thu, 25 Apr 2024 08:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714035050; cv=none; b=dYYkxl1gzBV6Y9UIXL+Y5PHcoaBkDlIW5KEAUyg3qVyeLWrcl1Jl0b9292gB58pvrZE8PVZNT6W/teFm+olsISmYEmbNESJgVMT7HWxnzvYR2nCNiaunBct4QWbGF+mTTnJQcHItDEN59TJm0Oe3o1UNqxRvZxKSgyfuvSWQ5Po=
+	t=1714035200; cv=none; b=TG6L4TppqUKSvaYpKVi7s/G8OX/etq56RwpcYatmn72wOViaN9f3m/dhuCvSPRkc9XBD2jZbRgWlTEx7UuMEpmj78I2lBJgUtB2nnL3UscLRwA82hMsya7Uik4cBJZ/xukjiVvigKrRv0WotKI5JSeR/oLKnjufMBrcg/lJQ75o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714035050; c=relaxed/simple;
-	bh=Ykyc1m6fUbjPL+SvZ1UaIcoFtggZytlQ0SlPkOJ/8aU=;
+	s=arc-20240116; t=1714035200; c=relaxed/simple;
+	bh=39w5XQsRAGKnURUuXsQ1Wk8XgraObcOPly8hISIv0IE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lurUOeS026MbLWDG0nWYe2y3hA01JY9eniROafA7xeoWImsTsVfJALEMGc1QCfosjKYL4FDzq1DYUVf30N1cPfgzmu37eFoTkXQwQk2wwEClJhVBA03VCDXOY/tq170L2ZB2OKk7fAlV/VE4tlrlYXEar8rKBD8kTGiIuxQEJ7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWLRYv8J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E590C2BBFC;
-	Thu, 25 Apr 2024 08:50:46 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MaKcqaLt733L7UuVP31Qw6x0pvp0iDCODaHf+yi18LJK3+QUIo/0IZAvvA3nVaaQej5pqVgfBhB8Id3TAc5eEXzxIMqxihJvO30tLSJr6lliCxP4h1Mj8v44irwt+Gh6hdYwnQD1gSashr0753g5Dtsxmw+tOmc357vtDiff7bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BgQ6XWu4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53AFFC113CC;
+	Thu, 25 Apr 2024 08:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714035050;
-	bh=Ykyc1m6fUbjPL+SvZ1UaIcoFtggZytlQ0SlPkOJ/8aU=;
+	s=k20201202; t=1714035200;
+	bh=39w5XQsRAGKnURUuXsQ1Wk8XgraObcOPly8hISIv0IE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PWLRYv8J+fJlpc5+N7ecHfJH4vNKOw3AeItSmvtb8mJi50tcoG6g2wzD2MTmYwk/o
-	 JlFCScJnKyonQ3s1MZ+6a9zXKD1bcmjnz3wh5bKzorOPzWBtwdDiKtDwLKplSbOVWR
-	 j/CfTOIv5qqmirc/TMf5P96/65QNmlpbISXOm0+8UYQRnnIYwONy8LqFOL32asCAjw
-	 05dxTy//HVWp8Zj5LWL5W/Zv8NC7Q0S+I0WA8Q3LOKGwKr8T0mAb52p8afoKtqTnef
-	 B6UlK87h7P21b/w8lcKfXig1lJFgi9/q0Pap17Mgti5FQl5/ZvsTBlexTotN5fUjG/
-	 7Fm58wmOqwZmA==
-Date: Thu, 25 Apr 2024 10:50:43 +0200
+	b=BgQ6XWu4j//NQ+XzmO9Edx2/vMnfoCNacDVh0oH6Igb9ft6E2ihSDh5gTNGuNBf2V
+	 9ALM3rKYjIQP8K0QnFcPOz6R7zhQ3nuAo6Jw0/bCIOhRHj2QYCS0L4UE/tzAWg2a/k
+	 mKycos2AMlSnwKLkFzY2So29mkpIjYmIYvKDNgrug0F91n+ZOLHbuh9wQH1aiR+peQ
+	 j97t1YIB5I/8A8z73fWpma6KnBND+XcB3y5eh6iLfFYVOF9aDsC6OES1hEm6BayZKF
+	 eHjxGjhzz8HVgO2XLyqdNhLSskCSBg3PYMZzT+cyyhuFN/P9vcXiNFcPiv6yKeJdbx
+	 pR9r4ZFdyHTWg==
+Date: Thu, 25 Apr 2024 10:53:10 +0200
 From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
 	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
 	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 11/16] bpf: wq: add bpf_wq_init
-Message-ID: <qdpeqhg4whvxeb7cwzex6moq63kp3sjwkkrzzwdrpsg3mfqmz6@bdmbzaa5zouc>
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 12/16] selftests/bpf: wq: add bpf_wq_init()
+ checks
+Message-ID: <v7avo5guriv6vbxt25m6bf4gs6ifblolxsui2vmswkyavim4c6@w6yposzvdxtg>
 References: <20240420-bpf_wq-v2-0-6c986a5a741f@kernel.org>
- <20240420-bpf_wq-v2-11-6c986a5a741f@kernel.org>
- <CAADnVQJ9Qw6Lr644xRTU-n16UkBCyHoTAQs7QqGiniOdsOVAJg@mail.gmail.com>
- <CAADnVQKfzu1F=xZxyYhiocAn1iM=8f13Ca-2Jfht2dXsXuGu9A@mail.gmail.com>
- <CAADnVQJTyXS--chM61Ysk7sDNXoUqPctprXwZ8DEcJMHa9Uy3w@mail.gmail.com>
+ <20240420-bpf_wq-v2-12-6c986a5a741f@kernel.org>
+ <CAEf4BzbqmrucgeXX9+Hgnhefne-go9nHYPmh_+JwuMHeNNsv-g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,115 +66,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJTyXS--chM61Ysk7sDNXoUqPctprXwZ8DEcJMHa9Uy3w@mail.gmail.com>
+In-Reply-To: <CAEf4BzbqmrucgeXX9+Hgnhefne-go9nHYPmh_+JwuMHeNNsv-g@mail.gmail.com>
 
-On Apr 24 2024, Alexei Starovoitov wrote:
-> On Wed, Apr 24, 2024 at 8:06 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On Apr 24 2024, Andrii Nakryiko wrote:
+> On Sat, Apr 20, 2024 at 2:10 AM Benjamin Tissoires <bentiss@kernel.org> wrote:
 > >
-> > On Tue, Apr 23, 2024 at 7:55 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Sat, Apr 20, 2024 at 2:10 AM Benjamin Tissoires <bentiss@kernel.org> wrote:
-> > > >
-> > > > We need to teach the verifier about the second argument which is declared
-> > > > as void * but which is of type KF_ARG_PTR_TO_MAP. We could have dropped
-> > > > this extra case if we declared the second argument as struct bpf_map *,
-> > > > but that means users will have to do extra casting to have their program
-> > > > compile.
-> > > >
-> > > > We also need to duplicate the timer code for the checking if the map
-> > > > argument is matching the provided workqueue.
-> > > >
-> > > > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> > > >
-> > > > ---
-> > > >
-> > > > FWIW, I still have one concern with this implementation:
-> > > > - bpf_wq_work() access ->prog without protection, but I think this might
-> > > >   be racing with bpf_wq_set_callback(): if we have the following:
-> > > >
-> > > >   CPU 0                                     CPU 1
-> > > >   bpf_wq_set_callback()
-> > > >   bpf_start()
-> > > >                                             bpf_wq_work():
-> > > >                                               prog = cb->prog;
-> > > >
-> > > >   bpf_wq_set_callback()
-> > > >     cb->prog = prog;
-> > > >     bpf_prog_put(prev)
-> > > >     rcu_assign_ptr(cb->callback_fn,
-> > > >                    callback_fn);
-> > > >                                            callback = READ_ONCE(w->cb.callback_fn);
-> > > >
-> > > >   As I understand callback_fn is fine, prog might be, but we clearly
-> > > >   have an inconstency between "prog" and "callback_fn" as they can come
-> > > >   from 2 different bpf_wq_set_callback() calls.
-> > > >
-> > > >   IMO we should protect this by the async->lock, but I'm not sure if
-> > > >   it's OK or not.
-> > >
-> > > I see the concern, but I think it's overkill.
-> > > Here 'prog' is used to pass it into __bpf_prog_enter_sleepable_recur()
-> > > to keep the standard pattern of calling into sleepable prog.
-> > > But it won't recurse.
-> > > We can open code migrate_disable,etc from there except this_cpu_inc_return,
-> > > but it's an overkill.
-> > > The passed 'prog' is irrelevant.
-> > > If somebody tries really hard by having two progs sharing the same
-> > > map with bpf_wq and racing to set_callback... I can see how
-> > > prog won't match callback, but it won't make a difference.
-> > > prog is not going trigger recursion check (unless somebody
-> > > tries is obsessed) and not going to UAF.
-> > > I imagine it's possible to attach somewhere in core wq callback
-> > > invocation path with fentry, set_callback to the same prog,
-> > > and technically it's kinda sorta recursion, but different subprogs,
-> > > so not a safety issue.
-> > > The code as-is is fine. imo.
+> > Allows to test if allocation/free works
 > >
-> > After sleeping on it, I realized that the use of
-> > __bpf_prog_enter_sleepable_recur() here is very much incorrect :(
-> > The tests are passing only because we don't inc prog->active
-> > when we run the prog via prog_run cmd.
-> > Adding the following:
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index f6aad4ed2ab2..0732dfe22204 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -1514,7 +1514,9 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
-> >         }
+> > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 > >
-> >         rcu_read_lock_trace();
-> > +       this_cpu_inc_return(*(prog->active));
-> >         retval = bpf_prog_run_pin_on_cpu(prog, ctx);
-> > +       this_cpu_dec(*(prog->active));
-> >         rcu_read_unlock_trace();
+> > ---
 > >
-> > makes the test fail sporadically.
-> > Or 100% fail when the kernel is booted with 1 cpu.
+> > changes in v2:
+> > - dropped mark_precise checks
+> > ---
+> >  tools/testing/selftests/bpf/bpf_experimental.h  |  1 +
+> >  tools/testing/selftests/bpf/prog_tests/wq.c     |  8 +++
+> >  tools/testing/selftests/bpf/progs/wq.c          | 10 ++++
+> >  tools/testing/selftests/bpf/progs/wq_failures.c | 78 +++++++++++++++++++++++++
+> >  4 files changed, 97 insertions(+)
 > >
-> > Could you send a quick follow up to
-> > replace __bpf_prog_enter_sleepable_recur() with
-> >         rcu_read_lock_trace();
-> >         migrate_disable();
-> > ?
+> > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> > index 3329ea080865..785b91b629be 100644
+> > --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> > @@ -470,4 +470,5 @@ extern int bpf_iter_css_new(struct bpf_iter_css *it,
+> >  extern struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *it) __weak __ksym;
+> >  extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
 > >
-> > Or I'll do it in an hour or so.
+> > +extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+> >  #endif
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+> > index 9a07b8bc2c52..26ab69796103 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/wq.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+> > @@ -2,6 +2,7 @@
+> >  /* Copyright (c) 2024 Benjamin Tissoires */
+> >  #include <test_progs.h>
+> >  #include "wq.skel.h"
+> > +#include "wq_failures.skel.h"
+> >
+> >  void serial_test_wq(void)
+> >  {
+> > @@ -9,3 +10,10 @@ void serial_test_wq(void)
+> >
+> >         RUN_TESTS(wq);
+> >  }
+> > +
+> > +void serial_test_failures_wq(void)
+> > +{
+> > +       LIBBPF_OPTS(bpf_test_run_opts, topts);
+> > +
 > 
-> Considering two broken-build reports already
-> I've applied the following fix:
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=dc92febf7b93da5049fe177804e6b1961fcc6bd7
-> 
-> that addresses the build issue on !JIT and fixes this recursion problem.
+> unused leftover?
 
-Thanks a lot for fixing this on my behalf. I was slightly puzzled by the
-broken-build report but really I wasn't in position to think straight
-yesterday (got a pretty big muscular pain in the back and had to go to
-the doctor to get painkillers)
+Oops, yeah. Looks like it.
 
-I haven't forgoten about the double list walk in 9/16, I'll hopefully
-send the fix today.
+I'll send a removal of it while fixing 9/16
 
 Cheers,
 Benjamin
+
+> 
+> > +       RUN_TESTS(wq_failures);
+> > +}
+> 
+> [...]
 
