@@ -1,122 +1,103 @@
-Return-Path: <linux-kselftest+bounces-8879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA968B293F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 21:58:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE028B294D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 21:59:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEA221C21441
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 19:58:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E847B23028
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 19:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF2D152166;
-	Thu, 25 Apr 2024 19:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E103B152533;
+	Thu, 25 Apr 2024 19:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Nweo078U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dkKA1cKA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2890915250B
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 19:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B43B152166
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 19:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714075127; cv=none; b=pmndl7mNmG9/tepzWhpAVEtAWXkpHscy2y9NpA5i1zv3suE0X57xk2djqhzK6linENROBMfQ1NFxJbI0bdTUuUgFsLKVZddSwVJdDWYCCXuXUvRvSCHlgpnJ5cjkUq2JkfztyVCMRgJeu3QKjXg15RNN55fPOVgU7VHGFjKexeM=
+	t=1714075181; cv=none; b=XrBS83LGS7jTri8o38hDTYgA3xT03QRMDj9nnxGYq3DY03Crt9bamaH5m+QdNao8VN6XSxbLCIfgwHVkoDUbpkBDpV1ane01Vkx6VukjeIADPU8LiCoBQH+o9HpD/dL8qP1EX+1DHKM4qfKYTvSwbOOea4Np0zaiJZLFD1GuEiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714075127; c=relaxed/simple;
-	bh=nA0EButQZ1tC8ouxJfYydhjZwNEli15W2Azor/y6KZY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KXW9KyV7SLXoNeZYffBlisybAy+Owzc0xUmHQL3YaMPcNULlvpeUKYBnKchMuvJVaMNGRfrLG+dtb3xEmaHEimZiazRWvOjrrtCvyuNdwcuaJlSI9aKjLEh1aNj514NOb3nDwXkG1qXFfoFHyxAYVjPRL5ky3ZYs8rL123d3YsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Nweo078U; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e4266673bbso12547425ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 12:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714075125; x=1714679925; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NZH4f99IF0WKrj7O85gUWonm//e5lpeuhKVLijLk2E=;
-        b=Nweo078UWkJl5uZKvMSdw6n6ypTywgu+XYsEchWDJMFyPBBD12I+49BpCTJJhWYdaP
-         jhYnPXwcepEXQdwIL6NGBP8UoVo0D5FNV45BM+JhhwBr1cyuQhW15Q0vI/QkPisNvQMw
-         33OfyaOrv6lsUcpT07u8WYda3C8CizTaLHtg00LODCCgA3kKyMsZYGz53GjK8sR8hM6R
-         BCADOgAlUWaF9KHB1DDKZ6AVJbRyd8Fed6fsjtLGABfH9SJWtVuqoJj94uNgACvUKldx
-         LgGHBFKP48e0IrnnDz6KNZkGoafmGoHzXHcBEsexxWqtYQwZ6EL0mHvP7kngS+zg8rgq
-         IleA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714075125; x=1714679925;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0NZH4f99IF0WKrj7O85gUWonm//e5lpeuhKVLijLk2E=;
-        b=uFD0fV7YMHy37F9MCnjuM0w3OS2YGfa3SWVobioiJ+20GuBkuY5fyQrFovPRJCSgZL
-         2AwywbpG8Qb/j6woeinIPhFTQdEGZ3HQB7KZ+qrgeHt2ZRvTrwDaxaPCZWAM9EUHzORG
-         v/ZS4I4JMeXhs80D7fcqtJmTaUtnDNwWmofakr/tuJfvJ1hIZAgsxRs20+XGSjI4xdVp
-         yBDDerBb8lcRSvjdFbidLfrtSx8nTNgwLhD8ix/F/4bn9tLI9Ru+wNjLK7ZNSxgfnV2e
-         533d0bpM+c06EfJ031HpEqVinU7FoBn6HlwPH+l1DkFlfVJ+Tfn6fMW/9vtksGmZD5lM
-         JmuQ==
-X-Gm-Message-State: AOJu0YxNMAhO19r2/Qpvq9vdEmDEiSVgK8vl+kS4zsOfANnzjV8zqZAW
-	4HiDCvy31t+To6+tWoHz9uk8a5s2i3fgBD7jIxx7Id4onbnjQDsWC/PchRjFAPY=
-X-Google-Smtp-Source: AGHT+IECF4sLhnfZeY8g6vk2fi/Z9puc/V7awMpO2ZhBa2zz101/n/Rq4S5Hho5iCaLR2kaBPAoHRQ==
-X-Received: by 2002:a17:902:e54d:b0:1e4:6938:6fe3 with SMTP id n13-20020a170902e54d00b001e469386fe3mr719133plf.58.1714075125454;
-        Thu, 25 Apr 2024 12:58:45 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170903248400b001dd88a5dc47sm14152176plw.290.2024.04.25.12.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 12:58:44 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Thu, 25 Apr 2024 12:58:03 -0700
-Subject: [PATCH] riscv: selftests: Add hwprobe binaries to .gitignore
+	s=arc-20240116; t=1714075181; c=relaxed/simple;
+	bh=0rvsB1EywH9lMzyqqGRclLkfnfKLWSH3VAuu/tTeaZU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZZrnKd9hukVC6Bpl2kEanXimNZskRgZBG4BeDcTejbFYfgqz4vFW9Www07THZnERD7Qs+VPbV7wRf1XTPPXkjU6AOwkkuXgSRU06b2TaTqjgSEqhOvvJdYDpSYBwcn3BvVguFRb30wJo9mlWO0iny32+5iVjiBY9gaj0fGutiMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dkKA1cKA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714075179;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+LRzQpo2wEWrfoGFtG/XZ51EhpMoHFQaxbJ8lYpJ9PA=;
+	b=dkKA1cKAq6U8YiP6/CPoYXsqbl3U/tIhUZSaBuvMP3EY7dvwUctp7eNJ4cjEUNiAPKvZP8
+	pJsIHz3eukkig2qxSc2nQd6GbVhWrwJ3Io8R44RytFBfY1y1k/2NtERv7MteXl50P14DOu
+	XJBrmf1gKKuAX4eUiRVEzCRYlxsJeq8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-4AGjYgClMw2JrT6HPLtwJA-1; Thu,
+ 25 Apr 2024 15:58:33 -0400
+X-MC-Unique: 4AGjYgClMw2JrT6HPLtwJA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CBFC928EC104;
+	Thu, 25 Apr 2024 19:58:32 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.33.7])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A83440F17B;
+	Thu, 25 Apr 2024 19:58:32 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,  netdev@vger.kernel.org,
+  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
+Subject: Re: selftests: openvswitch: Questions about possible enhancements
+In-Reply-To: <20240424173000.21c12587@kernel.org> (Jakub Kicinski's message of
+	"Wed, 24 Apr 2024 17:30:00 -0700")
+References: <20240424164405.GN42092@kernel.org>
+	<20240424173000.21c12587@kernel.org>
+Date: Thu, 25 Apr 2024 15:58:32 -0400
+Message-ID: <f7t1q6t9puf.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240425-gitignore_hwprobe_artifacts-v1-1-dfc5a20da469@rivosinc.com>
-X-B4-Tracking: v=1; b=H4sIAMq1KmYC/x3MQQqAIBAAwK/EnhPM8lBfiQizVfeisUoF0d+Tj
- nOZBzIyYYapeYDxpEwpVnRtAzaY6FHQXg1KqkEOSgtPhXxMjGu4Dk4broYLOWNLFm6TTtm913K
- 0UIeD0dH97/Pyvh9r8BpEbQAAAA==
-To: Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1714075124; l=933;
- i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=nA0EButQZ1tC8ouxJfYydhjZwNEli15W2Azor/y6KZY=;
- b=EMBx4wRw1BijgV83w/DHcSmBFo1pgAnUefy+7FE1WoOwc0GghpU0GN3buJtNdf5uyLReFKFc8
- Ek2BHtYsvTBBwL2lzcL85G7/HKa4/x2hUALseg3IMLy0cbQDJ9zs7ic
-X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
- pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-The cbo and which-cpu hwprobe selftests leave their artifacts in the
-kernel tree and end up being tracked by git. Add the binaries to the
-hwprobe selftest .gitignore so this no longer happens.
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-Fixes: a29e2a48afe3 ("RISC-V: selftests: Add CBO tests")
-Fixes: ef7d6abb2cf5 ("RISC-V: selftests: Add which-cpus hwprobe test")
----
- tools/testing/selftests/riscv/hwprobe/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+> On Wed, 24 Apr 2024 17:44:05 +0100 Simon Horman wrote:
+>> I have recently been exercising the Open vSwitch kernel selftests,
+>> using vng,
+>
+> Speaking of ovs tests, we currently don't run them in CI (and suffer
+> related skips in pmtu.sh) because Amazon Linux doesn't have ovs
+> packaged and building it looks pretty hard.
+>
+> Is there an easy way to build just the CLI tooling or get a pre-built
+> package somewhere?
 
-diff --git a/tools/testing/selftests/riscv/hwprobe/.gitignore b/tools/testing/selftests/riscv/hwprobe/.gitignore
-index 8113dc3bdd03..6e384e80ea1a 100644
---- a/tools/testing/selftests/riscv/hwprobe/.gitignore
-+++ b/tools/testing/selftests/riscv/hwprobe/.gitignore
-@@ -1 +1,3 @@
- hwprobe
-+cbo
-+which-cpus
+As Simon notes - we would need some support in the ovs-dpctl.py to set
+up the tunnel interfaces, and probably need to set them up for lwt and
+classic tunnels.
 
----
-base-commit: ed30a4a51bb196781c8058073ea720133a65596f
-change-id: 20240425-gitignore_hwprobe_artifacts-fb0f2cd3509c
--- 
-- Charlie
+I have a test branch where I have support for the former, and I can
+clean it up and submit it.
+
+> Or perhaps you'd be willing to run the OvS tests and we can move 
+> the part of pmtu.sh into OvS test dir?
+
+I guess either would be fine, as long as they can get run.
 
 
