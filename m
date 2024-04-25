@@ -1,280 +1,136 @@
-Return-Path: <linux-kselftest+bounces-8864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE4B68B2608
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 18:10:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 853C08B2625
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 18:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 162BF283458
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 16:10:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A4531F23BB3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Apr 2024 16:18:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C679314D280;
-	Thu, 25 Apr 2024 16:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03BBF14D6E7;
+	Thu, 25 Apr 2024 16:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="QG2lSSwQ"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="O9mbrnhq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8982114C59B;
-	Thu, 25 Apr 2024 16:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCA114D282
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 16:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714061399; cv=none; b=AqMVZMgzU05nR5lI5ygM2f7IIYjzz6ZFTIOzlbLpnWL2fdvo/K/QHRsTZ+ajh3knHFenFFPTb/86j2ebqPBWUAcPMDKyRLidMVM+zI8KsELgMX7LlkCqiEt8CxtLhHgGcBJprAtLhnP9BfUKrWQPlfvBkkDb+cxVJwID+PBbSC8=
+	t=1714061845; cv=none; b=Our4hco0FAfJcXTI9R5Uu7d9NkChgof/CwDQ2zyuS7Cdd7AGUPtw04D5/j7rQC8LFl7ZM7w2M9uFBNMmqAqAthZaJg8lVtzQCusmOG58G9T2bHxaSPpRxt/cOPoTpKBG/cScsGfBXKCojWr27d9/r4kjjHrYP48z5JKWedm3/ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714061399; c=relaxed/simple;
-	bh=3/vMU+KnL383rOtQme6UbwXiHGy/UeFxMMnLRj4gCZE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GC0ZmhfOi32wPkuyIrBnIUt9720WxOTDzDIBTc4eOB9VvrxbTvZEDtUW4uL21EWQLEFtdMbPeB11R1QmxZ4YtxZK4jIbooS3pkxi+vTcf8idrIOSc9NU1j3RTNAIHmOeQVztKcn5+6IuXGTtZq4cxD64aiHZ6DV+b02KqE/FNp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=QG2lSSwQ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1714061393;
-	bh=3/vMU+KnL383rOtQme6UbwXiHGy/UeFxMMnLRj4gCZE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=QG2lSSwQne7PHdSMNIIVxDuyZgk9baoGv4y9YbmxXMxaYMPvE+fHoijRo4R8Dfhxd
-	 JSmNftOOQk8Bxx47d+H/0i6jYSEUtAVMLjdLmNvNpTIi+W6eFHp/+g0qDGtNUuHfKt
-	 9mBFrUYQbY8U62deY7cLOJojM9J8ZSF1iuCvfgeo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 25 Apr 2024 18:09:27 +0200
-Subject: [PATCH 2/2] tools/nolibc: implement strtol() and friends
+	s=arc-20240116; t=1714061845; c=relaxed/simple;
+	bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=Uj1YqLBQyY9eKdmMRNfby3t39pPrezr1KSJWFsq/k0oEfzt0TTB56dTfJGTZSxKYqdFHaGQDknVSwljOh/jbgXcuXENdHQ8LvReO3n0KeFkCV3xNgbkpczNbkaiUTJLU2TvJ7oa27pg5XrWd/6/VJA6kgaOB1Ir8XidBS67o4k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=O9mbrnhq; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-36c191991e2so5475085ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 09:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1714061843; x=1714666643; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+        b=O9mbrnhqkgGqlkIWLWjfywNk+b8hvzOFOtVes64QnVvrIkNY7g0LGaX+D7LJwv967q
+         SyD+MUjyNvmRag0P33RAvYU+nDLhqW3OeIsyBOiI/bMDMkxz/TOJJIzehO+4qjc+7V30
+         HMDAdR4RumU69xi1Jp8B/sjobsU52e/o/A4Kp6kMmiuOkGd0Ouv47+9SDZfHpbYJ5awL
+         PWDlstLz6XbEVJELVAlwriuEFt0BSY2jMRl59TEZKnuq6CVbqNFYd9KBNHCdX5/lv1Ud
+         FfcFJugxcLWvx+Mvaat7x7J+eDCMEeLO+3bs0xtt0S7Ql1mj57DXOJ07pZL2rH6M0zSC
+         xIqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714061843; x=1714666643;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cyER0tCDsBziw32uLRrW1CVxp/jAM0IiNflpsGJ0Pto=;
+        b=S/aDK7nNVIKkCQIUJgMSMOrq2nrBzzSIwMgd/e5+6uw3Oz4Q190ewhByzhFllhTjP8
+         UVESO72C+NBRjJs1vNdZ3ueRPouQXoW6tOL1tbzFd6W51ny5aVwNwhC2mWwRwmiBjihm
+         MuOGp3Np9113Pu9ZZ7kwghvHF+NaPjMhrd104CLWX4fjjW/qul6uoFjeP5frN08QkHH/
+         i3i787jiCMTtIU0GM4Euh/b0eflJxSFO1n4BS6UcX17PuDYdBkIuab3de97V8BnrsByY
+         srfi1FBdie4+5SjI01ciy+1wCBOkjSr5HEBSDj4cO2NaSNyZOdk56iCnMb6dzBd2lcrM
+         HDQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV63dY2u7YdShB7xz1p0iieI+XELGa5EFujj10K03mXUL4ODHQaGDRnUWlVUFqUMbSXUr5hafeJNi2ZxRKQGr3henyrdKyt2veA9qfFWDZR
+X-Gm-Message-State: AOJu0YznLt0dUuv2TJXe3e3fFT/S8UgRnHqpq8Q4qgqjMbslBShUh+7N
+	thVIMsWIXFg1oXYxYe6Q+SmkK3Og3cTYSXEuqx+2yZR22rQqEqYqbJTbUfszsZs=
+X-Google-Smtp-Source: AGHT+IFiKKwCjlGCOK2QLiD684Fa0eyjQAMOCz/bbiL68N5tcmcGRSJea+bnlaWtzh6UXfIXUt5Ccg==
+X-Received: by 2002:a05:6e02:170f:b0:36c:297d:2c96 with SMTP id u15-20020a056e02170f00b0036c297d2c96mr234632ill.19.1714061843206;
+        Thu, 25 Apr 2024 09:17:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m15-20020a656a0f000000b005dc4806ad7dsm11611129pgu.40.2024.04.25.09.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Apr 2024 09:17:22 -0700 (PDT)
+Message-ID: <662a8212.650a0220.eb522.809c@mx.google.com>
+Date: Thu, 25 Apr 2024 09:17:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240425-nolibc-strtol-v1-2-bfeef7846902@weissschuh.net>
-References: <20240425-nolibc-strtol-v1-0-bfeef7846902@weissschuh.net>
-In-Reply-To: <20240425-nolibc-strtol-v1-0-bfeef7846902@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1714061393; l=6945;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=3/vMU+KnL383rOtQme6UbwXiHGy/UeFxMMnLRj4gCZE=;
- b=ALKzAWq1VPUd2oO06ghnPQWfc6psbr8i0vEazGC7mOizZd07raUSAQzgpghSdvbxoR7gmfwsY
- GsxifsuwCI1DAJeloXw31irF+df7B/ZqMW++DbY0a/A1+Qg0gHfsUeJ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.9-rc4-32-g693fe2f6a9ea
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 5 builds: 0 failed,
+ 5 passed (v6.9-rc4-32-g693fe2f6a9ea)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-The implementation always works on uintmax_t values.
+kselftest/next build: 5 builds: 0 failed, 5 passed (v6.9-rc4-32-g693fe2f6a9=
+ea)
 
-This is inefficient when only 32bit are needed.
-However for all functions this only happens for strtol() on 32bit
-platforms.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.9-rc4-32-g693fe2f6a9ea/
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Tree: kselftest
+Branch: next
+Git Describe: v6.9-rc4-32-g693fe2f6a9ea
+Git Commit: 693fe2f6a9ea17e4241e5114f54c6ae7bc2512d3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
 ---
- tools/include/nolibc/stdlib.h                | 109 +++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  59 +++++++++++++++
- 2 files changed, 168 insertions(+)
-
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 5be9d3c7435a..f66870e25389 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -438,6 +438,115 @@ char *u64toa(uint64_t in)
- 	return itoa_buffer;
- }
- 
-+static __attribute__((unused))
-+uintmax_t __strtox(const char *nptr, char **endptr, int base, intmax_t lower_limit, uintmax_t upper_limit)
-+{
-+	const char signed_ = lower_limit != 0;
-+	unsigned char neg = 0, overflow = 0;
-+	uintmax_t val = 0, limit, old_val;
-+	char c;
-+
-+	if (base < 0 || base > 35) {
-+		SET_ERRNO(EINVAL);
-+		goto out;
-+	}
-+
-+	while (isspace(*nptr))
-+		nptr++;
-+
-+	if (*nptr == '+') {
-+		nptr++;
-+	} else if (*nptr == '-') {
-+		neg = 1;
-+		nptr++;
-+	}
-+
-+	if (signed_ && neg)
-+		limit = -(uintmax_t)lower_limit;
-+	else
-+		limit = upper_limit;
-+
-+	if ((base == 0 || base == 16) &&
-+	    (strncmp(nptr, "0x", 2) == 0 || strncmp(nptr, "0X", 2) == 0)) {
-+		base = 16;
-+		nptr += 2;
-+	} else if (base == 0 && strncmp(nptr, "0", 1) == 0) {
-+		base = 8;
-+		nptr += 1;
-+	} else if (base == 0) {
-+		base = 10;
-+	}
-+
-+	while (*nptr) {
-+		c = *nptr;
-+
-+		if (c >= '0' && c <= '9')
-+			c -= '0';
-+		else if (c >= 'a' && c <= 'z')
-+			c = c - 'a' + 10;
-+		else if (c >= 'A' && c <= 'Z')
-+			c = c - 'A' + 10;
-+		else
-+			goto out;
-+
-+		if (c > base)
-+			goto out;
-+
-+		nptr++;
-+		old_val = val;
-+		val *= base;
-+		val += c;
-+
-+		if (val > limit || val < old_val)
-+			overflow = 1;
-+	}
-+
-+out:
-+	if (overflow) {
-+		SET_ERRNO(ERANGE);
-+		val = limit;
-+	}
-+	if (endptr)
-+		*endptr = (char *)nptr;
-+	return (neg ? -1 : 1) * val;
-+}
-+
-+static __attribute__((unused))
-+long strtol(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, LONG_MIN, LONG_MAX);
-+}
-+
-+static __attribute__((unused))
-+unsigned long strtoul(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, 0, ULONG_MAX);
-+}
-+
-+static __attribute__((unused))
-+long long strtoll(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, LLONG_MIN, LLONG_MAX);
-+}
-+
-+static __attribute__((unused))
-+unsigned long long strtoull(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, 0, ULLONG_MAX);
-+}
-+
-+static __attribute__((unused))
-+intmax_t strtoimax(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, INTMAX_MIN, INTMAX_MAX);
-+}
-+
-+static __attribute__((unused))
-+uintmax_t strtoumax(const char *nptr, char **endptr, int base)
-+{
-+	return __strtox(nptr, endptr, base, 0, UINTMAX_MAX);
-+}
-+
- /* make sure to include all global symbols */
- #include "nolibc.h"
- 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b9c84d42edbe..6161bd57a0c9 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -621,6 +621,51 @@ int expect_str_buf_eq(size_t expr, const char *buf, size_t val, int llen, const
- 	return 0;
- }
- 
-+#define EXPECT_STRTOX(cond, func, input, base, expected, chars, expected_errno)				\
-+	do { if (!(cond)) result(llen, SKIPPED); else ret += expect_strtox(llen, func, input, base, expected, chars, expected_errno); } while (0)
-+
-+static __attribute__((unused))
-+int expect_strtox(int llen, void *func, const char *input, int base, intmax_t expected, int expected_chars, int expected_errno)
-+{
-+	char *endptr;
-+	int actual_errno, actual_chars;
-+	intmax_t r;
-+
-+	errno = 0;
-+	if (func == strtol) {
-+		r = strtol(input, &endptr, base);
-+	} else if (func == strtoul) {
-+		r = strtoul(input, &endptr, base);
-+	} else {
-+		result(llen, FAIL);
-+		return 1;
-+	}
-+	actual_errno = errno;
-+	actual_chars = endptr - input;
-+
-+	llen += printf(" %lld = %lld", (long long)expected, (long long)r);
-+	if (r != expected) {
-+		result(llen, FAIL);
-+		return 1;
-+	}
-+	if (expected_chars == -1) {
-+		if (*endptr != '\0') {
-+			result(llen, FAIL);
-+			return 1;
-+		}
-+	} else if (expected_chars != actual_chars) {
-+		result(llen, FAIL);
-+		return 1;
-+	}
-+	if (actual_errno != expected_errno) {
-+		result(llen, FAIL);
-+		return 1;
-+	}
-+
-+	result(llen, OK);
-+	return 0;
-+}
-+
- /* declare tests based on line numbers. There must be exactly one test per line. */
- #define CASE_TEST(name) \
- 	case __LINE__: llen += printf("%d %s", test, #name);
-@@ -1143,6 +1188,20 @@ int run_stdlib(int min, int max)
- 		CASE_TEST(limit_ptrdiff_min);       EXPECT_EQ(1, PTRDIFF_MIN, sizeof(long) == 8 ? (ptrdiff_t) 0x8000000000000000LL  : (ptrdiff_t) 0x80000000); break;
- 		CASE_TEST(limit_ptrdiff_max);       EXPECT_EQ(1, PTRDIFF_MAX, sizeof(long) == 8 ? (ptrdiff_t) 0x7fffffffffffffffLL  : (ptrdiff_t) 0x7fffffff); break;
- 		CASE_TEST(limit_size_max);          EXPECT_EQ(1, SIZE_MAX,    sizeof(long) == 8 ? (size_t)    0xffffffffffffffffULL : (size_t)    0xffffffffU); break;
-+		CASE_TEST(strtol_simple);           EXPECT_STRTOX(1, strtol, "35", 10, 35, -1, 0); break;
-+		CASE_TEST(strtol_positive);         EXPECT_STRTOX(1, strtol, "+35", 10, 35, -1, 0); break;
-+		CASE_TEST(strtol_negative);         EXPECT_STRTOX(1, strtol, "-35", 10, -35, -1, 0); break;
-+		CASE_TEST(strtol_hex_auto);         EXPECT_STRTOX(1, strtol, "0xFF", 0, 255, -1, 0); break;
-+		CASE_TEST(strtol_octal_auto);       EXPECT_STRTOX(1, strtol, "011", 0, 9, -1, 0); break;
-+		CASE_TEST(strtol_hex_00);           EXPECT_STRTOX(1, strtol, "0x00", 16, 0, -1, 0); break;
-+		CASE_TEST(strtol_hex_FF);           EXPECT_STRTOX(1, strtol, "FF", 16, 255, -1, 0); break;
-+		CASE_TEST(strtol_hex_ff);           EXPECT_STRTOX(1, strtol, "ff", 16, 255, -1, 0); break;
-+		CASE_TEST(strtol_hex_prefix);       EXPECT_STRTOX(1, strtol, "0xFF", 16, 255, -1, 0); break;
-+		CASE_TEST(strtol_trailer);          EXPECT_STRTOX(1, strtol, "35foo", 10, 35, 2, 0); break;
-+		CASE_TEST(strtol_overflow);         EXPECT_STRTOX(1, strtol, "0x8000000000000000", 16, LONG_MAX, -1, ERANGE); break;
-+		CASE_TEST(strtol_underflow);        EXPECT_STRTOX(1, strtol, "-0x8000000000000001", 16, LONG_MIN, -1, ERANGE); break;
-+		CASE_TEST(strtoul_negative);        EXPECT_STRTOX(1, strtoul, "-0x1", 16, ULONG_MAX, 4, 0); break;
-+		CASE_TEST(strtoul_overflow);        EXPECT_STRTOX(1, strtoul, "0x10000000000000000", 16, ULONG_MAX, -1, ERANGE); break;
- 
- 		case __LINE__:
- 			return ret; /* must be last */
-
--- 
-2.44.0
-
+For more info write to <info@kernelci.org>
 
