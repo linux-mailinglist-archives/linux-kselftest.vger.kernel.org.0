@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-8966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3448F8B42B3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 01:24:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB81E8B42B4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 01:24:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65A261C21E35
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 23:24:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1EE6B2140E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 23:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0143CF58;
-	Fri, 26 Apr 2024 23:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3523D552;
+	Fri, 26 Apr 2024 23:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="REsYpzzz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EdnUuhQz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60003C463;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96F43D0C5;
 	Fri, 26 Apr 2024 23:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714173845; cv=none; b=hHGfrABnWzQA38bcizZwx0Q48drTztqBPaIpld27p2TgxEiV/BGsFiVlJZJlvZRfGgRM8haIp9oZ0//QiR8BD87ZF5R9Vygf+hvLIc36ySHXIJBbGqEizbTaus0KrizN3g1W9uBFwxhuan0aqVSPzHpKHs2C66ibVAFxlYMW0Nc=
+	t=1714173845; cv=none; b=SyPhez/UCGF+j7UrMfiQf7TAHINBQ2pFjwTh7JpXmboc49UqSbPx+2gJ+qH9psAxnHKZeqsU3hOT2ammZriv7NMcrQBA4C7UxVMt1OueEfRFI+KiOKJ2zvNmmTQS9QY28MdJxAxIXRxvvRYpABtiExVnODm4YQusKAi4iBIvW1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714173845; c=relaxed/simple;
-	bh=R2MeTPPej4K2BQjN/dfOWT2R2ABVWvDqMSdtBKSl1zU=;
+	bh=JeQ35s6yBVRaqXvMkpIQzzUCCOzpP8v/SETOU7be0NM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LtBPUGUmLAw32CvZYQlcO8TxacUgI+cC8C2Kn2FIPlMLV1ehxzq0LRrPUZm7hYsVGK5HY2/aElQKOnX4r7LPsjRMGZeSd1SX1r9XoDpOOSUeVIwTu7s/ovqyttR+yxsPrMQtcYNfnR7bL+PjAwm6+WvrR+MA1/iBDAjNeR6qJ00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=REsYpzzz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1653C2BD11;
-	Fri, 26 Apr 2024 23:24:04 +0000 (UTC)
+	 MIME-Version; b=VUyf17TaktCfGuDG6plHHceOmYdkzpo0MPb4G9NetvRLR/uu1z1lyf8saCyKRq4QjAV6kq3SfC7gKKdtyt96OzmXDp531mEqfrISSrQ+4Sa2j30Rw91SfkKL0fmh026mf3ZvZgqcaCwLvsMPK9imhU/1a8dRRMU6PgL4bdIOVBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EdnUuhQz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBECC32783;
+	Fri, 26 Apr 2024 23:24:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714173845;
-	bh=R2MeTPPej4K2BQjN/dfOWT2R2ABVWvDqMSdtBKSl1zU=;
+	bh=JeQ35s6yBVRaqXvMkpIQzzUCCOzpP8v/SETOU7be0NM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=REsYpzzzip2dW3wA8jvVnGqBElwgGZctDhxXVn0vCr02cgSAiww34/MT2opzB2T2o
-	 JHAJ1aipOn/Km6cTmtA6LnkhP6RjTUClhxuuuEsltv5ffLKg17cNzKVEd2wTWj11Sh
-	 Le1RooQq5FezBV3HkPHlvaNcR1rSLVG1f+QCoxoTh7W+jBr2jep1nZsDqL0RzSnbUd
-	 bnEG6usgsf4UGDtmOjBZ8ZTl0HHUFPHpyc1DcTfVWC+ci60boqqFP07P1M3gHmwk85
-	 +Ps5qnx1WfYno8FLBu7L5dOqqeorzqvjTiSSKm1IB7gB/T3TD82LwQlZIxh6n8/rAB
-	 +x1AjIy8uu2Vg==
+	b=EdnUuhQzYNNkUdyy/FuZ8rGUOGKQpRGs8lGxvM2jvlan2+eTdOOxsOiFIrA/MWzAp
+	 48BOgPuZYv5kerFtPvzpPbaLW4hwSjev2UnyYe1+ah1OjbphubS8jkcAG0cznXvtQx
+	 oP2U4UxlsHLK5CBr81g1x+do6gCnbQPdhes008pPlSdCbFbYRLleXzsmnGnXiAiu4i
+	 KHEjNFC8jgMPWyXcLjxnubu2bkAHWLUH0gCkHtMtrWCMj5xk4xw/ku2e0wPOIDN6Dl
+	 priG1yLlZk6j8As+YQe/ptk9gJwvucEiAakdZ2C+db0vwismGTQE+J2lYGwDpi3JOQ
+	 aaE4e+FolUA+w==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	willemdebruijn.kernel@gmail.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/6] selftests: drv-net-hw: support using Python from net hw tests
-Date: Fri, 26 Apr 2024 16:23:55 -0700
-Message-ID: <20240426232400.624864-3-kuba@kernel.org>
+Subject: [PATCH net-next 3/6] selftests: net: py: extract tool logic
+Date: Fri, 26 Apr 2024 16:23:56 -0700
+Message-ID: <20240426232400.624864-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240426232400.624864-1-kuba@kernel.org>
 References: <20240426232400.624864-1-kuba@kernel.org>
@@ -63,112 +63,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We created a separate directory for HW-only tests, recently.
-Glue in the Python test library there, Python is a bit annoying
-when it comes to using library code located "lower"
-in the directory structure.
+The main use of the ip() wrapper over cmd() is that it can parse JSON.
+cmd("ip -j link show") will return stdout as a string, and test has
+to call json.loads(). With ip("link show", json=True) the return value
+will be already parsed.
 
-Reuse the Env class, but let tests require non-nsim setup.
+More tools (ethtool, bpftool etc.) support the --json switch.
+To avoid having to wrap all of them individually create a tool()
+helper.
+
+Switch from -j to --json (for ethtool).
+While at it consume the netns attribute at the ip() level.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/Makefile                 |  2 +-
- tools/testing/selftests/drivers/net/hw/Makefile  |  1 +
- .../selftests/drivers/net/hw/lib/py/__init__.py  | 16 ++++++++++++++++
- .../testing/selftests/drivers/net/lib/py/env.py  | 10 ++++++++--
- 4 files changed, 26 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+ tools/testing/selftests/net/lib/py/utils.py | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2c940e9c4ced..9039f3709aff 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -119,7 +119,7 @@ TARGETS_HOTPLUG = cpu-hotplug
- TARGETS_HOTPLUG += memory-hotplug
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index d3715e6c21f2..11b588a2bb9d 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -56,10 +56,10 @@ import time
+         return self.process(terminate=self.terminate)
  
- # Networking tests want the net/lib target, include it automatically
--ifneq ($(filter net drivers/net,$(TARGETS)),)
-+ifneq ($(filter net drivers/net drivers/net/hw,$(TARGETS)),)
- ifeq ($(filter net/lib,$(TARGETS)),)
- 	INSTALL_DEP_TARGETS := net/lib
- endif
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 2259a39a70ed..95f32158b095 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -16,6 +16,7 @@ TEST_FILES := \
- 	#
  
- TEST_INCLUDES := \
-+	$(wildcard lib/py/*.py ../lib/py/*.py) \
- 	../../../net/lib.sh \
- 	../../../net/forwarding/lib.sh \
- 	../../../net/forwarding/ipip_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-new file mode 100644
-index 000000000000..b582885786f5
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -0,0 +1,16 @@
-+# SPDX-License-Identifier: GPL-2.0
+-def ip(args, json=None, ns=None, host=None):
+-    cmd_str = "ip "
++def tool(name, args, json=None, ns=None, host=None):
++    cmd_str = name + " "
+     if json:
+-        cmd_str += '-j '
++        cmd_str += '--json '
+     cmd_str += args
+     cmd_obj = cmd(cmd_str, ns=ns, host=host)
+     if json:
+@@ -67,6 +67,12 @@ import time
+     return cmd_obj
+ 
+ 
++def ip(args, json=None, ns=None, host=None):
++    if ns:
++        args = '-netns ' + ns + " " + args
++    return tool("ip", args, json=json, host=host)
 +
-+import sys
-+from pathlib import Path
 +
-+KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
-+
-+try:
-+    sys.path.append(KSFT_DIR.as_posix())
-+    from net.lib.py import *
-+    from drivers.net.lib.py import *
-+except ModuleNotFoundError as e:
-+    ksft_pr("Failed importing `net` library from kernel sources")
-+    ksft_pr(str(e))
-+    ktap_result(True, comment="SKIP")
-+    sys.exit(4)
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index e2ab637e56dc..5c8f695b2536 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -2,7 +2,7 @@
- 
- import os
- from pathlib import Path
--from lib.py import KsftSkipEx
-+from lib.py import KsftSkipEx, KsftXfailEx
- from lib.py import cmd, ip
- from lib.py import NetNS, NetdevSimDev
- from .remote import Remote
-@@ -76,7 +76,7 @@ from .remote import Remote
-     nsim_v4_pfx = "192.0.2."
-     nsim_v6_pfx = "2001:db8::"
- 
--    def __init__(self, src_path):
-+    def __init__(self, src_path, nsim_test=None):
- 
-         self.env = _load_env_file(src_path)
- 
-@@ -88,7 +88,10 @@ from .remote import Remote
-         self._ns_peer = None
- 
-         if "NETIF" in self.env:
-+            if nsim_test is True:
-+                raise KsftXfailEx("Test only works on netdevsim")
-             self._check_env()
-+
-             self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
- 
-             self.v4 = self.env.get("LOCAL_V4")
-@@ -98,6 +101,9 @@ from .remote import Remote
-             kind = self.env["REMOTE_TYPE"]
-             args = self.env["REMOTE_ARGS"]
-         else:
-+            if nsim_test is False:
-+                raise KsftXfailEx("Test does not work on netdevsim")
-+
-             self.create_local()
- 
-             self.dev = self._ns.nsims[0].dev
+ def rand_port():
+     """
+     Get unprivileged port, for now just random, one day we may decide to check if used.
 -- 
 2.44.0
 
