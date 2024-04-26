@@ -1,177 +1,144 @@
-Return-Path: <linux-kselftest+bounces-8954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C03F8B4145
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 23:33:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 537078B414E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 23:37:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D6DB1C2085F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 21:33:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0969D288249
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 21:37:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C133613E;
-	Fri, 26 Apr 2024 21:33:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13C22E84A;
+	Fri, 26 Apr 2024 21:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GJQxerLA"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hAThJjbd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4726364A5;
-	Fri, 26 Apr 2024 21:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6438F2D03D
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 21:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714167209; cv=none; b=NsD7o6WWuPiZEu/3FWZfzVezidGFlcLzf4rRMlL3W4F/pJAjjl7P8BnuS4gpo72LaMdKzQygoiaqjcVz4AhzsJgT6dz3O40m79o+CQm3Lzb/COAzyp3O+sJd/DgFWIiGYj8g41BhZ3fulGbigKAUFLYkz2KVuBLkYNHB5got00w=
+	t=1714167430; cv=none; b=gGsK7R9dAtRciDC1lrAgduyv5tR5t+OwbEKuXaH0MVZBq9kq6ML7SCfH35LXASUudFtUMo0jhb+G23MaKXGa2DGKlgXKzE5Svb9D90eKX4JRREFVstHbQ8vVEbnCr2THAqgVaN3NDA262LPywmcZbGTvCNT+q6GXNWGfBlUnrao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714167209; c=relaxed/simple;
-	bh=BRXUXLpBGxxQsER/ZsxTVxHRK9HYywVj2onYAAeAWb4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YjIvBbVSCGZW1o/WME6MBLBLQ6ZHkInuysN3RSIbaNYfQCcUlzoesQDoS5gvOrX344wHv9lVcf9JVoH58ywcsF3tha0L7u0UpXK2ySkd4Edh2JjlZh/oL4UMXAht8rgfTL345gINiKbyAgLRRV9Oge3lnBXZuYmHe3ieQOiFJmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GJQxerLA; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-518931f8d23so2792162e87.3;
-        Fri, 26 Apr 2024 14:33:27 -0700 (PDT)
+	s=arc-20240116; t=1714167430; c=relaxed/simple;
+	bh=wcB/ebDhkfkPBVDQxoUt3AjUlhzpSXzz59SF5DkeLyE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=O21d+uAnAu0AC8J7MIONfDUzdmCeYsbPU9fKUrX+i4LNh9s2RlZRb7w89ICXiMU3GsUYpOV1o2wxv9RrGt3ehnD1ja4y4R6cRtlVwZ7HkPjgsCVHppxJriOqaOisuw0IDrmw34PAZzZOVgnwh/DHyKA+7We4FAM/3Xg9ZNWFFeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hAThJjbd; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e3ca546d40so22316075ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 14:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714167206; x=1714772006; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZTGLY6ClByt4vmgeP2Z+fu7nhm7tDi0YebE9nPM0t0=;
-        b=GJQxerLAdprBLcxkraA+0huE2PMgPgLfyPost3asv8Ky42rgHlMeZcUJhf+vuvgbPC
-         TEaIxiy/+kZhU5foLHa/aRFMaTq524HSU2AK1zYPYKPgPzchIRDOOFkf6GAqkaM8wuQ7
-         y2djHoqNp7FrDtyCQKY1R8B5t4a5W6H822qBZH0n+0tLAE7U5NrL4HmI0ckFSA3CDkbe
-         wL2+Qftgyt8CBiOyS292T5I7Oky7ovr1L3+ib2nDFxrTs98fh7auAkpUPHY2PksUBXBi
-         6vzeowgckwhIAO7yKDyUFtk4A5O6tHsrn4U+DrOpWXmLpPQdEdVms2MCjVT37Ro9e0uP
-         8GRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714167206; x=1714772006;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714167429; x=1714772229; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iZTGLY6ClByt4vmgeP2Z+fu7nhm7tDi0YebE9nPM0t0=;
-        b=GHDzhxZc4NQRuq2cQ/GqepI9nklP4VLkd1B2hKo8aWAZwIukXLpFOhn4Tulj93Up8R
-         +Aj8iIt/g+J2+4tkwf6tpCXqvF9e5I7NGmiNTmHzmDVycfkn/n9g2/AVHXZ5xInuYsjP
-         uoZ/zzZae3rncLUI7n/nz7exjGt9yfvpqcW8uEoqm7vOqfxb9NaxQueY3XPv3dPWdmCb
-         o5tKxGd/NMmf46icnTH4TnQOk+ozXpPcphpM3307sTrZfjQK7dDp+EfRE1zTqvDDc2ec
-         AvAiAKrC43MgJ5q7dXoEN78/rKbdcGiq5vhNYcF3eql70/OJGVtQccYLp/V7p94Zw3Dt
-         8M7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVf+w2FFTma8yzTsZ2EiXAvpGyOjpuXkMnDH601iISNYiK9yrnExePHpoFMF1xmHaSl8zZNAvGdCmVLWs968EerCGqs5wtUPXcaTs1isH7b
-X-Gm-Message-State: AOJu0Yxu9lV7aHHcQ0lpUs/v2joc02JYIy+o3+y3LXypuzIwon8ge86U
-	rvSIdi5Q8yswvuoEXEAK8sYyEpKzpAX1okSj5CtX0vCZn/c4Yg==
-X-Google-Smtp-Source: AGHT+IF6iCfmDk882D2SyrC7CBjgCyuHpLzco4SQL5zvj/+YB00TJI6GrJFEvw+EkMhvZBO9KKj1Eg==
-X-Received: by 2002:a05:6512:3695:b0:51b:d593:8895 with SMTP id d21-20020a056512369500b0051bd5938895mr2239007lfs.13.1714167205756;
-        Fri, 26 Apr 2024 14:33:25 -0700 (PDT)
-Received: from localhost.localdomain ([85.89.127.166])
-        by smtp.gmail.com with ESMTPSA id k7-20020a05651210c700b0051b3ffaf234sm1781564lfg.117.2024.04.26.14.33.24
+        bh=bC8+jsiLZWKY+UGyCwiSu3stdoXyccUkl5+IF/7wAA4=;
+        b=hAThJjbdzufjf6zis7Ev542chPEnh4fy37zYW0oiKZv7lmJifbM8xvMQdK4UtcLBC6
+         xxpRNOeeTj37eSzUr1wjcY+9g4K3Ago+p7pIsZ1YavKbVBbTpjXVOtEdA14C8KIOSFQt
+         dCfiI7Q/JhEkyFAymGTKmaLp8j0FPjxLTnzU/ba2he7KrGPTGiF0MGDCLJ6aIP8GsOby
+         ZX+AJ50shtQlzg5HbHr7/cf20Rv5QAbT06NibR07t6YwWwPOUNzedNErb+T0Vpk65O+K
+         xBrgdWWe2MVr4aOSuVe3paWRQIW/kI2KTGj9xOrFWJqxdixSl8gt24mI9Q+ovUvmLD+o
+         Edqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714167429; x=1714772229;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bC8+jsiLZWKY+UGyCwiSu3stdoXyccUkl5+IF/7wAA4=;
+        b=nUZmFjvowW2vukfDjWpkmu7WZKb984FQid29YzcIZQuXcnxQ2/Ocfba4xAiCPlYPF8
+         aJZXFpLT1YZG9MiIP8dvbSoVmKZrmfECo3WDzps/27DlzJbb9hogQ7/nnjqk+8iGj0Om
+         eJPXzeA1h55IFsVCDPvx4S2ipADbP16YXTN3CvIii0JtBO3fTpTff2lyv2HODo2wEmph
+         36dFNV8Xz76ZAGBEQWt7EhNDeTHZDdJamVu1ggbiXSnVk1dfP8Sfat1uMfpYN/+PFEo1
+         AFncDv4oC88xzA/EaBvVloI6TJEBQyricfQdmeMzEqi7tbGiGt++rELCHg1nNFGSsoXD
+         13GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ2sSZtKskRGTNLzpxDUltzY1kiG4pivip+QmQwSEeWoqZ3Pp5z/XfECZX+c2IhwhPPLHuNGnBV2vTi7NacMKoOLI7qWeqm36ej4yezcuh
+X-Gm-Message-State: AOJu0YwlFT8iERAkKhTRNWyap9bTOCaLvJo4imOTZ92e80ISNdUYYV9l
+	LSI06HXgZf0x4jVa+w2j13rYNDDz087oOIKkfglrsf9M1UMjXuGoHyGcfsd7tv8=
+X-Google-Smtp-Source: AGHT+IHl0deFI+kKqJJSXtEo4lw1f4JLDe4eTcjXBFfcgornPJnmm+jN4W99Vb/Ph2g2fe8Xsa+lCQ==
+X-Received: by 2002:a17:902:f684:b0:1eb:51a4:3685 with SMTP id l4-20020a170902f68400b001eb51a43685mr382124plg.52.1714167428813;
+        Fri, 26 Apr 2024 14:37:08 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902760400b001e2936705b4sm15935701pll.243.2024.04.26.14.37.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Apr 2024 14:33:25 -0700 (PDT)
-From: Shengyu Li <shengyu.li.evgeny@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>
-Subject: [PATCH] selftest/tmpfs: Use harness framework in tmpfs
-Date: Sat, 27 Apr 2024 05:33:03 +0800
-Message-Id: <20240426213303.12583-1-shengyu.li.evgeny@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 Apr 2024 14:37:06 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Fri, 26 Apr 2024 14:37:04 -0700
+Subject: [PATCH v4 09/16] RISC-V: define the elements of the VCSR vector
+ CSR
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240426-dev-charlie-support_thead_vector_6_9-v4-9-5cf53b5bc492@rivosinc.com>
+References: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-5cf53b5bc492@rivosinc.com>
+In-Reply-To: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-5cf53b5bc492@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Guo Ren <guoren@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ Conor Dooley <conor.dooley@microchip.com>, Evan Green <evan@rivosinc.com>, 
+ =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Charlie Jenkins <charlie@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Heiko Stuebner <heiko@sntech.de>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1714167425; l=954;
+ i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
+ bh=C7F1c584ODJM4qF9TPT5kMoM8fDlOPYyEMw6010Mea8=;
+ b=+Ym/PXnw1qoA/TfJUg74ll2FQ3kDna0sfz28N0zMDelkAV0Bsm9v3B7NR0DImwTgQCifbv+07
+ 7SqQy9BhbS9DwC8AiBlZXnX+89Wsr6daBED+F73ctZ18G6TF8mNQWu/
+X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
+ pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
 
-Notice that there are a lot of Patch commits to enhance 
-the consistency of output from our legacy tests, 
-we plan to refactor them using kselftest_harness.h automatically by tools. 
-This will help standardize the TAP output format, 
-ensuring clarity and traceability of test results.
-This is the version of tmpfs after auto-refactoring.
+From: Heiko Stuebner <heiko@sntech.de>
 
-Signed-off-by: Shengyu Li <shengyu.li.evgeny@gmail.com>
+The VCSR CSR contains two elements VXRM[2:1] and VXSAT[0].
+
+Define constants for those to access the elements in a readable way.
+
+Acked-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- .../selftests/tmpfs/bug-link-o-tmpfile.c      | 54 +++++++++----------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ arch/riscv/include/asm/csr.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-index b5c3ddb90942..8a9a29bff287 100644
---- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-+++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-@@ -23,45 +23,45 @@
- #include <sys/mount.h>
- #include <unistd.h>
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 2468c55933cd..13bc99c995d1 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -215,6 +215,11 @@
+ #define SMSTATEEN0_SSTATEEN0_SHIFT	63
+ #define SMSTATEEN0_SSTATEEN0		(_ULL(1) << SMSTATEEN0_SSTATEEN0_SHIFT)
  
--int main(void)
--{
--	int fd;
-+#include "../kselftest_harness.h"
- 
--	if (unshare(CLONE_NEWNS) == -1) {
-+TEST(tmpfs_inodes_and_linking)
-+{
-+	ASSERT_NE(unshare(CLONE_NEWNS), -1)
-+	{
- 		if (errno == ENOSYS || errno == EPERM) {
--			fprintf(stderr, "error: unshare, errno %d\n", errno);
--			return 4;
-+			SKIP(return, "error: unshare, errno %d\n", errno);
- 		}
--		fprintf(stderr, "error: unshare, errno %d\n", errno);
--		return 1;
-+		TH_LOG("error: unshare, errno %d\n", errno);
- 	}
--	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
--		fprintf(stderr, "error: mount '/', errno %d\n", errno);
--		return 1;
++/* VCSR flags */
++#define VCSR_VXRM_MASK			3
++#define VCSR_VXRM_SHIFT			1
++#define VCSR_VXSAT_MASK			1
 +
-+	ASSERT_NE(mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL), -1)
-+	{
-+		TH_LOG("error: mount '/', errno %d\n", errno);
- 	}
- 
- 	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
--	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
--		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
--		return 1;
-+	ASSERT_NE(mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3"), -1)
-+	{
-+		TH_LOG("error: mount tmpfs, errno %d\n", errno);
- 	}
- 
--	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
--	if (fd == -1) {
--		fprintf(stderr, "error: open 1, errno %d\n", errno);
--		return 1;
-+	int fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
-+
-+	ASSERT_NE(fd, -1)
-+	{
-+		TH_LOG("error: open 1, errno %d\n", errno);
- 	}
--	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
--		fprintf(stderr, "error: linkat, errno %d\n", errno);
--		return 1;
-+
-+	ASSERT_NE(linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH), -1)
-+	{
-+		TH_LOG("error: linkat, errno %d\n", errno);
- 	}
- 	close(fd);
- 
--	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
--	if (fd == -1) {
--		fprintf(stderr, "error: open 2, errno %d\n", errno);
--		return 1;
-+	ASSERT_NE(openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600), -1)
-+	{
-+		TH_LOG("error: open 2, errno %d\n", errno);
- 	}
--
--	return 0;
- }
-+TEST_HARNESS_MAIN
+ /* symbolic CSR names: */
+ #define CSR_CYCLE		0xc00
+ #define CSR_TIME		0xc01
+
 -- 
-2.25.1
+2.44.0
 
 
