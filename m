@@ -1,82 +1,59 @@
-Return-Path: <linux-kselftest+bounces-8900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3224E8B30EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 08:59:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70AED8B3109
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 09:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A01DC1F23DA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 06:59:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B64128182B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 07:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FC813AA35;
-	Fri, 26 Apr 2024 06:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDAFE13AD09;
+	Fri, 26 Apr 2024 07:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="UK7FKijJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHiQmS3m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CA513A41D
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 06:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A8013A898;
+	Fri, 26 Apr 2024 07:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714114776; cv=none; b=jmZJzs0TVjJdr00Fk8b0We9pX/HRP5az8Dy9UytTl7Uc7Dj1bhdf+cUFcWUb07+OveFBDO7eY12VXex8qfRnyjAdT7du7Feq8xtZdh/enWiefJKZpoeJMHY9kXK+MJzDF3ho3QiCfwAu7L8jJHcdXPM1zKJdzgJ+/3Xhj9quNpk=
+	t=1714115128; cv=none; b=MDEQL7x+G1r4sMgTVNjryyeDQtoJSyuaZv/Wwpzg40LLh1HeqQ//oprex+Y4TnxjmUTqZIlZHhsXq/+kNAE7pMGcJGHcUhlliVQ9o1SOl9NWeaOtWuST+2VcPKNbzWvDYVk9imRzD/OrWD68vjNYS2lLM7HstXpp4nOBiFpi1Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714114776; c=relaxed/simple;
-	bh=G7vXm9ah7dP5SqmGJRXf6C33wHqAfZxN47t8q4zER0w=;
+	s=arc-20240116; t=1714115128; c=relaxed/simple;
+	bh=F0iG2wx60KVc6Z76DVrQ1R2rFXUk0p5yuCUgEIyadF0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QSxpZKg4cso3JndABSkCg2AWabphHKrOUcRvKXY2k5aCKyyi8VGAd9qY/0Xt/Jq87hqEN1TYbz0kME18qdzq1IqdkhwDIzhKlINQJICn+jJ5jDa9uECh140yku7E/n0FzyK0tDJb2Ktx26Tf8dcr0u/89netQXTyE1Bt1DK6xhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=UK7FKijJ; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56e48d0a632so2600715a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Apr 2024 23:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1714114773; x=1714719573; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJi2B9HW02fkMYGbO8TVAET6hHBVhmmZVgISXMQ1fkk=;
-        b=UK7FKijJ5KsbEi7f2h8gqZ+I0eBa776J6F/MNIEqNFIto/s8ZvcMOAhaTu8rZFdoYM
-         odFdPY0Wl6fGVynCWA415VcF7ukR5/PdKruw6FjrPxCaqQ88vWnsMXAE8cjQw+yc8m8l
-         8uVphq1VUUhckZ36DeuLqZ5IPrS0w1B0KEExIb395vC8B1X/N/2FFsRQ26WhnIPI3Fqd
-         V3LrADD3KMWVbFh3aHx+CkL0QcUShS3SHqQDEznDAv7DOdB2xsKJ8REdySGngkD3+2X+
-         ozzcZ8mnd3RaiwQW8JxQmfjXx5rVnHzYpp+AngsgSdOEkHOPL2aiQd/HV3YLLpUJREmJ
-         zouA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714114773; x=1714719573;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nJi2B9HW02fkMYGbO8TVAET6hHBVhmmZVgISXMQ1fkk=;
-        b=L9PEFlGktpm2xqCSxYFhBOHRzBo7Yl3HO7v3oY5TB9OEbhGsRjo8isO39oMJ3ZSK8n
-         pDzGdSsS/nEVyxy3x6G4alLkqFERKZON/2GDyMq+v2FI9V+BnVyRY3aa+++rAMHIJfXb
-         /m/P/E5wiItMBjLrLzlxTEFCumbMSj0xVn/sAzAa9CGrQB/tyeB2AAuZjKgq0FhNdBKM
-         mZ5Qs+37nM7LJX/wvoyOxecwimijySeTCy42/k7KRAk9RpH9wG4bFHCpaR/Oxc9GPinz
-         A+wHZ7QvPn1BjSSf/nL3ZTQ6nmBfdVisb9jL2PT5DIcYlylsSeBwRx2TfLLxMitCu1L3
-         8S1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXEdQxvmBU99K87Uq04UkM7o9AsEoS8H5A1NO9OmHL1k0REgkQDqm8g0H7SEAhB/NVFvliXMcYYRtILStkKQpUaHc2Uyacd1uhZZ7c+fAJE
-X-Gm-Message-State: AOJu0YyNCZGJ5wMopQupYjZdDHfGeVrwtU30FzoGHOlqttPlvBY4FNBH
-	6X4hh8mt0uT+ukiUTKMOcOmbBHb0uBuvbv/7QvfZRHecbIKw1DA3G8EJw3G6TO8iWAe6YbwojEQ
-	8DG0=
-X-Google-Smtp-Source: AGHT+IHUnMU8CxhFO5e0ybUeTeletpTSN8CoDzy9n/qhvKWDBbmouw24d1LdHfZWIXo2JhywDqhFJw==
-X-Received: by 2002:a17:906:3614:b0:a51:de95:f592 with SMTP id q20-20020a170906361400b00a51de95f592mr1758675ejb.63.1714114773338;
-        Thu, 25 Apr 2024 23:59:33 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id m12-20020a1709062b8c00b00a58d438ed2esm183306ejg.139.2024.04.25.23.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 23:59:32 -0700 (PDT)
-Date: Fri, 26 Apr 2024 08:59:31 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Shuah Khan <shuah@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: selftests: Add hwprobe binaries to .gitignore
-Message-ID: <20240426-ffd635ae77cff1868ae99206@orel>
-References: <20240425-gitignore_hwprobe_artifacts-v1-1-dfc5a20da469@rivosinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aveAYS/Mnh+0QUsow6PmqrTLvVLCjM+GIpLAvrjjAT7tfrq4hs/EWMCCpTF/1AV6WuGtP86whQbDOjFNX22S+t3NQ7FLBQQ+KVgrb9f/9X7z4V24bao04kKJqzdxVS47gkfYnIYwb/LPX3PjA01x5iJNRDMCV2g6X/Pdyte1v5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHiQmS3m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9BBC113CD;
+	Fri, 26 Apr 2024 07:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714115128;
+	bh=F0iG2wx60KVc6Z76DVrQ1R2rFXUk0p5yuCUgEIyadF0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CHiQmS3mZcG7Yzh+VpPEdThNyAnZJFFV/Ew4XQ8qPa8xVYCT8vhmPhO6F6g3utfl/
+	 2ppTGYsWoL33ilZP6We57FkeXcTVcYpHuDimWP//oLe7wWOvTiLo9sm4ZiW0+lPTI/
+	 d13WGsLAtE4yk3boD2C1Cf8F28qXIpUQd4uj9ApYw0gvAvyD3f33LY1nlCgdWQm+pN
+	 SsVAI7fUvT9dKb6PEqRu9zAug+VAmjGFSFXKh6i+0aiwDufsj3v8XRoTWqPl4qApW0
+	 Dmytm9V9pNl6m2OuHzIfPYzarNTIk+SIWYPiMbV0W1398eUJebN69Iw3SxeljEyyKw
+	 BLcd0VF3ShJeQ==
+Date: Fri, 26 Apr 2024 08:05:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: dev@openvswitch.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Aaron Conole <aconole@redhat.com>
+Subject: Re: [ovs-dev] selftests: openvswitch: Questions about possible
+ enhancements
+Message-ID: <20240426070524.GW42092@kernel.org>
+References: <20240424164405.GN42092@kernel.org>
+ <20240424173000.21c12587@kernel.org>
+ <20240425082637.GU42092@kernel.org>
+ <20240425185719.GV42092@kernel.org>
+ <20240425122151.1d5efcc2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,44 +62,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240425-gitignore_hwprobe_artifacts-v1-1-dfc5a20da469@rivosinc.com>
+In-Reply-To: <20240425122151.1d5efcc2@kernel.org>
 
-On Thu, Apr 25, 2024 at 12:58:03PM GMT, Charlie Jenkins wrote:
-> The cbo and which-cpu hwprobe selftests leave their artifacts in the
-> kernel tree and end up being tracked by git. Add the binaries to the
-> hwprobe selftest .gitignore so this no longer happens.
+On Thu, Apr 25, 2024 at 12:21:51PM -0700, Jakub Kicinski wrote:
+> On Thu, 25 Apr 2024 19:57:19 +0100 Simon Horman wrote:
+> > openvswitch.sh does not appear to have any dependencies on Open vSwitch
+> > user-space. My understanding is that, rather, it makes use of
+> > tools/testing/selftests/net/openvswitch/ovs-dpctl.py to talk to the Kernel
+> > using Netlink (which is also what Open vSwitch user-space does).
+> > 
+> > My brief testing indicates that for this the only dependencies
+> > when running on Amazon Linux 2 are python3 and pyroute2.
+> > 
+> > I think that it should be possible to port pmtu.sh to use ovs-dpctl.py.
+> > This would require some enhancements to ovs-dpctl.py to handle adding the
+> > tunnel vports (interfaces).
+> > 
+> > As an aside, to run the Open vSwitch tests in pmtu.sh the openvswitch
+> > kernel module is needed. So I think it would make sense to add
+> > CONFIG_OPENVSWITCH to tools/testing/selftests/net/config.
+> > 
+> > That would mean that tools/testing/selftests/net/config also has all
+> > the requirements to run openvswitch.sh. If so, we probably wouldn't need to
+> > add tools/testing/selftests/net/openvswitch/config or otherwise do anything
+> > special to configure the kernel for openvswitch.sh.
 > 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Fixes: a29e2a48afe3 ("RISC-V: selftests: Add CBO tests")
-> Fixes: ef7d6abb2cf5 ("RISC-V: selftests: Add which-cpus hwprobe test")
-> ---
->  tools/testing/selftests/riscv/hwprobe/.gitignore | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/riscv/hwprobe/.gitignore b/tools/testing/selftests/riscv/hwprobe/.gitignore
-> index 8113dc3bdd03..6e384e80ea1a 100644
-> --- a/tools/testing/selftests/riscv/hwprobe/.gitignore
-> +++ b/tools/testing/selftests/riscv/hwprobe/.gitignore
-> @@ -1 +1,3 @@
->  hwprobe
-> +cbo
-> +which-cpus
-> 
-> ---
-> base-commit: ed30a4a51bb196781c8058073ea720133a65596f
-> change-id: 20240425-gitignore_hwprobe_artifacts-fb0f2cd3509c
-> -- 
-> - Charlie
->
+> That sounds great, for simplicity we could move the ovs files down 
+> to the .../net/ directory. It'd be cool to not have to do that, and
+> let us separate tests more clearly into directories. But right now
+> every directory has its own runner so there's a high price to pay
+> for a primarily aesthetic gain :(
 
-We can also consider doing what kvm selftests does, which is to just have
-the top-level .gitignore which ignores everything except the code. See
-tools/testing/selftests/kvm/.gitignore
+Understood. Let's work on getting the Open vSwitch portions of pmtu.sh, and
+openvswitch.sh into a little bit better shape. Then we can consider moving
+the contents of tools/.../net/openvswitch/. It would certainly be nice to
+have the Open vSwitch tests run automatically.
 
-But, until (if at all) we go that way, we can do what this patch does,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
 
