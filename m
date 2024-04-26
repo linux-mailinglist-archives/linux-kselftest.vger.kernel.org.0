@@ -1,533 +1,527 @@
-Return-Path: <linux-kselftest+bounces-8939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2285E8B4056
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 21:47:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5997A8B409A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 22:01:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A48991F2112C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 19:47:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D690B28B7A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 20:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB37818C19;
-	Fri, 26 Apr 2024 19:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B9C28377;
+	Fri, 26 Apr 2024 20:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kIvvgFLe"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="zvxPcDlj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F552C859
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 19:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12DB1CFBC
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 20:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714160839; cv=none; b=tS4+q+GQCh+d0OcVZ+d1omsfGAeKmzCQMpGUuDnmyLu8MfQij1pdzoDAj67zJ+Ls6sLykzgoLVsgqKVCEL4WVzeKBVDsDqoUleMlvE0jKtQHnYsklmhrOxMXoGXVVGMPmvI7sfYHrGgt8bmsrdw1RCf95KQ4TSoh0PqXEf/XUHI=
+	t=1714161680; cv=none; b=NUlCTKefS5UwKSnOkEdVEvPonjE5EuFuHK+gEW9wURx3+S7QF8gfMYRHdI0OVPbIcba3pOTYeHV6xJ3fLt1JBG2gibDqcovxotbzdDwfKOyibVNa8y/iJFMWsnZ6XPOINxlF3Ol7hw0iEwPCQx4nhvfqTNvmZFmW/lPLfjb0eZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714160839; c=relaxed/simple;
-	bh=/FUsKXplFS5G+mv1I9uRwhnH2LAGbeIziLvbqUJgnn4=;
+	s=arc-20240116; t=1714161680; c=relaxed/simple;
+	bh=JacmjHIRjJ44cx4iSMHTqqEgRw8n5VJ8ckvrEsjcarw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Apj8j0RzBrX56FrMjWg+jSsHMn4XLs/RpAiSKhEIsIMjJRWkgv0iEA2aI08i4atyWrAnabSXm619boASIVN+0TINnbouK/5yBQ76CRmlZdoq/HOBCBURrspRvkpheaquYyz6VIOph1mfRJEnbYCad+J9IvYYaqyDQZz417R6PWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kIvvgFLe; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e51398cc4eso23696595ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 12:47:17 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCsj9DWhV+jWmNPMQlFvHU3pimv8LqlN1ZlM3gamC6iKEq9QeaJC9AM2hBmJPNKFoEbyTEJRDcaUp6zsdh/f0XYDtZsfqapUWbEBYXfu6EFAxx79G5lfMRHke6gUDqUy8fx1+f6j+rYtsqCqorJnd3H0sHMVCmwqabPaO80mt1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=zvxPcDlj; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso2139793a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 13:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714160837; x=1714765637; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=y1PXJEglPxUxkKUKfy/PB/vy8kF4Fex+GErBWeL36ZQ=;
-        b=kIvvgFLeeT2wohSa/Mp3J9rcU5HWPFLCJ/hiaahgDtxeVI22Owj86do+hzrbbT6kkv
-         vWsdKmh+yaimxmH+EH1eynkciOJMX8fbaP2ih37UC661v4iXaMxTEVM7m7EHXKCEwoUP
-         TtsCEnlYQF79+1TOxJQKUeL/MahDkyra3S8W8=
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714161676; x=1714766476; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=raghWWuWmM/5TZJC4kDKpgJQ4hXCQAZ4Q/dcRR9ZX90=;
+        b=zvxPcDlj1Ba9Bo5d5oM4IL9seunvfqUktYh6uCp92TKNbNv+aQkAa5R1ddK8nUUr63
+         4Pb34ccaeW/fC0wDU/FA0ks9vCacL3n98gHSOyGAqBP3nNxY80MELtRtVEoDMTeG+oN+
+         5rRvhCWy9nc27pKY5iG7gB5hkSHwYLA8ltVPGnCgre6MtYWpcMPk5BdNR7y47Om5GATr
+         2SEAekt487Qw6VNkgYvWK1tj+TFKhlIEHRHV0w1Xqbe+6GlSW+ZxSCrtDesTmURqCqgO
+         dEbpmdyvv1TdjgSGUFDFNmArM4dezh3yw7Tn9Mz4e37dacRDhQ+u/K7k62Cu1PctVk1Z
+         MPYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714160837; x=1714765637;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y1PXJEglPxUxkKUKfy/PB/vy8kF4Fex+GErBWeL36ZQ=;
-        b=bJi1pmethyXN2eL42kG98TCUdl8p7aWDvkSUgUISXoTYXkO/jrs4/cK0fyzQXOXIXC
-         8h9LAjR/9o4agIhWrxKl0eViWgc83JiFlBcYFRQrSU50C7fT8DW4wFf5lBzyFs1TPieI
-         Vmy/gifQSZJ8FaRCA6aC9nuMYE16SiaCObYb+1GLQeeWiSEEDDLgQxrguuD6pWPn+hkD
-         W5CK6Dw8M7vDr1fvFLk4pt/q98yeW6S0JZBuPqXDIahKnRhJAanxRIwSJR1vhqO6L2U2
-         UHANaAIXsujHBqfeEiNyUPczni0kxvuKdysXgzq+X9dIhdq2648dDRGgcmrTEZhaTMwC
-         b7fA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTWBx97T4b7/i7BY88pvur0wmKXcrDFsWi8WrIJqkzprwW2XZ4LH9lkhcGbz6LDgTyRSBPFRQ/tfXU6nW8SNWkbiiE3NaJoJe3UagVz4wn
-X-Gm-Message-State: AOJu0YztbQz/6LUo+yEWGf9LP/75IGypbWsSwAnMiL+7ZV6FqmwO/d91
-	j9+Y8ZVRQ/UuyE6Bb9LIW3bKGbwD314oyvI7Rz08OvgzPW7/f7WvpSg0ZqwM8g==
-X-Google-Smtp-Source: AGHT+IF6lSJvrbDQz6rgfKFLfRsKY4KRFFqD1YgE/QSVUbTJHDVBsJx2DrgUL0N0+atnGo1r5FGDdw==
-X-Received: by 2002:a17:902:a518:b0:1e4:51ab:fffb with SMTP id s24-20020a170902a51800b001e451abfffbmr4214061plq.25.1714160837225;
-        Fri, 26 Apr 2024 12:47:17 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b001d8f111804asm16127066plb.113.2024.04.26.12.47.16
+        d=1e100.net; s=20230601; t=1714161676; x=1714766476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=raghWWuWmM/5TZJC4kDKpgJQ4hXCQAZ4Q/dcRR9ZX90=;
+        b=oZtfFrEVZmnGpjx3f2NT5QUE4CE0XHVofmbISjxnXUnGwqqUpKAYclBpnynU3d17ms
+         bCoqUgeihEyWGu7Eb940qj3UIirrgbUpmu0MxgVQ9Yp1Fe4KJhiiKWPa8a12kBZS4nKn
+         XcE/Em5U3520s5B9mZ1GIRzPxzwpjXLQZVAhOXu4BCf2/8HLyySroCp9hBDadv3kH18Z
+         z6meyLxgNK0dgLJFkxBsE1VdP31CZ8wPAOGeM9qZZfTs8X9s5Dtt6PbAUpsNDi6rX20X
+         BqqPTN2yptTAeidlvskvqM4XqxdpS8pMQIWJEEzAFP6dzEAgD+6GRQGuz1K0wrCK5k1+
+         wCgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn9sMHbFinknONGzyzFVQwr7P+hzwCGun96g9AhumhUzv/5xFRjKn7aksdiSlF+JmjAlGUYJfnSCiwdIgn3mPKuZ+QvC/TGrcakUYPeoDg
+X-Gm-Message-State: AOJu0YwmrzLvTx0gdQWfj56kv8xdmZhQM5lBLrNAL0Rp19b5eYN63Ubi
+	Qj/SPGyvszFlYLL2yqJHusE1sTh0U1xUy5EQYk7pWDOOhiqwoX8dpJLmv8Urnzw=
+X-Google-Smtp-Source: AGHT+IGZxLUwYQbkZfhTACgCMYLPnuJOtrr+IfS6fDS+sMRgvJF5Hn9EpqDDgcmVhTluvK+/7Qvf6w==
+X-Received: by 2002:a17:90b:3741:b0:2a5:395e:8673 with SMTP id ne1-20020a17090b374100b002a5395e8673mr674149pjb.5.1714161675889;
+        Fri, 26 Apr 2024 13:01:15 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:3b15:3aba:70a1:7ce9])
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090a5e4600b002a5d71d48e8sm16583852pji.39.2024.04.26.13.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Apr 2024 12:47:16 -0700 (PDT)
-Date: Fri, 26 Apr 2024 12:47:16 -0700
-From: Kees Cook <keescook@chromium.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] selftests/harness: Fix vfork() side effects and
- uncaught errors
-Message-ID: <202404261245.DC9A268FF@keescook>
-References: <20240426172252.1862930-1-mic@digikod.net>
- <20240426172252.1862930-6-mic@digikod.net>
+        Fri, 26 Apr 2024 13:01:14 -0700 (PDT)
+Date: Fri, 26 Apr 2024 13:01:10 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 08/17] riscv: Introduce vendor variants of extension
+ helpers
+Message-ID: <ZiwIBmlaDbYdmv8f@ghost>
+References: <20240420-dev-charlie-support_thead_vector_6_9-v3-0-67cff4271d1d@rivosinc.com>
+ <20240420-dev-charlie-support_thead_vector_6_9-v3-8-67cff4271d1d@rivosinc.com>
+ <20240426-myself-crowbar-99dc0a080cd9@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240426172252.1862930-6-mic@digikod.net>
+In-Reply-To: <20240426-myself-crowbar-99dc0a080cd9@spud>
 
-On Fri, Apr 26, 2024 at 07:22:52PM +0200, Mickaël Salaün wrote:
-> Setting the time namespace with CLONE_NEWTIME returns -EUSERS if the
-> calling thread shares memory with another thread (because of the shared
-> vDSO), which is the case when it is created with vfork().
+On Fri, Apr 26, 2024 at 05:19:59PM +0100, Conor Dooley wrote:
+> On Sat, Apr 20, 2024 at 06:04:40PM -0700, Charlie Jenkins wrote:
+> > Vendor extensions are maintained in per-vendor structs (separate from
+> > standard extensions which live in riscv_isa). Create vendor variants for
+> > the existing extension helpers to interface with the riscv_isa_vendor
+> > bitmaps.
 > 
-> Fix pidfd_setns_test by replacing test harness's vfork() call with a
-> clone3() call with CLONE_VFORK, and an explicit sharing of the
-> __test_metadata and self objects.
+> > There is a good amount of overlap between these functions, so
+> > the alternative checking code can be factored out.
 > 
-> Replace _metadata->teardown_parent with a new FIXTURE_TEARDOWN_PARENT()
-> helper that can replace FIXTURE_TEARDOWN().  This is a cleaner approach
-> and it enables to selectively share the fixture data between the child
-> process running tests and the parent process running the fixture
-> teardown.  This also avoids updating several tests to not rely on the
-> self object's copy-on-write property (e.g. storing the returned value of
-> a fork() call).
-> 
-> In the Landlock filesystem tests, don't allocate self->dir_path in the
-> test process because this would not be visible in the
-> FIXTURE_TEARDOWN_PARENT() process when not sharing the memory mapping.
-> 
-> Unconditionally share _metadata between all forked processes, which
-> enables to actually catch errors (which were previously ignored).
-> 
-> Replace a wrong EXPECT_GT(self->child_pid_exited, 0) with EXPECT_GE(),
-> which is now actually tested on the parent and child sides.
-> 
-> FIXTURE_VARIANT_ADD() doesn't need to be MAP_SHARED because it should
-> not be modified: it is already passed as const pointers to
-> FIXTURE_TEARDOWN().  Make that explicit by constifying the variants
-> declarations.
+> Can you please split this out?
 
-This patch makes at least(?) 3 different logical changes. Can you split
-these up a bit; I think it would make review a bit easier.
-
-I don't quite understand why the need for the explicit shared memory
-setup for the fixture metadata? Is this to deal with the vfork?
-
--Kees
+Sure.
 
 > 
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Günther Noack <gnoack@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Will Drewry <wad@chromium.org>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
-> Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20240426172252.1862930-6-mic@digikod.net
-> ---
->  tools/testing/selftests/kselftest_harness.h   | 88 +++++++++++++------
->  tools/testing/selftests/landlock/fs_test.c    | 73 ++++++++-------
->  .../selftests/pidfd/pidfd_setns_test.c        |  2 +-
->  3 files changed, 103 insertions(+), 60 deletions(-)
+> > 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/riscv/errata/sifive/errata.c          |  3 ++
+> >  arch/riscv/errata/thead/errata.c           |  3 ++
+> >  arch/riscv/include/asm/cpufeature.h        | 86 +++++++++++++++++-------------
+> >  arch/riscv/include/asm/vendor_extensions.h | 56 +++++++++++++++++++
+> >  arch/riscv/kernel/cpufeature.c             | 20 ++++---
+> >  arch/riscv/kernel/vendor_extensions.c      | 40 ++++++++++++++
+> >  6 files changed, 164 insertions(+), 44 deletions(-)
+> > 
+> > diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
+> > index 3d9a32d791f7..b29b6e405ff2 100644
+> > --- a/arch/riscv/errata/sifive/errata.c
+> > +++ b/arch/riscv/errata/sifive/errata.c
+> > @@ -12,6 +12,7 @@
+> >  #include <asm/alternative.h>
+> >  #include <asm/vendorid_list.h>
+> >  #include <asm/errata_list.h>
+> > +#include <asm/vendor_extensions.h>
+> >  
+> >  struct errata_info_t {
+> >  	char name[32];
+> > @@ -99,6 +100,8 @@ void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+> >  	for (alt = begin; alt < end; alt++) {
+> >  		if (alt->vendor_id != SIFIVE_VENDOR_ID)
+> >  			continue;
+> > +		if (alt->patch_id >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE)
+> > +			continue;
+> >  		if (alt->patch_id >= ERRATA_SIFIVE_NUMBER) {
+> >  			WARN(1, "This errata id:%d is not in kernel errata list", alt->patch_id);
+> >  			continue;
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index b1c410bbc1ae..d8e78cc687bc 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> > @@ -18,6 +18,7 @@
+> >  #include <asm/io.h>
+> >  #include <asm/patch.h>
+> >  #include <asm/vendorid_list.h>
+> > +#include <asm/vendor_extensions.h>
+> >  
+> >  static bool errata_probe_pbmt(unsigned int stage,
+> >  			      unsigned long arch_id, unsigned long impid)
+> > @@ -163,6 +164,8 @@ void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+> >  	for (alt = begin; alt < end; alt++) {
+> >  		if (alt->vendor_id != THEAD_VENDOR_ID)
+> >  			continue;
+> > +		if (alt->patch_id >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE)
+> > +			continue;
 > 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index d2dd246a3843..a19d01c0b7a7 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -295,6 +295,32 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
->   * A bare "return;" statement may be used to return early.
->   */
->  #define FIXTURE_TEARDOWN(fixture_name) \
-> +	static const bool fixture_name##_teardown_parent = false; \
-> +	__FIXTURE_TEARDOWN(fixture_name)
-> +
-> +/**
-> + * FIXTURE_TEARDOWN_PARENT()
-> + * *_metadata* is included so that EXPECT_*, ASSERT_* etc. work correctly.
-> + *
-> + * @fixture_name: fixture name
-> + *
-> + * .. code-block:: c
-> + *
-> + *     FIXTURE_TEARDOWN_PARENT(fixture_name) { implementation }
-> + *
-> + * Same as FIXTURE_TEARDOWN() but run this code in a parent process.  This
-> + * enables the test process to drop its privileges without impacting the
-> + * related FIXTURE_TEARDOWN_PARENT() (e.g. to remove files from a directory
-> + * where write access was dropped).
-> + *
-> + * To make it possible for the parent process to use *self*, share (MAP_SHARED)
-> + * the fixture data between all forked processes.
-> + */
-> +#define FIXTURE_TEARDOWN_PARENT(fixture_name) \
-> +	static const bool fixture_name##_teardown_parent = true; \
-> +	__FIXTURE_TEARDOWN(fixture_name)
-> +
-> +#define __FIXTURE_TEARDOWN(fixture_name) \
->  	void fixture_name##_teardown( \
->  		struct __test_metadata __attribute__((unused)) *_metadata, \
->  		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-> @@ -339,7 +365,7 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
->   * variant.
->   */
->  #define FIXTURE_VARIANT_ADD(fixture_name, variant_name) \
-> -	extern FIXTURE_VARIANT(fixture_name) \
-> +	extern const FIXTURE_VARIANT(fixture_name) \
->  		_##fixture_name##_##variant_name##_variant; \
->  	static struct __fixture_variant_metadata \
->  		_##fixture_name##_##variant_name##_object = \
-> @@ -351,7 +377,7 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
->  		__register_fixture_variant(&_##fixture_name##_fixture_object, \
->  			&_##fixture_name##_##variant_name##_object);	\
->  	} \
-> -	FIXTURE_VARIANT(fixture_name) \
-> +	const FIXTURE_VARIANT(fixture_name) \
->  		_##fixture_name##_##variant_name##_variant =
->  
->  /**
-> @@ -369,10 +395,11 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
->   * Very similar to TEST() except that *self* is the setup instance of fixture's
->   * datatype exposed for use by the implementation.
->   *
-> - * The @test_name code is run in a separate process sharing the same memory
-> - * (i.e. vfork), which means that the test process can update its privileges
-> - * without impacting the related FIXTURE_TEARDOWN() (e.g. to remove files from
-> - * a directory where write access was dropped).
-> + * The __test_metadata object is shared (MAP_SHARED) with all the potential
-> + * forked processes, which enables them to use EXCEPT_*() and ASSERT_*().
-> + *
-> + * The *self* object is only shared with the potential forked processes if
-> + * FIXTURE_TEARDOWN_PARENT() is used instead of FIXTURE_TEARDOWN().
->   */
->  #define TEST_F(fixture_name, test_name) \
->  	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
-> @@ -393,57 +420,65 @@ static pid_t __attribute__((__unused__)) clone3_vfork(void)
->  		struct __fixture_variant_metadata *variant) \
->  	{ \
->  		/* fixture data is alloced, setup, and torn down per call. */ \
-> -		FIXTURE_DATA(fixture_name) self; \
-> +		FIXTURE_DATA(fixture_name) self_private, *self = NULL; \
->  		pid_t child = 1; \
->  		int status = 0; \
->  		/* Makes sure there is only one teardown, even when child forks again. */ \
->  		bool *teardown = mmap(NULL, sizeof(*teardown), \
->  			PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
->  		*teardown = false; \
-> -		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
-> +		if (sizeof(*self) > 0) { \
-> +			if (fixture_name##_teardown_parent) { \
-> +				self = mmap(NULL, sizeof(*self), PROT_READ | PROT_WRITE, \
-> +					MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
-> +			} else { \
-> +				memset(&self_private, 0, sizeof(self_private)); \
-> +				self = &self_private; \
-> +			} \
-> +		} \
->  		if (setjmp(_metadata->env) == 0) { \
-> -			/* Use the same _metadata. */ \
-> -			child = vfork(); \
-> +			/* _metadata and potentially self are shared with all forks. */ \
-> +			child = clone3_vfork(); \
->  			if (child == 0) { \
-> -				fixture_name##_setup(_metadata, &self, variant->data); \
-> +				fixture_name##_setup(_metadata, self, variant->data); \
->  				/* Let setup failure terminate early. */ \
->  				if (_metadata->exit_code) \
->  					_exit(0); \
->  				_metadata->setup_completed = true; \
-> -				fixture_name##_##test_name(_metadata, &self, variant->data); \
-> +				fixture_name##_##test_name(_metadata, self, variant->data); \
->  			} else if (child < 0 || child != waitpid(child, &status, 0)) { \
->  				ksft_print_msg("ERROR SPAWNING TEST GRANDCHILD\n"); \
->  				_metadata->exit_code = KSFT_FAIL; \
->  			} \
->  		} \
->  		if (child == 0) { \
-> -			if (_metadata->setup_completed && !_metadata->teardown_parent && \
-> +			if (_metadata->setup_completed && !fixture_name##_teardown_parent && \
->  					__sync_bool_compare_and_swap(teardown, false, true)) \
-> -				fixture_name##_teardown(_metadata, &self, variant->data); \
-> +				fixture_name##_teardown(_metadata, self, variant->data); \
->  			_exit(0); \
->  		} \
-> -		if (_metadata->setup_completed && _metadata->teardown_parent && \
-> +		if (_metadata->setup_completed && fixture_name##_teardown_parent && \
->  				__sync_bool_compare_and_swap(teardown, false, true)) \
-> -			fixture_name##_teardown(_metadata, &self, variant->data); \
-> +			fixture_name##_teardown(_metadata, self, variant->data); \
->  		munmap(teardown, sizeof(*teardown)); \
-> +		if (self && fixture_name##_teardown_parent) \
-> +			munmap(self, sizeof(*self)); \
->  		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
->  			/* Forward signal to __wait_for_test(). */ \
->  			kill(getpid(), WTERMSIG(status)); \
->  		__test_check_assert(_metadata); \
->  	} \
-> -	static struct __test_metadata \
-> -		      _##fixture_name##_##test_name##_object = { \
-> -		.name = #test_name, \
-> -		.fn = &wrapper_##fixture_name##_##test_name, \
-> -		.fixture = &_##fixture_name##_fixture_object, \
-> -		.termsig = signal, \
-> -		.timeout = tmout, \
-> -		.teardown_parent = false, \
-> -	 }; \
->  	static void __attribute__((constructor)) \
->  			_register_##fixture_name##_##test_name(void) \
->  	{ \
-> -		__register_test(&_##fixture_name##_##test_name##_object); \
-> +		struct __test_metadata *object = mmap(NULL, sizeof(*object), \
-> +			PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
-> +		object->name = #test_name; \
-> +		object->fn = &wrapper_##fixture_name##_##test_name; \
-> +		object->fixture = &_##fixture_name##_fixture_object; \
-> +		object->termsig = signal; \
-> +		object->timeout = tmout; \
-> +		__register_test(object); \
->  	} \
->  	static void fixture_name##_##test_name( \
->  		struct __test_metadata __attribute__((unused)) *_metadata, \
-> @@ -898,7 +933,6 @@ struct __test_metadata {
->  	bool timed_out;	/* did this test timeout instead of exiting? */
->  	bool aborted;	/* stopped test due to failed ASSERT */
->  	bool setup_completed; /* did setup finish? */
-> -	bool teardown_parent; /* run teardown in a parent process */
->  	jmp_buf env;	/* for exiting out of test early */
->  	struct __test_results *results;
->  	struct __test_metadata *prev, *next;
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 46b9effd53e4..27744524df51 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -9,6 +9,7 @@
->  
->  #define _GNU_SOURCE
->  #include <fcntl.h>
-> +#include <libgen.h>
->  #include <linux/landlock.h>
->  #include <linux/magic.h>
->  #include <sched.h>
-> @@ -285,8 +286,6 @@ static void prepare_layout_opt(struct __test_metadata *const _metadata,
->  
->  static void prepare_layout(struct __test_metadata *const _metadata)
->  {
-> -	_metadata->teardown_parent = true;
-> -
->  	prepare_layout_opt(_metadata, &mnt_tmp);
->  }
->  
-> @@ -315,7 +314,7 @@ FIXTURE_SETUP(layout0)
->  	prepare_layout(_metadata);
->  }
->  
-> -FIXTURE_TEARDOWN(layout0)
-> +FIXTURE_TEARDOWN_PARENT(layout0)
->  {
->  	cleanup_layout(_metadata);
->  }
-> @@ -378,7 +377,7 @@ FIXTURE_SETUP(layout1)
->  	create_layout1(_metadata);
->  }
->  
-> -FIXTURE_TEARDOWN(layout1)
-> +FIXTURE_TEARDOWN_PARENT(layout1)
->  {
->  	remove_layout1(_metadata);
->  
-> @@ -3691,7 +3690,7 @@ FIXTURE_SETUP(ftruncate)
->  	create_file(_metadata, file1_s1d1);
->  }
->  
-> -FIXTURE_TEARDOWN(ftruncate)
-> +FIXTURE_TEARDOWN_PARENT(ftruncate)
->  {
->  	EXPECT_EQ(0, remove_path(file1_s1d1));
->  	cleanup_layout(_metadata);
-> @@ -3869,7 +3868,7 @@ FIXTURE_SETUP(layout1_bind)
->  	clear_cap(_metadata, CAP_SYS_ADMIN);
->  }
->  
-> -FIXTURE_TEARDOWN(layout1_bind)
-> +FIXTURE_TEARDOWN_PARENT(layout1_bind)
->  {
->  	/* umount(dir_s2d2)) is handled by namespace lifetime. */
->  
-> @@ -4274,7 +4273,7 @@ FIXTURE_SETUP(layout2_overlay)
->  	clear_cap(_metadata, CAP_SYS_ADMIN);
->  }
->  
-> -FIXTURE_TEARDOWN(layout2_overlay)
-> +FIXTURE_TEARDOWN_PARENT(layout2_overlay)
->  {
->  	if (self->skip_test)
->  		SKIP(return, "overlayfs is not supported (teardown)");
-> @@ -4624,7 +4623,6 @@ FIXTURE(layout3_fs)
->  {
->  	bool has_created_dir;
->  	bool has_created_file;
-> -	char *dir_path;
->  	bool skip_test;
->  };
->  
-> @@ -4683,11 +4681,24 @@ FIXTURE_VARIANT_ADD(layout3_fs, hostfs) {
->  	.cwd_fs_magic = HOSTFS_SUPER_MAGIC,
->  };
->  
-> +static char *dirname_alloc(const char *path)
-> +{
-> +	char *dup;
-> +
-> +	if (!path)
-> +		return NULL;
-> +
-> +	dup = strdup(path);
-> +	if (!dup)
-> +		return NULL;
-> +
-> +	return dirname(dup);
-> +}
-> +
->  FIXTURE_SETUP(layout3_fs)
->  {
->  	struct stat statbuf;
-> -	const char *slash;
-> -	size_t dir_len;
-> +	char *dir_path = dirname_alloc(variant->file_path);
->  
->  	if (!supports_filesystem(variant->mnt.type) ||
->  	    !cwd_matches_fs(variant->cwd_fs_magic)) {
-> @@ -4695,27 +4706,15 @@ FIXTURE_SETUP(layout3_fs)
->  		SKIP(return, "this filesystem is not supported (setup)");
->  	}
->  
-> -	_metadata->teardown_parent = true;
-> -
-> -	slash = strrchr(variant->file_path, '/');
-> -	ASSERT_NE(slash, NULL);
-> -	dir_len = (size_t)slash - (size_t)variant->file_path;
-> -	ASSERT_LT(0, dir_len);
-> -	self->dir_path = malloc(dir_len + 1);
-> -	self->dir_path[dir_len] = '\0';
-> -	strncpy(self->dir_path, variant->file_path, dir_len);
-> -
->  	prepare_layout_opt(_metadata, &variant->mnt);
->  
->  	/* Creates directory when required. */
-> -	if (stat(self->dir_path, &statbuf)) {
-> +	if (stat(dir_path, &statbuf)) {
->  		set_cap(_metadata, CAP_DAC_OVERRIDE);
-> -		EXPECT_EQ(0, mkdir(self->dir_path, 0700))
-> +		EXPECT_EQ(0, mkdir(dir_path, 0700))
->  		{
->  			TH_LOG("Failed to create directory \"%s\": %s",
-> -			       self->dir_path, strerror(errno));
-> -			free(self->dir_path);
-> -			self->dir_path = NULL;
-> +			       dir_path, strerror(errno));
->  		}
->  		self->has_created_dir = true;
->  		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-> @@ -4736,9 +4735,11 @@ FIXTURE_SETUP(layout3_fs)
->  		self->has_created_file = true;
->  		clear_cap(_metadata, CAP_DAC_OVERRIDE);
->  	}
-> +
-> +	free(dir_path);
->  }
->  
-> -FIXTURE_TEARDOWN(layout3_fs)
-> +FIXTURE_TEARDOWN_PARENT(layout3_fs)
->  {
->  	if (self->skip_test)
->  		SKIP(return, "this filesystem is not supported (teardown)");
-> @@ -4754,16 +4755,17 @@ FIXTURE_TEARDOWN(layout3_fs)
->  	}
->  
->  	if (self->has_created_dir) {
-> +		char *dir_path = dirname_alloc(variant->file_path);
-> +
->  		set_cap(_metadata, CAP_DAC_OVERRIDE);
->  		/*
->  		 * Don't check for error because the directory might already
->  		 * have been removed (cf. release_inode test).
->  		 */
-> -		rmdir(self->dir_path);
-> +		rmdir(dir_path);
->  		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-> +		free(dir_path);
->  	}
-> -	free(self->dir_path);
-> -	self->dir_path = NULL;
->  
->  	cleanup_layout(_metadata);
->  }
-> @@ -4830,7 +4832,10 @@ TEST_F_FORK(layout3_fs, tag_inode_dir_mnt)
->  
->  TEST_F_FORK(layout3_fs, tag_inode_dir_child)
->  {
-> -	layer3_fs_tag_inode(_metadata, self, variant, self->dir_path);
-> +	char *dir_path = dirname_alloc(variant->file_path);
-> +
-> +	layer3_fs_tag_inode(_metadata, self, variant, dir_path);
-> +	free(dir_path);
->  }
->  
->  TEST_F_FORK(layout3_fs, tag_inode_file)
-> @@ -4857,9 +4862,13 @@ TEST_F_FORK(layout3_fs, release_inodes)
->  	if (self->has_created_file)
->  		EXPECT_EQ(0, remove_path(variant->file_path));
->  
-> -	if (self->has_created_dir)
-> +	if (self->has_created_dir) {
-> +		char *dir_path = dirname_alloc(variant->file_path);
-> +
->  		/* Don't check for error because of cgroup specificities. */
-> -		remove_path(self->dir_path);
-> +		remove_path(dir_path);
-> +		free(dir_path);
-> +	}
->  
->  	ruleset_fd =
->  		create_ruleset(_metadata, LANDLOCK_ACCESS_FS_READ_DIR, layer1);
-> diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> index 6e2f2cd400ca..47746b0c6acd 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> @@ -158,7 +158,7 @@ FIXTURE_SETUP(current_nsset)
->  	/* Create task that exits right away. */
->  	self->child_pid_exited = create_child(&self->child_pidfd_exited,
->  					      CLONE_NEWUSER | CLONE_NEWNET);
-> -	EXPECT_GT(self->child_pid_exited, 0);
-> +	EXPECT_GE(self->child_pid_exited, 0);
->  
->  	if (self->child_pid_exited == 0)
->  		_exit(EXIT_SUCCESS);
-> -- 
-> 2.44.0
+> >  		if (alt->patch_id >= ERRATA_THEAD_NUMBER)
+> 
+> This number is 2, how does the patching actually work for vendor stuff
+> when the base is always greater than 2?
 > 
 
--- 
-Kees Cook
+Patching is handled through the patcher at the end of cpufeature.c. The
+vendor_id field is set in the alternatives for errata and now also for
+vendor extensions. The vendor extension patching is all handled
+generically.
+
+This is distinguished by the patch_id being greater than
+RISCV_VENDOR_EXT_ALTERNATIVES_BASE, which should leave way more than
+enough room for errata ids. Since the code already checks if the
+patch_id is greater than the errata number, I can drop the
+"if (alt->patch_id >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE)" check.
+
+> >  			continue;
+> >  
+> > diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+> > index db6a6d7d6b2e..83e1143db9ad 100644
+> > --- a/arch/riscv/include/asm/cpufeature.h
+> > +++ b/arch/riscv/include/asm/cpufeature.h
+> > @@ -103,22 +103,13 @@ bool __riscv_isa_extension_available(const unsigned long *isa_bitmap, unsigned i
+> >  	__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_##ext)
+> >  
+> >  static __always_inline bool
+> > -riscv_has_extension_likely(const unsigned long ext)
+> > +__riscv_has_extension_likely_alternatives(const unsigned long vendor, const unsigned long ext)
+> >  {
+> > -	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > -			   "ext must be < RISCV_ISA_EXT_MAX");
+> > -
+> > -	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > -		asm goto(
+> > -		ALTERNATIVE("j	%l[l_no]", "nop", 0, %[ext], 1)
+> > -		:
+> > -		: [ext] "i" (ext)
+> > -		:
+> > -		: l_no);
+> > -	} else {
+> > -		if (!__riscv_isa_extension_available(NULL, ext))
+> > -			goto l_no;
+> > -	}
+> > +	asm goto(ALTERNATIVE("j	%l[l_no]", "nop", %[vendor], %[ext], 1)
+> > +	:
+> > +	: [vendor] "i" (vendor), [ext] "i" (ext)
+> > +	:
+> > +	: l_no);
+> >  
+> >  	return true;
+> >  l_no:
+> > @@ -126,42 +117,65 @@ riscv_has_extension_likely(const unsigned long ext)
+> >  }
+> >  
+> >  static __always_inline bool
+> > -riscv_has_extension_unlikely(const unsigned long ext)
+> > +__riscv_has_extension_unlikely_alternatives(const unsigned long vendor, const unsigned long ext)
+> 
+> ngl, I think you could drop the _alternatives from these - the
+> likely/unlikely is only actually a thing because of the alternatives in
+> the first place & just retain the __ as a differentiator. That'd help
+> you with some of the long-line wrangling you've been doing below.
+> 
+
+Sounds good.
+
+> >  {
+> > -	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > -			   "ext must be < RISCV_ISA_EXT_MAX");
+> > -
+> > -	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > -		asm goto(
+> > -		ALTERNATIVE("nop", "j	%l[l_yes]", 0, %[ext], 1)
+> > -		:
+> > -		: [ext] "i" (ext)
+> > -		:
+> > -		: l_yes);
+> > -	} else {
+> > -		if (__riscv_isa_extension_available(NULL, ext))
+> > -			goto l_yes;
+> > -	}
+> > +	asm goto(ALTERNATIVE("nop", "j	%l[l_yes]", %[vendor], %[ext], 1)
+> > +	:
+> > +	: [vendor] "i" (vendor), [ext] "i" (ext)
+> > +	:
+> > +	: l_yes);
+> >  
+> >  	return false;
+> >  l_yes:
+> >  	return true;
+> >  }
+> >  
+> > +static __always_inline bool
+> > +riscv_has_extension_likely(const unsigned long ext)
+> 
+> Can you format this so that its on one line & wrap the arguments if
+> needs be?
+> 
+> > +{
+> > +	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > +			   "ext must be < RISCV_ISA_EXT_MAX");
+> > +
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE))
+> > +		return __riscv_has_extension_likely_alternatives(0, ext);
+> > +	else
+> 
+> I'm almost certain I said this before, but none of the else branches are
+> needed here, there's a return in the if branch, so the remainder of the
+> function becomes unconditionally executed.
+
+Will fix.
+
+> 
+> > +		return __riscv_isa_extension_available(NULL, ext);
+> > +}
+> > +
+> > +static __always_inline bool
+> > +riscv_has_extension_unlikely(const unsigned long ext)
+> > +{
+> > +	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > +			   "ext must be < RISCV_ISA_EXT_MAX");
+> > +
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE))
+> > +		return __riscv_has_extension_unlikely_alternatives(0, ext);
+> > +	else
+> > +		return __riscv_isa_extension_available(NULL, ext);
+> > +}
+> > +
+> >  static __always_inline bool riscv_cpu_has_extension_likely(int cpu, const unsigned long ext)
+> >  {
+> > -	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) && riscv_has_extension_likely(ext))
+> > -		return true;
+> > +	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > +			   "ext must be < RISCV_ISA_EXT_MAX");
+> >  
+> > -	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) &&
+> > +	    __riscv_has_extension_likely_alternatives(0, ext))
+> 
+> 0 is meaningless, please make this more understandable using a define of
+> some sort.
+
+I'll add a define.
+
+> 
+> > +		return true;
+> > +	else
+> > +		return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+> >  }
+> >  
+> >  static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsigned long ext)
+> >  {
+> > -	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) && riscv_has_extension_unlikely(ext))
+> > -		return true;
+> > +	compiletime_assert(ext < RISCV_ISA_EXT_MAX,
+> > +			   "ext must be < RISCV_ISA_EXT_MAX");
+> >  
+> > -	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) &&
+> > +	    __riscv_has_extension_unlikely_alternatives(0, ext))
+> > +		return true;
+> > +	else
+> > +		return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+> >  }
+> >  
+> >  #endif
+> > diff --git a/arch/riscv/include/asm/vendor_extensions.h b/arch/riscv/include/asm/vendor_extensions.h
+> > index 0af1ddd0af70..3e676a96016e 100644
+> > --- a/arch/riscv/include/asm/vendor_extensions.h
+> > +++ b/arch/riscv/include/asm/vendor_extensions.h
+> > @@ -23,4 +23,60 @@ extern const struct riscv_isa_vendor_ext_data_list *riscv_isa_vendor_ext_list[];
+> >  
+> >  extern const size_t riscv_isa_vendor_ext_list_size;
+> >  
+> > +/*
+> > + * The alternatives need some way of distinguishing between vendor extensions
+> > + * and errata. Incrementing all of the vendor extension keys so they are at
+> > + * least 0x8000 accomplishes that.
+> > + */
+> > +#define RISCV_VENDOR_EXT_ALTERNATIVES_BASE	0x8000
+> > +
+> > +bool __riscv_isa_vendor_extension_available(int cpu, unsigned long vendor, unsigned int bit);
+> > +#define riscv_cpu_isa_vendor_extension_available(cpu, vendor, ext)	\
+> > +	__riscv_isa_vendor_extension_available(cpu, vendor, RISCV_ISA_VENDOR_EXT_##ext)
+> > +#define riscv_isa_vendor_extension_available(vendor, ext)	\
+> > +	__riscv_isa_vendor_extension_available(-1, vendor, RISCV_ISA_VENDOR_EXT_##ext)
+> > +
+> > +static __always_inline bool
+> > +riscv_has_vendor_extension_likely(const unsigned long vendor, const unsigned long ext)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE))
+> > +		return __riscv_has_extension_likely_alternatives(vendor,
+> > +								 ext + RISCV_VENDOR_EXT_ALTERNATIVES_BASE);
+> > +	else
+> > +		return __riscv_isa_vendor_extension_available(-1, vendor, ext);
+> > +}
+> > +
+> > +static __always_inline bool
+> > +riscv_has_vendor_extension_unlikely(const unsigned long vendor, const unsigned long ext)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE))
+> > +		return __riscv_has_extension_unlikely_alternatives(vendor,
+> > +								   ext + RISCV_VENDOR_EXT_ALTERNATIVES_BASE);
+> > +	else
+> > +		return __riscv_isa_vendor_extension_available(-1, vendor, ext);
+> > +}
+> > +
+> > +static __always_inline bool riscv_cpu_has_vendor_extension_likely(const unsigned long vendor,
+> > +								  int cpu, const unsigned long ext)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) &&
+> > +	    __riscv_has_extension_likely_alternatives(vendor,
+> > +						      ext + RISCV_VENDOR_EXT_ALTERNATIVES_BASE))
+> > +		return true;
+> > +	else
+> > +		return __riscv_isa_vendor_extension_available(cpu, vendor, ext);
+> > +}
+> > +
+> > +static __always_inline bool riscv_cpu_has_vendor_extension_unlikely(const unsigned long vendor,
+> > +								    int cpu,
+> > +								    const unsigned long ext)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE) &&
+> > +	    __riscv_has_extension_unlikely_alternatives(vendor,
+> > +							ext + RISCV_VENDOR_EXT_ALTERNATIVES_BASE))
+> > +		return true;
+> > +	else
+> > +		return __riscv_isa_vendor_extension_available(cpu, vendor, ext);
+> > +}
+> > +
+> >  #endif /* _ASM_VENDOR_EXTENSIONS_H */
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index c9f36822e337..17371887abcc 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -833,25 +833,29 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+> >  {
+> >  	struct alt_entry *alt;
+> >  	void *oldptr, *altptr;
+> > -	u16 id, value;
+> > +	u16 id, value, vendor;
+> >  
+> >  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> >  		return;
+> >  
+> >  	for (alt = begin; alt < end; alt++) {
+> > -		if (alt->vendor_id != 0)
+> > -			continue;
+> > -
+> >  		id = PATCH_ID_CPUFEATURE_ID(alt->patch_id);
+> > +		vendor = PATCH_ID_CPUFEATURE_ID(alt->vendor_id);
+> >  
+> > -		if (id >= RISCV_ISA_EXT_MAX) {
+> > +		if (id < RISCV_ISA_EXT_MAX) {
+> 
+> I think any reliance on the standard ext max requires a comment
+> explaining what the interaction is between it and the vendor stuff.
+>
+
+I'll add a comment describing that anything with an id below
+RISCV_ISA_EXT_MAX is interpreted as a standard extension and anything
+with an id above RISCV_VENDOR_EXT_ALTERNATIVES_BASE will be interpreted
+as a vendor extension.
+
+> > +			if (alt->vendor_id != 0)
+> > +				continue;
+> 
+> If this happens, it's a bug, should we be continuing silently?
+> 
+
+This indicates that the patch should be treated as errata and that's why
+it silently continues. I can add a comment that says that.
+
+- Charlie
+
+> Cheers,
+> Conor.
+> 
+> > +
+> > +			if (!__riscv_isa_extension_available(NULL, id))
+> > +				continue;
+> > +		} else if (id >= RISCV_VENDOR_EXT_ALTERNATIVES_BASE) {
+> > +			if (!__riscv_isa_vendor_extension_available(-1, vendor, id))
+> > +				continue;
+> > +		} else {
+> >  			WARN(1, "This extension id:%d is not in ISA extension list", id);
+> >  			continue;
+> >  		}
+> >  
+> > -		if (!__riscv_isa_extension_available(NULL, id))
+> > -			continue;
+> > -
+> >  		value = PATCH_ID_CPUFEATURE_VALUE(alt->patch_id);
+> >  		if (!riscv_cpufeature_patch_check(id, value))
+> >  			continue;
+> > diff --git a/arch/riscv/kernel/vendor_extensions.c b/arch/riscv/kernel/vendor_extensions.c
+> > index f76cb3013c2d..eced93eec5a6 100644
+> > --- a/arch/riscv/kernel/vendor_extensions.c
+> > +++ b/arch/riscv/kernel/vendor_extensions.c
+> > @@ -3,6 +3,7 @@
+> >   * Copyright 2024 Rivos, Inc
+> >   */
+> >  
+> > +#include <asm/vendorid_list.h>
+> >  #include <asm/vendor_extensions.h>
+> >  #include <asm/vendor_extensions/thead.h>
+> >  
+> > @@ -16,3 +17,42 @@ const struct riscv_isa_vendor_ext_data_list *riscv_isa_vendor_ext_list[] = {
+> >  };
+> >  
+> >  const size_t riscv_isa_vendor_ext_list_size = ARRAY_SIZE(riscv_isa_vendor_ext_list);
+> > +
+> > +/**
+> > + * __riscv_isa_vendor_extension_available() - Check whether given vendor
+> > + * extension is available or not.
+> > + *
+> > + * @cpu: check if extension is available on this cpu
+> > + * @vendor: vendor that the extension is a member of
+> > + * @bit: bit position of the desired extension
+> > + * Return: true or false
+> > + *
+> > + * NOTE: When cpu is -1, will check if extension is available on all cpus
+> > + */
+> > +bool __riscv_isa_vendor_extension_available(int cpu, unsigned long vendor, unsigned int bit)
+> > +{
+> > +	unsigned long *bmap;
+> > +	struct riscv_isainfo *cpu_bmap;
+> > +	size_t bmap_size;
+> > +
+> > +	switch (vendor) {
+> > +#ifdef CONFIG_RISCV_ISA_VENDOR_EXT_THEAD
+> > +	case THEAD_VENDOR_ID:
+> > +		bmap = riscv_isa_vendor_ext_list_thead.vendor_bitmap;
+> > +		cpu_bmap = riscv_isa_vendor_ext_list_thead.per_hart_vendor_bitmap;
+> > +		bmap_size = riscv_isa_vendor_ext_list_thead.bitmap_size;
+> > +		break;
+> > +#endif
+> > +	default:
+> > +		return false;
+> > +	}
+> > +
+> > +	if (cpu != -1)
+> > +		bmap = cpu_bmap[cpu].isa;
+> > +
+> > +	if (bit >= bmap_size)
+> > +		return false;
+> > +
+> > +	return test_bit(bit, bmap) ? true : false;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__riscv_isa_vendor_extension_available);
+> > 
+> > -- 
+> > 2.44.0
+> > 
+
+
 
