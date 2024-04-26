@@ -1,94 +1,159 @@
-Return-Path: <linux-kselftest+bounces-8909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5957F8B350A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 12:14:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB3BE8B352E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 12:20:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BB681C21A73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 10:14:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 327FD1F23036
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 10:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E24142E93;
-	Fri, 26 Apr 2024 10:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657AA145B12;
+	Fri, 26 Apr 2024 10:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nc9Zjp7K"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uHKWPnK/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9306E14264F
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 10:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF89142625;
+	Fri, 26 Apr 2024 10:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714126434; cv=none; b=klD4YKKi4uf4IIzo/kReJhWIbDWN8LL/tDWuW9yMVb8IJ14qVewMO6toqOv4lKgLg3Hrg0H1THA4ktkNPCXDCrgCcQStvjGcxXlgXBQ6VnnMgqHR2EeeAsiCP9W0b4UAw5OhmTWlEc/y3XYigFO5fEqsa45leBwk3f1V/KOZcVE=
+	t=1714126682; cv=none; b=QwxBDothfmGMEJCICncEYDrL9bLMsZ/pePZ5OqWn+RRKvZ7P08lYd/skt6FL/ZCpg3L3K1WpF+Vy5AOSazOROdl27hRFdVhdSy1xCfmJCrsCPCUR1b7UVNFPKdDexj9Fj0HV0qOUKxFTD2++fXuZn+5HpMIJaLnpVIiRtr5x3lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714126434; c=relaxed/simple;
-	bh=24kJE+8eVc4ogyRndMk8jZL6OfEUwakFZ92WxqX0NX4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s59bvOHzJeJy4qBXNiF+DXgFCpIoTd0BpIM4T0XL8kfFmNxDVSRJZ3bESOvLSy3KNLX8k3q7oZguLrQ1vuYbbpTnvbH5iY0mGXNZiFR+sPgGmr3cNwE9TMjPRjEdJ6aw+9k8dWVCdgEgN1h8ti3y97AKdvL3fudEH/72cmpxhy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nc9Zjp7K; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-439b1c72676so317121cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 03:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714126432; x=1714731232; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/LwG0GvPr9JWPbmW+g/6YHRZg+/MP5hxVTSkmO9J3A=;
-        b=nc9Zjp7KEi7GifK5+kHhBitePNyV57j3EF376yI7+L1kSzLORc7SqsJtWfLJm0/9p4
-         710HrGm+SsjrBqmr9KBiDL+pSJyerwp4v5rTSW5meWDdgv6kABoFFOfYWccQahrz67Tb
-         ZN5xb4M2knfSGnFyX/QY7C++mS6F2PCXctYzK0q7Ffx9LJ9tEHicbZ9cT4zHfBAzLl8/
-         LxG0ualS0gqM6n1GtPZQN7IVtw/yIzNMzmeHTvRx6MhYE0j6W3txybUOYDO5amzMEeA3
-         Q3+hbR9De/eZ2utXaPGDTINvSNmPFLyecOOPS1KL2Ctub76ckHXHD0HNi0qILF5INxKV
-         nb+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714126432; x=1714731232;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J/LwG0GvPr9JWPbmW+g/6YHRZg+/MP5hxVTSkmO9J3A=;
-        b=lBEsczLxu+hwVfj+YQLI2AgOs+GxldlpPcLEPE3ettW7dk9MpesQWFbE3eTi+2+2eT
-         c8/YcZ/YhziEzfiXkXpcf50IhOnTnkaGvcNOLccXKjbZoy+IoWRo2s8628/k1lwVDC0V
-         54lD8dcWHbExODYWUKWd9aaJv0xfxUUbTOjFrM2vE0koHB8s/cTk4oEOxRJDuefBl2vV
-         0ikdkbDzn3q2Aat8s3AX6e9atpdcFU/CGfad1Nul9U1iS0RMsvgrA2JIhzWJpodpm2Nl
-         qR1sVZvOrLjmG8xkmecvSY979tRJCkYCp192o30Tr9u6Fb+YsEINbxEj/x6bdC5QMk86
-         0P1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVQiWSTGAA5RG6TrrGknepsQyKE3LjSuPnLFk6VDJQUS4R7ljHZ8w8osr94LEfm8ej+o40OQqb4KXqiQF6q+k5P8WLNq2CKGkBITf/tEKNc
-X-Gm-Message-State: AOJu0YxmUpFgj7q1DxvqwTaypxeBXABGQgF3rXzj3749do1gxoyuhFrd
-	S8lbWm0/i/IGvD3I+cQOeWLLdrvx+Fx19b4SbJHiTzQ0gb30vRyMJfPd22nWa8L/pg3BQOfybfc
-	0Sz9+B2ljZPCk/Dbv5p4KR8jq1vpi2Sa7s2Qs
-X-Google-Smtp-Source: AGHT+IHi71L9eDaKtkraqMxL4gEt3ivysSLcXt8Ec3WGJM26HKGhUUS6XNYPVxaBjwiR90EFu0IelSE7k4TA7wxOP9M=
-X-Received: by 2002:ac8:5809:0:b0:437:8ba1:ee1 with SMTP id
- g9-20020ac85809000000b004378ba10ee1mr225334qtg.5.1714126432301; Fri, 26 Apr
- 2024 03:13:52 -0700 (PDT)
+	s=arc-20240116; t=1714126682; c=relaxed/simple;
+	bh=SuhIwCajet75pBQ8i3LxLuVtlkqvgvktzAYz1G96tqk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NnbBp4MQk22LAJOmxws/aIocO1fTWFkw7g43lmHqGmBjEWGPJ3W99YMjZDIFAoVHF0JRvP6KjheQI13wLNhBWig8lkoFRgU1g7ifIdbwqYIkzg/zqnIeTdhl4T8oZVy0equPGRz0GbK/yF4DJIzhls1A0FSAdr7y4lEg3LXLpYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uHKWPnK/; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1714126679;
+	bh=SuhIwCajet75pBQ8i3LxLuVtlkqvgvktzAYz1G96tqk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uHKWPnK/aXQOOIlE5fceeGsq+yhHf5pwIEWcwyHiqc1UrPvf08mMn1gVFgARoDHMy
+	 5mU+rLw8++8MwKxyQtW1GoohvIUGJeD9Lq3jEUsvhmmenVFNlncVm3s+6Fdl1HLZq8
+	 8J6Odz5GrRDQ2xIKEuNP4ZaCYqwzKcJIQ0VH9W+bBhB5kGa2sEzjG7HRe4iy0F8/X9
+	 VVdE3DmpqrDvgjt3MV/NBlk2EQBl4WTHcKKICbh/9McFHjE2kuTDr2w2l0nRT5IIeo
+	 FY0oVXeL66EQ6nJya5lJb3PJWAIi2l5cQ3WxQYytjuD+Ir/q7Gp9d8+xubjzNQLr3g
+	 c3XOE9oEwccoQ==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2C5343782156;
+	Fri, 26 Apr 2024 10:17:54 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: "Chang S . Bae" <chang.seok.bae@intel.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests: x86: conform test to TAP format output
+Date: Fri, 26 Apr 2024 15:18:22 +0500
+Message-Id: <20240426101824.2894574-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415-kvm-selftests-no-sudo-v1-1-95153ad5f470@google.com> <Ziri424B_R9GXA9Q@google.com>
-In-Reply-To: <Ziri424B_R9GXA9Q@google.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Fri, 26 Apr 2024 12:13:38 +0200
-Message-ID: <CA+i-1C1SoXugro50OO3BJx17Ea4VtmGNZ29YcatHVAQ3YO+sKA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Avoid assuming "sudo" exists
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 26 Apr 2024 at 01:10, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Apr 15, 2024, Brendan Jackman wrote:
-[...]
-> > +     function maybe_sudo () {
->
-> Any objection to do_sudo instead of maybe_sudo?  I can fixup when applying if
-> that works for you.
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
 
-Sounds good to me :)
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v1:
+- No changes, sending it again as got no response on v1 even after weeks
+---
+ tools/testing/selftests/x86/vdso_restorer.c | 29 +++++++++------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
+index fe99f24341554..f621167424a9c 100644
+--- a/tools/testing/selftests/x86/vdso_restorer.c
++++ b/tools/testing/selftests/x86/vdso_restorer.c
+@@ -21,6 +21,7 @@
+ #include <unistd.h>
+ #include <syscall.h>
+ #include <sys/syscall.h>
++#include "../kselftest.h"
+ 
+ /* Open-code this -- the headers are too messy to easily use them. */
+ struct real_sigaction {
+@@ -44,17 +45,19 @@ static void handler_without_siginfo(int sig)
+ 
+ int main()
+ {
+-	int nerrs = 0;
+ 	struct real_sigaction sa;
+ 
++	ksft_print_header();
++	ksft_set_plan(2);
++
+ 	void *vdso = dlopen("linux-vdso.so.1",
+ 			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+ 	if (!vdso)
+ 		vdso = dlopen("linux-gate.so.1",
+ 			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+ 	if (!vdso) {
+-		printf("[SKIP]\tFailed to find vDSO.  Tests are not expected to work.\n");
+-		return 0;
++		ksft_print_msg("[SKIP]\tFailed to find vDSO. Tests are not expected to work.\n");
++		return KSFT_SKIP;
+ 	}
+ 
+ 	memset(&sa, 0, sizeof(sa));
+@@ -62,21 +65,16 @@ int main()
+ 	sa.flags = SA_SIGINFO;
+ 	sa.restorer = NULL;	/* request kernel-provided restorer */
+ 
+-	printf("[RUN]\tRaise a signal, SA_SIGINFO, sa.restorer == NULL\n");
++	ksft_print_msg("Raise a signal, SA_SIGINFO, sa.restorer == NULL\n");
+ 
+ 	if (syscall(SYS_rt_sigaction, SIGUSR1, &sa, NULL, 8) != 0)
+ 		err(1, "raw rt_sigaction syscall");
+ 
+ 	raise(SIGUSR1);
+ 
+-	if (handler_called) {
+-		printf("[OK]\tSA_SIGINFO handler returned successfully\n");
+-	} else {
+-		printf("[FAIL]\tSA_SIGINFO handler was not called\n");
+-		nerrs++;
+-	}
++	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
+ 
+-	printf("[RUN]\tRaise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
++	ksft_print_msg("Raise a signal, !SA_SIGINFO, sa.restorer == NULL\n");
+ 
+ 	sa.flags = 0;
+ 	sa.handler = handler_without_siginfo;
+@@ -86,10 +84,7 @@ int main()
+ 
+ 	raise(SIGUSR1);
+ 
+-	if (handler_called) {
+-		printf("[OK]\t!SA_SIGINFO handler returned successfully\n");
+-	} else {
+-		printf("[FAIL]\t!SA_SIGINFO handler was not called\n");
+-		nerrs++;
+-	}
++	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
++
++	ksft_finished();
+ }
+-- 
+2.39.2
+
 
