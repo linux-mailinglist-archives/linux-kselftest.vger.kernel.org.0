@@ -1,157 +1,280 @@
-Return-Path: <linux-kselftest+bounces-8916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AA88B367E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 13:27:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C494D8B36B0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 13:46:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2814B207AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 11:27:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ABC2281777
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 11:46:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958CC145321;
-	Fri, 26 Apr 2024 11:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54990145B33;
+	Fri, 26 Apr 2024 11:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gQDdbq2i"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gtcr5+CY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121053A1B7
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 11:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86231145341
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 11:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714130821; cv=none; b=tLXga9RUx3HVeckd0DwvBez25ykwy3JP50JYBhQarA0RHxs6KNdzEL8tSABAP9jsmGqMzjAY41hGxIvbtIhMxAhaQdthasFkudAKuyIAvwyM3mNpbcz2ktgt1jIYO3ruH72RscHRFKp/6ohMHnGfgTwq9kEN6zqzhIwnRp+V4Mg=
+	t=1714131966; cv=none; b=d39LIfDZPXdToJxMYgpm+QSfh2IPvn0TocklYydnAqIFGy2hf9bz18Sr195qWeiQ1rY0MmuxSQFYX4hB3nGExsLUQiPFJOpzvAIBLOGyCL1heNaFplCv8dg1JyD/mb4dmkTPQJ9UU5h04vj2/sN1ja9gcdjWCEN1CYxFF+F1N0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714130821; c=relaxed/simple;
-	bh=lJH1vAUzuD2xAYeKTWYUa/NPnYuLuV53+qYSGVI77ow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X/jt82gI037HgyNe4Hz7NCkkQmEl7tEWA3hIgr8WAYkpGEwF9wzM1ge3QwSKcICiT0Gsi5JGHFXRk5VrCBvIDtBOKJoq7dFYn5VoJtSrMvs4y6bnECB25KXnnTfEiU/6ME7EXvp2BVNK4+PRGLOHtdRlgLf6ngQvPH8siqoFPX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gQDdbq2i; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1714131966; c=relaxed/simple;
+	bh=BRhNhRa5nUoyvEtCWgA0o5hBNXQs9lcW5HCVxK11thE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eiet/h5lb/U0Qfa/V6dokII2VxVor6mYvEPys9W4XhpS2BTDKO7OuqKRZLNjPUvESVJsL7LFsVlat4Ia9xy4MAC9ubAhpqML9HTNPn/zBM/ore3gkqyMghIYoMtFAKqo77/3MM85J7t+3WSinlNSXPrxwBzhMHR4lLgdggCDGDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gtcr5+CY; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714130819;
+	s=mimecast20190719; t=1714131963;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=JRBls/m74qSZorjaqM9e4x5+tWNgtnFayg/PS7KECKA=;
-	b=gQDdbq2ibZQbtSgjhqLXfnsuwkTEJn4anlMQXBjQnuPyVYxln3OQ+XSMZgnEa1KC1ez9x9
-	mGsqU86Ua2SH5NMMrzs5mhS6aLfgpjEwjRhDwutqLC2te44myMEvmZOJ0mwGgdvrag1xuM
-	OUJyiI7QfsEwfqFA1DLhvOYDBNOW1lI=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4RdPwyA7wfNaOIr7UmLDrra9JAYl3veQ/lffaIDIODI=;
+	b=Gtcr5+CYn+4WF0hQ/LPxrI1+6Q3ceUn0V6umwMGfaVfOhadfe+j9mk6GX8di4OYTngZZcm
+	AW9szO2RdikKmQ1tGLlSqVZ7O+WW2xm6AugLfy3nPBPr754mbZ2jxLoN4M+u7quWSP7DvA
+	2QjgX/NBVnRguI+lJthL5XAzPlhd6sQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-522-K9BwUYinNoWawFNFEYfPgw-1; Fri, 26 Apr 2024 07:26:57 -0400
-X-MC-Unique: K9BwUYinNoWawFNFEYfPgw-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a57bf8ae2fcso126599366b.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 04:26:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714130816; x=1714735616;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JRBls/m74qSZorjaqM9e4x5+tWNgtnFayg/PS7KECKA=;
-        b=ixCbzIhnmDgl8Z+IPbpbmqpu4OIzrR4WhlyezcgEs4x4cDIMNLBeDE2ncgEuwYLcZN
-         mICXVNXgxlSxFC1pJUlcP9FrNcTBx0ewipNIiJfLSSwv76dE31m5UmlQfP3Rh3zGvS1k
-         QHGaOCYVYFL7P/unStZ2kj0cp45AWyzd1LCF3Hb8DAaJm2t3OHjxtrzmZA4mY75hXX1F
-         6HhTt/kB0N72T6UY3jTLSFpAkUnfGeKiRAmHdMJnKdhNHWlIrd3W7IJ/lfWjvVT9mom5
-         AwqJioNvG4QFa0q6A3cjm5MkzWl/kYG3ofb6cBK1/cBCYC1K/NKWfvjST2F92hcxp5sM
-         EZRw==
-X-Gm-Message-State: AOJu0YxrREocVTsQzJnL8xq8HYmw/hfMUMhbipneH1hqI0sq/c1pcVRe
-	vxGNMvF2aZhU5Y6uBrmLLvYzCGNl4G/Wd8SR8HgbF+qu+zVDDgT9kPg4xM3msZ2PV4X9rOckEo6
-	szu0YmvZ2ykPEiOzOxiHkQe8Gg88G/Hsi6pQ59L7Jo0Jt36KEgCIVxQMmTJ4QMNX7xg==
-X-Received: by 2002:a17:906:2543:b0:a55:be99:60d5 with SMTP id j3-20020a170906254300b00a55be9960d5mr1777778ejb.23.1714130816389;
-        Fri, 26 Apr 2024 04:26:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFTmS2RNHwSZo0ZMPFetXxqXDSHWpcVU3RNwabCfGGCM1vM9kw57Jrbn4SH8q65/QjO73PKTg==
-X-Received: by 2002:a17:906:2543:b0:a55:be99:60d5 with SMTP id j3-20020a170906254300b00a55be9960d5mr1777757ejb.23.1714130815956;
-        Fri, 26 Apr 2024 04:26:55 -0700 (PDT)
-Received: from [192.168.0.9] (ip-109-43-179-20.web.vodafone.de. [109.43.179.20])
-        by smtp.gmail.com with ESMTPSA id g10-20020a1709067c4a00b00a4e5866448bsm10422001ejp.155.2024.04.26.04.26.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Apr 2024 04:26:55 -0700 (PDT)
-Message-ID: <c1a69fc4-8bce-4aa6-8641-5d651df0fc33@redhat.com>
-Date: Fri, 26 Apr 2024 13:26:54 +0200
+ us-mta-656-xpgkS5RBOImOAAM83bu05w-1; Fri, 26 Apr 2024 07:45:57 -0400
+X-MC-Unique: xpgkS5RBOImOAAM83bu05w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D561005D5C;
+	Fri, 26 Apr 2024 11:45:56 +0000 (UTC)
+Received: from thuth-p1g4.redhat.com (unknown [10.39.192.180])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 39EDE1C060D0;
+	Fri, 26 Apr 2024 11:45:53 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: kvm@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v2] KVM: selftests: Use TAP interface in the set_memory_region test
+Date: Fri, 26 Apr 2024 13:45:52 +0200
+Message-ID: <20240426114552.667346-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] KVM: selftests: Use TAP interface in the
- set_memory_region test
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>, kvm@vger.kernel.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>
-References: <20240426085556.619731-1-thuth@redhat.com>
- <26993de8-0e4f-4d08-9009-730d674b16c7@collabora.com>
-From: Thomas Huth <thuth@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=thuth@redhat.com; keydata=
- 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
-In-Reply-To: <26993de8-0e4f-4d08-9009-730d674b16c7@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-On 26/04/2024 12.07, Muhammad Usama Anjum wrote:
-> On 4/26/24 1:55 PM, Thomas Huth wrote:
->> Use the kselftest_harness.h interface in this test to get TAP
->> output, so that it is easier for the user to see what the test
->> is doing. (Note: We are not using the KVM_ONE_VCPU_TEST_SUITE()
->> macro here since these tests are creating their VMs with the
->> vm_create_barebones() function, not with vm_create_with_one_vcpu())
-> Thank you for the patch. I'm unable to apply the patch on next-20240426.
+Use the kselftest_harness.h interface in this test to get TAP
+output, so that it is easier for the user to see what the test
+is doing. (Note: We are not using the KVM_ONE_VCPU_TEST_SUITE()
+macro here since these tests are creating their VMs with the
+vm_create_barebones() function, not with vm_create_with_one_vcpu())
 
-Ah, I was using the master branch ... it's a context conflict due to 
-https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=dfc083a181bac ... 
-I'll send a v2 rebased to the next branch.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ v2:
+ - Rebase to linux-next branch
+ - Make "loops" variable static
+ - Added Andrew's Reviewed-by
 
-  Thomas
+ .../selftests/kvm/set_memory_region_test.c    | 86 +++++++++----------
+ 1 file changed, 42 insertions(+), 44 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index 68c899d27561..a5c9bee5235a 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -16,6 +16,7 @@
+ #include <test_util.h>
+ #include <kvm_util.h>
+ #include <processor.h>
++#include "kselftest_harness.h"
+ 
+ /*
+  * s390x needs at least 1MB alignment, and the x86_64 MOVE/DELETE tests need a
+@@ -38,6 +39,8 @@ extern const uint64_t final_rip_end;
+ 
+ static sem_t vcpu_ready;
+ 
++static int loops;
++
+ static inline uint64_t guest_spin_on_val(uint64_t spin_val)
+ {
+ 	uint64_t val;
+@@ -219,6 +222,13 @@ static void test_move_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
++TEST(move_in_use_region)
++{
++	ksft_print_msg("Testing MOVE of in-use region, %d loops\n", loops);
++	for (int i = 0; i < loops; i++)
++		test_move_memory_region();
++}
++
+ static void guest_code_delete_memory_region(void)
+ {
+ 	uint64_t val;
+@@ -308,12 +318,19 @@ static void test_delete_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_zero_memory_regions(void)
++TEST(delete_in_use_region)
++{
++	ksft_print_msg("Testing DELETE of in-use region, %d loops\n", loops);
++	for (int i = 0; i < loops; i++)
++		test_delete_memory_region();
++}
++
++TEST(zero_memory_regions)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	pr_info("Testing KVM_RUN with zero added memory regions\n");
++	ksft_print_msg("Testing KVM_RUN with zero added memory regions\n");
+ 
+ 	vm = vm_create_barebones();
+ 	vcpu = __vm_vcpu_add(vm, 0);
+@@ -326,7 +343,7 @@ static void test_zero_memory_regions(void)
+ }
+ #endif /* __x86_64__ */
+ 
+-static void test_invalid_memory_region_flags(void)
++TEST(invalid_memory_region_flags)
+ {
+ 	uint32_t supported_flags = KVM_MEM_LOG_DIRTY_PAGES;
+ 	const uint32_t v2_only_flags = KVM_MEM_GUEST_MEMFD;
+@@ -389,7 +406,7 @@ static void test_invalid_memory_region_flags(void)
+  * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
+  * tentative to add further slots should fail.
+  */
+-static void test_add_max_memory_regions(void)
++TEST(add_max_memory_regions)
+ {
+ 	int ret;
+ 	struct kvm_vm *vm;
+@@ -408,13 +425,13 @@ static void test_add_max_memory_regions(void)
+ 	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
+ 	TEST_ASSERT(max_mem_slots > 0,
+ 		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
+-	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
++	ksft_print_msg("Allowed number of memory slots: %i\n", max_mem_slots);
+ 
+ 	vm = vm_create_barebones();
+ 
+ 	/* Check it can be added memory slots up to the maximum allowed */
+-	pr_info("Adding slots 0..%i, each memory region with %dK size\n",
+-		(max_mem_slots - 1), MEM_REGION_SIZE >> 10);
++	ksft_print_msg("Adding slots 0..%i, each memory region with %dK size\n",
++		       (max_mem_slots - 1), MEM_REGION_SIZE >> 10);
+ 
+ 	mem = mmap(NULL, (size_t)max_mem_slots * MEM_REGION_SIZE + alignment,
+ 		   PROT_READ | PROT_WRITE,
+@@ -455,12 +472,21 @@ static void test_invalid_guest_memfd(struct kvm_vm *vm, int memfd,
+ 	TEST_ASSERT(r == -1 && errno == EINVAL, "%s", msg);
+ }
+ 
+-static void test_add_private_memory_region(void)
++static bool has_cap_guest_memfd(void)
++{
++	return kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&
++	       (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
++}
++
++TEST(add_private_memory_region)
+ {
+ 	struct kvm_vm *vm, *vm2;
+ 	int memfd, i;
+ 
+-	pr_info("Testing ADD of KVM_MEM_GUEST_MEMFD memory regions\n");
++	if (!has_cap_guest_memfd())
++		SKIP(return, "Missing KVM_MEM_GUEST_MEMFD / KVM_X86_SW_PROTECTED_VM");
++
++	ksft_print_msg("Testing ADD of KVM_MEM_GUEST_MEMFD memory regions\n");
+ 
+ 	vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
+ 
+@@ -491,13 +517,16 @@ static void test_add_private_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_add_overlapping_private_memory_regions(void)
++TEST(add_overlapping_private_memory_regions)
+ {
+ 	struct kvm_vm *vm;
+ 	int memfd;
+ 	int r;
+ 
+-	pr_info("Testing ADD of overlapping KVM_MEM_GUEST_MEMFD memory regions\n");
++	if (!has_cap_guest_memfd())
++		SKIP(return, "Missing KVM_MEM_GUEST_MEMFD / KVM_X86_SW_PROTECTED_VM");
++
++	ksft_print_msg("Testing ADD of overlapping KVM_MEM_GUEST_MEMFD memory regions\n");
+ 
+ 	vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
+ 
+@@ -536,46 +565,15 @@ static void test_add_overlapping_private_memory_regions(void)
+ 	close(memfd);
+ 	kvm_vm_free(vm);
+ }
++
+ #endif
+ 
+ int main(int argc, char *argv[])
+ {
+-#ifdef __x86_64__
+-	int i, loops;
+-
+-	/*
+-	 * FIXME: the zero-memslot test fails on aarch64 and s390x because
+-	 * KVM_RUN fails with ENOEXEC or EFAULT.
+-	 */
+-	test_zero_memory_regions();
+-#endif
+-
+-	test_invalid_memory_region_flags();
+-
+-	test_add_max_memory_regions();
+-
+-#ifdef __x86_64__
+-	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&
+-	    (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))) {
+-		test_add_private_memory_region();
+-		test_add_overlapping_private_memory_regions();
+-	} else {
+-		pr_info("Skipping tests for KVM_MEM_GUEST_MEMFD memory regions\n");
+-	}
+-
+ 	if (argc > 1)
+ 		loops = atoi_positive("Number of iterations", argv[1]);
+ 	else
+ 		loops = 10;
+ 
+-	pr_info("Testing MOVE of in-use region, %d loops\n", loops);
+-	for (i = 0; i < loops; i++)
+-		test_move_memory_region();
+-
+-	pr_info("Testing DELETE of in-use region, %d loops\n", loops);
+-	for (i = 0; i < loops; i++)
+-		test_delete_memory_region();
+-#endif
+-
+-	return 0;
++	return test_harness_run(argc, argv);
+ }
+-- 
+2.44.0
 
 
