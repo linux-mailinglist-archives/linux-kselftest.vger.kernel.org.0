@@ -1,236 +1,273 @@
-Return-Path: <linux-kselftest+bounces-8905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97AB08B321D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 10:15:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12D718B3367
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 10:56:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBF111C21625
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 08:15:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EC271F23275
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Apr 2024 08:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9570B13C9AF;
-	Fri, 26 Apr 2024 08:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BD713DDC1;
+	Fri, 26 Apr 2024 08:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8BJ/5Su"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c1eFfe4D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547BE1E885;
-	Fri, 26 Apr 2024 08:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9223813D500
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 08:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714119339; cv=none; b=EOsW5Wcyd07day8nWD/cG5glZU15QOu+gXnqZtu7LSz9c65FKSUyFeqLiu+wcA9xMbQjiUU1Ns9NVkZzoyL8KMuUgwMqc+687AtAexVUhdNW7yKJhpNh6bnJRUx7lMDwA3p5i6BLJ+kXzB1LHXOECM5RV+4UD+B7jC7ymJQcRvE=
+	t=1714121770; cv=none; b=cWY6xP7Qb9Ly67Zm/3S5Lza8ESupVREYJbSLcXEHsA1gpsnwcY4PD9oAaR79wSSrpippvZ2Qouv3rmUOY9qiipL+c/t0M1LILz43tpRrs0XEaKXeqWUsWHu9lyXPNMSzqeKOus51E33uBX2P6ep0alYPIXoBsB+qYkKHNNVk0W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714119339; c=relaxed/simple;
-	bh=1yC+gB+RH39a11ZICGlu8ThPKI65Pnf3tzMu4N3kPwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f6PyBXqNw32aZlJDj2UmiaUo05RYg6YidFN3zOWjFSsMM13zSRNwIqWRX632+CbIWCkV11OamtJ56eAYW86rfAkxG3z+lnOLgw1R267yzSUljHse1PCd4FTrTx/uuV6TjuFZGVkmotvRVcfhlcBYwwfH1TvsaukaI8wRAYjupFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8BJ/5Su; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD633C4AF08;
-	Fri, 26 Apr 2024 08:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714119338;
-	bh=1yC+gB+RH39a11ZICGlu8ThPKI65Pnf3tzMu4N3kPwg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=a8BJ/5SucEzuTdrZqKCG21lvJi6LtydPBKHQyO2DEukgWJy5HlA/UJSlxqazfk/43
-	 U6am5yWh6X1UqC5Q6dcn4wxluaIrZyify2W50hZ2XOf7vEwsvqufhDZcSR2eC9KLXe
-	 959zTu6qscNiUWLet+jJaLJ9b9OFKhs5F9pmGt5OVz8OVPr3j+gfcEQF9uYlJLQeSs
-	 CG7a2XjGU5p8751sD7i0M5uxo993BU3sqOcaVePnrqvXXn7EPKXL+uRUmvUu9kJoE3
-	 M5MpXo+WR/+VyaBwYNvw3/+o7+qQSvjx9hrAAvq4l0/U8Yr+CMjvQtd5/NkC7SpPj8
-	 IbauGQRZVS/PQ==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5725cfa2434so81436a12.2;
-        Fri, 26 Apr 2024 01:15:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV2peKlD0BC4adYUoDwIM3tyMv8l9DagYNfbJA/6yMsbheCAdhxV05rnNG3D47qBGmZDJw//AFqTPe2vsdkf2ogNLM78Hab8VLjV+lkRKOvzWm5BG6QUJRJHTYzqVHiiypCw7rikajLnOxg0aX8rONeTmjC/f0BfOKBc9AVFJwSqKrX4UU7nvcLwF//L7iwJS7mccGTt/WMhcYVDS1pVfLTStg1fg==
-X-Gm-Message-State: AOJu0YwGYQkBGiTU6qJCtNGn1Smb2Xjjwc21Se9MFmSzi0aHfKOPHwDt
-	WiqYt/i02t7CsxWy4nU5NpbK8TYHgN5xhxTYf1k0axBoAjygVVKbvbu8rY3E7VpJGFEnfYC95LM
-	Vpf5BhDCaSMlT0WRPoKGqmG1vYck=
-X-Google-Smtp-Source: AGHT+IFdWL+1rtvTdjZLYM58Wr/hUAPW6s+thTjch0dqfysVmrhP+T23KFGnV1/pBKaELJeFZArRbXJifhaQCJxXF9c=
-X-Received: by 2002:a50:99c7:0:b0:572:3f41:25aa with SMTP id
- n7-20020a5099c7000000b005723f4125aamr1644329edb.11.1714119337224; Fri, 26 Apr
- 2024 01:15:37 -0700 (PDT)
+	s=arc-20240116; t=1714121770; c=relaxed/simple;
+	bh=GlZ1B8v/0cLbLEAY4J2NVInrTG/rSDZ7UA9AoUhONts=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=phAK+62YOjk0TyZrRCMddXH9aArK/fVmGO8mGeP9nWvvRcuMSz2keLhhTZ09awJjV6qe0B9FLSCE2aVyK3DdPS65PXk79KX/nTBlBlodTRxvJE2fJ7H6FbLJWYb40s90QNIkgDUWtY42Q1o/AWlGkxW70Sr0y5JYscX3UVbOD7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c1eFfe4D; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714121767;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n8zGemF1SfCYbNk1FEg//7LYlxlOkILXpP9ensiSsiY=;
+	b=c1eFfe4DPbSHEDudYsO/trDAQA1p5uCGKhZkhe+tItUQ8DKWv1bKE5BeIHbpn4fT8077ws
+	7AgDB1DhQtLWG1Fpgafg8lqak9i21SdnwWDJ9HbpIlDI8CYUBaR90MzwuBmuKjN95MvXw1
+	dXA0iZ1WzgwpqDujQBXnpwhsgw0b+vM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-l2vb6lE1Pl21g1mYn_e7vA-1; Fri, 26 Apr 2024 04:56:00 -0400
+X-MC-Unique: l2vb6lE1Pl21g1mYn_e7vA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81D1F18065AA;
+	Fri, 26 Apr 2024 08:55:59 +0000 (UTC)
+Received: from thuth-p1g4.redhat.com (unknown [10.39.194.59])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8A3CA1121312;
+	Fri, 26 Apr 2024 08:55:57 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: kvm@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] KVM: selftests: Use TAP interface in the set_memory_region test
+Date: Fri, 26 Apr 2024 10:55:56 +0200
+Message-ID: <20240426085556.619731-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240420-dev-charlie-support_thead_vector_6_9-v3-0-67cff4271d1d@rivosinc.com>
- <20240420-dev-charlie-support_thead_vector_6_9-v3-1-67cff4271d1d@rivosinc.com>
-In-Reply-To: <20240420-dev-charlie-support_thead_vector_6_9-v3-1-67cff4271d1d@rivosinc.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Fri, 26 Apr 2024 16:15:25 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTeGBuL4S3cKV87w-TJTa+ZmOaPiT=+uor-PzL9jYTWAg@mail.gmail.com>
-Message-ID: <CAJF2gTTeGBuL4S3cKV87w-TJTa+ZmOaPiT=+uor-PzL9jYTWAg@mail.gmail.com>
-Subject: Re: [PATCH v3 01/17] riscv: cpufeature: Fix thead vector hwcap removal
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Conor Dooley <conor.dooley@microchip.com>, 
-	Evan Green <evan@rivosinc.com>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Palmer Dabbelt <palmer@rivosinc.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On Sun, Apr 21, 2024 at 9:04=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> The riscv_cpuinfo struct that contains mvendorid and marchid is not
-> populated until all harts are booted which happens after the DT parsing.
-> Use the vendorid/archid values from the DT if available or assume all
-> harts have the same values as the boot hart as a fallback.
->
-> Fixes: d82f32202e0d ("RISC-V: Ignore V from the riscv,isa DT property on =
-older T-Head CPUs")
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/include/asm/sbi.h   |  2 ++
->  arch/riscv/kernel/cpu.c        | 40 ++++++++++++++++++++++++++++++++++++=
-----
->  arch/riscv/kernel/cpufeature.c | 12 ++++++++++--
->  3 files changed, 48 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index 6e68f8dff76b..0fab508a65b3 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -370,6 +370,8 @@ static inline int sbi_remote_fence_i(const struct cpu=
-mask *cpu_mask) { return -1
->  static inline void sbi_init(void) {}
->  #endif /* CONFIG_RISCV_SBI */
->
-> +unsigned long riscv_get_mvendorid(void);
-> +unsigned long riscv_get_marchid(void);
->  unsigned long riscv_cached_mvendorid(unsigned int cpu_id);
->  unsigned long riscv_cached_marchid(unsigned int cpu_id);
->  unsigned long riscv_cached_mimpid(unsigned int cpu_id);
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index d11d6320fb0d..c1f3655238fd 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -139,6 +139,34 @@ int riscv_of_parent_hartid(struct device_node *node,=
- unsigned long *hartid)
->         return -1;
->  }
->
-> +unsigned long __init riscv_get_marchid(void)
-> +{
-> +       struct riscv_cpuinfo *ci =3D this_cpu_ptr(&riscv_cpuinfo);
-> +
-> +#if IS_ENABLED(CONFIG_RISCV_SBI)
-> +       ci->marchid =3D sbi_spec_is_0_1() ? 0 : sbi_get_marchid();
-> +#elif IS_ENABLED(CONFIG_RISCV_M_MODE)
-> +       ci->marchid =3D csr_read(CSR_MARCHID);
-> +#else
-> +       ci->marchid =3D 0;
-> +#endif
-> +       return ci->marchid;
-> +}
-> +
-> +unsigned long __init riscv_get_mvendorid(void)
-> +{
-> +       struct riscv_cpuinfo *ci =3D this_cpu_ptr(&riscv_cpuinfo);
-> +
-> +#if IS_ENABLED(CONFIG_RISCV_SBI)
-> +       ci->mvendorid =3D sbi_spec_is_0_1() ? 0 : sbi_get_mvendorid();
-> +#elif IS_ENABLED(CONFIG_RISCV_M_MODE)
-> +       ci->mvendorid =3D csr_read(CSR_MVENDORID);
-> +#else
-> +       ci->mvendorid =3D 0;
-> +#endif
-> +       return ci->mvendorid;
-> +}
-> +
->  DEFINE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
->
->  unsigned long riscv_cached_mvendorid(unsigned int cpu_id)
-> @@ -170,12 +198,16 @@ static int riscv_cpuinfo_starting(unsigned int cpu)
->         struct riscv_cpuinfo *ci =3D this_cpu_ptr(&riscv_cpuinfo);
->
->  #if IS_ENABLED(CONFIG_RISCV_SBI)
-> -       ci->mvendorid =3D sbi_spec_is_0_1() ? 0 : sbi_get_mvendorid();
-> -       ci->marchid =3D sbi_spec_is_0_1() ? 0 : sbi_get_marchid();
-> +       if (!ci->mvendorid)
-> +               ci->mvendorid =3D sbi_spec_is_0_1() ? 0 : sbi_get_mvendor=
-id();
-> +       if (!ci->marchid)
-> +               ci->marchid =3D sbi_spec_is_0_1() ? 0 : sbi_get_marchid()=
-;
->         ci->mimpid =3D sbi_spec_is_0_1() ? 0 : sbi_get_mimpid();
->  #elif IS_ENABLED(CONFIG_RISCV_M_MODE)
-> -       ci->mvendorid =3D csr_read(CSR_MVENDORID);
-> -       ci->marchid =3D csr_read(CSR_MARCHID);
-> +       if (!ci->mvendorid)
-> +               ci->mvendorid =3D csr_read(CSR_MVENDORID);
-> +       if (!ci->marchid)
-> +               ci->marchid =3D csr_read(CSR_MARCHID);
->         ci->mimpid =3D csr_read(CSR_MIMPID);
->  #else
->         ci->mvendorid =3D 0;
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
-e.c
-> index 3ed2359eae35..c6e27b45e192 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -490,6 +490,8 @@ static void __init riscv_fill_hwcap_from_isa_string(u=
-nsigned long *isa2hwcap)
->         struct acpi_table_header *rhct;
->         acpi_status status;
->         unsigned int cpu;
-> +       u64 boot_vendorid;
-> +       u64 boot_archid;
->
->         if (!acpi_disabled) {
->                 status =3D acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
-> @@ -497,6 +499,13 @@ static void __init riscv_fill_hwcap_from_isa_string(=
-unsigned long *isa2hwcap)
->                         return;
->         }
->
-> +       /*
-> +        * Naively assume that all harts have the same mvendorid/marchid =
-as the
-> +        * boot hart.
-> +        */
-> +       boot_vendorid =3D riscv_get_mvendorid();
-> +       boot_archid =3D riscv_get_marchid();
-> +
->         for_each_possible_cpu(cpu) {
->                 struct riscv_isainfo *isainfo =3D &hart_isa[cpu];
->                 unsigned long this_hwcap =3D 0;
-> @@ -544,8 +553,7 @@ static void __init riscv_fill_hwcap_from_isa_string(u=
-nsigned long *isa2hwcap)
->                  * CPU cores with the ratified spec will contain non-zero
->                  * marchid.
->                  */
-> -               if (acpi_disabled && riscv_cached_mvendorid(cpu) =3D=3D T=
-HEAD_VENDOR_ID &&
-> -                   riscv_cached_marchid(cpu) =3D=3D 0x0) {
-> +               if (acpi_disabled && boot_vendorid =3D=3D THEAD_VENDOR_ID=
- && boot_archid =3D=3D 0x0) {
-LGTM!
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Use the kselftest_harness.h interface in this test to get TAP
+output, so that it is easier for the user to see what the test
+is doing. (Note: We are not using the KVM_ONE_VCPU_TEST_SUITE()
+macro here since these tests are creating their VMs with the
+vm_create_barebones() function, not with vm_create_with_one_vcpu())
 
->                         this_hwcap &=3D ~isa2hwcap[RISCV_ISA_EXT_v];
->                         clear_bit(RISCV_ISA_EXT_v, isainfo->isa);
->                 }
->
-> --
-> 2.44.0
->
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ .../selftests/kvm/set_memory_region_test.c    | 86 +++++++++----------
+ 1 file changed, 42 insertions(+), 44 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index bd57d991e27d..4db6a66a3001 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -16,6 +16,7 @@
+ #include <test_util.h>
+ #include <kvm_util.h>
+ #include <processor.h>
++#include "kselftest_harness.h"
+ 
+ /*
+  * s390x needs at least 1MB alignment, and the x86_64 MOVE/DELETE tests need a
+@@ -38,6 +39,8 @@ extern const uint64_t final_rip_end;
+ 
+ static sem_t vcpu_ready;
+ 
++int loops;
++
+ static inline uint64_t guest_spin_on_val(uint64_t spin_val)
+ {
+ 	uint64_t val;
+@@ -219,6 +222,13 @@ static void test_move_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
++TEST(move_in_use_region)
++{
++	ksft_print_msg("Testing MOVE of in-use region, %d loops\n", loops);
++	for (int i = 0; i < loops; i++)
++		test_move_memory_region();
++}
++
+ static void guest_code_delete_memory_region(void)
+ {
+ 	uint64_t val;
+@@ -308,12 +318,19 @@ static void test_delete_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_zero_memory_regions(void)
++TEST(delete_in_use_region)
++{
++	ksft_print_msg("Testing DELETE of in-use region, %d loops\n", loops);
++	for (int i = 0; i < loops; i++)
++		test_delete_memory_region();
++}
++
++TEST(zero_memory_regions)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	pr_info("Testing KVM_RUN with zero added memory regions\n");
++	ksft_print_msg("Testing KVM_RUN with zero added memory regions\n");
+ 
+ 	vm = vm_create_barebones();
+ 	vcpu = __vm_vcpu_add(vm, 0);
+@@ -326,7 +343,7 @@ static void test_zero_memory_regions(void)
+ }
+ #endif /* __x86_64__ */
+ 
+-static void test_invalid_memory_region_flags(void)
++TEST(invalid_memory_region_flags)
+ {
+ 	uint32_t supported_flags = KVM_MEM_LOG_DIRTY_PAGES;
+ 	const uint32_t v2_only_flags = KVM_MEM_GUEST_MEMFD;
+@@ -389,7 +406,7 @@ static void test_invalid_memory_region_flags(void)
+  * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
+  * tentative to add further slots should fail.
+  */
+-static void test_add_max_memory_regions(void)
++TEST(add_max_memory_regions)
+ {
+ 	int ret;
+ 	struct kvm_vm *vm;
+@@ -408,13 +425,13 @@ static void test_add_max_memory_regions(void)
+ 	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
+ 	TEST_ASSERT(max_mem_slots > 0,
+ 		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
+-	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
++	ksft_print_msg("Allowed number of memory slots: %i\n", max_mem_slots);
+ 
+ 	vm = vm_create_barebones();
+ 
+ 	/* Check it can be added memory slots up to the maximum allowed */
+-	pr_info("Adding slots 0..%i, each memory region with %dK size\n",
+-		(max_mem_slots - 1), MEM_REGION_SIZE >> 10);
++	ksft_print_msg("Adding slots 0..%i, each memory region with %dK size\n",
++		       (max_mem_slots - 1), MEM_REGION_SIZE >> 10);
+ 
+ 	mem = mmap(NULL, (size_t)max_mem_slots * MEM_REGION_SIZE + alignment,
+ 		   PROT_READ | PROT_WRITE,
+@@ -455,12 +472,21 @@ static void test_invalid_guest_memfd(struct kvm_vm *vm, int memfd,
+ 	TEST_ASSERT(r == -1 && errno == EINVAL, "%s", msg);
+ }
+ 
+-static void test_add_private_memory_region(void)
++static bool has_cap_guest_memfd(void)
++{
++	return kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&
++	       (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
++}
++
++TEST(add_private_memory_region)
+ {
+ 	struct kvm_vm *vm, *vm2;
+ 	int memfd, i;
+ 
+-	pr_info("Testing ADD of KVM_MEM_GUEST_MEMFD memory regions\n");
++	if (!has_cap_guest_memfd())
++		SKIP(return, "Missing KVM_MEM_GUEST_MEMFD / KVM_X86_SW_PROTECTED_VM");
++
++	ksft_print_msg("Testing ADD of KVM_MEM_GUEST_MEMFD memory regions\n");
+ 
+ 	vm = vm_create_barebones_protected_vm();
+ 
+@@ -491,13 +517,16 @@ static void test_add_private_memory_region(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_add_overlapping_private_memory_regions(void)
++TEST(add_overlapping_private_memory_regions)
+ {
+ 	struct kvm_vm *vm;
+ 	int memfd;
+ 	int r;
+ 
+-	pr_info("Testing ADD of overlapping KVM_MEM_GUEST_MEMFD memory regions\n");
++	if (!has_cap_guest_memfd())
++		SKIP(return, "Missing KVM_MEM_GUEST_MEMFD / KVM_X86_SW_PROTECTED_VM");
++
++	ksft_print_msg("Testing ADD of overlapping KVM_MEM_GUEST_MEMFD memory regions\n");
+ 
+ 	vm = vm_create_barebones_protected_vm();
+ 
+@@ -536,46 +565,15 @@ static void test_add_overlapping_private_memory_regions(void)
+ 	close(memfd);
+ 	kvm_vm_free(vm);
+ }
++
+ #endif
+ 
+ int main(int argc, char *argv[])
+ {
+-#ifdef __x86_64__
+-	int i, loops;
+-
+-	/*
+-	 * FIXME: the zero-memslot test fails on aarch64 and s390x because
+-	 * KVM_RUN fails with ENOEXEC or EFAULT.
+-	 */
+-	test_zero_memory_regions();
+-#endif
+-
+-	test_invalid_memory_region_flags();
+-
+-	test_add_max_memory_regions();
+-
+-#ifdef __x86_64__
+-	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&
+-	    (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))) {
+-		test_add_private_memory_region();
+-		test_add_overlapping_private_memory_regions();
+-	} else {
+-		pr_info("Skipping tests for KVM_MEM_GUEST_MEMFD memory regions\n");
+-	}
+-
+ 	if (argc > 1)
+ 		loops = atoi_positive("Number of iterations", argv[1]);
+ 	else
+ 		loops = 10;
+ 
+-	pr_info("Testing MOVE of in-use region, %d loops\n", loops);
+-	for (i = 0; i < loops; i++)
+-		test_move_memory_region();
+-
+-	pr_info("Testing DELETE of in-use region, %d loops\n", loops);
+-	for (i = 0; i < loops; i++)
+-		test_delete_memory_region();
+-#endif
+-
+-	return 0;
++	return test_harness_run(argc, argv);
+ }
+-- 
+2.44.0
 
---=20
-Best Regards
- Guo Ren
 
