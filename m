@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-8976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38B628B45DD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 13:20:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 281578B45F8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 13:22:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB622282E45
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 11:20:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D866728592B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 11:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5A64E1BA;
-	Sat, 27 Apr 2024 11:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895354CB36;
+	Sat, 27 Apr 2024 11:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nTm+vxkF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hxO5U5xo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C844A990;
-	Sat, 27 Apr 2024 11:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178224D9FA;
+	Sat, 27 Apr 2024 11:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714216786; cv=none; b=Uu45iypOnsm9fjwx6DhN4r/WhHGqUOiGt9gNFN8FvIEaJ1egwt+IX5saS0MzRzzCy/2h3mamyMAYkyqsT0sDQVLPSXHYrthYIBHxnkfSPFPTDYcVXuS1Cgl44FyeH4deJAR15WMyqDXjYpowlPeLE1iG/b1NbuYSM8xyicd8kt4=
+	t=1714216888; cv=none; b=rn/cSXmMytuQ7c9WMbW7WTBNWYBI8JswE84ZoYPXUm9Bp533Q2vt5qeOiIgZZ7yI9l8rPfA2pwLyYs/uXrJuLgHmo/xAOAav8GNONnDipr4xCRehBukUzZ6YWrGPlIXcdXY3/x5h4HNqGlD0bCTbOPy4w9e1bLB1TtS4tdNFH10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714216786; c=relaxed/simple;
-	bh=HCznYAv0EfRhddfdK9swdqfYALkzcbaaWAuEQfAFYNA=;
+	s=arc-20240116; t=1714216888; c=relaxed/simple;
+	bh=q234AdlrqFb6gEgXej3Qyt4lhLROvR6uaavVzSiG6sg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jGUUuJQdQJIgr/D81jHtkA/pnUOGl1nLOjgl7o4guvK5VN2+5oDZq/4BZ21Id8sL7usJ2n3YxO5a9U/00TGHk4UaaqxjQMJ1xkX6VNSOh4fq6pkZJZnLGqOTq29B6aeZ+wyiMuH47kDLlOG2vBwKolL7lW4LQK89Ch7rR7piVyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nTm+vxkF; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=ofbFpNGGzYYJev88XevNeDsK3dXizRiUnPlhjHEtXIZAe/tc1kfCLATNo6XUzsxxh1b9rWjGhvrwWRmOYqXdbE/j0jEcDmVt2ZM00p7asn9j8MHoygpv9NosSRPBLeOBSIN96L1PZ7/mX0P3V/3PKHANmmxwzPeAfcIEKilp4/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hxO5U5xo; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=rpfo1oUoJzRPiJFA+UCmdgAFooGLVsmHebsz9FfSOoc=; b=nTm+vxkFhMhl43Kyx8J2RVas/v
-	MgEFbuFINgZfn9jT60qo3mU4baGpwZJVcBIjpTR4Do3kWwZT4QUBg98PbOUoDJbLq3/nZD2OY7Lis
-	4qNu3jtQVa5vX8YsbzMFJANZWuxcIiGKD1NvVLPedn4jVv5MiY61D62uG2blUJhPWmq61mf8bx3cK
-	Ox6xzXad8RByBaQdzoUhz+qkrlva0R8I8ybhudiaPmkY8jntMPVkIDd+4/PMdMM16Ko/VrzBT0Q+X
-	Cnr2IMYNucMM9bhDwMYaF7Qlp3kvX5HrFhfJtQqIIGOH65r+DNSlQJGm4vBEmm7hlgAA4EKhZ4yNR
-	1bHXGHQg==;
+	bh=U35TMzdrNli2izCJdFnYbyRs0V77OD2PqLViAcJYq/4=; b=hxO5U5xofonRRT6DH2IqMSnsZg
+	EcjO9Z8XG5e3WWqCQhtBKrT4Ih4VcwnV71BtwC5t2Kdfx5LwM06LNUSSB/uEB2rUc3qd3sBpPjgFo
+	5W70XvRfCwgsiEv4Gubq6SFoV+fUpbhx9ad/aGzcd2cKFDK12PcoHm3C7fowtqBBG9N3euu2SFe/Y
+	l+EW8Si2Z2TEoxPhIDfhUD8suRrYzxwQI/Cm5GVNKKNJz0bbpops0eoTmWlMw6rtvz2xYAQeXwrKC
+	xw6bNP+sHOfOgP6FshXSFGhuuj7I5bbv0B4CrEIHNME8nIaU6663y/RsGLvLPVr8HzDWo+6HoWToP
+	whoN/a+g==;
 Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5h-00000007Jwp-00lT;
-	Sat, 27 Apr 2024 11:19:37 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s0g5i-0000000FeZj-0p1P;
+	Sat, 27 Apr 2024 11:20:54 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5g-000000002bl-2B7U;
+	id 1s0g5g-000000002bo-2LwR;
 	Sat, 27 Apr 2024 12:19:36 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -70,9 +70,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	sveith@amazon.de,
 	zide.chen@intel.com,
 	Dongli Zhang <dongli.zhang@oracle.com>
-Subject: [PATCH v2 12/15] KVM: x86: Improve synchronization in kvm_synchronize_tsc()
-Date: Sat, 27 Apr 2024 12:05:09 +0100
-Message-ID: <20240427111929.9600-13-dwmw2@infradead.org>
+Subject: [PATCH v2 13/15] KVM: x86: Kill cur_tsc_{nsec,offset,write} fields
+Date: Sat, 27 Apr 2024 12:05:10 +0100
+Message-ID: <20240427111929.9600-14-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240427111929.9600-1-dwmw2@infradead.org>
 References: <20240427111929.9600-1-dwmw2@infradead.org>
@@ -84,101 +84,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-When synchronizing to an existing TSC (either by explicitly writing zero,
-or the legacy hack where the TSC is written within one second's worth of
-the previously written TSC), the last_tsc_write and last_tsc_nsec values
-were being misrecorded by __kvm_synchronize_tsc(). The *unsynchronized*
-value of the TSC (perhaps even zero) was bring recorded, along with the
-current time at which kvm_synchronize_tsc() was called. This could cause
-*subsequent* writes to fail to synchronize correctly.
+These pointlessly duplicate of the last_tsc_{nsec,offset,write} values.
 
-Fix that by resetting {data, ns} to the previous values before passing
-them to __kvm_synchronize_tsc() when synchronization is detected. Except
-in the case where the TSC is unstable and *has* to be synthesised from
-the host clock, in which case attempt to create a nsec/tsc pair which is
-on the correct line.
-
-Furthermore, there were *three* different TSC reads used for calculating
-the "current" time, all slightly different from each other. Fix that by
-using kvm_get_time_and_clockread() where possible and using the same
-host_tsc value in all cases.
+The only place they were used was where the TSC is stable and a new vCPU
+is being synchronized to the previous setting, in which case the 'last_'
+value is definitely identical.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- arch/x86/kvm/x86.c | 32 ++++++++++++++++++++++++++++----
- 1 file changed, 28 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 3 ---
+ arch/x86/kvm/x86.c              | 9 ++-------
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index b01c1d000fff..7d06f389a607 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1354,9 +1354,6 @@ struct kvm_arch {
+ 	u32 last_tsc_khz;
+ 	u64 last_tsc_offset;
+ 	u64 last_tsc_scaling_ratio;
+-	u64 cur_tsc_nsec;
+-	u64 cur_tsc_write;
+-	u64 cur_tsc_offset;
+ 	u64 cur_tsc_generation;
+ 	int nr_vcpus_matched_tsc;
+ 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index ea59694d712a..6ec43f39bdb0 100644
+index 6ec43f39bdb0..92e81bfca25a 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -201,6 +201,10 @@ module_param(eager_page_split, bool, 0644);
- static bool __read_mostly mitigate_smt_rsb;
- module_param(mitigate_smt_rsb, bool, 0444);
+@@ -2737,9 +2737,6 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
+ 		 * These values are tracked in kvm->arch.cur_xxx variables.
+ 		 */
+ 		kvm->arch.cur_tsc_generation++;
+-		kvm->arch.cur_tsc_nsec = ns;
+-		kvm->arch.cur_tsc_write = tsc;
+-		kvm->arch.cur_tsc_offset = offset;
+ 		kvm->arch.nr_vcpus_matched_tsc = 0;
+ 	} else if (vcpu->arch.this_tsc_generation != kvm->arch.cur_tsc_generation) {
+ 		kvm->arch.nr_vcpus_matched_tsc++;
+@@ -2747,8 +2744,6 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
  
-+#ifdef CONFIG_X86_64
-+static bool kvm_get_time_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp);
-+#endif
-+
- /*
-  * Restoring the host value for MSRs that are only consumed when running in
-  * usermode, e.g. SYSCALL MSRs and TSC_AUX, can be deferred until the CPU
-@@ -2753,14 +2757,22 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
- {
- 	u64 data = user_value ? *user_value : 0;
- 	struct kvm *kvm = vcpu->kvm;
--	u64 offset, ns, elapsed;
-+	u64 offset, host_tsc, ns, elapsed;
- 	unsigned long flags;
- 	bool matched = false;
- 	bool synchronizing = false;
+ 	/* Keep track of which generation this VCPU has synchronized to */
+ 	vcpu->arch.this_tsc_generation = kvm->arch.cur_tsc_generation;
+-	vcpu->arch.this_tsc_nsec = kvm->arch.cur_tsc_nsec;
+-	vcpu->arch.this_tsc_write = kvm->arch.cur_tsc_write;
  
-+#ifdef CONFIG_X86_64
-+	if (!kvm_get_time_and_clockread(&ns, &host_tsc))
-+#endif
-+	{
-+		ns = get_kvmclock_base_ns();
-+		host_tsc = rdtsc();
-+	}
-+
- 	raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
--	offset = kvm_compute_l1_tsc_offset(vcpu, rdtsc(), data);
--	ns = get_kvmclock_base_ns();
-+
-+	offset = kvm_compute_l1_tsc_offset(vcpu, host_tsc, data);
- 	elapsed = ns - kvm->arch.last_tsc_nsec;
+ 	kvm_track_tsc_matching(vcpu);
+ }
+@@ -2825,8 +2820,8 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
+ 		data = kvm->arch.last_tsc_write;
  
- 	if (vcpu->arch.virtual_tsc_khz) {
-@@ -2805,12 +2817,24 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
-          */
- 	if (synchronizing &&
- 	    vcpu->arch.virtual_tsc_khz == kvm->arch.last_tsc_khz) {
-+		/*
-+		 * If synchronizing, the "last written" TSC value/time recorded
-+		 * by __kvm_synchronize_tsc() should not change (i.e. should
-+		 * be precisely the same as the existing generation)...
-+		 */
-+		data = kvm->arch.last_tsc_write;
-+
  		if (!kvm_check_tsc_unstable()) {
- 			offset = kvm->arch.cur_tsc_offset;
-+			ns = kvm->arch.cur_tsc_nsec;
+-			offset = kvm->arch.cur_tsc_offset;
+-			ns = kvm->arch.cur_tsc_nsec;
++			offset = kvm->arch.last_tsc_offset;
++			ns = kvm->arch.last_tsc_nsec;
  		} else {
-+			/*
-+			 * ... unless the TSC is unstable and has to be
-+			 * synthesised from the host clock in nanoseconds.
-+			 */
- 			u64 delta = nsec_to_cycles(vcpu, elapsed);
- 			data += delta;
--			offset = kvm_compute_l1_tsc_offset(vcpu, rdtsc(), data);
-+			offset = kvm_compute_l1_tsc_offset(vcpu, host_tsc, data);
- 		}
- 		matched = true;
- 	}
+ 			/*
+ 			 * ... unless the TSC is unstable and has to be
 -- 
 2.44.0
 
