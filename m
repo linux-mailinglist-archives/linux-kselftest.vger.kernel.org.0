@@ -1,166 +1,159 @@
-Return-Path: <linux-kselftest+bounces-8972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B4F08B43C2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 04:11:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 244F28B45E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 13:20:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D46CB226E7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 02:11:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9326282F97
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 11:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4289439ACD;
-	Sat, 27 Apr 2024 02:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE054EB5F;
+	Sat, 27 Apr 2024 11:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mRu4S3Xu"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vS/M7D5S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448C238DDB
-	for <linux-kselftest@vger.kernel.org>; Sat, 27 Apr 2024 02:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BD738DD3;
+	Sat, 27 Apr 2024 11:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714183884; cv=none; b=hQDBKszjpK2AXfg2ynVSZvxOyzyhZbGsY+t7daG5duc5EbDxq3WDES472x5FNcApOtPMAEp6Aye45GHXupTDJDzfJV5Ba9oGslFvXmHWOONSAyISKZbGYL+KisBbRhSeSqtctdjHv46r2p884fKXzWtI4hXxa+epJtjXwI20cLI=
+	t=1714216787; cv=none; b=uAdDtT52Ht6eCNwrLddas4MC/kRgAOH979T3iYKApfg4gB0RptXDvOfTwzd04PAVF04sv5+X/QsHbJMmXwRKBNkZPqeLjlLIewrgD9MeJf6aAfdMfuSL/uF+qDlXQf81OqyaPAXLk4R5z4E5sAdSNnOlz+qegSmr+a5bqOvtMXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714183884; c=relaxed/simple;
-	bh=3TH1qKN/8kDOE9KfhYRZV82BLgZZskB3YkO2+4vu+tY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IZ9bqei0vK5F2oVp0uuwVYD83uBKqnkDqWJYvUpfaH6JbPAjTN1XC9Mwirkukyquz7wWUrUXUmDN9iq22m7exsRB3M7sAj1Rvt6WDjr+GuOugiHYUrtY5dlEY56RPXlrVhHx3bqmTbdLYNpstX8Pkaf4Nw0oMcbn0i9wUMDyJFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mRu4S3Xu; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a58e2740cd7so59042466b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Apr 2024 19:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714183880; x=1714788680; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCqXmA+0tJPmuPol3Ypy0jPmfZ3hkXnnk0DE4uLAUwU=;
-        b=mRu4S3XuUIqgZ4Zuu0XgismEQ5/XUBilPfFw+Xm1y6jIuBkNYDGqtJpVPfr3+pUbZf
-         sAyOLb5LdfBvQbmhLVih+PhEODGod32DbRItT4xo6P4xZydC8tce2YXd8+WGUheKnvMl
-         0gsDcMKy6EBMpWyVbsMo1ZYgFLSjchUULUluFbRjoQMZtHnCgGtdyMdP/eTFH75BbT8K
-         FVX5+bOMpdzkiS5xZzDrCWaSldC5RZPNVAUarByQRaAUL3UsGpPK9BwIUf856PWynKMz
-         yJGJKrx4/S1+RH9spj8VX4cHz3UyMAPh/HkI2nBx0BpnQc3OmMiXbW/kS0kmdQqOktCD
-         Fhzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714183880; x=1714788680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VCqXmA+0tJPmuPol3Ypy0jPmfZ3hkXnnk0DE4uLAUwU=;
-        b=ey3ITmbmWxu1+SokVWLcLBcIWOS35DezvrBbsg/l17InHJPkUEdEhjBY83gkevbF5b
-         bWxmGdvBClcmarJ10JIVFPO78rDIgKnSnyFSuZkSKNko7Yb55xujcoRwZvaeuGS/FcSf
-         0fqGWSMDz4hqRP5K7BRkciuAiWWoSHSOED2YOT5FI6vBkdWEeupqIVNLecdGIhxVArDx
-         oZAsnZFdG+7OfKOFiPtgpN1JigBTF/73Z6l5Nfkkv14X55q+GYncpjAEeY5C8f2UU42j
-         QnPYX9OBtDmgx9eCu8Zprbt4NnX4UxUha52NGRL0qWm4of/9b0yEAdy6T9sVnya3RGuh
-         J01Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVTT4iyjaLQd5MRKU1vY60nI8SMnhUHJsqY50q1JjWOdE2m+kYq6qQ1+W0GooNhD82QIlBR/Fo27Y+Uygy6ApuixcnlgqRIii+77fuSncrO
-X-Gm-Message-State: AOJu0Yy1PZisqpTfmSE9afnbSBbUcnCxsLpdeTj7JXXU6857Ka30N1hF
-	XRgLxmuMW2yOp8h6LuRJhlt4/Y0392GtCoUxR8xc2YLySUhLpNUxYpl2b+UIR5Ml+EZ9TDU7e8t
-	PoZm4ERK3bBz4yAlfkZM1O5Fw4ywtubPkcebv
-X-Google-Smtp-Source: AGHT+IGYpMq0S7NMYmgbheltdqICqswpFYbRt1nWr9f34ViEhM+DD9iOxk080j42Jd8vuPQgs8NIkJRSPoJ58AydrBw=
-X-Received: by 2002:a17:907:a49:b0:a58:c550:a102 with SMTP id
- be9-20020a1709070a4900b00a58c550a102mr4510853ejc.29.1714183880204; Fri, 26
- Apr 2024 19:11:20 -0700 (PDT)
+	s=arc-20240116; t=1714216787; c=relaxed/simple;
+	bh=Dne5fBR1iIOYX/rPcjbOE3SYHMPYwk167rrQ55hOsLU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qrSPeXl7rrYSWIL/P8qGYMXq4JIQEWJZPtoQEZxuLJn7emWFORdMjj9qVLwgh+hKu8WaYaggUZ6EbzyxziZt/1Y/xmn/EQBp2VWiEkq6zgCBzSGOIbfyw8f6zXxYAXLtH9Hc5CbzEPE9vlHhP3EooI7dcOAac6wMrf5VSLFBfBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vS/M7D5S; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=Z6fBy03Etm/CSR189UL7iYBAbnioWxrHrZek/W4lxZw=; b=vS/M7D5Sl4CQpsJxN9B544ayJl
+	NsbwfjA7eg/2ImNuB3vQ+FyO6KnYWChQhE9UEVfFRJmRllbf7DUhFzenLUO53LEAv2KInFk8Oyopb
+	9MjFoaiEhjWZejm4EGeYBo+qxV2Fdp1y9QNgkAKlrTFAoVmM8xKunZBtnnuKVSezJCdlERi2FB7//
+	jujUFNSHVAnwubObnsL7ygyYBQ0dIwi7XclXO4znpOewBlKzimiAe6eGE3mQuF7Wwdi4ZQImLLgC8
+	1juHV3lRqr0WEdRDyDptHnhZDzA9XiKwBEPic5gfoaMvn32X6ZBc3pRiqUA3XLJWQ41asQjYvd0XE
+	2ar5/N2A==;
+Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s0g5g-00000007Jwg-1Y9q;
+	Sat, 27 Apr 2024 11:19:36 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s0g5f-000000002b0-2wnU;
+	Sat, 27 Apr 2024 12:19:35 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paul Durrant <paul@xen.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	jalliste@amazon.co.uk,
+	sveith@amazon.de,
+	zide.chen@intel.com,
+	Dongli Zhang <dongli.zhang@oracle.com>
+Subject: [RFC PATCH v2] Cleaning up the KVM clock mess
+Date: Sat, 27 Apr 2024 12:04:57 +0100
+Message-ID: <20240427111929.9600-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-8-almasrymina@google.com> <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
-In-Reply-To: <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 26 Apr 2024 19:11:07 -0700
-Message-ID: <CAHS8izPeYryoLdCAQdGQU-wn7YVdtuofVKNvRFjFjhqTDsT7zA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v8 07/14] page_pool: devmem support
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Amritha Nambiar <amritha.nambiar@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Simon Horman <horms@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Florian Westphal <fw@strlen.de>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>, 
-	Arseniy Krasnov <avkrasnov@salutedevices.com>, 
-	Aleksander Lobakin <aleksander.lobakin@intel.com>, Michael Lass <bevan@bi-co.net>, 
-	Jiri Pirko <jiri@resnulli.us>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
-	Sridhar Samudrala <sridhar.samudrala@intel.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>, 
-	Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org, 
-	Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On Fri, Apr 26, 2024 at 5:18=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-04-02 5:20 pm, Mina Almasry wrote:
-> > @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
-> >   */
-> >  typedef unsigned long __bitwise netmem_ref;
-> >
-> > +static inline bool netmem_is_net_iov(const netmem_ref netmem)
-> > +{
-> > +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
->
-> I am guessing you added this to try and speed up the fast path? It's
-> overly restrictive for us since we do not need dmabuf necessarily. I
-> spent a bit too much time wondering why things aren't working only to
-> find this :(
+Clean up the KVM clock mess somewhat so that it is either based on the guest
+TSC ("master clock" mode), or on the host CLOCK_MONOTONIC_RAW in cases where
+the TSC isn't usable.
 
-My apologies, I'll try to put the changelog somewhere prominent, or
-notify you when I do something that I think breaks you.
+Eliminate the third variant where it was based directly on the *host* TSC,
+due to bugs in e.g. __get_kvmclock().
 
-Yes, this is a by-product of a discussion with regards to the
-page_pool benchmark regressions due to adding devmem. There is some
-background on why this was added and the impact on the
-bench_page_pool_simple tests in the cover letter.
+Kill off the last vestiges of the KVM clock being based on CLOCK_MONOTONIC
+instead of CLOCK_MONOTONIC_RAW and thus being subject to NTP skew.
 
-For you, I imagine you want to change this to something like:
+Fix up migration support to allow the KVM clock to be saved/restored as an
+arithmetic function of the guest TSC, since that's what it actually is in
+the *common* case so it can be migrated precisely. Or at least to within
+±1 ns which is good enough, as discussed in
+https://lore.kernel.org/kvm/c8dca08bf848e663f192de6705bf04aa3966e856.camel@infradead.org
 
-#if defined(CONFIG_PAGE_POOL)
-#if defined(CONFIG_DMA_SHARED_BUFFER) || defined(CONFIG_IOURING)
+In v2 of this series, TSC synchronization is improved and simplified a bit
+too, and we allow masterclock mode to be used even when the guest TSCs are
+out of sync, as long as they're running at the same *rate*. The different
+*offset* shouldn't matter.
 
-or something like that, right? Not sure if this is something I should
-do here or if something more appropriate to be in the patches you
-apply on top.
+And the kvm_get_time_scale() function annoyed me by being entirely opaque,
+so I studied it until my brain hurt and then added some comments.
 
-I additionally think you may also need to run the
-page_pool_benchmark_simple tests like I do in the cover letter to see
-if you're affecting those.
+In v2 I also dropped the commits which were removing the periodic clock
+syncs. Those are going to be needed still but *only* for non-masterclock
+mode, which I'll do next. Along with ensuring that a masterclock update
+while already in masterclock mode doesn't jump the clock, and just does
+the same as KVM_SET_CLOCK_GUEST does to preserve it.
 
---
-Thanks,
-Mina
+Needs a *lot* more testing. I think I'm almost done refactoring the code,
+so should focus on building up the tests next.
+
+(I do still hate that we're abusing KVM_GET_CLOCK just to get the tuple
+of {host_tsc, CLOCK_REALTIME} without even *caring* about the eponymous
+KVM clock. Especially as this information is (a) fundamentally what the
+vDSO gettimeofday() exposes to us anyway, (b) using CLOCK_REALTIME not
+TAI, (c) not available on other platforms, for example for migrating
+the Arm arch counter.)
+
+David Woodhouse (13):
+      KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_init()
+      KVM: x86: Improve accuracy of KVM clock when TSC scaling is in force
+      KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+      KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the documentation on TSC migration
+      KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
+      KVM: x86: Fix KVM clock precision in __get_kvmclock()
+      KVM: x86: Fix software TSC upscaling in kvm_update_guest_time()
+      KVM: x86: Simplify and comment kvm_get_time_scale()
+      KVM: x86: Remove implicit rdtsc() from kvm_compute_l1_tsc_offset()
+      KVM: x86: Improve synchronization in kvm_synchronize_tsc()
+      KVM: x86: Kill cur_tsc_{nsec,offset,write} fields
+      KVM: x86: Allow KVM master clock mode when TSCs are offset from each other
+      KVM: x86: Factor out kvm_use_master_clock()
+
+Jack Allister (2):
+      KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
+      KVM: selftests: Add KVM/PV clock selftest to prove timer correction
+
+ Documentation/virt/kvm/api.rst                    |  37 ++
+ Documentation/virt/kvm/devices/vcpu.rst           | 115 +++-
+ arch/x86/include/asm/kvm_host.h                   |  15 +-
+ arch/x86/include/uapi/asm/kvm.h                   |   6 +
+ arch/x86/kvm/svm/svm.c                            |   3 +-
+ arch/x86/kvm/vmx/vmx.c                            |   2 +-
+ arch/x86/kvm/x86.c                                | 687 +++++++++++++++-------
+ arch/x86/kvm/xen.c                                |   4 +-
+ include/uapi/linux/kvm.h                          |   3 +
+ tools/testing/selftests/kvm/Makefile              |   1 +
+ tools/testing/selftests/kvm/x86_64/pvclock_test.c | 192 ++++++
+ 11 files changed, 822 insertions(+), 243 deletions(-)
+
 
