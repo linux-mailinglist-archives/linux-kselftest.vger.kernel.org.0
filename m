@@ -1,162 +1,304 @@
-Return-Path: <linux-kselftest+bounces-8985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-8989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0CC28B4600
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 13:22:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E29588B4681
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 15:49:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77ABF1F24962
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 11:22:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA605B217BC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Apr 2024 13:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479E14F88E;
-	Sat, 27 Apr 2024 11:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD994F5EC;
+	Sat, 27 Apr 2024 13:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="C/3S/7g2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NrOSMGl5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177F54D9F9;
-	Sat, 27 Apr 2024 11:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B28F4F201;
+	Sat, 27 Apr 2024 13:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714216889; cv=none; b=hfhi39zbpOnaNSvTXLSs83uyrsNDGXeN+ETMzmXerOgwE5iZUehRO0nuy7/gAoX1mi6hZlwfH+ZP1o3YJKiayItWCfs+wrBkiAATJRsOI+EO8UYp88BCypQkYSKQWvQtnYhLnccMmSEN0yqhwd3NdXzR+hmloCTUDXaDYDxzZXI=
+	t=1714225773; cv=none; b=MZGGGE6aXTDqDOcshNSkYtJeFF8CnymEc1wZEOBJOGGXtodGQ5Zy5P2HKoSLstD3ooKvR5egWD+pFZpn7Lr7x0OOXXpjdvEqvj0G4gyJCdVOHuJATAM7+ATheOfZiiymsqK/rxyZIUriMD8dDk92emgpERv8mSK2Cy6HU/ntTCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714216889; c=relaxed/simple;
-	bh=zr1wUci8Xcm3SBmkDautJw+akuAPWZdTnl8cPxx2GoY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BFxhoiU6CXo+zp2/hn9HqES5PpkMogX7TwgH9rEQloZ5Pipwy5RMx+RaDC+13DPtj/WHAKAs0P7mDnyrJrGBWLJzq/4pQIMkGuzyJnoMZC3K2CvQKxCtDMrUMaPR9S+Eopr4sDALn2grDF/jz5w2oFzdRDxSuz+3IH6kbAJV5ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=C/3S/7g2; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=5S2tW55GgDiFyBbw9lOzLrSN36Zzgu35eCfjV6r8WLE=; b=C/3S/7g2ZpEyQRx09JvWZeaGRy
-	MstfydVMSKmDzDiNWQsVmHHabx9OQfnIVGuuynHfWhe7zBkqZrWPjQes73h15FdkhnTrE6PNu9LBi
-	b14a6T+iiBXVFXYMoIITDFCnXOq/qlapJsNYPQ6D5yagLsv8JVtf0F1dfuAFc8dvnkGYjNQq558Pj
-	BG4m/Ka0KD//ict8yEwYLWcCwuAqOybLY5jafWitwsG68L44u03utA67Qq97DkEKxNombNr+q3Vo7
-	RdniFSrdGS2PzHBGd0tvRjFWa3WUuvJ++CudOpdwkUgDJ0giXjFwnSRrz/nUKPm/lyjRzdmhy4hhM
-	dyxiJD2w==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5i-0000000FeZk-0pka;
-	Sat, 27 Apr 2024 11:19:46 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s0g5g-000000002bx-2nxs;
-	Sat, 27 Apr 2024 12:19:36 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paul Durrant <paul@xen.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	jalliste@amazon.co.uk,
-	sveith@amazon.de,
-	zide.chen@intel.com,
-	Dongli Zhang <dongli.zhang@oracle.com>
-Subject: [PATCH v2 15/15] KVM: x86: Factor out kvm_use_master_clock()
-Date: Sat, 27 Apr 2024 12:05:12 +0100
-Message-ID: <20240427111929.9600-16-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240427111929.9600-1-dwmw2@infradead.org>
-References: <20240427111929.9600-1-dwmw2@infradead.org>
+	s=arc-20240116; t=1714225773; c=relaxed/simple;
+	bh=37TP0DViE2pTNt0k4sP7y4WhwG/6OLmWNKr0syJIxHs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=uk0beUqnrG2ztL6rh6OVS7nuGHJj87d9Pa3fksEikNApCfdVHJBzSctSLlRXPIa36sklMTTfpHpvRrH3+VGys5/pxT/mIq35chuQ2LPe/E+tdnm6DXK77wHPJUrGf0f4QmgXXsewy9lnqDm7FTWcR3ENZ+zKmZYyqExHIbTQCaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NrOSMGl5; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c7510d1bacso1878487b6e.1;
+        Sat, 27 Apr 2024 06:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714225769; x=1714830569; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uif6sRwCq4B8viNrsdUGAHvyCJzvNgkSWnFMpuBhOpI=;
+        b=NrOSMGl5Aog1EsbHChbSO/cbNa++y0t0b8LMJI0lw+X9+VbI1YwwZrRYRn4CQ18V51
+         MREf7/PldjmyVTqUuClCxe3gcrAv3y4KItDqyqEgoU0pi7JXBHNRNIRffbzWNEuB7Qy1
+         4zsT7xTkWJw7MaLeglh94kU71PeeLNh2m5xaA4ywQJRJ4s4lVkcDIq7Z0Oh0H7laCtwV
+         9vILhgA8bQkQ9+fe5XcS6rKEJgq8hCv07aoVXysHr7fb/lNaHaYr0iUyRk8N5zLvTXkK
+         5ZmnONSkNJRyp2XfbXkFbsQEyQ1bsPq4QpAJ8H8VWumcWSao2Tqo4UvkgdTjMSg8Tnv7
+         6y8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714225769; x=1714830569;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uif6sRwCq4B8viNrsdUGAHvyCJzvNgkSWnFMpuBhOpI=;
+        b=Olmn7vMpZ+A8XYAmkgFsxj79tKKv49hex4Twv5m3cNjlrIQFQhOW6DDzteGwpkDkGz
+         vr8HAz2iWIf2MVeA8onLf9RYRKOo/NXkiCY7gACl5B9dr+snJSWHUrJuYM0X2UoZMxhP
+         pKBzaDCQv3eSyjgOuvr4sbyxHZWENm6RYrhu8+BLPzO6FRgK4A4pjpB5ikXqO9gt+cq3
+         +CA1RAXLiTQ5ah5eTRcGFykE9B8mcpVXEzfBvcJjGOx33AFH39OaZ4IIRDn8kztNpWn/
+         +5hJaHErtuGUt5YuGwaY8kiCveoEUuT4XS+3ZmEAHUpGe7BkWoVebeCoXvY6V9E5jIKP
+         D2Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCXCtEyo5Dsnj3cO0WcL/ltpCse6sRbtN5kStXiiQSSA0rkWBnL3wAFS7vHPyyO/YWKdo3BSn9UbeknOCPpnobKK1zgCzLqNceoD9Tbn0731
+X-Gm-Message-State: AOJu0Yz+O7GH454eLJ9LqV4NkF8RlRSAgBDrMZOe+YvslBv4Tp302iU9
+	RcUEEpLoIPcTI3rnzO+D+fyQO+EunvBkvp5x7X4J9itG78njO4F9
+X-Google-Smtp-Source: AGHT+IHGgYWNmBXVNLK0MOhie3KsIcVdcxZ1aNfnbhC+ixNnJbZpTcdheWNcGZiFgyTm27NnbZU4Vw==
+X-Received: by 2002:a05:6808:2882:b0:3c8:4948:ee2b with SMTP id eu2-20020a056808288200b003c84948ee2bmr6876054oib.5.1714225769544;
+        Sat, 27 Apr 2024 06:49:29 -0700 (PDT)
+Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05620a0d4f00b0078ee090baa3sm8829101qkl.10.2024.04.27.06.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Apr 2024 06:49:29 -0700 (PDT)
+Date: Sat, 27 Apr 2024 09:49:28 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ linux-kselftest@vger.kernel.org, 
+ willemdebruijn.kernel@gmail.com, 
+ Jakub Kicinski <kuba@kernel.org>
+Message-ID: <662d0268e71c5_28b98529417@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240426232400.624864-7-kuba@kernel.org>
+References: <20240426232400.624864-1-kuba@kernel.org>
+ <20240426232400.624864-7-kuba@kernel.org>
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net-hw: add test for memory
+ allocation failures with page pool
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+Jakub Kicinski wrote:
+> Bugs in memory allocation failure paths are quite common.
+> Add a test exercising those paths based on qstat and page pool
+> failure hook.
+> 
+> Running on bnxt:
+> 
+>   # ./drivers/net/hw/pp_alloc_fail.py
+>   KTAP version 1
+>   1..1
+>   # ethtool -G change retval: success
+>   ok 1 pp_alloc_fail.test_pp_alloc
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> I initially wrote this test to validate commit be43b7489a3c ("net/mlx5e:
+> RX, Fix page_pool allocation failure recovery for striding rq") but mlx5
+> still doesn't have qstat. So I run it on bnxt, and while bnxt survives
+> I found the problem fixed in commit 730117730709 ("eth: bnxt: fix counting
+> packets discarded due to OOM and netpoll").
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  .../testing/selftests/drivers/net/hw/Makefile |   1 +
+>  .../selftests/drivers/net/hw/pp_alloc_fail.py | 129 ++++++++++++++++++
+>  tools/testing/selftests/net/lib/py/ksft.py    |   4 +
+>  3 files changed, 134 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> 
+> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+> index 95f32158b095..1dd732855d76 100644
+> --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> @@ -9,6 +9,7 @@ TEST_PROGS = \
+>  	hw_stats_l3.sh \
+>  	hw_stats_l3_gre.sh \
+>  	loopback.sh \
+> +	pp_alloc_fail.py \
+>  	#
+>  
+>  TEST_FILES := \
+> diff --git a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> new file mode 100755
+> index 000000000000..026d98976c35
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+> @@ -0,0 +1,129 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +import time
+> +import os
+> +from lib.py import ksft_run, ksft_exit, ksft_pr
+> +from lib.py import KsftSkipEx, KsftFailEx
+> +from lib.py import NetdevFamily, NlError
+> +from lib.py import NetDrvEpEnv
+> +from lib.py import cmd, tool, GenerateTraffic
+> +
+> +
+> +def _write_fail_config(config):
+> +    for key, value in config.items():
+> +        with open("/sys/kernel/debug/fail_function/" + key, "w") as fp:
+> +            fp.write(str(value) + "\n")
+> +
+> +
+> +def _enable_pp_allocation_fail():
+> +    if not os.path.exists("/sys/kernel/debug/fail_function"):
+> +        raise KsftSkipEx("Kernel built without function error injection (or DebugFS)")
+> +
+> +    if not os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_pages"):
+> +        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
+> +            fp.write("page_pool_alloc_pages\n")
+> +
+> +    _write_fail_config({
+> +        "verbose": 0,
+> +        "interval": 511,
+> +        "probability": 100,
+> +        "times": -1,
+> +    })
+> +
+> +
+> +def _disable_pp_allocation_fail():
+> +    if not os.path.exists("/sys/kernel/debug/fail_function"):
+> +        return
+> +
+> +    if os.path.exists("/sys/kernel/debug/fail_function/page_pool_alloc_pages"):
+> +        with open("/sys/kernel/debug/fail_function/inject", "w") as fp:
+> +            fp.write("\n")
+> +
+> +    _write_fail_config({
+> +        "probability": 0,
+> +        "times": 0,
+> +    })
+> +
+> +
+> +def test_pp_alloc(cfg, netdevnl):
+> +    def get_stats():
+> +        return netdevnl.qstats_get({"ifindex": cfg.ifindex}, dump=True)[0]
+> +
+> +    def check_traffic_flowing():
+> +        stat1 = get_stats()
+> +        time.sleep(1)
+> +        stat2 = get_stats()
+> +        if stat2['rx-packets'] - stat1['rx-packets'] < 15000:
+> +            raise KsftFailEx("Traffic seems low:", stat2['rx-packets'] - stat1['rx-packets'])
+> +
+> +
+> +    try:
+> +        stats = get_stats()
+> +    except NlError as e:
+> +        if e.nl_msg.error == -95:
+> +            stats = {}
+> +        else:
+> +            raise
+> +    if 'rx-alloc-fail' not in stats:
+> +        raise KsftSkipEx("Driver does not report 'rx-alloc-fail' via qstats")
+> +
+> +    set_g = False
+> +    traffic = None
+> +    try:
+> +        traffic = GenerateTraffic(cfg)
+> +
+> +        check_traffic_flowing()
+> +
+> +        _enable_pp_allocation_fail()
+> +
+> +        s1 = get_stats()
+> +        time.sleep(3)
+> +        s2 = get_stats()
+> +
+> +        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 1:
+> +            raise KsftSkipEx("Allocation failures not increasing")
+> +        if s2['rx-alloc-fail'] - s1['rx-alloc-fail'] < 100:
+> +            raise KsftSkipEx("Allocation increasing too slowly", s2['rx-alloc-fail'] - s1['rx-alloc-fail'],
+> +                             "packets:", s2['rx-packets'] - s1['rx-packets'])
+> +
+> +        # Basic failures are fine, try to wobble some settings to catch extra failures
+> +        check_traffic_flowing()
+> +        g = tool("ethtool", "-g " + cfg.ifname, json=True)[0]
+> +        if 'rx' in g and g["rx"] * 2 <= g["rx-max"]:
+> +            new_g = g['rx'] * 2
+> +        elif 'rx' in g:
+> +            new_g = g['rx'] // 2
+> +        else:
+> +            new_g = None
+> +
+> +        if new_g:
+> +            set_g = cmd(f"ethtool -G {cfg.ifname} rx {new_g}", fail=False).ret == 0
+> +            if set_g:
+> +                ksft_pr("ethtool -G change retval: success")
+> +            else:
+> +                ksft_pr("ethtool -G change retval: did not succeed", new_g)
+> +        else:
+> +                ksft_pr("ethtool -G change retval: did not try")
+> +
+> +        time.sleep(0.1)
+> +        check_traffic_flowing()
+> +    finally:
+> +        _disable_pp_allocation_fail()
+> +        if traffic:
+> +            traffic.stop()
 
-Both kvm_track_tsc_matching() and pvclock_update_vm_gtod_copy() make a
-decision about whether the KVM clock should be in master clock mode.
+Very cool!
 
-They use *different* criteria for the decision though. This isn't really
-a problem; it only has the potential to cause unnecessary invocations of
-KVM_REQ_MASTERCLOCK_UPDATE if the masterclock was disabled due to TSC
-going backwards, or the guest using the old MSR. But it isn't pretty.
+Eventually probably want a more generic fault injection class.
 
-Factor the decision out to a single function. And document the historical
-reason why it's disabled for guests that use the old MSR_KVM_SYSTEM_TIME.
+And for both fault injection and background traffic the with object
+construct to ensure cleanup in all cases.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/kvm/x86.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+Maybe even the same for ethtool, as ip and ethtool config changes that
+need to be reverted to original state will be common.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d6e4469f531a..680b39f17851 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2518,6 +2518,27 @@ static inline bool gtod_is_based_on_tsc(int mode)
- }
- #endif
- 
-+static bool kvm_use_master_clock(strut kvm *kvm)
-+{
-+	struct kvm_arch *ka = &kvm->arch;
-+
-+	/*
-+	 * The 'old kvmclock' check is a workaround (from 2015) for a
-+	 * SUSE 2.6.16 kernel that didn't boot if the system_time in
-+	 * its kvmclock was too far behind the current time. So the
-+	 * mode of just setting the reference point and allowing time
-+	 * to proceed linearly from there makes it fail to boot.
-+	 * Despite that being kind of the *point* of the way the clock
-+	 * is exposed to the guest. By coincidence, the offending
-+	 * kernels used the old MSR_KVM_SYSTEM_TIME, which was moved
-+	 * only because it resided in the wrong number range. So the
-+	 * workaround is activated for *all* guests using the old MSR.
-+	 */
-+	return ka->all_vcpus_matched_tsc &&
-+		!ka->backwards_tsc_observed &&
-+		!ka->boot_vcpu_runs_old_kvmclock;
-+}
-+
- static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu)
- {
- #ifdef CONFIG_X86_64
-@@ -2550,7 +2571,7 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu)
- 	 * To use the masterclock, the host clocksource must be based on TSC
- 	 * and all vCPUs must have matching TSC frequencies.
- 	 */
--	bool use_master_clock = ka->all_vcpus_matched_tsc &&
-+	bool use_master_clock = kvm_use_master_clock(kvm) &&
- 				gtod_is_based_on_tsc(gtod->clock.vclock_mode);
- 
- 	/*
-@@ -3089,9 +3110,7 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
- 					&ka->master_cycle_now);
- 
- 	ka->use_master_clock = host_tsc_clocksource
--				&& ka->all_vcpus_matched_tsc
--				&& !ka->backwards_tsc_observed
--				&& !ka->boot_vcpu_runs_old_kvmclock;
-+				&& kvm_use_master_clock(kvm);
- 
- 	/*
- 	 * When TSC scaling is in use (which can thankfully only happen
--- 
-2.44.0
+To be clear, not at all suggesting to revise this series for that.
+
+> +        time.sleep(0.1)
+> +        if set_g:
+> +            cmd(f"ethtool -G {cfg.ifname} rx {g['rx']}")
+> +
+> +
+> +def main() -> None:
+> +    netdevnl = NetdevFamily()
+> +    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
+> +
+> +        ksft_run([test_pp_alloc], args=(cfg, netdevnl, ))
+> +    ksft_exit()
+> +
+> +
+> +if __name__ == "__main__":
+> +    main()
+> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+> index f84e9fdd0032..4769b4eb1ea1 100644
+> --- a/tools/testing/selftests/net/lib/py/ksft.py
+> +++ b/tools/testing/selftests/net/lib/py/ksft.py
+> @@ -11,6 +11,10 @@ KSFT_RESULT = None
+>  KSFT_RESULT_ALL = True
+>  
+>  
+> +class KsftFailEx(Exception):
+> +    pass
+> +
+> +
+>  class KsftSkipEx(Exception):
+>      pass
+>  
+> -- 
+> 2.44.0
+> 
+
 
 
