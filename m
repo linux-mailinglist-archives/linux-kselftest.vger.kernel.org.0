@@ -1,58 +1,60 @@
-Return-Path: <linux-kselftest+bounces-9055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B138B5EEC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 18:25:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A61A88B5EF7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 18:27:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 555E01C20F9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 16:25:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65658280FB0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 16:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1025284A58;
-	Mon, 29 Apr 2024 16:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76D784D15;
+	Mon, 29 Apr 2024 16:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1Z91D0t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trPM41cV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBB4824AA;
-	Mon, 29 Apr 2024 16:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA6584A58;
+	Mon, 29 Apr 2024 16:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714407932; cv=none; b=dU/xWyJWZggrJT5I8kLJHsTgNVVLUGNfi1Sw+sfipZUuiYnjqj0hXfMJvwJj0hb8T0GlMPI+Upul83Z5rF0solBBd1+sz01bIkvJhutQjZFQ75XgAMpvsHo6H3vVAoNpoNSRIQ36Ef94WxU9cbynRkd6gJwBgSGLUQivoF1ETFc=
+	t=1714408069; cv=none; b=Fx1n/5sX8QXMeBy77MtU/Q2uKa9RrJKKimps7YeCPQUKvJdpAV+RUg/OIG12oxWY6kX8otqTETyEb3mxHZX/mwLunyd84coMbyFGKXf18mTIm9+jpTPKnvafc07sGxuNA8k3M0pEPjDoBwRkvSI9mDZSlnJHFWzH24/qY5++Mdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714407932; c=relaxed/simple;
-	bh=hSRHVXUzOZxJuDsJ1gXUwOKbr/hMUv6DDcfdIIwM8sA=;
+	s=arc-20240116; t=1714408069; c=relaxed/simple;
+	bh=aqj/EIZbRjieJ/aUXcaSUzTZo7Js/xrao3OVFzrESAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IvL9oNHNUo4ouzCowQ/lYZY15RkaM/OPqs7mrTQxOUSOcgqHKIiY6k+3tjPI31M3H53Dy5LOpvhUT/3kydoW/SyFv8d0C5JYBA61cZW6LlTcYvtBGZ+IqZTq+EB5x36aHfcEEDgFAyhFPHqGX+X3GVDdCyZQn70pOxHDvwbOYS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1Z91D0t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F40BC113CD;
-	Mon, 29 Apr 2024 16:25:30 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FlJ0kCuz0GQHKhAGI4489Y4GnXH0G+eJa9VJoPmt1QripNWQxoIQAilek7l12yB3x0/ysp5Kzd8M86u7i/Th2njxShRMRVa26rqCe/gr66lZVwAsz7uVRha4CWrr62XDqVxiG4HGB9Y6TWYFfV30Hi6Zc4O10n98+sSOL5KwiqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trPM41cV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC5EC113CD;
+	Mon, 29 Apr 2024 16:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714407930;
-	bh=hSRHVXUzOZxJuDsJ1gXUwOKbr/hMUv6DDcfdIIwM8sA=;
+	s=k20201202; t=1714408069;
+	bh=aqj/EIZbRjieJ/aUXcaSUzTZo7Js/xrao3OVFzrESAo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=B1Z91D0t/60LSaS3V52CClHO2WSnjOOiviB8zF/hBqwbrNsX8i8gOZyXHq4Fxdw5K
-	 f9cmIW9BDM3V8OXMJUWEI9T7JNI1me49nNqbzF8/ftimhkDxpGHQKp93lM7jZnM1Y3
-	 rQMdSCPVFZrimYLIz5PbnLjnk6mcIlYlJV7+c2CrNahfWJbeb7XhmHEpo1GdqAheB8
-	 suEjJVWkU/8GPAEpgr1tWigSMclYnFIMX3ozRtM4iF/S6YPjXhk6cwLpVAwJO49oVB
-	 +5srEDJsJRcByNbvk333YqZ1sbatWHf0+g/vqTA6pS+PRVRCUfnVZztnvb5iTjm5qd
-	 6xVBCWyvDppow==
-Date: Mon, 29 Apr 2024 09:25:29 -0700
+	b=trPM41cVmtL9V9jcDQf3wjaz6LeuGCAwhcShC/C1ksu/ozloF28B5ZHTjTn+L+iEG
+	 iQ8Y/1qK7N7X98oL4oPwzBg/MoUsEQ5f5FpLKHmgFAhheGaVMlaHPDX1u/ZHWA4PzY
+	 RlZA2+erBXs3fVt8jhlU0KlnuDc16SISPaxO5d/nIo9IxR+LHL9NN0FEdLAflaDmoF
+	 nmkSfIK8+Ga/L9VTb52CrhYCKVU6BCkF3NPc87tR23Mc8D9evvM3hO+lDJNjmp5vHt
+	 5PaYLg9XS6qsOGKLZJtFga0jOLPONVoKhYelTY8BUljLZ/kPIORNVqkeXcmW3LrNm1
+	 2ASrlr4yBJEOg==
+Date: Mon, 29 Apr 2024 09:27:48 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, linux-kselftest@vger.kernel.org,
- willemdebruijn.kernel@gmail.com
-Subject: Re: [PATCH net-next 0/6] selftests: net: page_poll allocation error
- injection
-Message-ID: <20240429092529.649e7de0@kernel.org>
-In-Reply-To: <f59287a5-99ba-4f37-8019-b176f0307ec3@lunn.ch>
+ pabeni@redhat.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net-hw: add test for memory
+ allocation failures with page pool
+Message-ID: <20240429092748.2250c20f@kernel.org>
+In-Reply-To: <662fb69baa4b7_2e6aae2947c@willemb.c.googlers.com.notmuch>
 References: <20240426232400.624864-1-kuba@kernel.org>
-	<f59287a5-99ba-4f37-8019-b176f0307ec3@lunn.ch>
+	<20240426232400.624864-7-kuba@kernel.org>
+	<662d0268e71c5_28b98529417@willemb.c.googlers.com.notmuch>
+	<20240429075158.51b3f8d6@kernel.org>
+	<662fb69baa4b7_2e6aae2947c@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,23 +64,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Apr 2024 17:01:55 +0200 Andrew Lunn wrote:
-> > I'm not super happy with the traffic generation using iperf3,
-> > my initial approach was to use mausezahn. But it turned out to be
-> > 5x slower in terms of PPS. Hopefully this is good enough for now.  
-> 
-> How important is PPS? In order to get 'Maintained' status, automotive
-> vendors are going to want to test their 10Mbps T1 links.
+On Mon, 29 Apr 2024 11:02:51 -0400 Willem de Bruijn wrote:
+> The only interesting points so far are the use of deploy (which I
+> assume you have on some internal patch already)
 
-s/Maintained/Supported/ ?
+Yup, they need a touch more cleaning up but the PSP tests use it.
 
-PPS isn't important in itself, that said, I wanted to set a floor to
-make sure that the failure path is actually well exercised. 
-Some drivers may be doing internal recycling or whatever other magic,
-which would make them barely call the page_pool alloc.
+> and that with bkg would not fail the test if the background process
+> exits with error.
 
-Even though this is not a performance tests the check is based on
-expected perf. My thinking is that once we have some data points about
-various system we can abstract the perf expectations a bit more
-systematically than if speed < 10GE: pps //= 10
+Ah, that's a bug, yes. We should record the value of fail from 
+the constructor and use it in __exit__().
 
