@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-9051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EFF48B5E39
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 17:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2908B5E44
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 17:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9834B20E1A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:56:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B16BBB24E44
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:57:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38D382D9F;
-	Mon, 29 Apr 2024 15:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8897F839E2;
+	Mon, 29 Apr 2024 15:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SgLmpnxQ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CKK2lQoL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AAA81745
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 15:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E2082D8E
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 15:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714406182; cv=none; b=LIHsK5u2vVWx/F2jbKQi7xSortVf8add8j1R6cK3ABdW26ZXlHQidjkgBF+FKatFEWSNuQnRpKpg2HM+eDnRM0MPXUhrcqyxfuMTHAjUnydRwojoohg6kEbj2gc7m8Y9Yf5jkqcFenYlm2IS+q163w3X6ft4CUWgMmGSAkY3Two=
+	t=1714406219; cv=none; b=bXp2QMJUCAFaCQ/9fKKEf5DnB+ZNdZwu+DorPBd+dmqFLWLNu9Wfbg+WkDVXI9EX371V73qaKC88f1aWiWY1ItMT89vEPGLhNxPT9+OV6XUs1Usa15ORTVlK1XzehUTi0Rm4InqEqtck55hkAJ9YmVMZTmIZgYNH+N6rXJJbIoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714406182; c=relaxed/simple;
-	bh=ATY455EhGB1trAXJC1zlQW676b8T6ZW3Z87YtK/u72c=;
+	s=arc-20240116; t=1714406219; c=relaxed/simple;
+	bh=ln/ctlMET0+EokkOHdYMTIPRVvXKe1uFuslZLmp/Iu0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DumYAA2L0jfmXw3zJk7nSSI0KZ/gT8GcGinDoHBXuTnSyRXd1NAppxQ9Aw5taKEPXrpH+rixIIZ0C7BMEw846vL/b0XAOM3lzgs6QdsLYDdqa99tcOCW270T5LP89c3mOEAmV7zaEJrngPcuisYOfyDXsoqVuyzzEspyAKr/Eq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SgLmpnxQ; arc=none smtp.client-ip=209.85.210.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=PMhdLqHYubng0tkL9vcVLZcKXI1kiL2h8e0UbxxColep/7tEUsS+O/wgYX++xwyLgEn1z0eSvQc4rrgZU50lI3/1uXP5jADKYC6tq7g4UudPRxVKWoRwsp9mr64BqqlpLr2U4Fc4spbuKFWdDNd9ZYG8GsP5pRxfekNu07yr5MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CKK2lQoL; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6effe9c852eso4141579b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 08:56:21 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6ed2170d89fso3706162b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 08:56:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714406181; x=1715010981; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1714406217; x=1715011017; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=kjGkCSeKh/CcNwm3m2uBf4bHFv/7owazitqwRQkEuUE=;
-        b=SgLmpnxQ0lxawOMLyZWIQpPyCZSZ7fJXcSHPzxmXk74tG4zlVcZMECFZRRUKK3oRmo
-         hLNszzTufGyx3aP+cpehy4+yT1YWF/sEEpWiGjofC8YvyRF1+VL4rHmvM2SrnA+rBKoS
-         0Gq6bFt4yqVo/WZIO5OTle8oFYei8csCNJz6M=
+        bh=DjewcbYIq7c/TPoADj3iJGWkV17y2Ws3yovJos8PGaQ=;
+        b=CKK2lQoLapZiR/sNUMRqFNiCKE5Y7gkoPczJm4eSU7aBUdfsxtUpPcuQU9Y86RAtbF
+         cNkyh3H3of6pMiUZhFBHVGswTgQmz5/fgQHbJecGA8TahkDaBqhKhGXozT3WMJtX6hgK
+         i2DisxyggRAuHUFGDMO1Y2XhBGmgroHf5liwk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714406181; x=1715010981;
+        d=1e100.net; s=20230601; t=1714406217; x=1715011017;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kjGkCSeKh/CcNwm3m2uBf4bHFv/7owazitqwRQkEuUE=;
-        b=UwDmcbweo2MYZqfSXZbavOyDiY9ybt13pUklcQz9PYch+pT8sYk0dfKe/AUa9F/rC4
-         ds87q0iczBXerLGn3XYOWtaJIX/cpYnkAR2Yrq8kPaV+M/MCAjLO1f6tfRxx9eBRqNY/
-         W1jS+d57r4WWZ3c0nfaJOUWpGZAbucgmqMDSUOT0g1BkcPPlDhe7TzPUyKlkb3Y8h2db
-         Twhav3brB3lPvx5uIuecnNIH26nN3IFGAlAIxp844jcJVKrZve0qQ8kiCGYEk+fAuBMQ
-         3doEUC6TpM+EqWoyzCaw3V/j4MXaTGWvgPKzDcc4OH0Fa+uBaZjw+pqxzR9rXyM/e2i8
-         1acA==
-X-Forwarded-Encrypted: i=1; AJvYcCVlIDcJINSjzfeymYRNRmWPDrQzhikEg81q0O+sQvxQkeghZ8I4iloQpfrTmQog7qZ4dux3BCEmEBPyAoup2FdHTB4BS3eOJ37wnCjz3Its
-X-Gm-Message-State: AOJu0YzE/8HplysKTmOtjyQhC+qps5uIMf11UJ8XNj+ZWor+SoUnLOap
-	c1wLyelE45mPbXymMs+GeThXuvDaydPUV74aVj69CeUJe+jjjlmO8NuM6Xlfaw==
-X-Google-Smtp-Source: AGHT+IEEywzon9guDpWHAHMoP7E4pXBs+0uOQkQO23YAwbVpobMsPRalzKbOZoYrJ3hUqSG/EDAvIw==
-X-Received: by 2002:a05:6a21:7885:b0:1ad:89e:21b5 with SMTP id bf5-20020a056a21788500b001ad089e21b5mr12953888pzc.15.1714406180782;
-        Mon, 29 Apr 2024 08:56:20 -0700 (PDT)
+        bh=DjewcbYIq7c/TPoADj3iJGWkV17y2Ws3yovJos8PGaQ=;
+        b=Ky72TnSICSBZKCKkcZvRX1pAZ46SzcI+D4wVnBvPIfz6Su3aBOpHCkq0l3yjoO9f2E
+         dmH3ZaGfMb18ejEn1YgFoIS8WxELqFhrP4n0bTxC5/3StbIkrTchMHqHC/7XIWM/YrI1
+         /0h6bnyKCakxp0rm02TP/yATGnRYZ4buIt89N8GMqDwNtzqCj0UUD0S9xnOIxzsHLJCW
+         aRvpBnBOjRPV8iExxoDCwgOjV6wmp6/Z0870k4sc3gYdBMTRMjncTrNo2cc+6ND56WgR
+         LNfgV50fy+c8maxkYvU59ibhxkGpf8L5f/YUESfRg/6Iepe0tHcZsWZp3dv66llMo/0/
+         SNHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAceDbksULChLfXvmJzEOSXKMKOOEXNMxz/NObjZLMHh6F0pPUIrsGzscUQQez0AvYmoNwUs5ANckRLfGa8OdKNVE0fH4Qm2dhgDHg24RK
+X-Gm-Message-State: AOJu0YzKPQjJCwgjY+VTSC7KK48fqqFBecQZ/OMEiIunAjwG4oWkppIo
+	RK/msr+u3gurGuxRkbY22EH4zRuAywKXSVS/gaGMtA2xgdEA4pFfpUxiWu2ZWg==
+X-Google-Smtp-Source: AGHT+IGtX8s9RQQ04uPZujtZP7zzSJsOPnFU3xFcZv3k8VNpW282v6ntNSFT3IphQP9NXnShf8WEJg==
+X-Received: by 2002:a05:6a20:9f86:b0:1ad:8f18:8625 with SMTP id mm6-20020a056a209f8600b001ad8f188625mr57193pzb.28.1714406217557;
+        Mon, 29 Apr 2024 08:56:57 -0700 (PDT)
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id lw4-20020a056a00750400b006ea9108ec12sm19390219pfb.115.2024.04.29.08.56.19
+        by smtp.gmail.com with ESMTPSA id b19-20020a056a000a9300b006eae3aac040sm19436778pfl.31.2024.04.29.08.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 08:56:20 -0700 (PDT)
-Date: Mon, 29 Apr 2024 08:56:19 -0700
+        Mon, 29 Apr 2024 08:56:56 -0700 (PDT)
+Date: Mon, 29 Apr 2024 08:56:56 -0700
 From: Kees Cook <keescook@chromium.org>
 To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
 Cc: Christian Brauner <brauner@kernel.org>,
@@ -77,10 +77,11 @@ Cc: Christian Brauner <brauner@kernel.org>,
 	kernel test robot <oliver.sang@intel.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v2 7/9] selftests/pidfd: Fix wrong expectation
-Message-ID: <202404290855.34806C9@keescook>
+Subject: Re: [PATCH v2 8/9] selftests/harness: Share _metadata between forked
+ processes
+Message-ID: <202404290856.494B7F8A@keescook>
 References: <20240429130931.2394118-1-mic@digikod.net>
- <20240429130931.2394118-8-mic@digikod.net>
+ <20240429130931.2394118-9-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,21 +91,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240429130931.2394118-8-mic@digikod.net>
+In-Reply-To: <20240429130931.2394118-9-mic@digikod.net>
 
-On Mon, Apr 29, 2024 at 03:09:29PM +0200, Mickaël Salaün wrote:
-> Replace a wrong EXPECT_GT(self->child_pid_exited, 0) with EXPECT_GE(),
-> which will be actually tested on the parent and child sides with a
-> following commit.
+On Mon, Apr 29, 2024 at 03:09:30PM +0200, Mickaël Salaün wrote:
+> Unconditionally share _metadata between all forked processes, which
+> enables to actually catch errors which were previously ignored.
 > 
-> Cc: Christian Brauner <brauner@kernel.org>
+> This is required for a following commit replacing vfork() with clone3()
+> and CLONE_VFORK (i.e. not sharing the full memory) .  It should also be
+> useful to share _metadata to extend expectations to test process's
+> forks.  For instance, this change identified a wrong expectation in
+> pidfd_setns_test.
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
 > Cc: Kees Cook <keescook@chromium.org>
 > Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: Will Drewry <wad@chromium.org>
 > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-
-I had to take a closer look at this one -- but yes, this should be just
-checking for failure (negative). The parent/child separation is
-afterwards.
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
