@@ -1,122 +1,97 @@
-Return-Path: <linux-kselftest+bounces-9076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFA08B63C8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 22:44:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 308258B63CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 22:45:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A50F1F22656
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 20:44:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 623851C20E6E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 20:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A2A178CF2;
-	Mon, 29 Apr 2024 20:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2511779B7;
+	Mon, 29 Apr 2024 20:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k4NwZOxw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u26yrP+P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED117799B
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 20:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20971411EF
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 20:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714423426; cv=none; b=pt7nNDNvsRcY60Ti168I31zI9lBbmjzRk3OKm77Se/k41pVw7y3HrdFOwfAokkYZpVHM75yNUab4PvYhBnAvJ1XckytrClt6uvw+BZWA+YsqWD2QJi9DA0ts0eQUzk2hdmNj5r4of99zrZToVROVW6cwYb0te/kYYTlrt3H7rCA=
+	t=1714423537; cv=none; b=ApTVrnI4nYEVVNyi7uBZBjC/N1qgVjwxcDTae7fiQ0rLZVhnCFyKP0CdMSUnGHNDmtuPzmyxFoUMhQj/rNGpQjML9iB/4k4E80wQbTfIgpOk4ilNnO3Q4u8zPpV9kUC6tGvRrc2/7XIUCqajgi4fdMplccf6Yt5QdvlcFxdkKmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714423426; c=relaxed/simple;
-	bh=Dqvvv5k/2rBndxGB8WRqT0FWAmJL3N2QMXq8c8tcCZ8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Kj4C+XXBcEWsmWr/OJNDOM12BsQsDUp5M845zsn2KrmBIiiQ4vylloz5CeZ643qJFOeygxSBFotjGsP9YvgT5trpJOmunWsIEibmuKHaRykBJRWqVxbu3uEOZYmKfmSJvLm85TLL903TnGGRypFFUNoRdjaz+0wy77nUFQqrsYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k4NwZOxw; arc=none smtp.client-ip=209.85.128.202
+	s=arc-20240116; t=1714423537; c=relaxed/simple;
+	bh=swqQysmDwMqqr88s2ywDiAH95K0lzxn5LK729hkN2aw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Lj39v0mTob35mwRLYWxTyXlqvvjZqVolql9MD5dYPqMzsH2seSugEbfFkac5Rh+vSPJKdhUoAldo10uNhZ+Q0E4EabYrUDQGwhFWbIV0WZLWut9AROCVltk1xiYZdwZD+AP3CSh0xEqsMUNpT9ts/vS1sRmkuOFQOTIs9ucQfEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u26yrP+P; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-61be8f7ed6eso946787b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:43:43 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1eb48c26d14so20902185ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714423422; x=1715028222; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kP5D9/l/449dTy3r209IVThrMxV6+RNO48E3tZy87Nw=;
-        b=k4NwZOxw7/0sWfc6h5SRG+E66ZQGe+HXgBZ1cQ2zcoqCwxSgeQdf2ygu8MeNJK0EFB
-         HxwbbHHC8/AJQ3Glem/QBH2S9ZGiyAp2/Kjd3KpEYllsdNVqLGPfov3oOOaww7ho1nPT
-         BuTn3rp7prAaxlnvn7ans2Lq47tTHJsvq56reQ3F6Hrisqt1A3GGoS/iff4+wxeIP6JC
-         PqVooAaKfwWpZhqd1iLxrR3QB2zqLYWQPuhlGffYfK3ncyky0gcPRwNeqj4+Ig+uQi1Q
-         Dpe7j2ZSdrVC8jG8zGKz53rpar+7uh9aGbdphsrqyv4fRKFq3mdAubwTdRDk3Kz9hIB5
-         9hKg==
+        d=google.com; s=20230601; t=1714423535; x=1715028335; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x2fmwuVTRYT2T76+zXs3/JLoDv4rTdaNSw/3Jy5CfVQ=;
+        b=u26yrP+PtnzcG3AqL3z8fc9NtRzX892JKPMOvCgWvwZ5IQpvlgf1Lc+AsKMVcFd0mS
+         p12jdazhmAh0SAyL4nGs9I2DHt5oLXIBbDflElPyHsvTEUkFxD5z9KVjg0ihh4gERNwK
+         PUIfcRjHmMTXqvKd2tFG8RsqgKpojZInPgnDBdj01bL6lAj10m7+YHJiJPChznWvsvDt
+         GcCoD/mSutsuO98kLsrylKCOESRVM2//IO7X/Q9G4hYzg3Ib/iJrFbMkpMejJ8AR6WLK
+         1z99FzK6Nt5J+BBTvPRKJBAGVXeF2cvobMuUryxB3R8CR4KgM1m/uYF3+5y3JKVHgNTp
+         u0XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714423422; x=1715028222;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kP5D9/l/449dTy3r209IVThrMxV6+RNO48E3tZy87Nw=;
-        b=f1WBBEPTVQqdkGSsEzQ4i2AUPsxi4AmmoFIszUSNDTE2Me0EtfC+Bm5IETVvPonXVR
-         J9bhWVKfm2B+9GHON1uNv8XFYYWYyZoHKhW8uX5HBdBv/a7qW5Qy67Y+YMvChWbmL6G7
-         pNrhKtSUBkCVP2z5kX49J+N6I8wtvN6jTNlmMpkBOPjyK+VWEDy87Jxyj02VP1EH/wR3
-         e0LEEsH6/A7Vvk3UEIUB+3QiqtA/B2X00kZ29PhTwRXyQKCKNzhBTwf2W8PaXrPBVKn5
-         lI447gBux08cfWGN1lwsvBo7QyGB2aWGV1e5pDjy8r6lXzilG3StO5Y8NY7bmhGgJrwp
-         HhmQ==
-X-Gm-Message-State: AOJu0Yyp0eQiGwDQsbz5CAaUdGKFdEk+5XmxHyM2ma8odgtEP4wP65yw
-	dPI82O1yeltluxgDmpI4isyDA0gUyM/f1bNjcqW+/YMfpp0ZTAfHxgy/P2MZs3OzKYW6muBDiEJ
-	4PA==
-X-Google-Smtp-Source: AGHT+IHcpzk6wYZrqzhB/+Lz7lRSuqPg6576nmgHC5Ed8jKuAp3HkexHCZB1xdt3BUA02fkvb59KkOzh1vc=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:690c:250f:b0:618:2ad1:a46f with SMTP id
- dt15-20020a05690c250f00b006182ad1a46fmr136239ywb.2.1714423422592; Mon, 29 Apr
- 2024 13:43:42 -0700 (PDT)
-Date: Mon, 29 Apr 2024 20:43:32 +0000
+        d=1e100.net; s=20230601; t=1714423535; x=1715028335;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x2fmwuVTRYT2T76+zXs3/JLoDv4rTdaNSw/3Jy5CfVQ=;
+        b=uE4ER014Lo7zczSP9nLDDhzIfvINRvUcgF0XCE20Ip8izKEAy2wokNHyD7JzJ+x3NR
+         N0ns78dk8vN2wCDZ4A+XViUQyVrzsdS8S04/BuBtyaFwvWa46oJ3v/eTjhwyLkaEv4vG
+         DKaOmr0gUW9hOR2C35A9ynHfq+TxKw6MN7DJENcjJkNBtsTZe7qovsRXmH0Qc/z4waet
+         fb1vJ1uaOAdQDB2svCYrowG83DazrEkXk984iEtGLsedledj9sNXHPGCVhoK32Nf+wd5
+         KWrjOIM3tnJdrBoGvR/913648/SrYqQ0rQM+5DPWtCj452C8jP+SZqOqTrSlL9NT9gr0
+         241A==
+X-Forwarded-Encrypted: i=1; AJvYcCX84nUe3tQ+RMz00Xt7aRFPcZHl3zptTP/qyrYg6HNMQruVydAiXgta5vlia+o6J2lIwH5xhtpmNz6GlMm8y3XPRd+66wMhwGFAccDcg6Bp
+X-Gm-Message-State: AOJu0YyhqfNVe3UiQ0llu01nvNJ2+oA+fTORajUUqErEH5VwvJTEzboh
+	9tMh0Cr1XkgQEOUOlrKPSyEuokHluX2IgsQnXuS3tmeh3eCkAkHpj2tencrj0RfHNR6R510y0VO
+	+7w==
+X-Google-Smtp-Source: AGHT+IHTxVOr3Y2390m4Vk8ysi9jybVvKP27rvMP+9atp9ocgxWXWjUvkGjNfYfnlwWwa0iT/CXNfGjzEfY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:dace:b0:1e5:5c69:fcd7 with SMTP id
+ q14-20020a170902dace00b001e55c69fcd7mr2293plx.5.1714423535293; Mon, 29 Apr
+ 2024 13:45:35 -0700 (PDT)
+Date: Mon, 29 Apr 2024 13:45:17 -0700
+In-Reply-To: <20240315093629.2431491-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240315093629.2431491-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240429204333.146063-1-edliaw@google.com>
-Subject: [PATCH] selftests/vDSO: Explicit unsigned char conversion for elf_hash
-From: Edward Liaw <edliaw@google.com>
-To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>
-Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <171408614081.3338343.3036858355679882617.b4-ty@google.com>
+Subject: Re: [PATCH][next] KVM: selftests: Remove second semicolon
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Colin Ian King <colin.i.king@gmail.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Fixes clang compilation warnings by adding explicit unsigned conversion:
+On Fri, 15 Mar 2024 09:36:29 +0000, Colin Ian King wrote:
+> There is a statement with two semicolons. Remove the second one, it
+> is redundant.
 
-parse_vdso.c:206:22: warning: passing 'const char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-        ver_hash = elf_hash((const char *)version);
-                            ^~~~~~~~~~~~~~~~~~~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
-                                                   ^
-parse_vdso.c:207:46: warning: passing 'const char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-        ELF(Word) chain = vdso_info.bucket[elf_hash((const char *)name) % vdso_info.nbucket];
-                                                    ^~~~~~~~~~~~~~~~~~
-parse_vdso.c:59:52: note: passing argument to parameter 'name' here
-static unsigned long elf_hash(const unsigned char *name)
+Applied to kvm-x86 selftests, thanks!
 
-Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
- tools/testing/selftests/vDSO/parse_vdso.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[1/1] KVM: selftests: Remove second semicolon
+      https://github.com/kvm-x86/linux/commit/d85465f2773d
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..7e2ea9bea394 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -203,8 +203,8 @@ void *vdso_sym(const char *version, const char *name)
- 	if (!vdso_info.valid)
- 		return 0;
- 
--	ver_hash = elf_hash(version);
--	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-+	ver_hash = elf_hash((const unsigned char *)version);
-+	ELF(Word) chain = vdso_info.bucket[elf_hash((const unsigned char *)name) % vdso_info.nbucket];
- 
- 	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
- 		ELF(Sym) *sym = &vdso_info.symtab[chain];
--- 
-2.44.0.769.g3c40516874-goog
-
+--
+https://github.com/kvm-x86/linux/tree/next
 
