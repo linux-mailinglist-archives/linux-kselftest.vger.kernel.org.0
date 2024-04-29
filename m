@@ -1,139 +1,120 @@
-Return-Path: <linux-kselftest+bounces-9074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931968B635A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 22:15:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 884F58B63B7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 22:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC607B21629
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 20:15:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 390A4283B42
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 20:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337CA141999;
-	Mon, 29 Apr 2024 20:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B06817798C;
+	Mon, 29 Apr 2024 20:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="W+TFK+y6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a76IcWjO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42491419BC
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 20:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E62176FD6
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 20:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714421718; cv=none; b=t99v6aQKoK9l361ZMbO5QozGNelFY7DCQ0wmIs5J9xftzDWpWVJpw7u1mGbeAAOLivNPnQFLYHVJ8a8DYxXewZgSwQn3YGoDVelyVOrcnxXlYTZpDZqs0Iv1ABkHSkaOVbALayfrtEvil1hsL8J3nGpiRV2q3w1arwQ3Sl4IAlI=
+	t=1714422897; cv=none; b=gV784rs5Sp28tcoiwS2oiJ5acSxVvjF6l2HFSuVbwbVDRhw+9Q0GjTDoWPaNznOxobb+VKgeXw3YfrYPNAB/tIW1vlENFUmxNYdgT3bxXQm4uCG+oDpNn5mjn/+R/FBBwhe3GDkx6QNXHt+8AUAm/cy62eFhkLn9nJ7kfh+eRg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714421718; c=relaxed/simple;
-	bh=5lIm1eGtHM4PV56m4aPsCpHzpWdPQKBG54afaQAvc4A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QHUIQKxhbHUvhuv8rzEnX4Ec22QJyzxDBlBbS9yuTKZT9C9tMOA9mhUeXkyKuSRyvviAVZzbr83ysM5P+lMcDx2b0biTCXg55P7jV539z2Zofb0NpZYyHDCLI/bOP2GlZMhBNPf3hq8Sdxe4ruwBDmrB3h0F74H31MQTs42gG4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=W+TFK+y6; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57225322312so6609331a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:15:15 -0700 (PDT)
+	s=arc-20240116; t=1714422897; c=relaxed/simple;
+	bh=FJgJcexbKP8Vs2qsQoifsZ/CG9oPAv6wyYJlV8ROmx8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=axMBclUFESczgDrmZPKY2vyLUTE15t3ZdnUFkEaH9XV85nrxPqdt3r+Ja00DKcMCMH1bhx5zFGQsOik75pjtG4tfU5EqZnviYbQyRZGRerV5CM14stosT1M7cR8A/Uzlq8PMLEmYxWv7hHHjreFc0wRmpCG2QdSomXcJlMnOjP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a76IcWjO; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-61ab00d8a2eso83603637b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1714421714; x=1715026514; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5hNIl2k7bcjopXDurl21nUe10hqHAJ/W6XMO+7gYbZw=;
-        b=W+TFK+y6jzm4Zy3kavYgQEYxs0c6e7ehSSSP1t+dRGz42hGGveiTJD0Y+x7Hjh58VN
-         HrOEC517Xkq5q/bY65EPa+A1sdsfM7yB5YxPvEG388pBvmq23zMGNpZ4DA2KYIy/8ybx
-         Twc7PnSoeWqJ5MTA2/7uMRyk4tQ0cJgIs3o09UWMHWwUHY0qpOlLA0FoTHYXhC4QjM8e
-         PwWEWPEmd8zDtkfV+DHX3INFC98rFne2gRxJKDxQNu/cUy/CJILdl51Z1j245rB5q1Jn
-         HJnukH9Iw+xafkhCmpM1k5UnirgFuzlMtrjro9PjgWJoYAP5BJTKWIS+FhKulz53WcEe
-         gWjQ==
+        d=google.com; s=20230601; t=1714422895; x=1715027695; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9mL2eooEb/7s/U1rMU577fBDSrTqCDNk48ffx+zYIGY=;
+        b=a76IcWjOGXC13WnMKEt6QWBFJVUv5JakGEEpKzAc7w5cChB/v50B6P+HJ/Yo1NLsSW
+         J/Eioa6LuliTnWzGFeQbVqV4I/aNtv+pr9R1bHr420Cpkhi7YxTTBi+bA6hp213CgDW+
+         4ICZoaCxnBdO0/09cPK6FcbSQNU8XxjCvHeCwb/Ca+fZsjeHF+z+JIkFEmi7GP71qSaK
+         RB3V6eVsisA6Ha4vV2y/QaB86wom6qvMeXhdZ0/ysGdHR1gPOHfFDmBVJ+HjpAZAsfZs
+         xoGsEhiCeb9PFatTXclb8Djtz0QtT5Gki6ZAWMIlrbPW2Dd8Ze+k8hjnw56NzSfmimHS
+         sohQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714421714; x=1715026514;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5hNIl2k7bcjopXDurl21nUe10hqHAJ/W6XMO+7gYbZw=;
-        b=jtS/qO56gz9DOF7e0KedvdtE2rFZdu4rFsiSHg5eLbKPrna9m65XITJ7gjQ4Wlilg+
-         43Lz0YjZT0V2eW0zY/PdWRQCAzK4sCaztChvs/AxG9hdCOm3y+rvFnk3etfvJtYFYFio
-         AFv3FGfT5W/Xg2TewDo9kZF5gaZWMS/4CeQh9muYxs8t7oHg3cIq86radwfPb1bLGHNt
-         rap33nxK6OAxUt3SU1ckiACokg+13pRwuDQM5h2mVRMlmYNt3QvQ3HIRVKzcXYMZIvnX
-         vIfQl7lowPg0Uy6qyVBiyMdeJArejlnMPy1vXvuNDdxuzkrAdk9AS8gBu1+DDfySvDhY
-         t5xw==
-X-Forwarded-Encrypted: i=1; AJvYcCVwtZlwOFKGogC65GmjDnyLRDErSP4forYRvP+ssEJbPmR8bJqKhLy7r1JQdvaA0WcMEgybIgBplg8BSJ3iSnNMKDDYn1UomW2iu2jul4Bt
-X-Gm-Message-State: AOJu0YwhkuKeRw9cvy4FuXIb/4pWqfpu20Rv6AP09r4xmkc63Xr/Gu3x
-	Hyf52BrIpOjQib91d2IHnboLkG8JPwxviFpsZZrAp0YC9QZidl1AgWkTJxk1LQ8=
-X-Google-Smtp-Source: AGHT+IEYp6PrEor/rRFc0AvlZl9FY32fdI1sHcQqXd81K8C/WOL3RGcjPL+2CvSbMsQBan6olswboA==
-X-Received: by 2002:a50:cd0e:0:b0:570:5b71:4859 with SMTP id z14-20020a50cd0e000000b005705b714859mr6505696edi.41.1714421713909;
-        Mon, 29 Apr 2024 13:15:13 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5063:2dc::49:1ce])
-        by smtp.gmail.com with ESMTPSA id en22-20020a056402529600b005721b7bfea2sm7844691edb.22.2024.04.29.13.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 13:15:13 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Geliang Tang <geliang@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai
- Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@google.com>,  Hao Luo
- <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Geliang Tang <tanggeliang@kylinos.cn>,
-  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 1/2] selftests/bpf: Check recv lengths in
- test_sockmap
-In-Reply-To: <0de8cc53c7b797fbb8d8a12748b30353ca99d98d.1713867615.git.tanggeliang@kylinos.cn>
-	(Geliang Tang's message of "Tue, 23 Apr 2024 18:26:14 +0800")
-References: <cover.1713867615.git.tanggeliang@kylinos.cn>
-	<0de8cc53c7b797fbb8d8a12748b30353ca99d98d.1713867615.git.tanggeliang@kylinos.cn>
-User-Agent: mu4e 1.12.4; emacs 29.1
-Date: Mon, 29 Apr 2024 22:15:12 +0200
-Message-ID: <87y18whqnj.fsf@cloudflare.com>
+        d=1e100.net; s=20230601; t=1714422895; x=1715027695;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9mL2eooEb/7s/U1rMU577fBDSrTqCDNk48ffx+zYIGY=;
+        b=ZkvkFo2laBaCy2KhU4kLKChat55Z6HMPnexYp4BbBYDmN291+JabXv/mdSyacz8pll
+         o+M+0qky6WQrsYfjZxjqq/cUkuMBgxQ+yq8Ua8LtJ2k2HOeHhCUWUHpV/bGLsSiBiFwl
+         +J33shArt6ggX2Gblg9AbMT1t3R1aIdV07ei9hhBNEsUJ6T4ShzExx0JYSZ9J8dwInM1
+         jrBkGajZaPX6JMQ2hJU1KTVaVHJqTqbt0IRJpVUIMikhE5cQ6HN2tiOzNkz7cqcVRzYm
+         ru27Axvkxn65r8OfhKTX0cxvrguMS9CzCLXN4dZLdJHC/YLxVXFdOmM5dK3FALP6JGlj
+         mmzQ==
+X-Gm-Message-State: AOJu0YwWGFPKqkGoZmFGcYgPLKN33+mey6i0czTen5KjRoLJWnPw28nM
+	LiBs+2uNWg/g71QSvpyPeh1Ri/4ztxIP7lT2cGi//jIAvthRtkMwgBbzFl5GjgOkE9bhVuHPgjM
+	chQ==
+X-Google-Smtp-Source: AGHT+IEg/h9s1d+Swx9EJYfMUgBN/ifTzPWb8HrDxhF+oosvBsPlL28UkAI466cJzdn/BGYHBGso4LvRogE=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a81:a142:0:b0:61b:a123:1c53 with SMTP id
+ y63-20020a81a142000000b0061ba1231c53mr168083ywg.4.1714422895519; Mon, 29 Apr
+ 2024 13:34:55 -0700 (PDT)
+Date: Mon, 29 Apr 2024 20:34:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240429203441.143607-1-edliaw@google.com>
+Subject: [PATCH] selftests/vDSO: Fix assignment in condition without parentheses
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 23, 2024 at 06:26 PM +08, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->
-> The values of recv and recvp in msg_loop may be negative, so it's necessary
-> to check if they are positive before using them.
->
-> Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  tools/testing/selftests/bpf/test_sockmap.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> index 43612de44fbf..24b55da9d4af 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -680,7 +680,8 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
->  				}
->  			}
->  
-> -			s->bytes_recvd += recv;
-> +			if (recv > 0)
-> +				s->bytes_recvd += recv;
->  
->  			if (opt->check_recved_len && s->bytes_recvd > total_bytes) {
->  				errno = EMSGSIZE;
+Fixes clang compiler warnings by adding parentheses:
 
-I'm concerned why are we getting false-positives from select() here?
-This is what leads to test failures once socket is non-blocking.
+parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+                if (g = h & 0xf0000000)
+                    ~~^~~~~~~~~~~~~~~~
+parse_vdso.c:65:9: note: place parentheses around the assignment to silence this warning
+                if (g = h & 0xf0000000)
+                      ^
+                    (                 )
+parse_vdso.c:65:9: note: use '==' to turn this assignment into an equality comparison
+                if (g = h & 0xf0000000)
+                      ^
+                      ==
 
-[pid   544] pselect6(29, [28], NULL, NULL, {tv_sec=3, tv_nsec=0}, NULL) = 1 (in [28], left {tv_sec=2, tv_nsec=999997014})
-[pid   544] recvmsg(28,  <unfinished ...>
-[pid   545] +++ exited with 0 +++
-[pid   544] <... recvmsg resumed>{msg_namelen=0}, MSG_NOSIGNAL) = -1 EAGAIN (Resource temporarily unavailable)
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is there an explanation? Or are we ignoring an issue in sockmap code by
-"skipping" over EAGAIN errors from recvmsg() in the test?
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..b9cf771006da 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -62,7 +62,7 @@ static unsigned long elf_hash(const unsigned char *name)
+ 	while (*name)
+ 	{
+ 		h = (h << 4) + *name++;
+-		if (g = h & 0xf0000000)
++		if ((g = h & 0xf0000000))
+ 			h ^= g >> 24;
+ 		h &= ~g;
+ 	}
+-- 
+2.44.0.769.g3c40516874-goog
 
-Didn't have time to dig deeper yet.
 
