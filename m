@@ -1,130 +1,80 @@
-Return-Path: <linux-kselftest+bounces-9053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE7B08B5E56
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 17:59:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 889AC8B5EBD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 18:17:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98A58284985
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:59:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9BDB1C21726
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 16:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9B686253;
-	Mon, 29 Apr 2024 15:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CD184DE4;
+	Mon, 29 Apr 2024 16:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ii8sjjsx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnTivAxR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956CC8614C
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 15:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30FA84D35;
+	Mon, 29 Apr 2024 16:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714406282; cv=none; b=HCKiT/N0muBRuQF1xNlgl3nKyHT6+Tjd7VKR7lz07of8kyxG32zbl4lk5kwvZT0LABzS7glGB+zvothnDBrJwYtWldmynWbrktRg84SuwIGbag2SdrOhANa22ygXgPBIB/KCyUp4Tiespwp72OURetNo7+dNT1YPAyUDQWGd2mA=
+	t=1714407413; cv=none; b=qtR81FT84ZG3VqrdmClNtgwpEbMB75hYZFmeZOQ3sDzup8mntXB+p4gEmsNBSJkVlH0hpacMFWBNj6DGBG16je15RjZXxD9Dl2wC9Qgzz8D7klPmCMMksWmlj5z84o7+G9cRNd7nxgF0guCQqgzu519cS09VPsgxZbxcnpXKxa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714406282; c=relaxed/simple;
-	bh=elJxk/k9sqYtC/MCZ2vFryQvPeupAL5xKULnIW6JfRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C88dzaQRUlO5Ha2+Z9ySLesC44d02YKFqcUiUaqXWfi6fnIjXUIOEgBNi1boNNkVzX61zpuDozPcNqrsCiH0rRflzSKN1CBiXyPh8/7zDgecZ8Cm/3jI6EHiy28H4mnD1al1ABS+Dkh4AG6O3OLOGxJjXIWDnyhJuQTK5I34iho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ii8sjjsx; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f28bb6d747so3930616b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 08:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714406280; x=1715011080; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LXesceeVx7eAybXSMHvtACUpIAJaYRLCSDSMv3aiI6Y=;
-        b=ii8sjjsxUUoI7UJi0f+z1jQ/aZRF88qHkGEXQDr+zAffx5BYMijcwiwyB4dFA0o9wm
-         6jjVzaDFx9TOAQ+f33y8SRxnklbiFS9I6WS3Ia0t0CUD50obUEwy7AsguDN3iTo446so
-         TJ1y09rTSRdkD/nIXBLNDyJ2XAji/yACrcxFg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714406280; x=1715011080;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXesceeVx7eAybXSMHvtACUpIAJaYRLCSDSMv3aiI6Y=;
-        b=ld+X9X6Af9X0ZtFZBnRD5iaTHsqbQuS1DVj81oOTUNomwvgvKhbmjGcpkOFqETdQ9j
-         78eHvN5X/PQLRr/GQcKqygEj+t5RiarkNUpRWIkdlk9PcNBrf0Frk+jVf5QhqxbGzUL7
-         oiJIpwECSJOQxWKIGS0ogB7WMu4pN5xTMRdAVKrBh8EJQBKywDX59enxE5QYNUzdUyR1
-         bVYCzqrYDIh2YaAMLW0jYtMv2o1cOA+NkXACqvZVGNT4ZD4Idgxhy28OktrlQf9zPhdq
-         WeZ90Q9HbqGpnXcRciqUpAvvbC3wOAsorNOvkJ8KlVvD9JKclefGI6egdALJQcL7zG1m
-         JS+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVIpY4hbaTPFa/xTPQtCg/3nHyP88Es//VzzCLrAVh1XG9piT1rbjk7uNKc+yNWX3lUqoXgTRlRl0ZjJul/hcbT7ab293EUZS86jQYXh9Pw
-X-Gm-Message-State: AOJu0YzSUdVtN9KQc6SoZKpEpnxzgkRzlNuC3E+Kphiifoy9q48K9k2k
-	9Cs00Sr65QTUnAqy4QGwM/XVk6dtzQgQlYIsu2Eb8ZjjALTCXrgTwQchbNmCOA==
-X-Google-Smtp-Source: AGHT+IH5mn+xNGRLvYr66gOyWrbSH5iYC8VFZwOPTFbEPOgPuBjIRhHvM+Dtaw5Y0QSIqnQeruOFzw==
-X-Received: by 2002:a05:6300:808d:b0:1a7:6262:1dd1 with SMTP id ap13-20020a056300808d00b001a762621dd1mr9709716pzc.51.1714406279974;
-        Mon, 29 Apr 2024 08:57:59 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id m19-20020aa78a13000000b006e697bd5285sm19380439pfa.203.2024.04.29.08.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 08:57:59 -0700 (PDT)
-Date: Mon, 29 Apr 2024 08:57:58 -0700
-From: Kees Cook <keescook@chromium.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 9/9] selftests/harness: Fix vfork() side effects
-Message-ID: <202404290857.4BEAF6D55@keescook>
-References: <20240429130931.2394118-1-mic@digikod.net>
- <20240429130931.2394118-10-mic@digikod.net>
+	s=arc-20240116; t=1714407413; c=relaxed/simple;
+	bh=YXJGF1Zg4xe6UYYY8Irqeg5ykQPyYLk1knZJ6yRW8Xw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CBhQ8uYvO5Ar3r2eL0OnkeAUYVBpCU1KGU7DVxXRKOdN/tRk09GaKAXtm/ec4Bs/cdsmcCOwWz+k2K1JXH0Ue2AX4gmrcoRPZ5zrxOmy6b7HXo+XpcRt3zsGoT9abb6GgC+V5ldWfGAUbdCbQ/6bE2ekNh8YfW9qIGaqVdEf12I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnTivAxR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419CBC113CD;
+	Mon, 29 Apr 2024 16:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714407412;
+	bh=YXJGF1Zg4xe6UYYY8Irqeg5ykQPyYLk1knZJ6yRW8Xw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qnTivAxRbuS4p39PeNaBv+2U7bbYVfk4Jfb6PM4sDcZ+g6B+IndY2wHw1x1g95lPI
+	 vKruRY6jALIs5Sk6abnvCNlFrH9smXH7aT1I2zaq2T1CZjZkvLjRzVbCmXZgFz/X3x
+	 D2IwYjHpOuw1oUqCtJ5x1uX65dxU9oikPZsXPbdz6qdQg4/c0tWIUg+OxKUNZUi2ci
+	 f73BACpZNE+Gfpu1r3ZVNZfSa90JgxIM25Bcr5IEtxxwafR34OBC7nq2XCCHlGAe/8
+	 TE2FGVgor991QgCkFFn0xDagyy6e8C2IQUNq2N2ti2EvhUzxU1M7R+o/QKhGzsdbFc
+	 kIP+HHGlwy5Dw==
+Date: Mon, 29 Apr 2024 09:16:51 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+ willemdebruijn.kernel@gmail.com
+Subject: Re: [PATCH net-next 6/6] selftests: drv-net-hw: add test for memory
+ allocation failures with page pool
+Message-ID: <20240429091651.7b831da9@kernel.org>
+In-Reply-To: <3e332c1d-b767-48f2-8307-0d037921773f@lunn.ch>
+References: <20240426232400.624864-1-kuba@kernel.org>
+	<20240426232400.624864-7-kuba@kernel.org>
+	<3e332c1d-b767-48f2-8307-0d037921773f@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240429130931.2394118-10-mic@digikod.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 29, 2024 at 03:09:31PM +0200, Mickaël Salaün wrote:
-> Setting the time namespace with CLONE_NEWTIME returns -EUSERS if the
-> calling thread shares memory with another thread (because of the shared
-> vDSO), which is the case when it is created with vfork().
+On Mon, 29 Apr 2024 17:12:29 +0200 Andrew Lunn wrote:
+> >   # ./drivers/net/hw/pp_alloc_fail.py
+> >   KTAP version 1
+> >   1..1
+> >   # ethtool -G change retval: success
+> >   ok 1 pp_alloc_fail.test_pp_alloc
+> >   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0  
 > 
-> Fix pidfd_setns_test by replacing test harness's vfork() call with a
-> clone3() call with CLONE_VFORK, and an explicit sharing of the
-> _metadata and self objects.
-> 
-> Replace _metadata->teardown_parent with a new FIXTURE_TEARDOWN_PARENT()
-> helper that can replace FIXTURE_TEARDOWN().  This is a cleaner approach
-> and it enables to selectively share the fixture data between the child
-> process running tests and the parent process running the fixture
-> teardown.  This also avoids updating several tests to not rely on the
-> self object's copy-on-write property (e.g. storing the returned value of
-> a fork() call).
-> 
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Günther Noack <gnoack@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Will Drewry <wad@chromium.org>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
-> Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> If i'm reading the traffic generator correctly, this test runs for 24
+> hours. Do we want some sort of warning here about the test duration?
+> Some sort of alive indication very minute?
 
-Thanks for splitting these up! I found it much more digestible. :)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+That's just the max value for the time param.
+The generator is stopped / killed after we go thru the test steps.
 
