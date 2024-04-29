@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-9041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF018B5D21
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 17:16:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BEFC8B5D2A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 17:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8B01C217D7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:16:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CF6F1F214A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C440130AC2;
-	Mon, 29 Apr 2024 15:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12562130E35;
+	Mon, 29 Apr 2024 15:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="S528nEJJ"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IphIGX5T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBFA130A47
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 15:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545EF130AEB
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 15:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714403205; cv=none; b=T906W/zKeq06M9NCEvHpxWhBiyKrrQAJpmE0vZryUlWpsdE6q7abyOOUGkGyWyZRuYoTvNzt/3Kmo9hk8GOobS6kk8JkGbJVmfvfmUAOejgcbJKpnkXCaXnokAdr7S40Xa/iy8ICb1bw8FyOjcOAwy6d7up/QoXnmVjYnYbvvmg=
+	t=1714403209; cv=none; b=rdqkHwa4bHtzlVr31lyDqny7dzBX7qlbzwbSk8Y1KcoHb7WO5BS7vR4pyu8YvlPtubOTVywtoweSkmF7LS9iRArfiB0TrfdpGbB1qatXLzqSY6Em5dJq17jTs5CqDXWljtm81RjRDaQbWRSTPZogkFG+9dMaQL9kgUEy8P2LEjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714403205; c=relaxed/simple;
-	bh=awZzvOfeihP/zQBwulZo2fkHpvheuFzo9+sGOB1HlhQ=;
+	s=arc-20240116; t=1714403209; c=relaxed/simple;
+	bh=VBYIkTZIleyOsUo3Vs7GTW09WzwtONhQK0/AstEMTYc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ce7mT6RjuxVEBOgxMLwsG9ZO3NokFzKpEQS/3UhR5U6SW5EnPw4SnrsGC5QRNEsNdWZfLRfZrcRNdEMVmgv5rJiRfRJVbhTQjRGaO2AO4794Zgel54gdKq/161KhvwwdeGQEhDWzd8cL9vaBI8iW8b7LXWywnMgWSaKBjkcoSfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=S528nEJJ; arc=none smtp.client-ip=209.85.208.169
+	 MIME-Version:Content-Type; b=N95kuo2S37fBcGXUolO8J/FgqfBEjYDLCBUD1ianN2ab445F+QgnHrHMX9pdfS3l+PqBk9WdXMmuPceDqKff+6XrueAHYTihZbReYgFgAVCUOZ2nSTxrkdO90vMvKuxtPlqfnyyfsbX/zfdQb2eGIL5bycxyBomc308q7lftzqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IphIGX5T; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2dcae31018aso549451fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 08:06:43 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2e0c363d93bso855121fa.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 08:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714403202; x=1715008002; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714403205; x=1715008005; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cQHXVYsUJGkXAyoSx2aDU2oA4c+tlzZFdLvDimlX5cw=;
-        b=S528nEJJuVc/ifgNZ4CM3gYn0p5kQA7gZNENBrsSghE92Sj26A/1SSBJBqVhtZNeh/
-         J9lEvaCTBbiXiGF4DxPLgU6bCabt/3ngfL7EJ2oAvRgMEEjulbAnuFvkVXtM3e3H1yAr
-         gGMPtgjlfzCmST+gYzBzL7rGQQEj3KhLzLKpX60bQnC7XeK3SOQm4KKxIsSz0XckQd1K
-         YZ4CFJvwik/xtvoz73aMdsEtUgljll5/qA95DYD+y/9ObG2GufT7Awxbi3S6/2cUR5ey
-         tV6hfECq9+cEUGBo8QnNQyMGssrqnITCBFuVI0F69YZdsFFqwsQW+fc19lMke4SQdTB7
-         XcHg==
+        bh=rdCfPjm06PN8DLWdVlWU7iGB8QhHqS8f5T3HQCXkkpY=;
+        b=IphIGX5TTrUC/uFJ8BaxG7n8/RFvEhoIC1BHzQ5cRX4j563R/qMkGlkYwwjNsmKHdR
+         MEL7whh8gGX7f4CAYyb3gFqCYoBemsR9mv4s+pbvSCixsCbnCzSkT6t+s782xWmGdyNt
+         ggPSWugYJvgoMGISPiGycCiCAEeqk+/dtTVwSoV0OCF4l/jAY5znMGxfAwz/CNKGUky+
+         0nC/VgZokiA26hgMhtnccWfHW7gCakVCErZqFKOE55adMQshJrJnHvBt+QLz/XkLjHRK
+         GCWde5JnzlfPUiAvxqdhvKZItGRrZCckIrtebNLP5jshkMwhmOvJ6wJU/HnF3RPFVj4t
+         f8Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714403202; x=1715008002;
+        d=1e100.net; s=20230601; t=1714403205; x=1715008005;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cQHXVYsUJGkXAyoSx2aDU2oA4c+tlzZFdLvDimlX5cw=;
-        b=KamhGCOnk3J57rY3VBZH06zBdJUUsD1GwddoY6AQ7ovko2CyMazg3ux6hxy9uRHsgt
-         XPzU180TMuiLuwQieW/SJlezigYO7o4jxUH+8jfO/N5uVtUEFfHVjY5c7sr+q3fRXzKa
-         g34azUjm2cMATCEJvT9kvNWxeAECsnqNlmZHgoA2N//sgP0rnB91brd10DZxPiIfjs22
-         E3RdjRUnGaBxieTVOXVLF9LFU7p3u8non1fpsHdcgVnCX+1uu6Q0wE+o4mZOwHRI/nyX
-         pHvDhIJrRodN5Xy2urnXNOXOtJjqKvKk3ILFlzhB0QSIQO0sWuYKjn1jUuV6j+hpc+5W
-         vG/A==
-X-Forwarded-Encrypted: i=1; AJvYcCV3af3j2IM3cqIHhloSiDL8fp9K24mvwpkkMSYfbhSRA8U0ENQTlBIV8nT7harhsGJK8keFtlKFiaJEmLFCIW8iDJ7lWMpwEiJhFTFOV/uJ
-X-Gm-Message-State: AOJu0YwvOSpNsfrwGjZ4EESn/guUoVUcRYyy4E9VflvQHeZUI1AtyIJ3
-	OW2m4HnkmeV7e5XXFIrILKGdHhf0QG6sa5dIjhwF4jGixFJGgViZZLpcFNqtFGQ=
-X-Google-Smtp-Source: AGHT+IF5Vs0aqFA3oJjuIMNqrstrULWJr97uvIHCvJJ63TtvRmaJzQ2/6ase4AtbajSIDHGGP4F5Fw==
-X-Received: by 2002:a2e:9ad4:0:b0:2de:1457:9d22 with SMTP id p20-20020a2e9ad4000000b002de14579d22mr7307292ljj.0.1714403200338;
-        Mon, 29 Apr 2024 08:06:40 -0700 (PDT)
+        bh=rdCfPjm06PN8DLWdVlWU7iGB8QhHqS8f5T3HQCXkkpY=;
+        b=lMzcJdePp95XgTvxYEF4U/nNjSr5KX3VuKW0DVM/ZMZeMDLjtTq1/0SwpClj2j+dDB
+         ABV3CrF8nq9xjf6Frd00um4uJ7M1rNgS3RgOGLceE9hWezzk9Ui444oICKePrxSsUhoI
+         UNjAB6EltDIcTZPAzrpKwcN9mLeQh11pfrcQVXqrlJpHDjZg1S+mFltxK86J949O0Ekd
+         gGabH+TPLZqYks88VZKTmDDemPMX2ZX089QsXedpJue1VaCGzhRiGezmJuCCu3QjWs0u
+         WWSxO1pAjl3bIkpjHgVZ/wKoWKEcakWSp4/n9OcOSL0SZvjcAwwqTl4dp6BAibtTe8MZ
+         Qgow==
+X-Forwarded-Encrypted: i=1; AJvYcCUar1x5wJV87sxsidi2YEzypqIKVcP9SnoAQI9dyP/tjNSI2T1HzA9o6CIHAw2Pl92R9ZmKtICdnn2yKBtnZy+1Z9b88sPif61i5sMt+OjY
+X-Gm-Message-State: AOJu0YxsN0yAvVhYo8xz8BtVCEIOYDe9r5oRMCIudbC2XNpkaa8bW068
+	NiO3ZckP+/Xo1SXr0pKa1btkpEmefA3RsB1n+3frgUFaAQm3NuZuFNR+RqnwlIU=
+X-Google-Smtp-Source: AGHT+IGj1uRjkxG+FV5WjycG0XJI9pmWuDAlxIOwFNFoM4jSpFSFb8mNeeM7/iNLVr5rfQAB/mcNDA==
+X-Received: by 2002:a2e:9f46:0:b0:2df:b336:76e6 with SMTP id v6-20020a2e9f46000000b002dfb33676e6mr4355115ljk.5.1714403203714;
+        Mon, 29 Apr 2024 08:06:43 -0700 (PDT)
 Received: from carbon-x1.. ([2a01:e0a:999:a3a0:2fec:d20:2b60:e334])
-        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b00418f99170f2sm39646638wms.32.2024.04.29.08.06.39
+        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b00418f99170f2sm39646638wms.32.2024.04.29.08.06.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 08:06:40 -0700 (PDT)
+        Mon, 29 Apr 2024 08:06:42 -0700 (PDT)
 From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
@@ -86,9 +86,9 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	kvm@vger.kernel.org,
 	kvm-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 08/11] riscv: add ISA extension parsing for Zcmop
-Date: Mon, 29 Apr 2024 17:05:01 +0200
-Message-ID: <20240429150553.625165-9-cleger@rivosinc.com>
+Subject: [PATCH v4 09/11] riscv: hwprobe: export Zcmop ISA extension
+Date: Mon, 29 Apr 2024 17:05:02 +0200
+Message-ID: <20240429150553.625165-10-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240429150553.625165-1-cleger@rivosinc.com>
 References: <20240429150553.625165-1-cleger@rivosinc.com>
@@ -101,39 +101,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add parsing for Zcmop ISA extension which was ratified in commit
-b854a709c00 ("Zcmop is ratified/1.0") of the riscv-isa-manual.
+Export Zcmop ISA extension through hwprobe.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/include/asm/hwcap.h | 1 +
- arch/riscv/kernel/cpufeature.c | 1 +
- 2 files changed, 2 insertions(+)
+ Documentation/arch/riscv/hwprobe.rst  | 4 ++++
+ arch/riscv/include/uapi/asm/hwprobe.h | 1 +
+ arch/riscv/kernel/sys_hwprobe.c       | 1 +
+ 3 files changed, 6 insertions(+)
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index b7551bad341b..cff7660de268 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -86,6 +86,7 @@
- #define RISCV_ISA_EXT_ZCB		77
- #define RISCV_ISA_EXT_ZCD		78
- #define RISCV_ISA_EXT_ZCF		79
-+#define RISCV_ISA_EXT_ZCMOP		80
+diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
+index bf96b4e8ba3b..e3187659a077 100644
+--- a/Documentation/arch/riscv/hwprobe.rst
++++ b/Documentation/arch/riscv/hwprobe.rst
+@@ -212,6 +212,10 @@ The following keys are defined:
+        ("Zcf doesn't exist on RV64 as it contains no instructions") of
+        riscv-code-size-reduction.
  
- #define RISCV_ISA_EXT_XLINUXENVCFG	127
++  * :c:macro:`RISCV_HWPROBE_EXT_ZCMOP`: The Zcmop May-Be-Operations extension is
++       supported as defined in the RISC-V ISA manual starting from commit
++       c732a4f39a4 ("Zcmop is ratified/1.0").
++
+ * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
+   information about the selected set of processors.
  
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index c74bdb9c0a9f..acd745bbf41f 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -315,6 +315,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcb, RISCV_ISA_EXT_ZCB, riscv_ext_zca_depends),
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcd, RISCV_ISA_EXT_ZCD, riscv_ext_zcd_validate),
- 	__RISCV_ISA_EXT_DATA_VALIDATE(zcf, RISCV_ISA_EXT_ZCF, riscv_ext_zcf_validate),
-+	__RISCV_ISA_EXT_DATA_VALIDATE(zcmop, RISCV_ISA_EXT_ZCMOP, riscv_ext_zca_depends),
- 	__RISCV_ISA_EXT_DATA(zba, RISCV_ISA_EXT_ZBA),
- 	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
- 	__RISCV_ISA_EXT_DATA(zbc, RISCV_ISA_EXT_ZBC),
+diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+index dd4ad77faf49..d97ac5436447 100644
+--- a/arch/riscv/include/uapi/asm/hwprobe.h
++++ b/arch/riscv/include/uapi/asm/hwprobe.h
+@@ -64,6 +64,7 @@ struct riscv_hwprobe {
+ #define		RISCV_HWPROBE_EXT_ZCB		(1ULL << 38)
+ #define		RISCV_HWPROBE_EXT_ZCD		(1ULL << 39)
+ #define		RISCV_HWPROBE_EXT_ZCF		(1ULL << 40)
++#define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 41)
+ #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+ #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+ #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+index 2ffa0fe5101e..9457231bd1c0 100644
+--- a/arch/riscv/kernel/sys_hwprobe.c
++++ b/arch/riscv/kernel/sys_hwprobe.c
+@@ -114,6 +114,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+ 		EXT_KEY(ZIMOP);
+ 		EXT_KEY(ZCA);
+ 		EXT_KEY(ZCB);
++		EXT_KEY(ZCMOP);
+ 
+ 		if (has_vector()) {
+ 			EXT_KEY(ZVBB);
 -- 
 2.43.0
 
