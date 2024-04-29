@@ -1,177 +1,110 @@
-Return-Path: <linux-kselftest+bounces-9096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4369B8B6658
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 01:35:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FECF8B66A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 01:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00618283920
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 23:35:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3AB51F20F62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 23:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2689194C9B;
-	Mon, 29 Apr 2024 23:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DEFD194C7F;
+	Mon, 29 Apr 2024 23:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nLaLnNPF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eHSBEGvW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AAA199E80
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 23:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CEF194C70
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 23:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714433679; cv=none; b=SJLWbJ2qEiXS9Fvu1xfGzwDc/NG2j84rxb/+2C/JBLQ/gCrKmEcO8pW7FlmWFoLNdUTFNCEcAEGPohyJdRUHXZmbwYwHXZpxA6g16rfu9dHFHtDiKlU0qykTTsgH02TJtrXvNgL+pQ27rouFyHq9LH1N8dTiIndsTtMzqH3NTnM=
+	t=1714434397; cv=none; b=LX2TykVvwsth05LY1GhOq3rTpNXjvBFZXDARsaF07sps7Bmg6uILKBpZTTCmjGqG2yvXd7YAy/X9mL48BITpbFh+soHktf+Nf1vT7OQRbsEcgHOkvzIZEE4oVln3PO7cBaniFraRIw4dZpsvx7xHepYjyWRSXbg44lJg8Z1CLBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714433679; c=relaxed/simple;
-	bh=lwbJyriMeKCC7kbq+9YtW2yusBZJusLxuCP1m9edtYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KHY0ywhHLU3w/VxaYsk8bibQaWlZ57coQTxxUN787mvVhH/iANFPYWw+24Dx0w6T64CfG3SMQPreQIqhfnQl0Y80yo7Lw3EMYy57aA72zdmXnReLpjA2v9pXxNLj5742KaarQ9Z7e7PzTxxc3GNxaWuDbN9NqaGsTOH75mMDS2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nLaLnNPF; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714433677; x=1745969677;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lwbJyriMeKCC7kbq+9YtW2yusBZJusLxuCP1m9edtYs=;
-  b=nLaLnNPF8pQUkzpbG6+v4k1qKXHBbm49kB3heovlM0qXVf87f03DK+jE
-   l9tCUkyAcAvD7M0WaEDtNwMQljPgQAS8YxjP7U/VGUPs6cLbEceW3civX
-   jJGpAnMthyR9LJQdXfQGoOSnPCTpPZPbHJaMKKzroUeFQV27JB6TaT3Dd
-   J+5cbIFG/fgLk+M0G074RAs/CeZ3p46zzykZzdBAuec5sOFPswgQoHXqs
-   g2p+IkCNgGoqLLzWrZDbP8CEDIXLJc3FMtSwbwHkBpeqLR39EFuA3Dyq7
-   As5FBK0Td7kG9LphOZhim9jtpW14axpdJdq556a4D3zKpf2N3BdDHxYPZ
-   Q==;
-X-CSE-ConnectionGUID: WaTx00AsQa6U8OVCK0doqg==
-X-CSE-MsgGUID: FIMWcnDYSw2iS4ti6usP1w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20670017"
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="20670017"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:34:37 -0700
-X-CSE-ConnectionGUID: 8Vo4btO2T8uNQCxluH4QbQ==
-X-CSE-MsgGUID: OBveummPQm6rcznHKX6gFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="30740573"
-Received: from 984fee00c67b.jf.intel.com ([10.23.0.114])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:34:37 -0700
-From: Zide Chen <zide.chen@intel.com>
-To: linux-kselftest@vger.kernel.org
-Cc: seanjc@google.com,
-	pbonzini@redhat.com,
-	Zide Chen <zide.chen@intel.com>,
-	donsheng <dongsheng.x.zhang@intel.com>
-Subject: [PATCH V4] KVM: selftests: Add a new option to rseq_test
-Date: Mon, 29 Apr 2024 16:34:35 -0700
-Message-Id: <20240429233435.19003-1-zide.chen@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1714434397; c=relaxed/simple;
+	bh=eegKWMCzrzmAYKZZgWikTznQIF2vb+MOg4eHgNWHlvI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ddmxjatLpUTBrKvJx5+6ctc6BQ1NyL4jLFAmpst61LxnVa5fNlBBCToB3Onys5akd8xSUUPs5yVTjLKpm63fKKT4KSvbestxrsXlbnHKyig/k76a8gC7d/k1p2ncljm47HLDv0XXx8vkkzvSnStgKz96jGD8eqVtadcLOceMUTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eHSBEGvW; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5d8dd488e09so6297989a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 16:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714434395; x=1715039195; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VBKZZVwka2zaA5v6QzXM0lkoNOh+22WGqQQ6UgQ50cs=;
+        b=eHSBEGvWL15RNxpFN1o/z2TsCBOpM5PHzbyWILQxF0RW4NMO7OT7Cq9fHtRMNUe0/a
+         N1z9R6ipNPuqj0ovEDGBSg+k3W8o6pSHmOshm3DkN80xfwOP+jboIc9EydSgRyXY55oE
+         CeM5gF0xV+WH+gPvlWPjMYzu1URutmcL3+kgLrLkZrBHvVzjgMYQXDeIheRDQkjiDeJU
+         2kzUbmXYA5fKB5pJWmXrS9QY4NZNrEijtCDsSx29Ln8wSvlvJN0mXyVKQc9d5i7dB80P
+         5MPYLvBp+JV6B0wzEDppsc+K8oPjGiDhB/BqYmyYlMfzhPFQuWUOY7GzTlm5UYX3xKcO
+         e68A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714434395; x=1715039195;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VBKZZVwka2zaA5v6QzXM0lkoNOh+22WGqQQ6UgQ50cs=;
+        b=o2bMdm6MZooH9aUMD/tx+K1Z8hZZ2vNyjjt4PuEknhnav2+qYyuvVekLDIbmEzpL4b
+         E4hDXbK0pmtd3xjlHpC97mLluyUJTtzpGeMvnVidHEbMIxnt6kHm2IWPXySdK8qK6zjy
+         pRe5ZIjU3zuw3TM51rLAMp6uaUKv4Oix9h+hi/U4AixIP9cyVzXj935KTcx2JahwCE8y
+         k1oZPzUvGHjdH4rcJ8sFV6bWNqMVC9Khd6XUW0VqHdM066BD7Co0Cw1UpOKi/yfN597B
+         wI1cxMidfYYgy6u68bInmNfmrhN65H7ZBLEWqGKNcHg91SLRLC/dCmoPA4Z5yGOXIVQy
+         h4vg==
+X-Gm-Message-State: AOJu0YznvlrUsI9GOUcw6ZZjMH6yZjk1RsBa3cW//89rjKwHyc4ZHujF
+	Dy9jbUImIZRq2ansbSZ92x0fcuSJm/kzCrdciyQErJwc0xBQCWxn5J1Gg/6qmJ0kxHH+tLKuMEj
+	56A==
+X-Google-Smtp-Source: AGHT+IHmoAnjMd09Wlv6UL5QKa6QxWL7QFhCXyeHDXlfoY9FtEuKDfIaCrjFq4GlMUJN9085xhFmBcBtaf0=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a63:f508:0:b0:5f7:9783:12ed with SMTP id
+ w8-20020a63f508000000b005f7978312edmr49147pgh.10.1714434394810; Mon, 29 Apr
+ 2024 16:46:34 -0700 (PDT)
+Date: Mon, 29 Apr 2024 23:46:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+Message-ID: <20240429234610.191144-1-edliaw@google.com>
+Subject: [PATCH] selftests/kcmp: Remove unused open mode
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>, Cyrill Gorcunov <gorcunov@openvz.org>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Currently, the migration worker delays 1-10 us, assuming that one
-KVM_RUN iteration only takes a few microseconds.  But if the CPU low
-power wakeup latency is large enough, for example, hundreds or even
-thousands of microseconds deep C-state exit latencies on x86 server
-CPUs, it may happen that it's not able to wakeup the target CPU before
-the migration worker starts to migrate the vCPU thread to the next CPU.
+Android bionic warns that open modes are ignored if O_CREAT or O_TMPFILE
+aren't specified.  The permissions for the file are set above:
 
-If the system workload is light, most CPUs could be at a certain low
-power state, which may result in less successful migrations and fail the
-migration/KVM_RUN ratio sanity check.  But this is not supposed to be
-deemed a test failure.
+	fd1 = open(kpath, O_RDWR | O_CREAT | O_TRUNC, 0644);
 
-This patch adds a command line option to skip the sanity check in
-this case.
-
-Signed-off-by: Zide Chen <zide.chen@intel.com>
-Co-developed-by: donsheng <dongsheng.x.zhang@intel.com>
+Fixes: d97b46a64674 ("syscalls, x86: add __NR_kcmp syscall")
+Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
+ tools/testing/selftests/kcmp/kcmp_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-V2:
-- removed the busy loop implementation
-- add the new "-s" option
-
-V3:
-- drop the usleep randomization code
-- removed the term C-state for less confusion for non-x86 archetectures
-- changed patch subject
-
-v4:
-- replaced Signed-off-by with Co-developed-by
-- changed command line option from "-s" to "-u"
-- Adopted the much clearer assertion error messages provided by Sean.
----
- tools/testing/selftests/kvm/rseq_test.c | 35 +++++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 28f97fb52044..ad418a5c59dd 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -186,12 +186,35 @@ static void calc_min_max_cpu(void)
- 		       "Only one usable CPU, task migration not possible");
- }
+diff --git a/tools/testing/selftests/kcmp/kcmp_test.c b/tools/testing/selftests/kcmp/kcmp_test.c
+index 25110c7c0b3e..d7a8e321bb16 100644
+--- a/tools/testing/selftests/kcmp/kcmp_test.c
++++ b/tools/testing/selftests/kcmp/kcmp_test.c
+@@ -91,7 +91,7 @@ int main(int argc, char **argv)
+ 		ksft_print_header();
+ 		ksft_set_plan(3);
  
-+static void help(const char *name)
-+{
-+	puts("");
-+	printf("usage: %s [-h] [-u]\n", name);
-+	printf(" -u: Don't sanity check the number of successful KVM_RUNs\n");
-+	puts("");
-+	exit(0);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int r, i, snapshot;
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
- 	u32 cpu, rseq_cpu;
-+	bool skip_sanity_check = false;
-+	int opt;
-+
-+	while ((opt = getopt(argc, argv, "hu")) != -1) {
-+		switch (opt) {
-+		case 'u':
-+			skip_sanity_check = true;
-+			break;
-+		case 'h':
-+		default:
-+			help(argv[0]);
-+			break;
-+		}
-+	}
- 
- 	r = sched_getaffinity(0, sizeof(possible_mask), &possible_mask);
- 	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
-@@ -254,9 +277,17 @@ int main(int argc, char *argv[])
- 	 * getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a fairly
- 	 * conservative ratio on x86-64, which can do _more_ KVM_RUNs than
- 	 * migrations given the 1us+ delay in the migration task.
-+	 *
-+	 * Another reason why it may have small migration:KVM_RUN ratio is that,
-+	 * on systems with large low power mode wakeup latency, it may happen
-+	 * quite often that the scheduler is not able to wake up the target CPU
-+	 * before the vCPU thread is scheduled to another CPU.
- 	 */
--	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
--		    "Only performed %d KVM_RUNs, task stalled too much?", i);
-+	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 2),
-+		    "Only performed %d KVM_RUNs, task stalled too much? \n"
-+		    "  Try disabling deep sleep states to reduce CPU wakeup latency,\n"
-+		    "  e.g. via cpuidle.off=1 or setting /dev/cpu_dma_latency to '0',\n"
-+		    "  or run with -u to disable this sanity check.", i);
- 
- 	pthread_join(migration_thread, NULL);
- 
+-		fd2 = open(kpath, O_RDWR, 0644);
++		fd2 = open(kpath, O_RDWR);
+ 		if (fd2 < 0) {
+ 			perror("Can't open file");
+ 			ksft_exit_fail();
 -- 
-2.34.1
+2.44.0.769.g3c40516874-goog
 
 
