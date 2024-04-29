@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-9004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 007EF8B51F8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 09:07:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBDA8B51FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 09:07:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEB23280D24
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 07:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AAFB2813CB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 07:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF88125C7;
-	Mon, 29 Apr 2024 07:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F50812E70;
+	Mon, 29 Apr 2024 07:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EkmcVnXB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLMt7s9g"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353EBEAC2;
-	Mon, 29 Apr 2024 07:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6703C125C7;
+	Mon, 29 Apr 2024 07:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714374467; cv=none; b=AmCqFGPk8Somn1Pe6/d4m2QXakFw3DSXETxyyFyIYjHqM+lXACAe1vq2JXOwfMjCWYTxdo+arbKx5YZvMI6azYmzvW0TsCcxmRIL+u75CbT5wXla8+rwrmB/lphuVPTqdS6tnW9DWfcV4aTayzWCqp/OSPbgBTr6vhErCZ/kUQY=
+	t=1714374474; cv=none; b=Qi9L1en4xyGLdNLCtWSgJK2pGJEP/7qka1eCkoLQ4pdMIFJKRrahijB+X88rEwMfujnqWaYkLxE+4COPWCjpK5P3rvHWLtLejZKzXjn/VHmlJ1cZf255nq4LDCyUSNbaRy5I2wn9YcX1XtvFButP1a+VoN1dJM4qxadWhUgyJRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714374467; c=relaxed/simple;
-	bh=LVrUZuxUgIT+CYnkgICftuNuFWG6dYfuFHCIXSxud5M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mMX09tzGAVSLfPB40fN4Fqqgl64i1C4TH+feArGIvYks9EyDKNxtQRR1BygfL+U6wm1QCSwqsyD/JBeE26Ze2iuBpgO0BTdTaqHdMUv5KBXqlero1IQHwxed6O7W+N1TVzb+QPyZ0Wu3Zlt+LSKYVvRI90RmfyyVom5BL1wYEN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EkmcVnXB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA10C113CD;
-	Mon, 29 Apr 2024 07:07:40 +0000 (UTC)
+	s=arc-20240116; t=1714374474; c=relaxed/simple;
+	bh=DXr2pMZh7BTOmXSIeZOIVP06BS3XnB4krkOXdDtC3zM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ieHpW4IyHjSoRgUjHKeWi9dmzwQdQ/SnrYB/aayeQ/4kV47W9+1lEGHxx/vxQFS/cJjWQXxfo0Y+1c0uHHcG9sjIC7MUClOwxoyKw2LZqYJMI6M1nu6wm1OR81DEWBz8r8PsPDCSVlIW9oYPlBBDctMT7nNvpNI1vFwKEFRj2Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLMt7s9g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBF1C4AF1C;
+	Mon, 29 Apr 2024 07:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714374466;
-	bh=LVrUZuxUgIT+CYnkgICftuNuFWG6dYfuFHCIXSxud5M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EkmcVnXB/s2TiVQaNvLjLtzId/VAzLOaOkGognuGN107Q/UENMkgI8KuxK78gbopj
-	 7C0dLQeb+h/wmmpBwmEaDVgKx8P9yhLeUArWw9v12NDuYnz2ZtTl+VA7q3/p4fza52
-	 yKmWlTeAZUsE7mpNQ54Qu0L7aP4HodKXb9zhjpledyL/ovzeenx979U1hJd69XOV+x
-	 KASrBz5vm/J6hHi8PgJYlBjNEvB4d7c0mMyBB7quwCJUr9juZHG63MVPcGFaILdRt/
-	 LVnxlWHkefZAACKxRVwYyxhHewYva8HCN91oZ5jiLvQXceCUXS0dMKb1adIaBJJnzS
-	 I4uELshn1EpyA==
+	s=k20201202; t=1714374474;
+	bh=DXr2pMZh7BTOmXSIeZOIVP06BS3XnB4krkOXdDtC3zM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eLMt7s9gnGcSAg6lUy583TSGw/+8hkYjfuSpyVaSgK/d7yUXKwbJcUFyZSHWKLFo4
+	 OtgGLxWSJnGZPuf0NRLJHYyGz4JM0GU79BgtlkangSEp4MoBqnjcLotKrDOCyekKo8
+	 EOiaeCsLVRFNuEAnoht/HuHFRe2/5/9msQNiSbZC8hrY2+fuPwR50cgQ0cDlzFkJ5v
+	 pHY+dSQcSlLe+B6ZMgegNMkGfYff4AImglJyscPF4DSy7GGdY5RLwFONlXN35U1XMf
+	 bFjNAcmHUbg2tcesxITDRTX/H5Q2DNskyXew9mQGevw6D+Kl0LC2wSizVr8h5Yw2Pf
+	 GONa77GuJRbYA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,10 +61,12 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 0/2] Free strdup memory in selftests
-Date: Mon, 29 Apr 2024 15:07:32 +0800
-Message-Id: <cover.1714374022.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: Free strdup memory in test_sockmap
+Date: Mon, 29 Apr 2024 15:07:33 +0800
+Message-Id: <b76f2f4c550aebe4ab8ea73d23c4cbe4f06ea996.1714374022.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <cover.1714374022.git.tanggeliang@kylinos.cn>
+References: <cover.1714374022.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,16 +77,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Two fixes to free strdup memory in selftests to avoid memory leaks.
+The strdup() function returns a pointer to a new string which is a
+duplicate of the string "ptr". Memory for the new string is obtained
+with malloc(), and need to be freed with free().
 
-Geliang Tang (2):
-  selftests/bpf: Free strdup memory in test_sockmap
-  selftests/bpf: Free strdup memory in veristat
+This patch adds these missing "free(ptr)" in check_whitelist() and
+check_blacklist() to avoid memory leaks in test_sockmap.c.
 
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
  tools/testing/selftests/bpf/test_sockmap.c | 10 ++++++++--
- tools/testing/selftests/bpf/veristat.c     |  5 ++++-
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 43612de44fbf..92752f5eeded 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -1887,10 +1887,13 @@ static int check_whitelist(struct _test *t, struct sockmap_options *opt)
+ 	while (entry) {
+ 		if ((opt->prepend && strstr(opt->prepend, entry) != 0) ||
+ 		    strstr(opt->map, entry) != 0 ||
+-		    strstr(t->title, entry) != 0)
++		    strstr(t->title, entry) != 0) {
++			free(ptr);
+ 			return 0;
++		}
+ 		entry = strtok(NULL, ",");
+ 	}
++	free(ptr);
+ 	return -EINVAL;
+ }
+ 
+@@ -1907,10 +1910,13 @@ static int check_blacklist(struct _test *t, struct sockmap_options *opt)
+ 	while (entry) {
+ 		if ((opt->prepend && strstr(opt->prepend, entry) != 0) ||
+ 		    strstr(opt->map, entry) != 0 ||
+-		    strstr(t->title, entry) != 0)
++		    strstr(t->title, entry) != 0) {
++			free(ptr);
+ 			return 0;
++		}
+ 		entry = strtok(NULL, ",");
+ 	}
++	free(ptr);
+ 	return -EINVAL;
+ }
+ 
 -- 
 2.40.1
 
