@@ -1,178 +1,182 @@
-Return-Path: <linux-kselftest+bounces-9093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01CD8B6567
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 00:18:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8AAC8B6616
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 01:16:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161331C217CE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 22:18:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7ACB8B2149A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 23:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BBA19069B;
-	Mon, 29 Apr 2024 22:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 204DA126F07;
+	Mon, 29 Apr 2024 23:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWCVms9M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UC+R6q92"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F1B177992;
-	Mon, 29 Apr 2024 22:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707FF1EA90
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 23:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714429109; cv=none; b=IWb92Bg3N8jO9TYcdYOAIffiI1XROjKczPlh2NGDXUoMxwZ2QWdyMIgy8w8uPvbsyd4v6tU39F3sOcI9kSmL8ztwMOOyXRAQBJGitr4acNDQ4UBskVkPfCQp+hzzwOa0C1CUCJg8c9WL9scUpU9+a/00kMSbHJVdNyoS61nVkyM=
+	t=1714432596; cv=none; b=BJ+RnzePCBRK1GsQ/m7H3EAeOyLWOGNWrWLlL/4p7LjnA257H8+FOw4I+aYxrO2VeiZMCnxd9rXuw+CbbnVlFb3+L/MNLFP3f409XSfWOuHvup98fiAg+N2FVx6bsjSNNKAkTL/+QZB/I3HZNZlrJsOD7TzsDw4A1raF+zcDkOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714429109; c=relaxed/simple;
-	bh=5FQU/EVBfp8zquoet4tZvLNoTnExuvFfr0UFGN2zj48=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XZUmsSEzOwL2HCC7khYytlm51dT0XtYb3QlY0Cjv2vVfp3BWVzJBh76iun3nriUgUzcQJYKLDKI8LjgkwltPm2Y/y5tjpM1I+FOg8x7rLP1b08Ic/tfzqsPjYyPVZBj/B5Ot0txbfk+OKOTyS3ZKRNL+L3JcpBO7FA9OlKhTB4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWCVms9M; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f28bb6d747so4289520b3a.3;
-        Mon, 29 Apr 2024 15:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714429107; x=1715033907; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cr2+1Q7+k8stldRGJ4hycgrJdY6zIBRip1L2M8qYXwY=;
-        b=OWCVms9MIpsvaFyP0PdePw6QJOIzGvc0uyLOvGdqYs9gnSUuXvDhbX81RFlrx9LRqY
-         Zab2301H03sb3DSCSW5H9UfnbYresdMFmuhOGk7VmuZt3RrbKc3bOBthZq/PUM+76f3P
-         5pE6l5Ae8F4wkBrwcq2F1VRN2TjOJ0Bgh5cJMKH5mEZZ9MLrbTZUH7qAen3wekUkwc1P
-         t4LnyqrH7I71oCvLJM5IhXjfp7QpHfaOCMwrYIJxZ+avHkPW/KD0l73VBiNeJOvaIXdX
-         C7oPp6k+Igj3eNn3jP5lct0ugk6ATIQqTVOoYskEUT3o7fGicKM4fEQtIKQmP/QP681J
-         iYCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714429107; x=1715033907;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cr2+1Q7+k8stldRGJ4hycgrJdY6zIBRip1L2M8qYXwY=;
-        b=Zf4++BWxf+T/y2nQ1tXiWc7Vb1WkS6A2E/1mkrweLxX4ZCjKraK8B0qpP1hLXvQzi+
-         IuREJDcVLWRuElHBCwNIOK/oGQJInJhDdEvnOzXUHAOEi8lwvaKe8N+cDHBZUQxAn2JT
-         bd//+D9oTxVokUPXqEusW1oTIuq81kfLBQzbkun8u+sWA2FWFCWXkQZVOtSpll3GG6ID
-         xC8Se2dHrV6gzO7Ek/kLTEjguCrxpe2HvFXOFLZnmINByt8ADz/5/yQU38xhTS8/7tHv
-         n6c1EWDwAUO0nSgNKDijLFx61qfuRzWd1CJvxCKBnQ3LxIL6ZVqwqlIKRn/g8bzsnSdk
-         cDHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWNGfrB06PVQtIVaGSHOh7BSJxYusHArsLCEUQLcFdGlCfyXgwm5IjlTS5nXgz4Nmzl64hCxO/vDBO0unlOl6A/gntAJ4AmbsxA+z9e2KtVKPYciEJBZ1GV/t/lAYax0gs/mCqtoozasgpbaK5QdQhWXjQVXoEB/DB1nzcdB5JOBgt3vHWNVmBBAPwVF8AeTMxvgmKpA5na/zLDqsqRTK+hJA0E
-X-Gm-Message-State: AOJu0YxxMvMwknqWxniMCTRsO38AXi4UvrNs0oXcWdrMqa9NYVofzZDV
-	rVN0RSyr5o/6qtTerZ0XEZQZpf3ddxr6ThA566/afI8stmD5yhUT
-X-Google-Smtp-Source: AGHT+IHvde4/0TGU/WUi9Kdh6ZHDst/sN3GUbM0YW3YIX7JtqLVGN2Xr200x9TnGFz8idAwJn1lntQ==
-X-Received: by 2002:a05:6a00:1901:b0:6ea:bdbc:614 with SMTP id y1-20020a056a00190100b006eabdbc0614mr12833423pfi.13.1714429107532;
-        Mon, 29 Apr 2024 15:18:27 -0700 (PDT)
-Received: from ?IPv6:2604:3d08:9880:5900:a18e:a67:fdb6:1a18? ([2604:3d08:9880:5900:a18e:a67:fdb6:1a18])
-        by smtp.gmail.com with ESMTPSA id z8-20020a056a00240800b006ecf6417a9bsm19724998pfh.29.2024.04.29.15.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 15:18:26 -0700 (PDT)
-Message-ID: <7cf8b58011156af99816391d3afd5c52e48ea8b7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 07/11] bpf: Fix a false rejection caused by
- AND operation
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Xu Kuohai
-	 <xukuohai@huaweicloud.com>, Edward Cree <ecree.xilinx@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
- netdev@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Matt Bobrowski
- <mattbobrowski@google.com>, Brendan Jackman <jackmanb@chromium.org>, Paul
- Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E .
- Hallyn" <serge@hallyn.com>, Khadija Kamran <kamrankhadijadj@gmail.com>,
- Casey Schaufler <casey@schaufler-ca.com>, Ondrej Mosnacek
- <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>, John Johansen
- <john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Roberto Sassu <roberto.sassu@huawei.com>, Shung-Hsi Yu
- <shung-hsi.yu@suse.com>
-Date: Mon, 29 Apr 2024 15:18:25 -0700
-In-Reply-To: <CAEf4BzZb38EemdD8ahX4Px3vWCp=ani6vcX71Z-1_MLeATNjwQ@mail.gmail.com>
-References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
-	 <20240411122752.2873562-8-xukuohai@huaweicloud.com>
-	 <e62e2971301ca7f2e9eb74fc500c520285cad8f5.camel@gmail.com>
-	 <f80991aa-3a49-451a-9a82-ac57982dcb28@huaweicloud.com>
-	 <bdc84c6c-7415-4b84-a883-1988cb5f77d1@linux.dev>
-	 <576c7c44-d1b4-42c8-8b6e-2e6b93d7547a@huaweicloud.com>
-	 <CAEf4BzZTzftrOCFsfBd81sHDBpmNK+4Jefqa3SSS6NiuncO0tQ@mail.gmail.com>
-	 <4fbce978-9687-48a9-be2a-1c4d76790f7d@huaweicloud.com>
-	 <CAEf4BzZb38EemdD8ahX4Px3vWCp=ani6vcX71Z-1_MLeATNjwQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1714432596; c=relaxed/simple;
+	bh=u4ArKInx0mn3axBUqLTGogGayKr6CyDk7+sA/kF+kcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BNu9ZPY6dZzvA+y0+eJz07puKA7FvvtXvousG9lnOrc/jZcA9raigXchfiPWshLhMgp4tEwiKf5m2MHzsEqqX4HF/fEt/nzs4ZlwDF0DIscEj77Tdp2xltR39eGoFUt3TqYv/C1PboOuf0kTjo7ZR59f6wBuwfnRMvnFzX9XHjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UC+R6q92; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714432594; x=1745968594;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=u4ArKInx0mn3axBUqLTGogGayKr6CyDk7+sA/kF+kcU=;
+  b=UC+R6q92yae64/MjbsrA8MUV94Ot0Xzy9FwhpWewDEKVNrkaqXrreZas
+   euXPXtk9rV9c+6WzHma/px9gz9Vn85xGrgc7UmSp4q0+dvc9RgfqZpKTO
+   eeVGGjppp6Hyobn8vNo2AAa/sXePm+9l8kXqmCb9CJ2ozG8ANy69b9Jm9
+   ABp5IVl4dRTyqC6Xg5YeXLRT4z0SGoHrLMb6JKWCWdGli26Fj87UIla0T
+   q1X7EFZcHS9mq8xc3jNLCqWt4TTNBFH5szC3/vd1D8k6dhC8oZNCHQRzF
+   CxUlvP1eTbe2EB1+0cly7zWnfGQcq8DwNVBXnC2LmAQeP0+ik7V5vEK4i
+   Q==;
+X-CSE-ConnectionGUID: RELJtZBxSDOQv5CtcPm1Vw==
+X-CSE-MsgGUID: eDxFeDNwQrmu/nUrtyN9PA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20801500"
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="20801500"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:16:34 -0700
+X-CSE-ConnectionGUID: JCWUM8zxRTOvv9Ces3d7jQ==
+X-CSE-MsgGUID: MQLPN2wwTBe9HrpKbbTtdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="57131530"
+Received: from soc-cp83kr3.sc.intel.com (HELO [10.144.152.150]) ([10.144.152.150])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:16:33 -0700
+Message-ID: <5d3c3fa2-5250-41e0-adf7-ee7bf7501b3d@intel.com>
+Date: Mon, 29 Apr 2024 16:16:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3] KVM: selftests: Add a new option to rseq_test
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+ donsheng <dongsheng.x.zhang@intel.com>
+References: <20240416225153.23801-1-zide.chen@intel.com>
+ <Zi_3bNOgJl1m0wXy@google.com>
+Content-Language: en-US
+From: "Chen, Zide" <zide.chen@intel.com>
+In-Reply-To: <Zi_3bNOgJl1m0wXy@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-04-29 at 13:58 -0700, Andrii Nakryiko wrote:
 
-[...]
 
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 8f0f2e21699e..b69c89bc5cfc 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -13478,6 +13478,28 @@ static void scalar32_min_max_and(struct bpf_re=
-g_state *dst_reg,
-> >                  return;
-> >          }
-> >=20
-> > +       /* Special case: dst_reg is in range [-1, 0] */
-> > +       if (dst_reg->s32_min_value =3D=3D -1 && dst_reg->s32_max_value =
-=3D=3D 0) {
-> > +               var32_off =3D tnum_union(src_reg->var_off, tnum_const(0=
-));
-> > +               dst_reg->var_off =3D tnum_with_subreg(dst_reg->var_off,=
- var32_off);
-> > +               dst_reg->u32_min_value =3D var32_off.value;
-> > +               dst_reg->u32_max_value =3D min(dst_reg->u32_max_value, =
-umax_val);
->=20
-> can you explain the logic behing u32 min/max updates, especially that
-> we use completely different values for min/max and it's not clear why
-> u32_min <=3D u32_max invariant will always hold. Same below
+On 4/29/2024 12:39 PM, Sean Christopherson wrote:
+>> Signed-off-by: Zide Chen <zide.chen@intel.com>
+>> Signed-off-by: donsheng <dongsheng.x.zhang@intel.com>
+> 
+> Why does this have Donghsheng's SoB?  Is this a Co-developed-by situation?
 
-I agree with Andrii here.
-It appears that dst_reg.{min,max} fields should be set as
-{min(src.min, 0), max(src.max, 0)} for both signed and unsigned cases.
-Wdyt?
+Yes, Co-developed-by is more suitable.
 
->=20
-> > +               dst_reg->s32_min_value =3D min_t(s32, src_reg->s32_min_=
-value, 0);
-> > +               dst_reg->s32_max_value =3D max_t(s32, src_reg->s32_max_=
-value, 0);
-> > +               return;
-> > +       }
-> > +
-> > +       /* Special case: src_reg is in range [-1, 0] */
-> > +       if (src_reg->s32_min_value =3D=3D -1 && src_reg->s32_max_value =
-=3D=3D 0) {
-> > +               var32_off =3D tnum_union(dst_reg->var_off, tnum_const(0=
-));
-> > +               dst_reg->var_off =3D tnum_with_subreg(dst_reg->var_off,=
- var32_off);
-> > +               dst_reg->u32_min_value =3D var32_off.value;
-> > +               dst_reg->u32_max_value =3D min(dst_reg->u32_max_value, =
-umax_val);
-> > +               dst_reg->s32_min_value =3D min_t(s32, dst_reg->s32_min_=
-value, 0);
-> > +               dst_reg->s32_max_value =3D max_t(s32, dst_reg->s32_max_=
-value, 0);
-> > +               return;
-> > +       }
-> > +
-> >          /* We get our minimum from the var_off, since that's inherentl=
-y
-> >           * bitwise.  Our maximum is the minimum of the operands' maxim=
-a.
-> >           */
+>>
+> 
+> Put per-patch notes that aren't intended for the final changelog...
+> 
+>> V2:
+>> - removed the busy loop implementation
+>> - add the new "-s" option
+>>
+>> V3:
+>> - drop the usleep randomization code
+>> - removed the term C-state for less confusion for non-x86 archetectures
+>> - changed subject
+>> ---
+> 
+> ...down here below the "---", as this section is ignored by `git am`.  That way
+> the maintainer (me) doesn't need to manually delete the notes when applying.
 
-[...]
+Got it, thank you very much!
+
+>>  tools/testing/selftests/kvm/rseq_test.c | 40 +++++++++++++++++++++++--
+>>  1 file changed, 38 insertions(+), 2 deletions(-)
+> 
+>> +static void help(const char *name)
+>> +{
+>> +	puts("");
+>> +	printf("usage: %s [-h] [-s]\n", name);
+>> +	printf(" -s: skip the sanity check for successful KVM_RUN.\n");
+> 
+> Hmm, -s ends up being somewhat confusing because "sanity" also starts with 's',
+> e.g. my first thought is that "./rseq_test -s" would be "run the test with sanity
+> checks".
+> 
+> Maybe -u for unchecked/unverified?
+
+Agree, it's better.
+
+> 	printf(" -u: Don't sanity check the number of successful KVM_RUNs\n");
+> 
+>> @@ -254,9 +277,22 @@ int main(int argc, char *argv[])
+>>  	 * getcpu() to stabilize.  A 2:1 migration:KVM_RUN ratio is a fairly
+>>  	 * conservative ratio on x86-64, which can do _more_ KVM_RUNs than
+>>  	 * migrations given the 1us+ delay in the migration task.
+>> +	 *
+>> +	 * Another reason why it may have small migration:KVM_RUN ratio is that,
+>> +	 * on systems with large low power mode wakeup latency, it may happen
+>> +	 * quite often that the scheduler is not able to wake up the target CPU
+>> +	 * before the vCPU thread is scheduled to another CPU.
+>>  	 */
+>> -	TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
+>> -		    "Only performed %d KVM_RUNs, task stalled too much?", i);
+>> +	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 1),
+>> +		    "Only performed %d KVM_RUNs, task stalled too much? \n"
+>> +		    "  Try to run it with -s option, or disable deep sleep "
+>> +		    "states in the system,\n"
+>> +		    "  e.g., boot the host with cpuidle.off=1 or other driver "
+>> +		    "specific kernel options,\n"
+>> +		    "  or do it through the PM QoS interface at runtime: \n"
+>> +		    "    cat > /dev/cpu_dma_latency <(echo -e -n "
+>> +		    "\"\\x0\\x0\\x0\\x0\"; sleep inf) &\n"
+>> +		    "    PID=$! && run_the_test && kill $PID" , i);
+> 
+> I appreciate trying to be helpful, but this is a bit too verbose.  I would also
+> prefer to call out the command line option last, e.g. so that readers don't
+> automatically rerun with the sanity check disabled without reading the rest of
+> the error message.
+> 
+> How about this?
+> 
+> 
+> 	TEST_ASSERT(skip_sanity_check || i > (NR_TASK_MIGRATIONS / 1),
+> 		    "Only performed %d KVM_RUNs, task stalled too much? \n"
+>                     "Try disabling deep sleep states to reduce CPU wakeup latency,\n"
+> 		    "e.g. via cpuidle.off=1 or setting /dev/cpu_dma_latency to '0',\n"
+>                     "or run with -u to disable this sanity check", i);
+
+Thank you very much for your patience and your suggestions! I'll adopt
+them to V4. How baout to add two white spaces in front of the 2nd, 3rd
+and 4th in order to align with the first line (Only performed ... )?
+
+==== Test Assertion Failure ====
+  rseq_test.c:286: skip_sanity_check || i > (NR_TASK_MIGRATIONS / 1)
+  pid=17851 tid=17851 errno=4 - Interrupted system call
+     1  0x00000000004029da: main at rseq_test.c:286
+     2  0x00007ff615029d8f: ?? ??:0
+     3  0x00007ff615029e3f: ?? ??:0
+     4  0x0000000000402ab4: _start at ??:?
+  Only performed 22249 KVM_RUNs, task stalled too much?
+  Try disabling deep sleep states to reduce CPU wakeup latency,
+  e.g. via cpuidle.off=1 or setting /dev/cpu_dma_latency to '0',
+  or run with -u to disable this sanity check.
 
