@@ -1,120 +1,132 @@
-Return-Path: <linux-kselftest+bounces-9009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B7238B58BA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 14:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9585E8B5974
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 15:10:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAD6E286361
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 12:39:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD7C28C38F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 13:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAFF10A1B;
-	Mon, 29 Apr 2024 12:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15356CDDB;
+	Mon, 29 Apr 2024 13:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="VLOygaSt"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vd/U/wPA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6715175B6;
-	Mon, 29 Apr 2024 12:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF43C2C6
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 13:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714394363; cv=none; b=nzQOyvztKn4vpRsczpgGUTccL5XW57DeOK0HtAO9/cf32JMSVvPtb4ga0RHNenjZo4bhNf62MLLX/Ii4qfmm5xGIN6pLbG3HdMV/srnqqflMIO2/OF71SGqRd99TZ5fjFc8wSMUGjRLUZig989Rl5i/AXOctrYyMvBkKeA/InVY=
+	t=1714396189; cv=none; b=ARC70prhre0MTUJ5BQVNmTaiJzbNdOQqojbAqHFMh52rKH7QVCvMi0wWnascrecZl79UJrC/XbkzoHGfWFfdLspw3o9ufbbbVZfYXc3VUtrcpmXetgpYCP5Ddjrq/ghcCjdZWrzSlJwQY+SrBaUdG/2HhA67nKrHFIWw9k9Ytu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714394363; c=relaxed/simple;
-	bh=5aDerzYV45pWcuIwpnCX9XQl1PI2sWGc0Gm8QpZF424=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KUNoSkFEMaHU4I2kHh3WxYgOJ/V1nib+1VADuS30i1sO2yWLi8g8p/+wGJVW5wStlSFACBXfxqlpjyhXQZ8izqjTrQsKW/+8uLxP1hWDhYFbeHglU45l0v8MpQ5Zc9+Osl2GR49zwAz3cRPTeZ9aZNtUDJG1f9G1hbUMJURANac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=VLOygaSt; arc=none smtp.client-ip=84.16.66.174
+	s=arc-20240116; t=1714396189; c=relaxed/simple;
+	bh=+mGGfv+rNyQbPZbgK4ev9Hsh3jIoZFvo3k1FnAnnDJ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=K0MBlqyUytU+AQwmK/u3jo3Dc2bz8GJNaDETm+O/TGUVRnH8gM6hRkc88S5oO2mR8vWLKa6iklD1dhXjx6rwsO8sgFwy7kgI20WC60P19+1YOhxrvZuOJHanmTyYzdzZzHCbFmKvl2NYH5vO4vdPA4So8tsOgQa4+N1dPBTsEao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vd/U/wPA; arc=none smtp.client-ip=83.166.143.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VSjZG4hChz1Qk;
-	Mon, 29 Apr 2024 14:39:18 +0200 (CEST)
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VSkFF53VWzLTD;
+	Mon, 29 Apr 2024 15:09:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714394358;
-	bh=5aDerzYV45pWcuIwpnCX9XQl1PI2sWGc0Gm8QpZF424=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VLOygaStCXUdGaEcuPjPDefVbq+62hG1CPDYV87tiZ0EanFy5qokMl2slpNZGeEAS
-	 JyYsLyY9+eYqyPJH4nk+1Y78qhzU7SUJ8MRvFF/wcgFX1c0qyhRYGsxeqFvjDSMtwd
-	 Ug7SXmWKSdiHjURDgr4NZY/z6Eh6Sv2Pdhd4WK1Y=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VSjZG0dvdzNtL;
-	Mon, 29 Apr 2024 14:39:18 +0200 (CEST)
-Date: Mon, 29 Apr 2024 14:39:17 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Shengyu Li <shengyu.li.evgeny@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Will Drewry <wad@chromium.org>, kernel test robot <oliver.sang@intel.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] selftests/harness: Fix vfork() side effects and
- uncaught errors
-Message-ID: <20240429.aedish4oKoov@digikod.net>
-References: <20240426172252.1862930-1-mic@digikod.net>
- <20240426172252.1862930-6-mic@digikod.net>
- <202404261245.DC9A268FF@keescook>
+	s=20191114; t=1714396177;
+	bh=+mGGfv+rNyQbPZbgK4ev9Hsh3jIoZFvo3k1FnAnnDJ8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vd/U/wPAQJbV8RNav7swjB+xojeIfqXA8MfCiEX9qgLcgqFEfB0gogoIoMLGFtrOt
+	 ezZVXEpQ4Js1Ktt1iU0YGGT6TknNJTv7TD8qJMp4wuqDmLnqrKdhYInwrWK49L9Ygb
+	 TPwxWGPpcnCFN5AIsVusx2TKST1TyEkFvI+xBYOo=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VSkFD3SZczdD1;
+	Mon, 29 Apr 2024 15:09:36 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shengyu Li <shengyu.li.evgeny@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Will Drewry <wad@chromium.org>,
+	kernel test robot <oliver.sang@intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/5] Fix Kselftest's vfork() side effects
+Date: Mon, 29 Apr 2024 15:09:22 +0200
+Message-ID: <20240429130931.2394118-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202404261245.DC9A268FF@keescook>
 X-Infomaniak-Routing: alpha
 
-On Fri, Apr 26, 2024 at 12:47:16PM -0700, Kees Cook wrote:
-> On Fri, Apr 26, 2024 at 07:22:52PM +0200, Mickaël Salaün wrote:
-> > Setting the time namespace with CLONE_NEWTIME returns -EUSERS if the
-> > calling thread shares memory with another thread (because of the shared
-> > vDSO), which is the case when it is created with vfork().
-> > 
-> > Fix pidfd_setns_test by replacing test harness's vfork() call with a
-> > clone3() call with CLONE_VFORK, and an explicit sharing of the
-> > __test_metadata and self objects.
-> > 
-> > Replace _metadata->teardown_parent with a new FIXTURE_TEARDOWN_PARENT()
-> > helper that can replace FIXTURE_TEARDOWN().  This is a cleaner approach
-> > and it enables to selectively share the fixture data between the child
-> > process running tests and the parent process running the fixture
-> > teardown.  This also avoids updating several tests to not rely on the
-> > self object's copy-on-write property (e.g. storing the returned value of
-> > a fork() call).
-> > 
-> > In the Landlock filesystem tests, don't allocate self->dir_path in the
-> > test process because this would not be visible in the
-> > FIXTURE_TEARDOWN_PARENT() process when not sharing the memory mapping.
-> > 
-> > Unconditionally share _metadata between all forked processes, which
-> > enables to actually catch errors (which were previously ignored).
-> > 
-> > Replace a wrong EXPECT_GT(self->child_pid_exited, 0) with EXPECT_GE(),
-> > which is now actually tested on the parent and child sides.
-> > 
-> > FIXTURE_VARIANT_ADD() doesn't need to be MAP_SHARED because it should
-> > not be modified: it is already passed as const pointers to
-> > FIXTURE_TEARDOWN().  Make that explicit by constifying the variants
-> > declarations.
-> 
-> This patch makes at least(?) 3 different logical changes. Can you split
-> these up a bit; I think it would make review a bit easier.
+Hi,
 
-OK
+As reported by Kernel Test Robot [1], some pidfd tests fail.  This is
+due to the use of vfork() which introduced some side effects.
+Similarly, while making it more generic, a previous commit made some
+Landlock file system tests flaky, and subject to the host's file system
+mount configuration.
 
-> 
-> I don't quite understand why the need for the explicit shared memory
-> setup for the fixture metadata? Is this to deal with the vfork?
+This series fixes all these side effects by replacing vfork() with
+clone3() and CLONE_VFORK, which is cleaner (no arbitrary shared memory)
+and makes the Kselftest framework more robust.
 
-This change is needed for the parent process to check if any error
-happened in the test child process during FIXTURE_SETUP(), TEST_F(), and
-FIXTURE_TEARDOWN().  With vfork(), the sharing was implicit between the
-parent and the child, but without sharing the full memory mapping we
-need to MAP_SHARE it explicitly.
+I tried different approaches and I found this one to be the cleaner and
+less invasive for current test cases.
+
+This second series split the latest patch into 5 patches.
+
+I successfully ran the following tests (using TEST_F and
+fork/clone/clone3) with this series:
+- landlock:fs_test
+- landlock:net_test
+- landlock:ptrace_test
+- move_mount_set_group:move_mount_set_group_test
+- net/af_unix:scm_pidfd
+- perf_events:remove_on_exec
+- pidfd:pidfd_getfd_test
+- pidfd:pidfd_setns_test
+- seccomp:seccomp_bpf
+- user_events:abi_test
+
+[1] https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
+
+Previous version:
+v1: https://lore.kernel.org/r/20240426172252.1862930-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (9):
+  selftests/pidfd: Fix config for pidfd_setns_test
+  selftests/landlock: Fix FS tests when run on a private mount point
+  selftests/harness: Fix fixture teardown
+  selftests/harness: Fix interleaved scheduling leading to race
+    conditions
+  selftests/landlock: Do not allocate memory in fixture data
+  selftests/harness: Constify fixture variants
+  selftests/pidfd: Fix wrong expectation
+  selftests/harness: Share _metadata between forked processes
+  selftests/harness: Fix vfork() side effects
+
+ tools/testing/selftests/kselftest_harness.h   | 113 +++++++++++++-----
+ tools/testing/selftests/landlock/fs_test.c    |  83 ++++++++-----
+ tools/testing/selftests/pidfd/config          |   2 +
+ .../selftests/pidfd/pidfd_setns_test.c        |   2 +-
+ 4 files changed, 135 insertions(+), 65 deletions(-)
+
+
+base-commit: e67572cd2204894179d89bd7b984072f19313b03
+-- 
+2.44.0
+
 
