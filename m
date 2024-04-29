@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-9084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A35C8B64CE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 23:45:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E59068B64CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 23:45:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF56D1F21FF7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 21:45:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DB652813E5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2024 21:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D243F190660;
-	Mon, 29 Apr 2024 21:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7647419066B;
+	Mon, 29 Apr 2024 21:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p0i4bgQl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="atcpZti/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E09184113
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 21:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C3D184121
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 21:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714427141; cv=none; b=CYKEoIIFJIkwdjJtHRCf8ALac1S8aIA/KYPpj5rm/y6Nouo1nfShY+blOTrm9HnFjUSbUoDg8K8ezR1UqVafbuLjKH/w9ezNCrUAxfZrKvpvCGqD5SzN6vzB/n1ia2PQ31dQUJDUzztlXjONEiHruq36KdbLy75IN/sTsq8Lo3g=
+	t=1714427142; cv=none; b=bKJuH3W0MXYJi/jiHirdRoSkHRnWbe0HkUmA67CCL9vPPo+6zyOMkVFHQWI+uyEUmsUOLaZn5K6Z7vyAguyPmjetn+erHn2avsg0DJ3E75Rp/k5UiN4owqSe7LFGVQEcCopctrRbmqygpsvGg5LhH4yc6J4dDx2bGdHGwJ070EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714427141; c=relaxed/simple;
-	bh=gH3Kew8OeVHbPt/et/Jq6DKHu1BGdkCA7/7iaJldhMA=;
+	s=arc-20240116; t=1714427142; c=relaxed/simple;
+	bh=3XpCdIAzD80cSqUzy44G1UUId2dC6jZ7g9eolYeOgHg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=prwPmn26OOj9gMp1aWzqyyYApkIrdgSUd/1T5C00OCFJ3HYPp9JnID0hCkqzZ36LxSLOUlLfiXyxR8ilqVWuElnbGSj/VkoRhUcg/Z3IGPAR/V5uBATxtfefK83n2m7Qd6C3KkUjnnT7HUz8mnqwuWg3yaF9TykSqHeBDN2GgIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p0i4bgQl; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=ZdCcGAuKhnU/Lu/I8Ybt/mC4p56F3KZ1zcKja1k/RQmaoiad5YCZhpWj5a4m6837mmrex4g66wH/+qv4F5u/Zf9XNTNdbcxkC/kB+uUh/rUXr7godsaT/eRcq/I91Drn9OMXDTf5qaPRzcYWZCcA40w7ebJ805+KuG57J1EoY1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=atcpZti/; arc=none smtp.client-ip=209.85.166.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-de6054876efso1346290276.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 14:45:39 -0700 (PDT)
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-7dece812270so146483739f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2024 14:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714427138; x=1715031938; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1714427140; x=1715031940; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vCy+fpf0yWvn0SKMsxJ2kXcAwcPbu8+bowrH/Q+MXV8=;
-        b=p0i4bgQlWzapKz8nn1z4tggQGkavTbrTBjO7TWy1xMli/S5bvZg3z9/epxz4NfTMg5
-         6xgmJhpsCXOAbLMpuOlABYBDgoOAEvp3hLXVSe020gafXvIEp2jgQwHAcicjTfU9hwIX
-         VpTyV1IiYkdirmz2c9hF0i0s0qNupjdWy0qrEdCaeHV2DXhVN3+AzTpapSbCZal+6RIl
-         shGEFuiXUMrDtE/U90ylZ/kr+sVcV694zQq8HqHbFPG+YqToZ82xI3uHTbZY2A0gKssJ
-         DHc9KSi9zP1kOoNWPC3+KYDXC5sSXxq8VEgxc2gURO14lsyZzEj2jaHxSCzbfYIeFz4Z
-         plaQ==
+        bh=po5d4BRZvVuXwVZK5WJYEffm014lvA9qK8+HKXMPmJk=;
+        b=atcpZti/6rBUFK4O7PJ9KArMyf9CCM6VkNx6vHMp4zqD9L5c9m6ns7zUuq2hCzPVmX
+         eWQAvxJMm6XocxBW3uGBcVS4vyP9yAe2sjiwf60cnaJzte2YXb+B5kuM42EcvAedgK4N
+         RqJrrRQzZDOOT3Lycm1LgFzjQek+qZ4FOARWKHYXfJF+rEzo/s60pfD+X4Oi9BFI+j3S
+         rpvBUpNFAiImjveVGrRP47dy/tlNJcIcJZkLiayhRj3Wf5TFNQ021mi/g17SFy8kZ4b+
+         5vVLTL0hj28xva8cp8C7r7U02n8duGqgI1m9x5b3KCHInNT+1TNlDi34OLk/gnMvcXy8
+         WOaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714427138; x=1715031938;
+        d=1e100.net; s=20230601; t=1714427140; x=1715031940;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vCy+fpf0yWvn0SKMsxJ2kXcAwcPbu8+bowrH/Q+MXV8=;
-        b=Ehq2gA3koDwRIyo3Mp8eVzPfRiCjxRCoTQSNPQScs8p4oJzo7iaQagH135VzWjI+0P
-         kqZNsyTDiuptj1kShkoeqVwRSO6GXsVQzKdtLTuOWsRA7OU3ANjTiZufqA88nm1bEeYS
-         v8GrdiKyYjMv+f9AtFi5vSY62lKsn3G5+CS44q4W/PonKpNKQrqA+OO/wSpEsH/MGSjc
-         cHRkS3NQdv+bfJ8Wj5VLW2cKQaTTA8dUqkgVQfe7074g55KlaJrwNAPf4Al8wtLbWYpu
-         9vopKAibscNPNDy9o/Cv4J7BDV9X+9CKzdw0zRk2vfcL8rjHsmGvtiJAzZaiMVjy+uRV
-         8Pqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWk/Ky9EqvqSrqwtaIvGW5+Uc/8Ph8XZw9zbwh1slNSbwqj3Y9EtGxI8Jx3AgvNgOz+W8KreREpskFO1iBQaQ9l6GXke0CEzOAmE7N18xH4
-X-Gm-Message-State: AOJu0YwHYuBzIX67wJN5AQdsPULWBxEb0ACydKFn+xGgBtZ53cKKqO9k
-	dU9h8vJNEz4/Wqq6nP4MDzhJnbjAYwVgGujRm6Saq4Bvx0huEmOrTfgtRzl9WeGFPBB2cau7/A=
+        bh=po5d4BRZvVuXwVZK5WJYEffm014lvA9qK8+HKXMPmJk=;
+        b=QfCSfjVhYB5emTkgQxhqOgW0RJsDLRrbefRITu4z1DZ9t3r92SW503ugnJKdOOeIos
+         rfLds1ytHJJMR/z7K6LYlAY0sBwQshw/9mc7vaFvB6M+qs/sssHGSNzOQeX1QJTD+SRf
+         +p17C8fvRj5lqBNIF/VNRVzDhC624ch+k0u65KaJd3KR/ag5TWucraUur/j9W5c9pC1/
+         W1pFbXHDOD0/PsEKNJea1ta0IpwPpDuOuAiy5jHbxq6Zc2w/Lvoi6Ap7dPxu5Q2wRdVD
+         k4ul2CFhctRlDq4fn69gjBX1NJoiHvuY4IBH4ZznML/yWdeSu4JlpSpkCOLT3P2BZ2sR
+         Z/Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqQyOYzgWj9n/E/jQWrR3Yh35+GuWIYOtINFzf0zbbxdJ+94NTq5GvmApAmckT6/eWOPpAiiUm62FLcfe6hgQITDCk2nUV5uGKAVRdKJIs
+X-Gm-Message-State: AOJu0Yz6aPjjR+c07/hfEbp/PwlZ9GvzPocbfZ0yBI8Lkccaetcq+TuR
+	6GljMxTqM+6z7rUzX3YMcSbtNJmNxP1xu8/JXgp61NquQ4SiyFwUEWOqUb4CUituzBuQ+P55Bg=
 	=
-X-Google-Smtp-Source: AGHT+IHoNWoNNRTxsr97FZ7/q/g/qbz5Q9ezThkgwC+EzxECZkvUoCNMvH5u9tWM17HBQabkNVhUsUZZ3Q==
+X-Google-Smtp-Source: AGHT+IGiP7g2Vwbx/sLdHKd9CxsA4r/ojIP2tygMYyGsgdFlSxlMZGkrDs0gtBlxzsRC17Ye+q5H8p9Qdg==
 X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a05:6902:110c:b0:dd9:1702:4837 with SMTP id
- o12-20020a056902110c00b00dd917024837mr3741826ybu.3.1714427138565; Mon, 29 Apr
- 2024 14:45:38 -0700 (PDT)
-Date: Mon, 29 Apr 2024 16:45:18 -0500
+ (user=jrife job=sendgmr) by 2002:a05:6638:868e:b0:485:549f:eed8 with SMTP id
+ iv14-20020a056638868e00b00485549feed8mr61664jab.0.1714427140108; Mon, 29 Apr
+ 2024 14:45:40 -0700 (PDT)
+Date: Mon, 29 Apr 2024 16:45:19 -0500
 In-Reply-To: <20240429214529.2644801-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240429214529.2644801-1-jrife@google.com>
 X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240429214529.2644801-2-jrife@google.com>
-Subject: [PATCH v3 bpf-next 1/6] selftests/bpf: Fix bind program for big
- endian systems
+Message-ID: <20240429214529.2644801-3-jrife@google.com>
+Subject: [PATCH v3 bpf-next 2/6] selftests/bpf: Implement socket kfuncs for bpf_testmod
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, linux-kselftest@vger.kernel.org, 
@@ -93,135 +92,364 @@ Cc: Jordan Rife <jrife@google.com>, linux-kselftest@vger.kernel.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Without this fix, the bind4 and bind6 programs will reject bind attempts
-on big endian systems. This patch ensures that CI tests pass for the
-s390x architecture.
+This patch adds a set of kfuncs to bpf_testmod that can be used to
+manipulate a socket from kernel space.
 
 Signed-off-by: Jordan Rife <jrife@google.com>
 ---
- .../testing/selftests/bpf/progs/bind4_prog.c  | 18 ++++++++++--------
- .../testing/selftests/bpf/progs/bind6_prog.c  | 18 ++++++++++--------
- tools/testing/selftests/bpf/progs/bind_prog.h | 19 +++++++++++++++++++
- 3 files changed, 39 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bind_prog.h
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 255 ++++++++++++++++++
+ .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |  27 ++
+ 2 files changed, 282 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
-index a487f60b73ac4..66005c1a5b367 100644
---- a/tools/testing/selftests/bpf/progs/bind4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
-@@ -12,6 +12,8 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index eb2b78552ca29..e93013fc7bf4d 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -10,18 +10,30 @@
+ #include <linux/percpu-defs.h>
+ #include <linux/sysfs.h>
+ #include <linux/tracepoint.h>
++#include <linux/net.h>
++#include <linux/socket.h>
++#include <linux/nsproxy.h>
++#include <linux/inet.h>
++#include <linux/in.h>
++#include <linux/in6.h>
++#include <linux/un.h>
++#include <net/sock.h>
+ #include "bpf_testmod.h"
+ #include "bpf_testmod_kfunc.h"
  
-+#include "bind_prog.h"
+ #define CREATE_TRACE_POINTS
+ #include "bpf_testmod-events.h"
+ 
++#define CONNECT_TIMEOUT_SEC 1
 +
- #define SERV4_IP		0xc0a801feU /* 192.168.1.254 */
- #define SERV4_PORT		4040
- #define SERV4_REWRITE_IP	0x7f000001U /* 127.0.0.1 */
-@@ -118,23 +120,23 @@ int bind_v4_prog(struct bpf_sock_addr *ctx)
+ typedef int (*func_proto_typedef)(long);
+ typedef int (*func_proto_typedef_nested1)(func_proto_typedef);
+ typedef int (*func_proto_typedef_nested2)(func_proto_typedef_nested1);
  
- 	// u8 narrow loads:
- 	user_ip4 = 0;
--	user_ip4 |= ((volatile __u8 *)&ctx->user_ip4)[0] << 0;
--	user_ip4 |= ((volatile __u8 *)&ctx->user_ip4)[1] << 8;
--	user_ip4 |= ((volatile __u8 *)&ctx->user_ip4)[2] << 16;
--	user_ip4 |= ((volatile __u8 *)&ctx->user_ip4)[3] << 24;
-+	user_ip4 |= load_byte(ctx->user_ip4, 0, sizeof(user_ip4));
-+	user_ip4 |= load_byte(ctx->user_ip4, 1, sizeof(user_ip4));
-+	user_ip4 |= load_byte(ctx->user_ip4, 2, sizeof(user_ip4));
-+	user_ip4 |= load_byte(ctx->user_ip4, 3, sizeof(user_ip4));
- 	if (ctx->user_ip4 != user_ip4)
- 		return 0;
+ DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
+ long bpf_testmod_test_struct_arg_result;
++static DEFINE_MUTEX(sock_lock);
++static struct socket *sock;
  
- 	user_port = 0;
--	user_port |= ((volatile __u8 *)&ctx->user_port)[0] << 0;
--	user_port |= ((volatile __u8 *)&ctx->user_port)[1] << 8;
-+	user_port |= load_byte(ctx->user_port, 0, sizeof(user_port));
-+	user_port |= load_byte(ctx->user_port, 1, sizeof(user_port));
- 	if (ctx->user_port != user_port)
- 		return 0;
+ struct bpf_testmod_struct_arg_1 {
+ 	int a;
+@@ -498,6 +510,237 @@ __bpf_kfunc void bpf_kfunc_call_test_sleepable(void)
+ {
+ }
  
- 	// u16 narrow loads:
- 	user_ip4 = 0;
--	user_ip4 |= ((volatile __u16 *)&ctx->user_ip4)[0] << 0;
--	user_ip4 |= ((volatile __u16 *)&ctx->user_ip4)[1] << 16;
-+	user_ip4 |= load_word(ctx->user_ip4, 0, sizeof(user_ip4));
-+	user_ip4 |= load_word(ctx->user_ip4, 1, sizeof(user_ip4));
- 	if (ctx->user_ip4 != user_ip4)
- 		return 0;
- 
-diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
-index d62cd9e9cf0ea..9c86c712348cf 100644
---- a/tools/testing/selftests/bpf/progs/bind6_prog.c
-+++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
-@@ -12,6 +12,8 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
-+#include "bind_prog.h"
++__bpf_kfunc int bpf_kfunc_init_sock(struct init_sock_args *args)
++{
++	int proto;
++	int err;
 +
- #define SERV6_IP_0		0xfaceb00c /* face:b00c:1234:5678::abcd */
- #define SERV6_IP_1		0x12345678
- #define SERV6_IP_2		0x00000000
-@@ -129,25 +131,25 @@ int bind_v6_prog(struct bpf_sock_addr *ctx)
- 	// u8 narrow loads:
- 	for (i = 0; i < 4; i++) {
- 		user_ip6 = 0;
--		user_ip6 |= ((volatile __u8 *)&ctx->user_ip6[i])[0] << 0;
--		user_ip6 |= ((volatile __u8 *)&ctx->user_ip6[i])[1] << 8;
--		user_ip6 |= ((volatile __u8 *)&ctx->user_ip6[i])[2] << 16;
--		user_ip6 |= ((volatile __u8 *)&ctx->user_ip6[i])[3] << 24;
-+		user_ip6 |= load_byte(ctx->user_ip6[i], 0, sizeof(user_ip6));
-+		user_ip6 |= load_byte(ctx->user_ip6[i], 1, sizeof(user_ip6));
-+		user_ip6 |= load_byte(ctx->user_ip6[i], 2, sizeof(user_ip6));
-+		user_ip6 |= load_byte(ctx->user_ip6[i], 3, sizeof(user_ip6));
- 		if (ctx->user_ip6[i] != user_ip6)
- 			return 0;
- 	}
- 
- 	user_port = 0;
--	user_port |= ((volatile __u8 *)&ctx->user_port)[0] << 0;
--	user_port |= ((volatile __u8 *)&ctx->user_port)[1] << 8;
-+	user_port |= load_byte(ctx->user_port, 0, sizeof(user_port));
-+	user_port |= load_byte(ctx->user_port, 1, sizeof(user_port));
- 	if (ctx->user_port != user_port)
- 		return 0;
- 
- 	// u16 narrow loads:
- 	for (i = 0; i < 4; i++) {
- 		user_ip6 = 0;
--		user_ip6 |= ((volatile __u16 *)&ctx->user_ip6[i])[0] << 0;
--		user_ip6 |= ((volatile __u16 *)&ctx->user_ip6[i])[1] << 16;
-+		user_ip6 |= load_word(ctx->user_ip6[i], 0, sizeof(user_ip6));
-+		user_ip6 |= load_word(ctx->user_ip6[i], 1, sizeof(user_ip6));
- 		if (ctx->user_ip6[i] != user_ip6)
- 			return 0;
- 	}
-diff --git a/tools/testing/selftests/bpf/progs/bind_prog.h b/tools/testing/selftests/bpf/progs/bind_prog.h
-new file mode 100644
-index 0000000000000..e830caa940c35
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bind_prog.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __BIND_PROG_H__
-+#define __BIND_PROG_H__
++	mutex_lock(&sock_lock);
 +
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define load_byte(src, b, s) \
-+	(((volatile __u8 *)&(src))[b] << 8 * b)
-+#define load_word(src, w, s) \
-+	(((volatile __u16 *)&(src))[w] << 16 * w)
-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+#define load_byte(src, b, s) \
-+	(((volatile __u8 *)&(src))[(b) + (sizeof(src) - (s))] << 8 * ((s) - (b) - 1))
-+#define load_word(src, w, s) \
-+	(((volatile __u16 *)&(src))[w] << 16 * (((s) / 2) - (w) - 1))
-+#else
-+# error "Fix your compiler's __BYTE_ORDER__?!"
-+#endif
++	if (sock) {
++		pr_err("%s called without releasing old sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
 +
-+#endif
++	switch (args->af) {
++	case AF_INET:
++	case AF_INET6:
++		proto = args->type == SOCK_STREAM ? IPPROTO_TCP : IPPROTO_UDP;
++		break;
++	case AF_UNIX:
++		proto = PF_UNIX;
++		break;
++	default:
++		pr_err("invalid address family %d\n", args->af);
++		err = -EINVAL;
++		goto out;
++	}
++
++	err = sock_create_kern(current->nsproxy->net_ns, args->af, args->type,
++			       proto, &sock);
++
++	if (!err)
++		/* Set timeout for call to kernel_connect() to prevent it from hanging,
++		 * and consider the connection attempt failed if it returns
++		 * -EINPROGRESS.
++		 */
++		sock->sk->sk_sndtimeo = CONNECT_TIMEOUT_SEC * HZ;
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc void bpf_kfunc_close_sock(void)
++{
++	mutex_lock(&sock_lock);
++
++	if (sock) {
++		sock_release(sock);
++		sock = NULL;
++	}
++
++	mutex_unlock(&sock_lock);
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_connect(struct addr_args *args)
++{
++	int err;
++
++	if (args->addrlen > sizeof(args->addr))
++		return -EINVAL;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_connect(sock, (struct sockaddr *)&args->addr,
++			     args->addrlen, 0);
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_bind(struct addr_args *args)
++{
++	int err;
++
++	if (args->addrlen > sizeof(args->addr))
++		return -EINVAL;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_bind(sock, (struct sockaddr *)&args->addr, args->addrlen);
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_listen(void)
++{
++	int err;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_listen(sock, 128);
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_sendmsg(struct sendmsg_args *args)
++{
++	struct msghdr msg = {
++		.msg_name	= &args->addr.addr,
++		.msg_namelen	= args->addr.addrlen,
++	};
++	struct kvec iov;
++	int err;
++
++	if (args->addr.addrlen > sizeof(args->addr.addr) ||
++	    args->msglen > sizeof(args->msg))
++		return -EINVAL;
++
++	iov.iov_base = args->msg;
++	iov.iov_len  = args->msglen;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_sendmsg(sock, &msg, &iov, 1, args->msglen);
++	args->addr.addrlen = msg.msg_namelen;
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_sock_sendmsg(struct sendmsg_args *args)
++{
++	struct msghdr msg = {
++		.msg_name	= &args->addr.addr,
++		.msg_namelen	= args->addr.addrlen,
++	};
++	struct kvec iov;
++	int err;
++
++	if (args->addr.addrlen > sizeof(args->addr.addr) ||
++	    args->msglen > sizeof(args->msg))
++		return -EINVAL;
++
++	iov.iov_base = args->msg;
++	iov.iov_len  = args->msglen;
++
++	iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &iov, 1, args->msglen);
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = sock_sendmsg(sock, &msg);
++	args->addr.addrlen = msg.msg_namelen;
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_getsockname(struct addr_args *args)
++{
++	int err;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_getsockname(sock, (struct sockaddr *)&args->addr);
++	if (err < 0)
++		goto out;
++
++	args->addrlen = err;
++	err = 0;
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
++__bpf_kfunc int bpf_kfunc_call_kernel_getpeername(struct addr_args *args)
++{
++	int err;
++
++	mutex_lock(&sock_lock);
++
++	if (!sock) {
++		pr_err("%s called without initializing sock", __func__);
++		err = -EPERM;
++		goto out;
++	}
++
++	err = kernel_getpeername(sock, (struct sockaddr *)&args->addr);
++	if (err < 0)
++		goto out;
++
++	args->addrlen = err;
++	err = 0;
++out:
++	mutex_unlock(&sock_lock);
++
++	return err;
++}
++
+ BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+@@ -525,6 +768,15 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_destructive, KF_DESTRUCTIVE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_sleepable, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_init_sock, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_close_sock, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_connect, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_bind, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_listen, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_sendmsg, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_sock_sendmsg, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_getsockname, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_kernel_getpeername, KF_SLEEPABLE)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
+ 
+ static int bpf_testmod_ops_init(struct btf *btf)
+@@ -655,6 +907,8 @@ static int bpf_testmod_init(void)
+ 		return ret;
+ 	if (bpf_fentry_test1(0) < 0)
+ 		return -EINVAL;
++	sock = NULL;
++	mutex_init(&sock_lock);
+ 	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+ }
+ 
+@@ -668,6 +922,7 @@ static void bpf_testmod_exit(void)
+ 	while (refcount_read(&prog_test_struct.cnt) > 1)
+ 		msleep(20);
+ 
++	bpf_kfunc_close_sock();
+ 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+index ce5cd763561ca..b0d586a6751fa 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod_kfunc.h
+@@ -64,6 +64,22 @@ struct prog_test_fail3 {
+ 	char arr2[];
+ };
+ 
++struct init_sock_args {
++	int af;
++	int type;
++};
++
++struct addr_args {
++	char addr[sizeof(struct __kernel_sockaddr_storage)];
++	int addrlen;
++};
++
++struct sendmsg_args {
++	struct addr_args addr;
++	char msg[10];
++	int msglen;
++};
++
+ struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr) __ksym;
+ void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+@@ -107,4 +123,15 @@ void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p);
+ void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len);
+ 
+ void bpf_kfunc_common_test(void) __ksym;
++
++int bpf_kfunc_init_sock(struct init_sock_args *args) __ksym;
++void bpf_kfunc_close_sock(void) __ksym;
++int bpf_kfunc_call_kernel_connect(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_bind(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_listen(void) __ksym;
++int bpf_kfunc_call_kernel_sendmsg(struct sendmsg_args *args) __ksym;
++int bpf_kfunc_call_sock_sendmsg(struct sendmsg_args *args) __ksym;
++int bpf_kfunc_call_kernel_getsockname(struct addr_args *args) __ksym;
++int bpf_kfunc_call_kernel_getpeername(struct addr_args *args) __ksym;
++
+ #endif /* _BPF_TESTMOD_KFUNC_H */
 -- 
 2.44.0.769.g3c40516874-goog
 
