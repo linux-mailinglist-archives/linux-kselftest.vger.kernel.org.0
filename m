@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-9136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 657018B75DC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 14:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D30C8B7652
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 14:53:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7194C1C21F94
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 12:38:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BAF61C22859
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 12:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767F217107F;
-	Tue, 30 Apr 2024 12:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9E6171648;
+	Tue, 30 Apr 2024 12:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msr+qTsQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MxgB5xaA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
+Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C6212D214;
-	Tue, 30 Apr 2024 12:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436417109A;
+	Tue, 30 Apr 2024 12:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714480692; cv=none; b=ayQF/uWzX75K8h2KFDvfuZlafOJdBVI12J9CF70TdwZB84m6VbucB9RrMG/kXYJaQcbtMCuASK1Llv/3G7X37knRzakQ6/8l65eRaUN5zkSTiBTnGaBDHKH2UZyr9dhceZ4LbTk3XzGAk5IZ0UYdebtPpl3u9ZzBoM69mLDFLYg=
+	t=1714481595; cv=none; b=WZ1Yqrr2tl9NAyxZwcOkvY5ZVJpG2OfFP8Gr2KOqxr3noPctJTjcTLjZ0dT6/6kMdePtnWB+xN40Fnt6jqQmbZUU2VJpE9tHrdzJlfioJ3O4ZxMw/6crbt4s89EA+bVahdnLLb81glFRFOajEEylsjT1xd6M0NlAcQb+K7MVcqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714480692; c=relaxed/simple;
-	bh=UxkGHkyOV2QivS5ID0u+KA+og8PhR5pbstf9U27sdBk=;
+	s=arc-20240116; t=1714481595; c=relaxed/simple;
+	bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lxRQP8Er34s61Qf7/HbmVlZ/ThF/R2XDLTgcchVh8nfxSV8v872/aEY8M/q0UfFIbktG1YsRzWKtgAWnECn0CSsLULXNkOXKpAsr1pHKigC/Iw2SdKJbdIgEILBVVnBMgp3KFKLdNvf6snxGltJYjraaHBQEsPgy5ybrgun47Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msr+qTsQ; arc=none smtp.client-ip=209.85.218.65
+	 To:Cc:Content-Type; b=WxaIvuU3fnlHOoBufTPJdDAXWd8D/XWgempR/VxL1kZ2T61k6mfNjj6j250Gc5YDW1at0ZRy1mQojKUTH4kdb9rIhHuZMIJm2hTuh84kaf+mPb+DaLL0adBF7iRslYP6lMqxF6iz8b9BCVCHoUYKRAja5hRsUOSarfymaGI+89w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MxgB5xaA; arc=none smtp.client-ip=209.85.167.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-a55bf737cecso667462966b.0;
-        Tue, 30 Apr 2024 05:38:10 -0700 (PDT)
+Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-518a56cdc03so6347550e87.1;
+        Tue, 30 Apr 2024 05:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714480689; x=1715085489; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714481592; x=1715086392; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxkGHkyOV2QivS5ID0u+KA+og8PhR5pbstf9U27sdBk=;
-        b=msr+qTsQbSq2YbUnRrG3UixUxW0BILDkm5/M0fzbPXNcpnoz1RxWIdy5v2MjcemIap
-         EsoB1DIiIa2IfQvw5Yejwg2RdtqC/kU4VQ2HFOm2mmnwPd4mUP9s+KMDJx1uOvG/6WHH
-         P8ECnVlxjRq11BQAg7EgJJ39JOk7I+JnTHOXjfLBzHsVEF/DKBtvsLodQEyLN6kvPR+D
-         ZZZm9GKoBjnsb2ROAAiHweknYJ7Ff+wcWxyzPnjLLFpa7Qy0o8XK75k6/hBrY7BavWgn
-         Xa+WN1so4W4UTcl558L1QY0BvxjX/1ayG2c9es7JhfH64yiToNiuvi41YBihapxLq1bf
-         k3dw==
+        bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
+        b=MxgB5xaARnx7GEi6IaJBRF7aGUdBMLLCYoBLr1l0M6bL6tk6IVktY4wFGdaL0glY/4
+         hZWn6s107pEqWiLzPIGErMmeSTxqhcZUGLsjvGxlu4RbfUN/URLu3u5alGYMBfeOANKc
+         FDtrqUBuyl7WOaM1OjkDQp8IS+iUap+XLDJD1XOQM3xfQuhF/JhoVzwp8QmSYKCtGJIG
+         sWrWdCij6DMBVhazmM6GLlfjfY5kPN/pBGEiaAZ76Jso8vt223Q4WCKpEkzuR6UG0Gmx
+         FXbDkV2EmNa94rqul7/NMXoWhVKBMUYeaZuYjNwQdWmlX/Y5ME1M2l3DuojNSR8P++0V
+         c0jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714480689; x=1715085489;
+        d=1e100.net; s=20230601; t=1714481592; x=1715086392;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UxkGHkyOV2QivS5ID0u+KA+og8PhR5pbstf9U27sdBk=;
-        b=xJB4mYyGVTqRkjCZjSNA6GZL/Bxu7HAolYiMK1WHGgF3YRuUn44Rh+zx5lBbTNHbQw
-         XH+V6ebnYtiBnjMCVRVOqIbeuBAAzOloDE+6XJVERBe4OMcqSu/Ixk4gfGF4MZhKpNg4
-         SVoou4GrsMC++YjrPAKQxKt28ZEnnHRdOlUx5NcsHIpFTKkgV5v/j0Pw3Sv0nVi3lHfj
-         rwxhEGKmKV45q54EaVbwu+6XuRo49rcZ0VKka5JUQNZ5Nm6INnAYgxSpgOLmyPuvnfXi
-         VbKrodXanYUSbJpWo/W+EybMGeQg0kU+vuHTYJeDbhiJ1dzzpQ5VqquAQ0ixwBhgViL6
-         t4Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKacGA7AkoLIsiiHtrYyAaVFQ4l2E0deLvpvzNzc97e5p9iRZn/bfjSWonaK3tieUNx8UArszJjojqJxtL1BteBMX2lepg6QaA/cveVyuStdYx+8Z2kGidJMbT8LBmffMX2RaoByTO+kLnmSN+/E8ABVMjO/3uW6QUC5xxdtFoznQ6
-X-Gm-Message-State: AOJu0Yw3Vnugf20/wF71mXqWAlR9+id9GAcUxqFG2MPHMjgLYGp+13Yk
-	4Ce4CT/EchvwlYFygmocGcflB4p2LTFigATz8pBgDXpTCNCJo85fSeefi9VCZj6Jcn2iYa3GOiJ
-	TEIJJ8Tbb1ROW4LrHuiQ6ZrN055E=
-X-Google-Smtp-Source: AGHT+IH27RdWC5FSjhJY1OjL9ydhwSJgYHblvsxBFlka0WMmUZVYC+Xsw4NlWhQFVJQq1AKM2GpwEwM3xszNOJjFhnU=
-X-Received: by 2002:a17:906:f292:b0:a55:90c8:774f with SMTP id
- gu18-20020a170906f29200b00a5590c8774fmr9271117ejb.16.1714480689062; Tue, 30
- Apr 2024 05:38:09 -0700 (PDT)
+        bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
+        b=oP5A51U6C++eDQ+DI8BgPyPY1Evw6dIywGBxJ6F3LBIDNrBEI6KgD/QlqM7XHUGwAM
+         WTETcZBo0g6HxpT/Vy/8gH7doyPEAtvb3hoXybauFaO4c+J/yR4gNqvpKQZj3kwra+/h
+         gWwQQ9NLwQT7BtC4B6WBWDfF6Wk8lizP40r6VcmWCLClRtzBJNrpgw+8XMo/4u/BtJjs
+         9vdfGOqxjpxAVwL0zNxdzi9yzdorU8LzMtkhC4re+s4KqYF5vCJruNTe4gHT4q5JQAtS
+         EvFwmjrD2zdIhVH6BZL7WfoX+WxsahorT+dAju4d5UOfvwtRT9yqhZ0qxlaiJraOIYvM
+         XUrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUtfAk5OUKY/KSy6CIOySOeVwAOUlA0Zv6lipO038PG+h2CHS+YSGFuqbEa2ikDjAyPNZ/gdVXSRf2CZaS72DjOz871qdm1cpuDiRW6Sy2DtjTE5eQ5FN3ubkU7MsOTSlwH+jk3TBB3RVUlOHyhtGGjWIcpxPasLqNH+C/RFbkA0ldX
+X-Gm-Message-State: AOJu0YyuHjfRwv5ENj+oZkiYvxj4yWjlle4p+iqyPFruNK2mdsNR0bSH
+	sCa6QPKM99hq1tEJntQzhhGxBaI1/Zbkkc+/eMlko+nAEvuNfQjILhfhPHOAeKWW0wmcqG4JSB8
+	V66ub3j3e6iyIDVhJjv2iYEfOzwM=
+X-Google-Smtp-Source: AGHT+IEeNsmeI9uM1owNWyT0b3Zfvz+dHi/sMUsi0aBKdjayxoENcsgxyoEpXD/x/7tF4V10wXTofSlFpfxGo5KyeVY=
+X-Received: by 2002:a19:9157:0:b0:516:d33a:7571 with SMTP id
+ y23-20020a199157000000b00516d33a7571mr9167898lfj.8.1714481591989; Tue, 30 Apr
+ 2024 05:53:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430-bpf-next-v3-0-27afe7f3b17c@kernel.org> <20240430-bpf-next-v3-3-27afe7f3b17c@kernel.org>
-In-Reply-To: <20240430-bpf-next-v3-3-27afe7f3b17c@kernel.org>
+References: <20240430-bpf-next-v3-0-27afe7f3b17c@kernel.org> <20240430-bpf-next-v3-2-27afe7f3b17c@kernel.org>
+In-Reply-To: <20240430-bpf-next-v3-2-27afe7f3b17c@kernel.org>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 30 Apr 2024 14:37:32 +0200
-Message-ID: <CAP01T74gBChGdVWXKWro_vJ_B5jwEtstUMx41U+y+wbXy8VBXg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: drop an unused local variable
+Date: Tue, 30 Apr 2024 14:52:35 +0200
+Message-ID: <CAP01T76NyoYc4Y6k_ArbjfUn1tVjxSa0SpqVzEtM0h9jdRvgDg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] bpf: do not walk twice the hash map on free
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -89,16 +89,27 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 30 Apr 2024 at 12:44, Benjamin Tissoires <bentiss@kernel.org> wrote:
 >
-> Some copy/paste leftover, this is never used
+> If someone stores both a timer and a workqueue in a hash map, on free, we
+> would walk it twice.
+> Add a check in htab_free_malloced_timers_or_wq and free the timers
+> and workqueues if they are present.
 >
-> Fixes: e3d9eac99afd ("selftests/bpf: wq: add bpf_wq_init() checks")
+> Fixes: 246331e3f1ea ("bpf: allow struct bpf_wq to be embedded in arraymaps and hashmaps")
 > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 >
 > ---
+
+I had forgotten how the extra_elems logic is working, turns out
+everything is in the preallocated elems array and per-cpu extra_elems
+stores the *pointer* to them for recycling without hitting the pcpu
+allocator, so should be fine (just in case this confuses anyone else).
+
 >
-> no changes in v3
+> changes in v3:
+> - fix unloading of bpf_wq, again
 >
-> no changes in v2
+> changes in v2:
+> - fix wq being not freed (and static call not used)
 > ---
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
