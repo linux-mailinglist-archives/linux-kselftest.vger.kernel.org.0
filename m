@@ -1,116 +1,152 @@
-Return-Path: <linux-kselftest+bounces-9137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D30C8B7652
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 14:53:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BA5C8B76B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 15:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BAF61C22859
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 12:53:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 182F3280EA0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 13:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9E6171648;
-	Tue, 30 Apr 2024 12:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2BF171662;
+	Tue, 30 Apr 2024 13:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MxgB5xaA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lo+J2P6E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436417109A;
-	Tue, 30 Apr 2024 12:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2396817164B
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2024 13:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714481595; cv=none; b=WZ1Yqrr2tl9NAyxZwcOkvY5ZVJpG2OfFP8Gr2KOqxr3noPctJTjcTLjZ0dT6/6kMdePtnWB+xN40Fnt6jqQmbZUU2VJpE9tHrdzJlfioJ3O4ZxMw/6crbt4s89EA+bVahdnLLb81glFRFOajEEylsjT1xd6M0NlAcQb+K7MVcqQ=
+	t=1714482918; cv=none; b=fx+90UuUQcV6U8WBnZXSA6rdwUAZgc0TpZRc0iNlp22VzSV06G/1w+YtVOTrfYDrF1oUhlGoejmUkSsjsbW4bQUIQINHa5oCIcXXmr/GDChbRr1KYKfNZS2j+kJ0Qvo6kVewEpKrn8wIVd/tPmWMGOfdjRoLUn4lwpodk+Po1dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714481595; c=relaxed/simple;
-	bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WxaIvuU3fnlHOoBufTPJdDAXWd8D/XWgempR/VxL1kZ2T61k6mfNjj6j250Gc5YDW1at0ZRy1mQojKUTH4kdb9rIhHuZMIJm2hTuh84kaf+mPb+DaLL0adBF7iRslYP6lMqxF6iz8b9BCVCHoUYKRAja5hRsUOSarfymaGI+89w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MxgB5xaA; arc=none smtp.client-ip=209.85.167.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-518a56cdc03so6347550e87.1;
-        Tue, 30 Apr 2024 05:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714481592; x=1715086392; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
-        b=MxgB5xaARnx7GEi6IaJBRF7aGUdBMLLCYoBLr1l0M6bL6tk6IVktY4wFGdaL0glY/4
-         hZWn6s107pEqWiLzPIGErMmeSTxqhcZUGLsjvGxlu4RbfUN/URLu3u5alGYMBfeOANKc
-         FDtrqUBuyl7WOaM1OjkDQp8IS+iUap+XLDJD1XOQM3xfQuhF/JhoVzwp8QmSYKCtGJIG
-         sWrWdCij6DMBVhazmM6GLlfjfY5kPN/pBGEiaAZ76Jso8vt223Q4WCKpEkzuR6UG0Gmx
-         FXbDkV2EmNa94rqul7/NMXoWhVKBMUYeaZuYjNwQdWmlX/Y5ME1M2l3DuojNSR8P++0V
-         c0jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714481592; x=1715086392;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oWqL3ZY85KNjhD8aSZZTQArTMiUJ1o11X6J2QIlGdww=;
-        b=oP5A51U6C++eDQ+DI8BgPyPY1Evw6dIywGBxJ6F3LBIDNrBEI6KgD/QlqM7XHUGwAM
-         WTETcZBo0g6HxpT/Vy/8gH7doyPEAtvb3hoXybauFaO4c+J/yR4gNqvpKQZj3kwra+/h
-         gWwQQ9NLwQT7BtC4B6WBWDfF6Wk8lizP40r6VcmWCLClRtzBJNrpgw+8XMo/4u/BtJjs
-         9vdfGOqxjpxAVwL0zNxdzi9yzdorU8LzMtkhC4re+s4KqYF5vCJruNTe4gHT4q5JQAtS
-         EvFwmjrD2zdIhVH6BZL7WfoX+WxsahorT+dAju4d5UOfvwtRT9yqhZ0qxlaiJraOIYvM
-         XUrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtfAk5OUKY/KSy6CIOySOeVwAOUlA0Zv6lipO038PG+h2CHS+YSGFuqbEa2ikDjAyPNZ/gdVXSRf2CZaS72DjOz871qdm1cpuDiRW6Sy2DtjTE5eQ5FN3ubkU7MsOTSlwH+jk3TBB3RVUlOHyhtGGjWIcpxPasLqNH+C/RFbkA0ldX
-X-Gm-Message-State: AOJu0YyuHjfRwv5ENj+oZkiYvxj4yWjlle4p+iqyPFruNK2mdsNR0bSH
-	sCa6QPKM99hq1tEJntQzhhGxBaI1/Zbkkc+/eMlko+nAEvuNfQjILhfhPHOAeKWW0wmcqG4JSB8
-	V66ub3j3e6iyIDVhJjv2iYEfOzwM=
-X-Google-Smtp-Source: AGHT+IEeNsmeI9uM1owNWyT0b3Zfvz+dHi/sMUsi0aBKdjayxoENcsgxyoEpXD/x/7tF4V10wXTofSlFpfxGo5KyeVY=
-X-Received: by 2002:a19:9157:0:b0:516:d33a:7571 with SMTP id
- y23-20020a199157000000b00516d33a7571mr9167898lfj.8.1714481591989; Tue, 30 Apr
- 2024 05:53:11 -0700 (PDT)
+	s=arc-20240116; t=1714482918; c=relaxed/simple;
+	bh=/W2LaG4ED1NPUdu4j9585eVlZDNybe47gsOfhZdMXCs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sagjB4WkmAgYgxiK8FfZlYKKnEadHVmBLyOMIS7jeH2AwPAp9AceMDwnMkyS8vReJRXTPIb+OTglsBtvnw3Yfe7VK03tUl4I4Yu2biKMUgPmOIYy3ePwdj/fADmKh2YpChUj8ymnvLeFbBSeZDNLsG+i+VQX6Pc9Neg4Q15Knv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lo+J2P6E; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714482916;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TvN/vaqOiemb3kV8gzUJWpBwRA+WO8kvTTbX/5Cqx18=;
+	b=Lo+J2P6EOYGrNECDTm42BuLFZLQVEBfFNK3cInWBiy1sOM5w2zuK4JbCkErO8S5QZcd7yM
+	VIYZOD21gU5yztX1wXsXd9EJRwjc6vZJvNqE+myQQ48AbIWbyvjzJ8bFVED7cmmeQ9T8a9
+	C3cqNHpdPIL5V9LCoCYfjinxMG+1VUQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-79-OjnytbWMMWekGDOxme0w2g-1; Tue, 30 Apr 2024 09:15:12 -0400
+X-MC-Unique: OjnytbWMMWekGDOxme0w2g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B6C4812C56;
+	Tue, 30 Apr 2024 13:15:12 +0000 (UTC)
+Received: from t14s.cit.tum.de (unknown [10.39.194.166])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id EFBFC1121306;
+	Tue, 30 Apr 2024 13:15:09 +0000 (UTC)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Xu <peterx@redhat.com>
+Subject: [PATCH v1] selftests: mm: gup_longterm: test unsharing logic when R/O pinning
+Date: Tue, 30 Apr 2024 15:15:08 +0200
+Message-ID: <20240430131508.86924-1-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430-bpf-next-v3-0-27afe7f3b17c@kernel.org> <20240430-bpf-next-v3-2-27afe7f3b17c@kernel.org>
-In-Reply-To: <20240430-bpf-next-v3-2-27afe7f3b17c@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 30 Apr 2024 14:52:35 +0200
-Message-ID: <CAP01T76NyoYc4Y6k_ArbjfUn1tVjxSa0SpqVzEtM0h9jdRvgDg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf: do not walk twice the hash map on free
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On Tue, 30 Apr 2024 at 12:44, Benjamin Tissoires <bentiss@kernel.org> wrote:
->
-> If someone stores both a timer and a workqueue in a hash map, on free, we
-> would walk it twice.
-> Add a check in htab_free_malloced_timers_or_wq and free the timers
-> and workqueues if they are present.
->
-> Fixes: 246331e3f1ea ("bpf: allow struct bpf_wq to be embedded in arraymaps and hashmaps")
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
->
-> ---
+In our FOLL_LONGTERM tests, we prefault the page tables for the GUP-fast
+test cases to be able to find a PTE and exercise the "longterm pinning
+allowed" logic on the GUP-fast path where possible.
 
-I had forgotten how the extra_elems logic is working, turns out
-everything is in the preallocated elems array and per-cpu extra_elems
-stores the *pointer* to them for recycling without hitting the pcpu
-allocator, so should be fine (just in case this confuses anyone else).
+For now, we always prefault the page tables writable, resulting in PTEs
+that are writable.
 
->
-> changes in v3:
-> - fix unloading of bpf_wq, again
->
-> changes in v2:
-> - fix wq being not freed (and static call not used)
-> ---
+Let's cover more cases to also test if our unsharing logic works as
+expected (and is able to make progress when there is nothing to unshare)
+by mprotect'ing the range R/O when R/O-pinning, so we don't get PTEs
+that are writable.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+This change would have found an issue introduced by commit a12083d721d7
+("mm/gup: handle hugepd for follow_page()"), whereby R/O pinning was not
+able to make progress in all cases, because unsharing logic was not
+provided with the VMA to decide at some point that long-term R/O pinning
+a !anon page is fine.
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Peter Xu <peterx@redhat.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+
+Follow-up to [1].
+
+Tested only on x86-64, to make sure the tests are still passing.
+
+[1] https://lkml.kernel.org/r/20240428190151.201002-3-peterx@redhat.com
+
+---
+ tools/testing/selftests/mm/gup_longterm.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index ad168d35b23b7..6c6d99c1dc765 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -118,15 +118,22 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		return;
+ 	}
+ 
+-	/*
+-	 * Fault in the page writable such that GUP-fast can eventually pin
+-	 * it immediately.
+-	 */
++	/* Fault in the page such that GUP-fast can pin it directly. */
+ 	memset(mem, 0, size);
+ 
+ 	switch (type) {
+ 	case TEST_TYPE_RO:
+ 	case TEST_TYPE_RO_FAST:
++		/*
++		 * Cover more cases regarding unsharing decisions when
++		 * long-term R/O pinning by mapping the page R/O.
++		 */
++		ret = mprotect(mem, size, PROT_READ);
++		if (ret) {
++			ksft_test_result_fail("mprotect() failed\n");
++			goto munmap;
++		}
++		/* FALLTHROUGH */
+ 	case TEST_TYPE_RW:
+ 	case TEST_TYPE_RW_FAST: {
+ 		struct pin_longterm_test args;
+@@ -228,6 +235,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		assert(false);
+ 	}
+ 
++munmap:
+ 	munmap(mem, size);
+ }
+ 
+-- 
+2.44.0
+
 
