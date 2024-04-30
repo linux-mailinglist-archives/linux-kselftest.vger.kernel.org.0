@@ -1,194 +1,112 @@
-Return-Path: <linux-kselftest+bounces-9123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 017AB8B6FC2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 12:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06FD98B701C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 12:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EA4B1F2399B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 10:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BF411F21AB1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2024 10:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3620412C461;
-	Tue, 30 Apr 2024 10:39:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A637512C48B;
+	Tue, 30 Apr 2024 10:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrKPeI6b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zii2OQW7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052712CA7;
-	Tue, 30 Apr 2024 10:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD95129E81;
+	Tue, 30 Apr 2024 10:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714473585; cv=none; b=E8P95tnYEa0awntrGD0Q+hmLqs0N3GKKPHsCogqpnYFPsgpWRFdIq4Zvld5G+7loa/2XKlN1Nsm/oIqW+QEFEyg5TBwXMdHo8S2XuqD/sRcJOZ6Pa00i9hra/nszpDxZbBySg0ul7fypYC6ZeNpt/QuORZMwZMeTif2KHAJRuT0=
+	t=1714473813; cv=none; b=PQBlWZnQijXcpC8QMnpNXz1ZUPlZxk3oTgFkSIrCAvQQibAYa0PxjJyIREdhFP8Yte28F1jEa7QH81ShjhFji3HKUm7Z9UmGkLmzsNbrDL8kBAjxOxlFUaMYqrTkr3BmcgQf7I3F40sxyTr+tyy9laJ1lTduJr6+EX0qMZ5nFHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714473585; c=relaxed/simple;
-	bh=sNg/sHNAD7BL/VjF8rOvfs48XQbDjX30Eb+2bNQnFuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rflsVxuJ8TG2W7RYwGJMkTzP3BYd38P+c1B433DwidX+CRY7QitiMUK2MATcw7QIOkMpvZOVanwPz3pV63NPEOEGvHYlOCNFJeN/rOjwBpPnDVUqzJwWRWm8gxKkIEpcrOYLqW0ccj1TE0xA6vdRS3eHJuQLRCNcbroZCj5+Ut8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrKPeI6b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9DDC2BBFC;
-	Tue, 30 Apr 2024 10:39:41 +0000 (UTC)
+	s=arc-20240116; t=1714473813; c=relaxed/simple;
+	bh=pmPJ41wWRetcjAe+Ucdl6PaA5Nla2eyRnT5tyL4d71c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tW0XWcmyftrhMEdJQaHnWuuauLdP1RwzQVVd9SPjR4dsgeFbcSYjWctyYNcL/oImea6xUJyuwSws9qPGNiPuM/dNPc53XDHs9g4M19sOr50h2vpGmkRN8Sd3NKb92EmoHw3ZgWk2e+bAOH5c4L9ZMsaOfwvrPlRoa0h5xIf5rnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zii2OQW7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEF0C4AF14;
+	Tue, 30 Apr 2024 10:43:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714473584;
-	bh=sNg/sHNAD7BL/VjF8rOvfs48XQbDjX30Eb+2bNQnFuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GrKPeI6b3To+3rhSxGeKzj5cslKwbXB0GZbb9ugcLQLe3E3mosEC6t9NDEiAqbdc/
-	 qJJP/e/4uPB5wISoMmlHKkG3G49/6a9XdBnh748aUmcJQEIu+PWA/OshtVowjWhTXg
-	 k10mzOxYUngyTpkCMBqpvdzIGEaXx7N5GMOpPyyvOdCGrIIv4yWQBKmFAYh/T9n+oJ
-	 iYHLE2S51PtXBsUgJGzXp0od6uR9u+C/5j+QE1al+zDlLdA5gA0pR9lKIDlaPWxbkf
-	 bsQTavu+HyeRMqIhBIuXCMSnNTUB6tcqHaEJ06j5tmVrVwEcO6KNhMJ+eeOymprUNl
-	 BImRJowlPYbLQ==
-Date: Tue, 30 Apr 2024 12:39:38 +0200
+	s=k20201202; t=1714473813;
+	bh=pmPJ41wWRetcjAe+Ucdl6PaA5Nla2eyRnT5tyL4d71c=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Zii2OQW7u80T2Qx3WpabNscbjTM1oC2mLsYNQCIN1yNXjSV3Y/0nw6slPH8k+j0E0
+	 K4y+MSiO5V6Fbt63Gxxl/gdFL2+vyp5J1KqyHmPeiSvXHVgEIMCutyToy7ggpnfm6J
+	 Lzy39aAUzS1PmTWNE8ZWYTwX0FSzYcKYmfphFi0cMl2pzdxYVIya3ponX7+MuZs/aQ
+	 9JRgNzbK5Db+5GOtc4bx3Td+RgO44Y2lStEE7Y2O5EeO9A+v0s4BfJ5Lly1eFiX7GP
+	 80oJEc1r0wJM5rofYLuQLJYxIE2PSi2ZePoiFyyrBISWbILJ7YerVWIn48eif8FhXX
+	 C5ElXXwLXSgGw==
 From: Benjamin Tissoires <bentiss@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] bpf: do not walk twice the hash map on free
-Message-ID: <aqjmjzyiip3fmyivrnn3uvz7qbao3xbvazkaztd5wamubzqaaf@24wrep4lmbqp>
-References: <20240430-bpf-next-v2-0-140aa50f0f19@kernel.org>
- <20240430-bpf-next-v2-2-140aa50f0f19@kernel.org>
+Subject: [PATCH bpf-next v3 0/3] bpf_wq followup series
+Date: Tue, 30 Apr 2024 12:43:23 +0200
+Message-Id: <20240430-bpf-next-v3-0-27afe7f3b17c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240430-bpf-next-v2-2-140aa50f0f19@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEvLMGYC/2WNyw6CMBREf4XctTW3L0RW/odxgXALjaaQljQYw
+ r9bm5hgXE5mzpkVAnlLAepiBU/RBju6FOShgHZoXE/MdimDQKFQCc3uk2GOlpkJzpXUqKsTSUj
+ zyZOxS1Zd4buCW2oGG+bRv/JH5Ln/10XOkPGukhKpbEslLw/yjp7H0ffZEsWOlLgjxYdU2DQaD
+ Rp+/iG3bXsD5UhBwOUAAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1714473809; l=1120;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=pmPJ41wWRetcjAe+Ucdl6PaA5Nla2eyRnT5tyL4d71c=;
+ b=JBijTWQ4/ntor0BHc4BqUYpOGdwARsOol3Q76Psmfbc25fqiJ83J4Gg5rJ/mUULlLI/YR7Bua
+ upTSshfDCSoCttL7Vy246aKkXk7HeH69gEZElkcfulDaNM8BAiYt5Zs
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-On Apr 30 2024, Benjamin Tissoires wrote:
-> If someone stores both a timer and a workqueue in a hash map, on free, we
-> would walk it twice.
-> Add a check in htab_free_malloced_timers_or_wq and free the timers
-> and workqueues if they are present.
-> 
-> Fixes: 246331e3f1ea ("bpf: allow struct bpf_wq to be embedded in arraymaps and hashmaps")
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> 
-> ---
-> 
-> changes in v2:
-> - fix wq being not freed (and static call not used)
-> ---
->  kernel/bpf/hashtab.c | 49 +++++++++++++------------------------------------
->  1 file changed, 13 insertions(+), 36 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 0179183c543a..5eefadfc8ea9 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -221,32 +221,11 @@ static bool htab_has_extra_elems(struct bpf_htab *htab)
->  	return !htab_is_percpu(htab) && !htab_is_lru(htab);
->  }
->  
-> -static void htab_free_prealloced_timers(struct bpf_htab *htab)
-> +static void htab_free_prealloced_timers_and_wq(struct bpf_htab *htab)
->  {
->  	u32 num_entries = htab->map.max_entries;
->  	int i;
->  
-> -	if (!btf_record_has_field(htab->map.record, BPF_TIMER))
-> -		return;
-> -	if (htab_has_extra_elems(htab))
-> -		num_entries += num_possible_cpus();
-> -
-> -	for (i = 0; i < num_entries; i++) {
-> -		struct htab_elem *elem;
-> -
-> -		elem = get_htab_elem(htab, i);
-> -		bpf_obj_free_timer(htab->map.record, elem->key + round_up(htab->map.key_size, 8));
-> -		cond_resched();
-> -	}
-> -}
-> -
-> -static void htab_free_prealloced_wq(struct bpf_htab *htab)
-> -{
-> -	u32 num_entries = htab->map.max_entries;
-> -	int i;
-> -
-> -	if (!btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
-> -		return;
->  	if (htab_has_extra_elems(htab))
->  		num_entries += num_possible_cpus();
->  
-> @@ -254,8 +233,12 @@ static void htab_free_prealloced_wq(struct bpf_htab *htab)
->  		struct htab_elem *elem;
->  
->  		elem = get_htab_elem(htab, i);
-> -		bpf_obj_free_workqueue(htab->map.record,
-> -				       elem->key + round_up(htab->map.key_size, 8));
-> +		if (btf_record_has_field(htab->map.record, BPF_TIMER))
-> +			bpf_obj_free_timer(htab->map.record,
-> +					   elem->key + round_up(htab->map.key_size, 8));
-> +		else
+Few patches that should have been there from day 1.
 
-Sorry, this else above is wrong, it should be a check on BPF_WORKQUEUE
-instead.
+Anyway, they are coming now.
 
-v3 is n its way (with the proper bpf-next suffix this time).
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Changes in v3:
+- fixed bpf_test module not being able to be removed, because the bpf_wq
+  was never freed
+- Link to v2: https://lore.kernel.org/r/20240430-bpf-next-v2-0-140aa50f0f19@kernel.org
 
-Cheers,
-Benjamin
+Changes in v2:
+- fix wq in hashtabs not being freed (and static call not being used)
+- Link to v1: https://lore.kernel.org/r/20240425-bpf-next-v1-0-1d8330e6c643@kernel.org
 
-> +			bpf_obj_free_workqueue(htab->map.record,
-> +					       elem->key + round_up(htab->map.key_size, 8));
->  		cond_resched();
->  	}
->  }
-> @@ -1515,7 +1498,7 @@ static void delete_all_elements(struct bpf_htab *htab)
->  	migrate_enable();
->  }
->  
-> -static void htab_free_malloced_timers_or_wq(struct bpf_htab *htab, bool is_timer)
-> +static void htab_free_malloced_timers_and_wq(struct bpf_htab *htab)
->  {
->  	int i;
->  
-> @@ -1527,10 +1510,10 @@ static void htab_free_malloced_timers_or_wq(struct bpf_htab *htab, bool is_timer
->  
->  		hlist_nulls_for_each_entry(l, n, head, hash_node) {
->  			/* We only free timer on uref dropping to zero */
-> -			if (is_timer)
-> +			if (btf_record_has_field(htab->map.record, BPF_TIMER))
->  				bpf_obj_free_timer(htab->map.record,
->  						   l->key + round_up(htab->map.key_size, 8));
-> -			else
-> +			if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE))
->  				bpf_obj_free_workqueue(htab->map.record,
->  						       l->key + round_up(htab->map.key_size, 8));
->  		}
-> @@ -1544,17 +1527,11 @@ static void htab_map_free_timers_and_wq(struct bpf_map *map)
->  	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
->  
->  	/* We only free timer and workqueue on uref dropping to zero */
-> -	if (btf_record_has_field(htab->map.record, BPF_TIMER)) {
-> -		if (!htab_is_prealloc(htab))
-> -			htab_free_malloced_timers_or_wq(htab, true);
-> -		else
-> -			htab_free_prealloced_timers(htab);
-> -	}
-> -	if (btf_record_has_field(htab->map.record, BPF_WORKQUEUE)) {
-> +	if (btf_record_has_field(htab->map.record, BPF_TIMER | BPF_WORKQUEUE)) {
->  		if (!htab_is_prealloc(htab))
-> -			htab_free_malloced_timers_or_wq(htab, false);
-> +			htab_free_malloced_timers_and_wq(htab);
->  		else
-> -			htab_free_prealloced_wq(htab);
-> +			htab_free_prealloced_timers_and_wq(htab);
->  	}
->  }
->  
-> 
-> -- 
-> 2.44.0
-> 
+---
+Benjamin Tissoires (3):
+      bpf: do not walk twice the map on free
+      bpf: do not walk twice the hash map on free
+      selftests/bpf: drop an unused local variable
+
+ kernel/bpf/arraymap.c                       | 15 ++++-----
+ kernel/bpf/hashtab.c                        | 49 ++++++++---------------------
+ tools/testing/selftests/bpf/prog_tests/wq.c |  2 --
+ 3 files changed, 21 insertions(+), 45 deletions(-)
+---
+base-commit: 1bba3b3d373dbafae891e7cb06b8c82c8d62aba1
+change-id: 20240425-bpf-next-2114350587e3
+
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
+
 
