@@ -1,135 +1,123 @@
-Return-Path: <linux-kselftest+bounces-9205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB908B8A0C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 14:31:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EAED8B8B23
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 15:24:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7D141F22A7C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 12:31:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B4252837E4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 13:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7007F53E3C;
-	Wed,  1 May 2024 12:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D8712EBDD;
+	Wed,  1 May 2024 13:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3V3y3Ubp"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z4PSvnZZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B51D54FA1;
-	Wed,  1 May 2024 12:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF35A12DDBF
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 13:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714566615; cv=none; b=q0q2YSzhcBRpAJgXw7H2jYpfBuMVx+91CyE4vEq24wBYyFQ1qXWzIRbd66gYt8K+hGbZHNQYpj4UFnftyMW5OIXRlaQyo6S3F/COEJpRKnEuxEjgXLaDRexCgg6niGnfhkGNAJzEkZm/PK3f6DqwAr1FDjS7F6muevBbjuDUQz8=
+	t=1714569881; cv=none; b=juzwpr0FWRYdlVLBAPn4+huve/aErKEuBb5bVEL3svizBsmaWaPUVZuoPYoTJgmOIJ3CvqH7Js3/FXVDq/iaB0EyFrXON7AcRxgY3gldHmxhTcfcTizxb3A2PzGwyFZf4UKVfo/QUqbIOLogmMGz74rLTSgSe1dnKVODWFmgtno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714566615; c=relaxed/simple;
-	bh=mgHPm9EUU+dtIRu1nbBHCvXwznK9GnXXhda7E8pjDlQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q2SfaE/wIWGqroDoPKYtp3xAd3EfsKxZ5CBpU71tu7U7UxKRG9kfyoLf65IJyRv/BgR2c2KvaqaIO2xDENQiMe6O8mZmd9hnWK3J3pRvsOlO73LcQJkw0pdXDjVY75HSjm++5jXCD+XlZQEed6CAMbGAVM9u8G1FkuYkltoO5dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3V3y3Ubp; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1714566612;
-	bh=mgHPm9EUU+dtIRu1nbBHCvXwznK9GnXXhda7E8pjDlQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=3V3y3Ubp/4aZYxD6j2zXZiIE1Jw6POYUIzI/Xx4nkvdM4HxUu8stqhdLUzry5HwT1
-	 7RoInTTbSgOLHJgQWRi0pTFfRhNtA3cdzhiCtc8tnvU7nQQWuXNvQjVQeY8vdEYXv2
-	 siUulCFYspDhbeONErgDSheKZpODrRP0M/h1/awK5wbGid9pCwNuFG3KptQdJvXXjN
-	 o4JnFkrHkSt5Obcvl7Cam8kZ9PrYZtPSenedX5rwe0WDJOg5SwoGeIAjNVVo7jmx0r
-	 Hn1pEe+XRc4y76N4IQF0bm6CMgqK5n2dk7ZfYyYYi6oBSwsUMDOKjZTcdySM4FK/K2
-	 y8c9Lo6g4HstQ==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D22CF378206E;
-	Wed,  1 May 2024 12:30:05 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	"Chang S. Bae" <chang.seok.bae@intel.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: kernel@collabora.com
-Subject: [PATCH 8/8] selftests: x86: amx: Remove unused functions
-Date: Wed,  1 May 2024 17:29:18 +0500
-Message-Id: <20240501122918.3831734-9-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240501122918.3831734-1-usama.anjum@collabora.com>
-References: <20240501122918.3831734-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1714569881; c=relaxed/simple;
+	bh=krrfckqjbeQlFLb67v3IVek4EQvt8apnoVfcRYoUsg8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NUQSCPDdJ02kyQ49w8CFuUHXdje1+6xtF5/VyVY/eKbN5w5N0pFeHCSoUFTqxEluuzqHDQvc46LQ0VakBcRchhzYIBs6L+iDNESeHCTMRDHMJ6De0fF3G1B/uAxPvvpkF9vCw19OogBLFt09XzITDFatnK8kqVcppY6SU9qNf7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z4PSvnZZ; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2b2ab6bab07so1645748a91.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 06:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714569878; x=1715174678; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4j6TmQ6ZgTGCAdIqQxwPqCx/nTzh+QyhXiuMiXZrc1A=;
+        b=z4PSvnZZow+6cwPT+0ewrIkZ1zd7BDzLa+B4BwRbWfQeul8nzOsi19rm0gzFJB29a5
+         X1qrmI4UmTxNrE8laFdrt5n0s1LOcdAQUyN8KlFjksLa19gdfLjN9rdxS7rkHH6wHmSx
+         Dt6vno8vuOBbKIVaNd/ZSN209Qkb/aM/VBPR0OgIPrRnR7/vkHGp68RZbNptbw41mTFa
+         3d043BKnXcNsJkhd/u6ytclKWj9RxAZpUPm0bNkT0+lSbw6W9UH6MMOoIsVtz9Jxpx/l
+         0NrMuyLM5KyCds8FWf26I6GWndEOa1VsaXVD1/lqiTKKSTp/prHyQE9HYEcdSmd7GLiI
+         2DfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714569878; x=1715174678;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4j6TmQ6ZgTGCAdIqQxwPqCx/nTzh+QyhXiuMiXZrc1A=;
+        b=NHhCpVC/He/1HcvkbW/CCE+IZHYj6reDF8UXl3kj1SDbWAldSniw8q1GcltD1MAu8n
+         3bNJ1wc7HVykMpNpiqDfeOnA9iid607fCIzsfPmGYwYpz4kTK9ToILz9xeGMFkVxcD1V
+         8mcunJ9GW6xJCJQHpUFuzXEU6EisZnysJLL+Rz1kJhx2FN0PoFjjkUUnWeczs1K1ynwx
+         1LxYZEFW64br8FEW7VlcgepA8EBSnZaOtzBN28M88gwpzKymzV/66ost70IakcyzNsig
+         XB75oS7IPOztZ7y7/J5AVpWjlYsHFsugr955W/dc1h8t8zZIq120iCEpN9Utz4YIR4rZ
+         Jqxg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGtp35WXRVRI7H2TIKCQL6tv+LuYzpXlqgwrK3VBsxIxUosVr9BERXKY82pzIGERC+isEeiiJkBkbcsfSFaAGKOIqa84Bz2sZ+uekOybWe
+X-Gm-Message-State: AOJu0YwsK980V7RyJJ/+/naf7EVEXvY9VKrWdtLVajfHPWhg+4S10RpN
+	3AnRInvOwlJJBdPOfcjXh+aAPl0nGyj3Q20xUkG0eZ17du5wqog5M65wHjL8bVDAUVJbAYJ9zXd
+	/3w==
+X-Google-Smtp-Source: AGHT+IF3937EXGaxRuC2iwKEsqWkwYndGF2ruoyJWYYFvQeb8jNS6z1A7kQ93TL3uURuwu8bhUtDSRxNorw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:b0f:b0:2b0:14bf:3f45 with SMTP id
+ bf15-20020a17090b0b0f00b002b014bf3f45mr7454pjb.0.1714569878155; Wed, 01 May
+ 2024 06:24:38 -0700 (PDT)
+Date: Wed, 1 May 2024 06:24:36 -0700
+In-Reply-To: <ZjGiGq-_kUVht63m@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240430235057.1351993-1-edliaw@google.com> <ZjGiGq-_kUVht63m@finisterre.sirena.org.uk>
+Message-ID: <ZjJClMYEIyGEo37e@google.com>
+Subject: Re: [PATCH v1 00/10] Define _GNU_SOURCE for sources using
+From: Sean Christopherson <seanjc@google.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Edward Liaw <edliaw@google.com>, shuah@kernel.org, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Bongsu Jeon <bongsu.jeon@samsung.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	linux-sound@vger.kernel.org, linux-input@vger.kernel.org, kvm@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Remove unused code.
+On Wed, May 01, 2024, Mark Brown wrote:
+> On Tue, Apr 30, 2024 at 11:50:09PM +0000, Edward Liaw wrote:
+> > 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
+> > asprintf into kselftest_harness.h, which is a GNU extension and needs
+> > _GNU_SOURCE to either be defined prior to including headers or with the
+> > -D_GNU_SOURCE flag passed to the compiler.
+> 
+> This seems like something that should be handled centrally rather than
+> having to go round and audit the users every time some update is made.
 
-amx.c:42:24: warning: unused function 'xgetbv' [-Wunused-function]
-   42 | static inline uint64_t xgetbv(uint32_t index)
-      |                        ^~~~~~
-amx.c:167:24: warning: unused function 'get_xstatebv' [-Wunused-function]
-  167 | static inline uint64_t get_xstatebv(struct xsave_buffer *buffer)
-      |                        ^~~~~~~~~~~~
++1.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/x86/amx.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+And if for some reason unilaterally defining _GNU_SOURCE in
+tools/testing/selftests/lib.mk isn't an option, we should at least have
+kselftest_harness.h assert instead of making a futile attempt to provide its own
+definition, e.g.
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 95aad6d8849be..1fdf35a4d7f63 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -39,16 +39,6 @@ struct xsave_buffer {
- 	};
- };
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 4fd735e48ee7..6741b4f20f25 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -51,7 +51,7 @@
+ #define __KSELFTEST_HARNESS_H
  
--static inline uint64_t xgetbv(uint32_t index)
--{
--	uint32_t eax, edx;
--
--	asm volatile("xgetbv;"
--		     : "=a" (eax), "=d" (edx)
--		     : "c" (index));
--	return eax + ((uint64_t)edx << 32);
--}
--
- static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
- {
- 	uint32_t rfbm_lo = rfbm;
-@@ -164,12 +154,6 @@ static inline void clear_xstate_header(struct xsave_buffer *buffer)
- 	memset(&buffer->header, 0, sizeof(buffer->header));
- }
- 
--static inline uint64_t get_xstatebv(struct xsave_buffer *buffer)
--{
--	/* XSTATE_BV is at the beginning of the header: */
--	return *(uint64_t *)&buffer->header;
--}
--
- static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
- {
- 	/* XSTATE_BV is at the beginning of the header: */
--- 
-2.39.2
-
+ #ifndef _GNU_SOURCE
+-#define _GNU_SOURCE
++static_assert(0, "Using the kselftests harness requires building with _GNU_SOURCE");
+ #endif
+ #include <asm/types.h>
+ #include <ctype.h>
 
