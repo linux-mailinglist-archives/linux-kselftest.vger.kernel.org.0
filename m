@@ -1,73 +1,72 @@
-Return-Path: <linux-kselftest+bounces-9220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E72188B8E6D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 18:46:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57FD8B8EBB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 19:05:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 159E91C218EE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 16:46:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16A7F1F211E1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 17:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D296C10788;
-	Wed,  1 May 2024 16:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D4117548;
+	Wed,  1 May 2024 17:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="eoop2eVD"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="CsdP4LRi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6CBE542
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 16:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A75017580
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 17:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714581971; cv=none; b=C3CBRXgTubXhelHRhwnO55dUlRZ+U/ej1zLQcb3pgiTX5+u8f4I3vW+WGxptgBYs9/UU6hRrxDtKig7vpIkAokRDQqx1A/D5e1U8f6D/uSWLnmE/QoDOHBFMRcwYzGdj64W/PEoESgOTrkmaOSSXNaFLKupdCkTfcKvWB0DUSMY=
+	t=1714583105; cv=none; b=nRbXGp5Znx3Q3WV2bjXRtXbfiU7Oi/s++IGqC9wALOZCzeptTiBhHpkaTBnGzxiyT5pxJXCZe1IyP68IOnt0skA0n9ZDGE/0h4BULJXo0kmn2UzwCiFlRRbjt5wVhIupDVrAAW07XW/49iNzb5BqkYRi/qLJzZjSQBuCVvNz9JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714581971; c=relaxed/simple;
-	bh=krDJy1o6nlqSmGBvYIH6mBjLgfXcSgWyqs7rmpIkNjI=;
+	s=arc-20240116; t=1714583105; c=relaxed/simple;
+	bh=+MZIPJ0cp2Hrp3rYs7+GS9g8KSXuc61Ijyz78JQ904Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SifsWeRTN+0u5c0xRKt6R9jINSNd1DojY+oflFLmlpF/xjlIJ9MBW91AfiIXLDu9KhXQMe8AeDa0xJFIiu3m5ZHYxvTrzhrJy4/kE2ZMGEoxglv5PWObNerhQGs9lTLwN0Lwou2AzwcuyymwGO3cqvH9Ytwk2niLD7xXiYpaW0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=eoop2eVD; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=B40v+i6SfWVN12FWKJH23X5n/c+DndZnW99CM3TNWBbUpAi/JiXkfcbOSLzGERvFni8rUf1CDllBFw5EwIf6ZvaXi1mBNAPrp9+LiSS7jt/hjEBUq0KW4+Opadf92YnLqUq+ZiBnjYxBSSEx8R1ikZgmEeq3qfX1PKxPFkf8ixs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=CsdP4LRi; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-60585faa69fso707669a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 09:46:10 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1e51398cc4eso62273715ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 10:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714581970; x=1715186770; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714583102; x=1715187902; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HNAlEVQt8bQKb4hVjkj/tzVzfjylPjyKPm1CNtyCLJI=;
-        b=eoop2eVDk48ExcE0bVPSW1rCgmLVpjyQVEDmghnYayVtrHC0td9Ii5c04MmvmqsiwL
-         G2rN8mR0x2PXM4TCpWU5JLRYDBeTX+bn+hlrNKoPt4SaBmNc/IbAmm+qAZT8Ch7cQPc2
-         b0sWDkV7pq5C3YNK0WXJi1BXdR/CvVsjGbGcnUr3g+xUeb+ZX1q27f4us1sDAnqGe3LK
-         l72eIyJZYL0x/SY7JkFL98OZSgFWoX5i3SyvfDefSeiTw4N/DnYmhOuuKcfrtxs462Z0
-         ol7SwrA6uViYVzANofHxCgMWTOkzHtz9rSGCDG7vx/6KSHL1VbWmqZC9wCkOaC7DD119
-         BAHw==
+        bh=ElGjJ6DhmRlqGsY+eiWz/anA6sw6bSbldqs1mMMSdXY=;
+        b=CsdP4LRiKnn/ASIcvY/YDicsz/knDgbJoQqXly1E+lrpKWJ8EdBGgsyaaHvD6Thdk+
+         e43irhqwXh+WcC7dObTqFgv4llYAZ6Gq3aOvTpGLBY+yJla2OV/61PZZzYzT1iWNdsvu
+         VGQhSsAg7vxyHTKtgU9eF2RYU6cUuaMfwg4ogMx217PcVduNCaGJ7vD1X4RUInqMku80
+         SyMeMVGsb3dWUCxtL8RV2huXUw8Unhh12rn/lpeakx2CPx/Y4M7OJOiMGtd+bQ0e+5SE
+         wQvir9ldAB4vOeSxhBK2zmM/dMWD39V30m1Xv0j5JaZq+lZoj/rCrpiQGyh2hOQufn82
+         cPcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714581970; x=1715186770;
+        d=1e100.net; s=20230601; t=1714583102; x=1715187902;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HNAlEVQt8bQKb4hVjkj/tzVzfjylPjyKPm1CNtyCLJI=;
-        b=jTD9m7GGXnMpCQLyeJR2CCuoJ015vdkYWOz608zA+VrV3p20jLbiK58y7/B2eezJ0w
-         4LmwpXDz4KYMsFwXSaGqO5qXBwC1ZHJ41HzLYsWKdbTWhxPEwKI5L995jrcX9tmwtMDB
-         TzzpGAsNihSHvpr/k7dx4TbSzP2tgJJHAOO7SPsqe305zt7Zw4Fl7NIs/c/2RW5SvBM1
-         6gUMkzgYa6aHehsld8cO+I6Eo+yqhHFqMuGlrQ8T2ChgrG5XwI9g6gSX/mQLDPcTub7K
-         FA4jmtBDyyiE3hfggO5IL3ZrPl9YnrPNMVkBqnp7pTCwBFY2bEP3V8wnwMYLRb5e2Ktg
-         Zykw==
-X-Forwarded-Encrypted: i=1; AJvYcCWS0SfRt4rX2eAYQ8nSPyMWCef2jRLo6gGb49a7LkndRT/tOTSwrOVBdnDcTMxHkviKfxI2bWrVb1CH6bQj8Q6iN2ueevpRV7OEZAIfFkUZ
-X-Gm-Message-State: AOJu0YwsoGqolAgluT4JobU7/pA62U9b112qXjb6Eg1ugjR/maa9sdwL
-	BgENFyvUGyoBi2jE6rXJo0c5LrdkePOyYrXLmX6TlMYGJrvXcrxPFg6rXPWWCFAUV+aYe6Zugxs
-	g
-X-Google-Smtp-Source: AGHT+IH65t3T7Cre6ETXiixVNrR9oMbdBgpbTRkUxmtEpcotJ4qRMx/UYqqnRRVgQ7nCUV3kiM8/gw==
-X-Received: by 2002:a17:90a:c78f:b0:2a5:3f30:f5f6 with SMTP id gn15-20020a17090ac78f00b002a53f30f5f6mr274501pjb.20.1714581969579;
-        Wed, 01 May 2024 09:46:09 -0700 (PDT)
+        bh=ElGjJ6DhmRlqGsY+eiWz/anA6sw6bSbldqs1mMMSdXY=;
+        b=tVk+1ZNMquM/YgTlo1URyfidIDFYcYKmZ9vgPv6c5DqQLFL3meRjTovGGGtf4IMhJC
+         pgFIXSWIaY/Zf0zn4qNmL6wDPxq+NRAFSliSgM9FZPo9Si6EPxabTcZBegw0s7wLC4j5
+         mpN9RgesfSdvg0ZVehdP7X43mH3ru7FW5g5S1wxS3BVXtCJyowPaRAkhXPOjxmJsAhoW
+         yTUJKpeBym5tACIY0f1zuJiB9uW1KB32vL5zNkj03ZEfor9F9K59nva+he+8ZXUKPj+/
+         a8Qiy0jTdc8z0TSBeezS4i5sdG1JlGdZTVSpFIEhOn/ouMuVg7X6P4AiWzQUPAREipn0
+         20dg==
+X-Forwarded-Encrypted: i=1; AJvYcCWPp6L0UMzRiF/Cdgjpiwi8UkfDYHBYXyoMIWfPUORTF4gFgtYulhjpMbs2NhckJwMAcz1u5ECik8+mC7nsrPAXJy4jRhO+FlzymDDXSxp0
+X-Gm-Message-State: AOJu0Yw2NxctBrjg/iqINpDGIkZGi+vhfAnPwZcuh+9pPON/OHUmYytp
+	XZcDSZz+ZFkV2ZeMlM4elHLELflIJCb8WhnjXlQQ5k33eWuU6xMuktWrEOfXVHk=
+X-Google-Smtp-Source: AGHT+IFvczd8ByrKjRpEmw2Tm8e/A7jIBRbW9BHOckqa6SdF3HlIzepIjpMlwHXG9pT5WMnsKMpNHw==
+X-Received: by 2002:a17:902:e54f:b0:1eb:dae:bdab with SMTP id n15-20020a170902e54f00b001eb0daebdabmr3974726plf.46.1714583102382;
+        Wed, 01 May 2024 10:05:02 -0700 (PDT)
 Received: from ghost ([2601:647:5700:6860:1dcc:e03e:dc61:895d])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170902934200b001e25da6f2f2sm24328716plp.68.2024.05.01.09.46.07
+        by smtp.gmail.com with ESMTPSA id s1-20020a170902ea0100b001e3d2314f3csm24412023plg.141.2024.05.01.10.05.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 09:46:08 -0700 (PDT)
-Date: Wed, 1 May 2024 09:46:04 -0700
+        Wed, 01 May 2024 10:05:02 -0700 (PDT)
+Date: Wed, 1 May 2024 10:04:58 -0700
 From: Charlie Jenkins <charlie@rivosinc.com>
 To: Conor Dooley <conor@kernel.org>
 Cc: Rob Herring <robh@kernel.org>,
@@ -86,11 +85,12 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 03/16] riscv: vector: Use vlenb from DT
-Message-ID: <ZjJxzKUHkrVUv9zm@ghost>
+Subject: Re: [PATCH v4 05/16] riscv: Extend cpufeature.c to detect vendor
+ extensions
+Message-ID: <ZjJ2Omhynz02mAGk@ghost>
 References: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-b692f3c516ec@rivosinc.com>
- <20240426-dev-charlie-support_thead_vector_6_9-v4-3-b692f3c516ec@rivosinc.com>
- <20240501-showroom-rephrase-66c0929011b3@spud>
+ <20240426-dev-charlie-support_thead_vector_6_9-v4-5-b692f3c516ec@rivosinc.com>
+ <20240501-chastise-gecko-342f2c35cfc1@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,168 +99,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240501-showroom-rephrase-66c0929011b3@spud>
+In-Reply-To: <20240501-chastise-gecko-342f2c35cfc1@spud>
 
-On Wed, May 01, 2024 at 11:31:45AM +0100, Conor Dooley wrote:
-> On Fri, Apr 26, 2024 at 02:29:17PM -0700, Charlie Jenkins wrote:
-> > If vlenb is provided in the device tree, prefer that over reading the
-> > vlenb csr.
+On Wed, May 01, 2024 at 11:46:07AM +0100, Conor Dooley wrote:
+> On Fri, Apr 26, 2024 at 02:29:19PM -0700, Charlie Jenkins wrote:
+> > Separate vendor extensions out into one struct per vendor
+> > instead of adding vendor extensions onto riscv_isa_ext.
 > > 
+> > Add a hidden config RISCV_ISA_VENDOR_EXT to conditionally include this
+> > code.
+> > 
+> > The xtheadvector vendor extension is added using these changes.
+> 
+> This mostly looks good to me, thanks for the updates. There's one thing
+> that I think is wrong, but I need to test and will get back to you on...
+> 
 > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 > > ---
-> >  arch/riscv/include/asm/cpufeature.h |  2 ++
-> >  arch/riscv/kernel/cpufeature.c      | 43 +++++++++++++++++++++++++++++++++++++
-> >  arch/riscv/kernel/vector.c          | 12 ++++++++++-
-> >  3 files changed, 56 insertions(+), 1 deletion(-)
+> >  arch/riscv/Kconfig                               |  2 +
+> >  arch/riscv/Kconfig.vendor                        | 19 ++++++
+> >  arch/riscv/include/asm/cpufeature.h              | 18 ++++++
+> >  arch/riscv/include/asm/vendor_extensions.h       | 26 ++++++++
+> >  arch/riscv/include/asm/vendor_extensions/thead.h | 19 ++++++
+> >  arch/riscv/kernel/Makefile                       |  2 +
+> >  arch/riscv/kernel/cpufeature.c                   | 77 ++++++++++++++++++------
+> >  arch/riscv/kernel/vendor_extensions.c            | 18 ++++++
+> >  arch/riscv/kernel/vendor_extensions/Makefile     |  3 +
+> >  arch/riscv/kernel/vendor_extensions/thead.c      | 36 +++++++++++
+> >  10 files changed, 200 insertions(+), 20 deletions(-)
 > > 
-> > diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-> > index 347805446151..0c4f08577015 100644
-> > --- a/arch/riscv/include/asm/cpufeature.h
-> > +++ b/arch/riscv/include/asm/cpufeature.h
-> > @@ -31,6 +31,8 @@ DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
-> >  /* Per-cpu ISA extensions. */
-> >  extern struct riscv_isainfo hart_isa[NR_CPUS];
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index be09c8836d56..fec86fba3acd 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -759,6 +759,8 @@ config RISCV_EFFICIENT_UNALIGNED_ACCESS
 > >  
-> > +extern u32 riscv_vlenb_of;
-> > +
-> >  void riscv_user_isa_enable(void);
+> >  endchoice
 > >  
-> >  #if defined(CONFIG_RISCV_MISALIGNED)
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index 3ed2359eae35..8158f34c3e36 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -35,6 +35,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
-> >  /* Per-cpu ISA extensions. */
-> >  struct riscv_isainfo hart_isa[NR_CPUS];
+> > +source "arch/riscv/Kconfig.vendor"
+> > +
+> >  endmenu # "Platform type"
 > >  
-> > +u32 riscv_vlenb_of;
+> >  menu "Kernel features"
+> > diff --git a/arch/riscv/Kconfig.vendor b/arch/riscv/Kconfig.vendor
+> > new file mode 100644
+> > index 000000000000..4fc86810af1d
+> > --- /dev/null
+> > +++ b/arch/riscv/Kconfig.vendor
+> > @@ -0,0 +1,19 @@
+> > +menu "Vendor extensions"
 > > +
-> >  /**
-> >   * riscv_isa_extension_base() - Get base extension word
-> >   *
-> > @@ -648,6 +650,42 @@ static int __init riscv_isa_fallback_setup(char *__unused)
-> >  early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
-> >  #endif
-> >  
-> > +static int riscv_homogeneous_vlenb(void)
+> > +config RISCV_ISA_VENDOR_EXT
+> > +	bool
+> > +
+> > +menu "T-Head"
+> > +config RISCV_ISA_VENDOR_EXT_THEAD
+> > +	bool "T-Head vendor extension support"
+> > +	select RISCV_ISA_VENDOR_EXT
+> > +	default y
+> > +	help
+> > +	  Say N here if you want to disable all T-Head vendor extension
+> > +	  support. This will cause any T-Head vendor extensions that are
+> > +	  requested to be ignored.
 > 
-> Without a verb, this function name is rather odd.
+> What does "requested to be ignored" mean to a punter configuring a
+> kernel? I'd expect this to be something like:
 > 
+> "Say N here to disable detection of and support for all T-Head vendor
+> extensions. Without this option enabled, T-Head vendor extensions will
+> not be detected at boot and their presence not reported to userspace."
 
-Maybe has_riscv_homogeneous_vlenb() is better.
-
-> > +{
-> > +	int cpu;
-> > +	u32 prev_vlenb = 0;
-> > +	u32 vlenb;
-> > +
-> > +	for_each_possible_cpu(cpu) {
-> > +		struct device_node *cpu_node;
-> > +
-> > +		cpu_node = of_cpu_device_node_get(cpu);
-> > +		if (!cpu_node) {
-> > +			pr_warn("Unable to find cpu node\n");
-> > +			continue;
-> 
-> Hmm, if we fail to find the cpu node, then shouldn't we be returning an
-> error?
-
-Yes, I will change that.
-
-> 
-> > +		}
-> > +
-> > +		if (of_property_read_u32(cpu_node, "riscv,vlenb", &vlenb)) {
-> > +			of_node_put(cpu_node);
-> > +
-> > +			if (prev_vlenb)
-> > +				return -1;
-> 
-> Can you return an errno here and below please?
-> 
-
-Sounds good.
-
-> > +			continue;
-> > +		}
-> > +
-> > +		if (prev_vlenb && vlenb != prev_vlenb) {
-> > +			of_node_put(cpu_node);
-> > +			return -1;
-> > +		}
-> > +
-> > +		prev_vlenb = vlenb;
-> > +		of_node_put(cpu_node);
-> > +	}
-> > +
-> > +	riscv_vlenb_of = vlenb;
-> > +	return 0;
-> > +}
-> > +
-> >  void __init riscv_fill_hwcap(void)
-> >  {
-> >  	char print_str[NUM_ALPHA_EXTS + 1];
-> > @@ -671,6 +709,11 @@ void __init riscv_fill_hwcap(void)
-> >  			pr_info("Falling back to deprecated \"riscv,isa\"\n");
-> >  			riscv_fill_hwcap_from_isa_string(isa2hwcap);
-> >  		}
-> > +
-> > +		if (riscv_homogeneous_vlenb() < 0) {
-> > +			pr_warn("RISCV_ISA_V only supports one vlenb on SMP systems. Please ensure that the riscv,vlenb devicetree property is the same across all CPUs. Either all CPUs must have the riscv,vlenb property, or none. If no CPUs in the devicetree use riscv,vlenb then vlenb will be probed from the vlenb CSR. Disabling vector.\n");
-> 
-> Oh dear, that's a bit unwieldy... I think you could get away with a far
-> more basic message - and you should be able to break this over lines,
-> adjacent string literals should get concatenated.
-> I'd probably say something like "unsupported heterogeneous vlen detected,
-> vector extension disabled", however we should actually check that the
-> vector extension has been detected on all CPUs and that kernel support
-> for vector is enabled before emitting a warning for this.
-
-Haha yeah I wanted to provide as much information as possible, but I
-will shorten it.
-
-I can add an if-statement to only run this code if check if V is
-contained in elf_hwcap.
+Sounds great I will change to that.
 
 - Charlie
 
 > 
+> In general, I'd expect something that needs some support in the kernel
+> (like vector) to function to have a dedicated option, but the likes of
+> their Zba variant could be detected and reported via hwprobe et al
+> once RISCV_ISA_VENDOR_EXT_THEAD is enabled.
+> 
 > Cheers,
 > Conor.
-> 
-> > +			elf_hwcap &= ~COMPAT_HWCAP_ISA_V;
-> > +		}
-> >  	}
-> >  
-> >  	/*
-> > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> > index 6727d1d3b8f2..e04586cdb7f0 100644
-> > --- a/arch/riscv/kernel/vector.c
-> > +++ b/arch/riscv/kernel/vector.c
-> > @@ -33,7 +33,17 @@ int riscv_v_setup_vsize(void)
-> >  {
-> >  	unsigned long this_vsize;
-> >  
-> > -	/* There are 32 vector registers with vlenb length. */
-> > +	/*
-> > +	 * There are 32 vector registers with vlenb length.
-> > +	 *
-> > +	 * If the riscv,vlenb property was provided by the firmware, use that
-> > +	 * instead of probing the CSRs.
-> > +	 */
-> > +	if (riscv_vlenb_of) {
-> > +		this_vsize = riscv_vlenb_of * 32;
-> > +		return 0;
-> > +	}
-> > +
-> >  	riscv_v_enable();
-> >  	this_vsize = csr_read(CSR_VLENB) * 32;
-> >  	riscv_v_disable();
-> > 
-> > -- 
-> > 2.44.0
-> > 
 
 
 
