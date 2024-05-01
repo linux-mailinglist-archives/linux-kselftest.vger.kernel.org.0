@@ -1,75 +1,49 @@
-Return-Path: <linux-kselftest+bounces-9230-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC548B8F49
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 19:58:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4C588B8F56
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 20:04:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3ED4B21D30
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 17:58:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94F64283E9D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 18:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62180146D75;
-	Wed,  1 May 2024 17:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D33A01474A8;
+	Wed,  1 May 2024 18:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="MADNhq7u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qN29Q61T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D75146D5F
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 17:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9872C146D60;
+	Wed,  1 May 2024 18:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714586298; cv=none; b=jZ6kK2KC7STmwePtY07jt71z52+ENAPd9MhYH0rNdcDttKEe+8AP2Rn2sXUw9axjKsj14HARSG5BSbq0MHSo7vAD9t/CSkdZ+PgSlaZ4trqOn017xU1RB5IILLKLPrx5UCIbYmeFvL4HQPgN5Fb5qTZ5A5z5e6J2jik20h/NfvA=
+	t=1714586633; cv=none; b=mF1nBBAs2dUnuvy/OpTsnWHKvQc9Bwo4mI7pZg8MQyyFcTpHMPNPAnzBzz01/4Em9ROkwGlQEZ6Vix9QUlqh+gTRUbQGWQHEWJtDqH+oAt7k+7af9wYonpUH0HbVEfv2bPLwayUUuzrtmWG+2Or3eBUQncDudB+Ymidma9/20YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714586298; c=relaxed/simple;
-	bh=aEhywgK1Wn89FaWrhTM0HBEIeT3AwLow+BB6CKrQbCE=;
+	s=arc-20240116; t=1714586633; c=relaxed/simple;
+	bh=drTPFEBrSB98Q77bfO9fNzjeKZr9JPcrroYaZiR1E/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VVUAYA/O9VE65Uah/Pd4yUtvfNWnEJqFmDjoFdizQysLbNeVIX0URQo5kFOC6vbfbRWO8BWYQsVe2la0Ukk4djb0m515epqbTQF6Kan+yG4Q5fs3n4apSz/AB/DFasn3FaciUVvYGQw9HM3gXG8ZmZTE4qL75L2Yuen0cuaW0MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=MADNhq7u; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6effe9c852eso6293706b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 10:58:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714586296; x=1715191096; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ewiZxKEDhipFv9WpDKT1OvAInIM8Qy/YnJeIqtYAQ20=;
-        b=MADNhq7uxAPe3Mo8Oc0YkZUpGYLzdPHDbZPF0TfE7xGFeexml65gBIKfVcJjORoU4p
-         8O2TNe1B5m4MNfZTfj+Jy6ZYBlydcqSy0FA+cL8RCeMe1EZUB5H0fGYWvfKLPqhnceYM
-         /STiwv/l0HTWBmNoRId3ivMlkEmVYGxSFFXtgDeihan/5IjX4PDFc5CQ9/l2L48tmBHY
-         G0sEDO+kJVE5Cu0ebMu7fBOv/6pkqCMks7+RjYjChg2plhaV3zFSFXoOKua0AccgcuOr
-         ksfy5Av2m/c0UzdUxMDccwhWVBHydx6XU72bR1NAkHa5LLp9ZZVJrsYwCB7irWAW+JPp
-         9vhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714586296; x=1715191096;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewiZxKEDhipFv9WpDKT1OvAInIM8Qy/YnJeIqtYAQ20=;
-        b=G7t9iRz0QE923MQwl46hSP4Kq02fhhhvtMthPSIU6NSVuMgBAHzb1UnUmLXlVnqsN0
-         1odQ23fO687bSptjMF/Mt9dOWalAP8im+swXpG31qZhWW+pBn8GqZoKDDKSfFw/Hw1v1
-         tCWisgEE8oaQiq+OaD8PAU0uxC9vir+5zFASEwv1LjsT4yaFUWwLauihKCZGg/MsD9y0
-         PHqtXKIR+hgEiIDTE9JOWbtDH6cnCvRi50VdqtLIeSs59Wxog7FmdORGKHi20K/ZfDV/
-         icsT8KjUr0ZXLqdlhpyWqUogR4e+K5iAavDhs8Y24sUG5g5P466G0mMRmI3dRB4j/DcD
-         7bNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWZcb+H2GQPmX0GbCw4CQ5s8jfILmT9oxLY95Vahj6MVV12v14AvMsKuxT9lC53tthRGtav2bvKReXo6o3Ncxz7JkzGTNjM565EH9q1THTd
-X-Gm-Message-State: AOJu0YxyqJXdZGBbeZO07GuRpKUv84FHaYThKTwuj9gt2E9Bx+EROXSq
-	syU8DH8jzIOLAXSYFdfKDL2TibEgg2AvnNGZkygKhDYVInDYxHpRkUt2TtuvJCA=
-X-Google-Smtp-Source: AGHT+IHowJBwbgP8/Vm7zaF9odAFfRxagmDXAI/fLRPFmpGJdmGG+eEAuwcNKsDXaL6jhqUEVkKVOQ==
-X-Received: by 2002:a05:6a00:1305:b0:6e8:f57d:f1ec with SMTP id j5-20020a056a00130500b006e8f57df1ecmr4107317pfu.17.1714586296277;
-        Wed, 01 May 2024 10:58:16 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:1dcc:e03e:dc61:895d])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056a001b4700b006edcbbff2b0sm22940382pfv.199.2024.05.01.10.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 10:58:15 -0700 (PDT)
-Date: Wed, 1 May 2024 10:58:12 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=L0yij9+qnxtxb5hb5npFAbXKSpHso26mt6VBYhG5npL3Kl39ExSY8/4xcWvlOG1LAo5Nqg/3zvQPNmA18l+UUGS0WznA0mbT4qt/VVXjdhGN5uFD2cNXKf+SCW0ZYx+fxJxR/AnIDsN8ZPcnU9sApdBkCoAaaa3oGW0HZ8efgvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qN29Q61T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CB5C072AA;
+	Wed,  1 May 2024 18:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714586633;
+	bh=drTPFEBrSB98Q77bfO9fNzjeKZr9JPcrroYaZiR1E/0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qN29Q61To54o4hphAo7D6ESVL5CLcZ22ZHpI0FyvYvFgLaFOBDvLlrbsKw9PUcy16
+	 TdhZ8IltTvssrtMVEElRJH/lued5Rf9aQs3IwxXmxDMeOfCZkMXkPcVhn4/JicsHw5
+	 B0UCecIgcjbVQEWadDfGNsMY/WIcfZWgJWkcZdQdn+grMkc4EW6c5HQ/M5qrSvfD7V
+	 n+TDSu+G2xvUHeWKLLGMTrnbT2HYGkpmfC2D/dbyODDAShXE0KLAySIvrgReg8bZUj
+	 lQLQRnOko30Wy0F+eHnN6YKuMuZWuj5rhHdeiU+ZzDDv+kmMt5ZvIv4AP+w+Bzt/x5
+	 7IRI/B/fm+YVg==
+Date: Wed, 1 May 2024 19:03:46 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
 Cc: Evan Green <evan@rivosinc.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
@@ -87,43 +61,73 @@ Cc: Evan Green <evan@rivosinc.com>, Rob Herring <robh@kernel.org>,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v4 05/16] riscv: Extend cpufeature.c to detect vendor
  extensions
-Message-ID: <ZjKCtJWqoiLM3xZv@ghost>
+Message-ID: <20240501-banner-sniff-4c5958eb15ef@spud>
 References: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-b692f3c516ec@rivosinc.com>
  <20240426-dev-charlie-support_thead_vector_6_9-v4-5-b692f3c516ec@rivosinc.com>
  <CALs-HstM64Hy_=XVz=0sWQt=8j1u+bq6RhthUuD3P0E4=HyvcA@mail.gmail.com>
- <20240501-flagstone-zealous-2fc722bfad39@spud>
+ <ZjKBKg5zzikR5ngl@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="DB2yQnBvjkhLdZ/3"
+Content-Disposition: inline
+In-Reply-To: <ZjKBKg5zzikR5ngl@ghost>
+
+
+--DB2yQnBvjkhLdZ/3
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240501-flagstone-zealous-2fc722bfad39@spud>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 01, 2024 at 06:19:34PM +0100, Conor Dooley wrote:
+On Wed, May 01, 2024 at 10:51:38AM -0700, Charlie Jenkins wrote:
 > On Wed, May 01, 2024 at 09:44:15AM -0700, Evan Green wrote:
-> > On Fri, Apr 26, 2024 at 2:29 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> 
-> > > +struct riscv_isa_vendor_ext_data_list {
-> > > +       const struct riscv_isa_ext_data *ext_data;
-> > > +       struct riscv_isainfo *per_hart_vendor_bitmap;
-> > > +       unsigned long *vendor_bitmap;
-> > 
-> > It took a lot of digging for me to understand this was the set of
-> > vendor extensions supported on all harts. Can we add that to the name,
-> > maybe something like isa_bitmap_all_harts? (I wonder if we could drop
-> > the vendor part of the name since we already know we're in a
-> > vendor_ext_data_list structure).
-> 
-> Reading this made me wonder, why is the all-hart bitmap an unsigned long
-> when the per hart one is a riscv_isainfo struct?
+> > On Fri, Apr 26, 2024 at 2:29=E2=80=AFPM Charlie Jenkins <charlie@rivosi=
+nc.com> wrote:
+> > > +       for (int i =3D 0; i < riscv_isa_vendor_ext_list_size; i++) {
+> > > +               const struct riscv_isa_vendor_ext_data_list *ext_list=
+ =3D riscv_isa_vendor_ext_list[i];
+> > > +
+> > > +               if (bitmap_empty(ext_list->vendor_bitmap, ext_list->b=
+itmap_size))
+> > > +                       bitmap_copy(ext_list->vendor_bitmap,
+> > > +                                   ext_list->per_hart_vendor_bitmap[=
+cpu].isa,
+> > > +                                   ext_list->bitmap_size);
+> >=20
+> > Could you get into trouble here if the set of vendor extensions
+> > reduces to zero, and then becomes non-zero? To illustrate, consider
+> > these masks:
+> > cpu 0: 0x0000C000
+> > cpu 1: 0x00000003 <<< vendor_bitmap ANDs out to 0
+> > cpu 2: 0x00000010 <<< oops, we end up copying this into vendor_bitmap
+> >=20
+>=20
+> Huh that's a good point. The standard extensions have that same bug too?
+>=20
+> 	if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
+> 		bitmap_copy(riscv_isa, isainfo->isa, RISCV_ISA_EXT_MAX);
+> 	else
+> 		bitmap_and(riscv_isa, riscv_isa, isainfo->isa, RISCV_ISA_EXT_MAX);
 
-Hmm I don't think there is a good reason for that. I believe this can
-become struct riscv_isainfo * with no issues.
+I suppose it could in theory, but the boot hart needs ima to even get
+this far. I think you'd only end up with this happening if there were
+enabled harts that supported rvXXe, but I don't think we even add those
+to the possible set of CPUs. I'll have to check.
 
-- Charlie
+--DB2yQnBvjkhLdZ/3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjKEAgAKCRB4tDGHoIJi
+0t4AAP48TlGaRjpIOJcoV+H8wuppgNwKKx3OUtSc+5sg9jOMTgD/cl2e9XPolr3n
+9O0nDbaTisOGW7yGRdUZvJ0dsEhOqwE=
+=mFwP
+-----END PGP SIGNATURE-----
+
+--DB2yQnBvjkhLdZ/3--
 
