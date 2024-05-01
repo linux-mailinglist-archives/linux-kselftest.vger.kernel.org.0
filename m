@@ -1,82 +1,81 @@
-Return-Path: <linux-kselftest+bounces-9181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09F28B868A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 09:55:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 941D88B868D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 09:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFE1D1C2267A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 07:55:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B778C1C22B31
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 07:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C464F5FE;
-	Wed,  1 May 2024 07:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F5B4F205;
+	Wed,  1 May 2024 07:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hp8hS6zU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="plUJt9bk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710034E1DA
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 07:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97232502A6
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 07:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714550131; cv=none; b=UrjLMbYlIbzBn9uPgYvnYC+aV308tYShEhJsTbFiIi2WHtHvQBBAQ36KUwVXCD1zCM/64mzFvrM0dL7MzMKQobcyXi62szz4HGmRXp5QILC7qDh84ZxmivXuAvO58hbiwmKsRrMKtZn+xe7oWet5JD6RNK7MAj92YNBcw7ezeZE=
+	t=1714550146; cv=none; b=Zz5lDSvNu7tcA1kRc0rqh7LoW+na+hDS37Pweqt1AyBs8LCFS5EX12wD+F7o3BsqFHSTeFZ4bXt3kmPU7CU09DSNsMJaXHG5LZw+YErlfGNx2KAPsIeR9xoNdawXfGLWL1n3asCK8diZfJLjsyOxBMVMmUQegQj+G7wDj3ci+Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714550131; c=relaxed/simple;
-	bh=2Mh8oWFSD0cGfOJXX/1bLTWNN+nPO3LHG/GO4VoMFoc=;
+	s=arc-20240116; t=1714550146; c=relaxed/simple;
+	bh=AxYTHXuxlm4oQw6rXwq8fPlNfsnkeW5Lh3i30yjanXg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hjMm+2JimRkUmiwurNBJRPc3R6+ZHcUQtIJSO9v3jivLWg/oFCLo/LcEj4M0dQFkRCKIzJYmQJV5mra1cAcxpEmNVmv4zR2K5K6SnovjTnnymhU0l6vyBTvi3E9ucBRI74xWU92TjgX3KuGcxE3b2vL9oB5RyR2hQmpUYu3dyJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hp8hS6zU; arc=none smtp.client-ip=209.85.160.173
+	 To:Cc:Content-Type; b=Vdf8aXMcpERdKUorT+P1BINFUGEOCgvXk0xzLtraO4OO8AntxvEg8T1V8JRjfjAz2cDCgENGUuw+cOJ2rYqhttxKHo3c0BCIAzgYIGMtS3OcZWqvtRkfHUj4W7LxombOXzoS5/F47PBAz3swGglb4Mm7NS7fY5cTYDjzMAPHCWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=plUJt9bk; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-43989e6ca42so183991cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 00:55:29 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-43ae23431fbso108651cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 00:55:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714550128; x=1715154928; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1714550143; x=1715154943; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JhTqwpN90GwgibLL1/MorFZXh+reM4aHyQW7GmwgI4=;
-        b=hp8hS6zUKCW+fS4qn4sQMjPDW2Jp3tYLD5V/LfNJIF/M+XppyY53kd9FFzTTZWf5um
-         IPdZ90rjQiqBoYAq3SiJahskos4zQRxy6AbkSkjUaYBqLQj8pzT5p90nWE0cg/uFYR9+
-         6L75rbN2VJywoJRFGnz2wWpxfJXMzefMPYXeH3kD4K8r6TWGP+FIZk6ungNKPgCYWuk+
-         FPvu8WS9lOv7TyNqTNnQUf8gYHSzVESUTSKL+lQ8CW1W7/D0+fR86yltN2m/AJnc/7YY
-         Y7YvpdNhW/6dNrJ1J3lOpXwowWRUfbWLmuLgWUCXWfqphuhJpgyrFIbAzTd81L8VSZjp
-         +c1w==
+        bh=2uJS6xNIdgaV5UxjKtdgNdsxihWQujCeERKLdyJgQ4A=;
+        b=plUJt9bkVsxS3LmkLCJ6CWKzod3q6dBUe/CXhkLhMDH3K/FIREh/Pg4aFNLPmB18KD
+         b1XqehHN9EpANQuZ/RiZMPPIDdg2AWeR/B1OSWazfAZwHLI4Kco3+mlrPjvzgnmLK1DH
+         GdLES3+0fZB+4Op7b9ZWE2HCGGW6RcM7RBpA64pLVYUgd6YC/mcLpzK3r/c0yOaNTfnY
+         NRwx9OBkRxh+U+7R9ERXhX0lqx6iW//quruNamjeF14RWDwuahAwIp+9Bp11jK+mnVHC
+         7knj6P+lI7T56YmjCjHKJ9vzCm+3mz9Rueq3H6JcY/zKKoKokVNDWM7PBFPr7uYrKIwP
+         GoDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714550128; x=1715154928;
+        d=1e100.net; s=20230601; t=1714550143; x=1715154943;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1JhTqwpN90GwgibLL1/MorFZXh+reM4aHyQW7GmwgI4=;
-        b=Rljqpj7fcaIvAQ1vDrn3JtDPN4xazLX65cyjogvWadk6ho7mupB43ilmh7I32g+D3p
-         mXYEpoWIBM2FTIdzIoeLGCc+tliIdwhqIRswilSf6FcHdCSmQwzxB4wuCFF3nhveNbS2
-         Hc6gWy1VErzSf2U9pOGm147d+A39dMof909qRcGv/2xDgOGEAdE3qrJ7khv0T+QgMCek
-         uE/auAQf9mqPUBBDgLe6+z5ZKtaKIlXih3G5zjgthtAmaG//oNowmhrGskjXNLAA/7XS
-         GwmEUE+qxHePp+0AjawFohauVAaox69QSGMZCvJ8YouptYNKdhJTxZrqEKX0HgAfdpFf
-         TJgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoF3zUhTd5FjMlbxJI4nPapuf+wRbSmuF0+zogEDdiTK6hmxgJVYUceXUBiJQbloCaWhOBvnj656QoCrvcDt4cZPtETm2wVX1S9Uz2WYeS
-X-Gm-Message-State: AOJu0Yx9U8N6+bCVdP3OPqckM30JHwHkdlqGhpBU+nwiI1uh9c07DHs4
-	2J4K//OYyYUWDrcrrbAOiQJ0bNA0zco9eELw7j5f2TH0mpQTimkYHRF96RjCLhUCAwJ2lnh5QCR
-	Xbmu4RQKU1xic7KYUuco5eYnnhGLuubG1taEx
-X-Google-Smtp-Source: AGHT+IETRyGnGymcQDnf43ZnF+hwQ7xxuhBO6t7tkJNp5oek/Ovq07bayQJxEAH3tEAQlIlcOxMlGYiJSsP36L+wCm8=
-X-Received: by 2002:ac8:5742:0:b0:43a:c166:4d7e with SMTP id
- 2-20020ac85742000000b0043ac1664d7emr205957qtx.28.1714550128370; Wed, 01 May
- 2024 00:55:28 -0700 (PDT)
+        bh=2uJS6xNIdgaV5UxjKtdgNdsxihWQujCeERKLdyJgQ4A=;
+        b=FglbZVvi1pUKqcH6eC8zBNnV7Uk2srB99BxsamIPGApRoH65GfW8WN9BxfeMHvEgFq
+         qv+luzzjNnQ5AVXP+xZnyGKqkJ0wqqHPAGi4GJ9TSp1LtEU7njBBG6bNH3pSd/gfz5US
+         pTAr4BavTqQmerM4rEqk7nb/asbYP06Xn+J46zrovvc0CVI6jHjCVy+FlOXmJDICTXQj
+         TFtOK2o5xVaJdBQIp5Sfw0zjhWb9+iCpKwlsQ7VQpTwZLGl26buZLCfWBsSJxdzRFqRH
+         4lln9mIcrHqfyE4yMd6ZXibUHlQE1efp1ebhYCZ3X5VNjgSA7Zv5UoxMfs9v/zC0/Ir3
+         za8A==
+X-Forwarded-Encrypted: i=1; AJvYcCXhyXI2Que0H+0+CcVRa6sWAUtsrZ7s4/kKoweP0ezpz7wzytBjdeO+gE6VmKL8jGjVnoV8Bhj4cNJ8GghoROF0E6UTzOkSaYPEv4eFKMp9
+X-Gm-Message-State: AOJu0Yysyq4CMD3t830J4odnOyQASRm71D9uT/QMUyXpDCPXeWPvykAv
+	w/6sd9guuWNE+7EiG8ve6/vEQzmw3iZK9Uyxm/q/uixzBLzV2+PNgAGRwNtkRE23snqfM8GqxtD
+	1suzEPJ0peARWUFMYwanqaFPMqF4btpesodnI
+X-Google-Smtp-Source: AGHT+IFyXAnW7q/CaTvGXr4DvMb9iAnVWSKGAqqePBClgoe22w94ttdFubhovBppsGM0XWCiArmjh6/ljUzl0K8UOzM=
+X-Received: by 2002:ac8:7dc5:0:b0:43a:c494:a052 with SMTP id
+ c5-20020ac87dc5000000b0043ac494a052mr137215qte.9.1714550143401; Wed, 01 May
+ 2024 00:55:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-3-sboyd@kernel.org>
-In-Reply-To: <20240422232404.213174-3-sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-4-sboyd@kernel.org>
+In-Reply-To: <20240422232404.213174-4-sboyd@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Wed, 1 May 2024 15:55:17 +0800
-Message-ID: <CABVgOS=AAzSEWzcfVp3gCTBiUH7cdwbihjMaww5Qp8CZnUVy1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 02/10] dt-bindings: vendor-prefixes: Add "test" vendor
- for KUnit and friends
+Date: Wed, 1 May 2024 15:55:32 +0800
+Message-ID: <CABVgOSnEQ0m_nG-dSA3e+5PSazh9uTB_A56zRrphh5vgPsYk3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 03/10] dt-bindings: test: Add KUnit empty node binding
 To: Stephen Boyd <sboyd@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
 	linux-clk@vger.kernel.org, patches@lists.linux.dev, 
@@ -89,52 +88,81 @@ Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Maxime Ripard <maxime@cerno.tech>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000006023ff06175fcf65"
+	boundary="0000000000004671a206175fd04a"
 
---0000000000006023ff06175fcf65
+--0000000000004671a206175fd04a
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 23 Apr 2024 at 07:24, Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Add the vendor prefix "test" to reserve a vendor prefix for bindings
-> that are purely for testing device tree code. This allows test code to
-> write bindings that can be checked by the schema validator.
+> Describe a binding for an empty device node used by KUnit tests to
+> confirm overlays load properly.
 >
 > Reviewed-by: Rob Herring <robh@kernel.org>
 > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 > Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Rae Moar <rmoar@google.com>
 > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
 
+Looks good to me.
+
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
 -- David
 
-
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../devicetree/bindings/test/test,empty.yaml  | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/test/test,empty.yaml
 >
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index b97d298b3eb6..e590f5ab539f 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -1448,6 +1448,8 @@ patternProperties:
->      description: Terasic Inc.
->    "^tesla,.*":
->      description: Tesla, Inc.
-> +  "^test,.*":
-> +    description: Reserved for use by tests. For example, KUnit.
->    "^tfc,.*":
->      description: Three Five Corp
->    "^thead,.*":
+> diff --git a/Documentation/devicetree/bindings/test/test,empty.yaml b/Documentation/devicetree/bindings/test/test,empty.yaml
+> new file mode 100644
+> index 000000000000..20dc83b15bbf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/test/test,empty.yaml
+> @@ -0,0 +1,30 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/test/test,empty.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Empty node
+> +
+> +maintainers:
+> +  - David Gow <davidgow@google.com>
+> +  - Brendan Higgins <brendanhiggins@google.com>
+
+Brendan: Do you want to use your linux.dev address here?
+
+
+> +
+> +description:
+> +  An empty node to confirm tests can load device tree overlays.
+> +
+> +properties:
+> +  compatible:
+> +    const: test,empty
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    kunit-node {
+> +      compatible = "test,empty";
+> +    };
+> +...
 > --
 > https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 > https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 >
->
 
---0000000000006023ff06175fcf65
+--0000000000004671a206175fd04a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -202,14 +230,14 @@ wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
 ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIP7NXWvgU05zaKlB5LNRCXM1uo6w0jHDNuf/uHfgytu5MBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwMTA3NTUyOFowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIFcaBkPTeUYzJma0FkjF1qGeHlznEswwxjBunZ70gnyKMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwMTA3NTU0M1owaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAM2fBY
-19yesLZvX4YuLGnCMNVHpIbq0D3g1NUIhLNF0bSPP+auqc8gzB+qQqQDBeHnSImSeyF8G5XZYshv
-DnaNHpSJ6U18FK0DMElQYMx39JiPD7797efLOnDuw1RuBHtNWiiF6OU1DwVoF8N1eqi5h04EiqxS
-iQA4/S2prcpDfdVkn7L8sOM7LzlpSYjBm5isYn3Gr2y+SpVS50teVkKD2uEZ+ux5VLz/3DHkZxm3
-jbiUgQhNxcsQ8bQcttn0G2BTrw5P1t6yzx7+tVrCIqyr5dNVwLZVTa/SN0LSoM+v82TjwSEwJPEZ
-dKdST754MBTxV5SyKSbNYn7AR3kkXaJd
---0000000000006023ff06175fcf65--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBlIMbL
+grb8rUp7bLdAlhYm79kz0p93AkTwwEDPvUAdThk3DbFQWzi1c3O5lhrj70CjOFnt07cCDFRJyG6k
+IjNCi4ea+DzEerojQKDUwuqcWE8MChaQ0G/cL/9++RfeEKT2yKGz4X3PZw6t23/Vnykz6JTnxaMR
+6tHgZijN5G4uManotTZpcSEEi0tbXyQNMokC3lO+Ng4muSUgyKmgccHC8HavGFQjVNlDy6eT87fd
+wzOAEWhhKKiIxU5vJlC287aZ3jlNrULC0/DtLLP/rnejjoybA2Z2VKjS+Ly0PtjKcPLCUVM6Eh4w
+NVW/OLdQFVw+gvg5/27n9/0zcfTjo+KD
+--0000000000004671a206175fd04a--
 
