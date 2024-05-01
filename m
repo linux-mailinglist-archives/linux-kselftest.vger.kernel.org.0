@@ -1,117 +1,111 @@
-Return-Path: <linux-kselftest+bounces-9175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84CEE8B83C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 02:40:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDDF78B841F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 04:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44A45284A6D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 00:40:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12196B21B26
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 02:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1140B2114;
-	Wed,  1 May 2024 00:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B369D846F;
+	Wed,  1 May 2024 01:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GSkTurmd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSM5jhhD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32297492
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 00:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7113B522A;
+	Wed,  1 May 2024 01:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714524051; cv=none; b=FOEx1WTXdNGPnL42usBfUF6EcQ8zy5QUylCaoMHpAXCXr7/+YM2ZN+OOt24+dtYr2rSaU61Qljmi/i5QlTCgB3xcUh9YLsh5JKwyGmwFPygrY5dN1UVaLzD0H40bjLUaaSfLdHjXzetbz9/ve0XFpOSrEi7j6Sl1c+6CxX1h8fA=
+	t=1714528798; cv=none; b=PsTygwCUPNkuZUsXTt6hl80ClWKe3G+xq9sJxrda0Vpqoi6xG8KvWV4OC8tVblbRKHRDuB8GbgOULY5olkMwLrThfmLGtg10RXqR1OGh9gwu7BNL1BteXzbC4VmYuUgcAR8Uoy4IxFVzAf32I8XA+aR0gSKG4phukQp1uaSS1oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714524051; c=relaxed/simple;
-	bh=DvRZn0YkYoGOFeC6Hd6FMkq8OBughIT3EN9z+cXbVyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dx9mFQxKJEYGqiEKr9BxFdJATzh4jchj6l1V6Oilhre8+O7gvLYODQtpwRHxahQzMOebWQiua/qqKcslpwDZpci1jiEehNUHdCcxae7KT0fN0wwKTWE90X2GafzrMxk5R5igzoJQrTJYAKCRROcXNaQtjln89GnCtpetIqN3MKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GSkTurmd; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <f5148f33-cb4f-4e84-8182-b68a9c038d3e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1714524047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lsLhW8OsAHNbWQn+96nTp6LroytLS+VC0zUDcZpqbG0=;
-	b=GSkTurmd2UjQEf8zH5Jm26HqtN435YPprfcoop4FO2pBweiJXm4cG4n8k42YrVbg6L837W
-	p4UxJjUS3JxYLqL60X4rC2EpMsT/fN1VyByowadgL/T+LTIkkwV8odHiQBbdlyYNqjc4SQ
-	8sss4JPJy8l1mF57ynqNVD/kfEVOjzM=
-Date: Tue, 30 Apr 2024 17:40:40 -0700
+	s=arc-20240116; t=1714528798; c=relaxed/simple;
+	bh=o0JLE4w7Txl02smd17IqwLJ/xQdd2b9AlvJ/m9S7MxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A1dir4Axffx4QiCRR85CBlxv04UYRwDKTSupu1rObf0V+kTig4vQXxxtS/ZQCcI2wT9xXeR5qLbhHqZuaiUMHbuXXB/ppxGKn5/SsoMZUvlLRJEdChkHsfKcGkQJZKKQFAAYWRHzdvZEd/UmkYdH3b2Wowft5i3+HJysYk4tRmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSM5jhhD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522D3C2BBFC;
+	Wed,  1 May 2024 01:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714528797;
+	bh=o0JLE4w7Txl02smd17IqwLJ/xQdd2b9AlvJ/m9S7MxQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DSM5jhhDyVrsK4rI+tirVbxUm2SGjSCdGiW5yFeyy87vScGUmRYq8PoxARTsWGi75
+	 ZN1EWeOQh2/eZFMmiGFHj+woNykMssK7js3ZiiSdJhlK8P+CPJQeD7PHLwKfChDKys
+	 Vn6WznDzNt57OAzPcOny8cUE3vc+MoS9R/LGRw0r+eCYBudJMkIWBgooqLvpmCn1I5
+	 Dzttpfjh1y7CeXOQvVbhFTH3YMCL8d6ZCnhcpiYB+v31+ar86AKn1pAfB4zKu6l/8b
+	 JEmpQTGj5IdNtO+TWT7WkjmqVga3a1ZRHG7SWmeQ1BAc91x3VUyNPErEMaEHGoYkJm
+	 tJZXubj0xGIxA==
+Date: Wed, 1 May 2024 10:59:54 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Edward Liaw <edliaw@google.com>
+Cc: shuah@kernel.org, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Bongsu Jeon <bongsu.jeon@samsung.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel-team@android.com, linux-sound@vger.kernel.org,
+	linux-input@vger.kernel.org, kvm@vger.kernel.org,
+	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-sgx@vger.kernel.org
+Subject: Re: [PATCH v1 00/10] Define _GNU_SOURCE for sources using
+Message-ID: <ZjGiGq-_kUVht63m@finisterre.sirena.org.uk>
+References: <20240430235057.1351993-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 4/6] selftests/bpf: Add setsockopt for
- network_helper_opts
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1714014697.git.tanggeliang@kylinos.cn>
- <0f676d51126bf7c260a71cfb60df0d1acb23e552.1714014697.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <0f676d51126bf7c260a71cfb60df0d1acb23e552.1714014697.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u+4ZZ4jbS0aM3c2U"
+Content-Disposition: inline
+In-Reply-To: <20240430235057.1351993-1-edliaw@google.com>
+X-Cookie: lisp, v.:
 
-On 4/24/24 8:23 PM, Geliang Tang wrote:
-> +static int setsockopt_reuseport(int fd, const void *optval, socklen_t optlen)
-> +{
-> +	return setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, optval, optlen);
->   }
->   
 
-[ ... ]
+--u+4ZZ4jbS0aM3c2U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->   void free_fds(int *fds, unsigned int nr_close_fds)
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index c62b54daa914..540ecfc52bd7 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -28,6 +28,9 @@ struct network_helper_opts {
->   	bool noconnect;
->   	int type;
->   	int proto;
-> +	int (*setsockopt)(int fd, const void *optval, socklen_t optlen);
-> +	const void *optval;
-> +	socklen_t optlen;
+On Tue, Apr 30, 2024 at 11:50:09PM +0000, Edward Liaw wrote:
+> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
+> asprintf into kselftest_harness.h, which is a GNU extension and needs
+> _GNU_SOURCE to either be defined prior to including headers or with the
+> -D_GNU_SOURCE flag passed to the compiler.
 
-optval and optlen could be in the stack of the (*setsockopt) callback.
-e.g. the "int on;" could be local to the setsockopt_reuseport() instead of 
-adding optval/len to the network_helper_opts. Passing one optval in 
-network_helper_opts could be less flexible when we want to do multiple 
-setsockopt() after socket().
+This seems like something that should be handled centrally rather than
+having to go round and audit the users every time some update is made.
 
-Another nit I would like to make, rename this from (*setsockopt) to 
-(*post_socket_cb) because this callback could do more than setsockopt, e.g. 
-adding a sk local storage to a socket fd before bind(). Also, add a "const 
-struct post_socket_opts *opts" for future extension, Like:
+--u+4ZZ4jbS0aM3c2U
+Content-Type: application/pgp-signature; name="signature.asc"
 
-struct post_socket_opts {};
+-----BEGIN PGP SIGNATURE-----
 
-int (*post_socket_cb)(int fd, const struct post_socket_opts *opts);
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYxohoACgkQJNaLcl1U
+h9Dv4wf+Oy51jhJTtX+KR/9MxUx3xHW+ifosvcxRaNBSM47ULNjdnTpPKnkuarpt
+mWWj3hbt5RKWrCwD4BXewKlkUTeOwip+tNfAif1eE1keTt7royrAsdrRNbQnej4Q
+fZD3C9esrkUiJUPsBHZw74ycUnXOvo+2znUMLfLGh9cMI8AahfyBz7vNeXQanaSJ
+1SxF/MZUXwhZ0wmeUHmqIMtppKUiqWzLBTdkhRwVRGaGhzSNWD3qeHMNYmRLN++g
+35CtZCDC98DyWxcybLkR/DFkf/9yiC0leVqktKDouqBUiVMZxSicfl9kL8bfgmq8
+dSdfvdLQR1VKa6bPvR3uEa4WSOIlVA==
+=krSA
+-----END PGP SIGNATURE-----
 
-Patch 6 will need two setsockopt cb functions because of different optval but I 
-believe the tradeoff is worth it for this callback doing more than just one 
-setsockopt.
-
-Patch 1 to 3 have been applied. Thanks.
-
+--u+4ZZ4jbS0aM3c2U--
 
