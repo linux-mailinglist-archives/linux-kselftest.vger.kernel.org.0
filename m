@@ -1,81 +1,82 @@
-Return-Path: <linux-kselftest+bounces-9180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A052C8B8686
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 09:55:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09F28B868A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 09:55:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7EB4B226BF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 07:55:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFE1D1C2267A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 07:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E310B4E1CE;
-	Wed,  1 May 2024 07:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C464F5FE;
+	Wed,  1 May 2024 07:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZHE71tPO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hp8hS6zU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52D74D9FB
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 07:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710034E1DA
+	for <linux-kselftest@vger.kernel.org>; Wed,  1 May 2024 07:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714550126; cv=none; b=YiyfuFi6IP3uQYJq/aMqjAUleYExlOvEiD4IQzBivTSo7Y0wFY2xW6xb2KDyR8hLWeN7G0UTBiisw7iZnFFdvzpWSjkR0WtQY5gBw/V5DoFOHw8qRYG0MtKI7hn1HYqy3Y0uvnpP0feMcxpJnYoeIRMVeuQXcINNlerXnmZUnkE=
+	t=1714550131; cv=none; b=UrjLMbYlIbzBn9uPgYvnYC+aV308tYShEhJsTbFiIi2WHtHvQBBAQ36KUwVXCD1zCM/64mzFvrM0dL7MzMKQobcyXi62szz4HGmRXp5QILC7qDh84ZxmivXuAvO58hbiwmKsRrMKtZn+xe7oWet5JD6RNK7MAj92YNBcw7ezeZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714550126; c=relaxed/simple;
-	bh=X+WwdH+IAxiUV/wEGrgfiv6/Y7QU+RwT4SDHQQ4AeVs=;
+	s=arc-20240116; t=1714550131; c=relaxed/simple;
+	bh=2Mh8oWFSD0cGfOJXX/1bLTWNN+nPO3LHG/GO4VoMFoc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L7ElQ5erSuNKP6mI2jkD8RVYQmjumXWwgnr3PFnBBQs5WV972yzMhoo+C7HElSX1IW4JRPev4cb0JYV07+ngDitafIVfOoo1m5ei7UiN1zIUa+5LVh/2Jy088VuBkkPnucVrNUOpZWsLX+lcuJiyThZNVD7w7UNa348a+ko9LWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZHE71tPO; arc=none smtp.client-ip=209.85.160.180
+	 To:Cc:Content-Type; b=hjMm+2JimRkUmiwurNBJRPc3R6+ZHcUQtIJSO9v3jivLWg/oFCLo/LcEj4M0dQFkRCKIzJYmQJV5mra1cAcxpEmNVmv4zR2K5K6SnovjTnnymhU0l6vyBTvi3E9ucBRI74xWU92TjgX3KuGcxE3b2vL9oB5RyR2hQmpUYu3dyJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hp8hS6zU; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-436ed871225so161441cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 00:55:23 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-43989e6ca42so183991cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2024 00:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714550123; x=1715154923; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1714550128; x=1715154928; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GFcd21d1ExBvObMU9qfdNM36k6d/yWkoN7ifxl20W1E=;
-        b=ZHE71tPO90sNoa99cSJyu/VE8wcnoqgpNRYxCnWZvH91TtX/PEU/leL3aCiUOgabGl
-         55l1mmkEpYrUdILOQzt1g2Uk4JrTfgG5onSgHOy/85gvIzNEgiyO6aSs4KdQSz9EZngM
-         Cnr0tjLDTge9kG1uCaWcrLoVF0EwPqqjvdRSSqvfLj3yGWpnUxgaqYUHwU7yT0GDvf8H
-         zEnhB+zoD5yujJB6WgxWwcWLjynnLzAV3ZxjMDzHFQX850hByzZtRkANbbeIVc7fMN9N
-         vGAVIqxLqZZxgG6hsF7Q9advn6ybnCMecdxZMxSk1M+H6L4KCNNh7k0Ik1S5QwCr1NJo
-         OTSA==
+        bh=1JhTqwpN90GwgibLL1/MorFZXh+reM4aHyQW7GmwgI4=;
+        b=hp8hS6zUKCW+fS4qn4sQMjPDW2Jp3tYLD5V/LfNJIF/M+XppyY53kd9FFzTTZWf5um
+         IPdZ90rjQiqBoYAq3SiJahskos4zQRxy6AbkSkjUaYBqLQj8pzT5p90nWE0cg/uFYR9+
+         6L75rbN2VJywoJRFGnz2wWpxfJXMzefMPYXeH3kD4K8r6TWGP+FIZk6ungNKPgCYWuk+
+         FPvu8WS9lOv7TyNqTNnQUf8gYHSzVESUTSKL+lQ8CW1W7/D0+fR86yltN2m/AJnc/7YY
+         Y7YvpdNhW/6dNrJ1J3lOpXwowWRUfbWLmuLgWUCXWfqphuhJpgyrFIbAzTd81L8VSZjp
+         +c1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714550123; x=1715154923;
+        d=1e100.net; s=20230601; t=1714550128; x=1715154928;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GFcd21d1ExBvObMU9qfdNM36k6d/yWkoN7ifxl20W1E=;
-        b=bIqgt7yS+eQ9kUUIZJAtcuFtO9L3HimQRkNPbwDZeyxJEobEJ9nQbcC2HF4r7HURKx
-         0QWRUdfWg5jtKOCJqaYQsQKhhKL3xC6g3UpJ1FzhvQEVY+YVaZVe3Bfb1z4+EFUMldFm
-         No8nzFTXHA+Pt30Qroewbh577REK911OgsvEiknAkqoPob/+jFV6z2qEaNSXYBCSfD6m
-         ZQPVuq8ahdr3tBe7XPy6uxK6dzPLOaQ8zTYnQEeH0DxoWDyJ3PXR88UlgBiDibHeqWXG
-         zXxKSsb3BZ941eEcbWL9aAoBKpn2kWmE2aLS4mGgnww5RI+9smAe4UXEY01EHKf49xcP
-         bVnA==
-X-Forwarded-Encrypted: i=1; AJvYcCUy7hVg9xcMQmGGTbc5FWnLWmf5c+2eQonympi+F/7e6GCpqdpdsDdcDy4qfKZxZxs4zSoICQo+/N9pnElm32zR8oHbgWErXkVCk4R3B1tV
-X-Gm-Message-State: AOJu0Yy4AqLdViwhVH+qF1MKdFf2e1qbQ7tI6CLcQcb5BQFFbhZcX4yk
-	GoC2aO0I+x+/YrlhSxMbjgPUeuFwZUfEsxeC2PDA/Y6B1pu08SW6O8SjT9MMXsiWmNendsU9ocV
-	MAsiWX2XDes4vM1nXwJpjyQocYp8MNgqlwmp5
-X-Google-Smtp-Source: AGHT+IGMwZzk/EIf6V6anZuBEWRqkim2oHCNAJVhHHvJN4YYehVVVTmQ94ndRElFJrpzHSjdr06uqWjXUMHdHOdQAX8=
-X-Received: by 2002:a05:622a:34b:b0:43a:ccf3:8160 with SMTP id
- r11-20020a05622a034b00b0043accf38160mr205495qtw.14.1714550122597; Wed, 01 May
- 2024 00:55:22 -0700 (PDT)
+        bh=1JhTqwpN90GwgibLL1/MorFZXh+reM4aHyQW7GmwgI4=;
+        b=Rljqpj7fcaIvAQ1vDrn3JtDPN4xazLX65cyjogvWadk6ho7mupB43ilmh7I32g+D3p
+         mXYEpoWIBM2FTIdzIoeLGCc+tliIdwhqIRswilSf6FcHdCSmQwzxB4wuCFF3nhveNbS2
+         Hc6gWy1VErzSf2U9pOGm147d+A39dMof909qRcGv/2xDgOGEAdE3qrJ7khv0T+QgMCek
+         uE/auAQf9mqPUBBDgLe6+z5ZKtaKIlXih3G5zjgthtAmaG//oNowmhrGskjXNLAA/7XS
+         GwmEUE+qxHePp+0AjawFohauVAaox69QSGMZCvJ8YouptYNKdhJTxZrqEKX0HgAfdpFf
+         TJgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWoF3zUhTd5FjMlbxJI4nPapuf+wRbSmuF0+zogEDdiTK6hmxgJVYUceXUBiJQbloCaWhOBvnj656QoCrvcDt4cZPtETm2wVX1S9Uz2WYeS
+X-Gm-Message-State: AOJu0Yx9U8N6+bCVdP3OPqckM30JHwHkdlqGhpBU+nwiI1uh9c07DHs4
+	2J4K//OYyYUWDrcrrbAOiQJ0bNA0zco9eELw7j5f2TH0mpQTimkYHRF96RjCLhUCAwJ2lnh5QCR
+	Xbmu4RQKU1xic7KYUuco5eYnnhGLuubG1taEx
+X-Google-Smtp-Source: AGHT+IETRyGnGymcQDnf43ZnF+hwQ7xxuhBO6t7tkJNp5oek/Ovq07bayQJxEAH3tEAQlIlcOxMlGYiJSsP36L+wCm8=
+X-Received: by 2002:ac8:5742:0:b0:43a:c166:4d7e with SMTP id
+ 2-20020ac85742000000b0043ac1664d7emr205957qtx.28.1714550128370; Wed, 01 May
+ 2024 00:55:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-2-sboyd@kernel.org>
-In-Reply-To: <20240422232404.213174-2-sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-3-sboyd@kernel.org>
+In-Reply-To: <20240422232404.213174-3-sboyd@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Wed, 1 May 2024 15:55:10 +0800
-Message-ID: <CABVgOSm_Qce1AZQjH8wE4t238hxLYTNswNf1AkEDbWtqDTK7Ow@mail.gmail.com>
-Subject: Re: [PATCH v4 01/10] of: Add test managed wrappers for of_overlay_apply()/of_node_put()
+Date: Wed, 1 May 2024 15:55:17 +0800
+Message-ID: <CABVgOS=AAzSEWzcfVp3gCTBiUH7cdwbihjMaww5Qp8CZnUVy1Q@mail.gmail.com>
+Subject: Re: [PATCH v4 02/10] dt-bindings: vendor-prefixes: Add "test" vendor
+ for KUnit and friends
 To: Stephen Boyd <sboyd@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
 	linux-clk@vger.kernel.org, patches@lists.linux.dev, 
@@ -88,379 +89,52 @@ Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Maxime Ripard <maxime@cerno.tech>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000000a214606175fcfd4"
+	boundary="0000000000006023ff06175fcf65"
 
---0000000000000a214606175fcfd4
+--0000000000006023ff06175fcf65
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 23 Apr 2024 at 07:24, Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Add test managed wrappers for of_overlay_apply() that automatically
-> removes the overlay when the test is finished. This API is intended for
-> use by KUnit tests that test code which relies on 'struct device_node's
-> and of_*() APIs.
+> Add the vendor prefix "test" to reserve a vendor prefix for bindings
+> that are purely for testing device tree code. This allows test code to
+> write bindings that can be checked by the schema validator.
 >
-> KUnit tests will call of_overlay_apply_kunit() to load an overlay that's
-> been built into the kernel image. When the test is complete, the overlay
-> will be removed.
->
-> This has a few benefits:
->
->  1) It keeps the tests hermetic because the overlay is removed when the
->     test is complete. Tests won't even be aware that an overlay was
->     loaded in another test.
->
->  2) The overlay code can live right next to the unit test that loads it.
->     The overlay and the unit test can be compiled into one kernel module
->     if desired.
->
->  3) We can test different device tree configurations by loading
->     different overlays. The overlays can be written for a specific test,
->     and there can be many of them loaded per-test without needing to jam
->     all possible combinations into one DTB.
->
->  4) It also allows KUnit to test device tree dependent code on any
->     architecture, not just UML. This allows KUnit tests to test
->     architecture specific device tree code.
->
-> There are some potential pitfalls though. Test authors need to be
-> careful to not overwrite properties in the live tree. The easiest way to
-> do this is to add and remove nodes with a 'kunit-' prefix, almost
-> guaranteeing that the same node won't be present in the tree loaded at
-> boot.
->
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Saravana Kannan <saravanak@google.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
 > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
-
-This looks good to me. I'm not an expert on Device Tree Overlays, so
-can't guarantee it's perfect and/or the most ergonomic solution for
-any given use-case, but I definitely like the look of it from a KUnit
-point of view.
-
-A few minor naming and config-related thoughts below, but otherwise:
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/api/index.rst | 11 +++
->  Documentation/dev-tools/kunit/api/of.rst    | 13 +++
->  drivers/of/Makefile                         |  1 +
->  drivers/of/of_kunit.c                       | 99 +++++++++++++++++++++
->  include/kunit/of.h                          | 94 +++++++++++++++++++
->  5 files changed, 218 insertions(+)
->  create mode 100644 Documentation/dev-tools/kunit/api/of.rst
->  create mode 100644 drivers/of/of_kunit.c
->  create mode 100644 include/kunit/of.h
+
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-> index 2d8f756aab56..282befa17edf 100644
-> --- a/Documentation/dev-tools/kunit/api/index.rst
-> +++ b/Documentation/dev-tools/kunit/api/index.rst
-> @@ -9,11 +9,15 @@ API Reference
->         test
->         resource
->         functionredirection
-> +       of
->
->
->  This page documents the KUnit kernel testing API. It is divided into the
->  following sections:
->
-> +Core KUnit API
-> +==============
-> +
->  Documentation/dev-tools/kunit/api/test.rst
->
->   - Documents all of the standard testing API
-> @@ -25,3 +29,10 @@ Documentation/dev-tools/kunit/api/resource.rst
->  Documentation/dev-tools/kunit/api/functionredirection.rst
->
->   - Documents the KUnit Function Redirection API
-> +
-> +Driver KUnit API
-> +================
-
-If we're adding a separate 'Driver' section here, it's probably
-sensible to move the existing device/driver helper documentation here,
-rather than leaving it in resource.rst as-is. I'm happy to do that in
-a follow-up patch, though.
-
-> +
-> +Documentation/dev-tools/kunit/api/of.rst
-> +
-> + - Documents the KUnit device tree (OF) API
-> diff --git a/Documentation/dev-tools/kunit/api/of.rst b/Documentation/dev-tools/kunit/api/of.rst
-> new file mode 100644
-> index 000000000000..8587591c3e78
-> --- /dev/null
-> +++ b/Documentation/dev-tools/kunit/api/of.rst
-> @@ -0,0 +1,13 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +====================
-> +Device Tree (OF) API
-> +====================
-> +
-> +The KUnit device tree API is used to test device tree (of_*) dependent code.
-> +
-> +.. kernel-doc:: include/kunit/of.h
-> +   :internal:
-> +
-> +.. kernel-doc:: drivers/of/of_kunit.c
-> +   :export:
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index 251d33532148..0dfd05079313 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -19,6 +19,7 @@ obj-y += kexec.o
->  endif
->  endif
->
-> +obj-$(CONFIG_KUNIT) += of_kunit.o
-
-I'm tempted to have this either live in lib/kunit, or be behind a
-separate Kconfig option, particularly since this will end up as a
-separate module, as-is.
-
->  obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
->
->  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-> diff --git a/drivers/of/of_kunit.c b/drivers/of/of_kunit.c
-> new file mode 100644
-> index 000000000000..f63527268a51
-> --- /dev/null
-> +++ b/drivers/of/of_kunit.c
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Test managed device tree APIs
-> + */
-> +
-> +#include <linux/of.h>
-> +#include <linux/of_fdt.h>
-> +
-> +#include <kunit/of.h>
-> +#include <kunit/test.h>
-> +#include <kunit/resource.h>
-> +
-> +static void of_overlay_fdt_apply_kunit_exit(void *ovcs_id)
-> +{
-> +       of_overlay_remove(ovcs_id);
-> +}
-> +
-> +/**
-> + * of_overlay_fdt_apply_kunit() - Test managed of_overlay_fdt_apply()
-> + * @test: test context
-> + * @overlay_fdt: device tree overlay to apply
-> + * @overlay_fdt_size: size in bytes of @overlay_fdt
-> + * @ovcs_id: identifier of overlay, used to remove the overlay
-> + *
-> + * Just like of_overlay_fdt_apply(), except the overlay is managed by the test
-> + * case and is automatically removed with of_overlay_remove() after the test
-> + * case concludes.
-> + *
-> + * Return: 0 on success, negative errno on failure
-> + */
-> +int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
-> +                              u32 overlay_fdt_size, int *ovcs_id)
-
-We're using kunit_ as a prefix for the device helpers (e.g.
-kunit_device_register()), so it may make sense to do that here, too.
-It's not as important as with the platform_device helpers, which are
-very similar to the existing device ones, but if we want to treat
-these as "part of KUnit which deals with of_overlays", rather than
-"part of "of_overlay which deals with KUnit", this may fit better.
-
-Thoughts?
-
-> +{
-> +       int ret;
-> +       int *copy_id;
-> +
-> +       if (!IS_ENABLED(CONFIG_OF_OVERLAY))
-> +               kunit_skip(test, "requires CONFIG_OF_OVERLAY");
-> +       if (!IS_ENABLED(CONFIG_OF_EARLY_FLATTREE))
-> +               kunit_skip(test, "requires CONFIG_OF_EARLY_FLATTREE for root node");
-> +
-> +       copy_id = kunit_kmalloc(test, sizeof(*copy_id), GFP_KERNEL);
-> +       if (!copy_id)
-> +               return -ENOMEM;
-> +
-> +       ret = of_overlay_fdt_apply(overlay_fdt, overlay_fdt_size,
-> +                                  ovcs_id, NULL);
-> +       if (ret)
-> +               return ret;
-> +
-> +       *copy_id = *ovcs_id;
-> +
-> +       return kunit_add_action_or_reset(test, of_overlay_fdt_apply_kunit_exit,
-> +                                        copy_id);
-> +}
-> +EXPORT_SYMBOL_GPL(of_overlay_fdt_apply_kunit);
-> +
-> +/**
-> + * __of_overlay_apply_kunit() - Test managed of_overlay_fdt_apply() variant
-> + * @test: test context
-> + * @overlay_begin: start address of overlay to apply
-> + * @overlay_end: end address of overlay to apply
-> + *
-> + * This is mostly internal API. See of_overlay_apply_kunit() for the wrapper
-> + * that makes this easier to use.
-> + *
-> + * Similar to of_overlay_fdt_apply(), except the overlay is managed by the test
-> + * case and is automatically removed with of_overlay_remove() after the test
-> + * case concludes.
-> + *
-> + * Return: 0 on success, negative errno on failure
-> + */
-> +int __of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
-> +                            const u8 *overlay_end)
-> +{
-> +       int unused;
-> +
-> +       return of_overlay_fdt_apply_kunit(test, overlay_begin,
-> +                                         overlay_end - overlay_begin,
-> +                                         &unused);
-> +}
-> +EXPORT_SYMBOL_GPL(__of_overlay_apply_kunit);
-> +
-> +/**
-> + * of_node_put_kunit() - Test managed of_node_put()
-> + * @test: test context
-> + * @node: node to pass to `of_node_put()`
-> + *
-> + * Just like of_node_put(), except the node is managed by the test case and is
-> + * automatically put with of_node_put() after the test case concludes.
-> + */
-> +void of_node_put_kunit(struct kunit *test, struct device_node *node)
-> +{
-> +       if (kunit_add_action(test, (kunit_action_t *)&of_node_put, node)) {
-> +               KUNIT_FAIL(test,
-> +                          "Can't allocate a kunit resource to put of_node\n");
-> +       }
-> +}
-> +EXPORT_SYMBOL_GPL(of_node_put_kunit);
-> diff --git a/include/kunit/of.h b/include/kunit/of.h
-> new file mode 100644
-> index 000000000000..9981442ba578
-> --- /dev/null
-> +++ b/include/kunit/of.h
-> @@ -0,0 +1,94 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _KUNIT_OF_H
-> +#define _KUNIT_OF_H
-> +
-> +#include <kunit/test.h>
-> +
-> +struct device_node;
-> +
-> +#ifdef CONFIG_OF
-
-Do we also need to check for CONFIG_OF_OVERLAY here?
-
-Also, how useful is it to compile but skip tests without
-CONFIG_OF{,_OVERLAY} enabled? The other option is a compile error,
-which may make it more obvious that these are disabled if it's
-unexpected.
-
-Thoughts?
-
-> +
-> +int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
-> +                              u32 overlay_fdt_size, int *ovcs_id);
-> +int __of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
-> +                            const u8 *overlay_end);
-> +
-> +void of_node_put_kunit(struct kunit *test, struct device_node *node);
-> +
-> +#else
-> +
-> +static inline int
-> +of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
-> +                          u32 overlay_fdt_size, int *ovcs_id)
-> +{
-> +       kunit_skip(test, "requires CONFIG_OF");
-> +       return -EINVAL;
-> +}
-> +
-> +static inline int
-> +__of_overlay_apply_kunit(struct kunit *test, u8 *overlay_begin,
-> +                        const u8 *overlay_end)
-> +{
-> +       kunit_skip(test, "requires CONFIG_OF");
-> +       return -EINVAL;
-> +}
-> +
-> +static inline
-> +void of_node_put_kunit(struct kunit *test, struct device_node *node)
-> +{
-> +       kunit_skip(test, "requires CONFIG_OF");
-> +}
-> +
-> +#endif /* !CONFIG_OF */
-> +
-> +/**
-> + * of_overlay_apply_kunit() - Test managed of_overlay_fdt_apply() for built-in overlays
-> + * @test: test context
-> + * @overlay_name: name of overlay to apply
-> + *
-> + * This macro is used to apply a device tree overlay built with the
-> + * cmd_dt_S_dtbo rule in scripts/Makefile.lib that has been compiled into the
-> + * kernel image or KUnit test module. The overlay is automatically removed when
-> + * the test is finished.
-> + *
-> + * Unit tests that need device tree nodes should compile an overlay file with
-> + * @overlay_name\.dtbo.o in their Makefile along with their unit test and then
-> + * load the overlay during their test. The @overlay_name matches the filename
-> + * of the overlay without the dtbo filename extension. If CONFIG_OF_OVERLAY is
-> + * not enabled, the @test will be skipped.
-> + *
-> + * In the Makefile
-> + *
-> + * .. code-block:: none
-> + *
-> + *     obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
-> + *
-> + * In the test
-> + *
-> + * .. code-block:: c
-> + *
-> + *     static void of_overlay_kunit_of_overlay_apply(struct kunit *test)
-> + *     {
-> + *             struct device_node *np;
-> + *
-> + *             KUNIT_ASSERT_EQ(test, 0,
-> + *                             of_overlay_apply_kunit(test, kunit_overlay_test));
-> + *
-> + *             np = of_find_node_by_name(NULL, "test-kunit");
-> + *             KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
-> + *             of_node_put(np);
-> + *     }
-> + *
-> + * Return: 0 on success, negative errno on failure.
-> + */
-> +#define of_overlay_apply_kunit(test, overlay_name)             \
-> +({                                                             \
-> +       extern uint8_t __dtbo_##overlay_name##_begin[];         \
-> +       extern uint8_t __dtbo_##overlay_name##_end[];           \
-> +                                                               \
-> +       __of_overlay_apply_kunit((test),                        \
-> +                       __dtbo_##overlay_name##_begin,          \
-> +                       __dtbo_##overlay_name##_end);           \
-> +})
-> +
-> +#endif
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index b97d298b3eb6..e590f5ab539f 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1448,6 +1448,8 @@ patternProperties:
+>      description: Terasic Inc.
+>    "^tesla,.*":
+>      description: Tesla, Inc.
+> +  "^test,.*":
+> +    description: Reserved for use by tests. For example, KUnit.
+>    "^tfc,.*":
+>      description: Three Five Corp
+>    "^thead,.*":
 > --
 > https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 > https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 >
+>
 
---0000000000000a214606175fcfd4
+--0000000000006023ff06175fcf65
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -528,14 +202,14 @@ wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
 ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIOLYbOVEUj6A0cOtzQozdez4j8lXZvB76frKkLI/2SK7MBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwMTA3NTUyM1owaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIP7NXWvgU05zaKlB5LNRCXM1uo6w0jHDNuf/uHfgytu5MBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwMTA3NTUyOFowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCJQo59
-xSakZTvFTsCHQoAzn47CHNWg4e7Zy7bwsCATHRxzvEbSkDNzj9K3HMjXzbhPQDjfrVXpr2q1bK1B
-S5+c6DYV0E2LKo82geLkDGNCiBF/GtPOnC9CRHHsSgZwYO9zqCy3c5YNjXoglrh8qB1g84AOtDib
-3qIgpUsMhkLz1e+pbciBxQsX4TskvnntQukVsmp5S/XX0YzCl3qU9N6HaW3tbHgdjN8OR+dqEbV8
-d9N4316ImfT7AEAjFKs8qu6nqroX4stK7LotnDTlez0YGf0igozF5Kelt4agxUHIkNYSZ6AC0nit
-Z3OodwIL3mnXxfBi9NBNCXHyoAxtVEGx
---0000000000000a214606175fcfd4--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAM2fBY
+19yesLZvX4YuLGnCMNVHpIbq0D3g1NUIhLNF0bSPP+auqc8gzB+qQqQDBeHnSImSeyF8G5XZYshv
+DnaNHpSJ6U18FK0DMElQYMx39JiPD7797efLOnDuw1RuBHtNWiiF6OU1DwVoF8N1eqi5h04EiqxS
+iQA4/S2prcpDfdVkn7L8sOM7LzlpSYjBm5isYn3Gr2y+SpVS50teVkKD2uEZ+ux5VLz/3DHkZxm3
+jbiUgQhNxcsQ8bQcttn0G2BTrw5P1t6yzx7+tVrCIqyr5dNVwLZVTa/SN0LSoM+v82TjwSEwJPEZ
+dKdST754MBTxV5SyKSbNYn7AR3kkXaJd
+--0000000000006023ff06175fcf65--
 
