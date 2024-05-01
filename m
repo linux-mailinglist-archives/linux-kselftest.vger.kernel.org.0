@@ -1,130 +1,229 @@
-Return-Path: <linux-kselftest+bounces-9191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 852BF8B8925
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 13:21:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E33EC8B892F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 13:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B1721F232DA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 11:21:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09FB41C212F5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2024 11:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520D65EE80;
-	Wed,  1 May 2024 11:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7994F6518F;
+	Wed,  1 May 2024 11:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fW2nEUfX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FV/NkRDA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B329D48CE0;
-	Wed,  1 May 2024 11:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425724F898;
+	Wed,  1 May 2024 11:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714562464; cv=none; b=rFn2NMbh+DBbbJQFRbU3AjONgKFfW/WFX4SD8hTF6NNaa/hn4DoOYLi031YAd1gri31kKbsON6jn8RlRw8ZRoccHk2Je32YFDAlfFWVckg+h77h4L+uwkvBKJstb1QU495MiXcFf81rFvSsHFsvZDO4CTmY3MGjeRPUITdv/BM4=
+	t=1714563004; cv=none; b=W8pwIlF4XJmxW1GKSgr7UuPSFm2BJs3ZSvexwCnt57bU4Ao1omsNdUXMjz6zATh/IudxleF5gE/UWo2yUt9x930Ifth+WOQkbVcecYNDlT22h6UB7+ZMzOUTfLS2bFd/5rN2k6ib7x3eiI2ML5WzqZOw4SrqghqumQiVvDBRkeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714562464; c=relaxed/simple;
-	bh=3M3Wnl/h2raSpsy6VCZxZzdAzQMNJsqJJU3/6NMSVjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Cj+hdZsmMdFGZYuGzgOZxXe4ulFZn9JC/p52JHpWiHzyOe1VJ07TC3EbBEXZpfVgnfkVOk/z7I9qWBVYu2VQ0asSzZCLIbqUGYIxESrkWMuyFwkkoJ1LEEV6PopbofixDRNltkg3E4J8RjFoytcGg7fbt7/DNns2JxqcPhxcwv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fW2nEUfX; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41b2119da94so51980205e9.0;
-        Wed, 01 May 2024 04:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714562461; x=1715167261; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qq4XqB6hBIbawz6bEQ9yMFUln9F1VDqBqpK6RBvlwPM=;
-        b=fW2nEUfXzIjViKuY77EqD0IqkrAV4DNJZMKaWzvbLU/2Ryw5p6GRCxbrOd/uEcalRE
-         oP9XrSwrCCEZQtUFZko9UL4cZb1rucUCYKjHy0qkj4XU52l5JP3tSG+sLBVdPE0rAfAq
-         Fefen3lHRGy7mhwzctqPcsiDDg8EsUSQx98dMDc5hdBkjZYHRDSb4NkbIuaVyoNTt5Ej
-         k9YiB2/Z8STkO8/CIMqO46J00VanmEPDza0u0mNx3BV2a+2U2vCmZp5HrondkocFqP/0
-         dw1cE1SrNueiuTIwyMWRJrt3+eRyQPVV/qyGW+UD676ZFiZCI8vh8ffTmWEv9Xcd+mC4
-         Qxdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714562461; x=1715167261;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qq4XqB6hBIbawz6bEQ9yMFUln9F1VDqBqpK6RBvlwPM=;
-        b=pT/da/WohQ2IGD4KYvWdssTyH4gw4S8JF/qVQ6iS5X0wqPYOY0oBEF1iet9eWPKBVB
-         g/qo5tWlmeYP1OIIRxJLVUZHuoN54wuDn8tJ//khre/PI6pigyEcWIj/wPGl5DxmPBTO
-         PACwA1SaEwjKluElGwOjGGE/fuj4hK8UT+Xbp78QwVY7IW39MQG7UrTjp0ZAgh6jxuTn
-         xcCyDPAlnMfIJW3lUARsDSykWcPeVYLCIPgWF+trHW1V1UdvvN6SHueVyEWh5gv8URmt
-         N/f0kKIW3RqVlKjHP7kWrZoA5pt8Ajkn0WaDbYHSI9TUXpaw7sjL0ApPOGAWwIPYIKwN
-         jAAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWeCX+hZtczUfY2ZDluHLjfdUt0bKSemT8db7jHVakmK5t3s7Qz6lIb5dGCBqErNhlNLSzBe36FyFXCx2OsEZBLzvgfok3NnsW4XCmSGB92TD2IVFtFdmrp7+HXPgKrgVqhKUigufgtmRVt/SeBF74oKu/coHLYl+5g4uEdfMX65n1
-X-Gm-Message-State: AOJu0Yy7LnE87JOfoHE5SG0U25iYwrH69hZcriM2jovsInSz+N3seNtR
-	bEjIrtVwrOtomty8xzbGFoBZTYhEfI4FSBPdTKRAN8g4pHk4Ip+h
-X-Google-Smtp-Source: AGHT+IH6M5+jC4MHPn/cHXX4xJnlJS7nu6wiILZSJkRaZS8YtKJ8bZOzpCSMaw/rWyJBWAI4FuqZ6g==
-X-Received: by 2002:a05:600c:1e09:b0:41a:7065:430a with SMTP id ay9-20020a05600c1e0900b0041a7065430amr1702106wmb.41.1714562460801;
-        Wed, 01 May 2024 04:21:00 -0700 (PDT)
-Received: from localhost (craw-09-b2-v4wan-169726-cust2117.vm24.cable.virginm.net. [92.238.24.70])
-        by smtp.gmail.com with ESMTPSA id hn25-20020a05600ca39900b00419f419236fsm1864481wmb.41.2024.05.01.04.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 04:20:59 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/bpf: Fix spelling mistake "{GET|SET}SOCKOP" -> "{GET|SET}SOCKOPT"
-Date: Wed,  1 May 2024 12:20:59 +0100
-Message-Id: <20240501112059.1348423-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1714563004; c=relaxed/simple;
+	bh=wnyP0N2IUEGu5xTUV2erSrz4gmuy2GNmNKOOWDxahyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ieeyATj0dycJcTqHrHqor7vCE5l4daB0M90lkW53PIYhRZbw+3UfjKjeB2Fy8Cl0YKvLNO3UHgh0Jl/XFW3/zoE+MO4gY+pGvp5Qi8cPMLSMwhzmVSyCA6AIXBm5FKH50aBgqey1HRHByTuvLqheRyBBDkpThAouxrytv6mGsBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FV/NkRDA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46749C113CC;
+	Wed,  1 May 2024 11:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714563003;
+	bh=wnyP0N2IUEGu5xTUV2erSrz4gmuy2GNmNKOOWDxahyQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FV/NkRDARin7EyZMp5zpEWMLOj7VUk5uwlOKmK/QraQENAekoYt74g9QAxgVzlN7Q
+	 08GMdnBX9j1fCSX+x9eHg/9gkz/RRyQGC6WXGnBZKEQrc/FYO3xS2k2rJOgUeNOvO9
+	 v+6TP+11RF1FxRoCP6ym+ANBFfHJod9ArKo9IAbRaqgfJWhwB1P4LfsvKEsURoylZR
+	 HA405aAGd6qouJVCU+Tav/nkNNHiA3TFy/qmglhIqIAuB/6EkZ8Ogy42gqJmmRlz6H
+	 Xeur1ue0wnBx8dK9Mr/kaiu3qffOQ5XkwtpYP2HF/F5YNEPWhYoshZQbfFN6YyH+RF
+	 In72dVGW+yRmQ==
+Date: Wed, 1 May 2024 12:29:56 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 06/16] riscv: Introduce vendor variants of extension
+ helpers
+Message-ID: <20240501-tripping-acetone-e556e993ba95@spud>
+References: <20240426-dev-charlie-support_thead_vector_6_9-v4-0-b692f3c516ec@rivosinc.com>
+ <20240426-dev-charlie-support_thead_vector_6_9-v4-6-b692f3c516ec@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Y5+x5J78UsrLnSS+"
+Content-Disposition: inline
+In-Reply-To: <20240426-dev-charlie-support_thead_vector_6_9-v4-6-b692f3c516ec@rivosinc.com>
 
-There are two spelling mistakes in .descr literal strings. Fix them.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/sockopt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--Y5+x5J78UsrLnSS+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index eaac83a7f388..ecf5a7a047a4 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -933,7 +933,7 @@ static struct sockopt_test {
- 	/* ==================== prog_type ====================  */
- 
- 	{
--		.descr = "can attach only BPF_CGROUP_SETSOCKOP",
-+		.descr = "can attach only BPF_CGROUP_SETSOCKOPT",
- 		.insns = {
- 			/* return 1 */
- 			BPF_MOV64_IMM(BPF_REG_0, 1),
-@@ -947,7 +947,7 @@ static struct sockopt_test {
- 	},
- 
- 	{
--		.descr = "can attach only BPF_CGROUP_GETSOCKOP",
-+		.descr = "can attach only BPF_CGROUP_GETSOCKOPT",
- 		.insns = {
- 			/* return 1 */
- 			BPF_MOV64_IMM(BPF_REG_0, 1),
--- 
-2.39.2
+On Fri, Apr 26, 2024 at 02:29:20PM -0700, Charlie Jenkins wrote:
 
+> index c073494519eb..dd7e8e0c0af1 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -844,25 +844,41 @@ void __init_or_module riscv_cpufeature_patch_func(s=
+truct alt_entry *begin,
+>  {
+>  	struct alt_entry *alt;
+>  	void *oldptr, *altptr;
+> -	u16 id, value;
+> +	u16 id, value, vendor;
+> =20
+>  	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
+>  		return;
+> =20
+>  	for (alt =3D begin; alt < end; alt++) {
+> -		if (alt->vendor_id !=3D 0)
+> -			continue;
+> -
+>  		id =3D PATCH_ID_CPUFEATURE_ID(alt->patch_id);
+> +		vendor =3D PATCH_ID_CPUFEATURE_ID(alt->vendor_id);
+> =20
+> -		if (id >=3D RISCV_ISA_EXT_MAX) {
+> +		/*
+> +		 * Any alternative with a patch_id that is less than
+> +		 * RISCV_ISA_EXT_MAX is interpreted as a standard extension.
+> +		 *
+> +		 * Any alternative with patch_id that is greater than or equal
+> +		 * to RISCV_VENDOR_EXT_ALTERNATIVES_BASE is interpreted as a
+> +		 * vendor extension.
+
+I think this stuff is all fine, since we can always re-jig things in the
+future if needs be.
+
+> +		 */
+> +		if (id < RISCV_ISA_EXT_MAX) {
+> +			/*
+> +			 * This patch should be treated as errata so skip
+> +			 * processing here.
+> +			 */
+> +			if (alt->vendor_id !=3D 0)
+> +				continue;
+> +
+> +			if (!__riscv_isa_extension_available(NULL, id))
+> +				continue;
+> +		} else if (id >=3D RISCV_VENDOR_EXT_ALTERNATIVES_BASE) {
+> +			if (!__riscv_isa_vendor_extension_available(VENDOR_EXT_ALL_CPUS, vend=
+or, id))
+> +				continue;
+> +		} else {
+>  			WARN(1, "This extension id:%d is not in ISA extension list", id);
+>  			continue;
+>  		}
+> =20
+> -		if (!__riscv_isa_extension_available(NULL, id))
+> -			continue;
+> -
+>  		value =3D PATCH_ID_CPUFEATURE_VALUE(alt->patch_id);
+>  		if (!riscv_cpufeature_patch_check(id, value))
+>  			continue;
+> diff --git a/arch/riscv/kernel/vendor_extensions.c b/arch/riscv/kernel/ve=
+ndor_extensions.c
+> index f76cb3013c2d..eced93eec5a6 100644
+> --- a/arch/riscv/kernel/vendor_extensions.c
+> +++ b/arch/riscv/kernel/vendor_extensions.c
+> @@ -3,6 +3,7 @@
+>   * Copyright 2024 Rivos, Inc
+>   */
+> =20
+> +#include <asm/vendorid_list.h>
+>  #include <asm/vendor_extensions.h>
+>  #include <asm/vendor_extensions/thead.h>
+> =20
+> @@ -16,3 +17,42 @@ const struct riscv_isa_vendor_ext_data_list *riscv_isa=
+_vendor_ext_list[] =3D {
+>  };
+> =20
+>  const size_t riscv_isa_vendor_ext_list_size =3D ARRAY_SIZE(riscv_isa_ven=
+dor_ext_list);
+> +
+> +/**
+> + * __riscv_isa_vendor_extension_available() - Check whether given vendor
+> + * extension is available or not.
+> + *
+> + * @cpu: check if extension is available on this cpu
+> + * @vendor: vendor that the extension is a member of
+> + * @bit: bit position of the desired extension
+> + * Return: true or false
+> + *
+> + * NOTE: When cpu is -1, will check if extension is available on all cpus
+> + */
+> +bool __riscv_isa_vendor_extension_available(int cpu, unsigned long vendo=
+r, unsigned int bit)
+> +{
+> +	unsigned long *bmap;
+> +	struct riscv_isainfo *cpu_bmap;
+> +	size_t bmap_size;
+> +
+> +	switch (vendor) {
+> +#ifdef CONFIG_RISCV_ISA_VENDOR_EXT_THEAD
+> +	case THEAD_VENDOR_ID:
+> +		bmap =3D riscv_isa_vendor_ext_list_thead.vendor_bitmap;
+> +		cpu_bmap =3D riscv_isa_vendor_ext_list_thead.per_hart_vendor_bitmap;
+> +		bmap_size =3D riscv_isa_vendor_ext_list_thead.bitmap_size;
+> +		break;
+> +#endif
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	if (cpu !=3D -1)
+> +		bmap =3D cpu_bmap[cpu].isa;
+> +
+> +	if (bit >=3D bmap_size)
+> +		return false;
+> +
+> +	return test_bit(bit, bmap) ? true : false;
+> +}
+> +EXPORT_SYMBOL_GPL(__riscv_isa_vendor_extension_available);
+
+I wonder if we care to implement a non __ prefixed version of this, like
+the standard stuff? The only __ version users of the standard one are in
+kvm and core arch code, the "external" users all use the non-prefixed
+version.
+
+In any case,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--Y5+x5J78UsrLnSS+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjIntAAKCRB4tDGHoIJi
+0pG1AP9aIuCIPhbYrT1n7AA8UjSnOOwkB+PkZ7aGQQs6HdTO4gEA7aKglY8RnM0i
+x4nkold+5MiZkBsWg8bRWX3UFKhfEAA=
+=BvUa
+-----END PGP SIGNATURE-----
+
+--Y5+x5J78UsrLnSS+--
 
