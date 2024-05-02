@@ -1,264 +1,144 @@
-Return-Path: <linux-kselftest+bounces-9274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9FDE8BA118
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:38:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FD938BA1D3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 23:07:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E674281192
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 19:38:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF4CB2830EA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A697317B518;
-	Thu,  2 May 2024 19:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B00B180A7B;
+	Thu,  2 May 2024 21:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BkXNxnVX"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="AavzbeBd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BA71E877
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 19:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005B6180A81
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 21:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714678680; cv=none; b=J5oIvGvqNJi3jb4NhigU62Y2AOPTOPuD97ZGyvU6QlNw+gK/rcIXPGgQ+PQbSLF+IMD8/nUiKfoSC2a8sS4zPSZVZXbYLwq3xpP4Y6HebMYlkGhFveipv7iBN7HgdGQgK7gn00CYB6TTKk7jtsZ0uQ4IEJ6SmrReWD/gLMzBt2Q=
+	t=1714684044; cv=none; b=rf7tr45AGBh/NVDYrL7Osc0M3tlNy1IdNh/W08MVnYUJpieikQ1B4CpDAqnLumxeXrGlHHKJUuIp84OTNYEYaiD8v5eFdi0lSunu4SooYgWV5U5A89lpxTdFTPHWI2RnZTIPVrptH/L/6C0H9Va8zhE47oPG1CvU2jgfsEHZpmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714678680; c=relaxed/simple;
-	bh=zB3xTuyZbgX8sdF/Cs7DRyt+/+BNC4nMKcVIYlmLyhc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ggFOrr0NYFT/+wv2PxC9KWhoIngV0a2B70BbYFvb3sbIzF4ZgDwCMoJsAvzwNecZBIRTWPkGC4LYLo+Bi5EeabArOd1/jA0hsK8dHXmmmIYwK0U4b8ud7jqcdI2tGYU6rDBt4/nhhD1GFiaf69//TQk4iu30w08K4KW+zdqrtok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BkXNxnVX; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc691f1f83aso978447276.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2024 12:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714678678; x=1715283478; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7AFo+rWPM0rSLEMNbLLPaQl2EL3t3+SEPUFV0x84rCE=;
-        b=BkXNxnVXg2ls8D3Ty9aFPAi5XxN/wu/jxC7wiee8P0GC2HymUIaNRXop4IZRRpQOHl
-         FTCY5Qt2NghVMHTA7aUf/zeYVj2rvN5ym2ldo8s3FX09LtdizH7SOPJ/8yfIRTfeket7
-         PR7czPjqBqcbyxgHOjn3FjzHIWPdIAsCCEE/nekfYUkUJADGKJTLrCE8jWA4FNqnvCck
-         KTXprNY7oFAIlqzmJkuvjHrRqDJEAXhC8AEaF8KfcrKKywpe+NIABGiEVkDGdnYMmjeR
-         cvCPCbgjl5D1UQ1BTcS9DeTv+9ymrbTueYnnyF0QuTOrqluTtwUYaVHHujvAyFEbNFwG
-         A6tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714678678; x=1715283478;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7AFo+rWPM0rSLEMNbLLPaQl2EL3t3+SEPUFV0x84rCE=;
-        b=fbmKljAKuU6dR2etjqO5puVqp42qwizhtsv9X/fN0fqt2N9/YiwoszOXIzyc1pUgca
-         s+muCZVVjDUzzOC0hAbx75Byn/G+IKjjTJMqpCw46/v+fGbUO+jfAwET9uYnT60zXkBl
-         C3SjUmeotLAhpZZNSyM6uXzC8Dq/BwcAABpyOclLTCXgN6T6sC1Rqo4T0rPyE0fqrAMk
-         aPhRQGmm9MJwVLx9WWPq3OfuaumuZZt3GuGlRQPwYoDk0eSBTa4JSf5Qo45yLI/upg8T
-         FimpS+fIjrwvzZhlMG+WXAX7b6/wpLMivIZzNx61ozZ4MHsCewTELG7+rx8Li08Tv3+q
-         HR4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVFALZLLlefQcezEW4ZSyxJOgreMhn6C0Y4Lp6IMVnlqPULq/JdQU1pNmDgifamFbr/qdwUmM+bkpu3GufCaWmspY+LQ+8UgvtivM7/Jb6u
-X-Gm-Message-State: AOJu0YxnxRitxgfEOW7Psz173pOy4CzwNyHKcntIx0o3nitMeYBOIxFg
-	6KaX2pBEDmEhCxvGH0/bEptvNlQN54uvEFi07G/lDnnuR9AoZNo93WBAW6j34OBWna7nVhB1vju
-	edw==
-X-Google-Smtp-Source: AGHT+IHTZuZmwfOPEshApicWMHuRZRqYNPfI7JDHkDmawakUOBh+D03pZylyG9GgsJpLZl5KrfZnSPSqjzM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:c12:b0:dd9:20c1:85b6 with SMTP id
- fs18-20020a0569020c1200b00dd920c185b6mr240542ybb.2.1714678677992; Thu, 02 May
- 2024 12:37:57 -0700 (PDT)
-Date: Thu, 2 May 2024 12:37:56 -0700
-In-Reply-To: <20240426114552.667346-1-thuth@redhat.com>
+	s=arc-20240116; t=1714684044; c=relaxed/simple;
+	bh=W8Q5bXKOZUKtuPudohNxres0JDqyULeUWiZldw1kbLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SlTMbOmYPB0Q2vD0dQCqKM/EXBVUwVA18KA/qg3mHOFg/356KO+gBOkgUJn0PJJi6GDYjr9v0ytvG9u4VKI+kjd52/vSrSNJv87UgxSh3tjgJ+kd3SbJhham2mWAumUprRL7Rz8vcUFpGFHk91KMjGVrwCWyabnr6TPx3NVgPG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=AavzbeBd; arc=none smtp.client-ip=185.125.25.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmhv40Z4zPgv;
+	Thu,  2 May 2024 23:07:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1714684031;
+	bh=W8Q5bXKOZUKtuPudohNxres0JDqyULeUWiZldw1kbLk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AavzbeBd1JzJy9ac2M35nOFcEwjk3UPv+jtBfdHt6P0+Ts+gEYQTJBX/xpj42vfpP
+	 iSIUeSyyGwnHplQdEQujtEUvgeftsRNs3v4DfQFLbnYoh1d0uxDQPwU1IFho5+ZThh
+	 WtJv7oYLIWMvoRuexkTcHD0XxXT3Hz4qnKUV422w=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmht4Kgjzt3M;
+	Thu,  2 May 2024 23:07:10 +0200 (CEST)
+Date: Thu, 2 May 2024 23:07:10 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, jakub@cloudflare.com, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using
+ xfail
+Message-ID: <20240502.iwu8buoQuah1@digikod.net>
+References: <20240229005920.2407409-1-kuba@kernel.org>
+ <05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk>
+ <20240304150411.6a9bd50b@kernel.org>
+ <202403041512.402C08D@keescook>
+ <20240304153902.30cd2edd@kernel.org>
+ <202403050141.C8B1317C9@keescook>
+ <20240305.phohPh8saa4i@digikod.net>
+ <ZjPelW6-AbtYvslu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240426114552.667346-1-thuth@redhat.com>
-Message-ID: <ZjPrlLNNGNh2mOmW@google.com>
-Subject: Re: [PATCH v2] KVM: selftests: Use TAP interface in the
- set_memory_region test
-From: Sean Christopherson <seanjc@google.com>
-To: Thomas Huth <thuth@redhat.com>
-Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZjPelW6-AbtYvslu@google.com>
+X-Infomaniak-Routing: alpha
 
-On Fri, Apr 26, 2024, Thomas Huth wrote:
-> Use the kselftest_harness.h interface in this test to get TAP
-> output, so that it is easier for the user to see what the test
-> is doing. (Note: We are not using the KVM_ONE_VCPU_TEST_SUITE()
-> macro here since these tests are creating their VMs with the
-> vm_create_barebones() function, not with vm_create_with_one_vcpu())
+On Thu, May 02, 2024 at 11:42:29AM GMT, Sean Christopherson wrote:
+> +kvm
 > 
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  v2:
->  - Rebase to linux-next branch
->  - Make "loops" variable static
->  - Added Andrew's Reviewed-by
+> On Tue, Mar 05, 2024, Mickaël Salaün wrote:
+> > On Tue, Mar 05, 2024 at 01:43:14AM -0800, Kees Cook wrote:
+> > > On Mon, Mar 04, 2024 at 03:39:02PM -0800, Jakub Kicinski wrote:
+> > > > On Mon, 4 Mar 2024 15:14:04 -0800 Kees Cook wrote:
+> > > > > > Ugh, I'm guessing vfork() "eats" the signal, IOW grandchild signals,
+> > > > > > child exits? vfork() and signals.. I'd rather leave to Kees || Mickael.  
+> > > > > 
+> > > > > Oh no, that does seem bad. Since Mickaël is also seeing weird issues,
+> > > > > can we drop the vfork changes for now?
+> > > > 
+> > > > Seems doable, but won't be a simple revert. "drop" means we'd need 
+> > > > to bring ->step back. More or less go back to v3.
+> > > 
+> > > I think we have to -- other CIs are now showing the most of seccomp
+> > > failing now. (And I can confirm this now -- I had only tested seccomp
+> > > on earlier versions of the series.)
+> > 
+> > Sorry for the trouble, I found and fixed the vfork issues.
 > 
->  .../selftests/kvm/set_memory_region_test.c    | 86 +++++++++----------
->  1 file changed, 42 insertions(+), 44 deletions(-)
+> Heh, you found and fixed _some of_ the vfork issues.  This whole mess completely
+> breaks existing tests that use TEST_F() and exit() with non-zero values to
+> indicate failure, including failures that occur during FIXTURE_SETUP().
 > 
-> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-> index 68c899d27561..a5c9bee5235a 100644
-> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
-> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-> @@ -16,6 +16,7 @@
->  #include <test_util.h>
->  #include <kvm_util.h>
->  #include <processor.h>
-> +#include "kselftest_harness.h"
->  
->  /*
->   * s390x needs at least 1MB alignment, and the x86_64 MOVE/DELETE tests need a
-> @@ -38,6 +39,8 @@ extern const uint64_t final_rip_end;
->  
->  static sem_t vcpu_ready;
->  
-> +static int loops;
+> E.g. all of the KVM selftests that use KVM_ONE_VCPU_TEST() are broken and will
+> always show all tests as passing.
+> 
+> The below gets things working for KVM selftests again, but (a) I have no idea if
+> it's a complete fix, (b) I don't know if it will break other users of the harness,
+> and (c) I don't understand why spawning a grandchild is the default behavior, i.e.
+> why usage that has zero need of separating teardown from setup+run is subjected to
+> the complexity of the handful of tests that do.
 
-...
+Thanks for the fix.  I think it covers almost all cases.  I'd handle the
+same way the remaining _exit() though.  The grandchild changes was a
+long due patch from the time I added kselftest_harness.h and forked the
+TEST_F() macro.  I'll send a new patch series with this fix.
 
-> -static void test_add_overlapping_private_memory_regions(void)
-> +TEST(add_overlapping_private_memory_regions)
->  {
->  	struct kvm_vm *vm;
->  	int memfd;
->  	int r;
->  
-> -	pr_info("Testing ADD of overlapping KVM_MEM_GUEST_MEMFD memory regions\n");
-> +	if (!has_cap_guest_memfd())
-> +		SKIP(return, "Missing KVM_MEM_GUEST_MEMFD / KVM_X86_SW_PROTECTED_VM");
-
-I like that we can actually report sub-tests as being skipped, but I don't like
-having multiple ways to express requirements.  And IMO, this is much less readable
-than TEST_REQUIRE(has_cap_guest_memfd());
-
-AIUI, each test runs in a child process, so TEST_REQUIRE() can simply exit(), it
-just needs to avoid ksft_exit_skip() so that a sub-test doesn't spit out the full
-test summary.
-
-And if using exit() isn't an option, setjmp()+longjmp() will do the trick (I got
-that working for KVM_ONE_VCPU_TEST() before I realized tests run as a child).
-
-The below is lightly tested, but I think it does what we want?
-
-I also think we would effectively forbid direct use of TEST().  Partly because
-it's effectively necessary to use TEST_REQUIRE(), but also so that all tests will
-have an existing single point of contact if we need/want to make similar changes
-in the future.
-
-Lastly, would using a fixture allow throwing "loops" into a structure that is
-passed to each sub-test?  Having the global is obviously not a big deal, but it'd
-be nice if the early conversions to the TAP-friendly framework demonstrate the
-"right" way to do things, because they'll inevitably become the blueprint for all
-future conversions.
-
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Thu, 2 May 2024 12:32:04 -0700
-Subject: [PATCH] KVM: selftests: Allow using TEST_REQUIRE in kselftest harness
- testcases
-
-TODO: write me
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- .../selftests/kvm/include/kvm_test_harness.h  |  4 ++++
- .../testing/selftests/kvm/include/test_util.h | 24 +++++++++++++++----
- tools/testing/selftests/kvm/lib/kvm_util.c    |  2 ++
- .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |  3 +--
- 4 files changed, 27 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/include/kvm_test_harness.h b/tools/testing/selftests/kvm/include/kvm_test_harness.h
-index 8f7c6858e8e2..eda1c08c7c2b 100644
---- a/tools/testing/selftests/kvm/include/kvm_test_harness.h
-+++ b/tools/testing/selftests/kvm/include/kvm_test_harness.h
-@@ -9,6 +9,7 @@
- #define SELFTEST_KVM_TEST_HARNESS_H
- 
- #include "kselftest_harness.h"
-+#include "test_util.h"
- 
- #define KVM_ONE_VCPU_TEST_SUITE(name)					\
- 	FIXTURE(name) {							\
-@@ -29,7 +30,10 @@ static void __suite##_##test(struct kvm_vcpu *vcpu);			\
- TEST_F(suite, test)							\
- {									\
- 	vcpu_arch_set_entry_point(self->vcpu, guestcode);		\
-+									\
-+	kvm_is_sub_test = true;						\
- 	__suite##_##test(self->vcpu);					\
-+	kvm_is_sub_test = NULL;						\
- }									\
- static void __suite##_##test(struct kvm_vcpu *vcpu)
- 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 3e473058849f..64c9f128fef4 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -36,10 +36,26 @@ static inline int _no_printf(const char *format, ...) { return 0; }
- #endif
- 
- void __printf(1, 2) print_skip(const char *fmt, ...);
--#define __TEST_REQUIRE(f, fmt, ...)				\
--do {								\
--	if (!(f))						\
--		ksft_exit_skip("- " fmt "\n", ##__VA_ARGS__);	\
-+
-+extern bool kvm_is_sub_test;
-+
-+/*
-+ * Skip the test if a required capability/feature/whatever is not available,
-+ * e.g. due to lack of support in the underlying hardware, running against an
-+ * older kernel/KVM, etc.  Use ksft_test_result_skip() for sub-tests to avoid
-+ * spuriously printing the summary of the entire test suite.  Note, sub-tests
-+ * run in a child process, and so can exit() directly, e.g. don't need to
-+ * longjmp() out or do something similar to avoid killing the test as a whole.
-+ */
-+#define __TEST_REQUIRE(f, fmt, ...)						\
-+do {										\
-+	if (!(f)) {								\
-+		if (kvm_is_sub_test) {						\
-+			ksft_test_result_skip("- " fmt "\n", ##__VA_ARGS__);	\
-+			exit(KSFT_SKIP);					\
-+		}								\
-+		ksft_exit_skip("- " fmt "\n", ##__VA_ARGS__);			\
-+	}									\
- } while (0)
- 
- #define TEST_REQUIRE(f) __TEST_REQUIRE(f, "Requirement not met: %s", #f)
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 6b2158655baa..4b24c454fd33 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -19,6 +19,8 @@
- 
- #define KVM_UTIL_MIN_PFN	2
- 
-+bool kvm_is_sub_test;
-+
- uint32_t guest_random_seed;
- struct guest_random_state guest_rng;
- 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index 7c92536551cc..a58e0b1c2ee5 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -195,8 +195,7 @@ KVM_ONE_VCPU_TEST(vmx_pmu_caps, lbr_perf_capabilities, guest_code)
- {
- 	int r;
- 
--	if (!host_cap.lbr_format)
--		return;
-+	TEST_REQUIRE(host_cap.lbr_format);
- 
- 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.capabilities);
- 	vcpu_set_msr(vcpu, MSR_LBR_TOS, 7);
-
-base-commit: 2489e6c9ebb57d6d0e98936479b5f586201379c7
--- 
-
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 4fd735e48ee7..24e95828976f 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -391,7 +391,7 @@
+>                                 fixture_name##_setup(_metadata, &self, variant->data); \
+>                                 /* Let setup failure terminate early. */ \
+>                                 if (_metadata->exit_code) \
+> -                                       _exit(0); \
+> +                                       _exit(_metadata->exit_code); \
+>                                 _metadata->setup_completed = true; \
+>                                 fixture_name##_##test_name(_metadata, &self, variant->data); \
+>                         } else if (child < 0 || child != waitpid(child, &status, 0)) { \
+> @@ -406,8 +406,10 @@
+>                 } \
+>                 if (_metadata->setup_completed && _metadata->teardown_parent) \
+>                         fixture_name##_teardown(_metadata, &self, variant->data); \
+> -               if (!WIFEXITED(status) && WIFSIGNALED(status)) \
+> -                       /* Forward signal to __wait_for_test(). */ \
+> +               /* Forward exit codes and signals to __wait_for_test(). */ \
+> +               if (WIFEXITED(status)) \
+> +                       _exit(WEXITSTATUS(status)); \
+> +               else if (WIFSIGNALED(status)) \
+>                         kill(getpid(), WTERMSIG(status)); \
+>                 __test_check_assert(_metadata); \
+>         } \
+> 
 
