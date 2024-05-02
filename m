@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-9269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6252F8B9F77
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 19:27:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C93E8B9F79
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 19:27:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 939851C220A1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 17:27:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61ABEB2110B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 17:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE74216FF3F;
-	Thu,  2 May 2024 17:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03C616FF4E;
+	Thu,  2 May 2024 17:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hweUUaV8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emslM5hH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C9313C820;
-	Thu,  2 May 2024 17:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F8816FF4A;
+	Thu,  2 May 2024 17:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714670847; cv=none; b=HgKVwxE/uXRdlRSC+hnxKv2xL4/eiiDx1KCzD4T3lx/D0KkIPqzb8fFCVwI2MxQwI2YFV6TZEw4YhNj6kwTha0wBPrETP3na7CCfjlc0oCng6U0YCs1PuM/j8g78MqMfjVAWSxw/NEUFKwtwY8nemEqCVWWOZiunsOAlBsSbyJM=
+	t=1714670848; cv=none; b=pHfQeWx2tpJ8EYmEugKis1Y7I8GUdnlM3xVFwMj/AwYJoZrGtaS7ecFJrNQx0qrVtL06+Yy5v3Z/AdmIFr5/dAqoBcO6gdTsySDD+NuIA7BUd/lQ+KGReEBkafAe9pumHTHnxGMSpX4gm2QueVyFVM2maGVqxRyi7Upxw8bSW4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714670847; c=relaxed/simple;
-	bh=QLwaUzwohYnKP0PTSDFKLnYx6rSW06C0HwbtdZCDG40=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WxEL4nVI3Ab1OGP50OD39BgDFgZxQuvu99glPDNinRrU/QVfmhn8Y3JrdzRlSDSGrFvWKecnI1bdmgB1xy31/d/Q1a6wZKsbL2jXOUByqE4IiF8eXCRxnzF/aj7AKox+GX8CWonTFU3emn8dGGYOKa2Ywtwo9XjztWnANMMcklk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hweUUaV8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D80BC113CC;
+	s=arc-20240116; t=1714670848; c=relaxed/simple;
+	bh=I63TfrbmSoQUarN68hoe/QgcSHNL3XEpjAZInckdvxY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=J4dtsrYVrGxAOeWELjWEUJVYisdeEMu9PO1uMIWUzjpD/WCzue+sZLFEKBq6RFYdmIjW/az/3j0QEv3OyERwQoGBe8Y2h01CYzOa6skzJ2zDbfLK8X8ZubtZYaeB+yPx+kGuyKgDAqqDMTAhrmu6Y0JHCw05mHEqyHPnUvX1QnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emslM5hH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D968FC116B1;
 	Thu,  2 May 2024 17:27:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714670847;
-	bh=QLwaUzwohYnKP0PTSDFKLnYx6rSW06C0HwbtdZCDG40=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hweUUaV8NAQ5OShz8TXrOarDdyCdHeQcB9eoBXc2XrpK47V3t+hWmMsVlUqv/Z9A/
-	 WZItfVTYB7JmcDflZ5Z7MJ9ep6TezH/1ffFWK2DF6gY+vobeoLlXcZhI9TOEjtGjIE
-	 LDsSEoedb4dXfiMkHLbmJgD5tkEDPpz/zELvKCii5D4tQ1Q+NH0J6gfLsd+fxfsqWL
-	 Xu49g230DHM2P9+XBCdLARIad/I+TF1FbNYyTVsnhy08HktxI4BJA+3NXfNIWVpPjt
-	 sipGbDSK7Pfi3fQh9DDIT6rpBDeREDjXGpw9Zn0vZCOFLjRCsn2Tsw0aWQ1m7UpP7t
-	 i+eX0cyIR4usQ==
+	s=k20201202; t=1714670848;
+	bh=I63TfrbmSoQUarN68hoe/QgcSHNL3XEpjAZInckdvxY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=emslM5hHuculQgVIbvMTNrFTk3RZwSIu8woc1S4l3D/94fuVqnsBkJskI7EjqgWLe
+	 nkqk5Lvp5XtUQz4fCj4sY9TesHcQHaXUHNk3/iWeSPhXYfcqNoDvPppp5m1ZbSP4tK
+	 RfH5dADAd16/4hgmBvnFlmhsKW+oMVvcNvCbmonxzF3/0LtkHyciHHQ97ZLDLQRP+z
+	 CQa0Q9FFYoV87VTLt0yZQSne+eizUoT7nMHcXbUeIIMeOByFQqQVjJTrkAX+sAIY+0
+	 uyBWbxpGRlZhRSZ7OnqdZfF0QbMbLgV50lkih2A2xhxJekKKUl95GTcHPiM1GCgrmx
+	 SM/KNBRqSUw9w==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -48,10 +49,12 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] selftests/damon: add DAMOS quota goal test
-Date: Thu,  2 May 2024 10:27:16 -0700
-Message-Id: <20240502172718.74166-1-sj@kernel.org>
+Subject: [PATCH 1/2] selftests/damon/_damon_sysfs: support quota goals
+Date: Thu,  2 May 2024 10:27:17 -0700
+Message-Id: <20240502172718.74166-2-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240502172718.74166-1-sj@kernel.org>
+References: <20240502172718.74166-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,21 +63,133 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend DAMON selftest-purpose sysfs wrapper to support DAMOS quota goal,
-and implement a simple selftest for the feature using it.
+The DAMON sysfs test purpose wrapper, _damon_sysfs.py, is not supporting
+quota goals.  Implement the support for testing the feature.  The test
+will be implemented and added by the following commit.
 
-SeongJae Park (2):
-  selftests/damon/_damon_sysfs: support quota goals
-  selftests/damon: add a test for DAMOS quota goal
-
- tools/testing/selftests/damon/Makefile        |  2 +-
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
  tools/testing/selftests/damon/_damon_sysfs.py | 84 ++++++++++++++++++-
- .../selftests/damon/damos_quota_goal.py       | 77 +++++++++++++++++
- 3 files changed, 161 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/damon/damos_quota_goal.py
+ 1 file changed, 83 insertions(+), 1 deletion(-)
 
-
-base-commit: ff0a7c4126d225e56aa3e0164c53e82aabf61921
+diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+index d23d7398a27a..f80fdcef507c 100644
+--- a/tools/testing/selftests/damon/_damon_sysfs.py
++++ b/tools/testing/selftests/damon/_damon_sysfs.py
+@@ -70,16 +70,56 @@ class DamosAccessPattern:
+         if err != None:
+             return err
+ 
++qgoal_metric_user_input = 'user_input'
++qgoal_metric_some_mem_psi_us = 'some_mem_psi_us'
++qgoal_metrics = [qgoal_metric_user_input, qgoal_metric_some_mem_psi_us]
++
++class DamosQuotaGoal:
++    metric = None
++    target_value = None
++    current_value = None
++    effective_bytes = None
++    quota = None            # owner quota
++    idx = None
++
++    def __init__(self, metric, target_value=10000, current_value=0):
++        self.metric = metric
++        self.target_value = target_value
++        self.current_value = current_value
++
++    def sysfs_dir(self):
++        return os.path.join(self.quota.sysfs_dir(), 'goals', '%d' % self.idx) 
++
++    def stage(self):
++        err = write_file(os.path.join(self.sysfs_dir(), 'target_metric'),
++                         self.metric)
++        if err is not None:
++            return err
++        err = write_file(os.path.join(self.sysfs_dir(), 'target_value'),
++                         self.target_value)
++        if err is not None:
++            return err
++        err = write_file(os.path.join(self.sysfs_dir(), 'current_value'),
++                         self.current_value)
++        if err is not None:
++            return err
++        return None
++
+ class DamosQuota:
+     sz = None                   # size quota, in bytes
+     ms = None                   # time quota
++    goals = None                # quota goals
+     reset_interval_ms = None    # quota reset interval
+     scheme = None               # owner scheme
+ 
+-    def __init__(self, sz=0, ms=0, reset_interval_ms=0):
++    def __init__(self, sz=0, ms=0, goals=None, reset_interval_ms=0):
+         self.sz = sz
+         self.ms = ms
+         self.reset_interval_ms = reset_interval_ms
++        self.goals = goals if goals is not None else []
++        for idx, goal in enumerate(self.goals):
++            goal.idx = idx
++            goal.quota = self
+ 
+     def sysfs_dir(self):
+         return os.path.join(self.scheme.sysfs_dir(), 'quotas')
+@@ -96,6 +136,20 @@ class DamosQuota:
+         if err != None:
+             return err
+ 
++        nr_goals_file = os.path.join(self.sysfs_dir(), 'goals', 'nr_goals')
++        content, err = read_file(nr_goals_file)
++        if err is not None:
++            return err
++        if int(content) != len(self.goals):
++            err = write_file(nr_goals_file, len(self.goals))
++            if err is not None:
++                return err
++        for goal in self.goals:
++            err = goal.stage()
++            if err is not None:
++                return err
++        return None
++
+ class DamosStats:
+     nr_tried = None
+     sz_tried = None
+@@ -361,6 +415,34 @@ class Kdamond:
+                     stat_values.append(int(content))
+                 scheme.stats = DamosStats(*stat_values)
+ 
++    def update_schemes_effective_quotas(self):
++        err = write_file(os.path.join(self.sysfs_dir(), 'state'),
++                         'update_schemes_effective_quotas')
++        if err is not None:
++            return err
++        for context in self.contexts:
++            for scheme in context.schemes:
++                for goal in scheme.quota.goals:
++                    content, err = read_file(
++                            os.path.join(scheme.quota.sysfs_dir(),
++                                         'effective_bytes'))
++                    if err is not None:
++                        return err
++                    goal.effective_bytes = int(content)
++        return None
++
++    def commit_schemes_quota_goals(self):
++        for context in self.contexts:
++            for scheme in context.schemes:
++                for goal in scheme.quota.goals:
++                    err = goal.stage()
++                    if err is not None:
++                        print('commit_schemes_quota_goals failed stagign: %s'%
++                              err)
++                        exit(1)
++        return write_file(os.path.join(self.sysfs_dir(), 'state'),
++                         'commit_schemes_quota_goals')
++
+ class Kdamonds:
+     kdamonds = []
+ 
 -- 
 2.39.2
 
