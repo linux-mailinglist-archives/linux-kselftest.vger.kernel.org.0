@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-9277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D2DA8BA1D9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 23:10:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 287738BA1DC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 23:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E93E1C2164E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:10:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D29A01F227B6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2611836CE;
-	Thu,  2 May 2024 21:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7A2184139;
+	Thu,  2 May 2024 21:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SDPWZaAp"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZCAO39UD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6EF5181D17
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 21:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6385180A82;
+	Thu,  2 May 2024 21:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714684188; cv=none; b=JkJl14hY7bdVPXuWeWYjVQhXxaKN23OXDeH20Ckmcl2a0tlQWyishJlT82LcNLZh6SbGabnGdzbypHxxNnmdhfctlcq30ZPF0h2SpLtVNfDEKCPkhbjvn1AhvEBWY7UW4aCJsveNhajPhVpdmIMcSFd60Ejb8lZjGOFLYZrdZOQ=
+	t=1714684189; cv=none; b=Q8sODY/9TI5PdcOzNGM8R590B4PNR1L4c2DHt5/hvkt+5IsgK6GuPSDAaFt4x06Yj4RR8oiwDMOru5YJjjZGjIVKNEwLO0xVDB1DQ9h88dfUvTdPXAG0Rgo1ZWBwNNQ6X3nKDAmpqeQ3uiYFPvnVX4UU3W8A2r2YeYJQKxwNP+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714684188; c=relaxed/simple;
-	bh=f/p1tOYqxe+c3NIjeiRTNzU4W1mMlKeloFw4NDWiog8=;
+	s=arc-20240116; t=1714684189; c=relaxed/simple;
+	bh=o1BZa1ZTcA/1JqgMCw9VzGJzjIj9CX4NqTY0j+UJi3A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CWAqcGKOHtDJT43jcIGdxYoeiR51e+6lnOv7VXJVKeCS321S83MWJWG1RnBjag4vZVNcX5BRPEJFnOZ9Yqc0t+VotQHuN8N+cq4lmMtnZVMlnD3a28O7bU8Wqt7sJf6s2sdXL2K5YgCtn0LYihfBKpuZv35/KAEwkYaX8barN54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SDPWZaAp; arc=none smtp.client-ip=84.16.66.172
+	 MIME-Version:Content-Type; b=ngifeQ9Zo0A8IISQhYoWeD1F8KOjeFev/2rR64F+ypW1lVkhnPpSqbOBHZEnjHbkaGMnthIXqmr0SFtUUMo6q1eBckSZWEjwPOWEdm4zinp0YVs5PDBZo7aQ6EFtcCYUBz0AVQfLUrQeY9r/ZHTu6JxsZ1ZXGpCrSuQpNfQh47o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZCAO39UD; arc=none smtp.client-ip=84.16.66.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmlj5Qd9zKC9;
-	Thu,  2 May 2024 23:09:37 +0200 (CEST)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmlk56XfzMR6;
+	Thu,  2 May 2024 23:09:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714684177;
-	bh=f/p1tOYqxe+c3NIjeiRTNzU4W1mMlKeloFw4NDWiog8=;
+	s=20191114; t=1714684178;
+	bh=o1BZa1ZTcA/1JqgMCw9VzGJzjIj9CX4NqTY0j+UJi3A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SDPWZaApk+TnghGGtnoL1SCVBkxYtTcyjZoa+3Lub7Ksb3aoZsVd84y/xUQDtlDYT
-	 VUsSTffM6hlnlO5Sg34eTga9pENM0ccsXB6jURu0T1jRMh1olGvkDxfBlgTm6i+F/c
-	 LpTpE2b6dpbzq45jQbyvfk+Jye528zAQf4U6oOpU=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlj1XQ7zYJX;
-	Thu,  2 May 2024 23:09:37 +0200 (CEST)
+	b=ZCAO39UDMhXO/3Dy+ND/jBQS31eS7uykiSkNB+ceJtVo5mgfONIiXqx+uKzg0MHey
+	 l7DAy/5vzSpZtMS8neeTeIuPehnRGKLwpLuB+tCV9TNvGKjIbtTKRt4gSnTKJxzj5P
+	 QtRLy9/r+favJN/R3wyMVWNrNUQNgkkAaUILKej4=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlk1Kk4zJ1h;
+	Thu,  2 May 2024 23:09:38 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -60,9 +60,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v4 02/10] selftests/landlock: Fix FS tests when run on a private mount point
-Date: Thu,  2 May 2024 23:09:18 +0200
-Message-ID: <20240502210926.145539-3-mic@digikod.net>
+Subject: [PATCH v4 03/10] selftests/harness: Fix fixture teardown
+Date: Thu,  2 May 2024 23:09:19 +0200
+Message-ID: <20240502210926.145539-4-mic@digikod.net>
 In-Reply-To: <20240502210926.145539-1-mic@digikod.net>
 References: <20240502210926.145539-1-mic@digikod.net>
 Precedence: bulk
@@ -75,50 +75,61 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-According to the test environment, the mount point of the test's working
-directory may be shared or not, which changes the visibility of the
-nested "tmp" mount point for the test's parent process calling
-umount("tmp").
+Make sure fixture teardowns are run when test cases failed, including
+when _metadata->teardown_parent is set to true.
 
-This was spotted while running tests in containers [1], where mount
-points are private.
+Make sure only one fixture teardown is run per test case, handling the
+case where the test child forks.
 
-Cc: Günther Noack <gnoack@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Shengyu Li <shengyu.li.evgeny@gmail.com>
 Cc: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://github.com/landlock-lsm/landlock-test-tools/pull/4 [1]
-Fixes: 41cca0542d7c ("selftests/harness: Fix TEST_F()'s vfork handling")
+Fixes: 72d7cb5c190b ("selftests/harness: Prevent infinite loop due to Assert in FIXTURE_TEARDOWN")
+Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240502210926.145539-3-mic@digikod.net
+Link: https://lore.kernel.org/r/20240502210926.145539-4-mic@digikod.net
 ---
+ tools/testing/selftests/kselftest_harness.h | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Changes since v1:
-* Update commit description.
----
- tools/testing/selftests/landlock/fs_test.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 9a6036fbf289..46b9effd53e4 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -293,7 +293,15 @@ static void prepare_layout(struct __test_metadata *const _metadata)
- static void cleanup_layout(struct __test_metadata *const _metadata)
- {
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	EXPECT_EQ(0, umount(TMP_DIR));
-+	if (umount(TMP_DIR)) {
-+		/*
-+		 * According to the test environment, the mount point of the
-+		 * current directory may be shared or not, which changes the
-+		 * visibility of the nested TMP_DIR mount point for the test's
-+		 * parent process doing this cleanup.
-+		 */
-+		ASSERT_EQ(EINVAL, errno);
-+	}
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 	EXPECT_EQ(0, remove_path(TMP_DIR));
- }
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index d98702b6955d..55699a762c45 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -382,7 +382,10 @@
+ 		FIXTURE_DATA(fixture_name) self; \
+ 		pid_t child = 1; \
+ 		int status = 0; \
+-		bool jmp = false; \
++		/* Makes sure there is only one teardown, even when child forks again. */ \
++		bool *teardown = mmap(NULL, sizeof(*teardown), \
++			PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
++		*teardown = false; \
+ 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
+ 		if (setjmp(_metadata->env) == 0) { \
+ 			/* Use the same _metadata. */ \
+@@ -399,15 +402,16 @@
+ 				_metadata->exit_code = KSFT_FAIL; \
+ 			} \
+ 		} \
+-		else \
+-			jmp = true; \
+ 		if (child == 0) { \
+-			if (_metadata->setup_completed && !_metadata->teardown_parent && !jmp) \
++			if (_metadata->setup_completed && !_metadata->teardown_parent && \
++					__sync_bool_compare_and_swap(teardown, false, true)) \
+ 				fixture_name##_teardown(_metadata, &self, variant->data); \
+ 			_exit(0); \
+ 		} \
+-		if (_metadata->setup_completed && _metadata->teardown_parent) \
++		if (_metadata->setup_completed && _metadata->teardown_parent && \
++				__sync_bool_compare_and_swap(teardown, false, true)) \
+ 			fixture_name##_teardown(_metadata, &self, variant->data); \
++		munmap(teardown, sizeof(*teardown)); \
+ 		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
+ 			/* Forward signal to __wait_for_test(). */ \
+ 			kill(getpid(), WTERMSIG(status)); \
 -- 
 2.45.0
 
