@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-9284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249808BA1F0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 23:12:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 552848BA1F1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 23:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48D3E1C22048
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:12:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11021283C54
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 21:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD87F1C8FB6;
-	Thu,  2 May 2024 21:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD28A1C8FC3;
+	Thu,  2 May 2024 21:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="XhZDG8fH"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Y6QJwMwP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4BE1C6892
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 21:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F48A1C2310;
+	Thu,  2 May 2024 21:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714684200; cv=none; b=XpNPm9/Q4RF57cTMd+ZkBFnjIkpfnJAur3fu/4qVMMAbL3nzV8VAX716e1/HFzOGb3Esh8laDi+usJpgkPKtipK4NDni8VlX3kBtUlEhom8EzMXoGHUip7qf+rAwXbBh3KN9Iip/5kk/eLNnh/UEC1LHbfpC3aBvrD3plh/DMoU=
+	t=1714684201; cv=none; b=oQ7MLlDCUiTkG5sfRuAe43GyR5Stkol+LaiXLNirdoQLliNkr5PePjlEKC29v5uBrGUsfIjDUCgdiRoGHBXwqJiFIWl+acVaA3U1Z0utM0KBJyIvWdlyR1em1Wd+4ybYeFEuud9MmH3kgQQgbH7X2aKrR23WBsCu56cjig1AzmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714684200; c=relaxed/simple;
-	bh=NLhMzxe/FqUv13PMBWM+genqcakoB2tWTyZTcB0rzls=;
+	s=arc-20240116; t=1714684201; c=relaxed/simple;
+	bh=KqEsjBjuhpsjwrbJBGS/A9dvVAlJ3/nK7tVCR3svPG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KqfWJSpY+kh63xhuZ9qk1n7PEwiOrc71jQ2rqDcNY4KtwNQou9SV5ugwTjizqwKpeQMznl9A4Qrao2HJC3Uj2huxeA/48xDv7OkzLy8ONm1cTBSQfO/ZPBaSp2e2aSdpQVHYS4LrVuE8hMZHWbko+jUGtTCbzOsTGgopVe0CxRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=XhZDG8fH; arc=none smtp.client-ip=45.157.188.8
+	 MIME-Version:Content-Type; b=eMWT/hwgTlD7J+cWFTfe89uOv+IYG+JkJaGo3HJL24rKG0HuhMxJdiVfBY/tA7a7ShbxtxEOB7MRXP6oCMF3p8Zd16XNRNZVfPCnm0eSkqnphNTsUW0NEnURiKSGmpVGLQ/2hTSrrhl7++eEcge/uwIQsQouHFLjg+0EIt3Z2cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Y6QJwMwP; arc=none smtp.client-ip=45.157.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmly6nj9zPRQ;
-	Thu,  2 May 2024 23:09:50 +0200 (CEST)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VVmm03jwczL5X;
+	Thu,  2 May 2024 23:09:52 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1714684190;
-	bh=NLhMzxe/FqUv13PMBWM+genqcakoB2tWTyZTcB0rzls=;
+	s=20191114; t=1714684192;
+	bh=KqEsjBjuhpsjwrbJBGS/A9dvVAlJ3/nK7tVCR3svPG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XhZDG8fHuY5WYfK5fo1ZtWErt2VoORPWHdMckOFatEqc8bBm2aU53Vee/Tzuxcno/
-	 kL9H37kf0PCcNGAGzvWY/Cac1zVoNmYeT8LnWte3mVt1Oqfp8jGavmxP6fo54WUhyB
-	 vhowNd9qMT5hoS8zCEBTwYQ0G0ErXHyVIoRkS7VQ=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlx2cz0zXWy;
-	Thu,  2 May 2024 23:09:49 +0200 (CEST)
+	b=Y6QJwMwPh4Vk1yiDX75N9NqUtxGjQbcqVDnJJwMC+pksry1GXyClOGQ3GYzXMUgZO
+	 HgLgI1GKJocjJZMQo+kHGoQzfFTMTkDLfiAqNYUgFcIeKUQaZgU7TW8RfojFaD2C32
+	 8h9VOq5brlKrfatEcHyD+/ITP9JwPb9ac502cs2c=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VVmlz3TX3zqTH;
+	Thu,  2 May 2024 23:09:51 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -59,9 +59,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	kvm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 09/10] selftests/harness: Fix vfork() side effects
-Date: Thu,  2 May 2024 23:09:25 +0200
-Message-ID: <20240502210926.145539-10-mic@digikod.net>
+Subject: [PATCH v4 10/10] selftests/harness: Fix TEST_F()'s exit codes
+Date: Thu,  2 May 2024 23:09:26 +0200
+Message-ID: <20240502210926.145539-11-mic@digikod.net>
 In-Reply-To: <20240502210926.145539-1-mic@digikod.net>
 References: <20240502210926.145539-1-mic@digikod.net>
 Precedence: bulk
@@ -74,244 +74,64 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Setting the time namespace with CLONE_NEWTIME returns -EUSERS if the
-calling thread shares memory with another thread (because of the shared
-vDSO), which is the case when it is created with vfork().
+Always forward grandchild's exit codes to its parent.  This fixes
+KVM_ONE_VCPU_TEST().
 
-Fix pidfd_setns_test by replacing test harness's vfork() call with a
-clone3() call with CLONE_VFORK, and an explicit sharing of the
-_metadata and self objects.
+Initial patch written by Sean Christopherson [1].
 
-Replace _metadata->teardown_parent with a new FIXTURE_TEARDOWN_PARENT()
-helper that can replace FIXTURE_TEARDOWN().  This is a cleaner approach
-and it enables to selectively share the fixture data between the child
-process running tests and the parent process running the fixture
-teardown.  This also avoids updating several tests to not rely on the
-self object's copy-on-write property (e.g. storing the returned value of
-a fork() call).
-
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Günther Noack <gnoack@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
 Cc: Mark Brown <broonie@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Will Drewry <wad@chromium.org>
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
+Link: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com [1]
 Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240502210926.145539-10-mic@digikod.net
+Link: https://lore.kernel.org/r/20240502210926.145539-11-mic@digikod.net
 ---
 
-Changes since v1:
-* Split changes (suggested by Kees).
-* Improve documentation.
-* Remove the static fixture_name##_teardown_parent initialisation to
-  false (as suggested by checkpatch.pl).
+Changes since v3:
+* New patch mainly from Sean Christopherson.
 ---
- tools/testing/selftests/kselftest_harness.h | 66 ++++++++++++++++-----
- tools/testing/selftests/landlock/fs_test.c  | 16 ++---
- 2 files changed, 57 insertions(+), 25 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index abf2ffd2094f..d3837a3a584e 100644
+index d3837a3a584e..77d4fac8d0c0 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -294,6 +294,32 @@ static inline pid_t clone3_vfork(void)
-  * A bare "return;" statement may be used to return early.
-  */
- #define FIXTURE_TEARDOWN(fixture_name) \
-+	static const bool fixture_name##_teardown_parent; \
-+	__FIXTURE_TEARDOWN(fixture_name)
-+
-+/**
-+ * FIXTURE_TEARDOWN_PARENT()
-+ * *_metadata* is included so that EXPECT_*, ASSERT_* etc. work correctly.
-+ *
-+ * @fixture_name: fixture name
-+ *
-+ * .. code-block:: c
-+ *
-+ *     FIXTURE_TEARDOWN_PARENT(fixture_name) { implementation }
-+ *
-+ * Same as FIXTURE_TEARDOWN() but run this code in a parent process.  This
-+ * enables the test process to drop its privileges without impacting the
-+ * related FIXTURE_TEARDOWN_PARENT() (e.g. to remove files from a directory
-+ * where write access was dropped).
-+ *
-+ * To make it possible for the parent process to use *self*, share (MAP_SHARED)
-+ * the fixture data between all forked processes.
-+ */
-+#define FIXTURE_TEARDOWN_PARENT(fixture_name) \
-+	static const bool fixture_name##_teardown_parent = true; \
-+	__FIXTURE_TEARDOWN(fixture_name)
-+
-+#define __FIXTURE_TEARDOWN(fixture_name) \
- 	void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-@@ -368,10 +394,11 @@ static inline pid_t clone3_vfork(void)
-  * Very similar to TEST() except that *self* is the setup instance of fixture's
-  * datatype exposed for use by the implementation.
-  *
-- * The @test_name code is run in a separate process sharing the same memory
-- * (i.e. vfork), which means that the test process can update its privileges
-- * without impacting the related FIXTURE_TEARDOWN() (e.g. to remove files from
-- * a directory where write access was dropped).
-+ * The _metadata object is shared (MAP_SHARED) with all the potential forked
-+ * processes, which enables them to use EXCEPT_*() and ASSERT_*().
-+ *
-+ * The *self* object is only shared with the potential forked processes if
-+ * FIXTURE_TEARDOWN_PARENT() is used instead of FIXTURE_TEARDOWN().
-  */
- #define TEST_F(fixture_name, test_name) \
- 	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
-@@ -392,39 +419,49 @@ static inline pid_t clone3_vfork(void)
- 		struct __fixture_variant_metadata *variant) \
- 	{ \
- 		/* fixture data is alloced, setup, and torn down per call. */ \
--		FIXTURE_DATA(fixture_name) self; \
-+		FIXTURE_DATA(fixture_name) self_private, *self = NULL; \
- 		pid_t child = 1; \
- 		int status = 0; \
- 		/* Makes sure there is only one teardown, even when child forks again. */ \
- 		bool *teardown = mmap(NULL, sizeof(*teardown), \
- 			PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
- 		*teardown = false; \
--		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
-+		if (sizeof(*self) > 0) { \
-+			if (fixture_name##_teardown_parent) { \
-+				self = mmap(NULL, sizeof(*self), PROT_READ | PROT_WRITE, \
-+					MAP_SHARED | MAP_ANONYMOUS, -1, 0); \
-+			} else { \
-+				memset(&self_private, 0, sizeof(self_private)); \
-+				self = &self_private; \
-+			} \
-+		} \
- 		if (setjmp(_metadata->env) == 0) { \
--			/* Use the same _metadata. */ \
--			child = vfork(); \
-+			/* _metadata and potentially self are shared with all forks. */ \
-+			child = clone3_vfork(); \
- 			if (child == 0) { \
--				fixture_name##_setup(_metadata, &self, variant->data); \
-+				fixture_name##_setup(_metadata, self, variant->data); \
+@@ -442,7 +442,7 @@ static inline pid_t clone3_vfork(void)
+ 				fixture_name##_setup(_metadata, self, variant->data); \
  				/* Let setup failure terminate early. */ \
  				if (_metadata->exit_code) \
- 					_exit(0); \
+-					_exit(0); \
++					_exit(_metadata->exit_code); \
  				_metadata->setup_completed = true; \
--				fixture_name##_##test_name(_metadata, &self, variant->data); \
-+				fixture_name##_##test_name(_metadata, self, variant->data); \
+ 				fixture_name##_##test_name(_metadata, self, variant->data); \
  			} else if (child < 0 || child != waitpid(child, &status, 0)) { \
- 				ksft_print_msg("ERROR SPAWNING TEST GRANDCHILD\n"); \
- 				_metadata->exit_code = KSFT_FAIL; \
- 			} \
- 		} \
- 		if (child == 0) { \
--			if (_metadata->setup_completed && !_metadata->teardown_parent && \
-+			if (_metadata->setup_completed && !fixture_name##_teardown_parent && \
+@@ -454,7 +454,7 @@ static inline pid_t clone3_vfork(void)
+ 			if (_metadata->setup_completed && !fixture_name##_teardown_parent && \
  					__sync_bool_compare_and_swap(teardown, false, true)) \
--				fixture_name##_teardown(_metadata, &self, variant->data); \
-+				fixture_name##_teardown(_metadata, self, variant->data); \
- 			_exit(0); \
+ 				fixture_name##_teardown(_metadata, self, variant->data); \
+-			_exit(0); \
++			_exit(_metadata->exit_code); \
  		} \
--		if (_metadata->setup_completed && _metadata->teardown_parent && \
-+		if (_metadata->setup_completed && fixture_name##_teardown_parent && \
+ 		if (_metadata->setup_completed && fixture_name##_teardown_parent && \
  				__sync_bool_compare_and_swap(teardown, false, true)) \
--			fixture_name##_teardown(_metadata, &self, variant->data); \
-+			fixture_name##_teardown(_metadata, self, variant->data); \
+@@ -462,8 +462,10 @@ static inline pid_t clone3_vfork(void)
  		munmap(teardown, sizeof(*teardown)); \
-+		if (self && fixture_name##_teardown_parent) \
-+			munmap(self, sizeof(*self)); \
- 		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
- 			/* Forward signal to __wait_for_test(). */ \
+ 		if (self && fixture_name##_teardown_parent) \
+ 			munmap(self, sizeof(*self)); \
+-		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
+-			/* Forward signal to __wait_for_test(). */ \
++		/* Forward exit codes and signals to __wait_for_test(). */ \
++		if (WIFEXITED(status)) \
++			_exit(_metadata->exit_code); \
++		if (WIFSIGNALED(status)) \
  			kill(getpid(), WTERMSIG(status)); \
-@@ -895,7 +932,6 @@ struct __test_metadata {
- 	bool timed_out;	/* did this test timeout instead of exiting? */
- 	bool aborted;	/* stopped test due to failed ASSERT */
- 	bool setup_completed; /* did setup finish? */
--	bool teardown_parent; /* run teardown in a parent process */
- 	jmp_buf env;	/* for exiting out of test early */
- 	struct __test_results *results;
- 	struct __test_metadata *prev, *next;
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 1e2cffde02b5..27744524df51 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -286,8 +286,6 @@ static void prepare_layout_opt(struct __test_metadata *const _metadata,
- 
- static void prepare_layout(struct __test_metadata *const _metadata)
- {
--	_metadata->teardown_parent = true;
--
- 	prepare_layout_opt(_metadata, &mnt_tmp);
- }
- 
-@@ -316,7 +314,7 @@ FIXTURE_SETUP(layout0)
- 	prepare_layout(_metadata);
- }
- 
--FIXTURE_TEARDOWN(layout0)
-+FIXTURE_TEARDOWN_PARENT(layout0)
- {
- 	cleanup_layout(_metadata);
- }
-@@ -379,7 +377,7 @@ FIXTURE_SETUP(layout1)
- 	create_layout1(_metadata);
- }
- 
--FIXTURE_TEARDOWN(layout1)
-+FIXTURE_TEARDOWN_PARENT(layout1)
- {
- 	remove_layout1(_metadata);
- 
-@@ -3692,7 +3690,7 @@ FIXTURE_SETUP(ftruncate)
- 	create_file(_metadata, file1_s1d1);
- }
- 
--FIXTURE_TEARDOWN(ftruncate)
-+FIXTURE_TEARDOWN_PARENT(ftruncate)
- {
- 	EXPECT_EQ(0, remove_path(file1_s1d1));
- 	cleanup_layout(_metadata);
-@@ -3870,7 +3868,7 @@ FIXTURE_SETUP(layout1_bind)
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
- 
--FIXTURE_TEARDOWN(layout1_bind)
-+FIXTURE_TEARDOWN_PARENT(layout1_bind)
- {
- 	/* umount(dir_s2d2)) is handled by namespace lifetime. */
- 
-@@ -4275,7 +4273,7 @@ FIXTURE_SETUP(layout2_overlay)
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
- 
--FIXTURE_TEARDOWN(layout2_overlay)
-+FIXTURE_TEARDOWN_PARENT(layout2_overlay)
- {
- 	if (self->skip_test)
- 		SKIP(return, "overlayfs is not supported (teardown)");
-@@ -4708,8 +4706,6 @@ FIXTURE_SETUP(layout3_fs)
- 		SKIP(return, "this filesystem is not supported (setup)");
- 	}
- 
--	_metadata->teardown_parent = true;
--
- 	prepare_layout_opt(_metadata, &variant->mnt);
- 
- 	/* Creates directory when required. */
-@@ -4743,7 +4739,7 @@ FIXTURE_SETUP(layout3_fs)
- 	free(dir_path);
- }
- 
--FIXTURE_TEARDOWN(layout3_fs)
-+FIXTURE_TEARDOWN_PARENT(layout3_fs)
- {
- 	if (self->skip_test)
- 		SKIP(return, "this filesystem is not supported (teardown)");
+ 		__test_check_assert(_metadata); \
+ 	} \
 -- 
 2.45.0
 
