@@ -1,207 +1,230 @@
-Return-Path: <linux-kselftest+bounces-9380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BC238BB142
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 18:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 421C38BB14E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 18:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AED842816A3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 16:53:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAE962837ED
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 16:59:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F66156C52;
-	Fri,  3 May 2024 16:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EDD6157A54;
+	Fri,  3 May 2024 16:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hAq1rGU0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSZFWd59"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2073.outbound.protection.outlook.com [40.107.92.73])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916EA219FC;
-	Fri,  3 May 2024 16:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714755183; cv=fail; b=UAcqfeT7Z5LvGchJtR9ZYRA6D1ObFfYau8J89CIUz6uikPhKKCE0/g+/ECWIJun0u0MbKvyhOXwVZq3UFlNulnfoRVNsakUMGhlwXgtD0iQ2IqkyOZWtZ64bnTNqDiQalg+b0hIwcO/UoKIoNSz56N5L1pL8pRp9eUiEHXv09MM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714755183; c=relaxed/simple;
-	bh=PbxUL7G9ApwTG22on5No4AjDTWfHmV1zynn0l7L/T8U=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EKHDlfQGW02lO1RDiiQNI0MiimCgfLXo+ktQJFJcJcGkQIpFm9FGUeudbOHEp6gVpRgbshuNxqgt5lU38WgdbLQalBlreeINQCmVVxIgJJZXWv4/qi3ffvd3n+JxOjvvbht1BHB91jxbpVH5B9CHk19ZfV/eWFBUd8XOJeSHgOQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hAq1rGU0; arc=fail smtp.client-ip=40.107.92.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YhT3yNybS8uT9ljY3adBw9jxHb2MkVnxer0f0xGo6K6YLsSXGheqYzN4zZvDrEJ7TuLb2nn1iPnsZ+k4r613y0/Z04wNecBaoD/aWKARt2EpBe8eojssTMqMLVdjE7ydR00VDfNrI/R5H8P2aB0yv2RmVsMG9S7rSDfdYNE0d8vIcCT8kiPhOhpOhCayh0iBQBe6dkBifBHYliLToSoIQsuNR3xJ/5qHqI0HBlU8c4NYLde/16yP4o5kL0YHndtxHq6GQn6E2mmPBoeES4JmAHuOSmP1YwGRgB9xpuosl5koXn8YR0/B+4DcEZ6v9TCiOeL6moMAhnGJ8tFLgFPQeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Urrta7fDyoZGRmp8+AaheVqEVxf5U6lLhSDf+gWl1Q0=;
- b=QYhrfqj7B0O2A0JdX0lOxxOYIvV4wL5gbxQDFAEWdqDJjNOkuNikn9Xv0R1KyhIsj8nyPEYSMWqBEK/06IOnmM/HFDHA9mBBYeH30xA05ocX7+MECBR+a9GYzUCrKGAQm9wYDgJeBDerj7ADmDABJ1IZZKcd4pKe+EMv7HP/bHHjNvEbvCu+A9S2iYCV6UttwnOmLtN8c38s2PlJteJ/o6LtXCCO5NuoZgBeRQczGYdRkEQbtqqluP/YWLra6eU3j44i8crrGh7F35iajxv6uT79wru4OHEJnb7YFubP0zy9VsGs3R3QcN1ESFFIH24nDY9huSz/+BQlgdrygBZCgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Urrta7fDyoZGRmp8+AaheVqEVxf5U6lLhSDf+gWl1Q0=;
- b=hAq1rGU0KOzULA8oxsqMUhLzv78F322ODfomdHG1MKTDEtVsBqXj0rwERq73H62oGhNtnv78MC8TUrPacTFbrYh1VuzlBj83xO1CL2s2OC1j6mt/nZcHs6SF54vf79DQvq1jB2kssQrfIjWzxMoggXLcCws3m50fNIsuqSott9XiYW//sagRPv5hWM9NNT2E5XPhSQlrx58aP1u9PAkFRsCPSmgkhCq+S7faIl92GRLqrnqWBYFhmb3sIH+GHScRK41sxyvAVgRiZre+Qu9AKUhlItzs75u7Gdz2ScgR7ZCRFaZmEKFD5oFJt1LZug/+CzC6NO2j6bX639DempHgTQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH7PR12MB6657.namprd12.prod.outlook.com (2603:10b6:510:1fe::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.34; Fri, 3 May
- 2024 16:52:58 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.029; Fri, 3 May 2024
- 16:52:58 +0000
-Message-ID: <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com>
-Date: Fri, 3 May 2024 09:52:49 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
- abs(), labs() calls
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20240503023209.80787-1-jhubbard@nvidia.com>
- <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR13CA0120.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::35) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D54157A4F;
+	Fri,  3 May 2024 16:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714755580; cv=none; b=Ju7EKA/KDCIyeLhciAMnui4RlVlc3Qo2qXPY+QhbQgtXK3qqg+fTd3sF7wSIam4FhDrSzrBMCtyAznlF10DkEywZr0G2loyi7zu3nMmsMFjlNDZjYo6Cr29DaLb+N2NcI+SAaODWNDk8HfyhCZE2NUwSpeCDLVgwBfA7zf84xdQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714755580; c=relaxed/simple;
+	bh=vvcBvT6k7MW9lcqkcTuHTUlXRCysGywOkQMNFUqI1HM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SYNi/fey5p6lBiSY3e873qiz5YA59e03nQI+wjS3n3n0jdwHH8sFZJzUq9ggQDNfswHB2nFzM987Xl3FIn91x/4v4EEjhAYGWQ96W5rghjrCRb0/yDESyApfeUnCsHivljadneC6a8e1mFtxjWV9dJboaGIeRM62Z7lcNTUf648=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSZFWd59; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628B6C116B1;
+	Fri,  3 May 2024 16:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714755579;
+	bh=vvcBvT6k7MW9lcqkcTuHTUlXRCysGywOkQMNFUqI1HM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iSZFWd59XXPmDZD6g5k7lZqj9fhC5u3o0luW/c5v43i4PLwlWbXjXuiY7N/3Fvkza
+	 yiQ37uooXGmhvimq+ipEQWfK3NPQfx/1/tD4/5/ogAOlsLqeUlrpsHPE6dANieeQFC
+	 cge9SuF/YFnaDxfmcjxIXZJwozDA3V84vpeebfsY8I1LS3xbISHfZ/gRHKADcqGQh9
+	 u9WMYt2Ddy2vLdxSJddz61dweY5vVxx5LBfKA88HfgdsszY8mhgovfZGHgBBbsD229
+	 THtCmjgqQ7EmoIuIH2J/WBAM39ocQQ2jpO73EWTR7nmDgZuqhvw6UWwiBT7RfznI2N
+	 6p8Gzjc+xmlug==
+Date: Fri, 3 May 2024 17:59:33 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 03/17] riscv: vector: Use vlenb from DT
+Message-ID: <20240503-zippy-skeletal-e5f63c9f17c1@spud>
+References: <20240502-dev-charlie-support_thead_vector_6_9-v5-0-d1b5c013a966@rivosinc.com>
+ <20240502-dev-charlie-support_thead_vector_6_9-v5-3-d1b5c013a966@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH7PR12MB6657:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c896a7c-fdd3-4e6a-6217-08dc6b917c4c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|1800799015|366007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NE83NExEZVZvWGIvRXplSVRXVjJiK3NHck11eWdockk5NVBLaFpWaGJ5c0ov?=
- =?utf-8?B?Kzd2cTJ1WDhGTFk5enpUNnVRQ29OUWdSZjFVNzZlOGEvbTlMc0RBVUU5bEZ0?=
- =?utf-8?B?a0JHdjZpbnpLZi9WVzA1aXdXM2FGNGdFUHRUK3EyOXJQclZBc2tjb3VDWmxB?=
- =?utf-8?B?Vnl0cnQ1aGpReUxVa21DdEgrNWJ0QW9qQU03cE5LY1BjaGREV3RVT3Y4bGlS?=
- =?utf-8?B?ZFd6OU1qNjdwanJ1RDI4NmswMWp3Yzdqb3V1THNXSzZ2STMzclpDWGRJWFZG?=
- =?utf-8?B?dDlwc0FFZzJONnlxQVBvb1p0Uis5MG9YdUovaUpOT2FvTWpWcGR0YU1Yc1gw?=
- =?utf-8?B?aHRycVR4K0VULzdMMVJpWnZpMzIyRmhvY1B3aWZEeEtyLzN6QW1zY1RWRWNX?=
- =?utf-8?B?cU1ZeW5GamJFYkhBNDEzMjFpUmxHQXpqKzJOZVJDRjQ2b0NHUkZYUmcvVmx3?=
- =?utf-8?B?aER5eTZzdzJzdW1Nc1JNKzJFd1VRN05CNW5xNE9jYTMvV2lyUVF3bmZFWmRT?=
- =?utf-8?B?VWs3TWxyY09jQWsyT04vRVpTRFR5SDFJNTU0QW81ZENBRVFrYWJIM2VWak0r?=
- =?utf-8?B?R3dIQ0tIalVXYTlsejZGZS9kaGhpNXhyUSt5QzQvZ1dRMjdET1RyWVZWc21x?=
- =?utf-8?B?Szk4dUZvMnBpclRyZVpsTkRPcXBTNDJLVStwdUFXM0U3TnlQVVEya0FUTWtH?=
- =?utf-8?B?WUZ2TU11R1hWc1d5aFBwckxKeml3YmVuanFkM3VNSkloVFQ2a1Q5ellETmdB?=
- =?utf-8?B?a1BnR0RXeUZGQjZGdEdoWDZqRmNiOG50QWFBZ2ZHTDgrVDFQWlVLMXIzTUsv?=
- =?utf-8?B?OWZiUUtUOWhISWRDNktwYU1BUnY2M1U5WkpJSUxyYUpwbmo5SmgwU3hGaHdB?=
- =?utf-8?B?ZHQ4WnVyR1AwTWFwUHhhc3hEUTJKbXl4NmtmZkZXN0dlbTZ1R29mcjdQaS9C?=
- =?utf-8?B?T3RlOHY5VnJXSkQyVlVVZWM3T1c1a1IzVHVVRmgvNmhDTWRPd3A3OE5lOGVT?=
- =?utf-8?B?ZmpxZzE0TzdXYkRqNVFrbjZPenRsWjRobC91OXZQV0FTcW8ydStZbDFMSFp4?=
- =?utf-8?B?MWM1bGJ2dE9hOStrTElERWxYTXgvNzJLNW5aL1ZIZ1ZUT1BuN3dCY2xWcnA5?=
- =?utf-8?B?QzJ4RDVndXBJbGpkYmF2OUsrVW9KaDNsbFBDdW1VYW0xVTRHZDhQU1l1dVBB?=
- =?utf-8?B?SWpkMkoxeEN0SXV0OC9ZeDZZNkFTZ2lIbVFGRHFCOXpScGdhRzFzOURpQW5K?=
- =?utf-8?B?elpPZ2lHSWFoTit6L2xEVjh3T0M4SWhsNnRmc0VuNkVNNFhnWVZoQ0FlTTUx?=
- =?utf-8?B?c0wwcTR3aEdLeTF5RXMvT1NkRnRqa094NWlmWEtQQjVnV1hlZFROK00xMlNE?=
- =?utf-8?B?Z1VtSEdXK2UrZjNiNUM0M1FISmNoODNOSHpBVU9mcVgvbkxkQm9VSFU3bEtn?=
- =?utf-8?B?b2pyNWdwUSsva0wzT0NoajE4dGNKcDZkMDVMNFhiZkpnVmFXczlGVzl4RUZE?=
- =?utf-8?B?SlZEMDRmc1dSVjZqZ2NoaHlJSlhDbUN0TGZLeUxFN2lsR0d1UG9XWEFuUWhS?=
- =?utf-8?B?QldFTjkzRStTWVVFWFIzeWpvUndqNk51TDY4cXdVTm1YdGZaTXRlUS9mcnEw?=
- =?utf-8?B?SXVTR2RCRGlFLzh4dWIyMFc2aHlWZTlBM2xKS1h3R3FnUUY0ZUEwL3RxU0di?=
- =?utf-8?B?ZEc2VDYrNVZHQSt6RDQrekNlL2VPcGxvWmhJdXRPMFJHdGVzby9BWDRnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MmtmQUpTODNLWWdDb04xYklVeHVIYVdsZDB1TzF1TkJ6TllCOHgyRjhNN0hO?=
- =?utf-8?B?VFc4SVJ2NC9KTm95aWdlUExSQVVBeGpEbHB5L0Z5US9CRmtLVVk4RjZ1c1VL?=
- =?utf-8?B?bXZmUndnd0Z4WlhXbHpVWEIrSUh2NTk1Wmx0dXJYalgrQWo3ZUpJYkFRMnlY?=
- =?utf-8?B?MVlLNVBxem51MzJVVFlzSVlHQTJjWWlSR0gyOXI3MjlQVDc0TzVYUlJxRE1w?=
- =?utf-8?B?U3RXWHZWTUcvYzRDWnN3b0UxS05sV3B4cmM5L0lLZWxoWUU1d2lveTZXZzV2?=
- =?utf-8?B?NHNBcDg5RmF2OWJnS3Z2U0hOR01ZK3ZFdnRLRlNwMkFrbU9HaDBIeVFxY21i?=
- =?utf-8?B?K0hTTklzeGhKUEx4cEhNRlRQYkxlMGNwUzU5N3hjOEhzd240dGdHdW9lVk5S?=
- =?utf-8?B?UGhENmdyZzkzbmRUUE1KMlNiZXN3YTNyK3hzL1Zjd1pQMFNrcTJyMVVpeUk3?=
- =?utf-8?B?Vk8xQ1hYT1ZwYkV0dHNYVjkzVnRjaGJzNjhIaTgxMXVSbndCZzllZllJS09x?=
- =?utf-8?B?Y1VCbStLcG9nSXZJcExLbU9ER1hkMjh3L1dGYmN6dE03dEJicS8rVHRSc1Aw?=
- =?utf-8?B?VmtubUxiK1BrT3FJRnBBZ1duMWhyY0ZPMWpYTkVSRkFJM1NSdGdLVUorbEdM?=
- =?utf-8?B?VzVnUXFIN0h6ZlVwd0pCN0oxdENEaC9TWDRTQkZQbnhJb0RtYjlYUVZ0dEQy?=
- =?utf-8?B?UmdqTzB1TnFWWE5KSkdtNk1WcHNoUys3c0Q1M3NGVlZrSjl1TnIxT3I3dHo5?=
- =?utf-8?B?SkVmUGdJVS94M25YTkc4WUJ2NThTNzFZLzdDZGF2dyt3OVlWeGZJQnZoU2Zi?=
- =?utf-8?B?TU5xRzJ3a2NwWThFZE1TdFJONGo4ZFVzMUtBN0J1VGh6Nzd5eFI0VGJhNkky?=
- =?utf-8?B?YzhYS2FkQ05VSVNSM3VDVzh4SGNGZTAyVE1ybkJJbk1oNVEwaFZHeGp1cmY2?=
- =?utf-8?B?QTNFMEg5bDcwUDJpamlHaFFtSTQyZWV1WHBid1pMR1psWHlFVlRKdzhDZWY4?=
- =?utf-8?B?emw3ZmxuM2ZBNnQrOEpyeis4KzU5L1JXNXpWTEhtcFl2eEQ2SVdpQWxkUk9G?=
- =?utf-8?B?cGFXd3RGSjVlb3dQQjhhQlFXcldGL0Z2cG1VTm5CeUZUZUdXQllkdjFIeFIz?=
- =?utf-8?B?Y1I3WitBRmVBdWlNb1JjSkt0WnBGTjFKOWpxT3ExbEErQ2pYQWVTVG9QV1ZN?=
- =?utf-8?B?a0FPaWcrNUlwYkROa1h6RmF6QjZZa1kvZy9yeTBaRjNhLytQSzhIWXpkRkpI?=
- =?utf-8?B?VjIvcEtBMGFWQ2RrY2pISnBnRks5eGNxbkpxVnRkMnRZYUE2QmFPVWE2WFEw?=
- =?utf-8?B?WkI1UXlWSTc1QlZSV0tLNWlUR1BZTjZLRFhFM2VydW5JSTc3MGtPUkVSbElM?=
- =?utf-8?B?anRIUEF3WTNSRnVSVk5jdFBEUnhKWllEM3Vtblh4cGNqK0VVdTRtSnhGcnEx?=
- =?utf-8?B?amJndG1LZFFzWDlwMlozZ3ZEdmcwN3RwUHo5OVV4USswcVFEYUkvMWVWYk5F?=
- =?utf-8?B?VjNJcVViWDdEVm1TeGpTTi91STIvSEU4dENoNjVIdlBVMzQ2WmcxQit6MU5C?=
- =?utf-8?B?Snd2emgwZW9NMk5nZ1VySjVzQjNNa3RVTDM5SXNWMFd0VWRNd0J3U1Z0MXhs?=
- =?utf-8?B?MXRrU0ZCTkpIUmpYa29Ud3ozNy9raG1zeWh2Y2JSd2NlNGRXdGNzeXV5OExp?=
- =?utf-8?B?OXpldldQUEtUZzRKcmZqWmhSaU5pcU83eXArUU05Rm9EL2kzYkkxRGwzdXVS?=
- =?utf-8?B?TWRiRktubERGMXBxbWhUSGtIcDBXc25BV3o2Rk5DdnNST1NqTEwwa2NlZVlt?=
- =?utf-8?B?UFhVRXdiWDhveDZXNnM5bVNhdWVYb2hXYThobUF3MTNWdVM2Y1U5RDRKK21E?=
- =?utf-8?B?eU0zQmIyTEwvcU9HWUgzZmZ4M1ZZUkxLZy8vL2dic2UySHczMDdpQ1g1VzRD?=
- =?utf-8?B?dmtwSW0xbW1sTzN5d3prdnBvQUU3bWZJVVl0S2hhTGliTEM2aGg2alhjd2tK?=
- =?utf-8?B?ellGTWhnVGc4UEJ6NlREK2UzWjZmZUdzakhtSG0xTlRiajBSTkZMTVhHU2lz?=
- =?utf-8?B?Q0J3ZXJiM3hadFZQM2hGUm1GT1dlLzUwd1dBQW1zSXNYa3FEbFpMZ2ZDbmpl?=
- =?utf-8?B?UDBtT1VxUlF2NTQrSG8zVUw4ckNCU2ZMK2REZ3gwdGMzMVZZcU9aYlI5TGNq?=
- =?utf-8?B?alE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c896a7c-fdd3-4e6a-6217-08dc6b917c4c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 16:52:58.1062
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fRkVTzJMSMQp6vw4JZYwEgKmiRUpsLNmTkWOZ7IwedkN4Da6P+6x5RmRTiFRm4bLuM6cI8jmY3116DACHaLKZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6657
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Jm1skXhSfPF6Cfdj"
+Content-Disposition: inline
+In-Reply-To: <20240502-dev-charlie-support_thead_vector_6_9-v5-3-d1b5c013a966@rivosinc.com>
 
-On 5/3/24 1:00 AM, Ilpo Järvinen wrote:
-> On Thu, 2 May 2024, John Hubbard wrote:
-...
->> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
->> index d67ffa3ec63a..c873793d016d 100644
->> --- a/tools/testing/selftests/resctrl/mbm_test.c
->> +++ b/tools/testing/selftests/resctrl/mbm_test.c
->> @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
->>   
->>   	avg_bw_imc = sum_bw_imc / 4;
->>   	avg_bw_resc = sum_bw_resc / 4;
->> -	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->> +	avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->>   	avg_diff_per = (int)(avg_diff * 100);
->>   
->>   	ret = avg_diff_per > MAX_DIFF_PERCENT;
-> 
-> But how are these two cases same after your change when you ended up
-> removing taking the absolute value entirely?
 
-All of the arguments are unsigned integers, so all arithmetic results
-are interpreted as unsigned, so taking the absolute value of that is
-always a no-op.
+--Jm1skXhSfPF6Cfdj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+On Thu, May 02, 2024 at 09:46:38PM -0700, Charlie Jenkins wrote:
+> If vlenb is provided in the device tree, prefer that over reading the
+> vlenb csr.
+>=20
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/cpufeature.h |  2 ++
+>  arch/riscv/kernel/cpufeature.c      | 43 +++++++++++++++++++++++++++++++=
+++++++
+>  arch/riscv/kernel/vector.c          | 12 ++++++++++-
+>  3 files changed, 56 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm=
+/cpufeature.h
+> index 347805446151..0c4f08577015 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -31,6 +31,8 @@ DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
+>  /* Per-cpu ISA extensions. */
+>  extern struct riscv_isainfo hart_isa[NR_CPUS];
+> =20
+> +extern u32 riscv_vlenb_of;
+> +
+>  void riscv_user_isa_enable(void);
+> =20
+>  #if defined(CONFIG_RISCV_MISALIGNED)
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 3ed2359eae35..12c79db0b0bb 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -35,6 +35,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __r=
+ead_mostly;
+>  /* Per-cpu ISA extensions. */
+>  struct riscv_isainfo hart_isa[NR_CPUS];
+> =20
+> +u32 riscv_vlenb_of;
+> +
+>  /**
+>   * riscv_isa_extension_base() - Get base extension word
+>   *
+> @@ -648,6 +650,42 @@ static int __init riscv_isa_fallback_setup(char *__u=
+nused)
+>  early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
+>  #endif
+> =20
+> +static int has_riscv_homogeneous_vlenb(void)
+> +{
+> +	int cpu;
+> +	u32 prev_vlenb =3D 0;
+> +	u32 vlenb;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		struct device_node *cpu_node;
+> +
+> +		cpu_node =3D of_cpu_device_node_get(cpu);
+> +		if (!cpu_node) {
+> +			pr_warn("Unable to find cpu node\n");
+> +			return -ENOENT;
+> +		}
+> +
+> +		if (of_property_read_u32(cpu_node, "riscv,vlenb", &vlenb)) {
+> +			of_node_put(cpu_node);
+> +
+> +			if (prev_vlenb)
+> +				return -ENOENT;
+> +			continue;
+> +		}
+> +
+> +		if (prev_vlenb && vlenb !=3D prev_vlenb) {
+> +			of_node_put(cpu_node);
+> +			return -ENOENT;
+> +		}
+> +
+> +		prev_vlenb =3D vlenb;
+> +		of_node_put(cpu_node);
+> +	}
+> +
+> +	riscv_vlenb_of =3D vlenb;
+> +	return 0;
+> +}
+> +
+>  void __init riscv_fill_hwcap(void)
+>  {
+>  	char print_str[NUM_ALPHA_EXTS + 1];
+> @@ -671,6 +709,11 @@ void __init riscv_fill_hwcap(void)
+>  			pr_info("Falling back to deprecated \"riscv,isa\"\n");
+>  			riscv_fill_hwcap_from_isa_string(isa2hwcap);
+>  		}
+> +
+> +		if (elf_hwcap & COMPAT_HWCAP_ISA_V && has_riscv_homogeneous_vlenb() < =
+0) {
 
+I still think this isn't quite right, as it will emit a warning when
+RISCV_ISA_V is disabled. The simplest thing to do probably is just
+add an `if (IS_ENABLED(CONFIG_RISCV_ISA_V) return 0` shortcut the to
+function? It'll get disabled a few lines later so I think a zero is
+safe.
+
+> +			pr_warn("Unsupported heterogeneous vlen detected, vector extension di=
+sabled.\n");
+> +			elf_hwcap &=3D ~COMPAT_HWCAP_ISA_V;
+> +		}
+>  	}
+> =20
+>  	/*
+> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> index 6727d1d3b8f2..e04586cdb7f0 100644
+> --- a/arch/riscv/kernel/vector.c
+> +++ b/arch/riscv/kernel/vector.c
+> @@ -33,7 +33,17 @@ int riscv_v_setup_vsize(void)
+>  {
+>  	unsigned long this_vsize;
+> =20
+> -	/* There are 32 vector registers with vlenb length. */
+> +	/*
+> +	 * There are 32 vector registers with vlenb length.
+> +	 *
+> +	 * If the riscv,vlenb property was provided by the firmware, use that
+> +	 * instead of probing the CSRs.
+> +	 */
+> +	if (riscv_vlenb_of) {
+> +		this_vsize =3D riscv_vlenb_of * 32;
+> +		return 0;
+> +	}
+> +
+>  	riscv_v_enable();
+>  	this_vsize =3D csr_read(CSR_VLENB) * 32;
+>  	riscv_v_disable();
+>=20
+> --=20
+> 2.44.0
+>=20
+
+--Jm1skXhSfPF6Cfdj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUX9QAKCRB4tDGHoIJi
+0rXxAQDDUnlsnbkBc4xorvMXBorwh8UuxTwps60RTP8U5kKaKwD/RTwTniatfEGc
+LN74K3N4cTgYcOwsuNu6rNRBb5lk5Ao=
+=d5rs
+-----END PGP SIGNATURE-----
+
+--Jm1skXhSfPF6Cfdj--
 
