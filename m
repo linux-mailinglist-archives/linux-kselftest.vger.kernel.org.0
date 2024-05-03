@@ -1,93 +1,97 @@
-Return-Path: <linux-kselftest+bounces-9392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 850808BB1FF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 19:56:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 635708BB206
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 20:03:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245FC1F21233
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 17:56:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B86B1C21B7C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 18:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FA01581F3;
-	Fri,  3 May 2024 17:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD731158212;
+	Fri,  3 May 2024 18:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UjeLcRNx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/ANqK38"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C771BF24
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 17:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85329524BE;
+	Fri,  3 May 2024 18:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714758998; cv=none; b=rBoBd15dvIk/ui6xo/ZiZR3rlg18CxiUE+9OViMA0t+gqn6W6Kt+1G5epXk0cB2vmRmGlCuUTB6YCCCz3LwclAMyjdYfoTZQGpLtgwFoVfxdExM4IR9VJjWxkVQRkeT9k+62N2FFcod4hjTJQGq9ZYjlSZj3z/rgAcXxNlEod+4=
+	t=1714759402; cv=none; b=JsKrOKooezk4uvVz8v5bDVY9QGZLzznfmhU2T1zJCAj8GC9r6ObE7MOk2NPfpCn96WzP32Rf+W/20+aANIsnatZ9M6ym/UXhTGB5FNuFsZ63+ViU7logW4BchfEcwbKlr+td//n1Mj7szriACJ3tIK/6ftBvaC+YapapiwJkyWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714758998; c=relaxed/simple;
-	bh=iF+tuzYxBnhZHA40zu1dubng7ObuiWba8XuUcB+UZ4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/JsRoa/iox7cUuQ38aeznvKPq9ojr8+QAFjBWd6zQrm0Nwb2amfp1PlFzZdfVgZnAMv0W0ZlTxz772uwE7Cql4WCGlgc4eVqmKhrRMY580wCxGbS047/0AhYZD8Fui/erxAVDAqwt2HG2HkBDM9GErPKMLc9nPRPqVntBV7yDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UjeLcRNx; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Fri, 3 May 2024 10:56:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1714758995;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mVau4SQ9OnY1TYFgZ3SnItVxVCQLPzoWn/o0fmjLMis=;
-	b=UjeLcRNxuulhmedCPn015/NI2hPsSRRWm9SkBR8NsrUbJJep2nZk0ypPnff7j28Pwq31T1
-	l7DOR0OSaitDdyeOqXYfZRj7+6rJra3ymR7TBRZaW+jH8vi8lh6BL7lYJPHJhqcnYvPpiJ
-	PXaKoHsVGJ4Hw9ZWBAhkiIngoDIrR9E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Yosry Ahmed <yosryahmed@google.com>, Nhat Pham <nphamcs@gmail.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 4/4] selftests/cgroup: fix uninitialized variables in
- test_zswap.c
-Message-ID: <ZjUlTeLGqyJubyKr@P9FQF9L96D>
-References: <20240503035105.93280-1-jhubbard@nvidia.com>
- <20240503035105.93280-5-jhubbard@nvidia.com>
+	s=arc-20240116; t=1714759402; c=relaxed/simple;
+	bh=EaRqMYwfZ6CLfXPj4ijECU/OD147lD5SF+BXmhPmFBE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uceVdSl6sN9NN4KRTunI5u2hk8Qu1dApxpOM4eZ5AiwdVSxy0yr20BqL4zvbXvYrAb/0FwEzJ3ZSE96mSovDxRXIzgLk1g8f0ytoZzYGMCSUZH1j5yVYTDwych84EI/wMwDaj7gdI14MmgEXZvLfX4omnguGgVUoWsz8uqqZths=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/ANqK38; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE58C116B1;
+	Fri,  3 May 2024 18:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714759402;
+	bh=EaRqMYwfZ6CLfXPj4ijECU/OD147lD5SF+BXmhPmFBE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=c/ANqK38xQzyHdzDJOSTvZdEXbKgMhzGY+jpa3IIINQ5OxKUJ82vJj1zM62xdPM3G
+	 r+tLJo6ZjzHqZqfU3EnC32lBEoCGOXpNeMUBz2yYvmemF5TBOcxwKdeIMiHJPjsCs4
+	 LykAW/rdIX/geqNnFwcPAFHLJqEEDeutBud6EqKDgTvEy3dat0hI0PVmCpnI+D6aKk
+	 stVO19TpNFgbvyHbqNpo99PWCK8zG2KfyMGTvYRUFrZ5AEZQbjZxvjO3WJZrIMN576
+	 UFABaXUaLRtLTsLvWCzwsdoSMQcpWaM46DXMgelfpaHMLCM6Bj7XuLBhllHZYXr0DS
+	 WMQVXowP7D5aA==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] mm/damon: misc fixes and improvements
+Date: Fri,  3 May 2024 11:03:08 -0700
+Message-Id: <20240503180318.72798-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503035105.93280-5-jhubbard@nvidia.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 02, 2024 at 08:51:05PM -0700, John Hubbard wrote:
-> First of all, in order to build with clang at all, one must first apply
-> Valentin Obst's build fix for LLVM [1]. Once that is done, then when
-> building with clang, via:
-> 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> ...clang finds and warning about some uninitialized variables. Fix these
-> by initializing them.
-> 
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Add miscelleneous and non-urgent fixes and improvements for DAMON code,
+selftests, and documents.
 
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+SeongJae Park (10):
+  mm/damon/core: initialize ->esz_bp from damos_quota_init_priv()
+  selftests/damon/_damon_sysfs: check errors from nr_schemes file reads
+  selftests/damon/_damon_sysfs: find sysfs mount point from /proc/mounts
+  selftests/damon/_damon_sysfs: use 'is' instead of '==' for 'None'
+  selftests/damon: classify tests for functionalities and regressions
+  Docs/admin-guide/mm/damon/usage: fix wrong example of DAMOS filter
+    matching sysfs file
+  Docs/admin-guide/mm/damon/usage: fix wrong schemes effective quota
+    update command
+  Docs/mm/damon/design: use a list for supported filters
+  Docs/mm/damon/maintainer-profile: change the maintainer's timezone
+    from PST to PT
+  Docs/mm/damon/maintainer-profile: allow posting patches based on
+    damon/next tree
 
-Thanks!
+ Documentation/admin-guide/mm/damon/usage.rst  |  6 +-
+ Documentation/mm/damon/design.rst             | 46 +++++----
+ Documentation/mm/damon/maintainer-profile.rst | 13 +--
+ mm/damon/core.c                               |  1 +
+ tools/testing/selftests/damon/Makefile        | 13 ++-
+ tools/testing/selftests/damon/_damon_sysfs.py | 95 +++++++++++--------
+ 6 files changed, 100 insertions(+), 74 deletions(-)
+
+
+base-commit: fc7314cb6b750187a1366e0bf9da4c3ca8cfd064
+-- 
+2.39.2
+
 
