@@ -1,148 +1,197 @@
-Return-Path: <linux-kselftest+bounces-9429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5126B8BB462
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 21:55:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8148BB489
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 22:11:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC306285CBD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 19:55:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2B1F285890
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 20:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC65158A3F;
-	Fri,  3 May 2024 19:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2CCB158D8E;
+	Fri,  3 May 2024 20:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PDfg3uv+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BXraE1Cg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13275158219
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 19:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35DC158D75
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 20:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714766105; cv=none; b=nyCuZ82CByySmBOxL7Xs+Gz6JV6WCOQhb6acHj2wncdNkyXDOQ3sDaYPJTpoxBiz6WJpdM6KGxFJXAIU88wsGUEzlC5KU9K8kMr2UOZW1MdBAjcUMGXGQ+TuB0A7shvyQTLRiOr3XvGuTYL7f0C2kQKv84wWuoVbvghcQEaqRZY=
+	t=1714767059; cv=none; b=amtHYi5z+6KxngaAreLRKGjqSdBj7zs+0aFJb8hbOZvCTxojAk8x2idlecv+Aw44vjWz8u90CamLEwi9z31fmZcym4uIdOa/W0WP7+2/RdT1qFViPFbCBDZzPVJvBIa9tDXtLBzCASFuzZf3PQnWhRuUFN/utFtVCcgx3fzkATw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714766105; c=relaxed/simple;
-	bh=H+O3hAtZlwC5F0x+rCtibViAkb8br0MyxnKFwP8yITs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gPSUbROLReLivZ9SD+c6S+QD5tzkatReNTlcAzIWdEXMrGaWT8S6M1x+Io6+B+fqFy7pMaur685Focrf7Pg5gIBYugxVdYpOMrNTA8X+WlFlpVy/OmYVK8aAjIi/Hk9gsgvd8keaCfAkBduKlc0P1K310WjXu9B6iOZLinckWZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PDfg3uv+; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7d6b362115eso470839f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 12:55:02 -0700 (PDT)
+	s=arc-20240116; t=1714767059; c=relaxed/simple;
+	bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RzTxSOOJHO/vDZHXToUnLzBkIZN7UHgCtWZHCD0fdRia/5XTCAMhI2JUWN3CWn6Da7bpKFfSXoKBeCbRqsVvR1L+MT6MlKXdM+Vo2Dg9b1AZydWLsPRCPc4dgEkdY6ZQjOggBESZ8pKZh/oiavlPqMo1fo5gfymc8lZgy/UjXjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BXraE1Cg; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a59a387fbc9so2532166b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 13:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1714766102; x=1715370902; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vVDV1OeG9hQ/qmATCNcC1pLFdhB98ACZJusaLHASqpk=;
-        b=PDfg3uv+K1U261iLrHrxJoV1+BleoujsesJ+cSZarmag8aMArfecMRpz9t0Ssh9DMa
-         4ujVDlixbpB21PYUk+a4pGebCe6t6mGFxuUxB6SUwELkENLxVdCHmHxlbK3cchiftomh
-         t6dJLfADDYfSHkMOrK50igdhEDQeXMCbmW3f4=
+        d=google.com; s=20230601; t=1714767056; x=1715371856; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
+        b=BXraE1Cgqyr5gr4R1yA5bOlellj2XeZR3ELw04tSwgwfVv7Tej6f7AujDIMDuINB9N
+         q2nEFO9qOEOvh7HiQReLkvkWl9rakjWPl9SNFurQZQAs8DOlxuJjeYtxzcy6KEPNqqVf
+         mwGAzmTZDZUQIyusOpqki566NwoJRymeYhZF0faPskN7YR9xUI8DTCq7DVLv/ZuGgRBy
+         VfUrZztINEbwkYEdTK3UD6K5jJ2XqM612KvTehIfS51KV69MgrJejg+oDxSW3IlsJPsO
+         jOH3BSBbOuyK5XYgLAnbMwFMEoHPp/g5j9BgwCfWSYACT8UAkV3w6IWQfdiM9MX4ard4
+         eLfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714766102; x=1715370902;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vVDV1OeG9hQ/qmATCNcC1pLFdhB98ACZJusaLHASqpk=;
-        b=VlUl1+kt5pPIdm9Q2SmNBQSq896bj6fCQ+qvRr00cX+p7/dAKk9HVMaxlKDABYR9UW
-         cJvftJfdq1/mkyFLGOubnoq5OY+mz/IcC4QfgnVffFQfJYvXD/v63s7npItCmEXipw+K
-         r/3ZT/ikn5jfoOuypzT8vd+TVyXO4GTJN/OOG8d7i3bPQL85QbaYCnToMKoAhPd01cK/
-         3Y/NVoGzmeMk2CQfTIy90o5QzACDGn9IebA4hCoV8wDlUF3A6b9JWrilcKopn2akCwWK
-         fqoU0Pr/wBhcdqDuCEpk6cZQwArMIXS04PkF9+8246DF+g0oLhanZEU6J9binRjkg8W0
-         hL9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWapklQyZpK9BuLOOFOhNQXZramTT786x1Y6WhRMp/TWJv6NK2MxBxwCydmvMM8/5+vD3GL89Oug9zL1pXfxyC8U0/2GaTpIal+kJ/emby8
-X-Gm-Message-State: AOJu0Yx1KSdc7YH1KpPrsN4yAwhZMPOajX+PthGTcWpBoeauHUlo5wx2
-	c5P3mCsaz4Lc/DxOjkcyvEfn+M6ftNG8Vo/wfhz3b+ILuKuJkScxPrIdeuuPDyM=
-X-Google-Smtp-Source: AGHT+IEDvSK7zLWibDn57CFEVCFTU9+3wameuwSnNxEOPxolDZ6i9b9QnwmRipUUufkKlsJMbAAXSQ==
-X-Received: by 2002:a05:6e02:219c:b0:36b:15e0:de18 with SMTP id j28-20020a056e02219c00b0036b15e0de18mr4223000ila.0.1714766102018;
-        Fri, 03 May 2024 12:55:02 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id w8-20020a056e021a6800b0036c0d4b720asm820586ilv.74.2024.05.03.12.55.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 12:55:01 -0700 (PDT)
-Message-ID: <3beb08a6-0be7-4305-9ac5-2ccc9e6d02c5@linuxfoundation.org>
-Date: Fri, 3 May 2024 13:55:00 -0600
+        d=1e100.net; s=20230601; t=1714767056; x=1715371856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
+        b=PqkDuzDf8H0Fjs4RjpwOcR/vWog/G9r2ze+whQl9bx9BK3y8lUzVjjsbeDida39x6k
+         L1AHTtygyW5QE6FQRAtUFy0WsP872bNpvwVIDeQWjAr8w1LIIcElFGnHXZK0oTjxcEFK
+         YNwakMp3Z25iYLVnQAkc/nnom3Ph1hydFO+SFNUlZwU5seuu3YfQs5IaSySttShVURt6
+         UCpBJQcdNfAeRJ+bAWuLgMXX/ev08UjmBx6tqbbgjeI6Jma1/AHGWa+Ik/h9qn4loHff
+         slG/MUY6Rh42/dsbSI19jR2R3Se85edRxFIqznJKu0Gxn6TgRDohvZhhSsqeZO/Mmk1T
+         cu8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUyF/I4FF+aszpegqd3mx4TFJCVLyBsXnYS1Xcxsc/FerGmGDnhjpM0r49h4aMtf/A+496pPo6eAA+bu6NMNwCJ4WWQlo0MQ7ogcRx7BBw/
+X-Gm-Message-State: AOJu0Yx8wujtB1AGgW6807UeZYKrqe37wNbqHeUncrIXFBK6PThiskzH
+	0LOPBUPtaqixmKzTNDqlHTLR3eHKassAovafIyzUh5yp4cZuL5aL2LxotZK4lao+k/Zcnt1gyDU
+	iyP+6btvaMOhYni0JDeVYuB5FvhEy93RIS2oL
+X-Google-Smtp-Source: AGHT+IGWuTH3tkleUzlLfpne/Dggcuo50hlED+Ywh+UOAOcbaWh6EvDDw4vd2uLlNQ7vtR/GRuLWEPXod8Vuv8D8Zd0=
+X-Received: by 2002:a17:906:29d4:b0:a59:165f:87e6 with SMTP id
+ y20-20020a17090629d400b00a59165f87e6mr2459058eje.48.1714767055895; Fri, 03
+ May 2024 13:10:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: default to host arch for LLVM builds
-To: Valentin Obst <kernel@valentinobst.de>, jhubbard@nvidia.com
-Cc: anders.roxell@linaro.org, bpoirier@nvidia.com, broonie@kernel.org,
- guillaume.tucker@collabora.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mpdesouza@suse.com, nathan@kernel.org,
- sashal@kernel.org, shuah@kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <6d398f1d-6882-40fb-8ced-7fe6bee2aee7@nvidia.com>
- <20240428120806.19275-1-kernel@valentinobst.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240428120806.19275-1-kernel@valentinobst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-3-almasrymina@google.com> <ZjH1QaSSQ98mw158@infradead.org>
+In-Reply-To: <ZjH1QaSSQ98mw158@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 3 May 2024 13:10:44 -0700
+Message-ID: <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Amritha Nambiar <amritha.nambiar@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Simon Horman <horms@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Florian Westphal <fw@strlen.de>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>, 
+	Arseniy Krasnov <avkrasnov@salutedevices.com>, 
+	Aleksander Lobakin <aleksander.lobakin@intel.com>, Michael Lass <bevan@bi-co.net>, 
+	Jiri Pirko <jiri@resnulli.us>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
+	Sridhar Samudrala <sridhar.samudrala@intel.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>, 
+	Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/28/24 06:08, Valentin Obst wrote:
->>> Align the behavior for gcc and clang builds by interpreting unset
->>> `ARCH` and `CROSS_COMPILE` variables in `LLVM` builds as a sign that the
->>> user wants to build for the host architecture.
->>>
->>> This patch preserves the properties that setting the `ARCH` variable to an
->>> unknown value will trigger an error that complains about insufficient
->>> information, and that a set `CROSS_COMPILE` variable will override the
->>> target triple that is determined based on presence/absence of `ARCH`.
->>>
->>> When compiling with clang, i.e., `LLVM` is set, an unset `ARCH` variable in
->>> combination with an unset `CROSS_COMPILE` variable, i.e., compiling for
->>> the host architecture, leads to compilation failures since `lib.mk` can
->>> not determine the clang target triple. In this case, the following error
->>> message is displayed for each subsystem that does not set `ARCH` in its
->>> own Makefile before including `lib.mk` (lines wrapped at 75 chrs):
->>>
->>>     make[1]: Entering directory '/mnt/build/linux/tools/testing/selftests/
->>>      sysctl'
->>>     ../lib.mk:33: *** Specify CROSS_COMPILE or add '--target=' option to
->>>      lib.mk.  Stop.
->>>     make[1]: Leaving directory '/mnt/build/linux/tools/testing/selftests/
->>>      sysctl'
->>
->> Thanks for fixing this.
->>
->> And yes, the selftests "normal" (non-cross-compile) build is *broken*
->> right now, for clang. I didn't realize from the patch title that this is
->> actually a significant fix. Maybe we should change the subject line (patch
->> title) to something like:
->>
->>      [PATCH] selftests: fix the clang build: default to host arch for LLVM builds
-> 
-> Yes, I agree that the title should contain the word 'fix' somewhere. For
-> me its okay if maintainers reword the title when applying the patch,
-> alternatively I can send a v2. (Is it still a v2 if I change the title, or
-> rather a new patch?).
-> 
-> Any thoughts on whether this also needs a 'Cc stable'? Its not quite
-> clear to me if this fix meets the requirements. As above, no objections if
-> maintainers should decide to add it.
-> 
->>
->> ?
->>
->> Just a thought. The "Fixes:" tag covers it already, I realize.
->>
->> Anyway, this looks correct, and fixes that aspect of the build for me, so
->> either way, please feel free to add:
->>
->> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> 
+Sorry for the late reply.
 
-Thanks for the patch. Applied to linux-kselftest next for Linux 6.10-rc1
+On Wed, May 1, 2024 at 12:55=E2=80=AFAM Christoph Hellwig <hch@infradead.or=
+g> wrote:
+>
+> Still NAK to creating a=E2=85=BAbitrary hooks here.
 
-thanks,
--- Shuah
+Is the concern still that folks may be able to hook proprietary stuff
+into this like you mentioned before[1]?
 
+I don't see how that can be done as currently written. The page_pool
+grabs the memory_provider_ops from the netdev_rx_queue struct managed
+by core net stack and not really overridable by external modules. When
+the netdev creates the page_pool, it gets the core-managed
+netdev_rx_queue via something like __netif_get_rx_queue() and passes
+that to page_pool_create().
+
+We could make the memory_provider_ops even more opaque by only
+allowing the device to only pass in the netdev + queue num to the
+page_pool_create, and have the page_pool_create query the
+netdev_rx_queue struct, to make sure we're getting the one managed by
+core.
+
+Long story short is that as currently written I think it's pretty much
+impossible for someone to plug in a proprietary out-of-tree memory
+provider using these hooks, and if desired I can change the code
+slightly to make it even more difficult (but maybe that's pointless, I
+don't think it's possible even in the current iteration). The only way
+to get a memory_provider_ops in is to seek to merge it as part of the
+kernel with community approval. Is there something I'm missing here?
+
+> This should be a page or
+> dmabuf pool and not an indirect call abstraction allowing random
+> crap to hook into it.
+>
+
+What is the suggested fix here? I do something like:
+
+cp net/core/page_pool.c net/core/dmabuf_pool.c
+
+and then modify it such that the net stack maintains 2 page_pools?
+There are a lot of cons to that:
+
+1. Code duplication/maintenance (page_pool.c + dmabuf_pool.c will look
+very similar).
+
+2. The hooks enable more use cases than dmabuf_pool + standard pages.
+In addition to those, I'm thinking of (but not working on):
+a. Limited memory pools. I.e. a page_pool limited to a certain amount
+of memory (for overcommited VMs).
+b. dmabuf pools with GPU virtual addresses. Currently we seek to
+support dmabuf memory where the virtual address is an offset into the
+dmabuf for CPU access. For GPU memory accessible to the GPU we need
+dmabuf memory where the virtual address is the GPU virtual address.
+
+3. Support for multiple page_pools is actually more proprietary
+friendly IMO. Currently the page_pool is internal to core. If we start
+adding additional pools we need to have some uniform behavior between
+all the pools so core can operate on memory that originated from any
+one of them. In that case it becomes actually easier for someone to
+develop an out of tree pool and use it from their out-of-tree driver
+and as long as their out of tree page_pool behaves similarly enough to
+the decided uniform behavior, it may be able to fool core into
+thinking it's an in-tree pool...
+
+[1] https://lore.kernel.org/linux-kernel/ZfegzB341oNc_Ocz@infradead.org/
+
+
+--
+Thanks,
+Mina
 
