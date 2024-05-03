@@ -1,141 +1,242 @@
-Return-Path: <linux-kselftest+bounces-9298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C91D8BA382
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 00:53:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00CFE8BA497
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 02:36:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 027CD1F24781
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2024 22:53:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0298B212FE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 00:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABF61C6A7;
-	Thu,  2 May 2024 22:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7A98C05;
+	Fri,  3 May 2024 00:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GXlHVmV3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YoKHnsKm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E117D1BC43
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 May 2024 22:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2415F36B;
+	Fri,  3 May 2024 00:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714690421; cv=none; b=LivPxkhg3CdUV5UzFiJFfY3kDTvHv2QMiNPCvx5aDfriFsXvQqo+x+tdQ6zYYMj1rBNcy9r2hbJgYUYZjWK06pozpMWETIdaj5fimWAfYn31DoecxdzwjjT3g2XrimnMMVDRHMaCLQo4YtU332uldMKw2zUUyaPaHJywR3SPy2k=
+	t=1714696575; cv=none; b=LcSo3Dj7gSGG+mfdXOO+jHOaaU3lPUk3aCKPmjkV96EqzulEI+hUhRen6AxOfCwTNVwdkdJqkSiBuqyog2NrQ48czGhmUYZCklddcNR08QNa1g77qJQ8RROPADtwp2l2tSlyT6JarzQ9agiU3RCAQNidczcPazX0NGSJLVQmlnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714690421; c=relaxed/simple;
-	bh=9EIDvlKn8H06U3Ns7X4JkY7FQixrkq70JScwUwcT+Mk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HWBZrlyn+fBqXH3DeBsx98IDiIm5qE/M+A2h85IwAvqAlF3PNArziE139FGuRmWnQTwY3KNBYH2C3t33oxEFrqp/MekfCoHPM6Ze4XwYaFrDodNOvwAvQmplxajgAQcc4HYzqMk7xLJCbYRHWXkU6b5z5WNv6/wiZ+19RTEnYyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GXlHVmV3; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1ecc23e6c9dso14423545ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2024 15:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714690419; x=1715295219; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R+CbTYcuXhAHq3pBgBZF2uLGBq5IUxFnRXQZTgCCuoI=;
-        b=GXlHVmV32OySEyfV2tzM7/Zcoi9qf2XbShd3IE5te99M4XGjmb8J3ysGDFySvO7HIv
-         vrNel25xbPgx7HNUQiV2speMTI9EWLue/TrCaIBTqLOi+XZfgihfJIeWAAVy08HbJfqL
-         YprL+VAkMM6uFaXU5wbt/9fBVGbkGwuZE2tLE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714690419; x=1715295219;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R+CbTYcuXhAHq3pBgBZF2uLGBq5IUxFnRXQZTgCCuoI=;
-        b=qUt4ZVI6Gf6f9qqjEle4waGkMLcbgXBN1UgFooiEoy3DN1G4H9uQ+O/Zi2X/9Lq/MD
-         Ao8/+syjoPcwSWsPBZhy97++EZ0/eAse51yYkrtneGGaIFPfjfwUL1PXFE5gn6qffSvh
-         IbwlAGkmsyqrdfGSG8ID1vMTZUKWlDyo6x/oiuoscahP6UY5IYV7AzXaAyebQYkN1mh6
-         wZ+qB16Qu3f53Zdi1Mrp72xw4yQuu9xIWn516iI8V3ITqEGx3+AriyqXEO5aaRN8xWT1
-         Z2adikgNM/kPPQQyXbxCcRukxdpt7hwMFFz6RbQdjLanbnyJxfJNVFC5qJtO5WP/LMxB
-         tZjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMem4r+LQAhSxGrpteldbisjxEr9y9Ddn/35XQfpWb9iAeeXyATxJyxZ0nhmRQRe6vmC/C+pUHQvMGHUIi7w1AIzokTUmXNCwxpeaf0TqA
-X-Gm-Message-State: AOJu0YzhSBxQVzyL51cr1APq7pc4usUDt3mlGjG1mHpOsTRqZxCbopeB
-	0LSl9dWpm01QJ1GabgnJ0fi0IGdRcguIeHnZnRNQklkh9YokY639xULlLuPDtQ==
-X-Google-Smtp-Source: AGHT+IE828cNgqxiTXs3gOeTLsF+43jhO+3qFfjtUspZftTwhCEXBNu2gvO6RoHEZi05oN6gZOpuIA==
-X-Received: by 2002:a17:903:264f:b0:1eb:bc78:1ef5 with SMTP id je15-20020a170903264f00b001ebbc781ef5mr950791plb.17.1714690419185;
-        Thu, 02 May 2024 15:53:39 -0700 (PDT)
-Received: from localhost (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
-        by smtp.gmail.com with UTF8SMTPSA id q8-20020a170902dac800b001eb3f705ddasm1861884plx.255.2024.05.02.15.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 May 2024 15:53:38 -0700 (PDT)
-From: jeffxu@chromium.org
-To: ryan.roberts@arm.com
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	corbet@lwn.net,
-	dave.hansen@intel.com,
-	deraadt@openbsd.org,
-	gregkh@linuxfoundation.org,
-	groeck@chromium.org,
-	jannh@google.com,
-	jeffxu@chromium.org,
-	jeffxu@google.com,
-	jorgelo@chromium.org,
-	keescook@chromium.org,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	merimus@google.com,
-	pedro.falcato@gmail.com,
-	rdunlap@infradead.org,
-	sroettger@google.com,
-	surenb@google.com,
-	torvalds@linux-foundation.org,
-	usama.anjum@collabora.com,
-	willy@infradead.org
-Subject: [PATCH v1 1/1] selftest mm/mseal: fix arm build
-Date: Thu,  2 May 2024 22:53:31 +0000
-Message-ID: <20240502225331.3806279-2-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
-In-Reply-To: <20240502225331.3806279-1-jeffxu@chromium.org>
-References: <20240502225331.3806279-1-jeffxu@chromium.org>
+	s=arc-20240116; t=1714696575; c=relaxed/simple;
+	bh=bKhaQEnzeCgUZSUgaPavvVhtFMZ1NYjHum4LxmtOFXU=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=DQfRZqhrB1h24cTkH2YKDL2tb5rE1rQVof6QMQ3VHVrc+GvJXtuuNJKJ3n0xBzVWlgLcBS3fDvim/U1H/lCmggrHSn1BDCHLovKMn5LwrffTGGEtyJRhYXrCwsBkI1DKMYGiB3xo0I1tUqmPV/05Q/rmEkXpoQvWHGs6fofeHF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YoKHnsKm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9808FC113CC;
+	Fri,  3 May 2024 00:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714696574;
+	bh=bKhaQEnzeCgUZSUgaPavvVhtFMZ1NYjHum4LxmtOFXU=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=YoKHnsKmaE8a1q4sq+Ino4j5K8nMsHjk/WrDO62RcRZiYdWXlosAgtujF2c9QlAIP
+	 cQ7chKKKUSPiQAqMBFPlHwBMRqT4Cvzm6Kj83mYTyj5XJD1PQors+OSuSOIyZBjWJt
+	 nQsHRtL0UUIC3V1zIrK+hkkXk842bkgtfZk40+5Q6KILqYJV6mv7Cund5ixvAVolSz
+	 2WlCqScuTEX4ORnGm4GJA17f4c7nN6s7zQuFDHzsku1zOuiNDKNWDuHFtiSyivulAo
+	 PtP5qxuDzKrzEf9Mx0DltaI0Y19tHOm4TGEcEbXWppHRLYkUiPjclovypRnWtvVwZm
+	 8ajDlOzXhSABw==
+Message-ID: <15345b349077f57935e8f1d3d69f66f9.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSm_Qce1AZQjH8wE4t238hxLYTNswNf1AkEDbWtqDTK7Ow@mail.gmail.com>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-2-sboyd@kernel.org> <CABVgOSm_Qce1AZQjH8wE4t238hxLYTNswNf1AkEDbWtqDTK7Ow@mail.gmail.com>
+Subject: Re: [PATCH v4 01/10] of: Add test managed wrappers for of_overlay_apply()/of_node_put()
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
+To: David Gow <davidgow@google.com>
+Date: Thu, 02 May 2024 17:36:12 -0700
+User-Agent: alot/0.10
 
-From: Jeff Xu <jeffxu@chromium.org>
+Quoting David Gow (2024-05-01 00:55:10)
+> On Tue, 23 Apr 2024 at 07:24, Stephen Boyd <sboyd@kernel.org> wrote:
+> > diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentatio=
+n/dev-tools/kunit/api/index.rst
+> > index 2d8f756aab56..282befa17edf 100644
+> > --- a/Documentation/dev-tools/kunit/api/index.rst
+> > +++ b/Documentation/dev-tools/kunit/api/index.rst
+> > @@ -9,11 +9,15 @@ API Reference
+> >         test
+> >         resource
+> >         functionredirection
+> > +       of
+> >
+> >
+> >  This page documents the KUnit kernel testing API. It is divided into t=
+he
+> >  following sections:
+> >
+> > +Core KUnit API
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> >  Documentation/dev-tools/kunit/api/test.rst
+> >
+> >   - Documents all of the standard testing API
+> > @@ -25,3 +29,10 @@ Documentation/dev-tools/kunit/api/resource.rst
+> >  Documentation/dev-tools/kunit/api/functionredirection.rst
+> >
+> >   - Documents the KUnit Function Redirection API
+> > +
+> > +Driver KUnit API
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> If we're adding a separate 'Driver' section here, it's probably
+> sensible to move the existing device/driver helper documentation here,
+> rather than leaving it in resource.rst as-is. I'm happy to do that in
+> a follow-up patch, though.
 
-add include linux/mman.h to fix arm build
-fix a typo
+To clarify, you're talking about "Managed Devices"? Looks like that can
+be a follow-up to split it into a new file and then put it here. If
+you're happy to do that then I'll leave it to you.
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-Suggested-by: Ryan Roberts <ryan.roberts@arm.com>
----
- tools/testing/selftests/mm/mseal_test.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> > +
+> > +Documentation/dev-tools/kunit/api/of.rst
+> > +
+> > + - Documents the KUnit device tree (OF) API
+> > diff --git a/Documentation/dev-tools/kunit/api/of.rst b/Documentation/d=
+ev-tools/kunit/api/of.rst
+> > new file mode 100644
+> > index 000000000000..8587591c3e78
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/api/of.rst
+> > @@ -0,0 +1,13 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Device Tree (OF) API
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +The KUnit device tree API is used to test device tree (of_*) dependent=
+ code.
+> > +
+> > +.. kernel-doc:: include/kunit/of.h
+> > +   :internal:
+> > +
+> > +.. kernel-doc:: drivers/of/of_kunit.c
+> > +   :export:
+> > diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> > index 251d33532148..0dfd05079313 100644
+> > --- a/drivers/of/Makefile
+> > +++ b/drivers/of/Makefile
+> > @@ -19,6 +19,7 @@ obj-y +=3D kexec.o
+> >  endif
+> >  endif
+> >
+> > +obj-$(CONFIG_KUNIT) +=3D of_kunit.o
+>=20
+> I'm tempted to have this either live in lib/kunit, or be behind a
+> separate Kconfig option, particularly since this will end up as a
+> separate module, as-is.
 
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index ca8dbee0c612..41998cf1dcf5 100644
---- a/tools/testing/selftests/mm/mseal_test.c
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #define _GNU_SOURCE
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <stdint.h>
- #include <unistd.h>
-@@ -29,7 +30,7 @@
- # define PKEY_DISABLE_WRITE     0x2
- #endif
- 
--#ifndef PKEY_BITS_PER_KEY
-+#ifndef PKEY_BITS_PER_PKEY
- #define PKEY_BITS_PER_PKEY      2
- #endif
- 
--- 
-2.45.0.rc1.225.g2a3ae87e7f-goog
+Is the idea to have a single module that has all the kunit "stuff" in it
+so we can just load one module and be done? Is there any discussion on
+the list I can read to see the argument for this?
 
+>=20
+> >  obj-$(CONFIG_OF_KUNIT_TEST) +=3D of_test.o
+> >
+> >  obj-$(CONFIG_OF_UNITTEST) +=3D unittest-data/
+> > diff --git a/drivers/of/of_kunit.c b/drivers/of/of_kunit.c
+> > new file mode 100644
+> > index 000000000000..f63527268a51
+> > --- /dev/null
+> > +++ b/drivers/of/of_kunit.c
+> > @@ -0,0 +1,99 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Test managed device tree APIs
+> > + */
+> > +
+> > +#include <linux/of.h>
+> > +#include <linux/of_fdt.h>
+> > +
+> > +#include <kunit/of.h>
+> > +#include <kunit/test.h>
+> > +#include <kunit/resource.h>
+> > +
+> > +static void of_overlay_fdt_apply_kunit_exit(void *ovcs_id)
+> > +{
+> > +       of_overlay_remove(ovcs_id);
+> > +}
+> > +
+> > +/**
+> > + * of_overlay_fdt_apply_kunit() - Test managed of_overlay_fdt_apply()
+> > + * @test: test context
+> > + * @overlay_fdt: device tree overlay to apply
+> > + * @overlay_fdt_size: size in bytes of @overlay_fdt
+> > + * @ovcs_id: identifier of overlay, used to remove the overlay
+> > + *
+> > + * Just like of_overlay_fdt_apply(), except the overlay is managed by =
+the test
+> > + * case and is automatically removed with of_overlay_remove() after th=
+e test
+> > + * case concludes.
+> > + *
+> > + * Return: 0 on success, negative errno on failure
+> > + */
+> > +int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
+> > +                              u32 overlay_fdt_size, int *ovcs_id)
+>=20
+> We're using kunit_ as a prefix for the device helpers (e.g.
+> kunit_device_register()), so it may make sense to do that here, too.
+> It's not as important as with the platform_device helpers, which are
+> very similar to the existing device ones, but if we want to treat
+> these as "part of KUnit which deals with of_overlays", rather than
+> "part of "of_overlay which deals with KUnit", this may fit better.
+>=20
+> Thoughts?
+
+I'm fine either way with the name. I recall that last time we put a
+kunit postfix to make it easier to tab complete or something like that.
+
+I find it hard to understand the distinction you're trying to make
+though. I guess you're saying the difference is what subsystem maintains
+the code, kunit or of. When they're simple wrappers it is easier to
+extract them out to lib/kunit and thus they can (should?) have the kunit
+prefix. Maybe that always holds true, because kunit wrappers are
+typically another API consumer, and if the API is exported either in a
+linux/ header or as an exported symbol it can be wrapped in lib/kunit
+easily. Did I follow correctly? When would of_overlay ever deal with
+KUnit?
+
+> > diff --git a/include/kunit/of.h b/include/kunit/of.h
+> > new file mode 100644
+> > index 000000000000..9981442ba578
+> > --- /dev/null
+> > +++ b/include/kunit/of.h
+> > @@ -0,0 +1,94 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _KUNIT_OF_H
+> > +#define _KUNIT_OF_H
+> > +
+> > +#include <kunit/test.h>
+> > +
+> > +struct device_node;
+> > +
+> > +#ifdef CONFIG_OF
+>=20
+> Do we also need to check for CONFIG_OF_OVERLAY here?
+>=20
+> Also, how useful is it to compile but skip tests without
+> CONFIG_OF{,_OVERLAY} enabled? The other option is a compile error,
+> which may make it more obvious that these are disabled if it's
+> unexpected.
+>=20
+> Thoughts?
+
+I've tried to make it so that tests skip if an option isn't enabled. I
+suppose the CONFIG_OF_OVERLAY check can be hoisted up here as well so
+that the skip isn't buried in lower levels.
 
