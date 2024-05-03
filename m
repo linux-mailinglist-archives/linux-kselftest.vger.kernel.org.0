@@ -1,197 +1,345 @@
-Return-Path: <linux-kselftest+bounces-9430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A8148BB489
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 22:11:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A598BB4D1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 22:25:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2B1F285890
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 20:11:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7501FB223C7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 20:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2CCB158D8E;
-	Fri,  3 May 2024 20:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A85D159219;
+	Fri,  3 May 2024 20:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BXraE1Cg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4/LqMqf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35DC158D75
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 20:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54089158D6C;
+	Fri,  3 May 2024 20:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714767059; cv=none; b=amtHYi5z+6KxngaAreLRKGjqSdBj7zs+0aFJb8hbOZvCTxojAk8x2idlecv+Aw44vjWz8u90CamLEwi9z31fmZcym4uIdOa/W0WP7+2/RdT1qFViPFbCBDZzPVJvBIa9tDXtLBzCASFuzZf3PQnWhRuUFN/utFtVCcgx3fzkATw=
+	t=1714767919; cv=none; b=pbq5mE9Oq6fscPJ8/qpd64H9rnBWxo7F8Sq4hCMZuOCcAd4WTyIkjC5/AjlnSl9WWnvr7/fBD2lo57OdiGlNR3fljJfEFUgmI03j99B10lSw8jFlA/PQ9iIQVufNMuIkGAxK2h8/cpI2whVEPZHxFc50YGZHVy7xz68A2uYBIHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714767059; c=relaxed/simple;
-	bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RzTxSOOJHO/vDZHXToUnLzBkIZN7UHgCtWZHCD0fdRia/5XTCAMhI2JUWN3CWn6Da7bpKFfSXoKBeCbRqsVvR1L+MT6MlKXdM+Vo2Dg9b1AZydWLsPRCPc4dgEkdY6ZQjOggBESZ8pKZh/oiavlPqMo1fo5gfymc8lZgy/UjXjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BXraE1Cg; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a59a387fbc9so2532166b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 13:10:57 -0700 (PDT)
+	s=arc-20240116; t=1714767919; c=relaxed/simple;
+	bh=i0C5xpWD5f2z/IYxX3nNRhYxI2NXVo00ssiCrH00ejU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jC7RWnL1gFtXiWBQOlYs5DCEF+uUNyONpio/CmUyFBDYWChI4IDlcwCBQM6qli2psC3Dn5iI0Yzhh1ytwF4h6J0HiHO8z6ZiLvnpwYbkJEfo9uW2UsLjAhCoY5aYOD977+07fS9uiafbMba0DuUu+4S2mIOh+bd65/nepRAlLxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4/LqMqf; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6ee266e2999so28115a34.2;
+        Fri, 03 May 2024 13:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714767056; x=1715371856; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
-        b=BXraE1Cgqyr5gr4R1yA5bOlellj2XeZR3ELw04tSwgwfVv7Tej6f7AujDIMDuINB9N
-         q2nEFO9qOEOvh7HiQReLkvkWl9rakjWPl9SNFurQZQAs8DOlxuJjeYtxzcy6KEPNqqVf
-         mwGAzmTZDZUQIyusOpqki566NwoJRymeYhZF0faPskN7YR9xUI8DTCq7DVLv/ZuGgRBy
-         VfUrZztINEbwkYEdTK3UD6K5jJ2XqM612KvTehIfS51KV69MgrJejg+oDxSW3IlsJPsO
-         jOH3BSBbOuyK5XYgLAnbMwFMEoHPp/g5j9BgwCfWSYACT8UAkV3w6IWQfdiM9MX4ard4
-         eLfA==
+        d=gmail.com; s=20230601; t=1714767916; x=1715372716; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GoBSzwJr6dBy8LeIYFsSYiftBkef0PBvl0Rps45KpJ0=;
+        b=b4/LqMqf06B9ubElI0qioWHWUDa+v9zRw1hUgkEPwKr6tGyh4u7/+Y9sPk5Cmp71ME
+         IqiGyrnVea1FQjMwWjiUvy21x1gXYTmRNKwJO1KdlXkbLm3sfRfNaGxdOW7EAfHmS+Sq
+         zyXX5Vc7/8HtgTrllY+2ul8z0dGAZxEsxXWa8rfWBFParpBCXLU/8jet24Oby5jw9ESl
+         PJETPALGRuHlxWuLrJ4Piv7TSJw8Y76NZ4SV0kRIjy/QMqhPJbE2T5HN8gkysseUy84X
+         HLnvJXvBnynRrFrBVwVynlGuJxEBw99rnjJEjK7QzXZXz6GMtFBcKcgiozBsFt30/wzT
+         17YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714767056; x=1715371856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=atCvgdMV0JNn9Qp/m9GZW6Z7D46Y3/r5gcCPjNPxDaY=;
-        b=PqkDuzDf8H0Fjs4RjpwOcR/vWog/G9r2ze+whQl9bx9BK3y8lUzVjjsbeDida39x6k
-         L1AHTtygyW5QE6FQRAtUFy0WsP872bNpvwVIDeQWjAr8w1LIIcElFGnHXZK0oTjxcEFK
-         YNwakMp3Z25iYLVnQAkc/nnom3Ph1hydFO+SFNUlZwU5seuu3YfQs5IaSySttShVURt6
-         UCpBJQcdNfAeRJ+bAWuLgMXX/ev08UjmBx6tqbbgjeI6Jma1/AHGWa+Ik/h9qn4loHff
-         slG/MUY6Rh42/dsbSI19jR2R3Se85edRxFIqznJKu0Gxn6TgRDohvZhhSsqeZO/Mmk1T
-         cu8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUyF/I4FF+aszpegqd3mx4TFJCVLyBsXnYS1Xcxsc/FerGmGDnhjpM0r49h4aMtf/A+496pPo6eAA+bu6NMNwCJ4WWQlo0MQ7ogcRx7BBw/
-X-Gm-Message-State: AOJu0Yx8wujtB1AGgW6807UeZYKrqe37wNbqHeUncrIXFBK6PThiskzH
-	0LOPBUPtaqixmKzTNDqlHTLR3eHKassAovafIyzUh5yp4cZuL5aL2LxotZK4lao+k/Zcnt1gyDU
-	iyP+6btvaMOhYni0JDeVYuB5FvhEy93RIS2oL
-X-Google-Smtp-Source: AGHT+IGWuTH3tkleUzlLfpne/Dggcuo50hlED+Ywh+UOAOcbaWh6EvDDw4vd2uLlNQ7vtR/GRuLWEPXod8Vuv8D8Zd0=
-X-Received: by 2002:a17:906:29d4:b0:a59:165f:87e6 with SMTP id
- y20-20020a17090629d400b00a59165f87e6mr2459058eje.48.1714767055895; Fri, 03
- May 2024 13:10:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714767916; x=1715372716;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GoBSzwJr6dBy8LeIYFsSYiftBkef0PBvl0Rps45KpJ0=;
+        b=WtRndQbSXl+yEyKyI+TeNl8TGFalkPSgx0FMqOI7+qK0pMO51QD/4BIKTmlGrW3ufs
+         Rg5S7paG3DbICLtiQtMPVDXhknUgBegpPV98Msw0IvFVjwJsMBvj8pThp4c4cCeUE8tZ
+         ea72OJRpLeuGP5e+rtN8jMlGkD6NvonwloziXYx7LUMs4M+NNUNguxsNiBFrg2uMVEqa
+         GqO5cDnWM+dg6haopldGHbDSpuJCEbbWnIFMsusd3/q9QfpPYMCnELeQOGZSoGXyAGCz
+         ke355rlutYgeEjsBb7BVHgH46dd1Nf1NGrjKMOT87xViJDpAYI//NgmgwV9Iovt/x1B+
+         ys0A==
+X-Forwarded-Encrypted: i=1; AJvYcCX2lU6EgW20PRd0mzasar1O83AkJjX6ZU4eqWmjeczZvUCp2Xmgt6Z7UIB1e8msHiBmwCDZPKrqImPep0BWSbWSkAwwA9YPZR066q7oj5iW
+X-Gm-Message-State: AOJu0YzvgWqaxpZiVhqD24/uhgXyB0aS+sT+TPSsu2h4Hvio5/NhAFHq
+	nLiu6uj5mauXLC6eOA9s9eoDO2pAanHUKjQziOewq5sJShRqVkeuAqCaOw==
+X-Google-Smtp-Source: AGHT+IEEn5HB1dWLopB8IqW/ss5GWkMtvHuTbuQiBF1VE+R57i1wK2a9qmw05eyHpr5q1oZiTVHF4w==
+X-Received: by 2002:a9d:3e4c:0:b0:6eb:7c52:fd19 with SMTP id h12-20020a9d3e4c000000b006eb7c52fd19mr4146101otg.16.1714767916222;
+        Fri, 03 May 2024 13:25:16 -0700 (PDT)
+Received: from willemb.c.googlers.com.com (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id oq32-20020a05620a612000b007907d4bbeccsm1517932qkn.43.2024.05.03.13.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 May 2024 13:25:15 -0700 (PDT)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v2] selftests: drv-net: add checksum tests
+Date: Fri,  3 May 2024 16:24:49 -0400
+Message-ID: <20240503202511.4044515-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-3-almasrymina@google.com> <ZjH1QaSSQ98mw158@infradead.org>
-In-Reply-To: <ZjH1QaSSQ98mw158@infradead.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 3 May 2024 13:10:44 -0700
-Message-ID: <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Amritha Nambiar <amritha.nambiar@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Simon Horman <horms@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Florian Westphal <fw@strlen.de>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>, 
-	Arseniy Krasnov <avkrasnov@salutedevices.com>, 
-	Aleksander Lobakin <aleksander.lobakin@intel.com>, Michael Lass <bevan@bi-co.net>, 
-	Jiri Pirko <jiri@resnulli.us>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
-	Sridhar Samudrala <sridhar.samudrala@intel.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>, 
-	Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Sorry for the late reply.
+From: Willem de Bruijn <willemb@google.com>
 
-On Wed, May 1, 2024 at 12:55=E2=80=AFAM Christoph Hellwig <hch@infradead.or=
-g> wrote:
->
-> Still NAK to creating a=E2=85=BAbitrary hooks here.
+Run tools/testing/selftest/net/csum.c as part of drv-net.
+This binary covers multiple scenarios, based on arguments given,
+for both IPv4 and IPv6:
 
-Is the concern still that folks may be able to hook proprietary stuff
-into this like you mentioned before[1]?
+- Accept UDP correct checksum
+- Detect UDP invalid checksum
+- Accept TCP correct checksum
+- Detect TCP invalid checksum
 
-I don't see how that can be done as currently written. The page_pool
-grabs the memory_provider_ops from the netdev_rx_queue struct managed
-by core net stack and not really overridable by external modules. When
-the netdev creates the page_pool, it gets the core-managed
-netdev_rx_queue via something like __netif_get_rx_queue() and passes
-that to page_pool_create().
+- Transmit UDP: basic checksum offload
+- Transmit UDP: zero checksum conversion
 
-We could make the memory_provider_ops even more opaque by only
-allowing the device to only pass in the netdev + queue num to the
-page_pool_create, and have the page_pool_create query the
-netdev_rx_queue struct, to make sure we're getting the one managed by
-core.
+The test direction is reversed between receive and transmit tests, so
+that the NIC under test is always the local machine.
 
-Long story short is that as currently written I think it's pretty much
-impossible for someone to plug in a proprietary out-of-tree memory
-provider using these hooks, and if desired I can change the code
-slightly to make it even more difficult (but maybe that's pointless, I
-don't think it's possible even in the current iteration). The only way
-to get a memory_provider_ops in is to seek to merge it as part of the
-kernel with community approval. Is there something I'm missing here?
+In total this adds up to 12 testcases, with more to follow. For
+conciseness, I replaced individual functions with a function factory.
 
-> This should be a page or
-> dmabuf pool and not an indirect call abstraction allowing random
-> crap to hook into it.
->
+Also detect hardware offload feature availability using Ethtool
+netlink and skip tests when either feature is off. This need may be
+common for offload feature tests and eventually deserving of a thin
+wrapper in lib.py.
 
-What is the suggested fix here? I do something like:
+Missing are the PF_PACKET based send tests ('-P'). These use
+virtio_net_hdr to program hardware checksum offload. Which requires
+looking up the local MAC address and (harder) the MAC of the next hop.
+I'll have to give it some though how to do that robustly and where
+that code would belong.
 
-cp net/core/page_pool.c net/core/dmabuf_pool.c
+Tested:
 
-and then modify it such that the net stack maintains 2 page_pools?
-There are a lot of cons to that:
+        make -C tools/testing/selftests/ \
+                TARGETS="drivers/net drivers/net/hw" \
+                install INSTALL_PATH=/tmp/ksft
+        cd /tmp/ksft
 
-1. Code duplication/maintenance (page_pool.c + dmabuf_pool.c will look
-very similar).
+	sudo NETIF=ens4 REMOTE_TYPE=ssh \
+		REMOTE_ARGS="root@10.40.0.2" \
+		LOCAL_V4="10.40.0.1"
+		REMOTE_V4="10.40.0.2" \
+		./run_kselftest.sh -t drivers/net/hw:csum.py
 
-2. The hooks enable more use cases than dmabuf_pool + standard pages.
-In addition to those, I'm thinking of (but not working on):
-a. Limited memory pools. I.e. a page_pool limited to a certain amount
-of memory (for overcommited VMs).
-b. dmabuf pools with GPU virtual addresses. Currently we seek to
-support dmabuf memory where the virtual address is an offset into the
-dmabuf for CPU access. For GPU memory accessible to the GPU we need
-dmabuf memory where the virtual address is the GPU virtual address.
+Signed-off-by: Willem de Bruijn <willemb@google.com>
 
-3. Support for multiple page_pools is actually more proprietary
-friendly IMO. Currently the page_pool is internal to core. If we start
-adding additional pools we need to have some uniform behavior between
-all the pools so core can operate on memory that originated from any
-one of them. In that case it becomes actually easier for someone to
-develop an out of tree pool and use it from their out-of-tree driver
-and as long as their out of tree page_pool behaves similarly enough to
-the decided uniform behavior, it may be able to fool core into
-thinking it's an in-tree pool...
+---
 
-[1] https://lore.kernel.org/linux-kernel/ZfegzB341oNc_Ocz@infradead.org/
+Changes
+  - v1->v2
+      - remove dependency on tools/testing/selftests/net: move csum
+      - remove test output from git commit message:
+        has noisy (expected) failures on test platform after bkg changes
+---
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ .../testing/selftests/drivers/net/hw/csum.py  | 114 ++++++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   1 -
+ tools/testing/selftests/net/lib/.gitignore    |   2 +
+ tools/testing/selftests/net/lib/Makefile      |   7 ++
+ tools/testing/selftests/net/{ => lib}/csum.c  |   0
+ 7 files changed, 124 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/csum.py
+ create mode 100644 tools/testing/selftests/net/lib/.gitignore
+ rename tools/testing/selftests/net/{ => lib}/csum.c (100%)
 
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 1dd732855d76..4933d045ab66 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0+ OR MIT
+ 
+ TEST_PROGS = \
++	csum.py \
+ 	devlink_port_split.py \
+ 	ethtool.sh \
+ 	ethtool_extended_state.sh \
+diff --git a/tools/testing/selftests/drivers/net/hw/csum.py b/tools/testing/selftests/drivers/net/hw/csum.py
+new file mode 100755
+index 000000000000..7e3a955fc426
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/csum.py
+@@ -0,0 +1,114 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Run the tools/testing/selftests/net/csum testsuite."""
++
++from os import path
++
++from lib.py import ksft_run, ksft_exit, KsftSkipEx
++from lib.py import EthtoolFamily, NetDrvEpEnv
++from lib.py import bkg, cmd, wait_port_listen
++
++def test_receive(cfg, ipv4=False, extra_args=None):
++    """Test local nic checksum receive. Remote host sends crafted packets."""
++    if not cfg.have_rx_csum:
++        raise KsftSkipEx(f"Test requires rx checksum offload on {cfg.ifname}")
++
++    if ipv4:
++        ip_args = f"-4 -S {cfg.remote_v4} -D {cfg.v4}"
++    else:
++        ip_args = f"-6 -S {cfg.remote_v6} -D {cfg.v6}"
++
++    rx_cmd = f"{cfg.bin_local} -i {cfg.ifname} -n 100 {ip_args} -r 1 -R {extra_args}"
++    tx_cmd = f"{cfg.bin_remote} -i {cfg.ifname} -n 100 {ip_args} -r 1 -T {extra_args}"
++
++    with bkg(rx_cmd, exit_wait=True):
++        wait_port_listen(34000, proto='udp')
++        cmd(tx_cmd, host=cfg.remote)
++
++
++def test_transmit(cfg, ipv4=False, extra_args=None):
++    """Test local nic checksum transmit. Remote host verifies packets."""
++    if not cfg.have_tx_csum:
++        raise KsftSkipEx(f"Test requires tx checksum offload on {cfg.ifname}")
++
++    if ipv4:
++        ip_args = f"-4 -S {cfg.v4} -D {cfg.remote_v4}"
++    else:
++        ip_args = f"-6 -S {cfg.v6} -D {cfg.remote_v6}"
++
++    # Cannot randomize input when calculating zero checksum
++    if extra_args != "-U -Z":
++        extra_args += " -r 1"
++
++    rx_cmd = f"{cfg.bin_remote} -i {cfg.ifname} -L 1 -n 100 {ip_args} -R {extra_args}"
++    tx_cmd = f"{cfg.bin_local} -i {cfg.ifname} -L 1 -n 100 {ip_args} -T {extra_args}"
++
++    with bkg(rx_cmd, host=cfg.remote, exit_wait=True):
++        wait_port_listen(34000, proto='udp', host=cfg.remote)
++        cmd(tx_cmd)
++
++
++def test_builder(name, cfg, ipv4=False, tx=False, extra_args=""):
++    """Construct specific tests from the common template.
++
++       Most tests follow the same basic pattern, differing only in
++       Direction of the test and optional flags passed to csum."""
++    def f(cfg):
++        if ipv4:
++            cfg.require_v4()
++        else:
++            cfg.require_v6()
++
++        if tx:
++            test_transmit(cfg, ipv4, extra_args)
++        else:
++            test_receive(cfg, ipv4, extra_args)
++
++    if ipv4:
++        f.__name__ = "ipv4_" + name
++    else:
++        f.__name__ = "ipv6_" + name
++    return f
++
++
++def check_nic_features(cfg) -> None:
++    """Test whether Tx and Rx checksum offload are enabled.
++
++       If the device under test has either off, then skip the relevant tests."""
++    cfg.have_tx_csum = False
++    cfg.have_rx_csum = False
++
++    ethnl = EthtoolFamily()
++    features = ethnl.features_get({"header": {"dev-index": cfg.ifindex}})
++    for f in features["active"]["bits"]["bit"]:
++        if f["name"] == "tx-checksum-ip-generic":
++            cfg.have_tx_csum = True
++        elif f["name"] == "rx-checksum":
++            cfg.have_rx_csum = True
++
++
++def main() -> None:
++    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
++        check_nic_features(cfg)
++
++        cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../net/lib/csum")
++        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
++
++        cases = []
++        for ipv4 in [True, False]:
++            cases.append(test_builder("rx_tcp", cfg, ipv4, False, "-t"))
++            cases.append(test_builder("rx_tcp_invalid", cfg, ipv4, False, "-t -E"))
++
++            cases.append(test_builder("rx_udp", cfg, ipv4, False, ""))
++            cases.append(test_builder("rx_udp_invalid", cfg, ipv4, False, "-E"))
++
++            cases.append(test_builder("tx_udp_csum_offload", cfg, ipv4, True, "-U"))
++            cases.append(test_builder("tx_udp_zero_checksum", cfg, ipv4, True, "-U -Z"))
++
++        ksft_run(cases=cases, args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index d996a0ab0765..74ae1068229c 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -2,7 +2,6 @@
+ bind_bhash
+ bind_timewait
+ bind_wildcard
+-csum
+ cmsg_sender
+ diag_uid
+ fin_ack_lat
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5befca249452..052c21438dc4 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -81,7 +81,6 @@ TEST_PROGS += test_ingress_egress_chaining.sh
+ TEST_GEN_PROGS += so_incoming_cpu
+ TEST_PROGS += sctp_vrf.sh
+ TEST_GEN_FILES += sctp_hello
+-TEST_GEN_FILES += csum
+ TEST_GEN_FILES += ip_local_port_range
+ TEST_GEN_FILES += bind_wildcard
+ TEST_PROGS += test_vxlan_mdb.sh
+diff --git a/tools/testing/selftests/net/lib/.gitignore b/tools/testing/selftests/net/lib/.gitignore
+new file mode 100644
+index 000000000000..1ebc6187f421
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++csum
+diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+index 48557e6250dd..82c3264b115e 100644
+--- a/tools/testing/selftests/net/lib/Makefile
++++ b/tools/testing/selftests/net/lib/Makefile
+@@ -1,8 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
++CFLAGS += -I../../../../../usr/include/ $(KHDR_INCLUDES)
++# Additional include paths needed by kselftest.h
++CFLAGS += -I../../
++
+ TEST_FILES := ../../../../../Documentation/netlink/specs
+ TEST_FILES += ../../../../net/ynl
+ 
++TEST_GEN_FILES += csum
++
+ TEST_INCLUDES := $(wildcard py/*.py)
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/csum.c b/tools/testing/selftests/net/lib/csum.c
+similarity index 100%
+rename from tools/testing/selftests/net/csum.c
+rename to tools/testing/selftests/net/lib/csum.c
+-- 
+2.45.0.rc1.225.g2a3ae87e7f-goog
 
---
-Thanks,
-Mina
 
