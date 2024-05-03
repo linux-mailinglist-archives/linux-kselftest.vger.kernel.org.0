@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-9433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 225718BB528
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 23:03:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 279E38BB52C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 23:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DA711C20CEC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 21:03:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5D51283376
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 21:04:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5673E479;
-	Fri,  3 May 2024 21:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14BD405FB;
+	Fri,  3 May 2024 21:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="h0mK38A9"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="2haSRi/V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F60364AC
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 21:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698FD347A2
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 21:04:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714770214; cv=none; b=D9d510zWuOtNN86xwBC+2gZRAV4+pbkIPVJ4GW4OG/M6NnZ0LCXL4N7sh4wm3XB7fqbFbGnhXGRZZEnaHzob4zWovz7knbF+DO+mC5+fAncP3dPC+IJZRTs+APvCxNWVIGyjiC5th7IQ4GP21dA9X14Pw0GTskNDkl2s8aWWfCc=
+	t=1714770248; cv=none; b=e0SbQAanGIUivPcG0mklK2fVxkmTlrCvvDImalJZar86EEzRgjzzB04oie9ef8Sadqw86mdCCLPLb6NCqUJT8n2fFW+l2+UbZKm525OTnVXMZAk0AsUP10q/7oN4ohudQ9ixQ4uJ5hjn6lLcjDOKWoxDPPXfiB9TUVTd6ftTbQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714770214; c=relaxed/simple;
-	bh=Rd8OjNaRvWOeeFwsUuLYY+v1uRTD/QKNpcqqy3mvWT0=;
+	s=arc-20240116; t=1714770248; c=relaxed/simple;
+	bh=kr8q0vJdMraPMNcp9YTW0aQV6wa6XsOli4AJVOGN+FU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WdR89nFxwF21BhtaoS7uEkApuUAEXsKAgdt4MX/yJoL1QzcimhHsIDqWkTeYp5jZsQKQNPeGYv8vlAvdAlp2pdnMtOWOrHqw6DbRspyA7b4Gp4h9s7aPTaSvQpHtDOzUjD+v9ia0i9pyHXlbbncf9zSSj0QWMlQx6szMpzTEzGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=h0mK38A9; arc=none smtp.client-ip=209.85.167.54
+	 To:Cc:Content-Type; b=paPbfVHmfpsQ5vkkWvkC4ydBDWErZycScX5QnwbdUEFFIg/OQux8fydWE9AHhqraq1vow/MDVOKzfxoERC9H2W7XvtD9HkAg/gT1BhBBzhbHpQ7HAiH2x5sTbhQMvOC2Al5d7vIWSbyRJbPQvwBzjVidLJHSgMK9LqwYqcNPSvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=2haSRi/V; arc=none smtp.client-ip=209.85.208.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-51fd87ce075so83110e87.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 14:03:32 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2db13ca0363so1474861fa.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 14:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714770211; x=1715375011; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1714770245; x=1715375045; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rd8OjNaRvWOeeFwsUuLYY+v1uRTD/QKNpcqqy3mvWT0=;
-        b=h0mK38A9o9/MlQ5JvaWm+GxoJwsnbzITaYa3AcOlAmObqW65pD2U1bdwNy6DhRyj1n
-         xOj4p2HgjjLffWrDtH5MbeIU8h/TYE/McZTCb2A5WfCaVxfB8RSeih3O5t9ef0tIsvnv
-         yao6vdxTj3J7Z+c+WNWGE076yoS+kjvhVXZ5FUaCea1iPXkCEz9C1oRHFQL9wW5QVvqr
-         hCzYB9r8hAVZnjH/SmKo1G1qdIw3g8Ln9sZMCsWxy3PE376tu5mDHBsf0OxYdCHfu58M
-         +DjoTXG3uLpdB6AqK4dUfBmLNEuT1ks15NzVJPmLYQGXZ/bsQzttd5XJZbZA/WAyrsqU
-         zvkQ==
+        bh=kr8q0vJdMraPMNcp9YTW0aQV6wa6XsOli4AJVOGN+FU=;
+        b=2haSRi/Vc0mO0U+b+R2quBqnu0V9gEADZeoMz8Oc3ITSqlsfb+jAnKWHabUQVSpg6K
+         Sw2974nPzroLc2EAVx5emml2OYTX5Xsi+IhoFpbNkqUwISfbylL3iSCHWqIbTFnCSycX
+         LGeKLGpOuv95H0UnJAjun0bnWgtVAlqzvJ30LCZMC2JD2DbrUmlPVTa/A4UPUWJUHrML
+         iLD71xu5krDhqOperqZsjobSktkWIjjzLMipzTe4BzklEKz/rTOHjeFcj1mHTDl4yxB0
+         XyA+Ru9eJOVNyFhkgaZUli1S3QbiWP0enFnnPqgLxZlsK2OOFJU52zwy2Xd2VfGjCHKn
+         B4Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714770211; x=1715375011;
+        d=1e100.net; s=20230601; t=1714770245; x=1715375045;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rd8OjNaRvWOeeFwsUuLYY+v1uRTD/QKNpcqqy3mvWT0=;
-        b=oG8rUhTZ1sXfAKUyqF1JqbfcZPelWtPfcoOuKHVwb1p8LbZbk74gBxCVZrQHvDuaVS
-         8DoEy8skxAGQTL2DNmDT+NGog4HWDA2ZgKrvAH+n7ZLS7PqqF1eglSQv4HcMCiAdEhus
-         /6jV3aifUBu0ettZrQu5nKi82sXiei7g6KOcWT1sztyEY1jOEmzuNRMdzOA/+lVURVhj
-         /mvwDcJN0j45bEfXOtsIMhvKUXlb5DqDvlhUxZkCndxrRFkcYbYIQQt28C/KAwfJkN8B
-         Js/JHvQam88tYs71PBx1oCFkjRXU/Ik67cKcaglsxmr03U48XP3fimweAm6XMrGt0dnl
-         HLvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXaiPV3bqjldQpwosRPptmpgFZe0TsGVzdaMHb68ELyhW2FEG81qhEaeEwJ5HatO+9v7oQTwk1Lk2NG6E4KtvTPkXMwCvCnlQIVE+fEhHsf
-X-Gm-Message-State: AOJu0Yw+1SeGOahMwWO4YbB2NupU3mhKqoURqss78EXLdnjQ+YYe6EFj
-	HwL9pp1kejR62B0XZRP3AyduUe4o+b9eRK7DZbdwudmW4w1RPBgX/AiUDQa6GOQ+GFHCEjdlxxx
-	RSy996GHbij0k42ew/bM8hTbDxOe3iWg17RSoeg==
-X-Google-Smtp-Source: AGHT+IEwpEu81rH/FVNGePHBQCeqISBNzWjs4+w0Krz4xOnwCzY8XdmmXYuma+LSuWoMAtSFSqV0h7lUFLzfoGC8UUs=
-X-Received: by 2002:a19:2d5c:0:b0:51f:5760:dd34 with SMTP id
- t28-20020a192d5c000000b0051f5760dd34mr2358407lft.55.1714770211432; Fri, 03
- May 2024 14:03:31 -0700 (PDT)
+        bh=kr8q0vJdMraPMNcp9YTW0aQV6wa6XsOli4AJVOGN+FU=;
+        b=KOJWZiEdou/xwCQh50ip42NaixXS4nIuoYDBAEix357n8jFiH+lpQpsz7M9QuP6DZm
+         u2K9bxNZ75JT0IEQgr8rgGWC0zmrpyFIKDyEAU9Ma9BG4+TPgNvKOcpmJ2HiBTBc4e0C
+         ytthgdg2ePXvH7FOl1UWGHSHlO9h4Xkufxlmg/IuXVAZUN7SWAYCReZMqAGO8Yj+W1TP
+         XJbEYQZKUDWBJt+rZZ3Qv7SYULuoY6pDSmbG0qO4Pk1PY9+EJup2glhqlzMXXb0AWhUT
+         PBQHXtPlt9K3/INhvflR1JyF7KLNSW1owszBB+UYmFhhEhw4rTe9EX7IHwZQEOIZy2pu
+         gNZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzr7uSrnQge+qFXE1hIuDQ9BTi/UexsWVaiU/lZyVrDdsdZBWoj3QjEdwMMtMA4Ahz1qDkglp7zFdUuX5rFL/PkjP0TKJ6Og+jjRWd2uH5
+X-Gm-Message-State: AOJu0YwACp5ftNnor4heXAide4v43A+cSMmUSp1+lpJ2IgidsQpw7zVz
+	8nlKdA29QSGvBbi2erhSZpqCXnGcu28FQsEJNvQeFVKGvyYK8OnwGZ02vXEd4xoBJHhoFGyOv3J
+	kGByzF3ElUSjZKfebGc8NGbZHJBWF/enLEov5Kg==
+X-Google-Smtp-Source: AGHT+IFVGeh8LKuvAXn0wbATQFthajoGa9wA2FpRSy48ryw0IkU/MmVyuccePKcDYu88/CEm2wRejt72X+QG3nu2ZVk=
+X-Received: by 2002:a2e:a71f:0:b0:2e1:f255:6673 with SMTP id
+ s31-20020a2ea71f000000b002e1f2556673mr3009473lje.13.1714770245520; Fri, 03
+ May 2024 14:04:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,12 +72,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240503-dev-charlie-support_thead_vector_6_9-v6-0-cb7624e65d82@rivosinc.com>
- <20240503-dev-charlie-support_thead_vector_6_9-v6-5-cb7624e65d82@rivosinc.com>
-In-Reply-To: <20240503-dev-charlie-support_thead_vector_6_9-v6-5-cb7624e65d82@rivosinc.com>
+ <20240503-dev-charlie-support_thead_vector_6_9-v6-6-cb7624e65d82@rivosinc.com>
+In-Reply-To: <20240503-dev-charlie-support_thead_vector_6_9-v6-6-cb7624e65d82@rivosinc.com>
 From: Evan Green <evan@rivosinc.com>
-Date: Fri, 3 May 2024 14:02:54 -0700
-Message-ID: <CALs-HsuS_DWoUjwF0ozLH2drWJ7VzfdA-14XocsHNXt9CTT7Wg@mail.gmail.com>
-Subject: Re: [PATCH v6 05/17] riscv: Extend cpufeature.c to detect vendor extensions
+Date: Fri, 3 May 2024 14:03:29 -0700
+Message-ID: <CALs-HsuH5KM4OEH3Uo58cq=3Zgr-gd43hhtOuP2tQFDyDUjq2w@mail.gmail.com>
+Subject: Re: [PATCH v6 06/17] riscv: Add vendor extensions to /proc/cpuinfo
 To: Charlie Jenkins <charlie@rivosinc.com>
 Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
@@ -97,13 +97,8 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, May 3, 2024 at 11:18=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
 om> wrote:
 >
-> Separate vendor extensions out into one struct per vendor
-> instead of adding vendor extensions onto riscv_isa_ext.
->
-> Add a hidden config RISCV_ISA_VENDOR_EXT to conditionally include this
-> code.
->
-> The xtheadvector vendor extension is added using these changes.
+> All of the supported vendor extensions that have been listed in
+> riscv_isa_vendor_ext_list can be exported through /proc/cpuinfo.
 >
 > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 
