@@ -1,215 +1,230 @@
-Return-Path: <linux-kselftest+bounces-9372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EEB08BAE04
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 15:48:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A29E8BAE3E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 15:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66FC01C22674
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 13:48:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C7A6B22B62
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 13:57:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9D4153BF3;
-	Fri,  3 May 2024 13:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D273D15444B;
+	Fri,  3 May 2024 13:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="Eo4oUO0N"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LrwH/3mn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CC4153BE4
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 13:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751051DA21;
+	Fri,  3 May 2024 13:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714744094; cv=none; b=jsGZkZeBjvSrR/n0/eNubfno1lyOGL76zqb/vpghiVMZ/CV/30QLW1G5T9XKfVyKtMLBeDOeCg5voBT2WpyIdJQ+hpvIKcxF47tByr++2ehEysOsCKVSt3cEVfGV0xF2SoEpgDH3ZwV9A3X3tUV56EPR61aSfpoMdybgnT4nz3k=
+	t=1714744567; cv=none; b=fDcX2ymBE0NqDD8i+m45v+5albMtMDb/USJg9eZzQJvG18UpLR983epfbe72xs4/zLrj0rZmYPdIKyXJdRsjOVwq5ErDbdN2JMITM1aJ7XjfC6XUkqnvv6Y1oshjbxaQQm10at8IK52rZOYE1GiHXhAr3LI/kIHbpcxxATG9Pow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714744094; c=relaxed/simple;
-	bh=ZtEDfOvwvxE7Fvlei3awx6n7b16lJ64hGqs3ri5Vvno=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=skEvtvTfloSBgg0x0iNmHukMWbFxvo6ZKvNWrkiwTWn2po5J0eA0UfGkZbxdCoycK+/pR91KBFVgxkh/EceDkBHF1tIpwRMFMy4+FX32rYgDw9UsSk2eVePD/sCxN7BIGKo/lYhHuMvsQcqIzQi8Rzh5n1cTYOjdG9bdP9sIHjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=Eo4oUO0N; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6f44e3fd382so343768b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2024 06:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1714744092; x=1715348892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6o8JjInWH3LKnqSsl6S6HrXQoEHLETqeq/r/V572dU=;
-        b=Eo4oUO0NyGT18aCFzFdFLe56ucL/AJueYCJUdmnHl9Nt23FCxhv5x37MaOUQ4mh6Rg
-         6rJn7CuSsD3GRMFq5Spa4vSs2Y6E/sn+whqdcgZfPtnfK0N0uG/rm4XIJzYVogyjq5cy
-         T8gOz15Y0vP937ik8/MQs2ywKuHg/sWL6CQ/IJn0fQFnkVjd1NEBIL4WSTEDva/JujcI
-         H6RvqEgEq7x/22Kzc1WfR+te5bXod4QDkYGax6eZR+WzdpL1b0kO6ZiyL8PeKwpKi6zH
-         36NuwY5Jj+qVik3dnrT6dxhciqxhsCWIz46r2bmQh9zOv3o9tINJDeTu0AbtuOMKxL0g
-         tqkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714744092; x=1715348892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I6o8JjInWH3LKnqSsl6S6HrXQoEHLETqeq/r/V572dU=;
-        b=h9omG7P4IL8iTuDE43EfonrSwTc4sbIaIWuEbWguTONqPPw6KLhKw3GTqsWTjSUTxv
-         /O3qST5neG8t+InJTEtQD9uoFMMlZfIDjIadeX8SXWVJKliKoeOQ+PI6EyYpyoy3/NHm
-         uCoXgf/uzC+rtc+jtDOhSVDIr6yzID7iRRCJL+NFLqrvEclptKmir/hDdcKjksjz/rAQ
-         ZDzvT2rXw6BFGFw0aQMXUN5yXZuEAhss1zQaGzr/pwX1ZnwPUG0MHqD7Pq5foZRbBak0
-         gtIKjelKTIqLEuO94s/M5DO4Ub9maav4ncurPOkkoadoIhPNsdtKRFCCKBYhKuWsoYkF
-         ZCcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJDEKSKkHb+dH5kT/K0yrpvb1Bp1F/FwzvootDJLEYBJ08zBr8Fcwd0RsirAVVRFbSezU0LDOSTlsdPwdUyseVPbGKGAAbM0wNgSjqXTjt
-X-Gm-Message-State: AOJu0YyBtipwjQ8erRHD1pCNkRRea8TrgPtJGl1P1hfC5bBnTng7vWtr
-	u30LTEHoKMNDGgkpJyA1lYNc1avOzc2ZiLVOoH1TSnOog13pUT3zDdoGGBGFXD9SQksLppqsSXa
-	3ZG8WmsHRy0j4nR54ezGNIBNG7CBnz6VQ0zi2
-X-Google-Smtp-Source: AGHT+IGcHQbk7BIXmDO++MVBetSDEcok6GyH2AElax21yCwgfaWPhGQ74GzYA7sVljZdG8KJzwLOECLgom2T9Etb/J0=
-X-Received: by 2002:a05:6a20:a7a9:b0:1ac:de42:bc5c with SMTP id
- bx41-20020a056a20a7a900b001acde42bc5cmr2278110pzb.42.1714744092194; Fri, 03
- May 2024 06:48:12 -0700 (PDT)
+	s=arc-20240116; t=1714744567; c=relaxed/simple;
+	bh=Y96AOJn77GLmUXEHBQutWKub1WKq1hWJmHUqVNR3Y1k=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BAbahciPbzsI8MuY+WbxVnXc/nQDia0TYC9tgicebRWrhoQtN0j7Arkt5EKcEfSrfS3MTOiAL3Q6qfoU5LEFZMbH0+DhtRvLwHnYbeYJ/uHEI/MrQgO3sPIL11G5ecY7SpZdFC8Bos5CHDlKHbm3zdinKetz/GQ3ZFiMe3/Seic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LrwH/3mn; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1714744558;
+	bh=Y96AOJn77GLmUXEHBQutWKub1WKq1hWJmHUqVNR3Y1k=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=LrwH/3mnfPFWqlO5VtTiuRGi9MobTvoBHFrIB76DM6IOY+OUEJR0aAjTboy988yxP
+	 QSMEaZ3YNliz8x2SL9d2ztlpuXyVPx0TUKok84aJeR0FOwlO24eYgbvNLSwPkcfxPG
+	 pRCOxnEBERINg0V91bymWGUP03rFYdGMavMztrpWxRtbmoSM+hRbtTmAq6rx4xwvDr
+	 J3mNBr0h1epQC8Zio6mZvPLIiBsx75G9tiepMv+ebSGKARKHLP4txvVH+ee64mNfr3
+	 4tOdpC/q3rPmtqELML2YsgF4rCCSp86E4EPPbvcu+OoflwW3KnSsogQtvbsVCYas1C
+	 JlVqryH+wLruA==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5A0D33782135;
+	Fri,  3 May 2024 13:55:47 +0000 (UTC)
+Message-ID: <b4d7ce70-3320-4333-9589-b5df187409fe@collabora.com>
+Date: Fri, 3 May 2024 18:55:59 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240503032956.89290-1-jhubbard@nvidia.com>
-In-Reply-To: <20240503032956.89290-1-jhubbard@nvidia.com>
-From: Dmitry Safonov <dima@arista.com>
-Date: Fri, 3 May 2024 14:48:00 +0100
-Message-ID: <CAGrbwDTv7qikmnKVHECrX0SpxLV5-3RExxCEtPykfmMrVeBhQA@mail.gmail.com>
-Subject: Re: [PATCH] selftest/timerns: fix clang build failures for abs() calls
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Andrei Vagin <avagin@openvz.org>, Andrei Vagin <avagin@gmail.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Valentin Obst <kernel@valentinobst.de>, 
-	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
+ prog_tests
+To: Yonghong Song <yonghong.song@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240401123455.1377896-1-usama.anjum@collabora.com>
+ <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
+ <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
+ <0ff5c7d0-d5c5-4b61-ba89-8e7f9f775935@linux.dev>
+ <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
+ <ff36e8fa-14f4-42a6-8210-cec24a7779a0@linux.dev>
+Content-Language: en-US
+In-Reply-To: <ff36e8fa-14f4-42a6-8210-cec24a7779a0@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 3, 2024 at 4:30=E2=80=AFAM John Hubbard <jhubbard@nvidia.com> w=
-rote:
->
-> First of all, in order to build with clang at all, one must first apply
-> Valentin Obst's build fix for LLVM [1]. Once that is done, then when
-> building with clang, via:
->
->     make LLVM=3D1 -C tools/testing/selftests
->
-> ...then clang warns about mismatches between the expected and required
-> integer length being supplied to abs(3).
->
-> Fix this by using the correct variant of abs(3): labs(3) or llabs(3), in
-> these cases.
->
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f=
-9ed7d1c49f@valentinobst.de/
->
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On 4/5/24 1:06 AM, Yonghong Song wrote:
+> 
+> On 4/3/24 5:03 AM, Muhammad Usama Anjum wrote:
+>> On 4/3/24 7:36 AM, Yonghong Song wrote:
+>>> On 4/2/24 8:16 AM, Muhammad Usama Anjum wrote:
+>>>> Yonghong Song,
+>>>>
+>>>> Thank you so much for replying. I was missing how to run pipeline
+>>>> manually.
+>>>> Thanks a ton.
+>>>>
+>>>> On 4/1/24 11:53 PM, Yonghong Song wrote:
+>>>>> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
+>>>>>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
+>>>>>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
+>>>>>> dev_cgroup.skel.h and load program from it accourdingly.
+>>>>>>
+>>>>>>      ./test_progs -t dev_cgroup
+>>>>>>      mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>>>      64+0 records in
+>>>>>>      64+0 records out
+>>>>>>      32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+>>>>>>      dd: failed to open '/dev/full': Operation not permitted
+>>>>>>      dd: failed to open '/dev/random': Operation not permitted
+>>>>>>      #72     test_dev_cgroup:OK
+>>>>>>      Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>>> ---
+>>>>>> Changes since v2:
+>>>>>> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
+>>>>>>      probability that the test is racing against another cgroup test
+>>>>>> - Minor changes to the commit message above
+>>>>>>
+>>>>>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
+>>>>>> next. It is passing on both. Not sure why it was failed on BPFCI.
+>>>>>> Test run with vmtest.h:
+>>>>>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
+>>>>>> ./test_progs -t dev_cgroup
+>>>>>> ./test_progs -t dev_cgroup
+>>>>>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>>> 64+0 records in
+>>>>>> 64+0 records out
+>>>>>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
+>>>>>> dd: failed to open '/dev/full': Operation not permitted
+>>>>>> dd: failed to open '/dev/random': Operation not permitted
+>>>>>>     #69      dev_cgroup:OK
+>>>>>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>>> The CI failure:
+>>>>>
+>>>>>
+>>>>> Error: #72 dev_cgroup
+>>>>> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:mknod 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>>> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 !=
+>>>>> expected 0
+>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>>>
+>>>>> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
+>>>>>
+>>>>> The error code 256 means mknod execution has some issues. Maybe you
+>>>>> need to
+>>>>> find specific errno to find out what is going on. I think you can do ci
+>>>>> on-demanding test to debug.
+>>>> errno is 2 --> No such file or directory
+>>>>
+>>>> Locally I'm unable to reproduce it until I don't remove
+>>>> rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
+>>>> node is present before test execution. The error code is 256 with errno 2.
+>>>> I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
+>>>> are already present in /tmp. But ls's output doesn't appear on the CI
+>>>> logs.
+>>> errno 2 means ENOENT.
+>>>  From mknod man page (https://linux.die.net/man/2/mknod), it means
+>>>    A directory component in/pathname/  does not exist or is a dangling
+>>> symbolic link.
+>>>
+>>> It means /tmp does not exist or a dangling symbolic link.
+>>> It is indeed very strange. To make the test robust, maybe creating a temp
+>>> directory with mkdtemp and use it as the path? The temp directory
+>>> creation should be done before bpf prog attach.
+>> I've tried following but still no luck:
+>> * /tmp is already present. Then I thought maybe the desired file is already
+>> present. I've verified that there isn't file of same name is present inside
+>> /tmp.
+>> * I thought maybe mknod isn't present in the system. But mknod --help
+>> succeeds.
+>> * I switched from /tmp to current directory to create the mknod. But the
+>> result is same error.
+>> * I've tried to use the same kernel config as the BPF CI is using. I'm not
+>> able to reproduce it.
+>>
+>> Not sure which edge case or what's going on. The problem is appearing
+>> because of some limitation in the rootfs.
+> 
+> Maybe you could collect /tmp mount options to see whether anything is
+> suspicious? In my vm, I have
+>   tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=3501540k,nr_inodes=1048576)
+> and the test works fine.
+> 
+> 
+My test system:
+tmpfs /tmp tmpfs rw,relatime 0 0
 
-LGTM, even potentially fixes the testing post-2038.
+On the CI, /tmp is present. But it isn't tmpfs. Following shows the logs
+from /proc/mounts
 
-Reviewed-by: Dmitry Safonov <dima@arista.com>
+On CI:
+  /dev/root / 9p
+rw,relatime,cache=f,access=client,msize=512000,trans=virtio 0 0
+  devtmpfs /dev devtmpfs
+rw,relatime,size=1998612k,nr_inodes=499653,mode=755 0 0
+  tmpfs /dev/shm tmpfs rw,nosuid,nodev,relatime 0 0
+  proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+  tmpfs /run tmpfs rw,nosuid,nodev,relatime 0 0
+  tmpfs /run/netns tmpfs rw,nosuid,nodev,relatime 0 0
+  sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+  debugfs /sys/kernel/debug debugfs rw,relatime 0 0
+  tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
+  cgroup2 /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime 0 0
+  tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
+  net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
+  tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
+  net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
+  tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
+  net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
+  bpffs /sys/fs/bpf bpf rw,relatime 0 0
+  bpf /sys/fs/bpf bpf rw,relatime 0 0
+  tmpfs /mnt tmpfs rw,nosuid,nodev,relatime 0 0
+  vmtest-shared /mnt/vmtest 9p
+rw,relatime,cache=f,access=client,msize=512000,trans=virtio 0 0
+  none /mnt cgroup2 rw,relatime 0 0
 
-> ---
->  tools/testing/selftests/timens/exec.c       | 6 +++---
->  tools/testing/selftests/timens/timer.c      | 2 +-
->  tools/testing/selftests/timens/timerfd.c    | 2 +-
->  tools/testing/selftests/timens/vfork_exec.c | 4 ++--
->  4 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selfte=
-sts/timens/exec.c
-> index e40dc5be2f66..d12ff955de0d 100644
-> --- a/tools/testing/selftests/timens/exec.c
-> +++ b/tools/testing/selftests/timens/exec.c
-> @@ -30,7 +30,7 @@ int main(int argc, char *argv[])
->
->                 for (i =3D 0; i < 2; i++) {
->                         _gettime(CLOCK_MONOTONIC, &tst, i);
-> -                       if (abs(tst.tv_sec - now.tv_sec) > 5)
-> +                       if (labs(tst.tv_sec - now.tv_sec) > 5)
->                                 return pr_fail("%ld %ld\n", now.tv_sec, t=
-st.tv_sec);
->                 }
->                 return 0;
-> @@ -50,7 +50,7 @@ int main(int argc, char *argv[])
->
->         for (i =3D 0; i < 2; i++) {
->                 _gettime(CLOCK_MONOTONIC, &tst, i);
-> -               if (abs(tst.tv_sec - now.tv_sec) > 5)
-> +               if (labs(tst.tv_sec - now.tv_sec) > 5)
->                         return pr_fail("%ld %ld\n",
->                                         now.tv_sec, tst.tv_sec);
->         }
-> @@ -70,7 +70,7 @@ int main(int argc, char *argv[])
->                 /* Check that a child process is in the new timens. */
->                 for (i =3D 0; i < 2; i++) {
->                         _gettime(CLOCK_MONOTONIC, &tst, i);
-> -                       if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
-> +                       if (labs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
->                                 return pr_fail("%ld %ld\n",
->                                                 now.tv_sec + OFFSET, tst.=
-tv_sec);
->                 }
-> diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selft=
-ests/timens/timer.c
-> index 5e7f0051bd7b..5b939f59dfa4 100644
-> --- a/tools/testing/selftests/timens/timer.c
-> +++ b/tools/testing/selftests/timens/timer.c
-> @@ -56,7 +56,7 @@ int run_test(int clockid, struct timespec now)
->                         return pr_perror("timerfd_gettime");
->
->                 elapsed =3D new_value.it_value.tv_sec;
-> -               if (abs(elapsed - 3600) > 60) {
-> +               if (llabs(elapsed - 3600) > 60) {
->                         ksft_test_result_fail("clockid: %d elapsed: %lld\=
-n",
->                                               clockid, elapsed);
->                         return 1;
-> diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/sel=
-ftests/timens/timerfd.c
-> index 9edd43d6b2c1..a4196bbd6e33 100644
-> --- a/tools/testing/selftests/timens/timerfd.c
-> +++ b/tools/testing/selftests/timens/timerfd.c
-> @@ -61,7 +61,7 @@ int run_test(int clockid, struct timespec now)
->                         return pr_perror("timerfd_gettime(%d)", clockid);
->
->                 elapsed =3D new_value.it_value.tv_sec;
-> -               if (abs(elapsed - 3600) > 60) {
-> +               if (llabs(elapsed - 3600) > 60) {
->                         ksft_test_result_fail("clockid: %d elapsed: %lld\=
-n",
->                                               clockid, elapsed);
->                         return 1;
-> diff --git a/tools/testing/selftests/timens/vfork_exec.c b/tools/testing/=
-selftests/timens/vfork_exec.c
-> index beb7614941fb..5b8907bf451d 100644
-> --- a/tools/testing/selftests/timens/vfork_exec.c
-> +++ b/tools/testing/selftests/timens/vfork_exec.c
-> @@ -32,7 +32,7 @@ static void *tcheck(void *_args)
->
->         for (i =3D 0; i < 2; i++) {
->                 _gettime(CLOCK_MONOTONIC, &tst, i);
-> -               if (abs(tst.tv_sec - now->tv_sec) > 5) {
-> +               if (labs(tst.tv_sec - now->tv_sec) > 5) {
->                         pr_fail("%s: in-thread: unexpected value: %ld (%l=
-d)\n",
->                                 args->tst_name, tst.tv_sec, now->tv_sec);
->                         return (void *)1UL;
-> @@ -64,7 +64,7 @@ static int check(char *tst_name, struct timespec *now)
->
->         for (i =3D 0; i < 2; i++) {
->                 _gettime(CLOCK_MONOTONIC, &tst, i);
-> -               if (abs(tst.tv_sec - now->tv_sec) > 5)
-> +               if (labs(tst.tv_sec - now->tv_sec) > 5)
->                         return pr_fail("%s: unexpected value: %ld (%ld)\n=
-",
->                                         tst_name, tst.tv_sec, now->tv_sec=
-);
->         }
->
-> base-commit: f03359bca01bf4372cf2c118cd9a987a5951b1c8
-> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
-> --
-> 2.45.0
->
+-- 
+BR,
+Muhammad Usama Anjum
 
