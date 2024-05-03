@@ -1,110 +1,75 @@
-Return-Path: <linux-kselftest+bounces-9351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 078588BA97D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 11:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 688DE8BAAE5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 12:42:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B59F6281F57
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 09:10:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 242BD282941
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2024 10:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7F914EC6F;
-	Fri,  3 May 2024 09:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1q2O5mv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CED61514EC;
+	Fri,  3 May 2024 10:42:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7661367;
-	Fri,  3 May 2024 09:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842201514CD
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 May 2024 10:42:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714727445; cv=none; b=d4LYlBkGcR1skukfsVQgiMVzA7ReV/ptgs57qKP03MVvN1WOB/mjHlblHF6vLWWvS8ubp4P1se5/I79Zargg0Q0RTSKZzqQaKb2ARMQkzaPkC8AqkCff3/kzTPaE333jZ2CAaf4uGGCWpPzhLzgFLil4/bbjkluZyvUv/7Jhs1w=
+	t=1714732952; cv=none; b=LF6O0MZfJQB6aopIBtwdmbR1fD7vX61kVQlF3n9nm4jTAtAAsEL+hVBJRmIbmA8VV60SVL/jSMuacNJfmdE4cEcVfXoPpUjbp2acCe1RrnHUiMxVA80obIhXDUXifASMFWb9zHCAeJqa/4QQ8mxfYwD1l6MC8knI65MNPGjrtzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714727445; c=relaxed/simple;
-	bh=WTDd8xTTFTmxmAFyzg5Soj8vzJna+d8YvjaUIxy/+T4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q1M9IqZ3o00shLSAh2egRzhpghwWVPrOwAx4O4Mw1MBsW/BWtntTKI3QlBOGrXQ7bu5mvWFD+x1HHrFZb6Tr0XKanNPTuVgV5tbEEJE0JhfqjMT5hhMNQ5Xw/2//9Hpeb9cMaVmYvOwVO+JYO8tDvJ6d2KFw2opJR2DtpQ3xRiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1q2O5mv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F544C116B1;
-	Fri,  3 May 2024 09:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714727444;
-	bh=WTDd8xTTFTmxmAFyzg5Soj8vzJna+d8YvjaUIxy/+T4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F1q2O5mvo3cPCwkLySXkfpwl8YnN9PNkYtfmSoaliKWHUta39eI7uDK7j+8kEZTJO
-	 tvj03MIXG071ielV4jEC94C60aKxnuxD62MM2e/PfK87qi40aCIqLNUI3nxTlkOnSX
-	 Fl9ZbesgzSnk+xqe84bAcTfJjNLEGNkdFeDP1OWv2tX+CgWvXtnoDopQ9X9lO1JRp1
-	 l15rWENKBnB4gDNq+iF7iHrFRkbri1Psr6cWE1GaLyTE4JGuV8POPogUVZrmzfS4g/
-	 A6ELN1TCWKMZUZ/ADK65D2HqZqV02SLjhsEJo5GwpviP0EiVUoOBXRL09OeKlaZdml
-	 OTBD7oRCBzvnQ==
-Date: Fri, 3 May 2024 11:10:38 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Kees Cook <keescook@chromium.org>, Valentin Obst <kernel@valentinobst.de>, 
-	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests/binderfs: use the Makefile's rules, not Make's
- implicit rules
-Message-ID: <20240503-glossar-notfall-bd7c234c2da7@brauner>
-References: <20240503015820.76394-1-jhubbard@nvidia.com>
+	s=arc-20240116; t=1714732952; c=relaxed/simple;
+	bh=4B2TlPDiESp22hsGJx9RvmqzAQxJHwdIawyvCeWnOUQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=V5mFF8cZUaHjPqpQ9/G9PcbkOhGfFhDnH7iDG1zd7flEG+e3obBRykWe8EA/M6+u4JhWMr8Va/3GILsRFj4FXcCutBMqGqPyut7TLyojJQ8FstWrwbNZOG9c1cimkzoiQHStLV1xISU6QOi/m8NBVmpIJJH5EClHWhjf70agpoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VW6nc3jsxz4xFg;
+	Fri,  3 May 2024 20:42:28 +1000 (AEST)
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, aneesh.kumar@kernel.org, naveen.n.rao@linux.ibm.com, shuah@kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <20240229093711.581230-1-maddy@linux.ibm.com>
+References: <20240229093711.581230-1-maddy@linux.ibm.com>
+Subject: Re: [PATCH 1/3] selftest/powerpc: Re-order *FLAGS to follow lib.mk
+Message-Id: <171473286290.451432.4486404094591945834.b4-ty@ellerman.id.au>
+Date: Fri, 03 May 2024 20:41:02 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240503015820.76394-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 02, 2024 at 06:58:20PM -0700, John Hubbard wrote:
-> First of all, in order to build with clang at all, one must first apply
-> Valentin Obst's build fix for LLVM [1]. Once that is done, then when
-> building with clang, via:
+On Thu, 29 Feb 2024 15:07:09 +0530, Madhavan Srinivasan wrote:
+> In some powerpc/ sub-folder Makefiles, CFLAGS are
+> defined before lib.mk include. Clean it up by
+> re-ordering it to follow after the mk include.
+> This is needed to support sub-folders in powerpc/
+> buildable on its own.
 > 
->     make LLVM=1 -C tools/testing/selftests
 > 
-> ...the following error occurs:
-> 
->    clang: error: cannot specify -o when generating multiple output files
-> 
-> This is because clang, unlike gcc, won't accept invocations of this
-> form:
-> 
->     clang file1.c header2.h
-> 
-> While trying to fix this, I noticed that:
-> 
-> a) selftests/lib.mk already avoids the problem, and
-> 
-> b) The binderfs Makefile indavertently bypasses the selftests/lib.mk
-> build system, and quitely uses Make's implicit build rules for .c files
-> instead.
-> 
-> The Makefile attempts to set up both a dependency and a source file,
-> neither of which was needed, because lib.mk is able to automatically
-> handle both. This line:
-> 
->     binderfs_test: binderfs_test.c
-> 
-> ...causes Make's implicit rules to run, which builds binderfs_test
-> without ever looking at lib.mk.
-> 
-> Fix this by simply deleting the "binderfs_test:" Makefile target and
-> letting lib.mk handle it instead.
-> 
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-> 
-> Fixes: 6e29225af902 ("binderfs: port tests to test harness infrastructure")
-> Cc: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
+> [...]
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+Applied to powerpc/next.
+
+[1/3] selftest/powerpc: Re-order *FLAGS to follow lib.mk
+      https://git.kernel.org/powerpc/c/37496845c812db2a470d51088a59ee38156e8058
+[2/3] selftest/powerpc: Add flags.mk to support pmu buildable
+      https://git.kernel.org/powerpc/c/5553a79387e92ffd812a49fdcf679f392281f6a9
+[3/3] selftest/powerpc: make sub-folders buildable on it own
+      https://git.kernel.org/powerpc/c/108e5e683333615023265a9a73a29d4c2fa16c70
+
+cheers
 
