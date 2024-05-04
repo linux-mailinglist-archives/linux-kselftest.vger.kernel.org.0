@@ -1,182 +1,146 @@
-Return-Path: <linux-kselftest+bounces-9467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAE28BBD5B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 19:09:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8E1D8BBD66
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 19:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 480FAB2159F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 17:09:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84DFD1F20C95
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 17:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D991E871;
-	Sat,  4 May 2024 17:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FEFA5A7AB;
+	Sat,  4 May 2024 17:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WTi3d5Bv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mX4cAUdE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF74B3CF63;
-	Sat,  4 May 2024 17:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB281E871;
+	Sat,  4 May 2024 17:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714842582; cv=none; b=KBaQOJE05QAuUWXO4NPQMiyHPGCY1F/diImtju8iFmOI839/rJhks4mxJUgOeTRoL6LUHBs9124ptLyKlc0Zi+U04KY8T+xBqmzQlxWmZzGCUho/cVXXsj4iS1rju5kQg0MJl3OsEUfaDW2xA5dWn3Q4sG8LZ2SZ0mTsrVGkH8I=
+	t=1714843033; cv=none; b=IKOhb0UsvGtDkMLVgZKE0bZUiuEGdRZ+inqLjiHEgmXuos85Lkp+fKEYfOvv1nPDzQWklhnXGWRVxZ6frTDV0ZtSt14NErLwWWHHhdADiZMvVBvahTxE1oa18eY07ZSIFBMf+flN+BFBFku8xpNcnmvtqkMaNAQz3qhL0INyR18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714842582; c=relaxed/simple;
-	bh=RN8sM9rwjZwwdKGVaNRPJTpQKo7jfPTufLurlZ3XD3w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S1LDUBou6wEjqoYvucZsfCqT+TLTFI5a6vaW9M4BO3jL22ex2WNAsvXFjswIhTyc+qbPEU6AYGwbPxLdnT4xCcpypdjMJuwhGKuWGXMrhrSlozPaXFuuwtOOCdCPO4S0W8gwwhKRYNUWRe1a8CYOt09ItliQhXGT+VJYZmmpFOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WTi3d5Bv; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1714843033; c=relaxed/simple;
+	bh=CHwURKhOVjoyYyUjhiWmlLKA/tlrP8KbElQ4Ku0JlQA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WMstSrXwmI+ZpkpHhy8oLwjhUyLCk9Cmt3aHVSIUJKfHA4mW3+iD2Hs7myVIAndc+l7LTfW/Ru7zjSDYSlvga2p04v9r4q02ckFZvAjnupNjrhTssYY/U9Un+qsxeIz19JUf5KJ5eM2n/j0/U2CKa6I2Fd64XgPLqSj8HybieNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mX4cAUdE; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a59b178b75bso47717266b.0;
-        Sat, 04 May 2024 10:09:40 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5200afe39eso144757466b.1;
+        Sat, 04 May 2024 10:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714842579; x=1715447379; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ce7oQnjKrRdar2TNOfb/eaRIm+cuGYdS0Jy3xtMZjsU=;
-        b=WTi3d5BvJIvrz0ffw5mpoMPhS9jNp7+svdjQlgQRh1Jyr2qLIXVYSY6d1IKmFjiFtc
-         65M8QoP22j6N06nVHTtb18xtD5nbaO9QHcg1/L9e4Tv71JM23I6RmefBdehO238aS84I
-         RZsPlGe4kbdHpsgVnN6pTluY3QnEa0WN172aLQyft6caEiPlKJOYq2nEUONxApwgpf21
-         igRhY0nMhoDU3n2oELj2d8zhzmG4hzlFhF2mIqNqXc+Ye6I94z4cfJYrm5DVWL1R4RvJ
-         edkfAOka79Da/Q4k52eIrVVsMasVyG2YV7OLzrMWwXPLt+heEXy/+8BhVgRyxct7YJVu
-         B1eg==
+        d=gmail.com; s=20230601; t=1714843030; x=1715447830; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9B1yS7dr1hXa9Yb30wcZ4uAWT7TVNCN9CZxLiBerBs=;
+        b=mX4cAUdEPcCZdw6os1N1G+0pqOoFaTRjkJISg7DqFy2ak7uCOoh6buVFJnrlsQMYsy
+         pVfwPoUKnYrxm5JngYo96XSzv2rc78uaZUtaoKUQO+oPZzoqTX9dJbkAnpn6FQMZndK+
+         9ro5uJZgHRQCEV2VbyIOM6NKWciNKnTmArhlmpKHg69Qv16Pylo2W4DFKJAKa+nbJ3BV
+         AXbIgRsS2Q6+wN2rajQS4WOjyn7c0Bu8yuzJEKFL9Md7LdsG61hswPrFT6QrUfdYuckT
+         M7EcsGasr8xRvtwZUzXK9mtV0PkzYKNq1G+WMygeyvDCYzwlWsRCKvElm6nsCCEYKuT+
+         wEaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714842579; x=1715447379;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ce7oQnjKrRdar2TNOfb/eaRIm+cuGYdS0Jy3xtMZjsU=;
-        b=XD/SxNfCf0KqBV2DU5cOW2lQgSv1aGe5/iFtk5oiN+TK3uPddhbx9DgTifAtuR1x4u
-         29XVmRH2pGU6flFZUEULwZen4Dsx9auRZuwrXgzRhjVZ1QQBJCrCbqwp5TR2ctMTJU28
-         /iEqJf2ltdmw5yAFcmOyev4AUwCCT3z5xTTAOMcn/Rn9vK2aGLXp3VK38NfUUPk3ooIw
-         N0iclEEl48rXFN5bJkQIVj1Z0fWfb0f1iZTIriluWSx3ApTCRzAKzs0O0MofzCyZJTWR
-         kJhFlwDUogtaV0GpEP47qvl81YZ7gpPSh3BxZowyYi57noSLgVvQ1xvcop6mH7AeFmAa
-         kfOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkqnqDrKPhHMDHrNTXDXydAhDEWMYalhROjGo3orzkdA+DQfobbhw7deXBrls5+EO1mq0rFnFIyWmDmna+eyCk9zoY1uIEry8WzAFp
-X-Gm-Message-State: AOJu0YwFgpuNUJhcu0FCneB1avENN1l/8H1KO838+lUWwM/HSdNDXXKo
-	CD0kLMl7FHuj7pS0aZvj23rhNnJEg+UH08K5pOLFr4SlJk/tGYGyYmEYOg2/ebWFXHYW
-X-Google-Smtp-Source: AGHT+IHEZMxELsmkFExVZ32eKoE6VP7sNTw3UDjsB9mia7KxznttVdNLQa5l7PlqUnPTFxSru20zHA==
-X-Received: by 2002:a17:906:52cc:b0:a59:9f11:2b66 with SMTP id w12-20020a17090652cc00b00a599f112b66mr2113454ejn.36.1714842578767;
-        Sat, 04 May 2024 10:09:38 -0700 (PDT)
-Received: from xps-15.. ([194.110.115.30])
-        by smtp.googlemail.com with ESMTPSA id jl24-20020a17090775d800b00a599acaff03sm1776818ejc.19.2024.05.04.10.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 May 2024 10:09:38 -0700 (PDT)
-From: Amer Al Shanawany <amer.shanawany@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Amer Al Shanawany <amer.shanawany@gmail.com>
-Subject: [PATCH] selftests/capabilities: fix warn_unused_result build warnings
-Date: Sat,  4 May 2024 19:09:16 +0200
-Message-ID: <20240504170916.131580-1-amer.shanawany@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1714843030; x=1715447830;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9B1yS7dr1hXa9Yb30wcZ4uAWT7TVNCN9CZxLiBerBs=;
+        b=R9eN4y81V3aCLt20q9aDu1ap/iKYxk16hPG9YBvSjFgCBAu3pd3W7cHknenhMB5CIl
+         4cB20qbFV9zahStahBjEkX5X620TAngAWi+nLX9o24tRo3B4Zukv3fgJ9zKRvMuHDRD4
+         PP7aXaYNxR261Qbauqjd6r5S4mZy+Xp+c/RNEGERsgG1FLpyTvHDElT83lZMY+nKQ1MA
+         cJC+ve6JaOltmSYSQb+fjAodFaMWEl9rhQoSsQ3fite65L7U7z7oOOEw2CQKokSI+HZX
+         +xyoNh1kqmucJ1dTuKekPn2LglGXrDuajVPWhhJeQBlRjqrsnWLjtPvH254xT8lW/yuB
+         AQPA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVk+CB9WtymTs4ARRxt2Yp3ssNgsQfXeTdCCCwoVsIcUkEIdtNOC9i2P+qXD4G1zVKW34UIaGTL3rZFGDdYW4efAUmIPQBbrP6GFSeCuyjH96ruvUeJbcy+Fd8GXpAOR3Ua0xGxKllJm1UQQhs
+X-Gm-Message-State: AOJu0YzkxbdrR+6o5X9NYE/mQ7OXBo7YsIJoqaJMWjSpnDjThIop3AFM
+	A5LgZOaZSBQhHOpnL6xmlDUPA1AC8V12A9xTjjE44gznwVE/Hq67qmYZgxaPwcZGsM6B
+X-Google-Smtp-Source: AGHT+IHJSobgUVfPrytId4RzTuvXfHlNHsRRimrIEzItdJZxbxdhkx1mULmzvRgrMpSWoPGwJ64fuQ==
+X-Received: by 2002:a17:906:7acd:b0:a59:70d2:91b7 with SMTP id k13-20020a1709067acd00b00a5970d291b7mr4950325ejo.13.1714843029767;
+        Sat, 04 May 2024 10:17:09 -0700 (PDT)
+Received: from [10.67.234.135] ([194.110.115.30])
+        by smtp.gmail.com with ESMTPSA id fw14-20020a170906c94e00b00a59bf41edbesm318ejb.146.2024.05.04.10.17.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 May 2024 10:17:09 -0700 (PDT)
+Message-ID: <0910d537-c2e8-4932-8b0e-b5ce381e1ee1@gmail.com>
+Date: Sat, 4 May 2024 19:17:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: filesystems: fix warn_unused_result build
+ warnings
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Miklos Szeredi <mszeredi@redhat.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+References: <20240417184913.74734-1-amer.shanawany@gmail.com>
+ <58e0539d-423e-42e0-9ee4-8fc8e1eed94f@collabora.com>
+Content-Language: en-US
+From: Amer Al Shanawany <amer.shanawany@gmail.com>
+In-Reply-To: <58e0539d-423e-42e0-9ee4-8fc8e1eed94f@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Fix the following warnings by adding return check and error handling.
+On 4/19/24 18:41, Muhammad Usama Anjum wrote:
+> On 4/17/24 11:49 PM, Amer Al Shanawany wrote:
+>> Fix the following warnings by adding return check and error messages.
+>>
+>> statmount_test.c: In function ‘cleanup_namespace’:
+>> statmount_test.c:128:9: warning: ignoring return value of ‘fchdir’
+>> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>>   128 |         fchdir(orig_root);
+>>       |         ^~~~~~~~~~~~~~~~~
+>> statmount_test.c:129:9: warning: ignoring return value of ‘chroot’
+>> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>>   129 |         chroot(".");
+>>       |         ^~~~~~~~~~~
+>>
+>> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>
+>> ---
+>>  .../selftests/filesystems/statmount/statmount_test.c | 12 ++++++++++--
+>>  1 file changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>> index e6d7c4f1c85b..e8c019d72cbf 100644
+>> --- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>> +++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>> @@ -125,8 +125,16 @@ static uint32_t old_root_id, old_parent_id;
+>>  
+>>  static void cleanup_namespace(void)
+>>  {
+>> -	fchdir(orig_root);
+>> -	chroot(".");
+>> +	int ret;
+>> +
+>> +	ret = fchdir(orig_root);
+>> +	if (ret == -1)
+>> +		ksft_perror("fchdir to original root");
+>> +
+>> +	ret = chroot(".");
+>> +	if (ret == -1)
+>> +		ksft_perror("chroot to original root");
+>> +
+>>  	umount2(root_mntpoint, MNT_DETACH);
+>>  	rmdir(root_mntpoint);
+>>  }
+Hi,
 
-test_execve.c: In function ‘do_tests’:
-test_execve.c:100:17: warning: ignoring return value of
- ‘capng_get_caps_process’
- declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  100 |                 capng_get_caps_process();
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-validate_cap.c: In function ‘main’:
-validate_cap.c:47:9: warning: ignoring return value of
- ‘capng_get_caps_process’
-declared with attribute ‘warn_unused_result’ [-Wunused-result]
-   47 |         capng_get_caps_process();
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~
+Can you please consider this patch?
 
-Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
----
- tools/testing/selftests/capabilities/test_execve.c  | 12 +++++++++---
- tools/testing/selftests/capabilities/validate_cap.c |  7 ++++++-
- 2 files changed, 15 insertions(+), 4 deletions(-)
+Thank  you
 
-diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
-index 7cde07a5df78..47bad7ddc5bc 100644
---- a/tools/testing/selftests/capabilities/test_execve.c
-+++ b/tools/testing/selftests/capabilities/test_execve.c
-@@ -82,7 +82,7 @@ static bool create_and_enter_ns(uid_t inner_uid)
- {
- 	uid_t outer_uid;
- 	gid_t outer_gid;
--	int i;
-+	int i, ret;
- 	bool have_outer_privilege;
- 
- 	outer_uid = getuid();
-@@ -97,7 +97,10 @@ static bool create_and_enter_ns(uid_t inner_uid)
- 			ksft_exit_fail_msg("setresuid - %s\n", strerror(errno));
- 
- 		// Re-enable effective caps
--		capng_get_caps_process();
-+		ret = capng_get_caps_process();
-+		if (ret == -1)
-+			ksft_exit_fail_msg("capng_get_caps_process failed\n");
-+
- 		for (i = 0; i < CAP_LAST_CAP; i++)
- 			if (capng_have_capability(CAPNG_PERMITTED, i))
- 				capng_update(CAPNG_ADD, CAPNG_EFFECTIVE, i);
-@@ -207,6 +210,7 @@ static void exec_validate_cap(bool eff, bool perm, bool inh, bool ambient)
- 
- static int do_tests(int uid, const char *our_path)
- {
-+	int ret;
- 	bool have_outer_privilege = create_and_enter_ns(uid);
- 
- 	int ourpath_fd = open(our_path, O_RDONLY | O_DIRECTORY);
-@@ -250,7 +254,9 @@ static int do_tests(int uid, const char *our_path)
- 			ksft_exit_fail_msg("chmod - %s\n", strerror(errno));
- 	}
- 
--	capng_get_caps_process();
-+	ret = capng_get_caps_process();
-+	if (ret == -1)
-+		ksft_exit_fail_msg("capng_get_caps_process failed\n");
- 
- 	/* Make sure that i starts out clear */
- 	capng_update(CAPNG_DROP, CAPNG_INHERITABLE, CAP_NET_BIND_SERVICE);
-diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
-index 60b4e7b716a7..65f2a1c89239 100644
---- a/tools/testing/selftests/capabilities/validate_cap.c
-+++ b/tools/testing/selftests/capabilities/validate_cap.c
-@@ -28,6 +28,7 @@ static bool bool_arg(char **argv, int i)
- int main(int argc, char **argv)
- {
- 	const char *atsec = "";
-+	int ret;
- 
- 	/*
- 	 * Be careful just in case a setgid or setcapped copy of this
-@@ -44,7 +45,11 @@ int main(int argc, char **argv)
- 		atsec = " (AT_SECURE is not set)";
- #endif
- 
--	capng_get_caps_process();
-+	ret = capng_get_caps_process();
-+	if (ret == -1) {
-+		ksft_print_msg("capng_get_caps_process failed\n");
-+		return 1;
-+	}
- 
- 	if (capng_have_capability(CAPNG_EFFECTIVE, CAP_NET_BIND_SERVICE) != bool_arg(argv, 1)) {
- 		ksft_print_msg("Wrong effective state%s\n", atsec);
--- 
-2.43.0
+Amer
 
 
