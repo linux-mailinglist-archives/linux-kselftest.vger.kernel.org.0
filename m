@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-9463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19928BBA15
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 10:30:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D57618BBA18
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 10:30:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E15DB214B2
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 08:30:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 055861C213DF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2024 08:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43667CA7D;
-	Sat,  4 May 2024 08:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A656639;
+	Sat,  4 May 2024 08:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TEDATHvq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xcsuXSpx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609991CD23
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 May 2024 08:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1181F171D8
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 May 2024 08:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714811440; cv=none; b=LSimYRwP8QhxF6jnuYvtbTJlRkiNd1DXNP506qsQY0ZGamxp5NFwnszQAoQRnXrrkwHwW5a7Lsp9mBABL+FPKGp80cm7q5eZvTPIVWtn5RCMD2i3FZNwtavqy9umj5yk1A6hYTYvxdyqJfqRgrI8vjSLDti9CDtTBVbTn0rD6A4=
+	t=1714811449; cv=none; b=OolnXEXMyuB9tLpYf/zTWQnmUtMlnf/eM4S/VwC4YAjYWEJPHOsy8n7xzTTuqH7N35J6/OC2A5j5fAA2VnlRvpMCdKb+WGS8JnvkY2trvjTtsYMPw9vcYTtrbuZ/TbvojRhcmC7b/n2tyfLqTvzMBUHEhvWkcwWZh/5JjzSAF5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714811440; c=relaxed/simple;
-	bh=J4YP9eyb2yvyEzWwHGgln2HilaXj/A8D71mFKuvbR8E=;
+	s=arc-20240116; t=1714811449; c=relaxed/simple;
+	bh=mkRKdUMNUrNXUjl3m84zuncMk1LUIAekd7HgEcPRYXw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ngo4tQUGJR5DLj/VPEyaIZu9GRIcvuARaBMNVf1ciqWv+QN3ynMaxNkWB2JeX7qWcwxSS312ZoP+9rU0aFFfboPj7Rkzoxmah+Pb4pUCaBMW78ugF9lXYLijr8skmdZeGlp/NwRJDiiJEUosK2+tBAFRiPtUy4nYyFsv6xaAQQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TEDATHvq; arc=none smtp.client-ip=209.85.160.170
+	 To:Cc:Content-Type; b=BC5DEuPK/opDnsXsp18hA9LQOfvtyBl8ioJFDXyVguWBTUn+wwZ1ysfraLi+FmBf0OavQIxieCds4ZTEY0MMgQDn85lUcG4vM3htV4rvMkso4EgXzDoGtIkwLuUjg4FowKEl1AuwTGALfAIoLukpgTvLqTvlrqAYQa+/jINGdW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xcsuXSpx; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-43989e6ca42so139931cf.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2024 01:30:38 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-436ed871225so123591cf.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2024 01:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714811437; x=1715416237; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1714811446; x=1715416246; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvbjFciLUm6EQqcMUeFiyns6XBVhq4ReyJciLC5xPWc=;
-        b=TEDATHvqx3q+99nI29Q0lAzn0rA55xk4MdMJV4Icp9Ur52tYZV8yg7Wa2+Z3melBo3
-         SooWquW0o8hRcvE+I8SEps3OQY5yhU6/loA7AgBXBAq6u+mDHJabChOosq9RM6mNWkJz
-         ZcCwUIeAjbGJgItVGULhRg9f/Dlb3A5jUxqo/BOXuezjCljANJ4XboCw3/WG11HXxJ9I
-         ToTHBDM0S/jyH7QWeeHekRMk0pa0L3wh8xCrgXdn2I6VbLaSRMViHs8QccfonDDoIFfA
-         N4AtmvICkJk0ZGazJFc5p2DqUqe1O4HzxiHrEbkAb7s7yEw2anmF9d0V7WGIP8OyZxGp
-         edLg==
+        bh=+ybQKqLz0MjxKKvUKmUyCABvVlVSRKHM+pUXpAjprQc=;
+        b=xcsuXSpxVul2SD2jNlWe7AtZ8bF7iJ/EqjcfqwtGztXYjLTv3Z1mTP63T8e8vUNz6N
+         GQ97Rl6wzVjpuaK2XkhlaKnRDLyMLCSMBwc/dVoE2jm2j1hC4fGNVRDDMRsfGVGrRHUK
+         l+2O9PqJXJHWrPYOcJq3ui5fkGbWSGxJUIBZG26mWNSixX2qP9roy70nRCvtTEzrptlK
+         BHI9x8zOCB7Hh1AD1UP9bIOFH9xg0OkHzDgbNC+D/hB7Wes8RH8CPDg1ZXLko4UnWeIB
+         LXJCeE02osj7KSlHpPnCNZqmknaYX7Awi7vFIbLW61cUo5b7Nx2MpNJwdllrKYr8xT7D
+         rsmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714811437; x=1715416237;
+        d=1e100.net; s=20230601; t=1714811446; x=1715416246;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DvbjFciLUm6EQqcMUeFiyns6XBVhq4ReyJciLC5xPWc=;
-        b=o40iVoy/MlbqXwhHCc2NTbs7oyvg/VXgOJmT1c8mOedzyJ1jVw0vn/LMZN1L8UXLSZ
-         iJujZJz3jWxbwoaIca/M9mMcA8/uh53yV/UFuLcVJKSt1jC5woCSWK3JTPOQ8RHgbjQO
-         a0gKNyfjx7vX1it0gR8J6phPL2EOjkQNHymweRLPeTzZTgY+jBDPK9D3mtBn+87ZhpWZ
-         8s8F8x9lLt1TiRIVNC4DMoDvzgpAJN5lNMcupT8NKx40ezEak/ZTzlicU1JGNPtpS+pL
-         8dx1Sm8cYtQ4ABNWOHtAvYTfeEoC+8CUCfIPPAIyuUkI57yC6tFj+TnxHwH8qE3vBTqv
-         alhA==
-X-Forwarded-Encrypted: i=1; AJvYcCXhOPOyo6Ba84F+qJKfyx4z5BHZVsbNljqcQStewk/eBQ5g1DzQF1FfvKLhFaMWSVc3h63mTzTXVQ22VJ467Usznd2+nuJhOJD6A9PgeMTA
-X-Gm-Message-State: AOJu0YzFRgFM7ZeOoHz9hMKPRDF2F5cyfbzCJl2DyHiNkYydAuzz19wW
-	hnb30YpeARzO7v+iQwfBces7Y8Ff3sjYNvuSjcVJ9fZr8JDzwZAaZz/bqSavh9Y4cR8e+PvlFgV
-	isKs2ZxMLmLZFgS1bCgVIf4nBpW2FMo52tr7A
-X-Google-Smtp-Source: AGHT+IEKKjNF94/tQcRb2QIUjeBMH5UEmKlUpCU1PDh2BsvSCTMhvo7GdNy52lx7nNlyriGSFJrLmGHjeDwZZHrcU4I=
-X-Received: by 2002:a05:622a:413:b0:43a:b274:340e with SMTP id
- d75a77b69052e-43d030aea06mr1583531cf.8.1714811436897; Sat, 04 May 2024
- 01:30:36 -0700 (PDT)
+        bh=+ybQKqLz0MjxKKvUKmUyCABvVlVSRKHM+pUXpAjprQc=;
+        b=Wq4MzTCFn1hnp+R6NkshaLL+CgLGSTxN9nL7EZIHpW9/oFvsOfd+y/B3eCrj6HaLye
+         iInZCa705kiXB4yRGkuF2WTxwUEf2YXO8NGSbgJqmM0slgz2Fs0wpq72ZPrCdvy1r8T5
+         vNa0s+h76onDJmGcljzHqnNf5aG65zr7xAGNF4uDT5A3/CAS2nkUlMcGsSsMDPyGQQHM
+         tHx26USA7U9z3jLUQMDw18jLrPlXm7GzpCGrSadaWvWeoTHYcQh4ySogCjA++agEJ/QV
+         CLUEDiSDSJULKwjxKMXtOnmmM1QjaN4a/w9WmVbyGVu8Ibd5ZgAKZEEXkDtTQpbxWWuD
+         UnxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1HEYTq8rgdr0hzwyeKmifUEL3qBEUoCpsPGdugqOgEC5sLkIoLJl8mDrntmArmcgjUnLEEYncxDUCGM7/tCcJYhbZqpBrbEpdZazrZ9R6
+X-Gm-Message-State: AOJu0YxxY79L06CIiPXXHQkfm7Y6rN+SJdXj+U0UkqvNmdgAPxSvXTSm
+	vxLho51otgFuXfjdo+s35dxyRAWsENEq9gMFtrvpj6moB34h7ekLhof7Lu6E+xJa9SVnwhqXj+Z
+	+IIbX05bTIAHgyROA0GyW2WwuwuV0V0ERkYwh
+X-Google-Smtp-Source: AGHT+IHoD6UrwXDAVfBv2/wStUzfQOUGnc4UOeOSSn/U8Sp4IW3FGsOEWPTR7CJehUA5ddZ7eKwpOiE+4Io+lw6tY6Y=
+X-Received: by 2002:ac8:5956:0:b0:43a:c0d8:5a7c with SMTP id
+ d75a77b69052e-43d08686971mr1077141cf.5.1714811445759; Sat, 04 May 2024
+ 01:30:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-2-sboyd@kernel.org>
- <CABVgOSm_Qce1AZQjH8wE4t238hxLYTNswNf1AkEDbWtqDTK7Ow@mail.gmail.com> <15345b349077f57935e8f1d3d69f66f9.sboyd@kernel.org>
-In-Reply-To: <15345b349077f57935e8f1d3d69f66f9.sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-6-sboyd@kernel.org>
+ <CABVgOSk=jGzj55v+YWzOBCsG7Wdk68pyZr0VdAYftybv+5X67A@mail.gmail.com> <431171223433496db0a85072be5c83ba.sboyd@kernel.org>
+In-Reply-To: <431171223433496db0a85072be5c83ba.sboyd@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Sat, 4 May 2024 16:30:24 +0800
-Message-ID: <CABVgOSm=h0gacXEAgag+9io1yXR5+8rHW_HzvnVTNuiAFBhOHA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/10] of: Add test managed wrappers for of_overlay_apply()/of_node_put()
+Date: Sat, 4 May 2024 16:30:34 +0800
+Message-ID: <CABVgOS=+SnMN6qG4DWRXjbHZB_87nsZdfOmPVv8yHTpCqozkWA@mail.gmail.com>
+Subject: Re: [PATCH v4 05/10] platform: Add test managed platform_device/driver
+ APIs
 To: Stephen Boyd <sboyd@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
 	linux-clk@vger.kernel.org, patches@lists.linux.dev, 
@@ -89,237 +90,353 @@ Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Maxime Ripard <maxime@cerno.tech>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000097edab06179ca65d"
+	boundary="0000000000001d743e06179ca7e3"
 
---00000000000097edab06179ca65d
+--0000000000001d743e06179ca7e3
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 3 May 2024 at 08:36, Stephen Boyd <sboyd@kernel.org> wrote:
+On Fri, 3 May 2024 at 09:04, Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Quoting David Gow (2024-05-01 00:55:10)
+> Quoting David Gow (2024-05-01 00:55:46)
 > > On Tue, 23 Apr 2024 at 07:24, Stephen Boyd <sboyd@kernel.org> wrote:
-> > > diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-> > > index 2d8f756aab56..282befa17edf 100644
-> > > --- a/Documentation/dev-tools/kunit/api/index.rst
-> > > +++ b/Documentation/dev-tools/kunit/api/index.rst
-> > > @@ -9,11 +9,15 @@ API Reference
-> > >         test
-> > >         resource
-> > >         functionredirection
-> > > +       of
-> > >
-> > >
-> > >  This page documents the KUnit kernel testing API. It is divided into the
-> > >  following sections:
-> > >
-> > > +Core KUnit API
-> > > +==============
-> > > +
-> > >  Documentation/dev-tools/kunit/api/test.rst
-> > >
-> > >   - Documents all of the standard testing API
-> > > @@ -25,3 +29,10 @@ Documentation/dev-tools/kunit/api/resource.rst
-> > >  Documentation/dev-tools/kunit/api/functionredirection.rst
-> > >
-> > >   - Documents the KUnit Function Redirection API
-> > > +
-> > > +Driver KUnit API
-> > > +================
-> >
-> > If we're adding a separate 'Driver' section here, it's probably
-> > sensible to move the existing device/driver helper documentation here,
-> > rather than leaving it in resource.rst as-is. I'm happy to do that in
-> > a follow-up patch, though.
->
-> To clarify, you're talking about "Managed Devices"? Looks like that can
-> be a follow-up to split it into a new file and then put it here. If
-> you're happy to do that then I'll leave it to you.
->
-Yeah, this is "Managed Devices". I'll send out a follow-up patch to
-the documentation once this has landed so we don't conflict.
-
-> >
-> > > +
-> > > +Documentation/dev-tools/kunit/api/of.rst
-> > > +
-> > > + - Documents the KUnit device tree (OF) API
-> > > diff --git a/Documentation/dev-tools/kunit/api/of.rst b/Documentation/dev-tools/kunit/api/of.rst
+> > > diff --git a/Documentation/dev-tools/kunit/api/platformdevice.rst b/Documentation/dev-tools/kunit/api/platformdevice.rst
 > > > new file mode 100644
-> > > index 000000000000..8587591c3e78
+> > > index 000000000000..b228fb6558c2
 > > > --- /dev/null
-> > > +++ b/Documentation/dev-tools/kunit/api/of.rst
-> > > @@ -0,0 +1,13 @@
+> > > +++ b/Documentation/dev-tools/kunit/api/platformdevice.rst
+> > > @@ -0,0 +1,10 @@
 > > > +.. SPDX-License-Identifier: GPL-2.0
 > > > +
-> > > +====================
-> > > +Device Tree (OF) API
-> > > +====================
+> > > +===================
+> > > +Platform Device API
+> > > +===================
 > > > +
-> > > +The KUnit device tree API is used to test device tree (of_*) dependent code.
+> > > +The KUnit platform device API is used to test platform devices.
 > > > +
-> > > +.. kernel-doc:: include/kunit/of.h
-> > > +   :internal:
-> > > +
-> > > +.. kernel-doc:: drivers/of/of_kunit.c
+> > > +.. kernel-doc:: drivers/base/test/platform_kunit.c
 > > > +   :export:
-> > > diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> > > index 251d33532148..0dfd05079313 100644
-> > > --- a/drivers/of/Makefile
-> > > +++ b/drivers/of/Makefile
-> > > @@ -19,6 +19,7 @@ obj-y += kexec.o
-> > >  endif
-> > >  endif
+> > > diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+> > > index e321dfc7e922..740aef267fbe 100644
+> > > --- a/drivers/base/test/Makefile
+> > > +++ b/drivers/base/test/Makefile
+> > > @@ -1,8 +1,11 @@
+> > >  # SPDX-License-Identifier: GPL-2.0
+> > >  obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)  += test_async_driver_probe.o
 > > >
-> > > +obj-$(CONFIG_KUNIT) += of_kunit.o
+> > > +obj-$(CONFIG_KUNIT) += platform_kunit.o
+> > > +
 > >
-> > I'm tempted to have this either live in lib/kunit, or be behind a
-> > separate Kconfig option, particularly since this will end up as a
-> > separate module, as-is.
+> > Do we want this to be part of the kunit.ko module (and hence,
+> > probably, under lib/kunit), or to keep this as a separate module.
+> > I'm tempted, personally, to treat this as a part of KUnit, and have it
+> > be part of the same module. There are a couple of reasons for this:
+> > - It's nice to have CONFIG_KUNIT produce only one module. If we want
+> > this to be separate, I'd be tempted to put it behind its own kconfig
+> > entry.
+> > - The name platform_kunit.ko suggests (to me, at least) that this is
+> > the test for platform devices, not the implementation of the helper.
 >
-> Is the idea to have a single module that has all the kunit "stuff" in it
-> so we can just load one module and be done? Is there any discussion on
-> the list I can read to see the argument for this?
+> I was following *_kunit as "helpers" and *_test as the test. Only
+> loosely based on the documentation that mentions to use _test or _kunit
+> for test files. Maybe it should have _kunit_helpers postfix?
 
-I don't think there's been any specific discussion around making sure
-KUnit lives in one module: this is just the first patch which would
-make CONFIG_KUNIT build several separate ones.
-Personally, I'd prefer to have the CONFIG_KUNIT option only build one
-module itself, and otherwise keep the corresponding code in lib/kunit,
-just so it's clearer what side effects enabling / disabling it has.
+Yeah, the style guide currently suggests that *_test is the default
+for tests, but that _kunit may also be used for tests if _test is
+already used for non-KUnit tests:
+https://docs.kernel.org/dev-tools/kunit/style.html#test-file-and-module-names
 
-But ultimately, this really is just another side effect of the
-discussion below about whether this is integrated as "part of KUnit",
-in which case it can live in lib/kunit and be under CONFIG_KUNIT, or
-if it's a part of of, in which case this is fine (though I'd rather it
-be behind a CONFIG_OF_KUNIT_HELPERS or similar, personally).
+DRM has drm_kunit_helpers, so _kunit_helpers seems like a good suffix
+to settle on.
 
+> Following the single module design should I merge the tests for this
+> code into kunit-test.c? And do the same sort of thing for clk helpers?
+> That sounds like it won't scale very well if everything is in one module.
+
+I don't think it's as important that the tests live in the same
+module. It's nice from an ergonomic point-of-view to only have to
+modprobe the one thing, but we've already let that ship sail somewhat
+with string-stream-test.
+
+Either way, splitting up kunit-test.c is something we'll almost
+certainly want to do at some point, and we can always put them into
+the same module even if they're different source files if we have to.
+
+>
+> Shouldn't the wrapper code for subsystems live in those subsystems like
+> drm_kunit_helpers.c does? Maybe the struct device kunit wrappers should
+> be moved out to drivers/base/? lib/kunit can stay focused on providing
+> pure kunit code then.
+
+I tend to agree that wrapper code for subsystems should live in those
+subsystems, especially if the subsystems are relatively self-contained
+(i.e., the helpers are used to test that subsystem itself, rather than
+exported for other parts of the kernel to use to test interactions
+with said subsystem). For 'core' parts of the kernel, I think it makes
+it easier to make these obviously part of KUnit (e.g. kunit_kzalloc()
+is easier to have within KUnit, rather than as a part of the
+allocators).
+
+The struct device wrappers have the problem that they rely on the
+kunit_bus being registered, which is currently done when the kunit
+module is loaded. So it hooks more deeply into KUnit than is
+comfortable to do from drivers/base. So we've treated it as a 'core'
+part of the kernel.
+
+Ultimately, it's a grey area, so I can live with this going either
+way, depending on the actual helpers, so long as we don't end up with
+lots of half-in/half-out helpers, which behave a bit like both. (For
+example, at the moment, helpers which live outside lib/kunit are
+documented and have headers in the respective subsystems'
+directories.)
+
+FWIW, my gut feeling for what's "most consistent" with what we've done
+so far is:
+1. platform_device helpers should live alongside the current managed
+device stuff, which is currently in lib/kunit
+2. clk helpers should probably live in clk
+3. of/of_overlay sits a bit in the middle, but having thought more
+about it, it'd probably lean towards having it be part of 'of', not
+'kunit.
+
+But all of this is, to some extent, just bikeshedding, so as long as
+we pick somewhere to put them, and don't mix things up too much, I
+don't think it matters exactly what side of this fuzzy line they end
+up on.
 
 > >
-> > >  obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
-> > >
-> > >  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-> > > diff --git a/drivers/of/of_kunit.c b/drivers/of/of_kunit.c
+> > I probably can be persuaded otherwise if you've got a strong
+> > preference for it to stay as-is, though.
+> >
+> > > diff --git a/drivers/base/test/platform_kunit.c b/drivers/base/test/platform_kunit.c
 > > > new file mode 100644
-> > > index 000000000000..f63527268a51
+> > > index 000000000000..54af6db2a6d8
 > > > --- /dev/null
-> > > +++ b/drivers/of/of_kunit.c
-> > > @@ -0,0 +1,99 @@
+> > > +++ b/drivers/base/test/platform_kunit.c
+> > > @@ -0,0 +1,174 @@
 > > > +// SPDX-License-Identifier: GPL-2.0
 > > > +/*
-> > > + * Test managed device tree APIs
+> > > + * Test managed platform driver
 > > > + */
 > > > +
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_fdt.h>
+> > > +#include <linux/device/driver.h>
+> > > +#include <linux/platform_device.h>
 > > > +
-> > > +#include <kunit/of.h>
-> > > +#include <kunit/test.h>
+> > > +#include <kunit/platform_device.h>
 > > > +#include <kunit/resource.h>
 > > > +
-> > > +static void of_overlay_fdt_apply_kunit_exit(void *ovcs_id)
+> > > +/**
+> > > + * platform_device_alloc_kunit() - Allocate a KUnit test managed platform device
+> > > + * @test: test context
+> > > + * @name: device name of platform device to alloc
+> > > + * @id: identifier of platform device to alloc.
+> > > + *
+> > > + * Allocate a test managed platform device. The device is put when the test completes.
+> > > + *
+> > > + * Return: Allocated platform device on success, NULL on failure.
+> > > + */
+> > > +struct platform_device *
+> > > +platform_device_alloc_kunit(struct kunit *test, const char *name, int id)
+> >
+> > I'd prefer, personally, this be named something like
+> > kunit_platform_device_alloc(), to match the existing
+> > kunit_device_register() functions.
+> >
+> >
 > > > +{
-> > > +       of_overlay_remove(ovcs_id);
+> > > +       struct platform_device *pdev;
+> > > +
+> > > +       pdev = platform_device_alloc(name, id);
+> > > +       if (!pdev)
+> > > +               return NULL;
+> > > +
+> > > +       if (kunit_add_action_or_reset(test, (kunit_action_t *)&platform_device_put, pdev))
+> >
+> > Alas, casting function pointers to kunit_action_t* breaks CFI. It's
+> > worth using a wrapper, which can be created with the
+> > KUNIT_DEFINE_ACTION_WRAPPER() macro, e.g.
+> >
+> > KUNIT_DEFINE_ACTION_WRAPPER(platform_device_put_wrapper,
+> > platform_device_put, struct platform_device *);
+>
+> Thanks. I missed that.
+>
+> >
+> > > +               return NULL;
+> > > +
+> > > +       return pdev;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(platform_device_alloc_kunit);
+> > > +
+> > > +static void platform_device_add_kunit_exit(struct kunit_resource *res)
+> > > +{
+> > > +       struct platform_device *pdev = res->data;
+> > > +
+> > > +       platform_device_unregister(pdev);
+> > > +}
+> > > +
+> > > +static bool
+> > > +platform_device_alloc_kunit_match(struct kunit *test,
+> > > +                                 struct kunit_resource *res, void *match_data)
+> > > +{
+> > > +       struct platform_device *pdev = match_data;
+> > > +
+> > > +       return res->data == pdev;
 > > > +}
 > > > +
 > > > +/**
-> > > + * of_overlay_fdt_apply_kunit() - Test managed of_overlay_fdt_apply()
+> > > + * platform_device_add_kunit() - Register a KUnit test managed platform device
 > > > + * @test: test context
-> > > + * @overlay_fdt: device tree overlay to apply
-> > > + * @overlay_fdt_size: size in bytes of @overlay_fdt
-> > > + * @ovcs_id: identifier of overlay, used to remove the overlay
+> > > + * @pdev: platform device to add
 > > > + *
-> > > + * Just like of_overlay_fdt_apply(), except the overlay is managed by the test
-> > > + * case and is automatically removed with of_overlay_remove() after the test
-> > > + * case concludes.
+> > > + * Register a test managed platform device. The device is unregistered when the
+> > > + * test completes.
 > > > + *
-> > > + * Return: 0 on success, negative errno on failure
+> > > + * Return: 0 on success, negative errno on failure.
 > > > + */
-> > > +int of_overlay_fdt_apply_kunit(struct kunit *test, void *overlay_fdt,
-> > > +                              u32 overlay_fdt_size, int *ovcs_id)
+> > > +int platform_device_add_kunit(struct kunit *test, struct platform_device *pdev)
 > >
-> > We're using kunit_ as a prefix for the device helpers (e.g.
-> > kunit_device_register()), so it may make sense to do that here, too.
-> > It's not as important as with the platform_device helpers, which are
-> > very similar to the existing device ones, but if we want to treat
-> > these as "part of KUnit which deals with of_overlays", rather than
-> > "part of "of_overlay which deals with KUnit", this may fit better.
+> > As above, I'd lean towards naming this kunit_platform_device_add() for
+> > consistency with the other KUnit device helpers.
 > >
-> > Thoughts?
->
-> I'm fine either way with the name. I recall that last time we put a
-> kunit postfix to make it easier to tab complete or something like that.
->
-> I find it hard to understand the distinction you're trying to make
-> though. I guess you're saying the difference is what subsystem maintains
-> the code, kunit or of. When they're simple wrappers it is easier to
-> extract them out to lib/kunit and thus they can (should?) have the kunit
-> prefix. Maybe that always holds true, because kunit wrappers are
-> typically another API consumer, and if the API is exported either in a
-> linux/ header or as an exported symbol it can be wrapped in lib/kunit
-> easily. Did I follow correctly? When would of_overlay ever deal with
-> KUnit?
-
-Yeah, it's about what subsystem is maintaining the code, which impacts
-a bit of the naming, and depends a bit on the intended use-case.
-
-If these helpers are intended to test a particular subsystem, and are
-of no use outside it, it seems clear that they should be a part of
-that subsystem. For instance, the drm_kunit_helpers.
-If they're exposing kunit-specific wrappers around core APIs, it makes
-sense for them to be a part of KUnit. (The managed devices stuff, for
-instance, as the device model is used by pretty much everything. It
-also requires a KUnit-managed struct kunit_bus, which is hooked into
-KUnit at a lower level, so needs to be a part of kunit.)
-
-It gets more complicated for cases like of, where the helpers are both
-used for testing of itself, and for testing drivers which rely on it.
-So I think it could go either way. My gut instinct is that
-platform_device is generic enough to be a part of KUnit (to match the
-existing managed device stuff). For of_overlay, I could go either way,
-and just leaned to having it be part of KUnit as that's a bit more
-common, and it matches, e.g., the headers and documentation being
-under include/kunit and dev-tools/kunit respectively.
-
-> > > diff --git a/include/kunit/of.h b/include/kunit/of.h
-> > > new file mode 100644
-> > > index 000000000000..9981442ba578
-> > > --- /dev/null
-> > > +++ b/include/kunit/of.h
-> > > @@ -0,0 +1,94 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef _KUNIT_OF_H
-> > > +#define _KUNIT_OF_H
+> > > +{
+> > > +       struct kunit_resource *res;
+> > > +       int ret;
 > > > +
-> > > +#include <kunit/test.h>
+> > > +       ret = platform_device_add(pdev);
+> > > +       if (ret)
+> > > +               return ret;
 > > > +
-> > > +struct device_node;
-> > > +
-> > > +#ifdef CONFIG_OF
+> > > +       res = kunit_find_resource(test, platform_device_alloc_kunit_match, pdev);
+> > > +       if (res) {
+> > > +               /*
+> > > +                * Transfer the reference count of the platform device if it was
+> > > +                * allocated with platform_device_alloc_kunit(). In that case,
+> > > +                * calling platform_device_put() leads to reference count
+> > > +                * underflow because platform_device_unregister() does it for
+> > > +                * us and we call platform_device_unregister() from
+> > > +                * platform_device_add_kunit_exit().
+> > > +                *
+> > > +                * Usually callers transfer the refcount from
+> > > +                * platform_device_alloc() to platform_device_add() and simply
+> > > +                * call platform_device_unregister() when done, but with kunit
+> > > +                * we have to keep this straight by redirecting the free
+> > > +                * routine for the resource.
+> > > +                */
+> > > +               res->free = platform_device_add_kunit_exit;
+> > > +               kunit_put_resource(res);
+> > > +       } else if (kunit_add_action_or_reset(test,
+> > > +                                            (kunit_action_t *)&platform_device_unregister,
+> > > +                                            pdev)) {
 > >
-> > Do we also need to check for CONFIG_OF_OVERLAY here?
+> > Nit: We don't want to cast directly to kunit_action_t *, as that
+> > breaks CFI. Can we use KUNIT_DEFINE_ACTION_WRAPPER()?
 > >
-> > Also, how useful is it to compile but skip tests without
-> > CONFIG_OF{,_OVERLAY} enabled? The other option is a compile error,
-> > which may make it more obvious that these are disabled if it's
-> > unexpected.
+> > > +               return -ENOMEM;
 > >
-> > Thoughts?
+> > Nit: This is fine, as kunit_add_action_or_reset() only returns 0 or
+> > -ENOMEM at the moment, but it could cause problems down the line if we
+> > ever want to return a different error. I don't think that's
+> > particularly likely, but it might be nicer to properly propagate the
+> > error.
 >
-> I've tried to make it so that tests skip if an option isn't enabled. I
-> suppose the CONFIG_OF_OVERLAY check can be hoisted up here as well so
-> that the skip isn't buried in lower levels.
+> I will propagate the return value.
+>
+> >
+> > > +       }
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(platform_device_add_kunit);
+> > > +
+> > > +/**
+> > > + * platform_driver_register_kunit() - Register a KUnit test managed platform driver
+> > > + * @test: test context
+> > > + * @drv: platform driver to register
+> > > + *
+> > > + * Register a test managed platform driver. This allows callers to embed the
+> > > + * @drv in a container structure and use container_of() in the probe function
+> > > + * to pass information to KUnit tests. It can be assumed that the driver has
+> > > + * probed when this function returns.
+> > > + *
+> > > + * Example
+> > > + *
+> > > + * .. code-block:: c
+> > > + *
+> > > + *     struct kunit_test_context {
+> > > + *             struct platform_driver pdrv;
+> > > + *             const char *data;
+> > > + *     };
+> > > + *
+> > > + *     static inline struct kunit_test_context *
+> > > + *     to_test_context(struct platform_device *pdev)
+> > > + *     {
+> > > + *             return container_of(to_platform_driver(pdev->dev.driver),
+> > > + *                                 struct kunit_test_context,
+> > > + *                                 pdrv);
+> > > + *     }
+> > > + *
+> > > + *     static int kunit_platform_driver_probe(struct platform_device *pdev)
+> > > + *     {
+> > > + *             struct kunit_test_context *ctx;
+> > > + *
+> > > + *             ctx = to_test_context(pdev);
+> > > + *             ctx->data = "test data";
+> > > + *
+> > > + *             return 0;
+> > > + *     }
+> > > + *
+> > > + *     static void kunit_platform_driver_test(struct kunit *test)
+> > > + *     {
+> > > + *             struct kunit_test_context *ctx;
+> > > + *
+> > > + *             ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+> > > + *             KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+> > > + *
+> > > + *             ctx->pdrv.probe = kunit_platform_driver_probe;
+> > > + *             ctx->pdrv.driver.name = "kunit-platform";
+> > > + *             ctx->pdrv.driver.owner = THIS_MODULE;
+> > > + *
+> > > + *             KUNIT_EXPECT_EQ(test, 0, platform_driver_register_kunit(test, &ctx->pdrv));
+> > > + *             KUNIT_EXPECT_STREQ(test, ctx->data, "test data");
+> > > + *     }
+> > > + *
+> > > + * Return: 0 on success, negative errno on failure.
+> > > + */
+> > > +int platform_driver_register_kunit(struct kunit *test,
+> > > +                                  struct platform_driver *drv)
+> >
+> > As above, I'd prefer kunit_platform_driver_register()
+> >
+> > > +{
+> > > +       int ret;
+> > > +
+> > > +       ret = platform_driver_register(drv);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       /*
+> > > +        * Wait for the driver to probe (or at least flush out of the deferred
+> > > +        * workqueue)
+> > > +        */
+> > > +       wait_for_device_probe();
+> >
+> > Personally, I don't mind if this wrapper waits here (even if it makes
+> > it less of a 'pure' wrapper), so long as we document it. Can you think
+> > of any cases where we explicitly want _not_ to wait in a test?
+> >
+>
+> I don't like it because it's not deterministic. The function doesn't
+> take any struct device to wait for. I've already written the code to use
+> a completion, and it works well enough so I'll just do that. Then we
+> don't have to worry if this API goes away, or that it doesn't actually
+> determine if the driver has probed the device.
 
-Yeah, my feeling here is that if we're going to declare functions
-which interact with of_overlay, we should have the 'skip' fallbacks
-occur for either both CONFIG_OF and CONFIG_OF_OVERLAY here, or neither
-(and require the test use its own #include guards). Having CONFIG_OF
-checked here, and CONFIG_OF_OVERLAY checked elsewhere seems confusing
-to me.
+Sounds good!
 
 Cheers,
 -- David
 
---00000000000097edab06179ca65d
+--0000000000001d743e06179ca7e3
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -387,14 +504,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIETN56TU+Zyv4/Xmc6NmhAeOjWx39QgDubV8PTXD5gbEMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwNDA4MzAzN1owaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIEdB/LFzsNFKNeMTvsfijDLjGcHYDseL5eHwCfdvLH43MBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDUwNDA4MzA0NlowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQATQrkf
-/KbZeMeWllE8hnVs5v4hUkMO5tZqJZ60AA62xWv8UqCpqX6+l0bOcovTrnCe2ovY+jLlSCxTpZaG
-ZUX7Ftat5yVsfIh/tyUZiykqhQUwS39QpJUALn78lsO+JCwpOnpyMTx1VMLrUKoH9o6aDiRmIEl8
-O6oXdxp7BTaLIiTCuIi36rZC2a7ktgFH3LvmBWv9z0PtXeRcHoA/LU4cq+Y8ppqtGmhs3RUSumqG
-zqxunSUGYiWB7dPkb2+kAL/vv5nYLiL6QkInj3pQ3+BIk3VyIH9Ulf06Kmak6ilzYAG1G5mfTCYK
-DhoggHKYjd/cxTDsPTHc0mEaawbgvylZ
---00000000000097edab06179ca65d--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCLW7GF
+qT+yiMKea76vi66ZsXKu/KVvY+JWUV4Cf46rffrp0Y2yIq48NiR2v6npwLGcSQIG9QmWaUS9aqj0
+GxqMvd4uxyeYqRhlU0dUXWgp2jG+rI++dO/sUTeU55QLAG+FSyjaYk0MbuX4fFO3bRjReRlfefZW
+GjStHKE+hVMo/MIAONzrbbwODQZKMRD8d2L30/34DcVPkmiX7ky10SPcD6AiFMP/OT3JD1hWDnB/
+7VHbKrKSMVSuvwk2zwU01M15YPJj5+qNwMB8O/IwaUDrGGiRYNBFrQfdyxEfD2Yp98NayyNKxS8d
+8LpWzE8V73PAVvhOjPWgpuTeV8EFsLkd
+--0000000000001d743e06179ca7e3--
 
