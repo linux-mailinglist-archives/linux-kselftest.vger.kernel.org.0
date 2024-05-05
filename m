@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-9471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A76CD8BC03D
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 May 2024 13:36:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF108BC03F
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 May 2024 13:36:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3430A1F2156A
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 May 2024 11:36:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5D28281A2A
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 May 2024 11:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8CE14A96;
-	Sun,  5 May 2024 11:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20DF179AD;
+	Sun,  5 May 2024 11:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0fSXqgs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oShpf8JF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21F617556;
-	Sun,  5 May 2024 11:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB67E54C;
+	Sun,  5 May 2024 11:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714908978; cv=none; b=BvlZRPY+1DQOE9XKwO8yPOiV+8ZO/5jfBFPKICFeHMNdl775INTfgJ5PQBVu9ZmHT9Pbf7JPn+wjf4LVzAUFwekhHLHu3ZJQmMR3LWKwZrkFCnIMYehCpnEhjiN60WaafROREeGmRYLSJ3inzaqBAbX4R/tGhjspjC72zvXY/08=
+	t=1714908985; cv=none; b=ovMD9mW+OsqHHeJht9vdPruldYyVemrURDgBhbBjdzaCUpolWA3Duj2R5v8JWkPP0ArR9owZDcLzzMie+xv7cCWakfTv0oQib/+t7lk5nmK4Dk25B4CnRvS7bRxAMJwY/TZ2uj2QgPXCsOHeppiUqQS/LI+84PFHCSfgrhZY6tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714908978; c=relaxed/simple;
-	bh=stxRdDSSRuYZc/pts2D9NuorayFLNdNhEOrxagYcyes=;
+	s=arc-20240116; t=1714908985; c=relaxed/simple;
+	bh=DswGYNIEvAM0xbmLADZneHkiZ5QkmT0Colzhvlh7lZI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Er8Pg0LV+W2OUAczOdPzE9NmLf1SMR9iURQ1dYGzLOKy1aIscR3aVZfkdqSHnVZqcG2TnZ7vpEv7YGNwLzuq5dms2FjYci1q06vy3PHBdSRLWnevEIhKCT6w0q/3MLViFrRdsgZoYn46MJFH3ZEfnhxu4UF5PGQPJ27AGGUY16w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0fSXqgs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7F5C113CC;
-	Sun,  5 May 2024 11:36:11 +0000 (UTC)
+	 MIME-Version; b=Abtm6tWVGm+c14KAbV2NIeqNpz9i6wsUEj+DUPTpLMTFyNgS2Etio0hxibaRX/0PwMJVJUOZFxwEd5daLsz3r1QSqpzWw/NoAxL/8nRTqIShC1VIXzEOFtjxfpx0g1QXE4K6lVDU8r7iwQVX/EVtmuLRg9LU7Uz9QgqznPxB8RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oShpf8JF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB973C113CC;
+	Sun,  5 May 2024 11:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714908978;
-	bh=stxRdDSSRuYZc/pts2D9NuorayFLNdNhEOrxagYcyes=;
+	s=k20201202; t=1714908985;
+	bh=DswGYNIEvAM0xbmLADZneHkiZ5QkmT0Colzhvlh7lZI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D0fSXqgsOwV3RQgglfq7Om/RaRbu0qhpVoQC0PrPbL0PUlQEI4tZCWXK9nQVPldIF
-	 GXPMRXKEwcIxEEBEqEcbsxgrPLXVY4mEFlrnN/xF6Qrhox8uOUw8ghsOyuAbX//Xow
-	 FJtVoD0q5Ca3ySYkOFWGfrQBbIJke1hBHYZMEFk501Oa/+UEoKrNYRmeor5fkMHsGP
-	 HlevWJ6BqB/YSRrNNdf2rEm1pLMc27eElDTNOa3Q/Jk1G3XD3wN8KWNcpw1izpysAw
-	 11DntpQxvVS/EHflpP2byOr6JPR5o8uI+L0ijru8RQEdFHVVuFPPaN3gQ7ZyBoxwUa
-	 aMmy5OUMvDkPQ==
+	b=oShpf8JFlFXXU/Hvo+04YRpJmChcIkzhvuI8smz11UA8gO5EoR8VMNLHItFnl/khM
+	 2YxvrcONKiOPBHgm0SfjE+AWyNBOu+eVdAvRM1nM4TkYi4aDp4Mt9dQfhUpwbTYysm
+	 le0ykImtvMXZ8M2PnrKGTrlb5vycUvrasaX8xXFK1r5ugNzGwzMEbfvMdzVFWZQr0+
+	 bg+ivMMNlrP+7QutdtaFFRj/ssw8KMOj8tnH07WSagWnhL29zbVev44ISk5awQ7rWm
+	 lCzZQvQsAgHCT8IKIsgPzgWIalkLi0Pb5J4Ibtsoj8tzrfI3RMtEVoSsJXbI7WSfJ+
+	 vabKMFQaz7xRw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -61,9 +61,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 1/6] selftests/bpf: Add post_socket_cb for network_helper_opts
-Date: Sun,  5 May 2024 19:35:08 +0800
-Message-ID: <470cb82f209f055fc7fb39c66c6b090b5b7ed2b2.1714907662.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 2/6] selftests/bpf: Use start_server_addr in sockopt_inherit
+Date: Sun,  5 May 2024 19:35:09 +0800
+Message-ID: <687af66f743a0bf15cdba372c5f71fe64863219e.1714907662.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1714907662.git.tanggeliang@kylinos.cn>
 References: <cover.1714907662.git.tanggeliang@kylinos.cn>
@@ -77,123 +77,95 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-__start_server() sets SO_REUSPORT through setsockopt() when the parameter
-'reuseport' is set. This patch makes it more flexible by adding a function
-pointer post_socket_cb, together with 'struct post_socket_opts cb_opts'
-for future extension into struct network_helper_opts. Then 'reuseport'
-parameter can be dropped.
+Include network_helpers.h in prog_tests/sockopt_inherit.c, use public
+helper start_server_addr() instead of the local defined function
+start_server(). This can avoid duplicate code.
 
-Now the original start_reuseport_server() can be implemented by setting a
-newly defined reuseport_cb() function pointer to post_socket_cb filed of
-struct network_helper_opts.
+Add a helper custom_cb() to set SOL_CUSTOM sockopt looply, set it to
+post_socket_cb pointer of struct network_helper_opts, and pass it to
+start_server_addr().
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 25 ++++++++++++-------
- tools/testing/selftests/bpf/network_helpers.h |  4 +++
- 2 files changed, 20 insertions(+), 9 deletions(-)
+ .../bpf/prog_tests/sockopt_inherit.c          | 32 +++++++------------
+ 1 file changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 054d26e383e0..a7ab05baedb6 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -81,9 +81,8 @@ int settimeo(int fd, int timeout_ms)
- #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+index 917f486db826..ff0694ef5286 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include "cgroup_helpers.h"
++#include "network_helpers.h"
  
- static int __start_server(int type, const struct sockaddr *addr, socklen_t addrlen,
--			  bool reuseport, const struct network_helper_opts *opts)
-+			  const struct network_helper_opts *opts)
- {
--	int on = 1;
- 	int fd;
+ #include "sockopt_inherit.skel.h"
  
- 	fd = socket(addr->sa_family, type, opts->proto);
-@@ -95,9 +94,9 @@ static int __start_server(int type, const struct sockaddr *addr, socklen_t addrl
- 	if (settimeo(fd, opts->timeout_ms))
- 		goto error_close;
- 
--	if (reuseport &&
--	    setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &on, sizeof(on))) {
--		log_err("Failed to set SO_REUSEPORT");
-+	if (opts->post_socket_cb &&
-+	    opts->post_socket_cb(fd, &opts->cb_opts)) {
-+		log_err("Failed to call post_socket_cb");
- 		goto error_close;
- 	}
- 
-@@ -132,7 +131,14 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
- 	if (make_sockaddr(family, addr_str, port, &addr, &addrlen))
- 		return -1;
- 
--	return __start_server(type, (struct sockaddr *)&addr, addrlen, false, &opts);
-+	return __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
-+}
-+
-+static int reuseport_cb(int fd, const struct post_socket_opts *opts)
-+{
-+	int on = 1;
-+
-+	return setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &on, sizeof(on));
+@@ -98,23 +99,12 @@ static void *server_thread(void *arg)
+ 	return (void *)(long)err;
  }
  
- int *start_reuseport_server(int family, int type, const char *addr_str,
-@@ -140,6 +146,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
+-static int start_server(void)
++static int custom_cb(int fd, const struct post_socket_opts *opts)
  {
- 	struct network_helper_opts opts = {
- 		.timeout_ms = timeout_ms,
-+		.post_socket_cb = reuseport_cb,
- 	};
- 	struct sockaddr_storage addr;
- 	unsigned int nr_fds = 0;
-@@ -156,7 +163,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 	if (!fds)
- 		return NULL;
+-	struct sockaddr_in addr = {
+-		.sin_family = AF_INET,
+-		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+-	};
+ 	char buf;
+ 	int err;
+-	int fd;
+ 	int i;
  
--	fds[0] = __start_server(type, (struct sockaddr *)&addr, addrlen, true, &opts);
-+	fds[0] = __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
- 	if (fds[0] == -1)
- 		goto close_fds;
- 	nr_fds = 1;
-@@ -165,7 +172,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 		goto close_fds;
- 
- 	for (; nr_fds < nr_listens; nr_fds++) {
--		fds[nr_fds] = __start_server(type, (struct sockaddr *)&addr, addrlen, true, &opts);
-+		fds[nr_fds] = __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
- 		if (fds[nr_fds] == -1)
- 			goto close_fds;
+-	fd = socket(AF_INET, SOCK_STREAM, 0);
+-	if (fd < 0) {
+-		log_err("Failed to create server socket");
+-		return -1;
+-	}
+-
+ 	for (i = CUSTOM_INHERIT1; i <= CUSTOM_LISTENER; i++) {
+ 		buf = 0x01;
+ 		err = setsockopt(fd, SOL_CUSTOM, i, &buf, 1);
+@@ -125,20 +115,21 @@ static int start_server(void)
+ 		}
  	}
-@@ -183,7 +190,7 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t l
- 	if (!opts)
- 		opts = &default_opts;
  
--	return __start_server(type, (struct sockaddr *)addr, len, 0, opts);
-+	return __start_server(type, (struct sockaddr *)addr, len, opts);
+-	if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
+-		log_err("Failed to bind socket");
+-		close(fd);
+-		return -1;
+-	}
+-
+-	return fd;
++	return 0;
  }
  
- void free_fds(int *fds, unsigned int nr_close_fds)
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index c62b54daa914..887075fbf6ec 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -21,6 +21,8 @@ typedef __u16 __sum16;
- #define VIP_NUM 5
- #define MAGIC_BYTES 123
+ static void run_test(int cgroup_fd)
+ {
+ 	struct bpf_link *link_getsockopt = NULL;
+ 	struct bpf_link *link_setsockopt = NULL;
++	struct network_helper_opts opts = {
++		.post_socket_cb = custom_cb,
++	};
+ 	int server_fd = -1, client_fd;
++	struct sockaddr_in addr = {
++		.sin_family = AF_INET,
++		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
++	};
+ 	struct sockopt_inherit *obj;
+ 	void *server_err;
+ 	pthread_t tid;
+@@ -160,7 +151,8 @@ static void run_test(int cgroup_fd)
+ 	if (!ASSERT_OK_PTR(link_setsockopt, "cg-attach-setsockopt"))
+ 		goto close_bpf_object;
  
-+struct post_socket_opts {};
-+
- struct network_helper_opts {
- 	const char *cc;
- 	int timeout_ms;
-@@ -28,6 +30,8 @@ struct network_helper_opts {
- 	bool noconnect;
- 	int type;
- 	int proto;
-+	int (*post_socket_cb)(int fd, const struct post_socket_opts *opts);
-+	struct post_socket_opts cb_opts;
- };
+-	server_fd = start_server();
++	server_fd = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr,
++				      sizeof(addr), &opts);
+ 	if (!ASSERT_GE(server_fd, 0, "start_server"))
+ 		goto close_bpf_object;
  
- /* ipv4 test vector */
 -- 
 2.43.0
 
