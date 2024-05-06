@@ -1,153 +1,143 @@
-Return-Path: <linux-kselftest+bounces-9525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AC7D8BD28D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:22:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88D2B8BD305
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:46:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0A21C2223D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:22:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29C5FB212D7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79D7156253;
-	Mon,  6 May 2024 16:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A56156960;
+	Mon,  6 May 2024 16:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QVGJW07x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0SKbmS9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667D5156248
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 16:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8E713DDD8;
+	Mon,  6 May 2024 16:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715012560; cv=none; b=Be+z8dEYAwDzUP7SZWFB8GQgVQrqeYN9/+T8a8os0HQEgHIGroOrk/VZhNyjjdADhoF7AZRx3YsOm1vv0xxOn//QeFq0ZmUeY1wsdTxjt1X3LfLNVl79m5Xx8temko5ygdJ8IxRhzkUDb+lBuVcCNc6iN743EZjcTEKTXgO+IXs=
+	t=1715013982; cv=none; b=QU6++bH4LeUbcYwURinvmkcd7L3hrIVeRJe8sWUTGLw7eBcfWt+V4sRy857ynhtth4XobEWqfEI39j3EjngLt6CWdY36NHp5+KlIWh7rb7YUsYSkiSJz7Y4jHcLm7gZOzXVIhYMYMS1Swuk3W1jfrqjjpXj6KSjvavtgeorK8G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715012560; c=relaxed/simple;
-	bh=frTG5OBPlS3cpKFuLzpv3nMYxGsgU18EpPK6RPYW230=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Onkg2oQVT8hmRziGgQayIhuV8SK8LQh1J481d4JSo2wEN+qh9+LXwWABosCBEqgvJqXkqhqA5m94+3eDypMlruPWvVsjSWg6JNNX51VHYBcNj7eDKxUtYfO6rWr2W6lGvYgNNJReZ6rSr9Y/JSduJnlNpT11IPHASCEzQokWc5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QVGJW07x; arc=none smtp.client-ip=84.16.66.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VY6BX035Yzv5F;
-	Mon,  6 May 2024 18:22:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1715012547;
-	bh=frTG5OBPlS3cpKFuLzpv3nMYxGsgU18EpPK6RPYW230=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QVGJW07xk8eHL6UpWADM18ljmNpCsUZFZ/y+hnujvAG4wypA725OzVnlFCVIrzeIC
-	 hLijnFYam4uOXYA7uIhnwTtwavFoEY7K9tQ4KEDq+PhS9u4z/2SnXX09JSBL1tqE1e
-	 POk3pm5g+TTYR6xyTDIy65DL078axdOiRswSeqfc=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VY6BV5nyRzpxL;
-	Mon,  6 May 2024 18:22:26 +0200 (CEST)
-Date: Mon, 6 May 2024 18:22:25 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Mark Brown <broonie@kernel.org>, Shengyu Li <shengyu.li.evgeny@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>, 
-	kernel test robot <oliver.sang@intel.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v5 10/10] selftests/harness: Handle TEST_F()'s explicit
- exit codes
-Message-ID: <20240506.Ceeche0coolu@digikod.net>
-References: <20240503105820.300927-1-mic@digikod.net>
- <20240503105820.300927-11-mic@digikod.net>
- <ZjTx7BYvbrqFSNuH@google.com>
+	s=arc-20240116; t=1715013982; c=relaxed/simple;
+	bh=GOY7uF74aXtTWOzHLTtpIX38L22Nw4vV7OVkQIRNXrY=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=CjPno55+1RrWJFkm6RbByiCPUGByfh5tRfQIk4JxNDDLc7H5Ag8rzsS7Wq+VQSd0+FlDV0Y6W5KmElRA72IxyhqPBaNeU+yCvPvj5Wve0FHJdGvPmQ7CpOThuzkXh44iNbeYVHpApb+9gaJUJmn18eAtaVi9lTfC6LSRsqbLo0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R0SKbmS9; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-69b50b8239fso21392856d6.0;
+        Mon, 06 May 2024 09:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715013980; x=1715618780; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rzTio4TEar79DkyEXWbqorclupsXYPTSGL7v/jrECRU=;
+        b=R0SKbmS9+RrK+17ALX/uTTzUIcJPqIkDgCsKfQ2KbzcuZ+MbzZOhI/OXXTNe92feOu
+         x9KwMqgRSkbg38Bi4REhmvekBVfBso7hZHOQzeVdHmjWHZfI7R6wbrwOJT4K5mv6Q1W5
+         oA7vPBUdpjlywN84koic/MFFsZz8zdlsmUII02hvJKfqeCyP5nCSkOuwS+QtkmFQznrO
+         3A3yjrOoctfM2hbld9/U5mFLO2S2SepWoYmUC9w72k9YNm97QDZ1/RYzlhgskirHIIYA
+         CtfvyWzVbmzv2YP39GBs/jLva2aAd7jfUyGkRw3VAv9BZRcF89JTGipm8PgMZMuyZNSU
+         Qd2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715013980; x=1715618780;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rzTio4TEar79DkyEXWbqorclupsXYPTSGL7v/jrECRU=;
+        b=aTM/OUUsUBMN6mJtmwitWMKx3pkA/TC6DoNY0/wzFMefZXU/iRAmwbsnMlPJ240Bvv
+         OruDLxQtVgkTi//dF3526uRXJpi32GV4PnuW7O1A14MAY6zUOFfN0ioOJwEI1wLsAMbf
+         BpDhDEE6ooIXc+CARbAlD45+DZgw+KeQgvaqYync03FEK7Czd3Ts4/GRLVd6rJbpYa53
+         gJqDPIy5aP1KLl5We1bH1Ueaf+ujO/GxDku4bIK+8+C0N/LSg0eED08K3P7gkrf2UmMg
+         dmZ/yVUp1Ay2VveQfUpD7l6zPVVZJIY3cSIkVa3YBcfBGsAuYPtQOLbdKY9eJNPdvTHe
+         RfqA==
+X-Forwarded-Encrypted: i=1; AJvYcCVWdtOrE6J6fzEi30VSNe16hw9t0N5Q5HxgudOnn7LOtP2y7xBCHsW8l4gs0DBBilYKiXJXTozJv85C71zt9/NklGnzPptJL/fVY0wAOwymB/zkBl+SzHQnhYPhOpCT7/Kkp9/abFowJX4zu1XEvOEs60Tl18R8Bz/OXmXCxSjR87Obtpej
+X-Gm-Message-State: AOJu0YzaNg3HKgAugJXp+7qc7PmQkCSL8s6WWgZF0fHhQcBXiXYovpJq
+	bSSG7qZEMtxL9vkiyWNulQjzbQ72iJcu1x/W3xRoFdujtw8YEhkbdsFAWA==
+X-Google-Smtp-Source: AGHT+IE3xtdUWGdZUHh2WDdnuoZ14EOUNPk8DJIeSttgiBQGOaGlyoUoPStBZlUyVBxOrITd/5wEug==
+X-Received: by 2002:a05:6214:c84:b0:6a0:b3ec:9032 with SMTP id r4-20020a0562140c8400b006a0b3ec9032mr403317qvr.12.1715013979573;
+        Mon, 06 May 2024 09:46:19 -0700 (PDT)
+Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id l13-20020ad4408d000000b006a0ee5b6ee6sm3869966qvp.123.2024.05.06.09.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 May 2024 09:46:19 -0700 (PDT)
+Date: Mon, 06 May 2024 12:46:18 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Richard Gobert <richardbgobert@gmail.com>, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ willemdebruijn.kernel@gmail.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ dsahern@kernel.org, 
+ alobakin@pm.me, 
+ shuah@kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: Richard Gobert <richardbgobert@gmail.com>
+Message-ID: <6639095ab4887_516de294d8@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240506093550.128210-2-richardbgobert@gmail.com>
+References: <20240506093550.128210-1-richardbgobert@gmail.com>
+ <20240506093550.128210-2-richardbgobert@gmail.com>
+Subject: Re: [PATCH net-next v8 1/3] net: gro: use cb instead of
+ skb->network_header
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZjTx7BYvbrqFSNuH@google.com>
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 03, 2024 at 07:17:16AM GMT, Sean Christopherson wrote:
-> On Fri, May 03, 2024, Mickaël Salaün wrote:
-> > If TEST_F() explicitly calls exit(code) with code different than 0, then
-> > _metadata->exit_code is set to this code (e.g. KVM_ONE_VCPU_TEST()).  We
-> > need to keep in mind that _metadata->exit_code can be KSFT_SKIP while
-> > the process exit code is 0.
-> > 
-> > Initial patch written by Sean Christopherson [1].
+Richard Gobert wrote:
+> This patch converts references of skb->network_header to napi_gro_cb's
+> network_offset and inner_network_offset.
 > 
-> Heh, my pseudo patch barely has any relevance at this point.  How about replacing
-> that with:
+> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+> ---
+>  include/net/gro.h        | 9 +++++++--
+>  net/ipv4/af_inet.c       | 4 ----
+>  net/ipv4/tcp_offload.c   | 3 ++-
+>  net/ipv6/ip6_offload.c   | 5 ++---
+>  net/ipv6/tcpv6_offload.c | 3 ++-
+>  5 files changed, 13 insertions(+), 11 deletions(-)
 > 
->   Reported-by: Sean Christopherson <seanjc@google.com>
->   Closes: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com
-> 
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Will Drewry <wad@chromium.org>
-> > Link: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com [1]
-> > Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Link: https://lore.kernel.org/r/20240503105820.300927-11-mic@digikod.net
-> > ---
-> > 
-> > Changes since v4:
-> > * Check abort status when the grandchild exited.
-> > * Keep the _exit(0) calls because _metadata->exit_code is always
-> >   checked.
-> > * Only set _metadata->exit_code to WEXITSTATUS() if it is not zero.
-> > 
-> > Changes since v3:
-> > * New patch mainly from Sean Christopherson.
-> > ---
-> >  tools/testing/selftests/kselftest_harness.h | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> > index eb25f7c11949..7612bf09c5f8 100644
-> > --- a/tools/testing/selftests/kselftest_harness.h
-> > +++ b/tools/testing/selftests/kselftest_harness.h
-> > @@ -462,9 +462,13 @@ static inline pid_t clone3_vfork(void)
-> >  		munmap(teardown, sizeof(*teardown)); \
-> >  		if (self && fixture_name##_teardown_parent) \
-> >  			munmap(self, sizeof(*self)); \
-> > -		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
-> > +		if (WIFEXITED(status)) { \
-> > +			if (WEXITSTATUS(status)) \
-> > +				_metadata->exit_code = WEXITSTATUS(status); \
-> 
-> Ah, IIUC, this works because __run_test() effectively forwards the exit_code?
-> 
-> 	} else if (t->pid == 0) {
-> 		setpgrp();
-> 		t->fn(t, variant);
-> 		_exit(t->exit_code);
-> 	}
+> diff --git a/include/net/gro.h b/include/net/gro.h
+> index c1d4ca0463a1..1faff23b66e8 100644
+> --- a/include/net/gro.h
+> +++ b/include/net/gro.h
+> @@ -181,12 +181,17 @@ static inline void *skb_gro_header(struct sk_buff *skb, unsigned int hlen,
+>  	return ptr;
+>  }
+>  
+> +static inline int skb_gro_network_offset(const struct sk_buff *skb)
+> +{
+> +	return NAPI_GRO_CB(skb)->network_offsets[NAPI_GRO_CB(skb)->encap_mark];
+> +}
+> +
 
-Yes
+The fact that .._receive sets encap_mark, but .._complete must read
+encapsulation, due to the clear in udp_gro_complete, is non-obvious.
 
-> 
-> Tested-by: Sean Christopherson <seanjc@google.com>
+Can you add a comment to clarify this or rename this to
+skb_gro_receive_network_offset?
 
-OK, I'll send a v6. We really need to get this into -next.
-
-> 
-> > +		} else if (WIFSIGNALED(status)) { \
-> >  			/* Forward signal to __wait_for_test(). */ \
-> >  			kill(getpid(), WTERMSIG(status)); \
-> > +		} \
-> >  		__test_check_assert(_metadata); \
-> >  	} \
-> >  	static void __attribute__((constructor)) \
-> > -- 
-> > 2.45.0
-> > 
-> 
+>  static inline void *skb_gro_network_header(const struct sk_buff *skb)
+>  {
+>  	if (skb_gro_may_pull(skb, skb_gro_offset(skb)))
+> -		return skb_gro_header_fast(skb, skb_network_offset(skb));
+> +		return skb_gro_header_fast(skb, skb_gro_network_offset(skb));
+>  
+> -	return skb_network_header(skb);
+> +	return skb->data + skb_gro_network_offset(skb);
+>  }
 
