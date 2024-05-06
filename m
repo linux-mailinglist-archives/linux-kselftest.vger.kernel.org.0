@@ -1,138 +1,411 @@
-Return-Path: <linux-kselftest+bounces-9557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 571468BD5D6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 21:49:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A11C8BD68E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 22:54:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FCFFB22512
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 19:49:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3622BB20FF0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3062315ADA5;
-	Mon,  6 May 2024 19:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD5615CD42;
+	Mon,  6 May 2024 20:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XFFz6ATW"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="RZ+RptK2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22F315AD9C
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 19:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C0315B997
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 20:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715024848; cv=none; b=IypRIDrt7ERs8Mf2FGaRYX71qEVQM0ejuIl77J3DaaeB90D24Qj9TJUfdwjanep0MAOmnEb3oCxOgTh59AnTQ/sbA61ZXnJF2+Vwrn4KYaXvwNSaQsi7F9osf+c875nE2EJVsKODDpAtKXaAHz9gW52ZAKp2V/M0Qm+cMpIPuug=
+	t=1715028822; cv=none; b=aS9myUnkEx/eIaa9CwFyw7ccJ4kRW9bY9Ahi+HUuLMuxcjDHC71yZJrFD21LBS8GCSyX123acO7Bot7vOZ70dmpgrGJyxaEzaU4NO+tbd1L12jMiLCFtOkggvAmSehBxWUT6XFN5N8j3xQ97Y4FJCZ4e8ii4PbxMfB9XG0jv3gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715024848; c=relaxed/simple;
-	bh=GByCENBgWchn0akpqZGoD+13cIMCyJdu/t7ZRXWHSVM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=LLtMJNqagtVK0iGhhGDZcrGPkWGwGMLpu4VejUdtDMv2nLHWYG5PldgPC3O1+W/MJbRJo1o7jIGcXOJcw/dEckDMVsNZb1ThFjBHXGIcDpOwSdNhCKRVlaJIPzN9SQLTLMrWuourCU0HIRUakprfpwEybEkoJMpvXJINRX9g9Fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XFFz6ATW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715024845;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B+LfvZaM0cDhMeJS6ywBd3hBXEDd/TNc5rZ9ADTiBeU=;
-	b=XFFz6ATWAYxWIPX6dQOicv1BgwQn+0Nr5heyzjg+MHj7lcis5yn5DkHbq3DftmlKtKp2DF
-	BEZOVpGwIboeY6L1uFsjjS2BXlcgx1a8bpdjuAjq+YqHmLCw9ydbelytX4GvoMQBjsZFbf
-	PxN2OsaWtIoeDidlQ4nwV5+6z8fjxGE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-283-V3JHyPPFOO-9D95nAgLdvw-1; Mon, 06 May 2024 15:47:24 -0400
-X-MC-Unique: V3JHyPPFOO-9D95nAgLdvw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a59c942611bso98543266b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 12:47:24 -0700 (PDT)
+	s=arc-20240116; t=1715028822; c=relaxed/simple;
+	bh=6WzZW5A7prKkyPBstB4o6EWZ+BYYXcPcTb+GVvBRWeE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OthskqnjJKLi9ECqAVZMtO0zAn9eVPbqSawU88HEwRsnkgInq2gXpi3VPg0J9B1BSryqGv37sllyGvrvQTjSHTCAXLSklkFPcH7y0H7/1HU79JFkOp+c2iDtQpzdaGg6NmVpZ46czCXo5Cp6L88RmbEn8+WwDbocZTjtBfrdrQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=RZ+RptK2; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6f453d2c5a1so2309920b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 13:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1715028820; x=1715633620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=37IsvG5uzo6zvAWDaiRFgFSIj/fPT6QL1vAqI4tA0ac=;
+        b=RZ+RptK2kREWvugd6Z9DNedVSNSn8DSFXRonTpnfxFzM1ocgepV6OeC9utG+3DPop6
+         Ta4OzrlYxQpUpZPDE+MebmYlFYtfookNYgx71tkkJdO6zspvefEUQpoZm6VTKDPsFNbZ
+         f3Mt+Op4yZ/s8tk07T35xRFhr9t4S43iPWfiU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715024843; x=1715629643;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B+LfvZaM0cDhMeJS6ywBd3hBXEDd/TNc5rZ9ADTiBeU=;
-        b=WOf7IZTgFmolOl0G5scmzXplBNZh9wnhLtg0fBG4hxgQyDZ/98z7ZXQpmB5lIKW3L4
-         lhG5eB6ROC+CT3J0xKtsB+voUeQLNGy38Xey0jf4YsdNKLrVh6ZOMMe9uy4aBsSdsZI2
-         ZTKsan9kO6fC9mf79QdDoSQdrstEwwc3wQ0GnPF7y4POO6FvZRNYTrvGnBMtoxJMXFRD
-         AUObiUfjUmaBPMWcpe9aPLG+sho3z75JBsnjvmjmUiDqWLjZ6hhqpEFSg7lgAH25hC9s
-         lyn/9COiwPVDJOhXygo9wKH9lTe/wMZJAJryFMLQMSLj9SYHngFtUTTqH7ztYG0yA2ys
-         M5JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWkP/u9Jjmq0siuiS9+h2e0AXL9YGI9rYSO/xMpKd7CZxyEMduz7QjzRDwBOtZap/08gtTyCMWnITPYchholCzFYKmhtvYJgFGOOlSM1cMz
-X-Gm-Message-State: AOJu0YzgDiZ60Cx0A0/AuuAHr0BsCGXJ/mIpBuNhmZLyIq+yXgaH9IHq
-	R4ZZFRezpo+CF7qBvYzCJBddL5VBuBMaco0dkKW+KzIdMDSjshTcUMNKSqq11Qh4y/aleGzveCI
-	LmG2kpCmbQ+PFF+zvXu53OaCW46HbFc8NO4cMMpF6g5lQFOQ6S2o90MQm9uu9AAs8TQ==
-X-Received: by 2002:a17:906:b52:b0:a59:a857:85d9 with SMTP id v18-20020a1709060b5200b00a59a85785d9mr4643921ejg.69.1715024843391;
-        Mon, 06 May 2024 12:47:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGRBhj9be7jQBaaYDelz+oS21CM2eqozyILXEzEZ8HkdFgKx5zuiy6DpoR7jF+SLKlNWeLj5A==
-X-Received: by 2002:a17:906:b52:b0:a59:a857:85d9 with SMTP id v18-20020a1709060b5200b00a59a85785d9mr4643904ejg.69.1715024842927;
-        Mon, 06 May 2024 12:47:22 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id mf1-20020a170906cb8100b00a55778c1af7sm5641019ejb.11.2024.05.06.12.47.22
+        d=1e100.net; s=20230601; t=1715028820; x=1715633620;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=37IsvG5uzo6zvAWDaiRFgFSIj/fPT6QL1vAqI4tA0ac=;
+        b=M8UTf3gRNtv9Dwdiq2/ycXtbEKjcaq+bi/zjgBd37FVc8aM69F3K5FWiLGsRo9Mvba
+         c+QyyRIs4I4w6aAlSIWCAmRF8CxiMFFyMbrEBcePwNhQsN/C6ZPzhl9xnJ+vEaT3urMr
+         anHbMvHp71vGdGMwblb3+3fr7wScaiJGEN7LzdDznE6JRhNpwka+xVV8xtVMOKgILpUn
+         gbcUE3pYhh/MTvhDzWjiAh6oDjyyvyYeM3EwAzXvJHiSmfk5s6Hbiic3D+teqGwi6kcC
+         DE5y/BNzl511rU+1juzHpIuRKNnR57h6z/RzrrGL0HNZm8EOW6BehLnpPGz3fyyqOMr6
+         s6mA==
+X-Gm-Message-State: AOJu0Yzh5qBSgiHwEkMRDk9MWPHi2KGBeHM1/Bqxb2SIJnkK/ufUuH81
+	Gfi91Q/OfQ44E6SxjCRkcSKJ6P2EAL70LfAnwCQOCZk1+7F+YK3URiCFHI88OYY6cqWbvmdz1Ac
+	41h9YWF/8VKFSne+Vq+UnLTt0Bohc4Y7TwZ4MVLxjOcV6rpOXGSNo1Zf4Kn4GDceJmok+EM07KH
+	oPKDR6VMEMfZzmL9DOUekK2eZHuwKQtLUDLjxACYP/hh8F7N4=
+X-Google-Smtp-Source: AGHT+IGNDFzugS9+uMkoMuHk8mtOzpWvoY+LxKHtcCsVky71WRajvQzFJedmT2ImZOmmyCHKHKjqyA==
+X-Received: by 2002:a05:6a20:3d90:b0:1a3:ae75:d6f5 with SMTP id s16-20020a056a203d9000b001a3ae75d6f5mr13991866pzi.20.1715028819526;
+        Mon, 06 May 2024 13:53:39 -0700 (PDT)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id p40-20020a056a0026e800b006f44d0df062sm6289521pfw.125.2024.05.06.13.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 12:47:22 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D9DAC1275C78; Mon, 06 May 2024 21:47:21 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Michal Schmidt <mschmidt@redhat.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko
- <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
- <aleksander.lobakin@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] selftests/bpf: fix pointer arithmetic in
- test_xdp_do_redirect
-In-Reply-To: <20240506145023.214248-1-mschmidt@redhat.com>
-References: <20240506145023.214248-1-mschmidt@redhat.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Mon, 06 May 2024 21:47:21 +0200
-Message-ID: <87v83qoh86.fsf@toke.dk>
+        Mon, 06 May 2024 13:53:38 -0700 (PDT)
+From: Joe Damato <jdamato@fastly.com>
+To: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: nalramli@fastly.com,
+	Joe Damato <jdamato@fastly.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH net-next v2] selftest: epoll_busy_poll: epoll busy poll tests
+Date: Mon,  6 May 2024 20:53:22 +0000
+Message-Id: <20240506205326.70502-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Michal Schmidt <mschmidt@redhat.com> writes:
+Add a simple test for the epoll busy poll ioctls, using the kernel
+selftest harness.
 
-> Cast operation has a higher precedence than addition. The code here
-> wants to zero the 2nd half of the 64-bit metadata, but due to a pointer
-> arithmetic mistake, it writes the zero at offset 16 instead.
->
-> Just adding parentheses around "data + 4" would fix this, but I think
-> this will be slightly better readable with array syntax.
->
-> I was unable to test this with tools/testing/selftests/bpf/vmtest.sh,
-> because my glibc is newer than glibc in the provided VM image.
-> So I just checked the difference in the compiled code.
-> objdump -S tools/testing/selftests/bpf/xdp_do_redirect.test.o:
->   -	*((__u32 *)data) =3D 0x42; /* metadata test value */
->   +	((__u32 *)data)[0] =3D 0x42; /* metadata test value */
->         be7:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
->         bee:	c7 00 42 00 00 00    	movl   $0x42,(%rax)
->   -	*((__u32 *)data + 4) =3D 0;
->   +	((__u32 *)data)[1] =3D 0;
->         bf4:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
->   -     bfb:	48 83 c0 10          	add    $0x10,%rax
->   +     bfb:	48 83 c0 04          	add    $0x4,%rax
->         bff:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
->
-> Fixes: 5640b6d89434 ("selftests/bpf: fix "metadata marker" getting overwr=
-itten by the netstack")
-> Signed-off-by: Michal Schmidt <mschmidt@redhat.com>
+This test ensures that the ioctls have the expected return codes and
+that the kernel properly gets and sets epoll busy poll parameters.
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+The test can be expanded in the future to do real busy polling (provided
+another machine to act as the client is available).
+
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   2 +-
+ tools/testing/selftests/net/epoll_busy_poll.c | 271 ++++++++++++++++++
+ 3 files changed, 273 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/epoll_busy_poll.c
+
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index d996a0ab0765..777cfd027076 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -5,6 +5,7 @@ bind_wildcard
+ csum
+ cmsg_sender
+ diag_uid
++epoll_busy_poll
+ fin_ack_lat
+ gro
+ hwtstamp_config
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5befca249452..b0b893009867 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -67,7 +67,7 @@ TEST_GEN_FILES += ipsec
+ TEST_GEN_FILES += ioam6_parser
+ TEST_GEN_FILES += gro
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+-TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap
++TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap epoll_busy_poll
+ TEST_GEN_FILES += toeplitz
+ TEST_GEN_FILES += cmsg_sender
+ TEST_GEN_FILES += stress_reuseport_listen
+diff --git a/tools/testing/selftests/net/epoll_busy_poll.c b/tools/testing/selftests/net/epoll_busy_poll.c
+new file mode 100644
+index 000000000000..166fabc6cc7e
+--- /dev/null
++++ b/tools/testing/selftests/net/epoll_busy_poll.c
+@@ -0,0 +1,271 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/* Basic per-epoll context busy poll test.
++ *
++ * Only tests the ioctls, but should be expanded to test two connected hosts in
++ * the future
++ */
++
++#define _GNU_SOURCE
++
++#include <error.h>
++#include <errno.h>
++#include <inttypes.h>
++#include <limits.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include <sys/epoll.h>
++#include <sys/ioctl.h>
++#include <sys/socket.h>
++
++#include "../kselftest_harness.h"
++
++/* if the headers haven't been updated, we need to define some things */
++#if !defined(EPOLL_IOC_TYPE)
++struct epoll_params {
++	uint32_t busy_poll_usecs;
++	uint16_t busy_poll_budget;
++	uint8_t prefer_busy_poll;
++
++	/* pad the struct to a multiple of 64bits */
++	uint8_t __pad;
++};
++
++#define EPOLL_IOC_TYPE 0x8A
++#define EPIOCSPARAMS _IOW(EPOLL_IOC_TYPE, 0x01, struct epoll_params)
++#define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
++#endif
++
++FIXTURE(invalid_fd)
++{
++	int invalid_fd;
++	struct epoll_params params;
++};
++
++FIXTURE_SETUP(invalid_fd)
++{
++	int ret;
++
++	ret = socket(AF_UNIX, SOCK_DGRAM, 0);
++	EXPECT_NE(-1, ret)
++		TH_LOG("error creating unix socket");
++
++	self->invalid_fd = ret;
++}
++
++FIXTURE_TEARDOWN(invalid_fd)
++{
++	int ret;
++
++	ret = close(self->invalid_fd);
++	EXPECT_EQ(0, ret);
++}
++
++TEST_F(invalid_fd, test_invalid_fd)
++{
++	int ret;
++
++	ret = ioctl(self->invalid_fd, EPIOCGPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCGPARAMS on invalid epoll FD should error");
++
++	EXPECT_EQ(ENOTTY, errno)
++		TH_LOG("EPIOCGPARAMS on invalid epoll FD should set errno to ENOTTY");
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	ret = ioctl(self->invalid_fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS on invalid epoll FD should error");
++
++	EXPECT_EQ(ENOTTY, errno)
++		TH_LOG("EPIOCSPARAMS on invalid epoll FD should set errno to ENOTTY");
++}
++
++FIXTURE(epoll_busy_poll)
++{
++	int fd;
++	struct epoll_params params;
++	struct epoll_params *invalid_params;
++};
++
++FIXTURE_SETUP(epoll_busy_poll)
++{
++	int ret;
++
++	ret = epoll_create1(0);
++	EXPECT_NE(-1, ret)
++		TH_LOG("epoll_create1 failed?");
++
++	self->fd = ret;
++}
++
++FIXTURE_TEARDOWN(epoll_busy_poll)
++{
++	int ret;
++
++	ret = close(self->fd);
++	EXPECT_EQ(0, ret);
++}
++
++TEST_F(epoll_busy_poll, test_get_params)
++{
++	/* begin by getting the epoll params from the kernel
++	 *
++	 * the default should be default and all fields should be zero'd by the
++	 * kernel, so set params fields to garbage to test this.
++	 */
++	int ret = 0;
++
++	self->params.busy_poll_usecs = 0xff;
++	self->params.busy_poll_budget = 0xff;
++	self->params.prefer_busy_poll = 1;
++	self->params.__pad = 0xf;
++
++	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
++	EXPECT_EQ(0, ret)
++		TH_LOG("ioctl EPIOCGPARAMS should succeed");
++
++	EXPECT_EQ(0, self->params.busy_poll_usecs)
++		TH_LOG("EPIOCGPARAMS busy_poll_usecs should have been 0");
++
++	EXPECT_EQ(0, self->params.busy_poll_budget)
++		TH_LOG("EPIOCGPARAMS busy_poll_budget should have been 0");
++
++	EXPECT_EQ(0, self->params.prefer_busy_poll)
++		TH_LOG("EPIOCGPARAMS prefer_busy_poll should have been 0");
++
++	EXPECT_EQ(0, self->params.__pad)
++		TH_LOG("EPIOCGPARAMS __pad should have been 0");
++
++	self->invalid_params = (struct epoll_params *)0xdeadbeef;
++	ret = ioctl(self->fd, EPIOCGPARAMS, self->invalid_params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCGPARAMS should error with invalid params");
++
++	EXPECT_EQ(EFAULT, errno)
++		TH_LOG("EPIOCGPARAMS with invalid params should set errno to EFAULT");
++}
++
++TEST_F(epoll_busy_poll, test_set_invalid)
++{
++	int ret;
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	self->params.__pad = 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS non-zero __pad should error");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS non-zero __pad errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = (unsigned int)INT_MAX + 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error busy_poll_usecs > S32_MAX");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS busy_poll_usecs > S32_MAX errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = 32;
++	self->params.prefer_busy_poll = 2;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error prefer_busy_poll > 1");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS prefer_busy_poll > 1 errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = 32;
++	self->params.prefer_busy_poll = 1;
++
++	/* set budget well above kernel's NAPI_POLL_WEIGHT of 64 */
++	self->params.busy_poll_budget = 65535;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error busy_poll_budget > NAPI_POLL_WEIGHT");
++
++	EXPECT_EQ(EPERM, errno)
++		TH_LOG("EPIOCSPARAMS errno should be EPERM busy_poll_budget > NAPI_POLL_WEIGHT");
++
++	self->invalid_params = (struct epoll_params *)0xdeadbeef;
++	ret = ioctl(self->fd, EPIOCSPARAMS, self->invalid_params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error when epoll_params is invalid");
++
++	EXPECT_EQ(EFAULT, errno)
++		TH_LOG("EPIOCSPARAMS should set errno to EFAULT when epoll_params is invalid");
++}
++
++TEST_F(epoll_busy_poll, test_set_and_get_valid)
++{
++	int ret;
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	self->params.busy_poll_usecs = 25;
++	self->params.busy_poll_budget = 16;
++	self->params.prefer_busy_poll = 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(0, ret)
++		TH_LOG("EPIOCSPARAMS with valid params should not error");
++
++	/* check that the kernel returns the same values back */
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
++
++	EXPECT_EQ(0, ret)
++		TH_LOG("EPIOCGPARAMS should not error");
++
++	EXPECT_EQ(25, self->params.busy_poll_usecs)
++		TH_LOG("params.busy_poll_usecs incorrect");
++
++	EXPECT_EQ(16, self->params.busy_poll_budget)
++		TH_LOG("params.busy_poll_budget incorrect");
++
++	EXPECT_EQ(1, self->params.prefer_busy_poll)
++		TH_LOG("params.prefer_busy_poll incorrect");
++
++	EXPECT_EQ(0, self->params.__pad)
++		TH_LOG("params.__pad was not 0");
++}
++
++TEST_F(epoll_busy_poll, test_invalid_ioctl)
++{
++	int invalid_ioctl = EPIOCGPARAMS + 10;
++	int ret;
++
++	ret = ioctl(self->fd, invalid_ioctl, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("invalid ioctl should return error");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("invalid ioctl should set errno to EINVAL");
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.25.1
 
 
