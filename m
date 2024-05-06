@@ -1,105 +1,146 @@
-Return-Path: <linux-kselftest+bounces-9562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4BB08BD80F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 01:11:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA98B8BD82C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 01:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F32F28396B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 23:11:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 739BC1F23BEA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 23:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E785815B99E;
-	Mon,  6 May 2024 23:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E47D15CD72;
+	Mon,  6 May 2024 23:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kMuvdB1c"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gcS/kx1/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADB215AD90
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 23:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D4815533A
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 23:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715037057; cv=none; b=uGKvQX7II36Xr+3boRL6MFHJZzo27h39mJAdd1DnEz4XpU/e8latQBqgKf/ZhFvk3k8o7Cif078JD2oSlz6qNt9+8VltTa3ErOAixfaHvhfkGX8Fk6c9Pqbz6HJBiWuxeYTUONLeRTxELT+vRQPv9Lr1vS0tz6ZbP0sQd3afc3M=
+	t=1715038002; cv=none; b=vDmpCLa16xrTqPZZ/92IQrdnXzX8P2hGz31WEHWZfWaDcpJP/d+/V3moxkxF8vLms0YxL0v5mUfXE7CpNfqfxARS9FWkZVnBw7tj8BIsRsJchDuvpCp2UtCbU3Ti1YQimLanILjr/WhZveHal8k+ioEToRCI3KYm8rSlW0n862Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715037057; c=relaxed/simple;
-	bh=FCWmkGKtCYFY82UHw0ipUvRiJnRCs/R5WWby7amO1H0=;
+	s=arc-20240116; t=1715038002; c=relaxed/simple;
+	bh=cJ9hyxh3nF+1An19GSvXwAC4s8YrykB9K2WJtVoH5bk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KonaM6OpMuumXCIamyRLGcIovwwFmMUH/XjXh8ouyjf/8nGCrvRSVb3PjskDjXX0tRdjRiIcl6+U1Tn+KkAqCjaSSThZYzF3CUGE8XZURaa+fDy3DAi0UgPE3QiOzqStSQy9Pq7dHDzksWg9AbXkW5gOBp8/Yp3uZq/XQF4gqOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kMuvdB1c; arc=none smtp.client-ip=209.85.208.53
+	 To:Cc:Content-Type; b=PBK1NkA6S1y/VmTjZJW1WyMyrvqfv+wZBgsnU22k8wb706MDCPINsEVN/F+gTAuBFsnxO8cCJu4D7zR/irdfqkLEdvwj1JRcfcolWHNm9tAG/S4fCzMgrkb4AFRhMvtyxdkQzpU2Sd+/xX34ToDDEGiGdIlGLN6lUwV7cb5/MdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gcS/kx1/; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso8306a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 16:10:56 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso8437a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 16:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715037055; x=1715641855; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715037999; x=1715642799; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
-        b=kMuvdB1cLzgqxeh6zNuN0TMDI+65zpHTMXS+oQtqlCkeUOVR8hKn+E3ezhV26NLXm3
-         r/Mv838FvHr4gKw2SPuta0LdrgXBvgUuOZkwHjO8XyroWHKVyGJHXcESLaBOF41nPCPz
-         W/yjwZBUrBYQu9ZmKZDnQ5WFu9Ga21DqXOLl7mzSszdJYSKIZZzS1iyc35LTxsBmGH/L
-         LiryszNy8YQdemrtTCBRb3sPB/8P62o8ohM5ziPj1TN5BHWzpbYA/8I54CGaPtN9cgmJ
-         GkaLO3Bp7WKXNThF71ZrYOY1N+t2NMaOeACJ+yw+N6Q47TQXHOWHAJW/FzWwe8Xgxmzp
-         h9og==
+        bh=arg5k9e4eumU/21NxDFCZ0styz6cWNXoQ5vyGJusoQ8=;
+        b=gcS/kx1/4uQwRmvAXj49bbVHKWMUge5aWVFibTGOeNb1lZdlQIyu8tH34Si5vmLP9V
+         PVtycKXIf/+ED7wLGsSImwyXOKI5V6Yu8es1FPdPfE1gA5Tkv43mwQLoh93/5B1f9O6m
+         Ozl6StrWFSKWpIzBj1EXI+Y4wmyD6e6IDPaK7BL9iQkQxi6bCkcOlD4AJCzhg/lzt1Y/
+         L4K/RQNdGcSnpoOyP0hDlnbFLQQnlkXKwyGBNSnBdc8t1eVIL9iAq99BUW1HSFsi9WVj
+         zSGCGgB2a/Z0/FE0g9FMq4hZxvh/tbg805un2GP85QJIIAScnmG9IcQkTSkjh40uPvWz
+         O+9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715037055; x=1715641855;
+        d=1e100.net; s=20230601; t=1715037999; x=1715642799;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
-        b=WG05vf66LR2EgRedPlWg+zYgj0jBxCT+WqQSu5lrWN12LoyrKlmGf3lusGOclRM/G3
-         MSKZ4NW7qdFf7BgReXfb1g9PO/slBaH4ibpjt+sXBqZ5DWgLx8dTfsU51dZD7ynRJ6Mi
-         iilhmSs1CMog2yujBHxbXQmbA1ADRJQ/0ikl1qTrcxNU7PJBXZTja0tXEDD1LHj3rjqP
-         KQ9oSagXWCzuIIyym+H1+PxuspoPD2j9W8QWygxpMwAUBn2ht1iPsN+e1USuf+FtFdHN
-         /ySHsTQFu3rcrauG91tyFZ0r+biMJBDKImPbaAJyG5FuLkhN093DOlap4ogaLA7yUQQ9
-         dw9A==
-X-Forwarded-Encrypted: i=1; AJvYcCXi5HTzp82kNC2AFfQ6AURkD0iuYBbVF2bRu0iCLv3WW+junlqnegrmo6nhyCfJ+MtteB0YNhbPbVH3YytNp0AZcjZz3RL2d84lZgTfVPjj
-X-Gm-Message-State: AOJu0Yysl92s+BVxuiJBaOA8VEQRaHEbckcQ2p6D5PwlBQkjVqNB7ww6
-	Axu3rrdguSTYbj/dn/9ql9Bw4ll+v8OkfFNIiEhBAL1dBffdh8WORPni2BDRWHHf1XiwsIlizj9
-	3tVGPyHpPROs5LQVCNUIwCKoemmEdykcL4Xi8
-X-Google-Smtp-Source: AGHT+IHGZfGOFMLPDtfPud/GsrF7tdooNnrZe5MoO9klCGmWbiy/B/k6yjkc3wPHejQWyh/ZbyKrPPcGutS3l9Xw+Rg=
-X-Received: by 2002:a05:6402:4304:b0:572:7c06:9c0 with SMTP id
- 4fb4d7f45d1cf-57311c1506amr107766a12.0.1715037053475; Mon, 06 May 2024
- 16:10:53 -0700 (PDT)
+        bh=arg5k9e4eumU/21NxDFCZ0styz6cWNXoQ5vyGJusoQ8=;
+        b=V2952GMRUSytAiCxsc5ov1TtBsSA+ZNIZiZet7xc8l/QjtWCqW7lNx1249BO/tjrA9
+         uasn/l5hVLeNzwvIKexlMSChjacr9qwqTbaYZ4TJaFxWw2NS/zAup0YhocEMOVE1uj2h
+         sFKXgwPUOlg1dwacdoJYhE0XNv+RCWYWf/mB+kF2SDSLWjjuYeCCDf6M0rftjb5My8Sq
+         Ou85yP5o6nALsHA1Nb0o6YhamH5qZ5605JbWrpPxGVsAh1PWWGujAFu8bP1dUnonOM5A
+         ggVlfEjLcsT1y/VVqbTDwCBxB/P8pNdq55iizJ54VYRavfLXd8jLMLkZbsD/SJxARP3w
+         n9pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXIJgZgXkinjpONYT7j+bHtSlTH4/QFMwe0uHiz4oKLDzDARLM6Wo6W04MTnNic1JpOUggAFM5+NDSabp1aXu38QYYUbEysDAIJhXEl+SuH
+X-Gm-Message-State: AOJu0YysRuKUzcvEixyzCbVT8Di+UQMM+uB8pegP/knjL0JXuCgXzHmw
+	kkIkH/GYmn1v7vX4aId+BBtYRZKc3pMllZHQC2Dc8FI8xE44ouUrt+mcR0jNbByoSB1osTLEbQV
+	OmCaJZvq6b1rqf3OLAB0wkiAPB850dZWSDVAF
+X-Google-Smtp-Source: AGHT+IGJV7l8Y6VljzbpAT4oaU0i2MC2YKQ4WajhRPny/3d+aBTKQkE4NpCFTHY4NBSikNHOII7Lohs8MRKp9IuOFiI=
+X-Received: by 2002:a05:6402:34ce:b0:573:1366:d196 with SMTP id
+ 4fb4d7f45d1cf-5731366d350mr39525a12.1.1715037999082; Mon, 06 May 2024
+ 16:26:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240501180622.1676340-1-edliaw@google.com> <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
- <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com> <CAFhGd8rAW4Mkctq5VkcfVjw_yr=jVdXaWbYXP-vmeVpw7q4ruQ@mail.gmail.com>
- <CAG4es9WYrN_tOV1Uxi_ytO2qDRRZW5_uN=2p3iCg=P0r3mM3Og@mail.gmail.com> <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
-In-Reply-To: <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
-From: Edward Liaw <edliaw@google.com>
-Date: Mon, 6 May 2024 16:10:27 -0700
-Message-ID: <CAG4es9Vn2F34UEmyG3upO-frtCZ00DVN8vgK4mRfX2548FKxVw@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
-To: David Laight <David.Laight@aculab.com>
-Cc: Justin Stitt <justinstitt@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"kernel-team@android.com" <kernel-team@android.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20240501122918.3831734-1-usama.anjum@collabora.com>
+In-Reply-To: <20240501122918.3831734-1-usama.anjum@collabora.com>
+From: Fangrui Song <maskray@google.com>
+Date: Mon, 6 May 2024 16:26:25 -0700
+Message-ID: <CAFP8O3JkgQsH-4Lmr2W_teuvLjOCPi1htr9r3CO1O0yLyw=Azg@mail.gmail.com>
+Subject: Re: [PATCH 0/8] selftests: x86: build suite with clang
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, "Chang S. Bae" <chang.seok.bae@intel.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 6, 2024 at 12:32=E2=80=AFPM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Wed, May 1, 2024 at 5:29=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> This series fixes build errors found by clang to allow the x86 suite to
+> get built with the clang.
+>
+> Unfortunately, there is one bug [1] in the clang becuase of which
+> extended asm isn't handled correctly by it and build fails for
+> sysret_rip.c. Hence even after this series the build of this test would
+> fail with clang. Should we disable this test for now when clang is used
+> until the bug is fixed in clang? Not sure. Any opinions?
+>
+> [1] https://github.com/llvm/llvm-project/issues/53728
+
+I've closed https://github.com/llvm/llvm-project/issues/53728
+(constant expression folding for relocatable file output
+(MCObjectStreamer)).
+
+I've sent a patch to address https://github.com/llvm/llvm-project/issues/62=
+520
+(constant expression folding for relocatable file output  when inline
+assembly is used).
+
+(I am subscribed to llvm@lists.linux.dev but rarely read it. I noticed
+this message accidentally :) )
+
+> Muhammad Usama Anjum (8):
+>   selftests: x86: Remove dependence of headers file
+>   selftests: x86: check_initial_reg_state: remove -no-pie while using
+>     -static
+>   selftests: x86: test_vsyscall: remove unused function
+>   selftests: x86: fsgsbase_restore: fix asm directive from =3Drm to =3Dr
+>   selftests: x86: syscall_arg_fault_32: remove unused variable
+>   selftests: x86: test_FISTTP: use fisttps instead of ambigous fisttp
+>   selftests: x86: fsgsbase: Remove unused function and variable
+>   selftests: x86: amx: Remove unused functions
+>
+>  tools/testing/selftests/x86/Makefile            |  9 +++++----
+>  tools/testing/selftests/x86/amx.c               | 16 ----------------
+>  tools/testing/selftests/x86/fsgsbase.c          |  6 ------
+>  tools/testing/selftests/x86/fsgsbase_restore.c  |  2 +-
+>  tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
+>  tools/testing/selftests/x86/test_FISTTP.c       |  8 ++++----
+>  tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
+>  7 files changed, 10 insertions(+), 37 deletions(-)
+>
+> --
+> 2.39.2
 >
 >
-> That makes a lot more sense.
 
-I sent v4 https://lore.kernel.org/all/20240506181951.1804451-1-edliaw@googl=
-e.com/.
-I updated the commit log to reflect the change but I'm not sure if I
-did it right for the mailing list.  Should I have added --in-reply-to
-this thread?
 
-Edward
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
 
