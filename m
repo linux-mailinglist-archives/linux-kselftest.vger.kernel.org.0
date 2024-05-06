@@ -1,158 +1,145 @@
-Return-Path: <linux-kselftest+bounces-9502-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CF2E8BC83E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 09:19:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E188BC858
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 09:28:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E06F1C21341
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 07:19:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28DA71F210FC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 07:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E1A67E58D;
-	Mon,  6 May 2024 07:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F478763E4;
+	Mon,  6 May 2024 07:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SdPpOIwq";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pIUBUnAB";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SdPpOIwq";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pIUBUnAB"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="FpEaWNlW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7844D9E2;
-	Mon,  6 May 2024 07:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD99C43ADC;
+	Mon,  6 May 2024 07:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714979961; cv=none; b=NIleP9RFG2VaGMjfCFjwTC2KxylbQ9QIsVtYbUy5x/Utjn5v0v8UWsEajzomF8o/tGh0GAiLAzZ4F3uoR6Rw37VQ3Q7Uf1buqnShvhlkaeELXQV3lsDNwX+gT2DFHq8NevCRiJdXjbC3rV8O1N3ahzGQV+8il4ofAOHOlUj/e98=
+	t=1714980485; cv=none; b=Jr2CVRbn5z8rKomhlnxk+2eEY+D8Zn3zKGOomV2WycgTuz8Mr+fVINWHaiQP/JiXxJHvwL3WeA4dLPhspvoqzeuQYiBq66nAYcVeq36vXxbgCVEKP9Ski6VHBcwUUgWA078YFI9I3iLl2DGrxxhBmSX/7JxqYMczQn8ca2/oBtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714979961; c=relaxed/simple;
-	bh=2qf5MESMKz0rbf+sBoiM5dawaPuX0O13HjmplCWnva8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gt6mBtVw0Jaga6dC2vXUzhGsm7+VnTGNzj+rGMDsDb8vDaSxvMy4h87kvtbt9jJhJqMCik4KYZlsT/yivtfWXd2FLF18ZSS/E8kOQoWuNs9os8I53i42HTutNKfjnp8vl1USqLk4NCGTKroQy56gK0VHcTUTfC8/hEdLNJ5ndNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SdPpOIwq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pIUBUnAB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SdPpOIwq; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pIUBUnAB; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=arc-20240116; t=1714980485; c=relaxed/simple;
+	bh=Dl9Fp7DzcxJNL16+TIj68l+FgYDBaVnnxi1ZuOdNUdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SAKN5DKDcG7Q3/md6RKU00nh7bQMZ0MNDlaAnuZbx/pSPQuR/ZAy+s7yXEw2YsfQqtwJ8hXRcGW9OG/JYyzkDGvajKAVo0JL8yVGv6L+8DduxRZqKf6QOhv7YfQ1FqNjqYvBmpq3aw/xmP3dY56YUqOPFCt7qgsy/ienXdSobmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=FpEaWNlW; arc=none smtp.client-ip=77.48.224.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 97BF243F7;
+	Mon,  6 May 2024 09:27:51 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 97BF243F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+	t=1714980471; bh=DCx0YG4MBsCpVEaSdxyjBHSG2FllCh5usfBlyffo6Cg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FpEaWNlWK8RYXdkgtgDwNNTm3IFDmCm4qXejKTLUB0TlR4qyETqu8gzJVotF9jksv
+	 iDHpcSmlRaEE95MOpLF5uI0cwi60N/AsYSpDNw8mcGtf6shKp1KvXEP+2NMdjF6M6m
+	 xIwuh+5wplUhcIv/7xUGNObKOtMd3h+PaNEoEYj0=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9D0E75F913;
-	Mon,  6 May 2024 07:19:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714979957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IcLvCNWG1BpMQqyznUL8QmAGxy+Av9osQDupzzbn2/U=;
-	b=SdPpOIwqkOVpjDLEBurmdDR5GNv1CLLUPiytFFC2JytOISY1j1ak+gIHyXN1k0EYEnFrIU
-	00MmXlUXYzz0M1e6r6DkQIkCmFc9nWSQUk9PVGIUiLy04XpqMdXW6ajQbr2l+0r7Y1l+Qi
-	YfYv32Sd8qDgHAt6wvxlsF/yAV1VVYw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714979957;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IcLvCNWG1BpMQqyznUL8QmAGxy+Av9osQDupzzbn2/U=;
-	b=pIUBUnABkD51ctrCllCiIm8e8a9fVgJEolYDruV5OfPfbPDK5cjnuNCBA1Q3pQj1Z/hDDk
-	LVxZPxC7qbra9KBQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714979957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IcLvCNWG1BpMQqyznUL8QmAGxy+Av9osQDupzzbn2/U=;
-	b=SdPpOIwqkOVpjDLEBurmdDR5GNv1CLLUPiytFFC2JytOISY1j1ak+gIHyXN1k0EYEnFrIU
-	00MmXlUXYzz0M1e6r6DkQIkCmFc9nWSQUk9PVGIUiLy04XpqMdXW6ajQbr2l+0r7Y1l+Qi
-	YfYv32Sd8qDgHAt6wvxlsF/yAV1VVYw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714979957;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IcLvCNWG1BpMQqyznUL8QmAGxy+Av9osQDupzzbn2/U=;
-	b=pIUBUnABkD51ctrCllCiIm8e8a9fVgJEolYDruV5OfPfbPDK5cjnuNCBA1Q3pQj1Z/hDDk
-	LVxZPxC7qbra9KBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3810313A25;
-	Mon,  6 May 2024 07:19:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HAZcDHWEOGZXVgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 06 May 2024 07:19:17 +0000
-Date: Mon, 06 May 2024 09:19:31 +0200
-Message-ID: <875xvrif0c.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-sound@vger.kernel.org,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/alsa: missing a return value in unused dump_config_tree()
-In-Reply-To: <20240505210824.55392-1-jhubbard@nvidia.com>
-References: <20240505210824.55392-1-jhubbard@nvidia.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	(Authenticated sender: perex)
+	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+	Mon,  6 May 2024 09:27:40 +0200 (CEST)
+Message-ID: <a80cb2a2-735d-4539-a758-a536296975cd@perex.cz>
+Date: Mon, 6 May 2024 09:27:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Score: -1.32
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.32 / 50.00];
-	BAYES_HAM(-2.52)[97.82%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,perex.cz,suse.com,gmail.com,vger.kernel.org,valentinobst.de,lists.linux.dev];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/alsa: missing a return value in unused
+ dump_config_tree()
+Content-Language: en-US
+To: Takashi Iwai <tiwai@suse.de>, John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Takashi Iwai <tiwai@suse.com>, Ivan Orlov <ivan.orlov0322@gmail.com>,
+ linux-sound@vger.kernel.org, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240505210824.55392-1-jhubbard@nvidia.com>
+ <875xvrif0c.wl-tiwai@suse.de>
+From: Jaroslav Kysela <perex@perex.cz>
+Autocrypt: addr=perex@perex.cz; keydata=
+ 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
+In-Reply-To: <875xvrif0c.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, 05 May 2024 23:08:24 +0200,
-John Hubbard wrote:
+On 06. 05. 24 9:19, Takashi Iwai wrote:
+> On Sun, 05 May 2024 23:08:24 +0200,
+> John Hubbard wrote:
+>>
+>> dump_config_tree() is declared to return an int, but the compiler cannot
+>> prove that it always returns any value at all. This leads to a clang
+>> warning, when building via:
+>>
+>>      make LLVM=1 -C tools/testing/selftests
+>>
+>> Furthermore, Mark Brown noticed that dump_config_tree() isn't even used
+>> anymore, so just delete the entire function.
+>>
+>> Cc: Mark Brown <broonie@kernel.org>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > 
-> dump_config_tree() is declared to return an int, but the compiler cannot
-> prove that it always returns any value at all. This leads to a clang
-> warning, when building via:
-> 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> Furthermore, Mark Brown noticed that dump_config_tree() isn't even used
-> anymore, so just delete the entire function.
-> 
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> Thanks, applied now.
 
-Thanks, applied now.
+This function is nice for debugging. I'd prefer to keep it with the fix.
 
+				Jaroslav
 
-Takashi
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
 
