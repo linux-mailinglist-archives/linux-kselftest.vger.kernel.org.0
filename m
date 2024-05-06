@@ -1,143 +1,168 @@
-Return-Path: <linux-kselftest+bounces-9526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D2B8BD305
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F29208BD343
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:55:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29C5FB212D7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:46:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42259B215C9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A56156960;
-	Mon,  6 May 2024 16:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E741115748C;
+	Mon,  6 May 2024 16:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0SKbmS9"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0MfOT0xP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8E713DDD8;
-	Mon,  6 May 2024 16:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803BB156F53;
+	Mon,  6 May 2024 16:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715013982; cv=none; b=QU6++bH4LeUbcYwURinvmkcd7L3hrIVeRJe8sWUTGLw7eBcfWt+V4sRy857ynhtth4XobEWqfEI39j3EjngLt6CWdY36NHp5+KlIWh7rb7YUsYSkiSJz7Y4jHcLm7gZOzXVIhYMYMS1Swuk3W1jfrqjjpXj6KSjvavtgeorK8G0=
+	t=1715014532; cv=none; b=pEXgqqecHwXSPqP1tXlyHkBmwX9Tz9LtslqIcKevISHBMqmusjnt6Z0FkUROmN4Hr6yfAiBVUpQrpIkST0JYyz7pKNbCfJqWTIeQ5dgkSarvuoTOhvMoMEupP39THeXmypkIvLhHZ83WPiuh/zYnT3OF2FWF4t50xrLQrOnfVz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715013982; c=relaxed/simple;
-	bh=GOY7uF74aXtTWOzHLTtpIX38L22Nw4vV7OVkQIRNXrY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=CjPno55+1RrWJFkm6RbByiCPUGByfh5tRfQIk4JxNDDLc7H5Ag8rzsS7Wq+VQSd0+FlDV0Y6W5KmElRA72IxyhqPBaNeU+yCvPvj5Wve0FHJdGvPmQ7CpOThuzkXh44iNbeYVHpApb+9gaJUJmn18eAtaVi9lTfC6LSRsqbLo0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R0SKbmS9; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-69b50b8239fso21392856d6.0;
-        Mon, 06 May 2024 09:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715013980; x=1715618780; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzTio4TEar79DkyEXWbqorclupsXYPTSGL7v/jrECRU=;
-        b=R0SKbmS9+RrK+17ALX/uTTzUIcJPqIkDgCsKfQ2KbzcuZ+MbzZOhI/OXXTNe92feOu
-         x9KwMqgRSkbg38Bi4REhmvekBVfBso7hZHOQzeVdHmjWHZfI7R6wbrwOJT4K5mv6Q1W5
-         oA7vPBUdpjlywN84koic/MFFsZz8zdlsmUII02hvJKfqeCyP5nCSkOuwS+QtkmFQznrO
-         3A3yjrOoctfM2hbld9/U5mFLO2S2SepWoYmUC9w72k9YNm97QDZ1/RYzlhgskirHIIYA
-         CtfvyWzVbmzv2YP39GBs/jLva2aAd7jfUyGkRw3VAv9BZRcF89JTGipm8PgMZMuyZNSU
-         Qd2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715013980; x=1715618780;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rzTio4TEar79DkyEXWbqorclupsXYPTSGL7v/jrECRU=;
-        b=aTM/OUUsUBMN6mJtmwitWMKx3pkA/TC6DoNY0/wzFMefZXU/iRAmwbsnMlPJ240Bvv
-         OruDLxQtVgkTi//dF3526uRXJpi32GV4PnuW7O1A14MAY6zUOFfN0ioOJwEI1wLsAMbf
-         BpDhDEE6ooIXc+CARbAlD45+DZgw+KeQgvaqYync03FEK7Czd3Ts4/GRLVd6rJbpYa53
-         gJqDPIy5aP1KLl5We1bH1Ueaf+ujO/GxDku4bIK+8+C0N/LSg0eED08K3P7gkrf2UmMg
-         dmZ/yVUp1Ay2VveQfUpD7l6zPVVZJIY3cSIkVa3YBcfBGsAuYPtQOLbdKY9eJNPdvTHe
-         RfqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVWdtOrE6J6fzEi30VSNe16hw9t0N5Q5HxgudOnn7LOtP2y7xBCHsW8l4gs0DBBilYKiXJXTozJv85C71zt9/NklGnzPptJL/fVY0wAOwymB/zkBl+SzHQnhYPhOpCT7/Kkp9/abFowJX4zu1XEvOEs60Tl18R8Bz/OXmXCxSjR87Obtpej
-X-Gm-Message-State: AOJu0YzaNg3HKgAugJXp+7qc7PmQkCSL8s6WWgZF0fHhQcBXiXYovpJq
-	bSSG7qZEMtxL9vkiyWNulQjzbQ72iJcu1x/W3xRoFdujtw8YEhkbdsFAWA==
-X-Google-Smtp-Source: AGHT+IE3xtdUWGdZUHh2WDdnuoZ14EOUNPk8DJIeSttgiBQGOaGlyoUoPStBZlUyVBxOrITd/5wEug==
-X-Received: by 2002:a05:6214:c84:b0:6a0:b3ec:9032 with SMTP id r4-20020a0562140c8400b006a0b3ec9032mr403317qvr.12.1715013979573;
-        Mon, 06 May 2024 09:46:19 -0700 (PDT)
-Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
-        by smtp.gmail.com with ESMTPSA id l13-20020ad4408d000000b006a0ee5b6ee6sm3869966qvp.123.2024.05.06.09.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 09:46:19 -0700 (PDT)
-Date: Mon, 06 May 2024 12:46:18 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Richard Gobert <richardbgobert@gmail.com>, 
- davem@davemloft.net, 
- edumazet@google.com, 
- willemdebruijn.kernel@gmail.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- dsahern@kernel.org, 
- alobakin@pm.me, 
- shuah@kernel.org, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: Richard Gobert <richardbgobert@gmail.com>
-Message-ID: <6639095ab4887_516de294d8@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240506093550.128210-2-richardbgobert@gmail.com>
-References: <20240506093550.128210-1-richardbgobert@gmail.com>
- <20240506093550.128210-2-richardbgobert@gmail.com>
-Subject: Re: [PATCH net-next v8 1/3] net: gro: use cb instead of
- skb->network_header
+	s=arc-20240116; t=1715014532; c=relaxed/simple;
+	bh=8WXJkdX/4/+veG9WAOzi1ndePP+YpIaIGvCclyQG1xU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hILSaiXr+gBwCyfHukYafEFceFGUq5IN4rG2dScgZFqxXPvXF4PcmxWUnDKF0ihGf9V810TZv+LbFrd4llpXHzbm5vqqHyCbLSwIKtTFFp9oFTAeKFid6+4lnxQiv+3XEkJDc7gQHgspxd8e1LXPDvIE0v6FbMFi0NdcFEGPY0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0MfOT0xP; arc=none smtp.client-ip=83.166.143.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VY6wW2787z1mB;
+	Mon,  6 May 2024 18:55:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1715014523;
+	bh=8WXJkdX/4/+veG9WAOzi1ndePP+YpIaIGvCclyQG1xU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=0MfOT0xP98tgT/5+SomnDxdohs2Y48SX45KtTePd76eDIu/sF5BDBxYo1KlzWAllj
+	 VZvfowjev+0Qi4Rti++4R5OWWPOYuR9uYGNjS+ImJWD5G8IxYV/fO5Iesvmf7ryDOz
+	 pfzUgeUa11sfMKskRv2imMnwElLPv+GpB1QsXeuw=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VY6wS6ZFYz3pZ;
+	Mon,  6 May 2024 18:55:20 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Shengyu Li <shengyu.li.evgeny@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Ron Economos <re@w6rz.net>,
+	Ronald Warsow <rwarsow@gmx.de>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Will Drewry <wad@chromium.org>,
+	kernel test robot <oliver.sang@intel.com>,
+	kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v6 00/10] Fix Kselftest's vfork() side effects
+Date: Mon,  6 May 2024 18:55:08 +0200
+Message-ID: <20240506165518.474504-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-Richard Gobert wrote:
-> This patch converts references of skb->network_header to napi_gro_cb's
-> network_offset and inner_network_offset.
-> 
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-> ---
->  include/net/gro.h        | 9 +++++++--
->  net/ipv4/af_inet.c       | 4 ----
->  net/ipv4/tcp_offload.c   | 3 ++-
->  net/ipv6/ip6_offload.c   | 5 ++---
->  net/ipv6/tcpv6_offload.c | 3 ++-
->  5 files changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/net/gro.h b/include/net/gro.h
-> index c1d4ca0463a1..1faff23b66e8 100644
-> --- a/include/net/gro.h
-> +++ b/include/net/gro.h
-> @@ -181,12 +181,17 @@ static inline void *skb_gro_header(struct sk_buff *skb, unsigned int hlen,
->  	return ptr;
->  }
->  
-> +static inline int skb_gro_network_offset(const struct sk_buff *skb)
-> +{
-> +	return NAPI_GRO_CB(skb)->network_offsets[NAPI_GRO_CB(skb)->encap_mark];
-> +}
-> +
+Hi,
 
-The fact that .._receive sets encap_mark, but .._complete must read
-encapsulation, due to the clear in udp_gro_complete, is non-obvious.
+This sixth series just update the last patch description.
 
-Can you add a comment to clarify this or rename this to
-skb_gro_receive_network_offset?
+Shuah, I think this should be in -next really soon to make sure
+everything works fine for the v6.9 release, which is not currently the
+case.  I cannot test against all kselftests though.  I would prefer to
+let you handle this, but I guess you're not able to do so and I'll push
+it on my branch without reply from you.  Even if I push it on my branch,
+please push it on yours too as soon as you see this and I'll remove it
+from mine.
 
->  static inline void *skb_gro_network_header(const struct sk_buff *skb)
->  {
->  	if (skb_gro_may_pull(skb, skb_gro_offset(skb)))
-> -		return skb_gro_header_fast(skb, skb_network_offset(skb));
-> +		return skb_gro_header_fast(skb, skb_gro_network_offset(skb));
->  
-> -	return skb_network_header(skb);
-> +	return skb->data + skb_gro_network_offset(skb);
->  }
+Mark, Jakub, could you please test this series?
+
+As reported by Kernel Test Robot [1] and Sean Christopherson [2], some
+tests fail since v6.9-rc1 .  This is due to the use of vfork() which
+introduced some side effects.  Similarly, while making it more generic,
+a previous commit made some Landlock file system tests flaky, and
+subject to the host's file system mount configuration.
+
+This series fixes all these side effects by replacing vfork() with
+clone3() and CLONE_VFORK, which is cleaner (no arbitrary shared memory)
+and makes the Kselftest framework more robust.
+
+I tried different approaches and I found this one to be the cleaner and
+less invasive for current test cases.
+
+I successfully ran the following tests (using TEST_F and
+fork/clone/clone3, and KVM_ONE_VCPU_TEST) with this series:
+- kvm:fix_hypercall_test
+- kvm:sync_regs_test
+- kvm:userspace_msr_exit_test
+- kvm:vmx_pmu_caps_test
+- landlock:fs_test
+- landlock:net_test
+- landlock:ptrace_test
+- move_mount_set_group:move_mount_set_group_test
+- net/af_unix:scm_pidfd
+- perf_events:remove_on_exec
+- pidfd:pidfd_getfd_test
+- pidfd:pidfd_setns_test
+- seccomp:seccomp_bpf
+- user_events:abi_test
+
+[1] https://lore.kernel.org/oe-lkp/202403291015.1fcfa957-oliver.sang@intel.com
+[2] https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com
+
+Previous versions:
+v1: https://lore.kernel.org/r/20240426172252.1862930-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20240429130931.2394118-1-mic@digikod.net
+v3: https://lore.kernel.org/r/20240429191911.2552580-1-mic@digikod.net
+v4: https://lore.kernel.org/r/20240502210926.145539-1-mic@digikod.net
+v5: https://lore.kernel.org/r/20240503105820.300927-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (10):
+  selftests/pidfd: Fix config for pidfd_setns_test
+  selftests/landlock: Fix FS tests when run on a private mount point
+  selftests/harness: Fix fixture teardown
+  selftests/harness: Fix interleaved scheduling leading to race
+    conditions
+  selftests/landlock: Do not allocate memory in fixture data
+  selftests/harness: Constify fixture variants
+  selftests/pidfd: Fix wrong expectation
+  selftests/harness: Share _metadata between forked processes
+  selftests/harness: Fix vfork() side effects
+  selftests/harness: Handle TEST_F()'s explicit exit codes
+
+ tools/testing/selftests/kselftest_harness.h   | 122 +++++++++++++-----
+ tools/testing/selftests/landlock/fs_test.c    |  83 +++++++-----
+ tools/testing/selftests/pidfd/config          |   2 +
+ .../selftests/pidfd/pidfd_setns_test.c        |   2 +-
+ 4 files changed, 143 insertions(+), 66 deletions(-)
+
+
+base-commit: e67572cd2204894179d89bd7b984072f19313b03
+-- 
+2.45.0
+
 
