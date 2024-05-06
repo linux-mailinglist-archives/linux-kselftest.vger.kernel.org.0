@@ -1,61 +1,62 @@
-Return-Path: <linux-kselftest+bounces-9523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8266B8BD1A4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:39:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 625FC8BD1F1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3AF81C223FF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 15:39:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 939931C22B67
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 15:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C91154C0A;
-	Mon,  6 May 2024 15:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D06155A53;
+	Mon,  6 May 2024 15:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b="BEwZw+z+"
+	dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b="o2fWO0P7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D352F2C
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 15:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5662155A4E
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 15:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715009948; cv=none; b=sagMVL5oevK/6LH6D+kTa6xCG7vGX+j3Ea/6HBah1iz4Dd94ikpDI1sqhJk4DAaKYF3KY3YiJAQSy0/IZdYsJomfdlA+LdiYQGiUnFfo+BbyVbzrwax/KCpsRE2mjrJrEOM2Wrpj7CIxKng/332ZsdtIwYfNu2Szu62gZcfOca4=
+	t=1715011049; cv=none; b=KoXM7le+zX7VEc0BhgdvIVH/cW8r9mkiqSfyTwYEDp8UMiqZKi7RG5NHJzDJtJyDOHJ6FZ6UaZ2Ogz6rwIH2z1EW5WmqA2q6BlYz+AhEWtdlVK40X/dzUrY/rY3NnGuXYHPyOMfxqnOmPnNEqL2HqbKT6TysUpiEjkPjs8FXmWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715009948; c=relaxed/simple;
-	bh=DnxwuoRJdwU0EK8YzdxglEJVZl4zYMCJBJmNeCyRKZM=;
+	s=arc-20240116; t=1715011049; c=relaxed/simple;
+	bh=iiKrYKylxLJGKkdodAnRvX5ipn2c1qK7DHCqWXkLqMs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T1pDVG6zU9SaOF8akSpnTz4nEWcVfPoxFkkm42JyflhmgtbJXj0N0p332z8KTNhChgoUWheFVNQ3J/vgAjS7R61gaauvEQwypLkvFUpfdPeszOzAFzV73t9/xRQIFhjSFPe91+Y3kKcRtCGxwfOVYuUIc1aUlL0Ty7H9M1XA7Iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org; spf=none smtp.mailfrom=phenome.org; dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b=BEwZw+z+; arc=none smtp.client-ip=195.121.94.167
+	 Content-Type:Content-Disposition:In-Reply-To; b=oKeqtlNZD8sqeWbTZvFdeuIfnWFxXZusWGW6uk/JZn0Z34bV8nGb3ekNMXIXuZ4/iWczOgg/6gGC3qPoWIfRXdjAZn3JYf732Mm/QT/tmSVZJkfnYodPD8gb1+pikyXV9ievOv00WPB3emzeLIOGDAc/Ult2BOWNiidDg3EyHwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org; spf=none smtp.mailfrom=phenome.org; dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b=o2fWO0P7; arc=none smtp.client-ip=195.121.94.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=phenome.org
-X-KPN-MessageId: 98ec550c-0bbe-11ef-93a8-005056abbe64
-Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
+X-KPN-MessageId: 517d0a94-0bc1-11ef-93a8-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
 	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 98ec550c-0bbe-11ef-93a8-005056abbe64;
-	Mon, 06 May 2024 17:37:50 +0200 (CEST)
+	id 517d0a94-0bc1-11ef-93a8-005056abbe64;
+	Mon, 06 May 2024 17:57:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=kpnmail.nl; s=kpnmail01;
 	h=content-type:mime-version:message-id:subject:to:from:date;
-	bh=QzxMfPdrMLsARpkjMh1WDjEpvWUOvqLCZoUmM/KqtcU=;
-	b=BEwZw+z+Y1U0/WX10QCZvrbdL2acrp0YUkDmaeb7ql1iZI5/ZbzR/7bUmc3vPrCI6TWCY/hmc1kUq
-	 SybcZjg/y7QgGEM6a7DJ6fwGFtrfeB+8/bTdsBitrGs7sEEiQVsHKiTOHP4pFMfIC4Zq01UPsq6zC+
-	 MRGlKcDHGCWXWKoM=
-X-KPN-MID: 33|W2NYngEXl0xLO1XPwqGEAMx6nwL7XDxAgHNJnX6mlnDudqQkmV5V448Uh6KWfDg
- kCEA0T5LRj4+bXnV2BC1S9AIbrXJrDjXot/Y0KZSm6OE=
+	bh=RUHm1EWr1K/7L/9ocw0nmD0PbDFVhkil+phJ070GL4Q=;
+	b=o2fWO0P7FvqbEG/2cJ180+MP80HbMrtRuNbEML9KheS4F7idO9tbdqnWyUeem/9buafR2onUCZTz2
+	 YorC4i1exN684EXZdi+V/MYLmaRVqxYj1H4BbHYl0RS/fkXF3Sgi5WuQH5hrHaQ1aReh13drCBHt5k
+	 UZUGlF3aPjk10HL8=
+X-KPN-MID: 33|/Ph3iBiQzufTV4TSUee1KZp+q26aevXSrQGrnCyXEi8ZSlgUNTjH+xt/TX00Qj2
+ YUphs9Gquhk2zkw9fcqcXHazx/PX1p7W3bpmbRrNBtzI=
 X-KPN-VerifiedSender: No
-X-CMASSUN: 33|+RnBNADcfyOR1OrWqV101PniOZnmH6pArxf0AaHCVpILto3gR1DzXHYAuLMADGn
- ekmQO8ZA43asfXDmF5TY3YA==
+X-CMASSUN: 33|kNFyKwD6mBehpBEBTeKAMu+IAPoxC0+39Qm5wKamm0JqDcEu6s5sQcd7CJhaRz2
+ +VNFkBc2XQfM3lHNGIjGmRQ==
 Received: from Antony2201.local (213-10-186-43.fixed.kpn.net [213.10.186.43])
 	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 9b467a53-0bbe-11ef-8130-005056ab1411;
-	Mon, 06 May 2024 17:37:56 +0200 (CEST)
-Date: Mon, 6 May 2024 17:37:54 +0200
+	id 53dd6200-0bc1-11ef-8793-005056ab7447;
+	Mon, 06 May 2024 17:57:24 +0200 (CEST)
+Date: Mon, 6 May 2024 17:57:23 +0200
 From: Antony Antony <antony@phenome.org>
-To: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
 Cc: Antony Antony <antony.antony@secunet.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Steffen Klassert <steffen.klassert@secunet.com>,
 	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
@@ -63,12 +64,11 @@ Cc: Antony Antony <antony.antony@secunet.com>,
 	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org
-Subject: Re: [PATCH net-next v3 2/2] selftests/net: add ICMP unreachable over
- IPsec tunnel
-Message-ID: <Zjj5UsGuaGGBni2N@Antony2201.local>
+Subject: Re: [PATCH net-next v3 0/2] fix icmp error source address over xfrm
+ tunnel
+Message-ID: <Zjj94y2JW4uPg_Iz@Antony2201.local>
 References: <cover.1714982035.git.antony.antony@secunet.com>
- <053f57d79058138d09a0e606c0500a40cb78596d.1714982035.git.antony.antony@secunet.com>
- <20240506062830.5d48ba48@kernel.org>
+ <ZjjczzsSz6wwUHd5@hog>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,54 +77,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240506062830.5d48ba48@kernel.org>
+In-Reply-To: <ZjjczzsSz6wwUHd5@hog>
 
-Hi Jakub,
+Hi Sabrina,
 
-On Mon, May 06, 2024 at 06:28:30AM -0700, Jakub Kicinski via Devel wrote:
-> On Mon, 6 May 2024 10:05:54 +0200 Antony Antony wrote:
-> > Add IPsec tunnel, aka xfrm state, tests with ICMP flags enabled.
-> > IPv4 and IPv6, unreachable tests over xfrm/IPsec tunnels,
-> > xfrm SA with "flag icmp" set.
+On Mon, May 06, 2024 at 03:36:15PM +0200, Sabrina Dubroca via Devel wrote:
+> 2024-05-06, 09:58:26 +0200, Antony Antony wrote:
+> > Hi,
+> > This fix, originally intended for XFRM/IPsec, has been recommended by
+> > Steffen Klassert to submit to the net tree.
+> > 
+> > The patch addresses a minor issue related to the IPv4 source address of
+> > ICMP error messages, which originated from an old 2011 commit:
+> > 
+> > 415b3334a21a ("icmp: Fix regression in nexthop resolution during replies.")
+> > 
+> > The omission of a "Fixes" tag  in the following commit is deliberate
+> > to prevent potential test failures and subsequent regression issues
+> > that may arise from backporting this patch all stable kerenels.
 > 
-> Doesn't seem to work:
+> What kind of regression do you expect? If there's a risk of
 
-thanks. I am looking into it. I notice two issues.
+For example, an old testing scripts with hardcoded source IP address assume
+that the "Unreachable response" will have the previous behavior. Such 
+testing script may trigger regression when this patch is backported.  
+Consequently, there may be discussions on whether this patch has broken the 
+10-year-old test scripts, which may be hard to fix.
 
- 
-> # selftests: net: xfrm_state.sh
-> # ./xfrm_state.sh: line 91: test_: command not found
-> # TEST: unreachable_ipv4IPv6 unreachable from router r3           [ FAIL ]
+> regression, I'm not sure net-next is that much "better" than net or
+> stable. If a user complains about the new behavior breaking their
+> setup, my understanding is that you would likely have to revert the
+> patch anyway, or at least add some way to toggle the behavior.
 
-This appears to be an error from the v2 run, which was sent yesterday.
-The v3 patch should have superseded it.
-
-The branch net-dev-testing/net-next-2024-05-06--12-00 contains the v2 patch.
-I wonder if net-dev testing recognized v3 patch.
-
-git diff net-next-2024-05-06--12-00 net-next-2024-05-06--03-00 ./tools/testing/selftests/net/xfrm_state.sh
-is missing the expected one line diff in  IFS.
-
-> # ./xfrm_state.sh: line 91: test_: command not found
-> # TEST: unreachable_gw_ipv6IPv6 unreachable from IPsec gateway s2 [ FAIL ]
-> # ./xfrm_state.sh: line 91: test_: command not found
-> # TEST: mtu_ipv6_r2IPv6 MTU exceeded from ESP router r2          [ FAIL ]
-> # ./xfrm_state.sh: line 91: test_: command not found
-> # TEST: mtu_ipv6_r3IPv6 MTU exceeded router r3                   [ FAIL ]
-> not ok 1 selftests: net: xfrm_state.sh # exit=1
-
-I suspect there is another another issue with 
-tools/testing/selftests/net/config . It does not appear to support nftables 
-match for ESP. Which this script assumes.
-
-# ip netns exec ns_r2-39oUmE nft add rule inet filter FORWARD counter ip protocol esp counter log accept
-#
-# Error: Could not process rule: No such file or directory
-# add rule inet filter FORWARD counter ip protocol esp counter log accept
-#               ^^^^^^
-
-I learning vng also. I will send v4 with change to config, then I hope the 
-test runner will pick up the latest patch.
+My hope is that if this patch is applied to net-next without a "Fixes" tag,
+users would fix their testing scripts properly. Additionally, another piece
+of the puzzle for a complete fix is "forwarding of ICMP Error messages" 
+patch that is in the kerenl 6.8, which is new feature and applied via 
+ipsec-next.
 
 -antony
 
