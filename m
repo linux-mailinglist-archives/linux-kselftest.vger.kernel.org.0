@@ -1,138 +1,130 @@
-Return-Path: <linux-kselftest+bounces-9522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DB0B8BD0C3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:51:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8266B8BD1A4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:39:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8FB28DD45
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 14:51:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3AF81C223FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 15:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5904B154C15;
-	Mon,  6 May 2024 14:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C91154C0A;
+	Mon,  6 May 2024 15:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dl91rL4K"
+	dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b="BEwZw+z+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFB915383A
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 14:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D352F2C
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 15:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715007079; cv=none; b=mSRX96WkKapWP6w2H1vQbpTSiXMkyBz25cPpoLHDBemDhonzF/kXYs/uAUXvuzPCJfDwdeLjRbgmjVUrUJb8M3YBUNGltotq4375ekLrxBku/DXRpvJN9KHNNThJj/+tpJHn9FNoTqQZZZQ8RVjGMfzGnufbXheDwd+doyxj7dQ=
+	t=1715009948; cv=none; b=sagMVL5oevK/6LH6D+kTa6xCG7vGX+j3Ea/6HBah1iz4Dd94ikpDI1sqhJk4DAaKYF3KY3YiJAQSy0/IZdYsJomfdlA+LdiYQGiUnFfo+BbyVbzrwax/KCpsRE2mjrJrEOM2Wrpj7CIxKng/332ZsdtIwYfNu2Szu62gZcfOca4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715007079; c=relaxed/simple;
-	bh=NoJOEe3WBr5N+Zi1ZOJ8scZWtJUtA/7YeluteZtdGJ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BDBD2U6TP8xqHFWRR0WgOikwYDBMkMloYYovUeTo5hskVZt/EjDlygxE5yCgqLfoDN6Ha21NW3YVkNTbd3NUSE5cRC/duvhFTYAzcy/fcwtDPyRnvvvZQROuDumtRn6ic6A840OuL6azfZZk1sjT72aJ+KEZo4xvRtg5VVixuA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dl91rL4K; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715007076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=w3XIEQrPEX8PhRQQF8FgmaXCd9gS5l6iMjkAGMUJMYU=;
-	b=dl91rL4KChv2uYbK0N9qPatQAOb6pyMix9Pu/ehm4DOMkXCT79XVvJZ+qsGUkyGoSDG+d+
-	0SGl4WvEK5C2mnsiScxKr5cPEnyxKBzlhBH5t7seH6nqthIQl4lERNuvObmAWL1fiUkeuq
-	ljh/96NGQqtDbEusrwlzu87qAGRr9X4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-FdghGdmPO52jYmhPmuM1Aw-1; Mon, 06 May 2024 10:51:08 -0400
-X-MC-Unique: FdghGdmPO52jYmhPmuM1Aw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C3431044575;
-	Mon,  6 May 2024 14:51:07 +0000 (UTC)
-Received: from toolbox.redhat.com (unknown [10.45.226.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2322D2024512;
-	Mon,  6 May 2024 14:51:02 +0000 (UTC)
-From: Michal Schmidt <mschmidt@redhat.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	s=arc-20240116; t=1715009948; c=relaxed/simple;
+	bh=DnxwuoRJdwU0EK8YzdxglEJVZl4zYMCJBJmNeCyRKZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T1pDVG6zU9SaOF8akSpnTz4nEWcVfPoxFkkm42JyflhmgtbJXj0N0p332z8KTNhChgoUWheFVNQ3J/vgAjS7R61gaauvEQwypLkvFUpfdPeszOzAFzV73t9/xRQIFhjSFPe91+Y3kKcRtCGxwfOVYuUIc1aUlL0Ty7H9M1XA7Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org; spf=none smtp.mailfrom=phenome.org; dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b=BEwZw+z+; arc=none smtp.client-ip=195.121.94.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=phenome.org
+X-KPN-MessageId: 98ec550c-0bbe-11ef-93a8-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 98ec550c-0bbe-11ef-93a8-005056abbe64;
+	Mon, 06 May 2024 17:37:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=kpnmail.nl; s=kpnmail01;
+	h=content-type:mime-version:message-id:subject:to:from:date;
+	bh=QzxMfPdrMLsARpkjMh1WDjEpvWUOvqLCZoUmM/KqtcU=;
+	b=BEwZw+z+Y1U0/WX10QCZvrbdL2acrp0YUkDmaeb7ql1iZI5/ZbzR/7bUmc3vPrCI6TWCY/hmc1kUq
+	 SybcZjg/y7QgGEM6a7DJ6fwGFtrfeB+8/bTdsBitrGs7sEEiQVsHKiTOHP4pFMfIC4Zq01UPsq6zC+
+	 MRGlKcDHGCWXWKoM=
+X-KPN-MID: 33|W2NYngEXl0xLO1XPwqGEAMx6nwL7XDxAgHNJnX6mlnDudqQkmV5V448Uh6KWfDg
+ kCEA0T5LRj4+bXnV2BC1S9AIbrXJrDjXot/Y0KZSm6OE=
+X-KPN-VerifiedSender: No
+X-CMASSUN: 33|+RnBNADcfyOR1OrWqV101PniOZnmH6pArxf0AaHCVpILto3gR1DzXHYAuLMADGn
+ ekmQO8ZA43asfXDmF5TY3YA==
+Received: from Antony2201.local (213-10-186-43.fixed.kpn.net [213.10.186.43])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id 9b467a53-0bbe-11ef-8130-005056ab1411;
+	Mon, 06 May 2024 17:37:56 +0200 (CEST)
+Date: Mon, 6 May 2024 17:37:54 +0200
+From: Antony Antony <antony@phenome.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Antony Antony <antony.antony@secunet.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net] selftests/bpf: fix pointer arithmetic in test_xdp_do_redirect
-Date: Mon,  6 May 2024 16:50:22 +0200
-Message-ID: <20240506145023.214248-1-mschmidt@redhat.com>
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org
+Subject: Re: [PATCH net-next v3 2/2] selftests/net: add ICMP unreachable over
+ IPsec tunnel
+Message-ID: <Zjj5UsGuaGGBni2N@Antony2201.local>
+References: <cover.1714982035.git.antony.antony@secunet.com>
+ <053f57d79058138d09a0e606c0500a40cb78596d.1714982035.git.antony.antony@secunet.com>
+ <20240506062830.5d48ba48@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240506062830.5d48ba48@kernel.org>
 
-Cast operation has a higher precedence than addition. The code here
-wants to zero the 2nd half of the 64-bit metadata, but due to a pointer
-arithmetic mistake, it writes the zero at offset 16 instead.
+Hi Jakub,
 
-Just adding parentheses around "data + 4" would fix this, but I think
-this will be slightly better readable with array syntax.
+On Mon, May 06, 2024 at 06:28:30AM -0700, Jakub Kicinski via Devel wrote:
+> On Mon, 6 May 2024 10:05:54 +0200 Antony Antony wrote:
+> > Add IPsec tunnel, aka xfrm state, tests with ICMP flags enabled.
+> > IPv4 and IPv6, unreachable tests over xfrm/IPsec tunnels,
+> > xfrm SA with "flag icmp" set.
+> 
+> Doesn't seem to work:
 
-I was unable to test this with tools/testing/selftests/bpf/vmtest.sh,
-because my glibc is newer than glibc in the provided VM image.
-So I just checked the difference in the compiled code.
-objdump -S tools/testing/selftests/bpf/xdp_do_redirect.test.o:
-  -	*((__u32 *)data) = 0x42; /* metadata test value */
-  +	((__u32 *)data)[0] = 0x42; /* metadata test value */
-        be7:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
-        bee:	c7 00 42 00 00 00    	movl   $0x42,(%rax)
-  -	*((__u32 *)data + 4) = 0;
-  +	((__u32 *)data)[1] = 0;
-        bf4:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
-  -     bfb:	48 83 c0 10          	add    $0x10,%rax
-  +     bfb:	48 83 c0 04          	add    $0x4,%rax
-        bff:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
+thanks. I am looking into it. I notice two issues.
 
-Fixes: 5640b6d89434 ("selftests/bpf: fix "metadata marker" getting overwritten by the netstack")
-Signed-off-by: Michal Schmidt <mschmidt@redhat.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index 498d3bdaa4b0..bad0ea167be7 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -107,8 +107,8 @@ void test_xdp_do_redirect(void)
- 			    .attach_point = BPF_TC_INGRESS);
  
- 	memcpy(&data[sizeof(__u64)], &pkt_udp, sizeof(pkt_udp));
--	*((__u32 *)data) = 0x42; /* metadata test value */
--	*((__u32 *)data + 4) = 0;
-+	((__u32 *)data)[0] = 0x42; /* metadata test value */
-+	((__u32 *)data)[1] = 0;
- 
- 	skel = test_xdp_do_redirect__open();
- 	if (!ASSERT_OK_PTR(skel, "skel"))
--- 
-2.44.0
+> # selftests: net: xfrm_state.sh
+> # ./xfrm_state.sh: line 91: test_: command not found
+> # TEST: unreachable_ipv4IPv6 unreachable from router r3           [ FAIL ]
 
+This appears to be an error from the v2 run, which was sent yesterday.
+The v3 patch should have superseded it.
+
+The branch net-dev-testing/net-next-2024-05-06--12-00 contains the v2 patch.
+I wonder if net-dev testing recognized v3 patch.
+
+git diff net-next-2024-05-06--12-00 net-next-2024-05-06--03-00 ./tools/testing/selftests/net/xfrm_state.sh
+is missing the expected one line diff in  IFS.
+
+> # ./xfrm_state.sh: line 91: test_: command not found
+> # TEST: unreachable_gw_ipv6IPv6 unreachable from IPsec gateway s2 [ FAIL ]
+> # ./xfrm_state.sh: line 91: test_: command not found
+> # TEST: mtu_ipv6_r2IPv6 MTU exceeded from ESP router r2          [ FAIL ]
+> # ./xfrm_state.sh: line 91: test_: command not found
+> # TEST: mtu_ipv6_r3IPv6 MTU exceeded router r3                   [ FAIL ]
+> not ok 1 selftests: net: xfrm_state.sh # exit=1
+
+I suspect there is another another issue with 
+tools/testing/selftests/net/config . It does not appear to support nftables 
+match for ESP. Which this script assumes.
+
+# ip netns exec ns_r2-39oUmE nft add rule inet filter FORWARD counter ip protocol esp counter log accept
+#
+# Error: Could not process rule: No such file or directory
+# add rule inet filter FORWARD counter ip protocol esp counter log accept
+#               ^^^^^^
+
+I learning vng also. I will send v4 with change to config, then I hope the 
+test runner will pick up the latest patch.
+
+-antony
 
