@@ -1,119 +1,153 @@
-Return-Path: <linux-kselftest+bounces-9524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 625FC8BD1F1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:57:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC7D8BD28D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:22:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 939931C22B67
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 15:57:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0A21C2223D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 16:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D06155A53;
-	Mon,  6 May 2024 15:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79D7156253;
+	Mon,  6 May 2024 16:22:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b="o2fWO0P7"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QVGJW07x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5662155A4E
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 15:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667D5156248
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 16:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715011049; cv=none; b=KoXM7le+zX7VEc0BhgdvIVH/cW8r9mkiqSfyTwYEDp8UMiqZKi7RG5NHJzDJtJyDOHJ6FZ6UaZ2Ogz6rwIH2z1EW5WmqA2q6BlYz+AhEWtdlVK40X/dzUrY/rY3NnGuXYHPyOMfxqnOmPnNEqL2HqbKT6TysUpiEjkPjs8FXmWg=
+	t=1715012560; cv=none; b=Be+z8dEYAwDzUP7SZWFB8GQgVQrqeYN9/+T8a8os0HQEgHIGroOrk/VZhNyjjdADhoF7AZRx3YsOm1vv0xxOn//QeFq0ZmUeY1wsdTxjt1X3LfLNVl79m5Xx8temko5ygdJ8IxRhzkUDb+lBuVcCNc6iN743EZjcTEKTXgO+IXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715011049; c=relaxed/simple;
-	bh=iiKrYKylxLJGKkdodAnRvX5ipn2c1qK7DHCqWXkLqMs=;
+	s=arc-20240116; t=1715012560; c=relaxed/simple;
+	bh=frTG5OBPlS3cpKFuLzpv3nMYxGsgU18EpPK6RPYW230=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKeqtlNZD8sqeWbTZvFdeuIfnWFxXZusWGW6uk/JZn0Z34bV8nGb3ekNMXIXuZ4/iWczOgg/6gGC3qPoWIfRXdjAZn3JYf732Mm/QT/tmSVZJkfnYodPD8gb1+pikyXV9ievOv00WPB3emzeLIOGDAc/Ult2BOWNiidDg3EyHwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org; spf=none smtp.mailfrom=phenome.org; dkim=pass (1024-bit key) header.d=kpnmail.nl header.i=@kpnmail.nl header.b=o2fWO0P7; arc=none smtp.client-ip=195.121.94.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phenome.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=phenome.org
-X-KPN-MessageId: 517d0a94-0bc1-11ef-93a8-005056abbe64
-Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 517d0a94-0bc1-11ef-93a8-005056abbe64;
-	Mon, 06 May 2024 17:57:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=kpnmail.nl; s=kpnmail01;
-	h=content-type:mime-version:message-id:subject:to:from:date;
-	bh=RUHm1EWr1K/7L/9ocw0nmD0PbDFVhkil+phJ070GL4Q=;
-	b=o2fWO0P7FvqbEG/2cJ180+MP80HbMrtRuNbEML9KheS4F7idO9tbdqnWyUeem/9buafR2onUCZTz2
-	 YorC4i1exN684EXZdi+V/MYLmaRVqxYj1H4BbHYl0RS/fkXF3Sgi5WuQH5hrHaQ1aReh13drCBHt5k
-	 UZUGlF3aPjk10HL8=
-X-KPN-MID: 33|/Ph3iBiQzufTV4TSUee1KZp+q26aevXSrQGrnCyXEi8ZSlgUNTjH+xt/TX00Qj2
- YUphs9Gquhk2zkw9fcqcXHazx/PX1p7W3bpmbRrNBtzI=
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|kNFyKwD6mBehpBEBTeKAMu+IAPoxC0+39Qm5wKamm0JqDcEu6s5sQcd7CJhaRz2
- +VNFkBc2XQfM3lHNGIjGmRQ==
-Received: from Antony2201.local (213-10-186-43.fixed.kpn.net [213.10.186.43])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 53dd6200-0bc1-11ef-8793-005056ab7447;
-	Mon, 06 May 2024 17:57:24 +0200 (CEST)
-Date: Mon, 6 May 2024 17:57:23 +0200
-From: Antony Antony <antony@phenome.org>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: Antony Antony <antony.antony@secunet.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org
-Subject: Re: [PATCH net-next v3 0/2] fix icmp error source address over xfrm
- tunnel
-Message-ID: <Zjj94y2JW4uPg_Iz@Antony2201.local>
-References: <cover.1714982035.git.antony.antony@secunet.com>
- <ZjjczzsSz6wwUHd5@hog>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Onkg2oQVT8hmRziGgQayIhuV8SK8LQh1J481d4JSo2wEN+qh9+LXwWABosCBEqgvJqXkqhqA5m94+3eDypMlruPWvVsjSWg6JNNX51VHYBcNj7eDKxUtYfO6rWr2W6lGvYgNNJReZ6rSr9Y/JSduJnlNpT11IPHASCEzQokWc5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QVGJW07x; arc=none smtp.client-ip=84.16.66.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VY6BX035Yzv5F;
+	Mon,  6 May 2024 18:22:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1715012547;
+	bh=frTG5OBPlS3cpKFuLzpv3nMYxGsgU18EpPK6RPYW230=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QVGJW07xk8eHL6UpWADM18ljmNpCsUZFZ/y+hnujvAG4wypA725OzVnlFCVIrzeIC
+	 hLijnFYam4uOXYA7uIhnwTtwavFoEY7K9tQ4KEDq+PhS9u4z/2SnXX09JSBL1tqE1e
+	 POk3pm5g+TTYR6xyTDIy65DL078axdOiRswSeqfc=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VY6BV5nyRzpxL;
+	Mon,  6 May 2024 18:22:26 +0200 (CEST)
+Date: Mon, 6 May 2024 18:22:25 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Mark Brown <broonie@kernel.org>, Shengyu Li <shengyu.li.evgeny@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>, 
+	kernel test robot <oliver.sang@intel.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v5 10/10] selftests/harness: Handle TEST_F()'s explicit
+ exit codes
+Message-ID: <20240506.Ceeche0coolu@digikod.net>
+References: <20240503105820.300927-1-mic@digikod.net>
+ <20240503105820.300927-11-mic@digikod.net>
+ <ZjTx7BYvbrqFSNuH@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZjjczzsSz6wwUHd5@hog>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZjTx7BYvbrqFSNuH@google.com>
+X-Infomaniak-Routing: alpha
 
-Hi Sabrina,
-
-On Mon, May 06, 2024 at 03:36:15PM +0200, Sabrina Dubroca via Devel wrote:
-> 2024-05-06, 09:58:26 +0200, Antony Antony wrote:
-> > Hi,
-> > This fix, originally intended for XFRM/IPsec, has been recommended by
-> > Steffen Klassert to submit to the net tree.
+On Fri, May 03, 2024 at 07:17:16AM GMT, Sean Christopherson wrote:
+> On Fri, May 03, 2024, Mickaël Salaün wrote:
+> > If TEST_F() explicitly calls exit(code) with code different than 0, then
+> > _metadata->exit_code is set to this code (e.g. KVM_ONE_VCPU_TEST()).  We
+> > need to keep in mind that _metadata->exit_code can be KSFT_SKIP while
+> > the process exit code is 0.
 > > 
-> > The patch addresses a minor issue related to the IPv4 source address of
-> > ICMP error messages, which originated from an old 2011 commit:
-> > 
-> > 415b3334a21a ("icmp: Fix regression in nexthop resolution during replies.")
-> > 
-> > The omission of a "Fixes" tag  in the following commit is deliberate
-> > to prevent potential test failures and subsequent regression issues
-> > that may arise from backporting this patch all stable kerenels.
+> > Initial patch written by Sean Christopherson [1].
 > 
-> What kind of regression do you expect? If there's a risk of
+> Heh, my pseudo patch barely has any relevance at this point.  How about replacing
+> that with:
+> 
+>   Reported-by: Sean Christopherson <seanjc@google.com>
+>   Closes: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com
+> 
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Shuah Khan <shuah@kernel.org>
+> > Cc: Will Drewry <wad@chromium.org>
+> > Link: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com [1]
+> > Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
+> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > Link: https://lore.kernel.org/r/20240503105820.300927-11-mic@digikod.net
+> > ---
+> > 
+> > Changes since v4:
+> > * Check abort status when the grandchild exited.
+> > * Keep the _exit(0) calls because _metadata->exit_code is always
+> >   checked.
+> > * Only set _metadata->exit_code to WEXITSTATUS() if it is not zero.
+> > 
+> > Changes since v3:
+> > * New patch mainly from Sean Christopherson.
+> > ---
+> >  tools/testing/selftests/kselftest_harness.h | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> > index eb25f7c11949..7612bf09c5f8 100644
+> > --- a/tools/testing/selftests/kselftest_harness.h
+> > +++ b/tools/testing/selftests/kselftest_harness.h
+> > @@ -462,9 +462,13 @@ static inline pid_t clone3_vfork(void)
+> >  		munmap(teardown, sizeof(*teardown)); \
+> >  		if (self && fixture_name##_teardown_parent) \
+> >  			munmap(self, sizeof(*self)); \
+> > -		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
+> > +		if (WIFEXITED(status)) { \
+> > +			if (WEXITSTATUS(status)) \
+> > +				_metadata->exit_code = WEXITSTATUS(status); \
+> 
+> Ah, IIUC, this works because __run_test() effectively forwards the exit_code?
+> 
+> 	} else if (t->pid == 0) {
+> 		setpgrp();
+> 		t->fn(t, variant);
+> 		_exit(t->exit_code);
+> 	}
 
-For example, an old testing scripts with hardcoded source IP address assume
-that the "Unreachable response" will have the previous behavior. Such 
-testing script may trigger regression when this patch is backported.  
-Consequently, there may be discussions on whether this patch has broken the 
-10-year-old test scripts, which may be hard to fix.
+Yes
 
-> regression, I'm not sure net-next is that much "better" than net or
-> stable. If a user complains about the new behavior breaking their
-> setup, my understanding is that you would likely have to revert the
-> patch anyway, or at least add some way to toggle the behavior.
+> 
+> Tested-by: Sean Christopherson <seanjc@google.com>
 
-My hope is that if this patch is applied to net-next without a "Fixes" tag,
-users would fix their testing scripts properly. Additionally, another piece
-of the puzzle for a complete fix is "forwarding of ICMP Error messages" 
-patch that is in the kerenl 6.8, which is new feature and applied via 
-ipsec-next.
+OK, I'll send a v6. We really need to get this into -next.
 
--antony
+> 
+> > +		} else if (WIFSIGNALED(status)) { \
+> >  			/* Forward signal to __wait_for_test(). */ \
+> >  			kill(getpid(), WTERMSIG(status)); \
+> > +		} \
+> >  		__test_check_assert(_metadata); \
+> >  	} \
+> >  	static void __attribute__((constructor)) \
+> > -- 
+> > 2.45.0
+> > 
+> 
 
