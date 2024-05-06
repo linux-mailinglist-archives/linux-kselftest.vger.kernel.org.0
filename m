@@ -1,756 +1,176 @@
-Return-Path: <linux-kselftest+bounces-9508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 643FF8BC91D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 10:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 460CB8BCA43
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 11:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 835101C2164E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 08:06:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 694911C20FFA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 09:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6C7D14039A;
-	Mon,  6 May 2024 08:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310701422B8;
+	Mon,  6 May 2024 09:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="dTuiRCbO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UlWFbY2i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE1674416;
-	Mon,  6 May 2024 08:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB9F1422A5;
+	Mon,  6 May 2024 09:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714982769; cv=none; b=HMj+Jc36LVsAzMlZ258yQKo4FcEDhqR2AyrXoGmloTxPxwwHiTlrQGbi1lmQJxAuNnz8crfSsLBA9DBfK5KRBfPD36pIDL9hwh4vxNbPHGogtZjyW5PHdYBjWow+uEJvbMAD9ruHQA5effCnWooaB3jK84gyk1Lk8Ud+PViKZas=
+	t=1714986491; cv=none; b=bcuwoYwDYQPsZTJeNdQ5qAtVCvzVIEOgaT5AXO1R4Tr/EuxQDNBzpoqg6pDX6wt2PR5tPLv+dPFBXbMUtbP1i6TtZL6hQEZB+92M6QwszuiHUT0irCeIw/lSNvaWhXNVeRAEoCkEiaYRwaD9IvxFQIsjC/ZFE+kVtYa3bX88SPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714982769; c=relaxed/simple;
-	bh=bzLlwEre0RIDnWnC7+IGyQQ9XZGI9MMiGD8uW4JQetE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YgU4fMNTY3ShDtcOp+rHMdebdFBWkdyxe0hQKDFtQoY++swu9tAEa437UMmkyN7E2jIJ2iVhHKpzu2J6yCeMg019vQbfns7/FzrQ8B0jGNo6czYU/GLHOhgZOaHeDonPqaCdKe17LkxO3w2sn9ka0L3i2uDgHSq2mpLO9HLm3zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=dTuiRCbO; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 34F5B2069C;
-	Mon,  6 May 2024 10:06:05 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S5M-pHPe3fjL; Mon,  6 May 2024 10:06:02 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id C8C76201A0;
-	Mon,  6 May 2024 10:06:02 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com C8C76201A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1714982762;
-	bh=q4EFU43GFG61k+aE4BiqZJzQ0kBzFrzsWwOVhv9fg8k=;
-	h=Date:From:To:CC:Subject:Reply-To:References:In-Reply-To:From;
-	b=dTuiRCbOQTyBnw2xnDTyHwVOSX2KjF2BBnFhUAI82XbDs86Ip9P6yR7gh7O8nP4IE
-	 Rz33Mp/imC2EpSLei1CiERmvK9VHxcpoxo0m3kx1OPYE2MPIC42qyyVm5ypXEoiOFY
-	 YKhKtst0HzXrt1FUx+n00lsYmiGavmfA8FSu32BBDxfkU1G5NZKBchbgrSxTw/568T
-	 +PIaVD9XfazDuOOceB6/NaKPGsRemLUhghnNrGhRSGsfM/7twJB5YR59Bi89gI276S
-	 IoR1sM5AZ2yByqXQ7Dy4AdbjVDuIzTO9Cgfa5EWwFlZr2xODLVGPXYU7ynQcmSHrpI
-	 8mU7N0QUeGLPA==
-Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
-	by mailout2.secunet.com (Postfix) with ESMTP id BB96D80004A;
-	Mon,  6 May 2024 10:06:02 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 6 May 2024 10:06:02 +0200
-Received: from moon.secunet.de (172.18.149.1) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 6 May
- 2024 10:06:02 +0200
-Date: Mon, 6 May 2024 10:05:54 +0200
-From: Antony Antony <antony.antony@secunet.com>
-To: Jakub Kicinski <kuba@kernel.org>, Steffen Klassert
-	<steffen.klassert@secunet.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-CC: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "Herbert
- Xu" <herbert@gondor.apana.org.au>, Antony Antony <antony.antony@secunet.com>,
-	Shuah Khan <shuah@kernel.org>, <devel@linux-ipsec.org>
-Subject: [PATCH net-next v3 2/2] selftests/net: add ICMP unreachable over
- IPsec tunnel
-Message-ID: <053f57d79058138d09a0e606c0500a40cb78596d.1714982035.git.antony.antony@secunet.com>
-Reply-To: <antony.antony@secunet.com>
-References: <cover.1714982035.git.antony.antony@secunet.com>
+	s=arc-20240116; t=1714986491; c=relaxed/simple;
+	bh=DJFAb48flUOaIKrGIcEOoLa7PZxItSUWyxVPt3RrdEQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Xl72jl6Pd80BxPrqR7PInJAdxHLiv7jpMl6jXNykzFnanOqCDhGetX7SsSb9c7UwsNs69M5PqDUOzovGwgj0Fx8RcHOjMMjM1+tOq7pABrEYpGYYfePCPa+Xk3eUbYbjbFLWIB9idtwpBkOX13fC6kjhZk1wlUj6SIqz8BkUFmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UlWFbY2i; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714986489; x=1746522489;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=DJFAb48flUOaIKrGIcEOoLa7PZxItSUWyxVPt3RrdEQ=;
+  b=UlWFbY2i8Ajr0krrBNPGq9h+LIUgAj7hZPA1TAfRwvRrZUStA4OSNZPZ
+   mfP8Sq2CQLzpua184cIGrlGQcx+xABjYekhSDPgivCt8ZpVJu2lbg3Bui
+   QSl6EN88wbdtjJyHB3S+v4IzHrR1lH6Ljfq0vEHRAELRyT2w12sJ9vK6E
+   AlmxTdG3Ph82IsTBz7nfQoI8cI4y9AIKyPo5g+p8JCHlbuH+/wJEgma45
+   eeAuFTYEcCNskaimUUD/oa0IfB18qSxJgcWncdBVB7oVbSFsYMJSEGKzJ
+   UtKujpM4SF2XJGcoSDYVrQeFp05rJOkMnDRHl5n+1tQyMAKyMC5tZpNpE
+   A==;
+X-CSE-ConnectionGUID: hB4d89iyTYKdCrCx6zTKNA==
+X-CSE-MsgGUID: PJtQ6c3fR2etSMXuSut5gA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11064"; a="14508060"
+X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
+   d="scan'208";a="14508060"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 02:08:08 -0700
+X-CSE-ConnectionGUID: k8ITO01gQfSkX3H3SFK3XQ==
+X-CSE-MsgGUID: r2to3QFHTWug0UPqDwrTMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,257,1708416000"; 
+   d="scan'208";a="59297461"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.68])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 02:08:04 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 6 May 2024 12:07:57 +0300 (EEST)
+To: John Hubbard <jhubbard@nvidia.com>
+cc: Reinette Chatre <reinette.chatre@intel.com>, 
+    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+    Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+In-Reply-To: <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+Message-ID: <d46b81df-e018-a9bd-1550-31c825c487cf@linux.intel.com>
+References: <20240503023209.80787-1-jhubbard@nvidia.com> <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com> <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com> <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
+ <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <cover.1714982035.git.antony.antony@secunet.com>
-Precedence: first-class
-Priority: normal
-Organization: secunet
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: multipart/mixed; BOUNDARY="8323328-626839963-1714985487=:1111"
+Content-ID: <1eef3c65-1a10-d09b-efb0-b3996dc9e99e@linux.intel.com>
 
-Add IPsec tunnel, aka xfrm state, tests with ICMP flags enabled.
-IPv4 and IPv6, unreachable tests over xfrm/IPsec tunnels,
-xfrm SA with "flag icmp" set.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
----
-v2->v3: fix the IFS whitespace. It got mangled
----
- tools/testing/selftests/net/Makefile      |   1 +
- tools/testing/selftests/net/xfrm_state.sh | 624 ++++++++++++++++++++++
- 2 files changed, 625 insertions(+)
- create mode 100755 tools/testing/selftests/net/xfrm_state.sh
+--8323328-626839963-1714985487=:1111
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <910e6218-dd94-5978-7fc6-1c35ae67c9cd@linux.intel.com>
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 5befca249452..7d96b3e411b7 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -53,6 +53,7 @@ TEST_PROGS += bind_bhash.sh
- TEST_PROGS += ip_local_port_range.sh
- TEST_PROGS += rps_default_mask.sh
- TEST_PROGS += big_tcp.sh
-+TEST_PROGS += xfrm_state.sh
- TEST_PROGS_EXTENDED := toeplitz_client.sh toeplitz.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
-diff --git a/tools/testing/selftests/net/xfrm_state.sh b/tools/testing/selftests/net/xfrm_state.sh
-new file mode 100755
-index 000000000000..26eac013abcf
---- /dev/null
-+++ b/tools/testing/selftests/net/xfrm_state.sh
-@@ -0,0 +1,624 @@
-+#!/bin/bash -u
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Checks for xfrm/ESP/IPsec tunnel.
-+# - The unreachable tests are for icmp error handling.
-+#   As specified in IETF RFC 4301 section 6.
-+#
-+# See "test=" below for the implemented tests.
-+#
-+# Network topology default
-+# 10.1.c.d or IPv6 fc00:c::d/64
-+#   1.1   1.2   2.1   2.2   3.1   3.2   4.1   4.2   5.1   5.2  6.1  6.2
-+#  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1 eth0  eth1
-+# a -------- r1 -------- s1 -------- r2 -------- s2 -------- r3 -------- b
-+# a, b = Alice and Bob hosts without IPsec.
-+# r1, r2, r3 routers without IPsec
-+# s1, s2, IPsec gateways/routers that setup tunnel(s).
-+#
-+# Network topology: x for IPsec gateway that generate ICMP response.
-+# 10.1.c.d or IPv6 fc00:c::d/64
-+#   1.1   1.2   2.1   2.2   3.1   3.2   4.1   4.2   5.1   5.2
-+#  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1  eth0  eth1
-+# a -------- r1 -------- s1 -------- r2 -------- s2 -------- b
-+#
-+
-+source lib.sh
-+
-+PAUSE_ON_FAIL=no
-+VERBOSE=${VERBOSE:-0}
-+TRACING=0
-+
-+#               Name                          Description
-+tests="
-+	unreachable_ipv4		IPv4 unreachable from router r3
-+	unreachable_ipv4		IPv6 unreachable from router r3
-+	unreachable_gw_ipv4		IPv4 unreachable from IPsec gateway s2
-+	unreachable_gw_ipv6		IPv6 unreachable from IPsec gateway s2
-+	mtu_ipv4_r2			IPv4 MTU exceeded from ESP router r2
-+	mtu_ipv6_r2			IPv6 MTU exceeded from ESP router r2
-+	mtu_ipv4_r3			IPv4 MTU exceeded router r3
-+	mtu_ipv6_r3			IPv6 MTU exceeded router r3"
-+
-+ns_set="a r1 s1 r2 s2 r3 b" # Network topology default
-+imax=7 # number of namespaces in the test
-+
-+prefix4="10.1"
-+prefix6="fc00"
-+
-+run_cmd() {
-+	cmd="$*"
-+
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		printf "    COMMAND: $cmd\n"
-+	fi
-+
-+	out="$($cmd 2>&1)"
-+	rc=$?
-+	if [ "$VERBOSE" -gt 1 -a -n "$out" ]; then
-+		echo "    $out"
-+		echo
-+	fi
-+	return $rc
-+}
-+
-+run_test() {
-+	(
-+	tname="$1"
-+	tdesc="$2"
-+
-+
-+	unset IFS
-+
-+	fail="yes"
-+
-+	# Since cleanup() relies on variables modified by this sub shell, it
-+	# has to run in this context.
-+	trap cleanup EXIT
-+
-+	if [ "$VERBOSE" -gt 0 ]; then
-+		printf "\n#####################################################################\n\n"
-+	fi
-+
-+	# if errexit was not set, set it and unset after test eval
-+	errexit=0
-+	if [[ $- =~ "e" ]]; then
-+		errexit=1
-+	else
-+		set -e
-+	fi
-+
-+	eval test_${tname}
-+	ret=$?
-+	fail="no"
-+	[ $errexit -eq 0 ] && set +e # hack until exception is fixed
-+
-+	if [ $ret -eq 0 ]; then
-+		printf "TEST: %-60s [ PASS ]\n" "${tdesc}"
-+	elif [ $ret -eq 1 ]; then
-+		printf "TEST: %-60s [FAIL]\n" "${tdesc}"
-+		if [ "$VERBOSE" -eq 0 -o -n "${out}" -o -n "${out}" ]; then
-+			echo "#####################################################################"
-+			[ -n "${cmd}" ] && echo -e "${cmd}"
-+			[ -n "${out}" ] && echo -e "${out}"
-+			echo "#####################################################################"
-+		fi
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "Pausing. Hit enter to continue"
-+			read a
-+		fi
-+		err_flush
-+		exit 1
-+	elif [ $ret -eq $ksft_skip ]; then
-+		printf "TEST: %-60s [SKIP]\n" "${tdesc}"
-+		err_flush
-+	fi
-+
-+	return $ret
-+	)
-+	ret=$?
-+	case $ret in
-+		0)
-+			all_skipped=false
-+			[ $exitcode -eq $ksft_skip ] && exitcode=0
-+		;;
-+		$ksft_skip)
-+			[ $all_skipped = true ] && exitcode=$ksft_skip
-+		;;
-+		*)
-+			all_skipped=false
-+			exitcode=1
-+		;;
-+	esac
-+
-+	return $ret
-+}
-+
-+# Find the auto-generated name for this namespace
-+nsname() {
-+	eval echo ns_$1
-+}
-+
-+nscmd() {
-+	eval echo "ip netns exec $1"
-+}
-+
-+setup_namespace() {
-+	setup_ns NS_A
-+	ns_a="ip netns exec ${NS_A}"
-+}
-+
-+setup_namespaces() {
-+	local namespaces="";
-+
-+	NS_R1=""
-+	NS_R2=""
-+	NS_R3=""
-+	for ns in ${ns_set}; do
-+		n=$(nsname ${ns})
-+		n=$(echo $n | tr '[:lower:]' '[:upper:]')
-+		namespaces="$namespaces ${n}"
-+	done
-+
-+	setup_ns $namespaces
-+
-+	ns_active= #ordered list of namespaces for this test.
-+
-+	[ -n NS_A ] && ns_a="ip netns exec ${NS_A}" && ns_active="${ns_active} $NS_A"
-+	[ -n NS_R1 ] && ns_r1="ip netns exec ${NS_R1}" && ns_active="${ns_active} $NS_R1"
-+	[ -n NS_S1 ] && ns_s1="ip netns exec ${NS_S1}" && ns_active="${ns_active} $NS_S1"
-+	[ -n NS_R2 ] && ns_r2="ip netns exec ${NS_R2}" && ns_active="${ns_active} $NS_R2"
-+	[ -n NS_S2 ] && ns_s2="ip netns exec ${NS_S2}" && ns_active="${ns_active} $NS_S2"
-+	[ -n NS_R3 ] && ns_r3="ip netns exec ${NS_R3}" && ns_active="${ns_active} $NS_R3"
-+	[ -n NS_B ] && ns_b="ip netns exec ${NS_B}" && ns_active="${ns_active} $NS_B"
-+}
-+
-+setup_addr_add() {
-+	local ns_cmd=$(nscmd $1)
-+	local ip0="$2"
-+	local ip1="$3"
-+
-+	if [ -n "${ip0}" ]; then
-+		run_cmd ${ns_cmd} ip addr add ${ip0} dev eth0
-+		run_cmd ${ns_cmd} ip link set up eth0
-+	fi
-+	if [ -n "${ip1}" ]; then
-+		run_cmd ${ns_cmd} ip addr add ${ip1} dev eth1
-+		run_cmd ${ns_cmd} ip link set up eth1
-+	fi
-+	run_cmd ${ns_cmd} sysctl -q net/ipv4/ip_forward=1
-+	run_cmd ${ns_cmd} sysctl -q net/ipv6/conf/all/forwarding=1
-+
-+	# Disable DAD, so that we don't have to wait to use the
-+	# configured IPv6 addresses
-+	run_cmd ${ns_cmd} sysctl -q net/ipv6/conf/default/accept_dad=0
-+}
-+
-+route_add() {
-+	local ns_cmd=$(nscmd $1)
-+	local nhf=$2
-+	local nhr=$3
-+	local i=$4
-+
-+	if [ -n "${nhf}" ]; then
-+		# add forward routes
-+		for j in $(seq $((i + 1)) $imax); do
-+			local route="${prefix}${s}${j}${S}0/${prefix_len}"
-+			run_cmd ${ns_cmd} ip route replace "${route} via ${nhf}"
-+		done
-+	fi
-+
-+	if [ -n "${nhr}" ]; then
-+		# add reverse routes
-+		for j in $(seq 1 $((i - 2))); do
-+			local route="${prefix}${s}${j}${S}0/${prefix_len}"
-+			run_cmd ${ns_cmd} ip route replace "${route} via ${nhr}"
-+		done
-+	fi
-+}
-+
-+veth_add() {
-+	local ns_cmd=$(nscmd $1)
-+	local tn="veth${2}1"
-+	local ln=${3:-eth0}
-+	run_cmd ${ns_cmd} ip link add ${ln} type veth peer name ${tn}
-+}
-+
-+setup_nft_add_icmp_filter() {
-+	local ns_cmd=${ns_r2}
-+
-+	run_cmd ${ns_cmd} nft add table inet filter
-+	run_cmd ${ns_cmd} nft add chain inet filter FORWARD \
-+		{ type filter hook forward priority filter\; policy drop \; }
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD counter ip protocol \
-+		icmp counter log drop
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD counter ip protocol esp \
-+		counter log accept
-+}
-+
-+setup_nft_add_icmpv6_filter() {
-+	local ns_cmd=${ns_r2}
-+
-+	run_cmd ${ns_cmd} nft add table inet filter
-+	run_cmd ${ns_cmd} nft add chain inet filter FORWARD { type filter \
-+		hook forward priority filter\; policy drop \; }
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr \
-+		ipv6-icmp icmpv6 type echo-request counter log drop
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr esp \
-+		counter log accept
-+	run_cmd ${ns_cmd} nft add rule inet filter FORWARD ip6 nexthdr \
-+		ipv6-icmp icmpv6 type {nd-neighbor-solicit,nd-neighbor-advert,\
-+		nd-router-solicit,nd-router-advert} counter log accept
-+}
-+
-+veth_mv() {
-+	local ns=$1
-+	local nsp=$2
-+	local rn=${4:-eth1}
-+	local tn="veth${3}1"
-+
-+	run_cmd "$(nscmd ${nsp})" ip link set ${tn} netns ${ns}
-+	run_cmd "$(nscmd ${ns})" ip link set ${tn} name ${rn}
-+}
-+
-+vm_set() {
-+	s1_src=${src}
-+	s1_dst=${dst}
-+	s1_src_net=${src_net}
-+	s1_dst_net=${dst_net}
-+}
-+
-+setup_vm_set_v4() {
-+	src="10.1.3.1"
-+	dst="10.1.4.2"
-+	src_net="10.1.1.0/24"
-+	dst_net="10.1.6.0/24"
-+
-+	prefix=${prefix4}
-+	prefix_len=24
-+	s="."
-+	S="."
-+
-+	vm_set
-+}
-+
-+setup_vm_set_v4x() {
-+	ns_set="a r1 s1 r2 s2 b" # Network topology: x
-+	imax=6
-+	prefix=${prefix4}
-+	s="."
-+	S="."
-+	src="10.1.3.1"
-+	dst="10.1.4.2"
-+	src_net="10.1.1.0/24"
-+	dst_net="10.1.5.0/24"
-+	prefix_len=24
-+
-+	vm_set
-+}
-+
-+setup_vm_set_v6() {
-+	imax=7
-+	prefix=${prefix6}
-+	s=":"
-+	S="::"
-+	src="fc00:3::1"
-+	dst="fc00:4::2"
-+	src_net="fc00:1::0/64"
-+	dst_net="fc00:6::0/64"
-+	prefix_len=64
-+
-+	vm_set
-+}
-+
-+setup_vm_set_v6x() {
-+	ns_set="a r1 s1 r2 s2 b" # Network topology: x
-+	imax=6
-+	prefix=${prefix6}
-+	s=":"
-+	S="::"
-+	src="fc00:3::1"
-+	dst="fc00:4::2"
-+	src_net="fc00:1::0/64"
-+	dst_net="fc00:5::0/64"
-+	prefix_len=64
-+
-+	vm_set
-+}
-+
-+setup_veths() {
-+	i=1
-+	for ns in ${ns_active}; do
-+		[ ${i} = ${imax} ] && continue
-+		veth_add ${ns} ${i}
-+		i=$((i + 1))
-+	done
-+
-+	j=1
-+	for ns in ${ns_active}; do
-+		if [ ${j} -eq 1 ]; then
-+			p=${ns};
-+			pj=${j}
-+			j=$((j + 1))
-+			continue
-+		fi
-+		veth_mv ${ns} "${p}" ${pj}
-+		p=${ns}
-+		pj=${j}
-+		j=$((j + 1))
-+	done
-+}
-+
-+setup_routes() {
-+	ip1=""
-+	i=1
-+	for ns in ${ns_active}; do
-+		# 10.1.C.1/24
-+		ip0="${prefix}${s}${i}${S}1/${prefix_len}"
-+		[ "${ns}" = b ] && ip0=""
-+		setup_addr_add ${ns} "${ip0}" "${ip1}"
-+		# 10.1.C.2/24
-+		ip1="${prefix}${s}${i}${S}2/${prefix_len}"
-+		i=$((i + 1))
-+	done
-+
-+	i=1
-+	nhr=""
-+	for ns in ${ns_active}; do
-+		nhf="${prefix}${s}${i}${S}2"
-+		[ "${ns}" = b ] && nhf=""
-+		route_add ${ns} "${nhf}" "${nhr}" ${i}
-+		nhr="${prefix}${s}${i}${S}1"
-+		i=$((i + 1))
-+	done
-+}
-+
-+setup_xfrm() {
-+
-+	run_cmd ${ns_s1} ip xfrm policy add src ${s1_src_net} dst ${s1_dst_net} dir out \
-+		tmpl src ${s1_src} dst ${s1_dst} proto esp reqid 1 mode tunnel
-+
-+	# no "input" policies. we are only doing forwarding.
-+	# run_cmd ${ns_s1} ip xfrm policy add src ${s1_dst_net} dst ${s1_src_net} dir in \
-+	#	flag icmp tmpl src ${s1_dst} dst ${s1_src} proto esp reqid 2 mode tunnel
-+
-+	run_cmd ${ns_s1} ip xfrm policy add src ${s1_dst_net} dst ${s1_src_net} dir fwd \
-+		flag icmp tmpl src ${s1_dst} dst ${s1_src} proto esp reqid 2 mode tunnel
-+
-+	run_cmd ${ns_s1} ip xfrm state add src ${s1_src} dst ${s1_dst} proto esp spi 1 \
-+		reqid 1 mode tunnel aead 'rfc4106(gcm(aes))' \
-+		0x1111111111111111111111111111111111111111 96 \
-+		sel src ${s1_src_net} dst ${s1_dst_net}
-+
-+	run_cmd ${ns_s1} ip xfrm state add src ${s1_dst} dst ${s1_src} proto esp spi 2 \
-+		reqid 2 flag icmp replay-window 8 mode tunnel aead 'rfc4106(gcm(aes))' \
-+		0x2222222222222222222222222222222222222222 96 \
-+		sel src ${s1_dst_net} dst ${s1_src_net}
-+
-+	run_cmd ${ns_s2} ip xfrm policy add src ${s1_dst_net} dst ${s1_src_net} dir out \
-+		flag icmp tmpl src ${s1_dst} dst ${s1_src} proto esp reqid 2 mode tunnel
-+
-+	run_cmd ${ns_s2} ip xfrm policy add src ${s1_src_net} dst ${s1_dst_net} dir fwd \
-+		tmpl src ${s1_src} dst ${s1_dst} proto esp reqid 1 mode tunnel
-+
-+	run_cmd ${ns_s2} ip xfrm state add src ${s1_dst} dst ${s1_src} proto esp spi 2 \
-+		reqid 2 mode tunnel aead 'rfc4106(gcm(aes))' \
-+		0x2222222222222222222222222222222222222222 96 \
-+		sel src ${s1_dst_net} dst ${s1_src_net}
-+
-+	run_cmd ${ns_s2} ip xfrm state add src ${s1_src} dst ${s1_dst} proto esp spi 1 \
-+		reqid 1 flag icmp replay-window 8 mode tunnel aead 'rfc4106(gcm(aes))' \
-+		0x1111111111111111111111111111111111111111 96 \
-+		sel src ${s1_src_net} dst ${s1_dst_net}
-+}
-+
-+setup() {
-+	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
-+
-+	for arg do
-+		eval setup_${arg} || { echo "  ${arg} not supported"; return 1; }
-+	done
-+}
-+
-+trace() {
-+	[ $TRACING -eq 0 ] && return
-+
-+	for arg do
-+		[ "${ns_cmd}" = "" ] && ns_cmd="${arg}" && continue
-+		ns_cmd=
-+	done
-+	sleep 1
-+}
-+
-+cleanup() {
-+	if [ "${fail}" = "yes" -a -n "${desc}" ]; then
-+		printf "TEST: %-60s [ FAIL ]\n" "${desc}"
-+		[ -n "${cmd}" ] && echo -e "${cmd}\n"
-+		[ -n "${out}" ] && echo -e "${out}\n"
-+	fi
-+
-+	cleanup_all_ns
-+}
-+
-+mtu() {
-+	ns_cmd="${1}"
-+	dev="${2}"
-+	mtu="${3}"
-+
-+	${ns_cmd} ip link set dev ${dev} mtu ${mtu}
-+}
-+
-+mtu_parse() {
-+	input="${1}"
-+
-+	next=0
-+	for i in ${input}; do
-+		[ ${next} -eq 1 -a "${i}" = "lock" ] && next=2 && continue
-+		[ ${next} -eq 1 ] && echo "${i}" && return
-+		[ ${next} -eq 2 ] && echo "lock ${i}" && return
-+		[ "${i}" = "mtu" ] && next=1
-+	done
-+}
-+
-+link_get() {
-+	ns_cmd="${1}"
-+	name="${2}"
-+
-+	${ns_cmd} ip link show dev "${name}"
-+}
-+
-+link_get_mtu() {
-+	ns_cmd="${1}"
-+	name="${2}"
-+
-+	mtu_parse "$(link_get "${ns_cmd}" ${name})"
-+}
-+
-+test_unreachable_ipv6() {
-+	setup vm_set_v6 namespaces veths routes xfrm nft_add_icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::3 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From fc00:5::2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_gw_ipv6() {
-+	setup vm_set_v6x namespaces veths routes xfrm nft_add_icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:5::2
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:5::3 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From fc00:4::2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_gw_ipv4() {
-+	setup vm_set_v4x namespaces veths routes xfrm nft_add_icmp_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.5.2
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.5.3 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From 10.1.4.2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_unreachable_ipv4() {
-+	setup vm_set_v4 namespaces veths routes xfrm nft_add_icmp_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.3 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E 'From 10.1.5.2 icmp_seq.* Destination' || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv4_r2() {
-+	setup vm_set_v4 namespaces veths routes xfrm nft_add_icmp_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd ${ns_r2} ip route replace 10.1.3.0/24 dev eth1 src 10.1.3.2 mtu 1300
-+	run_cmd ${ns_r2} ip route replace 10.1.4.0/24 dev eth0 src 10.1.4.1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 10.1.6.2 || true
-+	rc=0
-+	# note the error should be s1 not from r2
-+	echo -e "$out" | grep -q -E "From 10.1.2.2 icmp_seq=.* Frag needed and DF set" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv6_r2() {
-+	setup vm_set_v6 namespaces veths routes xfrm nft_add_icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd ${ns_r2} ip -6 route replace fc00:3::/64 dev eth1 metric 256 src fc00:3::2 mtu 1300
-+	run_cmd ${ns_r2} ip -6 route replace fc00:4::/64 dev eth0 metric 256 src fc00:4::1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 fc00:6::2 || true
-+	rc=0
-+	# note the error should be s1 not from r2
-+	echo -e "$out" | grep -q -E "From fc00:2::2 icmp_seq=.* Packet too big: mtu=1230" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv4_r3() {
-+	setup vm_set_v4 namespaces veths routes xfrm nft_add_icmp_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 10.1.6.2
-+	run_cmd ${ns_r3} ip route replace 10.1.6.0/24 dev eth0 src 10.1.6.1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1350 -W 5 -w 4 -c 1 10.1.6.2 || true
-+	rc=0
-+	echo -e "$out" | grep -q -E "From 10.1.5.2 icmp_seq=.* Frag needed and DF set \(mtu = 1300\)" || rc=1
-+	return ${rc}
-+}
-+
-+test_mtu_ipv6_r3() {
-+	setup vm_set_v6 namespaces veths routes xfrm nft_add_icmpv6_filter || return $ksft_skip
-+	run_cmd ${ns_a} ping -W 5 -w 4 -c 1 fc00:6::2
-+	run_cmd ${ns_r3} ip -6 route replace fc00:6::/64 dev eth1 metric 256 src fc00:6::1 mtu 1300
-+	run_cmd ${ns_a} ping -M do -s 1300 -W 5 -w 4 -c 1 fc00:6::2 || true
-+	rc=0
-+	# note the error should be s1 not from r2
-+	echo -e "$out" | grep -q -E "From fc00:5::2 icmp_seq=.* Packet too big: mtu=1300" || rc=1
-+	return ${rc}
-+}
-+
-+################################################################################
-+#
-+usage() {
-+	echo
-+	echo "$0 [OPTIONS] [TEST]..."
-+	echo "If no TEST argument is given, all tests will be run."
-+	echo
-+	echo -e "\t-p Pause on fail"
-+	echo -e "\t-v Verbose output. Show commands; -vv Show output also"
-+	echo "Available tests${tests}"
-+	exit 1
-+}
-+
-+################################################################################
-+#
-+exitcode=0
-+desc=0
-+all_skipped=true
-+out=
-+cmd=
-+
-+while getopts :pv o
-+do
-+	case $o in
-+	p) PAUSE_ON_FAIL=yes;;
-+	v) VERBOSE=$(( VERBOSE + 1 ));;
-+	*) usage;;
-+	esac
-+done
-+shift $(($OPTIND-1))
-+
-+IFS="	
-+"
-+
-+for arg do
-+	# Check first that all requested tests are available before running any
-+	command -v > /dev/null "test_${arg}" || { echo "=== Test ${arg} not found"; usage; }
-+done
-+
-+trap cleanup EXIT
-+
-+name=""
-+desc=""
-+fail="no"
-+
-+# end cleanup
-+cleanup
-+
-+for t in ${tests}; do
-+	[ "${name}" = "" ] && name="${t}" && continue
-+	[ "${desc}" = "" ] && desc="${t}"
-+
-+	run_this=1
-+	for arg do
-+		[ "${arg}" != "${arg#--*}" ] && continue
-+		[ "${arg}" = "${name}" ] && run_this=1 && break
-+		run_this=0
-+	done
-+	if [ $run_this -eq 1 ]; then
-+		run_test "${name}" "${desc}"
-+	fi
-+	name=""
-+	desc=""
-+done
-+
-+exit ${exitcode}
--- 
-2.30.2
+On Fri, 3 May 2024, John Hubbard wrote:
 
+> On 5/3/24 11:37 AM, Reinette Chatre wrote:
+> > On 5/3/2024 9:52 AM, John Hubbard wrote:
+> > > On 5/3/24 1:00 AM, Ilpo J=E4rvinen wrote:
+> > > > On Thu, 2 May 2024, John Hubbard wrote:
+> > > ...
+> > > > > diff --git a/tools/testing/selftests/resctrl/mbm_test.c
+> > > > > b/tools/testing/selftests/resctrl/mbm_test.c
+> > > > > index d67ffa3ec63a..c873793d016d 100644
+> > > > > --- a/tools/testing/selftests/resctrl/mbm_test.c
+> > > > > +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> > > > > @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned lo=
+ng
+> > > > > *bw_resc, size_t span)
+> > > > >  =A0 =A0=A0=A0=A0=A0 avg_bw_imc =3D sum_bw_imc / 4;
+> > > > >  =A0=A0=A0=A0=A0 avg_bw_resc =3D sum_bw_resc / 4;
+> > > > > -=A0=A0=A0 avg_diff =3D (float)labs(avg_bw_resc - avg_bw_imc) / a=
+vg_bw_imc;
+> > > > > +=A0=A0=A0 avg_diff =3D (float)(avg_bw_resc - avg_bw_imc) / avg_b=
+w_imc;
+> > > > >  =A0=A0=A0=A0=A0 avg_diff_per =3D (int)(avg_diff * 100);
+> > > > >  =A0 =A0=A0=A0=A0=A0 ret =3D avg_diff_per > MAX_DIFF_PERCENT;
+> > > >=20
+> > > > But how are these two cases same after your change when you ended u=
+p
+> > > > removing taking the absolute value entirely?
+> > >=20
+> > > All of the arguments are unsigned integers, so all arithmetic results
+> > > are interpreted as unsigned, so taking the absolute value of that is
+> > > always a no-op.
+
+(I see there's a better patch posted already but since there are a few=20
+incorrect claims in this discussion, I'll do for the record type of=20
+reply.)
+
+This discussion now went to a tangent about the warning. My main point is=
+=20
+that logic is not correct after removing labs().
+
+I also disagree with the claim that using labs() on unsigned value is=20
+no-op because labs() takes long so unsigned is just forced into signed=20
+when calling which is why the warning triggers but it's very misleading=20
+warning (see below).
+
+> > It does not seem as though clang can see when values have been casted.
+> > I tried to do so explicitly with a:
+> >   =09avg_diff =3D labs((long)avg_bw_resc - avg_bw_imc) / (float)avg_bw_=
+imc;
+>
+> The subtraction result will get promoted to an unsigned long, before bein=
+g
+> passed into labs(3).
+>
+> > But that still triggers:
+> > warning: taking the absolute value of unsigned type 'unsigned long' has=
+ no
+> > effect [-Wabsolute-value]
+>=20
+> As expected, yes.
+
+That error message isn't factually correct:
+
+        unsigned long a =3D LONG_MAX;
+        long b;
+
+        a +=3D 2;
+        b =3D (long)a;
+        printf("%llu %lli %lli\n", a, b, labs(a));
+
+Prints (at least when built with gcc):
+
+9223372036854775809 -9223372036854775807 9223372036854775807
+
+labs(LONG_MAX + 1) won't work though since it's not positively presentable=
+=20
+with long and the value is left untouched.
+
+--=20
+ i.
+--8323328-626839963-1714985487=:1111--
 
