@@ -1,225 +1,105 @@
-Return-Path: <linux-kselftest+bounces-9561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4500C8BD78B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 00:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4BB08BD80F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 01:11:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9999C28339A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 22:11:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F32F28396B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 23:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B9315CD57;
-	Mon,  6 May 2024 22:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E785815B99E;
+	Mon,  6 May 2024 23:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KMZYMBF4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kMuvdB1c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B7213D2BC
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 22:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADB215AD90
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 23:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715033492; cv=none; b=ewk7sezhXxwkPparkVUOsB9He1prjkbzFs71zugY3ayrTXX8keeHLSR1U397TgYxXD8NJq/S2371OumXyiAKhxItuDHXtYO+UeRi3CiNdlkyCOc2ezgyrelY+E9D+3q5rZod7HzZKPY0biu31G7J1R0QhtviIDF6wC6uuho0PpE=
+	t=1715037057; cv=none; b=uGKvQX7II36Xr+3boRL6MFHJZzo27h39mJAdd1DnEz4XpU/e8latQBqgKf/ZhFvk3k8o7Cif078JD2oSlz6qNt9+8VltTa3ErOAixfaHvhfkGX8Fk6c9Pqbz6HJBiWuxeYTUONLeRTxELT+vRQPv9Lr1vS0tz6ZbP0sQd3afc3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715033492; c=relaxed/simple;
-	bh=/Kkn3iylTA0/DbNE6xbIHvO5QRrH6fjFBRnumk+mQzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LTJNQ2AcXaUZ2GjeTQAkhUZQA/NXdIDfgV2slV5Yml+YvBVLsJsFbNfi11y0AdwzI1yKiYS/9OiMob6Cfsz9KpjtSBIFLgT2g67+rT0ZI3TiI126U+1urIqEcaz9D9rnQ42WHCMMqMml0AzqU3wsvDGdAGmbEbiItdEkgMMVf5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KMZYMBF4; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <f171eee4-fa70-4374-b6a7-00d4edc03ae5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1715033488;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H4tAkfAI7C3BLA+cjtRULDa+t26iegxH3w/RcYzSWz8=;
-	b=KMZYMBF42BzUP1zS/OfDbRS16NS8PN4n4Ejkzvz3B5InLxteAeim8iUKXWTWxaoMMZZt0p
-	P4qWm68KTzOCXSHHdB/MZzDM+rYzesepvl4LnjLtwFp7tJrpw/TopeEYt/eFefxHSHPNsl
-	jEhoTE/yqa7QNPFv8nzeZihTkxTRjhg=
-Date: Mon, 6 May 2024 15:11:22 -0700
+	s=arc-20240116; t=1715037057; c=relaxed/simple;
+	bh=FCWmkGKtCYFY82UHw0ipUvRiJnRCs/R5WWby7amO1H0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KonaM6OpMuumXCIamyRLGcIovwwFmMUH/XjXh8ouyjf/8nGCrvRSVb3PjskDjXX0tRdjRiIcl6+U1Tn+KkAqCjaSSThZYzF3CUGE8XZURaa+fDy3DAi0UgPE3QiOzqStSQy9Pq7dHDzksWg9AbXkW5gOBp8/Yp3uZq/XQF4gqOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kMuvdB1c; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso8306a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 16:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715037055; x=1715641855; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
+        b=kMuvdB1cLzgqxeh6zNuN0TMDI+65zpHTMXS+oQtqlCkeUOVR8hKn+E3ezhV26NLXm3
+         r/Mv838FvHr4gKw2SPuta0LdrgXBvgUuOZkwHjO8XyroWHKVyGJHXcESLaBOF41nPCPz
+         W/yjwZBUrBYQu9ZmKZDnQ5WFu9Ga21DqXOLl7mzSszdJYSKIZZzS1iyc35LTxsBmGH/L
+         LiryszNy8YQdemrtTCBRb3sPB/8P62o8ohM5ziPj1TN5BHWzpbYA/8I54CGaPtN9cgmJ
+         GkaLO3Bp7WKXNThF71ZrYOY1N+t2NMaOeACJ+yw+N6Q47TQXHOWHAJW/FzWwe8Xgxmzp
+         h9og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715037055; x=1715641855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=To7fxBOaNRZwDFrn2W07ozUB1mmlkd6/wYo0eU+RqtA=;
+        b=WG05vf66LR2EgRedPlWg+zYgj0jBxCT+WqQSu5lrWN12LoyrKlmGf3lusGOclRM/G3
+         MSKZ4NW7qdFf7BgReXfb1g9PO/slBaH4ibpjt+sXBqZ5DWgLx8dTfsU51dZD7ynRJ6Mi
+         iilhmSs1CMog2yujBHxbXQmbA1ADRJQ/0ikl1qTrcxNU7PJBXZTja0tXEDD1LHj3rjqP
+         KQ9oSagXWCzuIIyym+H1+PxuspoPD2j9W8QWygxpMwAUBn2ht1iPsN+e1USuf+FtFdHN
+         /ySHsTQFu3rcrauG91tyFZ0r+biMJBDKImPbaAJyG5FuLkhN093DOlap4ogaLA7yUQQ9
+         dw9A==
+X-Forwarded-Encrypted: i=1; AJvYcCXi5HTzp82kNC2AFfQ6AURkD0iuYBbVF2bRu0iCLv3WW+junlqnegrmo6nhyCfJ+MtteB0YNhbPbVH3YytNp0AZcjZz3RL2d84lZgTfVPjj
+X-Gm-Message-State: AOJu0Yysl92s+BVxuiJBaOA8VEQRaHEbckcQ2p6D5PwlBQkjVqNB7ww6
+	Axu3rrdguSTYbj/dn/9ql9Bw4ll+v8OkfFNIiEhBAL1dBffdh8WORPni2BDRWHHf1XiwsIlizj9
+	3tVGPyHpPROs5LQVCNUIwCKoemmEdykcL4Xi8
+X-Google-Smtp-Source: AGHT+IHGZfGOFMLPDtfPud/GsrF7tdooNnrZe5MoO9klCGmWbiy/B/k6yjkc3wPHejQWyh/ZbyKrPPcGutS3l9Xw+Rg=
+X-Received: by 2002:a05:6402:4304:b0:572:7c06:9c0 with SMTP id
+ 4fb4d7f45d1cf-57311c1506amr107766a12.0.1715037053475; Mon, 06 May 2024
+ 16:10:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
- prog_tests
-Content-Language: en-GB
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240401123455.1377896-1-usama.anjum@collabora.com>
- <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
- <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
- <0ff5c7d0-d5c5-4b61-ba89-8e7f9f775935@linux.dev>
- <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
- <ff36e8fa-14f4-42a6-8210-cec24a7779a0@linux.dev>
- <b4d7ce70-3320-4333-9589-b5df187409fe@collabora.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <b4d7ce70-3320-4333-9589-b5df187409fe@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240501180622.1676340-1-edliaw@google.com> <osgrbhnqlyh5yw4y4x6wjggx56dogsgje5yy3mkpu75ubs3zwg@5tliydzky37k>
+ <b55272cb757743548c789aa8c0efa448@AcuMS.aculab.com> <CAFhGd8rAW4Mkctq5VkcfVjw_yr=jVdXaWbYXP-vmeVpw7q4ruQ@mail.gmail.com>
+ <CAG4es9WYrN_tOV1Uxi_ytO2qDRRZW5_uN=2p3iCg=P0r3mM3Og@mail.gmail.com> <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
+In-Reply-To: <7332ff979f3440bd8362d37d4d1f34b8@AcuMS.aculab.com>
+From: Edward Liaw <edliaw@google.com>
+Date: Mon, 6 May 2024 16:10:27 -0700
+Message-ID: <CAG4es9Vn2F34UEmyG3upO-frtCZ00DVN8vgK4mRfX2548FKxVw@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests/vDSO: Explicit unsigned char conversion for elf_hash
+To: David Laight <David.Laight@aculab.com>
+Cc: Justin Stitt <justinstitt@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, "H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"kernel-team@android.com" <kernel-team@android.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 5/3/24 6:55 AM, Muhammad Usama Anjum wrote:
-> On 4/5/24 1:06 AM, Yonghong Song wrote:
->> On 4/3/24 5:03 AM, Muhammad Usama Anjum wrote:
->>> On 4/3/24 7:36 AM, Yonghong Song wrote:
->>>> On 4/2/24 8:16 AM, Muhammad Usama Anjum wrote:
->>>>> Yonghong Song,
->>>>>
->>>>> Thank you so much for replying. I was missing how to run pipeline
->>>>> manually.
->>>>> Thanks a ton.
->>>>>
->>>>> On 4/1/24 11:53 PM, Yonghong Song wrote:
->>>>>> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
->>>>>>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
->>>>>>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
->>>>>>> dev_cgroup.skel.h and load program from it accourdingly.
->>>>>>>
->>>>>>>       ./test_progs -t dev_cgroup
->>>>>>>       mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->>>>>>>       64+0 records in
->>>>>>>       64+0 records out
->>>>>>>       32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
->>>>>>>       dd: failed to open '/dev/full': Operation not permitted
->>>>>>>       dd: failed to open '/dev/random': Operation not permitted
->>>>>>>       #72     test_dev_cgroup:OK
->>>>>>>       Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->>>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>>>>>> ---
->>>>>>> Changes since v2:
->>>>>>> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
->>>>>>>       probability that the test is racing against another cgroup test
->>>>>>> - Minor changes to the commit message above
->>>>>>>
->>>>>>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
->>>>>>> next. It is passing on both. Not sure why it was failed on BPFCI.
->>>>>>> Test run with vmtest.h:
->>>>>>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
->>>>>>> ./test_progs -t dev_cgroup
->>>>>>> ./test_progs -t dev_cgroup
->>>>>>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
->>>>>>> 64+0 records in
->>>>>>> 64+0 records out
->>>>>>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
->>>>>>> dd: failed to open '/dev/full': Operation not permitted
->>>>>>> dd: failed to open '/dev/random': Operation not permitted
->>>>>>>      #69      dev_cgroup:OK
->>>>>>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->>>>>> The CI failure:
->>>>>>
->>>>>>
->>>>>> Error: #72 dev_cgroup
->>>>>> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:mknod 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
->>>>>> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 !=
->>>>>> expected 0
->>>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
->>>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
->>>>>>
->>>>>> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
->>>>>>
->>>>>> The error code 256 means mknod execution has some issues. Maybe you
->>>>>> need to
->>>>>> find specific errno to find out what is going on. I think you can do ci
->>>>>> on-demanding test to debug.
->>>>> errno is 2 --> No such file or directory
->>>>>
->>>>> Locally I'm unable to reproduce it until I don't remove
->>>>> rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
->>>>> node is present before test execution. The error code is 256 with errno 2.
->>>>> I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
->>>>> are already present in /tmp. But ls's output doesn't appear on the CI
->>>>> logs.
->>>> errno 2 means ENOENT.
->>>>   From mknod man page (https://linux.die.net/man/2/mknod), it means
->>>>     A directory component in/pathname/  does not exist or is a dangling
->>>> symbolic link.
->>>>
->>>> It means /tmp does not exist or a dangling symbolic link.
->>>> It is indeed very strange. To make the test robust, maybe creating a temp
->>>> directory with mkdtemp and use it as the path? The temp directory
->>>> creation should be done before bpf prog attach.
->>> I've tried following but still no luck:
->>> * /tmp is already present. Then I thought maybe the desired file is already
->>> present. I've verified that there isn't file of same name is present inside
->>> /tmp.
->>> * I thought maybe mknod isn't present in the system. But mknod --help
->>> succeeds.
->>> * I switched from /tmp to current directory to create the mknod. But the
->>> result is same error.
->>> * I've tried to use the same kernel config as the BPF CI is using. I'm not
->>> able to reproduce it.
->>>
->>> Not sure which edge case or what's going on. The problem is appearing
->>> because of some limitation in the rootfs.
->> Maybe you could collect /tmp mount options to see whether anything is
->> suspicious? In my vm, I have
->>    tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=3501540k,nr_inodes=1048576)
->> and the test works fine.
->>
->>
-> My test system:
-> tmpfs /tmp tmpfs rw,relatime 0 0
+On Mon, May 6, 2024 at 12:32=E2=80=AFPM David Laight <David.Laight@aculab.c=
+om> wrote:
 >
-> On the CI, /tmp is present. But it isn't tmpfs. Following shows the logs
-> from /proc/mounts
 >
-> On CI:
->    /dev/root / 9p
-> rw,relatime,cache=f,access=client,msize=512000,trans=virtio 0 0
->    devtmpfs /dev devtmpfs
-> rw,relatime,size=1998612k,nr_inodes=499653,mode=755 0 0
->    tmpfs /dev/shm tmpfs rw,nosuid,nodev,relatime 0 0
->    proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
->    tmpfs /run tmpfs rw,nosuid,nodev,relatime 0 0
->    tmpfs /run/netns tmpfs rw,nosuid,nodev,relatime 0 0
->    sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
->    debugfs /sys/kernel/debug debugfs rw,relatime 0 0
->    tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
->    cgroup2 /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime 0 0
->    tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
+> That makes a lot more sense.
 
-somthing wrong here. /sys/fs/cgroup cannot be both cgroup2
-and tmpfs types.
+I sent v4 https://lore.kernel.org/all/20240506181951.1804451-1-edliaw@googl=
+e.com/.
+I updated the commit log to reflect the change but I'm not sure if I
+did it right for the mailing list.  Should I have added --in-reply-to
+this thread?
 
->    net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
->    tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
->    net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
->    tmpfs /sys/fs/cgroup tmpfs rw,relatime 0 0
->    net_cls /sys/fs/cgroup/net_cls cgroup rw,relatime,net_cls 0 0
->    bpffs /sys/fs/bpf bpf rw,relatime 0 0
->    bpf /sys/fs/bpf bpf rw,relatime 0 0
->    tmpfs /mnt tmpfs rw,nosuid,nodev,relatime 0 0
->    vmtest-shared /mnt/vmtest 9p
-> rw,relatime,cache=f,access=client,msize=512000,trans=virtio 0 0
->    none /mnt cgroup2 rw,relatime 0 0
->
+Edward
 
