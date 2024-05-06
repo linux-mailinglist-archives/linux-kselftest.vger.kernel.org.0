@@ -1,131 +1,143 @@
-Return-Path: <linux-kselftest+bounces-9547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04F5F8BD461
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:09:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D728BD47B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 307E01C220B5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:09:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 578292830ED
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45742158845;
-	Mon,  6 May 2024 18:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56FCF1586D7;
+	Mon,  6 May 2024 18:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="mFMPkPoy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EnloiKQk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from serval.cherry.relay.mailchannels.net (serval.cherry.relay.mailchannels.net [23.83.223.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAAC15821F;
-	Mon,  6 May 2024 18:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.163
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715018947; cv=pass; b=iiqzk1Nb22P2G8x/TrDuyJsT/N+cI2qxOFZVdsEjLDu2HFUjwFNTQvwzmPP3f4HwLUetRbxpDsprv1cvgqjs8dUsV7eSZr6OkRx1+RzLQ3d6ySgvFyiuWs00N5StVh/Io2HLN4f/2Vo3HIqSsBJzEHuNN98t4zVpOrLPTLszUO4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715018947; c=relaxed/simple;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dcwViE5LmFs+Hmn6L5iRcaXHLwNgV1+BfM8Zft0KnN1RJuXF5yp/3gLRfc8C0AyvB9XfLIsBrxfX6uzQ9GC5L30FIbVfdKMU8CycdmmuAwl9MYeYMx9UVt/jnhYgCVJ4amTfDq72hFcVY4r06sw6rfkJMZQEyiBUDE/4xy5b4Lw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=mFMPkPoy; arc=pass smtp.client-ip=23.83.223.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id EAFFB43B8B;
-	Mon,  6 May 2024 16:13:39 +0000 (UTC)
-Received: from pdx1-sub0-mail-a205.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 5B03143774;
-	Mon,  6 May 2024 16:13:39 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1715012019; a=rsa-sha256;
-	cv=none;
-	b=vJSMT1kScKcngTQJqRsp9Zz6KDnOhYBfO2uNGDYmM+D/FoSyYpr2cG0V9BMCbSx7zJcPPV
-	3PDpggt2Bx+mlU0Q8jzAXCEDQyM6c7zstuXdMR1re6WZGUg9JjLIXjEWrN4EZFPxyA96ad
-	FrYU+CdTppiuEdx6A5SyoYr/FWGiALJIlYBmcIPD4W5vSOVo4Shy1cbC8BgCE+D+4WsMA8
-	VppsmqehmxHA5qDJMqWaV+cWhMdqye4vkcgmM+jWM0wVBxctf/PHz0XeV9TtDRIVeMMuP2
-	FLfXROyfbZlflPQiTmSM+Nx/cvXJYX9cyqThMvLEukeeuIF6eZaaEJjSXMjdNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1715012019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	b=1remKSxbguFaVYzfns6YSyVY3e67fyIG9Vwp1Dgd5PJO8pAMqHi58NZeQXMKLi9DBL3YGf
-	dCCUgDkGWqJkyep4Xn4f3zdInNnvISEJNPavTeZ3MaDbpmmRXrGX10c7Kef+YVo77IW1JJ
-	fpOTYP5xKGL700XcBXxcmBS+D7T2ZyOTrY3Hez3/CcXPXHCP11KFcdkYzrFbwJrIh2CNyB
-	1tXIPxhJa3O18W37k9YaMvaNs6Zdj/EZ4AY4eS/X6Q65lYfkAXhrsTtgbQVg3A9twg1e3z
-	gCJF4xlEh8YHTBXzpmlOaicZDEIGmXBwUsNKno7szE9cNQdLg9TCj4R6RSFJtw==
-ARC-Authentication-Results: i=1;
-	rspamd-5d55749bb4-bp2gv;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Army-Battle: 0f90245f25a5cde6_1715012019744_1900881551
-X-MC-Loop-Signature: 1715012019744:224400567
-X-MC-Ingress-Time: 1715012019744
-Received: from pdx1-sub0-mail-a205.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.119.153.203 (trex/6.9.2);
-	Mon, 06 May 2024 16:13:39 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a205.dreamhost.com (Postfix) with ESMTPSA id 4VY60L3d1mzDF;
-	Mon,  6 May 2024 09:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1715012019;
-	bh=68qXLP+eVFBNZ3DoGjJOqqauF+0Za5z/s/VN7tKVQfU=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=mFMPkPoyJIC1AJUa6jDXzZHagJEjrWf8lHKtiRHodEwj/+t9JHSws24nE4ynOwgSD
-	 I+Nkdp1tM1Kk7WwVseuf1F69iBe3C555gEpo6uts4j9w5FCQbAKrvPkSQhx4TQia3z
-	 mE1RS7+CmhZUV1qfA8EHpU1DuczAtffbGty1OMfesh7FYrcbSxKc1XSWCP0CrngbFJ
-	 jJqqbEdyzWEP/Iea81q8FGQ+20sB9tPyf2FUYv4z5iagY5jr60YxTZpHxduxPdGm9G
-	 zZhRVWJXAs2na2d4vvbcGuWu239JaVa0lh7OLuPsHNSU7ZMbleeDF2CDnLT7ZfNzxf
-	 RKqv4VCFrGr+Q==
-Date: Mon, 6 May 2024 09:13:35 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	=?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
-	"Nysal Jan K . A" <nysal@linux.ibm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] selftests/futex: clang-inspired fixes
-Message-ID: <20240506161335.d6vzvsx74xx4mg7p@offworld>
-References: <20240503041843.99136-1-jhubbard@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8F414293
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 18:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715019606; cv=none; b=d7FdlayPUNHOfdA4ZMMUKX09A7qtUnKLP6T+h4BDs4Kny7vaDTEsRCeDuFFqKGfQETpk9sJAS4OqH2/o3XyGBpL/+lX6KHtDeVZ/NFK3zam7vb2p9ERCFIvEvVWDU3gZHNV+L9ZHr4fH6E+7uDEXitjtj2Jrg5DqbZUhfbnFvUA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715019606; c=relaxed/simple;
+	bh=29kh0OQhNn8m2tDtlHwrVE2HKUPGcD9TJf7JFu5B20I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ALm71xZRfM99RPIQqNZHcglLYtWiv32Tsx0lMarRvlKu89FWXBztfYTxWYk/qjs0G98RUxYmmlzvXVxINzwcae88wFDbXcN8ErGXU4YDMMc1MPTfETMCoSrVuxzp6/uYdUd2KzV9CGlNBx3uKMmhs9m2AMiUUXpFNkvM5jWrzKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EnloiKQk; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1ee42b9a13cso6522485ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 11:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715019604; x=1715624404; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PEorNdErbbliX1pJbW2p9S8u6EaFLwcWfv6R20jo+hk=;
+        b=EnloiKQkrAMLAaIGOX9w6DVdy1Ispn4i4n+MmsnZrH9V/ISGVplEricaolBTHuWeCF
+         hJ+xkfA0lVk6oyBbWfIAK8gjoRPJzbW2fZNK9CTlM9+UcIXtPmNVNXwD13aephdFYhmx
+         uccbHq8j8aehU6SmyT9m3OXp+7Dxtp36zUG1v0W/Zb08/erNtqRCza5Ug8tCPYvrEiKi
+         dZge/b8zmrTEcZyCZd0y8R0AoBN3sErpbFEe2VMWYOKTy08OSkyUpFZtQ1KWxnTlf/bA
+         zMLWO5wZsXruN9v9c+YJOyANDPmqlNofNJ/nI3yxWjy/xiGZDCtqR5WkEVVkslTmNqDR
+         Lhwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715019604; x=1715624404;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PEorNdErbbliX1pJbW2p9S8u6EaFLwcWfv6R20jo+hk=;
+        b=WRJFbCXvOi+r7wxDmnnhTjXkLxJBMRHFrUrHPgmN663wDhz4Ban75gxp2974LSxpwu
+         LV483yXaN7KusJBjTNkgiCadHo606enYQBvR9Ing8KxHVUuhmdmfGdvnmH0zFon/pMEt
+         5pkrNgYEm/hJLTTDgyeElunJ8Uicl5JflC+wT8D9VP3DRTC8Ai00Km2CukxP/h+YpSQY
+         bovUy0wD/uv3plMzoqmgC1f1qbEZRbnW9/Yeifq58sU8uDHR0AXXD1z0rHZRTCaFvOKS
+         Suhwtk4Y/UGVkhhtwmgfEgu5wrWxacb2H1u3VQCRisAf9ue1yq/6D9hdjUUrssnle+LM
+         Y2Ow==
+X-Gm-Message-State: AOJu0Yy4E0BS3ueXBT9POSXFvh9XKrtHj3c2E+w/IcdKVSLuli/A+AKD
+	GepsCrCWlHWfxMvcOOpzX/DuI3HCpdyHd8hBxicRPXXY34w9uqLnMd1BwiUL6Tn94Fti73YF1+4
+	QgQ==
+X-Google-Smtp-Source: AGHT+IESrbjMUY8Mv1UKtz5WxeKTzz99i+OpRkFhriDD5+V9JAcwp6S8JYlh7Y55BwCk8V/xyJtIzeIlI/M=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:ec89:b0:1e8:d158:4e13 with SMTP id
+ x9-20020a170902ec8900b001e8d1584e13mr796623plg.7.1715019604185; Mon, 06 May
+ 2024 11:20:04 -0700 (PDT)
+Date: Mon,  6 May 2024 18:19:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20240503041843.99136-1-jhubbard@nvidia.com>
-User-Agent: NeoMutt/20220429
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
+Message-ID: <20240506181951.1804451-1-edliaw@google.com>
+Subject: [PATCH v4] selftests/vDSO: change elf_hash parameter to signed char
+From: Edward Liaw <edliaw@google.com>
+To: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andy Lutomirski <luto@mit.edu>, "H. Peter Anvin" <hpa@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	Edward Liaw <edliaw@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 02 May 2024, John Hubbard wrote:
+Fixes clang compilation warnings by changing elf_hash's parameter type
+to char * and casting to unsigned char * inside elf_hash:
 
->Hi,
->
->Here's a few fixes that are part of my effort to get all selftests
->building cleanly under clang. Plus one that I noticed by inspection.
->
+parse_vdso.c:206:22: warning: passing 'const char *' to parameter of
+ type 'const unsigned char *' converts between pointers to integer types
+ where one is of the unique plain 'char' type and the other is not
+ [-Wpointer-sign]
+        ver_hash = elf_hash(version);
+                            ^~~~~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+static unsigned long elf_hash(const unsigned char *name)
+                                                   ^
+parse_vdso.c:207:46: warning: passing 'const char *' to parameter of
+ type 'const unsigned char *' converts between pointers to integer types
+ where one is of the unique plain 'char' type and the other is not
+ [-Wpointer-sign]
+        ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
+                                                    ^~~~
+parse_vdso.c:59:52: note: passing argument to parameter 'name' here
+static unsigned long elf_hash(const unsigned char *name)
 
-lgtm - feel free to add:
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+v2: updated commit message with correct compiler warning
+v3: fixed checkpatch errors and indentation
+https://lore.kernel.org/all/20240501180622.1676340-1-edliaw@google.com/
+v4: moved the typecast into elf_hash based on libelf
+https://sourceforge.net/p/elftoolchain/code/HEAD/tree/trunk/libelf/elf_hash.c#l47
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..33db8abd7d59 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -56,12 +56,15 @@ static struct vdso_info
+ } vdso_info;
+
+ /* Straight from the ELF specification. */
+-static unsigned long elf_hash(const unsigned char *name)
++static unsigned long elf_hash(const char *name)
+ {
+ 	unsigned long h = 0, g;
+-	while (*name)
++	const unsigned char *s;
++
++	s = (const unsigned char *) name;
++	while (*s)
+ 	{
+-		h = (h << 4) + *name++;
++		h = (h << 4) + *s++;
+ 		if (g = h & 0xf0000000)
+ 			h ^= g >> 24;
+ 		h &= ~g;
+--
+2.45.0.rc1.225.g2a3ae87e7f-goog
+
 
