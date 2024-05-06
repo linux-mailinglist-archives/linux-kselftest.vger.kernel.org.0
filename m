@@ -1,383 +1,227 @@
-Return-Path: <linux-kselftest+bounces-9550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDAFE8BD498
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:30:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C2AB8BD4A6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:34:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7424A284A71
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:30:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 036BD2836EE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E37156641;
-	Mon,  6 May 2024 18:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D14156641;
+	Mon,  6 May 2024 18:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="m17UP0zW"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qUbUZrH4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx07-001d1705.pphosted.com (mx07-001d1705.pphosted.com [185.132.183.11])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2050.outbound.protection.outlook.com [40.107.236.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E31182CC;
-	Mon,  6 May 2024 18:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.183.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A791DFF3;
+	Mon,  6 May 2024 18:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715020247; cv=fail; b=S9ALc785/3ZBJwb5S2ojXJ4ZaRgmnBAAIzkXwMbkiLbJJZLsb0TxJs39Ahu3oxT63hmSWt53Xi/LyyV2+A4UihDGPdgM/6UskW8fNylHK0pC/mMXK/LYOfUMuGc8/jVOAE4FUNA6BTzoK6xcf/MnIZEJjE04qO4d0LChm8FBKgM=
+	t=1715020465; cv=fail; b=uRQId3ng187qjkJ1+Ih5atkzrgmx6fLSMz0kremGRSHDFRNjNTfZgZCKBE9cNy+R//02mlo+SZkYiFgHu2ezPktgoQsskc0t6Bbbxqi26bxyY0wMkyXttJMIMWv2fMZKMIU2ICOHdmH0kCcRefQims8StQKtrDjki6Gx5dywBsY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715020247; c=relaxed/simple;
-	bh=pDjpyAmLc0tYNXUAcuj+QKo3N4dZ3uW0gIlKtClJeRI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=fN15oOdw2PTuJttXDKxy06WpAA+E33SHEB2o3BfzuQCQEU+rwEYVLPDV4d7m4Sju5z4xtiD/YJAkNlapArcIcQBGvkCGpiUQFevQhNu0bRmnmG8xlvxbgcBN7GmrfBwU+19Od8RNqxYIwzdJIf8zSansVharHvjpC9r/Q3Yz4x0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=m17UP0zW; arc=fail smtp.client-ip=185.132.183.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
-Received: from pps.filterd (m0209326.ppops.net [127.0.0.1])
-	by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446HFLLR006231;
-	Mon, 6 May 2024 18:30:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=S1;
- bh=5EOZV95uEGv4yXFEEMtFfIfQxHEwVB7mWsMi9ULm/Do=;
- b=m17UP0zWJRiA6Yd7NJh/cI6DVSMFEb1AgmZGuZiurDn8Jd7S7e0MXd0eK+tAGvQJ9bfA
- ac5uy4OFvqqi9q83rbvCklVbgovVqLqgSIUcGaZA0q4y/IkPYzte5eL5IJ/terPcWznQ
- WtEFi6PpkVDYalxyJ4CmdybxjVTtkZWKzO8QZ++4zDWf7Bv8whTEd2EcwGF+h9QyksKB
- BpSRrb4sha/0VkgDxEfKYCzLAvAwbROtDSN+aZ/mhB4OsM9lKv3KGG3nT6YxpviDeiti
- MPablUfUrdDiEgkF25Yp8KqeijGrePjHRL/A3uwtyYcXKUqmbI+eHatYjtvplxynsgCx Aw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2170.outbound.protection.outlook.com [104.47.58.170])
-	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3xwb7ht0u4-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 06 May 2024 18:30:07 +0000
+	s=arc-20240116; t=1715020465; c=relaxed/simple;
+	bh=V3a2MI2gS9aUXncT2qhTW/gN10Or3IB1mfYGzirvtuo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=kjMpo7xOn/SPxGRs+AQTa/UuHi6VzRzaO92/XWJGjMb1VMlL0q1JSAJy6HjEZXh1E3RZdElPbsyDhok0qfKXHjEs+6P+lKsRd3MgqC+HxpP/2OHzjo/m0ddbYCsKY38HJjVVQbxURVo85tQgvs12PUy7rU1wPo03OM5yBSYAdSs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qUbUZrH4; arc=fail smtp.client-ip=40.107.236.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=luno1VOgGAnkTYZ4zoXCFxnwhsZMjOlDYonLaHQv9cPgN3VlKL6oFK9gN6LaUwWh0R/mPmctuTHuyox18pmP/+SI/+axDBPZBgaEM0+LVrVwPJKcMomNeA1/JU5srSUIuluafylGFYr9c0xOxQPFboxP+qOKz84LaMXHzlX35dmtCYQe/cab8CI2llpZGYtOeUEwHgcmD2henucVOpZ0J0v+28g9Tmhmp7N8bQdoa0dLbMPBjpYAOV+5PzPsMIcVYJrCoiSqTWgtRd9PLkIFXDkw/2gAxIOxhGZkwjuCABaSj6srZOpk3huHKZn5/jjZWITWSFVJedmNorQF0n+qgA==
+ b=B9zIuVXOKhgNoLvDRFz0zMDjNmyE16vMXgFRzj1YCyms2lZWuiMDS7vgmglRq7HCvw52ggVJlHNAD9704NHWC7Lst09J2hDTu3T+NPA2W1AwM3NUM+fXMjkRXBU5tAap/kbj4AGXRS1aCLHAlt08sQLdoIqEOCYWoz0BQMKWwZ4CRvn5mZKZfr9j8JLvFnir7krt7W698KqFQQIUKC2K0JyIfuXnmEay6L9bviN1iW9E6dTJfRbYRnv6bptGfvmcRbT9Zj/lWVtQtomEkk5/IN178/GaO8LrWkECVZTkJjRjxByX7kfrYUBHcs8qVUDYfR5iJACdbTA7Pl29MveiIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5EOZV95uEGv4yXFEEMtFfIfQxHEwVB7mWsMi9ULm/Do=;
- b=IyVEIkLG2K8GCtHXyqtEjVB60QLtIpmGzA5+wIbtOnKjt4uA9OTEUqrOxJpkJx5Vke7fIAIlh/E0Sg7GpMHdQJihnaxCM7rmiYqB9BEUmGefBQrijI5dGntAke3YlG2L6kZZap9hCKA471JAHLTorRTCqpsKdCwISJVq1GDw7/e5/+0lRU9jTCsE0Ja90yzz86cxhmtBszjLNdImX6AJLrdv/S/vM63tg4aA83QEPWNNpOw9cciJMJSl5bgHiTi02B+jMDnuA7tiCDjZisP512609HZotENcVi1zoi/83mj0bFSndT3E8sTEYQoi+gwKP56e7MJTuoSat2l/qP67+w==
+ bh=EPXo9Zm2kSlTrTdCWARl5TIWsaY9d1Pip3eswOsp688=;
+ b=FvFSGMOSu37+nJgLloZUHX8e2aoBST8LxQOYKCb6zwiXYbRurQosKLt6SXaAwHoDcUxp/P27OBiE1u/qDcK6YyEHG17f7F9X2T9f6mcHSM6SoPTRVHDgi/2d9TovDoGTv2PZ2r25tbLXjtpHhC2KJQb2jrTgLZ0mLBIBuZrrG78c+1Ad4b2a7AqHm7ovN4msPOLFBf4ThfjZDQdCBJRh+9mSZgRTHIQ/xSs7kF7y2xzo2zOPtUsEdgW0TCgglu7em09wbBaf3K4+I+umza65Cwr0bFJKLijQjtnq3fNEulZT8v0AGDXc8KAMhbTnxTCW0g43Et0AnxMg4MMhVZqvJw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from SA3PR13MB6372.namprd13.prod.outlook.com (2603:10b6:806:37d::13)
- by CH3PR13MB6996.namprd13.prod.outlook.com (2603:10b6:610:20c::13) with
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EPXo9Zm2kSlTrTdCWARl5TIWsaY9d1Pip3eswOsp688=;
+ b=qUbUZrH4eQ5q9zt9U5k8CzOALFLnM9MuHlWzhclbKII85WB/k1cToqbI7yLVERA3cuOch8QNeR9aH1ky2YdOHXqTF1p+bx3NUvipqCuG4mc03ig/flCg923zjTeql1hStpU+61DJ8ycaCNoOIEY1GMskOA3DizeJjHwkX885tf/3xmdlsujjvXtB4LYQTR9+0aD+0MeJHS7Zu9oP2yM7hBP2VNQMzFaRPeoO6VCuF2j+Bz9+XrihHNZWVsiVUriZYFBVurWcxWXb4xbn+JUuaL4kKjbIRaJFCeMqV8hcyeOx8mehGXZQIDkZ/pksRhNlGAfDErhj7ePh3AyMO0Yefg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by PH8PR12MB7376.namprd12.prod.outlook.com (2603:10b6:510:214::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Mon, 6 May
- 2024 18:30:02 +0000
-Received: from SA3PR13MB6372.namprd13.prod.outlook.com
- ([fe80::2dee:b93e:d9f:d7b6]) by SA3PR13MB6372.namprd13.prod.outlook.com
- ([fe80::2dee:b93e:d9f:d7b6%5]) with mapi id 15.20.7544.041; Mon, 6 May 2024
- 18:30:02 +0000
-From: "Bird, Tim" <Tim.Bird@sony.com>
-To: Wen Yang <wen.yang@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrew Morton
-	<akpm@linux-foundation.org>
-CC: SShuah Khan <shuah@kernel.org>, Andrei Vagin <avagin@google.com>,
-        Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>,
-        Steven Rostedt
-	<rostedt@goodmis.org>, Dave Young <dyoung@redhat.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] selftests: introduce additional eventfd test coverage
-Thread-Topic: [PATCH] selftests: introduce additional eventfd test coverage
-Thread-Index: AQHanvs9FAxJ40hn5k6c626r1bhaQLGKiF0Q
-Date: Mon, 6 May 2024 18:30:02 +0000
-Message-ID: 
- <SA3PR13MB6372229283A34550FD52F913FD1C2@SA3PR13MB6372.namprd13.prod.outlook.com>
-References: <20240505144648.18347-1-wen.yang@linux.dev>
-In-Reply-To: <20240505144648.18347-1-wen.yang@linux.dev>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA3PR13MB6372:EE_|CH3PR13MB6996:EE_
-x-ms-office365-filtering-correlation-id: 13cc71cc-20d0-4cbb-5c8d-08dc6dfa8b1e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: 
- BCL:0;ARA:13230031|7416005|1800799015|376005|366007|38070700009;
-x-microsoft-antispam-message-info: 
- =?us-ascii?Q?19tb3MksaZaosvgJ0nSFHxMT0TL8BGXPrt6LS4DZ5UpkrC6ovAOAkEO5bNCq?=
- =?us-ascii?Q?4XRW+IpjqWyOlA1aIv2fJ4+Y7Dix3QcuPtAcavxcwC5fiM1n2VJQaP7Ie5ir?=
- =?us-ascii?Q?s9do1k3N6+z48pZyLiCHPiKEgS2n+csCFo5ZnAwp5OWeEMz9j4GBIDnCjNZn?=
- =?us-ascii?Q?RyKcvEghZ4R8fGiXjpSvENvkKYMpqQAhv8WEZr3I7O6K7OaCoic29dVJPeOz?=
- =?us-ascii?Q?8jaZnMRUBzmEE3ILKPrW2SUlZI+5SorINBeLKAK35s11pd8uM4E30x8ku7nO?=
- =?us-ascii?Q?CAgaASNmTwafYv2wLKrxgcE148WmpBOxPKUj7ZN3Ng/Bn5RQRLFSbZgJkZbn?=
- =?us-ascii?Q?JjI9zBx9+fBvsH/+YcUvFWWoTEa8IhzcB9HIXH+rv2QURlhHDuydIN7X2+EG?=
- =?us-ascii?Q?LbrBUgPpM42FZfgIIqrRhvLaBmvFAtZQj9wTfTEpEVFSt8FfW9sua4obl41o?=
- =?us-ascii?Q?Z7Y7GbrlClKYXlC8t34LXqwLucaMQEml+BXgxr7vKbaMDN2vsOQZzhKqy4BT?=
- =?us-ascii?Q?X7rsDV3XqfPfPilsxG6rPYYbQ9PB9ALPenZP1VpiZSsZEGNd7fw+0cCxebHI?=
- =?us-ascii?Q?04/CzSRVPz6ltdIvaYY6bJP6ATwpwl1uztCwfnb8K1PuzztpoX49Lcp6GUWe?=
- =?us-ascii?Q?4C/H/xxSIKWxKir9wDbS4A2wyIU4nuYjUqWo1JQEN+P1S8rTJDUOeSMzEw8s?=
- =?us-ascii?Q?K0QmWqTrLr1mnSjDDQNrF8QgJK6jm4msiCaT6jvE4YCveS414J45PlTFrhWF?=
- =?us-ascii?Q?7aDTKngdZMg1Hy0d/B1heqpflJV5XUIPwgVVngi08EykPTW/qlLZdY5UinJC?=
- =?us-ascii?Q?zgiuwd+LLvxAXZlktK3yGyDp4v17bEsDYdcEvLX52PmNFqkhVDFYVhlvJXIT?=
- =?us-ascii?Q?7Sj8AT8EOTCQJWe1tIksARBtZgGWyWgW7HHEuIzI4G8o5yHCkBw8S1NZESp2?=
- =?us-ascii?Q?LQtgWZLSh7/ziPMgUCG+4ZYvFM1Di8m+2DwcYy+T1k+DLucoMvVMqjioIc2Z?=
- =?us-ascii?Q?nSzR1K+Wx1vBa9WrlJHFvqEq4oHYy9qTCacGNMzfeKZV7dRITKNW/CKfRTst?=
- =?us-ascii?Q?nOPGZAeejp1Uf+Hhzx/x2tHlvhM9HnzkWIDJYM4K8otipDZbtQfF2vRrSluu?=
- =?us-ascii?Q?JNZ/q5n+EF5uvPS1eHKzsDxidguiKSux/1a6Pb1x4kLdVLJ7nDAtW3bJZWQS?=
- =?us-ascii?Q?mbhin23V+Qhb8whJgUemXRMf45VbPqtnTLCg3pca8RnCLJV8YzztprXN3NsZ?=
- =?us-ascii?Q?a1lV3irFb0w9SnDJm/cmHxLR2Zt2ohNHndAqAfGpqO3ZQK+vx8stoLh/ahm3?=
- =?us-ascii?Q?kQc6ac9IVtRObxF5KRqKxOmXnAKBI0R+WEK2r/o6U75NHw=3D=3D?=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR13MB6372.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?igNFPOHZcDaFnrsf6Eqqu7gk59fb7JAqpXqrUhefdAOknD1c+vV09RkC9jdu?=
- =?us-ascii?Q?W+sT6ryjUv+Tgdwasrqf3LvmsXb8VpBHWKgF7rbSkIISoZ2hxFLn72sgomd0?=
- =?us-ascii?Q?bIszHX541ka0OV/3e7C1g+rZ906d4flcqVpFfn8PhcIItZcWKdKpQJBYn8EL?=
- =?us-ascii?Q?GIFfwUC8bC4HvFkTTXXH973JV895bfNjl/+tKnDl0SGkDCn7qwY+2f4vb9+s?=
- =?us-ascii?Q?xpWbi9vltpF75m7o2L7wN74QsFYUO9wB4rSGSdX61ItNXhYJjlnrPuDRYkyL?=
- =?us-ascii?Q?B+cKPANhRb/M7pXwH4xkQuC4YwY+60ieoTEAlR358JL4ZNxHwQFFMbcS5943?=
- =?us-ascii?Q?bbX0IUgYAFVmnfVzWt0mVAnKchz9PxnDN0I+hDtruV6YehKNv090pWdAXr8u?=
- =?us-ascii?Q?FjBIvT9jvdiiEZL31sjpc3l6pxYWhSy1IvsE6dEvAw0XXV5RCVeS296mf0vn?=
- =?us-ascii?Q?mVxkH0vQfROFsPLElW+I6CRQbhmpp9UNKXjalxAdTNbX+janDsuONaKef/Op?=
- =?us-ascii?Q?szCnb9brAPTgaTsO9oqrLgGfMRiurhXbTaJCvIGw4qaVZ6cNo/wcGb7zl56k?=
- =?us-ascii?Q?Ky6YwVwZ3Tlkkp6XyUwaqRw3XQX8EHXFSg9M8jWT1K38YBdYtIndf5TPgZ85?=
- =?us-ascii?Q?PdomJ+tXr9P7d0AHPVi6D9mauayWoliQu0XPRBKNfRrSI7fBtBTwXVa65PVW?=
- =?us-ascii?Q?0Zj8YuE4mgv9sPAO7G99SDOAEN8izqLEpctYgrm5b86rl6Pn0fppccsB0rQL?=
- =?us-ascii?Q?MYDChfCprAOZNIn840ygNl5/efn5DWByQTZgLdEh7Rb7pzXZw7s730Uo0/5O?=
- =?us-ascii?Q?LkzSsnCT1w1F21L5tdTqPdOOTZCKgVklXSHd7L5znTQEhMeHFTRWUMd9Xp5Y?=
- =?us-ascii?Q?mhuT7mRngzRDbhlE+YaOgClphtJEyZGLX/duX1paGLR5bTUU8+Wb0Agycpc6?=
- =?us-ascii?Q?26S9MNI+qmHinIYD14R08WVMzh4eO6fFKN6kAfQqhIAYsxAlclSH3dpPLqDc?=
- =?us-ascii?Q?9Ye+A+tMOE0dDvK2quUDPoeEuwpGM7URMzZ7hqnpqUVKwyS6Tp7KJ2dDTxvf?=
- =?us-ascii?Q?nBOHkl8pY+sMbBcp/zhRAqMbhwpjatns0dHiN0clst0mxMw0AMGTZIWivNNW?=
- =?us-ascii?Q?q9eBL/IH9pSDbe9IZyHyNlwrlZo6/m5axCe8iKQxH/T1EwG3FW5xXVQKUPTX?=
- =?us-ascii?Q?HkA/elnpc9XuwUtlhNr/CdWjRRclHzGS5Nh5mDl/WPYKifS5SWDfxqgdlxRu?=
- =?us-ascii?Q?NHvY/m1q7pcc4UibYpVv4rnFpI2WJ0q79sMXe7y5T6mC4qz0LIcpwlXeMnzw?=
- =?us-ascii?Q?aVN4G5JqbV08LGuW9IZVjJIW/xHu9rgoMMR4euIszABvLt/TuSm52B7tJqyR?=
- =?us-ascii?Q?hGHvxRxWMe7HwYxElBGi7hzPFsA7neix6xIeaqcpHrilAhBd8LSgd6UWy34W?=
- =?us-ascii?Q?Fqr27CWf3yMdGtPm1TDvF6J5I5fsIm0KQdmRbTpxGmJrgPjr+qC+9UKlsb7W?=
- =?us-ascii?Q?bUhL+3Si5ZsaG3EWp8oGG9uErteBCmH4589K8MORx6fUmKQnfccqbfQweF5h?=
- =?us-ascii?Q?H8rHYY2X3AYhmBs6geY=3D?=
+ 2024 18:34:19 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Mon, 6 May 2024
+ 18:34:18 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Phil Sutter <phil@nwl.cc>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Felix Huettner <felix.huettner@mail.schwarz>,
+	Max Lamprecht <max.lamprecht@mail.schwarz>,
+	Luca Czesla <luca.czesla@mail.schwarz>,
+	Xin Long <lucien.xin@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>,
+	Richard Guy Briggs <rgb@redhat.com>,
+	Boris Sukholitko <boris.sukholitko@broadcom.com>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v2] selftests/netfilter: return a value for several "int" functions
+Date: Mon,  6 May 2024 11:34:07 -0700
+Message-ID: <20240506183407.26032-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0165.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::20) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	7RJvKpM/LaCr3e10VsRAdt/FlpJx7EC+zAD2ZoUKjXqwtflhWIS3eMnVGenb7kWKWiXfF3fpF2+YRrbt9QhCtSB5IvsR+PPNqBqTkLwOFdGFkaSMTPLYrpfiQ4VwAfV6vy1pD5aRAzx7ofsYNMi1R3gNWJwYYRrrSeBopVvjUJDq8tbFvICYjanoInhifW5znhIxQd3RvCIVMgSQqkRSII73a0hQsfhwmqSxJtjVuogwyqrYo1ImPZjKgoRlc1FYCUDWeh8r2OxoiDEiegnSeMS5LrgdozYwpvzrzet5wa5HXBTk8GNyAMbImtiLEGlqYp0Gr8mg/VtJPp+1vmYYUP6qYs72OYr0cT+JADTJVLka6rzw/Dtn9MGSAlTl6PEIei1EZRRLzh19wVEy20yNFWIfo4GINyNy9hhgsVjlJG2pyYYyN61/0B/tyjp0pGKIOmkAXQexEgL7Xa594L5NDtgtzpI5ub/9HkNcpC/fS0CwpsQALgCI/LnC6EhuF+yd8U+EmmwfxGVEOsxAf9eQGW9mAwlzrCkLfXTIbqmQRiP7a+JddoSNUr2SDLwAfH6tCHD94FrZaVLup4RYGm0qCFdGsy+K3lC+hXLrfwOsth20Fss6Uzlff0nqUxExXd+p
-X-OriginatorOrg: sony.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH8PR12MB7376:EE_
+X-MS-Office365-Filtering-Correlation-Id: cdd89297-bfd1-4d9e-0a87-08dc6dfb23f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|376005|1800799015|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BNec++iVZ0cl7rfNaSo0qY4Mnwdj3dP46NyEgVZyU8GwJfngM6RaC2iKwDx0?=
+ =?us-ascii?Q?+V2PuNiai+gmuinImYz+ShOaiW2Y0jsaNZzvV6VLZAI8cz+iv5pcWuOM5Lbx?=
+ =?us-ascii?Q?U60cXm+XwYUcMvStkWFmkZ4jvX7sJK9bWGO74Jwtk2+8WJXGM/2qBvW0ujpB?=
+ =?us-ascii?Q?jJiDoo4/dYsoNhgVZ0Z0+dCUknNTgQYgEz8R2XIYhT/vK7BnSugOzAar5WNn?=
+ =?us-ascii?Q?WFC0w4ElBdvW0+ufxgGTnibCkSNZGUuXFFzT9uXLxcnv5JTz7IVAnUoPcULH?=
+ =?us-ascii?Q?CVFt2EKi5z/U1AzUBxozjFU/62jubGyTFnhKCULUpulB7jmJHNKDXnTbnCv5?=
+ =?us-ascii?Q?xh2an10xj3hMEVt8uixRDoqiJa7dtH7JRPVQuLR6mnTXfRH1Ju3QysNwNKTb?=
+ =?us-ascii?Q?ICfriLUzTLJdT2GpU8lRl7jO6W/Hitfc5Khy7tmts7TLd/y9YFM4pJYpkQBk?=
+ =?us-ascii?Q?Ub2K9XoWkPrv9AcjuK2yJuS31HueC4rkkSp8RDas4nnO92+5OIBjNVp7QiCJ?=
+ =?us-ascii?Q?ZBi1HzjmCd+OL+bZPeMw7b++sAL+pLmnP9Tw+aKjU+Bd4noN5QxGPdmQiTxT?=
+ =?us-ascii?Q?W+BirfPZWdqdVqzr0+cJz3bmQdcQ+KRnRD4VqTgHiZBcwhRVoDbZAHa8JVWD?=
+ =?us-ascii?Q?+9jgRH5F5W4ObfZsWqUoADFYoFZVLL4q5uR5Ibow4hHfbEJj8hOFVTbvODa6?=
+ =?us-ascii?Q?0h9OrPfUHO6ikr53jF2W3YwMG6GMODyCkD8Tf8eXjWAfpTTLGhHSgI+wcH9y?=
+ =?us-ascii?Q?4WYIzTE5q+3jvyEt4BJjWGRKniXWw94IDUrfpN3v8DaTzGhT4Niz4La3ye0B?=
+ =?us-ascii?Q?qRhi9e1F/imBR04vz6h/oHAgaKOjUAV5zevIsSBx5h7JxaEZiBId4g6PQa9z?=
+ =?us-ascii?Q?WLmYdBt2M87D4/IdnnYmVzb9Rfhozla5psvt5tek2Lc0cTMVX4aHz+w45dBp?=
+ =?us-ascii?Q?bpIO7yM2f79Gwsx3JEEBwIuFfUBE8Ys9Z+gfFFLxrbMYFNHSO8v+QsKBLpTi?=
+ =?us-ascii?Q?85u3O1UAVswDTF2Gr6ez/+jpGc8L6FHMJFJyrWVR92AcHS3+h0A4wSL17aBg?=
+ =?us-ascii?Q?Qff0xlIMzqKjDVt9aYosC0lPImzQnZ7f9YQe0cwAlKyafRbVKxh8kFBLmbHY?=
+ =?us-ascii?Q?qVTaWPk7iafRI54m90+kk1grkKS95yIeRTY89b1p8jxW+8hSCKvbkzVdQxp1?=
+ =?us-ascii?Q?QndLIsBZ2xMyOmX5UBgPjaNtbjCeCJEPGiJq8zlAqUuM1j29dNNMAU1i0mws?=
+ =?us-ascii?Q?VLKgCWO0BGtI91umDFATPjmH9UOOpsmg55ScYKkW7g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?yfb2eW0HluTMmt3fqlPK6QEi7NZKniBvUdFGECpUgta7dn9QZV0ySInnKvCE?=
+ =?us-ascii?Q?nxHdoLc0WOneXPoVmARGW0lXRl+EET4P52vb6+jSa6/RTQiatrezAfFLpoJp?=
+ =?us-ascii?Q?1mLIc09xIYySFIPY9ql0q5OMpsoDH0OoRIyH1xj7XUDF+kKlBP4/VESSRSAl?=
+ =?us-ascii?Q?7chMqjlEH9C2CpJjy9W4+eJvI6TeCnRigAUXup+60NjPQmGlrcmM18XftamD?=
+ =?us-ascii?Q?TktUQCCw3vDT5xpTrD0FO6KR7Aosg033BtTfb6aVYZZX/V5u/LermePYuGxD?=
+ =?us-ascii?Q?8B26vkiQ1gxMWwFqXodRnMNILUFGxUcCt1dkGuWFWOSaGN3aoyin/qM3+7EG?=
+ =?us-ascii?Q?MhpcHigdHxjgD0bwcXXKxB001r8xS/cN9DfmBbiI4OCrZDBKOt/rMargDECJ?=
+ =?us-ascii?Q?jNSKU6Sd9b/1tYHRIibETvupuP3INUnETYwoqB+eMF0a24vA8BNNUFf5fLk5?=
+ =?us-ascii?Q?B9vog9mPX5fER24SUISM1uf4sMSCaaoBg6McHmdu+NyfnHMYu7msnhs2zy3l?=
+ =?us-ascii?Q?hnb3Y1G7YGiMUEkrVD1hPV6zLlVumE7aQeYuMgNKjmUvSdn+XAswff+H2FTS?=
+ =?us-ascii?Q?/rufkP1cQILrGSUqyrbDQIe0hclEWf8OCQXrObSKOojpcMfHzC3RkYF03JXv?=
+ =?us-ascii?Q?oLVYdORZ1tM84+L53dxE9r9pfKvdGW6DA6/eOLOkT1fNSOHhEgzZhzgo95H4?=
+ =?us-ascii?Q?Y7P9zL7/sr2uWTMmdXiZrSzcEd/4gofKKMlH3eJT5WNmlmGoU2CCna0V9CRX?=
+ =?us-ascii?Q?m0+3jSZKBHzAh3j60i3Y30qQf0a8q7/whsUQzMz604/1VT9whbgDmACYl4Pb?=
+ =?us-ascii?Q?j09RDRP718jKVwbVyMsBNdHTffxoC2nZ2DyyFWthRcqapdjtk1KaN19Y4Oew?=
+ =?us-ascii?Q?+HUYOfupIfE2qDPSYomUSyEqJ6HlMvlMpdJvtRkNMetLBZ0fNr3HtqDRAukR?=
+ =?us-ascii?Q?BQRKPEvn2/JEwrKivEjDsvUxtrpbdHlj7hq5RrNlSq+kyK8jGVCB1h3W/uU3?=
+ =?us-ascii?Q?tuFn/Ipku/sI/i0kiBH1fVtajcYF1UVO8uo0IeCQv5X2ecWISZ4kcJZGXqMD?=
+ =?us-ascii?Q?uSABSYx3oNzvbSY1taFKtTyzpf/FXSTDV2yvcRv3FwGokScmT3N+1lAV2jij?=
+ =?us-ascii?Q?S2meg8WS1AAeJQjIbjzoKYNs6FTOFoC0tzGx+scweX7Ec/PORBbAj7pfn5/e?=
+ =?us-ascii?Q?MPPDgb+TYhIVgzleKHuupdn2r3enzaMlQnGtNPv9Cde2P/oFU2tdHjQAywr5?=
+ =?us-ascii?Q?6zYEtIIBHPfMJcgxe7jEk1dqjD1wyVBpCJ+jugDm5ctSrHFRK96iBLkTQA5M?=
+ =?us-ascii?Q?VtBgoWnB0izP5l0BbuU1Lqf1Z3Ywcu0R3S5yOMITxTdGW4GrlchiWd16oOKJ?=
+ =?us-ascii?Q?hTtxQpIwFU/UFr8JBEL6wVb78I4gH1TZ8xyuQ/EyV6RNNOdqwFfqfgCnqlQJ?=
+ =?us-ascii?Q?iENB4g82LWe+H2H2GsKwaeM7+P9DFBwR5AJO6xd5lS/1hfnBnEPtol3kGs7W?=
+ =?us-ascii?Q?mceQH9XXQlOFL60p4DZuK8wenY4/RzJ8JsQa+zbTtka9A8v7PPpaSM4dll+m?=
+ =?us-ascii?Q?AssT17pG5paQgGYGoO8rASOiPCO+o0d5DlmZ2sT289UPO2p2U38oK6hbKju/?=
+ =?us-ascii?Q?PDizfT29d+olXLYx7AiAYBg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdd89297-bfd1-4d9e-0a87-08dc6dfb23f5
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR13MB6372.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13cc71cc-20d0-4cbb-5c8d-08dc6dfa8b1e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2024 18:30:02.2434
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 18:34:18.8247
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FtsWZYJf8dxqMMPWQ0MUBlW/g1iQiY/f6V2NFlyMshYF0g33itq5/NmSl3N6PBFSYeaKDCU01I+e3uWZGNGTIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR13MB6996
-X-Proofpoint-ORIG-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
-X-Proofpoint-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-X-Sony-Outbound-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-06_13,2024-05-06_02,2023-05-22_02
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IpXeabONDEAyzt+sbeKrMgdjwd6G7km2sEYVn1n8Y9cacGHY+OEeR60zn4vENeDULhtFvIGYaUaFZhTM1EFO+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7376
 
+When building with clang, via:
 
+    make LLVM=1 -C tools/testing/selftests
 
-> -----Original Message-----
-> From: Wen Yang <wen.yang@linux.dev>
-> Add several new test cases which assert corner cases on the eventfd
-> mechanism, for example, the supplied buffer is less than 8 bytes,
-> attempting to write a value that is too large, etc.
->=20
-> 	./eventfd_test
-> 	# Starting 9 tests from 1 test cases.
-> 	#  RUN           global.eventfd01 ...
-> 	#            OK  global.eventfd01
-> 	ok 1 global.eventfd01
+...clang warns, correctly, that several functions declared with an "int"
+return type are not always returning values in all cases (or at least,
+clang cannot prove that they always return a value).
 
-These are horrible test case names.  Can you please use strings which indic=
-ate
-what is being tested, that are useful to a human?
- -- Tim
+Fix this by returning an appropriate value for each function. Thanks to
+Felix Huettner for recommending MNL_CB_OK (which is non-zero) for the
+return value of the count_entries() callback.
 
-> 	#  RUN           global.eventfd02 ...
-> 	#            OK  global.eventfd02
-> 	ok 2 global.eventfd02
-> 	#  RUN           global.eventfd03 ...
-> 	#            OK  global.eventfd03
-> 	ok 3 global.eventfd03
-> 	#  RUN           global.eventfd04 ...
-> 	#            OK  global.eventfd04
-> 	ok 4 global.eventfd04
-> 	#  RUN           global.eventfd05 ...
-> 	#            OK  global.eventfd05
-> 	ok 5 global.eventfd05
-> 	#  RUN           global.eventfd06 ...
-> 	#            OK  global.eventfd06
-> 	ok 6 global.eventfd06
-> 	#  RUN           global.eventfd07 ...
-> 	#            OK  global.eventfd07
-> 	ok 7 global.eventfd07
-> 	#  RUN           global.eventfd08 ...
-> 	#            OK  global.eventfd08
-> 	ok 8 global.eventfd08
-> 	#  RUN           global.eventfd09 ...
-> 	#            OK  global.eventfd09
-> 	ok 9 global.eventfd09
-> 	# PASSED: 9 / 9 tests passed.
-> 	# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
->=20
-> Signed-off-by: Wen Yang <wen.yang@linux.dev>
-> Cc: SShuah Khan <shuah@kernel.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Andrei Vagin <avagin@google.com>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Dave Young <dyoung@redhat.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  .../filesystems/eventfd/eventfd_test.c        | 116 ++++++++++++++++++
->  1 file changed, 116 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c b=
-/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
-> index f142a137526c..eeab8df5b1b5 100644
-> --- a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
-> +++ b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
-> @@ -183,4 +183,120 @@ TEST(eventfd05)
->  	close(fd);
->  }
->=20
-> +/*
-> + * A write(2) fails with the error EINVAL if the size of the supplied bu=
-ffer
-> + * is less than 8 bytes, or if an attempt is made to write the value
-> + * 0xffffffffffffffff.
-> + */
-> +TEST(eventfd06)
-> +{
-> +	uint64_t value =3D 1;
-> +	ssize_t size;
-> +	int fd;
-> +
-> +	fd =3D sys_eventfd2(0, 0);
-> +	ASSERT_GE(fd, 0);
-> +
-> +	size =3D write(fd, &value, sizeof(int));
-> +	EXPECT_EQ(size, -1);
-> +	EXPECT_EQ(errno, EINVAL);
-> +
-> +	value =3D (uint64_t)-1;
-> +	size =3D write(fd, &value, sizeof(value));
-> +	EXPECT_EQ(size, -1);
-> +	EXPECT_EQ(errno, EINVAL);
-> +
-> +	close(fd);
-> +}
-> +
-> +/*
-> + * A read(2) fails with the error EINVAL if the size of the supplied buf=
-fer is
-> + * less than 8 bytes.
-> + */
-> +TEST(eventfd07)
-> +{
-> +	int value =3D 0;
-> +	ssize_t size;
-> +	int fd;
-> +
-> +	fd =3D sys_eventfd2(0, 0);
-> +	ASSERT_GE(fd, 0);
-> +
-> +	size =3D write(fd, &value, sizeof(value));
-> +	EXPECT_EQ(size, -1);
-> +	EXPECT_EQ(errno, EINVAL);
-> +
-> +	close(fd);
-> +}
-> +
-> +/*
-> + * If EFD_SEMAPHORE was not specified and the eventfd counter has a nonz=
-ero
-> + * value, then a read(2) returns 8 bytes containing that value, and the
-> + * counter's value is reset to zero.
-> + * If the eventfd counter is zero at the time of the call to read(2), th=
-en the
-> + * call fails with the error EAGAIN if the file descriptor has been made=
- nonblocking.
-> + */
-> +TEST(eventfd08)
-> +{
-> +	uint64_t value;
-> +	ssize_t size;
-> +	int fd;
-> +	int i;
-> +
-> +	fd =3D sys_eventfd2(0, EFD_NONBLOCK);
-> +	ASSERT_GE(fd, 0);
-> +
-> +	value =3D 1;
-> +	for (i =3D 0; i < 10000000; i++) {
-> +		size =3D write(fd, &value, sizeof(value));
-> +		EXPECT_EQ(size, sizeof(value));
-> +	}
-> +
-> +	size =3D read(fd, &value, sizeof(value));
-> +	EXPECT_EQ(size, sizeof(uint64_t));
-> +	EXPECT_EQ(value, 10000000);
-> +
-> +	size =3D read(fd, &value, sizeof(value));
-> +	EXPECT_EQ(size, -1);
-> +	EXPECT_EQ(errno, EAGAIN);
-> +
-> +	close(fd);
-> +}
-> +
-> +/*
-> + * If EFD_SEMAPHORE was specified and the eventfd counter has a nonzero =
-value,
-> + * then a read(2) returns 8 bytes containing the value 1, and the counte=
-r's
-> + * value is decremented by 1.
-> + * If the eventfd counter is zero at the time of the call to read(2), th=
-en the
-> + * call fails with the error EAGAIN if the file descriptor has been made=
- nonblocking.
-> + */
-> +TEST(eventfd09)
-> +{
-> +	uint64_t value;
-> +	ssize_t size;
-> +	int fd;
-> +	int i;
-> +
-> +	fd =3D sys_eventfd2(0, EFD_SEMAPHORE|EFD_NONBLOCK);
-> +	ASSERT_GE(fd, 0);
-> +
-> +	value =3D 1;
-> +	for (i =3D 0; i < 10000000; i++) {
-> +		size =3D write(fd, &value, sizeof(value));
-> +		EXPECT_EQ(size, sizeof(value));
-> +	}
-> +
-> +	for (i =3D 0; i < 10000000; i++) {
-> +		size =3D read(fd, &value, sizeof(value));
-> +		EXPECT_EQ(size, sizeof(value));
-> +		EXPECT_EQ(value, 1);
-> +	}
-> +
-> +	size =3D read(fd, &value, sizeof(value));
-> +	EXPECT_EQ(size, -1);
-> +	EXPECT_EQ(errno, EAGAIN);
-> +
-> +	close(fd);
-> +}
-> +
->  TEST_HARNESS_MAIN
-> --
-> 2.25.1
->=20
+Cc: Felix Huettner <felix.huettner@mail.schwarz>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/netfilter/conntrack_dump_flush.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/netfilter/conntrack_dump_flush.c b/tools/testing/selftests/netfilter/conntrack_dump_flush.c
+index b11ea8ee6719..e9df4ae14e16 100644
+--- a/tools/testing/selftests/netfilter/conntrack_dump_flush.c
++++ b/tools/testing/selftests/netfilter/conntrack_dump_flush.c
+@@ -43,6 +43,7 @@ static int build_cta_tuple_v4(struct nlmsghdr *nlh, int type,
+ 	mnl_attr_nest_end(nlh, nest_proto);
+ 
+ 	mnl_attr_nest_end(nlh, nest);
++	return 0;
+ }
+ 
+ static int build_cta_tuple_v6(struct nlmsghdr *nlh, int type,
+@@ -71,6 +72,7 @@ static int build_cta_tuple_v6(struct nlmsghdr *nlh, int type,
+ 	mnl_attr_nest_end(nlh, nest_proto);
+ 
+ 	mnl_attr_nest_end(nlh, nest);
++	return 0;
+ }
+ 
+ static int build_cta_proto(struct nlmsghdr *nlh)
+@@ -90,6 +92,7 @@ static int build_cta_proto(struct nlmsghdr *nlh)
+ 	mnl_attr_nest_end(nlh, nest_proto);
+ 
+ 	mnl_attr_nest_end(nlh, nest);
++	return 0;
+ }
+ 
+ static int conntrack_data_insert(struct mnl_socket *sock, struct nlmsghdr *nlh,
+@@ -207,6 +210,7 @@ static int conntrack_data_generate_v6(struct mnl_socket *sock,
+ static int count_entries(const struct nlmsghdr *nlh, void *data)
+ {
+ 	reply_counter++;
++	return MNL_CB_OK;
+ }
+ 
+ static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
+
+base-commit: f462ae0edd3703edd6f22fe41d336369c38b884b
+prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+prerequisite-patch-id: 9db2d20be98dc44731d8605a3da64ff118d2546d
+-- 
+2.45.0
 
 
