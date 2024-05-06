@@ -1,283 +1,383 @@
-Return-Path: <linux-kselftest+bounces-9549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7488BD495
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDAFE8BD498
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 20:30:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 220ED2846B6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:30:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7424A284A71
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 18:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD6C158D7B;
-	Mon,  6 May 2024 18:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E37156641;
+	Mon,  6 May 2024 18:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ibozrGuk"
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="m17UP0zW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2075.outbound.protection.outlook.com [40.107.236.75])
+Received: from mx07-001d1705.pphosted.com (mx07-001d1705.pphosted.com [185.132.183.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BB8158D6D;
-	Mon,  6 May 2024 18:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E31182CC;
+	Mon,  6 May 2024 18:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.183.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715020193; cv=fail; b=oihr2uqMBO+4unrkikNXXH79cXQHIdzZjNmwhDRLbvKHmaGkbKCtMTVkJ2fk5bi1beQIIf0GHOn8rsv0A0gymB/l4zz4/PV1/IsaR6UGLdUV5071u4DwPfikR8Dph3+gho4rLXVm/QsQynJzQo8J8l4Q1w6ZO8irCohGmyrk68Q=
+	t=1715020247; cv=fail; b=S9ALc785/3ZBJwb5S2ojXJ4ZaRgmnBAAIzkXwMbkiLbJJZLsb0TxJs39Ahu3oxT63hmSWt53Xi/LyyV2+A4UihDGPdgM/6UskW8fNylHK0pC/mMXK/LYOfUMuGc8/jVOAE4FUNA6BTzoK6xcf/MnIZEJjE04qO4d0LChm8FBKgM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715020193; c=relaxed/simple;
-	bh=TpqhSqrrhh0dRcR4ha5WZNsrUavrqEwWqOlUp8X7Viw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XOsRrfktk4JK1+VntUjmV2paVCQlYhGHVih6EJSBcPj/u1QK29vk+TPSU94aEV4w0V2m/4Zd11koafm7bm3giDVIcY0qGXMBPpS/iB2gnLTt7mkQsiZdmk+bnV2+rezmZhs5n0OsPYykNqXmsuQn39ijqJ2xtWUFbMD/e63b7JA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ibozrGuk; arc=fail smtp.client-ip=40.107.236.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1715020247; c=relaxed/simple;
+	bh=pDjpyAmLc0tYNXUAcuj+QKo3N4dZ3uW0gIlKtClJeRI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=fN15oOdw2PTuJttXDKxy06WpAA+E33SHEB2o3BfzuQCQEU+rwEYVLPDV4d7m4Sju5z4xtiD/YJAkNlapArcIcQBGvkCGpiUQFevQhNu0bRmnmG8xlvxbgcBN7GmrfBwU+19Od8RNqxYIwzdJIf8zSansVharHvjpC9r/Q3Yz4x0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=m17UP0zW; arc=fail smtp.client-ip=185.132.183.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
+Received: from pps.filterd (m0209326.ppops.net [127.0.0.1])
+	by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 446HFLLR006231;
+	Mon, 6 May 2024 18:30:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : mime-version :
+ content-type : content-transfer-encoding; s=S1;
+ bh=5EOZV95uEGv4yXFEEMtFfIfQxHEwVB7mWsMi9ULm/Do=;
+ b=m17UP0zWJRiA6Yd7NJh/cI6DVSMFEb1AgmZGuZiurDn8Jd7S7e0MXd0eK+tAGvQJ9bfA
+ ac5uy4OFvqqi9q83rbvCklVbgovVqLqgSIUcGaZA0q4y/IkPYzte5eL5IJ/terPcWznQ
+ WtEFi6PpkVDYalxyJ4CmdybxjVTtkZWKzO8QZ++4zDWf7Bv8whTEd2EcwGF+h9QyksKB
+ BpSRrb4sha/0VkgDxEfKYCzLAvAwbROtDSN+aZ/mhB4OsM9lKv3KGG3nT6YxpviDeiti
+ MPablUfUrdDiEgkF25Yp8KqeijGrePjHRL/A3uwtyYcXKUqmbI+eHatYjtvplxynsgCx Aw== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2170.outbound.protection.outlook.com [104.47.58.170])
+	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3xwb7ht0u4-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 06 May 2024 18:30:07 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=niXsNyW1HnR8U5/VvfXQLrP1O0CVEJMstPOmTKT+Q8l+E9FUHzEtQ3Au9iaZg7ZiaG7FrmNGFt/vSPYbpXVjklJgX0fdx2XTqWNajGT9YlBuDfltwqm6m56fujW66qrW3hu39UOQT5697+8jqoCPG41uxoBJ7uBniydHEYqQy+faAEv//i0cl/3yhryAviYHMnLnO1y3YsjFtL6xL+RPFDT4UaWFM5qUxRySx/CNSQyQweEqtEAvN72s3iSLglVGn0xqInssD8mT4lj8kd0xebJp0cNa5LPhq52+M8Yo3NAQSW5/wQf4D3VOzhU7s5kg/5EeBwVguExNBpDY4g+Wkg==
+ b=luno1VOgGAnkTYZ4zoXCFxnwhsZMjOlDYonLaHQv9cPgN3VlKL6oFK9gN6LaUwWh0R/mPmctuTHuyox18pmP/+SI/+axDBPZBgaEM0+LVrVwPJKcMomNeA1/JU5srSUIuluafylGFYr9c0xOxQPFboxP+qOKz84LaMXHzlX35dmtCYQe/cab8CI2llpZGYtOeUEwHgcmD2henucVOpZ0J0v+28g9Tmhmp7N8bQdoa0dLbMPBjpYAOV+5PzPsMIcVYJrCoiSqTWgtRd9PLkIFXDkw/2gAxIOxhGZkwjuCABaSj6srZOpk3huHKZn5/jjZWITWSFVJedmNorQF0n+qgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l/u4hY935hJIwxdqw9TeO2KOJWhG/kbsIbNV0pSzxPU=;
- b=P2e+vvzYOB5WcL66TByWnNUKcQbGlm0ZCUzjjSWpjrGyaCcTi2xmCFlHrsGpAbhSEIjRy9JGI6gnsQEaD24FhoOKTaVTlQAWogM0XPlQknXQGTnEpIMAKAAS2Z5nhctFsrPfyjvuQXouyR6FoswcykrvGHDFl0vT/xoDT0LbcT5UV7bMmZojrBhhDUu6djNiPtBWEnqM6PGSWQaUywh0P8jY1Sjd8g4dk485z62iee3+V2NJ4WosqucBZ8H3Dfmn7vRUbgwOo0SlZDjx4sFHInKhuTFT9jdCzhJtq6wFRQDVavxlw+msAxM4H6CCKaVk+oRVEYTbj/j8CY/SL2yiTg==
+ bh=5EOZV95uEGv4yXFEEMtFfIfQxHEwVB7mWsMi9ULm/Do=;
+ b=IyVEIkLG2K8GCtHXyqtEjVB60QLtIpmGzA5+wIbtOnKjt4uA9OTEUqrOxJpkJx5Vke7fIAIlh/E0Sg7GpMHdQJihnaxCM7rmiYqB9BEUmGefBQrijI5dGntAke3YlG2L6kZZap9hCKA471JAHLTorRTCqpsKdCwISJVq1GDw7/e5/+0lRU9jTCsE0Ja90yzz86cxhmtBszjLNdImX6AJLrdv/S/vM63tg4aA83QEPWNNpOw9cciJMJSl5bgHiTi02B+jMDnuA7tiCDjZisP512609HZotENcVi1zoi/83mj0bFSndT3E8sTEYQoi+gwKP56e7MJTuoSat2l/qP67+w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l/u4hY935hJIwxdqw9TeO2KOJWhG/kbsIbNV0pSzxPU=;
- b=ibozrGuk2+ixyS7cNmN3X9RBysGMgksC+eoX/QbwBHMh53A1zCpwUguU67UIjRxTyEbiAshPNte+GSy/W1GKNzwUP+dVTf3REWNdC9dmp2iS52hfnr2HdESf83OxT1O3RMysd94wqkbheMV9KBy/egQY27C/VUdgTBoxezvEgOTxvxhHHrkzwbfKxFDfJC5OF02ugJ/miT+IV3cdnLebRhntP819uLinQ1cu3GT6ftF74VAMc56LWA2nkNP3GQ98FutgTVIZGcTNBlVS/Tcqt6EMUY2KNgPXL+pzCCEqwFlts30+WicYyb16f/ji6kC9WSagCyifG4yUL811xzb66g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by CY5PR12MB6276.namprd12.prod.outlook.com (2603:10b6:930:f::6) with
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from SA3PR13MB6372.namprd13.prod.outlook.com (2603:10b6:806:37d::13)
+ by CH3PR13MB6996.namprd13.prod.outlook.com (2603:10b6:610:20c::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Mon, 6 May
- 2024 18:29:46 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Mon, 6 May 2024
- 18:29:46 +0000
-Message-ID: <b20d43d6-8d01-480c-af1d-90c0acd35d5c@nvidia.com>
-Date: Mon, 6 May 2024 11:29:36 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/netfilter: return a value for several "int"
- functions
-To: Felix Huettner <felix.huettner@mail.schwarz>
-Cc: Shuah Khan <shuah@kernel.org>, Phil Sutter <phil@nwl.cc>,
- Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
- Max Lamprecht <max.lamprecht@mail.schwarz>,
- Luca Czesla <luca.czesla@mail.schwarz>, Xin Long <lucien.xin@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>,
- Richard Guy Briggs <rgb@redhat.com>,
- Boris Sukholitko <boris.sukholitko@broadcom.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20240505214716.62304-1-jhubbard@nvidia.com>
- <20240505214716.62304-2-jhubbard@nvidia.com>
- <ZjjsGW314qCgpTKs@felix.runs.onstackit.cloud>
+ 2024 18:30:02 +0000
+Received: from SA3PR13MB6372.namprd13.prod.outlook.com
+ ([fe80::2dee:b93e:d9f:d7b6]) by SA3PR13MB6372.namprd13.prod.outlook.com
+ ([fe80::2dee:b93e:d9f:d7b6%5]) with mapi id 15.20.7544.041; Mon, 6 May 2024
+ 18:30:02 +0000
+From: "Bird, Tim" <Tim.Bird@sony.com>
+To: Wen Yang <wen.yang@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrew Morton
+	<akpm@linux-foundation.org>
+CC: SShuah Khan <shuah@kernel.org>, Andrei Vagin <avagin@google.com>,
+        Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>,
+        Steven Rostedt
+	<rostedt@goodmis.org>, Dave Young <dyoung@redhat.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] selftests: introduce additional eventfd test coverage
+Thread-Topic: [PATCH] selftests: introduce additional eventfd test coverage
+Thread-Index: AQHanvs9FAxJ40hn5k6c626r1bhaQLGKiF0Q
+Date: Mon, 6 May 2024 18:30:02 +0000
+Message-ID: 
+ <SA3PR13MB6372229283A34550FD52F913FD1C2@SA3PR13MB6372.namprd13.prod.outlook.com>
+References: <20240505144648.18347-1-wen.yang@linux.dev>
+In-Reply-To: <20240505144648.18347-1-wen.yang@linux.dev>
+Accept-Language: en-US
 Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ZjjsGW314qCgpTKs@felix.runs.onstackit.cloud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR04CA0019.namprd04.prod.outlook.com
- (2603:10b6:a03:40::32) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA3PR13MB6372:EE_|CH3PR13MB6996:EE_
+x-ms-office365-filtering-correlation-id: 13cc71cc-20d0-4cbb-5c8d-08dc6dfa8b1e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: 
+ BCL:0;ARA:13230031|7416005|1800799015|376005|366007|38070700009;
+x-microsoft-antispam-message-info: 
+ =?us-ascii?Q?19tb3MksaZaosvgJ0nSFHxMT0TL8BGXPrt6LS4DZ5UpkrC6ovAOAkEO5bNCq?=
+ =?us-ascii?Q?4XRW+IpjqWyOlA1aIv2fJ4+Y7Dix3QcuPtAcavxcwC5fiM1n2VJQaP7Ie5ir?=
+ =?us-ascii?Q?s9do1k3N6+z48pZyLiCHPiKEgS2n+csCFo5ZnAwp5OWeEMz9j4GBIDnCjNZn?=
+ =?us-ascii?Q?RyKcvEghZ4R8fGiXjpSvENvkKYMpqQAhv8WEZr3I7O6K7OaCoic29dVJPeOz?=
+ =?us-ascii?Q?8jaZnMRUBzmEE3ILKPrW2SUlZI+5SorINBeLKAK35s11pd8uM4E30x8ku7nO?=
+ =?us-ascii?Q?CAgaASNmTwafYv2wLKrxgcE148WmpBOxPKUj7ZN3Ng/Bn5RQRLFSbZgJkZbn?=
+ =?us-ascii?Q?JjI9zBx9+fBvsH/+YcUvFWWoTEa8IhzcB9HIXH+rv2QURlhHDuydIN7X2+EG?=
+ =?us-ascii?Q?LbrBUgPpM42FZfgIIqrRhvLaBmvFAtZQj9wTfTEpEVFSt8FfW9sua4obl41o?=
+ =?us-ascii?Q?Z7Y7GbrlClKYXlC8t34LXqwLucaMQEml+BXgxr7vKbaMDN2vsOQZzhKqy4BT?=
+ =?us-ascii?Q?X7rsDV3XqfPfPilsxG6rPYYbQ9PB9ALPenZP1VpiZSsZEGNd7fw+0cCxebHI?=
+ =?us-ascii?Q?04/CzSRVPz6ltdIvaYY6bJP6ATwpwl1uztCwfnb8K1PuzztpoX49Lcp6GUWe?=
+ =?us-ascii?Q?4C/H/xxSIKWxKir9wDbS4A2wyIU4nuYjUqWo1JQEN+P1S8rTJDUOeSMzEw8s?=
+ =?us-ascii?Q?K0QmWqTrLr1mnSjDDQNrF8QgJK6jm4msiCaT6jvE4YCveS414J45PlTFrhWF?=
+ =?us-ascii?Q?7aDTKngdZMg1Hy0d/B1heqpflJV5XUIPwgVVngi08EykPTW/qlLZdY5UinJC?=
+ =?us-ascii?Q?zgiuwd+LLvxAXZlktK3yGyDp4v17bEsDYdcEvLX52PmNFqkhVDFYVhlvJXIT?=
+ =?us-ascii?Q?7Sj8AT8EOTCQJWe1tIksARBtZgGWyWgW7HHEuIzI4G8o5yHCkBw8S1NZESp2?=
+ =?us-ascii?Q?LQtgWZLSh7/ziPMgUCG+4ZYvFM1Di8m+2DwcYy+T1k+DLucoMvVMqjioIc2Z?=
+ =?us-ascii?Q?nSzR1K+Wx1vBa9WrlJHFvqEq4oHYy9qTCacGNMzfeKZV7dRITKNW/CKfRTst?=
+ =?us-ascii?Q?nOPGZAeejp1Uf+Hhzx/x2tHlvhM9HnzkWIDJYM4K8otipDZbtQfF2vRrSluu?=
+ =?us-ascii?Q?JNZ/q5n+EF5uvPS1eHKzsDxidguiKSux/1a6Pb1x4kLdVLJ7nDAtW3bJZWQS?=
+ =?us-ascii?Q?mbhin23V+Qhb8whJgUemXRMf45VbPqtnTLCg3pca8RnCLJV8YzztprXN3NsZ?=
+ =?us-ascii?Q?a1lV3irFb0w9SnDJm/cmHxLR2Zt2ohNHndAqAfGpqO3ZQK+vx8stoLh/ahm3?=
+ =?us-ascii?Q?kQc6ac9IVtRObxF5KRqKxOmXnAKBI0R+WEK2r/o6U75NHw=3D=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR13MB6372.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?igNFPOHZcDaFnrsf6Eqqu7gk59fb7JAqpXqrUhefdAOknD1c+vV09RkC9jdu?=
+ =?us-ascii?Q?W+sT6ryjUv+Tgdwasrqf3LvmsXb8VpBHWKgF7rbSkIISoZ2hxFLn72sgomd0?=
+ =?us-ascii?Q?bIszHX541ka0OV/3e7C1g+rZ906d4flcqVpFfn8PhcIItZcWKdKpQJBYn8EL?=
+ =?us-ascii?Q?GIFfwUC8bC4HvFkTTXXH973JV895bfNjl/+tKnDl0SGkDCn7qwY+2f4vb9+s?=
+ =?us-ascii?Q?xpWbi9vltpF75m7o2L7wN74QsFYUO9wB4rSGSdX61ItNXhYJjlnrPuDRYkyL?=
+ =?us-ascii?Q?B+cKPANhRb/M7pXwH4xkQuC4YwY+60ieoTEAlR358JL4ZNxHwQFFMbcS5943?=
+ =?us-ascii?Q?bbX0IUgYAFVmnfVzWt0mVAnKchz9PxnDN0I+hDtruV6YehKNv090pWdAXr8u?=
+ =?us-ascii?Q?FjBIvT9jvdiiEZL31sjpc3l6pxYWhSy1IvsE6dEvAw0XXV5RCVeS296mf0vn?=
+ =?us-ascii?Q?mVxkH0vQfROFsPLElW+I6CRQbhmpp9UNKXjalxAdTNbX+janDsuONaKef/Op?=
+ =?us-ascii?Q?szCnb9brAPTgaTsO9oqrLgGfMRiurhXbTaJCvIGw4qaVZ6cNo/wcGb7zl56k?=
+ =?us-ascii?Q?Ky6YwVwZ3Tlkkp6XyUwaqRw3XQX8EHXFSg9M8jWT1K38YBdYtIndf5TPgZ85?=
+ =?us-ascii?Q?PdomJ+tXr9P7d0AHPVi6D9mauayWoliQu0XPRBKNfRrSI7fBtBTwXVa65PVW?=
+ =?us-ascii?Q?0Zj8YuE4mgv9sPAO7G99SDOAEN8izqLEpctYgrm5b86rl6Pn0fppccsB0rQL?=
+ =?us-ascii?Q?MYDChfCprAOZNIn840ygNl5/efn5DWByQTZgLdEh7Rb7pzXZw7s730Uo0/5O?=
+ =?us-ascii?Q?LkzSsnCT1w1F21L5tdTqPdOOTZCKgVklXSHd7L5znTQEhMeHFTRWUMd9Xp5Y?=
+ =?us-ascii?Q?mhuT7mRngzRDbhlE+YaOgClphtJEyZGLX/duX1paGLR5bTUU8+Wb0Agycpc6?=
+ =?us-ascii?Q?26S9MNI+qmHinIYD14R08WVMzh4eO6fFKN6kAfQqhIAYsxAlclSH3dpPLqDc?=
+ =?us-ascii?Q?9Ye+A+tMOE0dDvK2quUDPoeEuwpGM7URMzZ7hqnpqUVKwyS6Tp7KJ2dDTxvf?=
+ =?us-ascii?Q?nBOHkl8pY+sMbBcp/zhRAqMbhwpjatns0dHiN0clst0mxMw0AMGTZIWivNNW?=
+ =?us-ascii?Q?q9eBL/IH9pSDbe9IZyHyNlwrlZo6/m5axCe8iKQxH/T1EwG3FW5xXVQKUPTX?=
+ =?us-ascii?Q?HkA/elnpc9XuwUtlhNr/CdWjRRclHzGS5Nh5mDl/WPYKifS5SWDfxqgdlxRu?=
+ =?us-ascii?Q?NHvY/m1q7pcc4UibYpVv4rnFpI2WJ0q79sMXe7y5T6mC4qz0LIcpwlXeMnzw?=
+ =?us-ascii?Q?aVN4G5JqbV08LGuW9IZVjJIW/xHu9rgoMMR4euIszABvLt/TuSm52B7tJqyR?=
+ =?us-ascii?Q?hGHvxRxWMe7HwYxElBGi7hzPFsA7neix6xIeaqcpHrilAhBd8LSgd6UWy34W?=
+ =?us-ascii?Q?Fqr27CWf3yMdGtPm1TDvF6J5I5fsIm0KQdmRbTpxGmJrgPjr+qC+9UKlsb7W?=
+ =?us-ascii?Q?bUhL+3Si5ZsaG3EWp8oGG9uErteBCmH4589K8MORx6fUmKQnfccqbfQweF5h?=
+ =?us-ascii?Q?H8rHYY2X3AYhmBs6geY=3D?=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CY5PR12MB6276:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93f365ad-1c64-453d-5af2-08dc6dfa81d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?djF2cU80c3VRdGdnU1B6UHdrZ3J2RXdTSm1zcHNucGhsQUFuRkt1TDkxSVUy?=
- =?utf-8?B?QzlaTEw2Z01hbVhTQ0d1amZMOW5hc0ltUlQ5aGVuT1d3aGVIcGk4Uk5vNnhl?=
- =?utf-8?B?b0NLMEc5VU1SSy9kcnZOd1FDdy9rOExMM1RDRUhqUjEyRjJNY1d1TEoyZnVu?=
- =?utf-8?B?YjJpR2xOY0dpWXRpWnBrdGV4UTZlVG5FeUtQOTh0cVB1Mll6RXZZTTlySThB?=
- =?utf-8?B?ZTI2bTczU1MyQVp3TVhuZzQ5RXJ0ZUJJNGprSEppbDVMQWV6WG9mRFpEWlc0?=
- =?utf-8?B?TllZb2NQU2UzNEZkUVVtbGxvVjgwd01OVVFncEhnMDRwZ2pHM1BZcitOZGhE?=
- =?utf-8?B?Z0FXdkI3MTh5L0dHM2hLVkZ0TlNkaEVpcDBHTy8wU04ya3A1c2xFamVjcTRX?=
- =?utf-8?B?M3JGN3NLaE9BbTh4ZkoyS2RuSGN6QWp3em90b0J1WGgyVUpDYkY5eTIwM1Jt?=
- =?utf-8?B?eS9uVHFQYWhCamNKRm5kK0drdnl1YnRlRUoyWFVCN1h4QUxkSmFYdWZucHpJ?=
- =?utf-8?B?UEdNdTZBVkFQU1BRK2EwOEdwbHVFOVVqM3czM0J4UFNSOFlFS0RpUXVDejlu?=
- =?utf-8?B?Q0ZKazdsRVpYZ3QxQW1tRmQ1T3A0UVVPbWJ3a2NGKzRpN1pKeElVUXVmbDNk?=
- =?utf-8?B?akFnMStHL2trTUl1OUp0WW5YTkF4WjFGNDhCSkFUZzF0YnlGVEdVUUNUYk9t?=
- =?utf-8?B?cnI0cEpLc3ZqUG9LU1cwbzVob3kxQU9ZUElaMlpSMjF3MG5RL245NWxBN1M0?=
- =?utf-8?B?bmxSTjlqT0t5dXBiRk5YdDBMVVVTeHFmdjNiQktpSjhEdlNxM1Y5cHlEWTh5?=
- =?utf-8?B?ZUpWVmphbVFNVktlQWFCbU4xdkQ0d2lsdVdZN1N5RmE2dGd2NDBnbTJ1ZVlB?=
- =?utf-8?B?WW5WMHJUem53Uzh3UDRtampBM0dXSDVTVERqZ2tVRTY1SG9vdVUxekR0TEho?=
- =?utf-8?B?RmlyMm5NcnYraEJjN2h2SEpMZnRwVGszU0M0MlhoTkN6SjM5V1Axdnkzem0w?=
- =?utf-8?B?dGVRUXBzZzljMFdIU0lCb2s5b1NNQkJyNGxEY2JlSXJHNXJBODB0ZVlxMVZW?=
- =?utf-8?B?aTBmbXdiS3RkL3paRjBRbERyTW9IdHhkRll5aXJPTjFZR1FzampFb3NUNU9C?=
- =?utf-8?B?cndESnJ1YjlBZXhZRStQWmJ2bER5TDR1bk42MVpINVNKSFRMQ3FjYXQ2K0Nk?=
- =?utf-8?B?ekRaSStqb04wQkF1cG11VXYrcmkxeEgrRXVDazczWGJVVWxvQjlKU0VWdDFP?=
- =?utf-8?B?NGhNTWQyQWsrdnlxSnlDM0F3TWYydXNXdTZMbWdjVkt1MkF1cHFUcFh2MWcr?=
- =?utf-8?B?b0xybHdDTldreUZWQ3FCemRMNFZMcllwVEZJdXc2bGhvUm1JaThzTmsvbm5m?=
- =?utf-8?B?WTdFSjg5MysxVitLYU01d2dTTG1HWUsvSXdJZlR6TmdrdzZibCtCS3JQLzhw?=
- =?utf-8?B?VFY4SVNNWlRnaXZUZnVlaGJzQ1FhajRpbGhqRlV4cXNDbGxXaXpMMEdhSk9J?=
- =?utf-8?B?bjF5elY1OTBubUt1SXdQbklpZUNTNUNnYkoxWWxhNkc0ajU1N2F0VTZvWVZM?=
- =?utf-8?B?WUpRY1hraUw5L2kwd2xCQWQveWNOUGE0blJYb1pyM3BGZERDTm1vaWhJOVNs?=
- =?utf-8?B?L0pPWTVISjZuWFNLQzFKdG44SzRoUXRuMUxLdUtqZHFnSzFZWFI4blpVUTQ5?=
- =?utf-8?B?YWJYaFM5c1pyZCtodkl2bW9RaTZuVnFsMTRTNkZkRm1QOHhvekhjbGJnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dHBwVTNKN1NSZjBCRnNxMURkUllvblV0c2RhNnVJOS9mVlljS1ZPYUd1a2tl?=
- =?utf-8?B?SnJDWmRwTitkZERGdGVBNnBYL2prRzBIYjhldjk5NlhjR2ZuTmUzZFcxRCtn?=
- =?utf-8?B?SmdvK2VLNVRVa0dXTUE3MW01RnIxRU9ZM3RuVHRZODdEQThmZ3hxYlpZZVFT?=
- =?utf-8?B?VVFFOHRSWDdaeGcxYWs3Rzhwcm90U1V3UHhLN3VPUUdGM2I1NkFqRWgvcWI5?=
- =?utf-8?B?d003bnNXRG4yOFErS1lsSUp0dFIzbUtkVTJPSHNpaUg3THlvbWwzTHlNcmVQ?=
- =?utf-8?B?UDVLdlBZMzJTdEEwUjFWMi9BZDJLRThxWXRnczYyUTZ4U3ZtVnhqcVF5YnNP?=
- =?utf-8?B?aHNBS3B4bUU5TlVLODFsVmhrV3l4cjJ1aUJSTUVHdmp0Rnd4b2RzYmRwRW5j?=
- =?utf-8?B?TTJRVWV0a3NUL0lPNTB5TEQ3Y09zdkFOcmRmZ2IzOVMya2tXVDZqamtKaHM1?=
- =?utf-8?B?eHF1aXJ6Qlp3R212U2FNdk5ta0dtYjE2dnovejdoRWpBaGxSWUI5WFo1TGE3?=
- =?utf-8?B?SXJxaUhIdHdCWHkxOVVCL0pNb0VQQm12MzBKMFlLNkZCbFhzVHc0QVNqc3dN?=
- =?utf-8?B?OXh2cmJYakQwM3EyRTZQbUFmU1JQNE1YMXZYTXVpQ0FzcjcyMlgrUkZrUTZX?=
- =?utf-8?B?UGdSOFVGRXJSZkFIOHBEdktzR1lsMmRLcnFhU0ZKUExxNmJnV2JFMWxveWFh?=
- =?utf-8?B?SE9HTDVTUk9TNmxBVnRocVlVRHRrbDV1MWVwZG5NRkRNSEhSU1ZITU41QlBk?=
- =?utf-8?B?cXFsdWl0WXFJNHFwRWptQTJHSGFrUFMzdWJrQS9ZNzhmQzBtQ255U3U1U1R4?=
- =?utf-8?B?d2hqZ2ZrTFVlQzFRb3FFYnBLOUVDMU1PMVhnZFE2VVdTbHNYUzQyNXBEVDY1?=
- =?utf-8?B?Z2p3RTZOaGxPcUpFSG9uc1ZpcnV6M2hCdm15UTltZGVLcytBcHdZalhSZ1F0?=
- =?utf-8?B?NDIwN3gxU1JEVWhYdGhjTGMvMHV6RGE4OFJtY2JCV0RzU0kxTUsrcnkveW1x?=
- =?utf-8?B?MmxkL3Q5clIyK29vdDZkalRidWg4ZnpiT3F6UVFVZHo3MzArZTR3QTJVNTZL?=
- =?utf-8?B?TVpKY25tVWxyU1lVb3hrdGlXTXZSQXZYbWRBb0FFZUw3ZTZ0bWdoWGszdzVl?=
- =?utf-8?B?SCtOLzJYaGJuNCtSTHBOSTBVamVwM0xjeGRBU3BrTUw3UDU3ZU5FNlo3c0hH?=
- =?utf-8?B?TW0xY3l2d092VkMxSW1ETkF6c0JXR2lidTBoQlFSVXZGKzBMMEZrL1RaYk53?=
- =?utf-8?B?T1VxQmhENTFSQmlkeEp1cHpjZnV4YVZablNLWndaUG0yUjJISTBOTnhuUWh2?=
- =?utf-8?B?ZnYySXJRWUpVYXlGbjl6OVFqTkY2a0FRZUxZMEFSZmdwUWhRWUt6NThpd0h0?=
- =?utf-8?B?THNDa0JqbER3UXZuNzhnRWtmRnJnMnBVM2EwYmxXUWpLNlE2TEtkYksxN1NG?=
- =?utf-8?B?V2VNUjY3ZlJaMVcyb3hRa2duTHZrcjQrRXZPMG1PVmZxbC95Vm4vcjdaVUUy?=
- =?utf-8?B?RzFFQlNIZE1uS2tnL0Z1VHUzbHk1ZlBCN0hQa3VHdjVVeWhhUUJWTzl1a2Ny?=
- =?utf-8?B?dXVtSm16cm8rQzRsd1pKcXNqNUFRYlVHUHp2TTZad2ZwYzF5WUNuUkpLM3B3?=
- =?utf-8?B?YXZSa0pFR3RZTWZIeXhKaGhmUzB1dGpPTEZ6aWozNE9xaHVZY2JjaktJajV3?=
- =?utf-8?B?MWtrRXlmblJlYzZqUzJiYTkwbWZrNUpCWTYrNGVVL3JUd0g5Uk1KdlNhdVUw?=
- =?utf-8?B?RWxUNmlhSkZ2dnRVWU5xSVdKbUszbVBQMlZLbzdOa1Z6OWNuL0ZadTdDL2Ex?=
- =?utf-8?B?UWVPaEtYRmljUzMraTBXRUJ4R0R4NWZsZ3IrN1BhcXpaUW41ZmFzQmd4dVd6?=
- =?utf-8?B?WWZyT28xeVc2VHBRSFMyN3lyU2pGZlpvMm5yOHgwK29uQ0FGZzI2SGNFT3dl?=
- =?utf-8?B?TUdtbjlHTHU5YSttZjVrbVZLbkNTYjFERWlqdFowY3J5TTVPaDR5NUlRR0RM?=
- =?utf-8?B?V1FxdVMzcE5SMFd5b2Uvc2Mwci90dllxOVhFYTl0N204ZDVFMytVMHFVZW41?=
- =?utf-8?B?MEVvQ0xBVVlFSjljRGR2WHRMcFV1VElkOVBpRU5TcUZaWVNBT2hDRmc5VWFm?=
- =?utf-8?B?cGY4UitVWmVRUDRvWTBXME1OSTZRdkN1SzBON0pjS3dDY0NBbk9CTXBPVXVs?=
- =?utf-8?Q?1D7ogjlmLDKo5/1ir4fuaM0=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93f365ad-1c64-453d-5af2-08dc6dfa81d1
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	7RJvKpM/LaCr3e10VsRAdt/FlpJx7EC+zAD2ZoUKjXqwtflhWIS3eMnVGenb7kWKWiXfF3fpF2+YRrbt9QhCtSB5IvsR+PPNqBqTkLwOFdGFkaSMTPLYrpfiQ4VwAfV6vy1pD5aRAzx7ofsYNMi1R3gNWJwYYRrrSeBopVvjUJDq8tbFvICYjanoInhifW5znhIxQd3RvCIVMgSQqkRSII73a0hQsfhwmqSxJtjVuogwyqrYo1ImPZjKgoRlc1FYCUDWeh8r2OxoiDEiegnSeMS5LrgdozYwpvzrzet5wa5HXBTk8GNyAMbImtiLEGlqYp0Gr8mg/VtJPp+1vmYYUP6qYs72OYr0cT+JADTJVLka6rzw/Dtn9MGSAlTl6PEIei1EZRRLzh19wVEy20yNFWIfo4GINyNy9hhgsVjlJG2pyYYyN61/0B/tyjp0pGKIOmkAXQexEgL7Xa594L5NDtgtzpI5ub/9HkNcpC/fS0CwpsQALgCI/LnC6EhuF+yd8U+EmmwfxGVEOsxAf9eQGW9mAwlzrCkLfXTIbqmQRiP7a+JddoSNUr2SDLwAfH6tCHD94FrZaVLup4RYGm0qCFdGsy+K3lC+hXLrfwOsth20Fss6Uzlff0nqUxExXd+p
+X-OriginatorOrg: sony.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 18:29:46.8118
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR13MB6372.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13cc71cc-20d0-4cbb-5c8d-08dc6dfa8b1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2024 18:30:02.2434
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d+FkiTWesRiZbgjS2z3y/OWMohOoeaMUhVb3YG9uDyx6zh6eqUNpS8Cb4hohQhhFdZoSt+LUf8k9OI8XUocCqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6276
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FtsWZYJf8dxqMMPWQ0MUBlW/g1iQiY/f6V2NFlyMshYF0g33itq5/NmSl3N6PBFSYeaKDCU01I+e3uWZGNGTIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR13MB6996
+X-Proofpoint-ORIG-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
+X-Proofpoint-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Sony-Outbound-GUID: -IE7KEZsgApLh0oMp0Og9J3wziULzeU8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-06_13,2024-05-06_02,2023-05-22_02
 
-On 5/6/24 7:41 AM, Felix Huettner wrote:
-> On Sun, May 05, 2024 at 02:47:16PM -0700, John Hubbard wrote:
-...
->  > @@ -207,6 +210,7 @@ static int conntrack_data_generate_v6(struct 
-> mnl_socket *sock,
->  >  static int count_entries(const struct nlmsghdr *nlh, void *data)
->  >  {
->  >         reply_counter++;
->  > +       return 0;
-> 
-> Hi John,
-> 
-> This will need to return MNL_CB_OK.
-> Otherwise mnl_cb_run below will abort early and the connection count
-> will be wrong.
-> 
 
-Thanks for catching that, I'm sending a v2 with that fix.
 
-I was thinking about it, and expected that the pre-existing code
-appeared to work because the return value was some non-zero garbage
-value scrounged off of the stack (or %rax, for example on x86).
+> -----Original Message-----
+> From: Wen Yang <wen.yang@linux.dev>
+> Add several new test cases which assert corner cases on the eventfd
+> mechanism, for example, the supplied buffer is less than 8 bytes,
+> attempting to write a value that is too large, etc.
+>=20
+> 	./eventfd_test
+> 	# Starting 9 tests from 1 test cases.
+> 	#  RUN           global.eventfd01 ...
+> 	#            OK  global.eventfd01
+> 	ok 1 global.eventfd01
 
-However, just a quick test showed that *any* value (O, 1==MNL_CB_OK,
-or no value at all) allows the test to report success...oh, I see,
-it's reporting PASSED when it really ought to say SKIPPED:
+These are horrible test case names.  Can you please use strings which indic=
+ate
+what is being tested, that are useful to a human?
+ -- Tim
 
-$ ./conntrack_dump_flush
-TAP version 13
-1..3
-# Starting 3 tests from 1 test cases.
-#  RUN           conntrack_dump_flush.test_dump_by_zone ...
-mnl_socket_open: Protocol not supported
-#            OK  conntrack_dump_flush.test_dump_by_zone
-ok 1 conntrack_dump_flush.test_dump_by_zone
-#  RUN           conntrack_dump_flush.test_flush_by_zone ...
-mnl_socket_open: Protocol not supported
-#            OK  conntrack_dump_flush.test_flush_by_zone
-ok 2 conntrack_dump_flush.test_flush_by_zone
-#  RUN           conntrack_dump_flush.test_flush_by_zone_default ...
-mnl_socket_open: Protocol not supported
-#            OK  conntrack_dump_flush.test_flush_by_zone_default
-ok 3 conntrack_dump_flush.test_flush_by_zone_default
-# PASSED: 3 / 3 tests passed.
-# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-As long as we are looking at this, what do you think about
-this:
-
-diff --git a/tools/testing/selftests/netfilter/conntrack_dump_flush.c 
-b/tools/testing/selftests/netfilter/conntrack_dump_flush.c
-index e9df4ae14e16..4a73afad4de4 100644
---- a/tools/testing/selftests/netfilter/conntrack_dump_flush.c
-+++ b/tools/testing/selftests/netfilter/conntrack_dump_flush.c
-@@ -317,12 +317,12 @@ FIXTURE_SETUP(conntrack_dump_flush)
-         self->sock = mnl_socket_open(NETLINK_NETFILTER);
-         if (!self->sock) {
-                 perror("mnl_socket_open");
--               exit(EXIT_FAILURE);
-+               SKIP(exit(EXIT_FAILURE), "mnl_socket_open() failed");
-         }
-
-         if (mnl_socket_bind(self->sock, 0, MNL_SOCKET_AUTOPID) < 0) {
-                 perror("mnl_socket_bind");
--               exit(EXIT_FAILURE);
-+               SKIP(exit(EXIT_FAILURE), "mnl_socket_bind() failed");
-         }
-
-         ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
-
-...which changes the above output, to:
-
-$  ./conntrack_dump_flush
-TAP version 13
-1..3
-# Starting 3 tests from 1 test cases.
-#  RUN           conntrack_dump_flush.test_dump_by_zone ...
-mnl_socket_open: Protocol not supported
-#      SKIP      mnl_socket_open() failed
-#            OK  conntrack_dump_flush.test_dump_by_zone
-ok 1 conntrack_dump_flush.test_dump_by_zone # SKIP mnl_socket_open() failed
-#  RUN           conntrack_dump_flush.test_flush_by_zone ...
-mnl_socket_open: Protocol not supported
-#      SKIP      mnl_socket_open() failed
-#            OK  conntrack_dump_flush.test_flush_by_zone
-ok 2 conntrack_dump_flush.test_flush_by_zone # SKIP mnl_socket_open() failed
-#  RUN           conntrack_dump_flush.test_flush_by_zone_default ...
-mnl_socket_open: Protocol not supported
-#      SKIP      mnl_socket_open() failed
-#            OK  conntrack_dump_flush.test_flush_by_zone_default
-ok 3 conntrack_dump_flush.test_flush_by_zone_default # SKIP 
-mnl_socket_open() failed
-# PASSED: 3 / 3 tests passed.
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:3 error:0
-
-?
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+> 	#  RUN           global.eventfd02 ...
+> 	#            OK  global.eventfd02
+> 	ok 2 global.eventfd02
+> 	#  RUN           global.eventfd03 ...
+> 	#            OK  global.eventfd03
+> 	ok 3 global.eventfd03
+> 	#  RUN           global.eventfd04 ...
+> 	#            OK  global.eventfd04
+> 	ok 4 global.eventfd04
+> 	#  RUN           global.eventfd05 ...
+> 	#            OK  global.eventfd05
+> 	ok 5 global.eventfd05
+> 	#  RUN           global.eventfd06 ...
+> 	#            OK  global.eventfd06
+> 	ok 6 global.eventfd06
+> 	#  RUN           global.eventfd07 ...
+> 	#            OK  global.eventfd07
+> 	ok 7 global.eventfd07
+> 	#  RUN           global.eventfd08 ...
+> 	#            OK  global.eventfd08
+> 	ok 8 global.eventfd08
+> 	#  RUN           global.eventfd09 ...
+> 	#            OK  global.eventfd09
+> 	ok 9 global.eventfd09
+> 	# PASSED: 9 / 9 tests passed.
+> 	# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
+>=20
+> Signed-off-by: Wen Yang <wen.yang@linux.dev>
+> Cc: SShuah Khan <shuah@kernel.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Andrei Vagin <avagin@google.com>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Dave Young <dyoung@redhat.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  .../filesystems/eventfd/eventfd_test.c        | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c b=
+/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+> index f142a137526c..eeab8df5b1b5 100644
+> --- a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+> +++ b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+> @@ -183,4 +183,120 @@ TEST(eventfd05)
+>  	close(fd);
+>  }
+>=20
+> +/*
+> + * A write(2) fails with the error EINVAL if the size of the supplied bu=
+ffer
+> + * is less than 8 bytes, or if an attempt is made to write the value
+> + * 0xffffffffffffffff.
+> + */
+> +TEST(eventfd06)
+> +{
+> +	uint64_t value =3D 1;
+> +	ssize_t size;
+> +	int fd;
+> +
+> +	fd =3D sys_eventfd2(0, 0);
+> +	ASSERT_GE(fd, 0);
+> +
+> +	size =3D write(fd, &value, sizeof(int));
+> +	EXPECT_EQ(size, -1);
+> +	EXPECT_EQ(errno, EINVAL);
+> +
+> +	value =3D (uint64_t)-1;
+> +	size =3D write(fd, &value, sizeof(value));
+> +	EXPECT_EQ(size, -1);
+> +	EXPECT_EQ(errno, EINVAL);
+> +
+> +	close(fd);
+> +}
+> +
+> +/*
+> + * A read(2) fails with the error EINVAL if the size of the supplied buf=
+fer is
+> + * less than 8 bytes.
+> + */
+> +TEST(eventfd07)
+> +{
+> +	int value =3D 0;
+> +	ssize_t size;
+> +	int fd;
+> +
+> +	fd =3D sys_eventfd2(0, 0);
+> +	ASSERT_GE(fd, 0);
+> +
+> +	size =3D write(fd, &value, sizeof(value));
+> +	EXPECT_EQ(size, -1);
+> +	EXPECT_EQ(errno, EINVAL);
+> +
+> +	close(fd);
+> +}
+> +
+> +/*
+> + * If EFD_SEMAPHORE was not specified and the eventfd counter has a nonz=
+ero
+> + * value, then a read(2) returns 8 bytes containing that value, and the
+> + * counter's value is reset to zero.
+> + * If the eventfd counter is zero at the time of the call to read(2), th=
+en the
+> + * call fails with the error EAGAIN if the file descriptor has been made=
+ nonblocking.
+> + */
+> +TEST(eventfd08)
+> +{
+> +	uint64_t value;
+> +	ssize_t size;
+> +	int fd;
+> +	int i;
+> +
+> +	fd =3D sys_eventfd2(0, EFD_NONBLOCK);
+> +	ASSERT_GE(fd, 0);
+> +
+> +	value =3D 1;
+> +	for (i =3D 0; i < 10000000; i++) {
+> +		size =3D write(fd, &value, sizeof(value));
+> +		EXPECT_EQ(size, sizeof(value));
+> +	}
+> +
+> +	size =3D read(fd, &value, sizeof(value));
+> +	EXPECT_EQ(size, sizeof(uint64_t));
+> +	EXPECT_EQ(value, 10000000);
+> +
+> +	size =3D read(fd, &value, sizeof(value));
+> +	EXPECT_EQ(size, -1);
+> +	EXPECT_EQ(errno, EAGAIN);
+> +
+> +	close(fd);
+> +}
+> +
+> +/*
+> + * If EFD_SEMAPHORE was specified and the eventfd counter has a nonzero =
+value,
+> + * then a read(2) returns 8 bytes containing the value 1, and the counte=
+r's
+> + * value is decremented by 1.
+> + * If the eventfd counter is zero at the time of the call to read(2), th=
+en the
+> + * call fails with the error EAGAIN if the file descriptor has been made=
+ nonblocking.
+> + */
+> +TEST(eventfd09)
+> +{
+> +	uint64_t value;
+> +	ssize_t size;
+> +	int fd;
+> +	int i;
+> +
+> +	fd =3D sys_eventfd2(0, EFD_SEMAPHORE|EFD_NONBLOCK);
+> +	ASSERT_GE(fd, 0);
+> +
+> +	value =3D 1;
+> +	for (i =3D 0; i < 10000000; i++) {
+> +		size =3D write(fd, &value, sizeof(value));
+> +		EXPECT_EQ(size, sizeof(value));
+> +	}
+> +
+> +	for (i =3D 0; i < 10000000; i++) {
+> +		size =3D read(fd, &value, sizeof(value));
+> +		EXPECT_EQ(size, sizeof(value));
+> +		EXPECT_EQ(value, 1);
+> +	}
+> +
+> +	size =3D read(fd, &value, sizeof(value));
+> +	EXPECT_EQ(size, -1);
+> +	EXPECT_EQ(errno, EAGAIN);
+> +
+> +	close(fd);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.25.1
+>=20
 
 
