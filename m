@@ -1,247 +1,264 @@
-Return-Path: <linux-kselftest+bounces-9541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D2D8BD3BC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 19:20:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A4238BD3BF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 19:21:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4778F2853E2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:20:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38BBCB20D1B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 17:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 384D315746C;
-	Mon,  6 May 2024 17:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB90157472;
+	Mon,  6 May 2024 17:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfwxNr0i"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p5wj2tle"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979CB157463;
-	Mon,  6 May 2024 17:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715016018; cv=none; b=gnBgBSvZEt7+OR72wdLT9X1WzVYufWeHpGBaBl9PzAicRUD6xuyHu+OEeQatEG3lyNdOHZVLfJzFs3umXeZLK2j/GndKqaRnbwTNLTJJbrtKeKsue/vi62rKUPbCoVJYiKIo6VjP+b99reUsYhP2vfoeCHYFXSyEth4JdPe/dOk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715016018; c=relaxed/simple;
-	bh=zTR4Fx+0VuqaciyKhhBIeFfsOGSgd7NnE83iq5V1HY8=;
-	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=gDOC3M7Bxplk5x2HTmGR72CFBgs+HlIzKb2LSkbkAI15du4pzBjlFNUtJvpR18bpb8sOCWakKgZt5S0B9z9HF2UWPKELt85NBESLmkCAvXLRsnwIJbFLWm11dxCOrMc8LzvvVRukycRWhFhKA54wh0oEPIjEj1TfRc8t5e+HeEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfwxNr0i; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7928d2a03e8so171664685a.2;
-        Mon, 06 May 2024 10:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715016015; x=1715620815; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D0y+XnyAvMNLz7GBeXTnyBjUN7V568BYArXNaTPpjqk=;
-        b=bfwxNr0ie7phfHeVvieJTXY40l2Irkism8J3ALFjV5WrR/exOV4Jv4nRQjLLpaLBZK
-         2KmPFCLchroJghso6lEqKf0zUyyZXci/UhO58z2cCI8tw4Aneg7RTllqv1nfIf8OUu6Z
-         NHFlRNeGg2jAZNpQH5VsfFpA8v8yr0GfqVHwrHDqr7ORdeSscEtOfdfo8BfyTWzpwQN/
-         +6WTu+uFQEJNGIvM1qc+2Sbm9EH1jq8bZoN4O1qGtCxyp135hCG/otW4uZTiLW7dqExZ
-         G3TnEnduE8RPUnMq2+deAlVg2YOlDSQmYR8u3AmmNHEMrl3iTZd3/Meno59cVJoqZsHR
-         P5+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715016015; x=1715620815;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D0y+XnyAvMNLz7GBeXTnyBjUN7V568BYArXNaTPpjqk=;
-        b=btUmnJ9HtQ+qZCgzjQmZ5Ugds22sukZ1fjCWBGtEP7FrjNV4YEYOxMnCsdpkBMDP9y
-         7j2veqpmtarD69jaY4vPhcxH5lApwSf7wisiotXyZkCuKTPcfozVGR0JFOL60R1F9fV1
-         MdaOhayLumV88QfdOfCJ7jzD61RtUultoEARVDvlJkxIgGVXzyWBSABunp1ZxIqTtb21
-         ldxpaDV9we0PCyIUQwgWWIJP6vTtzYmDQjqXIz6/iyAqqy8csC5fE+ArcV1pab30zDP1
-         A9hJq2WxkPHyTmqmRdYYzd+E6uWdFEj3ZORs/KLlpVFpAnndw9UetnakAuVO+8LsoBEc
-         M9xA==
-X-Forwarded-Encrypted: i=1; AJvYcCURtBQWIVwJdW09FIKN1fPA6Y9ezwTyRqRVi6BgnUsdp9oL3MmTsPV2HNuXWaSj6DoiYhgQnxrsEDXA9tqFq0Bp4L9vJDCjDkegVUn7Az1D1lSyGQHuh2O/jOcp4K+cZ86Yyck1N2httNoBDdUZFFVRpXcYNa02hR/0b78wysqDYRcyBIi9
-X-Gm-Message-State: AOJu0YwvZon4GpX5//KIus3k2PXfQX7U1iZSz4FPmJHTrlsy9cNjcbhy
-	a5aC9BAsAAW8pnun7rbuFaMIre95iMZtJPyrXSru/YJPOqLR9kXW
-X-Google-Smtp-Source: AGHT+IFvUdHjpr3BUQ8xBSgo+rN17aYkuc/zDYQVtz23p2qARAxsHGJL9+ZJ4GTwq2dY0hfaulgVgw==
-X-Received: by 2002:a05:620a:4493:b0:792:8448:8cbd with SMTP id x19-20020a05620a449300b0079284488cbdmr10610327qkp.26.1715016015267;
-        Mon, 06 May 2024 10:20:15 -0700 (PDT)
-Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
-        by smtp.gmail.com with ESMTPSA id s6-20020a05620a0bc600b0078ede411c92sm4068185qki.27.2024.05.06.10.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 10:20:14 -0700 (PDT)
-Date: Mon, 06 May 2024 13:20:14 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Richard Gobert <richardbgobert@gmail.com>, 
- davem@davemloft.net, 
- edumazet@google.com, 
- willemdebruijn.kernel@gmail.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- dsahern@kernel.org, 
- alobakin@pm.me, 
- shuah@kernel.org, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- alexander.duyck@gmail.com
-Message-ID: <6639114eab050_516de29444@willemb.c.googlers.com.notmuch>
-In-Reply-To: <1ed21e6d-7cbc-43e3-8933-fc40562b70b2@gmail.com>
-References: <20240506093550.128210-1-richardbgobert@gmail.com>
- <1ed21e6d-7cbc-43e3-8933-fc40562b70b2@gmail.com>
-Subject: Re: [PATCH net-next v8 2/3] net: gro: move L3 flush checks to
- tcp_gro_receive and udp_gro_receive_segment
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30C915746B;
+	Mon,  6 May 2024 17:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715016075; cv=fail; b=lLTdWMIrZOfq2V+Tk3Ri0DhXVPeFE/8X4C0g3Xslb9b33a6kceWYDE0f1LxeqdiglPdgQQc6Bv9tBt15Cx2p658BIv4s4l9az8OycMRt4qpnL8RGob/dIrdZufbf4OIteeca0RP2Nn7XHHG96jo9wWq2bRitiI4ZlC5Cys5W64A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715016075; c=relaxed/simple;
+	bh=Qklca73GcdBnNTFq8VMarp5lIURo+pjiLZNyF5G92fU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=AYftRM/iqJ9ra4dBz1rWTXdYyyfQ72r6dJ8Cal3fgIOpG/X4xEcSw6DbKAePf5QtQ4XEMpv/kHZvzhxg/+sKtV/q1qflFjKoQcf36j4nrk7896SgtYBQznty+YumrudKeJM8tmyPk/2Yj3ESYyD61eO6MO0LzJeNmhPCFl+GumM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p5wj2tle; arc=fail smtp.client-ip=40.107.220.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bnd01hWePVvGtmjEpexBSOgkeL3SgKfI1jhfyIz9GpMHtc7M0O8dmBJ9MVRwIRAZ6zBzBT7XfgohsaCJywZvP6UVLvBp5LXxIUJrwd3dvLoDyWQn3e247uTozcG+VuMuuLGZnC225R53vPHU69AGshw0OGqY8v4viihN0QPgkEejagBmvGv0EEnZsOmvyzaSDFL90P8yZs5KewHOerPeNjXRiFC9dKbxh5peND60Je7EGhkWJipF94UuzSQVsKK00lcnOAjtPY9+dMd592qtleLPvQPAzGb2ih3v6sQIzFJ9Tx3ZjWZYEh+/HCapfPV6Gs58sCDQzJYwwukWQv1AXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qx+PCMejNQHrPgDEtiVqatwTX/uBjlm54kOduBhfB5Y=;
+ b=RlViw4vHTT9Y6XyWuR/PtqSreXEBVoqF3Cuxr0ZFlAFAoCWQx5cRn0RPGjqkuhkGLs2p72fjfn5A+8id9sWQhJMv+zHrj2h+BM/J8JKvfVBe6jjmvwyR9V6l58epwZS3yycNhpta4pbhwh5/7/XpyvzLkdkRos4JYz/UAFq/Ee7IRnE+MUOwYfngr6TJRTOQcNHt0MEHjf8/F3fdsu2dq+6wVk0yXaA1qB0H0axB5rV/5AP1ljp0MNIRsYMc7wHnMCeuoaKFXCWdDsD8nRDW9wuQdEOB96vnzef7Q6q24PjsrStsVGWTzWczJ8KkmCLdVzy7oi+q7tlkKOmEnD+mNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qx+PCMejNQHrPgDEtiVqatwTX/uBjlm54kOduBhfB5Y=;
+ b=p5wj2tleuogw0rdNvl1CKIXukEocPjZqDGzH+KGK2HOCAk+hJ8P/rYjLbQj0fG5n1Zi8YrC3rJMp9v0D/yiFzEHAfAWM2XjU34zBtba3lsWO7e6qwPtOjBXk8WfFn6LYPBda5SplWXCXqQmLAApFNZvKDUN7snHyeMMLuWYwBLD0S8YyhJCd6mro2CuO+5v+MDvVFVNBlIHiv7ti6Pnm/c/Fq7qzAzYeu7rp3CKCnfsn/D2Ng3lIVDol0qtNAk1mKbj60ii0K3AMc/9ifGGaTQEiQnr8iQBEfIu6d5BtGpBiFh1K1dthakBhrgw9ZcjAUMmvtn1+Bdrd8AEfbyhGow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by SJ2PR12MB8184.namprd12.prod.outlook.com (2603:10b6:a03:4f2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Mon, 6 May
+ 2024 17:21:10 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7544.041; Mon, 6 May 2024
+ 17:21:10 +0000
+Message-ID: <d93c08c2-6fa8-4c3c-8887-f5ccabd7777a@nvidia.com>
+Date: Mon, 6 May 2024 10:21:01 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>, Shuah Khan
+ <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240503023209.80787-1-jhubbard@nvidia.com>
+ <793bd068-c3b4-6330-41a4-bea597b1d820@linux.intel.com>
+ <f908ba74-86c0-409c-854d-9da5f3917b05@nvidia.com>
+ <26f3effc-6ea1-4670-a301-76df3a710fa9@intel.com>
+ <b88e73ea-d3f6-42d0-b9e0-f97665546178@nvidia.com>
+ <d46b81df-e018-a9bd-1550-31c825c487cf@linux.intel.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <d46b81df-e018-a9bd-1550-31c825c487cf@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR21CA0025.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::35) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SJ2PR12MB8184:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50dd90be-9efe-4d0e-2b99-08dc6df0ec68
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|366007|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MFRIaDlIR3hMRk9TeFRqdytGdHJjOG1ORGRqbmI1eGZSOU8zQkJ1SnpEMzgv?=
+ =?utf-8?B?WFdPdFJuWkcrNEpUZU9aNW5uRVRDV2pvbThEVndBbkpvejlUV25sRTVFeXlk?=
+ =?utf-8?B?NGxHdTRPS3BndTVaRkNXMklEQ1J6NEZrbC9aQktaSkorNzFuNGU1L2I1cUhS?=
+ =?utf-8?B?b0FzY25QZDU5eHh5UktJeVhOY2VSQWdBbTFvZFY3WWJaM0dBZjlOZlhPNVdV?=
+ =?utf-8?B?N2RROTNvQjFqdWdDYkNQVkZISmloU3RoT1lxV3p4cjhPZ2NPaktMdVRiUzFu?=
+ =?utf-8?B?R0h1dFJLa0tiQktzUDFGMXFBWmlRNlhMTGRuR1B3ZURMRTY5eXVWODN5aC9S?=
+ =?utf-8?B?dWRqYXQ4Um5ydnBwL2xWZmNpRzZGVUZzeHd0Z2luZU1nSHVxS21qM25wYzVl?=
+ =?utf-8?B?eWgybEMxZ3p0QWF3NVZEKzA1MmVEVjFlVGdDNkdaNldyMjJvdTFZcStjNUxm?=
+ =?utf-8?B?b3NoRmhWZnhoMHA5SUd4b3hkS1o0ODk4NjhJU1IyenJGWFhOVTdSTVJoR05I?=
+ =?utf-8?B?dWQxdlBQczlsZUxBRTlEMXh5K1A2N0xxamd0dmVvNUZUQ0N2V3VWQ1l1NjhU?=
+ =?utf-8?B?Nk8wclpGdENRSlFCckRRUzBIWjhOVURySkx4eThwK3NIQ0N0YzJvc2dZaE5r?=
+ =?utf-8?B?OFZoSmZCanl6OWVRZVhhWnR5VmxlblNLazhwL2VDUUFodnZ2cXg1OEltRWtU?=
+ =?utf-8?B?bXB3T3dvbUsyMmRzOG9GSWJ0bVUzaVNpU0FzRFJOdS9VSTVTV0lBeHllS1VS?=
+ =?utf-8?B?SkZGVXJReEVKNm5odmpuMzl4QzZ3bXN2SzE0N25lVnpiQW1nSS9kakUydW04?=
+ =?utf-8?B?bE9ncXozRE15TjhGeGZTZHhiMUpITzhmN2xERkxCUzFreklUWFl1K3pQRHdX?=
+ =?utf-8?B?SWRSWnpITjZxQy9vZVpNaTRKbHJTUDhvZmU3TXpnaVVxZUltYXE5VkN0Mkx6?=
+ =?utf-8?B?ZytQcWorbENHRWplUXJTNnhSQWIrY3UvWHpGQjUwK3NOVEJBZEViZ1N1dVZa?=
+ =?utf-8?B?TnRrMHQ1SW5ibkhLc21nd3E5TVFOTkd6ZGJKM1JOMkR6d1lQZ2RNZ0VvcTJF?=
+ =?utf-8?B?Ym1rNW1zM2NWYlhLZkVXMXVBajVyYXJMelFXc0RjSUYyUStHcllRdzI3dnQ1?=
+ =?utf-8?B?THVJVURpR1VSRU1rbm1CMTR2Y1JRRWIycm92cC9hT1VTRmp1WnJsMEY4TXNP?=
+ =?utf-8?B?VnhCdVg3UXA5bG5VSVdvRVlUN21Idkxpc0FaUll5YzdLZjNaV0FyazNpMWZs?=
+ =?utf-8?B?K3dkNEJiTVoxUFpXdXBFemNjRlhyTEswbG5WSjVnUnpsU21KWGE1cWpPWlpZ?=
+ =?utf-8?B?ejZaREszNjRVVWE0MmtsaHRYV0VJbk5sV3o4REEzeTJPK1RLUktoRkxvVDRr?=
+ =?utf-8?B?S0JWTjI2UlFjRVIrWm84Vm56cVllVE9JRlJtYys5R1FZWXBOMnV6T0lNT2hV?=
+ =?utf-8?B?TlBFeE81ZkI5WWRRUXJvbkl2ZnZ4UkEzanRMTWZjQVpSdUVGWVo3bVhFc0sz?=
+ =?utf-8?B?dld0ZHF3VGkzamN0dGR4NTNmVzRSVXQ2R3lNc3dVQW1tS1Z4T1MyS1JvT1lH?=
+ =?utf-8?B?WFF6SkUxQTZReUdGK1BDdzZ6YzVSS2Vma0lkWHRqTFNxZ1BOb0cvcEpuNlNx?=
+ =?utf-8?B?UWVVNDFSUDJvVW9IcTkyK2tPQzB0U2VRZmNPb1BsZjRzQWVEN3pObVhxS2RN?=
+ =?utf-8?B?SENzS0xBRGUrYm1VQThvUS9objR1M3dwVm9BMGU0dElwQ1IvTkNnYnJnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NGFYRWYrM2JmVWtnOVhTTXYzTENQWkNkdDNxVi9nN3NxbU1NQ1JkZS9QSlp4?=
+ =?utf-8?B?Z0NpWE1tVGNjYlB1SUVSWHNGQVBjTXc2QTVxbFdSUHF5ckwyY2ZMLzJiZVJK?=
+ =?utf-8?B?Z1Nxdm1UeDBsUlhnYjZXVkhkQWZKMnNQN3hmS3o0TCtpSmF0a2VicjhmUHRp?=
+ =?utf-8?B?ZFErZnMvUjlPUzA3NHRiY3UrZ0FXODlHM1RCKzBQaDhBc1hqbFJHQ3NNVm53?=
+ =?utf-8?B?dFhzZDJYLzFCYVh3a3RXMlJrR2ptaFA4a0hOVHk5anh6QkF6QlQxTHJiR28w?=
+ =?utf-8?B?TEJPVWo5MWdXaGc3TExPOEROR2p6TDJiL2l0dldSUzQrSjI3V01meTF5d2hC?=
+ =?utf-8?B?dDRVbER2eFdEVGRRbW5uVDFPQndvRGVCYkUxNUNPbENoLzVwUEliMHRxWnkz?=
+ =?utf-8?B?UVBSZVNEMHJLRWEvNmxzM0RUUVRIanBpVDNPQ0xQTk82d1owYmlsSzdyM0VO?=
+ =?utf-8?B?OVBlWmo3dmEwSWJGVmdhV09WU3dzSVlyaGtxMm9hU05KRVgzUXIzVUNBRUlM?=
+ =?utf-8?B?R1JlbDJwUnBpR1k4NDE4WkdEaWFiSzR5NjJha29XY2FWaHl3TDlPckQ0aG5h?=
+ =?utf-8?B?d3ZFOEhoM1RrRlR0aWMrMlRveFN4WVRKaG5GTDN3WkYwdG1MMWI4bGdZWThw?=
+ =?utf-8?B?T2JIMWJoeXZwdWJDMVBNZUE0bEpvekwweFl6cXRENzVDWlFvTU0rd2ZPejlL?=
+ =?utf-8?B?RDlQZjlkbHl1U1JSc3N1TkxSTUlIQjlBcEpTSmFCakQ5SkNOMlVqc2F3aTNk?=
+ =?utf-8?B?Z1BZUXFmZzFNbUZXVVBqbmJyaHY2Z08zQTBiNjA1OXlZZHdzTjl0RThmdVBB?=
+ =?utf-8?B?bnl0TS9WRFR3OHdLTHZ0eGZ2MGtEbEZhWjQrL2Qrc0h2T29ha2RDZ3ZURTJx?=
+ =?utf-8?B?VUdISVVqbHczMWNxekkzQVExVFF6diswdDAwcEM2eHlSVWFPY1l0S3poUGti?=
+ =?utf-8?B?enVPc283bDQ0RE9CTTNEaVE5d245c3FxKzFwNXEvYVBkS1UwZG1la1dWb1E5?=
+ =?utf-8?B?L2Fnd0JJcEpGWXBKQmhGeFdIaEpzajZEV3M3dktHLzRMS2ZqZ1N1Z2NMaDNp?=
+ =?utf-8?B?REFZOWRraDdhTXlzNnNZZVdZUU9pUFhibk5zRnJpTkJFRjlBeXJJMWdFWkVZ?=
+ =?utf-8?B?RGprYlRLd0E0NXlpa01sWm5pUHQ4L0dYeDNKVVdlRVJoSU1MRzlNT01kZWhN?=
+ =?utf-8?B?dElRWThKTVkwaUdVKzgvSkZWZXIvOEFuSVM0cFBJSmUrcHVzT2xOVnpmaGQ1?=
+ =?utf-8?B?emFGeU4za0xEM0EwYU5wL2dtcXE0WmRmSWFYZ0xDQTZDTFU1ZEQwT1dXSWJk?=
+ =?utf-8?B?QmZrRWptTXpNYiszaUZ6VlpYMzRHL3VCN012RDVUbXZua2dYWnZwRjRyY2dl?=
+ =?utf-8?B?eUtpaTQrb2dVOXpxRjlrSkpSRTNyUHh1bktYTzJvbEFQcUdkalJDOGJQc3RL?=
+ =?utf-8?B?Y1hGWWJNbUh5UUFrL29acFc5YUVPVlhjeHo4NkI1K2JDaTZJUkE0TGczazR3?=
+ =?utf-8?B?NzIzRm42RkFMRWpHb3BRRjZnUjNWaUpGN3pmMG16SkJtaDVDTXZhVExiQVRC?=
+ =?utf-8?B?aGxXOXc1cDhWOWdyTXJjbVBDNFNkNmg1TFdSSFZyQUdqc2dhWkZjZmtTaU5a?=
+ =?utf-8?B?WE9WVHVWWXVYaVB5RFBDb0hnbDEzcklEM2E2ZTdzdmxNbEVTVGYwQWwweU1k?=
+ =?utf-8?B?bkswTDZjTWNoL3VvVExwN3JwOTNubW5VSFZZOGw0RzJsaEk0OFpJL0tzL3pR?=
+ =?utf-8?B?ZHJWeGhzMDVFbktFSzduV3U1elZPWjlnNEQzSFo5R0pHdjRMLzJEOWN0SHMx?=
+ =?utf-8?B?Q3U5dVVXOG13RUVvWU5rNi9hTkVoL1RHZ1JQTkFkeHlJWTNLWXRYUWFSSDJh?=
+ =?utf-8?B?K2ZTNWJCUHNZUmtmMk90M3ZhRDFleGY0NDl2N1VrNzZ1Q3AxRGtHZnQzZGts?=
+ =?utf-8?B?RFFJbXY0UVlKdk9sN3k2enM5WkhZYW8xRi9Ga0NFUHFCeTlmKy9tNDFIVDEw?=
+ =?utf-8?B?ak83NjIrd2tGYkpXY2hoRmhNbldBbkVaSVdyRzMrdmRMd3NqZmVHSksxUkxw?=
+ =?utf-8?B?NC92UDNGRm81NXVXcm1JM2x1Yys3ejhNdE5rSVJQM0ovbkxHaDJHa0FWQUpu?=
+ =?utf-8?B?VEtMNjRyUlNPdnlqRzRTbU1aenFDZ3cwdHNaMU80VHFwenFRRTkwcHVPdUNz?=
+ =?utf-8?Q?8gAne6suHeRoSzHqC28+81Y=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50dd90be-9efe-4d0e-2b99-08dc6df0ec68
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 17:21:10.7156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dtZbbF4xn4OjEnW60+oIGns+1SjJePC+rIFSYL4nO9O5+R+cbWkC9fZAmFotjynSi6dPO7Ha53n+EGeUjvOHsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8184
 
-Richard Gobert wrote:
-> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
-> iph->id, ...) against all packets in a loop. These flush checks are used in
-> all merging UDP and TCP flows.
+On 5/6/24 2:07 AM, Ilpo Järvinen wrote:
+> On Fri, 3 May 2024, John Hubbard wrote:
 > 
-> These checks need to be done only once and only against the found p skb,
-> since they only affect flush and not same_flow.
+>> On 5/3/24 11:37 AM, Reinette Chatre wrote:
+>>> On 5/3/2024 9:52 AM, John Hubbard wrote:
+>>>> On 5/3/24 1:00 AM, Ilpo Järvinen wrote:
+>>>>> On Thu, 2 May 2024, John Hubbard wrote:
+>>>> ...
+>>>>>> diff --git a/tools/testing/selftests/resctrl/mbm_test.c
+>>>>>> b/tools/testing/selftests/resctrl/mbm_test.c
+>>>>>> index d67ffa3ec63a..c873793d016d 100644
+>>>>>> --- a/tools/testing/selftests/resctrl/mbm_test.c
+>>>>>> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+>>>>>> @@ -33,7 +33,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long
+>>>>>> *bw_resc, size_t span)
+>>>>>>           avg_bw_imc = sum_bw_imc / 4;
+>>>>>>         avg_bw_resc = sum_bw_resc / 4;
+>>>>>> -    avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>>>>>> +    avg_diff = (float)(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>>>>>>         avg_diff_per = (int)(avg_diff * 100);
+>>>>>>           ret = avg_diff_per > MAX_DIFF_PERCENT;
+>>>>>
+>>>>> But how are these two cases same after your change when you ended up
+>>>>> removing taking the absolute value entirely?
+>>>>
+>>>> All of the arguments are unsigned integers, so all arithmetic results
+>>>> are interpreted as unsigned, so taking the absolute value of that is
+>>>> always a no-op.
 > 
-> This patch leverages correct network header offsets from the cb for both
-> outer and inner network headers - allowing these checks to be done only
-> once, in tcp_gro_receive and udp_gro_receive_segment. As a result,
-> NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id checks are
-> more declarative and contained in inet_gro_flush, thus removing the need
-> for flush_id in napi_gro_cb.
+> (I see there's a better patch posted already but since there are a few
+> incorrect claims in this discussion, I'll do for the record type of
+> reply.)
 > 
-> This results in less parsing code for non-loop flush tests for TCP and UDP
-> flows.
+> This discussion now went to a tangent about the warning. My main point is
+> that logic is not correct after removing labs().
 > 
-> To make sure results are not within noise range - I've made netfilter drop
-> all TCP packets, and measured CPU performance in GRO (in this case GRO is
-> responsible for about 50% of the CPU utilization).
+> I also disagree with the claim that using labs() on unsigned value is
+> no-op because labs() takes long so unsigned is just forced into signed
+> when calling which is why the warning triggers but it's very misleading
+> warning (see below).
+>
+
+Yes you are correct.
+
+>>> It does not seem as though clang can see when values have been casted.
+>>> I tried to do so explicitly with a:
+>>>    	avg_diff = labs((long)avg_bw_resc - avg_bw_imc) / (float)avg_bw_imc;
+>>
+>> The subtraction result will get promoted to an unsigned long, before being
+>> passed into labs(3).
+>>
+>>> But that still triggers:
+>>> warning: taking the absolute value of unsigned type 'unsigned long' has no
+>>> effect [-Wabsolute-value]
+>>
+>> As expected, yes.
 > 
-> perf top while replaying 64 parallel IP/TCP streams merging in GRO:
-> (gro_network_flush is compiled inline to tcp_gro_receive)
-> net-next:
->         6.94% [kernel] [k] inet_gro_receive
->         3.02% [kernel] [k] tcp_gro_receive
+> That error message isn't factually correct:
 > 
-> patch applied:
->         4.27% [kernel] [k] tcp_gro_receive
->         4.22% [kernel] [k] inet_gro_receive
+>          unsigned long a = LONG_MAX;
+>          long b;
 > 
-> perf top while replaying 64 parallel IP/IP/TCP streams merging in GRO (same
-> results for any encapsulation, in this case inet_gro_receive is top
-> offender in net-next)
-> net-next:
->         10.09% [kernel] [k] inet_gro_receive
->         2.08% [kernel] [k] tcp_gro_receive
+>          a += 2;
+>          b = (long)a;
+>          printf("%llu %lli %lli\n", a, b, labs(a));
 > 
-> patch applied:
->         6.97% [kernel] [k] inet_gro_receive
->         3.68% [kernel] [k] tcp_gro_receive
+> Prints (at least when built with gcc):
+> 
+> 9223372036854775809 -9223372036854775807 9223372036854775807
+> 
+> labs(LONG_MAX + 1) won't work though since it's not positively presentable
+> with long and the value is left untouched.
+> 
 
-Thanks for getting the additional numbers. The savings are not huge.
+Thanks for setting the detailed record straight! :)
 
-But +1 on the change also because it simplifies this non-obvious
-logic. It makes sense to separate flow matching and flush logic.
 
-Btw please include Alexander Duyck in the Cc: of this series. 
-> +static inline int inet_gro_flush(const struct iphdr *iph, const struct iphdr *iph2,
-> +				 struct sk_buff *p, bool outer)
-> +{
-> +	const u32 id = ntohl(*(__be32 *)&iph->id);
-> +	const u32 id2 = ntohl(*(__be32 *)&iph2->id);
-> +	const u16 flush_id = (id >> 16) - (id2 >> 16);
-> +	const u16 count = NAPI_GRO_CB(p)->count;
-> +	const u32 df = id & IP_DF;
-> +	u32 is_atomic;
-> +	int flush;
-> +
-> +	/* All fields must match except length and checksum. */
-> +	flush = (iph->ttl ^ iph2->ttl) | (iph->tos ^ iph2->tos) | (df ^ (id2 & IP_DF));
-> +
-> +	if (outer && df)
-> +		return flush;
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-Does the fixed id logic apply equally to inner and outer IPv4?
-
-> +
-> +	/* When we receive our second frame we can make a decision on if we
-> +	 * continue this flow as an atomic flow with a fixed ID or if we use
-> +	 * an incrementing ID.
-> +	 */
-> +	NAPI_GRO_CB(p)->is_atomic |= (count == 1 && df && flush_id == 0);
-> +	is_atomic = (df && NAPI_GRO_CB(p)->is_atomic) - 1;
-> +
-> +	return flush | (flush_id ^ (count & is_atomic));
-
-This is a good time to consider making this logical more obvious.
-
-First off, the flush check can be part of the outer && df above, as
-flush is not modified after.
-
-Subjective, but I find the following more readable, and not worth
-saving a few branches.
-
-        if (count == 1 && df && !flush_id)
-                NAPI_GRO_CB(p)->is_atomic = true;
-
-	ip_fixedid_matches = NAPI_GRO_CB(p)->is_atomic ^ df;
-	ipid_offset_matches = ipid_offset - count;
-
-	return ip_fixedid_matches & ipid_offset_matches;
-
-Have to be a bit careful about types. Have not checked that in detail.
-
-And while nitpicking:
-ipid_offset may be a more descriptive variable name than flush_id, and
-ip_fixedid  than is_atomic. If changing those does not result in a lot
-of code churn.
-
-> +}
-> +
-> +static inline int ipv6_gro_flush(const struct ipv6hdr *iph, const struct ipv6hdr *iph2)
-> +{
-> +	/* <Version:4><Traffic_Class:8><Flow_Label:20> */
-> +	__be32 first_word = *(__be32 *)iph ^ *(__be32 *)iph2;
-> +
-> +	/* Flush if Traffic Class fields are different. */
-> +	return !!((first_word & htonl(0x0FF00000)) |
-> +		(__force __be32)(iph->hop_limit ^ iph2->hop_limit));
-> +}
-> +
-> +static inline int gro_network_flush(const void *th, const void *th2, struct sk_buff *p, int off)
-> +{
-> +	const bool encap_mark = NAPI_GRO_CB(p)->encap_mark;
-
-Is this correct when udp_gro_complete clears this for tunnels?
-
-> +	int flush = 0;
-> +	int i;
-> +
-> +	for (i = 0; i <= encap_mark; i++) {
-> +		const u16 diff = off - NAPI_GRO_CB(p)->network_offsets[i];
-> +		const void *nh = th - diff;
-> +		const void *nh2 = th2 - diff;
-> +
-> +		if (((struct iphdr *)nh)->version == 6)
-> +			flush |= ipv6_gro_flush(nh, nh2);
-> +		else
-> +			flush |= inet_gro_flush(nh, nh2, p, i != encap_mark);
-> +	}
-
-Maybe slightly better for branch prediction, and more obvious, if
-creating a helper function __gro_network_flush and calling
-
-    __gro_network_flush(th, th2, p, off - NAPI_GRO_CB(p)->network_offsets[0])
-    if (NAPI_GRO_CB(p)->encap_mark)
-            __gro_network_flush(th, th2, p, off - NAPI_GRO_CB(p)->network_offsets[1])
-
-> +
-> +	return flush;
-> +}
-> +
->  int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb);
->  
 
