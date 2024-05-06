@@ -1,144 +1,122 @@
-Return-Path: <linux-kselftest+bounces-9563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA98B8BD82C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 01:26:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0B1B8BD830
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 01:30:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 739BC1F23BEA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 23:26:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D2DD1C21D01
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2024 23:30:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E47D15CD72;
-	Mon,  6 May 2024 23:26:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B3715CD65;
+	Mon,  6 May 2024 23:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gcS/kx1/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vejhz29H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D4815533A
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 23:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3ED15CD78
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 May 2024 23:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715038002; cv=none; b=vDmpCLa16xrTqPZZ/92IQrdnXzX8P2hGz31WEHWZfWaDcpJP/d+/V3moxkxF8vLms0YxL0v5mUfXE7CpNfqfxARS9FWkZVnBw7tj8BIsRsJchDuvpCp2UtCbU3Ti1YQimLanILjr/WhZveHal8k+ioEToRCI3KYm8rSlW0n862Y=
+	t=1715038244; cv=none; b=Iysp1UKwmN07Cxsc92OgS0DQEBxNCy+/+Bwgtpgw0kNWGQHlqfWUCtkPkaE82pCAxa3Bf9jNElICaeyvaH2rOj3WFGEUs9IYj/tQbX27H6QwYv1bDsulgg67h7s53B5M6Qk2Crbe5fATUUUEdAblAV4miCuRCTl4pTgvp9/zYUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715038002; c=relaxed/simple;
-	bh=cJ9hyxh3nF+1An19GSvXwAC4s8YrykB9K2WJtVoH5bk=;
+	s=arc-20240116; t=1715038244; c=relaxed/simple;
+	bh=dC5gmNPxNSH+aIEWUfqlcoUV3/RSi8n3oR46/xve6dA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PBK1NkA6S1y/VmTjZJW1WyMyrvqfv+wZBgsnU22k8wb706MDCPINsEVN/F+gTAuBFsnxO8cCJu4D7zR/irdfqkLEdvwj1JRcfcolWHNm9tAG/S4fCzMgrkb4AFRhMvtyxdkQzpU2Sd+/xX34ToDDEGiGdIlGLN6lUwV7cb5/MdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gcS/kx1/; arc=none smtp.client-ip=209.85.208.51
+	 To:Cc:Content-Type; b=Qi62R9jNJERojl/JXLKWCJ1li7mqltu1r98mQ3W8vRKp2NUGaeH4HpjSsmbvNRTdKlN8ggtsPYGB4elE8jNfnhoUMUT9gGYdCvdjbG4eFG3qeQgGBsl8czlqIyzFc34sh0fdXJQ5Q5yWOWrUZ8lkSXo2LGUz3NPxQoJHKGD/m7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vejhz29H; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso8437a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 16:26:40 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5724736770cso2364a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2024 16:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715037999; x=1715642799; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715038241; x=1715643041; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=arg5k9e4eumU/21NxDFCZ0styz6cWNXoQ5vyGJusoQ8=;
-        b=gcS/kx1/4uQwRmvAXj49bbVHKWMUge5aWVFibTGOeNb1lZdlQIyu8tH34Si5vmLP9V
-         PVtycKXIf/+ED7wLGsSImwyXOKI5V6Yu8es1FPdPfE1gA5Tkv43mwQLoh93/5B1f9O6m
-         Ozl6StrWFSKWpIzBj1EXI+Y4wmyD6e6IDPaK7BL9iQkQxi6bCkcOlD4AJCzhg/lzt1Y/
-         L4K/RQNdGcSnpoOyP0hDlnbFLQQnlkXKwyGBNSnBdc8t1eVIL9iAq99BUW1HSFsi9WVj
-         zSGCGgB2a/Z0/FE0g9FMq4hZxvh/tbg805un2GP85QJIIAScnmG9IcQkTSkjh40uPvWz
-         O+9A==
+        bh=rday+enGpH1mUN4w1iIrCf7IG9Q6aF8QR6lBBrCyZ7g=;
+        b=vejhz29HQj+gKtb2WBiToZaEiReMxu6rMyWsEaQNyrYelzJtXm6QXARFGs+gCMc9uI
+         1bR8A8t7uZb8FSTLnOipGuyAZmNvSCl2NFiAbn4XxXfy1Imvhd7IVqvIN+bib+3w1lg5
+         IPQd+9F7JFynHtvPiJBcLsZxTmMac1vH7Gm2e1xTsVooNKySrtOU+K8dzpYmwKqHaa82
+         0CNs5dMpqqcaWO5Xlv5V0TwvxIYN32LFWPStMApOSn/fJ5Nxj1XPwaooQvf/nQ/JLTvf
+         H+wXXm5iOf+UNGNkM2f30GeWTBQxcMGMYv7L7JHrGMtb3P7m+yGK18wfaU1L5bTxH32p
+         r+ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715037999; x=1715642799;
+        d=1e100.net; s=20230601; t=1715038241; x=1715643041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=arg5k9e4eumU/21NxDFCZ0styz6cWNXoQ5vyGJusoQ8=;
-        b=V2952GMRUSytAiCxsc5ov1TtBsSA+ZNIZiZet7xc8l/QjtWCqW7lNx1249BO/tjrA9
-         uasn/l5hVLeNzwvIKexlMSChjacr9qwqTbaYZ4TJaFxWw2NS/zAup0YhocEMOVE1uj2h
-         sFKXgwPUOlg1dwacdoJYhE0XNv+RCWYWf/mB+kF2SDSLWjjuYeCCDf6M0rftjb5My8Sq
-         Ou85yP5o6nALsHA1Nb0o6YhamH5qZ5605JbWrpPxGVsAh1PWWGujAFu8bP1dUnonOM5A
-         ggVlfEjLcsT1y/VVqbTDwCBxB/P8pNdq55iizJ54VYRavfLXd8jLMLkZbsD/SJxARP3w
-         n9pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXIJgZgXkinjpONYT7j+bHtSlTH4/QFMwe0uHiz4oKLDzDARLM6Wo6W04MTnNic1JpOUggAFM5+NDSabp1aXu38QYYUbEysDAIJhXEl+SuH
-X-Gm-Message-State: AOJu0YysRuKUzcvEixyzCbVT8Di+UQMM+uB8pegP/knjL0JXuCgXzHmw
-	kkIkH/GYmn1v7vX4aId+BBtYRZKc3pMllZHQC2Dc8FI8xE44ouUrt+mcR0jNbByoSB1osTLEbQV
-	OmCaJZvq6b1rqf3OLAB0wkiAPB850dZWSDVAF
-X-Google-Smtp-Source: AGHT+IGJV7l8Y6VljzbpAT4oaU0i2MC2YKQ4WajhRPny/3d+aBTKQkE4NpCFTHY4NBSikNHOII7Lohs8MRKp9IuOFiI=
-X-Received: by 2002:a05:6402:34ce:b0:573:1366:d196 with SMTP id
- 4fb4d7f45d1cf-5731366d350mr39525a12.1.1715037999082; Mon, 06 May 2024
- 16:26:39 -0700 (PDT)
+        bh=rday+enGpH1mUN4w1iIrCf7IG9Q6aF8QR6lBBrCyZ7g=;
+        b=kN9BLAIvn5bc6jZ1KgWeks83bl0dJ/Gf3zL81kp2aTa9pqrviaYS3g8oo/LAiujerA
+         QxVXrfd+Nx9vqHKpZWlSCcEznSXe+MlUtxhFDR36K6kTvYacx3CWVxr6xR1UhNa7HgOy
+         +ilgib1/Xr7xLVfgX5/l8a6djQNYhge9Lzf5xYNqVr13UATtcITXKoFNf5AvMBTaHGh9
+         iBD1mnjFcxsmLFS3HzvhwZLFIy4rLO7zrBidSIlbLgWL9xEabf5sX3JiKJHWpMh9CmPe
+         7CBtISJ8W+a3mhBwTzr/ldVUeShEwG9hkRMpyATMpl3M4adW4nO8FwXPEzDZylyCe4QN
+         XDYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpBfRX0Yfy1YByVbbkKzT1I0jjUQo+lLmlCOKXF+QgJWWOFBdGY+Au0j1wCSIUhpQLuUE/MsdZedbQbKtcQRYGPcIX4HcA+VUZ98oz93zv
+X-Gm-Message-State: AOJu0YxsF8fmynUky4fj452oXNX5k5JscV4aS/vM8zMlIeezd3YX44qm
+	ezQOVsOvJmvYSdiNjFBnrjbOKVr0XPuq50jDa0UHnOSewgv9/oexEMsGkWSfojWu6AL5g0iuqQN
+	QwY+hgDwP8NOBEje/Rh9fwCeBmBkD9+nyvWRq
+X-Google-Smtp-Source: AGHT+IFPtbSaAcsaOKbHp6npYdFSTUzqld8pO8i1uwvZe0pXCtMxJsE/ukQM7Zz7NLIcHgg7/XYVun1u85SF7+71r+g=
+X-Received: by 2002:aa7:d389:0:b0:572:554b:ec4f with SMTP id
+ 4fb4d7f45d1cf-5731316c507mr37653a12.3.1715038240800; Mon, 06 May 2024
+ 16:30:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240501122918.3831734-1-usama.anjum@collabora.com>
-In-Reply-To: <20240501122918.3831734-1-usama.anjum@collabora.com>
+References: <20240416152831.3199999-1-usama.anjum@collabora.com> <202404161027.63F4D4FDEB@keescook>
+In-Reply-To: <202404161027.63F4D4FDEB@keescook>
 From: Fangrui Song <maskray@google.com>
-Date: Mon, 6 May 2024 16:26:25 -0700
-Message-ID: <CAFP8O3JkgQsH-4Lmr2W_teuvLjOCPi1htr9r3CO1O0yLyw=Azg@mail.gmail.com>
-Subject: Re: [PATCH 0/8] selftests: x86: build suite with clang
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, "Chang S. Bae" <chang.seok.bae@intel.com>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, kernel@collabora.com
+Date: Mon, 6 May 2024 16:30:27 -0700
+Message-ID: <CAFP8O3Jjkh0U94CbS=epXELMtCBpYt4fGejX3spH4=GdF7zVSw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: exec: make binaries position independent
+To: Kees Cook <keescook@chromium.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Yang Yingliang <yangyingliang@huawei.com>, 
+	kernel@collabora.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 1, 2024 at 5:29=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Tue, Apr 16, 2024 at 10:28=E2=80=AFAM Kees Cook <keescook@chromium.org> =
+wrote:
 >
-> This series fixes build errors found by clang to allow the x86 suite to
-> get built with the clang.
+> On Tue, Apr 16, 2024 at 08:28:29PM +0500, Muhammad Usama Anjum wrote:
+> > The -static overrides the -pie and binaries aren't position independent
+> > anymore. Use -static-pie instead which would produce a static and
+> > position independent binary. This has been caught by clang's warnings:
+> >
+> >   clang: warning: argument unused during compilation: '-pie'
+> >   [-Wunused-command-line-argument]
+> >
+> > Tested with both gcc and clang after this change.
+> >
+> > Fixes: 4d1cd3b2c5c1 ("tools/testing/selftests/exec: fix link error")
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >
-> Unfortunately, there is one bug [1] in the clang becuase of which
-> extended asm isn't handled correctly by it and build fails for
-> sysret_rip.c. Hence even after this series the build of this test would
-> fail with clang. Should we disable this test for now when clang is used
-> until the bug is fixed in clang? Not sure. Any opinions?
+> Thanks for this!
 >
-> [1] https://github.com/llvm/llvm-project/issues/53728
-
-I've closed https://github.com/llvm/llvm-project/issues/53728
-(constant expression folding for relocatable file output
-(MCObjectStreamer)).
-
-I've sent a patch to address https://github.com/llvm/llvm-project/issues/62=
-520
-(constant expression folding for relocatable file output  when inline
-assembly is used).
-
-(I am subscribed to llvm@lists.linux.dev but rarely read it. I noticed
-this message accidentally :) )
-
-> Muhammad Usama Anjum (8):
->   selftests: x86: Remove dependence of headers file
->   selftests: x86: check_initial_reg_state: remove -no-pie while using
->     -static
->   selftests: x86: test_vsyscall: remove unused function
->   selftests: x86: fsgsbase_restore: fix asm directive from =3Drm to =3Dr
->   selftests: x86: syscall_arg_fault_32: remove unused variable
->   selftests: x86: test_FISTTP: use fisttps instead of ambigous fisttp
->   selftests: x86: fsgsbase: Remove unused function and variable
->   selftests: x86: amx: Remove unused functions
->
->  tools/testing/selftests/x86/Makefile            |  9 +++++----
->  tools/testing/selftests/x86/amx.c               | 16 ----------------
->  tools/testing/selftests/x86/fsgsbase.c          |  6 ------
->  tools/testing/selftests/x86/fsgsbase_restore.c  |  2 +-
->  tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
->  tools/testing/selftests/x86/test_FISTTP.c       |  8 ++++----
->  tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
->  7 files changed, 10 insertions(+), 37 deletions(-)
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 >
 > --
-> 2.39.2
->
->
+> Kees Cook
+
+GCC versions before 8.1 do not support -static-pie,
+while https://www.kernel.org/doc/html/next/process/changes.html says
+the minimal version is GCC 5.1.
+Is this a problem?
+
+If not, and CFLAGS is guaranteed to include -fpie/-fpic/-fPIE/-fPIC
+(PIC), using -static-pie looks good to me.
 
 
 --=20
