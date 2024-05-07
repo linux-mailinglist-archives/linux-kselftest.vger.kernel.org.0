@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-9609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DC178BE875
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:12:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA7B8BE83E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07E76B28F96
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:06:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E2461C2445E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7225D16D30C;
-	Tue,  7 May 2024 16:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A0B16D9DC;
+	Tue,  7 May 2024 16:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZOpIzSM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2jzKdWd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA5D1649DA;
-	Tue,  7 May 2024 16:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441DF16D9CF;
+	Tue,  7 May 2024 16:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715097758; cv=none; b=VHm7OSHLOhcYJhANCCPpu2+3BkZR2RX0Fvm4kPqYYrx0U7OKQ/63zJWKcrP6WfFyXrS33dgKIKIK1xFlkkjVhr4jfe1uRzFr3Wgu30l1V0Hg8dQtcBIbebcPwXE3mSpURUL3pd8JOCSCNHqOpR2Q1fNPEAlVZJ5vW0BwInQSFjk=
+	t=1715097818; cv=none; b=Mw5QWZEzC/vj6OjGm3Xu2LdHdJjfrofkDkEEViOMPngl+2h/yxP1/Rjyjco1xHNHEgJgfcgIkkeQjdRsvwKOUl08CtIfCBFt0usStKNYEoGwDcVt/iZQTksz3UCOMqKniaVVqQJOqNWpQj1E7KTPjjV78xfCguTuzojDIJNcBo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715097758; c=relaxed/simple;
-	bh=nwWf43oku86e2innSvDOoVJQyhHvzwCs++ipm8hqsbc=;
+	s=arc-20240116; t=1715097818; c=relaxed/simple;
+	bh=tEFjrCieMjm2RotPaLaRVTqyTzHezBaUP3F1ZeAvDuU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cap3nJvj0tB4MKj0yV+ahb7lfKeCMlK5bGNz6s5bJ2ISFihQER/tmvOUjDn6KFNvKeT0p866ctVdyRV4bH5ALAslvXXsXJsRNCY9CTWCy2R/mQJCgjt8i2/p2ty8r9dRUhrzAqxR5MyvU0OuvmvIpW5svhIAapjmuy294BdIeyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZOpIzSM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D7CC2BBFC;
-	Tue,  7 May 2024 16:02:32 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=OL4xYlqkI3K7D8gk51mBdcMgq1aQhG3tLkWmXYy8OG/31j+sjnc87BPyHKVBygZt0tYrYCkl/X83xo1m1pJsXGt6O3lb/TY6FCfK2TLqGqmJmzLexWLlWC0fcaB7tXYa4ZpB/zd+fbIaOorOxN+1TrS3D7+eHMNAOoIJy5qqBe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2jzKdWd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E7C2BBFC;
+	Tue,  7 May 2024 16:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715097757;
-	bh=nwWf43oku86e2innSvDOoVJQyhHvzwCs++ipm8hqsbc=;
+	s=k20201202; t=1715097817;
+	bh=tEFjrCieMjm2RotPaLaRVTqyTzHezBaUP3F1ZeAvDuU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sZOpIzSM6uihAF2+L2js+eSP8DbgFV0i6mLaYEUHTgRfN/62+qGPaT1y0xTx6V2cG
-	 HskidmpdiJCdi1A86YO4RVapEBjOpipUHZouKD2B+1otTpNJKeFceJunbQEkh/R759
-	 2JX4R9fnNWAzxsYrI8RZ+KgyXwW2JmdpDdEbhiOE08XYuDxPoQHAXyZCgEUCSFd/ml
-	 q5Jx4x0aUjG0vgt2cwDif0WWV7dm/+uz7pN+z2STPSneRJmsHAA0KC+Bg57YkzmK0o
-	 iTYLxrZVTGUcnXxY19/ZshZ5u8/sR+3Iv1Eo5qEFgD9PZQZCpw+2R79FMusTF9Mp18
-	 1cFN7vogHdY4A==
-Message-ID: <d28dec16-9029-42f5-b979-a0f11656a991@kernel.org>
-Date: Tue, 7 May 2024 18:02:31 +0200
+	b=t2jzKdWdugZLz2Smc7O4LIwtwUzMO8DV1a2IngrSTrLMfVRRPtLYtP3bAxXzVerOB
+	 9yMe16bHeeq+/U3WNruqlt9mSFaah8NJnCHVwl0/cpEWcauNTlWzAwOuBswpcQF0He
+	 pI9INS0BQFPx22S/J0MvryS9gqm28cxzppU2T6SQ4ely1Daf0MxEVWH2Ih1igCpdqk
+	 RJhT0+8W8NSXTkaEitkHK7ql+K1xoMDGxkyzjcMV+DTUqYxeTbB1h9nCdZZ7UC188I
+	 udNIs6pnOcY+KtW47K1eD3c1PfAZy6I/zcuVS0MjBgx+zPV1tBtQJqWrrc8qT6wvkS
+	 oV/344fKdTg3g==
+Message-ID: <843ea6eb-a28d-437c-9c98-0b8c8816c518@kernel.org>
+Date: Tue, 7 May 2024 18:03:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: Add RUN_MPTCP_TEST macro
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Add mptcp subflow example
 Content-Language: en-GB
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: MPTCP Upstream <mptcp@lists.linux.dev>,
@@ -68,8 +68,8 @@ Cc: MPTCP Upstream <mptcp@lists.linux.dev>,
  "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
  Geliang Tang <tanggeliang@kylinos.cn>
 References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
- <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-2-e2bcbdf49857@kernel.org>
- <CAADnVQJ5-APFxMeGsUDSWBsiAbhJGivs=fBUapgYEFNHgnEVeA@mail.gmail.com>
+ <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-3-e2bcbdf49857@kernel.org>
+ <CAADnVQ+ADQRrZmZ_M9LLGj9u_HOo7Aeup+kid62xZfLCvSxUOQ@mail.gmail.com>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -115,7 +115,7 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <CAADnVQJ5-APFxMeGsUDSWBsiAbhJGivs=fBUapgYEFNHgnEVeA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+ADQRrZmZ_M9LLGj9u_HOo7Aeup+kid62xZfLCvSxUOQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -123,59 +123,63 @@ Hi Alexei,
 
 Thank you for the review!
 
-On 07/05/2024 16:44, Alexei Starovoitov wrote:
+On 07/05/2024 16:49, Alexei Starovoitov wrote:
 > On Tue, May 7, 2024 at 3:53 AM Matthieu Baerts (NGI0)
 > <matttbe@kernel.org> wrote:
 >>
->> From: Geliang Tang <tanggeliang@kylinos.cn>
+>> From: Nicolas Rybowski <nicolas.rybowski@tessares.net>
 >>
->> Each MPTCP subtest tests test__start_subtest(suffix), then invokes
->> test_suffix(). It makes sense to add a new macro RUN_MPTCP_TEST to
->> simpolify the code.
+>> Move Nicolas's patch into bpf selftests directory. This example added a
+>> test that was adding a different mark (SO_MARK) on each subflow, and
+>> changing the TCP CC only on the first subflow.
 >>
->> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
->> Reviewed-by: Mat Martineau <martineau@kernel.org>
->> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
->> ---
->>  tools/testing/selftests/bpf/prog_tests/mptcp.c | 12 ++++++++----
->>  1 file changed, 8 insertions(+), 4 deletions(-)
+>> This example shows how it is possible to:
 >>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
->> index baf976a7a1dd..9d1b255bb654 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
->> @@ -347,10 +347,14 @@ static void test_mptcpify(void)
->>         close(cgroup_fd);
->>  }
+>>     Identify the parent msk of an MPTCP subflow.
+>>     Put different sockopt for each subflow of a same MPTCP connection.
 >>
->> +#define RUN_MPTCP_TEST(suffix)                                 \
->> +do {                                                           \
->> +       if (test__start_subtest(#suffix))                       \
->> +               test_##suffix();                                \
->> +} while (0)
+>> Here especially, we implemented two different behaviours:
+>>
+>>     A socket mark (SOL_SOCKET SO_MARK) is put on each subflow of a same
+>>     MPTCP connection. The order of creation of the current subflow defines
+>>     its mark.
 > 
-> Please no.
-> Don't hide it behind macros.
+>> The TCP CC algorithm of the very first subflow of an MPTCP
+>>     connection is set to "reno".
+> 
+> why?
+> What does it test?
+> That bpf_setsockopt() can actually do it?
 
-I understand, I'm personally not a big fan of hiding code being a macro
-too. This one saves only one line. Geliang added a few more tests in our
-tree [1], for a total of 9, so that's only saving 9 lines.
+Correct.
 
-Related to that, if you don't mind, Geliang also added another macro --
-MPTCP_SCHED_TEST -- for tests that are currently only in our tree [2]
-(not ready yet). We asked him to reduce the size of this macro to the
-minimum. We accepted it because it removed quite a lot of similar code
-with very small differences [3]. Do you think we should revert this
-modification too?
+Here is a bit of context: from the userspace, an application can do a
+setsockopt() on an MPTCP socket, and typically the same value will be
+set on all subflows (paths). If someone wants to have different values
+per subflow, the recommanded way is to use BPF.
 
-[1]
-https://github.com/multipath-tcp/mptcp_net-next/blob/4369d9cbd752e166961ac0db7f85886111606301/tools/testing/selftests/bpf/prog_tests/mptcp.c#L578-L595
+We can indeed restrict this test to changing the MARK only. I think the
+CC has been modified just not to check one thing, but also to change
+something at the TCP level, because it is managed differently on MPTCP
+side -- but only when the userspace set something, or when new subflows
+are created. The result of this operation is easy to check with 'ss',
+and it was to show an exemple where this is set only on one subflow.
 
-[2]
-https://github.com/multipath-tcp/mptcp_net-next/blob/4369d9cbd752e166961ac0db7f85886111606301/tools/testing/selftests/bpf/prog_tests/mptcp.c#L559-L576
+> But the next patch doesn't check that it's reno.
 
-[3]
-https://lore.kernel.org/mptcp/cover.1713321357.git.tanggeliang@kylinos.cn/T/#m0b9c14f1cbae8653c6fd119f6b71d1797961d6ba
+No, I think it is checked: 'reno' is not hardcoded, but 'skel->data->cc'
+is used instead:
+
+  run_subflow(skel->data->cc);
+
+> It looks to me that dropping this "set to reno" part
+> won't change the purpose of the rest of selftest.
+
+Yes, up to you. If you still think it is better without it, we can
+remove the modification of the CC in patch 3/4, and the validation in
+patch 4/4.
+
+> pw-bot: cr
 
 Cheers,
 Matt
