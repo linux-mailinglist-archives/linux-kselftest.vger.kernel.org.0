@@ -1,163 +1,303 @@
-Return-Path: <linux-kselftest+bounces-9576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E94058BDABB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 07:44:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51C5B8BDBA3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 08:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2134B1C21CA5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 05:44:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 071B4282B26
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 06:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60AF6BB5E;
-	Tue,  7 May 2024 05:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E7578274;
+	Tue,  7 May 2024 06:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b="QeQkweQ1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ADWUYd67"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BcQvIL6y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C062E6BB20;
-	Tue,  7 May 2024 05:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AEA74267;
+	Tue,  7 May 2024 06:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715060652; cv=none; b=fWC3WYOFmLU1L5STQ6H5CwQGlzxhT0j7byhSOxrEuCQdJT3wqDmIKPOwsqwb3RtfBOxQRuR73nLvwDc6NE3mbw05kZtFXVK6MwZs0uVrhXgF696QghqkYgzIh8ms/pHJkhuVpP5A2EUmQx/Oy2RNLX51XmoASsaCnglvxWp55Zk=
+	t=1715063888; cv=none; b=ilaes5hP+JPTyTM3riSDfOK4R06O78mMLy5DqJLyGycNFfRmdUv2AmqNYhXyI9CtDpfW6WCzBIDD/l7D+Tciyr7nCcFTWMJF9Y3DccozL356OAe2Bci1JzxZvnrcTojVZmx/g1EvE7IdVTQ+21zGgUere1k+HqDWZYqNEzth/gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715060652; c=relaxed/simple;
-	bh=xUUikjw73Z2SWVDsnoMEjL6NWbOu9X7Pm9owE8s4BBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIbiZ3EZo9N7gMLrkT9aaCsIhNDiXxTaqTxjrfQymNhxPN8pxksqwD7lwy+uHbIYTDLyGbM5Tz5KagcI6scZBDGcPuIcB8dgssuh1wqMdwDji9AnddBlatDuspAenFjzOgDjQ1QVOeKy0ZE/Wi6Fh3zzPrYhFCgUye/tL1i/c8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net; spf=pass smtp.mailfrom=who-t.net; dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b=QeQkweQ1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ADWUYd67; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=who-t.net
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id CA3DA114010D;
-	Tue,  7 May 2024 01:44:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 07 May 2024 01:44:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1715060648; x=1715147048; bh=lkeboXyBVp
-	NmNRvKnjyj6x8sgel+2B8ncRxdOm+B4m4=; b=QeQkweQ1+bCG+NzV9FSr3Vpu4c
-	FR4kr6FpUMW/7D+ATsXbatQPO4TUNVgzI5xIsKhqsthkMm3PEyKqeuFj5QnVj7G2
-	YaCx7u00n3QYC9yZvbUrbGz8TQMw4VL96FI3LbAcQ9VGaLqddnlB9tIWgO1zJZfP
-	YJ3Xy1iAoLApjkDcBnBGSNr62XV8Cf5AUIbb74D8WjbDFlPavSyCqDv0TEFNfb2i
-	dmC/69b3+mvA8OLULvQCGBg1ycREVLf18qnD6sVq+iVYgyPPe6Y3qWZOO4M5Yop0
-	xDWRylj+tE8TPn72m+ACjbVm7VQW6eAjzye0st8Rd/dxm7Nz+uBXwJLxdtqg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1715060648; x=1715147048; bh=lkeboXyBVpNmNRvKnjyj6x8sgel+
-	2B8ncRxdOm+B4m4=; b=ADWUYd67gU3t6wO84l5Ys2TG+vpv4c8/rxVA9/MiHsnO
-	yGtp70MFyvgpofeyz3UTGPyGP+fPOLLUq4jav5ck951pVKmUDn2R1pmXhoiUySoT
-	4ncAFm7yQwB8kJz8AGyZLd8E9sCX9VF61BvZNB2JpbfClwlz+i/UX+rD+hCgomCQ
-	2FXfObMv+NqtGjH3ZR9AqamjC1pQDhK5xRzPaRe7IwMVcJtuser+1qAvuQT0NvGZ
-	3f7eLmKjwzzdRTOJL7aEOnHgOcdYSTonvdj5XPscDwlOu588sKDqzeG4YKV+gRj5
-	z8Nk5R3QQbTOP2Au+jiaPv8qhlpkoqfZsVdz+h0LLQ==
-X-ME-Sender: <xms:qL85Zv5bpem87foY8yva3ZgY8BqwUbmp2beoqHOQkps6ny9if3FOgw>
-    <xme:qL85Zk57LGYs2HWA1h9x20PXqAJndsUbLChHcaqw7rK_1CNPefxDI2RN9IVoF1dbQ
-    vdlNbIARysCmXV9PyM>
-X-ME-Received: <xmr:qL85ZmfsAL_w_R1iWvzhNSGuVLfKiH7cuzTXo02qM0GGRu8sVifKr0B44FPINevuvkd9yzhvTZfXrHr9zS91FdgfopNixhamo0xp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvjedgleefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
-    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
-    htqeenucggtffrrghtthgvrhhnpeekvdekgeehfeejgfdvudffhfevheejffevgfeigfek
-    hfduieefudfgtedugfetgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
-X-ME-Proxy: <xmx:qL85ZgKeoK0iG_pOUEJyngrRgD-qZQr_WVRyoGXxUmIebKdrh8Eqbw>
-    <xmx:qL85ZjLXdN2iGRSViUXKL1eHi372Qb2fMHNxOB3MDI3bKuTAT3YKjA>
-    <xmx:qL85ZpwoFYPnJ-VWosex2jtajpeCUaX8e4LZyj5jSygbS7JOvbtIIA>
-    <xmx:qL85ZvID7Py1eI5HiL8LHJKKqBawU-stWBtoQR8C2DUWfXGk03iyDA>
-    <xmx:qL85Zlya9pfG5BcaMtzX7R0zMqPC7mOPmDqMu59T_SNoal34jwQB_OmQ>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 May 2024 01:44:04 -0400 (EDT)
-Date: Tue, 7 May 2024 15:43:58 +1000
-From: Peter Hutterer <peter.hutterer@who-t.net>
-To: bentiss@kernel.org
-Cc: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-input@vger.kernel.org, Martin Sivak <mars@montik.net>,
-	Ping Cheng <pinglinux@gmail.com>,
-	Jason Gerecke <killertofu@gmail.com>,
-	Aaron Armstrong Skomra <skomra@gmail.com>,
-	Joshua Dickens <Joshua@joshua-dickens.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 19/18] selftests/hid: skip tests with HID-BPF if
- udev-hid-bpf is not installed
-Message-ID: <20240507054358.GA696790@quokka>
-References: <20240410-bpf_sources-v1-0-a8bf16033ef8@kernel.org>
- <20240506143612.148031-1-bentiss@kernel.org>
+	s=arc-20240116; t=1715063888; c=relaxed/simple;
+	bh=al2uTCbUkaO+YN6iS/CsFF1oIj/GnxrR8GTTZRDImpY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=m1q59kGR3dpkG7TvmKQKatHUciC/m7i2/TMMfo4uju+MTEooYd0pOHgpygWx/h7nv6Q2krAzitY22W18eVj+93PJbQnHaXb3FQZh3kfAv0pjqkoWo+GKWxTkpUV6I9Q5BrKqv4SNNVI3FOqlKeXfnYtCVjf3LhgBftLrGkpG6vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BcQvIL6y; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715063887; x=1746599887;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=al2uTCbUkaO+YN6iS/CsFF1oIj/GnxrR8GTTZRDImpY=;
+  b=BcQvIL6yQcsTT3xBivU+wKVFTzJGuB/n0/87nk5kf4Srm7vRn4kpqWx2
+   T0sb8OOg7vPWyRu4wpKwa/4uflLF+Iq879gRJlXoBl2f/dop+3skUH6J7
+   jlRT9w08ol9Qkh0N6R1XdC/LtHfFeGyIeREGWVcNerlk4+gO6JUmsCKl7
+   CUqYuy6/thrjQRAw85ay2lGvB02ONtG4nEReeI30jSqm2Sj1+I3A3ncM+
+   85ADFyhJYj7WPy5nxQa5xhbJYB+0tU8IiUQvmyL0J9CZLfq01ldR68aFj
+   thTqp6CcEWzS1goEvlqf+v0cvmUc3grqqntOjtyLG57DiKd6/oudWM/Ab
+   g==;
+X-CSE-ConnectionGUID: ytcKcyc+Q5SmMDe+NMFAZQ==
+X-CSE-MsgGUID: 7RdM4LPVSzCnnBv5DrS6lA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="28360753"
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="28360753"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 23:38:06 -0700
+X-CSE-ConnectionGUID: 0rO5EyK9SOGK0zZ0OrTZ8w==
+X-CSE-MsgGUID: d7fc7jBVRbqxLmJn3Qedww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="65861231"
+Received: from unknown (HELO st-server.bj.intel.com) ([10.240.193.102])
+  by orviesa001.jf.intel.com with ESMTP; 06 May 2024 23:38:00 -0700
+From: Tao Su <tao1.su@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	kvm@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-sgx@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	edliaw@google.com,
+	ivan.orlov0322@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	shuah@kernel.org,
+	seanjc@google.com,
+	pbonzini@redhat.com,
+	bongsu.jeon@samsung.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	alexandre.belloni@bootlin.com,
+	jarkko@kernel.org,
+	dave.hansen@linux.intel.com,
+	tao1.su@linux.intel.com
+Subject: [PATCH] selftests: Add _GNU_SOURCE definition when including kselftest_harness.h
+Date: Tue,  7 May 2024 14:35:34 +0800
+Message-Id: <20240507063534.4191447-1-tao1.su@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240506143612.148031-1-bentiss@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 06, 2024 at 04:36:12PM +0200, bentiss@kernel.org wrote:
-> From: Benjamin Tissoires <bentiss@kernel.org>
-> 
-> udev-hid-bpf is still not installed everywhere, and we should probably
-> not assume it is installed automatically.
-> 
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> ---
-> 
-> I wanted to apply this series given that it wasn't reviewed in a month,
+asprintf() is declared in stdio.h when defining _GNU_SOURCE, but stdio.h
+is so common that many files don’t define _GNU_SOURCE before including
+stdio.h, and defining _GNU_SOURCE after including stdio.h will no longer
+take effect.
 
-apologies. Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+Since kselftest_harness.h introduces asprintf(), it is necessary to add
+_GNU_SOURCE definition in all selftests including kselftest_harness.h,
+otherwise, there will be warnings or even errors during compilation.
+There are already many selftests that define _GNU_SOURCE or put the
+include of kselftest_harness.h at the very beginning of the .c file, just
+add the _GNU_SOURCE definition in the tests that have compilation warnings.
 
-(I have a few improvement suggestions for the hidtools code but it's
-better to do those there and then sync back).
+Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+Signed-off-by: Tao Su <tao1.su@linux.intel.com>
+---
+ tools/testing/selftests/alsa/test-pcmtest-driver.c      | 1 +
+ tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c | 1 +
+ tools/testing/selftests/nci/nci_dev.c                   | 1 +
+ tools/testing/selftests/net/bind_wildcard.c             | 1 +
+ tools/testing/selftests/net/ip_local_port_range.c       | 1 +
+ tools/testing/selftests/net/reuseaddr_ports_exhausted.c | 1 +
+ tools/testing/selftests/prctl/set-anon-vma-name-test.c  | 1 +
+ tools/testing/selftests/prctl/set-process-name.c        | 1 +
+ tools/testing/selftests/rtc/rtctest.c                   | 1 +
+ tools/testing/selftests/sgx/main.c                      | 1 +
+ tools/testing/selftests/tdx/tdx_guest_test.c            | 1 +
+ tools/testing/selftests/user_events/dyn_test.c          | 1 +
+ tools/testing/selftests/user_events/ftrace_test.c       | 1 +
+ tools/testing/selftests/user_events/perf_test.c         | 1 +
+ 14 files changed, 14 insertions(+)
 
-Cheers,
-  Peter
+diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+index ca81afa4ee90..5a01100d459d 100644
+--- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
++++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+@@ -5,6 +5,7 @@
+  *
+  * Copyright 2023 Ivan Orlov <ivan.orlov0322@gmail.com>
+  */
++#define _GNU_SOURCE
+ #include <string.h>
+ #include <alsa/asoundlib.h>
+ #include "../kselftest_harness.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index f3c2239228b1..40f3e81b1a6c 100644
+--- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
++++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+@@ -4,6 +4,7 @@
+  *
+  * Tests for KVM paravirtual feature disablement
+  */
++#define _GNU_SOURCE
+ #include <asm/kvm_para.h>
+ #include <linux/kvm_para.h>
+ #include <linux/stringify.h>
+diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
+index 1562aa7d60b0..7cf18aced644 100644
+--- a/tools/testing/selftests/nci/nci_dev.c
++++ b/tools/testing/selftests/nci/nci_dev.c
+@@ -6,6 +6,7 @@
+  * Test code for nci
+  */
+ 
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/net/bind_wildcard.c b/tools/testing/selftests/net/bind_wildcard.c
+index b7b54d646b93..f271e2ee6c7a 100644
+--- a/tools/testing/selftests/net/bind_wildcard.c
++++ b/tools/testing/selftests/net/bind_wildcard.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright Amazon.com Inc. or its affiliates. */
+ 
++#define _GNU_SOURCE
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ 
+diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
+index 193b82745fd8..fadefb0ab147 100644
+--- a/tools/testing/selftests/net/ip_local_port_range.c
++++ b/tools/testing/selftests/net/ip_local_port_range.c
+@@ -7,6 +7,7 @@
+  * Don't run these directly but with ip_local_port_range.sh script.
+  */
+ 
++#define _GNU_SOURCE
+ #include <fcntl.h>
+ #include <netinet/ip.h>
+ 
+diff --git a/tools/testing/selftests/net/reuseaddr_ports_exhausted.c b/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
+index 066efd30e294..4f6fb2fbb96d 100644
+--- a/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
++++ b/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
+@@ -17,6 +17,7 @@
+  *
+  * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+  */
++#define _GNU_SOURCE
+ #include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <sys/socket.h>
+diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+index 4275cb256dce..e5ea821be241 100644
+--- a/tools/testing/selftests/prctl/set-anon-vma-name-test.c
++++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+@@ -3,6 +3,7 @@
+  * This test covers the anonymous VMA naming functionality through prctl calls
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sys/prctl.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+index 562f707ba771..9cbfe9d38d72 100644
+--- a/tools/testing/selftests/prctl/set-process-name.c
++++ b/tools/testing/selftests/prctl/set-process-name.c
+@@ -3,6 +3,7 @@
+  * This test covers the PR_SET_NAME functionality of prctl calls
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sys/prctl.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..2ace7a75c638 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2018 Alexandre Belloni <alexandre.belloni@bootlin.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/rtc.h>
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 9820b3809c69..bb6e795d06e2 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*  Copyright(c) 2016-20 Intel Corporation. */
+ 
++#define _GNU_SOURCE
+ #include <cpuid.h>
+ #include <elf.h>
+ #include <errno.h>
+diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+index 81d8cb88ea1a..f966467d1ef1 100644
+--- a/tools/testing/selftests/tdx/tdx_guest_test.c
++++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+@@ -7,6 +7,7 @@
+  * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <sys/ioctl.h>
+ 
+ #include <errno.h>
+diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
+index bdf9ab127488..9d090ba3bfc3 100644
+--- a/tools/testing/selftests/user_events/dyn_test.c
++++ b/tools/testing/selftests/user_events/dyn_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index dcd7509fe2e0..25adef590a94 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 5288e768b207..176740a0fc02 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <linux/perf_event.h>
 
-> but I thought that maybe I should not enforce ude-hid-bpf to be
-> installed everywhere.
-> 
-> I'll probably push this series tomorrow so it makes the 6.10 cut.
-> 
-> Cheers,
-> Benjamin
-> 
->  tools/testing/selftests/hid/tests/base.py | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/hid/tests/base.py b/tools/testing/selftests/hid/tests/base.py
-> index 2d006c0f5fcd..3a465768e507 100644
-> --- a/tools/testing/selftests/hid/tests/base.py
-> +++ b/tools/testing/selftests/hid/tests/base.py
-> @@ -8,6 +8,7 @@
->  import libevdev
->  import os
->  import pytest
-> +import shutil
->  import subprocess
->  import time
->  
-> @@ -240,6 +241,10 @@ class BaseTestCase:
->              root_dir = (script_dir / "../../../../..").resolve()
->              bpf_dir = root_dir / "drivers/hid/bpf/progs"
->  
-> +            udev_hid_bpf = shutil.which("udev-hid-bpf")
-> +            if not udev_hid_bpf:
-> +                pytest.skip("udev-hid-bpf not found in $PATH, skipping")
-> +
->              wait = False
->              for _, rdesc_fixup in self.hid_bpfs:
->                  if rdesc_fixup:
-> -- 
-> 2.44.0
-> 
+base-commit: dccb07f2914cdab2ac3a5b6c98406f765acab803
+-- 
+2.34.1
+
 
