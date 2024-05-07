@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-9586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 597DB8BE03A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 12:54:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC8D78BE03E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 12:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 138012830E3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 10:54:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDCB51C232B0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 10:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC0C154C05;
-	Tue,  7 May 2024 10:53:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6DB156C78;
+	Tue,  7 May 2024 10:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQwAI7pF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LobBtDgD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3A81514E7;
-	Tue,  7 May 2024 10:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF8D1509A6;
+	Tue,  7 May 2024 10:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715079226; cv=none; b=bpdRsZmIc04ui9MAb7El6dpM4GL0KBDYG7eF8PL5JQwJ65UBIx3gAGxjll111FbWs9eh3Nh+kaZ9h1Z5k0mUmm7eGcIURTgixtZ9QzUbOl/nSHB36UO8aAJ5V7+gm/KMEomLvg+a0ZK9XreQbDrqVeXYsWAMaNjRzOwlZMTC2fw=
+	t=1715079231; cv=none; b=BN9OsIrvxaWFQlt5shvaDTd73Qox6sT/LgZkmZT82mIqGj/ppTjIADlR36rT7cg0hGXqZlC8HWG8utSX97Qxa+SdGdpSgMvwt+FGkHoioG/XBn/gHQaNfGkOajHk7J7h6NCxAW278fQNvOpwRKUYFlBvjYjW3RLOiQnMdux1aJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715079226; c=relaxed/simple;
-	bh=hPNoNz/g0I0oQPt/EFnqKp4bIa85B5bemCYHctr92U4=;
+	s=arc-20240116; t=1715079231; c=relaxed/simple;
+	bh=jSQSA9ObspLWriDSbY7LXBjGeEeVNlgc2rqqlfC5LXU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r4OOLGVmJZXufsyknJuihbb6jWVBlWs6EXgECum/uJbB0lF+fg+J16u8Af1h4U5IUZyCw6FL3rA8bhA65EKTDzO+0zl8Bp7nhbE/fAi3XOBbgFGcbzc3i8pq1KeW+G9VDmTFE1a+P+h/5gvDQ5bC1olNrYNhuXI+NrXb3YCzV8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQwAI7pF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD63DC4AF63;
-	Tue,  7 May 2024 10:53:40 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=UJl9WwmlhUdb0i9dDGXAfvoMNkt/UpFAkIfraT+IIM1axtzqu1s+IA8L1FUaTDO18w3YO8gnw/z81TUd/qi41Mw3XwrQHR2FMwM9LMb2/pJzMMgdjbw/Mq/Ka51UiHZqVT4HjMhyZM7oJQ8biv3m/GxtywnRfa09lqNWWJ8/QGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LobBtDgD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B638C4AF66;
+	Tue,  7 May 2024 10:53:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715079225;
-	bh=hPNoNz/g0I0oQPt/EFnqKp4bIa85B5bemCYHctr92U4=;
+	s=k20201202; t=1715079231;
+	bh=jSQSA9ObspLWriDSbY7LXBjGeEeVNlgc2rqqlfC5LXU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=sQwAI7pFMlEkTyzClB0iQYDUxEIFMwCadJADJv0UuKF0stcPVmE5iBuWrr/zPQ0ae
-	 MZ7KvqUUGh+lVYytmm4fcPpa33ZITC8J+OUQYEf0ZbbrBRKTMcmUV5gdA4D8JzMyge
-	 1my0Lw3XCTXlp/4x6846+5eXf3h+9Pf4lHu9uNy3pnEfjEO9MzgWRqAmNqTy8wsa2R
-	 pmn2ZBI/E3J+fg43+67CqOaG6FdzKBaogCv5uGV3V88AvJcXiyx4B/Xuxrdx3qFRmC
-	 CI6pAtwfOJRX95Y9M5o6Q609MDUL1Hb5whrhO0AKdL4vA1gmFcNHaTXFdE6l8lfCop
-	 mm1bEgBwLyg+g==
+	b=LobBtDgDRS54ocaslIxQbAv+VeYjboKklIHMunyTIrincm9+v7wH435pZEWgRs0Wl
+	 2aq2NE483s/Kuqj0WtFj+U8s0etMSOUqEVFfNvO2wLG8Xi4bXQcpAwVIOg70lAidvq
+	 npOvLfGb/CVmTWmM10gmJj9wVkVH8SyGf0RUvY0KX3dX1F533Xk53NjAuqa7lNbjgr
+	 sQQIxiXTFXrP+gqDIESebSpQXacB7Pzy534Lkqe0+RUGXOQmKljCxIYzafQQRfgDx7
+	 Nxhw09AXz17pQ/dVHPKyweSYX/VjBiwbehepyGU2MC6MWRLmAhTFqZo61bpfksEo0w
+	 tsRV7PYWMzFoQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 07 May 2024 12:53:31 +0200
-Subject: [PATCH bpf-next 1/4] selftests/bpf: Handle SIGINT when creating
- netns
+Date: Tue, 07 May 2024 12:53:32 +0200
+Subject: [PATCH bpf-next 2/4] selftests/bpf: Add RUN_MPTCP_TEST macro
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-1-e2bcbdf49857@kernel.org>
+Message-Id: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-2-e2bcbdf49857@kernel.org>
 References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
 In-Reply-To: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -70,60 +69,59 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <tanggeliang@kylinos.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1187; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=lyRBoz5Xmhw6UZgyarafKgSfWpCH32S9g/wdv08HRjU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmOggukIkwZj6TYCL8FxTM3oKEpmnsX+s2yWfBf
- zv+Q+kmt6CJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZjoILgAKCRD2t4JPQmmg
- c584EACgL5qCGLUyywbDhu1TIO6ySqs4kpRCfDV1gmNFeugITDERHvC0Y/t0MApQDciodwUanek
- eFYdwF2cKkHp3T1K5lC1e5vrh6dFOAObk9WuyDeXCuuEJgTF8qm8eLHOw9WpdT3RZw+2pVdP9fE
- B5A1qF7U+qjWWD031Kx4CPo/+v6QlUruVwiFJSA0yOHWA4l5HfXFhd8jF8uH93p/OyXwmzy+BnV
- 8RuK+k/uFudn85WUF1x6+aygt0bDGZntYCDslsPw//HBw9Z/HpqnFpv2T0+9AF2HahVYfliNOGJ
- amboL9mxYBEKMDQ+dIb9ll/fglr0Ma2oyxvjDLBcmdEMNDIjsaRsgUSjUGxTOPavuvZ3sMg71VJ
- KBBlaPczPTVU89XKZxLE4XKCN27BmTEG1cwvFDSU/LS3bW4K03vDouwCMWxYVlB+L1q2O8ZGMBH
- cZfIE0ZdWXKx9OS6IVVsEiI3bRG4tckilcigatWcnuGf1nHmhBSnieGl1SPfD2GkORLC3y4bTxU
- zQtN6aNyLp35sQ+S0ngqwNYj8AJEpou7PUFVV7o4qERDo2peInoBFfwqVGjMjwDT0aWeEMoW1/K
- xuE1SwbX1WmAmrM1sXwTpC3/qpMzgFiis+XhmF9iKogYatOzDClThq8a+RW6uK4GbSqDz6ONVUx
- UYAiYLtzEO62bXg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1144; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=mhApJwAHgeitNpAaQBRyxjO18rRunoBqRBu7knt84w4=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmOgguX+CwaeAGlpJyISVH1t/JF4AqZulYA5ymv
+ Fyb2Vd5VvWJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZjoILgAKCRD2t4JPQmmg
+ c4b+EADGbAtlxozE2Q30WzhbII+rfSFL0kbpgbwvR9eTSPvFy+cAFy2K3c/8xpHIkU4UHy5hB8v
+ IYVECxBKSlhefM8JcrC3C/oClRAyQBMNTqiZCKVBmWn7GrJib3c7gowTjpL/A9I0L5ziqEx8Yji
+ jZLm/T8cqCtekuwfEG4xVUmCcFmTzEOtrk07s1n7Dze05BAlF+ulpSlaRMzS/jWBeURdAkwkUrg
+ M4jX0gDMF7duHWP/R7Fut6X5GTyhOZlP0OEIV+532yrQyt1IcR/0MpwDfAzK2mMJjCJTlUhV5NB
+ 2RXMtMxaUMFW3TbXF8TTi23FcMgAiHnpDae82ouXyZXIoHTW7TBD4zIpk2ZRVctePKdSfwQqLAw
+ IZcBuMZfBE0kK5U8H/XHgSyWXbVK59x0e0zadorZ6dvxCYZl4IJV+gRzXNg03ENiVor9Is3Evkj
+ PTNH27cGsmU1UmI5UNmFJ7q43mS60swX4YRE4vQOP3sWoMG0vq8Fgz41oex9dkZQVUdnsul/zG1
+ 1ZKPz2GhHWHhc14V7nqjRkx6Nun6bPDaJO7LzhGa530NftYMEMub8QQBRu6vV7jF0NgCZTWEoi9
+ qU3kdInCSU6nePpofvQW3yavuF1rRTL1TMqdtKA2ahkpvlK0cNGnV7sYPjdkhaUUGG1lCfH2cHQ
+ t2uMsXvVJAUkE3g==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-It's necessary to delete netns during the MPTCP bpf tests interrupt,
-otherwise the next tests run will fail due to unable to create netns.
-
-This patch adds a new SIGINT handle sig_int, and deletes NS_TEST in it.
+Each MPTCP subtest tests test__start_subtest(suffix), then invokes
+test_suffix(). It makes sense to add a new macro RUN_MPTCP_TEST to
+simpolify the code.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/mptcp.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/mptcp.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 274d2e033e39..baf976a7a1dd 100644
+index baf976a7a1dd..9d1b255bb654 100644
 --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
 +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -64,11 +64,18 @@ struct mptcp_storage {
- 	char ca_name[TCP_CA_NAME_MAX];
- };
+@@ -347,10 +347,14 @@ static void test_mptcpify(void)
+ 	close(cgroup_fd);
+ }
  
-+static void sig_int(int sig)
-+{
-+	signal(sig, SIG_IGN);
-+	SYS_NOFAIL("ip netns del %s", NS_TEST);
-+}
++#define RUN_MPTCP_TEST(suffix)					\
++do {								\
++	if (test__start_subtest(#suffix))			\
++		test_##suffix();				\
++} while (0)
 +
- static struct nstoken *create_netns(void)
+ void test_mptcp(void)
  {
- 	SYS(fail, "ip netns add %s", NS_TEST);
- 	SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
- 
-+	signal(SIGINT, sig_int);
- 	return open_netns(NS_TEST);
- fail:
- 	return NULL;
+-	if (test__start_subtest("base"))
+-		test_base();
+-	if (test__start_subtest("mptcpify"))
+-		test_mptcpify();
++	RUN_MPTCP_TEST(base);
++	RUN_MPTCP_TEST(mptcpify);
+ }
 
 -- 
 2.43.0
