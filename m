@@ -1,242 +1,159 @@
-Return-Path: <linux-kselftest+bounces-9616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D89E28BE8B3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E428BE8BE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:23:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C17BA1C23814
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:22:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DB861C2233B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C29C16C44F;
-	Tue,  7 May 2024 16:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6DA16ABF8;
+	Tue,  7 May 2024 16:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkSU5rhY"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NPO5U6GK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91D316C434;
-	Tue,  7 May 2024 16:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CDF16190C;
+	Tue,  7 May 2024 16:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715098835; cv=none; b=J2+6DJvH3VdyIgu1IO9L3OFjfc+416BGjdhLZMqOxz9CZ6QS/67mgkxN/WlK0xMHz8q2FtULdUjq0mYNtUvYhNGbaPOUx9k+o9vGhZmYnRa9fFfFQGnropTwzDkXQ88BJ/oYUgeVb91W/nYdLkRNJCLaheBBeCUX+JKs4hZn6Z0=
+	t=1715099020; cv=none; b=sW/pijWnzCQG7TT/CGRaV5Ni3bdkjXqetW8OYvKx72ZRGbgkzMoP+a90eOKvFpYqIJ4TOZrSFwPv7R0Zz/us4bGLNfoQUUyQpY93O09/iRAepCGKD3Ef7YVzGl45mbXXJ7DS35vhIjwe7mXKB1iYMfE9/SjLQcRU7fyfuwrA1f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715098835; c=relaxed/simple;
-	bh=XoTG5z1bAVCfS/A6+nmmPwv6OjjWrqUXKpeu2nngY7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=psLMHpelVk9GXgnF+wq6ipXcImr7lTKsYYcw+dqIVzRMraNZNx2NWmqsXofo+GxKt+zTbJcJEYsOcuudc+vD4jq4TrFvIsKXQkVO5gHdQRjDRkXLzTojNlgXuQWfNbsvaEdBynSUjV7YDmWgl1YOZiWac7LaywL+lpursHQDq2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkSU5rhY; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41b79451153so27350615e9.2;
-        Tue, 07 May 2024 09:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715098832; x=1715703632; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jdb4sZljTUmWsoATTgfpaOlYZ8P52GpRSfK1mq+Jqt8=;
-        b=UkSU5rhY3xz/nME/2d1AwbUFd27uvY1BByLtVlM1sqJ6V60lS8ep/hu5Bd6YcqngnV
-         Suim+gx+nWJjKKta87zwblrOGwEhF4CdvuFxv1StQkDcwkAH04L/l/wDLslz6nuT/+bl
-         Ac509U/zzu/Zp5VV5dmIQVxhBeNNK1smnKUxZlUtNKCj9BuEYtQkey4rcSVa2RqvxB66
-         fdHVAIBc/EnbgCU4C5+KTclCIzbzlPbwTOFAPUuaIXqwn0g4Xh+/1HAa+PBmh5K/vSrL
-         Z8eAr3Dvnu/Ge0oAPCMWagY2QTFMZVI8siHsNf42OhqoRJV9R3kOTwv8R7D353xwPv2H
-         QFtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715098832; x=1715703632;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Jdb4sZljTUmWsoATTgfpaOlYZ8P52GpRSfK1mq+Jqt8=;
-        b=ClCj3vw5QF5oHj+7BDIR57nvkXAXWeBpig9CNozd+0pdXy6qodYLuh4ZuJT8FfYNNU
-         ndrK4WcpI/zI3Q4hNlMmZsbvpQVj014r5EAP5BJ+qjUq4SCasN5UqqLd7urT2aVL5P/X
-         lsVxpc5KicuhecLwpeYmC0reT5BNbFsrujZDddVXExY6a5BGbRBXOJ5xOYYh3y4kYYyx
-         gZ5DXc17hYJUtHVago+hjWGHhwcLevP4c9EtOgwqnvUb7MU/D/dQ1MEFGDWYlU40FEg8
-         qf+dlhCagshlgjeFkSlp7q0oYllGbZrp+T+o5vibE/TXJitqpPRgoJP6RvRB3xmLOVP7
-         A2MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlDmIQE/2Y0cT7zP+wbkQ9bzGcS9o5s1Mpna3lnoN0/OmZYQ+YKh7jMMSXhZ2N77av66W6HNJeJjEocq6eeVXZImMFlXp4qEwJCncsgJm4E8abeYc6mT8iqjRGw/zNMfiraVW6GjyRteyQIRcIbnyQwdJn85n2az/GbRUcqFz1RP64ThBh
-X-Gm-Message-State: AOJu0Yxh/Lk1/L0hyJJ8NtYs6LZVBtv8w92ypQ1U5vpuKgggjJ0Pfnvd
-	dBaQVLx0w+6jOei0+STNYeUtwDfIXO2m6af/tVxRTLTn0sdItmfYyVwYMA==
-X-Google-Smtp-Source: AGHT+IG9Yuccb4udV7312ZeVQbLc0K+RAED0oaxolsSB0eE4fsl3H368NlYAHnbOynBlypxNm2MVeQ==
-X-Received: by 2002:a5d:4a8b:0:b0:343:f3d9:a9d5 with SMTP id ffacd0b85a97d-34fca14b36amr241859f8f.10.1715098811352;
-        Tue, 07 May 2024 09:20:11 -0700 (PDT)
-Received: from debian ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id cx8-20020a056000092800b0034e01a80176sm13287273wrb.114.2024.05.07.09.19.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 May 2024 09:20:11 -0700 (PDT)
-Message-ID: <2262e5b6-d72b-42c3-8d49-663c910904ad@gmail.com>
-Date: Tue, 7 May 2024 18:19:53 +0200
+	s=arc-20240116; t=1715099020; c=relaxed/simple;
+	bh=sICSKR4sFxBRTS8fMbI24kMi7WOESTgwIxI/pjRz6RA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dimAeDMD0cymByiTW2hpgALfYzeBjixlQojIcOI1wnfFApf46aXXJPAXNvcwCnkR4TGo3oxs/8mf9kf3Qbb3PgmBvV7TxtiBM/n5H/5IW7G4xwEvM6W15HeDh4s/T1mUd2zm4ZGJY1Ln/gZdzlstIDQg7jhzDtYzgLz39XRoIW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NPO5U6GK; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=9ZGPfTdan4SS+4ZqtuNbHy8+y0rZ9H+66WTt20JNjQs=; b=NPO5U6GK2q3dfQUyRTyQXqAGgH
+	LGUK/hAb76lktkBzelyqJGwON6iMTBOU1vvWdDaTNOhmFARfkkqacM4MZDbqhRsWrBhSZpSyr31j9
+	rnVGX81fJONencRuYxgy+gUvbk1td5AzatkIzpJxDkxuiscwEYo4N8oulnlN3cr20Fl4kQnWn2K4k
+	vjyFKv8Dc0Ou5Y9Y3e0F1DNHN/9KNoiDvDBIerRYEo2cJVEyuYWDlEh28P+vypg9oxferkrSnhyY6
+	3+nORlS9afkibvueuiKevoyWIqBuhO8oO3H0okR3ZSHhuKfdam4neoUQLJz24jynmeVmuxYct436W
+	ZCZdRZ5A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s4NbA-0000000BwdT-3BjL;
+	Tue, 07 May 2024 16:23:24 +0000
+Date: Tue, 7 May 2024 09:23:24 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZjpVfPqGNfE5N4bl@infradead.org>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-3-almasrymina@google.com>
+ <ZjH1QaSSQ98mw158@infradead.org>
+ <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
+ <20240507161857.GA4718@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v8 3/3] selftests/net: add flush id selftests
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
- alobakin@pm.me, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240506093550.128210-1-richardbgobert@gmail.com>
- <761374d3-1c76-4dc2-a4cc-7bd693deb453@gmail.com>
- <663912b7b9746_516de29445@willemb.c.googlers.com.notmuch>
-From: Richard Gobert <richardbgobert@gmail.com>
-In-Reply-To: <663912b7b9746_516de29445@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240507161857.GA4718@ziepe.ca>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Willem de Bruijn wrote:
-> Richard Gobert wrote:
->> Added flush id selftests to test different cases where DF flag is set or
->> unset and id value changes in the following packets. All cases where the
->> packets should coalesce or should not coalesce are tested.
->>
->> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
->> ---
->>  tools/testing/selftests/net/gro.c | 147 ++++++++++++++++++++++++++++++
->>  1 file changed, 147 insertions(+)
->>
->> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
->> index 353e1e867fbb..5dc7b539ccbf 100644
->> --- a/tools/testing/selftests/net/gro.c
->> +++ b/tools/testing/selftests/net/gro.c
->> @@ -617,6 +617,123 @@ static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext
->>  	iph->payload_len = htons(ntohs(iph->payload_len) + MIN_EXTHDR_SIZE);
->>  }
->>  
->> +static void fix_ip4_checksum(struct iphdr *iph)
->> +{
->> +	iph->check = 0;
->> +	iph->check = checksum_fold(iph, sizeof(struct iphdr), 0);
->> +}
->> +
->> +static void send_flush_id_case(int fd, struct sockaddr_ll *daddr, int tcase)
->> +{
->> +	static char buf1[MAX_HDR_LEN + PAYLOAD_LEN];
->> +	static char buf2[MAX_HDR_LEN + PAYLOAD_LEN];
->> +	static char buf3[MAX_HDR_LEN + PAYLOAD_LEN];
->> +	bool send_three = false;
->> +	struct iphdr *iph1;
->> +	struct iphdr *iph2;
->> +	struct iphdr *iph3;
->> +
->> +	iph1 = (struct iphdr *)(buf1 + ETH_HLEN);
->> +	iph2 = (struct iphdr *)(buf2 + ETH_HLEN);
->> +	iph3 = (struct iphdr *)(buf3 + ETH_HLEN);
->> +
->> +	create_packet(buf1, 0, 0, PAYLOAD_LEN, 0);
->> +	create_packet(buf2, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
->> +	create_packet(buf3, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
->> +
->> +	switch (tcase) {
->> +	case 0: /* DF=1, Incrementing - should coalesce */
->> +		iph1->frag_off |= htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off |= htons(IP_DF);
->> +		iph2->id = htons(9);
->> +		fix_ip4_checksum(iph2);
->> +		break;
->> +
->> +	case 1: /* DF=1, Fixed - should coalesce */
->> +		iph1->frag_off |= htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off |= htons(IP_DF);
->> +		iph2->id = htons(8);
->> +		fix_ip4_checksum(iph2);
->> +		break;
->> +
->> +	case 2: /* DF=0, Incrementing - should coalesce */
->> +		iph1->frag_off &= ~htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off &= ~htons(IP_DF);
->> +		iph2->id = htons(9);
->> +		fix_ip4_checksum(iph2);
->> +		break;
->> +
->> +	case 3: /* DF=0, Fixed - should not coalesce */
->> +		iph1->frag_off &= ~htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off &= ~htons(IP_DF);
->> +		iph2->id = htons(8);
->> +		fix_ip4_checksum(iph2);
->> +		break;
->> +
->> +	case 4: /* DF=1, two packets incrementing, and one fixed - should
->> +		 * coalesce only the first two packets
->> +		 */
->> +		iph1->frag_off |= htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off |= htons(IP_DF);
->> +		iph2->id = htons(9);
->> +		fix_ip4_checksum(iph2);
->> +
->> +		iph3->frag_off |= htons(IP_DF);
->> +		iph3->id = htons(9);
->> +		fix_ip4_checksum(iph3);
->> +		send_three = true;
->> +		break;
->> +
->> +	case 5: /* DF=1, two packets fixed, and one incrementing - should
->> +		 * coalesce only the first two packets
->> +		 */
->> +		iph1->frag_off |= htons(IP_DF);
->> +		iph1->id = htons(8);
->> +		fix_ip4_checksum(iph1);
->> +
->> +		iph2->frag_off |= htons(IP_DF);
->> +		iph2->id = htons(8);
->> +		fix_ip4_checksum(iph2);
->> +
->> +		iph3->frag_off |= htons(IP_DF);
->> +		iph3->id = htons(9);
->> +		fix_ip4_checksum(iph3);
->> +		send_three = true;
->> +		break;
->> +	}
+On Tue, May 07, 2024 at 01:18:57PM -0300, Jason Gunthorpe wrote:
+> On Tue, May 07, 2024 at 05:05:12PM +0100, Pavel Begunkov wrote:
+> > > even in tree if you give them enough rope, and they should not have
+> > > that rope when the only sensible options are page/folio based kernel
+> > > memory (incuding large/huge folios) and dmabuf.
+> > 
+> > I believe there is at least one deep confusion here, considering you
+> > previously mentioned Keith's pre-mapping patches. The "hooks" are not
+> > that about in what format you pass memory, it's arguably the least
+> > interesting part for page pool, more or less it'd circulate whatever
+> > is given. It's more of how to have a better control over buffer lifetime
+> > and implement a buffer pool passing data to users and empty buffers
+> > back.
 > 
-> Consider moving the fix_ip4_checksum calls out of the switch to reduce
-> duplication.
-> 
->> +
->> +	write_packet(fd, buf1, total_hdr_len + PAYLOAD_LEN, daddr);
->> +	write_packet(fd, buf2, total_hdr_len + PAYLOAD_LEN, daddr);
->> +
->> +	if (send_three)
->> +		write_packet(fd, buf3, total_hdr_len + PAYLOAD_LEN, daddr);
->> +}
->> +
->> +static void test_flush_id(int fd, struct sockaddr_ll *daddr, char *fin_pkt)
->> +{
->> +	for (int i = 0; i < 6; i++) {
-> 
-> Please avoid unnamed magic constants. Something like
-> 
-> const int num_flush_id_cases = 6;	/* See switch in send_flush_id_case */
-> 
+> Isn't that more or less exactly what dmabuf is? Why do you need
+> another almost dma-buf thing for another project?
 
-Will do that, thanks for the review!
+That's the exact point I've been making since the last round of
+the series.  We don't need to reinvent dmabuf poorly in every
+subsystem, but instead fix the odd parts in it and make it suitable
+for everyone.
 
-> Or even define an enum with named tests and and _MAX val. It's
-> verbose, but helpful to readers.
-> 
->> +		sleep(1);
->> +		send_flush_id_case(fd, daddr, i);
->> +		sleep(1);
->> +		write_packet(fd, fin_pkt, total_hdr_len, daddr);
->> +	}
->> +}
->> +
 
