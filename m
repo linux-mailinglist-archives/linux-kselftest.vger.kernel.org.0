@@ -1,278 +1,153 @@
-Return-Path: <linux-kselftest+bounces-9621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D43B8BE934
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:37:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0488F8BE945
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C91B28F767
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:37:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 369521C23BF2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E10A16EC15;
-	Tue,  7 May 2024 16:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2Nqs2Ke"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E42916C456;
+	Tue,  7 May 2024 16:34:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6BC16C692;
-	Tue,  7 May 2024 16:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C622316C453;
+	Tue,  7 May 2024 16:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715099535; cv=none; b=gDDmXPGuZmdsxISvDvVpY48g/fuB5/alzoFAlmvMynISyNVMLFEK7sj+QcYwSjngeUqltCu65PnVH2Kx+dLvr5zSuUqihCP/v/jTlGktOkVJoIcrCnjA0TSRVdureEHfuv5rzSKnKaXNN58GHHy5TgqIytgu9+Wdv9vzKogGs3A=
+	t=1715099661; cv=none; b=FJDQDKmoZYztIJ1rX4CUBcnUJmvskM9A3L6XULOsySQdmJTiRft+kUrGatwa5SZovDStODpKpaoCipp5kAqYAQYOVtEZN2iKZrZJr0/AEltPSfvN/u761WDqK+ASZWc0/uwfGKhaMBQqVwrQARYzSvDNxyEb9WM9SDT9d/8Du6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715099535; c=relaxed/simple;
-	bh=qEiKUExEMZHpgJDE1n2n1k+AtLntSGaapHb3Uy4fz7o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nR1imCAGAYBYhLEv3jtoCjPKH+4XQ8f3sr6LJzRLVYqeGRW0iV2HjhXRZC5LOSY94CCMlDQ2mGT0B0QXIg08lwHwVagat+ROCFcqdEyQEbD//3B6ta/eTNwHrxsAfEqb0Iv1VgLWGAyFKPqNS19TM+VtAhhQlZCTz8nFgoTgNfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2Nqs2Ke; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-41b782405d5so35310135e9.2;
-        Tue, 07 May 2024 09:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715099532; x=1715704332; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/eYssGOudGrpw/4EPUaTbhOQHlVbIPat/QtucojUP08=;
-        b=O2Nqs2Ken37bQvU9ArX2yBIipGWZYuMVgSpFWXy0rn56hhYVJUb6UUlqn/jshp23VM
-         BEslucmsMg8iy85oh8fkpPb3cUVidoeEDoYRzGRfmik2mi3PCRJ9/CpQgeIwqTugQvmO
-         aPdGldeAGgoKAwM/30pCPUXpA6okyefmXcHJyKAdfAXRWFJWATBaLAxXJjqSU8bGxnkp
-         DsTWrb5S+7PXNrcLe5VXTP+HEI6WWphzg2/ZVn1LVcdCEeuni/pAroPi+F1y/qxlkIYT
-         V5ocdQcG4JyCSDLqDdpvjCRqAil6ixDDV94qNY7TB9/er1p66o6Eh/QBx8nYqMn9HGfc
-         8NSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715099532; x=1715704332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/eYssGOudGrpw/4EPUaTbhOQHlVbIPat/QtucojUP08=;
-        b=Yiq8ukV/laizfQoW6T2v9/szRxiXHuLfIBG1sZ53F/QEcqMQBIf1/LOZLIPqATNKfR
-         pduy8fFzJx2BM+na/cgor2GBP3snBVoQ6BbS1pYJBkZOHkUYoMEwp0zd+co0hssQSvb+
-         fLeySSWz/qRRr/nZ/bPu5L+oAWFCzz6g9xSmtsDgIBez8z2wU0HKfuwNhoiZR3+WNLK6
-         S/GSL1bRJNlKcU6yat4ZAHG7Iy2oczdxzYuOjQRWAEtVcg1FGHvW9zG3v1Ptg8eOfSSa
-         MhemuAJANN9OqGI6q4ahZKRyc6JzeQGfF2FEIi45udk1Hh/QOgDmBTo6bHzdgsfzUFzH
-         xBAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjCLG1bbMYOjZrRy6EQQApl8cDEsQddTAfWpvjestqn4UnQ51/t7UTHGGjVxy444bSwyF0+m5oSoJ8lhSkta82Ch0Ojw1YNegVdwahW4zBr/2ERL6ODXbsYVeNzoUmUE88L8853Brji7Yls9N5DJ3ljrC7URIpT49c7VB3r3oDBN1UnqB8
-X-Gm-Message-State: AOJu0YzX/TYNMYsNCsCtH9yR7A2RmjH/2ld9radqZ0yzDCjBmEWq9+Ij
-	lFrZdEJ0TWc30+He0AOyIjSuGYgxKkdAGAGPUHYmpFrK1ZIiDpdF
-X-Google-Smtp-Source: AGHT+IHFckoTAzD480JxZr2S3FkQjA/7iQ9pLJCVZIGiio6AMeHLJNEWOcA538F/c3ZULuJiBxaOiQ==
-X-Received: by 2002:a5d:4712:0:b0:34d:3b:6ea8 with SMTP id ffacd0b85a97d-34fca241349mr304578f8f.21.1715099531955;
-        Tue, 07 May 2024 09:32:11 -0700 (PDT)
-Received: from localhost ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id cx8-20020a056000092800b0034e01a80176sm13305901wrb.114.2024.05.07.09.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 09:32:11 -0700 (PDT)
-From: Richard Gobert <richardbgobert@gmail.com>
-To: richardbgobert@gmail.com
-Cc: alexander.duyck@gmail.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	willemdebruijn.kernel@gmail.com
-Subject: [PATCH net-next v9 3/3] selftests/net: add flush id selftests
-Date: Tue,  7 May 2024 18:31:41 +0200
-Message-Id: <20240507163141.130523-1-richardbgobert@gmail.com>
-In-Reply-To: <20240507162349.130277-1-richardbgobert@gmail.com>
-References: <20240507162349.130277-1-richardbgobert@gmail.com>
+	s=arc-20240116; t=1715099661; c=relaxed/simple;
+	bh=iRYaj26xe3Mr9cMwrKwc53RE8huH+KTl5l/a7Ec9pW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Uwa/jNZRQBmrGWBGB58aImbAbi6UWDikaidOIQIicOMUUGGEHbi6LdR46M9Vu+j7IB8Ohu/tm7P1L9CdOOh5cJEm81FL7LwnOX9tuyyT0ZZv/vT1navkqjRKEhaWBNSl1YRshFE0m5ob44ozLDiBXb4IUvTw19GozWk4sLbCPEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7BA01063;
+	Tue,  7 May 2024 09:34:42 -0700 (PDT)
+Received: from [10.1.34.181] (XHFQ2J9959.cambridge.arm.com [10.1.34.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FFA83F587;
+	Tue,  7 May 2024 09:34:15 -0700 (PDT)
+Message-ID: <518dd1e3-e31a-41c3-b488-9b75a64b6c8a@arm.com>
+Date: Tue, 7 May 2024 17:34:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/openat2: fix clang build failures:
+ -static-libasan, LOCAL_HDRS
+Content-Language: en-GB
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ Christian Brauner <brauner@kernel.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Alexey Gladkov <legion@kernel.org>, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240504044336.14411-1-jhubbard@nvidia.com>
+ <8fdefaa9-675e-4b37-9456-896b9989d18f@arm.com>
+ <9e346b64-0a7c-4eb9-88c4-8fb6cf65b33f@nvidia.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <9e346b64-0a7c-4eb9-88c4-8fb6cf65b33f@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Added flush id selftests to test different cases where DF flag is set or
-unset and id value changes in the following packets. All cases where the
-packets should coalesce or should not coalesce are tested.
+On 07/05/2024 17:19, John Hubbard wrote:
+> On 5/7/24 12:45 AM, Ryan Roberts wrote:
+>> On 04/05/2024 05:43, John Hubbard wrote:
+> ...
+>> Hi John,
+>>
+>> I sent out a similar fix a couple of weeks ago, see [1]. I don't think it got
+>> picked up though. It takes a slightly different approach, explicitly adding
+>> -static-libsan (note no 'a') for clang, instead of relying on its default.
+>>
+>> And it just drops helpers.h from the makefile altogether, on the assumption that
+>> it was a mistake; its just a header and shouldn't be compiled directly. I'm not
+>> exactly sure what the benefit of adding it to LOCAL_HDRS is?
+> 
+> Ah no, you must not drop headers.h. That's a mistake itself, because
+> LOCAL_HDRS adds a Make dependency; that's its purpose. If you touch
+> helpers.h it should cause a rebuild, which won't happen if you remove it
+> from LOCAL_HDRS.
 
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
----
- tools/testing/selftests/net/gro.c | 138 ++++++++++++++++++++++++++++++
- 1 file changed, 138 insertions(+)
+Ahh. I was under the impression that the compiler was configured to output the
+list of dependencies for make to track (something like -M, from memory ?). Since
+helpers.h is included from helpers.c I assumed it would be tracked like this - I
+guess its not that simple?
 
-diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-index 353e1e867fbb..e8fc94c2b9e5 100644
---- a/tools/testing/selftests/net/gro.c
-+++ b/tools/testing/selftests/net/gro.c
-@@ -93,6 +93,7 @@ static bool tx_socket = true;
- static int tcp_offset = -1;
- static int total_hdr_len = -1;
- static int ethhdr_proto = -1;
-+static const int num_flush_id_cases = 6;
- 
- static void vlog(const char *fmt, ...)
- {
-@@ -617,6 +618,113 @@ static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext
- 	iph->payload_len = htons(ntohs(iph->payload_len) + MIN_EXTHDR_SIZE);
- }
- 
-+static void fix_ip4_checksum(struct iphdr *iph)
-+{
-+	iph->check = 0;
-+	iph->check = checksum_fold(iph, sizeof(struct iphdr), 0);
-+}
-+
-+static void send_flush_id_case(int fd, struct sockaddr_ll *daddr, int tcase)
-+{
-+	static char buf1[MAX_HDR_LEN + PAYLOAD_LEN];
-+	static char buf2[MAX_HDR_LEN + PAYLOAD_LEN];
-+	static char buf3[MAX_HDR_LEN + PAYLOAD_LEN];
-+	bool send_three = false;
-+	struct iphdr *iph1;
-+	struct iphdr *iph2;
-+	struct iphdr *iph3;
-+
-+	iph1 = (struct iphdr *)(buf1 + ETH_HLEN);
-+	iph2 = (struct iphdr *)(buf2 + ETH_HLEN);
-+	iph3 = (struct iphdr *)(buf3 + ETH_HLEN);
-+
-+	create_packet(buf1, 0, 0, PAYLOAD_LEN, 0);
-+	create_packet(buf2, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-+	create_packet(buf3, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
-+
-+	switch (tcase) {
-+	case 0: /* DF=1, Incrementing - should coalesce */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(9);
-+		break;
-+
-+	case 1: /* DF=1, Fixed - should coalesce */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(8);
-+		break;
-+
-+	case 2: /* DF=0, Incrementing - should coalesce */
-+		iph1->frag_off &= ~htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off &= ~htons(IP_DF);
-+		iph2->id = htons(9);
-+		break;
-+
-+	case 3: /* DF=0, Fixed - should not coalesce */
-+		iph1->frag_off &= ~htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off &= ~htons(IP_DF);
-+		iph2->id = htons(8);
-+		break;
-+
-+	case 4: /* DF=1, two packets incrementing, and one fixed - should
-+		 * coalesce only the first two packets
-+		 */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(9);
-+
-+		iph3->frag_off |= htons(IP_DF);
-+		iph3->id = htons(9);
-+		send_three = true;
-+		break;
-+
-+	case 5: /* DF=1, two packets fixed, and one incrementing - should
-+		 * coalesce only the first two packets
-+		 */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(8);
-+
-+		iph3->frag_off |= htons(IP_DF);
-+		iph3->id = htons(9);
-+		send_three = true;
-+		break;
-+	}
-+
-+	fix_ip4_checksum(iph1);
-+	fix_ip4_checksum(iph2);
-+	write_packet(fd, buf1, total_hdr_len + PAYLOAD_LEN, daddr);
-+	write_packet(fd, buf2, total_hdr_len + PAYLOAD_LEN, daddr);
-+
-+	if (send_three) {
-+		fix_ip4_checksum(iph3);
-+		write_packet(fd, buf3, total_hdr_len + PAYLOAD_LEN, daddr);
-+	}
-+}
-+
-+static void test_flush_id(int fd, struct sockaddr_ll *daddr, char *fin_pkt)
-+{
-+	for (int i = 0; i < num_flush_id_cases; i++) {
-+		sleep(1);
-+		send_flush_id_case(fd, daddr, i);
-+		sleep(1);
-+		write_packet(fd, fin_pkt, total_hdr_len, daddr);
-+	}
-+}
-+
- static void send_ipv6_exthdr(int fd, struct sockaddr_ll *daddr, char *ext_data1, char *ext_data2)
- {
- 	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-@@ -935,6 +1043,8 @@ static void gro_sender(void)
- 			send_fragment4(txfd, &daddr);
- 			sleep(1);
- 			write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-+
-+			test_flush_id(txfd, &daddr, fin_pkt);
- 		} else if (proto == PF_INET6) {
- 			sleep(1);
- 			send_fragment6(txfd, &daddr);
-@@ -1061,6 +1171,34 @@ static void gro_receiver(void)
- 
- 			printf("fragmented ip4 doesn't coalesce: ");
- 			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			/* is_atomic checks */
-+			printf("DF=1, Incrementing - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=1, Fixed - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=0, Incrementing - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=0, Fixed - should not coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			printf("DF=1, 2 Incrementing and one fixed - should coalesce only first 2 packets: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			printf("DF=1, 2 Fixed and one incrementing - should coalesce only first 2 packets: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
- 		} else if (proto == PF_INET6) {
- 			/* GRO doesn't check for ipv6 hop limit when flushing.
- 			 * Hence no corresponding test to the ipv4 case.
--- 
-2.36.1
+Anyway, on the basis that LOCAL_HDRS is the right way to do this, let's go with
+your version and drop mine:
+
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+
+> 
+> The way it works is that lib.mk adds $(LOCAL_HDRS) to the dependencies list,
+> but then filters precisely that same set *out* of the list that it provides
+> to the compile invocation.
+> 
+> The other way to implement this requirement of "some things need to be
+> Make dependencies, and some need to be both dependencies and compilation
+> inputs", is to add everything to the dependency list, but then use a
+> separate list of files to pass to the compiler. For an example of that,
+> see $(EXTRA_FILES) in patch 1/7 [1] of my selftests/x86 cleanup.
+> 
+> [1] https://lore.kernel.org/all/20240503030214.86681-2-jhubbard@nvidia.com/
+> 
+> thanks,
+> John Hubbard
+> 
+>>
+>> [1]
+>> https://lore.kernel.org/linux-kselftest/20240417160740.2019530-1-ryan.roberts@arm.com/
+>>
+>> Thanks,
+>> Ryan
+>>
+>>
+>>> ---
+>>>   tools/testing/selftests/openat2/Makefile | 14 ++++++++++++--
+>>>   1 file changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/openat2/Makefile
+>>> b/tools/testing/selftests/openat2/Makefile
+>>> index 254d676a2689..185dc76ebb5f 100644
+>>> --- a/tools/testing/selftests/openat2/Makefile
+>>> +++ b/tools/testing/selftests/openat2/Makefile
+>>> @@ -1,8 +1,18 @@
+>>>   # SPDX-License-Identifier: GPL-2.0-or-later
+>>>   -CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
+>>> -static-libasan
+>>> +CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
+>>>   TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+>>>   +# gcc requires -static-libasan in order to ensure that Address Sanitizer's
+>>> +# library is the first one loaded. However, clang already statically links the
+>>> +# Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+>>> +# -static-libasan for clang builds.
+>>> +ifeq ($(LLVM),)
+>>> +    CFLAGS += -static-libasan
+>>> +endif
+>>> +
+>>> +LOCAL_HDRS += helpers.h
+>>> +
+>>>   include ../lib.mk
+>>>   -$(TEST_GEN_PROGS): helpers.c helpers.h
+>>> +$(TEST_GEN_PROGS): helpers.c
+>>>
+>>> base-commit: ddb4c3f25b7b95df3d6932db0b379d768a6ebdf7
+>>> prerequisite-patch-id: b901ece2a5b78503e2fb5480f20e304d36a0ea27
+>>
+> 
+> thanks,
 
 
