@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-9662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ADFE8BF1EA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 01:38:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B198BF245
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 01:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AE451F22016
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 23:38:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90C291C22C5E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 23:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103F914A4DB;
-	Tue,  7 May 2024 23:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284F3184471;
+	Tue,  7 May 2024 23:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qc+rKPV8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1sLw39p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BB7137746;
-	Tue,  7 May 2024 23:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB4C18446B;
+	Tue,  7 May 2024 23:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715123461; cv=none; b=eSYtUJIVW49A4mmc3zMv3RPlfH5nag1bB5puy8eOWgRu7gSDoJjw4DyY++80Wxnpql9q0XHKzCLovjDX4l9+KVM5+wrf6dc6aLIN8skaHyfrYTA2i0Obdosg9AWeRc8CKzhKLAyUR6rpgnylSdaGy+cklqxKq0+DOxOXj02o620=
+	t=1715123566; cv=none; b=avsI6FdHkBEIh6KubgU5/cTm+i1KNQUikpbRjncohQXDbqwsFk/LbZNaQQ0BhAXUz8Fm/bcNyVEdwXCW0N47Ueww8iIo4EdbzVdI/aY4g17PS0tbhIajhgRsNNFYpOGz3J7mxPgeRRHBWlFStXe5XcbC7odSDrGOdzlteBE8JuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715123461; c=relaxed/simple;
-	bh=XdZxsoASaO5IpIo4VCvpiibSkBtatqEOIr6SGp02oOY=;
+	s=arc-20240116; t=1715123566; c=relaxed/simple;
+	bh=5YIQjL4D61WZLH/t1LGV7NQyrRXXqmCiRTHtIYplpbA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OEftpGk+lXuUwLF0S+yOTATUxHWr8M0BOMZ7ewmrEyI403Ax00Nz9xdRdzxyNYNio6KCYloe8IA6C1wBr2xwySRa8G9cQtP+I2+Q9hYG+7eaDzH5OLNxQw8JKazBP633o1jiR8XGvMU16U/8exIFSr5SCB1uOe6kJt/xbBZuNYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qc+rKPV8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CCF7C3277B;
-	Tue,  7 May 2024 23:10:59 +0000 (UTC)
+	 MIME-Version; b=Va2KG4RCyB/k3Yoi3eoqPCgaNAB0NCmU3xwIlzuGR1EqL2Gq/ZScplnjx6PrdK7C/sxijS/ElrzMoRg0o6KYgdPC/X9ERgPvl+AqAQoS9Ja0xUArtj6HwVrKE61MZR0IhPhrl/SjsrjjYM5Aym1EhIiYQnbds2Lx9806GSbur2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1sLw39p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1E1C4AF17;
+	Tue,  7 May 2024 23:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715123460;
-	bh=XdZxsoASaO5IpIo4VCvpiibSkBtatqEOIr6SGp02oOY=;
+	s=k20201202; t=1715123565;
+	bh=5YIQjL4D61WZLH/t1LGV7NQyrRXXqmCiRTHtIYplpbA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qc+rKPV8hknaPxiJQDUoNANTgJMCDq3AudkjQ553yJOMzeIpo/KjV7x5g04bwv2W1
-	 S5ttBZkqLallG6yClosavBPf1ZaO/p9tFRe4/g5KmStLmJCmGApy4HAdDPaa5Pfqdz
-	 mAN50uMgO6WV+7EQil6lAo9R6SQdkE7sKpnPN2SZJwRNp+79+8vrJlviCvRP7ReesC
-	 N+akT5QRdPTagqSo9TIhDisDjhHrNKRzRkKw7ZkgmC7zdzs8Naw1xCLpgYJYRiJAL/
-	 k/cgCpERk44slwoutnqR2Oo8M9B6J9xbZayI+sv2Ce5xGNgvFGonN/EkjNbh+l7D0T
-	 b7WNgtIDWa7gA==
+	b=b1sLw39pv8SC3n3/3yvv8VZa4KoNSdSNoULxOwN/mEPFcJPtMYubSfmsSfKpFUY/Y
+	 tT7cKHAklLSUznsF9QsMS3KEXbmER91/I/N0BnuaKe7aMZL3KwaZUXb+TtIePiR2X0
+	 MU9FJ0HQbg3V8i3UtWvpMF++DlhOEtoTs5Zwx/FFsTeQc9402krV1mEHoDtHMu5h2s
+	 5XFdhAa7MqWsKHlCXPckHAlTcxk9NDf/+5DWuGGs+4kq0Aq+Ur+HSyQtmkjwyJdDsQ
+	 AGS1zT4+qwwcN1jRVdwHbmREaMemMFOnA5ID9NkAb6GIlHLUsaLonbn59lD1AQF+iV
+	 7pGX+QAvdZMeA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: Oliver Upton <oliver.upton@linux.dev>,
 	kvmarm@lists.linux.dev,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 15/43] KVM: selftests: Add test for uaccesses to non-existent vgic-v2 CPUIF
-Date: Tue,  7 May 2024 19:09:36 -0400
-Message-ID: <20240507231033.393285-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 08/25] KVM: selftests: Add test for uaccesses to non-existent vgic-v2 CPUIF
+Date: Tue,  7 May 2024 19:11:55 -0400
+Message-ID: <20240507231231.394219-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240507231033.393285-1-sashal@kernel.org>
-References: <20240507231033.393285-1-sashal@kernel.org>
+In-Reply-To: <20240507231231.394219-1-sashal@kernel.org>
+References: <20240507231231.394219-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.30
+X-stable-base: Linux 6.1.90
 Content-Transfer-Encoding: 8bit
 
 From: Oliver Upton <oliver.upton@linux.dev>
@@ -91,10 +91,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 49 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/vgic_init.c b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-index eef816b80993f..ca917c71ff602 100644
+index 9c131d977a1b5..ef737d0ed8fcb 100644
 --- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
 +++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-@@ -84,6 +84,18 @@ static struct vm_gic vm_gic_create_with_vcpus(uint32_t gic_dev_type,
+@@ -86,6 +86,18 @@ static struct vm_gic vm_gic_create_with_vcpus(uint32_t gic_dev_type,
  	return v;
  }
  
@@ -113,7 +113,7 @@ index eef816b80993f..ca917c71ff602 100644
  static void vm_gic_destroy(struct vm_gic *v)
  {
  	close(v->gic_fd);
-@@ -357,6 +369,40 @@ static void test_vcpus_then_vgic(uint32_t gic_dev_type)
+@@ -359,6 +371,40 @@ static void test_vcpus_then_vgic(uint32_t gic_dev_type)
  	vm_gic_destroy(&v);
  }
  
@@ -154,7 +154,7 @@ index eef816b80993f..ca917c71ff602 100644
  static void test_v3_new_redist_regions(void)
  {
  	struct kvm_vcpu *vcpus[NR_VCPUS];
-@@ -675,6 +721,9 @@ void run_tests(uint32_t gic_dev_type)
+@@ -677,6 +723,9 @@ void run_tests(uint32_t gic_dev_type)
  	test_vcpus_then_vgic(gic_dev_type);
  	test_vgic_then_vcpus(gic_dev_type);
  
