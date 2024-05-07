@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-9596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F0108BE428
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 15:34:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 410B18BE42C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 15:34:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7C931F229E9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 13:34:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72E1C1C21D56
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 13:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41151C8FD0;
-	Tue,  7 May 2024 13:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584731C9EB2;
+	Tue,  7 May 2024 13:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8cLmKdY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNcm/+Xy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794C615F3F6;
-	Tue,  7 May 2024 13:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1F31C9EA4;
+	Tue,  7 May 2024 13:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715088006; cv=none; b=Ufky3l0/AIgzcYB+mSV4/AkvqjeFp+YB2d/oAPJc2DulO1ZZfTnc91TXOchDskn7/qTBtBQ8bZPBv5HDcjlBT++oqDSTmXXroLDCYzphKGjZiiit46qHQD7PJeNNyJFX0PLbUPRkon37zMEsWD90U7JOVALZEdb+HNflMrgvUhs=
+	t=1715088010; cv=none; b=aZW7AEDSYXH6b5yod1LKODtwyOTircouDRb1IrlxFq2DMfGLWr6ffCr/hGnPvdUI+uKnm5nyOxSsy5XBv6d6CtZAeaMaGN9V3Yzyljz5iOkQVWP2D8HMPkw/m8Eqi7VsvmpWGprr/cVEUIKTMCiKkVFT2iF58KPhRNCzHcon49w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715088006; c=relaxed/simple;
-	bh=ZHkUdCx51hxhBKatmpC3J91gdbyruA1Cb3+7Y+YPx9g=;
+	s=arc-20240116; t=1715088010; c=relaxed/simple;
+	bh=egkWOz43eHGtMFIY140aoiyLqrnrPqlvPykxlJaPgaY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T8fsKhVNnC3bJfSpegl20lhUt0KvZWUDeWIuHkbH7/ah+e6nWIP34809oefxHBF1/1K4Oe0zY4cC6JtTNbVPSSaSifVe/T8bHtkY41ly1/BKVKUKyvDTGRqegeBOwDaWLz+GXx3oN0A2LhXkvouVp+WBJf1yaPMEueOMvMcXaZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8cLmKdY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1839EC2BBFC;
-	Tue,  7 May 2024 13:20:02 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=HcnZ+D7f296qmkbIU5CFTt/j48rNB8VUILummu1r9VhraVf7kTvH8h+IN45v5aDxGPgWd6wghxgdrWroMT8DHKeRL4fNgHzkjWjX9r6OYFR2cPqFuWiVj3qn9/04+d4Sx2We7+sJawAo0OjzhWMEexkHiZzgdPgKbwcyA8lIGBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNcm/+Xy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C210FC4DDE8;
+	Tue,  7 May 2024 13:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715088006;
-	bh=ZHkUdCx51hxhBKatmpC3J91gdbyruA1Cb3+7Y+YPx9g=;
+	s=k20201202; t=1715088010;
+	bh=egkWOz43eHGtMFIY140aoiyLqrnrPqlvPykxlJaPgaY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=j8cLmKdYaZvYjdWwLVoGorZkPFm1X6/PgT/qtThOSMp7ALVVSorihb8MLmuy2JQXB
-	 +9/62Vc2fDs5pzUZtFqGDnmw+x6ojwjkdeESRfSctA4tJZKXYpOv46AUSGdUCMZ/+C
-	 ZntOZHXuQYX+eSJqoyVEU0B+RyJsgUhBD3vd/PKknL8nl3br4dGK3UzKfswVkoQqZf
-	 cAJjggGBDllZ+XgyT9aSvmoyJMX9pjgDg4a55rkkLDbs0U5Mv3wzvRj4qEex3E0SgY
-	 iPkzJJ1q86GUZLZuveEQU3qiuC3H3zPI0fkXMcGD5/9x2c0Wfhg9wvuue+/5wwZdna
-	 yw3wGCBBKxMHg==
+	b=KNcm/+XyBrTLdm7oRT16OCMb3/Ap+qDbmQqv+Rp6gUHxh5DyiIXAwUGp2BmaDz7v0
+	 durzb7hgX0XX+Nagbwdc9gc+66y4/uLfnF0/0fFcEAMppdNqi6oySRmeC29LEjggyb
+	 M+a84qUFh/pFTcKg14xZ65dTwyNT7YqY75ParDTdk0D6536ARVspSebS5ZBBsMWCWo
+	 M9x8b6yREDX4te0TwoMkIEoyRSBSLAioBYFubWsR5n0k4pZiSnWw+69JC6Uta3fFg2
+	 mbhPoXK6Gm7sGdV7Jm15JdEC2pPof9EmHUeZPd3sQjj2xruBqjOHal8cNcHyLSJOcP
+	 8vzR0dIEyJJkQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 07 May 2024 15:19:34 +0200
-Subject: [PATCH RFC bpf-next 6/8] bpf: remove one special case of
- is_bpf_wq_set_callback_impl_kfunc
+Date: Tue, 07 May 2024 15:19:35 +0200
+Subject: [PATCH RFC bpf-next 7/8] bpf: implement __aux kfunc argument
+ suffix to fetch prog_aux
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-bpf_async-v1-6-b4df966096d8@kernel.org>
+Message-Id: <20240507-bpf_async-v1-7-b4df966096d8@kernel.org>
 References: <20240507-bpf_async-v1-0-b4df966096d8@kernel.org>
 In-Reply-To: <20240507-bpf_async-v1-0-b4df966096d8@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -69,20 +69,16 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1715087980; l=3721;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715087980; l=2673;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=ZHkUdCx51hxhBKatmpC3J91gdbyruA1Cb3+7Y+YPx9g=;
- b=+psPvQ9U0lib8PoOYD0b0ezqcWWXbbmhqvnYoH0EeLMPirxH4lu7bdfYRXp0w/+KFXQGW7eH2
- HfmBtwpdXeaDHz9Ay1pi/ODf7q7KQNcgbeoLKzBinovzJth7XPBrKEf
+ bh=egkWOz43eHGtMFIY140aoiyLqrnrPqlvPykxlJaPgaY=;
+ b=oJAmtA0r9hCIs8UUHfZHyxXeyHI1ooXguBzR9uFMgWiwn0xOIIL26fN4pkiWwxNCGDAFC1RfH
+ wIqjJqkgIp0DKjQK28Gx8oOq7x3Y3Ne4Ttm9fOagKbeixtvtfxJxGGc
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-It looks like the generic implementation based on __s_async suffix works
-well enough. So let's use it.
-
-Note:
-- currently we lose the return value range
-- the second argument is not of type PTR_TO_MAP_KEY
+This allows kfunc to request the prog_aux environment in their
+implementation, to have access to the originated bpf_prog for example.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -92,88 +88,74 @@ This is an RFC, and is not meant to be fully reviewed/applied as it is.
 I'm posting this to show what I wanted to explain in
 https://lore.kernel.org/bpf/mhkzkf4e23uvljtmwizwcxyuyat2tmfxn33xb4t7waafgmsa66@mcrzpj3b6ssx/
 ---
- kernel/bpf/verifier.c | 27 ++++-----------------------
- 1 file changed, 4 insertions(+), 23 deletions(-)
+ kernel/bpf/verifier.c | 40 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index cc4dab81b306..6fba9e2caa83 100644
+index 6fba9e2caa83..33b108db0025 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -511,7 +511,6 @@ static bool is_dynptr_ref_function(enum bpf_func_id func_id)
+@@ -10909,6 +10909,11 @@ static bool is_kfunc_arg_sleepable_async_cb(const struct btf *btf, const struct
+ 	return btf_param_match_suffix(btf, arg, "__s_async");
  }
  
- static bool is_sync_callback_calling_kfunc(u32 btf_id);
--static bool is_async_callback_calling_kfunc(u32 btf_id);
- static bool is_callback_calling_kfunc(u32 btf_id);
- static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
++static bool is_kfunc_arg_prog_aux(const struct btf *btf, const struct btf_param *arg)
++{
++	return btf_param_match_suffix(btf, arg, "__aux");
++}
++
+ static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+ 					  const struct btf_param *arg,
+ 					  const char *name)
+@@ -11807,7 +11812,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
  
-@@ -544,8 +543,7 @@ static bool is_sync_callback_calling_insn(struct bpf_insn *insn)
+ 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
  
- static bool is_async_callback_calling_insn(struct bpf_insn *insn)
- {
--	return (bpf_helper_call(insn) && is_async_callback_calling_function(insn->imm)) ||
--	       (bpf_pseudo_kfunc_call(insn) && is_async_callback_calling_kfunc(insn->imm));
-+	return bpf_helper_call(insn) && is_async_callback_calling_function(insn->imm);
- }
+-		if (is_kfunc_arg_ignore(btf, &args[i]))
++		if (is_kfunc_arg_ignore(btf, &args[i]) ||
++		    is_kfunc_arg_prog_aux(btf, &args[i]))
+ 			continue;
  
- static bool is_may_goto_insn(struct bpf_insn *insn)
-@@ -9560,15 +9558,14 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		return -EFAULT;
+ 		if (btf_type_is_scalar(t)) {
+@@ -19950,6 +19956,38 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[1] = ld_addrs[1];
+ 		insn_buf[2] = *insn;
+ 		*cnt = 3;
++	} else {
++		struct bpf_kfunc_call_arg_meta meta;
++		struct bpf_insn kfunc_insn = *insn;
++		const struct btf_param *args;
++		u32 i, nargs, prog_aux_arg;
++		const char *func_name;
++		int ret;
++
++		/* imm might not have func_id, so create a fake insn with the expected args */
++		kfunc_insn.imm = desc->func_id;
++
++		ret = fetch_kfunc_meta(env, &kfunc_insn, &meta, &func_name);
++		if (ret == 0) {
++			args = (const struct btf_param *)(meta.func_proto + 1);
++			nargs = btf_type_vlen(meta.func_proto);
++			prog_aux_arg = nargs;
++
++			for (i = 0; i < nargs; i++) {
++				if (is_kfunc_arg_prog_aux(meta.btf, &args[i]))
++					prog_aux_arg = i;
++			}
++
++			if (prog_aux_arg < nargs) {
++				struct bpf_insn ld_addrs[2] = { BPF_LD_IMM64(BPF_REG_1 + prog_aux_arg,
++								(long)env->prog->aux) };
++
++				insn_buf[0] = ld_addrs[0];
++				insn_buf[1] = ld_addrs[1];
++				insn_buf[2] = *insn;
++				*cnt = 3;
++			}
++		}
  	}
- 
--	if (is_async_callback_calling_insn(insn) || (kfunc_meta && kfunc_meta->async_cb.enabled)) {
-+	if (kfunc_meta && kfunc_meta->async_cb.enabled) {
- 		struct bpf_verifier_state *async_cb;
- 
- 		/* there is no real recursion here. timer and workqueue callbacks are async */
- 		env->subprog_info[subprog].is_async_cb = true;
- 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
- 					 insn_idx, subprog,
--					 (is_bpf_wq_set_callback_impl_kfunc(insn->imm) ||
--					  (kfunc_meta && kfunc_meta->async_cb.sleepable)));
-+					 kfunc_meta && kfunc_meta->async_cb.sleepable);
- 		if (!async_cb)
- 			return -EFAULT;
- 		callee = async_cb->frame[0];
-@@ -11534,11 +11531,6 @@ static bool is_sync_callback_calling_kfunc(u32 btf_id)
- 	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
+ 	return 0;
  }
- 
--static bool is_async_callback_calling_kfunc(u32 btf_id)
--{
--	return btf_id == special_kfunc_list[KF_bpf_wq_set_callback_impl];
--}
--
- static bool is_bpf_throw_kfunc(struct bpf_insn *insn)
- {
- 	return bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
-@@ -11552,8 +11544,7 @@ static bool is_bpf_wq_set_callback_impl_kfunc(u32 btf_id)
- 
- static bool is_callback_calling_kfunc(u32 btf_id)
- {
--	return is_sync_callback_calling_kfunc(btf_id) ||
--	       is_async_callback_calling_kfunc(btf_id);
-+	return is_sync_callback_calling_kfunc(btf_id);
- }
- 
- static bool is_rbtree_lock_required_kfunc(u32 btf_id)
-@@ -12465,16 +12456,6 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
- 	}
- 
--	if (is_bpf_wq_set_callback_impl_kfunc(meta.func_id)) {
--		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
--					 set_timer_callback_state, &meta);
--		if (err) {
--			verbose(env, "kfunc %s#%d failed callback verification\n",
--				func_name, meta.func_id);
--			return err;
--		}
--	}
--
- 	if (meta.async_cb.enabled) {
- 		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
- 					 set_generic_callback_state, &meta);
 
 -- 
 2.44.0
