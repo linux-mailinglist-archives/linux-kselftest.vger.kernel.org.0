@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-9659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF838BF102
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 01:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 417D48BF115
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 01:16:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14F55B23D3C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 23:15:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D23FBB222BC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 23:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E5913AD3E;
-	Tue,  7 May 2024 23:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAA113BC37;
+	Tue,  7 May 2024 23:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqlLseaK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S5cIlWao"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F05413AD30;
-	Tue,  7 May 2024 23:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A423B13BC33;
+	Tue,  7 May 2024 23:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715122868; cv=none; b=oDG8q4xcy/dydXfFdtLUZfK139Q12+jeNfkRCG5d/uJEJbjDlhu45EMoraIcFYgG8UvtW9ejEhYBRXrBGDes499Lc3sC5oZ+Tgl4AAZO/nwnVFeH5uL9hxTnLeLLryt3d/AUORtWbvfvsdSr5QM+pkbo9ZLEv7du5rxjIyIXH+M=
+	t=1715122890; cv=none; b=tuPS+nxsXusKCEbf/OcCT6Gzvzpt6wrnetZ6Djhyzakg91XqInmcRs2EfyGefbNA1fFvildhi3TnC1YSuPFQOwXo4wpRTRARncMgdrpdNWoG1AUXh/LTGClkU9QnovKN8l+u4Pqt7Wxw35pZf3ab9QFej5PZUZFLwEWhlxacIl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715122868; c=relaxed/simple;
+	s=arc-20240116; t=1715122890; c=relaxed/simple;
 	bh=+c40Uhf6KzmTtn+fKaywtRA/07JP5WBu9P0At09HAK4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ddqj0AUDFWlcqYzowKXb1Hlzj1lGD4sy993cdk351XfSrSGgBSafGvkqZ8ymdmtuweMny7BprSl2NMioIs7Df/OfK2ezuYHlSXgziPaORBbvjadNNXmSXmGQJqlLSW/0nuI8OiUELNq5plMYq93U1drQzQSziS3QNMiJK4Rbp84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqlLseaK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94644C2BBFC;
-	Tue,  7 May 2024 23:01:06 +0000 (UTC)
+	 MIME-Version:Content-Type; b=cneTdr9B911xZfySRmeupHkO7b8+mk2w+3+YQ52B0xj942yjGVie9i6XxsTskC0QsnVgZugHRhLSkq+ZUwmfFkixa50FVUHBSVcJj4e4phYt2t5O8hdbncS8hLhqtmBHdLeX8Psyvur/HeyNw6pF1ns5/SdsVEGz538KXfQBy8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S5cIlWao; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEEBC2BBFC;
+	Tue,  7 May 2024 23:01:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715122867;
+	s=k20201202; t=1715122890;
 	bh=+c40Uhf6KzmTtn+fKaywtRA/07JP5WBu9P0At09HAK4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nqlLseaKZ2lOQevOh/yv9opc6P/wPu6B655SSUNbNDV6+LFhnM5VgUvHyt6jak/4L
-	 zVVwHb6I41X51MYG5zwZCZMTGGNfNt4Sctw4u/YxmKB1YngXI+II/hKNB6q87ZAX+u
-	 xdd5oQ2hAoESNbF38Peae+dPnGMe2OpilhlzNTPS7xgK/MgRpWcIufgs0sv6wAAY07
-	 NSGYws4jxSD1qu0jVrfCHzADx6Q7MHUp8WpkmZ2iHGBFWfEwM5h1CpXLPhYJeK01J6
-	 gHJTsruDpBAlXZFxzXOm1JUxREXDVoO8vxIjr1IEs2tLRmBoRYVhNrkVt7ggslz9jN
-	 JMIRYOSp1jCQw==
+	b=S5cIlWaoOyk+pWZMz21NjhhRHibSOAvRkU9dUKLaR9nFDuyU0AHluFcm49F+9Wyl9
+	 LFgLUCkJZ/UryuxaVrMSVZNNkmxdPnK/QppE+2bzYNb8KbZlW5ohKwggZYwptdSKR0
+	 zyOZlKfedKT/ZVvMBu6EadHNQVmXdH2b47bh+7yIIXtnknfKeGTIP3cxidAmEJojVM
+	 l5Sj/5LJnTY1E2883GuapLI4r0GnCJGsMLX3EpveE8v0FWl6oK7dfmaGrhhDy3SH7W
+	 URLOAX/Mundj8SqRp/qJH8GBN8xuNswAwHMtMWiWSglB0uD/Zv5/fqNh4zhCVVMeLL
+	 pNrvX5nN9btvw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	aou@eecs.berkeley.edu,
 	linux-kselftest@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 11/12] selftests: sud_test: return correct emulated syscall value on RISC-V
-Date: Tue,  7 May 2024 19:00:13 -0400
-Message-ID: <20240507230031.391436-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 5/5] selftests: sud_test: return correct emulated syscall value on RISC-V
+Date: Tue,  7 May 2024 19:01:09 -0400
+Message-ID: <20240507230115.391725-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240507230031.391436-1-sashal@kernel.org>
-References: <20240507230031.391436-1-sashal@kernel.org>
+In-Reply-To: <20240507230115.391725-1-sashal@kernel.org>
+References: <20240507230115.391725-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.90
+X-stable-base: Linux 5.15.158
 Content-Transfer-Encoding: 8bit
 
 From: Clément Léger <cleger@rivosinc.com>
