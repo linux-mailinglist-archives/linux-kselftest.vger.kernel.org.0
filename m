@@ -1,274 +1,177 @@
-Return-Path: <linux-kselftest+bounces-9613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A196B8BE89E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:19:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9AB28BE895
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B2E9B24995
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:18:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F1728D751
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957C416ABC1;
-	Tue,  7 May 2024 16:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2437416C69A;
+	Tue,  7 May 2024 16:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fUbo0p6S"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="opveKBa6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6131649C8;
-	Tue,  7 May 2024 16:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CC916C685
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 May 2024 16:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715098735; cv=none; b=acRQf9MB361SBs2pmiOTdxFExT1YnJXAozax1MYemHNddU3D5EhNIpYeJtzE4AnnPuVU8hboIk40UqHQFV3MPHfQ8slqd8Yr1qCvpsALIVx1a3bqVXs5B8haHsty3Tz4aIRegMIgK6387OGSAXZuemuRdUCOs0wqSOG1ZIJ1Scg=
+	t=1715098741; cv=none; b=YFL0Jq+zNkiKUmW8xnkrt/rhk0BwcwWag8MAVOcx0r3ZpN4CK0jJ1j//YtYQRcFxhbAbHMcjlou90eSHBQOVxnZTS4EVeZbR6zA43AoKRHJnQdPPWoX7NdNqq+UrTcFs2/ixrdCqaYEQqlXUNp/OhqDmr4292nRGS27PqIOL0lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715098735; c=relaxed/simple;
-	bh=CXkhrGmVovd2iD+gew7vIJBjDRjYbrAoBFBuatO/EcY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ZBuWQgXBcakoADWG+7HdZXfe7lXyI0JbmpFbSDZSw2gm/NUHHleH5+NsjWQyPcDmSM/VfrE4UHbMlLwOioL5t5bqGbUQ8E5h2dLh5LF9xqR9yOLdquMNZS2Qlos6L8YS73iXRl8J7Uiq96FoNbdgLt1QPfw2HGAap0djBjB9a4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fUbo0p6S; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-34db6a299b8so2159887f8f.3;
-        Tue, 07 May 2024 09:18:53 -0700 (PDT)
+	s=arc-20240116; t=1715098741; c=relaxed/simple;
+	bh=0nsEzeVMKy4YdFDUp85eHaoqb8xweeElGlao/4FZIUg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OFsnY/2aDdcT3bJ0dOBlfDKiQb+AE2aM+0Te4b3mBjSTWvIBNGiD9Qq9hKDMCVvWlQRtVZmjhjWaegn+SGEa1GlZqzYVTHVHMCfFkEfduQFA/LaOV7REyFZeYPKA7pCDSoaq0rVX8s/4lEOwnLB9xxXPmehnZF8HUbwz3U725yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=opveKBa6; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c97066a668so739156b6e.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2024 09:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715098732; x=1715703532; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lZwcVSwzOm1/6zNDN7V+zmSg9uLJaNbCLAg7xyWPCgg=;
-        b=fUbo0p6SAYBXiJbbMee/iQBu5hDpznQgW1AkPNHPT6Kyc8uRE/Y9QjAI1dSTEkcGhM
-         cbTQh/1MXU48EYXshTQs+LcQlwxSGNofuv7bvjSfmgbzEHX9tJhXAvro1toQ8b6PV37L
-         NRxcow8Ge99KLk9TSJTnRno+mFQqSq7mwQRmB0jKToBbFqACoeyiKh+/BhanLeyBzeXt
-         hoTmAqQbn2mXLTiCo/W8Zqr7ZkQoOKkQix0nuVpjc4XfXsT5zQE+cbIsgO/XUJMGfAFm
-         ZdJErelqlfH8dsrVytGahjRdUriVe1M6DnDhnqkOLwhPfgtQVNMW6trJTqN9B5d9Vmi/
-         9fFw==
+        d=ziepe.ca; s=google; t=1715098738; x=1715703538; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpA0imZ1JqdhWIK1ORQBd9/L74Ck+FsRXQUsgUAbnpw=;
+        b=opveKBa68KDbotBwf+SHOGwR3L1ZEqcrdU071diK37U0beD4PU9lO4RkVxKP0Py0Ic
+         YnHD+bPzb79ZIWtRKfMvo7fg51hCnMP2Nc1DMug+5gHJLpkJxs143i+EJJeVaZLIb8ON
+         Hki4ApLOWCcRKhlk6LPk3jWJ9kuNTTOmPAze0955YfA3lIifckMzLgXCDhRjH9U7pp87
+         QUEreZiAHX+Msr+MM3DRBDfLpxxyehEdPpU2r8XeTFJFXvDPDYkMt/Tgt9MJbgrJ5hIX
+         Hve75qz7JpJG2KiWTu0envqkVVDR2M607agTGZ4qrNRqOL8pdgHhP4A5KJXcmBa0rAqU
+         5CNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715098732; x=1715703532;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lZwcVSwzOm1/6zNDN7V+zmSg9uLJaNbCLAg7xyWPCgg=;
-        b=YWg6YjSyB+ni3X3BuNRYiyI0bIya1VC4JomuDxkFgMvQ1TfELHKLhHn4iErYdrkACj
-         v8aqyAIaL2hXteXqzmVTQT3nfeHdNHj4JPT6Y0env+tVH1+3MnSHRaxeCOaumBjD1QTH
-         FAlWRC+S47jxjybk+YUR9CMUewqI93Oh8wzqfJfQZL8uxj3oi2pQG3I7dBwsi9sZ+r+C
-         oCk5h8x/5EjOUNDw6fPd+LVbXDdMdlSJ8eLBV04lG01sasY83e5gMqYzxcG6yTnoOusX
-         xw7J3ozEBA2bjjnLbwl2C9T6ezj9QyLpH/9y7c5DLpf4c+Oj7DX7le3uI8Lswmc9Bh5Q
-         m9rw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAY4G1CpMbgq7fSI4ehRuPU4yySy/9cP4yZuKHeOp7Ra5KjRulOo/1VccxqFvwhXKe7T6fz8aULS5l2mPyiRVgPjGiG4/mUEMqy7BMfxvnf0Wl2HindNIaa5BIX7tmA3QVIVv6YKlTN9+T2SJ9UbzixBAmMQ6FghzKo9sLru9pMrne3PwE
-X-Gm-Message-State: AOJu0YyFLDGcPAvNRVX1yJ0nfxR/0SrDpkWnFENkLqDJ5lbFV7A9yZEm
-	+cIO1HJsfswAoM8237WwVHlydi1Z128Nasa9oOVn5bjekMUB6gN6HeNd+g==
-X-Google-Smtp-Source: AGHT+IHx3+YiTxi1Fg/aMOoqKriaeDIKLF1dvzu0R4Y5PSwp5KwRB7ZCd9qeZFKdy4G+AcSQ1Nl9hw==
-X-Received: by 2002:adf:fecf:0:b0:34c:6629:9962 with SMTP id ffacd0b85a97d-34fca42eb2cmr201491f8f.30.1715098731713;
-        Tue, 07 May 2024 09:18:51 -0700 (PDT)
-Received: from debian ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id s3-20020adfe003000000b0034e8a10039esm10226719wrh.10.2024.05.07.09.18.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 May 2024 09:18:51 -0700 (PDT)
-Message-ID: <3514cd99-7bd2-49d9-a1b3-a26e727bcef8@gmail.com>
-Date: Tue, 7 May 2024 18:18:18 +0200
+        d=1e100.net; s=20230601; t=1715098738; x=1715703538;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpA0imZ1JqdhWIK1ORQBd9/L74Ck+FsRXQUsgUAbnpw=;
+        b=M3scaIFkZpvGOzxbIiItQV3ZdkSifhmmnLdmVRTJbUz2fiWtWkdUly8x3u+DB0prEi
+         uSV5P3Tls6hVgCADkA7UXV9McQR2bI6UMhzl7VMSop0bgyYRY4fFffepOpqD0dW/jNOD
+         IEtQ4v/A50ay5Mp8a88b1kZwQZr1IYsMrtlfufkgbLv5qqsIN82oz/iP2pvP2PUV0AeC
+         mwsL0uykbx1yK2n8kWW/SR/6WAUew8hTYyQ7ONVYasjRxs1f+kq3ln25AKlZVaU4astr
+         RjAoKuPRIfh5tQQzD7JmcFf+QgxX4ZqsZVA3BUWeTV4goSLGp68i9vD4E7iMkYMy40de
+         3GXA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1U6ijmn9PXK1h/wBNgKeyPp0d6rrpaRiNAnLfL5dBeS4BxKgI+8oEiDXJuIi5hWQ9LEx6npFoMA4E/6VeCFluR3bG12vA5m8h1UfSodOn
+X-Gm-Message-State: AOJu0Yzi1NY07F0iYz/JW5gnQrH2kiwlsD4yX5r14w3qu7nmxJQir5y2
+	Sbjcoqq91VB4xttDnZ5mG82c1KsPNKd2sOJWzqKwKBLxtKDKyxyRbgK8Ite1syc=
+X-Google-Smtp-Source: AGHT+IHBeOFCxQYTrI8MfHIwKkBSBqM9hntJdk3KZjtoSOk7dYsXXEt5GzDg6QwjzVe4x2v7iKDOJw==
+X-Received: by 2002:a05:6808:242:b0:3c9:70bf:6824 with SMTP id 5614622812f47-3c9852ad715mr54932b6e.7.1715098738624;
+        Tue, 07 May 2024 09:18:58 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
+        by smtp.gmail.com with ESMTPSA id mh15-20020a056214564f00b0069942e76d99sm4800030qvb.48.2024.05.07.09.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 09:18:58 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1s4NWr-0001Pl-DR;
+	Tue, 07 May 2024 13:18:57 -0300
+Date: Tue, 7 May 2024 13:18:57 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240507161857.GA4718@ziepe.ca>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-3-almasrymina@google.com>
+ <ZjH1QaSSQ98mw158@infradead.org>
+ <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v8 2/3] net: gro: move L3 flush checks to
- tcp_gro_receive and udp_gro_receive_segment
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
- alobakin@pm.me, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alexander.duyck@gmail.com
-References: <20240506093550.128210-1-richardbgobert@gmail.com>
- <1ed21e6d-7cbc-43e3-8933-fc40562b70b2@gmail.com>
- <6639114eab050_516de29444@willemb.c.googlers.com.notmuch>
-From: Richard Gobert <richardbgobert@gmail.com>
-In-Reply-To: <6639114eab050_516de29444@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
 
-Willem de Bruijn wrote:
-> Richard Gobert wrote:
->> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
->> iph->id, ...) against all packets in a loop. These flush checks are used in
->> all merging UDP and TCP flows.
->>
->> These checks need to be done only once and only against the found p skb,
->> since they only affect flush and not same_flow.
->>
->> This patch leverages correct network header offsets from the cb for both
->> outer and inner network headers - allowing these checks to be done only
->> once, in tcp_gro_receive and udp_gro_receive_segment. As a result,
->> NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id checks are
->> more declarative and contained in inet_gro_flush, thus removing the need
->> for flush_id in napi_gro_cb.
->>
->> This results in less parsing code for non-loop flush tests for TCP and UDP
->> flows.
->>
->> To make sure results are not within noise range - I've made netfilter drop
->> all TCP packets, and measured CPU performance in GRO (in this case GRO is
->> responsible for about 50% of the CPU utilization).
->>
->> perf top while replaying 64 parallel IP/TCP streams merging in GRO:
->> (gro_network_flush is compiled inline to tcp_gro_receive)
->> net-next:
->>         6.94% [kernel] [k] inet_gro_receive
->>         3.02% [kernel] [k] tcp_gro_receive
->>
->> patch applied:
->>         4.27% [kernel] [k] tcp_gro_receive
->>         4.22% [kernel] [k] inet_gro_receive
->>
->> perf top while replaying 64 parallel IP/IP/TCP streams merging in GRO (same
->> results for any encapsulation, in this case inet_gro_receive is top
->> offender in net-next)
->> net-next:
->>         10.09% [kernel] [k] inet_gro_receive
->>         2.08% [kernel] [k] tcp_gro_receive
->>
->> patch applied:
->>         6.97% [kernel] [k] inet_gro_receive
->>         3.68% [kernel] [k] tcp_gro_receive
+On Tue, May 07, 2024 at 05:05:12PM +0100, Pavel Begunkov wrote:
+> > even in tree if you give them enough rope, and they should not have
+> > that rope when the only sensible options are page/folio based kernel
+> > memory (incuding large/huge folios) and dmabuf.
 > 
-> Thanks for getting the additional numbers. The savings are not huge.
-> 
-> But +1 on the change also because it simplifies this non-obvious
-> logic. It makes sense to separate flow matching and flush logic.
-> 
-> Btw please include Alexander Duyck in the Cc: of this series. 
+> I believe there is at least one deep confusion here, considering you
+> previously mentioned Keith's pre-mapping patches. The "hooks" are not
+> that about in what format you pass memory, it's arguably the least
+> interesting part for page pool, more or less it'd circulate whatever
+> is given. It's more of how to have a better control over buffer lifetime
+> and implement a buffer pool passing data to users and empty buffers
+> back.
 
-Thanks, will do that when I re-post.
+Isn't that more or less exactly what dmabuf is? Why do you need
+another almost dma-buf thing for another project?
 
->> +static inline int inet_gro_flush(const struct iphdr *iph, const struct iphdr *iph2,
->> +				 struct sk_buff *p, bool outer)
->> +{
->> +	const u32 id = ntohl(*(__be32 *)&iph->id);
->> +	const u32 id2 = ntohl(*(__be32 *)&iph2->id);
->> +	const u16 flush_id = (id >> 16) - (id2 >> 16);
->> +	const u16 count = NAPI_GRO_CB(p)->count;
->> +	const u32 df = id & IP_DF;
->> +	u32 is_atomic;
->> +	int flush;
->> +
->> +	/* All fields must match except length and checksum. */
->> +	flush = (iph->ttl ^ iph2->ttl) | (iph->tos ^ iph2->tos) | (df ^ (id2 & IP_DF));
->> +
->> +	if (outer && df)
->> +		return flush;
-> 
-> Does the fixed id logic apply equally to inner and outer IPv4?
-> 
-
-Fixed id logic is not applied equally to inner and outer IPv4. innermost
-IDs are checked, but outer IPv4 IDs are not checked at all if DF is set.
-This is the current logic in the code and this patch preserves it. To my
-understanding this is explained as intentional by the original commit author
-(20160407223218.11142.26592.stgit@ahduyck-xeon-server)
-
-Alexander - could you maybe elaborate further?
-
->> +
->> +	/* When we receive our second frame we can make a decision on if we
->> +	 * continue this flow as an atomic flow with a fixed ID or if we use
->> +	 * an incrementing ID.
->> +	 */
->> +	NAPI_GRO_CB(p)->is_atomic |= (count == 1 && df && flush_id == 0);
->> +	is_atomic = (df && NAPI_GRO_CB(p)->is_atomic) - 1;
->> +
->> +	return flush | (flush_id ^ (count & is_atomic));
-> 
-> This is a good time to consider making this logical more obvious.
-> 
-> First off, the flush check can be part of the outer && df above, as
-> flush is not modified after.
-> 
-> Subjective, but I find the following more readable, and not worth
-> saving a few branches.
-> 
->         if (count == 1 && df && !flush_id)
->                 NAPI_GRO_CB(p)->is_atomic = true;
-> 
-> 	ip_fixedid_matches = NAPI_GRO_CB(p)->is_atomic ^ df;
-> 	ipid_offset_matches = ipid_offset - count;
-> 
-> 	return ip_fixedid_matches & ipid_offset_matches;
-> 
-> Have to be a bit careful about types. Have not checked that in detail.
-> 
-
-ip_fixedid_matches should also account for checking whether flush_id is 0
-or not, if we're going for readability I'd suggest checking "which check"
-should be done (fixedid or offset) and do only the appropriate one.
-
-	if (count == 1 && df && !ipid_offset)
-		NAPI_GRO_CB(p)->is_atomic = true;
-
-	if (NAPI_GRO_CB(p)->is_atomic && df)
-		return flush | ipid_offset;
-
-	return flush | (ipid_offset ^ count);
-
-> And while nitpicking:
-> ipid_offset may be a more descriptive variable name than flush_id, and
-> ip_fixedid  than is_atomic. If changing those does not result in a lot
-> of code churn.
-> 
-
-I also think is_atomic is not the best name, I'll change both names in the
-next patch.
-
->> +}
->> +
->> +static inline int ipv6_gro_flush(const struct ipv6hdr *iph, const struct ipv6hdr *iph2)
->> +{
->> +	/* <Version:4><Traffic_Class:8><Flow_Label:20> */
->> +	__be32 first_word = *(__be32 *)iph ^ *(__be32 *)iph2;
->> +
->> +	/* Flush if Traffic Class fields are different. */
->> +	return !!((first_word & htonl(0x0FF00000)) |
->> +		(__force __be32)(iph->hop_limit ^ iph2->hop_limit));
->> +}
->> +
->> +static inline int gro_network_flush(const void *th, const void *th2, struct sk_buff *p, int off)
->> +{
->> +	const bool encap_mark = NAPI_GRO_CB(p)->encap_mark;
-> 
-> Is this correct when udp_gro_complete clears this for tunnels?
-> 
-
-gro_network_flush is called in receive flow, so udp_gro_complete cannot be
-called after gro_network_flush. I think the function name should be changed to
-gro_receive_network_flush.
-
->> +	int flush = 0;
->> +	int i;
->> +
->> +	for (i = 0; i <= encap_mark; i++) {
->> +		const u16 diff = off - NAPI_GRO_CB(p)->network_offsets[i];
->> +		const void *nh = th - diff;
->> +		const void *nh2 = th2 - diff;
->> +
->> +		if (((struct iphdr *)nh)->version == 6)
->> +			flush |= ipv6_gro_flush(nh, nh2);
->> +		else
->> +			flush |= inet_gro_flush(nh, nh2, p, i != encap_mark);
->> +	}
-> 
-> Maybe slightly better for branch prediction, and more obvious, if
-> creating a helper function __gro_network_flush and calling
-> 
->     __gro_network_flush(th, th2, p, off - NAPI_GRO_CB(p)->network_offsets[0])
->     if (NAPI_GRO_CB(p)->encap_mark)
->             __gro_network_flush(th, th2, p, off - NAPI_GRO_CB(p)->network_offsets[1])
-> 
->> +
->> +	return flush;
->> +}
->> +
->>  int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb);
->>  
+Jason
 
