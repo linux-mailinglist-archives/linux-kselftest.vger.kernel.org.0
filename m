@@ -1,127 +1,98 @@
-Return-Path: <linux-kselftest+bounces-9583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E5AD8BDD7E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 10:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E03568BDDF6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 11:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 249601C21C2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 08:52:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D2011C22074
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 09:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F04614D44D;
-	Tue,  7 May 2024 08:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AC414D6F7;
+	Tue,  7 May 2024 09:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="ArLEAsdz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD6313C9A6
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 May 2024 08:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.139.111.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F9214D451;
+	Tue,  7 May 2024 09:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715071936; cv=none; b=fGITqPxXFxg5Er6zfCbZg4fvK1kpFTf8fAORacJFUXP0Win5oqI7yppYAYzdbi3qzVEINsQoPFrerx3qIgp83MJXzw0JWrhKzaG4iftdg48hsdNJY/dOqei9ke8Dj1csLjMoZxxNTS/OgUP/ZOYLSyKcIBsICFnc1H/uxr7rX7k=
+	t=1715073616; cv=none; b=bYUaH3Sc6Jwk9kN+aOJ0RMoUChUu9ty24k4PDNr/bpWIv+PcfJOZODx+eG0O4Wj+/DfrDE51tV9a/0xgBYGh6iP8dI2kXbGBFHjX+tMxE9vWRLgnSv2UvAytapsulEBEIQ1YU2N/eC+hycXlpEPNWNF1xDeDKUVU9AHbgHmteYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715071936; c=relaxed/simple;
-	bh=PcC6gv/Xh6AX9bpLAJzrtC5YtnizlAobd29EGBRTI8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=k35dlcErTi3mlEdknmTWvDVEEkH6abukLKfeSIy09W2y4mNWWcNoYcsarP5SYFlJvl5uqOGbOxsSxX3d16igND/ppBo/5gdUgufgFoRmqlNHv/SfXKAJzgEJPu7zyQC3Uqnk06b3qhdyKSwECLBkoaao7x/kyzzUnieMJjjA3TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=none smtp.mailfrom=queasysnail.net; arc=none smtp.client-ip=205.139.111.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=queasysnail.net
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-EKjwsSalOS-woX3gmevNcQ-1; Tue,
- 07 May 2024 04:52:09 -0400
-X-MC-Unique: EKjwsSalOS-woX3gmevNcQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	s=arc-20240116; t=1715073616; c=relaxed/simple;
+	bh=sGf8/xmI8qDULHoJO68RRuCV/ofbkTSGYEIclQqzzuI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cags6hqHaeghlQcYlldB4CqFEBD2HmBvvkhg/kxwTBnjhpnNmNIxdMegEokgSXqRkGdxJW+RlLMhDw10w1YvtmXUjWISRQgItBXnGySOnHv4MFj7cDMljc1hirAT/7WfYp2SNJ1jo8RbH3nSxSP330rhuSEei0ik+eE9iu7LgoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=ArLEAsdz; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA6DD3800BA4;
-	Tue,  7 May 2024 08:52:08 +0000 (UTC)
-Received: from hog (unknown [10.39.193.137])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 151DC40C6CB6;
-	Tue,  7 May 2024 08:52:06 +0000 (UTC)
-Date: Tue, 7 May 2024 10:52:05 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antony Antony <antony@phenome.org>
-Cc: Antony Antony <antony.antony@secunet.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	(Authenticated sender: lukma@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id A545488662;
+	Tue,  7 May 2024 11:12:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1715073140;
+	bh=gIiuGYeGovNn1vn+AbPqA/C3xilWFjjooh3cCUPXJPg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ArLEAsdz4l92leGhoyWDkV8sQUhnYA6o1EJlEc+Br8rlw2eUYYZMZgW4mqRKDmgjL
+	 tnyz4BaMDumIT1Ail6J+uruYZrQu8Q0zPp/cAbJH7DRcauhTJq3h0HNxUotlRh16YK
+	 UjNjF86KrS3u8F6oaviOfdUNyo43Ose8mw+U65qIvSTUtFtFZ4MWy6SHMLWIe1aTgN
+	 JS/dCdyB9QRlS23UJxlg4Obb3z1R1fjut4IjJXAuozq6lnheq7lM8kyWPmlQ+Aq+vk
+	 FCxNql/j7uLcY1IaUkgdF5gmpeRh7Xvt/5EfC/x/hkrT2z1dZwg9HWw40lyflk+fh0
+	 qAb65qHsZdeYg==
+From: Lukasz Majewski <lukma@denx.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Shuah Khan <shuah@kernel.org>, devel@linux-ipsec.org
-Subject: Re: [PATCH net-next v3 0/2] fix icmp error source address over xfrm
- tunnel
-Message-ID: <ZjnrtWZeVgsHyNhm@hog>
-References: <cover.1714982035.git.antony.antony@secunet.com>
- <ZjjczzsSz6wwUHd5@hog>
- <Zjj94y2JW4uPg_Iz@Antony2201.local>
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukasz Majewski <lukma@denx.de>
+Subject: [net-next PATCH] test: hsr: Call cleanup_all_ns when hsr_redbox.sh script exits
+Date: Tue,  7 May 2024 11:11:55 +0200
+Message-Id: <20240507091155.3504198-1-lukma@denx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Zjj94y2JW4uPg_Iz@Antony2201.local>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-2024-05-06, 17:57:23 +0200, Antony Antony wrote:
-> Hi Sabrina,
->=20
-> On Mon, May 06, 2024 at 03:36:15PM +0200, Sabrina Dubroca via Devel wrote=
-:
-> > 2024-05-06, 09:58:26 +0200, Antony Antony wrote:
-> > > Hi,
-> > > This fix, originally intended for XFRM/IPsec, has been recommended by
-> > > Steffen Klassert to submit to the net tree.
-> > >=20
-> > > The patch addresses a minor issue related to the IPv4 source address =
-of
-> > > ICMP error messages, which originated from an old 2011 commit:
-> > >=20
-> > > 415b3334a21a ("icmp: Fix regression in nexthop resolution during repl=
-ies.")
-> > >=20
-> > > The omission of a "Fixes" tag  in the following commit is deliberate
-> > > to prevent potential test failures and subsequent regression issues
-> > > that may arise from backporting this patch all stable kerenels.
-> >=20
-> > What kind of regression do you expect? If there's a risk of
->=20
-> For example, an old testing scripts with hardcoded source IP address assu=
-me
-> that the "Unreachable response" will have the previous behavior. Such=20
-> testing script may trigger regression when this patch is backported. =20
-> Consequently, there may be discussions on whether this patch has broken t=
-he=20
-> 10-year-old test scripts, which may be hard to fix.
+Without this change the created netns instances are not cleared after
+this script execution. To fix this problem the cleanup_all_ns function
+from ../lib.sh is called.
 
-Ok, that seems like an acceptable level of "regression" to me. Thanks
-for explaining.
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+---
+ tools/testing/selftests/net/hsr/hsr_redbox.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > regression, I'm not sure net-next is that much "better" than net or
-> > stable. If a user complains about the new behavior breaking their
-> > setup, my understanding is that you would likely have to revert the
-> > patch anyway, or at least add some way to toggle the behavior.
->=20
-> My hope is that if this patch is applied to net-next without a "Fixes" ta=
-g,
-> users would fix their testing scripts properly.
-
-I don't think the lack of a fixes tag will make people fix broken test
-scripts, but maybe I'm too pessimistic.
-
---=20
-Sabrina
+diff --git a/tools/testing/selftests/net/hsr/hsr_redbox.sh b/tools/testing/selftests/net/hsr/hsr_redbox.sh
+index 52e0412c32e6..db69be95ecb3 100755
+--- a/tools/testing/selftests/net/hsr/hsr_redbox.sh
++++ b/tools/testing/selftests/net/hsr/hsr_redbox.sh
+@@ -86,6 +86,8 @@ setup_hsr_interfaces()
+ check_prerequisites
+ setup_ns ns1 ns2 ns3
+ 
++trap cleanup_all_ns EXIT
++
+ setup_hsr_interfaces 1
+ do_complete_ping_test
+ 
+-- 
+2.20.1
 
 
