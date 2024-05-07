@@ -1,454 +1,268 @@
-Return-Path: <linux-kselftest+bounces-9581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E738BDD70
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 10:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F3298BDD74
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 10:47:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 213F21F2186F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 08:45:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADAED1F2305E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 08:47:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C4314D44D;
-	Tue,  7 May 2024 08:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA6514D2BD;
+	Tue,  7 May 2024 08:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BJdMyWKK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l5joAMGZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274E914D2BD
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 May 2024 08:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715071535; cv=none; b=mlFEq6aZ3329CpkTuU1l+upDXokM0DuRk+diuKKD4maMUXT2JGlCcAq4jmckRHv+e6vHh/sbPmhL8lnUcEJCn7thIu5bee/DtGyNXvDrHJOQL9gZoBFcFv8K2CZig+vJRPEsUJYN8+SNZD2BAuWOvwIBE/2GNy1waj3CEpUtW9w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715071535; c=relaxed/simple;
-	bh=Wd/DgNGPbiMtBuAX7H5j/Z8F2ILgRj3NdeU/NgDMW2Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SvGXy8DZsyieJUEHmmEKrr2Z4g3MFjQcRif2Pzm2ev3gJqoa38O4O+vXrfBASVxNYcb7o3u2VKRk3c54QjDMj+BqCkQZBRJcJN09GOHgYVg+HuJx6PDPKxBx+qDWwneS9R6aRutHHBI0JMBCi2nWkDifXjnhnSBvMJCuACZLcgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BJdMyWKK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715071532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rrNg/I73qStEB69VLnS4sHpoJ+U3TC5N5tjxufpLDoc=;
-	b=BJdMyWKKE5dhLESMnlCgL9aoADTezM4iCsqEhhlyygYafDxG4fQMlla1geqzqmUeazOgTu
-	aqzK6gTXQw/RyCQ1LjmIy5SKX5Fdj+xlt6YEbvmllS+T5zG2d28NZ3pD+MI8KVoLEPBOHE
-	/qANLVnkboIpS/30Lhc18f9alVpodug=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-144-klWgOVjXPPWQkeDffNw97w-1; Tue, 07 May 2024 04:45:30 -0400
-X-MC-Unique: klWgOVjXPPWQkeDffNw97w-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-79299e0c059so243917185a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2024 01:45:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715071529; x=1715676329;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrNg/I73qStEB69VLnS4sHpoJ+U3TC5N5tjxufpLDoc=;
-        b=DWqWUFF4JyBik6gm4FrjAP/NpZF20cMA+T6DkzJZRlEdiypCnhl7/kIZc5CHTxCeGJ
-         1UwDpvqoeAqrtbhteo+nQ7mNHI0dc3bCReQRh+hpR4YIKoLpWbZ+hnk9G+UI1ob/KOSB
-         0+of1aZWVoCA+lT1IghAiyyLKGnd+7rQf3kCTLKxHvqlR8mxLTNWqTez8J7XUMmywg4l
-         Hp+kxEjG0nOpnZLKhCyjE4vypiHS3wLRg3Znmk+7OT01HrxkTTzbBYySIw2F4BbXTxnh
-         GOoj02dt2Ms317FpvxgKbH5MCLooOGhc6QtOQlZkkn9mDbmFd862sMZTPZ+ypk3jlh9n
-         Kzzg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHtUmP2YU/CZoPk3IhglQVu8DAPUnQOnaz6/wmMFHbt6gx/UCoHTpPx7176viey4ZpBEMO+ow8FzK9UlBX8c3tXInonGhpi++mWc0Dhl9q
-X-Gm-Message-State: AOJu0YwCrMc88R+VAt4woVlZAWcD0UXuaydp6YSgz8JSsr3bKZh971dp
-	xstaAxjJHYtrlU3fUTloylgGovdUgfF2VtnZ/PqEj55FI3RkIDK81lxbnKyPO6wp5/Yhv7h7INh
-	8ldLd1HweMPz4MYpJDCVLovHmKfwMl/gDQHQI/G7i2p/7jxy8Ksv5cM9QW/bdqd1lRA==
-X-Received: by 2002:a05:620a:13ec:b0:792:9d45:e2f9 with SMTP id h12-20020a05620a13ec00b007929d45e2f9mr3727006qkl.32.1715071529382;
-        Tue, 07 May 2024 01:45:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IExnBUzVZEURtv9sE2D6uzisLrJGEfFs4dgUGwPTPMI+pElwNSM9WbHpiBi4QYcpxxfv4vMbg==
-X-Received: by 2002:a05:620a:13ec:b0:792:9d45:e2f9 with SMTP id h12-20020a05620a13ec00b007929d45e2f9mr3726994qkl.32.1715071529009;
-        Tue, 07 May 2024 01:45:29 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id l26-20020a05620a0c1a00b007929535435bsm2151439qki.110.2024.05.07.01.45.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 May 2024 01:45:28 -0700 (PDT)
-Message-ID: <acbc717e-5f7b-405b-9674-e03d315726cb@redhat.com>
-Date: Tue, 7 May 2024 10:45:24 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58A313C9A2;
+	Tue,  7 May 2024 08:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715071660; cv=fail; b=k7RKTIYdMCHQ+t4gwiMQ0LBKkgHBSe4jfJTJVhct2t3nuEuY0Rs39DjEYYXFlEbWy+mLmVEIXkm0EFr2u21oUY8BjUfdUYwEzhJ5ilYoheprgd6zOf+k+Mf4RQSDejuB4etNCUSJY5ZpknGLP2NntfKZHIHOSsdLicNWj5qID0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715071660; c=relaxed/simple;
+	bh=BQ8OmVPkzGwOA1SLJNC1KQhYe+wZR2mOnl6BuhXgUf0=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=FbUFP+2PD4YVrKstHwi+TyJzlN5U+tTX3yduEJ37VnE/k1JxGlnYtb685SNYjFcbfQy3zm+JYk7JgAhEtUz4YyqTEYQEWAtwNSwUUQdhpISv7BQkYR2yudxN3ohMZx9HAobDUL2S2QvxKlc8rCjflAzgKnXF5YMwQqMhyl0q9KY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l5joAMGZ; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715071659; x=1746607659;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=BQ8OmVPkzGwOA1SLJNC1KQhYe+wZR2mOnl6BuhXgUf0=;
+  b=l5joAMGZv336eYmCtAjJYA2jn+FUxVnu8u3pmxZDHjfB0R2cL6TWeeaE
+   VvWb3Q7WqNAvwSvnrDNLdhg65OFvZnioO39MfQvKy0v5Q2Lz7OPFoJAtj
+   MC4ndJtvf/uSjKHseQXwjoZVLMAp+1jycMnf2L/Qsbes3rG0ZHMzDtDEz
+   K7qEWDPWegIBF6SndyLgHrBwumfCLE8Bfbysz4xe03j3K5sGDEmkD+X8R
+   BFdThmK2aHb/7tu3bknWVBZjUQ6MAT7WvbNxnuvkTZbmoWiki1kKEizzw
+   ud49EzzFdwkrPbxF4/76GwOpPDLgcefrysuXNBMDnXpnAHckIN1Zg3ZNj
+   w==;
+X-CSE-ConnectionGUID: NoDGqTpcQ1qGmJaMoFRnoA==
+X-CSE-MsgGUID: LCWHonAFQcyJwK9CaWYV2A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="10686891"
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="10686891"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 01:47:38 -0700
+X-CSE-ConnectionGUID: s5vdfWzyTviV7YrQXVujZQ==
+X-CSE-MsgGUID: LbqtTxlDTlSZrJkghj4wAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="32957798"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 May 2024 01:47:37 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 7 May 2024 01:47:37 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 7 May 2024 01:47:37 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 7 May 2024 01:47:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CYaAuNQyrUnK2Iaol1rezkppuNTBEJmVBXdHW1pPy7xs+M/GduGdB/+O4KI7P+JXNFdQsLDv9Svzpu1mKkqpMUKzXwOMZJlAT6qfiAOA/b54upLvsDEXgrqiT/pwHNCHBqsYKANMQhQqKMUNFRy9FIn/ekX8qjzeWAT9GL7uIt8kBwPhIWAP+oi++97sD5/d+9eVlLC6Tco8icVw/JCfCp58Gwd+I3C+gS2gDjqvmXHw1qHlpWZ4HgdduocD1KRyeGeNYbejAFiA7YeHjh25SBT1LD21vo16JCnpRm+pUb1Kb6+v7VVXLUmfAhsL9FbxEwMblXt4x/IjyLAGl+OVoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MuSNyW3PmrFcRbTCM0WKJNjauDuaDWwC9+7zl6wzUCg=;
+ b=dAz9x38NIbUCnErE3zZPJ/wcYyGYIkk6vYlJ+YFpB80i+vtEB5tqVrn9t9Tic2+AUHBeMGQ7Fx3nF04ggHxlXTH5Pyp33aWyal2CMcvRqmFZBUPCiIBMEmoZQp+DhHfhaIVSzFIKVSUtwmT9fzl4h14nOlkziWPNTAzdkydMQznfOGidVgsH0a3uWGpo7D0enYSTaZjMvHkSzqMjkqViaYAt0RQCBrl+EQlvzq4tWZT0P5o47zdpk2V9idR74upIBJCPq8HB0rgZ+pWScL48DaA8Q3Vik/GvKz8prm7zDp+84IRS200og9o6OVVIZ8cmuLnFd/MhjA61NOo7U+ImEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by CY8PR11MB7313.namprd11.prod.outlook.com (2603:10b6:930:9c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43; Tue, 7 May
+ 2024 08:47:34 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808%4]) with mapi id 15.20.7544.041; Tue, 7 May 2024
+ 08:47:34 +0000
+Message-ID: <327aafc5-2bea-4cc2-9ada-9320146b5e28@intel.com>
+Date: Tue, 7 May 2024 10:47:03 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests/bpf: fix pointer arithmetic in
+ test_xdp_do_redirect
+To: Michal Schmidt <mschmidt@redhat.com>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+	<eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	<netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240506145023.214248-1-mschmidt@redhat.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20240506145023.214248-1-mschmidt@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: WA2P291CA0034.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1f::7) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/3] KVM: selftests: aarch64: Introduce
- pmu_event_filter_test
-Content-Language: en-US
-To: Shaoqin Huang <shahuang@redhat.com>, Oliver Upton
- <oliver.upton@linux.dev>, Marc Zyngier <maz@kernel.org>,
- kvmarm@lists.linux.dev
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- James Morse <james.morse@arm.com>, Suzuki K Poulose
- <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240409030320.182591-1-shahuang@redhat.com>
- <20240409030320.182591-3-shahuang@redhat.com>
-From: Eric Auger <eauger@redhat.com>
-In-Reply-To: <20240409030320.182591-3-shahuang@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|CY8PR11MB7313:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51cd10ee-5865-4b13-f090-08dc6e7256ba
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|7416005|376005;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?R0Faa25Hc2sxL1FVQU5DbXhidVFhTEdrUFl1K0I5MTU0K2xVZUpTTHZGVksr?=
+ =?utf-8?B?ZFRVS3A3THFQVnpEa2tIRXdXV3QxaFJXZkhrV2hJalZvZ1BmaWM1TUhSeFl4?=
+ =?utf-8?B?S0txcDIzSUpmNXRwN0FSeElDMWJ6RXZXVXBjQkdPT29sY0lORlU5NWVOV1RQ?=
+ =?utf-8?B?TDI5cmE4aC9mL2REeGpmeWVoUkFMUFpmYS91cXY3bFdUNEZaZUFpSUJFbEZ1?=
+ =?utf-8?B?cFRka1h6d21Wamw2UmVKSldhY1RkL3RrWnloMXl3Sjh6bmNzV2xsZ0F2YXNT?=
+ =?utf-8?B?dzE4R3lhUFpwUG9yRkp1MzNkQ0JocktnTzdwcWlaTTc2akVVMTBJTHpPTVhq?=
+ =?utf-8?B?dTZBSFF2SGx3WHl3TUxIeVlHV3RlMkIyMFQ4WlQxMmxVSWtPR09kLzBudEcz?=
+ =?utf-8?B?T2w3TUhBbWZPT01MR3JPWWJyclJuM1RQN3hCeEMzZEdTN25UYmIvTUhVZzhx?=
+ =?utf-8?B?dmVKQnZTaUJDOUo1ZjRRY1V1eWYyQS9JaTI2V3FzelV6V1psdkk2VmRINFJS?=
+ =?utf-8?B?VGNQNm8ycG5YdXBuVlkrVlo1YkZ3WGNSS0E4UjNoWEt0UzFkY0pzMitmNTU3?=
+ =?utf-8?B?djJiQTJXVjROQ1BtbU1SUGdycUozVDNkTHJXZ2pyTVlLbHdjMVlZVFlWN2d4?=
+ =?utf-8?B?UXQ4SGJJOXpjZE9Gb3FpMUxWWHY3aW9mZnkyVnFlalhhNVNMNm02allnMnBo?=
+ =?utf-8?B?VHJkeHhYQUYwamM1K0dTNlFTNTJrRmlzcFdmbnhDN2J4VFpZNlVYVER2M3Qz?=
+ =?utf-8?B?NHRhcVlUeHZDQUlsQWsydTlLMFJ3dHdMaFVYOUxjWTZJQ3BRMGVFZmVrOHRT?=
+ =?utf-8?B?ZFFuNTZLM3VIMTgxUFBnRlRRdHVBbUExRW9Ec1Zka3h0WWtrRWZFR2tsSUlk?=
+ =?utf-8?B?TDdyQno4TEF2dVpyUUN3K2xtMmR3T2VPb1Q0bDRRN3pJM1hmRUhtUnpEbGk0?=
+ =?utf-8?B?SjAzWGhxbmNSQXdxU0c5dmdla2NweDVFK0pxYjdIcWhEbWpkMGdpMFlOa1NC?=
+ =?utf-8?B?dEI2ZGVTSGh0K3g1dk4xYW5sSGQ3VzU5djJER1Fyc3V5cFVnY1NWVEYya3V1?=
+ =?utf-8?B?WGorYXBocDVqWEp0VTRvUEl6YWZmWUZFN2REMm5VRFJSbGNrYzArcVdlNTRm?=
+ =?utf-8?B?L1JYamtUeDl1Vk9oNE4wVTFUcEVQRCtjZSs5U1lscG5QVWFlcElmNkpDaW1v?=
+ =?utf-8?B?bWhQbUU4NnYzQzZlUmIybXQ5MDZoR0dEQ2RhbzVSMGQvbWI3YkpOZkdxVndu?=
+ =?utf-8?B?eWU2YkY2WnY1aWZXa3N3T09FajZIZlpqTTVEN2lUK1p3d3NNRDk0K0toTWw3?=
+ =?utf-8?B?N2dTRmxaWlF6MWp1NTBDUjhNamdJbFBRWUFXTzVvV1IwMWg4Tm93Q29DdDJh?=
+ =?utf-8?B?K0VHNFpubTZlTHdQRUNob2dKK0RncG1rV0pvQUlZai9tcnUwS0NmR3RzcUJv?=
+ =?utf-8?B?eTZXR2liL0x6SkZZV3R6VUdNWHBwN2ZRQ3BqYWJWc2trWDBrOTUzWkJtclov?=
+ =?utf-8?B?MlREbGVvNmRoWDRxMkFkZVFOc25reVU2ajZlUVR6TlFUNllEa2xkTGoweHlx?=
+ =?utf-8?B?aXFnOW9XaG9Ub1RjRmVjMlFyMDhCN2xmVm4yb3pzRUN6Slo1MWlnN1kwdEZS?=
+ =?utf-8?B?RkpQUG5NWEp1YVg2RG0wa2VZd0h5Zmh3NUllekcrNGxqUGNyaXR2VnZSbmdF?=
+ =?utf-8?B?UnBkQUhhZDR6VkoySEdQdFJrS0pJeVBHMlNMbEMrZU9VUkZwSXl4MFVBPT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(7416005)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWEySzBPZGxESkRHRm1EbU9JeDJreEZLM2JWN3dTS25xbjIvekF1K1d4cXRK?=
+ =?utf-8?B?YW5oUkZRRXBKYTRHRTZraGxrT0FQdllxNTRZN2wrbm4wb2xDTFJURWttbHo0?=
+ =?utf-8?B?eXZhbEIyYnM2c2F4UlU0VXV4YVprRitYdlg0eEhwRHhRK3JnTFozZFlMZ0lo?=
+ =?utf-8?B?RGJKMGxjNHB0T0VLSDBoZzNJZEsvWVMvaURuY0xEVHIrb2JZbmFQWXY1a1NF?=
+ =?utf-8?B?dFJFZUpVT1RuNFJmSEZiSFJYWnNIQ1JiaUh3c1RNTjN4U1hKQ0pwL1ZOekMr?=
+ =?utf-8?B?NzFxVnhEa3hGY09tYmt0NVhUbHZmWHVsTFI0bFdlblkvTVl5MzJua3pNYjRJ?=
+ =?utf-8?B?WUoxOEw2YkdsNjFkbWlLVzBXODkzVjJESlNSZ1ZGZU9OWDJxMWJOdEE1QUh5?=
+ =?utf-8?B?MDVQWjNwai9GSEZ4dFJwNy9UM0xLd0gycTRKRGJwSjROZHd2eU1ZYjdzVkYz?=
+ =?utf-8?B?VGNGU0pjbCtiZ25WbGFIa3luU1FiVUNzMXNYd1h0OXprUlB4ZjZ4MHhpNGdu?=
+ =?utf-8?B?UUxQeWVWeVFoa3c1RFVLL2h5dnhuRTh0N2RuN1hCWG9McWp4Zk41SEVReFZY?=
+ =?utf-8?B?dzg3SXJKS3p3MElzYUF6M1Jvb2hVaG5WVzlrK1VxUFlvbE1zL0tQdFJKOFg5?=
+ =?utf-8?B?UzJHb3dGUmVmVkNxQ2piT1dHRWI3Y05KZXQwZU5IK1BLazc2eGJ4bk1QWWhw?=
+ =?utf-8?B?Y2RZN3p1aXNzck9jZmxKaU5PeGQ4YmJ1TUlUdjV4VVFJbloycGNFSm4ySDBX?=
+ =?utf-8?B?WW5ZMzVnSXA4Y1VES3VXb1JCYjJtRkM0Q3VFS2hMQWM0Tk9nZkZDL011cmpo?=
+ =?utf-8?B?QzRFKzEwU0RFeXNmQnhtWlRjNTZWT1A5WVZqMkFWNmV1Z0pudmx2SmhRTlMx?=
+ =?utf-8?B?NmJUeWc4SlI5NlgzTzFtUDc4VHY4SUEzamZYYTN6R0U2UTB5a2I2REQ3Z3M5?=
+ =?utf-8?B?N3I4U29LTjAyMUU2SFJLa1RLN2hvSWRNakg1cWppL01Vem1vMUF2ZDdqc01j?=
+ =?utf-8?B?OThJMFc0VEdiU0FzS1c5bEIzYkxtOHlyNXNhS3RFMytRWTZMdUpvNDdLNG96?=
+ =?utf-8?B?NUVrRitiSGQwR2Z0S2RSdSsyWWt2c2Y2bTkxbGxVa01KTTZkSjFOdFBIYXFC?=
+ =?utf-8?B?blE4TTZseDlLN2g4Nm53dkdvMTNMSnlMcUhrVitQWVRPaUlKYmRzR3J5NE0v?=
+ =?utf-8?B?RUNCSGV3MEE4am1YYzdjcURYY2h2aUlyam9FWGg1RS85dFlpQjZVZDFJc1Jr?=
+ =?utf-8?B?eGdBV0YrUDFMM0w3OFEzeG9UeFN5ZFc3YXVjYmU4YUNCUXRzOWtVTXV3dWYw?=
+ =?utf-8?B?WkhtN0lDM2hDMDdpRk10NTBmc0xVUzhqWkxKUk0yellicDZxYVJqQWZYNVBm?=
+ =?utf-8?B?L2swakNSOXMyby8zQTN0OEtJRkpJcFFDL1grY3hLNVVMYko3TGpCeWtYTmRw?=
+ =?utf-8?B?d0F6UStMQk9EMkdTczdjUkpmenZTaithaVZPVkhEOXJVMWVBMUtqTVlwS0do?=
+ =?utf-8?B?azNBWGJ5YTI5cGNBb1VlbkxTdEN2Qk8rS1RjWEhrSXc4S3N5YU00NHFlK1Rs?=
+ =?utf-8?B?dzQvRUhrdWtvWkloK1BWcTVIL0psRmM1cmd4NWxHc2E5ZHJUc0dRaXhmdmxY?=
+ =?utf-8?B?NVFXdjZIbkZzTFg1NVcxRnBrbklSVmE4eklVR3FCV3g5d3JuRjlUQTVXRVJo?=
+ =?utf-8?B?NThPajkwYTJ6aS9qRTc3ZWY4WEVPWnNKYk43a2wrdEJYSXhMcVAwYUZDR1lV?=
+ =?utf-8?B?cUNSZjhrS3h3MGdhR1E5cCsrdEVSMmNjbm93Q3FKeDlDMERnTUJ5c0ZTZ1RD?=
+ =?utf-8?B?T0ZvTVFhVkdzVXlsUFJLSUEvcUJUQVk3bE14bTdRbjIxWis2b1ZkRm5oUzJN?=
+ =?utf-8?B?akpMRmdwM0pXWDFsaTgxZUc1WVFhYXpTcFUveHI0OXRhR2xaVjJvN05xWUhz?=
+ =?utf-8?B?MVZ6bXRSOG1tWmM2VUZwa3VxNmwwY1BIcENSa3ZMV2ViOEhNNjh3aDlUQnhh?=
+ =?utf-8?B?Qlo5ZmE5a2Fwd3hSak5ibndRVlR1KzdaY2ZhMW54Q1NaV0lQKzR1aHphRFMz?=
+ =?utf-8?B?U0Zhci9vbDJHSmJxQ3pOSnk3Sld4c0NoUmtiY2E5T3pzK1h4dktoR2hseGtY?=
+ =?utf-8?B?dmVUMThQVU4rL0hNbVlOVDEyQ0dBeEx1MXZ3UGRmaWR5dXZIQmVOQlhQU1B3?=
+ =?utf-8?B?ZVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51cd10ee-5865-4b13-f090-08dc6e7256ba
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 08:47:34.2691
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vRiQCI2wIxxu/50cpyS+R726gZo01OWNWpVbWc+BW6BGLLlJMfDicwvzJox+n1ZEuhfHu4dg4QdK60Nz//Izz5XvhUuDpjRLTYOop+oVXsM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7313
+X-OriginatorOrg: intel.com
 
-Hi Shaoqin,
+From: Michal Schmidt <mschmidt@redhat.com>
+Date: Mon,  6 May 2024 16:50:22 +0200
 
-On 4/9/24 05:03, Shaoqin Huang wrote:
-> Introduce pmu_event_filter_test for arm64 platforms. The test configures
-> PMUv3 for a vCPU, and sets different pmu event filters for the vCPU, and
-> check if the guest can see those events which user allow and can't use
-> those events which use deny.
+> Cast operation has a higher precedence than addition. The code here
+> wants to zero the 2nd half of the 64-bit metadata, but due to a pointer
+> arithmetic mistake, it writes the zero at offset 16 instead.
 > 
-> This test refactor the create_vpmu_vm() and make it a wrapper for
-> __create_vpmu_vm(), which allows some extra init code before
-> KVM_ARM_VCPU_PMU_V3_INIT.
+> Just adding parentheses around "data + 4" would fix this, but I think
+> this will be slightly better readable with array syntax.
 > 
-> And this test use the KVM_ARM_VCPU_PMU_V3_FILTER attribute to set the
-> pmu event filter in KVM. And choose to filter two common event
-> branches_retired and instructions_retired, and let the guest to check if
-> it see the right pmceid register.
+> I was unable to test this with tools/testing/selftests/bpf/vmtest.sh,
+> because my glibc is newer than glibc in the provided VM image.
+> So I just checked the difference in the compiled code.
+> objdump -S tools/testing/selftests/bpf/xdp_do_redirect.test.o:
+>   -	*((__u32 *)data) = 0x42; /* metadata test value */
+>   +	((__u32 *)data)[0] = 0x42; /* metadata test value */
+>         be7:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
+>         bee:	c7 00 42 00 00 00    	movl   $0x42,(%rax)
+>   -	*((__u32 *)data + 4) = 0;
+>   +	((__u32 *)data)[1] = 0;
+>         bf4:	48 8d 85 30 fc ff ff 	lea    -0x3d0(%rbp),%rax
+>   -     bfb:	48 83 c0 10          	add    $0x10,%rax
+>   +     bfb:	48 83 c0 04          	add    $0x4,%rax
+>         bff:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
 > 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+> Fixes: 5640b6d89434 ("selftests/bpf: fix "metadata marker" getting overwritten by the netstack")
+> Signed-off-by: Michal Schmidt <mschmidt@redhat.com>
 > ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/aarch64/pmu_event_filter_test.c       | 298 ++++++++++++++++++
->  2 files changed, 299 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>  tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 741c7dc16afc..9745be534df3 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -151,6 +151,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/aarch32_id_regs
->  TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
->  TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
->  TEST_GEN_PROGS_aarch64 += aarch64/page_fault_test
-> +TEST_GEN_PROGS_aarch64 += aarch64/pmu_event_filter_test
->  TEST_GEN_PROGS_aarch64 += aarch64/psci_test
->  TEST_GEN_PROGS_aarch64 += aarch64/set_id_regs
->  TEST_GEN_PROGS_aarch64 += aarch64/smccc_filter
-> diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
-> new file mode 100644
-> index 000000000000..972384e81067
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
-> @@ -0,0 +1,298 @@
-> +
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * pmu_event_filter_test - Test user limit pmu event for guest.
-> + *
-> + * Copyright (c) 2023 Red Hat, Inc.> + *
-> + * This test checks if the guest only see the limited pmu event that userspace> + * sets, if the guest can use those events which user allow, and if
-the guest
-> + * can't use those events which user deny.
-> + * This test runs only when KVM_CAP_ARM_PMU_V3, KVM_ARM_VCPU_PMU_V3_FILTER> + * is supported on the host.
-> + */
-> +#include <kvm_util.h>
-> +#include <processor.h>
-> +#include <vgic.h>
-> +#include <vpmu.h>
-> +#include <test_util.h>
-> +#include <perf/arm_pmuv3.h>
-> +
-> +struct pmu_common_event_ids {
-> +	uint64_t pmceid0;
-> +	uint64_t pmceid1;
-> +} max_pmce, expected_pmce;
-> +
-> +struct vpmu_vm {
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +	int gic_fd;
-> +};
-> +
-> +static struct vpmu_vm vpmu_vm;
-> +
-> +#define FILTER_NR 10
-> +
-> +struct test_desc {
-> +	const char *name;
-> +	struct kvm_pmu_event_filter filter[FILTER_NR];
-> +};
-> +
-> +#define __DEFINE_FILTER(base, num, act)		\
-> +	((struct kvm_pmu_event_filter) {	\
-> +		.base_event	= base,		\
-> +		.nevents	= num,		\
-> +		.action		= act,		\
-> +	})
-> +
-> +#define DEFINE_FILTER(base, act) __DEFINE_FILTER(base, 1, act)
-> +
-> +static void guest_code(void)
-> +{
-> +	uint64_t pmceid0 = read_sysreg(pmceid0_el0);
-> +	uint64_t pmceid1 = read_sysreg(pmceid1_el0);
-> +
-> +	GUEST_ASSERT_EQ(expected_pmce.pmceid0, pmceid0);
-> +	GUEST_ASSERT_EQ(expected_pmce.pmceid1, pmceid1);
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void guest_get_pmceid(void)
-> +{
-> +	max_pmce.pmceid0 = read_sysreg(pmceid0_el0);
-> +	max_pmce.pmceid1 = read_sysreg(pmceid1_el0);
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void run_vcpu(struct kvm_vcpu *vcpu)
-> +{
-> +	struct ucall uc;
-> +
-> +	while (1) {
-> +		vcpu_run(vcpu);
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_DONE:
-> +			return;
-> +		case UCALL_ABORT:
-> +			REPORT_GUEST_ASSERT(uc);
-> +			break;
-> +		default:
-> +			TEST_FAIL("Unknown ucall %lu", uc.cmd);
-> +		}
-> +	}
-> +}
-> +
-> +static void set_pmce(struct pmu_common_event_ids *pmce, int action, int event)
-> +{
-> +	int base = 0;
-> +	uint64_t *pmceid = NULL;
-> +
-> +	if (event >= 0x4000) {
-> +		event -= 0x4000;
-> +		base = 32;
-> +	}
-> +
-> +	if (event >= 0 && event <= 0x1F) {
-> +		pmceid = &pmce->pmceid0;
-> +	} else if (event >= 0x20 && event <= 0x3F) {
-> +		event -= 0x20;
-> +		pmceid = &pmce->pmceid1;
-> +	} else {
-> +		return;
-> +	}
-> +
-> +	event += base;
-> +	if (action == KVM_PMU_EVENT_ALLOW)
-> +		*pmceid |= BIT(event);
-> +	else
-> +		*pmceid &= ~BIT(event);
-> +}
-> +
-> +static void prepare_expected_pmce(struct kvm_pmu_event_filter *filter)
-> +{
-> +	struct pmu_common_event_ids pmce_mask = { ~0, ~0 };
-> +	bool first_filter = true;
-> +	int i;
-> +
-> +	while (filter && filter->nevents != 0) {
-> +		if (first_filter) {
-> +			if (filter->action == KVM_PMU_EVENT_ALLOW)
-> +				memset(&pmce_mask, 0, sizeof(pmce_mask));
-> +			first_filter = false;
-> +		}
-> +
-> +		for (i = 0; i < filter->nevents; i++)
-> +			set_pmce(&pmce_mask, filter->action,
-> +				 filter->base_event + i);
-> +
-> +		filter++;
-> +	}
-> +
-> +	expected_pmce.pmceid0 = max_pmce.pmceid0 & pmce_mask.pmceid0;
-> +	expected_pmce.pmceid1 = max_pmce.pmceid1 & pmce_mask.pmceid1;
-> +}
-> +
-> +static void pmu_event_filter_init(struct kvm_pmu_event_filter *filter)
-> +{
-> +	while (filter && filter->nevents != 0) {
-> +		kvm_device_attr_set(vpmu_vm.vcpu->fd,
-> +				    KVM_ARM_VCPU_PMU_V3_CTRL,
-> +				    KVM_ARM_VCPU_PMU_V3_FILTER,
-> +				    filter);
-> +		filter++;
-> +	}
-> +}
-> +
-> +#define GICD_BASE_GPA	0x8000000ULL
-> +#define GICR_BASE_GPA	0x80A0000ULL
-in v4 Oliver suggested "Shouldn't a standardized layout of the GIC
-frames go with the rest of the GIC stuff?"
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> index 498d3bdaa4b0..bad0ea167be7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> @@ -107,8 +107,8 @@ void test_xdp_do_redirect(void)
+>  			    .attach_point = BPF_TC_INGRESS);
+>  
+>  	memcpy(&data[sizeof(__u64)], &pkt_udp, sizeof(pkt_udp));
+> -	*((__u32 *)data) = 0x42; /* metadata test value */
+> -	*((__u32 *)data + 4) = 0;
+> +	((__u32 *)data)[0] = 0x42; /* metadata test value */
+> +	((__u32 *)data)[1] = 0;
 
-> +
-> +/* Create a VM that has one vCPU with PMUv3 configured. */
-> +static void create_vpmu_vm_with_filter(void *guest_code,
-> +				       struct kvm_pmu_event_filter *filter)
-> +{
-> +	uint64_t irq = 23;
-> +
-> +	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
-> +	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-> +
-> +	vpmu_vm.vm = vm_create(1);
-> +	vpmu_vm.vcpu = vm_vcpu_add_with_vpmu(vpmu_vm.vm, 0, guest_code);
-> +	vpmu_vm.gic_fd = vgic_v3_setup(vpmu_vm.vm, 1, 64,
-> +					GICD_BASE_GPA, GICR_BASE_GPA);
-> +	__TEST_REQUIRE(vpmu_vm.gic_fd >= 0,
-> +		       "Failed to create vgic-v3, skipping");
-> +
-> +	pmu_event_filter_init(filter);
-> +
-> +	/* Initialize vPMU */
-> +	vpmu_set_irq(vpmu_vm.vcpu, irq);
-> +	vpmu_init(vpmu_vm.vcpu);
-> +}
-> +
-> +static void create_vpmu_vm(void *guest_code)
-> +{
-> +	create_vpmu_vm_with_filter(guest_code, NULL);
-> +}
-> +
-> +static void destroy_vpmu_vm(void)
-> +{
-> +	close(vpmu_vm.gic_fd);
-> +	kvm_vm_free(vpmu_vm.vm);
-> +}
-> +
-> +static void run_test(struct test_desc *t)
-> +{
-> +	pr_info("Test: %s\n", t->name);
-> +
-> +	create_vpmu_vm_with_filter(guest_code, t->filter);
-> +	prepare_expected_pmce(t->filter);
-> +	sync_global_to_guest(vpmu_vm.vm, expected_pmce);
-> +
-> +	run_vcpu(vpmu_vm.vcpu);
-> +
-> +	destroy_vpmu_vm();
-> +}
-> +
-> +static struct test_desc tests[] = {
-> +	{
-> +		.name = "without_filter",
-> +		.filter = {
-> +			{ 0 }
-> +		},
-> +	},
-> +	{
-> +		.name = "member_allow_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 0),
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_INST_RETIRED, 0),
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_BR_RETIRED, 0),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "member_deny_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 1),
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_INST_RETIRED, 1),
-> +			DEFINE_FILTERShouldn't a standardized layout of the GIC frames go with the rest of
-the GIC stuff?(ARMV8_PMUV3_PERFCTR_BR_RETIRED, 1),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "not_member_deny_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 1),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "not_member_allow_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 0),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "deny_chain_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CHAIN, 1),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "deny_cpu_cycles_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 1),
-> +			{ 0 },
-> +		},
-> +	},
-> +	{
-> +		.name = "cancel_filter",
-> +		.filter = {
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 0),
-> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 1),
-> +		},
-> +	},
-> +	{
-> +		.name = "multiple_filter",
-> +		.filter = {
-> +			__DEFINE_FILTER(0x0, 0x10, 0),
-> +			__DEFINE_FILTER(0x6, 0x3, 1),
-> +		},
-> +	},
-> +	{ 0 }
-> +};
-> +
-> +static void run_tests(void)
-> +{
-> +	struct test_desc *t;
-> +
-> +	for (t = &tests[0]; t->name; t++)
-> +		run_test(t);
-> +}
-> +
-> +static bool kvm_pmu_support_events(void)
-> +{
-> +	create_vpmu_vm(guest_get_pmceid);
-> +
-> +	memset(&max_pmce, 0, sizeof(max_pmce));
-> +	sync_global_to_guest(vpmu_vm.vm, max_pmce);
-> +	run_vcpu(vpmu_vm.vcpu);
-> +	sync_global_from_guest(vpmu_vm.vm, max_pmce);
-> +	destroy_vpmu_vm();
-> +
-> +	return max_pmce.pmceid0 &
-> +	       (ARMV8_PMUV3_PERFCTR_BR_RETIRED |
-> +	       ARMV8_PMUV3_PERFCTR_INST_RETIRED |
-> +	       ARMV8_PMUV3_PERFCTR_CHAIN);
-those are not bit masks but bit shifts. Also don't you want to test that
-all of them are supported?
+Uff sorry. I was a bit in hurry to fix BPF CI and did this braino :z
+I know pointer arithms obviously :D
+I'd give a Rev-by, but it was applied already. Thanks!
 
-BR_RETIRED is 0x21 so doesn't it belong to pmceid1?
+>  
+>  	skel = test_xdp_do_redirect__open();
+>  	if (!ASSERT_OK_PTR(skel, "skel"))
 
-
-in v4 Oliver suggested to use sysfs instead of spawning a scratch VM.
-> +}
-> +
-> +int main(void)
-> +{
-> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
-> +	TEST_REQUIRE(kvm_pmu_support_events());
-> +
-> +	run_tests();
-> +}
-Eric
-
+Thanks,
+Olek
 
