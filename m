@@ -1,116 +1,137 @@
-Return-Path: <linux-kselftest+bounces-9599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3CF08BE573
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 91CE88BE647
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 16:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54CF31F2227D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 14:16:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08F981F23D81
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 14:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76C0C16D33D;
-	Tue,  7 May 2024 14:13:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526C415FA67;
+	Tue,  7 May 2024 14:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qqcv7LlC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IRT5LAzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CD01635B3
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 May 2024 14:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC75A156F39;
+	Tue,  7 May 2024 14:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715091190; cv=none; b=BxC7yNJUD1xxw4AA3SNbtc7CG6QK8RbhIwE3PdDW+J/+Fx/DYfjMO6c/YMJch91uOg7JoqPi8zUGjCe3E54kg/ZvuF+5PB0fWIIW0hsv/gS7imJl6NV3zljx79wODpBhfwuhKKa/U9bhUR0FUbYPJ42yIytelYzmZTlfgL+ciFc=
+	t=1715093033; cv=none; b=HSxohsMz1TIkWULJA1zw1rJ6dcdX8z55+eb638/JXIyILsPw9QK+BQkC53cEDK/TJyfjdZbPqHy4t/FlMfa5MnBKyXJM3B2GCwRWf3AycbniGnnPav4ZxXoaAk136z8oJS2kGaAlPCsZ2td46nMXl3lB4WK8Be2+FrmL4aMBC38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715091190; c=relaxed/simple;
-	bh=zchA9qCZkbTbiKP4dWASuNmwzS8UpJKwMcrmBhDATqo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pdCPyXIJyGYRQjDMK3srp4qyONzaZw7+dELtp8kJwxS9UbK494/whdFkrSBfF5sYtpTdXsWbvuTVYkzaTxy8vCc4mIxLXOvG3ABHZOlNcoKeYoPTsHXi26+1BD3COkrfOvskemhJLDjJGAxjJxAPgZ5HcPKEPz6s6JpOquDpavk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qqcv7LlC; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-de6054876efso6476647276.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2024 07:12:53 -0700 (PDT)
+	s=arc-20240116; t=1715093033; c=relaxed/simple;
+	bh=cVK00FVDWLzEDng1ImuaW8RdJLe7pFz6qhNng9TB52w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hsmL83J9qgyQqpqU51kIwEACkBRThBQbwZCtjrzmv1tlnEIxoenJgQMZ8KWdOiEPQuxS5frcK23Wn/VRHJy0v2dneYWTv9wrvlQvKydrk/k0VKL0HyNIAnP9/F5FmMpAY3K30PqlUY+1XZYbAVokhfDIKPpteFYjYNa3HARI6jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IRT5LAzr; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-34e7a35d5d4so2413424f8f.2;
+        Tue, 07 May 2024 07:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715091173; x=1715695973; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WETraqwVUAnZYIOXp5ZtLEEE1VYRO8MGNkm01fdovIk=;
-        b=Qqcv7LlCIOJvBe8ClD5U2l4Vj91uUJ1zIUjEjaKr6vohBi/GFK/kCBkhW9qZZdGHpC
-         nxwyf2tAeD9my0a/qM1hJuFLQ5WLbt9BIL0qxKTsdW5atZMtIoDfpEumiMKhONL+q6GC
-         72o1+zEuLefO3WFSRbvMdj98ysyUkJMpfe7bhvl6A005A3nsrGayxqodnVvhsMT20pAt
-         yNYTWrA21yYGzTAFWGKYYldNzy6HfLhHLr9P8AMYSNlf/aDrueIH/wUsf3uXieIgzDX+
-         O5JA/bxh+xBYg6hbKTMR+zx9CtluRtqSpv7bEPdFtCNAqD41I+kZK/yYDSFaH5tcnybA
-         cKyw==
+        d=gmail.com; s=20230601; t=1715093030; x=1715697830; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8bM5RjluxHipg60pIjQCs1Kdq4Li1XFga7CcO2QMKNA=;
+        b=IRT5LAzrgTDwtonDzUoI5cmF6WkEZrb4Kdff8G5dzDYdL0UOehPFnnn4jQyucGMVNh
+         xjbSPUV7o7ne4svcyMAJGhk9lSiHY09I9bUIP2DlPoFA3KfsFHUViFDG9cZXyuz6kIfP
+         YknA2lt75aMkeZEA2BziEuYQ0S49lpj43co9I3/+zDFRId+vFT01WLsBTzhEH5JrN0ul
+         ofm2BbO2vBbZRnw8cnB9ZiGsrGVUhnwi64hyrj/mFZwyIjrCa9f6QNasdZGQe8dr/aW0
+         zWt02ej9L+AooRBsKvnmQdq56q2Oj7S4O2uWowGZLZVXaYalCmpjVlD4RMoHUgCVrH5B
+         9fKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715091173; x=1715695973;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WETraqwVUAnZYIOXp5ZtLEEE1VYRO8MGNkm01fdovIk=;
-        b=NsdGBEFcKIemvEMZRxUihupSBjYxHm94WlgCJCGLzwalwgJguM/ForQQ03k1MC9wb9
-         xOufA6mYcV+Ze+uwDv+4vEf+NY1MPcslBr5av4ZFoDqr5TnFXm/5E83azCNv8JFkPE/i
-         pxl/gOAUtJkpPllbitwzP4DmV+9ol1fHIk0NM+vw7xyxnGpWxLcK8aWwM9DBDds0vQL8
-         EomwkMOwjtIXZZJRvGcEY1hLPZFcFCx+/1XbTR8E/TfE6rwG8edokmnd8WCZ2oJ/t54w
-         btpbScgLOD5tZcJkSqYZW2w6+upNNZYG/fWhJlf5nj1KUN2j/3Msa6EjfgCPtQffD6If
-         BuJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUN1h9g7LTepp/mc5vUbJGGB31nJOTKLtc/hMNXQIleFivNDC3sAGmt44sm3qPDXJm1M/9oILlV7+Cek63hvgR03bWUHVDgkjN38ObbIvMy
-X-Gm-Message-State: AOJu0Yy2XWTLtjbpPuWsG1jV6jXlTZTYMcGy7RC1eSe20mw2GsazN8uz
-	RllAyVr6hOmIrVL3siEAFuKNHQzoUtG6kCGBx8RW0cGpA/Mxf+xlx4HjQsHl5Cv3yjuDbpqUU3x
-	SUg==
-X-Google-Smtp-Source: AGHT+IGplKwNSTSkBTAvhdXpqfJnr+yrgmgSEfcIAM5opFxBtA3BpCgSqdbY3obOQsQH1wjTlAweJ+rLPgI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:69cc:0:b0:de5:5225:c3a4 with SMTP id
- e195-20020a2569cc000000b00de55225c3a4mr3998230ybc.7.1715091172929; Tue, 07
- May 2024 07:12:52 -0700 (PDT)
-Date: Tue, 7 May 2024 07:12:51 -0700
-In-Reply-To: <202405061002.01D399877A@keescook>
+        d=1e100.net; s=20230601; t=1715093030; x=1715697830;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8bM5RjluxHipg60pIjQCs1Kdq4Li1XFga7CcO2QMKNA=;
+        b=amBwxvfaJ1QAH9jfyKcxOSfj98uiHDu+FJM6t3jmSVPcxkUAmakDAnhy+e9anr37mW
+         Xxy+6xKFuleFVK9zLvUmf9H2lct8LJXJBrcxoCCXwfcQcTGZA5q2tzosCWhXZkuvOjEr
+         RJXGPSH8EK+X+DHLDr2L9kt9VzlvczRLhvxvqBzaIIRKBf0Cjx06N5TDcEqtZt4GvF+j
+         5ao/7arABXL/gKZSqmXBv7YTsAPJGVjFuwdsUaWWzhbTL6cl+2PPJK+2235QHjsRT7Sc
+         VEvUANivpexQawZv0qSMBSRrLew6hAiqeW1xdIRbLVoW9P4fkzKT+TQZ+pbF7PCwv6je
+         4dYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNISGbTtAKlGaw7ymPqRozg9kzFPuqOXiNQNbzLf/5pBoCzGOlrWVREZlElrqqdUVJZzrfi63iha4KiAkzB7SoiZZcbzXUmn/IqwlQfVt3sFGC4PdFH5kws7Pf/ySZ9xnvxu1ugmSg2DXqUGKpf9C7Go1IpCTG6FSBWNRWKLsji5TP+zYHeTESFJIzA/TfiEdqcIvXVp/kmHO6
+X-Gm-Message-State: AOJu0YxuQ9U35RNO6qG4cWz5omXDSTca5zRURn75+a9ztSSUG/x9uqJ/
+	GzonDJ2Uf/qtfiki70aTgZzbYBO7TdmTS6ofN6cagS3PCMSXIYf7rgdS0NSJy0JLVxEtoRUaznA
+	jc6/XQ/htKsa+6RLFDToKXRiIk98=
+X-Google-Smtp-Source: AGHT+IGohbKdu5N5Ex+4EkZMkPfNXVJa4QuvuOwWy2p6XWZL9RHKYD+h27FqkUdbOj4eiHLrpqiOUEpbKJrSf/ZV38w=
+X-Received: by 2002:a5d:42d2:0:b0:34a:56e7:5cc4 with SMTP id
+ ffacd0b85a97d-34fca14b3bamr36578f8f.2.1715093030024; Tue, 07 May 2024
+ 07:43:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240506165518.474504-1-mic@digikod.net> <202405061002.01D399877A@keescook>
-Message-ID: <Zjo1xyhjmehsRhZ2@google.com>
-Subject: Re: [PATCH v6 00/10] Fix Kselftest's vfork() side effects
-From: Sean Christopherson <seanjc@google.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>, Christian Brauner <brauner@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Mark Brown <broonie@kernel.org>, 
-	Sasha Levin <sashal@kernel.org>, Shengyu Li <shengyu.li.evgeny@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Brendan Higgins <brendanhiggins@google.com>, 
-	David Gow <davidgow@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	"=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, Jon Hunter <jonathanh@nvidia.com>, Ron Economos <re@w6rz.net>, 
-	Ronald Warsow <rwarsow@gmx.de>, Stephen Rothwell <sfr@canb.auug.org.au>, Will Drewry <wad@chromium.org>, 
-	kernel test robot <oliver.sang@intel.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
+ <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-1-e2bcbdf49857@kernel.org>
+In-Reply-To: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-1-e2bcbdf49857@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 7 May 2024 07:43:39 -0700
+Message-ID: <CAADnVQKWCVfUhQnoYBoEZaZbfiX8MROcj7Ct-nB4-axhZqMecw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] selftests/bpf: Handle SIGINT when creating netns
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Cc: MPTCP Upstream <mptcp@lists.linux.dev>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 06, 2024, Kees Cook wrote:
-> On Mon, May 06, 2024 at 06:55:08PM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> > Shuah, I think this should be in -next really soon to make sure
-> > everything works fine for the v6.9 release, which is not currently the
-> > case.  I cannot test against all kselftests though.  I would prefer to
-> > let you handle this, but I guess you're not able to do so and I'll push
-> > it on my branch without reply from you.  Even if I push it on my branch=
-,
-> > please push it on yours too as soon as you see this and I'll remove it
-> > from mine.
->=20
-> Yes, please. Getting this into v6.9 is preferred,
+On Tue, May 7, 2024 at 3:53=E2=80=AFAM Matthieu Baerts (NGI0)
+<matttbe@kernel.org> wrote:
+>
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+>
+> It's necessary to delete netns during the MPTCP bpf tests interrupt,
+> otherwise the next tests run will fail due to unable to create netns.
+>
+> This patch adds a new SIGINT handle sig_int, and deletes NS_TEST in it.
+>
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> Reviewed-by: Mat Martineau <martineau@kernel.org>
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/mptcp.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testi=
+ng/selftests/bpf/prog_tests/mptcp.c
+> index 274d2e033e39..baf976a7a1dd 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> @@ -64,11 +64,18 @@ struct mptcp_storage {
+>         char ca_name[TCP_CA_NAME_MAX];
+>  };
+>
+> +static void sig_int(int sig)
+> +{
+> +       signal(sig, SIG_IGN);
+> +       SYS_NOFAIL("ip netns del %s", NS_TEST);
+> +}
+> +
+>  static struct nstoken *create_netns(void)
+>  {
+>         SYS(fail, "ip netns add %s", NS_TEST);
+>         SYS(fail, "ip -net %s link set dev lo up", NS_TEST);
+>
+> +       signal(SIGINT, sig_int);
+>         return open_netns(NS_TEST);
 
-Very strongly prefered for KVM selftests.  The negative impact on KVM isn't=
- that
-the bugs cause failures, it's that they cause false passes, which is far wo=
-rse
-(and why the bugs went unnoticed for most of the cycle).
+That's a drop in the bucket.
+ctrl-c of test_progs doesn't really work.
+Such clean up needs to be generic as part of network_helpers.c
 
