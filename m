@@ -1,500 +1,301 @@
-Return-Path: <linux-kselftest+bounces-9640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4F598BEB38
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 20:11:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C50818BEC52
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 21:09:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CD731F241F1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 18:11:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8D1C1C24893
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2024 19:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8CB16D4CA;
-	Tue,  7 May 2024 18:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D4216E872;
+	Tue,  7 May 2024 19:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CBNJnyNw"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MdWnk8yo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF35216D339
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 May 2024 18:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADB416D9A7;
+	Tue,  7 May 2024 19:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715105300; cv=none; b=dwr0aVOpOQKUICWw4AjcxdABJ3+ZLprYl00bNwI+ILtjdmDNCNwTxKReMOCnpS1dq3NjcIju6e8uyf9ZMkJDYaEM28M99wZpTfLZkyvL3lj/Yn+ga+8HUiU/4n7U+0MImJEXOm4X53r97l+PHTQhtbnzdoVvVopPMTiWhxAEj9o=
+	t=1715108932; cv=none; b=MJ3uZGqN1Z7K9sNdUiA4ygxooirqn4lNl2lxKWhjWgTtojeBCfs5PdmGzh8LobCSJtvljuOspR1fvvn3gYk5sMIzHKOvZEuUzOEK1EEstp79POlAJiHwKbz12Y1OrdlS1mKg1fYsZSwhz6T3t+nV3w4oF2Np131n439tQ7scpcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715105300; c=relaxed/simple;
-	bh=1p+UvRkwILv7j+uU2Wfe+g+eScb0cDzf5sxz0CAgfdg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D/sPanPNLH7g4Rp1Bv64Q2UROczuh0oM1C+XTR7VY0qGQGH5U+TpulYt/xCiwN/gKztrZeVOL0OZ96Si0ex3PtCv3TmuYhd77fNSJGWId7cTCHMTRtRA9rgE5HJoHtfMMiz0CWZAJjYfx0MICGn4cdkPhFs8c0IUdKiGVbDpffE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CBNJnyNw; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso2754a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2024 11:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715105296; x=1715710096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9y4Lt3e39ao1KvAxZTkx82JWTupI8h7IYYpm7rSkMok=;
-        b=CBNJnyNwMH11EMpu2xokBxn3OhsiUP7Z9h8QDgGJG72JGVWy6PWfKesBM+9XbZmm+A
-         dcSQoJia/lWyPvCTQYIVlZxruWRkxb2t1bstWubTPfV5xiwUk+GlpxMqqZPm9iZlG8Xz
-         h8MZfoGDjBJF424v8gj5MTT1qb/zYEcMu+mLKUFyfVqoRRkkQHbL42TVqsiNdU5dG1IK
-         Otju2bqFuPtFYRojcTz2KgUPthOZ2r/AR/iqyEBAtBaqxA3Tdod3JNbvxKH8F/SxG0Y8
-         57KXSCf91HDluHsLEcKIl+82vCF/eJDuf5cFaPDMUdgBbXtMPWXaDfuaLeRtQfKf5N6s
-         d54A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715105296; x=1715710096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9y4Lt3e39ao1KvAxZTkx82JWTupI8h7IYYpm7rSkMok=;
-        b=PRcfTBiaWoDNTprKdho3pMLSnkJ+Xo5ZoyVeHiJl8kbUNnsedZAsltTSFkjOB8OKOT
-         6C/WGQcLwNn/5X2yzxMT1fTqXZh5cKRI9JmQXDW9Qq5/Q2ggidDxRLgMs+QBigjm2rRM
-         WPf+VdeXtnSZQZwBrlSUzeobvej3BFBTBP8oe5VyiSD1CRAm2znJGdaiXVFTUcvzHYww
-         oJJ+Me/jH4UrUYFWROq0N0yHut/wdGV+rqtTGAn0rxksBpuvdSNPIqikupHOEQNTstKf
-         1p0UrxMkFPCIOGmo53y63EKtIXv46ChehgfdwVP6rNIAZ1D+RQEWkoUsfNExS99yjCjG
-         /A5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWGty48sIniFaY3VPdocvBn4KSf6na4XLgtwNdxZtHmtF+mnpEMoiHYrY4QSAj0wcmAMyZ61tgqR9EyZq8sFs2H8XR8YQazMga7pvLRJgyM
-X-Gm-Message-State: AOJu0Yw4i/3ycSdR5T0qmqYCQnSGn7NhblIvErjcWQILIydgvx6sMxf4
-	7bOyAHOT2kO0h90Ft3hcryTamZgSZSom0mMsJbZqzM0RqThysEfAtHli20Dl90rDm1MIDdy1AZn
-	aZ3sun9XBuqNhEOKN+ABAkDdLJJv6fuw4VI0q
-X-Google-Smtp-Source: AGHT+IFms1rHyG/HROh20QipaFnMsmtruhARrzeshL1FUbecblfZ10EdE42yb5F1d0+3w9zzAlWcQCspDTWUYmKpHJM=
-X-Received: by 2002:a50:d486:0:b0:573:1366:d196 with SMTP id
- 4fb4d7f45d1cf-5731febed56mr14877a12.1.1715105295937; Tue, 07 May 2024
- 11:08:15 -0700 (PDT)
+	s=arc-20240116; t=1715108932; c=relaxed/simple;
+	bh=zBtOdwwtvKm20Q77bQR/mEqpEaFtLymX61Rz+GGBf8I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tjQlz+pTL1MaEB5FkuoJm5HaHkcNpH2SArlLzwIrFvHkWNQJvU7h3pOkGoYVQnA1NXiJqdPUvubgiUuVzvPI1fRpPEiSUstmKRwrVz8SAW1m8pM2F/yyiAlNDTvofggCsP/iaB1QUSYX/9rI/sVwTqJdR0M0fvDv1TmFsLGZB/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MdWnk8yo; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=zBtOdwwtvKm20Q77bQR/mEqpEaFtLymX61Rz+GGBf8I=; b=MdWnk8yoI2DOelSJXtTlIUSpzj
+	IQ3W64s3IyVTPaLMA6DEOtDjKp2/Nx8QfV7Q7H78ngnw0+FpgcJKClmwzFRSP/pdkyoIHmfSUHJR2
+	3M028WgCpRtgQELOITgr51x9myAnIGJY0sYy5bQPzHHpGvK+XeKggPfG7l9eyxxcIPEIsrCaE94OB
+	tnJwsxryJ3rdnaiyL47JuljvYXR62OJ8FuHg2yFG21qp9xkk1KdOJIOkRyIh4i51efiyypodxn702
+	KgQNwzMkoSujXejKdm8LvsJZ5GNVQ1qpQTQK1NxVA+6ZsR6XMo3dYRQOzwTicQWqXDfTzPO5ZH5UL
+	pg3GX21Q==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s4QB7-0000000Dsk7-40yh;
+	Tue, 07 May 2024 19:08:42 +0000
+Message-ID: <51dea3a632131d9a49af3991a633f26ce8592dd3.camel@infradead.org>
+Subject: Re: [PATCH v2 01/15] KVM: x86/xen: Do not corrupt KVM clock in
+ kvm_xen_shared_info_init()
+From: David Woodhouse <dwmw2@infradead.org>
+To: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Paul Durrant
+ <paul@xen.org>, Shuah Khan <shuah@kernel.org>,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org, Oliver
+ Upton <oliver.upton@linux.dev>,  jalliste@amazon.co.uk, sveith@amazon.de,
+ zide.chen@intel.com, Dongli Zhang <dongli.zhang@oracle.com>
+Date: Tue, 07 May 2024 20:08:40 +0100
+In-Reply-To: <ZjXm9w/y3/NLCxLQ@tpad>
+References: <20240427111929.9600-1-dwmw2@infradead.org>
+	 <20240427111929.9600-2-dwmw2@infradead.org> <ZjXm9w/y3/NLCxLQ@tpad>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-1MxL1pyflkVSO892kaNk"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507162349.130277-1-richardbgobert@gmail.com> <20240507163021.130466-1-richardbgobert@gmail.com>
-In-Reply-To: <20240507163021.130466-1-richardbgobert@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 7 May 2024 20:08:03 +0200
-Message-ID: <CANn89iJfVHA=n-vSpFwoP3Jb8Wxr1hgem1rLqmyPWPUwDpe-cg@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 2/3] net: gro: move L3 flush checks to
- tcp_gro_receive and udp_gro_receive_segment
-To: Richard Gobert <richardbgobert@gmail.com>
-Cc: alexander.duyck@gmail.com, davem@davemloft.net, dsahern@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	shuah@kernel.org, willemdebruijn.kernel@gmail.com
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+
+
+--=-1MxL1pyflkVSO892kaNk
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 7, 2024 at 6:30=E2=80=AFPM Richard Gobert <richardbgobert@gmail=
-.com> wrote:
->
-> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
-> iph->id, ...) against all packets in a loop. These flush checks are used =
-in
-> all merging UDP and TCP flows.
->
-> These checks need to be done only once and only against the found p skb,
-> since they only affect flush and not same_flow.
->
-> This patch leverages correct network header offsets from the cb for both
-> outer and inner network headers - allowing these checks to be done only
-> once, in tcp_gro_receive and udp_gro_receive_segment. As a result,
-> NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id checks ar=
-e
-> more declarative and contained in inet_gro_flush, thus removing the need
-> for flush_id in napi_gro_cb.
->
-> This results in less parsing code for non-loop flush tests for TCP and UD=
-P
-> flows.
->
-> To make sure results are not within noise range - I've made netfilter dro=
-p
-> all TCP packets, and measured CPU performance in GRO (in this case GRO is
-> responsible for about 50% of the CPU utilization).
->
-> perf top while replaying 64 parallel IP/TCP streams merging in GRO:
-> (gro_receive_network_flush is compiled inline to tcp_gro_receive)
-> net-next:
->         6.94% [kernel] [k] inet_gro_receive
->         3.02% [kernel] [k] tcp_gro_receive
->
-> patch applied:
->         4.27% [kernel] [k] tcp_gro_receive
->         4.22% [kernel] [k] inet_gro_receive
->
-> perf top while replaying 64 parallel IP/IP/TCP streams merging in GRO (sa=
-me
-> results for any encapsulation, in this case inet_gro_receive is top
-> offender in net-next)
-> net-next:
->         10.09% [kernel] [k] inet_gro_receive
->         2.08% [kernel] [k] tcp_gro_receive
->
-> patch applied:
->         6.97% [kernel] [k] inet_gro_receive
->         3.68% [kernel] [k] tcp_gro_receive
->
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-> ---
->  include/net/gro.h      | 78 +++++++++++++++++++++++++++++++++++++-----
->  net/core/gro.c         |  3 --
->  net/ipv4/af_inet.c     | 41 +---------------------
->  net/ipv4/tcp_offload.c | 17 ++-------
->  net/ipv4/udp_offload.c | 10 ++----
->  net/ipv6/ip6_offload.c | 11 ------
->  6 files changed, 76 insertions(+), 84 deletions(-)
->
-> diff --git a/include/net/gro.h b/include/net/gro.h
-> index 3dafa0f31ae1..e0939b4b6579 100644
-> --- a/include/net/gro.h
-> +++ b/include/net/gro.h
-> @@ -36,15 +36,15 @@ struct napi_gro_cb {
->         /* This is non-zero if the packet cannot be merged with the new s=
-kb. */
->         u16     flush;
->
-> -       /* Save the IP ID here and check when we get to the transport lay=
-er */
-> -       u16     flush_id;
-> -
->         /* Number of segments aggregated. */
->         u16     count;
->
->         /* Used in ipv6_gro_receive() and foo-over-udp and esp-in-udp */
->         u16     proto;
->
-> +       /* used to support CHECKSUM_COMPLETE for tunneling protocols */
-> +       __wsum  csum;
-> +
->  /* Used in napi_gro_cb::free */
->  #define NAPI_GRO_FREE             1
->  #define NAPI_GRO_FREE_STOLEN_HEAD 2
-> @@ -75,8 +75,8 @@ struct napi_gro_cb {
->                 /* Used in GRE, set in fou/gue_gro_receive */
->                 u8      is_fou:1;
->
-> -               /* Used to determine if flush_id can be ignored */
-> -               u8      is_atomic:1;
-> +               /* Used to determine if ipid_offset can be ignored */
-> +               u8      ip_fixedid:1;
->
->                 /* Number of gro_receive callbacks this packet already we=
-nt through */
->                 u8 recursion_counter:4;
-> @@ -85,9 +85,6 @@ struct napi_gro_cb {
->                 u8      is_flist:1;
->         );
->
-> -       /* used to support CHECKSUM_COMPLETE for tunneling protocols */
-> -       __wsum  csum;
-> -
->         /* L3 offsets */
->         union {
->                 struct {
-> @@ -442,6 +439,71 @@ static inline __wsum ip6_gro_compute_pseudo(const st=
-ruct sk_buff *skb,
->                                             skb_gro_len(skb), proto, 0));
->  }
->
-> +static inline int inet_gro_flush(const struct iphdr *iph, const struct i=
-phdr *iph2,
-> +                                struct sk_buff *p, bool outer)
-> +{
-> +       const u32 id =3D ntohl(*(__be32 *)&iph->id);
-> +       const u32 id2 =3D ntohl(*(__be32 *)&iph2->id);
-> +       const u16 ipid_offset =3D (id >> 16) - (id2 >> 16);
-> +       const u16 count =3D NAPI_GRO_CB(p)->count;
-> +       const u32 df =3D id & IP_DF;
-> +       int flush;
-> +
-> +       /* All fields must match except length and checksum. */
-> +       flush =3D (iph->ttl ^ iph2->ttl) | (iph->tos ^ iph2->tos) | (df ^=
- (id2 & IP_DF));
-> +
-> +       if (outer && df)
-> +               return flush;
-> +
-> +       /* When we receive our second frame we can make a decision on if =
-we
-> +        * continue this flow as an atomic flow with a fixed ID or if we =
-use
-> +        * an incrementing ID.
-> +        */
-> +       if (count =3D=3D 1 && df && !ipid_offset)
-> +               NAPI_GRO_CB(p)->ip_fixedid =3D true;
-> +
+On Sat, 2024-05-04 at 04:42 -0300, Marcelo Tosatti wrote:
+> On Sat, Apr 27, 2024 at 12:04:58PM +0100, David Woodhouse wrote:
+> >=20
+> > In particular, KVM_REQ_MASTERCLOCK_UPDATE will take a new snapshot of
+> > time as the reference in master_kernel_ns and master_cycle_now, yanking
+> > the guest's clock back to match definition A at that moment.
+>=20
+> KVM_REQ_MASTERCLOCK_UPDATE stops the vcpus because:
 
-I could not find where NAPI_GRO_CB(p)->ip_fixedid was cleared, or initializ=
-ed
-if/when GRO is fed with a GRO/GSO packet.
+Took me a while to work that one out, btw. The fact that the=C2=A0
+KVM_REQ_MCLOCK_INPROGRESS request is asserted but never actually
+*handled*, so all it does is repeatedly kick the vCPU out and make it
+spin until the request is cleared is... interesting. Likewise the way
+that we set KVM_REQ_MASTERCLOCK_UPDATE on *all* vCPUs, so they *all*
+call kvm_update_masterclock(), when only one of them needed to. I may
+clean that up a little.
 
-> +       if (NAPI_GRO_CB(p)->ip_fixedid && df)
-> +               return flush | ipid_offset;
-> +
-> +       return flush | (ipid_offset ^ count);
-> +}
-> +
-> +static inline int ipv6_gro_flush(const struct ipv6hdr *iph, const struct=
- ipv6hdr *iph2)
-> +{
-> +       /* <Version:4><Traffic_Class:8><Flow_Label:20> */
-> +       __be32 first_word =3D *(__be32 *)iph ^ *(__be32 *)iph2;
-> +
-> +       /* Flush if Traffic Class fields are different. */
-> +       return !!((first_word & htonl(0x0FF00000)) |
-> +               (__force __be32)(iph->hop_limit ^ iph2->hop_limit));
-> +}
-> +
-> +static inline int __gro_receive_network_flush(const void *th, const void=
- *th2,
-> +                                             struct sk_buff *p, const u1=
-6 diff,
-> +                                             bool outer)
-> +{
-> +       const void *nh =3D th - diff;
-> +       const void *nh2 =3D th2 - diff;
-> +
-> +       if (((struct iphdr *)nh)->version =3D=3D 6)
-> +               return ipv6_gro_flush(nh, nh2);
-> +       else
-> +               return inet_gro_flush(nh, nh2, p, outer);
-> +}
-> +
-> +static inline int gro_receive_network_flush(const void *th, const void *=
-th2,
-> +                                           struct sk_buff *p, int off)
-> +{
-> +       const bool encap_mark =3D NAPI_GRO_CB(p)->encap_mark;
-> +       int flush;
-> +
-> +       flush =3D __gro_receive_network_flush(th, th2, p, off - NAPI_GRO_=
-CB(p)->network_offset, encap_mark);
-> +       if (encap_mark)
-> +               flush |=3D __gro_receive_network_flush(th, th2, p, off - =
-NAPI_GRO_CB(p)->inner_network_offset, false);
-> +
-> +       return flush;
-> +}
-> +
->  int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb);
->
->  /* Pass the currently batched GRO_NORMAL SKBs up to the stack. */
-> diff --git a/net/core/gro.c b/net/core/gro.c
-> index 99a45a5211c9..3e9422c23bc9 100644
-> --- a/net/core/gro.c
-> +++ b/net/core/gro.c
-> @@ -331,8 +331,6 @@ static void gro_list_prepare(const struct list_head *=
-head,
->         list_for_each_entry(p, head, list) {
->                 unsigned long diffs;
->
-> -               NAPI_GRO_CB(p)->flush =3D 0;
-> -
->                 if (hash !=3D skb_get_hash_raw(p)) {
->                         NAPI_GRO_CB(p)->same_flow =3D 0;
->                         continue;
-> @@ -472,7 +470,6 @@ static enum gro_result dev_gro_receive(struct napi_st=
-ruct *napi, struct sk_buff
->                                         sizeof(u32))); /* Avoid slow unal=
-igned acc */
->         *(u32 *)&NAPI_GRO_CB(skb)->zeroed =3D 0;
->         NAPI_GRO_CB(skb)->flush =3D skb_has_frag_list(skb);
-> -       NAPI_GRO_CB(skb)->is_atomic =3D 1;
->         NAPI_GRO_CB(skb)->count =3D 1;
->         if (unlikely(skb_is_gso(skb))) {
->                 NAPI_GRO_CB(skb)->count =3D skb_shinfo(skb)->gso_segs;
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 428196e1541f..44564d009e95 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -1482,7 +1482,6 @@ struct sk_buff *inet_gro_receive(struct list_head *=
-head, struct sk_buff *skb)
->         struct sk_buff *p;
->         unsigned int hlen;
->         unsigned int off;
-> -       unsigned int id;
->         int flush =3D 1;
->         int proto;
->
-> @@ -1508,13 +1507,10 @@ struct sk_buff *inet_gro_receive(struct list_head=
- *head, struct sk_buff *skb)
->                 goto out;
->
->         NAPI_GRO_CB(skb)->proto =3D proto;
-> -       id =3D ntohl(*(__be32 *)&iph->id);
-> -       flush =3D (u16)((ntohl(*(__be32 *)iph) ^ skb_gro_len(skb)) | (id =
-& ~IP_DF));
-> -       id >>=3D 16;
-> +       flush =3D (u16)((ntohl(*(__be32 *)iph) ^ skb_gro_len(skb)) | (nto=
-hl(*(__be32 *)&iph->id) & ~IP_DF));
->
->         list_for_each_entry(p, head, list) {
->                 struct iphdr *iph2;
-> -               u16 flush_id;
->
->                 if (!NAPI_GRO_CB(p)->same_flow)
->                         continue;
-> @@ -1531,43 +1527,8 @@ struct sk_buff *inet_gro_receive(struct list_head =
-*head, struct sk_buff *skb)
->                         NAPI_GRO_CB(p)->same_flow =3D 0;
->                         continue;
->                 }
-> -
-> -               /* All fields must match except length and checksum. */
-> -               NAPI_GRO_CB(p)->flush |=3D
-> -                       (iph->ttl ^ iph2->ttl) |
-> -                       (iph->tos ^ iph2->tos) |
-> -                       ((iph->frag_off ^ iph2->frag_off) & htons(IP_DF))=
-;
-> -
-> -               NAPI_GRO_CB(p)->flush |=3D flush;
-> -
-> -               /* We need to store of the IP ID check to be included lat=
-er
-> -                * when we can verify that this packet does in fact belon=
-g
-> -                * to a given flow.
-> -                */
-> -               flush_id =3D (u16)(id - ntohs(iph2->id));
-> -
-> -               /* This bit of code makes it much easier for us to identi=
-fy
-> -                * the cases where we are doing atomic vs non-atomic IP I=
-D
-> -                * checks.  Specifically an atomic check can return IP ID
-> -                * values 0 - 0xFFFF, while a non-atomic check can only
-> -                * return 0 or 0xFFFF.
-> -                */
-> -               if (!NAPI_GRO_CB(p)->is_atomic ||
-> -                   !(iph->frag_off & htons(IP_DF))) {
-> -                       flush_id ^=3D NAPI_GRO_CB(p)->count;
-> -                       flush_id =3D flush_id ? 0xFFFF : 0;
-> -               }
-> -
-> -               /* If the previous IP ID value was based on an atomic
-> -                * datagram we can overwrite the value and ignore it.
-> -                */
-> -               if (NAPI_GRO_CB(skb)->is_atomic)
-> -                       NAPI_GRO_CB(p)->flush_id =3D flush_id;
-> -               else
-> -                       NAPI_GRO_CB(p)->flush_id |=3D flush_id;
->         }
->
-> -       NAPI_GRO_CB(skb)->is_atomic =3D !!(iph->frag_off & htons(IP_DF));
->         NAPI_GRO_CB(skb)->flush |=3D flush;
->         NAPI_GRO_CB(skb)->inner_network_offset =3D off;
->
-> diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
-> index b70ae50e658d..5f0af1338d62 100644
-> --- a/net/ipv4/tcp_offload.c
-> +++ b/net/ipv4/tcp_offload.c
-> @@ -232,9 +232,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *hea=
-d, struct sk_buff *skb)
->         goto out_check_final;
->
->  found:
-> -       /* Include the IP ID check below from the inner most IP hdr */
-> -       flush =3D NAPI_GRO_CB(p)->flush;
-> -       flush |=3D (__force int)(flags & TCP_FLAG_CWR);
-> +       flush =3D (__force int)(flags & TCP_FLAG_CWR);
->         flush |=3D (__force int)((flags ^ tcp_flag_word(th2)) &
->                   ~(TCP_FLAG_CWR | TCP_FLAG_FIN | TCP_FLAG_PSH));
->         flush |=3D (__force int)(th->ack_seq ^ th2->ack_seq);
-> @@ -242,16 +240,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *he=
-ad, struct sk_buff *skb)
->                 flush |=3D *(u32 *)((u8 *)th + i) ^
->                          *(u32 *)((u8 *)th2 + i);
->
-> -       /* When we receive our second frame we can made a decision on if =
-we
-> -        * continue this flow as an atomic flow with a fixed ID or if we =
-use
-> -        * an incrementing ID.
-> -        */
-> -       if (NAPI_GRO_CB(p)->flush_id !=3D 1 ||
-> -           NAPI_GRO_CB(p)->count !=3D 1 ||
-> -           !NAPI_GRO_CB(p)->is_atomic)
-> -               flush |=3D NAPI_GRO_CB(p)->flush_id;
-> -       else
-> -               NAPI_GRO_CB(p)->is_atomic =3D false;
-> +       flush |=3D gro_receive_network_flush(th, th2, p, off);
->
->         mss =3D skb_shinfo(p)->gso_size;
->
-> @@ -338,7 +327,7 @@ INDIRECT_CALLABLE_SCOPE int tcp4_gro_complete(struct =
-sk_buff *skb, int thoff)
->                                   iph->daddr, 0);
->
->         skb_shinfo(skb)->gso_type |=3D SKB_GSO_TCPV4 |
-> -                       (NAPI_GRO_CB(skb)->is_atomic * SKB_GSO_TCP_FIXEDI=
-D);
-> +                       (NAPI_GRO_CB(skb)->ip_fixedid * SKB_GSO_TCP_FIXED=
-ID);
->
->         tcp_gro_complete(skb);
->         return 0;
-> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> index 8721fe5beca2..726565159dc7 100644
-> --- a/net/ipv4/udp_offload.c
-> +++ b/net/ipv4/udp_offload.c
-> @@ -466,6 +466,7 @@ static struct sk_buff *udp_gro_receive_segment(struct=
- list_head *head,
->                                                struct sk_buff *skb)
->  {
->         struct udphdr *uh =3D udp_gro_udphdr(skb);
-> +       int off =3D skb_gro_offset(skb);
->         struct sk_buff *pp =3D NULL;
->         struct udphdr *uh2;
->         struct sk_buff *p;
-> @@ -505,14 +506,7 @@ static struct sk_buff *udp_gro_receive_segment(struc=
-t list_head *head,
->                         return p;
->                 }
->
-> -               flush =3D NAPI_GRO_CB(p)->flush;
-> -
-> -               if (NAPI_GRO_CB(p)->flush_id !=3D 1 ||
-> -                   NAPI_GRO_CB(p)->count !=3D 1 ||
-> -                   !NAPI_GRO_CB(p)->is_atomic)
-> -                       flush |=3D NAPI_GRO_CB(p)->flush_id;
-> -               else
-> -                       NAPI_GRO_CB(p)->is_atomic =3D false;
-> +               flush =3D gro_receive_network_flush(uh, uh2, p, off);
->
->                 /* Terminate the flow on len mismatch or if it grow "too =
-much".
->                  * Under small packet flood GRO count could elsewhere gro=
-w a lot
-> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-> index 288c7c6ea50f..bd5aff97d8b1 100644
-> --- a/net/ipv6/ip6_offload.c
-> +++ b/net/ipv6/ip6_offload.c
-> @@ -290,19 +290,8 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_rec=
-eive(struct list_head *head,
->                                    nlen - sizeof(struct ipv6hdr)))
->                                 goto not_same_flow;
->                 }
-> -               /* flush if Traffic Class fields are different */
-> -               NAPI_GRO_CB(p)->flush |=3D !!((first_word & htonl(0x0FF00=
-000)) |
-> -                       (__force __be32)(iph->hop_limit ^ iph2->hop_limit=
-));
-> -               NAPI_GRO_CB(p)->flush |=3D flush;
-> -
-> -               /* If the previous IP ID value was based on an atomic
-> -                * datagram we can overwrite the value and ignore it.
-> -                */
-> -               if (NAPI_GRO_CB(skb)->is_atomic)
-> -                       NAPI_GRO_CB(p)->flush_id =3D 0;
->         }
->
-> -       NAPI_GRO_CB(skb)->is_atomic =3D true;
->         NAPI_GRO_CB(skb)->flush |=3D flush;
->
->         skb_gro_postpull_rcsum(skb, iph, nlen);
-> --
-> 2.36.1
->
+> =C2=A0* To avoid that problem, do not allow visibility of distinct
+> =C2=A0* system_timestamp/tsc_timestamp values simultaneously: use a maste=
+r
+> =C2=A0* copy of host monotonic time values. Update that master copy
+> =C2=A0* in lockstep.
+
+Right. That comment is a lot longer than the part you cited here, and
+starts with 'assuming a stable TSC across pCPUS, and a stable TSC
+across vCPUs'. It's the "if (ka->use_master_clock)" case.
+
+And yes, what it's basically saying is a special case of the fact that
+if you let the KVM clock run at its "natural" rate based on the guest
+TSC (definition B), but each vCPU runs at that rate from a *different*
+point on the line that is definition A (the host CLOCK_MONOTONIC_RAW),
+bad things will happen.
+
+I'm OK with it stopping the vCPUs (although I'd like it to do so in a
+less implicitly awful way). But when we don't need to update the
+reference time at all, let's not do so.
+
+> > When invoked from in 'use_master_clock' mode, kvm_update_masterclock()
+> > should probably *adjust* kvm->arch.kvmclock_offset to account for the
+> > drift, instead of yanking the clock back to defintion A.
+>=20
+> You are likely correct...
+>=20
+> > But in the meantime there are a bunch of places where it just doesn't n=
+eed to be
+> > invoked at all.
+> >=20
+> > To start with: there is no need to do such an update when a Xen guest
+> > populates the shared_info page. This seems to have been a hangover from
+> > the very first implementation of shared_info which automatically
+> > populated the vcpu_info structures at their default locations, but even
+> > then it should just have raised KVM_REQ_CLOCK_UPDATE on each vCPU
+> > instead of using KVM_REQ_MASTERCLOCK_UPDATE. And now that userspace is
+> > expected to explicitly set the vcpu_info even in its default locations,
+> > there's not even any need for that either.
+> >=20
+> > Fixes: 629b5348841a1 ("KVM: x86/xen: update wallclock region")
+> > Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> > Reviewed-by: Paul Durrant <paul@xen.org>
+> > ---
+> > =C2=A0arch/x86/kvm/xen.c | 2 --
+> > =C2=A01 file changed, 2 deletions(-)
+> >=20
+> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> > index f65b35a05d91..5a83a8154b79 100644
+> > --- a/arch/x86/kvm/xen.c
+> > +++ b/arch/x86/kvm/xen.c
+> > @@ -98,8 +98,6 @@ static int kvm_xen_shared_info_init(struct kvm *kvm)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0wc->version =3D wc_vers=
+ion + 1;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0read_unlock_irq(&gpc->l=
+ock);
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kvm_make_all_cpus_request(kv=
+m, KVM_REQ_MASTERCLOCK_UPDATE);
+> > -
+> > =C2=A0out:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0srcu_read_unlock(&kvm->=
+srcu, idx);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
+> > --=20
+> > 2.44.0
+>=20
+> So KVM_REQ_MASTERCLOCK_UPDATE is to avoid the race above.
+>=20
+> In what contexes is kvm_xen_shared_info_init called from again?
+>=20
+> Not clear to me KVM_REQ_MASTERCLOCK_UPDATE is not needed (or that is
+> needed, for that matter...).
+
+We cal kvm_xen_shared_info_init() when the Xen "shared info" page is
+set up. The only interesting part of that is the *wallclock* epoch.
+
+The wallclock (just like KSR_KVM_WALL_CLOCK{,_NEW}) is *entirely* hosed
+ever since the KVM clock stopped being based on CLOCK_MONOTONIC, since
+that means that the value of "wallclock time minus KVM clock time"
+actually *changes* as the KVM clock runs at a different rate to
+wallclock time.=20
+
+I'm looking at a replacement for that which uses the gtod information
+to give the guest a direct mapping of guest TSC to host CLOCK_TAI. And
+in doing so we can *also* indicate when live migration has potentially
+disrupted the guest TSC, so any further NTP/PTP refinement that the
+guest may have done for itself needs to be thrown away.
+
+
+--=-1MxL1pyflkVSO892kaNk
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNTA3MTkwODQwWjAvBgkqhkiG9w0BCQQxIgQgHVmiWasw
+frgDY5E3eFn0b2+Z8rpbfP6rB7OVXKnqfWgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgChZ/FYOFQZZOOYZG05b4wiJdTD0tZ47wKq
+LYyo2tJiF2gtDaUDWztKlqtXJIhy1EHqLJkXexeS+G2NXJKc5m0GZfapeKEKDnlr4m7T6SSisSPl
+ou2+ZtAwIvnQg22lFFbDKBrzpKCvR2TPAhnbFEck/sUzmostgvzLgc4q76A16HYZ9dYLqShXGJoa
+gUOMidK1fOFrWC/36QjUDNB0JEHPDBYxvq4hSLlmMI81AxZ0+xCSOHOeTNHM7yqOJEGKJlTqgtx7
+UzSkB/W+uOs6re+XgyHZegmMukZyWEKHEZXo44gYfx4QZUUMi0pmOU8NC27TwLpD9N6mMvOsmkGo
+iUP8ZcTnNGjjFJKqfpEVeOymeGkPJxFBPfccQdc/WaPht2IDVnKiIDYc2Sw5QggL54iU4uwUKFay
+rXpzuMXRdJmfIyAQQIOIZokQJ0TLFJNW4q1gfulgO7HK48CRDxaceSbxHMBjwVfx9Zf5e8zfYFJC
+UT/pNvdY4RdfDUUMf+tzUyLKbE7XbrT5FvNCWlNyZgyTJgleGDKTj7KV0fCVQM/mqmwHipQo45fh
+4DFMfwa2FF045ZXH0ICN6ovrfYbjmcjMdPWQFvxCFX09dwPFYfmWvgBVdqJJi8EVHUTepQytBUqd
+Y2ueJkoJdXRulF3xvCQ006bk3AcMevjRqueyVfTXFAAAAAAAAA==
+
+
+--=-1MxL1pyflkVSO892kaNk--
 
