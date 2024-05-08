@@ -1,485 +1,256 @@
-Return-Path: <linux-kselftest+bounces-9669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D2E8BF3CB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 02:43:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 922578BF3F1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 03:16:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CD472843E1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 00:43:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 191191F23579
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 01:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F50ECC;
-	Wed,  8 May 2024 00:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA92637;
+	Wed,  8 May 2024 01:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="ZF1U2knH"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hBUS/1GZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7734C622
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 00:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715129030; cv=none; b=SgXQsgGKXCIpPYGdKFjPeoqENpF8F6+7iK04mLagx4kBD0mEehlTGnyzWAn8sgV5OwYCogNIgQNrA5KZY2VVyzMxP6i87222k4IvRnErFiirV77YapR5n5BhsNO871ZKf4Qgnn0BU2HK+fW5/iyrOKeUjiTZB3IoOT67RIIplEs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715129030; c=relaxed/simple;
-	bh=cud7NCLbLs0NpQaq1MDx8Z2sap0DQ+bUysuVvQ5I3Ak=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BDoxumIdWsWn4MQl8h4CW4GSv8Pxq9UgPleDgvdqX+9Cnf83hjtVAPqHGBNKkeGjhhe+MSI/bghenXUvGPTJgD78A+4QVPuQCbXZMxGBB2IPnvmMdq15L6LZDCzPb66wydr/Zf9TTfXPvbwAUGFePhOMaad3CEtW45eMsTSedHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=ZF1U2knH; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ec4dc64c6cso26650055ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2024 17:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1715129027; x=1715733827; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DeEO1Q8wJpOn7YutMlxicVAzKlqlun27NVu5Gr4Sb/k=;
-        b=ZF1U2knHBUhwg2l7XxzJIyvwL2RODR0IJ6yt23adVWyeeM4B4ZVuLizQFVwp4zX8Bu
-         OxGvHnEg+BnfzsBT4YjkAX3CHX5550C2Xe5dJqNykmv21GjdkT1usVl2I603kERq7Xr8
-         eNVQcGuPZHsoCWqs2VgVznCKNhcAZocWaRye8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715129027; x=1715733827;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DeEO1Q8wJpOn7YutMlxicVAzKlqlun27NVu5Gr4Sb/k=;
-        b=WiqKOm5r5R/VXBCMMZ6uwgWV5NbQxCLJR5ijbmIaIqbxT7SrWxxNt6wEYIXA6ec9nI
-         oifXt6ybqQ2fUd3SmBsheULOMATnvQeH5v5YJVf6CiX8L+zQSv6R40q2K2HJ0MiiL9BZ
-         eNgyQAJI0107/0s6DYfeeYRduKSSSpNgdzFctWaNeyLBFqOe/fHbla14zrLC7nP44xwL
-         0vpubsIi9j7WlXyJ0+H3cI/VShshhj5drMkluISBQVn3GfSHqm7jNdYHuHOXCbjp2NcU
-         MCo4STIZ7dY2EwykGbW922FLxjvrgUZTA9ROCgbOwWnxdTKYbJUkTioiHkaC5q5Rrkcn
-         ddWQ==
-X-Gm-Message-State: AOJu0Yz9UkV7S61aFqCtgpZCoiig10qylKjIwqYSJ8KxyIyn0lc4ykEl
-	+JTL4KLSMrIe3yZ/6GfxRw21uvF4zCmswV6X0Qgct9iGvHCzJ5VAgMoWHiO0MAZjN5jhTShvE0v
-	1DHrK2kXwNN+YdLakUPHQ+p/RAEYgU5TXDhU/nAMH3lUVRkEsmDfnLIcXkLXoN21RG1G5RCVg1O
-	y2bj/hWcNuL6cdPPAaYtHOdB7GHLgn31grDpvWxIeJFkDxGCU=
-X-Google-Smtp-Source: AGHT+IFU5OX8f3muKDbZdTfNQFdzYYAGmrfwaJeKLlhUwHZGa7e09od00FzK+WOi+VMz3OmRx2JqIA==
-X-Received: by 2002:a17:902:b282:b0:1ec:6b87:e125 with SMTP id d9443c01a7336-1eeb0791ce5mr11629595ad.50.1715129026820;
-        Tue, 07 May 2024 17:43:46 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b001e97772524asm10579710plh.234.2024.05.07.17.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 17:43:46 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: nalramli@fastly.com,
-	Joe Damato <jdamato@fastly.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH net-next v3] selftest: epoll_busy_poll: epoll busy poll tests
-Date: Wed,  8 May 2024 00:43:26 +0000
-Message-Id: <20240508004328.33970-1-jdamato@fastly.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE53E633;
+	Wed,  8 May 2024 01:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715131003; cv=fail; b=qyyxjUm880VVdNIbWPwDLHkKKBu9zqOel1n2rW7ZCGUYWa1qgsj1DpgdmON7A7AlQ6LN3E5HNc26geVeP9x8NLJkNuxomETbRAcXqURNBjYLkhyiS+ledIfRMjAZVRUV3/WxqgcSP84HS83/4qE/R7FEfg1wuw1EMqVtKZZs+PQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715131003; c=relaxed/simple;
+	bh=7pAvIBnJFWLsgFsGOIHaIhVe7O/HPmTBbBIx6W7vpOs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GBztPzUHo4MmHBP0DnvcXQuJuNlYLn1lOyaKvj68rxkgzwjkGLbenI+lFWurTc8ENMb1LNy2F4GbDHUrS0WerGCPkJ5VsjY9wuTFRd7HRGvaPT/xAgor5z0WJuczjLRhGyzofJHljOC7B2uC3aiKvx6baD+uYtH0/ggClP+RlYw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hBUS/1GZ; arc=fail smtp.client-ip=40.107.92.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LTliWSUM5HJ2HZDv35OFh0knrIivSxMNbNn0VMNwJ1TdqmIjN8VZxZz7mfeD0xaDWU9I4FtvDKiEY4J5aD2MV1CyiTQ7sFqMOYQg6ms3Xkp7v8zgDVyyD2NWadXT3vPnxLJg0HisqvpM4lKjLkHFIR+UFHobBZKpjo0HwukRgDxvqL8uofmhEyp8GT7JsDmCGeQjhd2ZH+rOZkqv3JD9BYnvZnvWw4qvn1DUIhFrzcORjFGGAVCWnGQ78JGO4gGKtkqseQAGtrIlNprx2hvnGV7371w1I0Yxn+X6Y9jPnEZHLzDfjFXqeBCYqv7MbXIQuiqgYTwIuqlPulul54jXjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GQBvLy2SR6/ARN2c/YkUDhr1ZETM/J5DdF/hqRLQnhs=;
+ b=QAi1fgwW3dwHa84bl5chiQhxfQqoZ4OoGkwVQ33o832KmEcIt5n+6GAUvXuKLZ4OMrj+yqFyybpdHYgSrdTpjaobDIg1l/qAhMAqKcVfzBEsMNlWBbLgQgx7c6xHWZchUf7tSC4wsU7mSMEsxRtXgxaH5AwhOcFGD60EwVp71dJfQbFw2xq7YLZYSmloK8Eij5RWMJH9ZRMEKCWOfSYJtXTBDNGEA5+yQNZD5bCBqOaMThDnuN4fCy38b2dYnVzJeDMv6Rj0OkNkaj6TIJ+Ktz4W1lq+A8dAlED9Wh8ID82ceKoekFb0Ay01LHG1OmPpqwyFFs8gGeRIt3aqmJNY0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GQBvLy2SR6/ARN2c/YkUDhr1ZETM/J5DdF/hqRLQnhs=;
+ b=hBUS/1GZtWFbQ6rQFokfKeqYV+bXbaEq1xa2m0SkUJn29EW12F5Kf4jVNYATlOWvAQDHpaQtnoYsBJPOGd06g1cFn9mvwmhpc5XmCOtYsQ4zlPffr9j8lmGjKMEQbrdqEjGua/UOSIFDur1gvR9Ce/HhSo5KxY8fL2wl30zMd6j5iUgFVYsYJ0c2YzcapKUu/iBAFdn0M8y3lHYCivIF2eDMqVnCYAbyoPFVNBN38IKQ2Fcmrgt3ia2W9xdfmj0jcBErprcY/68O3EtLQ6ZWBZO3a0+Lhi9dBfs1xhRgwST1DxJaAhGZ5sK4ph8m6mv7NQ0YlX8gmK7PpebEPp2DnQ==
+Received: from CH0PR04CA0069.namprd04.prod.outlook.com (2603:10b6:610:74::14)
+ by BY5PR12MB4226.namprd12.prod.outlook.com (2603:10b6:a03:203::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43; Wed, 8 May
+ 2024 01:16:36 +0000
+Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
+ (2603:10b6:610:74:cafe::7) by CH0PR04CA0069.outlook.office365.com
+ (2603:10b6:610:74::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43 via Frontend
+ Transport; Wed, 8 May 2024 01:16:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7544.18 via Frontend Transport; Wed, 8 May 2024 01:16:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 7 May 2024
+ 18:16:26 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 7 May 2024
+ 18:16:26 -0700
+Message-ID: <997d7fe0-46c8-4b38-824d-083ab29f54ce@nvidia.com>
+Date: Tue, 7 May 2024 18:16:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/resctrl: fix clang build warnings related to
+ abs(), labs() calls
+To: Reinette Chatre <reinette.chatre@intel.com>, Shuah Khan <shuah@kernel.org>
+CC: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst
+	<kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>, LKML
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20240503234051.21217-1-jhubbard@nvidia.com>
+ <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|BY5PR12MB4226:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14c7f25a-abc6-4b71-8495-08dc6efc819b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|1800799015|7416005|376005|82310400017|36860700004;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?emdRQ1BOYW05U1NHdWpmWnByYUxtTGRMdkdGeUM1RVpCSmU1RG0ya0ppZHBk?=
+ =?utf-8?B?RGJxdkF6d2g4VE5neHJmbnUwd2Z5Mi9GbFJFUzlSUWVMbGorMVJOZlgwakMx?=
+ =?utf-8?B?YktYQ043cnZhalFGdndLMTZ0eFdQcENNOHMyaSt2ZjUvNHU1NktQK3plcDBO?=
+ =?utf-8?B?bXR4SmpEbmJmOHZpZmlYSzNGVWNXdVNmTUNaalQrQ2J0dEIxRW8zdUNPdGUr?=
+ =?utf-8?B?KzJJNXMrSk1wNUZzamxFRks0YWJxcnZlelZMeldMbXo3RHhrRDNKMS9GKzV4?=
+ =?utf-8?B?TTBBeUozU1BYSjh6djJCaGZYZ3NBQlE4d3ByMnN2TkpmN25ZZ0hkTmZOSGlU?=
+ =?utf-8?B?Lzc3UGgxcFJaTnhmMHdBRVlJRUhVRktFQm10T25YUFRzaEd3SUlJanpoWWtJ?=
+ =?utf-8?B?WFI4U1JLMlFVVWNaQlpMWldxejlER2dBeVhLR055cFFjQzhDVi84T1hhM1BU?=
+ =?utf-8?B?OWljcjloV3l6ZlZSdEdyUjVVa1dMRFNZM2ZnckVDNmZ2R3FHN1B0eVc3akZl?=
+ =?utf-8?B?d2tPZXV5UDVWanNrUWlIKzFkUTU3L2pEWW45dEhiTHBzWTFNVmxDeVcxQU96?=
+ =?utf-8?B?TldJcnBQLzZtM3JwNkhCOTg3WVRGTTVneXlPZ2d4UXZPb01sSnJLYW1VQXNL?=
+ =?utf-8?B?NS9VZzMwMGY3Z0RKVjhtdVl5eXovaVhrRzdERk5SR3g4OGNJYSsxb0FCUUEw?=
+ =?utf-8?B?ZWt2c2J2dDJ4dWtzSzVLZUR3L2s5d2lCUnFVTlJSV1JsRitZampHQy9LVzdV?=
+ =?utf-8?B?NHZxaFlQRkNpT2VQSlkrbUxSN2FtcFMveG9RK2x2SXVZdko2UWEzT1RxTHBM?=
+ =?utf-8?B?WjU0SVRFRlVnRmJDQ3hQTTVIWDI5cmkxdzNYRHIyUHlaYjhTNDVqNnA4VXdr?=
+ =?utf-8?B?TFZITjlldkVuQm9SRERVUzZUTm5SWE53YmZyMkF4UUtOMkpyUU9nc1ArQ0JN?=
+ =?utf-8?B?YURSZFFiaStFeVpBZ0xIOHpyQmttODRxWW5WL0lYbkc4NStOY1A3Y0NNWjkw?=
+ =?utf-8?B?WmVWUGhyNUVFZVlUUnZoYUtnazhwa0VrdjJ0U211bnlSNkd1UmhheGNUakJH?=
+ =?utf-8?B?SHpuTmc4eXVtQWFSeXRzclBWQmtQa1VmTXo0VzFFZG1oYXpybnF6dTRUc05v?=
+ =?utf-8?B?bW9hbEl6RU9JSXhPMlg5NG1YMGJkU1M1N2tqZXE2ZXk5YzBjS1R1NGFYVkJh?=
+ =?utf-8?B?bUxsOE5tVDIyT0JMRUsraUxPNFlMcDcxaldUTGpIYWFQWXVEUXI2TStNQ0JM?=
+ =?utf-8?B?UmhRVTFUVk5HQjNUZjQxYlJiWTlQSXpZR1BDYWFNUm9wVUtPVkpIQnlRaTJM?=
+ =?utf-8?B?ZDYyM2lHZ0I1dlJBRm5sbWNFNk1hMzU5R2dkUDNycnc1QU5jQjliRi9XWFhB?=
+ =?utf-8?B?am8zUW1jQ1d4bTlpem02c0o2cjBid3huMkgvTEJFWU5jTWVCdnVYVWZ3Y1Zw?=
+ =?utf-8?B?alo5V0R5N2tXZUhNTTVUamp6cG9UcjNIOE12bElYRnB3TXJCTCt5aWYxbk1Q?=
+ =?utf-8?B?N2dTd01GSzg3UUVVd3QvNWFsOWY1QjhDWDQvb092YjRUa21janhPSU1nNmVz?=
+ =?utf-8?B?cFlTMEplbW84WnBLVHQvYU5GNlZSYytxTjdlNnZqNHI0RFZ2S2svY1U0bUhB?=
+ =?utf-8?B?S1ZqUnpjYlZ5aGkxd3B1UmU5dmt3eWhvR2oxYi94U1lWcnArQ1cyMHQxYWVP?=
+ =?utf-8?B?T0Q2VCtieHFBOWk3S2FFWlREM2FPeVVGOVpmTnBBdFdxNFJINEZLYmFuMm8v?=
+ =?utf-8?B?WldSbzArQVBZYk5DUXNyT3ZMdS9TVC9lb2NKam8rOVFFMHdpc0lEVnJySElL?=
+ =?utf-8?B?aDRmQVNHSklPRG5ZRU5Kd1cyU0Z5Z3d5VkJ2T0kzRWl5R3BRWXFZd1RzTlRv?=
+ =?utf-8?Q?ayBpCyrZfbjXR?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(82310400017)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 01:16:36.3472
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14c7f25a-abc6-4b71-8495-08dc6efc819b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF0000000F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4226
 
-Add a simple test for the epoll busy poll ioctls, using the kernel
-selftest harness.
+On 5/7/24 3:30 PM, Reinette Chatre wrote:
+...
+>> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+>> index a81f91222a89..af33abd1cca7 100644
+>> --- a/tools/testing/selftests/resctrl/cmt_test.c
+>> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+>> @@ -29,22 +29,22 @@ static int cmt_setup(const struct resctrl_test *test,
+>>   	return 0;
+>>   }
+>>   
+>> -static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
+>> -			     unsigned long cache_span, unsigned long max_diff,
+>> -			     unsigned long max_diff_percent, unsigned long num_of_runs,
+>> +static int show_results_info(long sum_llc_val, int no_of_bits,
+>> +			     long cache_span, long max_diff,
+>> +			     long max_diff_percent, long num_of_runs,
+>>   			     bool platform)
+>>   {
+>> -	unsigned long avg_llc_val = 0;
+>> +	long avg_llc_val = 0;
+>>   	float diff_percent;
+>>   	long avg_diff = 0;
+>>   	int ret;
+>>   
+>>   	avg_llc_val = sum_llc_val / num_of_runs;
+>> -	avg_diff = (long)abs(cache_span - avg_llc_val);
+>> +	avg_diff = labs(cache_span - avg_llc_val);
+>>   	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
+>>   
+>>   	ret = platform && abs((int)diff_percent) > max_diff_percent &&
+>> -	      abs(avg_diff) > max_diff;
+>> +	      labs(avg_diff) > max_diff;
+>>   
+>>   	ksft_print_msg("%s Check cache miss rate within %lu%%\n",
+>>   		       ret ? "Fail:" : "Pass:", max_diff_percent);
+> 
+> The changes in this hunk are unexpected. The changes to this area made by previous
+> version was ok, no? It really seems like this just does a brute force of everything
 
-This test ensures that the ioctls have the expected return codes and
-that the kernel properly gets and sets epoll busy poll parameters.
+Well, not entirely. That first version was when I still believed clang's
+claim that abs()/labs() was a no-op. I've since been corrected! :)
 
-The test can be expanded in the future to do real busy polling (provided
-another machine to act as the client is available).
+> to long (while taking labs() twice) unnecessarily.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
----
-v2 -> v3:
-  - Added this changelog :)
-  - Add libcap to LDLIBS.
-  - Most other changes are in test_set_invalid:
-    - Check if CAP_NET_ADMIN is set in the effective set before setting
-      busy_poll_budget over NAPI_POLL_WEIGHT. The test which follows
-      assumes CAP_NET_ADMIN.
-    - Drop CAP_NET_ADMIN from effective set in order to ensure the ioctl
-      fails when busy_poll_budget exceeds NAPI_POLL_WEIGHT.
-    - Put CAP_NET_ADMIN back into the effective set afterwards.
-    - Changed self->params.busy_poll_budget from 65535 to UINT16_MAX.
-    - Changed the cast for params.busy_poll_usecs from unsigned int to
-      uint32_t in the test_set_invalid case.
+Which part exactly is unnecessary? Are you looking at the function args?
+Or something else? I've stared at it too much and am not spotting the
+issue yet.
 
-v1 -> v2:
-  - Rewrote completely to use kernel self test harness.
+> 
+>> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+>> index 7946e32e85c8..707b07687249 100644
+>> --- a/tools/testing/selftests/resctrl/mba_test.c
+>> +++ b/tools/testing/selftests/resctrl/mba_test.c
+>> @@ -60,8 +60,8 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+>>   	/* Memory bandwidth from 100% down to 10% */
+>>   	for (allocation = 0; allocation < ALLOCATION_MAX / ALLOCATION_STEP;
+>>   	     allocation++) {
+>> -		unsigned long avg_bw_imc, avg_bw_resc;
+>> -		unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+>> +		long avg_bw_imc, avg_bw_resc;
+>> +		long sum_bw_imc = 0, sum_bw_resc = 0;
+>>   		int avg_diff_per;
+>>   		float avg_diff;
+>>   
+> 
+> On second look it only seems necessary to change avg_bw_imc and avg_bw_resc. What do you think?
 
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/Makefile          |   3 +-
- tools/testing/selftests/net/epoll_busy_poll.c | 320 ++++++++++++++++++
- 3 files changed, 323 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/epoll_busy_poll.c
+Yes, that works! I'll change it.
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index d996a0ab0765..777cfd027076 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -5,6 +5,7 @@ bind_wildcard
- csum
- cmsg_sender
- diag_uid
-+epoll_busy_poll
- fin_ack_lat
- gro
- hwtstamp_config
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 5befca249452..c6112d08b233 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -67,7 +67,7 @@ TEST_GEN_FILES += ipsec
- TEST_GEN_FILES += ioam6_parser
- TEST_GEN_FILES += gro
- TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
--TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap
-+TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap epoll_busy_poll
- TEST_GEN_FILES += toeplitz
- TEST_GEN_FILES += cmsg_sender
- TEST_GEN_FILES += stress_reuseport_listen
-@@ -102,6 +102,7 @@ TEST_INCLUDES := forwarding/lib.sh
- 
- include ../lib.mk
- 
-+$(OUTPUT)/epoll_busy_poll: LDLIBS += -lcap
- $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
- $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
-diff --git a/tools/testing/selftests/net/epoll_busy_poll.c b/tools/testing/selftests/net/epoll_busy_poll.c
-new file mode 100644
-index 000000000000..9dd2830fd67c
---- /dev/null
-+++ b/tools/testing/selftests/net/epoll_busy_poll.c
-@@ -0,0 +1,320 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+/* Basic per-epoll context busy poll test.
-+ *
-+ * Only tests the ioctls, but should be expanded to test two connected hosts in
-+ * the future
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <error.h>
-+#include <errno.h>
-+#include <inttypes.h>
-+#include <limits.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+#include <sys/capability.h>
-+
-+#include <sys/epoll.h>
-+#include <sys/ioctl.h>
-+#include <sys/socket.h>
-+
-+#include "../kselftest_harness.h"
-+
-+/* if the headers haven't been updated, we need to define some things */
-+#if !defined(EPOLL_IOC_TYPE)
-+struct epoll_params {
-+	uint32_t busy_poll_usecs;
-+	uint16_t busy_poll_budget;
-+	uint8_t prefer_busy_poll;
-+
-+	/* pad the struct to a multiple of 64bits */
-+	uint8_t __pad;
-+};
-+
-+#define EPOLL_IOC_TYPE 0x8A
-+#define EPIOCSPARAMS _IOW(EPOLL_IOC_TYPE, 0x01, struct epoll_params)
-+#define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
-+#endif
-+
-+FIXTURE(invalid_fd)
-+{
-+	int invalid_fd;
-+	struct epoll_params params;
-+};
-+
-+FIXTURE_SETUP(invalid_fd)
-+{
-+	int ret;
-+
-+	ret = socket(AF_UNIX, SOCK_DGRAM, 0);
-+	EXPECT_NE(-1, ret)
-+		TH_LOG("error creating unix socket");
-+
-+	self->invalid_fd = ret;
-+}
-+
-+FIXTURE_TEARDOWN(invalid_fd)
-+{
-+	int ret;
-+
-+	ret = close(self->invalid_fd);
-+	EXPECT_EQ(0, ret);
-+}
-+
-+TEST_F(invalid_fd, test_invalid_fd)
-+{
-+	int ret;
-+
-+	ret = ioctl(self->invalid_fd, EPIOCGPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCGPARAMS on invalid epoll FD should error");
-+
-+	EXPECT_EQ(ENOTTY, errno)
-+		TH_LOG("EPIOCGPARAMS on invalid epoll FD should set errno to ENOTTY");
-+
-+	memset(&self->params, 0, sizeof(struct epoll_params));
-+
-+	ret = ioctl(self->invalid_fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS on invalid epoll FD should error");
-+
-+	EXPECT_EQ(ENOTTY, errno)
-+		TH_LOG("EPIOCSPARAMS on invalid epoll FD should set errno to ENOTTY");
-+}
-+
-+FIXTURE(epoll_busy_poll)
-+{
-+	int fd;
-+	struct epoll_params params;
-+	struct epoll_params *invalid_params;
-+	cap_t caps;
-+};
-+
-+FIXTURE_SETUP(epoll_busy_poll)
-+{
-+	int ret;
-+
-+	ret = epoll_create1(0);
-+	EXPECT_NE(-1, ret)
-+		TH_LOG("epoll_create1 failed?");
-+
-+	self->fd = ret;
-+
-+	self->caps = cap_get_proc();
-+	EXPECT_NE(NULL, self->caps);
-+}
-+
-+FIXTURE_TEARDOWN(epoll_busy_poll)
-+{
-+	int ret;
-+
-+	ret = close(self->fd);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = cap_free(self->caps);
-+	EXPECT_NE(-1, ret)
-+		TH_LOG("unable to free capabilities");
-+}
-+
-+TEST_F(epoll_busy_poll, test_get_params)
-+{
-+	/* begin by getting the epoll params from the kernel
-+	 *
-+	 * the default should be default and all fields should be zero'd by the
-+	 * kernel, so set params fields to garbage to test this.
-+	 */
-+	int ret = 0;
-+
-+	self->params.busy_poll_usecs = 0xff;
-+	self->params.busy_poll_budget = 0xff;
-+	self->params.prefer_busy_poll = 1;
-+	self->params.__pad = 0xf;
-+
-+	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("ioctl EPIOCGPARAMS should succeed");
-+
-+	EXPECT_EQ(0, self->params.busy_poll_usecs)
-+		TH_LOG("EPIOCGPARAMS busy_poll_usecs should have been 0");
-+
-+	EXPECT_EQ(0, self->params.busy_poll_budget)
-+		TH_LOG("EPIOCGPARAMS busy_poll_budget should have been 0");
-+
-+	EXPECT_EQ(0, self->params.prefer_busy_poll)
-+		TH_LOG("EPIOCGPARAMS prefer_busy_poll should have been 0");
-+
-+	EXPECT_EQ(0, self->params.__pad)
-+		TH_LOG("EPIOCGPARAMS __pad should have been 0");
-+
-+	self->invalid_params = (struct epoll_params *)0xdeadbeef;
-+	ret = ioctl(self->fd, EPIOCGPARAMS, self->invalid_params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCGPARAMS should error with invalid params");
-+
-+	EXPECT_EQ(EFAULT, errno)
-+		TH_LOG("EPIOCGPARAMS with invalid params should set errno to EFAULT");
-+}
-+
-+TEST_F(epoll_busy_poll, test_set_invalid)
-+{
-+	int ret;
-+
-+	memset(&self->params, 0, sizeof(struct epoll_params));
-+
-+	self->params.__pad = 1;
-+
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS non-zero __pad should error");
-+
-+	EXPECT_EQ(EINVAL, errno)
-+		TH_LOG("EPIOCSPARAMS non-zero __pad errno should be EINVAL");
-+
-+	self->params.__pad = 0;
-+	self->params.busy_poll_usecs = (uint32_t)INT_MAX + 1;
-+
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS should error busy_poll_usecs > S32_MAX");
-+
-+	EXPECT_EQ(EINVAL, errno)
-+		TH_LOG("EPIOCSPARAMS busy_poll_usecs > S32_MAX errno should be EINVAL");
-+
-+	self->params.__pad = 0;
-+	self->params.busy_poll_usecs = 32;
-+	self->params.prefer_busy_poll = 2;
-+
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS should error prefer_busy_poll > 1");
-+
-+	EXPECT_EQ(EINVAL, errno)
-+		TH_LOG("EPIOCSPARAMS prefer_busy_poll > 1 errno should be EINVAL");
-+
-+	self->params.__pad = 0;
-+	self->params.busy_poll_usecs = 32;
-+	self->params.prefer_busy_poll = 1;
-+
-+	/* set budget well above kernel's NAPI_POLL_WEIGHT of 64 */
-+	self->params.busy_poll_budget = UINT16_MAX;
-+
-+	/* test harness should run with CAP_NET_ADMIN, but let's make sure */
-+	cap_flag_value_t tmp;
-+
-+	ret = cap_get_flag(self->caps, CAP_NET_ADMIN, CAP_EFFECTIVE, &tmp);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("unable to get CAP_NET_ADMIN cap flag");
-+
-+	EXPECT_EQ(CAP_SET, tmp)
-+		TH_LOG("expecting CAP_NET_ADMIN to be set for the test harness");
-+
-+	/* at this point we know CAP_NET_ADMIN is available, so setting the
-+	 * params with a busy_poll_budget > NAPI_POLL_WEIGHT should succeed
-+	 */
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("EPIOCSPARAMS should allow busy_poll_budget > NAPI_POLL_WEIGHT");
-+
-+	/* remove CAP_NET_ADMIN from our effective set */
-+	cap_value_t net_admin[] = { CAP_NET_ADMIN };
-+
-+	ret = cap_set_flag(self->caps, CAP_EFFECTIVE, 1, net_admin, CAP_CLEAR);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("couldnt clear CAP_NET_ADMIN");
-+
-+	ret = cap_set_proc(self->caps);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("cap_set_proc should drop CAP_NET_ADMIN");
-+
-+	/* this is now expected to fail */
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS should error busy_poll_budget > NAPI_POLL_WEIGHT");
-+
-+	EXPECT_EQ(EPERM, errno)
-+		TH_LOG("EPIOCSPARAMS errno should be EPERM busy_poll_budget > NAPI_POLL_WEIGHT");
-+
-+	/* restore CAP_NET_ADMIN to our effective set */
-+	ret = cap_set_flag(self->caps, CAP_EFFECTIVE, 1, net_admin, CAP_SET);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("couldn't restore CAP_NET_ADMIN");
-+
-+	ret = cap_set_proc(self->caps);
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("cap_set_proc should set  CAP_NET_ADMIN");
-+
-+	self->invalid_params = (struct epoll_params *)0xdeadbeef;
-+	ret = ioctl(self->fd, EPIOCSPARAMS, self->invalid_params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("EPIOCSPARAMS should error when epoll_params is invalid");
-+
-+	EXPECT_EQ(EFAULT, errno)
-+		TH_LOG("EPIOCSPARAMS should set errno to EFAULT when epoll_params is invalid");
-+}
-+
-+TEST_F(epoll_busy_poll, test_set_and_get_valid)
-+{
-+	int ret;
-+
-+	memset(&self->params, 0, sizeof(struct epoll_params));
-+
-+	self->params.busy_poll_usecs = 25;
-+	self->params.busy_poll_budget = 16;
-+	self->params.prefer_busy_poll = 1;
-+
-+	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
-+
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("EPIOCSPARAMS with valid params should not error");
-+
-+	/* check that the kernel returns the same values back */
-+
-+	memset(&self->params, 0, sizeof(struct epoll_params));
-+
-+	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
-+
-+	EXPECT_EQ(0, ret)
-+		TH_LOG("EPIOCGPARAMS should not error");
-+
-+	EXPECT_EQ(25, self->params.busy_poll_usecs)
-+		TH_LOG("params.busy_poll_usecs incorrect");
-+
-+	EXPECT_EQ(16, self->params.busy_poll_budget)
-+		TH_LOG("params.busy_poll_budget incorrect");
-+
-+	EXPECT_EQ(1, self->params.prefer_busy_poll)
-+		TH_LOG("params.prefer_busy_poll incorrect");
-+
-+	EXPECT_EQ(0, self->params.__pad)
-+		TH_LOG("params.__pad was not 0");
-+}
-+
-+TEST_F(epoll_busy_poll, test_invalid_ioctl)
-+{
-+	int invalid_ioctl = EPIOCGPARAMS + 10;
-+	int ret;
-+
-+	ret = ioctl(self->fd, invalid_ioctl, &self->params);
-+
-+	EXPECT_EQ(-1, ret)
-+		TH_LOG("invalid ioctl should return error");
-+
-+	EXPECT_EQ(EINVAL, errno)
-+		TH_LOG("invalid ioctl should set errno to EINVAL");
-+}
-+
-+TEST_HARNESS_MAIN
+> 
+> 
+>> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+>> index d67ffa3ec63a..30af15020731 100644
+>> --- a/tools/testing/selftests/resctrl/mbm_test.c
+>> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+>> @@ -17,8 +17,8 @@
+>>   static int
+>>   show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
+>>   {
+>> -	unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
+>> -	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
+>> +	long avg_bw_imc = 0, avg_bw_resc = 0;
+>> +	long sum_bw_imc = 0, sum_bw_resc = 0;
+>>   	int runs, ret, avg_diff_per;
+>>   	float avg_diff = 0;
+>>
+> 
+> Same here wrt the avg_ variables.
+
+Also yes here, I'll change that too.
+
+
+thanks,
 -- 
-2.25.1
+John Hubbard
+NVIDIA
 
 
