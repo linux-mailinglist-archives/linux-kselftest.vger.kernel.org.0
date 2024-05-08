@@ -1,74 +1,82 @@
-Return-Path: <linux-kselftest+bounces-9718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 743ED8C01B9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 18:13:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8C58C022C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 18:44:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCBED28B67B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 16:13:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1C31F21C63
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 16:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71642129E8E;
-	Wed,  8 May 2024 16:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 189CB633;
+	Wed,  8 May 2024 16:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAvZlWEK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W33h4I4o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A348184A38;
-	Wed,  8 May 2024 16:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC65652
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 16:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715184820; cv=none; b=iOBI6jT+0x7qgRqlefPWItZGAzdQMoDV5wHts1Jhq/CM32ChJpVNnr9FAlYci4NgHtPOJ3Huuguf+sy6UzN7zjz+vzpsIaKe9n99nsm1m98F9mj8yHW/EPtNORcExh81+18U7PCJONb3fCFyycxEif606OR//2zg8i0Oq/7d9f8=
+	t=1715186636; cv=none; b=TR+fHusJ8ZdJwXbfnLb0CojGyKrzUH9EoqrbLc0b2aUHvby8kLAuW/3fx5XN+IBksb2bxCG3l3gKz2xEss435sq9nXi7K7HHIJR1c7Tq/VzcWNh8JSKKOZ36HTsF2InKBFoCDWuU9eXFR9AIBZ5Ncv4M1UJomb27kAr8Rh/kC2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715184820; c=relaxed/simple;
-	bh=KTTPfU3G93nUaSQQ03SoA08BLzmCwzGHhrMxQMHXbrw=;
+	s=arc-20240116; t=1715186636; c=relaxed/simple;
+	bh=v2O/JOXhGm7/O6sH0tL56gDuw0iqg3tR8svJJWlpQlA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgKElpLYBQhs0SGUE+TA72SzgMC+9b3QdVzi/LdMjdf1kRmrQ0nvRlCQcLDXgEJpYyKrnUio0uwmOrD+CUUxdSG/2Tujg4uunpXZET60e93ipH7ttL6DXYIrCm1qkIeiNGaO03FhJAm9YU5YafEwOIbrvuAh4go7KU315zLmkyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAvZlWEK; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-520f9d559f6so3322217e87.3;
-        Wed, 08 May 2024 09:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715184817; x=1715789617; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=TAvZlWEKkXb77emTrSTwOzBRHL8ug8NMAuDKE6BOic+fg2A7sA90de4JHF7Wau2xW5
-         fecK+x6qcOchdMWceLOVCNtBN29n9EbLiF/VWB34UYv6uvvLtKjIh1rqTFNtKJ7/krIS
-         OySf2q0HOyl5vWpjxzO1Kl3kfiRxEC+TBDnnaTDgiasl3rQkCCWzVb6KbtNa+U1XbbCL
-         HEw0epDxohvWiPfAsCRtRxMpzgdkyLs+2OwCfwAO9dtE/FZKYU98hKP2pbxk4nCoRm1e
-         QbNM36jsnDINHtE5tHuYRuBaLZQic0qSEvHy7zReKTHmNjOI03FvxeOJM0XHjvoTGZC6
-         Us/w==
+	 In-Reply-To:Content-Type; b=PtIoSryPGDPZqRKLDS+o1ltaiSsIkQDzON4mvN6Pqj+q9WdrtGHMYG/mpjd8/CNhZeugWxzoL+7p1WVdk6ccqUwmccDTXXpXIZMFJqJrR9olTVWR/mGOiJoHX1vB7gSnGSOx5g03mbNVMySXE7RIt//xuaYkOH/J8UyhTH5oRd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W33h4I4o; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715186633;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=kfu+kNg5psV0QrTCz/mBUS9Pxutp2X9pNWB5lOfJe8k=;
+	b=W33h4I4oldN5VeCROKc+OwOkCgXMMxBRzlLPykuhIGpNY/end+FDOghT/uJBCBKXnZeVzW
+	g5QQjwSyfdLaQ8784HZ0mCduX+O8xEMZmHS1fe+r9rBMFe4MXomcw63LUDyy+ovpo6ETys
+	IhBiX+aMB1Ms99Y1ZuS6FKU9pzNc2X4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-112-AVmogvLFMFi-FyCb62ev6g-1; Wed, 08 May 2024 12:43:51 -0400
+X-MC-Unique: AVmogvLFMFi-FyCb62ev6g-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-41a370b6acdso22914435e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 09:43:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715184817; x=1715789617;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=aoKtCQ1fZ40sBjZa/Tldul+O4hQjk9kqh76dKiHfAdvc0m/f73cEcMpIUnaLMRieOL
-         vgwJKV8vLou8Xy3RKLXOUXgm9y1hKbtLJDaQiH/6RYZXs+B2EAgIesaIzeQXBdIIyXV7
-         bgCcZ97KLpUOLBXYlQYSH0GywipVxD0StrUWqu+d90RUKzLDpKSW5kQuBkW5hzGqLAHA
-         BUPvSAY+zY9nkW8HJ5mAFvMkH0x4PSVmdinpMSNKZLrAYtCohxXnsD66wBN/Hod5i5/I
-         gVi2+H78MyVTHkomrYwufOaVtezIh/99zBAER8eQKoanCfEm7ntbYocYrIiO4IPP0m6B
-         WFxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWib0r6e0Dq+xKF4iG8tjOM3ZoRl+qq4gosrqYCe6sarAjMbxGO7kDsTu13VRqaFxQBjsqR2INTArIjEKC/ferF9JfLX5ykGmfYtEfc2oEPBgY/FMG+DKPxEF4+mrEFkzm5lbP6li7VpMY3f+xEb9vwaZlMfrOccBYBPe8R8BLQpEfSL/ODPomo4ZemdQTwzXdpER4g5icdcrh+GrIMbiKRatm1vUXfC/BA+xLO6sD1AxS0TuXj0uUmi/k4Yhx0jNmqewFlTKWrS4l9bzzqWJ7CC2T/yzXpzfYSz7JWoNb9vvWNucV3YNgwMqgFkbOJSAIGi8nzATxwXXdozLXW1xGTlWMoAcONLGoJi9Ws1co7lmPBTh37DbQQ/YXdlfQ/E8U0/k9HatLt323fcx024x0ggRMghnNp/cKi25AY6t+eeieaqpAOVBmYRoJo3MNQI4Eo+C+Cg+1osmHiOLQfTm/fCaaLQzgwplxfIyQFst4xoHGXglC+byKSvoNQIAISHMw4WLrdlA==
-X-Gm-Message-State: AOJu0YxeYZoGNExeJ5GWhVwEPF8RcOKIHyh0kb4oynuO3PQ+1iBopLv7
-	f5FPJwETVM65Q/ruWjfHV8Yu/kAfrdWcGPs76i+FoyKHmQgop5LDe3ikSxVK
-X-Google-Smtp-Source: AGHT+IGOsGKTobWTIXaEhASc0QNiWa87Ncv1n8+a1K7thxeRTWIrU67BwG7R0FIWXrNbhbARcUS18g==
-X-Received: by 2002:a05:6512:3da6:b0:51b:f78d:c189 with SMTP id 2adb3069b0e04-5217c3707fdmr2707077e87.14.1715184816352;
-        Wed, 08 May 2024 09:13:36 -0700 (PDT)
-Received: from [192.168.42.40] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b00a59ae892a68sm5208655ejc.167.2024.05.08.09.13.34
+        d=1e100.net; s=20230601; t=1715186630; x=1715791430;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kfu+kNg5psV0QrTCz/mBUS9Pxutp2X9pNWB5lOfJe8k=;
+        b=H7xTckzfyu1UqoD0PnNjc8vynNiru5zEJfYwJhwVSs+XR3OVFExBOuBpSGY5mF4E4O
+         iQB6v80Fv7XJOXB66cqYGcuQZrydpk8k1n79a/PnD0YMuFL3VhJ9qeb+hoIg/Y5ewRQw
+         aokMrXMcn9eSKMCSOkdxySmfY7HbwVogU1flMdVlfnCpuSYeBAiXO/wZFInk/SiEdHl5
+         RW+vtXV0SGJR/B88eswwWsQMBlRlqidE3Tx1FWrIHJkHi1shTOuBHBjvglCttibF790G
+         1f0K2X91zxju00OSQ6ULfQzFJefRltSnPD1AhfQkseXXqTfy3Na9sen5u7OoIuztHBk1
+         24qA==
+X-Forwarded-Encrypted: i=1; AJvYcCVR+DXxVKl0lt4Ul35yBNtQLfpLgP/TK63zW17qODQKHsBFwIx4RP5fIT6eCeX/BG21P3m1vQZUX8sBLKa63/6ClGV3XQb5lFIriMS343bz
+X-Gm-Message-State: AOJu0Yw3OUfCKYfQfFWRUx7e30tY6hkoOdBzYAGyxbJHsiqDFp2ph2uN
+	Zr7cCj8Pet8GMonJh5gwq1Pr261gf2vRBLkVHYEgnWiCTJlNaLxb/IMoRvaHPpukve/83zxrJbh
+	XBGEbAF2Hkd+nmUnaL6tAnX3gaqS8ELd8ToK/QrdXxFzm0I8cdYQW0t7BTwTgBfi44PDPGct2Bw
+	==
+X-Received: by 2002:a05:600c:3507:b0:41a:f9db:88ac with SMTP id 5b1f17b1804b1-41f71cc4e9cmr25139275e9.14.1715186630452;
+        Wed, 08 May 2024 09:43:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEiXFhtgFYexLvlE9tUnQOpwikaBE/AJRGx0k+bYeHdn7M9LalM+i8Bs18/sw5TMREw1EkZEA==
+X-Received: by 2002:a05:600c:3507:b0:41a:f9db:88ac with SMTP id 5b1f17b1804b1-41f71cc4e9cmr25139055e9.14.1715186629991;
+        Wed, 08 May 2024 09:43:49 -0700 (PDT)
+Received: from [192.168.3.108] (p5b0c6bc3.dip0.t-ipconnect.de. [91.12.107.195])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41f882085dbsm29015445e9.41.2024.05.08.09.43.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 09:13:35 -0700 (PDT)
-Message-ID: <710dfcb5-8489-446d-a230-0e01828dfc58@gmail.com>
-Date: Wed, 8 May 2024 17:13:43 +0100
+        Wed, 08 May 2024 09:43:49 -0700 (PDT)
+Message-ID: <417e4dc4-ea48-4d68-a441-f782f98a08fe@redhat.com>
+Date: Wed, 8 May 2024 18:43:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,113 +84,210 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mina Almasry <almasrymina@google.com>,
- Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Amritha Nambiar <amritha.nambiar@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
- Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
- Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
- Arseniy Krasnov <avkrasnov@salutedevices.com>,
- Aleksander Lobakin <aleksander.lobakin@intel.com>,
- Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Richard Gobert <richardbgobert@gmail.com>,
- Sridhar Samudrala <sridhar.samudrala@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
- Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <ZjpVfPqGNfE5N4bl@infradead.org>
- <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
- <20240507164838.GG4718@ziepe.ca>
- <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
- <20240507175644.GJ4718@ziepe.ca>
- <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
- <20240507233247.GK4718@ziepe.ca>
- <54830914-1ec9-4312-96ad-423ac0aeb233@gmail.com>
- <20240508142530.GR4718@ziepe.ca>
- <6f69694b-4281-45a6-92aa-d9d72b918df2@gmail.com>
- <20240508155813.GS4718@ziepe.ca>
+Subject: Re: [PATCH 1/2] Fix userfaultfd_api to return EINVAL as expected
+To: Audra Mitchell <audra@redhat.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ akpm@linux-foundation.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, raquini@redhat.com,
+ Peter Xu <peterx@redhat.com>
+References: <20240507195510.283744-1-audra@redhat.com>
+ <939a16f2-7b66-45a6-a043-4821bd3c71dc@redhat.com> <Zjt3Apr8ILFA4oK_@fedora>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240508155813.GS4718@ziepe.ca>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <Zjt3Apr8ILFA4oK_@fedora>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/8/24 16:58, Jason Gunthorpe wrote:
-> On Wed, May 08, 2024 at 04:44:32PM +0100, Pavel Begunkov wrote:
-> 
->>> like a weird and indirect way to get there. Why can't io_uring just be
->>> the entity that does the final free and not mess with the logic
->>> allocator?
+On 08.05.24 14:58, Audra Mitchell wrote:
+> On Wed, May 08, 2024 at 09:39:10AM +0200, David Hildenbrand wrote:
+>> On 07.05.24 21:55, Audra Mitchell wrote:
+>>> Currently if we request a feature that is not set in the Kernel
+>>> config we fail silently and return the available features. However, the
+>>> documentation indicates we should return an EINVAL.
 >>
->> Then the user has to do a syscall (e.g. via io_uring) to return pages,
->> and there we'd need to care how to put the pages efficiently, i.e.
->> hitting the page pool's fast path, e.g. by hoping napi is scheduled and
->> scheduled for the CPU we're running on, or maybe transferring the pages
->> to the right CPU first.
+>> I assume you are referencing
 >>
->> Compare it with userspace putting pages into a ring, and the allocator
->> taking from there when needed without any extra synchronisation and
->> hassle just because it's a sole consumer.
+>> "EINVAL The API version requested in the api field is not supported by this
+>> kernel, or  the  features  field passed to the kernel includes feature bits
+>> that are not supported by the current kernel version."
+>>
+>> and
+>>
+>> "To  enable  userfaultfd features the application should set a bit
+>> corresponding to each feature it wants to enable in the features field. If
+>> the kernel supports all the requested features it will enable them.
+>> Otherwise it will zero out the returned uffdio_api structure and return
+>> EINVAL.
+>> "
+>>
+>> in which case I agree.
 > 
-> Wow, that sounds a bit terrifying for security, but I guess I can see
-> your point.
+> Yep! I'm referencing the man page.
 
-Mind elaborating about security? "No synchronisation" is for grabbing
-from the ring, it's napi exclusive, but it does refcounting to make sure
-there are no previous net users left and the userspace doesn't try
-anything funny like returning a page twice. And it's not even a page
-but rather a separately refcounted buffer represented by an offset
-from the userspace POV. It doesn't even have to be page sized, hw
-benefits from smaller chunks.
+Might be worth just quoting the man page :)
 
-> You are replacing the whole allocator logic if you are effectively
-> putting the free list in userspace memory.
+>>> We need to fix this issue since we can end up with a Kernel warning
+>>> should a program request the feature UFFD_FEATURE_WP_UNPOPULATED on
+>>> a kernel with the config not set with this feature.
+>>
+>> Can you mention which exact one? Is it a WARN* or a pr_warn() ?
 > 
-> Jason
+> Here is the kernel warning I get:
+> 
+
+Thanks, it makes sense to add the first couple of lines of below to the 
+patch description.
+
+> [  200.803094] unrecognized swap entry 0x7c00000000000001
+> [  200.808270] ------------[ cut here ]------------
+> [  200.812896] WARNING: CPU: 91 PID: 13634 at mm/memory.c:1660 zap_pte_range+0x43d/0x660
+> [  200.820738] Modules linked in: qrtr bridge stp llc rfkill sunrpc amd_atl intel_rapl_msr intel_rapl_common amd64_edac edac_mce_amd kvm_amd kvm ipmi_ssif acpi_ipmi i2c_piix4 ipmi_si wmi_bmof dcdbas dell_smbios dell_wmi_descriptor ptdma ipmi_devintf rapl ipmi_msghandler acpi_power_meter pcspkr k10temp xfs libcrc32c sd_mod t10_pi mgag200 sg drm_kms_helper crct10dif_pclmul i2c_algo_bit ahci crc32_pclmul drm_shmem_helper libahci crc32c_intel drm i40e libata ghash_clmulni_intel tg3 ccp megaraid_sas sp5100_tco wmi dm_mirror dm_region_hash dm_log dm_mod fuse
+> [  200.869387] CPU: 91 PID: 13634 Comm: userfaultfd Kdump: loaded Not tainted 6.9.0-rc5+ #8
+> [  200.877477] Hardware name: Dell Inc. PowerEdge R6525/0N7YGH, BIOS 2.7.3 03/30/2022
+> [  200.885052] RIP: 0010:zap_pte_range+0x43d/0x660
+> [  200.889595] Code: 83 fa 02 0f 86 44 01 00 00 83 f9 17 0f 84 e1 00 00 00 83 f9 1f 0f 84 d0 00 00 00 48 89 c6 48 c7 c7 00 e4 dd bb e8 73 a2 de ff <0f> 0b e9 44 fd ff ff 45 0f b6 44 24 20 41 f6 c0 f4 75 27 4c 89 ee
+> [  200.908348] RSP: 0018:ffffa18d2e6c37c8 EFLAGS: 00010246
+> [  200.913584] RAX: 000000000000002a RBX: 00007f26d3600000 RCX: 0000000000000000
+> [  200.920730] RDX: 0000000000000000 RSI: ffff93503f9a0bc0 RDI: ffff93503f9a0bc0
+> [  200.927867] RBP: 00007f26d35cc000 R08: 0000000000000000 R09: ffffa18d2e6c3688
+> [  200.935009] R10: ffffa18d2e6c3680 R11: ffffffffbc9de448 R12: ffffa18d2e6c39e8
+> [  200.942149] R13: ffff92d1ebc15b50 R14: ffff93114e0cde60 R15: ffffa18d2e6c3928
+> [  200.949291] FS:  0000000000000000(0000) GS:ffff93503f980000(0000) knlGS:0000000000000000
+> [  200.957384] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  200.963140] CR2: 00007f26b1600658 CR3: 00000040905ba000 CR4: 0000000000350ef0
+> [  200.970283] Call Trace:
+> [  200.972745]  <TASK>
+> [  200.974862]  ? __warn+0x7f/0x130
+> [  200.978108]  ? zap_pte_range+0x43d/0x660
+> [  200.982044]  ? report_bug+0x18a/0x1a0
+> [  200.985720]  ? handle_bug+0x3c/0x70
+> [  200.989219]  ? exc_invalid_op+0x14/0x70
+> [  200.993068]  ? asm_exc_invalid_op+0x16/0x20
+> [  200.997265]  ? zap_pte_range+0x43d/0x660
+> [  201.001199]  ? zap_pte_range+0x43d/0x660
+> [  201.005134]  zap_pmd_range.isra.0+0xf9/0x230
+> [  201.009416]  unmap_page_range+0x2d4/0x4a0
+> [  201.013436]  unmap_vmas+0xa8/0x180
+> [  201.016854]  exit_mmap+0xea/0x3b0
+> [  201.020191]  __mmput+0x43/0x120
+> [  201.023342]  exit_mm+0xb1/0x110
+> [  201.026496]  do_exit+0x270/0x4f0
+> [  201.029739]  do_group_exit+0x2c/0x80
+> [  201.033326]  get_signal+0x886/0x8b0
+> [  201.036828]  ? srso_return_thunk+0x5/0x5f
+> [  201.040848]  arch_do_signal_or_restart+0x25/0x100
+> [  201.045563]  ? srso_return_thunk+0x5/0x5f
+> [  201.049583]  ? vma_set_page_prot+0x5e/0xc0
+> [  201.053692]  ? srso_return_thunk+0x5/0x5f
+> [  201.057713]  ? syscall_exit_work+0xff/0x130
+> [  201.061908]  syscall_exit_to_user_mode+0x1b3/0x200
+> [  201.066712]  do_syscall_64+0x87/0x160
+> [  201.070387]  ? srso_return_thunk+0x5/0x5f
+> [  201.074405]  ? do_mmap+0x416/0x5f0
+> [  201.077821]  ? srso_return_thunk+0x5/0x5f
+> [  201.081840]  ? rseq_get_rseq_cs+0x1d/0x240
+> [  201.085950]  ? srso_return_thunk+0x5/0x5f
+> [  201.089970]  ? rseq_ip_fixup+0x6d/0x1d0
+> [  201.093823]  ? vm_mmap_pgoff+0x117/0x1a0
+> [  201.097755]  ? srso_return_thunk+0x5/0x5f
+> [  201.101776]  ? srso_return_thunk+0x5/0x5f
+> [  201.105795]  ? syscall_exit_to_user_mode+0x78/0x200
+> [  201.110685]  ? srso_return_thunk+0x5/0x5f
+> [  201.114706]  ? do_syscall_64+0x87/0x160
+> [  201.118557]  ? srso_return_thunk+0x5/0x5f
+> [  201.122575]  ? __count_memcg_events+0x49/0xb0
+> [  201.126944]  ? srso_return_thunk+0x5/0x5f
+> [  201.130967]  ? srso_return_thunk+0x5/0x5f
+> [  201.134986]  ? syscall_exit_work+0xff/0x130
+> [  201.139184]  ? srso_return_thunk+0x5/0x5f
+> [  201.143205]  ? syscall_exit_to_user_mode+0x78/0x200
+> [  201.148093]  ? srso_return_thunk+0x5/0x5f
+> [  201.152114]  ? do_syscall_64+0x87/0x160
+> [  201.155960]  ? srso_return_thunk+0x5/0x5f
+> [  201.159984]  ? sched_clock_cpu+0xb/0x190
+> [  201.163916]  ? srso_return_thunk+0x5/0x5f
+> [  201.167939]  ? irqtime_account_irq+0x40/0xc0
+> [  201.172220]  ? srso_return_thunk+0x5/0x5f
+> [  201.176243]  ? srso_return_thunk+0x5/0x5f
+> [  201.180263]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> [  201.185326] RIP: 0033:0x7f26dfd0735b
+> [  201.188939] Code: Unable to access opcode bytes at 0x7f26dfd07331.
+> [  201.195128] RSP: 002b:00007fffce176868 EFLAGS: 00000206 ORIG_RAX: 000000000000000a
+> [  201.202700] RAX: fffffffffffffffc RBX: 00007f26dfe60000 RCX: 00007f26dfd0735b
+> [  201.209841] RDX: 0000000000000003 RSI: 0000000001000000 RDI: 00007f26af401000
+> [  201.216983] RBP: 00007f26b0400640 R08: 00000000ffffffff R09: 0000000000000000
+> [  201.224127] R10: ffffffffffffffc0 R11: 0000000000000206 R12: 0000000000000000
+> [  201.231267] R13: 000000000040d320 R14: 0000000000000000 R15: 0000000000000000
+> [  201.238413]  </TASK>
+> [  201.240610] ---[ end trace 0000000000000000 ]---
+> [  201.245250] unrecognized swap entry 0x7c00000000000001
+> 
+> 
+> 
+>>
+>> Likely we want "Fixes:" here.
+> 
+> This could be seen as a continuation of the problem
+> 2ff559f31a5d Revert "userfaultfd: don't fail on unrecognized features"
+> was trying to solve. However, this patch only checks to make sure we didnt
+> ask for a feature outside the possible range of features. We are still missing
+> a check to confirm the requested features are also configured on. So I guess
+> the "Fixes" tag would be for this patch?
+> 914eedcb9ba0 userfaultfd: don't fail on unrecognized features
+> 
+> Happy to get your input here!
+
+I agree with Peters summary :)
 
 -- 
-Pavel Begunkov
+Cheers,
+
+David / dhildenb
+
 
