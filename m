@@ -1,88 +1,101 @@
-Return-Path: <linux-kselftest+bounces-9666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CD648BF30C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 02:04:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 371798BF3AE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 02:30:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00FBE1F20C22
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 00:04:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E640928259E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 00:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3E7131BA6;
-	Tue,  7 May 2024 23:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4F17FD;
+	Wed,  8 May 2024 00:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rM9mUW+u"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB3A13174E;
-	Tue,  7 May 2024 23:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93F9622;
+	Wed,  8 May 2024 00:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715124958; cv=none; b=TWzTtr6wzyuw2K+dvJdHAeZIlqYgEVUThJfnvDHz/jd+R9zSavQb5JeaOJA+gXuT061RKH/uaUO6aNMsSjJJUfBgzQNIoZF1l+9Krq3YZnSNmFKi6CTBJOL+dhgBps8zQbZfE8QUqbJEizmYHovGGjBaBRW7hGi0vMMCjDl6h0A=
+	t=1715128232; cv=none; b=kBNRd/OScJ/L8r9wZZluE6Hyaok7Z1rir5Ww7YA5sD59YNYMVJmvaxk/pKzHzAjnnbtWla6rBvrKt+ZgFKo85MMqO7T2StyZHcl5Zg+feEt/UuVA1iwSK84QZEchSMu/W/BDN310srzpcMqiAwRfBuOAMlGGQrPBzlgqn52yrWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715124958; c=relaxed/simple;
-	bh=gaeDja9fME/KkLtLEpCcfbpv+skEwWy0D4LLH9190n4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pat2nCg0UeZiUqs8NHH/2VCkGk91QkL1RB1kceF6MpbJ4v4Wa8r62bjnn9COmEvF8LDEM1nxJRlORuhOKQ2g8wezHGMeiI7yQ4BXl1hw+BnG+UZ7r8Fnrf+oyx/cVfxmi3mEfSlqnYUUWOvn1UNFj1rs+f/7M6xzlZ8dXNBKwho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650B9C2BBFC;
-	Tue,  7 May 2024 23:35:57 +0000 (UTC)
-Date: Tue, 7 May 2024 19:35:55 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, mhiramat@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- mathieu.desnoyers@efficios.com, kernel-team@android.com,
- rdunlap@infradead.org, rppt@kernel.org, david@redhat.com, Shuah Khan
- <shuah@kernel.org>, linux-kselftest@vger.kernel.org, Muhammad Usama Anjum
- <usama.anjum@collabora.com>
-Subject: Re: [PATCH v22 5/5] ring-buffer/selftest: Add ring-buffer mapping
- test
-Message-ID: <20240507193555.592a1e28@rorschach.local.home>
-In-Reply-To: <5bdb08a2-0740-4ea0-be24-a948332d60ac@linuxfoundation.org>
-References: <20240430111354.637356-1-vdonnefort@google.com>
-	<20240430111354.637356-6-vdonnefort@google.com>
-	<5bdb08a2-0740-4ea0-be24-a948332d60ac@linuxfoundation.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1715128232; c=relaxed/simple;
+	bh=q6V7n72TWE+LkN6Z1iKMOe3Tu61qwITDsaurNXpNThY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ly+qbBqnIcyYitWriKMHJsAF2FGkVqlac1LTeQC+HCzOAs42oTb0Ddst5dKl0sZVD7+oy7zOcKHIEi9ciXXI8CZFg28LZR30Lp158zTQY24JIa3ipV6TfwJJDLxIbfwDMUeW/EHf56Hs70KS4C/GoSYB9ZZaHJDszCaHsJCYxtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rM9mUW+u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AC5EC4DDE8;
+	Wed,  8 May 2024 00:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715128232;
+	bh=q6V7n72TWE+LkN6Z1iKMOe3Tu61qwITDsaurNXpNThY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rM9mUW+uCyW/C+l7YZqn2HJubeCXW8XJmWc36duoSk4aNSt4fb+TgZo+IFraMBQyV
+	 5CLIy5/rXtuwfysu/bH/gx6VUJDSQQgUCvsdLVT7OJG/PEh2Yx7ON75232pD0dvkCL
+	 4F/SCRISml0gDFmwiYxcIuyoWK8EBPxxu/9S0syUbg/lXhfdDWoEewDm/yabYjZT9B
+	 Ly9Lc7rnecRfMOrk8HaHDiXU8wL3qjin2WsqBeZ9vcclI9gosbYKA0uEBWgMIskUOE
+	 mKUnBumVr+Fb/o2f1PIKLaS0LZMrVOl1kmIWeZvgH25pEI4RDf6ooUBA1w9dqZt6cV
+	 ewnrn40mzMLRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D90AC43614;
+	Wed,  8 May 2024 00:30:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] selftests/net: fix uninitialized variables
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171512823237.17947.6042274954836297174.git-patchwork-notify@kernel.org>
+Date: Wed, 08 May 2024 00:30:32 +0000
+References: <20240506190204.28497-1-jhubbard@nvidia.com>
+In-Reply-To: <20240506190204.28497-1-jhubbard@nvidia.com>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, steffen.klassert@secunet.com,
+ herbert@gondor.apana.org.au, afaerber@suse.de,
+ manivannan.sadhasivam@linaro.org, matttbe@kernel.org, martineau@kernel.org,
+ geliang@kernel.org, pshelar@ovn.org, willemdebruijn.kernel@gmail.com,
+ alexander@mihalicyn.com, zhujun2@cmss.chinamobile.com, petrm@nvidia.com,
+ idosch@nvidia.com, liuhangbin@gmail.com, razor@blackwall.org,
+ bpoirier@nvidia.com, bigeasy@linutronix.de, 0x7f454c46@gmail.com,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
+ dev@openvswitch.org, kernel@valentinobst.de, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-On Fri, 3 May 2024 13:12:56 -0600
-Shuah Khan <skhan@linuxfoundation.org> wrote:
+Hello:
 
-> On 4/30/24 05:13, Vincent Donnefort wrote:
-> > This test maps a ring-buffer and validate the meta-page after reset and
-> > after emitting few events.
-> >   
-> 
-> Changelog needs to be imperative - refer to the following:
-> 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> Update the change log and describe what the test does and include
-> test output.
-> 
-> If the test requires root privileges - make sure add a check to skip
-> when a normal use runs the test.
-> 
-> The rest looks good.
-> 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Vincent,
+On Mon,  6 May 2024 12:02:04 -0700 you wrote:
+> When building with clang, via:
+> 
+>     make LLVM=1 -C tools/testing/selftest
+> 
+> ...clang warns about three variables that are not initialized in all
+> cases:
+> 
+> [...]
 
-Can you address Shuah's concerns. I'm starting to test patches 1-4 so
-you only need to send an update to this one, unless of course I find an
-issue with one of the others.
+Here is the summary with links:
+  - [v2] selftests/net: fix uninitialized variables
+    https://git.kernel.org/netdev/net-next/c/eb709b5f6536
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
--- Steve
+
 
