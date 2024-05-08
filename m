@@ -1,38 +1,74 @@
-Return-Path: <linux-kselftest+bounces-9696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 049AC8BFB35
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 12:43:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D1ED8BFBFF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 13:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 358D81C21CE3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 10:43:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8806281989
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 11:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C344C81727;
-	Wed,  8 May 2024 10:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 223A3823B0;
+	Wed,  8 May 2024 11:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1xNeRSz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8708121A;
-	Wed,  8 May 2024 10:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE064C61F;
+	Wed,  8 May 2024 11:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715165024; cv=none; b=bjuTwtfvDSMqmCMqI5Zgw/GCynyIYF9sbPV+K7/iCbjO27iLihc4PeBYZeHuh8a+eV+Yd+u1vu6HSaGErDRy1q9ueRgIOoF4SYD0dXsLk/9AwnP/NDqgHJWkb9qQvVQorkv/VddEKlMvUF9bTgsbOA3FAuCwSj8goxgx0xTlJJU=
+	t=1715167804; cv=none; b=kUurOUyrvVMhkPgx0Vx2sU5AMAe1yC3MFevHxe2hzgjKF4SonV+hPQEFCSoI9Cp6oAUEA1geUyphKdyVjGiK8ZIqLuGwQMetPlK7kogmNL77eNq5rFGvYddxxI3r0GJrw5ZvnnlkNg5SM06i263JpSc7vxGrYVOnHmEnBMlsdsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715165024; c=relaxed/simple;
-	bh=4kEk/+lJ061tISvnU8C3DinplnN17yBiPWG18m1vvrE=;
+	s=arc-20240116; t=1715167804; c=relaxed/simple;
+	bh=i1YXbT1f9p3n8QhwhLPoFD2HZIiqNikXNuPP+Cyyt3c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Th7DZdgaKVKjjBx6H/R1bljSXtemqeDXbRasEs5iz+RkmcNWy7ojCBBt9Z6Ywi2JvRA2/Y1D/MSFO5aIAJ2LMHT7mD1tqxJcOwUr7i2IzPp7hsrNA2D3FQOuJBVijxen725+/fr553b5uMwZXYNe3AwLAv780V3s3g+JLZEqPhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD2DC1BF204;
-	Wed,  8 May 2024 10:43:28 +0000 (UTC)
-Message-ID: <d14c1d04-2fd9-4c9b-affb-f4335bd7e6fc@ghiti.fr>
-Date: Wed, 8 May 2024 12:43:28 +0200
+	 In-Reply-To:Content-Type; b=Pv/lRpMxcvXS+X071yeAjW0UbLvKL1GPOYPSVSz6zxxUFq2UVgTyx1olEvbEk93zUj5aaG0bN8Nvn8sQ/Ae8g7Iu8rM7cXaydHxkvJF9Msu5YGlkUU5G6uCBRwc923dX+CZlKavu/GxpaeSrXsYtMJX4IKAtFP9jSf5WsiG6F+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1xNeRSz; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a59b178b75bso779737866b.0;
+        Wed, 08 May 2024 04:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715167801; x=1715772601; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3OIqwzAifyFyoLgyrgDnMDOezHmps93bJkTuXZ4CdWs=;
+        b=h1xNeRSzafyepxYmDP1++9rqUH17lOg6BY5IYYZKIy6/IE1vkKZ8Xz7yiNh6rfSm1c
+         XIGgKxzsKV+baBdnLFU7P0dnnybBXBEeophzt68HmlzA/m8P54CIVfgNBz2YTznj58VD
+         Q6oA6BVEVkZ/5RYKlFDZJrAt3aZtbUcKPBxz3zLgX7PgUAMeLFewiNouR+ANUam+C8C/
+         8lg4qW5ITEVgUmrEogE2fgkpY+Rd+LaRFTV8CmMADYhvQyvR/IaL0qlxzA1NQrKyMU+v
+         wGPc6XNTYYd8u96moAaUVk8P4wNMSFxj6CgECON6X2mzq2STOxFTrxAF69XZCNuNFftQ
+         Jj1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715167801; x=1715772601;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OIqwzAifyFyoLgyrgDnMDOezHmps93bJkTuXZ4CdWs=;
+        b=aNRaoLQHW1BxW3FMWZAyG3s1ptWM+mSjr4TAZ9Yr/rp5Piff1eJjdfkKoJPKsMSRTk
+         q0XBzvhaYWm7Q0yO4mo6TwbPkpv9JhTKtothM2JePqInUxDu/P8VxPQ6vf0w4sOr83XB
+         /3X8OmtZW0WFbC1eSjFkA/83Oscj8lVxEO3yjLG+cxvuwFMrPl0mhaZJ63NpWgjgP+kT
+         Scgm0oqN807bIweux6kMzrAl1usRlxM2QN2EAeqqru0Kw0fhh/MQtcXwv8c6TNZArohZ
+         dIVtEQy6Pmx+/yPs+JDIWTsZjVNv2zvHvQIRcau9bk90KQhJUTb4rKbpjY//0EPtam1K
+         E7vA==
+X-Forwarded-Encrypted: i=1; AJvYcCXm6w1eumq2q9EMEFyo4kNc8BR9pHrCS7tCygX2LAAYKcKouzgdFQMTPS5lAf6HJFibgduel/icX9JLTfZlq06TgC6rI4xyuOEcXDL4pIENalvxqAp0uCq1j5phhJICqgDkqsePt1bEIvIdvUtNI32jtOt8On8FNwThndFpciAiOgmgaF9/qomoYHHG/WquLicwAIWHVN4B7/Nqp2MalaWONW9Ek5G/KWTjX7B3Y4s7s4f4PA0kjabU0g8+wb6DwEfegEVxQlPeGSBmt9GoTJ/MvjN6ZeUCtvwzyozO2IUgQuzvl28XVn/Fky4SF7VV+Cn28NrJSmETpnz1E0nOCaWDyMsDLQlT6olsbEPRsxTtW9aFDzYcjBPHsPBSoeC6hGPhz++xbtf//NRFe97vRuoIRbGP1r1alatawYbxTOAflPn5lJSi7qC8dulkn6pESJOiz+BJhfLqgy7fISAXu/vGH/ghY2EiC19Qp4vWL1dp6LXRHhgctY75V7oUF9ROZsoG2p0hKQ==
+X-Gm-Message-State: AOJu0YzhUcl4AehwA3nCUUxAAjhD/+r3doMZIQfZcynU/xi7awPEAfHT
+	tlKafeagOWsmRTkwhFBzSWh9c5r2dW8fRzMiKGUfp+A6Q2mrY/B2
+X-Google-Smtp-Source: AGHT+IEBCSS9yz2TLoxpJSv9wB1C02lZToMUPdrmRCsf8QV6Km9boW/BeDcdlJbFciMxAmm6cw9vRg==
+X-Received: by 2002:a17:906:2b1b:b0:a58:a0b8:2a64 with SMTP id a640c23a62f3a-a59fb94b152mr153051866b.5.1715167800381;
+        Wed, 08 May 2024 04:30:00 -0700 (PDT)
+Received: from [192.168.42.217] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id kh24-20020a170906f81800b00a59bf40ba6dsm4449273ejb.7.2024.05.08.04.29.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 May 2024 04:29:59 -0700 (PDT)
+Message-ID: <54830914-1ec9-4312-96ad-423ac0aeb233@gmail.com>
+Date: Wed, 8 May 2024 12:30:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,169 +76,145 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/9] riscv: smp: fail booting up smp if inconsistent
- vlen is detected
-To: Andy Chiu <andy.chiu@sifive.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor.dooley@microchip.com>, Heiko Stuebner <heiko@sntech.de>,
- Guo Ren <guoren@kernel.org>, Conor Dooley <conor@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>,
- =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
- Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
- Vincent Chen <vincent.chen@sifive.com>,
- Greentime Hu <greentime.hu@sifive.com>, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
- <20240412-zve-detection-v4-2-e0c45bb6b253@sifive.com>
- <4acc62d0-d62b-4d42-805b-0bc7f663a81c@ghiti.fr>
- <CABgGipXcjY9KDU=fN6KtER3mPbxsQdb+Y5Czhq7QDBFFc6p__w@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mina Almasry <almasrymina@google.com>,
+ Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Amritha Nambiar <amritha.nambiar@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+ Arseniy Krasnov <avkrasnov@salutedevices.com>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>,
+ Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Richard Gobert <richardbgobert@gmail.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
+ Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
+ <20240507161857.GA4718@ziepe.ca> <ZjpVfPqGNfE5N4bl@infradead.org>
+ <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
+ <20240507164838.GG4718@ziepe.ca>
+ <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+ <20240507175644.GJ4718@ziepe.ca>
+ <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
+ <20240507233247.GK4718@ziepe.ca>
 Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CABgGipXcjY9KDU=fN6KtER3mPbxsQdb+Y5Czhq7QDBFFc6p__w@mail.gmail.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240507233247.GK4718@ziepe.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Transfer-Encoding: 7bit
 
-Hi Andy,
-
-On 08/05/2024 10:21, Andy Chiu wrote:
-> On Thu, Apr 25, 2024 at 4:01 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
->> Hi Andy,
+On 5/8/24 00:32, Jason Gunthorpe wrote:
+> On Tue, May 07, 2024 at 08:35:37PM +0100, Pavel Begunkov wrote:
+>> On 5/7/24 18:56, Jason Gunthorpe wrote:
+>>> On Tue, May 07, 2024 at 06:25:52PM +0100, Pavel Begunkov wrote:
+>>>> On 5/7/24 17:48, Jason Gunthorpe wrote:
+>>>>> On Tue, May 07, 2024 at 09:42:05AM -0700, Mina Almasry wrote:
+>>>>>
+>>>>>> 1. Align with devmem TCP to use udmabuf for your io_uring memory. I
+>>>>>> think in the past you said it's a uapi you don't link but in the face
+>>>>>> of this pushback you may want to reconsider.
+>>>>>
+>>>>> dmabuf does not force a uapi, you can acquire your pages however you
+>>>>> want and wrap them up in a dmabuf. No uapi at all.
+>>>>>
+>>>>> The point is that dmabuf already provides ops that do basically what
+>>>>> is needed here. We don't need ops calling ops just because dmabuf's
+>>>>> ops are not understsood or not perfect. Fixup dmabuf.
+>>>>
+>>>> Those ops, for example, are used to efficiently return used buffers
+>>>> back to the kernel, which is uapi, I don't see how dmabuf can be
+>>>> fixed up to cover it.
+>>>
+>>> Sure, but that doesn't mean you can't use dma buf for the other parts
+>>> of the flow. The per-page lifetime is a different topic than the
+>>> refcounting and access of the entire bulk of memory.
 >>
->> On 12/04/2024 08:48, Andy Chiu wrote:
->>> Currently we only support Vector for SMP platforms, that is, all SMP
->>> cores have the same vlenb. If we happen to detect a mismatching vlen, it
->>> is better to just fail bootting it up to prevent further race/scheduling
->>> issues.
->>>
->>> Also, move .Lsecondary_park forward and chage `tail smp_callin` into a
->>> regular call in the early assembly. So a core would be parked right
->>> after a return from smp_callin. Note that a successful smp_callin
->>> does not return.
->>>
->>> Fixes: 7017858eb2d7 ("riscv: Introduce riscv_v_vsize to record size of Vector context")
->>> Reported-by: Conor Dooley <conor.dooley@microchip.com>
->>> Closes: https://lore.kernel.org/linux-riscv/20240228-vicinity-cornstalk-4b8eb5fe5730@spud/
->>> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
->>> ---
->>> Changelog v4:
->>>    - update comment also in the assembly code (Yunhui)
->>> Changelog v2:
->>>    - update commit message to explain asm code change (Conor)
->>> ---
->>>    arch/riscv/kernel/head.S    | 19 ++++++++++++-------
->>>    arch/riscv/kernel/smpboot.c | 14 +++++++++-----
->>>    2 files changed, 21 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
->>> index 4236a69c35cb..a00f7523cb91 100644
->>> --- a/arch/riscv/kernel/head.S
->>> +++ b/arch/riscv/kernel/head.S
->>> @@ -165,9 +165,20 @@ secondary_start_sbi:
->>>    #endif
->>>        call .Lsetup_trap_vector
->>>        scs_load_current
->>> -     tail smp_callin
->>> +     call smp_callin
->>>    #endif /* CONFIG_SMP */
->>>
->>> +.align 2
->>> +.Lsecondary_park:
->>> +     /*
->>> +      * Park this hart if we:
->>> +      *  - have too many harts on CONFIG_RISCV_BOOT_SPINWAIT
->>> +      *  - receive an early trap, before setup_trap_vector finished
->>> +      *  - fail in smp_callin(), as a successful one wouldn't return
->>> +      */
->>> +     wfi
->>> +     j .Lsecondary_park
->>> +
->>>    .align 2
->>>    .Lsetup_trap_vector:
->>>        /* Set trap vector to exception handler */
->>> @@ -181,12 +192,6 @@ secondary_start_sbi:
->>>        csrw CSR_SCRATCH, zero
->>>        ret
->>>
->>> -.align 2
->>> -.Lsecondary_park:
->>> -     /* We lack SMP support or have too many harts, so park this hart */
->>> -     wfi
->>> -     j .Lsecondary_park
->>> -
->>>    SYM_CODE_END(_start)
->>>
->>>    SYM_CODE_START(_start_kernel)
->>> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
->>> index d41090fc3203..673437ccc13d 100644
->>> --- a/arch/riscv/kernel/smpboot.c
->>> +++ b/arch/riscv/kernel/smpboot.c
->>> @@ -214,6 +214,15 @@ asmlinkage __visible void smp_callin(void)
->>>        struct mm_struct *mm = &init_mm;
->>>        unsigned int curr_cpuid = smp_processor_id();
->>>
->>> +     if (has_vector()) {
->>> +             /*
->>> +              * Return as early as possible so the hart with a mismatching
->>> +              * vlen won't boot.
->>> +              */
->>> +             if (riscv_v_setup_vsize())
->>> +                     return;
->>> +     }
->>> +
->>>        /* All kernel threads share the same mm context.  */
->>>        mmgrab(mm);
->>>        current->active_mm = mm;
->>> @@ -226,11 +235,6 @@ asmlinkage __visible void smp_callin(void)
->>>        numa_add_cpu(curr_cpuid);
->>>        set_cpu_online(curr_cpuid, 1);
->>>
->>> -     if (has_vector()) {
->>> -             if (riscv_v_setup_vsize())
->>> -                     elf_hwcap &= ~COMPAT_HWCAP_ISA_V;
->>> -     }
->>> -
->>>        riscv_user_isa_enable();
->>>
->>>        /*
->>>
->> So this should go into -fixes, would you mind sending a single patch for
->> this fix?
-> I thought it would be magically picked up by a bot as long as we have
-> a fix tag. Am I assuming something wrong?
+>> Ok, so if we're leaving uapi (and ops) and keep per page/sub-buffer as
+>> is, the rest is resolving uptr -> pages, and passing it to page pool in
+>> a convenient to page pool format (net_iov).
+> 
+> I'm not going to pretend to know about page pool details, but dmabuf
+> is the way to get the bulk of pages into a pool within the net stack's
+> allocator and keep that bulk properly refcounted while.> 
+> An object like dmabuf is needed for the general case because there are
+> not going to be per-page references or otherwise available.
 
+They are already pinned, memory is owned by the provider, io_uring
+in this case, and it should not be freed circumventing io_uring,
+and at this stage calling release_pages() is not such a hassle,
+especially comparing to introducing an additional object.
 
-It gets backported to stable when it is merged, but then it is missing 
-from the first stable releases (as long as it is not merged).
+My question is how having an intermediary dmabuf benefits the net
+stack or io_uring ? For now IMO it doesn't solve anything but adds
+extra complexity. Adding dmabuf for the sake of adding dmabuf is
+not a great choice.
 
-But anyway, 6.9 fixes are all out, so let's hope this series makes it to 
-6.10.
+> What you seem to want is to alter how the actual allocation flow works
+> from that bulk of memory and delay the free. It seems like a different
+For people who jumped here without looking what this patchset is
+about, that's the entire point of the io_uring zero copy approach
+as well as this set. Instead of using kernel private pages that you
+have no other option but to copy/mmap (and then free), it hands
+buffers to the user while using memory accessible/visible in some
+way by the user.
 
-Thanks,
+That "delay free" is taking a reference while user is reading data
+(slightly different for devmem tcp). And note, it's not a page/dmabuf
+reference, kernel can forcibly take it back and release pages.
 
-Alex
+> topic to me, and honestly hacking into the allocator free function
+> seems a bit weird..
 
+Do you also think that DMA_BUF_IOCTL_SYNC is a weird hack, because
+it "delays free" by pinning the dmabuf object and letting the user
+read memory instead of copying it? I can find many examples
 
->
->> Your patch 8 is actually already fixed by Clement's patch
->> https://lore.kernel.org/linux-riscv/20240409143839.558784-1-cleger@rivosinc.com/
-> Okay, I will drop it at the next revision.
->
->> and I already mentioned this one to Palmer.
->>
->> Thanks,
->>
->> Alex
->>
-> Thanks,
-> Andy
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+-- 
+Pavel Begunkov
 
