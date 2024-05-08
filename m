@@ -1,192 +1,150 @@
-Return-Path: <linux-kselftest+bounces-9689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0468BF7D5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:58:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 503098BF7E6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 10:00:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 649B9285EB1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 07:58:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07429282F4C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 08:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2913CF73;
-	Wed,  8 May 2024 07:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02FB3AC10;
+	Wed,  8 May 2024 08:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="d+6Wlldu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hiVhMn8+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE503F8F0;
-	Wed,  8 May 2024 07:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF3F3B1AA;
+	Wed,  8 May 2024 08:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715155104; cv=none; b=gQ4T2L0LXhqW/pB+iPtxRhC2vQXpUkZORoctNgSKFqiwpu82JG31vKlnrXFkq5gS1NUDo3zNgLjfHCumcCS8W1PpwNK7H8ckUIzBfWJ2kDZWQzZvlDhg3d3v0L4VBmsMw80dDmbO5s7GQyBalxCj+Gks06aXedKEu9V1B+fGf8E=
+	t=1715155227; cv=none; b=qIeStoF3szDnuPdghe9ipBsVqNQTFbGHpnaKEud4J49d1AQqUgUT7nbZH6CLRIze/aA5P/PQPZRyyPwxKlzdw/zwV+0Nbe7xQ4mOe8Se+feP6D5pA+GzN06ulJPx/80e8d06OIuqxyUi24MlNYYs93zVlYT3njGi10CHBWf+z5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715155104; c=relaxed/simple;
-	bh=W8h0zv7fM5rho2qCrJQe63u3RrkuJY8jHMl1xzQ0llk=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IjU25Xg9gPe5MqgyNQI+U3t/5SVR1EJeHEUhkho0498dTu6O/PwyMaXW/1V8dqTMNciDI3/Ib7JxDW4bGVwTxeFpb9L0irSuXYBlYHPO7p5/4qsnQIxnJ3cc+vzZGpmgGXU6AJRQn8PXpSLDRpfFxbisyejQSs7AqMsrCk1ga40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=d+6Wlldu; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1715155100;
-	bh=W8h0zv7fM5rho2qCrJQe63u3RrkuJY8jHMl1xzQ0llk=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=d+6WlldukdN+eWmS3sBsn4libaX2zcJvXa/ngL+dhdc+DchosZSUl43ALM0fKrizz
-	 ysZ99uHC/8UpNmyFE4hOPapdp0NUzrlzrQjGLrkMDMqYNps7lgHGiCM7grlVWeqvuL
-	 e5HkvXoNYPhMwpb30PKIuWAHw1A/b8v33oat12Wn15tu738O33/VYc94jtdztajScu
-	 4J+5rFyzWIZ90H5CzrX9B4Ib32RGjnbcFX2KDX2Cv9yM6dA7sRVQyStsK2OIpLFTHR
-	 MsAgmoQsx7QhT2c2rNTU9MLlxEjijsJQpah0OPot4l0rd5cOVPx4wu8rShkkg7Xmln
-	 rRM76zFaWDvsw==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5163A378107C;
-	Wed,  8 May 2024 07:57:56 +0000 (UTC)
-Message-ID: <e3f6bb2a-a9bd-43c2-9468-85242eab0390@collabora.com>
-Date: Wed, 8 May 2024 12:58:20 +0500
+	s=arc-20240116; t=1715155227; c=relaxed/simple;
+	bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=s2xr8v2YSpW7GZXxoQvEA++Nq0BKPbuZONk/TYR7B/sEEeYFvaqCHAdWr/W3DfKQpCK0cRxTQI9aiVkYMqLI3DCC7QKqylw7jx87mNDf29FVQLZNkOLqODTam/rkvP0+HM8FqOxipRcEJxicFw11F+lHkA2cUQ1lqwNzxL/VPTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hiVhMn8+; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715155225; x=1746691225;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=A/AkggmDRJWYn/SaPI9yF1hBn4xncSCYULCuBbRnXZY=;
+  b=hiVhMn8+9b9G9wGAwoIcaGEaTnSCe5R0LFiDAqNvwHViEW5UGP5GFW3+
+   Mqz+vdgDPeI9RkJ7IOKyKKT45DRtKkGR1o+rIWByKBvbbHr629b/H/TV0
+   iuJlUpRSTqn0Zua3HGxSGlv5mfUnoBBOTqDAVSCQidEckGLr+v/YYtpDo
+   mMFf1jTgE1sDV2jSwWvqUYk62lKTt4jKbY7NCZebW1+avz/Yc5vs13lq0
+   d1Hw4zM5nZKw1w8pIloRIBXuzpLRLnaPkuzLcDLd74xIbJU+ZP2/Kju78
+   4g3v5j3s4h8LbHdesQjvC7KuutOEJB+WVOzuVhHP6gA1hxkt6HzzXkIsS
+   g==;
+X-CSE-ConnectionGUID: gU+gLjugT9GfnR+NHO7bxA==
+X-CSE-MsgGUID: T9wVPM0RSr+uYjzwWh/9mA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11157644"
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="11157644"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:25 -0700
+X-CSE-ConnectionGUID: nJHE1sCIRDu17P/5vHb2Bg==
+X-CSE-MsgGUID: tDH/Dr3jRKOveu8r6SwhHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="33362348"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 01:00:20 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 8 May 2024 11:00:15 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests/resctrl: fix clang build warnings related
+ to abs(), labs() calls
+In-Reply-To: <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
+Message-ID: <7d4d8a31-00db-c7ba-aa8f-0483c8d93700@linux.intel.com>
+References: <20240503234051.21217-1-jhubbard@nvidia.com> <9ae11dcb-62e8-4361-9f78-971d4c6e6054@intel.com> <997d7fe0-46c8-4b38-824d-083ab29f54ce@nvidia.com> <d67f4f57-4e9a-4715-b6dd-7b83a240b7dd@intel.com> <7dd4b09e-b9ba-459d-bfa4-150e712f54bc@nvidia.com>
+ <076d9990-6253-438d-bc92-70eba6dfbca9@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, linux-sound@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
- linux-input@vger.kernel.org, iommu@lists.linux.dev, kvmarm@lists.linux.dev,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
- linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
- linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] selftests: Drop duplicate -D_GNU_SOURCE
-To: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
- Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Christian Brauner
- <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
- Kees Cook <keescook@chromium.org>,
- OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
- <andrealmeid@igalia.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- David Hildenbrand <david@redhat.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Andrew Morton <akpm@linux-foundation.org>, Seth Forshee
- <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, =?UTF-8?Q?Andreas_F=C3=A4rber?=
- <afaerber@suse.de>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>
-References: <20240507214254.2787305-1-edliaw@google.com>
- <20240507214254.2787305-6-edliaw@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240507214254.2787305-6-edliaw@google.com>
+Content-Type: multipart/mixed; boundary="8323328-1785506523-1715155215=:3164"
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-1785506523-1715155215=:3164
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On 5/8/24 2:38 AM, Edward Liaw wrote:
-> -D_GNU_SOURCE can be de-duplicated here, as it is added by
-> KHDR_INCLUDES.
-> 
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On Tue, 7 May 2024, Reinette Chatre wrote:
 
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 2 +-
->  tools/testing/selftests/iommu/Makefile            | 2 --
->  tools/testing/selftests/net/tcp_ao/Makefile       | 2 +-
->  tools/testing/selftests/resctrl/Makefile          | 2 +-
->  4 files changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index a392d0917b4e..f79f9bac7918 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
-> -CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-> +CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread $(INCLUDES) $(KHDR_INCLUDES)
->  LDLIBS := -lpthread -lrt
->  
->  LOCAL_HDRS := \
-> diff --git a/tools/testing/selftests/iommu/Makefile b/tools/testing/selftests/iommu/Makefile
-> index 32c5fdfd0eef..fd6477911f24 100644
-> --- a/tools/testing/selftests/iommu/Makefile
-> +++ b/tools/testing/selftests/iommu/Makefile
-> @@ -2,8 +2,6 @@
->  CFLAGS += -Wall -O2 -Wno-unused-function
->  CFLAGS += $(KHDR_INCLUDES)
->  
-> -CFLAGS += -D_GNU_SOURCE
-> -
->  TEST_GEN_PROGS :=
->  TEST_GEN_PROGS += iommufd
->  TEST_GEN_PROGS += iommufd_fail_nth
-> diff --git a/tools/testing/selftests/net/tcp_ao/Makefile b/tools/testing/selftests/net/tcp_ao/Makefile
-> index 522d991e310e..c608b1ec02e6 100644
-> --- a/tools/testing/selftests/net/tcp_ao/Makefile
-> +++ b/tools/testing/selftests/net/tcp_ao/Makefile
-> @@ -26,7 +26,7 @@ LIB	:= $(LIBDIR)/libaotst.a
->  LDLIBS	+= $(LIB) -pthread
->  LIBDEPS	:= lib/aolib.h Makefile
->  
-> -CFLAGS	:= -Wall -O2 -g -D_GNU_SOURCE -fno-strict-aliasing
-> +CFLAGS	:= -Wall -O2 -g -fno-strict-aliasing
->  CFLAGS	+= $(KHDR_INCLUDES)
->  CFLAGS	+= -iquote ./lib/ -I ../../../../include/
->  
-> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-> index 2deac2031de9..5073dbc96125 100644
-> --- a/tools/testing/selftests/resctrl/Makefile
-> +++ b/tools/testing/selftests/resctrl/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE
-> +CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
->  CFLAGS += $(KHDR_INCLUDES)
->  
->  TEST_GEN_PROGS := resctrl_tests
+> Hi John,
+>=20
+> On 5/7/2024 6:25 PM, John Hubbard wrote:
+> > On 5/7/24 6:21 PM, Reinette Chatre wrote:
+> >> Hi John,
+> > ...
+> >>
+> >> The following (what was in v1) looks good to me. What am I missing?
+> >>
+> >> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testin=
+g/selftests/resctrl/cmt_test.c
+> >> index a81f91222a89..05a241519ae8 100644
+> >> --- a/tools/testing/selftests/resctrl/cmt_test.c
+> >> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+> >> @@ -40,11 +40,11 @@ static int show_results_info(unsigned long sum_llc=
+_val, int no_of_bits,
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 avg_llc_val =3D sum_llc_val / nu=
+m_of_runs;
+> >> -=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)abs(cache_span - avg_llc_val);
+> >> +=C2=A0=C2=A0=C2=A0 avg_diff =3D (long)(cache_span - avg_llc_val);
+> >=20
+> > This deletes the abs() call, because I incorrectly let clang's warning
+> > lead me to believe that the abs() call was a no-op. But both you and Il=
+po
+> > pointed out that the math breaks if you do that.
+>=20
+> To me the extra abs() was unnecessary anyway ...
+>=20
+> >=20
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 diff_percent =3D ((float)cache_span - a=
+vg_llc_val) / cache_span * 100;
+> >> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D platform && abs((int)dif=
+f_percent) > max_diff_percent &&
+> >> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 abs(avg_diff) =
+> max_diff;
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 labs(avg_diff)=
+ > max_diff;
+> >=20
+>=20
+> .. because it is repeated here.
 
--- 
-BR,
-Muhammad Usama Anjum
+Yes, there are two *abs() calls in this function.
+
+In this case is okay to remove the first one since it didn't remove=20
+absolute value completely, whereas in the MBA/MBM cases v1 removed *abs()=
+=20
+call entirely which was wrong thing to do.
+
+I explicitly noted in my v1 comment that this CMT change is okay but the=20
+other two were not.
+
+--=20
+ i.
+
+--8323328-1785506523-1715155215=:3164--
 
