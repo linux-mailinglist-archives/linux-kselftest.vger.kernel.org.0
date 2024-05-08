@@ -1,212 +1,205 @@
-Return-Path: <linux-kselftest+bounces-9683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16CC78BF723
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:36:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AD4C8BF737
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:39:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0F8D284F82
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 07:36:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F0141C2249D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 07:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A072E40C;
-	Wed,  8 May 2024 07:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 372BB3EA96;
+	Wed,  8 May 2024 07:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMrBsgr5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CetLzvWV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676DE3B298;
-	Wed,  8 May 2024 07:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5623DB97
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 07:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715153789; cv=none; b=EGqcGGM/g8DueLiwaWqHOJoGDjg2bPRgPKoWpQ6uo1wDVyS0KksbrJTSLilG9JUUpqrGatnhOL2vEdIOfP25TuklN2VfXfD8HDhOdJUSosFO1IfAEhHxzN6eiIlR/Qn1pseCAr68LP66kTcUZkXBv214mQ/iEBuf+7lOjDXaa6w=
+	t=1715153959; cv=none; b=fLOUItAfl9C2UR7J9mLiRtjtxKR2phqAp4y0VDzvW6+84dnCsoDUtMCrvBe5qSGqVsKz2NJeQ+BjLFurBdJqqlf4kV1NiPTH9O8rEXc/smLuwyV0vec+cSpaFk6AgTquZ9zhEWx+ib+1Z8S1+YNmXCDyJK5RK5lZgFrPcatiCIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715153789; c=relaxed/simple;
-	bh=uSc6/F8e+7rFoVsQ6llcJbirZ3srNGLSdVcX9PY6dFw=;
+	s=arc-20240116; t=1715153959; c=relaxed/simple;
+	bh=0Y+cdAgVJ5Wzm/Bku8fZNhaN9C0JgQPsf4IAnxXoyhg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nl7S56goMjkuyQxjZvgHqzbkNOacTbzjtZ7FK2UqQsIPWIawpKVqQG/p1XEi7RyAtyh7gVPf3LGgmcB1gEItNhFM1LLdLlPTTf4xs9qh++41W55EIDFrAyzAt8bIBoprQwzX6/g0dJaWbhGPv2q8Xa6s+UfxfynZO4fv7pPzWOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMrBsgr5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B71C4AF17;
-	Wed,  8 May 2024 07:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715153789;
-	bh=uSc6/F8e+7rFoVsQ6llcJbirZ3srNGLSdVcX9PY6dFw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vMrBsgr5Ntv8vEb5Wf0oFCiz716SpRC1/cH+4HxjtkIgjPFEIAT43XIMOJiyFEV8r
-	 5H3aIdkSo4cG1A5cHNsAzsntRKz5oaV4iZ7eD7oZsqbWz0Npd0LXE2iDgI8Kc/O71A
-	 uGaMvrdpY48GXT9ITcCqJuv8BdiS0ZOJLUMnp5Bv6oI1zSQDEeT2dWiASpMknsfdkw
-	 ZSgJ6AMgjRs18bCuHCg1cqauasvhGhEcFfHzZuxI92+qOUG3Tmn7Z0uQO8LNkZvmib
-	 YApL6r57WmT3/skOS8opW6JZr8b6BOZMNMWYerEB/XEGaClFz0mNAnyI72JwssSeQv
-	 N2GtCx40jfi/w==
-Message-ID: <42d0718f-296d-48ca-a21a-b4708e9bd6e9@kernel.org>
-Date: Wed, 8 May 2024 09:36:18 +0200
+	 In-Reply-To:Content-Type; b=guv7MXcfxEG9jXTdUWNEYDEq9RlDFlpQuIYtbuMc1QGB1/DxuuK61AyAwuHt4gIXflcsTcNktCTiSAucOiz1AGiPfabYrP+RC3/GCLFGcph3e8F4uV3g04CESXQcwdfZxHkdZMiTuJkhAcPi4Sthgoz+yxhmT+4OwyxPW2RP39U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CetLzvWV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715153955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=FVpdoIP5MsYXu7rCIo+E46n/SCgmwnPBP9uox/R7iyQ=;
+	b=CetLzvWVVdgP3y8/0UBS7cjydgDjZ3BQihZu1oY80/0j1kH9VlpykYYXe++28vNuUT/Nr+
+	nZflPywS64PZPUPpJS/3vZsxZY6Qm8zqKke6zxkSr1BId4cOoAsDXOttg99M4X0nnpYSmN
+	5hPU87+8AluwvPbfnvFIAUy3bESzEag=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-548-nHQryaAjMWKlRPILU0h2Fg-1; Wed, 08 May 2024 03:39:13 -0400
+X-MC-Unique: nHQryaAjMWKlRPILU0h2Fg-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-34c99c419e7so2560092f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 00:39:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715153952; x=1715758752;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FVpdoIP5MsYXu7rCIo+E46n/SCgmwnPBP9uox/R7iyQ=;
+        b=XEiDBbDVVsprzhowV+9yTE5ykGHNX6DSuLnrHbaDPcjsGIZhEcHKKp2eEkUMhgROjR
+         8OfBJKa1LQtGp6jcpwHmzKxI3pB5Y3RIPKplnYKSBNCO5xLJ5J44aIYru6hbpOU8d3kX
+         jStuumjxOLcXBWzxUgwTOnfH7rtq4D/XlbRELtnH22eO+kExNucC/D1xDqq7gpfvLITF
+         eVFvr1AuYdryIHXQaCHqRRGpMLX0uUaGJ5LxbUv1XwlOLcJrpnkDVrZ7MNFKxBaUAtfi
+         BCLZGpOMzHK/TbHI7ByuUfOwwJBBONT0eQzajIXMPASU4RT04swY0yRmbGvjmP7ESmXn
+         P5DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWs0A47B09ULgiTeU2m8pq0fiYiurlTsZxI5/KBGFosJxcKOGYfdCNSxP4Et64BLyQ09PAm/7g0FB2Aj5beUvcw2HYWSGa99cuHzA4CqfB
+X-Gm-Message-State: AOJu0YwSD2ZIDkTVS5aqkOejNFUsPSRJ2Nyzjb3TgoXqyG+TpsbMmrTh
+	Mwgu4KiI548nnjOQc43XOkdBvmsw5meHhG4pK1vYnBj62XkfQSf90Q/MXVrNV71V89miKFStBme
+	5OuEQTtlJRBwFhebuMYTwEL6eZtsAb6it9e48UXlt2eUjp/Fsiwa4oyC2ER/QGzZn9Q==
+X-Received: by 2002:a05:6000:4599:b0:34a:5d79:dfe2 with SMTP id ffacd0b85a97d-34fca054a97mr1258200f8f.13.1715153952348;
+        Wed, 08 May 2024 00:39:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFTOmHrKa5pFWDvRNcu/CVISPqg6g122HMr+o9Dj0SfD8mYWtCmGCyLsjc6SMQ+kU1VxmAlIw==
+X-Received: by 2002:a05:6000:4599:b0:34a:5d79:dfe2 with SMTP id ffacd0b85a97d-34fca054a97mr1258175f8f.13.1715153951852;
+        Wed, 08 May 2024 00:39:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:3100:35c3:fc4b:669f:9ff9? (p200300cbc707310035c3fc4b669f9ff9.dip0.t-ipconnect.de. [2003:cb:c707:3100:35c3:fc4b:669f:9ff9])
+        by smtp.gmail.com with ESMTPSA id f6-20020a5d58e6000000b0034dd063e8dasm14604835wrd.86.2024.05.08.00.39.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 May 2024 00:39:11 -0700 (PDT)
+Message-ID: <939a16f2-7b66-45a6-a043-4821bd3c71dc@redhat.com>
+Date: Wed, 8 May 2024 09:39:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Add mptcp subflow example
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: MPTCP Upstream <mptcp@lists.linux.dev>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Geliang Tang <tanggeliang@kylinos.cn>
-References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
- <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-3-e2bcbdf49857@kernel.org>
- <CAADnVQ+ADQRrZmZ_M9LLGj9u_HOo7Aeup+kid62xZfLCvSxUOQ@mail.gmail.com>
- <843ea6eb-a28d-437c-9c98-0b8c8816c518@kernel.org>
- <CAADnVQLA+2uoJJAJNFoK-EnUjLAwxJjxOXAizLWhcx4mf+C2Vg@mail.gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <CAADnVQLA+2uoJJAJNFoK-EnUjLAwxJjxOXAizLWhcx4mf+C2Vg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] Fix userfaultfd_api to return EINVAL as expected
+To: Audra Mitchell <audra@redhat.com>, viro@zeniv.linux.org.uk
+Cc: brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, raquini@redhat.com,
+ Peter Xu <peterx@redhat.com>
+References: <20240507195510.283744-1-audra@redhat.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20240507195510.283744-1-audra@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Alexei,
+On 07.05.24 21:55, Audra Mitchell wrote:
+> Currently if we request a feature that is not set in the Kernel
+> config we fail silently and return the available features. However, the
+> documentation indicates we should return an EINVAL.
 
-Thank you for your reply!
+I assume you are referencing
 
-On 07/05/2024 22:54, Alexei Starovoitov wrote:
-> On Tue, May 7, 2024 at 9:03 AM Matthieu Baerts <matttbe@kernel.org> wrote:
->>
->> Hi Alexei,
->>
->> Thank you for the review!
->>
->> On 07/05/2024 16:49, Alexei Starovoitov wrote:
->>> On Tue, May 7, 2024 at 3:53 AM Matthieu Baerts (NGI0)
->>> <matttbe@kernel.org> wrote:
->>>>
->>>> From: Nicolas Rybowski <nicolas.rybowski@tessares.net>
->>>>
->>>> Move Nicolas's patch into bpf selftests directory. This example added a
->>>> test that was adding a different mark (SO_MARK) on each subflow, and
->>>> changing the TCP CC only on the first subflow.
->>>>
->>>> This example shows how it is possible to:
->>>>
->>>>     Identify the parent msk of an MPTCP subflow.
->>>>     Put different sockopt for each subflow of a same MPTCP connection.
->>>>
->>>> Here especially, we implemented two different behaviours:
->>>>
->>>>     A socket mark (SOL_SOCKET SO_MARK) is put on each subflow of a same
->>>>     MPTCP connection. The order of creation of the current subflow defines
->>>>     its mark.
->>>
->>>> The TCP CC algorithm of the very first subflow of an MPTCP
->>>>     connection is set to "reno".
->>>
->>> why?
->>> What does it test?
->>> That bpf_setsockopt() can actually do it?
->>
->> Correct.
->>
->> Here is a bit of context: from the userspace, an application can do a
->> setsockopt() on an MPTCP socket, and typically the same value will be
->> set on all subflows (paths). If someone wants to have different values
->> per subflow, the recommanded way is to use BPF.
->>
->> We can indeed restrict this test to changing the MARK only. I think the
->> CC has been modified just not to check one thing, but also to change
->> something at the TCP level, because it is managed differently on MPTCP
->> side -- but only when the userspace set something, or when new subflows
->> are created. The result of this operation is easy to check with 'ss',
->> and it was to show an exemple where this is set only on one subflow.
->>
->>> But the next patch doesn't check that it's reno.
->>
->> No, I think it is checked: 'reno' is not hardcoded, but 'skel->data->cc'
->> is used instead:
->>
->>   run_subflow(skel->data->cc);
->>
->>> It looks to me that dropping this "set to reno" part
->>> won't change the purpose of the rest of selftest.
->>
->> Yes, up to you. If you still think it is better without it, we can
->> remove the modification of the CC in patch 3/4, and the validation in
->> patch 4/4.
+"EINVAL The API version requested in the api field is not supported by 
+this kernel, or  the  features  field passed to the kernel includes 
+feature bits that are not supported by the current kernel version."
+
+and
+
+"To  enable  userfaultfd features the application should set a bit 
+corresponding to each feature it wants to enable in the features field. 
+If the kernel supports all the requested features it will enable them. 
+Otherwise it will zero out the returned uffdio_api structure and return 
+EINVAL.
+"
+
+in which case I agree.
+
 > 
-> The concern with picking reno is extra deps to CI and every developer.
-> Currently in selftests/bpf/config we do:
-> CONFIG_TCP_CONG_DCTCP=y
-> CONFIG_TCP_CONG_BBR=y
+> We need to fix this issue since we can end up with a Kernel warning
+> should a program request the feature UFFD_FEATURE_WP_UNPOPULATED on
+> a kernel with the config not set with this feature.
+
+Can you mention which exact one? Is it a WARN* or a pr_warn() ?
+
+Likely we want "Fixes:" here.
+
 > 
-> I'd like to avoid adding reno there as well.
-> Will bpf_setsockopt("dctcp") work?
+> Signed-off-by: Audra Mitchell <audra@redhat.com>
+> ---
+>   fs/userfaultfd.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 60dcfafdc11a..17210558de79 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -2073,6 +2073,11 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
+>   	uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
+>   	uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
+>   #endif
+> +
+> +	ret = -EINVAL;
+> +	if (features & ~uffdio_api.features)
+> +		goto err_out;
+> +
+>   	uffdio_api.ioctls = UFFD_API_IOCTLS;
+>   	ret = -EFAULT;
+>   	if (copy_to_user(buf, &uffdio_api, sizeof(uffdio_api)))
 
-We picked Reno because this is an inlined kernel module that is always
-built: there is no kernel config to set, no extra deps. Also, it is
-usually not used as default, mostly used as fallback, so the
-verification should not be an issue.
+CCing Peter.
 
-We can switch to DCTCP or BBR if you prefer, but I think it is "safer"
-with Reno, no?
-
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
+Cheers,
+
+David / dhildenb
 
 
