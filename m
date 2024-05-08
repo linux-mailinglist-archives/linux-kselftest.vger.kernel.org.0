@@ -1,119 +1,109 @@
-Return-Path: <linux-kselftest+bounces-9694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A428BF96C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 11:14:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC058BFAB2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 12:16:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33A531F23AD2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:14:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD4A1C228A8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 10:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A28974404;
-	Wed,  8 May 2024 09:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D807E112;
+	Wed,  8 May 2024 10:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zh/RcZaG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2B874C04;
-	Wed,  8 May 2024 09:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9990D82487;
+	Wed,  8 May 2024 10:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715159650; cv=none; b=AcizFSOcfc4Y5WykACnPohUUrz045Crojl0CiX0MawZhprosvZ1bGMEoiLtYBbIOQMJfIqyBJNXd73mN0eJhLzJXKUeTz3S0t72Krvg9Hs9pNGpwsNR5ZP1kwbSusw/Wh4uit/kRumC/jE5tqbRBPYSurzbx5LNsRD00I4mWAWA=
+	t=1715163087; cv=none; b=n1Y9Ws63rvGkQkMNwdE38sh8/MSVhqA6TVDfWSDQidDbOjN2WNP/CcJTjh8JD4mzqeD2Wckk+XZjZtPAEeW1SMW7eNJhQuesB2fXoIwliPO47hPVZtrD459RRFH58ovLVNDIGZXhQskUXKbJEXdSlcn5fl7y1ureER7PXH+LBY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715159650; c=relaxed/simple;
-	bh=tF4iPughT/n6gbDG+mQ6IlbX52BIyWj5CwATxGx4kxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HvMazrPrnEc4VRZ0SRev5MAZQFVovhI1W4kD4wpPsgdszSOOXgJRXvmVkR8eOcg1xCsDuLqNqlYEi0wd737Jy22Q87qYPju+Q7q5HXiK3IyImkyjJF9CCWUBNzxPC3BTd6kxAGyZyB6DvOylUGGhxgSRZlkGwwKEqK2BxYHXqfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 606F81063;
-	Wed,  8 May 2024 02:14:33 -0700 (PDT)
-Received: from [10.57.67.194] (unknown [10.57.67.194])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A8C83F6A8;
-	Wed,  8 May 2024 02:14:06 -0700 (PDT)
-Message-ID: <c7a1fa3a-3e0a-4da4-8bdc-8d5b98d662c0@arm.com>
-Date: Wed, 8 May 2024 10:14:05 +0100
+	s=arc-20240116; t=1715163087; c=relaxed/simple;
+	bh=O01+4OxDhqfAMNBJajyRNazF4RaEhwcQwMkJgUw3EWY=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZLHs8nI304CGxa4RC1mYUOMwS1NwAUSJnszVHeC/Wl3oaaY3qlQImlFc1GPNaTTOM4yJLQJqLa7uqpF2unbLoXsxXDLvG/To9gj2dUsPgw6Kggup4TIDsE0HCtTUlRYnoQKLvOsxlLZ3TKkqZ0zNdCPADLceogOAImIEL/IL3BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zh/RcZaG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EEFC4AF17;
+	Wed,  8 May 2024 10:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715163087;
+	bh=O01+4OxDhqfAMNBJajyRNazF4RaEhwcQwMkJgUw3EWY=;
+	h=From:To:Subject:In-Reply-To:References:Date:From;
+	b=Zh/RcZaGT6E7lVROM1Ix/WzyM9U1WHn89iH+ECtYZyPi325pd5UBnddq6OsgQKhGj
+	 dtgp1emBDcRguH+li8+LQOsvCJHPDTzLgdhPEnO6o2x9HZhEu0bjP2FV3Co8XIFCye
+	 zN4xGHE8nKwPbF0b+AXMC9mFzQqGUrhGjtblR5TjB5mb2wy78uePKX7yUX6LcmK+Bj
+	 EchcG9cYgys2zvHpPQstcBiSX9NWznB/RttR2UazhmwjIa9ODcL4uU00iHqmG+2hdb
+	 wzt2m24Re/wGc58B9JxIG00Be3CU853Cea4h9d6mKsUD2Cdk99oG0QBZqNID/djXMX
+	 O53MvfdTHggLA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mykola Lysenko
+ <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf, arm64: Add support for lse atomics in
+ bpf_arena
+In-Reply-To: <20240426161116.441-1-puranjay@kernel.org>
+References: <20240426161116.441-1-puranjay@kernel.org>
+Date: Wed, 08 May 2024 10:11:23 +0000
+Message-ID: <mb61pzft0zk8k.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mqueue: fix 5 warnings about signed/unsigned
- mismatches
-Content-Language: en-GB
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>, SeongJae Park <sj@kernel.org>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20240505221359.65258-1-jhubbard@nvidia.com>
- <a340524c-15c1-4b8e-b7a9-1fad52e97f69@arm.com>
- <c8dd4b34-f49a-4929-9b14-d2cc17e0edd8@nvidia.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <c8dd4b34-f49a-4929-9b14-d2cc17e0edd8@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 07/05/2024 18:04, John Hubbard wrote:
-> On 5/7/24 12:54 AM, Ryan Roberts wrote:
->> On 05/05/2024 23:13, John Hubbard wrote:
-> ...
->>> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c
->>> b/tools/testing/selftests/mqueue/mq_perf_tests.c
->>> index 5c16159d0bcd..fb898850867c 100644
->>> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
->>> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
->>> @@ -323,7 +323,8 @@ void *fake_cont_thread(void *arg)
->>>   void *cont_thread(void *arg)
->>>   {
->>>       char buff[MSG_SIZE];
->>> -    int i, priority;
->>> +    int i;
->>> +    unsigned int priority;
->>>         for (i = 0; i < num_cpus_to_pin; i++)
->>>           if (cpu_threads[i] == pthread_self())
->>> @@ -425,7 +426,8 @@ struct test test2[] = {
->>>   void *perf_test_thread(void *arg)
->>>   {
->>>       char buff[MSG_SIZE];
->>> -    int prio_out, prio_in;
->>> +    int prio_out;
->>
->> It feels a bit odd for prio_out and prio_in to have different types. I don't
->> have any prior familiararity with these tests but looks like they are ultimately
->> the parameters of mq_send() and mq_receive() which both define them as unsigned
->> ints. Perhaps both should be converted?
-> 
-> 
-> This makes sense, and I recall wondering about it. Looking at it again,
-> I see why didn't go that far: there is a mini-unit test manager inside,
-> passing around priorities that are signed, throughout:
-> 
->         struct test {
->             char *desc; void (*func)(int *);
->         };
-> 
->         ...
-> 
->         void inc_prio(int *prio) {
->             if (++*prio == mq_prio_max)
->                 *prio = 0;
->         }
-> 
-> However, I can probably fix up everything to match up. Given that you've
-> called it out, I'll go ahead with that approach. Iit will be quite a few
-> changes but they will all be trivial too.     
+Puranjay Mohan <puranjay@kernel.org> writes:
 
-Ahh I see. It would certainly be an improvement, but if you don't think it's
-worth the effort, then don't feel you need to do it on my account.
+> When LSE atomics are available, BPF atomic instructions are implemented
+> as single ARM64 atomic instructions, therefore it is easy to enable
+> these in bpf_arena using the currently available exception handling
+> setup.
+>
+> LL_SC atomics use loops and therefore would need more work to enable in
+> bpf_arena.
+>
+> Enable LSE atomics based instructions in bpf_arena and use the
+> bpf_jit_supports_insn() callback to reject atomics in bpf_arena if LSE
+> atomics are not available.
+>
+> All atomics and arena_atomics selftests are passing:
+>
+>   [root@ip-172-31-2-216 bpf]# ./test_progs -a atomics,arena_atomics
+>   #3/1     arena_atomics/add:OK
+>   #3/2     arena_atomics/sub:OK
+>   #3/3     arena_atomics/and:OK
+>   #3/4     arena_atomics/or:OK
+>   #3/5     arena_atomics/xor:OK
+>   #3/6     arena_atomics/cmpxchg:OK
+>   #3/7     arena_atomics/xchg:OK
+>   #3       arena_atomics:OK
+>   #10/1    atomics/add:OK
+>   #10/2    atomics/sub:OK
+>   #10/3    atomics/and:OK
+>   #10/4    atomics/or:OK
+>   #10/5    atomics/xor:OK
+>   #10/6    atomics/cmpxchg:OK
+>   #10/7    atomics/xchg:OK
+>   #10      atomics:OK
+>   Summary: 2/14 PASSED, 0 SKIPPED, 0 FAILED
 
-  
-> 
-> 
-> thanks,
+Gentle ping about this,
 
+Thanks,
+Puranjay
 
