@@ -1,177 +1,485 @@
-Return-Path: <linux-kselftest+bounces-9729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87EA18C040C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 20:03:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28ACC8C0488
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 20:40:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EBC628ACD4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 18:03:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C59E1C2155E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 18:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE5012D1FE;
-	Wed,  8 May 2024 18:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7BAD82D93;
+	Wed,  8 May 2024 18:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DUGEar/2"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="dDFD3Zoa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8A412BEAE
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 18:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CE43F9C3
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 18:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715191421; cv=none; b=Vkh7UOBXQ26oA6QEd5qTkKBUuZXo1LrPubvo9Vt9I6HOiRMOGSNYVfwazGtkW4JeRNbyefkuXdbK4NJ9Poo80H63AhkScVwTXE1Cq2Lv3TzogPp5DqqzEUZQybKuYWWlSP6BTTtBEXt9T3285OkNjPqR3R8fWBBrlSB53LHypA8=
+	t=1715193623; cv=none; b=NZzDYrYXESdkT7pNiK8I55ElBH9tlcjeyFReLv02PW3BnBACkkIUagqZtZ+434PhcepzVc0WCTpJFipIt8EnrpE4nrp/JZBXEJLm6yv6HU6vHFfdlSgiAIaoBSs1QZW8d/OIz62Q6cbqw1/0tjEMoYQAdF/1WzInVfRRZLS24hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715191421; c=relaxed/simple;
-	bh=QnIGcOGbV4cqrx4Nx/huveAV3Zfk93aDR5GKJzn4mog=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KmCKqt78tvFD/eQgKE+Ql+GV+fGXYC9jXvzh6T7rDJD7LczEeqmYzn/Zissx9Pet7LfA2NK44FXtLQwClHJqXj0R5AMqRNg/Ivz/rcna0jTppeAJHcFUJpbL+ya1PGYRtMvkRdHVe1mWaxUmeDJAMV2wbz882gp+QZ6gLrNDYQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DUGEar/2; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-572a1b3d6baso1721a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 11:03:37 -0700 (PDT)
+	s=arc-20240116; t=1715193623; c=relaxed/simple;
+	bh=cud7NCLbLs0NpQaq1MDx8Z2sap0DQ+bUysuVvQ5I3Ak=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RNAmNn13CYXPUognHWYg93pFVD7E5QMQXi0Mnht0rkdPzP0fFlayQuJn1HT2D1c9prrzGp1zDhXxVS/umTcWVtJkp00c6Pgz9Q7fDH96po6HT/JYIcaISWFSxxs+a5hFiM4FVkD30mU8+ge03AN7Bf7GVC/QjzgAL+HoMNqHUrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=dDFD3Zoa; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6f44ed6e82fso108081b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 11:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715191416; x=1715796216; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NKy0w8SAVZYo27FpU6ZBovVv7b8KWTwyUtyfvoxHua4=;
-        b=DUGEar/2Azn7Sk1QTNCuUDEulN/0fZl9vXB5hOQzu0/nOgrwg4fZf52/mToQDVM8qK
-         jiUsdPGqqUwvZzc5u0l9202dIYL0q+IMe7xxZmBhlXB3J5eRzxWX0fftblZOgWkxI+we
-         9XD++0LEzvNluWOsumBz40KWlPtxbPjPC1kf6Ok4aTOZesZCMqDyE4i2PbM2TmRkV77y
-         fnpSfFLerzM3rn5+E4gNgR7DEPJhXlLQCIGbBmOfFDZ+yXafG5xPNT3IZJeGT7IZdJGj
-         zytDYAaO/LVJKWnOCxxOJKkQXzbNcmOYPnzY1vzpXmWU5IB7rQ0/IA1p+LCrYBo48PLP
-         biFA==
+        d=fastly.com; s=google; t=1715193621; x=1715798421; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeEO1Q8wJpOn7YutMlxicVAzKlqlun27NVu5Gr4Sb/k=;
+        b=dDFD3ZoaZnn1Z94w+SD/scTiPU9ojY+taNAe1GIvaXyiPFG5I+aKnAXO32+VF/b+WE
+         uipth7uDDw4LAPg0437gCkV7Pi2w6MfRxiKlYPQLgH4un7ItSAr0UC0mFuvhbWdYzG4k
+         8rm3FeevSwIBHI77UHEGdoUf/uW6D3+LW8rlg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715191416; x=1715796216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NKy0w8SAVZYo27FpU6ZBovVv7b8KWTwyUtyfvoxHua4=;
-        b=rAMymj1g9FH535WlJOceOz5Irud6a9swn/24nWdfqFjhQQiVu2n2/prMcARQZe7NOT
-         9c8h7DrOP5/lIYTRDRcL9N2CKEE8uZvVD0Fd6Eymi853G360mdmod3ch+dVcRI08TgSv
-         rMy0dJ0vv/pst0fNkTl6qaXxrI0Nu6uvE/XplS1evSeJ2YW4jjfrhmScCNaQ/IvdrsT5
-         7StrgWBzb3E5B30wF2VP0KHSSLLRalHq6l2r4mrpLHsoulwl2R78pgWmph6m6foVRN9T
-         lgkXIbcceTx7+lYN8sJXpj1Kg9KUG2ye3QuA13/xgOvcsKFUWmSoAwcB3fyKm97xWvqd
-         PagQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5rJUErxo+5tml0iJdAzz55jANMTthgU2FSjEvXpzjSLJKUHZzEaYMmEPb/PiyHkMv3v4oK8aH5cviMf4vcfBfxkFNE9i9zmwnST7tC/Mv
-X-Gm-Message-State: AOJu0YwVFK28/pYl3Y+leYK8iS4LwxPK7vkd4Uv6eClzQCauBE24TTXj
-	3nngZu75JcifSmbMlw2Aal4gwb/m3NPQE+grMnTrBBZg7ME73ZGoSSFkxM9rjZbhlXh0E6XY2xA
-	2Tx7Wf7bCeNscGV8tbFWjxxCVa/2QLN0xW/V4
-X-Google-Smtp-Source: AGHT+IFdyxKHKBA5RxjNJeg0nvw+PuOv0TpVA43qYYBbq4FC0UUJLuiCzYnH7rV9IAgiFwYJSHM5Q/yPLhYa7GrUbHY=
-X-Received: by 2002:a05:6402:1763:b0:572:554b:ec66 with SMTP id
- 4fb4d7f45d1cf-57334b922acmr1088a12.3.1715191416289; Wed, 08 May 2024 11:03:36
- -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715193621; x=1715798421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DeEO1Q8wJpOn7YutMlxicVAzKlqlun27NVu5Gr4Sb/k=;
+        b=L6DHMWsrlPmaJ8/v9O9nh/M7/xE4lbUrCRvXPWF39a1umqUdtfbML8XS+9y9k7IrNH
+         tJ3xo7zWeks6EzyHKCj+rJZkWwQ6gf+ye8Rm9uGIEhPT3qdEFri+U6l9b6LTU4cQxJa+
+         wCog4+ATYSvbzDiqkwGdTcb7WkxUQQv4i6fi7PhcIXalcXa5Kkyn2rmmBhP1v6itQM4k
+         3uZVPyi3Z2dMrQXvIqN+4tzYOHES3+tMydYQ87o5EOmKNIobwxglt4yhZeGJv1RWddai
+         C2Wjl9HgxDZD1bUqXTvuz8hhjRZ4wcZCECSvNs997OIeFCu4Je80YMrBPm36TDdm2Y0J
+         mRcQ==
+X-Gm-Message-State: AOJu0Yx3JqK4h5tsmUzA/2mtmqDwH+B8pSOGLouJGEHp/ejjIUSAw10E
+	n7JETpvhaAw5v1/fG/P8f48Dz/zsFU5vPOAGJo072LMjXSfHdhhlHvRFROVq2gN0rHhKXIVriiV
+	KuMoG5EHeHAPAI7CS9Lwspox1G+wrXNJc/t++UucV01+VXAVvUvkoV9DFIC3O6TnJ9yTc03Pv11
+	3RVhvTgQOFisbdAOKEya4pEjsZ+52A3KtB7hJRwfc/FRZIy1Y=
+X-Google-Smtp-Source: AGHT+IEH65mBkaGK3zjRLkbveOpF5uOHYGqMfWJ2weQm+zBhDdq+val0hJykvpF/YI055VANaxKhiA==
+X-Received: by 2002:a05:6a20:2d09:b0:1af:9c7a:a16d with SMTP id adf61e73a8af0-1afc8dbdb0fmr3950013637.51.1715193620619;
+        Wed, 08 May 2024 11:40:20 -0700 (PDT)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id m185-20020a633fc2000000b006202bc134f3sm8583160pga.77.2024.05.08.11.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 11:40:20 -0700 (PDT)
+From: Joe Damato <jdamato@fastly.com>
+To: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: nalramli@fastly.com,
+	Joe Damato <jdamato@fastly.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH REPOST net-next v3] selftest: epoll_busy_poll: epoll busy poll tests
+Date: Wed,  8 May 2024 18:40:04 +0000
+Message-Id: <20240508184008.48264-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507214254.2787305-1-edliaw@google.com> <ZjuA3aY_iHkjP7bQ@google.com>
-In-Reply-To: <ZjuA3aY_iHkjP7bQ@google.com>
-From: Edward Liaw <edliaw@google.com>
-Date: Wed, 8 May 2024 11:03:07 -0700
-Message-ID: <CAG4es9V1578h2EgpztcoEv3CPGftbgA+HNfhgaPxBqOxP6-CrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
-To: Sean Christopherson <seanjc@google.com>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Christian Brauner <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	David Hildenbrand <david@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Seth Forshee <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Fenghua Yu <fenghua.yu@intel.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mm@kvack.org, linux-input@vger.kernel.org, iommu@lists.linux.dev, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-actions@lists.infradead.org, mptcp@lists.linux.dev, 
-	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 8, 2024 at 6:47=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Tue, May 07, 2024, Edward Liaw wrote:
-> > 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> > asprintf into kselftest_harness.h, which is a GNU extension and needs
-> > _GNU_SOURCE to either be defined prior to including headers or with the
-> > -D_GNU_SOURCE flag passed to the compiler.
-> >
-> > v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-ed=
-liaw@google.com/
-> > v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-> > location.  Remove #define _GNU_SOURCE from source code to resolve
-> > redefinition warnings.
-> >
-> > Edward Liaw (5):
-> >   selftests: Compile kselftest headers with -D_GNU_SOURCE
-> >   selftests/sgx: Include KHDR_INCLUDES in Makefile
-> >   selftests: Include KHDR_INCLUDES in Makefile
-> >   selftests: Drop define _GNU_SOURCE
-> >   selftests: Drop duplicate -D_GNU_SOURCE
->
-> Can you rebase this on top of linux-next?  I have a conflicting fix[*] fo=
-r the
-> KVM selftests queued for 6.10, and I would prefer not to drop that commit=
- at
-> this stage as it would require a rebase of a pile of other commits.
+Add a simple test for the epoll busy poll ioctls, using the kernel
+selftest harness.
 
-Ok, I'll do that.
+This test ensures that the ioctls have the expected return codes and
+that the kernel properly gets and sets epoll busy poll parameters.
 
->
-> And I doubt KVM is the only subsystem that has a targeted fix for the _GN=
-U_SOURCE
-> mess.
->
-> If we want/need to get a fix into 6.9, then IMO we should just revert 809=
-216233555
-> ("selftests/harness: remove use of LINE_MAX"), as that came in quite late=
- in the
-> 6.9 cycle, and I don't think it's feasible to be 100% confident that glob=
-ally
-> defining _GNU_SOURCE works for all selftests, i.e. we really should have =
-a full
-> cycle for folks to test.
+The test can be expanded in the future to do real busy polling (provided
+another machine to act as the client is available).
 
-That sounds reasonable to me.  In this thread Tao suggested reverting
-back to 809216233555 and using a fixed value in place of LINE_MAX to
-fix 38c957f07038
-https://lore.kernel.org/linux-kselftest/20240508070003.2acdf9b4@kernel.org/
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+v2 -> v3:
+  - Added this changelog :)
+  - Add libcap to LDLIBS.
+  - Most other changes are in test_set_invalid:
+    - Check if CAP_NET_ADMIN is set in the effective set before setting
+      busy_poll_budget over NAPI_POLL_WEIGHT. The test which follows
+      assumes CAP_NET_ADMIN.
+    - Drop CAP_NET_ADMIN from effective set in order to ensure the ioctl
+      fails when busy_poll_budget exceeds NAPI_POLL_WEIGHT.
+    - Put CAP_NET_ADMIN back into the effective set afterwards.
+    - Changed self->params.busy_poll_budget from 65535 to UINT16_MAX.
+    - Changed the cast for params.busy_poll_usecs from unsigned int to
+      uint32_t in the test_set_invalid case.
 
->
-> [*] https://github.com/kvm-x86/linux/commit/730cfa45b5f4
+v1 -> v2:
+  - Rewrote completely to use kernel self test harness.
+
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   3 +-
+ tools/testing/selftests/net/epoll_busy_poll.c | 320 ++++++++++++++++++
+ 3 files changed, 323 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/epoll_busy_poll.c
+
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index d996a0ab0765..777cfd027076 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -5,6 +5,7 @@ bind_wildcard
+ csum
+ cmsg_sender
+ diag_uid
++epoll_busy_poll
+ fin_ack_lat
+ gro
+ hwtstamp_config
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5befca249452..c6112d08b233 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -67,7 +67,7 @@ TEST_GEN_FILES += ipsec
+ TEST_GEN_FILES += ioam6_parser
+ TEST_GEN_FILES += gro
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+-TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap
++TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap epoll_busy_poll
+ TEST_GEN_FILES += toeplitz
+ TEST_GEN_FILES += cmsg_sender
+ TEST_GEN_FILES += stress_reuseport_listen
+@@ -102,6 +102,7 @@ TEST_INCLUDES := forwarding/lib.sh
+ 
+ include ../lib.mk
+ 
++$(OUTPUT)/epoll_busy_poll: LDLIBS += -lcap
+ $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
+ $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
+diff --git a/tools/testing/selftests/net/epoll_busy_poll.c b/tools/testing/selftests/net/epoll_busy_poll.c
+new file mode 100644
+index 000000000000..9dd2830fd67c
+--- /dev/null
++++ b/tools/testing/selftests/net/epoll_busy_poll.c
+@@ -0,0 +1,320 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/* Basic per-epoll context busy poll test.
++ *
++ * Only tests the ioctls, but should be expanded to test two connected hosts in
++ * the future
++ */
++
++#define _GNU_SOURCE
++
++#include <error.h>
++#include <errno.h>
++#include <inttypes.h>
++#include <limits.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include <sys/capability.h>
++
++#include <sys/epoll.h>
++#include <sys/ioctl.h>
++#include <sys/socket.h>
++
++#include "../kselftest_harness.h"
++
++/* if the headers haven't been updated, we need to define some things */
++#if !defined(EPOLL_IOC_TYPE)
++struct epoll_params {
++	uint32_t busy_poll_usecs;
++	uint16_t busy_poll_budget;
++	uint8_t prefer_busy_poll;
++
++	/* pad the struct to a multiple of 64bits */
++	uint8_t __pad;
++};
++
++#define EPOLL_IOC_TYPE 0x8A
++#define EPIOCSPARAMS _IOW(EPOLL_IOC_TYPE, 0x01, struct epoll_params)
++#define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
++#endif
++
++FIXTURE(invalid_fd)
++{
++	int invalid_fd;
++	struct epoll_params params;
++};
++
++FIXTURE_SETUP(invalid_fd)
++{
++	int ret;
++
++	ret = socket(AF_UNIX, SOCK_DGRAM, 0);
++	EXPECT_NE(-1, ret)
++		TH_LOG("error creating unix socket");
++
++	self->invalid_fd = ret;
++}
++
++FIXTURE_TEARDOWN(invalid_fd)
++{
++	int ret;
++
++	ret = close(self->invalid_fd);
++	EXPECT_EQ(0, ret);
++}
++
++TEST_F(invalid_fd, test_invalid_fd)
++{
++	int ret;
++
++	ret = ioctl(self->invalid_fd, EPIOCGPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCGPARAMS on invalid epoll FD should error");
++
++	EXPECT_EQ(ENOTTY, errno)
++		TH_LOG("EPIOCGPARAMS on invalid epoll FD should set errno to ENOTTY");
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	ret = ioctl(self->invalid_fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS on invalid epoll FD should error");
++
++	EXPECT_EQ(ENOTTY, errno)
++		TH_LOG("EPIOCSPARAMS on invalid epoll FD should set errno to ENOTTY");
++}
++
++FIXTURE(epoll_busy_poll)
++{
++	int fd;
++	struct epoll_params params;
++	struct epoll_params *invalid_params;
++	cap_t caps;
++};
++
++FIXTURE_SETUP(epoll_busy_poll)
++{
++	int ret;
++
++	ret = epoll_create1(0);
++	EXPECT_NE(-1, ret)
++		TH_LOG("epoll_create1 failed?");
++
++	self->fd = ret;
++
++	self->caps = cap_get_proc();
++	EXPECT_NE(NULL, self->caps);
++}
++
++FIXTURE_TEARDOWN(epoll_busy_poll)
++{
++	int ret;
++
++	ret = close(self->fd);
++	EXPECT_EQ(0, ret);
++
++	ret = cap_free(self->caps);
++	EXPECT_NE(-1, ret)
++		TH_LOG("unable to free capabilities");
++}
++
++TEST_F(epoll_busy_poll, test_get_params)
++{
++	/* begin by getting the epoll params from the kernel
++	 *
++	 * the default should be default and all fields should be zero'd by the
++	 * kernel, so set params fields to garbage to test this.
++	 */
++	int ret = 0;
++
++	self->params.busy_poll_usecs = 0xff;
++	self->params.busy_poll_budget = 0xff;
++	self->params.prefer_busy_poll = 1;
++	self->params.__pad = 0xf;
++
++	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
++	EXPECT_EQ(0, ret)
++		TH_LOG("ioctl EPIOCGPARAMS should succeed");
++
++	EXPECT_EQ(0, self->params.busy_poll_usecs)
++		TH_LOG("EPIOCGPARAMS busy_poll_usecs should have been 0");
++
++	EXPECT_EQ(0, self->params.busy_poll_budget)
++		TH_LOG("EPIOCGPARAMS busy_poll_budget should have been 0");
++
++	EXPECT_EQ(0, self->params.prefer_busy_poll)
++		TH_LOG("EPIOCGPARAMS prefer_busy_poll should have been 0");
++
++	EXPECT_EQ(0, self->params.__pad)
++		TH_LOG("EPIOCGPARAMS __pad should have been 0");
++
++	self->invalid_params = (struct epoll_params *)0xdeadbeef;
++	ret = ioctl(self->fd, EPIOCGPARAMS, self->invalid_params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCGPARAMS should error with invalid params");
++
++	EXPECT_EQ(EFAULT, errno)
++		TH_LOG("EPIOCGPARAMS with invalid params should set errno to EFAULT");
++}
++
++TEST_F(epoll_busy_poll, test_set_invalid)
++{
++	int ret;
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	self->params.__pad = 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS non-zero __pad should error");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS non-zero __pad errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = (uint32_t)INT_MAX + 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error busy_poll_usecs > S32_MAX");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS busy_poll_usecs > S32_MAX errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = 32;
++	self->params.prefer_busy_poll = 2;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error prefer_busy_poll > 1");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("EPIOCSPARAMS prefer_busy_poll > 1 errno should be EINVAL");
++
++	self->params.__pad = 0;
++	self->params.busy_poll_usecs = 32;
++	self->params.prefer_busy_poll = 1;
++
++	/* set budget well above kernel's NAPI_POLL_WEIGHT of 64 */
++	self->params.busy_poll_budget = UINT16_MAX;
++
++	/* test harness should run with CAP_NET_ADMIN, but let's make sure */
++	cap_flag_value_t tmp;
++
++	ret = cap_get_flag(self->caps, CAP_NET_ADMIN, CAP_EFFECTIVE, &tmp);
++	EXPECT_EQ(0, ret)
++		TH_LOG("unable to get CAP_NET_ADMIN cap flag");
++
++	EXPECT_EQ(CAP_SET, tmp)
++		TH_LOG("expecting CAP_NET_ADMIN to be set for the test harness");
++
++	/* at this point we know CAP_NET_ADMIN is available, so setting the
++	 * params with a busy_poll_budget > NAPI_POLL_WEIGHT should succeed
++	 */
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(0, ret)
++		TH_LOG("EPIOCSPARAMS should allow busy_poll_budget > NAPI_POLL_WEIGHT");
++
++	/* remove CAP_NET_ADMIN from our effective set */
++	cap_value_t net_admin[] = { CAP_NET_ADMIN };
++
++	ret = cap_set_flag(self->caps, CAP_EFFECTIVE, 1, net_admin, CAP_CLEAR);
++	EXPECT_EQ(0, ret)
++		TH_LOG("couldnt clear CAP_NET_ADMIN");
++
++	ret = cap_set_proc(self->caps);
++	EXPECT_EQ(0, ret)
++		TH_LOG("cap_set_proc should drop CAP_NET_ADMIN");
++
++	/* this is now expected to fail */
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error busy_poll_budget > NAPI_POLL_WEIGHT");
++
++	EXPECT_EQ(EPERM, errno)
++		TH_LOG("EPIOCSPARAMS errno should be EPERM busy_poll_budget > NAPI_POLL_WEIGHT");
++
++	/* restore CAP_NET_ADMIN to our effective set */
++	ret = cap_set_flag(self->caps, CAP_EFFECTIVE, 1, net_admin, CAP_SET);
++	EXPECT_EQ(0, ret)
++		TH_LOG("couldn't restore CAP_NET_ADMIN");
++
++	ret = cap_set_proc(self->caps);
++	EXPECT_EQ(0, ret)
++		TH_LOG("cap_set_proc should set  CAP_NET_ADMIN");
++
++	self->invalid_params = (struct epoll_params *)0xdeadbeef;
++	ret = ioctl(self->fd, EPIOCSPARAMS, self->invalid_params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("EPIOCSPARAMS should error when epoll_params is invalid");
++
++	EXPECT_EQ(EFAULT, errno)
++		TH_LOG("EPIOCSPARAMS should set errno to EFAULT when epoll_params is invalid");
++}
++
++TEST_F(epoll_busy_poll, test_set_and_get_valid)
++{
++	int ret;
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	self->params.busy_poll_usecs = 25;
++	self->params.busy_poll_budget = 16;
++	self->params.prefer_busy_poll = 1;
++
++	ret = ioctl(self->fd, EPIOCSPARAMS, &self->params);
++
++	EXPECT_EQ(0, ret)
++		TH_LOG("EPIOCSPARAMS with valid params should not error");
++
++	/* check that the kernel returns the same values back */
++
++	memset(&self->params, 0, sizeof(struct epoll_params));
++
++	ret = ioctl(self->fd, EPIOCGPARAMS, &self->params);
++
++	EXPECT_EQ(0, ret)
++		TH_LOG("EPIOCGPARAMS should not error");
++
++	EXPECT_EQ(25, self->params.busy_poll_usecs)
++		TH_LOG("params.busy_poll_usecs incorrect");
++
++	EXPECT_EQ(16, self->params.busy_poll_budget)
++		TH_LOG("params.busy_poll_budget incorrect");
++
++	EXPECT_EQ(1, self->params.prefer_busy_poll)
++		TH_LOG("params.prefer_busy_poll incorrect");
++
++	EXPECT_EQ(0, self->params.__pad)
++		TH_LOG("params.__pad was not 0");
++}
++
++TEST_F(epoll_busy_poll, test_invalid_ioctl)
++{
++	int invalid_ioctl = EPIOCGPARAMS + 10;
++	int ret;
++
++	ret = ioctl(self->fd, invalid_ioctl, &self->params);
++
++	EXPECT_EQ(-1, ret)
++		TH_LOG("invalid ioctl should return error");
++
++	EXPECT_EQ(EINVAL, errno)
++		TH_LOG("invalid ioctl should set errno to EINVAL");
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.25.1
+
 
