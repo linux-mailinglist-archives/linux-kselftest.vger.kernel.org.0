@@ -1,81 +1,55 @@
-Return-Path: <linux-kselftest+bounces-9684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD4C8BF737
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:39:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C0F8BF789
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 09:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F0141C2249D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 07:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74F3B1F21604
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 07:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 372BB3EA96;
-	Wed,  8 May 2024 07:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEA03A1B5;
+	Wed,  8 May 2024 07:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CetLzvWV"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MbV/DHwt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5623DB97
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 07:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C3B2C85F;
+	Wed,  8 May 2024 07:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715153959; cv=none; b=fLOUItAfl9C2UR7J9mLiRtjtxKR2phqAp4y0VDzvW6+84dnCsoDUtMCrvBe5qSGqVsKz2NJeQ+BjLFurBdJqqlf4kV1NiPTH9O8rEXc/smLuwyV0vec+cSpaFk6AgTquZ9zhEWx+ib+1Z8S1+YNmXCDyJK5RK5lZgFrPcatiCIM=
+	t=1715154553; cv=none; b=J31IriaSeFLm5YglO/En/6o/Kg7umjTRc7M3sqoqT95r70J36X44spsu8teu+k0qVbQBRdcZgIrMExhJojM8SL4YR9MlfWgTSxcFGBcYxJZHZ5oHje/stggxeh/htEqJNjouBgWMDxUgSceNafHrmoERaELAXA4mahx2QjLFX1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715153959; c=relaxed/simple;
-	bh=0Y+cdAgVJ5Wzm/Bku8fZNhaN9C0JgQPsf4IAnxXoyhg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=guv7MXcfxEG9jXTdUWNEYDEq9RlDFlpQuIYtbuMc1QGB1/DxuuK61AyAwuHt4gIXflcsTcNktCTiSAucOiz1AGiPfabYrP+RC3/GCLFGcph3e8F4uV3g04CESXQcwdfZxHkdZMiTuJkhAcPi4Sthgoz+yxhmT+4OwyxPW2RP39U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CetLzvWV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715153955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=FVpdoIP5MsYXu7rCIo+E46n/SCgmwnPBP9uox/R7iyQ=;
-	b=CetLzvWVVdgP3y8/0UBS7cjydgDjZ3BQihZu1oY80/0j1kH9VlpykYYXe++28vNuUT/Nr+
-	nZflPywS64PZPUPpJS/3vZsxZY6Qm8zqKke6zxkSr1BId4cOoAsDXOttg99M4X0nnpYSmN
-	5hPU87+8AluwvPbfnvFIAUy3bESzEag=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-548-nHQryaAjMWKlRPILU0h2Fg-1; Wed, 08 May 2024 03:39:13 -0400
-X-MC-Unique: nHQryaAjMWKlRPILU0h2Fg-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-34c99c419e7so2560092f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 00:39:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715153952; x=1715758752;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FVpdoIP5MsYXu7rCIo+E46n/SCgmwnPBP9uox/R7iyQ=;
-        b=XEiDBbDVVsprzhowV+9yTE5ykGHNX6DSuLnrHbaDPcjsGIZhEcHKKp2eEkUMhgROjR
-         8OfBJKa1LQtGp6jcpwHmzKxI3pB5Y3RIPKplnYKSBNCO5xLJ5J44aIYru6hbpOU8d3kX
-         jStuumjxOLcXBWzxUgwTOnfH7rtq4D/XlbRELtnH22eO+kExNucC/D1xDqq7gpfvLITF
-         eVFvr1AuYdryIHXQaCHqRRGpMLX0uUaGJ5LxbUv1XwlOLcJrpnkDVrZ7MNFKxBaUAtfi
-         BCLZGpOMzHK/TbHI7ByuUfOwwJBBONT0eQzajIXMPASU4RT04swY0yRmbGvjmP7ESmXn
-         P5DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWs0A47B09ULgiTeU2m8pq0fiYiurlTsZxI5/KBGFosJxcKOGYfdCNSxP4Et64BLyQ09PAm/7g0FB2Aj5beUvcw2HYWSGa99cuHzA4CqfB
-X-Gm-Message-State: AOJu0YwSD2ZIDkTVS5aqkOejNFUsPSRJ2Nyzjb3TgoXqyG+TpsbMmrTh
-	Mwgu4KiI548nnjOQc43XOkdBvmsw5meHhG4pK1vYnBj62XkfQSf90Q/MXVrNV71V89miKFStBme
-	5OuEQTtlJRBwFhebuMYTwEL6eZtsAb6it9e48UXlt2eUjp/Fsiwa4oyC2ER/QGzZn9Q==
-X-Received: by 2002:a05:6000:4599:b0:34a:5d79:dfe2 with SMTP id ffacd0b85a97d-34fca054a97mr1258200f8f.13.1715153952348;
-        Wed, 08 May 2024 00:39:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFTOmHrKa5pFWDvRNcu/CVISPqg6g122HMr+o9Dj0SfD8mYWtCmGCyLsjc6SMQ+kU1VxmAlIw==
-X-Received: by 2002:a05:6000:4599:b0:34a:5d79:dfe2 with SMTP id ffacd0b85a97d-34fca054a97mr1258175f8f.13.1715153951852;
-        Wed, 08 May 2024 00:39:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3100:35c3:fc4b:669f:9ff9? (p200300cbc707310035c3fc4b669f9ff9.dip0.t-ipconnect.de. [2003:cb:c707:3100:35c3:fc4b:669f:9ff9])
-        by smtp.gmail.com with ESMTPSA id f6-20020a5d58e6000000b0034dd063e8dasm14604835wrd.86.2024.05.08.00.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 00:39:11 -0700 (PDT)
-Message-ID: <939a16f2-7b66-45a6-a043-4821bd3c71dc@redhat.com>
-Date: Wed, 8 May 2024 09:39:10 +0200
+	s=arc-20240116; t=1715154553; c=relaxed/simple;
+	bh=MofcZIwCP6uQfQVp6EE9HurxL3czn6diXGm18p/OF50=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=QP8r7FGCEIG9RIPEHrCJr201UpOq8fxdk2dGIGtH485FSZl0SCLcbFaQsRohnC5mV9vR2V+jJTIMKpfb4h9Jv8+Z4lR+4Ho9xY5yp8IEbhuQi1OZpX5aaJnvhz+jvpc1dwlZrJM7qKEpQjKP4MX2Nc7TE8804Qx1YrSNGjMmO1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MbV/DHwt; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1715154544;
+	bh=MofcZIwCP6uQfQVp6EE9HurxL3czn6diXGm18p/OF50=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=MbV/DHwtYAujOpXoDCW0s0KB5riHG/p4OMQuvDB00Pz7/gzHkZrQVMbWFe8RMvmKa
+	 E7/eZm+J0KkW6WdglkC3NhaZhrrqLwrLM/rN6pAvFjHBThsazg6zRLYCYBJKWtjUwR
+	 eLafdjBQjRl8tFVMXaPf7ETS5Spz1U0TN2/pXHhbkRMUKnerr3EUzBLw1LELesDSjx
+	 ww1UwcyShSZE5MdiI2h1EXPosoRI0u6sJbDL1yLfBCglfBakx0ihDdtGsu1uPdwGRy
+	 epZ0TaGCSSjrbxIQaccEYwAzomyOHcnd+TiIXNmGJ4FavJjakZ9om8hZy1/HJ08OvK
+	 /vO//iWp1Vbsw==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C668C378107C;
+	Wed,  8 May 2024 07:48:36 +0000 (UTC)
+Message-ID: <546aaaa7-d796-46af-8805-1612759aaaa5@collabora.com>
+Date: Wed, 8 May 2024 12:48:57 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,123 +57,141 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] Fix userfaultfd_api to return EINVAL as expected
-To: Audra Mitchell <audra@redhat.com>, viro@zeniv.linux.org.uk
-Cc: brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, raquini@redhat.com,
- Peter Xu <peterx@redhat.com>
-References: <20240507195510.283744-1-audra@redhat.com>
-From: David Hildenbrand <david@redhat.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, linux-sound@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+ linux-input@vger.kernel.org, iommu@lists.linux.dev, kvmarm@lists.linux.dev,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
+ linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org,
+ kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH v2 1/5] selftests: Compile kselftest headers with
+ -D_GNU_SOURCE
+To: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
+ Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Christian Brauner
+ <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+ Kees Cook <keescook@chromium.org>,
+ OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
+ <andrealmeid@igalia.com>, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>,
+ Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Hildenbrand <david@redhat.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Seth Forshee
+ <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, =?UTF-8?Q?Andreas_F=C3=A4rber?=
+ <afaerber@suse.de>, Manivannan Sadhasivam
+ <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Fenghua Yu <fenghua.yu@intel.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>
+References: <20240507214254.2787305-1-edliaw@google.com>
+ <20240507214254.2787305-2-edliaw@google.com>
 Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240507195510.283744-1-audra@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240507214254.2787305-2-edliaw@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 07.05.24 21:55, Audra Mitchell wrote:
-> Currently if we request a feature that is not set in the Kernel
-> config we fail silently and return the available features. However, the
-> documentation indicates we should return an EINVAL.
+Thanks for patches
 
-I assume you are referencing
-
-"EINVAL The API version requested in the api field is not supported by 
-this kernel, or  the  features  field passed to the kernel includes 
-feature bits that are not supported by the current kernel version."
-
-and
-
-"To  enable  userfaultfd features the application should set a bit 
-corresponding to each feature it wants to enable in the features field. 
-If the kernel supports all the requested features it will enable them. 
-Otherwise it will zero out the returned uffdio_api structure and return 
-EINVAL.
-"
-
-in which case I agree.
-
+On 5/8/24 2:38 AM, Edward Liaw wrote:
+> Add the -D_GNU_SOURCE flag to KHDR_INCLUDES so that it is defined in a
+> central location.
 > 
-> We need to fix this issue since we can end up with a Kernel warning
-> should a program request the feature UFFD_FEATURE_WP_UNPOPULATED on
-> a kernel with the config not set with this feature.
-
-Can you mention which exact one? Is it a WARN* or a pr_warn() ?
-
-Likely we want "Fixes:" here.
-
+> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
+> asprintf into kselftest_harness.h, which is a GNU extension and needs
+> _GNU_SOURCE to either be defined prior to including headers or with the
+> -D_GNU_SOURCE flag passed to the compiler.
 > 
-> Signed-off-by: Audra Mitchell <audra@redhat.com>
+> Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202404301040.3bea5782-oliver.sang@intel.com
+> Signed-off-by: Edward Liaw <edliaw@google.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+
 > ---
->   fs/userfaultfd.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>  tools/testing/selftests/Makefile            | 4 ++--
+>  tools/testing/selftests/kselftest_harness.h | 2 +-
+>  tools/testing/selftests/lib.mk              | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 60dcfafdc11a..17210558de79 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -2073,6 +2073,11 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
->   	uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
->   	uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
->   #endif
-> +
-> +	ret = -EINVAL;
-> +	if (features & ~uffdio_api.features)
-> +		goto err_out;
-> +
->   	uffdio_api.ioctls = UFFD_API_IOCTLS;
->   	ret = -EFAULT;
->   	if (copy_to_user(buf, &uffdio_api, sizeof(uffdio_api)))
-
-CCing Peter.
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index e1504833654d..ed012a7f0786 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -161,11 +161,11 @@ ifneq ($(KBUILD_OUTPUT),)
+>    # $(realpath ...) resolves symlinks
+>    abs_objtree := $(realpath $(abs_objtree))
+>    BUILD := $(abs_objtree)/kselftest
+> -  KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+> +  KHDR_INCLUDES := -D_GNU_SOURCE -isystem ${abs_objtree}/usr/include
+>  else
+>    BUILD := $(CURDIR)
+>    abs_srctree := $(shell cd $(top_srcdir) && pwd)
+> -  KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+> +  KHDR_INCLUDES := -D_GNU_SOURCE -isystem ${abs_srctree}/usr/include
+>    DEFAULT_INSTALL_HDR_PATH := 1
+>  endif
+>  
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index d98702b6955d..b2a1b6343896 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -51,7 +51,7 @@
+>  #define __KSELFTEST_HARNESS_H
+>  
+>  #ifndef _GNU_SOURCE
+> -#define _GNU_SOURCE
+> +static_assert(0, "kselftest harness requires _GNU_SOURCE to be defined");
+>  #endif
+>  #include <asm/types.h>
+>  #include <ctype.h>
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index da2cade3bab0..2503dc732b4d 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -45,7 +45,7 @@ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+>  top_srcdir = $(selfdir)/../../..
+>  
+>  ifeq ($(KHDR_INCLUDES),)
+> -KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+> +KHDR_INCLUDES := -D_GNU_SOURCE -isystem $(top_srcdir)/usr/include
+>  endif
+>  
+>  # The following are built by lib.mk common compile rules.
 
 -- 
-Cheers,
-
-David / dhildenb
-
+BR,
+Muhammad Usama Anjum
 
