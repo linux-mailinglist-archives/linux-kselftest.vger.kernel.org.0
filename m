@@ -1,249 +1,664 @@
-Return-Path: <linux-kselftest+bounces-9701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 153DD8BFDD7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 14:58:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC47B8BFEB6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 15:26:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9970E282BFA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 12:58:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E21DBB22065
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 13:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93BB65BD1;
-	Wed,  8 May 2024 12:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DE778C7F;
+	Wed,  8 May 2024 13:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aqOj4q9s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQ4lsd35"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053EC59158
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 12:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8E07A15A;
+	Wed,  8 May 2024 13:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715173131; cv=none; b=s25hwxBDGEmWNV6OkobDhaqQsAgjqo8C6zoS5T4CyOfVZFRIwJ5gY6k6LcHCkGejzfNoq/xQxrNYaNW9K1sJis52X6/YX9Cxr49LR3UIShPyjuB+NauGDJOiExxZVPQaBwC/dU6he5yvIu4JR5u7T7j9Ht7y7UILVoJb7sKmgAo=
+	t=1715174766; cv=none; b=jI/FDLWIg7b3AVR5QX7Z8/OrfgO4Zzz3oZXJ7LvaNTH5nrdR6aoxCi3Fbt+YxDgWQzNTsB+t5mbO/yhAhSoipLttKnq85sdZE0dPUmpznZKsrpMrFjw6i4XQs8yg6T4Tj6ARDzuM3sWnwwrldtxji3IIgi+ZB1Dk2t0pudpnsts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715173131; c=relaxed/simple;
-	bh=GYjfMVF/gOTYFXkiteIcGwz9L/HVIE8jUpBP3nujoZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=egiry5CNmq5d2NVdw95g8vZxxsIcC0SDBLdipJN+YJAKJdd4/cf2gHqIpdyiUcoI5D8YxWRxwNIEH2Gf4g72mLoxGZjP5/JU1XUM8LiB9xroO8PSs1K/F91VaIpEzQXxSBFujgPdUFM2rNmc+DSzMzcABOoztE4G417KT50PKkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aqOj4q9s; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715173128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OMWFB+58LjFbAGe/YILHZwb6Uma7hDTXbrXSYkry9jI=;
-	b=aqOj4q9sqO6eubTxb52v2dEDuKLAiXc9WY7NBGL6w0WUJ2UcWkJKo51KvvKX6RCbwDyPfu
-	uk570JtCswdGiiLAOxzayJvmtGTIJ5roaSKC3OD6HgOG/HUQnJGw9bBaU3OiscZ8VcjQt2
-	haGMrOfBhyyKB3kz2NZ+Lik0qgHx3uY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-662-Sj-D9hbEMpOUTgaC3hg7WQ-1; Wed,
- 08 May 2024 08:58:45 -0400
-X-MC-Unique: Sj-D9hbEMpOUTgaC3hg7WQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E6903C01C0D;
-	Wed,  8 May 2024 12:58:45 +0000 (UTC)
-Received: from fedora (unknown [10.22.18.45])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id AF2BC2088AFE;
-	Wed,  8 May 2024 12:58:43 +0000 (UTC)
-Date: Wed, 8 May 2024 08:58:42 -0400
-From: Audra Mitchell <audra@redhat.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	raquini@redhat.com, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 1/2] Fix userfaultfd_api to return EINVAL as expected
-Message-ID: <Zjt3Apr8ILFA4oK_@fedora>
-References: <20240507195510.283744-1-audra@redhat.com>
- <939a16f2-7b66-45a6-a043-4821bd3c71dc@redhat.com>
+	s=arc-20240116; t=1715174766; c=relaxed/simple;
+	bh=MAqxTvhgjm1oEziajJjjjGYxTJo1gKqr0BM3su7Nyoo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SvALSepiXZzwc0rEpl+mtZdw8dLyV+54z9151cxXk4+WlbNTXNpS9aJ4B0AMWr0WS1DRmaGcI0EgSwpCkI2fR7AJ72iglOeyG9OqK8Td8Y4YX0U7S9q9xc5sE9GlYMBbjkY+BVnCK7PMHM2p77KkW0TkupuJk5wXQXkWF3hpt/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQ4lsd35; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-41c017ee8deso136405e9.2;
+        Wed, 08 May 2024 06:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715174761; x=1715779561; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0kgMONDxGre1TMBprpb2YAsADbJp7hrnZXRcTxcl4I=;
+        b=CQ4lsd359CC2aUbkK5o4cNdlIa9cIigT6amt0hM0rL8RqsLyIbGvhHrOl/oSF9en3J
+         jSGnPCFw/+g+Jo/YnHBjbgfiX7eXI86FVjT3oXNpGltnXS2tryUI/mGl4+GJo6omNTi1
+         H7k9GG11r5thPQpioTkbRNMIPvr74YA45GxeDn4z8cZeo8+j5vJ4u9UALZnljJ5PVqzC
+         jFcqhKjHTpWHopGa4ruyt56+GA974avzwRN28LzKPAmREJVgMJsBnTZRpkYT3R/b6g5o
+         F5JF6fi0h8+OX/4IbnaIFf9BBlr3c4fIzX8QdzP8AGJwWymlQaHspKVqzL4Cm61ypIU8
+         S/6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715174761; x=1715779561;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E0kgMONDxGre1TMBprpb2YAsADbJp7hrnZXRcTxcl4I=;
+        b=mNrA2I5aPESgPll6Hj3Zz9yzSwd04Gut34+kmjmTg8A9GqitzSyB+wR+QOtsyPkpkI
+         R14ySQELfhK7alGynJTJSXvcZkaVjo86N1kWRUYNPOHSmtJj4QXu5dQisHCosFBjoHHg
+         zjXapBzqwKZLyGhBUZFerDXPICaBTX+yTNbBp9UCfO85pqPQpGoSTCpZPfCF0sc2a4PJ
+         N0+jr0rqcwgWtVqg0wzi1eVGlt7N3MPawevFBU/cUmevwwZn3Me6GeZrelFA4Yd1Y3Ip
+         5vPT+9cLkvy5x6x1IHCUJ7lBzTcP2fLWVzMZ0tJNmdjHzMIHC74c6/62IXhvtlrfoSQe
+         cxFA==
+X-Forwarded-Encrypted: i=1; AJvYcCWEc17WYOnTbZ6M1snffiMu6DjuZN5HpoV1FsmmmlGCY++APmNPiy6hCDziOfpKgX3yoYwqdJfmv5px06v75KmOiIcNWZmuXCOIfxJSU1m5g8M8dvoGJpmAMt4mzqvZpi8qDljla7UAM4IXH7Q3
+X-Gm-Message-State: AOJu0YzISCRsPW2ejuEtC9A5ZSmhW1OluRgQTxGmJWPBuRMEihnAtHbf
+	+2iIktIgDSDwWJizyRKGEVzZIbmr7XmpJJt7x9+m0/DiMzB4FVa9IdOAvg==
+X-Google-Smtp-Source: AGHT+IHDM3f1NSFk8ZJw3/Nr4c+LOEHPXQhK5oxNQbl6mYGjS282RjqjHOPgpv93R5w1e75+CcYmcQ==
+X-Received: by 2002:a05:600c:4f49:b0:41b:e58c:e007 with SMTP id 5b1f17b1804b1-41f71cbf49dmr19938555e9.4.1715174760582;
+        Wed, 08 May 2024 06:26:00 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.guest.codethink.co.uk ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id s8-20020adfecc8000000b0034dda041ccasm15410566wro.102.2024.05.08.06.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 06:26:00 -0700 (PDT)
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: [PATCH v2] kunit: Cover 'assert.c' with tests
+Date: Wed,  8 May 2024 14:25:57 +0100
+Message-Id: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <939a16f2-7b66-45a6-a043-4821bd3c71dc@redhat.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 08, 2024 at 09:39:10AM +0200, David Hildenbrand wrote:
-> On 07.05.24 21:55, Audra Mitchell wrote:
-> > Currently if we request a feature that is not set in the Kernel
-> > config we fail silently and return the available features. However, the
-> > documentation indicates we should return an EINVAL.
-> 
-> I assume you are referencing
-> 
-> "EINVAL The API version requested in the api field is not supported by this
-> kernel, or  the  features  field passed to the kernel includes feature bits
-> that are not supported by the current kernel version."
-> 
-> and
-> 
-> "To  enable  userfaultfd features the application should set a bit
-> corresponding to each feature it wants to enable in the features field. If
-> the kernel supports all the requested features it will enable them.
-> Otherwise it will zero out the returned uffdio_api structure and return
-> EINVAL.
-> "
-> 
-> in which case I agree.
+There are multiple assertion formatting functions in the `assert.c`
+file, which are not covered with tests yet. Implement the KUnit test
+for these functions.
 
-Yep! I'm referencing the man page.
+The test consists of 11 test cases for the following functions:
 
-> 
-> > 
-> > We need to fix this issue since we can end up with a Kernel warning
-> > should a program request the feature UFFD_FEATURE_WP_UNPOPULATED on
-> > a kernel with the config not set with this feature.
-> 
-> Can you mention which exact one? Is it a WARN* or a pr_warn() ?
+1) 'is_literal'
+2) 'is_str_literal'
+3) 'kunit_assert_prologue', test case for multiple assert types
+4) 'kunit_assert_print_msg'
+5) 'kunit_unary_assert_format'
+6) 'kunit_ptr_not_err_assert_format'
+7) 'kunit_binary_assert_format'
+8) 'kunit_binary_ptr_assert_format'
+9) 'kunit_binary_str_assert_format'
+10) 'kunit_assert_hexdump'
+11) 'kunit_mem_assert_format'
 
-Here is the kernel warning I get:
+The test aims at maximizing the branch coverage for the assertion
+formatting functions.
 
-[  200.803094] unrecognized swap entry 0x7c00000000000001
-[  200.808270] ------------[ cut here ]------------
-[  200.812896] WARNING: CPU: 91 PID: 13634 at mm/memory.c:1660 zap_pte_range+0x43d/0x660
-[  200.820738] Modules linked in: qrtr bridge stp llc rfkill sunrpc amd_atl intel_rapl_msr intel_rapl_common amd64_edac edac_mce_amd kvm_amd kvm ipmi_ssif acpi_ipmi i2c_piix4 ipmi_si wmi_bmof dcdbas dell_smbios dell_wmi_descriptor ptdma ipmi_devintf rapl ipmi_msghandler acpi_power_meter pcspkr k10temp xfs libcrc32c sd_mod t10_pi mgag200 sg drm_kms_helper crct10dif_pclmul i2c_algo_bit ahci crc32_pclmul drm_shmem_helper libahci crc32c_intel drm i40e libata ghash_clmulni_intel tg3 ccp megaraid_sas sp5100_tco wmi dm_mirror dm_region_hash dm_log dm_mod fuse
-[  200.869387] CPU: 91 PID: 13634 Comm: userfaultfd Kdump: loaded Not tainted 6.9.0-rc5+ #8
-[  200.877477] Hardware name: Dell Inc. PowerEdge R6525/0N7YGH, BIOS 2.7.3 03/30/2022
-[  200.885052] RIP: 0010:zap_pte_range+0x43d/0x660
-[  200.889595] Code: 83 fa 02 0f 86 44 01 00 00 83 f9 17 0f 84 e1 00 00 00 83 f9 1f 0f 84 d0 00 00 00 48 89 c6 48 c7 c7 00 e4 dd bb e8 73 a2 de ff <0f> 0b e9 44 fd ff ff 45 0f b6 44 24 20 41 f6 c0 f4 75 27 4c 89 ee
-[  200.908348] RSP: 0018:ffffa18d2e6c37c8 EFLAGS: 00010246
-[  200.913584] RAX: 000000000000002a RBX: 00007f26d3600000 RCX: 0000000000000000
-[  200.920730] RDX: 0000000000000000 RSI: ffff93503f9a0bc0 RDI: ffff93503f9a0bc0
-[  200.927867] RBP: 00007f26d35cc000 R08: 0000000000000000 R09: ffffa18d2e6c3688
-[  200.935009] R10: ffffa18d2e6c3680 R11: ffffffffbc9de448 R12: ffffa18d2e6c39e8
-[  200.942149] R13: ffff92d1ebc15b50 R14: ffff93114e0cde60 R15: ffffa18d2e6c3928
-[  200.949291] FS:  0000000000000000(0000) GS:ffff93503f980000(0000) knlGS:0000000000000000
-[  200.957384] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  200.963140] CR2: 00007f26b1600658 CR3: 00000040905ba000 CR4: 0000000000350ef0
-[  200.970283] Call Trace:
-[  200.972745]  <TASK>
-[  200.974862]  ? __warn+0x7f/0x130
-[  200.978108]  ? zap_pte_range+0x43d/0x660
-[  200.982044]  ? report_bug+0x18a/0x1a0
-[  200.985720]  ? handle_bug+0x3c/0x70
-[  200.989219]  ? exc_invalid_op+0x14/0x70
-[  200.993068]  ? asm_exc_invalid_op+0x16/0x20
-[  200.997265]  ? zap_pte_range+0x43d/0x660
-[  201.001199]  ? zap_pte_range+0x43d/0x660
-[  201.005134]  zap_pmd_range.isra.0+0xf9/0x230
-[  201.009416]  unmap_page_range+0x2d4/0x4a0
-[  201.013436]  unmap_vmas+0xa8/0x180
-[  201.016854]  exit_mmap+0xea/0x3b0
-[  201.020191]  __mmput+0x43/0x120
-[  201.023342]  exit_mm+0xb1/0x110
-[  201.026496]  do_exit+0x270/0x4f0
-[  201.029739]  do_group_exit+0x2c/0x80
-[  201.033326]  get_signal+0x886/0x8b0
-[  201.036828]  ? srso_return_thunk+0x5/0x5f
-[  201.040848]  arch_do_signal_or_restart+0x25/0x100
-[  201.045563]  ? srso_return_thunk+0x5/0x5f
-[  201.049583]  ? vma_set_page_prot+0x5e/0xc0
-[  201.053692]  ? srso_return_thunk+0x5/0x5f
-[  201.057713]  ? syscall_exit_work+0xff/0x130
-[  201.061908]  syscall_exit_to_user_mode+0x1b3/0x200
-[  201.066712]  do_syscall_64+0x87/0x160
-[  201.070387]  ? srso_return_thunk+0x5/0x5f
-[  201.074405]  ? do_mmap+0x416/0x5f0
-[  201.077821]  ? srso_return_thunk+0x5/0x5f
-[  201.081840]  ? rseq_get_rseq_cs+0x1d/0x240
-[  201.085950]  ? srso_return_thunk+0x5/0x5f
-[  201.089970]  ? rseq_ip_fixup+0x6d/0x1d0
-[  201.093823]  ? vm_mmap_pgoff+0x117/0x1a0
-[  201.097755]  ? srso_return_thunk+0x5/0x5f
-[  201.101776]  ? srso_return_thunk+0x5/0x5f
-[  201.105795]  ? syscall_exit_to_user_mode+0x78/0x200
-[  201.110685]  ? srso_return_thunk+0x5/0x5f
-[  201.114706]  ? do_syscall_64+0x87/0x160
-[  201.118557]  ? srso_return_thunk+0x5/0x5f
-[  201.122575]  ? __count_memcg_events+0x49/0xb0
-[  201.126944]  ? srso_return_thunk+0x5/0x5f
-[  201.130967]  ? srso_return_thunk+0x5/0x5f
-[  201.134986]  ? syscall_exit_work+0xff/0x130
-[  201.139184]  ? srso_return_thunk+0x5/0x5f
-[  201.143205]  ? syscall_exit_to_user_mode+0x78/0x200
-[  201.148093]  ? srso_return_thunk+0x5/0x5f
-[  201.152114]  ? do_syscall_64+0x87/0x160
-[  201.155960]  ? srso_return_thunk+0x5/0x5f
-[  201.159984]  ? sched_clock_cpu+0xb/0x190
-[  201.163916]  ? srso_return_thunk+0x5/0x5f
-[  201.167939]  ? irqtime_account_irq+0x40/0xc0
-[  201.172220]  ? srso_return_thunk+0x5/0x5f
-[  201.176243]  ? srso_return_thunk+0x5/0x5f
-[  201.180263]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  201.185326] RIP: 0033:0x7f26dfd0735b
-[  201.188939] Code: Unable to access opcode bytes at 0x7f26dfd07331.
-[  201.195128] RSP: 002b:00007fffce176868 EFLAGS: 00000206 ORIG_RAX: 000000000000000a
-[  201.202700] RAX: fffffffffffffffc RBX: 00007f26dfe60000 RCX: 00007f26dfd0735b
-[  201.209841] RDX: 0000000000000003 RSI: 0000000001000000 RDI: 00007f26af401000
-[  201.216983] RBP: 00007f26b0400640 R08: 00000000ffffffff R09: 0000000000000000
-[  201.224127] R10: ffffffffffffffc0 R11: 0000000000000206 R12: 0000000000000000
-[  201.231267] R13: 000000000040d320 R14: 0000000000000000 R15: 0000000000000000
-[  201.238413]  </TASK>
-[  201.240610] ---[ end trace 0000000000000000 ]---
-[  201.245250] unrecognized swap entry 0x7c00000000000001
+As you can see, it covers some of the static helper functions as
+well, so mark the static functions in `assert.c` as 'VISIBLE_IF_KUNIT'
+and conditionally export them with EXPORT_SYMBOL_IF_KUNIT. Add the
+corresponding definitions to `assert.h`.
 
+Build the assert test when CONFIG_KUNIT_TEST is enabled, similar to
+how it is done for the string stream test.
 
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2:
+- Check the output from the string stream for containing the key parts
+instead of comparing the results with expected strings char by char, as
+it was suggested by Rae Moar <rmoar@google.com>. Define two macros to
+make it possible (ASSERT_TEST_EXPECT_CONTAIN and
+ASSERT_TEST_EXPECT_NCONTAIN).
+- Mark the static functions in `assert.c` as VISIBLE_IF_KUNIT and export
+them conditionally if kunit is enabled instead of including the
+`assert_test.c` file in the end of `assert.c`. This way we will decouple
+the test from the implementation (SUT).
+- Update the kunit_assert_hexdump test: now it checks for presense of
+the brackets '<>' around the non-matching bytes, instead of comparing
+the kunit_assert_hexdump output char by char.
 
-> 
-> Likely we want "Fixes:" here.
+ include/kunit/assert.h  |  11 ++
+ lib/kunit/Makefile      |   1 +
+ lib/kunit/assert.c      |  24 ++-
+ lib/kunit/assert_test.c | 389 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 417 insertions(+), 8 deletions(-)
+ create mode 100644 lib/kunit/assert_test.c
 
-This could be seen as a continuation of the problem 
-2ff559f31a5d Revert "userfaultfd: don't fail on unrecognized features" 
-was trying to solve. However, this patch only checks to make sure we didnt 
-ask for a feature outside the possible range of features. We are still missing
-a check to confirm the requested features are also configured on. So I guess 
-the "Fixes" tag would be for this patch?
-914eedcb9ba0 userfaultfd: don't fail on unrecognized features
-
-Happy to get your input here!
-
-Thanks in advance!
-
-
-> 
-> > 
-> > Signed-off-by: Audra Mitchell <audra@redhat.com>
-> > ---
-> >   fs/userfaultfd.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index 60dcfafdc11a..17210558de79 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -2073,6 +2073,11 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
-> >   	uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
-> >   	uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
-> >   #endif
-> > +
-> > +	ret = -EINVAL;
-> > +	if (features & ~uffdio_api.features)
-> > +		goto err_out;
-> > +
-> >   	uffdio_api.ioctls = UFFD_API_IOCTLS;
-> >   	ret = -EFAULT;
-> >   	if (copy_to_user(buf, &uffdio_api, sizeof(uffdio_api)))
-> 
-> CCing Peter.
-> 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index 24c2b9fa61e8..31e655abbce9 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -218,4 +218,15 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 			     const struct va_format *message,
+ 			     struct string_stream *stream);
+ 
++#if IS_ENABLED(CONFIG_KUNIT_TEST)
++void kunit_assert_print_msg(const struct va_format *message,
++			    struct string_stream *stream);
++bool is_literal(const char *text, long long value);
++bool is_str_literal(const char *text, const char *value);
++void kunit_assert_hexdump(struct string_stream *stream,
++			  const void *buf,
++			  const void *compared_buf,
++			  const size_t len);
++#endif
++
+ #endif /*  _KUNIT_ASSERT_H */
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 309659a32a78..be7c9903936f 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -18,6 +18,7 @@ endif
+ obj-y +=				hooks.o
+ 
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
++obj-$(CONFIG_KUNIT_TEST) +=		assert_test.o
+ 
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index dd1d633d0fe2..382eb409d34b 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -7,6 +7,7 @@
+  */
+ #include <kunit/assert.h>
+ #include <kunit/test.h>
++#include <kunit/visibility.h>
+ 
+ #include "string-stream.h"
+ 
+@@ -30,12 +31,14 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
+ }
+ EXPORT_SYMBOL_GPL(kunit_assert_prologue);
+ 
+-static void kunit_assert_print_msg(const struct va_format *message,
+-				   struct string_stream *stream)
++VISIBLE_IF_KUNIT
++void kunit_assert_print_msg(const struct va_format *message,
++			    struct string_stream *stream)
+ {
+ 	if (message->fmt)
+ 		string_stream_add(stream, "\n%pV", message);
+ }
++EXPORT_SYMBOL_IF_KUNIT(kunit_assert_print_msg);
+ 
+ void kunit_fail_assert_format(const struct kunit_assert *assert,
+ 			      const struct va_format *message,
+@@ -89,7 +92,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+ EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
+ 
+ /* Checks if `text` is a literal representing `value`, e.g. "5" and 5 */
+-static bool is_literal(const char *text, long long value)
++VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
+ {
+ 	char *buffer;
+ 	int len;
+@@ -110,6 +113,7 @@ static bool is_literal(const char *text, long long value)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_IF_KUNIT(is_literal);
+ 
+ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ 				const struct va_format *message,
+@@ -166,7 +170,7 @@ EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
+ /* Checks if KUNIT_EXPECT_STREQ() args were string literals.
+  * Note: `text` will have ""s where as `value` will not.
+  */
+-static bool is_str_literal(const char *text, const char *value)
++VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
+ {
+ 	int len;
+ 
+@@ -178,6 +182,7 @@ static bool is_str_literal(const char *text, const char *value)
+ 
+ 	return strncmp(text + 1, value, len - 2) == 0;
+ }
++EXPORT_SYMBOL_IF_KUNIT(is_str_literal);
+ 
+ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    const struct va_format *message,
+@@ -208,10 +213,11 @@ EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+ /* Adds a hexdump of a buffer to a string_stream comparing it with
+  * a second buffer. The different bytes are marked with <>.
+  */
+-static void kunit_assert_hexdump(struct string_stream *stream,
+-				 const void *buf,
+-				 const void *compared_buf,
+-				 const size_t len)
++VISIBLE_IF_KUNIT
++void kunit_assert_hexdump(struct string_stream *stream,
++			  const void *buf,
++			  const void *compared_buf,
++			  const size_t len)
+ {
+ 	size_t i;
+ 	const u8 *buf1 = buf;
+@@ -229,6 +235,7 @@ static void kunit_assert_hexdump(struct string_stream *stream,
+ 			string_stream_add(stream, " %02x ", buf1[i]);
+ 	}
+ }
++EXPORT_SYMBOL_IF_KUNIT(kunit_assert_hexdump);
+ 
+ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 			     const struct va_format *message,
+@@ -269,4 +276,5 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 		kunit_assert_print_msg(message, stream);
+ 	}
+ }
++
+ EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+diff --git a/lib/kunit/assert_test.c b/lib/kunit/assert_test.c
+new file mode 100644
+index 000000000000..dd26a82b9fd7
+--- /dev/null
++++ b/lib/kunit/assert_test.c
+@@ -0,0 +1,389 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * KUnit test for the assertion formatting functions.
++ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
++ */
++#include <kunit/test.h>
++#include "string-stream.h"
++
++#define TEST_PTR_EXPECTED_BUF_SIZE 32
++#define HEXDUMP_TEST_BUF_LEN 5
++#define ASSERT_TEST_EXPECT_CONTAIN(test, str, substr) KUNIT_EXPECT_TRUE(test, strstr(str, substr))
++#define ASSERT_TEST_EXPECT_NCONTAIN(test, str, substr) KUNIT_EXPECT_FALSE(test, strstr(str, substr))
++
++static void kunit_test_is_literal(struct kunit *test)
++{
++	KUNIT_EXPECT_TRUE(test, is_literal("5", 5));
++	KUNIT_EXPECT_TRUE(test, is_literal("0", 0));
++	KUNIT_EXPECT_TRUE(test, is_literal("1234567890", 1234567890));
++	KUNIT_EXPECT_TRUE(test, is_literal("-1234567890", -1234567890));
++	KUNIT_EXPECT_FALSE(test, is_literal("05", 5));
++	KUNIT_EXPECT_FALSE(test, is_literal("", 0));
++	KUNIT_EXPECT_FALSE(test, is_literal("-0", 0));
++	KUNIT_EXPECT_FALSE(test, is_literal("12#45", 1245));
++}
++
++static void kunit_test_is_str_literal(struct kunit *test)
++{
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"Hello, World!\"", "Hello, World!"));
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"\"", ""));
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"\"\"", "\""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("", ""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"", "\""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"Abacaba", "Abacaba"));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("Abacaba\"", "Abacaba"));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"Abacaba\"", "\"Abacaba\""));
++}
++
++KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
++
++/* this function is used to get a "char *" string from the string stream and defer its cleanup  */
++static char *get_str_from_stream(struct kunit *test, struct string_stream *stream)
++{
++	char *str = string_stream_get_string(stream);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
++	kunit_add_action(test, kfree_wrapper, (void *)str);
++
++	return str;
++}
++
++static void kunit_test_assert_prologue(struct kunit *test)
++{
++	struct string_stream *stream;
++	char *str;
++	const struct kunit_loc location = {
++		.file = "testfile.c",
++		.line = 1337,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* Test an expectation fail prologue */
++	kunit_assert_prologue(&location, KUNIT_EXPECTATION, stream);
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "EXPECTATION");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "testfile.c");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "1337");
++
++	/* Test an assertion fail prologue */
++	string_stream_clear(stream);
++	kunit_assert_prologue(&location, KUNIT_ASSERTION, stream);
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "ASSERTION");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "testfile.c");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "1337");
++}
++
++/*
++ * This function accepts an arbitrary count of parameters and generates a va_format struct,
++ * which can be used to validate kunit_assert_print_msg function
++ */
++static void verify_assert_print_msg(struct kunit *test,
++				    struct string_stream *stream,
++				    char *expected, const char *format, ...)
++{
++	va_list list;
++	const struct va_format vformat = {
++		.fmt = format,
++		.va = &list,
++	};
++
++	va_start(list, format);
++	string_stream_clear(stream);
++	kunit_assert_print_msg(&vformat, stream);
++	KUNIT_EXPECT_STREQ(test, get_str_from_stream(test, stream), expected);
++}
++
++static void kunit_test_assert_print_msg(struct kunit *test)
++{
++	struct string_stream *stream;
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	verify_assert_print_msg(test, stream, "\nTest", "Test");
++	verify_assert_print_msg(test, stream, "\nAbacaba -123 234", "%s %d %u",
++				"Abacaba", -123, 234U);
++	verify_assert_print_msg(test, stream, "", NULL);
++}
++
++/*
++ * Further code contains the tests for different assert format functions.
++ * This helper function accepts the assert format function, executes it and
++ * validates the result string from the stream by checking that all of the
++ * substrings exist in the output.
++ */
++static void validate_assert(assert_format_t format_func, struct kunit *test,
++			    const struct kunit_assert *assert,
++			    struct string_stream *stream, int num_checks, ...)
++{
++	size_t i;
++	va_list checks;
++	char *cur_substr_exp;
++	struct va_format message = { NULL, NULL };
++
++	va_start(checks, num_checks);
++	string_stream_clear(stream);
++	format_func(assert, &message, stream);
++
++	for (i = 0; i < num_checks; i++) {
++		cur_substr_exp = va_arg(checks, char *);
++		ASSERT_TEST_EXPECT_CONTAIN(test, get_str_from_stream(test, stream), cur_substr_exp);
++	}
++}
++
++static void kunit_test_unary_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_unary_assert un_assert = {
++		.assert = assert,
++		.condition = "expr",
++		.expected_true = true,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	validate_assert(kunit_unary_assert_format, test, &un_assert.assert,
++			stream, 2, "true", "is false");
++
++	un_assert.expected_true = false;
++	validate_assert(kunit_unary_assert_format, test, &un_assert.assert,
++			stream, 2, "false", "is true");
++}
++
++static void kunit_test_ptr_not_err_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_ptr_not_err_assert not_err_assert = {
++		.assert = assert,
++		.text = "expr",
++		.value = NULL,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* Value is NULL. The corresponding message should be printed out */
++	validate_assert(kunit_ptr_not_err_assert_format, test,
++			&not_err_assert.assert,
++			stream, 1, "null");
++
++	/* Value is not NULL, but looks like an error pointer. Error should be printed out */
++	not_err_assert.value = (void *)-12;
++	validate_assert(kunit_ptr_not_err_assert_format, test,
++			&not_err_assert.assert, stream, 2,
++			"error", "-12");
++}
++
++static void kunit_test_binary_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_binary_assert_text text = {
++		.left_text = "1 + 2",
++		.operation = "==",
++		.right_text = "2",
++	};
++	const struct kunit_binary_assert binary_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = 3,
++		.right_value = 2,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/*
++	 * Printed values should depend on the input we provide: the left text, right text, left
++	 * value and the right value.
++	 */
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 4, "1 + 2", "2", "3", "==");
++
++	text.right_text = "4 - 2";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 3, "==", "1 + 2", "4 - 2");
++
++	text.left_text = "3";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 4, "3", "4 - 2", "2", "==");
++
++	text.right_text = "2";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 3, "3", "2", "==");
++}
++
++static void kunit_test_binary_ptr_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	char *addr_var_a, *addr_var_b;
++	static const void *var_a = (void *)0xDEADBEEF;
++	static const void *var_b = (void *)0xBADDCAFE;
++	struct kunit_binary_assert_text text = {
++		.left_text = "var_a",
++		.operation = "==",
++		.right_text = "var_b",
++	};
++	struct kunit_binary_ptr_assert binary_ptr_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = var_a,
++		.right_value = var_b,
++	};
++
++	addr_var_a = kunit_kzalloc(test, TEST_PTR_EXPECTED_BUF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, addr_var_a);
++	addr_var_b = kunit_kzalloc(test, TEST_PTR_EXPECTED_BUF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, addr_var_b);
++	/*
++	 * Print the addresses to the buffers first.
++	 * This is necessary as we may have different count of leading zeros in the pointer
++	 * on different architectures.
++	 */
++	snprintf(addr_var_a, TEST_PTR_EXPECTED_BUF_SIZE, "%px", var_a);
++	snprintf(addr_var_b, TEST_PTR_EXPECTED_BUF_SIZE, "%px", var_b);
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++	validate_assert(kunit_binary_ptr_assert_format, test, &binary_ptr_assert.assert,
++			stream, 3, addr_var_a, addr_var_b, "==");
++}
++
++static void kunit_test_binary_str_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	static const char *var_a = "abacaba";
++	static const char *var_b = "kernel";
++	struct kunit_binary_assert_text text = {
++		.left_text = "var_a",
++		.operation = "==",
++		.right_text = "var_b",
++	};
++	struct kunit_binary_str_assert binary_str_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = var_a,
++		.right_value = var_b,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	validate_assert(kunit_binary_str_assert_format, test,
++			&binary_str_assert.assert,
++			stream, 5, "var_a", "var_b", "\"abacaba\"",
++			"\"kernel\"", "==");
++
++	text.left_text = "\"abacaba\"";
++	validate_assert(kunit_binary_str_assert_format, test, &binary_str_assert.assert,
++			stream, 4, "\"abacaba\"", "var_b", "\"kernel\"", "==");
++
++	text.right_text = "\"kernel\"";
++	validate_assert(kunit_binary_str_assert_format, test, &binary_str_assert.assert,
++			stream, 3, "\"abacaba\"", "\"kernel\"", "==");
++}
++
++static const u8 hex_testbuf1[] = { 0x26, 0x74, 0x6b, 0x9c, 0x55,
++				   0x45, 0x9d, 0x47, 0xd6, 0x47,
++				   0x2,  0x89, 0x8c, 0x81, 0x94,
++				   0x12, 0xfe, 0x01 };
++static const u8 hex_testbuf2[] = { 0x26, 0x74, 0x6b, 0x9c, 0x55,
++				   0x45, 0x9d, 0x47, 0x21, 0x47,
++				   0xcd, 0x89, 0x24, 0x50, 0x94,
++				   0x12, 0xba, 0x01 };
++static void kunit_test_assert_hexdump(struct kunit *test)
++{
++	struct string_stream *stream;
++	char *str;
++	size_t i;
++	char buf[HEXDUMP_TEST_BUF_LEN];
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++	/* Check that we are getting output like <xx> for non-matching numbers. */
++	kunit_assert_hexdump(stream, hex_testbuf1, hex_testbuf2, sizeof(hex_testbuf1));
++	str = get_str_from_stream(test, stream);
++	for (i = 0; i < sizeof(hex_testbuf1); i++) {
++		snprintf(buf, HEXDUMP_TEST_BUF_LEN, "<%02x>", hex_testbuf1[i]);
++		if (hex_testbuf1[i] != hex_testbuf2[i])
++			ASSERT_TEST_EXPECT_CONTAIN(test, str, buf);
++	}
++	/* We shouldn't get any <xx> numbers when comparing the buffer with itself. */
++	string_stream_clear(stream);
++	kunit_assert_hexdump(stream, hex_testbuf1, hex_testbuf1, sizeof(hex_testbuf1));
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_NCONTAIN(test, str, "<");
++	ASSERT_TEST_EXPECT_NCONTAIN(test, str, ">");
++}
++
++static void kunit_test_mem_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct string_stream *expected_stream;
++	struct kunit_assert assert = {};
++	static const struct kunit_binary_assert_text text = {
++		.left_text = "hex_testbuf1",
++		.operation = "==",
++		.right_text = "hex_testbuf2",
++	};
++	struct kunit_mem_assert mem_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = NULL,
++		.right_value = hex_testbuf2,
++		.size = sizeof(hex_testbuf1),
++	};
++
++	expected_stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_stream);
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* The left value is NULL */
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 2, "hex_testbuf1", "is not null");
++
++	/* The right value is NULL, the left value is not NULL */
++	mem_assert.left_value = hex_testbuf1;
++	mem_assert.right_value = NULL;
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 2, "hex_testbuf2", "is not null");
++
++	/* Both arguments are not null */
++	mem_assert.left_value = hex_testbuf1;
++	mem_assert.right_value = hex_testbuf2;
++
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 3, "hex_testbuf1", "hex_testbuf2", "==");
++}
++
++struct kunit_case assert_test_cases[] = {
++	KUNIT_CASE(kunit_test_is_literal),
++	KUNIT_CASE(kunit_test_is_str_literal),
++	KUNIT_CASE(kunit_test_assert_prologue),
++	KUNIT_CASE(kunit_test_assert_print_msg),
++	KUNIT_CASE(kunit_test_unary_assert_format),
++	KUNIT_CASE(kunit_test_ptr_not_err_assert_format),
++	KUNIT_CASE(kunit_test_binary_assert_format),
++	KUNIT_CASE(kunit_test_binary_ptr_assert_format),
++	KUNIT_CASE(kunit_test_binary_str_assert_format),
++	KUNIT_CASE(kunit_test_assert_hexdump),
++	KUNIT_CASE(kunit_test_mem_assert_format),
++	{}
++};
++
++struct kunit_suite assert_test_suite = {
++	.name = "kunit-assert",
++	.test_cases = assert_test_cases,
++};
++
++MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
++kunit_test_suites(&assert_test_suite);
+-- 
+2.34.1
 
 
