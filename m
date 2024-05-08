@@ -1,153 +1,356 @@
-Return-Path: <linux-kselftest+bounces-9704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9705-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF608BFF47
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 15:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62CB08BFF7D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 15:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B127B1F29681
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 13:48:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC8A01F2B5F6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2024 13:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D08184FAC;
-	Wed,  8 May 2024 13:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552B279DD4;
+	Wed,  8 May 2024 13:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bPR2FNMY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LIOIDary"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FEA7D095
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 May 2024 13:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B321A2C11;
+	Wed,  8 May 2024 13:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715176027; cv=none; b=HqvoeA5/ofaTIt2o7jDmb/hNZ7itrpwjcPYe2dGjP8Vx7NhD/WA6kfbfE7IG/YcZBnBixpJFRd/3ym+XflBJmLthIlVP6q4D19fgFYDyWkTB2ggKhQu/P0EuqrkTy5o7J8TGg9WnyBvA+TIk3bHLX/VDhgAp3XCezvHn+43KpD0=
+	t=1715176200; cv=none; b=IHITbBpaXt8oXszTDN25izmh/fdT0XbDEBxqq/c5MxvE6DVjq/LgtnJJWAGKlREtIVwN7b/lYA7h/498VSm2+kfftv3vY7csOMxydRtKoh2qjbvg7MVDxcTCVwdo7txHbCRwZhVjJJ6YG3L4BFlALapHtxRgYxP4Q1XKh3Yy064=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715176027; c=relaxed/simple;
-	bh=u6EyzHXd27fFGrN9Et656hCo/08PPyT+hT+CjlkxkTU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ilLRk3tfjWXSZ785bdz7ERh0jzlT32LyB3dEWbS5a5NG/D7UmJMyufz4ZlCm9CZDsgbdYTaXE+Xc1J6xeRbkfFTo6oEQ6F2IJ7YyYCF76NpK6On75+k4W7ahv+iiew2RsLKiMFXdKt4nfAs3zAkQfNbDzKlpYQs/g50tY8gdbVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bPR2FNMY; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2b2738ce656so3654197a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 06:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715176025; x=1715780825; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Cy96MEbs4JLv+XlnJDrNT2CJ2qEQRDaH5Qu53Pf8ZU=;
-        b=bPR2FNMYRrL08LQZsHzX4L6KUGDoby1D7kq9CdVilnTl6CW9lrBNQYoFJsegU0aGHp
-         4Rvak8c4UmtoXc6S3fFjOZBo01YZflQzqFYbXxLIMfFX6eOvhYD8CtmBrq+Mb4rYJAd4
-         2TsYLBRRZ5lpklLD11TRJUBP059D2HhrmxyI4sMyN7bd6vthUJHtxs4RdEeGguR3wo9D
-         30qJITdawJLGFg0swiui7xrCU72XGr5q34hiCJUVBCjHrubNk4EFfWZpBaPVUzsm1Ifx
-         +T4FgDSpNbi6t6XMJh7DSzyQHM216u9cGZYXYgPB8SaOhyO6WycTJJETY3cK0TX2A9N0
-         gIog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715176025; x=1715780825;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Cy96MEbs4JLv+XlnJDrNT2CJ2qEQRDaH5Qu53Pf8ZU=;
-        b=mDkzh/V+EqDagvQOwXc34fVhBYAFWyLN5WKMJBZKAQwwv6BL2UKn+o7gymeBlVY3yi
-         PzOWRL3670qk2ZMq2CpRIFmVoLjjMk5fruYsI31s5Sj03kQxlereeZ63mKoSjeaOlFQj
-         K4+iAcMQSHVmJg0Cb4U93ZCq6k+hnPA7GZYCt6Frgf8u+6DAk/rEkKgnSvWOzwB8NMBE
-         vHs+iaPLNDQ3GsdEo+HAZeoT/PB7Huf7//MYWo1At6JwKJjYusvkmn5UT3iIVPZmpno6
-         axI/dfJAjOgR6feO4D8HcGyz3XmcCnRvES2POPg/qmz3R6g5j+7U3qxhQNwIm0AxNm0P
-         5HRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWviPb3Mdo8Oomidv4I4gc6Ap/xdT78S4mfMcSo4BctuHEa0nlDAe0X/6ys51wzux+txrJfMMNDLM1vc5UEtCRA4FbC/fhuwXNJShRSlVlD
-X-Gm-Message-State: AOJu0YzcuMMuFVbOq+zz1uIHVnMfA0eszxAh7UXSkXBHvhz8RTcr2CRZ
-	z8FATl8YKLrOQOkdwCINtaSLJPmzNKgwhtiLBYU+AfizbvslI0FdFrsvNZHbQTtRw5erbsp2qYJ
-	8Ag==
-X-Google-Smtp-Source: AGHT+IGkEzt3rrLCYEAc2MIkDJ4rSudkNPJV/ZI7YDr6FjDNwR59XbPWzyPuXmQfxq7n/1Jp45z9S3futCA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:128d:b0:2b4:32ae:483e with SMTP id
- 98e67ed59e1d1-2b61638c780mr8658a91.2.1715176024465; Wed, 08 May 2024 06:47:04
- -0700 (PDT)
-Date: Wed, 8 May 2024 06:47:03 -0700
-In-Reply-To: <20240507214254.2787305-1-edliaw@google.com>
+	s=arc-20240116; t=1715176200; c=relaxed/simple;
+	bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A6pFUO7DJ9w9+YI8g4gDlNMblbMoV7aoYQ5+HgQ0C5x95C6uAOqZXoDQJLR2MDPwPS9otpORsfMEWdRpAcT+HhABXvuN9tIvwee2z+MfE3pbrQyp8dG+6NdxZzR9hWUcWHguzMSsr5JPpaODMIhxkIhq+lHr1WeugsIlSNIOGBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LIOIDary; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715176198; x=1746712198;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
+  b=LIOIDarymB4NiIwh9KfyA/C8mImnq/+AXXvi1FTG7APeM++Y2L2AJNfc
+   hNW0O5Ve0jIOxBci3S/N1K82QoiYT1snPcnIHiV/DIZt17znoYSF6CLBG
+   FM/YpYJiQfZbbQOwT42iVvdkAuKmWWWNIVYasc0Smr7WduQUyx9ygaS6R
+   d8rn9u1GMSjJKh7xfQqvpt7pQ+qIvSKW95Zk0vVZAV8aHvKZ6QoXBMgaX
+   PdsHCjfuCWrjw2Fx+jVWzc0VE/jjayHhUW0ciKEXPBXYeHGAYvvCQPmh8
+   qFk+3EqU6RkTcl3D4LDRI7ncg/wHEiF8i6WiMrc4IEeM0eY9ccYYLG6Ki
+   g==;
+X-CSE-ConnectionGUID: pn8JSyZXQImQCgMN6td/Vg==
+X-CSE-MsgGUID: GbP2u5LsRrS8G+52bBi3yA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10906704"
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="10906704"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:49:43 -0700
+X-CSE-ConnectionGUID: YQXKHuBjRF2jRCIHJ8tR9w==
+X-CSE-MsgGUID: C7Lqb68eT8iGRXzNVoD2UA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="28855409"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:49:37 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-pci@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pm@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v5 8/8] selftests/pcie_bwctrl: Create selftests
+Date: Wed,  8 May 2024 16:47:44 +0300
+Message-Id: <20240508134744.52134-9-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240508134744.52134-1-ilpo.jarvinen@linux.intel.com>
+References: <20240508134744.52134-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240507214254.2787305-1-edliaw@google.com>
-Message-ID: <ZjuA3aY_iHkjP7bQ@google.com>
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
-From: Sean Christopherson <seanjc@google.com>
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Christian Brauner <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, "=?utf-8?B?QW5kcsOp?= Almeida" <andrealmeid@igalia.com>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	David Hildenbrand <david@redhat.com>, "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Seth Forshee <sforshee@kernel.org>, 
-	Bongsu Jeon <bongsu.jeon@samsung.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"Andreas =?utf-8?Q?F=C3=A4rber?=" <afaerber@suse.de>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Fenghua Yu <fenghua.yu@intel.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mm@kvack.org, linux-input@vger.kernel.org, iommu@lists.linux.dev, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-actions@lists.infradead.org, mptcp@lists.linux.dev, 
-	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 07, 2024, Edward Liaw wrote:
-> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> asprintf into kselftest_harness.h, which is a GNU extension and needs
-> _GNU_SOURCE to either be defined prior to including headers or with the
-> -D_GNU_SOURCE flag passed to the compiler.
-> 
-> v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-edliaw@google.com/
-> v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-> location.  Remove #define _GNU_SOURCE from source code to resolve
-> redefinition warnings.
-> 
-> Edward Liaw (5):
->   selftests: Compile kselftest headers with -D_GNU_SOURCE
->   selftests/sgx: Include KHDR_INCLUDES in Makefile
->   selftests: Include KHDR_INCLUDES in Makefile
->   selftests: Drop define _GNU_SOURCE
->   selftests: Drop duplicate -D_GNU_SOURCE
+Create selftests for PCIe BW control through the PCIe cooling device
+sysfs interface.
 
-Can you rebase this on top of linux-next?  I have a conflicting fix[*] for the
-KVM selftests queued for 6.10, and I would prefer not to drop that commit at
-this stage as it would require a rebase of a pile of other commits.
+First, the BW control selftest finds the PCIe Port to test with. By
+default, the PCIe Port with the highest Link Speed is selected but
+another PCIe Port can be provided with -d parameter.
 
-And I doubt KVM is the only subsystem that has a targeted fix for the _GNU_SOURCE
-mess.
+The actual test steps the cur_state of the cooling device one-by-one
+from max_state to what the cur_state was initially. The speed change
+is confirmed by observing the current_link_speed for the corresponding
+PCIe Port.
 
-If we want/need to get a fix into 6.9, then IMO we should just revert 809216233555
-("selftests/harness: remove use of LINE_MAX"), as that came in quite late in the
-6.9 cycle, and I don't think it's feasible to be 100% confident that globally
-defining _GNU_SOURCE works for all selftests, i.e. we really should have a full
-cycle for folks to test.
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+ .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
+ .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
+ 5 files changed, 193 insertions(+)
+ create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
 
-[*] https://github.com/kvm-x86/linux/commit/730cfa45b5f4
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3a94ae81b13f..5a3b69515256 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17106,6 +17106,7 @@ S:	Supported
+ F:	drivers/pci/pcie/bwctrl.c
+ F:	drivers/thermal/pcie_cooling.c
+ F:	include/linux/pci-bwctrl.h
++F:	tools/testing/selftests/pcie_bwctrl/
+ 
+ PCIE DRIVER FOR AMAZON ANNAPURNA LABS
+ M:	Jonathan Chocron <jonnyc@amazon.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index e1504833654d..ac0bc8af4123 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -65,6 +65,7 @@ TARGETS += net/openvswitch
+ TARGETS += net/tcp_ao
+ TARGETS += netfilter
+ TARGETS += nsfs
++TARGETS += pcie_bwctrl
+ TARGETS += perf_events
+ TARGETS += pidfd
+ TARGETS += pid_namespace
+diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
+new file mode 100644
+index 000000000000..3e84e26341d1
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/Makefile
+@@ -0,0 +1,2 @@
++TEST_PROGS = set_pcie_cooling_state.sh
++include ../lib.mk
+diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+new file mode 100755
+index 000000000000..9df606552af3
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+@@ -0,0 +1,122 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++SYSFS=
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++retval=0
++skipmsg="skip all tests:"
++
++PCIEPORTTYPE="PCIe_Port_Link_Speed"
++
++prerequisite()
++{
++	local ports
++
++	if [ $UID != 0 ]; then
++		echo $skipmsg must be run as root >&2
++		exit $ksft_skip
++	fi
++
++	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
++
++	if [ ! -d "$SYSFS" ]; then
++		echo $skipmsg sysfs is not mounted >&2
++		exit $ksft_skip
++	fi
++
++	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
++		echo $skipmsg thermal cooling devices missing >&2
++		exit $ksft_skip
++	fi
++
++	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
++	if [ $ports -eq 0 ]; then
++		echo $skipmsg pcie cooling devices missing >&2
++		exit $ksft_skip
++	fi
++}
++
++testport=
++find_pcie_port()
++{
++	local patt="$1"
++	local pcieports
++	local max
++	local cur
++	local delta
++	local bestdelta=-1
++
++	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
++	if [ -z "$pcieports" ]; then
++		return
++	fi
++	pcieports=${pcieports//\/type/}
++	# Find the port with the highest PCIe Link Speed
++	for port in $pcieports; do
++		max=`cat $port/max_state`
++		cur=`cat $port/cur_state`
++		delta=$((max-cur))
++		if [ $delta -gt $bestdelta ]; then
++			testport="$port"
++			bestdelta=$delta
++		fi
++	done
++}
++
++sysfspcidev=
++find_sysfs_pci_dev()
++{
++	local typefile="$1/type"
++	local pcidir
++
++	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
++
++	if [ -r "$pcidir/current_link_speed" ]; then
++		sysfspcidev="$pcidir/current_link_speed"
++	fi
++}
++
++usage()
++{
++	echo "Usage $0 [ -d dev ]"
++	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
++}
++
++pattern="$PCIEPORTTYPE"
++parse_arguments()
++{
++	while getopts d:h opt; do
++		case $opt in
++			h)
++				usage "$0"
++				exit 0
++				;;
++			d)
++				pattern="$PCIEPORTTYPE_$OPTARG"
++				;;
++			*)
++				usage "$0"
++				exit 0
++				;;
++		esac
++	done
++}
++
++parse_arguments "$@"
++prerequisite
++find_pcie_port "$pattern"
++if [ -z "$testport" ]; then
++	echo $skipmsg "pcie cooling device not found from sysfs" >&2
++	exit $ksft_skip
++fi
++find_sysfs_pci_dev "$testport"
++if [ -z "$sysfspcidev" ]; then
++	echo $skipmsg "PCIe port device not found from sysfs" >&2
++	exit $ksft_skip
++fi
++
++./set_pcie_speed.sh "$testport" "$sysfspcidev"
++retval=$?
++
++exit $retval
+diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+new file mode 100755
+index 000000000000..584596949312
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+@@ -0,0 +1,67 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++set -e
++
++TESTNAME=set_pcie_speed
++
++declare -a PCIELINKSPEED=(
++	"2.5 GT/s PCIe"
++	"5.0 GT/s PCIe"
++	"8.0 GT/s PCIe"
++	"16.0 GT/s PCIe"
++	"32.0 GT/s PCIe"
++	"64.0 GT/s PCIe"
++)
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++retval=0
++
++coolingdev="$1"
++statefile="$coolingdev/cur_state"
++maxfile="$coolingdev/max_state"
++linkspeedfile="$2"
++
++oldstate=`cat $statefile`
++maxstate=`cat $maxfile`
++
++set_state()
++{
++	local state=$1
++	local linkspeed
++	local expected_linkspeed
++
++	echo $state > $statefile
++
++	sleep 1
++
++	linkspeed="`cat $linkspeedfile`"
++	expected_linkspeed=$((maxstate-state))
++	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
++	if [ ! "${expected_str}" = "${linkspeed}" ]; then
++		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
++		retval=1
++	fi
++}
++
++cleanup_skip ()
++{
++	set_state $oldstate
++	exit $ksft_skip
++}
++
++trap cleanup_skip EXIT
++
++echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
++for i in $(seq $maxstate -1 $oldstate); do
++	set_state "$i"
++done
++
++trap EXIT
++if [ $retval -eq 0 ]; then
++	echo "$TESTNAME [PASS]"
++else
++	echo "$TESTNAME [FAIL]"
++fi
++exit $retval
+-- 
+2.39.2
+
 
