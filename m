@@ -1,336 +1,272 @@
-Return-Path: <linux-kselftest+bounces-9751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 742768C086E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 02:29:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E7A38C087C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 02:33:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA6FEB21272
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 00:29:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 813AC1C2101D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 00:33:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A934431;
-	Thu,  9 May 2024 00:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8982BD531;
+	Thu,  9 May 2024 00:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M1rhmnQ5"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="b9VmarQQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A513FC132
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 00:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A5110A0C
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 00:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715214579; cv=none; b=NYW6ESwYtVc4ovVTr0ASyL1GzDyd7eGEnQKMs0xeGDQ+qCP4X8g6v7WOf3z8SANnZs6aGWOoNVbpk/SKJ8EsAW2S84VInV5Q52nBzB83HW4Fr2a0w9BrtqgU0xh2/wDlQkaKUAXu1XKpFAY2SnFbDffivZOnxuM3C6DBqOajMok=
+	t=1715214804; cv=none; b=c6pHBvbTXuugNRxD643wqzUUH5IQ3YQ15qPrbj07KGci8Qr2F+5UFf1TgH52JyaBrEZkGWfT/g5mDl7owifoae6t81bQWXSpynyMBZ7hAyKTMhIQZE4puy6wEVGznVogcRTsUFO8uywQ4kFyR8Yc3Vf0qbdZvfvSWil23f+Ne7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715214579; c=relaxed/simple;
-	bh=YFEOyn8HhTR+KZ3cmP9SJDzMJP8/0gmTLnbxrYrAyiM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uy/S2WwPX4I9rSm5Hmu1yW5/WotiSn/hzLDZw1Q/SN5PIpk6yXhuUMgxN/luSVMyfzL5MSKBCFxZBVlBUd/bPDZg0YJoMLEOxEPz/5m3bzPS2LCrm9el54WOCoNF+EZlG0tS9Kd1JLSZJNgfrgX/qNZWWw02PwLu0hHqmxJBl8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M1rhmnQ5; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso6286a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 17:29:36 -0700 (PDT)
+	s=arc-20240116; t=1715214804; c=relaxed/simple;
+	bh=WG4czILDt53siornOU9hqky9v48XQnah+U0TvgVsuW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D5HWoOvs4XjsFn4FLjLWg1j5ly3aHCZbTUzdXMG9WBjOfj60e5mPz6ksvz+7rR0sFz3DBBlKPo10anJFCZWrg0FTwIyoX6UC5gdGzMixHjAabK537Lp+qZedYJVQqCTziJWr8tV5CvMctumf2dnpxgL3G4ciIie0FLeRWA/2aAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=b9VmarQQ; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-6333b2551ebso271039a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 17:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715214575; x=1715819375; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ze6we/9zl1hwpr5TTVXS+9EQi+iUJaNZFz5eMfIu64=;
-        b=M1rhmnQ5tPiYNgd3tYVN99l88xQJCR8QJ093SQ2ZdqpvlnparBv0W5R3gw0uiZoJIW
-         OpS/QL8eJjBFSCFRg+WtS4Mr4e8sgr3XF6Fj9sM8TRcogvaHaHeSvC8uTmpzeIK7nx/P
-         U7MG5p/lfaoyftQszloEFVlHKD53T+lSbG8Rm2k1ovzoPmXkANijqZHgFbeGAIK7Icii
-         K6YOYusn0GcPwD+KKY5aBL+oPTwXT5B1TJ5xzq3oXzHkMgTwfKWDpnhK1YYst/teky9P
-         eEY/jKzRKxHTRMapxx/C+MzpnWsiVAkjn6zSY9i9NeLPbdp5Hr1PIkGY86y0jHRXFr+5
-         Pg8Q==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715214802; x=1715819602; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryuqORYcPz0+pc/IX1bINOqGn4QcbQeAD0aN/YcW+a0=;
+        b=b9VmarQQmGnZVwlYYCKI1dKEuvGy6FeHSO5htSh5d9qy7KlDT0YIsLFCAidN0xFEV0
+         AmaiMfbxBsPhFMG7lJRwPtKGIriYreDkLdf0eLAJZjV4JfylpYcuYvI9wQZpCkWqkID3
+         Kn/jwuYWE0gHBXXhn90mfmkrdf6kDiW44fyWel0vuH7Rsziv5omqhKnAyOP/tCAQbQyS
+         AZRzQcfTj1qnZtcc96LGO8OMcxm0bU2Tgzb5iGEVL8cTWWFmSnhHBy9USAsCLMEvAmk+
+         0wYZCbhE6QGS/WXtGgQYDTghTNGxLDHKIIWMCq1OUzrFJfX5iXRAge7zav/1HV7y6/Qv
+         ozHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715214575; x=1715819375;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ze6we/9zl1hwpr5TTVXS+9EQi+iUJaNZFz5eMfIu64=;
-        b=mEY+R32vRtB91KiRENNb1jxrfxQHkMO+iut1iWC7qtwswPnGgKKt1c8+6yBGRkdAwC
-         PhBtVCj42L92Mid2duB1v+gW/iJQkaaRSoLHU905VwjwGGNo/ObSlKh/roIxKOzntbwG
-         X/tOtb0gP0o/maOvej8MRvvDfEmBxcFlFschiqeVNCw1thV5JPvlvgpicD9NzQb0lrYG
-         uKaVFbeZpZhWObTcevDc1EDVHAgtQc0lqA6YgtA75UT6s/tlbZJP+cGVylyf5X9zx3bZ
-         A1f3fFWvt1Wc+RtNGI+6cDPPqviMQno5V6BtYbREBLTDpHNcPowWggf9JNUufghesILB
-         BKqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWK8wAM9bVQ4pzOOVcFzdlsmJE5iWI+LzjnQbLsTP2/YytaPRoVGOYyagjYtJ5EmNpFRBAyprq8GK4h6Ad8glUlGsa4RoR4nB8IvEYHstP5
-X-Gm-Message-State: AOJu0YyiX7HqxJLDHFfFgT/kIDHsPCfMspeOxg0uq3zphKgFqol+h5GH
-	5depkg1+dXW82ACG9NVijvkuir6QoSzW3t6rh97Vx27p0SfbIdmXy+KAsDCKaaXZTAefzSdwXAj
-	sWsMJhbu9AIx4fQpNaqxjOa+cKc/aRGzc9lHu
-X-Google-Smtp-Source: AGHT+IEpRBxjqO7YXZEC9B8FKVtXSFN03eOTZMizwoUq2jNrJCvIwReN+ats511GKy8ts5rRqhmgn49fpwdVOB7Y6R8=
-X-Received: by 2002:a05:6402:742:b0:572:a154:7081 with SMTP id
- 4fb4d7f45d1cf-5733434b416mr85834a12.4.1715214574664; Wed, 08 May 2024
- 17:29:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715214802; x=1715819602;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ryuqORYcPz0+pc/IX1bINOqGn4QcbQeAD0aN/YcW+a0=;
+        b=htVxRLYtVlP9BrX4AIu5PeW5BtQIJuUsafvbxWMosUOTI3RYGX8FElLKTC1EMQYiju
+         i/l5Cd2vk3CA1vZd4tnHNeYk8Bpo0ISeSLa3t8Rg1jWcUVZRFJnZP8tNeGRNrA+V9aqM
+         CAs7QBVUZ9uufucsg6uH2o2/zLSE0OXsSzVl10Xx9L0kS8C28mc1DeVtFmPHTRNZYQxt
+         SWP5mbxLo2ES1sdRzej/sXQh6nCuS5ItcpyNiN9H1MOG6bIcLJKU8Al5UJHnXXyVRxEK
+         5YZHy59zmSRhsNkyYV2Dy40KfUN5jrOhb3Mg1xXl9D60VmCZcUTOm52RoK6QUF1g/lZV
+         fc4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUIh1jW0QlrsIbqZkOoi3cQJJgxefPzeUuO4z7FzP9wQIXzFK/0R2cuZ6hcJzGNvhGhLEP2PEqjjPZbCpOawZxXSN7iqedSV6l8xXFNkX18
+X-Gm-Message-State: AOJu0YzKZWglxnI5kfDanSRP7UO2vOPRy+0oSHTjRh0C5VTdplw9f1Ln
+	W5WK3KLIvCiH9qIgTPwjQLSIwPhqb6LIforBnwvIek0cJdFOX2beGml22dIQWB8=
+X-Google-Smtp-Source: AGHT+IHdropjLT7GTh0X7WVpcuGcFXvciZz0PPopuVK7WREz89rBGsBlLrTpoRWlSn9JTjqGGz8pew==
+X-Received: by 2002:a17:90a:d50b:b0:2a5:be1a:6831 with SMTP id 98e67ed59e1d1-2b65fe213cfmr1805609a91.19.1715214801866;
+        Wed, 08 May 2024 17:33:21 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:4144:6911:574f:fec1])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b67126ac21sm169379a91.30.2024.05.08.17.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 17:33:21 -0700 (PDT)
+Date: Wed, 8 May 2024 17:33:15 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
+	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
+	keescook@chromium.org, ajones@ventanamicro.com,
+	conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+	jerry.shih@sifive.com, hankuan.chen@sifive.com,
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+	apatel@ventanamicro.com, mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com, sameo@rivosinc.com,
+	shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 00/29] riscv control-flow integrity for usermode
+Message-ID: <ZjwZy7bvR9h/+P3e@ghost>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507214254.2787305-1-edliaw@google.com> <20240507214254.2787305-4-edliaw@google.com>
- <ec8ab737-a841-4cd5-8ec1-e0a777744262@nvidia.com>
-In-Reply-To: <ec8ab737-a841-4cd5-8ec1-e0a777744262@nvidia.com>
-From: Edward Liaw <edliaw@google.com>
-Date: Wed, 8 May 2024 17:29:07 -0700
-Message-ID: <CAG4es9XPLhHhH-Hfm3_m5zLLtiB1zme8pAazMhErMpHqJcAMmw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] selftests: Include KHDR_INCLUDES in Makefile
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Christian Brauner <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Seth Forshee <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Fenghua Yu <fenghua.yu@intel.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mm@kvack.org, linux-input@vger.kernel.org, iommu@lists.linux.dev, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-actions@lists.infradead.org, mptcp@lists.linux.dev, 
-	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403234054.2020347-1-debug@rivosinc.com>
 
-On Wed, May 8, 2024 at 2:41=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
-rote:
->
-> On 5/7/24 2:38 PM, Edward Liaw wrote:
-> > Add KHDR_INCLUDES to CFLAGS to pull in the kselftest harness
-> > dependencies (-D_GNU_SOURCE).
-> >
-> > Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
-> > Signed-off-by: Edward Liaw <edliaw@google.com>
-> > ---
-> >   tools/testing/selftests/alsa/Makefile                  | 2 +-
-> >   tools/testing/selftests/arm64/signal/Makefile          | 2 +-
-> >   tools/testing/selftests/exec/Makefile                  | 2 +-
-> >   tools/testing/selftests/filesystems/overlayfs/Makefile | 2 +-
-> >   tools/testing/selftests/hid/Makefile                   | 2 +-
-> >   tools/testing/selftests/nci/Makefile                   | 2 +-
-> >   tools/testing/selftests/prctl/Makefile                 | 2 ++
-> >   tools/testing/selftests/proc/Makefile                  | 2 +-
-> >   tools/testing/selftests/riscv/mm/Makefile              | 2 +-
-> >   tools/testing/selftests/rtc/Makefile                   | 2 +-
-> >   tools/testing/selftests/tmpfs/Makefile                 | 2 +-
-> >   11 files changed, 12 insertions(+), 10 deletions(-)
->
-> Hi Edward,
->
-> Seeing as how these all include lib.mk, and all use CFLAGS, is there
-> any reason not to simply fix this in lib.mk instead? Like this:
->
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib=
-.mk
-> index 7fa4a96e26ed..df72610e0d2b 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -170,6 +170,8 @@ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
->   CFLAGS +=3D $(USERCFLAGS)
->   LDFLAGS +=3D $(USERLDFLAGS)
->
-> +CFLAGS +=3D $(KHDR_INCLUDES)
-> +
->   # When make O=3D with kselftest target from main level
->   # the following aren't defined.
->   #
->
+On Wed, Apr 03, 2024 at 04:34:48PM -0700, Deepak Gupta wrote:
+> Sending out v3 for cpu assisted riscv user mode control flow integrity.
+> 
+> v2 [9] was sent a week ago for this riscv usermode control flow integrity
+> enabling. RFC patchset was (v1) early this year (January) [7].
+> 
+> changes in v3
+> --------------
+> envcfg:
+> logic to pick up base envcfg had a bug where `ENVCFG_CBZE` could have been
+> picked on per task basis, even though CPU didn't implement it. Fixed in
+> this series.
+> 
+> dt-bindings:
+> As suggested, split into separate commit. fixed the messaging that spec is
+> in public review
+> 
+> arch_is_shadow_stack change:
+> arch_is_shadow_stack changed to vma_is_shadow_stack
+> 
+> hwprobe:
+> zicfiss / zicfilp if present will get enumerated in hwprobe
+> 
+> selftests:
+> As suggested, added object and binary filenames to .gitignore
+> Selftest binary anyways need to be compiled with cfi enabled compiler which
+> will make sure that landing pad and shadow stack are enabled. Thus removed
+> separate enable/disable tests. Cleaned up tests a bit.
+> 
+> changes in v2
+> ---------------
+> As part of testing effort, compiled a rootfs with shadow stack and landing
+> pad enabled (libraries and binaries) and booted to shell. As part of long
+> running tests, I have been able to run some spec 2006 benchmarks [8] (here
+> link is provided only for list of benchmarks that were tested for long
+> running tests, excel sheet provided here actually is for some static stats
+> like code size growth on spec binaries). Thus converting from RFC to
+> regular patchset.
+> 
+> Securing control-flow integrity for usermode requires following
+> 
+>     - Securing forward control flow : All callsites must reach
+>       reach a target that they actually intend to reach.
+> 
+>     - Securing backward control flow : All function returns must
+>       return to location where they were called from.
+> 
+> This patch series use riscv cpu extension `zicfilp` [2] to secure forward
+> control flow and `zicfiss` [2] to secure backward control flow. `zicfilp`
+> enforces that all indirect calls or jmps must land on a landing pad instr
+> and label embedded in landing pad instr must match a value programmed in
+> `x7` register (at callsite via compiler). `zicfiss` introduces shadow stack
+> which can only be writeable via shadow stack instructions (sspush and
+> ssamoswap) and thus can't be tampered with via inadvertent stores. More
+> details about extension can be read from [2] and there are details in
+> documentation as well (in this patch series).
+> 
+> Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+> integrity for user mode programs can be compiled in the kernel.
+> 
+> Enabling of control flow integrity for user programs is left to user runtime
+> (specifically expected from dynamic loader). There has been a lot of earlier
+> discussion on the enabling topic around x86 shadow stack enabling [3, 4, 5] and
+> overall consensus had been to let dynamic loader (or usermode) to decide for
+> enabling the feature.
+> 
+> This patch series introduces arch agnostic `prctls` to enable shadow stack
+> and indirect branch tracking. And implements them on riscv. arm64 is expected
+> to implement shadow stack part of these arch agnostic `prctls` [6]
+> 
+> Changes since last time
+> ***********************
+> 
+> Spec changes
+> ------------
+> - Forward cfi spec has become much simpler. `lpad` instruction is pseudo for
+>   `auipc rd, <20bit_imm>`. `lpad` checks x7 against 20bit embedded in instr.
+>   Thus label width is 20bit.
+> 
+> - Shadow stack management instructions are reduced to
+>     sspush - to push x1/x5 on shadow stack
+>     sspopchk - pops from shadow stack and comapres with x1/x5.
+>     ssamoswap - atomically swap value on shadow stack.
+>     rdssp - reads current shadow stack pointer
+> 
+> - Shadow stack accesses on readonly memory always raise AMO/store page fault.
+>   `sspopchk` is load but if underlying page is readonly, it'll raise a store
+>   page fault. It simplifies hardware and kernel for COW handling for shadow
+>   stack pages.
+> 
+> - riscv defines a new exception type `software check exception` and control flow
+>   violations raise software check exception.
+> 
+> - enabling controls for shadow stack and landing are in xenvcfg CSR and controls
+>   lower privilege mode enabling. As an example senvcfg controls enabling for U and
+>   menvcfg controls enabling for S mode.
+> 
+> core mm shadow stack enabling
+> -----------------------------
+> Shadow stack for x86 usermode are now in mainline and thus this patch
+> series builds on top of that for arch-agnostic mm related changes. Big
+> thanks and shout out to Rick Edgecombe for that.
+> 
+> selftests
+> ---------
+> Created some minimal selftests to test the patch series.
+> 
+> 
+> [1] - https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+> [2] - https://github.com/riscv/riscv-cfi
+> [3] - https://lore.kernel.org/lkml/ZWHcBq0bJ+15eeKs@finisterre.sirena.org.uk/T/#mb121cd8b33d564e64234595a0ec52211479cf474
+> [4] - https://lore.kernel.org/all/20220130211838.8382-1-rick.p.edgecombe@intel.com/
+> [5] - https://lore.kernel.org/lkml/CAHk-=wgP5mk3poVeejw16Asbid0ghDt4okHnWaWKLBkRhQntRA@mail.gmail.com/
+> [6] - https://lore.kernel.org/linux-mm/20231122-arm64-gcs-v7-2-201c483bd775@kernel.org/
+> [7] - https://lore.kernel.org/lkml/20240125062739.1339782-1-debug@rivosinc.com/
+> [8] - https://docs.google.com/spreadsheets/d/1_cHGH4ctNVvFRiS7hW9dEGKtXLAJ3aX4Z_iTSa3Tw2U/edit#gid=0
+> [9] - https://lore.kernel.org/lkml/20240329044459.3990638-1-debug@rivosinc.com/
+> 
 
-Or how about just adding -D_GNU_SOURCE to CFLAGS then?
+This is a note for people wanting to test this series.
 
+1. Need a toolchain that has CFI support
 
+$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
+$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
+$ make -j$(nproc)
 
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
->
-> >
-> > diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/self=
-tests/alsa/Makefile
-> > index 5af9ba8a4645..9a0ef194522c 100644
-> > --- a/tools/testing/selftests/alsa/Makefile
-> > +++ b/tools/testing/selftests/alsa/Makefile
-> > @@ -6,7 +6,7 @@ LDLIBS +=3D $(shell pkg-config --libs alsa)
-> >   ifeq ($(LDLIBS),)
-> >   LDLIBS +=3D -lasound
-> >   endif
-> > -CFLAGS +=3D -L$(OUTPUT) -Wl,-rpath=3D./
-> > +CFLAGS +=3D $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=3D./
-> >
-> >   LDLIBS+=3D-lpthread
-> >
-> > diff --git a/tools/testing/selftests/arm64/signal/Makefile b/tools/test=
-ing/selftests/arm64/signal/Makefile
-> > index 8f5febaf1a9a..ae682ade615d 100644
-> > --- a/tools/testing/selftests/arm64/signal/Makefile
-> > +++ b/tools/testing/selftests/arm64/signal/Makefile
-> > @@ -2,7 +2,7 @@
-> >   # Copyright (C) 2019 ARM Limited
-> >
-> >   # Additional include paths needed by kselftest.h and local headers
-> > -CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
-> > +CFLAGS +=3D $(KHDR_INCLUDES) -std=3Dgnu99 -I.
-> >
-> >   SRCS :=3D $(filter-out testcases/testcases.c,$(wildcard testcases/*.c=
-))
-> >   PROGS :=3D $(patsubst %.c,%,$(SRCS))
-> > diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/self=
-tests/exec/Makefile
-> > index fb4472ddffd8..15e78ec7c55e 100644
-> > --- a/tools/testing/selftests/exec/Makefile
-> > +++ b/tools/testing/selftests/exec/Makefile
-> > @@ -1,7 +1,7 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> >   CFLAGS =3D -Wall
-> >   CFLAGS +=3D -Wno-nonnull
-> > -CFLAGS +=3D -D_GNU_SOURCE
-> > +CFLAGS +=3D $(KHDR_INCLUDES)
-> >
-> >   TEST_PROGS :=3D binfmt_script.py
-> >   TEST_GEN_PROGS :=3D execveat load_address_4096 load_address_2097152 l=
-oad_address_16777216 non-regular
-> > diff --git a/tools/testing/selftests/filesystems/overlayfs/Makefile b/t=
-ools/testing/selftests/filesystems/overlayfs/Makefile
-> > index 56b2b48a765b..6c29c963c7a8 100644
-> > --- a/tools/testing/selftests/filesystems/overlayfs/Makefile
-> > +++ b/tools/testing/selftests/filesystems/overlayfs/Makefile
-> > @@ -2,6 +2,6 @@
-> >
-> >   TEST_GEN_PROGS :=3D dev_in_maps
-> >
-> > -CFLAGS :=3D -Wall -Werror
-> > +CFLAGS :=3D -Wall -Werror $(KHDR_INCLUDES)
-> >
-> >   include ../../lib.mk
-> > diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selft=
-ests/hid/Makefile
-> > index 2b5ea18bde38..0661b34488ef 100644
-> > --- a/tools/testing/selftests/hid/Makefile
-> > +++ b/tools/testing/selftests/hid/Makefile
-> > @@ -21,7 +21,7 @@ CXX ?=3D $(CROSS_COMPILE)g++
-> >
-> >   HOSTPKG_CONFIG :=3D pkg-config
-> >
-> > -CFLAGS +=3D -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
-> > +CFLAGS +=3D -g -O0 -rdynamic -Wall -Werror $(KHDR_INCLUDES) -I$(OUTPUT=
-)
-> >   CFLAGS +=3D -I$(OUTPUT)/tools/include
-> >
-> >   LDLIBS +=3D -lelf -lz -lrt -lpthread
-> > diff --git a/tools/testing/selftests/nci/Makefile b/tools/testing/selft=
-ests/nci/Makefile
-> > index 47669a1d6a59..bbc5b8ec3b17 100644
-> > --- a/tools/testing/selftests/nci/Makefile
-> > +++ b/tools/testing/selftests/nci/Makefile
-> > @@ -1,5 +1,5 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> > -CFLAGS +=3D -Wl,-no-as-needed -Wall
-> > +CFLAGS +=3D -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-> >   LDFLAGS +=3D -lpthread
-> >
-> >   TEST_GEN_PROGS :=3D nci_dev
-> > diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/sel=
-ftests/prctl/Makefile
-> > index 01dc90fbb509..1a0aefec9d6f 100644
-> > --- a/tools/testing/selftests/prctl/Makefile
-> > +++ b/tools/testing/selftests/prctl/Makefile
-> > @@ -6,6 +6,8 @@ ARCH ?=3D $(shell echo $(uname_M) | sed -e s/i.86/x86/ =
--e s/x86_64/x86/)
-> >   ifeq ($(ARCH),x86)
-> >   TEST_PROGS :=3D disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-st=
-ress-test \
-> >               disable-tsc-test set-anon-vma-name-test set-process-name
-> > +
-> > +CFLAGS +=3D $(KHDR_INCLUDES)
-> >   all: $(TEST_PROGS)
-> >
-> >   include ../lib.mk
-> > diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/self=
-tests/proc/Makefile
-> > index cd95369254c0..9596014c10a0 100644
-> > --- a/tools/testing/selftests/proc/Makefile
-> > +++ b/tools/testing/selftests/proc/Makefile
-> > @@ -1,6 +1,6 @@
-> >   # SPDX-License-Identifier: GPL-2.0-only
-> >   CFLAGS +=3D -Wall -O2 -Wno-unused-function
-> > -CFLAGS +=3D -D_GNU_SOURCE
-> > +CFLAGS +=3D $(KHDR_INCLUDES)
-> >   LDFLAGS +=3D -pthread
-> >
-> >   TEST_GEN_PROGS :=3D
-> > diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/=
-selftests/riscv/mm/Makefile
-> > index c333263f2b27..715a21241113 100644
-> > --- a/tools/testing/selftests/riscv/mm/Makefile
-> > +++ b/tools/testing/selftests/riscv/mm/Makefile
-> > @@ -3,7 +3,7 @@
-> >   # Originally tools/testing/arm64/abi/Makefile
-> >
-> >   # Additional include paths needed by kselftest.h and local headers
-> > -CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
-> > +CFLAGS +=3D $(KHDR_INCLUDES) -std=3Dgnu99 -I.
-> >
-> >   TEST_GEN_FILES :=3D mmap_default mmap_bottomup
-> >
-> > diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selft=
-ests/rtc/Makefile
-> > index 55198ecc04db..654f9d58da3c 100644
-> > --- a/tools/testing/selftests/rtc/Makefile
-> > +++ b/tools/testing/selftests/rtc/Makefile
-> > @@ -1,5 +1,5 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> > -CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall
-> > +CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-> >   LDLIBS +=3D -lrt -lpthread -lm
-> >
-> >   TEST_GEN_PROGS =3D rtctest
-> > diff --git a/tools/testing/selftests/tmpfs/Makefile b/tools/testing/sel=
-ftests/tmpfs/Makefile
-> > index aa11ccc92e5b..bcdc1bb6d2e6 100644
-> > --- a/tools/testing/selftests/tmpfs/Makefile
-> > +++ b/tools/testing/selftests/tmpfs/Makefile
-> > @@ -1,6 +1,6 @@
-> >   # SPDX-License-Identifier: GPL-2.0-only
-> >   CFLAGS +=3D -Wall -O2
-> > -CFLAGS +=3D -D_GNU_SOURCE
-> > +CFLAGS +=3D $(KHDR_INCLUDES)
-> >
-> >   TEST_GEN_PROGS :=3D
-> >   TEST_GEN_PROGS +=3D bug-link-o-tmpfile
->
->
+2. QEMU
+
+$ git clone git@github.com:deepak0414/qemu.git -b zicfilp_zicfiss_mar24_spec_v8.1.1
+$ cd qemu
+$ mkdir build
+$ cd build
+$ ../configure --target-list=riscv64-softmmu
+$ make -j$(nproc)
+
+3. OpenSBI
+
+$ git clone git@github.com:deepak0414/opensbi.git -b cfi_spec_split_opensbi
+$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
+
+4. Linux
+
+Running defconfig is fine. CFI is enabled by default if the toolchain
+supports it.
+
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
+
+5. Running
+
+Modify your qemu command to have:
+-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
+-cpu rv64,zicfilp=true,zicfiss=true
+
+- Charlie
+
 
