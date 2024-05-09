@@ -1,197 +1,336 @@
-Return-Path: <linux-kselftest+bounces-9750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB498C0849
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 02:11:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 742768C086E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 02:29:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE3861F21F1B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 00:11:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA6FEB21272
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 00:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B2F1161;
-	Thu,  9 May 2024 00:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A934431;
+	Thu,  9 May 2024 00:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="quGCd96A"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M1rhmnQ5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B4E4A2D
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 00:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A513FC132
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 00:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715213453; cv=none; b=oZmE3h/kGwaAckeS4aUMJ8R5EVhP3fNSketDP/9CKxfJPZkA7YqhlDfUv5fqg0N+qUbNqxrZKM8eFi7WwQ4W7MvNh45Kr5E9jHzK8bpxaU+uKyq0OHtdK7/Sr+RBY5dz3h6V7iq+fW5D8iuMlSo9qI6IyiZYhOUt+JAX8J6Gaxw=
+	t=1715214579; cv=none; b=NYW6ESwYtVc4ovVTr0ASyL1GzDyd7eGEnQKMs0xeGDQ+qCP4X8g6v7WOf3z8SANnZs6aGWOoNVbpk/SKJ8EsAW2S84VInV5Q52nBzB83HW4Fr2a0w9BrtqgU0xh2/wDlQkaKUAXu1XKpFAY2SnFbDffivZOnxuM3C6DBqOajMok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715213453; c=relaxed/simple;
-	bh=qBebSFGe23qXNHpRvKnwFwAJnPuYEpMUnskY0mHPUrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FuP77E3H9QGKrS543IyspKYfkwr+kjQXQg4rIO9M8RSYmRBWRhh5Fb0RO3WKisYrMkLKXI0Wf4foW/yp3LcJ4tz/6xhg5CmPQE9pFvu/hfCt3wSa+LsNXVIzX+GQr9E0mr+j5uV5iWYcUV5xBObCXEQdnbVB4cR0VeB0Xmj7sD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=quGCd96A; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5b21e393debso185896eaf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 17:10:51 -0700 (PDT)
+	s=arc-20240116; t=1715214579; c=relaxed/simple;
+	bh=YFEOyn8HhTR+KZ3cmP9SJDzMJP8/0gmTLnbxrYrAyiM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uy/S2WwPX4I9rSm5Hmu1yW5/WotiSn/hzLDZw1Q/SN5PIpk6yXhuUMgxN/luSVMyfzL5MSKBCFxZBVlBUd/bPDZg0YJoMLEOxEPz/5m3bzPS2LCrm9el54WOCoNF+EZlG0tS9Kd1JLSZJNgfrgX/qNZWWw02PwLu0hHqmxJBl8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M1rhmnQ5; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso6286a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 17:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715213450; x=1715818250; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZqIlWMGzBPFcGrSBngkQrJzMqDGPG9IZxXHGwlwCwA=;
-        b=quGCd96ArelnOE/6jR2PICNWYL+yjgcpBQTWGRz8858h7zcLdHpD4yPsXyGkceVeFx
-         6ZEZu31weRy09C/x775rqVrhKNRbS5J7WEgKuSAk+xS+90tVAj1uwO01MMPhQWiHAD7+
-         0w3ruqsIAVLJwZluydzAyxLMgTsqnGILCEDQQhYMcU3S50PlbiAGgJ3fUWMz2OdkE4L6
-         ZRBH/b+5SYIOVlbtRzQIhv7mPSgpfBFJ6fxvLzEw6yZWDON4Y9ukBqs2GjL3HbCzDP52
-         bFo8GOOsYRTVUTetLDgiUyv1Wt5Y5biG3p3u+GimpT6WhrwwZ7MsWXuLBdvmrWTwiELM
-         7XDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715213450; x=1715818250;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1715214575; x=1715819375; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LZqIlWMGzBPFcGrSBngkQrJzMqDGPG9IZxXHGwlwCwA=;
-        b=Zls7LYTP7PTKm/SrM+9kAnsH/hU7875dcB5F+HrxxNj5y5MORtLslidl4gc9c1GvkY
-         aTPgH05DP5UOhl5Wep/5T2NskFOhaskn4Q2t/qeKhxcEjhLOq188F4YsA75cxWwnNN/O
-         ODipGGB/gT9udi9HGY3YtLp+7xSDyBUUuvl9CJFA+nbIwBfxn5Qqg43YSueP/SYW7JAR
-         oiJbjS1DraZpSHK9f9QO2yKf5GQ7Bjr2YaMBlnrhp+1NhGr1ch7jNGhBqJsWyxEQQyrd
-         QFK89P+VOfvmtiBowIyudU59sl2R7WSeddOopEbnM44QVvpIX2ybweEzZZlijrP+XKKd
-         ib9A==
-X-Forwarded-Encrypted: i=1; AJvYcCXzQLvjxdvetqmTl4yOceHskhumnsleuHqbOPGvzqVADzbFy0xo3eLAI7amHWtynWfpouCD+lB7v3pXV9iHpdMPb725vYtCDg9FtYTamGqy
-X-Gm-Message-State: AOJu0YyvRee8/+lAAnSFRHiLjjxcYjdE4PYdjrlwQG9sGr2oWJDL8YC+
-	rRrbaoRzs7R5pjlq7pmapcQVVLJLlAy6//4ikrJDH38B88zm/IAAj0fs8ms8/Zg=
-X-Google-Smtp-Source: AGHT+IGf3JRzZDV8fYaLM87bNAbWYV5rWVExMXqYWMFb1yCMw/X1461/R98MMrR2NY4Y0ojK0sDDKw==
-X-Received: by 2002:a05:6358:785:b0:18d:9114:eb1e with SMTP id e5c5f4694b2df-192d3778875mr506366755d.22.1715213450408;
-        Wed, 08 May 2024 17:10:50 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:4144:6911:574f:fec1])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-634103f727dsm81409a12.72.2024.05.08.17.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 17:10:49 -0700 (PDT)
-Date: Wed, 8 May 2024 17:10:46 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	apatel@ventanamicro.com, mchitale@ventanamicro.com,
-	dbarboza@ventanamicro.com, sameo@rivosinc.com,
-	shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 01/29] riscv: envcfg save and restore on task switching
-Message-ID: <ZjwUhvLBv13qi77a@ghost>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-2-debug@rivosinc.com>
+        bh=/ze6we/9zl1hwpr5TTVXS+9EQi+iUJaNZFz5eMfIu64=;
+        b=M1rhmnQ5tPiYNgd3tYVN99l88xQJCR8QJ093SQ2ZdqpvlnparBv0W5R3gw0uiZoJIW
+         OpS/QL8eJjBFSCFRg+WtS4Mr4e8sgr3XF6Fj9sM8TRcogvaHaHeSvC8uTmpzeIK7nx/P
+         U7MG5p/lfaoyftQszloEFVlHKD53T+lSbG8Rm2k1ovzoPmXkANijqZHgFbeGAIK7Icii
+         K6YOYusn0GcPwD+KKY5aBL+oPTwXT5B1TJ5xzq3oXzHkMgTwfKWDpnhK1YYst/teky9P
+         eEY/jKzRKxHTRMapxx/C+MzpnWsiVAkjn6zSY9i9NeLPbdp5Hr1PIkGY86y0jHRXFr+5
+         Pg8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715214575; x=1715819375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/ze6we/9zl1hwpr5TTVXS+9EQi+iUJaNZFz5eMfIu64=;
+        b=mEY+R32vRtB91KiRENNb1jxrfxQHkMO+iut1iWC7qtwswPnGgKKt1c8+6yBGRkdAwC
+         PhBtVCj42L92Mid2duB1v+gW/iJQkaaRSoLHU905VwjwGGNo/ObSlKh/roIxKOzntbwG
+         X/tOtb0gP0o/maOvej8MRvvDfEmBxcFlFschiqeVNCw1thV5JPvlvgpicD9NzQb0lrYG
+         uKaVFbeZpZhWObTcevDc1EDVHAgtQc0lqA6YgtA75UT6s/tlbZJP+cGVylyf5X9zx3bZ
+         A1f3fFWvt1Wc+RtNGI+6cDPPqviMQno5V6BtYbREBLTDpHNcPowWggf9JNUufghesILB
+         BKqw==
+X-Forwarded-Encrypted: i=1; AJvYcCWK8wAM9bVQ4pzOOVcFzdlsmJE5iWI+LzjnQbLsTP2/YytaPRoVGOYyagjYtJ5EmNpFRBAyprq8GK4h6Ad8glUlGsa4RoR4nB8IvEYHstP5
+X-Gm-Message-State: AOJu0YyiX7HqxJLDHFfFgT/kIDHsPCfMspeOxg0uq3zphKgFqol+h5GH
+	5depkg1+dXW82ACG9NVijvkuir6QoSzW3t6rh97Vx27p0SfbIdmXy+KAsDCKaaXZTAefzSdwXAj
+	sWsMJhbu9AIx4fQpNaqxjOa+cKc/aRGzc9lHu
+X-Google-Smtp-Source: AGHT+IEpRBxjqO7YXZEC9B8FKVtXSFN03eOTZMizwoUq2jNrJCvIwReN+ats511GKy8ts5rRqhmgn49fpwdVOB7Y6R8=
+X-Received: by 2002:a05:6402:742:b0:572:a154:7081 with SMTP id
+ 4fb4d7f45d1cf-5733434b416mr85834a12.4.1715214574664; Wed, 08 May 2024
+ 17:29:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403234054.2020347-2-debug@rivosinc.com>
+References: <20240507214254.2787305-1-edliaw@google.com> <20240507214254.2787305-4-edliaw@google.com>
+ <ec8ab737-a841-4cd5-8ec1-e0a777744262@nvidia.com>
+In-Reply-To: <ec8ab737-a841-4cd5-8ec1-e0a777744262@nvidia.com>
+From: Edward Liaw <edliaw@google.com>
+Date: Wed, 8 May 2024 17:29:07 -0700
+Message-ID: <CAG4es9XPLhHhH-Hfm3_m5zLLtiB1zme8pAazMhErMpHqJcAMmw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] selftests: Include KHDR_INCLUDES in Makefile
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Christian Brauner <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
+	Kees Cook <keescook@chromium.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>, 
+	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Seth Forshee <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>, 
+	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Fenghua Yu <fenghua.yu@intel.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mm@kvack.org, linux-input@vger.kernel.org, iommu@lists.linux.dev, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-actions@lists.infradead.org, mptcp@lists.linux.dev, 
+	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 03, 2024 at 04:34:49PM -0700, Deepak Gupta wrote:
-> envcfg CSR defines enabling bits for cache management instructions and
-> soon will control enabling for control flow integrity and pointer
-> masking features.
-> 
-> Control flow integrity enabling for forward cfi and backward cfi are
-> controlled via envcfg and thus need to be enabled on per thread basis.
-> 
-> This patch creates a place holder for envcfg CSR in `thread_info` and
-> adds logic to save and restore on task switching.
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  arch/riscv/include/asm/switch_to.h   | 10 ++++++++++
->  arch/riscv/include/asm/thread_info.h |  1 +
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-> index 7efdb0584d47..2d9a00a30394 100644
-> --- a/arch/riscv/include/asm/switch_to.h
-> +++ b/arch/riscv/include/asm/switch_to.h
-> @@ -69,6 +69,15 @@ static __always_inline bool has_fpu(void) { return false; }
->  #define __switch_to_fpu(__prev, __next) do { } while (0)
->  #endif
->  
-> +static inline void __switch_to_envcfg(struct task_struct *next)
-> +{
-> +	register unsigned long envcfg = next->thread_info.envcfg;
-
-This doesn't need the register storage class.
-
+On Wed, May 8, 2024 at 2:41=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
+rote:
+>
+> On 5/7/24 2:38 PM, Edward Liaw wrote:
+> > Add KHDR_INCLUDES to CFLAGS to pull in the kselftest harness
+> > dependencies (-D_GNU_SOURCE).
+> >
+> > Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+> > Signed-off-by: Edward Liaw <edliaw@google.com>
+> > ---
+> >   tools/testing/selftests/alsa/Makefile                  | 2 +-
+> >   tools/testing/selftests/arm64/signal/Makefile          | 2 +-
+> >   tools/testing/selftests/exec/Makefile                  | 2 +-
+> >   tools/testing/selftests/filesystems/overlayfs/Makefile | 2 +-
+> >   tools/testing/selftests/hid/Makefile                   | 2 +-
+> >   tools/testing/selftests/nci/Makefile                   | 2 +-
+> >   tools/testing/selftests/prctl/Makefile                 | 2 ++
+> >   tools/testing/selftests/proc/Makefile                  | 2 +-
+> >   tools/testing/selftests/riscv/mm/Makefile              | 2 +-
+> >   tools/testing/selftests/rtc/Makefile                   | 2 +-
+> >   tools/testing/selftests/tmpfs/Makefile                 | 2 +-
+> >   11 files changed, 12 insertions(+), 10 deletions(-)
+>
+> Hi Edward,
+>
+> Seeing as how these all include lib.mk, and all use CFLAGS, is there
+> any reason not to simply fix this in lib.mk instead? Like this:
+>
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib=
+.mk
+> index 7fa4a96e26ed..df72610e0d2b 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -170,6 +170,8 @@ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
+>   CFLAGS +=3D $(USERCFLAGS)
+>   LDFLAGS +=3D $(USERLDFLAGS)
+>
+> +CFLAGS +=3D $(KHDR_INCLUDES)
 > +
-> +	asm volatile (ALTERNATIVE("nop", "csrw " __stringify(CSR_ENVCFG) ", %0", 0,
-> +							  RISCV_ISA_EXT_XLINUXENVCFG, 1)
-> +							  :: "r" (envcfg) : "memory");
-> +}
-> +
+>   # When make O=3D with kselftest target from main level
+>   # the following aren't defined.
+>   #
+>
 
-Something like:
+Or how about just adding -D_GNU_SOURCE to CFLAGS then?
 
-static inline void __switch_to_envcfg(struct task_struct *next)
-{
-	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_XLINUXENVCFG))
-		csr_write(CSR_ENVCFG, next->thread_info.envcfg);
-}
 
-would be easier to read, but the alternative you have written doesn't
-have the jump that riscv_has_extension_unlikely has so what you have
-will be more performant.
 
-Does envcfg need to be save/restored always or just with
-CONFIG_RISCV_USER_CFI?
-
-- Charlie
-
->  extern struct task_struct *__switch_to(struct task_struct *,
->  				       struct task_struct *);
->  
-> @@ -80,6 +89,7 @@ do {							\
->  		__switch_to_fpu(__prev, __next);	\
->  	if (has_vector())					\
->  		__switch_to_vector(__prev, __next);	\
-> +	__switch_to_envcfg(__next);				\
->  	((last) = __switch_to(__prev, __next));		\
->  } while (0)
->  
-> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-> index 5d473343634b..a503bdc2f6dd 100644
-> --- a/arch/riscv/include/asm/thread_info.h
-> +++ b/arch/riscv/include/asm/thread_info.h
-> @@ -56,6 +56,7 @@ struct thread_info {
->  	long			user_sp;	/* User stack pointer */
->  	int			cpu;
->  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
-> +	unsigned long envcfg;
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  	void			*scs_base;
->  	void			*scs_sp;
-> -- 
-> 2.43.2
-> 
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
+>
+> >
+> > diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/self=
+tests/alsa/Makefile
+> > index 5af9ba8a4645..9a0ef194522c 100644
+> > --- a/tools/testing/selftests/alsa/Makefile
+> > +++ b/tools/testing/selftests/alsa/Makefile
+> > @@ -6,7 +6,7 @@ LDLIBS +=3D $(shell pkg-config --libs alsa)
+> >   ifeq ($(LDLIBS),)
+> >   LDLIBS +=3D -lasound
+> >   endif
+> > -CFLAGS +=3D -L$(OUTPUT) -Wl,-rpath=3D./
+> > +CFLAGS +=3D $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=3D./
+> >
+> >   LDLIBS+=3D-lpthread
+> >
+> > diff --git a/tools/testing/selftests/arm64/signal/Makefile b/tools/test=
+ing/selftests/arm64/signal/Makefile
+> > index 8f5febaf1a9a..ae682ade615d 100644
+> > --- a/tools/testing/selftests/arm64/signal/Makefile
+> > +++ b/tools/testing/selftests/arm64/signal/Makefile
+> > @@ -2,7 +2,7 @@
+> >   # Copyright (C) 2019 ARM Limited
+> >
+> >   # Additional include paths needed by kselftest.h and local headers
+> > -CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
+> > +CFLAGS +=3D $(KHDR_INCLUDES) -std=3Dgnu99 -I.
+> >
+> >   SRCS :=3D $(filter-out testcases/testcases.c,$(wildcard testcases/*.c=
+))
+> >   PROGS :=3D $(patsubst %.c,%,$(SRCS))
+> > diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/self=
+tests/exec/Makefile
+> > index fb4472ddffd8..15e78ec7c55e 100644
+> > --- a/tools/testing/selftests/exec/Makefile
+> > +++ b/tools/testing/selftests/exec/Makefile
+> > @@ -1,7 +1,7 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> >   CFLAGS =3D -Wall
+> >   CFLAGS +=3D -Wno-nonnull
+> > -CFLAGS +=3D -D_GNU_SOURCE
+> > +CFLAGS +=3D $(KHDR_INCLUDES)
+> >
+> >   TEST_PROGS :=3D binfmt_script.py
+> >   TEST_GEN_PROGS :=3D execveat load_address_4096 load_address_2097152 l=
+oad_address_16777216 non-regular
+> > diff --git a/tools/testing/selftests/filesystems/overlayfs/Makefile b/t=
+ools/testing/selftests/filesystems/overlayfs/Makefile
+> > index 56b2b48a765b..6c29c963c7a8 100644
+> > --- a/tools/testing/selftests/filesystems/overlayfs/Makefile
+> > +++ b/tools/testing/selftests/filesystems/overlayfs/Makefile
+> > @@ -2,6 +2,6 @@
+> >
+> >   TEST_GEN_PROGS :=3D dev_in_maps
+> >
+> > -CFLAGS :=3D -Wall -Werror
+> > +CFLAGS :=3D -Wall -Werror $(KHDR_INCLUDES)
+> >
+> >   include ../../lib.mk
+> > diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selft=
+ests/hid/Makefile
+> > index 2b5ea18bde38..0661b34488ef 100644
+> > --- a/tools/testing/selftests/hid/Makefile
+> > +++ b/tools/testing/selftests/hid/Makefile
+> > @@ -21,7 +21,7 @@ CXX ?=3D $(CROSS_COMPILE)g++
+> >
+> >   HOSTPKG_CONFIG :=3D pkg-config
+> >
+> > -CFLAGS +=3D -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
+> > +CFLAGS +=3D -g -O0 -rdynamic -Wall -Werror $(KHDR_INCLUDES) -I$(OUTPUT=
+)
+> >   CFLAGS +=3D -I$(OUTPUT)/tools/include
+> >
+> >   LDLIBS +=3D -lelf -lz -lrt -lpthread
+> > diff --git a/tools/testing/selftests/nci/Makefile b/tools/testing/selft=
+ests/nci/Makefile
+> > index 47669a1d6a59..bbc5b8ec3b17 100644
+> > --- a/tools/testing/selftests/nci/Makefile
+> > +++ b/tools/testing/selftests/nci/Makefile
+> > @@ -1,5 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > -CFLAGS +=3D -Wl,-no-as-needed -Wall
+> > +CFLAGS +=3D -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+> >   LDFLAGS +=3D -lpthread
+> >
+> >   TEST_GEN_PROGS :=3D nci_dev
+> > diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/sel=
+ftests/prctl/Makefile
+> > index 01dc90fbb509..1a0aefec9d6f 100644
+> > --- a/tools/testing/selftests/prctl/Makefile
+> > +++ b/tools/testing/selftests/prctl/Makefile
+> > @@ -6,6 +6,8 @@ ARCH ?=3D $(shell echo $(uname_M) | sed -e s/i.86/x86/ =
+-e s/x86_64/x86/)
+> >   ifeq ($(ARCH),x86)
+> >   TEST_PROGS :=3D disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-st=
+ress-test \
+> >               disable-tsc-test set-anon-vma-name-test set-process-name
+> > +
+> > +CFLAGS +=3D $(KHDR_INCLUDES)
+> >   all: $(TEST_PROGS)
+> >
+> >   include ../lib.mk
+> > diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/self=
+tests/proc/Makefile
+> > index cd95369254c0..9596014c10a0 100644
+> > --- a/tools/testing/selftests/proc/Makefile
+> > +++ b/tools/testing/selftests/proc/Makefile
+> > @@ -1,6 +1,6 @@
+> >   # SPDX-License-Identifier: GPL-2.0-only
+> >   CFLAGS +=3D -Wall -O2 -Wno-unused-function
+> > -CFLAGS +=3D -D_GNU_SOURCE
+> > +CFLAGS +=3D $(KHDR_INCLUDES)
+> >   LDFLAGS +=3D -pthread
+> >
+> >   TEST_GEN_PROGS :=3D
+> > diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/=
+selftests/riscv/mm/Makefile
+> > index c333263f2b27..715a21241113 100644
+> > --- a/tools/testing/selftests/riscv/mm/Makefile
+> > +++ b/tools/testing/selftests/riscv/mm/Makefile
+> > @@ -3,7 +3,7 @@
+> >   # Originally tools/testing/arm64/abi/Makefile
+> >
+> >   # Additional include paths needed by kselftest.h and local headers
+> > -CFLAGS +=3D -D_GNU_SOURCE -std=3Dgnu99 -I.
+> > +CFLAGS +=3D $(KHDR_INCLUDES) -std=3Dgnu99 -I.
+> >
+> >   TEST_GEN_FILES :=3D mmap_default mmap_bottomup
+> >
+> > diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selft=
+ests/rtc/Makefile
+> > index 55198ecc04db..654f9d58da3c 100644
+> > --- a/tools/testing/selftests/rtc/Makefile
+> > +++ b/tools/testing/selftests/rtc/Makefile
+> > @@ -1,5 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > -CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall
+> > +CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+> >   LDLIBS +=3D -lrt -lpthread -lm
+> >
+> >   TEST_GEN_PROGS =3D rtctest
+> > diff --git a/tools/testing/selftests/tmpfs/Makefile b/tools/testing/sel=
+ftests/tmpfs/Makefile
+> > index aa11ccc92e5b..bcdc1bb6d2e6 100644
+> > --- a/tools/testing/selftests/tmpfs/Makefile
+> > +++ b/tools/testing/selftests/tmpfs/Makefile
+> > @@ -1,6 +1,6 @@
+> >   # SPDX-License-Identifier: GPL-2.0-only
+> >   CFLAGS +=3D -Wall -O2
+> > -CFLAGS +=3D -D_GNU_SOURCE
+> > +CFLAGS +=3D $(KHDR_INCLUDES)
+> >
+> >   TEST_GEN_PROGS :=3D
+> >   TEST_GEN_PROGS +=3D bug-link-o-tmpfile
+>
+>
 
