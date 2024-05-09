@@ -1,259 +1,482 @@
-Return-Path: <linux-kselftest+bounces-9770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D716C8C0BC8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 08:56:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC54E8C0C01
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 09:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50CC51F2138E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 06:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BA801C213DC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 07:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C3E61272A8;
-	Thu,  9 May 2024 06:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF7013CF8A;
+	Thu,  9 May 2024 07:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TtbtRhxC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cZ1PPmmd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19B41373
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 06:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED0D1487C4
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 07:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715237804; cv=none; b=hOwzZYXGfcNl7lD/fmzopvXK3GloS3BpO9SHH3XUxhOuWBcleevVOHabYGpFafJSYbEf763Ghr+0m+rA5hwOguiSxsdyN9rzdiDE6kBzCqUKFqpqip5Bue6JiH5ZwSdtt5Qclps73uMcBZBnyJebGQeu1jaBfqC/vIlno6hCcJc=
+	t=1715240077; cv=none; b=XTSy1wMErglrqNtN/H+PM7AGt+CbtMq/SG8rdzgGBMhUPV2XBMEvWFT6iM5VmhWlZAHI473GtAc7dkXFlzHP6ILv6Ki+VAStPDUJJhqzXG8fbMCRSmmM/tiMazoveFVwsaJAiYs6kd1oHTCLpwnnyeJxQ5kCzFcUNUsJLFhGa2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715237804; c=relaxed/simple;
-	bh=qMk1PdT+iPPJAba1vs0taTftishgYTmWVXA0TThaZfo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W6U0AvZNlh+2g4Fw7HaIJmKnk9PT7fXm4nOh7QL8Z9N6F9aLKi6WozZx25TtVa8AzCfujLr0DUx2LWd1THV4SSLUi/+f4XpD7j/df8FOb+zHaTIJ/wq27yeXHoZr5ElJca1PonR6P1meCS5nKqS3DazI5emwq/IAkS8BOAfWjH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TtbtRhxC; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-61be74097cbso5474117b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2024 23:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1715237802; x=1715842602; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VaF65Mth8rDaiy1Bx7eDA2aD8YWaoQ7AgHRL/QGNHIg=;
-        b=TtbtRhxCHBFjy6bHolE3ZrCu96bdCOh13MQ+kXrhp9dMfcPglz3SLoc4BrSbvlL4dX
-         7MUoNBKH27UCtkjgWfVjl3thZFWqBpJqy5wZ3eNZDKn1+G/KxH7Ug+gdPDNO4Px/+HA+
-         E93FUMS3jI6aXzlseFgT0y++0ck0Ewp72md4v0qvvfAB8/cD4M/oWU8zfJq8u+ILhxNR
-         iPa+oWYEp6x8Zmvo7H+j1Y8tzsDTt+yqJAEFOVRNiuIclcXl7xLpDXXY/OWTmgTs8ogk
-         mLISZcKSBgoFxKJJDp4uYddqwOfZ8u+jMfgZ5W7/K6FObwwwegBsWc7GGzhz1aQYQQOM
-         bNvA==
+	s=arc-20240116; t=1715240077; c=relaxed/simple;
+	bh=Ql073AT/LBTOS6xuC597/sHYu6Z8Z1Jwpgk46IvSu0I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z2GkwgVo29NaDNGnyZvO+5NqN0HJojnsW8HY8JxAYupSS3nraoSMO8CwgvvAvYRBSYgle7fz08C94UwoGYQ7ABx6LU9kTCAlEFhUr7VrfhxP+r2GBFWzFDHKFinmnpEUUG9fy0oAIyOYHL58OBkVoiS8houb4q2zT+FcU6cVVy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cZ1PPmmd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715240074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GZzTdtZTg4X5rVAi3OPHx73IgpVVyO5kzJim7kMw5CM=;
+	b=cZ1PPmmdZUE9sbHnGxxccczZ6hsrFWMICsn/Qy+b2LJer/5/O9ojIEyLvsryLpWz62BWv8
+	vDdMXDPoaY0Oy8xee0OECYFbcnc1MRj0EYdXYS+jpr1mwudSdV25oWXkS2UBF6B3kgJq7r
+	X8LwxaorXYnR4tU9npGqPFgoR7lvvhY=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-14-_gTxEKONN5Kp7EmrSKOEAQ-1; Thu, 09 May 2024 03:34:32 -0400
+X-MC-Unique: _gTxEKONN5Kp7EmrSKOEAQ-1
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2b52fdaf766so214571a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 00:34:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715237802; x=1715842602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VaF65Mth8rDaiy1Bx7eDA2aD8YWaoQ7AgHRL/QGNHIg=;
-        b=F1pWyFs63EodWFd4YzjCxzVK57hWTyT22hNOtdJeVGRg7U6zaqx4ZjdtNVL5qgfxGJ
-         Rn5gR2XXcsgZZ2LbuaS+UV723SK7WJoIbDNYG44Q/s5wQSgvrpSRZoeSEDl6n8dThXQa
-         nL+yyGQhaIokhDhd6tqKLmGFytKZwDWkwyb2iLbbSIhLEXgXQI9jGeD8Am6AvJKdlozg
-         FWkhpwfFAbcWc+APM0Qw/og5dFNfU4RlPYvRwNmYlc2MXlq++8YuQwczgJhGOroDfRWB
-         gGBKcK1oJxEPyMQhgSbpnO9T8I4zchYbJs1AH/hi+RHe3D7roPabll2p+Alx8N1qNaZj
-         efKw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0vG1i7WDc1px/sRa0pLqXPby/oSMmN8WQm2devNWJM9ywg3rqOKVp063en6WTbPDY0RqNHq54aOnFalUKJokMlA+MphNA4Xw21YEMt/GW
-X-Gm-Message-State: AOJu0Yz0Htnx5Fpd4f+4IWgrFGRfsM0TUVQKtAGivCtzPAnIf/+FZtcf
-	uruWXBn2WYXp42KHZCHDhjZHadaxkOr9ujQyfVq9ln+VvvZ/EVswF58vP0RypUkyvK7BHPL9f5X
-	poJmoDOvdeTe/CIF86tVQQiytXYX1GmBIePLXqg==
-X-Google-Smtp-Source: AGHT+IFcRu416dvzSI2zoj2G7WcOFjTosCWbtC1c8KEzGSwEnHegTPHoEH/G3MULJAHlFRyEU5wzPOnrCvubOCTr4OM=
-X-Received: by 2002:a81:928c:0:b0:61b:3304:cdc7 with SMTP id
- 00721157ae682-62085a747b9mr50296887b3.29.1715237801602; Wed, 08 May 2024
- 23:56:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715240071; x=1715844871;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GZzTdtZTg4X5rVAi3OPHx73IgpVVyO5kzJim7kMw5CM=;
+        b=Tk+RtCKMd5cBKURF2duPVZbhCx/6n2RjAEBeqWvRIwVSvLoz4mURYWTp8Ns/m4zlyF
+         IkxONm1Alq/vpZVAl8uRcg8rwZ4ax5S8ByBr7WcyhQWjUAV7lCmeFyKkwHIfcSP9/Yl1
+         d7HcjBVmevbMFmBy6qe8m8d9/8AmgxlxS/REtg+owRNci3+NcBHOe1ZuYJxC6i3TVSHr
+         avcSdmpz7o1mxk6vLOOYheZWNzyuoZjOFzXzpVsRirCcPXQqqaBaXTNNmXN3/dmbbQ1z
+         p0tyy8Q0mHPwAa9MjBSaU2FMEDGSAWCmZXemy6GnOeKI5TZkWNkYMT0mFLn+sVVkibxM
+         oFig==
+X-Forwarded-Encrypted: i=1; AJvYcCVv32eEvjq0WzS65eka2ted8hKD7lAUqcKcUQAlMu4GJHtSR9ZFmEDBdSDOhywxwh/BdWbI6zl8vHg1Mt0xgknIF8EpegJENqhiQzfltDje
+X-Gm-Message-State: AOJu0YybGDL57giyJe6xg9XHXV8sCykFVqlmemtZIwUbQ5LKVPfTFglp
+	kg0INXawT2eMngWV32H3qmL8vNAX6LQyDPCKD84+e//x1nae2R3gdHrsHGC76ZOkO42J+n0LQ+q
+	nNGwRJ4PPQOZinA2lPScFfHHaXmXOVbGzsJ6g1assjOOVp2ZRz+wXKuuRc42vGXNYAA==
+X-Received: by 2002:a05:6a00:660f:b0:6ed:6944:b170 with SMTP id d2e1a72fcca58-6f49c1f4789mr5056171b3a.1.1715240071248;
+        Thu, 09 May 2024 00:34:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IETnKbEhQdah6mLAjO98A7KonaR0MZRYHoP3BQ3HzQIKW7cXeV9np1lDS1+HQQm51z1azrEww==
+X-Received: by 2002:a05:6a00:660f:b0:6ed:6944:b170 with SMTP id d2e1a72fcca58-6f49c1f4789mr5056158b3a.1.1715240070786;
+        Thu, 09 May 2024 00:34:30 -0700 (PDT)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a828d5sm709849b3a.62.2024.05.09.00.34.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 May 2024 00:34:30 -0700 (PDT)
+Message-ID: <b468421e-e453-42c7-9fee-21252ceaf4c2@redhat.com>
+Date: Thu, 9 May 2024 15:34:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240412-zve-detection-v4-0-e0c45bb6b253@sifive.com>
- <20240412-zve-detection-v4-7-e0c45bb6b253@sifive.com> <20240418-brook-chili-4d3e61d1a55c@wendy>
- <20240418155256.GA2410@sol.localdomain> <20240418-ultimatum-yam-11de4b063b83@spud>
- <20240418173203.GA1081@sol.localdomain> <20240418173946.GB1081@sol.localdomain>
- <20240418-sterling-sanding-d59c3b0a2aaa@spud>
-In-Reply-To: <20240418-sterling-sanding-d59c3b0a2aaa@spud>
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Thu, 9 May 2024 14:56:30 +0800
-Message-ID: <CABgGipU74TA3KgCH4pPuRefbnYt3q6RKcQwfyspenisEtY6eqw@mail.gmail.com>
-Subject: Re: [PATCH v4 7/9] riscv: vector: adjust minimum Vector requirement
- to ZVE32X
-To: Conor Dooley <conor@kernel.org>
-Cc: Eric Biggers <ebiggers@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
-	Vincent Chen <vincent.chen@sifive.com>, Greentime Hu <greentime.hu@sifive.com>, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Joel Granados <j.granados@samsung.com>, 
-	Jerry Shih <jerry.shih@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/3] KVM: selftests: aarch64: Introduce
+ pmu_event_filter_test
+To: Eric Auger <eauger@redhat.com>, Oliver Upton <oliver.upton@linux.dev>,
+ Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ James Morse <james.morse@arm.com>, Suzuki K Poulose
+ <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240409030320.182591-1-shahuang@redhat.com>
+ <20240409030320.182591-3-shahuang@redhat.com>
+ <acbc717e-5f7b-405b-9674-e03d315726cb@redhat.com>
+Content-Language: en-US
+From: Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <acbc717e-5f7b-405b-9674-e03d315726cb@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Conor,
+Hi Eric,
 
-On Fri, Apr 19, 2024 at 2:26=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Thu, Apr 18, 2024 at 10:39:46AM -0700, Eric Biggers wrote:
-> > On Thu, Apr 18, 2024 at 10:32:03AM -0700, Eric Biggers wrote:
-> > > On Thu, Apr 18, 2024 at 05:53:55PM +0100, Conor Dooley wrote:
-> > > > > If it would be useful to do so, we should be able to enable some =
-of the code
-> > > > > with a smaller VLEN and/or EEW once it has been tested in those c=
-onfigurations.
-> > > > > Some of it should work, but some of it won't be able to work.  (F=
-or example, the
-> > > > > SHA512 instructions require EEW=3D=3D64.)
-> > > > >
-> > > > > Also note that currently all the RISC-V vector crypto code only s=
-upports riscv64
-> > > > > (XLEN=3D64).  Similarly, that could be relaxed in the future if p=
-eople really need
-> > > > > the vector crypto acceleration on 32-bit CPUs...  But similarly, =
-the code would
-> > > > > need to be revised and tested in that configuration.
-> > > > >
-> > > > > > Eric/Jerry (although read the previous paragraph too):
-> > > > > > I noticed that the sha256 glue code calls crypto_simd_usable(),=
- and in
-> > > > > > turn may_use_simd() before kernel_vector_begin(). The chacha20 =
-glue code
-> > > > > > does not call either, which seems to violate the edict in
-> > > > > > kernel_vector_begin()'s kerneldoc:
-> > > > > > "Must not be called unless may_use_simd() returns true."
-> > > > >
-> > > > > skcipher algorithms can only be invoked in process and softirq co=
-ntext.  This
-> > > > > differs from shash algorithms which can be invoked in any context=
-.
-> > > > >
-> > > > > My understanding is that, like arm64, RISC-V always allows non-ne=
-sted
-> > > > > kernel-mode vector to be used in process and softirq context -- a=
-nd in fact,
-> > > > > this was intentionally done in order to support use cases like th=
-is.  So that's
-> > > > > why the RISC-V skcipher algorithms don't check for may_use_simd()=
- before calling
-> > > > > kernel_vector_begin().
-> > > >
-> > > > I see, thanks for explaining that. I think you should probably chec=
-k
-> > > > somewhere if has_vector() returns true in that driver though before
-> > > > using vector instructions. Only checking vlen seems to me like rely=
-ing on
-> > > > an implementation detail and if we set vlen for the T-Head/0.7.1 ve=
-ctor
-> > > > it'd be fooled. That said, I don't think that any of the 0.7.1 vect=
-or
-> > > > systems actually support Zvkb, but I hope you get my drift.
-> > >
-> > > All the algorithms check for at least one of the vector crypto extens=
-ions being
-> > > supported, for example Zvkb.  'if (riscv_isa_extension_available(NULL=
-, ZVKB))'
-> > > should return whether the ratified version of Zvkb is supported, and =
-likewise
-> > > for the other vector crypto extensions.  The ratified version of the =
-vector
-> > > crypto extensions depends on the ratified version of the vector exten=
-sion.
->
-> That's great if it does require that the version of the vector extension
-> must be standard. Higher quality spec than most if it does. But
-> "supported" in the context of riscv_isa_extension_available() means that
-> the hardware supports it (or set of harts), not that the currently
-> running kernel does. The Kconfig deps that must be met for the code to be
-> built at least mean the kernel is built with vector support, leaving only
-> "the kernel was built with vector support and the hardware supports vecto=
-r
-> but for $reason the kernel refused to enable it".
->
-> I'm not sure if that final condition is actually possible with the system
-> ending up in a broken state, however - I'm not sure that we ever do turn
-> off access to the VPU at present (after we mark it usable), and if we do
-> it doesn't get reflected in has_vector() so the kernel and userspace woul=
-d
-> both break, with what a crypto driver does probably being the least of
-> your worries.
->
-> > > So
-> > > there should be no issue.  If there is, the RISC-V core architecture =
-code needs
-> > > to be fixed to not declare that extensions are supported when they ar=
-e actually
-> > > incompatible non-standard versions of those extensions.  Incompatible
-> > > non-standard extensions should be represented as separate extensions.
-> > >
-> >
-> > It probably makes sense to check has_vector() to exclude Zve* for now, =
-though.
->
-> I think you might actually be better served at present, given the code ca=
-n
-> only be built if the core vector code is, by using
-> riscv_isa_extension_available(NULL, v). That way you know for sure that
-> you're getting the ratified extension and nothing else.
->
-> Prior to this conversation I thought that has_vector() should return true
-> if there's a standard compliant vector unit available - given all users
-> Andy added only need Zve32x.
->
-> > I am just concerned about how you're suggesting that non-standard exten=
-sions
-> > might be pretending to be standard ones and individual users of kernel-=
-mode
-> > vector would need to work around that.
->
-> I am absolutely not suggesting that non-standard extensions should
-> masquerade as standard ones, I don't know where you got that from. What
-> I said was that a non-standard vector extension could reuse riscv_v_vlen
-> (and should IMO for simplicity reasons), not that any of the APIs we have
-> for checking extension availability would lie and say it was standard.
-> riscv_v_vlen having a value greater than 128 is not one of those APIs ;)
->
-> > I think that neither has_vector() nor
-> > 'if (riscv_isa_extension_available(NULL, ZVKB))' should return true if =
-the CPU's
-> > vector extension is non-standard.
->
-> riscv_isa_extension_available(NULL, ZVKB) only checks whether the extensi=
-on
-> was present in DT or ACPI for all harts. It doesn't check whether or not
-> the required config option for vector has been set or anything related
-> to dependencies. has_vector() at least checks that the vector core has
-> been enabled (and uses the alternative-patched version of the check
-> given it is used in some hotter paths). That's kinda moot for code
-> that's only built if the vector core stuff is enabled as I said above
-> though.
->
-> We could of course make riscv_isa_extension_available() check
-> extension dependencies, but I'd rather leave dt validation to the dt
-> tooling (apparently ACPI tables are never wrong...). Either would allow
-> you to rely on the crypto extensions present only when the standard vecto=
-r
-> extensions unless someone's DT/ACPI stuff is shite, but then they keep th=
-e
-> pieces IMO :)
+On 5/7/24 16:45, Eric Auger wrote:
+> Hi Shaoqin,
+> 
+> On 4/9/24 05:03, Shaoqin Huang wrote:
+>> Introduce pmu_event_filter_test for arm64 platforms. The test configures
+>> PMUv3 for a vCPU, and sets different pmu event filters for the vCPU, and
+>> check if the guest can see those events which user allow and can't use
+>> those events which use deny.
+>>
+>> This test refactor the create_vpmu_vm() and make it a wrapper for
+>> __create_vpmu_vm(), which allows some extra init code before
+>> KVM_ARM_VCPU_PMU_V3_INIT.
+>>
+>> And this test use the KVM_ARM_VCPU_PMU_V3_FILTER attribute to set the
+>> pmu event filter in KVM. And choose to filter two common event
+>> branches_retired and instructions_retired, and let the guest to check if
+>> it see the right pmceid register.
+>>
+>> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+>> ---
+>>   tools/testing/selftests/kvm/Makefile          |   1 +
+>>   .../kvm/aarch64/pmu_event_filter_test.c       | 298 ++++++++++++++++++
+>>   2 files changed, 299 insertions(+)
+>>   create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>>
+>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+>> index 741c7dc16afc..9745be534df3 100644
+>> --- a/tools/testing/selftests/kvm/Makefile
+>> +++ b/tools/testing/selftests/kvm/Makefile
+>> @@ -151,6 +151,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/aarch32_id_regs
+>>   TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+>>   TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
+>>   TEST_GEN_PROGS_aarch64 += aarch64/page_fault_test
+>> +TEST_GEN_PROGS_aarch64 += aarch64/pmu_event_filter_test
+>>   TEST_GEN_PROGS_aarch64 += aarch64/psci_test
+>>   TEST_GEN_PROGS_aarch64 += aarch64/set_id_regs
+>>   TEST_GEN_PROGS_aarch64 += aarch64/smccc_filter
+>> diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>> new file mode 100644
+>> index 000000000000..972384e81067
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>> @@ -0,0 +1,298 @@
+>> +
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * pmu_event_filter_test - Test user limit pmu event for guest.
+>> + *
+>> + * Copyright (c) 2023 Red Hat, Inc.> + *
+>> + * This test checks if the guest only see the limited pmu event that userspace> + * sets, if the guest can use those events which user allow, and if
+> the guest
+>> + * can't use those events which user deny.
+>> + * This test runs only when KVM_CAP_ARM_PMU_V3, KVM_ARM_VCPU_PMU_V3_FILTER> + * is supported on the host.
+>> + */
+>> +#include <kvm_util.h>
+>> +#include <processor.h>
+>> +#include <vgic.h>
+>> +#include <vpmu.h>
+>> +#include <test_util.h>
+>> +#include <perf/arm_pmuv3.h>
+>> +
+>> +struct pmu_common_event_ids {
+>> +	uint64_t pmceid0;
+>> +	uint64_t pmceid1;
+>> +} max_pmce, expected_pmce;
+>> +
+>> +struct vpmu_vm {
+>> +	struct kvm_vm *vm;
+>> +	struct kvm_vcpu *vcpu;
+>> +	int gic_fd;
+>> +};
+>> +
+>> +static struct vpmu_vm vpmu_vm;
+>> +
+>> +#define FILTER_NR 10
+>> +
+>> +struct test_desc {
+>> +	const char *name;
+>> +	struct kvm_pmu_event_filter filter[FILTER_NR];
+>> +};
+>> +
+>> +#define __DEFINE_FILTER(base, num, act)		\
+>> +	((struct kvm_pmu_event_filter) {	\
+>> +		.base_event	= base,		\
+>> +		.nevents	= num,		\
+>> +		.action		= act,		\
+>> +	})
+>> +
+>> +#define DEFINE_FILTER(base, act) __DEFINE_FILTER(base, 1, act)
+>> +
+>> +static void guest_code(void)
+>> +{
+>> +	uint64_t pmceid0 = read_sysreg(pmceid0_el0);
+>> +	uint64_t pmceid1 = read_sysreg(pmceid1_el0);
+>> +
+>> +	GUEST_ASSERT_EQ(expected_pmce.pmceid0, pmceid0);
+>> +	GUEST_ASSERT_EQ(expected_pmce.pmceid1, pmceid1);
+>> +
+>> +	GUEST_DONE();
+>> +}
+>> +
+>> +static void guest_get_pmceid(void)
+>> +{
+>> +	max_pmce.pmceid0 = read_sysreg(pmceid0_el0);
+>> +	max_pmce.pmceid1 = read_sysreg(pmceid1_el0);
+>> +
+>> +	GUEST_DONE();
+>> +}
+>> +
+>> +static void run_vcpu(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct ucall uc;
+>> +
+>> +	while (1) {
+>> +		vcpu_run(vcpu);
+>> +		switch (get_ucall(vcpu, &uc)) {
+>> +		case UCALL_DONE:
+>> +			return;
+>> +		case UCALL_ABORT:
+>> +			REPORT_GUEST_ASSERT(uc);
+>> +			break;
+>> +		default:
+>> +			TEST_FAIL("Unknown ucall %lu", uc.cmd);
+>> +		}
+>> +	}
+>> +}
+>> +
+>> +static void set_pmce(struct pmu_common_event_ids *pmce, int action, int event)
+>> +{
+>> +	int base = 0;
+>> +	uint64_t *pmceid = NULL;
+>> +
+>> +	if (event >= 0x4000) {
+>> +		event -= 0x4000;
+>> +		base = 32;
+>> +	}
+>> +
+>> +	if (event >= 0 && event <= 0x1F) {
+>> +		pmceid = &pmce->pmceid0;
+>> +	} else if (event >= 0x20 && event <= 0x3F) {
+>> +		event -= 0x20;
+>> +		pmceid = &pmce->pmceid1;
+>> +	} else {
+>> +		return;
+>> +	}
+>> +
+>> +	event += base;
+>> +	if (action == KVM_PMU_EVENT_ALLOW)
+>> +		*pmceid |= BIT(event);
+>> +	else
+>> +		*pmceid &= ~BIT(event);
+>> +}
+>> +
+>> +static void prepare_expected_pmce(struct kvm_pmu_event_filter *filter)
+>> +{
+>> +	struct pmu_common_event_ids pmce_mask = { ~0, ~0 };
+>> +	bool first_filter = true;
+>> +	int i;
+>> +
+>> +	while (filter && filter->nevents != 0) {
+>> +		if (first_filter) {
+>> +			if (filter->action == KVM_PMU_EVENT_ALLOW)
+>> +				memset(&pmce_mask, 0, sizeof(pmce_mask));
+>> +			first_filter = false;
+>> +		}
+>> +
+>> +		for (i = 0; i < filter->nevents; i++)
+>> +			set_pmce(&pmce_mask, filter->action,
+>> +				 filter->base_event + i);
+>> +
+>> +		filter++;
+>> +	}
+>> +
+>> +	expected_pmce.pmceid0 = max_pmce.pmceid0 & pmce_mask.pmceid0;
+>> +	expected_pmce.pmceid1 = max_pmce.pmceid1 & pmce_mask.pmceid1;
+>> +}
+>> +
+>> +static void pmu_event_filter_init(struct kvm_pmu_event_filter *filter)
+>> +{
+>> +	while (filter && filter->nevents != 0) {
+>> +		kvm_device_attr_set(vpmu_vm.vcpu->fd,
+>> +				    KVM_ARM_VCPU_PMU_V3_CTRL,
+>> +				    KVM_ARM_VCPU_PMU_V3_FILTER,
+>> +				    filter);
+>> +		filter++;
+>> +	}
+>> +}
+>> +
+>> +#define GICD_BASE_GPA	0x8000000ULL
+>> +#define GICR_BASE_GPA	0x80A0000ULL
+> in v4 Oliver suggested "Shouldn't a standardized layout of the GIC
+> frames go with the rest of the GIC stuff?"
+> 
 
-Should we check if "v" presents for vector crypto extensions in
-riscv_isa_extension_check()? We are not checking this for now. So a
-kernel compiled with RISCV_ISA_V still has a problem if its isa-string
-includes any of vector crypto ("zvbb, zvkg, etc") but not "v".
+Oliver replied there is another commits did that, so I will remove them 
+when I update it.
 
->
-> Hope that makes sense?
-> Conor.
+>> +
+>> +/* Create a VM that has one vCPU with PMUv3 configured. */
+>> +static void create_vpmu_vm_with_filter(void *guest_code,
+>> +				       struct kvm_pmu_event_filter *filter)
+>> +{
+>> +	uint64_t irq = 23;
+>> +
+>> +	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
+>> +	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
+>> +
+>> +	vpmu_vm.vm = vm_create(1);
+>> +	vpmu_vm.vcpu = vm_vcpu_add_with_vpmu(vpmu_vm.vm, 0, guest_code);
+>> +	vpmu_vm.gic_fd = vgic_v3_setup(vpmu_vm.vm, 1, 64,
+>> +					GICD_BASE_GPA, GICR_BASE_GPA);
+>> +	__TEST_REQUIRE(vpmu_vm.gic_fd >= 0,
+>> +		       "Failed to create vgic-v3, skipping");
+>> +
+>> +	pmu_event_filter_init(filter);
+>> +
+>> +	/* Initialize vPMU */
+>> +	vpmu_set_irq(vpmu_vm.vcpu, irq);
+>> +	vpmu_init(vpmu_vm.vcpu);
+>> +}
+>> +
+>> +static void create_vpmu_vm(void *guest_code)
+>> +{
+>> +	create_vpmu_vm_with_filter(guest_code, NULL);
+>> +}
+>> +
+>> +static void destroy_vpmu_vm(void)
+>> +{
+>> +	close(vpmu_vm.gic_fd);
+>> +	kvm_vm_free(vpmu_vm.vm);
+>> +}
+>> +
+>> +static void run_test(struct test_desc *t)
+>> +{
+>> +	pr_info("Test: %s\n", t->name);
+>> +
+>> +	create_vpmu_vm_with_filter(guest_code, t->filter);
+>> +	prepare_expected_pmce(t->filter);
+>> +	sync_global_to_guest(vpmu_vm.vm, expected_pmce);
+>> +
+>> +	run_vcpu(vpmu_vm.vcpu);
+>> +
+>> +	destroy_vpmu_vm();
+>> +}
+>> +
+>> +static struct test_desc tests[] = {
+>> +	{
+>> +		.name = "without_filter",
+>> +		.filter = {
+>> +			{ 0 }
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "member_allow_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 0),
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_INST_RETIRED, 0),
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_BR_RETIRED, 0),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "member_deny_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 1),
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_INST_RETIRED, 1),
+>> +			DEFINE_FILTERShouldn't a standardized layout of the GIC frames go with the rest of
+> the GIC stuff?(ARMV8_PMUV3_PERFCTR_BR_RETIRED, 1),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "not_member_deny_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 1),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "not_member_allow_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_SW_INCR, 0),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "deny_chain_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CHAIN, 1),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "deny_cpu_cycles_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 1),
+>> +			{ 0 },
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "cancel_filter",
+>> +		.filter = {
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 0),
+>> +			DEFINE_FILTER(ARMV8_PMUV3_PERFCTR_CPU_CYCLES, 1),
+>> +		},
+>> +	},
+>> +	{
+>> +		.name = "multiple_filter",
+>> +		.filter = {
+>> +			__DEFINE_FILTER(0x0, 0x10, 0),
+>> +			__DEFINE_FILTER(0x6, 0x3, 1),
+>> +		},
+>> +	},
+>> +	{ 0 }
+>> +};
+>> +
+>> +static void run_tests(void)
+>> +{
+>> +	struct test_desc *t;
+>> +
+>> +	for (t = &tests[0]; t->name; t++)
+>> +		run_test(t);
+>> +}
+>> +
+>> +static bool kvm_pmu_support_events(void)
+>> +{
+>> +	create_vpmu_vm(guest_get_pmceid);
+>> +
+>> +	memset(&max_pmce, 0, sizeof(max_pmce));
+>> +	sync_global_to_guest(vpmu_vm.vm, max_pmce);
+>> +	run_vcpu(vpmu_vm.vcpu);
+>> +	sync_global_from_guest(vpmu_vm.vm, max_pmce);
+>> +	destroy_vpmu_vm();
+>> +
+>> +	return max_pmce.pmceid0 &
+>> +	       (ARMV8_PMUV3_PERFCTR_BR_RETIRED |
+>> +	       ARMV8_PMUV3_PERFCTR_INST_RETIRED |
+>> +	       ARMV8_PMUV3_PERFCTR_CHAIN);
+> those are not bit masks but bit shifts. Also don't you want to test that
+> all of them are supported?
 
-Cheers,
-Andy
+Thanks for catching this bug. Yes I want to test all of them are 
+supported but wrongly checking the bit masks. I will fix them.
+
+> 
+> BR_RETIRED is 0x21 so doesn't it belong to pmceid1?
+
+Yes, it should belong to pmceid1. But my wrong checking didn't help me 
+find it. Thanks a lot.
+
+> 
+> 
+> in v4 Oliver suggested to use sysfs instead of spawning a scratch VM.
+
+In that version I changed to function name to kvm_pmu_support_events, 
+which means I want to detect what the KVM supports about the PMU events 
+rather than the host supportted PMU events. I think that would be more 
+suitable if we test KVM.
+
+Thanks,
+Shaoqin
+
+>> +}
+>> +
+>> +int main(void)
+>> +{
+>> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
+>> +	TEST_REQUIRE(kvm_pmu_support_events());
+>> +
+>> +	run_tests();
+>> +}
+> Eric
+> 
+
+-- 
+Shaoqin
+
 
