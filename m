@@ -1,219 +1,205 @@
-Return-Path: <linux-kselftest+bounces-9815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 419F08C151E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 21:01:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 367BB8C1523
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 21:03:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3D6E1F23872
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 19:00:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1A43283158
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 19:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E7F7F476;
-	Thu,  9 May 2024 19:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835F7F7F5;
+	Thu,  9 May 2024 19:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="JJqxJHRe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EX23izYS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BCA7F46C
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 19:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0DA653;
+	Thu,  9 May 2024 19:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715281252; cv=none; b=f6Yl8v+/83waCWiYAkjKeV2Y1gQcoX12IULkql/WGKhetKlsODlvGr0Vs7+rIhEWujXQCmhYhJdj4tIqOuFuy9uS6sK3EwqgTF/RENPTLA/rPWPV3wILpo9SKcz4Mn8imzbimHvaQ2bRmRLqCGrH6aNPfGedzkk3P3KaiUWdcrI=
+	t=1715281375; cv=none; b=MFlhV7UOj2J9WjEt/Vw0v0+u1+cp33IDisL7KcorK4fiq+LcWQ2TDV5tnt4e+br1X9Oh1IsyibjsfFftnp/qAxeSwIPwGhpaGlyzVz2ANz94nEMJE9i4/+IUtEeSdGAZAcZrUcvfAwuAVyKxQg+0XvJw/c43VExEa/hP+F9pJHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715281252; c=relaxed/simple;
-	bh=xF39L+hs0TY+8aNmea7VYtJ+NEfSYKkZrUTY8FQHMiE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7/n8ErayhdLfDa7TaSpQ6RUEchWYLL1iqrfLzsVfSfhiv7VYmnNAGZZfiUc3veVjQ994C1pI1fMSN3KRqXVS4l8XZfAlu2E8bNOLLDUY2jVR62H45dS85BvNfu68AqxyUgli5AKIK9V1IE0xpnptEZBZYla6CkNnBQ3kAwMJJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=JJqxJHRe; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6f44a2d1e3dso1137441b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 12:00:42 -0700 (PDT)
+	s=arc-20240116; t=1715281375; c=relaxed/simple;
+	bh=z8BjbZ0KhLr5lDThTCUSNLL0I0h3odrN0f1OqSGaQhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Na3uD1vTVTqLy/1iRogEiT8/bxFyLgRslXRwjVDdkhy7txAMLZ5bXkdQXTdPEbocq/yGkx4l1YZpqumpRfUfo7fpo7Sst1EOvju0qynHmqhMWXI9yzfMPsv9f/ZF8T1Um0KmDcbHdgJffF6VGFTRiXFgTCW3fGE/A6hfY5BZyLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EX23izYS; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41c7ac71996so8589185e9.3;
+        Thu, 09 May 2024 12:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715281242; x=1715886042; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=suVrTFWe4Q9EJfAXikAfGsbIG5FwHp88I8wjDmo5qhw=;
-        b=JJqxJHRelJ7QcM2PM36uXftB9ooQUS6iPJ+3M48VB7n1Rt0Qvw8nwkvwQdK7vDOnbS
-         aGOCUnx0yvWjP5VLhv8aqijkQH2PhO71MfbI8y33/IpWtnZiY6xNDPK0U8dCpwyd0xpG
-         3dlf94UK2jlFf37YfJTq20Hjh3qjs16ULJthd1fBhrPnwa34PZTYrTwDx0jC2sU1i/0n
-         vsGn9/NidfMsoQPz+QPJfwiNmFIVVlgzvW7oSE4yaFwoFEz1PjPZqXy+FpRLbeyIDEsN
-         mr50KSsUPaB3x61aY+qwHMBle46w/Gy+HE1Vj0UoExGhiAFSeN5W4WLz23Ex5zBWYhf/
-         CT5Q==
+        d=gmail.com; s=20230601; t=1715281372; x=1715886172; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K0mCUgWpAxxdQAlqmk3AkXAPrSMFLi4xORwnVMsbd4A=;
+        b=EX23izYSb9GqA4m3K4KiBPV3til2EuQJX7/f8M63qGXvMUPX/RB8epuy6Yv0Xg7xNQ
+         28/orNAS0Mkx8wN4/u94JuMajxp8RQP90L46sMA0Shee1rct2en4wp/iWB1d7un7Xb8Y
+         qvB5rCLBEAniQ2eJg+nl73tdVFblIOWANYKBpFUmlPW2elwuhaSJTXNyOrn9B8jm86vB
+         ketOmtZNkVGI2C2qaaYc6SlKZzTeZ/KUU502sHnuUSZy7amsrOIxdzGrSQ4p2+FbLYx6
+         Nw4HgyCT4uSoQj/DxZoN+5HKyx+fHKk8vkpkxK8P0Y8grsgV2m6SgUldeCrGBhdJLOHA
+         Tzvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715281242; x=1715886042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=suVrTFWe4Q9EJfAXikAfGsbIG5FwHp88I8wjDmo5qhw=;
-        b=Uxsp2dis/6bYs00we2Gf6LKFOfcEUwxDj3u7BCq4wVPjMnQ8MbEroqEY/Xf5MWDD/i
-         mDyE2F94iTFTE3ptJc+vc0dxP2UueY42j1KPP5hS9ROApGvAvKvFF1I0+xU10gbdI0op
-         u0JUjlaHrV3cCa5eM0W7luXOuuCux4An3l9x40JYpEx/dva7hKV5EYuk56QEDQBUqiOd
-         oEhsfAfMMIeEMbUWhkH1JK+kv2gxHVTFZlBIQieBoO1ZQjBGD2vUqOvtojN5RUm15SBd
-         9WQB6+cJjOm9tqDO1SdB3E1/WHisDYmIGPCvBaQFGpj9ZOwQhdoN7vFJ5r1XPLOIy660
-         Fdbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVsvtrHjB82HtsiRM9zbaMc2FQgumRqz5z+Y2saQBty3TF9rS/WcHMbcT2zeja9P5J4/tTIHZwpgPdlU7Pq9x6jbbaIUko8SmcpLd6fzkmJ
-X-Gm-Message-State: AOJu0YwrDnVhxKtg0XMBrE9+zx/4xwc4Q0ka4/Qk9sOBRb4uEQCPAZMI
-	MEZlTZM5i5lzericcGg+bLcJnzis0D9EOBvMsA4aqhN8dILm2esoKj42dGtcY78=
-X-Google-Smtp-Source: AGHT+IHE3J/hwAQsHqywRim+p5Loya/dtj3SbYe2Ez8JQSaJRUzBly/edfRtpEMzoFQPu7m0vRKdfQ==
-X-Received: by 2002:a05:6300:8002:b0:1af:62a6:e2 with SMTP id adf61e73a8af0-1afde1fb753mr598976637.56.1715281241943;
-        Thu, 09 May 2024 12:00:41 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a6654asm1626451b3a.43.2024.05.09.12.00.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 12:00:41 -0700 (PDT)
-Date: Thu, 9 May 2024 12:00:36 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	apatel@ventanamicro.com, mchitale@ventanamicro.com,
-	dbarboza@ventanamicro.com, sameo@rivosinc.com,
-	shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 01/29] riscv: envcfg save and restore on task switching
-Message-ID: <Zj0dVJ20D05ELAoH@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-2-debug@rivosinc.com>
- <ZjwUhvLBv13qi77a@ghost>
+        d=1e100.net; s=20230601; t=1715281372; x=1715886172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K0mCUgWpAxxdQAlqmk3AkXAPrSMFLi4xORwnVMsbd4A=;
+        b=PlNijU5xXRYEjk2CNfWDR9kHxC4kvumJRg2byrF760An0G7P51L8MR9vUVeWtKnS5F
+         R2mplioI/QPatNQ+FjwVHxQiserbq7PPXxnaMJQhsrtcwAr1jqU1/womf4v8NW6wGuhe
+         3mnsxEfb4cVM4eD5LhRw1R0lCpGnLuCnbVPerD/ct93QZzYaYQA1Q5uTwxPARW5G37zx
+         4Kzclq00KMTdiNKPKqY8reBHP82mSU98sx6KmB60kaT3Aesh2fv/qkkdLi8mS0JX8cyv
+         7+fwnS+HMU9rLTq/9PoHM4UdDvjzdqw2CLbuY3TMYi+9PNQX4KltH/xu2ysgPvYaoP9O
+         ioqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWRiDXO+uFJLCKV4ZaKMmqdUjLu4XReEprZJ4ojrxtbRrR9tEy5BF46kxSqkfg0ZoyMfvtmvPYEh6eO5a/eJMOOuPb8dpptpXqhVBzA2FM+3efXIh7fCjDFUKEQ/AeSLlCvI6LkrPmRmhljSKwOll7coL8btN4Ht0nCpxCrVs1TtcB0SgTQ
+X-Gm-Message-State: AOJu0YyXMDpuRfiJQPckAjvT4moKkgRx52Cp1IXA3elDZqJsUqjWr01v
+	/9r9OfvawsHS1/PpReT+elEyHfAkgfzF7/iok9DvTUS87IJJg0q1
+X-Google-Smtp-Source: AGHT+IE0riKnDu956AcGU2f7+WCkij2yDXQzO02wiZCWSJbPC/Nbi/I9scUCCWNWAfXr1C5eSakvpg==
+X-Received: by 2002:adf:e981:0:b0:34c:f5d2:528d with SMTP id ffacd0b85a97d-3504a9580demr296333f8f.43.1715281372304;
+        Thu, 09 May 2024 12:02:52 -0700 (PDT)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41fdcdd5788sm20977835e9.13.2024.05.09.12.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 May 2024 12:02:51 -0700 (PDT)
+Message-ID: <39829bfe-72d6-45de-bbbb-f487df090973@gmail.com>
+Date: Thu, 9 May 2024 21:02:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZjwUhvLBv13qi77a@ghost>
+Subject: Re: [PATCH net-next v9 2/3] net: gro: move L3 flush checks to
+ tcp_gro_receive and udp_gro_receive_segment
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: alexander.duyck@gmail.com, davem@davemloft.net, dsahern@kernel.org,
+ edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
+ shuah@kernel.org
+References: <20240507162349.130277-1-richardbgobert@gmail.com>
+ <20240507163021.130466-1-richardbgobert@gmail.com>
+ <663cdcb73953_126914294b5@willemb.c.googlers.com.notmuch>
+From: Richard Gobert <richardbgobert@gmail.com>
+In-Reply-To: <663cdcb73953_126914294b5@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 08, 2024 at 05:10:46PM -0700, Charlie Jenkins wrote:
->On Wed, Apr 03, 2024 at 04:34:49PM -0700, Deepak Gupta wrote:
->> envcfg CSR defines enabling bits for cache management instructions and
->> soon will control enabling for control flow integrity and pointer
->> masking features.
+Willem de Bruijn wrote:
+> Richard Gobert wrote:
+>> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
+>> iph->id, ...) against all packets in a loop. These flush checks are used in
+>> all merging UDP and TCP flows.
 >>
->> Control flow integrity enabling for forward cfi and backward cfi are
->> controlled via envcfg and thus need to be enabled on per thread basis.
+>> These checks need to be done only once and only against the found p skb,
+>> since they only affect flush and not same_flow.
 >>
->> This patch creates a place holder for envcfg CSR in `thread_info` and
->> adds logic to save and restore on task switching.
+>> This patch leverages correct network header offsets from the cb for both
+>> outer and inner network headers - allowing these checks to be done only
+>> once, in tcp_gro_receive and udp_gro_receive_segment. As a result,
+>> NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id checks are
+>> more declarative and contained in inet_gro_flush, thus removing the need
+>> for flush_id in napi_gro_cb.
 >>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/switch_to.h   | 10 ++++++++++
->>  arch/riscv/include/asm/thread_info.h |  1 +
->>  2 files changed, 11 insertions(+)
+>> This results in less parsing code for non-loop flush tests for TCP and UDP
+>> flows.
 >>
->> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
->> index 7efdb0584d47..2d9a00a30394 100644
->> --- a/arch/riscv/include/asm/switch_to.h
->> +++ b/arch/riscv/include/asm/switch_to.h
->> @@ -69,6 +69,15 @@ static __always_inline bool has_fpu(void) { return false; }
->>  #define __switch_to_fpu(__prev, __next) do { } while (0)
->>  #endif
+>> To make sure results are not within noise range - I've made netfilter drop
+>> all TCP packets, and measured CPU performance in GRO (in this case GRO is
+>> responsible for about 50% of the CPU utilization).
 >>
->> +static inline void __switch_to_envcfg(struct task_struct *next)
+>> perf top while replaying 64 parallel IP/TCP streams merging in GRO:
+>> (gro_receive_network_flush is compiled inline to tcp_gro_receive)
+>> net-next:
+>>         6.94% [kernel] [k] inet_gro_receive
+>>         3.02% [kernel] [k] tcp_gro_receive
+>>
+>> patch applied:
+>>         4.27% [kernel] [k] tcp_gro_receive
+>>         4.22% [kernel] [k] inet_gro_receive
+>>
+>> perf top while replaying 64 parallel IP/IP/TCP streams merging in GRO (same
+>> results for any encapsulation, in this case inet_gro_receive is top
+>> offender in net-next)
+>> net-next:
+>>         10.09% [kernel] [k] inet_gro_receive
+>>         2.08% [kernel] [k] tcp_gro_receive
+>>
+>> patch applied:
+>>         6.97% [kernel] [k] inet_gro_receive
+>>         3.68% [kernel] [k] tcp_gro_receive
+>>
+>> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+> 
+>> +static inline int inet_gro_flush(const struct iphdr *iph, const struct iphdr *iph2,
+>> +				 struct sk_buff *p, bool outer)
 >> +{
->> +	register unsigned long envcfg = next->thread_info.envcfg;
->
->This doesn't need the register storage class.
->
-
-yeah. will fix it. thanks.
-
+>> +	const u32 id = ntohl(*(__be32 *)&iph->id);
+>> +	const u32 id2 = ntohl(*(__be32 *)&iph2->id);
+>> +	const u16 ipid_offset = (id >> 16) - (id2 >> 16);
+>> +	const u16 count = NAPI_GRO_CB(p)->count;
+>> +	const u32 df = id & IP_DF;
+>> +	int flush;
 >> +
->> +	asm volatile (ALTERNATIVE("nop", "csrw " __stringify(CSR_ENVCFG) ", %0", 0,
->> +							  RISCV_ISA_EXT_XLINUXENVCFG, 1)
->> +							  :: "r" (envcfg) : "memory");
+>> +	/* All fields must match except length and checksum. */
+>> +	flush = (iph->ttl ^ iph2->ttl) | (iph->tos ^ iph2->tos) | (df ^ (id2 & IP_DF));
+>> +
+>> +	if (outer && df)
+>> +		return flush;
+> 
+>     if (flush)
+>             return 1;
+> 
+> To be able to avoid the two flush | below?
+> Or to avoid adding a branch
+> 
+>     if (flush | (outer && df))
+>             return 1;
+> 
+>> +
+>> +	/* When we receive our second frame we can make a decision on if we
+>> +	 * continue this flow as an atomic flow with a fixed ID or if we use
+>> +	 * an incrementing ID.
+>> +	 */
+>> +	if (count == 1 && df && !ipid_offset)
+>> +		NAPI_GRO_CB(p)->ip_fixedid = true;
+>> +
+>> +	if (NAPI_GRO_CB(p)->ip_fixedid && df)
+>> +		return flush | ipid_offset;
+>> +
+>> +	return flush | (ipid_offset ^ count);
+> 
+> And then simply
+> 
+>     if (NAPI_GRO_CB(p)->ip_fixedid)
+>             return ipid_offset;
+>     else
+>             return ipid_offset ^ count;
+> 
+> Since NAPI_GRO_CB(p)->ip_fixedid is only set if DF is set on the first
+> two segments, and df ^ id2 & IP_DF is tested above, no need to test
+> that again.
+> 
 >> +}
->> +
->
->Something like:
->
->static inline void __switch_to_envcfg(struct task_struct *next)
->{
->	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_XLINUXENVCFG))
->		csr_write(CSR_ENVCFG, next->thread_info.envcfg);
->}
->
->would be easier to read, but the alternative you have written doesn't
->have the jump that riscv_has_extension_unlikely has so what you have
->will be more performant.
 
-Yeah looked at codegen of `riscv_has_extension_unlikely` and I didn't like un-necessary jumps,
-specially in switch_to path. All I want is a CSR write. So used alternative to patch nop with
-CSR write.
+I like the idea, it is more readable.
+We just need to return flush, and not 1 to make it correct (since flush
+could be 0 while outer && df set):
 
->
->Does envcfg need to be save/restored always or just with
->CONFIG_RISCV_USER_CFI?
+if (flush | (outer && df))
+		return flush;
 
-There is no save (no read of CSR). Only restore (writes to CSR).
+Not setting NAPI_GRO_CB(p)->ip_fixedid when flush==1 is a slight change
+from the previous behaviour.
+AFAIU it is ok since it doesn't change GRO logic - p will be flushed from
+gro_list and NAPI_GRO_CB becomes irrelevant.
+Removing the DF check is nice, I also think we can avoid a branch
+while keeping the code readable as follows:
 
-There are pointer masking patches from Samuel Holland where senvcfg needs to be context
-switched on per task basis.
-https://lore.kernel.org/lkml/20240319215915.832127-1-samuel.holland@sifive.com/T/
-
-Given that this CSR controls user execution environment and is per task basis, I thought its
-better to not wrap it under CONFIG_RISCV_USER_CFI and rather make it dependend on
-RISCV_ISA_EXT_XLINUXENVCFG. If any of the extensions which require senvcfg, then simply
-restore this CSR on per task basis.
-
->
->- Charlie
->
->>  extern struct task_struct *__switch_to(struct task_struct *,
->>  				       struct task_struct *);
->>
->> @@ -80,6 +89,7 @@ do {							\
->>  		__switch_to_fpu(__prev, __next);	\
->>  	if (has_vector())					\
->>  		__switch_to_vector(__prev, __next);	\
->> +	__switch_to_envcfg(__next);				\
->>  	((last) = __switch_to(__prev, __next));		\
->>  } while (0)
->>
->> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
->> index 5d473343634b..a503bdc2f6dd 100644
->> --- a/arch/riscv/include/asm/thread_info.h
->> +++ b/arch/riscv/include/asm/thread_info.h
->> @@ -56,6 +56,7 @@ struct thread_info {
->>  	long			user_sp;	/* User stack pointer */
->>  	int			cpu;
->>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
->> +	unsigned long envcfg;
->>  #ifdef CONFIG_SHADOW_CALL_STACK
->>  	void			*scs_base;
->>  	void			*scs_sp;
->> --
->> 2.43.2
->>
+return ipid_offset ^ (count * !NAPI_GRO_CB(p)->ip_fixedid);
 
