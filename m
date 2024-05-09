@@ -1,182 +1,175 @@
-Return-Path: <linux-kselftest+bounces-9806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFC6A8C1441
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 19:46:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B9A98C1493
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 20:14:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 971E2281EF8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 17:46:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A65C2B20D44
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 18:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF168770FA;
-	Thu,  9 May 2024 17:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE3B7711B;
+	Thu,  9 May 2024 18:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fxjG3anD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CcnwgtVC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C21D76405
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 17:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FD1770FE;
+	Thu,  9 May 2024 18:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715276763; cv=none; b=M6UzkTCTgjDAXeDkkwB78zMPniS5d+wYDrFZMg4rvATjbF+djedqZLM72JMYJUYVBjGlcKkD7zp5fQt5xIDDXP9gPOIOEzyWXHtpCMRkQ0eb3adcwIcY9qTmJm10ymIGQmXN23iGfa3j//03szPEj7sKN8zabdoRd0Zs/PODo9E=
+	t=1715278482; cv=none; b=IVftg/zfhAyqaM12GenL1/z9GbFxOtlmctWk0cdvubWmjxeA8AyiHG0aqHGpc0IRD3SJEKY5iOwYHhzQCC5cJ4Be+wiRF8XXr4hgaG0s7GYtrsGrQQZbInJojn1kgaS8x3/kayYcfHKCp4e6t447pgwKbu8B57UoEB7vD86AEGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715276763; c=relaxed/simple;
-	bh=/oSWOWjkap8fv/UuIsI6Isx0EXquObmcwzLznfIJKkQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SlcXOxukjJH1Z2odCciDVAFQ7wykaTAm3WdPOmhFxxshwqVDmBKjLeNFW2oTtd1nkGVLPFe8pvMoJWHJH62hKHvHPStMMO5Cz3jCODIB9IR0JQfw0anppbcKxHnND+VoVHWHNX87BGBnn42aVNuZCUmffrVp3LtfMnPMUfX/PWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fxjG3anD; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-572a1b3d6baso1174a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 10:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715276760; x=1715881560; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R9dUf6h0ZONDc1o4IvKX4JCSR1LfcFcW4NQit96LWug=;
-        b=fxjG3anD83hFoJAGJtRblIDGAlzmSLRG8ntKPrhQt+HieXxnkLfNrfeXZDA4DRCfMe
-         sREmIk4QaB74Bb5+DiGkytekIaBjk/rvNTyhi/v/+B08R+Q8xkpAkxzNLVstuVDGDd25
-         GEmOAe0DeZO+QlgQrqL3aR3rKTQi9U4Emep9ofkbHs2DXyOlZ4NdO4/806fVK2YkNxcS
-         68XAqfV/h5ZcRctT01utJ8bJz8tN/N7w4zhbOHBNLRylB0WWfQX5euwEKpNKnO8tR0BU
-         G2FjQBn80cFSqwU79je9zjjKho3HbMYZc8xJ1oeIamcwBM68P2fSXUSvRXeo5wFqsQOv
-         z1BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715276760; x=1715881560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R9dUf6h0ZONDc1o4IvKX4JCSR1LfcFcW4NQit96LWug=;
-        b=QGkEjPRi43qLvaH8VSgHMKfdP4g9ngNKTB6Y+aQrGdmrtqtEVsDv0JvLBL6y8sslYC
-         UceJLHwc3WKqyMEN2jaRC0iFwGJ4pnai05//LI9ySWMxD/rmGWEqx6VI7+IiSDAtqdSU
-         Og066VzyJxT83ICQrRJrCrVAXaXzcmulSCbaBmDD53gWsjdELgrtSD5c4lcMbh7AAcq5
-         nK5HWetb36FH3NaA8ilKjJQ/frodf2mxVnWQGlAuSRtkMXanlYUp8bWfBbImjj0g+bA8
-         I3CHS/bZfQ9M0vYqGYKVAa7IcNn6ZK6m4Igyk2/0XdcHTTMkSQGVa/S6I2I/VWa1VXyE
-         HEpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjw8CEYrGp2Us33diacBPZePcqb7yMKTVrVBSXJxQqoDa7uyKtaaLp1bk+kwnmL2mNC4CUTTi8RUChPNooXvwA+xa6XLcuF29sB6O8oU26
-X-Gm-Message-State: AOJu0YxHbBB5Vf59vr9eGdfOel/+yejff9QPyqlsku/a7e8/Lyf2KQ5X
-	nOgf2zWVrEM4pQWbLNBQkQqZ55AHKgC1JJoZMfrch45uLrneb+GfyP5XyqIforVkrCoyGxbYgi3
-	swzUDOd/E1V8pgN6lPS8+p5Hc95U/UM8DyhkA
-X-Google-Smtp-Source: AGHT+IFG+qZVP+GdGsJ0bfuXNwufKAJIRBglqYr60vsLU06TQKxk62S9P+fDwyd1v4jS3rVgg+dEQp+BJ2xOYW96LJk=
-X-Received: by 2002:a50:cac7:0:b0:572:988f:2f38 with SMTP id
- 4fb4d7f45d1cf-5734f8fe9f6mr3018a12.6.1715276759326; Thu, 09 May 2024 10:45:59
- -0700 (PDT)
+	s=arc-20240116; t=1715278482; c=relaxed/simple;
+	bh=hRafjKR2nz/ik0Ybw1Y2FxPsUTThAfB6fkIwc8yWrHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BvLoyYEyQKrNJ9P0s3tZwVDnEgP1aOL8wlaU9jMIuhDgk8N8SpXqSZBVypfQjEO+R6grIIYoK+CVjYeqacpPizU8+hUmTTtHXFCLu1DEO167MiUZ1jCPvwHDjcmVhWJGh3EGZ2fmuCxYTl1+ASf2xVp8HkRZcIYmVVlVggbagcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CcnwgtVC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7996C116B1;
+	Thu,  9 May 2024 18:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715278482;
+	bh=hRafjKR2nz/ik0Ybw1Y2FxPsUTThAfB6fkIwc8yWrHs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CcnwgtVCG7xfa9ZqQX9x5aPbB8jIN4eai6HbmPjX9FQGjkRwgfJVizpa671LV5kCx
+	 9QcKPdInn/8JQKidSZN9Eu35JSLnJY15KbOhzGq2w8HE2bY9uZkyk0U+HBxZ7kiM+V
+	 aysA3CouUg5fksg2k89YsqHNjChC1e+QIExkTm0ZKsenA/hFkA7dd0bD95DC+Uf844
+	 S+V1pAlVgGoxrbl2rRuhbFPPz1m/SuYxirzNkqJDLeYRmYySS3s37N8IkpGSb7eQDm
+	 BjuX/N9hoEsXnMZUjzWd0dYjjFNG4QGZO2CS7ceb+lKr8CXBBTstrnjgSa7sJEb+st
+	 WQf+eKiLwhByQ==
+Date: Thu, 9 May 2024 19:14:26 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>, paul.walmsley@sifive.com,
+	rick.p.edgecombe@intel.com, broonie@kernel.org,
+	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, conor.dooley@microchip.com,
+	cleger@rivosinc.com, atishp@atishpatra.org, alex@ghiti.fr,
+	bjorn@rivosinc.com, alexghiti@rivosinc.com,
+	samuel.holland@sifive.com, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	corbet@lwn.net, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+	jerry.shih@sifive.com, hankuan.chen@sifive.com,
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+	charlie@rivosinc.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
+	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 04/29] riscv: zicfilp / zicfiss in dt-bindings
+ (extensions.yaml)
+Message-ID: <20240509-cornflake-foyer-e6589c2bc364@spud>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-5-debug@rivosinc.com>
+ <20240410115806.GA4044117-robh@kernel.org>
+ <CAKC1njSsZ6wfvJtXkp4J4J6wXFtU92W9JGca-atKxBy8UvUwRg@mail.gmail.com>
+ <20240415194105.GA94432-robh@kernel.org>
+ <Zh6c0FH2OvrfDLje@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507214254.2787305-1-edliaw@google.com> <f4e45604-86b0-4be6-9bea-36edf301df33@linuxfoundation.org>
- <CAG4es9XE2D94BNboRSf607NbJVW7OW4xkVq4jZ8pDZ_AZsb3nQ@mail.gmail.com> <946ae22f-a4af-448a-92e1-60afb6ed9261@linuxfoundation.org>
-In-Reply-To: <946ae22f-a4af-448a-92e1-60afb6ed9261@linuxfoundation.org>
-From: Edward Liaw <edliaw@google.com>
-Date: Thu, 9 May 2024 10:45:31 -0700
-Message-ID: <CAG4es9V2CcBJr0josSoGNsD+ZPQ6vasVXh_Hc_j88oeSqn__yQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Christian Brauner <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Kees Cook <keescook@chromium.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Seth Forshee <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Fenghua Yu <fenghua.yu@intel.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mm@kvack.org, linux-input@vger.kernel.org, iommu@lists.linux.dev, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-actions@lists.infradead.org, mptcp@lists.linux.dev, 
-	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="JhRnWmWpnp4za6Qf"
+Content-Disposition: inline
+In-Reply-To: <Zh6c0FH2OvrfDLje@debug.ba.rivosinc.com>
+
+
+--JhRnWmWpnp4za6Qf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 9, 2024 at 7:37=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.or=
-g> wrote:
->
-> On 5/9/24 00:13, Edward Liaw wrote:
-> > On Wed, May 8, 2024 at 4:10=E2=80=AFPM Shuah Khan <skhan@linuxfoundatio=
-n.org> wrote:
-> >>
-> >> On 5/7/24 15:38, Edward Liaw wrote:
-> >>> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> >>> asprintf into kselftest_harness.h, which is a GNU extension and needs
-> >>> _GNU_SOURCE to either be defined prior to including headers or with t=
-he
-> >>> -D_GNU_SOURCE flag passed to the compiler.
-> >>>
-> >>> v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-=
-edliaw@google.com/
-> >>> v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-> >>> location.  Remove #define _GNU_SOURCE from source code to resolve
-> >>> redefinition warnings.
-> >>>
-> >>> Edward Liaw (5):
-> >>>     selftests: Compile kselftest headers with -D_GNU_SOURCE
-> >>>     selftests/sgx: Include KHDR_INCLUDES in Makefile
-> >>
-> >> I appled patches 1/5 and 2.5 - The rest need to be split up.
-> >>
-> >>>     selftests: Include KHDR_INCLUDES in Makefile
-> >>>     selftests: Drop define _GNU_SOURCE
-> >>>     selftests: Drop duplicate -D_GNU_SOURCE
-> >>>
-> >>
-> >> Please split these patches pwe test directory. Otherwise it will
-> >> cause merge conflicts which can be hard to resolve.
-> >
-> > Hi Shuah,
-> > Sean asked that I rebase the patches on linux-next, and I will need to
-> > remove additional _GNU_SOURCE defines.  Should I send an unsplit v3 to
-> > be reviewed, then split it afterwards?  I'm concerned that it will be
-> > difficult to review with ~70 patches once split.
->
-> Please send them split - it will be easier to review and apply. You
-> might as well wait until the merge window is done. I don't think
-> anybody would have time to review now since merge window starts
-> next week.
+On Tue, Apr 16, 2024 at 08:44:16AM -0700, Deepak Gupta wrote:
+> On Mon, Apr 15, 2024 at 02:41:05PM -0500, Rob Herring wrote:
+> > On Wed, Apr 10, 2024 at 02:37:21PM -0700, Deepak Gupta wrote:
+> > > On Wed, Apr 10, 2024 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.org>=
+ wrote:
+> > > >
+> > > > On Wed, Apr 03, 2024 at 04:34:52PM -0700, Deepak Gupta wrote:
+> > > > > Make an entry for cfi extensions in extensions.yaml.
+> > > > >
+> > > > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> > > > > ---
+> > > > >  .../devicetree/bindings/riscv/extensions.yaml          | 10 ++++=
+++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/riscv/extensions.y=
+aml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > > > index 63d81dc895e5..45b87ad6cc1c 100644
+> > > > > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > > > > @@ -317,6 +317,16 @@ properties:
+> > > > >              The standard Zicboz extension for cache-block zeroin=
+g as ratified
+> > > > >              in commit 3dd606f ("Create cmobase-v1.0.pdf") of ris=
+cv-CMOs.
+> > > > >
+> > > > > +        - const: zicfilp
+> > > > > +          description:
+> > > > > +            The standard Zicfilp extension for enforcing forward=
+ edge control-flow
+> > > > > +            integrity in commit 3a20dc9 of riscv-cfi and is in p=
+ublic review.
+> > > >
+> > > > Does in public review mean the commit sha is going to change?
+> > > >
+> > >=20
+> > > Less likely. Next step after public review is to gather comments from
+> > > public review.
+> > > If something is really pressing and needs to be addressed, then yes
+> > > this will change.
+> > > Else this gets ratified as it is.
+> >=20
+> > If the commit sha can change, then it is useless. What's the guarantee
+> > someone is going to remember to update it if it changes?
+>=20
+> Sorry for late reply.
+>=20
+> I was following existing wordings and patterns for messaging in this file.
+> You would rather have me remove sha and only mention that spec is in publ=
+ic
+> review?
 
-Sorry, I have them split already; is it ok if I send them now?  I will
-be on leave soon and may not be able to get back to it in a while.
+Nope, having a commit sha is desired. None of this is mergeable until at
+least the spec becomes frozen, so the sha can be updated at that point
+to the freeze state - or better yet to the ratified state. Being in
+public review is not sufficient.
 
-Thanks,
-Edward
+Cheers,
+Conor
 
->
->
-> thanks,
-> -- Shuah
+--JhRnWmWpnp4za6Qf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj0SggAKCRB4tDGHoIJi
+0mvjAP9d3Qz1PVGc/kOj+XdEfO1FrKoEF9VSW9XYGpnlZvSRVAEAhzTts4ymraHs
+rig86vUonyRRKcngwn/ZR5KdPHqJ3ws=
+=NfI8
+-----END PGP SIGNATURE-----
+
+--JhRnWmWpnp4za6Qf--
 
