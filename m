@@ -1,184 +1,137 @@
-Return-Path: <linux-kselftest+bounces-9788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4988C1158
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 16:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D4778C1210
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 17:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75D68285F95
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 14:37:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 849582828F4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 15:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77AE3AC2B;
-	Thu,  9 May 2024 14:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3655515F416;
+	Thu,  9 May 2024 15:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NTo7eWSD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="l2NteKRJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B383D3F8E2
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 14:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A3D12A179;
+	Thu,  9 May 2024 15:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.40.148.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715265430; cv=none; b=mI+FUvErBX4LtzCYuYZYYQNFhWYesuCSqqngu2IYmHpSiBQkW/Y162JiAvlTeCH94AlWmuYK3fnBmZn42H5wx3kN06omUkJS54Z1vYNOa+ZKrKbHqSpmXa6bwQfUBodDpStaF/xm0Faz5k1MG6vDn8QTw2rNWUhsEFMERvtYrZM=
+	t=1715269098; cv=none; b=bjKAKIF4sqhNBqX7LcZ1pa0gDg+By3Gxn7o4zGFWMVSP54LKhXYodt4W5Nv5Swrdj5DLGjJKX8RxcYhi5IreXTBXKfrqrd5kZXq6VOfZwePTE242dIXuu5fDa0RaFatR74VrFnzLZIKikL2yNdEuPzi2bkhqQYHijeBpZ1Yngxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715265430; c=relaxed/simple;
-	bh=rX2HhaPr9XjslEz/iELt3o8cY4WdThK1YOL4qhZC7cc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QRAGVXflKo23MXxrT4s0g3rvzk1B1ammXFbwKKf24iKk4djWFb6RQ1RkQm/Hx5xZBCJxiWP5FsBA8xm5FjX43UgC0pcHjJO076wXtGmH7j46arixvQsVKe7FK9HFVd4GPvJeE5Hs7BYwmn0zY5m1Cfa93OjR1mfby0lemdt0JOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NTo7eWSD; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7d9ef422859so8307239f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 07:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1715265427; x=1715870227; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qhunxhR/OF2icvm3HmEsNbbwCxzb74IsXbKxDT8qkPs=;
-        b=NTo7eWSDMbAgSOT7CINCmQClTKuqqKFXzf8sF9h8V2D/TL6uzIk6kNIRhOOZdzEMTW
-         mJ9+zmh148SCPZPrjx1yCxIGvBo6MHnlbazDh1HqKyqkHbDHYDUog3Z/huvB7M1KruTH
-         G4D/ZyTmCb4BjkMlKuDOLN5gYiVRGa28cjD1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715265427; x=1715870227;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qhunxhR/OF2icvm3HmEsNbbwCxzb74IsXbKxDT8qkPs=;
-        b=lyAgHBpsowQpbyRnJUCRBdmCLgeVtxp50kjjCV4fqz+DOf1sJtqW9bx+CkmFkcd35E
-         LhSWWYOGow2DOMydn9F8a7PHtUrlSL+OBlst/QlkdFUhKPLAa0u2oKdN8488aWQviVfL
-         N0CEG+ICau77fGEvIOe8zYqIyUIc72Zo3Tr3QDIxOdfzv6DZTFYZvi/Hj0MU21L6vIBX
-         q+K/RMam69NiCEjpt733hn2F83dr68YzV1KzWtjJIFuJxA5+w2HJDmM7TXuohcmdegQd
-         axyIBTQIJCuAvpvupOi+UKFrzu+Y1IibqlTVF/+xCzPetWgtQ27QwJ/9a9GfdXLgmu5Y
-         CXiA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjWSqUvhdOKBZEeCMGuhE0wZboHazWLgie2S5yD/yQXT0rYrHczV4ZNMHOlUyaX7/4P9U9PN6xjd583sL4kUCbI1oDVT4qOYExQwziLUej
-X-Gm-Message-State: AOJu0YxWd3Ba3mHfSAUhs4oA3CGmHFIOien/fOtEczfBhaPthnn4jjqX
-	lYI1BdVp+8NPIn2AvUZ89iPZPzkzAYFRhoEnJWd1+EPeqKDtcg/Y+es6GRefN94=
-X-Google-Smtp-Source: AGHT+IFLPV3hTUAqtiZSXFMZ3nZtJrVA8/PdzJcN3v/yjJF832scb22cGE7mYooNXziODVFLnPMOaA==
-X-Received: by 2002:a6b:e618:0:b0:7e1:86e1:cd46 with SMTP id ca18e2360f4ac-7e18fd9a35cmr655432839f.2.1715265426750;
-        Thu, 09 May 2024 07:37:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4893703c0c8sm386684173.48.2024.05.09.07.37.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 May 2024 07:37:06 -0700 (PDT)
-Message-ID: <946ae22f-a4af-448a-92e1-60afb6ed9261@linuxfoundation.org>
-Date: Thu, 9 May 2024 08:37:03 -0600
+	s=arc-20240116; t=1715269098; c=relaxed/simple;
+	bh=nANHlT8bQuzaSmFK3lwpS7Cj4BPy1dbSvsaWfROiQuQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LNgFo3//ZuQ+/JuGMqaZYmjWuRg27I/wXvE5PIA3Sepsy0skYgK3NNJfSbMmuFoZ8jqhhYEUIIR9Vghr1mImk0FsqGd2XmK+45AyezDZI6A2Ps+FYM8c7gesAj3gqBsoL5nLKDycdX9QpRv7yLoHhCYKFCjrhkwHYMhFxTarKLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=l2NteKRJ; arc=none smtp.client-ip=78.40.148.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codethink.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codethink.co.uk; s=imap5-20230908; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=50SVXh7j8YqDqiQBc6TkcGnGUn+l90zrT0o1BlM2Ags=; b=l2NteKRJVsFxAzIoByojnt/Vfu
+	qGc+PJQHO+cCUCM6K4zGy6fOQD5KE+qffxitaRdbqmKL5FVtNuvHqa1CUlzu9Dd2/QgtUgGQfmXdD
+	6HHEkXyCZ8e1zJVkxBx6tUYdJdsjIJTQF2XY+fNNcCHzSwtscyCuT9OFRzvQLn0X+KnpYwRmybtAi
+	mu/DURR1YvT4emFjagxsU1an1mnNDGaEOR3m4AN++mm/crvPkK3CcqbYwLReek35RrX8ONz0XZ004
+	PS2E0AmL6FxHEC1zYtrUPgjkl4gidrmvmNdZ2riFTfsxHbbSFHd0eRchxnv9/V+oH5owo6jzDCxCJ
+	EkdfNMQQ==;
+Received: from [167.98.27.226] (helo=ct-lt-2504.office.codethink.co.uk)
+	by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+	id 1s55qI-000cg5-FA; Thu, 09 May 2024 16:37:59 +0100
+From: Ivan Orlov <ivan.orlov@codethink.co.uk>
+To: pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: Ivan Orlov <ivan.orlov@codethink.co.uk>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Check API version when creating VM
+Date: Thu,  9 May 2024 16:37:57 +0100
+Message-Id: <20240509153757.42032-1-ivan.orlov@codethink.co.uk>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Christian Brauner <brauner@kernel.org>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>,
- OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
- <andrealmeid@igalia.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- David Hildenbrand <david@redhat.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Andrew Morton <akpm@linux-foundation.org>, Seth Forshee
- <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, =?UTF-8?Q?Andreas_F=C3=A4rber?=
- <afaerber@suse.de>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, linux-sound@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
- linux-input@vger.kernel.org, iommu@lists.linux.dev, kvmarm@lists.linux.dev,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
- linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
- linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240507214254.2787305-1-edliaw@google.com>
- <f4e45604-86b0-4be6-9bea-36edf301df33@linuxfoundation.org>
- <CAG4es9XE2D94BNboRSf607NbJVW7OW4xkVq4jZ8pDZ_AZsb3nQ@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAG4es9XE2D94BNboRSf607NbJVW7OW4xkVq4jZ8pDZ_AZsb3nQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Sender: ivan.orlov@codethink.co.uk
 
-On 5/9/24 00:13, Edward Liaw wrote:
-> On Wed, May 8, 2024 at 4:10 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 5/7/24 15:38, Edward Liaw wrote:
->>> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
->>> asprintf into kselftest_harness.h, which is a GNU extension and needs
->>> _GNU_SOURCE to either be defined prior to including headers or with the
->>> -D_GNU_SOURCE flag passed to the compiler.
->>>
->>> v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-edliaw@google.com/
->>> v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
->>> location.  Remove #define _GNU_SOURCE from source code to resolve
->>> redefinition warnings.
->>>
->>> Edward Liaw (5):
->>>     selftests: Compile kselftest headers with -D_GNU_SOURCE
->>>     selftests/sgx: Include KHDR_INCLUDES in Makefile
->>
->> I appled patches 1/5 and 2.5 - The rest need to be split up.
->>
->>>     selftests: Include KHDR_INCLUDES in Makefile
->>>     selftests: Drop define _GNU_SOURCE
->>>     selftests: Drop duplicate -D_GNU_SOURCE
->>>
->>
->> Please split these patches pwe test directory. Otherwise it will
->> cause merge conflicts which can be hard to resolve.
-> 
-> Hi Shuah,
-> Sean asked that I rebase the patches on linux-next, and I will need to
-> remove additional _GNU_SOURCE defines.  Should I send an unsplit v3 to
-> be reviewed, then split it afterwards?  I'm concerned that it will be
-> difficult to review with ~70 patches once split.
+As it is said in the docs, we should always check the KVM API version
+before running the KVM-based applications. Add the function which
+queries the current KVM API version through `ioctl` to the `kvm_util.c`
+file.
 
-Please send them split - it will be easier to review and apply. You
-might as well wait until the merge window is done. I don't think
-anybody would have time to review now since merge window starts
-next week.
+Add a new TEST_REQUIRE statement to the `vm_open` function in order
+to verify the version of the KVM API before creating a VM.
 
+Signed-off-by: Ivan Orlov <ivan.orlov@codethink.co.uk>
+---
+ .../testing/selftests/kvm/include/kvm_util_base.h  |  2 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c         | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 3e0db283a46a..d7a83387ae33 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -38,6 +38,7 @@
+ #define kvm_static_assert(expr, ...) __kvm_static_assert(expr, ##__VA_ARGS__, #expr)
+ 
+ #define KVM_DEV_PATH "/dev/kvm"
++#define KVM_DEFAULT_API_VERSION 12
+ #define KVM_MAX_VCPUS 512
+ 
+ #define NSEC_PER_SEC 1000000000L
+@@ -275,6 +276,7 @@ int get_kvm_intel_param_integer(const char *param);
+ int get_kvm_amd_param_integer(const char *param);
+ 
+ unsigned int kvm_check_cap(long cap);
++int kvm_get_api_version(void);
+ 
+ static inline bool kvm_has_cap(long cap)
+ {
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index b2262b5fad9e..58a5deccb388 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -176,6 +176,19 @@ unsigned int kvm_check_cap(long cap)
+ 	return (unsigned int)ret;
+ }
+ 
++int kvm_get_api_version(void)
++{
++	int ret;
++	int kvm_fd;
++
++	kvm_fd = open_kvm_dev_path_or_exit();
++	ret = __kvm_ioctl(kvm_fd, KVM_GET_API_VERSION, NULL);
++
++	close(kvm_fd);
++
++	return ret;
++}
++
+ void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size)
+ {
+ 	if (vm_check_cap(vm, KVM_CAP_DIRTY_LOG_RING_ACQ_REL))
+@@ -190,6 +203,7 @@ static void vm_open(struct kvm_vm *vm)
+ 	vm->kvm_fd = _open_kvm_dev_path_or_exit(O_RDWR);
+ 
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_IMMEDIATE_EXIT));
++	TEST_REQUIRE(kvm_get_api_version() == KVM_DEFAULT_API_VERSION);
+ 
+ 	vm->fd = __kvm_ioctl(vm->kvm_fd, KVM_CREATE_VM, (void *)vm->type);
+ 	TEST_ASSERT(vm->fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_VM, vm->fd));
+-- 
+2.34.1
+
 
