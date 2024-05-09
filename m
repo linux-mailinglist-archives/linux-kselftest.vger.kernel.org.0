@@ -1,78 +1,130 @@
-Return-Path: <linux-kselftest+bounces-9759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A69658C0A9F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 06:48:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D795A8C0AA4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 06:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AB2F282174
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 04:48:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 067A11C21837
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 04:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2021494D8;
-	Thu,  9 May 2024 04:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FBE148FFB;
+	Thu,  9 May 2024 04:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+WGMD3f"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="d9k3Xohb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586EE1494C8;
-	Thu,  9 May 2024 04:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E902747D;
+	Thu,  9 May 2024 04:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715230085; cv=none; b=m2/amdJwxhKzorQrCjKvGeymgOO127XGg6quDIBGR/sgNX1dEscnR7aca0PRrGKSY26m68yubQc2WsLBuOgkP9vy+jsJJfxTzdTr9CK2G9kD5OjE/scY3S2/YDc/YcqyEfSmoThUfr931Gt3ZpcOtmQibdwkQB8eBcA6AINV3/4=
+	t=1715230195; cv=none; b=BCjXOxe0Oa9542fw/UqQXY4T5vcOs8zMxCx7ihNJu1oKiYO/d3Eh929W80bhDyr3DpbfLfuzr0zmYwwE9pI+E/g2eRC55q6a9SOAlpFVblFM+MuKjehqJPB6G8NtbUIxpEgVfiDcXzsZAMgNyQ4n9UKB5Z3UEquJx/YJMp49ERc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715230085; c=relaxed/simple;
-	bh=E6GLGUNu5XEPafk+JfG6+bGh7d1mOOqhkHHoKLbrq8I=;
+	s=arc-20240116; t=1715230195; c=relaxed/simple;
+	bh=+AiojDAJmMoCc0Wxxh5jISkjo5+IH8X8Y3hjru7idxw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zg6MS8Qjq8Ve92jGY+II+0cRctj2ed/4z1u+NV5EadBi+JlxD2fqNLUbTE64MHZuJvDA3cr/F734zG5yp1R4aS+jl+XpsRq/oVOX+vefwBGGcGSQgfGK2/hRUIHX9stSVqb3YLjtofjzIBtlD7Nwc6nsEXZsS3zZmJZsI6qQKA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+WGMD3f; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715230084; x=1746766084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E6GLGUNu5XEPafk+JfG6+bGh7d1mOOqhkHHoKLbrq8I=;
-  b=L+WGMD3f3Lh+sdM5CaKDDaHxGiEgIYtFBmmu3FfaScFD+TzIpSOGPWNy
-   LYOx9AJnl1Bab7I6DF1l4OwwUd1DyLONUVtJTHlvLzusZdO8XWQ1eAgF4
-   TOYuFdXz4HaI9LsVaAeWvpimCUP0FdGMoiDvOpn2nE9n3wLOOARHIIvob
-   pg/mTSn+ySiwfW2n1DJxPSTQryeTPvf3Ly4wzHGrIffyHO/RwHbhV7TS8
-   OHQDpEwSp9uBEkZrhQAWET4OT8JbCrRYLylH6l2Ty4QBrMpSATtnB4ROj
-   MbaeB6uQcAPstO6tjBg0Rm2aaOAj1WAUpqxeIr97z6oudt+DmY5REPVcR
-   Q==;
-X-CSE-ConnectionGUID: eIUahOxcQCqcZKERRCCUQQ==
-X-CSE-MsgGUID: 2aTDyMwkTsybKtM6xK5dZQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="36508419"
-X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
-   d="scan'208";a="36508419"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 21:48:03 -0700
-X-CSE-ConnectionGUID: DP2pll5XTlWBTP78z2kmVw==
-X-CSE-MsgGUID: MoqN1fHWQmerOeJEMA4WDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
-   d="scan'208";a="29051161"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 May 2024 21:48:00 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4vhG-0004Sq-09;
-	Thu, 09 May 2024 04:47:58 +0000
-Date: Thu, 9 May 2024 12:46:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ivan Orlov <ivan.orlov0322@gmail.com>, brendan.higgins@linux.dev,
-	davidgow@google.com, rmoar@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] kunit: Cover 'assert.c' with tests
-Message-ID: <202405091253.FrHa2zBi-lkp@intel.com>
-References: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gd3tEsR/YQv0byIK1xjrl8o5hHsNLMKfXXH2YrBPy+qRa3XHUzeq41uD/hGk9158kxvmhCMG8KcXCYFXTNlXVTOP2Wtw56iRtrxB49RwlFBFP+KGePBvwY9IrDGeqT/tLf/oSBQJ/pYPuAj3ZSgeLMiGhvl2GtDB0nWb5/WBe8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d9k3Xohb; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=x3Xxg6i0FLAN0umHIWCwG93UHt8NFMOuUk41qzLUqYk=; b=d9k3XohbzRhXOoELgdBEeA6f1S
+	3oOjwUmoqaRaQC0CvfU6k+88iGiYqGevi4D0Mjv1XT/tJ31yElVIPjyooqUNsndaV6nr1hGD5KD6Y
+	hpVyEo5ud1SsOU0IbJ/27faXATUncL94DVq2aq/GP8tX02rBz5V+LazPctxgZmjT4XiNg5CteZelR
+	F250+x02riIYTRrco+NPB3RdRCFIh0LOb6pIdqAbmqXgrCWDOGcloO9JUAvrLzhBGKhu3BAgULPxQ
+	P+NUz6+r5CHQPlzEem7mdtAOYVy13sfKqnZcHBQZehzZ76EOcgOw/zp4uB68EXKz4VKifIE4VqybV
+	dq8ZPucQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s4vit-00000000LYS-0m4f;
+	Thu, 09 May 2024 04:49:39 +0000
+Date: Wed, 8 May 2024 21:49:39 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Christoph Hellwig <hch@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZjxV4yEYXRGElrsA@infradead.org>
+References: <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
+ <20240507164838.GG4718@ziepe.ca>
+ <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+ <20240507175644.GJ4718@ziepe.ca>
+ <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
+ <20240507233247.GK4718@ziepe.ca>
+ <Zjsm3vO6rIY_sw5A@phenom.ffwll.local>
+ <1e2823db-504b-4829-856f-3f45a45ccada@gmail.com>
+ <ZjufddNVJs5Csaix@infradead.org>
+ <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,275 +133,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240508132557.599213-1-ivan.orlov0322@gmail.com>
+In-Reply-To: <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi Ivan,
+On Wed, May 08, 2024 at 06:02:14PM +0100, Pavel Begunkov wrote:
+> Well, the example fell flat, but you don't use dmabuf when there are
+> no upsides from using it. For instance, when you already have pinned
+> pages, you're going to use pages, and there are no other refcounting
+> concerns.
 
-kernel test robot noticed the following build warnings:
+Sure.
 
-[auto build test WARNING on shuah-kselftest/kunit]
-[also build test WARNING on shuah-kselftest/kunit-fixes linus/master v6.9-rc7 next-20240508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Unless there is an advantage of dmabufs over FOLL_LONGTERM
+> that I don't know about when used with normal user pages.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/kunit-Cover-assert-c-with-tests/20240508-212654
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20240508132557.599213-1-ivan.orlov0322%40gmail.com
-patch subject: [PATCH v2] kunit: Cover 'assert.c' with tests
-config: i386-randconfig-001-20240509 (https://download.01.org/0day-ci/archive/20240509/202405091253.FrHa2zBi-lkp@intel.com/config)
-compiler: clang version 18.1.4 (https://github.com/llvm/llvm-project e6c3289804a67ea0bb6a86fadbe454dd93b8d855)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405091253.FrHa2zBi-lkp@intel.com/reproduce)
+The advantages of using a dma-buf over FOLL_LONGTERM are:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405091253.FrHa2zBi-lkp@intel.com/
+ a) you pre-dma map, which is a significant performance advantage for
+    IOMMU-based setups
+ b) you support any dma-buf exported and not just user memory.  This
+    is primarily important for PCIe P2P, but there might be other
+    useful exporters as well
 
-All warnings (new ones prefixed by >>):
+> > wish io_uring would have just implemented them from the start instead of
+> > the current fixed buffers that are not quite as useful by not
+> > pre-mapping DMA and not supporting P2P.
+> 
+> fdget(dmabuf) would be horrible, I assume that's not the suggestion.
 
->> lib/kunit/assert.c:35:6: warning: no previous prototype for function 'kunit_assert_print_msg' [-Wmissing-prototypes]
-      35 | void kunit_assert_print_msg(const struct va_format *message,
-         |      ^
-   lib/kunit/assert.c:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      35 | void kunit_assert_print_msg(const struct va_format *message,
-         | ^
-         | static 
->> lib/kunit/assert.c:95:23: warning: no previous prototype for function 'is_literal' [-Wmissing-prototypes]
-      95 | VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-         |                       ^
-   lib/kunit/assert.c:95:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      95 | VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-         |                  ^
-         |                  static 
->> lib/kunit/assert.c:173:23: warning: no previous prototype for function 'is_str_literal' [-Wmissing-prototypes]
-     173 | VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-         |                       ^
-   lib/kunit/assert.c:173:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     173 | VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-         |                  ^
-         |                  static 
->> lib/kunit/assert.c:217:6: warning: no previous prototype for function 'kunit_assert_hexdump' [-Wmissing-prototypes]
-     217 | void kunit_assert_hexdump(struct string_stream *stream,
-         |      ^
-   lib/kunit/assert.c:217:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     217 | void kunit_assert_hexdump(struct string_stream *stream,
-         | ^
-         | static 
-   4 warnings generated.
+I'm not even sure what you mean with that.
 
-
-vim +/kunit_assert_print_msg +35 lib/kunit/assert.c
-
-    33	
-    34	VISIBLE_IF_KUNIT
-  > 35	void kunit_assert_print_msg(const struct va_format *message,
-    36				    struct string_stream *stream)
-    37	{
-    38		if (message->fmt)
-    39			string_stream_add(stream, "\n%pV", message);
-    40	}
-    41	EXPORT_SYMBOL_IF_KUNIT(kunit_assert_print_msg);
-    42	
-    43	void kunit_fail_assert_format(const struct kunit_assert *assert,
-    44				      const struct va_format *message,
-    45				      struct string_stream *stream)
-    46	{
-    47		string_stream_add(stream, "%pV", message);
-    48	}
-    49	EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
-    50	
-    51	void kunit_unary_assert_format(const struct kunit_assert *assert,
-    52				       const struct va_format *message,
-    53				       struct string_stream *stream)
-    54	{
-    55		struct kunit_unary_assert *unary_assert;
-    56	
-    57		unary_assert = container_of(assert, struct kunit_unary_assert, assert);
-    58	
-    59		if (unary_assert->expected_true)
-    60			string_stream_add(stream,
-    61					  KUNIT_SUBTEST_INDENT "Expected %s to be true, but is false\n",
-    62					  unary_assert->condition);
-    63		else
-    64			string_stream_add(stream,
-    65					  KUNIT_SUBTEST_INDENT "Expected %s to be false, but is true\n",
-    66					  unary_assert->condition);
-    67		kunit_assert_print_msg(message, stream);
-    68	}
-    69	EXPORT_SYMBOL_GPL(kunit_unary_assert_format);
-    70	
-    71	void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-    72					     const struct va_format *message,
-    73					     struct string_stream *stream)
-    74	{
-    75		struct kunit_ptr_not_err_assert *ptr_assert;
-    76	
-    77		ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
-    78					  assert);
-    79	
-    80		if (!ptr_assert->value) {
-    81			string_stream_add(stream,
-    82					  KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-    83					  ptr_assert->text);
-    84		} else if (IS_ERR(ptr_assert->value)) {
-    85			string_stream_add(stream,
-    86					  KUNIT_SUBTEST_INDENT "Expected %s is not error, but is: %ld\n",
-    87					  ptr_assert->text,
-    88					  PTR_ERR(ptr_assert->value));
-    89		}
-    90		kunit_assert_print_msg(message, stream);
-    91	}
-    92	EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
-    93	
-    94	/* Checks if `text` is a literal representing `value`, e.g. "5" and 5 */
-  > 95	VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
-    96	{
-    97		char *buffer;
-    98		int len;
-    99		bool ret;
-   100	
-   101		len = snprintf(NULL, 0, "%lld", value);
-   102		if (strlen(text) != len)
-   103			return false;
-   104	
-   105		buffer = kmalloc(len+1, GFP_KERNEL);
-   106		if (!buffer)
-   107			return false;
-   108	
-   109		snprintf(buffer, len+1, "%lld", value);
-   110		ret = strncmp(buffer, text, len) == 0;
-   111	
-   112		kfree(buffer);
-   113	
-   114		return ret;
-   115	}
-   116	EXPORT_SYMBOL_IF_KUNIT(is_literal);
-   117	
-   118	void kunit_binary_assert_format(const struct kunit_assert *assert,
-   119					const struct va_format *message,
-   120					struct string_stream *stream)
-   121	{
-   122		struct kunit_binary_assert *binary_assert;
-   123	
-   124		binary_assert = container_of(assert, struct kunit_binary_assert,
-   125					     assert);
-   126	
-   127		string_stream_add(stream,
-   128				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   129				  binary_assert->text->left_text,
-   130				  binary_assert->text->operation,
-   131				  binary_assert->text->right_text);
-   132		if (!is_literal(binary_assert->text->left_text, binary_assert->left_value))
-   133			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
-   134					  binary_assert->text->left_text,
-   135					  binary_assert->left_value,
-   136					  binary_assert->left_value);
-   137		if (!is_literal(binary_assert->text->right_text, binary_assert->right_value))
-   138			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
-   139					  binary_assert->text->right_text,
-   140					  binary_assert->right_value,
-   141					  binary_assert->right_value);
-   142		kunit_assert_print_msg(message, stream);
-   143	}
-   144	EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
-   145	
-   146	void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-   147					    const struct va_format *message,
-   148					    struct string_stream *stream)
-   149	{
-   150		struct kunit_binary_ptr_assert *binary_assert;
-   151	
-   152		binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
-   153					     assert);
-   154	
-   155		string_stream_add(stream,
-   156				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   157				  binary_assert->text->left_text,
-   158				  binary_assert->text->operation,
-   159				  binary_assert->text->right_text);
-   160		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-   161				  binary_assert->text->left_text,
-   162				  binary_assert->left_value);
-   163		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
-   164				  binary_assert->text->right_text,
-   165				  binary_assert->right_value);
-   166		kunit_assert_print_msg(message, stream);
-   167	}
-   168	EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
-   169	
-   170	/* Checks if KUNIT_EXPECT_STREQ() args were string literals.
-   171	 * Note: `text` will have ""s where as `value` will not.
-   172	 */
- > 173	VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
-   174	{
-   175		int len;
-   176	
-   177		len = strlen(text);
-   178		if (len < 2)
-   179			return false;
-   180		if (text[0] != '\"' || text[len - 1] != '\"')
-   181			return false;
-   182	
-   183		return strncmp(text + 1, value, len - 2) == 0;
-   184	}
-   185	EXPORT_SYMBOL_IF_KUNIT(is_str_literal);
-   186	
-   187	void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-   188					    const struct va_format *message,
-   189					    struct string_stream *stream)
-   190	{
-   191		struct kunit_binary_str_assert *binary_assert;
-   192	
-   193		binary_assert = container_of(assert, struct kunit_binary_str_assert,
-   194					     assert);
-   195	
-   196		string_stream_add(stream,
-   197				  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-   198				  binary_assert->text->left_text,
-   199				  binary_assert->text->operation,
-   200				  binary_assert->text->right_text);
-   201		if (!is_str_literal(binary_assert->text->left_text, binary_assert->left_value))
-   202			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"\n",
-   203					  binary_assert->text->left_text,
-   204					  binary_assert->left_value);
-   205		if (!is_str_literal(binary_assert->text->right_text, binary_assert->right_value))
-   206			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
-   207					  binary_assert->text->right_text,
-   208					  binary_assert->right_value);
-   209		kunit_assert_print_msg(message, stream);
-   210	}
-   211	EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
-   212	
-   213	/* Adds a hexdump of a buffer to a string_stream comparing it with
-   214	 * a second buffer. The different bytes are marked with <>.
-   215	 */
-   216	VISIBLE_IF_KUNIT
- > 217	void kunit_assert_hexdump(struct string_stream *stream,
-   218				  const void *buf,
-   219				  const void *compared_buf,
-   220				  const size_t len)
-   221	{
-   222		size_t i;
-   223		const u8 *buf1 = buf;
-   224		const u8 *buf2 = compared_buf;
-   225	
-   226		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT);
-   227	
-   228		for (i = 0; i < len; ++i) {
-   229			if (!(i % 16) && i)
-   230				string_stream_add(stream, "\n" KUNIT_SUBSUBTEST_INDENT);
-   231	
-   232			if (buf1[i] != buf2[i])
-   233				string_stream_add(stream, "<%02x>", buf1[i]);
-   234			else
-   235				string_stream_add(stream, " %02x ", buf1[i]);
-   236		}
-   237	}
-   238	EXPORT_SYMBOL_IF_KUNIT(kunit_assert_hexdump);
-   239	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
