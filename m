@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-9799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E96B58C12BD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 18:28:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2726E8C12C2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 18:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16BC01C21A8D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 16:28:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8295AB2220F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 16:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B72170893;
-	Thu,  9 May 2024 16:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F61A1708B3;
+	Thu,  9 May 2024 16:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="GBmug3Rs"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Cst79pxW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AC517085A
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 16:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E601708A4
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 16:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715272056; cv=none; b=iFcbcWu1/xMQ+fsR3I1H9aVfyOoAqofAT0otnhSEvEbU7BqSiPz/4EH/Y4TtnnsW5y5N8pNSspaCvaeaGLhPErer+2EXxVt+4rU9LBtHGreg+am5pvdyhkmxw9srd5F/BSMhI1/WveG53voEBEV9E8CMufqhOoKN8DTGG+qSIhc=
+	t=1715272059; cv=none; b=oag/VW4fRJLEJ+dsxZvhOtiaB+iv2OdjW9QHASvn66MtmIG24y+46JFEqMqcNjKPhFfS94INzfmuc6GsRd4NhNdWmfeOye/9qpenedqj/QEdIZRTRwoAU0aoOABfUnvjvF/NeJeZNae7QQo5JHngVEc3jzNO9EbDRqoylrjYiRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715272056; c=relaxed/simple;
-	bh=bRdldBcR63JhBiYgvb0j6aaFVJpCttTWpBzzpwiAVFE=;
+	s=arc-20240116; t=1715272059; c=relaxed/simple;
+	bh=h9e60qU951Qvm2FC7p6XzmI4LIb1DbNk3veMfbQk7y4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EccjEUvfhtXgoXYBTdyr/vWMOIUAvK17FF4ewAhmImbpVcvueYILt9E1v4PO1+3tExdg7V+kOzspOaq3su0dqSBE+jHoK6CqdXzRLQPNBryy//jiFLm5StDhH4PfHjzCLc7JCGwQx2CXvcjV6SQN6Zzl212wp8J/5/aRtbDsVD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=GBmug3Rs; arc=none smtp.client-ip=209.85.214.181
+	 In-Reply-To:To:Cc; b=iLGg+qkIczfaKeFra9bcSVqVBdom0fWBiXee6hvgU0OzmQUQbMLmuptf+4CQGiXqTKMuDfu07HO2AQM8fORjJl+zHtklh6E5s08CBwQp3jqODX8vugwLtfSz/QJS6gQt9z8GwVJUtsoPFWIywVAYF+uIi56EMsomVGfuvoy1ZeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Cst79pxW; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1ec41d82b8bso9230275ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 09:27:34 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e50a04c317so5837805ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 09:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1715272054; x=1715876854; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1715272057; x=1715876857; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hrVtT3wUj2Ro2LlZ8rt/5kKYI6Cl/lb7mj3BLkp83qk=;
-        b=GBmug3RsgN9C0pFjOHp1E1ldNsaVhtGlliA2BfHmjYkdiVq/lEEELtsvx5+iFKM+U/
-         xeqJZ3oL2xd+VofCUTUUO5oodWTLppmjoGRHSiuyyLgtRfqXxxsmQXC8f1AQi7Pt+DEb
-         TYaLDubHtT+qJmVmsnvtHKjpNJY//QAmcycSh3shA/rUXcQuO+fe0QPnIIA8oltesOjM
-         FLVGikc8DCEBIDDtuYfwr4+b1VdnXih0X+JynU1JOBKZOZZrGDoAxCRrc5OGCqykj/ng
-         c/rLlHkwDF9H34PzPAa0MP7Qmtmg+B5MLSRnZwGoAXHXdBgEg+Lp83+PGNpebDIGnOYW
-         JiHQ==
+        bh=jlKJTA+y4FZTs32pZYAJnhXlsU7CxhYFnIn7J/LCVc0=;
+        b=Cst79pxWu/gQhJd1uXEapfQXn3XSi7IS4eVFvLGiPkPVtf6VOuvr/EE5DoFUxY4MN5
+         UrPcyAvBF+Tj9hcDEB/efeMpNpsjpuc5XCifdKoQ66Aydp4qvnIcO5Jm03LDdhafyLlb
+         k8euHAmrI17GpKcuTdF5eBQWdE7UO7Md+IM5OSbZ/IttepaODSBvfkoNIl1jst7TXR3w
+         dwQ3UgiQvSCCBQP289ToC3QtCI1lK6M1sJoh/sfHVwmJMtIVB7kQbrGtzAnqhjjR3Ehl
+         ik3JZrFULotwcawp9mfSB3KM+N+u6wBKWYk5QpUao2IFs090AQrFv6gu/5LNjNN+Y0y1
+         TMSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715272054; x=1715876854;
+        d=1e100.net; s=20230601; t=1715272057; x=1715876857;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hrVtT3wUj2Ro2LlZ8rt/5kKYI6Cl/lb7mj3BLkp83qk=;
-        b=voMyvVyLvZdqDvdRrKmbgxCvoE7sVlh75ZLBK0hJlOIYmtprBLfmptQ4p/22tGfeMq
-         M7wGnszxmGECTtRosUgvPq30qX4a+89Cg5A5mLL3w/EyBQYxnmU0KlEWIj3JfSe5gKKM
-         KnmKCu87hU1Zdhf+75llvIOpy6b3DMsjFvD7c8MKFqzAZ1PJ+uBj+H5As9f0nWVfM29y
-         cN1Gx6A9copM8IJS6cJD65B4s4ObBt3hWs2OoOtTbuiukvcI7u+wvJz+KRjV5U3+46YL
-         /x2ZMtkoDdqAgf3+mnTgVbDeA/1kWs2ThRMD6G42hPRM2rGxAyY/CzL9rL7NQwDgehzc
-         FmyA==
-X-Forwarded-Encrypted: i=1; AJvYcCW8ZQUgrbtjPx8yBRSOGyUAxAM9ynBe2LUF3ztded892ESe2vg+8fjOmkSmLudmT4GjXkJB2iQIQ+5UHeeJ1vcOTrf0+Nncc1oRY0sRYkge
-X-Gm-Message-State: AOJu0Yw+hkvLxXQUj6IcHe2d+oy2E9kklGkXv2yndtjMxblCR2y3YsUq
-	sI155K6EL0QfvNhMwXwr80C8AVM8A7v/KTsBVVyjQwk4SMU0Idk+Z48JjEOlbOY=
-X-Google-Smtp-Source: AGHT+IF8PgRVZZ0FHnW63FE7rtPOWp30TN+TCPvlMDVR+j+74ajw2NLtOZVqw2pXCxjO30nvabMrkw==
-X-Received: by 2002:a17:902:c3c5:b0:1ec:e3c2:790e with SMTP id d9443c01a7336-1ef43d2967cmr1810595ad.19.1715272053741;
-        Thu, 09 May 2024 09:27:33 -0700 (PDT)
+        bh=jlKJTA+y4FZTs32pZYAJnhXlsU7CxhYFnIn7J/LCVc0=;
+        b=mUIdb0MwSRmjEqeINdgctU5S24p6VzozYJllYn2IgHtRiXU4swH/C00E/TANVU0whX
+         9BGPTGIfPWXAr8zw8vng4zDKIpYbD9/Q34uoo8WcrKmq4C8j9SA0agc+1exHXD/awBgg
+         OaPeahiKuxVTgIHuLoMgh7PUUjHTuWXxVAOLtXM1x8s7HPwlaJOzrdekBoB0vPRNldLl
+         S/o2llk+3Xt2qVUQKu5M8JP0SQJHLaePfa7juBIF8kL2DB8C7Edd9rQlR6l4THN4qstD
+         AowGrfcq4YkncCPev8ln6ovif/IoZXPFsP4xWVTj0E/B7gGpZ3g+VQzjlNUdJo1I50xO
+         nNIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUL5XPU7c0rfJW0zGEDU6MNMqiq0gbJXsk5Tr5R7k6vuPpK+4KbUnDDr7rk63RQqumei/xwzfm83wWYKcuo7xZfQSBJ0HeF9a/2z/XFHBFa
+X-Gm-Message-State: AOJu0YyriFphmwkAPiO2UThK+gJlT0i5+QMHftUDrmngj93bAzOjKzUi
+	G2tBgFQYk4H1O6vYeSEteWaHK7ql0OKmD83wPW0SyBLa405b5CHILavfDqWF9ZQ=
+X-Google-Smtp-Source: AGHT+IEszGbwB/vNXrttRGOidBoOwpuhaJiBy+bYw1u/tAahtS9W1vF9JRL7sPHMpNOzMB5IXCQqvg==
+X-Received: by 2002:a17:902:c086:b0:1e4:8c64:33a2 with SMTP id d9443c01a7336-1ef44059be4mr1058755ad.68.1715272057380;
+        Thu, 09 May 2024 09:27:37 -0700 (PDT)
 Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c13805asm16210285ad.264.2024.05.09.09.27.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c13805asm16210285ad.264.2024.05.09.09.27.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 09:27:33 -0700 (PDT)
+        Thu, 09 May 2024 09:27:37 -0700 (PDT)
 From: Andy Chiu <andy.chiu@sifive.com>
-Date: Fri, 10 May 2024 00:26:53 +0800
-Subject: [PATCH v5 3/8] riscv: cpufeature: call match_isa_ext() for
- single-letter extensions
+Date: Fri, 10 May 2024 00:26:54 +0800
+Subject: [PATCH v5 4/8] dt-bindings: riscv: add Zve32[xf] Zve64[xfd] ISA
+ extension description
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,8 +78,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240510-zve-detection-v5-3-0711bdd26c12@sifive.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240510-zve-detection-v5-4-0711bdd26c12@sifive.com>
 References: <20240510-zve-detection-v5-0-0711bdd26c12@sifive.com>
 In-Reply-To: <20240510-zve-detection-v5-0-0711bdd26c12@sifive.com>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -98,49 +98,62 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.13-dev-a684c
 
-Single-letter extensions may also imply multiple subextensions. For
-example, Vector extension implies zve64d, and zve64d implies zve64f.
-
-Extension parsing for "riscv,isa-extensions" has the ability to resolve
-the dependency by calling match_isa_ext(). This patch makes deprecated
-parser call the same function for single letter extensions.
+Add description for Zve32x Zve32f Zve64x Zve64f Zve64d ISA extensions.
 
 Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
+Changelog v5:
+ - Reorder this patch prior than the first patch that uses them. (Conor)
 Changelog v3:
-- Remove set_bit for single-letter extensions as they are all checked in
-match_isa_ext. (Clément)
+ - Correct extension names and their order (Stefan)
+Changelog v2:
+ - new patch since v2
 ---
- arch/riscv/kernel/cpufeature.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ .../devicetree/bindings/riscv/extensions.yaml      | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 15ffda1968d8..4bfc13209938 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -468,16 +468,15 @@ static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct risc
+diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+index 468c646247aa..cfed80ad5540 100644
+--- a/Documentation/devicetree/bindings/riscv/extensions.yaml
++++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+@@ -381,6 +381,36 @@ properties:
+             instructions, as ratified in commit 56ed795 ("Update
+             riscv-crypto-spec-vector.adoc") of riscv-crypto.
  
- 		if (unlikely(ext_err))
- 			continue;
++        - const: zve32f
++          description:
++            The standard Zve32f extension for embedded processors, as ratified
++            in commit 6f702a2 ("Vector extensions are now ratified") of
++            riscv-v-spec.
 +
-+		for (int i = 0; i < riscv_isa_ext_count; i++)
-+			match_isa_ext(&riscv_isa_ext[i], ext, ext_end, isainfo);
++        - const: zve32x
++          description:
++            The standard Zve32x extension for embedded processors, as ratified
++            in commit 6f702a2 ("Vector extensions are now ratified") of
++            riscv-v-spec.
 +
- 		if (!ext_long) {
- 			int nr = tolower(*ext) - 'a';
- 
--			if (riscv_isa_extension_check(nr)) {
-+			if (riscv_isa_extension_check(nr))
- 				*this_hwcap |= isa2hwcap[nr];
--				set_bit(nr, isainfo->isa);
--			}
--		} else {
--			for (int i = 0; i < riscv_isa_ext_count; i++)
--				match_isa_ext(&riscv_isa_ext[i], ext, ext_end, isainfo);
- 		}
- 	}
- }
++        - const: zve64d
++          description:
++            The standard Zve64d extension for embedded processors, as ratified
++            in commit 6f702a2 ("Vector extensions are now ratified") of
++            riscv-v-spec.
++
++        - const: zve64f
++          description:
++            The standard Zve64f extension for embedded processors, as ratified
++            in commit 6f702a2 ("Vector extensions are now ratified") of
++            riscv-v-spec.
++
++        - const: zve64x
++          description:
++            The standard Zve64x extension for embedded processors, as ratified
++            in commit 6f702a2 ("Vector extensions are now ratified") of
++            riscv-v-spec.
++
+         - const: zvfh
+           description:
+             The standard Zvfh extension for vectored half-precision
 
 -- 
 2.44.0.rc2
