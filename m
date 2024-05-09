@@ -1,130 +1,84 @@
-Return-Path: <linux-kselftest+bounces-9760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D795A8C0AA4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 06:50:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C25B58C0ACB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 07:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 067A11C21837
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 04:50:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F72EB20BB6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 05:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FBE148FFB;
-	Thu,  9 May 2024 04:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40FEF14900F;
+	Thu,  9 May 2024 05:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="d9k3Xohb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IUeqVCTQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E902747D;
-	Thu,  9 May 2024 04:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C271D26D;
+	Thu,  9 May 2024 05:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715230195; cv=none; b=BCjXOxe0Oa9542fw/UqQXY4T5vcOs8zMxCx7ihNJu1oKiYO/d3Eh929W80bhDyr3DpbfLfuzr0zmYwwE9pI+E/g2eRC55q6a9SOAlpFVblFM+MuKjehqJPB6G8NtbUIxpEgVfiDcXzsZAMgNyQ4n9UKB5Z3UEquJx/YJMp49ERc=
+	t=1715231489; cv=none; b=i5H9DjHpgyYDTXuYgyohWeHmH2QFhzv3yu5AlwYaCvEstgqLc9kPjJv7/D3mFWNoLqlVagwu7VGquf8v4Dj4iYWBY0EyWhTLTJRrYlldkkGQYBJTwEaYH/ISUPIecJUa9pMqFl1BwKCWM8CTsk5zeChDnOsCoTL/d2NxOWI7jEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715230195; c=relaxed/simple;
-	bh=+AiojDAJmMoCc0Wxxh5jISkjo5+IH8X8Y3hjru7idxw=;
+	s=arc-20240116; t=1715231489; c=relaxed/simple;
+	bh=bwP4PkqYOWfJSD3RZMmNAAer7EiNi/W9/vpneJLOBBo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gd3tEsR/YQv0byIK1xjrl8o5hHsNLMKfXXH2YrBPy+qRa3XHUzeq41uD/hGk9158kxvmhCMG8KcXCYFXTNlXVTOP2Wtw56iRtrxB49RwlFBFP+KGePBvwY9IrDGeqT/tLf/oSBQJ/pYPuAj3ZSgeLMiGhvl2GtDB0nWb5/WBe8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d9k3Xohb; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=x3Xxg6i0FLAN0umHIWCwG93UHt8NFMOuUk41qzLUqYk=; b=d9k3XohbzRhXOoELgdBEeA6f1S
-	3oOjwUmoqaRaQC0CvfU6k+88iGiYqGevi4D0Mjv1XT/tJ31yElVIPjyooqUNsndaV6nr1hGD5KD6Y
-	hpVyEo5ud1SsOU0IbJ/27faXATUncL94DVq2aq/GP8tX02rBz5V+LazPctxgZmjT4XiNg5CteZelR
-	F250+x02riIYTRrco+NPB3RdRCFIh0LOb6pIdqAbmqXgrCWDOGcloO9JUAvrLzhBGKhu3BAgULPxQ
-	P+NUz6+r5CHQPlzEem7mdtAOYVy13sfKqnZcHBQZehzZ76EOcgOw/zp4uB68EXKz4VKifIE4VqybV
-	dq8ZPucQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s4vit-00000000LYS-0m4f;
-	Thu, 09 May 2024 04:49:39 +0000
-Date: Wed, 8 May 2024 21:49:39 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZjxV4yEYXRGElrsA@infradead.org>
-References: <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
- <20240507164838.GG4718@ziepe.ca>
- <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
- <20240507175644.GJ4718@ziepe.ca>
- <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
- <20240507233247.GK4718@ziepe.ca>
- <Zjsm3vO6rIY_sw5A@phenom.ffwll.local>
- <1e2823db-504b-4829-856f-3f45a45ccada@gmail.com>
- <ZjufddNVJs5Csaix@infradead.org>
- <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rYnXGIsfbG717vc53XWNlM51aooLfziQb+bXhl3+k3pZ+PbOzrigIB+XHt5+YwPVhutUU55aqLrV0Kg6js+ArNIyJ9jbj/MzzFuODIUjFf9+KBm9tEwppxTh6vEL4fX2pUfYV8JHgSCF8jKFYMxjxoAPJ34ltIi42Ou848VQpUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IUeqVCTQ; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715231488; x=1746767488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bwP4PkqYOWfJSD3RZMmNAAer7EiNi/W9/vpneJLOBBo=;
+  b=IUeqVCTQ/lwvnb4NQVmwxPS9oTm+yoa2E8WqAW55ZrHuokePPrO14kET
+   Fx2Xcbz9tPGTImGZZodrr3/bXaGd1cveUAFPMn4BtSKj+l2HacNTEGTsm
+   Y/VFHzCdjw0cq8DLksxHX9WNqMzg/Fli87zve/+gTDNjvHJUtVOMsQJPS
+   h9K8/QGlXZark6dAOryPmxTZlB9dlCCAKFsrat4T1dcSbYF+XvmW7ijTu
+   xu4AabFX/RBg/YWt0cfQzXP6b8cfvwSFv3Kxc0jknph9WYdD4tQcwItpw
+   wYiL2iqjiJpP43qR04ZptAocTekd7hafMPIbHyYTAOLNtuBs/RNa+UAVl
+   w==;
+X-CSE-ConnectionGUID: 9ASCG7zaReeTcrmrRVXh4w==
+X-CSE-MsgGUID: CumAFIfmSnO+XfhVXJCM9A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="11284475"
+X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
+   d="scan'208";a="11284475"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 22:11:27 -0700
+X-CSE-ConnectionGUID: l1HARRb3R5qiiFZyYJWetg==
+X-CSE-MsgGUID: ooJBziBmShmI8TfY+cJ4ag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,146,1712646000"; 
+   d="scan'208";a="29212573"
+Received: from linux.bj.intel.com ([10.238.157.71])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 22:11:21 -0700
+Date: Thu, 9 May 2024 13:08:36 +0800
+From: Tao Su <tao1.su@linux.intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org, kvm@vger.kernel.org,
+	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-sgx@vger.kernel.org, edliaw@google.com,
+	ivan.orlov0322@gmail.com, broonie@kernel.org, perex@perex.cz,
+	tiwai@suse.com, shuah@kernel.org, seanjc@google.com,
+	pbonzini@redhat.com, bongsu.jeon@samsung.com, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com,
+	alexandre.belloni@bootlin.com, jarkko@kernel.org,
+	dave.hansen@linux.intel.com
+Subject: Re: [PATCH] selftests: Add _GNU_SOURCE definition when including
+ kselftest_harness.h
+Message-ID: <ZjxaVEKv7bEuHJ8c@linux.bj.intel.com>
+References: <20240507063534.4191447-1-tao1.su@linux.intel.com>
+ <20240507100651.8faca09c7af34de28f830f03@linux-foundation.org>
+ <ZjrpieLKXFhklVwR@linux.bj.intel.com>
+ <20240508070003.2acdf9b4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -133,34 +87,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20240508070003.2acdf9b4@kernel.org>
 
-On Wed, May 08, 2024 at 06:02:14PM +0100, Pavel Begunkov wrote:
-> Well, the example fell flat, but you don't use dmabuf when there are
-> no upsides from using it. For instance, when you already have pinned
-> pages, you're going to use pages, and there are no other refcounting
-> concerns.
-
-Sure.
-
-> Unless there is an advantage of dmabufs over FOLL_LONGTERM
-> that I don't know about when used with normal user pages.
-
-The advantages of using a dma-buf over FOLL_LONGTERM are:
-
- a) you pre-dma map, which is a significant performance advantage for
-    IOMMU-based setups
- b) you support any dma-buf exported and not just user memory.  This
-    is primarily important for PCIe P2P, but there might be other
-    useful exporters as well
-
-> > wish io_uring would have just implemented them from the start instead of
-> > the current fixed buffers that are not quite as useful by not
-> > pre-mapping DMA and not supporting P2P.
+On Wed, May 08, 2024 at 07:00:03AM -0700, Jakub Kicinski wrote:
+> On Wed, 8 May 2024 10:55:05 +0800 Tao Su wrote:
+> > Back to commit 38c957f07038, I don't see any advantage in using LINE_MAX.
+> > Can we use a fixed value instead of LINE_MAX? E.g., 1024, 2048. Then we
+> > just need to revert commit 809216233555.
 > 
-> fdget(dmabuf) would be horrible, I assume that's not the suggestion.
+> SGTM, FWIW. The print is printing a test summary line, printing more
+> than 1k seems rather unreasonable. Other facilities, like TH_LOG(),
+> should be used for displaying longer info.
 
-I'm not even sure what you mean with that.
+Thanks, do you think 1k is enough for test_name?
 
+> 
 
