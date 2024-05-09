@@ -1,164 +1,191 @@
-Return-Path: <linux-kselftest+bounces-9907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C46D8C1957
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:22:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E99488C19A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B91FF1F22DA9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 22:22:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F757285353
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 22:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6DE129E72;
-	Thu,  9 May 2024 22:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A021512D744;
+	Thu,  9 May 2024 22:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMrZFnIS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GnVVXoFT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC4E770E0;
-	Thu,  9 May 2024 22:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DA3129E62
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 22:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715293369; cv=none; b=G3CYs8NWBiz8e6VSywXRTIeXjeB/wrAFUSs0msdewYG6XHShezubhlnF9dkTY6FKzbknGa42itB3vb5NxbWjQ5lDL+f2Z2bbu0LIcYQ4JhtRG1Yu4h+Dc0pGHDu2AEN9QOATKd82eTYq8cbgTVepNhxEW3HR2UWyInvA1K1xZEo=
+	t=1715295546; cv=none; b=L114WXw33d/aCMaQ2ELR4cJ7l9FYyOzsZksf3pOY+yrl7OK6JOjWrNdeIPgHayNz1tzvNfCIBTs0zoj3PB1mKriQR8z23zYTkgpmrFoetHwSKeS4YiS+gwSfOWiZNrwrDZ2xyfreM6M29geih1vaSGD+zQzA7/NtytORBjfI1A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715293369; c=relaxed/simple;
-	bh=t3AE0C2YacrUZCTb4JRj3hzsa+lHuEvQQO/PQSjoxNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UJYrTv5WPVZHy7Dm4Ugi7LbBS0Y1jjiAxEvkB57T4jhDapnTM6k5FxbWuypqeuu/q2N+nrDlN2sdtmgBJeorMdm/PAihdpmSmv4nHBlNCFOqVh2mjtGRBw3X0MLBgx4HjozfO0QP824awvszrOkw8AYhDHGXTIuadgKrXNjpP14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMrZFnIS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F940C116B1;
-	Thu,  9 May 2024 22:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715293368;
-	bh=t3AE0C2YacrUZCTb4JRj3hzsa+lHuEvQQO/PQSjoxNE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZMrZFnIShdbR6UvQ01rcp+t1LeIHoY5Y2AD+JRKCHUBoS0NA48p0xLWusq5PPoEfX
-	 FE3e8OnlE0uxdq8cvSJDbZIsuAu4/IX3P57NaXUGqyLDgdSbeDoTSjl29Y+pg68HtX
-	 g+wEsi+avkRq7uNrdLBzNTge88GJ2sOi1PhKgMp13WZK3fh7bDMaqi/YUSdUQdEY5E
-	 yqznvKm1XK8vv0D+cKhoBpvCDOcjSnyKq7oJBXr5GTjfClVWnwK9Y9/hnG7FH29vtu
-	 vqtks0t3/Ft8vxVis2DUczaQTTa0zzGoSA2AZ3PWKpfVSLBNY8VoKRV+xI0SGiRS8W
-	 VqayPJ/5ZbbSA==
-Date: Thu, 9 May 2024 23:22:42 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Andy Chiu <andy.chiu@sifive.com>, Eric Biggers <ebiggers@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Heiko Stuebner <heiko@sntech.de>,
-	Guo Ren <guoren@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Jonathan Corbet <corbet@lwn.net>, Evan Green <evan@rivosinc.com>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	Vincent Chen <vincent.chen@sifive.com>,
-	Greentime Hu <greentime.hu@sifive.com>, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Joel Granados <j.granados@samsung.com>,
-	Jerry Shih <jerry.shih@sifive.com>,
-	Charlie Jenkins <charlie@rivosinc.com>
-Subject: Re: [PATCH v4 7/9] riscv: vector: adjust minimum Vector requirement
- to ZVE32X
-Message-ID: <20240509-irritant-morphing-a25428a4f750@spud>
-References: <20240412-zve-detection-v4-7-e0c45bb6b253@sifive.com>
- <20240418-brook-chili-4d3e61d1a55c@wendy>
- <20240418155256.GA2410@sol.localdomain>
- <20240418-ultimatum-yam-11de4b063b83@spud>
- <20240418173203.GA1081@sol.localdomain>
- <20240418173946.GB1081@sol.localdomain>
- <20240418-sterling-sanding-d59c3b0a2aaa@spud>
- <CABgGipU74TA3KgCH4pPuRefbnYt3q6RKcQwfyspenisEtY6eqw@mail.gmail.com>
- <20240509-mandatory-monsieur-dfa4d7881fa9@wendy>
- <20240509-habitable-unrefined-02322f228d5a@wendy>
+	s=arc-20240116; t=1715295546; c=relaxed/simple;
+	bh=6jtL8Tq51/6D1tJuPGm0Kl2FshQGs9RlrJmrJmmfe3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iuWSnR5yuhNty9W6LvPHTpkrho3CMDZGUTbT/UaN5E9RiMd3NPjPEvDLDyyVeZ1gP7gyD2mj4Vg8xyVoDykuCh6IqGCLUzCPdk5L5zIR5jrncaj7k8vVsgqfFpL1pjcEti9L6C+B2xbr+vRB2NJf4zmikq0328qi/S4yHiEweds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GnVVXoFT; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5724736770cso2393a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 15:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715295543; x=1715900343; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y1vau91hxBMnWZHVkH054+8jTk5Pa/DNJnVVz4HmL40=;
+        b=GnVVXoFTnT9ZaLKRqrF5ZXsK5zLuCheZZudzfOfQi6gPm4n/QETZ0sOWxLxh6r2rI3
+         19GJlhsoj4X8j8Mf+3s5N1nPAjBqLy8ZY3ZKy7xF7WdQW6DbeJ+NlKQDS0JhVDm1TBX+
+         42JSiTnJT7j92d6kYrn+r4lXLmkzT5yyHur7dYOnOiFnt72q04xYHC2Z7hs/sglbHtAo
+         t91eN8KfbbmQpegOG9igaBDtPz9IQ/r58mhcbZj/RUwNUAe1eV8CRGKlqnIQNX/K0p66
+         JaJlhYBFctMhUWtiyWjkXIhqWg+B4mBUyzMh6hcgaCz5NHxqBzUA9gA+CcLQL++rZg/N
+         MO+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715295543; x=1715900343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y1vau91hxBMnWZHVkH054+8jTk5Pa/DNJnVVz4HmL40=;
+        b=L16GR4ja5ELIHyJgkCUDzFKIUvu1RO2Cjeuj+tSIie/CcajiwGqtKwGgv1hlgcTqcU
+         pJws1lSNk5/WpR0lWI7LbZ5MS8oU+ZAMnb32i44jAiJKfs/9S2QAGze4dEZIWFNieP14
+         R6fv7jHcj73cVxa0xcm+Fnr/4qQ1SWbFCNHZpRark0kINX9R06BKUF1DgPiIJtBxL+am
+         IVPOC1InHkl7wtB+2E/hWyPcaa+I3/Eu6zSGrrPTAk4EjseshKfwM+lsAJbV/hP96Os1
+         nHOqNKZaPtIO3yG06ouEXjAP1bZ564WWxeCsK1onAcZvtHf7zTbCAYSippvg+H2usYAz
+         VcJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYXmVI8XM2VBTbuRDtONudoxIvyWSahwAvi6oUgy4m4rGpc+YQGBfLYGWZRH6j2mPxfk1nINReyXC67VsDgv7i3WBUoAyZXALhlUk265BO
+X-Gm-Message-State: AOJu0YwBqbFdJ1aVMYUyH8kv4jYhkwkqkdvZQXvjXNPQ23NNl8WI2l2g
+	xkSxY44Vyt0rsk5iNQE9QOHw6GXEaATjgoKoj5RHleppLxnYosJLFDYumuPb9w03lRnIGha3LwS
+	5oFXtkcpi/oJXWbuE7jcsfW6HiRB5ib8qCD3i
+X-Google-Smtp-Source: AGHT+IHuVFTFisfvrt55ub+8UO4+Id1LOVWeasU97gGretbq/QA6WW4CiikvBa7AfpTXmMMad1SbRPJ/2IdczDaT84s=
+X-Received: by 2002:a50:8d84:0:b0:572:e6fb:ab07 with SMTP id
+ 4fb4d7f45d1cf-5735203906fmr30811a12.7.1715295542981; Thu, 09 May 2024
+ 15:59:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TLKFE95zt1kQU6Bl"
-Content-Disposition: inline
-In-Reply-To: <20240509-habitable-unrefined-02322f228d5a@wendy>
-
-
---TLKFE95zt1kQU6Bl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240509200022.253089-1-edliaw@google.com> <20240509200022.253089-4-edliaw@google.com>
+ <0e196143-c0bf-4d70-9735-7e6d9a69ea8f@nvidia.com>
+In-Reply-To: <0e196143-c0bf-4d70-9735-7e6d9a69ea8f@nvidia.com>
+From: Edward Liaw <edliaw@google.com>
+Date: Thu, 9 May 2024 15:58:35 -0700
+Message-ID: <CAG4es9Xv0Pwst+b0mre2g+QkBGoQS0cWj4xizRt+cHFJ0BTDaQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/68] selftests: Compile with -D_GNU_SOURCE when
+ including lib.mk
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: shuah@kernel.org, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
+	linux-security-module@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 09, 2024 at 09:25:25AM +0100, Conor Dooley wrote:
-> On Thu, May 09, 2024 at 08:48:09AM +0100, Conor Dooley wrote:
-> > On Thu, May 09, 2024 at 02:56:30PM +0800, Andy Chiu wrote:
-> > > Hi Conor,
-> > >=20
-> > > Should we check if "v" presents for vector crypto extensions in
-> > > riscv_isa_extension_check()? We are not checking this for now. So a
-> > > kernel compiled with RISCV_ISA_V still has a problem if its isa-string
-> > > includes any of vector crypto ("zvbb, zvkg, etc") but not "v".
-> >=20
-> >=20
-> > Yeah, one of the things I took away from this discussion is that we need
-> > to improve the implementation of both the methods we have at the moment
-> > for drivers etc to check if extensions are present and usable.
-> > In general, I don't think checks like that are "safe" to do in
-> > riscv_isa_extension_check(), because the dependencies may not all have
-> > been resolved when we probe an extension (Clement's current Zca etc
-> > series improves the situation though by only calling the checks after
-> > we probe all extensions).
-> >=20
-> > The simple V cases are all fine though - the DT binding and ACPI rules
-> > for compatible strings all mandate that single-letter extensions must
-> > come before multi-letter ones. For riscv,isa-extensions we control the
-> > probe ordering and probe V before any multi-letter stuff. Additionally,
-> > we should make it a requirement for V to be present if things that
-> > depend on it are.
-> >=20
-> > That said, is it permitted by the specs to have any of the extensions
-> > you mention without the full V extension, but with one of the cut-down
-> > variants you mention here? If not, I'd be more interested in figuring
-> > out the non-extension dependencies: whether or not the kernel itself
-> > supports vector and if the kernel has opted to disable vector due to
-> > detecting that harts have mismatching vector lengths.
-> >=20
-> > TL;DR: I think we should add some checks in riscv_isa_extension_check().
->=20
-> Also, unless this only becomes a problem with this series that adds the
-> cut-down forms of vector, I think this is a separate problem to solve
-> and I can send some patches for it (along with some other cleanup I'd like
-> to do as a result of Eric's comments) and you can just submit the v2 you
-> were planning to without it. I can't, off the top of my head, think of
-> why this particular series would break the vector crypto stuff though,
-> the problems with enabling extensions seem underlying.
+On Thu, May 9, 2024 at 2:25=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
+rote:
+>
+> On 5/9/24 12:57 PM, Edward Liaw wrote:
+> > lib.mk will add -D_GNU_SOURCE to CFLAGS by default.  This will make it
+> > unnecessary to add #define _GNU_SOURCE in the source code.
+> >
+> > Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+> > Suggested-by: John Hubbard <jhubbard@nvidia.com>
+> > Signed-off-by: Edward Liaw <edliaw@google.com>
+> > ---
+> >   tools/testing/selftests/Makefile | 4 ++--
+> >   tools/testing/selftests/lib.mk   | 5 ++++-
+> >   2 files changed, 6 insertions(+), 3 deletions(-)
+> >
+>
+> Hi Edward,
+>
+> This looks good, with one small refactoring opportunity remaining, though=
+:
+>
+> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests=
+/Makefile
+> > index f0431e6cb67e..9039f3709aff 100644
+> > --- a/tools/testing/selftests/Makefile
+> > +++ b/tools/testing/selftests/Makefile
+> > @@ -170,11 +170,11 @@ ifneq ($(KBUILD_OUTPUT),)
+> >     # $(realpath ...) resolves symlinks
+> >     abs_objtree :=3D $(realpath $(abs_objtree))
+> >     BUILD :=3D $(abs_objtree)/kselftest
+> > -  KHDR_INCLUDES :=3D -D_GNU_SOURCE -isystem ${abs_objtree}/usr/include
+> > +  KHDR_INCLUDES :=3D -isystem ${abs_objtree}/usr/include
+> >   else
+> >     BUILD :=3D $(CURDIR)
+> >     abs_srctree :=3D $(shell cd $(top_srcdir) && pwd)
+> > -  KHDR_INCLUDES :=3D -D_GNU_SOURCE -isystem ${abs_srctree}/usr/include
+> > +  KHDR_INCLUDES :=3D -isystem ${abs_srctree}/usr/include
+>
+> As mentioned in [1] (but there are a lot of patches to manage here, and
+> I think it got overlooked), you could factor out the duplicated
+> -D_GNU_SOURCE items into a single place:
 
-Here's something buggy that I chucked together as an idea of what I
-meant:
-https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/?h=
-=3Driscv-check_vector
-Beware, it is entirely untested :)
-It's based on both this series and patches 2 & 3 of Charlie's series doing
-the T-Head vector stuff. It really needs Clement's extension_check()
-rework that I mentioned 2 mails ago to function correctly for any of these
-vector subsets. Without Clement's stuff, it'll have "random" behaviour
-depending on probe order for riscv,isa and a determinate, but incorrect,
-behaviour otherwise.
+Hi John,
+Here I'm reverting the change I made to the Makefile in patch 1/68,
+since -D_GNU_SOURCE is being added directly to CFLAGS now, I didn't
+think it was necessary to add it to KHDR_INCLUDES anymore.  I would
+have merged the two patches together, but since the first and second
+patches from v2 were already merged, I thought I should leave them in
+the series.
 
-Cheers,
-Conor.
+Thanks,
+Edward
 
---TLKFE95zt1kQU6Bl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj1MsgAKCRB4tDGHoIJi
-0vmgAQD45tbvFJoRsUpsMY9T6rtZpE9/d1MUPNtjjZBcCvk81wEA9NHuzDQWVqos
-TKv6UR8HGOSqtTdK0XRrTlDGxoRiZQo=
-=ulWy
------END PGP SIGNATURE-----
-
---TLKFE95zt1kQU6Bl--
+>
+> [1]
+> https://lore.kernel.org/all/ac8c217e-4109-4ca7-a7dd-fc4fc8b0a4de@nvidia.c=
+om/
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
+>
+> >     DEFAULT_INSTALL_HDR_PATH :=3D 1
+> >   endif
+> >
+> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
+ib.mk
+> > index 3023e0e2f58f..e782f4c96aee 100644
+> > --- a/tools/testing/selftests/lib.mk
+> > +++ b/tools/testing/selftests/lib.mk
+> > @@ -67,7 +67,7 @@ MAKEFLAGS +=3D --no-print-directory
+> >   endif
+> >
+> >   ifeq ($(KHDR_INCLUDES),)
+> > -KHDR_INCLUDES :=3D -D_GNU_SOURCE -isystem $(top_srcdir)/usr/include
+> > +KHDR_INCLUDES :=3D -isystem $(top_srcdir)/usr/include
+> >   endif
+> >
+> >   # In order to use newer items that haven't yet been added to the user=
+'s system
+> > @@ -188,6 +188,9 @@ endef
+> >   clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
+> >       $(CLEAN)
+> >
+> > +# Build with _GNU_SOURCE by default
+> > +CFLAGS +=3D -D_GNU_SOURCE
+> > +
+> >   # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
+> >   # make USERCFLAGS=3D-Werror USERLDFLAGS=3D-static
+> >   CFLAGS +=3D $(USERCFLAGS)
+>
+>
 
