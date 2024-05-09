@@ -1,198 +1,105 @@
-Return-Path: <linux-kselftest+bounces-9895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9896-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326C08C17A1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 22:33:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0347A8C17E8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 22:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E6A1C20AC0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 20:33:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EC49B2130D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 20:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B6A1DA4E;
-	Thu,  9 May 2024 20:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98FF68061D;
+	Thu,  9 May 2024 20:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uy9+y+Wn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1MH4Zea"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BD4376;
-	Thu,  9 May 2024 20:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD68C2ED;
+	Thu,  9 May 2024 20:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715286785; cv=none; b=KvlVRcmHkVJ5z7y5uUFqS16EYgtlun4YfzBgERW6h9B/5NUDHCAG06WEAjJiF2G+lnwelYHSInnQ8GgzzbJ1a2wni4s+foG/qTR4MSAYoQQzVG5/zxZXBUfbvBjuxgm3+VwWkTxhRN0ERAFaRJLMyo5vDjTPR6mrrsOPupiGtZs=
+	t=1715287830; cv=none; b=hkz1mEcG8ZPBDF3LCIsApUNIefAORYUMRjucgIqIhukW9oEJpuz+nAG0LEBl5CnT9wIip2m+nW0Wykd9o7owoS28AUGZHHGZcXFTRVI8P8r1QFQhWGz7T/0St5sci7M2C/dk+jSBoUPBmkNk6WQbRvpYOvLuPvRXZf0b1xyR08o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715286785; c=relaxed/simple;
-	bh=6iQUzY8aEoDEDTDjSEFz/xHQqilN8EGwR9Ao9LR2DhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bf7ATi6BTJcMOyoRyX6pT7oFzTZU7pxX5HeheoJherLy+YYxY+LQirScfOKm801dOd4RAPvQGmk9Yc6qdka/wmh+xpI+VUdZZe7bmKLX3fUOhmNduT9RwBXzMfewOpyED/HvKYftH5afLCpTqWzVq7QOu4Mrx6Ah6/u5Gybmj6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uy9+y+Wn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA18C116B1;
-	Thu,  9 May 2024 20:32:51 +0000 (UTC)
+	s=arc-20240116; t=1715287830; c=relaxed/simple;
+	bh=I+4WNOHQ2T0LlJSzxc1d1XkR2bEVn55vwUCepHk0L64=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fJgigUtbCcq3lqX64l9gmKWCeHweh8J9buIjIQgIytbIMWsUsvxJs55ZzQx7+YbpgcvUkABhTFE/ESottH1K/bOvKdVNRKGs6KtUItPkN1BqdaJrH8fHIdHq8LI694yPP2I6ybqvhN4tofsmuTSKhYjxSBleZBKioKon7F5rr9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1MH4Zea; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DEF94C2BD11;
+	Thu,  9 May 2024 20:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715286785;
-	bh=6iQUzY8aEoDEDTDjSEFz/xHQqilN8EGwR9Ao9LR2DhA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Uy9+y+Wn571zBjkcfWNxqCA9u6G+sV4BOYW+53XaleB+d+ECLFA/QUFNlclIoorDe
-	 hKpRg4eDuONRLyrCriNbQ3Z62aTFZBZWxgTzR0NStKeR7yId4VXZnGyluuTkI5/q2z
-	 hMlkPWtJCjeu9zGzmej+baT6iIlzr6VGyVdAtDODuM/O32Wv7Cx7Mbmh/lE/C7uGum
-	 ULGcH15fuvlg+MBCHLwwmisSxYoKwfZReurwTHwj+0XILwZ1NlK2OGNPPZgXDXU/d0
-	 MO0ilOdWPTjG8X5FLoKkVrm8u7yv7nmp/+qppgGBjsG76Ze7gou+bBddiPRAbwPwf7
-	 2qMDIEht5/Uyg==
-Date: Thu, 9 May 2024 21:32:49 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Rob Herring <robh@kernel.org>, paul.walmsley@sifive.com,
-	rick.p.edgecombe@intel.com, broonie@kernel.org,
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, conor.dooley@microchip.com,
-	cleger@rivosinc.com, atishp@atishpatra.org, alex@ghiti.fr,
-	bjorn@rivosinc.com, alexghiti@rivosinc.com,
-	samuel.holland@sifive.com, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	corbet@lwn.net, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	charlie@rivosinc.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
-	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 04/29] riscv: zicfilp / zicfiss in dt-bindings
- (extensions.yaml)
-Message-ID: <20240509-clatter-crewmate-9755669b9452@spud>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-5-debug@rivosinc.com>
- <20240410115806.GA4044117-robh@kernel.org>
- <CAKC1njSsZ6wfvJtXkp4J4J6wXFtU92W9JGca-atKxBy8UvUwRg@mail.gmail.com>
- <20240415194105.GA94432-robh@kernel.org>
- <Zh6c0FH2OvrfDLje@debug.ba.rivosinc.com>
- <20240509-cornflake-foyer-e6589c2bc364@spud>
- <Zj0aAiZiTrt9ACjj@debug.ba.rivosinc.com>
+	s=k20201202; t=1715287829;
+	bh=I+4WNOHQ2T0LlJSzxc1d1XkR2bEVn55vwUCepHk0L64=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Z1MH4ZeaD5ZtYmexTH1wDhBcpt5g9iXKPFFJSUpArgwXLSDNdm6nZLK1mrTwSfCe6
+	 pedA/ZCcxzzyBdlr3kypQY3E4ZvWRXMA2N/KskNoq9DSM8G/toGxDbawEY+qkGHZvZ
+	 6SnpX0NBb2qicYHrxfty4idTIr4Ngxj8pGk6msyuG+NUQNPETP8kqGzHEjsLkXFmfz
+	 7nExEFyayDhQgJtL6JYRe40cow+I9lQbteHbBVSu2MTmZp2Ji6qRlzQ/R5x19ps1IN
+	 rkuPMVqRPzi0J4Ng6uKohFemlfIaP1VBLNy5ZV+hsP7m0wZsBQhKmod+azeVMeRpiH
+	 xw8Sfy8ej4EAw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CDAA4E7C0E0;
+	Thu,  9 May 2024 20:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="x+pjDPD7FlbQaxoS"
-Content-Disposition: inline
-In-Reply-To: <Zj0aAiZiTrt9ACjj@debug.ba.rivosinc.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/6] use network helpers, part 4
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171528782983.387.11204190011175475682.git-patchwork-notify@kernel.org>
+Date: Thu, 09 May 2024 20:50:29 +0000
+References: <cover.1714907662.git.tanggeliang@kylinos.cn>
+In-Reply-To: <cover.1714907662.git.tanggeliang@kylinos.cn>
+To: Geliang Tang <geliang@kernel.org>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ jakub@cloudflare.com, tanggeliang@kylinos.cn, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Sun,  5 May 2024 19:35:07 +0800 you wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> This patchset adds post_socket_cb pointer together with 'struct
+> post_socket_opts cb_opts' into struct network_helper_opts to make
+> start_server_addr() helper more flexible. With these modifications,
+> many duplicate codes can be dropped.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/6] selftests/bpf: Add post_socket_cb for network_helper_opts
+    https://git.kernel.org/bpf/bpf-next/c/20434d2d896f
+  - [bpf-next,2/6] selftests/bpf: Use start_server_addr in sockopt_inherit
+    https://git.kernel.org/bpf/bpf-next/c/5166b3e3e30a
+  - [bpf-next,3/6] selftests/bpf: Use start_server_addr in test_tcp_check_syncookie
+    https://git.kernel.org/bpf/bpf-next/c/49e1fa8dbd81
+  - [bpf-next,4/6] selftests/bpf: Use connect_to_fd in sockopt_inherit
+    https://git.kernel.org/bpf/bpf-next/c/5059c73eca67
+  - [bpf-next,5/6] selftests/bpf: Use connect_to_fd in test_tcp_check_syncookie
+    https://git.kernel.org/bpf/bpf-next/c/65a3f0df44dd
+  - [bpf-next,6/6] selftests/bpf: Drop get_port in test_tcp_check_syncookie
+    https://git.kernel.org/bpf/bpf-next/c/7abbf38cd8ed
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---x+pjDPD7FlbQaxoS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 09, 2024 at 11:46:26AM -0700, Deepak Gupta wrote:
-> On Thu, May 09, 2024 at 07:14:26PM +0100, Conor Dooley wrote:
-> > On Tue, Apr 16, 2024 at 08:44:16AM -0700, Deepak Gupta wrote:
-> > > On Mon, Apr 15, 2024 at 02:41:05PM -0500, Rob Herring wrote:
-> > > > On Wed, Apr 10, 2024 at 02:37:21PM -0700, Deepak Gupta wrote:
-> > > > > On Wed, Apr 10, 2024 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.=
-org> wrote:
-> > > > > >
-> > > > > > On Wed, Apr 03, 2024 at 04:34:52PM -0700, Deepak Gupta wrote:
-> > > > > > > Make an entry for cfi extensions in extensions.yaml.
-> > > > > > >
-> > > > > > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> > > > > > > ---
-> > > > > > >  .../devicetree/bindings/riscv/extensions.yaml          | 10 =
-++++++++++
-> > > > > > >  1 file changed, 10 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/Documentation/devicetree/bindings/riscv/extensio=
-ns.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> > > > > > > index 63d81dc895e5..45b87ad6cc1c 100644
-> > > > > > > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> > > > > > > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> > > > > > > @@ -317,6 +317,16 @@ properties:
-> > > > > > >              The standard Zicboz extension for cache-block ze=
-roing as ratified
-> > > > > > >              in commit 3dd606f ("Create cmobase-v1.0.pdf") of=
- riscv-CMOs.
-> > > > > > >
-> > > > > > > +        - const: zicfilp
-> > > > > > > +          description:
-> > > > > > > +            The standard Zicfilp extension for enforcing for=
-ward edge control-flow
-> > > > > > > +            integrity in commit 3a20dc9 of riscv-cfi and is =
-in public review.
-> > > > > >
-> > > > > > Does in public review mean the commit sha is going to change?
-> > > > > >
-> > > > >
-> > > > > Less likely. Next step after public review is to gather comments =
-=66rom
-> > > > > public review.
-> > > > > If something is really pressing and needs to be addressed, then y=
-es
-> > > > > this will change.
-> > > > > Else this gets ratified as it is.
-> > > >
-> > > > If the commit sha can change, then it is useless. What's the guaran=
-tee
-> > > > someone is going to remember to update it if it changes?
-> > >=20
-> > > Sorry for late reply.
-> > >=20
-> > > I was following existing wordings and patterns for messaging in this =
-file.
-> > > You would rather have me remove sha and only mention that spec is in =
-public
-> > > review?
-> >=20
-> > Nope, having a commit sha is desired. None of this is mergeable until at
-> > least the spec becomes frozen, so the sha can be updated at that point
-> > to the freeze state - or better yet to the ratified state. Being in
-> > public review is not sufficient.
->=20
-> Spec is frozen.
-> As per RVI spec lifecycle, spec freeze is a prior step to public review.
-> Public review concluded on 25th April
-> https://lists.riscv.org/g/tech-ss-lp-cfi/message/91
->=20
-> Next step is ratification whenever board meets.
-
-Ah, I did the "silly" thing of looking on the RVI website at extension
-status (because I never know the order of things) and these two
-extensions were marked on there as being in the inception phase, so I
-incorrectly assumed that "public review" came before freeze.
-Freeze is the standard that we have been applying so far, but if
-ratification is imminent, and nothing has changed in the review period,
-then it seems sane to just pick the freeze point for the definition.
-
-Cheers,
-Conor.
-
---x+pjDPD7FlbQaxoS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj0y8QAKCRB4tDGHoIJi
-0rP8AQC02hZlGWSuSewjVON0urY69iTQamRjygDbG9NHmoS2CgD9GqLx3inCUKtB
-gHw/mFivxVUjkbE0drkNkmSs+Vn4eAM=
-=uiDQ
------END PGP SIGNATURE-----
-
---x+pjDPD7FlbQaxoS--
 
