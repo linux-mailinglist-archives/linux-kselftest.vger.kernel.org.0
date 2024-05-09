@@ -1,278 +1,172 @@
-Return-Path: <linux-kselftest+bounces-9820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66CDE8C1532
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 21:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB9A58C1542
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 21:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BD7528315B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 19:09:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FF542831FD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2024 19:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250D27F495;
-	Thu,  9 May 2024 19:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CF27F7C8;
+	Thu,  9 May 2024 19:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epkngSnw"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="p6BR47fZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FB87F7D1;
-	Thu,  9 May 2024 19:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136E87F465
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 May 2024 19:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715281785; cv=none; b=uioPXA+Yodprpu6qgpoKyXXv6Yb37pbSZBGFhRtEGQYuRi0BP7Nddi+2GjSbgnULwVvNuZXWXV5nG2xlciFbz7SsfMQJSG9FepH2jWJyD58rMyoNR0DA5fdmcGRbAJUWmftkSQ/9aRRaskemiq87XvsZaNQFgRaX9Xysg/7c0aE=
+	t=1715282196; cv=none; b=QmGKGTB2b1cICw23aEsruESTq/kxmrRf7chzk4O+QplaKyKbkuKl3/i+ONrJFQW534PHwVMBnYT91lIvKXcwABG4EbGVXWMIh9/2wbvYycLwfahnoXsp2tLNqRnD3saW6BGH/1qDxCUw+uA9XLDV/xu8aLxIep/9JvGdXWLdUMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715281785; c=relaxed/simple;
-	bh=Je2CopuisTQSqTRX+CMQd6WrKvalUE1cl0xUVrV4L50=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AR3MniwtCN8l0Z55yiqgVKkEdZ+vzoF18l6dl0nZL/Fog/Rq33e/JUPRwgzx+u3c7vxLlNuZzfP7CwMxJ/NlHWCzzXB6ut3FiYCL/OEc7ql+vuO9zJKl/bDDjjO4g+vaYkz9SKBkBDej2xQ2/yoHeLw5nf3g3VoxD7P6foxiXRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epkngSnw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34ddc9fe4a1so778337f8f.0;
-        Thu, 09 May 2024 12:09:42 -0700 (PDT)
+	s=arc-20240116; t=1715282196; c=relaxed/simple;
+	bh=uCzgFU7wXjy37E1QSOA4C4Ah2huDwMghRUAkC14wOZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XuDlZiBujaoTLVU7uieICn6K13X3eV6+E+pr9DpZYBNgm8BvXG7qeZXZEf8AfRWmtyvo39c9e8Z38v80xB84bqbmWG3u792ujcF6JdB8eZy3VrCmlLNNDniBn0OmxYGLDJZs1mobPYp1IE4ETHAuyHZWNAThe/rXwKoYgN5Y4io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=p6BR47fZ; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1ee0132a6f3so10417205ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 12:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715281781; x=1715886581; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3CSbzIHGbUZ218pL4yd7rG60VIXMZlWnpY2Qh8ih8nw=;
-        b=epkngSnwF0h+iOqsgdCG4Di9lFPeAj2JLO5ZD97jby7HjVBAgBTBlcFRyV7+7yK7gq
-         tVo+ziwjpx3Y1yq3L19nveC0wj2Ndxm792nWJblG7lqS5sZwim/iwSL7RHRhBQODPWvu
-         Yh0sE/7b5VpCYz52cddL/pZS0FBXJjM52BTAfHEMAdUewrUsGiDPXntYWmCz/RUb6kKj
-         zvlvRjAr6tiddef86GsSGhdxQQY1xuwooAgP2kGTavhSY9WDj8i6iv5dgqffu7mTU+HC
-         pKrfaQEPalJr/dP7LLoPgmCvGf7+J8b+FZVEy/JnrZvSfxDE+j30y/zqE4SJRWcsbR2B
-         oyug==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715282194; x=1715886994; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WRd0Lx0MMpPCEzZHJ+gP+MBiwgoDsG5pFDJFXbEvS5E=;
+        b=p6BR47fZUkBd+uEdgLV91HLP/3f8tz9FUAZcMX1txl2WZCfGJTdp+7ji7eQ0HJsIou
+         7oDP3spbl6HXwjHBby8bB/D4x6YAMaqRKzXJBlD4nR67TSGhm7SCE647B6SSEUJ8cTnW
+         fXcRNJvRz0Uplw5AzETVF11LV3u0ZPVCdmAn5TnXS5lS4B6G/sQxncQ3DUCtaLGdH6hY
+         0/wmfs5EFIvkcZ8CMM8N9L9EDURm/c51QsQOAne3xTpfu1cKo7jKfC/FSo2cxUBkurQZ
+         kqrKu2kLpo8YPfyXBwxJOGyMy0Bnu8hLZtJ2xHu1VEHHRIaNOdIHaPeK381vB82/GWxY
+         tZrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715281781; x=1715886581;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3CSbzIHGbUZ218pL4yd7rG60VIXMZlWnpY2Qh8ih8nw=;
-        b=derbDo1tBiJuAsbzzrp8aiwE9kK0zj1OMpN1nafnFHQ26eDjtCNGg1Ly3w0w0kIV0d
-         He15RJOrxbMxw7mKetpSBW87EEFC7lsYUQW7DUurkyw2I3D+V7hXnmiG3NXAmAyn1DUR
-         IKu2seVESSjsWVgd2EgWLpFrolLJKKBBTwDfP3y+obuJh8JJHp7uiMD+jnCv9mntt1ZI
-         UBcpA5NuXUMmv+xOpb3FpyRSJXzPLw0lNcfGn2J7DJ5X6hbEKKLOg/eBGIQ9UZjOg5h0
-         Ni3Zw+zGFrXDsMhQL31iM8CzMw39AD6SSBRCb6BpI+1KKXZIbBk5SWlloZe6zL4oJ1Fa
-         S73Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVZeSZX5yuIF/3SFpX/XTooKiVglDoIG4BCgP3lj53pXRLoPHHyBOrYiuAiiU1jhe+QQwww/1cksDkl1hNpb9K50pCouPqzb08NzbfqOZ7ADwuSAE4tXWShuj9UoHJoIEqwPyPb36vLDtzdpE2liz4RTGs88JyBsyQed5WGt1e0QSQcxDQc
-X-Gm-Message-State: AOJu0YxbMKtavakio7BEKPtWkht8qrm4nrPbdS28px/gzm2WuU+QQTD0
-	s6ji0hQZsBQ3lWimBQCdZPW9QZKxJenjxqg8FRuDPPmq2/YG8Hl8
-X-Google-Smtp-Source: AGHT+IG5prNPg2rPvVejn53N8fhi120sz/Ilh9Fs/V3adRIhICtygStfMc9Tdnf7wKHeG3l19/wJ2A==
-X-Received: by 2002:adf:ff8a:0:b0:34a:687a:8f66 with SMTP id ffacd0b85a97d-3504a954dd1mr310915f8f.45.1715281781298;
-        Thu, 09 May 2024 12:09:41 -0700 (PDT)
-Received: from localhost ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502baad08asm2435998f8f.76.2024.05.09.12.09.39
+        d=1e100.net; s=20230601; t=1715282194; x=1715886994;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WRd0Lx0MMpPCEzZHJ+gP+MBiwgoDsG5pFDJFXbEvS5E=;
+        b=Fo4QfuwSDkQ/LRyAgDgxNdmwDR0BwmFlx85EDnkLMAGlo4lNyirFdidQ4yH+C3c3OD
+         ty3QQei21+nBjhhiYUYDdAEdjjH+uPr4nb6rJSaqI+DxBOFYaINnOVFroc9NbRlzQaVH
+         FH0DtOOQ9VryjUOPhKbaiFZk0lnz4HEuE/GLjt1EU11DNxtWOyqfBKm7pBe01eh/U0pj
+         BxhRqeb6Qlq20yMZklwbRl51M+MXNJwRAempE0WMhf0xF+HuclvW0/CCIkTgSpWssyOd
+         YGzt/CrrYZ9GCDtBO/Wybin90Yh1kHo8m+fQzyncKknJnYGTdgE6GNJwEqThGdSRKl8y
+         U4Uw==
+X-Forwarded-Encrypted: i=1; AJvYcCWteE735Oc4jZisEgpoIwVIR2fuyHI0O829boIpRhcY/xpjdh1/4eQE6LBeA3b7EF3YiJpkenLmxGR360/0+s/Whby9JoiJcBMpBjdHrhju
+X-Gm-Message-State: AOJu0YzB5s/VIU9lkjNe2AlquaxKQrT+ywnx+g+SeSP+mpcfKQwpHGwI
+	+dbQGhTNUans7VgME5kMACP2HTiJrBzXkRWFh8xAgkkgQzHhDB39yAoiBwtLjig=
+X-Google-Smtp-Source: AGHT+IGVLZ1hk7FPNudPJKafIIo2jYjbH8+I3TnNil7Sy8OT8DfcbS5dMB3RJTTTCW5vQbF2H1ruBQ==
+X-Received: by 2002:a17:903:191:b0:1dc:de65:623b with SMTP id d9443c01a7336-1ef4404b8cdmr7695675ad.60.1715282194292;
+        Thu, 09 May 2024 12:16:34 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c13692asm17812885ad.252.2024.05.09.12.16.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 12:09:41 -0700 (PDT)
-From: Richard Gobert <richardbgobert@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	willemdebruijn.kernel@gmail.com,
-	dsahern@kernel.org,
-	alexander.duyck@gmail.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Richard Gobert <richardbgobert@gmail.com>
-Subject: [PATCH net-next v10 3/3] selftests/net: add flush id selftests
-Date: Thu,  9 May 2024 21:08:19 +0200
-Message-Id: <20240509190819.2985-4-richardbgobert@gmail.com>
-In-Reply-To: <20240509190819.2985-1-richardbgobert@gmail.com>
-References: <20240509190819.2985-1-richardbgobert@gmail.com>
+        Thu, 09 May 2024 12:16:33 -0700 (PDT)
+Date: Thu, 9 May 2024 12:16:29 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
+	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
+	keescook@chromium.org, ajones@ventanamicro.com,
+	conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+	jerry.shih@sifive.com, hankuan.chen@sifive.com,
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+	apatel@ventanamicro.com, mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com, sameo@rivosinc.com,
+	shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 29/29] kselftest/riscv: kselftest for user mode cfi
+Message-ID: <Zj0hDT1EZmOaEkCj@debug.ba.rivosinc.com>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-30-debug@rivosinc.com>
+ <Zj0UGweLoRD1U9Po@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Zj0UGweLoRD1U9Po@ghost>
 
-Added flush id selftests to test different cases where DF flag is set or
-unset and id value changes in the following packets. All cases where the
-packets should coalesce or should not coalesce are tested.
+On Thu, May 09, 2024 at 11:21:15AM -0700, Charlie Jenkins wrote:
+>On Wed, Apr 03, 2024 at 04:35:17PM -0700, Deepak Gupta wrote:
+>> +
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	int ret = 0;
+>> +	unsigned long lpad_status = 0, ss_status = 0;
+>> +
+>> +	ksft_print_header();
+>> +
+>> +	ksft_set_plan(RISCV_CFI_SELFTEST_COUNT);
+>> +
+>> +	ksft_print_msg("starting risc-v tests\n");
+>> +
+>> +	/*
+>> +	 * Landing pad test. Not a lot of kernel changes to support landing
+>> +	 * pad for user mode except lighting up a bit in senvcfg via a prctl
+>> +	 * Enable landing pad through out the execution of test binary
+>> +	 */
+>> +	ret = my_syscall5(__NR_prctl, PR_GET_INDIR_BR_LP_STATUS, &lpad_status, 0, 0, 0);
+>
+>There is an assumption here that the libc supports setting
+>INDIR_BR_LP_STATUS but does not support the standard prctl interface
+>defined in <sys/prctl.h>. my_syscall5() is defined to fill in gaps in
+>the libc, so this test case should also set the status manually rather
+>than relying on the libc.
+>
+>I don't think it's necessary to define my_syscall5() since every libc
+>should have a prctl() definition. However, these CFI prctls are very new
+>and glibc does not yet support (correct me if I am wrong) it so these
+>prctls should be enabled by the test cases.
 
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
----
- tools/testing/selftests/net/gro.c | 138 ++++++++++++++++++++++++++++++
- 1 file changed, 138 insertions(+)
+In one of my previous patches, it was setting landing pad and shadow stack enabling
+directly via handcrafted prctl macro. I changed it to check for status for following reasons
 
-diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-index 6038b96ecee8..b2184847e388 100644
---- a/tools/testing/selftests/net/gro.c
-+++ b/tools/testing/selftests/net/gro.c
-@@ -93,6 +93,7 @@ static bool tx_socket = true;
- static int tcp_offset = -1;
- static int total_hdr_len = -1;
- static int ethhdr_proto = -1;
-+static const int num_flush_id_cases = 6;
- 
- static void vlog(const char *fmt, ...)
- {
-@@ -620,6 +621,113 @@ static void add_ipv6_exthdr(void *buf, void *optpkt, __u8 exthdr_type, char *ext
- 	iph->payload_len = htons(ntohs(iph->payload_len) + MIN_EXTHDR_SIZE);
- }
- 
-+static void fix_ip4_checksum(struct iphdr *iph)
-+{
-+	iph->check = 0;
-+	iph->check = checksum_fold(iph, sizeof(struct iphdr), 0);
-+}
-+
-+static void send_flush_id_case(int fd, struct sockaddr_ll *daddr, int tcase)
-+{
-+	static char buf1[MAX_HDR_LEN + PAYLOAD_LEN];
-+	static char buf2[MAX_HDR_LEN + PAYLOAD_LEN];
-+	static char buf3[MAX_HDR_LEN + PAYLOAD_LEN];
-+	bool send_three = false;
-+	struct iphdr *iph1;
-+	struct iphdr *iph2;
-+	struct iphdr *iph3;
-+
-+	iph1 = (struct iphdr *)(buf1 + ETH_HLEN);
-+	iph2 = (struct iphdr *)(buf2 + ETH_HLEN);
-+	iph3 = (struct iphdr *)(buf3 + ETH_HLEN);
-+
-+	create_packet(buf1, 0, 0, PAYLOAD_LEN, 0);
-+	create_packet(buf2, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-+	create_packet(buf3, PAYLOAD_LEN * 2, 0, PAYLOAD_LEN, 0);
-+
-+	switch (tcase) {
-+	case 0: /* DF=1, Incrementing - should coalesce */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(9);
-+		break;
-+
-+	case 1: /* DF=1, Fixed - should coalesce */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(8);
-+		break;
-+
-+	case 2: /* DF=0, Incrementing - should coalesce */
-+		iph1->frag_off &= ~htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off &= ~htons(IP_DF);
-+		iph2->id = htons(9);
-+		break;
-+
-+	case 3: /* DF=0, Fixed - should not coalesce */
-+		iph1->frag_off &= ~htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off &= ~htons(IP_DF);
-+		iph2->id = htons(8);
-+		break;
-+
-+	case 4: /* DF=1, two packets incrementing, and one fixed - should
-+		 * coalesce only the first two packets
-+		 */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(9);
-+
-+		iph3->frag_off |= htons(IP_DF);
-+		iph3->id = htons(9);
-+		send_three = true;
-+		break;
-+
-+	case 5: /* DF=1, two packets fixed, and one incrementing - should
-+		 * coalesce only the first two packets
-+		 */
-+		iph1->frag_off |= htons(IP_DF);
-+		iph1->id = htons(8);
-+
-+		iph2->frag_off |= htons(IP_DF);
-+		iph2->id = htons(8);
-+
-+		iph3->frag_off |= htons(IP_DF);
-+		iph3->id = htons(9);
-+		send_three = true;
-+		break;
-+	}
-+
-+	fix_ip4_checksum(iph1);
-+	fix_ip4_checksum(iph2);
-+	write_packet(fd, buf1, total_hdr_len + PAYLOAD_LEN, daddr);
-+	write_packet(fd, buf2, total_hdr_len + PAYLOAD_LEN, daddr);
-+
-+	if (send_three) {
-+		fix_ip4_checksum(iph3);
-+		write_packet(fd, buf3, total_hdr_len + PAYLOAD_LEN, daddr);
-+	}
-+}
-+
-+static void test_flush_id(int fd, struct sockaddr_ll *daddr, char *fin_pkt)
-+{
-+	for (int i = 0; i < num_flush_id_cases; i++) {
-+		sleep(1);
-+		send_flush_id_case(fd, daddr, i);
-+		sleep(1);
-+		write_packet(fd, fin_pkt, total_hdr_len, daddr);
-+	}
-+}
-+
- static void send_ipv6_exthdr(int fd, struct sockaddr_ll *daddr, char *ext_data1, char *ext_data2)
- {
- 	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-@@ -938,6 +1046,8 @@ static void gro_sender(void)
- 			send_fragment4(txfd, &daddr);
- 			sleep(1);
- 			write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-+
-+			test_flush_id(txfd, &daddr, fin_pkt);
- 		} else if (proto == PF_INET6) {
- 			sleep(1);
- 			send_fragment6(txfd, &daddr);
-@@ -1064,6 +1174,34 @@ static void gro_receiver(void)
- 
- 			printf("fragmented ip4 doesn't coalesce: ");
- 			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			/* is_atomic checks */
-+			printf("DF=1, Incrementing - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=1, Fixed - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=0, Incrementing - should coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			check_recv_pkts(rxfd, correct_payload, 1);
-+
-+			printf("DF=0, Fixed - should not coalesce: ");
-+			correct_payload[0] = PAYLOAD_LEN;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			printf("DF=1, 2 Incrementing and one fixed - should coalesce only first 2 packets: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
-+
-+			printf("DF=1, 2 Fixed and one incrementing - should coalesce only first 2 packets: ");
-+			correct_payload[0] = PAYLOAD_LEN * 2;
-+			correct_payload[1] = PAYLOAD_LEN;
-+			check_recv_pkts(rxfd, correct_payload, 2);
- 		} else if (proto == PF_INET6) {
- 			/* GRO doesn't check for ipv6 hop limit when flushing.
- 			 * Hence no corresponding test to the ipv4 case.
--- 
-2.36.1
+- If this binary is compiled with landing pad and shadow stack option then toolchain being used
+   already has libc with shadow stack and landing pad enabling
 
+- Currently upstream glibc toolchain dont have support but libc with toolchain has the support.
+
+In case of shadow stack enabling, macro is needed and `prctl` function can't be used.
+Because you enter `prctl` function with no shadow stack but exit with shadow stack and will lead to
+fault in its epilog.
+
+Due to all these reasons, kselftests have to be compiled with toolchain with cfi codegen and thus libc
+should have support to light them up. Here tests only checks if they are already lit up, If not it fails.
+
+Although you're spot on one thing here, since this test is assuming libc already lit-up landing pad and
+shadow stack. It doesn't need macro here for status check of feature and can simply use `prctl` syscall
+interface.
+
+>
+>- Charlie
+>
+>> +	if (ret)
 
