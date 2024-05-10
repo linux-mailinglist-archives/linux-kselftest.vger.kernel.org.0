@@ -1,131 +1,121 @@
-Return-Path: <linux-kselftest+bounces-10003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34AD18C22AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 13:04:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3697D8C2310
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 13:22:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 574DE1C20429
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 11:04:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E631B28289E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 11:22:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F8616D326;
-	Fri, 10 May 2024 11:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC5B16DEAA;
+	Fri, 10 May 2024 11:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F7JO9ne9"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UakbpR3T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC11416ABC3
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 11:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7377454662;
+	Fri, 10 May 2024 11:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715339079; cv=none; b=Yhbo4GyENceg9x4xM4mJVKzgJHu2aMCM3kKEy8giQA+1ERoNkafqGI3SPkM0IsjfxArMOozaPhr9y4WRO6FzSgX39UMSUElz+Y0HODL1/4HmJpqj7VVEfLCvu05F8Cft85Gu/OE27Iw9oUqFO1fCqev79D19fYZFhu4A0VyTgQU=
+	t=1715340032; cv=none; b=BxIdXOD/kLZdPyUL0BrULxMPVeAIF9vF/isuQxVWiyJkKHPvbd5uQItNpW5jazJQEQ8zhgX+nIjBCif8ghY+f0LymWQOhmaTb9IiY+EJ6EpBB/9AagHyUaZYr+W6gY0/wqmGIACQD73ogDW5O8Drtc6yGUcWnXOKooRNrSmVuNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715339079; c=relaxed/simple;
-	bh=ZSxrkHhk9TQzCx8yCadXPeLHHj/w7sGguiT2L35q54o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q6M7wRAj+2cclP8MPjCbRbUsUnexG7rEQG41LNuTank7cRT6SOsrtqAZlkuMwNVxmxp8UG2jYvrYI331IzWZkrCRVgmE+RCAImV5C5/toI5niPxxeIGrvFa/WdY5W4/XUIb6Uh3879ehGHTbzHdxQwwbPHxlmoY+wHFQzL3zn0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F7JO9ne9; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-34dc9065606so1005093f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 04:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715339076; x=1715943876; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/SK/dC7x2I+p3FAI3gVYVOnVrviG0LpG4AN59Ccpo1M=;
-        b=F7JO9ne96MhbVVd/Uv+RYRxXgA907sKyXLHwsj5kUR6i0H5T9Nv0xkKorPZll4p/CC
-         PTbMeEooDxeHFOYh2GeP3s7LMd76r8FvryPHZnheIpRtxFjiWmG5FMnd3QdAavJdm/WC
-         RDzBxNFobVONKsOuVJMtYeCTrazFTC8I5NWfAhV6GAo5CZBkXStAe8Alf1viItRBrfVC
-         wXVWs0NtB/mFI1vRUU3kspFt+DmZgqLVqN6wi+QBgyWqmHqvbz6YTiJ7Owz8Ms9T6td3
-         09HRgXigr3FGHYuzg5HPkBYddUGWZPmDBnnKnDEcJmwLr5cCCPLBfzD5ggVEapxOpJNI
-         54vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715339076; x=1715943876;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/SK/dC7x2I+p3FAI3gVYVOnVrviG0LpG4AN59Ccpo1M=;
-        b=tMDWhz4hSm3Ekf1PKShT1IKzn7OEmaXU20Xzl50nYdjj2C4RF+/zTDNeIcrmNhpdB5
-         x42QF7TJN9ZHWx9eEoB6wb7BGwgHA0CX21cGtcPS7qVBAGFHe59RXptoEtVAO86qElgh
-         OxZN+9fw6DGT98BJboxFo6coGhVAEwsKWW6qN2Rhn2gu++rpUR59NtKgMEzqGZqcUP7V
-         KmeleJjeV9L0m6S7yYooW89dOmqeH+KFiDGkbRHerTuHtWXj1t2xJ2E4hqGDF8rXhe/M
-         kvMzOOSa+UCWFNEC/6DqFuHrgxS+Pd34ElTEJqBXxxS135HUyUVkugAhXI9S8HXsQt/H
-         krUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXu28s4fg0KThgCqC+0ciEyKVn8EUOfayn6dcU13plH66CInT+HwzvMjHiq/g0uJWENo+5mbRk0b8BzTGULTgFsABrJK5ytGMIn4z1lPESt
-X-Gm-Message-State: AOJu0YyhLRqNlKBCtt7xOgANrJFusNBcjaLF18mljZxQLtYrDhMGFJTk
-	jIhxmoZLAI/eSaR9lpuFlPYlQcEMq/tqV6xcaKGO1o2xziOWEzk3R3TLaU+j+g==
-X-Google-Smtp-Source: AGHT+IFArYCKmX2D8zPFkyLcEZmPLkBX+LQfN8jrF3BucrLTmsxbO8b0CqbXFMxsD0gLsQRXXd9jpQ==
-X-Received: by 2002:adf:facc:0:b0:34d:7a55:5060 with SMTP id ffacd0b85a97d-35018113a95mr4886918f8f.11.1715339075493;
-        Fri, 10 May 2024 04:04:35 -0700 (PDT)
-Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b896a06sm4267905f8f.27.2024.05.10.04.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 04:04:35 -0700 (PDT)
-Date: Fri, 10 May 2024 12:04:31 +0100
-From: Vincent Donnefort <vdonnefort@google.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, mhiramat@kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	mathieu.desnoyers@efficios.com, kernel-team@android.com,
-	rdunlap@infradead.org, rppt@kernel.org, david@redhat.com,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [PATCH v22 5/5] ring-buffer/selftest: Add ring-buffer mapping
- test
-Message-ID: <Zj3_P5UsO61yp7a7@google.com>
-References: <20240430111354.637356-1-vdonnefort@google.com>
- <20240430111354.637356-6-vdonnefort@google.com>
- <5bdb08a2-0740-4ea0-be24-a948332d60ac@linuxfoundation.org>
- <20240507193555.592a1e28@rorschach.local.home>
+	s=arc-20240116; t=1715340032; c=relaxed/simple;
+	bh=SQwwA9wyysyHiNBB6w7RkMHU+mPG8xq/RDeviEh9MXk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=W9rxC5ohYPzWO4VHFVDfRPDUWJFkHi2MbdSPTwObIjw555J3GJ9sqcuBd8qBMr46gInxElgLKfD3G4c5esZJYtj93bqM81IHuh5vHM2OqxcFE/+N9BdeNeSrUKybs/LZH5e56VcWxxgoRBHcQJRUx761t68Nz0NxQ8TZbJMMlek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UakbpR3T; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1715340028;
+	bh=SQwwA9wyysyHiNBB6w7RkMHU+mPG8xq/RDeviEh9MXk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=UakbpR3TJ28+qmztK/kRuEiv8VQ5JVn1O6Jh7oooZ9E1tiL2jCwl/mNZST9Z6PfvX
+	 0oNJl2CdZydIeWA0a1ADrgggike+lcNMHOVGx37r3yZTtIhpAHfAczi8HYo4q6WNl7
+	 bcBNFxKBJQT4dv/xuygREoM3eVIR36PcYwffLfgmrEhAywD5/Waps3TM4e1bH7kgwR
+	 /YcMQreBEyJ81Cn+etuDplvnpRltof+YudwKi0cN8FsDuToxBvo0hlaSaTjq3f8BH7
+	 AAdSI7Y8XMzGt/PC5CFhQN8pTxUTsx06YD/pIyiwxLhU62uSIC5r6N9Eh0s9V9uasA
+	 83Jpe90mllcsA==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C282C3782185;
+	Fri, 10 May 2024 11:20:23 +0000 (UTC)
+Message-ID: <a6172c6e-3b5b-43e5-8678-9dc4e428cf94@collabora.com>
+Date: Fri, 10 May 2024 16:20:47 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240507193555.592a1e28@rorschach.local.home>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kunwu Chan <chentao@kylinos.cn>
+Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: Add some null pointer
+ checks
+To: kunwu.chan@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, kunwu.chan@hotmail.com
+References: <20240510095803.472840-1-kunwu.chan@linux.dev>
+ <20240510095803.472840-2-kunwu.chan@linux.dev>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240510095803.472840-2-kunwu.chan@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 07, 2024 at 07:35:55PM -0400, Steven Rostedt wrote:
-> On Fri, 3 May 2024 13:12:56 -0600
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
+On 5/10/24 2:58 PM, kunwu.chan@linux.dev wrote:
+> From: Kunwu Chan <chentao@kylinos.cn>
 > 
-> > On 4/30/24 05:13, Vincent Donnefort wrote:
-> > > This test maps a ring-buffer and validate the meta-page after reset and
-> > > after emitting few events.
-> > >   
-> > 
-> > Changelog needs to be imperative - refer to the following:
-> > 
-> > https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> > 
-> > Update the change log and describe what the test does and include
-> > test output.
-> > 
-> > If the test requires root privileges - make sure add a check to skip
-> > when a normal use runs the test.
-> > 
-> > The rest looks good.
-> > 
+> There is a 'malloc' call, which can be unsuccessful.
+> This patch will add the malloc failure checking
+> to avoid possible null dereference.
 > 
-> Vincent,
+> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+> ---
+>  tools/testing/selftests/bpf/test_progs.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> Can you address Shuah's concerns. I'm starting to test patches 1-4 so
-> you only need to send an update to this one, unless of course I find an
-> issue with one of the others.
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 89ff704e9dad..ecc3ddeceeeb 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -582,6 +582,11 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
+>  
+>  	val_buf1 = malloc(stack_trace_len);
+>  	val_buf2 = malloc(stack_trace_len);
+> +	if (!val_buf1 || !val_buf2) {
+> +		err = -ENOMEM;
+Return from here instead of going to out where free(val_buf*) is being called.
 
-I will do, as well as with the VM_ flags change.
+> +		goto out;
+> +	}
+> +
+>  	cur_key_p = NULL;
+>  	next_key_p = &key;
+>  	while (bpf_map_get_next_key(smap_fd, cur_key_p, next_key_p) == 0) {
+> @@ -1197,6 +1202,8 @@ static int dispatch_thread_send_subtests(int sock_fd, struct test_state *state)
+>  	int subtest_num = state->subtest_num;
+>  
+>  	state->subtest_states = malloc(subtest_num * sizeof(*subtest_state));
+> +	if (!state->subtest_states)
+> +		return -ENOMEM;
+>  
+>  	for (int i = 0; i < subtest_num; i++) {
+>  		subtest_state = &state->subtest_states[i];
 
-Thanks for having a look Shuah.
-
-> 
-> Thanks,
-> 
-> -- Steve
+-- 
+BR,
+Muhammad Usama Anjum
 
