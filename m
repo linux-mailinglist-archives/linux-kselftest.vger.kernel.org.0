@@ -1,78 +1,82 @@
-Return-Path: <linux-kselftest+bounces-10045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCB88C2A54
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:09:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3B48C2A30
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 899561F21508
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:09:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 660772846F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C331E3FB31;
-	Fri, 10 May 2024 19:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9091E525;
+	Fri, 10 May 2024 19:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BA8SjD8I"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bneyZqAc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f74.google.com (mail-ot1-f74.google.com [209.85.210.74])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4627ED2EE
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B691A2C3A
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715368140; cv=none; b=gkXiJX/6dO8Pmsdt3H2NmgLztIgETFiUNsViGvmtoFoLsSw0kf7p3Jxo3CshwqH8Ja/2eI5E69JpqsrzoeQq9hlMlW7YyTkAZpAQbtnfEGKPrFqLETq4aleYQYnRR3/7pUqAQJB65ZPvSZQK/Jsmqd16w+JB2NpCcDxYy2AwvRw=
+	t=1715367772; cv=none; b=Dqk1HICd8YW+G6u+tscWdzWlJjEc1fUY9fUeWCXEZ3OyGixvvtAvQ5uyOpSE8tYSfoUESRJpAlwUsbDhTApF+3gihRFK5/Pn/Qym+JG3rpUOxw/m5bbxZn3GdvwoTYBiwrcdxVBh7BNNmbwzG/m5U6guo37Bd9GFukkqR7nUM98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715368140; c=relaxed/simple;
-	bh=046+K2rooJaiWehncD1DjTIcHY7f2phEuhcBFTeaDGU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=o9mw+HZVsGK3rZBqtdBDan1ql/FsfRlRj1P98V3BP+hAe0u2f0nFu5V5ad6wDgyqHPsyYvH+VBbxIYtjD42PmVEOg0JDShL+hvipd05ZJhy8ZkL52VmCyKePNMcNLyohus/rkQ5Sh6qhjuQCf+UyBSn+jskE94ewNsWijo91dek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BA8SjD8I; arc=none smtp.client-ip=209.85.210.74
+	s=arc-20240116; t=1715367772; c=relaxed/simple;
+	bh=oAq7fpwbbfFZ61Uu45sOtwQXrRsEJ3Y5JqEG9Y1vxoY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=JKkP2+YLD9ZQBkFBqko9yPpvzcDmVQJaDOQnspv2G3AUdn5QMr1BhO6+LHoKpfHU7FmwmwNli2QqNTvDfG2+yCcupsgvEB/AdiMU7rpSJ0SzmtAAiXSe9/RU4KMt1JcQ6oU7nz3Hv/QYDlnsFLUjmBDSd6uBr/Dw56yIpDHB6sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bneyZqAc; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
-Received: by mail-ot1-f74.google.com with SMTP id 46e09a7af769-6f07a69673fso2822694a34.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:08:59 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61be23bb01aso45741437b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715368138; x=1715972938; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hZP8DSrrJ7HH0ntIonPMO4nthwrGJnEqqpwjTbUOSDM=;
-        b=BA8SjD8IrT8ffFuES+q99xBC1S1R2+rhp7A74e9UiUP9gzTSie252MgzcNDlQqEfRp
-         EFsAImBQKTY1fZ2obKgLwy1Sks5Eq4x35APKD4qDBA9aDuu1Yv5fsTUhlzDwsG9zJsgk
-         gpjPmpiAS37vMztGdxkZMiGJ+Kt0RfQozQfDzVB0G3sXasen5aNxCOaquL8koEAQaEEE
-         6Rxby53Hi7g4Jd2+t6+Y8clfG/Hh0EJLkKUUsiOuUwIaJxitSz69A231w08lhKTE6qBF
-         j9j8kcVyMO7AhmPgF7BaVc3tAXVTWERdhMisdrbz4LD567f3DcxR+1Pc8DyY2Mj5PX57
-         d9Yg==
+        d=google.com; s=20230601; t=1715367770; x=1715972570; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKWeI4M6w/xktAVzpxohBVmT60Oq62Vxb0DU/Gw4TvA=;
+        b=bneyZqAce5MLOURcs1d0U3tU7aDP+X1OI2zT99Et14mmnGTBrglaUBcxVJvbDJNQa7
+         j91T94LQxMgzTcaaFasQUtJq7sTGQ5zMnndrbxAqcDOQQ6ptFst6roVWwibKuM4E0WKr
+         jR6h/IlUzFgvukdV0UIDFE3D88nmy8L9hJngN2FEgzKqC8JWJr++UCNIQhE8Ld6GM5WQ
+         tH6BWZa1D4B3bbeFyd0xWTQS+xzJI+6NBLxW3HU+66kV0PfmK2ds4U4Rb0yLsCeDUtD+
+         X5eI0JLfxtmb0HIX7rU2lJmtulVuhAa1nSvq6RBwtVeSgPyRonRsUiisevPUQjoIsxGY
+         z2kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715368138; x=1715972938;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hZP8DSrrJ7HH0ntIonPMO4nthwrGJnEqqpwjTbUOSDM=;
-        b=tmsl/xgeODs8a3kLWPg5DKtZoIpmxYXp7sJSfVu7iXBF5rudM+g9fXZM4uqTEQy9Ze
-         xqp62bu8Sghqf7krUxRR+zbpT8uIoNMJg57lRbBhrTp85sE44fTMN62GDOeJgwqKM5rA
-         iOCuX+dSQxGUDnDzkt3Aw73eXghrzz0xjOZsA4XjKM35doQM7fPs2LJrSbLDFE5ySDBy
-         nzPXaZwKtsp6vU2CXVrK822Nb3YbbpVxr3TgySANLBYWjQElbzeyvDp++SbgepLYe9Xx
-         l9+UWm93Hkps0TRDBsClORaFsUN72GUNKJ5b0aX98w6eFVLzBYzwlorZVsvTKqJIjOu0
-         QN6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXOEX6Qu+rHbynLGHNQyw7ZwpTlNdyhW8nY8n33xKBkWzyEgPR5IRlomG14He2+aateuAAMX6C1zWjUJkb0J9RNDZOB0QayqJA6wbhbNV6B
-X-Gm-Message-State: AOJu0YyVk/qXuWDzGWGvzKzQcYUfHD0OI9WcXhweh7+okKdifQukRXc1
-	OCBJx1LLcDsR4XEbmWLqwl/dC4TIwNKi4RgcohTHThHh9Cg9V3oZ9ePDZwvBkjUNzUEn+sQFAA=
+        d=1e100.net; s=20230601; t=1715367770; x=1715972570;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKWeI4M6w/xktAVzpxohBVmT60Oq62Vxb0DU/Gw4TvA=;
+        b=CNLkp0ST6RFmjGApKpezWN9pE5Adxc9gxjd6CRde+9Qnx6HdvCvSfiuCWpLB7Tj3Uj
+         MsRcPIBfdNIS0Xp82rt/Gz+xVypwgplgN/DJr+F/b9wcJczumC4KzgRW5FSd867skfwq
+         8OwpHHIknPeRKAvy+syq54VWWnI6G4Fv+X7fn3Yzt8hZpY5MZr9URRXeD08gXoq7x4op
+         LfUUT0JEbgy3XlXAK8E57IEojTE2oHpAivsOFIfwVsRZ1SRXROoOHxPlbL1KiGDOdUwh
+         5jl6Eib8Rh5TC3KTCQYHoRCZ4drIX1UsORtDBl6GW2GOhRVItq5CShaewGfPUPRCTIBl
+         1+Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCVRor+p3tnZgi1SOwAfBz3Dhe/FNHg5Gi9xVUPVDeVZxIY++bWwEMYYKCR0x/HuY2MiLQipnTC57+/qjO8KmAplJzx+zxEcoU7BEPnECFN5
+X-Gm-Message-State: AOJu0YxdgAiP+OaWabEbvx2ZYre1rPB5BVQSqkonlijQxeBZZ/5mHv+3
+	VifubeRvGx7sn0hQoStSeMw+X/JbQmQw2LIMTKYTy9bv9crnBhB4jTFm/z/YZ9BdSAsfI39BIA=
 	=
-X-Google-Smtp-Source: AGHT+IGGsXZTPzxHdEkJ5KE1P5Ipo87Hv5nbFQ8da3X3dwC+l4U11PMrYCVwh4lKpb4TjrVQnINN73hlnA==
+X-Google-Smtp-Source: AGHT+IHA0jb54JeWUPzJsoNGtNdjo+1jDg2GxBwSeEG6DJy1RITQuxnlP0DcCPi19hmVKkJS4y7QRENq4A==
 X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a92:dd01:0:b0:36c:2ed4:8d4c with SMTP id
- e9e14a558f8ab-36cc14fde56mr743125ab.4.1715367768757; Fri, 10 May 2024
- 12:02:48 -0700 (PDT)
-Date: Fri, 10 May 2024 14:02:17 -0500
+ (user=jrife job=sendgmr) by 2002:a05:690c:b10:b0:61c:89a4:dd5f with SMTP id
+ 00721157ae682-622afcbec26mr9186507b3.0.1715367770380; Fri, 10 May 2024
+ 12:02:50 -0700 (PDT)
+Date: Fri, 10 May 2024 14:02:18 -0500
+In-Reply-To: <20240510190246.3247730-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240510190246.3247730-1-jrife@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510190246.3247730-1-jrife@google.com>
-Subject: [PATCH v1 bpf-next 00/17] Retire progs/test_sock_addr.c
+Message-ID: <20240510190246.3247730-2-jrife@google.com>
+Subject: [PATCH v1 bpf-next 01/17] selftests/bpf: Migrate recvmsg* return code
+ tests to verifier_sock_addr.c
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>, 
@@ -85,76 +89,178 @@ Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series migrates remaining tests from bpf/test_sock_addr.c to
-prog_tests/sock_addr.c and progs/verifier_sock_addr.c in order to fully
-retire the old-style test program and expands test coverage to test
-previously untested scenarios related to sockaddr hooks.
+This set of tests check that the BPF verifier rejects programs with
+invalid return codes (recvmsg4 and recvmsg6 hooks can only return 1).
+This patch replaces the tests in test_sock_addr.c with
+verifier_sock_addr.c, a new verifier prog_tests for sockaddr hooks, in a
+step towards fully retiring test_sock_addr.c.
 
-This is a continuation of the work started recently during the expansion
-of prog_tests/sock_addr.c.
-
-Link: https://lore.kernel.org/bpf/20240429214529.2644801-1-jrife@google.com/T/#u
-
-=======
-Patches
-=======
-* Patch 1 moves tests that check valid return values for recvmsg hooks
-  into progs/verifier_sock_addr.c, a new addition to the verifier test
-  suite.
-* Patches 2-5 lay the groundwork for test migration, enabling
-  prog_tests/sock_addr.c to handle more test dimensions.
-* Patches 6-11 move existing tests to prog_tests/sock_addr.c.
-* Patch 12 removes some redundant test cases.
-* Patches 14-17 expand on existing test coverage.
-
-Jordan Rife (17):
-  selftests/bpf: Migrate recvmsg* return code tests to
-    verifier_sock_addr.c
-  selftests/bpf: Use program name for skel load/destroy functions
-  selftests/bpf: Handle LOAD_REJECT test cases
-  selftests/bpf: Handle ATTACH_REJECT test cases
-  selftests/bpf: Handle SYSCALL_EPERM and SYSCALL_ENOTSUPP test cases
-  selftests/bpf: Migrate WILDCARD_IP test
-  selftests/bpf: Migrate sendmsg deny test cases
-  selftests/bpf: Migrate sendmsg6 v4 mapped address tests
-  selftests/bpf: Migrate wildcard destination rewrite test
-  selftests/bpf: Migrate expected_attach_type tests
-  selftests/bpf: Migrate ATTACH_REJECT test cases
-  selftests/bpf: Remove redundant sendmsg test cases
-  selftests/bpf: Retire test_sock_addr.(c|sh)
-  selftests/bpf: Expand sockaddr program return value tests
-  sefltests/bpf: Expand sockaddr hook deny tests
-  selftests/bpf: Expand getsockname and getpeername tests
-  selftests/bpf: Expand ATTACH_REJECT tests
-
- tools/testing/selftests/bpf/.gitignore        |    1 -
- tools/testing/selftests/bpf/Makefile          |    4 +-
- .../selftests/bpf/prog_tests/sock_addr.c      | 1821 +++++++++++++++--
- .../selftests/bpf/prog_tests/verifier.c       |    2 +
- .../testing/selftests/bpf/progs/bind4_prog.c  |    6 +
- .../testing/selftests/bpf/progs/bind6_prog.c  |    6 +
- .../selftests/bpf/progs/connect4_prog.c       |    6 +
- .../selftests/bpf/progs/connect6_prog.c       |    6 +
- .../selftests/bpf/progs/connect_unix_prog.c   |    6 +
- .../selftests/bpf/progs/getpeername4_prog.c   |   24 +
- .../selftests/bpf/progs/getpeername6_prog.c   |   31 +
- .../selftests/bpf/progs/getsockname4_prog.c   |   24 +
- .../selftests/bpf/progs/getsockname6_prog.c   |   31 +
- .../selftests/bpf/progs/sendmsg4_prog.c       |    6 +
- .../selftests/bpf/progs/sendmsg6_prog.c       |   57 +
- .../selftests/bpf/progs/sendmsg_unix_prog.c   |    6 +
- .../selftests/bpf/progs/verifier_sock_addr.c  |  331 +++
- tools/testing/selftests/bpf/test_sock_addr.c  | 1140 -----------
- tools/testing/selftests/bpf/test_sock_addr.sh |   58 -
- 19 files changed, 2142 insertions(+), 1424 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/getpeername4_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getpeername6_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getsockname4_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getsockname6_prog.c
+Signed-off-by: Jordan Rife <jrife@google.com>
+---
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../selftests/bpf/progs/verifier_sock_addr.c  | 37 ++++++++++
+ tools/testing/selftests/bpf/test_sock_addr.c  | 70 -------------------
+ 3 files changed, 39 insertions(+), 70 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/progs/verifier_sock_addr.c
- delete mode 100644 tools/testing/selftests/bpf/test_sock_addr.c
- delete mode 100755 tools/testing/selftests/bpf/test_sock_addr.sh
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index c4f9f306646ed..c60db8beeb734 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -66,6 +66,7 @@
+ #include "verifier_sdiv.skel.h"
+ #include "verifier_search_pruning.skel.h"
+ #include "verifier_sock.skel.h"
++#include "verifier_sock_addr.skel.h"
+ #include "verifier_spill_fill.skel.h"
+ #include "verifier_spin_lock.skel.h"
+ #include "verifier_stack_ptr.skel.h"
+@@ -181,6 +182,7 @@ void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
+ void test_verifier_sdiv(void)                 { RUN(verifier_sdiv); }
+ void test_verifier_search_pruning(void)       { RUN(verifier_search_pruning); }
+ void test_verifier_sock(void)                 { RUN(verifier_sock); }
++void test_verifier_sock_addr(void)            { RUN(verifier_sock_addr); }
+ void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill); }
+ void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock); }
+ void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sock_addr.c b/tools/testing/selftests/bpf/progs/verifier_sock_addr.c
+new file mode 100644
+index 0000000000000..5081fa723d3a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_sock_addr.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2024 Google LLC */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf_sockopt_helpers.h>
++#include "bpf_misc.h"
++
++SEC("cgroup/recvmsg4")
++__success
++int recvmsg4_good_return_code(struct bpf_sock_addr *ctx)
++{
++	return 1;
++}
++
++SEC("cgroup/recvmsg4")
++__failure __msg("At program exit the register R0 has smin=0 smax=0 should have been in [1, 1]")
++int recvmsg4_bad_return_code(struct bpf_sock_addr *ctx)
++{
++	return 0;
++}
++
++SEC("cgroup/recvmsg6")
++__success
++int recvmsg6_good_return_code(struct bpf_sock_addr *ctx)
++{
++	return 1;
++}
++
++SEC("cgroup/recvmsg6")
++__failure __msg("At program exit the register R0 has smin=0 smax=0 should have been in [1, 1]")
++int recvmsg6_bad_return_code(struct bpf_sock_addr *ctx)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
+index aa2198a0f24dd..40e33167bec20 100644
+--- a/tools/testing/selftests/bpf/test_sock_addr.c
++++ b/tools/testing/selftests/bpf/test_sock_addr.c
+@@ -94,8 +94,6 @@ static int connect4_prog_load(const struct sock_addr_test *test);
+ static int connect6_prog_load(const struct sock_addr_test *test);
+ static int sendmsg_allow_prog_load(const struct sock_addr_test *test);
+ static int sendmsg_deny_prog_load(const struct sock_addr_test *test);
+-static int recvmsg_allow_prog_load(const struct sock_addr_test *test);
+-static int recvmsg_deny_prog_load(const struct sock_addr_test *test);
+ static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test);
+@@ -373,64 +371,6 @@ static struct sock_addr_test tests[] = {
+ 		SRC6_REWRITE_IP,
+ 		SYSCALL_EPERM,
+ 	},
+-
+-	/* recvmsg */
+-	{
+-		"recvmsg4: return code ok",
+-		recvmsg_allow_prog_load,
+-		BPF_CGROUP_UDP4_RECVMSG,
+-		BPF_CGROUP_UDP4_RECVMSG,
+-		AF_INET,
+-		SOCK_DGRAM,
+-		NULL,
+-		0,
+-		NULL,
+-		0,
+-		NULL,
+-		ATTACH_OKAY,
+-	},
+-	{
+-		"recvmsg4: return code !ok",
+-		recvmsg_deny_prog_load,
+-		BPF_CGROUP_UDP4_RECVMSG,
+-		BPF_CGROUP_UDP4_RECVMSG,
+-		AF_INET,
+-		SOCK_DGRAM,
+-		NULL,
+-		0,
+-		NULL,
+-		0,
+-		NULL,
+-		LOAD_REJECT,
+-	},
+-	{
+-		"recvmsg6: return code ok",
+-		recvmsg_allow_prog_load,
+-		BPF_CGROUP_UDP6_RECVMSG,
+-		BPF_CGROUP_UDP6_RECVMSG,
+-		AF_INET6,
+-		SOCK_DGRAM,
+-		NULL,
+-		0,
+-		NULL,
+-		0,
+-		NULL,
+-		ATTACH_OKAY,
+-	},
+-	{
+-		"recvmsg6: return code !ok",
+-		recvmsg_deny_prog_load,
+-		BPF_CGROUP_UDP6_RECVMSG,
+-		BPF_CGROUP_UDP6_RECVMSG,
+-		AF_INET6,
+-		SOCK_DGRAM,
+-		NULL,
+-		0,
+-		NULL,
+-		0,
+-		NULL,
+-		LOAD_REJECT,
+-	},
+ };
+ 
+ static int load_insns(const struct sock_addr_test *test,
+@@ -527,16 +467,6 @@ static int sendmsg_deny_prog_load(const struct sock_addr_test *test)
+ 	return xmsg_ret_only_prog_load(test, /*rc*/ 0);
+ }
+ 
+-static int recvmsg_allow_prog_load(const struct sock_addr_test *test)
+-{
+-	return xmsg_ret_only_prog_load(test, /*rc*/ 1);
+-}
+-
+-static int recvmsg_deny_prog_load(const struct sock_addr_test *test)
+-{
+-	return xmsg_ret_only_prog_load(test, /*rc*/ 0);
+-}
+-
+ static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+ {
+ 	struct sockaddr_in dst4_rw_addr;
 -- 
 2.45.0.118.g7fe29c98d7-goog
 
