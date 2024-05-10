@@ -1,256 +1,160 @@
-Return-Path: <linux-kselftest+bounces-9985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38DB58C1D83
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 06:58:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B7178C1D8B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 07:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6EF11F22FE8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 04:58:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2AB6283658
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 05:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5C114C596;
-	Fri, 10 May 2024 04:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1BA161920;
+	Fri, 10 May 2024 05:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KYy31U+4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ym710eLx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679D913C3C1;
-	Fri, 10 May 2024 04:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F231315E819;
+	Fri, 10 May 2024 05:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715317085; cv=none; b=TI3KrXACUBUzGwlrVkzOZ/ZPgWJfCOL23JXsxmD0uYzeaHT1kHm/6R2IXhPG3m/iDRWfIu1QIhjzg5MOtBXYa8efbusdA0tBjH/0+47+RAN9/WM4Lmnx8Rb2/H7KVCHDWepRJRmyg+eZy3Hqf3QJZT7u0YGwuoEPLgYqdv4PRkE=
+	t=1715317535; cv=none; b=Ct4Uh91OMDclwFmQm+CIkXkEcRxDQHsThIpHY7dy9MPfBbGxX/gEuwG6qXK5b1MXBe9sp1VmlYxeN80C7R8nJupxNuejhxwJbVg8D8XJFrqiuKCUi/O1xjtWKTosl0ltHcbki9wF/3Nck+bsnR32kLnEY3VBO3PPoZ6dCVIPSZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715317085; c=relaxed/simple;
-	bh=ZfZhRWYMX4moU6HQ7mqkmcHxdy41tks5snJ397Mvqfg=;
+	s=arc-20240116; t=1715317535; c=relaxed/simple;
+	bh=jDGgcoUKKrxphsvaVnf/uMQ3t2976hJCRm3+2wGPq2Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A3l4U5wjUw2L/MTBe8WX5fKfnvHJVvM+1J2szGnJCbP+crrBxVGrUciSBTJGRhIK/DEX3S2UJeeFJeNY/pPtc4ChXkpJpUHHF8ZLWSKPxFu3I5k+vYc8BuOyRMqCUzg3uskHgLAdLs2+0nk+y4K1etiKuPg/JvEN4xFExyp6r+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KYy31U+4; arc=none smtp.client-ip=209.85.208.179
+	 To:Cc:Content-Type; b=nmVschlRqw7h+wsnYa2AaM0+iUeRdXOG6G1E7LfqgWaK86H3tyX74FWrKcEN1eQDepTb59RJXGD6Yvz/bzy9UjcRS76ZyvmBtCAIMsfgF7z0mYxizAIF1wso9YsUUzAVqvV/m/OP+JLSS05ImddETIA8KdP+UAVvpLlhGO2sY6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ym710eLx; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2df83058d48so20582041fa.1;
-        Thu, 09 May 2024 21:58:03 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a5a2c05006aso83500966b.0;
+        Thu, 09 May 2024 22:05:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715317081; x=1715921881; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715317523; x=1715922323; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dg99FC5PTS8Fg78W7A6USREyKpZrakyOalm2O94BqdY=;
-        b=KYy31U+4BW1sjtEpUyr5mpKO9mLMwM0IpPNdQ3Lf97oIvhNXL21/fytBIB0gQqbNgX
-         PkqCvgTvlq4n7p8RctphQJVhMwFgYDHmieW7Qxvo4royml0X8IxyiBChSXTKDIdpYVxW
-         Ij0j0P6R50ypYdtyL+BBNGtQghSQ2OkkXaRLiIkgWw6TGBnZOfT6OAffFJHkL7W4fWj8
-         70y6GUUC2w/4Q7VHf+Y7POBn7xSsdW6X3TmFm5SP5Ka8QSJ0MdelAsPYdE2rZJCZWZjp
-         21vBZWdaRkeVmmEWwZdcIhRrQ9iPh3XpZQCMJmE3pJDxf/TYDTPA+JvyD5fSOCXb8kPr
-         N8RA==
+        bh=jDGgcoUKKrxphsvaVnf/uMQ3t2976hJCRm3+2wGPq2Y=;
+        b=Ym710eLxvwSWAwOtpWMD8zoYbYe0xgqTfzsGrhqS6pgGLlcvY7+qsEcEQVJfPewcYg
+         sXZhfZPNuHXwcgKyjAL8e7c8isSPM2nJE9uBmDP5qoiqVMhOy4s5XXB3GdfdT6bo8Om0
+         16LALo0WEvHBJgS9rrKJFWkZI3JZajxe+JRKivjAekzrpajnkWz3Qq0cmJHGsvl8hXwd
+         ucTghuGGEBWYKEucX+0u8xBxPm/5AIJ+hE6NhNSIZ7e/ZcIkY0cGIuP6+wldxtZoav/Y
+         D8rhJmoav8w1MBx16W7lKq0qPSkGSvj1hqxeFOj1CViTWMDPBeU9ix3JR1lhll//2Ujh
+         msSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715317081; x=1715921881;
+        d=1e100.net; s=20230601; t=1715317523; x=1715922323;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dg99FC5PTS8Fg78W7A6USREyKpZrakyOalm2O94BqdY=;
-        b=seaooP+f8XGXKrXLpUNnunj+JcWs6GCPm837vbeZqWD4eP1IakuJbbVmZZla0zj5Iz
-         AKAZ7UdlKQCbreBrC2SLbEIZcyr7WOKSJ41tvGBXaUW3KlSLrdoiqwl5YUsUbLTczw3b
-         d21CdmOHuHpxRiZ3EBMXfVD1/h5x136AjXOvIoviGqtqs4C/wZp5vSGfcwL2CnM4aLs+
-         tjJwvqrazncxSgjMtvmadjRd6HVl8BDDiZBqS7x/kc2WHXW9aL4eBVQk+lwTxJBvaNDF
-         FI80nGWaBSOGTwp5P10n5RsVszHZjIGPNmMVON4pSyqo4JYJaKFf1FAu/BOmX7C/4MJl
-         DjLg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6onpGXal29O421S1Vzs30emts/S0TjfezoRpC1ncRh3XnpquQoT5l+syL+/ag7Ycas9FZlf1TenwrMTsasaxwLN7XbjBLFIX6Sam6KAg4VoPhXRz9ewQsA+UPNCCmVSTS5xI7vypK
-X-Gm-Message-State: AOJu0YziER2+R6fcrU6wGi5/wAAQYpGz0xnkRVuEAEH1BNuspU8BIvnH
-	QjgidSG1Fuigb3zbUs4+81nysdEMATcBm4QVHafHY5qHg0bsFSGqxPzC/SEjh1oM3S4X/ApQYOe
-	GRRaSSeT06DDOW3VW5Ur2Ja6EeTiKKSR+igk=
-X-Google-Smtp-Source: AGHT+IGrh8O/C3NIBVTu2S5+nnSDnAOzhVN56CUcJITw9k0zjx9lRzTL1AnlORZ9faJDiqiaCQKK7pPTPLMxprw/I4Y=
-X-Received: by 2002:a05:6512:3b08:b0:51a:cafd:3872 with SMTP id
- 2adb3069b0e04-5220fc736b0mr1012301e87.3.1715317081279; Thu, 09 May 2024
- 21:58:01 -0700 (PDT)
+        bh=jDGgcoUKKrxphsvaVnf/uMQ3t2976hJCRm3+2wGPq2Y=;
+        b=jpgwpjDNDsqpdOrNR6oYgNWRXGbq+8ogbdDG+5NS/W+tw8sXUfAottGOfNt+sVlgDu
+         GAedC+O5PbQniYYfutXH9SRKBX4ar8lzTLy5bIJ2sUEsSSeso/bEooUZTvhA4uxwmKIK
+         TYgGSeIRZ2pZg7UZbuTMV9ZIH+U1MEhh3Iad3a+TFnZ4lckn/LRYKU4CpY8MfD82h1bd
+         VIyhhyyPtiH/r0lU2LJWHqxm2cipW2Zk8PohRhc67EFLlFZhueRbeBHwc+WbOv1vd2s2
+         TicBuUk2iICc04N2vHVpqralC9SWBjfRvxRuw+/O9T/z+zsn5TSKsaoD7kPpkdPPVoik
+         Tl9w==
+X-Forwarded-Encrypted: i=1; AJvYcCXn47adRN0LPbGfaX1+decQSH1mDyRYheQYTlmVKtpmjDJLz9Rg9gaVQLEJIwJNDQduIjsK4MexJeCBHIxDHAhU0AhEfYz/6JWG180Mp5T5DaFXgJfPoLmBe/iU7dir5r0N6hdbBHTU
+X-Gm-Message-State: AOJu0YxdXt2Sj7mTZZlMGHuL+Lor3jM52+i1hHL/Y1LM7N4IAkRCI4yp
+	EZkbDxaZcLYEGr1cPzFAESZ1HvCRcM/cZaZXk5Tfj8jpkrVxhSygHu6Tm0ZJalLBGMxt0apmj3+
+	mLeCL6CQ85Asm1FyKdU+iycT4nR6zAOTWB2Q=
+X-Google-Smtp-Source: AGHT+IFvfQWhu1T/qdm9a3KREXg/Ypu6OnM4R/WZl1q3DCXxu8A88T/TExiiBn6JYOThs25R6H1YaM9IAB9viKA/cXc=
+X-Received: by 2002:a50:bb4b:0:b0:571:bb79:51aa with SMTP id
+ 4fb4d7f45d1cf-5734d6e0021mr1172138a12.39.1715317523098; Thu, 09 May 2024
+ 22:05:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240508040643.229383-1-ap420073@gmail.com> <20240509083819.GJ1736038@kernel.org>
-In-Reply-To: <20240509083819.GJ1736038@kernel.org>
+References: <20240508040643.229383-1-ap420073@gmail.com> <d5016925e415c422c37f7ac1c5374a06bbdc2126.camel@redhat.com>
+In-Reply-To: <d5016925e415c422c37f7ac1c5374a06bbdc2126.camel@redhat.com>
 From: Taehee Yoo <ap420073@gmail.com>
-Date: Fri, 10 May 2024 13:57:49 +0900
-Message-ID: <CAMArcTV6zPVNjay=ka3NVEUq2iEZ_W2dy8V6UJkT9Mf2PRKA0A@mail.gmail.com>
+Date: Fri, 10 May 2024 14:05:11 +0900
+Message-ID: <CAMArcTUaeVTDxSMy4u70RiKghAtezea4HBoQcqbRsoaYPa7d9w@mail.gmail.com>
 Subject: Re: [PATCH net] selftests: net: avoid waiting for server in amt.sh
  forever when it fails.
-To: Simon Horman <horms@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+	shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 9, 2024 at 5:38=E2=80=AFPM Simon Horman <horms@kernel.org> wrot=
+On Thu, May 9, 2024 at 6:36=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
 e:
 >
 
-Hi Simon,
-Thanks a lot for the review!
+Hi Paolo,
+Thank you for the review!
 
-> On Wed, May 08, 2024 at 04:06:43AM +0000, Taehee Yoo wrote:
-> > In the forwarding testcase, it opens a server and a client with the nc.
-> > The server receives the correct message from NC, it prints OK.
-> > The server prints FAIL if it receives the wrong message from the client=
-.
-> >
-> > But If the server can't receive any message, it will not close so
-> > the amt.sh waits forever.
-> > There are several reasons.
-> > 1. crash of smcrouted.
-> > 2. Send a message from the client to the server before the server is up=
-.
-> >
-> > To avoid this problem, the server waits only for 10 seconds.
-> > The client sends messages for 10 seconds.
-> > If the server is successfully closed, it kills the client.
-> >
-> > Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-> > Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-> > ---
-> >  tools/testing/selftests/net/amt.sh | 63 +++++++++++++++++++-----------
-> >  1 file changed, 40 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftes=
-ts/net/amt.sh
-> > index 75528788cb95..16641d3dccce 100755
-> > --- a/tools/testing/selftests/net/amt.sh
-> > +++ b/tools/testing/selftests/net/amt.sh
-> > @@ -77,6 +77,7 @@ readonly LISTENER=3D$(mktemp -u listener-XXXXXXXX)
-> >  readonly GATEWAY=3D$(mktemp -u gateway-XXXXXXXX)
-> >  readonly RELAY=3D$(mktemp -u relay-XXXXXXXX)
-> >  readonly SOURCE=3D$(mktemp -u source-XXXXXXXX)
-> > +readonly RESULT=3D$(mktemp -p /tmp amt-XXXXXXXX)
-> >  ERR=3D4
-> >  err=3D0
-> >
-> > @@ -85,6 +86,10 @@ exit_cleanup()
-> >       for ns in "$@"; do
-> >               ip netns delete "${ns}" 2>/dev/null || true
-> >       done
-> > +     rm $RESULT
-> > +     smcpid=3D$(< $SMCROUTEDIR/amt.pid)
-> > +     kill $smcpid
-> > +     rm -rf $SMCROUTEDIR
+> On Wed, 2024-05-08 at 04:06 +0000, Taehee Yoo wrote:
 >
-> Hi Taehee Yoo,
->
-> I think this cleanup may be executed before SMCROUTEDIR exists.
->
-> For consistency with other temp files, perhaps
-> perpahps it is best to move the creation of SMCROUTEDIR up
-> to where RESULT is instantiated above.
->
-> And perhaps the pid handling can be made conditional on the
-> existence of $SMCROUTEDIR/amt.pid
->
->         if [ -f "$SMCROUTEDIR/amt.pid" ]; then
->                 ...
->         fi
->
-
-Thanks!
-I will check a pid file before kills smcrouted.
-
-> >
-> >       exit $ERR
-> >  }
-> > @@ -167,7 +172,9 @@ setup_iptables()
-> >
-> >  setup_mcast_routing()
-> >  {
-> > -     ip netns exec "${RELAY}" smcrouted
-> > +     SMCROUTEDIR=3D"$(mktemp -d)"
-> > +
-> > +     ip netns exec "${RELAY}" smcrouted -P $SMCROUTEDIR/amt.pid
-> >       ip netns exec "${RELAY}" smcroutectl a relay_src \
-> >               172.17.0.2 239.0.0.1 amtr
-> >       ip netns exec "${RELAY}" smcroutectl a relay_src \
 > > @@ -210,40 +217,52 @@ check_features()
 > >
-> >  test_ipv4_forward()
-> >  {
-> > -     RESULT4=3D$(ip netns exec "${LISTENER}" nc -w 1 -l -u 239.0.0.1 4=
-000)
-> > +     echo "" > $RESULT
-> > +     bash -c "$(ip netns exec "${LISTENER}" \
-> > +             timeout 10s nc -w 1 -l -u 239.0.0.1 4000 > $RESULT)"
+> > test_ipv4_forward()
+> > {
+> > - RESULT4=3D$(ip netns exec "${LISTENER}" nc -w 1 -l -u 239.0.0.1 4000)
+> > + echo "" > $RESULT
+> > + bash -c "$(ip netns exec "${LISTENER}" \
+> > + timeout 10s > $RESULT)"
+> > + RESULT4=3D$(< $RESULT)
 >
-> Hi,
+> if you instead do:
 >
-> It's unclear to me what the purpose of the bash -c "$(...)" construction =
-is
-> here. Can the same be achieved using simply:
+> RESULT4=3D$(timeout 10s ip netns exec \
+> "${LISTENER}" nc -w 1 -l -u 239.0.0.1 4000)
 >
->         ip netns exec "${LISTENER}" \
->                 timeout 10s nc -w 1 -l -u 239.0.0.1 4000 > $RESULT
+> You can avoid the additional tmp file (RESULT)
 >
 
-The purpose of using bash -s was to avoid exiting main bash program
-by timeout expiration due to 'set -e' option.
-But Jakub avoided that problem by adding (|| true) in the recent patch.
+Thanks,
+In the recent patch from Jakub, a variable is used instead of a file.
 
-
-> Also, not strictly related to this patch, it seems a little odd here, and
-> elsewhere, to call bash in a /bin/sh script.
->
-
-Oh Thanks,
-Shebang should be bash, not sh.
-I will fix it.
-
-
-> > +     RESULT4=3D$(< $RESULT)
-> >       if [ "$RESULT4" =3D=3D "172.17.0.2" ]; then
-> >               printf "TEST: %-60s  [ OK ]\n" "IPv4 amt multicast forwar=
-ding"
-> > -             exit 0
-> >       else
-> >               printf "TEST: %-60s  [FAIL]\n" "IPv4 amt multicast forwar=
-ding"
-> > -             exit 1
-> >       fi
+> > if [ "$RESULT4" =3D=3D "172.17.0.2" ]; then
+> > printf "TEST: %-60s [ OK ]\n" "IPv4 amt multicast forwarding"
+> > - exit 0
+> > else
+> > printf "TEST: %-60s [FAIL]\n" "IPv4 amt multicast forwarding"
+> > - exit 1
+> > fi
 > > +
-> >  }
+> > }
 >
-> ...
+> [...]
 >
-> >  send_mcast4()
-> >  {
-> >       sleep 2
-> > -     ip netns exec "${SOURCE}" bash -c \
-> > -             'echo 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
-> > +     for n in {0..10}; do
-> > +             ip netns exec "${SOURCE}" bash -c \
-> > +                     'echo 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000'
-> > +             sleep 1
-> > +     done
-> > +
-> >  }
-> >
-> >  send_mcast6()
-> >  {
-> >       sleep 2
-> > -     ip netns exec "${SOURCE}" bash -c \
-> > -             'echo 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
-> > +     for n in {0..10}; do
-> > +             ip netns exec "${SOURCE}" bash -c \
-> > +                     'echo 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000'
-> > +             sleep 1
-> > +     done
-> > +
-> >  }
-> >
-> >  check_features
+> > @@ -259,19 +278,17 @@ setup_iptables
+> > setup_mcast_routing
+> > test_remote_ip
+> > test_ipv4_forward &
+> > -pid=3D$!
+> > -send_mcast4
+> > -wait $pid || err=3D$?
+> > -if [ $err -eq 1 ]; then
+> > - ERR=3D1
+> > -fi
+> > +spid=3D$!
+> > +send_mcast4 &
+> > +cpid=3D$!
+> > +wait $spid
 >
-> ...
+> It looks like you don't capture anymore the return code from
+> test_ipv4_forward, why?
 >
-> --
-> pw-bot: under-review
+> That will foul the test runner infra to think that this test is always
+> successful.
+>
+
+You're right,
+Sorry, I didn't consider it.
+It should not be changed.
+
+
+> Paolo
+>
 
 Thanks a lot!
 Taehee Yoo
