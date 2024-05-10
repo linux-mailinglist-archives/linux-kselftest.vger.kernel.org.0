@@ -1,185 +1,122 @@
-Return-Path: <linux-kselftest+bounces-10051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1F2B8C2B45
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 22:46:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 112DD8C2B4D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 22:50:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED9FC1C20B9D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 20:46:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42CA01C238BF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 20:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AA846444;
-	Fri, 10 May 2024 20:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFBB4F211;
+	Fri, 10 May 2024 20:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RI6SwIoQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2Rz0POx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2606FC0B;
-	Fri, 10 May 2024 20:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3090FC0B;
+	Fri, 10 May 2024 20:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715374012; cv=none; b=geQVrchc+AfvYzzclQOQQ+TErlcBV+Tix/hs6oBTrtt6ocWMwssU/TpM+JEXokX7guMrE0g0RcxuD8S8aCuRXRvgoVZVZxv5cht7pVJnnVmsTiSo10u2nZ/LYr1q951RaRLJq6eA/ZMQ7eHKN4SwXdjT/dMOhKQpuNT8lgDx9jk=
+	t=1715374239; cv=none; b=EYuqq/gBhK/I9vE/aQzMFnWGczuhuHJ5aX5eBju251ph3Bm2lUeRNuQjzyoNJYNq2SbS/Doq3yWUUuJN1pqeek7wQDxdNAkG8J/Q16nI2Bycd/l5QluKI/Qaz+KFOFTQsnth8l4mqtwsfPeDrI1Bfd7E8EZ1eaEUq0kKpx+KPPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715374012; c=relaxed/simple;
-	bh=fdvro2SMQFvU7C5zN+OrfigUP0qDunUUywy2/UNF0SA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=pNuIvWyJY4Cla8ZWAfvCCrB5XnoNXadkBWS1sGg9j1yxhgVwEVttETVs3ssONoupWe4rK18L+XK3RsyANQS8G7MVsCEhhERNnMMGU5YMzzhYfqW1aLpIJgPpa5/sInOdU9AxYRQNJb2iNLyO5H3286nyDxqvRzRgw3STzxPj5dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RI6SwIoQ; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a59a934ad50so590931866b.1;
-        Fri, 10 May 2024 13:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715374009; x=1715978809; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WMEM98RiYUq0hdtm/YdPk4weUn162VqCwHj8usxBrh0=;
-        b=RI6SwIoQ9Xd8SElEE0YLXfSxnD6ywvuE2ooSIO2EMIGmUUB0i/vGXS43DhD6AaewDO
-         2hDJyBGS8qdC89/DtfK84b0+166Mn+h8IjW8aTVW/bC5Zmp9rTHwM6BqPUil15uVMRCn
-         M3ppPam+KC9GFwShtQdJr98XUC5a1Ebigkg+w0I0bAj3O7l9KUZXMd07RtpJJ9f6qls8
-         exZQLg/NE+F79UTK15op2D6I4ya5ZusUWe4xOXb3Wum6imwuWPNe3HhgZcx4qL/6FXsE
-         fVnND1ONmlS6Xgk82gAZV8iOjlayyqbsUK5BB17wfhnn9UaP6/ZNNiHb001LQVsyath1
-         VMfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715374009; x=1715978809;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WMEM98RiYUq0hdtm/YdPk4weUn162VqCwHj8usxBrh0=;
-        b=TWvGP0oII2/thL9pgBPv6ZrSB0UujbqrJXopQkVBp6+s2M9c37bd0F/a5BEHLdI7cQ
-         1E+dDuOxsH4l6576A5ReD5Iu4nAJdjmY7x9a0val6etYqhA6F9bYcAVS7Uz0lZ59IFI+
-         Tr8TNoWsrg4kQ26hHSuxARihLwbhjUgYx/cVRuYc569nOaRn+Z1nitRPUlchCBZjYxuL
-         ztuffZRF3eBFWYRGDlwSzLC+4iriv8xJg4CfE6QvMUqweptUJMN3wUmvHBl6BOydhrBR
-         TOY7LdEXqBnDBFbPyiRYAi4Zv7gcImUzUfO7uEW1MtfB3w6CtA26W8ZXrNAibZKXvrn+
-         o2/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWMzCWMzx+n4vv//+EGG85CoDHG14jHljd97psyrqqUGhHGwVV72M/tvB6japZJxX+atEHKGs7iSvXeAlDGF28DQsxTZ/09PsKg/7VRNGiX/esfyex43FKm/P+Q5uw8FkhzVfi+1F8W
-X-Gm-Message-State: AOJu0Yy7+/pB/j8xr9NVlnqeboI/YJ5kF8p7nnTemc52jlWeN8CECgve
-	/tX+P5t0BsawPjPzi9LiLVLS85uk7D9vfEwJfL5cG4KjRGaPGLZ/s61yRH3L
-X-Google-Smtp-Source: AGHT+IEdoRgVqcTVs95ruV6D74mUnZI1UyKgszD5KL5X4ahLlK5JkYVuQ4kebfo/LFj3lkuKsI5Vww==
-X-Received: by 2002:a50:c349:0:b0:56d:faa2:789b with SMTP id 4fb4d7f45d1cf-5734d6df1dcmr2213346a12.40.1715374008474;
-        Fri, 10 May 2024 13:46:48 -0700 (PDT)
-Received: from [192.168.178.20] (dh207-42-221.xnet.hr. [88.207.42.221])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733becfb83sm2206598a12.46.2024.05.10.13.46.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 May 2024 13:46:48 -0700 (PDT)
-Message-ID: <150006c9-18c9-459d-9e38-58e83d6653ae@gmail.com>
-Date: Fri, 10 May 2024 22:46:47 +0200
+	s=arc-20240116; t=1715374239; c=relaxed/simple;
+	bh=+9uY+3QS/KU4LqGvBa9PuWhKX14BfkblrVKzdImHbHE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dl7eZNy30el480yxO5o+c2TmjmZXH7FPDDUyJcwCxKmFyabIEMEl3ZLmcE1jrRFC+ONCYCjHT6S14t9MfjJL77k5ecoIeDsxTM1AQAXZ6OvUq5KnxYqD/TPxwtIPs8QEz/aTmTPY+o4IR0/JSN9koVqLDsBm0emssYXPa4dKhzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2Rz0POx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF4BC32781;
+	Fri, 10 May 2024 20:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715374239;
+	bh=+9uY+3QS/KU4LqGvBa9PuWhKX14BfkblrVKzdImHbHE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B2Rz0POxy4nvsZ9o7IKxVQPe6AU1Y5raSL2PH5Oq3Rmz9k8KRtPC1aeUKTzmOEOmB
+	 n71lEqdV6eRXzZanUG2D7rEuULiSpRFrDJ9IO9Vz10Bl16Bfwfq85+pXyM6rMFmlI4
+	 +Lhh0FZaryAI5Zv7h6a3CUH7A/zjs8HOEOz89ULFAlJpiSafjizZPyECELU1b07WSD
+	 vywqr+1jWnM0GTV1UaDeTW3gA1enGAqHExtiEYv222nusjRmFleW9jG7We53M7KEdE
+	 jPbZtVtERRLHwRgUbNclnBiRcRtw07M2GPeESJZlrhzrvk3zn1KHFhgmw34EUO6mby
+	 R7ylxUW7WiWbQ==
+Date: Fri, 10 May 2024 21:50:32 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 06/17] riscv: Add vendor extensions to /proc/cpuinfo
+Message-ID: <20240510-childcare-outlook-d18e3cc5ccb3@spud>
+References: <20240503-dev-charlie-support_thead_vector_6_9-v6-0-cb7624e65d82@rivosinc.com>
+ <20240503-dev-charlie-support_thead_vector_6_9-v6-6-cb7624e65d82@rivosinc.com>
+ <20240507-divisive-swoop-c2737a2d9a9f@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-kselftest@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, Shuah Khan <shuah@kernel.org>,
- linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Mirsad Todorovac <mtodorovac69@gmail.com>
-Subject: [PATCH v1 1/1] selftests/sgx: Fix the implicit declaration of
- asprintf() compiler error
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="BHMvR13gFgTG0XBs"
+Content-Disposition: inline
+In-Reply-To: <20240507-divisive-swoop-c2737a2d9a9f@spud>
 
-The selftest/sgx/main.c didn't compile with [-Werror=implicit-function-declaration]
-[edited]:
 
-make[3]: Entering directory 'tools/testing/selftests/sgx'
-gcc -Wall -Werror -g -Itools/testing/selftests/../../../tools/include -fPIC -c main.c \
-        -o tools/testing/selftests/sgx/main.o
-In file included from main.c:21:
-../kselftest_harness.h: In function ‘__run_test’:
-../kselftest_harness.h:1169:13: error: implicit declaration of function ‘asprintf’; \
-        did you mean ‘vsprintf’? [-Werror=implicit-function-declaration]
- 1169 |         if (asprintf(&test_name, "%s%s%s.%s", f->name,
-      |             ^~~~~~~~
-      |             vsprintf
-cc1: all warnings being treated as errors
-make[3]: *** [Makefile:36: tools/testing/selftests/sgx/main.o] Error 1
+--BHMvR13gFgTG0XBs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The cause is in the included <stdio.h> on Ubuntu 22.04 LTS:
+On Tue, May 07, 2024 at 06:03:19PM +0100, Conor Dooley wrote:
+> On Fri, May 03, 2024 at 11:18:21AM -0700, Charlie Jenkins wrote:
+> > All of the supported vendor extensions that have been listed in
+> > riscv_isa_vendor_ext_list can be exported through /proc/cpuinfo.
+> >=20
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>=20
+> This seems fine, thanks for updating this interface :)
+>=20
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
- 19 /*
- 20  *      ISO C99 Standard: 7.19 Input/output     <stdio.h>
- 21  */
-.
-.
-.
-387 #if __GLIBC_USE (LIB_EXT2)
-388 /* Write formatted output to a string dynamically allocated with `malloc'.
-389    Store the address of the string in *PTR.  */
-390 extern int vasprintf (char **__restrict __ptr, const char *__restrict __f,
-391                       __gnuc_va_list __arg)
-392      __THROWNL __attribute__ ((__format__ (__printf__, 2, 0))) __wur;
-393 extern int __asprintf (char **__restrict __ptr,
-394                        const char *__restrict __fmt, ...)
-395      __THROWNL __attribute__ ((__format__ (__printf__, 2, 3))) __wur;
-396 extern int asprintf (char **__restrict __ptr,
-397                      const char *__restrict __fmt, ...)
-398      __THROWNL __attribute__ ((__format__ (__printf__, 2, 3))) __wur;
-399 #endif
+Hmm, actually the automation on patchwork is complaining a bunch about
+the series, but I think that's mostly false positives except for this
+patch. The nommu defconfigs are prob the easiest way to reproduce this:
+  /build/tmp.QPMRM3oUNu/arch/riscv/kernel/vendor_extensions.c:41:55: error:=
+ 'struct riscv_isa_vendor_ext_data_list' has no member named 'vendor_bitmap'
+  /build/tmp.QPMRM3oUNu/arch/riscv/kernel/vendor_extensions.c:42:60: error:=
+ 'struct riscv_isa_vendor_ext_data_list' has no member named 'per_hart_vend=
+or_bitmap'; did you mean 'per_hart_isa_bitmap'?
+  /build/tmp.QPMRM3oUNu/arch/riscv/kernel/vendor_extensions.c:43:60: error:=
+ 'struct riscv_isa_vendor_ext_data_list' has no member named 'bitmap_size'
 
-__GLIBC_USE (LIB_EXT2) expands into __GLIBC_USE_LIB_EXT2 as defined here:
+Cheers,
+Conor.
 
-/usr/include/features.h:186:#define __GLIBC_USE(F)      __GLIBC_USE_ ## F
+--BHMvR13gFgTG0XBs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Now, what is unobvious is that <stdio.h> includes
+-----BEGIN PGP SIGNATURE-----
 
-/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
-------------------------------------------------------
- 35 /* ISO/IEC TR 24731-2:2010 defines the __STDC_WANT_LIB_EXT2__
- 36    macro.  */
- 37 #undef __GLIBC_USE_LIB_EXT2
- 38 #if (defined __USE_GNU                                                  \
- 39      || (defined __STDC_WANT_LIB_EXT2__ && __STDC_WANT_LIB_EXT2__ > 0))
- 40 # define __GLIBC_USE_LIB_EXT2 1
- 41 #else
- 42 # define __GLIBC_USE_LIB_EXT2 0
- 43 #endif
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj6ImAAKCRB4tDGHoIJi
+0v5GAQDz/COSUgwYOrRhiE95HyXWBcrE7N78mp8pUkk9m/hrFgEAxmMo1xhXO2iP
+tU7a1ZH2VRD826Ot6whFO6eC88ci1wU=
+=8S+4
+-----END PGP SIGNATURE-----
 
-This makes <stdio.h> exclude line 396 and asprintf() prototype from normal
-include file processing.
-
-The fix defines __USE_GNU before including <stdio.h> in case it isn't already
-defined. After this intervention the module compiles OK.
-
-Converting snprintf() to asprintf() in selftests/kselftest_harness.h:1169
-created this new dependency and the implicit declaration broke the compilation.
-
-Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
-Cc: Edward Liaw <edliaw@google.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-sgx@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Mirsad Todorovac <mtodorov69@gmail.com>
----
- tools/testing/selftests/sgx/main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 9820b3809c69..f5cb426bd797 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -6,6 +6,9 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <stdbool.h>
-+#ifndef __USE_GNU
-+#define __USE_GNU
-+#endif
- #include <stdio.h>
- #include <stdint.h>
- #include <stdlib.h>
--- 
-2.34.1
-
+--BHMvR13gFgTG0XBs--
 
