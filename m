@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-9950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02448C1B10
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 02:24:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3716C8C1B17
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 02:25:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 653E3286B20
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:24:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1E751F26BCE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122FD1386A6;
-	Fri, 10 May 2024 00:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9FD13956C;
+	Fri, 10 May 2024 00:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SRNlLLG1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZI/Fccnw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809B11384AB
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 00:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCAE1386DA
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 00:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715299860; cv=none; b=l/mCO4HmSmWkOMAjn15LhbOatEHMfUz1TqLkKRq00AfU28dxvJLntf5iScLimAwRLP0jKX/OuK0fLbVDLn2PCT3E5Xl0h/g57zfQVrKiXyU6NfsNjGQfRHLaB+N+DMrhhLk4qikas56SxhiQYQ5l9sSUpiJzVOH8R/U0s0XroqU=
+	t=1715299864; cv=none; b=ZiacLhMHEiw+Foqw1+SfECdTmVQnQiqf4e7rApZoLbZFxlipTp7MmWA2g4qKAQfPo8WB2+4GKUgAmVJEvQogyNOqVW42u2IvzFjONkUX7iwxjTEyNe2YrSgZVIuXIxueTZOEuoEyLe+Twl/RbRJpFu12qYQ2AghnAP8ayW3YUQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715299860; c=relaxed/simple;
-	bh=PlH2ryvPza3XbatvZGTYKmksy4ISV5hABhu+UnwWsg8=;
+	s=arc-20240116; t=1715299864; c=relaxed/simple;
+	bh=L2xiJs0pvkHTyYEWb/dHuPHUb0aoyNpUC9tm+GW7Yvw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HRIVJ6d4VebmiX9waAMhIaJ+zsUmp8oe3EKCnEuLm2TPq/ffpbwd/uqYpzoQTZAiXXy2I+xgc5TCGLg9uD5k6n7YB7s3R/nW4gmuh+alxABTbTzmJ6voEvqhciLwhwLPvZF+/jrBc3SnGiyP6Hjn6QwJ/bi87unG+kvlpYhBOPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SRNlLLG1; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=jKKlnZc0yELo/VGZthpeeI1mGNLxsLQWQbhUKiIMD57AXb+QHlhT2p+POML5N4jW+JYGxFgZ1dssMUE9MColI2chlWbj3PPbm0TGKYeQK3+SEcfiwxHktiwxdDOIR37VH7IGlS3Whg0/F0PG8nTxm0ALcgBUwbVVVP7nAlHX/cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZI/Fccnw; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-635f5006685so606676a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 17:10:58 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62079696c58so25830697b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 17:11:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715299858; x=1715904658; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715299860; x=1715904660; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kMcDSSxWXBrY3fYB5DMyoDoFJQzub0IzoWq/+JBZ+ak=;
-        b=SRNlLLG1rLsx7c+soEyyP5hu/oiiUg9+ibCJz6sYafAJqdO2JGoLYLbd+Ji+d8uKYP
-         7rXbcTvDIJ0GCQKGct+Qm+HtYYdp4Zf2G2eAjz/f9fTYIqjpXvC2oHfvjhLC6SSzG0Zi
-         NOEMd0EgWsAM+npOYUdQPe61YgQIuM9R12qEb32EjQ3m0xcguLvSZOsNm4o/I3jhEmoU
-         wgi/rP832ciASZsrwhXet2vuAWSX1POseA19+ogxrg14i7KoZSN1oyDXQ3QcPEXyUhJi
-         HtMB4y+7gq3cDY8mEc/Gsj5t9Yz+HnACUUtZaGlR4qE3TGl3VzPvWMbSRpB3TPWedlnF
-         nrWQ==
+        bh=1D5J95pTto7bxbDE1cccaXNIpSHnuQdMjPAvgEtW+8E=;
+        b=ZI/FccnwydftpCTsWBICZzni4XlznE8txSZti84AyoJxhIecc0z0YGcPKdGW9T/Bpl
+         v3ZUGwVxpqACjDO/HeIIaO9bjIJfHT5bhLLnwh+aZZNiHWcm9nIsa5MRQUXzhzC6Jo1A
+         PbNHYTHe7Zopr2w/USQX4txe2oB/XUTly36WbGaWZL3NKB4rahhd1t927SRfT05Lq2Ae
+         uFTYJE7f6PAO2Bpt672AO8L7rbqqUjoQtKAde7FGHGS51593cnG7/SnNVOOI+5UCu0dG
+         JVTf0orCWc8z8ajGbafb24kk38e5wSkqzGlbDmD/sq8oXyhbC0mECAI3Zxzc/gh1DDBe
+         fHPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715299858; x=1715904658;
+        d=1e100.net; s=20230601; t=1715299860; x=1715904660;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kMcDSSxWXBrY3fYB5DMyoDoFJQzub0IzoWq/+JBZ+ak=;
-        b=kgAuJIb7kmQWdtPFGwAmTdtA1+KJvQrGKKjLJMX9M5lYHWjmmmYUsf4deUMQt75Uyw
-         uKHIQpO8E/V84C+tPEYjz9RWvclMd7b92FbNlX1anKFbhwyYDXsiPqR0Sr4JzdRbanbD
-         FOyUncJ7seYnkQ9+UVGabftsCBlzfiHw35Z4WiW/oEOhMV6ucTGRWej7V7jrVtUW+gf1
-         sMv0gW8xPYgtta62BG3yh44lvMXaIsa1lAdPbVVyTNbHZYBnaFBAwbvniJMaTZd0tOlb
-         i1FylKcQvWWjs3HWE+czLaSShpLc5Avu7AxqxpiMl8roTEKs0TYdg/PzguWp/Wu5EtOh
-         BBKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCaU82qAqGKkrs2qG81KzY87mjrYk88A+h19+rR0ypCLqNK9eXy7+zoGVwu7xTUiFBjLp7IuYIFuP3PaJLsugk5Ri6DhDhg+rSSxwiTQEy
-X-Gm-Message-State: AOJu0YxneTRi2EPd8wzhmmWBrR8hSRkU9/bxiE7px2nCcNWxyts0xtLB
-	wORzxypDM4SAtLnBHdJXmH/EcfC+O5Et5AFjFgj3Gz4f+9hbF+9NLOnBn8skmUGjKsvVLfLcxdK
-	B/A==
-X-Google-Smtp-Source: AGHT+IFTfIR9ZNxLhki0C2wWWB4797X2daDkkkc7DqzRvRAIH+7XYQIOmm1yx/VgJ+AcV1OpnXiFGoc/jNE=
+        bh=1D5J95pTto7bxbDE1cccaXNIpSHnuQdMjPAvgEtW+8E=;
+        b=I6TdDuAq38qtMvrrOdgvy9+6Cd3cPUZCON8TdoqKNSjgrB+jpMLLZBislRl93BI79X
+         twjclIaTlc1okpLUoqaxIO0uOxm6nJcYot3L5Q6GYdD/KCDwD4YyQssiCLzvGYTdpQap
+         kj540LwT2ryJv642A60zhuVLCTgaiZFfi/3BDEVJxeU8UV55t2SzYUlWuZArM4EJcUcF
+         0/iVSTmsBikLg5DMmDjtAdMiIb89NiFkea3OKFafWD5xWcMtPS5PotZGhmbeEQSQvi7H
+         IhnMhRiGaLENm4Jzlu0JwN73LeqbGxnVt5WdO69vw7SPusHbmffPnTAHDlGQK856/Bej
+         F1hw==
+X-Forwarded-Encrypted: i=1; AJvYcCWkFC3bCCsp0lCpMix+U9BinTkVe5WpQ91wNljuWfH2+PpBmmxEMYXp4DTncN/N27P9bUAu5yREkBJkmzIzGAoUeww8P/DtmPWxx3ZWpV4a
+X-Gm-Message-State: AOJu0YwG/9DOBDzaTX5oCBL0bQVsPafK8tDIl3alEJO28teKtLJcBiEP
+	8P4w180XIsh8O2D8lJaYUappFpqLZmcPNE26BKLqHU4akcTD+J2sFp6tJ3GWTTXFrSfcqkk5WWo
+	Qtw==
+X-Google-Smtp-Source: AGHT+IGhcJ7GjAM6Vy/ApGmusiwwih9+KKpTPcTPYhDNCwh5wA+pqL1DV0C5FY2sheVBHvhFaDSoPDUPtOg=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a65:5185:0:b0:5dc:877c:cef6 with SMTP id
- 41be03b00d2f7-6373c976894mr2360a12.2.1715299857838; Thu, 09 May 2024 17:10:57
- -0700 (PDT)
-Date: Fri, 10 May 2024 00:06:56 +0000
+ (user=edliaw job=sendgmr) by 2002:a05:690c:284:b0:61b:e8ce:18a1 with SMTP id
+ 00721157ae682-622b016af8cmr2822137b3.10.1715299860502; Thu, 09 May 2024
+ 17:11:00 -0700 (PDT)
+Date: Fri, 10 May 2024 00:06:57 +0000
 In-Reply-To: <20240510000842.410729-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240510000842.410729-1-edliaw@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510000842.410729-40-edliaw@google.com>
-Subject: [PATCH v4 39/66] selftests/openat2: Drop define _GNU_SOURCE
+Message-ID: <20240510000842.410729-41-edliaw@google.com>
+Subject: [PATCH v4 40/66] selftests/perf_events: Drop define _GNU_SOURCE
 From: Edward Liaw <edliaw@google.com>
 To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, 
 	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>, Christian Brauner <brauner@kernel.org>, 
@@ -95,77 +95,48 @@ redefinition warnings.
 
 Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- tools/testing/selftests/openat2/helpers.c            | 2 --
- tools/testing/selftests/openat2/helpers.h            | 1 -
- tools/testing/selftests/openat2/openat2_test.c       | 2 --
- tools/testing/selftests/openat2/rename_attack_test.c | 2 --
- tools/testing/selftests/openat2/resolve_test.c       | 2 --
- 5 files changed, 9 deletions(-)
+ tools/testing/selftests/perf_events/remove_on_exec.c   | 2 --
+ tools/testing/selftests/perf_events/sigtrap_threads.c  | 2 --
+ tools/testing/selftests/perf_events/watermark_signal.c | 2 --
+ 3 files changed, 6 deletions(-)
 
-diff --git a/tools/testing/selftests/openat2/helpers.c b/tools/testing/selftests/openat2/helpers.c
-index 5074681ffdc9..3658722c889c 100644
---- a/tools/testing/selftests/openat2/helpers.c
-+++ b/tools/testing/selftests/openat2/helpers.c
-@@ -3,8 +3,6 @@
-  * Author: Aleksa Sarai <cyphar@cyphar.com>
-  * Copyright (C) 2018-2019 SUSE LLC.
+diff --git a/tools/testing/selftests/perf_events/remove_on_exec.c b/tools/testing/selftests/perf_events/remove_on_exec.c
+index 5814611a1dc7..ef4d923f4759 100644
+--- a/tools/testing/selftests/perf_events/remove_on_exec.c
++++ b/tools/testing/selftests/perf_events/remove_on_exec.c
+@@ -5,8 +5,6 @@
+  * Copyright (C) 2021, Google LLC.
   */
--
--#define _GNU_SOURCE
- #include <errno.h>
- #include <fcntl.h>
- #include <stdbool.h>
-diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/selftests/openat2/helpers.h
-index 7056340b9339..ecd20a3d47ee 100644
---- a/tools/testing/selftests/openat2/helpers.h
-+++ b/tools/testing/selftests/openat2/helpers.h
-@@ -7,7 +7,6 @@
- #ifndef __RESOLVEAT_H__
- #define __RESOLVEAT_H__
  
 -#define _GNU_SOURCE
- #include <stdint.h>
- #include <stdbool.h>
+-
+ /* We need the latest siginfo from the kernel repo. */
+ #include <sys/types.h>
+ #include <asm/siginfo.h>
+diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
+index d1d8483ac628..14d1a3c8cb5c 100644
+--- a/tools/testing/selftests/perf_events/sigtrap_threads.c
++++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
+@@ -5,8 +5,6 @@
+  * Copyright (C) 2021, Google LLC.
+  */
+ 
+-#define _GNU_SOURCE
+-
+ /* We need the latest siginfo from the kernel repo. */
+ #include <sys/types.h>
+ #include <asm/siginfo.h>
+diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
+index 49dc1e831174..19557bd16e9e 100644
+--- a/tools/testing/selftests/perf_events/watermark_signal.c
++++ b/tools/testing/selftests/perf_events/watermark_signal.c
+@@ -1,6 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#define _GNU_SOURCE
+-
  #include <errno.h>
-diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index 9024754530b2..51f1a7d16cc9 100644
---- a/tools/testing/selftests/openat2/openat2_test.c
-+++ b/tools/testing/selftests/openat2/openat2_test.c
-@@ -3,8 +3,6 @@
-  * Author: Aleksa Sarai <cyphar@cyphar.com>
-  * Copyright (C) 2018-2019 SUSE LLC.
-  */
--
--#define _GNU_SOURCE
  #include <fcntl.h>
- #include <sched.h>
- #include <sys/stat.h>
-diff --git a/tools/testing/selftests/openat2/rename_attack_test.c b/tools/testing/selftests/openat2/rename_attack_test.c
-index 0a770728b436..477125eb64e2 100644
---- a/tools/testing/selftests/openat2/rename_attack_test.c
-+++ b/tools/testing/selftests/openat2/rename_attack_test.c
-@@ -3,8 +3,6 @@
-  * Author: Aleksa Sarai <cyphar@cyphar.com>
-  * Copyright (C) 2018-2019 SUSE LLC.
-  */
--
--#define _GNU_SOURCE
- #include <errno.h>
- #include <fcntl.h>
- #include <sched.h>
-diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testing/selftests/openat2/resolve_test.c
-index bbafad440893..48fa772de13e 100644
---- a/tools/testing/selftests/openat2/resolve_test.c
-+++ b/tools/testing/selftests/openat2/resolve_test.c
-@@ -3,8 +3,6 @@
-  * Author: Aleksa Sarai <cyphar@cyphar.com>
-  * Copyright (C) 2018-2019 SUSE LLC.
-  */
--
--#define _GNU_SOURCE
- #include <fcntl.h>
- #include <sched.h>
- #include <sys/stat.h>
+ #include <linux/perf_event.h>
 -- 
 2.45.0.118.g7fe29c98d7-goog
 
