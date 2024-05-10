@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10034-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6AC98C2A3B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:03:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 279A58C2A3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:03:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C98C81C213E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:03:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B2911C223A1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FC747A62;
-	Fri, 10 May 2024 19:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7208D45C10;
+	Fri, 10 May 2024 19:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FppcQ6bx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fJPk/9Fo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A83445979
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE82B3D968
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715367782; cv=none; b=ZFcNcBoUys5XWTtX1APy/usQXQ7vv/cY+xetwQTJn+KvrcJLq9mgK0SMDrzX60KnaBYrmW7Tj+k+upm89FWqWtkIygX0HYEuLyNwShNtOBntLNCToq/Su+/dvVXRXwOD9yI4yLNwvtK2dmiMpg8zqRMnD4nsXKA6ATNpNPYdjqg=
+	t=1715367784; cv=none; b=DUsYnzBbc5hNIaq0SZYK2jPEjQfPAAZVUhMnkLfX008U2f5tgJxlk8vUELbrRGwvA9gp0juFBHkfmv3aWwFmVuAiX518Sz3ZLqHgKWvjeTSGy4/viDPgduJ3aeiqXv2yi7EraSA4WEh3KOqY8IJtc0dqiBVKZoYKwD+izLAIQ28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715367782; c=relaxed/simple;
-	bh=ClRaP72pjb3E2W917zpJHnDF6WQ563poSNVHHcPXUAk=;
+	s=arc-20240116; t=1715367784; c=relaxed/simple;
+	bh=egpM+SS0LirfD5WSVqAIq0kMKcw13G77ryxMRFCOIQ0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VLh3N8ZBzSFsiKUZmXbcUQ2HGWEuiMnmNvebkVTMX1DvQ+C6eKdaShzZbsZZYyrBL8L5NfLWzbCt4ClVyS/s6NW/Ha5asIUsuR7ZR9bF1uTL2s7xrf7QrZOiSnRC13z5T8LUEtxsnvumm7AR3n5sdlFLrowADXVdx4qW4ZPSrU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FppcQ6bx; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=ktwETSLKm/zyBxHc3LdPTamRiIJkqFpudIbt5q5eOqKZOOdaylUCgvYqqkP9c0p7Efyo4Y5bstT6CV7bstndGqPCDOBc/gyTWkGYwYhr+mKGlm24JWx3sHwLta550WnXRb+6CY8G36xtaY/3ubyidcSDPLg/6S06zeeTs5tP1m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fJPk/9Fo; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61e0c296333so40543977b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:03:00 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61be325413eso29821807b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715367780; x=1715972580; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715367782; x=1715972582; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BtnreiZbliPZHYz3oERPbdrbZVQ8ZqM9pXNGCzUgu3M=;
-        b=FppcQ6bx62POgJewrkp+8acbX8QwxU2qF3Uw5RKs2LzmyDIOkaTWbwTKGzvOwKrh4X
-         VLLEjrieY/v/G1k8dyxBGXBkg8XbEbSGFjcdJdiMKRNyLQQsfaEI5LGxMKxcJe+/t5D6
-         AvfPJFuA/FGZ0/GD7eyTjVpTLMbR5Wg00YA++G6nGd0/Etkk6MOFhJRxK1y5i83jwRXr
-         xaPzNT5aaS7tnxQB8e7arG4oYsKuXvPN7W5VTOiWoBceSHgcW4hwf02k0YpVus0niI6h
-         PVeeVuzXZtwg15wtYmbuaWryVuIFBpyIN3nGB2fPl4wHR4g7iOFmxfCd9gG9P161dLYi
-         0x1w==
+        bh=hHfwMebtZT2WFxMtw8SrwWjcPDYGaUi97DICNoF8ucc=;
+        b=fJPk/9Fo64etC0qTGOsS8EeZ+c2cXyZQG7//r086GLFFYfBjN90eJrYVld4MdJgkLO
+         QkkTDFkPfkb6Ng9Lfa2vbdoWsEaaSmMlP8lwk7XqNlyg7Jd99Gper65/OBNVCh7WFj7I
+         P0nhvH8qWOa05vooCUyV3YS9wExGaknDsRKCrOEtMbUkGoYht9eEGkUd5htJWRO2Xioe
+         N38mCaR1E6F2tYwG66vIWJ/atNDVdP8sFa48uyfgnAH6IPnj7Zx+LhdfpI84lJuSBu8+
+         TDl0qyHCryOT6UZs1+MReftmPjDec1l0Z+0xKPD0S5QWdvhNRJYRHJ12BAs3zWmOaPh9
+         Bi0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715367780; x=1715972580;
+        d=1e100.net; s=20230601; t=1715367782; x=1715972582;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BtnreiZbliPZHYz3oERPbdrbZVQ8ZqM9pXNGCzUgu3M=;
-        b=ia26hjjqeiEzLYxqdXGR69/7PoNMEfjhhKdugHlqfM9qGGmMbbRsfdQvr1S46N4l4g
-         ZAsX/V/heOTrGJdA890p7RZ17bxc+IkxQPWMmyTYoHiCDpbQgHGf5r7G+WVYhqGCb8aY
-         lT2N2/OiG2Mj56ueQ/0/QjFtYLS8KkQgIkljy1uQ3jAeVETNlljYWQBH1mT2UfVgLT8M
-         gdFr/N5vM1wybrj82NylBy8dWc6ew6Sp76NAIB7vveD86IDIjKREB0BBoH90VFenua0r
-         xWM3uETC9pOK6Am3yacktYDA+cYh+x9fD8JBynyd6BahAK1L3T/hwYDqSD7H7kHm8r/8
-         Jebw==
-X-Forwarded-Encrypted: i=1; AJvYcCUpI4M9V/dwn8+WCZRb1jGBCQDRfHGdShh+Ry6aC9Q8dKt8Int/rOiLQMiFwth/6Mn8sOW58z9/iXuW6tS4Na48pQ4tbPGpStSsTWDPxBRc
-X-Gm-Message-State: AOJu0YxMn8vBrU4lRFCbfdOKrTy5ZECz/RklW/OBBRifKpX9ytc61W0/
-	ee0LTjh5BKwLnS9XPLuOTnKNtkoOkw8Haj2mXBs50Um6AZdNjK6vSY011NLS91s1JNdnzpZhcQ=
+        bh=hHfwMebtZT2WFxMtw8SrwWjcPDYGaUi97DICNoF8ucc=;
+        b=clyW3fRoCOEybHPNhN2pnH4/z32w7sHON/1jyDIYNuSjElEqMzCX6DGZomFM6hxeB+
+         ySC60eRVyzUj5FFvr1rxKY40Lb4qGKZ0JzC7rOtEbXkqCna/a7MyLxjSLUhXBa/g9srB
+         XWUMX5lN+zU272FpVVI1d0514zlFM70ZGKj87OxbAa2+1huphnVnbVOhdGxSD5ZBAM2P
+         p7O+Zh4hulvd0Zd+Uw6FlI2YiWEj9BlbwvoX+zPdAzI+dnXt3QcgDPqVNrq13J21b/hC
+         L/CeoKed63e5t4Yu0350X7Cick6fzTVvfdAf+FhkjghVn7+9bno0rQrRGNShJ5GZI5Wl
+         zxgg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+P8gx/ZNdGdkIb/tqmYWndjqyVaY+AAAyNKnb99iz6e45ydSxcSxSh70BHzJxW7urZVP/NzeM5HFVcC4+alan5WI5T1MaA/Hn+u4JgN0m
+X-Gm-Message-State: AOJu0YwEplM6i5e/x9u19jp1LcTsn8989Z15rIPuQOIdVbY+bhDvB0OI
+	q354vb2ACd+vUz7hqx/7/PAjsC5hNWrFgJfwWfOiC6DRtPBpaQjs9326HvwSJGWiG3HdRET7qg=
 	=
-X-Google-Smtp-Source: AGHT+IFmkW5oyt+fCUDEit4rEVfnALEndXTfWYgpUvZc35j30WdfNRmFuQjUX6JxFqjQKxQFNvZekxDuag==
+X-Google-Smtp-Source: AGHT+IG7fbQlnTrbXbgDBfbr6eGA00YeEBfy4lIhjdsALahrTgVDmpH+FiO197VLNr+GfHSnrbwoQxw+wQ==
 X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a25:68c3:0:b0:de5:dcb8:5c8a with SMTP id
- 3f1490d57ef6-debcfbce27fmr1485306276.2.1715367780121; Fri, 10 May 2024
- 12:03:00 -0700 (PDT)
-Date: Fri, 10 May 2024 14:02:24 -0500
+ (user=jrife job=sendgmr) by 2002:a81:4884:0:b0:618:2ad1:a46f with SMTP id
+ 00721157ae682-620992ea406mr14233357b3.2.1715367781807; Fri, 10 May 2024
+ 12:03:01 -0700 (PDT)
+Date: Fri, 10 May 2024 14:02:25 -0500
 In-Reply-To: <20240510190246.3247730-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240510190246.3247730-1-jrife@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510190246.3247730-8-jrife@google.com>
-Subject: [PATCH v1 bpf-next 07/17] selftests/bpf: Migrate sendmsg deny test cases
+Message-ID: <20240510190246.3247730-9-jrife@google.com>
+Subject: [PATCH v1 bpf-next 08/17] selftests/bpf: Migrate sendmsg6 v4 mapped
+ address tests
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>, 
@@ -88,64 +89,38 @@ Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This set of tests checks that sendmsg calls are rejected (return -EPERM)
-when the sendmsg* hook returns 0. Replace those in bpf/test_sock_addr.c
-with corresponding tests in prog_tests/sock_addr.c.
+Migrate test case from bpf/test_sock_addr.c ensuring that sendmsg
+returns -ENOTSUPP when sending to an IPv4-mapped IPv6 address to
+prog_tests/sock_addr.c.
 
 Signed-off-by: Jordan Rife <jrife@google.com>
 ---
- .../selftests/bpf/prog_tests/sock_addr.c      | 98 +++++++++++++++++++
- .../selftests/bpf/progs/sendmsg4_prog.c       |  6 ++
- .../selftests/bpf/progs/sendmsg6_prog.c       |  6 ++
- tools/testing/selftests/bpf/test_sock_addr.c  | 45 ---------
- 4 files changed, 110 insertions(+), 45 deletions(-)
+ .../selftests/bpf/prog_tests/sock_addr.c      | 17 +++++++++++++
+ .../selftests/bpf/progs/sendmsg6_prog.c       | 25 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_sock_addr.c  | 20 ---------------
+ 3 files changed, 42 insertions(+), 20 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-index 37e9ef5a5ae16..634f7a31b35db 100644
+index 634f7a31b35db..f096203171b17 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sock_addr.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-@@ -443,7 +443,9 @@ BPF_SKEL_FUNCS(connect4_prog, connect_v4_prog);
- BPF_SKEL_FUNCS(connect6_prog, connect_v6_prog);
- BPF_SKEL_FUNCS(connect_unix_prog, connect_unix_prog);
- BPF_SKEL_FUNCS(sendmsg4_prog, sendmsg_v4_prog);
-+BPF_SKEL_FUNCS(sendmsg4_prog, sendmsg_v4_deny_prog);
+@@ -447,6 +447,7 @@ BPF_SKEL_FUNCS(sendmsg4_prog, sendmsg_v4_deny_prog);
  BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_prog);
-+BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_deny_prog);
+ BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_deny_prog);
  BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_preserve_dst_prog);
++BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_v4mapped_prog);
  BPF_SKEL_FUNCS(sendmsg_unix_prog, sendmsg_unix_prog);
  BPF_SKEL_FUNCS(recvmsg4_prog, recvmsg4_prog);
-@@ -766,6 +768,22 @@ static struct sock_addr_test tests[] = {
- 		SRC4_REWRITE_IP,
- 		SUCCESS,
+ BPF_SKEL_FUNCS(recvmsg6_prog, recvmsg6_prog);
+@@ -832,6 +833,22 @@ static struct sock_addr_test tests[] = {
+ 		SRC6_REWRITE_IP,
+ 		SYSCALL_EPERM,
  	},
 +	{
 +		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg4: sendmsg deny (dgram)",
-+		sendmsg_v4_deny_prog_load,
-+		sendmsg_v4_deny_prog_destroy,
-+		BPF_CGROUP_UDP4_SENDMSG,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_DGRAM,
-+		SERV4_IP,
-+		SERV4_PORT,
-+		SERV4_REWRITE_IP,
-+		SERV4_REWRITE_PORT,
-+		SRC4_REWRITE_IP,
-+		SYSCALL_EPERM,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg6: sendmsg (dgram)",
-@@ -798,6 +816,22 @@ static struct sock_addr_test tests[] = {
- 		SRC6_IP,
- 		SUCCESS,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg6: sendmsg deny (dgram)",
-+		sendmsg_v6_deny_prog_load,
-+		sendmsg_v6_deny_prog_destroy,
++		"sendmsg6: sendmsg IPv4-mapped IPv6 (dgram)",
++		sendmsg_v6_v4mapped_prog_load,
++		sendmsg_v6_v4mapped_prog_destroy,
 +		BPF_CGROUP_UDP6_SENDMSG,
 +		&user_ops,
 +		AF_INET6,
@@ -155,173 +130,73 @@ index 37e9ef5a5ae16..634f7a31b35db 100644
 +		SERV6_REWRITE_IP,
 +		SERV6_REWRITE_PORT,
 +		SRC6_REWRITE_IP,
-+		SYSCALL_EPERM,
++		SYSCALL_ENOTSUPP,
 +	},
  	{
  		SOCK_ADDR_TEST_SENDMSG,
  		"sendmsg_unix: sendmsg (dgram)",
-@@ -832,6 +866,22 @@ static struct sock_addr_test tests[] = {
- 		SRC4_REWRITE_IP,
- 		SUCCESS,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg4: sock_sendmsg deny (dgram)",
-+		sendmsg_v4_deny_prog_load,
-+		sendmsg_v4_deny_prog_destroy,
-+		BPF_CGROUP_UDP4_SENDMSG,
-+		&kern_ops_sock_sendmsg,
-+		AF_INET,
-+		SOCK_DGRAM,
-+		SERV4_IP,
-+		SERV4_PORT,
-+		SERV4_REWRITE_IP,
-+		SERV4_REWRITE_PORT,
-+		SRC4_REWRITE_IP,
-+		SYSCALL_EPERM,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg6: sock_sendmsg (dgram)",
-@@ -864,6 +914,22 @@ static struct sock_addr_test tests[] = {
- 		SRC6_IP,
- 		SUCCESS,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg6: sock_sendmsg deny (dgram)",
-+		sendmsg_v6_deny_prog_load,
-+		sendmsg_v6_deny_prog_destroy,
-+		BPF_CGROUP_UDP6_SENDMSG,
-+		&kern_ops_sock_sendmsg,
-+		AF_INET6,
-+		SOCK_DGRAM,
-+		SERV6_IP,
-+		SERV6_PORT,
-+		SERV6_REWRITE_IP,
-+		SERV6_REWRITE_PORT,
-+		SRC6_REWRITE_IP,
-+		SYSCALL_EPERM,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg_unix: sock_sendmsg (dgram)",
-@@ -898,6 +964,22 @@ static struct sock_addr_test tests[] = {
- 		SRC4_REWRITE_IP,
- 		SUCCESS,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg4: kernel_sendmsg deny (dgram)",
-+		sendmsg_v4_deny_prog_load,
-+		sendmsg_v4_deny_prog_destroy,
-+		BPF_CGROUP_UDP4_SENDMSG,
-+		&kern_ops_kernel_sendmsg,
-+		AF_INET,
-+		SOCK_DGRAM,
-+		SERV4_IP,
-+		SERV4_PORT,
-+		SERV4_REWRITE_IP,
-+		SERV4_REWRITE_PORT,
-+		SRC4_REWRITE_IP,
-+		SYSCALL_EPERM,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg6: kernel_sendmsg (dgram)",
-@@ -930,6 +1012,22 @@ static struct sock_addr_test tests[] = {
- 		SRC6_IP,
- 		SUCCESS,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg6: kernel_sendmsg deny (dgram)",
-+		sendmsg_v6_deny_prog_load,
-+		sendmsg_v6_deny_prog_destroy,
-+		BPF_CGROUP_UDP6_SENDMSG,
-+		&kern_ops_kernel_sendmsg,
-+		AF_INET6,
-+		SOCK_DGRAM,
-+		SERV6_IP,
-+		SERV6_PORT,
-+		SERV6_REWRITE_IP,
-+		SERV6_REWRITE_PORT,
-+		SRC6_REWRITE_IP,
-+		SYSCALL_EPERM,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg_unix: sock_sendmsg (dgram)",
-diff --git a/tools/testing/selftests/bpf/progs/sendmsg4_prog.c b/tools/testing/selftests/bpf/progs/sendmsg4_prog.c
-index 351e79aef2fae..edc159598a0ef 100644
---- a/tools/testing/selftests/bpf/progs/sendmsg4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sendmsg4_prog.c
-@@ -49,4 +49,10 @@ int sendmsg_v4_prog(struct bpf_sock_addr *ctx)
- 	return 1;
- }
- 
-+SEC("cgroup/sendmsg4")
-+int sendmsg_v4_deny_prog(struct bpf_sock_addr *ctx)
-+{
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
 diff --git a/tools/testing/selftests/bpf/progs/sendmsg6_prog.c b/tools/testing/selftests/bpf/progs/sendmsg6_prog.c
-index 03956a654ce58..0c1825cb994d6 100644
+index 0c1825cb994d6..7611d9e17dd16 100644
 --- a/tools/testing/selftests/bpf/progs/sendmsg6_prog.c
 +++ b/tools/testing/selftests/bpf/progs/sendmsg6_prog.c
-@@ -65,4 +65,10 @@ int sendmsg_v6_preserve_dst_prog(struct bpf_sock_addr *ctx)
+@@ -20,6 +20,11 @@
+ #define DST_REWRITE_IP6_2	0
+ #define DST_REWRITE_IP6_3	1
+ 
++#define DST_REWRITE_IP6_V4_MAPPED_0	0
++#define DST_REWRITE_IP6_V4_MAPPED_1	0
++#define DST_REWRITE_IP6_V4_MAPPED_2	0x0000FFFF
++#define DST_REWRITE_IP6_V4_MAPPED_3	0xc0a80004 // 192.168.0.4
++
+ #define DST_REWRITE_PORT6	6666
+ 
+ SEC("cgroup/sendmsg6")
+@@ -59,6 +64,26 @@ int sendmsg_v6_prog(struct bpf_sock_addr *ctx)
  	return 1;
  }
  
 +SEC("cgroup/sendmsg6")
-+int sendmsg_v6_deny_prog(struct bpf_sock_addr *ctx)
++int sendmsg_v6_v4mapped_prog(struct bpf_sock_addr *ctx)
 +{
-+	return 0;
++	/* Rewrite source. */
++	ctx->msg_src_ip6[0] = bpf_htonl(SRC_REWRITE_IP6_0);
++	ctx->msg_src_ip6[1] = bpf_htonl(SRC_REWRITE_IP6_1);
++	ctx->msg_src_ip6[2] = bpf_htonl(SRC_REWRITE_IP6_2);
++	ctx->msg_src_ip6[3] = bpf_htonl(SRC_REWRITE_IP6_3);
++
++	/* Rewrite destination. */
++	ctx->user_ip6[0] = bpf_htonl(DST_REWRITE_IP6_V4_MAPPED_0);
++	ctx->user_ip6[1] = bpf_htonl(DST_REWRITE_IP6_V4_MAPPED_1);
++	ctx->user_ip6[2] = bpf_htonl(DST_REWRITE_IP6_V4_MAPPED_2);
++	ctx->user_ip6[3] = bpf_htonl(DST_REWRITE_IP6_V4_MAPPED_3);
++
++	ctx->user_port = bpf_htons(DST_REWRITE_PORT6);
++
++	return 1;
 +}
 +
- char _license[] SEC("license") = "GPL";
+ SEC("cgroup/sendmsg6")
+ int sendmsg_v6_preserve_dst_prog(struct bpf_sock_addr *ctx)
+ {
 diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
-index ab8ef02c9c556..91d88358090eb 100644
+index 91d88358090eb..4ead113753f81 100644
 --- a/tools/testing/selftests/bpf/test_sock_addr.c
 +++ b/tools/testing/selftests/bpf/test_sock_addr.c
-@@ -92,7 +92,6 @@ static int bind4_prog_load(const struct sock_addr_test *test);
- static int bind6_prog_load(const struct sock_addr_test *test);
- static int connect4_prog_load(const struct sock_addr_test *test);
+@@ -94,7 +94,6 @@ static int connect4_prog_load(const struct sock_addr_test *test);
  static int connect6_prog_load(const struct sock_addr_test *test);
--static int sendmsg_deny_prog_load(const struct sock_addr_test *test);
  static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test);
  static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test);
- static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test);
-@@ -258,20 +257,6 @@ static struct sock_addr_test tests[] = {
- 		SRC4_REWRITE_IP,
- 		SUCCESS,
- 	},
--	{
--		"sendmsg4: deny call",
--		sendmsg_deny_prog_load,
--		BPF_CGROUP_UDP4_SENDMSG,
--		BPF_CGROUP_UDP4_SENDMSG,
--		AF_INET,
--		SOCK_DGRAM,
--		SERV4_IP,
--		SERV4_PORT,
--		SERV4_REWRITE_IP,
--		SERV4_REWRITE_PORT,
--		SRC4_REWRITE_IP,
--		SYSCALL_EPERM,
--	},
- 	{
- 		"sendmsg6: load prog with wrong expected attach type",
- 		sendmsg6_rw_asm_prog_load,
-@@ -342,20 +327,6 @@ static struct sock_addr_test tests[] = {
+-static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test);
+ static int sendmsg6_rw_wildcard_prog_load(const struct sock_addr_test *test);
+ 
+ static struct sock_addr_test tests[] = {
+@@ -299,20 +298,6 @@ static struct sock_addr_test tests[] = {
  		SRC6_REWRITE_IP,
  		SUCCESS,
  	},
 -	{
--		"sendmsg6: deny call",
--		sendmsg_deny_prog_load,
+-		"sendmsg6: IPv4-mapped IPv6",
+-		sendmsg6_rw_v4mapped_prog_load,
 -		BPF_CGROUP_UDP6_SENDMSG,
 -		BPF_CGROUP_UDP6_SENDMSG,
 -		AF_INET6,
@@ -331,34 +206,23 @@ index ab8ef02c9c556..91d88358090eb 100644
 -		SERV6_REWRITE_IP,
 -		SERV6_REWRITE_PORT,
 -		SRC6_REWRITE_IP,
--		SYSCALL_EPERM,
+-		SYSCALL_ENOTSUPP,
 -	},
- };
- 
- static int load_insns(const struct sock_addr_test *test,
-@@ -431,22 +402,6 @@ static int connect6_prog_load(const struct sock_addr_test *test)
- 	return load_path(test, CONNECT6_PROG_PATH);
+ 	{
+ 		"sendmsg6: set dst IP = [::] (BSD'ism)",
+ 		sendmsg6_rw_wildcard_prog_load,
+@@ -512,11 +497,6 @@ static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test)
+ 	return sendmsg6_rw_dst_asm_prog_load(test, SERV6_REWRITE_IP);
  }
  
--static int xmsg_ret_only_prog_load(const struct sock_addr_test *test,
--				   int32_t rc)
+-static int sendmsg6_rw_v4mapped_prog_load(const struct sock_addr_test *test)
 -{
--	struct bpf_insn insns[] = {
--		/* return rc */
--		BPF_MOV64_IMM(BPF_REG_0, rc),
--		BPF_EXIT_INSN(),
--	};
--	return load_insns(test, insns, ARRAY_SIZE(insns));
+-	return sendmsg6_rw_dst_asm_prog_load(test, SERV6_V4MAPPED_IP);
 -}
 -
--static int sendmsg_deny_prog_load(const struct sock_addr_test *test)
--{
--	return xmsg_ret_only_prog_load(test, /*rc*/ 0);
--}
--
- static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+ static int sendmsg6_rw_wildcard_prog_load(const struct sock_addr_test *test)
  {
- 	struct sockaddr_in dst4_rw_addr;
+ 	return sendmsg6_rw_dst_asm_prog_load(test, WILDCARD6_IP);
 -- 
 2.45.0.118.g7fe29c98d7-goog
 
