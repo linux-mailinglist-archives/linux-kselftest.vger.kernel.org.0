@@ -1,133 +1,172 @@
-Return-Path: <linux-kselftest+bounces-9987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EDA98C1DA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 07:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D15B8C1DE9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 08:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ACD9283755
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 05:17:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEF1A2822F8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 06:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA5E14E2D5;
-	Fri, 10 May 2024 05:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6009F1527BE;
+	Fri, 10 May 2024 06:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BEf+sA6G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfjL2PUF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2955B14A63C;
-	Fri, 10 May 2024 05:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27E7128816;
+	Fri, 10 May 2024 06:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715318246; cv=none; b=Ol8FG/2xgfM24x64xgt36liJKg5muDOGgcXQpJi+MveU8GHDJxmeQS8uynYm2NAXnDne9ZT7puo173Zwi/l52H1YAWnJdTWGoRQIXET03ALVU2SIOZ99myRsWHKPot1Vss9dLSQje9nbE5FPz3Z4qt7+oLMAVQ33oNTN7qXU9sI=
+	t=1715321378; cv=none; b=PQj8c9QAO7ddCHXc53EDJFLel48/kLhpIyCJdmwOKE7ElH84WrWnRM4rMn1s2RincI9UGiONqOrCv0J4ixom2EbYrASv8RQU8WZp57jZ4o3R0GMfk3QtQOc7g0AuFPB1CWjAzzQfq7GA1NfdCYMkjXPHvopaU5mcLrBVO8ML0lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715318246; c=relaxed/simple;
-	bh=dE+qD+g3KmzOQgoEuCTr15P/CZqaA4bmglQuowx/FFc=;
+	s=arc-20240116; t=1715321378; c=relaxed/simple;
+	bh=X2n280+mXsA89/FtAepb7uflU5AriFITfm3j9x0rLRA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LnEWJ+w9b8iVd3iAQrdNMEQS9b+5BSRxiDVjrYt5ziP2WlFJY/ntWAzrIMhZiEr/s7swGvItL2H4OnRgSVYZ4OUS8OxZdbPYItzdWf4w0N8LH+xcGNVZz19zr1NDnmbxRPRHLQXSQAcWqIZYxHdPE09Rz6m0aEWsaLPYOXEfWug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BEf+sA6G; arc=none smtp.client-ip=209.85.218.42
+	 To:Cc:Content-Type; b=aV06sc7TVxLEYXr3d0LmDy2iYe2cwXHov2jIU5xIROuZdzDf34zz93Oqmp1wtaC/KUlN4/cFvCADjBqIFnuTEITs0ZiUZ0cr+jR/kBmhyCxsT1pTH3uCDwfzGyClhkcKHT/dLlrlDAN02xytLYXyOMReM7qZh0IMxeUoZSl4yQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfjL2PUF; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a599c55055dso409082766b.0;
-        Thu, 09 May 2024 22:17:24 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e09138a2b1so18605541fa.3;
+        Thu, 09 May 2024 23:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715318243; x=1715923043; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715321375; x=1715926175; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B16ozbzV/6/ExRtvJywDAuXn8gAsVLtiBq1Txuwd8uM=;
-        b=BEf+sA6GESq6OkU+5FNn2xen73xRmjS7MqsI9w4u2zzN8lfsnh+q9C6+ZUXqQwVFlL
-         dH4D8O8gtvFY2mJFi9f6c7ioYbKYojnqA9vUsczwX5RjHeFy9xzsSOOKnqPMBsSIrgzy
-         +tZgcHP5M/4zzV7m51dAceE0839zkSwhUqDxF4ZVcTcvNhqBYgMOtNGsCdlJBvy1YSYH
-         7jxC99WM0w4nMrTE/+WlFeUUZUiz6ztiavhyfUs0ggDpYGyC+a72MVPK6wHpVSL4TmU7
-         RQY/m/qvMMdNZjJjP0einbCtLsspVaUlXBEyEQjn2N7BLUiQ8KVSYuq8yJ8XvpPW/cW1
-         ODXg==
+        bh=y6Yn4wNa98dW6VI6SqDEcxq/HOv22hewhypus1USGwM=;
+        b=AfjL2PUFnQCNAlskM0oZfyRDlS61vmJz5NT9KdRnXsiA0ek/wNBwExIDUjw/ARERLN
+         ut1SOMmkBA27IxrSxbpaOPFrdpEfSTHeSl43VS3OvYr6iAhNtZLCjgFFuVmyhEpbjav7
+         6+4VeiuK5wEMSr9ter25Xk4+/Fk/zpNsUOV7dWy/CDbg2ewcqKS7zUvNLrzCU3kiAcFQ
+         4fz0n7yhGcNOrxp53RbKPwnFcWzItkWh5OBg0WmeLVhUTbaNqcHN5hsOhf1Ds+MotuNu
+         Nw1rcGsEYE56a3Nc3NWd35H6BMWqwRE/sM5Kxj9+KJuaLU+oA9E7mWR89xvN5nKQuPIm
+         S34Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715318243; x=1715923043;
+        d=1e100.net; s=20230601; t=1715321375; x=1715926175;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B16ozbzV/6/ExRtvJywDAuXn8gAsVLtiBq1Txuwd8uM=;
-        b=J7A+uVhrUV6U69on/zagUnirhdYZqL/z1QB0xUWl6Oo3cw2sm4YSHcfC9/2bVxGqFS
-         EYS6RFKa+Aprobdq9dUQUilvrbZS9G9O8lzioid1Be1niJUM2MNYtyF1eqcM6RRFvdSt
-         8U1McC8XifA2Ce3yWR1fz7ZENllaNS7f3ByaNhOrkHGq+RkC5OdZQuDgRwe2b/fXUfLZ
-         Zv2w16ZCLR8gKph9rB8EmzvQ0+SESRnTpAVyOqKevO6PJnktOo5A8c1hQrvWhfKXaVLl
-         OUnvYAbWRvW6kwflA63CQL3F9MW2sUOtZ7se0u3PJCX/HpTS95Uky1toFt6LPKJApktA
-         oKpw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4WliVSXE1M6vWqgEgVGoUy00FO5o19yt24bfjM5kyE/TMN55kQO1rq2bqugzVVhkWClmBa5EPDydM3oknRlOzVs7k+zFePvC9YtOqoDATHsCoZkVy1JVdeyGAtx0qgQGadJzcNTBf
-X-Gm-Message-State: AOJu0YyRclC45wT8TgsknfzRmGjWLYaozpmzMYL43Obox9UASbNYOllM
-	oEARVAbzOfVVvsISEQYc15IUvhP9f1FDhdNjlrGoxUrQBBJ67oBhUpYc2Z5zaaD5LfPblBU+jYP
-	SDkfskQGATyMcD9eSFDULdEs+MHI=
-X-Google-Smtp-Source: AGHT+IEJ9DEbuPceorlzgRGznv9pDwSBTfvFnSTibOF/x5IbXBcj6m7NZz3YBhdujqufq4dMSA826UXnBLPnIEQNtzM=
-X-Received: by 2002:a50:8e55:0:b0:572:952e:7a5e with SMTP id
- 4fb4d7f45d1cf-5734d5cfe4amr1001131a12.24.1715318243459; Thu, 09 May 2024
- 22:17:23 -0700 (PDT)
+        bh=y6Yn4wNa98dW6VI6SqDEcxq/HOv22hewhypus1USGwM=;
+        b=mpC6dEUH+v1Z/S7+1TUl7nx/cSBqL7k/0Ggclrbrug62S+WznqoclRQlm3AKm9hnI5
+         GjOsAFg9mBM+PfyA07qFEsuUXrnv0vMEXGS/J9NGpFVI7WMcXu62zejxmVmsfPKbANTr
+         IxUgD5OLfrXx9js8Vh2mxtlSXQEQd/wnDjwR8t7PRqW9U5AeTVgPk1HjrBpyHa9Nz+Xu
+         uQZvRxe9ygmDkO/qQ8lFN0M7/MHJi79ytENQbPnaT8uK0xhix/r3CZfxte31LVmNTzwP
+         cSGXZQiHEW7GW8VNvJ0zQyr3PsBybgsBsrM9+9HGQEgY351cAqMf2JwbutORSihwRI2w
+         7tNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0/SDhD2ofGc/N1wqC4uLXh7Ue1pVFkl2COgALWFb/CR3ap9hhgedP1eefl53RCbklt35IKeUT9QS0hk3Q+CCD9kqsDmxzgR5idtlt4UGx1pOBjQe1IVfGAB/4f7YA6BG1KfLvmVjH
+X-Gm-Message-State: AOJu0YzY+0MrWowchW2tAdjer9gG/E3HVW5YBPCY4VORV32jwck0dkuQ
+	IwT6G9/V+qamQx32qkppCaxjFb3gV2JsSqLHEXB9GpkzpZS688PMAB+gGCmUwr4cfnTD7m1Zwu1
+	pLNOMm00EJYgCmb0Z0Q4SMI+X4M4=
+X-Google-Smtp-Source: AGHT+IGtZRZ5lZkbKfGtptUShvonm0UqQ0HKCNe+xz6gkIbRPLcwR7OXEkKd/JP0v+EBQUYbRwjzB+EU7UPlVd25o2Y=
+X-Received: by 2002:a2e:81d6:0:b0:2e4:45a6:cdcf with SMTP id
+ 38308e7fff4ca-2e5205ec95bmr9748531fa.43.1715321374588; Thu, 09 May 2024
+ 23:09:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240508040643.229383-1-ap420073@gmail.com> <20240509092257.2ecb8fd4@kernel.org>
-In-Reply-To: <20240509092257.2ecb8fd4@kernel.org>
+References: <20240509161952.3940476-1-kuba@kernel.org>
+In-Reply-To: <20240509161952.3940476-1-kuba@kernel.org>
 From: Taehee Yoo <ap420073@gmail.com>
-Date: Fri, 10 May 2024 14:17:12 +0900
-Message-ID: <CAMArcTUi9bBd=b4nXsG3qs8MMi8ghS19DjszHhEdnQNfM-DmHg@mail.gmail.com>
-Subject: Re: [PATCH net] selftests: net: avoid waiting for server in amt.sh
- forever when it fails.
+Date: Fri, 10 May 2024 15:09:23 +0900
+Message-ID: <CAMArcTVfJZH+u1XT4pTxiLftX=ndRoQceaSLg1SvDOr85R1D3Q@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: net: move amt to socat for better compatibility
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
-	shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 1:23=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
+On Fri, May 10, 2024 at 1:19=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
 ote:
 >
 
 Hi Jakub,
-Thanks a lot for the review and looking into the bug.
+Thanks a lot for this work!
 
-> On Wed,  8 May 2024 04:06:43 +0000 Taehee Yoo wrote:
-> > In the forwarding testcase, it opens a server and a client with the nc.
-> > The server receives the correct message from NC, it prints OK.
-> > The server prints FAIL if it receives the wrong message from the client=
-.
-> >
-> > But If the server can't receive any message, it will not close so
-> > the amt.sh waits forever.
-> > There are several reasons.
-> > 1. crash of smcrouted.
-> > 2. Send a message from the client to the server before the server is up=
-.
-> >
-> > To avoid this problem, the server waits only for 10 seconds.
-> > The client sends messages for 10 seconds.
-> > If the server is successfully closed, it kills the client.
+> The test seems to expect that nc will exit after the first
+> received message. This is not the case with Ncat 7.94.
+> There are multiple versions of nc out there, switch
+> to socat for better compatibility.
 >
-> Since this didn't fix the problem of smcroute crashing I had to take
-> a closer look myself.
+> Tell socat to exit after 128 bytes and pad the message.
 >
-> I filed https://github.com/troglobit/smcroute/issues/207 for smcroute
+> Since the test sets -e make sure we don't set exit code
+> (|| true) and print the pass / fail rather then silently
+> moving over the test and just setting non-zero exit code
+> with no output indicating what failed.
+>
+> Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: ap420073@gmail.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/amt.sh | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests=
+/net/amt.sh
+> index 75528788cb95..5175a42cbe8a 100755
+> --- a/tools/testing/selftests/net/amt.sh
+> +++ b/tools/testing/selftests/net/amt.sh
+> @@ -210,8 +210,8 @@ check_features()
+>
+>  test_ipv4_forward()
+>  {
+> -       RESULT4=3D$(ip netns exec "${LISTENER}" nc -w 1 -l -u 239.0.0.1 4=
+000)
+> -       if [ "$RESULT4" =3D=3D "172.17.0.2" ]; then
+> +       RESULT4=3D$(ip netns exec "${LISTENER}" timeout 15 socat - UDP4-L=
+ISTEN:4000,readbytes=3D128 || true)
+> +       if echo "$RESULT4" | grep -q "172.17.0.2"; then
+>                 printf "TEST: %-60s  [ OK ]\n" "IPv4 amt multicast forwar=
+ding"
+>                 exit 0
+>         else
+> @@ -222,8 +222,8 @@ test_ipv4_forward()
+>
+>  test_ipv6_forward()
+>  {
+> -       RESULT6=3D$(ip netns exec "${LISTENER}" nc -w 1 -l -u ff0e::5:6 6=
+000)
+> -       if [ "$RESULT6" =3D=3D "2001:db8:3::2" ]; then
+> +       RESULT6=3D$(ip netns exec "${LISTENER}" timeout 15 socat - UDP6-L=
+ISTEN:6000,readbytes=3D128 || true)
+> +       if echo "$RESULT6" | grep -q "2001:db8:3::2"; then
+>                 printf "TEST: %-60s  [ OK ]\n" "IPv6 amt multicast forwar=
+ding"
+>                 exit 0
+>         else
+> @@ -236,14 +236,14 @@ send_mcast4()
+>  {
+>         sleep 2
+>         ip netns exec "${SOURCE}" bash -c \
+> -               'echo 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
+> +               'printf "%s %128s" 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000=
+' &
+>  }
+>
+>  send_mcast6()
+>  {
+>         sleep 2
+>         ip netns exec "${SOURCE}" bash -c \
+> -               'echo 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
+> +               'printf "%s %128s" 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6=
+000' &
+>  }
+>
+>  check_features
+> --
+> 2.45.0
 >
 
-Thank you so much for looking into this bug!
-I will test it.
-
-> And sent:
-> https://lore.kernel.org/all/20240509161919.3939966-1-kuba@kernel.org/
-> and
-> https://lore.kernel.org/all/20240509161952.3940476-1-kuba@kernel.org/
->
-> Please don't use netcat in tests in the future. There are two
-> incompatible implementations which always cause hard to repro
-> issues.
-
-Okay, I will not use netcat in the future.
-
-Thanks a lot!
-Taehee Yoo
+Tested-by: Taehee Yoo <ap420073@gmail.com>
 
