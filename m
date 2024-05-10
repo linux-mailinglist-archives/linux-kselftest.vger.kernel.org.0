@@ -1,98 +1,126 @@
-Return-Path: <linux-kselftest+bounces-9989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E670A8C1E85
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 08:58:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E1C78C1E97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 09:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86244B21DD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 06:58:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFB5A1F21BA1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 07:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E15815217A;
-	Fri, 10 May 2024 06:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B17153BE2;
+	Fri, 10 May 2024 07:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="LoPMsBkp"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FSR6UNy7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F119F9C9;
-	Fri, 10 May 2024 06:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DF4482D0
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 07:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715324293; cv=none; b=SzmC2VjVkGIzzMc6qvNH1l+x5qIlTEqyb/eFHzxsqNnjcYM7AHMNrTr8r9pSvMsmONnATxJG76SBcfDNH7X+dLPNeLxj+JVUgnCrYzcE6Cx6YC+20wNHnVKB5W0+TOitL/0qlpUp3t6R5y9xYk1o2zrROu2s3FXRGujMJtANgLc=
+	t=1715324516; cv=none; b=WlwbcSDq/x1wCuNmymtFkmJcSJrt8qQWa6u4wKwYCX2XMVWxZD6RNqtRL0IpPQcqGCMkZ05nmjcVSpU9zbAuKd5X0ZrmC6FnTLii0P2G9zlw6pOyNBFc1AHWU8AMzsfKfFmwqjIAsMfdc20hZ1DBtowfY0Y8Y/VYY5Nu+1lwZAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715324293; c=relaxed/simple;
-	bh=ze4zdjo0fbz33aF2z7EukPA4jLCJ45hoe9ptXCI2FWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UxyRiQt7ZD6H2dfXVd065zwmac1fMRkGIoOR372z8Epszb2NAcojqaf+YVKZKugyEKlqZmi9IsRdMmJ8eSlFuGsx9KZn9IuzndHHiRvaX8TO6k7HQsRObdR1nSOsrhRPqFF2OuH8cBi5yml29wg8pWqGniW3bKlQoRL+8CKn5R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=LoPMsBkp; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1715324286;
-	bh=ze4zdjo0fbz33aF2z7EukPA4jLCJ45hoe9ptXCI2FWA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LoPMsBkp+4SADwS6jrdQNBJGi7DCW73il17aUnDwIa1oyXji8Q/4pc/iKFIzJLY/c
-	 Q+z//3FFDHszb0g6PtGL5I026GJFKPn+JmHgnAvadcY419eX/foh0ynFGckgalFFOq
-	 HLg577n8fZ8bMgT8eQfvMVA4UfdUCoQF6nttbLmM=
-Date: Fri, 10 May 2024 08:58:05 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Willy Tarreau <w@1wt.eu>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, linux-security-module@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 37/66] selftests/nolibc: Drop define _GNU_SOURCE
-Message-ID: <b2ed9fed-0263-405d-9e5a-71c49421619a@t-8ch.de>
-References: <20240510000842.410729-1-edliaw@google.com>
- <20240510000842.410729-38-edliaw@google.com>
+	s=arc-20240116; t=1715324516; c=relaxed/simple;
+	bh=7oGXbFORwBCyzCIXmLVRq2rm6tpAyoLE/wEl7xVni/k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bfSuY/wdhA35Hyil9s3CUeVd0JZH7FdUwVxJB11VefAeqMVh1SATQatqb88WOno7buTwBgugmYBmxIVotKC1M+LkNXYr9SADOXR8GvCMoeeBXxforgobS+bDQhfjOP97XdA8FPbGk/f9UBQeVvdDfPnZG6MWDyJDBMkKXukObS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FSR6UNy7; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41b48daaaf4so55425e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 00:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715324513; x=1715929313; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/fNjQtXaSKOYp8nX/E0knSnpY+xEYmx9idjbqHww5m8=;
+        b=FSR6UNy7ZCeAoKw4kCtum0FHjMP04IWADohr7m7A5TLlSkuMvQAjAcvzR8UjzJfBNC
+         3tH7uJQlHm9S8jDO6mu/RD1pDyNcw8i8+pjqVYJmkM6H3p4vvwvDTCRPDQ+Lla7srN1u
+         jHJWTGQxz/SPK7mJqIYKLsMtyepy5LA5XDs57QyfEYwjukbNg/MrZ/kCBNl6Khp3UTE0
+         UERCbamJedTMLe+klmnv4hli01rs0GgW6e1p91U/vJNfArxZWxwAC9MDidnzM/4fMSVY
+         kT/vxWA/+Z3IkROawa9ZCYxHlLHIJAIGXOyToPnpCgWZYyrgZUeNT+5U0HLEElf9UYyi
+         cxyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715324513; x=1715929313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/fNjQtXaSKOYp8nX/E0knSnpY+xEYmx9idjbqHww5m8=;
+        b=sbnFwDfPy6PLuy+b/8FgCTkOGLpnhyP0Y6vvLhf5bc1zS2P8KF65LdKbt7WdYOCpLs
+         lRgl3bQOWHXxGIYrlMtuSMtZ3Mrai5bkWp1aWwS8lybJK6DR+xA48vNnMXMiZf5Cm6D4
+         Aa34f0K7rXs6HZqOhiHZZhk7Ke3AR/sP6MEcHT+1kNhUepAOgdJxypdYOMcf63g3OnsD
+         ri1eNAzrXkV+IEZ80pa6JfIWH4vSRMYSbq27LBg6VSsHF7apg18uvVZqWlOWo6qeq4J7
+         m2UHW6mxdNBLa+nodJUt0SZIEOQMGmec2nM4dYs2H4s90ARl5IP1cDw+lBBVPq14/5uq
+         qSIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyXdvOvzRVtXQWzinhodsS1AO3zDHOsh+fnIzrSilzdsCuIYqZQdonsSRZPdEeWt0x2zQwRqR30RMMVdFOm31mYZKKNZ+GgpwDE1fQFox0
+X-Gm-Message-State: AOJu0YyblY26V4getjWFDdUU5cFbP0dFuli0GvldI1SRTYrYu7JJ0byd
+	Gihob/cyR0LBwxe76OnPuL0aYEVZo3iN+QwZShhlRHTxf5ZZ5O1c8vGyHka2P5uwq5hLmrTy6+g
+	bA1Fmef0xpjdbi/OSZTm4YOnPKmqT9no6z1is1QzxWrC1AAqyivcK
+X-Google-Smtp-Source: AGHT+IHXgoYwv8mIiaDIGVOr7ncUPb8+Jxgb25xnmzzrh7Nx+vSrbhU+T7T2JV86E1ZVTxXeU3M9WBbaaejAwoMk2Q4=
+X-Received: by 2002:a05:600c:6b13:b0:41b:e416:1073 with SMTP id
+ 5b1f17b1804b1-41fedc6d1d4mr1312435e9.0.1715324512596; Fri, 10 May 2024
+ 00:01:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240510000842.410729-38-edliaw@google.com>
+References: <20240507162349.130277-1-richardbgobert@gmail.com>
+ <20240507163021.130466-1-richardbgobert@gmail.com> <CANn89iJfVHA=n-vSpFwoP3Jb8Wxr1hgem1rLqmyPWPUwDpe-cg@mail.gmail.com>
+ <82f6854c-5d69-4675-8233-052a7b085cd4@gmail.com>
+In-Reply-To: <82f6854c-5d69-4675-8233-052a7b085cd4@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 10 May 2024 09:01:37 +0200
+Message-ID: <CANn89iJ7TPa350Git+r2dp6rvvJ-TUTYj5RiLi7i5TWsBJO1bQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 2/3] net: gro: move L3 flush checks to
+ tcp_gro_receive and udp_gro_receive_segment
+To: Richard Gobert <richardbgobert@gmail.com>
+Cc: alexander.duyck@gmail.com, davem@davemloft.net, dsahern@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	shuah@kernel.org, willemdebruijn.kernel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Edward,
+On Thu, May 9, 2024 at 8:58=E2=80=AFPM Richard Gobert <richardbgobert@gmail=
+.com> wrote:
+>
 
-On 2024-05-10 00:06:54+0000, Edward Liaw wrote:
-> _GNU_SOURCE is provided by lib.mk, so it should be dropped to prevent
-> redefinition warnings.
+>
+> Interesting, I think that is indeed a bug, that exists also in the curren=
+t
+> implementation.
+> NAPI_GRO_CB(p)->ip_fixedid (is_atomic before we renamed it in this commit=
+)
+> is cleared as being part of NAPI_GRO_CB(skb)->zeroed in dev_gro_receive.
 
-The nolibc tests do not use lib.mk.
+And the code there seems wrong.
 
-This change breaks "make libc-test", please drop it.
+A compiler can absolutely reorder things, I have seen this many times.
 
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 94bb6e11c16f..a28813f4367f 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -1,6 +1,4 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -
-> -#define _GNU_SOURCE
->  #define _LARGEFILE64_SOURCE
->  
->  /* libc-specific include files
-> -- 
-> 2.45.0.118.g7fe29c98d7-goog
+I would play safe here, to make sure NAPI_GRO_CB(skb)->is_atomic =3D 1;
+can not be lost.
 
-Thomas
+diff --git a/net/core/gro.c b/net/core/gro.c
+index c7901253a1a8fc1e9425add77014e15b363a1623..6e4203ea4d54b8955a504e42633=
+f7667740b796e
+100644
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@ -470,6 +470,7 @@ static enum gro_result dev_gro_receive(struct
+napi_struct *napi, struct sk_buff
+        BUILD_BUG_ON(!IS_ALIGNED(offsetof(struct napi_gro_cb, zeroed),
+                                        sizeof(u32))); /* Avoid slow
+unaligned acc */
+        *(u32 *)&NAPI_GRO_CB(skb)->zeroed =3D 0;
++       barrier();
+        NAPI_GRO_CB(skb)->flush =3D skb_has_frag_list(skb);
+        NAPI_GRO_CB(skb)->is_atomic =3D 1;
+        NAPI_GRO_CB(skb)->count =3D 1;
 
