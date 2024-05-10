@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FDE8C2A43
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F9758C2A45
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 21:03:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E804A1C20B3C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:03:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5284F1C22A4B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 19:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D91A45BEC;
-	Fri, 10 May 2024 19:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAF4482C1;
+	Fri, 10 May 2024 19:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wjr356MK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ul7kZa15"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D68945038
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2092845023
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 19:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715367789; cv=none; b=QudAab3fuvvnnXHXOlTkzfFXYJKNKWTnXJFrul609xe28iLb+QlOuy4CKXyuBMEpY03xwlp8WLP3zveTAZFhalgmVL2KLbDc8jkWNSzCD+WBCzQNMGyVXAzjZoMokcD21P5cEKwFdS7rhptNtCAkSmzhTGavQKlkCSGObsrad9k=
+	t=1715367790; cv=none; b=gpcxujQprORfkuGvV0oWZO7lQXaosKMUBsJGjxGE3fEUAO1PScZfI/d/UI920ihJpKZSy7h8xvrDHxUGTbOMa6/ZWnwV1fuf10/JTz13HynxWgSyivTS8U2SrhlLUwHmQFS842le0OIvWrpjjdaFZYT+oZPdrXwGhb6ktEnkkgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715367789; c=relaxed/simple;
-	bh=VMyugVAQ8Ub1DGTFanqOI4/2k/P0xtDqyEZKFeH42jI=;
+	s=arc-20240116; t=1715367790; c=relaxed/simple;
+	bh=BUKmtnNs2wklMJIvxINe04xe6pmF+mh+kjGQW30j49k=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GLUvmBWk3j4EiwSstAVIh9dstNCGFQcbFTDHeg/+rGSzZRqvfdl+oKpzUmP6UdRylkai343jyRCeIR+Xb0WIBinADs8j6JvKYr+iYVEVTdloeDcGP0b+xiHpmu0eQ2omfSybMT6ZJiTpI04xD1K6jPllJHD7OmJHRsRXKJ+PECc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wjr356MK; arc=none smtp.client-ip=209.85.166.73
+	 To:Cc:Content-Type; b=A/E6rdzHQyEup5gC+V97pamnagt6/a/DNFTLZz71y1CGXr8so6vxiVLuOk4pefTWSZEmPmKcqfiSq1zbfr0vJbztrqWbtcOOLSvTILGAy1dK0szAVdViqc+z/WqjXNLG1YlAmO18+yA90Pfr/32/BhgWz1+2vKp+txrgs7if5jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ul7kZa15; arc=none smtp.client-ip=209.85.166.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
-Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7dab89699a8so234261339f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:03:07 -0700 (PDT)
+Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-7e1b80d4004so117882939f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 12:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715367787; x=1715972587; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715367788; x=1715972588; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5Qphk0OKRqdStjeaxrPqPTmxPnx+FOSWajJd14XMpA=;
-        b=wjr356MKaQzC3u+fgqp2IEtA057NAKoLs28/1i8tEQaN8vrQWQJyAS0hjz4tvB+Qrs
-         TH/WWDgMK45+vUfy9oWq9f9tEgVAeGsI2LBQLYK5zPSg+A291KN+mceWzb0zstkwgjqp
-         TWePi14UjA+yfbv+EvFHcNQZrl57n4OldfSfQRipJhTEwloR/OVxA3YWxddkfVGuHPsy
-         gHzoWmkqqhlDBnT6cMMnbGo6a5rJFWmQlyHR9SiPyFIUrRboQiYekPn7hEedVfd6Qkeh
-         fAk69Q2/HcIhXccfYWosMmNDe0Jg9h7/DkCHsYzptjrWRxuz/30l3QAj3Ofi7by106OT
-         LdaQ==
+        bh=vgof1JdDIiQsHO2U8t6nMcAU4LuwP+16QwPtEtzPHeM=;
+        b=ul7kZa15LmCw4XcqyGIIZfkccnWZ9SpQ9COoCCA545A595pmKnqnTBk/FSnPIfS5H/
+         Be9o1hgZU54k53VyMRwMwazpv44/RmCaBhyQ+rdds0brn74wRbAdqY8v46x9e9ONUxdj
+         D5vjynuePhPs5opz8qHLCLGi2mdRadVt/0We3rWl0Fv2ue88wVB1LgDFauHhN3EgWGUz
+         z5hZxXIpPNDgqhSYaDNVzFy+cf8BdYP1oS7GYsshY0CVziZyci8klV8mIZnGGiEGWnw1
+         MWzxxJdAU4u93qgBltiCwZMkQxDPvZ1Gq8+sn942miayZWIXKXXSudFlhKuh/9j1UMHl
+         Zt/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715367787; x=1715972587;
+        d=1e100.net; s=20230601; t=1715367788; x=1715972588;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o5Qphk0OKRqdStjeaxrPqPTmxPnx+FOSWajJd14XMpA=;
-        b=Z58wPAL1TAlnMilW3yT1gdFx9HOhhmRBUKCjtHx62PbqS+R6vc6hC5pQnkIi9hCPpy
-         KlZfIGKbWtDhzCix7n1eh50VfGQGxUpS0WHoq/aQvyU8VBdwJpiSi0c3NFRrlgQBdbvQ
-         H8jpfUBcbcokEbL31jxFVJfmQaqhdxwyAbCqksUrlKWjxse+IvplSRbADvpxNK0t3hd+
-         GX96pwPVIEBLIhpv2tRAwsfsjDpVz8tj0oLRA/8rGmeZCG/F1tK7eY3+J6F8D7AF0Vac
-         M8jGLnsas/JkXvGOgwmsbXMCqgmh3zOXveKsaslsE1OcKUY6UMDr/oWYiKuZfmbyZcMp
-         6/kA==
-X-Forwarded-Encrypted: i=1; AJvYcCVq49XUWu4R+ueyHZnbevJ7d2WS6hPo6+GI0XLqrNrPZ0UjY7Y6Hx9sxAWL8yg0o1TxRzFX9uwbftrGC1HwCsBvJ65Baeesbk8ftqSZDzpS
-X-Gm-Message-State: AOJu0YyqNNtMCIVhcO7J/z+J0rw+K+sW9mF0+0vpdkTccQvXRJA6x5qd
-	cAcUVXNqkwuFqfE7HkUbbv8ogUl2JOwprUA7afMlwIYVyOjhZ9wfWT8RUaWfysB7EOx8nG3KyQ=
+        bh=vgof1JdDIiQsHO2U8t6nMcAU4LuwP+16QwPtEtzPHeM=;
+        b=Zu7E5j/Kpm2gJgiwllHzCpgAc9QerY1mSzrSOBrU8YMuostOIU8fht3nhrHbUAIrV1
+         X/lvsf7+RFr2uwuvkA3YsJ/bQQB6siG09NPg/qXlfJEuQ6nkIwAGgYPf/NS1YbuYZsmW
+         OOpnnchR5Xh10yv1uV76PYFOuzOFRjzSWOURn4zk1Jsj283YAc/cSuuaEZiRZtjj3FBA
+         4XDYQQJmZEoTesceukAu2UGcgj/3pwbhGW5rinHVhImP7tRBm3nbdekziN0yK27OY3od
+         HeGCgkzdM7nceaJLitMGgAQqvHQqvbDNTuAimdfEl1zTze6vRHtvd1icAHc9uzOMFV5D
+         CMEg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVVN5uTUvjjUYplKV4tsjf+aYpAK3QKMdHDLPEErBx9uATJKjjjD0z/Xq1KQ+xb5O0GDYcEg6a91noVm7ls6yQJY6wyVyhC3NBJOcxcCAn
+X-Gm-Message-State: AOJu0YzjtmIYLQK+1Tz2ScH3rF4Xsivo3/QzZF2HgptQfHbh7fpLkC9C
+	nHTGpix9XpPeKvQcDvJ055cgdb1DsxoFxInkAWAiOUHm97f6pmZbhrcybKDtwl71rcw1+H9b0Q=
 	=
-X-Google-Smtp-Source: AGHT+IH9MvaFKRLstHKq2Et97J3n4iTmX6fh7j0LE0aUv6M3Muldzo4QSXXpNLJjm/sjgQ0ULTEMIiBg+A==
+X-Google-Smtp-Source: AGHT+IEu5Ha/9G6xoyaIJnCe7JbzsANU7IpamibLvfl0JQcsi0n2IXqcNHJI1T7nlje2/yBgL6EAPCRAUg==
 X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a05:6638:140d:b0:488:7838:5ab6 with SMTP id
- 8926c6da1cb9f-4895a1ac748mr175589173.5.1715367786811; Fri, 10 May 2024
- 12:03:06 -0700 (PDT)
-Date: Fri, 10 May 2024 14:02:28 -0500
+ (user=jrife job=sendgmr) by 2002:a05:6638:210d:b0:488:e34a:5f72 with SMTP id
+ 8926c6da1cb9f-4895857588dmr232481173.2.1715367788325; Fri, 10 May 2024
+ 12:03:08 -0700 (PDT)
+Date: Fri, 10 May 2024 14:02:29 -0500
 In-Reply-To: <20240510190246.3247730-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240510190246.3247730-1-jrife@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510190246.3247730-12-jrife@google.com>
-Subject: [PATCH v1 bpf-next 11/17] selftests/bpf: Migrate ATTACH_REJECT test cases
+Message-ID: <20240510190246.3247730-13-jrife@google.com>
+Subject: [PATCH v1 bpf-next 12/17] selftests/bpf: Remove redundant sendmsg
+ test cases
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>, 
@@ -88,353 +89,191 @@ Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Migrate test case from bpf/test_sock_addr.c ensuring that program
-attachment fails when using an inappropriate attach type.
+Remove these test cases completely, as the same behavior is already
+covered by other sendmsg* test cases in prog_tests/sock_addr.c. This
+just rewrites the destination address similar to sendmsg_v4_prog and
+sendmsg_v6_prog.
 
 Signed-off-by: Jordan Rife <jrife@google.com>
 ---
- .../selftests/bpf/prog_tests/sock_addr.c      | 102 ++++++++++++
- tools/testing/selftests/bpf/test_sock_addr.c  | 146 ------------------
- 2 files changed, 102 insertions(+), 146 deletions(-)
+ tools/testing/selftests/bpf/test_sock_addr.c | 161 -------------------
+ 1 file changed, 161 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-index 8c7c56f997549..ebd5e58e38c5c 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-@@ -438,13 +438,19 @@ static void prog_name##_destroy(void *skel) \
- }
- 
- BPF_SKEL_FUNCS(bind4_prog, bind_v4_prog);
-+BPF_SKEL_FUNCS_RAW(bind4_prog, bind_v4_prog);
- BPF_SKEL_FUNCS(bind6_prog, bind_v6_prog);
-+BPF_SKEL_FUNCS_RAW(bind6_prog, bind_v6_prog);
- BPF_SKEL_FUNCS(connect4_prog, connect_v4_prog);
-+BPF_SKEL_FUNCS_RAW(connect4_prog, connect_v4_prog);
- BPF_SKEL_FUNCS(connect6_prog, connect_v6_prog);
-+BPF_SKEL_FUNCS_RAW(connect6_prog, connect_v6_prog);
- BPF_SKEL_FUNCS(connect_unix_prog, connect_unix_prog);
- BPF_SKEL_FUNCS(sendmsg4_prog, sendmsg_v4_prog);
-+BPF_SKEL_FUNCS_RAW(sendmsg4_prog, sendmsg_v4_prog);
- BPF_SKEL_FUNCS(sendmsg4_prog, sendmsg_v4_deny_prog);
- BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_prog);
-+BPF_SKEL_FUNCS_RAW(sendmsg6_prog, sendmsg_v6_prog);
- BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_deny_prog);
- BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_preserve_dst_prog);
- BPF_SKEL_FUNCS(sendmsg6_prog, sendmsg_v6_v4mapped_prog);
-@@ -506,6 +512,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_BIND,
-+		"bind4: attach prog with wrong attach type",
-+		bind_v4_prog_load_raw,
-+		bind_v4_prog_destroy_raw,
-+		BPF_CGROUP_INET6_BIND,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_STREAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 	{
- 		SOCK_ADDR_TEST_BIND,
- 		"bind6: bind (stream)",
-@@ -554,6 +576,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_BIND,
-+		"bind6: attach prog with wrong attach type",
-+		bind_v6_prog_load_raw,
-+		bind_v6_prog_destroy_raw,
-+		BPF_CGROUP_INET4_BIND,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_STREAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 
- 	/* bind - kernel calls */
- 	{
-@@ -670,6 +708,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_CONNECT,
-+		"connect4: attach prog with wrong attach type",
-+		connect_v4_prog_load_raw,
-+		connect_v4_prog_destroy_raw,
-+		BPF_CGROUP_INET6_CONNECT,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_STREAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 	{
- 		SOCK_ADDR_TEST_CONNECT,
- 		"connect6: connect (stream)",
-@@ -718,6 +772,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_CONNECT,
-+		"connect6: attach prog with wrong attach type",
-+		connect_v6_prog_load_raw,
-+		connect_v6_prog_destroy_raw,
-+		BPF_CGROUP_INET4_CONNECT,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_STREAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 	{
- 		SOCK_ADDR_TEST_CONNECT,
- 		"connect_unix: connect (stream)",
-@@ -866,6 +936,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg4: attach prog with wrong attach type",
-+		sendmsg_v4_prog_load_raw,
-+		sendmsg_v4_prog_destroy_raw,
-+		BPF_CGROUP_UDP6_SENDMSG,
-+		&user_ops,
-+		AF_INET,
-+		SOCK_DGRAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg6: sendmsg (dgram)",
-@@ -962,6 +1048,22 @@ static struct sock_addr_test tests[] = {
- 		NULL,
- 		LOAD_REJECT,
- 	},
-+	{
-+		SOCK_ADDR_TEST_SENDMSG,
-+		"sendmsg6: attach prog with wrong attach type",
-+		sendmsg_v6_prog_load_raw,
-+		sendmsg_v6_prog_destroy_raw,
-+		BPF_CGROUP_UDP4_SENDMSG,
-+		&user_ops,
-+		AF_INET6,
-+		SOCK_DGRAM,
-+		NULL,
-+		0,
-+		NULL,
-+		0,
-+		NULL,
-+		ATTACH_REJECT,
-+	},
- 	{
- 		SOCK_ADDR_TEST_SENDMSG,
- 		"sendmsg_unix: sendmsg (dgram)",
 diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
-index 4ecbc72477f1f..311eda4f48645 100644
+index 311eda4f48645..a2b587273331c 100644
 --- a/tools/testing/selftests/bpf/test_sock_addr.c
 +++ b/tools/testing/selftests/bpf/test_sock_addr.c
-@@ -88,89 +88,11 @@ struct sock_addr_test {
+@@ -88,170 +88,9 @@ struct sock_addr_test {
  	} expected_result;
  };
  
--static int bind4_prog_load(const struct sock_addr_test *test);
--static int bind6_prog_load(const struct sock_addr_test *test);
--static int connect4_prog_load(const struct sock_addr_test *test);
--static int connect6_prog_load(const struct sock_addr_test *test);
- static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test);
- static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test);
- 
+-static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test);
+-static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test);
+-
  static struct sock_addr_test tests[] = {
--	/* bind */
+-	/* sendmsg */
 -	{
--		"bind4: attach prog with wrong attach type",
--		bind4_prog_load,
--		BPF_CGROUP_INET4_BIND,
--		BPF_CGROUP_INET6_BIND,
--		AF_INET,
--		SOCK_STREAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
--	},
--	{
--		"bind6: attach prog with wrong attach type",
--		bind6_prog_load,
--		BPF_CGROUP_INET6_BIND,
--		BPF_CGROUP_INET4_BIND,
--		AF_INET,
--		SOCK_STREAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
--	},
--
--	/* connect */
--	{
--		"connect4: attach prog with wrong attach type",
--		connect4_prog_load,
--		BPF_CGROUP_INET4_CONNECT,
--		BPF_CGROUP_INET6_CONNECT,
--		AF_INET,
--		SOCK_STREAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
--	},
--	{
--		"connect6: attach prog with wrong attach type",
--		connect6_prog_load,
--		BPF_CGROUP_INET6_CONNECT,
--		BPF_CGROUP_INET4_CONNECT,
--		AF_INET,
--		SOCK_STREAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
--	},
--
- 	/* sendmsg */
--	{
--		"sendmsg4: attach prog with wrong attach type",
+-		"sendmsg4: rewrite IP & port (asm)",
 -		sendmsg4_rw_asm_prog_load,
 -		BPF_CGROUP_UDP4_SENDMSG,
--		BPF_CGROUP_UDP6_SENDMSG,
+-		BPF_CGROUP_UDP4_SENDMSG,
 -		AF_INET,
 -		SOCK_DGRAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
+-		SERV4_IP,
+-		SERV4_PORT,
+-		SERV4_REWRITE_IP,
+-		SERV4_REWRITE_PORT,
+-		SRC4_REWRITE_IP,
+-		SUCCESS,
 -	},
- 	{
- 		"sendmsg4: rewrite IP & port (asm)",
- 		sendmsg4_rw_asm_prog_load,
-@@ -185,20 +107,6 @@ static struct sock_addr_test tests[] = {
- 		SRC4_REWRITE_IP,
- 		SUCCESS,
- 	},
 -	{
--		"sendmsg6: attach prog with wrong attach type",
+-		"sendmsg6: rewrite IP & port (asm)",
 -		sendmsg6_rw_asm_prog_load,
 -		BPF_CGROUP_UDP6_SENDMSG,
--		BPF_CGROUP_UDP4_SENDMSG,
+-		BPF_CGROUP_UDP6_SENDMSG,
 -		AF_INET6,
 -		SOCK_DGRAM,
--		NULL,
--		0,
--		NULL,
--		0,
--		NULL,
--		ATTACH_REJECT,
+-		SERV6_IP,
+-		SERV6_PORT,
+-		SERV6_REWRITE_IP,
+-		SERV6_REWRITE_PORT,
+-		SRC6_REWRITE_IP,
+-		SUCCESS,
 -	},
- 	{
- 		"sendmsg6: rewrite IP & port (asm)",
- 		sendmsg6_rw_asm_prog_load,
-@@ -234,60 +142,6 @@ static int load_insns(const struct sock_addr_test *test,
- 	return ret;
- }
+ };
  
--static int load_path(const struct sock_addr_test *test, const char *path)
+-static int load_insns(const struct sock_addr_test *test,
+-		      const struct bpf_insn *insns, size_t insns_cnt)
 -{
--	struct bpf_object *obj;
--	struct bpf_program *prog;
--	int err;
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+-	int ret;
 -
--	obj = bpf_object__open_file(path, NULL);
--	err = libbpf_get_error(obj);
--	if (err) {
--		log_err(">>> Opening BPF object (%s) error.\n", path);
+-	opts.expected_attach_type = test->expected_attach_type;
+-	opts.log_buf = bpf_log_buf;
+-	opts.log_size = BPF_LOG_BUF_SIZE;
+-
+-	ret = bpf_prog_load(BPF_PROG_TYPE_CGROUP_SOCK_ADDR, NULL, "GPL", insns, insns_cnt, &opts);
+-	if (ret < 0 && test->expected_result != LOAD_REJECT) {
+-		log_err(">>> Loading program error.\n"
+-			">>> Verifier output:\n%s\n-------\n", bpf_log_buf);
+-	}
+-
+-	return ret;
+-}
+-
+-static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+-{
+-	struct sockaddr_in dst4_rw_addr;
+-	struct in_addr src4_rw_ip;
+-
+-	if (inet_pton(AF_INET, SRC4_REWRITE_IP, (void *)&src4_rw_ip) != 1) {
+-		log_err("Invalid IPv4: %s", SRC4_REWRITE_IP);
 -		return -1;
 -	}
 -
--	prog = bpf_object__next_program(obj, NULL);
--	if (!prog)
--		goto err_out;
+-	if (make_sockaddr(AF_INET, SERV4_REWRITE_IP, SERV4_REWRITE_PORT,
+-			  (struct sockaddr_storage *)&dst4_rw_addr,
+-			  NULL) == -1)
+-		return -1;
 -
--	bpf_program__set_type(prog, BPF_PROG_TYPE_CGROUP_SOCK_ADDR);
--	bpf_program__set_expected_attach_type(prog, test->expected_attach_type);
--	bpf_program__set_flags(prog, testing_prog_flags());
+-	struct bpf_insn insns[] = {
+-		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
 -
--	err = bpf_object__load(obj);
--	if (err) {
--		if (test->expected_result != LOAD_REJECT)
--			log_err(">>> Loading program (%s) error.\n", path);
--		goto err_out;
+-		/* if (sk.family == AF_INET && */
+-		BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+-			    offsetof(struct bpf_sock_addr, family)),
+-		BPF_JMP_IMM(BPF_JNE, BPF_REG_7, AF_INET, 8),
+-
+-		/*     sk.type == SOCK_DGRAM)  { */
+-		BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+-			    offsetof(struct bpf_sock_addr, type)),
+-		BPF_JMP_IMM(BPF_JNE, BPF_REG_7, SOCK_DGRAM, 6),
+-
+-		/*      msg_src_ip4 = src4_rw_ip */
+-		BPF_MOV32_IMM(BPF_REG_7, src4_rw_ip.s_addr),
+-		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_7,
+-			    offsetof(struct bpf_sock_addr, msg_src_ip4)),
+-
+-		/*      user_ip4 = dst4_rw_addr.sin_addr */
+-		BPF_MOV32_IMM(BPF_REG_7, dst4_rw_addr.sin_addr.s_addr),
+-		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_7,
+-			    offsetof(struct bpf_sock_addr, user_ip4)),
+-
+-		/*      user_port = dst4_rw_addr.sin_port */
+-		BPF_MOV32_IMM(BPF_REG_7, dst4_rw_addr.sin_port),
+-		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_7,
+-			    offsetof(struct bpf_sock_addr, user_port)),
+-		/* } */
+-
+-		/* return 1 */
+-		BPF_MOV64_IMM(BPF_REG_0, 1),
+-		BPF_EXIT_INSN(),
+-	};
+-
+-	return load_insns(test, insns, ARRAY_SIZE(insns));
+-}
+-
+-static int sendmsg6_rw_dst_asm_prog_load(const struct sock_addr_test *test,
+-					 const char *rw_dst_ip)
+-{
+-	struct sockaddr_in6 dst6_rw_addr;
+-	struct in6_addr src6_rw_ip;
+-
+-	if (inet_pton(AF_INET6, SRC6_REWRITE_IP, (void *)&src6_rw_ip) != 1) {
+-		log_err("Invalid IPv6: %s", SRC6_REWRITE_IP);
+-		return -1;
 -	}
 -
--	return bpf_program__fd(prog);
--err_out:
--	bpf_object__close(obj);
--	return -1;
+-	if (make_sockaddr(AF_INET6, rw_dst_ip, SERV6_REWRITE_PORT,
+-			  (struct sockaddr_storage *)&dst6_rw_addr,
+-			  NULL) == -1)
+-		return -1;
+-
+-	struct bpf_insn insns[] = {
+-		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
+-
+-		/* if (sk.family == AF_INET6) { */
+-		BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
+-			    offsetof(struct bpf_sock_addr, family)),
+-		BPF_JMP_IMM(BPF_JNE, BPF_REG_7, AF_INET6, 18),
+-
+-#define STORE_IPV6_WORD_N(DST, SRC, N)					       \
+-		BPF_MOV32_IMM(BPF_REG_7, SRC[N]),			       \
+-		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_7,		       \
+-			    offsetof(struct bpf_sock_addr, DST[N]))
+-
+-#define STORE_IPV6(DST, SRC)						       \
+-		STORE_IPV6_WORD_N(DST, SRC, 0),				       \
+-		STORE_IPV6_WORD_N(DST, SRC, 1),				       \
+-		STORE_IPV6_WORD_N(DST, SRC, 2),				       \
+-		STORE_IPV6_WORD_N(DST, SRC, 3)
+-
+-		STORE_IPV6(msg_src_ip6, src6_rw_ip.s6_addr32),
+-		STORE_IPV6(user_ip6, dst6_rw_addr.sin6_addr.s6_addr32),
+-
+-		/*      user_port = dst6_rw_addr.sin6_port */
+-		BPF_MOV32_IMM(BPF_REG_7, dst6_rw_addr.sin6_port),
+-		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_7,
+-			    offsetof(struct bpf_sock_addr, user_port)),
+-
+-		/* } */
+-
+-		/* return 1 */
+-		BPF_MOV64_IMM(BPF_REG_0, 1),
+-		BPF_EXIT_INSN(),
+-	};
+-
+-	return load_insns(test, insns, ARRAY_SIZE(insns));
 -}
 -
--static int bind4_prog_load(const struct sock_addr_test *test)
+-static int sendmsg6_rw_asm_prog_load(const struct sock_addr_test *test)
 -{
--	return load_path(test, BIND4_PROG_PATH);
+-	return sendmsg6_rw_dst_asm_prog_load(test, SERV6_REWRITE_IP);
 -}
 -
--static int bind6_prog_load(const struct sock_addr_test *test)
--{
--	return load_path(test, BIND6_PROG_PATH);
--}
--
--static int connect4_prog_load(const struct sock_addr_test *test)
--{
--	return load_path(test, CONNECT4_PROG_PATH);
--}
--
--static int connect6_prog_load(const struct sock_addr_test *test)
--{
--	return load_path(test, CONNECT6_PROG_PATH);
--}
--
- static int sendmsg4_rw_asm_prog_load(const struct sock_addr_test *test)
+ static int cmp_addr(const struct sockaddr_storage *addr1,
+ 		    const struct sockaddr_storage *addr2, int cmp_port)
  {
- 	struct sockaddr_in dst4_rw_addr;
 -- 
 2.45.0.118.g7fe29c98d7-goog
 
