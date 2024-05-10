@@ -1,217 +1,189 @@
-Return-Path: <linux-kselftest+bounces-10018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C56498C2700
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 16:37:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B766B8C27E8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 17:35:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E84E61C214E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 14:37:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 432F81F21455
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 15:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1797A170891;
-	Fri, 10 May 2024 14:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C162F1708B1;
+	Fri, 10 May 2024 15:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="ZYCSRI7v"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="UiMLt0Pj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2072.outbound.protection.outlook.com [40.107.8.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AF412C526;
-	Fri, 10 May 2024 14:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715351856; cv=none; b=MUzpAFqgd+R7Msxwr+wW2thWyF47Fg6F61Hb+pNZbVctxG7Vt54t47vwbbv1DSZ/GA63ghQfclGOMEdXESTYlcitgcr9J3KOIn5qrm3EyS3PFuHsqNdv6swn6q0AgBug9MT6SY0v9S8S+00QVPH7qgBH6D4tWTOluAdwSG6XRlA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715351856; c=relaxed/simple;
-	bh=Rs8unjHuGUxifVY/9+LC+KIT6hLlUWyGTvZnyD5tKSI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ioGODtkzXU5uiO9h5ZkU8Nx66tIUQQivomZ0aC2dszG/XYW2laIUhFSJl3HdMdiWbWihR3ehC7J64DsjbECaX8pnuyCCw2U2n1qiz6yVr7OWbFyNZYDiFyKBTAYsIkOGQgulnGvcvc8oy4dFbNjOsbX79Vln4m5PYRl7JKe2tbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=ZYCSRI7v; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: lukma@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 36EF688122;
-	Fri, 10 May 2024 16:37:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1715351846;
-	bh=jOpOKeXB26MZGG5tc6iWhny1B4Ybi73lxsddx0Swstw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZYCSRI7vYaB9EJXXMJidQqjnmSwNoVkIWGX4FrOSw/9Re8XKPS0fZTBUMumBo/BdT
-	 JRGLaqKHk30YJZBbsU1veZ4D7yeJwn4AGPqLSlADSbKED+7L765V7aoaMP//g5dkmw
-	 UhavJevqRi+k4JszuQEWCS5oPf8IuxJhVgnQvmzc27QrmKdJCOHil92PqC0pd48hnL
-	 acAagRV3kTW1V7vL86Fh30wRxcjO0/eyr7myB4EjBye5MEafwP7dqQXcqNxGy1bMqj
-	 RyQx7GJOmlU8RsYhQGnj3lL1a4YwxHwLCM99zPGFYA/9BZth6FoRMOjCp/5bqM+5LZ
-	 pdIXc9cMimREA==
-From: Lukasz Majewski <lukma@denx.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FE712D219;
+	Fri, 10 May 2024 15:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715355305; cv=fail; b=rv129kKXHJYWVA8SNUtbpqf1zlhMZ0DlW0QL0uDmZQxLU+lAMomZiv3cjelwNNQgsOqrP4KPR6RA+R0/u4qNLy3FgzPURddKE1BVbIaf0gII3sLvYXHhWOJXxRRrGfJE422SCIH7nmG/wIHkvmkH7Z5/wxq7ceIxlrIylf+gPac=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715355305; c=relaxed/simple;
+	bh=vRyahkAsAok4LuIn0hLG2YuJxfTbO3jMxF+jtuF+Uts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=aydnM46mfELPRDXzoqjAG8TOabiO2aakefFKnRVrZRYTGDv4G0epGE2cm21mXAh8h/ygUpkq3kuWdgztjUYTK+o/9TkcwjAAczDr5mL6YOCwJiua3/xTBN4KFcPXnXa2KTQqumCIXZfYdR6pe3lqokI5RvKduTu4fwu22D1pyfk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=UiMLt0Pj; arc=fail smtp.client-ip=40.107.8.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T9EDhKVSz4TCr4MqPHntnkWztYT9YCdDR/pcspbltdAxeYZuwwLjVdEyLbynzW4/eTU4VFD/FrO2IaMoTbRwdN0GFZe2mExomaifNREHfQ2o4PjmCHbGE9HlD92PyoPC+0QG1k/Um12mwGE2iooa8m7SdjNYs4xxEvv29v4qNSGKB+IVkMzdySFmMAgD8TR3ax451AOPvTqVbAwompWDgWQb/WET7GhFNCt0Ci37TIhH2W2Xl/yj0YYdua8N+saWH36njn44HkpNx2sqkI9GJuAtEdEtsKea8NYms0iT48f0m1uD84bMlzXDYdYxZTK9RIZRU3GmaK4DkE+Fn6/L4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mJa4vB4k5wE8b3Ylvvj5aKF1ETNyd++VUuCFvkBPLAo=;
+ b=dYMOpkJEWP1S6Yi1eJzXA45NTAcnFaCiQNy00wBOE9leDWtVYCAenelukUixXFwPFBFJyIPUClQJx9tgf8jkWKax5FqX7sbXeUupOEpiQ/EAoZFTjn59Ax3FGTS5I4M8lm54a1jswxRSLRGvfzzN4ppxXZRD0+LoQ9dj/4Ajl6rGIoxvk1yoljdxRD1oWaeaoXDcxmzUlyysSqVZyE7EUYzQNn0ygyn0AvumoCsrgr/rRFwKEz+gOcAnhNMamZ2jC76vu46JHiVviSPuYObJsQ8pz1GNK2e0D/YUeb/cg/sZt83c1Kh7rxSuNhFNr7VJHtDjUKR5B7DT84ncLZR5sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mJa4vB4k5wE8b3Ylvvj5aKF1ETNyd++VUuCFvkBPLAo=;
+ b=UiMLt0PjphjiGjwbE8hLM6Uq24e6/jDtCTrTbC4l2eHjqlTte1Ota3ETI0NWj0VAJbN8eQ6TIUGGWSpwwrBeVmJAEXiAVDnN72szTvs5ap4MZiGfR4XiKYE+e8zv0iqnqizdWSSINWsg6Pl/3tcPBxUUT82hFfLYD1+RpU8WiHQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DBAPR04MB7368.eurprd04.prod.outlook.com (2603:10a6:10:1ad::19)
+ by AM0PR04MB6769.eurprd04.prod.outlook.com (2603:10a6:208:17f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.49; Fri, 10 May
+ 2024 15:35:00 +0000
+Received: from DBAPR04MB7368.eurprd04.prod.outlook.com
+ ([fe80::2bba:eb35:9ac6:9884]) by DBAPR04MB7368.eurprd04.prod.outlook.com
+ ([fe80::2bba:eb35:9ac6:9884%7]) with mapi id 15.20.7544.048; Fri, 10 May 2024
+ 15:35:00 +0000
+Date: Fri, 10 May 2024 18:34:57 +0300
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
 	linux-kselftest@vger.kernel.org,
-	Simon Horman <horms@kernel.org>,
-	Casper Andersson <casper.casan@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Lukasz Majewski <lukma@denx.de>
-Subject: [net-next PATCH] test: hsr: Extend the hsr_redbox.sh to have more SAN devices connected
-Date: Fri, 10 May 2024 16:37:10 +0200
-Message-Id: <20240510143710.3916631-1-lukma@denx.de>
-X-Mailer: git-send-email 2.39.2
+	Joachim Wiberg <troglobit@gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: use upstream mtools
+Message-ID: <20240510153457.wtaycdzg3iwbcq7a@skbuf>
+References: <20240510112856.1262901-1-vladimir.oltean@nxp.com>
+ <20240510072424.7c05850b@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240510072424.7c05850b@kernel.org>
+X-ClientProxiedBy: VI1PR0902CA0029.eurprd09.prod.outlook.com
+ (2603:10a6:802:1::18) To DBAPR04MB7368.eurprd04.prod.outlook.com
+ (2603:10a6:10:1ad::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBAPR04MB7368:EE_|AM0PR04MB6769:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d6e9378-a857-43d1-86a1-08dc7106c10d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|7416005|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?aCSSKZ5mUmxFik/Rxz5KxSFfJfDGBKqwXwR2K2H+D6uN6BblR7XX4FEbjohb?=
+ =?us-ascii?Q?oS6Gsp74xu8hVhI0xrh9/pQNDBu4O0XbifWSxiNWCiYaJH9+kF/69uMzlYY1?=
+ =?us-ascii?Q?RVpx/UIrAM8Zfqks7+IiCOIXpG6KTX8Y88KYqM0IphF+oaHNJM91kN0LiWWu?=
+ =?us-ascii?Q?YcAUoFs7gHXTulXbD6zzKc3PhD8hu/EgMFz06y5FpDOOG7t0Ldgw4lEfXB8Y?=
+ =?us-ascii?Q?+U6tVgjQ5UwwLsrXIYprLNyjG00BILE64G4rf7GHs3VFnFgTBHi+dG9mtl69?=
+ =?us-ascii?Q?8UMlrwRrz+h5PNnxdM4TuIypvqgaeqBUsXXE1AmGR5h8Npli5axwyaRqvvyf?=
+ =?us-ascii?Q?9f+1Q009Ed64gGLnUFEuliaR1J5WLdIYM0q1MJfZHXrh4vMAPtDnUlrxkOVl?=
+ =?us-ascii?Q?Kw6p5dL2iVscId42Jfrt96yduB03+k7M4lxDzZhtgUb/d5pkj99b63r5a80E?=
+ =?us-ascii?Q?O2+I/gJfD8Nh1bUrZ66G/ab50JbQW5bPQVY3PkiuTFcZ0xXQ82OmmV8+EZsz?=
+ =?us-ascii?Q?8f5K5cnQqtGBXarWcSoqf7ORbqWmy+ThB8tO78SZeS2C8OQyWBeI6fcLn7t0?=
+ =?us-ascii?Q?XFnHenIva4hSR8iD2kq9mXZE2KVy7C91IEtyXjwTbY4TO81cJIYAI/nUVQyH?=
+ =?us-ascii?Q?+0wOU+HGkn1ca+k/sjwxd3ngk86q95oW6Viyf9XJXzvuuhxNgbZcR8nzxXDO?=
+ =?us-ascii?Q?qlW15jSvPMICLeIc5gs5+9U9YUUB0D+cojxpEstRFtnmpFUIpsUB/EekLWK1?=
+ =?us-ascii?Q?qLYmuHi92s9pfPWRt4Hsjrxcuk8aruAX4cq+HhgRdz9hdRL80OT4ANq0nR8m?=
+ =?us-ascii?Q?1vGHoXGzPROUD5Smqqd8tNlwOPwh5OAGIfwCRAQOlJ23M+JZ2J9xK8ebCsY8?=
+ =?us-ascii?Q?bYlK+2wM4w0tBFEoNSTw1IEajp9u068tkuRMXflyVGxPDfVm9m4/hkGqxh2V?=
+ =?us-ascii?Q?HPifCzshjLqpEUPQAQLyDOiuDYHsWIrAT/+I9KNs/+gbPgf4ZkrhgQOyRJrH?=
+ =?us-ascii?Q?mc+TBU6JPHNE5TV170ZFm8y2Cm6VqiW/hyKLIzVyyT4t3G6llyCGB4W1RbB6?=
+ =?us-ascii?Q?RPTbN7dsI5idadSlGft3sfWf6A14nyE4EGF1rMYewrHq2+M2KJyab7NJ1o3y?=
+ =?us-ascii?Q?A5vsimCDUzOyy3qNaHrQZpKMrdNylwcHvH5SZgXFXaH5dBDsNKNlPYo1PRo4?=
+ =?us-ascii?Q?m+buqRoB3V5Ck3TwbzINpuUU5e6xd+54H1yk3toLioXdC7hmVDqlZSN8E928?=
+ =?us-ascii?Q?3G7AscgsDJjHyBZgyX2aTGNoOmAZpkNQRgpOIwWpYA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR04MB7368.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(7416005)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xwVEW3OulfrBdXsUGVKqPg3g3l79wqscnwJh+ZlkfNp2l9EABhTeA20AJ3z0?=
+ =?us-ascii?Q?u2cGbe/SD/r0G0l40velngE2qJNf1oQKnSj6qveBcO13nfxjyRHfMoVgHgIO?=
+ =?us-ascii?Q?XVR76pfOzwFcRXnpa6lrMOho4YbTD9m7Rg553mCXQNgA5Jwl2QjR0ZTt+QZS?=
+ =?us-ascii?Q?KxM3T1L7xsmU65GkpLbmchfEoBoQ7YRperCe05IORRZB4q8fjOnl46WHY9aV?=
+ =?us-ascii?Q?GiqpN5RrFNjiQuATjut59oBxEquyOXrBoAx5sApZr2JmU4IM1Og1NS8jSCFj?=
+ =?us-ascii?Q?FygBU3ZPyaqFAPIiBJEg+Z/TsyD6cSS0hfcFummc6vezrSUI5tliNaG6rpfr?=
+ =?us-ascii?Q?JJkdJ/Un/H6fpCp29cCgMY8XwzZfaZROdSMGD+263xoTZ/Vii+w778j+zAN7?=
+ =?us-ascii?Q?YkiP6DXs4rur5rVZco8/ktRw0afq2l3LOSYHFfj1RKtzOBnccgKwOu6BkI4o?=
+ =?us-ascii?Q?PSliEi6HXKPcqHwXIPOpusbel5PgHjPqwfOp5UBSgSxX0sPPtTftSp/vbToo?=
+ =?us-ascii?Q?1luJdEog1cq6WLL+r4g3+H627ys+5yPZss1SbqykYvdHWQsjqgvKXdjE/LdK?=
+ =?us-ascii?Q?wMU7iG4FElOTFlHoAs7/dHRcRJ728FWrC9kCrzhM/k8bW3fh/IfclORWwdzG?=
+ =?us-ascii?Q?DXMVc8ELVaoss14zcwbmWXiQHKBRluqmff0dJ16ipla0PG6L4qvWRIy3k1ei?=
+ =?us-ascii?Q?zzNxUJ+PnGUMQDo99ZWFNI4USKITPs+dJ8fz0Y2QwWskkq6ZGV3y15GpY+XM?=
+ =?us-ascii?Q?ugurNNf+Wni3zwltow0N+18n2z4U00/oG2+FOekmjD9ySYQvX2RPCFDFcbhG?=
+ =?us-ascii?Q?xk1MeJM73/7zWAF/3yGy1iRmRxL9Exs5B7oj0wmceFs/ySWPxAp+JJvYMn9m?=
+ =?us-ascii?Q?vnGpw79lXq8vPVNV+++/13o2Rrnu7a0vrHWvKzS66pe+TdrFfMT4vcjQ0/ks?=
+ =?us-ascii?Q?J1xVFP5wokHI3KMFa139aDuQBAAmF18Jdp2KJQr/+PKjDwIj7gYM4kUXNYvn?=
+ =?us-ascii?Q?DdzZ/+UoBIHvQ1VSEbvoxnYTqnumXIsMFqecbCEQ7IXzD7Us60xcgZhvJxGw?=
+ =?us-ascii?Q?kmTCPEBlptempF+jl/Dnc9PHwUtIJcVHMeyW5uPS6UI/xe5snBf9PMlfL8mL?=
+ =?us-ascii?Q?fsO59owkdrZs7U6yjwXJEGte7SQLF71OEq3nTNmuTDv1YX6MwLLV7JYUZYPa?=
+ =?us-ascii?Q?Ib84YIO1xOpY0T0VXPiPBaiBJy5qgZcPmGD6zykshKY9WpM7YsbVpVRvkqEX?=
+ =?us-ascii?Q?EBlp+0tPTYx9CUGCWsrLO7iG6ExfNB8GXPGBJQkpmJiztkdA1U2SZNmYCkOQ?=
+ =?us-ascii?Q?VlqJpStBT1iBB0FgWTzYo1oIpxbd1dTGZUf3q/CSsy/3jVRy7MoU8jWen1+C?=
+ =?us-ascii?Q?ItCZWosAu/WswFVfke+zr90rZ1j/pcK4rxr1QtzeT9/bFcZJFQGrSxryyMAG?=
+ =?us-ascii?Q?atGqHuB7LwXOLnc0G+JLYpP91buxfL28smFxhnZI3RfkO7l5lM3TXnntXqhd?=
+ =?us-ascii?Q?+4udiGxJwLihqivVmf0f9nmoxhs6gHLGKhcMTEZHoFTX60NNAJim+2UfAPKp?=
+ =?us-ascii?Q?j809AVo+xGRnnVg8O8XxMtTpRUuXCBEi19HmppCu+UqUk2YMgxa4PXXi4a64?=
+ =?us-ascii?Q?OA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d6e9378-a857-43d1-86a1-08dc7106c10d
+X-MS-Exchange-CrossTenant-AuthSource: DBAPR04MB7368.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2024 15:35:00.3363
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o5xNEj9CzBNkWm49xtyOquOlodNvIE6RrkZ6HD51jV8mr7JST537AEaB+kpKOiS65fbZRUr+fBI4Rd1nWN9Sdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6769
 
-After this change the single SAN device (ns3eth1) is now replaced with
-two SAN devices - respectively ns4eth1 and ns5eth1.
+On Fri, May 10, 2024 at 07:24:24AM -0700, Jakub Kicinski wrote:
+> On Fri, 10 May 2024 14:28:56 +0300 Vladimir Oltean wrote:
+> > Check that the deployed mtools version is 3.0 or above. Note that the
+> > version check breaks compatibility with my fork 
+> 
+> And Joachim's tree from before the tag, the PR was merged a while back
+> ;)
 
-It is possible to extend this script to have more SAN devices connected
-by adding them to ns3br1 bridge.
+Yet "git tag --contains <the pull request>" shows "v3.0". I have no
+other reliable way of determining whether IPv6 is supported. Maybe look
+at msend -h | grep '\-6'.
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
- tools/testing/selftests/net/hsr/hsr_redbox.sh | 71 +++++++++++++------
- 1 file changed, 49 insertions(+), 22 deletions(-)
+> > where I didn't bump the version, but I assume that won't be a problem.
+> 
+> Agreed, no point accumulating more bespoke checks.
+> I updated NIPA, next run should have tagged 3.0.
+> 
+> Speaking of requirement checks - I run the test on a fresh Fedora
+> install yesterday and it was failing with no indication of why.
+> Then I realized tcpdump wasn't installed :(
 
-diff --git a/tools/testing/selftests/net/hsr/hsr_redbox.sh b/tools/testing/selftests/net/hsr/hsr_redbox.sh
-index db69be95ecb3..1f36785347c0 100755
---- a/tools/testing/selftests/net/hsr/hsr_redbox.sh
-+++ b/tools/testing/selftests/net/hsr/hsr_redbox.sh
-@@ -8,12 +8,19 @@ source ./hsr_common.sh
- do_complete_ping_test()
- {
- 	echo "INFO: Initial validation ping (HSR-SAN/RedBox)."
--	# Each node has to be able each one.
-+	# Each node has to be able to reach each one.
- 	do_ping "${ns1}" 100.64.0.2
- 	do_ping "${ns2}" 100.64.0.1
--	# Ping from SAN to hsr1 (via hsr2)
-+	# Ping between SANs (test bridge)
-+	do_ping "${ns4}" 100.64.0.51
-+	do_ping "${ns5}" 100.64.0.41
-+	# Ping from SANs to hsr1 (via hsr2) (and opposite)
- 	do_ping "${ns3}" 100.64.0.1
- 	do_ping "${ns1}" 100.64.0.3
-+	do_ping "${ns1}" 100.64.0.41
-+	do_ping "${ns4}" 100.64.0.1
-+	do_ping "${ns1}" 100.64.0.51
-+	do_ping "${ns5}" 100.64.0.1
- 	stop_if_error "Initial validation failed."
- 
- 	# Wait for MGNT HSR frames being received and nodes being
-@@ -23,8 +30,12 @@ do_complete_ping_test()
- 	echo "INFO: Longer ping test (HSR-SAN/RedBox)."
- 	# Ping from SAN to hsr1 (via hsr2)
- 	do_ping_long "${ns3}" 100.64.0.1
--	# Ping from hsr1 (via hsr2) to SAN
-+	# Ping from hsr1 (via hsr2) to SANs (and opposite)
- 	do_ping_long "${ns1}" 100.64.0.3
-+	do_ping_long "${ns1}" 100.64.0.41
-+	do_ping_long "${ns4}" 100.64.0.1
-+	do_ping_long "${ns1}" 100.64.0.51
-+	do_ping_long "${ns5}" 100.64.0.1
- 	stop_if_error "Longer ping test failed."
- 
- 	echo "INFO: All good."
-@@ -35,22 +46,26 @@ setup_hsr_interfaces()
- 	local HSRv="$1"
- 
- 	echo "INFO: preparing interfaces for HSRv${HSRv} (HSR-SAN/RedBox)."
--
--#       |NS1                     |
--#       |                        |
--#       |    /-- hsr1 --\        |
--#       | ns1eth1     ns1eth2    |
--#       |------------------------|
--#            |            |
--#            |            |
--#            |            |
--#       |------------------------|        |-----------|
--#       | ns2eth1     ns2eth2    |        |           |
--#       |    \-- hsr2 --/        |        |           |
--#       |            \           |        |           |
--#       |             ns2eth3    |--------| ns3eth1   |
--#       |             (interlink)|        |           |
--#       |NS2 (RedBOX)            |        |NS3 (SAN)  |
-+#
-+# IPv4 addresses (100.64.X.Y/24), and [X.Y] is presented on below diagram:
-+#
-+#
-+# |NS1                     |               |NS4                |
-+# |       [0.1]            |               |                   |
-+# |    /-- hsr1 --\        |               |    [0.41]         |
-+# | ns1eth1     ns1eth2    |               |    ns4eth1 (SAN)  |
-+# |------------------------|               |-------------------|
-+#      |            |                                |
-+#      |            |                                |
-+#      |            |                                |
-+# |------------------------|   |-------------------------------|
-+# | ns2eth1     ns2eth2    |   |                  ns3eth2      |
-+# |    \-- hsr2 --/        |   |                 /             |
-+# |      [0.2] \           |   |                /              |  |------------|
-+# |             ns2eth3    |---| ns3eth1 -- ns3br1 -- ns3eth3--|--| ns5eth1    |
-+# |             (interlink)|   | [0.3]      [0.11]             |  | [0.51]     |
-+# |NS2 (RedBOX)            |   |NS3 (BR)                       |  | NS5 (SAN)  |
-+#
- #
- 	# Check if iproute2 supports adding interlink port to hsrX device
- 	ip link help hsr | grep -q INTERLINK
-@@ -59,7 +74,9 @@ setup_hsr_interfaces()
- 	# Create interfaces for name spaces
- 	ip link add ns1eth1 netns "${ns1}" type veth peer name ns2eth1 netns "${ns2}"
- 	ip link add ns1eth2 netns "${ns1}" type veth peer name ns2eth2 netns "${ns2}"
--	ip link add ns3eth1 netns "${ns3}" type veth peer name ns2eth3 netns "${ns2}"
-+	ip link add ns2eth3 netns "${ns2}" type veth peer name ns3eth1 netns "${ns3}"
-+	ip link add ns3eth2 netns "${ns3}" type veth peer name ns4eth1 netns "${ns4}"
-+	ip link add ns3eth3 netns "${ns3}" type veth peer name ns5eth1 netns "${ns5}"
- 
- 	sleep 1
- 
-@@ -70,21 +87,31 @@ setup_hsr_interfaces()
- 	ip -n "${ns2}" link set ns2eth2 up
- 	ip -n "${ns2}" link set ns2eth3 up
- 
--	ip -n "${ns3}" link set ns3eth1 up
-+	ip -n "${ns3}" link add name ns3br1 type bridge
-+	ip -n "${ns3}" link set ns3br1 up
-+	ip -n "${ns3}" link set ns3eth1 master ns3br1 up
-+	ip -n "${ns3}" link set ns3eth2 master ns3br1 up
-+	ip -n "${ns3}" link set ns3eth3 master ns3br1 up
-+
-+	ip -n "${ns4}" link set ns4eth1 up
-+	ip -n "${ns5}" link set ns5eth1 up
- 
- 	ip -net "${ns1}" link add name hsr1 type hsr slave1 ns1eth1 slave2 ns1eth2 supervision 45 version ${HSRv} proto 0
- 	ip -net "${ns2}" link add name hsr2 type hsr slave1 ns2eth1 slave2 ns2eth2 interlink ns2eth3 supervision 45 version ${HSRv} proto 0
- 
- 	ip -n "${ns1}" addr add 100.64.0.1/24 dev hsr1
- 	ip -n "${ns2}" addr add 100.64.0.2/24 dev hsr2
-+	ip -n "${ns3}" addr add 100.64.0.11/24 dev ns3br1
- 	ip -n "${ns3}" addr add 100.64.0.3/24 dev ns3eth1
-+	ip -n "${ns4}" addr add 100.64.0.41/24 dev ns4eth1
-+	ip -n "${ns5}" addr add 100.64.0.51/24 dev ns5eth1
- 
- 	ip -n "${ns1}" link set hsr1 up
- 	ip -n "${ns2}" link set hsr2 up
- }
- 
- check_prerequisites
--setup_ns ns1 ns2 ns3
-+setup_ns ns1 ns2 ns3 ns4 ns5
- 
- trap cleanup_all_ns EXIT
- 
--- 
-2.20.1
+Huh, for me, "why isn't this running properly?" ends up being answered
+by the following Kconfig options not being active:
 
+CONFIG_IP_ADVANCED_ROUTER=y
+CONFIG_IP_MULTIPLE_TABLES=y
+CONFIG_NET_L3_MASTER_DEV=y
+CONFIG_IPV6=y
+CONFIG_IPV6_MULTIPLE_TABLES=y
+CONFIG_NET_VRF=y
 
