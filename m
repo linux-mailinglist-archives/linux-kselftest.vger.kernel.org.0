@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-9951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-9952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3716C8C1B17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 02:25:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C623B8C1B1D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 02:25:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1E751F26BCE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:25:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63EAAB24172
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 00:25:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9FD13956C;
-	Fri, 10 May 2024 00:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5156413A3E2;
+	Fri, 10 May 2024 00:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZI/Fccnw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OdR5AmzK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCAE1386DA
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 00:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFE2139D01
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 00:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715299864; cv=none; b=ZiacLhMHEiw+Foqw1+SfECdTmVQnQiqf4e7rApZoLbZFxlipTp7MmWA2g4qKAQfPo8WB2+4GKUgAmVJEvQogyNOqVW42u2IvzFjONkUX7iwxjTEyNe2YrSgZVIuXIxueTZOEuoEyLe+Twl/RbRJpFu12qYQ2AghnAP8ayW3YUQM=
+	t=1715299866; cv=none; b=qswoS1bwASgvHAPWRKGGeipwFNZnV6x8d/Kl+U6/QQkBostXwP1wF1NfAju8EA7yVwbewSXzZEpgXOMF3KVvQQJXXpq7N8G5gEiLLrpVpXertZYzgz/A68xffeb0gte69HAtabhJ0x/ANmR0tT6qg+lYWQikjf0xFdNTqwNEzPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715299864; c=relaxed/simple;
-	bh=L2xiJs0pvkHTyYEWb/dHuPHUb0aoyNpUC9tm+GW7Yvw=;
+	s=arc-20240116; t=1715299866; c=relaxed/simple;
+	bh=F2h5TqE2gznk34Xcds+2kdj8K23iiPRCWyz0VnUXgXA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jKKlnZc0yELo/VGZthpeeI1mGNLxsLQWQbhUKiIMD57AXb+QHlhT2p+POML5N4jW+JYGxFgZ1dssMUE9MColI2chlWbj3PPbm0TGKYeQK3+SEcfiwxHktiwxdDOIR37VH7IGlS3Whg0/F0PG8nTxm0ALcgBUwbVVVP7nAlHX/cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZI/Fccnw; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=lFWCHDL2n9zrW+LVY7dOp9XdaJeHKzXyh9tk8gbwxTn/BVWenh9GQohewKTsntFcbY6HEI7J36WmFpzVV7e0vQ7Ys2Hjn9umjIwiCqqj9egVUb5NKDapLlkf0cwaMY6fNz0wMm9kVHo2rWdGOHcljHEctWfUoNw24SfaCfWJhI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OdR5AmzK; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62079696c58so25830697b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 17:11:01 -0700 (PDT)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1ee2f06e652so14314405ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2024 17:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715299860; x=1715904660; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715299863; x=1715904663; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1D5J95pTto7bxbDE1cccaXNIpSHnuQdMjPAvgEtW+8E=;
-        b=ZI/FccnwydftpCTsWBICZzni4XlznE8txSZti84AyoJxhIecc0z0YGcPKdGW9T/Bpl
-         v3ZUGwVxpqACjDO/HeIIaO9bjIJfHT5bhLLnwh+aZZNiHWcm9nIsa5MRQUXzhzC6Jo1A
-         PbNHYTHe7Zopr2w/USQX4txe2oB/XUTly36WbGaWZL3NKB4rahhd1t927SRfT05Lq2Ae
-         uFTYJE7f6PAO2Bpt672AO8L7rbqqUjoQtKAde7FGHGS51593cnG7/SnNVOOI+5UCu0dG
-         JVTf0orCWc8z8ajGbafb24kk38e5wSkqzGlbDmD/sq8oXyhbC0mECAI3Zxzc/gh1DDBe
-         fHPA==
+        bh=bwoIN6qkNAvdiVIWhe30F/ZM8apUP9a8ewoMWfm8QMg=;
+        b=OdR5AmzKxDF2VeWbz84SkamMt5Xs46lx2Y+AmngwiqfwOjgv+WLgjQo0LVMdSM3ztE
+         sZ6rBe6/JLjrfh875Ucpx8QPWEOSO7BtUofcmxN49SBSXjBy6bKXCghqQU66IXGh9F5q
+         DTfUg69t1wwHXSgZuIP+TDjiyrLPQOhQjcYfFLCx36y7dY7AVwBhgKRsQw9jNf7Wlcuc
+         9McSjxKbVX/ljwEcbXrx2gH2l69tLpvqSROHhl95GSvqhspSvZjlx6okqUopw3n6gTB/
+         8XMqW9eFaU5x1sSoCJpCKu9xRfKr+QiedTj8bJ27fNpj3wMqW6h1VbYN3NBcXw0SA6u9
+         FsMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715299860; x=1715904660;
+        d=1e100.net; s=20230601; t=1715299863; x=1715904663;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1D5J95pTto7bxbDE1cccaXNIpSHnuQdMjPAvgEtW+8E=;
-        b=I6TdDuAq38qtMvrrOdgvy9+6Cd3cPUZCON8TdoqKNSjgrB+jpMLLZBislRl93BI79X
-         twjclIaTlc1okpLUoqaxIO0uOxm6nJcYot3L5Q6GYdD/KCDwD4YyQssiCLzvGYTdpQap
-         kj540LwT2ryJv642A60zhuVLCTgaiZFfi/3BDEVJxeU8UV55t2SzYUlWuZArM4EJcUcF
-         0/iVSTmsBikLg5DMmDjtAdMiIb89NiFkea3OKFafWD5xWcMtPS5PotZGhmbeEQSQvi7H
-         IhnMhRiGaLENm4Jzlu0JwN73LeqbGxnVt5WdO69vw7SPusHbmffPnTAHDlGQK856/Bej
-         F1hw==
-X-Forwarded-Encrypted: i=1; AJvYcCWkFC3bCCsp0lCpMix+U9BinTkVe5WpQ91wNljuWfH2+PpBmmxEMYXp4DTncN/N27P9bUAu5yREkBJkmzIzGAoUeww8P/DtmPWxx3ZWpV4a
-X-Gm-Message-State: AOJu0YwG/9DOBDzaTX5oCBL0bQVsPafK8tDIl3alEJO28teKtLJcBiEP
-	8P4w180XIsh8O2D8lJaYUappFpqLZmcPNE26BKLqHU4akcTD+J2sFp6tJ3GWTTXFrSfcqkk5WWo
-	Qtw==
-X-Google-Smtp-Source: AGHT+IGhcJ7GjAM6Vy/ApGmusiwwih9+KKpTPcTPYhDNCwh5wA+pqL1DV0C5FY2sheVBHvhFaDSoPDUPtOg=
+        bh=bwoIN6qkNAvdiVIWhe30F/ZM8apUP9a8ewoMWfm8QMg=;
+        b=wsEEy7b+TKmlNX7FNADaM7n8llBJhso+mQAlRmwgnTipaQOCK0MI0SuoOSl8LmRw79
+         djcAE28ZdzuU61VmATLApdSAyv7SE80b9WZuAxjL/r34OYU/m5CVQe6H5e749haLTc1j
+         m4Ydvo2hBbYjGz5qB2wPVzDROQh+ruSMPcjoeFD7ANr5oU1MucfEhVESscDI3g3HqucN
+         lS0THfrEugpQAxIGv5Px0zvk3jsuaujA/HG977aqVEPbITlsx8UFxWiPYbJCb9FviKqF
+         hYXwFWwMB8uJ19nFoeyWr2xiyQsZy4IDPgIhHKgUGcUZ7BMoAGVuDSXeg0CyR6g9wtEG
+         K3qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVv5fKqXNWkx2k7xuUypYUqFXuhilKzxfsEMZk/yTuW8PLK0PUol53Z5/JFvyDDf/LCzFHsULg11n+YRZPDUebIYgIrQ7uhDx9w6/FELPsF
+X-Gm-Message-State: AOJu0YwYC3CyEVAoljAfvIQOla/5uSkOGZ3Xt3OzbtBqxdsqxlAQ/wVB
+	9MlLDNpNCq3/UfE2u1c1YkFd9yp80zmQq2sMOwSDnnl9TcNsJGwOXR2cffZkaNJFOa0yTpFaybn
+	s1A==
+X-Google-Smtp-Source: AGHT+IEbRaO3Ij2eSHkGXoI8SykX5P3OggNnx2FkEhJM98+CkdTeaw/WmnIfTcZIrruC+KD5ZR5dK9HYN54=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:690c:284:b0:61b:e8ce:18a1 with SMTP id
- 00721157ae682-622b016af8cmr2822137b3.10.1715299860502; Thu, 09 May 2024
- 17:11:00 -0700 (PDT)
-Date: Fri, 10 May 2024 00:06:57 +0000
+ (user=edliaw job=sendgmr) by 2002:a17:902:e549:b0:1e5:e676:4b0d with SMTP id
+ d9443c01a7336-1ef43f4b57cmr31935ad.9.1715299862877; Thu, 09 May 2024 17:11:02
+ -0700 (PDT)
+Date: Fri, 10 May 2024 00:06:58 +0000
 In-Reply-To: <20240510000842.410729-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240510000842.410729-1-edliaw@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510000842.410729-41-edliaw@google.com>
-Subject: [PATCH v4 40/66] selftests/perf_events: Drop define _GNU_SOURCE
+Message-ID: <20240510000842.410729-42-edliaw@google.com>
+Subject: [PATCH v4 41/66] selftests/pid_namespace: Drop define _GNU_SOURCE
 From: Edward Liaw <edliaw@google.com>
 To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, 
 	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>, Christian Brauner <brauner@kernel.org>, 
@@ -87,56 +87,29 @@ To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kernel-team@android.com, Edward Liaw <edliaw@google.com>, 
 	linux-security-module@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>, Muhammad Usama Anjum <usama.anjum@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 
 _GNU_SOURCE is provided by lib.mk, so it should be dropped to prevent
 redefinition warnings.
 
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- tools/testing/selftests/perf_events/remove_on_exec.c   | 2 --
- tools/testing/selftests/perf_events/sigtrap_threads.c  | 2 --
- tools/testing/selftests/perf_events/watermark_signal.c | 2 --
- 3 files changed, 6 deletions(-)
+ tools/testing/selftests/pid_namespace/regression_enomem.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/perf_events/remove_on_exec.c b/tools/testing/selftests/perf_events/remove_on_exec.c
-index 5814611a1dc7..ef4d923f4759 100644
---- a/tools/testing/selftests/perf_events/remove_on_exec.c
-+++ b/tools/testing/selftests/perf_events/remove_on_exec.c
-@@ -5,8 +5,6 @@
-  * Copyright (C) 2021, Google LLC.
-  */
- 
+diff --git a/tools/testing/selftests/pid_namespace/regression_enomem.c b/tools/testing/selftests/pid_namespace/regression_enomem.c
+index 7d84097ad45c..54dc8f16d92a 100644
+--- a/tools/testing/selftests/pid_namespace/regression_enomem.c
++++ b/tools/testing/selftests/pid_namespace/regression_enomem.c
+@@ -1,4 +1,3 @@
 -#define _GNU_SOURCE
--
- /* We need the latest siginfo from the kernel repo. */
- #include <sys/types.h>
- #include <asm/siginfo.h>
-diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
-index d1d8483ac628..14d1a3c8cb5c 100644
---- a/tools/testing/selftests/perf_events/sigtrap_threads.c
-+++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
-@@ -5,8 +5,6 @@
-  * Copyright (C) 2021, Google LLC.
-  */
- 
--#define _GNU_SOURCE
--
- /* We need the latest siginfo from the kernel repo. */
- #include <sys/types.h>
- #include <asm/siginfo.h>
-diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
-index 49dc1e831174..19557bd16e9e 100644
---- a/tools/testing/selftests/perf_events/watermark_signal.c
-+++ b/tools/testing/selftests/perf_events/watermark_signal.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#define _GNU_SOURCE
--
+ #include <assert.h>
  #include <errno.h>
  #include <fcntl.h>
- #include <linux/perf_event.h>
 -- 
 2.45.0.118.g7fe29c98d7-goog
 
