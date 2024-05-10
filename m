@@ -1,249 +1,184 @@
-Return-Path: <linux-kselftest+bounces-10049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EABB58C2B27
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 22:30:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A35D18C2B38
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 22:37:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 645351F22F55
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 20:30:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58E032872EA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2024 20:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E3343ADE;
-	Fri, 10 May 2024 20:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20E545BEC;
+	Fri, 10 May 2024 20:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="O8F9Z7lJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLA2XLuU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54519219FF
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 20:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162314F881;
+	Fri, 10 May 2024 20:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715373042; cv=none; b=nfeZDlbd4YP+Q3zh3vCi8BtzimKAW2ylBE6OdWTP/xslLAAQI/70hlAqrO2CjOnPea4wZabvYaSgjEaCN7S4zUVWB5pxUIpEdVRw+K9RtwPtUki7ZkeS5UR2y5dpAXNGz2oo/qIatXvxKJhihsE15lchm3qr6T01WBzPZcjo+/c=
+	t=1715373448; cv=none; b=b9sbWo5jYYPhBqo7OmTtXNiq79Mbxj1cyV8oLxqFS4VMgD3Ibxk6ONtJ0uwpBHpQvp1AWKNME3RxgJDXxvHpm8UW2uKFmJF3NhTrj8Zrrc7bwbLZ1M4CzUr8Thlok7Os1JZpO2fMznlkEGzIkHDYwCpvaPB43DrJwNpsyyioJJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715373042; c=relaxed/simple;
-	bh=uwl1r0wrzQZCmCidHq5JuR1AW/H9uVs/PIUpQcndgSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxJirkfZ4N6FVlaSCxEw4GTdY0Z8hb3XJ84VoywUK2sQCF2GnhT4f9sQBkDEOaTslm1+16il0AbSF2QhX5+zNN1pgSoP40MFGoekrP45/8RNA7cf43oFdjMdc5w7J4+yJigHR8F+4jVGPmzV2p1PCq6Ripm75gVem6LVLysfToI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=O8F9Z7lJ; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1ecddf96313so21384485ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2024 13:30:40 -0700 (PDT)
+	s=arc-20240116; t=1715373448; c=relaxed/simple;
+	bh=fdvro2SMQFvU7C5zN+OrfigUP0qDunUUywy2/UNF0SA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=jMKFUcNLVHlyzRdnVxjPJbU+eQy4zfnuyczTwGGBaFY9g/GyeZ0Iv2P0DUvC3DZ8JQgU2Iy9sknrm2dQkQrbVdBQI8v91DyvLuVfRMCOvOUBTEpGcWEh9mAJccM7PxCJtGFaSgh3T3mi5CrNlHwYUc0Y9IZQydmkPE+gARuBjkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLA2XLuU; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-51f40b5e059so2729276e87.0;
+        Fri, 10 May 2024 13:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715373040; x=1715977840; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6+vAbiClRDiC4uIvdtPo+0v0pdzSTB+/qaSHejfRyI=;
-        b=O8F9Z7lJPtyJocVY0td3s5IMZZVbsa7MSr8BjngoMRdUnxNwfPTCSotm7WbOaPUJWX
-         qNT8jkdSCHgIf8JEbeIZZfMcVzIH3wM0z+rCk2H7NFulWx6mn/e98ERJnNSKRqZ6Bq02
-         6/CERH+tIG4avhx61qfRdk8mGOgU4YXmrZwAWk9gwiDuy/SIGfSB0jQFFl1lj5ibM6Au
-         tFACBQBREaP5I2cz+eNnUtk0xE/8W3F/HQqIv3SSxP211NV48EgNJ3FSOCPwXyRWd/9Z
-         ji9NJ7IKb4X2ucoAvQN9ntzz6VercbMmhhuuMpaXUkxhdMRzBHfS9dlGP5fiWhJuhY+k
-         0eyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715373040; x=1715977840;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1715373445; x=1715978245; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f6+vAbiClRDiC4uIvdtPo+0v0pdzSTB+/qaSHejfRyI=;
-        b=S/9N4/FJA17X3tgXcJkDKFbII9Si6R+ujzt5N68G3bEXXX+oe+29caRhC7f2E8uSjU
-         L4B7ExBswTSufiynjhPltfL5FYFbSc3alRXtJ4wq4KFnfyUV/4dmVouV5kzdU/aOGAoy
-         0u1BDqkKo02fP6uAKB7BP4k6CqzQrWC9jFYip5Gp8F8jJuuR4XaQHRlhca1ClCKLdsFV
-         KHBGAOUqAhG9og5PQEQV2KzeJUbIjbDbrywZSmCpJDGEfoMkdGffjl4FH+TvvCwfGOqI
-         vggVmfpDVfSJ4HEED0ZI7yu1PsoQq5aI5GB8Da1u5BHX8zrYxb/bTR0XFseskNvXaPYP
-         zyrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXP7WIErm500qlPYcPmwlPvCpO/bXL5Ax0TTgOTdM7NiN2/Ja1VuHHBfUOiXkYhAJ1lEtCOLn4MIMizSOs4ZzDPzBUOn9Hy9H5taKQCO7+2
-X-Gm-Message-State: AOJu0YyzOFkp8ofGwPhC77NQzkv5eL+g2q8lmSjfyiN8wACTgKjxnpo/
-	I3HPjXFQmkY7AVWe1wkvUW5XJSWmnqJW/aW536J0cnU9DkopfnE/0Sy/YyiPThk=
-X-Google-Smtp-Source: AGHT+IFPBkbU2aNYrXQ8809dzA+eKb9uiS2PXSzCao5t90cyhOzkMcMmTiaCTPqTvHS08OSljlo5Sg==
-X-Received: by 2002:a17:902:7ed0:b0:1eb:dae:bdab with SMTP id d9443c01a7336-1ef43f4e315mr43128725ad.46.1715373039531;
-        Fri, 10 May 2024 13:30:39 -0700 (PDT)
-Received: from ghost ([2601:647:5700:6860:629e:3f2:f321:6c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c138c04sm36433135ad.267.2024.05.10.13.30.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 13:30:38 -0700 (PDT)
-Date: Fri, 10 May 2024 13:30:32 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	apatel@ventanamicro.com, mchitale@ventanamicro.com,
-	dbarboza@ventanamicro.com, sameo@rivosinc.com,
-	shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 27/29] riscv: Documentation for landing pad / indirect
- branch tracking
-Message-ID: <Zj6D6FqfbnEhcfqs@ghost>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-28-debug@rivosinc.com>
+        bh=WMEM98RiYUq0hdtm/YdPk4weUn162VqCwHj8usxBrh0=;
+        b=iLA2XLuUOAj6fiiKkGy8WprNFBZH9xNMj4PzEydY7V3fYYZce+tkMHEfVo+L72VPFI
+         obvAZEvRcAvtbnr4Sduew6oanfOBZ18rLgM+gI09vNdeqgruMBX6IUWLm0mYy/NF4bCl
+         73uRvwl8DWejhet7F02a37CjMrCCtRTlGQT7ZPGdizeC3j4NiopeRGZXBlyQ3LsjcpH3
+         Js8PQjG1/VMH8wph8TjE2oEZvTl+gBYHX/gIEVH/qrcmvoR4Q1xVCPsyG64q5Laq+CP4
+         bPlBfpjCkP0cgpWvQzxUCMYTbvYRetG5yIRmJtMq8lmIiOxJP6/jU3PkFna6qdi55QkP
+         6ecw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715373445; x=1715978245;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WMEM98RiYUq0hdtm/YdPk4weUn162VqCwHj8usxBrh0=;
+        b=fjVbU7ROh40fPFeJ2rgun2N9fzKVJbx8adYvueHbkdQwoE2GywqGtIRU5JFSHcKCK2
+         WXqrMfYnFDsoFCHgfe7lJsaS6vW0q9S5qwxvQuONklhpXdG0Eb6TkuR5T3dIEtXbO9+P
+         Zg5wXF8x5sHTlZM7ByEw6HHgrwWby0luQzB1xJLf2dTvmkhIMPbXpMqU7xPiZ5beVGS0
+         hFcNPH+BUwfBeXbJKZlgsPjzwbLYd5DbnqxyFJS3hQud9QHoVP7qQvbt9X5jDqk2Qdmq
+         kV43Xa+ERqXe4tblMlfyLKFvcrdYK+itYRExcHZIdp5xOVMXoNIlat42VDjnETobYAok
+         1o2g==
+X-Forwarded-Encrypted: i=1; AJvYcCU/NWEIVXmf8pyEBjKooOmdSigNotZwjsJcz0mZzA5M52EIZaCdwSeAc28CyiJdGAO+AGWrzDqgt8VoiORN8wSdLuzr06eBwaCnIDkbP5JavHAjXGB3PyMnMRU6d26NTtg2lxn9L/3Z
+X-Gm-Message-State: AOJu0YwBjwdq4E+2h+WbEEiCdT41ul3BzQW+Cl3w8fmzUCmOj+xN+V6W
+	1i3snY462/osHNlDoLu58xaEOEMweOT5kO3XpYwwmBT7Ied7C/VxFeQepyG6
+X-Google-Smtp-Source: AGHT+IFYRfcqAHHZlCT0YBLATYTXOOjY8VcpQZIfQCe9xsqALHHq2pklRgPZUZpo3EGvS0ilrFc1aA==
+X-Received: by 2002:a05:6512:2809:b0:51f:5760:dd34 with SMTP id 2adb3069b0e04-5220ff70be8mr2901131e87.55.1715373444614;
+        Fri, 10 May 2024 13:37:24 -0700 (PDT)
+Received: from [192.168.178.20] (dh207-42-221.xnet.hr. [88.207.42.221])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17894d57sm221186466b.73.2024.05.10.13.37.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 May 2024 13:37:24 -0700 (PDT)
+Message-ID: <656c3b4a-0481-4634-9dd4-19bb9e4cd612@gmail.com>
+Date: Fri, 10 May 2024 22:37:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403234054.2020347-28-debug@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-kselftest@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Shuah Khan <shuah@kernel.org>,
+ linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Edward Liaw <edliaw@google.com>
+From: Mirsad Todorovac <mtodorovac69@gmail.com>
+Subject: [PATCH v1 1/1] selftests/sgx: Fix the implicit declaration of
+ asprintf() compiler error
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 03, 2024 at 04:35:15PM -0700, Deepak Gupta wrote:
-> Adding documentation on landing pad aka indirect branch tracking on riscv
-> and kernel interfaces exposed so that user tasks can enable it.
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  Documentation/arch/riscv/zicfilp.rst | 104 +++++++++++++++++++++++++++
->  1 file changed, 104 insertions(+)
->  create mode 100644 Documentation/arch/riscv/zicfilp.rst
-> 
-> diff --git a/Documentation/arch/riscv/zicfilp.rst b/Documentation/arch/riscv/zicfilp.rst
-> new file mode 100644
-> index 000000000000..3007c81f0465
-> --- /dev/null
-> +++ b/Documentation/arch/riscv/zicfilp.rst
-> @@ -0,0 +1,104 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +:Author: Deepak Gupta <debug@rivosinc.com>
-> +:Date:   12 January 2024
-> +
-> +====================================================
-> +Tracking indirect control transfers on RISC-V Linux
-> +====================================================
-> +
-> +This document briefly describes the interface provided to userspace by Linux
-> +to enable indirect branch tracking for user mode applications on RISV-V
-> +
-> +1. Feature Overview
-> +--------------------
-> +
-> +Memory corruption issues usually result in to crashes, however when in hands of
-> +an adversary and if used creatively can result into variety security issues.
-> +
-> +One of those security issues can be code re-use attacks on program where adversary
-> +can use corrupt function pointers and chain them together to perform jump oriented
-> +programming (JOP) or call oriented programming (COP) and thus compromising control
-> +flow integrity (CFI) of the program.
-> +
-> +Function pointers live in read-write memory and thus are susceptible to corruption
-> +and allows an adversary to reach any program counter (PC) in address space. On
-> +RISC-V zicfilp extension enforces a restriction on such indirect control transfers
-> +
-> +	- indirect control transfers must land on a landing pad instruction `lpad`.
-> +	  There are two exception to this rule
-> +		- rs1 = x1 or rs1 = x5, i.e. a return from a function and returns are
+The selftest/sgx/main.c didn't compile with [-Werror=implicit-function-declaration]
+[edited]:
 
-What is a return that is not a return from a function?
+make[3]: Entering directory 'tools/testing/selftests/sgx'
+gcc -Wall -Werror -g -Itools/testing/selftests/../../../tools/include -fPIC -c main.c \
+        -o tools/testing/selftests/sgx/main.o
+In file included from main.c:21:
+../kselftest_harness.h: In function ‘__run_test’:
+../kselftest_harness.h:1169:13: error: implicit declaration of function ‘asprintf’; \
+        did you mean ‘vsprintf’? [-Werror=implicit-function-declaration]
+ 1169 |         if (asprintf(&test_name, "%s%s%s.%s", f->name,
+      |             ^~~~~~~~
+      |             vsprintf
+cc1: all warnings being treated as errors
+make[3]: *** [Makefile:36: tools/testing/selftests/sgx/main.o] Error 1
 
-> +		  protected using shadow stack (see zicfiss.rst)
-> +
-> +		- rs1 = x7. On RISC-V compiler usually does below to reach function
-> +		  which is beyond the offset possible J-type instruction.
-> +
-> +			"auipc x7, <imm>"
-> +			"jalr (x7)"
-> +
-> +		  Such form of indirect control transfer are still immutable and don't rely
-> +		  on memory and thus rs1=x7 is exempted from tracking and considered software
-> +		  guarded jumps.
-> +
-> +`lpad` instruction is pseudo of `auipc rd, <imm_20bit>` and is a HINT nop. `lpad`
+The cause is in the included <stdio.h> on Ubuntu 22.04 LTS:
 
-I think this should say "x0" or instead of "rd", or mention that rd=x0.
+ 19 /*
+ 20  *      ISO C99 Standard: 7.19 Input/output     <stdio.h>
+ 21  */
+.
+.
+.
+387 #if __GLIBC_USE (LIB_EXT2)
+388 /* Write formatted output to a string dynamically allocated with `malloc'.
+389    Store the address of the string in *PTR.  */
+390 extern int vasprintf (char **__restrict __ptr, const char *__restrict __f,
+391                       __gnuc_va_list __arg)
+392      __THROWNL __attribute__ ((__format__ (__printf__, 2, 0))) __wur;
+393 extern int __asprintf (char **__restrict __ptr,
+394                        const char *__restrict __fmt, ...)
+395      __THROWNL __attribute__ ((__format__ (__printf__, 2, 3))) __wur;
+396 extern int asprintf (char **__restrict __ptr,
+397                      const char *__restrict __fmt, ...)
+398      __THROWNL __attribute__ ((__format__ (__printf__, 2, 3))) __wur;
+399 #endif
 
-> +instruction must be aligned on 4 byte boundary and compares 20 bit immediate with x7.
-> +If `imm_20bit` == 0, CPU don't perform any comparision with x7. If `imm_20bit` != 0,
-> +then `imm_20bit` must match x7 else CPU will raise `software check exception`
-> +(cause=18)with `*tval = 2`.
-> +
-> +Compiler can generate a hash over function signatures and setup them (truncated
-> +to 20bit) in x7 at callsites and function proglogs can have `lpad` with same
+__GLIBC_USE (LIB_EXT2) expands into __GLIBC_USE_LIB_EXT2 as defined here:
 
-"prologues" instead of "proglogs"
+/usr/include/features.h:186:#define __GLIBC_USE(F)      __GLIBC_USE_ ## F
 
-> +function hash. This further reduces number of program counters a call site can
-> +reach.
-> +
-> +2. ELF and psABI
-> +-----------------
-> +
-> +Toolchain sets up `GNU_PROPERTY_RISCV_FEATURE_1_FCFI` for property
-> +`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the object file.
-> +
-> +3. Linux enabling
-> +------------------
-> +
-> +User space programs can have multiple shared objects loaded in its address space
-> +and it's a difficult task to make sure all the dependencies have been compiled
-> +with support of indirect branch. Thus it's left to dynamic loader to enable
-> +indirect branch tracking for the program.
-> +
-> +4. prctl() enabling
-> +--------------------
-> +
-> +`PR_SET_INDIR_BR_LP_STATUS` / `PR_GET_INDIR_BR_LP_STATUS` /
-> +`PR_LOCK_INDIR_BR_LP_STATUS` are three prctls added to manage indirect branch
-> +tracking. prctls are arch agnostic and returns -EINVAL on other arches.
-> +
-> +`PR_SET_INDIR_BR_LP_STATUS`: If arg1 `PR_INDIR_BR_LP_ENABLE` and if CPU supports
-> +`zicfilp` then kernel will enabled indirect branch tracking for the task.
-> +Dynamic loader can issue this `prctl` once it has determined that all the objects
-> +loaded in address space support indirect branch tracking. Additionally if there is
-> +a `dlopen` to an object which wasn't compiled with `zicfilp`, dynamic loader can
-> +issue this prctl with arg1 set to 0 (i.e. `PR_INDIR_BR_LP_ENABLE` being clear)
-> +
-> +`PR_GET_INDIR_BR_LP_STATUS`: Returns current status of indirect branch tracking.
-> +If enabled it'll return `PR_INDIR_BR_LP_ENABLE`
-> +
-> +`PR_LOCK_INDIR_BR_LP_STATUS`: Locks current status of indirect branch tracking on
-> +the task. User space may want to run with strict security posture and wouldn't want
-> +loading of objects without `zicfilp` support in it and thus would want to disallow
-> +disabling of indirect branch tracking. In that case user space can use this prctl
-> +to lock current settings.
-> +
-> +5. violations related to indirect branch tracking
-> +--------------------------------------------------
-> +
-> +Pertaining to indirect branch tracking, CPU raises software check exception in
-> +following conditions
-> +	- missing `lpad` after indirect call / jmp
-> +	- `lpad` not on 4 byte boundary
-> +	- `imm_20bit` embedded in `lpad` instruction doesn't match with `x7`
-> +
-> +In all 3 cases, `*tval = 2` is captured and software check exception is raised
-> +(cause=18)
-> +
-> +Linux kernel will treat this as `SIGSEV`` with code = `SEGV_CPERR` and follow
-> +normal course of signal delivery.
-> -- 
-> 2.43.2
-> 
+Now, what is unobvious is that <stdio.h> includes
+
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+------------------------------------------------------
+ 35 /* ISO/IEC TR 24731-2:2010 defines the __STDC_WANT_LIB_EXT2__
+ 36    macro.  */
+ 37 #undef __GLIBC_USE_LIB_EXT2
+ 38 #if (defined __USE_GNU                                                  \
+ 39      || (defined __STDC_WANT_LIB_EXT2__ && __STDC_WANT_LIB_EXT2__ > 0))
+ 40 # define __GLIBC_USE_LIB_EXT2 1
+ 41 #else
+ 42 # define __GLIBC_USE_LIB_EXT2 0
+ 43 #endif
+
+This makes <stdio.h> exclude line 396 and asprintf() prototype from normal
+include file processing.
+
+The fix defines __USE_GNU before including <stdio.h> in case it isn't already
+defined. After this intervention the module compiles OK.
+
+Converting snprintf() to asprintf() in selftests/kselftest_harness.h:1169
+created this new dependency and the implicit declaration broke the compilation.
+
+Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+Cc: Edward Liaw <edliaw@google.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-sgx@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Mirsad Todorovac <mtodorov69@gmail.com>
+---
+ tools/testing/selftests/sgx/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 9820b3809c69..f5cb426bd797 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -6,6 +6,9 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <stdbool.h>
++#ifndef __USE_GNU
++#define __USE_GNU
++#endif
+ #include <stdio.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+-- 
+2.34.1
 
