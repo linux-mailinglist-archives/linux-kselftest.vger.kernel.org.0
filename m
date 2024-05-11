@@ -1,146 +1,100 @@
-Return-Path: <linux-kselftest+bounces-10106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452558C32DD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 19:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75DC58C32E5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 19:19:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6877C1C20E45
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 17:18:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A23831C20A39
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 17:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457A476020;
-	Sat, 11 May 2024 17:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="U/jljERU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3241C6A3;
+	Sat, 11 May 2024 17:19:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E671657A7
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 May 2024 17:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991741C69C;
+	Sat, 11 May 2024 17:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715447713; cv=none; b=ibXQ7ggfcU3g5qo8wSRiccD3u6sw4zFmeySVn8YfCOUV/XhUH+MTltWjWoc/ccXJKkDcinAIp6wbn9VanSQMDuj6MUyqaMySDYncPIRfNmVuhUye+V2dAQdDsn/JqrBb0ua+mTW+zgdZ/bBQS4V8rP0EPNSdjdriG+YHkdF7F+M=
+	t=1715447966; cv=none; b=C6SaR2QHt7lxJfuuacLs/d767FbR5DyFIJQfOO5/U9c9pEOcpR4RU1Dl23GW8iJWTaCCZLgkrHNj/N16SaQWdxhtx+7FAzBZtQ7h/jKfgxLTEeTyLDi636/n0KZJyv0dX+50SvzUMVOSTG+8o+pHfTc9NWfeH3mDYGmvRPGEoVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715447713; c=relaxed/simple;
-	bh=788u9Ll57Ys8HanKTUXYX18fyulkHMSJMNamEoiF3dE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tZewLUPZOwHmKhT9La7D2whoAssqqFQJuPC4pnwImVReSpM18MS/pMV3WIrZRkCHWg+6FvCi6/OQHR3qpKFFM0iiP+snPmc9fRgykn0CtXtlskwsSHSn/q0xtKWh9SmgCN01Rs4k6lVSeUO8Zjd7E+CY+DGo2IGxuqtT42ay4Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=U/jljERU; arc=none smtp.client-ip=84.16.66.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VcC6v6TSMzkr2;
-	Sat, 11 May 2024 19:15:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1715447703;
-	bh=iC1DSJl1PeqWX6x9aSS4+KXcksdR90artpUmueb/AB0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U/jljERUOqe/Z4nt3Hwt5Pj28zTqnanMqp8O9vWLFujZOzL7mXfibxaPV2aInBVjt
-	 jn4aAQ9WNxHiiwOzj/TWzTYsRS2Ywi1OmWkqiPP2Y+N8A7mY8xxG56gbmoSpvKIwZs
-	 r+QLALDEbqltuGI3sqESUbU/71VJtaTh1bj9WBCU=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4VcC6v0xg5z82q;
-	Sat, 11 May 2024 19:15:03 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Christian Brauner <brauner@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Ron Economos <re@w6rz.net>,
-	Ronald Warsow <rwarsow@gmx.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>,
-	kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v7 10/10] selftests/harness: Handle TEST_F()'s explicit exit codes
-Date: Sat, 11 May 2024 19:14:45 +0200
-Message-ID: <20240511171445.904356-11-mic@digikod.net>
-In-Reply-To: <20240511171445.904356-1-mic@digikod.net>
-References: <20240511171445.904356-1-mic@digikod.net>
+	s=arc-20240116; t=1715447966; c=relaxed/simple;
+	bh=pgsGnygtsFDYBZVmkmNEae+IbcuJAAlPGbGMWWujjy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BwPXAsS2gC3hYu4tvCXJFTVG5uh5EJlWSwqpUsq9SBMMMTElZjNkh5Dj1vhDTDVEtVADoAH6JDaXBnY7S4epLxNzjAREmySxPW3ku+CT4kHGoBgk0CaleQRz08j/YamLZkuhi5pYssuqxr07Gz2rLLj90eydAB3PF6HhQt1tbSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A84D113E;
+	Sat, 11 May 2024 10:19:44 -0700 (PDT)
+Received: from [10.57.65.1] (unknown [10.57.65.1])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D0C53F641;
+	Sat, 11 May 2024 10:19:16 -0700 (PDT)
+Message-ID: <3022c21b-a34d-4592-a0da-79e047372eef@arm.com>
+Date: Sat, 11 May 2024 18:19:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/openat2: fix clang build failures:
+ -static-libasan, LOCAL_HDRS
+Content-Language: en-GB
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ Christian Brauner <brauner@kernel.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Alexey Gladkov <legion@kernel.org>, Valentin Obst <kernel@valentinobst.de>,
+ linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev
+References: <20240504044336.14411-1-jhubbard@nvidia.com>
+ <c406383d-e08a-4a12-9e25-1c987b0d678f@arm.com>
+ <f715719a-c835-496c-9e99-d249e5607a0b@nvidia.com>
+ <b28e6bcb-dde2-4ac0-ac0d-dfddb42c4426@nvidia.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <b28e6bcb-dde2-4ac0-ac0d-dfddb42c4426@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: 7bit
 
-If TEST_F() explicitly calls exit(code) with code different than 0, then
-_metadata->exit_code is set to this code (e.g. KVM_ONE_VCPU_TEST()).  We
-need to keep in mind that _metadata->exit_code can be KSFT_SKIP while
-the process exit code is 0.
+On 10/05/2024 19:22, John Hubbard wrote:
+> On 5/10/24 10:56 AM, John Hubbard wrote:
+>> On 5/10/24 4:52 AM, Ryan Roberts wrote:
+>>> On 04/05/2024 05:43, John Hubbard wrote:
+>> ...
+>>> It just occured to me that the bug report I was fixing with my attempt was
+>>> invoking make like this (see [1]):
+>>>
+>>> # tools/testing/selftests/fchmodat2$ make CC=clang
+>>> # tools/testing/selftests/openat2$ make CC=clang
+>>>
+>>> So LLVM is not set in this case. Perhaps my approach [2] (suggested by Arnd) of
+>>> using cc-option is more robust? (cc-option is alredy used by other selftests).
+>>>
+>>
+>> Yes, I think that would better handle the two cases: setting LLVM,
+>> and/or setting CC (!).
+>>
+>> For that, some nits, but only worth fussing over if the patch hasn't
+>> gone in yet, or if you're changing it for some other reason:
+>>
+> 
+> I just remembered it needs the LOCAL_HDRS approach as well. Did your
+> patch already go in? Should I fix up this one here to use cc-option,
+> or go with yours? Either way is fine with me.
 
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Will Drewry <wad@chromium.org>
-Reported-by: Sean Christopherson <seanjc@google.com>
-Tested-by: Sean Christopherson <seanjc@google.com>
-Closes: https://lore.kernel.org/r/ZjPelW6-AbtYvslu@google.com
-Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240511171445.904356-11-mic@digikod.net
----
+I don't think my patch has been taken into any branch - I didn't see a
+notification anyway. So it would be great if you are happy to take ownership of
+it? - I'm on Paternity leave for the next 3 weeks so wouldn't get it done until
+I get back.
 
-Changes since v5:
-* Update commit message as suggested by Sean.
-
-Changes since v4:
-* Check abort status when the grandchild exited.
-* Keep the _exit(0) calls because _metadata->exit_code is always
-  checked.
-* Only set _metadata->exit_code to WEXITSTATUS() if it is not zero.
-
-Changes since v3:
-* New patch mainly from Sean Christopherson.
----
- tools/testing/selftests/kselftest_harness.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index cbedb4a6cf7b..3c8f2965c285 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -462,9 +462,13 @@ static inline pid_t clone3_vfork(void)
- 		munmap(teardown, sizeof(*teardown)); \
- 		if (self && fixture_name##_teardown_parent) \
- 			munmap(self, sizeof(*self)); \
--		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
-+		if (WIFEXITED(status)) { \
-+			if (WEXITSTATUS(status)) \
-+				_metadata->exit_code = WEXITSTATUS(status); \
-+		} else if (WIFSIGNALED(status)) { \
- 			/* Forward signal to __wait_for_test(). */ \
- 			kill(getpid(), WTERMSIG(status)); \
-+		} \
- 		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
--- 
-2.45.0
+> 
+> thanks,
 
 
