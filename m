@@ -1,118 +1,104 @@
-Return-Path: <linux-kselftest+bounces-10096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF9B8C2FC7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 08:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90C3A8C3042
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 10:50:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61C41F2339F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 06:09:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC7041F21AD6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 08:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701694E1CB;
-	Sat, 11 May 2024 06:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991434E1D5;
+	Sat, 11 May 2024 08:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F6A+/yff"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBZ3V/JB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036E3847A;
-	Sat, 11 May 2024 06:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEF8FBEA;
+	Sat, 11 May 2024 08:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715407756; cv=none; b=G04Oh+qBwvJ8pQVW3ay8375GptEd0sFgo5UQQxT95+81Q1qVeYOAWYBV4hYnM2z3S65u0iQQKNENNyY7ZWKZjz2sI56rx9UditpCRiebklCPi3/LZ0Pcv2KJAXHbMTNAIdxsKQ514GFmWQ4qr0yOzaaK9USNF1YcPIJ1dzfFIs4=
+	t=1715417437; cv=none; b=EI84xr5kLGax7R2jBfjOMvS4U/RTOi6/3VFvNzSGYppvw9uHggFrX0p5rKlBWYCdH2qFctgG7iq4u2j0LCJJ7+p9kCve7OdAeYa4TALA0WRpvU3s8w1jkkDcX1yJq44qJKl98zrtdNbn3Frg6Fwe50h2DtFlsiVUdw/yj7Wa0YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715407756; c=relaxed/simple;
-	bh=4Cw67AAJdkqX2gyzq12KaP3i0akQNIRyP6BdXDvGxLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UyvudBVNTq+RCibRTsWXKu+55rKqDZISuGHzg+U1yUnPszsoPbr/bBDBc40v244bYwbbJ9ytFZHtQmQCuVAOM4TVAZ6SaS/ai00bdEa8nLadbU/65ra8c1+HzQ5zCcdqqcmJ+14KSWYlE3h8aecsZ6mDewBlVi1UceHZxV9pyGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F6A+/yff; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2b2b42b5126so2440357a91.3;
-        Fri, 10 May 2024 23:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715407754; x=1716012554; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MHW7pEn2GFg162daMmi7jC9NBXHcilw+F/P1PhFFzU=;
-        b=F6A+/yffHp/4wLYJFbM822jJWyBqXVi0B7TSPSU8964uBt6eBhCqK5iVr6jx1xEYov
-         ceLLPSUJtoNMU7iPaayPLKCSoC8xH+CKA+sEMchjtrZ3CUl6DJjBXoC3J9VinSVx0Bn/
-         I+3umDcQTk2XeLxKro/m3AhZkwkYK5nXMULFuC0Wh+rtoZcPwAmGZU5pChoy+moN7QFN
-         ilsGArN9v642NQqe5ZkS5YnKM2E9wTHkH13UhK2DZH5B7Vm5kAkfTIV+DEu7SvXMjCfk
-         l2uEZvMZTxZXQHNn6ZvvMvky5AxGIWVv2G76xb/hM2TJRNuHrspybFPjEK+co9bU+Zar
-         SD1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715407754; x=1716012554;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7MHW7pEn2GFg162daMmi7jC9NBXHcilw+F/P1PhFFzU=;
-        b=C6md0tOhWYj8Ju1zThwj4lEFoScDDoXaMRt7O4fGgzKvYMQA6axQTNmRsn2nyibI6A
-         OY/lc0b1+4zpxBMMtj0XBJmEPUhj3EU1emymnBv8HO6fN3KmFjkXDiGykvh6gftOUBpz
-         A5XVUYqKEsN9qRbvNYwysd/WgdmAw+alKgbmyAQPPjFXqM5aq3VpZwLSQpnjeL66f7R/
-         TTjPF+0VfdPIOkNq1baaTwsE2AOGMeWYitM9nw0/DbBaIT1WUPcvKqdP+keFICJzPz/1
-         JsdE+vIWEL2rp27WlJVSqvSiF3njjIssxab8JKwoHhWb6SKbVVlcrQlgUwD+tJsSxv1B
-         mkLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVSSF5lpR7/dzkU/ARf3wrCr5v3GexoNouTBpXZFAqeNgeALkfD54klbZlaHZqJverwBJPCozSJpkeqDYFSHzRPK7HQfWnAF4SsK3jT85C2c34IG+GUTVfp8CbW7qmJrMs+4BQzQxWE
-X-Gm-Message-State: AOJu0YwIMXC+pIC5vG5picAF2rweD291sWrWIu/dJGO9D+PUFxu4qOVE
-	0L14Io88SNKq47eV/aj2I0ssIeGRY3s1Ah74+JrYtC6lTSeTGu1l
-X-Google-Smtp-Source: AGHT+IH5UD/ZuC/NMVFuPPpJdFQeAbDdNkQlZGDQJtmPunI+R1nbjIWne3PH0smEwpQLy4oXIt/bvQ==
-X-Received: by 2002:a17:902:eb86:b0:1eb:4a40:c486 with SMTP id d9443c01a7336-1ef43d17f42mr62917825ad.14.1715407754172;
-        Fri, 10 May 2024 23:09:14 -0700 (PDT)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c137f14sm42125855ad.259.2024.05.10.23.09.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 23:09:13 -0700 (PDT)
-Date: Sat, 11 May 2024 14:09:08 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, Vladimir Oltean <vladimir.oltean@nxp.com>,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2] selftests: net: local_termination: annotate
- the expected failures
-Message-ID: <Zj8LhK28QvLAEhEq@Laptop-X1>
-References: <20240511013236.383368-1-kuba@kernel.org>
+	s=arc-20240116; t=1715417437; c=relaxed/simple;
+	bh=7OguetOiT+Z8CgMkKCjbz3+cqB8iRaQlGIKeWQiGTJE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NlUQbkczrzfkFg6cUsHAwAJzR6fGB77RRRXA5xGVmyElDaT71swvAAh2jUledwftbh7Lv7jgPxSmBa5WYNt8MZ+h6iynVvs+qiUpY970cSZPxzuIP/yDc9Lmusd+rNm9aewpwL39jplMEYOtm/l+5GnePDtDNxNzC9Zkzu+Jkv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBZ3V/JB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046D4C2BBFC;
+	Sat, 11 May 2024 08:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715417437;
+	bh=7OguetOiT+Z8CgMkKCjbz3+cqB8iRaQlGIKeWQiGTJE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NBZ3V/JBhkVF/6v+gg2H5HtRT5KDIhy29myDTWvsPmBQKiho5bq/n0EfIfaT1Syg7
+	 t1GjIHkh8vUnWXToIbHlqckn5UGDkNPXzh8Zjdri08T9a4ttDpCx+qNOwCj6xrYsNy
+	 f007Lc/EIfKOlXvlLWdCDGY7PSgwtzrBheTEOljNyhpyOu3RV50P2cK+ZIWUlMpGlW
+	 Pe7ut/bfEI+u1QURhUirR2CNA5EuW3KQcS9YfCrZpS/M3q1OqDVgFNnAr1wVjEuFGd
+	 b1xQdq4HQLug52QiNaLG6Qtz6iJBklsDFtxR76wExR6IZ7xP+LTQv+edXL0UlOaqHZ
+	 MwlcsDCSdFwNw==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Geliang Tang <geliang@kernel.org>
+Subject: [PATCH bpf-next] selftests/bpf: Free strdup memory in xdp_hw_metadata
+Date: Sat, 11 May 2024 16:50:24 +0800
+Message-ID: <af9bcccb96655e82de5ce2b4510b88c9c8ed5ed0.1715417367.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240511013236.383368-1-kuba@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 10, 2024 at 06:32:36PM -0700, Jakub Kicinski wrote:
-> Vladimir said when adding this test:
-> 
->   The bridge driver fares particularly badly [...] mainly because
->   it does not implement IFF_UNICAST_FLT.
-> 
-> See commit 90b9566aa5cd ("selftests: forwarding: add a test for
-> local_termination.sh").
-> 
-> We don't want to hide the known gaps, but having a test which
-> always fails prevents us from catching regressions. Report
-> the cases we know may fail as XFAIL.
-> 
-> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: liuhangbin@gmail.com
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> 
-> v2:
->  - remove duplicated log_test_xfail
-> v1: https://lore.kernel.org/all/20240509235553.5740-1-kuba@kernel.org/
-> ---
->  .../net/forwarding/local_termination.sh       | 21 ++++++++++++++-----
->  1 file changed, 16 insertions(+), 5 deletions(-)
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+The strdup() function returns a pointer to a new string which is a
+duplicate of the string "ifname". Memory for the new string is obtained
+with malloc(), and need to be freed with free().
+
+This patch adds this missing "free(saved_hwtstamp_ifname)" in cleanup()
+to avoid a potential memory leak in xdp_hw_metadata.c.
+
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 0859fe727da7..6f9956eed797 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -581,6 +581,8 @@ static void cleanup(void)
+ 
+ 	if (bpf_obj)
+ 		xdp_hw_metadata__destroy(bpf_obj);
++
++	free((void *)saved_hwtstamp_ifname);
+ }
+ 
+ static void handle_signal(int sig)
+-- 
+2.43.0
+
 
