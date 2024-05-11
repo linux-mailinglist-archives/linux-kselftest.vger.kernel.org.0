@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-10084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0162F8C2E68
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 03:30:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0769F8C2E6E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 03:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C06A1F21EF8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 01:30:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38A781C2181E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2024 01:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB41101D5;
-	Sat, 11 May 2024 01:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B701643A;
+	Sat, 11 May 2024 01:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dK+AT9tJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZCOrxB0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0B979D3;
-	Sat, 11 May 2024 01:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFD812E75;
+	Sat, 11 May 2024 01:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715391029; cv=none; b=ue0Svtwlo8CZz4jn4x7+WJMkcBUGYcb+z5IlsInZTRSJBZ67r5Uix4fgYqyBPG7HcEjb1bmjhnk48YVUtTm848Nx3eFrEgWIQXK5ODp3nEluSNHeeMYJaw2FTQS8JS7jZ09iRbHpgZLv7D5YwrrBccG4e+C5pnlMQVWaz4eOQRE=
+	t=1715391030; cv=none; b=TkxuBc+zivq25Ch5SyHqhgH1tkS1wDWkCWaGQuNgMUs5yD9N43BLz1jt199KKWSZ7yOJXQg7EI52MtxUNlWVsGT7E47H1lfjcd06/SQ7E1yt4jUvGz4+bsgo9/yFyMLYxB53ojvRR1MBaeYN0dziykgwbTqTQHlCtUaYMb59vCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715391029; c=relaxed/simple;
-	bh=G7HxeJHvkKb5el8iF7xdtCwhl2ey/gQNL2iTshZLcfY=;
+	s=arc-20240116; t=1715391030; c=relaxed/simple;
+	bh=/ZHSSqh3rUqMhO0Uzq7P/GCi2+a71wh0TC8ORjxbZoo=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gBgFicWTdRzlpeU/awkOoLWrLVNqfPVPQ55T9flbRHyI4m+hfPY87YGAKXM6LoMGn8uGJuIjdSHJZazMzXfT6mC5hi/ZmCp6hKhiOwYVcIu3q038qdIqcSE5Z+zk9pVpZleP5kXeoynq232bTWazLk5dj5tmS6Z2G2H86x9VJRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dK+AT9tJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B91FC32781;
-	Sat, 11 May 2024 01:30:29 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=EJUBEvL6MWjWSQk+/8bCHNWegcryaRhh3oBeMyZH7hrIq+9bbGv3Qoj8iw+TvJMTlIzk0v1uLOPIyNQXNawi0tLsylYNHZjP7+/OPLGlsPw29AezUaX06krFfbn3zKAJ311qdVZs/xzxB8sg234dCOcGnq6j6f8uQ7pRSG4iucI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZCOrxB0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 034F5C4AF0B;
+	Sat, 11 May 2024 01:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715391029;
-	bh=G7HxeJHvkKb5el8iF7xdtCwhl2ey/gQNL2iTshZLcfY=;
+	s=k20201202; t=1715391030;
+	bh=/ZHSSqh3rUqMhO0Uzq7P/GCi2+a71wh0TC8ORjxbZoo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dK+AT9tJsSscmLNgAEezO1FB8udU1vThESrpuMavleZy8avaNCFLCYUw3ItWj0VoS
-	 HylIQGfAUlZcOSQFCpybWg/TpzUp81grcyr7aFn7b/liYyj5qnaf573sHHUqaWglC6
-	 SQuG+RQGY0WfwYb8gmPgGxofSP9wfr6wtYZgSHmNSqRB9up0xR6yngapBY4n3rB8fI
-	 Z8fcrw8dnc6+15nKntXjboK8u9h/Sq/k8OoVHaxRXc1dy2/ulCSf5IM118UveAfhUv
-	 mX7O7ml4csQgm9PiQt2YS5GVe6FLzmZYgcBe3L6tAMqb0Bs1T6AA81mcR98Jui2w7/
-	 7to86x/Ga8D5A==
+	b=TZCOrxB0GISX9nJzhTiSrgj0hdDxhMwmFuvQN+1hLVJAeySGFPCC0iLjc3CorltLs
+	 Q/xrBoRw2dZxIxIOsEHjPkwPQ/A/4XkAAs7ed7g7tz+Tdmjjpxx/ur9dCyKTYARjEK
+	 O6DhQ6cK6oU50T1rqVReFwFE06+DsTixqkjYkyVhJiPfPNrtiQe/xOotTNSVIlc44j
+	 U422XV+dnPkWHPywomy2ydstcryDcFgyfLvX/+o1WtL6RNMJx/WxqWL0ZAhI5GByQN
+	 HnW7KvDa3ZS01C+ZEs0V1epBJyyFujC/+WtN1VGjkvbjfl/EF/Ebjn/LOWBeGhSEXx
+	 mhyePXagpurAw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EDD74E7C114;
-	Sat, 11 May 2024 01:30:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE681C32759;
+	Sat, 11 May 2024 01:30:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,39 +52,38 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: net: add missing config for amt.sh
+Subject: Re: [PATCH net-next 1/2] selftests: net: fix timestamp not arriving in
+ cmsg_time.sh
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171539102896.31003.9532678139869008403.git-patchwork-notify@kernel.org>
-Date: Sat, 11 May 2024 01:30:28 +0000
-References: <20240509161919.3939966-1-kuba@kernel.org>
-In-Reply-To: <20240509161919.3939966-1-kuba@kernel.org>
+ <171539102997.31003.15681328963726859289.git-patchwork-notify@kernel.org>
+Date: Sat, 11 May 2024 01:30:29 +0000
+References: <20240510005705.43069-1-kuba@kernel.org>
+In-Reply-To: <20240510005705.43069-1-kuba@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, ap420073@gmail.com,
- linux-kselftest@vger.kernel.org
+ pabeni@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This series was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu,  9 May 2024 09:19:19 -0700 you wrote:
-> Test needs IPv6 multicast. smcroute currently crashes when trying
-> to install a route in a kernel without IPv6 multicast.
+On Thu,  9 May 2024 17:57:04 -0700 you wrote:
+> On slow machines the SND timestamp sometimes doesn't arrive before
+> we quit. The test only waits as long as the packet delay, so it's
+> easy for a race condition to happen.
 > 
-> Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: ap420073@gmail.com
-> CC: linux-kselftest@vger.kernel.org
+> Double the wait but do a bit of polling, once the SND timestamp
+> arrives there's no point to wait any longer.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] selftests: net: add missing config for amt.sh
-    https://git.kernel.org/netdev/net/c/c499fe96d3f7
+  - [net-next,1/2] selftests: net: fix timestamp not arriving in cmsg_time.sh
+    https://git.kernel.org/netdev/net-next/c/2d3b8dfd82d7
+  - [net-next,2/2] selftests: net: increase the delay for relative cmsg_time.sh test
+    https://git.kernel.org/netdev/net-next/c/b9d5f5711dd8
 
 You are awesome, thank you!
 -- 
