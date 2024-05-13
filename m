@@ -1,107 +1,93 @@
-Return-Path: <linux-kselftest+bounces-10133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B858C3D1E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 10:28:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5B628C3D2B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 10:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12DFE1C21232
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 08:28:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 854471F22034
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 08:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0C41474A0;
-	Mon, 13 May 2024 08:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ruLKaRup"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240C41474B2;
+	Mon, 13 May 2024 08:29:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B6A1EA8F;
-	Mon, 13 May 2024 08:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DBBE1474B8;
+	Mon, 13 May 2024 08:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715588880; cv=none; b=NB+LMrDbICuZAdaTyCGQziosp7JTr370NO2u8F6dT5RkhHbQAoGCBbc28+HQwgK5aTDoyPfYwSwCTfURVDu/uL1dToYfgq13Ji9MlzJ6+QF0lc1dhVxYbFiq76RvsV4IVPmTPgMhtFj5r5ixNekTpX1BFkKaY/9Aq8UFR1af4Kk=
+	t=1715588988; cv=none; b=QMjF0c3jD18Ghw2fRVo7wDVWAqJRyMYDQcssaezzdLVT0p2eecy100OtGGywcWC7ON0ydhFOXwljSGhtUoqpaK3t5UAkuUyW26PR3T9+R12tNBbqDtBro3F3NDGMjDKYOiEMLuoRfNqpJZYM3a6X5EU/RgulPb8BtjGupLuD758=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715588880; c=relaxed/simple;
-	bh=KvcnjCyjTkeTtXOV8cNt7JFpqH6iplwYmt5RghSUA4E=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cIfIL0eAP8jSw3S7BDaYI3Ed9BTGagdf/9587vrZBdx0G3PKxyxMFckqLooJB/d9OUxJ0YbwQAs4vbpXv0paILNmoryn3b5I7hBYhxUWtwvzrKlV00hYXLWkb6SuC/wdgesPbeWiFD1K5bqkPxeWPxFfYBFJuXx+KT+Gaseqbmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ruLKaRup; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D66C113CC;
-	Mon, 13 May 2024 08:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715588880;
-	bh=KvcnjCyjTkeTtXOV8cNt7JFpqH6iplwYmt5RghSUA4E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ruLKaRup83lDJ1pnNLz4iugrEQJ1No9G22zd9XXPU1JLSc2oa9bTOlyGMyU9bgO9d
-	 /03IrvzoHFAbJmV141tyaUbGkOSPH/kFMKu6xosLfiTIUwH/BRwrKD87ZU9b/1s11k
-	 7jkKt/Ynnwcj25e0Q7sTAqmYjFlo+GoPOZLGxRg9njdOgpjMwAye/+IBz4/QredsCM
-	 aEJKL6TMJlFflcgmtVVVoUxdAqkdOdIC3809gaqZxLE3c+lCZV8MpYxljU5t8DYc9S
-	 tyqJcBs3KZLxz8Qu+0dUxLTEJuKjlPH+LDj2t+q4sF66kfHeYcLsRQpTRb9hODmT1c
-	 WGal839zOIrQg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1s6R2L-00ClXb-OX;
-	Mon, 13 May 2024 09:27:57 +0100
-Date: Mon, 13 May 2024 09:27:57 +0100
-Message-ID: <86zfsum7zm.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Pavel Machek <pavel@denx.de>
-Cc: Sasha Levin <sashal@kernel.org>,
+	s=arc-20240116; t=1715588988; c=relaxed/simple;
+	bh=w2OxaGvxyHVfOAWRircL4Fn/3IZtA341il1A/uniA30=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P9bvBP2kb0rTpRZgm5veDMi5hVi2rUIzmB+oIAKx3svbR3tbEFVXu/fUYmKgdBbobkEJueSDaFxE41czbr/ZqYN2Qt8jHV2fBsFknUOHmMl48V4pqEnVdplsH6phcr0NhTgO7ch1sgiXTdx77NCTmIXyH9HfMPE8XVuzwPaYswE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F19F21007;
+	Mon, 13 May 2024 01:30:09 -0700 (PDT)
+Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.12])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4A3493F7A6;
+	Mon, 13 May 2024 01:29:42 -0700 (PDT)
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Oliver Upton <oliver.upton@linux.dev>,
-	pbonzini@redhat.com,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.1 08/25] KVM: selftests: Add test for uaccesses to non-existent vgic-v2 CPUIF
-In-Reply-To: <ZkHNVtwcrf91k+dR@duo.ucw.cz>
-References: <20240507231231.394219-1-sashal@kernel.org>
-	<20240507231231.394219-8-sashal@kernel.org>
-	<ZkHNVtwcrf91k+dR@duo.ucw.cz>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	Anshuman.Khandual@arm.com,
+	Dev Jain <dev.jain@arm.com>
+Subject: [PATCH] selftests/mm: compaction_test: Fix trivial test pass on Aarch64 when nr_hugepages = 0
+Date: Mon, 13 May 2024 13:58:42 +0530
+Message-Id: <20240513082842.4117782-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pavel@denx.de, sashal@kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 13 May 2024 09:20:38 +0100,
-Pavel Machek <pavel@denx.de> wrote:
-> 
-> Hi!
-> 
-> > Assert that accesses to a non-existent vgic-v2 CPU interface
-> > consistently fail across the various KVM device attr ioctls. This also
-> > serves as a regression test for a bug wherein KVM hits a NULL
-> > dereference when the CPUID specified in the ioctl is invalid.
-> > 
-> > Note that there is no need to print the observed errno, as TEST_ASSERT()
-> > will take care of it.
-> 
-> I don't think this fixes the bug... and thus we should not need it in
-> stable.
+Currently, if at runtime we are not able to allocate a huge page, the
+test will trivially pass on Aarch64 due to no exception being raised on
+division by zero while computing compaction_index. Fix that by checking
+for nr_hugepages == 0. Anyways, in general, avoid a division by zero by
+exiting the program beforehand. While at it, fix a typo.
 
-Given that this goes together with an actually bug fix that was
-backported, it *is*, for once, actually useful to have it in stable.
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+---
+ tools/testing/selftests/mm/compaction_test.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-	M.
-
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 533999b6c284..df1b76f9c734 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -134,6 +134,10 @@ int check_compaction(unsigned long mem_free, unsigned int hugepage_size)
+ 
+ 	/* We should have been able to request at least 1/3 rd of the memory in
+ 	   huge pages */
++	if (!atoi(nr_hugepages)) {
++		ksft_print_msg("ERROR: No memory is available as huge pages\n");
++		goto close_fd;
++	}
+ 	compaction_index = mem_free/(atoi(nr_hugepages) * hugepage_size);
+ 
+ 	lseek(fd, 0, SEEK_SET);
+@@ -149,7 +153,7 @@ int check_compaction(unsigned long mem_free, unsigned int hugepage_size)
+ 		       atoi(nr_hugepages));
+ 
+ 	if (compaction_index > 3) {
+-		ksft_print_msg("ERROR: Less that 1/%d of memory is available\n"
++		ksft_print_msg("ERROR: Less than 1/%d of memory is available\n"
+ 			       "as huge pages\n", compaction_index);
+ 		goto close_fd;
+ 	}
 -- 
-Without deviation from the norm, progress is not possible.
+2.39.2
+
 
