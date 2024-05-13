@@ -1,95 +1,99 @@
-Return-Path: <linux-kselftest+bounces-10161-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10162-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314088C49E8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 01:10:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6A678C4A17
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 01:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A99BA1F21C22
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 23:10:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 286C3B21735
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 23:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1A184FD2;
-	Mon, 13 May 2024 23:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527E785649;
+	Mon, 13 May 2024 23:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7mL5KpV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJ4+eKX9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF9684E08;
-	Mon, 13 May 2024 23:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A8C446BD;
+	Mon, 13 May 2024 23:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715641829; cv=none; b=T8k1tVfDlv67AYMPt3gmItT+Maq8mVJxsKGWV5psrpgEvdQxzVuJybSf/Tov4FDOf0wnZgPYtw7C4j4tkzS4SH/4hU2NMEtQtDroBbIaPRwbFUPkQR3760jSdMZXY0Hdv48aE0p4o1F3bc+WoPNbeJGh8AtyRUwb8+U9yjH19+M=
+	t=1715643078; cv=none; b=pkcuLdlTR8fO/SZlvGe+Ae00t54/L6kVUjuzosgQIOeuzI1C8ITt6o3Nd70yfX78jxGSviS+vv2whGofolgeHQSbDoTuNe3w4n/AIf9d6kUxsXFT09xuN+YDHW937/jvTseMT3Ltx2dkQk6/+gmjs2zQinlBIS7IbXTUPtJ77Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715641829; c=relaxed/simple;
-	bh=1yzhIq4eTcJuUqwKHSzQMlzBz5BnslKWlNDp52610XI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=iJLnY6baGjmu0kXXSJLJi8zx4Xz0X3pYkWN3vJoRsZ1xv8VT+J+/udbl7ZlkOtIomdWhq2jlsWyw7Ivc32SDFPx31HCaE6grgZwG+cYb02JHLzd9v036myZHQmfkP/ltp9G8An94U+e5Ekn+oggKAsK4Di48n2hrwivBoGfhwLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7mL5KpV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 36AA4C32786;
-	Mon, 13 May 2024 23:10:29 +0000 (UTC)
+	s=arc-20240116; t=1715643078; c=relaxed/simple;
+	bh=edYEvfVF7LrKCEOZSZcW2VnvwSmiDi2QkoyU4leeWL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hGpCKcoY/w6Gln9pm+E5v3EZag0SfSBcqz1EyQLe43Y+miE4IpBPQ4AWaqsqI7iDxUDKEnBMUZBhktO1YpqkOtTJaM/UGIEFtBRsQoxgK5R6QHxGZsOE/jIO9TCXaZp7y4nz/vNz70f1ijAvblhNpKELP3DD+f82BYQUxZ9/W/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJ4+eKX9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781EFC113CC;
+	Mon, 13 May 2024 23:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715641829;
-	bh=1yzhIq4eTcJuUqwKHSzQMlzBz5BnslKWlNDp52610XI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=u7mL5KpVbKQMoEdCqQeTD72LIT/9VWC6GclztPN670RlZ9zYiINTxNDi2jtKDASmU
-	 EUgtectCNbt+LHubBPw4eo1iKvhJzc3B5OyRHXwdDB09ZoJdjmMKSGVnDT3uJWWPxf
-	 3VhSSFMnpTbyNybRT3BV/JOj9b2DEyG/RCORq4eWI+QqdHvyqSTo1BjpDlfJ+hFgA8
-	 E76l/4CODYpkrPBPn0S9JmaeQPz7e2zy3fDOot5cKcYfyrL8M7YGry+cpwgbJnIKfV
-	 XPWLzO5BgF7YsDVzGA9Rrkh8mG3AbFmph1kPZgFqiTRDW83CU4TrfHTi0htCyf8QJ0
-	 0jTsMxj5BBvGQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2383BC43445;
-	Mon, 13 May 2024 23:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1715643077;
+	bh=edYEvfVF7LrKCEOZSZcW2VnvwSmiDi2QkoyU4leeWL4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UJ4+eKX9Jjb5n009vEa+fw3qm93HTsbq6E/2kjaqWw2wukzg/halQAfNZEZXm/LE4
+	 VseHIcoczFEhUFNJrX+hE4brEcaqhJYLF5QDeawrQXHzGtVSeWHqMAph2zfIoqyKzs
+	 dOJA+Rc3OrJVxsqBTVfE67aPPpe9lMIgv3q46l/7C7ygJVD9GHoY5L6Ff+NHFHfw2i
+	 EpUgZS3K/R4TIL0bsax/NTea+fsRH6i/BQKSVamsq7sDeOuVD37dm9gghM9OITGk7Y
+	 MbBxbNA6+ZDp6bsz2N1nY5IAOc0jzEJb0dHK2wgUTlLTS0Qe7idImQezxoSFuJYfYW
+	 r/H0ew9pGJ3Hg==
+Date: Mon, 13 May 2024 16:31:14 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Christian
+ =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Pavel Begunkov
+ <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand
+ <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v9 00/14] Device Memory TCP
+Message-ID: <20240513163114.52b44f66@kernel.org>
+In-Reply-To: <20240510232128.1105145-1-almasrymina@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH] test: hsr: Extend the hsr_redbox.sh to have more SAN
- devices connected
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171564182914.6706.16647604861165136957.git-patchwork-notify@kernel.org>
-Date: Mon, 13 May 2024 23:10:29 +0000
-References: <20240510143710.3916631-1-lukma@denx.de>
-In-Reply-To: <20240510143710.3916631-1-lukma@denx.de>
-To: Lukasz Majewski <lukma@denx.de>
-Cc: kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
- pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, horms@kernel.org, casper.casan@gmail.com,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri, 10 May 2024 16:21:11 -0700 Mina Almasry wrote:
+> Device Memory TCP
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 10 May 2024 16:37:10 +0200 you wrote:
-> After this change the single SAN device (ns3eth1) is now replaced with
-> two SAN devices - respectively ns4eth1 and ns5eth1.
-> 
-> It is possible to extend this script to have more SAN devices connected
-> by adding them to ns3br1 bridge.
-> 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] test: hsr: Extend the hsr_redbox.sh to have more SAN devices connected
-    https://git.kernel.org/netdev/net-next/c/eafbf0574e05
-
-You are awesome, thank you!
+Sorry Mina, this is too big to apply during the merge window :(
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: defer
 
