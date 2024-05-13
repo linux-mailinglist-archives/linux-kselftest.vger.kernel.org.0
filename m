@@ -1,155 +1,119 @@
-Return-Path: <linux-kselftest+bounces-10129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F05A8C3B26
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 08:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C518C3BAD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 09:01:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2469E1F21332
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 06:09:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F15B21F21CE8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 07:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4B4146596;
-	Mon, 13 May 2024 06:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C041B146A61;
+	Mon, 13 May 2024 07:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fX87UbdN"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DL1O4sdP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD6350280;
-	Mon, 13 May 2024 06:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE78C6A01E
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 May 2024 07:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715580557; cv=none; b=So65WmKpadf2rSTfC4iBZzq5uzZ+w4S05YcmjQZCRDFiqa4qB0PxNeuQKsobqPSqiYwYlHL1RjhelAkM8Vb1JpO5e/E/rZJWyudSvm7QsEa+SpGUq5X8LXP5jKdiuM+HOLZloDZyy0Ru/k0ZgHf1Z+6fTau430FjmvhkOCZP2aU=
+	t=1715583666; cv=none; b=jBfjy3QrHD3eOqnKtIt+rXES3FErwJLKDMD6POFy8cSrnPwF4FCb36P9Jim+cfN69LL+KgleQdXrSKGCbIYuvr4BVAPHbgGL047FBAF4wiR4ZpkXAKSDd6q9+tZL+6fp64+BAPsoxxI+4nk3s4ABU8I9wDhHdfevTN++hKF0GG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715580557; c=relaxed/simple;
-	bh=G6TxMzZEjWTt8/9mG4lMC+ndwcD6oEw96BfOtdlHxu8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lWe407U8w/NIL/lF10on+LIv0UFvVze+VsP5lsXNMdP4VhRRgLw6zV2Ku+sm5WODZ5PvVSVAMwnEAMN89hwrIiQdawu+EXTxZ0AGNpZaWIyEqAUHoF13yTTKiQcxIFCaObHJIgyRHCPxnQeezWNyDr+Pgv+oP9qcjTxWD5IP56s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fX87UbdN; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6f4f2b1c997so1061625b3a.0;
-        Sun, 12 May 2024 23:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715580556; x=1716185356; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uuXJwcX4KqD+qIcLKgPP2fT2dHU0gUYgHHAWU3cdYOI=;
-        b=fX87UbdN3ciW3PKynJWV+E//RUg+JQEfAADxEfz2aDADSAPI0VZtUnSIf16gTwxkwz
-         rZNPo1Wo05m5r37b7KvRKrwhFl5lgV7ZKt2RwoL5XFeznJ+v/cFXNhEdBiOzf/S+KfLn
-         yFw6HYgx//qwcT3dJpAMtTDjiiDXYsz4z47fM6ND2bHtxO/4/3CgNR7HothuPRBpnw5C
-         SMWDuCnGvIQDqhsZV6oX+jHELWLWJHa8XK/FyK0wD20N6utl2G6LEO9s+cn01ACNACQv
-         qaaBtr25CTB8sHfMpdXWFsXygvyYIAUsJJ/KxDCdovt9ZYln/kqIWcC1Gy0c/vkuYb+w
-         ikew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715580556; x=1716185356;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uuXJwcX4KqD+qIcLKgPP2fT2dHU0gUYgHHAWU3cdYOI=;
-        b=wZ1XFeYmcI39lY0Vq9zUNmjw7O69hfJvkvUYRw267aY2+PIDjVw44FSrJbp/If9gOQ
-         Dif81QlFZ7u0yAbgIoAqHNVzWzmw23xkCzE0EG824dFBWo+IxtvptAS4Al4QrZpZpgo3
-         LOuWl6XSAE7YWOYCE2DU5/pNjxcX/o3Mx/eG5H1XYJ1XCwfSueDKKKiQCliVJxuN9/37
-         Hg2YKJv5C7PEUy5/dujEt3Pj1S+FwR/W36g+9oWdQPdvAf/bwZGwVCJ2PPXvdttVLWIO
-         5QL6CRF8nLx19j0WbgUJYeQ0yISunR+Hn929jLKKS86JDSc534DCtzWE/QdFaOCh0emb
-         jlkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4qa21vfaYyyrXgXH9EeCMhvzsXG/vJSMPNiDcwaUISqJfbcTORMXoigphLxQ20uvxFjBg+LA4BTAfR3P64WrgbmuTyLXrOXFy17olAGCKedf5te7lnMSSfmZKcfYzRPRRTwMd4lzc
-X-Gm-Message-State: AOJu0YwWh2OFecaKgoM2iPLgVfvYY//D8O6raGMNTW5kqfGLcYhawbVC
-	Bx+gg+klvkRjL+4vt8KyYaAW8h8Bx9v3wLwF6gtadJfLyr22hJkd
-X-Google-Smtp-Source: AGHT+IH4tlHldlTTLMUwonFbo/ItKnDcx9sHDjVu6pyff6njeeE6pEkSKAonyPIHM804TSSj1NjxrQ==
-X-Received: by 2002:a05:6a20:748e:b0:1af:b1e0:85e6 with SMTP id adf61e73a8af0-1afde1df6b6mr9364398637.56.1715580555564;
-        Sun, 12 May 2024 23:09:15 -0700 (PDT)
-Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b6711660fdsm7121718a91.16.2024.05.12.23.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 May 2024 23:09:14 -0700 (PDT)
-From: Taehee Yoo <ap420073@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: ap420073@gmail.com,
-	horms@kernel.org
-Subject: [PATCH net v2] selftests: net: kill smcrouted in the cleanup logic in amt.sh
-Date: Mon, 13 May 2024 06:08:52 +0000
-Message-Id: <20240513060852.1105380-1-ap420073@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1715583666; c=relaxed/simple;
+	bh=FNglutKOMNf4oIKy8z3CJ0ag4Xtd06wdi78Qz0/sjP4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U5Og+H4qhwpjvAKUgkozS90OIqipbwruASvvK/WjSvOXJplVhcIeqUuPfLchVJyTWn6h0gukHAU/XuHUnZ0IXphRGbm02pVPBk7iwHDVTM1BA5xlF7vcpGEN30Mg6eROqiFuj7NMRe8y8k0RnxfmW1n6e+0yjNgkKceW0ZyAveU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DL1O4sdP; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b666dbe4-e406-44fc-8bb7-122e6c007948@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1715583662;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zuM1ivPBry8hvT+SMqe+Wim0oUpETn/fwoja6E4kiSE=;
+	b=DL1O4sdP9UfM9V2ARELSgsO1X5MSdx7mxbW/hLANEG8uSQPn8nxDnmNGMYBvvb2yju/8Gh
+	xDWPOaCrYAUuIW4TJi/7MkSQeekKER3ZUAzZKE4a71d1rTuCl2l64jfOpaHOz/9EKPIlpc
+	EVOLVTM9a+uqRnSxS/F0mh8A6Vxvv+A=
+Date: Mon, 13 May 2024 15:00:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: Add some null pointer
+ checks
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>, kunwu.chan@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, kunwu.chan@hotmail.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240510095803.472840-1-kunwu.chan@linux.dev>
+ <20240510095803.472840-2-kunwu.chan@linux.dev>
+ <a6172c6e-3b5b-43e5-8678-9dc4e428cf94@collabora.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kunwu Chan <kunwu.chan@linux.dev>
+In-Reply-To: <a6172c6e-3b5b-43e5-8678-9dc4e428cf94@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The amt.sh requires smcrouted for multicasting routing.
-So, it starts smcrouted before forwarding tests.
-It must be stopped after all tests, but it isn't.
+On 2024/5/10 19:20, Muhammad Usama Anjum wrote:
+> On 5/10/24 2:58 PM, kunwu.chan@linux.dev wrote:
+>> From: Kunwu Chan <chentao@kylinos.cn>
+>>
+>> There is a 'malloc' call, which can be unsuccessful.
+>> This patch will add the malloc failure checking
+>> to avoid possible null dereference.
+>>
+>> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+>> ---
+>>   tools/testing/selftests/bpf/test_progs.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+>> index 89ff704e9dad..ecc3ddeceeeb 100644
+>> --- a/tools/testing/selftests/bpf/test_progs.c
+>> +++ b/tools/testing/selftests/bpf/test_progs.c
+>> @@ -582,6 +582,11 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
+>>   
+>>   	val_buf1 = malloc(stack_trace_len);
+>>   	val_buf2 = malloc(stack_trace_len);
+>> +	if (!val_buf1 || !val_buf2) {
+>> +		err = -ENOMEM;
+> Return from here instead of going to out where free(val_buf*) is being called.
+I think it's no harm.  And Unify the processing at the end to achieve 
+uniform format.
+>> +		goto out;
+>> +	}
+>> +
+>>   	cur_key_p = NULL;
+>>   	next_key_p = &key;
+>>   	while (bpf_map_get_next_key(smap_fd, cur_key_p, next_key_p) == 0) {
+>> @@ -1197,6 +1202,8 @@ static int dispatch_thread_send_subtests(int sock_fd, struct test_state *state)
+>>   	int subtest_num = state->subtest_num;
+>>   
+>>   	state->subtest_states = malloc(subtest_num * sizeof(*subtest_state));
+>> +	if (!state->subtest_states)
+>> +		return -ENOMEM;
+>>   
+>>   	for (int i = 0; i < subtest_num; i++) {
+>>   		subtest_state = &state->subtest_states[i];
 
-To fix this issue, it kills smcrouted in the cleanup logic.
-
-Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
----
-The v1 patch is here:
-https://lore.kernel.org/netdev/20240508040643.229383-1-ap420073@gmail.com/
-
-v2
- - Headline change.
- - Kill smcrouted process only if amt.pid exists.
- - Do not remove the return value.
- - Remove timeout logic because it was already fixed by following commit
-   4c639b6a7b9d ("selftests: net: move amt to socat for better compatibility")
- - Fix shebang.
-
- tools/testing/selftests/net/amt.sh | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-index 5175a42cbe8a..d458b45c775b 100755
---- a/tools/testing/selftests/net/amt.sh
-+++ b/tools/testing/selftests/net/amt.sh
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
- # Author: Taehee Yoo <ap420073@gmail.com>
-@@ -77,6 +77,7 @@ readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
- readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
- readonly RELAY=$(mktemp -u relay-XXXXXXXX)
- readonly SOURCE=$(mktemp -u source-XXXXXXXX)
-+readonly SMCROUTEDIR="$(mktemp -d)"
- ERR=4
- err=0
- 
-@@ -85,6 +86,11 @@ exit_cleanup()
- 	for ns in "$@"; do
- 		ip netns delete "${ns}" 2>/dev/null || true
- 	done
-+	if [ -f "$SMCROUTEDIR/amt.pid" ]; then
-+		smcpid=$(< $SMCROUTEDIR/amt.pid)
-+		kill $smcpid
-+	fi
-+	rm -rf $SMCROUTEDIR
- 
- 	exit $ERR
- }
-@@ -167,7 +173,7 @@ setup_iptables()
- 
- setup_mcast_routing()
- {
--	ip netns exec "${RELAY}" smcrouted
-+	ip netns exec "${RELAY}" smcrouted -P $SMCROUTEDIR/amt.pid
- 	ip netns exec "${RELAY}" smcroutectl a relay_src \
- 		172.17.0.2 239.0.0.1 amtr
- 	ip netns exec "${RELAY}" smcroutectl a relay_src \
 -- 
-2.34.1
+Thanks,
+   Kunwu.Chan
 
 
