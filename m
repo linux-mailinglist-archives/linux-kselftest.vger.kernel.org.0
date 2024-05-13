@@ -1,298 +1,139 @@
-Return-Path: <linux-kselftest+bounces-10155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62768C470F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 20:41:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CAAC8C476B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 21:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9A0EB20E79
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 18:41:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5238B1F22AE4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2024 19:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3B62C69D;
-	Mon, 13 May 2024 18:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B1C54FB8;
+	Mon, 13 May 2024 19:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KkJOcaXD"
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="paUo6HvC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23FB4317C
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 May 2024 18:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D0745016
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 May 2024 19:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.51.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715625702; cv=none; b=isODJxx7QjBCEnpNcfd0bAgvG5gezQ6u26Tvi0P9kC5jl00cmFJAF1sNvnOSwYebFxTIcvrBRGR5k+kTBLmHxIcD0nbJkBSdUtF2umsxWucipDowffT/E3pwaV2GjAch2Wjjm7pPV4kczzAAMOgdddlFO6dZm7ooovBTzxOouLA=
+	t=1715627768; cv=none; b=fFT6V4JMNwvpZV/+Q/VxBJacn7t7HTIocweNqM24JtXJrgB8+8zrCwzJ6TAy+tWienZ0tOe45A1pEmZDx2wYKo6JzpqKKm0mZBNac01EEe3vEz3lNrtrzWzzGTz0x32Ki6vtX8X8tVq8/h9V4vBWHtZVWTSC9JLNdxCIPxAwg84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715625702; c=relaxed/simple;
-	bh=xGBtiJZmTHqdBVzMjvOUzQnxsV/z6+7wQ+yQppDB/9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GTLEVnNxgM6U9Uua95Ge78tANpq+JrR2prjRnFQXANrKbEXzyL+8BppKDzhCk3U+HxgQhfdreoFO9Ccd/QvFCwBJwC3ekHxrvizvgRrup3MMjGI7oOSWZ1YPm4KCDuAly98h8xFiM6RHm9rqkStBPH5HDaex+T3zwVrMpfw5JUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KkJOcaXD; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f4ed9dc7beso1590426b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 May 2024 11:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715625699; x=1716230499; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XY9wUjNICjiX4OH8fN35kly5zcKWL5OlXrAU/KY+MCs=;
-        b=KkJOcaXDYNC65LGBdmbPJEpYdvvlkC7AL6OIn419k8ZJz4tbQ4J7KkSoYrtSXJ5GOv
-         gt3n/7R0TUG2+Hmqofsobgc5isLmduVHeesMnUk7wkFeAmpU0Fc/kn3BEOJFSTsXD/Ne
-         abGJIuhv3I3mkgZRAtGW/eBXQ97BH2mXIFgRaNVN6i7m3Hpj98ebqdvEyXfQKklYbHbm
-         g5y34VwDk0iZDTxKLmrckU9rljUsnqHL5lCgIqiBcKN/5GZ9UlYa76Qu7SrjXIbSdobv
-         x9Slyk/7XDAm2/GyxC92au528sukPDTRT5rZ13pDCWu1r9AgCdeMLL/R6NxwmETNidzQ
-         HXFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715625699; x=1716230499;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XY9wUjNICjiX4OH8fN35kly5zcKWL5OlXrAU/KY+MCs=;
-        b=G+IGW0DeR//uYX3WfaXYWN2mpB9xUDZql7JdqHAe6xA57WxjM1mnQs3nHb8U5A4Iun
-         W+zSvSCTufptLuylEy6cIa/hCsonOIBEBGGdx6exOOUmuUInH57NqqnZqkYLqN7y9SeR
-         xG8EtZea7xA9nM6CjGLx5dy/dsCbd/eoxjoi+Yy6sDdFC7PjmiPDUn5r1MgVQFh/XvNq
-         dQhFZ/AOkf614bzl7NyggW6gmhDXCVW3KAz5/GedPF8tkMDli7Pwdnr0SS5g3POjfjG+
-         JjAHVBhSOBXd7oI3P5zHPi7d24Jy/SZXaUxaB6fSrMsiL6jx6jOZpfYEfwEWl6SMygQn
-         B+Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCUV6ZZXzVd2iKxYvzixTVJkfejq3IAd91J18tv5trnIon4ESjgVy4CWjzVC2Om171l+F23lcu+8vYyk1pFUDG5jrIXFmdajhlKB7iXPXaDR
-X-Gm-Message-State: AOJu0Yx11wTTxu4IPNMzlM/cfXhWtnYuGzezFiSr141pS8DpeKSzcRof
-	sMSRx5o7LFi3EkTWac/ICXj/kpMjM0le0bmn916b/BxJqvJg64/jKVOR59rBa2s=
-X-Google-Smtp-Source: AGHT+IFDpGJAozuUAoSCJToHHLthoDO4Bo/1R8ix+nOMfz5BRfFaIeih/L/fVxquTOUi37YhZTLrFg==
-X-Received: by 2002:a05:6a00:198a:b0:6f4:4b84:7c17 with SMTP id d2e1a72fcca58-6f4c9338971mr19674022b3a.13.1715625698960;
-        Mon, 13 May 2024 11:41:38 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2b2f9eesm7681513b3a.212.2024.05.13.11.41.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 11:41:38 -0700 (PDT)
-Date: Mon, 13 May 2024 11:41:34 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	apatel@ventanamicro.com, mchitale@ventanamicro.com,
-	dbarboza@ventanamicro.com, sameo@rivosinc.com,
-	shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 10/29] riscv/mm : ensure PROT_WRITE leads to VM_READ |
- VM_WRITE
-Message-ID: <ZkJe3ivq7m4NptHd@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-11-debug@rivosinc.com>
- <Zj6LfpQhOjTLEx2O@ghost>
- <ZkJSLTk1iWFGJZCQ@debug.ba.rivosinc.com>
- <ZkJdYvkUqHkX7yPf@ghost>
+	s=arc-20240116; t=1715627768; c=relaxed/simple;
+	bh=VTNZ62sNInU+Dd0cJEiFTSXsmrSxsvXnwZWnDCIDW1w=;
+	h=Date:To:From:Subject:Message-ID:MIME-Version:Content-Type; b=hgldSHEFB7SUdny1m39ODq5BV1ccwqI3lMEjXp9OkFqOxlUiv2OiKt73Qlo4tJ3Kq6lNiiw3UnXUT5GVX8mbyD/pNFnoiuZ2XVFUymhEjiHzWnpAFJ6Nkrth68Nk/kV1b72RQA2cNeCSvUOMIV4tbA5tZ/H6Pmac7jWo2T0u8/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=paUo6HvC; arc=none smtp.client-ip=188.165.51.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1715627756; x=1715886956;
+	bh=dnjH8R0E9R4kgtyNo0zRZg9A30KPJQ23f20lyVjqLUg=;
+	h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=paUo6HvCMLe0YNG7ppE6+OPvGgid8o+AocVm7IAPnTOOrvFA/8N/tGUWjA2zzNR1c
+	 GVx7xT77FF6o+JP6+Zh09H3imzNnz4rQhZagjM1M4nrgThGaih72r6wrtOP2kNxl1N
+	 DHbwRXhrAulrtdz47x25GKugAUt/IFC4+3U0hkAal6Rsx3QureSft5H303iwrUXdAZ
+	 2d1HKUW2K6Qb8kG8VCuE3vE68ZJkRpggJJeRMvYUA1o6wPDzzN/Xw3TwTFvAZ09tQI
+	 fER0eEvBGTX1P0vNjY9qTuqab6A7AQNHppc7siqrvJvq4Vy0zENWkFww/RnFLoYQde
+	 aPh/FMAymeUSw==
+Date: Mon, 13 May 2024 19:15:47 +0000
+To: linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com, jeffxu@google.com, jorgelo@chromium.org, skhan@linuxfoundation.org, keescook@chromium.org
+From: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
+Message-ID: <20240513191544.94754-1-pobrn@protonmail.com>
+Feedback-ID: 20568564:user:proton
+X-Pm-Message-ID: 67eeb4ec5ac3eaf815ed12f6c17c9a0732f87faa
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZkJdYvkUqHkX7yPf@ghost>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 13, 2024 at 11:36:49AM -0700, Charlie Jenkins wrote:
->On Mon, May 13, 2024 at 10:47:25AM -0700, Deepak Gupta wrote:
->> On Fri, May 10, 2024 at 02:02:54PM -0700, Charlie Jenkins wrote:
->> > On Wed, Apr 03, 2024 at 04:34:58PM -0700, Deepak Gupta wrote:
->> > > `arch_calc_vm_prot_bits` is implemented on risc-v to return VM_READ |
->> > > VM_WRITE if PROT_WRITE is specified. Similarly `riscv_sys_mmap` is
->> > > updated to convert all incoming PROT_WRITE to (PROT_WRITE | PROT_READ).
->> > > This is to make sure that any existing apps using PROT_WRITE still work.
->> > >
->> > > Earlier `protection_map[VM_WRITE]` used to pick read-write PTE encodings.
->> > > Now `protection_map[VM_WRITE]` will always pick PAGE_SHADOWSTACK PTE
->> > > encodings for shadow stack. Above changes ensure that existing apps
->> > > continue to work because underneath kernel will be picking
->> > > `protection_map[VM_WRITE|VM_READ]` PTE encodings.
->> > >
->> > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> > > ---
->> > >  arch/riscv/include/asm/mman.h    | 24 ++++++++++++++++++++++++
->> > >  arch/riscv/include/asm/pgtable.h |  1 +
->> > >  arch/riscv/kernel/sys_riscv.c    | 11 +++++++++++
->> > >  arch/riscv/mm/init.c             |  2 +-
->> > >  mm/mmap.c                        |  1 +
->> > >  5 files changed, 38 insertions(+), 1 deletion(-)
->> > >  create mode 100644 arch/riscv/include/asm/mman.h
->> > >
->> > > diff --git a/arch/riscv/include/asm/mman.h b/arch/riscv/include/asm/mman.h
->> > > new file mode 100644
->> > > index 000000000000..ef9fedf32546
->> > > --- /dev/null
->> > > +++ b/arch/riscv/include/asm/mman.h
->> > > @@ -0,0 +1,24 @@
->> > > +/* SPDX-License-Identifier: GPL-2.0 */
->> > > +#ifndef __ASM_MMAN_H__
->> > > +#define __ASM_MMAN_H__
->> > > +
->> > > +#include <linux/compiler.h>
->> > > +#include <linux/types.h>
->> > > +#include <uapi/asm/mman.h>
->> > > +
->> > > +static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
->> > > +	unsigned long pkey __always_unused)
->> > > +{
->> > > +	unsigned long ret = 0;
->> > > +
->> > > +	/*
->> > > +	 * If PROT_WRITE was specified, force it to VM_READ | VM_WRITE.
->> > > +	 * Only VM_WRITE means shadow stack.
->> > > +	 */
->> > > +	if (prot & PROT_WRITE)
->> > > +		ret = (VM_READ | VM_WRITE);
->> > > +	return ret;
->> > > +}
->> > > +#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
->> > > +
->> > > +#endif /* ! __ASM_MMAN_H__ */
->> > > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> > > index 6066822e7396..4d5983bc6766 100644
->> > > --- a/arch/riscv/include/asm/pgtable.h
->> > > +++ b/arch/riscv/include/asm/pgtable.h
->> > > @@ -184,6 +184,7 @@ extern struct pt_alloc_ops pt_ops __initdata;
->> > >  #define PAGE_READ_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC)
->> > >  #define PAGE_WRITE_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ |	\
->> > >  					 _PAGE_EXEC | _PAGE_WRITE)
->> > > +#define PAGE_SHADOWSTACK       __pgprot(_PAGE_BASE | _PAGE_WRITE)
->> > >
->> > >  #define PAGE_COPY		PAGE_READ
->> > >  #define PAGE_COPY_EXEC		PAGE_READ_EXEC
->> > > diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
->> > > index f1c1416a9f1e..846c36b1b3d5 100644
->> > > --- a/arch/riscv/kernel/sys_riscv.c
->> > > +++ b/arch/riscv/kernel/sys_riscv.c
->> > > @@ -8,6 +8,8 @@
->> > >  #include <linux/syscalls.h>
->> > >  #include <asm/cacheflush.h>
->> > >  #include <asm-generic/mman-common.h>
->> > > +#include <vdso/vsyscall.h>
->> > > +#include <asm/mman.h>
->> > >
->> > >  static long riscv_sys_mmap(unsigned long addr, unsigned long len,
->> > >  			   unsigned long prot, unsigned long flags,
->> > > @@ -17,6 +19,15 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
->> > >  	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
->> > >  		return -EINVAL;
->> > >
->> > > +	/*
->> > > +	 * If only PROT_WRITE is specified then extend that to PROT_READ
->> > > +	 * protection_map[VM_WRITE] is now going to select shadow stack encodings.
->> > > +	 * So specifying PROT_WRITE actually should select protection_map [VM_WRITE | VM_READ]
->> > > +	 * If user wants to create shadow stack then they should use `map_shadow_stack` syscall.
->> > > +	 */
->> > > +	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
->> >
->> > The comments says that this should extend to PROT_READ if only
->> > PROT_WRITE is specified. This condition instead is checking if
->> > PROT_WRITE is selected but PROT_READ is not. If prot is (VM_EXEC |
->> > VM_WRITE) then it would be extended to (VM_EXEC | VM_WRITE | VM_READ).
->> > This will not currently cause any issues because these both map to the
->> > same value in the protection_map PAGE_COPY_EXEC, however this seems to
->> > be not the intention of this change.
->> >
->> > prot == PROT_WRITE better suits the condition explained in the comment.
->>
->> If someone specifies this (PROT_EXEC | PROT_WRITE) today, it works because
->> of the way permissions are setup in `protection_map`. On risc-v there is no
->> way to have a page which is execute and write only. So expectation is that
->> if some apps were using `PROT_EXEC | PROT_WRITE` today, they were working
->> because internally it was translating to read, write and execute on page
->> permissions level. This patch make sure that, it stays same from page
->> permissions perspective.
->>
->> If someone was using PROT_EXEC, it may translate to execute only and this change
->> doesn't impact that.
->>
->> Patch simply looks for presence of `PROT_WRITE` and absence of `PROT_READ` in
->> protection flags and if that condition is satisfied, it assumes that caller assumed
->> page is going to be read allowed as well.
->
->The purpose of this change is for compatibility with shadow stack pages
->but this affects flags for pages that are not shadow stack pages.
->Adding PROT_READ to the other cases is redundant as protection_map
->already handles that mapping. Permissions being strictly PROT_WRITE is
->the only case that needs to be handled, and is the only case that is
->called out in the commit message and in the comment.
+`MFD_NOEXEC_SEAL` should remove the executable bits and set
+`F_SEAL_EXEC` to prevent further modifications to the executable
+bits as per the comment in the uapi header file:
 
-Yeah that's fine.
-I can change the commit message or just strictly check for PROT_WRITE.
-It doesn't change bottomline, I am fine with either option.
+  not executable and sealed to prevent changing to executable
 
-Let me know your preference.
+However, currently, it also unsets `F_SEAL_SEAL`, essentially
+acting as a superset of `MFD_ALLOW_SEALING`. Nothing implies
+that it should be so, and indeed up until the second version
+of the of the patchset[0] that introduced `MFD_EXEC` and
+`MFD_NOEXEC_SEAL`, `F_SEAL_SEAL` was not removed, however it
+was changed in the third revision of the patchset[1] without
+a clear explanation.
 
->
->- Charlie
->
->>
->>
->> >
->> > > +		prot |= PROT_READ;
->> > > +
->> > >  	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
->> > >  			       offset >> (PAGE_SHIFT - page_shift_offset));
->> > >  }
->> > > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> > > index fa34cf55037b..98e5ece4052a 100644
->> > > --- a/arch/riscv/mm/init.c
->> > > +++ b/arch/riscv/mm/init.c
->> > > @@ -299,7 +299,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
->> > >  static const pgprot_t protection_map[16] = {
->> > >  	[VM_NONE]					= PAGE_NONE,
->> > >  	[VM_READ]					= PAGE_READ,
->> > > -	[VM_WRITE]					= PAGE_COPY,
->> > > +	[VM_WRITE]					= PAGE_SHADOWSTACK,
->> > >  	[VM_WRITE | VM_READ]				= PAGE_COPY,
->> > >  	[VM_EXEC]					= PAGE_EXEC,
->> > >  	[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
->> > > diff --git a/mm/mmap.c b/mm/mmap.c
->> > > index d89770eaab6b..57a974f49b00 100644
->> > > --- a/mm/mmap.c
->> > > +++ b/mm/mmap.c
->> > > @@ -47,6 +47,7 @@
->> > >  #include <linux/oom.h>
->> > >  #include <linux/sched/mm.h>
->> > >  #include <linux/ksm.h>
->> > > +#include <linux/processor.h>
->> >
->> > It doesn't seem like this is necessary for this patch.
->>
->> Thanks. Yeah it looks like I forgot to remove this over the churn.
->> Will fix it.
->>
->> >
->> > - Charlie
->> >
->> > >
->> > >  #include <linux/uaccess.h>
->> > >  #include <asm/cacheflush.h>
->> > > --
->> > > 2.43.2
->> > >
+This behaviour is suprising for application developers,
+there is no documentation that would reveal that `MFD_NOEXEC_SEAL`
+has the additional effect of `MFD_ALLOW_SEALING`.
+
+So do not remove `F_SEAL_SEAL` when `MFD_NOEXEC_SEAL` is requested.
+This is technically an ABI break, but it seems very unlikely that an
+application would depend on this behaviour (unless by accident).
+
+[0]: https://lore.kernel.org/lkml/20220805222126.142525-3-jeffxu@google.com=
+/
+[1]: https://lore.kernel.org/lkml/20221202013404.163143-3-jeffxu@google.com=
+/
+
+Fixes: 105ff5339f498a ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
+Signed-off-by: Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.com>
+---
+
+Or did I miss the explanation as to why MFD_NOEXEC_SEAL should
+imply MFD_ALLOW_SEALING? If so, please direct me to it and
+sorry for the noise.
+
+---
+ mm/memfd.c                                 | 9 ++++-----
+ tools/testing/selftests/memfd/memfd_test.c | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 7d8d3ab3fa37..8b7f6afee21d 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -356,12 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
+=20
+ =09=09inode->i_mode &=3D ~0111;
+ =09=09file_seals =3D memfd_file_seals_ptr(file);
+-=09=09if (file_seals) {
+-=09=09=09*file_seals &=3D ~F_SEAL_SEAL;
++=09=09if (file_seals)
+ =09=09=09*file_seals |=3D F_SEAL_EXEC;
+-=09=09}
+-=09} else if (flags & MFD_ALLOW_SEALING) {
+-=09=09/* MFD_EXEC and MFD_ALLOW_SEALING are set */
++=09}
++
++=09if (flags & MFD_ALLOW_SEALING) {
+ =09=09file_seals =3D memfd_file_seals_ptr(file);
+ =09=09if (file_seals)
+ =09=09=09*file_seals &=3D ~F_SEAL_SEAL;
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/sel=
+ftests/memfd/memfd_test.c
+index 18f585684e20..b6a7ad68c3c1 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -1151,7 +1151,7 @@ static void test_noexec_seal(void)
+ =09=09=09    mfd_def_size,
+ =09=09=09    MFD_CLOEXEC | MFD_NOEXEC_SEAL);
+ =09mfd_assert_mode(fd, 0666);
+-=09mfd_assert_has_seals(fd, F_SEAL_EXEC);
++=09mfd_assert_has_seals(fd, F_SEAL_SEAL | F_SEAL_EXEC);
+ =09mfd_fail_chmod(fd, 0777);
+ =09close(fd);
+ }
+--=20
+2.45.0
+
+
 
