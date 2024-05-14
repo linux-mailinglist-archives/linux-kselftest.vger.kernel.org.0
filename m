@@ -1,134 +1,146 @@
-Return-Path: <linux-kselftest+bounces-10164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A11338C4B2F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 04:34:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11D418C4B86
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 05:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DA982864F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 02:34:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A69A11F229CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 03:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585211879;
-	Tue, 14 May 2024 02:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73A6BA45;
+	Tue, 14 May 2024 03:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0tJbCJy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RWhj5WyH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0482CAD24;
-	Tue, 14 May 2024 02:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DC3AD53;
+	Tue, 14 May 2024 03:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715654053; cv=none; b=ga2wqmgGxY8WBNeIlnQTL/hFJBFkWP70oqlBwnIP+WE1Xl1VeMYMHDucCdMqQhdj1Bct6OuYkXoqNQVOJUNrodxApz6o2icwtCsfYVDhH7GaasNmplHumscfQ17l2vpMdTCts7aKiiSiVepU6HokNu3RGbwA4SWmbR660aVCZ4w=
+	t=1715657751; cv=none; b=HPO42QaS7A0t7+1/FRasS7zqC+9U+HcoudA72MBtrEF/JFMjNaJiO+mENpnsvPoI/aZAb+47RQ9GmiHuYhE1XNxdSE52yWtCSbRvQn9MY93RFsp4g5zye5DKLm/L12ZxKJOLC+Z4rhfTir/l6/Krtuw5jK05WPH1pQpWfqqdD6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715654053; c=relaxed/simple;
-	bh=Fj4L+WmJwBpI33hWG+XhSdn5v/27r+qCR0+i4uR74Mw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hYNV+mDXUCpUMSSf2iA4mwNggi1/0aXZIaClhMfYZTz1B5i7Jsr5OzPD6fwuosCoMTZ67j+SjGja3kjBp68Er6qMqF8W29oKqLC/S5GMhaaX4cnU6ezfK0rS8XfHz5E7pFDivcGT5bWF0p1+dHldW0iKagPbvoUZ4iFJhIjEtmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0tJbCJy; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f44e3fd382so4155979b3a.1;
-        Mon, 13 May 2024 19:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715654051; x=1716258851; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KncoJsONQXdGs8dpSt8iIGQs9fO0BdlhjynEZlhIVCk=;
-        b=e0tJbCJyTMEkOEytoEuoWPAwA2ZR5GFMi3CY+mWXmRzWyG14NT0qeaPMAKYCYM3niS
-         DtG+lmJspo2vVPqiVmkeL3hpMoQQAQMrTJeIqWSLgclV4N9L/ITM+iKhyS5ojHOS7V1+
-         XKEnL3DEimpvfYx7kEAjgumVL4+bqm2FcPurtg+7YYRwd1VYMY3dpjz35s0/4lS8KpnB
-         7g6Ny6yzV3SHvZ/pqf3E57BCAz5G+SnPZrVaVuEG35oe8b3jhegbzJn8tDNUJOuxLfLU
-         5n8CggDD2FgnxaC+rJrmh8Hq1vxo6s+1C+y/qL/JVpltUqUT/rKBGiTWrKsJNdvF/ca/
-         KFMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715654051; x=1716258851;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KncoJsONQXdGs8dpSt8iIGQs9fO0BdlhjynEZlhIVCk=;
-        b=QXDVZBtJqLKcR/0D34Vmb1FjUW400GCclEQZeSEkwcVCoLol+zA71UYkfkSkN/votp
-         VrWMLXAhphJhaW+TC6hSFlTA7ts62wv7feXEgjP7POA9E56rBZ3cIxepUTkaDHD0Z3Ii
-         4MnL2XH5iB8KXqPpbxobFD8DMZUpTQxfskZzHRmUYd6wYmo5+IHXssjvDzqeYvpqIW2V
-         jz2cgevquv4aLRBp641Un44mR/yuYiyZTxz/zTfR57XujUOCuC23Nw7BAsWPy2W/v3k9
-         xZABF4v37KbAmjZFaJ7lG7QDSJ0cCrHaLerfNeyCvjn6hgX1Xbp6+6iAZVWOyCIujve6
-         tyTA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHAhqjtOJDBwD/Uquyw8JH8f6HYU3MgR9pJ81ye9gfZ/Y+JSeZG8LhLYGEZFlvo2xTrMnDceWcUOL2R6Ewzn0TkgcNu798szcA8PI4sDaC
-X-Gm-Message-State: AOJu0YxqiOIlpXq801T5TLhUvQAlVfAVo1yQBs12KI/7J5KUFLAy+2l1
-	2y4bZr4jQfiRTLwKI+iI5BQebOnDQ08ALEAIu/oXGfsnZsezrlmtDQU3f5kRpJo=
-X-Google-Smtp-Source: AGHT+IFfea6LdpiGGC40sAYZGj4ALwsOvNL8Ai5AGYQdrZlHQTPYfzgBnPhpgl7aB0oT7edFpiG2/A==
-X-Received: by 2002:a05:6a20:a12a:b0:1ad:80ed:41 with SMTP id adf61e73a8af0-1afde238daemr12434379637.58.1715654050940;
-        Mon, 13 May 2024 19:34:10 -0700 (PDT)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bf30c6fsm86475955ad.156.2024.05.13.19.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 19:34:10 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests/net/lib: no need to record ns name if it already exist
-Date: Tue, 14 May 2024 10:33:59 +0800
-Message-ID: <20240514023400.1293236-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1715657751; c=relaxed/simple;
+	bh=2g51WnteVbDW6Xw9cHo8bze8u9qoK08M7PEKoTNl//U=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=i5QPuNqmTH+TZ7Nbmu5T9mEyb4i31vq4UFthc7biMNPjC/DT2LM5aGD32NFHiGEy9N9PfcySKapVH270nriVUn3qlWNlbzM8gKuPidfKwkufhHeoMkWX6TmMQkZ8cbAugOTm70nyZ+kwEXGDTikA79S+cKUajXUJ24paxRQ3M1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RWhj5WyH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4913AC2BD10;
+	Tue, 14 May 2024 03:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715657751;
+	bh=2g51WnteVbDW6Xw9cHo8bze8u9qoK08M7PEKoTNl//U=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=RWhj5WyH38Woqr+5eMMlmko6m4W28FqTOEvMn2vnCfh/yJHDfSelrHDdq8V296J2s
+	 ZaDecWJebiToXuNeDOHk8hkAqC0FezOcUWj3+1oEtpAevdnjdHYub5zHelCHV+44sP
+	 sY8B02t11x5Gt58+t0omv/OQ/jp/9HsU7dCOHyrLxej3fMwMunVBzZpc6m1le3F26m
+	 g027xhP7NXsTyu3Uy5iaRfbIQWnwjxHS1vTrUPnzOCbjhqtmU4cmP4ffBK3evUqzSZ
+	 p3b4TXgHAQssXm6Nx/ikd6fGoui/EKPwhF4lWm0v5bRa8FnTkj+tje5PB04f8XHZ47
+	 9b53bYw7AT5Qw==
+Message-ID: <31d4dfdf8bc4b866a2b6d45fc4de0c2d.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240422232404.213174-6-sboyd@kernel.org>
+References: <20240422232404.213174-1-sboyd@kernel.org> <20240422232404.213174-6-sboyd@kernel.org>
+Subject: Re: [PATCH v4 05/10] platform: Add test managed platform_device/driver APIs
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
+To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Date: Mon, 13 May 2024 20:35:49 -0700
+User-Agent: alot/0.10
 
-There is no need to add the name to ns_list again if the netns already
-recoreded.
+Quoting Stephen Boyd (2024-04-22 16:23:58)
+> diff --git a/drivers/base/test/platform_kunit.c b/drivers/base/test/platf=
+orm_kunit.c
+> new file mode 100644
+> index 000000000000..54af6db2a6d8
+> --- /dev/null
+> +++ b/drivers/base/test/platform_kunit.c
+> @@ -0,0 +1,174 @@
+[...]
+> +struct platform_device *
+> +platform_device_alloc_kunit(struct kunit *test, const char *name, int id)
+> +{
+> +       struct platform_device *pdev;
+> +
+> +       pdev =3D platform_device_alloc(name, id);
+> +       if (!pdev)
+> +               return NULL;
+> +
+> +       if (kunit_add_action_or_reset(test, (kunit_action_t *)&platform_d=
+evice_put, pdev))
+> +               return NULL;
+> +
+> +       return pdev;
+> +}
+> +EXPORT_SYMBOL_GPL(platform_device_alloc_kunit);
+> +
+> +static void platform_device_add_kunit_exit(struct kunit_resource *res)
+> +{
+> +       struct platform_device *pdev =3D res->data;
+> +
+> +       platform_device_unregister(pdev);
+> +}
+> +
+> +static bool
+> +platform_device_alloc_kunit_match(struct kunit *test,
+> +                                 struct kunit_resource *res, void *match=
+_data)
+> +{
+> +       struct platform_device *pdev =3D match_data;
+> +
+> +       return res->data =3D=3D pdev;
+> +}
+> +
+> +/**
+> + * platform_device_add_kunit() - Register a KUnit test managed platform =
+device
+> + * @test: test context
+> + * @pdev: platform device to add
+> + *
+> + * Register a test managed platform device. The device is unregistered w=
+hen the
+> + * test completes.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int platform_device_add_kunit(struct kunit *test, struct platform_device=
+ *pdev)
+> +{
+> +       struct kunit_resource *res;
+> +       int ret;
+> +
+> +       ret =3D platform_device_add(pdev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       res =3D kunit_find_resource(test, platform_device_alloc_kunit_mat=
+ch, pdev);
 
-Fixes: 25ae948b4478 ("selftests/net: add lib.sh")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- tools/testing/selftests/net/lib.sh | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This doesn't work because platform_device_alloc_kunit() used
+kunit_add_action_or_reset() which has a chained free routine and data
+pointer. I've added a test to make sure the platform device is removed
+from the bus. It's not super great though because when this code fails
+to find a match it will still remove the device by calling
+platform_device_unregister() when the test ends. It will follow that up
+with a call to platform_device_put(), which is the problem as that
+causes an underflow and operates on an already freed device.
 
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index f9fe182dfbd4..56a9454b7ba3 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -73,15 +73,17 @@ setup_ns()
- 	local ns=""
- 	local ns_name=""
- 	local ns_list=""
-+	local ns_exist=
- 	for ns_name in "$@"; do
- 		# Some test may setup/remove same netns multi times
- 		if unset ${ns_name} 2> /dev/null; then
- 			ns="${ns_name,,}-$(mktemp -u XXXXXX)"
- 			eval readonly ${ns_name}="$ns"
-+			ns_exist=false
- 		else
- 			eval ns='$'${ns_name}
- 			cleanup_ns "$ns"
--
-+			ns_exist=true
- 		fi
- 
- 		if ! ip netns add "$ns"; then
-@@ -90,7 +92,7 @@ setup_ns()
- 			return $ksft_skip
- 		fi
- 		ip -n "$ns" link set lo up
--		ns_list="$ns_list $ns"
-+		! $ns_exist && ns_list="$ns_list $ns"
- 	done
- 	NS_LIST="$NS_LIST $ns_list"
- }
--- 
-2.43.0
-
+I couldn't come up with anything better than searching the platform bus.
+Maybe if there was a way to allocate the memory or redirect where
+platform_device_alloc_kunit() got memory from we could hold the device
+memory around after it should have been freed and make sure the kref for
+the device kobject is 0. That seems pretty invasive to do though so I'm
+just going to leave it for now and add this test to make sure it cleans
+up.
 
