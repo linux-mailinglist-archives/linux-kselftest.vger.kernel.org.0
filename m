@@ -1,106 +1,113 @@
-Return-Path: <linux-kselftest+bounces-10204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BC98C5DFE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 01:02:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC398C5E2E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 01:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 835B6282DC8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:02:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245461F216F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CF0182C8A;
-	Tue, 14 May 2024 23:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F171836C6;
+	Tue, 14 May 2024 23:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="rffGIS+E"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="w3jmiolY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16925181D1B;
-	Tue, 14 May 2024 23:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68FE1E491;
+	Tue, 14 May 2024 23:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715727717; cv=none; b=CZK69uUbFcP38izaa62SNLKkicwQbdUPQFoj2ioTWqY9NHMu7sZ0mZLkO1q3u3qTWJWsVBgqk7p6qsD2hvU4/OvkjNZlxfWNQABSoWuMnL8rlKOP4rrHM/RC42JXuBZmqsqxUt4wUpDO0LKMhNS3iGQFxGWyvqqOz3jPDXDdRic=
+	t=1715730454; cv=none; b=tjziR4e/sCTlYVjK2lskFJJ3dL4W+hgNFwR4yyIRaWdkFyg/JMygtPyIweZzCsDFjThCSZnKKhPqXdUxkuxOaLdBJkZBC71sRcoV8bAsFOMnir83K0mLXMEVtgOOy11GKcZ6qBsd26bfdWgwwyfkdW2Li5uiqpk3ratq2RPfqn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715727717; c=relaxed/simple;
-	bh=ql9IruMwPF3jx//u401rl++FzKZuu5086c7g9sy74LI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=FTM37K9i7IWAEraH2xaDiSBVl0YH1qpbF4de+KvzN6H8+fUyc/5S29N1F4+3xv2r/XSk/LLdlo4dpJ0Xt4EWxSJ/bJAHt8d0jLfZ5mAQf2nXxHgY5fjrN8r5CnbtTwSmx6Y43RUNjXXOeKY07oUPozL5jVnaq7yeFfDA7eYM+sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=rffGIS+E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06DAC2BD10;
-	Tue, 14 May 2024 23:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1715727716;
-	bh=ql9IruMwPF3jx//u401rl++FzKZuu5086c7g9sy74LI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rffGIS+E3mt0Fj4i8hRGK7jzBkFBu2+Ts1IckYH+2iO2fXNtNyBfKYrztj3owuT+k
-	 kqYni2rDFcl3C36xXwrddcU8GIRwb+1suRtTtsCyCLSAhH3qfBTQkP2NqqbRK7wr5S
-	 05wHzwQfae2uVTicAuWCNkfDhPt5c6OFgiLGDU/I=
-Date: Tue, 14 May 2024 16:01:50 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Theo de Raadt" <deraadt@openbsd.org>
-Cc: Matthew Wilcox <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- jeffxu@chromium.org, keescook@chromium.org, jannh@google.com,
- sroettger@google.com, gregkh@linuxfoundation.org,
- torvalds@linux-foundation.org, usama.anjum@collabora.com,
- Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
- rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
- groeck@chromium.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- pedro.falcato@gmail.com, dave.hansen@intel.com,
- linux-hardening@vger.kernel.org
+	s=arc-20240116; t=1715730454; c=relaxed/simple;
+	bh=1rwfNpf50aTPtb80Ip2O+B+pjU7fjXSF51Ls8a9PAtY=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=ko3d4GldeWa/4V3ydARYS5sWKSGxRFc5tScgPZxxGTZg5lGIgwmhGKe7hzoP5j1Tz9ZLtJuLyt9ybIcf8jl0mO12kZLIJgWYi3nKFmejV3hKuwgY680CH/2NskCx6FD9h5s+TrwX1GfyIKiAxgsJwxZlbg6Q3gPagWAuvTXDCog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=w3jmiolY; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=1rwfNpf50a
+	TPtb80Ip2O+B+pjU7fjXSF51Ls8a9PAtY=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=w3jmiolYozzwXCDaJGlzE5ZoZaKGpcix0
+	0z5OoNzmAs0Pm443g2gWqiJee/dXJ8hyt1VSANoXCAjPfbosI7dWN1YGKtnq8Ov6CV/qNG
+	zwkrtcAPKRaLMALsW+JNjcs4cj6NrLtvfYtahvZpBzTZx4IaBRTBu5BRYdvHF/Jfo3fC3B
+	osPSeUaZSTQdt9mWAVJR++Gx5nvHxLWInVSGLBqLUDaJyRAUVb3QNkv8qNdN0/pWS1qYJZ
+	2rHibAKs2IvwBkqQkjTz5jv7Fab+MtUsZl5Dx1M+XBDQIYLMOxG3OnzokZAtPlrQCmfjW8
+	f5KGRZSe4qM95Hm3t7KbGcEFpyL5g==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id ba1c6f5b;
+	Tue, 14 May 2024 17:47:30 -0600 (MDT)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+cc: Matthew Wilcox <willy@infradead.org>,
+    Jonathan Corbet <corbet@lwn.net>, jeffxu@chromium.org,
+    keescook@chromium.org, jannh@google.com, sroettger@google.com,
+    gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+    usama.anjum@collabora.com, Liam.Howlett@oracle.com,
+    surenb@google.com, merimus@google.com, rdunlap@infradead.org,
+    jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
 Subject: Re: [PATCH v10 0/5] Introduce mseal
-Message-Id: <20240514160150.3ed0fda8af5cbd2f17c625e6@linux-foundation.org>
-In-Reply-To: <56001.1715726927@cvs.openbsd.org>
-References: <20240415163527.626541-1-jeffxu@chromium.org>
-	<20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
-	<871q646rea.fsf@meer.lwn.net>
-	<ZkPXcT_JuQeZCAv0@casper.infradead.org>
-	<56001.1715726927@cvs.openbsd.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+In-reply-to: <20240514160150.3ed0fda8af5cbd2f17c625e6@linux-foundation.org>
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org> <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org> <56001.1715726927@cvs.openbsd.org> <20240514160150.3ed0fda8af5cbd2f17c625e6@linux-foundation.org>
+Comments: In-reply-to Andrew Morton <akpm@linux-foundation.org>
+   message dated "Tue, 14 May 2024 16:01:50 -0700."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <45809.1715730450.1@cvs.openbsd.org>
+Date: Tue, 14 May 2024 17:47:30 -0600
+Message-ID: <92453.1715730450@cvs.openbsd.org>
 
-On Tue, 14 May 2024 16:48:47 -0600 "Theo de Raadt" <deraadt@openbsd.org> wrote:
+Andrew Morton <akpm@linux-foundation.org> wrote:
 
-> Matthew Wilcox <willy@infradead.org> wrote:
+> > I worry that the non-atomicity will one day be used by an attacker.
 > 
-> > > Not taking a position on merging, but I have to ask: are we convinced at
-> > > this point that mseal() isn't a chrome-only system call?  Did we ever
-> > > see the glibc patches that were promised?
-> > 
-> > I think _this_ version of mseal() is OpenBSD's mimmutable() with a
-> > basically unused extra 'flags' argument.  As such, we have an existance
-> > proof that it's useful beyond Chrome.
-> 
-> Yes, it is close enough.
-> 
-> > I think Liam still had concerns around the
-> > walk-the-vmas-twice-to-error-out-early part of the implementation?
-> > Although we can always fix the implementation later; changing the API
-> > is hard.
-> 
-> Yes I am a bit worried about the point Liam brings up -- we've discussed
-> it privately at length.  Matthew, to keep it short I have a different
-> viewpoint:
-> 
-> Some of the Linux m* system calls have non-conforming, partial-work-then-return-error
-> behaviour.  I cannot find anything like this in any system call in any other
-> operating system, and I believe there is a defacto rule against doing this, and
-> Linux has an optimization which violating this, and I think it could be fixed
-> with fairly minor expense, and can't imagine it affecting a single application.
+> How might an attacker exploit this?
 
-Thanks.
+Various ways which are going to be very application specific. Most ways
+will depend on munmap / mprotect arguments being incorrect for some
+reason, and callers not checking the return values.
 
-> I worry that the non-atomicity will one day be used by an attacker.
+After the system call, the memory is in a very surprising configuration.
 
-How might an attacker exploit this?
+Consider a larger memory region containing the following sections:
+
+  [regular memory]  [sealed memory]  [regular memory containing a secret]
+
+unmap() gets called on the whole region, for some reason.  The first
+section is removed.  It hits the sealed memory, and returns EPERM.  It does
+not unmap the sealed reason, not the memory containing the secret.
+
+The return values of mprotect and munmap are *very rarely* checked,
+which adds additional intrigue. They are not checked because these
+system calls never failed in this way on systems before Linux.
+
+It is difficult to write test programs which fail under the current ENOMEM
+situation (the only current failure mode, AFAIK).  But with the new mseal()
+EPERM condition, it will be very easy to write programs which leave memory
+behind.
+
+I don't know how you'll document this trap in the manual page, let me try.
+
+    If msealed memory is found inside the range [start, start+len], 
+    earlier memory will be unmapped, but later memory will remain unmapped
+    and the system call returns error EPERM.
+
+    If kernel memory shortage occurs while unmapping the region, early
+    regions may be unmapped but higher regions may remain mapped, and
+    the system call may return ENOMEM.
+
+I feel so gross now, time for a shower..
 
