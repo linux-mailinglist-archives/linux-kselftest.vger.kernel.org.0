@@ -1,152 +1,84 @@
-Return-Path: <linux-kselftest+bounces-10200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E7948C5CCE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:29:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87E088C5CDF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:34:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921231F224B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 21:29:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E33528201C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 21:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BE2181BA8;
-	Tue, 14 May 2024 21:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00DA181BA6;
+	Tue, 14 May 2024 21:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tj7qo6Oq"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="PV/6XtIo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CC9180A6A;
-	Tue, 14 May 2024 21:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8288F180A6A;
+	Tue, 14 May 2024 21:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715722183; cv=none; b=EAZb45ibjzurI2tf70q7Ybmr7rjtwxZMjMmItfBcdervkkBaU7BRPnhp7ZAZMN/XlHCYOXpcS9hpTl6axMuRFz6OYfFydHfoeccT2nkkLeyMJhBuUMcUdfeGgrjSa04XD+k+Ay4V5DbRKF8WAyQ0AsaA5hxUIit7/yBAyguJuv0=
+	t=1715722439; cv=none; b=k0ouw1ExQVOCCoA2W/Y/WL8KeiTWnDC3D6MzdukkwtOsGmDSjWAlTBmwKC0wCWdprftCK4Rsw3sjEGoHYj/4wlN28LE9tGKwI3KmmS9dcsZ+lH28hizrYwVD+CVIdRXKp/CW3PpyM+O+9wIJuLdnu/aom6tBHn38eJu2ys0a7CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715722183; c=relaxed/simple;
-	bh=Y+m1nbd28r9a7918tO34Pw+7ZflDLT2x0sc9gLxM79Q=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=U8ovaJsXiIrFjqHxdEHP3xb/J6e+CRy+1FloTgVoZxdfzJZbmBiUuaS0BD80TgvM0Ru7VGTrsRDDvqr3oxnkSW0QQwd+ynJL+9Z36LWmc3ishgCbdh1fy2X9qzE67lmeilJd7SxNGPNHTkvlEYbdeouPg5wDIOcKZihquDCIDTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tj7qo6Oq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47491C2BD10;
-	Tue, 14 May 2024 21:29:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715722182;
-	bh=Y+m1nbd28r9a7918tO34Pw+7ZflDLT2x0sc9gLxM79Q=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=tj7qo6OqQuXFdOdFZ1bi12ZdMFQ36pNjyngiRyzkjtqgMTgrAPBfYYo9cn1g0GmCq
-	 Ojop1qK+lr5KWo1zePIYi343Vr7czqA8sBS/DTXRsy2ZQxTKk8+UlQ+4ggwg2w6lQq
-	 tOHzWCvnQewAUise+RwW/gpoqKA/KHNDKqVD3f7UI7IWF9vnrlak3WhHoyGIZhpxOV
-	 l4j0P79xvLU5JLeKZ8HU+Bu7YuVqVT6dUV/C/AGi5Qe0I48zQzt7VQogogY96yp8Pq
-	 Kt4NqAFWtSGsT1r0u24xApI8REWXUrbC5s8FgZXOtHb3PgZzzWpeYqOKKkjgS75l8s
-	 F9lSpEr0HqWTA==
-Message-ID: <5c919f0d3d72fe1592a11c45545e8a60.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1715722439; c=relaxed/simple;
+	bh=gQ3cHLBfriWESqMJX8RI6EYiieJnzdTF2TB9WXr93Jo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=txqUbAI/Mbm3RW2NMjjHXR5n3gEWUVjY22PgAuEVQtH9HSRhjLFLF5F3JNvwheG9qwSoyiQfSvihqmrqIggNxhAOvvlzbj3mzolMVn1z9MwtfbOc7R1UpsXHwmtlnaMjDcDPYdX0hC+ltXxN/hGPLwG+dzDjKclJK7Ce3N4A3SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=PV/6XtIo; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 85E7A47C5E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1715722433; bh=PLi46UaVrc/Z0uoODzowFmJDuvciXUyoO6N2acvXiQU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=PV/6XtIoIwbywu9v9hI5qfTogTxnTYW8Hli6HSI20avtrV/HAlxaBmBFp4ZnUmtTR
+	 jH3WSYrzaZTF5067Ql5OxTiz5iZoKTPL4Efu2tFv9LyT7l12A3ZHXituz1yhyT9pUT
+	 AX9DeXWJ5tJjc0ZyTn/FUeU4LIxk66NoaPTyjpP3ZqqDBsxTidsOnmt9+DSODBWXnM
+	 jH2eRiwlWKKzQpgd3BRCcniLKNmg+QsN6yX8FO2hJfrRMJRJGufaFFAP7CSZwT5x0p
+	 BpHAlVhBrpihOI4fapvZEpgaIMLVS7EsOBL86dKR2OM749ms+tbvk3ZqfdxYWZJBin
+	 oNd2RfYk0Iing==
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 85E7A47C5E;
+	Tue, 14 May 2024 21:33:53 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Brendan Jackman <jackmanb@google.com>, Daniel Latypov <dlatypov@google.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Brendan Higgins
+ <brendan.higgins@linux.dev>, davidgow@google.com, rmoar@google.com
+Subject: Re: [PATCH v2] Documentation: kunit: Clarify test filter format
+In-Reply-To: <ZkPVt9wyu7f-fC3c@google.com>
+References: <20240402125109.1251232-1-jackmanb@google.com>
+ <CAGS_qxpBmmafnQnDXYf5RftPzxghd+i8Ly4CK=EkcpidpCPP6g@mail.gmail.com>
+ <ZkPVt9wyu7f-fC3c@google.com>
+Date: Tue, 14 May 2024 15:33:52 -0600
+Message-ID: <87wmnw5b9b.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b822c6a5488c4098059b6d3c35eecbbd.sboyd@kernel.org>
-References: <20240422232404.213174-1-sboyd@kernel.org> <CABVgOSmgUJp3FijpYGCphi1OzRUNvmYQmPDdL6mN59YnbkR2iQ@mail.gmail.com> <b822c6a5488c4098059b6d3c35eecbbd.sboyd@kernel.org>
-Subject: Re: [PATCH v4 00/10] clk: Add kunit tests for fixed rate and parent data
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
-To: David Gow <davidgow@google.com>, Rob Herring <robh@kernel.org>
-Date: Tue, 14 May 2024 14:29:40 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain
 
-Quoting Stephen Boyd (2024-05-02 18:27:42)
-> Quoting David Gow (2024-05-01 01:08:11)
-> >=20
-> > The other thing I've noted so far is that the
-> > of_apply_kunit_platform_device and of_overlay_apply_kunit_cleanup
-> > tests fail (and BUG() with a NULL pointer) on powerpc:
-> > > [15:18:51]     # of_overlay_apply_kunit_platform_device: EXPECTATION =
-FAILED at drivers/of/overlay_test.c:47
-> > > [15:18:51]     Expected pdev is not null, but is
-> > > [15:18:51] BUG: Kernel NULL pointer dereference at 0x0000004c
->=20
-> This seems to be because pdev is NULL and we call put_device(&pdev->dev)
-> on it. We could be nicer and have an 'if (pdev)' check there. I wonder
-> if that fixes the other two below?
->=20
-> ---8<---
-> diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
-> index 223e5a5c23c5..85cfbe6bb132 100644
-> --- a/drivers/of/overlay_test.c
-> +++ b/drivers/of/overlay_test.c
-> @@ -91,7 +92,8 @@ static void of_overlay_apply_kunit_cleanup(struct kunit=
- *test)
->         dev =3D bus_find_device(&platform_bus_type, NULL, kunit_compatibl=
-e,
->                               of_overlay_bus_match_compatible);
->         KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
-> -       put_device(dev);
-> +       if (dev)
-> +               put_device(dev);
->  }
+Brendan Jackman <jackmanb@google.com> writes:
 
-This last hunk isn't needed.
+> On Wed, Apr 03, 2024 at 02:59:43PM -0700, Daniel Latypov wrote:
+>> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+>
+> Hi Jonathan, I think this is ready to be applied?
 
-> =20
->  static struct kunit_case of_overlay_apply_kunit_test_cases[] =3D {
->=20
-> > > [15:18:51]     # of_overlay_apply_kunit_platform_device: try faulted:=
- last line seen lib/kunit/resource.c:99
-> > > [15:18:51]     # of_overlay_apply_kunit_platform_device: internal err=
-or occurred preventing test case from running: -4
-> > > [15:18:51] [FAILED] of_overlay_apply_kunit_platform_device
-> >=20
-> > > [15:18:51] BUG: Kernel NULL pointer dereference at 0x0000004c
-> > > [15:18:51] note: kunit_try_catch[698] exited with irqs disabled
-> > > [15:18:51]     # of_overlay_apply_kunit_cleanup: try faulted: last li=
-ne seen drivers/of/overlay_test.c:77
-> > > [15:18:51]     # of_overlay_apply_kunit_cleanup: internal error occur=
-red preventing test case from running: -4
-> > > [15:18:51] [FAILED] of_overlay_apply_kunit_cleanup
-> >=20
-> > I've not had a chance to dig into it any further, yet, but it appears
-> > to work on all of the other architectures I tried.
->=20
-> Cool. I don't know why powerpc doesn't make devices. Maybe it has a
-> similar design to sparc to create resources. I'll check it out.
->=20
+I'm happy to take this, but normally these patches go through the kunit
+tree, so I've not been paying much attention.  Let me know please if I
+should pick it up.
 
-powerpc doesn't mark the root node with OF_POPULATED_BUS. If I set that
-in of_platform_default_populate_init() then the overlays can be applied.
+Thanks,
 
----8<----
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index 389d4ea6bfc1..fa7b439e9402 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -565,6 +565,10 @@ static int __init of_platform_default_populate_init(vo=
-id)
- 				of_platform_device_create(node, buf, NULL);
- 		}
-=20
-+		node =3D of_find_node_by_path("/");
-+		if (node)
-+			of_node_set_flag(node, OF_POPULATED_BUS);
-+		of_node_put(node);
- 	} else {
- 		/*
- 		 * Handle certain compatibles explicitly, since we don't want to create
-
-I'm guessing this is wrong though, because I see bunch of powerpc specific =
-code
-calling of_platform_bus_probe() which will set the flag on the actual platf=
-orm
-bus nodes. Maybe we should just allow overlays to create devices at the root
-node regardless? Of course, the flag doc says "platform bus created for
-children" and if we never populated the root then that isn't entirely accur=
-ate.
-
-Rob, can you point me in the right direction? Do we need to use simple-bus =
-in
-the test overlays and teach overlay code to populate that bus?
+jon
 
