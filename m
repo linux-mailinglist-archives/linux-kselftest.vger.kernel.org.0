@@ -1,84 +1,101 @@
-Return-Path: <linux-kselftest+bounces-10201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87E088C5CDF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:34:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF028C5DEF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 00:55:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E33528201C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 21:34:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 106861F21652
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 22:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00DA181BA6;
-	Tue, 14 May 2024 21:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80EF182C82;
+	Tue, 14 May 2024 22:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="PV/6XtIo"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="DXKecPN0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8288F180A6A;
-	Tue, 14 May 2024 21:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E182B181D1F;
+	Tue, 14 May 2024 22:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715722439; cv=none; b=k0ouw1ExQVOCCoA2W/Y/WL8KeiTWnDC3D6MzdukkwtOsGmDSjWAlTBmwKC0wCWdprftCK4Rsw3sjEGoHYj/4wlN28LE9tGKwI3KmmS9dcsZ+lH28hizrYwVD+CVIdRXKp/CW3PpyM+O+9wIJuLdnu/aom6tBHn38eJu2ys0a7CM=
+	t=1715727330; cv=none; b=gMYx54o7KCtDtbILXNNL7idZwgLsrnohlHM+gaDsU4zPS1nUNr5Np2y50yk7MgWrM0cVnmikC8m8V3NyVqP69t9beWed9xht3q9KO4Ci87UgyZRJ5ZBCbM4qlnEFGLo5s6hkv/GAoUrR7yd42cM+7Eo1U1ax7RDsC9CbfhxmyEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715722439; c=relaxed/simple;
-	bh=gQ3cHLBfriWESqMJX8RI6EYiieJnzdTF2TB9WXr93Jo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=txqUbAI/Mbm3RW2NMjjHXR5n3gEWUVjY22PgAuEVQtH9HSRhjLFLF5F3JNvwheG9qwSoyiQfSvihqmrqIggNxhAOvvlzbj3mzolMVn1z9MwtfbOc7R1UpsXHwmtlnaMjDcDPYdX0hC+ltXxN/hGPLwG+dzDjKclJK7Ce3N4A3SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=PV/6XtIo; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 85E7A47C5E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1715722433; bh=PLi46UaVrc/Z0uoODzowFmJDuvciXUyoO6N2acvXiQU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=PV/6XtIoIwbywu9v9hI5qfTogTxnTYW8Hli6HSI20avtrV/HAlxaBmBFp4ZnUmtTR
-	 jH3WSYrzaZTF5067Ql5OxTiz5iZoKTPL4Efu2tFv9LyT7l12A3ZHXituz1yhyT9pUT
-	 AX9DeXWJ5tJjc0ZyTn/FUeU4LIxk66NoaPTyjpP3ZqqDBsxTidsOnmt9+DSODBWXnM
-	 jH2eRiwlWKKzQpgd3BRCcniLKNmg+QsN6yX8FO2hJfrRMJRJGufaFFAP7CSZwT5x0p
-	 BpHAlVhBrpihOI4fapvZEpgaIMLVS7EsOBL86dKR2OM749ms+tbvk3ZqfdxYWZJBin
-	 oNd2RfYk0Iing==
-Received: from localhost (mdns.lwn.net [45.79.72.68])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 85E7A47C5E;
-	Tue, 14 May 2024 21:33:53 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Brendan Jackman <jackmanb@google.com>, Daniel Latypov <dlatypov@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Brendan Higgins
- <brendan.higgins@linux.dev>, davidgow@google.com, rmoar@google.com
-Subject: Re: [PATCH v2] Documentation: kunit: Clarify test filter format
-In-Reply-To: <ZkPVt9wyu7f-fC3c@google.com>
-References: <20240402125109.1251232-1-jackmanb@google.com>
- <CAGS_qxpBmmafnQnDXYf5RftPzxghd+i8Ly4CK=EkcpidpCPP6g@mail.gmail.com>
- <ZkPVt9wyu7f-fC3c@google.com>
-Date: Tue, 14 May 2024 15:33:52 -0600
-Message-ID: <87wmnw5b9b.fsf@meer.lwn.net>
+	s=arc-20240116; t=1715727330; c=relaxed/simple;
+	bh=lUUbtboFXAJWCE0W1VokJb8/yl3D0BpWZ8xnDFVZ9qM=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=NAapIUaj2VBO1DfdqC4kCdN5cagjrWqIL86g5DvvBagbVSeO2fLz7PaY/JY0W4OnmAn7oYk2dzqtP1CBLqbvs3PzmJSyVKAebQ/bjC6LkFVsA4bDV7DlyuAo+uawdFK3Sw7uzGQAXO3vRSEPzljCR3PH+ZKPm4+6qdp5VTaz0Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=DXKecPN0; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=lUUbtboFXA
+	JWCE0W1VokJb8/yl3D0BpWZ8xnDFVZ9qM=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=DXKecPN04dCt3ZGgyElWyQpUlSl8jxRlY
+	fFmJmAonBF+5KpsNWHrZwtZLRNElrmyFepY+8i/Z1yYp6+xsR2NPvp22BIvChLbSA5tuWS
+	L86bhYwLO9mbdcbd5MUKwgx0zrriBeTE5NTzNdm7wU+JAaxFvYez/GuEHF/1kfs9q2CbRt
+	WZlubKV/MDKp30IHhP5MgV/YrT+UCm+zetoZ7L58Wrk+Tdie9BX4HIJrPq7TKoqTjbNgK1
+	D8wl0W+5bf5Yjcs1fc359iBaktIk3EM/C7cMwOyXGf5J0ybBHf4/BT7VNAcYrBpnwjZiPl
+	rAJdmEb0IiNvnAemTgraO883ggLaA==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 907e0c43;
+	Tue, 14 May 2024 16:48:47 -0600 (MDT)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Matthew Wilcox <willy@infradead.org>
+cc: Jonathan Corbet <corbet@lwn.net>,
+    Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org,
+    keescook@chromium.org, jannh@google.com, sroettger@google.com,
+    gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+    usama.anjum@collabora.com, Liam.Howlett@oracle.com,
+    surenb@google.com, merimus@google.com, rdunlap@infradead.org,
+    jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+In-reply-to: <ZkPXcT_JuQeZCAv0@casper.infradead.org>
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org> <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org>
+Comments: In-reply-to Matthew Wilcox <willy@infradead.org>
+   message dated "Tue, 14 May 2024 22:28:17 +0100."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <57526.1715726927.1@cvs.openbsd.org>
+Date: Tue, 14 May 2024 16:48:47 -0600
+Message-ID: <56001.1715726927@cvs.openbsd.org>
 
-Brendan Jackman <jackmanb@google.com> writes:
+Matthew Wilcox <willy@infradead.org> wrote:
 
-> On Wed, Apr 03, 2024 at 02:59:43PM -0700, Daniel Latypov wrote:
->> Reviewed-by: Daniel Latypov <dlatypov@google.com>
->
-> Hi Jonathan, I think this is ready to be applied?
+> > Not taking a position on merging, but I have to ask: are we convinced at
+> > this point that mseal() isn't a chrome-only system call?  Did we ever
+> > see the glibc patches that were promised?
+> 
+> I think _this_ version of mseal() is OpenBSD's mimmutable() with a
+> basically unused extra 'flags' argument.  As such, we have an existance
+> proof that it's useful beyond Chrome.
 
-I'm happy to take this, but normally these patches go through the kunit
-tree, so I've not been paying much attention.  Let me know please if I
-should pick it up.
+Yes, it is close enough.
 
-Thanks,
+> I think Liam still had concerns around the
+> walk-the-vmas-twice-to-error-out-early part of the implementation?
+> Although we can always fix the implementation later; changing the API
+> is hard.
 
-jon
+Yes I am a bit worried about the point Liam brings up -- we've discussed
+it privately at length.  Matthew, to keep it short I have a different
+viewpoint:
+
+Some of the Linux m* system calls have non-conforming, partial-work-then-return-error
+behaviour.  I cannot find anything like this in any system call in any other
+operating system, and I believe there is a defacto rule against doing this, and
+Linux has an optimization which violating this, and I think it could be fixed
+with fairly minor expense, and can't imagine it affecting a single application.
+
+I worry that the non-atomicity will one day be used by an attacker.
 
