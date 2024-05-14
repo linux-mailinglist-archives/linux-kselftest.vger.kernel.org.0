@@ -1,239 +1,161 @@
-Return-Path: <linux-kselftest+bounces-10179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D998C5835
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 16:44:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CAB28C592A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 17:57:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF8AE1F2180F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 14:44:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBB6B213E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 15:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD0D17BB39;
-	Tue, 14 May 2024 14:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B6E17EBB4;
+	Tue, 14 May 2024 15:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNn88E3q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqU/sBjS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458E326AC6;
-	Tue, 14 May 2024 14:44:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A6C17EBAA;
+	Tue, 14 May 2024 15:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715697851; cv=none; b=XktmwwpcuLud2BWGCHppJH+ci0xBHMtouWYgLfjsWR4WW40a0R2tH+4hS2DuWR/c5yMDT0S37yxk7FrDDvP4H5khqztRYjDcaAbAqBM/GKOggPmVZ9UkQ2dU88nR1ZAa4Hnl27oPOHCRwwfbd5HimmQ3XJG8eTxYjcrx6gyi4eM=
+	t=1715702254; cv=none; b=PgDDt6V1La9m7Pg/XkNlYiHTwHimwI2+/CNWBZu8LXgrCdOjnnbpwPg/EPP7I1ArfvLOtXLtvHtfvCekctltl3mNjcjI03vdvW1Vd4BShZiYG2Lc+ulNmxJrKp/6SpTFtAL3/1D0V72fV3cStNeosquUidp5vpTIMDLFIFeQLGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715697851; c=relaxed/simple;
-	bh=y6f6cP8b+wbXxgeRLntoPzUrt10oVgLSe6lqdbiAE/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DiNRnUICMyUSdWqZP/6t1a/iRJmCuIt2vLSDQaagUtA0Ir+4yWGQCZIXAB2dsaVNwPsfjj5ERdBnl/yIZ0mO5ejrqynYqqfojst2HCQekYkzCdNf1Nb9coaVT112yRHHWPOkDn6fF49TsjMqHSEWtXew5HgVvGtNpBefecORbF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNn88E3q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54926C2BD10;
-	Tue, 14 May 2024 14:44:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715697850;
-	bh=y6f6cP8b+wbXxgeRLntoPzUrt10oVgLSe6lqdbiAE/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JNn88E3qwlFZ8IDo6NLYz/WL2sOshJD3Uwz336B+1EH4VNtFWEZ+38K/urjlox5v4
-	 +p20OpHYmetUOS7FZF3FMG+TTHQ74Py0oaqF+8nysAdUl6Q/S+A6DtPPu1CbPT0nD2
-	 56JsY/sPwMcRh+UeCI85oV+CUt42T8bkE/rro8rs6hAli5pQnKnI6mikqVICbwyVtE
-	 T/89KdPyIKiQM5KK3IxQEOcmODsQ6xNUdO5WbgVHnDkYF/G5O9Otq4LkDmXfqLHxwu
-	 8uLS1hakZ34fk7+HjgCTmylScgB4wF6RJM2WTkGHUyuZJLNwKszxO5OW1N0yZa0b9x
-	 qfcktlIO2YeRA==
-Date: Tue, 14 May 2024 15:44:05 +0100
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
-	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 02/11] riscv: add ISA extensions validation
-Message-ID: <20240514-ascend-joyous-a15969f703de@spud>
-References: <20240429150553.625165-1-cleger@rivosinc.com>
- <20240429150553.625165-3-cleger@rivosinc.com>
- <20240429-subtext-tabby-3a1532f058a5@spud>
- <5d5febd5-d113-4e8c-9535-9e75acf23398@rivosinc.com>
- <20240430-payable-famished-6711765d5ca4@wendy>
- <e57f8b70-7981-42c1-bb04-2060054dd796@rivosinc.com>
- <20240514-sip-exclusion-014b07b01f4c@spud>
- <9d0840ff-d00a-4866-8f45-e8676f369ad6@rivosinc.com>
+	s=arc-20240116; t=1715702254; c=relaxed/simple;
+	bh=7vQ9caJ69PPA/iWpxP0PVdG/Xnyf24O2zVxjSm9eec0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=asedzKwJ8iF1eOh3iECzKZrqAvDHsaf0MJErPcvJZnhWDyIcIcPbOrXa1h0vOxGcfwq3WYHMG8X0P4x59qjCW5i/gKcdWC2MVOrFYPLWMPmLNFY4zLj6iML++oCB7VGB9OAC+VPV2UJ85P7fk2K1qkVMA8zRySMciaUVgRPfih4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dqU/sBjS; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-34d8d11a523so3650309f8f.2;
+        Tue, 14 May 2024 08:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715702251; x=1716307051; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T+d4421rpsL7HiUws1Ztdbm4DVzL1jztBkW9+LQ+UBo=;
+        b=dqU/sBjSwLu4bozDDv2XKBuqOl8eeZ+3hp2B4XnRatnNrIVuWow/8w1/b20UMc5vG9
+         uyJc0Jyr0A0fUDN/2UYa9eLtOQs9G10nQIfz+8C6o+g8xUYPR7d29TRLJGgJofiSnl7L
+         nQ0FwOVRb3a/0qBp1OwPapDuonBup8t2zP4xqi9wwO2852/YFjBB03w+B1vmoclsQf+j
+         UstRiJ74Qb+tiimw7tlTEYZ5V438JMDuQx16oNOPCV2QpgWnJTallS/8T7G2I2RRNuzu
+         A+EN6bsGiA7cYNO7gRPBXmaEA3wG1Um9oXXXQGVsfWvNhSF0PFttkFowvfxZLmV4UWoJ
+         Tkyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715702251; x=1716307051;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T+d4421rpsL7HiUws1Ztdbm4DVzL1jztBkW9+LQ+UBo=;
+        b=uupcYeRcfrI3YEzv51OkDY3M4UXuGpV5bGPWlsz2TWWGxVZ/1am0Lc5B8SqFQ4/r5M
+         QAgjylRk764qqgSesqajSOwEkUqJ51OqGpst9DsAJ5tL0KIesDcyIjQ2tKbToC6DJraJ
+         zJCqBkXL7oV6bYWkTPM/2ozhGOPL817WXNXwJqkU44PVF6kU55VmU3zeYY6p7fAbF1Sh
+         4ZZCM3eje51uG1efFzRNamNE+s/KcL517ZilY8lWP0EQAAn3YkkTSkivt60bLmdZtoK3
+         zxZrECXBDr0pgm7mBGfY0mwEZ5W82E7RXTmtfW0RBawnMVxJPU975IQpyZZF2RxUm+gv
+         1i8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUap3VSv6HTQF2yDeTOgGFNlMuT6uY5xLevdpqs+YebtwPK2vTIvlzlvjsfKaGoS2xqN2fplzad/BRXb2PGGrakOwRYSZudULcHgLxbEGGRQghNS2ruvMYTNqqTfxI4txF4hZFaIdF9IVTyoaWntVTjsjsXf8e4NGKTg79ppz+OxQCoxKOp
+X-Gm-Message-State: AOJu0YzyGbJAlcncBZrkdQQ9bDnJq63YxnL9B/uMCm2Sicqlwt6q5c1d
+	69XqDKh7GzDuv5JgZcqNO+BTZ+OjB4d66KyAO2FVxiOvWS+AKSko
+X-Google-Smtp-Source: AGHT+IGfTM40WEprBTch2H967ZRRzRzKTT0rxn3GV9l1lNsS/HTRokQXI1/DIIFxF4ck9xhTstklVQ==
+X-Received: by 2002:a5d:6451:0:b0:34e:34c5:2312 with SMTP id ffacd0b85a97d-3504aa62fd3mr9068696f8f.59.1715702250770;
+        Tue, 14 May 2024 08:57:30 -0700 (PDT)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502bbbc082sm14042487f8f.107.2024.05.14.08.57.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 May 2024 08:57:30 -0700 (PDT)
+Message-ID: <8e0b027d-4d30-4f0f-82ef-113287f17c6a@gmail.com>
+Date: Tue, 14 May 2024 17:56:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="77IYhpXVRVT+g+0m"
-Content-Disposition: inline
-In-Reply-To: <9d0840ff-d00a-4866-8f45-e8676f369ad6@rivosinc.com>
+Subject: Re: [PATCH net-next v10 2/3] net: gro: move L3 flush checks to
+ tcp_gro_receive and udp_gro_receive_segment
+To: Jakub Kicinski <kuba@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
+ alexander.duyck@gmail.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240509190819.2985-1-richardbgobert@gmail.com>
+ <20240509190819.2985-3-richardbgobert@gmail.com>
+ <CAMuHMdXFJwxexojG+41ppD=2EmyXsVM6bwh+-cxCxfSsM_yJiw@mail.gmail.com>
+ <20240514071407.257c0003@kernel.org>
+From: Richard Gobert <richardbgobert@gmail.com>
+In-Reply-To: <20240514071407.257c0003@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Jakub Kicinski wrote:
+> On Tue, 14 May 2024 14:13:21 +0200 Geert Uytterhoeven wrote:
+>> On Thu, May 9, 2024 at 9:09 PM Richard Gobert <richardbgobert@gmail.com> wrote:
+>>> {inet,ipv6}_gro_receive functions perform flush checks (ttl, flags,
+>>> iph->id, ...) against all packets in a loop. These flush checks are used in
+>>> all merging UDP and TCP flows.
+>>>
+>>> These checks need to be done only once and only against the found p skb,
+>>> since they only affect flush and not same_flow.
+>>>
+>>> This patch leverages correct network header offsets from the cb for both
+>>> outer and inner network headers - allowing these checks to be done only
+>>> once, in tcp_gro_receive and udp_gro_receive_segment. As a result,
+>>> NAPI_GRO_CB(p)->flush is not used at all. In addition, flush_id checks are
+>>> more declarative and contained in inet_gro_flush, thus removing the need
+>>> for flush_id in napi_gro_cb.
+>>>
+>>> This results in less parsing code for non-loop flush tests for TCP and UDP
+>>> flows.
+>>>
+>>> To make sure results are not within noise range - I've made netfilter drop
+>>> all TCP packets, and measured CPU performance in GRO (in this case GRO is
+>>> responsible for about 50% of the CPU utilization).
+>>>
+>>> perf top while replaying 64 parallel IP/TCP streams merging in GRO:
+>>> (gro_receive_network_flush is compiled inline to tcp_gro_receive)
+>>> net-next:
+>>>         6.94% [kernel] [k] inet_gro_receive
+>>>         3.02% [kernel] [k] tcp_gro_receive
+>>>
+>>> patch applied:
+>>>         4.27% [kernel] [k] tcp_gro_receive
+>>>         4.22% [kernel] [k] inet_gro_receive
+>>>
+>>> perf top while replaying 64 parallel IP/IP/TCP streams merging in GRO (same
+>>> results for any encapsulation, in this case inet_gro_receive is top
+>>> offender in net-next)
+>>> net-next:
+>>>         10.09% [kernel] [k] inet_gro_receive
+>>>         2.08% [kernel] [k] tcp_gro_receive
+>>>
+>>> patch applied:
+>>>         6.97% [kernel] [k] inet_gro_receive
+>>>         3.68% [kernel] [k] tcp_gro_receive
+>>>
+>>> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>  
+>>
+>> Thanks for your patch, which is now commit 4b0ebbca3e167976 ("net: gro:
+>> move L3 flush checks to tcp_gro_receive and udp_gro_receive_segment")
+>> in net-next/main (next-20240514).
+>>
+>> noreply@ellerman.id.au reports build failures on m68k, e.g.
+>> http://kisskb.ellerman.id.au/kisskb/buildresult/15168903/
+>>
+>>     net/core/gro.c: In function ‘dev_gro_receive’:
+>>     ././include/linux/compiler_types.h:460:38: error: call to
+>> ‘__compiletime_assert_654’ declared with attribute error: BUILD_BUG_ON
+>> failed: !IS_ALIGNED(offsetof(struct napi_gro_cb, zeroed), sizeof(u32))
+> 
+> Hi Richard, any chance of getting this fixed within the next 2 hours?
+> I can't send the net-next PR if it doesn't build on one of the arches..
 
---77IYhpXVRVT+g+0m
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 14, 2024 at 02:48:01PM +0200, Cl=E9ment L=E9ger wrote:
->=20
->=20
-> On 14/05/2024 14:43, Conor Dooley wrote:
-> > On Tue, May 14, 2024 at 09:53:08AM +0200, Cl=E9ment L=E9ger wrote:
-> >>
-> >>
-> >> On 30/04/2024 13:44, Conor Dooley wrote:
-> >>> On Tue, Apr 30, 2024 at 09:18:47AM +0200, Cl=E9ment L=E9ger wrote:
-> >>>>
-> >>>>
-> >>>> On 30/04/2024 00:15, Conor Dooley wrote:
-> >>>>> On Mon, Apr 29, 2024 at 05:04:55PM +0200, Cl=E9ment L=E9ger wrote:
-> >>>>>> Since a few extensions (Zicbom/Zicboz) already needs validation and
-> >>>>>> future ones will need it as well (Zc*) add a validate() callback to
-> >>>>>> struct riscv_isa_ext_data. This require to rework the way extensio=
-ns are
-> >>>>>> parsed and split it in two phases. First phase is isa string or isa
-> >>>>>> extension list parsing and consists in enabling all the extensions=
- in a
-> >>>>>> temporary bitmask without any validation. The second step "resolve=
-s" the
-> >>>>>> final isa bitmap, handling potential missing dependencies. The mec=
-hanism
-> >>>>>> is quite simple and simply validate each extension described in the
-> >>>>>> temporary bitmap before enabling it in the final isa bitmap. valid=
-ate()
-> >>>>>> callbacks can return either 0 for success, -EPROBEDEFER if extensi=
-on
-> >>>>>> needs to be validated again at next loop. A previous ISA bitmap is=
- kept
-> >>>>>> to avoid looping mutliple times if an extension dependencies are n=
-ever
-> >>>>>> satisfied until we reach a stable state. In order to avoid any pot=
-ential
-> >>>>>> infinite looping, allow looping a maximum of the number of extensi=
-on we
-> >>>>>> handle. Zicboz and Zicbom extensions are modified to use this vali=
-dation
-> >>>>>> mechanism.
-> >>>>>
-> >>>>> Your reply to my last review only talked about part of my comments,
-> >>>>> which is usually what you do when you're gonna implement the rest, =
-but
-> >>>>> you haven't.
-> >>>>> I like the change you've made to shorten looping, but I'd at least =
-like
-> >>>>> a response to why a split is not worth doing :)
-> >>>>
-> >>>> Hi Conor,
-> >>>>
-> >>>> Missed that point since I was feeling that my solution actually
-> >>>> addresses your concerns. Your argument was that there is no reason to
-> >>>> loop for Zicbom/Zicboz but that would also apply to Zcf in case we a=
-re
-> >>>> on RV64 as well (since zcf is not supported on RV64). So for Zcf, th=
-at
-> >>>> would lead to using both mecanism or additional ifdefery with little=
- to
-> >>>> no added value since the current solution actually solves both cases:
-> >>>>
-> >>>> - We don't have any extra looping if all validation callback returns=
- 0
-> >>>> (except the initial one on riscv_isa_ext, which is kind of unavoidab=
-le).
-> >>>> - Zicbom, Zicboz callbacks will be called only once (which was one of
-> >>>> your concern).
-> >>>>
-> >>>> Adding a second kind of callback for after loop validation would only
-> >>>> lead to a bunch of additional macros/ifdefery for extensions with
-> >>>> validate() callback, with validate_end() or with both (ie Zcf)). For
-> >>>> these reasons, I do not think there is a need for a separate mechani=
-sm
-> >>>> nor additional callback for such extensions except adding extra code
-> >>>> with no real added functionality.
-> >>>>
-> >>>> AFAIK, the platform driver probing mechanism works the same, the pro=
-be()
-> >>>> callback is actually called even if for some reason properties are
-> >>>> missing from nodes for platform devices and thus the probe() returns
-> >>>> -EINVAL or whatever.
-> >>>>
-> >>>> Hope this answers your question,
-> >>>
-> >>> Yeah, pretty much I am happy with just an "it's not worth doing it"
-> >>> response. Given it wasn't your first choice, I doubt you're overly ha=
-ppy
-> >>> with it either, but I really would like to avoid looping to closure to
-> >>> sort out dependencies - particularly on the boot CPU before we bring
-> >>> anyone else up, but if the code is now more proactive about breaking
-> >>> out, I suppose that'll have to do :)
-> >>> I kinda wish we didn't do this at all, but I think we've brought this
-> >>> upon ourselves via hwprobe. I'm still on the fence as to whether thin=
-gs
-> >>> that are implied need to be handled in this way. I think I'll bring t=
-his
-> >>> up tomorrow at the weekly call, because so far it's only been you and=
- I
-> >>> discussing this really and it's a policy decision that hwprobe-ists
-> >>> should be involved in I think.
-> >>
-> >> Hi Conor,
-> >>
-> >> Were you able to discuss that topic ?
-> >=20
-> > I realised last night that I'd not got back to this thread and meant to
-> > do that today (I had accidentally deleted it from my mailbox), but I had
-> > a migraine this morning and so didn't.
-> > I did bring it up and IIRC Palmer was of the opinion that we should try
-> > our best to infer extensions.
-> >=20
-> >>> Implied extensions aside, I think we will eventually need this stuff
-> >>> anyway, for extensions that make no sense to consider if a config opt=
-ion
-> >>> for a dependency is disabled.
-> >>> From talking to Eric Biggers the other week about
-> >>> riscv_isa_extension_available() I'm of the opinion that we need to do
-> >>> better with that interface w.r.t. extension and config dependencies,
-> >>> and what seems like a good idea to me at the moment is putting tests =
-for
-> >>> IS_ENABLED(RISCV_ISA_FOO) into these validate hooks.
-> >>>
-> >>> I'll try to look at the actual implementation here tomorrow.
-> >>
-> >> Did you found time to look at the implementation ?
-> >=20
-> > No, with the above excuse. I'll try to get to it today or tomorrow...
->=20
-> No worries, I was on vacation and was just checking if I hadn't missed
-> anything in the meantime. Take your time ;)
-
-I forget where we talked about validation for F/V, but I chucked this
-together last week in response to another thread of Andy's that was
-adding some of the vector subset stuff, because I realised we don't turn
-off any of the stuff that depends on vector if vector gets disabled:
-https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/?h=
-=3Driscv-check_vector&id=3D38050c6858143f43ce2fd04e9824727a7d7731d0
-
-What I've got there doesn't actually work for the vector subsets though,
-only for vector itself, because of the probe ordering. Your validate
-callback stuff should solve that issue though.
-
---77IYhpXVRVT+g+0m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkN4tQAKCRB4tDGHoIJi
-0qISAP90Cmxbqg0YPzaeFWc+C9/VvgVu9xKpX7ljk8pbm7X1owD6AnM5MtNIBLJQ
-RIKtT/ATp2dDqn5rjyDfcJhTFVb4Qwk=
-=e78x
------END PGP SIGNATURE-----
-
---77IYhpXVRVT+g+0m--
+Hi Jakub and Geert,
+I'm only seeing this mail now, sorry for the late response.
+I can fix this within the next two hours, would you prefer a standalone 
+patch or should I add it to this patch series?
 
