@@ -1,127 +1,133 @@
-Return-Path: <linux-kselftest+bounces-10183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E4578C59DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 18:45:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 628C98C5A0E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 19:06:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43E8A2826B4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 16:45:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C94F1C215FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 17:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC78179647;
-	Tue, 14 May 2024 16:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B4917F37C;
+	Tue, 14 May 2024 17:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SwLFwFBk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmYMBgAX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F0EF501
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 16:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3332AD1C;
+	Tue, 14 May 2024 17:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715705112; cv=none; b=BklTSGUrKsVN+6OPD1JDffOJSjhCn3wFgyPz4R+NLJRXvSbjOX2Xq9E3qD9nJ7Gg1fSI8yZMghv6UtJK9I/qa65/EeoVDTtixSf8qHynHLtNFYRTGHePLyTHyFmDTdlcXQn/su6lY4n8jlM4m+UjBlNptunT4SeGY056+P0rqWk=
+	t=1715706411; cv=none; b=jSJviLZpre0l6USxF3WHLsFLx4WRixrPfpGxMD7sM9usNw+6y1CXXDwSeKF4Lu4+QFIY2fk2VRsjmbS831pJ12PN0Aw9mCX8LrcxI8qHTCufhp9JclmDfWVVUntxIhEqqcfIj8jbylTqJBFuKLcxVKrzMK2fe1eyAiC5KqjsIKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715705112; c=relaxed/simple;
-	bh=diyKllqobKbeGJc5R1CZjCecj8JwIgAdEMhvC1ZOIPA=;
+	s=arc-20240116; t=1715706411; c=relaxed/simple;
+	bh=myXA2G0Xw49AlkC8lVgzyk8+knCG4OkEt2v5csHBEko=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EmiLffuqSSLLnjeCz+ZZHwuadm1vxhS5I/JqFh1wWB828Jo/rGIaxqq3u2UpOyhzZvT2xqhqhAwKRS/tgqvgAFf66GX3X9IC1nY9iHytptDYuOpSFQdLEbTv276/jtMDfX10w7USvtypKFX0TNt9c+5VzjCB5iKlM2sS8KxmWo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SwLFwFBk; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7d9ef422859so45721539f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 09:45:11 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=ApLAaVGo2IxpHknBrLhvh4IMBQyKi962HxohM13gq43mXEI9gi6IYxo+4oYwy3L0yDNx1ZZCb9zGwA40Ga+D/jt8NOs5ExBkB1/zdt/9ez/Tl8VFKcttCcB+eoOVMFgCa4M3cz9gN/0EU3zdx7R3xEzC0p+F+vp3EHJIg+9JHrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmYMBgAX; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2e4939c5323so72550981fa.2;
+        Tue, 14 May 2024 10:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1715705110; x=1716309910; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OqKNcj7j0AZZaaEg2IE4Ch533Q1LfRJ1nDU5mEA1FkI=;
-        b=SwLFwFBkbB0nbUxeqedwjU/lTmquVv67N+Wv80U2rttrPYQJ4WLoNDAoIU5h0PT52R
-         KN6j+gVQQkMe2j9WNJUF7kgNsCe41WdrAEusWLx5PG4T3Twy5QmOGGEdwobuKR85SkVz
-         mCf+ttokVOLfUc64RWCziJn33FXRq8Ak5wTmY=
+        d=gmail.com; s=20230601; t=1715706408; x=1716311208; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IyHBRVBgS14zuN34iI4Hkq/dBvDFESfJ7FWpiCIUk30=;
+        b=nmYMBgAXJwQQwspu2thFkbWzSVc6frVBDjM1TkbAlU8B2vLWNB+mgJCJw4ewf/yVMX
+         gagbgBsiODvs9WHoguZNBidno8DgRGtuCeaNfqZVMR8V3PDcS8S/2BgBC7M4yjYQlOEU
+         Af7qDMT4YQ0p5oF0U8T39qKX170bQHqNeOknP9z1ZRfL8FFDF4MY/wDhoPKTwb70xL57
+         dnskLhwqM/rpfuyERCxD3bT5grUupseGF9TL6EWhqbgd646XDNMO49vVodozyKKx3C9n
+         +LFfIiIJlLaBOZE072Eoytu9bFWGPlo0ilNGRtTzhcgjD53SU7JgMeG5XDtZPVI/KrDD
+         c1mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715705110; x=1716309910;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqKNcj7j0AZZaaEg2IE4Ch533Q1LfRJ1nDU5mEA1FkI=;
-        b=osAKygqm32IYZ8zn2Y8pkKWN6pFw0wsqLLIAL7m14qtj/0cV1Ofp6nmNANQ1jZRMgH
-         PpFmBM6c5h5nG8S173ukm00KTxwj6CWDFt1WRmF3FgDqB7lvOIuRggZ258EHa7/zPR5O
-         iRyDS300g+sW/VHYlnAP/SBhfkWygjgmkmq2ZW289gLhLTzTwqKp9tWuAi29zPwL9N7m
-         2L9ffnVwO51SDg56aHUvGD6x012iwaAPET1Ylh1an/Fc6EaqVH5f9zJy/ZN5za8LH/RI
-         2QSoqvZriFoaclCxc+PEdmIFjIcx10fx+jwLfIZRJZcmG6d+JTZXeIBNuwmDnMjxGEdI
-         X8JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuIGV6qn9bLRtahlOKUDMoEPfgH4cEMIhFxe+ltOQwRSzvlpoI4SqKVLrt4FI/mdIsVLWT5FWf5D/GIAo7wqOjTTNqgJO8ptf5EIpP3iNV
-X-Gm-Message-State: AOJu0YwSsMsS42hM5QGWSpbuzWrDHop/W0mJwdtJFXRS6H7VqXj5fuDE
-	3OAcJu9QLsFzulbTouiU+29YFMBswG3jTJR9rRLk6iQvpvOsMmPHjzLrq66D8Ho=
-X-Google-Smtp-Source: AGHT+IHJWsjymJ9pgm9nI2xMNo2ER37wCeFcVuOst5E9tYnvhx2Gbm+LFuCTw3kM22zofhBtRP8VSg==
-X-Received: by 2002:a92:608:0:b0:36c:3856:4386 with SMTP id e9e14a558f8ab-36cc14e921amr138441975ab.3.1715705110440;
-        Tue, 14 May 2024 09:45:10 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-36cc9473003sm19088335ab.79.2024.05.14.09.45.09
+        d=1e100.net; s=20230601; t=1715706408; x=1716311208;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IyHBRVBgS14zuN34iI4Hkq/dBvDFESfJ7FWpiCIUk30=;
+        b=k1OHMdoXD1105/Z0Nd9meUsfXDBXhQb4W6lIno9WE6BV75RshQkahsDFHzvK973qeL
+         vVBexq6db/JZeT4Wm0oIQQgY1mePSntwsa/dKsZpuAk+xSmK8LKWRQqsd3dOr/X8BFfi
+         MQ2g5f2WmeyB9h+ge0AVQ7KieRuDkpVVqy6fQIslod9L872BR5P8GCB7S346PbHhGkow
+         9abpmcn3IdNZXlQT3WSMwy1Kg98kWSAa/P6fVkeXJy2BAbunpUP7Oom5gr1TQNZ3Rq9s
+         VYeXE/bqS88Auww6StTuzrfLeQNu+2SlpxsCAHLK4P/7ficRtXE5T+Njoj/GSGSDxhY4
+         zYmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUABGs5wMK+oAHRrkQC/PYxZpWETyTBi/RGmR1cShv7ztaGchrRKbvsGbgWagMWU2x+i2q2lCVPMTDOec2zIaMYdgKbCYuF89AtircORK9gXYUITXsnRYW7+Tg95Y6iYllivkNhYuicQd+jMAxXfCL2PTFEonhRsOkN8jLZKbJT/sWrCDNm
+X-Gm-Message-State: AOJu0YziRM1equUBD8s7HjOL8H+SpnBrc9qGkejJU5150JKQ0JwEE44G
+	RB7P83N0JpMHCA8SG2IoGaFhDb8NMeyFwfqU2LJiQQL0AYYraIbM9d9Wfw==
+X-Google-Smtp-Source: AGHT+IHKAHrJL4JHb2eSoXriNeAEkmodYMxHBrXgi2GmZTZ2VQ5iPMRlbIK3ZWZJUPMkViu8V2WqnA==
+X-Received: by 2002:a2e:7c0d:0:b0:2e3:7121:aba6 with SMTP id 38308e7fff4ca-2e5205c61a3mr108576151fa.46.1715706407529;
+        Tue, 14 May 2024 10:06:47 -0700 (PDT)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42015deac1asm80799915e9.17.2024.05.14.10.06.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 May 2024 09:45:10 -0700 (PDT)
-Message-ID: <58fd25ea-c444-45cf-a41d-c3022e9d5f80@linuxfoundation.org>
-Date: Tue, 14 May 2024 10:45:09 -0600
+        Tue, 14 May 2024 10:06:47 -0700 (PDT)
+Message-ID: <fca08735-c245-49e5-af72-82900634f144@gmail.com>
+Date: Tue, 14 May 2024 19:06:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/4] add tests to verify IFS (In Field Scan) driver
- functionality
-To: Pengfei Xu <pengfei.xu@intel.com>, shuah@kernel.org,
- linux-kselftest <linux-kselftest@vger.kernel.org>
-Cc: linux-kernel <linux-kernel@vger.kernel.org>, jithu.joseph@intel.com,
- ashok.raj@intel.com, sathyanarayanan.kuppuswamy@intel.com,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1714447026.git.pengfei.xu@intel.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <cover.1714447026.git.pengfei.xu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH] net: gro: fix napi_gro_cb zeroed alignment
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
+ dsahern@kernel.org, alexander.duyck@gmail.com, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240509190819.2985-1-richardbgobert@gmail.com>
+ <20240509190819.2985-3-richardbgobert@gmail.com>
+ <CAMuHMdXFJwxexojG+41ppD=2EmyXsVM6bwh+-cxCxfSsM_yJiw@mail.gmail.com>
+ <20240514071407.257c0003@kernel.org>
+ <8e0b027d-4d30-4f0f-82ef-113287f17c6a@gmail.com>
+ <20240514090626.69676cb5@kernel.org>
+From: Richard Gobert <richardbgobert@gmail.com>
+In-Reply-To: <20240514090626.69676cb5@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/29/24 21:31, Pengfei Xu wrote:
-> To verify IFS (In Field Scan [1]) driver functionality, add the following 6
-> test cases:
->    1. Verify that IFS sysfs entries are created after loading the IFS module
->    2. Check if loading an invalid IFS test image fails and loading a valid
->       one succeeds
->    3. Perform IFS scan test on each CPU using all the available image files
->    4. Perform IFS scan with first test image file on a random CPU for 3
->       rounds
->    5. Perform IFS ARRAY BIST(Board Integrated System Test) test on each CPU
->    6. Perform IFS ARRAY BIST test on a random CPU for 3 rounds
-> 
-> These are not exhaustive, but some minimal test runs to check various
-> parts of the driver. Some negative tests are also included.
-> 
-> [1] https://docs.kernel.org/arch/x86/ifs.html
-> 
-> Pengfei Xu (4):
->    selftests: ifs: verify test interfaces are created by the driver
->    selftests: ifs: verify test image loading functionality
->    selftests: ifs: verify IFS scan test functionality
->    selftests: ifs: verify IFS ARRAY BIST functionality
-> 
->   MAINTAINERS                                   |   1 +
->   tools/testing/selftests/Makefile              |   1 +
->   .../drivers/platform/x86/intel/ifs/Makefile   |   6 +
->   .../platform/x86/intel/ifs/test_ifs.sh        | 496 ++++++++++++++++++
->   4 files changed, 504 insertions(+)
->   create mode 100644 tools/testing/selftests/drivers/platform/x86/intel/ifs/Makefile
->   create mode 100755 tools/testing/selftests/drivers/platform/x86/intel/ifs/test_ifs.sh
-> 
+Add 2 byte padding to napi_gro_cb struct to ensure zeroed member is
+aligned after flush_id member was removed in the original commit.
 
-I am fine with adding a test. I would need ifs ack or reviewed-by.
-I don't see ifs maintainer on on this thread.
+Fixes: 4b0ebbca3e16 ("net: gro: move L3 flush checks to tcp_gro_receive and udp_gro_receive_segment")
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+---
+ include/net/gro.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/include/net/gro.h b/include/net/gro.h
+index f13634b1f4c1..b9b58c1f8d19 100644
+--- a/include/net/gro.h
++++ b/include/net/gro.h
+@@ -42,8 +42,7 @@ struct napi_gro_cb {
+ 	/* Used in ipv6_gro_receive() and foo-over-udp and esp-in-udp */
+ 	u16	proto;
+ 
+-	/* used to support CHECKSUM_COMPLETE for tunneling protocols */
+-	__wsum	csum;
++	u16	pad;
+ 
+ /* Used in napi_gro_cb::free */
+ #define NAPI_GRO_FREE             1
+@@ -85,6 +84,9 @@ struct napi_gro_cb {
+ 		u8	is_flist:1;
+ 	);
+ 
++	/* used to support CHECKSUM_COMPLETE for tunneling protocols */
++	__wsum	csum;
++
+ 	/* L3 offsets */
+ 	union {
+ 		struct {
+-- 
+2.36.1
+
 
