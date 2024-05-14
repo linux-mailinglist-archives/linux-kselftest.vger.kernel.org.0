@@ -1,116 +1,99 @@
-Return-Path: <linux-kselftest+bounces-10195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9CCC8C5C04
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 22:00:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C148C5C8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 23:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82BA91F238DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 20:00:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 271C81C219AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 21:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F5B181B83;
-	Tue, 14 May 2024 20:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DED1A17BB0D;
+	Tue, 14 May 2024 21:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CIji9zEw"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="p+vex417"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A9C18131F;
-	Tue, 14 May 2024 20:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B261DFD1;
+	Tue, 14 May 2024 21:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715716834; cv=none; b=AXEIfPbh/2rpVw4MJMFKLVRs1mXAyJjkZtU3omkcIgxV2rRBNRnsFqDAoq1JoxTmlUuR7dMW2ES6RX0h3IP4VL0135TGQ2a2OM9Pmk489DdjP90qnuo38ngrfFkphKvvejuZS8/96bFwfL8bOJvb6zZD1ff6BkXl6BQ3J0uBmwY=
+	t=1715720406; cv=none; b=AwSO/XJQ2lhgbNm4kIUHbLn9lL8ElPYyVtsdhROMtSGNvhq69CMkITMxTR7cEy6hVqkv+8t8IIX6/13nzCTp1pnWCJHXqR/JSUastmr6IWepsZFU+LA9gVwEXnyAvvTR7f11V40ADMRlHfOZ5nzWAREoUJkif995+tvCV/OC1xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715716834; c=relaxed/simple;
-	bh=Uns3l4vcEBP4ql19jJuv5+6cGbzp2148+pjW3Nuewzs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OQshIEVRHlAgJX4Q0Qye8AkAezneupO+T70AkKs5nyA4mvpYNm/K1MSiqZeFqBS6WcFZVdOKL5bnKz0+3gnHfnbFQ0wRmb+xNIdqY4XVlP6VbaTvG8IoRc7I3X6mNpPBUPLaRSsXyuqsNkZz2+bIPHpUFqPL1onNG3O1vK0CAWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CIji9zEw; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-351cb099fd7so143693f8f.0;
-        Tue, 14 May 2024 13:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715716831; x=1716321631; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dp5f50u5OZO/IIkoPCOjftXQZtJVWZku7j3Ppopcads=;
-        b=CIji9zEw3uRNgJSWFBY0TOP2BTmjSHgRwgFdIz1OFBUzpgUbmHoHc/fsdiygKimETi
-         TXBspH7tLD0BLw1ll0CgZVvFIN7fATKJWeYoS+XYj9h76psj2J0OXwFvl8xs0r0dnCMR
-         0CekCsye680OwSIHS+eCeZUmFDp7mF2uZmg2kVR+VZkekQ+LEIlOsDOhhtH/i8T4+BjX
-         WEiMQcWMRS2/hme6qZBeOqOtoKSEqLWgAoOvWjvpb9UR9tm7SlPXCK0QBPPVEoyzxehh
-         GDsCrQ2EUfY4gI84X6ipTKAh5P2exYWVXPVLtPEHJZp3XaSn3w9ScXmrxIdK5sI5PgGv
-         Zqmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715716831; x=1716321631;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dp5f50u5OZO/IIkoPCOjftXQZtJVWZku7j3Ppopcads=;
-        b=SW5iALYesfWq530x5hCeTDLrxCJOilBpL5iLGpbhChXF+u32FUPqz/DTYvb3+0ar1A
-         EV5AoGfUIDEzDtWPqfXYH1bZzbyze5SOXQ0B4nDEipiqy85zKxGimey3ERj4HgU5BX7u
-         r3VKD3PpW/UTZAByB2f6Zbo5mj6w7/9XqYQy9YEaiUK8JTJs6z/do06SIeOoj1DuLWLB
-         8VYI9BdC3vrpGp3p5gCtQCe2um7XFMwEn+Op1dh2bMIgGbh5ZcANx8cfLUBqowr6aiPO
-         moxSrLU47V+TpWKeilrvC+wTpQHkGZRq92Gr0V07X+MzHmdSFCjau7c+DIK7GsvcG3mH
-         LHfw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxKfM8mnGScEm9XeQYOMZubaoBi6FGKZ3QStRWfT7wz9PRtnVlTSQ8XeBn8RD6p7+juu2dcxBTM4W49UulgbkC4FX5C3IRo1d6fh4oG+OBGrpxxzArwVZ4DIkfAV/EcEgPkMZI+pUEAcz73/AT
-X-Gm-Message-State: AOJu0Yy3ggtSSjROmUNx4N8fYKSHMdNLNEZAmKnomSwPN53Rvn6EhnUS
-	bm5Cp1mXQe2EyuPkyxmSMGZS5zL/E4dZBK9aCoTKyr6WnOWfo7Pe
-X-Google-Smtp-Source: AGHT+IFRkXX1zEQ16ZVa9wFZ5RExqrRa9H95KNGlotYW70m3+L/dI8Sb3EhKNK/ynHyAkQs9nBzn2w==
-X-Received: by 2002:adf:e602:0:b0:34d:b05b:c784 with SMTP id ffacd0b85a97d-3504aa68aafmr8480583f8f.7.1715716830662;
-        Tue, 14 May 2024 13:00:30 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:d20e:7300:3efb:454c:189a:7b2d? ([2a01:4b00:d20e:7300:3efb:454c:189a:7b2d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b896a5bsm14367642f8f.36.2024.05.14.13.00.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 May 2024 13:00:30 -0700 (PDT)
-Message-ID: <6c7ef96b-bd29-401f-bb07-9dbeaa4348a3@gmail.com>
-Date: Tue, 14 May 2024 21:00:29 +0100
+	s=arc-20240116; t=1715720406; c=relaxed/simple;
+	bh=LzIjbm8EmhE8nz2vY1r+uwzY38OtTNn3Qux8G3lPnvs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=myO82dOphTUZdOfS4QyPOBBaP8ZUQtu0bWBqyjcYq50lyVKzNxI6BIR4cWXe5IC+e5f8NQ36xI567T2HroZZuQ385/cYFX56qiLYWtZKT3Gu1rgO8vVQmPSAbhTupLKNH/iQ23sPLaDVGSwAV7DgbnOX1zPButt+fPPGUj+249M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=p+vex417; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E2D8847C39
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1715720398; bh=Pm5GQXvf/+T4Nt95ku2E3tncArTWJsHx/sY7VG5ZKk4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=p+vex417G255x4AnYioFbmLzZwUfVWPjslsURVv7taRXwTjPhbNIKXelbcHcM+MHc
+	 9akB/ulGNSIlMfk+xZynwa4QJTvWehWuSw/lqxXkjgsP0WkNsU+EWxPcEGce1kNczs
+	 JZr3Yz34r/86v6FF7E+cuyjKxAOirYHnxfD1jTeXW89Cq7pQ1IxE1q4TGx3bjXIvq3
+	 NcIc/t0VZrwDWBVuqDDWmj3ivv6e0wGfmQtr/1z0g8aTMuRxG+J3qIlqBKFZGSC7E5
+	 UPvCg5LKwNVTTskGHeK5DQ5Vd6oVG1O6+evGJQxmiUPcCgGjutu9qxI9sHp9ixOJlU
+	 aZTRYcQ6cJ96g==
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id E2D8847C39;
+	Tue, 14 May 2024 20:59:57 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org
+Cc: keescook@chromium.org, jannh@google.com, sroettger@google.com,
+ willy@infradead.org, gregkh@linuxfoundation.org,
+ torvalds@linux-foundation.org, usama.anjum@collabora.com,
+ Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
+ rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
+ groeck@chromium.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ pedro.falcato@gmail.com, dave.hansen@intel.com,
+ linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+In-Reply-To: <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
+References: <20240415163527.626541-1-jeffxu@chromium.org>
+ <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
+Date: Tue, 14 May 2024 14:59:57 -0600
+Message-ID: <871q646rea.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] kunit: Cover 'assert.c' with tests
-To: Rae Moar <rmoar@google.com>
-Cc: brendan.higgins@linux.dev, davidgow@google.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kunit-dev@googlegroups.com, skhan@linuxfoundation.org
-References: <20240509090546.944808-1-ivan.orlov0322@gmail.com>
- <CA+GJov6hq0WsjqX1LrC2m7YS1nD37+zGmO+i1R1OajwYQZXY8w@mail.gmail.com>
- <44b5b31f-ac98-4c5c-8bc4-ebff9579b4d7@gmail.com>
- <CA+GJov7O9Hj1g3mMRjdnkcUCORofkxsqtn06t_JGOkNRBhfGCg@mail.gmail.com>
-Content-Language: en-US
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <CA+GJov7O9Hj1g3mMRjdnkcUCORofkxsqtn06t_JGOkNRBhfGCg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 5/14/24 20:55, 'Rae Moar' via KUnit Development wrote:
->> Thank you once again,
->> --
->> Kind regards,
->> Ivan Orlov
-> 
-> Hello!
-> 
-> This sounds like a great approach! Happy to review the new patch
-> series when it comes in.
-> 
-> Thanks,
-> Rae
-> 
+Andrew Morton <akpm@linux-foundation.org> writes:
 
+> On Mon, 15 Apr 2024 16:35:19 +0000 jeffxu@chromium.org wrote:
+>
+>> This patchset proposes a new mseal() syscall for the Linux kernel.
+>
+> I have not moved this into mm-stable for a 6.10 merge.  Mainly because
+> of the total lack of Reviewed-by:s and Acked-by:s.
+>
+> The code appears to be stable enough for a merge.
+>
+> It's awkward that we're in conference this week, but I ask people to
+> give consideration to the desirability of moving mseal() into mainline
+> sometime over the next week, please.
 
-Awesome, thank you!
+I hate to be obnoxious, but I *was* copied ... :)
 
--- 
-Kind regards,
-Ivan Orlov
+Not taking a position on merging, but I have to ask: are we convinced at
+this point that mseal() isn't a chrome-only system call?  Did we ever
+see the glibc patches that were promised?
 
+Thanks,
+
+jon
 
