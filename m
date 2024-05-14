@@ -1,83 +1,67 @@
-Return-Path: <linux-kselftest+bounces-10169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02A7E8C4F15
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 12:33:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12AF8C4FFD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 12:55:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 334141C20AF9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 10:33:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77DB91F217D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2024 10:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A88139D13;
-	Tue, 14 May 2024 09:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BFBD7F490;
+	Tue, 14 May 2024 10:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SprSUAb/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JkPugluX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D7055C1A;
-	Tue, 14 May 2024 09:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C87D531;
+	Tue, 14 May 2024 10:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715680363; cv=none; b=PX0sYMPbdqKA9M7rakMPvxNd4QrAy8f4D1k5+v963wR8TXLYfCWAIWXjtLtdvdC6HSzBrP4KBL+Y2924DpFUUUGXE+Px+8UQCRBwN+fSp22keo9sfZoH2r+XYDuh2W6MACkkFVbwrd4fktdW1cDlJO/Kb7SHgtXFRdXXaZsOGPE=
+	t=1715682815; cv=none; b=dnHUDkhko0LY6jCCLRyIHdEOtfLlEgCCVRPuP1wph09a/FA3M2OD7nAacYu+IWJERxFrhyNRWB+HflewX9/i224Cdy99fWYJza+h90gAXZSCEfVqP19NYnWcD+vJB9oF0q6/d7P8FpXKOxRiOQcrcnFxWFKFdkdE4frtHFbi7JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715680363; c=relaxed/simple;
-	bh=qQPs/RR8CzraieUgoteO0FaGhWNGB9R+qGNZhaCRM5I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nNufSIuFpyH6LFUEXX0ArcSnPf8mGijoTFNpqrP7Vj2X+1UQ0cPsodv1FKhfDI53ilTAImzW+tPsQYEu8Kir+D9kRbO7gcqD3MC5D5jtjPZRLUp5CONBXSFZ/xP6nsafWI9eqi/YpzEeW6/eiLAQU+CYfGMYjJAFcNIIUK/uc7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SprSUAb/; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ed96772f92so43202855ad.0;
-        Tue, 14 May 2024 02:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715680361; x=1716285161; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFfP3mz64I/XOp3gx3OATpkgLA0E1TNomVcVvuvhZP0=;
-        b=SprSUAb/lQHHZ7E3Y8nlYj3SVjcpy/7CWvj6Vdmpeoq5REciq/zQVvSzwc2eU0xbi5
-         L9uq9zubk//MQuejHtUpWpkGSHjWtzvPE05Eh2N8G8avJNju6fqxKmLEpYsKcT3WrUjX
-         sLlVQSS/l3mjOi3hV46uYqukTk1GtseZL+zya7lhc3rXuUPXIUCqGhbaoo0V1CQ+lGbx
-         I2r76NUXDEmNWWkoYsEqOPKzQ/CnR+JrhJ+bFeAjfL3KqlstXOcNoyfpqGsp5BlOqJtS
-         +YEp92IQavtIe8p8lxBtTk8nhgepgloGbsCubxcFY6RlFk/PfNFfhD+y4GoKcCRNMDKI
-         Z2ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715680361; x=1716285161;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sFfP3mz64I/XOp3gx3OATpkgLA0E1TNomVcVvuvhZP0=;
-        b=AxbFBfKEkgw+a1Jum/okdAkVW6trCwGIM8FbaQ0QdLoDzBwNWEbvoEtRbCXuwRxl7k
-         V+sM4aNy0fsgI6wcq4Rk0JXA1/doW9TLthEh6yHoqwn+40BSP7DwE9XsF0WZ+VxqsDe2
-         /w9tBT5Zieqxkb6XMneHX+bCD43UQ+lzhweJWSHLibQfvFQJyhETXlmdCTNuznrh8HtO
-         t/UJbEvumwczfLAU33oCnyo3e/SzkDA3iFthhilSquHUl3nudWMVd08Yh6TAzhdz6Hoc
-         DM7gTikaAL8lDU0IRjOsipx/MVDLU704+TDfkZ8hmUknOjlBRqp8gncWHfT9MOgD1Jtd
-         LZ/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW8uOtWXKgJVYTcYdNtTxkCKaWjipG31n/sYHoPEowbUM1ACUTw1QGX6vVe98q07VyNIlkfoPGGh8TsQIrDmRed5HymEM5xoKoVK6/k1cFS
-X-Gm-Message-State: AOJu0YxJmI8enHvzL1z6t9kRjrL0djChAJZSeqDaSxaAreyjhWIvUVFz
-	zwj9QO8x/Gak6U7dJm9luWMepAIAO0sRnqsm250+KG8zRY61ceijc9ithCPhLj4=
-X-Google-Smtp-Source: AGHT+IHUu136zWycDASDkbcbItzfJk6e0j3+jTBu17osPkQw2LJFVcxd8eZnTdwlaeuEiSUB4voT6w==
-X-Received: by 2002:a17:902:684c:b0:1eb:fb02:c454 with SMTP id d9443c01a7336-1ef4404966amr119717435ad.53.1715680361112;
-        Tue, 14 May 2024 02:52:41 -0700 (PDT)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bad7dc1sm93451065ad.89.2024.05.14.02.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 May 2024 02:52:40 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+	s=arc-20240116; t=1715682815; c=relaxed/simple;
+	bh=NCYPld70qYshmpCzGEhpslZFD4dlvSlpfznYMRZF0LA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WN5o0NB/HXk54ZxGbMuomBsdtyjynJT+F/OgGmlLQ+zv8nWW7A30n/4PPJHnh8Jctuijc9niXwg4lOi3US/jkJiifDYS88VlDCRvY2fP4remNufO0j74zGg7o2cGrOZdmjKG87qJBiBvy1RlYONnYRD17pXv+Zav575fc7xMz6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JkPugluX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01045C2BD10;
+	Tue, 14 May 2024 10:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1715682814;
+	bh=NCYPld70qYshmpCzGEhpslZFD4dlvSlpfznYMRZF0LA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JkPugluXmDu6jINKTNGmZa2uLAALdZQAZwWg7Y55dEYGsQBYKVgK92c6SYi6aObpV
+	 8/7fqN8JddDKK4XpeAseWbnHOUKF8MlYy3WKFT1i6BxjvklOXUGSzkZu7+hr6J4YI4
+	 dfa7GR0oKSfgPQ+pBA2NrdYUEk9gPUgCjk17IxqE=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Mark Rutland <mark.rutland@arm.com>,
+	Aishwarya TCV <aishwarya.tcv@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Shuah Khan <shuah@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net] selftests/net: reduce xfrm_policy test time
-Date: Tue, 14 May 2024 17:52:27 +0800
-Message-ID: <20240514095227.2597730-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-trace-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.8 118/336] selftests/ftrace: Fix event filter target_func selection
+Date: Tue, 14 May 2024 12:15:22 +0200
+Message-ID: <20240514101043.058135845@linuxfoundation.org>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20240514101038.595152603@linuxfoundation.org>
+References: <20240514101038.595152603@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,38 +70,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The check_random_order test add/get plenty of xfrm rules, which consume
-a lot time on debug kernel and always TIMEOUT. Let's reduce the test
-loop and see if it works.
+6.8-stable review patch.  If anyone has any objections, please let me know.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+------------------
+
+From: Mark Rutland <mark.rutland@arm.com>
+
+[ Upstream commit 8ecab2e64572f1aecdfc5a8feae748abda6e3347 ]
+
+The event filter function test has been failing in our internal test
+farm:
+
+| # not ok 33 event filter function - test event filtering on functions
+
+Running the test in verbose mode indicates that this is because the test
+erroneously determines that kmem_cache_free() is the most common caller
+of kmem_cache_free():
+
+  # # + cut -d: -f3 trace
+  # # + sed s/call_site=([^+]*)+0x.*/1/
+  # # + sort
+  # # + uniq -c
+  # # + sort
+  # # + tail -n 1
+  # # + sed s/^[ 0-9]*//
+  # # + target_func=kmem_cache_free
+
+... and as kmem_cache_free() doesn't call itself, setting this as the
+filter function for kmem_cache_free() results in no hits, and
+consequently the test fails:
+
+  # # + grep kmem_cache_free trace
+  # # + grep kmem_cache_free
+  # # + wc -l
+  # # + hitcnt=0
+  # # + grep kmem_cache_free trace
+  # # + grep -v kmem_cache_free
+  # # + wc -l
+  # # + misscnt=0
+  # # + [ 0 -eq 0 ]
+  # # + exit_fail
+
+This seems to be because the system in question has tasks with ':' in
+their name (which a number of kernel worker threads have). These show up
+in the trace, e.g.
+
+  test:.sh-1299    [004] .....  2886.040608: kmem_cache_free: call_site=putname+0xa4/0xc8 ptr=000000000f4d22f4 name=names_cache
+
+... and so when we try to extact the call_site with:
+
+  cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/'
+
+... the 'cut' command will extrace the column containing
+'kmem_cache_free' rather than the column containing 'call_site=...', and
+the 'sed' command will leave this unchanged. Consequently, the test will
+decide to use 'kmem_cache_free' as the filter function, resulting in the
+failure seen above.
+
+Fix this by matching the 'call_site=<func>' part specifically to extract
+the function name.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/xfrm_policy.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/ftrace/test.d/filter/event-filter-function.tc     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/xfrm_policy.sh b/tools/testing/selftests/net/xfrm_policy.sh
-index 457789530645..3eeeeffb4005 100755
---- a/tools/testing/selftests/net/xfrm_policy.sh
-+++ b/tools/testing/selftests/net/xfrm_policy.sh
-@@ -293,7 +293,7 @@ check_random_order()
- 	local ns=$1
- 	local log=$2
+diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
+index 2de7c61d1ae30..3f74c09c56b62 100644
+--- a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
++++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
+@@ -24,7 +24,7 @@ echo 0 > events/enable
+ echo "Get the most frequently calling function"
+ sample_events
  
--	for i in $(seq 100); do
-+	for i in $(seq 50); do
- 		ip -net $ns xfrm policy flush
- 		for j in $(seq 0 16 255 | sort -R); do
- 			ip -net $ns xfrm policy add dst $j.0.0.0/24 dir out priority 10 action allow
-@@ -306,7 +306,7 @@ check_random_order()
- 		done
- 	done
- 
--	for i in $(seq 100); do
-+	for i in $(seq 50); do
- 		ip -net $ns xfrm policy flush
- 		for j in $(seq 0 16 255 | sort -R); do
- 			local addr=$(printf "e000:0000:%02x00::/56" $j)
+-target_func=`cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
++target_func=`cat trace | grep -o 'call_site=\([^+]*\)' | sed 's/call_site=//' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
+ if [ -z "$target_func" ]; then
+     exit_fail
+ fi
 -- 
 2.43.0
+
+
 
 
