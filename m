@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B9DA8C6079
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EE858C607B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5506C1F23A70
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 493621F23A7C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8473C463;
-	Wed, 15 May 2024 06:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579AE3D0D9;
+	Wed, 15 May 2024 06:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ko+jMzfG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yp8dyDSx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216303BBF4;
-	Wed, 15 May 2024 06:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2734E3C485;
+	Wed, 15 May 2024 06:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715752815; cv=none; b=tc18ox/Rf+kXJN3O3aknypcSgIP7BrI6wuduyhORMErK/36jSwnO55X6vQRDiODWgbdyn9LV6pQCFlo6v0f2t0OTLILwzhO7bTgOJO8HmXwvi3wSyrYG/rhOk+2HFYpONOSL3HB4FuFSc42leSnF19CiRtMymp6Q8BDYdnCfO2M=
+	t=1715752821; cv=none; b=KvnAzkGHxONV7eu8y6KrcOHCKGHVFjQInp4/I+gdkJbQaG0oR9lPGZDWsCwMDXRLgrDMOm+U52QNWb6FBYId0YPEpUWYd/eGZMjDS4nNCTrKWs9Yhw1F4wmFT+Sqg+lOq5dswaUO0VMzi2WrPgtatNmgVMxEozVgvBbs2NEcwqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715752815; c=relaxed/simple;
-	bh=PYLreC9y69ftkHES1PiYml+GPmE1yXRehjsAcxtM0yE=;
+	s=arc-20240116; t=1715752821; c=relaxed/simple;
+	bh=9RIzon2SQFRluCkM4WuVpqfZM7QKLJta1nv2UWTfiXM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=moGFNY4wjnyg4w3+jJdPBfxnUfWJOfjXFmS6Yi0npNZFHq13L4p2BS9OyBHH5p5+PA9bosCtlNN7llwVYr5y6TkoMb7lq/PWfnVZslGnxyOdJLYOv5QFSCW5EzJ/tG696T43XEe94nH7yQQDMbm4nsuMPGlFcsSGkno1A6XEy+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ko+jMzfG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A633C2BD11;
-	Wed, 15 May 2024 06:00:08 +0000 (UTC)
+	 MIME-Version; b=FdIbJUDmdLFfFo+g/1yADnu8VGsmDodx2kU38OQZAgoDIoocVXMLeXWSFqvNm+4dUUhZPuqsRfkH+2sT0kF21kAaW0TAhYbmt7HQ3mIgvLhLPoQgT9RQvEnRe3wLqFcMGmNKyGCJYQuuQBAWy8inVvJ9Adwa4Z9WYzhU91y5GKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yp8dyDSx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01AC9C116B1;
+	Wed, 15 May 2024 06:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715752814;
-	bh=PYLreC9y69ftkHES1PiYml+GPmE1yXRehjsAcxtM0yE=;
+	s=k20201202; t=1715752821;
+	bh=9RIzon2SQFRluCkM4WuVpqfZM7QKLJta1nv2UWTfiXM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ko+jMzfGVy07o73PO/KxNjgPETIRkKhaUUXGDbKSgD1LP03Duu7OEfpEZIM8YVS5X
-	 fPTuxjCmuO9MYqBwDvmGNwueWsGtg3ehzANIQOojZfCKkVx7RbVABjChI+vfLi3nKB
-	 DUOvnS+fOjO6cnGP2+RaL0tVTxeHBri+2cYQ2Z01QtojDN4YHMYRVor5murUW5Tx2r
-	 NxDxg8eusl/EvZTZtyC8eX6jr5MAJIQsIZzbGqCBFTaHNwgI009XlMwv9rPPaX9mEu
-	 tpzeSr6tKHoRpc2XS2CxwMrWlaBHBiN2/GzPRLF/ywOBommQ4quo87BQw0bv0DUubj
-	 oVkC54l/cbFiw==
+	b=Yp8dyDSxZAmuZMQXPWYut6khNpgyV5wwdXWIgiP75jpxt/TKy5TpyCsogimqq15EG
+	 pJ080tfzyksAJTVRJueixlX6DZjKEcj0vjf4LgtxYABhiFecrxQDQzAFNfLqTnO2Eg
+	 OgQkmX06E7Y5u0k1JNYZzznvltVe1nrQFe7ZVo5WWvN0zUTs2sG0VyEDSXE0knUa4X
+	 hEirg7DVFyB1mskjoZ023H+nalXMr0jWWErEh7YEzceM7OB+Qxj+DCsbBxdpe1tzjI
+	 d7V/yQrdb2As485Xg1fFw65VZe9LXy6a72RJMu1mZi/SeUsrEB1tUQJ27Tcd4yb/9a
+	 KdT8bFbbMXAvQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -61,9 +61,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 1/9] selftests/bpf: Add unshare_netns helper
-Date: Wed, 15 May 2024 13:59:28 +0800
-Message-ID: <50d0c331d3418c4dcde72bfbce45196c6806c9cc.1715751995.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 2/9] selftests/bpf: Use unshare_netns helper
+Date: Wed, 15 May 2024 13:59:29 +0800
+Message-ID: <edac8307c8267b0d339117a70efad4f4724fd2ab.1715751995.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1715751995.git.tanggeliang@kylinos.cn>
 References: <cover.1715751995.git.tanggeliang@kylinos.cn>
@@ -77,58 +77,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Many BPF selftests create new test network namespaces by using CLONE_NEWNET
-flag to unshare the network namespace, so that the calling process is moved
-into a new network namespace which is not shared with any previously
-existing process. So this patch adds a new helper in network_helpers.c
-named unshare_netns(), which create a new network namespace and set the
-net device lo up.
+The newly added helper unshare_netns() can be used to replace unshare()
+and "ip link set dev lo up" in sk_assign.c, btf_skc_cls_ingress.c and
+tcp_custom_syncookie.c to simplify the code.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 19 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- 2 files changed, 20 insertions(+)
+ .../testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c  | 6 +-----
+ tools/testing/selftests/bpf/prog_tests/sk_assign.c          | 4 +---
+ .../testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c | 5 +----
+ 3 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 35250e6cde7f..919bb2a0c6a6 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -670,3 +670,22 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index ef4d6a3ae423..f697397c641e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -27,15 +27,11 @@ static int prepare_netns(void)
+ 	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
+ 		    .prog_fd = bpf_program__fd(skel->progs.cls_ingress));
  
- 	return err;
- }
-+
-+int unshare_netns(void)
-+{
-+	int err;
-+
-+	err = unshare(CLONE_NEWNET);
-+	if (err) {
-+		log_err("unshare netns failed");
-+		return err;
-+	}
-+
-+	err = SYS_NOFAIL("ip link set dev lo up");
-+	if (err) {
-+		log_err("set dev lo up failed");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 883c7ea9d8d5..b087330f2861 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -82,6 +82,7 @@ struct nstoken;
- struct nstoken *open_netns(const char *name);
- void close_netns(struct nstoken *token);
- int send_recv_data(int lfd, int fd, uint32_t total_bytes);
-+int unshare_netns(void);
+-	if (CHECK(unshare(CLONE_NEWNET), "create netns",
++	if (CHECK(unshare_netns(), "create netns",
+ 		  "unshare(CLONE_NEWNET): %s (%d)",
+ 		  strerror(errno), errno))
+ 		return -1;
  
- static __u16 csum_fold(__u32 csum)
+-	if (CHECK(system("ip link set dev lo up"),
+-		  "ip link set dev lo up", "failed\n"))
+-		return -1;
+-
+ 	qdisc_lo.ifindex = if_nametoindex("lo");
+ 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
+ 		return -1;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+index 0b9bd1d6f7cc..56df5861059f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -47,12 +47,10 @@ configure_stack(void)
+ 		return false;
+ 
+ 	/* Move to a new networking namespace */
+-	if (CHECK_FAIL(unshare(CLONE_NEWNET)))
++	if (CHECK_FAIL(unshare_netns()))
+ 		return false;
+ 
+ 	/* Configure necessary links, routes */
+-	if (CHECK_FAIL(system("ip link set dev lo up")))
+-		return false;
+ 	if (CHECK_FAIL(system("ip route add local default dev lo")))
+ 		return false;
+ 	if (CHECK_FAIL(system("ip -6 route add local default dev lo")))
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+index eaf441dc7e79..07817d9c039c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_custom_syncookie.c
+@@ -32,12 +32,9 @@ static struct test_tcp_custom_syncookie_case {
+ 
+ static int setup_netns(void)
  {
+-	if (!ASSERT_OK(unshare(CLONE_NEWNET), "create netns"))
++	if (!ASSERT_OK(unshare_netns(), "create netns"))
+ 		return -1;
+ 
+-	if (!ASSERT_OK(system("ip link set dev lo up"), "ip"))
+-		goto err;
+-
+ 	if (!ASSERT_OK(write_sysctl("/proc/sys/net/ipv4/tcp_ecn", "1"),
+ 		       "write_sysctl"))
+ 		goto err;
 -- 
 2.43.0
 
