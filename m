@@ -1,178 +1,136 @@
-Return-Path: <linux-kselftest+bounces-10217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 338668C5F18
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 04:29:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 108978C5F33
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 04:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8CE41F21F43
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:29:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78E17B21A60
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB0063B9;
-	Wed, 15 May 2024 02:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99DCA2F874;
+	Wed, 15 May 2024 02:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ZfVGUVi1"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="EVzA9XNP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE12E8493
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 02:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743B917C96;
+	Wed, 15 May 2024 02:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715740155; cv=none; b=buFEOMtUadi0kcKDGixWAZR2bUn0nfczMP8wN2kq5y3js6UJonzNjmQ67FCiVc2JxzUwZKGfY+DaLzhmht6KgkP8kqbYj3GDPdLCmwUiVX9FkRfPFjXwDc0tnAqYAQKlfgkJVlFtEr4Z8WPmCw+X2P7eh6J79mHVZXvnYqz5tNU=
+	t=1715740961; cv=none; b=QFZp6jR7FV2rEdphHfDQoRwnz+Tj6MqaKDOA4LPFb//2tXK9JrjhSiX9jfWbbowwvfPorLocg7dmzovk2uISNiAHfOJsHu6tc8s9PziRVhkkVNfzISoGCPGWZoOnkRDtmSD9tr5BRsCsm/FTALuRM6KIqntsWwdBWWsUH7jPHnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715740155; c=relaxed/simple;
-	bh=uIVALT8fMTxGKl7HLSAvodUgkyb/d8KBVovit9yBBdQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jLJ/gXyWgYk8uhLV6BBn6MgfHlVWIcSr7bMqpSuD1lUbhdFs//MB8D3ThPC3E+Rr4eWQ4SQXmBks+WeFQXhawgb6WKpSjw4+v7wU3r56tz4g8RgD0d37eGoJdPhw0r6Yv0WtRFfHQz0QJdDiaSqTKDHVcvg83mosDYwibLGLSNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ZfVGUVi1; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56e56ee8d5cso1070340a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 19:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1715740151; x=1716344951; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhWK/QjBhcq/4T9972QoRB3M6/JeMKBp9jipg24+Woc=;
-        b=ZfVGUVi1Zt4zGzoP9BuOkhPT0cp6BqZn4xtFRnGzEBQV6fd7FKcwywfoPV07YNRpzN
-         dqn6nj7blb+M4f4mnW3/Dp/rL9TiPpHNwn1PySZM8jB7+RmlVJDsnw0e3LEq4yb+/XRD
-         uH2AJG6MJ4TMuTqjcbQIRbyf96GBrpDCoC5Xg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715740151; x=1716344951;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HhWK/QjBhcq/4T9972QoRB3M6/JeMKBp9jipg24+Woc=;
-        b=HfsnSXQeZ97MCa+MTU6BcFNrRYk1DcptPNaEG/9VkxNsk6w8dLp71D/Kbtf5epwR9n
-         g8aDhTHeT45AivV4ACFUNOeZd529I5Uq0A/+WGhwnM+72eedy7DSfnguNpuJYxLt51ZO
-         H+uN7++Atgw0XWGBnSy9aswpRxCQ5D3u8bP4KRJwz9Yf9la+U8s0VnE/b05XamwxeVD9
-         cunDytL4Xoo7CqwVtFBZnSZEr2UTQUyZAqHmWtKV1cVEk42ujrGcdBDi6/RqB5dax2lk
-         pN3/AexEmnOCRP8c6mcSQ3LxAgvGXo60QzYlWKIgEI2M8v7vNgKtiXJpFOJSA3tqTuRv
-         XdcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVOmMesfEs2ACtB7AqVBSdE1qqFmc/nj7lrosvqZkt29eOh+e0vucweCxrPK/qpX++Dtmnrqvdfrxg3kDyJxFmZHo9klQoTYC4yaiRDZ7P+
-X-Gm-Message-State: AOJu0YwWnURyTHpGqv6lPtvjON1kIld9iuWBeWuFcl8xqjIxxaM2PrCI
-	9Gb6+XTbi6rZZPAD1ACBTGWD3OXeEB2Y3OAkr2SfJ4NunFvO7RbQA9lPcZ68Yz8AEtRl4+DLUap
-	Vdp+gFw==
-X-Google-Smtp-Source: AGHT+IE4pDtMz8qcHeLC4uMbcULOvZdJJQYekNHagkaH5Ku9udW6xWtN38Nub9N/KGvjLZcPA1FJqg==
-X-Received: by 2002:a50:9e61:0:b0:566:d333:45e8 with SMTP id 4fb4d7f45d1cf-5734d5ce24fmr11044289a12.20.1715740151264;
-        Tue, 14 May 2024 19:29:11 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-574d8f5501esm2152430a12.75.2024.05.14.19.29.10
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 May 2024 19:29:11 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59c5c9c6aeso99788566b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 19:29:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU380x/DYQR8Y7wJY1Je1EBidoLPckHGrcs07PLFMwK7mz+RQD8U+1mKrP9HQpj63Ni8wjzQ913K4QtsLzzgVt0Yl10w/xhrfFsBfZYuJ3e
-X-Received: by 2002:a17:907:7f08:b0:a5a:63bf:5175 with SMTP id
- a640c23a62f3a-a5a63bf5227mr784689766b.10.1715740150546; Tue, 14 May 2024
- 19:29:10 -0700 (PDT)
+	s=arc-20240116; t=1715740961; c=relaxed/simple;
+	bh=E/eITmSfv/hukN66zjfP822dc02uc7jnjBNrPzQ6vNk=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=dYrEr6iDgTgdyzfkVQdp3ksjSCW7ATRGn7/3HEmS/xI8a+xV0nF8iw18r0gPl1mdzK9OE0xMj5YA1DOs0htzhdZDoV+wq52kNR7oT/w6LMN2Tu1HsO1Zjrncen7n+2ccAtKDM3Xo68nN4ReJgDvUT+v0CkzJWMSzo94wzGtMT4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=EVzA9XNP; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=E/eITmSfv/
+	hukN66zjfP822dc02uc7jnjBNrPzQ6vNk=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=EVzA9XNPb+gPk9asC5OFVNyHR+i0fVDrX
+	z9ATBDqxXlTOWBjRzskA+p4lrJb8vGvkmGIahadIO+N6X9VTQdg+upE34qLc8nykHKnuY4
+	wqNDC2Q0W5Oznjn2CSqtM84yOm6dPwVrEqedE0/6mmhog1vx9pEaabKX1Px+VovNJbW9tJ
+	VHPvFyJlsKPFNTvh6V2NyZhzfdcuYz2xi1w6ovAUxkwjMkRT6lNcBvtEjguIqLUx1OHff4
+	5ethYU+X1oK6WAP/fCgIjJ+r2iQ0CdxRD0WnGC/RI18BOMMGW0/C9kcQzAuugpakmsH6Db
+	jPJkuaz3YI2MbHRwYImoyZOwLf7SA==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id b934a569;
+	Tue, 14 May 2024 20:42:38 -0600 (MDT)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+cc: Matthew Wilcox <willy@infradead.org>,
+    Jonathan Corbet <corbet@lwn.net>,
+    Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org,
+    keescook@chromium.org, jannh@google.com, sroettger@google.com,
+    gregkh@linuxfoundation.org, usama.anjum@collabora.com,
+    Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
+    rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
+    groeck@chromium.org, linux-kernel@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+    pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+In-reply-to: <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org> <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org> <56001.1715726927@cvs.openbsd.org> <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com> <16982.1715734632@cvs.openbsd.org> <CAHk-=wi04ZCm3vTtkcVnAUdiOpX3a0hBZ-aQWONwCubOJQEdXw@mail.gmail.com> <84192.1715737666@cvs.openbsd.org> <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
+Comments: In-reply-to Linus Torvalds <torvalds@linux-foundation.org>
+   message dated "Tue, 14 May 2024 19:28:54 -0700."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
- <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org>
- <56001.1715726927@cvs.openbsd.org> <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com>
- <16982.1715734632@cvs.openbsd.org> <CAHk-=wi04ZCm3vTtkcVnAUdiOpX3a0hBZ-aQWONwCubOJQEdXw@mail.gmail.com>
- <84192.1715737666@cvs.openbsd.org>
-In-Reply-To: <84192.1715737666@cvs.openbsd.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 14 May 2024 19:28:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
-Message-ID: <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] Introduce mseal
-To: Theo de Raadt <deraadt@openbsd.org>
-Cc: Matthew Wilcox <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org, keescook@chromium.org, 
-	jannh@google.com, sroettger@google.com, gregkh@linuxfoundation.org, 
-	usama.anjum@collabora.com, Liam.Howlett@oracle.com, surenb@google.com, 
-	merimus@google.com, rdunlap@infradead.org, jeffxu@google.com, 
-	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
-	dave.hansen@intel.com, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <58986.1715740958.1@cvs.openbsd.org>
+Date: Tue, 14 May 2024 20:42:38 -0600
+Message-ID: <75628.1715740958@cvs.openbsd.org>
 
-On Tue, 14 May 2024 at 18:47, Theo de Raadt <deraadt@openbsd.org> wrote:
->
-> Linus Torvalds <torvalds@linux-foundation.org> wrote:
->
-> Regarding mprotect(), POSIX also says:
->
->     An implementation may permit accesses other than those specified by
->     prot; however, no implementation shall permit a write to succeed where
->     PROT_WRITE has not been set or shall permit any access where PROT_NONE
->     alone has been set.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Why do you quote entirely irrelevant issues?
+> On Tue, 14 May 2024 at 18:47, Theo de Raadt <deraadt@openbsd.org> wrote:
+> >
+> > Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> >
+> > Regarding mprotect(), POSIX also says:
+> >
+> >     An implementation may permit accesses other than those specified by
+> >     prot; however, no implementation shall permit a write to succeed where
+> >     PROT_WRITE has not been set or shall permit any access where PROT_NONE
+> >     alone has been set.
+> 
+> Why do you quote entirely irrelevant issues?
+> 
+> If the mprotect didn't succeed, then clearly the above is irrelevant.
 
-If the mprotect didn't succeed, then clearly the above is irrelevant.
+Imagine the following region:
 
-> When sealed memory is encountered in the middle of a range, an error
-> will be returned (which almost noone looks at). Memory after the sealed
-> region will not be fixed to follow this rule.
->
-> It may retain higher permission.
 
-This is not in any way specific to mseal().
+    <--------------------------------------------- len
+    [region PROT_READ] [region PROT_READ + sealed] 
+addr ^
 
-Theo, you're making shit up.
+then perform
+    mprotect(addr, len, PROT_WRITE | PROT_READ);
 
-You claim that this is somehow new behavior:
+This will return -1, with EPERM, when it encounters the sealed region.
 
-> The other previous errors have been transient system effects, like ENOMEM.
+I believe in Linux, since it has not checked for errors as a first
+phase, this changes the first region of memory to PROT_READ |
+PROT_WRITE.  Liam, is that correct?  If I am correct, then this
+follows:
 
-but that's simply NOT TRUE. Try this:
+So tell me -- did the mprotect() system call succeed or did not it
+succeed?
 
-    #include <stdio.h>
-    #include <sys/mman.h>
+If EPERM means it did not succeed, then why is the first region now
+writable?
 
-    int main(int argc, char **argv)
-    {
-        /* Just three pages for VM space allocation */
-        void *a = mmap(NULL, 3*4096, PROT_READ, MAP_PRIVATE |
-MAP_ANONYMOUS, -1, 0);
+Immediately after this "call that failed", the process can perform a
+write to that first region.  But no succesful system call was made to
+change that memory to PROT_WRITE.
 
-        /* Make the second page a shared read mapping of stdin */
-        mmap(a+4096, 4096, PROT_READ, MAP_FIXED | MAP_SHARED, 0, 0);
+Alternatively, does EPERM mean it did not completely fail, and therefore
+it is OK that that the prot value has been applied?  That's really obscure,
+and undocumented.
 
-        /* Turn them all PROT_WRITE */
-        mprotect(a, 3*4096, PROT_WRITE);
+In any case it seems, PROT_WRITE can be set on memory, and it is even
+more pointless than before for userland to check the errno *because you
+can't determine the resulting protection on every page of memory.  It's
+all a mishmash after that.
 
-        fprintf(stderr, "Write to first page\n");
-        *(int *) (a+0) = 0;
+(There is no POSIX system call to ask "what is the permission of a page or
+region).
 
-        fprintf(stderr, "Write to second page\n");
-        *(int *) (a+4096) = 0;
+> Theo, you're making shit up.
 
-        fprintf(stderr, "Write to third page\n");
-        *(int *) (a+2*4096) = 0;
-    }
+I'm trying to have a technical discussion.  Please change your approach,
+Linus.
 
-and what you will get (under Linux) is
 
-    $ ./a.out < ./a.out
-    Write to first page
-    Write to second page
-    Segmentation fault (core dumped)
-
-because that mprotect() will have returned EACCES on the shared
-mapping, but will have successfully made the first one writable.
-
-End result: this whole "transient system effects" is just not true.
-And "mseal()" isn't somethign new.
-
-If somebody makes random mprotect() calls, and doesn't check the
-result, they get exactly what they deserve. And mseal() isn't the
-issue - bad programming is.
-
-Anyway, you're just making things up for your nonexistent arguments. I'm done.
-
-            Linus
 
