@@ -1,136 +1,102 @@
-Return-Path: <linux-kselftest+bounces-10218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 108978C5F33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 04:42:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA2D8C5F59
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 05:14:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78E17B21A60
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:42:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B12621F2255B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 03:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99DCA2F874;
-	Wed, 15 May 2024 02:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="EVzA9XNP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F443374E9;
+	Wed, 15 May 2024 03:14:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743B917C96;
-	Wed, 15 May 2024 02:42:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EBC38385;
+	Wed, 15 May 2024 03:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715740961; cv=none; b=QFZp6jR7FV2rEdphHfDQoRwnz+Tj6MqaKDOA4LPFb//2tXK9JrjhSiX9jfWbbowwvfPorLocg7dmzovk2uISNiAHfOJsHu6tc8s9PziRVhkkVNfzISoGCPGWZoOnkRDtmSD9tr5BRsCsm/FTALuRM6KIqntsWwdBWWsUH7jPHnc=
+	t=1715742848; cv=none; b=ULx1r9RpVRm2lDYhoLZu3c3eijKn7ECF9JLKo6XLbDbzakkewPsW8IedOTRUxaNNbOAvZOd3QqjRcBNnPk+KhwTBJuZCoLqUPpRMVNqJLlWJvUyTUKrYWLCNXohlJcl+owyH83PJYdOIguGLfsjEq90hcxzJOKxvK8cDdQ1fyo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715740961; c=relaxed/simple;
-	bh=E/eITmSfv/hukN66zjfP822dc02uc7jnjBNrPzQ6vNk=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=dYrEr6iDgTgdyzfkVQdp3ksjSCW7ATRGn7/3HEmS/xI8a+xV0nF8iw18r0gPl1mdzK9OE0xMj5YA1DOs0htzhdZDoV+wq52kNR7oT/w6LMN2Tu1HsO1Zjrncen7n+2ccAtKDM3Xo68nN4ReJgDvUT+v0CkzJWMSzo94wzGtMT4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=EVzA9XNP; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=E/eITmSfv/
-	hukN66zjfP822dc02uc7jnjBNrPzQ6vNk=; h=date:references:in-reply-to:
-	subject:cc:to:from; d=openbsd.org; b=EVzA9XNPb+gPk9asC5OFVNyHR+i0fVDrX
-	z9ATBDqxXlTOWBjRzskA+p4lrJb8vGvkmGIahadIO+N6X9VTQdg+upE34qLc8nykHKnuY4
-	wqNDC2Q0W5Oznjn2CSqtM84yOm6dPwVrEqedE0/6mmhog1vx9pEaabKX1Px+VovNJbW9tJ
-	VHPvFyJlsKPFNTvh6V2NyZhzfdcuYz2xi1w6ovAUxkwjMkRT6lNcBvtEjguIqLUx1OHff4
-	5ethYU+X1oK6WAP/fCgIjJ+r2iQ0CdxRD0WnGC/RI18BOMMGW0/C9kcQzAuugpakmsH6Db
-	jPJkuaz3YI2MbHRwYImoyZOwLf7SA==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id b934a569;
-	Tue, 14 May 2024 20:42:38 -0600 (MDT)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-cc: Matthew Wilcox <willy@infradead.org>,
-    Jonathan Corbet <corbet@lwn.net>,
-    Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org,
-    keescook@chromium.org, jannh@google.com, sroettger@google.com,
-    gregkh@linuxfoundation.org, usama.anjum@collabora.com,
-    Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
-    rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
+	s=arc-20240116; t=1715742848; c=relaxed/simple;
+	bh=nB1m7j2Q3vEqktywIoGVfNTqMXYMw9gbBScV7i4x0AE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K5IWINe3Bvxy+8GeP5La3r1srhnFtBODgDit+jlRdpk7XAiTa4muAuiQ9iLny1R7YM77Pejh50IQO+4gtP96kFEFwPtKF0uhdGmMBw4GjUwFq86UD1728ydU1EX3BaM3mByps/HHPFVchln3847CsilYzBs9AboKP0dw4HCvGuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 44F2wB5O001379;
+	Wed, 15 May 2024 04:58:11 +0200
+Date: Wed, 15 May 2024 04:58:11 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Theo de Raadt <deraadt@openbsd.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
+        jeffxu@chromium.org, keescook@chromium.org, jannh@google.com,
+        sroettger@google.com, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, usama.anjum@collabora.com,
+        Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
+        rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
+        groeck@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        pedro.falcato@gmail.com, dave.hansen@intel.com,
+        linux-hardening@vger.kernel.org
 Subject: Re: [PATCH v10 0/5] Introduce mseal
-In-reply-to: <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
-References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org> <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org> <56001.1715726927@cvs.openbsd.org> <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com> <16982.1715734632@cvs.openbsd.org> <CAHk-=wi04ZCm3vTtkcVnAUdiOpX3a0hBZ-aQWONwCubOJQEdXw@mail.gmail.com> <84192.1715737666@cvs.openbsd.org> <CAHk-=wj=Yb1r_g=geQe8YDGv-TA-UQBQe6-OVhA8FOGjWKnQmA@mail.gmail.com>
-Comments: In-reply-to Linus Torvalds <torvalds@linux-foundation.org>
-   message dated "Tue, 14 May 2024 19:28:54 -0700."
+Message-ID: <20240515025811.GA1232@1wt.eu>
+References: <20240415163527.626541-1-jeffxu@chromium.org>
+ <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
+ <871q646rea.fsf@meer.lwn.net>
+ <ZkPXcT_JuQeZCAv0@casper.infradead.org>
+ <56001.1715726927@cvs.openbsd.org>
+ <20240514160150.3ed0fda8af5cbd2f17c625e6@linux-foundation.org>
+ <92453.1715730450@cvs.openbsd.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <58986.1715740958.1@cvs.openbsd.org>
-Date: Tue, 14 May 2024 20:42:38 -0600
-Message-ID: <75628.1715740958@cvs.openbsd.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92453.1715730450@cvs.openbsd.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> On Tue, 14 May 2024 at 18:47, Theo de Raadt <deraadt@openbsd.org> wrote:
-> >
-> > Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >
-> > Regarding mprotect(), POSIX also says:
-> >
-> >     An implementation may permit accesses other than those specified by
-> >     prot; however, no implementation shall permit a write to succeed where
-> >     PROT_WRITE has not been set or shall permit any access where PROT_NONE
-> >     alone has been set.
+On Tue, May 14, 2024 at 05:47:30PM -0600, Theo de Raadt wrote:
+> Andrew Morton <akpm@linux-foundation.org> wrote:
 > 
-> Why do you quote entirely irrelevant issues?
+> > > I worry that the non-atomicity will one day be used by an attacker.
+> > 
+> > How might an attacker exploit this?
 > 
-> If the mprotect didn't succeed, then clearly the above is irrelevant.
+> Various ways which are going to be very application specific. Most ways
+> will depend on munmap / mprotect arguments being incorrect for some
+> reason, and callers not checking the return values.
+> 
+> After the system call, the memory is in a very surprising configuration.
+> 
+> Consider a larger memory region containing the following sections:
+> 
+>   [regular memory]  [sealed memory]  [regular memory containing a secret]
+> 
+> unmap() gets called on the whole region, for some reason.  The first
+> section is removed.  It hits the sealed memory, and returns EPERM.  It does
+> not unmap the sealed reason, not the memory containing the secret.
 
-Imagine the following region:
+If we consider that the attack consists, for an attacker, in mseal()ing
+the beginning of an area to make sure to pin the whole area by making a
+future munmap() fail, maybe we could make munmap() not stop anymore on
+such errors and continue to unmap the rest of the area, for the purpose
+of not leaving such a theoretical attack vector work ? After all, munmap()
+currently skips wholes and continues to unmap the area. But then what
+would prevent the attacker from doing mseal() on the whole area in this
+case, to prevent it from being unmapped ?
 
+Wouldn't it be more effective to have a non-resettable prctl() allowing
+the application to prefer to be killed upon such an munmap() failure in
+order to stay consistent and more robust against such class of attacks?
 
-    <--------------------------------------------- len
-    [region PROT_READ] [region PROT_READ + sealed] 
-addr ^
-
-then perform
-    mprotect(addr, len, PROT_WRITE | PROT_READ);
-
-This will return -1, with EPERM, when it encounters the sealed region.
-
-I believe in Linux, since it has not checked for errors as a first
-phase, this changes the first region of memory to PROT_READ |
-PROT_WRITE.  Liam, is that correct?  If I am correct, then this
-follows:
-
-So tell me -- did the mprotect() system call succeed or did not it
-succeed?
-
-If EPERM means it did not succeed, then why is the first region now
-writable?
-
-Immediately after this "call that failed", the process can perform a
-write to that first region.  But no succesful system call was made to
-change that memory to PROT_WRITE.
-
-Alternatively, does EPERM mean it did not completely fail, and therefore
-it is OK that that the prot value has been applied?  That's really obscure,
-and undocumented.
-
-In any case it seems, PROT_WRITE can be set on memory, and it is even
-more pointless than before for userland to check the errno *because you
-can't determine the resulting protection on every page of memory.  It's
-all a mishmash after that.
-
-(There is no POSIX system call to ask "what is the permission of a page or
-region).
-
-> Theo, you're making shit up.
-
-I'm trying to have a technical discussion.  Please change your approach,
-Linus.
-
-
+Willy
 
