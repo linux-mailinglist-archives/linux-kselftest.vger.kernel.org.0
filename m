@@ -1,318 +1,194 @@
-Return-Path: <linux-kselftest+bounces-10256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D998C6569
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 13:18:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 681278C66DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 15:06:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CA5F1F23DBC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:18:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AFED1C20E57
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 13:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAC36D1B2;
-	Wed, 15 May 2024 11:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A29F85956;
+	Wed, 15 May 2024 13:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D1Lhsq6u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rvdY/AXK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CF56EB4C;
-	Wed, 15 May 2024 11:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83BC3B79F;
+	Wed, 15 May 2024 13:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715771934; cv=none; b=NVD9/HQrH/EyP4DzPDEXBDM/uYqL2H2p0sNYCUBHgWEvS7ZXBOqm4zbLGKpbweaWa3IJ2Rj18XomUzoI69yL78YkzG8UdiHeYC+78ZWlDg0U6dv2byf+LOzK+ipf9Z8K45BRlIs7UcJNqdCn8G4evJQRVMElSwsaPPrqwPW0heo=
+	t=1715778384; cv=none; b=qrqgKUqXZWe11TY/0pSrYvwWsrlr7haB7rOW9WVb9vORm/+tO5svQAPIS92Z72uqfSllCzdKFpdLEFG+e7UB6nqqLndNv5ja2WKX0gm0A2FLRq01VeLQtc07xyvO5+HuNSo4cLeiylpEss5gUri5gRMa74tjXSQ8pccNxYvX3KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715771934; c=relaxed/simple;
-	bh=ypmQgTTVuA6yQFrlp0e3Jm4SgrVCOEzrzTi78+uItIs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uoqUtjodN/JdWmUzlZNspl4x8MX80UUx32sEogWNnqH2n2+ghOpq8Fxk9Fe8bsv46Te6enYbx7IgvrNoXGl0igv9vY1k8z5Givunbnc/bbDY47g9olNbsUNr4cIrowTRjHnuRXdp0vbppBhhgVvbHFWdXMgOQn1VKaz5PwPfU0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D1Lhsq6u; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715771934; x=1747307934;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ypmQgTTVuA6yQFrlp0e3Jm4SgrVCOEzrzTi78+uItIs=;
-  b=D1Lhsq6uxOvKL/kyu1bEIiQZaRAnCchCOariTxK8B/3EzewyTMOFPKc7
-   4BLsB03Pq+pEV24rUcsxkWjZtvxjJSpA00HJQfmjFlkaJJMEDqe0l171S
-   jzZWrW7b3uWPVQYbNugfSxcpr3+hVePu5ewl1I6VeZIcLpPBKN21+mwsp
-   sP8RRjRqdguMW/4pgqOQZNFuTMm8vskeF136DMNYWbXEwJrwXVqeqEDQF
-   cTtuSMMU4x3A/TjchPhuwJBFRTvuMEMVGzKFT4EHbr/PUUHJnTtHs3P3k
-   kpy59WianpV/tnSvQ7SRYq3V/kCJizXe0mJEfAqkfOthzlbHaxsY8qgeg
-   A==;
-X-CSE-ConnectionGUID: nLyMdaVTR0uSGvIUFRHqBQ==
-X-CSE-MsgGUID: 99tsPHlWSw+BkIFwj07noA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="22399428"
-X-IronPort-AV: E=Sophos;i="6.08,161,1712646000"; 
-   d="scan'208";a="22399428"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 04:18:53 -0700
-X-CSE-ConnectionGUID: n7DBne7AT+GRpJ1utQrarQ==
-X-CSE-MsgGUID: wFklm+3eSeisovWVteQwhA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,161,1712646000"; 
-   d="scan'208";a="31609018"
-Received: from unknown (HELO wieczorr-mobl1.intel.com) ([10.245.245.148])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 04:18:49 -0700
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: fenghua.yu@intel.com,
-	shuah@kernel.org,
-	reinette.chatre@intel.com
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	tony.luck@intel.com
-Subject: [PATCH v2 2/2] selftests/resctrl: Adjust SNC support messages
-Date: Wed, 15 May 2024 13:18:38 +0200
-Message-ID: <16764746e8f9f42cbd45d61210764a9b67085cbf.1715769576.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <cover.1715769576.git.maciej.wieczor-retman@intel.com>
-References: <cover.1715769576.git.maciej.wieczor-retman@intel.com>
+	s=arc-20240116; t=1715778384; c=relaxed/simple;
+	bh=A0YxFuuJShHBQ3xCPsMtAedx1f9EA+YbMAddHPRKwiU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DJI28n8oetkNZIbK1w6QW0OcRLgyLp6m8QySNjzudO3DLr14APAfLFCrS5fVSFJ5wnbFDbm5qg+Ayngy7Xm33ts2jWGzzZRzx5iOkuOqkO+021v4rD/b/jedd0LtNF8sX7EZq1lNuLXwDdlJzv33p/M7tucBfEJfKVhnFz42sTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rvdY/AXK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC19C32782;
+	Wed, 15 May 2024 13:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715778384;
+	bh=A0YxFuuJShHBQ3xCPsMtAedx1f9EA+YbMAddHPRKwiU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rvdY/AXKAcsO8WrapFPJs3ADz99OtdbHGqSxheuLegvO/mgbeU30ahKSaF0QhsY5y
+	 jVWBU2e1R8nM9RKtuKLZcyqRzLPvxodOMT9Kmx/4PVwKtjQfAg8Ia4yOAPG6t03QY1
+	 mVii6+i5lWDUW1jIt0dUYlNy9XJEErw5WRExs39M8NU2NhhJnZUw2VYMgelfBTGTkV
+	 ySX7RroJD4hhnzC/U9+2V4v92uR81h/Lp/b3KAXUqW/Vw2Z2SmwUUL1ILSBplQOqrZ
+	 19upOy+ZKuH9uiMVeafnaM9h5/9salMdrPI7ugdL7UYnZiZIrZeTt99w8AHySqIpzv
+	 uR7gXmEpq/TMQ==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-51fc01b6fe7so7446299e87.0;
+        Wed, 15 May 2024 06:06:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSamnP/7Eq+iYgJmvO5wMFAqT6dvzqzSp9oY81DtiehGrZvKJdP+mRj25hKUP2V5uptOJ2wQZVEh73IMyweO2N19hQiheHTO0GWLj7d4DOF2s/qkf3/pL2c3MAV38suTunsNcb3dNN9KlOElyHt5CNmJcuj5t9ez6JlcEmlADQOINfMG5SnWGMAAG9Y/rkwDb9gtJUpX9n6mg+oCJGlGPEd9KPRg==
+X-Gm-Message-State: AOJu0YzaVqzID+FYY9qjWamroUlh7MX38yjnRVpW0lNeU7TjZ0R/5qd+
+	PMRYQP7ub3U1BwQDWYVMU4QqMGIW/8gU+ExFt8L/R4LP7/JDDNaxUaw7ld0asnVHcmJOIu3cYDf
+	rX7yPNqv5oqpbAeDCCO42TZVP/A==
+X-Google-Smtp-Source: AGHT+IFx85HwyGkq7nhuxIMzVBaBcFT+g2jH7StU0bEW7eR8FFo2zOGOMnX4dCVgnkGHDb6Fk2RaGnQFsJxSXXkyhAc=
+X-Received: by 2002:a05:6512:3043:b0:522:36f7:3660 with SMTP id
+ 2adb3069b0e04-52236f739f8mr11158575e87.36.1715778382780; Wed, 15 May 2024
+ 06:06:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240422232404.213174-1-sboyd@kernel.org> <CABVgOSmgUJp3FijpYGCphi1OzRUNvmYQmPDdL6mN59YnbkR2iQ@mail.gmail.com>
+ <b822c6a5488c4098059b6d3c35eecbbd.sboyd@kernel.org> <5c919f0d3d72fe1592a11c45545e8a60.sboyd@kernel.org>
+In-Reply-To: <5c919f0d3d72fe1592a11c45545e8a60.sboyd@kernel.org>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 15 May 2024 08:06:09 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK4EZ0RhYCw6ZaeYSJu5Ps1J+J25vjwQy2XvNa5F5d7Pw@mail.gmail.com>
+Message-ID: <CAL_JsqK4EZ0RhYCw6ZaeYSJu5Ps1J+J25vjwQy2XvNa5F5d7Pw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/10] clk: Add kunit tests for fixed rate and parent data
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: David Gow <davidgow@google.com>, Michael Turquette <mturquette@baylibre.com>, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	patches@lists.linux.dev, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, 
+	Christian Marangi <ansuelsmth@gmail.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Resctrl selftest prints a message on test failure that Sub-Numa
-Clustering (SNC) could be enabled and points the user to check theirs BIOS
-settings. No actual check is performed before printing that message so
-it is not very accurate in pinpointing a problem.
+On Tue, May 14, 2024 at 4:29=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Stephen Boyd (2024-05-02 18:27:42)
+> > Quoting David Gow (2024-05-01 01:08:11)
+> > >
+> > > The other thing I've noted so far is that the
+> > > of_apply_kunit_platform_device and of_overlay_apply_kunit_cleanup
+> > > tests fail (and BUG() with a NULL pointer) on powerpc:
+> > > > [15:18:51]     # of_overlay_apply_kunit_platform_device: EXPECTATIO=
+N FAILED at drivers/of/overlay_test.c:47
+> > > > [15:18:51]     Expected pdev is not null, but is
+> > > > [15:18:51] BUG: Kernel NULL pointer dereference at 0x0000004c
+> >
+> > This seems to be because pdev is NULL and we call put_device(&pdev->dev=
+)
+> > on it. We could be nicer and have an 'if (pdev)' check there. I wonder
+> > if that fixes the other two below?
+> >
+> > ---8<---
+> > diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
+> > index 223e5a5c23c5..85cfbe6bb132 100644
+> > --- a/drivers/of/overlay_test.c
+> > +++ b/drivers/of/overlay_test.c
+> > @@ -91,7 +92,8 @@ static void of_overlay_apply_kunit_cleanup(struct kun=
+it *test)
+> >         dev =3D bus_find_device(&platform_bus_type, NULL, kunit_compati=
+ble,
+> >                               of_overlay_bus_match_compatible);
+> >         KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
+> > -       put_device(dev);
+> > +       if (dev)
+> > +               put_device(dev);
+> >  }
+>
+> This last hunk isn't needed.
+>
+> >
+> >  static struct kunit_case of_overlay_apply_kunit_test_cases[] =3D {
+> >
+> > > > [15:18:51]     # of_overlay_apply_kunit_platform_device: try faulte=
+d: last line seen lib/kunit/resource.c:99
+> > > > [15:18:51]     # of_overlay_apply_kunit_platform_device: internal e=
+rror occurred preventing test case from running: -4
+> > > > [15:18:51] [FAILED] of_overlay_apply_kunit_platform_device
+> > >
+> > > > [15:18:51] BUG: Kernel NULL pointer dereference at 0x0000004c
+> > > > [15:18:51] note: kunit_try_catch[698] exited with irqs disabled
+> > > > [15:18:51]     # of_overlay_apply_kunit_cleanup: try faulted: last =
+line seen drivers/of/overlay_test.c:77
+> > > > [15:18:51]     # of_overlay_apply_kunit_cleanup: internal error occ=
+urred preventing test case from running: -4
+> > > > [15:18:51] [FAILED] of_overlay_apply_kunit_cleanup
+> > >
+> > > I've not had a chance to dig into it any further, yet, but it appears
+> > > to work on all of the other architectures I tried.
+> >
+> > Cool. I don't know why powerpc doesn't make devices. Maybe it has a
+> > similar design to sparc to create resources. I'll check it out.
+> >
+>
+> powerpc doesn't mark the root node with OF_POPULATED_BUS. If I set that
+> in of_platform_default_populate_init() then the overlays can be applied.
+>
+> ---8<----
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index 389d4ea6bfc1..fa7b439e9402 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -565,6 +565,10 @@ static int __init of_platform_default_populate_init(=
+void)
+>                                 of_platform_device_create(node, buf, NULL=
+);
+>                 }
+>
+> +               node =3D of_find_node_by_path("/");
+> +               if (node)
+> +                       of_node_set_flag(node, OF_POPULATED_BUS);
 
-Figuring out if SNC is enabled is only one part of the problem, the
-other being whether the kernel supports it. As there is no easy
-interface that simply states SNC support in the kernel one can find that
-information by comparing L3 cache sizes from different sources. Cache
-size reported by /sys/devices/system/node/node0/cpu0/cache/index3/size
-will always show the full cache size even if it's split by enabled SNC.
-On the other hand /sys/fs/resctrl/size has information about L3 size,
-that with kernel support is adjusted for enabled SNC.
+I think you want to do this in of_platform_bus_probe() instead to
+mirror of_platform_populate(). These are supposed to be the same
+except that 'populate' only creates devices for nodes with compatible
+while 'probe' will create devices for all child nodes. Looks like we
+are missing some devlink stuff too. There may have been some issue for
+PPC with it.
 
-Add a function to find a cache size from /sys/fs/resctrl/size since
-finding that information from the other source is already implemented.
+> +               of_node_put(node);
+>         } else {
+>                 /*
+>                  * Handle certain compatibles explicitly, since we don't =
+want to create
+>
+> I'm guessing this is wrong though, because I see bunch of powerpc specifi=
+c code
+> calling of_platform_bus_probe() which will set the flag on the actual pla=
+tform
+> bus nodes. Maybe we should just allow overlays to create devices at the r=
+oot
+> node regardless? Of course, the flag doc says "platform bus created for
+> children" and if we never populated the root then that isn't entirely acc=
+urate.
+>
+> Rob, can you point me in the right direction? Do we need to use simple-bu=
+s in
+> the test overlays and teach overlay code to populate that bus?
 
-Add a function that compares the two cache sizes and use it to make the
-SNC support message more meaningful.
+Overlays adding things to the root node might be suspect, but probably
+there are some valid reasons to do so. If simple-bus makes sense here,
+then yes, you should use it. But if what's on it is not MMIO devices,
+don't. That's a warning in the schema now.
 
-Add the SNC support message just after MBA's check_results() since MBA
-shares code with MBM and also can suffer from enabled SNC if there is no
-support in the kernel.
-
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v2:
-- Move snc_ways() checks from individual tests into
-  snc_kernel_support().
-- Write better comment for snc_kernel_support().
-
- tools/testing/selftests/resctrl/cat_test.c  |  2 +-
- tools/testing/selftests/resctrl/cmt_test.c  |  6 +-
- tools/testing/selftests/resctrl/mba_test.c  |  2 +
- tools/testing/selftests/resctrl/mbm_test.c  |  4 +-
- tools/testing/selftests/resctrl/resctrl.h   |  5 +-
- tools/testing/selftests/resctrl/resctrlfs.c | 72 ++++++++++++++++++++-
- 6 files changed, 82 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index c7686fb6641a..722b4fcaf788 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -253,7 +253,7 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 		return ret;
- 
- 	/* Get L3/L2 cache size */
--	ret = get_cache_size(uparams->cpu, test->resource, &cache_total_size);
-+	ret = get_sys_cache_size(uparams->cpu, test->resource, &cache_total_size);
- 	if (ret)
- 		return ret;
- 	ksft_print_msg("Cache size :%lu\n", cache_total_size);
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index a44e6fcd37b7..0ff232d38c26 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -112,7 +112,7 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	if (ret)
- 		return ret;
- 
--	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
-+	ret = get_sys_cache_size(uparams->cpu, "L3", &cache_total_size);
- 	if (ret)
- 		return ret;
- 	ksft_print_msg("Cache size :%lu\n", cache_total_size);
-@@ -157,8 +157,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 		goto out;
- 
- 	ret = check_results(&param, span, n);
--	if (ret && (get_vendor() == ARCH_INTEL))
--		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled. Check BIOS configuration.\n");
- 
- out:
- 	free(span_str);
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 5d6af9e8afed..74e1ebb14904 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -161,6 +161,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 		return ret;
- 
- 	ret = check_results();
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled. Check BIOS configuration.\n");
- 
- 	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 3059ccc51a5a..e542938272f9 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -129,8 +129,8 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		return ret;
- 
- 	ret = check_results(DEFAULT_SPAN);
--	if (ret && (get_vendor() == ARCH_INTEL))
--		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled. Check BIOS configuration.\n");
- 
- 	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 3dd5d6779786..2bd7c3f71733 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -28,6 +28,7 @@
- #define RESCTRL_PATH		"/sys/fs/resctrl"
- #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
- #define INFO_PATH		"/sys/fs/resctrl/info"
-+#define SIZE_PATH		"/sys/fs/resctrl/size"
- 
- /*
-  * CPU vendor IDs
-@@ -165,12 +166,14 @@ unsigned long create_bit_mask(unsigned int start, unsigned int len);
- unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
- int get_full_cbm(const char *cache_type, unsigned long *mask);
- int get_mask_no_shareable(const char *cache_type, unsigned long *mask);
--int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
- int resource_info_unsigned_get(const char *resource, const char *filename, unsigned int *val);
-+int get_sys_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
-+int get_resctrl_cache_size(const char *cache_type, unsigned long *cache_size);
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(const struct resctrl_test *test);
- void signal_handler_unregister(void);
- unsigned int count_bits(unsigned long n);
-+int snc_kernel_support(void);
- 
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
- void perf_event_initialize_read_format(struct perf_event_read *pe_read);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index e4d3624a8817..88f97db72246 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -214,14 +214,14 @@ int snc_ways(void)
- }
- 
- /*
-- * get_cache_size - Get cache size for a specified CPU
-+ * get_sys_cache_size - Get cache size for a specified CPU
-  * @cpu_no:	CPU number
-  * @cache_type:	Cache level L2/L3
-  * @cache_size:	pointer to cache_size
-  *
-  * Return: = 0 on success, < 0 on failure.
-  */
--int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size)
-+int get_sys_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size)
- {
- 	char cache_path[1024], cache_str[64];
- 	int length, i, cache_num;
-@@ -273,6 +273,44 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
- 	return 0;
- }
- 
-+/*
-+ * get_resctrl_cache_size - Get cache size as reported by resctrl
-+ * @cache_type:	Cache level L2/L3
-+ * @cache_size:	pointer to cache_size
-+ *
-+ * Return: = 0 on success, < 0 on failure.
-+ */
-+int get_resctrl_cache_size(const char *cache_type, unsigned long *cache_size)
-+{
-+	char line[256], cache_prefix[16], *stripped_line, *token;
-+	size_t len;
-+	FILE *fp;
-+
-+	strcpy(cache_prefix, cache_type);
-+	strncat(cache_prefix, ":", 1);
-+
-+	fp = fopen(SIZE_PATH, "r");
-+	if (!fp) {
-+		ksft_print_msg("Failed to open %s : '%s'\n",
-+			       SIZE_PATH, strerror(errno));
-+		return -1;
-+	}
-+
-+	while (fgets(line, sizeof(line), fp)) {
-+		stripped_line = strstr(line, cache_prefix);
-+
-+		if (stripped_line) {
-+			len = strlen(cache_prefix);
-+			stripped_line += len;
-+			token = strtok(stripped_line, ";");
-+			if (sscanf(token, "0=%lu", cache_size) <= 0)
-+				return -1;
-+		}
-+	}
-+	fclose(fp);
-+	return 0;
-+}
-+
- #define CORE_SIBLINGS_PATH	"/sys/bus/cpu/devices/cpu"
- 
- /*
-@@ -935,3 +973,33 @@ unsigned int count_bits(unsigned long n)
- 
- 	return count;
- }
-+
-+/**
-+ * snc_kernel_support - Compare system reported cache size and resctrl
-+ * reported cache size to get an idea if SNC is supported on the kernel side.
-+ *
-+ * Return: 0 if not supported, 1 if SNC is disabled or SNC is both enabled and
-+ * supported, < 0 on failure.
-+ */
-+int snc_kernel_support(void)
-+{
-+	unsigned long resctrl_cache_size, node_cache_size;
-+	int ret;
-+
-+	/* If SNC is disabled then its kernel support isn't important. */
-+	if (snc_ways() == 1)
-+		return 1;
-+
-+	ret = get_sys_cache_size(0, "L3", &node_cache_size);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = get_resctrl_cache_size("L3", &resctrl_cache_size);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (resctrl_cache_size == node_cache_size)
-+		return 1;
-+
-+	return 0;
-+}
--- 
-2.45.0
-
+Rob
 
