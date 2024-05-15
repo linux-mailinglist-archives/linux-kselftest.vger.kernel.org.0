@@ -1,139 +1,133 @@
-Return-Path: <linux-kselftest+bounces-10206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10207-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3553C8C5E63
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:43:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D218C5E65
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:44:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9EBA282859
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 00:43:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD41A1C20FC8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 00:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857C163C;
-	Wed, 15 May 2024 00:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E17812;
+	Wed, 15 May 2024 00:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ui/MobDt"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Plx7n0X8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481A7803;
-	Wed, 15 May 2024 00:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA487FB
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 00:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715733803; cv=none; b=ELZF/h5olnord9PRMtTc7lTyX+tgUC8eiyPrjWg+DAZwaxR/Zew+DS1ez0527sanZ1ka5+YFFrEbSLuA4MbQNbJcLrwkHrTP8OanwF1VqIt1E74vWJkAhL0RhALmAt7QfZAjCBIunVWvxZKTBvZ/11mWzBQglWsyRFmf98V6fxo=
+	t=1715733848; cv=none; b=evaYu4joje2f3uaoMKta4EFMYFfaPzr1xapN8DBhesjRMcEKjvzcyWZ/Nb/O9BM/N5Iy9BBiMZTSJhjjn18dg9MiEWA+wUoH5hoz5GJz2IR8bsOJkJ7qZLXABqUGt1ajuxVePNkHyi96MnAdWm2Gi6UdehvW4hYFSi22v4g8I1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715733803; c=relaxed/simple;
-	bh=VFRhRLtJe6gMt3AlqSP3aSMrq7Sn300+2gW/3T3DoWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=akD+J95Ng1xTmESYO0VM6M/D685mT8s85bmXvZT6A9IweDafTnBX7tafzXrURqas6pgAGpLnZR6oB6GOzRbjstZn2bZM4KUlaWaSPIi7jdPpm4GnrvIRHqGfr1jXWwFT4dJKp8LZ3oZSKylBDQLEFEDf8zvpOBu5/+QFf2MLCfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ui/MobDt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE08C2BD10;
-	Wed, 15 May 2024 00:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715733802;
-	bh=VFRhRLtJe6gMt3AlqSP3aSMrq7Sn300+2gW/3T3DoWw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Ui/MobDtbOufjX9M08OxOsgD6NGdGs0kz0A5jvU8NYmOoeUBycuzAOh73iuApvpvj
-	 tAa42Rfcoe1AAs5zrdOqr7JJYQE1Ci67NuTR53mGEHRHtwTdPVLd+v2aUqwES1AxEZ
-	 izix4+61CVhsYUnLc4fd48hQ8G34vyF82yHqGvrUkuFjlf3CF9jbRCYXB6+DCmUSX8
-	 NqH2Mg5qZSQjzbv/RxXypMT6a23NQE0lhROd4en69oCnqVCQnHMhpTOSSi7diu0AzO
-	 yWjSwFtjTfSjkTDY1lski2ECJWR/MsXTgDYA6V3qeRM5MTXSoBts+Zk78O99cZWID9
-	 j0PkU1uOS7NWg==
-Date: Tue, 14 May 2024 17:43:21 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
- <pabeni@redhat.com>, <vladimir.oltean@nxp.com>, <shuah@kernel.org>,
- <liuhangbin@gmail.com>, <bpoirier@nvidia.com>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next] selftests: net: local_termination: annotate
- the expected failures
-Message-ID: <20240514174321.376039a5@kernel.org>
-In-Reply-To: <875xvhu97r.fsf@nvidia.com>
-References: <20240509235553.5740-1-kuba@kernel.org>
-	<875xvhu97r.fsf@nvidia.com>
+	s=arc-20240116; t=1715733848; c=relaxed/simple;
+	bh=iyxC/dRXIM6KYxQfRCHr8g+kv1gexJCsm8khro+Q+uQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cr5qSdLjCVjkkzxfQyWU72+zg0GbIUMjTHScDTeExIvPV+2dutImM+nIRHjRs9O6HsdBCgzqGqX4cUSjYb76xqUqKR+ls56glfY1HalBjHCftoM1BuY5B5iEQBOM2MDsAQmcC//j4EzohnTklLuM5vIbmGBBa90+Jw7+AIWqPrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Plx7n0X8; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-572a93890d1so994372a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 17:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1715733844; x=1716338644; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7OZvAiAEdwWZe22j4pRu5oxfNYFobcCpcqXbwXMC6CU=;
+        b=Plx7n0X8y6yIj1mJsUk4XX/ArUcg4viBPqKx5/GYYIgD8qVXolUkF9LIVxsPrvqjB5
+         h5m3wBZxFld2j0pJ/nZvHDSYVl5D8nOfB3Ziyn63ywsxLFj+EiwQ7y9Z0nn6KkLuY/hA
+         MfOo2nAxUyCX8zEcG/D+hnpHNMne6beAjxCrM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715733844; x=1716338644;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7OZvAiAEdwWZe22j4pRu5oxfNYFobcCpcqXbwXMC6CU=;
+        b=Pn1XEPPWpuSAvv4ml+yaVJwGiy/z8jj1yurWcJhVQoowYeoGoYYFLgkgc0huZipPpv
+         c2sU/CAzwqe64djZXyYofuqx5jg3OowrJ+oZNMCxFuxnWX+0mcPXdLe5fbPoniBsefFU
+         kSFmTdMxJ0/6+76lAXM98dudGFELmY/XFHY8TaM8aueRXJgH45mWOEKEAm4KD2qacmsP
+         eJPUVkwZkfNiEsGx5bOsKJ5qNWOXhVp+CffJJPOCFcI38W4fUyAPnxYIdKB8k/TDNV2w
+         Z2LLy7tj4RoEMmhUAEeIN6uCXwsFG32dV+NkF3LyZt3Ty9jS0uJkTFng5FfKpwsE3sf3
+         h+3A==
+X-Forwarded-Encrypted: i=1; AJvYcCVjuwuNnrgV1Noz7hT+8pAYpdPM/vHI2F1sPdvPvsOWZk/zHMNJ7xK0QEqo1mgQoF66z+QKgd4X9VJqaIaLX2HCSpsWjHFdNpMgC7gLM9lq
+X-Gm-Message-State: AOJu0YxUE4S8LaXwo4vaKIjoQE5tzOBHoHzbUZ8vS3Em9PNHjukkBFBu
+	8pVz6jbeac49obCU/bWjuHi6lZNY/P3cedOvTv4unyz9o9A0TBq9ohoW2G1MU9aG1EoVKy2zRO9
+	+0tnaWA==
+X-Google-Smtp-Source: AGHT+IGk+EhC3U2BIioYpyPr9wRtO3AHfQiQedV4xROQLpn9O85t3IzOUf7ChXud+nAQFTrEhxl54A==
+X-Received: by 2002:a17:906:ac8:b0:a59:d0be:dba4 with SMTP id a640c23a62f3a-a5a2d53aed6mr1317801166b.13.1715733844597;
+        Tue, 14 May 2024 17:44:04 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781d708sm782924966b.41.2024.05.14.17.44.04
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 May 2024 17:44:04 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a5a4bc9578cso84228766b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2024 17:44:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUwgmA6SqAE79kGiDAHV4zVoOzCEHsJzLUelqe9mLky41iEvkwyDTrcbV85g+Q97eLsF27enpqTVkt7G+jLui9XwbXEalWWExCz6rPAQ1yu
+X-Received: by 2002:a17:906:a010:b0:a59:a9c0:57e6 with SMTP id
+ a640c23a62f3a-a5a2d675dafmr1290775966b.75.1715733843947; Tue, 14 May 2024
+ 17:44:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
+ <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org> <56001.1715726927@cvs.openbsd.org>
+In-Reply-To: <56001.1715726927@cvs.openbsd.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 14 May 2024 17:43:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com>
+Message-ID: <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com>
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+To: Theo de Raadt <deraadt@openbsd.org>
+Cc: Matthew Wilcox <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org, keescook@chromium.org, 
+	jannh@google.com, sroettger@google.com, gregkh@linuxfoundation.org, 
+	usama.anjum@collabora.com, Liam.Howlett@oracle.com, surenb@google.com, 
+	merimus@google.com, rdunlap@infradead.org, jeffxu@google.com, 
+	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
+	dave.hansen@intel.com, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 13 May 2024 15:25:38 +0200 Petr Machata wrote:
-> For veth specifically there is xfail_on_veth:
-> 
-> xfail_on_veth $rcv_if_name \
-> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
-> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
-> 		  false
-> 
-> Which is IMHO clearer than passing an extra boolean.
+On Tue, 14 May 2024 at 15:48, Theo de Raadt <deraadt@openbsd.org> wrote:
+>
+> and can't imagine it affecting a single application
 
-The extra boolean is because we want to only fail particular subcases.
-I think that's legit. If the other cases regress we want to know.
-Otherwise running the test on SW bridge is only useful for catching
-crashes (so less useful).
+Honestly, that's the reason for not caring.
 
-So we probably need to reset FAIL_TO_XFAIL in this case.
-Any preference on how to go about that? I'm tempted to:
+You have to do actively wrong things for this to matter AT ALL.
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh
-b/tools/testing/selftests/net/forwarding/lib.sh index
-112c85c35092..79aa3c8bc288 100644 ---
-a/tools/testing/selftests/net/forwarding/lib.sh +++
-b/tools/testing/selftests/net/forwarding/lib.sh @@ -473,6 +473,13 @@
-ret_set_ksft_status() # Whether FAILs should be interpreted as XFAILs.
-Internal. FAIL_TO_XFAIL=
- 
-+# Clear internal failure tracking for the next test case
-+begin_test()
-+{
-+    RET=0
-+    FAIL_TO_XFAIL=
-+}
-+
- check_err()
- {
- 	local err=$1
-diff --git
-a/tools/testing/selftests/net/forwarding/local_termination.sh
-b/tools/testing/selftests/net/forwarding/local_termination.sh index
-65694cdf2dbb..0781ceba1348 100755 ---
-a/tools/testing/selftests/net/forwarding/local_termination.sh +++
-b/tools/testing/selftests/net/forwarding/local_termination.sh @@ -76,7
-+76,7 @@ check_rcv() local xfail_sw=$5 
- 	[ $should_receive = true ] && should_fail=0 || should_fail=1
--	RET=0
-+	begin_test
- 
- 	tcpdump_show $if_name | grep -q "$pattern"
- 
+So no, we're not making gratuitous changes for stupid reasons.
 
-> Not sure what to do about the bridge bit though. In principle the
-> various xfail_on_'s can be chained, so e.g. this should work:
-> 
-> xfail_on_bridge $rcv_if_name \
-> xfail_on_veth $rcv_if_name \
-> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
-> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
-> 		  false
-> 
-> I find this preferable to adding these ad-hoc tweaks to each test
-> individually. Maybe it would make sense to have:
-> 
-> xfail_on_kind $rcv_if_name veth bridge \
-> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
-> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
-> 		  false
-> 
-> And then either replace the existing xfail_on_veth's (there are just a
-> handful) or convert xfail_on_veth to a wrapper around xfail_on_kind.
+> I worry that the non-atomicity will one day be used by an attacker.
 
-I think the bridge thing we can workaround by just checking
-if ${NETIFS[p1]} is veth, rather than $rcv_if_name.
-Since the two behave the same.
+Blah blah blah. That's a made-up scare tactic if I ever heard one.
+It's unworthy of you.
+
+Anybody who does mprotect/mmap/munmap/whatever over multiple
+independent memory mappings had better know exactly what mappings they
+are touching. Otherwise they are *already* just doing random crap.
+
+In other words: nobody actually does that. Yes, you have people who
+first carve out one big area with an mmap(), and then do their own
+memory management within that area. But the point is, they are very
+much in control and if they do something inconsistent, they absolutely
+only have themselves to blame.
+
+And if you have some app that randomly does mprotect etc over multipl
+memory mappings that it doesn't know what the f*^% they are, then
+there is no saving such a piece of unbelievable garbahe.
+
+So stop the pointless fear-mongering. Linux does the smart thing,
+which is to not waste a single cycle on something that cannot possibly
+be relevant.
+
+             Linus
 
