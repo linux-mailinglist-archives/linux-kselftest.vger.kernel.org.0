@@ -1,563 +1,680 @@
-Return-Path: <linux-kselftest+bounces-10258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450EE8C6750
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 15:26:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0C2B8C6872
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 16:21:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDADA285226
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 13:26:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 191EBB2115B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 14:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D7D85C6F;
-	Wed, 15 May 2024 13:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED1713F43D;
+	Wed, 15 May 2024 14:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="3PFE6nlA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAJICnly"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C04D8595B
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 13:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6786214D;
+	Wed, 15 May 2024 14:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715779589; cv=none; b=fWUt448ofHtJPfv10IqwnkFdkBcRg6QMfX1J1Ob1izXXdHLL0La9/qcKwMy1sWfCupPGXWfCmRAgwnQWe5mcsAZsvPmL8l10Cko0BYo3wTSwL+Kll6d5AyoKa2HJ1ULAxtREKtqb0vTPZ+egoQOPsTbPDVXfxIaBRhzKBm4hgjQ=
+	t=1715782863; cv=none; b=E74JFPLsoJZxaQlMxYooFhuseUr6xwM3jyRg0qv8i2/JVgwQrw1Oh1PRo4mNUySpXqzfe7GhI4LNPZGoPvIcb/tWnX/f+CXiXde5uaZl7WAZ9EA+5Jg0fuwVRSNAwwjgTjyb7RPhnbq+xavjsrh8i7GbxhacbgkkanDr83rovfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715779589; c=relaxed/simple;
-	bh=Ay36m1Hv1uA4nVw2mx1bBjHXOneciByDqnlcaCc4eOg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bmmPc7O1TwaO/K2/4rdm8EqWBXQtOvBUfGgbUQ0V9xA4oESFhebEGGD2HC8eApvZgvhbIx42Zwh14rEarcoaxe0H0WNqIBGCwdU8QdNyEjCTIUVc72eUmK1dh9GOmm8j3rQsZYctpB1F9Y79C8CKk2Zi8YbtOEOjl4u+vib6OD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=3PFE6nlA; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41ff0c3eacdso4520205e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 06:26:26 -0700 (PDT)
+	s=arc-20240116; t=1715782863; c=relaxed/simple;
+	bh=lne6jIgtRd1Ugb8zZw12WxMh6tqXXpqC7Ku29xoYDqA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u2voAe6iadEpO1DQZi2SXB2AG1OxhPJVy5nEZB523dhwIcTK3kJTksBtWoV81aEB/I3pKIQl9s6nbecg/PfVlEymlXourgCqQos8LAtTJS1YcQNuwVNEWFKGlTEEl/zuCsHD98O9pNxeD8NUXxVlkEgYwRe8PyhLQkpgZw3ezr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cAJICnly; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5238a0486baso222147e87.3;
+        Wed, 15 May 2024 07:21:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715779585; x=1716384385; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j4jRaTLo0FBNHYO1U6ebOfybdn0s3zuus+R/Yo6bdlE=;
-        b=3PFE6nlA5QUxWJwfWpBkcFnGNIv7gP7QV8KPFK/8T/uFRZ+DGGa/mL5fvMEVGMrZnE
-         n3vQ7DkTQh/C2r1Kbs/KWSiN2WgymPgJoyFlvW/zp033Rif9F/BhERVUxLEnQ4MCkr+n
-         /s+4yTPo/VDgnr8wmOp/Yy7BF9OdcOZZgwRbgbQ3sKmCYTeN7tZgE9TE4RekSIkvwJUd
-         vj3vZiGphr8UnzFl/TgWsy08OUOVPLZ12+LVNJqPzidpNtcxFebW9q0bHoBKP4yGXZsG
-         TtuLJWgg6X4kpdLZHINKZ7OQ3Cu8/ARRYoFd6F66kMhCciDzCL7sxHKdHAdqCU2YJkt0
-         Hj5g==
+        d=gmail.com; s=20230601; t=1715782859; x=1716387659; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRFLOjQLOEykVlB5zuhTnYwcBcjuXCRfy0aTgdQoPhE=;
+        b=cAJICnlyRy7t/D92YJJojQxz30TOH3V7co0ubXSRmt+jRCayQLIrlB6PCwKwBpIWKW
+         nkH6STW/CGWgCAU3rm/p8qslHuMilef6a8FwPC9T5s8eBYzQIHoqS2CTzutqn8g90dCR
+         PcQknvSNKw8otUFXTl1v+Cr7Pw7/xrtELI73GTZYQiiEyVyc0EDTv/JTlQfnS9I/Oqrn
+         +5Exy1NJdsjRJy+foVNObcumlNNbE+37lEb+2eL1E+UvNRxm0vTfeKZxhfrRt0u6THCJ
+         YQnLmt6Bxi8Vijno4jM8qfcfH4QruguPAmDKFSzmcl9NGyvO04t+eYbtXc0QODzE377G
+         4AUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715779585; x=1716384385;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4jRaTLo0FBNHYO1U6ebOfybdn0s3zuus+R/Yo6bdlE=;
-        b=qf3FVR01PsE4mAdNPGUr5yds6DUftJrckQX9U6/Ta4TBDuEX8hnBdhKsRdgEHc9CMz
-         bV6dwYdaUCLv9xZZG2dzm4MnppTnb6IEIN3ijrgZJIDCuA7i6fTX9qZ2i1MyAIzcaEBl
-         wGZsnZYFZTi4NjK5mhH4/8okpMLZU4V90t1GmuvxHu4spAt4I1MH8eBP9QLVHeZt5eFm
-         r4UKeDjwet0E2fOlvEDEjPYrhCc4IJkQx6PvaBJneVSJdOjr/R2M628v0DXd93d4t4O1
-         iYH1Zjvw3UAG75E7uMlXpelItqe8eYk6wsopkGrProCEiX+/z2JdD5GvWSLJwqKSiFBC
-         NtMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBG8O7P6JbTYmh6M49Nnlc/G9jU0ppdGDjcoyzVjH0P7cLQCPzgkLONMjeDJQxAUKJ2LelLCJyYlCjO1Zl9agaEu0itjJnPT1Eh836dFv2
-X-Gm-Message-State: AOJu0YzaEeVR+Vf7Rv7rMHxZcb+o4rymsJUaGX7rQdrpFC7vOip6hmju
-	mtIzYiKmjBYxhkB9ajawHMEyjzBWssIkZqW6HUhQhGTEQwjZ3YgY/Z2+iB5SslU=
-X-Google-Smtp-Source: AGHT+IF/WKhF6PXHO1JN4EiQHsyuki3NYd7GxeZ1PvC8tJ0bB/n5WVvtu6sOSb+rsq6GKiqpgb39IQ==
-X-Received: by 2002:a5d:4d10:0:b0:34c:f989:dc25 with SMTP id ffacd0b85a97d-3504a9689demr10930354f8f.6.1715779585335;
-        Wed, 15 May 2024 06:26:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:f218:39c8:532e:12d6? ([2a01:e0a:999:a3a0:f218:39c8:532e:12d6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b8a78cdsm16462077f8f.58.2024.05.15.06.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 06:26:24 -0700 (PDT)
-Message-ID: <7a26604f-2653-4140-9294-637b340282d1@rivosinc.com>
-Date: Wed, 15 May 2024 15:26:23 +0200
+        d=1e100.net; s=20230601; t=1715782859; x=1716387659;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZRFLOjQLOEykVlB5zuhTnYwcBcjuXCRfy0aTgdQoPhE=;
+        b=Kko+kbMk3y5Ji95ECBqHDUZvVJAA6COsxhIAoOgupWD5AxO7KMpSsr8KUktCjKgQAM
+         KMp56F3mgRgkj+IGX2fs9FtOcW21Nx4wUqrI3oZM+h1VCCpuOrFQfYEV+pg/ACsuOPR9
+         LPeYZyIRWs9iZvRK2XQ2J7I1AAyBMpxhCmNRw3JiAeBtkb3RhKPDg8qLbE4k0uCf4VqW
+         cSYlSmI2o+OtYlqRsMZ1xOOeS37SOiZC6kFCOTI8I+Zmc6u2mFiJb0ryHhoYh3wkQR73
+         JvjsRtiWI/DYjiCGDnZnYynqbMVQLQfOW96WxROTL7TheZ58brq5/Oxf2cOAfJiCQWHO
+         XN7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUZnZOybwNpefiMtQwYflTVWi6GeVlDW+CnoVYAmLIb67LkeJpfWFigpepoWUGOt0FcHFzGkbqwpU6JZn07gX5gChwbJEnRpLVREk9JvjYBpn/m8SN0g95BJrBsTiGaZ0daActz67/Q78ImxOUa
+X-Gm-Message-State: AOJu0YyHnFtrRKtI8i9KUXT1/fUJGzL7GEJFXWq5Pa3VdC4u8mztONKQ
+	4yukkp7SH5cwY8zZTeGrC1Hr5V0hn0rU/q/pzi0megZt+8nWea7ImKIA/w==
+X-Google-Smtp-Source: AGHT+IEc+J9OJ9T59rbndTDqraa9cwTWFAsWIO8HKxOkHk2SoQr4cS1OQ2JL/V/pVj6jNHe+Oz4cog==
+X-Received: by 2002:a2e:2e03:0:b0:2de:42d0:faf8 with SMTP id 38308e7fff4ca-2e52082c658mr92341271fa.5.1715782858721;
+        Wed, 15 May 2024 07:20:58 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.guest.codethink.co.uk ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41fe004eae9sm220127585e9.1.2024.05.15.07.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 May 2024 07:20:58 -0700 (PDT)
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org
+Subject: [PATCH v4] kunit: Cover 'assert.c' with tests
+Date: Wed, 15 May 2024 15:20:56 +0100
+Message-Id: <20240515142056.1374495-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 02/11] riscv: add ISA extensions validation
-To: Conor Dooley <conor@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240429150553.625165-1-cleger@rivosinc.com>
- <20240429150553.625165-3-cleger@rivosinc.com>
- <20240514-headcount-shrill-390ac0b9233c@spud>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240514-headcount-shrill-390ac0b9233c@spud>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+There are multiple assertion formatting functions in the `assert.c`
+file, which are not covered with tests yet. Implement the KUnit test
+for these functions.
 
+The test consists of 11 test cases for the following functions:
 
-On 14/05/2024 19:39, Conor Dooley wrote:
-> On Mon, Apr 29, 2024 at 05:04:55PM +0200, Clément Léger wrote:
->> Since a few extensions (Zicbom/Zicboz) already needs validation and
->> future ones will need it as well (Zc*) add a validate() callback to
->> struct riscv_isa_ext_data. This require to rework the way extensions are
->> parsed and split it in two phases. First phase is isa string or isa
->> extension list parsing and consists in enabling all the extensions in a
->> temporary bitmask without any validation. The second step "resolves" the
->> final isa bitmap, handling potential missing dependencies. The mechanism
->> is quite simple and simply validate each extension described in the
->> temporary bitmap before enabling it in the final isa bitmap. validate()
->> callbacks can return either 0 for success, -EPROBEDEFER if extension
->> needs to be validated again at next loop. A previous ISA bitmap is kept
->> to avoid looping mutliple times if an extension dependencies are never
->> satisfied until we reach a stable state. In order to avoid any potential
->> infinite looping, allow looping a maximum of the number of extension we
->> handle. Zicboz and Zicbom extensions are modified to use this validation
->> mechanism.
->>
->> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/cpufeature.h |   1 +
->>  arch/riscv/kernel/cpufeature.c      | 211 ++++++++++++++++------------
->>  2 files changed, 126 insertions(+), 86 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
->> index 347805446151..000796c2d0b1 100644
->> --- a/arch/riscv/include/asm/cpufeature.h
->> +++ b/arch/riscv/include/asm/cpufeature.h
->> @@ -70,6 +70,7 @@ struct riscv_isa_ext_data {
->>  	const char *property;
->>  	const unsigned int *subset_ext_ids;
->>  	const unsigned int subset_ext_size;
->> +	int (*validate)(const struct riscv_isa_ext_data *data, const unsigned long *isa_bitmap);
->>  };
->>  
->>  extern const struct riscv_isa_ext_data riscv_isa_ext[];
->> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->> index 115ba001f1bc..cb2ffa6c8c33 100644
->> --- a/arch/riscv/kernel/cpufeature.c
->> +++ b/arch/riscv/kernel/cpufeature.c
->> @@ -72,51 +72,58 @@ bool __riscv_isa_extension_available(const unsigned long *isa_bitmap, unsigned i
->>  }
->>  EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
->>  
->> -static bool riscv_isa_extension_check(int id)
->> +static bool riscv_isa_extension_valid(int id)
->>  {
->> -	switch (id) {
->> -	case RISCV_ISA_EXT_ZICBOM:
->> -		if (!riscv_cbom_block_size) {
->> -			pr_err("Zicbom detected in ISA string, disabling as no cbom-block-size found\n");
->> -			return false;
->> -		} else if (!is_power_of_2(riscv_cbom_block_size)) {
->> -			pr_err("Zicbom disabled as cbom-block-size present, but is not a power-of-2\n");
->> -			return false;
->> -		}
->> -		return true;
->> -	case RISCV_ISA_EXT_ZICBOZ:
->> -		if (!riscv_cboz_block_size) {
->> -			pr_err("Zicboz detected in ISA string, disabling as no cboz-block-size found\n");
->> -			return false;
->> -		} else if (!is_power_of_2(riscv_cboz_block_size)) {
->> -			pr_err("Zicboz disabled as cboz-block-size present, but is not a power-of-2\n");
->> -			return false;
->> -		}
->> -		return true;
->> -	case RISCV_ISA_EXT_INVALID:
->> -		return false;
->> +	return id != RISCV_ISA_EXT_INVALID;
->> +}
->> +
->> +static int riscv_ext_zicbom_validate(const struct riscv_isa_ext_data *data,
->> +				     const unsigned long *isa_bitmap)
->> +{
->> +	if (!riscv_cbom_block_size) {
->> +		pr_err("Zicbom detected in ISA string, disabling as no cbom-block-size found\n");
->> +		return -EINVAL;
->> +	} else if (!is_power_of_2(riscv_cbom_block_size)) {
-> 
-> I guess the original code did this too, but as the branches return the
-> else here should go.
+1) 'is_literal'
+2) 'is_str_literal'
+3) 'kunit_assert_prologue', test case for multiple assert types
+4) 'kunit_assert_print_msg'
+5) 'kunit_unary_assert_format'
+6) 'kunit_ptr_not_err_assert_format'
+7) 'kunit_binary_assert_format'
+8) 'kunit_binary_ptr_assert_format'
+9) 'kunit_binary_str_assert_format'
+10) 'kunit_assert_hexdump'
+11) 'kunit_mem_assert_format'
 
-Indeed.
+The test aims at maximizing the branch coverage for the assertion
+formatting functions.
 
-> 
->> +		pr_err("Zicbom disabled as cbom-block-size present, but is not a power-of-2\n");
->> +		return -EINVAL;
->>  	}
->> +	return 0;
->> +}
->>  
->> -	return true;
->> +static int riscv_ext_zicboz_validate(const struct riscv_isa_ext_data *data,
->> +				     const unsigned long *isa_bitmap)
->> +{
->> +	if (!riscv_cboz_block_size) {
->> +		pr_err("Zicboz detected in ISA string, disabling as no cboz-block-size found\n");
->> +		return -EINVAL;
->> +	} else if (!is_power_of_2(riscv_cboz_block_size)) {
->> +		pr_err("Zicboz disabled as cboz-block-size present, but is not a power-of-2\n");
->> +		return -EINVAL;
->> +	}
->> +	return 0;
->>  }
->>  
->> -#define _RISCV_ISA_EXT_DATA(_name, _id, _subset_exts, _subset_exts_size) {	\
->> -	.name = #_name,								\
->> -	.property = #_name,							\
->> -	.id = _id,								\
->> -	.subset_ext_ids = _subset_exts,						\
->> -	.subset_ext_size = _subset_exts_size					\
->> +#define _RISCV_ISA_EXT_DATA(_name, _id, _subset_exts, _subset_exts_size, _validate) {	\
->> +	.name = #_name,									\
->> +	.property = #_name,								\
->> +	.id = _id,									\
->> +	.subset_ext_ids = _subset_exts,							\
->> +	.subset_ext_size = _subset_exts_size,						\
->> +	.validate = _validate								\
->>  }
->>  
->> -#define __RISCV_ISA_EXT_DATA(_name, _id) _RISCV_ISA_EXT_DATA(_name, _id, NULL, 0)
->> +#define __RISCV_ISA_EXT_DATA(_name, _id) _RISCV_ISA_EXT_DATA(_name, _id, NULL, 0, NULL)
->>  
->>  /* Used to declare pure "lasso" extension (Zk for instance) */
->>  #define __RISCV_ISA_EXT_BUNDLE(_name, _bundled_exts) \
->> -	_RISCV_ISA_EXT_DATA(_name, RISCV_ISA_EXT_INVALID, _bundled_exts, ARRAY_SIZE(_bundled_exts))
->> +	_RISCV_ISA_EXT_DATA(_name, RISCV_ISA_EXT_INVALID, _bundled_exts, \
->> +			    ARRAY_SIZE(_bundled_exts), NULL)
->>  
->>  /* Used to declare extensions that are a superset of other extensions (Zvbb for instance) */
->>  #define __RISCV_ISA_EXT_SUPERSET(_name, _id, _sub_exts) \
->> -	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts))
->> +	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), NULL)
->> +#define __RISCV_ISA_EXT_SUPERSET_VALIDATE(_name, _id, _sub_exts, _validate) \
->> +	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), _validate)
->>  
->>  static const unsigned int riscv_zk_bundled_exts[] = {
->>  	RISCV_ISA_EXT_ZBKB,
->> @@ -247,8 +254,10 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>  	__RISCV_ISA_EXT_DATA(c, RISCV_ISA_EXT_c),
->>  	__RISCV_ISA_EXT_DATA(v, RISCV_ISA_EXT_v),
->>  	__RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
->> -	__RISCV_ISA_EXT_SUPERSET(zicbom, RISCV_ISA_EXT_ZICBOM, riscv_xlinuxenvcfg_exts),
->> -	__RISCV_ISA_EXT_SUPERSET(zicboz, RISCV_ISA_EXT_ZICBOZ, riscv_xlinuxenvcfg_exts),
->> +	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicbom, RISCV_ISA_EXT_ZICBOM, riscv_xlinuxenvcfg_exts,
->> +					  riscv_ext_zicbom_validate),
->> +	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicboz, RISCV_ISA_EXT_ZICBOZ, riscv_xlinuxenvcfg_exts,
->> +					  riscv_ext_zicboz_validate),
->>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
->>  	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
->>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
->> @@ -310,33 +319,80 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>  
->>  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
->>  
->> -static void __init match_isa_ext(const struct riscv_isa_ext_data *ext, const char *name,
->> -				 const char *name_end, struct riscv_isainfo *isainfo)
->> +static void riscv_isa_set_ext(const struct riscv_isa_ext_data *ext, unsigned long *bitmap)
->>  {
->> -	if ((name_end - name == strlen(ext->name)) &&
->> -	     !strncasecmp(name, ext->name, name_end - name)) {
->> -		/*
->> -		 * If this is a bundle, enable all the ISA extensions that
->> -		 * comprise the bundle.
->> -		 */
->> -		if (ext->subset_ext_size) {
->> -			for (int i = 0; i < ext->subset_ext_size; i++) {
->> -				if (riscv_isa_extension_check(ext->subset_ext_ids[i]))
->> -					set_bit(ext->subset_ext_ids[i], isainfo->isa);
->> -			}
->> +	/*
->> +	 * This is valid even for bundle extensions which uses the RISCV_ISA_EXT_INVALID id
->> +	 * (rejected by riscv_isa_extension_valid()).
-> 
-> I really don't understand what this comment is trying to say.
-> I think what you're trying to say is that it is safe to call
-> riscv_isa_extension_valid() for bundles, but wouldn't it just be clearer
-> to drop the function calls and do the comparison to ..._INVALID here
-> since riscv_isa_extension_valid() has been reduced to just that single
-> comparison?
+As you can see, it covers some of the static helper functions as
+well, so mark the static functions in `assert.c` as 'VISIBLE_IF_KUNIT'
+and conditionally export them with EXPORT_SYMBOL_IF_KUNIT. Add the
+corresponding definitions to `assert.h`.
 
-Yeah, that comment is a remnant of the rpevious code but does not make
-sense anymore. I'll remove it along with riscv_isa_extension_valid() and
-just compare to RISCV_ISA_EXT_INVALID.
+Build the assert test when CONFIG_KUNIT_TEST is enabled, similar to
+how it is done for the string stream test.
 
-> 
-> I'd understand this function looking as it did if
-> riscv_isa_extension_valid() was more than a oneliner.
-> 
->> +	 */
->> +	if (riscv_isa_extension_valid(ext->id))
->> +		set_bit(ext->id, bitmap);
->> +
->> +	for (int i = 0; i < ext->subset_ext_size; i++) {
->> +		if (riscv_isa_extension_valid(ext->subset_ext_ids[i]))
->> +			set_bit(ext->subset_ext_ids[i], bitmap);
->> +	}
->> +}
->> +
->> +static void __init riscv_resolve_isa(unsigned long *isa_bitmap, struct riscv_isainfo *isainfo,
->> +				     unsigned long *this_hwcap, unsigned long *isa2hwcap)
-> 
-> This function is badly in need of some new variable names for the first
-> two parameters. It's hard to follow what each of them is meant to be
-> once you're inside this function and removed from their definitions.
-> The first parameter is the source bitmap that we've already filled from
-> the dt/acpi scan of that hart and the second is the per-hart data
-> structure that we're gonna assign it to and keep "forever", I think the
-> naming should reflect that.
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2:
+- Check the output from the string stream for containing the key parts
+instead of comparing the results with expected strings char by char, as
+it was suggested by Rae Moar <rmoar@google.com>. Define two macros to
+make it possible (ASSERT_TEST_EXPECT_CONTAIN and
+ASSERT_TEST_EXPECT_NCONTAIN).
+- Mark the static functions in `assert.c` as VISIBLE_IF_KUNIT and export
+them conditionally if kunit is enabled instead of including the
+`assert_test.c` file in the end of `assert.c`. This way we will decouple
+the test from the implementation (SUT).
+- Update the kunit_assert_hexdump test: now it checks for presense of
+the brackets '<>' around the non-matching bytes, instead of comparing
+the kunit_assert_hexdump output char by char.
+V2 -> V3:
+- Make test case array and test suite definitions static
+- Change the condition in `assert.h`: we should declare VISIBLE_IF_KUNIT
+functions in the header file when CONFIG_KUNIT is enabled, not
+CONFIG_KUNIT_TEST. Otherwise, if CONFIG_KUNIT_TEST is disabled,
+VISIBLE_IF_KUNIT functions in the `assert.c` are not static, and
+prototypes for them can't be found.
+- Add MODULE_LICENSE and MODULE_DESCRIPTION macros
+V3 -> V4:
+- Compile the assertion test only when CONFIG_KUNIT_TEST is set to 'y',
+as it is done for the string-stream test. It is necessary since
+functions from the string-stream are not exported into the public
+namespace, and therefore they are not accessible when linking and
+loading the test module.
 
-Yeah, wasn't sure of the naming at all. Would you be ok with the following:
+ include/kunit/assert.h  |  11 ++
+ lib/kunit/Makefile      |   1 +
+ lib/kunit/assert.c      |  24 ++-
+ lib/kunit/assert_test.c | 391 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 419 insertions(+), 8 deletions(-)
+ create mode 100644 lib/kunit/assert_test.c
 
-- source_isa: Input ISA bitmap parsed from ISA string (DT/ACPI)
-- resolved_isa: Output ISA bitmap resolved from the first one
-(configuration and extension dependencies matching).
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index 24c2b9fa61e8..7e7490a74b13 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -218,4 +218,15 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 			     const struct va_format *message,
+ 			     struct string_stream *stream);
+ 
++#if IS_ENABLED(CONFIG_KUNIT)
++void kunit_assert_print_msg(const struct va_format *message,
++			    struct string_stream *stream);
++bool is_literal(const char *text, long long value);
++bool is_str_literal(const char *text, const char *value);
++void kunit_assert_hexdump(struct string_stream *stream,
++			  const void *buf,
++			  const void *compared_buf,
++			  const size_t len);
++#endif
++
+ #endif /*  _KUNIT_ASSERT_H */
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 309659a32a78..900e6447c8e8 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -22,6 +22,7 @@ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+ obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
++obj-$(CONFIG_KUNIT_TEST) +=		assert_test.o
+ endif
+ 
+ obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index dd1d633d0fe2..382eb409d34b 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -7,6 +7,7 @@
+  */
+ #include <kunit/assert.h>
+ #include <kunit/test.h>
++#include <kunit/visibility.h>
+ 
+ #include "string-stream.h"
+ 
+@@ -30,12 +31,14 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
+ }
+ EXPORT_SYMBOL_GPL(kunit_assert_prologue);
+ 
+-static void kunit_assert_print_msg(const struct va_format *message,
+-				   struct string_stream *stream)
++VISIBLE_IF_KUNIT
++void kunit_assert_print_msg(const struct va_format *message,
++			    struct string_stream *stream)
+ {
+ 	if (message->fmt)
+ 		string_stream_add(stream, "\n%pV", message);
+ }
++EXPORT_SYMBOL_IF_KUNIT(kunit_assert_print_msg);
+ 
+ void kunit_fail_assert_format(const struct kunit_assert *assert,
+ 			      const struct va_format *message,
+@@ -89,7 +92,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+ EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
+ 
+ /* Checks if `text` is a literal representing `value`, e.g. "5" and 5 */
+-static bool is_literal(const char *text, long long value)
++VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
+ {
+ 	char *buffer;
+ 	int len;
+@@ -110,6 +113,7 @@ static bool is_literal(const char *text, long long value)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_IF_KUNIT(is_literal);
+ 
+ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ 				const struct va_format *message,
+@@ -166,7 +170,7 @@ EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
+ /* Checks if KUNIT_EXPECT_STREQ() args were string literals.
+  * Note: `text` will have ""s where as `value` will not.
+  */
+-static bool is_str_literal(const char *text, const char *value)
++VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
+ {
+ 	int len;
+ 
+@@ -178,6 +182,7 @@ static bool is_str_literal(const char *text, const char *value)
+ 
+ 	return strncmp(text + 1, value, len - 2) == 0;
+ }
++EXPORT_SYMBOL_IF_KUNIT(is_str_literal);
+ 
+ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    const struct va_format *message,
+@@ -208,10 +213,11 @@ EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+ /* Adds a hexdump of a buffer to a string_stream comparing it with
+  * a second buffer. The different bytes are marked with <>.
+  */
+-static void kunit_assert_hexdump(struct string_stream *stream,
+-				 const void *buf,
+-				 const void *compared_buf,
+-				 const size_t len)
++VISIBLE_IF_KUNIT
++void kunit_assert_hexdump(struct string_stream *stream,
++			  const void *buf,
++			  const void *compared_buf,
++			  const size_t len)
+ {
+ 	size_t i;
+ 	const u8 *buf1 = buf;
+@@ -229,6 +235,7 @@ static void kunit_assert_hexdump(struct string_stream *stream,
+ 			string_stream_add(stream, " %02x ", buf1[i]);
+ 	}
+ }
++EXPORT_SYMBOL_IF_KUNIT(kunit_assert_hexdump);
+ 
+ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 			     const struct va_format *message,
+@@ -269,4 +276,5 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 		kunit_assert_print_msg(message, stream);
+ 	}
+ }
++
+ EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+diff --git a/lib/kunit/assert_test.c b/lib/kunit/assert_test.c
+new file mode 100644
+index 000000000000..1347a964204b
+--- /dev/null
++++ b/lib/kunit/assert_test.c
+@@ -0,0 +1,391 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * KUnit test for the assertion formatting functions.
++ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
++ */
++#include <kunit/test.h>
++#include "string-stream.h"
++
++#define TEST_PTR_EXPECTED_BUF_SIZE 32
++#define HEXDUMP_TEST_BUF_LEN 5
++#define ASSERT_TEST_EXPECT_CONTAIN(test, str, substr) KUNIT_EXPECT_TRUE(test, strstr(str, substr))
++#define ASSERT_TEST_EXPECT_NCONTAIN(test, str, substr) KUNIT_EXPECT_FALSE(test, strstr(str, substr))
++
++static void kunit_test_is_literal(struct kunit *test)
++{
++	KUNIT_EXPECT_TRUE(test, is_literal("5", 5));
++	KUNIT_EXPECT_TRUE(test, is_literal("0", 0));
++	KUNIT_EXPECT_TRUE(test, is_literal("1234567890", 1234567890));
++	KUNIT_EXPECT_TRUE(test, is_literal("-1234567890", -1234567890));
++	KUNIT_EXPECT_FALSE(test, is_literal("05", 5));
++	KUNIT_EXPECT_FALSE(test, is_literal("", 0));
++	KUNIT_EXPECT_FALSE(test, is_literal("-0", 0));
++	KUNIT_EXPECT_FALSE(test, is_literal("12#45", 1245));
++}
++
++static void kunit_test_is_str_literal(struct kunit *test)
++{
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"Hello, World!\"", "Hello, World!"));
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"\"", ""));
++	KUNIT_EXPECT_TRUE(test, is_str_literal("\"\"\"", "\""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("", ""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"", "\""));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"Abacaba", "Abacaba"));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("Abacaba\"", "Abacaba"));
++	KUNIT_EXPECT_FALSE(test, is_str_literal("\"Abacaba\"", "\"Abacaba\""));
++}
++
++KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
++
++/* this function is used to get a "char *" string from the string stream and defer its cleanup  */
++static char *get_str_from_stream(struct kunit *test, struct string_stream *stream)
++{
++	char *str = string_stream_get_string(stream);
++
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
++	kunit_add_action(test, kfree_wrapper, (void *)str);
++
++	return str;
++}
++
++static void kunit_test_assert_prologue(struct kunit *test)
++{
++	struct string_stream *stream;
++	char *str;
++	const struct kunit_loc location = {
++		.file = "testfile.c",
++		.line = 1337,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* Test an expectation fail prologue */
++	kunit_assert_prologue(&location, KUNIT_EXPECTATION, stream);
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "EXPECTATION");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "testfile.c");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "1337");
++
++	/* Test an assertion fail prologue */
++	string_stream_clear(stream);
++	kunit_assert_prologue(&location, KUNIT_ASSERTION, stream);
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "ASSERTION");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "testfile.c");
++	ASSERT_TEST_EXPECT_CONTAIN(test, str, "1337");
++}
++
++/*
++ * This function accepts an arbitrary count of parameters and generates a va_format struct,
++ * which can be used to validate kunit_assert_print_msg function
++ */
++static void verify_assert_print_msg(struct kunit *test,
++				    struct string_stream *stream,
++				    char *expected, const char *format, ...)
++{
++	va_list list;
++	const struct va_format vformat = {
++		.fmt = format,
++		.va = &list,
++	};
++
++	va_start(list, format);
++	string_stream_clear(stream);
++	kunit_assert_print_msg(&vformat, stream);
++	KUNIT_EXPECT_STREQ(test, get_str_from_stream(test, stream), expected);
++}
++
++static void kunit_test_assert_print_msg(struct kunit *test)
++{
++	struct string_stream *stream;
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	verify_assert_print_msg(test, stream, "\nTest", "Test");
++	verify_assert_print_msg(test, stream, "\nAbacaba -123 234", "%s %d %u",
++				"Abacaba", -123, 234U);
++	verify_assert_print_msg(test, stream, "", NULL);
++}
++
++/*
++ * Further code contains the tests for different assert format functions.
++ * This helper function accepts the assert format function, executes it and
++ * validates the result string from the stream by checking that all of the
++ * substrings exist in the output.
++ */
++static void validate_assert(assert_format_t format_func, struct kunit *test,
++			    const struct kunit_assert *assert,
++			    struct string_stream *stream, int num_checks, ...)
++{
++	size_t i;
++	va_list checks;
++	char *cur_substr_exp;
++	struct va_format message = { NULL, NULL };
++
++	va_start(checks, num_checks);
++	string_stream_clear(stream);
++	format_func(assert, &message, stream);
++
++	for (i = 0; i < num_checks; i++) {
++		cur_substr_exp = va_arg(checks, char *);
++		ASSERT_TEST_EXPECT_CONTAIN(test, get_str_from_stream(test, stream), cur_substr_exp);
++	}
++}
++
++static void kunit_test_unary_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_unary_assert un_assert = {
++		.assert = assert,
++		.condition = "expr",
++		.expected_true = true,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	validate_assert(kunit_unary_assert_format, test, &un_assert.assert,
++			stream, 2, "true", "is false");
++
++	un_assert.expected_true = false;
++	validate_assert(kunit_unary_assert_format, test, &un_assert.assert,
++			stream, 2, "false", "is true");
++}
++
++static void kunit_test_ptr_not_err_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_ptr_not_err_assert not_err_assert = {
++		.assert = assert,
++		.text = "expr",
++		.value = NULL,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* Value is NULL. The corresponding message should be printed out */
++	validate_assert(kunit_ptr_not_err_assert_format, test,
++			&not_err_assert.assert,
++			stream, 1, "null");
++
++	/* Value is not NULL, but looks like an error pointer. Error should be printed out */
++	not_err_assert.value = (void *)-12;
++	validate_assert(kunit_ptr_not_err_assert_format, test,
++			&not_err_assert.assert, stream, 2,
++			"error", "-12");
++}
++
++static void kunit_test_binary_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	struct kunit_binary_assert_text text = {
++		.left_text = "1 + 2",
++		.operation = "==",
++		.right_text = "2",
++	};
++	const struct kunit_binary_assert binary_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = 3,
++		.right_value = 2,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/*
++	 * Printed values should depend on the input we provide: the left text, right text, left
++	 * value and the right value.
++	 */
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 4, "1 + 2", "2", "3", "==");
++
++	text.right_text = "4 - 2";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 3, "==", "1 + 2", "4 - 2");
++
++	text.left_text = "3";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 4, "3", "4 - 2", "2", "==");
++
++	text.right_text = "2";
++	validate_assert(kunit_binary_assert_format, test, &binary_assert.assert,
++			stream, 3, "3", "2", "==");
++}
++
++static void kunit_test_binary_ptr_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	char *addr_var_a, *addr_var_b;
++	static const void *var_a = (void *)0xDEADBEEF;
++	static const void *var_b = (void *)0xBADDCAFE;
++	struct kunit_binary_assert_text text = {
++		.left_text = "var_a",
++		.operation = "==",
++		.right_text = "var_b",
++	};
++	struct kunit_binary_ptr_assert binary_ptr_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = var_a,
++		.right_value = var_b,
++	};
++
++	addr_var_a = kunit_kzalloc(test, TEST_PTR_EXPECTED_BUF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, addr_var_a);
++	addr_var_b = kunit_kzalloc(test, TEST_PTR_EXPECTED_BUF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, addr_var_b);
++	/*
++	 * Print the addresses to the buffers first.
++	 * This is necessary as we may have different count of leading zeros in the pointer
++	 * on different architectures.
++	 */
++	snprintf(addr_var_a, TEST_PTR_EXPECTED_BUF_SIZE, "%px", var_a);
++	snprintf(addr_var_b, TEST_PTR_EXPECTED_BUF_SIZE, "%px", var_b);
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++	validate_assert(kunit_binary_ptr_assert_format, test, &binary_ptr_assert.assert,
++			stream, 3, addr_var_a, addr_var_b, "==");
++}
++
++static void kunit_test_binary_str_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct kunit_assert assert = {};
++	static const char *var_a = "abacaba";
++	static const char *var_b = "kernel";
++	struct kunit_binary_assert_text text = {
++		.left_text = "var_a",
++		.operation = "==",
++		.right_text = "var_b",
++	};
++	struct kunit_binary_str_assert binary_str_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = var_a,
++		.right_value = var_b,
++	};
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	validate_assert(kunit_binary_str_assert_format, test,
++			&binary_str_assert.assert,
++			stream, 5, "var_a", "var_b", "\"abacaba\"",
++			"\"kernel\"", "==");
++
++	text.left_text = "\"abacaba\"";
++	validate_assert(kunit_binary_str_assert_format, test, &binary_str_assert.assert,
++			stream, 4, "\"abacaba\"", "var_b", "\"kernel\"", "==");
++
++	text.right_text = "\"kernel\"";
++	validate_assert(kunit_binary_str_assert_format, test, &binary_str_assert.assert,
++			stream, 3, "\"abacaba\"", "\"kernel\"", "==");
++}
++
++static const u8 hex_testbuf1[] = { 0x26, 0x74, 0x6b, 0x9c, 0x55,
++				   0x45, 0x9d, 0x47, 0xd6, 0x47,
++				   0x2,  0x89, 0x8c, 0x81, 0x94,
++				   0x12, 0xfe, 0x01 };
++static const u8 hex_testbuf2[] = { 0x26, 0x74, 0x6b, 0x9c, 0x55,
++				   0x45, 0x9d, 0x47, 0x21, 0x47,
++				   0xcd, 0x89, 0x24, 0x50, 0x94,
++				   0x12, 0xba, 0x01 };
++static void kunit_test_assert_hexdump(struct kunit *test)
++{
++	struct string_stream *stream;
++	char *str;
++	size_t i;
++	char buf[HEXDUMP_TEST_BUF_LEN];
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++	/* Check that we are getting output like <xx> for non-matching numbers. */
++	kunit_assert_hexdump(stream, hex_testbuf1, hex_testbuf2, sizeof(hex_testbuf1));
++	str = get_str_from_stream(test, stream);
++	for (i = 0; i < sizeof(hex_testbuf1); i++) {
++		snprintf(buf, HEXDUMP_TEST_BUF_LEN, "<%02x>", hex_testbuf1[i]);
++		if (hex_testbuf1[i] != hex_testbuf2[i])
++			ASSERT_TEST_EXPECT_CONTAIN(test, str, buf);
++	}
++	/* We shouldn't get any <xx> numbers when comparing the buffer with itself. */
++	string_stream_clear(stream);
++	kunit_assert_hexdump(stream, hex_testbuf1, hex_testbuf1, sizeof(hex_testbuf1));
++	str = get_str_from_stream(test, stream);
++	ASSERT_TEST_EXPECT_NCONTAIN(test, str, "<");
++	ASSERT_TEST_EXPECT_NCONTAIN(test, str, ">");
++}
++
++static void kunit_test_mem_assert_format(struct kunit *test)
++{
++	struct string_stream *stream;
++	struct string_stream *expected_stream;
++	struct kunit_assert assert = {};
++	static const struct kunit_binary_assert_text text = {
++		.left_text = "hex_testbuf1",
++		.operation = "==",
++		.right_text = "hex_testbuf2",
++	};
++	struct kunit_mem_assert mem_assert = {
++		.assert = assert,
++		.text = &text,
++		.left_value = NULL,
++		.right_value = hex_testbuf2,
++		.size = sizeof(hex_testbuf1),
++	};
++
++	expected_stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_stream);
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* The left value is NULL */
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 2, "hex_testbuf1", "is not null");
++
++	/* The right value is NULL, the left value is not NULL */
++	mem_assert.left_value = hex_testbuf1;
++	mem_assert.right_value = NULL;
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 2, "hex_testbuf2", "is not null");
++
++	/* Both arguments are not null */
++	mem_assert.left_value = hex_testbuf1;
++	mem_assert.right_value = hex_testbuf2;
++
++	validate_assert(kunit_mem_assert_format, test, &mem_assert.assert,
++			stream, 3, "hex_testbuf1", "hex_testbuf2", "==");
++}
++
++static struct kunit_case assert_test_cases[] = {
++	KUNIT_CASE(kunit_test_is_literal),
++	KUNIT_CASE(kunit_test_is_str_literal),
++	KUNIT_CASE(kunit_test_assert_prologue),
++	KUNIT_CASE(kunit_test_assert_print_msg),
++	KUNIT_CASE(kunit_test_unary_assert_format),
++	KUNIT_CASE(kunit_test_ptr_not_err_assert_format),
++	KUNIT_CASE(kunit_test_binary_assert_format),
++	KUNIT_CASE(kunit_test_binary_ptr_assert_format),
++	KUNIT_CASE(kunit_test_binary_str_assert_format),
++	KUNIT_CASE(kunit_test_assert_hexdump),
++	KUNIT_CASE(kunit_test_mem_assert_format),
++	{}
++};
++
++static struct kunit_suite assert_test_suite = {
++	.name = "kunit-assert",
++	.test_cases = assert_test_cases,
++};
++
++MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
++kunit_test_suites(&assert_test_suite);
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Test for the KUnit assertion format functions.");
+-- 
+2.34.1
 
-Since I'm a non-native english speaker, I'm not sure at all if it
-correctly means what they do, feel free to tell me if you have some
-better options.
-
-> 
->> +{
->> +	bool loop;
->> +	const struct riscv_isa_ext_data *ext;
->> +	DECLARE_BITMAP(prev_bitmap, RISCV_ISA_EXT_MAX);
->> +	int max_loop_count = riscv_isa_ext_count, ret;
->> +
->> +	do {
->> +		loop = false;
->> +		if (max_loop_count-- < 0) {
->> +			pr_err("Failed to reach a stable ISA state\n");
->> +			return;
->>  		}
->> +		memcpy(prev_bitmap, isainfo->isa, sizeof(prev_bitmap));
-> 
-> Why not bitmap_copy()?
-
-Not reason at all, just forgot it existed.
-
-> 
->> +		for (int i = 0; i < riscv_isa_ext_count; i++) {
-> 
-> Why would we even be testing extensions that have been disabled rather
-> than iterating just over the set that has been turned on? IOW, does
-> for_each_set_bit() work here?
-
-I think the loop can acutally be done the other way (not sure, need to
-check thoug) and iterate on isa_bitmap first rather than on extension array.
-
-> 
->> +			ext = &riscv_isa_ext[i];
->> +
->> +			/* Bundle extensions ids are invalid*/
->> +			if (!riscv_isa_extension_valid(ext->id))
->> +				continue;
->> +
-> 
->> +			if (!test_bit(ext->id, isa_bitmap) || test_bit(ext->id, isainfo->isa))
->> +				continue;
-> 
-> What's this test excluding? I think this deserves a comment.
-
-Skips non set extension id in isa bitmap or extensions already enabled
-in resolved bitmap. Will be rendered useless if changing the loop order.
-
-> 
->> +
->> +			if (ext->validate) {
->> +				ret = ext->validate(ext, isainfo->isa);
->> +				if (ret) {
->> +					if (ret == -EPROBE_DEFER)
->> +						loop = true;
->> +					else
->> +						clear_bit(ext->id, isa_bitmap);
->> +					continue;
->> +				}
->> +			}
->>  
->> -		/*
->> -		 * This is valid even for bundle extensions which uses the RISCV_ISA_EXT_INVALID id
->> -		 * (rejected by riscv_isa_extension_check()).
->> -		 */
->> -		if (riscv_isa_extension_check(ext->id))
->>  			set_bit(ext->id, isainfo->isa);
->> +
->> +			/* Only single letter extensions get set in hwcap */
->> +			if (ext->id < RISCV_ISA_EXT_BASE)
->> +				*this_hwcap |= isa2hwcap[ext->id];
->> +		}
->> +	} while (loop && memcmp(prev_bitmap, isainfo->isa, sizeof(prev_bitmap)));
->> +}
->> +
->> +static void __init match_isa_ext(const char *name, const char *name_end, unsigned long *bitmap)
->> +{
->> +	for (int i = 0; i < riscv_isa_ext_count; i++) {
->> +		const struct riscv_isa_ext_data *ext = &riscv_isa_ext[i];
->> +
->> +		if ((name_end - name == strlen(ext->name)) &&
->> +		    !strncasecmp(name, ext->name, name_end - name)) {
->> +			riscv_isa_set_ext(ext, bitmap);
->> +			break;
->> +		}
->>  	}
->>  }
->>  
->> -static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct riscv_isainfo *isainfo,
->> -					  unsigned long *isa2hwcap, const char *isa)
->> +static void __init riscv_resolve_isa_string(const char *isa, unsigned long *bitmap)
-> 
-> I don't see why this needs to be renamed, I think the original name here
-> was fine - and the new name makes the operation of the caller of this
-> function less clear to me.
-> 
-
-Bad renaming from a previous version where it conflicted with a new
-function. No reason to keep it as is though, I'll revert that.
-
->>  {
->>  	/*
->>  	 * For all possible cpus, we have already validated in
->> @@ -349,7 +405,7 @@ static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct risc
->>  	while (*isa) {
->>  		const char *ext = isa++;
->>  		const char *ext_end = isa;
->> -		bool ext_long = false, ext_err = false;
->> +		bool ext_err = false;
->>  
->>  		switch (*ext) {
->>  		case 's':
->> @@ -389,7 +445,6 @@ static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct risc
->>  			 * character itself while eliminating the extensions version number.
->>  			 * A simple re-increment solves this problem.
->>  			 */
->> -			ext_long = true;
->>  			for (; *isa && *isa != '_'; ++isa)
->>  				if (unlikely(!isalnum(*isa)))
->>  					ext_err = true;
->> @@ -469,17 +524,8 @@ static void __init riscv_parse_isa_string(unsigned long *this_hwcap, struct risc
->>  
->>  		if (unlikely(ext_err))
->>  			continue;
->> -		if (!ext_long) {
->> -			int nr = tolower(*ext) - 'a';
->>  
->> -			if (riscv_isa_extension_check(nr)) {
->> -				*this_hwcap |= isa2hwcap[nr];
->> -				set_bit(nr, isainfo->isa);
->> -			}
->> -		} else {
->> -			for (int i = 0; i < riscv_isa_ext_count; i++)
->> -				match_isa_ext(&riscv_isa_ext[i], ext, ext_end, isainfo);
->> -		}
->> +		match_isa_ext(ext, ext_end, bitmap);
->>  	}
->>  }
->>  
->> @@ -501,6 +547,7 @@ static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
->>  	for_each_possible_cpu(cpu) {
->>  		struct riscv_isainfo *isainfo = &hart_isa[cpu];
-> 
-> I think this code would, and the non-string variant below, benefit from
-> a similar renaming to make the "flow" of information clearer.
-> 
-> In general tho, this stuff looks sane to me. There's a bunch of moving
-> pieces at the moment with various extensions, so I hope that some of
-> them (the vector subsets & the non-vector parts (1-9) of Charlie's series
-> for vendor stuff maybe) get merged as 6.10 material so that we can
-> reduce what's in play while we try to add this stuff.
-
-Yes sure.
-
-Thanks,
-
-Clément
-
-> 
-> I'll suggest that to Palmer tomorrow I think..
-> 
-> Cheers,
-> Conor.
-> 
->>  		unsigned long this_hwcap = 0;
->> +		DECLARE_BITMAP(isa_bitmap, RISCV_ISA_EXT_MAX) = { 0 };
->>  
->>  		if (acpi_disabled) {
->>  			node = of_cpu_device_node_get(cpu);
->> @@ -523,7 +570,7 @@ static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
->>  			}
->>  		}
->>  
->> -		riscv_parse_isa_string(&this_hwcap, isainfo, isa2hwcap, isa);
->> +		riscv_resolve_isa_string(isa, isa_bitmap);
->>  
->>  		/*
->>  		 * These ones were as they were part of the base ISA when the
->> @@ -531,10 +578,10 @@ static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
->>  		 * unconditionally where `i` is in riscv,isa on DT systems.
->>  		 */
->>  		if (acpi_disabled) {
->> -			set_bit(RISCV_ISA_EXT_ZICSR, isainfo->isa);
->> -			set_bit(RISCV_ISA_EXT_ZIFENCEI, isainfo->isa);
->> -			set_bit(RISCV_ISA_EXT_ZICNTR, isainfo->isa);
->> -			set_bit(RISCV_ISA_EXT_ZIHPM, isainfo->isa);
->> +			set_bit(RISCV_ISA_EXT_ZICSR, isa_bitmap);
->> +			set_bit(RISCV_ISA_EXT_ZIFENCEI, isa_bitmap);
->> +			set_bit(RISCV_ISA_EXT_ZICNTR, isa_bitmap);
->> +			set_bit(RISCV_ISA_EXT_ZIHPM, isa_bitmap);
->>  		}
->>  
->>  		/*
-> 
->> @@ -548,9 +595,11 @@ static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
->>  		if (acpi_disabled && riscv_cached_mvendorid(cpu) == THEAD_VENDOR_ID &&
->>  		    riscv_cached_marchid(cpu) == 0x0) {
->>  			this_hwcap &= ~isa2hwcap[RISCV_ISA_EXT_v];
->> -			clear_bit(RISCV_ISA_EXT_v, isainfo->isa);
->> +			clear_bit(RISCV_ISA_EXT_v, isa_bitmap);
->>  		}
->>  
->> +		riscv_resolve_isa(isa_bitmap, isainfo, &this_hwcap, isa2hwcap);
->> +
->>  		/*
->>  		 * All "okay" hart should have same isa. Set HWCAP based on
->>  		 * common capabilities of every "okay" hart, in case they don't
->> @@ -579,6 +628,7 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
->>  		unsigned long this_hwcap = 0;
->>  		struct device_node *cpu_node;
->>  		struct riscv_isainfo *isainfo = &hart_isa[cpu];
->> +		DECLARE_BITMAP(isa_bitmap, RISCV_ISA_EXT_MAX) = { 0 };
->>  
->>  		cpu_node = of_cpu_device_node_get(cpu);
->>  		if (!cpu_node) {
->> @@ -598,22 +648,11 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
->>  						     ext->property) < 0)
->>  				continue;
->>  
->> -			if (ext->subset_ext_size) {
->> -				for (int j = 0; j < ext->subset_ext_size; j++) {
->> -					if (riscv_isa_extension_check(ext->subset_ext_ids[i]))
->> -						set_bit(ext->subset_ext_ids[j], isainfo->isa);
->> -				}
->> -			}
->> -
->> -			if (riscv_isa_extension_check(ext->id)) {
->> -				set_bit(ext->id, isainfo->isa);
->> -
->> -				/* Only single letter extensions get set in hwcap */
->> -				if (strnlen(riscv_isa_ext[i].name, 2) == 1)
->> -					this_hwcap |= isa2hwcap[riscv_isa_ext[i].id];
->> -			}
->> +			riscv_isa_set_ext(ext, isa_bitmap);
->>  		}
->>  
->> +		riscv_resolve_isa(isa_bitmap, isainfo, &this_hwcap, isa2hwcap);
->> +
->>  		of_node_put(cpu_node);
->>  
->>  		/*
->> -- 
->> 2.43.0
->>
 
