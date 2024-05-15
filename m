@@ -1,144 +1,178 @@
-Return-Path: <linux-kselftest+bounces-10263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEFA78C6C31
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 20:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1571B8C6DA5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 23:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFC9A2832A3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 18:33:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD27F282753
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 21:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2993A27E;
-	Wed, 15 May 2024 18:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EFB115B13E;
+	Wed, 15 May 2024 21:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HWVyaIS0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiDOQQmN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AFF3BBF6
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 18:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCEC2F877;
+	Wed, 15 May 2024 21:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715797991; cv=none; b=BEblGLKht+prREtGlUPJgm8wlWSXzr2iuVCzDJHBvVnLQTtAt/wCeXQ7U5cVjKcqUmBljO62kC4B6kW2EBdkoiyHtWFxPy/L8eTMwCytx18sFsh9dtV/FX81cTXbxvc+jnEnI3dFDszgkhsIoCM8a+ZnVY/8GAu0HQNm5r6z13k=
+	t=1715807738; cv=none; b=GgNaSJYkGzjSu2HFG1loMxO0Qyobt1+SrysBrBaZay69ifGLH6gKB44e5OFwYwvZjgj+m+j3Br0PDuI4v3WuGx5/A5bObLb9mU+G1kKISQailg4jqZ+VHnF9Osz4CSQmH+uFkm9RpEFzlaUAZ5m+PjtMJwxvruVS2FeYyPqrkuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715797991; c=relaxed/simple;
-	bh=yw+ipdvPqTKvzHRePFMCEGB32d2gTHY4yIizWZv9K1I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CFP377RMy8OR9XQkAFiMI/JLMZKtE8Z/3QY0KlSOCVBveHiidJdyBZgXKt2t+Wms19/EbySHrEvZoSeDT9meHLYYo6/7VPhwydlVkVKb+O2L2o3DSnZs8K5goRBTjKsxA//ZxYDigVZIRUmSjMbvFMjEdtKoQ8sZsGcU9WVuMik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HWVyaIS0; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-572a1b3d6baso36275a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 11:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715797988; x=1716402788; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KKkDnLN7qusp5ZEvAbHRefNjI/EUrE6vZKOBSo4hBmc=;
-        b=HWVyaIS0npQb1JpKRAJZztkST62euTKgxU7HH4B6I6s6UY/JYNOS2+GnzcMboRQuVg
-         Fxe0U5VxQAL0Ls3kn4GeWlqSHkrhcbxxrWdlpCEa0vZMqL3b1dI2pIQ6g2n0sz3sgNPE
-         JwcBZdn1f1bOMgbU+PaS3KTeYNOQD8os0uq/t+xk/OoCKm7pkDtBetoRpM46sq3dyR6q
-         bNpCf1RiuFA/Ilr8CBHZ11X8ClH5V6GLBY1V8GlsgcOUfyj8ABab5tXExe6IH6X3M6/U
-         twwvmxwnswpF3uucX+dFrHAMNi+3HPoHsJxTkuGT3E9juJneaEWM0SR4txt686dpHO2Z
-         1hHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715797988; x=1716402788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KKkDnLN7qusp5ZEvAbHRefNjI/EUrE6vZKOBSo4hBmc=;
-        b=ggqUJ0xhPbGW1Sx3DHZnjPOUr/h0R5x3X8TU2AOpioU+pDIp72HwPdAbR9xxoJuOSS
-         WKZGPPjt6NFSp1155nTlNY7zoA6JY9RXRUaxvC74q6AYeh2FPH9JKBpjTFmJ1ivbn2CP
-         KKoVLTf7ETXTF8jLMJeK2q6jTqR/gFPr0aCnfdjc8kwxVBvcC326OhTPeNbj2gRmHqyo
-         Pj9yyr4fepzHbbcwgWmTMnOdn9F9ZdmE7PqI1Q/6YZmzlRZnOv38HIgN4fV3pZSUm04o
-         gYth43tnP6TFb9QCVtu24aiUsBvdumU1jfNzcD1efqmTcOib7eCUjgtHrkHVVg1Euwxo
-         qMLg==
-X-Gm-Message-State: AOJu0Yy5wYZtG4lS3suBzHXJFejMoArrn0WmitVFu9cKMHoQEVDPD/Dc
-	4goPIY4hYBjeW7qjZjGOlLlk/YxBSaR9PVrKvDlsL+1fkgWs1P5u4DwBvbtpM0C7wepMAmWoFlT
-	+fjeDnig8VnX/LaCq57ibOjYNhyVSWdh5g93U5B617z2UyIlXwoYDwg==
-X-Google-Smtp-Source: AGHT+IF6MleNTArg5bIvPJ3/eiTCxrRw7G9TB8KN62fOFsAAIP5+dlj2ACr18vI1mrmdbbKTxO7t/JgL68s+ize3a8I=
-X-Received: by 2002:a50:85c6:0:b0:573:438c:7789 with SMTP id
- 4fb4d7f45d1cf-574ae418342mr914673a12.1.1715797987465; Wed, 15 May 2024
- 11:33:07 -0700 (PDT)
+	s=arc-20240116; t=1715807738; c=relaxed/simple;
+	bh=8zRgYixeWbU5a3kUd0M4xV5TV+AjxJpEmwU45ge4kaY=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=BmsCn2nCgRDW0wQkhSgrZ3VM4nF0BbusABfrVK25kzZEPP9th1rJ3mdbkBqWUhlPh5lMZm40tiwfSqLufAOcW2V5BkLp8VE+00gR7HoCdWvSnEmLWMlvQPkmhFuf/FHhOyapJbP8tZDLGMnDCU8qibbLgJcIR+BcxTAuIuRsbAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiDOQQmN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B304C116B1;
+	Wed, 15 May 2024 21:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715807738;
+	bh=8zRgYixeWbU5a3kUd0M4xV5TV+AjxJpEmwU45ge4kaY=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=PiDOQQmN+bIHiSfpue2YctCCuTwEZkmpnSQGS3TqeNw0bE58cNELXRSd85nazMCPD
+	 yuyXdclaoXVl/gIeV3NxguyB4jU8hRBbwCLWM8Ce6hG3Aftjx0m6mkx3JnkRu8L61F
+	 qCJ/012Qc4p9xwHF+8KEZzJM+driOYnuam1IQoI9owU8e5ESdC4IjvM5Mu2OlTHOjB
+	 g9qjwOJYBTWtHgJDeBBv2x/DFhL6M6/FB+rJSajg2VRDV/830G/RhBhCT1FjyRohhx
+	 FXGpleblOhL/tGUOmGx1hG+eiRwQldeZlT5/MfIcU1Ig4+uSXrn/MJ28b8ibODTfCo
+	 7kY1NLoRgCVzw==
+Message-ID: <f6d7574582592f3bfa50fc45fefc53be.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240515010805.605511-1-xandfury@gmail.com> <20240515010805.605511-4-xandfury@gmail.com>
-In-Reply-To: <20240515010805.605511-4-xandfury@gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Wed, 15 May 2024 11:32:48 -0700
-Message-ID: <CAGG=3QWyeWuLmJg1R7X8T4CsSgM+EiDToxjd_-8MD94D=DCLtw@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] selftests/binderfs: Macro argument 'fd' may be
- better as '(fd)' to avoid precedence issues
-To: Abhinav Saxena <xandfury@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAL_JsqK4EZ0RhYCw6ZaeYSJu5Ps1J+J25vjwQy2XvNa5F5d7Pw@mail.gmail.com>
+References: <20240422232404.213174-1-sboyd@kernel.org> <CABVgOSmgUJp3FijpYGCphi1OzRUNvmYQmPDdL6mN59YnbkR2iQ@mail.gmail.com> <b822c6a5488c4098059b6d3c35eecbbd.sboyd@kernel.org> <5c919f0d3d72fe1592a11c45545e8a60.sboyd@kernel.org> <CAL_JsqK4EZ0RhYCw6ZaeYSJu5Ps1J+J25vjwQy2XvNa5F5d7Pw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/10] clk: Add kunit tests for fixed rate and parent data
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: David Gow <davidgow@google.com>, Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
+To: Rob Herring <robh@kernel.org>
+Date: Wed, 15 May 2024 14:15:36 -0700
+User-Agent: alot/0.10
 
-On Tue, May 14, 2024 at 6:08=E2=80=AFPM Abhinav Saxena <xandfury@gmail.com>=
- wrote:
->
-> Change the macro argument 'fd' to '(fd)' to avoid potential precedence
-> issues. Without parentheses, the macro expansion could lead to
-> unexpected behavior when used with an expression having different
-> precedence levels.
->
-> Example Code:
->
->     #define CALC_SQR_BAD(x) (x*x)
->     #define CALC_SQR_GOOD(x) ((x)*(x))
->
-> CALC_SQR_BAD(2+3) expands to 2+(3*3)+2, giving 11 as the incorrect
-> answer. Enclosing with parathesis CALC_SQR_GOOD(2+3) sets the correct
+Quoting Rob Herring (2024-05-15 06:06:09)
+> On Tue, May 14, 2024 at 4:29=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> w=
+rote:
+> >
+> > powerpc doesn't mark the root node with OF_POPULATED_BUS. If I set that
+> > in of_platform_default_populate_init() then the overlays can be applied.
+> >
+> > ---8<----
+> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > index 389d4ea6bfc1..fa7b439e9402 100644
+> > --- a/drivers/of/platform.c
+> > +++ b/drivers/of/platform.c
+> > @@ -565,6 +565,10 @@ static int __init of_platform_default_populate_ini=
+t(void)
+> >                                 of_platform_device_create(node, buf, NU=
+LL);
+> >                 }
+> >
+> > +               node =3D of_find_node_by_path("/");
+> > +               if (node)
+> > +                       of_node_set_flag(node, OF_POPULATED_BUS);
+>=20
+> I think you want to do this in of_platform_bus_probe() instead to
+> mirror of_platform_populate(). These are supposed to be the same
+> except that 'populate' only creates devices for nodes with compatible
+> while 'probe' will create devices for all child nodes. Looks like we
+> are missing some devlink stuff too. There may have been some issue for
+> PPC with it.
 
-s/parathesis/parentheses/
+Got it. So this patch?
 
-> order of precedence and expands to (2+3)*(2+3), giving 25 as the
-> correct answer.
->
-> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
-> ---
->  .../testing/selftests/filesystems/binderfs/binderfs_test.c  | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c=
- b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> index 4a149e3d4ba4..d5dba6c1e07f 100644
-> --- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> +++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> @@ -30,11 +30,11 @@
->
->  #define close_prot_errno_disarm(fd)      \
->         do {                             \
-> -               if (fd >=3D 0) {           \
-> +               if ((fd) >=3D 0) {         \
->                         int _e_ =3D errno; \
-> -                       close(fd);       \
-> +                       close((fd));     \
->                         errno =3D _e_;     \
-> -                       fd =3D -EBADF;     \
-> +                       (fd) =3D -EBADF;   \
+---8<---
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 389d4ea6bfc1..acecefcfdba7 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -421,6 +421,7 @@ int of_platform_bus_probe(struct device_node *root,
+ 	if (of_match_node(matches, root)) {
+ 		rc =3D of_platform_bus_create(root, matches, NULL, parent, false);
+ 	} else for_each_child_of_node(root, child) {
++		of_node_set_flag(root, OF_POPULATED_BUS);
+ 		if (!of_match_node(matches, child))
+ 			continue;
+ 		rc =3D of_platform_bus_create(child, matches, NULL, parent, false);
 
-While I agree that it's generally good to add parentheses in macros,
-this line ensures that 'fd' must be an lvalue and not an arithmetic
-expression.
 
--bw
+This doesn't work though. I see that prom_init() is called, which
+constructs a DTB and flattens it to be unflattened by
+unflatten_device_tree(). The powerpc machine type used by qemu is
+PLATFORM_PSERIES_LPAR. It looks like it never calls
+of_platform_bus_probe() from the pseries platform code.
 
->                 }                        \
->         } while (false)
->
-> --
-> 2.34.1
->
+What about skipping the OF_POPULATED_BUS check, or skipping the check
+when the parent is the root node? This is the if condition that's
+giving the headache.
+
+---8<---
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 389d4ea6bfc1..38dfafc25d86 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -735,10 +735,6 @@ static int of_platform_notify(struct notifier_block *n=
+b,
+=20
+ 	switch (of_reconfig_get_state_change(action, rd)) {
+ 	case OF_RECONFIG_CHANGE_ADD:
+-		/* verify that the parent is a bus */
+-		if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS))
+-			return NOTIFY_OK;	/* not for us */
+-
+ 		/* already populated? (driver using of_populate manually) */
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+ 			return NOTIFY_OK;
+
+
+>=20
+> > +               of_node_put(node);
+> >         } else {
+> >                 /*
+> >                  * Handle certain compatibles explicitly, since we don'=
+t want to create
+> >
+> > I'm guessing this is wrong though, because I see bunch of powerpc speci=
+fic code
+> > calling of_platform_bus_probe() which will set the flag on the actual p=
+latform
+> > bus nodes. Maybe we should just allow overlays to create devices at the=
+ root
+> > node regardless? Of course, the flag doc says "platform bus created for
+> > children" and if we never populated the root then that isn't entirely a=
+ccurate.
+> >
+> > Rob, can you point me in the right direction? Do we need to use simple-=
+bus in
+> > the test overlays and teach overlay code to populate that bus?
+>=20
+> Overlays adding things to the root node might be suspect, but probably
+> there are some valid reasons to do so.
+
+In this case we're using it to add nodes without a reg property to the
+root node.
+
+> If simple-bus makes sense here,
+> then yes, you should use it. But if what's on it is not MMIO devices,
+> don't. That's a warning in the schema now.
+>=20
+
+Ok. Sounds like adding these nodes to the root node is the right way
+then.
+
+I wonder if we can make MMIO devices appear on the kunit bus by adding
+DT support to the bus and then letting those nodes have reg properties
+that we "sinkhole" by making those iomem resources point to something
+else in the ioremap code. Then we can work in MMIO kunit emulation that
+way to let tests check code that works with readl/writel, e.g. the clk
+gate tests.
 
