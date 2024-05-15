@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-10250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7C508C6458
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:53:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18EA68C6472
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 12:01:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 771E51F21D8D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 09:53:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78492B22374
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 10:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458E15FB8B;
-	Wed, 15 May 2024 09:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6165CDF2;
+	Wed, 15 May 2024 10:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="CyTK+oMk"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="K1RcWlVF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D62F5B05E
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 09:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EB45A0E0
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 10:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715766785; cv=none; b=Bzu/wgk//eTampovF32FXEqTnfa7HS/8InLjYHmqPHcJfsZARKSVCfY+96EL2AZsI8zXfqPS8VO5sFC57i4xFLS4jGaz7k0hQKhomDj5Y/23LMa7P5shURhh81kVVG/6AyhEQNn8Q84HJ20Mg+WVE522UfyhSqBDSx6KYJhCsok=
+	t=1715767282; cv=none; b=C5F2DS4L/1E4/tOv2+pUWgkp0JUstCRRpbSApxzMr0RheKG078G5KS3J/g5HQFiuWwiMz3iiHZdSqDuqGfH4c09t2SV1OKtaNlH+40D40HXAAlwtb5AhVg5FnqgvEMjJPx5reTCF9k0DUXiidNoJuc59s+pz4US1l1cRE7jAzy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715766785; c=relaxed/simple;
-	bh=TsOk3vFqremJkiKTf83L+7lVwN7NONoMxe4kSI6IvYw=;
+	s=arc-20240116; t=1715767282; c=relaxed/simple;
+	bh=tFC4Uagubb4eoXf9w6qPRw0dVqgXqCUj9Gg59g6y8cY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ANUsh0DDsu8IGzj7/gHjv4+UZfoHKVGosfLRSeZRSijz2zrYluauhw2lScgX39pNotGIltaa7DOUiNQG5jNP1AMON/Y0q10md/SrxfgdBjs3vSYVd91P8kmexke4Xe//ehxbGb7Zlx6d2oGdhLyikjMuVxYeErca8SdK7Iql7t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=CyTK+oMk; arc=none smtp.client-ip=209.85.208.50
+	 In-Reply-To:Content-Type; b=mKNjZAOp1XUMcvKik8gb5xncJ6gTuNceMY21oSFJH4X17vZNZz5rGksObTjqJ+7XiAcirhHV1A90OvLD0PZg8KlR5THpK6StSO/dLUfmvsvlEQQF8bLK5ZbudQcBeWn7smXcjlatvGyvFdTgv/OBwRWirm1p1ZLXqpOproPb+Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=K1RcWlVF; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-572e48f91e9so1528648a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 02:53:03 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51ffff16400so10924421e87.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 03:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715766782; x=1716371582; darn=vger.kernel.org;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715767277; x=1716372077; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=S1lmRXypy+tgqjJjCBelLKezDGdnEAnnPizIiNZdruM=;
-        b=CyTK+oMkbUZvJX+UEpXD2WFMSiEdaF9FbbEkHgrzxqIOXJh3IjX7fUED53WyhtfNCd
-         n2EIRkb6K9WTdMARS9VuK3lIcwCF+typcSHLH8KJGqwuPma5t+cvhe1NS61b8h6qwBS9
-         mwkIWHGaxIqTXF7Z16UhZF5rk3gXWnzQYKdn3/bSx+l9CaYvAZ7b1mGjre/zhtmIw1DR
-         RKNJlKAICoTaHxukGyzYNIJyvWGUzOle01tTAWgalCoZoqZ6ZcgK2yzNZGrfyW/vCVKi
-         Cqm3jpwjE0S+sh5WKfhm6aGR9HpoF3H7IOUypLZ8RwI1GxjJa/GYPwQbzgxCpJMUYCBL
-         n9Bg==
+        bh=ukpqZZkZ02pF7RH8XXzq5qjyGt8/k5nmv3oeZg4UY0I=;
+        b=K1RcWlVF7Y7Z2kmuv2U08evyQJO5O88iW/TZktke7hjOwzENLKqs6pqbtoMo/mQXpd
+         NWEsVJGSfsXVHn5TJi6teJ3btLF0MQLm92TBGcVx8KVaBDA3iVt3I1PoIx8ORd3xiPWh
+         9vsj7EzFcg7il8x3V7bH1W6VDWR2CGNzqXMnOpqDQ7OlrIXCvfIGFcil+drnBNad9TKX
+         rGjUD6RLAyHJc115+6GwEi6eL5LFoDqAqsNngvXRyA4AjD68zW6rZyVN0MHtVWHfuIwT
+         F7kRt5KReQfMK+DCwYtTNTiVEWm6sN6HEQGdlXjULZNKkBOsEYFsjFNNmv79oR9saiB9
+         sqVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715766782; x=1716371582;
+        d=1e100.net; s=20230601; t=1715767277; x=1716372077;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S1lmRXypy+tgqjJjCBelLKezDGdnEAnnPizIiNZdruM=;
-        b=qxbie0Bl4zdzCTgnd5SXGsT1tCG2SXYAk2z1iC+nbYkpELael4HQXjgXy7Kin9y/fq
-         u6tnCsoVY6FeNF+L8ysy5hsgZCQ4TVKY+UUIEw+Xz/6MmUS7C66sKEFIdiJ85iFFi12m
-         cUYO9QDwjU9zt1+jgM8SfTR+SK0J5aNhtJSJ4rhg2gZHITpbxRDOSk1/Gyg/+08v0Y8E
-         n+2hIYQf4TYEoYuCGkbyphQ8NopqiA84dCyhaLjol2aYWguFp5KLc16xoIcXX7ebypdF
-         LXhTQWIH9Xa4Q0xBG3HId+qGMv3Y+SG7eq7xGo2IfCA9XmUv8Wfl7fckb374S5phaG37
-         GRuA==
-X-Forwarded-Encrypted: i=1; AJvYcCXLo58dkrhV80pNwAbLMTi0Igg+hIhAU2QF90T5akUbPAJlzhgU64vOpgMgJ8ujpcc+sueA3Y2yqTdYb8r38Q7fZ/HQyu9sv/sIJwOgJEKz
-X-Gm-Message-State: AOJu0Yzhf6fUGoSbRkDuWZTQZnGgiJlSueLdyF+jNMgvVrxyfT0yMIHJ
-	ntw9R4pJ07i0O14foHXy98Z2qLy1/T91X7Jx4VWjas13jlMg6UBh3hdAU6sz9+w=
-X-Google-Smtp-Source: AGHT+IHJ/nIQ9Mj+hR5RkGPoGTlj6+iE5Zdg+QT5yPe2HHYjGXYAnkxMww7zPjsNTDTMLKdw2VFCRA==
-X-Received: by 2002:a50:f699:0:b0:56e:f64:aaf6 with SMTP id 4fb4d7f45d1cf-5734d5c16dfmr11167023a12.5.1715766781663;
-        Wed, 15 May 2024 02:53:01 -0700 (PDT)
+        bh=ukpqZZkZ02pF7RH8XXzq5qjyGt8/k5nmv3oeZg4UY0I=;
+        b=FOTjzQuXlAv3tptJ194af0TMTI8PoF8U4cvNgq773nNPBN/378FKBIo1Xl20cOYZWL
+         Ae907c0SXInhOu2df2RuoW0dBdTauMHCfNn5GUPxJr+UlFwhB93JuUtrgqFHtt938QvW
+         Hac23H4Hj7XJtn5JtMPxjaAUHxwqYJBLj4DzWz4yPoqk7Xv0tQ8QknG9fMA98ElZ46sD
+         jqkomPZTIuovbt+0MuqJVzGfeTJUdSkIWBjIv3Ekkvedt4F+P+DGNzhI/tkU09l9+iAK
+         yVt/sknSmlsDyggzwFSwRNVYNyiOwy8gYKkufEGPt/IiiaEJ5SMGZk+RcWnBqsag/hRp
+         KMQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ9pt3eibWAm1/9YHue+kzzMMUkciGpfFLQ+WkisAfoFMFiGCJwFhkjlJjJdFgpdgDuLKyoBmTVve61eH+EPgQLFByFbgs5dROIQtZPcTe
+X-Gm-Message-State: AOJu0YzbjLW6RREBH3QDbg6wZAPUkfQLc48ZKYgUmGQ6X5MJFSHBJxOF
+	Dfa6iWluHUXQAiTuKg5w/h8q2SnOWZOWz0hitJ2hEeYCLijJ3bW8A4K3FOLbheU=
+X-Google-Smtp-Source: AGHT+IFdKwRcFcJDPoxpjnHjRZfubVEt9+BPb8Ln+L2DQVxYwERLJdr4JLAoMMUPEl1bmgBYy5XENg==
+X-Received: by 2002:a05:6512:3e17:b0:51d:605e:f0ce with SMTP id 2adb3069b0e04-52210278698mr17687805e87.50.1715767276761;
+        Wed, 15 May 2024 03:01:16 -0700 (PDT)
 Received: from [192.168.0.245] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733bebb687sm8592378a12.25.2024.05.15.02.52.58
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b01724sm837186066b.162.2024.05.15.03.01.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 02:53:01 -0700 (PDT)
-Message-ID: <0e5007fb-2d95-4cbb-b0a6-baa0d20e9469@blackwall.org>
-Date: Wed, 15 May 2024 12:52:57 +0300
+        Wed, 15 May 2024 03:01:16 -0700 (PDT)
+Message-ID: <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
+Date: Wed, 15 May 2024 13:01:12 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,8 +76,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 12/14] net: add SO_DEVMEM_DONTNEED setsockopt
- to release RX frags
+Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
+ netdevice
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -119,17 +119,41 @@ Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
  <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
  Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-13-almasrymina@google.com>
+ <20240510232128.1105145-5-almasrymina@google.com>
 Content-Language: en-US
 From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20240510232128.1105145-13-almasrymina@google.com>
+In-Reply-To: <20240510232128.1105145-5-almasrymina@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/05/2024 02:21, Mina Almasry wrote:
-> Add an interface for the user to notify the kernel that it is done
-> reading the devmem dmabuf frags returned as cmsg. The kernel will
-> drop the reference on the frags to make them available for reuse.
+> Add a netdev_dmabuf_binding struct which represents the
+> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+> rx queues on the netdevice. On the binding, the dma_buf_attach
+> & dma_buf_map_attachment will occur. The entries in the sg_table from
+> mapping will be inserted into a genpool to make it ready
+> for allocation.
+> 
+> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
+> holds the dma-buf offset of the base of the chunk and the dma_addr of
+> the chunk. Both are needed to use allocations that come from this chunk.
+> 
+> We create a new type that represents an allocation from the genpool:
+> net_iov. We setup the net_iov allocation size in the
+> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+> allocated by the page pool and given to the drivers.
+> 
+> The user can unbind the dmabuf from the netdevice by closing the netlink
+> socket that established the binding. We do this so that the binding is
+> automatically unbound even if the userspace process crashes.
+> 
+> The binding and unbinding leaves an indicator in struct netdev_rx_queue
+> that the given queue is bound, but the binding doesn't take effect until
+> the driver actually reconfigures its queues, and re-initializes its page
+> pool.
+> 
+> The netdev_dmabuf_binding struct is refcounted, and releases its
+> resources only when all the refs are released.
 > 
 > Signed-off-by: Willem de Bruijn <willemb@google.com>
 > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
@@ -137,118 +161,118 @@ On 11/05/2024 02:21, Mina Almasry wrote:
 > 
 > ---
 > 
+> v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
+> - Removed net_devmem_restart_rx_queues and put it in its own patch
+>   (David).
+> 
+> v8:
+> - move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
+>   build error.
+> 
 > v7:
-> - Updated SO_DEVMEM_* uapi to use the next available entry (Arnd).
+> - Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
+>   value.
+> - Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
+> - DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
+> - Added a comment around recovering of the old rx queue in
+>   net_devmem_restart_rx_queue(), and added freeing of old_mem if the
+>   restart of the old queue fails. (Yunsheng).
+> - Use kernel-family sock-priv (Jakub).
+> - Put pp_memory_provider_params in netdev_rx_queue instead of the
+>   dma-buf specific binding (Pavel & David).
+> - Move queue management ops to queue_mgmt_ops instead of netdev_ops
+>   (Jakub).
+> - Remove excess whitespaces (Jakub).
+> - Use genlmsg_iput (Jakub).
 > 
 > v6:
-> - Squash in locking optimizations from edumazet@google.com. With his
->   changes we lock the xarray once per sock_devmem_dontneed operation
->   rather than once per frag.
+> - Validate rx queue index
+> - Refactor new functions into devmem.c (Pavel)
 > 
-> Changes in v1:
-> - devmemtoken -> dmabuf_token (David).
-> - Use napi_pp_put_page() for refcounting (Yunsheng).
-> - Fix build error with missing socket options on other asms.
+> v5:
+> - Renamed page_pool_iov to net_iov, and moved that support to devmem.h
+>   or netmem.h.
+> 
+> v1:
+> - Introduce devmem.h instead of bloating netdevice.h (Jakub)
+> - ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
+> - Remove unneeded rcu protection for binding->list (rtnl protected)
+> - Removed extraneous err_binding_put: label.
+> - Removed dma_addr += len (Paolo).
+> - Don't override err on netdev_bind_dmabuf_to_queue failure.
+> - Rename devmem -> dmabuf (David).
+> - Add id to dmabuf binding (David/Stan).
+> - Fix missing xa_destroy bound_rq_list.
+> - Use queue api to reset bound RX queues (Jakub).
+> - Update netlink API for rx-queue type (tx/re) (Jakub).
+> 
+> RFC v3:
+> - Support multi rx-queue binding
 > 
 > ---
->  arch/alpha/include/uapi/asm/socket.h  |  1 +
->  arch/mips/include/uapi/asm/socket.h   |  1 +
->  arch/parisc/include/uapi/asm/socket.h |  1 +
->  arch/sparc/include/uapi/asm/socket.h  |  1 +
->  include/uapi/asm-generic/socket.h     |  1 +
->  include/uapi/linux/uio.h              |  4 ++
->  net/core/sock.c                       | 61 +++++++++++++++++++++++++++
->  7 files changed, 70 insertions(+)
+>  Documentation/netlink/specs/netdev.yaml |   4 +
+>  include/net/devmem.h                    | 111 +++++++++++
+>  include/net/netdev_rx_queue.h           |   2 +
+>  include/net/netmem.h                    |  10 +
+>  include/net/page_pool/types.h           |   5 +
+>  net/core/Makefile                       |   2 +-
+>  net/core/dev.c                          |   3 +
+>  net/core/devmem.c                       | 254 ++++++++++++++++++++++++
+>  net/core/netdev-genl-gen.c              |   4 +
+>  net/core/netdev-genl-gen.h              |   4 +
+>  net/core/netdev-genl.c                  | 105 +++++++++-
+>  11 files changed, 501 insertions(+), 3 deletions(-)
+>  create mode 100644 include/net/devmem.h
+>  create mode 100644 net/core/devmem.c
 > 
 [snip]
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 8d6e638b5426d..2edb988259e8d 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -124,6 +124,7 @@
->  #include <linux/netdevice.h>
->  #include <net/protocol.h>
->  #include <linux/skbuff.h>
-> +#include <linux/skbuff_ref.h>
->  #include <net/net_namespace.h>
->  #include <net/request_sock.h>
->  #include <net/sock.h>
-> @@ -1049,6 +1050,62 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_PAGE_POOL
-> +static noinline_for_stack int
-> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +/* Protected by rtnl_lock() */
+> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> +
+> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
 > +{
-> +	unsigned int num_tokens, i, j, k, netmem_num = 0;
-> +	struct dmabuf_token *tokens;
-> +	netmem_ref netmems[16];
-> +	int ret;
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
 > +
-> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
-> +		return -EBADF;
+> +	if (!binding)
+> +		return;
 > +
-> +	if (optlen % sizeof(struct dmabuf_token) ||
-> +	    optlen > sizeof(*tokens) * 128)
-> +		return -EINVAL;
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
 > +
-> +	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
-> +	if (!tokens)
-> +		return -ENOMEM;
-> +
-> +	num_tokens = optlen / sizeof(struct dmabuf_token);
-> +	if (copy_from_sockptr(tokens, optval, optlen))
-> +		return -EFAULT;
 
-tokens isn't freed in this error case
+minor nit:
+In theory list.next can still be != null if it's poisoned (e.g. after del). You can
+use the list api here (!list_empty(&binding->list) -> list_del_init(&binding->list))
+if you initialize it in net_devmem_bind_dmabuf(), then you'll also get nice list
+debugging.
 
+> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> +		if (rxq->mp_params.mp_priv == binding) {
+> +			/* We hold the rtnl_lock while binding/unbinding
+> +			 * dma-buf, so we can't race with another thread that
+> +			 * is also modifying this value. However, the page_pool
+> +			 * may read this config while it's creating its
+> +			 * rx-queues. WRITE_ONCE() here to match the
+> +			 * READ_ONCE() in the page_pool.
+> +			 */
+> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
+> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
 > +
-> +	ret = 0;
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
 > +
-> +	xa_lock_bh(&sk->sk_user_frags);
-> +	for (i = 0; i < num_tokens; i++) {
-> +		for (j = 0; j < tokens[i].token_count; j++) {
-> +			netmem_ref netmem = (__force netmem_ref)__xa_erase(
-> +				&sk->sk_user_frags, tokens[i].token_start + j);
-> +
-> +			if (netmem &&
-> +			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
-> +				netmems[netmem_num++] = netmem;
-> +				if (netmem_num == ARRAY_SIZE(netmems)) {
-> +					xa_unlock_bh(&sk->sk_user_frags);
-> +					for (k = 0; k < netmem_num; k++)
-> +						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
-> +					netmem_num = 0;
-> +					xa_lock_bh(&sk->sk_user_frags);
-> +				}
-> +				ret++;
-> +			}
+> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
 > +		}
 > +	}
 > +
-> +	xa_unlock_bh(&sk->sk_user_frags);
-> +	for (k = 0; k < netmem_num; k++)
-> +		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
 > +
-> +	kvfree(tokens);
-> +	return ret;
+> +	net_devmem_dmabuf_binding_put(binding);
 > +}
-> +#endif
-> +
->  void sockopt_lock_sock(struct sock *sk)
->  {
->  	/* When current->bpf_ctx is set, the setsockopt is called from
-> @@ -1200,6 +1257,10 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
->  			ret = -EOPNOTSUPP;
->  		return ret;
->  		}
-> +#ifdef CONFIG_PAGE_POOL
-> +	case SO_DEVMEM_DONTNEED:
-> +		return sock_devmem_dontneed(sk, optval, optlen);
-> +#endif
->  	}
->  
->  	sockopt_lock_sock(sk);
+[snip]
+
+Cheers,
+ Nik
 
 
