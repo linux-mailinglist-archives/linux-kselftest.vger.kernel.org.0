@@ -1,90 +1,125 @@
-Return-Path: <linux-kselftest+bounces-10231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71CC08C6030
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 07:36:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC098C6077
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2A681C20CD2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 05:36:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A4211C21E4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E0E3A1DC;
-	Wed, 15 May 2024 05:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6FB3A29C;
+	Wed, 15 May 2024 06:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxmBmR1I"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4013A1B0;
-	Wed, 15 May 2024 05:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DABE3D541;
+	Wed, 15 May 2024 06:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715751388; cv=none; b=LY4fQZoJIIlUVDi/apEmEwo9ecQuOwh943GzTjdpXI0KXzRzQqlIaAuY2wcGnnhEwwR3psJAYsdXs3NsUJTFNeB3Ewh4UNwt7AKS/Gu9lKmpZBBnrOMLKd1oSBlS9diWgjnjBLN4UfPv+sZQRSV07emm2BssSugQyAoYzMs1Awc=
+	t=1715752808; cv=none; b=hMqsszsQ/Wn+XUSz6FF8DkMPYTScHzpeltGPCY0RjYDnYYsnJMXlVY7cnpVAyUquMu5EorhDXv3uBq0siJkcUnEWtjEAk+0gFWGUhyvwWzX5k88+J8WhlOslvVZoi+p5J0HoKGIHfcn7Gkme2utmaDXXzRf6iq7MPK6+UHeUHEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715751388; c=relaxed/simple;
-	bh=c94//jp1PE5EDDwmY7Ielx198lHnxvyElpsaJQ+yI+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YAesdkDnf+LudqI901xPrHeTZVtCtg2AMjPl6TTlvuddbauFmRifTW4EILN5EMqX9CiqBX2TMG6T+t29pdbAMKMtttosxrVEsyLV1MMKdFHFpxm2SZmsz3TiU2Wx8IvrYZsbOe9t+y3KQcwuZsV9WZTa076V8VtpTr2qbA5nixA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B008C116B1;
-	Wed, 15 May 2024 05:36:27 +0000 (UTC)
-Date: Wed, 15 May 2024 01:36:20 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
- <linux-trace-kernel@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@kernel.org>, Shuah
- Khan <shuahkhan@gmail.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: Fix test to handle both old and new
- kernels
-Message-ID: <20240515013620.098cb37a@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1715752808; c=relaxed/simple;
+	bh=AQ3tkiONemRilHkmlqquV+TjmIQLfUDgsuuM0Tf2bCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QuhQ9GXdmCBvrOvjLxxOoiU06KBrswLxWMJAljDW+DN6ysWTTmGfCyRmbE9tp09EyUi87UJxKGJtK1G1satno1aiiyFe8F3wWtIA4hIPNcpp3cukdnmU4dfIVlAV+gARHZr69UzOjAAB99DGh80CTzzOHLXCZl4wwAq9ropI3xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxmBmR1I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD1FBC116B1;
+	Wed, 15 May 2024 06:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715752808;
+	bh=AQ3tkiONemRilHkmlqquV+TjmIQLfUDgsuuM0Tf2bCk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fxmBmR1IJ80bdF0JfJhMKEigeOYplQSs1LMYxRQ3XHy/7ttki/1fYBwhrEkADErP7
+	 x/lriRh0i41gL1HjzK/KL+MuCqF4l/+Yz0GdRlJ6UPTI7JRAY1qLOR06WXYgnnUwMq
+	 hw9pcEJMYKgZUHx58Z5PeqY4cBEwOtFYiA6NtAs8WsTfa9Fgsw9WkEU1Ab6CCm5OkA
+	 wK7Tz8wmXlIEypkePJpiaaGCyy+weRmRzukKUoo9yOVLFFi2oEz7WI3sYx4h1uLpSF
+	 eQBMJiA8H84DG20Y9F0yqnhhZGu50lz4aClVGeZn93orjlXEUHyHd2Z0VLAGOFKTMB
+	 AWqlNFGsFYBjg==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	Geliang Tang <geliang@kernel.org>
+Subject: [PATCH bpf-next 0/9] add netns helpers
+Date: Wed, 15 May 2024 13:59:27 +0800
+Message-ID: <cover.1715751995.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The function "scheduler_tick" was renamed to "sched_tick" and a selftest
-that used that function for testing function trace filtering used that
-function as part of the test.
+This patchset addresses Alexei's comment for commit "Handle SIGINT
+when creating netns" [1]. Export local helpers create_netns() and
+cleanup_netns() defined in mptcp.c into network_helpers.c as generic
+ones. For this another helper unshare_netns() is added to replace
+the existing local helpers create_netns().
 
-But the change causes it to fail when run on older kernels. As tests
-should not fail on older kernels, add a check to see which name is
-available before testing.
+[1]
+https://patchwork.kernel.org/project/mptcp/patch/20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-1-e2bcbdf49857@kernel.org/
 
-Fixes: 86dd6c04ef9f2 ("sched/balancing: Rename scheduler_tick() => sched_tick()")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- .../ftrace/test.d/ftrace/func_set_ftrace_file.tc         | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Geliang Tang (9):
+  selftests/bpf: Add unshare_netns helper
+  selftests/bpf: Use unshare_netns helper
+  selftests/bpf: Drop duplicate create_netns
+  selftests/bpf: Export create_netns helper
+  selftests/bpf: Use create_netns helper
+  selftests/bpf: Export cleanup_netns helper
+  selftests/bpf: Use cleanup_netns helper
+  selftests/bpf: Use netns helpers in lwt tests
+  selftests/bpf: Use netns helpers in test_tunnel
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-index 073a748b9380..263f6b798c85 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-@@ -19,7 +19,14 @@ fail() { # mesg
- 
- FILTER=set_ftrace_filter
- FUNC1="schedule"
--FUNC2="sched_tick"
-+if grep '^sched_tick\b' available_filter_functions; then
-+    FUNC2="sched_tick"
-+elif grep '^scheduler_tick\b' available_filter_functions; then
-+    FUNC2="scheduler_tick"
-+else
-+    exit_unresolved
-+fi
-+
- 
- ALL_FUNCS="#### all functions enabled ####"
- 
+ tools/testing/selftests/bpf/network_helpers.c | 67 +++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c   | 12 +---
+ .../selftests/bpf/prog_tests/bind_perm.c      | 11 +--
+ .../bpf/prog_tests/bpf_iter_setsockopt.c      | 13 +---
+ .../bpf/prog_tests/btf_skc_cls_ingress.c      |  6 +-
+ .../selftests/bpf/prog_tests/crypto_sanity.c  |  3 +-
+ .../selftests/bpf/prog_tests/decap_sanity.c   |  6 +-
+ .../selftests/bpf/prog_tests/fib_lookup.c     |  8 +--
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 26 ++-----
+ .../selftests/bpf/prog_tests/lwt_redirect.c   |  2 -
+ .../selftests/bpf/prog_tests/lwt_reroute.c    |  2 -
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 22 +-----
+ .../bpf/prog_tests/ns_current_pid_tgid.c      |  9 +--
+ .../selftests/bpf/prog_tests/setget_sockopt.c | 10 +--
+ .../selftests/bpf/prog_tests/sk_assign.c      |  4 +-
+ .../selftests/bpf/prog_tests/sock_destroy.c   |  9 +--
+ .../selftests/bpf/prog_tests/sock_fields.c    | 13 +---
+ .../bpf/prog_tests/sock_iter_batch.c          |  7 +-
+ .../bpf/prog_tests/tcp_custom_syncookie.c     |  5 +-
+ .../bpf/prog_tests/tcp_hdr_options.c          | 13 +---
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 19 +++---
+ .../bpf/prog_tests/xdp_dev_bound_only.c       |  3 +-
+ .../bpf/prog_tests/xdp_do_redirect.c          |  4 +-
+ 24 files changed, 114 insertions(+), 163 deletions(-)
+
 -- 
 2.43.0
 
