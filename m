@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E75D8C6081
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 719838C6083
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FFA31C21E2E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E407C1F23A66
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFCD3FB1C;
-	Wed, 15 May 2024 06:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7B73FE2A;
+	Wed, 15 May 2024 06:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mph49uLB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SUvxgOyL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E3D3C485;
-	Wed, 15 May 2024 06:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635C83C485;
+	Wed, 15 May 2024 06:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715752843; cv=none; b=iqp90xFlXPNky5eBRfn9Kyw8aJOmXEUD3H+E9wF90dt9lAU2gueb5oCXoV+tsiNGhcQy36WCf7uXEo4nIwLCoaxXfv5ZXgmkhV1uVAXjmvb/MR09/ACSHjGttPUzYqp4yGY1XHJC2wN+HEpHuTta0t2bRHh140ZI9y27aBPSihs=
+	t=1715752850; cv=none; b=RDRtZYMDjeA/HMrkCT7lq48nk5M+mDKS1F9+fzX9NLP9zrNquUnSTOOCILwKThiBGkylQsYEw91QAig4nc69QxuzUp6xGgKgBKOsh2T9ShMP4tQHyBvhdKuM/VOXYHf7chxzMpA2Epdg0cYjahbi7e2LTsp6GY3TokgrLx2c/Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715752843; c=relaxed/simple;
-	bh=nldUSDpla7riCahA4LY3CS7ej4UNHCzwLWbb6fr1yh4=;
+	s=arc-20240116; t=1715752850; c=relaxed/simple;
+	bh=gFtH4vnhvrfgIng/oPWR939UW+4mcOZR1dqwqPB1/OI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C24fzB2d2gOP2TJmdZr9RLnpAwaw+SLM2zXafA729XwIkaYSPQDFS2+bdyGREA6FE46wBZmtzq8D30WpSkZSVpjsY2OOTEokXUA8/npVp2P6Leid1hx6pZizGtABSM7yxEcpgltVi9102iscLdQhsuE/C/eOLqjOakZ9VPHaBzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mph49uLB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55732C4AF09;
-	Wed, 15 May 2024 06:00:36 +0000 (UTC)
+	 MIME-Version; b=k/tZYWMxG22O1fWzYOH6ih7OeMTvWyqqYiJzBkneWDGZP9b2KlcqfLf/Sen5D00Ps8xnySpBuoUbZUopU5N0lrnTErYXRXHV3krVks+R8zupQJLf5KH5OGBZzkxd+UngzSfqWxVgj8vUWlA8Za3WdoP3/4aHJuII2W0FgWgfHK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SUvxgOyL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E165EC2BD11;
+	Wed, 15 May 2024 06:00:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715752843;
-	bh=nldUSDpla7riCahA4LY3CS7ej4UNHCzwLWbb6fr1yh4=;
+	s=k20201202; t=1715752850;
+	bh=gFtH4vnhvrfgIng/oPWR939UW+4mcOZR1dqwqPB1/OI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mph49uLB2V/3pmuv8rGdEr2XZWaBSniab8bljQeWjWvKvoaplSgXfblYYC4E+Uwpy
-	 Htv+6iYUp0A+Nz8JfXnqrABZscfQbmoy8OO7XkcLvHWFPsJNdi08gSDonM3j2aDq2y
-	 V2dEUnP3idcM7uNRe34AwXS2dU07WqH7WsDDWddZVv9d84190BKD/iO/0oGGRt65Dm
-	 AsBGfnBciuU/CC/mBinfIBD3gj+acj52NjsnRchdz3Ap0NpjIZ4xjwv0ku4F8qEEoM
-	 LNV0G9cyXwS+R4/RIV1dSRuywbp7nXfZC5ivGjLvJEGCdoYf8eVvf9MgjRW1rutMfI
-	 luPxNVPqzWEWA==
+	b=SUvxgOyLLHPR+caBSyHmck15JG/v5z52QqNDZ5fH0b3kjMCegUH2U6Z7geIdCWQ0Y
+	 ZLUw0mD7HW61egojkquUrsP2TLg6VExE8MeAEk8QNoXRNB+AOX9bUyMZULcoRCV5nQ
+	 RUlQ0JhDMFQVOPRuvjW7AZvQ+So0/FPBKJluoxoOXkdHAxm8SgzzJM8MKieTyxbiI4
+	 DHtvlAg2thTuDR852Xg3zgBIwccsVjEhOy9N5Ag+Qy3bJMXEOMQSB3EnrT/BSB7MeM
+	 eZ4c+znMFM181OWG0OjYUIywNs01DZYkBcU/IaRd/P/FMs0JMRWXWdxy+Xnznn0QS/
+	 DFTqo1mNFMKPw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -61,9 +61,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 5/9] selftests/bpf: Use create_netns helper
-Date: Wed, 15 May 2024 13:59:32 +0800
-Message-ID: <8927853212a8bfedc303452f450ee7a0cf520d99.1715751995.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 6/9] selftests/bpf: Export cleanup_netns helper
+Date: Wed, 15 May 2024 13:59:33 +0800
+Message-ID: <c0eeecb2628a136bb23d9fa62d259e08fcddb26d.1715751995.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1715751995.git.tanggeliang@kylinos.cn>
 References: <cover.1715751995.git.tanggeliang@kylinos.cn>
@@ -77,111 +77,110 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The newly added helper create_netns() can be used in assign_reuse.c,
-fib_lookup.c, ns_current_pid_tgid.c, sock_destroy.c and sock_iter_batch.c
-to simplify the code.
+This patch adds a new struct member name in struct nstoken, to save
+the name of the given network namespace. It dups the name string in
+open_netns() and freed in close_netns().
 
-It changes the behavior of test fib_lookup.c a little bit, but doesn't
-affect the results.
+Then move cleanup_netns() from mptcp.c into network_helpers.c as a
+public helper. In it the newly added name field is passed to command
+"ip netns del" to delete this network namespace. This makes it more
+flexible.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/assign_reuse.c    | 9 ++-------
- tools/testing/selftests/bpf/prog_tests/fib_lookup.c      | 4 +---
- .../selftests/bpf/prog_tests/ns_current_pid_tgid.c       | 5 +----
- tools/testing/selftests/bpf/prog_tests/sock_destroy.c    | 5 +----
- tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c | 4 +---
- 5 files changed, 6 insertions(+), 21 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 21 +++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  1 +
+ .../testing/selftests/bpf/prog_tests/mptcp.c  |  8 -------
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-index 989ee4d9785b..21e1549d9749 100644
---- a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-+++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-@@ -175,12 +175,9 @@ void test_assign_reuse(void)
- {
- 	struct nstoken *tok = NULL;
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index c115aeca0a66..0b25b008f4f6 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -444,6 +444,7 @@ char *ping_command(int family)
  
--	SYS(out, "ip netns add %s", NS_TEST);
--	SYS(cleanup, "ip -net %s link set dev lo up", NS_TEST);
--
--	tok = open_netns(NS_TEST);
-+	tok = create_netns(NS_TEST);
- 	if (!ASSERT_OK_PTR(tok, "netns token"))
--		return;
-+		goto cleanup;
+ struct nstoken {
+ 	int orig_netns_fd;
++	char *name;
+ };
  
- 	if (test__start_subtest("tcpv4"))
- 		run_assign_reuse(AF_INET, SOCK_STREAM, "127.0.0.1", PORT);
-@@ -194,6 +191,4 @@ void test_assign_reuse(void)
- cleanup:
- 	close_netns(tok);
- 	SYS_NOFAIL("ip netns delete %s", NS_TEST);
--out:
--	return;
+ struct nstoken *open_netns(const char *name)
+@@ -459,6 +460,13 @@ struct nstoken *open_netns(const char *name)
+ 		return NULL;
+ 	}
+ 
++	token->name = strdup(name);
++	if (!token->name) {
++		log_err("Failed to dup name");
++		free(token);
++		return NULL;
++	}
++
+ 	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
+ 	if (token->orig_netns_fd == -1) {
+ 		log_err("Failed to open(/proc/self/ns/net)");
+@@ -483,6 +491,7 @@ struct nstoken *open_netns(const char *name)
+ fail:
+ 	if (token->orig_netns_fd != -1)
+ 		close(token->orig_netns_fd);
++	free(token->name);
+ 	free(token);
+ 	return NULL;
  }
-diff --git a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-index bd7658958004..b7eac1fce746 100644
---- a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-@@ -315,9 +315,7 @@ void test_fib_lookup(void)
- 		return;
- 	prog_fd = bpf_program__fd(skel->progs.fib_lookup);
+@@ -494,10 +503,22 @@ void close_netns(struct nstoken *token)
  
--	SYS(fail, "ip netns add %s", NS_TEST);
--
--	nstoken = open_netns(NS_TEST);
-+	nstoken = create_netns(NS_TEST);
- 	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
- 		goto fail;
+ 	if (setns(token->orig_netns_fd, CLONE_NEWNET))
+ 		log_err("Failed to setns(orig_netns_fd)");
++	if (token->name)
++		free(token->name);
+ 	close(token->orig_netns_fd);
+ 	free(token);
+ }
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index e72d75d6baa7..6dae14d106ac 100644
---- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -204,10 +204,7 @@ static void test_in_netns(int (*fn)(void *), void *arg)
++void cleanup_netns(struct nstoken *token)
++{
++	if (!token)
++		return;
++
++	if (SYS_NOFAIL("ip netns del %s", token->name))
++		log_err("del netns %s failed", token->name);
++	close_netns(token);
++}
++
+ struct nstoken *create_netns(const char *name)
  {
- 	struct nstoken *nstoken = NULL;
+ 	struct nstoken *token = NULL;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 5c0b082153fd..7ed6d78b3744 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -81,6 +81,7 @@ struct nstoken;
+  */
+ struct nstoken *open_netns(const char *name);
+ void close_netns(struct nstoken *token);
++void cleanup_netns(struct nstoken *token);
+ struct nstoken *create_netns(const char *name);
+ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
+ int unshare_netns(void);
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+index ae42ae41f4b4..11267f987e7e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -79,14 +79,6 @@ struct mptcp_storage {
+ 	char ca_name[TCP_CA_NAME_MAX];
+ };
  
--	SYS(cleanup, "ip netns add ns_current_pid_tgid");
--	SYS(cleanup, "ip -net ns_current_pid_tgid link set dev lo up");
+-static void cleanup_netns(struct nstoken *nstoken)
+-{
+-	if (nstoken)
+-		close_netns(nstoken);
 -
--	nstoken = open_netns("ns_current_pid_tgid");
-+	nstoken = create_netns("ns_current_pid_tgid");
- 	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597..c156218c7280 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -193,10 +193,7 @@ void test_sock_destroy(void)
- 	if (!ASSERT_OK_PTR(skel->links.sock_connect, "prog_attach"))
- 		goto cleanup;
- 
--	SYS(cleanup, "ip netns add %s", TEST_NS);
--	SYS(cleanup, "ip -net %s link set dev lo up", TEST_NS);
+-	SYS_NOFAIL("ip netns del %s", NS_TEST);
+-}
 -
--	nstoken = open_netns(TEST_NS);
-+	nstoken = create_netns(TEST_NS);
- 	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c b/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-index d56e18b25528..6a19bfdc0677 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-@@ -113,10 +113,8 @@ void test_sock_iter_batch(void)
- 	struct nstoken *nstoken = NULL;
- 
- 	SYS_NOFAIL("ip netns del " TEST_NS);
--	SYS(done, "ip netns add %s", TEST_NS);
--	SYS(done, "ip -net %s link set dev lo up", TEST_NS);
- 
--	nstoken = open_netns(TEST_NS);
-+	nstoken = create_netns(TEST_NS);
- 	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
- 		goto done;
- 
+ static int start_mptcp_server(int family, const char *addr_str, __u16 port,
+ 			      int timeout_ms)
+ {
 -- 
 2.43.0
 
