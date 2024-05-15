@@ -1,144 +1,254 @@
-Return-Path: <linux-kselftest+bounces-10249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFB5B8C6427
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:48:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C508C6458
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:53:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52B58B231F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 09:48:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 771E51F21D8D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 09:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC5F95A116;
-	Wed, 15 May 2024 09:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458E15FB8B;
+	Wed, 15 May 2024 09:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIqJy+Oz"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="CyTK+oMk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B195914C;
-	Wed, 15 May 2024 09:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D62F5B05E
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 09:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715766515; cv=none; b=TrSza2ReL8b6cMnra4sQVS1ERymG8iE52egcUTmNdl/1n2PwtQEvRfyWZ+/oEUHSAwsVW9df8kCb/fGTqw/SPRc90m5IMTRW6DY0pBqALn4dwaJ5Jvieop9juMtwf3v2Sk7cZk8swOnsM28IDMLz7kTXFJm9SL78l2WFG8+2aSY=
+	t=1715766785; cv=none; b=Bzu/wgk//eTampovF32FXEqTnfa7HS/8InLjYHmqPHcJfsZARKSVCfY+96EL2AZsI8zXfqPS8VO5sFC57i4xFLS4jGaz7k0hQKhomDj5Y/23LMa7P5shURhh81kVVG/6AyhEQNn8Q84HJ20Mg+WVE522UfyhSqBDSx6KYJhCsok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715766515; c=relaxed/simple;
-	bh=dW4XzXkdq+Ja/Dw/2N3tZiM/mGQj/ucsHQwY0STLJoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=adNGv8EPbLzzXs8U0LfxG3NTiy/iGgbjydXUQyz7awamQsKZK4xhXgDe46E5USbPaWz53qRUg97mLfGKRhOcvBgJro52Ur2jzUX3csxIfV/fDRcBKzsPLTz4oSx3OUtU7iCILf4dieDukdX0Q6N6qSJ+m9rFepDuBWhDr1EV8Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIqJy+Oz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A60AC32786;
-	Wed, 15 May 2024 09:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715766515;
-	bh=dW4XzXkdq+Ja/Dw/2N3tZiM/mGQj/ucsHQwY0STLJoQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QIqJy+OzRu2eANqM1Cr1r30LZxK8LnzmlifBnWfhLA7KlvhGlm7z7uw1rVbUE204n
-	 I4QWDSD7SLNPl2eq+eQPUKJSsdp1aFfH1VWfxfhJsmLkEZz6qWuvxCPrp3ugmw8RuO
-	 q8IaYmsbwuMvmHYrMm1gdb97Cv0s4Z11la/ATeotiD3TkKqvRFDQd4IdI8K3Q6TFkL
-	 VlA+pyy95m5tolQH0SNLFpupWBqPn1hYQe0Ox3f2VEmSyJ7MTDmMZQ7lspg7k0tN4g
-	 nKD2FTfLaFkOedVL6+/ka9pxHwlLttrWXjj05xQiuGqr7NVBjfU0lg7VUqRmnPDBuY
-	 ryrYLvBHbPnuw==
-Date: Wed, 15 May 2024 10:48:31 +0100
-From: Simon Horman <horms@kernel.org>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests: net: kill smcrouted in the cleanup
- logic in amt.sh
-Message-ID: <20240515094831.GA154012@kernel.org>
-References: <20240513060852.1105380-1-ap420073@gmail.com>
+	s=arc-20240116; t=1715766785; c=relaxed/simple;
+	bh=TsOk3vFqremJkiKTf83L+7lVwN7NONoMxe4kSI6IvYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ANUsh0DDsu8IGzj7/gHjv4+UZfoHKVGosfLRSeZRSijz2zrYluauhw2lScgX39pNotGIltaa7DOUiNQG5jNP1AMON/Y0q10md/SrxfgdBjs3vSYVd91P8kmexke4Xe//ehxbGb7Zlx6d2oGdhLyikjMuVxYeErca8SdK7Iql7t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=CyTK+oMk; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-572e48f91e9so1528648a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 02:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715766782; x=1716371582; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S1lmRXypy+tgqjJjCBelLKezDGdnEAnnPizIiNZdruM=;
+        b=CyTK+oMkbUZvJX+UEpXD2WFMSiEdaF9FbbEkHgrzxqIOXJh3IjX7fUED53WyhtfNCd
+         n2EIRkb6K9WTdMARS9VuK3lIcwCF+typcSHLH8KJGqwuPma5t+cvhe1NS61b8h6qwBS9
+         mwkIWHGaxIqTXF7Z16UhZF5rk3gXWnzQYKdn3/bSx+l9CaYvAZ7b1mGjre/zhtmIw1DR
+         RKNJlKAICoTaHxukGyzYNIJyvWGUzOle01tTAWgalCoZoqZ6ZcgK2yzNZGrfyW/vCVKi
+         Cqm3jpwjE0S+sh5WKfhm6aGR9HpoF3H7IOUypLZ8RwI1GxjJa/GYPwQbzgxCpJMUYCBL
+         n9Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715766782; x=1716371582;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S1lmRXypy+tgqjJjCBelLKezDGdnEAnnPizIiNZdruM=;
+        b=qxbie0Bl4zdzCTgnd5SXGsT1tCG2SXYAk2z1iC+nbYkpELael4HQXjgXy7Kin9y/fq
+         u6tnCsoVY6FeNF+L8ysy5hsgZCQ4TVKY+UUIEw+Xz/6MmUS7C66sKEFIdiJ85iFFi12m
+         cUYO9QDwjU9zt1+jgM8SfTR+SK0J5aNhtJSJ4rhg2gZHITpbxRDOSk1/Gyg/+08v0Y8E
+         n+2hIYQf4TYEoYuCGkbyphQ8NopqiA84dCyhaLjol2aYWguFp5KLc16xoIcXX7ebypdF
+         LXhTQWIH9Xa4Q0xBG3HId+qGMv3Y+SG7eq7xGo2IfCA9XmUv8Wfl7fckb374S5phaG37
+         GRuA==
+X-Forwarded-Encrypted: i=1; AJvYcCXLo58dkrhV80pNwAbLMTi0Igg+hIhAU2QF90T5akUbPAJlzhgU64vOpgMgJ8ujpcc+sueA3Y2yqTdYb8r38Q7fZ/HQyu9sv/sIJwOgJEKz
+X-Gm-Message-State: AOJu0Yzhf6fUGoSbRkDuWZTQZnGgiJlSueLdyF+jNMgvVrxyfT0yMIHJ
+	ntw9R4pJ07i0O14foHXy98Z2qLy1/T91X7Jx4VWjas13jlMg6UBh3hdAU6sz9+w=
+X-Google-Smtp-Source: AGHT+IHJ/nIQ9Mj+hR5RkGPoGTlj6+iE5Zdg+QT5yPe2HHYjGXYAnkxMww7zPjsNTDTMLKdw2VFCRA==
+X-Received: by 2002:a50:f699:0:b0:56e:f64:aaf6 with SMTP id 4fb4d7f45d1cf-5734d5c16dfmr11167023a12.5.1715766781663;
+        Wed, 15 May 2024 02:53:01 -0700 (PDT)
+Received: from [192.168.0.245] ([62.73.69.208])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5733bebb687sm8592378a12.25.2024.05.15.02.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 May 2024 02:53:01 -0700 (PDT)
+Message-ID: <0e5007fb-2d95-4cbb-b0a6-baa0d20e9469@blackwall.org>
+Date: Wed, 15 May 2024 12:52:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240513060852.1105380-1-ap420073@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 12/14] net: add SO_DEVMEM_DONTNEED setsockopt
+ to release RX frags
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-13-almasrymina@google.com>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20240510232128.1105145-13-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 13, 2024 at 06:08:52AM +0000, Taehee Yoo wrote:
-> The amt.sh requires smcrouted for multicasting routing.
-> So, it starts smcrouted before forwarding tests.
-> It must be stopped after all tests, but it isn't.
+On 11/05/2024 02:21, Mina Almasry wrote:
+> Add an interface for the user to notify the kernel that it is done
+> reading the devmem dmabuf frags returned as cmsg. The kernel will
+> drop the reference on the frags to make them available for reuse.
 > 
-> To fix this issue, it kills smcrouted in the cleanup logic.
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 > 
-> Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-> Signed-off-by: Taehee Yoo <ap420073@gmail.com>
 > ---
-> The v1 patch is here:
-> https://lore.kernel.org/netdev/20240508040643.229383-1-ap420073@gmail.com/
 > 
-> v2
->  - Headline change.
->  - Kill smcrouted process only if amt.pid exists.
->  - Do not remove the return value.
->  - Remove timeout logic because it was already fixed by following commit
->    4c639b6a7b9d ("selftests: net: move amt to socat for better compatibility")
->  - Fix shebang.
+> v7:
+> - Updated SO_DEVMEM_* uapi to use the next available entry (Arnd).
 > 
->  tools/testing/selftests/net/amt.sh | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> v6:
+> - Squash in locking optimizations from edumazet@google.com. With his
+>   changes we lock the xarray once per sock_devmem_dontneed operation
+>   rather than once per frag.
 > 
-> diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-> index 5175a42cbe8a..d458b45c775b 100755
-> --- a/tools/testing/selftests/net/amt.sh
-> +++ b/tools/testing/selftests/net/amt.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  
->  # Author: Taehee Yoo <ap420073@gmail.com>
-
-Hi.
-
-I think that the change above is not related to the fix below.
-I think it should be in a separate patch targeted at net-next.
-And as net-next is currently closed it should be posted once it
-reopens, after the 27th May.
-
-The changes below look good to me.
-I suggest resending only those changes, targeted at net, as v3.
-
-Thanks.
-
-> @@ -77,6 +77,7 @@ readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
->  readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
->  readonly RELAY=$(mktemp -u relay-XXXXXXXX)
->  readonly SOURCE=$(mktemp -u source-XXXXXXXX)
-> +readonly SMCROUTEDIR="$(mktemp -d)"
->  ERR=4
->  err=0
->  
-> @@ -85,6 +86,11 @@ exit_cleanup()
->  	for ns in "$@"; do
->  		ip netns delete "${ns}" 2>/dev/null || true
->  	done
-> +	if [ -f "$SMCROUTEDIR/amt.pid" ]; then
-> +		smcpid=$(< $SMCROUTEDIR/amt.pid)
-> +		kill $smcpid
-> +	fi
-> +	rm -rf $SMCROUTEDIR
->  
->  	exit $ERR
+> Changes in v1:
+> - devmemtoken -> dmabuf_token (David).
+> - Use napi_pp_put_page() for refcounting (Yunsheng).
+> - Fix build error with missing socket options on other asms.
+> 
+> ---
+>  arch/alpha/include/uapi/asm/socket.h  |  1 +
+>  arch/mips/include/uapi/asm/socket.h   |  1 +
+>  arch/parisc/include/uapi/asm/socket.h |  1 +
+>  arch/sparc/include/uapi/asm/socket.h  |  1 +
+>  include/uapi/asm-generic/socket.h     |  1 +
+>  include/uapi/linux/uio.h              |  4 ++
+>  net/core/sock.c                       | 61 +++++++++++++++++++++++++++
+>  7 files changed, 70 insertions(+)
+> 
+[snip]
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 8d6e638b5426d..2edb988259e8d 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -124,6 +124,7 @@
+>  #include <linux/netdevice.h>
+>  #include <net/protocol.h>
+>  #include <linux/skbuff.h>
+> +#include <linux/skbuff_ref.h>
+>  #include <net/net_namespace.h>
+>  #include <net/request_sock.h>
+>  #include <net/sock.h>
+> @@ -1049,6 +1050,62 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+>  	return 0;
 >  }
-> @@ -167,7 +173,7 @@ setup_iptables()
 >  
->  setup_mcast_routing()
->  {
-> -	ip netns exec "${RELAY}" smcrouted
-> +	ip netns exec "${RELAY}" smcrouted -P $SMCROUTEDIR/amt.pid
->  	ip netns exec "${RELAY}" smcroutectl a relay_src \
->  		172.17.0.2 239.0.0.1 amtr
->  	ip netns exec "${RELAY}" smcroutectl a relay_src \
+> +#ifdef CONFIG_PAGE_POOL
+> +static noinline_for_stack int
+> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +{
+> +	unsigned int num_tokens, i, j, k, netmem_num = 0;
+> +	struct dmabuf_token *tokens;
+> +	netmem_ref netmems[16];
+> +	int ret;
+> +
+> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
+> +		return -EBADF;
+> +
+> +	if (optlen % sizeof(struct dmabuf_token) ||
+> +	    optlen > sizeof(*tokens) * 128)
+> +		return -EINVAL;
+> +
+> +	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
+> +	if (!tokens)
+> +		return -ENOMEM;
+> +
+> +	num_tokens = optlen / sizeof(struct dmabuf_token);
+> +	if (copy_from_sockptr(tokens, optval, optlen))
+> +		return -EFAULT;
 
--- 
-pw-bot: changes-requested
-> 
+tokens isn't freed in this error case
+
+> +
+> +	ret = 0;
+> +
+> +	xa_lock_bh(&sk->sk_user_frags);
+> +	for (i = 0; i < num_tokens; i++) {
+> +		for (j = 0; j < tokens[i].token_count; j++) {
+> +			netmem_ref netmem = (__force netmem_ref)__xa_erase(
+> +				&sk->sk_user_frags, tokens[i].token_start + j);
+> +
+> +			if (netmem &&
+> +			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
+> +				netmems[netmem_num++] = netmem;
+> +				if (netmem_num == ARRAY_SIZE(netmems)) {
+> +					xa_unlock_bh(&sk->sk_user_frags);
+> +					for (k = 0; k < netmem_num; k++)
+> +						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +					netmem_num = 0;
+> +					xa_lock_bh(&sk->sk_user_frags);
+> +				}
+> +				ret++;
+> +			}
+> +		}
+> +	}
+> +
+> +	xa_unlock_bh(&sk->sk_user_frags);
+> +	for (k = 0; k < netmem_num; k++)
+> +		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +
+> +	kvfree(tokens);
+> +	return ret;
+> +}
+> +#endif
+> +
+>  void sockopt_lock_sock(struct sock *sk)
+>  {
+>  	/* When current->bpf_ctx is set, the setsockopt is called from
+> @@ -1200,6 +1257,10 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+>  			ret = -EOPNOTSUPP;
+>  		return ret;
+>  		}
+> +#ifdef CONFIG_PAGE_POOL
+> +	case SO_DEVMEM_DONTNEED:
+> +		return sock_devmem_dontneed(sk, optval, optlen);
+> +#endif
+>  	}
+>  
+>  	sockopt_lock_sock(sk);
+
 
