@@ -1,284 +1,184 @@
-Return-Path: <linux-kselftest+bounces-10252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A96D8C64E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 12:20:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D59C8C654D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 13:03:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE8C71F24746
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 10:20:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E2821C217A3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C235FBB7;
-	Wed, 15 May 2024 10:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA61C627E2;
+	Wed, 15 May 2024 11:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="DK+gEtqm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I2jODLZD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E445FB87
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 10:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CEF5684;
+	Wed, 15 May 2024 11:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715768395; cv=none; b=p21PB9tgYArU7IqHNa2AB65A6UJO/xpZ7/1jvAHX6lRabsudoDsN8uo+2WHbaEHqsOXEgeA6cnpzd3VOsin2YjnO8xIA1Z4Imy3af7lhB3+R5PBzmeRuetEqvhp1SFjlGFzJWUj9zufLD2uqoFggPS0vBTi0qykifV1AbfafosA=
+	t=1715771003; cv=none; b=tLFTfCp13Y9ZOIDcAtExGyWmfT+qr6z//qpjAdcYXyz4aRWfwLuk6/ji90WSCUI5MfjksW1nudYxf6tbE57Ki6tmKOsvA0mgk2rUvoEa/ozN+N3PcYnS50qahreRlKjJX6RehbZfl04FYHo0iiY4GoxbeSv1sLC392ROB0zNODg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715768395; c=relaxed/simple;
-	bh=+EMK6b7qfktIFvrX/yoLCEmiPgCxTGiziO7yYK3P3rU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LHRwecfeBD6AYxEOvf2MGQYFmZSllmXGXXppMWmfVi6o5QNi8H4YsT8BOwrLYaDVGXWnD000Q2sAKSzokIw9TJrVv7R/kTf6DZhqXzNeSOALIz8G9h58K/I00Xi/+aVeHfcdV/kCGbHergfwIiAZeeFaYSgKPub52Kjt1Hoh0WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=DK+gEtqm; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56e69888a36so1432350a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 03:19:52 -0700 (PDT)
+	s=arc-20240116; t=1715771003; c=relaxed/simple;
+	bh=bhPWCNAUIK6VfX6XoxIhdW3f+hVkZo9HiaN1p3ULkuc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y/3nUVf+kuF0qyzPnRIauI4PiYAx33x6GZjWWaOCEyk8vR/HpgVSwG70aHLi3BpDgbI5kxb523VYJho8ycRlEPZykDHC89IXp5W/OcM7OeVlUc4vGTPM0pdyDNtH1DFniV0i8mgLu+zcifQbxxrTfR2jmUegiNYb6P7nUt9fduM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I2jODLZD; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56e48d0a632so2068773a12.2;
+        Wed, 15 May 2024 04:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715768391; x=1716373191; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
-        b=DK+gEtqmkb0jZ/CHh7UFa0VObjCqX95pEIy9AVKWg8R9+uBAQeX1wq1kySemn5w3pJ
-         0k9SCtvjvzqxKGOAZKIQaSUiQlw/2yQ4e13tjG9Q+SL1gECZK5IzNkOCLLXybSi6QDmr
-         yUqNDnXq7FbT9kkRg3qgpIOdVsAmgeGaSzsfm2qyrDNgDJTa1YPWz8fhKcqKqGLu5lZu
-         TaTYgVSAMqtgIczhmzHNK2pu1kQqag85ESBXKoX+eVPkXy2wAFkr9UQGJRkCh8bRVbnA
-         Pbz/mZLWkbtj2rebXLzLoMhm+rQiiremoorBu9eXu0nPNa7FIhkhLZ6OLaoOfcZuNqtJ
-         WOoA==
+        d=gmail.com; s=20230601; t=1715771000; x=1716375800; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bhPWCNAUIK6VfX6XoxIhdW3f+hVkZo9HiaN1p3ULkuc=;
+        b=I2jODLZD7VpFLPkrBw2Abr+rAbvL/CpQxBlU45ZUcPq8P67dhhGu1J9vJFETarZi2Z
+         VGWvcDea66i3UalaTuyw+8xmVj/ZQqB4n4wtoCL2n/ecaWPAtF1LRjTg0MUboDcGCEpl
+         LOiFjGEC5GcTE8lfonlkgIktiQF4ozNjfm6MejTrQk51j4TEkXGjIgVmyWkf3xXMDO9m
+         P95ZYo3FLjiSS+KbuStjMqIYLVdS3mBSvYQpqhfZXfr1CQAQfDMct0nzGl7SGikYCMFd
+         +kPwj0V6jH+hQZmzrNNwpasXgM3rlBUkhRqg6B1Pm+fNCJx6uP+L3BcYbFQNJScY9y44
+         cy4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715768391; x=1716373191;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
-        b=tKX/UtRiFP5j9cCOnehJ5KmVBVlYKbeLhm6FZSdE20oIsJRaK1O3g3sgaEvcZ0qhVJ
-         cADqr/Bi0iakJpDWCLSnH1A8mTSTRFT7KoKAJNvoZOK2FRjPNwqcD92g+Wnc4TofC+Vk
-         GnsYpeCg5oUzf+7/CsJJAXqSY9oQ49T7UO1S4h87oFd2gfAdjP/9r8qFa3tgmmhn0HNl
-         NJ4INhpNIlqj6AZdOkJL9YupkQIt/gYSylyWOaynJqtucxT+LGDGM42E636UkSM5lcMR
-         P6tIAl6Bf4+PqeRs5MMAn0lou1RoXcM75QT6AK1Z2UVkQ+XrIdmNnK6xIkX6h1pmM0XE
-         OFNw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9iO9NCpH1h4Ue0/6lnsIjhopeye/GPyN5DM4tvbCaRvwEuWYK0Dr4GyAZGRces4uy/CgauV+UcS9erDmFaxxonxknA4bH/ycQOd0QJhfd
-X-Gm-Message-State: AOJu0YztZ/jqQ9p3SMt1JzNY126GOu0KpD90JxdQ91IvO7XQo28behBS
-	QRLReWs7Wv8PBIrsc6DntgXp3HijUTsvt6Q5oqXjU3IgYncRAl29AkpjT2BDzdg=
-X-Google-Smtp-Source: AGHT+IHWaSA/H+4L2d0rsT1ymvAysPmXQv4l8zitT6YQF2Rw+C8vn0POfuJW4lu+DIxHSNpoY53xBA==
-X-Received: by 2002:a50:d59d:0:b0:572:7e7e:4296 with SMTP id 4fb4d7f45d1cf-5734d5c152dmr11481093a12.3.1715768391400;
-        Wed, 15 May 2024 03:19:51 -0700 (PDT)
-Received: from [192.168.0.245] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-574b18dff66sm6291338a12.27.2024.05.15.03.19.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 03:19:50 -0700 (PDT)
-Message-ID: <f9a8f912-5cb7-4184-be2d-187052c04e2e@blackwall.org>
-Date: Wed, 15 May 2024 13:19:47 +0300
+        d=1e100.net; s=20230601; t=1715771000; x=1716375800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bhPWCNAUIK6VfX6XoxIhdW3f+hVkZo9HiaN1p3ULkuc=;
+        b=jYL0CSSsRzFVD5g5OmxjJLmjQ4iz4jcbhWbCQBMhGmENk5dhs/l47Gk9PyVAbOqL1r
+         9wVhxhA/J9fEA1ydkla0wlUbyrdvrVsnOJZA/Pfv/vRLiVz4XDBGXz59V3NrOZoZC/VI
+         XLoAwXVmLsQtX7VbiawXenzufU97YqY8pJVn2rH8sQPbnQajYcJqqai6B++gVll8Wb6N
+         rhQL/iLgJt73A+H+FroCScoJ5acXASZ4Hg9H0lGwrcdaZM6wMTSZJDv28+Wjmve5SFoo
+         OFT/enV81Db/AJAzpAS3MYDdPFZCc4/YVdrBluMA0xtVvZQL567/QaTAhDmaRi9lTsak
+         EUaA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUKrr3er+NPk6vbDJNdoCagbIUi6vWKmtFHjA9RSStxYoROZMGIOtUku3bM6vqMrM21fwryR3Q9LkmBKCyjYtr4ypdioxSEORYwbJcjyLMNvJ7/14UWurLGmYkoKIujr/jjkQ8vEvq
+X-Gm-Message-State: AOJu0YxRijf7GIUdQiDqJogod4hCeoCm0CwWNZ7PlyL2je0y9tHnkH2K
+	xqxKt5pDphvKJDlhulvwu0q4j+fbblACI3ckFy+sazyhY7Iu26x8b2MZW5NVF+rIMnNGahIVoqc
+	NHr+SUw1PEb7xlHbPZNB4/ufHbb4=
+X-Google-Smtp-Source: AGHT+IEtXNaXRMhwfYMzWT333xACm9XANBbz96ElsQaKYUeGoZRpoAaYTuoUVKMvt1tPjthuQ3VsFiFR8s3pNeR7Ayk=
+X-Received: by 2002:a50:aa94:0:b0:56b:cecb:a4c8 with SMTP id
+ 4fb4d7f45d1cf-5734d70603cmr16238930a12.39.1715771000175; Wed, 15 May 2024
+ 04:03:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
- netdevice
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-5-almasrymina@google.com>
- <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
-Content-Language: en-US
-In-Reply-To: <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240513060852.1105380-1-ap420073@gmail.com> <20240515094831.GA154012@kernel.org>
+In-Reply-To: <20240515094831.GA154012@kernel.org>
+From: Taehee Yoo <ap420073@gmail.com>
+Date: Wed, 15 May 2024 20:03:08 +0900
+Message-ID: <CAMArcTW4G+_XM1Gf=1mJCptGYLEc=+b8FeOAD_+Cuba8tvjyKg@mail.gmail.com>
+Subject: Re: [PATCH net v2] selftests: net: kill smcrouted in the cleanup
+ logic in amt.sh
+To: Simon Horman <horms@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 15/05/2024 13:01, Nikolay Aleksandrov wrote:
-> On 11/05/2024 02:21, Mina Almasry wrote:
->> Add a netdev_dmabuf_binding struct which represents the
->> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
->> rx queues on the netdevice. On the binding, the dma_buf_attach
->> & dma_buf_map_attachment will occur. The entries in the sg_table from
->> mapping will be inserted into a genpool to make it ready
->> for allocation.
->>
->> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
->> holds the dma-buf offset of the base of the chunk and the dma_addr of
->> the chunk. Both are needed to use allocations that come from this chunk.
->>
->> We create a new type that represents an allocation from the genpool:
->> net_iov. We setup the net_iov allocation size in the
->> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
->> allocated by the page pool and given to the drivers.
->>
->> The user can unbind the dmabuf from the netdevice by closing the netlink
->> socket that established the binding. We do this so that the binding is
->> automatically unbound even if the userspace process crashes.
->>
->> The binding and unbinding leaves an indicator in struct netdev_rx_queue
->> that the given queue is bound, but the binding doesn't take effect until
->> the driver actually reconfigures its queues, and re-initializes its page
->> pool.
->>
->> The netdev_dmabuf_binding struct is refcounted, and releases its
->> resources only when all the refs are released.
->>
->> Signed-off-by: Willem de Bruijn <willemb@google.com>
->> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
->> Signed-off-by: Mina Almasry <almasrymina@google.com>
->>
->> ---
->>
->> v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
->> - Removed net_devmem_restart_rx_queues and put it in its own patch
->>   (David).
->>
->> v8:
->> - move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
->>   build error.
->>
->> v7:
->> - Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
->>   value.
->> - Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
->> - DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
->> - Added a comment around recovering of the old rx queue in
->>   net_devmem_restart_rx_queue(), and added freeing of old_mem if the
->>   restart of the old queue fails. (Yunsheng).
->> - Use kernel-family sock-priv (Jakub).
->> - Put pp_memory_provider_params in netdev_rx_queue instead of the
->>   dma-buf specific binding (Pavel & David).
->> - Move queue management ops to queue_mgmt_ops instead of netdev_ops
->>   (Jakub).
->> - Remove excess whitespaces (Jakub).
->> - Use genlmsg_iput (Jakub).
->>
->> v6:
->> - Validate rx queue index
->> - Refactor new functions into devmem.c (Pavel)
->>
->> v5:
->> - Renamed page_pool_iov to net_iov, and moved that support to devmem.h
->>   or netmem.h.
->>
->> v1:
->> - Introduce devmem.h instead of bloating netdevice.h (Jakub)
->> - ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
->> - Remove unneeded rcu protection for binding->list (rtnl protected)
->> - Removed extraneous err_binding_put: label.
->> - Removed dma_addr += len (Paolo).
->> - Don't override err on netdev_bind_dmabuf_to_queue failure.
->> - Rename devmem -> dmabuf (David).
->> - Add id to dmabuf binding (David/Stan).
->> - Fix missing xa_destroy bound_rq_list.
->> - Use queue api to reset bound RX queues (Jakub).
->> - Update netlink API for rx-queue type (tx/re) (Jakub).
->>
->> RFC v3:
->> - Support multi rx-queue binding
->>
->> ---
->>  Documentation/netlink/specs/netdev.yaml |   4 +
->>  include/net/devmem.h                    | 111 +++++++++++
->>  include/net/netdev_rx_queue.h           |   2 +
->>  include/net/netmem.h                    |  10 +
->>  include/net/page_pool/types.h           |   5 +
->>  net/core/Makefile                       |   2 +-
->>  net/core/dev.c                          |   3 +
->>  net/core/devmem.c                       | 254 ++++++++++++++++++++++++
->>  net/core/netdev-genl-gen.c              |   4 +
->>  net/core/netdev-genl-gen.h              |   4 +
->>  net/core/netdev-genl.c                  | 105 +++++++++-
->>  11 files changed, 501 insertions(+), 3 deletions(-)
->>  create mode 100644 include/net/devmem.h
->>  create mode 100644 net/core/devmem.c
->>
-> [snip]
->> +/* Protected by rtnl_lock() */
->> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
->> +
->> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
->> +{
->> +	struct netdev_rx_queue *rxq;
->> +	unsigned long xa_idx;
->> +	unsigned int rxq_idx;
->> +
->> +	if (!binding)
->> +		return;
->> +
->> +	if (binding->list.next)
->> +		list_del(&binding->list);
->> +
-> 
-> minor nit:
-> In theory list.next can still be != null if it's poisoned (e.g. after del). You can
-> use the list api here (!list_empty(&binding->list) -> list_del_init(&binding->list))
-> if you initialize it in net_devmem_bind_dmabuf(), then you'll also get nice list
-> debugging.
-> 
+On Wed, May 15, 2024 at 6:48=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+>
 
-On second thought nevermind this, sorry for the noise.
+Hi Simon,
+Thanks for the review!
 
->> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
->> +		if (rxq->mp_params.mp_priv == binding) {
->> +			/* We hold the rtnl_lock while binding/unbinding
->> +			 * dma-buf, so we can't race with another thread that
->> +			 * is also modifying this value. However, the page_pool
->> +			 * may read this config while it's creating its
->> +			 * rx-queues. WRITE_ONCE() here to match the
->> +			 * READ_ONCE() in the page_pool.
->> +			 */
->> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
->> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
->> +
->> +			rxq_idx = get_netdev_rx_queue_index(rxq);
->> +
->> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
->> +		}
->> +	}
->> +
->> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
->> +
->> +	net_devmem_dmabuf_binding_put(binding);
->> +}
-> [snip]
-> 
-> Cheers,
->  Nik
-> 
+> On Mon, May 13, 2024 at 06:08:52AM +0000, Taehee Yoo wrote:
+> > The amt.sh requires smcrouted for multicasting routing.
+> > So, it starts smcrouted before forwarding tests.
+> > It must be stopped after all tests, but it isn't.
+> >
+> > To fix this issue, it kills smcrouted in the cleanup logic.
+> >
+> > Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
+> > Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+> > ---
+> > The v1 patch is here:
+> > https://lore.kernel.org/netdev/20240508040643.229383-1-ap420073@gmail.c=
+om/
+> >
+> > v2
+> > - Headline change.
+> > - Kill smcrouted process only if amt.pid exists.
+> > - Do not remove the return value.
+> > - Remove timeout logic because it was already fixed by following commit
+> > 4c639b6a7b9d ("selftests: net: move amt to socat for better compatibili=
+ty")
+> > - Fix shebang.
+> >
+> > tools/testing/selftests/net/amt.sh | 10 ++++++++--
+> > 1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftes=
+ts/net/amt.sh
+> > index 5175a42cbe8a..d458b45c775b 100755
+> > --- a/tools/testing/selftests/net/amt.sh
+> > +++ b/tools/testing/selftests/net/amt.sh
+> > @@ -1,4 +1,4 @@
+> > -#!/bin/sh
+> > +#!/bin/bash
+> > # SPDX-License-Identifier: GPL-2.0
+> >
+> > # Author: Taehee Yoo <ap420073@gmail.com>
+>
+> Hi.
+>
+> I think that the change above is not related to the fix below.
+> I think it should be in a separate patch targeted at net-next.
+> And as net-next is currently closed it should be posted once it
+> reopens, after the 27th May.
+>
+> The changes below look good to me.
+> I suggest resending only those changes, targeted at net, as v3.
+>
 
+Okay, I will send a v3 patch that will not change the shebang.
+
+> Thanks.
+>
+> > @@ -77,6 +77,7 @@ readonly LISTENER=3D$(mktemp -u listener-XXXXXXXX)
+> > readonly GATEWAY=3D$(mktemp -u gateway-XXXXXXXX)
+> > readonly RELAY=3D$(mktemp -u relay-XXXXXXXX)
+> > readonly SOURCE=3D$(mktemp -u source-XXXXXXXX)
+> > +readonly SMCROUTEDIR=3D"$(mktemp -d)"
+> > ERR=3D4
+> > err=3D0
+> >
+> > @@ -85,6 +86,11 @@ exit_cleanup()
+> > for ns in "$@"; do
+> > ip netns delete "${ns}" 2>/dev/null || true
+> > done
+> > + if [ -f "$SMCROUTEDIR/amt.pid" ]; then
+> > + smcpid=3D$(< $SMCROUTEDIR/amt.pid)
+> > + kill $smcpid
+> > + fi
+> > + rm -rf $SMCROUTEDIR
+> >
+> > exit $ERR
+> > }
+> > @@ -167,7 +173,7 @@ setup_iptables()
+> >
+> > setup_mcast_routing()
+> > {
+> > - ip netns exec "${RELAY}" smcrouted
+> > + ip netns exec "${RELAY}" smcrouted -P $SMCROUTEDIR/amt.pid
+> > ip netns exec "${RELAY}" smcroutectl a relay_src \
+> > 172.17.0.2 239.0.0.1 amtr
+> > ip netns exec "${RELAY}" smcroutectl a relay_src \
+>
+> --
+> pw-bot: changes-requested
+> >
+
+Thanks a lot!
+Taehee Yoo
 
