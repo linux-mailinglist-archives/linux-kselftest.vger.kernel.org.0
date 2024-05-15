@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-10251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18EA68C6472
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 12:01:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A96D8C64E1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 12:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78492B22374
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 10:01:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE8C71F24746
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 10:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6165CDF2;
-	Wed, 15 May 2024 10:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C235FBB7;
+	Wed, 15 May 2024 10:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="K1RcWlVF"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="DK+gEtqm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EB45A0E0
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 10:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E445FB87
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 10:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715767282; cv=none; b=C5F2DS4L/1E4/tOv2+pUWgkp0JUstCRRpbSApxzMr0RheKG078G5KS3J/g5HQFiuWwiMz3iiHZdSqDuqGfH4c09t2SV1OKtaNlH+40D40HXAAlwtb5AhVg5FnqgvEMjJPx5reTCF9k0DUXiidNoJuc59s+pz4US1l1cRE7jAzy0=
+	t=1715768395; cv=none; b=p21PB9tgYArU7IqHNa2AB65A6UJO/xpZ7/1jvAHX6lRabsudoDsN8uo+2WHbaEHqsOXEgeA6cnpzd3VOsin2YjnO8xIA1Z4Imy3af7lhB3+R5PBzmeRuetEqvhp1SFjlGFzJWUj9zufLD2uqoFggPS0vBTi0qykifV1AbfafosA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715767282; c=relaxed/simple;
-	bh=tFC4Uagubb4eoXf9w6qPRw0dVqgXqCUj9Gg59g6y8cY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mKNjZAOp1XUMcvKik8gb5xncJ6gTuNceMY21oSFJH4X17vZNZz5rGksObTjqJ+7XiAcirhHV1A90OvLD0PZg8KlR5THpK6StSO/dLUfmvsvlEQQF8bLK5ZbudQcBeWn7smXcjlatvGyvFdTgv/OBwRWirm1p1ZLXqpOproPb+Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=K1RcWlVF; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1715768395; c=relaxed/simple;
+	bh=+EMK6b7qfktIFvrX/yoLCEmiPgCxTGiziO7yYK3P3rU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=LHRwecfeBD6AYxEOvf2MGQYFmZSllmXGXXppMWmfVi6o5QNi8H4YsT8BOwrLYaDVGXWnD000Q2sAKSzokIw9TJrVv7R/kTf6DZhqXzNeSOALIz8G9h58K/I00Xi/+aVeHfcdV/kCGbHergfwIiAZeeFaYSgKPub52Kjt1Hoh0WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=DK+gEtqm; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51ffff16400so10924421e87.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 03:01:18 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56e69888a36so1432350a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2024 03:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715767277; x=1716372077; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ukpqZZkZ02pF7RH8XXzq5qjyGt8/k5nmv3oeZg4UY0I=;
-        b=K1RcWlVF7Y7Z2kmuv2U08evyQJO5O88iW/TZktke7hjOwzENLKqs6pqbtoMo/mQXpd
-         NWEsVJGSfsXVHn5TJi6teJ3btLF0MQLm92TBGcVx8KVaBDA3iVt3I1PoIx8ORd3xiPWh
-         9vsj7EzFcg7il8x3V7bH1W6VDWR2CGNzqXMnOpqDQ7OlrIXCvfIGFcil+drnBNad9TKX
-         rGjUD6RLAyHJc115+6GwEi6eL5LFoDqAqsNngvXRyA4AjD68zW6rZyVN0MHtVWHfuIwT
-         F7kRt5KReQfMK+DCwYtTNTiVEWm6sN6HEQGdlXjULZNKkBOsEYFsjFNNmv79oR9saiB9
-         sqVA==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715768391; x=1716373191; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
+        b=DK+gEtqmkb0jZ/CHh7UFa0VObjCqX95pEIy9AVKWg8R9+uBAQeX1wq1kySemn5w3pJ
+         0k9SCtvjvzqxKGOAZKIQaSUiQlw/2yQ4e13tjG9Q+SL1gECZK5IzNkOCLLXybSi6QDmr
+         yUqNDnXq7FbT9kkRg3qgpIOdVsAmgeGaSzsfm2qyrDNgDJTa1YPWz8fhKcqKqGLu5lZu
+         TaTYgVSAMqtgIczhmzHNK2pu1kQqag85ESBXKoX+eVPkXy2wAFkr9UQGJRkCh8bRVbnA
+         Pbz/mZLWkbtj2rebXLzLoMhm+rQiiremoorBu9eXu0nPNa7FIhkhLZ6OLaoOfcZuNqtJ
+         WOoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715767277; x=1716372077;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1715768391; x=1716373191;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ukpqZZkZ02pF7RH8XXzq5qjyGt8/k5nmv3oeZg4UY0I=;
-        b=FOTjzQuXlAv3tptJ194af0TMTI8PoF8U4cvNgq773nNPBN/378FKBIo1Xl20cOYZWL
-         Ae907c0SXInhOu2df2RuoW0dBdTauMHCfNn5GUPxJr+UlFwhB93JuUtrgqFHtt938QvW
-         Hac23H4Hj7XJtn5JtMPxjaAUHxwqYJBLj4DzWz4yPoqk7Xv0tQ8QknG9fMA98ElZ46sD
-         jqkomPZTIuovbt+0MuqJVzGfeTJUdSkIWBjIv3Ekkvedt4F+P+DGNzhI/tkU09l9+iAK
-         yVt/sknSmlsDyggzwFSwRNVYNyiOwy8gYKkufEGPt/IiiaEJ5SMGZk+RcWnBqsag/hRp
-         KMQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ9pt3eibWAm1/9YHue+kzzMMUkciGpfFLQ+WkisAfoFMFiGCJwFhkjlJjJdFgpdgDuLKyoBmTVve61eH+EPgQLFByFbgs5dROIQtZPcTe
-X-Gm-Message-State: AOJu0YzbjLW6RREBH3QDbg6wZAPUkfQLc48ZKYgUmGQ6X5MJFSHBJxOF
-	Dfa6iWluHUXQAiTuKg5w/h8q2SnOWZOWz0hitJ2hEeYCLijJ3bW8A4K3FOLbheU=
-X-Google-Smtp-Source: AGHT+IFdKwRcFcJDPoxpjnHjRZfubVEt9+BPb8Ln+L2DQVxYwERLJdr4JLAoMMUPEl1bmgBYy5XENg==
-X-Received: by 2002:a05:6512:3e17:b0:51d:605e:f0ce with SMTP id 2adb3069b0e04-52210278698mr17687805e87.50.1715767276761;
-        Wed, 15 May 2024 03:01:16 -0700 (PDT)
+        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
+        b=tKX/UtRiFP5j9cCOnehJ5KmVBVlYKbeLhm6FZSdE20oIsJRaK1O3g3sgaEvcZ0qhVJ
+         cADqr/Bi0iakJpDWCLSnH1A8mTSTRFT7KoKAJNvoZOK2FRjPNwqcD92g+Wnc4TofC+Vk
+         GnsYpeCg5oUzf+7/CsJJAXqSY9oQ49T7UO1S4h87oFd2gfAdjP/9r8qFa3tgmmhn0HNl
+         NJ4INhpNIlqj6AZdOkJL9YupkQIt/gYSylyWOaynJqtucxT+LGDGM42E636UkSM5lcMR
+         P6tIAl6Bf4+PqeRs5MMAn0lou1RoXcM75QT6AK1Z2UVkQ+XrIdmNnK6xIkX6h1pmM0XE
+         OFNw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9iO9NCpH1h4Ue0/6lnsIjhopeye/GPyN5DM4tvbCaRvwEuWYK0Dr4GyAZGRces4uy/CgauV+UcS9erDmFaxxonxknA4bH/ycQOd0QJhfd
+X-Gm-Message-State: AOJu0YztZ/jqQ9p3SMt1JzNY126GOu0KpD90JxdQ91IvO7XQo28behBS
+	QRLReWs7Wv8PBIrsc6DntgXp3HijUTsvt6Q5oqXjU3IgYncRAl29AkpjT2BDzdg=
+X-Google-Smtp-Source: AGHT+IHWaSA/H+4L2d0rsT1ymvAysPmXQv4l8zitT6YQF2Rw+C8vn0POfuJW4lu+DIxHSNpoY53xBA==
+X-Received: by 2002:a50:d59d:0:b0:572:7e7e:4296 with SMTP id 4fb4d7f45d1cf-5734d5c152dmr11481093a12.3.1715768391400;
+        Wed, 15 May 2024 03:19:51 -0700 (PDT)
 Received: from [192.168.0.245] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b01724sm837186066b.162.2024.05.15.03.01.13
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-574b18dff66sm6291338a12.27.2024.05.15.03.19.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 03:01:16 -0700 (PDT)
-Message-ID: <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
-Date: Wed, 15 May 2024 13:01:12 +0300
+        Wed, 15 May 2024 03:19:50 -0700 (PDT)
+Message-ID: <f9a8f912-5cb7-4184-be2d-187052c04e2e@blackwall.org>
+Date: Wed, 15 May 2024 13:19:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,6 +78,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
  netdevice
+From: Nikolay Aleksandrov <razor@blackwall.org>
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -120,159 +121,164 @@ Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
  Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20240510232128.1105145-1-almasrymina@google.com>
  <20240510232128.1105145-5-almasrymina@google.com>
+ <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
 Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20240510232128.1105145-5-almasrymina@google.com>
+In-Reply-To: <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/05/2024 02:21, Mina Almasry wrote:
-> Add a netdev_dmabuf_binding struct which represents the
-> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
-> rx queues on the netdevice. On the binding, the dma_buf_attach
-> & dma_buf_map_attachment will occur. The entries in the sg_table from
-> mapping will be inserted into a genpool to make it ready
-> for allocation.
+On 15/05/2024 13:01, Nikolay Aleksandrov wrote:
+> On 11/05/2024 02:21, Mina Almasry wrote:
+>> Add a netdev_dmabuf_binding struct which represents the
+>> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+>> rx queues on the netdevice. On the binding, the dma_buf_attach
+>> & dma_buf_map_attachment will occur. The entries in the sg_table from
+>> mapping will be inserted into a genpool to make it ready
+>> for allocation.
+>>
+>> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
+>> holds the dma-buf offset of the base of the chunk and the dma_addr of
+>> the chunk. Both are needed to use allocations that come from this chunk.
+>>
+>> We create a new type that represents an allocation from the genpool:
+>> net_iov. We setup the net_iov allocation size in the
+>> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+>> allocated by the page pool and given to the drivers.
+>>
+>> The user can unbind the dmabuf from the netdevice by closing the netlink
+>> socket that established the binding. We do this so that the binding is
+>> automatically unbound even if the userspace process crashes.
+>>
+>> The binding and unbinding leaves an indicator in struct netdev_rx_queue
+>> that the given queue is bound, but the binding doesn't take effect until
+>> the driver actually reconfigures its queues, and re-initializes its page
+>> pool.
+>>
+>> The netdev_dmabuf_binding struct is refcounted, and releases its
+>> resources only when all the refs are released.
+>>
+>> Signed-off-by: Willem de Bruijn <willemb@google.com>
+>> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+>> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>>
+>> ---
+>>
+>> v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
+>> - Removed net_devmem_restart_rx_queues and put it in its own patch
+>>   (David).
+>>
+>> v8:
+>> - move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
+>>   build error.
+>>
+>> v7:
+>> - Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
+>>   value.
+>> - Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
+>> - DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
+>> - Added a comment around recovering of the old rx queue in
+>>   net_devmem_restart_rx_queue(), and added freeing of old_mem if the
+>>   restart of the old queue fails. (Yunsheng).
+>> - Use kernel-family sock-priv (Jakub).
+>> - Put pp_memory_provider_params in netdev_rx_queue instead of the
+>>   dma-buf specific binding (Pavel & David).
+>> - Move queue management ops to queue_mgmt_ops instead of netdev_ops
+>>   (Jakub).
+>> - Remove excess whitespaces (Jakub).
+>> - Use genlmsg_iput (Jakub).
+>>
+>> v6:
+>> - Validate rx queue index
+>> - Refactor new functions into devmem.c (Pavel)
+>>
+>> v5:
+>> - Renamed page_pool_iov to net_iov, and moved that support to devmem.h
+>>   or netmem.h.
+>>
+>> v1:
+>> - Introduce devmem.h instead of bloating netdevice.h (Jakub)
+>> - ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
+>> - Remove unneeded rcu protection for binding->list (rtnl protected)
+>> - Removed extraneous err_binding_put: label.
+>> - Removed dma_addr += len (Paolo).
+>> - Don't override err on netdev_bind_dmabuf_to_queue failure.
+>> - Rename devmem -> dmabuf (David).
+>> - Add id to dmabuf binding (David/Stan).
+>> - Fix missing xa_destroy bound_rq_list.
+>> - Use queue api to reset bound RX queues (Jakub).
+>> - Update netlink API for rx-queue type (tx/re) (Jakub).
+>>
+>> RFC v3:
+>> - Support multi rx-queue binding
+>>
+>> ---
+>>  Documentation/netlink/specs/netdev.yaml |   4 +
+>>  include/net/devmem.h                    | 111 +++++++++++
+>>  include/net/netdev_rx_queue.h           |   2 +
+>>  include/net/netmem.h                    |  10 +
+>>  include/net/page_pool/types.h           |   5 +
+>>  net/core/Makefile                       |   2 +-
+>>  net/core/dev.c                          |   3 +
+>>  net/core/devmem.c                       | 254 ++++++++++++++++++++++++
+>>  net/core/netdev-genl-gen.c              |   4 +
+>>  net/core/netdev-genl-gen.h              |   4 +
+>>  net/core/netdev-genl.c                  | 105 +++++++++-
+>>  11 files changed, 501 insertions(+), 3 deletions(-)
+>>  create mode 100644 include/net/devmem.h
+>>  create mode 100644 net/core/devmem.c
+>>
+> [snip]
+>> +/* Protected by rtnl_lock() */
+>> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
+>> +
+>> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>> +{
+>> +	struct netdev_rx_queue *rxq;
+>> +	unsigned long xa_idx;
+>> +	unsigned int rxq_idx;
+>> +
+>> +	if (!binding)
+>> +		return;
+>> +
+>> +	if (binding->list.next)
+>> +		list_del(&binding->list);
+>> +
 > 
-> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
-> holds the dma-buf offset of the base of the chunk and the dma_addr of
-> the chunk. Both are needed to use allocations that come from this chunk.
+> minor nit:
+> In theory list.next can still be != null if it's poisoned (e.g. after del). You can
+> use the list api here (!list_empty(&binding->list) -> list_del_init(&binding->list))
+> if you initialize it in net_devmem_bind_dmabuf(), then you'll also get nice list
+> debugging.
 > 
-> We create a new type that represents an allocation from the genpool:
-> net_iov. We setup the net_iov allocation size in the
-> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
-> allocated by the page pool and given to the drivers.
-> 
-> The user can unbind the dmabuf from the netdevice by closing the netlink
-> socket that established the binding. We do this so that the binding is
-> automatically unbound even if the userspace process crashes.
-> 
-> The binding and unbinding leaves an indicator in struct netdev_rx_queue
-> that the given queue is bound, but the binding doesn't take effect until
-> the driver actually reconfigures its queues, and re-initializes its page
-> pool.
-> 
-> The netdev_dmabuf_binding struct is refcounted, and releases its
-> resources only when all the refs are released.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-> 
-> v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
-> - Removed net_devmem_restart_rx_queues and put it in its own patch
->   (David).
-> 
-> v8:
-> - move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
->   build error.
-> 
-> v7:
-> - Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
->   value.
-> - Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
-> - DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
-> - Added a comment around recovering of the old rx queue in
->   net_devmem_restart_rx_queue(), and added freeing of old_mem if the
->   restart of the old queue fails. (Yunsheng).
-> - Use kernel-family sock-priv (Jakub).
-> - Put pp_memory_provider_params in netdev_rx_queue instead of the
->   dma-buf specific binding (Pavel & David).
-> - Move queue management ops to queue_mgmt_ops instead of netdev_ops
->   (Jakub).
-> - Remove excess whitespaces (Jakub).
-> - Use genlmsg_iput (Jakub).
-> 
-> v6:
-> - Validate rx queue index
-> - Refactor new functions into devmem.c (Pavel)
-> 
-> v5:
-> - Renamed page_pool_iov to net_iov, and moved that support to devmem.h
->   or netmem.h.
-> 
-> v1:
-> - Introduce devmem.h instead of bloating netdevice.h (Jakub)
-> - ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
-> - Remove unneeded rcu protection for binding->list (rtnl protected)
-> - Removed extraneous err_binding_put: label.
-> - Removed dma_addr += len (Paolo).
-> - Don't override err on netdev_bind_dmabuf_to_queue failure.
-> - Rename devmem -> dmabuf (David).
-> - Add id to dmabuf binding (David/Stan).
-> - Fix missing xa_destroy bound_rq_list.
-> - Use queue api to reset bound RX queues (Jakub).
-> - Update netlink API for rx-queue type (tx/re) (Jakub).
-> 
-> RFC v3:
-> - Support multi rx-queue binding
-> 
-> ---
->  Documentation/netlink/specs/netdev.yaml |   4 +
->  include/net/devmem.h                    | 111 +++++++++++
->  include/net/netdev_rx_queue.h           |   2 +
->  include/net/netmem.h                    |  10 +
->  include/net/page_pool/types.h           |   5 +
->  net/core/Makefile                       |   2 +-
->  net/core/dev.c                          |   3 +
->  net/core/devmem.c                       | 254 ++++++++++++++++++++++++
->  net/core/netdev-genl-gen.c              |   4 +
->  net/core/netdev-genl-gen.h              |   4 +
->  net/core/netdev-genl.c                  | 105 +++++++++-
->  11 files changed, 501 insertions(+), 3 deletions(-)
->  create mode 100644 include/net/devmem.h
->  create mode 100644 net/core/devmem.c
-> 
-[snip]
-> +/* Protected by rtnl_lock() */
-> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> +
-> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	struct netdev_rx_queue *rxq;
-> +	unsigned long xa_idx;
-> +	unsigned int rxq_idx;
-> +
-> +	if (!binding)
-> +		return;
-> +
-> +	if (binding->list.next)
-> +		list_del(&binding->list);
-> +
 
-minor nit:
-In theory list.next can still be != null if it's poisoned (e.g. after del). You can
-use the list api here (!list_empty(&binding->list) -> list_del_init(&binding->list))
-if you initialize it in net_devmem_bind_dmabuf(), then you'll also get nice list
-debugging.
+On second thought nevermind this, sorry for the noise.
 
-> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> +		if (rxq->mp_params.mp_priv == binding) {
-> +			/* We hold the rtnl_lock while binding/unbinding
-> +			 * dma-buf, so we can't race with another thread that
-> +			 * is also modifying this value. However, the page_pool
-> +			 * may read this config while it's creating its
-> +			 * rx-queues. WRITE_ONCE() here to match the
-> +			 * READ_ONCE() in the page_pool.
-> +			 */
-> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
-> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
-> +
-> +			rxq_idx = get_netdev_rx_queue_index(rxq);
-> +
-> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
-> +		}
-> +	}
-> +
-> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
-> +
-> +	net_devmem_dmabuf_binding_put(binding);
-> +}
-[snip]
-
-Cheers,
- Nik
+>> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+>> +		if (rxq->mp_params.mp_priv == binding) {
+>> +			/* We hold the rtnl_lock while binding/unbinding
+>> +			 * dma-buf, so we can't race with another thread that
+>> +			 * is also modifying this value. However, the page_pool
+>> +			 * may read this config while it's creating its
+>> +			 * rx-queues. WRITE_ONCE() here to match the
+>> +			 * READ_ONCE() in the page_pool.
+>> +			 */
+>> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
+>> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
+>> +
+>> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+>> +
+>> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
+>> +		}
+>> +	}
+>> +
+>> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+>> +
+>> +	net_devmem_dmabuf_binding_put(binding);
+>> +}
+> [snip]
+> 
+> Cheers,
+>  Nik
+> 
 
 
