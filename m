@@ -1,84 +1,121 @@
-Return-Path: <linux-kselftest+bounces-10208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7118C5E79
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 02:57:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63DF08C5EA3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 03:08:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0E93B21902
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 00:57:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07063282869
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 01:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9598D812;
-	Wed, 15 May 2024 00:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B60803;
+	Wed, 15 May 2024 01:08:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="lxaPLprY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3I7We6z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4A54A23;
-	Wed, 15 May 2024 00:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829B55CB0;
+	Wed, 15 May 2024 01:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715734635; cv=none; b=f5vUrc4L69taWfK34tWNqfz2Mj2a3E+7a4QfyFDi8WavIiudvsUZsLn/wM/yUollD4hMNVd5oC3b4TdxyfwktyFafU+8Pj55ohgEn7ZB8bjd95DMh7D41z1r+NPl14N6FYxnl+35kEecSc5VYfPtfWIZUQ8XvDmN4wchJCSngkM=
+	t=1715735302; cv=none; b=D45ki/HVFU2u1zvpUAS+8DDBk3u9hk0zZfLIC7Fy7VhQY7QKPAt8wwiFclSozbd7/8Ei3OtK00yqOhtVGVXdAhv6yXmFlUdkmrd9Zslgvk1XvCMnSFK2cy6jt0MTzGELGXXW3lQ1UKTe84DXO5k+a7dDMpHlgwIaOVRP1jlkhj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715734635; c=relaxed/simple;
-	bh=Tp+H0K5QBoSVdZXwfKgYZIjpg1XuSAWBXwAx1DzF8sA=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=VlBDmx7VEe8N9PHNwg0+o9Lwe4gxc4+YzCkmwSjCnsGuhStqcSXHtNV6SDRd+oWyW1RwKyv5FlXRmbML4DQ4rc3t+2GFA2P86KDvWoVNjL/TXHxhp20FwBHd9pMUIBcX+HKmm/9ow7om2a5+RBg8JWFWIXeTOpf+Oc9rSG5mWpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=lxaPLprY; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=Tp+H0K5QBo
-	SVdZXwfKgYZIjpg1XuSAWBXwAx1DzF8sA=; h=date:references:in-reply-to:
-	subject:cc:to:from; d=openbsd.org; b=lxaPLprYzJ00fSaQHk9PaY/XjyG/TOiry
-	J4aaFgmXuVu9/f7WAP4UTqygXQYY60grub5GX6StNo9F20PFWuVvzlLNAFKEKNuObq0gH4
-	gPVJaTyi/52KYiWEhrtOpmxprKp0rlqHFgbrvpP0A4PganEEqosTTvlIZYDN2GYsh0kQOh
-	Kjz1mRunyAOmb9+lxOz2/YkF/7FGyUAcdwO+7ai1fU1MU3XRP4QWjUuYye9/BJ2qgCBQJm
-	x5RiA8+29lUIceuRq9Gz3Uj8Dgke64xBlqTn5sNUFK/PibzPIjqM7HwzRYS8IRvCuvZtm7
-	uWpIpZ52XSRNhrZreWzkAG/KtWo/g==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 4b91908f;
-	Tue, 14 May 2024 18:57:12 -0600 (MDT)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-cc: Matthew Wilcox <willy@infradead.org>,
-    Jonathan Corbet <corbet@lwn.net>,
-    Andrew Morton <akpm@linux-foundation.org>, jeffxu@chromium.org,
-    keescook@chromium.org, jannh@google.com, sroettger@google.com,
-    gregkh@linuxfoundation.org, usama.anjum@collabora.com,
-    Liam.Howlett@oracle.com, surenb@google.com, merimus@google.com,
-    rdunlap@infradead.org, jeffxu@google.com, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v10 0/5] Introduce mseal
-In-reply-to: <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com>
-References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org> <871q646rea.fsf@meer.lwn.net> <ZkPXcT_JuQeZCAv0@casper.infradead.org> <56001.1715726927@cvs.openbsd.org> <CAHk-=wgsGCKvN0Db6ZRZqJwXQrmhZyWB6RmABaOp4DiZbXgNew@mail.gmail.com>
-Comments: In-reply-to Linus Torvalds <torvalds@linux-foundation.org>
-   message dated "Tue, 14 May 2024 17:43:47 -0700."
+	s=arc-20240116; t=1715735302; c=relaxed/simple;
+	bh=D69ZLC8/gjwZxvU+Y4nvOh9+wCwb1dUPhipLaDHJTd8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P3J8TFH9WkiNIlzNtMgpcii4KyNa320nf2J0eLQDKDHmqeGQY/r45pxNsrSvLepmZuDyH43ZEzzFlJormBM5YT+UMnZgmaPp6MF3qXK8nm/mdKUYg3VCJokR2yZNMdTx+5SRbxeJtgwz7qcf65LtFcE/KJWbjVFhsL00RE4xAXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3I7We6z; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f4dcc3eeb3so3589945b3a.0;
+        Tue, 14 May 2024 18:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715735300; x=1716340100; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oEOuUmrraVajZP9NumOJGczPjev4TG6biSN92z3lk0k=;
+        b=i3I7We6ztg0PplCVUQqhfrhvi/KFp8gskcg35QEDt01Et1y1yLXIrBFw1dq6ru2wQP
+         P5OSHo/515ulToKUhuohdS53EUY2NFXmom16WzVYsB7HFWrZITzKPdPNyTwb/hNocHTd
+         Yf/Wj0t7rcbL9d9xXHLX+RPZ+cgqfPRchfbYY07dieSxOo23FT4ql9JRoY77U5xDSsrE
+         NCmrpXAfbwDVQ09MVXHDH+qipHYXTeb/96lRXRsNsMrdtrI4qfkSUxzx9SDxYn7L3D66
+         ov7bfeGNRnTT9XOjPSv9BEDdHlKvB2xyn8gk5WeEPRrh9BXFFiAprPSiY9x59SQ2oL/O
+         BpBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715735300; x=1716340100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oEOuUmrraVajZP9NumOJGczPjev4TG6biSN92z3lk0k=;
+        b=UK/nF4SEgW/e1P8KB5a/7nUK7p2ti600ELm1gRw31aPDUfWcm9RyTrs4skG+0x0ajw
+         zTIxFF/f3WX5D9FH0kJ0oegQbJ/s/w7pWOtfJEyqie+0BP1eCdOG1Y/TaJiQiOEkZx5P
+         +b3/6R5Hil0EaHQprN3sZBBwGoZ/A5uPDwrk0K2IwJklZ7lwuT5HIWvABqoSRWb54FGz
+         2N3N6BzKkbQwb0Il5IRRiFLaEkvb28NtUUWhbFfj9FK5KK42GKzXCmb0qxr8mCpGSiQd
+         187gldcmxoYE+xYvlQvgK+8gk43cxwatPke14JFO9pf4MVGddCZijNo58wsYvvUGT2Hf
+         w+5g==
+X-Forwarded-Encrypted: i=1; AJvYcCWGqwW/nmLt/PdrIytacOYYp9uw/z6AlZRvu8f6K0LLRmrAUirrAXUnyxEIz6UKeyRR5mClkaCzAA2K6i/oBLABIJyxfjcDhS/v6lFe
+X-Gm-Message-State: AOJu0YxPBlCsWR3gRPI16LCQD68y44iHik2Wn6nlM1gwtx43HKh+hUOx
+	RQKEecTFfEmjw8elTm8HlanrU8lXLOAYIE9+zZpcCNJzG2Cl3Ts8sCwAWHj5y+Q=
+X-Google-Smtp-Source: AGHT+IEf/8xYnuiJOOGb2Sge2zyvi8v+F5kXfA+0Ec6yoRGy+k/BnTYqMYRzAU13OsIYlFSS1N9lgA==
+X-Received: by 2002:a05:6a20:43a7:b0:1af:fa18:76f7 with SMTP id adf61e73a8af0-1affa18795amr7375050637.39.1715735299986;
+        Tue, 14 May 2024 18:08:19 -0700 (PDT)
+Received: from server.ucalgary.ca (S0106f85e42401d5e.cg.shawcable.net. [174.0.240.170])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d16cfsm104973325ad.18.2024.05.14.18.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 May 2024 18:08:19 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Abhinav Saxena <xandfury@gmail.com>
+Subject: [RFC PATCH 0/4] selftests/binderfs: Fixes to binderfs_test
+Date: Wed, 15 May 2024 01:08:01 +0000
+Message-Id: <20240515010805.605511-1-xandfury@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <28994.1715734632.1@cvs.openbsd.org>
-Date: Tue, 14 May 2024 18:57:12 -0600
-Message-ID: <16982.1715734632@cvs.openbsd.org>
+Content-Transfer-Encoding: 8bit
 
-> > I worry that the non-atomicity will one day be used by an attacker.
-> 
-> Blah blah blah. That's a made-up scare tactic if I ever heard one.
-> It's unworthy of you.
+Hi everyone,
 
-Let's wait and see.
+My name is Abhinav Saxena. I am a graduate student at the University
+of Calgary. This is my first patch series for the Linux kernel. I am
+applying for the "Linux kernel Bug Fixing Summer Unpaid
+2024". Apologies in advance if I made any trivial mistakes :)
 
-(Linus, don't be a jerk)
+This patch mainly includes issues reported by checkpatch.pl.  The
+changes include:
+- Running clang-format on `binderfs_test.c` to fix formatting issues.
+- Updates the macro close_prot_errno_disarm macro.
 
+Testing: I tested patches on my local machine (ARM64 ubuntu) with
+checkpatch.pl and running the selftests.
+
+Best,
+Abhinav
+
+Abhinav Saxena (4):
+  run clang-format on bindergfs test
+  update close_prot_errno_disarm macro to do{...}while(false) structure
+    for safety
+  Macro argument 'fd' may be better as '(fd)' to avoid precedence issues
+  add missing a blank line after declarations; fix alignment formatting
+
+ .../filesystems/binderfs/binderfs_test.c      | 204 +++++++++++-------
+ 1 file changed, 126 insertions(+), 78 deletions(-)
+
+--
+2.34.1
 
 
