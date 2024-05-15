@@ -1,237 +1,232 @@
-Return-Path: <linux-kselftest+bounces-10244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579C58C634E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:01:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26A538C63D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 11:37:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AB0C1C225F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 09:01:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEAD3285413
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 09:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BE02AF0E;
-	Wed, 15 May 2024 09:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E47A57C9A;
+	Wed, 15 May 2024 09:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aScdMWp/"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CCrRCzp5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5A75FB9B;
-	Wed, 15 May 2024 09:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715763626; cv=none; b=WwN7igKIbPF2DXxdXPTRpfm8ukZkWSiHJ7+nnEqEjB+g0OEtU251CXB9Va+RCnEI8qIt7KBUpBhMC5pieoxVLJHf0ERFVDg0sTQZUySFRHmlZYcbN2YWMoUSlOIXkuqldft+KqIibHNoXOFKYq2f7L6oiwLFAkL1Y5NFydvTnjI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715763626; c=relaxed/simple;
-	bh=NKHHtdns4RBHpoQzvy4ZHGmWu1zbZfFnKsjEvnUAZsg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QYFehYSEDV1ZvcvMEzEWD5RyVs5dPcTqe06PEZY6tKBHiqHUCJD7LWCNz+2yXULCxyO0bwXaO5OHk1Qufn3Kr10eJppE5zKSddwQQcweg8YGWgCf0XJ7DvH0TswIQAeHIuRshTn/NQHtiSreDS/kPf9czRm4SHSu1f4oU/qSvNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aScdMWp/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00356C116B1;
-	Wed, 15 May 2024 09:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715763625;
-	bh=NKHHtdns4RBHpoQzvy4ZHGmWu1zbZfFnKsjEvnUAZsg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=aScdMWp/nyB9Bfi9YcRUduuU/MaUUzYf0nqAS15w7x4aGxnMVElI2uQLHGQ/e4yJh
-	 BvE1CuzvsbbFjyWuxTB8kgT5ZCklL4ltWRDjomVL44kSF3QBWAiSHtYXPZHSSQAJzU
-	 b9RF/QoIDX02RHFMFhoGAVJhflD/x08tI6hF+aX4Oja5nJujFk5/GQLiX7ILIuO5rt
-	 7YRsI29QoRfm6wRHrbfnyFQP2dJqaaFLChfEMMn7kuBiuMNT+8Pfj+2FS2JUJnTH70
-	 m3zDTDjurG4bFrsVpGRBqMfvsfJp6cor1E8HLdbigmE0JiqLSD5XkvNKGjpZUUUG4S
-	 1TY5VRm5XqMag==
-Message-ID: <9a207f7b3fc0d915781041a143dfccdd672db68c.camel@kernel.org>
-Subject: Re: [PATCH bpf-next 9/9] selftests/bpf: Use netns helpers in
- test_tunnel
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
-Date: Wed, 15 May 2024 17:00:16 +0800
-In-Reply-To: <a1d1035cefdeb675ae561fdb1fd49cddb4ba4bb6.1715751995.git.tanggeliang@kylinos.cn>
-References: <cover.1715751995.git.tanggeliang@kylinos.cn>
-	 <a1d1035cefdeb675ae561fdb1fd49cddb4ba4bb6.1715751995.git.tanggeliang@kylinos.cn>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- TO0tfEdfAX7IENcV87h2yAFBZkaA==
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0-1build2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE2B5BAF0;
+	Wed, 15 May 2024 09:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715765826; cv=fail; b=SoW1OEoRd+vIRtCcJnUS8ZKdT2veoO6xDTcHmHlRgBunKfGN+G5ZtvoenAouYbPzdJEyn86+mRr824hD9kgnugwnU8KtE87Ndu/2uBhJENLT5w4Se+aNCk0u4RV7SmylxNB6xpGGJ2RZ+LevzyfXf8GqaZWmLoj3yDJVE5ly8iY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715765826; c=relaxed/simple;
+	bh=NIMhgKE910cmVmaoxuOtrnwRMcxGnt1f6bc9o265fdk=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=T5Dy2RvT3iyolQNM7Y1QhICBVti12yvDOXyIdaWwNVnDanChf5vJGhIrnU4S+Eyc4b8+kMLvOMmKs6mr1xK0MZ0BopOJECB4hhA1GOR1ldTKFdpGolLHI9boRpQnVS/dk0x2C0xEn1pxL3s6NizFRe3UdCPsvfYvf2wQHjB8NI4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CCrRCzp5; arc=fail smtp.client-ip=40.107.94.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=An9qO/F1TU7Rt4JLDQhyLKoa0OPRYQs1B+1+EKczAoKBqxCBZzgrZE9ihrTLqh0WSrlKQ6umC6rvl5yyM2kqlt+EsOJFkloXYnbxf9jlnVOZpKNs6piLSZJkEBExDQ37ZVFpSJ2ohoqeWb4k+3QeCBKkI/d75eEA2DSS4zPS58AD86Pe23NQk0fPlYlW2useYJy+mcEgAUO449zZhJMA44LRJXs6JCi4qRZnMfYKMB1+swNLhjWFkvAGKoelvhtqc5V3QHPYBoD/93udnF0eVsktzbdU3uEh0QgG9NeAp8kuDidHe7KgTxCBxiIucVms8fLLUJp0nn26vEWnkItFXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GeVmD/ysNeCWIFcZRDGstsaR+yu0PB1p99d2i23mw3w=;
+ b=oYHVYo8S3DwMaTz6RrBDlQxZ9Y51Ff5yiWhNppxKj803Y8yk5Ke6t5ZbEfBquRNSLjE3YyrGbmdWNVHCk7bOpW7xhynNDt74ndDJ+2fX7kSRyZMedluVasQBRFq8TxhaamEor2zms0v9ODMlnhBrKgP6vUq6FAEefYrDFkHSibgAWVI1Rz3F4P35Bmfer7je/kdVe/fo696liCf4pyfLvKJWJhLRqeAWzFRhYrwISKydDulj0gH1uqz3PXPj/6lsCLocRXVYjc6T0BGuGbNXfW/LdOnFk3yffOyXPmKFWHOynPVGCmsV/xXodFHBkii8/Ao2u5DKvtv0+B+jRxoExA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GeVmD/ysNeCWIFcZRDGstsaR+yu0PB1p99d2i23mw3w=;
+ b=CCrRCzp5FEKl3Dj27cQPQGOWteAFqpFObFFA8SUjgy4EoEtWezgABrneihrPmCrEBi3WRv3Qxb0W8RqAHdAcTUpchTDYhKP7lZYi+GpG45jV1hNlep2wHd6HTOaVYLtNIppPcuXv1dBFRbEu3gmLGZFDT1CMrQAiJyO8AcVpwrFKPKDwg58QmH9uzKtXsSBR7DM8Y+SXyoZDWCmox3v9PxSbBo6FO2H+i/KOLWhMJBm7Pn95kE3sKqH7KOoGMTOeqOlwJUTEzJqEU9892O2Z1o7nFTTugNleHuxZe9yA26ZqPGJo4TTaK0vJzt9b9N7xIRjIt5XLne+56GgazsRSCw==
+Received: from DM5PR08CA0056.namprd08.prod.outlook.com (2603:10b6:4:60::45) by
+ CYXPR12MB9318.namprd12.prod.outlook.com (2603:10b6:930:de::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7587.27; Wed, 15 May 2024 09:37:03 +0000
+Received: from DS1PEPF00017091.namprd03.prod.outlook.com
+ (2603:10b6:4:60:cafe::3f) by DM5PR08CA0056.outlook.office365.com
+ (2603:10b6:4:60::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55 via Frontend
+ Transport; Wed, 15 May 2024 09:37:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF00017091.mail.protection.outlook.com (10.167.17.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7587.21 via Frontend Transport; Wed, 15 May 2024 09:37:02 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 15 May
+ 2024 02:36:49 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 15 May
+ 2024 02:36:45 -0700
+References: <20240509235553.5740-1-kuba@kernel.org>
+ <875xvhu97r.fsf@nvidia.com> <20240514174321.376039a5@kernel.org>
+User-agent: mu4e 1.8.11; emacs 29.3
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
+	<netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
+	<vladimir.oltean@nxp.com>, <shuah@kernel.org>, <liuhangbin@gmail.com>,
+	<bpoirier@nvidia.com>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: local_termination: annotate
+ the expected failures
+Date: Wed, 15 May 2024 11:02:28 +0200
+In-Reply-To: <20240514174321.376039a5@kernel.org>
+Message-ID: <87y18bju1n.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017091:EE_|CYXPR12MB9318:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23f65612-522d-4001-959b-08dc74c293c0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|376005|1800799015|36860700004|82310400017;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3uONqEyn+LW3EawJisj2g3kfll8BYzhpTtjj7+SKvhAS+hskHjpyLBr5neJ9?=
+ =?us-ascii?Q?RcLh7V5MXz+7b09aedsX5gHZPuJP56Pwb41bE6oRAyEOJ778fShmnu413giE?=
+ =?us-ascii?Q?vPX+JyNj2uEXI+zUY6vGWXWHWXQJ1c/rJR6zi1RMEDQ3Q6GGPAkwoelTbJFD?=
+ =?us-ascii?Q?kJSOq/LR/T6HCUNa3qo2OzT8kF6KsjQPYqyRMSgK13mF7ETs4448gTTZICGB?=
+ =?us-ascii?Q?YMql0zo4xlXQF4yvzkdxsUYIu5sTpWpO26ka/Ow7cW/b1LExUb/Wg4RmLU3s?=
+ =?us-ascii?Q?o7NVt/zRnFYCoOQ3el65aNrSK0EsPWyT4mDqRsVlrjot4MOBN/4eCESfWd6z?=
+ =?us-ascii?Q?fGA4zVQN4yJhY810zUa7aeQZs786j+FQseBDYZe3mOlY5qeFVJ+YORtPKOQ0?=
+ =?us-ascii?Q?hHMHtfSkhww0C59ABxqP7b1r421v/krxPMu6zwczg6TKwdQZa/oxiudMRicq?=
+ =?us-ascii?Q?bI7sTWqQ7cBqvIRMMPN7Cru7T3WyF2NlbNKme+iqfkfXT8CXyy2GA1g+JCys?=
+ =?us-ascii?Q?hbTKL4zhlX6mOqfnUjEg+nOPwGxX0CedvFrVUwgCH4VAU/LHxdles5JI3UBX?=
+ =?us-ascii?Q?ksudosV5OYFemMjGrDZbN2wD3il5XKYm0EYwaWrZ53XEkurDyreOGnH1WyYy?=
+ =?us-ascii?Q?j3Pnuc7hY4vk5cJC344NEAaKlMzdL/3rx+ZNaIkYL3MeRg5UlRIpps4BY/26?=
+ =?us-ascii?Q?4EGFsD0yILSpFh0od7WqguHgi3NfA4d6wqln5EZCJZSoAtJoEbZqpRIHd8vo?=
+ =?us-ascii?Q?hfqQsUMHAeuL+fHYZHTEN7DzPaTPDYlq/vX0bCw/MqKosAoRlOSq8aXOoixA?=
+ =?us-ascii?Q?xq14WpfY97OXF7miiTH3BUKoE5iYAhv1E77nptn2XLW196vsLy5FskT6PK9G?=
+ =?us-ascii?Q?D0lVS4h+y253iWvYZGNYSRj6bF/2q/6cUXw7G5OYm1m7XNUqO9nBrsewt7Lm?=
+ =?us-ascii?Q?TxD5s1Dy10rXgb5rn8UkhsXorjWHItgxLp19So23J4yVHEQj4n7SQ4r3f7zN?=
+ =?us-ascii?Q?MyEW37rGTvl/3NT3GKBppIyUmaNhpFGZboXPaLa+OIZPkwnfKDmVpvyy68/2?=
+ =?us-ascii?Q?tB0WaYxjyGbm+RJXLosAz158c+nVuJ9EX6vO71njyev21uA3AjSHE7UJMiZ4?=
+ =?us-ascii?Q?DiSDOGSK0LGFHLbGIY2OmJieCEw00rAaG5JwhOXBwSOg3m2xv1mbhKqwHpIL?=
+ =?us-ascii?Q?jKZEgC3CNpTrO3oS9om2OOEG2nNq+kpusZBs5bSzgOWi8DEZjPek/k5OZkvH?=
+ =?us-ascii?Q?tlMQ55M2YEa+RRYh3gruMNoxEHdYIF/s/QfK4ctr+doKttSEW2WkII4VYi3N?=
+ =?us-ascii?Q?MlmyTf7SIT/V/ZKV46D14YpYjX1+9MXkjK+7UBYeW7fPz7gu+TYZH6j8DpEW?=
+ =?us-ascii?Q?qTqbg/MieHLZr1tKUyRBbJwcTLHz?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(1800799015)(36860700004)(82310400017);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2024 09:37:02.9554
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23f65612-522d-4001-959b-08dc74c293c0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017091.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9318
 
-Sorry, this patch breaks CI.
 
-Changes Requested.
+Jakub Kicinski <kuba@kernel.org> writes:
 
--Geliang
+> On Mon, 13 May 2024 15:25:38 +0200 Petr Machata wrote:
+>> For veth specifically there is xfail_on_veth:
+>> 
+>> xfail_on_veth $rcv_if_name \
+>> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+>> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+>> 		  false
+>> 
+>> Which is IMHO clearer than passing an extra boolean.
+>
+> The extra boolean is because we want to only fail particular subcases.
+> I think that's legit. If the other cases regress we want to know.
+> Otherwise running the test on SW bridge is only useful for catching
+> crashes (so less useful).
 
-On Wed, 2024-05-15 at 13:59 +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> This patch uses netns helpers create_netns() and cleanup_netns() in
-> test_tunnel.c instead of using open_netns() and close_netns()
-> directly.
-> 
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->  .../selftests/bpf/prog_tests/test_tunnel.c    | 19 +++++++++--------
-> --
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> index cec746e77cd3..6706ee1cb36d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> @@ -102,7 +102,6 @@
->  
->  static int config_device(void)
->  {
-> -	SYS(fail, "ip netns add at_ns0");
->  	SYS(fail, "ip link add veth0 address " MAC_VETH1 " type veth
-> peer name veth1");
->  	SYS(fail, "ip link set veth0 netns at_ns0");
->  	SYS(fail, "ip addr add " IP4_ADDR1_VETH1 "/24 dev veth1");
-> @@ -117,7 +116,7 @@ static int config_device(void)
->  
->  static void cleanup(void)
->  {
-> -	SYS_NOFAIL("test -f /var/run/netns/at_ns0 && ip netns delete
-> at_ns0");
-> +	SYS_NOFAIL("test -f /var/run/netns/at_ns0");
->  	SYS_NOFAIL("ip link del veth1");
->  	SYS_NOFAIL("ip link del %s", VXLAN_TUNL_DEV1);
->  	SYS_NOFAIL("ip link del %s", IP6VXLAN_TUNL_DEV1);
-> @@ -444,7 +443,7 @@ static void test_vxlan_tunnel(void)
->  		goto done;
->  
->  	/* load and attach prog set_md to tunnel dev tc hook point
-> at_ns0 */
-> -	nstoken = open_netns("at_ns0");
-> +	nstoken = create_netns("at_ns0");
->  	if (!ASSERT_OK_PTR(nstoken, "setns src"))
->  		goto done;
->  	ifindex = if_nametoindex(VXLAN_TUNL_DEV0);
-> @@ -456,7 +455,7 @@ static void test_vxlan_tunnel(void)
->  		goto done;
->  	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
->  		goto done;
-> -	close_netns(nstoken);
-> +	cleanup_netns(nstoken);
->  
->  	/* use veth1 ip 2 as tunnel source ip */
->  	local_ip_map_fd = bpf_map__fd(skel->maps.local_ip_map);
-> @@ -517,7 +516,7 @@ static void test_ip6vxlan_tunnel(void)
->  		goto done;
->  
->  	/* load and attach prog set_md to tunnel dev tc hook point
-> at_ns0 */
-> -	nstoken = open_netns("at_ns0");
-> +	nstoken = create_netns("at_ns0");
->  	if (!ASSERT_OK_PTR(nstoken, "setns src"))
->  		goto done;
->  	ifindex = if_nametoindex(IP6VXLAN_TUNL_DEV0);
-> @@ -529,7 +528,7 @@ static void test_ip6vxlan_tunnel(void)
->  		goto done;
->  	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
->  		goto done;
-> -	close_netns(nstoken);
-> +	cleanup_netns(nstoken);
->  
->  	/* use veth1 ip 2 as tunnel source ip */
->  	local_ip_map_fd = bpf_map__fd(skel->maps.local_ip_map);
-> @@ -611,13 +610,13 @@ static void test_ipip_tunnel(enum ipip_encap
-> encap)
->  		goto done;
->  
->  	/* ping from at_ns0 namespace test */
-> -	nstoken = open_netns("at_ns0");
-> +	nstoken = create_netns("at_ns0");
->  	if (!ASSERT_OK_PTR(nstoken, "setns"))
->  		goto done;
->  	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
->  	if (!ASSERT_OK(err, "test_ping"))
->  		goto done;
-> -	close_netns(nstoken);
-> +	cleanup_netns(nstoken);
->  
->  done:
->  	/* delete ipip tunnel */
-> @@ -667,11 +666,11 @@ static void test_xfrm_tunnel(void)
->  		goto done;
->  
->  	/* ping from at_ns0 namespace test */
-> -	nstoken = open_netns("at_ns0");
-> +	nstoken = create_netns("at_ns0");
->  	if (!ASSERT_OK_PTR(nstoken, "setns"))
->  		goto done;
->  	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
-> -	close_netns(nstoken);
-> +	cleanup_netns(nstoken);
->  	if (!ASSERT_OK(err, "test_ping"))
->  		goto done;
->  
+Likewise you only annotate with xfail_on_* the testcases that you want
+to xfail. The FAIL_TO_XFAIL ought to only be set for that one subcase
+and then revert to its former value. (That's the intention anyway.)
 
+> So we probably need to reset FAIL_TO_XFAIL in this case.
+> Any preference on how to go about that? I'm tempted to:
+>
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh
+> b/tools/testing/selftests/net/forwarding/lib.sh index
+> 112c85c35092..79aa3c8bc288 100644 ---
+> a/tools/testing/selftests/net/forwarding/lib.sh +++
+> b/tools/testing/selftests/net/forwarding/lib.sh @@ -473,6 +473,13 @@
+> ret_set_ksft_status() # Whether FAILs should be interpreted as XFAILs.
+> Internal. FAIL_TO_XFAIL=
+>  
+> +# Clear internal failure tracking for the next test case
+> +begin_test()
+> +{
+> +    RET=0
+> +    FAIL_TO_XFAIL=
+> +}
+> +
+>  check_err()
+>  {
+>  	local err=$1
+> diff --git
+> a/tools/testing/selftests/net/forwarding/local_termination.sh
+> b/tools/testing/selftests/net/forwarding/local_termination.sh index
+> 65694cdf2dbb..0781ceba1348 100755 ---
+> a/tools/testing/selftests/net/forwarding/local_termination.sh +++
+> b/tools/testing/selftests/net/forwarding/local_termination.sh @@ -76,7
+> +76,7 @@ check_rcv() local xfail_sw=$5 
+>  	[ $should_receive = true ] && should_fail=0 || should_fail=1
+> -	RET=0
+> +	begin_test
+>  
+>  	tcpdump_show $if_name | grep -q "$pattern"
+>  
+>
+>> Not sure what to do about the bridge bit though. In principle the
+>> various xfail_on_'s can be chained, so e.g. this should work:
+>> 
+>> xfail_on_bridge $rcv_if_name \
+>> xfail_on_veth $rcv_if_name \
+>> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+>> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+>> 		  false
+>> 
+>> I find this preferable to adding these ad-hoc tweaks to each test
+>> individually. Maybe it would make sense to have:
+>> 
+>> xfail_on_kind $rcv_if_name veth bridge \
+>> 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+>> 		  "$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+>> 		  false
+>> 
+>> And then either replace the existing xfail_on_veth's (there are just a
+>> handful) or convert xfail_on_veth to a wrapper around xfail_on_kind.
+>
+> I think the bridge thing we can workaround by just checking
+> if ${NETIFS[p1]} is veth, rather than $rcv_if_name.
+> Since the two behave the same.
+
+I don't follow. The test has two legs, one creates a VRF and attaches
+p2, the other creates a bridge and attaches p2. Whether p1 and p2 are
+veth or HW seems orthogonal to whether $rcv_if_name is a bridge or a
+veth.
 
