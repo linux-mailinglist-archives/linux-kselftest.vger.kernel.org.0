@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D06D08C6087
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:01:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937D48C6089
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 08:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 492421F23A1F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:01:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ACF42824FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2024 06:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EDB3D388;
-	Wed, 15 May 2024 06:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF1241C6A;
+	Wed, 15 May 2024 06:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fSiHs2Jw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j6QklQBE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B405540C03;
-	Wed, 15 May 2024 06:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55AB40862;
+	Wed, 15 May 2024 06:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715752866; cv=none; b=ALFeLOOyf/ddHzOLtJOdCy6Sqr8omGzDGLR8+Cj4rR/ekUj+DRL7hcW+Lhk6mCZBMmNeYBjseGsa6aTKjs51QTvqNK0cO8pVoLhNApi3F72lngyhjbw+e42oPtjU8IJPMCMwBB2HKaZtVO+PXpHP1SmBNFaJJr5S6PwLKtelX78=
+	t=1715752874; cv=none; b=kKVhlqPA5XGO2v/EXE58SKaONM3dMk62cE+A/gTl/xizD1BBBYAI+PfBNP01xCOrY8tWOmvfzspCPJnHsd9Q76v2VXwOrGREGBMPP2FFMQEHqCJPHB0cvBb6epSleBz5K2sWH9ktANZ8doM70accvjuYwgkrxCdSSyIA2wdlWkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715752866; c=relaxed/simple;
-	bh=G2WA+IiJuJCE45LBBIyhxmHVn1AFRba13pD3Hykej9s=;
+	s=arc-20240116; t=1715752874; c=relaxed/simple;
+	bh=v2VRj9lBoAF6iF1QM9Z49yG7Oe8T0ukmCgaWUngLrP4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GqAIL8LjN2zGmJdFh2Q90MebxWZq+VlguIgDBxwsWpBoktE8BLkJuw6rnQBAdqgQIUXvOhnHn6DSPATop/vwCeFYs89YQsZqvc1jIXLivKpScp6Y3hCIdYheXaMGM0jKlgETXSr8ghsDDP0erliBB0EuCzOSJuAKq8ZzoFQTgaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fSiHs2Jw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F81C116B1;
-	Wed, 15 May 2024 06:00:58 +0000 (UTC)
+	 MIME-Version; b=nzWb/4Tj2V7STHu9lgenLatVTFBcANVy/SCG2UwKldJXktT5rJFS3Zx1sUxrtufZmAjtqUXYFhrTUM2zRmvGmv46dErtKeqzNz+5L1YFcPt2eknZU+esq0sV2kFaIWRmfPBg3x8DBoyLOCZaghXfO+PllMxIjYB650/KzcD2KFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j6QklQBE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B2DC2BD11;
+	Wed, 15 May 2024 06:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715752866;
-	bh=G2WA+IiJuJCE45LBBIyhxmHVn1AFRba13pD3Hykej9s=;
+	s=k20201202; t=1715752873;
+	bh=v2VRj9lBoAF6iF1QM9Z49yG7Oe8T0ukmCgaWUngLrP4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fSiHs2JwVX4TODhgplxbC+vHukL9aEg7wYIQDH5tgAvJ554+lAesZK3sTZmiGCZZ2
-	 DUnQR0uB3HPX5IA4RBZWlILMoLHVYiGKCoxUdbr9IidHh2BNv5s8Vjf6VNJ1DFBcCt
-	 3CvKA1ptqWqvIflHLYzBHPKZDng5I74D6FRUGGNQ9bKwGM1dvqpL0D3JyQzozF24F/
-	 WAoDrBaveO74yFAB0wDoPapSkoqZuobYZilW5P3GUufYe2vm1y6PhEIIJqVfV1yon0
-	 eMVPWkceOncJbIds+ULg6vBZ2tkJzFxsJhM4xncMPE2yoTzkvEwkUnBHxjJuzq6wDM
-	 fEtPtgvI3/L9Q==
+	b=j6QklQBEq8iY/45up63lz7ShI5e+HxEt11Xxnc0V203YrEPQGqghBLRJsSHEpcG0R
+	 ipALNF2oWIpkEiGtugglhAHSOQaDyL/yI4cMjgI0+cstsMe7HEzZhBhUpruT26hyBt
+	 lFFjO7ynWQjohFoZOhDOXl1mnKgTctXpI7aKlgCGE8dT/31niGE8GkNRygOo9Dkzji
+	 ecTRy2Le9JhNAv05GyquUMRo4lQ61CwJCGUtftMCIbbZMj22LIZU3Rge4N8PcQc2vJ
+	 mQcTIfoqyUO7E+U4fbddLmqXrUckrjW3+LVfUE4e4uu1S5NN40kEm2xovg1eW+O9ok
+	 5eppEYPq/SJQg==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -61,9 +61,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	Geliang Tang <geliang@kernel.org>
-Subject: [PATCH bpf-next 8/9] selftests/bpf: Use netns helpers in lwt tests
-Date: Wed, 15 May 2024 13:59:35 +0800
-Message-ID: <92f1fe99018b50a92fedd7ce68abcb744f49d1cf.1715751995.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 9/9] selftests/bpf: Use netns helpers in test_tunnel
+Date: Wed, 15 May 2024 13:59:36 +0800
+Message-ID: <a1d1035cefdeb675ae561fdb1fd49cddb4ba4bb6.1715751995.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1715751995.git.tanggeliang@kylinos.cn>
 References: <cover.1715751995.git.tanggeliang@kylinos.cn>
@@ -78,106 +78,100 @@ Content-Transfer-Encoding: 8bit
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
 This patch uses netns helpers create_netns() and cleanup_netns() in
-lwt_helpers.h instead of using the local function netns_create() and
-netns_delete().
-
-For using these helpers. network_helpers.h needs to be included in
-lwt_helpers.h. Then '#include "network_helpers.h"' in lwt_redirect.c
-and lwt_reroute.c can be dropped.
+test_tunnel.c instead of using open_netns() and close_netns() directly.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/lwt_helpers.h    | 26 +++++--------------
- .../selftests/bpf/prog_tests/lwt_redirect.c   |  2 --
- .../selftests/bpf/prog_tests/lwt_reroute.c    |  2 --
- 3 files changed, 7 insertions(+), 23 deletions(-)
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-index fb1eb8c67361..602a268502e2 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-@@ -9,6 +9,7 @@
- #include <linux/icmp.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+index cec746e77cd3..6706ee1cb36d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
+@@ -102,7 +102,6 @@
  
- #include "test_progs.h"
-+#include "network_helpers.h"
- 
- #define log_err(MSG, ...) \
- 	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
-@@ -16,27 +17,14 @@
- 
- #define RUN_TEST(name)                                                        \
- 	({                                                                    \
--		if (test__start_subtest(#name))                               \
--			if (ASSERT_OK(netns_create(), "netns_create")) {      \
--				struct nstoken *token = open_netns(NETNS);    \
--				if (ASSERT_OK_PTR(token, "setns")) {          \
--					test_ ## name();                      \
--					close_netns(token);                   \
--				}                                             \
--				netns_delete();                               \
--			}                                                     \
-+		if (test__start_subtest(#name)) {                             \
-+			struct nstoken *token = create_netns(NETNS);          \
-+			if (ASSERT_OK_PTR(token, "setns"))                    \
-+				test_ ## name();                              \
-+			cleanup_netns(token);                                 \
-+		}                                                             \
- 	})
- 
--static inline int netns_create(void)
--{
--	return system("ip netns add " NETNS);
--}
--
--static inline int netns_delete(void)
--{
--	return system("ip netns del " NETNS ">/dev/null 2>&1");
--}
--
- static int open_tuntap(const char *dev_name, bool need_mac)
+ static int config_device(void)
  {
- 	int err = 0;
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
-index 835a1d756c16..70b80171f7f4 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
-@@ -57,7 +57,6 @@
- #define NETNS "ns_lwt_redirect"
- #include "lwt_helpers.h"
- #include "test_progs.h"
--#include "network_helpers.h"
+-	SYS(fail, "ip netns add at_ns0");
+ 	SYS(fail, "ip link add veth0 address " MAC_VETH1 " type veth peer name veth1");
+ 	SYS(fail, "ip link set veth0 netns at_ns0");
+ 	SYS(fail, "ip addr add " IP4_ADDR1_VETH1 "/24 dev veth1");
+@@ -117,7 +116,7 @@ static int config_device(void)
  
- #define BPF_OBJECT            "test_lwt_redirect.bpf.o"
- #define INGRESS_SEC(need_mac) ((need_mac) ? "redir_ingress" : "redir_ingress_nomac")
-@@ -308,7 +307,6 @@ static void test_lwt_redirect_dev_carrier_down(void)
- 
- static void *test_lwt_redirect_run(void *arg)
+ static void cleanup(void)
  {
--	netns_delete();
- 	RUN_TEST(lwt_redirect_normal);
- 	RUN_TEST(lwt_redirect_normal_nomac);
- 	RUN_TEST(lwt_redirect_dev_down);
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-index 03825d2b45a8..f51cbde7d8b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-@@ -50,7 +50,6 @@
-  */
- #define NETNS "ns_lwt_reroute"
- #include "lwt_helpers.h"
--#include "network_helpers.h"
- #include <linux/net_tstamp.h>
+-	SYS_NOFAIL("test -f /var/run/netns/at_ns0 && ip netns delete at_ns0");
++	SYS_NOFAIL("test -f /var/run/netns/at_ns0");
+ 	SYS_NOFAIL("ip link del veth1");
+ 	SYS_NOFAIL("ip link del %s", VXLAN_TUNL_DEV1);
+ 	SYS_NOFAIL("ip link del %s", IP6VXLAN_TUNL_DEV1);
+@@ -444,7 +443,7 @@ static void test_vxlan_tunnel(void)
+ 		goto done;
  
- #define BPF_OBJECT            "test_lwt_reroute.bpf.o"
-@@ -242,7 +241,6 @@ static void test_lwt_reroute_qdisc_dropped(void)
+ 	/* load and attach prog set_md to tunnel dev tc hook point at_ns0 */
+-	nstoken = open_netns("at_ns0");
++	nstoken = create_netns("at_ns0");
+ 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
+ 		goto done;
+ 	ifindex = if_nametoindex(VXLAN_TUNL_DEV0);
+@@ -456,7 +455,7 @@ static void test_vxlan_tunnel(void)
+ 		goto done;
+ 	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
+ 		goto done;
+-	close_netns(nstoken);
++	cleanup_netns(nstoken);
  
- static void *test_lwt_reroute_run(void *arg)
- {
--	netns_delete();
- 	RUN_TEST(lwt_reroute_normal_xmit);
- 	RUN_TEST(lwt_reroute_qdisc_dropped);
- 	return NULL;
+ 	/* use veth1 ip 2 as tunnel source ip */
+ 	local_ip_map_fd = bpf_map__fd(skel->maps.local_ip_map);
+@@ -517,7 +516,7 @@ static void test_ip6vxlan_tunnel(void)
+ 		goto done;
+ 
+ 	/* load and attach prog set_md to tunnel dev tc hook point at_ns0 */
+-	nstoken = open_netns("at_ns0");
++	nstoken = create_netns("at_ns0");
+ 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
+ 		goto done;
+ 	ifindex = if_nametoindex(IP6VXLAN_TUNL_DEV0);
+@@ -529,7 +528,7 @@ static void test_ip6vxlan_tunnel(void)
+ 		goto done;
+ 	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
+ 		goto done;
+-	close_netns(nstoken);
++	cleanup_netns(nstoken);
+ 
+ 	/* use veth1 ip 2 as tunnel source ip */
+ 	local_ip_map_fd = bpf_map__fd(skel->maps.local_ip_map);
+@@ -611,13 +610,13 @@ static void test_ipip_tunnel(enum ipip_encap encap)
+ 		goto done;
+ 
+ 	/* ping from at_ns0 namespace test */
+-	nstoken = open_netns("at_ns0");
++	nstoken = create_netns("at_ns0");
+ 	if (!ASSERT_OK_PTR(nstoken, "setns"))
+ 		goto done;
+ 	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
+ 	if (!ASSERT_OK(err, "test_ping"))
+ 		goto done;
+-	close_netns(nstoken);
++	cleanup_netns(nstoken);
+ 
+ done:
+ 	/* delete ipip tunnel */
+@@ -667,11 +666,11 @@ static void test_xfrm_tunnel(void)
+ 		goto done;
+ 
+ 	/* ping from at_ns0 namespace test */
+-	nstoken = open_netns("at_ns0");
++	nstoken = create_netns("at_ns0");
+ 	if (!ASSERT_OK_PTR(nstoken, "setns"))
+ 		goto done;
+ 	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
+-	close_netns(nstoken);
++	cleanup_netns(nstoken);
+ 	if (!ASSERT_OK(err, "test_ping"))
+ 		goto done;
+ 
 -- 
 2.43.0
 
