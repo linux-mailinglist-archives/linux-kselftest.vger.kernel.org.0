@@ -1,122 +1,141 @@
-Return-Path: <linux-kselftest+bounces-10297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 020DF8C7909
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 17:11:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED9208C7924
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 17:17:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EC8D1F215A1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:11:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9587283A70
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A8614D2BD;
-	Thu, 16 May 2024 15:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EABE14B978;
+	Thu, 16 May 2024 15:17:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rgLFeDYv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O9jJV8Y1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AEF14D2B7
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 15:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E87148856
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 15:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715872178; cv=none; b=C14fCEQ9SFy/XAJ6xjQ8FnZL7cx74/R2qOjRlYKVRc35Cn5i56uf2/6X/iisl10puBFD5pKm5jNI7waGCWWOYByCN9YfwSXYQk3drYZlQfwRyw5tsQlkxcv73a3ARcJ+Xu8FGUimzoeKSd2SxY0wmW47a0JUmJCLa5Rv2yeyccE=
+	t=1715872621; cv=none; b=W8gqdXllgLMQsh6dJCm7SqGnVBPVFudDMhIg6TeKhsJPRzIdc5g9vIy5MiP+PxCIKreNrIQX90Fa57kOX/1ffNj9QywOZIwQY/obfAvKUhjK3P6EUdDkp2bnHr1x9ZggPf+Io3LNZxcyFwGd0K0sMLIXAK3vwsYaRwXXHwufu3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715872178; c=relaxed/simple;
-	bh=4e1CyU3ET7+XSdag+4G5AlXocl1TZNSQXXPxA3htHQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KtG4IK1OsoFPk9Wv70O2ZFRj+Hj5nw0uKMoJyv9NoY1U2Qos8/zal3s9lO7tQYO7czsO64sFBbWn8h8PuyQjQM7vVf90IdiaIyU2wXQr6isvEZUU9bhscboT8Ktxq2eqNzLbGLInvJAMbqK4RtWx8/3uWd543AmmVjl8f1xeydo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rgLFeDYv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24560C32786;
-	Thu, 16 May 2024 15:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715872177;
-	bh=4e1CyU3ET7+XSdag+4G5AlXocl1TZNSQXXPxA3htHQo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rgLFeDYvRNVZcTScPZ4q52X1xbDOVtrR8xOASEQHEZrU5dN/zchosf/2+nHrthbrk
-	 hX/PBOSEu5XLuHxE/DrrXItIpdXg5tpyb2KuMXU0nZsXY/DwxrXxWjnrafbE5Q3zkd
-	 E0RK+z9mWxrX7mCGXz19FGiwdFgdtZCBxDU+CX2RF6v6W2b2anLcX1XkE3hrtbiVf5
-	 vq7xdPL75hFGRu4/WiogfkxW2shPUEEMhCR03mOUkRTvx1kGZ4bByvlOJUbSS1emgt
-	 5qhcAJpu2fcj0QRoaTAi0suAEBSyyIQEljIygdFXRrcjnZrm62PwJIqEX4aAIbBP7H
-	 PFb33m3PLALMg==
-Date: Thu, 16 May 2024 16:09:33 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Edward Liaw <edliaw@google.com>, John Hubbard <jhubbard@nvidia.com>,
-	linux-kselftest@vger.kernel.org, torvalds@linux-foundation.org,
-	shuah <shuah@kernel.org>
-Subject: Re: -D_GNU_SOURCE kselftest breakage in mainline
-Message-ID: <d885eba8-8fda-4e36-af5c-38eefd6f0af7@sirena.org.uk>
-References: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
- <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
+	s=arc-20240116; t=1715872621; c=relaxed/simple;
+	bh=ZXs22x8gjkyO5FvWfIYFnYooRXNq/Z5RnIzauYycA2c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aHjGvHV4sx/LtuYV066NCaJy+Cxhu5xHxOPjMq+vkbb5ybV5xc4I1MDUvld/u01NMkPhb8oFFWrt38WnGhGXYVx4dbuXsnEVxepf2m1OcxepiBWCZkDF1vYPycjdjSZ1oBMWtFj8608q3PkL9fvNnf0tzD2XtjjKgK5Blszi8gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O9jJV8Y1; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5750a8737e5so10420a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 08:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1715872618; x=1716477418; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S4aYJn/xV/PKWXs5PNzajPV5h6iws4xgG9CE/ZAuxU8=;
+        b=O9jJV8Y1NfSroH7pVBI1a0MwoviYauaTDffLSrwHr2ANL2cwvNsI96mZEZwTI9pAds
+         gCiIFDAwYiSSz5n2BPRulynH+x9aB+dmA0l7Aus8N3mCNcaEmDeJ3MGVXzRyWKjnQ1/S
+         j6sbtkwDE0FGG6Gf98vXQpR3lkExREtyhz+oNSEeewpK/vx0tlJqXKjqeKuPXxt/dFPL
+         aA4WFw7MphbIdnuGKeOcPnITQdPmN8ogDcpVB/mtYBU5nnYfi2kMMsduzLGjN4Ab/wJT
+         giZYJCUD2uoyWBYbd6iuSFMFFtn6w5V8tfTh+lV1f8OwmgQ+yie8V19JMnOSuhgCvjy7
+         yMaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715872618; x=1716477418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S4aYJn/xV/PKWXs5PNzajPV5h6iws4xgG9CE/ZAuxU8=;
+        b=WSohVToudAzgBMTEsdrOFL8ROEveFjcEQTyAnG04yz1bFCltE81nhStnxTy/Bxq7bs
+         lTISGX8DQyd08wEJJ4KQB2SWfQ1DbkAreLpqO9i3MBdkJUsHNYHEPVQzmg+iFqpHyQAX
+         mZVWqGu81N2DXVLrF8ZmuV2zAQ4++rC7B4r/j0BCem0WxgFGMOyhMlkQ87t9hP1q3Ogb
+         eJiCwQN6pUCRJzVuH27jWBftMomaY4ocDAxNbuRtV5KPQ9A98mvqBpKAOmWSpbCp2kBJ
+         5JVONImEwKGEzEzCWwdHC6SYxzIyxmrO5zGnGFxBBdkGExDtkg2B+XSsp0iGCvE60RUo
+         vpcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPzhU8eNXAhE5NGk0cBCiGPI4hlRgXenp3Z2m4Iey69Z/+xnCuNpoF0ZUeYapf2pkos4mOBnnsSi/564EfUi3AKPCZs0s/S9HAcPYgB/wC
+X-Gm-Message-State: AOJu0Yy8NNQypdd13kCLPPyokziJkARRMAC/253WuPWqNoNkcqf+JkOL
+	1FPn8c8ZQ44zIhbW8weJA1NJklswl1q4g1rGb8rj/+ufpIYCcZlpFYwyBx2efGofGvAq3UmsJzm
+	u7km08h6fcvQgrGPmCMw/aUXFNye3pU5R9KJJ
+X-Google-Smtp-Source: AGHT+IHMNTC40XpTvgL1XTSP35Cv+n/Rhk6HldIuh2H5A/OEKFOgYm6M15rG805D9tnLx4WQjYkOJaxE+AAac13kuWk=
+X-Received: by 2002:a50:c90b:0:b0:572:a33d:437f with SMTP id
+ 4fb4d7f45d1cf-5743a0a4739mr1000638a12.2.1715872617792; Thu, 16 May 2024
+ 08:16:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Fkl8inbLxXTHkfZP"
-Content-Disposition: inline
-In-Reply-To: <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
-X-Cookie: I'm having a MID-WEEK CRISIS!
+References: <20210416180427.1545645-1-dlatypov@google.com> <b7155efb-e99c-f385-3bf3-3ffcdefd1260@ti.com>
+In-Reply-To: <b7155efb-e99c-f385-3bf3-3ffcdefd1260@ti.com>
+From: Daniel Latypov <dlatypov@google.com>
+Date: Thu, 16 May 2024 08:16:44 -0700
+Message-ID: <CAGS_qxoSgEGThm3RfSc2jXrCUFwSs6HnfNcsg+EMMvWYWRbKWw@mail.gmail.com>
+Subject: Re: [PATCH v6] lib: add basic KUnit test for lib/math
+To: Devarsh Thakkar <devarsht@ti.com>
+Cc: andriy.shevchenko@linux.intel.com, brendanhiggins@google.com, 
+	davidgow@google.com, linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, May 16, 2024 at 3:19=E2=80=AFAM Devarsh Thakkar <devarsht@ti.com> w=
+rote:
+>
+> Hi Daniel, Andy,
+>
+> On 16/04/21 23:34, Daniel Latypov wrote:
+> > Add basic test coverage for files that don't require any config options=
+:
+> > * part of math.h (what seem to be the most commonly used macros)
+> > * gcd.c
+> > * lcm.c
+> > * int_sqrt.c
+> > * reciprocal_div.c
+> > (Ignored int_pow.c since it's a simple textbook algorithm.)
+> >
+> > These tests aren't particularly interesting, but they
+> > * provide short and simple examples of parameterized tests
+> > * provide a place to add tests for any new files in this dir
+> > * are written so adding new test cases to cover edge cases should be ea=
+sy
+> >   * looking at code coverage, we hit all the branches in the .c files
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > Reviewed-by: David Gow <davidgow@google.com>
+>
+> Just checking if something else was pending on this patch-set for this no=
+t
+> getting merged?
+>
+> I needed this patch-set for adding tests for new macros I am adding in ma=
+th.h
+> as suggested in this thread [1], so wanted to pull this in my series and =
+add
+> changes on top of that for new macros.
+>
+> Kindly let me know your thoughts on this.
 
---Fkl8inbLxXTHkfZP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch just fell through the cracks for me.
+I had (wrongly) inferred that Andy might have had some lingering
+reservations about this patch (that it was too contrived, might not be
+useful to have tests for stuff like abs(), etc.).
 
-On Thu, May 16, 2024 at 08:53:52AM -0600, Shuah Khan wrote:
-> On 5/16/24 08:02, Mark Brown wrote:
+Feel free to pull this into your series.
 
-> > I'm seeing quite a lot of breakage in mainline as a result of
-> > daef47b89efd0b7 ("selftests: Compile kselftest headers with
-> > -D_GNU_SOURCE") and daef47b89efd0 ("selftests: Compile kselftest headers
-> > with -D_GNU_SOURCE") - thus far I've found that the use of
-> > static_assert() is triggering build breaks where testsuites aren't
-> > picking up the addition of _GNU_SOURCE (including stopping installing
-> > the other tests in the same directory), and there's a bunch of tests
-> > which #define _GNU_SOURCE in their code and now trigger build warnings.
-> > I'm looking at fixes and mitigations now.
+Looking over the code itself, I think this still looks valid and
+stylistically correct with regard to KUnit.
+I haven't gone and validated that it still compiles and runs just yet, thou=
+gh.
+But if you do run into any problems, let me know and I can help send
+you a fixed version.
 
-> Would it be better to revert this for now and get this for now? I wouldn't
-> want you to extra busy work to workaround this.
-
-I have patches that both fix the build breakage (it turns out on closer
-inspection that it's just ALSA that's impacted I think, the extensive
-extra warning splat and some other stuff that's just updates in
-mainline) was making the impact look wider) and deescalate it to a
-#warning which I'm currently running through CI.
-
-> > The build failures are taking out the ALSA tests entirely which has
-> > caused my personal CI to explode badly :/
-
-> This has been in next for a while and I didn't see any failures. These
-> kind of changes are tricky. On second thought, I probably should have
-> delayed picking this up.
-
-Yeah, I'd been on holiday for literally a month (got home Monday night)
-- once I saw the issues I realised I had registered them going past at
-some point while I was away but hadn't really been paying attention to
-what was going on in -next.  I'm kind of surprised nobody else picked up
-on the warnings though.
-
---Fkl8inbLxXTHkfZP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZGIawACgkQJNaLcl1U
-h9CQXgf/Y/NUJVFs+5zFCK0T5X0XAUxM7LgN319i/Yb6lN8ByNEs5clJLo2A1wsm
-iN9L7EggUYJx7WTQjg5vs96126aPCUUZs6OkzjAvTGo0N+h7pQxJ0jDKUvXq5vc5
-Pj/h6Df62sKAQ5pifdj1hGHaQRRNUcXlB7I+LpMcqNI6rIOfiHmv9LmCGI4qRlZh
-vsi99m1sipx6I3lAzvyf/ZrL/yZoSa3O0rOPeZnKHyS22QexpbOQ69dcSxf9KsMI
-1N3CqR7yWhvctHxljkImOwSnScbck41f21KZjv9NGR6XjuCuGegdC8B/jEf6iLI/
-V1Yzhs0oPkI5W6kITlKD7PEPE2mAvg==
-=+ajI
------END PGP SIGNATURE-----
-
---Fkl8inbLxXTHkfZP--
+Thanks for picking this up,
+Daniel
 
