@@ -1,141 +1,157 @@
-Return-Path: <linux-kselftest+bounces-10298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9208C7924
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 17:17:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BE858C794D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 17:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9587283A70
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:17:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD9B3B21457
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EABE14B978;
-	Thu, 16 May 2024 15:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C910614D444;
+	Thu, 16 May 2024 15:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O9jJV8Y1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gsbox4WI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E87148856
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 15:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CAA14D439;
+	Thu, 16 May 2024 15:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715872621; cv=none; b=W8gqdXllgLMQsh6dJCm7SqGnVBPVFudDMhIg6TeKhsJPRzIdc5g9vIy5MiP+PxCIKreNrIQX90Fa57kOX/1ffNj9QywOZIwQY/obfAvKUhjK3P6EUdDkp2bnHr1x9ZggPf+Io3LNZxcyFwGd0K0sMLIXAK3vwsYaRwXXHwufu3w=
+	t=1715873119; cv=none; b=MxI1B+N3xjc2KMAx7xnLqz8JGxa/b3A2x5D4uy5HzH//O95/Xroqs8B06FGmxeC1N1nid5WkodN9F/qwCVoak4t0Xx/pq9WNett8gqU3zem7s9dU3eEp/sjuFpRdgasdJH+zutYi4uy6Ko6c3nxsppBUN5axUprjDHylClN0ZjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715872621; c=relaxed/simple;
-	bh=ZXs22x8gjkyO5FvWfIYFnYooRXNq/Z5RnIzauYycA2c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aHjGvHV4sx/LtuYV066NCaJy+Cxhu5xHxOPjMq+vkbb5ybV5xc4I1MDUvld/u01NMkPhb8oFFWrt38WnGhGXYVx4dbuXsnEVxepf2m1OcxepiBWCZkDF1vYPycjdjSZ1oBMWtFj8608q3PkL9fvNnf0tzD2XtjjKgK5Blszi8gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O9jJV8Y1; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5750a8737e5so10420a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 08:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715872618; x=1716477418; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S4aYJn/xV/PKWXs5PNzajPV5h6iws4xgG9CE/ZAuxU8=;
-        b=O9jJV8Y1NfSroH7pVBI1a0MwoviYauaTDffLSrwHr2ANL2cwvNsI96mZEZwTI9pAds
-         gCiIFDAwYiSSz5n2BPRulynH+x9aB+dmA0l7Aus8N3mCNcaEmDeJ3MGVXzRyWKjnQ1/S
-         j6sbtkwDE0FGG6Gf98vXQpR3lkExREtyhz+oNSEeewpK/vx0tlJqXKjqeKuPXxt/dFPL
-         aA4WFw7MphbIdnuGKeOcPnITQdPmN8ogDcpVB/mtYBU5nnYfi2kMMsduzLGjN4Ab/wJT
-         giZYJCUD2uoyWBYbd6iuSFMFFtn6w5V8tfTh+lV1f8OwmgQ+yie8V19JMnOSuhgCvjy7
-         yMaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715872618; x=1716477418;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S4aYJn/xV/PKWXs5PNzajPV5h6iws4xgG9CE/ZAuxU8=;
-        b=WSohVToudAzgBMTEsdrOFL8ROEveFjcEQTyAnG04yz1bFCltE81nhStnxTy/Bxq7bs
-         lTISGX8DQyd08wEJJ4KQB2SWfQ1DbkAreLpqO9i3MBdkJUsHNYHEPVQzmg+iFqpHyQAX
-         mZVWqGu81N2DXVLrF8ZmuV2zAQ4++rC7B4r/j0BCem0WxgFGMOyhMlkQ87t9hP1q3Ogb
-         eJiCwQN6pUCRJzVuH27jWBftMomaY4ocDAxNbuRtV5KPQ9A98mvqBpKAOmWSpbCp2kBJ
-         5JVONImEwKGEzEzCWwdHC6SYxzIyxmrO5zGnGFxBBdkGExDtkg2B+XSsp0iGCvE60RUo
-         vpcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPzhU8eNXAhE5NGk0cBCiGPI4hlRgXenp3Z2m4Iey69Z/+xnCuNpoF0ZUeYapf2pkos4mOBnnsSi/564EfUi3AKPCZs0s/S9HAcPYgB/wC
-X-Gm-Message-State: AOJu0Yy8NNQypdd13kCLPPyokziJkARRMAC/253WuPWqNoNkcqf+JkOL
-	1FPn8c8ZQ44zIhbW8weJA1NJklswl1q4g1rGb8rj/+ufpIYCcZlpFYwyBx2efGofGvAq3UmsJzm
-	u7km08h6fcvQgrGPmCMw/aUXFNye3pU5R9KJJ
-X-Google-Smtp-Source: AGHT+IHMNTC40XpTvgL1XTSP35Cv+n/Rhk6HldIuh2H5A/OEKFOgYm6M15rG805D9tnLx4WQjYkOJaxE+AAac13kuWk=
-X-Received: by 2002:a50:c90b:0:b0:572:a33d:437f with SMTP id
- 4fb4d7f45d1cf-5743a0a4739mr1000638a12.2.1715872617792; Thu, 16 May 2024
- 08:16:57 -0700 (PDT)
+	s=arc-20240116; t=1715873119; c=relaxed/simple;
+	bh=hjj/nXZu32n4CjvTA1Xw1/LPmTE9VwI8rF+cAW747CU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PJV/5DLSki2xNsf3u9pTSiDzsfwiYJzWVFw8RD4Uddi8mJkLJQjDQdVWJmO764PbnE7XsSkXMJZVi328LEXwgWMyhhbyDbPlz2bS9roagYl7/il6CzNenxBoCWFZdQtjigJ5Fx5cQ/ebJR34v/7xFt/zaKulUk0Jb8u64vU7iQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gsbox4WI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F6AC113CC;
+	Thu, 16 May 2024 15:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715873119;
+	bh=hjj/nXZu32n4CjvTA1Xw1/LPmTE9VwI8rF+cAW747CU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gsbox4WIarrcvlGApHd3bAgvUb14EEBRLQdy9wYXYbyAUhMURC4QHzxvk8Xtkm9eq
+	 3TQaW6gbJczpa3JF62JxDdeqpTmiBe7rNSPNMBu5zzHxi7rLLCt/TQqJHnnBBjgF2b
+	 a4rVOSiqoJM2P4ZUOCRRSqSso3Z+mH2Ym4FbuxCQYaOGdYzF9VCfQIwhzUVgQNcRXA
+	 QWN40g8z2mIuugW9VXPNYpVDZyN3/Y2o6Vy6zpCfmgtEsUbnpTj57hHYpgyfi005Lc
+	 TKt5v0PEiZ5M2DnQGfeQsEdfD5cJKvQ6oVqIAJDHiLqKMmJk2hQ+Fo/3EZhMTR/g17
+	 jLSHHkAXamOdg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Petr Machata <petrm@nvidia.com>,
+	vladimir.oltean@nxp.com
+Subject: [PATCH net v3] selftests: net: local_termination: annotate the expected failures
+Date: Thu, 16 May 2024 08:25:13 -0700
+Message-ID: <20240516152513.1115270-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20210416180427.1545645-1-dlatypov@google.com> <b7155efb-e99c-f385-3bf3-3ffcdefd1260@ti.com>
-In-Reply-To: <b7155efb-e99c-f385-3bf3-3ffcdefd1260@ti.com>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Thu, 16 May 2024 08:16:44 -0700
-Message-ID: <CAGS_qxoSgEGThm3RfSc2jXrCUFwSs6HnfNcsg+EMMvWYWRbKWw@mail.gmail.com>
-Subject: Re: [PATCH v6] lib: add basic KUnit test for lib/math
-To: Devarsh Thakkar <devarsht@ti.com>
-Cc: andriy.shevchenko@linux.intel.com, brendanhiggins@google.com, 
-	davidgow@google.com, linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org, 
-	Linux Media Mailing List <linux-media@vger.kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 16, 2024 at 3:19=E2=80=AFAM Devarsh Thakkar <devarsht@ti.com> w=
-rote:
->
-> Hi Daniel, Andy,
->
-> On 16/04/21 23:34, Daniel Latypov wrote:
-> > Add basic test coverage for files that don't require any config options=
-:
-> > * part of math.h (what seem to be the most commonly used macros)
-> > * gcd.c
-> > * lcm.c
-> > * int_sqrt.c
-> > * reciprocal_div.c
-> > (Ignored int_pow.c since it's a simple textbook algorithm.)
-> >
-> > These tests aren't particularly interesting, but they
-> > * provide short and simple examples of parameterized tests
-> > * provide a place to add tests for any new files in this dir
-> > * are written so adding new test cases to cover edge cases should be ea=
-sy
-> >   * looking at code coverage, we hit all the branches in the .c files
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > Reviewed-by: David Gow <davidgow@google.com>
->
-> Just checking if something else was pending on this patch-set for this no=
-t
-> getting merged?
->
-> I needed this patch-set for adding tests for new macros I am adding in ma=
-th.h
-> as suggested in this thread [1], so wanted to pull this in my series and =
-add
-> changes on top of that for new macros.
->
-> Kindly let me know your thoughts on this.
+Vladimir said when adding this test:
 
-This patch just fell through the cracks for me.
-I had (wrongly) inferred that Andy might have had some lingering
-reservations about this patch (that it was too contrived, might not be
-useful to have tests for stuff like abs(), etc.).
+  The bridge driver fares particularly badly [...] mainly because
+  it does not implement IFF_UNICAST_FLT.
 
-Feel free to pull this into your series.
+See commit 90b9566aa5cd ("selftests: forwarding: add a test for
+local_termination.sh").
 
-Looking over the code itself, I think this still looks valid and
-stylistically correct with regard to KUnit.
-I haven't gone and validated that it still compiles and runs just yet, thou=
-gh.
-But if you do run into any problems, let me know and I can help send
-you a fixed version.
+We don't want to hide the known gaps, but having a test which
+always fails prevents us from catching regressions. Report
+the cases we know may fail as XFAIL.
 
-Thanks for picking this up,
-Daniel
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: liuhangbin@gmail.com
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+CC: Petr Machata <petrm@nvidia.com>
+CC: vladimir.oltean@nxp.com
+
+v3:
+ - use xfail_on_veth correctly as a "prefix" call
+ - dropping Vladimir's tags since the code is quite different now
+v2: https://lore.kernel.org/r/20240509235553.5740-1-kuba@kernel.org/
+ - remove duplicated log_test_xfail
+v1: https://lore.kernel.org/all/20240509235553.5740-1-kuba@kernel.org/
+---
+ .../net/forwarding/local_termination.sh       | 30 +++++++++++--------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
+index c5b0cbc85b3e..4b364cdf3ef0 100755
+--- a/tools/testing/selftests/net/forwarding/local_termination.sh
++++ b/tools/testing/selftests/net/forwarding/local_termination.sh
+@@ -155,25 +155,30 @@ run_test()
+ 		"$smac > $MACVLAN_ADDR, ethertype IPv4 (0x0800)" \
+ 		true
+ 
+-	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+-		"$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+-		false
++	xfail_on_veth $h1 \
++		check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
++			"$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
++			false
+ 
+ 	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address, promisc" \
+ 		"$smac > $UNKNOWN_UC_ADDR2, ethertype IPv4 (0x0800)" \
+ 		true
+ 
+-	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address, allmulti" \
+-		"$smac > $UNKNOWN_UC_ADDR3, ethertype IPv4 (0x0800)" \
+-		false
++	xfail_on_veth $h1 \
++		check_rcv $rcv_if_name \
++			"Unicast IPv4 to unknown MAC address, allmulti" \
++			"$smac > $UNKNOWN_UC_ADDR3, ethertype IPv4 (0x0800)" \
++			false
+ 
+ 	check_rcv $rcv_if_name "Multicast IPv4 to joined group" \
+ 		"$smac > $JOINED_MACV4_MC_ADDR, ethertype IPv4 (0x0800)" \
+ 		true
+ 
+-	check_rcv $rcv_if_name "Multicast IPv4 to unknown group" \
+-		"$smac > $UNKNOWN_MACV4_MC_ADDR1, ethertype IPv4 (0x0800)" \
+-		false
++	xfail_on_veth $h1 \
++		check_rcv $rcv_if_name \
++			"Multicast IPv4 to unknown group" \
++			"$smac > $UNKNOWN_MACV4_MC_ADDR1, ethertype IPv4 (0x0800)" \
++			false
+ 
+ 	check_rcv $rcv_if_name "Multicast IPv4 to unknown group, promisc" \
+ 		"$smac > $UNKNOWN_MACV4_MC_ADDR2, ethertype IPv4 (0x0800)" \
+@@ -187,9 +192,10 @@ run_test()
+ 		"$smac > $JOINED_MACV6_MC_ADDR, ethertype IPv6 (0x86dd)" \
+ 		true
+ 
+-	check_rcv $rcv_if_name "Multicast IPv6 to unknown group" \
+-		"$smac > $UNKNOWN_MACV6_MC_ADDR1, ethertype IPv6 (0x86dd)" \
+-		false
++	xfail_on_veth $h1 \
++		check_rcv $rcv_if_name "Multicast IPv6 to unknown group" \
++			"$smac > $UNKNOWN_MACV6_MC_ADDR1, ethertype IPv6 (0x86dd)" \
++			false
+ 
+ 	check_rcv $rcv_if_name "Multicast IPv6 to unknown group, promisc" \
+ 		"$smac > $UNKNOWN_MACV6_MC_ADDR2, ethertype IPv6 (0x86dd)" \
+-- 
+2.45.0
+
 
