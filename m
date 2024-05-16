@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4838C6FE2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:13:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A45028C6FE4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:13:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFB1EB22294
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 01:13:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59F352841CD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 01:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2814C10F1;
-	Thu, 16 May 2024 01:13:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671C9A47;
+	Thu, 16 May 2024 01:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HUkU2AxM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ibU4bvWb"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67901C2D;
-	Thu, 16 May 2024 01:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AA84A0A;
+	Thu, 16 May 2024 01:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715822014; cv=none; b=A3D2TLT33HqIQ4OFyz9qpL7ijYufJipGfFlXLamzR/QxxrY90VfKPwBRP7cpPEk/KAYsMS+9jytZc7Pcwo6ra1Qh4y3GiId/x1vDRNNbne7/ZUQUIBHW6D7ahxldK+bfRMrbwDXP1l0WLkvR7DkC/ejV3ll3xi2jWatlriM6j5M=
+	t=1715822021; cv=none; b=M6JLpgg3fHc94rDPyAKutUY2apBlqJ1LJB3adhsN7i7m8i9yQStwZQ+4IP+VQ5IDEq2vPp0aO4Cks7MKY1vQopFcTQyOtfqPut63tzqc63n4YsqW/uMmbyUR1H7EhG6DNm/eAgpI7l1I97vS/NpWtS08DXrQ7QtoTyUMvCnSD5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715822014; c=relaxed/simple;
-	bh=Q5Cbjwtbw/8Kx0ebwpTU7N9zcYC0mwVyv7/lA72sn2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bPosiQYyWvhu0wiZ8xfClK+h9Sk5EBE/kwbscWsXf+mRlPL3Uco+LS+vpweTZ9t8rmOJcWyj9FhFkz2t9GyCbHVIFb+xdNbNPApNaHwga81OSLWJWrmqUMQRltWbtTqnVOihGECBXB9IwDymctrMx8/YaDGQaUqsHVQoVhOKQ0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HUkU2AxM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF366C116B1;
-	Thu, 16 May 2024 01:13:26 +0000 (UTC)
+	s=arc-20240116; t=1715822021; c=relaxed/simple;
+	bh=PYLreC9y69ftkHES1PiYml+GPmE1yXRehjsAcxtM0yE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=epF4nD35ECiPSYlprqwaLS90ghe0x0Mh/IfyKGLVQ5cX5vrMOHajGAUMnJ3yeSUGJxgABcrPiHIfv/xYpM2WNy72Mg2q2l43ddwS2MuY/wqC8CbujCX0F0N0KfCiKUxhqpvt7drllwvOHdgYO+aQTQQcw3vvCklEw3UfqN8Q/Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ibU4bvWb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B4AC32789;
+	Thu, 16 May 2024 01:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715822013;
-	bh=Q5Cbjwtbw/8Kx0ebwpTU7N9zcYC0mwVyv7/lA72sn2M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HUkU2AxMAhmAf3RJsHqQjaC8s/ACCtcNWbXaUBjWAjFSZDIgv4BcpmrsZPgJRvZpP
-	 r2b3zBAWjM4oeFhs8qeyncfxpzlwsIrTGgqxbQhec8L+S9zV8s92eekJ3U6CFdP6RB
-	 bc9OP+On4/oA93HSDkpbjB9yd1h5DY9nClkGl8SdZ7dqu98hW9f37p7BMkcn2ifAYa
-	 bYxlUl4eQ7eENrlZts6yx3X5a19i9m81ubrhnlmKxCC4G08KOKv1l/PXnKInP903OB
-	 yi5QN5riI+xNbGbMswTBT+noaVJ9j1RXDZX2lbCs+12NhFNwJLIkGbDI30ccM2XXWW
-	 CL7euCVEjNN2g==
+	s=k20201202; t=1715822020;
+	bh=PYLreC9y69ftkHES1PiYml+GPmE1yXRehjsAcxtM0yE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ibU4bvWbLh+yvbt5FdWsnHYegiOXOcO2vzCjNnEN5Mo/1DJBYlf00SrnZHFfNLKaU
+	 V1pPwwT0d/5871mwU5BK7occF0ytCdc0dWxebcv/288+MwaKSBvPlKTn+O1i8VOx7p
+	 118gmRuuZ+VmhlenVU7o0VpTMcmdug5xWVkwdJ6JynzCufatKELhrsa/Ky0t0U82KE
+	 BwGn9GgkBVTLgM+BSBQ4KPv8SZ04RjkNWpvn/vtsHI7f+PUQu8xmd5gYF5IfhIL6jQ
+	 bQ8IAy4ORl/oz5nvIBsXKZLc+lX9H7jtdaOD9o5gEKgN5wSCzzeadHnDxXoV2OC74J
+	 ErCLedkyD4rHQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,10 +60,12 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/8] add netns helpers
-Date: Thu, 16 May 2024 09:13:06 +0800
-Message-ID: <cover.1715821541.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 1/8] selftests/bpf: Add unshare_netns helper
+Date: Thu, 16 May 2024 09:13:07 +0800
+Message-ID: <cf3c81f6014cfd1339622b1230e8dc9cca7a4440.1715821541.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1715821541.git.tanggeliang@kylinos.cn>
+References: <cover.1715821541.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,55 +76,58 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patchset addresses Alexei's comment for commit "Handle SIGINT
-when creating netns" [1]. Export local helpers create_netns() and
-cleanup_netns() defined in mptcp.c into network_helpers.c as generic
-ones. For this another helper unshare_netns() is added to replace
-the existing local helpers create_netns().
+Many BPF selftests create new test network namespaces by using CLONE_NEWNET
+flag to unshare the network namespace, so that the calling process is moved
+into a new network namespace which is not shared with any previously
+existing process. So this patch adds a new helper in network_helpers.c
+named unshare_netns(), which create a new network namespace and set the
+net device lo up.
 
-v2:
- - drop patch 9, it breaks CI
- - delete netns first before adding it in patch 4
- - move cleanup_netns behind create_netns in patch 6
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 19 +++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  1 +
+ 2 files changed, 20 insertions(+)
 
-[1]
-https://patchwork.kernel.org/project/mptcp/patch/20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-1-e2bcbdf49857@kernel.org/
-
-Geliang Tang (8):
-  selftests/bpf: Add unshare_netns helper
-  selftests/bpf: Use unshare_netns helper
-  selftests/bpf: Drop duplicate create_netns
-  selftests/bpf: Export create_netns helper
-  selftests/bpf: Use create_netns helper
-  selftests/bpf: Export cleanup_netns helper
-  selftests/bpf: Use cleanup_netns helper
-  selftests/bpf: Use netns helpers in lwt tests
-
- tools/testing/selftests/bpf/network_helpers.c | 68 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  3 +
- .../selftests/bpf/prog_tests/assign_reuse.c   | 12 +---
- .../selftests/bpf/prog_tests/bind_perm.c      | 11 +--
- .../bpf/prog_tests/bpf_iter_setsockopt.c      | 13 +---
- .../bpf/prog_tests/btf_skc_cls_ingress.c      |  6 +-
- .../selftests/bpf/prog_tests/crypto_sanity.c  |  3 +-
- .../selftests/bpf/prog_tests/decap_sanity.c   |  6 +-
- .../selftests/bpf/prog_tests/fib_lookup.c     |  8 +--
- .../selftests/bpf/prog_tests/lwt_helpers.h    | 26 ++-----
- .../selftests/bpf/prog_tests/lwt_redirect.c   |  2 -
- .../selftests/bpf/prog_tests/lwt_reroute.c    |  2 -
- .../testing/selftests/bpf/prog_tests/mptcp.c  | 22 +-----
- .../bpf/prog_tests/ns_current_pid_tgid.c      |  9 +--
- .../selftests/bpf/prog_tests/setget_sockopt.c | 10 +--
- .../selftests/bpf/prog_tests/sk_assign.c      |  4 +-
- .../selftests/bpf/prog_tests/sock_destroy.c   |  9 +--
- .../selftests/bpf/prog_tests/sock_fields.c    | 13 +---
- .../bpf/prog_tests/sock_iter_batch.c          |  9 +--
- .../bpf/prog_tests/tcp_custom_syncookie.c     |  5 +-
- .../bpf/prog_tests/tcp_hdr_options.c          | 13 +---
- .../bpf/prog_tests/xdp_dev_bound_only.c       |  3 +-
- .../bpf/prog_tests/xdp_do_redirect.c          |  4 +-
- 23 files changed, 106 insertions(+), 155 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 35250e6cde7f..919bb2a0c6a6 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -670,3 +670,22 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes)
+ 
+ 	return err;
+ }
++
++int unshare_netns(void)
++{
++	int err;
++
++	err = unshare(CLONE_NEWNET);
++	if (err) {
++		log_err("unshare netns failed");
++		return err;
++	}
++
++	err = SYS_NOFAIL("ip link set dev lo up");
++	if (err) {
++		log_err("set dev lo up failed");
++		return err;
++	}
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 883c7ea9d8d5..b087330f2861 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -82,6 +82,7 @@ struct nstoken;
+ struct nstoken *open_netns(const char *name);
+ void close_netns(struct nstoken *token);
+ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
++int unshare_netns(void);
+ 
+ static __u16 csum_fold(__u32 csum)
+ {
 -- 
 2.43.0
 
