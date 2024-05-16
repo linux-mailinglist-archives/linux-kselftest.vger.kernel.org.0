@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10291-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10292-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9888E8C76E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 14:51:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77FF78C7753
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:11:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A9621F21915
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 12:51:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 042CE1F21CAA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 13:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B1914601C;
-	Thu, 16 May 2024 12:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72E41474AA;
+	Thu, 16 May 2024 13:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="eBSLS7j8"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="HKkIiKKg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4572B145FE2
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 12:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E93146A81
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 13:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715863858; cv=none; b=HA34G/Z9/+Bz3cqS9AD+PI+3ek9VjAaoKEQpCoJrJ/xD4nbum2BeD06dUL++80XxABmXwJQ44mLmqNVTArkQKoI5R16AiBLrNHdo0e40td01vJrV+PJjRm707NGtZWbdPvLzs/KEhRE3p7X4vPEtWoWwrpnclbKMP0OSbG/wfME=
+	t=1715865108; cv=none; b=tMIkUitOxGdFYb/Z8GtrHcvJDbPYHn8Dqs9PLCDH5SD186B+9Wjjb5gvlvcZ6FFr6s7JN4b9hLftzo725hFgaV9f55rSEdxxdauRQEmiZLc+DmR2+5u5VvePJIexK6eUZzoHVJZ7Dn0TbUyixOpqtU6+mQmQWM6MSE05LebLaT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715863858; c=relaxed/simple;
-	bh=kZU55I/RDRwDthGYCDmfPc+xZ2lz+hR5qGvHj4RkRqY=;
+	s=arc-20240116; t=1715865108; c=relaxed/simple;
+	bh=Wi6fPWBM2N13lqz1ePjmrOpqRQ8zl8M+Hd0GZZShN44=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OjVGkibad/hvW6xWawRXUie1Xzn9sUTAzCdhKNeP9E7PxVrMT3Sv/XxBy3yXJWKQ7loXnfkTsFI+nJaNgmERvtUKCuGlHAxtBeIdmq5dAVKEy2iGwL3LNoKeNGJqo65w1xt9wNOvx/k9CSPlid16+Vrul0bOKxsx2ZJdcTYadmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=eBSLS7j8; arc=none smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=mItJRC6x2p99V5YqGMi+kMI2Hh21Mvj8qY9Ly9t24Z9U9sQHAP/MYoeHlDyjoDwCzrBqyuFKRW2qpUwQecqfZhZgGhaKXe7mz0w/Razhnkk+JLtcWct59rF68HnWIEBuaqzLqZ/OenEnnxoGaXWin8qDFIzbPDxu3/fGX87gcWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=HKkIiKKg; arc=none smtp.client-ip=209.85.128.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-61bed5ce32fso86132047b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 05:50:57 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-62027fcf9b1so68210007b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 06:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1715863856; x=1716468656; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1715865106; x=1716469906; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+Od+pJB6mZAnjsfvS954bc7TMJjR9/PUts1oYAKpTsg=;
-        b=eBSLS7j8sF2FCizeCUCxtHWs1+I0yYcNl+5SKyakicYBlPNYYkJb9bsmn2bmNHn+Kj
-         bSeaj3XTbD7GD1qbi0t59VL2/hINVjg+DpC4o8IgCu1DJdIOyWs1wmJH1eBgwedbuf7Z
-         k2bhuC0G9GX1mzhxaTjBwZFcBbbe+b5YJJSSk7gwAlg6yflflUVHG/ZuQOnNcoMx/Vpr
-         rLl3wY/Y+g3Rh6OIXP1mXwFrLxxlD9jDvvBXnFqt9sLm3bCl/nqPxG6tRag00m+zhgOy
-         U8cyjrlYSHwMfNwog5uZOKuLmonDYnVQabAA447CY3pQ16bkGJzPqs5LF0upOW8zM7vF
-         6l8A==
+        bh=4V904prVi6oQ5IyZz7aDLXAgfOChEzLZtTfRAaiZkwU=;
+        b=HKkIiKKglEbZ0hNaJB/6vEr2kjrfTrAMUPaj+Ct9bWmyMQA8SkQKvrQg76KjBrhUDw
+         q8pq4iGam6QFNqGlYJ8XhdLlsbe8rwle8BtK8Yzs15RQbF855DfywMB7pBLjcnaj2wOl
+         rcktK0svtAULtALURw4vcFxNsJzMgU7QBe9+zLUlTZ+3n+Mxl55MoOIu3uNbJWmth10o
+         rYXY1FBNrUN1miG65K942JxmgsxAIQeibboAPzgXzJB2qYI5aq7GaJG1fSZkC/2DMdMY
+         q+PZrMLZtF1XCXtv6AwqUtmKFy/mVByqlYuE14B6xeelv2axt6X0fNVBPYacEP7tdK92
+         rx0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715863856; x=1716468656;
+        d=1e100.net; s=20230601; t=1715865106; x=1716469906;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+Od+pJB6mZAnjsfvS954bc7TMJjR9/PUts1oYAKpTsg=;
-        b=cOMunsG/AJnajQVbaCX8W1lOSGI55TllnHJMVNtZ4W+0pMGzfr5P74GOOctZqQ7eK6
-         d78+FLqwWMPClOsQU80M01RqtjBeq1HrrzHtM52ISZnC1cfoiqiG0SuLfTXem7E+TcLv
-         TZEL1OKAzE8sjTbliu4jme3UcDI7t5FXNQK0z+5orTMkFTtiFK8YvuYEps+3kT+TbsGI
-         v//ZHSBy7X+3irdcRvSiLHV1hPkfE1a1HnbQiJuhIPPkjUhxgfAgqd6Ng6N4/7SP62w+
-         39QGlR3oFNfrcop1dhmBMEmistQyZEbsmB/NSqsCXt+z1Ll9tnA/NTzBrx6aOegAeZ74
-         ibGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUtOibE/uFod3C1dGN6P6otcb8hETslCFZw4xMBCFEeXa4achkbWMFAtQG0wBEatYihaYWZm1j5w3sd8zdshEEUVgObztKSEHoqEPoQIDp8
-X-Gm-Message-State: AOJu0YzLoNBkkrpoWFw9y1DJocksMwMSkO964+JB3sSS5rRU7bjMHoWl
-	/BbDBz0DBXVAhHI4EK9DClxixhKjXevrL5+cDfJ+qctzwJQagunZXcV74ZylKbGH1eOvHyvVlxA
-	CEstFYhBqdLGAz9c1BfMbXzDNlAY7dny1FWa6Bg==
-X-Google-Smtp-Source: AGHT+IGs7lVMK92YN+1HJCcotmujY/ztr2anQuNr3U+Iebkb2i92DLwZmM+D3pTVHWKs6H4058jiuMgZuuev28xE+eY=
-X-Received: by 2002:a0d:cb52:0:b0:615:46dc:44db with SMTP id
- 00721157ae682-622b013ca1bmr180898027b3.35.1715863856375; Thu, 16 May 2024
- 05:50:56 -0700 (PDT)
+        bh=4V904prVi6oQ5IyZz7aDLXAgfOChEzLZtTfRAaiZkwU=;
+        b=IkVMN7Hnvx72GdMozbLgDY2GEPheFTz8lhNaExwUx2Sh5Z1g0cWIHnKFjNj4ZJyGJ0
+         SlKQj4TR17UAVv2ADEoeY40HMoWa93BlNdPnA6lGGQlQG89bbqMPGCulKIOJ6bJKD/fD
+         AMDpSIWRPewj+jO/gCSm87kwg9+UIocz0JLkB+qt+h/gllKr4MZBiDLfLMogl76IwpHt
+         Mb4fuQy+yVdiRudgdth2GqNWfgUDJOo4NPfbuksiCZYvR9ZXhz8XO0StPEdILxY4eebM
+         n4Q17ma7yfeQQMwzroXne04SYquQMYjDNXW3AM3UtzyRFkl9slW5t2JJxp+4sdFtTGiy
+         p/ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2FJFvUc9v5l2HGZsDqrYFjXUykNcYGa7ozgX7JqdG8G7hI58LCH9TPaSRuQ4w5y0vf7w2SLmfOnKCNrs+vBc8WKITH4I9y5pJnM5lm0Hq
+X-Gm-Message-State: AOJu0YwUTlqUcc6y2THsZwT1I7+QZOgqvuIyFUT6ao/tqvIZk0IHxl+L
+	QHter03s4mvjcnEpAS7xP/6vskFPimF60i0KxW6tO224uEJvPQqpEQxoUshM9M+QXI4MEb2BwND
+	IJR3DpolIVEixwKh+R6BlA1bfcD31bgnwtt0NoA==
+X-Google-Smtp-Source: AGHT+IH5FRDo7BDlg+tWZAgAOlCiAfHazME5mq8JEMAmJ+ns26s+bWNHf5N3/miLQXMAqpV9jaca9Qw0iocuCcuU1Ac=
+X-Received: by 2002:a81:77c2:0:b0:618:9198:1a9b with SMTP id
+ 00721157ae682-622af7af307mr115191067b3.3.1715865105680; Thu, 16 May 2024
+ 06:11:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,13 +72,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240503-dev-charlie-support_thead_vector_6_9-v6-0-cb7624e65d82@rivosinc.com>
- <20240503-dev-charlie-support_thead_vector_6_9-v6-2-cb7624e65d82@rivosinc.com>
-In-Reply-To: <20240503-dev-charlie-support_thead_vector_6_9-v6-2-cb7624e65d82@rivosinc.com>
+ <20240503-dev-charlie-support_thead_vector_6_9-v6-3-cb7624e65d82@rivosinc.com>
+In-Reply-To: <20240503-dev-charlie-support_thead_vector_6_9-v6-3-cb7624e65d82@rivosinc.com>
 From: Andy Chiu <andy.chiu@sifive.com>
-Date: Thu, 16 May 2024 20:50:45 +0800
-Message-ID: <CABgGipXNoiQ-+R3CzFS_hGT+d9L9vhqyB1famkDmm=v8XcYavg@mail.gmail.com>
-Subject: Re: [PATCH v6 02/17] dt-bindings: riscv: cpus: add a vlen register
- length property
+Date: Thu, 16 May 2024 21:11:33 +0800
+Message-ID: <CABgGipUJ1hk_N6Vka2j12o80bxpDbAadJVBHdoLncrQEaBPoaw@mail.gmail.com>
+Subject: Re: [PATCH v6 03/17] riscv: vector: Use vlenb from DT
 To: Charlie Jenkins <charlie@rivosinc.com>
 Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
@@ -96,47 +95,146 @@ Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 4, 2024 at 3:33=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.co=
+On Sat, May 4, 2024 at 2:21=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.co=
 m> wrote:
 >
-> From: Conor Dooley <conor.dooley@microchip.com>
+> If vlenb is provided in the device tree, prefer that over reading the
+> vlenb csr.
 >
-> Add a property analogous to the vlenb CSR so that software can detect
-> the vector length of each CPU prior to it being brought online.
-> Currently software has to assume that the vector length read from the
-> boot CPU applies to all possible CPUs. On T-Head CPUs implementing
-> pre-ratification vector, reading the th.vlenb CSR may produce an illegal
-> instruction trap, so this property is required on such systems.
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+
+I agree with Conor that we need a mechanism to turn off v and all
+depending extensions with has_riscv_homogeneous_vlenb(). And that can
+come after this.
+
+Thanks for adding the homogeneous vlen checking!
 
 Reviewed-by: Andy Chiu <andy.chiu@sifive.com>
 
 > ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  arch/riscv/include/asm/cpufeature.h |  2 ++
+>  arch/riscv/kernel/cpufeature.c      | 47 +++++++++++++++++++++++++++++++=
+++++++
+>  arch/riscv/kernel/vector.c          | 12 +++++++++-
+>  3 files changed, 60 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
-ation/devicetree/bindings/riscv/cpus.yaml
-> index d87dd50f1a4b..edcb6a7d9319 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -94,6 +94,12 @@ properties:
->      description:
->        The blocksize in bytes for the Zicboz cache operations.
+> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm=
+/cpufeature.h
+> index 347805446151..0c4f08577015 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -31,6 +31,8 @@ DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
+>  /* Per-cpu ISA extensions. */
+>  extern struct riscv_isainfo hart_isa[NR_CPUS];
 >
-> +  riscv,vlenb:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      VLEN/8, the vector register length in bytes. This property is requ=
-ired in
-> +      systems where the vector register length is not identical on all h=
-arts.
+> +extern u32 riscv_vlenb_of;
 > +
->    # RISC-V has multiple properties for cache op block sizes as the sizes
->    # differ between individual CBO extensions
->    cache-op-block-size: false
+>  void riscv_user_isa_enable(void);
+>
+>  #if defined(CONFIG_RISCV_MISALIGNED)
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 3ed2359eae35..6c143ea9592b 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -35,6 +35,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __r=
+ead_mostly;
+>  /* Per-cpu ISA extensions. */
+>  struct riscv_isainfo hart_isa[NR_CPUS];
+>
+> +u32 riscv_vlenb_of;
+> +
+>  /**
+>   * riscv_isa_extension_base() - Get base extension word
+>   *
+> @@ -648,6 +650,46 @@ static int __init riscv_isa_fallback_setup(char *__u=
+nused)
+>  early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
+>  #endif
+>
+> +static int has_riscv_homogeneous_vlenb(void)
+> +{
+> +       int cpu;
+> +       u32 prev_vlenb =3D 0;
+> +       u32 vlenb;
+> +
+> +       /* Ignore vlenb if vector is not enabled in the kernel */
+> +       if (!IS_ENABLED(CONFIG_RISCV_ISA_V))
+> +               return 0;
+> +
+> +       for_each_possible_cpu(cpu) {
+> +               struct device_node *cpu_node;
+> +
+> +               cpu_node =3D of_cpu_device_node_get(cpu);
+> +               if (!cpu_node) {
+> +                       pr_warn("Unable to find cpu node\n");
+> +                       return -ENOENT;
+> +               }
+> +
+> +               if (of_property_read_u32(cpu_node, "riscv,vlenb", &vlenb)=
+) {
+> +                       of_node_put(cpu_node);
+> +
+> +                       if (prev_vlenb)
+> +                               return -ENOENT;
+> +                       continue;
+> +               }
+> +
+> +               if (prev_vlenb && vlenb !=3D prev_vlenb) {
+> +                       of_node_put(cpu_node);
+> +                       return -ENOENT;
+> +               }
+> +
+> +               prev_vlenb =3D vlenb;
+> +               of_node_put(cpu_node);
+> +       }
+> +
+> +       riscv_vlenb_of =3D vlenb;
+> +       return 0;
+> +}
+> +
+>  void __init riscv_fill_hwcap(void)
+>  {
+>         char print_str[NUM_ALPHA_EXTS + 1];
+> @@ -671,6 +713,11 @@ void __init riscv_fill_hwcap(void)
+>                         pr_info("Falling back to deprecated \"riscv,isa\"=
+\n");
+>                         riscv_fill_hwcap_from_isa_string(isa2hwcap);
+>                 }
+> +
+> +               if (elf_hwcap & COMPAT_HWCAP_ISA_V && has_riscv_homogeneo=
+us_vlenb() < 0) {
+> +                       pr_warn("Unsupported heterogeneous vlen detected,=
+ vector extension disabled.\n");
+> +                       elf_hwcap &=3D ~COMPAT_HWCAP_ISA_V;
+> +               }
+>         }
+>
+>         /*
+> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> index 6727d1d3b8f2..e04586cdb7f0 100644
+> --- a/arch/riscv/kernel/vector.c
+> +++ b/arch/riscv/kernel/vector.c
+> @@ -33,7 +33,17 @@ int riscv_v_setup_vsize(void)
+>  {
+>         unsigned long this_vsize;
+>
+> -       /* There are 32 vector registers with vlenb length. */
+> +       /*
+> +        * There are 32 vector registers with vlenb length.
+> +        *
+> +        * If the riscv,vlenb property was provided by the firmware, use =
+that
+> +        * instead of probing the CSRs.
+> +        */
+> +       if (riscv_vlenb_of) {
+> +               this_vsize =3D riscv_vlenb_of * 32;
+> +               return 0;
+> +       }
+> +
+>         riscv_v_enable();
+>         this_vsize =3D csr_read(CSR_VLENB) * 32;
+>         riscv_v_disable();
 >
 > --
 > 2.44.0
