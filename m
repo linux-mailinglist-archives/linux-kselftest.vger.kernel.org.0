@@ -1,67 +1,51 @@
-Return-Path: <linux-kselftest+bounces-10280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A65A8C7012
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:42:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F738C70C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 05:58:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4E451F22193
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 01:42:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4074AB2221C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38BA1362;
-	Thu, 16 May 2024 01:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TO03+x3r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E56C029A9;
+	Thu, 16 May 2024 03:58:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C8C10FA;
-	Thu, 16 May 2024 01:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1AFB642;
+	Thu, 16 May 2024 03:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715823725; cv=none; b=KBfkhD1nndymmVjIYeZszwK1YcUx6Z9K/ILaAOxuvfqsm+o3bvteV9UI8K+YsUxqe2c4OWtIGd5ASQ/UHKgHV54vzjiyetja6qqJNvWYI+JnlCS7l752czhqV6vfbuvAUUo8uB2CClb3vlNnuAbNcGPBI7nR3PEc9tbsX49YWFA=
+	t=1715831914; cv=none; b=HIZb00DNGMLCtTOPTKzTXbd71hwcrWYhtRVUUaPu/dwoKWVCGGPk7AlC9r3lyscMrrhM1JPdgejX0Ijmi2dhjR4W3tVF3rsU8LEAkRfJqbg0f9JHT14Z3UjcuLIzqGajoRtYYShELiAZssaMwmLCmvwQFIFgSRWUBmi6pL7yKdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715823725; c=relaxed/simple;
-	bh=xk386NB5B+OYNSRRJVYypSTewBpx9zOWjLdaiL1ocTI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XysZexdc2+gZXaJAq1XqvZDZC0h0hlS8vt/35tlLdBx6LPzPZbLoZ9Q10xwCwG8RNHTRVFG9GKbp70PZaGNCgjNgaZjaAfxuphAtt5jL5D0XOJN+7XesfcuEu/Wo2zw43e+qr52Amglpe0QVNy4RV7tbHx6RIeiia9i9C+9Ntbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TO03+x3r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E34CC116B1;
-	Thu, 16 May 2024 01:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715823725;
-	bh=xk386NB5B+OYNSRRJVYypSTewBpx9zOWjLdaiL1ocTI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=TO03+x3rDgELssLHtutB/zQR3GH6iKSsR0LaRtbxO+VmxVnWceAD+XaXLHb2A/gsK
-	 rs4XwwCbTqluqj4MkFL45bOQ1GyKtxKCeWX6P+E1N7ZBbFCnz3DMOBfH8wvAPGAR/7
-	 bZzoyjtQd1fVoW/7/j1CRdUMsxOAgXxAOtS6eCljnKXQHQpvj8tEUCpk3bEbkQzROx
-	 l6UOqfJXJMezKXwaRPMvoSAivCyJZTRXOxC2d7N57pbl8xWu+9Cxf0IYayq9zkia11
-	 Ezw8LNDo7FzOG+3z1j4WYm9b8tglkvDz1Un77a+JDtb+pXkvSMBxqLvCb3D43tdny5
-	 d8CdqGStsXnFA==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Enable INET_XFRM_TUNNEL in config
-Date: Thu, 16 May 2024 09:41:53 +0800
-Message-ID: <acb442e38544bc5c60dcaa61d56ca1e6bbbc82fe.1715823610.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1715831914; c=relaxed/simple;
+	bh=Zhefvo70pHJbj6XKrgOY//OVMBUuvPbNTjnSlKyaCYI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jMkQe85vOLilJXLrSW6QAX2VtlAXYdbSTn/oAzpmG7vCU059hor77Cu1SKsJ21Ucbj0hZJubAw4/VkDVzDjG6FuF0kiikDDgjSLWUI5eJQpwiDXOR6kFSzD+wMICn0u5AbHD0ZlCt+GULKkf71sInZKV/5i1jik2shfyFv2HHdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96F8BDA7;
+	Wed, 15 May 2024 20:58:55 -0700 (PDT)
+Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.15])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CBDA33F762;
+	Wed, 15 May 2024 20:58:27 -0700 (PDT)
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Anshuman.Khandual@arm.com,
+	kirill.shutemov@linux.intel.com,
+	AneeshKumar.KizhakeVeetil@arm.com,
+	Dev Jain <dev.jain@arm.com>
+Subject: [PATCH] selftests/mm: va_high_addr_switch: Do not skip test and give warning message post FEAT_LPA2
+Date: Thu, 16 May 2024 09:26:33 +0530
+Message-Id: <20240516035633.143793-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,30 +54,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Post FEAT_LPA2, Aarch64 extends the 4KB and 16KB translation granule to
+large virtual addresses. Currently, the test is being skipped for said
+granule sizes, because the page sizes have been statically defined; to
+work around that would mean breaking the nice array of structs used for
+adding testcases. Instead, don't skip the test, and encourage the user
+to manually change the macros.
 
-The kconfigs CONFIG_INET_XFRM_TUNNEL and CONFIG_INET6_XFRM_TUNNEL are
-needed by test_tunnel tests. This patch enables them together with the
-dependent kconfigs CONFIG_INET_IPCOMP and CONFIG_INET6_IPCOMP.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Dev Jain <dev.jain@arm.com>
 ---
- tools/testing/selftests/bpf/config | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/mm/va_high_addr_switch.c  | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index eeabd798bc3a..8aa56e6bdac1 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -95,3 +95,7 @@ CONFIG_XDP_SOCKETS=y
- CONFIG_XFRM_INTERFACE=y
- CONFIG_TCP_CONG_DCTCP=y
- CONFIG_TCP_CONG_BBR=y
-+CONFIG_INET_IPCOMP=y
-+CONFIG_INET_XFRM_TUNNEL=y
-+CONFIG_INET6_IPCOMP=y
-+CONFIG_INET6_XFRM_TUNNEL=y
+diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
+index cfbc501290d3..ba862f51d395 100644
+--- a/tools/testing/selftests/mm/va_high_addr_switch.c
++++ b/tools/testing/selftests/mm/va_high_addr_switch.c
+@@ -292,12 +292,24 @@ static int supported_arch(void)
+ #elif defined(__x86_64__)
+ 	return 1;
+ #elif defined(__aarch64__)
+-	return getpagesize() == PAGE_SIZE;
++	return 1;
+ #else
+ 	return 0;
+ #endif
+ }
+ 
++#if defined(__aarch64__)
++void failure_message(void)
++{
++	printf("TEST MAY FAIL: Are you running on a pagesize other than 64K?\n");
++	printf("If yes, please change macros manually. Ensure to change the\n");
++	printf("address macros too if running defconfig on 16K pagesize,\n");
++	printf("since userspace VA = 47 bits post FEAT_LPA2.\n");
++}
++#else
++void failure_message(void) {}
++#endif
++
+ int main(int argc, char **argv)
+ {
+ 	int ret;
+@@ -308,5 +320,8 @@ int main(int argc, char **argv)
+ 	ret = run_test(testcases, ARRAY_SIZE(testcases));
+ 	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
+ 		ret = run_test(hugetlb_testcases, ARRAY_SIZE(hugetlb_testcases));
++
++	if (ret)
++		failure_message();
+ 	return ret;
+ }
 -- 
-2.43.0
+2.39.2
 
 
