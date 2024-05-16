@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C238C6FF0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:14:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB1968C6FF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 03:14:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE071F230C2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 01:14:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C52DB212C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 01:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1965EBB;
-	Thu, 16 May 2024 01:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAFEA47;
+	Thu, 16 May 2024 01:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jde1oyOx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DhbMaN9G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A484710F1;
-	Thu, 16 May 2024 01:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F091366;
+	Thu, 16 May 2024 01:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715822059; cv=none; b=VZb9YYxUIcSx5prpNILUFzfHVXw/Yp5qj4QaElSMwjMBcjT7gnPqLUy+b6NmKXoTjlmGH87H98QTRE9E9XrKEdyI/NMquGSVOEvoA/9KcsRxxOAhrf2lXJ21K44iqeBJyUwCHaito87VJb0tdGrjUTuV5j8iZvF8yXvSEDHrDcw=
+	t=1715822065; cv=none; b=H3JZ8Lfsjan/K1V4kBzPQqqIMSHxpEAp5oah2V8cGxL7waayVntND0u+5XrIGzPuNA/G2c+7d7sf5bsV2lZh83nkrJBT7CsiQ0FGkBDp/RBA8dLenf8SEIs4zECdKgezxqVRgd4WU9St5YexU6MLlhfpLCl3TR6KbVgzK8PVFho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715822059; c=relaxed/simple;
-	bh=Uo4wLsAlHWOererHPGvsbRVZjycyG+wZVHCA7IFyqz4=;
+	s=arc-20240116; t=1715822065; c=relaxed/simple;
+	bh=G2WA+IiJuJCE45LBBIyhxmHVn1AFRba13pD3Hykej9s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kNi28ftQQvFjlbCr6G/KEigE8mWSd5wBwNevQBbw8YevJElcx7nAzuaOvpdjdVsJhrXQ686LnUAVdIm4bZTrK3/sM5Znbu3YIXohxCj2KgTdEm/PzcjCJBGXpQZyVklaA6wmFsxMap1jQ2Wl+GvHxs4/9lDfBRfkMvWabvruMDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jde1oyOx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7785C32786;
-	Thu, 16 May 2024 01:14:13 +0000 (UTC)
+	 MIME-Version; b=Q7oaD0xTqn09xtP6Ta48ltSwlmU7aDO+dE0dRK7t6GOVTlEcIicGLXxYJ3WnSEmPwjaAYB2QC8lSUk59SEp/vxE79DaE+JeP5bo9c5Y1vOr7veDPhV5kFLIu5NNhfszwJykTvoai2kUQwzEuM51N5qT2oBTiz5rTC6eBjtgH9Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DhbMaN9G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEC6C32786;
+	Thu, 16 May 2024 01:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715822059;
-	bh=Uo4wLsAlHWOererHPGvsbRVZjycyG+wZVHCA7IFyqz4=;
+	s=k20201202; t=1715822065;
+	bh=G2WA+IiJuJCE45LBBIyhxmHVn1AFRba13pD3Hykej9s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Jde1oyOxYp8DaQCMaya6jI/lNx+AG1YZ9HYLA1K1TW+pB3ETgU9IMeDO0TPyERsmN
-	 27KWpX6Qmhb+CLdgefCydChempXl1Vs0q9bWVfiezGEyM11b9Fp77SqV39OFILLgb/
-	 KA28Vjcg+f6kXHP76qx6i5uqhxRnI06ZGJN/RsuBSLmVJltDTJc/oXkW3p40X+Cq7J
-	 rR7yc7H4ZM6Wn9bveLYzMEo/bjdm+iQWPeBuwyxSGUIFL30bBr0hnrZ0XcUkX6qsUy
-	 ar+e8Vr6cpDbgkBvu9/EMrCajzY58Ebp4Gos6jPLHnIqOk65r6ABtVR7DiyGCdsp3l
-	 UGuM0CgoZTnyw==
+	b=DhbMaN9GFU9HZdxClw+ajXv7vVpBARXL6b0zCtdEMK4NDAGIrP1pOhU+tpX/MfG3A
+	 7fXRSqt/ccgZzlyHbaS9MbAKlVv7z8z+Ml9D3VpYqWWgg3j2Ebzvu03qji12JJyslI
+	 mPNTgmC9tOamv6fVJ/gzcjCl9Ck5dvGUjiVW1wLfr5vxzhTX++//4htY5h3KATUC3p
+	 kw8+x5W+E/BHudNIt5v4YOkzWY7dYOdfWfH+nH1QwN+bHV/K/Ql7rwNo6CqVRsziYM
+	 gXiAEC/gSzW/DFq9YgnXkRZeJmE3aa9PaoxfZgWpYA2OOZwfFwA79oiSpYPOKCkoTC
+	 Z31GHs+SEGOuA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 7/8] selftests/bpf: Use cleanup_netns helper
-Date: Thu, 16 May 2024 09:13:13 +0800
-Message-ID: <4b69f489f2cd66dcd69851e4cfc419a3dde4b575.1715821541.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 8/8] selftests/bpf: Use netns helpers in lwt tests
+Date: Thu, 16 May 2024 09:13:14 +0800
+Message-ID: <cd9a14a9367afa1731986a2816f2a6836c965603.1715821541.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1715821541.git.tanggeliang@kylinos.cn>
 References: <cover.1715821541.git.tanggeliang@kylinos.cn>
@@ -76,155 +76,107 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch uses cleanup_netns() helper in BPF tests wide to replace
-close_netns() and "ip netns del", included assign_reuse.c, crypto_sanity.c,
-decap_sanity.c, fib_lookup.c, ns_current_pid_tgid.c, sock_destroy.c,
-sock_iter_batch.c, xdp_dev_bound_only.c and xdp_do_redirect.c. This can
-simplify the code.
+This patch uses netns helpers create_netns() and cleanup_netns() in
+lwt_helpers.h instead of using the local function netns_create() and
+netns_delete().
+
+For using these helpers. network_helpers.h needs to be included in
+lwt_helpers.h. Then '#include "network_helpers.h"' in lwt_redirect.c
+and lwt_reroute.c can be dropped.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/assign_reuse.c       | 3 +--
- tools/testing/selftests/bpf/prog_tests/crypto_sanity.c      | 3 +--
- tools/testing/selftests/bpf/prog_tests/decap_sanity.c       | 6 ++----
- tools/testing/selftests/bpf/prog_tests/fib_lookup.c         | 4 +---
- .../testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c  | 4 +---
- tools/testing/selftests/bpf/prog_tests/sock_destroy.c       | 4 +---
- tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c    | 3 +--
- tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c | 3 +--
- tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c    | 4 +---
- 9 files changed, 10 insertions(+), 24 deletions(-)
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 26 +++++--------------
+ .../selftests/bpf/prog_tests/lwt_redirect.c   |  2 --
+ .../selftests/bpf/prog_tests/lwt_reroute.c    |  2 --
+ 3 files changed, 7 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-index 21e1549d9749..6fa08c47357c 100644
---- a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-+++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-@@ -189,6 +189,5 @@ void test_assign_reuse(void)
- 		run_assign_reuse(AF_INET6, SOCK_DGRAM, "::1", PORT);
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+index fb1eb8c67361..602a268502e2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+@@ -9,6 +9,7 @@
+ #include <linux/icmp.h>
  
- cleanup:
--	close_netns(tok);
--	SYS_NOFAIL("ip netns delete %s", NS_TEST);
-+	cleanup_netns(tok);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-index b1a3a49a822a..ce6ceac8a812 100644
---- a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-+++ b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-@@ -190,8 +190,7 @@ void test_crypto_sanity(void)
- 	ASSERT_OK(err, "bpf_tc_detach decrypt");
+ #include "test_progs.h"
++#include "network_helpers.h"
  
- fail:
--	close_netns(nstoken);
-+	cleanup_netns(nstoken);
- 	deinit_afalg();
--	SYS_NOFAIL("ip netns del " NS_TEST " &> /dev/null");
- 	crypto_sanity__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/decap_sanity.c b/tools/testing/selftests/bpf/prog_tests/decap_sanity.c
-index dcb9e5070cc3..9528b039ad33 100644
---- a/tools/testing/selftests/bpf/prog_tests/decap_sanity.c
-+++ b/tools/testing/selftests/bpf/prog_tests/decap_sanity.c
-@@ -68,10 +68,8 @@ void test_decap_sanity(void)
- 	ASSERT_FALSE(skel->bss->broken_csum_start, "broken_csum_start");
+ #define log_err(MSG, ...) \
+ 	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
+@@ -16,27 +17,14 @@
  
- fail:
--	if (nstoken) {
-+	if (nstoken)
- 		bpf_tc_hook_destroy(&qdisc_hook);
--		close_netns(nstoken);
--	}
--	SYS_NOFAIL("ip netns del " NS_TEST);
-+	cleanup_netns(nstoken);
- 	decap_sanity__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-index b7eac1fce746..9de05603098d 100644
---- a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-@@ -368,8 +368,6 @@ void test_fib_lookup(void)
- 	}
+ #define RUN_TEST(name)                                                        \
+ 	({                                                                    \
+-		if (test__start_subtest(#name))                               \
+-			if (ASSERT_OK(netns_create(), "netns_create")) {      \
+-				struct nstoken *token = open_netns(NETNS);    \
+-				if (ASSERT_OK_PTR(token, "setns")) {          \
+-					test_ ## name();                      \
+-					close_netns(token);                   \
+-				}                                             \
+-				netns_delete();                               \
+-			}                                                     \
++		if (test__start_subtest(#name)) {                             \
++			struct nstoken *token = create_netns(NETNS);          \
++			if (ASSERT_OK_PTR(token, "setns"))                    \
++				test_ ## name();                              \
++			cleanup_netns(token);                                 \
++		}                                                             \
+ 	})
  
- fail:
--	if (nstoken)
--		close_netns(nstoken);
--	SYS_NOFAIL("ip netns del " NS_TEST);
-+	cleanup_netns(nstoken);
- 	fib_lookup__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index 6dae14d106ac..b4af39dbc449 100644
---- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -211,9 +211,7 @@ static void test_in_netns(int (*fn)(void *), void *arg)
- 	test_ns_current_pid_tgid_new_ns(fn, arg);
+-static inline int netns_create(void)
+-{
+-	return system("ip netns add " NETNS);
+-}
+-
+-static inline int netns_delete(void)
+-{
+-	return system("ip netns del " NETNS ">/dev/null 2>&1");
+-}
+-
+ static int open_tuntap(const char *dev_name, bool need_mac)
+ {
+ 	int err = 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
+index 835a1d756c16..70b80171f7f4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
+@@ -57,7 +57,6 @@
+ #define NETNS "ns_lwt_redirect"
+ #include "lwt_helpers.h"
+ #include "test_progs.h"
+-#include "network_helpers.h"
  
- cleanup:
--	if (nstoken)
--		close_netns(nstoken);
--	SYS_NOFAIL("ip netns del ns_current_pid_tgid");
-+	cleanup_netns(nstoken);
- }
+ #define BPF_OBJECT            "test_lwt_redirect.bpf.o"
+ #define INGRESS_SEC(need_mac) ((need_mac) ? "redir_ingress" : "redir_ingress_nomac")
+@@ -308,7 +307,6 @@ static void test_lwt_redirect_dev_carrier_down(void)
  
- /* TODO: use a different tracepoint */
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index c156218c7280..1d3abc7a92c4 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -209,9 +209,7 @@ void test_sock_destroy(void)
- 	RUN_TESTS(sock_destroy_prog_fail);
+ static void *test_lwt_redirect_run(void *arg)
+ {
+-	netns_delete();
+ 	RUN_TEST(lwt_redirect_normal);
+ 	RUN_TEST(lwt_redirect_normal_nomac);
+ 	RUN_TEST(lwt_redirect_dev_down);
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
+index 03825d2b45a8..f51cbde7d8b3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
+@@ -50,7 +50,6 @@
+  */
+ #define NETNS "ns_lwt_reroute"
+ #include "lwt_helpers.h"
+-#include "network_helpers.h"
+ #include <linux/net_tstamp.h>
  
- cleanup:
--	if (nstoken)
--		close_netns(nstoken);
--	SYS_NOFAIL("ip netns del " TEST_NS);
-+	cleanup_netns(nstoken);
- 	if (cgroup_fd >= 0)
- 		close(cgroup_fd);
- 	sock_destroy_prog__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c b/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-index b82ab5ddd9e6..f37e6450d08b 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_iter_batch.c
-@@ -124,8 +124,7 @@ void test_sock_iter_batch(void)
- 		do_test(SOCK_DGRAM, true);
- 		do_test(SOCK_DGRAM, false);
- 	}
--	close_netns(nstoken);
+ #define BPF_OBJECT            "test_lwt_reroute.bpf.o"
+@@ -242,7 +241,6 @@ static void test_lwt_reroute_qdisc_dropped(void)
  
- done:
--	SYS_NOFAIL("ip netns del " TEST_NS);
-+	cleanup_netns(nstoken);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
-index 7dd18c6d06c6..315777a4c7ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
-@@ -53,9 +53,8 @@ void test_xdp_dev_bound_only_offdev(void)
- out:
- 	close(fd1);
- 	close(fd2);
--	close_netns(tok);
- 	/* eth42 was added inside netns, removing the netns will
- 	 * also remove eth42 veth pair.
- 	 */
--	SYS_NOFAIL("ip netns del " LOCAL_NETNS);
-+	cleanup_netns(tok);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index bad0ea167be7..27cb409a237f 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -241,8 +241,6 @@ void test_xdp_do_redirect(void)
- out_tc:
- 	bpf_tc_hook_destroy(&tc_hook);
- out:
--	if (nstoken)
--		close_netns(nstoken);
--	SYS_NOFAIL("ip netns del testns");
-+	cleanup_netns(nstoken);
- 	test_xdp_do_redirect__destroy(skel);
- }
+ static void *test_lwt_reroute_run(void *arg)
+ {
+-	netns_delete();
+ 	RUN_TEST(lwt_reroute_normal_xmit);
+ 	RUN_TEST(lwt_reroute_qdisc_dropped);
+ 	return NULL;
 -- 
 2.43.0
 
