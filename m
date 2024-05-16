@@ -1,136 +1,174 @@
-Return-Path: <linux-kselftest+bounces-10314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 028EB8C7D61
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 21:41:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E1C08C7D9D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 22:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 952751F21B13
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 19:41:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91993B215B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 20:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB4F156F43;
-	Thu, 16 May 2024 19:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75FCF157496;
+	Thu, 16 May 2024 20:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sWHzItkG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVk2DsXS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E7E156F53
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 19:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5AB282E1;
+	Thu, 16 May 2024 20:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715888465; cv=none; b=LX+wfRXCkIpx/hPkJnPmJuMq+9qlt64yQxgC7Rz/TSjVaehV5II8q7ukfuzQ42aVcL5F/dMBeNMwIVs+BcoiUFBj73FuT+vCWU5i+CT9Z8g6KdbNlRV431ZpUwWJ0hg9uqT0ugZ+ONv5VYknHfktxIjvc/jT5UgmIGumMvD2KfU=
+	t=1715890468; cv=none; b=rtjg70cEHb1c60a0ix1WgKZo5Wfr74R6qRoEAxCeniT8Ev30fGOVkGCgidIkHLaIYRDMs178sm6W/8DUAwXMzkgERaKCoe9DBq4dRBgK8JeJslXNVeh24ShGqWWzaWoG+iStEANAJNcK37g8dqVA7WLKwyGolYM0dxIO0xyMwa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715888465; c=relaxed/simple;
-	bh=qRGrAjcAOw/BpdIDpIw29VUbCdUpk5nCvIPyhVcCtco=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=neSfsDqTeDuJJ1aRp+KJHXnSNBRAcsoURPK81/7w+ObcPURMlxuCqgRlbHZDFX9UKd7it5qXF5PZPjyvyXU1//2bi87LCitqWt5BtFlxefSsG798UdSQLPqaSMmSSaZ3J7S0p5g1VWNP8mzRlZRrfqX+exta0k0zOiFOfGJ1xaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sWHzItkG; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-622ccd54631so97189347b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 12:41:03 -0700 (PDT)
+	s=arc-20240116; t=1715890468; c=relaxed/simple;
+	bh=OFe/ZL0e30eGPwsmxyP86C74EW1jVn+nxDNC1Ljp4uY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZqlLCUZXmsW0G8Z1J23pKnF6LBOtGifEl3EtNuAUCZb0FLKCXBZ8QjbOVclKGW5JPHC4RVY08RGrdOy9zgyEvf4EEbvsdSwqPQ/9MacDwWxX0tCOX84WPvTJQ85yExDHXQBDwfLKSeU1w3q/4a90KhUIqqp8j/Sm+quxf98t15A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVk2DsXS; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e2a216758bso2371751fa.3;
+        Thu, 16 May 2024 13:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715888463; x=1716493263; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e1P6Db3qkzX3owazVizLczKyUZgazBAYnFdo7ANHUs0=;
-        b=sWHzItkGsGuUcWNOxHQF3Ctt3honpuyXin7TXnIw6s5PN6d/3ojvgknGkawPtGAWuz
-         Nfy9MQZ+fO5xRSjPAJrK6MjYZDpqOCPQpn1xvm7qHEkv4o7WI6dfXPyxONWZc9358Z5S
-         80XxFwYwtxU9+Td8F7wcyZh+fqL8/iuUO0yUgG/+SNMi6RvaJKy+OE0yfStjZrwNsr+9
-         8Zwbw0Q2thAu5A+tfUyAP832Ww7XGzXaKopSI3WX276AYxVCWC5RmiGrptMImtWYIZbq
-         Sqa7Kr5qQDg0StHwcTIoX61pJQYDqvO9vLyLOr51QKSCAHVMWRmCdeWnaOXnOUFoQhOy
-         hDoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715888463; x=1716493263;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=gmail.com; s=20230601; t=1715890465; x=1716495265; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e1P6Db3qkzX3owazVizLczKyUZgazBAYnFdo7ANHUs0=;
-        b=McK7nxI7ZXlbldPG4bWzEZp4xI/BRnrv+1mA3MQWb9nrrBxInydrnr22gyhuOYmdUb
-         ryrE5uYFlsprAN2syLdB4dubxhc+VynykpFSEY/XQCcNn/kGrmp4U5jZFKFlrkaremq5
-         m3O5Tf2Zh4Nca6GphYdoWTl1Wg1D6cq3CAdfMGV8C2uR6H0I4+QC0Y2gpAykOdUB60Ht
-         TfyfFfyrBo+7OT15/ZMBkkm3/X5auspevnfOF5A/Ro5I+e1/8Mr3FcblhHyIsY2Kg0b8
-         gj+B2Xg+mhWmOpkFny9lzz9jroCIZvPfYI1906NXgaod38DkOXreF7psZgq10GZqUeU0
-         su6A==
-X-Gm-Message-State: AOJu0Yz91WKCz2+Lxy7NxPleGqzvLGL6wFeoOnXgiFhDycdoH86OYQyl
-	LIg6Ni8XWGrP3SFWIPcnppPpTLnDiwpl7zuZPLTkom+ocTyw9LHicBuJay2JXd4kFvvdgoCD6/g
-	RWazpDKkYhA==
-X-Google-Smtp-Source: AGHT+IFN8NHYHCx0Mp5JwPViDfrjX4xtgJESmyjLorrTrnPM7FlMf7IPZ+ZzzNyfzySoyjQbNXwc78fPagVkYw==
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a05:6902:1142:b0:df1:d00c:130c with SMTP
- id 3f1490d57ef6-df1d00c1507mr450667276.5.1715888462994; Thu, 16 May 2024
- 12:41:02 -0700 (PDT)
-Date: Thu, 16 May 2024 19:40:53 +0000
+        bh=Vya+uy7v324SP8pO8WI3GxGb7Sg/yebLjN4lmzLeISg=;
+        b=DVk2DsXShQdX56y8D4vCP3uaKTUX72sxNySKXCgvFZgSZNLl5hcVEmSKNds0Uz0b0O
+         ezgBzopnXQYQLLGZ0A95T2X+wucL4piwaDRsY9/UoUezeoqZW/C/Qt/gPvQSblHWBzzG
+         7haE0CSyynZxB+8hiQ76Ji+LLogUJmca3lSeFGl6kzE0RMNmDHHR1sute7RNR/tFakhX
+         jbNoADGBJxQDpzcoxZozjTqd4xpXGPpvmXQUnBWFxtOoe0UXGEY3247zNA05J4FrX9T3
+         w8QF5sSVGs8PmlEWq2a2PIaLIWK3jzCz7bejGwPtM2kEr/K/DdA7Sfv94FhGXC7WCsR0
+         0ESA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715890465; x=1716495265;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vya+uy7v324SP8pO8WI3GxGb7Sg/yebLjN4lmzLeISg=;
+        b=iKP4qKS9Kaj9t3h32hfaOq8iZ+nyC9nrIVSn+iU2AtxVT/ysrbTbMk1WS8ZrAjBl/t
+         W12+7EtuCsQDEJ4YD1SzJaqPEeA8vZkvCL8b94FkkSTNPe1h+Dj45iWlazvdi05T7P99
+         m3EgccawZpawGFwqifqQKi7Q3+Zaoklo6vW1RaVj31lQzte/jfkQKu54QnJMoM8vL6gP
+         xbtc2W802qbYiRefDnb38zSsx2K3nfHDbTifOOqxY1+o4tpYPJip003QbnzCC82+PZm9
+         b3awtBcwofKwT7602lXrM+glAc4piIgsa9mpo58hI8bDTKbM6vPtrG4mKRBo4BslHXBm
+         PI/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWVTJeVDVUnUIUzwf1+unHlqloNvXbYZdCy5JqiXghQO9Wt6m7SG9oZt3Z10cpKl9qoznPnXp3LHbko49P4T83rmsB71+URL6gxDYbZFvBC4OQ/W7yayoj69C3ez3PWQVUZ+a3GkZUT0TQkqaA0
+X-Gm-Message-State: AOJu0Yzx+1DF4X4MO8gfuFMmtkfedTYkZ93u54zivwjgLeHrcSoGkTYk
+	cwe7oUyAqmFhuU1QAfSTPmdH9UB8N76rF1ZOLEcs/nGKzthY9uzd
+X-Google-Smtp-Source: AGHT+IHCDJ8w1rrxe0y33ueWsUdSVYyrhSFHiZquYFjDCAjqBwW48xH9NBGraRbYoZby/QGgFefKJA==
+X-Received: by 2002:a2e:9f4e:0:b0:2e5:6859:1902 with SMTP id 38308e7fff4ca-2e56859194bmr120879611fa.0.1715890464445;
+        Thu, 16 May 2024 13:14:24 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:d20e:7300:e9c4:b0ae:5941:af8b? ([2a01:4b00:d20e:7300:e9c4:b0ae:5941:af8b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b79bd5asm19924705f8f.18.2024.05.16.13.14.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 May 2024 13:14:23 -0700 (PDT)
+Message-ID: <7a190f66-3d55-4fad-aaa9-854b586ed5aa@gmail.com>
+Date: Thu, 16 May 2024 21:14:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAERhRmYC/x2MQQqAIBAAvxJ7TlCxwr4SHUy3WioLrQiiv2edh
- jnM3BAxEEaosxsCnhRp9UlEnoEdjR+QkUsOkkvFC1Gy6fC0M7suG834cTHeRea0VrxSvZUdQoq 3gD1d/7hpn+cFped4W2gAAAA=
-X-Mailer: b4 0.14-dev
-Message-ID: <20240516-kunit-compile-commands-v1-1-86e61857c820@google.com>
-Subject: [PATCH] kunit: tool: Build compile_commands.json
-From: Brendan Jackman <jackmanb@google.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] kunit: Cover 'assert.c' with tests
+To: Rae Moar <rmoar@google.com>
+Cc: brendan.higgins@linux.dev, davidgow@google.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kunit-dev@googlegroups.com, skhan@linuxfoundation.org
+References: <20240515142056.1374495-1-ivan.orlov0322@gmail.com>
+ <CA+GJov4e8K2gWbQQA_vZvWs34OZJ7biMTkOnGAhfidG4V_dPJg@mail.gmail.com>
+Content-Language: en-US
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <CA+GJov4e8K2gWbQQA_vZvWs34OZJ7biMTkOnGAhfidG4V_dPJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-compile_commands.json is used by clangd[1] to provide code navigation
-and completion functionality to editors. See [2] for an example
-configuration that includes this functionality for VSCode.
+On 5/16/24 19:57, Rae Moar wrote:
+> On Wed, May 15, 2024 at 10:20 AM Ivan Orlov <ivan.orlov0322@gmail.com> wrote:
+>>
+>> There are multiple assertion formatting functions in the `assert.c`
+>> file, which are not covered with tests yet. Implement the KUnit test
+>> for these functions.
+>>
+>> The test consists of 11 test cases for the following functions:
+>>
+>> 1) 'is_literal'
+>> 2) 'is_str_literal'
+>> 3) 'kunit_assert_prologue', test case for multiple assert types
+>> 4) 'kunit_assert_print_msg'
+>> 5) 'kunit_unary_assert_format'
+>> 6) 'kunit_ptr_not_err_assert_format'
+>> 7) 'kunit_binary_assert_format'
+>> 8) 'kunit_binary_ptr_assert_format'
+>> 9) 'kunit_binary_str_assert_format'
+>> 10) 'kunit_assert_hexdump'
+>> 11) 'kunit_mem_assert_format'
+>>
+>> The test aims at maximizing the branch coverage for the assertion
+>> formatting functions.
+>>
+>> As you can see, it covers some of the static helper functions as
+>> well, so mark the static functions in `assert.c` as 'VISIBLE_IF_KUNIT'
+>> and conditionally export them with EXPORT_SYMBOL_IF_KUNIT. Add the
+>> corresponding definitions to `assert.h`.
+>>
+>> Build the assert test when CONFIG_KUNIT_TEST is enabled, similar to
+>> how it is done for the string stream test.
+>>
+>> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+>> ---
+>> V1 -> V2:
+>> - Check the output from the string stream for containing the key parts
+>> instead of comparing the results with expected strings char by char, as
+>> it was suggested by Rae Moar <rmoar@google.com>. Define two macros to
+>> make it possible (ASSERT_TEST_EXPECT_CONTAIN and
+>> ASSERT_TEST_EXPECT_NCONTAIN).
+>> - Mark the static functions in `assert.c` as VISIBLE_IF_KUNIT and export
+>> them conditionally if kunit is enabled instead of including the
+>> `assert_test.c` file in the end of `assert.c`. This way we will decouple
+>> the test from the implementation (SUT).
+>> - Update the kunit_assert_hexdump test: now it checks for presense of
+>> the brackets '<>' around the non-matching bytes, instead of comparing
+>> the kunit_assert_hexdump output char by char.
+>> V2 -> V3:
+>> - Make test case array and test suite definitions static
+>> - Change the condition in `assert.h`: we should declare VISIBLE_IF_KUNIT
+>> functions in the header file when CONFIG_KUNIT is enabled, not
+>> CONFIG_KUNIT_TEST. Otherwise, if CONFIG_KUNIT_TEST is disabled,
+>> VISIBLE_IF_KUNIT functions in the `assert.c` are not static, and
+>> prototypes for them can't be found.
+>> - Add MODULE_LICENSE and MODULE_DESCRIPTION macros
+>> V3 -> V4:
+>> - Compile the assertion test only when CONFIG_KUNIT_TEST is set to 'y',
+>> as it is done for the string-stream test. It is necessary since
+>> functions from the string-stream are not exported into the public
+>> namespace, and therefore they are not accessible when linking and
+>> loading the test module.
+> 
+> Hi Ivan!
+> 
+> This looks great! Just one last thing, since this test is no longer
+> loadable as a module, could you remove the exporting of new symbols
+> and adding of the module license. Those can be part of the next patch,
+> where we convert these tests to modules.
+> 
+> Thanks!
+> -Rae
+> 
 
-It can currently be built manually when using kunit.py, by running:
+Hi Rae,
 
-  ./scripts/clang-tools/gen_compile_commands.py -d .kunit
+Ah, sorry, I completely forgot to remove the module-related part. Thank 
+you for the review, and I'll try to be more attentive next time :)
 
-With this change however, it's built automatically so you don't need to
-manually keep it up to date.
-
-Unlike the manual approach, having make build the compile_commands.json
-means that it appears in the build output tree instead of at the root of
-the source tree, so you'll need to add --compile-commands-dir=.kunit to
-your clangd args for it to be found. This might turn out to be pretty
-annoying, I'm not sure yet. If so maybe we can later add some hackery to
-kunit.py to work around it.
-
-[1] https://clangd.llvm.org/
-[2] https://github.com/FlorentRevest/linux-kernel-vscode
-
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 7254c110ff23..61931c4926fd 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -72,7 +72,8 @@ class LinuxSourceTreeOperations:
- 			raise ConfigError(e.output.decode())
- 
- 	def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
--		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
-+		command = ['make', 'all', 'compile_commands.json', 'ARCH=' + self._linux_arch,
-+			   'O=' + build_dir, '--jobs=' + str(jobs)]
- 		if make_options:
- 			command.extend(make_options)
- 		if self._cross_compile:
-
----
-base-commit: 3c999d1ae3c75991902a1a7dad0cb62c2a3008b4
-change-id: 20240516-kunit-compile-commands-d994074fc2be
-
-Best regards,
 -- 
-Brendan Jackman <jackmanb@google.com>
+Kind regards,
+Ivan Orlov
 
 
