@@ -1,174 +1,171 @@
-Return-Path: <linux-kselftest+bounces-10316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1C08C7D9D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 22:14:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806958C7DAE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 22:29:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91993B215B5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 20:14:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 052E11F222C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 20:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75FCF157496;
-	Thu, 16 May 2024 20:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155B115820E;
+	Thu, 16 May 2024 20:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVk2DsXS"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="f7I5TVmz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5AB282E1;
-	Thu, 16 May 2024 20:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D751581EF
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 20:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715890468; cv=none; b=rtjg70cEHb1c60a0ix1WgKZo5Wfr74R6qRoEAxCeniT8Ev30fGOVkGCgidIkHLaIYRDMs178sm6W/8DUAwXMzkgERaKCoe9DBq4dRBgK8JeJslXNVeh24ShGqWWzaWoG+iStEANAJNcK37g8dqVA7WLKwyGolYM0dxIO0xyMwa4=
+	t=1715891332; cv=none; b=WPJ8ttaZZxBciFfr9z3gOtAx7CMCSLzj2iE5MSS9rTowhIOUXiJM5VJhavW4D7746rV1LQYsVngi8HVj1mXH3Jp1s6YcLL+pr1OxWn6IxDk2/YyopHrAsciPlQFd76uzwqr8Uf1pq/E1AduSC9yfCkuZmR6BBr/KAUTHIS2EZv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715890468; c=relaxed/simple;
-	bh=OFe/ZL0e30eGPwsmxyP86C74EW1jVn+nxDNC1Ljp4uY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZqlLCUZXmsW0G8Z1J23pKnF6LBOtGifEl3EtNuAUCZb0FLKCXBZ8QjbOVclKGW5JPHC4RVY08RGrdOy9zgyEvf4EEbvsdSwqPQ/9MacDwWxX0tCOX84WPvTJQ85yExDHXQBDwfLKSeU1w3q/4a90KhUIqqp8j/Sm+quxf98t15A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVk2DsXS; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e2a216758bso2371751fa.3;
-        Thu, 16 May 2024 13:14:26 -0700 (PDT)
+	s=arc-20240116; t=1715891332; c=relaxed/simple;
+	bh=kC5VynHMsC9YRLX685duYC0SDWhDLE4h76tMsTIxJ7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CmtQWROAUSvir/JQi/MyicTKyc8SpJVw0MesMRtFWEhDaNLtBiNMBQ1jdSJryuiufHxJj3jA1zMAeY2GNQu2OaYYohEPq6VPZdZk/NRCooXrAOQqN/rf64kSwqdnzUiZBJ6sKC5E1s4sYJRlMGtMTGNahJWZ3qrP9ALL2Yo5Rc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=f7I5TVmz; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2b3646494a8so512420a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 13:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715890465; x=1716495265; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vya+uy7v324SP8pO8WI3GxGb7Sg/yebLjN4lmzLeISg=;
-        b=DVk2DsXShQdX56y8D4vCP3uaKTUX72sxNySKXCgvFZgSZNLl5hcVEmSKNds0Uz0b0O
-         ezgBzopnXQYQLLGZ0A95T2X+wucL4piwaDRsY9/UoUezeoqZW/C/Qt/gPvQSblHWBzzG
-         7haE0CSyynZxB+8hiQ76Ji+LLogUJmca3lSeFGl6kzE0RMNmDHHR1sute7RNR/tFakhX
-         jbNoADGBJxQDpzcoxZozjTqd4xpXGPpvmXQUnBWFxtOoe0UXGEY3247zNA05J4FrX9T3
-         w8QF5sSVGs8PmlEWq2a2PIaLIWK3jzCz7bejGwPtM2kEr/K/DdA7Sfv94FhGXC7WCsR0
-         0ESA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715891329; x=1716496129; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Y4kKN9JX8nIOafaZ0J8qaWRBKY02LqUa/O7jwO2X8Tk=;
+        b=f7I5TVmz2dloZY3tjfcb5pTQNrPv0mLDrOCxzWIsorznjnTAKpjQIk2IS1USv5ZOZn
+         h6qMS3dnyGPXkfUm1kBhXc6bMUxqcsLHmZdxBi9uvrn9j/N9YOgOgJgi4w/PuAsk9b0P
+         N+M/GOHyvHeBcMonuA7mFVcbdF1avWueWc+YH4IB0t5NLsCgMfHxqgDuExKmFr4AAb1k
+         /3734/J7SJPaw2Lqh6tJEkGsr/kQSlBIrGkK+dz/FLwqyhTYVkuBUGcmGllwhJXeHwiY
+         zSGH54rdSKfee9jJiz5ZGDxT6uEmbTQwF4+9sPh9DU5dWSKE9GHevui8DxO7l0zlHQTS
+         aiZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715890465; x=1716495265;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1715891329; x=1716496129;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vya+uy7v324SP8pO8WI3GxGb7Sg/yebLjN4lmzLeISg=;
-        b=iKP4qKS9Kaj9t3h32hfaOq8iZ+nyC9nrIVSn+iU2AtxVT/ysrbTbMk1WS8ZrAjBl/t
-         W12+7EtuCsQDEJ4YD1SzJaqPEeA8vZkvCL8b94FkkSTNPe1h+Dj45iWlazvdi05T7P99
-         m3EgccawZpawGFwqifqQKi7Q3+Zaoklo6vW1RaVj31lQzte/jfkQKu54QnJMoM8vL6gP
-         xbtc2W802qbYiRefDnb38zSsx2K3nfHDbTifOOqxY1+o4tpYPJip003QbnzCC82+PZm9
-         b3awtBcwofKwT7602lXrM+glAc4piIgsa9mpo58hI8bDTKbM6vPtrG4mKRBo4BslHXBm
-         PI/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWVTJeVDVUnUIUzwf1+unHlqloNvXbYZdCy5JqiXghQO9Wt6m7SG9oZt3Z10cpKl9qoznPnXp3LHbko49P4T83rmsB71+URL6gxDYbZFvBC4OQ/W7yayoj69C3ez3PWQVUZ+a3GkZUT0TQkqaA0
-X-Gm-Message-State: AOJu0Yzx+1DF4X4MO8gfuFMmtkfedTYkZ93u54zivwjgLeHrcSoGkTYk
-	cwe7oUyAqmFhuU1QAfSTPmdH9UB8N76rF1ZOLEcs/nGKzthY9uzd
-X-Google-Smtp-Source: AGHT+IHCDJ8w1rrxe0y33ueWsUdSVYyrhSFHiZquYFjDCAjqBwW48xH9NBGraRbYoZby/QGgFefKJA==
-X-Received: by 2002:a2e:9f4e:0:b0:2e5:6859:1902 with SMTP id 38308e7fff4ca-2e56859194bmr120879611fa.0.1715890464445;
-        Thu, 16 May 2024 13:14:24 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:d20e:7300:e9c4:b0ae:5941:af8b? ([2a01:4b00:d20e:7300:e9c4:b0ae:5941:af8b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b79bd5asm19924705f8f.18.2024.05.16.13.14.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 May 2024 13:14:23 -0700 (PDT)
-Message-ID: <7a190f66-3d55-4fad-aaa9-854b586ed5aa@gmail.com>
-Date: Thu, 16 May 2024 21:14:22 +0100
+        bh=Y4kKN9JX8nIOafaZ0J8qaWRBKY02LqUa/O7jwO2X8Tk=;
+        b=YstEJBublItNAz+ix+iIR29R8cgo7GAr0dhtNkpNqffjH+ZoayJHAOdbqNHL0U2I8l
+         TvgkfRudM52pvImWSQ+PmRRqdtr/WY46C+lIMGngTyHtId1rBXY+3rYQ/y52oVyEgNl8
+         DDo6fHvP0MiDFuSRmhV00HGfBgw4bowRWN2MmIDzdyW2ZPY37cfm4kYFFnbpFuc/H46R
+         y3lPUIXVG3NYhQ3fIhgVT1sxpaVvJ+DXq6CrQEyQsn65XY14AhfbuMhE2jikgHpvylZI
+         xl9cm5hs0UurjJtoJbdcjnkFUAgvYYzHkOKb64/AGM9ExMAlIHAJ2G08S/aoY1sJRQ1a
+         xSsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUntX6jACzRMxmSChz0DzuYasT5FgFvllrmojz1C8RhHfnhXzkNvyazSwLl6gH+vuYRfRq6ta56nxPmMkdrGECfUUAMovyUrpDMUKFZIatE
+X-Gm-Message-State: AOJu0YxtXjos12BQRzwC6vRpG0+zR+YUHnHFrYF3kHj7C24WbFeC+XQQ
+	AUBIeWoP1kbvpMgeqqJ7AwQsWoypOGmm19eSZIEejeMM79j3Fl1dcvUnzqnAbME=
+X-Google-Smtp-Source: AGHT+IHTvY9bDUnWjwEIw7wiu0tFvYg1zAisbkSsd1SW/ziLhl1A+ZDZh7r1nudePVmEtMwYFsaJKg==
+X-Received: by 2002:a17:90a:db54:b0:2b6:3034:4ae9 with SMTP id 98e67ed59e1d1-2b6ccd6bceemr16825092a91.35.1715891329488;
+        Thu, 16 May 2024 13:28:49 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b671782dcesm15524206a91.53.2024.05.16.13.28.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 May 2024 13:28:48 -0700 (PDT)
+Date: Thu, 16 May 2024 13:28:45 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Andy Chiu <andy.chiu@sifive.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Evan Green <evan@rivosinc.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 03/17] riscv: vector: Use vlenb from DT
+Message-ID: <ZkZV3yxbxab4W6I4@ghost>
+References: <20240503-dev-charlie-support_thead_vector_6_9-v6-0-cb7624e65d82@rivosinc.com>
+ <20240503-dev-charlie-support_thead_vector_6_9-v6-3-cb7624e65d82@rivosinc.com>
+ <CABgGipXg68VEGt=oZZSENmbqs4-g3PB=CBobNwgqQjLHfxo+VQ@mail.gmail.com>
+ <20240516-grandkid-monday-86c698ca4aed@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] kunit: Cover 'assert.c' with tests
-To: Rae Moar <rmoar@google.com>
-Cc: brendan.higgins@linux.dev, davidgow@google.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kunit-dev@googlegroups.com, skhan@linuxfoundation.org
-References: <20240515142056.1374495-1-ivan.orlov0322@gmail.com>
- <CA+GJov4e8K2gWbQQA_vZvWs34OZJ7biMTkOnGAhfidG4V_dPJg@mail.gmail.com>
-Content-Language: en-US
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <CA+GJov4e8K2gWbQQA_vZvWs34OZJ7biMTkOnGAhfidG4V_dPJg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240516-grandkid-monday-86c698ca4aed@spud>
 
-On 5/16/24 19:57, Rae Moar wrote:
-> On Wed, May 15, 2024 at 10:20 AM Ivan Orlov <ivan.orlov0322@gmail.com> wrote:
->>
->> There are multiple assertion formatting functions in the `assert.c`
->> file, which are not covered with tests yet. Implement the KUnit test
->> for these functions.
->>
->> The test consists of 11 test cases for the following functions:
->>
->> 1) 'is_literal'
->> 2) 'is_str_literal'
->> 3) 'kunit_assert_prologue', test case for multiple assert types
->> 4) 'kunit_assert_print_msg'
->> 5) 'kunit_unary_assert_format'
->> 6) 'kunit_ptr_not_err_assert_format'
->> 7) 'kunit_binary_assert_format'
->> 8) 'kunit_binary_ptr_assert_format'
->> 9) 'kunit_binary_str_assert_format'
->> 10) 'kunit_assert_hexdump'
->> 11) 'kunit_mem_assert_format'
->>
->> The test aims at maximizing the branch coverage for the assertion
->> formatting functions.
->>
->> As you can see, it covers some of the static helper functions as
->> well, so mark the static functions in `assert.c` as 'VISIBLE_IF_KUNIT'
->> and conditionally export them with EXPORT_SYMBOL_IF_KUNIT. Add the
->> corresponding definitions to `assert.h`.
->>
->> Build the assert test when CONFIG_KUNIT_TEST is enabled, similar to
->> how it is done for the string stream test.
->>
->> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
->> ---
->> V1 -> V2:
->> - Check the output from the string stream for containing the key parts
->> instead of comparing the results with expected strings char by char, as
->> it was suggested by Rae Moar <rmoar@google.com>. Define two macros to
->> make it possible (ASSERT_TEST_EXPECT_CONTAIN and
->> ASSERT_TEST_EXPECT_NCONTAIN).
->> - Mark the static functions in `assert.c` as VISIBLE_IF_KUNIT and export
->> them conditionally if kunit is enabled instead of including the
->> `assert_test.c` file in the end of `assert.c`. This way we will decouple
->> the test from the implementation (SUT).
->> - Update the kunit_assert_hexdump test: now it checks for presense of
->> the brackets '<>' around the non-matching bytes, instead of comparing
->> the kunit_assert_hexdump output char by char.
->> V2 -> V3:
->> - Make test case array and test suite definitions static
->> - Change the condition in `assert.h`: we should declare VISIBLE_IF_KUNIT
->> functions in the header file when CONFIG_KUNIT is enabled, not
->> CONFIG_KUNIT_TEST. Otherwise, if CONFIG_KUNIT_TEST is disabled,
->> VISIBLE_IF_KUNIT functions in the `assert.c` are not static, and
->> prototypes for them can't be found.
->> - Add MODULE_LICENSE and MODULE_DESCRIPTION macros
->> V3 -> V4:
->> - Compile the assertion test only when CONFIG_KUNIT_TEST is set to 'y',
->> as it is done for the string-stream test. It is necessary since
->> functions from the string-stream are not exported into the public
->> namespace, and therefore they are not accessible when linking and
->> loading the test module.
+On Thu, May 16, 2024 at 05:24:25PM +0100, Conor Dooley wrote:
+> On Thu, May 16, 2024 at 10:00:12PM +0800, Andy Chiu wrote:
+> > On Sat, May 4, 2024 at 2:21 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
 > 
-> Hi Ivan!
+> > > +               if (elf_hwcap & COMPAT_HWCAP_ISA_V && has_riscv_homogeneous_vlenb() < 0) {
+> > > +                       pr_warn("Unsupported heterogeneous vlen detected, vector extension disabled.\
+> > > +                       elf_hwcap &= ~COMPAT_HWCAP_ISA_V;
+> > > +               }
+> > 
+> > We only touch COMPAT_HWCAP_ISA_V and the failed case only turns off the
+> > rectified V. So here we have nothing to do with the Xtheadvector.
 > 
-> This looks great! Just one last thing, since this test is no longer
-> loadable as a module, could you remove the exporting of new symbols
-> and adding of the module license. Those can be part of the next patch,
-> where we convert these tests to modules.
+> There's nothing t-head related in the tree at this point, so doing
+> anything with it would cause build issues.
 > 
-> Thanks!
-> -Rae
+> > However, I am still confused because I think Xtheadvector would also
+> > need to call into this check, so as to setup vlenb.
 > 
+> 
+> > Apart from that, it seems like some vendor stating Xtheadvector is
+> > actually vector-0.7.
+> 
+> The T-Head implementation is 0.7.x, but I am not really sure what you
+> mean by this comment.
 
-Hi Rae,
+Andy, the idea of this patch was to be able to support this binding on
+more than just xtheadvector.
 
-Ah, sorry, I completely forgot to remove the module-related part. Thank 
-you for the review, and I'll try to be more attentive next time :)
+You are correct though Andy, this is a problem that a later patch in
+this series doesn't disable xtheadvector when vlenb is not homogeneous.
+I am going to wait to send out any more versions until after this merge
+window but I will fix this in the next version. Thank you! 
 
--- 
-Kind regards,
-Ivan Orlov
+> 
+> > Please correct me if I speak anything wrong. One
+> > thing I noticed is that Xtheadvector wouldn't trap on reading
+> > th.vlenb but vector-0.7 would. If that is the case, should we require
+> > Xtheadvector to specify `riscv,vlenb` on the device tree?
+> 
+> In the world of Linux, "vector-0.7" isn't a thing. There's only 1.0, and
+> after this patchset, "xtheadvector". My understanding, from discussion
+> on earlier versions of this series the trap is actually accessing
+> th.vlenb register, despite the documentation stating that it is
+> unprivileged:
+> https://github.com/T-head-Semi/thead-extension-spec/blob/master/xtheadvector.adoc
+> I assume Charlie tried it but was trapping, as v1 had a comment:
+> +		 * Although xtheadvector states that th.vlenb exists and
+> +		 * overlaps with the vector 1.0 extension overlaps, an illegal
+> +		 * instruction is raised if read. These systems all currently
+> +		 * have a fixed vector length of 128, so hardcode that value.
+
+On my board with a c906 attempting to read th.vlenb (which is supposed
+to have the same encoding as vlenb) raises an illegal instruction
+exception from S-mode even though the documentation states that it
+shouldn't. Because the documentation states that vlenb is available, I
+haven't made it required for xtheadvector, I am not sure the proper
+solution for that.
+
+- Charlie
+
+> 
+> Cheers,
+> Conor.
+
 
 
