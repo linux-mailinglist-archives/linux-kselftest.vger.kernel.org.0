@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10292-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77FF78C7753
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:11:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF79A8C7826
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 16:00:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 042CE1F21CAA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 13:11:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A39A0284A27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 14:00:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72E41474AA;
-	Thu, 16 May 2024 13:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7179314B94A;
+	Thu, 16 May 2024 14:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="HKkIiKKg"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="BclPoID/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E93146A81
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 13:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B600914A60F
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 14:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715865108; cv=none; b=tMIkUitOxGdFYb/Z8GtrHcvJDbPYHn8Dqs9PLCDH5SD186B+9Wjjb5gvlvcZ6FFr6s7JN4b9hLftzo725hFgaV9f55rSEdxxdauRQEmiZLc+DmR2+5u5VvePJIexK6eUZzoHVJZ7Dn0TbUyixOpqtU6+mQmQWM6MSE05LebLaT8=
+	t=1715868029; cv=none; b=B7U+j/GYCGyqXtJYtEfYaflWmElpRg2bNwyg5zBnna8WRr7NChY0ckGDgftY9LlGU+5K8SS7e4rgu0UxZrJYLjnFBcAUOPK9ibPBkG4FVLsBOPVW/Wu2ZN9O52PgrRUy64eMrmkp7U0KzmwnDAAsujNRKB+6GplNQPWhQN926TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715865108; c=relaxed/simple;
-	bh=Wi6fPWBM2N13lqz1ePjmrOpqRQ8zl8M+Hd0GZZShN44=;
+	s=arc-20240116; t=1715868029; c=relaxed/simple;
+	bh=N0mPA+arP6XJeVtdFeMPRAWdHbtc4Ku64hU43AeRhbA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mItJRC6x2p99V5YqGMi+kMI2Hh21Mvj8qY9Ly9t24Z9U9sQHAP/MYoeHlDyjoDwCzrBqyuFKRW2qpUwQecqfZhZgGhaKXe7mz0w/Razhnkk+JLtcWct59rF68HnWIEBuaqzLqZ/OenEnnxoGaXWin8qDFIzbPDxu3/fGX87gcWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=HKkIiKKg; arc=none smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=EGUSZuscdMAWMZl0SzL0/7KHnGL4vbxJurScGjktoxSuCbYSM95CTJEb3pMFvc5nk/KtkhumBGRdenDIvMiwW+94v5XCF0Kx0Ud9V9/3Ik33NUsUXT2VBncG6h02ELPByny7rFsrW9qsGZcY7Jy16sglmXAmbj/0uXJVXBc7SQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=BclPoID/; arc=none smtp.client-ip=209.85.128.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-62027fcf9b1so68210007b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 06:11:46 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-61be4b98766so93590047b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 07:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1715865106; x=1716469906; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1715868027; x=1716472827; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4V904prVi6oQ5IyZz7aDLXAgfOChEzLZtTfRAaiZkwU=;
-        b=HKkIiKKglEbZ0hNaJB/6vEr2kjrfTrAMUPaj+Ct9bWmyMQA8SkQKvrQg76KjBrhUDw
-         q8pq4iGam6QFNqGlYJ8XhdLlsbe8rwle8BtK8Yzs15RQbF855DfywMB7pBLjcnaj2wOl
-         rcktK0svtAULtALURw4vcFxNsJzMgU7QBe9+zLUlTZ+3n+Mxl55MoOIu3uNbJWmth10o
-         rYXY1FBNrUN1miG65K942JxmgsxAIQeibboAPzgXzJB2qYI5aq7GaJG1fSZkC/2DMdMY
-         q+PZrMLZtF1XCXtv6AwqUtmKFy/mVByqlYuE14B6xeelv2axt6X0fNVBPYacEP7tdK92
-         rx0Q==
+        bh=cD8EYomjv0kIIk3OrzTD6Ca/3+CIlst2MLQc78I7jZU=;
+        b=BclPoID/Ts7KHclBqi2U2kpM9STPSbLEHZwScHjbJjPZFMzKLNwk0UmMy4gH8Z9ej5
+         rqC8I9SR/YYkUxOviRR86VppM95QPWA1F4PNfHVp6wTt6mdr6/qzVhJ4GSV2qpNdbAib
+         bguJAZjVFlYIPwRb5SwoJBQte1xWY3svvm9hKiS4TuT22QCjJ6nIMSJP0wS/vysMe5WW
+         /YBs19Ky+rZpVpnooSsEHI/kwaJ+TeIfgjd7mAtJ3n7Y/KS7SQtdkPOXUfRzrRrV+aWZ
+         36O7UKpad9E0E200Y0KE9HEW2Qyn/jdQqqYWneeyKITstjeAYpGlQOWWuK66W7REJQ8F
+         h2Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715865106; x=1716469906;
+        d=1e100.net; s=20230601; t=1715868027; x=1716472827;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4V904prVi6oQ5IyZz7aDLXAgfOChEzLZtTfRAaiZkwU=;
-        b=IkVMN7Hnvx72GdMozbLgDY2GEPheFTz8lhNaExwUx2Sh5Z1g0cWIHnKFjNj4ZJyGJ0
-         SlKQj4TR17UAVv2ADEoeY40HMoWa93BlNdPnA6lGGQlQG89bbqMPGCulKIOJ6bJKD/fD
-         AMDpSIWRPewj+jO/gCSm87kwg9+UIocz0JLkB+qt+h/gllKr4MZBiDLfLMogl76IwpHt
-         Mb4fuQy+yVdiRudgdth2GqNWfgUDJOo4NPfbuksiCZYvR9ZXhz8XO0StPEdILxY4eebM
-         n4Q17ma7yfeQQMwzroXne04SYquQMYjDNXW3AM3UtzyRFkl9slW5t2JJxp+4sdFtTGiy
-         p/ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2FJFvUc9v5l2HGZsDqrYFjXUykNcYGa7ozgX7JqdG8G7hI58LCH9TPaSRuQ4w5y0vf7w2SLmfOnKCNrs+vBc8WKITH4I9y5pJnM5lm0Hq
-X-Gm-Message-State: AOJu0YwUTlqUcc6y2THsZwT1I7+QZOgqvuIyFUT6ao/tqvIZk0IHxl+L
-	QHter03s4mvjcnEpAS7xP/6vskFPimF60i0KxW6tO224uEJvPQqpEQxoUshM9M+QXI4MEb2BwND
-	IJR3DpolIVEixwKh+R6BlA1bfcD31bgnwtt0NoA==
-X-Google-Smtp-Source: AGHT+IH5FRDo7BDlg+tWZAgAOlCiAfHazME5mq8JEMAmJ+ns26s+bWNHf5N3/miLQXMAqpV9jaca9Qw0iocuCcuU1Ac=
-X-Received: by 2002:a81:77c2:0:b0:618:9198:1a9b with SMTP id
- 00721157ae682-622af7af307mr115191067b3.3.1715865105680; Thu, 16 May 2024
- 06:11:45 -0700 (PDT)
+        bh=cD8EYomjv0kIIk3OrzTD6Ca/3+CIlst2MLQc78I7jZU=;
+        b=jFMTjrSnbvl88Vie6Vy6EF3gM1vvQnGWrhfSzFIKEFYA/AhVVI/3y3X17yTlnjPMx4
+         qudwDrD6ymvfg8cwwnDXLEKSeJjpLc4RuUARDcAR2TrG8gnVP/T7gGOFBivaO02ZNPkL
+         Q+3nGiaOgfEplEherm/kOFeiSES8FQxAFqUfc3MjgPawHdw8oL32iKX4yIbNv5ACqwNN
+         0O8T3Wo6+bDKbR2MtZaOn0mXhy+ZWTPvafVLs3a2owHiPWv7NjS6fPLN3GZiPHMM6roQ
+         QKH7lBUa74/0QJy+M8I+n5nhso7aOgBB+9f7s4ljdDNMpSjzxQCMqrsroMoknDt+RXfN
+         7vdA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOWj9zJ+/6Y5B8dVvlDW4zIj1tNZ0KplgKl3bPHJoyKsecVV8upmErT96tjMbuui09mPYe59+KFjPMa/VCKpLPS+Onv992+07y3KZJjt4v
+X-Gm-Message-State: AOJu0YzsPv74PkcXiaQ/vm5QaumM4cxfqiG3lmibxGzXvusYZ6Bg7kBV
+	L0KbSST9id2uGOqbDtINLbfiW5xo/W86YgzxDJurIDa2OZLXmP3vUPYp2GXHr6AteoH2PnKU9X6
+	xPs94hwEk2P2G7O2RAa0/ryx91eqMzvy7gPysxg==
+X-Google-Smtp-Source: AGHT+IEiXLNHmQcW5RA/wgj6ioJ1XAjnfrpiTrNjDqI8fGRd+D3gGsZcnD/VKszGvYjANziq7R0rmzEGrccihxPdLyI=
+X-Received: by 2002:a81:480f:0:b0:61a:dfd6:fd6d with SMTP id
+ 00721157ae682-622aff831a4mr186279727b3.25.1715868023507; Thu, 16 May 2024
+ 07:00:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,8 +75,8 @@ References: <20240503-dev-charlie-support_thead_vector_6_9-v6-0-cb7624e65d82@riv
  <20240503-dev-charlie-support_thead_vector_6_9-v6-3-cb7624e65d82@rivosinc.com>
 In-Reply-To: <20240503-dev-charlie-support_thead_vector_6_9-v6-3-cb7624e65d82@rivosinc.com>
 From: Andy Chiu <andy.chiu@sifive.com>
-Date: Thu, 16 May 2024 21:11:33 +0800
-Message-ID: <CABgGipUJ1hk_N6Vka2j12o80bxpDbAadJVBHdoLncrQEaBPoaw@mail.gmail.com>
+Date: Thu, 16 May 2024 22:00:12 +0800
+Message-ID: <CABgGipXg68VEGt=oZZSENmbqs4-g3PB=CBobNwgqQjLHfxo+VQ@mail.gmail.com>
 Subject: Re: [PATCH v6 03/17] riscv: vector: Use vlenb from DT
 To: Charlie Jenkins <charlie@rivosinc.com>
 Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -95,6 +95,9 @@ Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Sorry Charlie, I forgot to include the mailing list. Here is the same as
+what I sent in the private message.
+
 On Sat, May 4, 2024 at 2:21=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.co=
 m> wrote:
 >
@@ -102,15 +105,6 @@ m> wrote:
 > vlenb csr.
 >
 > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-
-I agree with Conor that we need a mechanism to turn off v and all
-depending extensions with has_riscv_homogeneous_vlenb(). And that can
-come after this.
-
-Thanks for adding the homogeneous vlen checking!
-
-Reviewed-by: Andy Chiu <andy.chiu@sifive.com>
-
 > ---
 >  arch/riscv/include/asm/cpufeature.h |  2 ++
 >  arch/riscv/kernel/cpufeature.c      | 47 +++++++++++++++++++++++++++++++=
@@ -205,9 +199,22 @@ nused)
 > +               if (elf_hwcap & COMPAT_HWCAP_ISA_V && has_riscv_homogeneo=
 us_vlenb() < 0) {
 > +                       pr_warn("Unsupported heterogeneous vlen detected,=
- vector extension disabled.\n");
-> +                       elf_hwcap &=3D ~COMPAT_HWCAP_ISA_V;
+ vector extension disabled.\> +                       elf_hwcap &=3D ~COMPA=
+T_HWCAP_ISA_V;
 > +               }
+
+We only touch COMPAT_HWCAP_ISA_V and the failed case only turns off the
+rectified V. So here we have nothing to do with the Xtheadvector.
+
+However, I am still confused because I think Xtheadvector would also
+need to call into this check, so as to setup vlenb.
+
+Apart from that, it seems like some vendor stating Xtheadvector is
+actually vector-0.7. Please correct me if I speak anything wrong. One
+thing I noticed is that Xtheadvector wouldn't trap on reading
+th.vlenb but vector-0.7 would. If that is the case, should we require
+Xtheadvector to specify `riscv,vlenb` on the device tree?
+
 >         }
 >
 >         /*
@@ -244,4 +251,7 @@ that
 > linux-riscv mailing list
 > linux-riscv@lists.infradead.org
 > http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+Thanks,
+Andy
 
