@@ -1,55 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79AF78C783E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 16:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A05FD8C78B6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 16:54:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33DC9282FA1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 14:07:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BEAF2818F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 14:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEAC114A082;
-	Thu, 16 May 2024 14:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BA114B961;
+	Thu, 16 May 2024 14:53:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Bn+zJ0xP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BODhy19q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9682714884E;
-	Thu, 16 May 2024 14:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBC5145FEB
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 14:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715868441; cv=none; b=mgwMgfyUYwRuKcfWfxHY+WkRk803ZRW9MX6Cbg51w4v3COZIext6Oa+2gZC4hgsVElVl8IA9wMovV+8jhg4N5nBj4vB1Dc+l3jNi67XOI0VndozRQmYOANow+iLn6OxEn8e5IltnD30ALk9c/xlWhTmiAEucj6+4sciO/HBDoNk=
+	t=1715871236; cv=none; b=f7kXuxnMyTAptqafNvsnr3OEAQTEF9JbFcT8zR552itS3Kng1wu/NmbJ02zdf2hBi4kTo5SNRmRlTrO/gXW0XY1FCPg9sSzeTUAmV2KhMbyimYHk+BUJVO49uKozqcfVbPF2cLnQxvJObRf0mNB726QEU18k3810wfzh104U8GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715868441; c=relaxed/simple;
-	bh=KiC6KxHYjfqrbyU7JMR/2JxDMnpW/3vFOgBAlktdxyM=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=lJYszKs1oeuo6zEVT9O3hgKLqVQFaFdreBY7LmaQLbMF53z4/eUAUR9AHibRPbWZfJ5MdhCHdA+iPXc/eMFN0p+koTK/FVM4x6j99hJIDYLlvyW8ujhVjKRHj76TUXzNtnzGmGIC15nYEw7o8fe+7CMEq2q2ePp5xXAsXRnO500=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Bn+zJ0xP; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1715868435;
-	bh=KiC6KxHYjfqrbyU7JMR/2JxDMnpW/3vFOgBAlktdxyM=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=Bn+zJ0xPRrwPVoorLOjwckuKoIkIGn5hFNFdjaToRr70mEUgPkW2j1Wke1673sWrV
-	 GD+PGWLylxDXKmGrYyghgeOiidlm4PU0L9e94CBdywSwMcvjSN3nwPfuBVRchMByCH
-	 zJfEh4ws9r2jeck+Z2Xxu+vtffV1WdGIyTCB6Y8Ex1DSo6kIgZuiLz/P+Na51o3uUp
-	 KVfqhlJv7ZMxwK0fCoH5MYfaKe5ZSRs/ku6/jv4t5y2Fzm68BvpwhG6TGw7N3NVSac
-	 XPxAoZVe8u3dY6E10XJxzOgOk99JUQ2VbheE8lLs9M+ks8uzNgqGWifkRPDQtmhV2Y
-	 8Xespj5BSoNWw==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id F39D63781183;
-	Thu, 16 May 2024 14:07:10 +0000 (UTC)
-Message-ID: <1f896922-1a62-44f5-b9b4-2e48e90e7f70@collabora.com>
-Date: Thu, 16 May 2024 08:06:16 -0600
+	s=arc-20240116; t=1715871236; c=relaxed/simple;
+	bh=EqQJNFBHmj9w7MIcTajMGZzjrM+m3hk8PDoy6QI4uQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F4DcoIf9xKSy3v9l4tA/TXT0RC1lheaOFT4JtKLR6YHuwGOXQXdzb9zxw2WYm5GQxlQrtOZQ0l1NAB3yP3vnaYzAvugj9YnGkWpkVCr6OJvwRsQjymKypUC5ADl57q5XN+a3KWUBYCHy4r+h05sdnMG95DQ0aGkDkXQ+1lBxxWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BODhy19q; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7e195fd1d8eso6004639f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 07:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1715871234; x=1716476034; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9yzmjOEeTllPQipyUqGuhVVU46tl95GvKs67H4ACCeQ=;
+        b=BODhy19qTIlnwMa4JQUPLSrQ+7bVnik4DdK8YAqhGTLZ2/RTbwAUSJgSkl6IrhIebp
+         qw++IgzRhlKT+mDyWLpi0mPsyt91vAD/xCyQ4NX341oBTiuq8c7mkM0gWWOAHCPYWs/R
+         tyRXXO2d4/FjPmUl8O9S7GBGIuFdYoiLjAewA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715871234; x=1716476034;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9yzmjOEeTllPQipyUqGuhVVU46tl95GvKs67H4ACCeQ=;
+        b=kCpAaTz0ROX5TqOuTxaPIoQOFSAhYgX4O5BXJwxZW+zsRck0CeXuo2V6yLPU9M4M7j
+         qjON2U+1UYEMGWFiYXyXOE3qEEqcDICvCmp/UiABqCmVzAz4JfCavNj3PiI2y5WWRxX1
+         EoAmBTKiyzJdW8rk+dIKZIxR1o9jqnrbjVxyW81TYBrVWrLZj4G4OpaOqo8RU/KXe5an
+         dmyK56ozURLz/yFSqyEFyqPBZSaF6JTAQk+jmyAsqsJom6EQ2mGJqPLQQnu8yzvRM0OI
+         oUweYvZ5bug4u7jjSrZMtLvUdWNxIaNxlgialKCDJ7WNAdj1vBTuES3QNV4R0LjokTJT
+         lp9A==
+X-Gm-Message-State: AOJu0YxYEhg44ESDB62jfPRPfe3dXLq3NFjPrJTwAYs9QhgpcpuasRfd
+	ELsCmQcGy5pcF8ohVYbcSGML/zYb6vDUz2TZEonzHjzRKWIb0Z2vrdtdEkuleYw=
+X-Google-Smtp-Source: AGHT+IFuYNy5AYIeI+Knw58Q5Nb/tmOtO2xa02G5M0FcI0DiEBBGEYAZ74T6O9maNc+jx5GFDx01FQ==
+X-Received: by 2002:a92:cb0f:0:b0:36c:532c:d088 with SMTP id e9e14a558f8ab-36cc1391118mr187451305ab.0.1715871233575;
+        Thu, 16 May 2024 07:53:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-36cb9d3f9afsm37771045ab.6.2024.05.16.07.53.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 May 2024 07:53:53 -0700 (PDT)
+Message-ID: <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
+Date: Thu, 16 May 2024 08:53:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,65 +72,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com
-Subject: Re: [PATCH 0/8] selftests: x86: build suite with clang
-To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- "Mike Rapoport (IBM)" <rppt@kernel.org>, Ingo Molnar <mingo@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Alexey Dobriyan <adobriyan@gmail.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, "Chang S. Bae" <chang.seok.bae@intel.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, maskray@google.com
-References: <20240501122918.3831734-1-usama.anjum@collabora.com>
+Subject: Re: -D_GNU_SOURCE kselftest breakage in mainline
+To: Mark Brown <broonie@kernel.org>, Edward Liaw <edliaw@google.com>,
+ John Hubbard <jhubbard@nvidia.com>
+Cc: linux-kselftest@vger.kernel.org, torvalds@linux-foundation.org,
+ Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>
+References: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
 Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240501122918.3831734-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/1/24 6:29 AM, Muhammad Usama Anjum wrote:
-> This series fixes build errors found by clang to allow the x86 suite to
-> get built with the clang.
+On 5/16/24 08:02, Mark Brown wrote:
+> Hi,
 > 
-> Unfortunately, there is one bug [1] in the clang becuase of which
-> extended asm isn't handled correctly by it and build fails for
-> sysret_rip.c. Hence even after this series the build of this test would
-> fail with clang. Should we disable this test for now when clang is used
-> until the bug is fixed in clang? Not sure. Any opinions?
-Its seems like the bug has been fixed in clang. I'll verify it in next
-release and draft a patch separately to fix that error.
-
-I think this series is good to accept then.
-
-> 
-> [1] https://github.com/llvm/llvm-project/issues/53728
-> 
-> Muhammad Usama Anjum (8):
->   selftests: x86: Remove dependence of headers file
->   selftests: x86: check_initial_reg_state: remove -no-pie while using
->     -static
->   selftests: x86: test_vsyscall: remove unused function
->   selftests: x86: fsgsbase_restore: fix asm directive from =rm to =r
->   selftests: x86: syscall_arg_fault_32: remove unused variable
->   selftests: x86: test_FISTTP: use fisttps instead of ambigous fisttp
->   selftests: x86: fsgsbase: Remove unused function and variable
->   selftests: x86: amx: Remove unused functions
-> 
->  tools/testing/selftests/x86/Makefile            |  9 +++++----
->  tools/testing/selftests/x86/amx.c               | 16 ----------------
->  tools/testing/selftests/x86/fsgsbase.c          |  6 ------
->  tools/testing/selftests/x86/fsgsbase_restore.c  |  2 +-
->  tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
->  tools/testing/selftests/x86/test_FISTTP.c       |  8 ++++----
->  tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
->  7 files changed, 10 insertions(+), 37 deletions(-)
+> I'm seeing quite a lot of breakage in mainline as a result of
+> daef47b89efd0b7 ("selftests: Compile kselftest headers with
+> -D_GNU_SOURCE") and daef47b89efd0 ("selftests: Compile kselftest headers
+> with -D_GNU_SOURCE") - thus far I've found that the use of
+> static_assert() is triggering build breaks where testsuites aren't
+> picking up the addition of _GNU_SOURCE (including stopping installing
+> the other tests in the same directory), and there's a bunch of tests
+> which #define _GNU_SOURCE in their code and now trigger build warnings.
+> I'm looking at fixes and mitigations now.
 > 
 
--- 
-BR,
-Muhammad Usama Anjum
+Would it be better to revert this for now and get this for now? I wouldn't
+want you to extra busy work to workaround this.
+
+> The build failures are taking out the ALSA tests entirely which has
+> caused my personal CI to explode badly :/
+> 
+
+This has been in next for a while and I didn't see any failures. These
+kind of changes are tricky. On second thought, I probably should have
+delayed picking this up.
+
+thanks,
+-- Shuah
+
+
 
