@@ -1,116 +1,122 @@
-Return-Path: <linux-kselftest+bounces-10296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A05FD8C78B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 16:54:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 020DF8C7909
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 17:11:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BEAF2818F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 14:53:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EC8D1F215A1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 15:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BA114B961;
-	Thu, 16 May 2024 14:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A8614D2BD;
+	Thu, 16 May 2024 15:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BODhy19q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rgLFeDYv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBC5145FEB
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 14:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AEF14D2B7
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 15:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715871236; cv=none; b=f7kXuxnMyTAptqafNvsnr3OEAQTEF9JbFcT8zR552itS3Kng1wu/NmbJ02zdf2hBi4kTo5SNRmRlTrO/gXW0XY1FCPg9sSzeTUAmV2KhMbyimYHk+BUJVO49uKozqcfVbPF2cLnQxvJObRf0mNB726QEU18k3810wfzh104U8GY=
+	t=1715872178; cv=none; b=C14fCEQ9SFy/XAJ6xjQ8FnZL7cx74/R2qOjRlYKVRc35Cn5i56uf2/6X/iisl10puBFD5pKm5jNI7waGCWWOYByCN9YfwSXYQk3drYZlQfwRyw5tsQlkxcv73a3ARcJ+Xu8FGUimzoeKSd2SxY0wmW47a0JUmJCLa5Rv2yeyccE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715871236; c=relaxed/simple;
-	bh=EqQJNFBHmj9w7MIcTajMGZzjrM+m3hk8PDoy6QI4uQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F4DcoIf9xKSy3v9l4tA/TXT0RC1lheaOFT4JtKLR6YHuwGOXQXdzb9zxw2WYm5GQxlQrtOZQ0l1NAB3yP3vnaYzAvugj9YnGkWpkVCr6OJvwRsQjymKypUC5ADl57q5XN+a3KWUBYCHy4r+h05sdnMG95DQ0aGkDkXQ+1lBxxWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BODhy19q; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7e195fd1d8eso6004639f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 07:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1715871234; x=1716476034; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9yzmjOEeTllPQipyUqGuhVVU46tl95GvKs67H4ACCeQ=;
-        b=BODhy19qTIlnwMa4JQUPLSrQ+7bVnik4DdK8YAqhGTLZ2/RTbwAUSJgSkl6IrhIebp
-         qw++IgzRhlKT+mDyWLpi0mPsyt91vAD/xCyQ4NX341oBTiuq8c7mkM0gWWOAHCPYWs/R
-         tyRXXO2d4/FjPmUl8O9S7GBGIuFdYoiLjAewA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715871234; x=1716476034;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yzmjOEeTllPQipyUqGuhVVU46tl95GvKs67H4ACCeQ=;
-        b=kCpAaTz0ROX5TqOuTxaPIoQOFSAhYgX4O5BXJwxZW+zsRck0CeXuo2V6yLPU9M4M7j
-         qjON2U+1UYEMGWFiYXyXOE3qEEqcDICvCmp/UiABqCmVzAz4JfCavNj3PiI2y5WWRxX1
-         EoAmBTKiyzJdW8rk+dIKZIxR1o9jqnrbjVxyW81TYBrVWrLZj4G4OpaOqo8RU/KXe5an
-         dmyK56ozURLz/yFSqyEFyqPBZSaF6JTAQk+jmyAsqsJom6EQ2mGJqPLQQnu8yzvRM0OI
-         oUweYvZ5bug4u7jjSrZMtLvUdWNxIaNxlgialKCDJ7WNAdj1vBTuES3QNV4R0LjokTJT
-         lp9A==
-X-Gm-Message-State: AOJu0YxYEhg44ESDB62jfPRPfe3dXLq3NFjPrJTwAYs9QhgpcpuasRfd
-	ELsCmQcGy5pcF8ohVYbcSGML/zYb6vDUz2TZEonzHjzRKWIb0Z2vrdtdEkuleYw=
-X-Google-Smtp-Source: AGHT+IFuYNy5AYIeI+Knw58Q5Nb/tmOtO2xa02G5M0FcI0DiEBBGEYAZ74T6O9maNc+jx5GFDx01FQ==
-X-Received: by 2002:a92:cb0f:0:b0:36c:532c:d088 with SMTP id e9e14a558f8ab-36cc1391118mr187451305ab.0.1715871233575;
-        Thu, 16 May 2024 07:53:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-36cb9d3f9afsm37771045ab.6.2024.05.16.07.53.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 May 2024 07:53:53 -0700 (PDT)
-Message-ID: <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
-Date: Thu, 16 May 2024 08:53:52 -0600
+	s=arc-20240116; t=1715872178; c=relaxed/simple;
+	bh=4e1CyU3ET7+XSdag+4G5AlXocl1TZNSQXXPxA3htHQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KtG4IK1OsoFPk9Wv70O2ZFRj+Hj5nw0uKMoJyv9NoY1U2Qos8/zal3s9lO7tQYO7czsO64sFBbWn8h8PuyQjQM7vVf90IdiaIyU2wXQr6isvEZUU9bhscboT8Ktxq2eqNzLbGLInvJAMbqK4RtWx8/3uWd543AmmVjl8f1xeydo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rgLFeDYv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24560C32786;
+	Thu, 16 May 2024 15:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715872177;
+	bh=4e1CyU3ET7+XSdag+4G5AlXocl1TZNSQXXPxA3htHQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rgLFeDYvRNVZcTScPZ4q52X1xbDOVtrR8xOASEQHEZrU5dN/zchosf/2+nHrthbrk
+	 hX/PBOSEu5XLuHxE/DrrXItIpdXg5tpyb2KuMXU0nZsXY/DwxrXxWjnrafbE5Q3zkd
+	 E0RK+z9mWxrX7mCGXz19FGiwdFgdtZCBxDU+CX2RF6v6W2b2anLcX1XkE3hrtbiVf5
+	 vq7xdPL75hFGRu4/WiogfkxW2shPUEEMhCR03mOUkRTvx1kGZ4bByvlOJUbSS1emgt
+	 5qhcAJpu2fcj0QRoaTAi0suAEBSyyIQEljIygdFXRrcjnZrm62PwJIqEX4aAIbBP7H
+	 PFb33m3PLALMg==
+Date: Thu, 16 May 2024 16:09:33 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Edward Liaw <edliaw@google.com>, John Hubbard <jhubbard@nvidia.com>,
+	linux-kselftest@vger.kernel.org, torvalds@linux-foundation.org,
+	shuah <shuah@kernel.org>
+Subject: Re: -D_GNU_SOURCE kselftest breakage in mainline
+Message-ID: <d885eba8-8fda-4e36-af5c-38eefd6f0af7@sirena.org.uk>
+References: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
+ <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: -D_GNU_SOURCE kselftest breakage in mainline
-To: Mark Brown <broonie@kernel.org>, Edward Liaw <edliaw@google.com>,
- John Hubbard <jhubbard@nvidia.com>
-Cc: linux-kselftest@vger.kernel.org, torvalds@linux-foundation.org,
- Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>
-References: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 5/16/24 08:02, Mark Brown wrote:
-> Hi,
-> 
-> I'm seeing quite a lot of breakage in mainline as a result of
-> daef47b89efd0b7 ("selftests: Compile kselftest headers with
-> -D_GNU_SOURCE") and daef47b89efd0 ("selftests: Compile kselftest headers
-> with -D_GNU_SOURCE") - thus far I've found that the use of
-> static_assert() is triggering build breaks where testsuites aren't
-> picking up the addition of _GNU_SOURCE (including stopping installing
-> the other tests in the same directory), and there's a bunch of tests
-> which #define _GNU_SOURCE in their code and now trigger build warnings.
-> I'm looking at fixes and mitigations now.
-> 
-
-Would it be better to revert this for now and get this for now? I wouldn't
-want you to extra busy work to workaround this.
-
-> The build failures are taking out the ALSA tests entirely which has
-> caused my personal CI to explode badly :/
-> 
-
-This has been in next for a while and I didn't see any failures. These
-kind of changes are tricky. On second thought, I probably should have
-delayed picking this up.
-
-thanks,
--- Shuah
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Fkl8inbLxXTHkfZP"
+Content-Disposition: inline
+In-Reply-To: <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
+X-Cookie: I'm having a MID-WEEK CRISIS!
 
 
+--Fkl8inbLxXTHkfZP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, May 16, 2024 at 08:53:52AM -0600, Shuah Khan wrote:
+> On 5/16/24 08:02, Mark Brown wrote:
+
+> > I'm seeing quite a lot of breakage in mainline as a result of
+> > daef47b89efd0b7 ("selftests: Compile kselftest headers with
+> > -D_GNU_SOURCE") and daef47b89efd0 ("selftests: Compile kselftest headers
+> > with -D_GNU_SOURCE") - thus far I've found that the use of
+> > static_assert() is triggering build breaks where testsuites aren't
+> > picking up the addition of _GNU_SOURCE (including stopping installing
+> > the other tests in the same directory), and there's a bunch of tests
+> > which #define _GNU_SOURCE in their code and now trigger build warnings.
+> > I'm looking at fixes and mitigations now.
+
+> Would it be better to revert this for now and get this for now? I wouldn't
+> want you to extra busy work to workaround this.
+
+I have patches that both fix the build breakage (it turns out on closer
+inspection that it's just ALSA that's impacted I think, the extensive
+extra warning splat and some other stuff that's just updates in
+mainline) was making the impact look wider) and deescalate it to a
+#warning which I'm currently running through CI.
+
+> > The build failures are taking out the ALSA tests entirely which has
+> > caused my personal CI to explode badly :/
+
+> This has been in next for a while and I didn't see any failures. These
+> kind of changes are tricky. On second thought, I probably should have
+> delayed picking this up.
+
+Yeah, I'd been on holiday for literally a month (got home Monday night)
+- once I saw the issues I realised I had registered them going past at
+some point while I was away but hadn't really been paying attention to
+what was going on in -next.  I'm kind of surprised nobody else picked up
+on the warnings though.
+
+--Fkl8inbLxXTHkfZP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZGIawACgkQJNaLcl1U
+h9CQXgf/Y/NUJVFs+5zFCK0T5X0XAUxM7LgN319i/Yb6lN8ByNEs5clJLo2A1wsm
+iN9L7EggUYJx7WTQjg5vs96126aPCUUZs6OkzjAvTGo0N+h7pQxJ0jDKUvXq5vc5
+Pj/h6Df62sKAQ5pifdj1hGHaQRRNUcXlB7I+LpMcqNI6rIOfiHmv9LmCGI4qRlZh
+vsi99m1sipx6I3lAzvyf/ZrL/yZoSa3O0rOPeZnKHyS22QexpbOQ69dcSxf9KsMI
+1N3CqR7yWhvctHxljkImOwSnScbck41f21KZjv9NGR6XjuCuGegdC8B/jEf6iLI/
+V1Yzhs0oPkI5W6kITlKD7PEPE2mAvg==
+=+ajI
+-----END PGP SIGNATURE-----
+
+--Fkl8inbLxXTHkfZP--
 
