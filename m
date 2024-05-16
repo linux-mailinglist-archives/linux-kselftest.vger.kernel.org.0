@@ -1,358 +1,265 @@
-Return-Path: <linux-kselftest+bounces-10286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E4D58C73EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 11:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC49C8C74A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 12:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03B0C28629A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 09:35:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70592282640
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2024 10:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACDE144D39;
-	Thu, 16 May 2024 09:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE38145328;
+	Thu, 16 May 2024 10:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwKTJGvM"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bHnaLLSn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60826144D21;
-	Thu, 16 May 2024 09:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715852059; cv=none; b=nD3hUz5yw9kBcROKSMl+4TZCBjbFgjHT6auXm29FIcmJ1OwWvG9K21xRPj4qcnaOm69UHmaV5Q2p923y0kGHaqlj5WXVdTJjtj0Q2FOiuGJA6Jh28SgIUyISsrN7GNUtSkWEExSdv1Ow+LkhGJ8inf01oreyTfOjDVrg+3Iexqw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715852059; c=relaxed/simple;
-	bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jHxUgiMTZKui6/Y4mn2uK1TSyPFzw6OyRQ4jCIabVoc9OScXE2E2egzwkKkhWN8lJyhDv1V9dAMV8vdcqEdLbPnU6fCnxuGbzxETRUqWPFY4WAo3nmZG17ZHINZq2xNQCmvNGvJbJOYtSQ3Ruf52lbek5fe3pLglRC3GFXQ9VJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwKTJGvM; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715852058; x=1747388058;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-  b=WwKTJGvMoaUzp5sPvSHn5q9a0y7KZngHUGw7Q/nrIq8SGlv7nza46Dbz
-   yvIfsemrHUWje8//c23juv1aSa/neS7t0w3jr3zZct+aTsgEfu5MeqpI2
-   rpxOcYk5bXvhlRJVMtb5LqkYDF7x9A1XkrDPoHL30BMCGXRfY7ZXcUseC
-   GKQrIavVjxwkf8+ScaMV//jSwRTavTGHK3yJQWEp+7IQwtJJVtUQUMwMe
-   Du59dridf3ba9iQpbxQQgV1K7RRK94DRZX83zlp2GhQXXvPu/jYAMkwjA
-   WQR4mW3S1ZjyUr4Yr3nhkoQWzteskEKXDvABAal72Bx6OezjDGeosjE2/
-   A==;
-X-CSE-ConnectionGUID: KtqkfFNXScKEi1l3TUWgGQ==
-X-CSE-MsgGUID: FlRa8US+SQ+qF3IsKyCC7g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="23355097"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="23355097"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:17 -0700
-X-CSE-ConnectionGUID: cgN1CT//SLyjTRQzX4ZGLg==
-X-CSE-MsgGUID: P/22DOGFQF6FiIs41t5lyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="31372510"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.108])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:12 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-pci@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v6 8/8] selftests/pcie_bwctrl: Create selftests
-Date: Thu, 16 May 2024 12:32:22 +0300
-Message-Id: <20240516093222.1684-9-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
-References: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65017143C55;
+	Thu, 16 May 2024 10:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715855428; cv=fail; b=JW057ewV0Vpq+3/6TO/Yxjwrpb+V0j788L+EOCPVwtfx1lpaPhhRGsyVxv/MUPflYX3nTa+J1s8NGKwE2L2xYm8fpJytRf4DP5vOOY6tEd/yMB0EvLcZk6vt9aNQhtjkvvJxwb1hQBO3yPq2evOHBhpeKyMWZGN4dGRY7iWPaoE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715855428; c=relaxed/simple;
+	bh=1tffHcAoN1464NYgw8ghPkEhwEJllg5x/OhJsrPcMVw=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=OX8SxKXkyZ9DfRa95zofF6aP2NvLhPBBWAxMVFhXPGJzjjgLFHR6po+Jw+Apymcdg3had+0UA0GGAEqWI+a3HXQ3YuL19t2HliLI5Dy/CogXIHZqQZGXmBzWl8Gm1jGvTFyy6ZPwL2ZBrPMlU9mTznH7xLUGDzQpkLRhYEJzl+w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bHnaLLSn; arc=fail smtp.client-ip=40.107.94.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h1Rp/AKzS9t7fqkPLMAsu7Su9Ulk5BWo/2ZzQXGBDro29qufslGrLFjaYF5TTBbprPOCBNtoiIcRaAIc8XA4WtiGKFTn4W5llVPghNUa4lKgWKZSTWYpLL1hsgvVt4pwIm41IIMhbr06dgWGUzFCQmzvpfeKqkW2DRa10bAnl9HjBJK2JdpYIIZoa/rOOwxj6qQ9Sd6O7QRL+i/ZZ/G5+nQHnDTotn7zsxXB8M4JFGP5ypoPhW/dIl/JCaI7g3y154iiNuMZWlvIMT15VT8j1BGJIw8mLZNsMsH2ikB0CQQgnlwpTpyTQupcbbmggZucKEJlqpMwv9ZUG3KF4zg9Qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=coRR0y/pkc9zRs1uDhClaRbIvcinyU9R527CNQalRcg=;
+ b=UyA0rdN8arb8KKcIe6udkkTkevRJbeOTNYBY0faWKAY/bVWmzJRsbz4Mlaijh7+yCHYRdimnk7kTIfiTsfra0fMT+gYa2IkgBimILYuuZk4Pvm5gbR/FkI4D4o7SzG+nACZhFTnuBCSyujvJOqx1z/HtuGvpH+V5hXLBDitpKHRWOfvsnDQQg92+uuJrEG3vJjzzDndFX6qUUjjdU9xjmf6Nzzk0QKoamVyixX7jL82ALmRyDNbwUv6pNqPol+OI+QEhs/hvvvL8Qj1ScCp9VurflghwlqlzqoiZpIBW1IzqlWBTZyuQpCeAMuVCEsoNn78Ynkwkhgw2oecduZUfJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=coRR0y/pkc9zRs1uDhClaRbIvcinyU9R527CNQalRcg=;
+ b=bHnaLLSn/5eYlaFtNmxCp9qyLMiNSVZoyZHXnlJ9QiXdzHh2FzSrzrUYymK5DKzodxYcTN1cD7A0bUmaO07gPFzsqkseAwTBnNlNBgDS+ypZqBPuAaswJAOVLSeviNSFTzqqT6C7tQLIJbfyzWHi+m5WO+y+pKQFDgcq5NSUA39nPoKP6tpkOtLf8832kI5iw1INXxtyfFj/6h/Z2oHkq08YHo9ihr7qi0YZvkgoXuZzbY6r1y6WN8aXjqB721omJHJz7z8XSs98ezOrg/HQxDY5bRigjh7GDFES2Yl/3zLvTWNnO97XHXkmaj9ogLnfAlrp9tEygYJ5fYUaZri+1A==
+Received: from SA9PR13CA0126.namprd13.prod.outlook.com (2603:10b6:806:27::11)
+ by CH2PR12MB4296.namprd12.prod.outlook.com (2603:10b6:610:af::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.30; Thu, 16 May
+ 2024 10:30:21 +0000
+Received: from SA2PEPF00003F61.namprd04.prod.outlook.com
+ (2603:10b6:806:27:cafe::54) by SA9PR13CA0126.outlook.office365.com
+ (2603:10b6:806:27::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.10 via Frontend
+ Transport; Thu, 16 May 2024 10:30:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SA2PEPF00003F61.mail.protection.outlook.com (10.167.248.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7587.21 via Frontend Transport; Thu, 16 May 2024 10:30:20 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 03:30:05 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 03:30:00 -0700
+References: <20240509235553.5740-1-kuba@kernel.org>
+ <875xvhu97r.fsf@nvidia.com> <20240514174321.376039a5@kernel.org>
+ <87y18bju1n.fsf@nvidia.com> <20240515162132.476a6b43@kernel.org>
+User-agent: mu4e 1.8.11; emacs 29.3
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Petr Machata <petrm@nvidia.com>, <davem@davemloft.net>,
+	<netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>,
+	<vladimir.oltean@nxp.com>, <shuah@kernel.org>, <liuhangbin@gmail.com>,
+	<bpoirier@nvidia.com>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: local_termination: annotate
+ the expected failures
+Date: Thu, 16 May 2024 10:42:31 +0200
+In-Reply-To: <20240515162132.476a6b43@kernel.org>
+Message-ID: <87ikzevyl7.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F61:EE_|CH2PR12MB4296:EE_
+X-MS-Office365-Filtering-Correlation-Id: 811d47dd-bf8a-42e6-cd3d-08dc7593301c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|376005|36860700004|1800799015|82310400017;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?RSVwJ+H8MCepLeTj0hMQ3h7szB6HGVHlC81sP+HAGp0/DTq/OH3u6J1Si3Bx?=
+ =?us-ascii?Q?Kvb1G+6BGzE5crz98kQtnohYU71lC5tQT2JkVAER5IoLDN3FHa6KmQQKf5/e?=
+ =?us-ascii?Q?WctNqyFW54i+qQ8T0ntgel32cJiNzvLyAsVwBt6H6fzfRqUdIUsWLPy2ZEUV?=
+ =?us-ascii?Q?/is1A1h2sQYsUcg5WY8hyyvwStjsydZKyS3Te19u41YY4SqGJR50lCPQBmdS?=
+ =?us-ascii?Q?A8zE85kCqW6v2TAIo8Ncu9lRY5KZ7fiHzsv/ge+gZEtZgLe74u4Z8dzqBx5i?=
+ =?us-ascii?Q?0pJDTVx3mMPyld40mo8mbEJ1/+YoL/cfRbqMe+8vqYE5nb1BymYiIqWxWdR1?=
+ =?us-ascii?Q?P6tnQWL8yfRGbGREUk3jmEaF2z1rk3K7FiaS5NMBr4fkL2+59DCVz0+jOE6v?=
+ =?us-ascii?Q?6orschvTMR055V+Mmc076AlZdJdJZhePjG9R7SoezznjASo9iXJkv3VQ83Wi?=
+ =?us-ascii?Q?5awz/57vrj7EtO6YzGo3IAk+9nBPPJM+3xeri75f61jAogxgsj9hYbvtZxhj?=
+ =?us-ascii?Q?T1VSQiolDdNlQ/b24QU39vMaaW2ofxoSVQ/zd/+gSAKGy+hus+WusNmVqB4s?=
+ =?us-ascii?Q?r5Ba+nwh6L2LSjUJXmgvnku5XBxbcNdAqK/6Bwt0Ljd/T6qY3L16JGKNx1Hi?=
+ =?us-ascii?Q?qkWKlllXqHMiQ4jnHEMneYEDCDDKuB9E4XtI4PMNpd4HXsbx7AtsW7NYhLG+?=
+ =?us-ascii?Q?SDb/07H+cIDJkx9U8HlPh7tAGz/Y9zdw3c51MT7fiMTZ4DmNNckZa3532Ovd?=
+ =?us-ascii?Q?T6AhMJVq0OEtmXlS5OMgPyfPqyKAZZ/lq7mS+R3tDPY7mRgsfYSAhbSnL0xq?=
+ =?us-ascii?Q?aZNe4ijTe5YqSGSp0yeKN9ZOoCDk8go0GcNaIaqFYl9xeMp7LSw7cdBRKTqS?=
+ =?us-ascii?Q?fh5NIdK/kwj5Il7ML+XmLK504X8FfV52A3oo/RAf/9hHlHjoDpsxnGJXA6E/?=
+ =?us-ascii?Q?Gcs1L7CS+jEO17hnwAA8UYIzifoh2YytUiCvVQlA6730FnZP+wpr4eNyIcaF?=
+ =?us-ascii?Q?kp8yIdi2um5J0A9/OMM8/KEwarUWpwLiVHpyqdtQMCpVF50nfwgOYd86YBKs?=
+ =?us-ascii?Q?BW2Jb61KWLhV5MMRjb9zbe5rdwLoDUgWy0HtyCW6xQyatXiT6voisG/L6V0n?=
+ =?us-ascii?Q?FTQCvDOGJcsVWeYNgB9KNRLIj+CEM7OPE9xHQrNrN/EPPXnCFqfML/FONgoq?=
+ =?us-ascii?Q?cAXTryX0T8QdAFoJnXrMJUzXZUFlcVhWFpQcCRZ1qHWrVM19lNgb0PRLK7gl?=
+ =?us-ascii?Q?pMoikzVavlwW/5E4q8PSbBerhotPw/T5ENh3vzv3n2KEtcR6vyaXMt65QPbv?=
+ =?us-ascii?Q?FzBNkNcaJQOz1jfYbPJ5po3JLTPXodykMoCIPdCoNdOzs+2xefLX2qqOgCZm?=
+ =?us-ascii?Q?nviP38T4A9e+rUYyPMXU1rrJ/h5X?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(36860700004)(1800799015)(82310400017);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2024 10:30:20.5885
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 811d47dd-bf8a-42e6-cd3d-08dc7593301c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003F61.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4296
 
-Create selftests for PCIe BW control through the PCIe cooling device
-sysfs interface.
 
-First, the BW control selftest finds the PCIe Port to test with. By
-default, the PCIe Port with the highest Link Speed is selected but
-another PCIe Port can be provided with -d parameter.
+Jakub Kicinski <kuba@kernel.org> writes:
 
-The actual test steps the cur_state of the cooling device one-by-one
-from max_state to what the cur_state was initially. The speed change
-is confirmed by observing the current_link_speed for the corresponding
-PCIe Port.
+> On Wed, 15 May 2024 11:02:28 +0200 Petr Machata wrote:
+>> >> And then either replace the existing xfail_on_veth's (there are just a
+>> >> handful) or convert xfail_on_veth to a wrapper around xfail_on_kind.  
+>> >
+>> > I think the bridge thing we can workaround by just checking
+>> > if ${NETIFS[p1]} is veth, rather than $rcv_if_name.
+>> > Since the two behave the same.  
+>> 
+>> I don't follow. The test has two legs, one creates a VRF and attaches
+>> p2, the other creates a bridge and attaches p2. Whether p1 and p2 are
+>> veth or HW seems orthogonal to whether $rcv_if_name is a bridge or a
+>> veth.
+>
+> Right, my superficial understanding was that the main distinction is
+> whether p2/h2 can do the filtering (or possibly some offload happens).
+> So if p1,p2 are veths we know to XFAIL, doesn't matter if we're in 
+> the vrf or bridge configuration, cause these construct will not filter
+> either.
+>
+> If I'm not making sense - I'm probably confused, I can code up what you
+> suggested, it will work, just more LoC :)
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
- .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
- .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
- 5 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+I'm not sure myself, but from the commit message it looks like the issue
+is with $rcv_if_name being the bridge.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3a94ae81b13f..5a3b69515256 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17106,6 +17106,7 @@ S:	Supported
- F:	drivers/pci/pcie/bwctrl.c
- F:	drivers/thermal/pcie_cooling.c
- F:	include/linux/pci-bwctrl.h
-+F:	tools/testing/selftests/pcie_bwctrl/
- 
- PCIE DRIVER FOR AMAZON ANNAPURNA LABS
- M:	Jonathan Chocron <jonnyc@amazon.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e1504833654d..ac0bc8af4123 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -65,6 +65,7 @@ TARGETS += net/openvswitch
- TARGETS += net/tcp_ao
- TARGETS += netfilter
- TARGETS += nsfs
-+TARGETS += pcie_bwctrl
- TARGETS += perf_events
- TARGETS += pidfd
- TARGETS += pid_namespace
-diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
-new file mode 100644
-index 000000000000..3e84e26341d1
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/Makefile
-@@ -0,0 +1,2 @@
-+TEST_PROGS = set_pcie_cooling_state.sh
-+include ../lib.mk
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-new file mode 100755
-index 000000000000..9df606552af3
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-@@ -0,0 +1,122 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+SYSFS=
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+skipmsg="skip all tests:"
-+
-+PCIEPORTTYPE="PCIe_Port_Link_Speed"
-+
-+prerequisite()
-+{
-+	local ports
-+
-+	if [ $UID != 0 ]; then
-+		echo $skipmsg must be run as root >&2
-+		exit $ksft_skip
-+	fi
-+
-+	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-+
-+	if [ ! -d "$SYSFS" ]; then
-+		echo $skipmsg sysfs is not mounted >&2
-+		exit $ksft_skip
-+	fi
-+
-+	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
-+		echo $skipmsg thermal cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+
-+	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
-+	if [ $ports -eq 0 ]; then
-+		echo $skipmsg pcie cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+}
-+
-+testport=
-+find_pcie_port()
-+{
-+	local patt="$1"
-+	local pcieports
-+	local max
-+	local cur
-+	local delta
-+	local bestdelta=-1
-+
-+	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
-+	if [ -z "$pcieports" ]; then
-+		return
-+	fi
-+	pcieports=${pcieports//\/type/}
-+	# Find the port with the highest PCIe Link Speed
-+	for port in $pcieports; do
-+		max=`cat $port/max_state`
-+		cur=`cat $port/cur_state`
-+		delta=$((max-cur))
-+		if [ $delta -gt $bestdelta ]; then
-+			testport="$port"
-+			bestdelta=$delta
-+		fi
-+	done
-+}
-+
-+sysfspcidev=
-+find_sysfs_pci_dev()
-+{
-+	local typefile="$1/type"
-+	local pcidir
-+
-+	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
-+
-+	if [ -r "$pcidir/current_link_speed" ]; then
-+		sysfspcidev="$pcidir/current_link_speed"
-+	fi
-+}
-+
-+usage()
-+{
-+	echo "Usage $0 [ -d dev ]"
-+	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
-+}
-+
-+pattern="$PCIEPORTTYPE"
-+parse_arguments()
-+{
-+	while getopts d:h opt; do
-+		case $opt in
-+			h)
-+				usage "$0"
-+				exit 0
-+				;;
-+			d)
-+				pattern="$PCIEPORTTYPE_$OPTARG"
-+				;;
-+			*)
-+				usage "$0"
-+				exit 0
-+				;;
-+		esac
-+	done
-+}
-+
-+parse_arguments "$@"
-+prerequisite
-+find_pcie_port "$pattern"
-+if [ -z "$testport" ]; then
-+	echo $skipmsg "pcie cooling device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+find_sysfs_pci_dev "$testport"
-+if [ -z "$sysfspcidev" ]; then
-+	echo $skipmsg "PCIe port device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+
-+./set_pcie_speed.sh "$testport" "$sysfspcidev"
-+retval=$?
-+
-+exit $retval
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-new file mode 100755
-index 000000000000..584596949312
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-@@ -0,0 +1,67 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+set -e
-+
-+TESTNAME=set_pcie_speed
-+
-+declare -a PCIELINKSPEED=(
-+	"2.5 GT/s PCIe"
-+	"5.0 GT/s PCIe"
-+	"8.0 GT/s PCIe"
-+	"16.0 GT/s PCIe"
-+	"32.0 GT/s PCIe"
-+	"64.0 GT/s PCIe"
-+)
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+
-+coolingdev="$1"
-+statefile="$coolingdev/cur_state"
-+maxfile="$coolingdev/max_state"
-+linkspeedfile="$2"
-+
-+oldstate=`cat $statefile`
-+maxstate=`cat $maxfile`
-+
-+set_state()
-+{
-+	local state=$1
-+	local linkspeed
-+	local expected_linkspeed
-+
-+	echo $state > $statefile
-+
-+	sleep 1
-+
-+	linkspeed="`cat $linkspeedfile`"
-+	expected_linkspeed=$((maxstate-state))
-+	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
-+	if [ ! "${expected_str}" = "${linkspeed}" ]; then
-+		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
-+		retval=1
-+	fi
-+}
-+
-+cleanup_skip ()
-+{
-+	set_state $oldstate
-+	exit $ksft_skip
-+}
-+
-+trap cleanup_skip EXIT
-+
-+echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
-+for i in $(seq $maxstate -1 $oldstate); do
-+	set_state "$i"
-+done
-+
-+trap EXIT
-+if [ $retval -eq 0 ]; then
-+	echo "$TESTNAME [PASS]"
-+else
-+	echo "$TESTNAME [FAIL]"
-+fi
-+exit $retval
--- 
-2.39.2
+But the patch that you inline is R-b'd and T-b'd by Vladimir, so I'm
+going to assume it's doing the right thing.
+
+> +# Clear internal failure tracking for the next test case
+> +begin_test()
+> +{
+> +    RET=0
+> +    FAIL_TO_XFAIL=
+> +}
+> +
+>  check_err()
+>  {
+>  	local err=$1
+> diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
+> index c5b0cbc85b3e..a241acc02498 100755
+> --- a/tools/testing/selftests/net/forwarding/local_termination.sh
+> +++ b/tools/testing/selftests/net/forwarding/local_termination.sh
+> @@ -73,9 +73,12 @@ check_rcv()
+>  	local pattern=$3
+>  	local should_receive=$4
+>  	local should_fail=
+> +	local xfail_sw=$5
+>  
+>  	[ $should_receive = true ] && should_fail=0 || should_fail=1
+> -	RET=0
+> +	begin_test
+> +	# check if main interface is veth
+> +	[ "$xfail_sw" == true ] && xfail_on_veth $h1
+
+If xfail_on_veth $h1 is all that's needed, then I really don't see a
+reason why not just do this:
+
+	check_rcv $rcv_if_name "Unicast IPv4 to primary MAC address" \
+		"$smac > $rcv_dmac, ethertype IPv4 (0x0800)" \
+		true
+
+	check_rcv $rcv_if_name "Unicast IPv4 to macvlan MAC address" \
+		"$smac > $MACVLAN_ADDR, ethertype IPv4 (0x0800)" \
+		true
+
+	xfail_on_veth $h1 \
+		check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+			"$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+			false
+
+This should work now, in much the same way as this patch, but the intent
+is IMHO clearer (vs. passing a mystery true), and FAIL_TO_XFAIL is
+cleanly scoped and doesn't run the risk of leaking out of the test.
+
+>  	tcpdump_show $if_name | grep -q "$pattern"
+>  
+> @@ -157,7 +160,7 @@ run_test()
+>  
+>  	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address" \
+>  		"$smac > $UNKNOWN_UC_ADDR1, ethertype IPv4 (0x0800)" \
+> -		false
+> +		false true
+>  
+>  	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address, promisc" \
+>  		"$smac > $UNKNOWN_UC_ADDR2, ethertype IPv4 (0x0800)" \
+> @@ -165,7 +168,7 @@ run_test()
+>  
+>  	check_rcv $rcv_if_name "Unicast IPv4 to unknown MAC address, allmulti" \
+>  		"$smac > $UNKNOWN_UC_ADDR3, ethertype IPv4 (0x0800)" \
+> -		false
+> +		false true
+>  
+>  	check_rcv $rcv_if_name "Multicast IPv4 to joined group" \
+>  		"$smac > $JOINED_MACV4_MC_ADDR, ethertype IPv4 (0x0800)" \
+> @@ -173,7 +176,7 @@ run_test()
+>  
+>  	check_rcv $rcv_if_name "Multicast IPv4 to unknown group" \
+>  		"$smac > $UNKNOWN_MACV4_MC_ADDR1, ethertype IPv4 (0x0800)" \
+> -		false
+> +		false true
+>  
+>  	check_rcv $rcv_if_name "Multicast IPv4 to unknown group, promisc" \
+>  		"$smac > $UNKNOWN_MACV4_MC_ADDR2, ethertype IPv4 (0x0800)" \
+> @@ -189,7 +192,7 @@ run_test()
+>  
+>  	check_rcv $rcv_if_name "Multicast IPv6 to unknown group" \
+>  		"$smac > $UNKNOWN_MACV6_MC_ADDR1, ethertype IPv6 (0x86dd)" \
+> -		false
+> +		false true
+>  
+>  	check_rcv $rcv_if_name "Multicast IPv6 to unknown group, promisc" \
+>  		"$smac > $UNKNOWN_MACV6_MC_ADDR2, ethertype IPv6 (0x86dd)" \
 
 
