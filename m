@@ -1,89 +1,94 @@
-Return-Path: <linux-kselftest+bounces-10367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4027D8C8CAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 21:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02BAE8C8D55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 22:38:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4981C212B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 19:16:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12EAE1C228CE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 20:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E7F13FD9B;
-	Fri, 17 May 2024 19:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA7B140386;
+	Fri, 17 May 2024 20:38:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dpdiRJYE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkJuUjV8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFBB13FD92;
-	Fri, 17 May 2024 19:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B74038F86;
+	Fri, 17 May 2024 20:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715973380; cv=none; b=tDq2gu0t2yOQJ7h/7smNOBy3/g5SxrIwz9XiWJIEB4F5dMJreokVdg1oI3RA65IhB5a72qG/4aMjHcJUwRfmaC3A9OGl8wYTMPqVqyTVStrleKdPKiuRuOgh9qqBTTqlpshihtMgsEO2/S0vE+TdXiQCG6j25Z8IKqRyR2ij8js=
+	t=1715978310; cv=none; b=GxB5KxvSKvNC7QdTN4EmOfTOZx54D8aI4O3LFhpX4a3RYCuv2EyUvKKbVXbPamRD8VuLZ8MKjjzTMCn6PSKJcAEUFFxU7GbN0l2BXQlwfw0r8c1xBA2d1CSKxoME+RVPETBaNghBhJSEjo7EC9GJJRkhfXUMKcrHnUJ2WTTBMjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715973380; c=relaxed/simple;
-	bh=VPJIKN7NUDowBVz/dtCZSneJ0vS4DaX9ktRnbDW/dF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ORIlCD1R8FcUdaZnER1kBZug1kgSmhx+rgAuaweEn9f0JEikqkl7ohHmy11+xxNleBPmSpp25Qh2S4l8r4p8G3JnfZNAMH1drVhn6C1Cu4k3aRdp4SrTxHrJ8Y5rp3oaH/9B+0oXbkc9pPx84a6nBNUXdmS5JyOVeiYecbK3JP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dpdiRJYE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050D2C32789;
-	Fri, 17 May 2024 19:16:16 +0000 (UTC)
+	s=arc-20240116; t=1715978310; c=relaxed/simple;
+	bh=VESQQVszmj9hnUXrDL5EqUE8OZdDZkTLli8H1c6yMw8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=LnEOPhI31dkKQTJHmb3lCsUUDmgNiAD5F2MQi5C1/uZSJ11fCA2rf7Zc78G64au+O56ObDIzC0QmDk7rsJ23D29IzFZ4t8tlbbuX7BFzYYiMvUryaNn7r67PAqhiR4MfY7cPszgHnJ70+XfFho7kTk2Ui3NqJ6/jtzw7SdJB3qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkJuUjV8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2E01C4AF0B;
+	Fri, 17 May 2024 20:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715973380;
-	bh=VPJIKN7NUDowBVz/dtCZSneJ0vS4DaX9ktRnbDW/dF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dpdiRJYEpsyT5+6Win0jvl1fYxTa7g4Sb0kBOfRT6OLnqdDWwhrvq2D5wKge8L7QY
-	 BT/I90s3ASqB8WOfd5+2q49f+t4wxs5DATNKX8owD6EJ5wnv7AlgOk3I7Hxtj51nKt
-	 ZuyA81//Yr4Z1T5KCTgPDCuL11dvWQGzYPn40CEKvFYlDi4k6ZZilvj5/7LkWADpDX
-	 R5mXrB6Zdypr9egoBYa2O9anacBOevvRAb5U8bvA2XF7iFllGo5eBBobHbuUT4r5jS
-	 fLEQ9U8eijk71xfFgf9yRJ22s2NQJw8W30DWUg6bZ8ORYeMmAPRkwcnJfkF/+g5du6
-	 5dWwpQ8vEDmeA==
-Date: Fri, 17 May 2024 20:16:14 +0100
-From: Simon Horman <horms@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-	Benjamin Poirier <bpoirier@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Jaehee Park <jhpark1013@gmail.com>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv2 net] selftests/net: use tc rule to filter the na packet
-Message-ID: <20240517191614.GA475595@kernel.org>
-References: <20240517010327.2631319-1-liuhangbin@gmail.com>
- <20240517091402.GD443576@kernel.org>
- <20240517120420.6d2d34a2@kernel.org>
+	s=k20201202; t=1715978309;
+	bh=VESQQVszmj9hnUXrDL5EqUE8OZdDZkTLli8H1c6yMw8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AkJuUjV8UfKWHHkbXBUokhD9PswDCOhG5Nc+h/XDapPtMf/9M9kVkN5fblisd6juw
+	 QI1UBkZQC0sPw41THyOV4To5t8rP0R9ZCzk/enGdaw3l1m/vkIBdMiA3MokXw/jnVy
+	 xStJxzUu/EH+kN5RQPEJtUZqi8SqHzAXcSSLklGIdJN0KhtvjgM8S/umCq08Tz449L
+	 gRpJbScIB6HXeoV3QvVVbpgh0gSD77YpNp8W0RIVR2CP8qaFd0q5VQ1X4Lwiii678W
+	 7872Jdpoahz9XgrZr9gB8RuWmE9dknuA+wHSFDSlpTZCKOcTrX5pVpA5BOUG+chruZ
+	 GCIyTNAgoQPLA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8BE7C54BDA;
+	Fri, 17 May 2024 20:38:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240517120420.6d2d34a2@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3] selftests: net: local_termination: annotate the
+ expected failures
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171597830975.5541.4499174102390124527.git-patchwork-notify@kernel.org>
+Date: Fri, 17 May 2024 20:38:29 +0000
+References: <20240516152513.1115270-1-kuba@kernel.org>
+In-Reply-To: <20240516152513.1115270-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, liuhangbin@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, petrm@nvidia.com, vladimir.oltean@nxp.com
 
-On Fri, May 17, 2024 at 12:04:20PM -0700, Jakub Kicinski wrote:
-> On Fri, 17 May 2024 10:14:02 +0100 Simon Horman wrote:
-> > Jakub, is there a way to tell how long a test took to execute?
-> > Perhaps it's obvious, but I couldn't see it.
-> 
-> It's not obvious, and it was broken. There's an 'info' file with
-> extra metadata in the directory with results:
-> 
-> https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/599300/39-arp-ndisc-untracked-subnets-sh/info
-> 
-> but it's currently reporting fractional seconds rather than total
-> seconds:
-> 
-> https://github.com/linux-netdev/nipa/commit/fb7c45fd3b68b379b7bceb8f79c8df06aaf53ee0
-> 
-> Once we have a proper DB (any day now), I'll add it to the JSON output
-> so it appears in the web UI.
+Hello:
 
-Great, thanks.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 16 May 2024 08:25:13 -0700 you wrote:
+> Vladimir said when adding this test:
+> 
+>   The bridge driver fares particularly badly [...] mainly because
+>   it does not implement IFF_UNICAST_FLT.
+> 
+> See commit 90b9566aa5cd ("selftests: forwarding: add a test for
+> local_termination.sh").
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v3] selftests: net: local_termination: annotate the expected failures
+    https://git.kernel.org/netdev/net/c/fe56d6e4a99a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
