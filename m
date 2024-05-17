@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-10356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 143888C88B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 16:57:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A728A8C88C0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 16:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 378401C23BB5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 14:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 629F828963B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 14:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2227C09F;
-	Fri, 17 May 2024 14:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 969007EEE3;
+	Fri, 17 May 2024 14:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="YklKUTZn"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sIkXvz5e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7E978C6E
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 14:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768F27BAF0
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 14:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715957613; cv=none; b=eH4eIs+8barQScSSO95O83jV+YbWhQWxmM17At9Aa/hmklfseLcsbc3uhInDsm3ZFeV3j7rwuCtbdVpekebMbVBJWJbRoTKQdJn8iQFFXNT2xZBxVKoLLnWlqTwNcJrw063m8mkKLipMEDGPsqcRR+VJ1TnZIv4B663JkXfxxdU=
+	t=1715957615; cv=none; b=f/YDUtPEK89R2Gm3WDq5F7ua0UCTUIHtjIiDGE4chlqy8svq7aocVnUqO0QrmxKyWfmk8zUIR2MnixXQcpBy7yMvXZkirRt1zz3COgypU1wcTSMe3CHgbWYYNPGXhnCrh89mrYjX2jiElvYW1cYHbOPzcTjvfIlCFqcunbCf/Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715957613; c=relaxed/simple;
-	bh=u6ulU0BPQmNSIcLbsuogo6WHzBJ6ZqZxhPCHBhuLYhk=;
+	s=arc-20240116; t=1715957615; c=relaxed/simple;
+	bh=C9vzT2vCbUbGsLodiBKngW59Ng7yI/EkxSzw5LE66mw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JzXp8mKvY3uJKP3cZ9Y4UOfU3X9LSAxxEB6JaFusJYuCTTex94S79mrmBR/tMLM8vrZbY3FluJ2fKrUZU0v93XHCJ1Vskjhx/dA1TPGnERAqHSYbLQy2Dherbvr4hOvNg1cRMZKK0R2uCyjnrpbe9j/fsD96LpOKf84er0QisIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=YklKUTZn; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version:Content-Type; b=lColjedk4zFFzqyKLMvbbq3rRCRGO4TkNyKXqyetYN4r1I0mXXih7u1M85L0hi1Ausu1/Ntws4gy2KyxP/wOB44cze5m0cRDsOJ4nSOcGAW5AzP07TJu4cyyoG66AncugZVuHUfjdSTBzs24Oo58AEptLN9gaVCWuhVcv/Pbk6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sIkXvz5e; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-34e663ab1caso42904f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 07:53:31 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2e70f6b22e2so751181fa.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 07:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715957610; x=1716562410; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715957611; x=1716562411; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HO1pUvU0QFRoXzPxVhmpQLKjzbVC9RycGYDtZgzkuNE=;
-        b=YklKUTZnaJLHJ40ku30xof7p6KXJyl/VRZjweJduV17tX9PWc49JPwz9q4nEVzjOZF
-         HdpO+mIJxG9nPu8ei2fLgeD1AC55utgll/TqMaCHDk+BzZhsgSW2c+Ekykc8PbRmLomt
-         cHygXWduuNAJKRcnQxKKA9O+FxjeZSpT2HfZQYxNS41IDeuc8vrpeDFHrHT+I7bgeiEW
-         Q+ftcZxgcPISDwOj65oK1gixE+RZMdaJtNCr3WUnOjbFxl8l2hPOZXNpD9eS4B7szxXB
-         oJTfvqG11f1/lTS0da4jW9CXWzxVjPeJUQuxsCOTtUn/doL6GO5FoDLsf1+hpEl4eTxK
-         +GCw==
+        bh=6gKduH3vm4bA8ayteF62cYLjH3IlcFCjaIqG2zMpUYA=;
+        b=sIkXvz5eK/YQvVo3BZT2MEA3u2wHyX/qt5kNedkFdvktJXxyuqE0AcrEdwXLe9GjzO
+         pTnjwXcrSBw6q6S/13ZAznk/uw5FS3m+ug+ZNKbmT8hk/dcTJ7g8vCPNXx8+GfM9OOSM
+         MUUczNc+m8MEckkEZ9YPByQdADj5H83g3zzCztsoUsR/MhAcjOrWagRN7ZIn4VXh1C8c
+         PQXpJCWAW4m5hrMiLCZWymK84ethTmp4HtmfvgcZusKIXArsyx5pekMDwNIL5ZwPOPDS
+         a7dRtKdf8oV4OgjltAaMVVwTK3zT7NzyoY7hHviADrIzOXodUyJ/lqLNbaNpZ3B4XiEd
+         +qWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715957610; x=1716562410;
+        d=1e100.net; s=20230601; t=1715957611; x=1716562411;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HO1pUvU0QFRoXzPxVhmpQLKjzbVC9RycGYDtZgzkuNE=;
-        b=VgaDqcJ3UnAo2sIT4pM7kgahlpPBrwcIGFGh2DxY25UVujWgkosKJWyrzk/8rEDiHj
-         S4G73jIZo9g51I+WLx2+et8sDz5vf/0J757vVLmax7F9rKB6QKrgODGjMhk1M9xZ2rIe
-         w86VLISfZTh13I+sN6tqxJJwkZ5gPrGvknW4uD+oo3idTYh4doRMl9EKdtWQ+F3q8j5a
-         +g+7e/eqwF+h1XUt8RgkFYYMfhVG8iB1echXqyWK9AllvrEMyhiD/74roQ+hxhganCcR
-         Ocv/pT6nYE39xOwuq5jcpxtrYAFdiRCe18LeXL68l/8VCy9z6o2heaUMtuQ2UqdlP2Xt
-         6oZA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/YfdkkL79n2wyajS7KJ7JqAMStPb403QPZ9RS1vSn6PtrYbC+QWl0QjT0OIuuhvsGIXgOtriXhTdaTfcPOv4GAQEVqqVEk+caj1N3jUCp
-X-Gm-Message-State: AOJu0Yw4DKk0uXenVPiR0H+p8NwznNsS2/SPr8CllfBWnnV7OqIzzkcK
-	umGCVM5pjH4Ggoohov57mKmxv1m3bBB89pER3FiH2O/XU74OqMUZyuID/DE5NZk=
-X-Google-Smtp-Source: AGHT+IHCcI6mTF/qG46F9/WPCDIuGLK4dSqNF1EcLBDpXdJsYapMFNR0VxcFS5FS/J/SwT2j4pYivA==
-X-Received: by 2002:a05:600c:3b86:b0:418:f770:ba0 with SMTP id 5b1f17b1804b1-41fea52ef14mr167164555e9.0.1715957610248;
-        Fri, 17 May 2024 07:53:30 -0700 (PDT)
+        bh=6gKduH3vm4bA8ayteF62cYLjH3IlcFCjaIqG2zMpUYA=;
+        b=t6bWDOeEp987GoAbuFz4W6/E0zqjoQEg5la0QK20vq8AsZ0AwEZL79IT0xRatS6FW+
+         lP2SbdzKtPr7TCez4PzwjQRfsKth1ssnRQqXnYr8ctKMl3Q6Apg5r/st78Mb3mzUNlGQ
+         1FCRgZN+B6xIwSNKUlX9YZJFL+PNL69EdytYjUxODrV7qoV5H0pl50NbdJ55AHzI1Bru
+         DjCt+GehE5NeBVyOSHzH3bz38j8CGIZoQlzK7NUKM0+A0UNSpYY7guEo2GdLf9W5lJFl
+         TRnxTYCUSS3Y5QaCtnvdiFzTC89gm3UOp9YFOO9PqJxFGNlGmEMs1Y1q3kR/osEjAhCJ
+         Ttmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHz8+mqGWrMbsLEQe8V47C96q//0sJxL0tBdd1k3w23qlzOoxbjBpSXYpAkZershC9vxAH8KhHSy2zgtxYofOkbrEuSy8uwCsI6jMczJpH
+X-Gm-Message-State: AOJu0YyyUMdwKiHyOOf3+yauM+Mj0a7l+tuKX6T22WgqA49B2wpNRoS/
+	Fv/7PMa5+28J5kINyQ8SPAlHo/HCfLhuosAlzIsKdD6N7e5LvRZTsgLqbe+zUQY=
+X-Google-Smtp-Source: AGHT+IEoTnwmla6Aw69ILKU9EfBqXp43B9e88SNG9U5yWPM6gqE1tM5+qUVkKG7xDY04SlNYRjnGNA==
+X-Received: by 2002:a05:651c:19ac:b0:2e2:18c2:9c8b with SMTP id 38308e7fff4ca-2e51f262c65mr155101901fa.0.1715957611714;
+        Fri, 17 May 2024 07:53:31 -0700 (PDT)
 Received: from carbon-x1.. ([2a01:e0a:999:a3a0:46f0:3724:aa77:c1f8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41fccce9431sm301723695e9.28.2024.05.17.07.53.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41fccce9431sm301723695e9.28.2024.05.17.07.53.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 May 2024 07:53:29 -0700 (PDT)
+        Fri, 17 May 2024 07:53:31 -0700 (PDT)
 From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
@@ -85,10 +85,11 @@ Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
 	devicetree@vger.kernel.org,
 	kvm@vger.kernel.org,
 	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 11/16] KVM: riscv: selftests: Add some Zc* extensions to get-reg-list test
-Date: Fri, 17 May 2024 16:52:51 +0200
-Message-ID: <20240517145302.971019-12-cleger@rivosinc.com>
+	linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v5 12/16] dt-bindings: riscv: add Zcmop ISA extension description
+Date: Fri, 17 May 2024 16:52:52 +0200
+Message-ID: <20240517145302.971019-13-cleger@rivosinc.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240517145302.971019-1-cleger@rivosinc.com>
 References: <20240517145302.971019-1-cleger@rivosinc.com>
@@ -101,64 +102,46 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The KVM RISC-V allows Zca, Zcf, Zcd and Zcb extensions for Guest/VM so
-add these extensions to get-reg-list test.
+Add description for the Zcmop (Compressed May-Be-Operations) ISA
+extension which was ratified in commit c732a4f39a4 ("Zcmop is
+ratified/1.0") of the riscv-isa-manual.
 
 Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Acked-by: Anup Patel <anup@brainfault.org>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../devicetree/bindings/riscv/extensions.yaml        | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 40107bb61975..61cad4514197 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -55,6 +55,10 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBKC:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBKX:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZBS:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCA:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCB:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCD:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCF:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFH:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFHMIN:
-@@ -421,6 +425,10 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(ZBKC),
- 		KVM_ISA_EXT_ARR(ZBKX),
- 		KVM_ISA_EXT_ARR(ZBS),
-+		KVM_ISA_EXT_ARR(ZCA),
-+		KVM_ISA_EXT_ARR(ZCB),
-+		KVM_ISA_EXT_ARR(ZCD),
-+		KVM_ISA_EXT_ARR(ZCF),
- 		KVM_ISA_EXT_ARR(ZFA),
- 		KVM_ISA_EXT_ARR(ZFH),
- 		KVM_ISA_EXT_ARR(ZFHMIN),
-@@ -945,6 +953,10 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zbkb, ZBKB);
- KVM_ISA_EXT_SIMPLE_CONFIG(zbkc, ZBKC);
- KVM_ISA_EXT_SIMPLE_CONFIG(zbkx, ZBKX);
- KVM_ISA_EXT_SIMPLE_CONFIG(zbs, ZBS);
-+KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
-+KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
-+KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
-+KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
- KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
- KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
- KVM_ISA_EXT_SIMPLE_CONFIG(zfhmin, ZFHMIN);
-@@ -1001,6 +1013,10 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_zbkc,
- 	&config_zbkx,
- 	&config_zbs,
-+	&config_zca,
-+	&config_zcb,
-+	&config_zcd,
-+	&config_zcf,
- 	&config_zfa,
- 	&config_zfh,
- 	&config_zfhmin,
+diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+index 39084c58d4e4..acad4d9d96ab 100644
+--- a/Documentation/devicetree/bindings/riscv/extensions.yaml
++++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+@@ -252,6 +252,11 @@ properties:
+             merged in the riscv-isa-manual by commit dbc79cf28a2 ("Initial seed
+             of zc.adoc to src tree.").
+ 
++        - const: zcmop
++          description:
++            The standard Zcmop extension version 1.0, as ratified in commit
++            c732a4f39a4 ("Zcmop is ratified/1.0") of the riscv-isa-manual.
++
+         - const: zfa
+           description:
+             The standard Zfa extension for additional floating point
+@@ -559,6 +564,13 @@ properties:
+                 const: zca
+             - contains:
+                 const: f
++      # Zcmop depends on Zca
++      - if:
++          contains:
++            const: zcmop
++        then:
++          contains:
++            const: zca
+ 
+ allOf:
+   # Zcf extension does not exist on rv64
 -- 
 2.43.0
 
