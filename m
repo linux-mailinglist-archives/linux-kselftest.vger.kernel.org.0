@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-10325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAF038C803C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 05:41:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A355B8C8043
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 05:47:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC1961C21114
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 03:41:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6380328278D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 03:47:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2411F947A;
-	Fri, 17 May 2024 03:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFD5B672;
+	Fri, 17 May 2024 03:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g61vNCLU"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KkFX2Qdv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709C120E3
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 03:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E3C10A1B
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 03:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715917274; cv=none; b=ilTooRyzRWQtgyDZO42tcvkF5ll+fCgaL6Ss6PNcKgv969z8dw18J9zzAF7ykTDs3OeDnZY9Adrbk6Nk8R1HGId2k9Hsj3xAr+0YO1Ntkb7AI5xTObysDJi1FCRv46dsasoJNMWgBAdKc2Du91NS9wOQBgrkyH/3ppGn3mACfsQ=
+	t=1715917629; cv=none; b=VP325galOkPDL7tnSCo1d3LF4eUXfR22kgfE+69QdiERHAVrv8akRUI8XsayVcdJNtM98RJ+5YZzADVBCD9FbOwtfeWT6jhYNhKNCYmwBruVaL3V8smsYj6YMv57OndlSOu5OQykmQwV2l1vHiFnlT1Q2f4iaVVRljkgmiuc5aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715917274; c=relaxed/simple;
-	bh=3BEGxZwtyF1vRM91ndh6CJUGdhhKMSU0cO7xHvcWCuM=;
+	s=arc-20240116; t=1715917629; c=relaxed/simple;
+	bh=60WJPyunhwRDxdqK0jmaca+G8J/J7dfoT/EsRzkUIOM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=evRpRSDft8VHPxI64sJlGEWOKN0H2uoe8Nxf8Ptsu8RqkoSGcazs/MhYmf+k+7xR0gsZWaOzRHSSNYk+CERp91jPHHge55fdH1d+IVyfMaZ12dXZXVyR1LN50QHfHR07dOqc4TZ3P7cvJrIOMQ8QJqwUYwS8Hy477bePlZRSWyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g61vNCLU; arc=none smtp.client-ip=209.85.166.173
+	 In-Reply-To:Content-Type; b=TFbN5FwGnV+CYbxh6FaqkrgffLtPth9+gE4YEeHPxjWDLSPZnT9vid7i/4aKhPWAmeWGEcJU+puLPuzJr+4zwWbR2V/PQM8PuWaz5+TJG848SE+JA++Hj1jiYtmxTkcgJIrZ4ltVDJHbivAx/Pn6IghgdtktZxj8CNeDhBy+VKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KkFX2Qdv; arc=none smtp.client-ip=209.85.166.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36c2cf463e3so132445ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 20:41:12 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7d9ef422859so801439f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2024 20:47:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1715917271; x=1716522071; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1715917627; x=1716522427; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JUD5o9hcxRwEXEseJIOEUO2XCi0ciQLzvPwy0xSef34=;
-        b=g61vNCLUtI4DaMY4P2HjvxZ4iXQkMVMWIduKqUKvGRKG3wTppyhap4c7QOcCNZqzqv
-         zvqpranUpO1nhsjSoNkgqWlqVJm02WHtvn+eX1taRbLXI/Iy3h7M6DzC5WsJX3oRkR6e
-         vrHXyU9h0ZOfLxHRu4AOwzDAEJ+KswwvRdwEw=
+        bh=yDlOiioY4qBdeDaBJ3EMBjG9W4k3e+q2KQuwlwFm/Wg=;
+        b=KkFX2Qdvuhzl5EaGH5xkrhb0yT1vguDmkATYGJXXzKL+60FaUrp0rGhbJAIzha2c8Y
+         +HEYSfsGATA7i7Rcq8GakJDptzuDZE7S2ciBMIyojTlAnot1ibQnXvuSgmCpVNmzm6Pv
+         oG5WBKMzyD2u4NSVuQlS6NsJTg1ucs84pQE9E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715917271; x=1716522071;
+        d=1e100.net; s=20230601; t=1715917627; x=1716522427;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JUD5o9hcxRwEXEseJIOEUO2XCi0ciQLzvPwy0xSef34=;
-        b=ZGbLWT9UqML6toUD5VAsbJOGnW4vIMHf8G26CMR37/K15hI6ifF7MBFDwmibHjjIJd
-         orwr+UBu7Doz79S+7SBkwXot2pOaPOxy6UlXxb48wMUkbLW9WzQFE45uggTB5O/skIt4
-         Hm2/XcV0DRvD2OxVopQzGbmjiQdSzn6eczexxKjnC8hyYqZI8GD9i36+bpHzeY1PYZxh
-         2C4Rv7JQPRcdqYVSEd/o8B0Vcs7MoXOwzqKlLCAhzpRpsVguz2+mgpZ5y4sFZW772O2D
-         kWrZpG6y/89XWTKsy4mJs8q7A6z0GKYXrZLqMFrTjn72r8dvzAXK8LKZomGXtBQxrTKb
-         3csA==
-X-Forwarded-Encrypted: i=1; AJvYcCV347/e/3uSI9JcV3kfhhZ/agalspnV0Bnogd0g2njBPtu2weNr1y3b+1Gmf/VGWznDBV4K6KEon03ADoB0/aUi0Ju6k/YefxMTV2hRKsaB
-X-Gm-Message-State: AOJu0YxksAEY6JGt8fmqz8FZJ4Yc17Rn39Q1WLVoFJzYSfqXFiqCTL3x
-	Rsq+Or5TKaFezlSK5qHd8B4q3Suq7vDKMEThAK2MJYK7TdozFxe8gNkRG44N7ss=
-X-Google-Smtp-Source: AGHT+IFcXrgWJlCZ6P7vFvi1UcBpEELhM8WlYfhKGL33h/k68L9JMlaraBns2HkUqKkhtvBs+LoHwA==
-X-Received: by 2002:a92:d348:0:b0:36d:b8f9:4f00 with SMTP id e9e14a558f8ab-36db8f94fa7mr58665275ab.3.1715917271478;
-        Thu, 16 May 2024 20:41:11 -0700 (PDT)
+        bh=yDlOiioY4qBdeDaBJ3EMBjG9W4k3e+q2KQuwlwFm/Wg=;
+        b=vi/S3UDzGglzLIhD31PtXXHjnSZAn4FbtukSfS4tlhyTb9U3mPTjV5qORSFsi9RAC6
+         sG4gZURvmEdme3xhcdObdLws+sVcVN3K+r7HO9wMm6bj0XGgK+bMTEVJe7eTTfhUWIcJ
+         VEdLY9w6P8+xA4O0dKwmNJdaduQa6sQHZEFyazgy3UM3hSyL1mYMZBAjniWUhn3L1OsL
+         8rubLoQc20BD/uZoS5iHXDx1Tf0psM6ZqlSBtKR8ca/13zT4XAjAFW+Nu6+ooNPNO/KL
+         HAtjNLFA9ww5H9ATorFTrK0/uEJUq79SRPBWTviR/TK/zNA9tKt3lKHaIvMKB3Ge1HVN
+         SqVg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9SX02iUof7JuD5pcZnO4Mzk3CxQzToYRv35DW3CIYHqAk3o5zqH7HGDCnwLoE/tE5gzkJL/TUGjpGRPsjwKFIio5GnwIPr/y5FPpvzdc3
+X-Gm-Message-State: AOJu0YzZ1R2o2osfO5BFuHantm+wBJMQ7KJbND2aVVM4MqTmWqSFHU1T
+	w5fdsXLfxExJb2Q1tCv+463hQwv0/7Va2/JvoUN+TYriiaGhoP+akug8jnID4Uc=
+X-Google-Smtp-Source: AGHT+IGdK6rFNtMzv/o7w6HNu0tCiqSEnlqZgL7f/KrvB7GNWi1KNGokcDBCge/J7xruX5muwQNDjQ==
+X-Received: by 2002:a5e:c748:0:b0:7e1:d865:e700 with SMTP id ca18e2360f4ac-7e1d865e82emr1709781039f.2.1715917627289;
+        Thu, 16 May 2024 20:47:07 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-36cb9d98cf1sm40303725ab.45.2024.05.16.20.41.10
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-489376de473sm4436301173.154.2024.05.16.20.47.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 May 2024 20:41:11 -0700 (PDT)
-Message-ID: <24975952-b1fa-44a5-bac5-aef538ad0c09@linuxfoundation.org>
-Date: Thu, 16 May 2024 21:41:10 -0600
+        Thu, 16 May 2024 20:47:06 -0700 (PDT)
+Message-ID: <f3bff4ea-507c-419f-8fca-9276281c3b9e@linuxfoundation.org>
+Date: Thu, 16 May 2024 21:47:05 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,68 +73,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: -D_GNU_SOURCE kselftest breakage in mainline
-To: Mark Brown <broonie@kernel.org>, Tejun Heo <tj@kernel.org>
-Cc: Edward Liaw <edliaw@google.com>, John Hubbard <jhubbard@nvidia.com>,
- linux-kselftest@vger.kernel.org, torvalds@linux-foundation.org,
- shuah <shuah@kernel.org>, skhan@linuxfoundation.org
-References: <d33973a1-4d49-473e-99b6-f0a5174458e7@sirena.org.uk>
- <71d1f2bf-2e18-4adb-988f-665675fc803b@linuxfoundation.org>
- <d885eba8-8fda-4e36-af5c-38eefd6f0af7@sirena.org.uk>
+Subject: Re: [PATCH v4 08/66] selftests/cgroup: Drop define _GNU_SOURCE
+To: Tejun Heo <tj@kernel.org>
+Cc: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Christian Brauner <brauner@kernel.org>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Zefan Li
+ <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Muchun Song <muchun.song@linux.dev>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Yosry Ahmed <yosryahmed@google.com>,
+ Nhat Pham <nphamcs@gmail.com>, Chengming Zhou <chengming.zhou@linux.dev>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, linux-security-module@vger.kernel.org,
+ netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240510000842.410729-1-edliaw@google.com>
+ <20240510000842.410729-9-edliaw@google.com>
+ <ZkJHvrwZEqg6RJK5@slm.duckdns.org>
+ <bec3f30e-fc9a-45e2-b6ea-d739b2a2d019@linuxfoundation.org>
+ <ZkYymMDd690uufZy@slm.duckdns.org>
+ <9e72d97a-9a04-4423-a711-0c21c1c8b161@linuxfoundation.org>
+ <ZkZGP9Io6o9Dhh36@slm.duckdns.org>
+ <a8702e6b-0360-493d-bf8b-94dd7f17e7f1@linuxfoundation.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <d885eba8-8fda-4e36-af5c-38eefd6f0af7@sirena.org.uk>
+In-Reply-To: <a8702e6b-0360-493d-bf8b-94dd7f17e7f1@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/16/24 09:09, Mark Brown wrote:
-> On Thu, May 16, 2024 at 08:53:52AM -0600, Shuah Khan wrote:
->> On 5/16/24 08:02, Mark Brown wrote:
+On 5/16/24 12:05, Shuah Khan wrote:
+> On 5/16/24 11:45, Tejun Heo wrote:
+>> Hello,
+>>
+>> On Thu, May 16, 2024 at 10:31:13AM -0600, Shuah Khan wrote:
+>>> I am exploring options and leaning towards reverting the patch
+>>>
+>>> daef47b89efd ("selftests: Compile kselftest headers with -D_GNU_SOURCE")
+>>>
+>>> Your amending the PR helps me if I have to send revert. I am sorry
+>>> for the trouble.
+>>>
+>>> I can all of them together in a second update or after the merge window
+>>> closes.
+>>
+>> The cgroup commit is already pulled in unfortunately. Can you please handle
+>> the revert and whatever's necessary to fix up the situation? I'll ask you
+>> what to do with selftest patches from now on.
+>>
 > 
->>> I'm seeing quite a lot of breakage in mainline as a result of
->>> daef47b89efd0b7 ("selftests: Compile kselftest headers with
->>> -D_GNU_SOURCE") and daef47b89efd0 ("selftests: Compile kselftest headers
->>> with -D_GNU_SOURCE") - thus far I've found that the use of
->>> static_assert() is triggering build breaks where testsuites aren't
->>> picking up the addition of _GNU_SOURCE (including stopping installing
->>> the other tests in the same directory), and there's a bunch of tests
->>> which #define _GNU_SOURCE in their code and now trigger build warnings.
->>> I'm looking at fixes and mitigations now.
+> Thanks for the update. Yes I am working on fixing the situation and
+> will send revert for cgroup test patch as well if necessary.
 > 
->> Would it be better to revert this for now and get this for now? I wouldn't
->> want you to extra busy work to workaround this.
+> No worries. It is not a problem for you to handle cgroup test patches
+> in general. I will need your review anyway and letting you handle them
+> reduces the overhead.
+> 
+> This kind of framework change causes needs to be coordinated.
+> I should have held back on the framework change on my part.
 > 
 
+As mentioned in the other thread
 
-I determined the best option now is reverting the 3 patches.
+https://lore.kernel.org/linux-kselftest/24975952-b1fa-44a5-bac5-aef538ad0c09@linuxfoundation.org/T/#t
 
-commit daef47b89efd0b745e8478d69a3ad724bd8b4dc6
-"selftests: Compile kselftest headers with -D_GNU_SOURCE"
+I reverted the following patch and the framework change patch.
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
 
-"selftests/sgx: Include KHDR_INCLUDES in Makefile"
-commit 2c3b8f8f37c6c0c926d584cf4158db95e62b960c
+Will send PR to Linus this weekend.
 
 "selftests/cgroup: Drop define _GNU_SOURCE"
 commit c1457d9aad5ee2feafcf85aa9a58ab50500159d2
-
-I have this in linux-kselftest next now and will send pull
-request to Linus this weekend.
-
-Tejun, I made sure cgroup compiles after reverting the framework
-patch and the cgroup test patch.
-
-Mark,
-
-Thank you Mark for finding the problem and sending in mitigation
-fixes. I will hold off on your alsa patch:
-
-kselftest/alsa: Ensure _GNU_SOURCE is defined
-https://patchwork.kernel.org/project/linux-kselftest/patch/20240516-kselftest-fix-gnu-source-v1-1-e482ca6bfff7@kernel.org/
-
-There is no need to for the following patch
-
-kselftest: Desecalate reporting of missing _GNU_SOURCE
-https://patchwork.kernel.org/project/linux-kselftest/patch/20240516-kselftest-mitigate-gnu-source-v1-1-a0e814ff2874@kernel.org/
 
 thanks,
 -- Shuah
