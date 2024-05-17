@@ -1,89 +1,92 @@
-Return-Path: <linux-kselftest+bounces-10322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E23E8C7F5B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 03:03:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21BFD8C7FE2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 04:29:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F09A282BCE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 01:03:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D7C71C20F4B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 02:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F724633;
-	Fri, 17 May 2024 01:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547FE4C6E;
+	Fri, 17 May 2024 02:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mb21Krmx"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tDmk9a2R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2045.outbound.protection.outlook.com [40.107.102.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61356622;
-	Fri, 17 May 2024 01:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715907828; cv=none; b=eDmUNeZBKFFk7Czi7gzMp7qjiwi5arfnfOOSbneY7O+CQyJkkjKzmj3m7YnpHHHJVj2jYBH8lOPiA7xxmgh//7nNsj3NW+/fN0CxutehvqrL1cR4gjyC9J+dZvL4H8EDp6TO43GHloZNlf2S6UFGldlS5g3GouQJGl/Lu8QqZDA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715907828; c=relaxed/simple;
-	bh=YL+cun76H43cdokkBmGLzF78RWhIsxoVq3jTMlQy9rI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PCWNkyawA6s9lNRFM/iKctGdfLZoaR3SPxpTldGbRBcEtqq3FZ0QOWlaU1VAc0D04bYYCF8pOQ4E6+9VH7R9YSuIR7CsEFA6Cgbp3rs4dg+k+eMO+iRpQsoUSTxDO/2r0LIqpjADnYTUhLG/kJXOGu8QNjsEZGZ7x/sFiTeuyRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mb21Krmx; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2b12b52fbe0so615484a91.0;
-        Thu, 16 May 2024 18:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715907824; x=1716512624; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AL+paX7CcQrBoFNNm0DaCG4n9OvI6O2TWGvRwoOA9+M=;
-        b=mb21KrmxNVbGlY/jeMMscXS6kDzk/ePd+qUY+ma7VTcqYQDLi33K4RScrSHdF4GaO2
-         pjHos2y9MHRRCB3gmo6Xiz7Xuc/wgPOL0f1Nb4ZxuTgQ517vvR8wvxHcd++8o7QzCj4l
-         Wy7qYKssHyYSdRmpNxrR+IBibFNOyuZFe83/PjrjYy7WS1FEz62Hd0KDnnMxUZF+5hXb
-         qou7XyjJoOnUeHDaW328hgmq6dp7wNfvUfCtOXttJk1PVdo8JgK13OFDKTDtDdT3OjUa
-         XGfUtnNzjG1mqseoIBgoOciIoK1WVAU1jqLWFtT2lXWDjqtADg+iAM39EV6Up6kekSfw
-         Vnhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715907824; x=1716512624;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AL+paX7CcQrBoFNNm0DaCG4n9OvI6O2TWGvRwoOA9+M=;
-        b=HSSYgIg9lHKR/OseJXSMZZKmypsNyF8+dxm0si7p636Fkok5PaN13qTBZNf76iiEki
-         8a1HKyPGBFilGGuE0xfgCvQDl+RH3KQrDGcGCmdwZMYaiIlBtdfOy6fsovUC34sNrdSS
-         D7h5TCaw/ScKSs5SVXM+5PLLHeeXj/5pNtlgKyTTb71MVI9iv394Lze3w8WURXxbwjKz
-         dmkYFhnU0+vQnwyrZwNfwBisiDcKIkBznOloGq+JWaLzlaRl9G1QtoCKWBDRbVbUV2KH
-         KwvPWe8DqkSXErLZXTyGrQ9Epkzpaa8N8LgFx0098yyf/kopn5oXc89mFxZXvFWbbrgf
-         lTxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWt1N3LndH8/MYO8cNpipw9aLM0eMp8JoYzQ2TEPx9rdy0gtEh6iR/8sG2j0//Rm5YUWSofRvUEMfk0qfzd0SyeWUbV5/MUqe1P46AZgobj
-X-Gm-Message-State: AOJu0Yz1bYZix7KGKd1ZPVt3nGDQaVTDmOkLpbyWnHg+37AyHYl5FzSS
-	HkyTYkSXegwL8S7uZxnjHAxSUxQLBtszRJCpzByEk+DDGmgd7mjbj0Zm2PTl6vFE/w==
-X-Google-Smtp-Source: AGHT+IG3OVcWFrFyWBR2r+Fp9uMyLJlm9teOa3sy3wLAchFZoaxP9DL2KXvIZFI2RnAMFaNjP6j8pg==
-X-Received: by 2002:a17:90a:4c84:b0:2b6:3034:4ae6 with SMTP id 98e67ed59e1d1-2b6ccd93d4dmr22935553a91.33.1715907824190;
-        Thu, 16 May 2024 18:03:44 -0700 (PDT)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b627cacac4sm16411431a91.0.2024.05.16.18.03.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 May 2024 18:03:43 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Benjamin Poirier <bpoirier@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Jaehee Park <jhpark1013@gmail.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCHv2 net] selftests/net: use tc rule to filter the na packet
-Date: Fri, 17 May 2024 09:03:27 +0800
-Message-ID: <20240517010327.2631319-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280234C69;
+	Fri, 17 May 2024 02:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715912952; cv=fail; b=OnFNGjPrI1yX7ylcjQ8DbWQVRWUrCQI6X1lDuOlf595eUWQ+J+EHUYTXzVwwIoXPA89etPjg4YmPfwIJ1Y0LqhV91/v9BIQc132N4knjEAj9fLqiC1MOokPTmpMHE6hRXpF2wE6Qr4PL9ArXSMjk6PtLdkqidfOekddmWoXF65Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715912952; c=relaxed/simple;
+	bh=iVeckCrz9wx4B/iNYMquEQI+UKZo+viljmgf0EIzlns=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h2Z0JN6ux/iqGrpKGIxt/FX7DQrGHwEVRkvfZ8XTTd8xj8SmO8MEqzoRfxfvl3ZnQff14t86fTwZBpxDqG4x8xgB8g/MvKW5DQdSvfAN3pGHjommAJ4nECKXDq+/Fcv2gwIRyE9Yg0sk6MHkkknaMqGa4dIqcgUPdSRCDdOqQZw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tDmk9a2R; arc=fail smtp.client-ip=40.107.102.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KA925Vr7Ha+R6zP1tHWFmCp526q9TNMeTZuLwB3CNYBhvpZ/UcXIIXGe7TyzMgr/WeOU8FDX5EHN+Axk7OcGeFn0ToK0pDaJBAQ6A2AI88spYPuL+LBTfdXG9Ppb65qhqjEDZ6/kFhrlGNAqF2XV8gBuaNFlyx3MDc2W5aCgCahqSQxJeGMRQVRQeAnjLM+OwQbFpNbLHeMwu973EybU+X0Jg4vjYeZTvaoSm20QsCx9g2LbUZ5rj3jY3j4RRkTZfkWqfrlPpqCDhVsLuKNloeXeG7bOdUn38Cx8pBbhop3NAXWRyUuWDsjm1y3OkhSspZ7cuVqkqmheau59w3M1LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9/FwjHpSnA2BxQLK7KBOKHljoABJta8/kVCJTSfpUW0=;
+ b=Nx6z0m61dykjoozEEHG/pqd34gcokyEvR6QBsqR78BT2p1fPGRETWhrnhDH9cpSCu7hlxCkTF57YXPHZlky0IT2A8IpK4UFy0E3NnGOd4SFAzIa9WiaHluXLhuGds2Hz7A3ptMpOWAg1FjVwTuQWmT4OvNOQbUIqAMABtXp0PYTibJ5E8iyT2m+qZYcKFNHEUqfGMllj7/BVLMCAn/oKeatax3/C9kxujg/Gtb7iI3lmXGiQ6WgFc5lM7H/GhwftowddYbSX5DlfWESa1G16/N0CHo5eVtHHA+bPMsK/HG6Gec6gfXf5Fj4THqH0OclF8ztA4E3KPIfpfbCJLYW1XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9/FwjHpSnA2BxQLK7KBOKHljoABJta8/kVCJTSfpUW0=;
+ b=tDmk9a2RXq3LbB1ptVujpuKIQGicmcRfcuxvfP96P2c3axb78O/ycit2IkMvgqKrb5/5eNcA5qQ0O0C32aoUQSGgtxquk0bktZyD7Fw7lUSSj+XquX2iUiQIidOFKC0wHlykMGGrNDIbtpXhXth0JnibHe+x77sklvapmhBI4C6wdYgw8h15S71y1KB2BIQ15w6BpfWgofriw6RMpBJ935Srp/QQVet4OyoeFar5+IngK7pJTxV4l2pckvNTjHnk7CAEPL/oEaXmVrqKMplcCXiL5ULfUOpEujHupZbsD/UUAKvbmvxyd5r+NXgv5FwJNzg8tiQ3x5w2MjfQ3VsLSA==
+Received: from MN2PR19CA0054.namprd19.prod.outlook.com (2603:10b6:208:19b::31)
+ by IA0PR12MB8349.namprd12.prod.outlook.com (2603:10b6:208:407::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.26; Fri, 17 May
+ 2024 02:29:06 +0000
+Received: from BL6PEPF0001AB77.namprd02.prod.outlook.com
+ (2603:10b6:208:19b:cafe::bb) by MN2PR19CA0054.outlook.office365.com
+ (2603:10b6:208:19b::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.28 via Frontend
+ Transport; Fri, 17 May 2024 02:29:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL6PEPF0001AB77.mail.protection.outlook.com (10.167.242.170) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7587.21 via Frontend Transport; Fri, 17 May 2024 02:29:05 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 19:28:50 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 19:28:49 -0700
+Received: from jjang.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server id 15.2.1544.4 via Frontend Transport; Thu, 16 May
+ 2024 19:28:49 -0700
+From: Joseph Jang <jjang@nvidia.com>
+To: <shuah@kernel.org>, <alexandre.belloni@bootlin.com>, <avagin@google.com>,
+	<jjang@nvidia.com>, <amir73il@gmail.com>, <brauner@kernel.org>,
+	<mochs@nvidia.com>, <jszu@nvidia.com>, <linux-kernel@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>
+Subject: [PATCH] selftest: rtc: Add to check rtc alarm status for alarm related test
+Date: Thu, 16 May 2024 19:28:47 -0700
+Message-ID: <20240517022847.4094731-1-jjang@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,286 +94,253 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB77:EE_|IA0PR12MB8349:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c48c816-1edb-4fdb-332c-08dc76191fd9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|376005|1800799015|82310400017|36860700004|921011;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7hjjmt90gjULxT+EKyuujiTlh1qDcYvWTixfateAYk+IYrctbXWsn/xXT3hF?=
+ =?us-ascii?Q?OBQqh7syEbZogzTAZqb/sGLfHU79egJOUiw4mMY7JucilN+Yf9neewBZlY/K?=
+ =?us-ascii?Q?eFxOyruX0ElTqBiD/OP+G85eS+CkgNsuxaXJXXMtvj3uPhjCumdjmw4L6Aii?=
+ =?us-ascii?Q?1y7BovAA2FAbhNG6O4vT0o+sB/I1eFsQJmjf70BOo/x4xafbQQmn840TGCYL?=
+ =?us-ascii?Q?5BL8wIn1axDNnqemx0PNOUyRZVnKUS4pHKf5sdzUVdGeKgf0HdQWH8eARaYC?=
+ =?us-ascii?Q?SDhoGWzkJ8mO8dVoYH//w4RJxp8sGCm8i9Y4oG8qVLITks0xCf/dc7zSMNoC?=
+ =?us-ascii?Q?AKqe26pIJzWD2nVrNESVFP4mmCcbcChCv6pOofqNXZANhu3tg4UaSLZhtB9R?=
+ =?us-ascii?Q?/0ScrdeX1HAHkXos8cj5OvI3faLklYl9n++LvhLoEWh/wNba4Qcij0nx9pqC?=
+ =?us-ascii?Q?AoTaqRNJuVwW2Mz/0Z/g5TO21rpDJx3YZBAmuqRpEBhBQdJrmvDLo2ejq2iU?=
+ =?us-ascii?Q?2UfdVLL3KOaKBwIpdjsr7a+b9MulHI5huNof2t58h1909F1Z2O7OkNR/E074?=
+ =?us-ascii?Q?gn3hihBEz2SgUg9StuAzczYDLgoZuuU26SKOQjapZo6zVyC3MhoMKV8yL2lZ?=
+ =?us-ascii?Q?qNvUlHAY6DZ8bVkfrVkCrI+7LoZyEIn7fDyosJS8dEY/Zzx/L7ZeH4Py2wwG?=
+ =?us-ascii?Q?BOoS2kWU0ssHmIkKZWp4ygq+I67UKULPk8uMI4pBxYe3UddW9PgvTTZhrSXC?=
+ =?us-ascii?Q?nQilB71CfCOEOv/7d2/ktV7BLu9N+h33WFOep5j2YrvHcnzCLlQpKrENBnsz?=
+ =?us-ascii?Q?GZaPaiIPuxizdclhXU361YNFtHMSSXFlgfxV7DkWwm3WGWD2dRfXY17X0uwg?=
+ =?us-ascii?Q?my3BecmVau5pdC/L5q6cd7/r2F8uc5FMZVasEGhD74ELr+qe5tj/cPV899RH?=
+ =?us-ascii?Q?7omaAryvsulL5IRy8NZwzyU8KDWcV3z8lAYWzp1i21/hGXF0s0blhRaDmKfH?=
+ =?us-ascii?Q?KyvF1m4CgQchcpwIR+V+j0LEhckK8Ag/+ko0dkFsJ8CWbHFs4V91zzErBWnD?=
+ =?us-ascii?Q?65OwYc+8m7ZqLF+Ycm1ANf61zk+SHmRQPdiGLK5oTFqSDRh0JYUDmNzGFxtW?=
+ =?us-ascii?Q?XU1fawAwq5XMHyTLK7lXA+j1csgV9pFxOhVfhT4iGHeYQ0V0TujNp2VsgmBJ?=
+ =?us-ascii?Q?LTKvGd0h5gNb5XIY2ySBMBfrU+IeguVX0eMj7LLNAaa/RC+s84HQ+iP7cFzW?=
+ =?us-ascii?Q?qkGExH07XrGaVPzRO4q9mlxTXN4tBqs2wVDMZWLgB+UL6LKZo2dDAlnkV8z8?=
+ =?us-ascii?Q?y5mIZIP86C4k82RkPe6vG7JLrEkMAT1d3jv3Lbh0oZyJTDM+X6xZiP2MMpFP?=
+ =?us-ascii?Q?17PuCtG22TzeAt09o7c8Qj9chnOx?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(1800799015)(82310400017)(36860700004)(921011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2024 02:29:05.8324
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c48c816-1edb-4fdb-332c-08dc76191fd9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB77.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8349
 
-Test arp_ndisc_untracked_subnets use tcpdump to filter the unsolicited
-and untracked na messages. It set -e before calling tcpdump. But if
-tcpdump filters 0 packet, it will return none zero, and cause the script
-to exit.
+In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
+ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
+skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
+code. This design may miss detecting real problems when the
+efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
+ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
 
-Instead of using slow tcpdump to capture packets, let's using tc rule
-to filter out the na message.
+In order to make rtctest more explicit and robust, we propose to use
+RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
+running alarm related tests. If the kernel does not support RTC_PARAM_GET
+ioctl interface, we will fallback to check the presence of "alarm" in
+/proc/driver/rtc.
 
-At the same time, fix function setup_v6 which only needs one parameter.
-Move all the related helpers from forwarding lib.sh to net lib.sh.
+The rtctest requires the read permission on /dev/rtc0. The rtctest will
+be skipped if the /dev/rtc0 is not readable.
 
-Fixes: 0ea7b0a454ca ("selftests: net: arp_ndisc_untracked_subnets: test for arp_accept and accept_untracked_na")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+as optional")
+
+Reviewed-by: Jeremy Szu <jszu@nvidia.com>
+Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+Signed-off-by: Joseph Jang <jjang@nvidia.com>
 ---
+ tools/testing/selftests/rtc/Makefile  |  2 +-
+ tools/testing/selftests/rtc/rtctest.c | 72 +++++++++++++++++++--------
+ 2 files changed, 53 insertions(+), 21 deletions(-)
 
-v2: rebase to latest net main code. no update,
-v1: https://lore.kernel.org/netdev/20240514071130.2121042-1-liuhangbin@gmail.com
-
----
- .../net/arp_ndisc_untracked_subnets.sh        | 53 ++++++-----------
- tools/testing/selftests/net/forwarding/lib.sh | 58 -------------------
- tools/testing/selftests/net/lib.sh            | 58 +++++++++++++++++++
- 3 files changed, 75 insertions(+), 94 deletions(-)
-
-diff --git a/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-index a40c0e9bd023..eef5cbf6eecc 100755
---- a/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-+++ b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-@@ -73,25 +73,19 @@ setup_v6() {
- 	# namespaces. veth0 is veth-router, veth1 is veth-host.
- 	# first, set up the inteface's link to the namespace
- 	# then, set the interface "up"
--	ip -6 -netns ${ROUTER_NS_V6} link add name ${ROUTER_INTF} \
--		type veth peer name ${HOST_INTF}
--
--	ip -6 -netns ${ROUTER_NS_V6} link set dev ${ROUTER_INTF} up
--	ip -6 -netns ${ROUTER_NS_V6} link set dev ${HOST_INTF} netns \
--		${HOST_NS_V6}
-+	ip -n ${ROUTER_NS_V6} link add name ${ROUTER_INTF} \
-+		type veth peer name ${HOST_INTF} netns ${HOST_NS_V6}
+diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+index 55198ecc04db..6e3a98fb24ba 100644
+--- a/tools/testing/selftests/rtc/Makefile
++++ b/tools/testing/selftests/rtc/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -O3 -Wl,-no-as-needed -Wall
++CFLAGS += -O3 -Wl,-no-as-needed -Wall -I../../../../usr/include/
+ LDLIBS += -lrt -lpthread -lm
  
--	ip -6 -netns ${HOST_NS_V6} link set dev ${HOST_INTF} up
--	ip -6 -netns ${ROUTER_NS_V6} addr add \
--		${ROUTER_ADDR_V6}/${PREFIX_WIDTH_V6} dev ${ROUTER_INTF} nodad
-+	# Add tc rule to filter out host na message
-+	tc -n ${ROUTER_NS_V6} qdisc add dev ${ROUTER_INTF} clsact
-+	tc -n ${ROUTER_NS_V6} filter add dev ${ROUTER_INTF} \
-+		ingress protocol ipv6 pref 1 handle 101 \
-+		flower src_ip ${HOST_ADDR_V6} ip_proto icmpv6 type 136 skip_hw action pass
+ TEST_GEN_PROGS = rtctest
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..aa47b17fbd1a 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/rtc.h>
++#include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <sys/ioctl.h>
+@@ -24,12 +25,17 @@
+ #define READ_LOOP_SLEEP_MS 11
  
- 	HOST_CONF=net.ipv6.conf.${HOST_INTF}
- 	ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.ndisc_notify=1
- 	ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.disable_ipv6=0
--	ip -6 -netns ${HOST_NS_V6} addr add ${HOST_ADDR_V6}/${PREFIX_WIDTH_V6} \
--		dev ${HOST_INTF}
--
- 	ROUTER_CONF=net.ipv6.conf.${ROUTER_INTF}
--
- 	ip netns exec ${ROUTER_NS_V6} sysctl -w \
- 		${ROUTER_CONF}.forwarding=1 >/dev/null 2>&1
- 	ip netns exec ${ROUTER_NS_V6} sysctl -w \
-@@ -99,6 +93,13 @@ setup_v6() {
- 	ip netns exec ${ROUTER_NS_V6} sysctl -w \
- 		${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na} \
- 		>/dev/null 2>&1
+ static char *rtc_file = "/dev/rtc0";
++static char *rtc_procfs = "/proc/driver/rtc";
+ 
+ FIXTURE(rtc) {
+ 	int fd;
+ };
+ 
+ FIXTURE_SETUP(rtc) {
++	if (access(rtc_file, R_OK) != 0)
++		SKIP(return, "Skipping test since cannot access %s, perhaps miss sudo",
++			 rtc_file);
 +
-+	ip -n ${ROUTER_NS_V6} link set dev ${ROUTER_INTF} up
-+	ip -n ${HOST_NS_V6} link set dev ${HOST_INTF} up
-+	ip -n ${ROUTER_NS_V6} addr add ${ROUTER_ADDR_V6}/${PREFIX_WIDTH_V6} \
-+		dev ${ROUTER_INTF} nodad
-+	ip -n ${HOST_NS_V6} addr add ${HOST_ADDR_V6}/${PREFIX_WIDTH_V6} \
-+		dev ${HOST_INTF}
- 	set +e
+ 	self->fd = open(rtc_file, O_RDONLY);
  }
  
-@@ -162,26 +163,6 @@ arp_test_gratuitous_combinations() {
- 	arp_test_gratuitous 2 1
+@@ -82,6 +88,36 @@ static void nanosleep_with_retries(long ns)
+ 	}
  }
  
--cleanup_tcpdump() {
--	set -e
--	[[ ! -z  ${tcpdump_stdout} ]] && rm -f ${tcpdump_stdout}
--	[[ ! -z  ${tcpdump_stderr} ]] && rm -f ${tcpdump_stderr}
--	tcpdump_stdout=
--	tcpdump_stderr=
--	set +e
--}
--
--start_tcpdump() {
--	set -e
--	tcpdump_stdout=`mktemp`
--	tcpdump_stderr=`mktemp`
--	ip netns exec ${ROUTER_NS_V6} timeout 15s \
--		tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
--		"icmp6 && icmp6[0] == 136 && src ${HOST_ADDR_V6}" \
--		> ${tcpdump_stdout} 2> /dev/null
--	set +e
--}
--
- verify_ndisc() {
- 	local accept_untracked_na=$1
- 	local same_subnet=$2
-@@ -222,8 +203,9 @@ ndisc_test_untracked_advertisements() {
- 			HOST_ADDR_V6=2001:db8:abcd:0012::3
- 		fi
- 	fi
--	setup_v6 $1 $2
--	start_tcpdump
-+	setup_v6 $1
-+	slowwait_for_counter 15 1 \
-+		tc_rule_handle_stats_get "dev ${ROUTER_INTF} ingress" 101 ".packets" "-n ${ROUTER_NS_V6}"
- 
- 	if verify_ndisc $1 $2; then
- 		printf "    TEST: %-60s  [ OK ]\n" "${test_msg[*]}"
-@@ -231,7 +213,6 @@ ndisc_test_untracked_advertisements() {
- 		printf "    TEST: %-60s  [FAIL]\n" "${test_msg[*]}"
- 	fi
- 
--	cleanup_tcpdump
- 	cleanup_v6
- 	set +e
- }
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 112c85c35092..eabbdf00d8ca 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -129,14 +129,6 @@ fi
- 
- source "$net_forwarding_dir/../lib.sh"
- 
--# timeout in seconds
--slowwait()
--{
--	local timeout_sec=$1; shift
--
--	loopy_wait "sleep 0.1" "$((timeout_sec * 1000))" "$@"
--}
--
- ##############################################################################
- # Sanity checks
- 
-@@ -678,33 +670,6 @@ wait_for_trap()
- 	"$@" | grep -q trap
- }
- 
--until_counter_is()
--{
--	local expr=$1; shift
--	local current=$("$@")
--
--	echo $((current))
--	((current $expr))
--}
--
--busywait_for_counter()
--{
--	local timeout=$1; shift
--	local delta=$1; shift
--
--	local base=$("$@")
--	busywait "$timeout" until_counter_is ">= $((base + delta))" "$@"
--}
--
--slowwait_for_counter()
--{
--	local timeout=$1; shift
--	local delta=$1; shift
--
--	local base=$("$@")
--	slowwait "$timeout" until_counter_is ">= $((base + delta))" "$@"
--}
--
- setup_wait_dev()
- {
- 	local dev=$1; shift
-@@ -1023,29 +988,6 @@ link_stats_rx_errors_get()
- 	link_stats_get $1 rx errors
- }
- 
--tc_rule_stats_get()
--{
--	local dev=$1; shift
--	local pref=$1; shift
--	local dir=$1; shift
--	local selector=${1:-.packets}; shift
--
--	tc -j -s filter show dev $dev ${dir:-ingress} pref $pref \
--	    | jq ".[1].options.actions[].stats$selector"
--}
--
--tc_rule_handle_stats_get()
--{
--	local id=$1; shift
--	local handle=$1; shift
--	local selector=${1:-.packets}; shift
--	local netns=${1:-""}; shift
--
--	tc $netns -j -s filter show $id \
--	    | jq ".[] | select(.options.handle == $handle) | \
--		  .options.actions[0].stats$selector"
--}
--
- ethtool_stats_get()
- {
- 	local dev=$1; shift
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 72b191e4e064..edc030e81a46 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -91,6 +91,41 @@ busywait()
- 	loopy_wait : "$timeout_ms" "$@"
- }
- 
-+# timeout in seconds
-+slowwait()
++static bool is_rtc_alarm_supported(int fd)
 +{
-+	local timeout_sec=$1; shift
++	struct rtc_param param = { 0 };
++	int rc;
++	char buf[1024] = { 0 };
 +
-+	loopy_wait "sleep 0.1" "$((timeout_sec * 1000))" "$@"
++	/* Validate kernel reflects unsupported RTC alarm state */
++	param.param = RTC_PARAM_FEATURES;
++	param.index = 0;
++	rc = ioctl(fd, RTC_PARAM_GET, &param);
++	if (rc < 0) {
++		/* Fallback to read rtc procfs */
++		fd = open(rtc_procfs, O_RDONLY);
++		if (fd != -1) {
++			rc = read(fd, buf, sizeof(buf));
++			close(fd);
++
++			/* Check for the presence of "alarm" in the buf */
++			if (strstr(buf, "alarm") == NULL)
++				return false;
++		} else
++			return false;
++	} else {
++		if ((param.uvalue & _BITUL(RTC_FEATURE_ALARM)) == 0)
++			return false;
++	}
++
++	return true;
 +}
 +
-+until_counter_is()
-+{
-+	local expr=$1; shift
-+	local current=$("$@")
+ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+ 	int rc;
+ 	long iter_count = 0;
+@@ -202,6 +238,9 @@ TEST_F(rtc, alarm_alm_set) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
+ 
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
 +
-+	echo $((current))
-+	((current $expr))
-+}
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
+ 
+@@ -209,11 +248,7 @@ TEST_F(rtc, alarm_alm_set) {
+ 	gmtime_r(&secs, (struct tm *)&tm);
+ 
+ 	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
+ 
+ 	rc = ioctl(self->fd, RTC_ALM_READ, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -260,6 +295,9 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
+ 
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
 +
-+busywait_for_counter()
-+{
-+	local timeout=$1; shift
-+	local delta=$1; shift
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
+ 
+@@ -269,11 +307,7 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 	alarm.enabled = 1;
+ 
+ 	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
+ 
+ 	rc = ioctl(self->fd, RTC_WKALM_RD, &alarm);
+ 	ASSERT_NE(-1, rc);
+@@ -312,6 +346,9 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
+ 
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
 +
-+	local base=$("$@")
-+	busywait "$timeout" until_counter_is ">= $((base + delta))" "$@"
-+}
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
+ 
+@@ -319,11 +356,7 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+ 	gmtime_r(&secs, (struct tm *)&tm);
+ 
+ 	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
+ 
+ 	rc = ioctl(self->fd, RTC_ALM_READ, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -370,6 +403,9 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
+ 
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
 +
-+slowwait_for_counter()
-+{
-+	local timeout=$1; shift
-+	local delta=$1; shift
-+
-+	local base=$("$@")
-+	slowwait "$timeout" until_counter_is ">= $((base + delta))" "$@"
-+}
-+
- cleanup_ns()
- {
- 	local ns=""
-@@ -150,3 +185,26 @@ setup_ns()
- 	done
- 	NS_LIST="$NS_LIST $ns_list"
- }
-+
-+tc_rule_stats_get()
-+{
-+	local dev=$1; shift
-+	local pref=$1; shift
-+	local dir=$1; shift
-+	local selector=${1:-.packets}; shift
-+
-+	tc -j -s filter show dev $dev ${dir:-ingress} pref $pref \
-+	    | jq ".[1].options.actions[].stats$selector"
-+}
-+
-+tc_rule_handle_stats_get()
-+{
-+	local id=$1; shift
-+	local handle=$1; shift
-+	local selector=${1:-.packets}; shift
-+	local netns=${1:-""}; shift
-+
-+	tc $netns -j -s filter show $id \
-+	    | jq ".[] | select(.options.handle == $handle) | \
-+		  .options.actions[0].stats$selector"
-+}
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
+ 
+@@ -379,11 +415,7 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ 	alarm.enabled = 1;
+ 
+ 	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
+ 
+ 	rc = ioctl(self->fd, RTC_WKALM_RD, &alarm);
+ 	ASSERT_NE(-1, rc);
 -- 
-2.43.0
+2.34.1
 
 
