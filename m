@@ -1,57 +1,60 @@
-Return-Path: <linux-kselftest+bounces-10337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B9B8C82CB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 10:55:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EDE18C8316
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 11:14:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2731A1F215AC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 08:55:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51379282384
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 May 2024 09:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC6E14003;
-	Fri, 17 May 2024 08:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5310D1DDDB;
+	Fri, 17 May 2024 09:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eu9VoAKw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFc09+HY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447838BF7;
-	Fri, 17 May 2024 08:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A11D1DA3A;
+	Fri, 17 May 2024 09:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715936097; cv=none; b=oINjblqZQyrgItslxFuLYk1qDf69T+lI1LvTpJbV7PKQZi+Wrg9Dpcved1PHwADZRsHXLFRvgqGVW+QseN4Te6EXNT4ngJFLhzaFTgf3WefH8Vo7UV0jx/SpCNVrt1tK5rAXf5/c76s66upT3tXplRg2WbxmQpOEAAFXudN3uuo=
+	t=1715937248; cv=none; b=aRQ48wxzAsjgRNhR/LfQAUr4cp4ImJgdTle819NeJxcMzLY+1RMuaMZHvEoZfa/Q2QXtguiLBNxpRQYWLEIlmIsYRw2dATHNTI+BQVxMOi6EpBuZrNQv2yIOWRcpca0nEb8BUtUTYXnWln+3woKVnbrPbxAYrs3sWbH0h983Kx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715936097; c=relaxed/simple;
-	bh=Xog/tS5vq+lgeG72Uoo6J9glCxSk0h/9CurO3SylIhE=;
+	s=arc-20240116; t=1715937248; c=relaxed/simple;
+	bh=Xe15mh7B1t2lxZdkig85mHYRwiCQgE6k5nwukrPUuHw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pN+PEa5r8z/YTC6WEH4QEhRhxeH53x8YoDGYk2H6D7Mwiz6HVlPAGBn+pU4GVRnKJU1x7begm7DZdUgUwLQCVdRFXufZ48MihRVWomn+Tyt9IdeMp7LT5+Z8RVaAHsqJmL63oXYmvpoicNaDkTsw3t0yUezG40T++TTnpmtc75E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eu9VoAKw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB0FC2BD10;
-	Fri, 17 May 2024 08:54:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uFSlIpCd3NSXkg8fF5HX0f+N64JqffEOAwk5g+KrRD+Icps7DjBo6iGBAlP+OrqnuEAqi6svR0vSXNSVKlMBkZF+qo9ll1Ku0i5o3m6zMtK15QsOFGU9Z+7+cHQUwRmtD57S+zT/vjFMGg/utbTbxymgV/H/wjVy6JrJ03bTuzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFc09+HY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD2DC32782;
+	Fri, 17 May 2024 09:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715936096;
-	bh=Xog/tS5vq+lgeG72Uoo6J9glCxSk0h/9CurO3SylIhE=;
+	s=k20201202; t=1715937247;
+	bh=Xe15mh7B1t2lxZdkig85mHYRwiCQgE6k5nwukrPUuHw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Eu9VoAKw6f2oTSBALK1w42rV42/v/ppmD/OGZ7/GYrc3zPmhBDIL9Z/KNHFOTXFvr
-	 RucdJymM6BqmwGyZCdaBD3/x77ExQmBbvfGA1TjmuM40NYD884qdhBqnZ1Yu1st/uJ
-	 MAfnFmBIVy7L7tyPe2mUPDVSJPEMwHuYmYwYYQeMRD86lLvk80bc3wsbCaCT42VefA
-	 n5t6M04EaVBQUAsCPCMGmevqqghddIlv44JuI1zEvrUqqBqnTQIMMEr+iFHwezEsIs
-	 EqpkMLhx5BdCCcjigCt650+aVGeLgA1i8cEqdeCtns3Aua8VwISCSSrWca79tPJGWA
-	 IBLru1NTFUp2A==
-Date: Fri, 17 May 2024 09:54:52 +0100
+	b=CFc09+HYu2EXxFwBRdVmAAmwd7rmJNVE6MSHNuShdc34MC9Ua6fr4X+6EXuxzdEB3
+	 fIlygF3y6jEdJPwzi244dXqZsoAvTkn+9Nk78+8USk+4tC117jLxXCNVlF4fGZcc4G
+	 OWvMh7odNor2vDRXx4ga4eyo6D2g87PrjOAq7qPJPspWYC6B9P+ZipQsm1T8f+onOs
+	 7MqWeW+vZh4m1NlcCydUPRT0dvlh2HjRIGb3Z7439Tfh+oeTjTS85MotcLcherjYml
+	 1bSFXws/M73u9VpyaewFd3LzJ9zCSL02+8/0tQvwQWZRf6kyDUliAfBRdrGG81zkEq
+	 wsiILFdCDQsJA==
+Date: Fri, 17 May 2024 10:14:02 +0100
 From: Simon Horman <horms@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, liuhangbin@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-	vladimir.oltean@nxp.com
-Subject: Re: [PATCH net v3] selftests: net: local_termination: annotate the
- expected failures
-Message-ID: <20240517085452.GC443576@kernel.org>
-References: <20240516152513.1115270-1-kuba@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Jaehee Park <jhpark1013@gmail.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv2 net] selftests/net: use tc rule to filter the na packet
+Message-ID: <20240517091402.GD443576@kernel.org>
+References: <20240517010327.2631319-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,28 +63,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240516152513.1115270-1-kuba@kernel.org>
+In-Reply-To: <20240517010327.2631319-1-liuhangbin@gmail.com>
 
-On Thu, May 16, 2024 at 08:25:13AM -0700, Jakub Kicinski wrote:
-> Vladimir said when adding this test:
+On Fri, May 17, 2024 at 09:03:27AM +0800, Hangbin Liu wrote:
+> Test arp_ndisc_untracked_subnets use tcpdump to filter the unsolicited
+> and untracked na messages. It set -e before calling tcpdump. But if
+> tcpdump filters 0 packet, it will return none zero, and cause the script
+> to exit.
 > 
->   The bridge driver fares particularly badly [...] mainly because
->   it does not implement IFF_UNICAST_FLT.
+> Instead of using slow tcpdump to capture packets, let's using tc rule
+> to filter out the na message.
 > 
-> See commit 90b9566aa5cd ("selftests: forwarding: add a test for
-> local_termination.sh").
+> At the same time, fix function setup_v6 which only needs one parameter.
+> Move all the related helpers from forwarding lib.sh to net lib.sh.
 > 
-> We don't want to hide the known gaps, but having a test which
-> always fails prevents us from catching regressions. Report
-> the cases we know may fail as XFAIL.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Fixes: 0ea7b0a454ca ("selftests: net: arp_ndisc_untracked_subnets: test for arp_accept and accept_untracked_na")
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 
-I agree that XFAIL is appropriate for cases like this - the test
-is expected to fail and this can act like a TODO.
+I see that, as of writing, the last two runs of this test have succeeded.
+Which doesn't seem to have occurred since 9th May. So this does seem
+positive, albeit perhaps a bit too soon to call.
 
-I also looked over how xfail_on_veth works and this usage seems
-correct to me.
+Jakub, is there a way to tell how long a test took to execute?
+Perhaps it's obvious, but I couldn't see it.
+
+Code changes look good to me.
 
 Reviewed-by: Simon Horman <horms@kernel.org>
 
