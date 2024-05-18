@@ -1,211 +1,316 @@
-Return-Path: <linux-kselftest+bounces-10374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01B5F8C8EF5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 02:39:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 930508C8F77
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 05:29:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 238EA1C21B3F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 00:39:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44153282B20
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 03:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A20179DE;
-	Sat, 18 May 2024 00:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04F75C96;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="SV2zemg5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjoNvqOz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78AD1FBA
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 May 2024 00:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C041A2C03;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715992776; cv=none; b=PhOn60kD7UGFuJCZ7RavgeMdskAPsUWb3XEtH9QKGrSlTeCek1O2kGYT1Lnkbx1iKo5iZZRXUMkmSXB8oQ9VDVd2RXqxYSJJUCGk5C6yDNrWlkMs1jEhKxdO5n9w1EvCszWxV4BwqcmWHJC78VYeK+RkTnoa4AgfMnDsazmjJPU=
+	t=1716002978; cv=none; b=RicBhEVF2uIsn08zrPJAvlUjpiFBSSvoXA3LkvXwVMZdcgRg/KdEHZxoc1RvwDGlvfq8P78w5hswuFtnGhACuLdr+wS7ddaZOgS/yPGoa6l1YPA9C4DJ7y3NSnyPhBe8o3uxDMBFG525r571iE0FTIUA2jTXWPpzr2ao09ewOlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715992776; c=relaxed/simple;
-	bh=4V5YW8ORGMY45KRj8UEqSm59pF8Y+sc6mDeE+TSeGJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N1oJ8C564v5WwH21K9BJaKwtCAHsqMM2XQ9obXcF6TnFgp1gGJc3n/6pqvkQtSyVTp/YFQRJqRwza+Tf/H3y0N8ecSIcCuIsqb0oCe8zO5KV6+znJrhsG6+CGxcAiCaXQK5sZUYyH/Zo6g8VMrwsElwsEux5DDwPEl7j+jU8Oc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=SV2zemg5; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e3c3aa8938so25542125ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 May 2024 17:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1715992772; x=1716597572; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p7Punv+O2VI5RKAkHRkhtEk7CBj9yRK2PJX5XN6bfhc=;
-        b=SV2zemg5NtIR3pbXcUpjQL4Nh2uV808bM0bYra4XbVqoECYENJz6/Yy1du6GUsBF1T
-         XjClNZyHgkq1IjzGsNu0VF4KSRcFvP8duWW93pNhihxONKxIBHEuEju184pzDGSNNupq
-         ib3YMvRdDHjiHmp2OxcZgusnPxfFWYkd34Nlw+eS/M5SIsLUf3Mrx9wPF3j4JbN0L51J
-         8Ns52iIbDMMJzhPw7VAE6tB2RCkaU9f1rM9auoIgPX19Bn4lqARdC5AzZbrjVYBG9xPX
-         cdNuEoJX1TmbwOv4k+7AFSI4ow5gFWRUrYzogvoH4IJNgoo7XBVgU2ba15ADfeNZaYsV
-         sGRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715992772; x=1716597572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7Punv+O2VI5RKAkHRkhtEk7CBj9yRK2PJX5XN6bfhc=;
-        b=EWVrMzea/KOQ0GT/jzVHmLhHfgch5vr6EC2Ing623gG0YVqCdqB29C6mO0qSRRE3Cs
-         V/sZqY8r+2CV5yb0RzZtMWnAbiWr7RPmbW3q9cHy0iXajW8PWuVppX7DNV5XFxqCLZTE
-         NjHAfvuFrp2dgLtI0Qq77XiDNEvrjNnHZhWgTxMKQ1JifaBkVtiCMN6418wDiyM7D3iY
-         UZQdYwS2ytvw9jY4hVjCFgt4B1yrOYJWPB0FcUU7g3gCu0RqHLfKVJdTdQGbr+aziDYI
-         LfkqAruvgg6eFIbeuTk4g0uSmhRE3SIqshbxIp070ZBudLSKNNmQzLgM1DOsMRuh1+6d
-         s+VA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4Up/7AXlUVi/v6D+45cZGlKCvdtHlERn+Xt2W6SVsTVrHRSOYfYEu6iCkSM1LxpqnHiWJ1ob27CQJBS64dKCtLvXkjPiLdbrIdbHCyB8V
-X-Gm-Message-State: AOJu0YzZsqrMBUcYZEdNjZ/iO5KEVPvvEzzyFQmsOZrUiWcfViZ4YyTt
-	cRIbr8LlrxBzdwB8DGybBOa39eJpYsiLDHDft0zqR6zsRLjJoMYyFtru+xdP4zI=
-X-Google-Smtp-Source: AGHT+IG2kizdOiSw0uylPEq0qK5Nujj1quEtxgB2wxc39/tXdkGx33RSfpvHjRCh3dNNGsAUN6Msjg==
-X-Received: by 2002:a05:6a00:1397:b0:6e6:89ad:1233 with SMTP id d2e1a72fcca58-6f4e02a6150mr30537733b3a.2.1715992772166;
-        Fri, 17 May 2024 17:39:32 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1156:1:1cbd:da2b:a9f2:881? ([2620:10d:c090:500::6:9fd9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2af2bccsm16503658b3a.170.2024.05.17.17.39.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 May 2024 17:39:31 -0700 (PDT)
-Message-ID: <090be3c0-42e6-4b97-8b03-eb64b06a2911@davidwei.uk>
-Date: Fri, 17 May 2024 17:39:25 -0700
+	s=arc-20240116; t=1716002978; c=relaxed/simple;
+	bh=kkyl4Oabc5KFglNOe80Nz61jeWKai1MJfXMkEUXwnmU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b1kDV2Zn9OHarVbYodo8HNMgC0zbwriS2pfF0HaJKfFqmJCdzCN8dwsOD01XoGabxXbQh9p70HnGCQQgwaX+jUZ4pHqVF0qBORPNfDdXfpOMYkIjDZC2clgVxdE1BbmccxA1dS+LNQb2RVJugbRtHO1qq8ee8HpnsCqdhMaPfrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjoNvqOz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DD6C113CC;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716002978;
+	bh=kkyl4Oabc5KFglNOe80Nz61jeWKai1MJfXMkEUXwnmU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rjoNvqOzo3HdnCeU+KmVqyS7dlVzyuiOyXi+GfeZT+PrEdOGm5eXgAKqNBDjCP74i
+	 KdN3NnxQRn1nlaoug/cLc+tKQtZPi3M3u3wr3tz/cg6DJ4FygUGUNzwquCe873tVFF
+	 KnyYkspXItQ8KzSNo3hAcGrC0ugmx6+45rNT0iLJ8ERFnZQHABzMCWtO1igPTr9QX1
+	 D7ND6kmhn6HxddN7fuB1ZETN6kKhjmNlYtyMaCkaCv1bpMqGXecXRK06lr57C8Y15E
+	 +u1bWRz8msvvNg7DbCgQ/7pu+0ll9aSJZrPlvavVisdii/k12lVdzq9RlcwzV4yKuW
+	 ShT7OB+k3qYdQ==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51fcb7dc722so2402308e87.1;
+        Fri, 17 May 2024 20:29:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUpD4v8a+xMIMnnTahEfVSRuTTwy9NYDIS9AlBJ8RtK5rNfFyFjqohjw4lBNorJ64W0UEpKSqMWBusee1ZFFU+Deg3UPe5zFjvky+gG1y778ilbl6uq0N/ULpMD1IBKENOAvoprCbW1ZRNSQ+zrwFxZieTSMxmJwwTDq/+78832lGTVx5gZi3LNXJvTqenNcDoHpv8wsqATOJNed9UVcL4piF2Qkr7z9lavF/uy5hPaKKDoYl3ILo7t4h1M2U8I85lLv4jNbTTFs489lnjZ01s=
+X-Gm-Message-State: AOJu0YwamY5BkZLPU4VsvnCiXgGbFMcwDn6lkadrlrYnzA2AgiiveVjv
+	LAHpJTCOo69+QdwXq7MgP7Ax6Ke+9kFXSY98NaduHh4nq+pnB8QBC62CicSVVjaKRd4EIhOnhFd
+	VBDnnIYOMVjujSWKq7qa3as5Vj3Y=
+X-Google-Smtp-Source: AGHT+IHjKSQhzhnm8QEyFc5lZeQyVnNhe9kiBHVN3rnespbtU+DOI88/Xq5mDvMdVlJFl+tDAt3va5hG2q/WRWWlhDk=
+X-Received: by 2002:ac2:514d:0:b0:51f:5f6d:3fba with SMTP id
+ 2adb3069b0e04-52407cddc4amr204791e87.27.1716002976823; Fri, 17 May 2024
+ 20:29:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 05/14] netdev: netdevice devmem allocator
-Content-Language: en-GB
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-6-almasrymina@google.com>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20240510232128.1105145-6-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240517114506.1259203-1-masahiroy@kernel.org>
+ <20240517114506.1259203-2-masahiroy@kernel.org> <202405171621.A178606D8@keescook>
+In-Reply-To: <202405171621.A178606D8@keescook>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 18 May 2024 12:29:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+Message-ID: <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: harness: remove unneeded __constructor_order_last()
+To: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	David Hildenbrand <david@redhat.com>, Janosch Frank <frankja@linux.ibm.com>, Jiri Kosina <jikos@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-05-10 16:21, Mina Almasry wrote:
-> +/* This returns the absolute dma_addr_t calculated from
-> + * net_iov_owner(niov)->owner->base_dma_addr, not the page_pool-owned
-> + * niov->dma_addr.
-> + *
-> + * The absolute dma_addr_t is a dma_addr_t that is always uncompressed.
-> + *
-> + * The page_pool-owner niov->dma_addr is the absolute dma_addr compressed into
-> + * an unsigned long. Special handling is done when the unsigned long is 32-bit
-> + * but the dma_addr_t is 64-bit.
-> + *
-> + * In general code looking for the dma_addr_t should use net_iov_dma_addr(),
-> + * while page_pool code looking for the unsigned long dma_addr which mirrors
-> + * the field in struct page should use niov->dma_addr.
-> + */
-> +static inline dma_addr_t net_iov_dma_addr(const struct net_iov *niov)
-> +{
-> +	struct dmabuf_genpool_chunk_owner *owner = net_iov_owner(niov);
-> +
-> +	return owner->base_dma_addr +
-> +	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
-> +}
+On Sat, May 18, 2024 at 8:26=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Fri, May 17, 2024 at 08:45:05PM +0900, Masahiro Yamada wrote:
+> > __constructor_order_last() is unneeded.
+> >
+> > If __constructor_order_last() is not called on reverse-order systems,
+> > __constructor_order will remain 0 instead of being set to
+> > _CONSTRUCTOR_ORDER_BACKWARD (=3D -1).
+> >
+> > __LIST_APPEND() will still take the 'else' branch, so there is no
+> > difference in the behavior.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  .../selftests/drivers/s390x/uvdevice/test_uvdevice.c   |  6 ------
+> >  tools/testing/selftests/hid/hid_bpf.c                  |  6 ------
+> >  tools/testing/selftests/kselftest_harness.h            | 10 +---------
+> >  tools/testing/selftests/rtc/rtctest.c                  |  7 -------
+> >  4 files changed, 1 insertion(+), 28 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevi=
+ce.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > index ea0cdc37b44f..7ee7492138c6 100644
+> > --- a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > +++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > @@ -257,12 +257,6 @@ TEST_F(attest_fixture, att_inval_addr)
+> >       att_inval_addr_test(&self->uvio_attest.meas_addr, _metadata, self=
+);
+> >  }
+> >
+> > -static void __attribute__((constructor)) __constructor_order_last(void=
+)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       int fd =3D open(UV_PATH, O_ACCMODE);
+> > diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/self=
+tests/hid/hid_bpf.c
+> > index 2cf96f818f25..f47feef2aced 100644
+> > --- a/tools/testing/selftests/hid/hid_bpf.c
+> > +++ b/tools/testing/selftests/hid/hid_bpf.c
+> > @@ -853,12 +853,6 @@ static int libbpf_print_fn(enum libbpf_print_level=
+ level,
+> >       return 0;
+> >  }
+> >
+> > -static void __attribute__((constructor)) __constructor_order_last(void=
+)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       /* Use libbpf 1.0 API mode */
+> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testin=
+g/selftests/kselftest_harness.h
+> > index ba3ddeda24bf..60c1cf5b0f0d 100644
+> > --- a/tools/testing/selftests/kselftest_harness.h
+> > +++ b/tools/testing/selftests/kselftest_harness.h
+> > @@ -444,12 +444,6 @@
+> >   * Use once to append a main() to the test file.
+> >   */
+> >  #define TEST_HARNESS_MAIN \
+> > -     static void __attribute__((constructor)) \
+> > -     __constructor_order_last(void) \
+> > -     { \
+> > -             if (!__constructor_order) \
+> > -                     __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWA=
+RD; \
+> > -     } \
+> >       int main(int argc, char **argv) { \
+> >               return test_harness_run(argc, argv); \
+> >       }
+>
+> This won't work. All constructors are executed, so we have to figure
+> out which is run _first_. Switching this to a boolean means we gain no
+> information about ordering: it'll always be set to "true".
 
-This part feels like devmem TCP specific, yet the function is in
-netmem.h. Please consider moving it into devmem.{h,c} which makes it
-less likely that people not reading your comment will try using it.
 
-> +
-> +static inline struct net_devmem_dmabuf_binding *
-> +net_iov_binding(const struct net_iov *niov)
-> +{
-> +	return net_iov_owner(niov)->binding;
-> +}
-> +
->  /* netmem */
->  
->  /**
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> index d82f92d7cf9ce..1f90e23a81441 100644
-> --- a/net/core/devmem.c
-> +++ b/net/core/devmem.c
-> @@ -54,6 +54,42 @@ void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
->  	kfree(binding);
->  }
->  
-> +struct net_iov *
-> +net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	struct dmabuf_genpool_chunk_owner *owner;
-> +	unsigned long dma_addr;
-> +	struct net_iov *niov;
-> +	ssize_t offset;
-> +	ssize_t index;
-> +
-> +	dma_addr = gen_pool_alloc_owner(binding->chunk_pool, PAGE_SIZE,
-> +					(void **)&owner);
-> +	if (!dma_addr)
-> +		return NULL;
-> +
-> +	offset = dma_addr - owner->base_dma_addr;
-> +	index = offset / PAGE_SIZE;
-> +	niov = &owner->niovs[index];
-> +
-> +	niov->dma_addr = 0;
-> +
-> +	net_devmem_dmabuf_binding_get(binding);
-> +
-> +	return niov;
-> +}
-> +
-> +void net_devmem_free_dmabuf(struct net_iov *niov)
-> +{
-> +	struct net_devmem_dmabuf_binding *binding = net_iov_binding(niov);
-> +	unsigned long dma_addr = net_iov_dma_addr(niov);
-> +
-> +	if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
-> +		gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
-> +
-> +	net_devmem_dmabuf_binding_put(binding);
-> +}
-> +
->  /* Protected by rtnl_lock() */
->  static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
->  
+
+It will be set to "true" eventually,
+but __LIST_APPEND() still sees "false"
+on backward-order systems.
+
+
+
+
+Let's see how the following is expanded.
+
+
+ #include "kselftest_harness.h"
+
+ TEST(foo) { ... }
+
+ TEST(bar) { ... }
+
+
+
+You will get something as follows:
+
+
+
+void _attribute__((constructor)) __constructor_order_first(void)
+{
+        __constructor_order_forward =3D true;
+}
+
+void __attribute__((constructor)) _register_foo(void)
+{
+      __register_test(&foo_object); // call __LIST_APPEND() for foo
+}
+
+
+void __attribute__((constructor)) _register_bar(void)
+{
+      __register_test(&bar_object); // call __LIST_APPEND() for bar
+}
+
+
+
+
+On forward-order systems, the constructors are executed in this order:
+
+
+  __constructor_order_first() -> _register_foo() -> _register_bar()
+
+
+So, __LIST_APPEND will see "true".
+
+
+
+
+On backward-order systems, the constructors are executed in this order:
+
+
+  _register_bar() -> _register_foo() -> __constructor_order_first()
+
+
+So, __LIST_APPEND will see "false" since __construtor_order_first()
+has not been called yet.
+
+
+
+Correct me if I am wrong.
+
+
+
+
+> We need to
+> detect which constructor sets it first so that we can walk the lists
+> (that are built via all the constructors in between)
+
+
+You have a wrong assumption here.
+
+TEST() macros may not be placed in-between.
+
+
+   #include "kselftest_harness.h"
+
+   TEST_HARNESS_MAIN
+   TEST(foo) { ... }
+   TEST(bar) { ... }
+
+
+This is perfectly correct code, because there is no reason to force
+"Please put TEST_HARNESS_MAIN at the end of the file".
+
+It is just a "coding style".
+
+
+If the test code were written in such style with
+the current harness implementation, __constructor_order
+would be zero instead of _CONSTRUCTOR_ORDER_BACKWARD
+on backward-order systems.
+__LIST_APPEND() still works correctly, though.
+
+
+
+
+
+
+
+
+
+> >  #endif  /* __KSELFTEST_HARNESS_H */
+> > diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/self=
+tests/rtc/rtctest.c
+> > index 63ce02d1d5cc..9647b14b47c5 100644
+> > --- a/tools/testing/selftests/rtc/rtctest.c
+> > +++ b/tools/testing/selftests/rtc/rtctest.c
+> > @@ -410,13 +410,6 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+> >       ASSERT_EQ(new, secs);
+> >  }
+> >
+> > -static void __attribute__((constructor))
+> > -__constructor_order_last(void)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       switch (argc) {
+>
+> A better question is why these tests are open-coding the execution of
+> "main"...
+
+
+
+It is open __unnecessary__ coding.
+
+
+
+If __constructor_order_last() had not existed in the first place,
+such things would not have occured.
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
 
