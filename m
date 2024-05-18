@@ -1,113 +1,164 @@
-Return-Path: <linux-kselftest+bounces-10377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D08148C91B5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 19:19:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01ACC8C91EC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 20:46:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 861601F218A5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 17:19:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A5281C20A15
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 May 2024 18:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C557C2E3FE;
-	Sat, 18 May 2024 17:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09E254FBD;
+	Sat, 18 May 2024 18:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bLvtPKtf"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="M/fVgprD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422582CCD0
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 May 2024 17:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F1D45010
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 May 2024 18:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716052734; cv=none; b=Z31Uwr+k296X+CmdU5/qXC/bjGgmJq9GArZToorWcX1h2xGygODNN9JoykqWURbGo33ZRQDpYOieX0sU/rWHOWC7tmqFd5bxAvWjV45AKnMOC5dBCdL9kX00xXP6sZktCG54c2AfEO9zrAVOCawC0JYv3sNUZgUIqDi2cr4FrYg=
+	t=1716057974; cv=none; b=dnZQEEcHDLigSRUYMdBLPWQC9rYU+4jrzYrBOJYosebyiMnZYy9Q3swnA4Ti7dY1RQX71ijN4xXiKYZ7wyTOdwVLS3Z3M26Y3W7jnCZ3jKrcbZhLbChjpWSK/CbICwW+CNnA5weQlbbaHOJQhlnmxVPJJyiv3kXnk5U5Lu4GCEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716052734; c=relaxed/simple;
-	bh=//8QV5TSiMfT14T+L5Dni8yVPWQI23EOE8lPHpMRkQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A/i/iBBxhvIFCW7oEiqrIKOa5B/Bgpu1P3oCOTGdwGghOYb2TO05jdMizYsv484oM63k6Qz0REKz/mJ0W4cZV8TSb+qGZZQrPEsyBq/1k+i91gTSZM1HDZcpUt0nZlMrhZtiilIlbXuGVDPtGGIy+mBTS0mv3klCGf+UEMfTG5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bLvtPKtf; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ecc23e6c9dso38488845ad.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 May 2024 10:18:53 -0700 (PDT)
+	s=arc-20240116; t=1716057974; c=relaxed/simple;
+	bh=zQdyUAfqyEGFQFtZHOsOkjixcTwdwCIOHdjVrBr5h0Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u3BxvK40VKxTBxNXjkCEq/pYfVJKRWWjBpYQSL7rSjEhBoa9zMBGecfH0U2YI0mhQUWrD1UgeLC5U6FBPmNBEn3dqFKWDpoUWCludOje6ks2sTjB1MZhi5ywo3wdYFbO0y0azugoF4DPlLApiyEFKReWd7z/Rdz2E/8A5qyrS6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=M/fVgprD; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ee12baa01cso42999625ad.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 May 2024 11:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1716052732; x=1716657532; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bI35mSpFGv5azuf3W34PAy5g+Nwe9xTUDOP2VBYb+qw=;
-        b=bLvtPKtf7AAWUQL7+1BKfBQFilZk/h/+9MqhYx3/ShuBC/VbG7djvHzsS5IkURC66Q
-         01vQjZEIk0vVLgNCnqrW31X87xGfJIH8Zb0RGjsovgioPJUSOqmnKHV3pz4gKKRjv+vk
-         ORI+VxKwcJWNGn1ZIf67KYxyKfGxIkGDJCZMk=
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1716057972; x=1716662772; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gtghe09oJ6h1zM6r9/hcuib2w+0SfFSyUIep5UEjz/8=;
+        b=M/fVgprDo3qemvtSVtDRBRihNA73ylyeFz8g+H/e5sPuphR4ajsfoJ2oJA4fiO1Mf4
+         huJ3Hi0718/4mMzry0SjufRovVcKBA9vaY79KDjdLL+ErhfSF7admU5GZhyxxQKlw7bQ
+         P6FzfziADju1WXT57k/HMvhjcWxFY0BPwg09Q3jaq0U5Qeu19j55rBc/Ek7v5+Wb+5DK
+         VIo2yc1sa4o8rV8D4ZoJ89vKqeGRyfId25tWOki754yqKUAX7FPN3FlB55H5scbibug0
+         nbYjjdqO/YJL4bKhmNFjhLBGVMufB87xfA90viz6pJSxBaBqaLk9hRUHebVf407yE6VK
+         pbgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716052732; x=1716657532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bI35mSpFGv5azuf3W34PAy5g+Nwe9xTUDOP2VBYb+qw=;
-        b=Z66gu+LSVx7vWQ8KN1XIHCO5uKK5mW6SfxEvp14EowRJNL959RGo5PWp1Twn4TrX08
-         SUWSV2WnoqAYrQcOnJvK5tVlIqWjcEGRSShFBTRMA4mXDcSGwvRhllTLzqu3zJTamAT3
-         P4sEjYmMqZzGOTjbK5iNPpg6pnpbiwqfRXBseA1XYoFlF/y/R3gN5xph+YuULyMbSVva
-         03/KSpD4uLmlHYob9xPbFjOHK+TBW2PfrcJQotd2AkBwyTWNdssKhCbk7WeyQsqSMzo5
-         Va3ZNPfMpN+Z6mw7J1rrMdxDtQoP+qxVrde5Yz7yDw+leGCYugkMEmu4OhzvNXXRItGG
-         aDgw==
-X-Forwarded-Encrypted: i=1; AJvYcCXi0QtObiWhzltrWbDDo0BcR7jGWtvJwyiUVWF6gBn53lr/iRK1H5GRJtDBpxSduOO4wEp0/cMuteenJlFh7u9PaDmWamQ32Tm0Uj12O8f7
-X-Gm-Message-State: AOJu0Yx7kokr0zGF2dVS2GEogfWEdFne8TTIqaRRuN/k7Z+L75mfxyte
-	rxXJMtAoMFyy5vUtTm3IjBdB2h/6931j9O+onObarzCU9esIJzCb8dfMWBBWxw==
-X-Google-Smtp-Source: AGHT+IHnTm7HxB1ifDLOfll4lXfhQucVtONb5bXh+in0GA9Emo8PEiZzBgcOx9HwsOaXGa4JlF1tXg==
-X-Received: by 2002:a05:6a20:5602:b0:1af:cbd3:ab4d with SMTP id adf61e73a8af0-1afde120e4dmr22666060637.33.1716052732590;
-        Sat, 18 May 2024 10:18:52 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4fff45ce3sm11294743b3a.197.2024.05.18.10.18.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 May 2024 10:18:51 -0700 (PDT)
-Date: Sat, 18 May 2024 10:18:50 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org, kvm@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests: harness: remove unneeded
- __constructor_order_last()
-Message-ID: <202405181014.B84D979BA@keescook>
-References: <20240517114506.1259203-1-masahiroy@kernel.org>
- <20240517114506.1259203-2-masahiroy@kernel.org>
- <202405171621.A178606D8@keescook>
- <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1716057972; x=1716662772;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtghe09oJ6h1zM6r9/hcuib2w+0SfFSyUIep5UEjz/8=;
+        b=AfX4W/eywOQmkAs+yWmv34zDHrzePqCDNyHrCsqcaKmRCuKuqmR5R+wNXFJ4FxMyKT
+         GlbL8rpFAuB1tTJMkvfpx/7MK5WXWR6tkKpQJXKxqJxdn0fJyQcrq9x2CCng6l6uoTc/
+         +k9h81sxL/0/rc6gaxS2zd8zQmYfVMblz4tchIUHiVVuoWxXwOxo9QE6GCl9o7JZWTXP
+         BLmH4Oyjf3/LWyrmWnXYdV9uxDRb+pbbPtJGAa0RjjaX4mAgp7QcVkBirMy8Vw6ByDEm
+         VDDAWvuRJfSUqEnnNEgO2VlEae8EXHjG6Njha9lOIDPUJ1piAnAUtSOma4Gn1b7wQ3Pp
+         OUDw==
+X-Forwarded-Encrypted: i=1; AJvYcCXW5GXZ1hmSXntK0qAkwYpJ/fsbVqMRQXfhKTNuW5KFkouB8+k9yeS4yR3r+/2/hJcgYg0lsHm+i2xlt08+xzWeakhRK5Uv84XNl55KXhJr
+X-Gm-Message-State: AOJu0Yw8MV1oJMIzhtTMblpiraBLLTVhcW4eHqF2QWvyegxgujxOfKw3
+	VU3sIjurm4VQqCTQFq0XcL8vpSQQTH1Vr+EnYYTe+gzRTMEUYTxJljcer/13hIU=
+X-Google-Smtp-Source: AGHT+IGg0S5X0hOpYwIoBA7prkwh880WzDoU3RkbOFeT/k39JSwrbImT1CJOj9wyUMDIZCVhykRgQw==
+X-Received: by 2002:a05:6a00:1988:b0:6f3:8468:f9d1 with SMTP id d2e1a72fcca58-6f4e02c7d62mr28356985b3a.14.1716057972513;
+        Sat, 18 May 2024 11:46:12 -0700 (PDT)
+Received: from [192.168.1.16] (174-21-188-197.tukw.qwest.net. [174.21.188.197])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a6656esm16665141b3a.38.2024.05.18.11.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 May 2024 11:46:11 -0700 (PDT)
+Message-ID: <d85f4ba4-774f-4577-985f-45a5a1866da7@davidwei.uk>
+Date: Sat, 18 May 2024 11:46:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
+ netdevice
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-5-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240510232128.1105145-5-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 18, 2024 at 12:29:00PM +0900, Masahiro Yamada wrote:
-> It will be set to "true" eventually,
-> but __LIST_APPEND() still sees "false"
-> on backward-order systems.
+On 2024-05-10 16:21, Mina Almasry wrote:
+> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
+> +
+> +	if (!binding)
+> +		return;
+> +
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
+> +
+> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> +		if (rxq->mp_params.mp_priv == binding) {
+> +			/* We hold the rtnl_lock while binding/unbinding
+> +			 * dma-buf, so we can't race with another thread that
+> +			 * is also modifying this value. However, the page_pool
+> +			 * may read this config while it's creating its
+> +			 * rx-queues. WRITE_ONCE() here to match the
+> +			 * READ_ONCE() in the page_pool.
+> +			 */
+> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
+> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
+> +
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+> +
+> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
 
-Ah, yes -- you are right. I looked through the commit history (I had
-to go back to when the seccomp test, and the harness, was out of tree).
-There was a time when the logic happened during the list walking, rather
-than during list _creation_. I was remembering the former.
+What if netdev_rx_queue_restart() fails? Depending on where it failed, a
+queue might still be filled from struct net_devmem_dmabuf_binding. This
+is one downside of the current situation with netdev_rx_queue_restart()
+needing to do allocations each time.
 
-So, yes, let's make this change. As you say, it also solves for defining
-TEST_HARNESS_MAIN before the tests. Thank you! I'd still like to replace
-all the open-coded TEST_HARNESS_MAIN calls, though.
+Perhaps a full reset if individual queue restart fails?
 
--- 
-Kees Cook
 
