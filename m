@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-10412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 063BB8C967A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 May 2024 22:27:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C99B08C964E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 May 2024 22:26:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 875B71F21261
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 May 2024 20:27:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A6E0B20DEA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 May 2024 20:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958397A15C;
-	Sun, 19 May 2024 20:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FEF274E3A;
+	Sun, 19 May 2024 20:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="UxpKGxEf"
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="NiaODcDz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D29745FD;
-	Sun, 19 May 2024 20:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A795FD2EE;
+	Sun, 19 May 2024 20:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716150321; cv=none; b=LRGjb/siA/yxA5OAImSgYqiyuTBsgUMkW72QrQ9jDFVxagVCAvO11jt8zfEDGbTEHwUAKdh+iLKsr+XyxrIRCqG+0AQ1z6F2PiOYzlOayfn4b2bt4G8Yr4QY3MbhG7m99lJFBSUlinS9tm5GHm3qbjcsjQ9EmGdbR+Rb+O9rVcA=
+	t=1716150318; cv=none; b=nOie80YtpMW46JvrihZLKMKn5oamtdW+f2H79BFmR48j8nu8GgLw48W6574gXE+U/RW9Akec32RNm/sU2NDIrdwNRtJSoUvE2hiC6lvpCXwyH1k2YPUHowpcX/PnVzvjfCcJnrGREIOIoVEUb0r4oOTdlPEUUK6FheuN6D/wHIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716150321; c=relaxed/simple;
-	bh=O6pZ7douG1wzU+ulrX8Og0hWJD7BuLVJKerv0vxm/10=;
+	s=arc-20240116; t=1716150318; c=relaxed/simple;
+	bh=Gd1tpusTbSbI8AbBBLGNjkRaHaUPl9s4W+WpkKEI2/o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S/k2XMuZKPgY0R96Cvp6943rW4+7ffXTW9pcAZIdYMZ0/KBYGLCfXxJolmTxtKcNnvwQC8hzggIdwVWHTwBU2fzFhpzSFfijl3ms4VvtA8GWUyqBw4RWmXrBT/tFBg4BK/eJJHrMkebDcq5AeBoWz8MWzGaEmH/FtcS17Par0QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=UxpKGxEf; arc=none smtp.client-ip=4.36.192.163
+	 MIME-Version; b=IcsOxX+WS357QuSZlGD3+GV11MIydWKtZ4HGGyHEACMtIfm1IhgjDHgq9U89Bh8TQLNb5W61MQ7YPL/C6PszVBM/EVSxrE/Dd65AuPkadqKMBxFSJCj3vJMLtqlHAhgFv+78jRjBpbj+AkBmR0sVOPaGp4P3YZbZ0CSVjb581FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=NiaODcDz; arc=none smtp.client-ip=4.36.192.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=Q3igaEQxpSWMeILoj0hVqmOUYjiaFqrzya8EJNTRHxM=; b=UxpKGxEfEjkYwB4SS7myShHCO6
-	K+rnS3v/QIdGY4D9ZMsNgzX75LMmx3PTw0DtqU7SIGoAJ0buZv4lHU+cisPNLc95CJoEPZnOZsC6j
-	TGDoXrbp3p24C/hATSDohSpcjlut64PzbPWzGbS3ndt3IqC3HKu/Zqsnd5M7H6Dp1AEmy0xNGeSl/
-	okB2D8HwY6NPPyUR+2udcYbtWCGemumleBFomdwl0boIzByhr2oyEfj38/HWVjY6Y7YPb+6cayBqd
-	TgTN3Jf9jg0aYxPTllA1KK4nvKmiDaS6p9PNK+O/Z7Xd60XS83eGK0TykhTFuBChImBpUGdre+HDV
-	xd/6B7Bg==;
+	bh=SXcqtGNCLa8ZwRK5oOBNmkOan2B17nwyjfjgs8uki1U=; b=NiaODcDzU8ZWsWB359bWxa1KAl
+	HcPRFvAijl1UkMDDqzMtziEsQv330IW4dTu5iBRwWME8MnAa9kF5rSnhUk7HXKKslKEH9r89/rfEM
+	KSdEPu5+KFuOUPgKYSO499n5Ajg0w702h6zIKax0//l9Rfetw6J9SJ67XDaiK0lRCrUqo12x87Of/
+	NvM6cXXvVhYQ+7VMVX1VUV64y2d7tixd2f3ng4jPnSwsTEQldY7MPUppFP8H47sZejx6eVvznWEAP
+	abx3x6TqifJg9OSZsqZpcOdO0Z7u+a65vsYAtmSZXukhzV82farOU+bIGGex4N0OZcvkbuL0D5YND
+	vwd+ZKrA==;
 Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
 	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <zfigura@codeweavers.com>)
-	id 1s8n5b-008wIn-1a;
+	id 1s8n5b-008wIn-23;
 	Sun, 19 May 2024 15:25:03 -0500
 From: Elizabeth Figura <zfigura@codeweavers.com>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -66,9 +66,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Waiman Long <longman@redhat.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH v5 03/28] ntsync: Introduce NTSYNC_IOC_CREATE_MUTEX.
-Date: Sun, 19 May 2024 15:24:29 -0500
-Message-ID: <20240519202454.1192826-4-zfigura@codeweavers.com>
+Subject: [PATCH v5 04/28] ntsync: Introduce NTSYNC_IOC_MUTEX_UNLOCK.
+Date: Sun, 19 May 2024 15:24:30 -0500
+Message-ID: <20240519202454.1192826-5-zfigura@codeweavers.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240519202454.1192826-1-zfigura@codeweavers.com>
 References: <20240519202454.1192826-1-zfigura@codeweavers.com>
@@ -80,231 +80,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This corresponds to the NT syscall NtCreateMutant().
+This corresponds to the NT syscall NtReleaseMutant().
 
-An NT mutex is recursive, with a 32-bit recursion counter. When acquired via
-NtWaitForMultipleObjects(), the recursion counter is incremented by one. The OS
-records the thread which acquired it.
-
-The OS records the thread which acquired it. However, in order to keep this
-driver self-contained, the owning thread ID is managed by user-space, and passed
-as a parameter to all relevant ioctls.
-
-The initial owner and recursion count, if any, are specified when the mutex is
-created.
+This syscall decrements the mutex's recursion count by one, and returns the
+previous value. If the mutex is not owned by the current task, the function
+instead fails and returns -EPERM.
 
 Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- drivers/misc/ntsync.c       | 77 +++++++++++++++++++++++++++++++++++--
- include/uapi/linux/ntsync.h | 10 ++++-
- 2 files changed, 83 insertions(+), 4 deletions(-)
+ drivers/misc/ntsync.c       | 53 +++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/ntsync.h |  1 +
+ 2 files changed, 54 insertions(+)
 
 diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
-index a2f2dfadc3ee..cfe802c79d7d 100644
+index cfe802c79d7d..f00af9b15164 100644
 --- a/drivers/misc/ntsync.c
 +++ b/drivers/misc/ntsync.c
-@@ -25,6 +25,7 @@
- 
- enum ntsync_type {
- 	NTSYNC_TYPE_SEM,
-+	NTSYNC_TYPE_MUTEX,
- };
- 
- /*
-@@ -55,6 +56,10 @@ struct ntsync_obj {
- 			__u32 count;
- 			__u32 max;
- 		} sem;
-+		struct {
-+			__u32 count;
-+			pid_t owner;
-+		} mutex;
- 	} u;
- 
- 	/*
-@@ -92,6 +97,7 @@ struct ntsync_q_entry {
- 
- struct ntsync_q {
- 	struct task_struct *task;
-+	__u32 owner;
- 
- 	/*
- 	 * Protected via atomic_try_cmpxchg(). Only the thread that wins the
-@@ -214,13 +220,17 @@ static void ntsync_unlock_obj(struct ntsync_device *dev, struct ntsync_obj *obj,
- 		       ((lockdep_is_held(&(obj)->dev->wait_all_lock) != LOCK_STATE_NOT_HELD) && \
- 			(obj)->dev_locked))
- 
--static bool is_signaled(struct ntsync_obj *obj)
-+static bool is_signaled(struct ntsync_obj *obj, __u32 owner)
- {
- 	ntsync_assert_held(obj);
- 
- 	switch (obj->type) {
- 	case NTSYNC_TYPE_SEM:
- 		return !!obj->u.sem.count;
-+	case NTSYNC_TYPE_MUTEX:
-+		if (obj->u.mutex.owner && obj->u.mutex.owner != owner)
-+			return false;
-+		return obj->u.mutex.count < UINT_MAX;
- 	}
- 
- 	WARN(1, "bad object type %#x\n", obj->type);
-@@ -250,7 +260,7 @@ static void try_wake_all(struct ntsync_device *dev, struct ntsync_q *q,
- 	}
- 
- 	for (i = 0; i < count; i++) {
--		if (!is_signaled(q->entries[i].obj)) {
-+		if (!is_signaled(q->entries[i].obj, q->owner)) {
- 			can_wake = false;
- 			break;
- 		}
-@@ -264,6 +274,10 @@ static void try_wake_all(struct ntsync_device *dev, struct ntsync_q *q,
- 			case NTSYNC_TYPE_SEM:
- 				obj->u.sem.count--;
- 				break;
-+			case NTSYNC_TYPE_MUTEX:
-+				obj->u.mutex.count++;
-+				obj->u.mutex.owner = q->owner;
-+				break;
- 			}
- 		}
- 		wake_up_process(q->task);
-@@ -307,6 +321,30 @@ static void try_wake_any_sem(struct ntsync_obj *sem)
- 	}
+@@ -396,6 +396,57 @@ static int ntsync_sem_post(struct ntsync_obj *sem, void __user *argp)
+ 	return ret;
  }
  
-+static void try_wake_any_mutex(struct ntsync_obj *mutex)
++/*
++ * Actually change the mutex state, returning -EPERM if not the owner.
++ */
++static int unlock_mutex_state(struct ntsync_obj *mutex,
++			      const struct ntsync_mutex_args *args)
 +{
-+	struct ntsync_q_entry *entry;
-+
 +	ntsync_assert_held(mutex);
-+	lockdep_assert(mutex->type == NTSYNC_TYPE_MUTEX);
 +
-+	list_for_each_entry(entry, &mutex->any_waiters, node) {
-+		struct ntsync_q *q = entry->q;
-+		int signaled = -1;
++	if (mutex->u.mutex.owner != args->owner)
++		return -EPERM;
 +
-+		if (mutex->u.mutex.count == UINT_MAX)
-+			break;
-+		if (mutex->u.mutex.owner && mutex->u.mutex.owner != q->owner)
-+			continue;
-+
-+		if (atomic_try_cmpxchg(&q->signaled, &signaled, entry->index)) {
-+			mutex->u.mutex.count++;
-+			mutex->u.mutex.owner = q->owner;
-+			wake_up_process(q->task);
-+		}
-+	}
++	if (!--mutex->u.mutex.count)
++		mutex->u.mutex.owner = 0;
++	return 0;
 +}
 +
- /*
-  * Actually change the semaphore state, returning -EOVERFLOW if it is made
-  * invalid.
-@@ -455,6 +493,33 @@ static int ntsync_create_sem(struct ntsync_device *dev, void __user *argp)
- 	return put_user(fd, &user_args->sem);
- }
- 
-+static int ntsync_create_mutex(struct ntsync_device *dev, void __user *argp)
++static int ntsync_mutex_unlock(struct ntsync_obj *mutex, void __user *argp)
 +{
 +	struct ntsync_mutex_args __user *user_args = argp;
++	struct ntsync_device *dev = mutex->dev;
 +	struct ntsync_mutex_args args;
-+	struct ntsync_obj *mutex;
-+	int fd;
++	__u32 prev_count;
++	bool all;
++	int ret;
 +
 +	if (copy_from_user(&args, argp, sizeof(args)))
 +		return -EFAULT;
-+
-+	if (!args.owner != !args.count)
++	if (!args.owner)
 +		return -EINVAL;
 +
-+	mutex = ntsync_alloc_obj(dev, NTSYNC_TYPE_MUTEX);
-+	if (!mutex)
-+		return -ENOMEM;
-+	mutex->u.mutex.count = args.count;
-+	mutex->u.mutex.owner = args.owner;
-+	fd = ntsync_obj_get_fd(mutex);
-+	if (fd < 0) {
-+		kfree(mutex);
-+		return fd;
++	if (mutex->type != NTSYNC_TYPE_MUTEX)
++		return -EINVAL;
++
++	all = ntsync_lock_obj(dev, mutex);
++
++	prev_count = mutex->u.mutex.count;
++	ret = unlock_mutex_state(mutex, &args);
++	if (!ret) {
++		if (all)
++			try_wake_all_obj(dev, mutex);
++		try_wake_any_mutex(mutex);
 +	}
 +
-+	return put_user(fd, &user_args->mutex);
++	ntsync_unlock_obj(dev, mutex, all);
++
++	if (!ret && put_user(prev_count, &user_args->count))
++		ret = -EFAULT;
++
++	return ret;
 +}
 +
- static struct ntsync_obj *get_obj(struct ntsync_device *dev, int fd)
+ static int ntsync_obj_release(struct inode *inode, struct file *file)
  {
- 	struct file *file = fget(fd);
-@@ -524,7 +589,7 @@ static int setup_wait(struct ntsync_device *dev,
- 	struct ntsync_q *q;
- 	__u32 i, j;
- 
--	if (args->pad[0] || args->pad[1] || args->pad[2] || (args->flags & ~NTSYNC_WAIT_REALTIME))
-+	if (args->pad[0] || args->pad[1] || (args->flags & ~NTSYNC_WAIT_REALTIME))
- 		return -EINVAL;
- 
- 	if (args->count > NTSYNC_MAX_WAIT_COUNT)
-@@ -538,6 +603,7 @@ static int setup_wait(struct ntsync_device *dev,
- 	if (!q)
- 		return -ENOMEM;
- 	q->task = current;
-+	q->owner = args->owner;
- 	atomic_set(&q->signaled, -1);
- 	q->all = all;
- 	q->count = count;
-@@ -580,6 +646,9 @@ static void try_wake_any_obj(struct ntsync_obj *obj)
- 	case NTSYNC_TYPE_SEM:
- 		try_wake_any_sem(obj);
- 		break;
-+	case NTSYNC_TYPE_MUTEX:
-+		try_wake_any_mutex(obj);
-+		break;
- 	}
- }
- 
-@@ -769,6 +838,8 @@ static long ntsync_char_ioctl(struct file *file, unsigned int cmd,
- 	void __user *argp = (void __user *)parm;
- 
+ 	struct ntsync_obj *obj = file->private_data;
+@@ -415,6 +466,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
  	switch (cmd) {
-+	case NTSYNC_IOC_CREATE_MUTEX:
-+		return ntsync_create_mutex(dev, argp);
- 	case NTSYNC_IOC_CREATE_SEM:
- 		return ntsync_create_sem(dev, argp);
- 	case NTSYNC_IOC_WAIT_ALL:
+ 	case NTSYNC_IOC_SEM_POST:
+ 		return ntsync_sem_post(obj, argp);
++	case NTSYNC_IOC_MUTEX_UNLOCK:
++		return ntsync_mutex_unlock(obj, argp);
+ 	default:
+ 		return -ENOIOCTLCMD;
+ 	}
 diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
-index addf187b1573..d5e5a2fbcb4d 100644
+index d5e5a2fbcb4d..a633db34f284 100644
 --- a/include/uapi/linux/ntsync.h
 +++ b/include/uapi/linux/ntsync.h
-@@ -16,6 +16,12 @@ struct ntsync_sem_args {
- 	__u32 max;
- };
- 
-+struct ntsync_mutex_args {
-+	__u32 mutex;
-+	__u32 owner;
-+	__u32 count;
-+};
-+
- #define NTSYNC_WAIT_REALTIME	0x1
- 
- struct ntsync_wait_args {
-@@ -24,7 +30,8 @@ struct ntsync_wait_args {
- 	__u32 count;
- 	__u32 index;
- 	__u32 flags;
--	__u32 pad[3];
-+	__u32 owner;
-+	__u32 pad[2];
- };
- 
- #define NTSYNC_MAX_WAIT_COUNT 64
-@@ -32,6 +39,7 @@ struct ntsync_wait_args {
- #define NTSYNC_IOC_CREATE_SEM		_IOWR('N', 0x80, struct ntsync_sem_args)
- #define NTSYNC_IOC_WAIT_ANY		_IOWR('N', 0x82, struct ntsync_wait_args)
- #define NTSYNC_IOC_WAIT_ALL		_IOWR('N', 0x83, struct ntsync_wait_args)
-+#define NTSYNC_IOC_CREATE_MUTEX		_IOWR('N', 0x84, struct ntsync_sem_args)
+@@ -42,5 +42,6 @@ struct ntsync_wait_args {
+ #define NTSYNC_IOC_CREATE_MUTEX		_IOWR('N', 0x84, struct ntsync_sem_args)
  
  #define NTSYNC_IOC_SEM_POST		_IOWR('N', 0x81, __u32)
++#define NTSYNC_IOC_MUTEX_UNLOCK		_IOWR('N', 0x85, struct ntsync_mutex_args)
  
+ #endif
 -- 
 2.43.0
 
