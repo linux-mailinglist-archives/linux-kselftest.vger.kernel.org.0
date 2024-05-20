@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-10430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F9058C9D5C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:32:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 042498C9D5F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:33:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BAE81F23443
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:32:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3E2828473F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7FA56763;
-	Mon, 20 May 2024 12:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7601971B3B;
+	Mon, 20 May 2024 12:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k/CYVbpt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D4a6KXrh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1A7535BF;
-	Mon, 20 May 2024 12:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0DE71B48;
+	Mon, 20 May 2024 12:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716208297; cv=none; b=dXMBCB2M4r5fXCcKMJYo+kZXKnqcvVoKksgjuKzwiZSXqX8hUhgZxiMEncEDCP1LoCPvN+Bm7mmzxsuc1VytfLfdNqjePm61esKYmE4aAEFV1EqC2SJem4BDbJDzhuaSmvIib0xmgZyyIlcAoz20sKlB7n3ddxqcosLuaGnUYME=
+	t=1716208306; cv=none; b=FXfDsSmAvzrr5pcyEsT1OHn+TJufRBrWlWG4Ois/LbkVvQ41uSkjTFLmeJAOWQyG6IwNuyiaWdZDq0Xe04QJg/gLwphNS3P2H48h314inmjcip8idytl7BIhi7kC0XQ07DjOA0LsMN0Kz8wrgxkmTkL24b+dwXzk5/OZBtc8DHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716208297; c=relaxed/simple;
-	bh=vD3mIPWehyTxwiEwSM2bRKm7uM+xdNcRV/4ZwMjS0X4=;
+	s=arc-20240116; t=1716208306; c=relaxed/simple;
+	bh=k+xZPNvp8VJD3Y5WMA9eeWl+zPa7LoAlFBHiX0NOM3M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QN440DwImfUbRQj9cgqWnnzmYMi96kjUBpvqC1RzT9i/7pW68bneGu4npGcUbpmKKW/L/c0uR6DYljWpE6vD/O7XQ43ATfZWpyUU4xUrdOMFuL0ndP7G7daK8CcedS0ZV+8OBtSIfaoa7t0vLH00lrghWbcHYLLhayn+BM7fpd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k/CYVbpt; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version:Content-Type; b=gZLHVQw8cv4C0jaL2MelQFSpByXetySdLyaHb1QJVL/kApnKpYWaXuqRvuGWWMq3DE/qlc5YfuDo2RbluF9EvMGixCGrHuNbc5ycltvsDE+DrQlOnL1QQBJ1NMruPTCXEw3+NZoODZnUam2tA2+Qi7ppq89Atjyz9uH+g5zQ4Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D4a6KXrh; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716208296; x=1747744296;
+  t=1716208305; x=1747744305;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vD3mIPWehyTxwiEwSM2bRKm7uM+xdNcRV/4ZwMjS0X4=;
-  b=k/CYVbptNyLFPWKxVJ5yeCRP7a9Xm8aNd21e+m+LEiUOJSF6lP9iUHY2
-   teJ1+ODuTQzEV7HRsLDk3acEFD1Kas6HA0HQ4L+TQdNO2RWV8KAcixei/
-   YDKv4RZcJKONyEnH09O3cSfZWxVDRGZHTtCoxYMXclNQ9CJ+xqcZvxsEF
-   spVGQagDaxqKRMJj60owU+fkaRixJip1smlgeSamUDT5Nd66e6aaxewei
-   GSn5BUz8pFXf75llyy3euKmEKzNpEO4zjRfx4RkrGFeJnsKThe9TpuV8N
-   n0OOs+g6vtDx9+l1wBUsl9BCZYZq35CScB4R0iCESYRFJ1QGGAcDSarN2
+  bh=k+xZPNvp8VJD3Y5WMA9eeWl+zPa7LoAlFBHiX0NOM3M=;
+  b=D4a6KXrhmn3DAEZaSW7nBQNmVaiHKb3djul4tlAVE62CIt3Kj+OXnq+6
+   Fd3+WdyIBlKan4p62IvvB2zf2VHVnDmsUtr1AaZ01DpJv/DL5GdqTcFMo
+   k5NtaZIsP41vr6zVzoTr7SlpZhAMQrgojqTpaRCS3LVReaMoRXqYBw+np
+   1HIYSTbRW6Khys/1afIayFSgkLcWy608dsTZdAsBV8GVetE9vy8NTo3YJ
+   oXJZ4UbF2YCB/hTsHVzWbs3E/DZGEtq0zwy39/vY9IH1V9F9IdlrPVCJT
+   G2M7C8ZpqBUAZciB0SYyy3nOcrkqOWdYzLUKTehNyFrNu1Spa158HE1PW
    A==;
-X-CSE-ConnectionGUID: G3rh8IPdSyKdBFERxNEeWQ==
-X-CSE-MsgGUID: FO0z4uVqRtiAkmmP9XAsJw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12180401"
+X-CSE-ConnectionGUID: tt/pGeOoRzSW/qWLUM+cag==
+X-CSE-MsgGUID: JvPJ2Cl4SKGFIsHFiVTnCw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12180435"
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="12180401"
+   d="scan'208";a="12180435"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:31:36 -0700
-X-CSE-ConnectionGUID: vqimptmwRyiz92b0+b+l3w==
-X-CSE-MsgGUID: jk1/L8YJSQKwxh+8A+mQGA==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:31:44 -0700
+X-CSE-ConnectionGUID: Skeem3bPS4iH8KcErhPASw==
+X-CSE-MsgGUID: okJHpcksSKeMEJR8jBgKLA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="37474480"
+   d="scan'208";a="37474552"
 Received: from unknown (HELO localhost) ([10.245.247.114])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:31:33 -0700
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:31:42 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -68,9 +68,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 07/16] selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() & document
-Date: Mon, 20 May 2024 15:30:11 +0300
-Message-Id: <20240520123020.18938-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 08/16] selftests/resctrl: Simplify mem bandwidth file code for MBA & MBM tests
+Date: Mon, 20 May 2024 15:30:12 +0300
+Message-Id: <20240520123020.18938-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
 References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
@@ -83,44 +83,126 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-measure_val() is awfully generic name so rename it to measure_mem_bw()
-to describe better what it does and document the function parameters.
+initialize_mem_bw_resctrl() and set_mbm_path() contain complicated set
+of conditions, each yielding different file to be opened to measure
+memory bandwidth through resctrl FS. In practice, only two of them are
+used. For MBA test, ctrlgrp is always provided, and for MBM test both
+ctrlgrp and mongrp are set.
 
+The file used differ between MBA/MBM test, however, MBM test
+unnecessarily create monitor group because resctrl FS already provides
+monitoring interface underneath any ctrlgrp too, which is what the MBA
+selftest uses.
+
+Consolidate memory bandwidth file used to the one used by the MBA
+selftest. Remove all unused branches opening other files to simplify
+the code.
+
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl_val.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
+v4:
+- Remove also MBM .mongrp setup
+v3:
+- New patch
+---
+ tools/testing/selftests/resctrl/mbm_test.c    |  1 -
+ tools/testing/selftests/resctrl/resctrl_val.c | 45 ++-----------------
+ 2 files changed, 4 insertions(+), 42 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 3059ccc51a5a..96d279b06377 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -115,7 +115,6 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+ 	struct resctrl_val_param param = {
+ 		.resctrl_val	= MBM_STR,
+ 		.ctrlgrp	= "c1",
+-		.mongrp		= "m1",
+ 		.filename	= RESULT_FILE_NAME,
+ 		.bw_report	= "reads",
+ 		.setup		= mbm_setup
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 198b5133432a..6c53eb9171ea 100644
+index 6c53eb9171ea..a3cf3c5ed17f 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -637,8 +637,14 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
- 		set_cmt_path(ctrlgrp, mongrp, domain_id);
+@@ -19,18 +19,10 @@
+ #define MAX_TOKENS		5
+ #define READ			0
+ #define WRITE			1
+-#define CON_MON_MBM_LOCAL_BYTES_PATH				\
+-	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+ 
+ #define CON_MBM_LOCAL_BYTES_PATH		\
+ 	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+ 
+-#define MON_MBM_LOCAL_BYTES_PATH		\
+-	"%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+-
+-#define MBM_LOCAL_BYTES_PATH			\
+-	"%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+-
+ #define CON_MON_LCC_OCCUP_PATH		\
+ 	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/llc_occupancy"
+ 
+@@ -436,43 +428,15 @@ static int get_mem_bw_imc(char *bw_report, float *bw_imc)
+ 	return -1;
  }
  
--static int measure_vals(const struct user_params *uparams,
--			struct resctrl_val_param *param, pid_t bm_pid)
-+/*
-+ * measure_mem_bw - Measures memory bandwidth numbers while benchmark runs
-+ * @uparams:		User supplied parameters
-+ * @param:		parameters passed to resctrl_val()
-+ * @bm_pid:		PID that runs the benchmark
-+ */
-+static int measure_mem_bw(const struct user_params *uparams,
-+			  struct resctrl_val_param *param, pid_t bm_pid)
+-void set_mbm_path(const char *ctrlgrp, const char *mongrp, int domain_id)
+-{
+-	if (ctrlgrp && mongrp)
+-		sprintf(mbm_total_path, CON_MON_MBM_LOCAL_BYTES_PATH,
+-			RESCTRL_PATH, ctrlgrp, mongrp, domain_id);
+-	else if (!ctrlgrp && mongrp)
+-		sprintf(mbm_total_path, MON_MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
+-			mongrp, domain_id);
+-	else if (ctrlgrp && !mongrp)
+-		sprintf(mbm_total_path, CON_MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
+-			ctrlgrp, domain_id);
+-	else if (!ctrlgrp && !mongrp)
+-		sprintf(mbm_total_path, MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
+-			domain_id);
+-}
+-
+ /*
+  * initialize_mem_bw_resctrl:	Appropriately populate "mbm_total_path"
+  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
+- * @mongrp:			Name of the monitor group (mon grp)
+  * @domain_id:			Domain ID (cache ID; for MB, L3 cache ID)
+- * @resctrl_val:		Resctrl feature (Eg: mbm, mba.. etc)
+  */
+-static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
+-				      int domain_id, char *resctrl_val)
++static void initialize_mem_bw_resctrl(const char *ctrlgrp, int domain_id)
  {
- 	unsigned long bw_resc, bw_resc_start, bw_resc_end;
- 	FILE *mem_bw_fp, *mem_bw_fp2;
-@@ -912,7 +918,7 @@ int resctrl_val(const struct resctrl_test *test,
+-	if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
+-		set_mbm_path(ctrlgrp, mongrp, domain_id);
+-
+-	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
+-		if (ctrlgrp)
+-			sprintf(mbm_total_path, CON_MBM_LOCAL_BYTES_PATH,
+-				RESCTRL_PATH, ctrlgrp, domain_id);
+-		else
+-			sprintf(mbm_total_path, MBM_LOCAL_BYTES_PATH,
+-				RESCTRL_PATH, domain_id);
+-	}
++	sprintf(mbm_total_path, CON_MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
++		ctrlgrp, domain_id);
+ }
  
- 		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
- 		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
--			ret = measure_vals(uparams, param, bm_pid);
-+			ret = measure_mem_bw(uparams, param, bm_pid);
- 			if (ret)
- 				break;
- 		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ /*
+@@ -878,8 +842,7 @@ int resctrl_val(const struct resctrl_test *test,
+ 		if (ret)
+ 			goto out;
+ 
+-		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
+-					  domain_id, resctrl_val);
++		initialize_mem_bw_resctrl(param->ctrlgrp, domain_id);
+ 	} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		initialize_llc_occu_resctrl(param->ctrlgrp, param->mongrp,
+ 					    domain_id, resctrl_val);
 -- 
 2.39.2
 
