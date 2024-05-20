@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-10422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F6C8C9D3F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:30:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 595108C9D43
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:30:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93F5F282905
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:30:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EDA72812A4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B15535BF;
-	Mon, 20 May 2024 12:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 434D550275;
+	Mon, 20 May 2024 12:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NNqAzDqE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FYyoBqTc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56301EB45;
-	Mon, 20 May 2024 12:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1A41EB45;
+	Mon, 20 May 2024 12:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716208213; cv=none; b=cShLIhoVSpZHmksTc7Q1hyYxUtFupSSFOd/wapDAEttu74VdZCORCz9QODTDjjPOr2vmaxpYmOJ9W5MR3k+3QtDJgbksp9EQoEW9VL88Cuain7wT4NL2ZDSvcU9NwiGCfzhyS8UwE/CEYA7qCU5gRYhRQcTP2HNApmJnQQnKsRU=
+	t=1716208242; cv=none; b=GbRxBM7oBnTYIhIYWZOhfJb9DG31C2WpCXbeInKOmfcE9Ezx/XP9EpMXGhCH/98/xcbPCv/L+AV76EE8jsGlIa8iZBa9EZxidvFPRyqBbyUtZXnBhqak9woGQMJrsuLDHFibpk1TqjwMl2jymIssg5zZCb/O/eppPoVooNUCGjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716208213; c=relaxed/simple;
+	s=arc-20240116; t=1716208242; c=relaxed/simple;
 	bh=VTFXazmwUm3I8saNmQlbGIoVuTKmGGMewfsHcp2Ovjo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=tv7V69UcgnKdqK/c5MeRyZX7fsoWE7KqvFkD/nS6i/WOKSBSwa6DtsH7Xy7z/v7zjjB1oFCwOwBXqPQV/L1m7iWMZTQuHrGcQZV0DSJmES3met3L/26glO7wzLqoY5Mr+e+bh4i/EXJcSjngFfhv1MY34PDDS2/wbs9Rb+/kUt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NNqAzDqE; arc=none smtp.client-ip=198.175.65.16
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=soNXJtoHTk05nU5JuQGE/FsC7TOxKAd2G/HTb1RJPcNL6MwMgYEzV7g2r9fplHwF9tRGg2mfey87mSKUBk27ceYe67sUnKDPGzbK0EZH2Ltm9pm60Vz+sW3v7R8cJ9E4mbtnJ+5pN5l8LITi1C9mvoWJ7smZbTeqQwd5NDVRn3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FYyoBqTc; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716208212; x=1747744212;
+  t=1716208241; x=1747744241;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=VTFXazmwUm3I8saNmQlbGIoVuTKmGGMewfsHcp2Ovjo=;
-  b=NNqAzDqE0XR6v/PVOc852ZB2dR55yCWaQxqQz1jZlhbXODWoBOm9DWpu
-   UWiYTrCPpYPvfP5EBlrhEadJKZWbX7S8WCqDoHgV7VjYq3HTMH4Q5MWQm
-   vaijll0/FSpinDZaI61JCng0aZ3aoZae8Xhu0xnOdyAm3n1Lzb42FUn2f
-   KN2lmpyYDhzXgiiEFurLdj+yqwNElBhrnYYXzVJOjZ9Zr6OzntZ8g/ZI4
-   4HUt8VN7UScYSCmQSM+cXdLj4IMo+i4ssYQVt9Gcqyps9xtf0qYyPcM/K
-   jjjjohzPd83mAMkcpQArBHC+hs7QLPOEG2rU9skN45k6QsBw3Fexac7/8
-   A==;
-X-CSE-ConnectionGUID: LFpNrNnwTJqCfJikxatF7A==
-X-CSE-MsgGUID: ELBELRjiRdGD3dIe4J0XRw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12444484"
+  b=FYyoBqTc5XFcTIAM+m300GW2qmAgUSzeztjnTjiTwm4cFHQR15ZNifzU
+   ORavbezl3ifa2V2EWAxGw60fj21C8eMa+qg9a55cWtDBC4B8soQnRI/MB
+   22XaI+Q2Y+j90Pd8jLudMS8vAyJoU1gtIaxKuIn7HIBd2gXEIUKOHqOiT
+   TGiN/y3YXrjCbnia6BVpFxUtYu2oZq4eODcIULtxVbAoB8CdLHVMSc7CB
+   6n2jDIJbDsMyWT1PdJCkHVVYJKrpgskO2XDqHS74m6/ZE8iyP6n0u6Vjd
+   7Ges84UHDvOs+TiwvRYehLS7VMoHIA/dUc+IALgxhN8je0KJw48BUnuqw
+   Q==;
+X-CSE-ConnectionGUID: x93D7dKMQdSqOqjIxdSz4w==
+X-CSE-MsgGUID: vC4JNS8ESHGttuKj5Aln9A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12444523"
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="12444484"
+   d="scan'208";a="12444523"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:11 -0700
-X-CSE-ConnectionGUID: h2J4Wqx1SNqCUkNJhxpsnw==
-X-CSE-MsgGUID: p7QLL69PSHKQVtmTRqx8wQ==
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:40 -0700
+X-CSE-ConnectionGUID: w0r5q6TnQAWWE/XpkFEKFA==
+X-CSE-MsgGUID: E43spQU2S7iqWNvu4J9kNg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="37115103"
+   d="scan'208";a="37115232"
 Received: from unknown (HELO localhost) ([10.245.247.114])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:08 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:29 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -68,8 +68,8 @@ Cc: linux-kernel@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Subject: [PATCH v4 00/16] selftests/resctrl: resctrl_val() related cleanups & improvements
-Date: Mon, 20 May 2024 15:28:50 +0300
-Message-Id: <20240520122906.18831-1-ilpo.jarvinen@linux.intel.com>
+Date: Mon, 20 May 2024 15:30:04 +0300
+Message-Id: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
