@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-10425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329DA8C9D48
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:31:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C95FA8C9D4B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:31:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C1D91C2228E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:31:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8516A282FD2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B655579F;
-	Mon, 20 May 2024 12:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB97856454;
+	Mon, 20 May 2024 12:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HaWhIcIW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YP/J42fq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39195466B;
-	Mon, 20 May 2024 12:30:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8369556440;
+	Mon, 20 May 2024 12:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716208253; cv=none; b=DK09ysrYng/PoA/YdJwDwZoJoM8lPibKm5wGDnvqd//ylL7oGT9xYWpvINMyVL03Hhcq3n2E81dz+k8X8mqRAogUvz07JzV3NBCDa/+snx/BBNnZTC4MzLF2nRhJxc9RZNFFAVjK3LXBrWeoJUgk/i3g4JmDKvGRyOIf2fqAHW4=
+	t=1716208261; cv=none; b=WDarpAMFoRYDJG1WYOWYTZNK4Z97tzk3JR4SnSmADyk5nTPf0EaB+hDRPCaEJpCgCrCwqFPOzvh+kSNgBeTG2hVMfyRPFtDBMzBtqgkgPGGmb1jO51uOb0Fh47xMIrTTf18cNLcTV9ODy7oTmNWg7ulrVyzd7eZWttn5Bk4QqpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716208253; c=relaxed/simple;
-	bh=//oQCpLHULNkZm6rA5fdSTosfvwJzsgXn+TlVyfaP5k=;
+	s=arc-20240116; t=1716208261; c=relaxed/simple;
+	bh=qciJp89w73IYXrwUHbmWOg2Gey9XF1Mn/Uim9/b41Og=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nKByPXxij5OwHfgGCE9/TnDlMMCIoDKG4J+h8F6ZoiXodKsUHRS4rgETlZ3bwJrmWIs/gB6w3ZfB2I7FzlciBsxoUR3n9PYbiWbCSfYyJr2N0HN4LiEQddzKSRybhNcn5hhyWqmkrnuRFrFIZOwOmMAzqMtmsiCUcKk3vuQmcPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HaWhIcIW; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version:Content-Type; b=VUeTnGKjcy9h19gmr9folGHr5U5VKU+W5k72ebO8TVL+Jqb6SjJVM5F7g+V2HLVfM48zFWGA/XofqoOiMrWwPOROsuHR7zr70vayyjf5Ykm3ILD9YPbwLvTcXb4qoz39PRGbGwTmLLjWBK1s7knHtyAsmxF3CnpvCWOTCD2IJME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YP/J42fq; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716208252; x=1747744252;
+  t=1716208260; x=1747744260;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=//oQCpLHULNkZm6rA5fdSTosfvwJzsgXn+TlVyfaP5k=;
-  b=HaWhIcIWS7DXC3IeEmktjLXXNdHDjF+FoHlGQMmRnvrz8CWVBclwmJ/l
-   Y0OdSxqyWVpFshqKSHnPCOYzWzG36ZuvqDyYuDihsr8EmdqdJN1HbvvB7
-   qw/5zbqIDT0adE+5LphQrRJ03Fww8BOKJuaj2LEe/tRLX9tiMVbKTtzSS
-   GV4CE5zSfys+tF7Xzw77tX6bV0LWknIL74JsmxRGczD4xc966IfLkM/Xu
-   sLJs1hp899fx4XXRAK9+IhcJrt4EBypO0CexHH8LXJdMubz+T6Qy+UF8/
-   4v9O4llZ2g78iMT+QSeZBU2pgpaUtZDMFOr6gtfkFdnw1Gxi3PVaUu6Wb
-   w==;
-X-CSE-ConnectionGUID: Bu3hDyLHQIukYGkj1MZZvg==
-X-CSE-MsgGUID: BnvVIgkPR3eoSaHW47ZNGg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12180298"
+  bh=qciJp89w73IYXrwUHbmWOg2Gey9XF1Mn/Uim9/b41Og=;
+  b=YP/J42fqH5gVydWGjkc9agBnF0+n3OlTXsCIqYmylFKY4Rubx/BoNzKt
+   B/Dk8KYA6197cL80BvM1AVPuLcFcZKrB0gKTMZKwDA2JzAciX6xfIHC66
+   i7OZP8APJlenQx8GIMume9YyFaoMwoLLFPdykib0aTFGSOTIQFbQu1xab
+   Iuv5mXKX4WuxyDJvSZED9MFuy1apHZFGnCvYfDkS6rmvPchFU7XuhW/jn
+   y092rQag+efYxa3/zkh5P0ldQ33l7fGUGvF4VfMWcML6vrGTpy7GvXtXj
+   hTMwEF8B4Gq0AjEx+bS/aMisK3dqF4ZTwL4ZhIetvtClCNRj2MeNSQh0p
+   A==;
+X-CSE-ConnectionGUID: 5sfbBTevRF6HNyL11oIG2Q==
+X-CSE-MsgGUID: pWY9/B8bR1qRa3YODbDBtQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12180314"
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="12180298"
+   d="scan'208";a="12180314"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:51 -0700
-X-CSE-ConnectionGUID: 6DdbZsDVSRWRfNfT3N8znA==
-X-CSE-MsgGUID: M0M7ba0RRWG2d41uRnDkgw==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:31:00 -0700
+X-CSE-ConnectionGUID: WQDHJ4k+Rs6N/1R1Anz/NA==
+X-CSE-MsgGUID: A2Axa0apSSCuTMtQIjbAXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="33091030"
+   d="scan'208";a="33091062"
 Received: from unknown (HELO localhost) ([10.245.247.114])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:48 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:57 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -68,9 +68,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1) only
-Date: Mon, 20 May 2024 15:30:06 +0300
-Message-Id: <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 03/16] selftests/resctrl: Make "bandwidth" consistent in comments & prints
+Date: Mon, 20 May 2024 15:30:07 +0300
+Message-Id: <20240520123020.18938-4-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
 References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
@@ -83,243 +83,89 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that performs
-the measurement over a duration of sleep(1) call. The memory bandwidth
-numbers from IMC are derived over this duration. The resctrl FS derived
-memory bandwidth, however, is calculated inside measure_vals() and only
-takes delta between the previous value and the current one which
-besides the actual test, also samples inter-test noise.
+Resctrl selftests refer to "bandwidth" currently in two other forms in
+the code ("B/W" and "band width").
 
-Rework the logic in measure_vals() and get_mem_bw_imc() such that the
-resctrl FS memory bandwidth section covers much shorter duration
-closely matching that of the IMC perf counters to improve measurement
-accuracy. Open two the resctrl mem bw files twice to avoid opening
-after the test during measurement period (reading the same file twice
-returns the same value so two files are needed).
+Use "bandwidth" consistently everywhere. While at it, fix also one
+"over flow" -> "overflow" on a line that is touched by the change.
 
 Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
 
-v4:
-- Open resctrl mem bw file (twice) beforehand to avoid opening it during
-  the test
 v3:
-- Don't drop Return: entry from perf_open_imc_mem_bw() func comment
+- New patch
 ---
- tools/testing/selftests/resctrl/resctrl_val.c | 119 +++++++++++++-----
- 1 file changed, 85 insertions(+), 34 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 14 +++++++-------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index f55f5989de72..bd5a1cbb8a21 100644
+index bd5a1cbb8a21..126a9cad588b 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -306,18 +306,13 @@ static void perf_close_imc_mem_bw(void)
+@@ -361,11 +361,11 @@ static void do_imc_mem_bw_test(void)
  }
  
  /*
-- * get_mem_bw_imc:	Memory band width as reported by iMC counters
-- * @cpu_no:		CPU number that the benchmark PID is binded to
-- * @bw_report:		Bandwidth report type (reads, writes)
-- *
+- * get_mem_bw_imc - Memory band width as reported by iMC counters
++ * get_mem_bw_imc - Memory bandwidth as reported by iMC counters
+  * @bw_report: Bandwidth report type (reads, writes)
+  *
 - * Memory B/W utilized by a process on a socket can be calculated using
 - * iMC counters. Perf events are used to read these counters.
-+ * perf_open_imc_mem_bw - Open perf fds for IMCs
-+ * @cpu_no: CPU number that the benchmark PID is binded to
++ * Memory bandwidth utilized by a process on a socket can be calculated
++ * using iMC counters. Perf events are used to read these counters.
   *
   * Return: = 0 on success. < 0 on failure.
   */
--static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
-+static int perf_open_imc_mem_bw(int cpu_no)
- {
--	float reads, writes, of_mul_read, of_mul_write;
- 	int imc, ret;
- 
- 	for (imc = 0; imc < imcs; imc++) {
-@@ -325,8 +320,6 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
- 		imc_counters_config[imc][WRITE].fd = -1;
- 	}
- 
--	/* Start all iMC counters to log values (both read and write) */
--	reads = 0, writes = 0, of_mul_read = 1, of_mul_write = 1;
- 	for (imc = 0; imc < imcs; imc++) {
- 		ret = open_perf_event(imc, cpu_no, READ);
- 		if (ret)
-@@ -334,7 +327,26 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
- 		ret = open_perf_event(imc, cpu_no, WRITE);
- 		if (ret)
- 			goto close_fds;
-+	}
- 
-+	return 0;
-+
-+close_fds:
-+	perf_close_imc_mem_bw();
-+	return -1;
-+}
-+
-+/*
-+ * do_mem_bw_test - Perform memory bandwidth test
-+ *
-+ * Runs memory bandwidth test over one second period. Also, handles starting
-+ * and stopping of the IMC perf counters around the test.
-+ */
-+static void do_imc_mem_bw_test(void)
-+{
-+	int imc;
-+
-+	for (imc = 0; imc < imcs; imc++) {
- 		membw_ioctl_perf_event_ioc_reset_enable(imc, READ);
- 		membw_ioctl_perf_event_ioc_reset_enable(imc, WRITE);
- 	}
-@@ -346,6 +358,24 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
- 		membw_ioctl_perf_event_ioc_disable(imc, READ);
- 		membw_ioctl_perf_event_ioc_disable(imc, WRITE);
- 	}
-+}
-+
-+/*
-+ * get_mem_bw_imc - Memory band width as reported by iMC counters
-+ * @bw_report: Bandwidth report type (reads, writes)
-+ *
-+ * Memory B/W utilized by a process on a socket can be calculated using
-+ * iMC counters. Perf events are used to read these counters.
-+ *
-+ * Return: = 0 on success. < 0 on failure.
-+ */
-+static int get_mem_bw_imc(char *bw_report, float *bw_imc)
-+{
-+	float reads, writes, of_mul_read, of_mul_write;
-+	int imc;
-+
-+	/* Start all iMC counters to log values (both read and write) */
-+	reads = 0, writes = 0, of_mul_read = 1, of_mul_write = 1;
+@@ -379,7 +379,7 @@ static int get_mem_bw_imc(char *bw_report, float *bw_imc)
  
  	/*
  	 * Get results which are stored in struct type imc_counter_config
-@@ -462,24 +492,23 @@ static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
-  * 1. If con_mon grp is given, then read from it
-  * 2. If con_mon grp is not given, then read from root con_mon grp
-  */
--static int get_mem_bw_resctrl(unsigned long *mbm_total)
-+static FILE *open_mem_bw_resctrl(const char *mbm_bw_file)
- {
- 	FILE *fp;
- 
--	fp = fopen(mbm_total_path, "r");
--	if (!fp) {
-+	fp = fopen(mbm_bw_file, "r");
-+	if (!fp)
- 		ksft_perror("Failed to open total bw file");
- 
--		return -1;
--	}
-+	return fp;
-+}
-+
-+static int get_mem_bw_resctrl(FILE *fp, unsigned long *mbm_total)
-+{
- 	if (fscanf(fp, "%lu", mbm_total) <= 0) {
- 		ksft_perror("Could not get mbm local bytes");
--		fclose(fp);
--
- 		return -1;
- 	}
--	fclose(fp);
--
- 	return 0;
- }
- 
-@@ -616,13 +645,22 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
- }
- 
- static int measure_vals(const struct user_params *uparams,
--			struct resctrl_val_param *param,
--			unsigned long *bw_resc_start)
-+			struct resctrl_val_param *param)
- {
--	unsigned long bw_resc, bw_resc_end;
-+	unsigned long bw_resc, bw_resc_start, bw_resc_end;
-+	FILE *mem_bw_fp, *mem_bw_fp2;
- 	float bw_imc;
- 	int ret;
- 
-+	mem_bw_fp = open_mem_bw_resctrl(mbm_total_path);
-+	if (!mem_bw_fp)
-+		return -1;
-+	mem_bw_fp2 = open_mem_bw_resctrl(mbm_total_path);
-+	if (!mem_bw_fp2) {
-+		ret = -1;
-+		goto close_fp;
-+	}
-+
- 	/*
- 	 * Measure memory bandwidth from resctrl and from
- 	 * another source which is perf imc value or could
-@@ -630,22 +668,36 @@ static int measure_vals(const struct user_params *uparams,
- 	 * Compare the two values to validate resctrl value.
- 	 * It takes 1sec to measure the data.
+-	 * Take over flow into consideration before calculating total b/w
++	 * Take overflow into consideration before calculating total bandwidth.
  	 */
--	ret = get_mem_bw_imc(uparams->cpu, param->bw_report, &bw_imc);
-+	ret = perf_open_imc_mem_bw(uparams->cpu);
- 	if (ret < 0)
--		return ret;
-+		goto close_fp2;
+ 	for (imc = 0; imc < imcs; imc++) {
+ 		struct imc_counter_config *r =
+@@ -389,13 +389,13 @@ static int get_mem_bw_imc(char *bw_report, float *bw_imc)
  
--	ret = get_mem_bw_resctrl(&bw_resc_end);
-+	ret = get_mem_bw_resctrl(mem_bw_fp, &bw_resc_start);
- 	if (ret < 0)
--		return ret;
-+		goto close_fp2;
+ 		if (read(r->fd, &r->return_value,
+ 			 sizeof(struct membw_read_format)) == -1) {
+-			ksft_perror("Couldn't get read b/w through iMC");
++			ksft_perror("Couldn't get read bandwidth through iMC");
+ 			goto close_fds;
+ 		}
  
--	bw_resc = (bw_resc_end - *bw_resc_start) / MB;
--	ret = print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
--	if (ret)
--		return ret;
-+	do_imc_mem_bw_test();
-+
-+	ret = get_mem_bw_resctrl(mem_bw_fp2, &bw_resc_end);
-+	if (ret < 0)
-+		goto close_fp2;
-+
-+	ret = get_mem_bw_imc(param->bw_report, &bw_imc);
-+	if (ret < 0)
-+		goto close_fp2;
+ 		if (read(w->fd, &w->return_value,
+ 			 sizeof(struct membw_read_format)) == -1) {
+-			ksft_perror("Couldn't get write bw through iMC");
++			ksft_perror("Couldn't get write bandwidth through iMC");
+ 			goto close_fds;
+ 		}
  
--	*bw_resc_start = bw_resc_end;
-+	fclose(mem_bw_fp2);
-+	fclose(mem_bw_fp);
+@@ -498,7 +498,7 @@ static FILE *open_mem_bw_resctrl(const char *mbm_bw_file)
  
--	return 0;
-+	bw_resc = (bw_resc_end - bw_resc_start) / MB;
-+
-+	return print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
-+
-+close_fp2:
-+	fclose(mem_bw_fp2);
-+close_fp:
-+	fclose(mem_bw_fp);
-+	return ret;
+ 	fp = fopen(mbm_bw_file, "r");
+ 	if (!fp)
+-		ksft_perror("Failed to open total bw file");
++		ksft_perror("Failed to open total memory bandwidth file");
+ 
+ 	return fp;
  }
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 1cade75176eb..9b86f826a40c 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -850,7 +850,7 @@ int validate_bw_report_request(char *bw_report)
+ 	if (strcmp(bw_report, "total") == 0)
+ 		return 0;
  
- /*
-@@ -719,7 +771,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		struct resctrl_val_param *param)
- {
- 	char *resctrl_val = param->resctrl_val;
--	unsigned long bw_resc_start = 0;
- 	struct sigaction sigact;
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
-@@ -861,7 +912,7 @@ int resctrl_val(const struct resctrl_test *test,
+-	fprintf(stderr, "Requested iMC B/W report type unavailable\n");
++	fprintf(stderr, "Requested iMC bandwidth report type unavailable\n");
  
- 		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
- 		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
--			ret = measure_vals(uparams, param, &bw_resc_start);
-+			ret = measure_vals(uparams, param);
- 			if (ret)
- 				break;
- 		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ 	return -1;
+ }
 -- 
 2.39.2
 
