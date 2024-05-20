@@ -1,157 +1,141 @@
-Return-Path: <linux-kselftest+bounces-10444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10445-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F468CA184
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 19:45:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 804448CA196
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 19:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F3F2812E8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 17:45:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44005282433
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 17:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCBC6D53E;
-	Mon, 20 May 2024 17:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABBF137C21;
+	Mon, 20 May 2024 17:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Mxi1aJTW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vhfZTKji"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B7E13791E
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 17:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFAB34CDE
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 17:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716227106; cv=none; b=gysiS+0fk6QjsDMwWXfAJemmdutAuTm3T2iTA2uIhyK4OOJZXkeV7YBm/zDiCkR1hvfLqV+yWLggL6AamDNiMcFyPwUgNkNpewxE9gqsvoXeaNv0Y7MSZum3wit+Aj9VrMxXxt+dUHtofnpx7Bq/0OvSLhJe3w0nA2xFA+Nf030=
+	t=1716227801; cv=none; b=hGEArAua7Ujbqq/UEmtytijk86uAbOjmCuA0UXOwbWi31TSf3iXijf4kHTYVtZ1mJrA6EysNd25NGHPi9GoE6T0lIu3NLfEEm6QsXczKkK7JZ5rZHYUBL/9PWNQcI5WwT/78XKOg5CsRxwJ7Ypm3NrwUbbB1mjL5grh6FVDkobk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716227106; c=relaxed/simple;
-	bh=NoF8Epxk+kPwoFDdVNCmSSKs5A0z9ukazRXDjetP+iQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=VXTEeUlc5iXvFjstDRyx0WrDEg+alv4pH7Br3Yum55/1UzSPLh5hv4/ccf4QjphRjRFs0BzvhZhFAIya2U/o8LltxgkQKtwkxAbFWJXLaDS2YVWHEfmBc7N0I8nlI673A3aWPprVG1he7uHjZIxb5Gx6beCc0iLW2YtqeOz5Y40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Mxi1aJTW; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1edf506b216so79013955ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 10:45:04 -0700 (PDT)
+	s=arc-20240116; t=1716227801; c=relaxed/simple;
+	bh=hh63JzVkq3RFqwduAXD7nF+C9C+KYPzdxNLZnuAzF64=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lRaWPCirmJlDaUqC0am9Mc9Gyl8hGKbmnQ5vvKK1ezIHv79uryO2F696uiYh1kckyLcU66SXfj8yCGSuyK9o5jEHg8ychM/nFycmpr0kBmE8BcygoJn448Hkuxi5XUshFjCPg9DT9hftIqxICB/t4YGGZ9Hhev5I5wFIaoJ0xjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vhfZTKji; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1ec5ce555f6so119783515ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 10:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1716227104; x=1716831904; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WYOAib0im5YAIvaoLC4Jwr+EZhyCaxWhipiU5T6Uw8w=;
-        b=Mxi1aJTWHuxctKS6HMqgvuK4a2A6PFTfwT5xQdjEpJ/bIEFd0FyazEpTUnKSYaDjgG
-         B3W28FvkGGbNBWfi2qchfglF5lCiEz0Z2YPOTDu92NGT4mdE/9gn3iugFF1U8BJOMOWT
-         pS2eI9Gj3fynmBQWvF+VnNt+ep2XkP9veIUKuzPwRH8lU7x3otLtNebJjU65wvNGCgxh
-         k6oW1gMlkl1Xummo9iNFT970et91jcrKf4S597cbatMKF5Yd9d6G6j/UxYBkE6IyHxBj
-         PDDDJk9r3C8nr3XPiDXv4ZgECe5A6zxUZsac2Ew0a6w2CfXmLE8ikrPRFDj/yoFUn7Ib
-         xNPw==
+        d=google.com; s=20230601; t=1716227799; x=1716832599; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tBM9TYW+bx0dFVR3I0872jrLR5NKUzwrIIEe5tnLaNs=;
+        b=vhfZTKji9pvOGcNf4p+ePouAmwdPP4+lRYZQoJkuO+CPIa0v2XQxWdK1Tfb3utSQv2
+         PotqQ7FFZAit5bjFPQhimyRtOk6YIaUyxMCFrGkTl3g7PY1BxlunaWMztsmvkLW6eBhs
+         dGbjuzczB3YfyG36mBtIGx7dT0Q64HOVgINcIUeIwQfD8DL/kMyuCCKen7Igu7/MbFIj
+         +P2yl9lqW3qytcOhc9qJTpGOcIWx8SSvVeMTMCzRUoZQ+ds+8T5AukrTnTDJeaCuMoY3
+         PuBJMPkrxmCVs6tKB8dUUIazGY46rBX5wCy4Cs+9i3t+N+a3H3c6HpZuffk7ny0e0R2N
+         RASg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716227104; x=1716831904;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WYOAib0im5YAIvaoLC4Jwr+EZhyCaxWhipiU5T6Uw8w=;
-        b=KmxJyNOu1xojwAaF0Dv2WZvONIc7qqeiFVcyl8YxZGtvLwJCfHpyOBxPd2g0Uo4dto
-         APs8V/1K5iyNLnVbwR0nZY0k4AKUr4eN51yHSjAWFN5UKZCihkEevMaMGwcVn+1wPzg8
-         EHw1yXeBDMNhsYTglUDCUy1R4Ws8axU2lWbKuKUHNhF/p9i6u8cTYOeiYaiw/dZ5FQp+
-         TkbL2Lij24Ik2DHHHy3Q4vzVByjUrkDZu/qE0iKSzZkuIyZBFx3a7U5mra0jqZ3UYv9K
-         rKu8YtatKFkzFRFwopFRVYOo39Pax45WQ1o3cH62+2MrL8pLDv/+WQWTA72IgMeppbzf
-         fi3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVIpaaR1fEajOCWefy8Fy+SQJMX0O6a2R8+Ju+yEjUCGdAoPJA5jP1xEzDYNJWY/RQia3twUVLZkVOzLSzoLRXbXvVllIHrDRhRrOdTqI9l
-X-Gm-Message-State: AOJu0Ywq3g4DRZAxzjsXSj10VFhlngBYt/b+WqCRwPpGoR/b55TbFnGY
-	2L3gvNSL89tYO8ABPqwo6aca4NXZlTB2+NYNOvb43764Yvv5GUEq/JmfFgPUBR4=
-X-Google-Smtp-Source: AGHT+IGSP83LK59lDrAUC06K8wYy4cJVLkLalIosHKTaUDb8DXNLIvnlR9bUemvrM7Ajwt7gOq2SbA==
-X-Received: by 2002:a17:902:7d95:b0:1ee:b2ff:c93a with SMTP id d9443c01a7336-1ef43f3e4admr280919625ad.40.1716227104077;
-        Mon, 20 May 2024 10:45:04 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d164dsm204987635ad.52.2024.05.20.10.45.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 10:45:03 -0700 (PDT)
-Message-ID: <664b8c1f.170a0220.5691e.4a83@mx.google.com>
-Date: Mon, 20 May 2024 10:45:03 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1716227799; x=1716832599;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tBM9TYW+bx0dFVR3I0872jrLR5NKUzwrIIEe5tnLaNs=;
+        b=qwILJo4/s5yVmAqq9j/LHM8EnrL29iE9+OM1kfdEwVYQAn0DeFbuRGltnzCoRrvLaa
+         lQNIglX22vlYH9DpY9QyTs9EyFt5R2BasSPO9EOO3cMgsDCyD9gG0cRG0dYiRc5exTPK
+         +/PvaZZjjG7ZZTBYez+Rno19W5J3QsE6fPsZWq1bMm1amXQMw936kz+ROrIJRQKffiVy
+         3cakgCxwwDzhjzFP28Y0rv/vsPKJo27Ctuj0yKTq0CqH3QNiA9Ruhm8TdcsT+XgZ042J
+         z+aphMBQCxz9u+fb51+2Veh/NEPNckSLasu7XPNov1+pAgUlzAzCx8kpSmEJLpRbhx14
+         x2JA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQBomZB1ammc39oKxjA/DRkKzReyUT5y82RvRqnl6Dva+IKiQkNwhHmT+p5xbq1+Y5VyTnM4AFjSuAPTfQBgV9c5pyVeI4WhwCzivLHMNO
+X-Gm-Message-State: AOJu0YwhP9IiIqcwUhVidM85ImRpYDtaYylN+mUKufKpWbOxb9YGmeJl
+	2UzmjFGz/jD+nZ5cyLMs819fuZ44pGe6fBLDKv32RM6zXjJZ6LEqJQnYU7/47krQ+eQgQ95NwPa
+	WJA==
+X-Google-Smtp-Source: AGHT+IGj95gLCpyblFJ+pwIY+HiJCy20O8Y2ZVsTP33S8ecicT9VG4slD5xQlkr5v4v8OD/7ntCEuybKbio=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:f547:b0:1f3:665:9041 with SMTP id
+ d9443c01a7336-1f306659434mr2255965ad.0.1716227799032; Mon, 20 May 2024
+ 10:56:39 -0700 (PDT)
+Date: Mon, 20 May 2024 17:56:28 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: linux_kselftest-next-6.10-rc1-fixes
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 4 builds: 0 failed, 4 passed,
- 1 warning (linux_kselftest-next-6.10-rc1-fixes)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.0.215.g3402c0e53f-goog
+Message-ID: <20240520175629.162697-1-edliaw@google.com>
+Subject: [PATCH RESEND 6.6.y] kselftest: Add a ksft_perror() helper
+From: Edward Liaw <edliaw@google.com>
+To: stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Cc: kernel-team@android.com, Mark Brown <broonie@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Edward Liaw <edliaw@google.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-kselftest/next build: 4 builds: 0 failed, 4 passed, 1 warning (linux_kselft=
-est-next-6.10-rc1-fixes)
+From: Mark Brown <broonie@kernel.org>
 
-This legacy KernelCI providing this report will shutdown sometime
-soon in favor of our new KernelCI infra. Not all tests are being
-migrated.
-If you are still using this report and want us to prioritize your
-usecase in the new system, please let us know at
-kernelci@lists.linux.dev
+[ Upstream commit 907f33028871fa7c9a3db1efd467b78ef82cce20 ]
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/linux_kselftest-next-6.10-rc1-fixes/
+The standard library perror() function provides a convenient way to print
+an error message based on the current errno but this doesn't play nicely
+with KTAP output. Provide a helper which does an equivalent thing in a KTAP
+compatible format.
 
-Tree: kselftest
-Branch: next
-Git Describe: linux_kselftest-next-6.10-rc1-fixes
-Git Commit: a97853f25b06f71c23b2d7a59fbd40f3f42d55ac
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 3 unique architectures
+nolibc doesn't have a strerror() and adding the table of strings required
+doesn't seem like a good fit for what it's trying to do so when we're using
+that only print the errno.
 
-Warnings Detected:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14dd29
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14dd29
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Stable-dep-of: 071af0c9e582 ("selftests: timers: Convert posix_timers test to generate KTAP output")
+Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
-For more info write to <info@kernelci.org>
+ tools/testing/selftests/kselftest.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index e8eecbc83a60..ad7b97e16f37 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -48,6 +48,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <string.h>
+ #include <stdio.h>
+ #include <sys/utsname.h>
+ #endif
+@@ -156,6 +157,19 @@ static inline void ksft_print_msg(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
++static inline void ksft_perror(const char *msg)
++{
++#ifndef NOLIBC
++	ksft_print_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
++#else
++	/*
++	 * nolibc doesn't provide strerror() and it seems
++	 * inappropriate to add one, just print the errno.
++	 */
++	ksft_print_msg("%s: %d)\n", msg, errno);
++#endif
++}
++
+ static inline void ksft_test_result_pass(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+-- 
+2.45.0.215.g3402c0e53f-goog
+
 
