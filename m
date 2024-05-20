@@ -1,101 +1,188 @@
-Return-Path: <linux-kselftest+bounces-10441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B0D8C9F5A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 17:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12EAD8CA17D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 19:41:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8782C1C20C34
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 15:09:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39D801C20E36
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 17:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 034EA1369AF;
-	Mon, 20 May 2024 15:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B196137C3C;
+	Mon, 20 May 2024 17:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BF/4T0Rx"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1DAarIjl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9674F28E7;
-	Mon, 20 May 2024 15:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3946CA2D;
+	Mon, 20 May 2024 17:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716217789; cv=none; b=CfszjD/bn76U3tEEEOiB3OH+DYzhYJ78EIrx5jgUCvR2oJlOH1nyCSDrzqW2NZfGJuFLaam5r1prK+9AyhkyF5Z70oyvDDXYyQUuDeROYMn5K6rZ90ZG+tKI4cMmN8D3kUqHx3osa3ICH+skdhxf3G1kDhgcrIwqJ8w5W2kC378=
+	t=1716226913; cv=none; b=rwXKylQDclLi+5dChvPgjfiiXACJDEHn1Gcbd0c0hFQXRr5kxlhlVTNHywJl2cVZRExJthJjTdCD8iSKImWEtCQSYO4PyPfc3hoZhfI22WmwxJvUEIU9cJCW05imUvegk9so3RIrX+pMjIlhq0y0Udnd9A/5gdedf+FRJKPkItk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716217789; c=relaxed/simple;
-	bh=3ZPzTccGxeYiZ3UCRWcRKYqjZ6SNEtUDp0r4ooVJnSg=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZsVZc2ZpJaFhP4PacuARu9hcRRxLanUvGRljdFdrzdmxS9ADpIDZFotdB0scT/d+TA+3r/WFTPbcWHPnQca3m77M2DLtOEjsa8SzW2iND9eDtHQeXqdoo4vYRdcdYO6+MFomQKDQeJBlIYQPBmMswI3763ge7+skP6ywyI8sTe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BF/4T0Rx; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-23d1c4c14ceso1440709fac.0;
-        Mon, 20 May 2024 08:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716217788; x=1716822588; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3ZPzTccGxeYiZ3UCRWcRKYqjZ6SNEtUDp0r4ooVJnSg=;
-        b=BF/4T0Rxls8Bhm4YqXf6pHPnHuaLO3lm2MWs/ZDcelKiAy7gRpA324g8DU4sGfGQqy
-         nwPTcNIPfSn80Op0vCPXywUF4PeJjPx4muTfMQ7AHmHLYuBB3A6pMG+xS+k0nla5oqSk
-         nj8gkSWCHudBPPus5Mr7RWNRPktzIqUHZHZCVoTb2t9QVczU0+eE4xAw59Gh9/9X/UHS
-         OWxa90j6dE2L71iJ6il8Q6vGIdNYTgTCwLMM2KGo05IuV5sheW6QEEzSTikrp2IbKjc/
-         TEuQgi5Y1f37NQLKKzQidHmCy6yqT+niBUb/zxD8ZDieZGsP1K/QCOB34eeFQC4i6SK/
-         OLuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716217788; x=1716822588;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ZPzTccGxeYiZ3UCRWcRKYqjZ6SNEtUDp0r4ooVJnSg=;
-        b=nRh4M+Rvab291VayoHkIO5ACZtzYMCpT6nemD+xzBVF/Z0DK0HaxoxZJqoglGGijF+
-         JeAQmDLHeWC8y5UoWOaKzq8VlJ9ZFkZxBchr2UrAnnFSR40wypjE3J70LNeq+RgSvzaf
-         9sjEVJGHHxCzC1XmWqCpZiYTHjYv2sYSvC+oe+MH/ZeDe4HldcNJWHE13cCcAcUuQ2xK
-         0DlZzA6wGCkJAzex+xdKmDSWyN3fac9pheHpgZFXZNCQYnOXHsRMZZ/RJOYLdwlgd1DC
-         VGy7ATdTP/nB6E72PGrl48OS8FrOdcnXbGewBuGNJwFKOf3M33n65AIS0NdWjV7FOT5I
-         Zffw==
-X-Forwarded-Encrypted: i=1; AJvYcCVB8GCUDSaplHHU0dcDzHvduewx7ORZkgyTgvUlpvd570lV7cZ7RbE4cafj/M/tX7gFoQXdI+UFegf7qWVSyd6hTOlo8Z1avhIqDf3Yd+6MYQKKsYc8cCNC+ONNhZ2cp1aoMumwl5hLH5++BwL/IFQMucBsXg+KbKNR+R+BhUSMhcqpUiP7tINgp5AdaQ==
-X-Gm-Message-State: AOJu0YxO9fU0XqXdgc0gD5hRi8f3/S2re3DeXzke7oOmuE5q9ja3f3d3
-	GPZ7q7iSmoMBTxH8RyFokWaLDGtlFsOlXSrAPa1JqyjvS4yJKlXD
-X-Google-Smtp-Source: AGHT+IEEwTNwDG/5OWJKkrOQ+QtpD76b+5Ie4/DQJOETwsN4jDmj2Z5/18baOTuuE1EhEH6prG8TgQ==
-X-Received: by 2002:a05:6870:5246:b0:23b:b0fd:47f4 with SMTP id 586e51a60fabf-24172a8b902mr33765767fac.18.1716217787405;
-        Mon, 20 May 2024 08:09:47 -0700 (PDT)
-Received: from arch (recod-gw.ic.unicamp.br. [143.106.7.151])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-4df85902f10sm2923274e0c.54.2024.05.20.08.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 08:09:46 -0700 (PDT)
-Date: Mon, 20 May 2024 12:09:43 -0300
-From: Artur A C de Barros <arturacb@gmail.com>
-To: willy@infradead.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: First Contributions for KUnit
-Message-ID: <Zktnt7rjKryTh9-N@arch>
+	s=arc-20240116; t=1716226913; c=relaxed/simple;
+	bh=USAnQFsFIAz4NTK1Wi/gNcItGq8+FboBq9Sm3p6WVJE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fbaiWSWHx0oE5qRHz8T/tK64v1EfhJBktP0q7hd50I2siz5TwB88AJ86gOhracSRepgnQ7KkP527VrV8pbyOFFLlJrtZSk5BGWm22cOcDW+xQ5nGe30tBf+tG8kfoiB+BHc+m3UvalzV8rxIxMq9Rb2Lq4EC5py6YMxOO5djAlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1DAarIjl; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1716226909;
+	bh=USAnQFsFIAz4NTK1Wi/gNcItGq8+FboBq9Sm3p6WVJE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=1DAarIjlKy2Zl60w7NfmP/MqF+2Vf/lBvTyq/6hDi9OQDKknjDXzFHqpwgOc+lUjA
+	 pphsH/zdCrKHAHbKSZ23D//Eca5Y3tqf5q/o6FJuyEeG5utOgnD/ano+hUgn4j9gBN
+	 985FZoqwm8oJcQR22Ds6awEbQptqdojjls4+AqLvJz4fXuykXdEvusxo2qAUVJ9APi
+	 I5NMO2wdKnu9z4NXjcdMw1JsDF/8pF1qCdzxKcoKubfulihtrzqImF0E3+kTDKIsfC
+	 1cvwoN9Mr2GFIii68eYdsOK+YJWALUX9iBLyUsWizv3g9WVl9KPrb56bji59IhTDA7
+	 HpNToWom1Nqmw==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 09AC0378107D;
+	Mon, 20 May 2024 17:41:47 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: firmware: conform test to TAP
+Date: Mon, 20 May 2024 09:37:57 -0700
+Message-Id: <20240520163759.1427653-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
+Without using TAP messages, the passed/failed/skip test names cannot be
+found. This is a prepartory patch, more patches will be sent to comform
+the test completely.
 
-We are students from the State University of Campinas with an interest in contributing to the kernel. We are part of LKCAMP, a student group that focuses on researching and contributing to open source software. Our group has organized kernel hackathons in the past [1] that resulted in sucessful contributions, and we would like to continue the effort this year.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ .../selftests/firmware/fw_run_tests.sh        | 63 ++++++++++++-------
+ 1 file changed, 40 insertions(+), 23 deletions(-)
 
-This time, we were thinking about writing KUnit tests for data structures in `lib/` (or converting existing lib test code), similarly to our previous hackathon. We are currently considering a few candidates:
+diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
+index f6d95a2d51249..5063c75345680 100755
+--- a/tools/testing/selftests/firmware/fw_run_tests.sh
++++ b/tools/testing/selftests/firmware/fw_run_tests.sh
+@@ -6,6 +6,9 @@
+ 
+ set -e
+ 
++DIR="$(dirname $(readlink -f "$0"))"
++source "${DIR}"/../kselftest/ktap_helpers.sh
++
+ TEST_DIR=$(dirname $0)
+ source $TEST_DIR/fw_lib.sh
+ 
+@@ -26,54 +29,68 @@ run_tests()
+ 	proc_set_force_sysfs_fallback $1
+ 	proc_set_ignore_sysfs_fallback $2
+ 	$TEST_DIR/fw_upload.sh
++
++	ktap_test_pass "Completed"
+ }
+ 
+ run_test_config_0001()
+ {
+-	echo "-----------------------------------------------------"
+-	echo "Running kernel configuration test 1 -- rare"
+-	echo "Emulates:"
+-	echo "CONFIG_FW_LOADER=y"
+-	echo "CONFIG_FW_LOADER_USER_HELPER=n"
+-	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
++	ktap_print_msg "-----------------------------------------------------"
++	ktap_print_msg "Running kernel configuration test 1 -- rare"
++	ktap_print_msg "Emulates:"
++	ktap_print_msg "CONFIG_FW_LOADER=y"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=n"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+ 	run_tests 0 1
+ }
+ 
+ run_test_config_0002()
+ {
+-	echo "-----------------------------------------------------"
+-	echo "Running kernel configuration test 2 -- distro"
+-	echo "Emulates:"
+-	echo "CONFIG_FW_LOADER=y"
+-	echo "CONFIG_FW_LOADER_USER_HELPER=y"
+-	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
++	ktap_print_msg "-----------------------------------------------------"
++	ktap_print_msg "Running kernel configuration test 2 -- distro"
++	ktap_print_msg "Emulates:"
++	ktap_print_msg "CONFIG_FW_LOADER=y"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+ 	proc_set_ignore_sysfs_fallback 0
+ 	run_tests 0 0
+ }
+ 
+ run_test_config_0003()
+ {
+-	echo "-----------------------------------------------------"
+-	echo "Running kernel configuration test 3 -- android"
+-	echo "Emulates:"
+-	echo "CONFIG_FW_LOADER=y"
+-	echo "CONFIG_FW_LOADER_USER_HELPER=y"
+-	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
++	ktap_print_msg "-----------------------------------------------------"
++	ktap_print_msg "Running kernel configuration test 3 -- android"
++	ktap_print_msg "Emulates:"
++	ktap_print_msg "CONFIG_FW_LOADER=y"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
++	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
+ 	run_tests 1 0
+ }
+ 
++ktap_print_header
++
+ check_mods
+ check_setup
+ 
+-echo "Running namespace test: "
+-$TEST_DIR/fw_namespace $DIR/trigger_request
+-echo "OK"
+-
+ if [ -f $FW_FORCE_SYSFS_FALLBACK ]; then
++	ktap_set_plan "4"
++
+ 	run_test_config_0001
+ 	run_test_config_0002
+ 	run_test_config_0003
+ else
+-	echo "Running basic kernel configuration, working with your config"
++	ktap_set_plan "2"
++
++	ktap_print_msg "Running basic kernel configuration, working with your config"
+ 	run_tests
+ fi
++
++ktap_print_msg "Running namespace test: "
++$TEST_DIR/fw_namespace $DIR/trigger_request
++if [ $? -eq 0 ]; then
++    ktap_test_pass "fw_namespace completed successfully"
++else
++    ktap_test_fail "fw_namespace failed"
++fi
++
++ktap_finished
+-- 
+2.39.2
 
-- lib/kfifo.c
-- lib/llist.c
-- tools/testing/scatterlist
-- tools/testing/radix-tree
-
-We would like to know if these are good candidates, and also ask for suggestions of other code that could benefit from having KUnit tests.
-
-Thanks!
-Artur Alves
-
-[1] https://lore.kernel.org/dri-devel/20211011152333.gm5jkaog6b6nbv5w@notapiano/
 
