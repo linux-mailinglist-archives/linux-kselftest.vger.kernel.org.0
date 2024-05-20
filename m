@@ -1,95 +1,160 @@
-Return-Path: <linux-kselftest+bounces-10421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C98968C9B83
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:40:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10F6C8C9D3F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E4431F21733
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 10:40:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93F5F282905
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4EB51034;
-	Mon, 20 May 2024 10:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B15535BF;
+	Mon, 20 May 2024 12:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubHyfK+7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NNqAzDqE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854944E1CE;
-	Mon, 20 May 2024 10:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56301EB45;
+	Mon, 20 May 2024 12:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716201627; cv=none; b=r7YgowKyhdFKQJ/+gOp9TjQUmjc7havktJsE4xcVvQDf3TOrG+JwKeN/Ybwg3dU8jLQdiYVWhnW1ZjdeD+fQ/CI4+OtiWp25BRiHBlwE5YChL+dJI6npFMtFKqH1fjSp8kOnO+u+weODCOuXryUWlVk8IhxTgJZ6ziwamNH06Xo=
+	t=1716208213; cv=none; b=cShLIhoVSpZHmksTc7Q1hyYxUtFupSSFOd/wapDAEttu74VdZCORCz9QODTDjjPOr2vmaxpYmOJ9W5MR3k+3QtDJgbksp9EQoEW9VL88Cuain7wT4NL2ZDSvcU9NwiGCfzhyS8UwE/CEYA7qCU5gRYhRQcTP2HNApmJnQQnKsRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716201627; c=relaxed/simple;
-	bh=Fn72sRJbBTtdMcN9t4cwebE1WPTps7u8azEPLXa+oRA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UiIHo/RQdl9hLyJ6p5m9O1+5Tit2uJLUFcJHra0S/DyEdEFX3Up1+uB1RA9YXvB0q1jYEMd4gzlWs29yGKAbjOCJKV48E+Jyyw4WAxqRHbU6Q6YUwx/X3H89ygf5XHsquPM6MQn3Kc2jD8NbLdWuGf7uuO7/uxCc4vUp3bFvtHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubHyfK+7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07CBAC4AF08;
-	Mon, 20 May 2024 10:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716201627;
-	bh=Fn72sRJbBTtdMcN9t4cwebE1WPTps7u8azEPLXa+oRA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ubHyfK+7hSHxNl/rlgm3Gna53O3gfbf/NzOPvlHzmfF8bRQTsTmMh3WPC5zFDiqQu
-	 4gYvoC7zFfx28uxe99sWGviZWnfXuDMkjhiKjWPkwOG4yz2dYy2gKuNXene1BChc39
-	 Mwj9J0iGns+TTaB00dBPy1J9O8NP2g2lYlUDbSrW20kytTFHtRYZNlctweidIeyBZQ
-	 PpReZStCQIS6yghGHd03MVvOlZMFtEwHlenuIXwOSRsAfnyqyCJXJAGB9H7/Uyl7m/
-	 XARwO2kcOgzODwbA0t30FMqThs6DWd7pynukSN6BRk971ssaXwO9PAeKZnGulLJKgL
-	 ij9GtL3jAju6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3321CF21D8;
-	Mon, 20 May 2024 10:40:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1716208213; c=relaxed/simple;
+	bh=VTFXazmwUm3I8saNmQlbGIoVuTKmGGMewfsHcp2Ovjo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=tv7V69UcgnKdqK/c5MeRyZX7fsoWE7KqvFkD/nS6i/WOKSBSwa6DtsH7Xy7z/v7zjjB1oFCwOwBXqPQV/L1m7iWMZTQuHrGcQZV0DSJmES3met3L/26glO7wzLqoY5Mr+e+bh4i/EXJcSjngFfhv1MY34PDDS2/wbs9Rb+/kUt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NNqAzDqE; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716208212; x=1747744212;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VTFXazmwUm3I8saNmQlbGIoVuTKmGGMewfsHcp2Ovjo=;
+  b=NNqAzDqE0XR6v/PVOc852ZB2dR55yCWaQxqQz1jZlhbXODWoBOm9DWpu
+   UWiYTrCPpYPvfP5EBlrhEadJKZWbX7S8WCqDoHgV7VjYq3HTMH4Q5MWQm
+   vaijll0/FSpinDZaI61JCng0aZ3aoZae8Xhu0xnOdyAm3n1Lzb42FUn2f
+   KN2lmpyYDhzXgiiEFurLdj+yqwNElBhrnYYXzVJOjZ9Zr6OzntZ8g/ZI4
+   4HUt8VN7UScYSCmQSM+cXdLj4IMo+i4ssYQVt9Gcqyps9xtf0qYyPcM/K
+   jjjjohzPd83mAMkcpQArBHC+hs7QLPOEG2rU9skN45k6QsBw3Fexac7/8
+   A==;
+X-CSE-ConnectionGUID: LFpNrNnwTJqCfJikxatF7A==
+X-CSE-MsgGUID: ELBELRjiRdGD3dIe4J0XRw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="12444484"
+X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
+   d="scan'208";a="12444484"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:11 -0700
+X-CSE-ConnectionGUID: h2J4Wqx1SNqCUkNJhxpsnw==
+X-CSE-MsgGUID: p7QLL69PSHKQVtmTRqx8wQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
+   d="scan'208";a="37115103"
+Received: from unknown (HELO localhost) ([10.245.247.114])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:30:08 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Babu Moger <babu.moger@amd.com>,
+	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
+Cc: linux-kernel@vger.kernel.org,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 00/16] selftests/resctrl: resctrl_val() related cleanups & improvements
+Date: Mon, 20 May 2024 15:28:50 +0300
+Message-Id: <20240520122906.18831-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] selftests: net: kill smcrouted in the cleanup logic in
- amt.sh
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171620162692.11269.9908896463327696163.git-patchwork-notify@kernel.org>
-Date: Mon, 20 May 2024 10:40:26 +0000
-References: <20240518132052.1293474-1-ap420073@gmail.com>
-In-Reply-To: <20240518132052.1293474-1-ap420073@gmail.com>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, horms@kernel.org
 
-Hello:
+Hi all,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+This series does a number of cleanups into resctrl_val() and
+generalizes it by removing test name specific handling from the
+function.
 
-On Sat, 18 May 2024 13:20:52 +0000 you wrote:
-> The amt.sh requires smcrouted for multicasting routing.
-> So, it starts smcrouted before forwarding tests.
-> It must be stopped after all tests, but it isn't.
-> 
-> To fix this issue, it kills smcrouted in the cleanup logic.
-> 
-> Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-> Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-> 
-> [...]
+One of the changes improves MBA/MBM measurement by narrowing down the
+period the resctrl FS derived memory bandwidth numbers are measured
+over. My feel is it didn't cause noticeable difference into the numbers
+because they're generally good anyway except for the small number of
+outliers. To see the impact on outliers, I'd need to setup a test to
+run large number of replications and do a statistical analysis, which
+I've not spent my time on. Even without the statistical analysis, the
+new way to measure seems obviously better and makes sense even if I
+cannot see a major improvement with the setup I'm using.
 
-Here is the summary with links:
-  - [net,v3] selftests: net: kill smcrouted in the cleanup logic in amt.sh
-    https://git.kernel.org/netdev/net/c/cc563e749810
+v4:
+- Merged close fix into IMC READ+WRITE rework patch
+- Add loop to reset imc_counters_config fds to -1 to be able know which
+  need closing
+- Introduce perf_close_imc_mem_bw() to close fds
+- Open resctrl mem bw file (twice) beforehand to avoid opening it during
+  the test
+- Remove MBM .mongrp setup
+- Remove mongrp from CMT test
 
-You are awesome, thank you!
+v3:
+- Rename init functions to <testname>_init()
+- Replace for loops with READ+WRITE statements for clarity
+- Don't drop Return: entry from perf_open_imc_mem_bw() func comment
+- New patch: Fix closing of IMC fds in case of error
+- New patch: Make "bandwidth" consistent in comments & prints
+- New patch: Simplify mem bandwidth file code
+- Remove wrong comment
+- Changed grp_name check to return -1 on fail (internal sanity check)
+
+v2:
+- Resolved conflicts with kselftest/next
+- Spaces -> tabs correction
+
+Ilpo Järvinen (16):
+  selftests/resctrl: Fix closing IMC fds on error and open-code R+W
+    instead of loops
+  selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1)
+    only
+  selftests/resctrl: Make "bandwidth" consistent in comments & prints
+  selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
+  selftests/resctrl: Use correct type for pids
+  selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
+  selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() &
+    document
+  selftests/resctrl: Simplify mem bandwidth file code for MBA & MBM
+    tests
+  selftests/resctrl: Add ->measure() callback to resctrl_val_param
+  selftests/resctrl: Add ->init() callback into resctrl_val_param
+  selftests/resctrl: Simplify bandwidth report type handling
+  selftests/resctrl: Make some strings passed to resctrlfs functions
+    const
+  selftests/resctrl: Convert ctrlgrp & mongrp to pointers
+  selftests/resctrl: Remove mongrp from MBA test
+  selftests/resctrl: Remove mongrp from CMT test
+  selftests/resctrl: Remove test name comparing from
+    write_bm_pid_to_resctrl()
+
+ tools/testing/selftests/resctrl/cache.c       |   6 +-
+ tools/testing/selftests/resctrl/cat_test.c    |   5 +-
+ tools/testing/selftests/resctrl/cmt_test.c    |  22 +-
+ tools/testing/selftests/resctrl/mba_test.c    |  26 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  26 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  49 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c | 362 ++++++++----------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  64 ++--
+ 8 files changed, 287 insertions(+), 273 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
 
