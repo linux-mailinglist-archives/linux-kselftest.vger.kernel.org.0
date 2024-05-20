@@ -1,67 +1,76 @@
-Return-Path: <linux-kselftest+bounces-10420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CEC8C9B0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:13:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C98968C9B83
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E732280CA3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 10:13:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E4431F21733
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 10:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EFCE4D9FE;
-	Mon, 20 May 2024 10:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4EB51034;
+	Mon, 20 May 2024 10:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwU2RKFc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubHyfK+7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255A44D9E8;
-	Mon, 20 May 2024 10:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854944E1CE;
+	Mon, 20 May 2024 10:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716199989; cv=none; b=d02KVRrtgjjHOAyqMbOfpbNx3nB5ziF60YHUqogSJy4WXOKvLUmeCYDGI9XxuXveE34jNYmt0qqZOavs27RsLvbr9SY9Hpn8vHh1AvupoYSRzIpRyvevdKsvCr1k04r38qoVno6gqZIRIcq+uZdkrTFL4tUDGDUx0q92UZONurg=
+	t=1716201627; cv=none; b=r7YgowKyhdFKQJ/+gOp9TjQUmjc7havktJsE4xcVvQDf3TOrG+JwKeN/Ybwg3dU8jLQdiYVWhnW1ZjdeD+fQ/CI4+OtiWp25BRiHBlwE5YChL+dJI6npFMtFKqH1fjSp8kOnO+u+weODCOuXryUWlVk8IhxTgJZ6ziwamNH06Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716199989; c=relaxed/simple;
-	bh=iB1/AGMuI2COmHUKNKYxTjsIWqrSI+JI2QtGpq3yc54=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GBe8pUfAZFmGugq2QTBKgnGOG8bQqFh/LxeiSE768scIbBbPq+l4lSn9wEM9WcFZbMkk7ugZgprghSkvZrvtrbHGbXJfUhQis2JbdUopcbJx5vfzpD1K++6mMgVmkuJWKsKr9+iwPVZH7ddf8XesFReDW7jQg2D1Xj77c+8p0KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwU2RKFc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEE3C2BD10;
-	Mon, 20 May 2024 10:13:06 +0000 (UTC)
+	s=arc-20240116; t=1716201627; c=relaxed/simple;
+	bh=Fn72sRJbBTtdMcN9t4cwebE1WPTps7u8azEPLXa+oRA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UiIHo/RQdl9hLyJ6p5m9O1+5Tit2uJLUFcJHra0S/DyEdEFX3Up1+uB1RA9YXvB0q1jYEMd4gzlWs29yGKAbjOCJKV48E+Jyyw4WAxqRHbU6Q6YUwx/X3H89ygf5XHsquPM6MQn3Kc2jD8NbLdWuGf7uuO7/uxCc4vUp3bFvtHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubHyfK+7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07CBAC4AF08;
+	Mon, 20 May 2024 10:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716199988;
-	bh=iB1/AGMuI2COmHUKNKYxTjsIWqrSI+JI2QtGpq3yc54=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pwU2RKFcZsq99WDem1ZJGcQ0YMzo+q6mt003rOBynMyS8d5zc+KZR+EMAOcOHN2VU
-	 5z3kDPVB2Jmw/5B8tcwYzMz+Sggh2NEMHIN0mCRqbwxTVVbWeW3k/iQ1wbHk5i0Qxr
-	 sCIU0o29bbK03UYU6Qkfr6Cv0ya4ViLMTjGGzicoCgDNGouAemxYCZIk3fHw/oxnID
-	 k/0H78auW+0zLW1TQKnhqNxumdpEmBh9NsMB53H+sPwKQVOzahiKjd5WIj7Dj3eBRM
-	 S6ibI7AYPDfg3DtPIAcM8MNRE7w3twDBt6lmGH3b1Jpbg2uGJArRONE6PAQS6CJvI5
-	 asBZAS/1BUU7Q==
-Date: Mon, 20 May 2024 11:13:04 +0100
-From: Simon Horman <horms@kernel.org>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v3] selftests: net: kill smcrouted in the cleanup
- logic in amt.sh
-Message-ID: <20240520101304.GA764145@kernel.org>
-References: <20240518132052.1293474-1-ap420073@gmail.com>
+	s=k20201202; t=1716201627;
+	bh=Fn72sRJbBTtdMcN9t4cwebE1WPTps7u8azEPLXa+oRA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ubHyfK+7hSHxNl/rlgm3Gna53O3gfbf/NzOPvlHzmfF8bRQTsTmMh3WPC5zFDiqQu
+	 4gYvoC7zFfx28uxe99sWGviZWnfXuDMkjhiKjWPkwOG4yz2dYy2gKuNXene1BChc39
+	 Mwj9J0iGns+TTaB00dBPy1J9O8NP2g2lYlUDbSrW20kytTFHtRYZNlctweidIeyBZQ
+	 PpReZStCQIS6yghGHd03MVvOlZMFtEwHlenuIXwOSRsAfnyqyCJXJAGB9H7/Uyl7m/
+	 XARwO2kcOgzODwbA0t30FMqThs6DWd7pynukSN6BRk971ssaXwO9PAeKZnGulLJKgL
+	 ij9GtL3jAju6Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3321CF21D8;
+	Mon, 20 May 2024 10:40:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3] selftests: net: kill smcrouted in the cleanup logic in
+ amt.sh
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171620162692.11269.9908896463327696163.git-patchwork-notify@kernel.org>
+Date: Mon, 20 May 2024 10:40:26 +0000
+References: <20240518132052.1293474-1-ap420073@gmail.com>
 In-Reply-To: <20240518132052.1293474-1-ap420073@gmail.com>
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, horms@kernel.org
 
-On Sat, May 18, 2024 at 01:20:52PM +0000, Taehee Yoo wrote:
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Sat, 18 May 2024 13:20:52 +0000 you wrote:
 > The amt.sh requires smcrouted for multicasting routing.
 > So, it starts smcrouted before forwarding tests.
 > It must be stopped after all tests, but it isn't.
@@ -70,9 +79,17 @@ On Sat, May 18, 2024 at 01:20:52PM +0000, Taehee Yoo wrote:
 > 
 > Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
 > Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+> 
+> [...]
 
-Thanks for the updates.
+Here is the summary with links:
+  - [net,v3] selftests: net: kill smcrouted in the cleanup logic in amt.sh
+    https://git.kernel.org/netdev/net/c/cc563e749810
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
