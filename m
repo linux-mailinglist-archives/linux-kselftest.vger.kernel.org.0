@@ -1,299 +1,117 @@
-Return-Path: <linux-kselftest+bounces-10439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3988C9D71
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:34:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1B38C9EBD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 16:24:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF4BB1F21374
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 12:34:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51B9EB203CD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2024 14:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C085F56450;
-	Mon, 20 May 2024 12:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB631369A5;
+	Mon, 20 May 2024 14:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cisR0SiT"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g9NkebL4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7415674E;
-	Mon, 20 May 2024 12:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AC813665A
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 14:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716208374; cv=none; b=fuvHzFZuJk42h+hgYo10l+Iyht1GsZV7aqfdmCn1nu6HWIfmSbEAWqFJMakqOyBfpd7m+yWPcoFam9J9/nGEwbAPjy8sEKg9U5XKQS/LDKRvHW5dt0CswdiK1VGvVzyLwTCjd3POwbDTiJ8Arh/rQ3uvIViAP8n8CMFj0A5iTKg=
+	t=1716215042; cv=none; b=fOVmtEzGYBWiHHoIwka0vxuxXYoH5FTXRLn1fm4pD6lv+mNq/XW57v8RCBzs1dXcWhmN4Z6JSg/31eH+9P+D0FUrEZs+jrl7HP/PivHIIquEVN7unssxuLERwA6k5YAl4a/jG9c/u+Bzow0Pfc44d1vqTT6/CNFzStxIfMBRptY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716208374; c=relaxed/simple;
-	bh=m8Ay8MkqRIOBzYe6MzQZIISyQvOfsbMcEQaEQT9xQ6Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JVVP/6bqMbJnpSVS7BK+GBL8MYG0oqJSh+lI7Qq55QWqR+ZT3M6u/p+jCswY3xNbiZUXnOyLV3PQhXTEhQRfDOBDbHVlbf7WzPhkPLeJqJOR4P15qVVXVI4Y6zwODwhZZMVTpDH/4vAq5LkxyrcAUdX+22bT6JUwyvMe/+fgpAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cisR0SiT; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716208373; x=1747744373;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=m8Ay8MkqRIOBzYe6MzQZIISyQvOfsbMcEQaEQT9xQ6Q=;
-  b=cisR0SiTIAtBZWuByJsZcbTQrtEPYnG86j7oNz+d5fce4oV4KFl3fEVd
-   +9q+EgoXoWty+RwQVPvcWlIEb23fsNMJQsnqy5Lcri9bTOzga1eJqUM6L
-   BLI6H1PKCCavXxrMJyj8trJF44KinRJ2xoSVqX1VjGg7kjxtFXgTU43U9
-   vgxQvlLzlGRSrw9yqiezH4wESA6vGE3kYC0WwLDK7WadpfTRN5AmyC5y0
-   A5JLrZfgDC+ovH6lt81KNYLFxcCvOzSYLu33lPSPZbdpd7r8IjwAUjuDr
-   y5H+Zajx033GmwUHxQF7hdgM12ObP+9JUXi6ExoflgfGh2KFv5MjkWQ49
-   A==;
-X-CSE-ConnectionGUID: +QPScvsGTDOZOApOLHLnUw==
-X-CSE-MsgGUID: TKeLot8ETLOfLH8fo1/9mg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11078"; a="23475528"
-X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="23475528"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:32:53 -0700
-X-CSE-ConnectionGUID: BNKLkKUrSkqJ7FtAUVMe7A==
-X-CSE-MsgGUID: kBxmBYOxT8SvJpnXXwqNzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,175,1712646000"; 
-   d="scan'208";a="63747818"
-Received: from unknown (HELO localhost) ([10.245.247.114])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2024 05:32:49 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-kselftest@vger.kernel.org,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Babu Moger <babu.moger@amd.com>,
-	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>
-Cc: linux-kernel@vger.kernel.org,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 16/16] selftests/resctrl: Remove test name comparing from write_bm_pid_to_resctrl()
-Date: Mon, 20 May 2024 15:30:20 +0300
-Message-Id: <20240520123020.18938-17-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
-References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1716215042; c=relaxed/simple;
+	bh=Kxud4rInQ/uIzpvwj6zKqD7cVG/YMxBM6hnwJWDO3Ls=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H4zsesuR9x2QHHrfF1qyOzAvLaT5eWnsXYIH48IAvg1ZjEpMVWt28AitFght/RKSXvCdqx3BgJUbEchI4J1TVeGq5TKLKo8HTSDP+3k6d0GwaNcHp4RVR157c32W5gpOXJKtArCukJg+c5Dx5SCPrkp2u8OsZO/3E7XdiJNK3bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g9NkebL4; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7e1df3c0663so14639539f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2024 07:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1716215039; x=1716819839; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NBQNQ9FZZZqvjteJBWF+UbSAu8Fn4cYlBjQ/AkQ61gQ=;
+        b=g9NkebL42r+8TquAQvVximMh2Xju3TT4znDAtnS3KoUJY554PkwakpV0I9st2rshqm
+         xEWeQMD8WRc6AGMFwgUzuImuF2tnCu+GUB5LcKgtib1DQyjYFBOW5/fbaScTdrkY3tyz
+         5hQ0aNrlF6KPwIvmd6JgNZ97XZ9MYxTgbjitw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716215039; x=1716819839;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NBQNQ9FZZZqvjteJBWF+UbSAu8Fn4cYlBjQ/AkQ61gQ=;
+        b=EsPH5FLxWgWrwRN2vgsA+WnyB9qTcMUbkahSrkg7nS67y9u29wPbdKehHudt6k5fMi
+         evlHCL5vtnbkiG90qvd8PkX6Mu/a9wwMS21jKNiLDBXq87ED3ue9gqDrLbI6kivL/wT9
+         t6K7kymEgEXuLsooqnffO2zfKGSjcEq/gf7fsB+zLoyvnVcNOnYpfmc4X0S41MQXn02U
+         tP5U07S49NpN5nHrTnJuTg+GFD59QOtJYxwiDFE2oZpjlqk77yaYOhgmPBjoCcbsw7cI
+         Ng+5RJC/1EIM97AVFMRSsuP6scmHg4ikOf1f0Bq6iJXUitDrmSu8d2TbtwPUeeLeGcMg
+         fAqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX8t6bFHRfi3s4tlPMQiSZ8/Un9XgRL5MmAf0T15ARxKbLJdohH6Ygq7JsoSU1X9PRk33pKHnxiNWRv+g8RawaeW4sP1sHMLD/sqUS/3Mo4
+X-Gm-Message-State: AOJu0Yzhm+iPcx6BRsser4Gvhsqze57XyKw3iPeF8EQQ5l7Dd8P7i5Ei
+	AexXGkhFycPEtTMT1OQgmb2N+jURtsyTrI0gQmR3yM9rcZDtdv9UJRJ2GFjDjug=
+X-Google-Smtp-Source: AGHT+IHOExpjLNN+4G5/kjDmKREPcV4+VDUq67A82eppucYtUYxOE/4nd3SHNqSCoiAcFlRE57sYAw==
+X-Received: by 2002:a5e:c748:0:b0:7e1:d865:e700 with SMTP id ca18e2360f4ac-7e1d865e82emr2632162039f.2.1716215038950;
+        Mon, 20 May 2024 07:23:58 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4893700e444sm6409930173.28.2024.05.20.07.23.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 May 2024 07:23:58 -0700 (PDT)
+Message-ID: <6b2a93f0-8521-4915-b63d-d28d1d243481@linuxfoundation.org>
+Date: Mon, 20 May 2024 08:23:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest/alsa: Ensure _GNU_SOURCE is defined
+To: Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Edward Liaw <edliaw@google.com>, John Hubbard <jhubbard@nvidia.com>,
+ linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240516-kselftest-fix-gnu-source-v1-1-e482ca6bfff7@kernel.org>
+ <871q6025ut.wl-tiwai@suse.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <871q6025ut.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-write_bm_pid_to_resctrl() uses resctrl_val to check test name which is
-not a good interface generic resctrl FS functions should provide.
+On 5/17/24 02:35, Takashi Iwai wrote:
+> On Thu, 16 May 2024 17:27:33 +0200,
+> Mark Brown wrote:
+>>
+>> The pcmtest driver tests use the kselftest harness which requires that
+>> _GNU_SOURCE is defined but nothing causes it to be defined.  Since the
+>> KHDR_INCLUDES Makefile variable has had the required define added let's
+>> use that, this should provide some futureproofing.
+>>
+>> Fixes: daef47b89efd ("selftests: Compile kselftest headers with -D_GNU_SOURCE")
+>> Signed-off-by: Mark Brown <broonie@kernel.org>
+> 
+> The commit isn't yet in the Linus upstream tree but only in
+> linux-next.  I guess it's better to put the fix in the tree (Shuah's?)
+> that introduced this change.  So feel free to take my ack:
+> 
+> Acked-by: Takashi Iwai <tiwai@suse.de>
+> 
+> 
 
-Only MBM and CMT tests define mongrp so the test name check in
-write_bm_pid_to_resctrl() can be changed to depend simply on mongrp
-being non-NULL.
+Thank you. I will take this through my tree.
 
-With last user of resctrl_val gone, the parameter and member from the
-struct resctrl_val_param can removed. Test name constants can also be
-removed because they are not used anymore.
-
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c    |  5 +--
- tools/testing/selftests/resctrl/cmt_test.c    |  1 -
- tools/testing/selftests/resctrl/mba_test.c    |  1 -
- tools/testing/selftests/resctrl/mbm_test.c    |  1 -
- tools/testing/selftests/resctrl/resctrl.h     | 10 +-----
- tools/testing/selftests/resctrl/resctrl_val.c |  4 +--
- tools/testing/selftests/resctrl/resctrlfs.c   | 33 ++++++++-----------
- 7 files changed, 17 insertions(+), 38 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index c7686fb6641a..d4dffc934bc3 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -158,7 +158,6 @@ static int cat_test(const struct resctrl_test *test,
- 		    struct resctrl_val_param *param,
- 		    size_t span, unsigned long current_mask)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct perf_event_read pe_read;
- 	struct perf_event_attr pea;
- 	cpu_set_t old_affinity;
-@@ -178,8 +177,7 @@ static int cat_test(const struct resctrl_test *test,
- 		return ret;
- 
- 	/* Write benchmark to specified con_mon grp, mon_grp in resctrl FS*/
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto reset_affinity;
- 
-@@ -272,7 +270,6 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	start_mask = create_bit_mask(start, n);
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CAT_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.num_of_runs	= 0,
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index b63fa1e93307..d1c272743eb2 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -144,7 +144,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	}
- 
- 	struct resctrl_val_param param = {
--		.resctrl_val	= CMT_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.mask		= ~(long_mask << n) & long_mask,
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 5e0b1e794295..1f2a7dc73b62 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -164,7 +164,6 @@ static void mba_test_cleanup(void)
- static int mba_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBA_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.init		= mba_init,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 27b936fe60bc..39aa70374154 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -132,7 +132,6 @@ static void mbm_test_cleanup(void)
- static int mbm_run_test(const struct resctrl_test *test, const struct user_params *uparams)
- {
- 	struct resctrl_val_param param = {
--		.resctrl_val	= MBM_STR,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.init		= mbm_init,
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index a999fbc13fd3..2dda56084588 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -81,7 +81,6 @@ struct resctrl_test {
- 
- /*
-  * resctrl_val_param:	resctrl test parameters
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-  * @filename:		Name of file to which the o/p should be written
-@@ -90,7 +89,6 @@ struct resctrl_test {
-  * @measure:		Callback that performs the measurement (a single test)
-  */
- struct resctrl_val_param {
--	char		*resctrl_val;
- 	const char	*ctrlgrp;
- 	const char	*mongrp;
- 	char		filename[64];
-@@ -113,11 +111,6 @@ struct perf_event_read {
- 	} values[2];
- };
- 
--#define MBM_STR			"mbm"
--#define MBA_STR			"mba"
--#define CMT_STR			"cmt"
--#define CAT_STR			"cat"
--
- /*
-  * Memory location that consumes values compiler must not optimize away.
-  * Volatile ensures writes to this location cannot be optimized away by
-@@ -143,8 +136,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
- int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity);
- int write_schemata(const char *ctrlgrp, char *schemata, int cpu_no,
- 		   const char *resource);
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val);
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp);
- int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
- unsigned char *alloc_buffer(size_t buf_size, int memflush);
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index b2b944a70fb9..719a08ece9d3 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -695,7 +695,6 @@ int resctrl_val(const struct resctrl_test *test,
- 		const char * const *benchmark_cmd,
- 		struct resctrl_val_param *param)
- {
--	char *resctrl_val = param->resctrl_val;
- 	struct sigaction sigact;
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
-@@ -786,8 +785,7 @@ int resctrl_val(const struct resctrl_test *test,
- 		goto out;
- 
- 	/* Write benchmark to specified control&monitoring grp in resctrl FS */
--	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
--				      resctrl_val);
-+	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp);
- 	if (ret)
- 		goto out;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 6b4448588666..4bf1fe6dc308 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -519,7 +519,6 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  * @bm_pid:		PID that should be written
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-- * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  *
-  * If a con_mon grp is requested, create it and write pid to it, otherwise
-  * write pid to root con_mon grp.
-@@ -529,8 +528,7 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
-  *
-  * Return: 0 on success, < 0 on error.
-  */
--int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
--			    const char *mongrp, const char *resctrl_val)
-+int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp, const char *mongrp)
- {
- 	char controlgroup[128], monitorgroup[512], monitorgroup_p[256];
- 	char tasks[1024];
-@@ -550,22 +548,19 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, const char *ctrlgrp,
- 	if (ret)
- 		goto out;
- 
--	/* Create mon grp and write pid into it for "mbm" and "cmt" test */
--	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)) ||
--	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
--		if (mongrp) {
--			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
--			sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
--			ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
--			if (ret)
--				goto out;
--
--			sprintf(tasks, "%s/mon_groups/%s/tasks",
--				controlgroup, mongrp);
--			ret = write_pid_to_tasks(tasks, bm_pid);
--			if (ret)
--				goto out;
--		}
-+	/* Create monitor group and write pid into if it is used */
-+	if (mongrp) {
-+		sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
-+		sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
-+		ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
-+		if (ret)
-+			goto out;
-+
-+		sprintf(tasks, "%s/mon_groups/%s/tasks",
-+			controlgroup, mongrp);
-+		ret = write_pid_to_tasks(tasks, bm_pid);
-+		if (ret)
-+			goto out;
- 	}
- 
- out:
--- 
-2.39.2
+thanks,
+-- Shuah
 
 
