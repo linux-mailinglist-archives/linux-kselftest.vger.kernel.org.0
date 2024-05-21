@@ -1,116 +1,137 @@
-Return-Path: <linux-kselftest+bounces-10484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77B28CB476
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 21:49:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 663728CB4EA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 22:51:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 642BE1F235EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 19:49:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC8A1B21E4F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 20:51:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2515149C68;
-	Tue, 21 May 2024 19:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A80763F1;
+	Tue, 21 May 2024 20:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKAcwqxM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZpskQob3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7652E149C58;
-	Tue, 21 May 2024 19:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891497F49F
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 20:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716320965; cv=none; b=D0qSjb7CAYQGGOAoyxmmsIchK6/NRNqwCPtEd2I/gvwEXv0IHEddz56pKPSgGHj8jMMX4coZAjiWh0Ogzfeovhb2j0l1L9GnuE3XFsI/+I2tCzWL49FK0Hu3n8xxoSAKn9xhbLTtO2emaPvBhnkdZESIf0v6kFsSYFnFO33x7oY=
+	t=1716324709; cv=none; b=Ev1A7AEQLZNjsvVuyBbPhlAyaHsBEVErQdNJxcGK3fSzlNPvaHlbhze1WN7mnQ7IK+uUcL3mj2UkSiALViPkQfpUa9Z5u5zLz1H2936cqrR6jBsSgoddjCS5hHFnyg/RkEyZR8sURT82D9SCZZmpQykn6BHZgSKYJX5inx+1Iss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716320965; c=relaxed/simple;
-	bh=5VxfSyKHqzOTEZZXzZT0aLiSoKTpopx0vsuhYEVZU44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hwzbzb+96TJdTjoH5+0zfitPjW3uXA6HSvaHE/NC1zIm3FTV1Hxh8fidbhFw8w5QIZV7E0OUNjd7OJinTdHuiKM48jiBdBlAUCLpUHgt+dbM3NYqgFWQguw5VXwZyIy1MO2ndW/JCZJgJblIJIdmP5OjkNEY1XEt4H3jQfB7iU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKAcwqxM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDBDAC32782;
-	Tue, 21 May 2024 19:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716320965;
-	bh=5VxfSyKHqzOTEZZXzZT0aLiSoKTpopx0vsuhYEVZU44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bKAcwqxMdvphissksxBIPo4FGq5KPKX5AEWVVQ7lfMWYqInRJAiv62MhaLPG8X/CJ
-	 LPy2sNv63Ns1zkEtgNV5LYXsdZZxw2z9bmmmUBOV3XvxhyUmm4NLiRft4/a/9tvmAd
-	 JgFA+/vxMLqr18xEdz4O8WjbWSLTvY6QSkQxiJ6Ch2Kk63BOeNCBoMoSppWHHAC6T4
-	 u73/wl8C6JEKK1Dbz+0RbvlfAn/zKENyT8qj2OlRC6J9rtupS9o2Okfe8K2dsqSxoE
-	 zSHmCE6ARjH+EqqoV+acJDZTEK2z5xBLiavm3H8wzLBpW9uDz+1021dqaMh7HmU4Ld
-	 opUY8g2tiYyLA==
-Date: Tue, 21 May 2024 20:49:19 +0100
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
-	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 08/16] riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
-Message-ID: <20240521-spiny-undergrad-efa1a391ad3d@spud>
-References: <20240517145302.971019-1-cleger@rivosinc.com>
- <20240517145302.971019-9-cleger@rivosinc.com>
+	s=arc-20240116; t=1716324709; c=relaxed/simple;
+	bh=M71SjQ8CvyRceTtPag6Y8By8insDFpbiuLeOP7ClPOQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:Cc:
+	 In-Reply-To:Content-Type; b=jEkY577uG5b9HKMxLSJDIJZPoZpviwaRnA0gJBkHTcR+zL0ksCcj2sWunoImEj56KXFp6Zub0d1Sw2jIR7ehnqM4g2ksADVFBhWqcFQtxZXWyOCzyLaoznuDHcPeBolgu/9QQrf1RwLyH5Jk9A8ZN3I3kzihGJRR24nu8PDgbhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZpskQob3; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716324707; x=1747860707;
+  h=message-id:date:mime-version:subject:from:to:references:
+   cc:in-reply-to:content-transfer-encoding;
+  bh=M71SjQ8CvyRceTtPag6Y8By8insDFpbiuLeOP7ClPOQ=;
+  b=ZpskQob3YEmgPUXSEzsMmOC/1+I12xaZZEUGpAUNb4baGQbWtGsDVhBP
+   CG0C3l9eeoh+lSCKhsRQek6f0C93uCSkg/CflpIcNY8nWt7dpldTWGTiL
+   eEBD22eiAISDMMHzE/Sf4tjZ2Z8yu1DLdIQ08zmM/c6apNdFjxHfTTFsC
+   UufFI8EA8tW4eea4YGDSq2JZwC8GkypQ9qfUzFtKvpH0NcWUzhDzMZZVA
+   QHKsjpKgRn27X3MNOe6pb9plif3ZS58/Lckq7tPlJufNSENtT6GASupOM
+   W2QlGI8mwmfiGlORwB8vCPDcvUmKoisuq6QfLHcxCnOMS+DYBvzp7DN9Z
+   w==;
+X-CSE-ConnectionGUID: zH7OljrtTWSLDD38sDz40g==
+X-CSE-MsgGUID: c4QkcM8rT1eV1bw80NdsDw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="30069444"
+X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
+   d="scan'208";a="30069444"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 13:51:47 -0700
+X-CSE-ConnectionGUID: W+09VOujSmK3/xEtvREZbg==
+X-CSE-MsgGUID: A8LQ9IAvS3OfBjgfgBN1dQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
+   d="scan'208";a="37815893"
+Received: from dongshen-mobl1.amr.corp.intel.com (HELO [10.124.104.52]) ([10.124.104.52])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 13:51:46 -0700
+Message-ID: <57ef2e87-1119-4258-80b6-920b21dbcf98@intel.com>
+Date: Tue, 21 May 2024 13:51:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ZUPGMxJHsaJik2Qb"
-Content-Disposition: inline
-In-Reply-To: <20240517145302.971019-9-cleger@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] KVM: selftests: Fix nx_huge_pages_test for
+ default_hugepagesz=1G
+From: "Zhang, Dongsheng X" <dongsheng.x.zhang@intel.com>
+To: "<shuah"@kernel.org
+References: <20240424224434.14166-1-dongsheng.x.zhang@intel.com>
+Content-Language: en-US
+Cc: linux-kselftest@vger.kernel.org
+In-Reply-To: <20240424224434.14166-1-dongsheng.x.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---ZUPGMxJHsaJik2Qb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi, Shuah,
+Any comment on this series?
 
-On Fri, May 17, 2024 at 04:52:48PM +0200, Cl=E9ment L=E9ger wrote:
+Thanks,
+don
 
-> +static int riscv_ext_zca_depends(const struct riscv_isa_ext_data *data,
-> +				 const unsigned long *isa_bitmap)
-> +{
-> +	return __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA) ?=
- 0 : -EPROBE_DEFER;
-> +}
-> +static int riscv_ext_zcd_validate(const struct riscv_isa_ext_data *data,
-> +				  const unsigned long *isa_bitmap)
-> +{
-> +	return __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA) &&
-> +	       __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_d) ? 0=
- : -EPROBE_DEFER;
-> +}
-
-Could you write the logic in these out normally please? I think they'd
-be more understandable (particular this second one) broken down and with
-early return.
-
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
---ZUPGMxJHsaJik2Qb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkz6vwAKCRB4tDGHoIJi
-0kLvAQCE6VdTKzQsLhuTCAot4T9V9f4Lr+mwFH/JYa+PN4XSawEA4Bpid+JyrYkM
-5yKjg6DZQIn95XuoTjrLNnKL0qkRvw0=
-=XDFW
------END PGP SIGNATURE-----
-
---ZUPGMxJHsaJik2Qb--
+On 4/24/2024 3:44 PM, Dongsheng Zhang wrote:
+> From: donsheng <dongsheng.x.zhang@intel.com>
+> 
+> If the host was booted with the "default_hugepagesz=1G" kernel command-line
+> parameter, running the NX hugepage test will fail with error "Invalid argument"
+> at the TEST_ASSERT line in kvm_util.c's __vm_mem_region_delete() function:
+> static void __vm_mem_region_delete(struct kvm_vm *vm,
+>                    struct userspace_mem_region *region,
+>                    bool unlink)
+> {
+>     int ret;
+>     ...
+>     ret = munmap(region->mmap_start, region->mmap_size);
+>     TEST_ASSERT(!ret, __KVM_SYSCALL_ERROR("munmap()", ret));
+>     ...
+> }
+> 
+> NX hugepage test creates a VM with a data slot of 6M size backed with huge
+> pages. If the default hugetlb page size is set to 1G, calling mmap() with
+> MAP_HUGETLB and a length of 6M will succeed but calling its matching munmap()
+> will fail. Documentation/admin-guide/mm/hugetlbpage.rst specifies this behavior:
+> 
+> "Syscalls that operate on memory backed by hugetlb pages only have their lengths
+> aligned to the native page size of the processor; they will normally fail with
+> errno set to EINVAL or exclude hugetlb pages that extend beyond the length if
+> not hugepage aligned.  For example, munmap(2) will fail if memory is backed by
+> a hugetlb page and the length is smaller than the hugepage size."
+> 
+> Explicitly use MAP_HUGE_2MB in conjunction with MAP_HUGETLB to fix the issue.
+> 
+> Signed-off-by: donsheng <dongsheng.x.zhang@intel.com>
+> Suggested-by: Zide Chen <zide.chen@intel.com>
+> ---
+>  tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> index 17bbb96fc4df..146e9033e206 100644
+> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> @@ -129,7 +129,7 @@ void run_test(int reclaim_period_ms, bool disable_nx_huge_pages,
+>  
+>  	vcpu = vm_vcpu_add(vm, 0, guest_code);
+>  
+> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
+>  				    HPAGE_GPA, HPAGE_SLOT,
+>  				    HPAGE_SLOT_NPAGES, 0);
+>  
 
