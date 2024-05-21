@@ -1,137 +1,104 @@
-Return-Path: <linux-kselftest+bounces-10485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 663728CB4EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 22:51:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A94548CB4FC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 22:56:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC8A1B21E4F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 20:51:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C4041F22D35
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 20:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A80763F1;
-	Tue, 21 May 2024 20:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF2C149C71;
+	Tue, 21 May 2024 20:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZpskQob3"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Tiws/Mon"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891497F49F
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 20:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3D014901B
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 20:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716324709; cv=none; b=Ev1A7AEQLZNjsvVuyBbPhlAyaHsBEVErQdNJxcGK3fSzlNPvaHlbhze1WN7mnQ7IK+uUcL3mj2UkSiALViPkQfpUa9Z5u5zLz1H2936cqrR6jBsSgoddjCS5hHFnyg/RkEyZR8sURT82D9SCZZmpQykn6BHZgSKYJX5inx+1Iss=
+	t=1716324966; cv=none; b=Ixor41lYeXvj6lS0F7jh08FTgFO5uEtdfCQSkJ+5N7lRW1cjn1y/yRb6x1F7Dhzdn4QUwcwVoixdEOtmDfISX++pfN2I9AaNAgZhxQJW8XGjV1ZA4oPM0Ur5iCDOOZXBRoahys+9nxpchy8nJeNt92IVOMPmNKk0F616f65LF0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716324709; c=relaxed/simple;
-	bh=M71SjQ8CvyRceTtPag6Y8By8insDFpbiuLeOP7ClPOQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:Cc:
-	 In-Reply-To:Content-Type; b=jEkY577uG5b9HKMxLSJDIJZPoZpviwaRnA0gJBkHTcR+zL0ksCcj2sWunoImEj56KXFp6Zub0d1Sw2jIR7ehnqM4g2ksADVFBhWqcFQtxZXWyOCzyLaoznuDHcPeBolgu/9QQrf1RwLyH5Jk9A8ZN3I3kzihGJRR24nu8PDgbhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZpskQob3; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716324707; x=1747860707;
-  h=message-id:date:mime-version:subject:from:to:references:
-   cc:in-reply-to:content-transfer-encoding;
-  bh=M71SjQ8CvyRceTtPag6Y8By8insDFpbiuLeOP7ClPOQ=;
-  b=ZpskQob3YEmgPUXSEzsMmOC/1+I12xaZZEUGpAUNb4baGQbWtGsDVhBP
-   CG0C3l9eeoh+lSCKhsRQek6f0C93uCSkg/CflpIcNY8nWt7dpldTWGTiL
-   eEBD22eiAISDMMHzE/Sf4tjZ2Z8yu1DLdIQ08zmM/c6apNdFjxHfTTFsC
-   UufFI8EA8tW4eea4YGDSq2JZwC8GkypQ9qfUzFtKvpH0NcWUzhDzMZZVA
-   QHKsjpKgRn27X3MNOe6pb9plif3ZS58/Lckq7tPlJufNSENtT6GASupOM
-   W2QlGI8mwmfiGlORwB8vCPDcvUmKoisuq6QfLHcxCnOMS+DYBvzp7DN9Z
-   w==;
-X-CSE-ConnectionGUID: zH7OljrtTWSLDD38sDz40g==
-X-CSE-MsgGUID: c4QkcM8rT1eV1bw80NdsDw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="30069444"
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="30069444"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 13:51:47 -0700
-X-CSE-ConnectionGUID: W+09VOujSmK3/xEtvREZbg==
-X-CSE-MsgGUID: A8LQ9IAvS3OfBjgfgBN1dQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,178,1712646000"; 
-   d="scan'208";a="37815893"
-Received: from dongshen-mobl1.amr.corp.intel.com (HELO [10.124.104.52]) ([10.124.104.52])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2024 13:51:46 -0700
-Message-ID: <57ef2e87-1119-4258-80b6-920b21dbcf98@intel.com>
-Date: Tue, 21 May 2024 13:51:26 -0700
+	s=arc-20240116; t=1716324966; c=relaxed/simple;
+	bh=MJiaqEAU9sSWZ1B+ERJ2EzFdFTRMHtGeptWAmPSNdbc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=q25a2nFWd1CZmZmkoOppwW4Dw73ZcEeSsr/KvjM3IjuxkG8mupZXDh7Kd5aE2DMcKsXpHl9PhqvxqQpEzM7ZOZoLPAzeI88uGXVx0wUtzgOgGF/wgCTBJn1CuLtnOcq5B+rc+7JuPXCO6HpEpHfWxy8wtE9NBYvq/5vQR0wZov0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Tiws/Mon; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-23fb9c871c8so2273504fac.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 13:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1716324963; x=1716929763; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MJiaqEAU9sSWZ1B+ERJ2EzFdFTRMHtGeptWAmPSNdbc=;
+        b=Tiws/MonIon6cnbOMs+FdnaKxtRNYkO7DdF8WvLW6zJDCgjy/w3ikKcVuA4R1pf6yd
+         IaeAurCMkojwjWJOV05TodcuN75c9Ff5EsWi69WZzuXPIXTlargkQdcJtqzGgIbslOQr
+         8O8B+wn/3Hg+Zba5h63pQYdM/NiYo1t1n9E/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716324963; x=1716929763;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MJiaqEAU9sSWZ1B+ERJ2EzFdFTRMHtGeptWAmPSNdbc=;
+        b=VkiA5dOlSBfXX7ZPTVt0Fp1NKMsW4cJp17GXTnAFGRYdyhrtb//cZ/duEjS/sZwIRH
+         d8kxTQ/j0qyMbirWzKbNlyM8E1rZOgXcqkb31R2ye2kfnB6yEYWpRsu8+PzFWJagx8tg
+         gWlw8vt8H3fpf4T9/SxZllbRg8iSx9w7Lc8KSmDXtZBOhN/va4/+eaepBPUjgEBSXdim
+         tSqiRZGKhdieFdFq/j+z5bPSiGUn4CkFBSaXpqGzDnGsEbhmElqh6ZldtUgX3Z8S0oKX
+         QzeFB1ncy3VIKd3goE8gAx9+wACa4H5/R69cnWEuS90Axm8j+ffvz3icgFXKP0OEYIF7
+         4UhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqR2/W4IV7ZzuRt36Gz162ezqXKwGtHspr3uglexLzB72XCb9cQ04rDPyVUfHKKQy0YR7rPJny1hIYDH5OJ3fiq+GipPvnbBO+8+k028+o
+X-Gm-Message-State: AOJu0YxGeS1xhuz8vrhTnpR5yxxkztC3SBXi0L3BUgrSonw+nCCaddri
+	Ex7uK6EWGZ5CSbYfcegCyJ2eFmH5H98eOv4SncQ7h+wWLmFNbTo+40yrR3t6H4vKOHe7KEeT31n
+	B75wXQ5PDZVDjkV/Q9DARfKrXpiPAWg1Mb7bsIoe8LZ1NZVg=
+X-Google-Smtp-Source: AGHT+IFVKWZED7guJzc+MzWuGHfaHJUwnJp1kEX7pxfEdSQdnNlThEftDlYt/MqxHChTBxk0kLBrMDZyswbZxiDXzxE=
+X-Received: by 2002:a05:6870:b00e:b0:239:8687:d01 with SMTP id
+ 586e51a60fabf-24c68aebafemr258687fac.6.1716324963212; Tue, 21 May 2024
+ 13:56:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] KVM: selftests: Fix nx_huge_pages_test for
- default_hugepagesz=1G
-From: "Zhang, Dongsheng X" <dongsheng.x.zhang@intel.com>
-To: "<shuah"@kernel.org
-References: <20240424224434.14166-1-dongsheng.x.zhang@intel.com>
-Content-Language: en-US
-Cc: linux-kselftest@vger.kernel.org
-In-Reply-To: <20240424224434.14166-1-dongsheng.x.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240415163527.626541-1-jeffxu@chromium.org> <20240514104646.e6af4292f19b834777ec1e32@linux-foundation.org>
+ <d46qb2rkfsagw22u6ishgagsvsmqsu5nrmf5up5mhi6xrwolyt@6ir6g2v63of7>
+ <CABi2SkXBpL8qdSMTwe5njWasqidsWDkhme6xw2_38JARrhPRwA@mail.gmail.com>
+ <3rpmzsxiwo5t2uq7xy5inizbtaasotjtzocxbayw5ntgk5a2rx@jkccjg5mbqqh>
+ <CABi2SkVLqE7WD2MTYpksxA3+BfLLzjibHeJy9saYFvM-GRFy-w@mail.gmail.com> <khduyf47rifr5bmswkbju6l5itldhqaksjasvnkfhg4ig3ngdc@a4c2csfsdeqz>
+In-Reply-To: <khduyf47rifr5bmswkbju6l5itldhqaksjasvnkfhg4ig3ngdc@a4c2csfsdeqz>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Tue, 21 May 2024 13:55:51 -0700
+Message-ID: <CABi2SkU+6tSO6UASTW+7WNX4ySot5FPz5shnjE8b1OeXyJu-=w@mail.gmail.com>
+Subject: Re: [PATCH v10 0/5] Introduce mseal
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Jeff Xu <jeffxu@chromium.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, keescook@chromium.org, jannh@google.com, 
+	sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
+	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
+	surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
+	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, May 21, 2024 at 9:00=E2=80=AFAM Liam R. Howlett <Liam.Howlett@oracl=
+e.com> wrote:
+>
+>
+> TL;DR for Andrew (and to save his page down key):
+>
+> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+>
+Many thanks!
 
-Hi, Shuah,
-Any comment on this series?
-
-Thanks,
-don
-
-On 4/24/2024 3:44 PM, Dongsheng Zhang wrote:
-> From: donsheng <dongsheng.x.zhang@intel.com>
-> 
-> If the host was booted with the "default_hugepagesz=1G" kernel command-line
-> parameter, running the NX hugepage test will fail with error "Invalid argument"
-> at the TEST_ASSERT line in kvm_util.c's __vm_mem_region_delete() function:
-> static void __vm_mem_region_delete(struct kvm_vm *vm,
->                    struct userspace_mem_region *region,
->                    bool unlink)
-> {
->     int ret;
->     ...
->     ret = munmap(region->mmap_start, region->mmap_size);
->     TEST_ASSERT(!ret, __KVM_SYSCALL_ERROR("munmap()", ret));
->     ...
-> }
-> 
-> NX hugepage test creates a VM with a data slot of 6M size backed with huge
-> pages. If the default hugetlb page size is set to 1G, calling mmap() with
-> MAP_HUGETLB and a length of 6M will succeed but calling its matching munmap()
-> will fail. Documentation/admin-guide/mm/hugetlbpage.rst specifies this behavior:
-> 
-> "Syscalls that operate on memory backed by hugetlb pages only have their lengths
-> aligned to the native page size of the processor; they will normally fail with
-> errno set to EINVAL or exclude hugetlb pages that extend beyond the length if
-> not hugepage aligned.  For example, munmap(2) will fail if memory is backed by
-> a hugetlb page and the length is smaller than the hugepage size."
-> 
-> Explicitly use MAP_HUGE_2MB in conjunction with MAP_HUGETLB to fix the issue.
-> 
-> Signed-off-by: donsheng <dongsheng.x.zhang@intel.com>
-> Suggested-by: Zide Chen <zide.chen@intel.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> index 17bbb96fc4df..146e9033e206 100644
-> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> @@ -129,7 +129,7 @@ void run_test(int reclaim_period_ms, bool disable_nx_huge_pages,
->  
->  	vcpu = vm_vcpu_add(vm, 0, guest_code);
->  
-> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
-> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
->  				    HPAGE_GPA, HPAGE_SLOT,
->  				    HPAGE_SLOT_NPAGES, 0);
->  
+-Jeff
 
