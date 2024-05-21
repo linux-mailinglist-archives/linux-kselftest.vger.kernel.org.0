@@ -1,133 +1,166 @@
-Return-Path: <linux-kselftest+bounces-10468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 403AB8CAA57
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 10:49:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 783058CAAA5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 11:21:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71A271C20283
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 08:49:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14FD0B2220E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 09:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFEC4CDE0;
-	Tue, 21 May 2024 08:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E92612EB;
+	Tue, 21 May 2024 09:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/A7fRtY"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="FJekK48L";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="gtLbwtE9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA238DC3;
-	Tue, 21 May 2024 08:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC43456773;
+	Tue, 21 May 2024 09:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716281392; cv=none; b=FFuD1wqeKIRKidG0BA//KPEkFw0Hzryxz52Lg/Iwog5DEDOzsKx5XGO8mT0LTw4XtoYodBBbtZblCTC1RmtkBg8/XBGm6SxW+bMGaMahj36Yt2jYu3ZSNTd2r1FTuKkTs8rAvQ/XYpaDvRaRqB0OsXAIqOGjm6BaW3Skk0QCcUs=
+	t=1716283296; cv=none; b=BKe4LnCZOKjCGfkzOHujbWeaqSLz7HdxkxGc6pidaBMG7W6mTRI3PPWbzye5j0HZc7LsckH3YhQxPkUFlA0qpYm+npBKa06kWDxrb6rntB//FxHk/Gqy0KTDPlkBSdvolnQBYjuDAsNBcd/qlae6SYlleMufrJtXYPJmViAv4yE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716281392; c=relaxed/simple;
-	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qqWd68DH6lHvb9+YUCRLb0Szx/Ifh3oAI4E7SJSsvi3lqgN4Hp/djF7KElQ+DooX+0Et1QP35mp/cX/FZp+/jSHzuQRj3p1Ny/ffbGRh3+x5uUlUPvbHgAZgjLUe727HBpQQYdfjVhbL0UMUfdEZS8kilDDqg0wnxgGkte9n/R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/A7fRtY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95187C2BD11;
-	Tue, 21 May 2024 08:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716281391;
-	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=i/A7fRtYMOtCaMpoCusvfKBxz5VsHDxuwqfTjgYWkNdy2AfBqNJUxVntD60dRm8fG
-	 ySmEAyQMa5Js+1NkqHmasOf6BLrZbsvrnAhS4CEOpKKNdcwl1so8/O4kzf1DiwMA0a
-	 rIu+3pmmuFd4WcAVFQvZxtodvFE6mv/Q6IaezmONpUYu/xKLsDsjV5OmWPpxh9SCtt
-	 GZEAiB4iC9RJyflQpQn6ur3Fwrbb/4DfoW83oZXMwvkkjgiJ35wJGQR07mwmfz2sqf
-	 tspG4Uf6jHGIKOqmYtzlNat027pczO0fLPkqZywKmJp45J/CmTOfHFmA9tl+GTfKYW
-	 aiaR+4ULJJlEg==
-From: Geliang Tang <geliang@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1716283296; c=relaxed/simple;
+	bh=L8uimhUWPGJ0KgFqNtZBzgCwE1GHpNZQQzxQkiu/s8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iOet4Yd6jPua90IeXB0cQLwZjqY2yofAGmFBNV4sYvQs7S5yBlNwCaG0L1enuUzDVbNVz+21IKWbi20SLRs/KlMmP6/zvquDO+kZkgE1zL/fQW7cS7e1U6SmfCHqJv7gexSL+wQSCZEeux74wFB7lOlgA+KLv5AdwJ0dCuwdzeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=FJekK48L; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=gtLbwtE9; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id BAFFF5BFD4;
+	Tue, 21 May 2024 09:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716283292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RZ4Ycnq4O0FTSEXxyM/FN9hxtXkMlycqRzRAQFk7JpY=;
+	b=FJekK48LN8HJZVGjtkX1O8HxoUAslBvUSpjlLDF0K3O/d4dxHKLY4p6wvRRoDVvWhkme7m
+	jkcGKhWTgpBSSYaFUFy2Nx542HB0B7EAgcIwiXwAJq0VOavL/FPMxTuQ8wrHrKzP6OkSwJ
+	2fpRbKlyR8KLzGzw1DXhmOIwc93QG7c=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716283291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RZ4Ycnq4O0FTSEXxyM/FN9hxtXkMlycqRzRAQFk7JpY=;
+	b=gtLbwtE9AF682EdeTUVgQjtZYm8yEWrW72jaD5lqZYaOnunV0DVvRf2IzZFZGPPu7Avm5V
+	Cm+z7F+aEk4jSpCJTu30jomQ4HWXgT120dwOVU5bGtlD4GBhfsF6WUMVtqTcf0PG42pJw2
+	TYq28W+k2BLdii+PetWtWUYbKoE/BQc=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ADB5513A1E;
+	Tue, 21 May 2024 09:21:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 7fc8KptnTGaZYgAAD6G6ig
+	(envelope-from <mkoutny@suse.com>); Tue, 21 May 2024 09:21:31 +0000
+From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To: cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: hsr: Fix "File exists" errors for hsr_ping
-Date: Tue, 21 May 2024 16:49:44 +0800
-Message-ID: <db256340b909f8b6f8bb7f9e42dbe71c228993b6.1716280848.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+Cc: Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v5 0/5] pids controller events rework
+Date: Tue, 21 May 2024 11:21:25 +0200
+Message-ID: <20240521092130.7883-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RL6j1h7wxugqfdyj8pnx7tibp9)];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+This makes pids.events:max affine to pids.max limit.
 
-The hsr_ping test reports the following errors:
+How are the new events supposed to be useful?
 
- INFO: preparing interfaces for HSRv0.
- INFO: Initial validation ping.
- INFO: Longer ping test.
- INFO: Cutting one link.
- INFO: Delay the link and drop a few packages.
- INFO: All good.
- INFO: preparing interfaces for HSRv1.
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- RTNETLINK answers: File exists
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- Error: ipv4: Address already assigned.
- Error: ipv6: address already assigned.
- INFO: Initial validation ping.
+- pids.events.local:max
+  - tells that cgroup's limit is hit (too tight?)
+- pids.events:*
+  - "only" directs top-down search to cgroups of interest
 
-That is because the cleanup code for the 2nd round test before
-"setup_hsr_interfaces 1" is removed incorrectly in commit 680fda4f6714
-("test: hsr: Remove script code already implemented in lib.sh").
+Changes from v4 (https://lore.kernel.org/r/20240416142014.27630-1-mkoutny@suse.com)
+- rebased on cgroup/for-6.10 (rather cgroup/for-next, there's no rush)
+- introduce pids_files_legacy at one place (Tejun)
+- more descriptive Documentation/ (Tejun)
 
-This patch fixes it by adding a new helper delete_hsr_interfaces() to
-delete all interfaces before "setup_hsr_interfaces 1".
+Changes from v3 (https://lore.kernel.org/r/20240405170548.15234-1-mkoutny@suse.com)
+- use existing functions for TAP output in selftest (Muhammad)
+- formatting in selftest (Muhammad)
+- remove pids.events:max.imposed event, keep it internal (Johannes)
+- allow legacy behavior with a mount option
+- detach migration charging patches
+- drop RFC prefix
 
-Fixes: 680fda4f6714 ("test: hsr: Remove script code already implemented in lib.sh")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/net/hsr/hsr_ping.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes from v2 (https://lore.kernel.org/r/20200205134426.10570-1-mkoutny@suse.com)
+- implemented pids.events.local (Tejun)
+- added migration charging
 
-diff --git a/tools/testing/selftests/net/hsr/hsr_ping.sh b/tools/testing/selftests/net/hsr/hsr_ping.sh
-index 790294c8af83..0be1d5f78dab 100755
---- a/tools/testing/selftests/net/hsr/hsr_ping.sh
-+++ b/tools/testing/selftests/net/hsr/hsr_ping.sh
-@@ -166,6 +166,14 @@ setup_hsr_interfaces()
- 	ip -net "$ns3" link set hsr3 up
- }
- 
-+delete_hsr_interfaces()
-+{
-+	echo "INFO: delete interfaces."
-+	ip -net "$ns1" link del ns1eth1
-+	ip -net "$ns1" link del ns1eth2
-+	ip -net "$ns3" link del ns3eth2
-+}
-+
- check_prerequisites
- setup_ns ns1 ns2 ns3
- 
-@@ -174,6 +182,8 @@ trap cleanup_all_ns EXIT
- setup_hsr_interfaces 0
- do_complete_ping_test
- 
-+delete_hsr_interfaces
-+
- setup_hsr_interfaces 1
- do_complete_ping_test
- 
+[1] https://lore.kernel.org/r/20230202155626.1829121-1-hannes@cmpxchg.org/
+
+Michal Koutný (5):
+  cgroup/pids: Separate semantics of pids.events related to pids.max
+  cgroup/pids: Make event counters hierarchical
+  cgroup/pids: Add pids.events.local
+  selftests: cgroup: Lexicographic order in Makefile
+  selftests: cgroup: Add basic tests for pids controller
+
+ Documentation/admin-guide/cgroup-v1/pids.rst |   3 +-
+ Documentation/admin-guide/cgroup-v2.rst      |  21 ++-
+ include/linux/cgroup-defs.h                  |   7 +-
+ kernel/cgroup/cgroup.c                       |  15 +-
+ kernel/cgroup/pids.c                         | 129 +++++++++++---
+ tools/testing/selftests/cgroup/.gitignore    |  11 +-
+ tools/testing/selftests/cgroup/Makefile      |  25 +--
+ tools/testing/selftests/cgroup/test_pids.c   | 178 +++++++++++++++++++
+ 8 files changed, 346 insertions(+), 43 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/test_pids.c
+
+
+base-commit: 21c38a3bd4ee3fb7337d013a638302fb5e5f9dc2
 -- 
-2.43.0
+2.44.0
 
 
