@@ -1,348 +1,213 @@
-Return-Path: <linux-kselftest+bounces-10474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6151C8CAAAD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 11:22:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBDCE8CAAC7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 11:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167602831E1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 09:22:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0903B1C21491
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 09:28:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13EDD6BFA9;
-	Tue, 21 May 2024 09:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11C557CB2;
+	Tue, 21 May 2024 09:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="p5DV15iL";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="p5DV15iL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omHaxv8U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC37355C29;
-	Tue, 21 May 2024 09:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82385478B;
+	Tue, 21 May 2024 09:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716283297; cv=none; b=YygjyYAlTzB+Tz9tAPgiZ8Wjf1hlvHHfqgrU9HHC/d70c1YFOlbvpz8YbMXC7ObXH21sFHVLpiZ213GHTDNODMrcR30Dh516ocFwK20lV0ODsuZkQUl5mN/0tqS/O27bb7vF5wLJsMvI43MzktQ43mC5ZpiiRRx9VzswS2sPFWM=
+	t=1716283709; cv=none; b=YTu23V+IXHYS2JTORSrlSL0D8IXoMwi2KNrwcg/jnZ+2oKrkxh76HtC42jFE/Yy/Yp3RNOMxAT9fYYP5Ucq+EffSxgj0JJlKwMHHdGq6yjFdYE68DMWGa6EvzBgqXbHuudPfznu7T3wmABbqhfY+OtbG6Ih2MGAUBf8nR67WVuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716283297; c=relaxed/simple;
-	bh=4dFrYdcmVtwA9VZJt2v3HgZmwGamkp49n3Wy0o+6jxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iY/hM2a5ZJoXFJNj2hoRp1S0raNPqXvglg5eAPfuFNRwrBH3L/4OuYU0Wydsikqh+tiea0bMgvPreG03vIX8L8E9/3GAKuAmJA6nkQUync/uYMKPs+Q6sck9AbXEMQ42NuvFC7kCyBwRD/JmWRPpdbpwfxRp3J7B0qWBIpNDRio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=p5DV15iL; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=p5DV15iL; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0C0485BFD9;
-	Tue, 21 May 2024 09:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1716283292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X37ZRyOgbOIAdXd7wOkCKb16c9+K3Y5mi/hhGEonRpo=;
-	b=p5DV15iLN5DIJWQ8v6ZWwPalnQDNriEmykiKfpG9rAld0VGRCccuXxPfq5o0Ruf5q7t0gj
-	SmOfUURe7oXNbEHJ8AxR5+07RKO0PSTnuWaIoikj6SklOC95IVKB3sE5pyB+KNUx2J0YN7
-	/o0eORNxm9vTEVFHrJSXlPsVS7U9GWE=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1716283292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X37ZRyOgbOIAdXd7wOkCKb16c9+K3Y5mi/hhGEonRpo=;
-	b=p5DV15iLN5DIJWQ8v6ZWwPalnQDNriEmykiKfpG9rAld0VGRCccuXxPfq5o0Ruf5q7t0gj
-	SmOfUURe7oXNbEHJ8AxR5+07RKO0PSTnuWaIoikj6SklOC95IVKB3sE5pyB+KNUx2J0YN7
-	/o0eORNxm9vTEVFHrJSXlPsVS7U9GWE=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E175B13A7C;
-	Tue, 21 May 2024 09:21:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id oJXtNptnTGaZYgAAD6G6ig
-	(envelope-from <mkoutny@suse.com>); Tue, 21 May 2024 09:21:31 +0000
-From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To: cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v5 5/5] selftests: cgroup: Add basic tests for pids controller
-Date: Tue, 21 May 2024 11:21:30 +0200
-Message-ID: <20240521092130.7883-6-mkoutny@suse.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240521092130.7883-1-mkoutny@suse.com>
-References: <20240521092130.7883-1-mkoutny@suse.com>
+	s=arc-20240116; t=1716283709; c=relaxed/simple;
+	bh=vu4Fr4NnQHtFu5eBOffzT74hbPy+G9MfIqvA0bqoLfU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=b3pKvs+o/bm53gG89RtvzcplkyYW1v156/+GRXD7vNmAby1QRyZSnMRqV/jKWwx7lB5eZrQZHNXzRvzAsdPok5VA3oVIYpR6aLP1xocAfrCkx9fsKdF4lbGdjih+mjRvSNRLRUJ8pW9lNt5VD3g+L6jxt0tUps6k1GZfENCL3GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omHaxv8U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6333FC4AF07;
+	Tue, 21 May 2024 09:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716283709;
+	bh=vu4Fr4NnQHtFu5eBOffzT74hbPy+G9MfIqvA0bqoLfU=;
+	h=Date:Subject:From:To:References:In-Reply-To:From;
+	b=omHaxv8UqD3LFxWqgzUNsyO6tACio0yOaRVMzFye9QZ/qJNp6cNQr0UvJVp/4Avid
+	 6U1H6sZaemnnsr40Pg4Ht3rmux9P4Mzx5l1XI3uLUDAL2jcf8lvdCzgKyaE+vFIf80
+	 qcF4N2wlwKiJzaxB3ZeuolKbTQS4kn3AUXZK7NB+yWRxojT0HV4N/nU0/hYEU7AiNM
+	 ofhCMO74eWNQTnLzekiPXedVkuKXwVRJJboiD3zYbxaxpQAeqi3Hu8Pz6D/6PH4GeR
+	 soTOpWI1wnyHRYvBisDBNRlfq23AHV0FGPmixl5LiKCmfqTHS8O/EMYwf7Q3nGfdPC
+	 Tw7uecJM7mxEg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RL6j1h7wxugqfdyj8pnx7tibp9)];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email]
-X-Spam-Score: -3.30
-X-Spam-Flag: NO
+Date: Tue, 21 May 2024 12:28:22 +0300
+Message-Id: <D1F7SODNAG8W.1OR5BWUWSM4EA@kernel.org>
+Subject: Re: [PATCH 0/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Helen Koike" <helen.koike@collabora.com>, <linuxtv-ci@linuxtv.org>,
+ <dave.pigott@collabora.com>, <mripard@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+ <linux-kselftest@vger.kernel.org>, <gustavo.padovan@collabora.com>,
+ <pawiecz@collabora.com>, <spbnick@gmail.com>, <tales.aparecida@gmail.com>,
+ <workflows@vger.kernel.org>, <kernelci@lists.linux.dev>,
+ <skhan@linuxfoundation.org>, <kunit-dev@googlegroups.com>,
+ <nfraprado@collabora.com>, <davidgow@google.com>, <cocci@inria.fr>,
+ <Julia.Lawall@inria.fr>, <laura.nao@collabora.com>,
+ <ricardo.canuelo@collabora.com>, <kernel@collabora.com>,
+ <torvalds@linuxfoundation.org>, <gregkh@linuxfoundation.org>
+X-Mailer: aerc 0.17.0
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+In-Reply-To: <20240228225527.1052240-1-helen.koike@collabora.com>
 
-This commit adds (and wires in) new test program for checking basic pids
-controller functionality -- restricting tasks in a cgroup and correct
-event counting.
+On Thu Feb 29, 2024 at 12:55 AM EET, Helen Koike wrote:
+> Dear Kernel Community,
+>
+> This patch introduces a `.gitlab-ci` file along with a `ci/` folder, defi=
+ning a
+> basic test pipeline triggered by code pushes to a GitLab-CI instance. Thi=
+s
+> initial version includes static checks (checkpatch and smatch for now) an=
+d build
+> tests across various architectures and configurations. It leverages an
+> integrated cache for efficient build times and introduces a flexible 'sce=
+narios'
+> mechanism for subsystem-specific extensions.
+>
+> tl;dr: check this video to see a quick demo: https://youtu.be/TWiTjhjOuzg=
+,
+> but don't forget to check the "Motivation for this work" below. Your feed=
+back,
+> whether a simple thumbs up or down, is crucial to determine if it is wort=
+hwhile
+> to pursue this initiative.
+>
+> GitLab is an Open Source platform that includes integrated CI/CD. The pip=
+eline
+> provided in this patch is designed to work out-of-the-box with any GitLab
+> instance, including the gitlab.com Free Tier. If you reach the limits of =
+the
+> Free Tier, consider using community instances like https://gitlab.freedes=
+ktop.org/.
+> Alternatively, you can set up a local runner for more flexibility. The
+> bootstrap-gitlab-runner.sh script included with this patch simplifies thi=
+s
+> process, enabling you to run tests on your preferred infrastructure, incl=
+uding
+> your own machine.
+>
+> For detailed information, please refer to the documentation included in t=
+he
+> patch, or check the rendered version here: https://koike.pages.collabora.=
+com/-/linux/-/jobs/298498/artifacts/artifacts/Documentation-output/ci/gitla=
+b-ci/gitlab-ci.html .
+>
+>
+> Motivation for this Work
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> We all know tests are a major topic in the community, so let's mention th=
+e
+> specificities of this approach:
+>
+> 1. **Built-in User Interface:** GitLab CI/CD is growing in popularity and=
+ has an
+> user-friendly interface. Our experience with the upstream DRM-CI in the k=
+ernel
+> tree (see this blog post [https://www.collabora.com/news-and-blog/blog/20=
+24/02/08/drm-ci-a-gitlab-ci-pipeline-for-linux-kernel-testing/] )
+> has provided insights into how such a system can benefit the wider commun=
+ity.
+>
+> 2. **Distributed Infrastructure:**
+> The proposed GitLab-CI pipeline is designed with a distributed infrastruc=
+ture
+> model, being possible to run in any gitlab instance.=20
+>
+> 3. **Reduce regressions:** Fostering a culture where people habitually ru=
+n
+> validated tests and post their results can prevent many issues in post-me=
+rge
+> tests.
+>
+> 4. **Collaborative Testing Environment:** The kernel community is already
+> engaged in numerous testing efforts, including various GitLab-CI pipeline=
+s such
+> as DRM-CI, which I maintain, along with other solutions like KernelCI and
+> BPF-CI. This proposal is designed to further stimulate contributions to t=
+he
+> evolving testing landscape. Our goal is to establish a comprehensive suit=
+e of
+> common tools and files.
+>
+> 5. **Ownership of QA:**=20
+> Discrepancies between kernel code and outdated tests often lead to misatt=
+ributed
+> failures, complicating regression tracking. This issue, often arising fro=
+m
+> neglected or deprioritized test updates, creates uncertainty about the so=
+urce of
+> failures. Adopting an "always green pipeline" approach, as detailed in th=
+is
+> patch's documentation, encourages timely maintenance and validation of te=
+sts.
+> This ensures that testing accurately reflects the current state of the ke=
+rnel,
+> thereby improving the effectiveness of our QA processes.
+>
+> Additionally, if we discover that this method isn't working for us, we ca=
+n
+> easily remove it from the codebase, as it is primarily contained within t=
+he ci/
+> folder.
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- tools/testing/selftests/cgroup/.gitignore  |   1 +
- tools/testing/selftests/cgroup/Makefile    |   2 +
- tools/testing/selftests/cgroup/test_pids.c | 178 +++++++++++++++++++++
- 3 files changed, 181 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_pids.c
+Not to criticize but I can do  tests I ever want with either Github
+or Gitlab simply by bootstrapping BuildRoot on top of whatever the CI
+runner has. So I essentially need just enough deps to make a BR build,
+and that's it. And e.g. could run x86 tests on ARM ISA runner with zero
+issues. And can even have emulated TPM chip in the QEMU VM by building
+swtpm.
 
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index ec635a0ef488..952e4448bf07 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -7,5 +7,6 @@ test_hugetlb_memcg
- test_kill
- test_kmem
- test_memcontrol
-+test_pids
- test_zswap
- wait_inotify
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index b91f60f3402c..1b897152bab6 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -15,6 +15,7 @@ TEST_GEN_PROGS += test_hugetlb_memcg
- TEST_GEN_PROGS += test_kill
- TEST_GEN_PROGS += test_kmem
- TEST_GEN_PROGS += test_memcontrol
-+TEST_GEN_PROGS += test_pids
- TEST_GEN_PROGS += test_zswap
- 
- LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
-@@ -29,4 +30,5 @@ $(OUTPUT)/test_hugetlb_memcg: cgroup_util.c
- $(OUTPUT)/test_kill: cgroup_util.c
- $(OUTPUT)/test_kmem: cgroup_util.c
- $(OUTPUT)/test_memcontrol: cgroup_util.c
-+$(OUTPUT)/test_pids: cgroup_util.c
- $(OUTPUT)/test_zswap: cgroup_util.c
-diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
-new file mode 100644
-index 000000000000..9ecb83c6cc5c
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_pids.c
-@@ -0,0 +1,178 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <linux/limits.h>
-+#include <signal.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+#include "cgroup_util.h"
-+
-+static int run_success(const char *cgroup, void *arg)
-+{
-+	return 0;
-+}
-+
-+static int run_pause(const char *cgroup, void *arg)
-+{
-+	return pause();
-+}
-+
-+/*
-+ * This test checks that pids.max prevents forking new children above the
-+ * specified limit in the cgroup.
-+ */
-+static int test_pids_max(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cg_pids;
-+	int pid;
-+
-+	cg_pids = cg_name(root, "pids_test");
-+	if (!cg_pids)
-+		goto cleanup;
-+
-+	if (cg_create(cg_pids))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_pids, "pids.max", "max\n"))
-+		goto cleanup;
-+
-+	if (cg_write(cg_pids, "pids.max", "2"))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_pids))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(cg_pids, run_pause, NULL);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (cg_run_nowait(cg_pids, run_success, NULL) != -1 || errno != EAGAIN)
-+		goto cleanup;
-+
-+	if (kill(pid, SIGINT))
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	cg_destroy(cg_pids);
-+	free(cg_pids);
-+
-+	return ret;
-+}
-+
-+/*
-+ * This test checks that pids.events are counted in cgroup associated with pids.max
-+ */
-+static int test_pids_events(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cg_parent = NULL, *cg_child = NULL;
-+	int pid;
-+
-+	cg_parent = cg_name(root, "pids_parent");
-+	cg_child = cg_name(cg_parent, "pids_child");
-+	if (!cg_parent || !cg_child)
-+		goto cleanup;
-+
-+	if (cg_create(cg_parent))
-+		goto cleanup;
-+	if (cg_write(cg_parent, "cgroup.subtree_control", "+pids"))
-+		goto cleanup;
-+	if (cg_create(cg_child))
-+		goto cleanup;
-+
-+	if (cg_write(cg_parent, "pids.max", "2"))
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_child, "pids.max", "max\n"))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_child))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(cg_child, run_pause, NULL);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (cg_run_nowait(cg_child, run_success, NULL) != -1 || errno != EAGAIN)
-+		goto cleanup;
-+
-+	if (kill(pid, SIGINT))
-+		goto cleanup;
-+
-+	if (cg_read_key_long(cg_child, "pids.events", "max ") != 0)
-+		goto cleanup;
-+	if (cg_read_key_long(cg_parent, "pids.events", "max ") != 1)
-+		goto cleanup;
-+
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (cg_child)
-+		cg_destroy(cg_child);
-+	if (cg_parent)
-+		cg_destroy(cg_parent);
-+	free(cg_child);
-+	free(cg_parent);
-+
-+	return ret;
-+}
-+
-+
-+
-+#define T(x) { x, #x }
-+struct pids_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+	T(test_pids_max),
-+	T(test_pids_events),
-+};
-+#undef T
-+
-+int main(int argc, char **argv)
-+{
-+	char root[PATH_MAX];
-+
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
-+	if (cg_find_unified_root(root, sizeof(root), NULL))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	/*
-+	 * Check that pids controller is available:
-+	 * pids is listed in cgroup.controllers
-+	 */
-+	if (cg_read_strstr(root, "cgroup.controllers", "pids"))
-+		ksft_exit_skip("pids controller isn't available\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "pids"))
-+		if (cg_write(root, "cgroup.subtree_control", "+pids"))
-+			ksft_exit_skip("Failed to set pids controller\n");
-+
-+	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			break;
-+		default:
-+			ksft_test_result_fail("%s\n", tests[i].name);
-+			break;
-+		}
-+	}
-+
-+	ksft_finished();
-+}
--- 
-2.44.0
+I had this for some time running actually Gitlab runner. It does not
+currently build QEMU but then it also did that:
 
+https://gitlab.com/jarkkojs/linux-tpmdd-test
+
+Essentially just executing this sequence:
+
+git clone https://gitlab.com/jarkkojs/linux-tpmdd-test.git
+cd linux-tpmdd-test
+cmake -Bbuild && make -Cbuild buildroot-prepare
+make -Cbuild/buildroot/build
+build/buildroot/build/images/run-tests.sh
+
+I use TCL's "expect" to make conclusions from the output :-)
+
+I'm assuming that this has a bigger point that I can understand right
+now but makes me a bit puzzled given that it is quite trivial problem
+to my understanding (if you want to pursue to it). Like one work=20
+week maybe but not more than that...
+
+Especially it feels weird that it needs kernel to be patched at all and
+when I did read the motivation but it has sort of whitepaperish stuff
+that does not really explain me the edge of this compared to e.g. to my
+ad-hoc but still very usable solution (which is agnostic to runner's CPU
+architecture, can emulated hardware and works in any possible hosting
+with CI).
+
+So maybe my review comment it this: do not assume that this would be
+entirely new thing. It is not, and I'm sure some other people have
+done this too in the past rather than just me. Instead this should
+explain why this is so great that even kernel tree needs to be patched?
+
+BR, Jarkko
 
