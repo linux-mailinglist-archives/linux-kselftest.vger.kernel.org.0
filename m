@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-10480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 680078CB28B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 18:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 835028CB293
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 19:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE28B1F2236D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 16:56:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 115E91F21AEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 17:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C617580B;
-	Tue, 21 May 2024 16:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC88482D0;
+	Tue, 21 May 2024 17:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lL10cmY/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OFL3511c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5816F7F46C
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 16:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D9822F11;
+	Tue, 21 May 2024 17:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716310604; cv=none; b=Wkoq2xO4k5tYUFgZNvRcANZvm1kKcgDSboDyNRZ15iwoQoOuqwDqEsHR/ggPaeS2XNkAbEHsSDrogp1pwLpQlI2mbEHcDx/4eL0ypV1Dh8iwWMYE7W5Zk/ofBD2sUR7wYagfH7/K2LxxFxjfjtRxO6JLkjVT9Mny2XkO7hZZ7DE=
+	t=1716310945; cv=none; b=nt4gW2p9xKtiOWn2GYVhfC6BOHdcXRBAWcuxcfjnw1b1RvT/VGz/PVVVmodSO+n4OqVa+JHX7ugxTzevkK1mUpdD3sLIcd7BpWi9x+QUtr51MqnX63T3u94M/WGYT1w3W+9ujvD2+Q3wIVpHJJrh1LpDl5/3w0uOhKvh7Ee/JeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716310604; c=relaxed/simple;
-	bh=oB7MzplTbKVCh14+79NAxqy62U4C88ms9HxhSAs6yNM=;
+	s=arc-20240116; t=1716310945; c=relaxed/simple;
+	bh=QfCbhAaXGNQvLQcwCuJ2ZSPbopQAclQR/dAUyXbuIRM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pAy/1y+wL3aVPQtIX37Vgz+1IvTvOF2rzhp5fHNhG9lPkhTveipGgsN6YSzH4R+T3r6bVqoc1kYiUnxpCUVLxO/2XiwdK3zrDqIeRCWlX+EVfYvU1dG1DFR668ZjLr4uh0aOCSJfsWSKQ6wQow+cJMdsL8tfUQ4MwkYOoNtgHPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lL10cmY/; arc=none smtp.client-ip=95.215.58.174
+	 In-Reply-To:Content-Type; b=Nzhw73/79Zo1ln0302neYjLobG45ATI6YRZSeZb3WUKdexjjPSK02IID1jJe9ertsCkh8YWkhLX7+w9PIVjIFnPNcRJRK6LPvoq0O446OfsYlST7JlZpNroc3nD8/9nu3RXV7GWHQwmqWkTvu/vkuy/1SutJI97BsUwGZs8QIeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OFL3511c; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Envelope-To: geliang@kernel.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1716310600;
+	t=1716310940;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NmM/aNE8tI5vtI0prsxo11rjvbiNagTdGhDgFn6+HZg=;
-	b=lL10cmY/pB451EZHvDHXUKYA2iA9dFbwjmkKmeM5+rr6Ul6QtPefxGiWarPRZDpFch+D6c
-	CpEinw+XyjbgzXLpyymFqZPg4jtpvueepC/ddfb1pOLaAGvOf/OQkb9yvRL5zuUKLRngFp
-	QSlB4Xfe+chlWaDNB9iLUgMqz4vRSqM=
+	bh=A373rHP5VMYLT7kGtqmoOMSg6eK0JOW8MjlxgdA1iU0=;
+	b=OFL3511cdqJRB+KvAg7j0gbbm8m1UqFsQ8EJGt30cjsbcDA+pevuuNfkoMGqaExqGBvhvr
+	ichNZGV6Fjc6KOGV8IRdbDiXs5e3TLQ18KatWv31BgAa+G67J2+1qraoEioVQunVRPicCD
+	EZo447xWUV3Q4X0ePJLqRzYCzNsU2Q4=
 X-Envelope-To: andrii@kernel.org
 X-Envelope-To: eddyz87@gmail.com
 X-Envelope-To: mykolal@fb.com
@@ -58,16 +58,16 @@ X-Envelope-To: shuah@kernel.org
 X-Envelope-To: tanggeliang@kylinos.cn
 X-Envelope-To: bpf@vger.kernel.org
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Message-ID: <a4db3afb-4dc6-4aea-8424-a1c9cc9563bf@linux.dev>
-Date: Tue, 21 May 2024 09:56:29 -0700
+Message-ID: <b4a654a3-6078-4aca-98f5-f98bc319240d@linux.dev>
+Date: Tue, 21 May 2024 10:02:14 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: Use post_socket_cb in
- connect_to_fd_opts
+Subject: Re: [PATCH bpf-next v2 2/4] selftests/bpf: Use start_server_addr in
+ bpf_tcp_ca
 To: Geliang Tang <geliang@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
@@ -79,11 +79,11 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <cover.1715745588.git.tanggeliang@kylinos.cn>
- <0de05f2ffdfa4adb832fb87d08e6d1c56bef62b2.1715745588.git.tanggeliang@kylinos.cn>
+ <bc13f05ea454890af39ebefb7231b66b545f0486.1715745588.git.tanggeliang@kylinos.cn>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <0de05f2ffdfa4adb832fb87d08e6d1c56bef62b2.1715745588.git.tanggeliang@kylinos.cn>
+In-Reply-To: <bc13f05ea454890af39ebefb7231b66b545f0486.1715745588.git.tanggeliang@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -91,123 +91,65 @@ X-Migadu-Flow: FLOW_OUT
 On 5/14/24 9:20 PM, Geliang Tang wrote:
 > From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> Since the post_socket_cb() callback is added in struct network_helper_opts,
-> it's make sense to use it not only in __start_server(), but also in
-> connect_to_fd_opts(). Then it can be used to set TCP_CONGESTION sockopt.
+> This patch uses start_server_addr() in do_test() in prog_tests/bpf_tcp_ca.c
+> to accept a struct network_helper_opts argument instead of using
+> start_server() and settcpca(). Then change the type of the first paramenter
+> of do_test() into a struct network_helper_opts one.
 > 
-> Add a post_socket_opts type member cb_opts into struct network_helper_opts,
-> then cc can be moved into struct post_socket_opts from network_helper_opts.
-> Define a new callback cc_cb() to set TCP_CONGESTION sockopt, and set it to
-> post_socket_cb pointer.
+> Define its own opts for each test, set its own cc name into cb_opts.cc, and
+> cc_cb() into post_socket_cb callback, then pass it to do_test().
+> 
+> opts->cb_opts needs to be passed to post_socket_cb() in __start_server().
 > 
 > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
->   tools/testing/selftests/bpf/network_helpers.c       | 5 ++---
->   tools/testing/selftests/bpf/network_helpers.h       | 6 ++++--
->   tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 9 ++++++++-
->   3 files changed, 14 insertions(+), 6 deletions(-)
+>   tools/testing/selftests/bpf/network_helpers.c |  2 +-
+>   .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 52 +++++++++++++++----
+>   2 files changed, 42 insertions(+), 12 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index 35250e6cde7f..d97f8a669b38 100644
+> index d97f8a669b38..6864af665508 100644
 > --- a/tools/testing/selftests/bpf/network_helpers.c
 > +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -338,9 +338,8 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
+> @@ -94,7 +94,7 @@ static int __start_server(int type, const struct sockaddr *addr, socklen_t addrl
 >   	if (settimeo(fd, opts->timeout_ms))
 >   		goto error_close;
 >   
-> -	if (opts->cc && opts->cc[0] &&
-> -	    setsockopt(fd, SOL_TCP, TCP_CONGESTION, opts->cc,
-> -		       strlen(opts->cc) + 1))
-> +	if (opts->post_socket_cb &&
-> +	    opts->post_socket_cb(fd, &opts->cb_opts))
+> -	if (opts->post_socket_cb && opts->post_socket_cb(fd, NULL)) {
+> +	if (opts->post_socket_cb && opts->post_socket_cb(fd, &opts->cb_opts)) {
+>   		log_err("Failed to call post_socket_cb");
 >   		goto error_close;
->   
->   	if (!opts->noconnect)
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index 883c7ea9d8d5..e44a6e5d8344 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -21,16 +21,18 @@ typedef __u16 __sum16;
->   #define VIP_NUM 5
->   #define MAGIC_BYTES 123
->   
-> -struct post_socket_opts {};
-> +struct post_socket_opts {
-> +	const char *cc;
-> +};
-
- From looking its usage in this set, it has cc name and map fd in it. It becomes 
-clear that it is not possible to have one generic/common "struct 
-post_socket_opts" for all tests.
-
->   
->   struct network_helper_opts {
-> -	const char *cc;
->   	int timeout_ms;
->   	bool must_fail;
->   	bool noconnect;
->   	int type;
->   	int proto;
->   	int (*post_socket_cb)(int fd, const struct post_socket_opts *opts);
-> +	struct post_socket_opts cb_opts;
-
-It is better to have the individual test define its own callback opts struct. 
-Something like this:
-
-/* network_helpers.h */
-struct network_helper_opts {
-	/* ... */
-	int (*post_socket_cb)(int fd, void *opts);
-	void *post_socket_opts;
-};
-
-/* bpf_tcp_ca.c */
-struct cb_opts {
-	const char *cc;
-	int map_fd;
-};
-
-struct cb_opts cb_opts = {
-	.cc = "bpf_dctcp",
-	.map_fd = fd,
-};
-
-struct network_helper_opts opts = {
-	.post_socket_cb = stg_post_socket_cb,
-	.post_sock_opts = &cb_opts,
-};
-
-pw-bot: cr
-
->   };
->   
->   /* ipv4 test vector */
+>   	}
 > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-> index 0aca02532794..9bc909fa0833 100644
+> index 9bc909fa0833..25961ce850cb 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-> @@ -81,6 +81,12 @@ static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
->   	close(fd);
+> @@ -34,12 +34,18 @@ static int settcpca(int fd, const char *tcp_ca)
+>   	return 0;
 >   }
 >   
-> +static int cc_cb(int fd, const struct post_socket_opts *opts)
-> +{
-> +	return setsockopt(fd, SOL_TCP, TCP_CONGESTION, opts->cc,
-> +			  strlen(opts->cc) + 1);
-> +}
+> -static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
+> +static void do_test(const struct network_helper_opts *opts,
+> +		    const struct bpf_map *sk_stg_map)
+>   {
+> +	struct sockaddr_storage addr;
+>   	int lfd = -1, fd = -1;
+> +	socklen_t addrlen;
+>   	int err;
+>   
+> -	lfd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
+> +	if (make_sockaddr(AF_INET6, NULL, 0, &addr, &addrlen))
+> +		return;
 > +
->   static void test_cubic(void)
->   {
->   	struct bpf_cubic *cubic_skel;
-> @@ -172,7 +178,8 @@ static void test_dctcp_fallback(void)
->   {
->   	int err, lfd = -1, cli_fd = -1, srv_fd = -1;
->   	struct network_helper_opts opts = {
-> -		.cc = "cubic",
-> +		.cb_opts.cc = "cubic",
-> +		.post_socket_cb = cc_cb,
->   	};
->   	struct bpf_dctcp *dctcp_skel;
->   	struct bpf_link *link = NULL;
+> +	lfd = start_server_addr(SOCK_STREAM, &addr, addrlen, opts);
+
+It is a tech debt that start_server does not take the "opts" argument.
+It is pretty handy to have start_server as a helper that takes string address.
+
+How about create a start_server_str() and start using it in this set. The other 
+existing start_server() usages can be retired later.
+
+int start_server_str(int family, int type, const char *addr, __u16 port,
+		     const struct network_helper_opts *opts);
 
 
