@@ -1,139 +1,133 @@
-Return-Path: <linux-kselftest+bounces-10467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C90908CA979
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 09:59:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 403AB8CAA57
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 10:49:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C69FB2242E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 07:59:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71A271C20283
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2024 08:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549F1548F7;
-	Tue, 21 May 2024 07:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFEC4CDE0;
+	Tue, 21 May 2024 08:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="tRSIHZVI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/A7fRtY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596FB55C35
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 07:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA238DC3;
+	Tue, 21 May 2024 08:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716278311; cv=none; b=E1uvb1UkyC9nhESn78vcNcPGqOb92bmKbEU8fvnYW+3MRIZMCR2BsOp/G/lj4VrSFdnnE4+bCNo1jtHcRCA8znS3P6ngKgx8EWtmM3ZJfh3rJPgKPNwFZPPPxaNIYMHfbaKKS3Wvq69bCgcOesFIPzWGA0HcYVQF2fc2hbUCz8w=
+	t=1716281392; cv=none; b=FFuD1wqeKIRKidG0BA//KPEkFw0Hzryxz52Lg/Iwog5DEDOzsKx5XGO8mT0LTw4XtoYodBBbtZblCTC1RmtkBg8/XBGm6SxW+bMGaMahj36Yt2jYu3ZSNTd2r1FTuKkTs8rAvQ/XYpaDvRaRqB0OsXAIqOGjm6BaW3Skk0QCcUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716278311; c=relaxed/simple;
-	bh=YbW/ijAGccFQlQTqAfJm9lN3VLgscw+sw3OGEMReWk8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JIHMETmBrAWXp1d98i5nuzJtBkrwq7PcxnhXSXLynwjwyeTP4lEX/a2J+MlYmidyEAiDfMKKaxzyJICr4Y1cXYEl5iQx6bsNCU98jtNV6wxNiApLGPFLM6xKP1Pik7EhnjkXT3S1M2jfZ34O7dbPEuGbCibqK58r1vJiNWQi4is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=tRSIHZVI; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-34cb27f1f2dso84966f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 00:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716278307; x=1716883107; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GBb6iShuxHaV7v6bJv2LipIX1/0KjJPEPWALv2DbLcM=;
-        b=tRSIHZVIGlH4zuEM4xjxevPKjIjyEAC7TRQMEzuN/x7oZnnoRXErQdwagNObslHH9Q
-         4o/O20kCD3/rOzIDpSRuQBNHLC6F0eKPsWpJ+j2bkiBL5mY5DtjNMGfrbxOWWUN9J2f9
-         SiK0EvVLTRBDnq8+NF3PKD/iE9F0ztId7AlHJc/k8DbgtdSeAPcYAWvCBR+N4vQirYg9
-         3bQ4Aj19SyPzZo9Rh5lhxH4VhCsCEpv9kCyh985X/wmyy4hXj/tpiBZyu0pQIJShKUQf
-         D2bj4QGrUQzjNCBXlVGxfM7OHMnIIyfaUW9MNRMpvgFuDHLRDQ+eJTqTJAuMS0A2v+Mh
-         /Jrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716278307; x=1716883107;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBb6iShuxHaV7v6bJv2LipIX1/0KjJPEPWALv2DbLcM=;
-        b=sryy4rZcMmqe6Fxts7G6Vy1VRr9etl3HT//IYVq3/J6tM4zwi2BOqMqnbvmQjAxkTS
-         YWk6vG/X3KfRfc9qpaUWHUGgoNqnSEIt0n6RB+Fb/ohEynhNepz12o+rMUHuVb4rHAPk
-         m7Ogxan/VBxkzwJq6/c9RYGMqtPhzKhvY0xvWiIMEdbOugz4Kia+1468K+3ZU0D2g43Y
-         3wnFgFTu6ItqSAyE1uxzjIwdaKWfEL0Uhtl9iTh0Pv56jrxCSVXRaF1KIAlaKWvAg1CJ
-         ZqSjHDK+C666caHNeXukaLUoLAQm7+EFpGE0nXpaEuB8pCWpcr6O4NBbdEjsZmiFWOZC
-         4FTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQleIzRsc7M9p8uvtGoFMRhSpkUPmPomMot1fDEb6yFJgPVLdWC2HCBHH8sWHR644ha5i4H/muscr8iM2iaviKo80cvm9jBrAhDnNv5ysF
-X-Gm-Message-State: AOJu0Yw80l/YNpaPTr7yuFzzjx5IPAwoi2fyP+jvZcMgX5RC7Ax8ys2X
-	HGb47bNbcTslju0R4ZBpx+UlUiTF/gnmzBwVLP5GN5PDWrDSnS5YnpFIOZ/j9cM=
-X-Google-Smtp-Source: AGHT+IHfRRdzTlFAebZ7wRlj20qZMeakja/n64TG1vwKypRDd/Ir6iJk3WrsYiVjjhgxZ9RFdOvn+A==
-X-Received: by 2002:adf:eed1:0:b0:34d:7201:460a with SMTP id ffacd0b85a97d-3504a10f308mr21256806f8f.0.1716278307420;
-        Tue, 21 May 2024 00:58:27 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:813a:5863:97f7:aca7? ([2a01:e0a:999:a3a0:813a:5863:97f7:aca7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502bbbbefdsm31017829f8f.94.2024.05.21.00.58.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 May 2024 00:58:26 -0700 (PDT)
-Message-ID: <6d2eb1ec-010d-4390-a25e-afd2fca0311d@rivosinc.com>
-Date: Tue, 21 May 2024 09:58:25 +0200
+	s=arc-20240116; t=1716281392; c=relaxed/simple;
+	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qqWd68DH6lHvb9+YUCRLb0Szx/Ifh3oAI4E7SJSsvi3lqgN4Hp/djF7KElQ+DooX+0Et1QP35mp/cX/FZp+/jSHzuQRj3p1Ny/ffbGRh3+x5uUlUPvbHgAZgjLUe727HBpQQYdfjVhbL0UMUfdEZS8kilDDqg0wnxgGkte9n/R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/A7fRtY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95187C2BD11;
+	Tue, 21 May 2024 08:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716281391;
+	bh=SFvM+4CQg9OhmwXJvfL6GQph7spU6XveHyFkL8ajJ4o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=i/A7fRtYMOtCaMpoCusvfKBxz5VsHDxuwqfTjgYWkNdy2AfBqNJUxVntD60dRm8fG
+	 ySmEAyQMa5Js+1NkqHmasOf6BLrZbsvrnAhS4CEOpKKNdcwl1so8/O4kzf1DiwMA0a
+	 rIu+3pmmuFd4WcAVFQvZxtodvFE6mv/Q6IaezmONpUYu/xKLsDsjV5OmWPpxh9SCtt
+	 GZEAiB4iC9RJyflQpQn6ur3Fwrbb/4DfoW83oZXMwvkkjgiJ35wJGQR07mwmfz2sqf
+	 tspG4Uf6jHGIKOqmYtzlNat027pczO0fLPkqZywKmJp45J/CmTOfHFmA9tl+GTfKYW
+	 aiaR+4ULJJlEg==
+From: Geliang Tang <geliang@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: hsr: Fix "File exists" errors for hsr_ping
+Date: Tue, 21 May 2024 16:49:44 +0800
+Message-ID: <db256340b909f8b6f8bb7f9e42dbe71c228993b6.1716280848.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/16] riscv: add ISA extensions validation callback
-To: Conor Dooley <conor@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240517145302.971019-1-cleger@rivosinc.com>
- <20240517145302.971019-8-cleger@rivosinc.com>
- <20240517-scrunch-palace-2f83aa8cc3ce@spud>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240517-scrunch-palace-2f83aa8cc3ce@spud>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
+The hsr_ping test reports the following errors:
 
-On 17/05/2024 18:44, Conor Dooley wrote:
-> On Fri, May 17, 2024 at 04:52:47PM +0200, Clément Léger wrote:
->> Since a few extensions (Zicbom/Zicboz) already needs validation and
->> future ones will need it as well (Zc*) add a validate() callback to
->> struct riscv_isa_ext_data. This require to rework the way extensions are
->> parsed and split it in two phases. First phase is isa string or isa
->> extension list parsing and consists in enabling all the extensions in a
->> temporary bitmask (source isa) without any validation. The second step
->> "resolves" the final isa bitmap, handling potential missing dependencies.
->> The mechanism is quite simple and simply validate each extension
->> described in the source bitmap before enabling it in the resolved isa
->> bitmap. validate() callbacks can return either 0 for success,
->> -EPROBEDEFER if extension needs to be validated again at next loop. A
->> previous ISA bitmap is kept to avoid looping multiple times if an
->> extension dependencies are never satisfied until we reach a stable
->> state. In order to avoid any potential infinite looping, allow looping
->> a maximum of the number of extension we handle. Zicboz and Zicbom
->> extensions are modified to use this validation mechanism.
-> 
-> I wish we weren't doin' it at all, but since we have to, I think what
-> you've got here is good.
+ INFO: preparing interfaces for HSRv0.
+ INFO: Initial validation ping.
+ INFO: Longer ping test.
+ INFO: Cutting one link.
+ INFO: Delay the link and drop a few packages.
+ INFO: All good.
+ INFO: preparing interfaces for HSRv1.
+ RTNETLINK answers: File exists
+ RTNETLINK answers: File exists
+ RTNETLINK answers: File exists
+ RTNETLINK answers: File exists
+ RTNETLINK answers: File exists
+ RTNETLINK answers: File exists
+ Error: ipv4: Address already assigned.
+ Error: ipv6: address already assigned.
+ Error: ipv4: Address already assigned.
+ Error: ipv6: address already assigned.
+ Error: ipv4: Address already assigned.
+ Error: ipv6: address already assigned.
+ INFO: Initial validation ping.
 
-Yup, this is what you got with a fast evolving architecture I guess ;)
+That is because the cleanup code for the 2nd round test before
+"setup_hsr_interfaces 1" is removed incorrectly in commit 680fda4f6714
+("test: hsr: Remove script code already implemented in lib.sh").
 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Do you want me to send some patches for the F/V stuff we discussed
-> previously?
+This patch fixes it by adding a new helper delete_hsr_interfaces() to
+delete all interfaces before "setup_hsr_interfaces 1".
 
-Sure go ahead, I did not have anything written yet.
+Fixes: 680fda4f6714 ("test: hsr: Remove script code already implemented in lib.sh")
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/net/hsr/hsr_ping.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thanks,
+diff --git a/tools/testing/selftests/net/hsr/hsr_ping.sh b/tools/testing/selftests/net/hsr/hsr_ping.sh
+index 790294c8af83..0be1d5f78dab 100755
+--- a/tools/testing/selftests/net/hsr/hsr_ping.sh
++++ b/tools/testing/selftests/net/hsr/hsr_ping.sh
+@@ -166,6 +166,14 @@ setup_hsr_interfaces()
+ 	ip -net "$ns3" link set hsr3 up
+ }
+ 
++delete_hsr_interfaces()
++{
++	echo "INFO: delete interfaces."
++	ip -net "$ns1" link del ns1eth1
++	ip -net "$ns1" link del ns1eth2
++	ip -net "$ns3" link del ns3eth2
++}
++
+ check_prerequisites
+ setup_ns ns1 ns2 ns3
+ 
+@@ -174,6 +182,8 @@ trap cleanup_all_ns EXIT
+ setup_hsr_interfaces 0
+ do_complete_ping_test
+ 
++delete_hsr_interfaces
++
+ setup_hsr_interfaces 1
+ do_complete_ping_test
+ 
+-- 
+2.43.0
 
-Clément
-
-> 
-> Cheers,
-> Conor.
 
