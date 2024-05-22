@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B0FD8CB722
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 03:03:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FF78CB727
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 03:03:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D52F2B24826
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 01:03:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83DEFB24B2F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 01:03:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7867057C8E;
-	Wed, 22 May 2024 01:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 493237711C;
+	Wed, 22 May 2024 01:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yyAI8ND/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MC5nN8Yk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1BC52F9B
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2024 01:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE8174BEC
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2024 01:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716339602; cv=none; b=kgekd9/U1NkxUytcQmIdqvN+kphMRkiTgK8cHsGWKPpKBPkfjLA2lA0SvWCOTHnkspI4IGBrQaZUbURUwQmros+WmnTFY4l/1KUW7h0V1efMPQFI5Le+sssYjjxniOTkx1XYWoBk0j2kkXcHE5AfcQg1tQEsjaIhH2f4A1zP7hI=
+	t=1716339605; cv=none; b=lBmOu7Ht+FxeK0wjSDJbfpplKgGWgFHAPv9B/xev1zUj0mvZqxIuv/1fpvipf+v4cLeVku1fm/Vt6VgrDSmK4Fg3YFwbwKhmawh89VBQGwdNoVKqRpg1fxMRZ1m64dr5Vf9DSvSIEqaCZXZyQWKYVSleV4gZ3Rpi3AQT56zVlM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716339602; c=relaxed/simple;
-	bh=ChN28EHAqFl6+8yppbpRlHGVZfo9GWkmbJN43rS0lAg=;
+	s=arc-20240116; t=1716339605; c=relaxed/simple;
+	bh=48j0kBVIuwpXnzwPdE9EQKf+xvifHDss5b365P6opso=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=K2g8Ro/DJm3R0EJd60yXmGoAODVepsxxxdBU4ma/1EHsosxCb3em8wZ6br7+xoHJWRVeYM8ml9uMpNam2LklUE31Hd5YuOYRIriP2K3mM5P+8P9cA1NmIVZaCxVDp2k/M3B3naXp/gwcWXQqbKttki8+vNarOEu95xQz+G8dNn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yyAI8ND/; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=XmXZlZES1Gq3w0zl8fGx9GNwKb033uax5jzMques9r0QX8rgWGKHrV8c5yddUKQUTaPgtrs2EWwc/0NK2xsQV2kXn32SBlMv8VHIZXc5KgbhOsXm8i6pITwAIfnahNehGbIqJQHaQtAYb3qiGYrf7CEOnpfvZ+94vamsPNqo0Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MC5nN8Yk; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1ee2f06e652so141373145ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 18:00:00 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-6f46acb3537so261275b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2024 18:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716339600; x=1716944400; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1716339603; x=1716944403; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fu2STs6PZpOamDjJKGMtZZrD18Ex35OZP78N3HJKaqA=;
-        b=yyAI8ND/mlgq6HuOuftcycS4e/gRhmDPqS3POY6D/xq6C/1vGDMGhsWz8ubwj16uqQ
-         Gy73hkoPNVweFSFJP/AggnPhXypbnERwYA/gngWKNbgCHVYYVznEnJhNttNY+zZNPqQ7
-         dlY3xS01EyU3B5jK7ZNOPpwlzlpHGdOGggja8hiAG6dWeNrh/+jQ5aFTveQYNj2/26ml
-         DoSwQsvAY1GNjkzT00+MQhWkqQw4E690CmByMGrCWWbbKARE95nLioaIw/3BWy+OTAGb
-         tfJ8/jY7VFMYPpIWi1QDrsD+eDmzpc3SVIyl+V0Zd1EBi03Mk1toC1crPobUhOs1mcki
-         VyYQ==
+        bh=Zfexs9UjGmBXqFDc3RmOYfuuIPIjhIku4381mEPxmek=;
+        b=MC5nN8Yk+V1tBtvhXTPyW8RnlD26+YaQu/KDz6C/esic2/eGXIhIoPvgFLTUXs6r/D
+         wabIolgZnXM/5X6tVAsW+oVikpliZf5whLUOnwUM5bsSlUu7PZTYQEOPrr6QDYAateDi
+         nRvGKGUuGrx6BoYGQNwM/bRg+0sA6W/FksH7iYVSn8Dmt5A7A4ZcqXU1HW/oX2V1SacC
+         eUC+OQ4ncDzJpN5N+6hMaiS62s+t0xnasyWi2rSxgNJ5qSeVxQ7AqIApVrES/3V3Q+qg
+         iMKQ4DCCGkYiRbz1LYeQ4AS5nwTJCtLCoMA8A9e9+Yv6JgO9FnwQ02/16O/OsmMqXQvG
+         xp8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716339600; x=1716944400;
+        d=1e100.net; s=20230601; t=1716339603; x=1716944403;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fu2STs6PZpOamDjJKGMtZZrD18Ex35OZP78N3HJKaqA=;
-        b=ZGgLna/lE+5vsN3T8RMaqZD165vwZNwOp6Ftuq9dHsc/EcXtaF03q+ttoBRgJK+7wS
-         vwFdMtieDTlxTZCcpyGRQTXiSvL4oliI24uU/YVJNnpI16EZiTqoPmJX/5xks9vjsauw
-         gcwOZEuH/tWWCtpxHyYIDs9NhLwVbb+YfAAueSYL1LFp86eo1Te1eSO10SQwt9VWUKU0
-         XbWSk7sGDqmJ4aUipsJ/lLmDcMIXRCBH9Ywz5vw0ZKutSwDEHc0IHTbHajdLMN6wC7PM
-         hg9y6lc8yZ++vwCIAe/Pdwm4nDUYEjONhCx8EOPvnEx3lgQ7m/wBH2c15k1bIShqdS0z
-         KKBA==
-X-Forwarded-Encrypted: i=1; AJvYcCXE9jHQQVuiff0FBloQ13+Mv2o7+b5HdYLV3ovD2qtNA7kn8dH4yINCUznhfNlGCnfIkJa7SVMnEb7uTFubSYiwkcGC6TC6M5wYVw2He64n
-X-Gm-Message-State: AOJu0YzO59R187fT5TqfZELpvTp9pBIfUwILGL+YXchKYlWnVu5AdM15
-	5FYpdZ1jdU917FGkqsKqO1NO2iOxCYMBU+fc0UjiYKH+HvdQN7vQB932+xv5Vf2z2nM83nVMmUu
-	pcw==
-X-Google-Smtp-Source: AGHT+IEFjdm+modzHl4cK4pfS9awweB7RmwScYsN5OqiRKiBdxiZrCIPpWs+/7sEWbnGOtixci5Pqw9llow=
+        bh=Zfexs9UjGmBXqFDc3RmOYfuuIPIjhIku4381mEPxmek=;
+        b=U/I9HSpjN4zZrqZIkeZFmdT9TXdc2Rhp1314XGtVmk9VR/NQsRn190bWaaCtyXGZJJ
+         wYCxpolnmE5d3hZgo6NpIdCxwMrH8NDl4dBF6lKucOS/21j4vrNFaiu6IsfmCPfN+ZQo
+         bBvVCWlmChydp32xzw00Xz8mDYwB042twREW+CimWJSKwI0arQA6wrXpRNC/61g5ojre
+         PPaZ7YsZFDu0CDRhVIfjQpHNqaaey7PdPfq87CO8cjm0Fb4nsww34enUFZvWbJKuxKDG
+         3ySpMz8oqIRg2CLkVnaQY9pYVBB/tRrj1RkVdDeAPYKC3Uvc2CDyMjY3AHtJElouQA7o
+         ZiaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW98ccmRCAbWi5UHNjl93rOVggt1pgi3eWG7g3c+zKdlut2UtMxhjDN4V86m6O5ScwCi1yFBg7PmDfX2wU5CJ+PQdfAjT2r5FlSimt98qMT
+X-Gm-Message-State: AOJu0YwqJVZg9AxRHEYSH6QCc3xebOLmXX9aTWbyflaq3xPAsCAhzpT8
+	uUPzUHEoMWv4tgh7QALgtuvnc87w5t/h7t3sOY+2azTQuCnS5wnyry0ItJVTcNJZrtxP4MU05HJ
+	bcw==
+X-Google-Smtp-Source: AGHT+IEPkERz80TavebKf8h6ivCdraONOXoxyZx+85NntRxFKBy5lPixdFq9EghEr+xMMbOlv4i0i8mXE/M=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a17:902:da87:b0:1f3:900:e7f0 with SMTP id
- d9443c01a7336-1f31c9cd3afmr111425ad.9.1716339599938; Tue, 21 May 2024
- 17:59:59 -0700 (PDT)
-Date: Wed, 22 May 2024 00:56:55 +0000
+ (user=edliaw job=sendgmr) by 2002:a05:6a00:8b87:b0:6ea:df4b:86d0 with SMTP id
+ d2e1a72fcca58-6f69fc55137mr43971b3a.2.1716339603118; Tue, 21 May 2024
+ 18:00:03 -0700 (PDT)
+Date: Wed, 22 May 2024 00:56:56 +0000
 In-Reply-To: <20240522005913.3540131-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240522005913.3540131-1-edliaw@google.com>
 X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-Message-ID: <20240522005913.3540131-10-edliaw@google.com>
-Subject: [PATCH v5 09/68] selftests/cgroup: Drop define _GNU_SOURCE
+Message-ID: <20240522005913.3540131-11-edliaw@google.com>
+Subject: [PATCH v5 10/68] selftests/clone3: Drop define _GNU_SOURCE
 From: Edward Liaw <edliaw@google.com>
 To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, 
 	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>, Christian Brauner <brauner@kernel.org>, 
@@ -83,111 +83,90 @@ To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>
 	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Muchun Song <muchun.song@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Yosry Ahmed <yosryahmed@google.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kernel-team@android.com, Edward Liaw <edliaw@google.com>, 
 	linux-security-module@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-mm@kvack.org
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>, Muhammad Usama Anjum <usama.anjum@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 
 _GNU_SOURCE is provided by lib.mk, so it should be dropped to prevent
 redefinition warnings.
 
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- tools/testing/selftests/cgroup/cgroup_util.c        | 3 ---
- tools/testing/selftests/cgroup/test_core.c          | 2 --
- tools/testing/selftests/cgroup/test_cpu.c           | 2 --
- tools/testing/selftests/cgroup/test_hugetlb_memcg.c | 2 --
- tools/testing/selftests/cgroup/test_kmem.c          | 2 --
- tools/testing/selftests/cgroup/test_memcontrol.c    | 2 --
- tools/testing/selftests/cgroup/test_zswap.c         | 2 --
- 7 files changed, 15 deletions(-)
+ tools/testing/selftests/clone3/clone3.c                        | 2 --
+ tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c | 2 --
+ tools/testing/selftests/clone3/clone3_clear_sighand.c          | 2 --
+ tools/testing/selftests/clone3/clone3_selftests.h              | 1 -
+ tools/testing/selftests/clone3/clone3_set_tid.c                | 2 --
+ 5 files changed, 9 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 432db923bced..ce16a50ecff8 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -1,7 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index e61f07973ce5..ce2c149dab46 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -1,8 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+ /* Based on Christian Brauner's clone3() example */
 -
 -#define _GNU_SOURCE
--
  #include <errno.h>
- #include <fcntl.h>
- #include <linux/limits.h>
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index a5672a91d273..de8baad46022 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -1,6 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+ #include <inttypes.h>
+ #include <linux/types.h>
+diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+index 31b56d625655..bb99ea20f7d5 100644
+--- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
++++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+@@ -7,8 +7,6 @@
+  */
+ 
+ /* capabilities related code based on selftests/bpf/test_verifier.c */
 -
 -#define _GNU_SOURCE
- #include <linux/limits.h>
+ #include <errno.h>
+ #include <linux/types.h>
  #include <linux/sched.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index dad2ed82f3ef..5a4a314f6af7 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--
--#define _GNU_SOURCE
- #include <linux/limits.h>
- #include <sys/sysinfo.h>
- #include <sys/wait.h>
-diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-index 856f9508ea56..80d05d50a42d 100644
---- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-+++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#define _GNU_SOURCE
--
- #include <linux/limits.h>
- #include <sys/mman.h>
- #include <stdio.h>
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 96693d8772be..2e453ac50c0d 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#define _GNU_SOURCE
--
- #include <linux/limits.h>
- #include <fcntl.h>
- #include <stdio.h>
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 41ae8047b889..c871630d62a3 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
+index ce0426786828..8ee24da7aea8 100644
+--- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
++++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
 @@ -1,6 +1,4 @@
  /* SPDX-License-Identifier: GPL-2.0 */
--#define _GNU_SOURCE
 -
- #include <linux/limits.h>
- #include <linux/oom.h>
- #include <fcntl.h>
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 190096017f80..cfaa94e0a175 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -1,6 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
 -#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sched.h>
+ #include <signal.h>
+diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
+index 3d2663fe50ba..172e19d5515f 100644
+--- a/tools/testing/selftests/clone3/clone3_selftests.h
++++ b/tools/testing/selftests/clone3/clone3_selftests.h
+@@ -3,7 +3,6 @@
+ #ifndef _CLONE3_SELFTESTS_H
+ #define _CLONE3_SELFTESTS_H
+ 
+-#define _GNU_SOURCE
+ #include <sched.h>
+ #include <linux/sched.h>
+ #include <linux/types.h>
+diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
+index bfb0da2b4fdd..a6df528341bb 100644
+--- a/tools/testing/selftests/clone3/clone3_set_tid.c
++++ b/tools/testing/selftests/clone3/clone3_set_tid.c
+@@ -5,8 +5,6 @@
+  * These tests are assuming to be running in the host's
+  * PID namespace.
+  */
 -
- #include <linux/limits.h>
- #include <unistd.h>
- #include <stdio.h>
+-#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
 -- 
 2.45.1.288.g0e0cd299f1-goog
 
