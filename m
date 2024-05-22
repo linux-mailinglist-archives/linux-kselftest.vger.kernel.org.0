@@ -1,206 +1,89 @@
-Return-Path: <linux-kselftest+bounces-10586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B938CC559
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 19:08:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB7948CC562
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 19:13:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A6B91C21377
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 17:08:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A60A1F22042
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 17:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23431422C8;
-	Wed, 22 May 2024 17:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA5A1422AE;
+	Wed, 22 May 2024 17:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Al5qSITR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UeFxgPqN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440331F17B;
-	Wed, 22 May 2024 17:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D7C762FF;
+	Wed, 22 May 2024 17:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716397671; cv=none; b=OL8GoAoH8KVvJjiZ9gL3LjwEfnfw4t0HK4a+PwM+xDernQq/q/WOS2aodf9OF7acTqRhhOIVP5vnQqbIisb9Kq3AE5pcH2u4F2YQvJn2Pcl1c73/IjRU/NPJy3BczqoWqQ/ExKx4OtngHiZpQrQGiMu9zy0ki/05uiiiK7sMiH0=
+	t=1716398032; cv=none; b=ZJnhnm29EjJS4ub04giVeuC1xYZo9jVd1pEiNVWfH0i8piUii5S2le+NsKsm6Y+IrlcJCMK21QE3YzO5veqEZcSHohR9rBNsE1Omc6lJnUYWzPwFSFiXPRe+hIXUO0Q498Aju8kntYninAUlmBGE+iFgCoANXCxA1MT7tJ535Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716397671; c=relaxed/simple;
-	bh=Q5eimIUAh2hCMIAuK6asuJ6RF1m3Dp6LF57HRl79KzI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dda0wf6AnjUEkaMlkNOFd96HjmVT4q3Z1Al5TBAL5IPTp2Qmw9SF7jg+E4b9xspXOylrtT16RO5D9yMDujCpOxBv/EhupfXz2vQIZ1RP/UP7lCtSsxhzCAib0E3Rblr2MJHV9+efaKXZy0SpP7GDRfAJVZDoEidumsusHcEEzIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Al5qSITR; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716397668;
-	bh=Q5eimIUAh2hCMIAuK6asuJ6RF1m3Dp6LF57HRl79KzI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Al5qSITRus5LO4elT1QOmpA0adoZ7FmZokOzdLcJ2nxwJeh+wY5QbDoYL922by/zM
-	 NLCeEwaMvqozCpO5yEn1UHUoJTtm8yPovJuAcSaClpTd3HN3d7oqO969Lgqp8kVphG
-	 w7CrOWAXhJattII5moPUfnahfF0xKiM1RVlh/vm/87Ke8Z5H2/8sRK4hU+8BConVca
-	 4+bMiKYyInLtx43Hp7HyigTsKAw4snt7Gho8T6b/4ZVV/xev4iYeHp1N9GbiwXXslz
-	 y0D1H2sWzQ0hgtPdTLQkJjex7qaTPxMk7Yy98T7UscCS4U+LuU25lcQ3TtfwALpZLF
-	 R5jSbBmNcKefw==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 37668378216B;
-	Wed, 22 May 2024 17:07:47 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: kernel@collabora.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/thermel/intel: conform the test to TAP output
-Date: Wed, 22 May 2024 10:06:49 -0700
-Message-Id: <20240522170655.2879712-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240522170655.2879712-1-usama.anjum@collabora.com>
-References: <20240522170655.2879712-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1716398032; c=relaxed/simple;
+	bh=60LHAtzrKidGyWFU1huo2XzSzZXTtfyfRyB9guGBkOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cA002To3Muxf6iKI36/DvuoAI3Xtgx6X966Wxs5qOrGw5o5Xc1X6OBcjgTpRmU/XMLWELmOQIRsOKz241ZaFV5B1xOrx0KEC6Eo9RIyyjnRpeu2YeAoLaObxmEmW4K6iPdFZaE8T+UzkpOJXyiVE09IhAzN7lcDi/AGk2mQLqYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UeFxgPqN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E92FC2BBFC;
+	Wed, 22 May 2024 17:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716398031;
+	bh=60LHAtzrKidGyWFU1huo2XzSzZXTtfyfRyB9guGBkOE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UeFxgPqNVyEgTI0XJHmMlqgVNwR2qk549KtkKSQj2xn6VpsjZwqC2Lf+iDGZOM5df
+	 0pIFB6FedIZ/eSAj34yv1Bx+FunjVdU3oXJTN9JCuPirVygCgAdPEBau4VikcgzwOQ
+	 vlGypaEUL6B4MLskgs7u6vTkyDaanEs1bahwrtj9f+XSO7m6MP7DKDlUm+A0438Ht9
+	 2a4kdmt1gQm5HYO3RfBeVkC9R256x/7f0QwJz18xlk3m5e89KQ/35CBOktYzcP1rKi
+	 EodPgwktvtviUOk0lBkjMML7i2DmwbUNREU03/GeffV5q/eqjOx9u6S0Sn1Z0ZUMco
+	 ceoRRyLMbHS3g==
+Date: Wed, 22 May 2024 10:13:49 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Edward Liaw <edliaw@google.com>, shuah@kernel.org, =?UTF-8?B?TWlja2E=?=
+ =?UTF-8?B?w6tsIFNhbGHDvG4=?= <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?=
+ Noack <gnoack@google.com>, Christian Brauner <brauner@kernel.org>, Richard
+ Cochran <richardcochran@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@android.com,
+ linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+ linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v5 00/68] Define _GNU_SOURCE for sources using
+Message-ID: <20240522101349.565a745e@kernel.org>
+In-Reply-To: <6caf3332-9ed9-4257-9532-4fd71c465c0d@linuxfoundation.org>
+References: <20240522005913.3540131-1-edliaw@google.com>
+	<6caf3332-9ed9-4257-9532-4fd71c465c0d@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
+On Wed, 22 May 2024 10:19:33 -0600 Shuah Khan wrote:
+> On 5/21/24 18:56, Edward Liaw wrote:
+> > Centralizes the definition of _GNU_SOURCE into KHDR_INCLUDES and removes
+> > redefinitions of _GNU_SOURCE from source code.
+> > 
+> > 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
+> > asprintf into kselftest_harness.h, which is a GNU extension and needs  
+> 
+> Easier solution to define LINE_MAX locally. In gerenal it is advisable
+> to not add local defines, but it is desirable in some cases to avoid
+> churn like this one.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- .../intel/power_floor/power_floor_test.c      | 68 ++++++++-----------
- 1 file changed, 28 insertions(+), 40 deletions(-)
-
-diff --git a/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c b/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-index 0326b39a11b91..1626c6d92e621 100644
---- a/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-+++ b/tools/testing/selftests/thermal/intel/power_floor/power_floor_test.c
-@@ -9,6 +9,7 @@
- #include <fcntl.h>
- #include <poll.h>
- #include <signal.h>
-+#include "../../../kselftest.h"
- 
- #define POWER_FLOOR_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/power_limits/power_floor_enable"
- #define POWER_FLOOR_STATUS_ATTRIBUTE  "/sys/bus/pci/devices/0000:00:04.0/power_limits/power_floor_status"
-@@ -20,17 +21,13 @@ void power_floor_exit(int signum)
- 	/* Disable feature via sysfs knob */
- 
- 	fd = open(POWER_FLOOR_ENABLE_ATTRIBUTE, O_RDWR);
--	if (fd < 0) {
--		perror("Unable to open power floor enable file\n");
--		exit(1);
--	}
-+	if (fd < 0)
-+		ksft_exit_fail_perror("Unable to open power floor enable file");
- 
--	if (write(fd, "0\n", 2) < 0) {
--		perror("Can' disable power floor notifications\n");
--		exit(1);
--	}
-+	if (write(fd, "0\n", 2) < 0)
-+		ksft_exit_fail_perror("Can' disable power floor notifications");
- 
--	printf("Disabled power floor notifications\n");
-+	ksft_print_msg("Disabled power floor notifications\n");
- 
- 	close(fd);
- }
-@@ -41,6 +38,9 @@ int main(int argc, char **argv)
- 	char status_str[3];
- 	int fd, ret;
- 
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	if (signal(SIGINT, power_floor_exit) == SIG_IGN)
- 		signal(SIGINT, SIG_IGN);
- 	if (signal(SIGHUP, power_floor_exit) == SIG_IGN)
-@@ -50,57 +50,45 @@ int main(int argc, char **argv)
- 
- 	/* Enable feature via sysfs knob */
- 	fd = open(POWER_FLOOR_ENABLE_ATTRIBUTE, O_RDWR);
--	if (fd < 0) {
--		perror("Unable to open power floor enable file\n");
--		exit(1);
--	}
-+	if (fd < 0)
-+		ksft_exit_fail_perror("Unable to open power floor enable file");
- 
--	if (write(fd, "1\n", 2) < 0) {
--		perror("Can' enable power floor notifications\n");
--		exit(1);
--	}
-+	if (write(fd, "1\n", 2) < 0)
-+		ksft_exit_fail_perror("Can' enable power floor notifications");
- 
- 	close(fd);
- 
--	printf("Enabled power floor notifications\n");
-+	ksft_print_msg("Enabled power floor notifications\n");
- 
- 	while (1) {
- 		fd = open(POWER_FLOOR_STATUS_ATTRIBUTE, O_RDONLY);
--		if (fd < 0) {
--			perror("Unable to power floor status file\n");
--			exit(1);
--		}
-+		if (fd < 0)
-+			ksft_exit_fail_perror("Unable to power floor status file");
- 
--		if ((lseek(fd, 0L, SEEK_SET)) < 0) {
--			fprintf(stderr, "Failed to set pointer to beginning\n");
--			exit(1);
--		}
-+		if ((lseek(fd, 0L, SEEK_SET)) < 0)
-+			ksft_exit_fail_perror("Failed to set pointer to beginning\n");
- 
- 		if (read(fd, status_str, sizeof(status_str)) < 0) {
--			fprintf(stderr, "Failed to read from:%s\n",
--			POWER_FLOOR_STATUS_ATTRIBUTE);
--			exit(1);
--		}
-+			ksft_exit_fail_perror(stderr, "Failed to read from: power_floor_status");
- 
- 		ufd.fd = fd;
- 		ufd.events = POLLPRI;
- 
- 		ret = poll(&ufd, 1, -1);
- 		if (ret < 0) {
--			perror("poll error");
--			exit(1);
-+			ksft_exit_fail_msg("Poll error\n");
- 		} else if (ret == 0) {
--			printf("Poll Timeout\n");
-+			ksft_print_msg("Poll Timeout\n");
- 		} else {
--			if ((lseek(fd, 0L, SEEK_SET)) < 0) {
--				fprintf(stderr, "Failed to set pointer to beginning\n");
--				exit(1);
--			}
-+			if ((lseek(fd, 0L, SEEK_SET)) < 0)
-+				ksft_exit_fail_msg("Failed to set pointer to beginning\n");
- 
--			if (read(fd, status_str, sizeof(status_str)) < 0)
--				exit(0);
-+			if (read(fd, status_str, sizeof(status_str)) < 0) {
-+				ksft_test_result_pass("Successfully read\n");
-+				ksft_finished();
-+			}
- 
--			printf("power floor status: %s\n", status_str);
-+			ksft_print_msg("power floor status: %s\n", status_str);
- 		}
- 
- 		close(fd);
--- 
-2.39.2
-
+Will the patch that Andrew applied:
+https://lore.kernel.org/all/20240519213733.2AE81C32781@smtp.kernel.org/
+make its way to Linus? As you say that's a much simpler fix.
 
