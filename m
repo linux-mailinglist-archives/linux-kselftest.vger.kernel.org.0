@@ -1,376 +1,246 @@
-Return-Path: <linux-kselftest+bounces-10584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2F98CC4FB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 18:40:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAFE08CC557
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 19:08:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31791B21258
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 16:40:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33517B225DD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2024 17:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E8814038F;
-	Wed, 22 May 2024 16:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0731422AE;
+	Wed, 22 May 2024 17:07:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="UQrGAa5I"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HBnV2ChT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38DE6AD7
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2024 16:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523431F17B;
+	Wed, 22 May 2024 17:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716396034; cv=none; b=B1TiJKV5eYJ8hENX/WNvL2Eb9oZ8ELmHeYgvIMuLuU5TcpcJf6JIwex83FOs6P6F5ZniqH0PmNMHHU++XM1gjSNHFZU7Ym79INwENXWVyo4fzYKqdxjqGL5BO8rKJko10gCiR49DMn/OQxTlpHyh7QY1In1njSbII+USCiFNaPY=
+	t=1716397666; cv=none; b=otKL69xQy5NdnKNIVakdXpSWy+GJFHmjE90ZLKTFJiz6BUynueVRmxRuQbzx4gf4a/L2mXlols/ebnKNT8tJv981gjc7+4GUr8LRlhDxamg3nzQRvgtQ3GRGDHXEkB2aLKi/Cc0vOxFdU3cr7crtgad3s2l6OEK0arn8MTKlgFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716396034; c=relaxed/simple;
-	bh=AQgUlV9ljyVvTXd6sdYi/VKpv3N6lC3vGB8gSB2bAQI=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=TTFfQvsfxslyEcghrzwwtClMct2vjIOnGxEd7077xhrEAGJoyJ8Y+JZ9frqGRwDq6tP7CPruyDyy5PvGNIW0k1EBaCPtVfMlCzpB3gPFMmq8dgU58EPjaXFfdLYUTSQLBkXNho6AO3QhsPzIJkImWoRa3af1klZ/O4Fovd+Vu5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=UQrGAa5I; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1ee5235f5c9so112575285ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2024 09:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1716396032; x=1717000832; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nh2hEBp7C+i2NTaEC7uyemcMKD8WTFnEb/ThoPY8mY0=;
-        b=UQrGAa5IdsZVSuVDF/zLZn7ozK11aW9vPcyK7GFDQtdJllB5juftSGJfr6OIzRqE4i
-         m1YUfn8x58blCmJZ8ZgB3I6S7h5XhkpisxmHYkGrVcXZK+jo86B8Z/SoYycQ4Hlg7FKQ
-         AtgVg4y76VfwJxEmac1o31cYE3gRAGuhNkQQlp/jBmBjeboCUgE1bo7cqko8q7XdnNQC
-         F4Up2aDTYjFla2T6Za67mqdOQz4uIToIMGK5EcRNJTVc6tP4sgYl0jBXt3tVeME4lSS9
-         TrGXjl0iIAFaHpEqVPUe/q0QMSdWeWBP1mTQR3/fpYO8/kFS/P2wxdomI33pB+2tir9U
-         XbvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716396032; x=1717000832;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nh2hEBp7C+i2NTaEC7uyemcMKD8WTFnEb/ThoPY8mY0=;
-        b=WSkWhUFHDctZ2Ck6VZX11QqPMsPLh5YQM4A9efGhaqekAJ9c6NeJ8xWIzjomNQEtD6
-         pXmL2GXqMA025YVnPZSYsIMpoDMPaiW6vxe2cwbpjwpnbCEuCwyP1HfLcT8jZKslTYV9
-         Ra4gU7yr2PvvT46ap+OmbGdKY/uJ3/ZlZ9A5GXhk662NtsvT1R0UkNW7yog1R2++Sqq1
-         s0IBG5eGRb0wXg4reK0K3Sm+vLaMU3rpm32WBpRxp4Qr01Lymjkx0qqV3/NO86CfURse
-         SBEs0GB6kWKDlUuw6UVe1oXCNOQqH1XZKg7wGF6zM3Bz61bfmidgk5X2hGalr1GkO+HI
-         dXvg==
-X-Forwarded-Encrypted: i=1; AJvYcCV99xslQToR0aqEh0H7fjMFii1331omLXAf6BFq6pwhHLQ2lg6+Nh6llQu+NFCgGHZ+W15bjgUpNuLLaLJReUPNrorisV+bXnGoyz46q9Qd
-X-Gm-Message-State: AOJu0Yzzqeqh807d0nogWp1C9/uk/dP/x0ZI578PyGyty9g9TuUoEZRo
-	S89NVKZVz2XJKeopYTazuiWbuKb/nGQYcRQmX+piB0b0QccZnnR951ZdqzJfNUA=
-X-Google-Smtp-Source: AGHT+IHTgDEZ1Rdi9Tw0QmvSjoSsko/OAJhdhHxBLtqT7rpxgRJiixbvhXF7RsPN5V9wFt21tEw6+Q==
-X-Received: by 2002:a17:902:9895:b0:1f2:efdf:a410 with SMTP id d9443c01a7336-1f31c97be08mr23788185ad.15.1716396031849;
-        Wed, 22 May 2024 09:40:31 -0700 (PDT)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bad7eb8sm241308015ad.90.2024.05.22.09.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 May 2024 09:40:31 -0700 (PDT)
-Date: Wed, 22 May 2024 09:40:31 -0700 (PDT)
-X-Google-Original-Date: Wed, 22 May 2024 09:40:20 PDT (-0700)
-Subject:     Re: [PATCH] riscv: selftests: Add signal handling vector tests
-In-Reply-To: <20240403-vector_sigreturn_tests-v1-1-2e68b7a3b8d7@rivosinc.com>
-CC: shuah@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-  aou@eecs.berkeley.edu, andy.chiu@sifive.com, bjorn@kernel.org, Vineet Gupta <vineetg@rivosinc.com>,
-  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-  Charlie Jenkins <charlie@rivosinc.com>
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Message-ID: <mhng-50849ea8-b103-43af-aef4-073aff99ae61@palmer-ri-x1c9>
+	s=arc-20240116; t=1716397666; c=relaxed/simple;
+	bh=/kt+NqBwmu9PAbUDYn6qhBk39YQggcMNamNlMPFBDJ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ivL1iUTlqYMFURB3AQ1tLqrP9NUnPAeLQ02zT+uLweVbQ0xyZ1okBuQyL7b995YtrlH/xo6Z//7fXg1cy26qo6kIhqfOfvkR0TLY15C1Ab5U/8jCoIxjC3j7h2la5YyTm4rRpTO9mBCiURGwo/7v3bF5hqDlrOWDx6RjvUIq1S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HBnV2ChT; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1716397662;
+	bh=/kt+NqBwmu9PAbUDYn6qhBk39YQggcMNamNlMPFBDJ8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HBnV2ChTSuVUyx1gZvBatJ3jZWQU8fvjLE2KcRbYDhn8hhepV235/Cq8ZYf+3h6QX
+	 mTA/uphi+W1KwQInP/Kf/q/DfuyiuAUk8ujcIjiRT2xVTqfcnqAkcrBMqLjVCpxb8u
+	 4nKXqcm7doHJt6YOaMB7ZSKhd19yFdg/bKk6Z1SeGMC6d8jI2qpNr7wyoRKyVpekMY
+	 afHlWY+lGqgK5rpzQdYuw4YmujEDQSE92aP8c4e5vdNnqYkdC/jEKpn6lLxsIjmxhS
+	 3pA2xoJqWukhfUy2zGxPkVFaqH2qVkVnPaCGZeC///JSG19LHrqkrEotPuOCLuj52q
+	 g/eNV/Ifjortg==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B2A82378216B;
+	Wed, 22 May 2024 17:07:40 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] selftests/thermel/intel: conform the test to TAP output
+Date: Wed, 22 May 2024 10:06:48 -0700
+Message-Id: <20240522170655.2879712-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, 03 Apr 2024 16:50:29 PDT (-0700), Charlie Jenkins wrote:
-> Add two tests to check vector save/restore when a signal is received
-> during a vector routine. One test ensures that a value is not clobbered
-> during signal handling. The other verifies that vector registers
-> modified in the signal handler are properly reflected when the signal
-> handling is complete.
->
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
-> These tests came about to highlight the bug fixed in
-> https://lore.kernel.org/lkml/20240403072638.567446-1-bjorn@kernel.org/
-> and will only pass with that fix applied.
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
 
-Thaks.  I'm just staging this, I have a testcase too that I keep 
-forgetting to post because I haven't gotten in into the selftests sanely 
-yet...
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ .../intel/workload_hint/workload_hint_test.c  | 98 ++++++++-----------
+ 1 file changed, 39 insertions(+), 59 deletions(-)
 
-    #include "../../kselftest.h"
-    #include <signal.h>
-    #include <stdlib.h>
-    #include <asm/ptrace.h>
-    #include <stdint.h>
-    
-    #define ITERATIONS     (1 << 24)
-    #define RISCV_V_MAGIC  0x53465457
-    
-    struct __riscv_ctx_hdr {
-            __u32 magic;
-            __u32 size;
-    };
-    
-    struct __riscv_extra_ext_header {
-            __u32 __padding[129] __attribute__((aligned(16)));
-            /*
-             * Reserved for expansion of sigcontext structure.  Currently zeroed
-             * upon signal, and must be zero upon sigreturn.
-             */
-            __u32 reserved;
-            struct __riscv_ctx_hdr hdr;
-    };
-    
-    
-    struct __riscv_v_ext_state {
-            unsigned long vstart;
-            unsigned long vl;
-            unsigned long vtype;
-            unsigned long vcsr;
-            unsigned long vlenb;
-            void *datap;
-            /*
-             * In signal handler, datap will be set a correct user stack offset
-             * and vector registers will be copied to the address of datap
-             * pointer.
-             */
-    };
-    
-    /* The beginning of the actual state. */
-    int count;
-    
-    void handler(int, siginfo_t *si, void *ucontext_void)
-    {
-    	ucontext_t *ucontext = ucontext_void;
-    
-    	/* Skip over the SEGV by just jumping to a0. */
-    	ucontext->uc_mcontext.__gregs[REG_PC] = ucontext->uc_mcontext.__gregs[REG_A0];
-    
-    	/* Increment the first element of v0. */
-    	{
-    		struct __riscv_extra_ext_header *ext;
-    		struct __riscv_v_ext_state *v_ext_state;
-    		uint32_t val;
-    
-    		/* Find the vector context. */
-    		ext = (void *)(&ucontext->uc_mcontext.__fpregs);
-    		if (ext->hdr.magic != RISCV_V_MAGIC) {
-    			fprintf(stderr, "bad vector magic: %x\n", ext->hdr.magic);
-    			abort();
-    		}
-    
-    		v_ext_state = (void *)((char *)(ext) + sizeof(*ext));
-    
-    		/* Actually do the increment. */
-    		memcpy(&val, v_ext_state->datap, sizeof(val));
-    		val++;
-    		memcpy(v_ext_state->datap, &val, sizeof(val));
-    	}
-    
-    	/* Count the delivered signal, to make sure we don't miss any. */
-    	count++;
-    }
-    
-    void sigill(int, siginfo_t *si, void *ucontext_void)
-    {
-    	fprintf(stderr, "SIGILL after %d iterations\n", count);
-    	abort();
-    }
-    
-    void check_signal(void)
-    {
-    	int check = rand();
-    	int out;
-    
-    	__asm__ volatile (
-    		"vsetvli a0, %2, e32, ta, ma\n\t"
-    		"vmv.s.x v0, %1\n\t"
-    		"la a0, 1f\n\t"
-    		"lw t0, 0(x0)\n\t"
-    		"1:\n\t"
-    		"vmv.x.s %0, v0"
-    		: "=&r"(out)
-    		: "r"(check-1), "r"(1)
-    		: "a0"
-    #ifdef __riscv_vector
-    		  , "v0"
-    #endif
-    	);
-    
-    	if (out != check) {
-    		fprintf(stderr, "out: %d\ncheck: %d\n", out, check);
-    		abort();
-    	}
-    }
-    
-    int main(void)
-    {
-    	struct sigaction sa_segv, sa_ill;
-    
-    	memset(&sa_segv, 0, sizeof(sa_segv));
-    	sa_segv.sa_sigaction = &handler;
-    	sa_segv.sa_flags     = SA_SIGINFO;
-    	sigaction(SIGSEGV, &sa_segv, NULL);
-    
-    	memset(&sa_ill, 0, sizeof(sa_ill));
-    	sa_ill.sa_sigaction = &sigill;
-    	sa_ill.sa_flags     = SA_SIGINFO;
-    	sigaction(SIGILL, &sa_ill, NULL);
-    
-    	count = 0;
-    	for (int i = 0; i < ITERATIONS; ++i)
-    		check_signal();
-    
-    	if (count != ITERATIONS) {
-    		fprintf(stderr, "count: %d\n", count);
-    		abort();
-    	}
-    
-    	return 0;
-    }
+diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+index 217c3a641c537..d107c2d6f3a22 100644
+--- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
++++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+@@ -9,6 +9,7 @@
+ #include <fcntl.h>
+ #include <poll.h>
+ #include <signal.h>
++#include "../../../kselftest.h"
+ 
+ #define WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/notification_delay_ms"
+ #define WORKLOAD_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_hint_enable"
+@@ -31,17 +32,13 @@ void workload_hint_exit(int signum)
+ 	/* Disable feature via sysfs knob */
+ 
+ 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
+-	if (fd < 0) {
+-		perror("Unable to open workload type feature enable file\n");
+-		exit(1);
+-	}
++	if (fd < 0)
++		ksft_exit_fail_perror("Unable to open workload type feature enable file");
+ 
+-	if (write(fd, "0\n", 2) < 0) {
+-		perror("Can' disable workload hints\n");
+-		exit(1);
+-	}
++	if (write(fd, "0\n", 2) < 0)
++		ksft_exit_fail_perror("Can' disable workload hints");
+ 
+-	printf("Disabled workload type prediction\n");
++	ksft_print_msg("Disabled workload type prediction\n");
+ 
+ 	close(fd);
+ }
+@@ -54,32 +51,27 @@ int main(int argc, char **argv)
+ 	char delay_str[64];
+ 	int delay = 0;
+ 
+-	printf("Usage: workload_hint_test [notification delay in milli seconds]\n");
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	ksft_print_msg("Usage: workload_hint_test [notification delay in milli seconds]\n");
+ 
+ 	if (argc > 1) {
+ 		ret = sscanf(argv[1], "%d", &delay);
+-		if (ret < 0) {
+-			printf("Invalid delay\n");
+-			exit(1);
+-		}
++		if (ret < 0)
++			ksft_exit_fail_perror("Invalid delay");
+ 
+-		printf("Setting notification delay to %d ms\n", delay);
++		ksft_print_msg("Setting notification delay to %d ms\n", delay);
+ 		if (delay < 0)
+-			exit(1);
+-
+-		sprintf(delay_str, "%s\n", argv[1]);
++			ksft_exit_fail_msg("delay can never be negative\n");
+ 
+ 		sprintf(delay_str, "%s\n", argv[1]);
+ 		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
+-		if (fd < 0) {
+-			perror("Unable to open workload notification delay\n");
+-			exit(1);
+-		}
++		if (fd < 0)
++			ksft_exit_fail_perror("Unable to open workload notification delay");
+ 
+-		if (write(fd, delay_str, strlen(delay_str)) < 0) {
+-			perror("Can't set delay\n");
+-			exit(1);
+-		}
++		if (write(fd, delay_str, strlen(delay_str)) < 0)
++			ksft_exit_fail_perror("Can't set delay");
+ 
+ 		close(fd);
+ 	}
+@@ -93,63 +85,51 @@ int main(int argc, char **argv)
+ 
+ 	/* Enable feature via sysfs knob */
+ 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
+-	if (fd < 0) {
+-		perror("Unable to open workload type feature enable file\n");
+-		exit(1);
+-	}
++	if (fd < 0)
++		ksft_exit_fail_perror("Unable to open workload type feature enable file");
+ 
+-	if (write(fd, "1\n", 2) < 0) {
+-		perror("Can' enable workload hints\n");
+-		exit(1);
+-	}
++	if (write(fd, "1\n", 2) < 0)
++		ksft_exit_fail_perror("Can' enable workload hints");
+ 
+ 	close(fd);
+ 
+-	printf("Enabled workload type prediction\n");
++	ksft_print_msg("Enabled workload type prediction\n");
+ 
+ 	while (1) {
+ 		fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE, O_RDONLY);
+-		if (fd < 0) {
+-			perror("Unable to open workload type file\n");
+-			exit(1);
+-		}
++		if (fd < 0)
++			ksft_exit_fail_perror("Unable to open workload type file");
+ 
+-		if ((lseek(fd, 0L, SEEK_SET)) < 0) {
+-			fprintf(stderr, "Failed to set pointer to beginning\n");
+-			exit(1);
+-		}
++		if ((lseek(fd, 0L, SEEK_SET)) < 0)
++			ksft_exit_fail_perror("Failed to set pointer to beginning");
+ 
+-		if (read(fd, index_str, sizeof(index_str)) < 0) {
+-			fprintf(stderr, "Failed to read from:%s\n",
+-			WORKLOAD_TYPE_INDEX_ATTRIBUTE);
+-			exit(1);
+-		}
++		if (read(fd, index_str, sizeof(index_str)) < 0)
++			ksft_exit_fail_perror("Failed to read from: workload_type_index");
+ 
+ 		ufd.fd = fd;
+ 		ufd.events = POLLPRI;
+ 
+ 		ret = poll(&ufd, 1, -1);
+ 		if (ret < 0) {
+-			perror("poll error");
+-			exit(1);
++			ksft_exit_fail_perror("poll error");
+ 		} else if (ret == 0) {
+-			printf("Poll Timeout\n");
++			ksft_print_msg("Poll Timeout\n");
+ 		} else {
+-			if ((lseek(fd, 0L, SEEK_SET)) < 0) {
+-				fprintf(stderr, "Failed to set pointer to beginning\n");
+-				exit(1);
+-			}
++			if ((lseek(fd, 0L, SEEK_SET)) < 0)
++				ksft_exit_fail_perror("Failed to set pointer to beginning");
+ 
+-			if (read(fd, index_str, sizeof(index_str)) < 0)
+-				exit(0);
++			if (read(fd, index_str, sizeof(index_str)) < 0) {
++				ksft_test_result_pass("Successfully read\n");
++				ksft_finished();
++			}
+ 
+ 			ret = sscanf(index_str, "%d", &index);
+ 			if (ret < 0)
+ 				break;
+ 			if (index > WORKLOAD_TYPE_MAX_INDEX)
+-				printf("Invalid workload type index\n");
++				ksft_print_msg("Invalid workload type index\n");
+ 			else
+-				printf("workload type:%s\n", workload_types[index]);
++				ksft_print_msg("workload type:%s\n", workload_types[index]);
+ 		}
+ 
+ 		close(fd);
+-- 
+2.39.2
 
-> ---
->  tools/testing/selftests/riscv/Makefile             |  2 +-
->  tools/testing/selftests/riscv/sigreturn/.gitignore |  1 +
->  tools/testing/selftests/riscv/sigreturn/Makefile   | 12 ++++
->  .../testing/selftests/riscv/sigreturn/sigreturn.c  | 82 ++++++++++++++++++++++
->  4 files changed, 96 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> index 4a9ff515a3a0..7ce03d832b64 100644
-> --- a/tools/testing/selftests/riscv/Makefile
-> +++ b/tools/testing/selftests/riscv/Makefile
-> @@ -5,7 +5,7 @@
->  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->
->  ifneq (,$(filter $(ARCH),riscv))
-> -RISCV_SUBTARGETS ?= hwprobe vector mm
-> +RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn
->  else
->  RISCV_SUBTARGETS :=
->  endif
-> diff --git a/tools/testing/selftests/riscv/sigreturn/.gitignore b/tools/testing/selftests/riscv/sigreturn/.gitignore
-> new file mode 100644
-> index 000000000000..35002b8ae780
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/sigreturn/.gitignore
-> @@ -0,0 +1 @@
-> +sigreturn
-> diff --git a/tools/testing/selftests/riscv/sigreturn/Makefile b/tools/testing/selftests/riscv/sigreturn/Makefile
-> new file mode 100644
-> index 000000000000..eb8bac9279a8
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/sigreturn/Makefile
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2021 ARM Limited
-> +# Originally tools/testing/arm64/abi/Makefile
-> +
-> +CFLAGS += -I$(top_srcdir)/tools/include
-> +
-> +TEST_GEN_PROGS := sigreturn
-> +
-> +include ../../lib.mk
-> +
-> +$(OUTPUT)/sigreturn: sigreturn.c
-> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-> new file mode 100644
-> index 000000000000..62397d5934f1
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <signal.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <ucontext.h>
-> +#include <linux/ptrace.h>
-> +#include "../../kselftest_harness.h"
-> +
-> +#define RISCV_V_MAGIC		0x53465457
-> +#define DEFAULT_VALUE		2
-> +#define SIGNAL_HANDLER_OVERRIDE	3
-> +
-> +static void simple_handle(int sig_no, siginfo_t *info, void *vcontext)
-> +{
-> +	ucontext_t *context = vcontext;
-> +
-> +	context->uc_mcontext.__gregs[REG_PC] = context->uc_mcontext.__gregs[REG_PC] + 4;
-> +}
-> +
-> +static void vector_override(int sig_no, siginfo_t *info, void *vcontext)
-> +{
-> +	ucontext_t *context = vcontext;
-> +
-> +	// vector state
-> +	struct __riscv_extra_ext_header *ext;
-> +	struct __riscv_v_ext_state *v_ext_state;
-> +
-> +	/* Find the vector context. */
-> +	ext = (void *)(&context->uc_mcontext.__fpregs);
-> +	if (ext->hdr.magic != RISCV_V_MAGIC) {
-> +		fprintf(stderr, "bad vector magic: %x\n", ext->hdr.magic);
-> +		abort();
-> +	}
-> +
-> +	v_ext_state = (void *)((char *)(ext) + sizeof(*ext));
-> +
-> +	*(int *)v_ext_state->datap = SIGNAL_HANDLER_OVERRIDE;
-> +
-> +	context->uc_mcontext.__gregs[REG_PC] = context->uc_mcontext.__gregs[REG_PC] + 4;
-> +}
-> +
-> +static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
-> +{
-> +	int after_sigreturn;
-> +	struct sigaction sig_action = {
-> +		.sa_sigaction = handler,
-> +		.sa_flags = SA_SIGINFO
-> +	};
-> +
-> +	sigaction(SIGSEGV, &sig_action, 0);
-> +
-> +	asm(".option push				\n\
-> +		.option		arch, +v		\n\
-> +		vsetivli	x0, 1, e32, ta, ma	\n\
-> +		vmv.s.x		v0, %1			\n\
-> +		# Generate SIGSEGV			\n\
-> +		lw		a0, 0(x0)		\n\
-> +		vmv.x.s		%0, v0			\n\
-> +		.option pop" : "=r" (after_sigreturn) : "r" (data));
-> +
-> +	return after_sigreturn;
-> +}
-> +
-> +TEST(vector_restore)
-> +{
-> +	int result;
-> +
-> +	result = vector_sigreturn(DEFAULT_VALUE, &simple_handle);
-> +
-> +	EXPECT_EQ(DEFAULT_VALUE, result);
-> +}
-> +
-> +TEST(vector_restore_signal_handler_override)
-> +{
-> +	int result;
-> +
-> +	result = vector_sigreturn(DEFAULT_VALUE, &vector_override);
-> +
-> +	EXPECT_EQ(SIGNAL_HANDLER_OVERRIDE, result);
-> +}
-> +
-> +TEST_HARNESS_MAIN
->
-> ---
-> base-commit: 4cece764965020c22cff7665b18a012006359095
-> change-id: 20240403-vector_sigreturn_tests-8118f0ac54fa
 
