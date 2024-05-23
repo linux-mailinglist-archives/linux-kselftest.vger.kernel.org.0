@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F3D88CCC80
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B7B38CCC82
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BC20283035
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:51:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBCB4283406
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8CD13C8F4;
-	Thu, 23 May 2024 06:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4F313C901;
+	Thu, 23 May 2024 06:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5JTXCuk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HblURiMY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DF013C8F2;
-	Thu, 23 May 2024 06:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B2413C8F2;
+	Thu, 23 May 2024 06:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716447058; cv=none; b=Oqse2sHhVocI1tJI0JXg8Z/1nbPSC2Mf/B/sSrOELFHPqZAmH3yV/FbIlGhiQcVUamVFOYMaFF5Cu2JXMM75o+qTiS/n2eW6d0Kw02WbiwEsCKDJO4X5o/pFdB4FRUtW7U6H25VndI8D6A4sRJzf9A546jXAPuEvjEXFM3Zz8s0=
+	t=1716447063; cv=none; b=D5X4JS2ubqI3jk/MmRlOFSMJNLWPw+ChM11MWEmaUAwHRB/52Eb1+1BeRNSOWstVMNxvQXiYjo809UtP1Q474TDwOLG9zTbi2y+ltHshsMK5vw0X5eU+IUTnvzZas4J01eQA4Dtcqr0L5vV35o50g4/9CerRVSR4IeYt5Y9kn0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716447058; c=relaxed/simple;
-	bh=icBCMYv8O7EZO08xGmk+z3plQf8DdXeJ7xlVNI+eUg8=;
+	s=arc-20240116; t=1716447063; c=relaxed/simple;
+	bh=0LAI2gSq/78VUmPVnhaSZfCl2xOHD0Zb0z7FrKUwl4s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gItQKgnynlp8Pc5VQu6zCG/GE+aIUqPlEqI75RP+PTXTjHLMaLe7PkAQwiKOk2cAmzGtItrbKzmy9kKT486clcjwK52ERgzr8pijTH5UT3X5CmjdYWINUgpPaVL/5TGthwmMmOo9T4BM7fmivkF/QhmNXNmya4e5V9znHIIZy6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5JTXCuk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EBBC3277B;
-	Thu, 23 May 2024 06:50:51 +0000 (UTC)
+	 MIME-Version; b=VN7T3WwuxTZdjgrsaghRg+qJE0CxGljOFHzYkDrixPeYyBC7F/aqAYEzWw0KqFx4yIXAKDf+ffS3yoM1zgjEzN0yxaszWuVYM7Ek/E4HpZcp5ZB6RatL8TI+/AJLsmvXfQQozNOeTVdntE4JRjC1rPGRPbKS5QBRhWZtm7JIJJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HblURiMY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41950C32782;
+	Thu, 23 May 2024 06:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716447057;
-	bh=icBCMYv8O7EZO08xGmk+z3plQf8DdXeJ7xlVNI+eUg8=;
+	s=k20201202; t=1716447063;
+	bh=0LAI2gSq/78VUmPVnhaSZfCl2xOHD0Zb0z7FrKUwl4s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N5JTXCukGzZwBFu63kpWcjZa9lIhGnvdH6ee7TC/8LFPVu3JMRcm4UpWoJnKgyMK4
-	 yftbDFVUcHAyDeREJwQM5CfdJmE07k9Glf+oqJ2Ckes9uKb22SFI/1ubktHfZQaGwY
-	 HvSe+jCYWSMzbVdCVgiU85dmUDLWYX9LgaUEex7LaBd4hHOLqGvRSW4bCLDiXGPxo4
-	 s3/SHicJCh/VpyqIO2bi+4QkH1kaXXLKHo+y4SEhZoogljXlhNVmBysbjNNIa/QM8i
-	 YIbQvwtPSFi1bE54RNEQg58G87r3plgjNJ+Srtu6wUwJ1CYgfwc2+6d4q4fcJoNBnj
-	 Lfiinq436IS8Q==
+	b=HblURiMYwX88M9GZxVJ+LeazU0EFypTaWEIovopa7SuowVhSo0Ak44JVvQ9FbQxic
+	 RHKVRCmubgmJQsPCpIybr7ytKeURTIRcW82Lq0WH2h2oSdTlcP6SkV4ZCppfrxN8I9
+	 6tJpziAXMy11ynj6nxQI7vL3qqj8x7NaPT9F2AyODbbChWqGkPOxjgxIr8zKOJSlv0
+	 UqsgZNIdYmMHH7esMeHR3IjiYgyphxOyPA3XVV8t3vquIIoQH/OHLWeB1MscSIuXmG
+	 kH4uUhNMQHoHiJPEnXHCENIieLnwdkp3NG9YGfbF/f497auG6KOQgFVwn0pUQDUWfb
+	 gJ2PpXXckWP1w==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 6/8] selftests/bpf: Fix size of map_fd in test_sockmap
-Date: Thu, 23 May 2024 14:50:02 +0800
-Message-ID: <0972529ee01ebf8a8fd2b310bdec90831c94be77.1716446893.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 7/8] selftests/bpf: Check length of recv in test_sockmap
+Date: Thu, 23 May 2024 14:50:03 +0800
+Message-ID: <5172563f7c7b2a2e953cef02e89fc34664a7b190.1716446893.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn>
 References: <cover.1716446893.git.tanggeliang@kylinos.cn>
@@ -76,27 +76,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The array size of map_fd[] is 9, not 8. This patch changes it as a more
-general form: ARRAY_SIZE(map_fd).
+The value of recv in msg_loop may be negative, like EWOULDBLOCK, so it's
+necessary to check if it is positive before accumulating it to bytes_recvd.
 
+Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index e83ca0005721..3654babfac59 100644
+index 3654babfac59..4c7cb206b31d 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -1285,7 +1285,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 			bpf_link__detach(links[i]);
- 	}
+@@ -681,7 +681,8 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+ 				}
+ 			}
  
--	for (i = 0; i < 8; i++) {
-+	for (i = 0; i < ARRAY_SIZE(map_fd); i++) {
- 		key = next_key = 0;
- 		bpf_map_update_elem(map_fd[i], &key, &zero, BPF_ANY);
- 		while (bpf_map_get_next_key(map_fd[i], &key, &next_key) == 0) {
+-			s->bytes_recvd += recv;
++			if (recv > 0)
++				s->bytes_recvd += recv;
+ 
+ 			if (opt->check_recved_len && s->bytes_recvd > total_bytes) {
+ 				errno = EMSGSIZE;
 -- 
 2.43.0
 
