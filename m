@@ -1,136 +1,134 @@
-Return-Path: <linux-kselftest+bounces-10628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10629-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7BD8CD9B4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 20:13:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BEEB8CDA65
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 21:06:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EA2AB22473
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 18:13:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D5841F21CE6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 19:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF9781ABE;
-	Thu, 23 May 2024 18:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE538289E;
+	Thu, 23 May 2024 19:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2X/9CXkz"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SrkRVSXj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C480E76F17
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 18:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6ED82863
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 19:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716488003; cv=none; b=PonAcLL4ZSYW8muFpbO+gpB26NYR9bFFHHvehMzjvJQDsD8cqiAWHhn5cj+WdgbEwc37aUIF54dTju1zhwib1Tzn5LiqCRonB2OS6wtb8KO9GDIQWcA7bS/gteRnqR3Jj8eVaExxydh8bC9+J+48w/h10DpP/muP2jRrmaWowr4=
+	t=1716491200; cv=none; b=ggVvsW0g7tzjn9Jfja/2ND1Q6c6TpYe6xJyGJu0ChRH1GD/uFCoQ/Bgvza76ftiYl4KH8gJEzK/XJ/2mQ+j5z7AaIFEHVXfnu02ZOSPfqNcKUPj/fc9ryzcnD2qsBwGE1EjUDRHbl1Ffs/7Rwq2C0DOeePxq5x3QKMVs3WSXeCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716488003; c=relaxed/simple;
-	bh=zsnTKCdVkvI0k+jxRH2TuSi7PFifNDtiAicq3/1spJA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=grn8uc7HmWb7nxZ3be/Bd3UGXX5pgA40zAJ9iCmf1dCIxbr8HWVWKNtEQ1UUGEngCDGTb6jIBy+auWD/DtGM+Q09scxH4fMfm1LJUiB/hLThbZopBq9pnmvI75ToUMyUZvNhEbw7EbfyDCUgwpwt4MlFGHAimZlZ/dbU43DU8QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2X/9CXkz; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso2364a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 11:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716488000; x=1717092800; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TmV9pjx2Z/cgyKoVK6PJ6k9Fa04AQ2nQf51yC2c36Uc=;
-        b=2X/9CXkzUa2XXZf7Pc6ONJBU1W/rvJ4wSpgHYq2AexrqD9KxQIdkteHQRvbnQ7Nu6i
-         7whqhSAEFey88amyy43L2nGMCCb0zl7EGVf/rhm5gJDBD/dh3BYxadgIe1Aqizu+n8eR
-         tNloqYgm7JQBR/3xPhVDvsIBPrEGgxdT5WXve8uf7mnGdFHCBRwPRG/xj1LdXVzGqImg
-         Nl9fVZJgYUt/kPF/b0R2I6DAMQh6feIwKOe08Y/wIoAnTySIUhOn9JwpKy5kHDhkEahl
-         WEgwfKhhrey4SacY6KSCQ+5jzUB+5lhy68+PkmDMEC/aFnI9Cp8ad69dRLJxTH6ybTeo
-         3r4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716488000; x=1717092800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TmV9pjx2Z/cgyKoVK6PJ6k9Fa04AQ2nQf51yC2c36Uc=;
-        b=I9jVZ5e4uJ+7V/MJ4lU2S3NxZNGJ7B9YHQpExoEbMEVd51Qwg4G3qu/nXFN4LxKHJX
-         ihOWEbeDk1ODDt7M7Sa+w6861CDUhbSMvssQxmwxZvc5XNfUyVkaqYkBCwlm8eMiWMMm
-         ZHvL5TUiKy1vkAMcItsrA64+OEaYlGMbVH1AoYpLty+O1ptsIJpPE8kjW/Auq/xwMmjj
-         8SksuWJi2gqa2f9tq7i2ClMZ1pUxQVd3gj1VOtoPxOQ3i7lhSgePP4WkQOnvf3bHQ1+l
-         1kctevBcihRW5Nekmvbad6MhHb6b+kyUpD9HPhorTiqFlqkGO0ELIiOswBE/k1NUw8qr
-         ndEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIcSzpS1seObkpVmkgf8Kw4oLpZ9oMH/bQN4REnlZ1AqU7eJPz5o/T8AL0H7OSJMoukDeflk8Pcf6rUtLY5Jj3/4q2yTxBU9eOGgnVJujG
-X-Gm-Message-State: AOJu0YywoSLes0l4Pse828IvGF5i26yOwW9iukWLylNfMaHxBsX3+Qgw
-	ws6Cwpf/y81hSyMrgxCcHK8oVeKDrUVS2EHaNrBvpZMUT1JR7EBnVEFlrjoUYl4uqbyQPlRYjIg
-	GsIDzMmjL/2fI6kwX1pYHjTj6zmMOwswl8KaJ
-X-Google-Smtp-Source: AGHT+IH4XyN34wwdQO+LD1omzn19g4Z0hsO4LF5HJg6/COqxImkywXTVpGaksCMO62vMlBB+i2WN/mYDnRwwA5mbJXU=
-X-Received: by 2002:aa7:c941:0:b0:578:33c0:f00e with SMTP id
- 4fb4d7f45d1cf-578510d677dmr19276a12.0.1716487999947; Thu, 23 May 2024
- 11:13:19 -0700 (PDT)
+	s=arc-20240116; t=1716491200; c=relaxed/simple;
+	bh=j3flo5l00FtdW96ZfTYmz3Ii+MzBsr13pNH0ETvfftg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BF0kck7T/U2fl8fWz6JS/Pd0BbRXA6A2O2e3Z3jqI4lVFhT0rslBq/a9Oe2mEFkESXbd4VZx5wUm3lGeXkIzut/2Ef6yRzxXD33MERVpjrPs7soU/o/ZXsDjg6ZgjbhDxi2n9cMzCsOmF9MZagRiolMmv9AfZyUfrqdlEGkH0HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SrkRVSXj; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: geliang@kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716491196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gd8SEEEwJ/GbynmyIxCgVpoqrktcLO7iOrDAG1e0Zeo=;
+	b=SrkRVSXjJYHgDqTioVSSWUFlF0MHU3yIhgHILFvCjuqxE5TaQ6F/snGsR0tPouy+1FX7mc
+	FdcFBlpcTZbW2blsxeHfOjdb1yJCqp+s2eo5L4uMbqH8OWaFrU8Nc4VfssiRZB5CR3pSEh
+	voR08CHyQQwA5anLKsN43C/t3g7b1zk=
+X-Envelope-To: andrii@kernel.org
+X-Envelope-To: eddyz87@gmail.com
+X-Envelope-To: mykolal@fb.com
+X-Envelope-To: ast@kernel.org
+X-Envelope-To: daniel@iogearbox.net
+X-Envelope-To: song@kernel.org
+X-Envelope-To: yonghong.song@linux.dev
+X-Envelope-To: john.fastabend@gmail.com
+X-Envelope-To: kpsingh@kernel.org
+X-Envelope-To: sdf@google.com
+X-Envelope-To: haoluo@google.com
+X-Envelope-To: jolsa@kernel.org
+X-Envelope-To: shuah@kernel.org
+X-Envelope-To: tanggeliang@kylinos.cn
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Message-ID: <5c6beff5-2fb0-489b-917d-688a98f51175@linux.dev>
+Date: Thu, 23 May 2024 12:06:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240522005913.3540131-1-edliaw@google.com> <20240522005913.3540131-3-edliaw@google.com>
- <94b73291-5b8a-480d-942d-cfc72971c2f5@sirena.org.uk> <CAG4es9WAASaSG+Xgp31-kLT3G8wpeT5vAqbCA4r=Z8G_zAF73w@mail.gmail.com>
- <9e2677ec-1d54-4969-907b-112b71ef8dd3@nvidia.com> <d5471e30-227d-4e6d-9bbd-90a74bd9006b@linuxfoundation.org>
-In-Reply-To: <d5471e30-227d-4e6d-9bbd-90a74bd9006b@linuxfoundation.org>
-From: Edward Liaw <edliaw@google.com>
-Date: Thu, 23 May 2024 11:12:52 -0700
-Message-ID: <CAG4es9XU2fMo7hBv81vpn1JGKFWt9gExOhyAyRtOc-5OR5eiLQ@mail.gmail.com>
-Subject: Re: [PATCH v5 02/68] kselftest: Desecalate reporting of missing _GNU_SOURCE
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>, Mark Brown <broonie@kernel.org>, shuah@kernel.org, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kees Cook <keescook@chromium.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@android.com, 
-	linux-security-module@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3 2/8] selftests/bpf: Drop type parameter of
+ start_server_addr
+To: Geliang Tang <geliang@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1716369375.git.tanggeliang@kylinos.cn>
+ <65dd42dd91d678740e9c05e32852f5e01ba2b7bc.1716369375.git.tanggeliang@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <65dd42dd91d678740e9c05e32852f5e01ba2b7bc.1716369375.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, May 23, 2024 at 11:02=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.=
-org> wrote:
->
-> On 5/22/24 20:28, John Hubbard wrote:
-> > On 5/22/24 10:46 AM, Edward Liaw wrote:
-> >> On Wed, May 22, 2024 at 4:21=E2=80=AFAM Mark Brown <broonie@kernel.org=
-> wrote:
-> >>> On Wed, May 22, 2024 at 12:56:48AM +0000, Edward Liaw wrote:
-> > ...
-> >>> You've not provided a Signed-off-by for this so people can't do anyth=
-ing
-> >>> with it, please see Documentation/process/submitting-patches.rst for
-> >>> details on what this is and why it's important.
-> >>
-> >> Sorry, my mistake, I forgot to add it after cherry-picking.  If added
-> >
-> > Adding this to your .gitconfig would cover you for cases like this, I t=
-hink
-> > it's pretty common to do this:
-> >
-> > [format]
-> >      signoff =3D true
-> >
-> >
+On 5/22/24 2:23 AM, Geliang Tang wrote:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> index 0b9bd1d6f7cc..517d1186e386 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> @@ -255,6 +255,9 @@ void test_sk_assign(void)
+>   
+>   	for (i = 0; i < ARRAY_SIZE(tests) && !READ_ONCE(stop); i++) {
+>   		struct test_sk_cfg *test = &tests[i];
+> +		struct network_helper_opts opts = {
+> +			.type = test->type,
 
-Thanks Mark, I'll add that.
+I think dropping the type arg from the start_server_addr (and other existing 
+helpers) is wrong.
 
->
-> Mark, Edward,
->
-> Is this patch still necessary of the series is dropped?
->
-> thanks,
-> -- Shuah
->
+"type" is the common case that tests usually want to specify here (at least 
+between SOCK_STREAM and SOCK_DGRAM). It becomes optional (opts) now and have a 
+more complicated way to pass it to the the start_server_addr, connect_to_addr...etc.
 
-No, it is not necessary anymore.
+imo, the opts.{type, proto, noconnect} is at least a bit non intuitive or 
+unnecessary. The only use case now is in test_bpf_ip_check_defrag_ok which ends 
+up bypassing most (or at least some) of the connect_to_fd_opts() logic. May be 
+that test should have its own connect_to_fd_opts() instead. However, lets leave 
+this potential cleanup out for later and not complicate this set further.
+
+Please keep type as the individual arg to the helper functions.
+
+pw-bot: cr
+
+> +		};
+>   		const struct sockaddr *addr;
+>   		const int zero = 0;
+>   		int err;
+> @@ -263,9 +266,8 @@ void test_sk_assign(void)
+>   			continue;
+>   		prepare_addr(test->addr, test->family, BIND_PORT, false);
+>   		addr = (const struct sockaddr *)test->addr;
+> -		server = start_server_addr(test->type,
+> -					   (const struct sockaddr_storage *)addr,
+> -					   test->len, NULL);
+> +		server = start_server_addr((const struct sockaddr_storage *)addr,
+> +					   test->len, &opts);
+
 
