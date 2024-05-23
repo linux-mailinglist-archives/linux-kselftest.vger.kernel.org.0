@@ -1,223 +1,310 @@
-Return-Path: <linux-kselftest+bounces-10601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D068CCC04
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:03:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B888CCC5E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:40:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C59001C210C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:03:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADF681F22E6A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AEC13B5A1;
-	Thu, 23 May 2024 06:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D878613C672;
+	Thu, 23 May 2024 06:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="Uz2AHfik"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hDXU5vDA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624A913B2B0
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 06:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9B02D05E;
+	Thu, 23 May 2024 06:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716444180; cv=none; b=HSQqXMIUNGOBQx8ngZkTZ5JrLT4IeNJZS13QuZVo0yGfdnQbD7Ud49fysijeqKGkqSy2PwnYKa1i1kxPcBajwgbRZXKJ/puDkfkCAjNw24b6T0YUR76MgXVZMKBYigky7vftIb/EyEsACCLCVubVPPv9u5Hh+hoseDWoZ8L/UvA=
+	t=1716446388; cv=none; b=kb3e7iz4Fqf7XX74vxLO0KXQJvI/jMXFYfjR14xEUSG8z2PmVD1rGdz873IHQJy00p3KBEVaozgw+n5Ysz22Ss1a/6DwCDNX7tHGILrlwvy4qXy5br+m7TkW1lkHKpP4D7yllqiFHx3XjOHzuPR6NZNjtp1erZfoBt2v2h6mIu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716444180; c=relaxed/simple;
-	bh=B9lGrOwbzZ9cwWP1ohGSBcMGMvcXioUh06F1RRqtc5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lmvgtIQz4/pFyljMdOiJ6WHSklZBJ8IdEgoMFyng39MFJfeh8Qxy1/Yk3x1Vquhq9oj2nLgHYZ1XWBdVd8KJMFZrTMrOCPKS4HSw6OTfJLhRpPWqO7rSlP+xaW5ypoODfdc4Ho6stGJBYsgiz4Kx8eqMFYQIRIW9sdXziJ9O0k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=Uz2AHfik; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-36c67760b1aso29953085ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2024 23:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1716444176; x=1717048976; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
-        b=Uz2AHfikahhuUowwWHZ/rUV3mnPgvxCUBUVLy75Ni4QVr3Zm8DMJc7X+YPT/ZlueFf
-         fM09t2fSBt5pPpQRo2M2zZC0pkRmdXI9FCcScF4/EKN/cySBOR/qDzA5ekE4ILkpPwpy
-         5mKNJ6bHDg+TEheZbQ3IkCrHP/NZCEn3hQOxoKAsaSNFqq1PjKOo0dSQD72z4WdrL11T
-         SDuOkvOaGOZFmfxRTdXg/vfbkBY5oBXpiOFGPI2dN03MwRCRVp7zTktF7l5JeFQL9kbh
-         gj4aNjvikrd9qQBAiO+5XOkySFNkgVh2QVR/GkOax5g1Q2KM/PsKBO5u3BVjXDevfa5r
-         Zpcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716444176; x=1717048976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
-        b=FxuTCzO+aw/Wqc5GvIkx+5bN5mxfz9pJUX8JswZRSaQEWk/i6szv07r4U2yqEJdKeI
-         YgTm4MXwGucv08p7ZRt8q5r3w92nKV5q+H4t3A/Ivj3V4VJbyiSkrbLGozV1BRTK1nXm
-         VebgiZkN2Tp/qYBvkeZGZGnIoIVgHcPUwWxUwrGxOkC9W3NWAwXxfHY25DMI+f3DG0pd
-         5vhIOftPTOda+LM/0xNjnOwHJM9CWZjHyLRfdt2sHKpJG3fy5RuYRrzmHqOyBNvrJXnr
-         KucIOiwAh8IVb305xknIV0idu0MKrLH8tn0kleZlpxUvukyOEDMfn1h/CAviBdYFDwlp
-         sErg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbx3bTsBtzBoeUU0hVhxwC4gJD/84gjOMuC5HiRnSygViVI7D2c2rbN3levw0QEO0mvASy0zxDEutlytBYy8mKCwyl+rVId3BbnYqUvfcf
-X-Gm-Message-State: AOJu0Yy1ZIRa2Xz6z4qpA3BBVFL8ZBrOlC45T+QAu5zj4bsZ3NVme+AO
-	sPiV9wEZ3E+yg9rUghHNaQjd16/CDLugOnzZfi8zLy1YQEVcrbG8FKyj9vf53Dg=
-X-Google-Smtp-Source: AGHT+IEHlOqXvdbfYiugVF0TXgIiftVk0fEr87owHTsVUKSpnXRyU8iozPM5JlvqTh0LUpuxvOHGhg==
-X-Received: by 2002:a05:6e02:1447:b0:36c:7f3d:59a with SMTP id e9e14a558f8ab-371f7c80fe6mr48056835ab.4.1716444176327;
-        Wed, 22 May 2024 23:02:56 -0700 (PDT)
-Received: from [192.168.1.16] (174-21-188-197.tukw.qwest.net. [174.21.188.197])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-634117190absm23448503a12.87.2024.05.22.23.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 May 2024 23:02:55 -0700 (PDT)
-Message-ID: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
-Date: Wed, 22 May 2024 23:02:54 -0700
+	s=arc-20240116; t=1716446388; c=relaxed/simple;
+	bh=1SHWak6NpxZvRy4JJY7ngfTdxhrfgQj+uET7woZ0lUM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y8o8Dhg5clCgzv1LhPHrMp1L6Ev3cfkPPtjv0+PHI+kuocyZlOTxW6uU+eRU9TxkP5j+U3vHOxQKB0R6BaFXd31iK6spzfYtGa7CfzATmlXL4XI+/yzTY9B1UI2d08oe6+ITi5pT0sS6Z0GBMwMg2j8pm/EG0YIjNt5db644Yac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hDXU5vDA; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44N6QAUW010835;
+	Thu, 23 May 2024 06:39:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Thk8rNquzcEN0pZulHeg/jOPCh54cDBsgkzDBaidssc=;
+ b=hDXU5vDApGo1eYJiPQrJtS7JssTTZjCq1eKlkRpj/r4lgmFfWveBdzYxCwkmc7sw/hlZ
+ NgTpD+DKBHa53xNQAAF0Ofr7ejiNmWLp3fkkQXVro9G9GZ1foZXsQ8IB94wok2S1RGS8
+ Z4phB8djBAYn/Y+dX3rxfE7KX0DQxuae6J2FUxxwEy8nrq3f3U+o9rvzLfQamcrkuctk
+ /eEV4ZtgWbcSZga3VForJpBSYnHOjlRYyMINRuUfiutKTC9J7V5lYM6v/RVmcF+ABoq4
+ HPTvIt2PxY8HFCHB/syCVPiEG7mwr6tzFD/reuhsILxZseUjIa7FpJWYUZ0sATNj3YSQ ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ya03r03cs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 May 2024 06:39:13 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44N6dC0W002051;
+	Thu, 23 May 2024 06:39:12 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ya03r03cp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 May 2024 06:39:12 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44N6Tecm022086;
+	Thu, 23 May 2024 06:39:11 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y76nu0r1f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 May 2024 06:39:11 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44N6d7QA51315030
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 23 May 2024 06:39:09 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A5C8A20043;
+	Thu, 23 May 2024 06:39:07 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D923A20040;
+	Thu, 23 May 2024 06:39:05 +0000 (GMT)
+Received: from ltczz402-lp1.aus.stglabs.ibm.com (unknown [9.53.171.174])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 23 May 2024 06:39:05 +0000 (GMT)
+From: Donet Tom <donettom@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH] selftest: mm: Test if hugepage does not get leaked during __bio_release_pages()
+Date: Thu, 23 May 2024 01:39:05 -0500
+Message-Id: <20240523063905.3173-1-donettom@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
-Content-Language: en-GB
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-12-almasrymina@google.com>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20240510232128.1105145-12-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: w3bomp1Ygh6fVGcOAxb--U1SDV0WWeHP
+X-Proofpoint-ORIG-GUID: 7yDoZyQskpGg9ex2I-WMIaZwP8-soNWj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-23_03,2024-05-22_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2405230043
 
-On 2024-05-10 16:21, Mina Almasry wrote:
-> +/* On error, returns the -errno. On success, returns number of bytes sent to the
-> + * user. May not consume all of @remaining_len.
-> + */
-> +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
-> +			      unsigned int offset, struct msghdr *msg,
-> +			      int remaining_len)
-> +{
-> +	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
-> +	struct tcp_xa_pool tcp_xa_pool;
-> +	unsigned int start;
-> +	int i, copy, n;
-> +	int sent = 0;
-> +	int err = 0;
-> +
-> +	tcp_xa_pool.max = 0;
-> +	tcp_xa_pool.idx = 0;
-> +	do {
-> +		start = skb_headlen(skb);
-> +
-> +		if (skb_frags_readable(skb)) {
-> +			err = -ENODEV;
-> +			goto out;
-> +		}
-> +
-> +		/* Copy header. */
-> +		copy = start - offset;
-> +		if (copy > 0) {
-> +			copy = min(copy, remaining_len);
-> +
-> +			n = copy_to_iter(skb->data + offset, copy,
-> +					 &msg->msg_iter);
-> +			if (n != copy) {
-> +				err = -EFAULT;
-> +				goto out;
-> +			}
-> +
-> +			offset += copy;
-> +			remaining_len -= copy;
-> +
-> +			/* First a dmabuf_cmsg for # bytes copied to user
-> +			 * buffer.
-> +			 */
-> +			memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
-> +			dmabuf_cmsg.frag_size = copy;
-> +			err = put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEAR,
-> +				       sizeof(dmabuf_cmsg), &dmabuf_cmsg);
-> +			if (err || msg->msg_flags & MSG_CTRUNC) {
-> +				msg->msg_flags &= ~MSG_CTRUNC;
-> +				if (!err)
-> +					err = -ETOOSMALL;
-> +				goto out;
-> +			}
-> +
-> +			sent += copy;
-> +
-> +			if (remaining_len == 0)
-> +				goto out;
-> +		}
-> +
-> +		/* after that, send information of dmabuf pages through a
-> +		 * sequence of cmsg
-> +		 */
-> +		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-> +			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-> +			struct net_iov *niov;
-> +			u64 frag_offset;
-> +			int end;
-> +
-> +			/* !skb_frags_readable() should indicate that ALL the
-> +			 * frags in this skb are dmabuf net_iovs. We're checking
-> +			 * for that flag above, but also check individual frags
-> +			 * here. If the tcp stack is not setting
-> +			 * skb_frags_readable() correctly, we still don't want
-> +			 * to crash here.
-> +			 */
-> +			if (!skb_frag_net_iov(frag)) {
-> +				net_err_ratelimited("Found non-dmabuf skb with net_iov");
-> +				err = -ENODEV;
-> +				goto out;
-> +			}
-> +
-> +			niov = skb_frag_net_iov(frag);
+Commit 1b151e2435fc ("block: Remove special-casing of compound
+pages") caused a change in behaviour when releasing the pages
+if the buffer does not start at the beginning of the page. This
+was because the calculation of the number of pages to release
+was incorrect.
+This was fixed by commit 38b43539d64b ("block: Fix page refcounts
+for unaligned buffers in __bio_release_pages()").
 
-Sorry if we've already discussed this.
+We pin the user buffer during direct I/O writes. If this buffer is a
+hugepage, bio_release_page() will unpin it and decrement all references
+and pin counts at ->bi_end_io. However, if any references to the hugepage
+remain post-I/O, the hugepage will not be freed upon unmap, leading
+to a memory leak.
 
-We have this additional hunk:
+This patch verifies that a hugepage, used as a user buffer for DIO
+operations, is correctly freed upon unmapping, regardless of whether
+the offsets are aligned or unaligned w.r.t page boundary.
 
-+ if (niov->pp->mp_ops != &dmabuf_devmem_ops) {
-+ 	err = -ENODEV;
-+ 	goto out;
-+ }
+Test Result  Fail Scenario (Without the fix)
+--------------------------------------------------------
+[]# ./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 6
+not ok 4 : Huge pages not freed!
+Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-In case one of our skbs end up here, skb_frag_is_net_iov() and
-!skb_frags_readable(). Does this even matter? And if so then is there a
-better way to distinguish between our two types of net_iovs?
+Test Result  PASS Scenario (With the fix)
+---------------------------------------------------------
+[]#./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 4 : Huge pages freed successfully !
+Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+---
+ tools/testing/selftests/mm/Makefile      |   1 +
+ tools/testing/selftests/mm/hugetlb_dio.c | 118 +++++++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/hugetlb_dio.c
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index eb5f39a2668b..87d8130b3376 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -71,6 +71,7 @@ TEST_GEN_FILES += ksm_functional_tests
+ TEST_GEN_FILES += mdwe_test
+ TEST_GEN_FILES += hugetlb_fault_after_madv
+ TEST_GEN_FILES += hugetlb_madv_vs_map
++TEST_GEN_FILES += hugetlb_dio
+ 
+ ifneq ($(ARCH),arm64)
+ TEST_GEN_FILES += soft-dirty
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+new file mode 100644
+index 000000000000..6f6587c7913c
+--- /dev/null
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program tests for hugepage leaks after DIO writes to a file using a
++ * hugepage as the user buffer. During DIO, the user buffer is pinned and
++ * should be properly unpinned upon completion. This patch verifies that the
++ * kernel correctly unpins the buffer at DIO completion for both aligned and
++ * unaligned user buffer offsets (w.r.t page boundary), ensuring the hugepage
++ * is freed upon unmapping.
++ */
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <sys/stat.h>
++#include <stdlib.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <string.h>
++#include <sys/mman.h>
++#include "vm_util.h"
++#include "../kselftest.h"
++
++void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
++{
++	int fd;
++	char *buffer =  NULL;
++	char *orig_buffer = NULL;
++	size_t h_pagesize = 0;
++	size_t writesize;
++	int free_hpage_b = 0;
++	int free_hpage_a = 0;
++
++	writesize = end_off - start_off;
++
++	/* Get the default huge page size */
++	h_pagesize = default_huge_page_size();
++	if (!h_pagesize)
++		ksft_exit_fail_msg("Unable to determine huge page size\n");
++
++	/* Open the file to DIO */
++	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT);
++	if (fd < 0)
++		ksft_exit_fail_msg("Error opening file");
++
++	/* Get the free huge pages before allocation */
++	free_hpage_b = get_free_hugepages();
++	if (free_hpage_b == 0) {
++		close(fd);
++		ksft_exit_skip("No free hugepage, exiting!\n");
++	}
++
++	/* Allocate a hugetlb page */
++	orig_buffer = mmap(NULL, h_pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE
++			| MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
++	if (orig_buffer == MAP_FAILED) {
++		close(fd);
++		ksft_exit_fail_msg("Error mapping memory");
++	}
++	buffer = orig_buffer;
++	buffer += start_off;
++
++	memset(buffer, 'A', writesize);
++
++	/* Write the buffer to the file */
++	if (write(fd, buffer, writesize) != (writesize)) {
++		munmap(orig_buffer, h_pagesize);
++		close(fd);
++		ksft_exit_fail_msg("Error writing to file");
++	}
++
++	/* unmap the huge page */
++	munmap(orig_buffer, h_pagesize);
++	close(fd);
++
++	/* Get the free huge pages after unmap*/
++	free_hpage_a = get_free_hugepages();
++
++	/*
++	 * If the no. of free hugepages before allocation and after unmap does
++	 * not match - that means there could still be a page which is pinned.
++	 */
++	if (free_hpage_a != free_hpage_b) {
++		printf("No. Free pages before allocation : %d\n", free_hpage_b);
++		printf("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_fail(": Huge pages not freed!\n");
++	} else {
++		printf("No. Free pages before allocation : %d\n", free_hpage_b);
++		printf("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_pass(": Huge pages freed successfully !\n");
++	}
++}
++
++int main(void)
++{
++	size_t pagesize = 0;
++
++	ksft_print_header();
++	ksft_set_plan(4);
++
++	/* Get base page size */
++	pagesize  = psize();
++
++	/* start and end is aligned to pagesize */
++	run_dio_using_hugetlb(0, (pagesize * 3));
++
++	/* start is aligned but end is not aligned */
++	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
++
++	/* start is unaligned and end is aligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
++
++	/* both start and end are unaligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
++
++	ksft_finished();
++	return 0;
++}
++
+-- 
+2.39.3
+
 
