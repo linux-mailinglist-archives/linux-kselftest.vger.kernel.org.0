@@ -1,57 +1,59 @@
-Return-Path: <linux-kselftest+bounces-10631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 782A78CDA8A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 21:13:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA2848CDAFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 21:45:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A544C1C216A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 19:13:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B8761F234A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 19:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03D682D68;
-	Thu, 23 May 2024 19:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35F283A08;
+	Thu, 23 May 2024 19:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="0PL4Ar5s"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="STAvvTVz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A40860BBE;
-	Thu, 23 May 2024 19:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CCD5FB9C;
+	Thu, 23 May 2024 19:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716491627; cv=none; b=pUX9NKjImsWhOPKdnsRFQRAuK+IN3rjE4ibdWWUf94HWEjF868NzjHi2AVYJbtbZcsqy6YeIuKrMhx9KJEmvYUbFg8NeAWjope9mG7mSbyJUwcmLTC+pxEtR4VfYZRq9VBEadjOWCD/QP0pzvY2cQIgM22f/tLzPaRK9e+shDq8=
+	t=1716493522; cv=none; b=NbIoT0Z0w2AwesFKsy+62GTO2NWJ/AUXCx5nN3kDAjd+aRnxasC2gYDDVWbyKGq5yxx0D2RNA+jLbVz3skrBtmucU32aQM3iUsvRwBMFyW5M+HVfkQeXEU+QgFrsgS49RE7AWVs0B7Pt3kA3pQzkZz9mI2aUxyLAof+yAmXhQ4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716491627; c=relaxed/simple;
-	bh=+JOFaXZ73U5uGnk9S9gTiM6JcwXiBpR5hDiNMxbHwEs=;
+	s=arc-20240116; t=1716493522; c=relaxed/simple;
+	bh=t0orVRpMQ2TKtiB7VH6XOYM3LYyB2qqnNE9rKqfRp/Y=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=kiiWXtmVbEfkDnGZnCBhiRNLnbEIAFcgIiHuNnN818UXM25cS2ac8L8uUtTnT8LQJUWcwH1n8YDIgqyuPpD6avJUB4U4XZQPEggLiFBy08dxu8EtHxchOERqsH0xEzNaFn4qRococ31rqH66q6E+eJ9DCNnetOhwnjjBikkKdhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=0PL4Ar5s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88791C2BD10;
-	Thu, 23 May 2024 19:13:45 +0000 (UTC)
+	 Mime-Version:Content-Type; b=TRjAQe6/zCOZcHrKdPzut4+Tnc38QApULDg4A8EVChKm8CRMY8qe3DZIrRWtk5IhvGh9yQNt+ochhEo81uI04bUze1MXgAPIqGylJ+DsQ6EAqDVZnO3ZLNnBdNLV9nfeFx65As3gnPt0X4Xk3czPsF/T+2yHHcdrjMfzxv6I9h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=STAvvTVz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7433C2BD10;
+	Thu, 23 May 2024 19:45:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1716491625;
-	bh=+JOFaXZ73U5uGnk9S9gTiM6JcwXiBpR5hDiNMxbHwEs=;
+	s=korg; t=1716493522;
+	bh=t0orVRpMQ2TKtiB7VH6XOYM3LYyB2qqnNE9rKqfRp/Y=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=0PL4Ar5sbdb9hd+8AwsrwqUSMI0PeChmRoviG1HBMJXK22+BmiR2yY5/loVJ7TH86
-	 /kUFqgPLQNauTjDcASYiUW/QhCFYj5Vtngv18YndVjQ85l4RGgnMzIDl4cO9IOgmQo
-	 GwEFRy1I4FOOsvUe0iHS0V+Llx4IUJN1X/03mynw=
-Date: Thu, 23 May 2024 12:13:44 -0700
+	b=STAvvTVzBYeeYtMAR4rcP0Cgi9iM9Rx+w3MaVMYJjlI1iQG2xRjQWByb5+m1YRGu9
+	 W7DZ+g/eSDTYcq4y3JfQ60Ej5nCw+KN20a5eILdppvOw/UNJaiqXvbnIT2j/YqK8Ah
+	 y7X1KdxHtJniVxNxiff7jTO0AI57+Bw1xgJo0oAA=
+Date: Thu, 23 May 2024 12:45:21 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
-To: Donet Tom <donettom@linux.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
- Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Ritesh
- Harjani <ritesh.list@gmail.com>, Mike Rapoport <rppt@kernel.org>, Muchun
- Song <songmuchun@bytedance.com>, David Hildenbrand <david@redhat.com>,
- stable@vger.kernel.org
-Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked
- during __bio_release_pages()
-Message-Id: <20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
-In-Reply-To: <20240523063905.3173-1-donettom@linux.ibm.com>
-References: <20240523063905.3173-1-donettom@linux.ibm.com>
+To: Jeff Xu <jeffxu@google.com>
+Cc: =?UTF-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dmitry.torokhov@gmail.com,
+ dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+ skhan@linuxfoundation.org, keescook@chromium.org
+Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply
+ `MFD_ALLOW_SEALING`
+Message-Id: <20240523124521.99a798d645b0939d331d70c1@linux-foundation.org>
+In-Reply-To: <CALmYWFuLe6RaJkZ4koQpgZR-77b9PP=wooPYN-jFFw1KQ5K3aQ@mail.gmail.com>
+References: <20240513191544.94754-1-pobrn@protonmail.com>
+	<CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
+	<20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
+	<CALmYWFuLe6RaJkZ4koQpgZR-77b9PP=wooPYN-jFFw1KQ5K3aQ@mail.gmail.com>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -62,32 +64,49 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 23 May 2024 01:39:05 -0500 Donet Tom <donettom@linux.ibm.com> wrote:
+On Wed, 22 May 2024 19:32:35 -0700 Jeff Xu <jeffxu@google.com> wrote:
 
-> Commit 1b151e2435fc ("block: Remove special-casing of compound
-> pages") caused a change in behaviour when releasing the pages
-> if the buffer does not start at the beginning of the page. This
-> was because the calculation of the number of pages to release
-> was incorrect.
-> This was fixed by commit 38b43539d64b ("block: Fix page refcounts
-> for unaligned buffers in __bio_release_pages()").
+> >
+> > It's a change to a userspace API, yes?  Please let's have a detailed
+> > description of why this is OK.  Why it won't affect any existing users.
+> >
+> Unfortunately, this is a breaking change that might break a
+> application if they do below:
+> memfd_create("", MFD_NOEXEC_SEAL)
+> fcntl(fd, F_ADD_SEALS, F_SEAL_WRITE); <-- this will fail in new
+> semantics, due to mfd not being sealable.
 > 
-> We pin the user buffer during direct I/O writes. If this buffer is a
-> hugepage, bio_release_page() will unpin it and decrement all references
-> and pin counts at ->bi_end_io. However, if any references to the hugepage
-> remain post-I/O, the hugepage will not be freed upon unmap, leading
-> to a memory leak.
+> However, I still think the new semantics is a better, the reason is
+> due to  the sysctl: memfd_noexec_scope
+> Currently, when the sysctl  is set to MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL
+> kernel adds MFD_NOEXEC_SEAL to memfd_create, and the memfd  becomes sealable.
+> E.g.
+> When the sysctl is set to MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL
+> The app calls memfd_create("",0)
+> application will get sealable memfd, which might be a surprise to application.
 > 
-> This patch verifies that a hugepage, used as a user buffer for DIO
-> operations, is correctly freed upon unmapping, regardless of whether
-> the offsets are aligned or unaligned w.r.t page boundary.
+> If the app doesn't want this behavior, they will need one of two below
+> in current implementation.
+> 1>
+> set the sysctl: memfd_noexec_scope to 0.
+> So the kernel doesn't overwrite the mdmfd_create
 > 
+> 2>
+> modify their code  to get non-sealable NOEXEC memfd.
+> memfd_create("", MEMFD_NOEXEC_SCOPE_NOEXEC)
+> fcntl(fd, F_ADD_SEALS, F_SEAL_SEAL)
+> 
+> The new semantics works better with the sysctl.
+> 
+> Since memfd noexec is new, maybe there is no application using the
+> MFD_NOEXEC_SEAL to create
+> sealable memfd. They mostly likely use
+> memfd(MFD_NOEXEC_SEAL|MFD_ALLOW_SEALING) instead.
+> I think it might benefit in the long term with the new semantics.
 
-You have stable@vger.kernel.org in the mail headers, so I assume you're
-proposing this for backporting.  When doing this, please include 
+Yes, it's new so I expect any damage will be small.  Please prepare a
+v2 which fully explains/justifies the thinking for this
+non-backward-compatible change and which include the cc:stable.
 
-Cc: <stable@vger.kernel.org>
 
-in the changelog footers and also include a Fixes: target.  I'm
-assuming the suitable Fixes: target for this patch is 38b43539d64b?
 
