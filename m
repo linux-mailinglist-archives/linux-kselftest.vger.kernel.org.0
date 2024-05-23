@@ -1,160 +1,193 @@
-Return-Path: <linux-kselftest+bounces-10597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCA708CCAB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 04:25:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC0FC8CCABC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 04:29:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A2D1C2107B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 02:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3433F1F218F3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 02:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A55469D;
-	Thu, 23 May 2024 02:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7326C4C9F;
+	Thu, 23 May 2024 02:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="qr2XdU4C"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="f0ba2GBa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787A14690;
-	Thu, 23 May 2024 02:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716431117; cv=none; b=uN1y0uCX/aFkpMzTFER7C/lkrYsTl2X5NwHGpGEhNzTUkgzOj2aKvzF3zs1Nrzo6DVa5LsFYr2YQbvPsUoVderc3Ts2ZQd1SVNA4Pl74O/AOPCH/S7Ww5Sq1zyg383IgG8Q1zdpc0qgDf45fRY0JRVxSjiV2Qp1ZGczkl+pvWm8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716431117; c=relaxed/simple;
-	bh=O1CV/B9LphTJrxPOucqjkcv56j8RNm7CStUV/UI6DbA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lUe5W7V+77ARU3XMC9ulU8ukl6zOsYHFIzGbYkqnwcYl5MhSrFgZV4Kqu6MqcVMNv9P4T86S20HuoJh+oDoGbXURoxsK/qGOEhrqY8NWFOnUdvsn7eZ454Q5ePruPD71WfBb0fUnhlLNx4kXlerlmgTkZ0idS097yEMQCVrS+i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=qr2XdU4C; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1716431108; x=1716690308;
-	bh=a8pilQrg+0LcR8JZ6a5Lw64IT07R5JeNXi2Sc07VtB4=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=qr2XdU4CmvcjXQ/Ji5hOJs60iVCpZlR9xiT9We0JAy9Yjj+ax6UIfDjmc5aqdhr64
-	 GcXV8qVxcDNxWVu7WdGC3PYOscTDob5nKQz96ufHTs5TEjs+lWwLnbqm7C09QxOgJT
-	 3qaeiW+IYKWObwAMfHomBt7CzbgN0gkztzQrn2sXK9Osb6sSUA4VPAOjkHo9IYy50n
-	 Zz7i0J7hJ8IpzBtkR8E31TpIPqCxfXcDGKvjdv2lYmyMeBLsWc9zErIga3dB3jvyhE
-	 XSRL17heXB/dRmFMqsgsK+HoawKRRi27a7b/YT5qvOuOcXPHbXojWMQIFRxV1DXhkZ
-	 v18zdL41AXivA==
-Date: Thu, 23 May 2024 02:25:04 +0000
-To: Andrew Morton <akpm@linux-foundation.org>
-From: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc: Jeff Xu <jeffxu@google.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org, skhan@linuxfoundation.org, keescook@chromium.org
-Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
-Message-ID: <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
-In-Reply-To: <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
-References: <20240513191544.94754-1-pobrn@protonmail.com> <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com> <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
-Feedback-ID: 20568564:user:proton
-X-Pm-Message-ID: 5f6b9c478d44802fc89ce6227ae33d51f6a60db9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E5D2901;
+	Thu, 23 May 2024 02:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716431349; cv=fail; b=HkxhSNPbc3/QQRim+LPp2t0aQj/Jl7pR1bKk6N6WE2FY65/zh5N0R1cNb2wmsQ0JJJIfwDtPFTAjCBbl3i68B3BpbstTaHFIWHADLjB9yLoBqUgkIXkKDgdJMeDDjcakRh+Kd/V9EWUjkidJyG8sCL2dnAnfNvyPbWJp6yVni64=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716431349; c=relaxed/simple;
+	bh=Kth35OVTQBfcgCEasmGO5GrnJroQ2JUyU/EoeS9XYd8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BENazR7ue4AKFTmDjS7xyeZG2N8relv4uE+5uO7L7ohnah6YKrv7tiQLEdNB/ZeRjbV1X0BqhaARTXT8cALZIkT4TfnPsNYHx/XYEQQ67hrShGR/7tRsZ2BXvRKowygphvFbdwS05+Csbj+gG8UJDI+YjfBeq5v61wfEzOOw4vA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=f0ba2GBa; arc=fail smtp.client-ip=40.107.243.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N9seY1n6WqpV0LecKtPypWVfDUTEJUOfoxJYDZp7xOhl6+YbqAGg8BJTNqFKRV+JrubRNl2F9OJ3eiCCWzucRlCbE5vplfbbEJzvNH+MXoo9iRy/qIC5YpcNvs7f7a8AIp/YxiZTQvChbZTiene+ak13jZd5wjbP7ArhxPZW+7DgskuoKiZs4r4rpEAT/kQk1Us2RJkyvn+jsxSxCp+ZkbxLfBkBz9haJNPn8/nhDn2AP+5V2GKY5P7hWOceN8u/7Nlk1x5H3iPrGXqLhmUOv5aHzdl/+Xe/2D61Zwo6CWZLFSAHUsUBbDEIAoujvIzfphYyLm+QXrmojOAN0nyZXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t5PZteq1ir9VyDK7/kE82+oQab2J/vlu29EWaM/TSUY=;
+ b=Irl2zzGTlHIzoh4QAi/b2gVd7SJkyx41UgGZwnhy3wXjlQU3RLNIjRwBWM9Z3BRULEESKFatxg+RNxVy+p9Bgdj+L+EjlR/llKog7Oe2RK+N15KaOewwPlMEO/rp9vZXHzM541KZhEHOEJ5BYiErmp5A17XoUHOkhHCU5CMUTBN4Zp4xq6oSLmvPI0wOUmq/5oYfEU/62bImftlDP0/F2nK2GKNgyKUP7H0osq2pTYFiLjYr9NjHXG8tV8xMOZ3ubnwhmQPzXdABWuEB8E91HcK+jZ/aqL8hClCgTTAO76dF9E9byqxUtLr10/w1tA/sLHHuloEu8GvBXyZPQNVekw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t5PZteq1ir9VyDK7/kE82+oQab2J/vlu29EWaM/TSUY=;
+ b=f0ba2GBa7wbqnN4qHNDgGwKZsAVfxkX3h2sVkf58OJfudEcXqcGjtA7sQoEBICkNjW9p74IPqcsKTY6GFxXJGk2mpla66JpBKgxOEKmplfl3euHDkZCD9X2OR6TkePqQ+WWVHFySARzb8cOu1l4f3fhxD+3FN4aPRoKt1X0YBh/5hhpfHMOIw5/TcT8fRf1f/9rKPwqxhwAGFM9Z097tPtTTqaonmuUKgtmPVbPYFIYLDbF6JeB7DEYirgcaIcfnAZj5af5iTeErOYKhSgc3ImblDWvjj6211VWtuulOWNe5tFlAf7iTPJHbLsaJAnZo/TgE4sLVt+yDcL7u/7LqBA==
+Received: from DM6PR06CA0020.namprd06.prod.outlook.com (2603:10b6:5:120::33)
+ by SJ1PR12MB6220.namprd12.prod.outlook.com (2603:10b6:a03:455::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36; Thu, 23 May
+ 2024 02:29:04 +0000
+Received: from DS1PEPF00017097.namprd05.prod.outlook.com
+ (2603:10b6:5:120:cafe::e2) by DM6PR06CA0020.outlook.office365.com
+ (2603:10b6:5:120::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.19 via Frontend
+ Transport; Thu, 23 May 2024 02:29:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF00017097.mail.protection.outlook.com (10.167.18.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7611.14 via Frontend Transport; Thu, 23 May 2024 02:29:04 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 22 May
+ 2024 19:28:50 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 22 May
+ 2024 19:28:49 -0700
+Message-ID: <9e2677ec-1d54-4969-907b-112b71ef8dd3@nvidia.com>
+Date: Wed, 22 May 2024 19:28:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 02/68] kselftest: Desecalate reporting of missing
+ _GNU_SOURCE
+To: Edward Liaw <edliaw@google.com>, Mark Brown <broonie@kernel.org>
+CC: <shuah@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+	<mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+	Christian Brauner <brauner@kernel.org>, Richard Cochran
+	<richardcochran@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, "Palmer
+ Dabbelt" <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David
+ S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, "Jesper
+ Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Kees Cook <keescook@chromium.org>, Andy
+ Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<kernel-team@android.com>, <linux-security-module@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<bpf@vger.kernel.org>
+References: <20240522005913.3540131-1-edliaw@google.com>
+ <20240522005913.3540131-3-edliaw@google.com>
+ <94b73291-5b8a-480d-942d-cfc72971c2f5@sirena.org.uk>
+ <CAG4es9WAASaSG+Xgp31-kLT3G8wpeT5vAqbCA4r=Z8G_zAF73w@mail.gmail.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CAG4es9WAASaSG+Xgp31-kLT3G8wpeT5vAqbCA4r=Z8G_zAF73w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017097:EE_|SJ1PR12MB6220:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3aceb185-6cf6-42d0-9f33-08dc7ad01d6d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|7416005|1800799015|82310400017|36860700004|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?czJPOHNDanBmT0FVVFNaVzlTdnpIVmVGcUpqcHYyY2I1SDh3MVU0U2piRnZM?=
+ =?utf-8?B?SGNyWDNLRW9BUHc5UUdpZVExaTZVcmE3emlxS0c4N1gvWWozNmlMUEZmWWhl?=
+ =?utf-8?B?S25MaHVFcDVnRGpXODhqT3YvdWFkL2V1Wktaaml3T3RZcUhpWitaTjAzdTJB?=
+ =?utf-8?B?QVhMN211L0lneTUzSk92RnRIYkFOczRra3l5SWJaRkVtdDVBbUU2TDIwVDIr?=
+ =?utf-8?B?ZFlwcXBEVWxtUDY5NWthRHVnT2ErN3ZYb01UY0wvS0JHS084ZlBwcWw2SU9u?=
+ =?utf-8?B?MEhZRkZvTmpRcm93ZU9DOHk4NmJGOHJlekJ6T0k5cEh5TUpMZTdxQkhHV3I3?=
+ =?utf-8?B?aG9HYVpzOGd0YnhDQzBTSWVPaG10Rkl2clR4QVRoU05CSVR5ZmljV1FRY1NF?=
+ =?utf-8?B?TFZwckRyUGpHYXcrakJibVlZbjkvSElhdkJtMy9JSmdSdFRhWjNab0VyWUVz?=
+ =?utf-8?B?Vnd1QUkxL2RJR0dwWVJxT0dCbXFGZHhDS2M5UDZYdXp3U0FOTjN3alk5bWJ0?=
+ =?utf-8?B?c2xNZVEvRUp5N1dYVDlDcXpHMGthTWhobWsvTTh5MU5QN2dYOW1ZS0lMcFY2?=
+ =?utf-8?B?TGFNMk9Pd2tjRzJGZ3plMDFlcDV2eUNiZXg0b3NERjltYkM0TDBuMG9OQXZq?=
+ =?utf-8?B?Y1RKU0JhanorVmRvVHlJNUVVeU4xNXVmcE9yT0ZPMlE5UlJKOUYrK3h4ODVv?=
+ =?utf-8?B?RDllVG9uMCtUNDBGU1I3SWI3RTkyMmdBWkRZQmVDbFFSZXRNczZwcmViQUtQ?=
+ =?utf-8?B?VUl1T3dVK2ZuajhEVERqblVaTDVqTUhxMmNjOHFQcVVaZ1o5S0hyUVVlNVFZ?=
+ =?utf-8?B?enlzbUF3V09ZNXJGVTFXMi9aeTgvOU8zam8xMm01SFd2by8zcmpwQWJlQU11?=
+ =?utf-8?B?NUhFT0QwdUFHOFRrb1hxWjVTeTVUc1BUUDVmWlFLMHdXY2ZlVFBPaVZhalVs?=
+ =?utf-8?B?S2hIUlJUYzdGVVpMSnN1VVZIbXN0RjdMbXkydGQ4TGZhRXFxTWE5U05JZ2wy?=
+ =?utf-8?B?T3UwNzArWWJjblF6b1BNUW8wV0tjTE41aW9pdFM0NlU5OXZmejE3OENWVVli?=
+ =?utf-8?B?MElxdVFsblUrdGl2NDFIQ25TUEdjV2VNRlFRNGZySUhxMGdTc0Q0cm1Lblhn?=
+ =?utf-8?B?T2dxSHlhcTRCZzRaNG0weGtmYm9QSTlOajJkL0xHZE5sbzJsU2pxbkhtQjFL?=
+ =?utf-8?B?eW5qd25HTkVOODVuYzRtaitybTFqNndYWnYyK1crOGRQb1VuR3NqbjJIM09H?=
+ =?utf-8?B?ZStEUlFkdnJFRTNwMVAvYVAzTGhwanhpTGJyd095Mk5VR2FCMUVEWWZ1bDl0?=
+ =?utf-8?B?NThIL2dUeTNWS1FvVGZKVVVsV0xTb3RrNVI3VllVSDhSb3lkN2hzK3JjdmdM?=
+ =?utf-8?B?NlRkb1E0T29MYkYwOURocGF5S3VjNDVBT3dKRXFaSjliTVZGQ0ducUZlUDdR?=
+ =?utf-8?B?Q0Q2eDkyOVlwTVo4eU1UQVJjekUxRDE0OGpzM2RVK1Z6ejhpTkcyUGNLaVhR?=
+ =?utf-8?B?L1VsdWxocE5ienhTRVcyQm5TZTRMaHh4M203aFQyWlJSTXBidjViWHhkS2NS?=
+ =?utf-8?B?S3IwRWVDZ284ajlCbUZVRHcxblpnOXU5U21JelRDS1hzN21sYThBRmVFdVpr?=
+ =?utf-8?B?b2N3M0lFWm9uYnpoZTFWTkozUFZqdUtqNkxSaU5icHptc1Z0b1RnUXFqbkFE?=
+ =?utf-8?B?NG1WM04xUmRUeWdUNVg2R2thWGtQOWp2eEpvNkxNZHY0WTV3T3ZmYmZxSjQ4?=
+ =?utf-8?B?MDBxc29NTElTcWozU1BFd3RJbjFwTTZEZG5Qd09NeFAxS3ZHVDVhMkJKeUcz?=
+ =?utf-8?B?RzZOc3lkSlI2cTFndG9nYkpJM1VLWnk4TWJJbmV2Zm9PNFUvK2t0N2tXU1l0?=
+ =?utf-8?Q?C2SygUAB9yeUr?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(82310400017)(36860700004)(376005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 02:29:04.3714
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3aceb185-6cf6-42d0-9f33-08dc7ad01d6d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017097.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6220
 
-Hi
+On 5/22/24 10:46 AM, Edward Liaw wrote:
+> On Wed, May 22, 2024 at 4:21 AM Mark Brown <broonie@kernel.org> wrote:
+>> On Wed, May 22, 2024 at 12:56:48AM +0000, Edward Liaw wrote:
+...
+>> You've not provided a Signed-off-by for this so people can't do anything
+>> with it, please see Documentation/process/submitting-patches.rst for
+>> details on what this is and why it's important.
+> 
+> Sorry, my mistake, I forgot to add it after cherry-picking.  If added
+
+Adding this to your .gitconfig would cover you for cases like this, I think
+it's pretty common to do this:
+
+[format]
+     signoff = true
 
 
-2024. m=C3=A1jus 23., cs=C3=BCt=C3=B6rt=C3=B6k 1:23 keltez=C3=A9ssel, Andre=
-w Morton <akpm@linux-foundation.org> =C3=ADrta:
 
-> On Wed, 15 May 2024 23:11:12 -0700 Jeff Xu <jeffxu@google.com> wrote:
->=20
-> > On Mon, May 13, 2024 at 12:15=E2=80=AFPM Barnab=C3=A1s P=C5=91cze <pobr=
-n@protonmail.com> wrote:
-> > >
-> > > `MFD_NOEXEC_SEAL` should remove the executable bits and set
-> > > `F_SEAL_EXEC` to prevent further modifications to the executable
-> > > bits as per the comment in the uapi header file:
-> > >
-> > >   not executable and sealed to prevent changing to executable
-> > >
-> > > However, currently, it also unsets `F_SEAL_SEAL`, essentially
-> > > acting as a superset of `MFD_ALLOW_SEALING`. Nothing implies
-> > > that it should be so, and indeed up until the second version
-> > > of the of the patchset[0] that introduced `MFD_EXEC` and
-> > > `MFD_NOEXEC_SEAL`, `F_SEAL_SEAL` was not removed, however it
-> > > was changed in the third revision of the patchset[1] without
-> > > a clear explanation.
-> > >
-> > > This behaviour is suprising for application developers,
-> > > there is no documentation that would reveal that `MFD_NOEXEC_SEAL`
-> > > has the additional effect of `MFD_ALLOW_SEALING`.
-> > >
-> > Ya, I agree that there should be documentation, such as a man page. I w=
-ill
-> > work on that.
-> >
-> > > So do not remove `F_SEAL_SEAL` when `MFD_NOEXEC_SEAL` is requested.
-> > > This is technically an ABI break, but it seems very unlikely that an
-> > > application would depend on this behaviour (unless by accident).
-> > >
-> > > [0]: https://lore.kernel.org/lkml/20220805222126.142525-3-jeffxu@goog=
-le.com/
-> > > [1]: https://lore.kernel.org/lkml/20221202013404.163143-3-jeffxu@goog=
-le.com/
-> >
-> > ...
-> >
-> > Reviewed-by: Jeff Xu <jeffxu@google.com>
->=20
-> It's a change to a userspace API, yes?  Please let's have a detailed
-> description of why this is OK.  Why it won't affect any existing users.
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-Yes, it is a uAPI change. To trigger user visible change, a program has to
-
- - create a memfd
-   - with MFD_NOEXEC_SEAL,
-   - without MFD_ALLOW_SEALING;
- - try to add seals / check the seals.
-
-This change in essence reverts the kernel's behaviour to that of Linux <6.3=
-, where
-only `MFD_ALLOW_SEALING` enabled sealing. If a program works correctly on t=
-hose
-kernels, it will likely work correctly after this change.
-
-I have looked through Debian Code Search and GitHub, searching for `MFD_NOE=
-XEC_SEAL`.
-And I could find only a single breakage that this change would case: dbus-b=
-roker
-has its own memfd_create() wrapper that is aware of this implicit `MFD_ALLO=
-W_SEALING`
-behaviour[0], and tries to work around it. This workaround will break. Luck=
-ily,
-however, as far as I could tell this only affects the test suite of dbus-br=
-oker,
-not its normal operations, so I believe it should be fine. I have prepared =
-a PR
-with a fix[1].
-
-
->=20
-> Also, please let's give consideration to a -stable backport so that all
-> kernel versions will eventually behave in the same manner.
->=20
->=20
-
-I think that is a good idea, should I resend this with the `Cc: stable@...`=
- tag or
-what should I do?
-
-
-Regards,
-Barnab=C3=A1s P=C5=91cze
-
-
-[0]: https://github.com/bus1/dbus-broker/blob/9eb0b7e5826fc76cad7b025bc46f2=
-67d4a8784cb/src/util/misc.c#L114
-[1]: https://github.com/bus1/dbus-broker/pull/366
 
