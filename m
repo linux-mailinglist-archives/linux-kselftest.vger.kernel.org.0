@@ -1,124 +1,193 @@
-Return-Path: <linux-kselftest+bounces-10617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2437A8CD157
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 13:38:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0C38CD42B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 15:22:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DC85B20EFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 11:38:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BC051C22451
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 13:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793EB1487CB;
-	Thu, 23 May 2024 11:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D55F814BF85;
+	Thu, 23 May 2024 13:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PaI7MKYJ"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="P1ev7UXW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05BE13D2A8;
-	Thu, 23 May 2024 11:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3065513C3D8
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 13:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716464287; cv=none; b=cunp3pFuntE9SfLYXLx/qbuCUI9WvZk+knLgIe3O6TCz4vHCs8hLqCymDzAeB5cddrAvhhcPCUSe7ma1HAxRVzJ2lL3YRJQv6PRk40UgY5An8CnPwXIRaZAC2yWU5BBO+ZDPFhRvxk1QA7EwWUOxgErGEeQBLpZ0fDyrCCp02iI=
+	t=1716470524; cv=none; b=IkupDphiR7BiUxzABWjHLNEQQ9493lSuhSPonyVWTBu0zrLjjDadw5TjIrNvhIZB0AjwhYTnYGXOKuUvjbUrhabn7Ic59ngRc7ego42BGJSh5jsDp/Zf6vzJJ0RGqUJj/NK1UFQx2vZJEURey8v64bBJalXV0zJ0Vm7ukg20FMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716464287; c=relaxed/simple;
-	bh=18slTayNbrDxXRTDHctjnSZxYHIh7ey5nRzuUlCOa8w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Qxx8JqcvkdIF1KgM+QajhHjsF3rtr+IG1NRPdrTVnGSNDexuXXtsD8yOuOuCsdsc+o7ftdSnVs95Jxv8FIexqd/xGuJFSgwk1zfzmq311/dimi7HMvGiSVhtzlI1s5NAoayuKA3IDTral2jnUEIy/fQk5XVnixjhCenyijGleE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PaI7MKYJ; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-354f6ab168aso434814f8f.1;
-        Thu, 23 May 2024 04:38:05 -0700 (PDT)
+	s=arc-20240116; t=1716470524; c=relaxed/simple;
+	bh=NH24LVGdDYeMPuYOJqA4c6ioraAkWYckArYfePkuphA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NUMBBKaUr4j7+Szr0L/8x9eZl2EkD9NVUDzCDN47lV+sqAiz/rxbtKl71jUe5p/muvV4rIG+qsXvSJXXb7nPFhXLwMQfl+JEJhlk/MiGD/i2/Dr7LXPr5fiUIL8HRwoFiXDnhokkcqMwi8gn6yJciVgEAGfur9JsRrb5sbrpYT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=P1ev7UXW; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a5a8bd02e8eso81559566b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2024 06:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716464284; x=1717069084; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqT4y2vS8dNyIczJ8/6qqGRpO0964EMbDkWUyIXs2l4=;
-        b=PaI7MKYJeA+XzTHNq89c1OyRRQ1D+/xYWl0bpmS3pgoW3Ij+exl0ZM79sQk7GvNa6i
-         343hRoMxOHvppM00b7P3J46TTSj3U+RVbJcBdd9zd98dJYVNTvL+WoQj/kj5BpUjFW9Q
-         T5xQTGWKq6V2VXkHRttmCeJcWeU3JLZcGjbv2AVoWj2BMpAGwTMW1fS7/dNHhSH1PlOp
-         prb6A0SkGDAnwdH9C/MBXJ3AjpfY65ly3YuSDDVW8sZJF8t4JpnJ9Nefuo1jN2Wu9852
-         YuJS17mf6OplleZBI2/JDUnwHF0hjB/P8qT4CH13P6oejg5DZmqtgw0fIHh0gbZJVrFC
-         95Hw==
+        d=ffwll.ch; s=google; t=1716470521; x=1717075321; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=On9r6HMkgaTSzrnf05gbFZryZJM5WajSuUMiqmrGLOk=;
+        b=P1ev7UXWeddHoOphcSqFDyoaLGy13rAJw+M3XIBOOOe/tgciBhOLekB1tsy7Xkp6sL
+         YUDJkdpCEh/z/SG2g7ov7a1OC9gygUNYN0ylg9caxhE/z+Zs9DeJoJWbJjGgDIYj0uHT
+         Is0ZCjgtlPzBfXglZCVNX5REJ7Ghs5EhPzVqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716464284; x=1717069084;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aqT4y2vS8dNyIczJ8/6qqGRpO0964EMbDkWUyIXs2l4=;
-        b=SNwmHygMg28nRHh6Lzz6Zd4+1q4aDqbwW5A3iVBVU7a2t/EIKxhlDDEbirsFnrjynh
-         hsSktfm1tz0IdXXJoTRrp9l2sl8k7lDkwhXcouIeKr9rAmt7b8Td5PXstY0aVQEisjs6
-         FNpgMXtnpY+NCtTAidttS2CwMSVViPZPta+noVMrCGiv0QysShUy11dYknSWJ5Attl9A
-         xsHVIlZfFDFsVFDngGmDiZNYnkrJQ+IXAtqhw2MGy+Yz+a3GBsiu1mFCmsJdbR24IugC
-         AFHmakO++isoNa84xBnS0l8MnlOTtNjiQLMi6VCJZRAGxL4Vky0subjgFJxyjx6aXurg
-         yQYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuS6ci0if0HyCRxlbwC7XuNqo1q0hHUz/CSmuTlZ3BnCKg/zbSnzzzhu7Nh/JKo10qacaD0bAQcIABU0Oqx0gXWgt2muyFBx/EW0eh+6kVXUSggaZOuF55Yh9VuTukzHevAfITIfLoQLG5GMvJTAmoqKfdVgt4PJmWiEVV9DvoC42M
-X-Gm-Message-State: AOJu0YzgMtMQJ9frvNNjE0yMYN7e+/8TRXf9KoY97CVxVYxAtIji9OSj
-	QFaMKyzE6YLr6F5fgXJ5hJNcD6GeXqUoKDj49DSmr+o7F2J+Vo3E
-X-Google-Smtp-Source: AGHT+IF0zOUS4HcsGOW8XOAHOsMjR5/9orrWORqY68lF8DKEooBrJ/0B1LJhJnM5j8Xmn6sFwitvJA==
-X-Received: by 2002:adf:e7c8:0:b0:354:f248:4aa8 with SMTP id ffacd0b85a97d-354f75218a2mr1796665f8f.18.1716464284075;
-        Thu, 23 May 2024 04:38:04 -0700 (PDT)
-Received: from localhost (craw-09-b2-v4wan-169726-cust2117.vm24.cable.virginm.net. [92.238.24.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502b8a77easm36377801f8f.53.2024.05.23.04.38.03
+        d=1e100.net; s=20230601; t=1716470521; x=1717075321;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=On9r6HMkgaTSzrnf05gbFZryZJM5WajSuUMiqmrGLOk=;
+        b=XMqxDa4Nt2L2BP54N8g4dVhcCdLMj1Tgfe1WaWKb40qTkrFnb7wq/7AMfgGx5ZwzTp
+         kqKY77fKoHJFiqDKSKLqfBcpKlU9urJp1WcR9xXp1kpeMXJApWwyemRIUbvlwH17o9bj
+         +IwH1p8bUsOoTzkAYGWltqgrmbgs35D7ECZrut00TjtsI9Ntzuh3gRmRumAiIqGSBchz
+         d6MKOrmQUqSOKOcWKm0Jqn+0l4nEDKsm/REHhr0e+lDdds7rAkwv50TEdcNzOBv6q6Tc
+         T4OKXv13dIGvCLAW4XWD2B9uFf1AJqrAEHjGsFYAWlZEh8r4IDKSa0DXE38C4gkgoB+C
+         a55g==
+X-Forwarded-Encrypted: i=1; AJvYcCWvjv5s3Yg2b9RqDen4zQ1IML9wX5aynur4r7ctoe3SQpMNvvTPeDrMCQs38p1ElKnHs1DBKFMIAmg/1yCZqnUvNfoo8bwgViwpxjYie9LN
+X-Gm-Message-State: AOJu0YwFbFDfnwO68c10tGDr3B1yJEn3juzBBkLalOpgQrYEkymiD837
+	yTZ2o08PcFo1aFaWiN/3eUYL66UJ5r2/FR+D2Ql2ymzIrx9qexVQ2/0AjEzBOAw=
+X-Google-Smtp-Source: AGHT+IGR0y2bdIOAPy2UsVNakF0nkcO1SJLtEWKLN+I3EqK+AagX4rPCgY602MbsaeBciZNK5T/aag==
+X-Received: by 2002:a17:906:64b:b0:a5c:e20c:8255 with SMTP id a640c23a62f3a-a622814aefamr315661266b.4.1716470521180;
+        Thu, 23 May 2024 06:22:01 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781d350sm1934790766b.23.2024.05.23.06.22.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 May 2024 04:38:03 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: kvm: fix shift of 32 bit unsigned int more than 32 bits
-Date: Thu, 23 May 2024 12:38:02 +0100
-Message-Id: <20240523113802.2195703-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 23 May 2024 06:22:00 -0700 (PDT)
+Date: Thu, 23 May 2024 15:21:58 +0200
+From: Daniel Vetter <daniel@ffwll.ch>
+To: Helen Koike <helen.koike@collabora.com>
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>,
+	Nikolai Kondrashov <spbnick@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>, linuxtv-ci@linuxtv.org,
+	dave.pigott@collabora.com, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+	gustavo.padovan@collabora.com, pawiecz@collabora.com,
+	tales.aparecida@gmail.com, workflows@vger.kernel.org,
+	kernelci@lists.linux.dev, skhan@linuxfoundation.org,
+	kunit-dev@googlegroups.com, nfraprado@collabora.com,
+	davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr,
+	laura.nao@collabora.com, ricardo.canuelo@collabora.com,
+	kernel@collabora.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH 1/3] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+Message-ID: <Zk9C9mCj15hVWUyL@phenom.ffwll.local>
+Mail-Followup-To: Helen Koike <helen.koike@collabora.com>,
+	Linus Torvalds <torvalds@linuxfoundation.org>,
+	Nikolai Kondrashov <spbnick@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>, linuxtv-ci@linuxtv.org,
+	dave.pigott@collabora.com, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+	gustavo.padovan@collabora.com, pawiecz@collabora.com,
+	tales.aparecida@gmail.com, workflows@vger.kernel.org,
+	kernelci@lists.linux.dev, skhan@linuxfoundation.org,
+	kunit-dev@googlegroups.com, nfraprado@collabora.com,
+	davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr,
+	laura.nao@collabora.com, ricardo.canuelo@collabora.com,
+	kernel@collabora.com, gregkh@linuxfoundation.org
+References: <20240228225527.1052240-1-helen.koike@collabora.com>
+ <20240228225527.1052240-2-helen.koike@collabora.com>
+ <20240229-dancing-laughing-groundhog-d85161@houat>
+ <5d7ed81b-37f9-48e9-ab7e-484b74ca886c@gmail.com>
+ <CAHk-=wixVy3WYvjbt43ZSrCqPDsS76QJQSkXFbbPsAOs1MCSAQ@mail.gmail.com>
+ <44ae0339-daf1-4bb9-a12d-e3d2e79b889e@gmail.com>
+ <CAHk-=wiccniE=iZDC_e7T+J8iPVQbh1Wi5BaVee9COfy+ZaYKg@mail.gmail.com>
+ <17341b96-5050-4528-867a-9f628434e4e6@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17341b96-5050-4528-867a-9f628434e4e6@collabora.com>
+X-Operating-System: Linux phenom 6.8.9-amd64 
 
-Currrentl a 32 bit 1u value is being shifted more than 32 bits causing
-overflow and incorrect checking of bits 32-63. Fix this by using the
-BIT_ULL macro for shifting bits.
+On Mon, Mar 04, 2024 at 06:45:33PM -0300, Helen Koike wrote:
+> Hi Linus,
+> 
+> Thank you for your reply and valuable inputs.
+> 
+> On 01/03/2024 17:10, Linus Torvalds wrote:
+> > On Fri, 1 Mar 2024 at 02:27, Nikolai Kondrashov <spbnick@gmail.com> wrote:
+> > > 
+> > > I agree, it's hard to imagine even a simple majority agreeing on how GitLab CI
+> > > should be done. Still, we would like to help people, who are interested in
+> > > this kind of thing, to set it up. How about we reframe this contribution as a
+> > > sort of template, or a reference for people to start their setup with,
+> > > assuming that most maintainers would want to tweak it? We would also be glad
+> > > to stand by for questions and help, as people try to use it.
+> > 
+> > Ack. I think seeing it as a library for various gitlab CI models would
+> > be a lot more palatable. Particularly if you can then show that yes,
+> > it is also relevant to our currently existing drm case.
+> 
+> Having it as a library would certainly make my work as the DRM-CI maintainer
+> easier and  also simplify the process whenever we consider integrating tests
+> into other subsystems.
 
-Detected by cppcheck:
-sev_init2_tests.c:108:34: error: Shifting 32-bit value by 63 bits is
-undefined behaviour [shiftTooManyBits]
+Kinda ignored this thread, just wanted to throw my +1 in here.
 
-Fixes: dfc083a181ba ("selftests: kvm: add tests for KVM_SEV_INIT2")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/kvm/x86_64/sev_init2_tests.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+To spin it positively, the kernel CI space is wide open (more negatively,
+it's a fractured mess). And I think there's just no way to force top-down
+unification. Imo the only way is to land subsystem CI support in upstream,
+figure out what exactly that should look like (I sketched a lot of open
+questions in the DRM CI PR around what should and should not be in
+upstream).
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-index 7a4a61be119b..ea09f7a06aa4 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-@@ -105,11 +105,11 @@ void test_features(uint32_t vm_type, uint64_t supported_features)
- 	int i;
- 
- 	for (i = 0; i < 64; i++) {
--		if (!(supported_features & (1u << i)))
-+		if (!(supported_features & BIT_ULL(i)))
- 			test_init2_invalid(vm_type,
- 				&(struct kvm_sev_init){ .vmsa_features = BIT_ULL(i) },
- 				"unknown feature");
--		else if (KNOWN_FEATURES & (1u << i))
-+		else if (KNOWN_FEATURES & BIT_ULL(u))
- 			test_init2(vm_type,
- 				&(struct kvm_sev_init){ .vmsa_features = BIT_ULL(i) });
- 	}
+Then, once we have a few of those, extract common scripts and tools into
+tools/ci/ or scripts/ci or whatever.
+
+And only then, best case years down the road, dare to have some common
+top-level CI, once it's clear what the actual common pieces and test
+stages even are.
+
+> > So I'm not objecting to having (for example) some kind of CI helper
+> > templates - I think a logical place would be in tools/ci/ which is
+> > kind of alongside our tools/testing subdirectory.
+> 
+> Works for me.
+> 
+> We  can skip having a default .gitlab-ci.yml in the root directory and
+> instead include clear instructions in our documentation for using these
+> templates.
+
+I'd go a few steps more back and start with trying to get more subsystem
+CI into upstream. And then once that dust has settled, figure out what the
+common pieces actually are. Because I'm pretty sure that what we have for
+drm ci or kernelci right now won't be it, but likely just a local optimum.
+
+Cheers, Sima
+
+> 
+> Thanks,
+> Helen Koike
+> 
+> > 
+> > (And then perhaps have a 'gitlab' directory under that. I'm not sure
+> > whether - and how much - commonality there might be between the
+> > different CI models of different hosts).
+> > 
+> > Just to clarify: when I say "a logical place", I very much want to
+> > emphasize the "a" - maybe there are better places, and I'm not saying
+> > that is the only possible place. But it sounds more logical to me than
+> > some.
+> > 
+> >              Linus
+
 -- 
-2.39.2
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 
