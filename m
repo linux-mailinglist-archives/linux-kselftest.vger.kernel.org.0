@@ -1,276 +1,170 @@
-Return-Path: <linux-kselftest+bounces-10612-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E1F8CCCAA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 09:03:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE63A8CCE28
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 10:25:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D3061C2218D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 07:03:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44E471F21D4F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC6D13C9AB;
-	Thu, 23 May 2024 07:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4908313D254;
+	Thu, 23 May 2024 08:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDxwxxZK"
+	dkim=pass (2048-bit key) header.d=readahead.eu header.i=@readahead.eu header.b="bbi9wCEX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IrVVz1iY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C445A13AA24;
-	Thu, 23 May 2024 07:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF1413CFB7;
+	Thu, 23 May 2024 08:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716447829; cv=none; b=POw4puAw97PN8L2WWwwd5+9PrHrtETNstbvAE7YcOLx6DyyjED5qbfNmo/HgAQhw3Q39UvlM0wHxA+rAD4xCcVtFR62AQhLnfPDsAStjAdSZB1DoyBIb4VCL2Pht3IFhZbAW+nDD0V9gFdHdHy8weV4rRUksf1LoMUh30rS2zbo=
+	t=1716452686; cv=none; b=WR+Q6kyd8etbRAaddKsSOhvLntgLkSduhjKNJ8jBdDELY7bYzq+C11EttiC+X+JShfF6Wqrrrzx7gOhj7QCjfIYAMvQ3ZHE97HYP2jWpfWOdLQ3/wCuBgGae0RaMfioD4Fwxr4jvSdAyhguN3OsPvjAVY7nDjKyj6Sky8Wls36s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716447829; c=relaxed/simple;
-	bh=xIcbRPGzdTAXs2WNxd0mi0Vbycy28GbQ0IRPVhzR40Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lgA9TFKE2XzDzJSQsAZg4z8x6ocDlqGodkV4tQIkwuz4op851kwPj06Hj6knNc6Lj/5EFZwu6Kj/iUrc6V8h+3TGKqsuoGmAB134SWo4pONu/MTWafUtkiCQiD2wtmO3xEwIwkOonjGQ9qUKW+7mK/n38ZSdTIGP7i2GVNzfYq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDxwxxZK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB017C2BD10;
-	Thu, 23 May 2024 07:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716447829;
-	bh=xIcbRPGzdTAXs2WNxd0mi0Vbycy28GbQ0IRPVhzR40Q=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=cDxwxxZKGl3LJ/raRP5TzNGi3xSxshQVmJ2HOpBGJbV5dLg1Db1HHoJNuaJQ+Abud
-	 QYXJrHmm35W39YfIF2qfQZP7w7hzdnr94g3ZChJ93kZpcP28aXLDe3QKK2m5dWzny3
-	 KuWciZdoQGPIOphDK8DzzU5kI8YfdyX3MCRj/AGlbwbtWKdNEXHDjFD1JdwmLhWmaE
-	 OCtQuWDqhKvbV3hDuSH7gfLVv3ecG1++kC6QWPxALVfDv4qorSayHnV27bflO4gKge
-	 JlZKvUGvaz8XaPUWFDjy+HBc5xpPo0yc7PwijDLmDysbcQzcuGIpPqV98o6xb9wkOj
-	 AESGqIAxU5Gjw==
-Message-ID: <7a9df605cea389db8f76f5543cce3730faa0e5e3.camel@kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Use prog_attach_type to attach
- in test_sockmap
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Thu, 23 May 2024 15:03:41 +0800
-In-Reply-To: <e27d7d0c1e0e79b0acd22ac6ad5d8f9f00225303.1716372485.git.tanggeliang@kylinos.cn>
-References: 
-	<e27d7d0c1e0e79b0acd22ac6ad5d8f9f00225303.1716372485.git.tanggeliang@kylinos.cn>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- TO0tfEdfAX7IENcV87h2yAFBZkaA==
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0-1build2 
+	s=arc-20240116; t=1716452686; c=relaxed/simple;
+	bh=xP59lqobFIBfQ9MOhx/Wcx58biVRgohQI2O/XYsPjxc=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=pCvGJl64b7JM8zDmW0S3zSGbzhUYG7uVLkbaRPcEOBFulKclbTkENUE4/I7poGjGglpk095hXvUKgNhevQxW3FpGzo41pbsMJPvVxiRR7BVlYVHAYiNhHE++hFfaD6pCjgOQ6EQ3uHlno24CXWZmFWxzK2loaDLBvMvwqqmst9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readahead.eu; spf=pass smtp.mailfrom=readahead.eu; dkim=pass (2048-bit key) header.d=readahead.eu header.i=@readahead.eu header.b=bbi9wCEX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IrVVz1iY; arc=none smtp.client-ip=64.147.123.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readahead.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=readahead.eu
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfhigh.west.internal (Postfix) with ESMTP id CEE1718000C3;
+	Thu, 23 May 2024 04:24:40 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Thu, 23 May 2024 04:24:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=readahead.eu; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1716452680;
+	 x=1716539080; bh=uQ1XIZZzVzDnVHgFVVR9WB3UmecDQC4WcoxUGP3/pSA=; b=
+	bbi9wCEXusq1PCAmAYxC4BiT27Y40Ap08kAkdhBLZgdMw/bGbiv2m8vsxcFVgmru
+	q1OKDPeRBpEmFr9Cux8fOA0Av7QX/pUbN56fvGRN/GQ3Yq3+4uCieiqqF9VrX/ey
+	B+RX/qDbkSBDH9dILn59EbowqykCzjPEExmQxTMNk8r5HlV7752kVMwqN3I83ZVl
+	rrdP3OOhATAc+/OiEq7j9stxIgCA37KIB+ELIm7YnWK93kLM2SLBHZmlGUoDnOc4
+	e5TXMv56KeOVl4RoJitRzb72QYevGQ4n0yqQpO6ae1Qwvambj+iSimpMjcuQqbb2
+	s83XtM7ZZ7b6w6echlAw6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716452680; x=
+	1716539080; bh=uQ1XIZZzVzDnVHgFVVR9WB3UmecDQC4WcoxUGP3/pSA=; b=I
+	rVVz1iYth6Czg8j1qlzSei4KHsHk6i+iAIZb4h97+FiMw3x2pC1Wx8pjym0Y2czl
+	PFYMs18JfaAGDc3KXI+uViAvvsi2a+OWbTUeyMX4JzMmW8pYVy+aabMwvk+O1t0j
+	cFsoE0nhI6EMqrwcvF+vjkskxERjNkO4DG2VRh7aSm1GlttBA9EOUFRISMvIe/Ds
+	SNEXzqJ+1twWXspR4etxVWREVenq7W6wRzr3OwswSNFVFgAQ+O3WComfcxo3QA+W
+	GM4uNOKBx77LmoBwx6tG7FqCy1pYoASliHS+fJFT7VMvpPYiUtz8xaGpgPRuxGB3
+	0Y6ab0XbWd3sMsnygt6tg==
+X-ME-Sender: <xms:SP1OZp23Z6lyzNyhkGuoc2_RiEJwcR3eXBFXARD6DAvZZlV0o3BRmA>
+    <xme:SP1OZgFY0gJZvgIkAtLu9GzYQk8Jiv6zbtkneqGrLD_7AB9yiNlG4QYhyG9K8rd8Y
+    XGHvv2p9aLSv0TTJ6M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeiiedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdff
+    rghvihguucfthhgvihhnshgsvghrghdfuceouggrvhhiugesrhgvrggurghhvggrugdrvg
+    huqeenucggtffrrghtthgvrhhnpefgleejleduiedvfeevjeevieduledvjeeljeelvedt
+    uedvgeejjefhvdefhffgieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuggrvhhiugesrhgv
+    rggurghhvggrugdrvghu
+X-ME-Proxy: <xmx:SP1OZp627CQUZWumLRL_y-qFCF8hLB3I_CJJ-288c8wJL0uEyoEHaw>
+    <xmx:SP1OZm0hZweVYJ7PfqXhwrHOtjDgYYL_IHV1P1epwocPM5W6oS8L5g>
+    <xmx:SP1OZsHtsGGbu5IdrbmPdtYaN6EYt1XaXNXdkZnlty2tM7HQISjwpw>
+    <xmx:SP1OZn89w5r0T-DPR_WTli6ZgQDYgM40w60wq8SsHpcCqi_kBvVgVQ>
+    <xmx:SP1OZv-tL447aLQolAZ5j1fj4aFENRlMnunOutk3TL8Ah6wvvVC3ket9>
+Feedback-ID: id2994666:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0828D1700093; Thu, 23 May 2024 04:24:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-480-g515a2f54a-fm-20240515.001-g515a2f54
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <08450f80-4c33-40db-886f-fee18e531545@app.fastmail.com>
+In-Reply-To: 
+ <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
+References: <20240513191544.94754-1-pobrn@protonmail.com>
+ <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
+ <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
+ <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
+Date: Thu, 23 May 2024 10:24:19 +0200
+From: "David Rheinsberg" <david@readahead.eu>
+To: =?UTF-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: "Jeff Xu" <jeffxu@google.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ dmitry.torokhov@gmail.com, "Daniel Verkamp" <dverkamp@chromium.org>,
+ hughd@google.com, jorgelo@chromium.org, skhan@linuxfoundation.org,
+ "Kees Cook" <keescook@chromium.org>
+Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-This patch is "Rejected", according to Jakub's comments:
+Hi
 
-https://lore.kernel.org/bpf/87zfsiw3a3.fsf@cloudflare.com/
+On Thu, May 23, 2024, at 4:25 AM, Barnab=C3=A1s P=C5=91cze wrote:
+> 2024. m=C3=A1jus 23., cs=C3=BCt=C3=B6rt=C3=B6k 1:23 keltez=C3=A9ssel, =
+Andrew Morton=20
+> <akpm@linux-foundation.org> =C3=ADrta:
+>> It's a change to a userspace API, yes?  Please let's have a detailed
+>> description of why this is OK.  Why it won't affect any existing user=
+s.
+>
+> Yes, it is a uAPI change. To trigger user visible change, a program ha=
+s to
+>
+>  - create a memfd
+>    - with MFD_NOEXEC_SEAL,
+>    - without MFD_ALLOW_SEALING;
+>  - try to add seals / check the seals.
+>
+> This change in essence reverts the kernel's behaviour to that of Linux=20
+> <6.3, where
+> only `MFD_ALLOW_SEALING` enabled sealing. If a program works correctly=20
+> on those
+> kernels, it will likely work correctly after this change.
+>
+> I have looked through Debian Code Search and GitHub, searching for=20
+> `MFD_NOEXEC_SEAL`.
+> And I could find only a single breakage that this change would case:=20
+> dbus-broker
+> has its own memfd_create() wrapper that is aware of this implicit=20
+> `MFD_ALLOW_SEALING`
+> behaviour[0], and tries to work around it. This workaround will break.=20
+> Luckily,
+> however, as far as I could tell this only affects the test suite of=20
+> dbus-broker,
+> not its normal operations, so I believe it should be fine. I have=20
+> prepared a PR
+> with a fix[1].
 
-Thanks,
--Geliang
+We asked for exactly this fix before, so I very much support this. Our t=
+est-suite in `dbus-broker` merely verifies what the current kernel behav=
+ior is (just like the kernel selftests). I am certainly ok if the kernel=
+ breaks it. I will gladly adapt the test-suite.
 
-On Wed, 2024-05-22 at 18:08 +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> Since prog_attach_type[] array is defined, it makes sense to use it
-> paired
-> with prog_fd[] array for bpf_prog_attach() and bpf_prog_detach2()
-> instead
-> of open-coding.
-> 
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->  tools/testing/selftests/bpf/test_sockmap.c | 44 +++++++++++---------
-> --
->  1 file changed, 22 insertions(+), 22 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c
-> b/tools/testing/selftests/bpf/test_sockmap.c
-> index 4499b3cfc3a6..8c8208b82c5e 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -65,6 +65,18 @@ int map_fd[9];
->  struct bpf_map *maps[9];
->  int prog_fd[9];
->  
-> +int prog_attach_type[] = {
-> +	BPF_SK_SKB_STREAM_PARSER,
-> +	BPF_SK_SKB_STREAM_VERDICT,
-> +	BPF_SK_SKB_STREAM_VERDICT,
-> +	BPF_CGROUP_SOCK_OPS,
-> +	BPF_SK_MSG_VERDICT,
-> +	BPF_SK_MSG_VERDICT,
-> +	BPF_SK_MSG_VERDICT,
-> +	BPF_SK_MSG_VERDICT,
-> +	BPF_SK_MSG_VERDICT,
-> +};
-> +
->  int txmsg_pass;
->  int txmsg_redir;
->  int txmsg_drop;
-> @@ -961,7 +973,7 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  	/* Attach programs to sockmap */
->  	if (!txmsg_omit_skb_parser) {
->  		err = bpf_prog_attach(prog_fd[0], map_fd[0],
-> -				      BPF_SK_SKB_STREAM_PARSER, 0);
-> +				      prog_attach_type[0], 0);
->  		if (err) {
->  			fprintf(stderr,
->  				"ERROR: bpf_prog_attach (sockmap %i-
-> >%i): %d (%s)\n",
-> @@ -971,7 +983,7 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  	}
->  
->  	err = bpf_prog_attach(prog_fd[1], map_fd[0],
-> -				BPF_SK_SKB_STREAM_VERDICT, 0);
-> +			      prog_attach_type[1], 0);
->  	if (err) {
->  		fprintf(stderr, "ERROR: bpf_prog_attach (sockmap):
-> %d (%s)\n",
->  			err, strerror(errno));
-> @@ -982,7 +994,7 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  	if (txmsg_ktls_skb) {
->  		if (!txmsg_omit_skb_parser) {
->  			err = bpf_prog_attach(prog_fd[0], map_fd[8],
-> -					     
-> BPF_SK_SKB_STREAM_PARSER, 0);
-> +					      prog_attach_type[0],
-> 0);
->  			if (err) {
->  				fprintf(stderr,
->  					"ERROR: bpf_prog_attach (TLS
-> sockmap %i->%i): %d (%s)\n",
-> @@ -992,7 +1004,7 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  		}
->  
->  		err = bpf_prog_attach(prog_fd[2], map_fd[8],
-> -				      BPF_SK_SKB_STREAM_VERDICT, 0);
-> +				      prog_attach_type[2], 0);
->  		if (err) {
->  			fprintf(stderr, "ERROR: bpf_prog_attach (TLS
-> sockmap): %d (%s)\n",
->  				err, strerror(errno));
-> @@ -1001,7 +1013,7 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  	}
->  
->  	/* Attach to cgroups */
-> -	err = bpf_prog_attach(prog_fd[3], cg_fd,
-> BPF_CGROUP_SOCK_OPS, 0);
-> +	err = bpf_prog_attach(prog_fd[3], cg_fd,
-> prog_attach_type[3], 0);
->  	if (err) {
->  		fprintf(stderr, "ERROR: bpf_prog_attach (groups): %d
-> (%s)\n",
->  			err, strerror(errno));
-> @@ -1279,11 +1291,11 @@ static int run_options(struct sockmap_options
-> *options, int cg_fd,  int test)
->  		fprintf(stderr, "unknown test\n");
->  out:
->  	/* Detatch and zero all the maps */
-> -	bpf_prog_detach2(prog_fd[3], cg_fd, BPF_CGROUP_SOCK_OPS);
-> -	bpf_prog_detach2(prog_fd[0], map_fd[0],
-> BPF_SK_SKB_STREAM_PARSER);
-> -	bpf_prog_detach2(prog_fd[1], map_fd[0],
-> BPF_SK_SKB_STREAM_VERDICT);
-> -	bpf_prog_detach2(prog_fd[0], map_fd[8],
-> BPF_SK_SKB_STREAM_PARSER);
-> -	bpf_prog_detach2(prog_fd[2], map_fd[8],
-> BPF_SK_SKB_STREAM_VERDICT);
-> +	bpf_prog_detach2(prog_fd[3], cg_fd, prog_attach_type[3]);
-> +	bpf_prog_detach2(prog_fd[0], map_fd[0],
-> prog_attach_type[0]);
-> +	bpf_prog_detach2(prog_fd[1], map_fd[0],
-> prog_attach_type[1]);
-> +	bpf_prog_detach2(prog_fd[0], map_fd[8],
-> prog_attach_type[0]);
-> +	bpf_prog_detach2(prog_fd[2], map_fd[8],
-> prog_attach_type[2]);
->  
->  	if (tx_prog_fd >= 0)
->  		bpf_prog_detach2(tx_prog_fd, map_fd[1],
-> BPF_SK_MSG_VERDICT);
-> @@ -1783,18 +1795,6 @@ char *map_names[] = {
->  	"tls_sock_map",
->  };
->  
-> -int prog_attach_type[] = {
-> -	BPF_SK_SKB_STREAM_PARSER,
-> -	BPF_SK_SKB_STREAM_VERDICT,
-> -	BPF_SK_SKB_STREAM_VERDICT,
-> -	BPF_CGROUP_SOCK_OPS,
-> -	BPF_SK_MSG_VERDICT,
-> -	BPF_SK_MSG_VERDICT,
-> -	BPF_SK_MSG_VERDICT,
-> -	BPF_SK_MSG_VERDICT,
-> -	BPF_SK_MSG_VERDICT,
-> -};
-> -
->  int prog_type[] = {
->  	BPF_PROG_TYPE_SK_SKB,
->  	BPF_PROG_TYPE_SK_SKB,
+Previous discussion was in:
 
+    [PATCH] memfd: support MFD_NOEXEC alongside MFD_EXEC
+    https://lore.kernel.org/lkml/20230714114753.170814-1-david@readahead=
+.eu/
+
+Note that this fix is particularly important in combination with `vm.mem=
+fd_noexec=3D2`, since this breaks existing user-space by enabling sealin=
+g on all memfds unconditionally. I also encourage backporting to stable =
+kernels.
+
+Reviewed-by: David Rheinsberg <david@readahead.eu>
+
+Thanks
+David
 
