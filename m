@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F8B58CCC7E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F3D88CCC80
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:51:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A7CA282932
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BC20283035
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E37C13C8F3;
-	Thu, 23 May 2024 06:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8CD13C8F4;
+	Thu, 23 May 2024 06:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGq8GO5I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5JTXCuk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046C613C838;
-	Thu, 23 May 2024 06:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DF013C8F2;
+	Thu, 23 May 2024 06:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716447052; cv=none; b=JywuqU5Hi98U6M+ertTyhDAAbpez5UGGlFLydfdrsG7i7Wvp0Q6BKtrO4ZpCSppOzWVbvofQ9JoW/Tbf1cJKWyFn/y5ewGj1nPBrV73HyEiEYRs3b84SsMjUyzIOzOsasl8QhhdGWruYfvGDHzoISy8FTYtm0INl2an4Sh7D7TE=
+	t=1716447058; cv=none; b=Oqse2sHhVocI1tJI0JXg8Z/1nbPSC2Mf/B/sSrOELFHPqZAmH3yV/FbIlGhiQcVUamVFOYMaFF5Cu2JXMM75o+qTiS/n2eW6d0Kw02WbiwEsCKDJO4X5o/pFdB4FRUtW7U6H25VndI8D6A4sRJzf9A546jXAPuEvjEXFM3Zz8s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716447052; c=relaxed/simple;
-	bh=XxU76wSm2VGBTgKDwcx/rB1boeVCdpt1MRZ/fiiWAOA=;
+	s=arc-20240116; t=1716447058; c=relaxed/simple;
+	bh=icBCMYv8O7EZO08xGmk+z3plQf8DdXeJ7xlVNI+eUg8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vhdnp7ctVBKMPeVI5u4Bk937Hgo+BSfCUnCyTLoUHR6lSFVCm1jnJhXlQ2Q1hgc84QoAw590z0uJnOfuX5XTcBNgGPw7Kph0bqMOcEOG+x+5u6RwY5o82u7ua9t2PDofLo9jRmQ/2ZhCV8DiMF03mj0S1/rlah6hcoSdK7fAy64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGq8GO5I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED88BC2BD10;
-	Thu, 23 May 2024 06:50:45 +0000 (UTC)
+	 MIME-Version; b=gItQKgnynlp8Pc5VQu6zCG/GE+aIUqPlEqI75RP+PTXTjHLMaLe7PkAQwiKOk2cAmzGtItrbKzmy9kKT486clcjwK52ERgzr8pijTH5UT3X5CmjdYWINUgpPaVL/5TGthwmMmOo9T4BM7fmivkF/QhmNXNmya4e5V9znHIIZy6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5JTXCuk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EBBC3277B;
+	Thu, 23 May 2024 06:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716447051;
-	bh=XxU76wSm2VGBTgKDwcx/rB1boeVCdpt1MRZ/fiiWAOA=;
+	s=k20201202; t=1716447057;
+	bh=icBCMYv8O7EZO08xGmk+z3plQf8DdXeJ7xlVNI+eUg8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cGq8GO5I7w/oERSiKjS6JbZ834/uTytnA8GchwA9/Gc4vyJWOyDxkEzZdrEFotFvp
-	 iJnFrqVrsnx31KWz3d1FFQ1i6UVJD+6HvGWeVtL64us5uoYwpC80+p0iKGAm6eMBYq
-	 kNUKLQzJfm9yLcqSJnNmXpX32oVE6deed0Nx8/JRJ7liz+qEV4xZWrvW4LoBXst9E/
-	 IYbtF7kz4FIozfCxJgOS1e4hBD1LJR63k1axZEr+nxnLjvunPsxF0q83rjMKhvrprM
-	 OHCeVrqSbBitM9E8zVjUkq6I78ZNASFpbasgbCjI78DuVWFR+VKaEJAunqAA9NmpO1
-	 jlZg+iGV/yXCw==
+	b=N5JTXCukGzZwBFu63kpWcjZa9lIhGnvdH6ee7TC/8LFPVu3JMRcm4UpWoJnKgyMK4
+	 yftbDFVUcHAyDeREJwQM5CfdJmE07k9Glf+oqJ2Ckes9uKb22SFI/1ubktHfZQaGwY
+	 HvSe+jCYWSMzbVdCVgiU85dmUDLWYX9LgaUEex7LaBd4hHOLqGvRSW4bCLDiXGPxo4
+	 s3/SHicJCh/VpyqIO2bi+4QkH1kaXXLKHo+y4SEhZoogljXlhNVmBysbjNNIa/QM8i
+	 YIbQvwtPSFi1bE54RNEQg58G87r3plgjNJ+Srtu6wUwJ1CYgfwc2+6d4q4fcJoNBnj
+	 Lfiinq436IS8Q==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 5/8] selftests/bpf: Drop prog_fd array in test_sockmap
-Date: Thu, 23 May 2024 14:50:01 +0800
-Message-ID: <9a6335e4d8dbab23c0d8906074457ceddd61e74b.1716446893.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 6/8] selftests/bpf: Fix size of map_fd in test_sockmap
+Date: Thu, 23 May 2024 14:50:02 +0800
+Message-ID: <0972529ee01ebf8a8fd2b310bdec90831c94be77.1716446893.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn>
 References: <cover.1716446893.git.tanggeliang@kylinos.cn>
@@ -76,52 +76,27 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The program fds can be got by using bpf_program__fd(progs[]), then
-prog_fd becomes useless. This patch drops it.
+The array size of map_fd[] is 9, not 8. This patch changes it as a more
+general form: ARRAY_SIZE(map_fd).
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 8e32d157bac0..e83ca0005721 100644
+index e83ca0005721..3654babfac59 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -63,7 +63,6 @@ int passed;
- int failed;
- int map_fd[9];
- struct bpf_map *maps[9];
--int prog_fd[9];
- struct bpf_program *progs[9];
- struct bpf_link *links[9];
- 
-@@ -1000,7 +999,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+@@ -1285,7 +1285,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 			bpf_link__detach(links[i]);
  	}
  
- 	/* Attach to cgroups */
--	err = bpf_prog_attach(prog_fd[3], cg_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	err = bpf_prog_attach(bpf_program__fd(progs[3]), cg_fd, BPF_CGROUP_SOCK_OPS, 0);
- 	if (err) {
- 		fprintf(stderr, "ERROR: bpf_prog_attach (groups): %d (%s)\n",
- 			err, strerror(errno));
-@@ -1279,7 +1278,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 		fprintf(stderr, "unknown test\n");
- out:
- 	/* Detatch and zero all the maps */
--	bpf_prog_detach2(prog_fd[3], cg_fd, BPF_CGROUP_SOCK_OPS);
-+	bpf_prog_detach2(bpf_program__fd(progs[3]), cg_fd, BPF_CGROUP_SOCK_OPS);
- 
- 	for (i = 0; i < ARRAY_SIZE(links); i++) {
- 		if (links[i])
-@@ -1834,7 +1833,6 @@ static int populate_progs(char *bpf_file)
- 	i = 0;
- 	bpf_object__for_each_program(prog, obj) {
- 		progs[i] = prog;
--		prog_fd[i] = bpf_program__fd(prog);
- 		i++;
- 	}
- 
+-	for (i = 0; i < 8; i++) {
++	for (i = 0; i < ARRAY_SIZE(map_fd); i++) {
+ 		key = next_key = 0;
+ 		bpf_map_update_elem(map_fd[i], &key, &zero, BPF_ANY);
+ 		while (bpf_map_get_next_key(map_fd[i], &key, &next_key) == 0) {
 -- 
 2.43.0
 
