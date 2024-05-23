@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101CF8CCC74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:50:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B91C88CCC76
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B19F91F21845
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:50:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 742812839E9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623A513C832;
-	Thu, 23 May 2024 06:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007C613C838;
+	Thu, 23 May 2024 06:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBOMAU9D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eby2GAoI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EC413BC0B;
-	Thu, 23 May 2024 06:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA01FEC5;
+	Thu, 23 May 2024 06:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716447021; cv=none; b=KJW5QyyU5xWFh7ZeEFp1jQwJe1rgs2A3vniJQwL4Qvlt7RCdVJjE+3VyZeFh6j7bhU+xn+MvqZ5IiQx3AbrCQpCdHWvbASJT7Groe1accm6rRGyrhJz2c1rRMUax2MyFKUxaimnL6eUbOigkXGEjmlV49Q6grwhKjUHV/0Odi7A=
+	t=1716447027; cv=none; b=UoSX9bYtZDOv34bU2RTnt/5FDYgPtTQ7PQtj9JFHbcebFvCRnHdImv8h7Z8fAwYkrDJrL0IU4tOEJNHXC/aDyV5dSAXUrNmOOtliRVC9u8THYj52q0crvSGcdnjBkysKsE36BrW4fo8RziCGfPaVXkH/WVVimDcQFka2+Hn5+6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716447021; c=relaxed/simple;
-	bh=QpVEYZWT6MjWy9a74eltpfFBlmBPT9ahhBEfVpJ1hK8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C8m/R9Ikl32Mh+T/Qu0ioy1k1arJwNbtfaKe/Zu5hWhXrPPS3NeTE4kkVGLJqi2iPtj1+G6Pa/SG7aCI4XkstbmhjYkQpTYwIWdNYsE6s7u/CNqlOfXtYOXzTUFvappJKwpa0NEFYySvPygrZlFL3MR2uW7Yr07PVRlN15/2Bzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBOMAU9D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582D4C2BD10;
-	Thu, 23 May 2024 06:50:14 +0000 (UTC)
+	s=arc-20240116; t=1716447027; c=relaxed/simple;
+	bh=jzxUYLvnv6hkKSXo/p1R8ovUX+pIaKQO539KVGwiG20=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YJB/PUHdx1ahuXv+9XvpEqkY5x5WR182yduu3UN5wN9ohUE1qx6+CCE4s475Nlc9N6sMt8NXPIhUcZ0pKYszJ/+ixMSALFuuk0UlQbPscmzgRf5+QGN84qM9c2behVeGjoQq1yoTxaQ20gQIDq4yLOHS9Rc5ZajwBwsAl/rlWLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eby2GAoI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A0FC2BD10;
+	Thu, 23 May 2024 06:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716447020;
-	bh=QpVEYZWT6MjWy9a74eltpfFBlmBPT9ahhBEfVpJ1hK8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DBOMAU9D7cAlAHhf2K3v7Z7pB9EJmHbMDRJ+3hF/qxRGbXBanI1fHOEDgfhClkeax
-	 NuXiAgBFqYmkbkcSdUREEeeWoMZK7qtGtgM02o+AsO2m0oJmsHwCDZUHi7MBJ5WTY1
-	 OxCg7WpThIUFbw2iBPZHeMJwgUPxm0tQDxdIz6JqN91JbqvKyhfzsX655jIPJE18+S
-	 EyT1qlHhchOqJGe6OnRttnA3TBiMZErviJ96zLyswHfeF2E6g7oud3cmrWIxWDxFfN
-	 KdSy/r1uRqo3bvyc/6Myu5wTzPQEruS8E3jf/cs7PV6GAdG4ua3D752CtetfZBbgMu
-	 9WhRhg24NmDUg==
+	s=k20201202; t=1716447027;
+	bh=jzxUYLvnv6hkKSXo/p1R8ovUX+pIaKQO539KVGwiG20=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eby2GAoIUIjb8+GelMPK80DThcXma/TaB4tdAg9Dpz9a+WQTRkAcbgDP7JRq/3XSM
+	 9n0t59bQ7UOMVEtXr9596kjARqSzS9f0sKa4gZZxoXQs2pv6IjdSztgxu2lXaqUl0+
+	 8elsjNjnh5H0IFne3CAlB+/tVA5h1ytfwYaqGyZtrOTW58f9YiaMjKW6lrB2SgoizY
+	 6u7U1G4IhLJoexVXqZWXpasiaYDyKQsPW3vW+vis2DpMa6/puBwpecS/0jP7qez3g3
+	 KvqraSfxxqatgmTSmAkqSs+9cxE/rUBp0sycnL5zUDE/6f5VlKz7tmrV5DMdX83v2c
+	 6wZpRG1NZZyXA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,10 +60,12 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 0/8] fixes for test_sockmap
-Date: Thu, 23 May 2024 14:49:56 +0800
-Message-ID: <cover.1716446893.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 1/8] selftests/bpf: Fix tx_prog_fd values in test_sockmap
+Date: Thu, 23 May 2024 14:49:57 +0800
+Message-ID: <08b20ffc544324d40939efeae93800772a91a58e.1716446893.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn>
+References: <cover.1716446893.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,28 +76,40 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patchset contains some fixes and improvements for test_sockmap.
+The values of tx_prog_fd in run_options() should not be 0, so set it as -1
+in else branch, and test it using "if (tx_prog_fd > 0)" condition, not
+"if (tx_prog_fd)" or "if (tx_prog_fd >= 0)".
 
-3-5: switching attachments to bpf_link as Jakub suggested in [1].
-1-2, 6-8: Small fixes.
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/test_sockmap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-[1]
-https://lore.kernel.org/bpf/87zfsiw3a3.fsf@cloudflare.com/
-
-Geliang Tang (8):
-  selftests/bpf: Fix tx_prog_fd values in test_sockmap
-  selftests/bpf: Drop duplicate definition of i in test_sockmap
-  selftests/bpf: Use bpf_link attachments in test_sockmap
-  selftests/bpf: Replace tx_prog_fd with tx_prog in test_sockmap
-  selftests/bpf: Drop prog_fd array in test_sockmap
-  selftests/bpf: Fix size of map_fd in test_sockmap
-  selftests/bpf: Check length of recv in test_sockmap
-  selftests/bpf: Drop duplicate bpf_map_lookup_elem in test_sockmap
-
- .../selftests/bpf/progs/test_sockmap_kern.h   |   3 -
- tools/testing/selftests/bpf/test_sockmap.c    | 101 +++++++++---------
- 2 files changed, 51 insertions(+), 53 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 4499b3cfc3a6..fde0dd741e69 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -1027,9 +1027,9 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 	else if (txmsg_drop)
+ 		tx_prog_fd = prog_fd[8];
+ 	else
+-		tx_prog_fd = 0;
++		tx_prog_fd = -1;
+ 
+-	if (tx_prog_fd) {
++	if (tx_prog_fd > 0) {
+ 		int redir_fd, i = 0;
+ 
+ 		err = bpf_prog_attach(tx_prog_fd,
+@@ -1285,7 +1285,7 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 	bpf_prog_detach2(prog_fd[0], map_fd[8], BPF_SK_SKB_STREAM_PARSER);
+ 	bpf_prog_detach2(prog_fd[2], map_fd[8], BPF_SK_SKB_STREAM_VERDICT);
+ 
+-	if (tx_prog_fd >= 0)
++	if (tx_prog_fd > 0)
+ 		bpf_prog_detach2(tx_prog_fd, map_fd[1], BPF_SK_MSG_VERDICT);
+ 
+ 	for (i = 0; i < 8; i++) {
 -- 
 2.43.0
 
