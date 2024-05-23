@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF8128CCC7A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:50:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB238CCC7C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 08:50:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1CE280E60
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:50:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3EC01F217C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2024 06:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3AF13C8E8;
-	Thu, 23 May 2024 06:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B0313C8EE;
+	Thu, 23 May 2024 06:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLXTYBmC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOB1RTw6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D2D13C8E1;
-	Thu, 23 May 2024 06:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8913213C838;
+	Thu, 23 May 2024 06:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716447040; cv=none; b=fxRI/gsOrGIvqqFyMFUI635tFl6eR6QXgj1tCgGZmeQIH6sLRI8VCmGAUQVRlN0b+nPy7RoJEDcN3H/e734DbQp1rvDK6JRCT2aNyfwBvnZSyycYOcqNdk5NznlVfQHeql3d3FDjqrxG+RXyBi8VnXiVqv9QwuQRGZMz44KN++Q=
+	t=1716447045; cv=none; b=Owni4GA15IZtKqjjljdIAWFCjma4/pZ7C3wy4Yo+nIASuEZs7jZcxwX8DTx2ZPbpAMD2aWVbJJTlVA8RUbLfrBi948zfz5EwF5Q5K6T9+Ixs29uF8iGMqJzjmjY3EFiT4XvA3Xv7F4cGOkZc3Pu2C+KrVtHpchy05VwtoRxdOkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716447040; c=relaxed/simple;
-	bh=j+Yzr44J3a/y0uMOBUQ0oSYXFSurJrqVJ6d0Uotfark=;
+	s=arc-20240116; t=1716447045; c=relaxed/simple;
+	bh=EsgKr2+15JU23386C02AiaPX82NABHkp3oBufrNJeLE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ew09LSNDHRg5/frDkDu+x+8p36RB0ilJ1Dp+xM8qIB8Skg13N3NYtPtgURtgM8IaCQsSG6jv0vWWIpv9+RBRNI8zZUL37MmAUkqO3exbrZkV1lN1Wgx+Xhn3+gJ7/xoqdt8AkYfA9EDP/vqpmxpimPA5rCJmcdWeGFbvawf3CU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLXTYBmC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E51C32782;
-	Thu, 23 May 2024 06:50:33 +0000 (UTC)
+	 MIME-Version; b=Q7lvGqR0NqcSsCFWAwQrylhZ/EXdHSN2XSZFcx/XO011yMKgmbFQ6iMS7KmYzIAKkeDEBNpMgge5v3aNIpHZHcoC97TU/nbBnM48YZIRq0ONDiJ9aYoT3680MwFQKZseem0927Xu6p/lcryslloFuvLzCx/0mMtU0H2ghMBU0mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOB1RTw6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220D3C2BD10;
+	Thu, 23 May 2024 06:50:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716447039;
-	bh=j+Yzr44J3a/y0uMOBUQ0oSYXFSurJrqVJ6d0Uotfark=;
+	s=k20201202; t=1716447045;
+	bh=EsgKr2+15JU23386C02AiaPX82NABHkp3oBufrNJeLE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cLXTYBmC9qdkVCPDH1Vxcmic2fuUaIF/DZWKMYZr7aHHhSBKr9qGWR60dBMtlZ4xt
-	 TF2U3FNb6KpusCJtKrJUpkQ58ql8eAxdqqUG14fYYR81zVG+kqO1P0EPVQVgeAl5Z8
-	 gdTLeL/qIfLIzQbomqeG5xlO01f2TT3Di9yJKEiw0BviUzrC2rSl5rvZQWsi8KGynh
-	 w/Ve6EBVeUqY3WaFgU2Nj9gwn8W26GeVDQHtMlxMEOCsyedWzKdf7A2htnjWAhyjg1
-	 mv7UmLRaDBFQ2Tb2crXn76NG2B/W+CXtjTW2pSap5XKFMJmb5lR5k/ZmJCz1gFDYUM
-	 9HFIUCplfMVMw==
+	b=aOB1RTw63RqL0BbGW60bu5BO0B7L9tVOMackeER5+2CY4tKejCceupNgyj32hn5cp
+	 niqoR3j5B8bz6FZQZKAXhhL/hUQ3mzn2s0E0TyapXxvnWEi/VHDwmB8YBABkkiUnA6
+	 uuZHlkb4qBTRJZwN0zy0b0XNxnldrLFR9uxM4emOKjvsHCgTszWrdLwQSXIjN8f5P8
+	 fOr7c0if/bF3y/+xikF+CLjEwG5ix2Se2NN8fAXozza/T6bODy+STmFULgPV0iOhXh
+	 so4kE+4kXOV/OEMNRos+nitdmA9nYDCmc8Iba9j3lYTxlfb0EbpviMJrs6Au/xxp33
+	 jqm3NiY5Au5Bw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -60,9 +60,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 3/8] selftests/bpf: Use bpf_link attachments in test_sockmap
-Date: Thu, 23 May 2024 14:49:59 +0800
-Message-ID: <32cf8376a810e2e9c719f8e4cfb97132ed2d1f9c.1716446893.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 4/8] selftests/bpf: Replace tx_prog_fd with tx_prog in test_sockmap
+Date: Thu, 23 May 2024 14:50:00 +0800
+Message-ID: <23b37f932c547dd1ebfe154bbc0b0e957be21ee6.1716446893.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn>
 References: <cover.1716446893.git.tanggeliang@kylinos.cn>
@@ -76,132 +76,79 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Switch attachments to bpf_link using bpf_program__attach_sockmap() instead
-of bpf_prog_attach().
-
-This patch adds a new array progs[] to replace prog_fd[] array, set in
-populate_progs() for each program in bpf object.
-
-And another new array links[] to save the attached bpf_link. It is
-initalized as NULL in populate_progs, set as the return valuses of
-bpf_program__attach_sockmap(), and detached by bpf_link__detach().
+bpf_program__attach_sockmap() needs to take a parameter of type bpf_program
+instead of an fd, so tx_prog_fd becomes useless. This patch uses a pointer
+tx_prog to point to an item in progs[] array.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 59 ++++++++++++----------
- 1 file changed, 31 insertions(+), 28 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 30 ++++++++++------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index e7dbf49a2ca6..d7581bbbc473 100644
+index d7581bbbc473..8e32d157bac0 100644
 --- a/tools/testing/selftests/bpf/test_sockmap.c
 +++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -64,6 +64,8 @@ int failed;
- int map_fd[9];
- struct bpf_map *maps[9];
- int prog_fd[9];
-+struct bpf_program *progs[9];
-+struct bpf_link *links[9];
+@@ -954,7 +954,8 @@ enum {
  
- int txmsg_pass;
- int txmsg_redir;
-@@ -960,43 +962,39 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ {
+-	int i, key, next_key, err, tx_prog_fd = -1, zero = 0;
++	int i, key, next_key, err, zero = 0;
++	struct bpf_program *tx_prog;
  
- 	/* Attach programs to sockmap */
- 	if (!txmsg_omit_skb_parser) {
--		err = bpf_prog_attach(prog_fd[0], map_fd[0],
--				      BPF_SK_SKB_STREAM_PARSER, 0);
+ 	/* If base test skip BPF setup */
+ 	if (test == BASE || test == BASE_SENDPAGE)
+@@ -1015,27 +1016,27 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 
+ 	/* Attach txmsg program to sockmap */
+ 	if (txmsg_pass)
+-		tx_prog_fd = prog_fd[4];
++		tx_prog = progs[4];
+ 	else if (txmsg_redir)
+-		tx_prog_fd = prog_fd[5];
++		tx_prog = progs[5];
+ 	else if (txmsg_apply)
+-		tx_prog_fd = prog_fd[6];
++		tx_prog = progs[6];
+ 	else if (txmsg_cork)
+-		tx_prog_fd = prog_fd[7];
++		tx_prog = progs[7];
+ 	else if (txmsg_drop)
+-		tx_prog_fd = prog_fd[8];
++		tx_prog = progs[8];
+ 	else
+-		tx_prog_fd = -1;
++		tx_prog = NULL;
+ 
+-	if (tx_prog_fd > 0) {
++	if (tx_prog) {
+ 		int redir_fd;
+ 
+-		err = bpf_prog_attach(tx_prog_fd,
+-				      map_fd[1], BPF_SK_MSG_VERDICT, 0);
 -		if (err) {
-+		links[0] = bpf_program__attach_sockmap(progs[0], map_fd[0]);
-+		if (!links[0]) {
++		links[4] = bpf_program__attach_sockmap(tx_prog, map_fd[1]);
++		if (!links[4]) {
  			fprintf(stderr,
--				"ERROR: bpf_prog_attach (sockmap %i->%i): %d (%s)\n",
--				prog_fd[0], map_fd[0], err, strerror(errno));
--			return err;
-+				"ERROR: bpf_program__attach_sockmap (sockmap %i->%i): (%s)\n",
-+				bpf_program__fd(progs[0]), map_fd[0], strerror(errno));
-+			return -1;
- 		}
- 	}
- 
--	err = bpf_prog_attach(prog_fd[1], map_fd[0],
--				BPF_SK_SKB_STREAM_VERDICT, 0);
--	if (err) {
--		fprintf(stderr, "ERROR: bpf_prog_attach (sockmap): %d (%s)\n",
--			err, strerror(errno));
--		return err;
-+	links[1] = bpf_program__attach_sockmap(progs[1], map_fd[0]);
-+	if (!links[1]) {
-+		fprintf(stderr, "ERROR: bpf_program__attach_sockmap (sockmap): (%s)\n",
-+			strerror(errno));
-+		return -1;
- 	}
- 
- 	/* Attach programs to TLS sockmap */
- 	if (txmsg_ktls_skb) {
- 		if (!txmsg_omit_skb_parser) {
--			err = bpf_prog_attach(prog_fd[0], map_fd[8],
--					      BPF_SK_SKB_STREAM_PARSER, 0);
--			if (err) {
-+			links[2] = bpf_program__attach_sockmap(progs[0], map_fd[8]);
-+			if (!links[2]) {
- 				fprintf(stderr,
--					"ERROR: bpf_prog_attach (TLS sockmap %i->%i): %d (%s)\n",
--					prog_fd[0], map_fd[8], err, strerror(errno));
--				return err;
-+					"ERROR: bpf_program__attach_sockmap (TLS sockmap %i->%i): (%s)\n",
-+					bpf_program__fd(progs[0]), map_fd[8], strerror(errno));
-+				return -1;
- 			}
- 		}
- 
--		err = bpf_prog_attach(prog_fd[2], map_fd[8],
--				      BPF_SK_SKB_STREAM_VERDICT, 0);
--		if (err) {
--			fprintf(stderr, "ERROR: bpf_prog_attach (TLS sockmap): %d (%s)\n",
+-				"ERROR: bpf_prog_attach (txmsg): %d (%s)\n",
 -				err, strerror(errno));
--			return err;
-+		links[3] = bpf_program__attach_sockmap(progs[2], map_fd[8]);
-+		if (!links[3]) {
-+			fprintf(stderr, "ERROR: bpf_program__attach_sockmap (TLS sockmap): (%s)\n",
++				"ERROR: bpf_program__attach_sockmap (txmsg): (%s)\n",
 +				strerror(errno));
-+			return -1;
++			err = -1;
+ 			goto out;
  		}
+ 
+@@ -1285,9 +1286,6 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 			bpf_link__detach(links[i]);
  	}
  
-@@ -1281,10 +1279,11 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- out:
- 	/* Detatch and zero all the maps */
- 	bpf_prog_detach2(prog_fd[3], cg_fd, BPF_CGROUP_SOCK_OPS);
--	bpf_prog_detach2(prog_fd[0], map_fd[0], BPF_SK_SKB_STREAM_PARSER);
--	bpf_prog_detach2(prog_fd[1], map_fd[0], BPF_SK_SKB_STREAM_VERDICT);
--	bpf_prog_detach2(prog_fd[0], map_fd[8], BPF_SK_SKB_STREAM_PARSER);
--	bpf_prog_detach2(prog_fd[2], map_fd[8], BPF_SK_SKB_STREAM_VERDICT);
-+
-+	for (i = 0; i < ARRAY_SIZE(links); i++) {
-+		if (links[i])
-+			bpf_link__detach(links[i]);
-+	}
- 
- 	if (tx_prog_fd > 0)
- 		bpf_prog_detach2(tx_prog_fd, map_fd[1], BPF_SK_MSG_VERDICT);
-@@ -1836,6 +1835,7 @@ static int populate_progs(char *bpf_file)
- 	i = bpf_object__load(obj);
- 	i = 0;
- 	bpf_object__for_each_program(prog, obj) {
-+		progs[i] = prog;
- 		prog_fd[i] = bpf_program__fd(prog);
- 		i++;
- 	}
-@@ -1850,6 +1850,9 @@ static int populate_progs(char *bpf_file)
- 		}
- 	}
- 
-+	for (i = 0; i < ARRAY_SIZE(links); i++)
-+		links[i] = NULL;
-+
- 	return 0;
- }
- 
+-	if (tx_prog_fd > 0)
+-		bpf_prog_detach2(tx_prog_fd, map_fd[1], BPF_SK_MSG_VERDICT);
+-
+ 	for (i = 0; i < 8; i++) {
+ 		key = next_key = 0;
+ 		bpf_map_update_elem(map_fd[i], &key, &zero, BPF_ANY);
 -- 
 2.43.0
 
