@@ -1,225 +1,218 @@
-Return-Path: <linux-kselftest+bounces-10670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090468CE7B2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 17:20:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC4D58CE7D7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 17:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F03EB21255
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 15:20:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44E24B20B18
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 15:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345DA12EBD4;
-	Fri, 24 May 2024 15:20:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6AC312CD82;
+	Fri, 24 May 2024 15:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FeDStk13"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dV9H049W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D29312EBC2
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 15:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139191802B;
+	Fri, 24 May 2024 15:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716564012; cv=none; b=WT4Vtl39WzN0RPWvNl9VcMQwPCqzEA/a5Mjv74u7qeYRoz8m6Yi44DLHnx1wpWgETpVuWAtORYbuDOBxWzyQ8ULQnroSiKs/BX8iJv8ktTyuFF6tTchhtwGIdMWS9xpP42gCbq8upi0B+dKpP8iTLFh42jV4/DW8gwRwviFqjjo=
+	t=1716564398; cv=none; b=ivtY1BdsZTYvwqQW5mhq+zWehMYLkUHEtqM05cXlvrJtUw+Cor5oCCIhLKsnsaQdwtj/QAlhchoXp5eKhHaBHzfb2kPCPLykyaulzcLAZgYw9XQU5S4OEp30yATlZuFbhX5AE9mu8yOXV1fisD0alvSw1Rnnbtf+TdiT9wU8+rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716564012; c=relaxed/simple;
-	bh=CiO/lvnALkYRYbRd1zlLaDYsKNI9Jx8F2Ri4OFHTdJ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lwDXbRPaUbG6o5E8NG35TcdS7L0hxMusXPyDdUFQbgcnLvmN9kOOhpCUIVW72BWQmHIAykOASFLDHhh1ayQdT4gTgxzdcAAQEc2BU/gUjjyKCJSsJs7qVvbep9AQ9A1mHZxToWYtkEKLqHsLF4pBSCPoNylOFLis7HtDv/CAI6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FeDStk13; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716564009;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=1ZIpjSpVhGXFqbeIYTEMQJjeeXWxW1gA9+eSsQ9QaIk=;
-	b=FeDStk13quYHuHiJNMTyetiTSrZBsuxy1sqdh3sL1wGXUtJrjbuXQCpmORwtGQZmbGDsZC
-	vJ/iKg1ofJ++Ov+8AVGXdI8Jd/V87kwzUsOIOGnXza3488aHPtjrDwub9f30kGdIZO1YlJ
-	V5szLHVw2DKlc2VIuLVJkX07VxshNhw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-625-Hhlsev9lPT2wgGOAsPHaxA-1; Fri, 24 May 2024 11:20:08 -0400
-X-MC-Unique: Hhlsev9lPT2wgGOAsPHaxA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-420fc4241ccso3015045e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 08:20:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716564007; x=1717168807;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1ZIpjSpVhGXFqbeIYTEMQJjeeXWxW1gA9+eSsQ9QaIk=;
-        b=H6YBipkeZ3sAGN6vufLLxWk6EiVwBcy805BLt7AYLFvEyZ+CHUWYQLcQm5+I/w6jAd
-         yVaYeS9F1EJo5ctYbGeIpDkj7q8dqlsRe4j561N3BvW37N56olpDJxUl2AMKxXAJ7TXi
-         WUEINJVGfia4heixoOsYgtiIwGsX4AnXL37omJl0Tuu47nB6pJ7COfEsinA1UH/zR1BS
-         fN5dGKVkSVLWWymIJ/e0rairGHL2UlKc15Tp61qChXQQ+8PKt/T2T+BYW9sCDsyLmzPB
-         Umj2XPuezZZmvFv+ZAAOQuoBSQZIAEYCDGhIgQdxCk7ug8X5SjQ7Fs4Q5a4Idx9uX6kW
-         95PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqlFMvqLIBa8AGLyTMQgeS4ePo/A4TkuAF8n3pGwAgdxvumeDiE8yp2qNWBhpk4yY7PTTU7+P8dTzBLk7pmU0fu4FWVHXIm7Le/6NhR4kA
-X-Gm-Message-State: AOJu0YyIpC0zlHSGbnDjF+JfcG9WPRRg3eQEkbgJEwoNG8mM6dQYm5rJ
-	4bbhH5fStwyqU8GcEvIyYpvqX56qeOTg5LqL0SdjpHZ9utX/nA2VcyG77rmU4fPkBBecYD9qBdR
-	dsjFGGXO/ndr7M/J3WU6dxsUSqCeLtRTrmKgLlOEjMJc8ZChtNHeqj2U0Ozyrp9uwhw==
-X-Received: by 2002:a05:600c:3152:b0:421:757:4d3e with SMTP id 5b1f17b1804b1-42108a40f7emr28519955e9.16.1716564006948;
-        Fri, 24 May 2024 08:20:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0+MT4DE5ofWCxfrSzCht7nuRPo1YsHdujhPfIDVrENkF3v+gPtlH5pDAMVQnnZJrG1araOA==
-X-Received: by 2002:a05:600c:3152:b0:421:757:4d3e with SMTP id 5b1f17b1804b1-42108a40f7emr28519685e9.16.1716564006451;
-        Fri, 24 May 2024 08:20:06 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4210896f442sm23071615e9.11.2024.05.24.08.20.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 May 2024 08:20:05 -0700 (PDT)
-Message-ID: <b9a66589-5313-4b7e-89db-3f328d5638f3@redhat.com>
-Date: Fri, 24 May 2024 17:20:04 +0200
+	s=arc-20240116; t=1716564398; c=relaxed/simple;
+	bh=jrsMR0Hbp2Lf70BirMCZcxLAC3k0Adh53Y+FmXUtnPQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=JyDPFFpCXq0/lHy71te9Cmi+E0cqeTpahCx7XOv98YGv4UwvYqEg/PM2rF/uCoVabsuG53gzxnLxZA3IbmNfoHVFhM31sP8S85XxUK7VNO30ym70kc6L8MZzeufZXKw9NckKhmkvUkZD0axTh/cNVNkSIudOjCZ1OqSU1tHZHUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dV9H049W; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716564397; x=1748100397;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jrsMR0Hbp2Lf70BirMCZcxLAC3k0Adh53Y+FmXUtnPQ=;
+  b=dV9H049WgyO8QaMF0/bhp42TFmHcyqGcjOyIX74SfDlTHWot0hdfWbak
+   xRe9wKwuHvljYEmMuqeR+P1Fr3JhtnzKn/AzY6uHT2w9VIoxlElTacDJY
+   61XvM9Z1g5EN174Ga3gh/hZyOhw4YJLWEeyHGZnt5iOiDuWzcfc+92RlC
+   oaTwXKqgZcZe3KsXhU8gy5cV8bsLAkYs0+4i3wY0UX0roe5kCMiede6cF
+   t60YYhueGmQ5dSKbG67rJoDqdkqFsg3/gdnA2lLgkcZNx43ruAxV1z5QL
+   HXuNE96CG1kpNaK+YvMBrZp5F9jukDOEbeSaeksZOJKdf5QTqwJbBdev4
+   Q==;
+X-CSE-ConnectionGUID: kqm/mlRvQ+CvrHMrLOJxYA==
+X-CSE-MsgGUID: /mUzzxPGSDy/8caLnw2qZQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11082"; a="16776010"
+X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
+   d="scan'208";a="16776010"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 08:26:36 -0700
+X-CSE-ConnectionGUID: JATHZZ8QSNaEs7JvDbcC5g==
+X-CSE-MsgGUID: /ev4NJy+SAqYQOohgYmHmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,185,1712646000"; 
+   d="scan'208";a="34549821"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.127])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 08:26:33 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 24 May 2024 18:26:29 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived
+ mem bw over sleep(1) only
+In-Reply-To: <d8063ee7-1744-45a2-b6b9-506e68106baf@intel.com>
+Message-ID: <b029db88-2e09-0b4a-f46a-84b5e535f178@linux.intel.com>
+References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com> <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com> <ea0c86b9-ae77-c2d9-b52b-239ae42603e8@linux.intel.com>
+ <d8063ee7-1744-45a2-b6b9-506e68106baf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked during
- __bio_release_pages()
-To: Donet Tom <donettom@linux.ibm.com>,
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
- Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Rapoport <rppt@kernel.org>, Muchun Song <songmuchun@bytedance.com>
-References: <20240523063905.3173-1-donettom@linux.ibm.com>
- <20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
- <d551d1cd-a02f-42aa-9de2-10ff7757224c@redhat.com>
- <20240523195734.bc03a8822a34b1a97880fb65@linux-foundation.org>
- <7792c8ba-39e6-47ee-9b43-108270325c15@redhat.com> <87o78vsoav.fsf@gmail.com>
- <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
- <3c6e5e78-aa49-4002-941f-af8fd2b81d10@linux.ibm.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <3c6e5e78-aa49-4002-941f-af8fd2b81d10@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-770057559-1716564389=:1394"
 
-On 24.05.24 11:31, Donet Tom wrote:
-> 
-> On 5/24/24 12:31, David Hildenbrand wrote:
->> On 24.05.24 08:43, Ritesh Harjani (IBM) wrote:
->>> David Hildenbrand <david@redhat.com> writes:
->>>
->>> dropping stable@vger.kernel.org
->>>
->>>> On 24.05.24 04:57, Andrew Morton wrote:
->>>>> On Thu, 23 May 2024 22:40:25 +0200 David Hildenbrand
->>>>> <david@redhat.com> wrote:
->>>>>
->>>>>>> You have stable@vger.kernel.org in the mail headers, so I assume
->>>>>>> you're
->>>>>>> proposing this for backporting.  When doing this, please include
->>>>>>>
->>>>>>> Cc: <stable@vger.kernel.org>
->>>>>>>
->>>>>>> in the changelog footers and also include a Fixes: target.  I'm
->>>>>>> assuming the suitable Fixes: target for this patch is 38b43539d64b?
->>>>>>
->>>>>> This adds a new selfest to make sure what was fixed (and
->>>>>> backported to
->>>>>> stable) remains fixed.
->>>>>
->>>>> Sure.  But we should provide -stable maintainers guidance for "how far
->>>>> back to go".  There isn't much point in backporting this into kernels
->>>>> where it's known to fail!
->>>>
->>>> I'm probably missing something important.
->>>>
->>>> 1) It's a test that does not fall into the common stable kernels
->>>> categories (see Documentation/process/stable-kernel-rules.rst).
->>>>
->>>> 2) If it fails in a kernel *it achieved its goal* of highlighting that
->>>> something serious is broken.
->>>>
->>>>>
->>>>> I'm still thinking that we want this in kernels which have
->>>>> 38b43539d64b?
->>>>
->>>> To hide that the other kernels are seriously broken and miss that fix?
->>>>
->>>> Really (1) this shouldn't be backported. I'm not even sure it should be
->>>> a selftest (sounds more like a reproducer that we usually attach to
->>>> commits, but that's too late). And if people care about backporting it,
->>>> (2) you really want this test to succeed everywhere. Especially also to
->>>> find kernels *without* 38b43539d64b
->>>
->>>
->>> Sorry about the noise and cc'd to stable. I believe we don't need to
->>> backport this test. The idea of adding a selftests was "also" to
->>> catch any
->>> future bugs like this.
->>
->> Yes, for that purpose it's fine, but it has quite the "specific
->> reproducer taste". Having it as part of something that is prepared to
->> run against arbitrary kernels (which selftests frequently are not) to
->> detect known problems feels better.
->>
-> I have seen some hugetlbfs directio tests in LTP. If you think
-> selftest is not the correct place to add this test, we can drop this
-> test from selftests and add it to LTP.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I think LTP might be a better fit to spot such issues in the wild. But I 
-don't have a strong opinion.
+--8323328-770057559-1716564389=:1394
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
--- 
-Cheers,
+On Fri, 24 May 2024, Reinette Chatre wrote:
+> On 5/24/24 12:57 AM, Ilpo J=C3=A4rvinen wrote:
+> > On Thu, 23 May 2024, Reinette Chatre wrote:
+> > > On 5/20/24 5:30 AM, Ilpo J=C3=A4rvinen wrote:
+> > > > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that perfo=
+rms
+> > > > the measurement over a duration of sleep(1) call. The memory bandwi=
+dth
+> > > > numbers from IMC are derived over this duration. The resctrl FS der=
+ived
+> > > > memory bandwidth, however, is calculated inside measure_vals() and =
+only
+> > > > takes delta between the previous value and the current one which
+> > > > besides the actual test, also samples inter-test noise.
+> > > >=20
+> > > > Rework the logic in measure_vals() and get_mem_bw_imc() such that t=
+he
+> > > > resctrl FS memory bandwidth section covers much shorter duration
+> > > > closely matching that of the IMC perf counters to improve measureme=
+nt
+> > > > accuracy. Open two the resctrl mem bw files twice to avoid opening
+> > > > after the test during measurement period (reading the same file twi=
+ce
+> > > > returns the same value so two files are needed).
+> > >=20
+> > > I think this is only because of how the current reading is done, resc=
+trl
+> > > surely supports keeping a file open and reading from it multiple time=
+s.
+> > >=20
+> > > There seems to be two things that prevent current code from doing thi=
+s
+> > > correctly:
+> > > (a) the fscanf() code does not take into account that resctrl also
+> > >      prints a "\n" ... (this seems to be the part that may cause the =
+same
+> > >      value to be returned).
+> > >      So:
+> > > =09if (fscanf(fp, "%lu", mbm_total) <=3D 0) {
+> > >      should be:
+> > > =09if (fscanf(fp, "%lu\n", mbm_total) <=3D 0) {
+> > > (b) the current reading does not reset the file position so a second
+> > >      read will attempt to read past the beginning. A "rewind(fp)"
+> > >      should help here.
+> >=20
+> > (b) cannot be the cause for returning the same value again. It would
+> > not be able to reread the number at all if file position is not moved.
+>=20
+> I know. This was not intended to explain the duplicate answer but instead
+> describe another change required to use current code in a loop. I
+> specifically said in (a) that "(this seems to be the part that may cause
+> the same value to be returned)".
+>=20
+> > I certainly tried with fseek() and it is when I got same value on the
+> > second read which is when I just went to two files solution.
+> >=20
+> > > A small program like below worked for me by showing different values
+> > > on every read:
+> > >=20
+> > > #include <stdio.h>
+> > > #include <stdlib.h>
+> > > #include <unistd.h>
+> > >=20
+> > > const char *mbm_total_path =3D
+> > > "/sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes";
+> > >=20
+> > > int main(void)
+> > > {
+> > > =09unsigned long mbm_total;
+> > > =09FILE *fp;
+> > > =09int count;
+> > >=20
+> > > =09fp =3D fopen(mbm_total_path, "r");
+> > > =09if (!fp) {
+> > > =09=09perror("Opening data file\n");
+> > > =09=09exit(1);
+> > > =09}
+> > > =09for (count =3D 0; count < 100; count++) {
+> > > =09=09if (fscanf(fp, "%lu\n", &mbm_total) <=3D 0) {
+> > > =09=09=09perror("Unable to read from data file\n");
+> > > =09=09=09exit(1);
+> > > =09=09}
+> > > =09=09printf("Read %d: %lu\n",count ,mbm_total );
+> > > =09=09sleep(1);
+> > > =09=09rewind(fp);
+> > > =09}
+> > > =09fclose(fp);
+> > > =09return 0;
+> > > }
+> >=20
+> > Okay, so perhaps it's your explanation (a) but can libc be trusted to n=
+ot
+> > do buffering/caching for FILE *? So to be on the safe side, it would
+>=20
+> Coding with expectation that libc cannot be trusted sounds strange to me.
+>=20
+> > need to use syscalls directly to guarantee it's read the file twice.
+> >=20
+> > If I convert it into fds, fscanf() cannot be used which would complicat=
+e
+> > the string processing by adding extra steps.
+> >=20
+>=20
+> It is not clear to me why you think that fscanf() cannot be used.
 
-David / dhildenb
+This was related to fscanf() not being able to read from an fd which is=20
+different interface than what libc's FILE * is.
 
+> Could you please elaborate what the buffering issues are?
+
+I'm pretty sure that by default libc does some buffering (even std*=20
+streams are line buffered and others streams even more). I'm not entirely=
+=20
+sure about the extent of that buffering but here we need to always read=20
+the up to date value from the file itself, not from some buffer.
+
+Maybe there never is any problem that the earlier read values are returned=
+=20
+from some libc buffer when lseek/rewind is used, I just don't know that=20
+for sure. You seem to be more certain but I've not seen on what basis=20
+(other than the anecdotial test you provided).
+
+> It is not necessary to open and close the file every time a value needs
+> to be read from it.
+
+--=20
+ i.
+--8323328-770057559-1716564389=:1394--
 
