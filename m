@@ -1,225 +1,228 @@
-Return-Path: <linux-kselftest+bounces-10659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B19EF8CE143
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:02:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D4478CE16F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:16:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4AC11C20F4E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 07:02:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DCE3B212B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 07:16:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0833D6EB60;
-	Fri, 24 May 2024 07:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC89B127E2D;
+	Fri, 24 May 2024 07:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L9TxNvFX"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="y2ijOrSi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D5F2B9B8
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 07:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A4C6EB4C
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 07:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716534121; cv=none; b=QLZvBfgTRJ2SCsLCH1RzainNkA8PNxy2Bc+BTVpmm1AyiQZJYqL14ALAhukKXKIo2CZuzHrHz9R1qeiK1QAlZXCYFK0krpz9uTHswKjBV56YvgCktinGNieEfIuUmTS1mcyjVxtVIa8GLsdJrqvuWVDPV3SbYHh9iHPy8FCHLoQ=
+	t=1716534995; cv=none; b=VvQlvTKAiIgNqJsnhzsS1nyd0k5g8ZKdqEgCPKtw48LQosgQcVLg0Gsahqvq1c7d+5wFqDVB/O2wD+tlRlO2sg9Jdh8txw6n6SvuAQ9BDcWLS6Zt5rrrmFR+cAq2iQnrRJSRzKkUPQj931rzl/+90aRiLISVWV6bjcdQS/X4NLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716534121; c=relaxed/simple;
-	bh=S6X3QWQ+0K1WufA9+NZWA+XmUyZ213h25aZFAPV5q4g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CxTGt7iWrh5+urrO/78yaMuMHwYIgRVZ20lIldtTTe67yLyedaJQxyVZN4YPs2SXvKGKFcT3mYn6ltv+BBzrLQEBR7L2vCB1OvaB9NRckQvxvG5yeYmOtuECZcgAaJEf3mo+3e6mDZqtqVImR+f5vgOzaFpLnQmk1pY8wuGZUTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L9TxNvFX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1716534119;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0uHq3ec8ZMgbwjUPHUCI4MPEhdD2KzAA/CPZDlqmLUk=;
-	b=L9TxNvFXFv00Dc/RYQ1qqPFdJgCrxR7m3f/G5hoigggr6tSpLiKC5tGr4P11+Qg+gIlvqo
-	skpVpW/kGA9z+vx/y2SZojUEgbT9Rg4U+mNXIf3paW0JDtzF145x8flxuDT9IEACtFbRjr
-	xbtk+vM3mK+gG0MPDg/YSIIsO8u+VbU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-648-psYyoNtpPIOT3VABd71J-g-1; Fri, 24 May 2024 03:01:57 -0400
-X-MC-Unique: psYyoNtpPIOT3VABd71J-g-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-41ffa918455so80470985e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 00:01:57 -0700 (PDT)
+	s=arc-20240116; t=1716534995; c=relaxed/simple;
+	bh=L5dtxTCrzKCyV3a12hQ+4vBbPtIXGLsw+Pi3J3zri8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LkcEoX2VcrnTTDseEELjJ2gzPeL8xDd2lYiOOwuMLsiaj881xvX02G2mCGe3NbpZ0gIcUKhrFlmXKjdSiL+lAMGPt2qjqmyzfB9QV5A/glMy/0nj/oalXiQmCHZkDJG6+rvuV02A8hWDYe7uhQdRHve3Gh6PB7HkR78sVeFr/iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=y2ijOrSi; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-681a49e6e86so352199a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 00:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716534992; x=1717139792; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
+        b=y2ijOrSiwn8kujMA0869ALapDPpI42dWw9fvOBWqX8Y8XIpcqYXkUkkubl7IuDmmgr
+         UXgs/FYwWQ6cMuIo093RxaHWEmjtTlpcPKupttpXoO4fgnH95uo/yaxP5aiTe2K0XTK6
+         OB8Hf49CztFRHosI56opMlAGwTeRKeLa7jDUtXNV3n1p1lK8CwTzFsc2CcTBhW2OQl9c
+         y5qGjjAYEsJqZqRGr4HQu2IUQ11hKqzITyzCBxl3gLhHVB9p4BNs9O6j/HB/qLxm07aS
+         +zTKlMC5xlJAWs8LHA+/ivB1Cb7gpZt6kBbkLyaNpACXt8lTMYOy0j5JSg5MfxhV1IOJ
+         uvgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716534116; x=1717138916;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0uHq3ec8ZMgbwjUPHUCI4MPEhdD2KzAA/CPZDlqmLUk=;
-        b=aMHUsLuK0DAMafQzxZhmgWOt6ejgUk1nVrFINuFkMaN01CoHfv9QpPUx0sjsx/8BY7
-         LGQwNJd+w5qaUbRs6EqnegjdihGbfbQEf8vri9HG9wSH6Jtr6RHk7/9RLPCxIOLiSDpL
-         H9Rcd1VR2ObvokIUyNOzlmZ6W1jbetGu0tlfDNAwwYV9iEHbbK2GyUZUvh8z2FtPGA6J
-         Vwk6vBgLEU+m0dt57BBBxOO3n/JLpf+0bTpBLtfMTOwk+ucCYr0prue/xERqFquUy8Zt
-         zvVCFU3WHVpm3Ce6kopy6HpRzMfCmQ1LvLtM+FWU5b8jeQ9gS7wJMVbpgzO0rlqGEujB
-         UFdA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6u6uXVPDCk1xA2kE3oRnOd25IVC9FaC1gKblDtPhrwUUeHR0yaO6Ug71+dxfqBJA9ynJgfy/2NrXjRqQbW/8iVBsGG71OgoN+OD69yr6n
-X-Gm-Message-State: AOJu0YzAYyfg65IdusK7XTkvA/nl10S97AegrZUZe0k1yhA+MN2YhVEP
-	UYv0RlIArVIzd89NIhSzwAK7Zch8KwBI3I9noZAfKtswcIzWHOnC3Snn55SzAV07I/+tMsOCCzk
-	zv2gbWMgpp+PHP8Fqn9pf6Dpw4heuXyJfgjwt9gYxo6/yWWubvKUZwCseOV4EwB8mpA==
-X-Received: by 2002:a7b:cbd0:0:b0:420:1284:475 with SMTP id 5b1f17b1804b1-421089cd413mr11031195e9.12.1716534116276;
-        Fri, 24 May 2024 00:01:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGWxG9Is1RP9OAuCNjoZ84PzkbrNAp1YEXxVe/Wk2tG3Id8JRSEhNammAi0NqOk2IOBrH+qkQ==
-X-Received: by 2002:a7b:cbd0:0:b0:420:1284:475 with SMTP id 5b1f17b1804b1-421089cd413mr11030695e9.12.1716534115521;
-        Fri, 24 May 2024 00:01:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c724:bc00:e919:27a8:d431:782a? (p200300cbc724bc00e91927a8d431782a.dip0.t-ipconnect.de. [2003:cb:c724:bc00:e919:27a8:d431:782a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100fadcabsm44408595e9.35.2024.05.24.00.01.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 May 2024 00:01:55 -0700 (PDT)
-Message-ID: <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
-Date: Fri, 24 May 2024 09:01:54 +0200
+        d=1e100.net; s=20230601; t=1716534992; x=1717139792;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
+        b=q88z1fa5WDRkJhbd0Y6Omrbk1/85x8OViWFifV8xgHcEC7OJsKHtp9T5ao6y8t+SJv
+         MH/SnzAZwcyySVhiP7z/iusjzVJX+t1Jtzkym6YnlfJ/jBn159EqtfGAM7OY7VApNH57
+         6zLtpoJDHL7ju8HPWEO4NRvRwU19vPaR1uJNsx9LVgUxr4r+rQhhLe5lUaFezSMUw5N4
+         AoakQPGBr+3oORJE56yBW6t3//CCeuGPoorMMiBV8nUZNzef0XEvfVa/u8PQF7Rf2gi/
+         xXZSuHpXckyMXJftyCsl/D4SjDSTukesNHdR2wryjVi0BLnmNQOE31kvJMKVS/bVRspW
+         +usQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVoFWmU1rmtzBvCLMXAzbm5/HUXb5VpWXvoqq8/l6V65ewW6R9B5tBNejlndR56aVd+2xFiNwrTx5q0bajJh/Vh59ONGJIwmPd0EHpxaUR2
+X-Gm-Message-State: AOJu0Yy7PIxWzjhKmVDUWx/TpuAVtulAVHZWutc1K9GWZjXXWfGmphxZ
+	2rPCIhzbSLzlvvBCj4cgY+tW0XxdNMut+LeI/0NakNHaalDQ/TX+TDNrcGP1Qk0=
+X-Google-Smtp-Source: AGHT+IEDTqTA76mWXJ68mdGF74fNSFi0v4c+GSsV/TK7Kq0h+0BnWlexLZoWy2cb8clnmvmHxGdpVw==
+X-Received: by 2002:a17:90a:ec12:b0:2bf:5992:31ae with SMTP id 98e67ed59e1d1-2bf5ee1cb71mr1385379a91.20.1716534992281;
+        Fri, 24 May 2024 00:16:32 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bf5f9b28dcsm742083a91.52.2024.05.24.00.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 May 2024 00:16:31 -0700 (PDT)
+Date: Fri, 24 May 2024 00:16:27 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, paul.walmsley@sifive.com,
+	rick.p.edgecombe@intel.com, broonie@kernel.org,
+	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, conor.dooley@microchip.com,
+	cleger@rivosinc.com, atishp@atishpatra.org, bjorn@rivosinc.com,
+	samuel.holland@sifive.com, conor@kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+	jerry.shih@sifive.com, hankuan.chen@sifive.com,
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+	charlie@rivosinc.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
+	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 13/29] riscv mmu: write protect and shadow stack
+Message-ID: <ZlA+yxsiHtyUJ/5/@debug.ba.rivosinc.com>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-14-debug@rivosinc.com>
+ <276fa17b-cd62-433d-b0ec-fa98c65a46ca@ghiti.fr>
+ <ZkJOs6ENmDHFsq/U@debug.ba.rivosinc.com>
+ <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked during
- __bio_release_pages()
-To: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Donet Tom <donettom@linux.ibm.com>, Shuah Khan <shuah@kernel.org>,
- Matthew Wilcox <willy@infradead.org>, Tony Battersby
- <tonyb@cybernetics.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mike Rapoport <rppt@kernel.org>, Muchun Song <songmuchun@bytedance.com>
-References: <20240523063905.3173-1-donettom@linux.ibm.com>
- <20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
- <d551d1cd-a02f-42aa-9de2-10ff7757224c@redhat.com>
- <20240523195734.bc03a8822a34b1a97880fb65@linux-foundation.org>
- <7792c8ba-39e6-47ee-9b43-108270325c15@redhat.com> <87o78vsoav.fsf@gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <87o78vsoav.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
 
-On 24.05.24 08:43, Ritesh Harjani (IBM) wrote:
-> David Hildenbrand <david@redhat.com> writes:
-> 
-> dropping stable@vger.kernel.org
-> 
->> On 24.05.24 04:57, Andrew Morton wrote:
->>> On Thu, 23 May 2024 22:40:25 +0200 David Hildenbrand <david@redhat.com> wrote:
->>>
->>>>> You have stable@vger.kernel.org in the mail headers, so I assume you're
->>>>> proposing this for backporting.  When doing this, please include
->>>>>
->>>>> Cc: <stable@vger.kernel.org>
->>>>>
->>>>> in the changelog footers and also include a Fixes: target.  I'm
->>>>> assuming the suitable Fixes: target for this patch is 38b43539d64b?
->>>>
->>>> This adds a new selfest to make sure what was fixed (and backported to
->>>> stable) remains fixed.
->>>
->>> Sure.  But we should provide -stable maintainers guidance for "how far
->>> back to go".  There isn't much point in backporting this into kernels
->>> where it's known to fail!
+On Thu, May 23, 2024 at 04:59:30PM +0200, Alexandre Ghiti wrote:
+>Hi Deepak,
+>
+>On Mon, May 13, 2024 at 7:32 PM Deepak Gupta <debug@rivosinc.com> wrote:
 >>
->> I'm probably missing something important.
+>> On Sun, May 12, 2024 at 06:31:24PM +0200, Alexandre Ghiti wrote:
+>> >On 04/04/2024 01:35, Deepak Gupta wrote:
+>> >>`fork` implements copy on write (COW) by making pages readonly in child
+>> >>and parent both.
+>> >>
+>> >>ptep_set_wrprotect and pte_wrprotect clears _PAGE_WRITE in PTE.
+>> >>Assumption is that page is readable and on fault copy on write happens.
+>> >>
+>> >>To implement COW on such pages,
+>> >
+>> >
+>> >I guess you mean "shadow stack pages" here.
 >>
->> 1) It's a test that does not fall into the common stable kernels
->> categories (see Documentation/process/stable-kernel-rules.rst).
+>> Yes I meant shadow stack pages. Will fix the message.
 >>
->> 2) If it fails in a kernel *it achieved its goal* of highlighting that
->> something serious is broken.
+>> >
+>> >
+>> >>  clearing up W bit makes them XWR = 000.
+>> >>This will result in wrong PTE setting which says no perms but V=1 and PFN
+>> >>field pointing to final page. Instead desired behavior is to turn it into
+>> >>a readable page, take an access (load/store) fault on sspush/sspop
+>> >>(shadow stack) and then perform COW on such pages.
+>> >>This way regular reads
+>> >>would still be allowed and not lead to COW maintaining current behavior
+>> >>of COW on non-shadow stack but writeable memory.
+>> >>
+>> >>On the other hand it doesn't interfere with existing COW for read-write
+>> >>memory. Assumption is always that _PAGE_READ must have been set and thus
+>> >>setting _PAGE_READ is harmless.
+>> >>
+>> >>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> >>---
+>> >>  arch/riscv/include/asm/pgtable.h | 12 ++++++++++--
+>> >>  1 file changed, 10 insertions(+), 2 deletions(-)
+>> >>
+>> >>diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+>> >>index 9b837239d3e8..7a1c2a98d272 100644
+>> >>--- a/arch/riscv/include/asm/pgtable.h
+>> >>+++ b/arch/riscv/include/asm/pgtable.h
+>> >>@@ -398,7 +398,7 @@ static inline int pte_special(pte_t pte)
+>> >>  static inline pte_t pte_wrprotect(pte_t pte)
+>> >>  {
+>> >>-     return __pte(pte_val(pte) & ~(_PAGE_WRITE));
+>> >>+     return __pte((pte_val(pte) & ~(_PAGE_WRITE)) | (_PAGE_READ));
+>> >>  }
+>> >>  /* static inline pte_t pte_mkread(pte_t pte) */
+>> >>@@ -581,7 +581,15 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>> >>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+>> >>                                    unsigned long address, pte_t *ptep)
+>> >>  {
+>> >>-     atomic_long_and(~(unsigned long)_PAGE_WRITE, (atomic_long_t *)ptep);
+>> >>+     volatile pte_t read_pte = *ptep;
+>
+>Sorry I missed this ^. You need to use ptep_get() to get the value of
+>a pte. 
+
+Noted. will fix it.
+
+>And why do you need the volatile here?
+
+I don't remember the reason. It's probably not needed here.
+But I am sure I was debugging something and trying everything.
+And this probably slipped sanitization before sending patches.
+
+Will fix it.
+>
+>> >>+     /*
+>> >>+      * ptep_set_wrprotect can be called for shadow stack ranges too.
+>> >>+      * shadow stack memory is XWR = 010 and thus clearing _PAGE_WRITE will lead to
+>> >>+      * encoding 000b which is wrong encoding with V = 1. This should lead to page fault
+>> >>+      * but we dont want this wrong configuration to be set in page tables.
+>> >>+      */
+>> >>+     atomic_long_set((atomic_long_t *)ptep,
+>> >>+                     ((pte_val(read_pte) & ~(unsigned long)_PAGE_WRITE) | _PAGE_READ));
+>> >>  }
+>> >>  #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
+>> >
+>> >
+>> >Doesn't making the shadow stack page readable allow "normal" loads to
+>> >access the page? If it does, isn't that an issue (security-wise)?
 >>
->>>
->>> I'm still thinking that we want this in kernels which have 38b43539d64b?
+>> When shadow stack permissions are there (i.e. R=0, W=1, X=0), then also shadow stack is
+>> readable through "normal" loads. So nothing changes when it converts into a readonly page
+>> from page permissions perspective.
 >>
->> To hide that the other kernels are seriously broken and miss that fix?
+>> Security-wise it's not a concern because from threat modeling perspective, if attacker had
+>> read-write primitives (via some bug in program) available to read and write address space
+>> of process/task; then they would have availiblity of return addresses on normal stack. It's
+>> the write primitive that is concerning and to be protected against. And that's why shadow stack
+>> is not writeable using "normal" stores.
 >>
->> Really (1) this shouldn't be backported. I'm not even sure it should be
->> a selftest (sounds more like a reproducer that we usually attach to
->> commits, but that's too late). And if people care about backporting it,
->> (2) you really want this test to succeed everywhere. Especially also to
->> find kernels *without* 38b43539d64b
-> 
-> 
-> Sorry about the noise and cc'd to stable. I believe we don't need to
-> backport this test. The idea of adding a selftests was "also" to catch any
-> future bugs like this.
-
-Yes, for that purpose it's fine, but it has quite the "specific 
-reproducer taste". Having it as part of something that is prepared to 
-run against arbitrary kernels (which selftests frequently are not) to 
-detect known problems feels better.
-
-> 
-> I am unaware of any functional test suite where we could add such tests
-> like how filesystems have fstests. Hence the ideas was to add this in
-> selftests.
-
-LTP has quite some MM testcases in testcases/kernel/mem/. But it often 
-has a different focus (CVE or advanced feature/syscall tests). Now that 
-most things are CVEs ... it might not be a bad fit ... :)
-
-> 
-> So this begs the question which I also asked few people at LSFMM,
-> Does mm has any mmfvt (mm functional verification tests)? Should we have
-> something like this? Was it tried in past?
-
-I think LTP is mostly the only "bigger" thing we have that is prepared 
-to run against arbitrary kernel versions.
-
--- 
-Cheers,
-
-David / dhildenb
-
+>> >
+>
+>Thanks for the explanation!
+>
+>With the use of ptep_get(), you can add:
+>
+>Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>
+>Thanks,
+>
+>Alex
 
