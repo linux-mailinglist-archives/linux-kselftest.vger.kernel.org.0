@@ -1,85 +1,104 @@
-Return-Path: <linux-kselftest+bounces-10682-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F758CEAB9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 22:12:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 872AD8CECA4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 01:16:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDA391F210EE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 20:12:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 423F5281E83
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 23:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F5BA433D8;
-	Fri, 24 May 2024 20:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA12515572C;
+	Fri, 24 May 2024 23:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="1zFJRgB7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ccCfzOGh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5D983CBD;
-	Fri, 24 May 2024 20:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1202C1553A1
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 23:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716581574; cv=none; b=W23KshCyrjviiCaFxR9vm/6AJfLjBWAH6xuXbVFzokRj3K8juvgbPcC1ehwDZTbVrY1RRrg7Z+vBioTw7FQRtg/c554WbbJ5W+AYNlePuQfLbC09RM/bHlxH2jvEnCQa5reiO67tqcgjTZ2IF5BwcJUwlbOi9pur3P/H79IJatI=
+	t=1716592595; cv=none; b=qWIpkAe2POGoB1PB13l8pzkUfxsHBP0zmC2QNBUWemcd9dVShYzDMsCcgLERyHP3CTMVs3GHrujPShXIq5IHhqqhKhnJRSPArCVDWLesMN9AlAPJ37esH3OFH/ex8HrZut2WhCxsqWCFcWXKWIW64fKeDPOV7OfE+2ele/ftLVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716581574; c=relaxed/simple;
-	bh=3UnR8vsmR8CcxvacyVVttEzPUuRJVz8jYNuEfHywzW4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=A3MBTXKo9UXapaunnw7BgW9XHCajXohIkibFAgZDkP4D6glmClOJkbEe8tNxeb9t9HeI75uKVBTA9DnDwdiHyIX/IkrKDi0PMfC/XJBg506WkGfq3RtZCHDmsQV4BTfwp0Y+px9DFK9m470HY0pv1ufmWC5tHj7zkPoQt+WUoKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=1zFJRgB7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48EAAC2BBFC;
-	Fri, 24 May 2024 20:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1716581573;
-	bh=3UnR8vsmR8CcxvacyVVttEzPUuRJVz8jYNuEfHywzW4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=1zFJRgB7GUn20f6S8m3qnHj7wBwqWEifkehnYbb5C3CHrLqqQEp2ckQJccVPm3hEN
-	 82fbFl2JJI0VlLLmIgAdrnKJoVjWd6d7u3R0O4L09cLNvWUk+D4PFxRzyLiNUkKT6Y
-	 EsjcEmBJlOmoUfkb0ZoGkWbgu5VJ5v+NJC48B+yY=
-Date: Fri, 24 May 2024 13:12:52 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>, Donet Tom
- <donettom@linux.ibm.com>, Shuah Khan <shuah@kernel.org>, Matthew Wilcox
- <willy@infradead.org>, Tony Battersby <tonyb@cybernetics.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>, Muchun Song
- <songmuchun@bytedance.com>
-Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked
- during __bio_release_pages()
-Message-Id: <20240524131252.52475e7dc695b4d924c253a2@linux-foundation.org>
-In-Reply-To: <87msofsntw.fsf@gmail.com>
-References: <20240523063905.3173-1-donettom@linux.ibm.com>
-	<20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
-	<d551d1cd-a02f-42aa-9de2-10ff7757224c@redhat.com>
-	<87msofsntw.fsf@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1716592595; c=relaxed/simple;
+	bh=Y7I1w3NIY80FaZLYX1Gavh/lqC4JjyMBM4H9YaMYdHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SZxk7SC+0GqckJ0bJzCU0JgEv5cuGuM0GhROV1he7KoKc/RsO6/95eVdPqUzldhsUeb+Zu9ldLSJyARyAFRmDCuTgcshCv/PP1XqTVT5DOkMzMGbQJP8ZOQ6uTuVWhQ94z3YBz17BR1328d3/yjDDynhX+oW9z1J84lW2oATnVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ccCfzOGh; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: geliang@kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716592591;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2uwCfu2jscoa5V5s+WTAFPg+4Fve3as4zISaAXGli0=;
+	b=ccCfzOGh5VgqUv7o3CgvqFdJJr31yri0xDXVtZUHHHJYpk8Rpt1nfD0/IakSbbZG4L6vjj
+	92G5ttiSkfv8JbnQbDIbVmAAs+UaaPWOQFWIU+Yw+3KVJSH33fW0FiCexdyYcZ7oGF6ref
+	LABVNxhHt9E1z0kniqOVIiAp6qe8sBY=
+X-Envelope-To: andrii@kernel.org
+X-Envelope-To: eddyz87@gmail.com
+X-Envelope-To: mykolal@fb.com
+X-Envelope-To: ast@kernel.org
+X-Envelope-To: daniel@iogearbox.net
+X-Envelope-To: song@kernel.org
+X-Envelope-To: yonghong.song@linux.dev
+X-Envelope-To: john.fastabend@gmail.com
+X-Envelope-To: kpsingh@kernel.org
+X-Envelope-To: sdf@google.com
+X-Envelope-To: haoluo@google.com
+X-Envelope-To: jolsa@kernel.org
+X-Envelope-To: shuah@kernel.org
+X-Envelope-To: tanggeliang@kylinos.cn
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Message-ID: <80fbda0d-d366-4aa8-83e7-f7a5bdc5236a@linux.dev>
+Date: Fri, 24 May 2024 16:16:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v4 3/6] selftests/bpf: Use post_socket_cb in
+ connect_to_fd_opts
+To: Geliang Tang <geliang@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1716520609.git.tanggeliang@kylinos.cn>
+ <34180b520025f700f65d23b41148109e4214c697.1716520609.git.tanggeliang@kylinos.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <34180b520025f700f65d23b41148109e4214c697.1716520609.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 24 May 2024 12:23:15 +0530 Ritesh Harjani (IBM) <ritesh.list@gmail.com> wrote:
+On 5/23/24 8:21 PM, Geliang Tang wrote:
+> +static int cc_cb(int fd, void *opts)
+> +{
+> +	struct cb_opts *cb_opts = (struct cb_opts *)opts;
+> +
+> +	return setsockopt(fd, SOL_TCP, TCP_CONGESTION, cb_opts->cc,
+> +			  strlen(cb_opts->cc) + 1);
 
-> >>> This patch verifies that a hugepage, used as a user buffer for DIO
-> >>> operations, is correctly freed upon unmapping, regardless of whether
-> >>> the offsets are aligned or unaligned w.r.t page boundary.
-> >>>
-> >> 
-> >
-> > Two SOF, is there a Co-developed-by: missing?
-> >
-> 
-> Sorry about that. Andrew, could you please add the tag (let me know if you
-> would like me to send v2). Will take care of it next time.
-> 
-> Co-developed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Since this cc_cb is in the test itself, it should use ASSERT_* such that the 
+error output will be more useful. The same (use ASSERT_* whenever makes sense) 
+goes for all cb functions in this set. In particular for the cb that does more 
+than setsockopt in patch 5.
 
-I made that edit, thanks.
 
