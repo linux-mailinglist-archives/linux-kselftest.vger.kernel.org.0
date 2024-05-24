@@ -1,173 +1,202 @@
-Return-Path: <linux-kselftest+bounces-10661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E828CE1DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 737768CE384
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 11:32:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E59561F21C96
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 07:57:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1BBA1F23118
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B76A82D7A;
-	Fri, 24 May 2024 07:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02BF85264;
+	Fri, 24 May 2024 09:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Doc44Kxm"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ljAPogY6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A67604F;
-	Fri, 24 May 2024 07:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3DD282E2;
+	Fri, 24 May 2024 09:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716537447; cv=none; b=Ess8dYj+dxqDtpO59PuNKY6ovCNVg+XI6m+NdDdnNnKkbnouMeNUtSnM7vqoYyEcsTBWQkA3gC6HaWYh5u3w8pk7KCFovTuC/zcQOjmagCYsp5sx7pyyRV+sW0MyU9ehmdmRrK+2+aKa8H/eOyBXoKgPLTVGQpNbP9bbWeQksJg=
+	t=1716543126; cv=none; b=r/vCsKW5TXYN/2YPCZiwqmnT0Y9JCAm3ow8IPUM0cUNSbFMuS+wa3kgfob0sR5T8uxUCtA8e6mStu6VAGLLG8umcdvhP2LxPeHsX2DCXbPGbtFzKfaMuNeMh/ADhG/enC+sXg0lH/nUZ26T0olrhrP1tmdgavQ0REdODET6FwKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716537447; c=relaxed/simple;
-	bh=2nW2MH8YYHHMcOuU6yP8ETfJDp4ymu8aiSEbCDPefVY=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=DSCX2aXM62qAmg8vuu0N+3Gmn7OrJim7wgCuB6jjdlgLQ0QDmKB826/AGcZhYoN27QcNkiw9aAuRPc1Oy3KsVQrs24SCxhrvxS7oMo3ppYv2lToxlL1eUPFJTGgHRicYc3WA67bLAn4xccvK0QHbhaI+EmHPMs4wyVGw5nNcjqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Doc44Kxm; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716537446; x=1748073446;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2nW2MH8YYHHMcOuU6yP8ETfJDp4ymu8aiSEbCDPefVY=;
-  b=Doc44KxmINpnOIhMjExKaXokT9sP+xVVFSlUMHDmAZ0tB4B9YWRhAzJ2
-   CGfOmMneGgEJ+eVcS04NET9L97i9AVw6PMhFPLe0Rzsh0tY5B9m7OKur2
-   MmKhhYvtiRQZCOBL9VQrnnwN4hcWqpF1hqQbQuEZixZPDoen8QCkTZJDM
-   3i77o9bGUu8Gz/4rwEQFInFQgWXIgsytKQxVddHmfZow8x3pN5RMstTPV
-   SGv3vNdPgSfYJBj7JNyD7KA96Jbfl9Sl8m8st+LrUfMTC9xfaNL1o7pBo
-   rIApyt/c6Eu8CIEEJ+Ng29Yb+PTvIna5Hm+lk10wxozdTTF/K3R8Q3ADf
-   w==;
-X-CSE-ConnectionGUID: CMg1Q00pSMivJCoc4cLMBA==
-X-CSE-MsgGUID: zTw9tLpDRMurMhy79jWdNw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="12843684"
-X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
-   d="scan'208";a="12843684"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:57:25 -0700
-X-CSE-ConnectionGUID: IjiR8ATdRbiRMIkWiEyIrg==
-X-CSE-MsgGUID: 7miEALFIRtWZk2Ju6+D+qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
-   d="scan'208";a="34055675"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.127])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:57:22 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 24 May 2024 10:57:16 +0300 (EEST)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-    Babu Moger <babu.moger@amd.com>, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
-    Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived
- mem bw over sleep(1) only
-In-Reply-To: <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com>
-Message-ID: <ea0c86b9-ae77-c2d9-b52b-239ae42603e8@linux.intel.com>
-References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com> <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com>
+	s=arc-20240116; t=1716543126; c=relaxed/simple;
+	bh=rwAvwKwHBuccXt1++ALJWxvGf7nO+9ofOmq3PGzn/tc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L1YzaqDxdJnPzn4JvHo79wS6iEdB7wcPhHzfyJy9Ku7Mn0Bu1i1O4bpSYJLqggifMzo/dg5+N/+b002bhgNFalI1HIQgxoSX2zbnNezIw43UISlK+enYdvZiUEAnTRCCxegFP4AxHpp5YViCbc4qcFMkr3v9q5cr505M+11P9W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ljAPogY6; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44O9N43H017389;
+	Fri, 24 May 2024 09:31:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7is4630m7gBGeEwPyBGyvuIIaidItnoMd2eDRou0Gic=;
+ b=ljAPogY6Xc5nYw7h4kDhE4uqSOX6jpC5WdpCqrRYsXtEb0l56jt39g+pX0W65ptwV+sB
+ TQD84y+a9emrOehy0gTPhaEydDP4Srfe3GVD7dOQHxz8669qKsVJ21JaKu29QwHn13M4
+ CTireWxFK3WxQIDp4afIJtSQJMnab7MnOjBw88j116G+1zxmwJ+XnRmoJaxiAJfPrK84
+ umEBaAtBETdzDbcYapQ/X190C7CletZ/f9skQowaLyAVFSJJLUNfJlkoGEYCzTXacTba
+ DH6rpM8yqWK2sdicROA6Ds6n927riXOTJV69v2jsMlEpMFUPqo4xyNBmLADg3WGpb/qv fA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yar6u8105-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 May 2024 09:31:33 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44O9S4sE025761;
+	Fri, 24 May 2024 09:31:32 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yar6u8103-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 May 2024 09:31:32 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44O8032S008123;
+	Fri, 24 May 2024 09:31:31 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y78vmfby6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 May 2024 09:31:31 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44O9VTXE16515792
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 24 May 2024 09:31:31 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 95FC65805F;
+	Fri, 24 May 2024 09:31:27 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 021AB5805E;
+	Fri, 24 May 2024 09:31:24 +0000 (GMT)
+Received: from [9.109.245.191] (unknown [9.109.245.191])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 24 May 2024 09:31:23 +0000 (GMT)
+Message-ID: <3c6e5e78-aa49-4002-941f-af8fd2b81d10@linux.ibm.com>
+Date: Fri, 24 May 2024 15:01:18 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-355923539-1716537436=:1394"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked during
+ __bio_release_pages()
+Content-Language: en-US
+To: David Hildenbrand <david@redhat.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20240523063905.3173-1-donettom@linux.ibm.com>
+ <20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
+ <d551d1cd-a02f-42aa-9de2-10ff7757224c@redhat.com>
+ <20240523195734.bc03a8822a34b1a97880fb65@linux-foundation.org>
+ <7792c8ba-39e6-47ee-9b43-108270325c15@redhat.com> <87o78vsoav.fsf@gmail.com>
+ <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9SVpRuQBL_ZxKd5AyejlGygJ40Dy6mHE
+X-Proofpoint-ORIG-GUID: ORbpw0wF7gjoGqKtK3qPRFcZr2ETtb5A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-24_03,2024-05-23_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 suspectscore=0 bulkscore=0
+ spamscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2405240066
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-355923539-1716537436=:1394
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Thu, 23 May 2024, Reinette Chatre wrote:
-> On 5/20/24 5:30 AM, Ilpo J=C3=A4rvinen wrote:
-> > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that performs
-> > the measurement over a duration of sleep(1) call. The memory bandwidth
-> > numbers from IMC are derived over this duration. The resctrl FS derived
-> > memory bandwidth, however, is calculated inside measure_vals() and only
-> > takes delta between the previous value and the current one which
-> > besides the actual test, also samples inter-test noise.
-> >=20
-> > Rework the logic in measure_vals() and get_mem_bw_imc() such that the
-> > resctrl FS memory bandwidth section covers much shorter duration
-> > closely matching that of the IMC perf counters to improve measurement
-> > accuracy. Open two the resctrl mem bw files twice to avoid opening
-> > after the test during measurement period (reading the same file twice
-> > returns the same value so two files are needed).
->=20
-> I think this is only because of how the current reading is done, resctrl
-> surely supports keeping a file open and reading from it multiple times.
->=20
-> There seems to be two things that prevent current code from doing this
-> correctly:
-> (a) the fscanf() code does not take into account that resctrl also
->     prints a "\n" ... (this seems to be the part that may cause the same
->     value to be returned).
->     So:
-> =09if (fscanf(fp, "%lu", mbm_total) <=3D 0) {
->     should be:
-> =09if (fscanf(fp, "%lu\n", mbm_total) <=3D 0) {
-> (b) the current reading does not reset the file position so a second
->     read will attempt to read past the beginning. A "rewind(fp)"
->     should help here.
-
-(b) cannot be the cause for returning the same value again. It would=20
-not be able to reread the number at all if file position is not moved.
-
-I certainly tried with fseek() and it is when I got same value on the=20
-second read which is when I just went to two files solution.
-
-> A small program like below worked for me by showing different values
-> on every read:
->=20
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <unistd.h>
->=20
-> const char *mbm_total_path =3D
-> "/sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes";
->=20
-> int main(void)
-> {
-> =09unsigned long mbm_total;
-> =09FILE *fp;
-> =09int count;
->=20
-> =09fp =3D fopen(mbm_total_path, "r");
-> =09if (!fp) {
-> =09=09perror("Opening data file\n");
-> =09=09exit(1);
-> =09}
-> =09for (count =3D 0; count < 100; count++) {
-> =09=09if (fscanf(fp, "%lu\n", &mbm_total) <=3D 0) {
-> =09=09=09perror("Unable to read from data file\n");
-> =09=09=09exit(1);
-> =09=09}
-> =09=09printf("Read %d: %lu\n",count ,mbm_total );
-> =09=09sleep(1);
-> =09=09rewind(fp);
-> =09}
-> =09fclose(fp);
-> =09return 0;
-> }
-
-Okay, so perhaps it's your explanation (a) but can libc be trusted to not=
-=20
-do buffering/caching for FILE *? So to be on the safe side, it would=20
-need to use syscalls directly to guarantee it's read the file twice.
-
-If I convert it into fds, fscanf() cannot be used which would complicate=20
-the string processing by adding extra steps.
-
---=20
- i.
-
---8323328-355923539-1716537436=:1394--
+On 5/24/24 12:31, David Hildenbrand wrote:
+> On 24.05.24 08:43, Ritesh Harjani (IBM) wrote:
+>> David Hildenbrand <david@redhat.com> writes:
+>>
+>> dropping stable@vger.kernel.org
+>>
+>>> On 24.05.24 04:57, Andrew Morton wrote:
+>>>> On Thu, 23 May 2024 22:40:25 +0200 David Hildenbrand 
+>>>> <david@redhat.com> wrote:
+>>>>
+>>>>>> You have stable@vger.kernel.org in the mail headers, so I assume 
+>>>>>> you're
+>>>>>> proposing this for backporting.  When doing this, please include
+>>>>>>
+>>>>>> Cc: <stable@vger.kernel.org>
+>>>>>>
+>>>>>> in the changelog footers and also include a Fixes: target.  I'm
+>>>>>> assuming the suitable Fixes: target for this patch is 38b43539d64b?
+>>>>>
+>>>>> This adds a new selfest to make sure what was fixed (and 
+>>>>> backported to
+>>>>> stable) remains fixed.
+>>>>
+>>>> Sure.  But we should provide -stable maintainers guidance for "how far
+>>>> back to go".  There isn't much point in backporting this into kernels
+>>>> where it's known to fail!
+>>>
+>>> I'm probably missing something important.
+>>>
+>>> 1) It's a test that does not fall into the common stable kernels
+>>> categories (see Documentation/process/stable-kernel-rules.rst).
+>>>
+>>> 2) If it fails in a kernel *it achieved its goal* of highlighting that
+>>> something serious is broken.
+>>>
+>>>>
+>>>> I'm still thinking that we want this in kernels which have 
+>>>> 38b43539d64b?
+>>>
+>>> To hide that the other kernels are seriously broken and miss that fix?
+>>>
+>>> Really (1) this shouldn't be backported. I'm not even sure it should be
+>>> a selftest (sounds more like a reproducer that we usually attach to
+>>> commits, but that's too late). And if people care about backporting it,
+>>> (2) you really want this test to succeed everywhere. Especially also to
+>>> find kernels *without* 38b43539d64b
+>>
+>>
+>> Sorry about the noise and cc'd to stable. I believe we don't need to
+>> backport this test. The idea of adding a selftests was "also" to 
+>> catch any
+>> future bugs like this.
+>
+> Yes, for that purpose it's fine, but it has quite the "specific 
+> reproducer taste". Having it as part of something that is prepared to 
+> run against arbitrary kernels (which selftests frequently are not) to 
+> detect known problems feels better.
+>
+> I have seen some hugetlbfs directio tests in LTP. If you think 
+> selftest is not the correct place to add this test, we can drop this 
+> test from selftests and add it to LTP.
+>
+> Thanks
+> Donet
+>
+>>
+>> I am unaware of any functional test suite where we could add such tests
+>> like how filesystems have fstests. Hence the ideas was to add this in
+>> selftests.
+>
+> LTP has quite some MM testcases in testcases/kernel/mem/. But it often 
+> has a different focus (CVE or advanced feature/syscall tests). Now 
+> that most things are CVEs ... it might not be a bad fit ... :)
+>
+>>
+>> So this begs the question which I also asked few people at LSFMM,
+>> Does mm has any mmfvt (mm functional verification tests)? Should we have
+>> something like this? Was it tried in past?
+>
+> I think LTP is mostly the only "bigger" thing we have that is prepared 
+> to run against arbitrary kernel versions.
+>
 
