@@ -1,202 +1,173 @@
-Return-Path: <linux-kselftest+bounces-10662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 737768CE384
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 11:32:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2E68CE3B8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 11:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1BBA1F23118
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E518E2822EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02BF85264;
-	Fri, 24 May 2024 09:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6024A8526B;
+	Fri, 24 May 2024 09:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ljAPogY6"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Qvv+rTHr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3DD282E2;
-	Fri, 24 May 2024 09:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C34C84E19
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 09:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716543126; cv=none; b=r/vCsKW5TXYN/2YPCZiwqmnT0Y9JCAm3ow8IPUM0cUNSbFMuS+wa3kgfob0sR5T8uxUCtA8e6mStu6VAGLLG8umcdvhP2LxPeHsX2DCXbPGbtFzKfaMuNeMh/ADhG/enC+sXg0lH/nUZ26T0olrhrP1tmdgavQ0REdODET6FwKU=
+	t=1716543991; cv=none; b=Rd8DgHTDPEd4m9rBuLqqPOvpiSTUUbB2WhcAb0yqiDGvxGYQErituS9BXr33BlsfRIDiULQOr6NP5kG/palViOzcTMcLmQVP/dlY+BBFqA08gcARy2MG/DLXKg8BMtF20u05A6kZvuq+mJG3dk8TbmBcJlEqrgfbmvQBYItAK4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716543126; c=relaxed/simple;
-	bh=rwAvwKwHBuccXt1++ALJWxvGf7nO+9ofOmq3PGzn/tc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L1YzaqDxdJnPzn4JvHo79wS6iEdB7wcPhHzfyJy9Ku7Mn0Bu1i1O4bpSYJLqggifMzo/dg5+N/+b002bhgNFalI1HIQgxoSX2zbnNezIw43UISlK+enYdvZiUEAnTRCCxegFP4AxHpp5YViCbc4qcFMkr3v9q5cr505M+11P9W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ljAPogY6; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44O9N43H017389;
-	Fri, 24 May 2024 09:31:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=7is4630m7gBGeEwPyBGyvuIIaidItnoMd2eDRou0Gic=;
- b=ljAPogY6Xc5nYw7h4kDhE4uqSOX6jpC5WdpCqrRYsXtEb0l56jt39g+pX0W65ptwV+sB
- TQD84y+a9emrOehy0gTPhaEydDP4Srfe3GVD7dOQHxz8669qKsVJ21JaKu29QwHn13M4
- CTireWxFK3WxQIDp4afIJtSQJMnab7MnOjBw88j116G+1zxmwJ+XnRmoJaxiAJfPrK84
- umEBaAtBETdzDbcYapQ/X190C7CletZ/f9skQowaLyAVFSJJLUNfJlkoGEYCzTXacTba
- DH6rpM8yqWK2sdicROA6Ds6n927riXOTJV69v2jsMlEpMFUPqo4xyNBmLADg3WGpb/qv fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yar6u8105-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 May 2024 09:31:33 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44O9S4sE025761;
-	Fri, 24 May 2024 09:31:32 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yar6u8103-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 May 2024 09:31:32 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44O8032S008123;
-	Fri, 24 May 2024 09:31:31 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y78vmfby6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 May 2024 09:31:31 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44O9VTXE16515792
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 May 2024 09:31:31 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 95FC65805F;
-	Fri, 24 May 2024 09:31:27 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 021AB5805E;
-	Fri, 24 May 2024 09:31:24 +0000 (GMT)
-Received: from [9.109.245.191] (unknown [9.109.245.191])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 24 May 2024 09:31:23 +0000 (GMT)
-Message-ID: <3c6e5e78-aa49-4002-941f-af8fd2b81d10@linux.ibm.com>
-Date: Fri, 24 May 2024 15:01:18 +0530
+	s=arc-20240116; t=1716543991; c=relaxed/simple;
+	bh=HDU6Ikis2reepBp7XonSWdeQ98AVdDz0nuzQ+64KYp8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jLpcxeGfo5SXXG8UN1tpCh+8TGU8/lK8viu/Lw739JgQqzkGL7eoy/9nVG96esN+gK4qPyJ3KFKJ97qne6GuEqVUM+Gr+5KQFuhKMTACMWxeGwB41/TMz0hA1Sd35otVhb76LF45w67Irzxj/rzNJOQHymw+zzppeMcLHKsbxME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Qvv+rTHr; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-df481bf6680so2720594276.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 02:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1716543987; x=1717148787; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WjgMHPkdKke/sFW+wP3x/OWfAW3icjljhDceGb+T51c=;
+        b=Qvv+rTHrHM5G+L52LeF/Ukc57xiGL2/T+SEBVpyDFh0YPcFG22QFWnTay7BdzrZ3JP
+         hUQESM8tnI7oSt7hVKSGhj9+wW9szYPoHmD2M9QAApWzUHwgOWfaWPVbZ1VTYQq+fDJZ
+         Z5r0118dPBrruHGC83QnOfMaHkNBCEvPh2gJ8KpOXIllsXa2YTOxiIBl2J4Nv85Ccd4Y
+         IWjs40RXK78QI4z3tAFTn8diN+7XuYR/pxMgmzJJT3/jzKk++3dgxEaU1S+PBmbYngGA
+         RRBipfTPQbP7nPrqaMOPdkb3feB8K+rO7FA1QBUlY9nYY2FnYz9vcF5xArFebdzgv4cG
+         lx7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716543987; x=1717148787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WjgMHPkdKke/sFW+wP3x/OWfAW3icjljhDceGb+T51c=;
+        b=Mh9J8CaSArWNIZ86JyNVGqV9XMsBdZgEV7LJA8BI+l/iHVZHfbjeIuXkChsn5L+2pE
+         5cJXZhWsgEoB7shpS0W2WAXUVhchP9P9dsp7aogSkRKh64ijNhOvygk6YvsxP7/6RXU+
+         4hHQ5HREx+w5CNyL8TkXHoIKMjr1aIbDoopbggX84CXszBWJuodOIDjVibaP/DQR7MRh
+         +DmygmLc/eRk7rePN0g90hc2kN9pabLdbf3ECUHHINyrSr0Q/daz/U1ByEeH61O75BVC
+         vWxmwOzzZVLY4/pweH94pxoMOQhFyWyXTwGbcJpjIXJ1U7P45XaU5UYwFmTBEoAuWYkd
+         X+Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCWFIP9LzjoNCRSPcxO2CSIZEm8Gz07yazK5gW+jH2oiODs4z9S/xuHu6gwVL4bNAfpyIGwXLKB4j8gW+zObA3ctHbG2qe5uv4saN62NS0O7
+X-Gm-Message-State: AOJu0YzUiKLnZo09QHHzz91uh09QLUf0BGy6TfqBeXjtAEmw8Y+QmOpX
+	rNB/4iOeFUIWQ6bTq1YWS+/ItzaNe/zJBRdxy6EKY9HvD8VVjKNet897RpzJsnyrW6342vSZ6Eh
+	ruizS4bZD+FStY91uYQbjfpOraLGKO6HC4Prqnw==
+X-Google-Smtp-Source: AGHT+IElLw9ldbzBvHZ3/TQt52rrJpYv9UPwEZAezgFRSlhX7EDpAmWQFaSOD80MnXamfMqxd179zHrTOZ6XZB7bNkc=
+X-Received: by 2002:a25:ae1e:0:b0:df4:df14:61bc with SMTP id
+ 3f1490d57ef6-df7721b7236mr1844605276.29.1716543987537; Fri, 24 May 2024
+ 02:46:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked during
- __bio_release_pages()
-Content-Language: en-US
-To: David Hildenbrand <david@redhat.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-        Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20240523063905.3173-1-donettom@linux.ibm.com>
- <20240523121344.6a67a109e0af2ba70973b34b@linux-foundation.org>
- <d551d1cd-a02f-42aa-9de2-10ff7757224c@redhat.com>
- <20240523195734.bc03a8822a34b1a97880fb65@linux-foundation.org>
- <7792c8ba-39e6-47ee-9b43-108270325c15@redhat.com> <87o78vsoav.fsf@gmail.com>
- <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <c9ee47d3-77cd-4333-805a-d457e4a1bb80@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9SVpRuQBL_ZxKd5AyejlGygJ40Dy6mHE
-X-Proofpoint-ORIG-GUID: ORbpw0wF7gjoGqKtK3qPRFcZr2ETtb5A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-24_03,2024-05-23_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- impostorscore=0 mlxscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- spamscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405240066
+References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-23-debug@rivosinc.com>
+In-Reply-To: <20240403234054.2020347-23-debug@rivosinc.com>
+From: Andy Chiu <andy.chiu@sifive.com>
+Date: Fri, 24 May 2024 17:46:16 +0800
+Message-ID: <CABgGipW4ZTFLh1dkiRuWD0WP4RRkfhyFCc+RsUjCD2EkA5GhSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 22/29] riscv sigcontext: adding cfi state field in sigcontext
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, broonie@kernel.org, 
+	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org, 
+	ajones@ventanamicro.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
+	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com, akpm@linux-foundation.org, 
+	arnd@arndb.de, ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
+	jerry.shih@sifive.com, hankuan.chen@sifive.com, greentime.hu@sifive.com, 
+	evan@rivosinc.com, xiao.w.wang@intel.com, charlie@rivosinc.com, 
+	apatel@ventanamicro.com, mchitale@ventanamicro.com, dbarboza@ventanamicro.com, 
+	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org, 
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com, 
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de, bhe@redhat.com, 
+	jeeheng.sia@starfivetech.com, cyy@cyyself.name, maskray@google.com, 
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de, cuiyunhui@bytedance.com, 
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, 
+	david@redhat.com, catalin.marinas@arm.com, revest@chromium.org, 
+	josh@joshtriplett.org, shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, 
+	ojeda@kernel.org, jhubbard@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Deepak,
 
-On 5/24/24 12:31, David Hildenbrand wrote:
-> On 24.05.24 08:43, Ritesh Harjani (IBM) wrote:
->> David Hildenbrand <david@redhat.com> writes:
->>
->> dropping stable@vger.kernel.org
->>
->>> On 24.05.24 04:57, Andrew Morton wrote:
->>>> On Thu, 23 May 2024 22:40:25 +0200 David Hildenbrand 
->>>> <david@redhat.com> wrote:
->>>>
->>>>>> You have stable@vger.kernel.org in the mail headers, so I assume 
->>>>>> you're
->>>>>> proposing this for backporting.  When doing this, please include
->>>>>>
->>>>>> Cc: <stable@vger.kernel.org>
->>>>>>
->>>>>> in the changelog footers and also include a Fixes: target.  I'm
->>>>>> assuming the suitable Fixes: target for this patch is 38b43539d64b?
->>>>>
->>>>> This adds a new selfest to make sure what was fixed (and 
->>>>> backported to
->>>>> stable) remains fixed.
->>>>
->>>> Sure.  But we should provide -stable maintainers guidance for "how far
->>>> back to go".  There isn't much point in backporting this into kernels
->>>> where it's known to fail!
->>>
->>> I'm probably missing something important.
->>>
->>> 1) It's a test that does not fall into the common stable kernels
->>> categories (see Documentation/process/stable-kernel-rules.rst).
->>>
->>> 2) If it fails in a kernel *it achieved its goal* of highlighting that
->>> something serious is broken.
->>>
->>>>
->>>> I'm still thinking that we want this in kernels which have 
->>>> 38b43539d64b?
->>>
->>> To hide that the other kernels are seriously broken and miss that fix?
->>>
->>> Really (1) this shouldn't be backported. I'm not even sure it should be
->>> a selftest (sounds more like a reproducer that we usually attach to
->>> commits, but that's too late). And if people care about backporting it,
->>> (2) you really want this test to succeed everywhere. Especially also to
->>> find kernels *without* 38b43539d64b
->>
->>
->> Sorry about the noise and cc'd to stable. I believe we don't need to
->> backport this test. The idea of adding a selftests was "also" to 
->> catch any
->> future bugs like this.
+On Thu, Apr 4, 2024 at 7:42=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> wr=
+ote:
 >
-> Yes, for that purpose it's fine, but it has quite the "specific 
-> reproducer taste". Having it as part of something that is prepared to 
-> run against arbitrary kernels (which selftests frequently are not) to 
-> detect known problems feels better.
+> Shadow stack needs to be saved and restored on signal delivery and signal
+> return.
 >
-> I have seen some hugetlbfs directio tests in LTP. If you think 
-> selftest is not the correct place to add this test, we can drop this 
-> test from selftests and add it to LTP.
+> sigcontext embedded in ucontext is extendible. Adding cfi state in there
+> which can be used to save cfi state before signal delivery and restore
+> cfi state on sigreturn
 >
-> Thanks
-> Donet
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/include/uapi/asm/sigcontext.h | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
->>
->> I am unaware of any functional test suite where we could add such tests
->> like how filesystems have fstests. Hence the ideas was to add this in
->> selftests.
+> diff --git a/arch/riscv/include/uapi/asm/sigcontext.h b/arch/riscv/includ=
+e/uapi/asm/sigcontext.h
+> index cd4f175dc837..5ccdd94a0855 100644
+> --- a/arch/riscv/include/uapi/asm/sigcontext.h
+> +++ b/arch/riscv/include/uapi/asm/sigcontext.h
+> @@ -21,6 +21,10 @@ struct __sc_riscv_v_state {
+>         struct __riscv_v_ext_state v_state;
+>  } __attribute__((aligned(16)));
 >
-> LTP has quite some MM testcases in testcases/kernel/mem/. But it often 
-> has a different focus (CVE or advanced feature/syscall tests). Now 
-> that most things are CVEs ... it might not be a bad fit ... :)
+> +struct __sc_riscv_cfi_state {
+> +       unsigned long ss_ptr;   /* shadow stack pointer */
+> +       unsigned long rsvd;             /* keeping another word reserved =
+in case we need it */
+> +};
+>  /*
+>   * Signal context structure
+>   *
+> @@ -29,6 +33,7 @@ struct __sc_riscv_v_state {
+>   */
+>  struct sigcontext {
+>         struct user_regs_struct sc_regs;
+> +       struct __sc_riscv_cfi_state sc_cfi_state;
+
+I am concerned about this change as this could potentially break uabi.
+Let's say there is a pre-CFI program running on this kernel. It
+receives a signal so the kernel lays out the sig-stack as presented in
+this structure. If the program accesses sc_fpregs, it would now get
+sc_cfi_state. As the offset has changed, and the pre-CFI program has
+not been re-compiled.
+
+>         union {
+>                 union __riscv_fp_state sc_fpregs;
+>                 struct __riscv_extra_ext_header sc_extdesc;
+> --
+> 2.43.2
 >
->>
->> So this begs the question which I also asked few people at LSFMM,
->> Does mm has any mmfvt (mm functional verification tests)? Should we have
->> something like this? Was it tried in past?
->
-> I think LTP is mostly the only "bigger" thing we have that is prepared 
-> to run against arbitrary kernel versions.
->
+
+There may be two ways to deal with this. One is to use a different
+signal ABI for CFI-enabled programs. This may complicate the user
+space because new programs will have to determine whether it should
+use the CFI-ABI at run time. Another way is to follow what Vector does
+for signal stack. It adds a way to introduce new extensions on signal
+stack without impacting ABI.
+
+Please let me know if I misunderstand anything, thanks.
+
+Cheers,
+Andy
 
