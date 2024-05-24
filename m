@@ -1,228 +1,173 @@
-Return-Path: <linux-kselftest+bounces-10660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D4478CE16F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:16:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66E828CE1DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 09:57:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DCE3B212B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 07:16:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E59561F21C96
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 07:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC89B127E2D;
-	Fri, 24 May 2024 07:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B76A82D7A;
+	Fri, 24 May 2024 07:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="y2ijOrSi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Doc44Kxm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A4C6EB4C
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 07:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A67604F;
+	Fri, 24 May 2024 07:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716534995; cv=none; b=VvQlvTKAiIgNqJsnhzsS1nyd0k5g8ZKdqEgCPKtw48LQosgQcVLg0Gsahqvq1c7d+5wFqDVB/O2wD+tlRlO2sg9Jdh8txw6n6SvuAQ9BDcWLS6Zt5rrrmFR+cAq2iQnrRJSRzKkUPQj931rzl/+90aRiLISVWV6bjcdQS/X4NLw=
+	t=1716537447; cv=none; b=Ess8dYj+dxqDtpO59PuNKY6ovCNVg+XI6m+NdDdnNnKkbnouMeNUtSnM7vqoYyEcsTBWQkA3gC6HaWYh5u3w8pk7KCFovTuC/zcQOjmagCYsp5sx7pyyRV+sW0MyU9ehmdmRrK+2+aKa8H/eOyBXoKgPLTVGQpNbP9bbWeQksJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716534995; c=relaxed/simple;
-	bh=L5dtxTCrzKCyV3a12hQ+4vBbPtIXGLsw+Pi3J3zri8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkcEoX2VcrnTTDseEELjJ2gzPeL8xDd2lYiOOwuMLsiaj881xvX02G2mCGe3NbpZ0gIcUKhrFlmXKjdSiL+lAMGPt2qjqmyzfB9QV5A/glMy/0nj/oalXiQmCHZkDJG6+rvuV02A8hWDYe7uhQdRHve3Gh6PB7HkR78sVeFr/iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=y2ijOrSi; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-681a49e6e86so352199a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2024 00:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716534992; x=1717139792; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
-        b=y2ijOrSiwn8kujMA0869ALapDPpI42dWw9fvOBWqX8Y8XIpcqYXkUkkubl7IuDmmgr
-         UXgs/FYwWQ6cMuIo093RxaHWEmjtTlpcPKupttpXoO4fgnH95uo/yaxP5aiTe2K0XTK6
-         OB8Hf49CztFRHosI56opMlAGwTeRKeLa7jDUtXNV3n1p1lK8CwTzFsc2CcTBhW2OQl9c
-         y5qGjjAYEsJqZqRGr4HQu2IUQ11hKqzITyzCBxl3gLhHVB9p4BNs9O6j/HB/qLxm07aS
-         +zTKlMC5xlJAWs8LHA+/ivB1Cb7gpZt6kBbkLyaNpACXt8lTMYOy0j5JSg5MfxhV1IOJ
-         uvgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716534992; x=1717139792;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
-        b=q88z1fa5WDRkJhbd0Y6Omrbk1/85x8OViWFifV8xgHcEC7OJsKHtp9T5ao6y8t+SJv
-         MH/SnzAZwcyySVhiP7z/iusjzVJX+t1Jtzkym6YnlfJ/jBn159EqtfGAM7OY7VApNH57
-         6zLtpoJDHL7ju8HPWEO4NRvRwU19vPaR1uJNsx9LVgUxr4r+rQhhLe5lUaFezSMUw5N4
-         AoakQPGBr+3oORJE56yBW6t3//CCeuGPoorMMiBV8nUZNzef0XEvfVa/u8PQF7Rf2gi/
-         xXZSuHpXckyMXJftyCsl/D4SjDSTukesNHdR2wryjVi0BLnmNQOE31kvJMKVS/bVRspW
-         +usQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoFWmU1rmtzBvCLMXAzbm5/HUXb5VpWXvoqq8/l6V65ewW6R9B5tBNejlndR56aVd+2xFiNwrTx5q0bajJh/Vh59ONGJIwmPd0EHpxaUR2
-X-Gm-Message-State: AOJu0Yy7PIxWzjhKmVDUWx/TpuAVtulAVHZWutc1K9GWZjXXWfGmphxZ
-	2rPCIhzbSLzlvvBCj4cgY+tW0XxdNMut+LeI/0NakNHaalDQ/TX+TDNrcGP1Qk0=
-X-Google-Smtp-Source: AGHT+IEDTqTA76mWXJ68mdGF74fNSFi0v4c+GSsV/TK7Kq0h+0BnWlexLZoWy2cb8clnmvmHxGdpVw==
-X-Received: by 2002:a17:90a:ec12:b0:2bf:5992:31ae with SMTP id 98e67ed59e1d1-2bf5ee1cb71mr1385379a91.20.1716534992281;
-        Fri, 24 May 2024 00:16:32 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bf5f9b28dcsm742083a91.52.2024.05.24.00.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 May 2024 00:16:31 -0700 (PDT)
-Date: Fri, 24 May 2024 00:16:27 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, paul.walmsley@sifive.com,
-	rick.p.edgecombe@intel.com, broonie@kernel.org,
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, conor.dooley@microchip.com,
-	cleger@rivosinc.com, atishp@atishpatra.org, bjorn@rivosinc.com,
-	samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	charlie@rivosinc.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
-	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 13/29] riscv mmu: write protect and shadow stack
-Message-ID: <ZlA+yxsiHtyUJ/5/@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-14-debug@rivosinc.com>
- <276fa17b-cd62-433d-b0ec-fa98c65a46ca@ghiti.fr>
- <ZkJOs6ENmDHFsq/U@debug.ba.rivosinc.com>
- <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
+	s=arc-20240116; t=1716537447; c=relaxed/simple;
+	bh=2nW2MH8YYHHMcOuU6yP8ETfJDp4ymu8aiSEbCDPefVY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=DSCX2aXM62qAmg8vuu0N+3Gmn7OrJim7wgCuB6jjdlgLQ0QDmKB826/AGcZhYoN27QcNkiw9aAuRPc1Oy3KsVQrs24SCxhrvxS7oMo3ppYv2lToxlL1eUPFJTGgHRicYc3WA67bLAn4xccvK0QHbhaI+EmHPMs4wyVGw5nNcjqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Doc44Kxm; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716537446; x=1748073446;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=2nW2MH8YYHHMcOuU6yP8ETfJDp4ymu8aiSEbCDPefVY=;
+  b=Doc44KxmINpnOIhMjExKaXokT9sP+xVVFSlUMHDmAZ0tB4B9YWRhAzJ2
+   CGfOmMneGgEJ+eVcS04NET9L97i9AVw6PMhFPLe0Rzsh0tY5B9m7OKur2
+   MmKhhYvtiRQZCOBL9VQrnnwN4hcWqpF1hqQbQuEZixZPDoen8QCkTZJDM
+   3i77o9bGUu8Gz/4rwEQFInFQgWXIgsytKQxVddHmfZow8x3pN5RMstTPV
+   SGv3vNdPgSfYJBj7JNyD7KA96Jbfl9Sl8m8st+LrUfMTC9xfaNL1o7pBo
+   rIApyt/c6Eu8CIEEJ+Ng29Yb+PTvIna5Hm+lk10wxozdTTF/K3R8Q3ADf
+   w==;
+X-CSE-ConnectionGUID: CMg1Q00pSMivJCoc4cLMBA==
+X-CSE-MsgGUID: zTw9tLpDRMurMhy79jWdNw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="12843684"
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="12843684"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:57:25 -0700
+X-CSE-ConnectionGUID: IjiR8ATdRbiRMIkWiEyIrg==
+X-CSE-MsgGUID: 7miEALFIRtWZk2Ju6+D+qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="34055675"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.127])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:57:22 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 24 May 2024 10:57:16 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived
+ mem bw over sleep(1) only
+In-Reply-To: <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com>
+Message-ID: <ea0c86b9-ae77-c2d9-b52b-239ae42603e8@linux.intel.com>
+References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com> <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
+Content-Type: multipart/mixed; boundary="8323328-355923539-1716537436=:1394"
 
-On Thu, May 23, 2024 at 04:59:30PM +0200, Alexandre Ghiti wrote:
->Hi Deepak,
->
->On Mon, May 13, 2024 at 7:32 PM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> On Sun, May 12, 2024 at 06:31:24PM +0200, Alexandre Ghiti wrote:
->> >On 04/04/2024 01:35, Deepak Gupta wrote:
->> >>`fork` implements copy on write (COW) by making pages readonly in child
->> >>and parent both.
->> >>
->> >>ptep_set_wrprotect and pte_wrprotect clears _PAGE_WRITE in PTE.
->> >>Assumption is that page is readable and on fault copy on write happens.
->> >>
->> >>To implement COW on such pages,
->> >
->> >
->> >I guess you mean "shadow stack pages" here.
->>
->> Yes I meant shadow stack pages. Will fix the message.
->>
->> >
->> >
->> >>  clearing up W bit makes them XWR = 000.
->> >>This will result in wrong PTE setting which says no perms but V=1 and PFN
->> >>field pointing to final page. Instead desired behavior is to turn it into
->> >>a readable page, take an access (load/store) fault on sspush/sspop
->> >>(shadow stack) and then perform COW on such pages.
->> >>This way regular reads
->> >>would still be allowed and not lead to COW maintaining current behavior
->> >>of COW on non-shadow stack but writeable memory.
->> >>
->> >>On the other hand it doesn't interfere with existing COW for read-write
->> >>memory. Assumption is always that _PAGE_READ must have been set and thus
->> >>setting _PAGE_READ is harmless.
->> >>
->> >>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> >>---
->> >>  arch/riscv/include/asm/pgtable.h | 12 ++++++++++--
->> >>  1 file changed, 10 insertions(+), 2 deletions(-)
->> >>
->> >>diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> >>index 9b837239d3e8..7a1c2a98d272 100644
->> >>--- a/arch/riscv/include/asm/pgtable.h
->> >>+++ b/arch/riscv/include/asm/pgtable.h
->> >>@@ -398,7 +398,7 @@ static inline int pte_special(pte_t pte)
->> >>  static inline pte_t pte_wrprotect(pte_t pte)
->> >>  {
->> >>-     return __pte(pte_val(pte) & ~(_PAGE_WRITE));
->> >>+     return __pte((pte_val(pte) & ~(_PAGE_WRITE)) | (_PAGE_READ));
->> >>  }
->> >>  /* static inline pte_t pte_mkread(pte_t pte) */
->> >>@@ -581,7 +581,15 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->> >>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->> >>                                    unsigned long address, pte_t *ptep)
->> >>  {
->> >>-     atomic_long_and(~(unsigned long)_PAGE_WRITE, (atomic_long_t *)ptep);
->> >>+     volatile pte_t read_pte = *ptep;
->
->Sorry I missed this ^. You need to use ptep_get() to get the value of
->a pte. 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Noted. will fix it.
+--8323328-355923539-1716537436=:1394
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
->And why do you need the volatile here?
+On Thu, 23 May 2024, Reinette Chatre wrote:
+> On 5/20/24 5:30 AM, Ilpo J=C3=A4rvinen wrote:
+> > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that performs
+> > the measurement over a duration of sleep(1) call. The memory bandwidth
+> > numbers from IMC are derived over this duration. The resctrl FS derived
+> > memory bandwidth, however, is calculated inside measure_vals() and only
+> > takes delta between the previous value and the current one which
+> > besides the actual test, also samples inter-test noise.
+> >=20
+> > Rework the logic in measure_vals() and get_mem_bw_imc() such that the
+> > resctrl FS memory bandwidth section covers much shorter duration
+> > closely matching that of the IMC perf counters to improve measurement
+> > accuracy. Open two the resctrl mem bw files twice to avoid opening
+> > after the test during measurement period (reading the same file twice
+> > returns the same value so two files are needed).
+>=20
+> I think this is only because of how the current reading is done, resctrl
+> surely supports keeping a file open and reading from it multiple times.
+>=20
+> There seems to be two things that prevent current code from doing this
+> correctly:
+> (a) the fscanf() code does not take into account that resctrl also
+>     prints a "\n" ... (this seems to be the part that may cause the same
+>     value to be returned).
+>     So:
+> =09if (fscanf(fp, "%lu", mbm_total) <=3D 0) {
+>     should be:
+> =09if (fscanf(fp, "%lu\n", mbm_total) <=3D 0) {
+> (b) the current reading does not reset the file position so a second
+>     read will attempt to read past the beginning. A "rewind(fp)"
+>     should help here.
 
-I don't remember the reason. It's probably not needed here.
-But I am sure I was debugging something and trying everything.
-And this probably slipped sanitization before sending patches.
+(b) cannot be the cause for returning the same value again. It would=20
+not be able to reread the number at all if file position is not moved.
 
-Will fix it.
->
->> >>+     /*
->> >>+      * ptep_set_wrprotect can be called for shadow stack ranges too.
->> >>+      * shadow stack memory is XWR = 010 and thus clearing _PAGE_WRITE will lead to
->> >>+      * encoding 000b which is wrong encoding with V = 1. This should lead to page fault
->> >>+      * but we dont want this wrong configuration to be set in page tables.
->> >>+      */
->> >>+     atomic_long_set((atomic_long_t *)ptep,
->> >>+                     ((pte_val(read_pte) & ~(unsigned long)_PAGE_WRITE) | _PAGE_READ));
->> >>  }
->> >>  #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
->> >
->> >
->> >Doesn't making the shadow stack page readable allow "normal" loads to
->> >access the page? If it does, isn't that an issue (security-wise)?
->>
->> When shadow stack permissions are there (i.e. R=0, W=1, X=0), then also shadow stack is
->> readable through "normal" loads. So nothing changes when it converts into a readonly page
->> from page permissions perspective.
->>
->> Security-wise it's not a concern because from threat modeling perspective, if attacker had
->> read-write primitives (via some bug in program) available to read and write address space
->> of process/task; then they would have availiblity of return addresses on normal stack. It's
->> the write primitive that is concerning and to be protected against. And that's why shadow stack
->> is not writeable using "normal" stores.
->>
->> >
->
->Thanks for the explanation!
->
->With the use of ptep_get(), you can add:
->
->Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
->Thanks,
->
->Alex
+I certainly tried with fseek() and it is when I got same value on the=20
+second read which is when I just went to two files solution.
+
+> A small program like below worked for me by showing different values
+> on every read:
+>=20
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+>=20
+> const char *mbm_total_path =3D
+> "/sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes";
+>=20
+> int main(void)
+> {
+> =09unsigned long mbm_total;
+> =09FILE *fp;
+> =09int count;
+>=20
+> =09fp =3D fopen(mbm_total_path, "r");
+> =09if (!fp) {
+> =09=09perror("Opening data file\n");
+> =09=09exit(1);
+> =09}
+> =09for (count =3D 0; count < 100; count++) {
+> =09=09if (fscanf(fp, "%lu\n", &mbm_total) <=3D 0) {
+> =09=09=09perror("Unable to read from data file\n");
+> =09=09=09exit(1);
+> =09=09}
+> =09=09printf("Read %d: %lu\n",count ,mbm_total );
+> =09=09sleep(1);
+> =09=09rewind(fp);
+> =09}
+> =09fclose(fp);
+> =09return 0;
+> }
+
+Okay, so perhaps it's your explanation (a) but can libc be trusted to not=
+=20
+do buffering/caching for FILE *? So to be on the safe side, it would=20
+need to use syscalls directly to guarantee it's read the file twice.
+
+If I convert it into fds, fscanf() cannot be used which would complicate=20
+the string processing by adding extra steps.
+
+--=20
+ i.
+
+--8323328-355923539-1716537436=:1394--
 
