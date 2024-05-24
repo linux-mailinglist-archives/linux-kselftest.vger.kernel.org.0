@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 729398CDFB1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 05:22:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B12598CDFB4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 05:22:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14DCEB21358
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 03:22:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3569B2140A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2024 03:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442BDBE47;
-	Fri, 24 May 2024 03:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C444212E4A;
+	Fri, 24 May 2024 03:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GKd2KeLS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NyM0WhOw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB491BF53;
-	Fri, 24 May 2024 03:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986961EF01;
+	Fri, 24 May 2024 03:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716520943; cv=none; b=eP/gJLdLuPEo2G3R1M8u3yr2YYFVDWZDvjNc6aYS4K3DxGEHqPV7bXScqAL1A9jqu45KNqEYxRWFPLa4NChzcHEe3pLNtlfpEBy26QdgGVcJZOc6c3UnmGzSDB7Q3dz24PAPpuC/zNrML4ZDI3cS9oBjJSg0RVgHzGHxueB3CZ0=
+	t=1716520953; cv=none; b=soguBufa1BZeHyJP6Bo/04/Zn1XZ+kLeKSNdYNVjtte7Aj8t1Jf839YEJ5DhYeBXOvkNDUKtMaHljkI5h/oR2yrCuAibDloC25FHBhV5baCQPP0+MOCzGRfCe/q3VfUjSh9kjx34vFNL5YV2G4u3oVDEIR5pYHMwjmXyPTaOD2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716520943; c=relaxed/simple;
-	bh=z/rJWlSUZ4/YuGyhiu6hcQQN4WWNf6a84wS8YU3ikvI=;
+	s=arc-20240116; t=1716520953; c=relaxed/simple;
+	bh=394h3Q9cvyh41rfbfaAmL8bMBRnTOy6D4vSWMspn9Og=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CB/eh6qYi2VZxGGlgTW29dsEMKw1VbLXGPmcLW2R/z/lILXglJe17Z88eIzgyho7cZuesLbp2KYGRvnneEdobtptRwJL0duFSnWvFFvhyp0xt4ViwRLBHS+DurzAuuqKhBKgrnyws3YthOYgOUPtPLY/RzUp0REAKGUiDbTj9Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GKd2KeLS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C339C4AF07;
-	Fri, 24 May 2024 03:22:11 +0000 (UTC)
+	 MIME-Version; b=XixLBcJI8r/YGojg/nMnnNgh+4bufKjK7N+rk7bIiVVz+fNVC0JpopBR0lOe2idhousNN8gHrhSSNrxamYtT75GCOB8+c6Vw++umSu75oLqkj7oE/qQLo4lvcZcNngdXq7bowaqi4Ukd1HoOr7B42GEHcuF1QxfFEdo+G+OlbTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NyM0WhOw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463B0C2BD10;
+	Fri, 24 May 2024 03:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716520942;
-	bh=z/rJWlSUZ4/YuGyhiu6hcQQN4WWNf6a84wS8YU3ikvI=;
+	s=k20201202; t=1716520953;
+	bh=394h3Q9cvyh41rfbfaAmL8bMBRnTOy6D4vSWMspn9Og=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GKd2KeLSaP8qNgqdu8PUYki8jmah2GN8vEw7MEMleKEfHTG0dX6qI1RaEbjF6Sa8q
-	 l0CWgru/8Kz4eIoeaj3aT4LmPotNB96QaAl/NvWq9Ms0RE3ODC9PQcYFVSsdCbSAsX
-	 lWuhl4lQ08ginOzvrLvA851KLxane6D2r7TP8vOVvMkdLgAJ9qUP3hMafQrifxRBGp
-	 VvFcLTxVcJnf7FUgbGr3ArSMVtC/sgYU14IsyFK9ii3gyEnRI1It+o11K0O/MjHJrA
-	 fEqbKZ+c1lflRTrl4EbjlhHYY4X9UifVAOP8MZd/00RP87BCNURVKQiWAzozKyQSNV
-	 GCxAShM+JU3+w==
+	b=NyM0WhOwkkwvl/vJvKmaTvOmMGxbGykI6Bhd0j8CTHBG8jYn7vhPRvk5csEuAmkNc
+	 dKn5FLA8GI3rHxl3tBUxG9mgmKWSZAjumHbFkGQKxeuRJqp8Bzv0E7lKIVEgPwpMsz
+	 pfRaHg5tbvN3dsgxoTuG24+/6YqzmX58Wi90SjXxcgm8jmvfwEppxmyKvzJhztfr74
+	 5i9U8JsqjjpFOqeE9w2s05MFQS9CtCDpDESM6LhjX/7ADmGO66fXvTdEvUPs8Sp9EY
+	 LKifP1KZBzA6NzKjhPTMswvIyQfzEUKqaD62yi0HpW1o/2PHACsv9K1CpMs+sJvXTa
+	 lhIT6MESs1ddw==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 1/6] selftests/bpf: Drop struct post_socket_opts
-Date: Fri, 24 May 2024 11:21:49 +0800
-Message-ID: <d58f5a0905679adbbbe6308e865150886391c168.1716520609.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v4 2/6] selftests/bpf: Add start_server_str helper
+Date: Fri, 24 May 2024 11:21:50 +0800
+Message-ID: <e0094a0ed6c3116fdbabb0e57ee1d6dc20f8198c.1716520609.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1716520609.git.tanggeliang@kylinos.cn>
 References: <cover.1716520609.git.tanggeliang@kylinos.cn>
@@ -75,90 +75,72 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-It's not possible to have one generic/common "struct post_socket_opts"
-for all tests. It's better to have the individual test define its own
-callback opts struct.
+It's a tech debt that start_server() does not take the "opts" argument.
+It's pretty handy to have start_server() as a helper that takes string
+address.
 
-So this patch drops struct post_socket_opts, and changes the second
-parameter of post_socket_cb as "void *" type.
+So this patch creates a new helper start_server_str(). Then start_server()
+can be a wrapper of it.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c               | 2 +-
- tools/testing/selftests/bpf/network_helpers.h               | 4 +---
- tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c    | 2 +-
- tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c | 4 ++--
- 4 files changed, 5 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 22 ++++++++++++++-----
+ tools/testing/selftests/bpf/network_helpers.h |  2 ++
+ 2 files changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 35250e6cde7f..4d776b78929c 100644
+index 4d776b78929c..0e8266f439e4 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -133,7 +133,7 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
- 	return __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
+@@ -118,19 +118,29 @@ static int __start_server(int type, const struct sockaddr *addr, socklen_t addrl
+ 	return -1;
  }
  
--static int reuseport_cb(int fd, const struct post_socket_opts *opts)
-+static int reuseport_cb(int fd, void *opts)
+-int start_server(int family, int type, const char *addr_str, __u16 port,
+-		 int timeout_ms)
++int start_server_str(int family, int type, const char *addr_str, __u16 port,
++		     const struct network_helper_opts *opts)
  {
- 	int on = 1;
+-	struct network_helper_opts opts = {
+-		.timeout_ms	= timeout_ms,
+-	};
+ 	struct sockaddr_storage addr;
+ 	socklen_t addrlen;
  
++	if (!opts)
++		opts = &default_opts;
++
+ 	if (make_sockaddr(family, addr_str, port, &addr, &addrlen))
+ 		return -1;
+ 
+-	return __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
++	return __start_server(type, (struct sockaddr *)&addr, addrlen, opts);
++}
++
++int start_server(int family, int type, const char *addr_str, __u16 port,
++		 int timeout_ms)
++{
++	struct network_helper_opts opts = {
++		.timeout_ms	= timeout_ms,
++	};
++
++	return start_server_str(family, type, addr_str, port, &opts);
+ }
+ 
+ static int reuseport_cb(int fd, void *opts)
 diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 883c7ea9d8d5..40011e0f584b 100644
+index 40011e0f584b..4e3e6afe7d3a 100644
 --- a/tools/testing/selftests/bpf/network_helpers.h
 +++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -21,8 +21,6 @@ typedef __u16 __sum16;
- #define VIP_NUM 5
- #define MAGIC_BYTES 123
+@@ -48,6 +48,8 @@ struct ipv6_packet {
+ extern struct ipv6_packet pkt_v6;
  
--struct post_socket_opts {};
--
- struct network_helper_opts {
- 	const char *cc;
- 	int timeout_ms;
-@@ -30,7 +28,7 @@ struct network_helper_opts {
- 	bool noconnect;
- 	int type;
- 	int proto;
--	int (*post_socket_cb)(int fd, const struct post_socket_opts *opts);
-+	int (*post_socket_cb)(int fd, void *opts);
- };
- 
- /* ipv4 test vector */
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-index 1d3a20f01b60..7cd8be2780ca 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-@@ -70,7 +70,7 @@ static void *server_thread(void *arg)
- 	return (void *)(long)err;
- }
- 
--static int custom_cb(int fd, const struct post_socket_opts *opts)
-+static int custom_cb(int fd, void *opts)
- {
- 	char buf;
- 	int err;
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index 7b5fc98838cd..aebc58c24dc5 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -139,14 +139,14 @@ static int run_test(int server_fd, int results_fd, bool xdp)
- 	return ret;
- }
- 
--static int v6only_true(int fd, const struct post_socket_opts *opts)
-+static int v6only_true(int fd, void *opts)
- {
- 	int mode = true;
- 
- 	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
- }
- 
--static int v6only_false(int fd, const struct post_socket_opts *opts)
-+static int v6only_false(int fd, void *opts)
- {
- 	int mode = false;
- 
+ int settimeo(int fd, int timeout_ms);
++int start_server_str(int family, int type, const char *addr_str, __u16 port,
++		     const struct network_helper_opts *opts);
+ int start_server(int family, int type, const char *addr, __u16 port,
+ 		 int timeout_ms);
+ int *start_reuseport_server(int family, int type, const char *addr_str,
 -- 
 2.43.0
 
