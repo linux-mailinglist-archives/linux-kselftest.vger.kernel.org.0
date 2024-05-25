@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-10687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F698CEDD9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 06:28:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 339A68CEDDC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 06:32:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF6351F21961
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 04:28:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BECA11F219A0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 04:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346EB2566;
-	Sat, 25 May 2024 04:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B829E2F3B;
+	Sat, 25 May 2024 04:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4oYl54JU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uLGOzZwJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968DFD29B;
-	Sat, 25 May 2024 04:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DCB4691;
+	Sat, 25 May 2024 04:32:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716611302; cv=none; b=fDjN6eiuZJkVOwvGsLrVLLlmw0FvaXXggfhst38x+bcSAtk8+i/WWDYz2XEwjRrW3p52ZhVwoHxSi0po8B9K3Z1HdBJvEaAoqkoZIBPnvYJVRoewhH354YmY5en3cMr0xHPx0Ra8mxEkBT9U1mQ71o1LPpvxtT65FsrbY7gmJFg=
+	t=1716611569; cv=none; b=ZzBlo/i8hekd7YW8DGT6eKEP3KzYPZih8XTVQRYqjz/Dvysu9+o27fbtYn3CmdEOQsFU8483z3qLTsO5aLDF/+Lffv+TpdWdgaYNT/iOw/2U09i9YsT0Y2czEh4/hL9fGizpyARC5MSZTGKkims3+hXH66bJngZ0fDLHhEKA9wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716611302; c=relaxed/simple;
-	bh=ttlCjFGN1GWY/TRCbxgxdnLzYeRMUvqNwRjJELBMJSw=;
+	s=arc-20240116; t=1716611569; c=relaxed/simple;
+	bh=mla9/6MWVvFTkGR018Hqe//h65qdGPgHc26QyuTvYVI=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=U8lx9Cz9lbrcnsSz/gOpwS+X1RmtIaRhuxHU7SI1KhZGj6PWzS35AddQwoK/9Q6eBC5yK71PiORw4CKFELAa4DssfzwE6umBMwJx6R3Qc+EqhSpc0gr+eKMWa2PIpFqKBLEHDDM30rp3dsF/bj5mhD72t5+tHaAW9yJb+u+SIOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=4oYl54JU; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=l3DOlee1sXrW+d86fzRaOjIyYOdf7EOEjkhLLYDSfYVgAcrQS5NbcXR0NKORZryVkOnVa0AlnxRRue4KfnQy/OH+9Mp16Utjf5+8qMfe7vwcWTUjNv9W0GaeY0mdmfRvu434mr0IZ9JGi14fDKaWOtsJINs7QMRj9v/HPDwv8L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uLGOzZwJ; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716611298;
-	bh=ttlCjFGN1GWY/TRCbxgxdnLzYeRMUvqNwRjJELBMJSw=;
+	s=mail; t=1716611566;
+	bh=mla9/6MWVvFTkGR018Hqe//h65qdGPgHc26QyuTvYVI=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=4oYl54JU9WNgEPcMjvWlTxh2YNyVcBYI0T4zCpnO9XKUTsSh70gOR/xLsl9kjKOpw
-	 zzT0I1JMFIcgjNKX5vE9rpJUxInTLle0XlOEb55KyPiNAOuRKfJ/tRjooQOtjWbpH+
-	 D/IhPYK9ydHAKMqMqScl+GREoW/lUcKj5Izo6tI5caMTDpb/lszzCbFxWoLqRnM6Bd
-	 5B4C9QiJwCgjDfHqcN3TyAAr1RVXODXy+QL6KIcCwaFo5HUiTkiPXl0ds5z2InH9kc
-	 D3URgFnWliYDZ0LcrTm9nFHewzfb9wiOUNw2QzzI0ry6MRPOpNxI1KqoGBVnRcv/r/
-	 xXj8JHyg8dkrw==
+	b=uLGOzZwJziYYaReuCZP41kdo/7KY1AqmQoffffhNZ/c2oeTog0OBD+2U+2gUDVeJp
+	 LJTvzHVnCC2Sk9zwokxKWpWGvNUdNXak+uVoD8XHA1SAL5Fgg9DKJeSVXkgWQgRfKW
+	 wJiGULnndLJTwK+lnU2hOXwCbNKGYWW/KBgldCiwY/NnJw8waTDDT2WLKXIRjXcqQO
+	 S1M17y5E0rErqYsRHKZhOueljqWywQkLO8ygo99IlJFqBCbV4I8W3o3bCqgJwUjaLs
+	 P7BQll0ZUDwY3wjmKob60wfKa1zexxjA+9401Gm2ue4eLd7woAH86b8/aCFspSkGCy
+	 FChlupYiiFs9w==
 Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4C4E53782085;
-	Sat, 25 May 2024 04:28:17 +0000 (UTC)
-Message-ID: <f03e4933-d835-4080-ac44-f7f17adeca62@collabora.com>
-Date: Fri, 24 May 2024 21:28:02 -0700
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 34D483782085;
+	Sat, 25 May 2024 04:32:45 +0000 (UTC)
+Message-ID: <94964224-1796-4610-a42d-3aacb4d47341@collabora.com>
+Date: Fri, 24 May 2024 21:32:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,75 +58,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/ftrace: Update required config
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
-References: <171624961322.252417.15852003285637286674.stgit@devnote2>
- <171624963215.252417.12572658025062192987.stgit@devnote2>
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] selftests/openat2: Fix build warnings on ppc64
+To: Michael Ellerman <mpe@ellerman.id.au>, linux-kselftest@vger.kernel.org,
+ skhan@linuxfoundation.org
+References: <20240521030325.58095-1-mpe@ellerman.id.au>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <171624963215.252417.12572658025062192987.stgit@devnote2>
+In-Reply-To: <20240521030325.58095-1-mpe@ellerman.id.au>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/20/24 5:00 PM, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Update required config options for running all tests.
-> This also sorts the config entries alphabetically.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-LGTM
+I was looking at if we can add this flag for ppc64 for all selftests
+somewhere. But there isn't any suitable place other than in KHDR_INCLUDES.
+But there is a series already trying to add _GNU_SOURCE to it. Once that
+gets accepted, we may add this flag there by removing the definitions from
+individual files. But until then the current solution seems fine:
+
 Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
+On 5/20/24 8:03 PM, Michael Ellerman wrote:
+> Fix warnings like:
+> 
+>   openat2_test.c: In function ‘test_openat2_flags’:
+>   openat2_test.c:303:73: warning: format ‘%llX’ expects argument of type
+>   ‘long long unsigned int’, but argument 5 has type ‘__u64’ {aka ‘long
+>   unsigned int’} [-Wformat=]
+> 
+> By switching to unsigned long long for u64 for ppc64 builds.
+> 
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 > ---
->  tools/testing/selftests/ftrace/config |   26 +++++++++++++++++++-------
->  1 file changed, 19 insertions(+), 7 deletions(-)
+>  tools/testing/selftests/openat2/openat2_test.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-> index e59d985eeff0..048a312abf40 100644
-> --- a/tools/testing/selftests/ftrace/config
-> +++ b/tools/testing/selftests/ftrace/config
-> @@ -1,16 +1,28 @@
-> -CONFIG_KPROBES=y
-> +CONFIG_BPF_SYSCALL=y
-> +CONFIG_DEBUG_INFO_BTF=y
-> +CONFIG_DEBUG_INFO_DWARF4=y
-> +CONFIG_EPROBE_EVENTS=y
-> +CONFIG_FPROBE=y
-> +CONFIG_FPROBE_EVENTS=y
->  CONFIG_FTRACE=y
-> +CONFIG_FTRACE_SYSCALLS=y
-> +CONFIG_FUNCTION_GRAPH_RETVAL=y
->  CONFIG_FUNCTION_PROFILER=y
-> -CONFIG_TRACER_SNAPSHOT=y
-> -CONFIG_STACK_TRACER=y
->  CONFIG_HIST_TRIGGERS=y
-> -CONFIG_SCHED_TRACER=y
-> -CONFIG_PREEMPT_TRACER=y
->  CONFIG_IRQSOFF_TRACER=y
-> -CONFIG_PREEMPTIRQ_DELAY_TEST=m
-> +CONFIG_KALLSYMS_ALL=y
-> +CONFIG_KPROBES=y
-> +CONFIG_KPROBE_EVENTS=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
-> +CONFIG_PREEMPTIRQ_DELAY_TEST=m
-> +CONFIG_PREEMPT_TRACER=y
-> +CONFIG_PROBE_EVENTS_BTF_ARGS=y
->  CONFIG_SAMPLES=y
->  CONFIG_SAMPLE_FTRACE_DIRECT=m
->  CONFIG_SAMPLE_TRACE_PRINTK=m
-> -CONFIG_KALLSYMS_ALL=y
-> +CONFIG_SCHED_TRACER=y
-> +CONFIG_STACK_TRACER=y
-> +CONFIG_TRACER_SNAPSHOT=y
-> +CONFIG_UPROBES=y
-> +CONFIG_UPROBE_EVENTS=y
-> 
-> 
+> diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
+> index 9024754530b2..5790ab446527 100644
+> --- a/tools/testing/selftests/openat2/openat2_test.c
+> +++ b/tools/testing/selftests/openat2/openat2_test.c
+> @@ -5,6 +5,7 @@
+>   */
+>  
+>  #define _GNU_SOURCE
+> +#define __SANE_USERSPACE_TYPES__ // Use ll64
+>  #include <fcntl.h>
+>  #include <sched.h>
+>  #include <sys/stat.h>
 
 -- 
 BR,
