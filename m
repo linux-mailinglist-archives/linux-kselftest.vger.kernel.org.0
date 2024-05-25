@@ -1,262 +1,227 @@
-Return-Path: <linux-kselftest+bounces-10697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA6F18CEEDB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 14:09:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B71B28CEF56
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 16:43:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 411BD1F215C8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 12:09:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5402E2818AA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 14:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A4E242073;
-	Sat, 25 May 2024 12:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636CF53804;
+	Sat, 25 May 2024 14:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMxcX0JV"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="moFaAMfq";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="moFaAMfq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429254204B;
-	Sat, 25 May 2024 12:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092DD4F1EE;
+	Sat, 25 May 2024 14:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716638942; cv=none; b=HE+VPfaJgbamozjKEaWEZAN2RR3FotpUmjp1PMqe7i/f8dM46cUoPzEjkj3oVN4/ip527Tz/3jMNEVuCr3hzCM1wWo4XuW+dTiGKBfa+hwQ7LPZm9yXDBBqZg88KfOCcmRE8TMHdBMU6NIfceZw2WZ56O9FZZujLwVHZomZD1LU=
+	t=1716648188; cv=none; b=AAv+8TVSA183LGZX1bRf2RcXeicl4bbsR2BxFkZTPqlxvjYd+zPlw7lYi7tLnYJd+FS6R7NVLQt0T+WHNvk6cZOQWrS3lSvS8TJ2G34YG5yDOOmOS0bLRaKd/JLHZPxQAOfx11D2Ex7RHmI2uVS+gj3+h6YA2CukpgVa/YhRnRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716638942; c=relaxed/simple;
-	bh=Z9oReom4OcpwOIk6DSXKNHCUKdLqN5YiEZpEcZFsHrk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s55SuEsfOLL9YDRG1dIcYJbCeetbie7oWDU1fnknqQGy62FPrP7lCQUEvdqrIhw8UI99+NpsMkwEWKw3UUDpmCW86HvFW73Y7rf/poQ2dE6HcoU1YF8+Ppbpd1lT8MANNhh9okflmeMrn4Fl/dVXTD0MPyTYVrI50n/K8xeAoDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMxcX0JV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F375C3277B;
-	Sat, 25 May 2024 12:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716638942;
-	bh=Z9oReom4OcpwOIk6DSXKNHCUKdLqN5YiEZpEcZFsHrk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tMxcX0JVREIg0peQmaMg44VKTutYxxwT/8ym1tE2cpH/LTvKjfadIv0tLYIllBezz
-	 k561DIEQBjmxCKn6XD1pO4DCG/uM/Wtf4OCpjbuXSprHp7YfNdQfY7Nc1c04nkrZKG
-	 iTv1tL5W/DipOuqgfoqaWrZV3KSkChIbFt3bqkhsce9jYCXQemw8UE6YzF6etkNIvK
-	 YnSXUjn/BzLB1FNqf1yfpBbDhPYNgKSBSA/7GPYsoWs1Gy72TCVa1kL6OJYWKWnclR
-	 EUSyjGPgY4yJUbFPMrjHAAGJfx6wcksfQfL0WAw/1AFzV+WKCkmH6SbzhwMaRb6BnI
-	 HugxxJbuDmp/Q==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 7/7] selftests/bpf: Add post_connect_cb callback
-Date: Sat, 25 May 2024 20:08:21 +0800
-Message-ID: <3c5e8bd6c38cbe233daee6e0359a99d8d22ed821.1716638248.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1716638248.git.tanggeliang@kylinos.cn>
-References: <cover.1716638248.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1716648188; c=relaxed/simple;
+	bh=EkrUWFhn0zt+TeGkX6M8/mRR/R/1t+tAjbE/Avl3BCg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sbz3KriaiQip42fFVEz/mvd+cspIgHV8FQ5yxVgZ3G46C52gtfM4k4FDdm1e0qXdRnDCusVLXICwu0+aAeq+a1zAB8bv2KGI+kQrD7lVcO5VsA1L1v1+IQBhdqQpNaHXG1j6Zd8Cng5ZAOIfqt75L2513WNgXwZf/CD75G57VFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=moFaAMfq; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=moFaAMfq; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2533E340EF;
+	Sat, 25 May 2024 14:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716647658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kayrq4bIogVbNvkYduiGWuYdpRW0aW0d8zLBW6xI8FA=;
+	b=moFaAMfqnNAZuh2xbYkD4mwv2iHWITj82fZzbieW9f2Q6I8xV6mz1dvv8ESWYidRH4TmQD
+	YSnsz8+N5wfO8lRUNfmTEqTnNO8qHict3hCzLJgA0iQ0rG/nhPCA7VUKcR9hUEPg47JU+A
+	p8jm9RnCf1IeYlzi8ut/A7NbiRNLZhc=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1716647658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kayrq4bIogVbNvkYduiGWuYdpRW0aW0d8zLBW6xI8FA=;
+	b=moFaAMfqnNAZuh2xbYkD4mwv2iHWITj82fZzbieW9f2Q6I8xV6mz1dvv8ESWYidRH4TmQD
+	YSnsz8+N5wfO8lRUNfmTEqTnNO8qHict3hCzLJgA0iQ0rG/nhPCA7VUKcR9hUEPg47JU+A
+	p8jm9RnCf1IeYlzi8ut/A7NbiRNLZhc=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B507F13A6B;
+	Sat, 25 May 2024 14:34:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id oH3EIOn2UWYJNQAAD6G6ig
+	(envelope-from <mpdesouza@suse.com>); Sat, 25 May 2024 14:34:17 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+Date: Sat, 25 May 2024 11:34:08 -0300
+Subject: [PATCH v2] selftests: livepatch: Test atomic replace against
+ multiple modules
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240525-lp-atomic-replace-v2-1-142199bb65a1@suse.com>
+X-B4-Tracking: v=1; b=H4sIAN/2UWYC/0XMyw6CMBSE4VchXXtML5CAK9/DuKjtIE2Akp6KJ
+ oR3t7JxN99i/k0wUgCLS7WJhDVwiHOBPlXCDXZ+goIvFlrqWja6oXEhm+MUHCUso3WgTj6MgZe
+ q9U6U35LQh8/RvN2L+xQnykOC/ZeM0r8SY+wzONOMNx1jVaSoc21toBuYFld+Mc4uTmLfv/V8C
+ 96uAAAA
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716647655; l=4356;
+ i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
+ bh=EkrUWFhn0zt+TeGkX6M8/mRR/R/1t+tAjbE/Avl3BCg=;
+ b=zthRmdcWJPIHXlRCyOn1WbeN86DXFqLe49bmdmlhZCkNWwZr9dr+0T2NEmIwwfJELaj27kdyO
+ i0FuZ4SkumtCt2lUNlxvCs3e/wf4Mptk5tyPDzw9AIQ3ad/OVX5xTaV
+X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
+ pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,test-livepatch.sh:url,suse.com:email]
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Adapt the current test-livepatch.sh script to account the number of
+applied livepatches and ensure that an atomic replace livepatch disables
+all previously applied livepatches.
 
-For getting rid of the second parameter of do_test(), this patch adds a
-new callback post_connect_cb in struct network_helper_opts, it will be
-invoked after connect_fd_to_addr() in connect_to_fd_opts().
-
-Then define a dctcp dedicated post_connect_cb callback, invoking
-bpf_map_lookup_elem() in it, named stg_post_connect_cb() and set it in
-test_dctcp().
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c |  7 ++-
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 45 ++++++++++---------
- 3 files changed, 31 insertions(+), 22 deletions(-)
+Changes since v1:
+* Added checks in the existing test-livepatch.sh instead of creating a
+  new test file. (Joe)
+* Fixed issues reported by ShellCheck (Joe)
+---
+ .../testing/selftests/livepatch/test-livepatch.sh  | 46 ++++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index e20caef06aae..75589597c17e 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -353,10 +353,15 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
- 	    opts->post_socket_cb(fd, opts->cb_opts))
- 		goto error_close;
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index e3455a6b1158..d85405d18e54 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -107,9 +107,12 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
  
--	if (!opts->noconnect)
-+	if (!opts->noconnect) {
- 		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
- 			goto error_close;
+ # - load a livepatch that modifies the output from /proc/cmdline and
+ #   verify correct behavior
+-# - load an atomic replace livepatch and verify that only the second is active
+-# - remove the first livepatch and verify that the atomic replace livepatch
+-#   is still active
++# - load two addtional livepatches and check the number of livepatch modules
++#   applied
++# - load an atomic replace livepatch and check that the other three modules were
++#   disabled
++# - remove all livepatches besides the atomic replace one and verify that the
++#   atomic replace livepatch is still active
+ # - remove the atomic replace livepatch and verify that none are active
  
-+		if (opts->post_connect_cb &&
-+		    opts->post_connect_cb(fd, opts->cb_opts))
-+			goto error_close;
-+	}
+ start_test "atomic replace livepatch"
+@@ -119,12 +122,31 @@ load_lp $MOD_LIVEPATCH
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
++for mod in test_klp_syscall test_klp_callbacks_demo; do
++	load_lp $mod
++done
 +
- 	return fd;
- 
- error_close:
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 11eea8e2e4f1..b387e8142f3c 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -28,6 +28,7 @@ struct network_helper_opts {
- 	int type;
- 	int proto;
- 	int (*post_socket_cb)(int fd, void *opts);
-+	int (*post_connect_cb)(int fd, void *opts);
- 	void *cb_opts;
- };
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 9a7c3dc39008..e6fc6dfbcb7b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -39,11 +39,9 @@ static int settcpca(int fd, const char *tcp_ca)
- 	return 0;
- }
- 
--static void do_test(const struct network_helper_opts *opts,
--		    const struct bpf_map *sk_stg_map)
-+static void do_test(const struct network_helper_opts *opts)
- {
- 	int lfd = -1, fd = -1;
--	int err;
- 
- 	lfd = start_server_str(AF_INET6, SOCK_STREAM, NULL, 0, opts);
- 	if (!ASSERT_NEQ(lfd, -1, "socket"))
-@@ -54,16 +52,6 @@ static void do_test(const struct network_helper_opts *opts,
- 	if (!ASSERT_NEQ(fd, -1, "connect_to_fd_opts"))
- 		goto done;
- 
--	if (sk_stg_map) {
--		int tmp_stg;
--
--		err = bpf_map_lookup_elem(bpf_map__fd(sk_stg_map), &fd,
--					  &tmp_stg);
--		if (!ASSERT_ERR(err, "bpf_map_lookup_elem(sk_stg_map)") ||
--				!ASSERT_EQ(errno, ENOENT, "bpf_map_lookup_elem(sk_stg_map)"))
--			goto done;
--	}
--
- 	ASSERT_OK(send_recv_data(lfd, fd, total_bytes), "send_recv_data");
- 
- done:
-@@ -100,7 +88,7 @@ static void test_cubic(void)
- 		return;
- 	}
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 
- 	ASSERT_EQ(cubic_skel->bss->bpf_cubic_acked_called, 1, "pkts_acked called");
- 
-@@ -125,6 +113,20 @@ static int stg_post_socket_cb(int fd, void *opts)
- 	return 0;
- }
- 
-+static int stg_post_connect_cb(int fd, void *opts)
-+{
-+	struct cb_opts *cb_opts = (struct cb_opts *)opts;
-+	int tmp_stg;
-+	int err;
++mods=(/sys/kernel/livepatch/*)
++nmods=${#mods[@]}
++if [ "$nmods" -ne 3 ]; then
++	die "Expecting three modules listed, found $nmods"
++fi
 +
-+	err = bpf_map_lookup_elem(cb_opts->map_fd, &fd, &tmp_stg);
-+	if (!ASSERT_ERR(err, "bpf_map_lookup_elem(sk_stg_map)") ||
-+			!ASSERT_EQ(errno, ENOENT, "bpf_map_lookup_elem(sk_stg_map)"))
-+		return err;
+ load_lp $MOD_REPLACE replace=1
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-unload_lp $MOD_LIVEPATCH
++mods=(/sys/kernel/livepatch/*)
++nmods=${#mods[@]}
++if [ "$nmods" -ne 1 ]; then
++	die "Expecting only one moduled listed, found $nmods"
++fi
 +
-+	return 0;
-+}
-+
- static void test_dctcp(void)
- {
- 	struct cb_opts cb_opts = {
-@@ -132,6 +134,7 @@ static void test_dctcp(void)
- 	};
- 	struct network_helper_opts opts = {
- 		.post_socket_cb	= stg_post_socket_cb,
-+		.post_connect_cb = stg_post_connect_cb,
- 		.cb_opts	= &cb_opts,
- 	};
- 	struct bpf_dctcp *dctcp_skel;
-@@ -148,7 +151,7 @@ static void test_dctcp(void)
- 	}
++# These modules were disabled by the atomic replace
++for mod in test_klp_callbacks_demo test_klp_syscall $MOD_LIVEPATCH; do
++	unload_lp "$mod"
++done
  
- 	cb_opts.map_fd = bpf_map__fd(dctcp_skel->maps.sk_stg_map);
--	do_test(&opts, dctcp_skel->maps.sk_stg_map);
-+	do_test(&opts);
- 	ASSERT_EQ(dctcp_skel->bss->stg_result, expected_stg, "stg_result");
- 
- 	bpf_link__destroy(link);
-@@ -352,14 +355,14 @@ static void test_update_ca(void)
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
- 	ASSERT_OK_PTR(link, "attach_struct_ops");
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
- 	ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
- 
- 	err = bpf_link__update_map(link, skel->maps.ca_update_2);
- 	ASSERT_OK(err, "update_map");
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 	ASSERT_EQ(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
- 	ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
- 
-@@ -388,14 +391,14 @@ static void test_update_wrong(void)
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
- 	ASSERT_OK_PTR(link, "attach_struct_ops");
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
- 	ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
- 
- 	err = bpf_link__update_map(link, skel->maps.ca_wrong);
- 	ASSERT_ERR(err, "update_map");
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 	ASSERT_GT(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
- 
- 	bpf_link__destroy(link);
-@@ -425,7 +428,7 @@ static void test_mixed_links(void)
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
- 	ASSERT_OK_PTR(link, "attach_struct_ops");
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
- 
- 	err = bpf_link__update_map(link, skel->maps.ca_no_link);
-@@ -532,7 +535,7 @@ static void test_cc_cubic(void)
- 		return;
- 	}
- 
--	do_test(&opts, NULL);
-+	do_test(&opts);
- 
- 	bpf_link__destroy(link);
- 	bpf_cc_cubic__destroy(cc_cubic_skel);
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+@@ -142,6 +164,20 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ livepatch: '$MOD_LIVEPATCH': patching complete
+ $MOD_LIVEPATCH: this has been live patched
++% insmod test_modules/test_klp_syscall.ko
++livepatch: enabling patch 'test_klp_syscall'
++livepatch: 'test_klp_syscall': initializing patching transition
++livepatch: 'test_klp_syscall': starting patching transition
++livepatch: 'test_klp_syscall': completing patching transition
++livepatch: 'test_klp_syscall': patching complete
++% insmod test_modules/test_klp_callbacks_demo.ko
++livepatch: enabling patch 'test_klp_callbacks_demo'
++livepatch: 'test_klp_callbacks_demo': initializing patching transition
++test_klp_callbacks_demo: pre_patch_callback: vmlinux
++livepatch: 'test_klp_callbacks_demo': starting patching transition
++livepatch: 'test_klp_callbacks_demo': completing patching transition
++test_klp_callbacks_demo: post_patch_callback: vmlinux
++livepatch: 'test_klp_callbacks_demo': patching complete
+ % insmod test_modules/$MOD_REPLACE.ko replace=1
+ livepatch: enabling patch '$MOD_REPLACE'
+ livepatch: '$MOD_REPLACE': initializing patching transition
+@@ -149,6 +185,8 @@ livepatch: '$MOD_REPLACE': starting patching transition
+ livepatch: '$MOD_REPLACE': completing patching transition
+ livepatch: '$MOD_REPLACE': patching complete
+ $MOD_REPLACE: this has been live patched
++% rmmod test_klp_callbacks_demo
++% rmmod test_klp_syscall
+ % rmmod $MOD_LIVEPATCH
+ $MOD_REPLACE: this has been live patched
+ % echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
+
+---
+base-commit: 6d69b6c12fce479fde7bc06f686212451688a102
+change-id: 20240525-lp-atomic-replace-90b33ed018dc
+
+Best regards,
 -- 
-2.43.0
+Marcos Paulo de Souza <mpdesouza@suse.com>
 
 
