@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-10690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C88828CEECD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 14:08:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9988CEED0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 14:08:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2477D1F21561
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 12:08:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ED01B21005
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2024 12:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147F13D967;
-	Sat, 25 May 2024 12:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7448F4084D;
+	Sat, 25 May 2024 12:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rX2MVUlL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVd/GRgV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AF818044;
-	Sat, 25 May 2024 12:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4844E18044;
+	Sat, 25 May 2024 12:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716638912; cv=none; b=Ti6bsEwolDezVUj9VZvCXkykDa2a9hJ+/n8vs52it8PUX+fwLhMIWjX1xp79lofpPpk/e+mgiDNCshhHTPUjfw9ZLRNVrbxA2RhSlM+I0WIja6qbJMabeweD70vzDh01qnnIsfv2k/gGa3fCryV9NwgWVPHzKqUOnQM6UmGR5oc=
+	t=1716638916; cv=none; b=kt2YnXCJe897qjwOVUz2wDjnhcIGOGf1QnqLL7lYbgcs2+gctYtBNiEUBoZ1kzX2uGTsXRU26fpW8cah87v5ikhNY3tuRm2YkXFa74utIolN1cedZmpapZ1A0FWtVb+rgaDOT0y7rrUxADKKFRYjgmaCjxcZ5dJtbxHm/UqXM88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716638912; c=relaxed/simple;
-	bh=Z6DeYB71VeeBAuOoaimCiM1lovTmgmabsCkf/mJ2Vos=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hxw7pB7Yov4WXGQIR4GDkrtwizF9L8BXB/AqjGULC78MtwVjKVttvYTAJshRtHdpu/u98iAncUn3Gdi6FHrqlv4lJ3OxiuzQ1V2/ZxMPV8Kbh8KUw/frqlp8Jx7F3CYzraGRkebO0kqRXVGZEYXPvmJBoGpJvVKjUN9i5XBVuPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rX2MVUlL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474EEC2BD11;
-	Sat, 25 May 2024 12:08:27 +0000 (UTC)
+	s=arc-20240116; t=1716638916; c=relaxed/simple;
+	bh=z/rJWlSUZ4/YuGyhiu6hcQQN4WWNf6a84wS8YU3ikvI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Etwerl+/0AFF2vs5yHFSxAXXJATu66UpXTJFQqf/fiONBmNn+8w3tZYT7YsWt2u0DW3gV7mehFlVu3nnCfCa8xxDFtmxWYuLT34cbJmuVic7MaKLLvKfD2t77/RAfY0jwC5fxfEqIiJigxAG3qIw7+9Xb5JvPNDYjsEEUBxrcgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVd/GRgV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD52CC3277B;
+	Sat, 25 May 2024 12:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716638911;
-	bh=Z6DeYB71VeeBAuOoaimCiM1lovTmgmabsCkf/mJ2Vos=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rX2MVUlLgUd4gvH27ucvtNqJKLQ125f48hMcOUItiRrU0o9MplvsoyWVNk42y/kGB
-	 lLVQzvcQpHqJ3U0QpAqY8D2DlGGBtfQEfXYoHIuCUj+KdhifiaEQOJ06oYosq7Ma3r
-	 uTW4kAT7qBs6ayLcgqYU0N5o7sr3SSJlfyDtIXQhRpNMLucMAQ44U8xhPergLxAfxn
-	 1PsOA434/xk88x3Sg1/g4F1w5zihC/Ks+IhB4pnfrkV9T/E6dabi17yMR0sWKKYcXM
-	 1P/gNrt54ruJddI5znHam2uaOH9ttMGJqpGge0L3epC5aL2th4Lbp029OMP1Kqu6Dc
-	 gBuvHHE1fwOIQ==
+	s=k20201202; t=1716638915;
+	bh=z/rJWlSUZ4/YuGyhiu6hcQQN4WWNf6a84wS8YU3ikvI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mVd/GRgVelizq+TR98Fn0i6XE08W/TDrwQZiIJHkqYAPpopYPwNIOfY2FL+LogQvL
+	 2bEsb036fx8CAPygZeYlYBFI57bxNCnJTZK7KrO9HcNR+2TeIT2CUztlRWttQF8OzH
+	 xixf/jwHcoJsLykUgUovOglOfrDu8bdywWVRXsnnVQiLkQA53Ug1onXhRS00QWykh6
+	 j56oaZ8NnxtY/qe05dAm8hOY5KkQTT2DNzT/+8ejxwATyOM++WXFJe7vd3ByQI3s7c
+	 fMyBedcUm17T8Gd8oXTaiOFA8jhTi5yOlVbiLvPTaw+jn7lX1iEszzFwRq9XXqq+Yp
+	 J7DyoRou2O/ZA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -58,10 +59,12 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 0/7] use network helpers, part 5
-Date: Sat, 25 May 2024 20:08:14 +0800
-Message-ID: <cover.1716638248.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v5 1/7] selftests/bpf: Drop struct post_socket_opts
+Date: Sat, 25 May 2024 20:08:15 +0800
+Message-ID: <f8bda41c7cb9cb6979b2779f89fb3a684234304f.1716638248.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1716638248.git.tanggeliang@kylinos.cn>
+References: <cover.1716638248.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,46 +75,90 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patchset uses post_socket_cb and post_connect_cb callbacks of struct
-network_helper_opts to refactor do_test() in bpf_tcp_ca.c to move dctcp
-test dedicated code out of do_test() into test_dctcp().
+It's not possible to have one generic/common "struct post_socket_opts"
+for all tests. It's better to have the individual test define its own
+callback opts struct.
 
-v5:
- - address Martin's comments in v4 (thanks)
- - add patch 4, use start_server_str in test_dctcp_fallback too
- - ASSERT_* is already used in settcpca, use this helper in cc_cb (patch 3)
- and stg_post_socket_cb (patch 6)
- - add ASSERT_* in stg_post_socket_cb in patch 6
+So this patch drops struct post_socket_opts, and changes the second
+parameter of post_socket_cb as "void *" type.
 
-v4:
- - address Martin's comments in v3 (thanks).
- - drop 2 patches, keep "type" as the individual arg to start_server_addr,
-   connect_to_addr and start_server_str.
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/network_helpers.c               | 2 +-
+ tools/testing/selftests/bpf/network_helpers.h               | 4 +---
+ tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c    | 2 +-
+ tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c | 4 ++--
+ 4 files changed, 5 insertions(+), 7 deletions(-)
 
-v3:
- - Add 4 new patches, 1-3 are cleanups. 4 adds a new helper.
- - address Martin's comments in v2.
-
-v2:
- - rebased on commit "selftests/bpf: Add test for the use of new args in
- cong_control"
-
-Geliang Tang (7):
-  selftests/bpf: Drop struct post_socket_opts
-  selftests/bpf: Add start_server_str helper
-  selftests/bpf: Use post_socket_cb in connect_to_fd_opts
-  selftests/bpf: Use post_socket_cb in start_server_str
-  selftests/bpf: Use start_server_str in do_test in bpf_tcp_ca
-  selftests/bpf: Use connect_to_fd_opts in do_test in bpf_tcp_ca
-  selftests/bpf: Add post_connect_cb callback
-
- tools/testing/selftests/bpf/network_helpers.c |  39 +++--
- tools/testing/selftests/bpf/network_helpers.h |   9 +-
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 153 +++++++++++++-----
- .../bpf/prog_tests/sockopt_inherit.c          |   2 +-
- .../bpf/test_tcp_check_syncookie_user.c       |   4 +-
- 5 files changed, 145 insertions(+), 62 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 35250e6cde7f..4d776b78929c 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -133,7 +133,7 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	return __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
+ }
+ 
+-static int reuseport_cb(int fd, const struct post_socket_opts *opts)
++static int reuseport_cb(int fd, void *opts)
+ {
+ 	int on = 1;
+ 
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 883c7ea9d8d5..40011e0f584b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -21,8 +21,6 @@ typedef __u16 __sum16;
+ #define VIP_NUM 5
+ #define MAGIC_BYTES 123
+ 
+-struct post_socket_opts {};
+-
+ struct network_helper_opts {
+ 	const char *cc;
+ 	int timeout_ms;
+@@ -30,7 +28,7 @@ struct network_helper_opts {
+ 	bool noconnect;
+ 	int type;
+ 	int proto;
+-	int (*post_socket_cb)(int fd, const struct post_socket_opts *opts);
++	int (*post_socket_cb)(int fd, void *opts);
+ };
+ 
+ /* ipv4 test vector */
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+index 1d3a20f01b60..7cd8be2780ca 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
+@@ -70,7 +70,7 @@ static void *server_thread(void *arg)
+ 	return (void *)(long)err;
+ }
+ 
+-static int custom_cb(int fd, const struct post_socket_opts *opts)
++static int custom_cb(int fd, void *opts)
+ {
+ 	char buf;
+ 	int err;
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+index 7b5fc98838cd..aebc58c24dc5 100644
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+@@ -139,14 +139,14 @@ static int run_test(int server_fd, int results_fd, bool xdp)
+ 	return ret;
+ }
+ 
+-static int v6only_true(int fd, const struct post_socket_opts *opts)
++static int v6only_true(int fd, void *opts)
+ {
+ 	int mode = true;
+ 
+ 	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
+ }
+ 
+-static int v6only_false(int fd, const struct post_socket_opts *opts)
++static int v6only_false(int fd, void *opts)
+ {
+ 	int mode = false;
+ 
 -- 
 2.43.0
 
