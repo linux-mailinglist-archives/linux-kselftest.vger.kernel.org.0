@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-10731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E06EA8D0927
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 19:07:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A74E28D0916
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 19:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4FFCB25E17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 17:05:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 460D71F21CE0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 17:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D98A15E5D1;
-	Mon, 27 May 2024 17:02:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5DA15ECE0;
+	Mon, 27 May 2024 17:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8WDPhKG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cK7wOu/5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D210C15A870;
-	Mon, 27 May 2024 17:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7277F15A870;
+	Mon, 27 May 2024 17:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716829373; cv=none; b=bMpKh/f/YKLOs8eIQpPOXH8rplqpz7FpKAD4s6Praj2KVxCv3ihWrbSpXABVIQx3NP8XZs9uxddwTrATP0jeeRt/w7lmnbbfc90M6pgrjPCM1wiITonhfOw5jN3wylJcCKnBgZEMT1ksHoydz1jV0GLPwZEg1W2dK/vurRmwAcI=
+	t=1716829414; cv=none; b=I6TAjrsWKuDKBCcqKDpLbvQAlq36aZIeuDq90SdCIXk51iMVN24FQW955XMCj+vpFJwgboQ133MjLhLl8jzU9cYWMlmmgqX6R1N2dSwNuT0tikNifHdJeyN8mjVsAbBl/Nu+s4v9aq4QZ4dRjfAdya4u+k+pdS93s1rrDXOyJIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716829373; c=relaxed/simple;
-	bh=HuufMUl06tKaoCf1fvMHkMRw5RUO9CTNBZfFJ++j9F4=;
+	s=arc-20240116; t=1716829414; c=relaxed/simple;
+	bh=cypR+g0zFhtE7zY1PMkxYKKwvS5VxOe4Z0SwLJHhfhc=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=GPUHAv2Avg10dofKLv85NJRvLB8OWC6uQe1LCtpkGZUpZz36YS532WwIY3YQkeUYV6j8LE0HpgCyOmi62Hh2t+8f7b2LjjABg1HWgECLPyK8wG+D/D12moIjjQjGydnsdSFbuyllcaR1wQkI8OeS6cMiqV/udf5p00Y5Y3MOozo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E8WDPhKG; arc=none smtp.client-ip=209.85.214.182
+	 Mime-Version:Content-Type; b=hXLf9hRybFDP3fyHnNunVus5o3LyAbW8yGjKCvyvihh3hdGUyV1sCN0dUSgGVJra4OQsJFb698wTjIF87PqgavzHObAxbjgdg9Y1TWcJHf4/gZO1ElM00/ZpdzcZX9cyGrHwLGi5bgH5z8oCHRnc6y0peAIZfGqDKTgbi+P//tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cK7wOu/5; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f4a6a54416so76375ad.0;
-        Mon, 27 May 2024 10:02:51 -0700 (PDT)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-68195b58daeso20739a12.2;
+        Mon, 27 May 2024 10:03:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716829371; x=1717434171; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716829413; x=1717434213; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tCL0QMy+Ly73P6vs1+MeDV5qAwekWDUkZdhexh4ksow=;
-        b=E8WDPhKGvTBJIPtfe4R/v0nKkNCRxE9jK2zf75CoDC3HYwetC8+0i6urynncWBUkTW
-         SfcH4ZPUA4Lqnd1eSo6dbePIXFslMpX4Bxz3tUAoaYAENC64iRgG98owoyYcCYFCxqZy
-         +kp0ZNMWF+r9omr+0tMbRrLXqHqC5oawOyzQns+C/fkc1EiNU2BeIgL6EOIxY0pRsOaX
-         KhFjbi077cszxo/tgcZAQWqvwLyoJAw5oBe5wZx1uJlS15sB14d1VDEqoWwDQkcVGALg
-         IFbgqVMm/IDMsoG8IrEVwCTtsD/Nl2rOnOhSkPaFppkeBSM3A3erHV8GM6fnURWVJVKg
-         0qvw==
+        bh=2m1zWh4PmcbbQ/4vQeWDTlVzAcYxn8TniNE0ypJ7ZkY=;
+        b=cK7wOu/5+fZ9QlA4+lGs6Vp3LvU/whsGAJh7MCIlWcpQ/s8OOmyHRjlRxlPbJpaKUy
+         CM1UMfFMtOXM8ZdDMBryeiNEoBelzvcG726g7Qka8ZbBSiJx6qdkWBiaCN6SCIdGEz3C
+         AJeDDW6ygAm7pdajp2fmHyuVGtDwzV/kd6jNWuBvllyZ/0/tXhfO/wFRmmR8x7NQiH+X
+         hsqpUgnNy6JxWSpugHqP4a8jUSEgNO9qwG+CwtYFnegBCZBv1f5SQnStLUX4TSDg82lQ
+         K6sPuSFVdsKrxbhsJxj5GbV6gmz3oUwIqS3N0yKaUZ8DIThl9KyafN/cOWRGsxBp2x1b
+         VKvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716829371; x=1717434171;
+        d=1e100.net; s=20230601; t=1716829413; x=1717434213;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=tCL0QMy+Ly73P6vs1+MeDV5qAwekWDUkZdhexh4ksow=;
-        b=bwZrrl/r8gL+MbdNKq1VvhZ4M1EYjO70wwiBxuAv2dBta3bcJ1nGdjdbLcfvlLpmsl
-         ENqzh4rLTyrI1p4iVFGhCZ/iURy+ey0ynzcSOyuT/9B82dR7cR/YljvMAM+EaPedbPvE
-         k62eFt+/MseBp19o3tr7sGh7BXPFw10vRkRk/0B1wPU4W28QS3KltL17pNG4u5KKt3y6
-         31swnuMmveRaGS+HMV6HXa/22Xf/y3onzug56XN156zTm++EJFIgescfVq2O+2QBfHqr
-         q0OwqWl4XDEs9SQfy70x+9t7IztPvQ+JzPadzDmhi9EbQcAydYBXoWYpsTrsLc0Ho0kN
-         k1ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUUB4pcMFMAXELC45AWCDaGULQAQwxMw75cOD8aPf5FjCIHff8HqzJDmrpYBjeuzvD/GJm2MdpPPbJYJtfYzar1Qtg3mfbZM6qoEL/VLtnp37NZv30HF079EGiEugIqg+opdXV9
-X-Gm-Message-State: AOJu0Yz+e7PYOTRjowhoO3IUUvHt+vYj5C4mKoP/8ttPXJv/1UjNpern
-	bcdz91EXs7rkZn/bMoJ+GwaNKxj0IuL5+G7diiSEuA2notvQeA2J
-X-Google-Smtp-Source: AGHT+IHv2KRHulQpfjNbRpU0ZNk6UKwSl4yDia/usKLNi6d7oc9+0t125YVDRVssVv3Juubp+LhX6w==
-X-Received: by 2002:a17:902:fc8e:b0:1f4:a04e:8713 with SMTP id d9443c01a7336-1f4a04e8cd4mr47832295ad.28.1716829371142;
-        Mon, 27 May 2024 10:02:51 -0700 (PDT)
+        bh=2m1zWh4PmcbbQ/4vQeWDTlVzAcYxn8TniNE0ypJ7ZkY=;
+        b=L0/Cd6E3LTpqI1oWFU0EXWXj7MAeXey+Lzz/7SvwxO3F6zWA5OgdbyxDqscGZ6iQ9L
+         V8K2NPWxMHKwFUuBsEjbmU5msC+ISMDwaSbf85v31IuRDxvFPLNlLdz8iRZWHNTPJzLv
+         CEbZ5lxbrCoAE13hwP+LCbIAgokiTnGDhqb18zAmx1cWw558i/wcI64eMENGPMhATo3a
+         AuAXxJSDluFXZpP4DRuGwsXUvMlmaI3eHFn40I5uv83/I9pesTUTCRey2kg/UE4cLw/X
+         tS6swEtBUmbOkjYt9nOGCqGhwejcznFkAMM/aSuGSObFoL4WJdB8xRgofdmAjFfi5jdk
+         M1rA==
+X-Forwarded-Encrypted: i=1; AJvYcCWr3CgtkFNkJf5uwCQsOxeJaBh8DXVvMAZuuLzZ+WIxpBA1dxghxok6gjYnNgCrYy0GaE5/A8Zavppbn9KLtY8pSU5cI4Wz6aJT3wmkXhFdSO+8/3GQNke6KnMPbtTSvr4rSlPL
+X-Gm-Message-State: AOJu0Yzh+ddBoYTMYrFi2H85SBH7uRd49baPP75isVJnzUnSQl0Piymg
+	b2pWcYVDdwILFm6bBN8VbKJajMCEj+UmMW6LBqAYvFv399n+Yfk+
+X-Google-Smtp-Source: AGHT+IFKfq+H9+x0YXQkHE+EojBqtVnPw7be5Ssr/5SPLjYAKXj+rVlue01t0WiGUA6aOay6Y0O9EA==
+X-Received: by 2002:a17:902:db11:b0:1f4:5dc0:5fe8 with SMTP id d9443c01a7336-1f45dc06337mr99021015ad.15.1716829412633;
+        Mon, 27 May 2024 10:03:32 -0700 (PDT)
 Received: from localhost ([98.97.41.203])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c7d1b46sm63393815ad.110.2024.05.27.10.02.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c99d8c9sm62984535ad.214.2024.05.27.10.03.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 May 2024 10:02:50 -0700 (PDT)
-Date: Mon, 27 May 2024 10:02:49 -0700
+        Mon, 27 May 2024 10:03:32 -0700 (PDT)
+Date: Mon, 27 May 2024 10:03:31 -0700
 From: John Fastabend <john.fastabend@gmail.com>
 To: Geliang Tang <geliang@kernel.org>, 
  Andrii Nakryiko <andrii@kernel.org>, 
@@ -88,12 +88,12 @@ To: Geliang Tang <geliang@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>, 
  bpf@vger.kernel.org, 
  linux-kselftest@vger.kernel.org
-Message-ID: <6654bcb9e376e_23de208d5@john.notmuch>
-In-Reply-To: <08b20ffc544324d40939efeae93800772a91a58e.1716446893.git.tanggeliang@kylinos.cn>
+Message-ID: <6654bce339d08_23de208fa@john.notmuch>
+In-Reply-To: <8d690682330a59361562bca75d6903253d16f312.1716446893.git.tanggeliang@kylinos.cn>
 References: <cover.1716446893.git.tanggeliang@kylinos.cn>
- <08b20ffc544324d40939efeae93800772a91a58e.1716446893.git.tanggeliang@kylinos.cn>
-Subject: RE: [PATCH bpf-next 1/8] selftests/bpf: Fix tx_prog_fd values in
- test_sockmap
+ <8d690682330a59361562bca75d6903253d16f312.1716446893.git.tanggeliang@kylinos.cn>
+Subject: RE: [PATCH bpf-next 2/8] selftests/bpf: Drop duplicate definition of
+ i in test_sockmap
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -107,9 +107,8 @@ Content-Transfer-Encoding: 7bit
 Geliang Tang wrote:
 > From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> The values of tx_prog_fd in run_options() should not be 0, so set it as -1
-> in else branch, and test it using "if (tx_prog_fd > 0)" condition, not
-> "if (tx_prog_fd)" or "if (tx_prog_fd >= 0)".
+> There's already a definition of i in run_options() at the beginning, no
+> need to define a new one in "if (tx_prog_fd > 0)" block.
 > 
 > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
