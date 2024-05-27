@@ -1,112 +1,323 @@
-Return-Path: <linux-kselftest+bounces-10700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD1A8CF588
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2024 20:47:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D66108CF6E4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 02:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A6CEB20BB1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2024 18:47:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7D891C20C32
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2024 00:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B97E1DA5F;
-	Sun, 26 May 2024 18:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB92EDE;
+	Mon, 27 May 2024 00:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IExAs+PL"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oZFZCESK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072351FA5;
-	Sun, 26 May 2024 18:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CED2F43
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 May 2024 00:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716749240; cv=none; b=kdlGbfcPRos/BlyzDCmde8n47bWdFhwBV4KSrGGKmD5QOrkPF0pMGJhfkCjBH9TtYDNGT7czxmSVeud02vzc7bRfRc9wU91u+qyFu0YSn9ZxXhYfdHbAcOh3xwf5N5tF4vkEM9T9A1dLJ8ez/2+TniWG8okV6ofM/VLzD8NPFmc=
+	t=1716768172; cv=none; b=Y2CStziZGnBlFzEjW54/BIY9vCSw3ZsvY1LYdrh1NiLl6iz8EEWwQmnhgsAwt2vMXlWu6uaO/ZBOOUxGxLocG0NjJoX6HVU5MTzrXv1GrJ7mx4fELruJbEHLpK2bemuL78jnW8pCrZTdWR8ALAC9Iot8D33ZjUz/ustXWHcPa8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716749240; c=relaxed/simple;
-	bh=frnKVSu43OrJuRdMsz7rIGrcuSBmuhzMuZfwJ4GrIwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wdv8QW3kkZNfn+ncpvaRrVlXgo9n24gY7bHHgX5ohiUvQGpTzvEsktohkTJ7rFnlEuXmssnROD5k5q7dxHXNHCc6DLA6lKAab/1OyZ1McFIFHFiRUW99b2bA0Jz4ge78uIzGZN7YlKuxhAr0tATYtr5oxH7CxZ0iGXZeMLMfTgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IExAs+PL; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f44b42d1caso15701685ad.0;
-        Sun, 26 May 2024 11:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716749238; x=1717354038; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kY/rVz04n65zKIr3R5sTizybKZxPLRDpXYvpdpomf3E=;
-        b=IExAs+PLJaqemuVASy1WjX5867HOFviHkebd7KxNhWWhOsUJMDsUyToPDm1CBTJ/CJ
-         Q8ITtg3K7C6yrMo7Quy/xjCRmX+KBobx/IKExicKQXAJdj4UPXC4wqcUx5GL35bSFIyM
-         4+TIjjMxh00xb+6hl3WDltXdxW8jNV5dxUkIDVEbJ3FelgdEsiPM8SFigeCnVMDqWpb5
-         ZWxFK5ZqRIAK1kPMLfreha2ibKWmGvHTNEuGsDJFcJ2Tq+hHZm71/dPT4T9iByBobg6I
-         i1wu/T1bU0CJKMZJxJv8N6+XFENesIF2GUVEK8CaDrbeMNlONb8qyV4dDVxU0+DwcYZN
-         Y2yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716749238; x=1717354038;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kY/rVz04n65zKIr3R5sTizybKZxPLRDpXYvpdpomf3E=;
-        b=TsD4okR/74F2bUDFZ3MxdbT4TbsP71fTLLLqE5LzZcS9aNoGIfsqngxVcfpgQImG0e
-         ctgpKkI/LIo25g+9JjK9gV0tjTM6tIgpjYsymZ7I+EcCehWctP6tOgYUcL+cM4uzSkQM
-         x3uH+dZf4shGypng48cMv1PBtxsT4I4Uu1DHjA4w9hSeBhVPTmm+p8A29WD3fw4ltpqW
-         MYCwW+1Yd9rg4tsQzLenzqTyI2eGZ280t4c+/6qW7+LWQwt7h3EjE1dPtJsrIuQ6QPzH
-         RIBdjSHImlrbSq04VWXzJPIHVRtHiobB2xGEtYHIIflV4ahj1Uz8W+AEiDLHhVa8HtFh
-         NB8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVDgRYvHNRG8zlceyKzXn51cnuD2bcOhwE6WnIdekzoDWY5GTM6iryTGCSHACO8I6Oqy3C66cjn8VBmrftL2GTvpXUKP6mockmbvfxxUeMD1TUQvo4wHy/dS8xRibcK8tJAr5Nyttx9lBkAQ9rLG2w/Zs7tdRSGhxYU9QByFMIgyecEGkbo79ME
-X-Gm-Message-State: AOJu0YxvM+WbYpn/qSeZ+W6ITEns6cBxklRuHam3qTXOWLANhKCca/OX
-	7Krn0BqorhtoueNlezqlCZF+41OD/ooqu7KlfhPGr+KkEsEj5oW4tYXFnw==
-X-Google-Smtp-Source: AGHT+IEyAc/rcWTRs8X1mfec50gk78YnBsoandfEtTwnYyq+aQgeZO61Y93KI6nEi33WUsJ6GlEo6A==
-X-Received: by 2002:a17:903:32ce:b0:1f3:488a:bc54 with SMTP id d9443c01a7336-1f448d3510bmr90792645ad.36.1716749238115;
-        Sun, 26 May 2024 11:47:18 -0700 (PDT)
-Received: from localhost (dhcp-141-239-159-203.hawaiiantel.net. [141.239.159.203])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c75e579sm45943235ad.35.2024.05.26.11.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 May 2024 11:47:17 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Sun, 26 May 2024 08:47:16 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [PATCH v5 0/5] pids controller events rework
-Message-ID: <ZlODtCOIjaAeItif@slm.duckdns.org>
-References: <20240521092130.7883-1-mkoutny@suse.com>
+	s=arc-20240116; t=1716768172; c=relaxed/simple;
+	bh=5Z/IQ1AG0LSghMA4nafETdJADGNE+D470yXbhvbV++8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QfuzmxUMyzB7OPK6SkCwtPEolk2dxrvJ9ThpYzdCLcIkQEFWxkZ+k0bSYcqtqutndHGCbmfdZwB+hYVjts0j/XzcQkBEukxzlGp1u/Ru2/a06JoW09bre12xdtYAC5wVBlj+tzK+T7FSzt7SHR+GTe4qt/l7krxIc7WN68tbcLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oZFZCESK; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: skhan@linuxfoundation.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716768167;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VjOimlkAb10m4KMSg1DOqlHJhsmFxHSlxPO0CJcAMP4=;
+	b=oZFZCESKyh4srLsDKsx5WPsLeRrP/XrmvJbpNuyLg7+fLFuBjxhdK+JDw0N6j29Dr+ZBCF
+	QGxoL82JDx2HkkQdJifXgoczMxUfnqPhW9YNUFGfkJLNW4w1z4GR4xJ6hPpMeLGOmSUO1l
+	KndM+M6bjwFFkAM0ZuJTKax0jVq5f20=
+X-Envelope-To: brauner@kernel.org
+X-Envelope-To: akpm@linux-foundation.org
+X-Envelope-To: wen.yang@linux.dev
+X-Envelope-To: shuah@kernel.org
+X-Envelope-To: avagin@google.com
+X-Envelope-To: mathieu.desnoyers@efficios.com
+X-Envelope-To: rostedt@goodmis.org
+X-Envelope-To: dyoung@redhat.com
+X-Envelope-To: tim.bird@sony.com
+X-Envelope-To: linux-kselftest@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Wen Yang <wen.yang@linux.dev>
+To: Shuah Khan <skhan@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Wen Yang <wen.yang@linux.dev>,
+	SShuah Khan <shuah@kernel.org>,
+	Andrei Vagin <avagin@google.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Dave Young <dyoung@redhat.com>,
+	Tim Bird <tim.bird@sony.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RESEDN PATCH v2] selftests: introduce additional eventfd test coverage
+Date: Mon, 27 May 2024 08:02:00 +0800
+Message-Id: <20240527000200.5615-1-wen.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240521092130.7883-1-mkoutny@suse.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, May 21, 2024 at 11:21:25AM +0200, Michal Koutný wrote:
-> Michal Koutný (5):
->   cgroup/pids: Separate semantics of pids.events related to pids.max
->   cgroup/pids: Make event counters hierarchical
->   cgroup/pids: Add pids.events.local
->   selftests: cgroup: Lexicographic order in Makefile
->   selftests: cgroup: Add basic tests for pids controller
+Add several new test cases which assert corner cases on the eventfd
+mechanism, for example, the supplied buffer is less than 8 bytes,
+attempting to write a value that is too large, etc.
 
-Applied 1-5 to cgroup/for-6.11.
+	./eventfd_test
+	# Starting 9 tests from 1 test cases.
+	#  RUN           global.eventfd_check_flag_rdwr ...
+	#            OK  global.eventfd_check_flag_rdwr
+	ok 1 global.eventfd_check_flag_rdwr
+	#  RUN           global.eventfd_check_flag_cloexec ...
+	#            OK  global.eventfd_check_flag_cloexec
+	ok 2 global.eventfd_check_flag_cloexec
+	#  RUN           global.eventfd_check_flag_nonblock ...
+	#            OK  global.eventfd_check_flag_nonblock
+	ok 3 global.eventfd_check_flag_nonblock
+	#  RUN           global.eventfd_chek_flag_cloexec_and_nonblock ...
+	#            OK  global.eventfd_chek_flag_cloexec_and_nonblock
+	ok 4 global.eventfd_chek_flag_cloexec_and_nonblock
+	#  RUN           global.eventfd_check_flag_semaphore ...
+	#            OK  global.eventfd_check_flag_semaphore
+	ok 5 global.eventfd_check_flag_semaphore
+	#  RUN           global.eventfd_check_write ...
+	#            OK  global.eventfd_check_write
+	ok 6 global.eventfd_check_write
+	#  RUN           global.eventfd_check_read ...
+	#            OK  global.eventfd_check_read
+	ok 7 global.eventfd_check_read
+	#  RUN           global.eventfd_check_read_with_nonsemaphore ...
+	#            OK  global.eventfd_check_read_with_nonsemaphore
+	ok 8 global.eventfd_check_read_with_nonsemaphore
+	#  RUN           global.eventfd_check_read_with_semaphore ...
+	#            OK  global.eventfd_check_read_with_semaphore
+	ok 9 global.eventfd_check_read_with_semaphore
+	# PASSED: 9 / 9 tests passed.
+	# Totals: pass:9 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-Shuah, I applied the two selftests patches to the cgroup tree as the new
-tests are dependent on the preceding changes. Please let me know if you wish
-them to be routed differently.
+Signed-off-by: Wen Yang <wen.yang@linux.dev>
+Cc: SShuah Khan <shuah@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Andrei Vagin <avagin@google.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: Tim Bird <tim.bird@sony.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+v2: use strings which indicate what is being tested, that are useful to a human
 
-Thanks.
+ .../filesystems/eventfd/eventfd_test.c        | 136 +++++++++++++++++-
+ 1 file changed, 131 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+index f142a137526c..85acb4e3ef00 100644
+--- a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
++++ b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+@@ -13,6 +13,8 @@
+ #include <sys/eventfd.h>
+ #include "../../kselftest_harness.h"
+ 
++#define EVENTFD_TEST_ITERATIONS 100000UL
++
+ struct error {
+ 	int  code;
+ 	char msg[512];
+@@ -40,7 +42,7 @@ static inline int sys_eventfd2(unsigned int count, int flags)
+ 	return syscall(__NR_eventfd2, count, flags);
+ }
+ 
+-TEST(eventfd01)
++TEST(eventfd_check_flag_rdwr)
+ {
+ 	int fd, flags;
+ 
+@@ -54,7 +56,7 @@ TEST(eventfd01)
+ 	close(fd);
+ }
+ 
+-TEST(eventfd02)
++TEST(eventfd_check_flag_cloexec)
+ {
+ 	int fd, flags;
+ 
+@@ -68,7 +70,7 @@ TEST(eventfd02)
+ 	close(fd);
+ }
+ 
+-TEST(eventfd03)
++TEST(eventfd_check_flag_nonblock)
+ {
+ 	int fd, flags;
+ 
+@@ -83,7 +85,7 @@ TEST(eventfd03)
+ 	close(fd);
+ }
+ 
+-TEST(eventfd04)
++TEST(eventfd_chek_flag_cloexec_and_nonblock)
+ {
+ 	int fd, flags;
+ 
+@@ -161,7 +163,7 @@ static int verify_fdinfo(int fd, struct error *err, const char *prefix,
+ 	return 0;
+ }
+ 
+-TEST(eventfd05)
++TEST(eventfd_check_flag_semaphore)
+ {
+ 	struct error err = {0};
+ 	int fd, ret;
+@@ -183,4 +185,128 @@ TEST(eventfd05)
+ 	close(fd);
+ }
+ 
++/*
++ * A write(2) fails with the error EINVAL if the size of the supplied buffer
++ * is less than 8 bytes, or if an attempt is made to write the value
++ * 0xffffffffffffffff.
++ */
++TEST(eventfd_check_write)
++{
++	uint64_t value = 1;
++	ssize_t size;
++	int fd;
++
++	fd = sys_eventfd2(0, 0);
++	ASSERT_GE(fd, 0);
++
++	size = write(fd, &value, sizeof(int));
++	EXPECT_EQ(size, -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	size = write(fd, &value, sizeof(value));
++	EXPECT_EQ(size, sizeof(value));
++
++	value = (uint64_t)-1;
++	size = write(fd, &value, sizeof(value));
++	EXPECT_EQ(size, -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	close(fd);
++}
++
++/*
++ * A read(2) fails with the error EINVAL if the size of the supplied buffer is
++ * less than 8 bytes.
++ */
++TEST(eventfd_check_read)
++{
++	uint64_t value;
++	ssize_t size;
++	int fd;
++
++	fd = sys_eventfd2(1, 0);
++	ASSERT_GE(fd, 0);
++
++	size = read(fd, &value, sizeof(int));
++	EXPECT_EQ(size, -1);
++	EXPECT_EQ(errno, EINVAL);
++
++	size = read(fd, &value, sizeof(value));
++	EXPECT_EQ(size, sizeof(value));
++	EXPECT_EQ(value, 1);
++
++	close(fd);
++}
++
++
++/*
++ * If EFD_SEMAPHORE was not specified and the eventfd counter has a nonzero
++ * value, then a read(2) returns 8 bytes containing that value, and the
++ * counter's value is reset to zero.
++ * If the eventfd counter is zero at the time of the call to read(2), then the
++ * call fails with the error EAGAIN if the file descriptor has been made nonblocking.
++ */
++TEST(eventfd_check_read_with_nonsemaphore)
++{
++	uint64_t value;
++	ssize_t size;
++	int fd;
++	int i;
++
++	fd = sys_eventfd2(0, EFD_NONBLOCK);
++	ASSERT_GE(fd, 0);
++
++	value = 1;
++	for (i = 0; i < EVENTFD_TEST_ITERATIONS; i++) {
++		size = write(fd, &value, sizeof(value));
++		EXPECT_EQ(size, sizeof(value));
++	}
++
++	size = read(fd, &value, sizeof(value));
++	EXPECT_EQ(size, sizeof(uint64_t));
++	EXPECT_EQ(value, EVENTFD_TEST_ITERATIONS);
++
++	size = read(fd, &value, sizeof(value));
++	EXPECT_EQ(size, -1);
++	EXPECT_EQ(errno, EAGAIN);
++
++	close(fd);
++}
++
++/*
++ * If EFD_SEMAPHORE was specified and the eventfd counter has a nonzero value,
++ * then a read(2) returns 8 bytes containing the value 1, and the counter's
++ * value is decremented by 1.
++ * If the eventfd counter is zero at the time of the call to read(2), then the
++ * call fails with the error EAGAIN if the file descriptor has been made nonblocking.
++ */
++TEST(eventfd_check_read_with_semaphore)
++{
++	uint64_t value;
++	ssize_t size;
++	int fd;
++	int i;
++
++	fd = sys_eventfd2(0, EFD_SEMAPHORE|EFD_NONBLOCK);
++	ASSERT_GE(fd, 0);
++
++	value = 1;
++	for (i = 0; i < EVENTFD_TEST_ITERATIONS; i++) {
++		size = write(fd, &value, sizeof(value));
++		EXPECT_EQ(size, sizeof(value));
++	}
++
++	for (i = 0; i < EVENTFD_TEST_ITERATIONS; i++) {
++		size = read(fd, &value, sizeof(value));
++		EXPECT_EQ(size, sizeof(value));
++		EXPECT_EQ(value, 1);
++	}
++
++	size = read(fd, &value, sizeof(value));
++	EXPECT_EQ(size, -1);
++	EXPECT_EQ(errno, EAGAIN);
++
++	close(fd);
++}
++
+ TEST_HARNESS_MAIN
 -- 
-tejun
+2.25.1
+
 
