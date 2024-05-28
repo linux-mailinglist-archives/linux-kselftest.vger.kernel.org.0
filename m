@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-10780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C188D1C73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 15:17:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 088F58D1C7D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 15:17:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36676284F82
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 13:17:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43AA8B25A16
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 13:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B39916FF48;
-	Tue, 28 May 2024 13:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD02170846;
+	Tue, 28 May 2024 13:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwkX8cqi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lm2ld1Dp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5811F16FF3D;
-	Tue, 28 May 2024 13:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC1017083E;
+	Tue, 28 May 2024 13:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716902130; cv=none; b=Ygd4BTBln7fsYTsB8P0EjYVLpzyVeH90Wb4ucb0JN4Zt0w56TR/VJTqONQAYzn0OEjWtyBZf/T8JFfL3RfKVmQjWZzTNU6QfyD6fihJgmDFzYT2ijksHpU/HtBPDzRUL5SVpAQzb1ME1YV8WvOA0eHrjpAnGBVvMH4629/sTCts=
+	t=1716902133; cv=none; b=qh4LrI8xCYi1yo9stghcwmmhUZIF3n8UnHXxkiK97ERaJBvOXdlX3ti17I74s6LogzRPOhZzDVJ7MWWUr4j95TV1UKaOKmVvnCzv7+1irLPVQRtow7c7oNM6bIgKH0LlUdLq0pz+/J+e2PX0AhnVN4ACDQ3Hms+6n3lB55t8Yts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716902130; c=relaxed/simple;
-	bh=ASYT7C4PzdLCyYUiHYyqygWpOHzADQG5pEoKYjPNpLw=;
+	s=arc-20240116; t=1716902133; c=relaxed/simple;
+	bh=tqO/DG0FgvAOibuQ2xEp6PL6ZRfxR/tzTfW3jaARF5E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DdeH+PdTxRnAJTePcNy5+X8zv2zFLOvsPzlYdEDb68tlY/AnndYNYaLg2oCxB+CZX6hWUgaMhCfyaEtzvYAD/sOhJJRSy7sE4GYcR7MQhyfuvYbo4w/ts9W8aQYUKHolEsY2b9lff04hMRTs3Qw2P+BUf/Ho9lDtsqKJCyXFcQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwkX8cqi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FE1C4AF0E;
-	Tue, 28 May 2024 13:15:28 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QZsJzRfLGvwusnMuj07ehuW3eGEXGsIn6WPDljCkCp8DR1/YfCJ6R9Rds/e24wCSprNzfxC9FYJjsMOPyF3QxkGh+m/kNTVPIU1FEtdn42hUst79gh2qChqqmdYjLpswtyjnjoSD89LCp8fK41R5s+Px4q+BXcZU0XXnzqNhSjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lm2ld1Dp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5549C4AF0E;
+	Tue, 28 May 2024 13:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716902130;
-	bh=ASYT7C4PzdLCyYUiHYyqygWpOHzADQG5pEoKYjPNpLw=;
+	s=k20201202; t=1716902132;
+	bh=tqO/DG0FgvAOibuQ2xEp6PL6ZRfxR/tzTfW3jaARF5E=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=bwkX8cqijGiQ/QYWGGcZDZ/scvEanb4LC1M1wvbOzItZ/DBxSNMkAL8VmjUBMr/Qb
-	 jk61eakf0gpJNvEXaVVicwfbhyNfuIa1yUATV2UbaWFjIDYVvHsvwHod0uKBl8HhU7
-	 Ltjv/nqJiQsDdX9EVNWk1mPDKRNhuYEaV9gt/o1nIrc+XOYsz1ejr6ZgN7ZKpJB5/b
-	 rzhX69BW+HxsHwlGLAXV6jdsrUqzh15l1kqgjKJ9rjcODb4+xiqe3y2tJ3so12nQZv
-	 grLDLE8AbTkmhIXc11Y0EZkUMBvqWlGxTB0IK2ua0vlO1PGGRSZOc/1wImYjwyoX9g
-	 ovTMUBIU07vDA==
+	b=Lm2ld1Dp1d3nNPOqg4+igSXG7SXytZ+BMVFZvF3yuFNBvFkj84ZalUzsAadDDnZty
+	 Fx+j7u9oDEFEKD/r3H/ddqJCxw2X1xobOeyuTpghVwGHNPPPjti8tIZvshVbBICZsM
+	 ziuQMaYep7EFeYH1Y2e/GREOsISJxhkD1Q0vPkZmhGx9paFZ0u0JENgfJtHzEsQRg8
+	 10RJZdfcJnLNI2+Mc2zlw3JGfUfIPScXSj+GDt3dt1SHIJr/n6W81gXx+dNYlugKHr
+	 JteKyEo3pr1GnnrpGbgoAP7mAeVobe41WmsfKVF0eThaFrpV0GqJVYicG7qptWtad9
+	 3q05WzFNED/5A==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 28 May 2024 15:14:44 +0200
-Subject: [PATCH HID 06/13] HID: bpf: add defines for HID-BPF SEC in in-tree
- bpf fixes
+Date: Tue, 28 May 2024 15:14:45 +0200
+Subject: [PATCH HID 07/13] HID: bpf: convert in-tree fixes into struct_ops
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240528-hid_bpf_struct_ops-v1-6-8c6663df27d8@kernel.org>
+Message-Id: <20240528-hid_bpf_struct_ops-v1-7-8c6663df27d8@kernel.org>
 References: <20240528-hid_bpf_struct_ops-v1-0-8c6663df27d8@kernel.org>
 In-Reply-To: <20240528-hid_bpf_struct_ops-v1-0-8c6663df27d8@kernel.org>
 To: Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
@@ -62,193 +61,205 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
  Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1716902113; l=8046;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716902113; l=7057;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=ASYT7C4PzdLCyYUiHYyqygWpOHzADQG5pEoKYjPNpLw=;
- b=n25Uu3EJwKcRP7Hcut64lnYNaZZh3KCE0KPUUCQS6VwdqQ+aOA9q/cx7D+6Iromo5BwuCEJVz
- F6QGNfzhS05AQx7i32p/JuXvBpiOaaXzWU16RgTYMJWvQcd0lXk1PaH
+ bh=tqO/DG0FgvAOibuQ2xEp6PL6ZRfxR/tzTfW3jaARF5E=;
+ b=JKmQNp3Z0oIQZmbdR4fgXuPPMXA0Mvaof+w+0mIQ1G0jGZQx3+EHmXKN7BFG5D37z+iQ+kV9C
+ eiHCj7v/O+ED4xEJ3zGSQN4l2X8xx+jvxC4EEFVPNeG30sdsozVKq7C
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-We are going to switch over struct_ops, so instead of having to manually
-replace all fields one by one, let's have a common place to change it.
+Very mechanical:
+- Change HID_BPF_DEVICE_EVENT and HID_BPF_RDESC_FIXUP #defines
+- add a matching SEC(".struct_ops.link")
+- in ArtistPro16Gen2 make the 2 functions static and have a new one
+  calling them
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c     | 4 ++--
- drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c       | 2 +-
- drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c      | 4 ++--
- drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c | 2 +-
- drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c   | 2 +-
- drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c             | 2 +-
- drivers/hid/bpf/progs/XPPen__Artist24.bpf.c           | 4 ++--
- drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c    | 6 +++---
- drivers/hid/bpf/progs/hid_bpf.h                       | 3 +++
- 9 files changed, 16 insertions(+), 13 deletions(-)
+ drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c  |  5 +++++
+ drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c    |  4 ++++
+ drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c   |  5 +++++
+ .../hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c  |  4 ++++
+ .../hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c    |  4 ++++
+ drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c          |  4 ++++
+ drivers/hid/bpf/progs/XPPen__Artist24.bpf.c        |  5 +++++
+ drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c | 22 ++++++++++++++++++----
+ drivers/hid/bpf/progs/hid_bpf.h                    |  6 ++++--
+ 9 files changed, 53 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c b/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
-index dc26a7677d36..2c2c1637ade8 100644
+index 2c2c1637ade8..caec91391d32 100644
 --- a/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
 +++ b/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
-@@ -133,7 +133,7 @@ HID_BPF_CONFIG(
-  *   integer. We thus divide it by 30 to match what other joysticks are
-  *   doing
-  */
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc_raptor_mach_2, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, HID_MAX_DESCRIPTOR_SIZE /* size */);
-@@ -152,7 +152,7 @@ int BPF_PROG(hid_fix_rdesc_raptor_mach_2, struct hid_bpf_ctx *hctx)
-  * divide it by 30.
-  * Byte 34 is always null, so it is ignored.
-  */
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(raptor_mach_2_fix_hat_switch, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 64 /* size */);
-diff --git a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
-index 3d14bbb6f276..17fc55f6f02c 100644
---- a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
-+++ b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
-@@ -30,7 +30,7 @@ HID_BPF_CONFIG(
-  * pointer.
-  */
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-diff --git a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
-index ff759f2276f9..24b8a5aa05f3 100644
---- a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
-+++ b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
-@@ -191,7 +191,7 @@ static const __u8 fixed_rdesc[] = {
- 	0xc0,                          // End Collection                      327
- };
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc_huion_kamvas_pro_19, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, HID_MAX_DESCRIPTOR_SIZE /* size */);
-@@ -215,7 +215,7 @@ int BPF_PROG(hid_fix_rdesc_huion_kamvas_pro_19, struct hid_bpf_ctx *hctx)
-  * - if there was this out-of-proximity event, we are entering
-  *   eraser mode, and we will until the next out-of-proximity.
-  */
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(kamvas_pro_19_fix_3rd_button, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
-diff --git a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
-index 225cbefdbf0e..bee37872ee8c 100644
---- a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
-+++ b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
-@@ -21,7 +21,7 @@ HID_BPF_CONFIG(
-  * We just fix the report descriptor to enable those missing 7 buttons.
-  */
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
- {
- 	const u8 offsets[] = {84, 112, 140};
-diff --git a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
-index c04abecab8ee..f9ad33f4a373 100644
---- a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
-+++ b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
-@@ -93,7 +93,7 @@ _Static_assert(sizeof(rdesc_assign_selection) == sizeof(fixed_rdesc_assign_selec
- _Static_assert(sizeof(rdesc_assign_selection) + OFFSET_ASSIGN_SELECTION < ORIGINAL_RDESC_SIZE,
- 	       "Rdesc at given offset is too big");
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-diff --git a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
-index dc05aa48faa7..39d77c5e9172 100644
---- a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
-+++ b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
-@@ -101,7 +101,7 @@ static inline __u8 *get_u8(__u8 *data, unsigned int offset)
- 	return (__u8 *)get_bits(data, offset);
+@@ -168,6 +168,11 @@ int BPF_PROG(raptor_mach_2_fix_hat_switch, struct hid_bpf_ctx *hctx)
+ 	return 0;
  }
  
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(artpen_pressure_interpolate, struct hid_bpf_ctx *hctx)
++HID_BPF_OPS(raptor_mach_2) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc_raptor_mach_2,
++	.hid_device_event = (void *)raptor_mach_2_fix_hat_switch,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
  {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, PEN_REPORT_LEN /* size */);
+diff --git a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
+index 17fc55f6f02c..c2413fa80543 100644
+--- a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
++++ b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
+@@ -45,6 +45,10 @@ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++HID_BPF_OPS(hp_elite_presenter) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
+diff --git a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
+index 24b8a5aa05f3..a4a4f324aedd 100644
+--- a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
++++ b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
+@@ -255,6 +255,11 @@ int BPF_PROG(kamvas_pro_19_fix_3rd_button, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++HID_BPF_OPS(huion_Kamvas_pro_19) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc_huion_kamvas_pro_19,
++	.hid_device_event = (void *)kamvas_pro_19_fix_3rd_button,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
+diff --git a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
+index bee37872ee8c..82f1950445dd 100644
+--- a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
++++ b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
+@@ -45,6 +45,10 @@ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++HID_BPF_OPS(iogear_kaliber_momentum) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
+diff --git a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
+index f9ad33f4a373..70b16edfb59a 100644
+--- a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
++++ b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
+@@ -114,6 +114,10 @@ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++HID_BPF_OPS(xbox_elite_2) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
+diff --git a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
+index 39d77c5e9172..2da680bc4e11 100644
+--- a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
++++ b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
+@@ -139,6 +139,10 @@ int BPF_PROG(artpen_pressure_interpolate, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++HID_BPF_OPS(wacom_artpen) = {
++	.hid_device_event = (void *)artpen_pressure_interpolate,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
 diff --git a/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
-index e1be6a12bb75..c938808bd589 100644
+index c938808bd589..bc0b85c38445 100644
 --- a/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
 +++ b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
-@@ -91,7 +91,7 @@ static const __u8 fixed_rdesc[] = {
+@@ -209,6 +209,11 @@ int BPF_PROG(xppen_24_fix_eraser, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
  
- #define U16(index) (data[index] | (data[index + 1] << 8))
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc_xppen_artist24, struct hid_bpf_ctx *hctx)
++HID_BPF_OPS(xppen_artist_24) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc_xppen_artist24,
++	.hid_device_event = (void *)xppen_24_fix_eraser,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
  {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-@@ -152,7 +152,7 @@ static __u8 prev_state = 0;
-  *     E: TipSwitch                     InRange
-  *
-  */
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(xppen_24_fix_eraser, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
 diff --git a/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
-index 65ef10036126..77ef8b95d52e 100644
+index 77ef8b95d52e..a669525691aa 100644
 --- a/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
 +++ b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
-@@ -82,7 +82,7 @@ static const __u8 fixed_rdesc[] = {
- 	0xc0,                          // End Collection                      112
- };
- 
--SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC(HID_BPF_RDESC_FIXUP)
- int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
- {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-@@ -105,7 +105,7 @@ int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
+@@ -105,8 +105,7 @@ int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
  	return sizeof(fixed_rdesc);
  }
  
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(xppen_16_fix_eraser, struct hid_bpf_ctx *hctx)
+-SEC(HID_BPF_DEVICE_EVENT)
+-int BPF_PROG(xppen_16_fix_eraser, struct hid_bpf_ctx *hctx)
++static int xppen_16_fix_eraser(struct hid_bpf_ctx *hctx)
  {
  	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
-@@ -207,7 +207,7 @@ static void compensate_coordinates_by_tilt(__u8 *data, const __u8 idx,
+ 
+@@ -207,8 +206,7 @@ static void compensate_coordinates_by_tilt(__u8 *data, const __u8 idx,
  	data[idx+1] = coords >> 8;
  }
  
--SEC("fmod_ret/hid_bpf_device_event")
-+SEC(HID_BPF_DEVICE_EVENT)
- int BPF_PROG(xppen_16_fix_angle_offset, struct hid_bpf_ctx *hctx)
+-SEC(HID_BPF_DEVICE_EVENT)
+-int BPF_PROG(xppen_16_fix_angle_offset, struct hid_bpf_ctx *hctx)
++static int xppen_16_fix_angle_offset(struct hid_bpf_ctx *hctx)
  {
  	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
+ 
+@@ -254,6 +252,22 @@ int BPF_PROG(xppen_16_fix_angle_offset, struct hid_bpf_ctx *hctx)
+ 	return 0;
+ }
+ 
++SEC(HID_BPF_DEVICE_EVENT)
++int BPF_PROG(xppen_artist_pro_16_device_event, struct hid_bpf_ctx *hctx)
++{
++	int ret = xppen_16_fix_angle_offset(hctx);
++
++	if (ret)
++		return ret;
++
++	return xppen_16_fix_eraser(hctx);
++}
++
++HID_BPF_OPS(xppen_artist_pro_16) = {
++	.hid_rdesc_fixup = (void *)hid_fix_rdesc_xppen_artistpro16gen2,
++	.hid_device_event = (void *)xppen_artist_pro_16_device_event,
++};
++
+ SEC("syscall")
+ int probe(struct hid_bpf_probe_args *ctx)
+ {
 diff --git a/drivers/hid/bpf/progs/hid_bpf.h b/drivers/hid/bpf/progs/hid_bpf.h
-index 7ee371cac2e1..1970faf84310 100644
+index 1970faf84310..8c1cd9e25bc3 100644
 --- a/drivers/hid/bpf/progs/hid_bpf.h
 +++ b/drivers/hid/bpf/progs/hid_bpf.h
-@@ -5,6 +5,9 @@
+@@ -5,8 +5,10 @@
  #ifndef ____HID_BPF__H
  #define ____HID_BPF__H
  
-+#define HID_BPF_DEVICE_EVENT "fmod_ret/hid_bpf_device_event"
-+#define HID_BPF_RDESC_FIXUP  "fmod_ret/hid_bpf_rdesc_fixup"
-+
+-#define HID_BPF_DEVICE_EVENT "fmod_ret/hid_bpf_device_event"
+-#define HID_BPF_RDESC_FIXUP  "fmod_ret/hid_bpf_rdesc_fixup"
++#define HID_BPF_DEVICE_EVENT "struct_ops/hid_device_event"
++#define HID_BPF_RDESC_FIXUP  "struct_ops/hid_rdesc_fixup"
++#define HID_BPF_OPS(name) SEC(".struct_ops.link") \
++	struct hid_bpf_ops name
+ 
  struct hid_bpf_probe_args {
  	unsigned int hid;
- 	unsigned int rdesc_size;
 
 -- 
 2.44.0
