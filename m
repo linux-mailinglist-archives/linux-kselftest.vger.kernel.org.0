@@ -1,181 +1,161 @@
-Return-Path: <linux-kselftest+bounces-10793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DED868D22D5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 19:56:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0890C8D2597
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 22:15:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9355C2843D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 17:56:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A20A1C21903
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 20:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE4445034;
-	Tue, 28 May 2024 17:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B29876050;
+	Tue, 28 May 2024 20:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="epfvodyS"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="X5GFW+Oj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587BC446A1
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 17:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20A54436E
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 20:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716919015; cv=none; b=Nk/umZ1mnoXaNhvmviRf/EUNmI4GyV1hhZJCKQNQwqQQEtiH2+7yGAyqmg2mnNKvdlIVcO4AzZlcJoH6rXSPX9G3rF8LxxTbBrfjCsl+H/TEjdsaQ8C9VPu22+eS4phYzFkJl7EJe0IY8tlsUHPw4A8jp3+t7gI1RaBa6ycEBqE=
+	t=1716927355; cv=none; b=JBI1kdVHuTSsSoHkqmA9E/eIif7ca8s/x8/8+Uvx5w7XrltI3hOi8ggwIFdPUsoO2r1ssn7JJAb9y3ipwklqlDqfV8apWYOTyeLLFDaMUtFVlVWvNxKX3+n/0zGwjEuFe9fKVT0c5Z3OQ0yYfmhTNnw9PRFEHzFENl82wJSCrro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716919015; c=relaxed/simple;
-	bh=RsvjGM9JTcVgBiBSDa/jqsgorhKnTlBpTCld5EUEWJw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t0BvtBNjrxMiGuQpG/8y5mXX8VXelKPDaOcIfvXLfBNI3+ISoWShwJyzln8ZB1KhbHv6CquWCRuYjduetqaOuXZeaGTqJobp9AD13pca2YhX43oh8stOP615rqBeeX1xNYNviVUm1GUiu/ANxUy0rA3c8JyQ2iqmxSIGmve7688=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=epfvodyS; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso2053a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 10:56:53 -0700 (PDT)
+	s=arc-20240116; t=1716927355; c=relaxed/simple;
+	bh=LOvqo+aV+B1mOBU3H+RRFFDe5Cq38Xtx0O5Q3+LYB+A=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=HHjuC206AM+4xjbEx9t/AFphLYu6yy8I1n3h0TYMh0IA0BYSga7PRNQilPvchn2IgSy3BAH8NP/bsg7Xa+FqWc4rHg9uP9KXseE9nAVgVMKh1oOf9X8RqHJL0e/F7a/K8vRcnOa1G2ISKpKbiQkiUZkswrqOMdtszgpaDVzzNWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=X5GFW+Oj; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f8e819cf60so1065031b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 13:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716919012; x=1717523812; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SKUGqqWPr9TLGGPFQ1drx41emUhb6B1gi66jgb5MsYE=;
-        b=epfvodySPIQTb1tAZd2f5Q1CTGkiP2uoI0M4xgAzg9uLlCdiODGQZ0T1vE+NnZWpgd
-         tm3/FSFjlSPIg60/ZiZH2icW7y883G00So8DSnuHmpTDZvgEBESxIZn/b0RXBzseofOA
-         ZT0Me++u6iBpOYUBDzv909as9oY1xXU2Bw7KAwMMYdY5Q2rLjKmFpFbadXC+WHHYkSqr
-         RETDMrlAetozmltE0I+PjX2qb3J2DT2Vab7gT0Zfyv7tHMf2A0Xr8sFrFGLbBmZyAtPz
-         SE049xy8FzMkF4UySMSx2dpd7ELEKVusIHKSMg4HRmVcV7E+UOi3e6QmGGI1QufjcGBb
-         CSIg==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1716927353; x=1717532153; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcEC98X5Tk9pufqIfKmfwp4sjab37I3AMWo+deVLHIA=;
+        b=X5GFW+OjJ7wkeW9DPGExW7KOkRfRmfAg0rCWSJmxUhn+cCFKdXpLs5PqmSVtmb2cZa
+         BJ4lVmuLoGPMZ9VaKGm7Iov138I+/8TmPMw7qVWb498CrcA5Zsk7sZDP0AMxfDKtkqH4
+         bS6Ye9toPGe0CExBrnrP4EXHf+ILJMaru+ZCXqNoS3w5juvAlo2OfTWwBBSAagY31+zB
+         bOyuPir76CuNzsvcc59jRzmcET7YU4kIbWCv6Qv4bXve87btK7p0HvJNYKSf/IUxRPOC
+         NtV4tVKT0kxmUYZJo7O16pzGGhDpzoAM/6klRYNuEuuV1prtexDvL+TMzjT15q75buNf
+         cy7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716919012; x=1717523812;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SKUGqqWPr9TLGGPFQ1drx41emUhb6B1gi66jgb5MsYE=;
-        b=ihdgffHaTSDF8U1wAaYGL2ke84SzIyrAWOp3yhT49maZJECjpeXRYrDVTzNIpnru2x
-         fyWFup7N/GcPOrzeKgJWbjSMuWS7NextVLjxxrbajbH16svN6TfqVLMBr5WVvO1kfmTH
-         YdOkmc+tT/RA3Fx1riYbS2si2JSrcCoYa9qVnhFw8U7ovylNSf93d6uk9sZIo8jbBcg9
-         TJljT4RrFg0PJ6ccLBv04X+K3DbWpYSPqiPH3EbHohpf7zkg8Kf6KahCVlktgpgVOtlr
-         ZRmbjkm/RsaQ91TYFfFwadGrOpS0WixxUAeFGlxBdHgw1UltJWO0WNoKNjZnhcMDVGV7
-         9W6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUz1GvAeq5+IGXyMEObgWRHpKiF0yFRoR4sfbMJRQfhJ8TYjzDdizK0g1RhG8d2Mgfn8R/laY5Qez7tFOqiQmdu4QqiXNUoAL2l+DropU0c
-X-Gm-Message-State: AOJu0YzMgsBcrnTcmNXBVie7jCJ2M0J04k31ory0UumOMixgSSf0rTeg
-	nSYUVSy3P9+KrM2DE1BtB6d1pmeIseT4Kjcx6AUcnH6FtLRsqsNO6jSNLXvuNEYGHO7t1RRuRMw
-	Xw2vYT90ctFsiK0Sowhq69+t6nUQZFkEdnJs+
-X-Google-Smtp-Source: AGHT+IEcFSGFLA92N67hRJZZKfuUP54ChZWVp/fzQzI9F+ne83J/6+p0ouLE12hyW7IobvfLf4GWEsYmji6NaeNQTP4=
-X-Received: by 2002:a05:6402:13d4:b0:574:ea5c:fa24 with SMTP id
- 4fb4d7f45d1cf-57a02766876mr11029a12.3.1716919011421; Tue, 28 May 2024
- 10:56:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716927353; x=1717532153;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jcEC98X5Tk9pufqIfKmfwp4sjab37I3AMWo+deVLHIA=;
+        b=cWFvvHhsBXMYWCpmXFhQ8CJSlg9/9qMyhNHCW/jR+QjnHqvPzQuyGqMbaZTe4iXCyS
+         h4I/0fzM1h84MvZe03IQV7mtXkR97x3tc4iLoynCQf2X8jXGNHTvbPUkpMZV6cJ3XkNq
+         OXuJrdUn6FHKD0pIfRAYocfyXESsBcooP8DQFuz9F6ehXXQ6hgHdLbnnxYxwMHXpmSvI
+         O2UpvPd9hBRJ6oQxsreymCnySzJqdFVNIWyHwqnCQehEs+Xd4Q+3DKalhUUHLE0X5PIT
+         pGcQAigWokLi1UnMn5keC5ajIZGW4DxW6J7CFmzVn23h4xkt78jdOidJlbFy6sWkV15r
+         vuvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnnASyUvVAkCsJmQQzmdDJ5d0foY7v/Gy6i9uLp0Wg8xKUiZsZOJK0v815rW2ptqSSQBmG3MMtui9c9ltIB0MQgdQI47TbWqUUjMSOJvzy
+X-Gm-Message-State: AOJu0Yx6EggUZ+eG/poWukYLowuImhY236ygjA4R/ZYC35F79xMnIH7G
+	aBjsdgm7tSV/tqnLFksmJ+pLaQOE4LJ285HFg3zFFYxbptlhp0wCQ73h76LAW/Y=
+X-Google-Smtp-Source: AGHT+IHYb7qIRYV/asWrKHIV/ya61hCaowBFPEvmv9j+QZakLOHdAIqnDpzGM7KC/Z0vDr+vQLtTrw==
+X-Received: by 2002:a05:6a00:808c:b0:6f3:e6d6:7fde with SMTP id d2e1a72fcca58-6f8f3b3f89bmr18671384b3a.26.1716927352944;
+        Tue, 28 May 2024 13:15:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fd2d909asm7022593b3a.178.2024.05.28.13.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 13:15:52 -0700 (PDT)
+Message-ID: <66563b78.050a0220.3d199.1e21@mx.google.com>
+Date: Tue, 28 May 2024 13:15:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240513191544.94754-1-pobrn@protonmail.com> <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
- <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
- <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
- <08450f80-4c33-40db-886f-fee18e531545@app.fastmail.com> <CALmYWFv9dK5ZPzwx3WCLMXzuuDadvFxh84+8rrT7aL105+ZZAQ@mail.gmail.com>
- <20240524.160158-custard.odds.smutty.cuff-caukvmB4EWP9@cyphar.com>
-In-Reply-To: <20240524.160158-custard.odds.smutty.cuff-caukvmB4EWP9@cyphar.com>
-From: Jeff Xu <jeffxu@google.com>
-Date: Tue, 28 May 2024 10:56:12 -0700
-Message-ID: <CALmYWFs18vUwXx5p-VxNO5BZ0wvaHE54cG8n_+UdAL5-etAK=w@mail.gmail.com>
-Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
-To: Aleksa Sarai <cyphar@cyphar.com>, Jeff Xu <jeffxu@chromium.org>
-Cc: David Rheinsberg <david@readahead.eu>, =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	dmitry.torokhov@gmail.com, Daniel Verkamp <dverkamp@chromium.org>, hughd@google.com, 
-	jorgelo@chromium.org, skhan@linuxfoundation.org, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.10-rc1)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Aleksa,
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.10-rc1)
 
-On Fri, May 24, 2024 at 9:12=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com> wr=
-ote:
->
-> On 2024-05-23, Jeff Xu <jeffxu@google.com> wrote:
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/v6.10-rc1/
 
-> > Regarding vm.memfd_noexec, on another topic.
-> > I think in addition to  vm.memfd_noexec =3D 1 and 2,  there still could
-> > be another state: 3
-> >
-> > =3D0. Do nothing.
-> > =3D1. This will add MFD_NOEXEC_SEAL if application didn't set EXEC or
-> > MFD_NOEXE_SEAL (to help with the migration)
-> > =3D2: This will reject all calls without MFD_NOEXEC_SEAL (the whole
-> > system doesn't allow executable memfd)
-> > =3D3:  Application must set MFD_EXEC or MFD_NOEXEC_SEAL explicitly, or
-> > else it will be rejected.
-> >
-> > 3 is useful because it lets applications choose what to use, and
-> > forces applications to migrate to new semantics (this is what 2 did
-> > before 9876cfe8).
-> > The caveat is 3 is less restrictive than 2, so must document it clearly=
-.
->
-> As discussed at the time, "you must use this flag" is not a useful
-> setting for a general purpose operating system because it explicitly
-> disables backwards compatibility (breaking any application that was
-> written in the past 10 years!) for no reason other than "new is better".
->
-Are you referring to ratcheting in the sysctl in my original patch or
-is this something else ?
-I do not disagree with your change of  "removing the ratcheting" from
-the admin point of view.
+Tree: kselftest
+Branch: fixes
+Git Describe: v6.10-rc1
+Git Commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-> As I suggested when we fixed the semantics of vm.memfd_noexec, if you
-> really want to block a particular flag from not being set, seccomp lets
-> you do this incredibly easily without acting as a footgun for admins.
+Warnings Detected:
 
-seccomp can but it requires more work for the container, e.g.
-container needs to allow-list all the syscalls. I'm trying to point
-out that seccomp might not cover all user-cases.
+arm64:
 
-"ratcheting" in the vm.memfd_noexec is lightweight  and can be applied
-to the sandbox  of the container in advance, but since admin doesn't
-like ratcheting in sysctl, maybe prctl or LSM are ways to implement
-such restriction.
+arm:
 
-> Yes, vm.memfd_noexec can break programs that use executable memfds, but
-> that is the point of the sysctl -- making vm.memfd_noexec break programs
-> that don't use executable memfds (they are only guilty of being written
-> before mid-2023) is not useful.
->
-> In addition, making 3 less restrictive than 2 would make the original
-> restriction mechanism useless. A malicious process could raise the
-> setting to 3 and disable the "protection" (as discussed before, I really
-> don't understand the threat model here, but making it possible to
-> disable easily is pretty clearly).
-> You could change the policy, but now
-> you're adding more complexity for a feature that IMO doesn't really make
-> sense in the first place.
->
-The reason of 3 is help with migration (not for threat-model), e.g. a
-container can force every apps run in the container migrates their
-memfd_create  to use either MFD_EXEC or MFD_NOEXEC_SEAL.
-But I understand what you mean, with current code,  adding 3 would
-cause more confusion to vm.memfd_noexec. Perhaps a new sysctl or prctl
-is the way to go if the app wants to force migration.
-In the hinder sight: two sysctls would work betters:  the first deal
-with migration, the second enforces NO_EXEC_SEAL.
+i386:
 
-Thanks
--Jeff
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
 
 
-> > -Jeff
-> >
-> > > Reviewed-by: David Rheinsberg <david@readahead.eu>
-> > >
-> > > Thanks
-> > > David
->
-> --
-> Aleksa Sarai
-> Senior Software Engineer (Containers)
-> SUSE Linux GmbH
-> <https://www.cyphar.com/>
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14cf94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14cf94
+
+---
+For more info write to <info@kernelci.org>
 
