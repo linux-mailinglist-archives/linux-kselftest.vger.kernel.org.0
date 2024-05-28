@@ -1,249 +1,181 @@
-Return-Path: <linux-kselftest+bounces-10792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA2B8D2292
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 19:37:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DED868D22D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 19:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCADA1F2491A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 17:37:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9355C2843D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 17:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEB239852;
-	Tue, 28 May 2024 17:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE4445034;
+	Tue, 28 May 2024 17:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F4p6t/tW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="epfvodyS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D0D2E64C
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 17:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587BC446A1
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 17:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716917817; cv=none; b=QAQuGOmuzHoiAsFUkbdli7SIwKXPyzlMp2df9WPjEfM0XEs9pUOYim6P3GvNsbDFtvlJKLp0+jZ9u0sBKnIjrZMI8X4efyfk19xZWqci7uY1YRiIx2CryDKs7M/AOlRhnBOm4AQYYpuSNRwvk+FK8nRkjpPh1VC2bRTgyvnxp3Q=
+	t=1716919015; cv=none; b=Nk/umZ1mnoXaNhvmviRf/EUNmI4GyV1hhZJCKQNQwqQQEtiH2+7yGAyqmg2mnNKvdlIVcO4AzZlcJoH6rXSPX9G3rF8LxxTbBrfjCsl+H/TEjdsaQ8C9VPu22+eS4phYzFkJl7EJe0IY8tlsUHPw4A8jp3+t7gI1RaBa6ycEBqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716917817; c=relaxed/simple;
-	bh=5jqpjWDjCYeF0iZMmfNh1F02B5hbFSGCHFwvks87kGw=;
+	s=arc-20240116; t=1716919015; c=relaxed/simple;
+	bh=RsvjGM9JTcVgBiBSDa/jqsgorhKnTlBpTCld5EUEWJw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FglDXgoMx3y3R6J5vUduslz/HcYI2eLe1rY675fEQSfGQrbXy9O/qlzHeNFl/RQv1Vm1GL62d2V9AfM7JZbK2VNvlW6sTQkWX16vOETBCUb9Dm8ikKp43JhKqkDIOqNg2SCelmpEEHTLNA3t8KPl+iGm2DwrFP+e7D5fOYXWuTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F4p6t/tW; arc=none smtp.client-ip=209.85.218.42
+	 To:Cc:Content-Type; b=t0BvtBNjrxMiGuQpG/8y5mXX8VXelKPDaOcIfvXLfBNI3+ISoWShwJyzln8ZB1KhbHv6CquWCRuYjduetqaOuXZeaGTqJobp9AD13pca2YhX43oh8stOP615rqBeeX1xNYNviVUm1GUiu/ANxUy0rA3c8JyQ2iqmxSIGmve7688=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=epfvodyS; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a634e03339dso116694166b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 10:36:54 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso2053a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 10:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716917813; x=1717522613; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1716919012; x=1717523812; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
-        b=F4p6t/tWtjSOVYylJbwcLVV6UTyM4sNrgf29x/I2qiaXmlzGuSs/libx4uluVN+nqU
-         Q1wu6ZyJ+t/J5G4TTactfmH72bg+9gQMI6XUV/JPUvIcgZPTSklK6xODqYbVvKUruZsd
-         qGcZJqKk9SLen5tkhgx7pjnVQN79mjH/J3XY5cJYmSYfwEdHgeAgZgJLCWfItyd1aUlo
-         m8SST44+ucTlAuYiprzs7++Q4aRuTHjVObQuxYwumcTSK42endimDnDiRHgNYuUyIKni
-         X0y60pnKnN3oBLyeEGWlqJk5sfZxG3gqEzLBOt9HDhyBsgJwOczZkJZdgWzCHvs7ja5e
-         tsGw==
+        bh=SKUGqqWPr9TLGGPFQ1drx41emUhb6B1gi66jgb5MsYE=;
+        b=epfvodySPIQTb1tAZd2f5Q1CTGkiP2uoI0M4xgAzg9uLlCdiODGQZ0T1vE+NnZWpgd
+         tm3/FSFjlSPIg60/ZiZH2icW7y883G00So8DSnuHmpTDZvgEBESxIZn/b0RXBzseofOA
+         ZT0Me++u6iBpOYUBDzv909as9oY1xXU2Bw7KAwMMYdY5Q2rLjKmFpFbadXC+WHHYkSqr
+         RETDMrlAetozmltE0I+PjX2qb3J2DT2Vab7gT0Zfyv7tHMf2A0Xr8sFrFGLbBmZyAtPz
+         SE049xy8FzMkF4UySMSx2dpd7ELEKVusIHKSMg4HRmVcV7E+UOi3e6QmGGI1QufjcGBb
+         CSIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716917813; x=1717522613;
+        d=1e100.net; s=20230601; t=1716919012; x=1717523812;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
-        b=dsi+6HxxBdqjKG37Y5k0rm0+osoJKXFZNMtyV+GrDD8fBsI7mFNhcFIQlI9U6zGH6W
-         3zw2hRyFLEURNCxlnmD7g8ZV69lZmhS7qDjLjNuo9GJQbQfP997ZZGYqa8tHVHOCGwSK
-         JuAUrxjKHd7mAQ3B91zLno2x6NTUJ5sOUluGeAqPIi7V29GKggGfaEjJvMkDSX7oHLZ7
-         0qkyacI23DYyyJ4j/WQCVuCXfuEA/jUd9bTjooModx9cOUlgPsqzQjp6MWYGyOBsTs/4
-         319rPrVyPycc5lv5dPZFUsmnZoEWix25/9a5N4JZq7rP3jLkD52AC7YEbx1OdsfYu/u0
-         aC+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV2RPnqlTZ7VUkW3rctLZqEXIvVM+3H8k0JhoVcSPKASvxcsmZR//BmHYq8FO2cIF/GII70r8j5yTEeF2SU9IebcLeJsDWYMNH8Mbz8ZxVj
-X-Gm-Message-State: AOJu0Yw5/MNG9xXUeraS5qvSlco/CqwZqeZoykACba2VWp6azhtNMUuD
-	4TTOhPK0VoWdVxikjSdwWlgu//jIfcBoJtkK9OJUj3QKxtLs1sVexNKanCLExt/hYBEawbDkqB2
-	VKob3YZDkfLdlI+F3TuoZ7AmlBzlCKBVYdD9E
-X-Google-Smtp-Source: AGHT+IFf32eXkuapluEvlBEyoJKJxifsmiVKQ0AvF4ow+8ygeGf1col+Xo1abUwIXzRnUJhSc+Yk6CUkl0RPaD3UYic=
-X-Received: by 2002:a17:906:3c1a:b0:a63:42b6:1976 with SMTP id
- a640c23a62f3a-a6342b619f5mr156681366b.68.1716917812713; Tue, 28 May 2024
- 10:36:52 -0700 (PDT)
+        bh=SKUGqqWPr9TLGGPFQ1drx41emUhb6B1gi66jgb5MsYE=;
+        b=ihdgffHaTSDF8U1wAaYGL2ke84SzIyrAWOp3yhT49maZJECjpeXRYrDVTzNIpnru2x
+         fyWFup7N/GcPOrzeKgJWbjSMuWS7NextVLjxxrbajbH16svN6TfqVLMBr5WVvO1kfmTH
+         YdOkmc+tT/RA3Fx1riYbS2si2JSrcCoYa9qVnhFw8U7ovylNSf93d6uk9sZIo8jbBcg9
+         TJljT4RrFg0PJ6ccLBv04X+K3DbWpYSPqiPH3EbHohpf7zkg8Kf6KahCVlktgpgVOtlr
+         ZRmbjkm/RsaQ91TYFfFwadGrOpS0WixxUAeFGlxBdHgw1UltJWO0WNoKNjZnhcMDVGV7
+         9W6w==
+X-Forwarded-Encrypted: i=1; AJvYcCUz1GvAeq5+IGXyMEObgWRHpKiF0yFRoR4sfbMJRQfhJ8TYjzDdizK0g1RhG8d2Mgfn8R/laY5Qez7tFOqiQmdu4QqiXNUoAL2l+DropU0c
+X-Gm-Message-State: AOJu0YzMgsBcrnTcmNXBVie7jCJ2M0J04k31ory0UumOMixgSSf0rTeg
+	nSYUVSy3P9+KrM2DE1BtB6d1pmeIseT4Kjcx6AUcnH6FtLRsqsNO6jSNLXvuNEYGHO7t1RRuRMw
+	Xw2vYT90ctFsiK0Sowhq69+t6nUQZFkEdnJs+
+X-Google-Smtp-Source: AGHT+IEcFSGFLA92N67hRJZZKfuUP54ChZWVp/fzQzI9F+ne83J/6+p0ouLE12hyW7IobvfLf4GWEsYmji6NaeNQTP4=
+X-Received: by 2002:a05:6402:13d4:b0:574:ea5c:fa24 with SMTP id
+ 4fb4d7f45d1cf-57a02766876mr11029a12.3.1716919011421; Tue, 28 May 2024
+ 10:56:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-12-almasrymina@google.com> <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
-In-Reply-To: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 28 May 2024 10:36:40 -0700
-Message-ID: <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240513191544.94754-1-pobrn@protonmail.com> <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
+ <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
+ <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
+ <08450f80-4c33-40db-886f-fee18e531545@app.fastmail.com> <CALmYWFv9dK5ZPzwx3WCLMXzuuDadvFxh84+8rrT7aL105+ZZAQ@mail.gmail.com>
+ <20240524.160158-custard.odds.smutty.cuff-caukvmB4EWP9@cyphar.com>
+In-Reply-To: <20240524.160158-custard.odds.smutty.cuff-caukvmB4EWP9@cyphar.com>
+From: Jeff Xu <jeffxu@google.com>
+Date: Tue, 28 May 2024 10:56:12 -0700
+Message-ID: <CALmYWFs18vUwXx5p-VxNO5BZ0wvaHE54cG8n_+UdAL5-etAK=w@mail.gmail.com>
+Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
+To: Aleksa Sarai <cyphar@cyphar.com>, Jeff Xu <jeffxu@chromium.org>
+Cc: David Rheinsberg <david@readahead.eu>, =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	dmitry.torokhov@gmail.com, Daniel Verkamp <dverkamp@chromium.org>, hughd@google.com, 
+	jorgelo@chromium.org, skhan@linuxfoundation.org, 
+	Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 22, 2024 at 11:02=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-05-10 16:21, Mina Almasry wrote:
-> > +/* On error, returns the -errno. On success, returns number of bytes s=
-ent to the
-> > + * user. May not consume all of @remaining_len.
-> > + */
-> > +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *s=
-kb,
-> > +                           unsigned int offset, struct msghdr *msg,
-> > +                           int remaining_len)
-> > +{
-> > +     struct dmabuf_cmsg dmabuf_cmsg =3D { 0 };
-> > +     struct tcp_xa_pool tcp_xa_pool;
-> > +     unsigned int start;
-> > +     int i, copy, n;
-> > +     int sent =3D 0;
-> > +     int err =3D 0;
-> > +
-> > +     tcp_xa_pool.max =3D 0;
-> > +     tcp_xa_pool.idx =3D 0;
-> > +     do {
-> > +             start =3D skb_headlen(skb);
-> > +
-> > +             if (skb_frags_readable(skb)) {
-> > +                     err =3D -ENODEV;
-> > +                     goto out;
-> > +             }
-> > +
-> > +             /* Copy header. */
-> > +             copy =3D start - offset;
-> > +             if (copy > 0) {
-> > +                     copy =3D min(copy, remaining_len);
-> > +
-> > +                     n =3D copy_to_iter(skb->data + offset, copy,
-> > +                                      &msg->msg_iter);
-> > +                     if (n !=3D copy) {
-> > +                             err =3D -EFAULT;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     offset +=3D copy;
-> > +                     remaining_len -=3D copy;
-> > +
-> > +                     /* First a dmabuf_cmsg for # bytes copied to user
-> > +                      * buffer.
-> > +                      */
-> > +                     memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
-> > +                     dmabuf_cmsg.frag_size =3D copy;
-> > +                     err =3D put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEA=
-R,
-> > +                                    sizeof(dmabuf_cmsg), &dmabuf_cmsg)=
-;
-> > +                     if (err || msg->msg_flags & MSG_CTRUNC) {
-> > +                             msg->msg_flags &=3D ~MSG_CTRUNC;
-> > +                             if (!err)
-> > +                                     err =3D -ETOOSMALL;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     sent +=3D copy;
-> > +
-> > +                     if (remaining_len =3D=3D 0)
-> > +                             goto out;
-> > +             }
-> > +
-> > +             /* after that, send information of dmabuf pages through a
-> > +              * sequence of cmsg
-> > +              */
-> > +             for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
-> > +                     skb_frag_t *frag =3D &skb_shinfo(skb)->frags[i];
-> > +                     struct net_iov *niov;
-> > +                     u64 frag_offset;
-> > +                     int end;
-> > +
-> > +                     /* !skb_frags_readable() should indicate that ALL=
- the
-> > +                      * frags in this skb are dmabuf net_iovs. We're c=
-hecking
-> > +                      * for that flag above, but also check individual=
- frags
-> > +                      * here. If the tcp stack is not setting
-> > +                      * skb_frags_readable() correctly, we still don't=
- want
-> > +                      * to crash here.
-> > +                      */
-> > +                     if (!skb_frag_net_iov(frag)) {
-> > +                             net_err_ratelimited("Found non-dmabuf skb=
- with net_iov");
-> > +                             err =3D -ENODEV;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     niov =3D skb_frag_net_iov(frag);
->
-> Sorry if we've already discussed this.
->
-> We have this additional hunk:
->
-> + if (niov->pp->mp_ops !=3D &dmabuf_devmem_ops) {
-> +       err =3D -ENODEV;
-> +       goto out;
-> + }
->
-> In case one of our skbs end up here, skb_frag_is_net_iov() and
-> !skb_frags_readable(). Does this even matter? And if so then is there a
-> better way to distinguish between our two types of net_iovs?
+Hi Aleksa,
 
-Thanks for bringing this up, yes, maybe we do need a way to
-distinguish, but it's not 100% critical, no? It's mostly for debug
-checking?
+On Fri, May 24, 2024 at 9:12=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com> wr=
+ote:
+>
+> On 2024-05-23, Jeff Xu <jeffxu@google.com> wrote:
 
-I would say add a helper, like net_iov_is_dmabuf() or net_iov_is_io_uring()=
+> > Regarding vm.memfd_noexec, on another topic.
+> > I think in addition to  vm.memfd_noexec =3D 1 and 2,  there still could
+> > be another state: 3
+> >
+> > =3D0. Do nothing.
+> > =3D1. This will add MFD_NOEXEC_SEAL if application didn't set EXEC or
+> > MFD_NOEXE_SEAL (to help with the migration)
+> > =3D2: This will reject all calls without MFD_NOEXEC_SEAL (the whole
+> > system doesn't allow executable memfd)
+> > =3D3:  Application must set MFD_EXEC or MFD_NOEXEC_SEAL explicitly, or
+> > else it will be rejected.
+> >
+> > 3 is useful because it lets applications choose what to use, and
+> > forces applications to migrate to new semantics (this is what 2 did
+> > before 9876cfe8).
+> > The caveat is 3 is less restrictive than 2, so must document it clearly=
 .
+>
+> As discussed at the time, "you must use this flag" is not a useful
+> setting for a general purpose operating system because it explicitly
+> disables backwards compatibility (breaking any application that was
+> written in the past 10 years!) for no reason other than "new is better".
+>
+Are you referring to ratcheting in the sysctl in my original patch or
+is this something else ?
+I do not disagree with your change of  "removing the ratcheting" from
+the admin point of view.
 
-Checking for niov->pp->mp_ops seems a bit hacky to me, and may be
-outright broken. IIRC niov's can be disconnected from the page_pool
-via page_pool_clear_pp_info(), and niov->pp may be null. Abstractly
-speaking the niov type maybe should be a property of the niov itself,
-and not the pp the niov is attached to.
+> As I suggested when we fixed the semantics of vm.memfd_noexec, if you
+> really want to block a particular flag from not being set, seccomp lets
+> you do this incredibly easily without acting as a footgun for admins.
 
-It is not immediately obvious to me what the best thing to do here is,
-maybe it's best to add a flag to niov or to use niov->pp_magic for
-this.
+seccomp can but it requires more work for the container, e.g.
+container needs to allow-list all the syscalls. I'm trying to point
+out that seccomp might not cover all user-cases.
 
-I would humbly ask that your follow up patchset takes care of this
-bit, if possible. I think mine is doing quite a bit of heavy lifting
-as is (and I think may be close to ready?), when it comes to concerns
-of devmem + io_uring coexisting if you're able to take care, awesome,
-if not, I can look into squashing some fix.
+"ratcheting" in the vm.memfd_noexec is lightweight  and can be applied
+to the sandbox  of the container in advance, but since admin doesn't
+like ratcheting in sysctl, maybe prctl or LSM are ways to implement
+such restriction.
 
---=20
-Thanks,
-Mina
+> Yes, vm.memfd_noexec can break programs that use executable memfds, but
+> that is the point of the sysctl -- making vm.memfd_noexec break programs
+> that don't use executable memfds (they are only guilty of being written
+> before mid-2023) is not useful.
+>
+> In addition, making 3 less restrictive than 2 would make the original
+> restriction mechanism useless. A malicious process could raise the
+> setting to 3 and disable the "protection" (as discussed before, I really
+> don't understand the threat model here, but making it possible to
+> disable easily is pretty clearly).
+> You could change the policy, but now
+> you're adding more complexity for a feature that IMO doesn't really make
+> sense in the first place.
+>
+The reason of 3 is help with migration (not for threat-model), e.g. a
+container can force every apps run in the container migrates their
+memfd_create  to use either MFD_EXEC or MFD_NOEXEC_SEAL.
+But I understand what you mean, with current code,  adding 3 would
+cause more confusion to vm.memfd_noexec. Perhaps a new sysctl or prctl
+is the way to go if the app wants to force migration.
+In the hinder sight: two sysctls would work betters:  the first deal
+with migration, the second enforces NO_EXEC_SEAL.
+
+Thanks
+-Jeff
+
+
+> > -Jeff
+> >
+> > > Reviewed-by: David Rheinsberg <david@readahead.eu>
+> > >
+> > > Thanks
+> > > David
+>
+> --
+> Aleksa Sarai
+> Senior Software Engineer (Containers)
+> SUSE Linux GmbH
+> <https://www.cyphar.com/>
 
