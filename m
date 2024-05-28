@@ -1,161 +1,134 @@
-Return-Path: <linux-kselftest+bounces-10794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0890C8D2597
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 22:15:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E59D78D25D1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 22:28:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A20A1C21903
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 20:15:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1B5928FD22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 20:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B29876050;
-	Tue, 28 May 2024 20:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC815178CE8;
+	Tue, 28 May 2024 20:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="X5GFW+Oj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FSagSTgc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20A54436E
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 20:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDFF2FB2;
+	Tue, 28 May 2024 20:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716927355; cv=none; b=JBI1kdVHuTSsSoHkqmA9E/eIif7ca8s/x8/8+Uvx5w7XrltI3hOi8ggwIFdPUsoO2r1ssn7JJAb9y3ipwklqlDqfV8apWYOTyeLLFDaMUtFVlVWvNxKX3+n/0zGwjEuFe9fKVT0c5Z3OQ0yYfmhTNnw9PRFEHzFENl82wJSCrro=
+	t=1716928115; cv=none; b=arhpYxAFHLPlJy1WBExr0Ac5yPa31Yy4tyiAmakShxqb9ucNH0fjRVI5PH0rhiZry9Y8/aRfJOdMyU1kfyEx/klumi26THBLL7fWYCHGsTqltLAIPJndG3Qmd6k0/LK1BfaAXV/1a1EBl3NNdrmjNFlZ+IYerSKnH90sxNEFakw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716927355; c=relaxed/simple;
-	bh=LOvqo+aV+B1mOBU3H+RRFFDe5Cq38Xtx0O5Q3+LYB+A=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=HHjuC206AM+4xjbEx9t/AFphLYu6yy8I1n3h0TYMh0IA0BYSga7PRNQilPvchn2IgSy3BAH8NP/bsg7Xa+FqWc4rHg9uP9KXseE9nAVgVMKh1oOf9X8RqHJL0e/F7a/K8vRcnOa1G2ISKpKbiQkiUZkswrqOMdtszgpaDVzzNWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=X5GFW+Oj; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f8e819cf60so1065031b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 13:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1716927353; x=1717532153; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jcEC98X5Tk9pufqIfKmfwp4sjab37I3AMWo+deVLHIA=;
-        b=X5GFW+OjJ7wkeW9DPGExW7KOkRfRmfAg0rCWSJmxUhn+cCFKdXpLs5PqmSVtmb2cZa
-         BJ4lVmuLoGPMZ9VaKGm7Iov138I+/8TmPMw7qVWb498CrcA5Zsk7sZDP0AMxfDKtkqH4
-         bS6Ye9toPGe0CExBrnrP4EXHf+ILJMaru+ZCXqNoS3w5juvAlo2OfTWwBBSAagY31+zB
-         bOyuPir76CuNzsvcc59jRzmcET7YU4kIbWCv6Qv4bXve87btK7p0HvJNYKSf/IUxRPOC
-         NtV4tVKT0kxmUYZJo7O16pzGGhDpzoAM/6klRYNuEuuV1prtexDvL+TMzjT15q75buNf
-         cy7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716927353; x=1717532153;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jcEC98X5Tk9pufqIfKmfwp4sjab37I3AMWo+deVLHIA=;
-        b=cWFvvHhsBXMYWCpmXFhQ8CJSlg9/9qMyhNHCW/jR+QjnHqvPzQuyGqMbaZTe4iXCyS
-         h4I/0fzM1h84MvZe03IQV7mtXkR97x3tc4iLoynCQf2X8jXGNHTvbPUkpMZV6cJ3XkNq
-         OXuJrdUn6FHKD0pIfRAYocfyXESsBcooP8DQFuz9F6ehXXQ6hgHdLbnnxYxwMHXpmSvI
-         O2UpvPd9hBRJ6oQxsreymCnySzJqdFVNIWyHwqnCQehEs+Xd4Q+3DKalhUUHLE0X5PIT
-         pGcQAigWokLi1UnMn5keC5ajIZGW4DxW6J7CFmzVn23h4xkt78jdOidJlbFy6sWkV15r
-         vuvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnnASyUvVAkCsJmQQzmdDJ5d0foY7v/Gy6i9uLp0Wg8xKUiZsZOJK0v815rW2ptqSSQBmG3MMtui9c9ltIB0MQgdQI47TbWqUUjMSOJvzy
-X-Gm-Message-State: AOJu0Yx6EggUZ+eG/poWukYLowuImhY236ygjA4R/ZYC35F79xMnIH7G
-	aBjsdgm7tSV/tqnLFksmJ+pLaQOE4LJ285HFg3zFFYxbptlhp0wCQ73h76LAW/Y=
-X-Google-Smtp-Source: AGHT+IHYb7qIRYV/asWrKHIV/ya61hCaowBFPEvmv9j+QZakLOHdAIqnDpzGM7KC/Z0vDr+vQLtTrw==
-X-Received: by 2002:a05:6a00:808c:b0:6f3:e6d6:7fde with SMTP id d2e1a72fcca58-6f8f3b3f89bmr18671384b3a.26.1716927352944;
-        Tue, 28 May 2024 13:15:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fd2d909asm7022593b3a.178.2024.05.28.13.15.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 13:15:52 -0700 (PDT)
-Message-ID: <66563b78.050a0220.3d199.1e21@mx.google.com>
-Date: Tue, 28 May 2024 13:15:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1716928115; c=relaxed/simple;
+	bh=tvqtyxszXM8jDckKY+3E2CdFN/rc+uOT4+I2rD70XSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQAjcy33tHDTK9Gb8PIRqGsBD+zBhvwcX//bsZDb+E072ikkG3vIBgkmYl/Nk+0DqHrcExEtJ9EkeyrYPnXonqmMZ7hFjC5YOL8Chd3YI6P0atJFgHzLqCTa0M56Twbf+L3Cl6h7QMxzY7r4k4XdYMABf8FYGN9NUowoaq2fpIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FSagSTgc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8327C3277B;
+	Tue, 28 May 2024 20:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716928115;
+	bh=tvqtyxszXM8jDckKY+3E2CdFN/rc+uOT4+I2rD70XSs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FSagSTgcCe2BF3D778iaB7O6jZupz2oWfXX6aVkdKYp9UtJAfx6AS7Taq1pRR+Cna
+	 8+7JUyyCC7PxNSP5frvuVg+/t/TGdKo8qZMDhfRm6UurFPKoXufbH8CA1MIztVhPNj
+	 d+nK0cQB6exOG37UGUijO7dekHrjsNBkjW20xxcKQ5QtCK8V3yvgWOIyf+/bnJZsGu
+	 zZ1lVewf5+OGdz1NXBt5JAKDdakbQFXBjQU/VvXkigvM4pagHmE+GDAxYKAoOA0xvF
+	 SJbda8NIulJwQUvSg36c7dLkDij8GPYTIt4dfLhH6vI3OV338Sa/EUCpCU4r3iXASv
+	 ZYe+rxcP+GAKw==
+Date: Tue, 28 May 2024 13:28:33 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mark Brown <broonie@kernel.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	sunliming <sunliming@kylinos.cn>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] selftests/user_events: silence a clang warning:
+ address of packed member
+Message-ID: <20240528202833.GB2680415@thelio-3990X>
+References: <20240527214704.300444-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc1
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
- 1 warning (v6.10-rc1)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240527214704.300444-1-jhubbard@nvidia.com>
 
-kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.10-rc1)
+Hi John,
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v6.10-rc1/
+On Mon, May 27, 2024 at 02:47:04PM -0700, John Hubbard wrote:
+> When building with clang, via:
+> 
+>     make LLVM=1 -C tools/testing/selftest
+> 
+> ...clang warns about "taking address of packed member 'write_index' ".
+> This is not particularly helpful, because the test code really wants to
+> write to exactly this location, and if it ends up being unaligned, then
+> the test won't work (and may segfault, depending on the CPU type).
+> 
+> If that ever comes up, it will be obvious and can be fixed. But all it's
+> doing now is prevent a clean clang build, so disable the warning.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+> 
+> Changes since the first version:
+> 
+> 1) Rebased onto Linux 6.10-rc1
+> 
+> 
+> thanks,
+> John Hubbard
+> 
+> 
+>  tools/testing/selftests/user_events/Makefile | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/user_events/Makefile b/tools/testing/selftests/user_events/Makefile
+> index 10fcd0066203..617e94344711 100644
+> --- a/tools/testing/selftests/user_events/Makefile
+> +++ b/tools/testing/selftests/user_events/Makefile
+> @@ -1,5 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+> +
+> +ifneq ($(LLVM),)
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v6.10-rc1
-Git Commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+Perhaps it would be better if this were
 
-Warnings Detected:
+  ifeq ($(CC),clang)
 
-arm64:
+as that would catch both CC=clang and LLVM=1 users? I haven't tested
+this though.
 
-arm:
+Additionally, I think it would be good to mention that
+-Wno-address-of-packed-member is GCC's default, whereas Clang enables
+-Waddress-of-packed-member by default.
 
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14cf94
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14cf94
-
----
-For more info write to <info@kernelci.org>
+> +    CFLAGS += -Wno-address-of-packed-member
+> +endif
+> +
+>  LDLIBS += -lrt -lpthread -lm
+>  
+>  TEST_GEN_PROGS = ftrace_test dyn_test perf_test abi_test
+> 
+> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+> -- 
+> 2.45.1
+> 
+> 
 
