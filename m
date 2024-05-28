@@ -1,176 +1,249 @@
-Return-Path: <linux-kselftest+bounces-10791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE7B58D223C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 19:14:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA2B8D2292
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 19:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E5DDB229BA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 17:14:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCADA1F2491A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2024 17:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DAD173355;
-	Tue, 28 May 2024 17:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEB239852;
+	Tue, 28 May 2024 17:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CnG+IWFx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F4p6t/tW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEA117332E
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 17:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D0D2E64C
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 17:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716916464; cv=none; b=R+E+MSmFv9WYV9DrFXiXhOsvtxh3MgDJ0iz+FX7rkCMAiLX61wsDgVDKSR6Oc/0SEESk0ZQ3jNT+oNpwk+prZsyMxmsGiSeOAQ9x6iWeuHSIqDcx/nIwXFSb8+vX1URincv+8FwY0dpAG8k4CGs2EAfwgReP6dtfmDAqlbqvYWQ=
+	t=1716917817; cv=none; b=QAQuGOmuzHoiAsFUkbdli7SIwKXPyzlMp2df9WPjEfM0XEs9pUOYim6P3GvNsbDFtvlJKLp0+jZ9u0sBKnIjrZMI8X4efyfk19xZWqci7uY1YRiIx2CryDKs7M/AOlRhnBOm4AQYYpuSNRwvk+FK8nRkjpPh1VC2bRTgyvnxp3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716916464; c=relaxed/simple;
-	bh=83R2ZCKdOqHlasXYLLr4mim4mlTsG49LjGj+ZstOnnM=;
+	s=arc-20240116; t=1716917817; c=relaxed/simple;
+	bh=5jqpjWDjCYeF0iZMmfNh1F02B5hbFSGCHFwvks87kGw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fm3xi5aWt417+hJcfqF7ziSrhfI9Zx/mNZqxr3F7Y4r7Z8rj8WCU4iReaLVTuiXo6wajJVEmF8XFiX+JQ315fgg/oEhkBN6O/hdcT8aFy1xD8tV465MstYoeIJGqfX69Xc4jjhs+WMLGliGejM2Eaw6+rNxcoPL7I2Ml8PCe5no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CnG+IWFx; arc=none smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=FglDXgoMx3y3R6J5vUduslz/HcYI2eLe1rY675fEQSfGQrbXy9O/qlzHeNFl/RQv1Vm1GL62d2V9AfM7JZbK2VNvlW6sTQkWX16vOETBCUb9Dm8ikKp43JhKqkDIOqNg2SCelmpEEHTLNA3t8KPl+iGm2DwrFP+e7D5fOYXWuTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F4p6t/tW; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-572f6c56cdaso1036a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 10:14:22 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a634e03339dso116694166b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2024 10:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716916461; x=1717521261; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1716917813; x=1717522613; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sT1TXK7ZG2RZ0EH6nVas07ZfsjkH1/Dt6uPqSJeUCoY=;
-        b=CnG+IWFxbWY4zMZJmQKytObd79blWiAIPL0F+FFPul5zWwx4NC4L2ZTkuu74cKUFi6
-         K9wl7IGUtT8z1zQqud7j63wIQcUvOLleMRmtu3Kn7UBe6dhDgeNPuNkiAVRUmKvw1FZJ
-         Ug13n89jTzBlNZkgSo3C+eSpBDVab0Nqp6W0sTsTRb7OjT9tR1J25E/jkUVwnIR4AiVA
-         h/yg4dK5F9RVFWygc1fV248+g7ciVviVVYUFUviLWCEhhtOsMepm4gEa/dkhfnonAUnD
-         2NlWHkI143Gl4ph8lwhFCB+ryTKtd20Z0+j0hUkCvKE5wxStdl3z5m/fmokKnRBu99oG
-         PYOA==
+        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
+        b=F4p6t/tWtjSOVYylJbwcLVV6UTyM4sNrgf29x/I2qiaXmlzGuSs/libx4uluVN+nqU
+         Q1wu6ZyJ+t/J5G4TTactfmH72bg+9gQMI6XUV/JPUvIcgZPTSklK6xODqYbVvKUruZsd
+         qGcZJqKk9SLen5tkhgx7pjnVQN79mjH/J3XY5cJYmSYfwEdHgeAgZgJLCWfItyd1aUlo
+         m8SST44+ucTlAuYiprzs7++Q4aRuTHjVObQuxYwumcTSK42endimDnDiRHgNYuUyIKni
+         X0y60pnKnN3oBLyeEGWlqJk5sfZxG3gqEzLBOt9HDhyBsgJwOczZkJZdgWzCHvs7ja5e
+         tsGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716916461; x=1717521261;
+        d=1e100.net; s=20230601; t=1716917813; x=1717522613;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sT1TXK7ZG2RZ0EH6nVas07ZfsjkH1/Dt6uPqSJeUCoY=;
-        b=O6se8pzVAxyKemzkxt2K4OR//6Oon+HCLsrQCKbb8HptCn0QQmmuu5tlFYPmQFCCzD
-         WHCoK3mA940Ys/h19C0fsfBmBNzIrmmVv1col58OuRsVpHg1LRaJy5kEb35pmgsuFUkn
-         aO9db3DsQBLvg0FbvcVztfFExm2BaCuIJ9zdrShNcKCKQZnQGna9BeWNhTtIIa7R/wOX
-         9nyDDfsKncf8TJp7WcWHK2drQGCWakZsfyLzyw1MIytOJxl4YgakrvIkF277HReUvkv5
-         HKGjgVJ/qGsnWFMK+/MCKCaHVIEbgEhYJtVy5XQK9f87id9tOynJOyu0KPx0JBO/Z9KC
-         2STg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqdGbKV776jsZSBVt0J9qFbCUJUtqjaT4VpzQwMkCC5gywxTPWa5Wk482gtAq+Wblps2UKLuieX23A4/Y+YuonL/teGOtnBLg4d3FqV54Q
-X-Gm-Message-State: AOJu0YwyEYxhX9cJqg9yyHmZ0Ibg79UbfMpGUz752UyHV1UVdSnJtVWo
-	jkwrqVljS26gwUlg64xQz+2tebMjMrVOF6P6Ig0qif9JFGTvvmANyAGUeizmk/+5tCsAsfL7J1H
-	y4e/sV1BQnZQSQuRthYeJF0iwl/BzujZFZWFn
-X-Google-Smtp-Source: AGHT+IE8Pz/iLsw8edvmphGKBIzilffR3JGLP31yHX57EFk3d75gUAm2eWXqD2JVdGL2QbquNMg1y2tNWJ/UYY3WYA4=
-X-Received: by 2002:a05:6402:38f:b0:578:4e12:8e55 with SMTP id
- 4fb4d7f45d1cf-57869a07e68mr453327a12.1.1716916460427; Tue, 28 May 2024
- 10:14:20 -0700 (PDT)
+        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
+        b=dsi+6HxxBdqjKG37Y5k0rm0+osoJKXFZNMtyV+GrDD8fBsI7mFNhcFIQlI9U6zGH6W
+         3zw2hRyFLEURNCxlnmD7g8ZV69lZmhS7qDjLjNuo9GJQbQfP997ZZGYqa8tHVHOCGwSK
+         JuAUrxjKHd7mAQ3B91zLno2x6NTUJ5sOUluGeAqPIi7V29GKggGfaEjJvMkDSX7oHLZ7
+         0qkyacI23DYyyJ4j/WQCVuCXfuEA/jUd9bTjooModx9cOUlgPsqzQjp6MWYGyOBsTs/4
+         319rPrVyPycc5lv5dPZFUsmnZoEWix25/9a5N4JZq7rP3jLkD52AC7YEbx1OdsfYu/u0
+         aC+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV2RPnqlTZ7VUkW3rctLZqEXIvVM+3H8k0JhoVcSPKASvxcsmZR//BmHYq8FO2cIF/GII70r8j5yTEeF2SU9IebcLeJsDWYMNH8Mbz8ZxVj
+X-Gm-Message-State: AOJu0Yw5/MNG9xXUeraS5qvSlco/CqwZqeZoykACba2VWp6azhtNMUuD
+	4TTOhPK0VoWdVxikjSdwWlgu//jIfcBoJtkK9OJUj3QKxtLs1sVexNKanCLExt/hYBEawbDkqB2
+	VKob3YZDkfLdlI+F3TuoZ7AmlBzlCKBVYdD9E
+X-Google-Smtp-Source: AGHT+IFf32eXkuapluEvlBEyoJKJxifsmiVKQ0AvF4ow+8ygeGf1col+Xo1abUwIXzRnUJhSc+Yk6CUkl0RPaD3UYic=
+X-Received: by 2002:a17:906:3c1a:b0:a63:42b6:1976 with SMTP id
+ a640c23a62f3a-a6342b619f5mr156681366b.68.1716917812713; Tue, 28 May 2024
+ 10:36:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240513191544.94754-1-pobrn@protonmail.com> <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
- <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
- <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
- <08450f80-4c33-40db-886f-fee18e531545@app.fastmail.com> <CALmYWFv9dK5ZPzwx3WCLMXzuuDadvFxh84+8rrT7aL105+ZZAQ@mail.gmail.com>
- <CALmYWFtedtEnfGFp5DYacHYOE7+GB8yoQC-iyw7JAxySmgQ7vw@mail.gmail.com> <f880562e-9521-4270-82e2-c6fb14dc853a@app.fastmail.com>
-In-Reply-To: <f880562e-9521-4270-82e2-c6fb14dc853a@app.fastmail.com>
-From: Jeff Xu <jeffxu@google.com>
-Date: Tue, 28 May 2024 10:13:41 -0700
-Message-ID: <CALmYWFuPBEM2DE97mQvB2eEgSO9Dvt=uO9OewMhGfhGCY66Hbw@mail.gmail.com>
-Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
-To: David Rheinsberg <david@readahead.eu>, Jeff Xu <jeffxu@chromium.org>
-Cc: Aleksa Sarai <cyphar@cyphar.com>, =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	dmitry.torokhov@gmail.com, Daniel Verkamp <dverkamp@chromium.org>, hughd@google.com, 
-	jorgelo@chromium.org, skhan@linuxfoundation.org, 
-	Kees Cook <keescook@chromium.org>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-12-almasrymina@google.com> <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
+In-Reply-To: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 28 May 2024 10:36:40 -0700
+Message-ID: <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
+To: David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 24, 2024 at 7:29=E2=80=AFAM David Rheinsberg <david@readahead.e=
-u> wrote:
+On Wed, May 22, 2024 at 11:02=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
 >
-> Hi
+> On 2024-05-10 16:21, Mina Almasry wrote:
+> > +/* On error, returns the -errno. On success, returns number of bytes s=
+ent to the
+> > + * user. May not consume all of @remaining_len.
+> > + */
+> > +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *s=
+kb,
+> > +                           unsigned int offset, struct msghdr *msg,
+> > +                           int remaining_len)
+> > +{
+> > +     struct dmabuf_cmsg dmabuf_cmsg =3D { 0 };
+> > +     struct tcp_xa_pool tcp_xa_pool;
+> > +     unsigned int start;
+> > +     int i, copy, n;
+> > +     int sent =3D 0;
+> > +     int err =3D 0;
+> > +
+> > +     tcp_xa_pool.max =3D 0;
+> > +     tcp_xa_pool.idx =3D 0;
+> > +     do {
+> > +             start =3D skb_headlen(skb);
+> > +
+> > +             if (skb_frags_readable(skb)) {
+> > +                     err =3D -ENODEV;
+> > +                     goto out;
+> > +             }
+> > +
+> > +             /* Copy header. */
+> > +             copy =3D start - offset;
+> > +             if (copy > 0) {
+> > +                     copy =3D min(copy, remaining_len);
+> > +
+> > +                     n =3D copy_to_iter(skb->data + offset, copy,
+> > +                                      &msg->msg_iter);
+> > +                     if (n !=3D copy) {
+> > +                             err =3D -EFAULT;
+> > +                             goto out;
+> > +                     }
+> > +
+> > +                     offset +=3D copy;
+> > +                     remaining_len -=3D copy;
+> > +
+> > +                     /* First a dmabuf_cmsg for # bytes copied to user
+> > +                      * buffer.
+> > +                      */
+> > +                     memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
+> > +                     dmabuf_cmsg.frag_size =3D copy;
+> > +                     err =3D put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEA=
+R,
+> > +                                    sizeof(dmabuf_cmsg), &dmabuf_cmsg)=
+;
+> > +                     if (err || msg->msg_flags & MSG_CTRUNC) {
+> > +                             msg->msg_flags &=3D ~MSG_CTRUNC;
+> > +                             if (!err)
+> > +                                     err =3D -ETOOSMALL;
+> > +                             goto out;
+> > +                     }
+> > +
+> > +                     sent +=3D copy;
+> > +
+> > +                     if (remaining_len =3D=3D 0)
+> > +                             goto out;
+> > +             }
+> > +
+> > +             /* after that, send information of dmabuf pages through a
+> > +              * sequence of cmsg
+> > +              */
+> > +             for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
+> > +                     skb_frag_t *frag =3D &skb_shinfo(skb)->frags[i];
+> > +                     struct net_iov *niov;
+> > +                     u64 frag_offset;
+> > +                     int end;
+> > +
+> > +                     /* !skb_frags_readable() should indicate that ALL=
+ the
+> > +                      * frags in this skb are dmabuf net_iovs. We're c=
+hecking
+> > +                      * for that flag above, but also check individual=
+ frags
+> > +                      * here. If the tcp stack is not setting
+> > +                      * skb_frags_readable() correctly, we still don't=
+ want
+> > +                      * to crash here.
+> > +                      */
+> > +                     if (!skb_frag_net_iov(frag)) {
+> > +                             net_err_ratelimited("Found non-dmabuf skb=
+ with net_iov");
+> > +                             err =3D -ENODEV;
+> > +                             goto out;
+> > +                     }
+> > +
+> > +                     niov =3D skb_frag_net_iov(frag);
 >
-> On Thu, May 23, 2024, at 6:55 PM, Jeff Xu wrote:
-> > On Thu, May 23, 2024 at 9:20=E2=80=AFAM Jeff Xu <jeffxu@google.com> wro=
-te:
-> >> On Thu, May 23, 2024 at 1:24=E2=80=AFAM David Rheinsberg <david@readah=
-ead.eu> wrote:
-> >> > We asked for exactly this fix before, so I very much support this. O=
-ur test-suite in `dbus-broker` merely verifies what the current kernel beha=
-vior is (just like the kernel selftests). I am certainly ok if the kernel b=
-reaks it. I will gladly adapt the test-suite.
-> >> >
-> > memfd is by default not sealable, and file is by default sealable,
-> > right ? that makes the memfd  semantics different from other objects
-> > in linux.
-> > I wonder what is the original reason to have memfd  this way?
+> Sorry if we've already discussed this.
 >
-> shmem-files are *not* sealable by default. This design was followed for b=
-ackward compatibility reasons, since shmem-files predate sealing and silent=
-ly enabling sealing on all shmem-files would have broken existing users (se=
-e shmem.c which initializes seals to F_SEAL_SEAL).
+> We have this additional hunk:
 >
-One may ask the question: If shmem-files  need to be non-sealable by
-default, does memfd need to be so as well?
+> + if (niov->pp->mp_ops !=3D &dmabuf_devmem_ops) {
+> +       err =3D -ENODEV;
+> +       goto out;
+> + }
+>
+> In case one of our skbs end up here, skb_frag_is_net_iov() and
+> !skb_frags_readable(). Does this even matter? And if so then is there a
+> better way to distinguish between our two types of net_iovs?
 
-> I am not sure what you mean with "makes [memfd] semantics different from =
-other objects in linux". Can you elaborate?
->
-The memory sealing feature - mseal() went through similar discussion
-on MAP_SEALABLE flag during the RFC phase,  but everyone doesn't like
-the flag, and it gets dropped.
-The feedback from communities for MAP_SEALABLE were.
-- such a flag will slow down the adoption of the feature, i.e.
-applications on multiple layers/libraries must change in order to use
-sealing, i.e.  time of construction and  time of sealing might reside
-in different libraries.
-- Deny of service attack is likely not a concern,  the attacker that
-is able to call mseal() can probably already call mprotect() or other
-calls and achieve a similar DOS attack.
+Thanks for bringing this up, yes, maybe we do need a way to
+distinguish, but it's not 100% critical, no? It's mostly for debug
+checking?
 
-> Since `memfd_create` was introduced at the same time as shmem-sealing, it=
- could certainly have enabled sealing by default. Not sure whether this wou=
-ld be preferable, though.
->
-I would think making memfd sealable is desirable.
+I would say add a helper, like net_iov_is_dmabuf() or net_iov_is_io_uring()=
+.
 
-Probably the same for a shmem-file too.
+Checking for niov->pp->mp_ops seems a bit hacky to me, and may be
+outright broken. IIRC niov's can be disconnected from the page_pool
+via page_pool_clear_pp_info(), and niov->pp may be null. Abstractly
+speaking the niov type maybe should be a property of the niov itself,
+and not the pp the niov is attached to.
 
-> > Another solution is to change memfd to be by-default sealable,
-> > although that will be an api change, but what side effect  will it be
-> > ?
-> > If we are worried about the memfd being sealed by an attacker, the
-> > malicious code could also overwrite the content since memfd is not
-> > sealed.
->
-> You cannot change the default-seals retrospectively. There are existing s=
-hmem-users that share file-descriptors and *expect* the other party to be a=
-ble to override data, but do *not* expect the other party to be able to app=
-ly seals. Note that these models explicitly *want* shared, writable access =
-to the buffer (e.g., render-client shares a buffer with the display server =
-for scanout), so just because you can *write* to a shmem-file does not mean=
- that sharing is unsafe (e.g., using SIGBUS+mmap can safely deal with page-=
-faults).
->
-If the other party is controlled by an attacker, the attacker can
-write garbage to the shm-file/memfd, that is already the end of the
-game, at that point, sealing is no longer a concern, right?
-If the threat-model is preventing attacker on the other side to write
-the garbage data, then F_SEAL_WRITE|F_SEAL_SHRINK|F_SEAL_GROW can be
-applied, in that case, default-sealable seems preferable because of
-less code change.
-If the other party needs to write to shmem/memfd anyway, then maybe
-F_SEAL_EXEC needs to be applied ?
+It is not immediately obvious to me what the best thing to do here is,
+maybe it's best to add a flag to niov or to use niov->pp_magic for
+this.
 
-Thanks
--Jeff
+I would humbly ask that your follow up patchset takes care of this
+bit, if possible. I think mine is doing quite a bit of heavy lifting
+as is (and I think may be close to ready?), when it comes to concerns
+of devmem + io_uring coexisting if you're able to take care, awesome,
+if not, I can look into squashing some fix.
 
-> Thanks
-> David
+--=20
+Thanks,
+Mina
 
