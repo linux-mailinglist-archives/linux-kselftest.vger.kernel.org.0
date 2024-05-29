@@ -1,137 +1,118 @@
-Return-Path: <linux-kselftest+bounces-10835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3D478D38A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 16:06:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3309C8D3906
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 16:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CF2D2822A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 14:06:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8954B22D74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 14:23:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18341CD2C;
-	Wed, 29 May 2024 14:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B0A157A72;
+	Wed, 29 May 2024 14:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gxQnBgQh";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="jg6JtFYa";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gxQnBgQh";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="jg6JtFYa"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="BbxHiInL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57241BF3B;
-	Wed, 29 May 2024 14:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B804157A6B;
+	Wed, 29 May 2024 14:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716991539; cv=none; b=Kn0HQXrFbhFOHEPcmiT86pDh/HFUPmxK8hmqXAyQxBIN5OHWLtw0Y+aVygfDKIEk64s6kECCgnqTMwpFpAU4C0cI3JNQDLzZpcx7Mgo+UObNS+sdyMwlP8bq/mLqqtt6JZ1C+xYcBvqDO5V9AcajOaotEjNEJasuEbgl3ixBMSo=
+	t=1716992575; cv=none; b=MVcPiVxgXHbNuZi9AuF0otpPW77jC1JqjyUg6Eo2DnDoDHmk4S7Lb0pYXLrdDxw6na6uI6cfRn8+fVXnIn5m5/zeENwC3hySqZcdCHNW7ILP2GigmiolB2bmsYzAREJGxT/Qkchs0CNssxRcnndHlRT3Er1No0ZzFQWc4gkOzrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716991539; c=relaxed/simple;
-	bh=EXhy7Y0Mf45o5EJir2NiWLb5gdZ7rsjUh8NPftXsJow=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=PB1m1ZqUpg3yzFH8a1ilOUXhmlw/eDqE7S1bIMUC43irQgD0ijyXHRq5kPLnuZbvHzUsKyJwPRO9/viHkcQCI0wwPU08VSgPmmxXamfup2yWxHr/9jOaClhFRpKr1a54+eUCC/BNe9vG4sg4fXpJXLSMjTaasrn6S/Q3dwDDU3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gxQnBgQh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=jg6JtFYa; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gxQnBgQh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=jg6JtFYa; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	s=arc-20240116; t=1716992575; c=relaxed/simple;
+	bh=i1+W9fRwSuY7cIzxg3UDgG1qLL/tZ34N8qpXL2awnyI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HKBuH1FOYNHQ9qArSybn7xSSRizWsB/6qEoJTQcG763S2nchEj0ZcII+cnbc9L9RmANDaZBwAS42HhLW/l6y4xk/e/IiPe30n8ljOVWRKm9jQzhqK0NH0AW+ABrjBPEqAi31a56a/DAY9gwv+hyMc52GZkhERP39SO9n/l1WSnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=BbxHiInL; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0A615336AF;
-	Wed, 29 May 2024 14:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1716991536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g08lDbPcwFQ8xueoQtCrEiFoHfACj1CSYR+KNNv+rMU=;
-	b=gxQnBgQhL4HkNjTak2bPFeBqDyKa6HKwDD64Hb/vi8YwyJn4yE4LnDJgWLjVyMmJEko6zD
-	U9s9wzyG3ZbcejYjL6cHY9lZQijApHmEtfC+ROU5kSK0oDBDMn04zvpGe3ry3bYC1o1HCN
-	1HBSqpxHQNkgJPlZoyIfZN0r0cMwUKI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1716991536;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g08lDbPcwFQ8xueoQtCrEiFoHfACj1CSYR+KNNv+rMU=;
-	b=jg6JtFYabPnoubKactJdtDdpnEmpjWiYk1QHerLv9exgjvH6ECp0gQRVF08SYZrI5wMlZU
-	yevDfrkVJQ/YXvCA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1716991536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g08lDbPcwFQ8xueoQtCrEiFoHfACj1CSYR+KNNv+rMU=;
-	b=gxQnBgQhL4HkNjTak2bPFeBqDyKa6HKwDD64Hb/vi8YwyJn4yE4LnDJgWLjVyMmJEko6zD
-	U9s9wzyG3ZbcejYjL6cHY9lZQijApHmEtfC+ROU5kSK0oDBDMn04zvpGe3ry3bYC1o1HCN
-	1HBSqpxHQNkgJPlZoyIfZN0r0cMwUKI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1716991536;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g08lDbPcwFQ8xueoQtCrEiFoHfACj1CSYR+KNNv+rMU=;
-	b=jg6JtFYabPnoubKactJdtDdpnEmpjWiYk1QHerLv9exgjvH6ECp0gQRVF08SYZrI5wMlZU
-	yevDfrkVJQ/YXvCA==
-Date: Wed, 29 May 2024 16:05:35 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-    Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: livepatch: Test atomic replace against
- multiple modules
-In-Reply-To: <20240525-lp-atomic-replace-v2-1-142199bb65a1@suse.com>
-Message-ID: <alpine.LSU.2.21.2405291601040.9680@pobox.suse.cz>
-References: <20240525-lp-atomic-replace-v2-1-142199bb65a1@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	(Authenticated sender: lukma@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id 3D6CA88271;
+	Wed, 29 May 2024 16:22:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1716992571;
+	bh=I2oVJcFLXkPCNKP7PqlC/eM5qW7lVm4lSg1L40401TI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BbxHiInLCDYI73Rz+vptL1jC0UDd5SG0btzkGHuWikdKesGmooljxpvLXUtRoRiHi
+	 kzJOVYaTdvr7TJ1ZFEqqD3RWyt8m+60aoMzcjFn03jiqXVtq71jTe4BpGn4b+uf+Ij
+	 9Iw1qdHYnrczTQiDuNfUvtVu9I/pSQz9WA/dk0tLyGfBJzknA3paTa0kISfUCrw6Lg
+	 qTWt5SIayv9SjxxBL9IuAZW9A1L4cjdDTKy3d1yHpX0TUntmvkzfggxI+uveKnMiNq
+	 FsJMyrsZ9Ad50KjQR0mblh5cqpyvUH+H7GMsT8Nea1ZNHl2VNlklA3BoxL2Vxx8fYf
+	 NpPPc6IW2BLFw==
+From: Lukasz Majewski <lukma@denx.de>
+To: Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Eric Dumazet <edumazet@google.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Tristram.Ha@microchip.com,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Ravi Gunasekaran <r-gunasekaran@ti.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+	Murali Karicheri <m-karicheri2@ti.com>,
+	Arvid Brodin <Arvid.Brodin@xdin.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>,
+	Casper Andersson <casper.casan@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Geliang Tang <tanggeliang@kylinos.cn>,
+	Shuah Khan <shuah@kernel.org>,
+	Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH] selftests: hsr: Extend the hsr_ping.sh test to use fixed MAC addresses
+Date: Wed, 29 May 2024 16:22:31 +0200
+Message-Id: <20240529142232.2625747-1-lukma@denx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ZERO(0.00)[0];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-On Sat, 25 May 2024, Marcos Paulo de Souza wrote:
+Fixed MAC addresses help with debugging as last four bytes identify the
+network namespace.
 
-> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-> index e3455a6b1158..d85405d18e54 100755
-> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
-> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-> @@ -107,9 +107,12 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
->  
->  # - load a livepatch that modifies the output from /proc/cmdline and
->  #   verify correct behavior
-> -# - load an atomic replace livepatch and verify that only the second is active
-> -# - remove the first livepatch and verify that the atomic replace livepatch
-> -#   is still active
-> +# - load two addtional livepatches and check the number of livepatch modules
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+---
+ tools/testing/selftests/net/hsr/hsr_ping.sh | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-s/addtional/additional/
+diff --git a/tools/testing/selftests/net/hsr/hsr_ping.sh b/tools/testing/selftests/net/hsr/hsr_ping.sh
+index 3684b813b0f6..f5d207fc770a 100755
+--- a/tools/testing/selftests/net/hsr/hsr_ping.sh
++++ b/tools/testing/selftests/net/hsr/hsr_ping.sh
+@@ -152,6 +152,15 @@ setup_hsr_interfaces()
+ 	ip -net "$ns3" addr add 100.64.0.3/24 dev hsr3
+ 	ip -net "$ns3" addr add dead:beef:1::3/64 dev hsr3 nodad
+ 
++	ip -net "$ns1" link set address 00:11:22:00:01:01 dev ns1eth1
++	ip -net "$ns1" link set address 00:11:22:00:01:02 dev ns1eth2
++
++	ip -net "$ns2" link set address 00:11:22:00:02:01 dev ns2eth1
++	ip -net "$ns2" link set address 00:11:22:00:02:02 dev ns2eth2
++
++	ip -net "$ns3" link set address 00:11:22:00:03:01 dev ns3eth1
++	ip -net "$ns3" link set address 00:11:22:00:03:02 dev ns3eth2
++
+ 	# All Links up
+ 	ip -net "$ns1" link set ns1eth1 up
+ 	ip -net "$ns1" link set ns1eth2 up
+-- 
+2.20.1
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-
-M
 
