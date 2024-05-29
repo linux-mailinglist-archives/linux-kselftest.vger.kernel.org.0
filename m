@@ -1,159 +1,162 @@
-Return-Path: <linux-kselftest+bounces-10883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90DDA8D41F8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 01:32:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 692AA8D4223
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 01:55:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D2C11F23BA5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 23:32:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A8041C210CC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 23:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616DF1CB328;
-	Wed, 29 May 2024 23:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4A41C2339;
+	Wed, 29 May 2024 23:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bjG1O2pe"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="M+zyPTZs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55AC17B4F2
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 23:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403CB28E8
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 23:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717025519; cv=none; b=k0SB5az8N042JvttSaW3Xs1naSQiPEu+TBO/yZca3A6h27hUUINkKdunkU/cGnOZsMH3+UTIP7YkCDfYp4wJF1ZL1eyecw9xVY1lW8FfxKAROUBOI6EtPtXJ8EqCdKPNodX8uDoCRvOqSQU9C75GYWtlBED2pqhQAOFD3omofCs=
+	t=1717026915; cv=none; b=OjHuXqpfi41/+2dB7hbP+7ntKgnF22LWzM6rddJGZKty0/i4J10u9ckFejJS7KdGDk7u5W3FDBZRrRIFySQQGcaortyN+uXo8qd4Ikz/ePRK2GojL/MpMBXJzFogUKeM2Q25YwxbR+shGTf1cuT+HP1X2dcLet032sy2ArYPgVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717025519; c=relaxed/simple;
-	bh=GoVk3hNrKd3c6caDQ7OhCBjgqux/jYlC6OkQqSfhfUM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KE625Zo+88Iu0Qd6t4W6iKv3S2spaTI7eNuLDgdAcT6NqkRtC7+wEkMS9J3zaX55KTs2/h0Jec5hcSNkXqlGYeaeqqHvxn2ylEFCYM9kxw3wAWB9L5Sk/hdLq3DORYafKsydsv8NyqCrXwNsjLtHrGd7iDAXlriGU7FkRVmlkGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bjG1O2pe; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: geliang@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717025514;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S0FFwBvD1ZO13tqatCTLyRIjujkFUNX3kU8lW2Xfe3w=;
-	b=bjG1O2peWEi9z7e58KY4Cx1QmmMCC1YtHrtYYRaZ+oTuU39utOUJ09xQjz21HWcJtu0sD8
-	ewHFZt6Z53oljObR2UMPqcCaUz3EzuIJpFKkk8pBNZBS0BVF0cvAfzEvofKcfL31EJieGw
-	XbwhkLlZa21xc7UQ2Cl/u46oyt1lgUE=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: sdf@google.com
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: mptcp@lists.linux.dev
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Message-ID: <1808b186-27d3-4bb8-854e-5ce19920a0c9@linux.dev>
-Date: Wed, 29 May 2024 16:31:41 -0700
+	s=arc-20240116; t=1717026915; c=relaxed/simple;
+	bh=dOFyuloBj/zwklIg4VsJpHFqiln6SGPlXNj+VnyzAyI=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=dwYZKkF3/sExcdevS0jC68yOCpbvLdZOvq2Kp+0EgGjVx9jIA5FSo2ypL9+abAsYcXI6ZSMqLUGXHwX2tG+LP1ZZKBHfAemo1BcAUPTYHdqxcEYvkAgnLHaMCCT5RXQTvcx/bl9z68GPesj5TMF9gFhkA3QKzyFVCIkxtYuehiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=M+zyPTZs; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-701d854b8dfso306371b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 16:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717026913; x=1717631713; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KQ1O+JmdlJtcXskvcw3euq9830gu5JIlq0yafs8CgDU=;
+        b=M+zyPTZsaycbBJY9SBEXreV3KEBqRQv8/cFfJI04lPsRDbtHsUsf6/hGrG6BQKTsaR
+         Au1nWtuOnQLSzwhMGwbBEiNScLSyzXcbJ+kWcaACzv2EsrDmM+UHRigffWsut/PXcmhU
+         vHc5BeA6g9+ZGzqRV+z4SPZR8HF3B9bhBfrFaWlsbGkoCQzUKDFLx2r6Mh966nqRsFKN
+         sbhJomd+0qjhKOFy+E7eWir+sAoXgQTo3vEQt3vundWIuKC6LXvBM2hYceM8UyEgochb
+         IS2uePJHZbKdqCmOP5uVl5Tl04rMX+2Qqcy8H7iydScEm5E33kjoX7MYmcUj4nyEZDGl
+         oZIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717026913; x=1717631713;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KQ1O+JmdlJtcXskvcw3euq9830gu5JIlq0yafs8CgDU=;
+        b=quTb/oKVsqK+RXY45uq2C4dk3MrtD/9CV5E9xs+m5o+Fs+CaOmPprs9+2LU4EuIDrP
+         L/sdDO3WwKV6BVikkjN5+8Z56rSEcGNE/th0RE+ZUC4ngu+BIK6GIL5iSf3GjVc3dsoX
+         Fn2Jmj5JR44GOtzE85WOWqDv5M/7LEC8X1e0jRFm7eD4TK3t6iZlI/g878N/miXtA0EH
+         d0Jl53a1w5PbcPjPYzri308eG56bnW5ZDxrc/j/RbiKGTT/cXWCV/tWNQ6Swjs8UIQK1
+         rtpWnVgHVYhUoU+riOuudRQ1e6kfS8mT/y81G9mJa+umluvrPexOhbH7EBOhm0YuJ/tA
+         KZ3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUpzai4p0ekvI18CfJoLA3WZCgAiBBLq+aZBIqNoMV/BucnknbLFdJk6iwlGI0ln5pTcU6EhVqgm4P3R9FtF9OZqLKZMKp0L624JTiSxnzh
+X-Gm-Message-State: AOJu0YzVLXxMNM2Oy3vIXAI1hz8808U5MUrfn1vTeF8U1D5dH1grMHCf
+	noJsnDHytqYGGcrODycLGFe4b61zLwjyXb+ZVsiboTogydw7iSMQelC/YmMp7vs=
+X-Google-Smtp-Source: AGHT+IGl1itDWAIl3eAcYfQzJCuVt1hLz9kOxqdbVPyjA9SC6sFfGA8xcHn6f8aBxIzSbUc0LZdaRg==
+X-Received: by 2002:a05:6a00:3311:b0:702:2f19:658f with SMTP id d2e1a72fcca58-702313de331mr525510b3a.30.1717026913426;
+        Wed, 29 May 2024 16:55:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fbd3dea2sm8523232b3a.24.2024.05.29.16.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 16:55:13 -0700 (PDT)
+Message-ID: <6657c061.050a0220.abc12.7e83@mx.google.com>
+Date: Wed, 29 May 2024 16:55:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/8] selftests/bpf: Add unshare_netns helper
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
-References: <cover.1715821541.git.tanggeliang@kylinos.cn>
- <cf3c81f6014cfd1339622b1230e8dc9cca7a4440.1715821541.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <cf3c81f6014cfd1339622b1230e8dc9cca7a4440.1715821541.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-7-ge8b8c5264d4e
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.10-rc1-7-ge8b8c5264d4e)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 5/15/24 6:13 PM, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> Many BPF selftests create new test network namespaces by using CLONE_NEWNET
-> flag to unshare the network namespace, so that the calling process is moved
-> into a new network namespace which is not shared with any previously
-> existing process. So this patch adds a new helper in network_helpers.c
-> named unshare_netns(), which create a new network namespace and set the
-> net device lo up.
-> 
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->   tools/testing/selftests/bpf/network_helpers.c | 19 +++++++++++++++++++
->   tools/testing/selftests/bpf/network_helpers.h |  1 +
->   2 files changed, 20 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index 35250e6cde7f..919bb2a0c6a6 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -670,3 +670,22 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes)
->   
->   	return err;
->   }
-> +
-> +int unshare_netns(void)
-> +{
-> +	int err;
-> +
-> +	err = unshare(CLONE_NEWNET);
-> +	if (err) {
-> +		log_err("unshare netns failed");
-> +		return err;
-> +	}
-> +
-> +	err = SYS_NOFAIL("ip link set dev lo up");
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.10-rc1-7=
+-ge8b8c5264d4e)
 
-Losing useful error output is not good. Please find a way to keep them available 
-such that it is easier to debug. The same goes for similar cases in this patch 
-set. I think the only exception could be the "ip netns del" during cleanup.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/v6.10-rc1-7-ge8b8c5264d4e/
 
-Also, bpf CI reports a crash (should be the test #18 bpf_ip_check_defrag). Not 
-sure how this set indirectly triggered it more easily:
+Tree: kselftest
+Branch: fixes
+Git Describe: v6.10-rc1-7-ge8b8c5264d4e
+Git Commit: e8b8c5264d4ebd248f60a5cef077fe615806e7a0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-https://github.com/kernel-patches/bpf/actions/runs/9290828674/job/25569002645
+Warnings Detected:
 
-pw-bot: cr
+arm64:
 
-> +	if (err) {
-> +		log_err("set dev lo up failed");
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index 883c7ea9d8d5..b087330f2861 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -82,6 +82,7 @@ struct nstoken;
->   struct nstoken *open_netns(const char *name);
->   void close_netns(struct nstoken *token);
->   int send_recv_data(int lfd, int fd, uint32_t total_bytes);
-> +int unshare_netns(void);
->   
->   static __u16 csum_fold(__u32 csum)
->   {
+arm:
 
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14cf94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14cf94
+
+---
+For more info write to <info@kernelci.org>
 
