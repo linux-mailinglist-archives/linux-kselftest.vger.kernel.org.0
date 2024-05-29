@@ -1,138 +1,150 @@
-Return-Path: <linux-kselftest+bounces-10870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 292098D40AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 00:00:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6B98D411D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 00:09:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49B7D1C213F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 22:00:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D57FC2895B5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 22:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACCF91C9ECE;
-	Wed, 29 May 2024 21:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA6EB1CB32F;
+	Wed, 29 May 2024 22:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w0+ZgNTP"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Hr1zRBtU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BD21C9EC8
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 21:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CBB1A0B06
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 22:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717019999; cv=none; b=qg5F3IKr4gqMKlEYUuwAC1wH3xtmW0lAXI5DMDaJtrUHdQDP+TfRKIjjtjO6xpimv4rXj3fQN1LqIVJk/MilPsQO/9G/rHpyblBceqI63Gym2l0a980N8MQtrJazQpLunPkKiBOnqA9a7oHhpOK9oRIcBQK6dw+30nNVVI30E2E=
+	t=1717020525; cv=none; b=hL2vw2p1Oms17D+6nFCL2JB3MFXqUI6gNlSlmINHEac39UCfRyn0+9M/ndQtRBmvpwEeAd68YI3wsuiHFJPPDm3X4YbP1HfPDs40RepxwZKmG1j7E3A9S5VTnTGVY2ngoHaOpj4F2+9UzyglLZL+hg27Mqh7j3Tcxj197ZCMfTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717019999; c=relaxed/simple;
-	bh=VygQSYtgJkxGCNbSiB1TmlrjiVcPo9FASZn5iwrGyKo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XmulC1OppKJsjE7neqWbiKGLT8K1zgFSG6gQHmuLUtbZ6rxHRVozUcNurLXyM8MeQIY1ELoPkCNg/VXJwnFcUGMoI8asCXj4t7OdS1ev7lsLsQzoqRN4s6KjyWvfZy7BQFFzJS2PX2EIoLbM0/uZwDNkwW5Z9jo0eFKlLbyOD7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w0+ZgNTP; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-70227105d66so146808b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 14:59:58 -0700 (PDT)
+	s=arc-20240116; t=1717020525; c=relaxed/simple;
+	bh=E9cC9YBfnRBR3Uz0I+4AkqOzYtSqq1o71OLZJ27uiMA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ch1SS8Q44sLIAemTu11HhzwHA+9vpKzVNYjf9O5qQZU/u75iArNYr1Dhz29ZRxaqB/+kwAvTwyOb02T6YOnq+hO2GQd6hlWS30J+lT4prvmbjymw4sMCyGAAaHYBtJz77HU1oq62ZHGrrsewWTQ/yRmCIsatWwrjSlkej8PpKDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Hr1zRBtU; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6f6911d16b4so241451b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 15:08:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717019997; x=1717624797; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VygQSYtgJkxGCNbSiB1TmlrjiVcPo9FASZn5iwrGyKo=;
-        b=w0+ZgNTPQb9aX0poHvtDZZm3p4fR7g6y3BVn38ULDgIF+EmfrNCDJoZ13Y8UVFQzSv
-         ZgxhWa+OCPlMPluvNLQOmLNOpf0ub1w6SQ9We5NrhY81fiU39R+ao5v2my1gqzr6nDp3
-         9/Qh9tLRT+1lmz1zmtwnJ8QY4gZWd8JwxPHdQBPSUpYXOrKJlCrFNSvDiBQMH5r7D1Yt
-         2rg8dDI0c2aupjqnlC0vKxC8L0D4+O6KWvhVYb1HavK3VfsdxNo5duPaaaYoWzrVvmRQ
-         AoEjFqsR/ASHBJm3nuRdUknt8abriWdhUWXfKv+DNrIuBVJLiBZutYH59fEM8t7P6zD9
-         veig==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717020522; x=1717625322; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RdCGT44mhuV5q5NuFAR9fXiN471X1L/TiMRJsZFqU8M=;
+        b=Hr1zRBtUzGh0r7/9P95krkrlLsWI53kOVbfFbglQCOvtvTUiIuufLK3/GdJ3bgl9RE
+         S3GvkhjXz6JluXHe7cg4xH6kza9MQOfrpnhe2uYqi7GRbYgf/4tA0tFgVvRSkfJxYB2Q
+         RN4d8lq+QKEi/u0OQq36BrovCbs1y5W5jSMDq6Q65iChhh8YUckWBx3KRDY3ZHdTJJNh
+         MimwDmQynpVX4U5v+bBpbcp325/7QIzUdrZYZ0D5E3aTHZVILXL6W1SLVgW9bg4YdvqY
+         icd1HFfVdPMcgR+OXkYAubH3ejLw5JiMpIMIPr+/VUBcuoeq3cysve4cq+GoUdcv9tUo
+         HXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717019997; x=1717624797;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VygQSYtgJkxGCNbSiB1TmlrjiVcPo9FASZn5iwrGyKo=;
-        b=vmnz2MWcN0BPkCJIda0KODOIrc10sLm0+r1VSANCW7FwVyTBVB0g/TpvnJk3ihlddK
-         uhUm8eZlJc8oEwHYhxQ9r3Sx5f4Rk8nFEFC4n1mSXOzIGPj4FNQFB3+FI4r7hMlDx4q7
-         6XWy4S5mVeqsIwNve0tKGGHRQyxNxO2bIlUOpA6WbUWGeGGk7o96CIeg54PaRq+7aXpN
-         CEs0yg1cHV4KOqPZKbQ4akUZjh5XGluKKHdjynS2NrEkIkkqhPPG8jA6jIyiyl2zxYHI
-         +EecooeSiqQExZcU8wXp1TVrjNbZJ4GVuLgSEYpQUEVjSSdJvJrLoq+H9MO/3835UxxL
-         baMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQLXsiCrKr+pNTNG61f7uodnheAJ02LwhD1FCYk3rv80DROYWZ6lUkOmyoZosgctL17/3ypTesxYGUM40WXVREIEclRbieLieq85WGRPCK
-X-Gm-Message-State: AOJu0Yy+0x94kAWcf1mSXjVLHY9Powlqe8pvXyE0dVC1xdEMmrkLpRSa
-	yR+pV18CBwxu+vYFUbQ1eZNuFI4JCEfezyrmROrYRGE7eS0C7bCw243QClbB7AhCUS48FxLL43Z
-	adA==
-X-Google-Smtp-Source: AGHT+IErfD3/6U7Yg0vFWmN+JznLDOE9vgR2lO1JhTGk52Ll6iOJE5uAx2O1dqENYjCcQTLMPcB8oRdC9wY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:8607:b0:702:1e25:a47c with SMTP id
- d2e1a72fcca58-70231a8676amr343b3a.1.1717019996755; Wed, 29 May 2024 14:59:56
- -0700 (PDT)
-Date: Wed, 29 May 2024 14:59:55 -0700
-In-Reply-To: <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1717020522; x=1717625322;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RdCGT44mhuV5q5NuFAR9fXiN471X1L/TiMRJsZFqU8M=;
+        b=NUS9hIKUUe3YWamBWMcVMFkUuQRctRooWzaMbY1zYRa2uXBXZzm0A13XjPLM5x60ZB
+         4/J1bFytjup0WOnxI67AIflMRDQQJwV7CZLM0GLqR43QMSDtgdwVuLnrbk4yBymcXR6t
+         epPB4R2PJwVlsEAq9/Atb36Avo+tzBs5A5GUMssIOOszzRVE4ajv4TYnLBh7ea0mpPSP
+         HWD+ZTF1iGknSkFoJsq5ZProYX1TYTbJ41TlX2Lw9SnL9yfrDCswzH2YIj7OLUIKaeFr
+         EsqYbH/sUKBzwfRVt20qSg1u0QAQv4xyVAIqD55Ewgi5dk25aNewq1hmSKhHvXtoVSUc
+         f1XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXOuAzi7c7nN/tgwwkbAAnuNJ0aVyd8XhbTM7E4V4TesdemRKPdhXLwRUM2iZGoikEzDOH22l40gokCJ7yTxnv9ohHWZuo82/ontC60tqQG
+X-Gm-Message-State: AOJu0YwFtm20De0w2NvpgC3G3kuBRMAnFb0A/n2b/QQW+zy16IpI3qFC
+	4BIzjl03BNvvPWLDHNW59HdG0ego0tj2tpWQdrDNAuBttyyjtvacDh8UlVG8Mps=
+X-Google-Smtp-Source: AGHT+IFVbGuLQ9kLYtGQbBJcQAfO3Ny7PuBQS6jGLtBxl1ZSStjATPWV48xKuwi+JBDh4QC6bwbmFQ==
+X-Received: by 2002:a05:6a20:f3a7:b0:1b0:278e:34a6 with SMTP id adf61e73a8af0-1b264636f38mr300967637.49.1717020522470;
+        Wed, 29 May 2024 15:08:42 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:32f9:8d5b:110a:1952])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fc3552ffsm8482750b3a.80.2024.05.29.15.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 15:08:42 -0700 (PDT)
+Date: Wed, 29 May 2024 15:08:39 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
+	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 02/16] riscv: add ISA extension parsing for Zimop
+Message-ID: <ZlenZ+NvXxOxvqEO@ghost>
+References: <20240517145302.971019-1-cleger@rivosinc.com>
+ <20240517145302.971019-3-cleger@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
-Message-ID: <ZlelW93_T6P-ZuSZ@google.com>
-Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
- in aging
-From: Sean Christopherson <seanjc@google.com>
-To: Yu Zhao <yuzhao@google.com>
-Cc: James Houghton <jthoughton@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Catalin Marinas <catalin.marinas@arm.com>, 
-	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, James Morse <james.morse@arm.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Ryan Roberts <ryan.roberts@arm.com>, 
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240517145302.971019-3-cleger@rivosinc.com>
 
-On Wed, May 29, 2024, Yu Zhao wrote:
-> On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton@googl=
-e.com> wrote:
-> >
-> > Secondary MMUs are currently consulted for access/age information at
-> > eviction time, but before then, we don't get accurate age information.
-> > That is, pages that are mostly accessed through a secondary MMU (like
-> > guest memory, used by KVM) will always just proceed down to the oldest
-> > generation, and then at eviction time, if KVM reports the page to be
-> > young, the page will be activated/promoted back to the youngest
-> > generation.
->=20
-> Correct, and as I explained offline, this is the only reasonable
-> behavior if we can't locklessly walk secondary MMUs.
->=20
-> Just for the record, the (crude) analogy I used was:
-> Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
-> but you are only allowed to pick up 10 of them (and put them in your
-> pocket). A smart move would be to survey the room *first and then*
-> pick up the largest ones. But if you are carrying a 500 lbs backpack,
-> you would just want to pick up whichever that's in front of you rather
-> than walk the entire room.
->=20
-> MGLRU should only scan (or lookaround) secondary MMUs if it can be
-> done lockless. Otherwise, it should just fall back to the existing
-> approach, which existed in previous versions but is removed in this
-> version.
+On Fri, May 17, 2024 at 04:52:42PM +0200, Clément Léger wrote:
+> Add parsing for Zimop ISA extension which was ratified in commit
+> 58220614a5f of the riscv-isa-manual.
+> 
+> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/hwcap.h | 1 +
+>  arch/riscv/kernel/cpufeature.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 1f2d2599c655..b1896dade74c 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -80,6 +80,7 @@
+>  #define RISCV_ISA_EXT_ZFA		71
+>  #define RISCV_ISA_EXT_ZTSO		72
+>  #define RISCV_ISA_EXT_ZACAS		73
+> +#define RISCV_ISA_EXT_ZIMOP		74
 
-IIUC, by "existing approach" you mean completely ignore secondary MMUs that=
- don't
-implement a lockless walk?
+Since my changes for removing xandespmu haven't landed here yet I think
+you should keep RISCV_ISA_EXT_XANDESPMU in the diff here and make
+RISCV_ISA_EXT_ZIMOP have a key of 75. Palmer can probably resolve the
+conflicting keys when these two series are merged.
+
+- Charlie
+
+>  
+>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
+>  
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 2993318b8ea2..41f8ae22e7a0 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -241,6 +241,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>  	__RISCV_ISA_EXT_DATA(zihintntl, RISCV_ISA_EXT_ZIHINTNTL),
+>  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>  	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+> +	__RISCV_ISA_EXT_DATA(zimop, RISCV_ISA_EXT_ZIMOP),
+>  	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
+>  	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+>  	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
+> -- 
+> 2.43.0
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
 
