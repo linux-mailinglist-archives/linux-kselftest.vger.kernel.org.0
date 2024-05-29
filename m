@@ -1,203 +1,123 @@
-Return-Path: <linux-kselftest+bounces-10827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C06558D308B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 10:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9AC98D3122
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 10:26:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E33341C226B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 08:15:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAB791C20E00
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 08:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECDA17BB02;
-	Wed, 29 May 2024 08:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE5D16D4CC;
+	Wed, 29 May 2024 08:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0TPyU/Bm"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="XiRW+Zpa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79DD17B507;
-	Wed, 29 May 2024 08:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11580168C3D;
+	Wed, 29 May 2024 08:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716970005; cv=none; b=NzHRdXgWQCFg0ecUUc/ecsMLQeyhQmjRVk7RfBe9aVsm5sNMlj2KobISRQLhOTOmoAeqNJ+MU8lUzOnsE6iUSeUN/fBd709BKi0Kw6lA+GoE9GcoyWy7/kAyA/M0o4EY02r/10vhT9wpO7zxXis6nJmel+g+GISwh8OiWtxEth4=
+	t=1716970998; cv=none; b=JuZSA/sqZ1CFpGvHG9O4zRM1vcpnzmX+C8KOO4U4CwaCxeZR5jperAAZPbFlo5km7UJcYOguRUO43nK+UkDmqb0qEUgdqZAvU7I/xXvCKSWJdvtukitFQfQiZSf94D09vzkkzVfs8uzg7ljM/ufEYx6OrFa+Tki0fBQZWXTI+iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716970005; c=relaxed/simple;
-	bh=C9NThqdx/W9npFCwEseQgicfZl61EOyPH13LNK3W6HM=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NCWnPe8xAbfLDyrgFj/40G6R39zD9Lpq7YQLuQqYdFaeT0zM2ZoHRUYny/DSpMLfZm8aMt7J+z6O7ahpfaN7pdr3/02GfCdIEVRCBpZ64a0LNAuYHy2SUXfiOcm+k9yyHTTMol1W4ObERaalYXLiiqEP93UPusOFMh7B91ht4sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0TPyU/Bm; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716970002;
-	bh=C9NThqdx/W9npFCwEseQgicfZl61EOyPH13LNK3W6HM=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=0TPyU/Bmm41hIGdVrpdVaPzXI963Y+no4v0A8ghyC3bQvE3pjAxBLp11ReGn+iJGj
-	 kHkobjweMEugNEjPF3NZ9sxAeJaf+HV/ftMvhjdSt4dSK8vN3fgK4BKF3WkP84nv4Q
-	 Uahb+JJ/974RBI0oVHnj1sc0Gnbx4U5nBlVRPmFO1reC/hnSF+ebDirAVVv+V4iZIJ
-	 6TOVPgMZK2NgCJxUzGxnXbSQcCWw6962KX8iQ3WtInBEYIve8tSOGA8wdcXd7zEe/c
-	 3bwjDfVc7MQVEqo/FYZPuUoXJ2f/qc/ilOvZu530ffd2p2iCUIfveKG2Hqb4jwtAhz
-	 1Rmw2FBaZJcGA==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=arc-20240116; t=1716970998; c=relaxed/simple;
+	bh=07Xjk5JBFCnOoz1mUgexuqTBZYBeWpziuUZ0TgxpGwg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=p5cnBcoQBDK5PA/8T8XqyHt9G6jTWL8zwQfpmppsZND3NHctddusAfhyFwY0mxFcLwq+c6SzfgEq0irvecqzY/XgEeab1G+XDNBeE+Ufg0n+zKO1aqRkDqWjND5/w4rohuzMseD7JI0NlvSvxFVXU550vGCJ/rI9GD2a8PT0+TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=XiRW+Zpa; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1716970993;
+	bh=6/CD09y2pZU+03thgvTqiTFJgMlhZGZLAYHe+sGMc/g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=XiRW+ZpaTrrP8+qBXRvs8QVm2694mJVod+js/TjyavYOAfMvdoxrvDFDCvmA7Ug+5
+	 BPGqItpjFl4YpQ/QTfGysW31o/qsPexH4o3uZ4+hDMW7fhaJul6jjWny+HE+tydOej
+	 /s55kQXxs7aKjMPJ4FpAyGh2Qu9860h6VPhE2gFnOjcNpRWJeJ1x0D67PRsXAm0qI6
+	 a8HOHEKRZav5u3lCLAaLL8WuO6VJbFWAidqdgISz5xihkORuVmnGLh3sowLCH3X77i
+	 CZxQy/OUHU2+o6FkRFPReiWlqNjP1Yzl/sSvRLLsnc6OV7YY5hZedBJYxKKgOMo+26
+	 mQud2qKn+6DXw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0A9D23782162;
-	Wed, 29 May 2024 08:06:34 +0000 (UTC)
-Message-ID: <0816b38b-41a1-431a-90a4-1ac33401a671@collabora.com>
-Date: Wed, 29 May 2024 13:05:57 +0500
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Vq2Sx5Vgkz4x20;
+	Wed, 29 May 2024 18:23:13 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] selftests/openat2: Fix build warnings on ppc64
+In-Reply-To: <94964224-1796-4610-a42d-3aacb4d47341@collabora.com>
+References: <20240521030325.58095-1-mpe@ellerman.id.au>
+ <94964224-1796-4610-a42d-3aacb4d47341@collabora.com>
+Date: Wed, 29 May 2024 18:23:13 +1000
+Message-ID: <87bk4p3u32.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/vDSO: fix clang build errors and warnings
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-References: <20240527211622.290635-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240527211622.290635-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 5/28/24 2:16 AM, John Hubbard wrote:
-> When building with clang, via:
-> 
->     make LLVM=1 -C tools/testing/selftests
-> 
-> ...there are several warnings, and an error. This fixes all of those and
-> allows these tests to run and pass.
-> 
-> 1. Fix linker error (undefined reference to memcpy) by providing a local
->    version of memcpy.
-> 
-> 2. clang complains about using this form:
-> 
->     if (g = h & 0xf0000000)
-> 
-> ...so factor out the assignment into a separate step.
-> 
-> 3. The code is passing a signed const char* to elf_hash(), which expects
->    a const unsigned char *. There are several callers, so fix this at
->    the source by allowing the function to accept a signed argument, and
->    then converting to unsigned operations, once inside the function.
-> 
-> 4. clang doesn't have __attribute__((externally_visible)) and generates
->    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
->    to require that attribute in order to build, run and pass tests here,
->    so remove it.
-Just checked with GCC 5.1, it builds fine without any errors.
+Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
+> I was looking at if we can add this flag for ppc64 for all selftests
+> somewhere. But there isn't any suitable place other than in KHDR_INCLUDES.
+> But there is a series already trying to add _GNU_SOURCE to it.
 
-> 
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-LGTM
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+IMHO adding other flags to KHDR_INCLUDES is not the right solution, it
+conflates unrelated things. Some tests may want the kernel headers but
+not _GNU_SOURCE, or vice versa.
 
-> ---
-> 
-> Changes since the first version:
-> 
-> 1) Rebased onto Linux 6.10-rc1
-> 
-> thanks,
-> John Hubbard
-> 
->  tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
->  .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
->  2 files changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-> index 413f75620a35..4ae417372e9e 100644
-> --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> @@ -55,14 +55,20 @@ static struct vdso_info
->  	ELF(Verdef) *verdef;
->  } vdso_info;
->  
-> -/* Straight from the ELF specification. */
-> -static unsigned long elf_hash(const unsigned char *name)
-> +/*
-> + * Straight from the ELF specification...and then tweaked slightly, in order to
-> + * avoid a few clang warnings.
-> + */
-> +static unsigned long elf_hash(const char *name)
->  {
->  	unsigned long h = 0, g;
-> -	while (*name)
-> +	const unsigned char *uch_name = (const unsigned char *)name;
-> +
-> +	while (*uch_name)
->  	{
-> -		h = (h << 4) + *name++;
-> -		if (g = h & 0xf0000000)
-> +		h = (h << 4) + *uch_name++;
-> +		g = h & 0xf0000000;
-> +		if (g)
->  			h ^= g >> 24;
->  		h &= ~g;
->  	}
-> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> index 8a44ff973ee1..27f6fdf11969 100644
-> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> @@ -18,7 +18,7 @@
->  
->  #include "parse_vdso.h"
->  
-> -/* We need a libc functions... */
-> +/* We need some libc functions... */
->  int strcmp(const char *a, const char *b)
->  {
->  	/* This implementation is buggy: it never returns -1. */
-> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
->  	return 0;
->  }
->  
-> +/*
-> + * The clang build needs this, although gcc does not.
-> + * Stolen from lib/string.c.
-> + */
-> +void *memcpy(void *dest, const void *src, size_t count)
-> +{
-> +	char *tmp = dest;
-> +	const char *s = src;
-> +
-> +	while (count--)
-> +		*tmp++ = *s++;
-> +	return dest;
-> +}
-> +
->  /* ...and two syscalls.  This is x86-specific. */
->  static inline long x86_syscall3(long nr, long a0, long a1, long a2)
->  {
-> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
->  	}
->  }
->  
-> -__attribute__((externally_visible)) void c_main(void **stack)
-> +void c_main(void **stack)
->  {
->  	/* Parse the stack */
->  	long argc = (long)*stack;
-> 
-> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+Adding a separate define for "standard kselftest flags" would be
+preferable, and then something like __SANE_USERSPACE_TYPES__ would make
+sense being added to it.
 
--- 
-BR,
-Muhammad Usama Anjum
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+
+Thanks.
+
+cheers
+
+> On 5/20/24 8:03 PM, Michael Ellerman wrote:
+>> Fix warnings like:
+>>=20
+>>   openat2_test.c: In function =E2=80=98test_openat2_flags=E2=80=99:
+>>   openat2_test.c:303:73: warning: format =E2=80=98%llX=E2=80=99 expects =
+argument of type
+>>   =E2=80=98long long unsigned int=E2=80=99, but argument 5 has type =E2=
+=80=98__u64=E2=80=99 {aka =E2=80=98long
+>>   unsigned int=E2=80=99} [-Wformat=3D]
+>>=20
+>> By switching to unsigned long long for u64 for ppc64 builds.
+>>=20
+>> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>> ---
+>>  tools/testing/selftests/openat2/openat2_test.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>=20
+>> diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/test=
+ing/selftests/openat2/openat2_test.c
+>> index 9024754530b2..5790ab446527 100644
+>> --- a/tools/testing/selftests/openat2/openat2_test.c
+>> +++ b/tools/testing/selftests/openat2/openat2_test.c
+>> @@ -5,6 +5,7 @@
+>>   */
+>>=20=20
+>>  #define _GNU_SOURCE
+>> +#define __SANE_USERSPACE_TYPES__ // Use ll64
+>>  #include <fcntl.h>
+>>  #include <sched.h>
+>>  #include <sys/stat.h>
+>
+> --=20
+> BR,
+> Muhammad Usama Anjum
 
