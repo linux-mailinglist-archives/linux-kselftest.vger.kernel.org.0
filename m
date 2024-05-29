@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-10856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055A68D3DE8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 20:05:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BF1E8D3DEF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 20:06:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF112286AD5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 18:05:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2E701F22AA1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2024 18:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2141C2326;
-	Wed, 29 May 2024 18:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652161C68AC;
+	Wed, 29 May 2024 18:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s7MBpJ1m"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nr+vZDlF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f73.google.com (mail-ua1-f73.google.com [209.85.222.73])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371681C0DEA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176B91A38FB
 	for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 18:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.73
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717005923; cv=none; b=XT5PTwVKHbBa5rwb45Y+4wJkt/dp7WutHVQebDeBOeg/BC8Ex7FEwYQxwK5wVlQymGYqtth7aSbBwUOQajylHQABYu0emhOHqO1BxskDjDjIx2Wofibbaf4sY3rMWq6M2IJnyU31NOzk3k/lkcdOTjobAjQqvjrBb/X8YkN2l0I=
+	t=1717005926; cv=none; b=cM9hweyxQqpGb5jUUWrgRPxpvPQP/d61DBZRBm9CpgtFbfcr25+9HIiC6PvbMGGsQ4V+7Y0D11V8fZZFk/XX0H7w8e8w+dfD42IoJimYHzvReqpvJSw0x5KAhLSn5TXTnD14kcy1dPz9rn3QWokdpUaasoFFqqK7H4800sBRPfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717005923; c=relaxed/simple;
-	bh=SWsXA6zISqxg7q/RviiZ4NedczRmTyw4MPVWOHpV4Is=;
+	s=arc-20240116; t=1717005926; c=relaxed/simple;
+	bh=OQY9Vqs+HI1vENbDn3dmIDSRIhipNfSPU1lQ5OD7EjA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dbmnG9X9I+rcaQadO15cUve8sObzFozr9OAww7214fhz38amPVUGTUAvDkoXC6KNssWyhrhB2GjiTM2pPNn9GNKt8V2UEXn6Il3v9gwxcpwI0T8AN2bubRcRHdvlZjfbIWLJVmNrslcEaUTNWqg1UuC8dvzvSUR7g+Zm5b77x4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s7MBpJ1m; arc=none smtp.client-ip=209.85.222.73
+	 To:Cc:Content-Type; b=bBqyGHVgre9ZSPnz+03IZq2SIqSU41lF4P7RT0LU3a+z/GyOOmP4WR+sO3AeMCSLMhYDIkTk7lfV63Pq2ieNpMv1MYESln0bNwL8Ga3xAQ+O2ptDdupx1BxJ+DDnbQqLkVkcQ2kvxwSWG93Uq6RzKCQAEPDFGsQsq5DkgiuMPsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nr+vZDlF; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
-Received: by mail-ua1-f73.google.com with SMTP id a1e0cc1a2514c-804f9eea128so30873241.0
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62a088faef7so3328157b3.0
         for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 11:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717005920; x=1717610720; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717005921; x=1717610721; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IVaEi5zQfJ05wKpIy/u5NLNm+GzTdT+Fqa7TW9318s=;
-        b=s7MBpJ1mHbnkciR9D20cJ6JpiWCtHVtbp1Xs4X2ToDNocrXxNDD99pTaf8IBdMQ+Ch
-         K5+dqPBtAGsL+eW4M3bIVGJ8gRZNPafS9gFSaHCdbz7XKeR2zeRUM8TG+SyeEJONnQ+5
-         5RSSLmFj3mVvfz/CWNpYKjFi1qKShk+L8qU1wUzvGpe4G0O8Jfdp1yQpTJ96Jsdak4BV
-         6ztaNRvVQKyEC58xBXmTIh+H4qY4yN0StoFCeZTSN3nA4w0itvMCxdo9NIxSsIxNp2/I
-         zRZG848LjREmCP0kKyqUMtB3EhynDvJJ/i0zCb8u7tbSBx4oaN2x0bbZ780p+p/4diax
-         QpEA==
+        bh=CwoKXote5Ew7Jsdz/aAIUFFvPSk6A909NzRQYNohjtE=;
+        b=nr+vZDlFmFPPDf1BdF4SN97EzlKcU6OGEc4xYlLk50PgwNpqqTTkWRsW0xEzUTGkUi
+         2gAhWlBEBw6upS9M6/RN06tHmg4UapKGbwLiiluYqH4hZp4OEuKUAK76EX9ckE3rffVi
+         69xXeCTTcH6rT1F170dg7svsF10cKVeDLInlwhNFfHnDtWXklVfgSmMt6qAmdofKta4y
+         8wBPPXo238gApUq6tRRn9n/NtUHTqCYIQHvuppg5fHEDU0fe60AvfeYRljjt4aQdvEQq
+         l4nt82Oz5spVSo91F0XLS8da8iBGIGGZqflW/V6Rgr7vVKUjjc3sRod9OodOsjAfQXe2
+         kq4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717005920; x=1717610720;
+        d=1e100.net; s=20230601; t=1717005921; x=1717610721;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IVaEi5zQfJ05wKpIy/u5NLNm+GzTdT+Fqa7TW9318s=;
-        b=D6YVsEmCSsEaw3bbPIwY7A191kPU+8x2XZT/k8aIAlcc81OtLkqH9//zXRkW2GWjKu
-         LlovVGga0xQHzFaMk/uvRwNuKHiyoG2FF1y8jwEeSUbCRLV6JzMsUHdTu+jYJ9ANH/wP
-         bGs4YsZSvdsrBUiZg9dMWxYf3+VE55hWY9KI3ZKQmf/Mdkv8f0LFcptpy0wzgHf3KULd
-         RVtLdz/6c28/jEx7PR5Gx6Fm25QXkxrSVXRTx+dLn8LwZByOX3t6YGlWvCM5ReUK9hE1
-         WbOzGvH+BFjgxdfaWRpafKKj1Fn/ZmdrdLvKxRv4A+xl0M/UvbLM5H7bDuC/eGi+BNJ4
-         Jffw==
-X-Forwarded-Encrypted: i=1; AJvYcCVu1KjrstgqzpWVIQxlEEgDyY5HYY2w5kFkoprpAVTOB0SbK3SV61tNsZOElTHSa3BT0v4zdD3MF7y8qGcjPPqFQzJKf3gq2q0pCx2ui5/2
-X-Gm-Message-State: AOJu0YwKenDXZYmLrJzBruzd5WuqG7BF/fc6u6KONl6lntqT/aP4bCCF
-	bQZDn/wx6hAdcba6YCBIh9Nbi3q6xTbja/WrUM5tWVOG131dFbjiIF6xmhirJdRhA1/e+vGsiv3
-	sM5fpIAMYpyQ6a1ZDhA==
-X-Google-Smtp-Source: AGHT+IHvckbiyzzys4cYuqrWT42OTG48lfJUuChD2cJY5KHOUyTU+EmIW59KYswmWzGhXx+WNvqLQXCKjQe35xSx
+        bh=CwoKXote5Ew7Jsdz/aAIUFFvPSk6A909NzRQYNohjtE=;
+        b=e19Grz1kNPyPYfr6dDZjKHXdrVW5dSoFp/Jd0owqGZctafqHNPg+eqv/Pl7L31e3Na
+         mCxwaS+tesXqFcsmUxQ7d8dp04bYsHOLuwOt9QTHefamZ57FXB+nEOJhkcRjnrlZTGmU
+         Ny7ZiR7pk5NxTIxGoN+YbBafzZ7oxk6NgBteSD+95un+HGwRIjNyyUWklrkCDTI2/gCs
+         kQ2mTSVuCFISlsBzV7a5e+Ia10Liye6syOf+rKSdG4R3sF8dCxfodS7BKPKCHeJ29qtb
+         jSkmqGkuxWROXmWOFWPXpxiaOQ2i/wDlScbHsjN9NeIBxlOkXAY1+IYIOJFUkPf4sgp6
+         xRZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVp+0L8b1PTDrc1UTQ8y9CJbXVzTbtqkldNGWJtgQhX8egeuc0mS07FyO00cXmYe4hwQVtes6OhWRcMZun1taENtuDyRzLFCaFhW6umteDh
+X-Gm-Message-State: AOJu0YwgX8qMuovV2Bq+O7n9jSV8aNacqGbvfxArt/JRHxMxJtOYJ1nG
+	tDz0GYZ6NNHR33CuZ+1RWMrV/Gn6p7QylbZwyE8AFvbB+/t3z4jQipQ7rDh7K63l6B+NtieHtY8
+	U9kIUE9JH+/M8dOvAJA==
+X-Google-Smtp-Source: AGHT+IF9TgFBMPkNgtG0hPNwMJ317N5S8DzPgfu78mJAr8hsxOfUSU1lJMom0dwIl649roanAV0XRBVJc/tZTtZp
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6130:2289:b0:80a:5330:87c5 with
- SMTP id a1e0cc1a2514c-80a5330931fmr5289241.2.1717005920232; Wed, 29 May 2024
- 11:05:20 -0700 (PDT)
-Date: Wed, 29 May 2024 18:05:06 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6902:1005:b0:df7:9df5:4bbc with
+ SMTP id 3f1490d57ef6-dfa462d091bmr641866276.0.1717005921060; Wed, 29 May 2024
+ 11:05:21 -0700 (PDT)
+Date: Wed, 29 May 2024 18:05:07 +0000
 In-Reply-To: <20240529180510.2295118-1-jthoughton@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240529180510.2295118-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-Message-ID: <20240529180510.2295118-4-jthoughton@google.com>
-Subject: [PATCH v4 3/7] KVM: Add lockless memslot walk to KVM
+Message-ID: <20240529180510.2295118-5-jthoughton@google.com>
+Subject: [PATCH v4 4/7] KVM: Move MMU lock acquisition for test/clear_young to architecture
 From: James Houghton <jthoughton@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>
 Cc: Albert Ou <aou@eecs.berkeley.edu>, Ankit Agrawal <ankita@nvidia.com>, 
@@ -99,129 +99,305 @@ Cc: Albert Ou <aou@eecs.berkeley.edu>, Ankit Agrawal <ankita@nvidia.com>,
 	loongarch@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Provide flexibility to the architecture to synchronize as optimally as
-they can instead of always taking the MMU lock for writing.
+For implementation mmu_notifier_{test,clear}_young, the KVM memslot
+walker used to take the MMU lock for us. Now make the architectures
+take it themselves.
 
-The immediate application is to allow architectures to implement the
-test/clear_young MMU notifiers more cheaply.
+Don't relax locking for any architecture except powerpc e500; its
+implementations of kvm_age_gfn and kvm_test_age_gfn simply return false,
+so there is no need to grab the KVM MMU lock.
 
-Suggested-by: Yu Zhao <yuzhao@google.com>
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/linux/kvm_host.h |  1 +
- virt/kvm/kvm_main.c      | 38 +++++++++++++++++++++++++-------------
- 2 files changed, 26 insertions(+), 13 deletions(-)
+ arch/arm64/kvm/mmu.c      | 30 ++++++++++++++++++++++--------
+ arch/loongarch/kvm/mmu.c  | 20 +++++++++++++++-----
+ arch/mips/kvm/mmu.c       | 21 ++++++++++++++++-----
+ arch/powerpc/kvm/book3s.c | 14 ++++++++++++--
+ arch/riscv/kvm/mmu.c      | 26 ++++++++++++++++++++------
+ arch/x86/kvm/mmu/mmu.c    |  8 ++++++++
+ virt/kvm/kvm_main.c       |  4 ++--
+ 7 files changed, 95 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 692c01e41a18..4d7c3e8632e6 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -266,6 +266,7 @@ struct kvm_gfn_range {
- 	gfn_t end;
- 	union kvm_mmu_notifier_arg arg;
- 	bool may_block;
-+	bool lockless;
- };
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
- bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 14841acb8b95..d197b6725cb3 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -558,6 +558,7 @@ struct kvm_mmu_notifier_range {
- 	on_lock_fn_t on_lock;
- 	bool flush_on_ret;
- 	bool may_block;
-+	bool lockless;
- };
- 
- /*
-@@ -612,6 +613,10 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
- 			 IS_KVM_NULL_FN(range->handler)))
- 		return r;
- 
-+	/* on_lock will never be called for lockless walks */
-+	if (WARN_ON_ONCE(range->lockless && !IS_KVM_NULL_FN(range->on_lock)))
-+		return r;
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 8bcab0cc3fe9..8337009dde77 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -1773,25 +1773,39 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
++	bool young = false;
 +
- 	idx = srcu_read_lock(&kvm->srcu);
++	write_lock(&kvm->mmu_lock);
  
- 	for (i = 0; i < kvm_arch_nr_memslot_as_ids(kvm); i++) {
-@@ -643,15 +648,18 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
- 			gfn_range.start = hva_to_gfn_memslot(hva_start, slot);
- 			gfn_range.end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, slot);
- 			gfn_range.slot = slot;
-+			gfn_range.lockless = range->lockless;
+ 	if (!kvm->arch.mmu.pgt)
+-		return false;
++		goto out;
  
- 			if (!r.found_memslot) {
- 				r.found_memslot = true;
--				KVM_MMU_LOCK(kvm);
--				if (!IS_KVM_NULL_FN(range->on_lock))
--					range->on_lock(kvm);
--
--				if (IS_KVM_NULL_FN(range->handler))
--					break;
-+				if (!range->lockless) {
-+					KVM_MMU_LOCK(kvm);
-+					if (!IS_KVM_NULL_FN(range->on_lock))
-+						range->on_lock(kvm);
+-	return kvm_pgtable_stage2_test_clear_young(kvm->arch.mmu.pgt,
+-						   range->start << PAGE_SHIFT,
+-						   size, true);
++	young = kvm_pgtable_stage2_test_clear_young(kvm->arch.mmu.pgt,
++						    range->start << PAGE_SHIFT,
++						    size, true);
 +
-+					if (IS_KVM_NULL_FN(range->handler))
-+						break;
-+				}
- 			}
- 			r.ret |= range->handler(kvm, &gfn_range);
- 		}
-@@ -660,7 +668,7 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
- 	if (range->flush_on_ret && r.ret)
- 		kvm_flush_remote_tlbs(kvm);
- 
--	if (r.found_memslot)
-+	if (r.found_memslot && !range->lockless)
- 		KVM_MMU_UNLOCK(kvm);
- 
- 	srcu_read_unlock(&kvm->srcu, idx);
-@@ -686,10 +694,12 @@ static __always_inline int kvm_handle_hva_range(struct mmu_notifier *mn,
- 	return __kvm_handle_hva_range(kvm, &range).ret;
++out:
++	write_unlock(&kvm->mmu_lock);
++	return young;
  }
  
--static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn,
--							 unsigned long start,
--							 unsigned long end,
--							 gfn_handler_t handler)
-+static __always_inline int kvm_handle_hva_range_no_flush(
-+		struct mmu_notifier *mn,
-+		unsigned long start,
-+		unsigned long end,
-+		gfn_handler_t handler,
-+		bool lockless)
+ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
  {
- 	struct kvm *kvm = mmu_notifier_to_kvm(mn);
- 	const struct kvm_mmu_notifier_range range = {
-@@ -699,6 +709,7 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
- 		.on_lock	= (void *)kvm_null_fn,
- 		.flush_on_ret	= false,
- 		.may_block	= false,
-+		.lockless	= lockless,
- 	};
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
++	bool young = false;
++
++	write_lock(&kvm->mmu_lock);
  
- 	return __kvm_handle_hva_range(kvm, &range).ret;
-@@ -889,7 +900,8 @@ static int kvm_mmu_notifier_clear_young(struct mmu_notifier *mn,
- 	 * cadence. If we find this inaccurate, we might come up with a
+ 	if (!kvm->arch.mmu.pgt)
+-		return false;
++		goto out;
+ 
+-	return kvm_pgtable_stage2_test_clear_young(kvm->arch.mmu.pgt,
+-						   range->start << PAGE_SHIFT,
+-						   size, false);
++	young = kvm_pgtable_stage2_test_clear_young(kvm->arch.mmu.pgt,
++						    range->start << PAGE_SHIFT,
++						    size, false);
++
++out:
++	write_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ phys_addr_t kvm_mmu_get_httbr(void)
+diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
+index 98883aa23ab8..5eb262bcf6b0 100644
+--- a/arch/loongarch/kvm/mmu.c
++++ b/arch/loongarch/kvm/mmu.c
+@@ -497,24 +497,34 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	kvm_ptw_ctx ctx;
++	bool young;
++
++	spin_lock(&kvm->mmu_lock);
+ 
+ 	ctx.flag = 0;
+ 	ctx.ops = kvm_mkold_pte;
+ 	kvm_ptw_prepare(kvm, &ctx);
+ 
+-	return kvm_ptw_top(kvm->arch.pgd, range->start << PAGE_SHIFT,
++	young = kvm_ptw_top(kvm->arch.pgd, range->start << PAGE_SHIFT,
+ 				range->end << PAGE_SHIFT, &ctx);
++
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	gpa_t gpa = range->start << PAGE_SHIFT;
+-	kvm_pte_t *ptep = kvm_populate_gpa(kvm, NULL, gpa, 0);
++	kvm_pte_t *ptep;
++	bool young;
+ 
+-	if (ptep && kvm_pte_present(NULL, ptep) && kvm_pte_young(*ptep))
+-		return true;
++	spin_lock(&kvm->mmu_lock);
++	ptep = kvm_populate_gpa(kvm, NULL, gpa, 0);
+ 
+-	return false;
++	young = ptep && kvm_pte_present(NULL, ptep) && kvm_pte_young(*ptep);
++
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ /*
+diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+index c17157e700c0..db3b7cf22db1 100644
+--- a/arch/mips/kvm/mmu.c
++++ b/arch/mips/kvm/mmu.c
+@@ -446,17 +446,28 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ 
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	return kvm_mips_mkold_gpa_pt(kvm, range->start, range->end);
++	bool young;
++
++	spin_lock(&kvm->mmu_lock);
++	young = kvm_mips_mkold_gpa_pt(kvm, range->start, range->end);
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	gpa_t gpa = range->start << PAGE_SHIFT;
+-	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
++	pte_t *gpa_pte;
++	bool young = false;
+ 
+-	if (!gpa_pte)
+-		return false;
+-	return pte_young(*gpa_pte);
++	spin_lock(&kvm->mmu_lock);
++	gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
++
++	if (gpa_pte)
++		young = pte_young(*gpa_pte);
++
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ /**
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index ff6c38373957..f503ab9ac3a5 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -887,12 +887,22 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ 
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	return kvm->arch.kvm_ops->age_gfn(kvm, range);
++	bool young;
++
++	spin_lock(&kvm->mmu_lock);
++	young = kvm->arch.kvm_ops->age_gfn(kvm, range);
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+-	return kvm->arch.kvm_ops->test_age_gfn(kvm, range);
++	bool young;
++
++	spin_lock(&kvm->mmu_lock);
++	young = kvm->arch.kvm_ops->test_age_gfn(kvm, range);
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ int kvmppc_core_init_vm(struct kvm *kvm)
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index b63650f9b966..c78abe8041fb 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -555,17 +555,24 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	pte_t *ptep;
+ 	u32 ptep_level = 0;
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
++	bool young = false;
++
++	spin_lock(&kvm->mmu_lock);
+ 
+ 	if (!kvm->arch.pgd)
+-		return false;
++		goto out;
+ 
+ 	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+ 
+ 	if (!gstage_get_leaf_entry(kvm, range->start << PAGE_SHIFT,
+ 				   &ptep, &ptep_level))
+-		return false;
++		goto out;
++
++	young = ptep_test_and_clear_young(NULL, 0, ptep);
+ 
+-	return ptep_test_and_clear_young(NULL, 0, ptep);
++out:
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+@@ -573,17 +580,24 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	pte_t *ptep;
+ 	u32 ptep_level = 0;
+ 	u64 size = (range->end - range->start) << PAGE_SHIFT;
++	bool young = false;
++
++	spin_lock(&kvm->mmu_lock);
+ 
+ 	if (!kvm->arch.pgd)
+-		return false;
++		goto out;
+ 
+ 	WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+ 
+ 	if (!gstage_get_leaf_entry(kvm, range->start << PAGE_SHIFT,
+ 				   &ptep, &ptep_level))
+-		return false;
++		goto out;
++
++	young = pte_young(ptep_get(ptep));
+ 
+-	return pte_young(ptep_get(ptep));
++out:
++	spin_unlock(&kvm->mmu_lock);
++	return young;
+ }
+ 
+ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 662f62dfb2aa..6a2a557c2c31 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1630,12 +1630,16 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	bool young = false;
+ 
++	write_lock(&kvm->mmu_lock);
++
+ 	if (kvm_memslots_have_rmaps(kvm))
+ 		young = kvm_handle_gfn_range(kvm, range, kvm_age_rmap);
+ 
+ 	if (tdp_mmu_enabled)
+ 		young |= kvm_tdp_mmu_age_gfn_range(kvm, range);
+ 
++	write_unlock(&kvm->mmu_lock);
++
+ 	return young;
+ }
+ 
+@@ -1643,12 +1647,16 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	bool young = false;
+ 
++	write_lock(&kvm->mmu_lock);
++
+ 	if (kvm_memslots_have_rmaps(kvm))
+ 		young = kvm_handle_gfn_range(kvm, range, kvm_test_age_rmap);
+ 
+ 	if (tdp_mmu_enabled)
+ 		young |= kvm_tdp_mmu_test_age_gfn(kvm, range);
+ 
++	write_unlock(&kvm->mmu_lock);
++
+ 	return young;
+ }
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index d197b6725cb3..8d2d3acf18d8 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -901,7 +901,7 @@ static int kvm_mmu_notifier_clear_young(struct mmu_notifier *mn,
  	 * more sophisticated heuristic later.
  	 */
--	return kvm_handle_hva_range_no_flush(mn, start, end, kvm_age_gfn);
-+	return kvm_handle_hva_range_no_flush(mn, start, end,
-+					     kvm_age_gfn, false);
+ 	return kvm_handle_hva_range_no_flush(mn, start, end,
+-					     kvm_age_gfn, false);
++					     kvm_age_gfn, true);
  }
  
  static int kvm_mmu_notifier_test_young(struct mmu_notifier *mn,
-@@ -899,7 +911,7 @@ static int kvm_mmu_notifier_test_young(struct mmu_notifier *mn,
+@@ -911,7 +911,7 @@ static int kvm_mmu_notifier_test_young(struct mmu_notifier *mn,
  	trace_kvm_test_age_hva(address);
  
  	return kvm_handle_hva_range_no_flush(mn, address, address + 1,
--					     kvm_test_age_gfn);
-+					     kvm_test_age_gfn, false);
+-					     kvm_test_age_gfn, false);
++					     kvm_test_age_gfn, true);
  }
  
  static void kvm_mmu_notifier_release(struct mmu_notifier *mn,
