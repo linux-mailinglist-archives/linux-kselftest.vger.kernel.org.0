@@ -1,188 +1,232 @@
-Return-Path: <linux-kselftest+bounces-10887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5033F8D4291
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 02:53:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 657808D42B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 03:08:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4DDC1F213A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 00:53:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D6562854A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 01:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50950C14F;
-	Thu, 30 May 2024 00:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDB112E71;
+	Thu, 30 May 2024 01:08:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="k9RQ3NQh"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0CxcI6FD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E184FFC01
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 00:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634F5F510
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 01:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717030410; cv=none; b=FBjaCwaDUzTD/8IRlzaQza9N8QKGjz0uqYafJuzQKVfZUiIBnzWVoY/9BmwrzZ7ikfdJCs6rt7MfyxnwighGrza5Mm+asnQjx/ChOsKzjE4L5l32fXQ2oiCYnefK0GKpduNX6YGECFs42BGfWHOiCR1vqcmZM9BcQSRYnsPoBEY=
+	t=1717031327; cv=none; b=ERkRZJBWYcg8dVKKUGfWzPQuhKEG9wo/Yg1U9JAaxpPkdgwA8+GTWoc1jjiTR/zAIW7Wm9KiDq+zzpRQ4ISKzSkLzOCXZRnV1ZrSeHlwtOVn08MLSU6Iu0SuNOWgHyek/94Vf/3/ZdBfQSrt0rRrJbvvIptnUSoqEmvaZ8AU7a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717030410; c=relaxed/simple;
-	bh=LTIDGMxgdzUFS01lDnzGmZbOoWjMmjR3a/SOSoub8Pk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=J8XkN3+qXJxwHf8cmS+AEa+yWO6aJTHVaOetUVKyUASz5la05A+vhC8w2sJfqBUpSsXswTVqQiGoZD6yCsy8Q0IAWwNm0pJacxKLKIlFvSApssqvlrlUeTdVprWh7c+KosqShGObKxbqVSyV+4lO/Hs1phmuQ7B73RwGOuzrLRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=k9RQ3NQh; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2bde0e3cd6aso260782a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 17:53:28 -0700 (PDT)
+	s=arc-20240116; t=1717031327; c=relaxed/simple;
+	bh=HUAN0/h1uUnwVHvw5+gjjvN2wmVD3N2hYhH/W+fSmng=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tpjUns5GN0k027J71G/CByflM/nxQsukblVZ+9ykzqnj5fh3mXtfpKgw9ECUGnTltx1oqsFwRzTRXuAsFK6YkqODpoZLfhvsI7R9fivG6PTG9YA2AKz23DK84+cCBrDs2kIxjfCMIY0bps6GzgqqhIcxujNVMUPZHbVycziE4Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0CxcI6FD; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-43f87dd6866so167741cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2024 18:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717030408; x=1717635208; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gt5+W1XxErFXYWQNmkY2dOGx9Lo11Trv/tzxOvAOUqY=;
-        b=k9RQ3NQhEcY9TVOqaUCP2SM9US9TsiuPF0q1EmwUVs0CBHLhmNobvQirQQyPYKNMTT
-         DDrZT3YPwEiT9Og9/3ftygecH2pZPO5vZylWHBPTjkG3nqXyVd1whlWy/cH94b0STpnl
-         JrUJBQMCxXosrzoXAAPC1IHPYAnMG60s6sYrk4SeEFt6dYu4AXNkPb4M+CTGSL5yLEwq
-         Po1/2yQpkGZ4F8wHAc7Uz1/T3ZgzU4mlVDvwcXJb3QKEJ48wJuC+1E7l3pWEKppmjQKr
-         1Qv+HygrocFADpEmjgLaoXiXCRJ/ggMgjpsUDd0R6y3PIniMS7oWV076n+MOwxTXY1rZ
-         y2jw==
+        d=google.com; s=20230601; t=1717031324; x=1717636124; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RNCYiTPJ+jmwqf05JMT+AdSr7J72TbIz2CKFhve3Jy0=;
+        b=0CxcI6FDl7jFDQxcpUYxZt5vBPgkc6u9I8kDHvOF1t4nxhy5YdkqiDc92+E1QFjBKt
+         YCnld08mSd/EPuEkf9cN83p9ZGJJdSW1vvAqiO/uDlNSvEm0FQt2Jy2+4B9UXiqUcGEJ
+         OMmxgGvT/L6gqZ+1JZL5PvL6gN2g0y/Kmaeikr1QToKJV8EDaLiGXPfNpYax2gnxj1yJ
+         srEhKv09Q2KyuZNzA3YxHQ/f5WAHQYjlh24DdofT0tWdgnqQb0JPldGS8QQrXG7IqGQJ
+         wUN35PyD3tV/2alPCcwAPx4CXGaiPkWVQyS5BbJM15JNAZk9NnU+TDEmQCLy9iKPRlmS
+         u8dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717030408; x=1717635208;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gt5+W1XxErFXYWQNmkY2dOGx9Lo11Trv/tzxOvAOUqY=;
-        b=MRau/nCgPF+VzgYiA09wZcELDh5iQUGJHBJ495jWB95X7QrBwKIbjiZa+P68n25H6P
-         P4G3fFRCNJzEx1TkyEuAgYxtiowHd+ugpFsU9gYwgh2jT1GXmwWLg0x8ayid77jri0m4
-         TReo3/gzOLldn1UPvcfhUKQS/KTMTisxigEgmiYLp57WjdmqcE1zcv80gC8jzrduamm6
-         EYohrxwRDSsKYA0JcaLQJN5euNQPOr9V24c/vmLDbJuljs7vwhBXFuBFPvY8IIpvCWFH
-         Xng1QHWqfVN5iQKggoBuYeXi/tVIRnyUHKPvpwVbJtIiC0PEvUjJlN/f4xcXlMFpyMHS
-         Kc/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWOrJ0xAvMAyChK1qy02NrANn9Hq1uFxDTMPTXCsa6oRWkXw94wtM+fyop596/8KuafwMJZuu9HgQcCqEvviVarkCIck9ZTlM/EcJb5A+br
-X-Gm-Message-State: AOJu0Yz/yESRPe+MX0AQAps1c45LjU8lkav0+9m+zBkUqJdnco5GGJ+E
-	EzAIGXNAf9AbwYVPI1BAl8hBBg9QJvuRgFJD8L3W07sxlHd+iwerohKWA24Rmff2572yi+uokag
-	b
-X-Google-Smtp-Source: AGHT+IFRA5RbZOCcgnj/wTqdJP1pbtggRDS4dt2eTjhP5DQ2x3tXKNCp0hH4Ywb8IdP71RY6iDAjjQ==
-X-Received: by 2002:a17:90a:db44:b0:2bd:faef:e85f with SMTP id 98e67ed59e1d1-2c1abc3c4damr687789a91.24.1717030408032;
-        Wed, 29 May 2024 17:53:28 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a7778068sm463058a91.19.2024.05.29.17.53.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 17:53:27 -0700 (PDT)
-Message-ID: <6657ce07.170a0220.174a5.2fb3@mx.google.com>
-Date: Wed, 29 May 2024 17:53:27 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1717031324; x=1717636124;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RNCYiTPJ+jmwqf05JMT+AdSr7J72TbIz2CKFhve3Jy0=;
+        b=eMBuWgGHoOhDuXwkZvCO/l/EO39BCjv2cU4sIgEV2tv//84Ay+uA645S4P7dKge7hA
+         /NrS2erT1b/KkVsvegtho178V92Cdiu5LKu51nHuOHOJMBOtcma+G4xH9Qk9607riLLg
+         ihnhLSinYLhveSK1RQjzyO4fELCQjIzTAkviAmhaPGQ4AaizF80lhOYYfbkLLYr1Genj
+         tviSZuRDaoJXyyrqIrrsW06eGeq5FrdJecFpjDLus0u+gAkHIoNJ2/zR1AGOsE40Zk07
+         m40g0FnMcZy+o4wSppLqNX3SqqRGpVJAGjzi8GTlqGmpl4Lm3vV/Cbbg04rwixdl1kIO
+         /lgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBvy4ek7mA9XxgaaxB3VSjEUTYZcp/X+Nq2mX8RgfWyqMU2CcwyqG8PC6UJ6aUsjQkKX5b6n8Yn9pUbFmyKXh876Oibx7ZO6CTgbssts3Z
+X-Gm-Message-State: AOJu0YwGwfo6FLzBJgsAFetrcRfM5h0HbnonmD4LOre43GStPRw1KtPw
+	944uuK1lBXs4UVOM+UT0uafuEZ8ph9CSFVrB4UuyCk0ug7s81D95uRDiprXs6Vt/ew8u4DsL+Qd
+	t2pSZuQM7uNxSEmTkhQUr5E3rUDbvf2wcD4LJ
+X-Google-Smtp-Source: AGHT+IFJBPRQlkDyYJeSsGM/RxiiiLg1VsLLsha8SGwYsobiZXs39Abfff+lsGr1GDYLgVu96Cm8k7GvNnaVZDK3Ruk=
+X-Received: by 2002:a05:622a:5509:b0:43b:6b6:8cad with SMTP id
+ d75a77b69052e-43fe8e0b1dfmr1268341cf.10.1717031323987; Wed, 29 May 2024
+ 18:08:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240529180510.2295118-1-jthoughton@google.com>
+ <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+ <ZlelW93_T6P-ZuSZ@google.com> <CAOUHufZdEpY6ra73SMHA33DegKxKaUM=Os7A7aDBFND6NkbUmQ@mail.gmail.com>
+ <Zley-u_dOlZ-S-a6@google.com>
+In-Reply-To: <Zley-u_dOlZ-S-a6@google.com>
+From: James Houghton <jthoughton@google.com>
+Date: Wed, 29 May 2024 18:08:06 -0700
+Message-ID: <CADrL8HXHWg_MkApYQTngzmN21NEGNWC6KzJDw_Lm63JHJkR=5A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
+ in aging
+To: Sean Christopherson <seanjc@google.com>
+Cc: Yu Zhao <yuzhao@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Catalin Marinas <catalin.marinas@arm.com>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, James Morse <james.morse@arm.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Oliver Upton <oliver.upton@linux.dev>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Ryan Roberts <ryan.roberts@arm.com>, 
+	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc1-7-ge8b8c5264d4e
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes kselftest-seccomp: 6 runs,
- 2 regressions (v6.10-rc1-7-ge8b8c5264d4e)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/fixes kselftest-seccomp: 6 runs, 2 regressions (v6.10-rc1-7-ge8b8=
-c5264d4e)
+On Wed, May 29, 2024 at 3:58=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Wed, May 29, 2024, Yu Zhao wrote:
+> > On Wed, May 29, 2024 at 3:59=E2=80=AFPM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > >
+> > > On Wed, May 29, 2024, Yu Zhao wrote:
+> > > > On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton=
+@google.com> wrote:
+> > > > >
+> > > > > Secondary MMUs are currently consulted for access/age information=
+ at
+> > > > > eviction time, but before then, we don't get accurate age informa=
+tion.
+> > > > > That is, pages that are mostly accessed through a secondary MMU (=
+like
+> > > > > guest memory, used by KVM) will always just proceed down to the o=
+ldest
+> > > > > generation, and then at eviction time, if KVM reports the page to=
+ be
+> > > > > young, the page will be activated/promoted back to the youngest
+> > > > > generation.
+> > > >
+> > > > Correct, and as I explained offline, this is the only reasonable
+> > > > behavior if we can't locklessly walk secondary MMUs.
+> > > >
+> > > > Just for the record, the (crude) analogy I used was:
+> > > > Imagine a large room with many bills ($1, $5, $10, ...) on the floo=
+r,
+> > > > but you are only allowed to pick up 10 of them (and put them in you=
+r
+> > > > pocket). A smart move would be to survey the room *first and then*
+> > > > pick up the largest ones. But if you are carrying a 500 lbs backpac=
+k,
+> > > > you would just want to pick up whichever that's in front of you rat=
+her
+> > > > than walk the entire room.
+> > > >
+> > > > MGLRU should only scan (or lookaround) secondary MMUs if it can be
+> > > > done lockless. Otherwise, it should just fall back to the existing
+> > > > approach, which existed in previous versions but is removed in this
+> > > > version.
+> > >
+> > > IIUC, by "existing approach" you mean completely ignore secondary MMU=
+s that
+> > > don't implement a lockless walk?
+> >
+> > No, the existing approach only checks secondary MMUs for LRU folios,
+> > i.e., those at the end of the LRU list. It might not find the best
+> > candidates (the coldest ones) on the entire list, but it doesn't pay
+> > as much for the locking. MGLRU can *optionally* scan MMUs (secondary
+> > included) to find the best candidates, but it can only be a win if the
+> > scanning incurs a relatively low overhead, e.g., done locklessly for
+> > the secondary MMU. IOW, this is a balance between the cost of
+> > reclaiming not-so-cold (warm) folios and that of finding the coldest
+> > folios.
+>
+> Gotcha.
+>
+> I tend to agree with Yu, driving the behavior via a Kconfig may generate =
+simpler
+> _code_, but I think it increases the overall system complexity.  E.g. dis=
+tros
+> will likely enable the Kconfig, and in my experience people using KVM wit=
+h a
+> distro kernel usually aren't kernel experts, i.e. likely won't know that =
+there's
+> even a decision to be made, let alone be able to make an informed decisio=
+n.
+>
+> Having an mmu_notifier hook that is conditionally implemented doesn't see=
+m overly
+> complex, e.g. even if there's a runtime aspect at play, it'd be easy enou=
+gh for
+> KVM to nullify its mmu_notifier hook during initialization.  The hardest =
+part is
+> likely going to be figuring out the threshold for how much overhead is to=
+o much.
 
-Regressions Summary
--------------------
+Hi Yu, Sean,
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
+Perhaps I "simplified" this bit of the series a little bit too much.
+Being able to opportunistically do aging with KVM (even without
+setting the Kconfig) is valuable.
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+IIUC, we have the following possibilities:
+- v4: aging with KVM is done if the new Kconfig is set.
+- v3: aging with KVM is always done.
+- v2: aging with KVM is done when the architecture reports that it can
+probably be done locklessly, set at KVM MMU init time.
+- Another possibility?: aging with KVM is only done exactly when it
+can be done locklessly (i.e., mmu_notifier_test/clear_young() called
+such that it will not grab any locks).
 
+I like the v4 approach because:
+1. We can choose whether or not to do aging with KVM no matter what
+architecture we're using (without requiring userspace be aware to
+disable the feature at runtime with sysfs to avoid regressing
+performance if they don't care about proactive reclaim).
+2. If we check the new feature bit (0x8) in sysfs, we can know for
+sure if aging is meant to be working or not. The selftest changes I
+made won't work properly unless there is a way to be sure that aging
+is working with KVM.
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-10-rc1-7-ge8b8c5264d4e/plan/kselftest-seccomp/
+For look-around at eviction time:
+- v4: done if the main mm PTE was young and no MMU notifiers are subscribed=
+.
+- v2/v3: done if the main mm PTE was young or (the SPTE was young and
+the MMU notifier was lockless/fast).
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: v6.10-rc1-7-ge8b8c5264d4e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      e8b8c5264d4ebd248f60a5cef077fe615806e7a0 =
+I made this logic change as part of removing batching.
 
+I'd really appreciate guidance on what the correct thing to do is.
 
+In my mind, what would work great is: by default, do aging exactly
+when KVM can do it locklessly, and then have a Kconfig to always have
+MGLRU to do aging with KVM if a user really cares about proactive
+reclaim (when the feature bit is set). The selftest can check the
+Kconfig + feature bit to know for sure if aging will be done.
 
-Test Regressions
----------------- =
+I'm not sure what the exact right thing to do for look-around is.
 
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6657c34ffb75bd8ad57e7077
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-7-ge=
-8b8c5264d4e/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-7-ge=
-8b8c5264d4e/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6657c34ffb75=
-bd8ad57e7078
-        new failure (last pass: v6.10-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6657bf5f9059fe370d7e70b3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-7-ge=
-8b8c5264d4e/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-7-ge=
-8b8c5264d4e/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6657bf5f9059=
-fe370d7e70b4
-        failing since 588 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =20
+Thanks for the quick feedback.
 
