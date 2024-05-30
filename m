@@ -1,150 +1,177 @@
-Return-Path: <linux-kselftest+bounces-10914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7587D8D4ADA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 13:28:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C818D4AF9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 13:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D01B1B21D76
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 11:28:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D33811C22508
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 11:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006D9176182;
-	Thu, 30 May 2024 11:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D1E176182;
+	Thu, 30 May 2024 11:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="FpZS537T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l7v3Pel/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D97174EC3;
-	Thu, 30 May 2024 11:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D83B176AC5;
+	Thu, 30 May 2024 11:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717068478; cv=none; b=SBJZZkblDM0t/6FV93OLDAY98SR1WSNRp16ClpITDXg9XaCooN6T9IjoGdi9dhNrTl0CYGsUUo7bxAjjY9ITPaUhMvgqzjqe093TspzUnaiNst2TSV55rD+JrJwogbNhlCEfkGMbWKseLyZT7syC34znoNjFh6kxmA5gub0bpDE=
+	t=1717069506; cv=none; b=e1fFd2Cs3DUtO7KSf8KUH7HTS+Ur3rLFgNzC6goHDKZNOaGNq0N44SwqfIJ1e2d2ZhRQmHUBIHKbSJMQ/jZtJMFKsygK+1fqpvBiAyoAxkYewKgE6Nn2ypsMJlvPqhsMQiQ3bl3Epb7Llky118ZKcsS+1GB0EUvp+vwzhwkpcQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717068478; c=relaxed/simple;
-	bh=QKCYv/9pkeewZS0wdLDjidR9iHNKpRPbnM/6kemvOTo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WxXhFvMtMjgVSzLpEp6TKhWoHVAJaB06pdJAhbGEJ9zqqfLQNc2QwR9nX3j4IXcpoKixFqCttojsYf0cuLYJ5q0pjYELEFSiIuRWNcpk8vpMWVlrtLF1h0L2vk7igPSIdiTnqmxZxx2fLTzJtXhfIIhQcLUB0wtBuPdqBk22Csk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=FpZS537T; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1717068464;
-	bh=QKCYv/9pkeewZS0wdLDjidR9iHNKpRPbnM/6kemvOTo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=FpZS537T3yPjs0iXwLB6GlRYL0cdPMhC1/wShIU0j7i47Zz9Tq4aKnr7A8nrfwGme
-	 9lzOUhjVJGLOLZqyiXFOMnX8rKmDEv+3qt3eMOkee7hOiQVhkl2PN7zQ51r+NWqHBV
-	 R1iDpMCyTvvksWQ0oQYf3mlL90Er9AtaOI0Fdkps=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 998376770C;
-	Thu, 30 May 2024 07:27:34 -0400 (EDT)
-Message-ID: <19dd3ba543ee3796afd4ee75daea199f56f32bcb.camel@xry111.site>
-Subject: Re: [PATCH 2/6] loongarch: defconfig: drop RT_GROUP_SCHED=y
-From: Xi Ruoyao <xry111@xry111.site>
-To: Celeste Liu <coelacanthushex@gmail.com>, Heinrich Schuchardt
- <heinrich.schuchardt@canonical.com>, Anup Patel <anup@brainfault.org>, Guo
- Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>,  Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
- <gregory.clement@bootlin.com>,  =?ISO-8859-1?Q?Th=E9o?= Lebrun
- <theo.lebrun@bootlin.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, Sven Joachim
- <svenjoac@gmx.de>, Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, Russell King <linux@armlinux.org.uk>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Tony
- Lindgren <tony@atomide.com>,  Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, 
- Mykola Lysenko <mykolal@fb.com>, linux-riscv@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org,
-  linux-omap@vger.kernel.org, linux-tegra@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Lennart Poettering <lennart@poettering.net>, 
- Icenowy Zheng
-	 <uwu@icenowy.me>
-Date: Thu, 30 May 2024 19:27:32 +0800
-In-Reply-To: <20240530111947.549474-10-CoelacanthusHex@gmail.com>
-References: <20240530111947.549474-8-CoelacanthusHex@gmail.com>
-	 <20240530111947.549474-10-CoelacanthusHex@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	s=arc-20240116; t=1717069506; c=relaxed/simple;
+	bh=f9yex0Fn8UvWvmP34S99dGP6y/djloVwxdVqGVzSE3k=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=ZwijGOJ1wqrl7rbqFVyPpCwEZiGdTYyG9denUM+rdswAy5UADyt4btDJt2rifYM8nnqL2Yh4Is61x3rVFr+AIy+N990sc1bh1iI8TRv1grLPmRJsCcCRmwlYsNKMpH+piH+ZetTCg3ZqvsA7Ra+uK0IAC+JXfAatf4cIyBSFUwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l7v3Pel/; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717069506; x=1748605506;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=f9yex0Fn8UvWvmP34S99dGP6y/djloVwxdVqGVzSE3k=;
+  b=l7v3Pel/iC3wZCu8cFOes5B+pcuBfB/7S07t2VvGoz/uJc8ORG9AodDF
+   sUVJUGi6X9HtCgPVeU0rt2ezcjXppVzxeuIJFfiFqmlbdBYRxCQSmtT5m
+   9Rc/8huMwnZzUkUqDvonAg6PEFHkqMuFotTtkzXVTimX7LIeEP98LVvpY
+   3xM59ek331TP4OixC7UGRwyAW7v42b1sUffn4uc99n6G8iWQLe8ayxG+0
+   mSybbqFtBfqRlrL2FBtGVI8XLIVSUOXnUziaYhdPozSNhjtRz9pa3jjOs
+   ffjxpDUIsJ6Z70076IqDwo0/lfMBamCOpTiqWn/PTNkb2CfmW29unIakR
+   g==;
+X-CSE-ConnectionGUID: TT3+0XZTQriQwgL5eVj4jQ==
+X-CSE-MsgGUID: qO9c5xpBR4+n/Rw5M6mvbQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="17376467"
+X-IronPort-AV: E=Sophos;i="6.08,201,1712646000"; 
+   d="scan'208";a="17376467"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 04:45:05 -0700
+X-CSE-ConnectionGUID: ga+mekW0SlS2SLZsYcnOkw==
+X-CSE-MsgGUID: 543TXdKLQ5W38te2Lhk5iw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,201,1712646000"; 
+   d="scan'208";a="35732878"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.150])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 04:45:01 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 30 May 2024 14:44:57 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v4 13/16] selftests/resctrl: Convert ctrlgrp & mongrp to
+ pointers
+In-Reply-To: <bafcfe0c-e052-426f-be0d-9bcbb4c16a62@intel.com>
+Message-ID: <a14be305-67fc-7c92-3e40-0168084171d6@linux.intel.com>
+References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-14-ilpo.jarvinen@linux.intel.com> <bafcfe0c-e052-426f-be0d-9bcbb4c16a62@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323328-1151364960-1717069497=:1113"
 
-On Thu, 2024-05-30 at 19:19 +0800, Celeste Liu wrote:
-> For cgroup v1, if turned on, and there's any cgroup in the "cpu" hierarch=
-y it
-> needs an RT budget assigned, otherwise the processes in it will not be ab=
-le to
-> get RT at all. The problem with RT group scheduling is that it requires t=
-he
-> budget assigned but there's no way we could assign a default budget, sinc=
-e the
-> values to assign are both upper and lower time limits, are absolute, and =
-need to
-> be sum up to < 1 for each individal cgroup. That means we cannot really c=
-ome up
-> with values that would work by default in the general case.[1]
->=20
-> For cgroup v2, it's almost unusable as well. If it turned on, the cpu con=
-troller
-> can only be enabled when all RT processes are in the root cgroup. But it =
-will
-> lose the benefits of cgroup v2 if all RT process were placed in the same =
-cgroup.
->=20
-> Red Hat, Gentoo, Arch Linux and Debian all disable it. systemd also doesn=
-'t
-> support it.[2]
->=20
-> [1]: https://bugzilla.redhat.com/show_bug.cgi?id=3D1229700
-> [2]: https://github.com/systemd/systemd/issues/13781#issuecomment-5491643=
-83
->=20
-> Signed-off-by: Celeste Liu <CoelacanthusHex@gmail.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-As a distro maintainer who had once been bitten by this option:
+--8323328-1151364960-1717069497=:1113
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Reviewed-by: Xi Ruoyao <xry111@xry111.site>
+On Wed, 29 May 2024, Reinette Chatre wrote:
 
-> ---
-> =C2=A0arch/loongarch/configs/loongson3_defconfig | 1 -
-> =C2=A01 file changed, 1 deletion(-)
+> Hi Ilpo,
 >=20
-> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/=
-configs/loongson3_defconfig
-> index b4252c357c8e..4d93adb3f1a2 100644
-> --- a/arch/loongarch/configs/loongson3_defconfig
-> +++ b/arch/loongarch/configs/loongson3_defconfig
-> @@ -23,7 +23,6 @@ CONFIG_NUMA_BALANCING=3Dy
-> =C2=A0CONFIG_MEMCG=3Dy
-> =C2=A0CONFIG_BLK_CGROUP=3Dy
-> =C2=A0CONFIG_CFS_BANDWIDTH=3Dy
-> -CONFIG_RT_GROUP_SCHED=3Dy
-> =C2=A0CONFIG_CGROUP_PIDS=3Dy
-> =C2=A0CONFIG_CGROUP_RDMA=3Dy
-> =C2=A0CONFIG_CGROUP_FREEZER=3Dy
+> On 5/20/24 5:30 AM, Ilpo J=C3=A4rvinen wrote:
+> > The struct resctrl_val_param has control and monitor groups as char
+> > arrays but they are not supposed to be mutated within resctrl_val().
+> >=20
+> > Convert the ctrlgrp and mongrp char array within resctrl_val_param to
+> > plain const char pointers and adjust the strlen() based checks to
+> > check NULL instead.
+> >=20
+> > Convert !grp_name check in create_grp() into internal sanity check by
+> > returning error if the caller asked to create a group but doesn't
+> > provide a name for the group. The existing code already abides this by
+> > only calling create_grp() if mongrp is non-NULL so the error should
+> > never be returned with the current selftests (ctrlgrp is never NULL).
+> >=20
+> > Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >=20
+> > v3:
+> > - Removed wrong comment
+> > - Changed grp_name check to return -1 on fail (internal sanity check)
+> > ---
+> >   tools/testing/selftests/resctrl/resctrl.h   |  4 ++--
+> >   tools/testing/selftests/resctrl/resctrlfs.c | 15 +++++----------
+> >   2 files changed, 7 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/resctrl/resctrl.h
+> > b/tools/testing/selftests/resctrl/resctrl.h
+> > index 5967389038d4..a999fbc13fd3 100644
+> > --- a/tools/testing/selftests/resctrl/resctrl.h
+> > +++ b/tools/testing/selftests/resctrl/resctrl.h
+> > @@ -91,8 +91,8 @@ struct resctrl_test {
+> >    */
+> >   struct resctrl_val_param {
+> >   =09char=09=09*resctrl_val;
+> > -=09char=09=09ctrlgrp[64];
+> > -=09char=09=09mongrp[64];
+> > +=09const char=09*ctrlgrp;
+> > +=09const char=09*mongrp;
+> >   =09char=09=09filename[64];
+> >   =09unsigned long=09mask;
+> >   =09int=09=09num_of_runs;
+> > diff --git a/tools/testing/selftests/resctrl/resctrlfs.c
+> > b/tools/testing/selftests/resctrl/resctrlfs.c
+> > index a0e84157eb63..6b4448588666 100644
+> > --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> > +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> > @@ -464,13 +464,8 @@ static int create_grp(const char *grp_name, char *=
+grp,
+> > const char *parent_grp)
+> >   =09struct dirent *ep;
+> >   =09DIR *dp;
+> >   -=09/*
+> > -=09 * At this point, we are guaranteed to have resctrl FS mounted and =
+if
+> > -=09 * length of grp_name =3D=3D 0, it means, user wants to use root co=
+n_mon
+> > -=09 * grp, so do nothing
+> > -=09 */
+> > -=09if (strlen(grp_name) =3D=3D 0)
+> > -=09=09return 0;
+> > +=09if (!grp_name)
+> > +=09=09return -1;
+>=20
+> As I said during review of v2, this should not be an error. I went back t=
+o
+> read
+> your comments and the argument that this is done for benefit of API is un=
+clear
+> since
+> the default control group does not have a name, exactly what create_grp()
+> supports
+> when not returning an error in this case.
+
+Okay, I did not know about this expectation related to the default control=
+=20
+group because it's not used anywhere in the selftest code that always=20
+provides a ctrlgrp name.
+
+I'll change it to return 0.
 
 --=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+ i.
+
+--8323328-1151364960-1717069497=:1113--
 
