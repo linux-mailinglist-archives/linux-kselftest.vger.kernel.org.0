@@ -1,74 +1,71 @@
-Return-Path: <linux-kselftest+bounces-10923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A57F8D4E26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 16:38:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806378D4E7D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 16:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5B6A282182
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 14:38:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BE0B1C2334C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 14:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D102A17D883;
-	Thu, 30 May 2024 14:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626DA186E5C;
+	Thu, 30 May 2024 14:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sInuQO+n"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BH3o7go5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283EC17C230
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 14:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181B317D899
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 14:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717079916; cv=none; b=twKYIPPBI5pv9LYu9wrje/XEi6j8byZ5wMjY9f/jqrtV9sDN+GXdcx9qVFfStbbXImZLQOOdk/G7DDjsCaAtbq7fgluv2nRzzvuIuUSeBNo11q0us8PDs2KMAfeQqvTtLM/SCwCwStOCadpQMKpx8+sUh/RWX9TPNs8neaXyVpA=
+	t=1717081100; cv=none; b=uXyJQmjcVcpoh57uWxzrjHWfc2nkWq/JCbW/rd2TFSM8YolFjpFHJm/GYilDK2vhih4H92ehaFQfi43sJOYHa1Mf0KC7YOdSf8Qnc9775tqAww2e+Czons1SnuvcfJEDu3IOxfoKKJmv//YlIh3/2smzTB3/XRuIlP4mwlNMQ/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717079916; c=relaxed/simple;
-	bh=H6kbJAMgSyiK2Mm362YL1uVRFh8mkzI+q2iR1ROJpTg=;
+	s=arc-20240116; t=1717081100; c=relaxed/simple;
+	bh=6frT2cUqOy2QZwW8Jb/ICL917q3xtkQYsWty0q3A7EM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NYN1q3p3ZMuDRuHhMTDmlsdH9jIBcR+lChXjoTDo2IMAhwLS80lwWloIMfQkeQdKrbrbfi+JXfJbu3E128o7c21HvPHizMPsvF901UnX5z5QL0Jjqdlr2FwGrRF2s/0TpILG6NjQc8vS6mjWhrb7ZNzrC5V/xXG1WOyw7iTxb1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sInuQO+n; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42111c2892bso1182755e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 07:38:34 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=esePtTkw4JxRHswyRrrtMMYD5ilQZqHZaAdGW2QO6/e6hs8O3mWYhgsbKJaf33dyXL9zPY/KO5xIn7QEkeWwYSybI0qxsc0uTetJQ5wxNPtUuaFfKSwpyrmiwCnQybBZKk/Tv6IfqbJiXI+EwTfhGlBtyiToZJ0n2/ywrzoAu5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BH3o7go5; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7ead7e95c91so4509039f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 07:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717079913; x=1717684713; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1717081097; x=1717685897; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lCqk0Wbl0C/qkffAR5D1GSnGrOBHuEfWLT6qcnFKC74=;
-        b=sInuQO+nBoq3aLpAlYrsQgUkiQrAbbqRyB+9VZ5PVCRag4oWSgZv+NOkyfId//4HDc
-         cjdtbQUp7iXJGaGgYIF2wmPNpjcwhsNVBTUbUWAINectGTciOeBRYx0fNQL/Kx7ZhxRE
-         n7hmKwo7wJdMhyAVdXmKms1mqcELViZZrBA9GpaMn8HkDV9y6EqrS6j8m4RwmEWsS86V
-         iSTnp01nITZoHQ6uIuIfudWS4nnkkWZKnpBKSMhALvDrEitrvSLPN37R6zZQgI+FrQ0L
-         A1ZHU4f8yMXh9hJsPBTLpFSgwWXLSM0A/MK7DF6mbV5dBIzcY0EhA2Z1s0ULeXhyc50Z
-         FisQ==
+        bh=UYQWkDbOOCMyq/o0QgNOHjrEjyrRmklhwNgybQNhet8=;
+        b=BH3o7go5uU9GFxLELhp5muo6xJ8S7whMvwe1K3VaD4bBzmCMSMv7mwDr3ulgp2Fm/y
+         Z69oQUoGnQ/Spq7svVv9cpB/Lj14DPzZfkUaRdz3rFVgbpeZntqUjAX8vnA2Is8TRkpG
+         nulYZLF2D0lNMgZW3sUT0coM3zHucQpq1oyK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717079913; x=1717684713;
+        d=1e100.net; s=20230601; t=1717081097; x=1717685897;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lCqk0Wbl0C/qkffAR5D1GSnGrOBHuEfWLT6qcnFKC74=;
-        b=JBfiAsUTBwcnCV497+bGIp8EAivJzHT6vLVNsA9yDZabsALFvHWC9DVvblSei8kmuN
-         t0fXgJpCMlLntV7bPRYQyzNBSpNGOZZ6ykvhIWtQ+fMbobKC5rgBJ3KvPsGgulojOXK1
-         2LgPn3ghDPEBy2vk791tJQhvF6LaFwb8DRbscfXUv5eG6FtkDMFfXUclR1JAEtVVJkCi
-         sAyZVigPcra0cuzVyBTUbxLUF23ek56RtXekB9SGRVbajFwuT2QEqQ2e+qhmLK+l5ZZ7
-         X9LpNcXQqWZI9RjMlvFeC86Tpk3GeO4vW48DrhWFiBQEj5W0Vh0RL7ghqO71zqnaFfXw
-         4SHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdoWmDT9RhRpYEfP0qO5XRbYFZCY9H7oeFjbOL3YlFbzc5ndmDqlITxZrNIh1IGbFziHANgcP1c5/W//I0KCxrdZCmIVNG80JU3psy41D1
-X-Gm-Message-State: AOJu0Yze9AFjN3/lfMCsDI8afjUHwlgRc0IKJPQfis/Wy93tyUZ2HG3c
-	xxFzh4Ax6MPz8HVFEROfjdOjfQYZedrIJPRBuoOPYJ/ZvSy+N44UTDKMjml0RqU=
-X-Google-Smtp-Source: AGHT+IFlbatkP5YNI0+cCdIM7/+OIHMvdLvagld1bA6xjJeK+Uh1NabWQhxIBQr5mw7eUxpTgrJABw==
-X-Received: by 2002:a05:600c:3b99:b0:418:1303:c3d1 with SMTP id 5b1f17b1804b1-4212793612bmr20925615e9.3.1717079913490;
-        Thu, 30 May 2024 07:38:33 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:1c45:973a:b74b:ef3c? ([2a01:e0a:999:a3a0:1c45:973a:b74b:ef3c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212706ea02sm27143985e9.30.2024.05.30.07.38.32
+        bh=UYQWkDbOOCMyq/o0QgNOHjrEjyrRmklhwNgybQNhet8=;
+        b=C4AVAXDYrIl7+mADPQE6m2NIbNBUh2QkFmUaP8AC1YsBplpNUr8gdZCcK6QCp0pBs9
+         URfhAf/1MjdyzaV4WtFuuD6ApcVC/lNqlmOjnQZ0P1TINUBQUyuW6iE1L6MUB0XbS5Dw
+         iMJEq4P6prhTUmQQBOnD/QiARP3JcmIjoX3cG/IeaLXz+nMufz0+BhLPZkE+C5gjtNd4
+         VokheBvNZAQoOcHnoX3b2rm3WSVsGvqCHiV7Gv8yYYVftu3KUQr4PaB1mGiKCsrB6PJ3
+         c7PWU4wxo7ExoF4ASFtEE9C1DgZEt9OXthd9NHIcy1Ccv7NwEbGdwmw+pSkKzOyDJ98I
+         wjYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyjzCKvjiqp+ZVPku595NC9Hy5Dh919tts8Gth2lVLq4YTRdylqLbh1DuYv9Mht733ZdLc3xJIYnYupr0oVUh/tyjFYLPIfo8mQ+RqSmcE
+X-Gm-Message-State: AOJu0Yzd2DgtS5crIX/KlOGEfnzen7ZpLYMxs+tlxrNWwgYH7STSli7j
+	+bDZufxD6xWaUbLdqmuX/Jdomy8dw6XONK3q4Chex9rd1c75l1g9b5JPlWY7F1w=
+X-Google-Smtp-Source: AGHT+IF+c5SyF4FomowgTAfuj5YYGj0MkoKjfwfa0To8fH/UHJshVIcQ2oirqjk7Q32H9m4sYBF/7A==
+X-Received: by 2002:a5d:970c:0:b0:7e1:d865:e700 with SMTP id ca18e2360f4ac-7eaf5d9611amr259019339f.2.1717081097098;
+        Thu, 30 May 2024 07:58:17 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b0f152442asm1842750173.173.2024.05.30.07.58.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 07:38:33 -0700 (PDT)
-Message-ID: <920cc061-f5bf-4eae-88b9-7b7c2b32ed53@rivosinc.com>
-Date: Thu, 30 May 2024 16:38:31 +0200
+        Thu, 30 May 2024 07:58:16 -0700 (PDT)
+Message-ID: <f4877afd-dc2c-4e54-8b53-c681d3eed045@linuxfoundation.org>
+Date: Thu, 30 May 2024 08:58:15 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,113 +73,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/16] riscv: add ISA extension parsing for Zimop
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240517145302.971019-1-cleger@rivosinc.com>
- <20240517145302.971019-3-cleger@rivosinc.com> <ZlenZ+NvXxOxvqEO@ghost>
- <ZleqVUhDW+xgiTwu@ghost> <4d23f17e-cc1e-45e3-9ca2-a884baacf207@rivosinc.com>
- <ZliPL4yXBAir5pr2@ghost>
+Subject: Re: [PATCH v2 0/6] selftests/x86: fix build errors and warnings found
+ via clang
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+ Ingo Molnar <mingo@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ Binbin Wu <binbin.wu@linux.intel.com>, Alexey Dobriyan
+ <adobriyan@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240527210042.220315-1-jhubbard@nvidia.com>
 Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <ZliPL4yXBAir5pr2@ghost>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240527210042.220315-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 30/05/2024 16:37, Charlie Jenkins wrote:
-> On Thu, May 30, 2024 at 10:12:39AM +0200, Clément Léger wrote:
->>
->>
->> On 30/05/2024 00:21, Charlie Jenkins wrote:
->>> On Wed, May 29, 2024 at 03:08:39PM -0700, Charlie Jenkins wrote:
->>>> On Fri, May 17, 2024 at 04:52:42PM +0200, Clément Léger wrote:
->>>>> Add parsing for Zimop ISA extension which was ratified in commit
->>>>> 58220614a5f of the riscv-isa-manual.
->>>>>
->>>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->>>>> ---
->>>>>  arch/riscv/include/asm/hwcap.h | 1 +
->>>>>  arch/riscv/kernel/cpufeature.c | 1 +
->>>>>  2 files changed, 2 insertions(+)
->>>>>
->>>>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
->>>>> index 1f2d2599c655..b1896dade74c 100644
->>>>> --- a/arch/riscv/include/asm/hwcap.h
->>>>> +++ b/arch/riscv/include/asm/hwcap.h
->>>>> @@ -80,6 +80,7 @@
->>>>>  #define RISCV_ISA_EXT_ZFA		71
->>>>>  #define RISCV_ISA_EXT_ZTSO		72
->>>>>  #define RISCV_ISA_EXT_ZACAS		73
->>>>> +#define RISCV_ISA_EXT_ZIMOP		74
->>>>
->>>> Since my changes for removing xandespmu haven't landed here yet I think
->>>> you should keep RISCV_ISA_EXT_XANDESPMU in the diff here and make
->>>> RISCV_ISA_EXT_ZIMOP have a key of 75. Palmer can probably resolve the
->>>> conflicting keys when these two series are merged.
->>>>
->>>> - Charlie
->>>
->>> I missed that other patches in this series were based off my
->>> xtheadvector changes. It's not in the cover letter that there is a
->>> dependency though. What do you need from that series for this series to
->>> work?
->>
->> Hey Charlie, I'm not based directly on any of your series, but on
->> riscv/for-next which probably already contains your patches.
->>
->> Clément
+On 5/27/24 15:00, John Hubbard wrote:
+> Hi,
 > 
-> There was some churn here so I didn't expect those to be merged, it
-> looks like a subset of the patches were added to riscv/for-next, sorry
-> for the confusion!
+> Just a bunch of build and warnings fixes that show up when
+> building with clang. Some of these depend on each other, so
+> I'm sending them as a series.
+> 
+> Changes since the first version:
+> 
+> 1) Rebased onto Linux 6.10-rc1
 
-No worries, it seems strange indeed that some of them were merged but
-not the other :/
+x86 test patches usually go through x86 tree.
+
+This series requires x86 maintainer review and ack for me
+to take this through kselftest tree.
+
 
 > 
-> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-
-Thanks !
-
+> Enjoy!
 > 
->>
->>>
->>> - Charlie
->>>
->>>>
->>>>>  
->>>>>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
->>>>>  
->>>>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->>>>> index 2993318b8ea2..41f8ae22e7a0 100644
->>>>> --- a/arch/riscv/kernel/cpufeature.c
->>>>> +++ b/arch/riscv/kernel/cpufeature.c
->>>>> @@ -241,6 +241,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>>>>  	__RISCV_ISA_EXT_DATA(zihintntl, RISCV_ISA_EXT_ZIHINTNTL),
->>>>>  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->>>>>  	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
->>>>> +	__RISCV_ISA_EXT_DATA(zimop, RISCV_ISA_EXT_ZIMOP),
->>>>>  	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
->>>>>  	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
->>>>>  	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
->>>>> -- 
->>>>> 2.43.0
->>>>>
->>>>>
->>>>> _______________________________________________
->>>>> linux-riscv mailing list
->>>>> linux-riscv@lists.infradead.org
->>>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>>>
+> thanks,
+> John Hubbard
+> 
+> John Hubbard (6):
+>    selftests/x86: build test_FISTTP.c with clang
+>    selftests/x86: build fsgsbase_restore.c with clang
+>    selftests/x86: build sysret_rip.c with clang
+>    selftests/x86: avoid -no-pie warnings from clang during compilation
+>    selftests/x86: remove (or use) unused variables and functions
+>    selftests/x86: fix printk warnings reported by clang
+> 
+>   tools/testing/selftests/x86/Makefile          | 10 +++++++
+>   tools/testing/selftests/x86/amx.c             | 16 -----------
+>   .../testing/selftests/x86/clang_helpers_32.S  | 11 ++++++++
+>   .../testing/selftests/x86/clang_helpers_64.S  | 28 +++++++++++++++++++
+>   tools/testing/selftests/x86/fsgsbase.c        |  6 ----
+>   .../testing/selftests/x86/fsgsbase_restore.c  | 11 ++++----
+>   tools/testing/selftests/x86/sigreturn.c       |  2 +-
+>   .../testing/selftests/x86/syscall_arg_fault.c |  1 -
+>   tools/testing/selftests/x86/sysret_rip.c      | 20 ++++---------
+>   tools/testing/selftests/x86/test_FISTTP.c     |  8 +++---
+>   tools/testing/selftests/x86/test_vsyscall.c   | 15 ++++------
+>   tools/testing/selftests/x86/vdso_restorer.c   |  2 ++
+>   12 files changed, 72 insertions(+), 58 deletions(-)
+>   create mode 100644 tools/testing/selftests/x86/clang_helpers_32.S
+>   create mode 100644 tools/testing/selftests/x86/clang_helpers_64.S
+> 
+> 
+> base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+> prerequisite-patch-id: 39d606b9b165077aa1a3a3b0a3b396dba0c20070
+
+thanks,
+-- Shuah
+
 
