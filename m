@@ -1,70 +1,72 @@
-Return-Path: <linux-kselftest+bounces-10970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B8C38D563A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 01:27:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01C88D563D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 01:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DBE28841B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 23:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 665561F265AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 23:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8073E17E441;
-	Thu, 30 May 2024 23:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B53181CE5;
+	Thu, 30 May 2024 23:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ejz6rW9g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2kjQBsP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE3F4D8C3;
-	Thu, 30 May 2024 23:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAFA4D8C3;
+	Thu, 30 May 2024 23:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717111656; cv=none; b=Lk/g8XBBX82a3GDONPXemx1jspilSLS02VvLCdX28Cbw9jvyLPhlMpAW+PxXgG71B8XGouLaKNcp9npw6gJAWesleI9CXzEO2owwMP1jskRNeW+Y67sIkz6B3Nmv79rC9RJXKm51l9KEwbSiVIBWPhmI5+A8DN8bJod5LkPCmIA=
+	t=1717111665; cv=none; b=H031IuF5sdsDAT2ezHXVGGX0gbOiUhYgNCP6FtjECk0R8SHNCQzwLuXz9oeSv3EekNArS+9a0YuJKhi0CJsfeV9f3DmwfhXQpM3BqflJF8XWw70WdyIJVqnycB63+deMRbZE0XDmYdrYPyE7hdWXnjOuWmtSkQNxwR8E+nATZXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717111656; c=relaxed/simple;
-	bh=J936r+DiOMS3MgFGq6523UYD7iDOXAN2fhSE2VGZZss=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M9qjJlr3+EYbHwY6naMteYIRzRDTj5zgrIKLMQdg8g49fPvsquzhIx6580DLrDBPxEbVRID95iaHboh1mzl8eCiYRoY5KdM/qy6RTCO5Frp8KAMPHqikDMbaFVYENzRov7E8JRtoKoaOf+/iCccwuek6s5W8pdb/LVnHbM2ggeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ejz6rW9g; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1717111665; c=relaxed/simple;
+	bh=x/k6Kpvd3d3Dt3fnD5caMY+otK5hlu1tQbKkTc66ihU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DLaqFRTt5o2Z9V7OBUZJXcBs7oeUvyImPu7BB9ZtkpoX3n43SQmWkn7KIIHa80OzycABLI2oLyPtgQE75LHNXa/A0bCTebDI6JDLrLqyTV4HOMviL6drJwLvVG5aRmOLELlPi73eAg8uMwRY627moP1Y4AtbX/WNRT382UJ6pcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2kjQBsP; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e964acff1aso14759961fa.0;
-        Thu, 30 May 2024 16:27:34 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-57864327f6eso2254573a12.1;
+        Thu, 30 May 2024 16:27:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717111653; x=1717716453; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4p5dezIqTlwyao4nfb4lQwbHXPe29ko3E6Z2p0D7l4=;
-        b=Ejz6rW9gmcDbE3gN8d6v0qyl5ArcGqTaouJxCoUxa1w6j+hLr8bH/gToaT5PAgLfVh
-         G1bcraO0vtvH7Ddt4E2Fhv/ngwbr9jAtZU1jjxLYi7dbyo4/Kfa3Hv/dJUCx6Qdx2hBj
-         v9N0oQTOmjSqahv1UInPEBrwGqna31qQwhknpzIM4DW/upZAdbFjoa8lYCwDQFgFmR/f
-         gjx94pN4rSi5PY8SZKCZyAIwOj3ZYLk2SnwqGraeAe6RqRI5rGpaVm41CdeZYo6GkBAp
-         PnrIvAF/ER9QlHIH/limCn6zDYHR+bNNxkEojMOJg31iiRITvZSaxgzICoLp4jNJEZfL
-         QXsg==
+        d=gmail.com; s=20230601; t=1717111662; x=1717716462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WSLJvHjzEW7OFvjVKUT8WVkEESYqHYJbjaoB4OVbctY=;
+        b=D2kjQBsP6WCvcJ9FRhJsipvShiNiLPxCKbi3p1zZooqtdt1aisVHJT+vD4VZMR0U8/
+         Wj8r0I9yGMbt+XOdBMLsf0cxTKrm6JcJochiUuZ2KhIkcNhP0uLTF3f7cga7Ikuxd7+u
+         BWxxgKphbKED5kDqfil555mETgfPahrLQ7WoQJMRVTH6G6J+5o2pVc2vVbr07eXYvUZN
+         7dgSf0D+0bm9Volpd6JBboAoaIeEVlbIh80lUrHjpkNpFRQFgeLOhfTDxKhFcxTAGtkI
+         /n6vSu733LTPOOe3+cSmYUsBROswBplf6EhHqZrUePkWJ0H1D9gaN77jDkybFdanRA9G
+         b5RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717111653; x=1717716453;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x4p5dezIqTlwyao4nfb4lQwbHXPe29ko3E6Z2p0D7l4=;
-        b=T+YLUtoK1pqZ0AUMNk6FnwqYxbDVCAOl9W1u5AmsiD8sPxPoZb8/10C4EJxdywzv+N
-         GOwOAlqr/Y1OSslC8uAl/HCqnEkHLEc/HAg1tqrggo6GzgCXvP1IcUQ0LvS+VXWXSnRQ
-         Ts0ss/64DiI9B6AwfMJ2AVX/YInsXUJJCFpU/J8eyVyfHMhPCv5GtEgCbiJ9VyoFV1Xa
-         BFGgqsOMYHyYhjsxH1XWZTWH1r0vwhMroY/F0V9ITyV/Z2nvoTPo8+Nqv5fA0RcqEVQI
-         gWudHg1M3qqLZdmTN79UALqPvl+3v0nOLO4RIXxtpksZh/JDjwE5NVzr2X6EEBhsc/4O
-         m4QA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDfY5ytEoFomLGGxP2Z8q0z7QSBtSjyVG9lrbSbvRsz8BOdYK/alNFWIqGmjcXKr5jKfcSNaNGpm43oFYiTc23BSYfuFRv87Z/cKEpTGMv4eU1/b2xGb8t0QzZ6SyZs51u4vHF1SAXCm+0f4S5
-X-Gm-Message-State: AOJu0YyvYPlolaK0Dl8UzmvQGcJzr0q6fopVElSnspqcvE91wSVMJPIW
-	w4Z+V6w53MjZXRGyfSHUYc39y0ZsH2oL0TSv2+bHT+gepFWXBxCXBUVMvA==
-X-Google-Smtp-Source: AGHT+IHi05csmUaC/XdePFs1mfj5AfezWi9oiIMwfg2LOseu0xjlzdLecM1APuhYP98qnjfxF4H8SQ==
-X-Received: by 2002:ac2:5b1e:0:b0:52b:8926:9052 with SMTP id 2adb3069b0e04-52b8955b3e8mr78151e87.5.1717111652620;
-        Thu, 30 May 2024 16:27:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717111662; x=1717716462;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WSLJvHjzEW7OFvjVKUT8WVkEESYqHYJbjaoB4OVbctY=;
+        b=lmMOhL8o2Wa/C2XpxkKFgLspB/C6Ezc4b+w/lKBXFLAbDdyDXPKJ9r2YxLrv1V6xb5
+         3SJA1nKFvafgY43H5xRniE4SQctX6WJzfs9gRGZ7gugD+77AU+mRMGiEN/XJQip+eefR
+         d/N89aHd9YbSqjGSCabABdAi44r8xufICw1aP4WX+sEWPfzDWS6EUQ5QrQ7J5AIrJALo
+         +Z0b3mjLDaD8Z5v715bTfmTxWpHTpN3mFXVf3AVyOnmCIhqr97wjt3dLpuMuTeMA6yWr
+         FkEgz5fzlvHCaXQeGIUX9C8rc16xVhgzjs34tNxDz69rr7GRDmLPIhHa/3zfFisQSg05
+         JOBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCsHc8AYyN8mzFeIP75Gr7G2r/tV9rxR7z/l9knY5svpXC8fqau+kC95bw6nipGrv1yDxilh4T6xBTJriSoomGYVT/GvJxZmvk51yyj0ssPcyNPnuatAF/G0frKqhv9gdKBcUSG/713DU7YRde
+X-Gm-Message-State: AOJu0Yw2sfNxeh1+Q+IoZNuQzTEri/9TXsjsEUUAsa9FUpnAx5h+cY3j
+	dBI24gBJqQFhgftjC+7g3Dz/xSjpq1cNVjez9Y1LI/5x0enMShGIdvV9SA==
+X-Google-Smtp-Source: AGHT+IEBAW0TjmtzG+Sjm6uDWd/Li+E2qd5PmPGUZOyyTg49iDQUIvHu+qPLEL14CBstls6nq7rWYg==
+X-Received: by 2002:a50:9f61:0:b0:574:ebf4:f786 with SMTP id 4fb4d7f45d1cf-57a3644d2b3mr288091a12.16.1717111661820;
+        Thu, 30 May 2024 16:27:41 -0700 (PDT)
 Received: from lenovo.. (mob-2-43-182-132.net.vodafone.it. [2.43.182.132])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a35e86c36sm197223a12.54.2024.05.30.16.27.30
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a35e86c36sm197223a12.54.2024.05.30.16.27.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 16:27:31 -0700 (PDT)
+        Thu, 30 May 2024 16:27:41 -0700 (PDT)
 From: technoboy85@gmail.com
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -76,10 +78,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Matteo Croce <teknoraver@meta.com>
-Subject: [PATCH net-next v2 0/2] net: visibility of memory limits in netns
-Date: Fri, 31 May 2024 01:27:20 +0200
-Message-ID: <20240530232722.45255-1-technoboy85@gmail.com>
+Subject: [PATCH net-next v2 1/2] net: make net.core.{r,w}mem_{default,max} namespaced
+Date: Fri, 31 May 2024 01:27:21 +0200
+Message-ID: <20240530232722.45255-2-technoboy85@gmail.com>
 X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240530232722.45255-1-technoboy85@gmail.com>
+References: <20240530232722.45255-1-technoboy85@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,29 +94,122 @@ Content-Transfer-Encoding: 8bit
 
 From: Matteo Croce <teknoraver@meta.com>
 
-Some programs need to know the size of the network buffers to operate
-correctly, export the following sysctls read-only in network namespaces:
+The following sysctl are global and can't be read from a netns:
 
-- net.core.rmem_default
-- net.core.rmem_max
-- net.core.wmem_default
-- net.core.wmem_max
+net.core.rmem_default
+net.core.rmem_max
+net.core.wmem_default
+net.core.wmem_max
 
-Matteo Croce (2):
-  net: make net.core.{r,w}mem_{default,max} namespaced
-  selftests: net: tests net.core.{r,w}mem_{default,max} sysctls in a
-    netns
+Make the following sysctl parameters available readonly from within a
+network namespace, allowing a container to read them.
 
-changes from v1:
-- added SPDX header to test
-- rewrite test with more detailed error messages
+Signed-off-by: Matteo Croce <teknoraver@meta.com>
+---
+ net/core/sysctl_net_core.c | 75 +++++++++++++++++++++-----------------
+ 1 file changed, 42 insertions(+), 33 deletions(-)
 
- net/core/sysctl_net_core.c                  | 75 ++++++++++++---------
- tools/testing/selftests/net/Makefile        |  1 +
- tools/testing/selftests/net/netns-sysctl.sh | 40 +++++++++++
- 3 files changed, 83 insertions(+), 33 deletions(-)
- create mode 100755 tools/testing/selftests/net/netns-sysctl.sh
-
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index c9fb9ad87485..2079000691e2 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -382,38 +382,6 @@ proc_dolongvec_minmax_bpf_restricted(struct ctl_table *table, int write,
+ #endif
+ 
+ static struct ctl_table net_core_table[] = {
+-	{
+-		.procname	= "wmem_max",
+-		.data		= &sysctl_wmem_max,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_sndbuf,
+-	},
+-	{
+-		.procname	= "rmem_max",
+-		.data		= &sysctl_rmem_max,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_rcvbuf,
+-	},
+-	{
+-		.procname	= "wmem_default",
+-		.data		= &sysctl_wmem_default,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_sndbuf,
+-	},
+-	{
+-		.procname	= "rmem_default",
+-		.data		= &sysctl_rmem_default,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_rcvbuf,
+-	},
+ 	{
+ 		.procname	= "mem_pcpu_rsv",
+ 		.data		= &net_hotdata.sysctl_mem_pcpu_rsv,
+@@ -697,6 +665,41 @@ static struct ctl_table netns_core_table[] = {
+ 		.extra2		= SYSCTL_ONE,
+ 		.proc_handler	= proc_dou8vec_minmax,
+ 	},
++	/* sysctl_core_net_init() will set the values after this
++	 * to readonly in network namespaces
++	 */
++	{
++		.procname	= "wmem_max",
++		.data		= &sysctl_wmem_max,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &min_sndbuf,
++	},
++	{
++		.procname	= "rmem_max",
++		.data		= &sysctl_rmem_max,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &min_rcvbuf,
++	},
++	{
++		.procname	= "wmem_default",
++		.data		= &sysctl_wmem_default,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &min_sndbuf,
++	},
++	{
++		.procname	= "rmem_default",
++		.data		= &sysctl_rmem_default,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &min_rcvbuf,
++	},
+ };
+ 
+ static int __init fb_tunnels_only_for_init_net_sysctl_setup(char *str)
+@@ -724,8 +727,14 @@ static __net_init int sysctl_core_net_init(struct net *net)
+ 		if (tbl == NULL)
+ 			goto err_dup;
+ 
+-		for (i = 0; i < table_size; ++i)
++		for (i = 0; i < table_size; ++i) {
++			if (tbl[i].data == &sysctl_wmem_max)
++				break;
++
+ 			tbl[i].data += (char *)net - (char *)&init_net;
++		}
++		for (; i < table_size; ++i)
++			tbl[i].mode &= ~0222;
+ 	}
+ 
+ 	net->core.sysctl_hdr = register_net_sysctl_sz(net, "net/core", tbl, table_size);
 -- 
 2.45.1
 
