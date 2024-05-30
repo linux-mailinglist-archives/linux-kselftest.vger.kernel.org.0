@@ -1,169 +1,290 @@
-Return-Path: <linux-kselftest+bounces-10905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7A88D46CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 10:12:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DF188D4A17
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 13:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 311641C2142C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 08:12:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01A661F224CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 11:11:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC2A14A62A;
-	Thu, 30 May 2024 08:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A3F116F0EB;
+	Thu, 30 May 2024 11:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="jrGn5udO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRULgM92"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A615214C5B3
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 08:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6977E16EBE7;
+	Thu, 30 May 2024 11:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717056765; cv=none; b=Tr2Rax3P6qGZ3SoeDaAGn695At2nhyXVgARcVatVbCpPJJU3a7RjWNrqMlUtMC8LoVhaGLWfCqAyWXL9B57x1TzeAP5ylpR/bYejthLcXDDSkSkABGW2DIVK+O76BdyDvA07v2lGoHoZ0FMYwQm5Jwxq23Jha4Zfc+jusPVgMQU=
+	t=1717067490; cv=none; b=RB321vr7GJ/rmPGKqpjOtUonHKYZpArGObyY76TBx32azXV1YUtvSnbdXIikoZE1xZwDNZwGRoAkMmcaO96rijZWT82rinut82HBFz0uFo6/yIeUCtJegrXFLhz3BMRP/hAfGp9dIzCfFv9mZCMunyPHG5lX7fUZ2/v/4axpwMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717056765; c=relaxed/simple;
-	bh=mwYATlGqSRRpITnG8BIh7RCuTwAeiIWonLTkywmLt9Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ODiEahOVqESy7MBMz3g7WNqUPMKnpkvwqMny+w8X8lWSSk/eOkYF8wSESzRGptG1Np1uwjoHdLbJNVO9tQgqc/JHjNMfKL2fIVZl/1F5mJvYUdRX6j8tairAlH8dBs0/tXiH8Q5KbTfL9D8KYeQgKTUV2zeuwNnlVN5epo+80oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=jrGn5udO; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5295f2f6ba2so33115e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2024 01:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717056762; x=1717661562; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0RoFCn1cKvd1zoXQP5ZuJdh9HnrCwhzMajErjx8js2Q=;
-        b=jrGn5udOweDMzlyebgYMx5PKm98he5FC/bTVeFYtsgyL+SaQCkL6TIWKSd2Q8/if6T
-         bWG4M8OADBdjA1z2e56hNf81cCRwrtpJi+ZKXgUpv+sj4psmxkZsI60HUXQw+1A/qnAv
-         WpzSUOyUsYQZBW9luY2gwVOJIXm0ZJsiDqSzXMrBBbnzGOoFVFJkY7J3blQp0ffdd39i
-         eguFyN3R6XdU7P1UC1U1xGEJ5QursoDqQDZ8PmQbge1AvDeEP5wfv26O2i+uZhAo5Fyo
-         p8rvE7gsQjk5el9aUTLffp5IY0XxijSa7zzqdeDeFGirHHci69yIHawoA+UUcXK43QOa
-         I3wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717056762; x=1717661562;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0RoFCn1cKvd1zoXQP5ZuJdh9HnrCwhzMajErjx8js2Q=;
-        b=L+eHNRHHN7bQr/5vxdaIb+M2n5zUVGoQDaAd0t8AvWlVr2rxoh9EmDwIHZsVaJwBqP
-         FYai+4o/dEULhK93/FrBcnyxlWNxu/GGh8wubUbiCIthWkfmF/VEl3ndAqMvTHxIXytC
-         2uUgeMM644Xg+J32cs3GdhA6akJIlTnGKw1W74ArrDqmUkVpJRUvVXmUzsraRZv6PC3J
-         O43b+6/SVQs6iT7YoQ3fLE+VxN2X7ggtG+b/I1OzxcPBWOJB9xDSmCK7K0ZEWEg9cUrc
-         ViJum/BK3cTjq17z9wUaB/LN5wpqPGEFnkiE77sZnGNlRhY5FP3gYKbL8SMJaqzMJKmw
-         5vhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUC/r8lU7e/KswLe3CMEIscxm7rempJPsL5uX9i+Z+MQ4kM5KvRqRSfz/cDW4JhZbmf3zjpw3O9IS5vHg1y/MTtjdlQrxxHYgFYuhJ2wCEu
-X-Gm-Message-State: AOJu0YwII8PyE7PdHlIU4i9zqsqmjOCPCccRfOgzrHUHe4q5+lfrZmf9
-	mfODVxsJ2rZHdu4Cy/8Cw/FzZEDFzus8U7ag7XKkdas8KjTgBIoSx4S4GhxjNmg=
-X-Google-Smtp-Source: AGHT+IFDH/BtR0IqfU1MMNNRmaYz2QjK/JKuYYRlqhpvwnINHfFSvpEeQs/Qm8e5sz1sHPGcXd9sFQ==
-X-Received: by 2002:a05:6512:1111:b0:51f:1bf8:3ea9 with SMTP id 2adb3069b0e04-52b7d49951fmr1181406e87.3.1717056761685;
-        Thu, 30 May 2024 01:12:41 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:a3c2:7707:741:7c5c? ([2a01:e0a:999:a3a0:a3c2:7707:741:7c5c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42126fea343sm17505945e9.0.2024.05.30.01.12.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 01:12:41 -0700 (PDT)
-Message-ID: <4d23f17e-cc1e-45e3-9ca2-a884baacf207@rivosinc.com>
-Date: Thu, 30 May 2024 10:12:39 +0200
+	s=arc-20240116; t=1717067490; c=relaxed/simple;
+	bh=m7Nqw4BzpQisgwB3C3v62bMPbsmyMULykJCFST6uTBw=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=dBDiAAfMTM7U7zEEBU8b1UvMihUvSHuIgYjcVi8Oej0ULpl+CqeZHAPKVqgfveTXnjPrN1rEQUy0oCfj4Uui5dxWKwHgDW4GgR3/ksF4RKymFR1OprN05mx1KBr1U3CmqCuSWr5k+rUkAx9MFh1KIowTJ07D2gl4yinzD0zU5K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRULgM92; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717067489; x=1748603489;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=m7Nqw4BzpQisgwB3C3v62bMPbsmyMULykJCFST6uTBw=;
+  b=iRULgM92Zt6ALWkowgHoaaoyHOnd4Jm/zr2LKpVJR7jTT3uYCQfnh+0w
+   rMphb8KcC8aBr0CuwpB3V6L6nFtYrRka28PMMxW5bGV2B3YabQLEpUi5Y
+   BcTCaj932tvubEdrhkxAFRoobw8Ot35/2Ar22fGaSWUVWekJgWOxFpk6/
+   eeGX6YlLvJL96VwYigKrhXRZm4BEju/X1z2qm6tVrBngAICStADU/Kp99
+   p6pEgICyCWc43i07C99zNhpzAGPZrWo/tdY1rRWsY1SCERy18DVqbxTv6
+   4KRgssm/EC9+8YydK//zmMIDJb2baa7uLdpXvK//I8QAGqrAr1FsEmOIc
+   Q==;
+X-CSE-ConnectionGUID: DbIT0Qi9T4ix933vrvwHyg==
+X-CSE-MsgGUID: /Y8O8z5gRt2ZVO1lH1rIZw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="31063089"
+X-IronPort-AV: E=Sophos;i="6.08,201,1712646000"; 
+   d="scan'208";a="31063089"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 04:11:28 -0700
+X-CSE-ConnectionGUID: nWlfQRbXSF2uTzrCZCyIRg==
+X-CSE-MsgGUID: HaNFl82JS0+R6Tre0Dilow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,201,1712646000"; 
+   d="scan'208";a="35842073"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.150])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 04:11:24 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 30 May 2024 14:11:20 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived
+ mem bw over sleep(1) only
+In-Reply-To: <700e3df4-4e10-4870-a1df-49d4616cbc45@intel.com>
+Message-ID: <0f294d43-e704-d1de-06ee-97bb81ebb9cb@linux.intel.com>
+References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com> <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com> <ea0c86b9-ae77-c2d9-b52b-239ae42603e8@linux.intel.com> <d8063ee7-1744-45a2-b6b9-506e68106baf@intel.com>
+ <b029db88-2e09-0b4a-f46a-84b5e535f178@linux.intel.com> <904aa442-9fc5-c6dd-f367-07b197085f7b@linux.intel.com> <700e3df4-4e10-4870-a1df-49d4616cbc45@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/16] riscv: add ISA extension parsing for Zimop
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
- Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20240517145302.971019-1-cleger@rivosinc.com>
- <20240517145302.971019-3-cleger@rivosinc.com> <ZlenZ+NvXxOxvqEO@ghost>
- <ZleqVUhDW+xgiTwu@ghost>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <ZleqVUhDW+xgiTwu@ghost>
+Content-Type: multipart/mixed; boundary="8323328-72461896-1717067480=:1113"
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-72461896-1717067480=:1113
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
+On Tue, 28 May 2024, Reinette Chatre wrote:
+> On 5/28/24 3:19 AM, Ilpo J=C3=A4rvinen wrote:
+> > On Fri, 24 May 2024, Ilpo J=C3=A4rvinen wrote:
+> > > On Fri, 24 May 2024, Reinette Chatre wrote:
+> > > > On 5/24/24 12:57 AM, Ilpo J=C3=A4rvinen wrote:
+> > > > > On Thu, 23 May 2024, Reinette Chatre wrote:
+> > > > > > On 5/20/24 5:30 AM, Ilpo J=C3=A4rvinen wrote:
+> > > > > > > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that
+> > > > > > > performs
+> > > > > > > the measurement over a duration of sleep(1) call. The memory
+> > > > > > > bandwidth
+> > > > > > > numbers from IMC are derived over this duration. The resctrl =
+FS
+> > > > > > > derived
+> > > > > > > memory bandwidth, however, is calculated inside measure_vals(=
+) and
+> > > > > > > only
+> > > > > > > takes delta between the previous value and the current one wh=
+ich
+> > > > > > > besides the actual test, also samples inter-test noise.
+> > > > > > >=20
+> > > > > > > Rework the logic in measure_vals() and get_mem_bw_imc() such =
+that
+> > > > > > > the
+> > > > > > > resctrl FS memory bandwidth section covers much shorter durat=
+ion
+> > > > > > > closely matching that of the IMC perf counters to improve
+> > > > > > > measurement
+> > > > > > > accuracy. Open two the resctrl mem bw files twice to avoid op=
+ening
+> > > > > > > after the test during measurement period (reading the same fi=
+le
+> > > > > > > twice
+> > > > > > > returns the same value so two files are needed).
+> > > > > >=20
+> > > > > > I think this is only because of how the current reading is done=
+,
+> > > > > > resctrl
+> > > > > > surely supports keeping a file open and reading from it multipl=
+e
+> > > > > > times.
+> > > > > >=20
+> > > > > > There seems to be two things that prevent current code from doi=
+ng
+> > > > > > this
+> > > > > > correctly:
+> > > > > > (a) the fscanf() code does not take into account that resctrl a=
+lso
+> > > > > >       prints a "\n" ... (this seems to be the part that may cau=
+se
+> > > > > > the same
+> > > > > >       value to be returned).
+> > > > > >       So:
+> > > > > > =09if (fscanf(fp, "%lu", mbm_total) <=3D 0) {
+> > > > > >       should be:
+> > > > > > =09if (fscanf(fp, "%lu\n", mbm_total) <=3D 0) {
+> > > > > > (b) the current reading does not reset the file position so a s=
+econd
+> > > > > >       read will attempt to read past the beginning. A "rewind(f=
+p)"
+> > > > > >       should help here.
+> > > > >=20
+> > > > > (b) cannot be the cause for returning the same value again. It wo=
+uld
+> > > > > not be able to reread the number at all if file position is not m=
+oved.
+> > > >=20
+> > > > I know. This was not intended to explain the duplicate answer but
+> > > > instead
+> > > > describe another change required to use current code in a loop. I
+> > > > specifically said in (a) that "(this seems to be the part that may =
+cause
+> > > > the same value to be returned)".
+> > > >=20
+> > > > > I certainly tried with fseek() and it is when I got same value on=
+ the
+> > > > > second read which is when I just went to two files solution.
+> > > > >=20
+> > > > > > A small program like below worked for me by showing different v=
+alues
+> > > > > > on every read:
+> > > > > >=20
+> > > > > > #include <stdio.h>
+> > > > > > #include <stdlib.h>
+> > > > > > #include <unistd.h>
+> > > > > >=20
+> > > > > > const char *mbm_total_path =3D
+> > > > > > "/sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_bytes";
+> > > > > >=20
+> > > > > > int main(void)
+> > > > > > {
+> > > > > > =09unsigned long mbm_total;
+> > > > > > =09FILE *fp;
+> > > > > > =09int count;
+> > > > > >=20
+> > > > > > =09fp =3D fopen(mbm_total_path, "r");
+> > > > > > =09if (!fp) {
+> > > > > > =09=09perror("Opening data file\n");
+> > > > > > =09=09exit(1);
+> > > > > > =09}
+> > > > > > =09for (count =3D 0; count < 100; count++) {
+> > > > > > =09=09if (fscanf(fp, "%lu\n", &mbm_total) <=3D 0) {
+> > > > > > =09=09=09perror("Unable to read from data file\n");
+> > > > > > =09=09=09exit(1);
+> > > > > > =09=09}
+> > > > > > =09=09printf("Read %d: %lu\n",count ,mbm_total );
+> > > > > > =09=09sleep(1);
+> > > > > > =09=09rewind(fp);
+> > > > > > =09}
+> > > > > > =09fclose(fp);
+> > > > > > =09return 0;
+> > > > > > }
+> > > > >=20
+> > > > > Okay, so perhaps it's your explanation (a) but can libc be truste=
+d to
+> > > > > not
+> > > > > do buffering/caching for FILE *? So to be on the safe side, it wo=
+uld
+> > > >=20
+> > > > Coding with expectation that libc cannot be trusted sounds strange =
+to
+> > > > me.
+> > > >=20
+> > > > > need to use syscalls directly to guarantee it's read the file twi=
+ce.
+> > > > >=20
+> > > > > If I convert it into fds, fscanf() cannot be used which would
+> > > > > complicate
+> > > > > the string processing by adding extra steps.
+> > > > >=20
+> > > >=20
+> > > > It is not clear to me why you think that fscanf() cannot be used.
+> > >=20
+> > > This was related to fscanf() not being able to read from an fd which =
+is
+> > > different interface than what libc's FILE * is.
+>=20
+> The part I am missing is why you believe syscalls are required. Could
+> you please elaborate why FILE * cannot be used?
+>=20
+> > >=20
+> > > > Could you please elaborate what the buffering issues are?
+> > >=20
+> > > I'm pretty sure that by default libc does some buffering (even std*
+> > > streams are line buffered and others streams even more). I'm not enti=
+rely
+> > > sure about the extent of that buffering but here we need to always re=
+ad
+> > > the up to date value from the file itself, not from some buffer.
+> > >=20
+> > > Maybe there never is any problem that the earlier read values are ret=
+urned
+> > > from some libc buffer when lseek/rewind is used, I just don't know th=
+at
+> > > for sure. You seem to be more certain but I've not seen on what basis
+> > > (other than the anecdotial test you provided).
+>=20
+> I demonstrated that it works. I have not heard a clear reason why this
+> conclusion
+> is incorrect. The above remains vague to me and I cannot find a descripti=
+on of
+> a clear problem that can be studied.
 
+It's pointless to continue this discussion as I don't have anything=20
+concrete to prove you wrong.
 
-On 30/05/2024 00:21, Charlie Jenkins wrote:
-> On Wed, May 29, 2024 at 03:08:39PM -0700, Charlie Jenkins wrote:
->> On Fri, May 17, 2024 at 04:52:42PM +0200, Clément Léger wrote:
->>> Add parsing for Zimop ISA extension which was ratified in commit
->>> 58220614a5f of the riscv-isa-manual.
->>>
->>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->>> ---
->>>  arch/riscv/include/asm/hwcap.h | 1 +
->>>  arch/riscv/kernel/cpufeature.c | 1 +
->>>  2 files changed, 2 insertions(+)
->>>
->>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
->>> index 1f2d2599c655..b1896dade74c 100644
->>> --- a/arch/riscv/include/asm/hwcap.h
->>> +++ b/arch/riscv/include/asm/hwcap.h
->>> @@ -80,6 +80,7 @@
->>>  #define RISCV_ISA_EXT_ZFA		71
->>>  #define RISCV_ISA_EXT_ZTSO		72
->>>  #define RISCV_ISA_EXT_ZACAS		73
->>> +#define RISCV_ISA_EXT_ZIMOP		74
->>
->> Since my changes for removing xandespmu haven't landed here yet I think
->> you should keep RISCV_ISA_EXT_XANDESPMU in the diff here and make
->> RISCV_ISA_EXT_ZIMOP have a key of 75. Palmer can probably resolve the
->> conflicting keys when these two series are merged.
->>
->> - Charlie
-> 
-> I missed that other patches in this series were based off my
-> xtheadvector changes. It's not in the cover letter that there is a
-> dependency though. What do you need from that series for this series to
-> work?
+So count it as my paranoia when it comes to putting buffering in between=20
+something that is read more than once and expecting to get different=20
+bits out of that buffered interface :-).
 
-Hey Charlie, I'm not based directly on any of your series, but on
-riscv/for-next which probably already contains your patches.
+I'll just use a single FILE *.
 
-Clément
+> > > > It is not necessary to open and close the file every time a value n=
+eeds
+> > > > to be read from it.
+> >=20
+> > I'm bit unsure where to go with this. While I could change the code to
+> > match what you described, I realized with the two files approach there'=
+s
+> > no need to do even review/lseek() call during the measurement. It might
+> > not be very significant compared with the open that was there initially
+> > but it's still extra.
+>=20
+> We are discussing the resctrl selftests that will accompany the resctrl
+> filesystem in the kernel. When in doubt on how to interact with resctrl u=
+sers
+> use the selftests as reference. Needing to open and close a resctrl file
+> every time a value needs to be read from it is not the correct guidance.
 
-> 
-> - Charlie
-> 
->>
->>>  
->>>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
->>>  
->>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->>> index 2993318b8ea2..41f8ae22e7a0 100644
->>> --- a/arch/riscv/kernel/cpufeature.c
->>> +++ b/arch/riscv/kernel/cpufeature.c
->>> @@ -241,6 +241,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>>  	__RISCV_ISA_EXT_DATA(zihintntl, RISCV_ISA_EXT_ZIHINTNTL),
->>>  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->>>  	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
->>> +	__RISCV_ISA_EXT_DATA(zimop, RISCV_ISA_EXT_ZIMOP),
->>>  	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
->>>  	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
->>>  	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
->>> -- 
->>> 2.43.0
->>>
->>>
->>> _______________________________________________
->>> linux-riscv mailing list
->>> linux-riscv@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>
+That's actually a different goal from the earlier, but I've no problem=20
+adjusting to it.
+
+Initially, this open/close() refactoring was made because of another goal=
+=20
+which was to avoid doing extra syscalls during the test.
+
+--=20
+ i.
+
+--8323328-72461896-1717067480=:1113--
 
