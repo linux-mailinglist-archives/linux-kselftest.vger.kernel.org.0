@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-10971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E01C88D563D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 01:27:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 636378D5641
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 01:28:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 665561F265AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 23:27:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13CA4288813
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 23:28:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B53181CE5;
-	Thu, 30 May 2024 23:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB4E180A71;
+	Thu, 30 May 2024 23:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2kjQBsP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QjHslTbs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAFA4D8C3;
-	Thu, 30 May 2024 23:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4343B183A6A;
+	Thu, 30 May 2024 23:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717111665; cv=none; b=H031IuF5sdsDAT2ezHXVGGX0gbOiUhYgNCP6FtjECk0R8SHNCQzwLuXz9oeSv3EekNArS+9a0YuJKhi0CJsfeV9f3DmwfhXQpM3BqflJF8XWw70WdyIJVqnycB63+deMRbZE0XDmYdrYPyE7hdWXnjOuWmtSkQNxwR8E+nATZXo=
+	t=1717111682; cv=none; b=rk1jUTyiI5jQgQCFqx00T0iUkRyv1B1iHGqinRcgM+JtYDI4jk2H7RFBmMkpBe1AGRwKm3oi18/T5yS0/g3TYavn+wuBjny1W4WEZeSAvwa0+A0mEYwHv44eX0vriLujJu8ZCWh4PqnbCoxV8J+rP8VEZ1LDTZ/ZRHaEvvazdoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717111665; c=relaxed/simple;
-	bh=x/k6Kpvd3d3Dt3fnD5caMY+otK5hlu1tQbKkTc66ihU=;
+	s=arc-20240116; t=1717111682; c=relaxed/simple;
+	bh=ujw6A7cLPJ4pZoF4QMgdKjARQaEwljLkk/Cun06F0n0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DLaqFRTt5o2Z9V7OBUZJXcBs7oeUvyImPu7BB9ZtkpoX3n43SQmWkn7KIIHa80OzycABLI2oLyPtgQE75LHNXa/A0bCTebDI6JDLrLqyTV4HOMviL6drJwLvVG5aRmOLELlPi73eAg8uMwRY627moP1Y4AtbX/WNRT382UJ6pcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2kjQBsP; arc=none smtp.client-ip=209.85.208.54
+	 MIME-Version; b=Ih4fQhiDSXnCGtOFLqmpG2RskFzZW6oIDm6gIu9H1JMtb6wJ615UTw2u6ReABoLovIKsdPi/PPjl1H2b7jC12QaalC2FEOVwYsvsccpH22GcrXbWIjn4dexCPbAu8zM7xIZw1sqR5uyJAZAusVayPbM2P559RHwg1WGwuAHVZMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QjHslTbs; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-57864327f6eso2254573a12.1;
-        Thu, 30 May 2024 16:27:43 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57a32b0211aso248140a12.2;
+        Thu, 30 May 2024 16:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717111662; x=1717716462; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717111679; x=1717716479; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WSLJvHjzEW7OFvjVKUT8WVkEESYqHYJbjaoB4OVbctY=;
-        b=D2kjQBsP6WCvcJ9FRhJsipvShiNiLPxCKbi3p1zZooqtdt1aisVHJT+vD4VZMR0U8/
-         Wj8r0I9yGMbt+XOdBMLsf0cxTKrm6JcJochiUuZ2KhIkcNhP0uLTF3f7cga7Ikuxd7+u
-         BWxxgKphbKED5kDqfil555mETgfPahrLQ7WoQJMRVTH6G6J+5o2pVc2vVbr07eXYvUZN
-         7dgSf0D+0bm9Volpd6JBboAoaIeEVlbIh80lUrHjpkNpFRQFgeLOhfTDxKhFcxTAGtkI
-         /n6vSu733LTPOOe3+cSmYUsBROswBplf6EhHqZrUePkWJ0H1D9gaN77jDkybFdanRA9G
-         b5RA==
+        bh=86jy8d5X7FFm14WAT6OxpflPnTEq2yva/bp539o24YQ=;
+        b=QjHslTbsqMEaoF/ZiV/wjPlvcrGKL48dSrZQKWS3Bph4iCBHRbCNnliProLzpVAEll
+         R+m2AAEC5AuAHl1xVRC+rBO8Iu7PvpP9kF77kivNScUBJBuyQTGqZpKm0s/OD6VyY0Dt
+         Crn11E21v632RhyT8ip4GHnH7cDuk6KjFTbtKtkQEdOwo6XM5bugWXqVqqpapcy7CRZ4
+         LFvHQj5K5yliR5ZUNwAezAgBO4ZzFoRMtWcm/yV4qL1218hkZ8mBV0W2B8zH58Ythgq9
+         1K16GPgzW10/JfqmyC4yKLrGVmB+GcSxi/MertVklEf66ENbXNROUD/7FUZ+V0uNF58U
+         TXbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717111662; x=1717716462;
+        d=1e100.net; s=20230601; t=1717111679; x=1717716479;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WSLJvHjzEW7OFvjVKUT8WVkEESYqHYJbjaoB4OVbctY=;
-        b=lmMOhL8o2Wa/C2XpxkKFgLspB/C6Ezc4b+w/lKBXFLAbDdyDXPKJ9r2YxLrv1V6xb5
-         3SJA1nKFvafgY43H5xRniE4SQctX6WJzfs9gRGZ7gugD+77AU+mRMGiEN/XJQip+eefR
-         d/N89aHd9YbSqjGSCabABdAi44r8xufICw1aP4WX+sEWPfzDWS6EUQ5QrQ7J5AIrJALo
-         +Z0b3mjLDaD8Z5v715bTfmTxWpHTpN3mFXVf3AVyOnmCIhqr97wjt3dLpuMuTeMA6yWr
-         FkEgz5fzlvHCaXQeGIUX9C8rc16xVhgzjs34tNxDz69rr7GRDmLPIhHa/3zfFisQSg05
-         JOBw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCsHc8AYyN8mzFeIP75Gr7G2r/tV9rxR7z/l9knY5svpXC8fqau+kC95bw6nipGrv1yDxilh4T6xBTJriSoomGYVT/GvJxZmvk51yyj0ssPcyNPnuatAF/G0frKqhv9gdKBcUSG/713DU7YRde
-X-Gm-Message-State: AOJu0Yw2sfNxeh1+Q+IoZNuQzTEri/9TXsjsEUUAsa9FUpnAx5h+cY3j
-	dBI24gBJqQFhgftjC+7g3Dz/xSjpq1cNVjez9Y1LI/5x0enMShGIdvV9SA==
-X-Google-Smtp-Source: AGHT+IEBAW0TjmtzG+Sjm6uDWd/Li+E2qd5PmPGUZOyyTg49iDQUIvHu+qPLEL14CBstls6nq7rWYg==
-X-Received: by 2002:a50:9f61:0:b0:574:ebf4:f786 with SMTP id 4fb4d7f45d1cf-57a3644d2b3mr288091a12.16.1717111661820;
-        Thu, 30 May 2024 16:27:41 -0700 (PDT)
+        bh=86jy8d5X7FFm14WAT6OxpflPnTEq2yva/bp539o24YQ=;
+        b=hTKDuSo0v/5nzcllKD1J9f90JSPRm8OpCwtiOSCxOk5ZQPVoiEzoFR9g1RJboOoJsa
+         kTDlNnFN5atgiuJTlJltFR7E3R4aGyb4G5GwldQOCRP/bf4HRsrmUVmhZy4a/Wb3Knyc
+         7y9ZOdCDlRb4MOyFuamTxq0kHBYsuMOhalaqXE0YOC7h+2qPhiWpx/JrR9kH/19tuUkZ
+         ssad6atAKUcH3sLF8qT7tv471KX+SZbPwz8IZeBD+zZwCAEc2toQ3q59en3EpMvKSqTb
+         2C0W1+VKv1DO1AJVmCP8f1IsZYLHJXT5ByouzFucmVZHqYSQykrBzZ52EQbgmdIV4Uj1
+         39mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWiB7OOHhSAyIwfY01b7cGbn+M7KoXYN7xRU1oUD89MIrGt3rC5MhAQyWDE5UAzkiAC/HF6LV1aBLJy0nylCjDkzeNP8vU5RhuDzDVgJZ2T/asFxvuCV0iBn8Mb/M1eZAzBgqKpAcC76zeGN2Ec
+X-Gm-Message-State: AOJu0YzoxDdwM5uqYhIo4WcrW2c8LIZ8uH7yubENKWhO6avg+67Va0je
+	djxs4ja7gEDNJUl3K5ODXKMkQgicTxE0oH7iIDb9dBm1vVjzyrsnmmbJ7g==
+X-Google-Smtp-Source: AGHT+IEsITIBxxuwId87jffyD/ukXFKSCHoAbQ/t0LNpNWhJ1TwBiF1flDVKvATVGvNxzh+1GuF3Kw==
+X-Received: by 2002:a50:8a9d:0:b0:57a:2742:de36 with SMTP id 4fb4d7f45d1cf-57a36563e86mr198024a12.35.1717111679199;
+        Thu, 30 May 2024 16:27:59 -0700 (PDT)
 Received: from lenovo.. (mob-2-43-182-132.net.vodafone.it. [2.43.182.132])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a35e86c36sm197223a12.54.2024.05.30.16.27.38
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a35e86c36sm197223a12.54.2024.05.30.16.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 16:27:41 -0700 (PDT)
+        Thu, 30 May 2024 16:27:58 -0700 (PDT)
 From: technoboy85@gmail.com
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -78,9 +78,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Matteo Croce <teknoraver@meta.com>
-Subject: [PATCH net-next v2 1/2] net: make net.core.{r,w}mem_{default,max} namespaced
-Date: Fri, 31 May 2024 01:27:21 +0200
-Message-ID: <20240530232722.45255-2-technoboy85@gmail.com>
+Subject: [PATCH net-next v2 2/2] selftests: net: tests net.core.{r,w}mem_{default,max} sysctls in a netns
+Date: Fri, 31 May 2024 01:27:22 +0200
+Message-ID: <20240530232722.45255-3-technoboy85@gmail.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240530232722.45255-1-technoboy85@gmail.com>
 References: <20240530232722.45255-1-technoboy85@gmail.com>
@@ -94,122 +94,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Matteo Croce <teknoraver@meta.com>
 
-The following sysctl are global and can't be read from a netns:
-
-net.core.rmem_default
-net.core.rmem_max
-net.core.wmem_default
-net.core.wmem_max
-
-Make the following sysctl parameters available readonly from within a
-network namespace, allowing a container to read them.
+Add a selftest which checks that the sysctl is present in a netns,
+that the value is read from the init one, and that it's readonly.
 
 Signed-off-by: Matteo Croce <teknoraver@meta.com>
 ---
- net/core/sysctl_net_core.c | 75 +++++++++++++++++++++-----------------
- 1 file changed, 42 insertions(+), 33 deletions(-)
+ tools/testing/selftests/net/Makefile        |  1 +
+ tools/testing/selftests/net/netns-sysctl.sh | 40 +++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100755 tools/testing/selftests/net/netns-sysctl.sh
 
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index c9fb9ad87485..2079000691e2 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -382,38 +382,6 @@ proc_dolongvec_minmax_bpf_restricted(struct ctl_table *table, int write,
- #endif
- 
- static struct ctl_table net_core_table[] = {
--	{
--		.procname	= "wmem_max",
--		.data		= &sysctl_wmem_max,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= &min_sndbuf,
--	},
--	{
--		.procname	= "rmem_max",
--		.data		= &sysctl_rmem_max,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= &min_rcvbuf,
--	},
--	{
--		.procname	= "wmem_default",
--		.data		= &sysctl_wmem_default,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= &min_sndbuf,
--	},
--	{
--		.procname	= "rmem_default",
--		.data		= &sysctl_rmem_default,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= &min_rcvbuf,
--	},
- 	{
- 		.procname	= "mem_pcpu_rsv",
- 		.data		= &net_hotdata.sysctl_mem_pcpu_rsv,
-@@ -697,6 +665,41 @@ static struct ctl_table netns_core_table[] = {
- 		.extra2		= SYSCTL_ONE,
- 		.proc_handler	= proc_dou8vec_minmax,
- 	},
-+	/* sysctl_core_net_init() will set the values after this
-+	 * to readonly in network namespaces
-+	 */
-+	{
-+		.procname	= "wmem_max",
-+		.data		= &sysctl_wmem_max,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_sndbuf,
-+	},
-+	{
-+		.procname	= "rmem_max",
-+		.data		= &sysctl_rmem_max,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_rcvbuf,
-+	},
-+	{
-+		.procname	= "wmem_default",
-+		.data		= &sysctl_wmem_default,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_sndbuf,
-+	},
-+	{
-+		.procname	= "rmem_default",
-+		.data		= &sysctl_rmem_default,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= &min_rcvbuf,
-+	},
- };
- 
- static int __init fb_tunnels_only_for_init_net_sysctl_setup(char *str)
-@@ -724,8 +727,14 @@ static __net_init int sysctl_core_net_init(struct net *net)
- 		if (tbl == NULL)
- 			goto err_dup;
- 
--		for (i = 0; i < table_size; ++i)
-+		for (i = 0; i < table_size; ++i) {
-+			if (tbl[i].data == &sysctl_wmem_max)
-+				break;
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index bd01e4a0be2c..6da63d1831c1 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -53,6 +53,7 @@ TEST_PROGS += bind_bhash.sh
+ TEST_PROGS += ip_local_port_range.sh
+ TEST_PROGS += rps_default_mask.sh
+ TEST_PROGS += big_tcp.sh
++TEST_PROGS += netns-sysctl.sh
+ TEST_PROGS_EXTENDED := toeplitz_client.sh toeplitz.sh
+ TEST_GEN_FILES =  socket nettest
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
+diff --git a/tools/testing/selftests/net/netns-sysctl.sh b/tools/testing/selftests/net/netns-sysctl.sh
+new file mode 100755
+index 000000000000..45c34a3b9aae
+--- /dev/null
++++ b/tools/testing/selftests/net/netns-sysctl.sh
+@@ -0,0 +1,40 @@
++#!/bin/bash -e
++# SPDX-License-Identifier: GPL-2.0
++#
++# This test checks that the network buffer sysctls are present
++# in a network namespaces, and that they are readonly.
 +
- 			tbl[i].data += (char *)net - (char *)&init_net;
-+		}
-+		for (; i < table_size; ++i)
-+			tbl[i].mode &= ~0222;
- 	}
- 
- 	net->core.sysctl_hdr = register_net_sysctl_sz(net, "net/core", tbl, table_size);
++source lib.sh
++
++cleanup() {
++    cleanup_ns $test_ns
++}
++
++trap cleanup EXIT
++
++fail() {
++	echo "ERROR: $*" >&2
++	exit 1
++}
++
++setup_ns test_ns
++
++for sc in {r,w}mem_{default,max}; do
++	# check that this is writable in a netns
++	[ -w "/proc/sys/net/core/$sc" ] ||
++		fail "$sc isn't writable in the init netns!"
++
++	# change the value in the host netns
++	sysctl -qw "net.core.$sc=300000" ||
++		fail "Can't write $sc in init netns!"
++
++	# check that the value is read from the init netns
++	[ "$(ip netns exec $test_ns sysctl -n "net.core.$sc")" -eq 300000 ] ||
++		fail "Value for $sc mismatch!"
++
++	# check that this isn't writable in a netns
++	ip netns exec $test_ns [ -w "/proc/sys/net/core/$sc" ] &&
++		fail "$sc is writable in a netns!"
++done
++
++echo 'Test passed OK'
 -- 
 2.45.1
 
