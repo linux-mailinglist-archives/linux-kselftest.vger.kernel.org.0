@@ -1,128 +1,94 @@
-Return-Path: <linux-kselftest+bounces-10898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1984E8D44AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 07:05:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC3FF8D4636
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 09:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAC1BB22E26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 05:05:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 626E81F21A00
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2024 07:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328DA14389C;
-	Thu, 30 May 2024 05:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B1A64D8B5;
+	Thu, 30 May 2024 07:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uRn7mB89"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HaVUsmKG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824A12BD0F;
-	Thu, 30 May 2024 05:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E529C4D8A0;
+	Thu, 30 May 2024 07:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717045527; cv=none; b=HARMNBBN/pbQCETikeO2ASzpfNPJL2TQjxG9mVKpaennWS0BR5TzjN0V8Avaq10ZIHqFJh9bKTmzHeoaBuvQrhyvVOXcXpaAJKPt+hcEvtWKIXq07l+ziV1c1E0Ddswep0gG7z3UvJYQEwC4jLfkPKd5lEbPvlPXuNyKBvO0XcY=
+	t=1717054886; cv=none; b=SxlfGPIlrg9kbftNMOHThQLenvIRz7Tl+5QGV982nOxz35J9qZRTQD+4wmAvF1SzXMzNJZ9ONs4fWz80Af+mLcsz2CnoZNSrcKK6t3VmI9UTlo8TDfzu1XShlH4W+7zu6mNJgXswBfg21b/zxlLEW1FhhK7L15M3i5E6bLQL6nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717045527; c=relaxed/simple;
-	bh=s9qXRDE3kVrAi41iJlR/Y5hBZergFEJWL5Qw7DmJZ7U=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=R7eFEQK5s6YRhRm4WvR8P/QSIarfVXT2BpCQzig9HLkB2mnkqtuCGGCpO5/fV2H/7QY785rR6TLdE6AHdDqNE6TLHRal84gCsjJO2j0CG3BbiXPmso7Iy10vvZ/b87eLg4eFI0PxQKFstrlrcTU0O7WQ09NyoFnMLKBpzpK3Fl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uRn7mB89; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1717045523;
-	bh=s9qXRDE3kVrAi41iJlR/Y5hBZergFEJWL5Qw7DmJZ7U=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=uRn7mB89I2VpD/4rjIY1xGx+r6xJfQejHjCuoOWO4c/11bqz6E8UDyH8oCtRy8De5
-	 +u9cNLQ7jSV+UjaBF5LbzSSx+I2UuXiO45/rk1i4nxYrAs/gqIFg/M4o53AOfwxB2b
-	 yDf/uArjFtwVZu7P+zFsjZAe0EDDiMTgcQkE0iSR5b4ONJLHZtl1zLUgXMw0omEXkM
-	 GR5pSuxMjjNLp8Jv2xSuM1DXliLmW+YMlOiRnzhf8DQakzTI460aVtC5I6fpucz8n5
-	 HD6H8SfxLy/V3nYvyAJrLlvprQyqPpy5l+03hLdEQlY0S6l2R1op6IFB+VCsgUD+C8
-	 EIC1PfLBwUgfg==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CC77A3782173;
-	Thu, 30 May 2024 05:05:13 +0000 (UTC)
-Message-ID: <20323e06-e2f6-4991-8b63-4471b6567932@collabora.com>
-Date: Thu, 30 May 2024 10:04:43 +0500
+	s=arc-20240116; t=1717054886; c=relaxed/simple;
+	bh=9U5nEZdd1Y0T+h6AXKi3ESI1oRaRrYk/nMTOIFwucpo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eK9z1xFbzRmrrnIP6ypu5eKvewBxclXGroSzWxcF4berq5Gd2YVDkavvYAK9/p5Vv5NgtXfGzuCtSuZyCsbu7d6Qt5FB6Cy+JWTNrFd4Yye6xDBIk2f44YiuMHwNIC9bfDZaZKJ562V1Yq+eyTd7t53gMB6QVoRQwpHqTJbOyr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HaVUsmKG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9072FC2BBFC;
+	Thu, 30 May 2024 07:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717054885;
+	bh=9U5nEZdd1Y0T+h6AXKi3ESI1oRaRrYk/nMTOIFwucpo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HaVUsmKGuzogfvGJuUxo/AjvZ98P9YyRl+2z+RgccXM9k0E5bpAyTjbw8QUaBn7Qz
+	 46ebRL3+X4Vl2Wc7W+SoYsSLXShF4RztPXIvDC5QOFdJK1jHYHBeeEcZh4GkrGOWoH
+	 7c2nosHCpwkk9BCILI8W6jqmBNqMaBaOvNxqPsyEivZH0mSuIoXcSB2m5t0NxgMquC
+	 oAIuyeQg4hQxUvIglh/hTnkUfLKhh5tH1KF6JbV5bISAH2oQ8GY4pz5ZdEy6J66wFf
+	 N+syJDTjlzp83+hniIcpBn70Eyts7HncUDxQTxexWyG2QKlgx0VxGFxPNCL1Y9PPDY
+	 ZDYtmm15GnJtw==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/5] use network helpers, part 6
+Date: Thu, 30 May 2024 15:41:07 +0800
+Message-ID: <cover.1717054461.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Beau Belgrave <beaub@linux.microsoft.com>,
- Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
- sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: [PATCH 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
- builds
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-References: <20240529020842.127275-1-jhubbard@nvidia.com>
- <20240529020842.127275-2-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240529020842.127275-2-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/29/24 7:08 AM, John Hubbard wrote:
-> The kselftests may be built in a couple different ways:
->     make LLVM=1
->     make CC=clang
-> 
-> In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
-> of lib.mk, and any Makefiles that include lib.mk, can base decisions
-> solely on whether or not LLVM is set.
-> 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-LGTM
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+For moving dctcp test dedicated code out of do_test() into test_dctcp().
+This patchset adds a new helper start_test() in bpf_tcp_ca.c to refactor
+do_test().
 
-> ---
->  tools/testing/selftests/lib.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 429535816dbd..2902787b89b2 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -1,5 +1,17 @@
->  # This mimics the top-level Makefile. We do it explicitly here so that this
->  # Makefile can operate with or without the kbuild infrastructure.
-> +
-> +# The kselftests may be built in a couple different ways:
-> +#     make LLVM=1
-> +#     make CC=clang
-> +#
-> +# In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest of
-> +# lib.mk, and any Makefiles that include lib.mk, can base decisions solely on
-> +# whether or not LLVM is set.
-> +ifeq ($(CC),clang)
-> +    LLVM := 1
-> +endif
-> +
->  ifneq ($(LLVM),)
->  ifneq ($(filter %/,$(LLVM)),)
->  LLVM_PREFIX := $(LLVM)
+Address Martin's comments for the previous series.
+
+Geliang Tang (5):
+  selftests/bpf: Use connect_to_fd_opts in do_test in bpf_tcp_ca
+  selftests/bpf: Add start_test helper in bpf_tcp_ca
+  selftests/bpf: Use start_test in test_dctcp_fallback in bpf_tcp_ca
+  selftests/bpf: Use start_test in test_dctcp in bpf_tcp_ca
+  selftests/bpf: Drop useless arguments of do_test in bpf_tcp_ca
+
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 140 +++++++++++-------
+ 1 file changed, 85 insertions(+), 55 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.43.0
+
 
