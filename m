@@ -1,62 +1,63 @@
-Return-Path: <linux-kselftest+bounces-11000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ABD78D6284
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:12:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 891098D6286
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:12:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9411DB2631E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:12:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F001287098
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B7AC158A17;
-	Fri, 31 May 2024 13:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1A0158D7D;
+	Fri, 31 May 2024 13:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AdgUtpL4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOKRs8JP"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E774E158A02;
-	Fri, 31 May 2024 13:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BB1158A02;
+	Fri, 31 May 2024 13:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717161119; cv=none; b=krX8fOCEj4xnqEAN7Gr37cOWcS8e1Q2HOfjOuPWNuRnx4LJ/20DNFWTmQnJ5dMbS66Fj0moG4WCm/OT1EwKqa5eEIiyDsO4t+0LOcxMrrscFcXg5szzbHklTD9NSS9MGQEBrJX04P4uIsUZKujHpOFxsXP4uPsRgbNB8vDEnXg8=
+	t=1717161127; cv=none; b=DBE3XX1gnPzBCWkPMWVVnNiKeoIGqNn6fCbD3ju8bI7WvreaAxd+GtWzWcFDLkOuHios5rKJNQh+JwUoXPMdxJYuTo6tlMhm7NPTdHGBezN6FEStYoo+PPeTGFh72ahfvbf1Uhf+Bs/8Ctz3+WevcDjf7QGCKbvc9Ui4UQl6Z3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717161119; c=relaxed/simple;
-	bh=upUyOSi88e6K6NHhyRUhd91/HYgA4M6ItJ1rlhZ0tb4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hf2VP6VS80G5sgLKTjjFET0YlgkC8gPNDxBOoqj2eEZ0o4M2WrvoVK4IKENXYm0C/KxWu96owkMtm3+E4uWNagEhtMKOPNARvZ+7MiPDIs4w9fLtvSjL7NZVxYctWslWwJ78o1l4gdeRY5G1SMsb76+mr7rEzEMDjjKKffld1bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AdgUtpL4; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1717161127; c=relaxed/simple;
+	bh=tEABxayzFRwYRytJEo8h12hyPuOgFgUlmCEyWW6boEo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oatvO1gfZV3Xxgx9exSBVn1nu/1i30Ri4W6JWUH7WLMS+Xt7VJxGBvVp0uNLzPV2++MzrCjEO11gVsid45XZGA/ZTgDxNapdfe3QNfXyd3Tqbf+xaczKq9MJYg4CcS2qge4hyT0bF/g22rpwWYKBKJ6H+sYREbKXPNALRRvQvMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kOKRs8JP; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717161118; x=1748697118;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=upUyOSi88e6K6NHhyRUhd91/HYgA4M6ItJ1rlhZ0tb4=;
-  b=AdgUtpL4Hz8MGje0ruPnyE9mGs3zz46Xb7+kIQGXfDvxU7fupIeNug1V
-   ivej/U34TP2jn098L2vMmzOXpxFBi7b+gPY89+24kpuWZANpflnEkjkYE
-   H93gObc3FAB0giQBPuQdGwn7uG27gWHae8JGMHL+Mo5ZRyaWX1U4qo4mY
-   2z+dMjQHcgWZGiVDsFBqRYKz/m+N3ndH2thSB9yGwm3fsuffjM8iRIlEq
-   UNt8EJCt8YDzXvbASBeb8aqaXTe+8zPZufbz7+pStT4UC7juwVNAZ6cZN
-   E0des44GwedvotJLaTGzFUTbjL5mK8RDR5wxO7mUhqLnnfZlKnEqW65Jd
-   g==;
-X-CSE-ConnectionGUID: AG7/L8DzT8SECI8uBBSWFg==
-X-CSE-MsgGUID: axDOpcEpQXKKIUke29wdGg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="24263191"
+  t=1717161127; x=1748697127;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tEABxayzFRwYRytJEo8h12hyPuOgFgUlmCEyWW6boEo=;
+  b=kOKRs8JPmk9LhOou+1DZHy4oZqoFwfUoFQSvh9xlQvWfcn1PMPx2a4JZ
+   8GNllUtU3evo3zag/f1kmiDx+jxrd57mUum1Lfzip7mapojW64G+8V+RS
+   lHjU+8Q56xssxsRIDHf/QCBCEMXbSmPehmTqGQayMIVzG4xHyBTE/PZ3H
+   CjREpRj/B2o6WGthV7T9u94xQcnVdX3ky44NZpkitZTd8cvQveu+0L8+9
+   DVEDW0Dq39D3o7zGFPmMlkT3uAFcXR9q2o2SOIAfskmMKC/RHX63koFCk
+   vfiZIgDkeCqjn9z+N7KpBGdveQMSPxBsmyNURq2Hsx/JxH2oofqcICk+A
+   w==;
+X-CSE-ConnectionGUID: wpgC1BP3TDa3r2DP9eGJVg==
+X-CSE-MsgGUID: fiojCc64S1KGSdJGY37wPQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="24263203"
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="24263191"
+   d="scan'208";a="24263203"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:11:57 -0700
-X-CSE-ConnectionGUID: 2XHUiKxzRaq0TJ88kgEpyg==
-X-CSE-MsgGUID: tTlNoEFDQ+e306Io3nOiBQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:12:06 -0700
+X-CSE-ConnectionGUID: V8P+O97rTZyN2XE+CI2XIQ==
+X-CSE-MsgGUID: quw91v6BScyN8IqKCkh+Bw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="40595155"
+   d="scan'208";a="40595210"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.152])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:11:53 -0700
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:12:02 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -67,10 +68,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 00/16] selftests/resctrl: resctrl_val() related cleanups & improvements
-Date: Fri, 31 May 2024 16:11:26 +0300
-Message-Id: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 01/16] selftests/resctrl: Fix closing IMC fds on error and open-code R+W instead of loops
+Date: Fri, 31 May 2024 16:11:27 +0300
+Message-Id: <20240531131142.1716-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com>
+References: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,83 +83,138 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+The imc perf fd close() calls are missing from all error paths. In
+addition, get_mem_bw_imc() handles fds in a for loop but close() is
+based on two fixed indexes READ and WRITE.
 
-This series does a number of cleanups into resctrl_val() and
-generalizes it by removing test name specific handling from the
-function.
+Open code inner for loops to READ+WRITE entries for clarity and add a
+function to close() IMC fds properly in all cases.
 
-Hopefully these reach also Shuah successfully as I've recently seen
-rejects for mail from @linux.intel.com to gmail addresses.
-
-v5:
-- Open mem bw file only once and use rewind().
-- Add \n to mem bw file read to allow reading fresh values from the file.
-- Return 0 if create_grp() is given NULL grp_name (matches the original
-  behavior). Mention this in function's kerneldoc.
-- Cast pid_t to int before printing with %d.
-- Caps/typo fixes to kerneldoc and commit messages.
-- Use imperative tone in commit messages and improve them based on points
-  that came up during review.
+Fixes: 7f4d257e3a2a ("selftests/resctrl: Add callback to start a benchmark")
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+---
 
 v4:
-- Merged close fix into IMC READ+WRITE rework patch
+- Merge with the fix close patch
 - Add loop to reset imc_counters_config fds to -1 to be able know which
   need closing
 - Introduce perf_close_imc_mem_bw() to close fds
-- Open resctrl mem bw file (twice) beforehand to avoid opening it during
-  the test
-- Remove MBM .mongrp setup
-- Remove mongrp from CMT test
-
 v3:
-- Rename init functions to <testname>_init()
-- Replace for loops with READ+WRITE statements for clarity
-- Don't drop Return: entry from perf_open_imc_mem_bw() func comment
-- New patch: Fix closing of IMC fds in case of error
-- New patch: Make "bandwidth" consistent in comments & prints
-- New patch: Simplify mem bandwidth file code
-- Remove wrong comment
-- Changed grp_name check to return -1 on fail (internal sanity check)
+- Rework entirely, use open coding instead of for loops for clarity
+---
+ tools/testing/selftests/resctrl/resctrl_val.c | 54 ++++++++++++-------
+ 1 file changed, 36 insertions(+), 18 deletions(-)
 
-v2:
-- Resolved conflicts with kselftest/next
-- Spaces -> tabs correction
-
-Ilpo Järvinen (16):
-  selftests/resctrl: Fix closing IMC fds on error and open-code R+W
-    instead of loops
-  selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1)
-    only
-  selftests/resctrl: Make "bandwidth" consistent in comments & prints
-  selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
-  selftests/resctrl: Use correct type for pids
-  selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
-  selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() &
-    document
-  selftests/resctrl: Simplify mem bandwidth file code for MBA & MBM
-    tests
-  selftests/resctrl: Add ->measure() callback to resctrl_val_param
-  selftests/resctrl: Add ->init() callback into resctrl_val_param
-  selftests/resctrl: Simplify bandwidth report type handling
-  selftests/resctrl: Make some strings passed to resctrlfs functions
-    const
-  selftests/resctrl: Convert ctrlgrp & mongrp to pointers
-  selftests/resctrl: Remove mongrp from MBA test
-  selftests/resctrl: Remove mongrp from CMT test
-  selftests/resctrl: Remove test name comparing from
-    write_bm_pid_to_resctrl()
-
- tools/testing/selftests/resctrl/cache.c       |  10 +-
- tools/testing/selftests/resctrl/cat_test.c    |   5 +-
- tools/testing/selftests/resctrl/cmt_test.c    |  22 +-
- tools/testing/selftests/resctrl/mba_test.c    |  26 +-
- tools/testing/selftests/resctrl/mbm_test.c    |  26 +-
- tools/testing/selftests/resctrl/resctrl.h     |  49 ++-
- tools/testing/selftests/resctrl/resctrl_val.c | 364 ++++++++----------
- tools/testing/selftests/resctrl/resctrlfs.c   |  67 ++--
- 8 files changed, 290 insertions(+), 279 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 445f306d4c2f..f55f5989de72 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -293,6 +293,18 @@ static int initialize_mem_bw_imc(void)
+ 	return 0;
+ }
+ 
++static void perf_close_imc_mem_bw(void)
++{
++	int mc;
++
++	for (mc = 0; mc < imcs; mc++) {
++		if (imc_counters_config[mc][READ].fd != -1)
++			close(imc_counters_config[mc][READ].fd);
++		if (imc_counters_config[mc][WRITE].fd != -1)
++			close(imc_counters_config[mc][WRITE].fd);
++	}
++}
++
+ /*
+  * get_mem_bw_imc:	Memory band width as reported by iMC counters
+  * @cpu_no:		CPU number that the benchmark PID is binded to
+@@ -306,26 +318,33 @@ static int initialize_mem_bw_imc(void)
+ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ {
+ 	float reads, writes, of_mul_read, of_mul_write;
+-	int imc, j, ret;
++	int imc, ret;
++
++	for (imc = 0; imc < imcs; imc++) {
++		imc_counters_config[imc][READ].fd = -1;
++		imc_counters_config[imc][WRITE].fd = -1;
++	}
+ 
+ 	/* Start all iMC counters to log values (both read and write) */
+ 	reads = 0, writes = 0, of_mul_read = 1, of_mul_write = 1;
+ 	for (imc = 0; imc < imcs; imc++) {
+-		for (j = 0; j < 2; j++) {
+-			ret = open_perf_event(imc, cpu_no, j);
+-			if (ret)
+-				return -1;
+-		}
+-		for (j = 0; j < 2; j++)
+-			membw_ioctl_perf_event_ioc_reset_enable(imc, j);
++		ret = open_perf_event(imc, cpu_no, READ);
++		if (ret)
++			goto close_fds;
++		ret = open_perf_event(imc, cpu_no, WRITE);
++		if (ret)
++			goto close_fds;
++
++		membw_ioctl_perf_event_ioc_reset_enable(imc, READ);
++		membw_ioctl_perf_event_ioc_reset_enable(imc, WRITE);
+ 	}
+ 
+ 	sleep(1);
+ 
+ 	/* Stop counters after a second to get results (both read and write) */
+ 	for (imc = 0; imc < imcs; imc++) {
+-		for (j = 0; j < 2; j++)
+-			membw_ioctl_perf_event_ioc_disable(imc, j);
++		membw_ioctl_perf_event_ioc_disable(imc, READ);
++		membw_ioctl_perf_event_ioc_disable(imc, WRITE);
+ 	}
+ 
+ 	/*
+@@ -341,15 +360,13 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ 		if (read(r->fd, &r->return_value,
+ 			 sizeof(struct membw_read_format)) == -1) {
+ 			ksft_perror("Couldn't get read b/w through iMC");
+-
+-			return -1;
++			goto close_fds;
+ 		}
+ 
+ 		if (read(w->fd, &w->return_value,
+ 			 sizeof(struct membw_read_format)) == -1) {
+ 			ksft_perror("Couldn't get write bw through iMC");
+-
+-			return -1;
++			goto close_fds;
+ 		}
+ 
+ 		__u64 r_time_enabled = r->return_value.time_enabled;
+@@ -369,10 +386,7 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ 		writes += w->return_value.value * of_mul_write * SCALE;
+ 	}
+ 
+-	for (imc = 0; imc < imcs; imc++) {
+-		close(imc_counters_config[imc][READ].fd);
+-		close(imc_counters_config[imc][WRITE].fd);
+-	}
++	perf_close_imc_mem_bw();
+ 
+ 	if (strcmp(bw_report, "reads") == 0) {
+ 		*bw_imc = reads;
+@@ -386,6 +400,10 @@ static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ 
+ 	*bw_imc = reads + writes;
+ 	return 0;
++
++close_fds:
++	perf_close_imc_mem_bw();
++	return -1;
+ }
+ 
+ void set_mbm_path(const char *ctrlgrp, const char *mongrp, int domain_id)
 -- 
 2.39.2
 
