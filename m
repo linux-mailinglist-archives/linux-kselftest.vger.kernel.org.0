@@ -1,109 +1,81 @@
-Return-Path: <linux-kselftest+bounces-10991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8767C8D5CFA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 10:42:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D278D5EAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 11:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B86B51C23DDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 08:42:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F020B1F21386
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 09:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E0A153BE4;
-	Fri, 31 May 2024 08:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15EC135A65;
+	Fri, 31 May 2024 09:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UfYrAAWd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qdnhx3mV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13868153BDB
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 08:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B5A133993;
+	Fri, 31 May 2024 09:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717144933; cv=none; b=XGI/Nh6qMeswLCDO5Ii9aa5Wdsgl2aA90xS2MmlT/EOvcm6JPXy3h66mDbG/KSg715ON6k+iN40ubexdQUF0S8EAGoQp1GG5VegGY9L7kjQVNMH39y9AlR2gDdUTJuHNO8JfLA8fXcdEcEktXWE/fO3cB0mMJSK4aOc9RcRvOxg=
+	t=1717148612; cv=none; b=sHz/ATdRQwD4mJT1vKL8R/7lDEpWORh4051FbJ+XkYZ7f8BJTP+JZUbmJ9IAkeesrG3ybW7vhYrXa99p5K4zbzwAUvA6uv81SoY1Fdq8aeLosnvAkfBF3Nv8kY8eSzKteB2e3Cy3E6w5UUzq/sr1f8w31X6gG7AQJonAycX2Wu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717144933; c=relaxed/simple;
-	bh=4yK9SyBdW0zgwmNl9s3wi8n2UWcuNwjF8EG8EoaUDU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RW2e+InLyERrK8CvJNnFNpS5wm+hQ/E5x9J6idrYlftKBJNpuJGm6DdpvvXjtMUdhEvFSeGP4k0moESWKslxl1KXaIkhFliZM90m2kjps5gCQl98xj1FKnD8FvcDMbjaeX7dKfE7Lr0K8GGAxu+YZIekZcEh52JYFy+QVxiPHTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UfYrAAWd; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57a2406f951so1594100a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 01:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1717144929; x=1717749729; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnEJF5YFjXx3H2Urn60X/VuHjAoAlnqwvGpoDCqgBZM=;
-        b=UfYrAAWdHylShCEbxzOoeOw0Y8FuzftgA7pjjJVrdlGGvFxn9WYr3PQfb0URxtY+Zv
-         c54xnW/qxO+Cd9eaBn95RZb4oQe0P/tEznbVq9qRwYtEO5oktDtr4zEr50SeQP05PUTK
-         2bPkqA36Ip+O4cFSsDliBm3Va39q9pxcb15pDvGRXNdJWsBMRCZ8wn7BycR7x7FHa2YX
-         Wjs2vLsrqQMTQjLbu/MSRKqBCQZ15TNVYiY3KNd422BTzPjPsuu4BNyFgA+8jAcjTRuG
-         BTaAi7F9lBZn6EM7YdY7ozLgm6dfIXOWwINt1AVOLTsGXFn7qssTjEQfU0jKFvXGY4Vv
-         9cqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717144929; x=1717749729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fnEJF5YFjXx3H2Urn60X/VuHjAoAlnqwvGpoDCqgBZM=;
-        b=O6AhiiqAqqn/J8bsDs+gAVmGPl8KhPb/rIHEgWIxWEh3yDQQxVvJYkubq/shTdRDUF
-         2J8pe8m2NdczqQoGC/CbSPKShXGjB4UsYLFWgXbVIND5w4WtipMxIdtE9SpN95MNXNff
-         bskmQPulBArZdf5CDmkHk/QPN6CnfO+qwHHlyHFwwmqgoPSRKKsimEvaRQ1UCmqZSYs8
-         QU4HLpz1BJA3qVIqxwAGP+19zIYxqFhIlb2InjknOKo0GKaQpAcn5iOXCzafLMpPvmNb
-         MJHWcMt2AfJ7zQjkWJWIs5OamKr/WqqRWyHozRQU0V2fvInxq9GUZYntqtgWMbHX+XUz
-         yAyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJbXjjeHUbNH2p3LBcZqZ40yl+nPKP9kIMgS8CGmUMC2Ln6meLVSrIxb+hnVESvT4CrgjJGcZnfPUQxAsrdafLZLwDzmjsEemnk//GNM/Z
-X-Gm-Message-State: AOJu0YziYB8FAdOdbCEPWfkIo0bbXe5Ka0wcCh7jhBY2nsIHcr3hpWud
-	SPAsSAJ/UXJz4ldgyFBHI8DDCnQC5kPTUdgcM8mc82UbOrualyrX8mwmMNkSoqQ=
-X-Google-Smtp-Source: AGHT+IFaI4U2rH2Rd9l/+r9yzVCwe48OPbQ3/TkHlZBslQk9PqBEy0Gw2qtSg9KR6sBLoLVxmyYr1A==
-X-Received: by 2002:a50:d4d9:0:b0:573:5c18:c2d5 with SMTP id 4fb4d7f45d1cf-57a36382781mr872799a12.3.1717144929374;
-        Fri, 31 May 2024 01:42:09 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a31bb8282sm734725a12.25.2024.05.31.01.42.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 01:42:09 -0700 (PDT)
-Date: Fri, 31 May 2024 10:42:07 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Ryan Sullivan <rysulliv@redhat.com>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mpdesouza@suse.com,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH] tools/testing/selftests/livepatch: define max
- test-syscall processes
-Message-ID: <ZlmNX78SCFX2Kj3O@pathway.suse.cz>
-References: <20240529201941.13968-1-rysulliv@redhat.com>
+	s=arc-20240116; t=1717148612; c=relaxed/simple;
+	bh=Rp8mA1asZ6wDztf7QBipnOaEZGxaR8gps8Opj1bYW4w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=U+p+DbFsCpwb0VOgguAlYiEW/bcBUJWi3I1eu6tlczpEzStgYIBCNTGimIzlj4KZ/boLLRnWgac7/kcLT0AZXfvOSpVY2hwdjW0aH3XPO6LvHbvsYWNl8bKjxsgUkDKLLzj8K78r60iJz2u9O75tXNlun6Dt9zdC2+7KG/PByHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qdnhx3mV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5364BC116B1;
+	Fri, 31 May 2024 09:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717148612;
+	bh=Rp8mA1asZ6wDztf7QBipnOaEZGxaR8gps8Opj1bYW4w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Qdnhx3mVVovm/FqmJex3a5//aYOs5MD45Ga8LURUXxiFFfYXRKOpVJDtrsTHlFHL7
+	 fKwhPwhQSW3PHt2xguF69VyrARfhzBrdeLTx2fL5L5WuwUR/hYkfSQxPjwhNY9thZR
+	 B+IeN0oHh3QMyZNUpTIW+EjamGuq87FmPihPSk1w17J8ugredcqYZKUPX4Z3BXXgCo
+	 8w/HMocbhZhJgQSo0Xiu41923oyE4CWMO1EQOo6zOBdRdwqaGmQ7ARgbF42rnwLt9z
+	 4/Pr8VTNud4u349nzCgTithq8+7zzxTQrUEoTkfQVrFzctLGRl/EgmObtAMI6vnHrY
+	 XjInCJc9cBH0A==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	mhiramat@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] selftests/tracing: Fix ftracetest testcase issues
+Date: Fri, 31 May 2024 18:43:28 +0900
+Message-Id: <171714860864.198407.18416314586430149538.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240529201941.13968-1-rysulliv@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed 2024-05-29 16:19:41, Ryan Sullivan wrote:
-> Define a maximum allowable number of pids that can be livepatched in
-> test-syscall.sh as with extremely large machines the output from a
-> large number of processes overflows the dev/kmsg "expect" buffer in
-> the "check_result" function and causes a false error.
-> 
-> Reported-by: CKI Project <cki-project@redhat.com>
-> Signed-off-by: Ryan Sullivan <rysulliv@redhat.com>
+Here is a couple of patches to fix issues related to runing environment
+and kernel configuration.
 
-Looks reasonable.
+Thank you,
+---
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Masami Hiramatsu (Google) (2):
+      selftests/tracing: Fix event filter test to retry up to 10 times
+      selftests/tracing: Fix to check the required syscall event
 
-Best Regards,
-Petr
 
-PS: I am going to queue it for 6.11. I will add it into
-    a pull request for 6.10-rcX if there will be another more
-    critical fix which would need such a pull request.
+ .../ftrace/test.d/dynevent/test_duplicates.tc      |    2 +-
+ .../ftrace/test.d/filter/event-filter-function.tc  |   20 +++++++++++++++++++-
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
