@@ -1,165 +1,114 @@
-Return-Path: <linux-kselftest+bounces-11045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A4FC8D6978
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 21:11:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73AFB8D6983
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 21:13:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE2FAB22C26
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:11:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14B651F297FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B84217C7DE;
-	Fri, 31 May 2024 19:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92DA17C223;
+	Fri, 31 May 2024 19:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c+stuysy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Xdt3BDL2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ADF80C0C
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 19:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220C0178369
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 19:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717182710; cv=none; b=oUebHjLW+rJWK3Ix/681Y92sRyUojX5ILvLsWAhXwOa0z+RMtefLJCRS7X/2f1UxsTDrcTuz8OwJatJHMhy52SEv7KtCgvtzrcUllVQ483KFj1SXPYIdTAtMLIh4ErIBXv5RcFiqe2Ms+HsKcyRiLg2B/xvGt3rvJYozmD3DItI=
+	t=1717182810; cv=none; b=lrQp2FpqNKXGiHTFCQyuGT5WZ+nQoDF+497Oaa/tv40TJteuKcQF/nJpB04+HuDSmgIscK5FZ97WeUoWXu4ScOBteVCnehqLBU5UMRys4f3SLkA94MXzsJs3JNNvbZNw1ES3or/QZj8CgSFOXQPYseIy4e0bWlGOxDGeBxCBE7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717182710; c=relaxed/simple;
-	bh=sgtQujDi/xwJoTvozQThnGUOv2FF51IL2+0TqRg8OEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IPM7zAMpmtpcQBPt6g1fn+63YZ2LtT0YxOeEKPB7Zb7L1rjLmqKHkvP3lKXny6hv0LhkK7geoEI2F4g7/9jQ9d0vEootbRFXwRBnjo5xhkp8iSMXH6CVggbUta3eyafgMUdQXbwJCxgT3fCJCB/dI3zQxHYnttcVacSSuqMiuRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c+stuysy; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: jthoughton@google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717182706;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H/R5IQbpE5t+x2dR39LRiJBqiBXfmFPbwxdtpnn5hGs=;
-	b=c+stuysyrYtChztUjj8bfOLa+pidnwFeuWOXm8J8IFP59C7O1SPwkzhQYX7vXUlN1P6bs5
-	FvYG4eEtw8I3Z1F5NDtIKLP4wlgV4ZNL+EPxaYtUlojUk2IX9MNoL7r3xWNfltbQiD1hec
-	SsERK6rU5wdZ1zfN5Rp0Z+kjvAVliNw=
-X-Envelope-To: akpm@linux-foundation.org
-X-Envelope-To: pbonzini@redhat.com
-X-Envelope-To: aou@eecs.berkeley.edu
-X-Envelope-To: ankita@nvidia.com
-X-Envelope-To: anup@brainfault.org
-X-Envelope-To: atishp@atishpatra.org
-X-Envelope-To: axelrasmussen@google.com
-X-Envelope-To: maobibo@loongson.cn
-X-Envelope-To: catalin.marinas@arm.com
-X-Envelope-To: dmatlack@google.com
-X-Envelope-To: rientjes@google.com
-X-Envelope-To: chenhuacai@kernel.org
-X-Envelope-To: james.morse@arm.com
-X-Envelope-To: corbet@lwn.net
-X-Envelope-To: maz@kernel.org
-X-Envelope-To: mpe@ellerman.id.au
-X-Envelope-To: npiggin@gmail.com
-X-Envelope-To: palmer@dabbelt.com
-X-Envelope-To: paul.walmsley@sifive.com
-X-Envelope-To: rananta@google.com
-X-Envelope-To: ryan.roberts@arm.com
-X-Envelope-To: seanjc@google.com
-X-Envelope-To: shahuang@redhat.com
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: suzuki.poulose@arm.com
-X-Envelope-To: zhaotianrui@loongson.cn
-X-Envelope-To: will@kernel.org
-X-Envelope-To: yuzhao@google.com
-X-Envelope-To: yuzenghui@huawei.com
-X-Envelope-To: kvm-riscv@lists.infradead.org
-X-Envelope-To: kvm@vger.kernel.org
-X-Envelope-To: kvmarm@lists.linux.dev
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-doc@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: linux-mips@vger.kernel.org
-X-Envelope-To: linux-mm@kvack.org
-X-Envelope-To: linux-riscv@lists.infradead.org
-X-Envelope-To: linuxppc-dev@lists.ozlabs.org
-X-Envelope-To: loongarch@lists.linux.dev
-Date: Fri, 31 May 2024 12:11:33 -0700
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: James Houghton <jthoughton@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	David Matlack <dmatlack@google.com>,
-	David Rientjes <rientjes@google.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-	Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org,
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev
-Subject: Re: [PATCH v4 6/7] KVM: arm64: Relax locking for kvm_test_age_gfn
- and kvm_age_gfn
-Message-ID: <Zlog5Yk_Pjq0jQhC@linux.dev>
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-7-jthoughton@google.com>
+	s=arc-20240116; t=1717182810; c=relaxed/simple;
+	bh=E296/Sootdy1zZQGNWdy4Bn1+fEQuepZc3Fj238Krog=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ajy2RciU1FS4w2C4GtLKrVyW6ua2DR/K4t61qmhgzPUZLtd/BGqDILLAAoZ7/tUbJ2niWNg2q+BJjGjbLjhfNA/Tl++JjLCIH7DqDvpNxdkOZ3+hyVI9qB1rESrQsZAUuKn2l+3yMrR4eiwoqv1PA17eu6MM1zqtdVLG9Anr6As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Xdt3BDL2; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7e3b1981fe5so10724639f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 12:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1717182808; x=1717787608; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=41fiE54FY+e6bgGGsIbRgTEJBX7DPyrtesC8AIAh9Ug=;
+        b=Xdt3BDL22gzsFqcdg/T4UgxHlLb9JGTaMPdlXWcilOXYfJHV59WqcsF02AAh3C6o9L
+         KtLSBJ1hz9SsKYBDG4WNPdkfoAXLmUe1WPDU+dEOKSUdPjbww8gm9eFstKSEECVAmXfG
+         qPeEz5bcQwzrUzvkcyxU2iK6TRtsYdGjjt2YU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717182808; x=1717787608;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=41fiE54FY+e6bgGGsIbRgTEJBX7DPyrtesC8AIAh9Ug=;
+        b=PeaVerbQSgRQ7TOFyQNamR030ZQu3Y100vFGLyPojxRVN2mBwgV6fVHB6Sr+McxmCG
+         z+t00xx7srMTJxUa2OwJrhN9+vUDB7kFCp7eufVP4AV9JobjxpR8mitVuNVrzsU9Pt1Z
+         FcZyCmR8xmY5mJECEdI4GWh7msDzuyo4iSsJo2xSySb4WQWFQW/UU6wty7gielcnbZae
+         Yaw5mtVAdWPjAE0/UMkNsNppSFATTEWuY0Qv5EPtnaIEHeaZz3zkSsAZDBtivzDrGTZ5
+         +H6Si45pyGrYHuXiKD9KOG2bxNhMSWSJHvpXtW4trQiubKekc85qSZOZn0GEzHRcf6Cg
+         csbg==
+X-Forwarded-Encrypted: i=1; AJvYcCU100uw4OaIaOMATRE9X2qkyN5PlTrciOzDejYFoPJHjAhPfBvUyNyAX+8OgG0WIGHvZ4KoGlqt9Wb/vS8NsVydlkRdIYt4G7olDu6wcL+J
+X-Gm-Message-State: AOJu0YzqvsdnL/kOq6iNNpMIBjZJdoYLphzOGvD4GLb9uU0etux8lhyC
+	ROwETPLYBt870kpag+gOpY9eL7bQsF8CX4NYSBobdjArLjxwpmPzVozf5PaM1Kg=
+X-Google-Smtp-Source: AGHT+IHrKoWGzpR+rMVObi2QP9d4WGkPOovhn8D1ERBu3+IYhrknVsI6Qi0EL7KWAFhRyTDonEBaPg==
+X-Received: by 2002:a5d:9b13:0:b0:7e1:7e15:6471 with SMTP id ca18e2360f4ac-7eaffee2c4amr334625439f.1.1717182808038;
+        Fri, 31 May 2024 12:13:28 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b48b99b0c8sm626884173.107.2024.05.31.12.13.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 12:13:27 -0700 (PDT)
+Message-ID: <f9091516-37ff-43d1-b515-ae8eb3f80e80@linuxfoundation.org>
+Date: Fri, 31 May 2024 13:13:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240529180510.2295118-7-jthoughton@google.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] list: test: remove unused struct 'klist_test_struct'
+To: "Dr. David Alan Gilbert" <linux@treblig.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: davidgow@google.com, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240531151801.128792-1-linux@treblig.org>
+ <89e07c93-a54d-4cc2-8ee1-664389ffcdd7@collabora.com>
+ <Zlod5TMzmXinDu2X@gallifrey>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <Zlod5TMzmXinDu2X@gallifrey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 29, 2024 at 06:05:09PM +0000, James Houghton wrote:
+On 5/31/24 12:58, Dr. David Alan Gilbert wrote:
+> * Muhammad Usama Anjum (usama.anjum@collabora.com) wrote:
+>> On 5/31/24 8:18 PM, linux@treblig.org wrote:
+>>> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+>>>
+>>> 'klist_test_struct' has been unused since the original
+>>> commit 57b4f760f94d ("list: test: Test the klist structure").
+>> Probably a fixes by tag would be needed here.
+> 
+> I'm generally avoiding fixes tags in this set of changes, since
+>    a) They have no behavioural change at all.
+>    b) Downstream and stable kernel people use fixes tags to indicate
+>       stuff they should pick up if they have the original, and there's
+>       no need for them to do that with this cleanup.
+> 
+> Dave
 
-[...]
++1 on using careful use of Fixes tag only on real fixes for the
+reasons mentioned above.
 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index 9e2bbee77491..eabb07c66a07 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -1319,10 +1319,8 @@ static int stage2_age_walker(const struct kvm_pgtable_visit_ctx *ctx,
->  	data->young = true;
->  
->  	/*
-> -	 * stage2_age_walker() is always called while holding the MMU lock for
-> -	 * write, so this will always succeed. Nonetheless, this deliberately
-> -	 * follows the race detection pattern of the other stage-2 walkers in
-> -	 * case the locking mechanics of the MMU notifiers is ever changed.
-> +	 * This walk may not be exclusive; the PTE is permitted to change
-> +	 * from under us.
->  	 */
->  	if (data->mkold && !stage2_try_set_pte(ctx, new))
->  		return -EAGAIN;
+thanks,
+-- Shuah
 
-It is probably worth mentioning that if there was a race to update the
-PTE then the GFN is most likely young, so failing to clear AF probably
-isn't even consequential.
-
--- 
-Thanks,
-Oliver
 
