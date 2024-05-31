@@ -1,218 +1,248 @@
-Return-Path: <linux-kselftest+bounces-11040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74EBA8D690F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:38:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035648D6919
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75B131C25414
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 18:38:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F4761F27801
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 18:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566C117D376;
-	Fri, 31 May 2024 18:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8B17E591;
+	Fri, 31 May 2024 18:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ze6fU8bx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Btrcptra"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061.outbound.protection.outlook.com [40.107.243.61])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11EB17C23B;
-	Fri, 31 May 2024 18:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717180686; cv=fail; b=TOG7uFOQBuaFbcHhQkBpwj07LJIg2/EYoue+iajiC3FtenxngSzEwebqaVqe/E4R/g0xzLwYfPIPvSe8ndJQbY0VAu11Kvwc1MOKaasGhmYn3JREQvhoYw2f8yqJmfHvqrRjLmaCBZnUUWUVH8o99bEKLOBbXphlL3I/uqt+kDU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717180686; c=relaxed/simple;
-	bh=DIhwsKVgYBpxueJvHkM+NRBBDTBGnoZiOvZeZ54nxaE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=djqmRyKP7dsp4eeYoHRs29SKXiCgXfi2/HzYiQYJfLh0VIY4PtephuQFDpeq37cIpKm4EsH7lyqo1yIk10a0WEtg9MaXULKN0f91z0uo+G2NVqZBE0mg615lYs4Oa8ec566ABJdEddzH0xOaSWONbp3uYNDcSqA62TcTTdOQ5Ug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ze6fU8bx; arc=fail smtp.client-ip=40.107.243.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NQp6FIT8wRwv7WOWkRuX/3UdCsQQ1+L678mPkPa+6e59m5jD8PW7rsN66TC9or6ZoKZutrxY7oTeX40cDQS99j1Mo5GDfZXz+KmeoHS3xsgEeGHLlNr727g6n0D2N1Tpm1tIrt/HQOhQsZHr3QysrAc/vp+nDq8MPTeqRSciA3aVTDvVkYJeGWXLCyGLye2PGm9uaRP5OCRfPF0bR/6J8CMA1vGa0r0WBrmLE4i6uEC9IN18d48ZspPX6+qGqdbWrIQxiF/1JWp4mmEFVbw4pCkTbTCKkfhOeLDPbCzGhGLTXXCIkyj1JRnUAajX9+d1MFIsVXz8YKWOpJWV0He5Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8zq87mtnFUsXcFEG/fBM5MQrx+9iKtQ9bsuRba9PzrI=;
- b=KypHE6CJrC8MfIdjQTQFsNS0keYqQUg9TQWf/bEwPaa6v+J/DcCB+9f6m2cEYLkMucW5wa/Q3rseHeZB+KQIOcTH5UIgZsfsBDBswHN3ATAsDTkuPf3WHrjqaVNU2L+WGFCQyhOW+QRJ1BrSrC2RcgU3yMTTd6PsNuh4CeDsMOsk2qAZh9p8MtvfIIkDIBtEPw46B2/jB618dnypbEgCOh6y/Ehh4a2kvokd/Qpw8BZb8k9cGJR7978Ki8ejQXS7lX4s/0mGkA/EnLm8m8TFab+yOp7vaPEDTi3JQFOiC4kZpJqB35T/pLAP0ha3FU4CIre+DpuZJmvzg4cTk/Id0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8zq87mtnFUsXcFEG/fBM5MQrx+9iKtQ9bsuRba9PzrI=;
- b=Ze6fU8bxQhhQyd43zsmFVjp/kErPxNWg1TaacNFGtp25MBCVS8GnsyZi8A9WOjQgOIrdxLKigEWyXWAiGKmwzXArVs6FWBrUF84cbwAD/qH7dSk9Cf9f2/0t2Gn9UuF0y4XXgQ1UK9VXoctPapmYoip1tLwjnSZ4z+7dLIbHEF39UsknE7vJWKXoH6Schy8N3nzJzhZJ9T3YJMmLjED1xx6ocmS0NlXS2uCDvunVEIk0KeszoziOJvG+rccYSgS7NPJgpd/C3sVHsV93mEt7i4ZZdlhScInYs9MiZHsqHOSFBnUKi2puiRxoD76puuIP10p48NS2jkhVOkxV/3zBpA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by MN2PR12MB4207.namprd12.prod.outlook.com (2603:10b6:208:1d9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.24; Fri, 31 May
- 2024 18:37:57 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.021; Fri, 31 May 2024
- 18:37:57 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Beau Belgrave <beaub@linux.microsoft.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Bill Wendling <morbo@google.com>,
-	sunliming <sunliming@kylinos.cn>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 2/2] selftests/lib.mk: silence some clang warnings that gcc already ignores
-Date: Fri, 31 May 2024 11:37:51 -0700
-Message-ID: <20240531183751.100541-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240531183751.100541-1-jhubbard@nvidia.com>
-References: <20240531183751.100541-1-jhubbard@nvidia.com>
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0008.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::21) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0A47E0EA
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 18:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717180890; cv=none; b=MTKAvC+OaKdMh4ayEmgxhuP4a598fAYGHgqcFw9nF4xEXIpajbTzrmqLrqie4iLSE9Ahy8Npk22JXKvolA7Zif2ZoerxM2SrzV6XBYSSvgDatbRhqZrnupaM03pFuPt0EexU5BS0/RlSZf/XpCUBPF01YsuKtacdCgySoP0n9Xo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717180890; c=relaxed/simple;
+	bh=N/Blbd63m9rqy+z4+yPkchYJqSbPLzT+F1ELjIofaUg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3VSEk7jpizypP1zSk+l8/BLcwXl2fydTEju2F7j8OfVV8JEpyrKC3S0TMXLMLCunzF6oj+dbFM9ZGKz4F3D7t9PqnJF6ACof5PUl/csE+lNPlrM0QqYbL7+yxceA1rpTtUJWUGlMjVHvdqnVA07tjGTyiLh3SUD/1Vnox8lBEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Btrcptra; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: yuzhao@google.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1717180886;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrkvQ09UVgsdWxfCoZpOjcpYyls+3WTdBXC7IWp+Dfo=;
+	b=BtrcptrahIHMY/n9/AZA3DXzcLGC2SGPLvU4nGpmgpexhmeAxDztnyub/a9ACk3LuYD+jI
+	LdluBPvSaCSCX0KVcSV8bu/k0Ua9VEQflTkBfxkmAhE+NkAnYBC/j5woXAspbTVxmRtrc9
+	MlzHXFSR+9wI8QbERC3hyyKRlZW/w/A=
+X-Envelope-To: jthoughton@google.com
+X-Envelope-To: seanjc@google.com
+X-Envelope-To: akpm@linux-foundation.org
+X-Envelope-To: pbonzini@redhat.com
+X-Envelope-To: aou@eecs.berkeley.edu
+X-Envelope-To: ankita@nvidia.com
+X-Envelope-To: anup@brainfault.org
+X-Envelope-To: atishp@atishpatra.org
+X-Envelope-To: axelrasmussen@google.com
+X-Envelope-To: maobibo@loongson.cn
+X-Envelope-To: catalin.marinas@arm.com
+X-Envelope-To: dmatlack@google.com
+X-Envelope-To: rientjes@google.com
+X-Envelope-To: chenhuacai@kernel.org
+X-Envelope-To: james.morse@arm.com
+X-Envelope-To: corbet@lwn.net
+X-Envelope-To: maz@kernel.org
+X-Envelope-To: mpe@ellerman.id.au
+X-Envelope-To: npiggin@gmail.com
+X-Envelope-To: palmer@dabbelt.com
+X-Envelope-To: paul.walmsley@sifive.com
+X-Envelope-To: rananta@google.com
+X-Envelope-To: ryan.roberts@arm.com
+X-Envelope-To: shahuang@redhat.com
+X-Envelope-To: shuah@kernel.org
+X-Envelope-To: suzuki.poulose@arm.com
+X-Envelope-To: zhaotianrui@loongson.cn
+X-Envelope-To: will@kernel.org
+X-Envelope-To: yuzenghui@huawei.com
+X-Envelope-To: kvm-riscv@lists.infradead.org
+X-Envelope-To: kvm@vger.kernel.org
+X-Envelope-To: kvmarm@lists.linux.dev
+X-Envelope-To: linux-arm-kernel@lists.infradead.org
+X-Envelope-To: linux-doc@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: linux-kselftest@vger.kernel.org
+X-Envelope-To: linux-mips@vger.kernel.org
+X-Envelope-To: linux-mm@kvack.org
+X-Envelope-To: linux-riscv@lists.infradead.org
+X-Envelope-To: linuxppc-dev@lists.ozlabs.org
+X-Envelope-To: loongarch@lists.linux.dev
+Date: Fri, 31 May 2024 11:41:14 -0700
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Yu Zhao <yuzhao@google.com>
+Cc: James Houghton <jthoughton@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Bibo Mao <maobibo@loongson.cn>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	David Matlack <dmatlack@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>,
+	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>,
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs
+ participate in aging
+Message-ID: <ZloZysAPL0ePk3bY@linux.dev>
+References: <20240529180510.2295118-1-jthoughton@google.com>
+ <20240529180510.2295118-3-jthoughton@google.com>
+ <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+ <ZlelW93_T6P-ZuSZ@google.com>
+ <CAOUHufZdEpY6ra73SMHA33DegKxKaUM=Os7A7aDBFND6NkbUmQ@mail.gmail.com>
+ <Zley-u_dOlZ-S-a6@google.com>
+ <CADrL8HXHWg_MkApYQTngzmN21NEGNWC6KzJDw_Lm63JHJkR=5A@mail.gmail.com>
+ <CAOUHufZq6DwpStzHtjG+TOiHaQ6FFbkTfHMCe8Yy0n_M9MKdqw@mail.gmail.com>
+ <Zll2ILUNWE-JPi9U@linux.dev>
+ <CAOUHufb_-w=B+NfHAUAo=O8bDXZBdXeeGRZD6kY=krN07srbGA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|MN2PR12MB4207:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2cd71373-ff43-4076-b722-08dc81a0ca87
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|7416005|1800799015|376005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?3pRhIEG1CYfUUSAe8lHwAymgdIzUZYIpL0X91tFZ02USPoF7qKtf1WcXf4T2?=
- =?us-ascii?Q?/x+y4juqMV6rdP7vgcXYP2BJFkyjZZq/23NvMViB14KhNPnmqbsasL/yBwTJ?=
- =?us-ascii?Q?FI19fb0O9EzNvTtBt8sZ558qlZ0cA20Uj4YP4hdVeNuxQQ5ZGko89/oM40/J?=
- =?us-ascii?Q?hJNpZCcQuaVanysJ7LvjDXoiAChbASrJUUhXTMOpdWGWwuqyhXpT0LDTYl2o?=
- =?us-ascii?Q?dj05bqa087oI+JHzjqsca4XsGZm2K6rxKYwhjepWtO3p69RbWGmQWgjzuUA6?=
- =?us-ascii?Q?Xrqf3nuWvH2vFKQPLpVhzinV/qctgEcbbFJ639EuaB+hSdZqyQvm0YLJO/Wa?=
- =?us-ascii?Q?eFoB5oPvBhCS3SUNEwPkx0IHncswaj+v+hLjQrE/ai+AFtgNIoV5tLNF2ODJ?=
- =?us-ascii?Q?M/7dBiDpUEMsdjAsVce6NcuEMwljbRN9By/ia0fbCFfqLwapb0APQThzLQDG?=
- =?us-ascii?Q?smCFgXjRM/yhrIl6itSn8W6odoKX9GQ34uavhLueg/sLT59BDHrYg/e6D+C7?=
- =?us-ascii?Q?w3Gl8MVOXsEQmIDAxISI8VkMSwWzQ8J52qwksYmawrMuM/+IYIn1p/1F7Wxx?=
- =?us-ascii?Q?j5+EDo6O2mcdtOn/3mDVZi7RajrOd3m8loJoPkG0Nbmzpcj16w0LvQoEStzu?=
- =?us-ascii?Q?2elDwLj7CHJsrlbxRbKbCLe3DcslBpxO8LoB81IcuJ/qFTZBXeNOtRHybg8c?=
- =?us-ascii?Q?Gt4SIMSBccPsueIuJ0XiTuPKvOCndZeqwxTYCqh5haRIsti/GiEL3X0Vz26b?=
- =?us-ascii?Q?NSNb9OV0cRw06C+Jz3v0v7qpi4BBw1gmbIOe/iSjj6ggGdbR8oBBRGIgA8QW?=
- =?us-ascii?Q?BVrCHLeRRo17IhjMOw5NPuHepBiTXwigm+D+/p6AnGnmh2tvyHXG8r2cziXG?=
- =?us-ascii?Q?cIWmdrhjHGi/+otTSFaq2+SnoVlU5hGHTcCcxoIQ7EBYB24/kLkGy0l2IPXJ?=
- =?us-ascii?Q?dVDT7JbTY1lIwB+Ae2aYXeFJzNFuieLSmzJreAYcbQrnEzVAfD4Ks9lUJMAF?=
- =?us-ascii?Q?7mw/5iVFapJ7NQ3hh0MJvykQpSZYFiVQif6GEA05lohC9+wy9VSmhPBMThpk?=
- =?us-ascii?Q?2jTk8xuVR9ODTabSwZUj+wp1vMw8lDfOPFcLGdJn5v3nb6Oilpzla/7uZxNX?=
- =?us-ascii?Q?DHJH0RdLfUVSLZOjCW8fMQ7nX+XwifVR5z9u870JwRGcRhiJzQNM4PNqA+/N?=
- =?us-ascii?Q?JCHfhVYH2Y6fLYneZYlAFHKpmyMeBXhSywYysrys4EwrPALSotXbWXbDfTqN?=
- =?us-ascii?Q?hysUb2lppJCmGypsgGyN2ukVLo1VOtb9dJuJxxlqVw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ojMyj70feVHdbB1/O4J/zwJyQStcR4otvioygq+UvgbYrxWz1RN69kz1pHvi?=
- =?us-ascii?Q?6QSodPLBH3kvGlE2IDA5sOWoULImEPsFzqJ0ZxF9crffvQ7gjwffgweVHvcE?=
- =?us-ascii?Q?1A09TmWGdWH/W+m+Hc6h5pzbX3FW41ZO0yQ3ugcRfrEPewod86a45aEIq5mt?=
- =?us-ascii?Q?EPDbtDjbndoH7LkplrVWw2GvymM+SnkpSeFF0vRB5cJEeNvuul2PpAdwBQyH?=
- =?us-ascii?Q?VRY3DBQQObMSwMfvfkVFp4x+X8yO5o4VW4S0WAkGoIySijJsyNlOlJnWrlCs?=
- =?us-ascii?Q?lJ/zG2iz1+jTAKFSBucu8AeqItpqVN77crNsPGSLuKu5xmlImicchDMVCgpX?=
- =?us-ascii?Q?0lFb6cLhp6A0QPIDsmfPM+eSIrdMa4qerEjVSF8Z5ehgQLOnaxrkRMmq3Mtj?=
- =?us-ascii?Q?3Mx71EjOb91zBmNjqNOxw/46ah4vZcgwMoyhH45aTfXS8yszwNDyLpv9yscW?=
- =?us-ascii?Q?1n4ZrdDwwVFW5ZqPBaN7NCpPG88cfGGhHU8tOEJSZg71mRsvMUDDlsf1St6d?=
- =?us-ascii?Q?W4z4MIlEup9StADhmoy3l9YRCE3/zsOG56GkavOW17goR2Mi9R7ugnh8ATiu?=
- =?us-ascii?Q?54eNe8D8+gshZXLVa6JfWvUbqG2vcyanKyptjqO97qmu4bYNRaxpo+IweNj7?=
- =?us-ascii?Q?kMUyAJeopdlz3NuASFYVJxdTvUip3Zi66V1yxNDHRadSpzuyvLAFHj4GQzgv?=
- =?us-ascii?Q?eOkUiovHGYV8ulQ5T/oVWk9indj+U8spdpr8bEKQKPnRS+ewZ3dNW2m8G5HL?=
- =?us-ascii?Q?01gVhxEvPFxEpuOBqenljemlLuA+h3N0GBfQhcTKdNX69laZdp6nKWFjocZj?=
- =?us-ascii?Q?PpRJM0u9J5Dx8jSfhcxdKnJzpUFMTfHqi8LrIiC2V6Uob/2nlvTWlvy8ng3v?=
- =?us-ascii?Q?CJFw72A7VEbzOP7VVeUNd2786BnHltVDTxnOgjhIiBx2eKGaljbG34nbegMP?=
- =?us-ascii?Q?jWGzs8BEerUk9Gfk1XcXEBAmfXLXEldrzqmDV9Gl0J3EOYe+8pC/qC48ppzq?=
- =?us-ascii?Q?OMA+8PJ2S6O/hkP6YTbSA3RsMjsYx4YyUAr2BwJ4IYfEh3sBBLKe2+7J4d/Q?=
- =?us-ascii?Q?b63FrYMI9W/BZyPvpK1Agah7hoG+faeHwjAOBw5/BSr2jj+GwZ7zz3iX8zet?=
- =?us-ascii?Q?Nt8lWvTwyJOtmv6OkesBLdwlQsWDFmKExxYwmLTpHVzwjM6v/Lw/xeU1Mzu2?=
- =?us-ascii?Q?sfFqtAZcEXSDwW1ZWa/72lh7YAZm1Lt/HeTyuf4ZnlOomcmhzvqdf4wQlAD1?=
- =?us-ascii?Q?lEwv0k8FVLkEYGmMf3pC3yVH5Mjkv9MxBmWxX8XHeOfTiLwZiUhhdhNvs+1n?=
- =?us-ascii?Q?Fg+TXHhiUdrWKBGCrPxwg3OIjI9Ekz03Wv9K1IvXNx3O2u2UOb0YMNR0wz8f?=
- =?us-ascii?Q?2gZ/WgwFFUoEylC+2BMIS6gtdm67mQK3XRY4m2W/dw1sPpVucZLYztvJczSP?=
- =?us-ascii?Q?LrzBMc5Ob2hv8+AFb5C8YY/MidrVPNQx06QYpl40T49ydELoFdZ4EM+Di9yr?=
- =?us-ascii?Q?hf1/4uw9e1uQ/u3St2dHmQ3EcRZ5Mxh1POgdwF7Utk27KJi7pKToH4QH6+aA?=
- =?us-ascii?Q?tRY/CtCiG3s27Pq3Y/vqCUp+jSt/TAKGyrMCtv2D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cd71373-ff43-4076-b722-08dc81a0ca87
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 18:37:57.3203
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t7t0BUYoRnOnJOz86VuT07Zc6YwRWpgUNzEoW3ta9h3xJmdcGIAOPXECGkeH42sD7YJSCNBcL1TN+jQQY+PTEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4207
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOUHufb_-w=B+NfHAUAo=O8bDXZBdXeeGRZD6kY=krN07srbGA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-gcc defaults to silence (off) for the following warnings, but clang
-defaults to the opposite. The warnings are not useful for the kernel
-itself, which is why they have remained disabled in gcc for the main
-kernel build. And it is only due to including kernel data structures in
-the selftests, that we get the warnings from clang.
+On Fri, May 31, 2024 at 10:45:04AM -0600, Yu Zhao wrote:
+> On Fri, May 31, 2024 at 1:03 AM Oliver Upton <oliver.upton@linux.dev> wrote:
+> >
+> > On Fri, May 31, 2024 at 12:05:48AM -0600, Yu Zhao wrote:
+> 
+> Let me add back what I said earlier:
+> 
+>   I'm not convinced, but it doesn't mean your point of view is
+>   invalid. If you fully understand the implications of your design
+>   choice and document them, I will not object.
 
-    -Waddress-of-packed-member
-    -Wgnu-variable-sized-type-not-at-end
+Thanks, I appreciate the sentiment. Hopefully we can align here.
 
-In other words, the warnings are not unique to the selftests: there is
-nothing that the selftests' code does that triggers these warnings,
-other than the act of including the kernel's data structures. Therefore,
-silence them for the clang builds as well.
+> > > All optimizations in v2 were measured step by step. Even that bitmap,
+> > > which might be considered overengineered, brought a readily
+> > > measuarable 4% improvement in memcached throughput on Altra Max
+> > > swapping to Optane:
+> >
+> > That's great, but taking an iterative approach to the problem allows
+> > the reviewers and maintainers to come to their own conclusions about
+> > each optimization independently. Squashing all of that together and
+> > posting the result doesn't allow for this.
+> 
+> That's your methodology, which I respect: as I said I won't stand in your way.
+> 
+> But mine is backed by data, please do respect that as well,
 
-This eliminates warnings for the net/ and user_events/ kselftest
-subsystems, in these files:
+Data is useful and expected for changes that aim to improve the
+performance of a system in one way or another. That is, after all, the
+sole intention of the work, no?
 
-    ./net/af_unix/scm_rights.c
-    ./net/timestamping.c
-    ./net/ipsec.c
-    ./user_events/perf_test.c
+What I'm also looking for is a controlled experiment, where a single
+independent variable (e.g. locking) can be evaluated against the
+baseline. All-or-nothing data has limited usefulness.
 
-Cc: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/lib.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> by doing what I asked: document your justifications.
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 2902787b89b2..c179c02281e9 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -50,6 +50,14 @@ else
- CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
- endif # CROSS_COMPILE
- 
-+# gcc defaults to silence (off) for the following warnings, but clang defaults
-+# to the opposite. The warnings are not useful for the kernel itself, which is
-+# why they have remained disabled in gcc for the main kernel build. And it is
-+# only due to including kernel data structures in the selftests, that we get the
-+# warnings from clang. Therefore, disable the warnings for clang builds.
-+CFLAGS += -Wno-address-of-packed-member
-+CFLAGS += -Wno-gnu-variable-sized-type-not-at-end
-+
- CC := $(CLANG) $(CLANG_FLAGS) -fintegrated-as
- else
- CC := $(CROSS_COMPILE)gcc
+The justification for a series is against the upstream tree, not some
+out-of-tree stuff. The cover letter explicitly calls out the decision
+to simplify the patch series along with performance data I can reproduce
+on my own systems.
+
+This is a perfect example of how to contribute changes upstream.
+
+> > > What I don't think is acceptable is simplifying those optimizations
+> > > out without documenting your justifications (I would even call it a
+> > > design change, rather than simplification, from v3 to v4).
+> >
+> > No, sorry, there's nothing wrong with James' approach here.
+> 
+> Sorry, are you saying "without documenting your justifications" is
+> nothing wrong? If so, please elaborate.
+
+As I mentioned above, the reasoning is adequately documented and the
+discussion that led to v4 is public. OTOH...
+
+> > The discussion that led to the design of v4 happened on list; you were
+> > on CC. The general consensus on the KVM side was that the bitmap was
+> > complicated and lacked independent justification. There was ample
+> > opportunity to voice your concerns before he spent the time on v4.
+> 
+> Please re-read my previous emails -- I never object to the removal of
+> the bitmap or James' approach.
+> 
+> And please stop making assumptions -- I did voice my concerns with
+> James privately.
+        ^~~~~~~~~
+
+If it happened in private then its no better than having said nothing at
+all.
+
+Please, keep the conversation on-list next time so we can iron out any
+disagreements there. Otherwise contributors are put in a *very* awkward
+situation of mediating the on- and off-list dialogue.
+
+> > You seriously cannot fault a contributor for respinning their work based
+> > on the provided feedback.
+> 
+> Are you saying I faulted James for taking others' feedback?
+
+No. Sufficient justification is captured in the public review feedback +
+series cover letter. Your statement that the approach was changed without
+justification is unsubstantiated.
+
+> Also what do you think about the technical flaws and inaccurate
+> understandings I pointed out? You seem to have a strong opinion on
+> your iterate approach, but I hope you didn't choose to overlook the
+> real meat of this discussion.
+
+Serious question: are you not receiving my mail or something?
+
+I re-raised my question to you from ages ago about locking on the arm64
+MMU. You didn't answer last time, I'd appreciate a reply this time
+around.
+
+Otherwise I couldn't be bothered about the color of the Kconfig bikeshed
+and don't have anything meaningful to add there. I think the three of
+you are trending in the right direction.
+
 -- 
-2.45.1
-
+Thanks,
+Oliver
 
