@@ -1,89 +1,95 @@
-Return-Path: <linux-kselftest+bounces-10996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332408D603E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:07:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 481378D605D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:13:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB6641F233EB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 11:06:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758E81C20A44
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 11:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A91D156F46;
-	Fri, 31 May 2024 11:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55ECE156F4D;
+	Fri, 31 May 2024 11:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="OeS8pXcO"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DFgamvD7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE3F153BC1
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 11:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AEF156F40
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 11:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717153616; cv=none; b=kYdWY4JQFmxSieo0fjwkOXTQCealJLONm6ZTfHxfWnNbAkUPxEHq2OxL7V8RxiEv4S2Kc0ZxocJ5cZeMzeHgLAHEY8CLfDTKOmWO80OnyRes4b/dtQZUJuW25CIMloDxTgrk86BUD65VWPgHjy7ZkJ3/TeU7q8beiUvzlkwaOZ0=
+	t=1717154025; cv=none; b=nyNAYPfW3eLNwEGjiCyMQ1srY52baj22uZi31afFyNwacYEolB2k7YZih1bYg611MvJvoMv7hcFpR042DL9Y6EKa5iBkYTgm8zgY1alVq/GlbBu9Cq6lVgrKd25r0Hz9pjyWew9AkYQZ1YyuHUqAXpj4+YgesaH5ZLPMj6VrsaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717153616; c=relaxed/simple;
-	bh=b63JTI62Pg8zEWJQ7SVpv+5RvTmJQ7KBtaQNOw86Wbc=;
+	s=arc-20240116; t=1717154025; c=relaxed/simple;
+	bh=b3A47GKp3DVbDjtboyMRPNUCGOfNcSUH5VJJp458EUY=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Yd6fYK+kxekLKggWeSRWgKbVqLHaUklICbk9pIP/V0QahPVsqEArs1xm4hqCyMsrFEFWKpsLeoiEhiTGKLZeaz4I7rjRxOWLiLYEfFe+Ve+kwxHebMsh8KXO0G5DB2DAYkB1mU3CSTQXNg4cBrwZzBx7ocKsU90pWdR7ANWsM5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=OeS8pXcO; arc=none smtp.client-ip=209.85.167.54
+	 MIME-Version:Content-Type; b=uT9uHyFYYFbbXotKyx8T1ItJRSgBGWlkWfRZucKtbSBqY0lefcsEZPNXr8CLXW+XOUMwR2oYU7P9uh7MDMpbe7DiFv0jZU71AolXqNahLFcfVbL92gDSPOyjLK8g+mLqUjwAJEfxlhTvbCuSGWFb40ZvkouiUqvP0IQEM8BMOWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=DFgamvD7; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52b78c65cadso2542661e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 04:06:54 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a635a74e0deso218376366b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 04:13:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1717153613; x=1717758413; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1717154022; x=1717758822; darn=vger.kernel.org;
         h=mime-version:message-id:date:user-agent:references:in-reply-to
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3mdfv2rH3R+xYGKIe88q8x7+eTV4JK7os4By2FXBeo=;
-        b=OeS8pXcOuDNdBVZohp0UfMEj4awJocL8s8S4Mprw4joDmXv0l1HTotG5ASpxUsKzKH
-         a1TwAEdVbunDM+A5hKOpesWNA/SwQDCS4Mj9KIXFEj9av7eaKg+d8kjt1t3THeII37yw
-         El+QcSbhRkymySl6S82mn746kcYwjZ3Dr7LIPucmjqWesQGFWZJRkg2LZ826022/0cg9
-         LkjMDwsLCPIcCFLOZYnflu8FyuDtFBqLfT83c+LaPXqSm1/ies/oWjez1YlhZkjwOgDp
-         8UU1A9q4zhUgfxM5MW1MbC6xEYVtM3AaDSQRTG2fhe8Q6hDhmL+3KNCxGsBY0Upc8R+G
-         7kdQ==
+        bh=Skowyj1GrS+nqOzj9o4sPhgAkjxMx0n01JEJn6nXjeY=;
+        b=DFgamvD7fWNZ3ekk7r3dttyp6qGzYlWvuonpHDwWdV7Q+lQAkLxVv2aXBedB4/gs4Y
+         NtqSEizsJlZdAob+p53/h71nk2oYFr58gT8PWVtY4mwcRP2IBcLeyI0Zcr5x2qBg92KA
+         V+McSmAMFibkYBkCCaGfNYSgLBEBWBGMG359uXBmQLXI32WNUKewnfEL6hRmn+yLyVjC
+         6oEWHaViIpu1ECCyPbpVLGXgrpWgulySgknkhO1yp1SqN3YmEoAzk7qEBswDjvx8zlw6
+         YJtTXtiP0GLyB4a8bHrHJC4JeIEH7lCclbbltcWxwSDD0CUnaCuh9sRVeC/WAiTjoAdW
+         Wi9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717153613; x=1717758413;
+        d=1e100.net; s=20230601; t=1717154022; x=1717758822;
         h=mime-version:message-id:date:user-agent:references:in-reply-to
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a3mdfv2rH3R+xYGKIe88q8x7+eTV4JK7os4By2FXBeo=;
-        b=RD5NeoidxWUY/pDmqdUzWqlSglLj+Kxcf0r0m1CH8CLt2LWsj+JhSOzMXvy+ec+LxO
-         yiCbNW+8iZ70C1/sx0CpfBR/l2XSFef2dvdhWXei61QYjgoqs15PAuEoX+gROnlJisge
-         Q6VjBKUVnJsgVoxPzjlX69NRZXM4Xk4nXU4YdPwGZHImj9uoe8ScABov/aQIFlP3cjAU
-         Zf0C6BZEkXuxQtquNu+AgWcBoDiSvOamYuhy2AX29X8oObgBYI5oYID/SFYWGe+5Pnio
-         g5ummttj+7Bqbn4v8K5O2k72G1dsg2k/wL3evapuvwbCxFPerFGhzklbFaYuerUpoUAL
-         GGQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIrBWi9F/iSc24LmH1up2CECErl1IQRB3U+CB+NySb9n44B0HYh5+axCozYy+0ehy77Dq/vrti1X6DvrGaucxuKkWCNdaBQnLbDEFbm84L
-X-Gm-Message-State: AOJu0YxxOetOmSCrUIbpfhLmkVmgQzqafrfx/WM047G/R1h4YygpnY4G
-	+KSG4MqlRnSCxqwwZei8d07mu92TzDHRYRQyR2sT/wVAcxUTd/G1tVPt0AH5coI=
-X-Google-Smtp-Source: AGHT+IFrZEZzV53dUiNjC5OJwpp6b4oDHNv0nM7PrOe0AonBpEcRsg1aMk2Ca7cx4hhhCwlWSelU3g==
-X-Received: by 2002:a19:f804:0:b0:529:a6f6:1b03 with SMTP id 2adb3069b0e04-52b895609ccmr1075401e87.14.1717153612612;
-        Fri, 31 May 2024 04:06:52 -0700 (PDT)
+        bh=Skowyj1GrS+nqOzj9o4sPhgAkjxMx0n01JEJn6nXjeY=;
+        b=nLMi9hcrwycSsn3IbS5ZTBpWrJLxk7CfcXz7OM13asKo5JpDQOiK1hziXTa6vQT11k
+         ufEdL0HenaOo3B+IHG2xl3hatPM6x6DOrwFnTHllb8m4MNDoclGEO2tg39jyQKmOAM23
+         Zzvx71NphuN+Irv2XvoGQCCKoAIZdi9zGxw6sBXuXFjBYHc0hBiE9iauw9bIwfvWq+d7
+         jL0MgsGv8OJaaSD27G5qSNX0Ux46oIBTCjuQR0pHLBqmjN6XYGEwuEPodiTQ8gVicLSR
+         0jHnRJai5cCWIdXdSJjqAoFYKn6rt2VSb4yFgv07Q8PYJ7TrDxxL2bbNQX0+GvKEaiZe
+         RM4w==
+X-Forwarded-Encrypted: i=1; AJvYcCWQzdrfo8Nfro8273RuGDMSXEyFq2yG+gFdFtYLhOEy2S8U8jFRYphGr5sxCLh835pXcvp3jTzdudTAkQMCE5ivoJoDKgLsmHsnaM2IKFPt
+X-Gm-Message-State: AOJu0Yw32kGrsmgPfvwHzZ+c3Vd9hRwawA/SuGiyg2GosUqmQ/iJDeJ2
+	JIKI8ic9bPOh8c/XLS+/nZaE31Sc7RXgonD67o4VVkXALzv5c3MRXqsqeSjMgQg=
+X-Google-Smtp-Source: AGHT+IGaxXHFTVRHEsvv6q9z+YGNFkpqNRVrzgFepTWblfIrwjh5IyPMmzwEBN+iYaMSGdvj8ETx6g==
+X-Received: by 2002:a17:906:6046:b0:a64:3518:f904 with SMTP id a640c23a62f3a-a681fe4e25emr106111666b.7.1717154021966;
+        Fri, 31 May 2024 04:13:41 -0700 (PDT)
 Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:19])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a67eab85f32sm75165066b.180.2024.05.31.04.06.51
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a68519892c8sm49491166b.65.2024.05.31.04.13.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 04:06:52 -0700 (PDT)
+        Fri, 31 May 2024 04:13:41 -0700 (PDT)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Geliang Tang <geliang@kernel.org>
+To: Geliang Tang <geliang@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
  <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,  Alexei Starovoitov
  <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai
  Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@google.com>,  Hao Luo
- <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Geliang Tang <tanggeliang@kylinos.cn>,
-  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 0/8] fixes for test_sockmap
-In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn> (Geliang Tang's
-	message of "Thu, 23 May 2024 14:49:56 +0800")
+ <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,  Stanislav
+ Fomichev <sdf@google.com>,  Hao Luo <haoluo@google.com>,  Jiri Olsa
+ <jolsa@kernel.org>,  Shuah Khan <shuah@kernel.org>,  Geliang Tang
+ <tanggeliang@kylinos.cn>,  bpf@vger.kernel.org,
+  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/8] selftests/bpf: Use bpf_link attachments in
+ test_sockmap
+In-Reply-To: <66590f821d120_e5072085a@john.notmuch> (John Fastabend's message
+	of "Thu, 30 May 2024 16:45:06 -0700")
 References: <cover.1716446893.git.tanggeliang@kylinos.cn>
+	<32cf8376a810e2e9c719f8e4cfb97132ed2d1f9c.1716446893.git.tanggeliang@kylinos.cn>
+	<6654beff96840_23de2086e@john.notmuch> <87wmnfujwg.fsf@cloudflare.com>
+	<577531139c4db3cb35f3f40e23587bcb9815b0ba.camel@kernel.org>
+	<66590f821d120_e5072085a@john.notmuch>
 User-Agent: mu4e 1.12.4; emacs 29.1
-Date: Fri, 31 May 2024 13:06:50 +0200
-Message-ID: <871q5ixmt1.fsf@cloudflare.com>
+Date: Fri, 31 May 2024 13:13:39 +0200
+Message-ID: <87wmnaw7x8.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,30 +98,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Thu, May 23, 2024 at 02:49 PM +08, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->
-> This patchset contains some fixes and improvements for test_sockmap.
->
-> 3-5: switching attachments to bpf_link as Jakub suggested in [1].
-> 1-2, 6-8: Small fixes.
->
-> [1]
-> https://lore.kernel.org/bpf/87zfsiw3a3.fsf@cloudflare.com/
->
-> Geliang Tang (8):
->   selftests/bpf: Fix tx_prog_fd values in test_sockmap
->   selftests/bpf: Drop duplicate definition of i in test_sockmap
->   selftests/bpf: Use bpf_link attachments in test_sockmap
->   selftests/bpf: Replace tx_prog_fd with tx_prog in test_sockmap
->   selftests/bpf: Drop prog_fd array in test_sockmap
->   selftests/bpf: Fix size of map_fd in test_sockmap
->   selftests/bpf: Check length of recv in test_sockmap
->   selftests/bpf: Drop duplicate bpf_map_lookup_elem in test_sockmap
->
->  .../selftests/bpf/progs/test_sockmap_kern.h   |   3 -
->  tools/testing/selftests/bpf/test_sockmap.c    | 101 +++++++++---------
->  2 files changed, 51 insertions(+), 53 deletions(-)
+On Thu, May 30, 2024 at 04:45 PM -07, John Fastabend wrote:
+> Geliang Tang wrote:
+>> On Mon, 2024-05-27 at 21:36 +0200, Jakub Sitnicki wrote:
+>> > On Mon, May 27, 2024 at 10:12 AM -07, John Fastabend wrote:
+>> > > Geliang Tang wrote:
 
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
+[...]
+
+>> > > The one advantage of test_sockmap is we can have it run for longer
+>> > > runs by pushing different options through so might be worth keeping
+>> > > just for that.
+>> > > 
+>> > > If you really want links here I'm OK with that I guess just asking.
+>> > 
+>> > It was me who suggested the switch to bpf_link in reaction to a
+>> > series
+>> > of cleanups to prog_type and prog_attach_type submitted by Geliang.
+>> 
+>> Yes, patches 3-5 address Jakub's suggestion: switching attachments to
+>> bpf_link.
+>
+> OK. Lets just take them the series lgtm. Jakub any other comments?
+
+Gave it a run - all looks well. Thanks for the patches.
+
+Geliang, is there some MPTCP+sockmap use-case you're working towards?
 
