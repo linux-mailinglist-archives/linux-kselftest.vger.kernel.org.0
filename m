@@ -1,169 +1,136 @@
-Return-Path: <linux-kselftest+bounces-11061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D798D6AB7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 22:32:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1330A8D6AEA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 22:39:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DB6B1F24952
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43CA41C21128
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB1E82866;
-	Fri, 31 May 2024 20:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DF717CA1D;
+	Fri, 31 May 2024 20:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NBYD5ft"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PSPqzJel"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F817442D
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 20:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412DF1CA80
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 20:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717187519; cv=none; b=UMK4/AISDlWvkebz08ndUdD6O4tm9i2594RufoqIs0TRSIRCEjEcpiyBW5UoFtsR30+UOsIIvcMlTWaZq21A2RN7lFP1vvVjeMB7cVFkgmEMGUVwf/262xsZuSHqzqIoP0b3aSA+Es5f5MUxzZs0tkBAwLnd7zMXYP0DwuymXbw=
+	t=1717187985; cv=none; b=q2pSE23IwCY1JHu1LY5V/or3hzqgyaOXk8Xt5ChcXt7HvoUAAWFfGXtnvRBhLV7ect49RrREVv66UITKh95pHBvg8H6PgimRt7vDqWg7hpPKxi1D4CDZBAlKNpzK5qoQg/ZZZJJfRo+GPVe4/wJmNnGwVyvZG86Z+FmGQwHjgrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717187519; c=relaxed/simple;
-	bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FfOhsOJpTX1Nj+HJaFD1ng6e9Yt2jcDlKwtYXZPyo+TYpnVt4jspneuPiJGQN27mEGrlHEHoPKk6ErntmeO27YNNSbd0qUNocZzywg+qxxFsxNnJKoHvX9xMMY01KEOchAXP7IXoDbBw06cv3TUsVQ/9js67su9YJFqbHvL3iZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NBYD5ft; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42133fbe137so4945e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 13:31:57 -0700 (PDT)
+	s=arc-20240116; t=1717187985; c=relaxed/simple;
+	bh=shhio0iNEuO7LiDKGHdia85hkYDhPRfghUqasfZZD+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Md/6pzXi9/PTEVwWtwfjuLMRot2zSqfUTdpnD4UB74oUHhwBXraFic+7gGt+7zYYjyGFnU31cyZDzmh5BoqUDWoYPO7yUdK5q9gvd9EZHelY8cSf+wDwCJrIzqPJxMgdCe8PwcNzPYNrDswpeZDXKoAcEEBzjByPy4kk3sCyAf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PSPqzJel; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7e22af6fed5so11683239f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 13:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717187516; x=1717792316; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
-        b=0NBYD5ftjqzLMMU9S/ShWY0r9adcsacAYrM6QxiDfQawAq5CIU1qD7b8p/9X1Hh9Vn
-         lCeav7KbQTZC6WocF6DzhU0JB4kTTRoGMFPgYyLf6liDfGpbROuuf0wi9Ii3IF2Wp6ZH
-         LVAHYybeCo0IO6rGM34tdAhVTzb/Y/5xa6yThldfSM2fHLRpWf9tyD3zhhSPVOvMnQ5F
-         HsTmc2o2GZfb5q551QKtw3Su6tbc7M+8j+U/aPJi73PXxJ0zf4OgSd+qNvvQsbGx64r9
-         MyGt8lz5GklSwzrPofU6xaiWPHie5vbk9RrAhk6LaMlnayWdQ6y7x3a9KE9fRKZisF3z
-         z+Lw==
+        d=linuxfoundation.org; s=google; t=1717187982; x=1717792782; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C6cHgWjpqD8fz5b7y0liRbomCTR9fA7E/zBbxbh5sw4=;
+        b=PSPqzJelWORugQHF9dweOJfzNzUSvvGrJQnLuiYc4EPbX+WP1hTPhy8LD8v8K2lwHr
+         xf9IbD0sqMuWKYU9W03BR7v9OlVsMnV/tNqbqYF/cnNizW7pELx1ZqBMHOa89tXroCB7
+         i/W5uryS1pEQ+pMBEjvJZBqTBNREAhvm5ilUM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717187516; x=1717792316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
-        b=ffZLtuFbXzcfi2/AL41GpMAF/zaNYHYKdC+APLzXGBYmROXHBMnA+nXk2HZRBGUnHd
-         fDCJJCSXyWPHnBrsxIfh80Szvq0RuKDd2W8Px7lSWh7xQJ4aZI3Vhf5bvWwF98Sh8+jz
-         7wXEdpcOFQKOXVqS/g3i13DFKZ5aqJNtpLwLM5a1quHGGQ3hozVVOvx22rnV41+7DGvN
-         a0FiLqXLH11l/wAZoQe9VEx4nJVcA7HVHlPNoEgL/dSz1L/Z6pjeIz41l5ZSqTEbK49L
-         VM7ZeDwXFDuGRYryVkrf4igkMA3l2LCPN+o/nzbtjcRceHft1r0EN0kW2CxG4Jam1eSf
-         IRqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmnJ3Ne7Q+XBZ/bi3PZ/M8mu/ZUXp+zAP3+TpIEtoBRnah3pqzWOLWdpExrc8GmJ9Jld2gSVMbu45kArG/GDKOtyYGnS+WgWVe2Zq25O2A
-X-Gm-Message-State: AOJu0YzNFa0zlF2ewGKfFvdg6qIn/D12t/ozo0+fj3KPy3f4+YSYDb/r
-	C6ytZtAe+NDrp1wf76o0CeJdSsL5OfDXua3kZaDOAJWKD+PoRkqg6clgfgqbCFkk2ECM76OJU/Z
-	cciQwsSM2Cv/tGhem09tF/QRlCVTcBM5Zvlbu
-X-Google-Smtp-Source: AGHT+IECr7zScct/L9KDZG2FMT9+ZV9pueXumB1G4qrj8mkBEYnZr/Z/kM44zsq5c/gUQqURoi9spkN6RMIRJ4Ct+FE=
-X-Received: by 2002:a05:600c:299:b0:418:97c6:188d with SMTP id
- 5b1f17b1804b1-421358ce41bmr41075e9.7.1717187515962; Fri, 31 May 2024 13:31:55
- -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717187982; x=1717792782;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C6cHgWjpqD8fz5b7y0liRbomCTR9fA7E/zBbxbh5sw4=;
+        b=DjaTZCKOtlHhK9V9T6GWWgrB7PgI8kJ5CtSQHpvLWzknhY1Vp3SgDwwvXuAFpqxqzz
+         6ErYRdSFsZXizrhh64qmCrh99d13eDUNlyLN9uxOssuRDQ7RZsKxoYkoWHHi3dhMExbC
+         HbO7M4h00Lhj0sQh5yCE9hjshCSqtr0lHuNowZDv7IPrxYN5Zv5n5Fkyi/lMtxoG6rc1
+         3Oh6by4yG1/aWqWnaiJos472je1tioDIYJQ3WsNVceGB7u88Xh5rkaCg83U9roDAG6qL
+         XrZE/Rv/L6Yzak4LDAdK53nT5pO6IsLYq+47pYPi7m/yGialzYwikmxc9ws3Xtm9aAWG
+         9tOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzzM109x+nmRx4wnKRtKTJVL6pP1p0f2lew32Y2a8FZOS+Kv/re3RqTEAEAq19dHv8HRW0u5PVF7wH5rFBE02ecQWRrMgTM3ZStAtbX2xj
+X-Gm-Message-State: AOJu0Yxv7G+ci4qKbyNKAwc2zVkHJ4MOjeBd9eLfQKmxqp9B8z9LPUAQ
+	0eU15avSEF9SIAc5FfEnAXyl/PKQdgt9JQIQ3s5gtcNViuRHFAXLWhpBJC4bhR8=
+X-Google-Smtp-Source: AGHT+IEi/yRk3a3BA5WhOOsakdFKAemq7R0bofiAbYYvoIhENWSoZzpQG/FvvYP3/VSRcUgV/PlyQA==
+X-Received: by 2002:a5e:8b09:0:b0:7e1:8829:51f6 with SMTP id ca18e2360f4ac-7eafff1f512mr323936339f.1.1717187982213;
+        Fri, 31 May 2024 13:39:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b562a839acsm269349173.67.2024.05.31.13.39.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 13:39:41 -0700 (PDT)
+Message-ID: <0394faa7-af19-4929-a1e4-00d21d0749aa@linuxfoundation.org>
+Date: Fri, 31 May 2024 14:39:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
- <Zll7IuGYGG5uI20W@linux.dev>
-In-Reply-To: <Zll7IuGYGG5uI20W@linux.dev>
-From: Yu Zhao <yuzhao@google.com>
-Date: Fri, 31 May 2024 14:31:17 -0600
-Message-ID: <CAOUHufa50Dy8CJ5+D10Khs4NU-3Pv0B8qi-GYkcppctTVUkPcA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
- in aging
-To: Oliver Upton <oliver.upton@linux.dev>
-Cc: James Houghton <jthoughton@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Catalin Marinas <catalin.marinas@arm.com>, 
-	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, James Morse <james.morse@arm.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Sean Christopherson <seanjc@google.com>, 
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/3] selftests/futex: clang-inspired fixes
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, Edward Liaw <edliaw@google.com>,
+ =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+ "Nysal Jan K . A" <nysal@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240531200755.128749-1-jhubbard@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240531200755.128749-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 31, 2024 at 1:24=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Wed, May 29, 2024 at 03:03:21PM -0600, Yu Zhao wrote:
-> > On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton@goo=
-gle.com> wrote:
-> > >
-> > > Secondary MMUs are currently consulted for access/age information at
-> > > eviction time, but before then, we don't get accurate age information=
-.
-> > > That is, pages that are mostly accessed through a secondary MMU (like
-> > > guest memory, used by KVM) will always just proceed down to the oldes=
-t
-> > > generation, and then at eviction time, if KVM reports the page to be
-> > > young, the page will be activated/promoted back to the youngest
-> > > generation.
-> >
-> > Correct, and as I explained offline, this is the only reasonable
-> > behavior if we can't locklessly walk secondary MMUs.
-> >
-> > Just for the record, the (crude) analogy I used was:
-> > Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
-> > but you are only allowed to pick up 10 of them (and put them in your
-> > pocket). A smart move would be to survey the room *first and then*
-> > pick up the largest ones. But if you are carrying a 500 lbs backpack,
-> > you would just want to pick up whichever that's in front of you rather
-> > than walk the entire room.
-> >
-> > MGLRU should only scan (or lookaround) secondary MMUs if it can be
-> > done lockless. Otherwise, it should just fall back to the existing
-> > approach, which existed in previous versions but is removed in this
-> > version.
->
-> Grabbing the MMU lock for write to scan sucks, no argument there. But
-> can you please be specific about the impact of read lock v. RCU in the
-> case of arm64? I had asked about this before and you never replied.
->
-> My concern remains that adding support for software table walkers
-> outside of the MMU lock entirely requires more work than just deferring
-> the deallocation to an RCU callback. Walkers that previously assumed
-> 'exclusive' access while holding the MMU lock for write must now cope
-> with volatile PTEs.
->
-> Yes, this problem already exists when hardware sets the AF, but the
-> lock-free walker implementation needs to be generic so it can be applied
-> for other PTE bits.
+On 5/31/24 14:07, John Hubbard wrote:
+> Hi,
+> 
+> Here's a few fixes that are part of my effort to get all selftests
+> building cleanly under clang. Plus one that I noticed by inspection.
+> 
+> Changes since v2:
+> 
+> 1) Added a sentence to the .PHONY patch, to show that it is removing
+>     duplicate code.
+> 
+> 2) Added the actual clang warning output to the commit description.
+> 
+> Changes since the first version:
+> 
+> 1) Rebased onto Linux 6.10-rc1
+> 2) Added Reviewed-by's.
+> 
+> ...and it turns out that all three patches are still required, on -rc1,
+> in order to get a clean clang build.
+> 
+> Enjoy!
+> 
+> thanks,
+> John Hubbard
+> 
+> John Hubbard (3):
+>    selftests/futex: don't redefine .PHONY targets (all, clean)
+>    selftests/futex: don't pass a const char* to asprintf(3)
+>    selftests/futex: pass _GNU_SOURCE without a value to the compiler
+> 
+>   tools/testing/selftests/futex/Makefile                      | 2 --
+>   tools/testing/selftests/futex/functional/Makefile           | 2 +-
+>   tools/testing/selftests/futex/functional/futex_requeue_pi.c | 2 +-
+>   3 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> 
+> base-commit: b050496579632f86ee1ef7e7501906db579f3457
 
-Direct reclaim is multi-threaded and each reclaimer can take the mmu
-lock for read (testing the A-bit) or write (unmapping before paging
-out) on arm64. The fundamental problem of using the readers-writer
-lock in this case is priority inversion: the readers have lower
-priority than the writers, so ideally, we don't want the readers to
-block the writers at all.
+Thank you - applied to linux-kselftest fixes branch for next rc.
 
-Using my previous (crude) analogy: puting the bill right in front of
-you (the writers) profits immediately whereas searching for the
-largest bill (the readers) can be futile.
-
-As I said earlier, I prefer we drop the arm64 support for now, but I
-will not object to taking the mmu lock for read when clearing the
-A-bit, as long as we fully understand the problem here and document it
-clearly.
+thanks,
+-- Shuah
 
