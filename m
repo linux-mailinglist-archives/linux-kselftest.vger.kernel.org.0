@@ -1,178 +1,187 @@
-Return-Path: <linux-kselftest+bounces-11030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F078D67FD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:16:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50B238D68AE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:06:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E84E31C25DB4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 17:16:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4B94B28964
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 18:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A525B176AA4;
-	Fri, 31 May 2024 17:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E847BB01;
+	Fri, 31 May 2024 18:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="3eY9F1Li"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0b0H4uHV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zWw66wax";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0b0H4uHV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zWw66wax"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA3F156242
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 17:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8C92E63B;
+	Fri, 31 May 2024 18:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717175796; cv=none; b=LqXVChSGs0UWb7H7zrUdj/XfXms8hrr3sy8KLuVFtyN5mBxmrTeBJ7yECsK6KEaE60HeoC3CJN3fh/i9ZLzA8ds+S3avZf5vG5MabLgRlnDvtj8oLPzTvXM2QkaG7eHFyWADwVIAOFtdeJwtsmZavkqHgB8r6Nyk9t6BH/ZKFnA=
+	t=1717178757; cv=none; b=TGSMIYtJHlqMxwe3pts+joSo+UtW+UXTiXbgUwR3a7vWOvEQi7tFoMWZP8dedn6eEDCBmQmAn89iutf7PDbQWPgCKQS3ha293hG/E9Q9vekhSnA0oMaf23yv4hz+0R3lpzAj8ufAQTiFko5VyczI3cwp0sLzzytJakkW32q3HZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717175796; c=relaxed/simple;
-	bh=7yW3olQCIN+nHXN9a97vOJq0fHbhENXz471EHbIjWt0=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=lLLJYE0ejgygDdwGzWQaOHno9rMCx6tEspsHkRBvdjf3b1zursmMGJ5vK2z7wmsKw2IshrN3cFfYgaYmXBt2DGPq9z/zQjb9UqhzlP9OJpjCI1UAOSDuhEA+4TL2FCvxREyKyRVT7NdZewfneyooT46qNmpP0a4mcMjpyiKKgk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=3eY9F1Li; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1f480624d10so18901305ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 10:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717175794; x=1717780594; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MrwJ5x8spmkzVrVZr0BNH6mTCrPOBGo8xNMOf+MH38=;
-        b=3eY9F1LiZzrXzgHzMMU+IzUUlh3JNpDTfd/EHfcKBNTx2QCbaxV3r5MReBWYB8+uol
-         90g3AgTySr4P1r75PqqmWKv5uAXUDH3Uv8/16wPO7IhzOH3srjIw+0ifMBjPeshvQqM/
-         EW/x+N/mm/Ln8jG7PlaBp1Y9Yx2AhDj5phS3EaZdXMZBofLbcU31lIveELBZyvS5hoT1
-         2puVH5d4rdE94vs0jy2cJb49i5mGbSdU4Eij7kDSbuaR9/+/Spylo4Fox0QiVF7b/NMF
-         s2bt/JHibzgu0aHnoDlXyfKJkg30dQ+U3Buj5lfE2zjrX4onPPJzhnEzmcoZGNeHia+X
-         EIrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717175794; x=1717780594;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9MrwJ5x8spmkzVrVZr0BNH6mTCrPOBGo8xNMOf+MH38=;
-        b=pRpoQUOC3MDogp3Xvq4adtHSFVWbgmTL0lao3djMQgI6zkMD/12uZsaLhRFfw5XAVd
-         UA9GCFJAZf1GV8+6sTS2m1jS5I9UaKw+9AUtYGXJB80XJuyNAL5a1rtGdY1pOWH+GfQk
-         mJW8iDLnPQAl2KNE2Kw4hzfQPmM2dDg+XKYU/D8v4QSAW9SYim/4k21Se7Me9loODndI
-         +XBBEIklbFwSETyutygGBFPhyCNG/HsJMwpvy/YbkLSXHo3vAKJZmEa/lIogmcFyXhHd
-         MH1/47YU2aLWtREbJZAJnUPrzDtDYxH3CadbubUqLbxgWtUCHFK8prV7FXkeHL0d61ZG
-         6zlA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCot7W2MKg1nuLBNyicE3iyLNw209uqgcsYfQFi85KJpmaLhp+4qTLUkKckG+J//2vPy6g7wX1MRqvQ5iEYQQk7+O8hVG76Ra84H9ZKrcm
-X-Gm-Message-State: AOJu0YyRLF71K6JzwHoFuJ6RFu740v5+r7L8w+bAv96JlTIKXenwL1VB
-	NUqN9yjuWNGMKFzav0lXwVDbU308vx6WAPXn97xFrJou4JZvDFcCd3zHevMT3zQ=
-X-Google-Smtp-Source: AGHT+IHasi0W5Xnym4Io1+IZNU3hcK5/Bb0w01iPNeLhEueaE7HtWo0MfcUDnGydKnwxh2H046GhQA==
-X-Received: by 2002:a17:902:ea02:b0:1f4:75bf:5b83 with SMTP id d9443c01a7336-1f6370ceadcmr32403585ad.45.1717175794335;
-        Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f63232dd4fsm18792715ad.45.2024.05.31.10.16.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Message-ID: <665a05f2.170a0220.136cfb.5179@mx.google.com>
-Date: Fri, 31 May 2024 10:16:34 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1717178757; c=relaxed/simple;
+	bh=Jnh7QyNKun8BwM4RB9OQGdu5Wf0BrMYpllXHlrDsZWQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z1BF/doLSg/WzCff1j1ryKijQ+xSNDsCDWa/a8aZemkj8qVjrJQW7QIJwAObFf4H6nqXi9BfBDIUbVXsYvRARJPbcyEqlRp8zCMMRrTHxxPrqVGWL9XZOa/z4g4AJNX/2/Aulk7VLlu/Khx3Fae31QQxBaSIJHLVrFYGOQxbJ0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0b0H4uHV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zWw66wax; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0b0H4uHV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zWw66wax; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6535721CDF;
+	Fri, 31 May 2024 18:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717178752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=0b0H4uHVlmn4PYaYPZ2RiJcGTLn0RThbzuWEnvlyiYM0RALGOFfxWm6m/kWMar0OrwsEgm
+	knB4hmP8xlzt6OfHsTj9JITggfgoFD/sqK/U9ROxUtyg/iO0+IEF59vF1GgCorl7wTfAbC
+	wihc2e2HbrukqIVvJsE26TzdBaou8sw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717178752;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=zWw66waxNWCeJZGDYERyNFm4OpdmMPOhfUgvP2orQF5Af9CP9smNMVsDbI7yenSZl/+137
+	qVDvUlt8Wgrw+nBg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=0b0H4uHV;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zWw66wax
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717178752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=0b0H4uHVlmn4PYaYPZ2RiJcGTLn0RThbzuWEnvlyiYM0RALGOFfxWm6m/kWMar0OrwsEgm
+	knB4hmP8xlzt6OfHsTj9JITggfgoFD/sqK/U9ROxUtyg/iO0+IEF59vF1GgCorl7wTfAbC
+	wihc2e2HbrukqIVvJsE26TzdBaou8sw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717178752;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdPRT5mE0rdQjCqwKaiwjzTSyrTE2NNeScJ+vvQaCOA=;
+	b=zWw66waxNWCeJZGDYERyNFm4OpdmMPOhfUgvP2orQF5Af9CP9smNMVsDbI7yenSZl/+137
+	qVDvUlt8Wgrw+nBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2A1F6132C2;
+	Fri, 31 May 2024 18:05:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id lAaiCIARWmaqOAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 31 May 2024 18:05:52 +0000
+Date: Fri, 31 May 2024 20:06:14 +0200
+Message-ID: <878qzp97qh.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13 9360
+In-Reply-To: <21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
+	<87cyp280yw.wl-tiwai@suse.de>
+	<21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc1-9-g0f42bdf59b4e4
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes kselftest-livepatch: 2 runs,
- 1 regressions (v6.10-rc1-9-g0f42bdf59b4e4)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Spam-Score: -3.51
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 6535721CDF
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	DKIM_TRACE(0.00)[suse.de:+]
 
-kselftest/fixes kselftest-livepatch: 2 runs, 1 regressions (v6.10-rc1-9-g0f=
-42bdf59b4e4)
+On Fri, 31 May 2024 18:03:52 +0200,
+Mark Brown wrote:
+> 
+> On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
+> > On Fri, 31 May 2024 07:50:33 +0200,
+> 
+> > >     not ok 5 write_invalid.0.40
+> > >     not ok 201 write_invalid.0.12
+> > >     not ok 208 write_invalid.0.11
+> > >     not ok 264 write_invalid.0.3
+> > >     not ok 271 write_invalid.0.2
+> > >     not ok 278 write_invalid.0.1
+> > >     not ok 285 write_invalid.0.0
+> 
+> > Through a quick look, those are no real "failures".  It'd be more
+> > preferable if the driver returns an error for invalid values, but
+> > currently it's up to drivers how to deal with them, and some accept as
+> > is but with correction of the values internally.  They are shown as
+> > "skips" in the summary above you showed, after all.
+> 
+> I would say these are all bugs, they show the driver not correcting the
+> value and allowing users to read back out of range values that were
+> written.  Even if the driver is accepting out of range values I'd expect
+> it to transform them somehow when storing, the program will accept a
+> mismatched read when testing this case but it will complain if the read
+> value is not valid according to the control's info.
 
-Regressions Summary
--------------------
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-10-rc1-9-g0f42bdf59b4e4/plan/kselftest-livepatch/
-
-  Test:     kselftest-livepatch
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: v6.10-rc1-9-g0f42bdf59b4e4
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      0f42bdf59b4e428485aa922bef871bfa6cc505e0 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6659f48a0dab1a7ca37e7076
-
-  Results:     1 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftes=
-t-livepatch-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
-f42bdf59b4e4/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftes=
-t-livepatch-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/armhf/initrd.cpio.gz =
+Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
+that it'd be better to enable the input validation globally, something
+like below.
 
 
+Takashi
 
-  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
-/id/6659f48a0dab1a7ca37e7078
-        failing since 58 days (last pass: v6.8-rc1-4-gb54761f6e9773, first =
-fail: linux_kselftest-fixes-6.9-rc2)
+--- a/sound/core/Kconfig
++++ b/sound/core/Kconfig
+@@ -219,7 +219,8 @@ config SND_PCM_XRUN_DEBUG
+ 	  the process or driver which causes the scheduling gaps.
+ 
+ config SND_CTL_INPUT_VALIDATION
+-	bool "Validate input data to control API"
++	bool "Validate input data to control API" if EXPERT
++	default y
+ 	help
+ 	  Say Y to enable the additional validation for the input data to
+ 	  each control element, including the value range checks.
 
-    2024-05-31T16:11:40.647832  / # =
-
-
-    2024-05-31T16:11:40.657216  =
-
-
-    2024-05-31T16:11:45.800624  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
-atcher/tmp/14111144/extract-nfsrootfs-yli_sz22'
-
-    2024-05-31T16:11:45.816678  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
-er/tmp/14111144/extract-nfsrootfs-yli_sz22'
-
-    2024-05-31T16:11:48.041221  / # export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-05-31T16:11:48.052379  export NFS_SERVER_IP=3D'192.168.201.1'
-
-    2024-05-31T16:11:48.171766  / # #
-
-    2024-05-31T16:11:48.180312  #
-
-    2024-05-31T16:11:48.297878  / # export SHELL=3D/bin/bash
-
-    2024-05-31T16:11:48.308150  export SHELL=3D/bin/bash
- =
-
-    ... (76 line(s) more)  =
-
- =20
 
