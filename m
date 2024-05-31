@@ -1,208 +1,169 @@
-Return-Path: <linux-kselftest+bounces-11060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B27328D6A7F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 22:10:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D798D6AB7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 22:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5D2A1C21B45
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:10:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DB6B1F24952
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 20:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 168C218628C;
-	Fri, 31 May 2024 20:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB1E82866;
+	Fri, 31 May 2024 20:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tYtzQq/B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NBYD5ft"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0D717F4F0;
-	Fri, 31 May 2024 20:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717186093; cv=fail; b=IefZjAGaXTgKNX6ucBkHXSYHuTC5CRwjHD+fXlhSvrk8RxM3izVvYEvNZK+EmfPaMBKhGNYE+J7F8MiToIGyFVKGuj83VkC06cFSFIa/HiCNiIzv2DxbTSEpyO55HOTDqDPnrMsz50mW/MYithxb0Zcjeh+F+Vpi2Y7tsWzRc9k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717186093; c=relaxed/simple;
-	bh=xkF1tllS7e+DZTZ9jHJSvdZ+FCkY0pPkBri0DoOV1RM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZYj5OKVsOPJ61SVvf8ediqf487yh07xbAWXN2gt/mEjGmYE+aLfIBGmrMd0lnyO2EXoxCI4ODQ2EFKnbtRfzo1p30qR3mzYgdxvTSD3Q0uxXoS6nD73OJ9ODmryyEl/jZ5eeTcKkS1rLkaVYIpFHDbvvqTsBKVCBcS1eC4M+0ho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tYtzQq/B; arc=fail smtp.client-ip=40.107.223.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OP7SfuQwCRaGtLJw4ZsfJkFN0k2qBjbAY75s3Pn/HN1eFk/CcfOaGyGfDNL3oXOIbvpdAjOGJjvUd2Y23Z5q2je9MSnQyiFUuprBqoq5dMutP5ZbyGeTk1oEPPuiu5LU0bkyH8IFBwi2l5Bn2SfDs1KuYbaZVRdDL8mYxzSuPgtNOxo8tJ01X41SsBeNau9cCTNlq2Uf+U64KIjb7C7xk9YobBWt3ek5j0M1uZJFIS4FpqXJwNiXAzYAUz7FZjzGQpqc0NGPX2YzFZWipWT6fu2g3cwqQ+baOPXom7y5leUDzK2TialiphXBLZ3cmGCnSxit+PTbdrQj1kGvOmQl1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kec8cUwqo8PXdu5+3RBtwP8N5SJ9HTi/RyoulnN5bi4=;
- b=CncQB156/S4gbS/Y/6EkAR81LiScEDAF1y1oI+tLPxbfOHM2vBeRPq5HdbnXO8mKit0+kj8d7xWGM/HC2Kn+SE7Wo+7p5uoquFOEsHXEeUAnROuPvUbzYMtN2H6kQyFYu3cxfG3KoNeaACLty8YZ2HKvTSm3lj5BQ7ipFYrc1rtvqK0AnUbypH9fQMeYHf9j7A5Ld2APVB+JwwH0NDermzzJpFmHS0FC+sPGFfIzjcDpUeuQ/ymgAy+u9GrCnslqe8GACxlQatN1MH5CHStllx+3nXmzpgapfU2dnVjMRYWpas0ZHLDGpcH482CPf+07pSMW0FD5IYf1xg7ZX6kKoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kec8cUwqo8PXdu5+3RBtwP8N5SJ9HTi/RyoulnN5bi4=;
- b=tYtzQq/BobCI6EX8YHbd+W6oiOEL3mFZsPkoh1+NBuWGT+lE9SCTn49wdzhDBZs0klC2wd6kQNV70Dki3VCEwuUN+ze+MfXD3GtAlD17YBf+0WybVmkAXWCXLxNGVZlD3LfcQRUs8f2GiRrIyMhTrcog8B+3HekfeF5yE/Bqs1n3WtW3awA8mG7OoHZehbb/Sj7NOue2KpDG+JYEfIsGtph7+htBtwE3aLvhobuhR89v+bD9aD46qr2HL4v/fTpAf/RmGGQC/OcSgUmsHQWaVCS26rErGEdlzJol5mB51pxyXgB0gXxp6yuDClR8sp+qiPxmkjFKseqCbaSAqmuaEQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by CH3PR12MB8880.namprd12.prod.outlook.com (2603:10b6:610:17b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 31 May
- 2024 20:08:01 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.021; Fri, 31 May 2024
- 20:08:01 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Edward Liaw <edliaw@google.com>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	"Nysal Jan K . A" <nysal@linux.ibm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 3/3] selftests/futex: pass _GNU_SOURCE without a value to the compiler
-Date: Fri, 31 May 2024 13:07:55 -0700
-Message-ID: <20240531200755.128749-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240531200755.128749-1-jhubbard@nvidia.com>
-References: <20240531200755.128749-1-jhubbard@nvidia.com>
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0061.namprd05.prod.outlook.com
- (2603:10b6:a03:74::38) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F817442D
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 20:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717187519; cv=none; b=UMK4/AISDlWvkebz08ndUdD6O4tm9i2594RufoqIs0TRSIRCEjEcpiyBW5UoFtsR30+UOsIIvcMlTWaZq21A2RN7lFP1vvVjeMB7cVFkgmEMGUVwf/262xsZuSHqzqIoP0b3aSA+Es5f5MUxzZs0tkBAwLnd7zMXYP0DwuymXbw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717187519; c=relaxed/simple;
+	bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FfOhsOJpTX1Nj+HJaFD1ng6e9Yt2jcDlKwtYXZPyo+TYpnVt4jspneuPiJGQN27mEGrlHEHoPKk6ErntmeO27YNNSbd0qUNocZzywg+qxxFsxNnJKoHvX9xMMY01KEOchAXP7IXoDbBw06cv3TUsVQ/9js67su9YJFqbHvL3iZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NBYD5ft; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42133fbe137so4945e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 13:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717187516; x=1717792316; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+        b=0NBYD5ftjqzLMMU9S/ShWY0r9adcsacAYrM6QxiDfQawAq5CIU1qD7b8p/9X1Hh9Vn
+         lCeav7KbQTZC6WocF6DzhU0JB4kTTRoGMFPgYyLf6liDfGpbROuuf0wi9Ii3IF2Wp6ZH
+         LVAHYybeCo0IO6rGM34tdAhVTzb/Y/5xa6yThldfSM2fHLRpWf9tyD3zhhSPVOvMnQ5F
+         HsTmc2o2GZfb5q551QKtw3Su6tbc7M+8j+U/aPJi73PXxJ0zf4OgSd+qNvvQsbGx64r9
+         MyGt8lz5GklSwzrPofU6xaiWPHie5vbk9RrAhk6LaMlnayWdQ6y7x3a9KE9fRKZisF3z
+         z+Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717187516; x=1717792316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+        b=ffZLtuFbXzcfi2/AL41GpMAF/zaNYHYKdC+APLzXGBYmROXHBMnA+nXk2HZRBGUnHd
+         fDCJJCSXyWPHnBrsxIfh80Szvq0RuKDd2W8Px7lSWh7xQJ4aZI3Vhf5bvWwF98Sh8+jz
+         7wXEdpcOFQKOXVqS/g3i13DFKZ5aqJNtpLwLM5a1quHGGQ3hozVVOvx22rnV41+7DGvN
+         a0FiLqXLH11l/wAZoQe9VEx4nJVcA7HVHlPNoEgL/dSz1L/Z6pjeIz41l5ZSqTEbK49L
+         VM7ZeDwXFDuGRYryVkrf4igkMA3l2LCPN+o/nzbtjcRceHft1r0EN0kW2CxG4Jam1eSf
+         IRqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmnJ3Ne7Q+XBZ/bi3PZ/M8mu/ZUXp+zAP3+TpIEtoBRnah3pqzWOLWdpExrc8GmJ9Jld2gSVMbu45kArG/GDKOtyYGnS+WgWVe2Zq25O2A
+X-Gm-Message-State: AOJu0YzNFa0zlF2ewGKfFvdg6qIn/D12t/ozo0+fj3KPy3f4+YSYDb/r
+	C6ytZtAe+NDrp1wf76o0CeJdSsL5OfDXua3kZaDOAJWKD+PoRkqg6clgfgqbCFkk2ECM76OJU/Z
+	cciQwsSM2Cv/tGhem09tF/QRlCVTcBM5Zvlbu
+X-Google-Smtp-Source: AGHT+IECr7zScct/L9KDZG2FMT9+ZV9pueXumB1G4qrj8mkBEYnZr/Z/kM44zsq5c/gUQqURoi9spkN6RMIRJ4Ct+FE=
+X-Received: by 2002:a05:600c:299:b0:418:97c6:188d with SMTP id
+ 5b1f17b1804b1-421358ce41bmr41075e9.7.1717187515962; Fri, 31 May 2024 13:31:55
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CH3PR12MB8880:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c8d40b6-9056-461f-6020-08dc81ad5fbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|7416005|1800799015;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tEF/tLgv4sa5bXDoZgd7AX6ndBhs1pf0EHRmLjTjRSkxo49jwNAw4lB5pJ7C?=
- =?us-ascii?Q?DWTZ7zV2nzO16seN5cyyh7KGDiTeVDrXd2Q3+wapWOtWxxBYTz69jLUo0N1C?=
- =?us-ascii?Q?CeiFF+4sqGwmcb4h7iuiO9uU0F4axeBDPFuk7g2qjfmGiyElgkUN3AXQMSNR?=
- =?us-ascii?Q?61iahpDLgTCDkZNwSGRJn6/csMZKS2r0czOzBSCw1sTxpPfhwLj9NGy72dPJ?=
- =?us-ascii?Q?AVxR7rckTAXLOERLWxgI0UKoEAJKDv9uoQ5Fd8fgUzVMLCeIb0/jOZMkP3qj?=
- =?us-ascii?Q?Kkywt81dbi7zl52coPodaV+F5KUYwETPcuqEyYIXIxONxpTDjY0nBwV7F3jH?=
- =?us-ascii?Q?i1NSTtJZ+sEGUPhVhNaoWUrSIjl1QQdtCUrXIQtkXmhKA9gbmOJcVZ/oCfi+?=
- =?us-ascii?Q?Dc4oDOWTNBU89yWo2o0biYneKGrNM/wql04MANY42Em5NKCcZCrgRkdVMWjd?=
- =?us-ascii?Q?cPjFp4OW8gAaDTmOHGLs7HREAo5ZuHznVgRYcj5KSq+L9WgArCplmOm+O3+t?=
- =?us-ascii?Q?mOFJER/aHEuq5kTJ/RzcRggDlJs1o3UuFl4DH92wde5T4gbME5UNgwHrxaAo?=
- =?us-ascii?Q?lj50C7g8+xIpSrkPQuUnxyicAfMMR8AbaBBc1vIE6/hzKdAPlYQ45GCPTt/i?=
- =?us-ascii?Q?QvNtGRtRGDLCTNCRIIhOGb9sQEgdMixnizUlRuqoWDmOpBjyIOQ8Lc+JyTHS?=
- =?us-ascii?Q?uUMNj4d9aU3fHrQ2mmb4hv7Bib3fp+tPl65dg2A8xwpyZUyAdmguJlN6ketJ?=
- =?us-ascii?Q?6Zxd8MAK8/FaiZfIo4WjpkZvT4m7TcWSN8FpebQ0YKXbfqCgupPN1PBrbAwZ?=
- =?us-ascii?Q?lOBqmNEpSTTJkOsPrGRGtfWCJFqbr7vuhK/rvVqyKdS/DOFaBJKRllUZR1N/?=
- =?us-ascii?Q?K7gWi1FmJPADPnT9MlmFEG5Fsl7rJ4TCd0uYHWGDH4oWgvrz/coB+rBv4qZg?=
- =?us-ascii?Q?H7NNI2gtCbhz2wxQmuBGEDrznDSZmxo6FTRyUYlgQ9F7Utjyi6c9RPQTT7LG?=
- =?us-ascii?Q?vwCDf75ipMQqsqoCF+RFOqk+6wFBDbSoeiQnchwb7Ri1zvfHsFlUPYF71Toy?=
- =?us-ascii?Q?nViUzbvM5DhUvrKhHwvb9nBhiMkrhG3G8a63A3xZwwW1OHWau4G5cyHQUeUF?=
- =?us-ascii?Q?DiTZetppB4+aJ4ZZwYP4rabrPJXiNJmp5VHWCnB6XCtk7MlOHKD2EaDojYri?=
- =?us-ascii?Q?CAUKDaWTXxc0raE0JwkaOcdxyvv4Aee/uaj/yfj9nz62MMX+fTk5rpl10nKo?=
- =?us-ascii?Q?MwByJENuV7qDj8wb2S7ieaIijdye+uUe6YQRr11kow=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Sx49zpABabw+98W7m+BDF7X1ID8xqDMQ7rELMN5e2cNAHV3uMveQEXmdPWjo?=
- =?us-ascii?Q?8QWK/QmswGOb6+CjQqyfJH9GmjR1BPYiCk+EoR+nD4s5AmiQprN7TqFKOv/O?=
- =?us-ascii?Q?j+AGa4NyW/nJynr3SWfZbssN4mp5Lq/rTYu3COKVnK1mK3bqXIN7fPNDteVh?=
- =?us-ascii?Q?wN8h5id8Wt1a+OLGpQecTQ6bIUy+c0e8QzthluJAKfJBfjPjgQ25zqv8AiIy?=
- =?us-ascii?Q?qgSNCyWRIV+F0k2EFZYVBl1MhKowOpsVO60xexYznnCLOaPsC7yEha4eo3nS?=
- =?us-ascii?Q?/AJWv6hNCeMoYSMf3Eq8vLg7tbsC9KvbNSA2CFccNXK5rwtc/puPw4z+Ed/H?=
- =?us-ascii?Q?m+yiqYRjGoGp72qjSTduZEQMMeBkHoLcHTzUa9OJGzyYPl8tn5VFG2UgG9Ge?=
- =?us-ascii?Q?bAMN8z6VKWh6oyWxStQRK8SAFhN5PBNV9U3uOiLK1eAjHF1CNemSjwaNM8Kt?=
- =?us-ascii?Q?Zup6OSpMAbB0niC09rENKka1mliNvyIrz0+exITGg5cKn/6sDg5bAlZeEGvw?=
- =?us-ascii?Q?2U+GNBRwh3h46Y/vN1FkEhaqwMsvx8KbG2WsTxCFbKaa3u3pKViHM2P5GLYw?=
- =?us-ascii?Q?OcVAXYFUccq5lrrBlkrVkwEP5gnu0aKu8/cr/ukkhLxk95s38Ab8kU0iFqjh?=
- =?us-ascii?Q?rEhetDAt/YUPkLTS0kqwjLrbNKLITczIrXviOGPvMkkXYkb06EfD3yKNwi4w?=
- =?us-ascii?Q?KtKigGzAPd/7Q/k4ixUTMmQF2XfyPV3FemUHQhzqmaFw+lPQSyWWoJBDqUqh?=
- =?us-ascii?Q?jgkBVWIJWDkfpSbJKzhA3/ABanDgF9xOYGS2e/Lpfw8u3EkEdGXGc/CChQ8/?=
- =?us-ascii?Q?jw/LaOf3ROgrKO7DSEIX765Me3vrO3gzxqCAH4gDucwTRg08YlhIJToMM3KU?=
- =?us-ascii?Q?3X3tCcoitiIo5OGku68reoFgCr4P8lypMARe8C3h5t0jRbklgNCIk7kXzOM5?=
- =?us-ascii?Q?aUAwYyZh0hVg0wFQwm2XYFPtBbJhiySmxxkYxu+w37yUDJ6VSpequo7+llwZ?=
- =?us-ascii?Q?BL0aJDSZM2An8KsyadVwmKuw7615OEP1IMfeMpfwzD3V0P7Zdq6+amvOEwKt?=
- =?us-ascii?Q?Z7BLTjNLMOcIUOB8sZPN7QAZwCUhwQA5eHcB0AUzl4Vy6r7Muaqf0i5bjDpG?=
- =?us-ascii?Q?eln0yjgcNJhJRn2IKEbA9cbyYOCn8iCpNbLyAyf+k8ASpV6p/pl9Oi2DPrVb?=
- =?us-ascii?Q?P6r+aY7ReFfNDcPQs7JatQs24QULKlW321nkcFZObKLtPw5VdRCRIVeH5r2m?=
- =?us-ascii?Q?8axGFQjzEW4k7lS5Xono4zIONSQlg6bp+4onukH/CU2yJT36ZbgKcpdvra/w?=
- =?us-ascii?Q?LnBHWoHXQpO0iw0qLH0HsqFSU5YfMLTpWQBicO3SWjk8gy7cBc+70yJxcJz+?=
- =?us-ascii?Q?Ok+tW8lEaaWIQqWsFLaP+RuaIh13DuKo+3eZR3yNo4PDcZKnjOwavWIkou+d?=
- =?us-ascii?Q?omeDfUUM6hU6qxa4eNvQCj2MMbgXLL8ZilkLRoLIHTl0nww1rQrtDb38tZQz?=
- =?us-ascii?Q?f8/r0KXkJVVRRwZaLYGzz9TseL0WlPjQNVTyPhsLlIuvoq4MTry757S9b220?=
- =?us-ascii?Q?XjqNm6IWmTrIQy6OuB9VjeyYq85N+h2nHdmOk1qg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c8d40b6-9056-461f-6020-08dc81ad5fbe
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 20:08:01.6616
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TSnSRU0lxLdPUunJKyR9cxI6LryTrSwuOnXA0qmF//1TdR1S4h6XcfYL4DSSSoADjlCUVMDj/Dp0jeEUcg9lkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8880
+References: <20240529180510.2295118-1-jthoughton@google.com>
+ <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+ <Zll7IuGYGG5uI20W@linux.dev>
+In-Reply-To: <Zll7IuGYGG5uI20W@linux.dev>
+From: Yu Zhao <yuzhao@google.com>
+Date: Fri, 31 May 2024 14:31:17 -0600
+Message-ID: <CAOUHufa50Dy8CJ5+D10Khs4NU-3Pv0B8qi-GYkcppctTVUkPcA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
+ in aging
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: James Houghton <jthoughton@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Catalin Marinas <catalin.marinas@arm.com>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, James Morse <james.morse@arm.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Sean Christopherson <seanjc@google.com>, 
+	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-It's slightly better to set _GNU_SOURCE in the source code, but if one
-must do it via the compiler invocation, then the best way to do so is
-this:
+On Fri, May 31, 2024 at 1:24=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Wed, May 29, 2024 at 03:03:21PM -0600, Yu Zhao wrote:
+> > On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton@goo=
+gle.com> wrote:
+> > >
+> > > Secondary MMUs are currently consulted for access/age information at
+> > > eviction time, but before then, we don't get accurate age information=
+.
+> > > That is, pages that are mostly accessed through a secondary MMU (like
+> > > guest memory, used by KVM) will always just proceed down to the oldes=
+t
+> > > generation, and then at eviction time, if KVM reports the page to be
+> > > young, the page will be activated/promoted back to the youngest
+> > > generation.
+> >
+> > Correct, and as I explained offline, this is the only reasonable
+> > behavior if we can't locklessly walk secondary MMUs.
+> >
+> > Just for the record, the (crude) analogy I used was:
+> > Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
+> > but you are only allowed to pick up 10 of them (and put them in your
+> > pocket). A smart move would be to survey the room *first and then*
+> > pick up the largest ones. But if you are carrying a 500 lbs backpack,
+> > you would just want to pick up whichever that's in front of you rather
+> > than walk the entire room.
+> >
+> > MGLRU should only scan (or lookaround) secondary MMUs if it can be
+> > done lockless. Otherwise, it should just fall back to the existing
+> > approach, which existed in previous versions but is removed in this
+> > version.
+>
+> Grabbing the MMU lock for write to scan sucks, no argument there. But
+> can you please be specific about the impact of read lock v. RCU in the
+> case of arm64? I had asked about this before and you never replied.
+>
+> My concern remains that adding support for software table walkers
+> outside of the MMU lock entirely requires more work than just deferring
+> the deallocation to an RCU callback. Walkers that previously assumed
+> 'exclusive' access while holding the MMU lock for write must now cope
+> with volatile PTEs.
+>
+> Yes, this problem already exists when hardware sets the AF, but the
+> lock-free walker implementation needs to be generic so it can be applied
+> for other PTE bits.
 
-    $(CC) -D_GNU_SOURCE=
+Direct reclaim is multi-threaded and each reclaimer can take the mmu
+lock for read (testing the A-bit) or write (unmapping before paging
+out) on arm64. The fundamental problem of using the readers-writer
+lock in this case is priority inversion: the readers have lower
+priority than the writers, so ideally, we don't want the readers to
+block the writers at all.
 
-...because otherwise, if this form is used:
+Using my previous (crude) analogy: puting the bill right in front of
+you (the writers) profits immediately whereas searching for the
+largest bill (the readers) can be futile.
 
-    $(CC) -D_GNU_SOURCE
-
-...then that leads the compiler to set a value, as if you had passed in:
-
-    $(CC) -D_GNU_SOURCE=1
-
-That, in turn, leads to warnings under both gcc and clang, like this:
-
-    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
-
-Fix this by using the "-D_GNU_SOURCE=" form.
-
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/futex/functional/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index a392d0917b4e..994fa3468f17 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
--CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-+CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
- LDLIBS := -lpthread -lrt
- 
- LOCAL_HDRS := \
--- 
-2.45.1
-
+As I said earlier, I prefer we drop the arm64 support for now, but I
+will not object to taking the mmu lock for read when clearing the
+A-bit, as long as we fully understand the problem here and document it
+clearly.
 
