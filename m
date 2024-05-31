@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-11014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 138E48D62A6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:15:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13A308D62B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B11091F27970
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:15:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33A928ACF1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 13:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDD3158D66;
-	Fri, 31 May 2024 13:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535941779BB;
+	Fri, 31 May 2024 13:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e6KbIi5p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cd7VRIKb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2273158A1B;
-	Fri, 31 May 2024 13:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13AE176AC9;
+	Fri, 31 May 2024 13:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717161255; cv=none; b=ZjR422d3H9cY5K4FXRZZ+cgKPQaojPDzqeA7Zr2supC7XHb9I7HhR0JTy1eKjV0vwxReM5pzKkdoqpDJprDMya/GayospY0b2IfrW/ivMGjXNISqlfgYOqCzA90S5ySQUBJG8BGPNL1zsdQykqGG2zCi0ZpU3tmPmfqRuTpnjGo=
+	t=1717161265; cv=none; b=h2gJE0pcvFrroPuwDr0kNAt1aU3Y4hMAsIxXqhn9wfoqoKET+nYnb/R5MhMxpXm7yRaGOfnt+QsDKHXIRHXD4vJcB0fsdVOFp6kWSKsqy3LX8CWsUtWaoMYOaNqysnZSY9EMDgXK0QG0y6yirsanmPGF1EILGYTwQIxLKjwwixY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717161255; c=relaxed/simple;
-	bh=gEdB0ql+iXyQKgfAS8X+Gy4guSIHDeUO8eOjHZ1F3U8=;
+	s=arc-20240116; t=1717161265; c=relaxed/simple;
+	bh=CvFqSJiNzfsGJ0vkCckpwpi4AWMEa7rfewympWlIBiE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cI3nW0jC8gEebuzaEMKg3xx1mONbQ5mV60gChwUgHWDT/PbEYYNbMSqDkFSwkMzXkpQZQhT2030RH/9UGezIkwKtvvu50qFfe3QLdwR5Dk3ztimR2aKSR2j+iO1vChiwTdwG5ScAzuw2gr+SGVikceTyOB/Es7C87OM/BdjNIAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e6KbIi5p; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version:Content-Type; b=q+/M9XZnAVOCxJpfrJCGZudgHMbyYUpTrhkthRewW46etlNpLUx1AXuEpYNw2ywpCvvv7TpfrinrHoDUdxY+qqw/zg/sMlwe7Gszhz9BCzZbG/7cGUxdFam6aROe0C2HVBaZdOo/CYQ1wgCLZtfXGeJT6jRqygLUM/O9H4Utbec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cd7VRIKb; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717161254; x=1748697254;
+  t=1717161264; x=1748697264;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gEdB0ql+iXyQKgfAS8X+Gy4guSIHDeUO8eOjHZ1F3U8=;
-  b=e6KbIi5p7raMM2ksS5IEZfeN/xhChSJ5gyMsKDRcuDiQ1qg18IY1+2Pt
-   5jbDsI5rpVTAmFxqTcoGJyIUvM+IqNuQHV/otuuxyTduhIQvnWJubp3GU
-   1StHhXoUfjbFO4f0EtkqP2FZ8GmXvq5EipUKF0l8IZ9JSbQ0JuhzfLUQB
-   3yvI5cGei24lUPoFdt1/UpYw7hNvIKPESXuCASxI86Xzrj5H3wtFBg+Tv
-   PWa0XFI2cJmThs0fsvlnxbEwUZPQKh8PDNZI08emKq/UmYiNPtPjmdPVL
-   jvls0ipq3O0WGqA597c+Hxy3AGPqJFWJ5QifY6vuKfXtFQNehi6S0opel
-   g==;
-X-CSE-ConnectionGUID: Gvtc6LeiTSaFgVicbDX9TQ==
-X-CSE-MsgGUID: bgqgkP6BQQyyYv3JZHx3iA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="25103339"
+  bh=CvFqSJiNzfsGJ0vkCckpwpi4AWMEa7rfewympWlIBiE=;
+  b=cd7VRIKbbA5V8+XXP8VkesR6kroGd00OPp1Fzln14N5bMYXpkQCgBqcp
+   HrozOO/1GZ0I7uckCb7TnDCdVfAnKOfkQnuzpZbZjWj2YtQdQMFFOssfR
+   SyY/7jCzvcLnDlP0y7mXdAGHGhlpR10iDAeH5G+UFKQAzAKWi6PAnxAnA
+   aeCAhy6aWiAQWztTgty8UoczdJN3t+0PRlkn3dtbw4yGJI2k2mDx6HF5m
+   c0V0zp8L/mRGuiQTQlUiYc5Vj9O2cMwRe9q04haKuKh+UQJ2TmY2LLBeN
+   CMQRkkNajmNdthJv4g82MTbD7WLxXGTUJn4lwLG+f5d7qFG/cVDTMKWRQ
+   A==;
+X-CSE-ConnectionGUID: 0noPJ0dzSh6uLWNso3nWsQ==
+X-CSE-MsgGUID: /oTECt9dRqW7w+R5se8ITg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="17501591"
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="25103339"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:14:14 -0700
-X-CSE-ConnectionGUID: /jPvPeo2THigHTycFu4FPQ==
-X-CSE-MsgGUID: snFfrxzdS7mWIRJWwA4QtA==
+   d="scan'208";a="17501591"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:14:23 -0700
+X-CSE-ConnectionGUID: xdABLVBuTx2nkFoeVUs5AQ==
+X-CSE-MsgGUID: 05NSAZhBSHCaDnD00btXsQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="41078021"
+   d="scan'208";a="36240683"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.152])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:14:10 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 06:14:21 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -68,9 +68,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 14/16] selftests/resctrl: Remove mongrp from MBA test
-Date: Fri, 31 May 2024 16:11:40 +0300
-Message-Id: <20240531131142.1716-15-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 15/16] selftests/resctrl: Remove mongrp from CMT test
+Date: Fri, 31 May 2024 16:11:41 +0300
+Message-Id: <20240531131142.1716-16-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com>
 References: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com>
@@ -83,30 +83,51 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Nothing during MBA test uses mongrp even if it has been defined ever
-since the introduction of the MBA test in the commit 01fee6b4d1f9
-("selftests/resctrl: Add MBA test").
+The CMT selftest instantiates a monitor group to read LLC occupancy.
+Since the test also creates a control group, it is unnecessary to
+create another one for monitoring because control groups already
+provide monitoring too.
 
-Remove the mongrp from MBA test.
+Remove the unnecessary monitor group from the CMT selftest.
 
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
- tools/testing/selftests/resctrl/mba_test.c | 1 -
- 1 file changed, 1 deletion(-)
+--
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 9c9a4f22e529..5e0b1e794295 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -166,7 +166,6 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+v4:
+- New patch
+---
+ tools/testing/selftests/resctrl/cmt_test.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 238f514ba7e6..b63fa1e93307 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -17,12 +17,12 @@
+ #define MAX_DIFF_PERCENT	15
+ 
+ #define CON_MON_LCC_OCCUP_PATH		\
+-	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/llc_occupancy"
++	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
+ 
+ static int cmt_init(const struct resctrl_val_param *param, int domain_id)
+ {
+ 	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
+-		param->ctrlgrp, param->mongrp, domain_id);
++		param->ctrlgrp, domain_id);
+ 
+ 	return 0;
+ }
+@@ -146,7 +146,6 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
  	struct resctrl_val_param param = {
- 		.resctrl_val	= MBA_STR,
+ 		.resctrl_val	= CMT_STR,
  		.ctrlgrp	= "c1",
 -		.mongrp		= "m1",
  		.filename	= RESULT_FILE_NAME,
- 		.init		= mba_init,
- 		.setup		= mba_setup,
+ 		.mask		= ~(long_mask << n) & long_mask,
+ 		.num_of_runs	= 0,
 -- 
 2.39.2
 
