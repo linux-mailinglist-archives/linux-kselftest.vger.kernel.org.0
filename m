@@ -1,160 +1,157 @@
-Return-Path: <linux-kselftest+bounces-10998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4A3C8D61C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 14:31:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D3EE8D6230
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 14:51:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 531911F28058
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 12:31:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E66DF284048
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 12:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA19158A2E;
-	Fri, 31 May 2024 12:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF05B15884B;
+	Fri, 31 May 2024 12:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3R8Tcdz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="luLGxnmE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B65158862;
-	Fri, 31 May 2024 12:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD16210EC;
+	Fri, 31 May 2024 12:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717158639; cv=none; b=dF0BGf1SJ7YCPvlZzSsK6dLGQSobs8VvAw06pSiYf+lhrYVPpHDZnsK2LkScW5x2/V2akjTN8SN5vW1LqaZ1BVZE4ZQqsBaEMCruwXDnSLMVx28NI9LAJVvAsl/4AH5q78WijDirJocEi5sX2SjtyWcBkxuYhg+KxgDp+IW5jmE=
+	t=1717159911; cv=none; b=DUmRi7sDMaIGFXQK/qb2dFUVvVlkvXXF8wLzvfgqsYetTsDZQQV0mytUJ+KwTgZX2gSjN0evji4AAy/bBi72HwOT8+qhMS05Mh0np8MAsBeObgdttxK2Xjv/AUScT49zD8TQRXeYFVO7VNfCzNb6Bb357gda+JptNS6QymlxuAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717158639; c=relaxed/simple;
-	bh=elMV5nlVUCpXGxL/arb3/iQCax33bq4ad5idfGKdJL8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tzbGuvdJ3Ozqwr+u6QnXjpxvHgV7pqYUPezO7naT74O+mjVb4ftOO6bldceelTfTUVRXoCbAga2LOtNAS4fXxBDe5b9BVku+oeBKpW7H9fjMiDWHltfP8T2qL4HuCoOqwoKBYf8Evc5Laj0TqgRHvEtK25RuHmsr8AJoN363TCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3R8Tcdz; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717159911; c=relaxed/simple;
+	bh=mq2Zzqny2IVXTs3luQ/FAMhkfHVKM3ejXtFE0TZCml4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=oKJKk+0xGHGn3vJ692yORFNyoFfwVM/85hXXKzmPVDhtbX4UeuihsRiB2N5UUCLJ0RNc1qiqWYql/8i2Adse1asTpPOPyR37BpWA+QiGkskNmO1Bq1vL0aNZoUMftPWjruA8ZN4V6rKZUASpPW8A1X/9FDRzzGMpvWf/bLTafks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=luLGxnmE; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717158638; x=1748694638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=elMV5nlVUCpXGxL/arb3/iQCax33bq4ad5idfGKdJL8=;
-  b=U3R8TcdzJZWV8rKGKK6HC74C4JJypA+e60JfAzFF3dHyA4Vq4qtt2yuV
-   26IEGpISfc4OgDVKUxqlZopJ3rTV1VtYmBznKIJT5/7b7gWWrzke8rwuz
-   uv2CVIEI9ITvfpgSNWu5iZdb6kuhIeoHMnnguSJ0SlG2jh831L8/PIe0W
-   RwXAlbk/Ak4A67mQ5ArU4AczWouLk6xPoI7Y1hmWGqNOH8cRMuyWkotR1
-   Qd7myVd90IFnBbWj5ReL5odTSVMLTw0iyHEp1iUNaRSXuybU3NrHUdVst
-   tIhjqlFybuxsxGl9Lbqg92TALJhj65sy1JSuaTzdGuP6b8zWZGMEyCaxR
-   w==;
-X-CSE-ConnectionGUID: 0FDGtSiYQsiM/jgrw0thZg==
-X-CSE-MsgGUID: Q1q3DAzURoGm8yBpXIReJQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="39093349"
+  t=1717159910; x=1748695910;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=mq2Zzqny2IVXTs3luQ/FAMhkfHVKM3ejXtFE0TZCml4=;
+  b=luLGxnmEAUdSPynLO7N1hp4ey3wblvcGEsWGmn/EJ1Nrh7bnvgF2lvKG
+   eD9etu6B2hCAvjsdlBBW7zidJf5PMbVXGiDqWvF8A9hKvSnCNexLKKUNo
+   MRGYS3pGFeI+X0sluXzXeXMRRuFCqEsp7d/hVdM6+xwdozBYydFC7fa/g
+   +a280HH+/lRwa4KaDSlY5txi7E5zfaa38qyz2tZH+5A9ZGKSmTjkc1We4
+   nPaDXIATyLdgwbErITfP48JpuMONmQILXIM+3GJ3VH1brfmOORxv2MKxj
+   6tKnSBXsrtvL1ImfkGG/e4gMr7haM/s+iSSFiTNKL2bGaFb7Bv9Z6V3/C
+   A==;
+X-CSE-ConnectionGUID: dEK4+ey5RMCWG35y1KdmUw==
+X-CSE-MsgGUID: DGKesi6tRdq05FQxoJ/zcQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="16647416"
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="39093349"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 05:30:28 -0700
-X-CSE-ConnectionGUID: i98rGWf7SXK/HkAiegwFTA==
-X-CSE-MsgGUID: 6ibuqBWfQRe899Pf5ixvdg==
+   d="scan'208";a="16647416"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 05:51:49 -0700
+X-CSE-ConnectionGUID: ME7YDNouRmuXSHs5bc096w==
+X-CSE-MsgGUID: 1RdvsJU8T/yDNeC0TVKyXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="59321521"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 31 May 2024 05:30:25 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sD1Oo-000H4b-2B;
-	Fri, 31 May 2024 12:30:22 +0000
-Date: Fri, 31 May 2024 20:29:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Tissoires <bentiss@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Alexei Starovoitov <ast@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
-	Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH HID 03/13] HID: bpf: implement HID-BPF through
- bpf_struct_ops
-Message-ID: <202405312035.U1rZN04z-lkp@intel.com>
-References: <20240528-hid_bpf_struct_ops-v1-3-8c6663df27d8@kernel.org>
+   d="scan'208";a="41077266"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.152])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 05:51:48 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 31 May 2024 15:51:44 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v4 02/16] selftests/resctrl: Calculate resctrl FS derived
+ mem bw over sleep(1) only
+In-Reply-To: <3b0baf88-c9cb-49c0-a6e1-acb581403f52@intel.com>
+Message-ID: <23188ca6-2de8-3998-c73f-41939a964754@linux.intel.com>
+References: <20240520123020.18938-1-ilpo.jarvinen@linux.intel.com> <20240520123020.18938-3-ilpo.jarvinen@linux.intel.com> <04d0a5d6-82fa-4cc7-bd80-ee5cbd35f0c3@intel.com> <ea0c86b9-ae77-c2d9-b52b-239ae42603e8@linux.intel.com> <d8063ee7-1744-45a2-b6b9-506e68106baf@intel.com>
+ <b029db88-2e09-0b4a-f46a-84b5e535f178@linux.intel.com> <904aa442-9fc5-c6dd-f367-07b197085f7b@linux.intel.com> <700e3df4-4e10-4870-a1df-49d4616cbc45@intel.com> <0f294d43-e704-d1de-06ee-97bb81ebb9cb@linux.intel.com>
+ <3b0baf88-c9cb-49c0-a6e1-acb581403f52@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240528-hid_bpf_struct_ops-v1-3-8c6663df27d8@kernel.org>
+Content-Type: multipart/mixed; BOUNDARY="8323328-125186921-1717136622=:1027"
+Content-ID: <af795ab7-1f7b-2778-334f-1fa913818b38@linux.intel.com>
 
-Hi Benjamin,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-kernel test robot noticed the following build warnings:
+--8323328-125186921-1717136622=:1027
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <5c23432d-da0d-c4b1-66c5-528957fb8e06@linux.intel.com>
 
-[auto build test WARNING on 70ec81c2e2b4005465ad0d042e90b36087c36104]
+On Thu, 30 May 2024, Reinette Chatre wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/HID-rename-struct-hid_bpf_ops-into-hid_ops/20240528-212222
-base:   70ec81c2e2b4005465ad0d042e90b36087c36104
-patch link:    https://lore.kernel.org/r/20240528-hid_bpf_struct_ops-v1-3-8c6663df27d8%40kernel.org
-patch subject: [PATCH HID 03/13] HID: bpf: implement HID-BPF through bpf_struct_ops
-config: i386-buildonly-randconfig-002-20240531 (https://download.01.org/0day-ci/archive/20240531/202405312035.U1rZN04z-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405312035.U1rZN04z-lkp@intel.com/reproduce)
+> Hi Ilpo,
+>=20
+> On 5/30/24 4:11 AM, Ilpo J=E4rvinen wrote:
+> > On Tue, 28 May 2024, Reinette Chatre wrote:
+> > > On 5/28/24 3:19 AM, Ilpo J=E4rvinen wrote:
+> > > > On Fri, 24 May 2024, Ilpo J=E4rvinen wrote:
+> > > > > On Fri, 24 May 2024, Reinette Chatre wrote:
+> > > > > > On 5/24/24 12:57 AM, Ilpo J=E4rvinen wrote:
+> > > > > > > On Thu, 23 May 2024, Reinette Chatre wrote:
+>=20
+> ...
+>=20
+> > > > > > It is not necessary to open and close the file every time a val=
+ue
+> > > > > > needs
+> > > > > > to be read from it.
+> > > >=20
+> > > > I'm bit unsure where to go with this. While I could change the code=
+ to
+> > > > match what you described, I realized with the two files approach th=
+ere's
+> > > > no need to do even review/lseek() call during the measurement. It m=
+ight
+> > > > not be very significant compared with the open that was there initi=
+ally
+> > > > but it's still extra.
+> > >=20
+> > > We are discussing the resctrl selftests that will accompany the resct=
+rl
+> > > filesystem in the kernel. When in doubt on how to interact with resct=
+rl
+> > > users
+> > > use the selftests as reference. Needing to open and close a resctrl f=
+ile
+> > > every time a value needs to be read from it is not the correct guidan=
+ce.
+> >=20
+> > That's actually a different goal from the earlier, but I've no problem
+> > adjusting to it.
+> >=20
+> > Initially, this open/close() refactoring was made because of another go=
+al
+> > which was to avoid doing extra syscalls during the test.
+> >=20
+>=20
+> It is not clear what you hint at here. Reading twice from an open file
+> should not be a huge adjustment so it is not clear to me how this results
+> in a big change to this work. As I understand this does match with origin=
+al
+> goal
+> of reducing syscalls since the file need not be opened and closed twice.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405312035.U1rZN04z-lkp@intel.com/
+What I tried to say is that with a single file, the test uses rewind()=20
+that also needs to do a syscall within the test period, whereas if the=20
+file is opened twice in advance rewind() won't be needed.
 
-All warnings (new ones prefixed by >>):
+But I've converted it into single file for the sake of serving as an=20
+example for other resctrl users.
 
-   In file included from include/linux/bpf_verifier.h:7:0,
-                    from drivers/hid/bpf/hid_bpf_struct_ops.c:10:
-   drivers/hid/bpf/hid_bpf_struct_ops.c: In function 'hid_bpf_struct_ops_init':
->> include/linux/bpf.h:1844:50: warning: statement with no effect [-Wunused-value]
-    #define register_bpf_struct_ops(st_ops, type) ({ (void *)(st_ops); 0; })
-                                                     ^~~~~~~~~~~~~~~~
-   drivers/hid/bpf/hid_bpf_struct_ops.c:244:9: note: in expansion of macro 'register_bpf_struct_ops'
-     return register_bpf_struct_ops(&bpf_hid_bpf_ops, hid_bpf_ops);
-            ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +1844 include/linux/bpf.h
-
-c196906d50e360d Hou Tao          2021-10-25  1834  
-c196906d50e360d Hou Tao          2021-10-25  1835  int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
-c196906d50e360d Hou Tao          2021-10-25  1836  			    union bpf_attr __user *uattr);
-c196906d50e360d Hou Tao          2021-10-25  1837  #endif
-f6be98d19985411 Kui-Feng Lee     2024-01-19  1838  int bpf_struct_ops_desc_init(struct bpf_struct_ops_desc *st_ops_desc,
-f6be98d19985411 Kui-Feng Lee     2024-01-19  1839  			     struct btf *btf,
-f6be98d19985411 Kui-Feng Lee     2024-01-19  1840  			     struct bpf_verifier_log *log);
-1338b93346587a2 Kui-Feng Lee     2024-01-19  1841  void bpf_map_struct_ops_info_fill(struct bpf_map_info *info, struct bpf_map *map);
-1611603537a4b88 Kui-Feng Lee     2024-02-08  1842  void bpf_struct_ops_desc_release(struct bpf_struct_ops_desc *st_ops_desc);
-27ae7997a66174c Martin KaFai Lau 2020-01-08  1843  #else
-f6be98d19985411 Kui-Feng Lee     2024-01-19 @1844  #define register_bpf_struct_ops(st_ops, type) ({ (void *)(st_ops); 0; })
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1845  static inline bool bpf_try_module_get(const void *data, struct module *owner)
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1846  {
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1847  	return try_module_get(owner);
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1848  }
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1849  static inline void bpf_module_put(const void *data, struct module *owner)
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1850  {
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1851  	module_put(owner);
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1852  }
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1853  static inline int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map,
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1854  						     void *key,
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1855  						     void *value)
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1856  {
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1857  	return -EINVAL;
-85d33df357b6346 Martin KaFai Lau 2020-01-08  1858  }
-68b04864ca425d1 Kui-Feng Lee     2023-03-22  1859  static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
-68b04864ca425d1 Kui-Feng Lee     2023-03-22  1860  {
-68b04864ca425d1 Kui-Feng Lee     2023-03-22  1861  	return -EOPNOTSUPP;
-68b04864ca425d1 Kui-Feng Lee     2023-03-22  1862  }
-1338b93346587a2 Kui-Feng Lee     2024-01-19  1863  static inline void bpf_map_struct_ops_info_fill(struct bpf_map_info *info, struct bpf_map *map)
-1338b93346587a2 Kui-Feng Lee     2024-01-19  1864  {
-1338b93346587a2 Kui-Feng Lee     2024-01-19  1865  }
-68b04864ca425d1 Kui-Feng Lee     2023-03-22  1866  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+ i.
+--8323328-125186921-1717136622=:1027--
 
