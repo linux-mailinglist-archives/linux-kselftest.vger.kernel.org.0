@@ -1,137 +1,141 @@
-Return-Path: <linux-kselftest+bounces-11018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 523AD8D649C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 16:36:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B758D64AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 16:41:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E74E91F241A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 14:36:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58C831C2248D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 14:41:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EC741C69;
-	Fri, 31 May 2024 14:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9634D8C1;
+	Fri, 31 May 2024 14:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LD3tAu+e"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MvrDWyHF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE23B3EA86;
-	Fri, 31 May 2024 14:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D7A57C9C
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 14:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717166157; cv=none; b=i/glmwqo9DJ48rquNN9tfSoYhI9S5CP9CLfOm+iTo5UFwb1rjycX9rcKzydrcywr0Gpuhtt4vYHqh37XFcjG4O+hSm2YaLzUlpjyzvcnixKOpK1FFQKzGrVT9zh9O8VeX2VkSgnF1+IZjuMnpITd1NoheNUAf1njNsRWMPFgQKI=
+	t=1717166464; cv=none; b=OSZ40+d3hstiG6typlfWKm4nKKU8o84Q6/LZjju7PjpH5y7PEmdh0dJJxMaj5rNVix2FeOUKuYhxOBuF4UKtekZK0jd8FcDGf6CzWziHTYu5B5SLLZnFrcyq0dia+GhZVkJHWl9frYYCi7u/bTe+KtOVMF7ym6ir2Eo2zRQqfcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717166157; c=relaxed/simple;
-	bh=/Ltdv79q3skkml0ifKj3D0gZrv9LGfP0o2gnIsRp+6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mson6biAPtxnYviketqfsJwQ7ivqHxqdNDLQgsQjfDQPfsnxlZNf9XuQF67Ly1ERpPo+yvM8Se8baJ0aVdnUqhcN8K+he2mCSiE+nqibNb/neeCvcHIDBDQ3nl1gmYOUU2AI6CS5JupOcZ033WEKi+GmUeYksZQuJpHeRgP3VJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LD3tAu+e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A26BC116B1;
-	Fri, 31 May 2024 14:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717166156;
-	bh=/Ltdv79q3skkml0ifKj3D0gZrv9LGfP0o2gnIsRp+6E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LD3tAu+e2GZhlS16l95NYRLhYtJf/bC/FGtKdWqvEJMCGTvsCjzT1oSP4xYjJFXtO
-	 nKkOW0K18ohGEohKEyNOS4W6L+8uNkx3i2ekTEkr5wxwJ+mDlDFpHj82h3wuX7zoIp
-	 v3+sqmTSVOgciQfMyPng5hhEwV/YYGPF54tmOaShwx1ggme3/TiWNGBrF+Xji3teHQ
-	 nwBTWqNeo1OLQ4ZbQAdbF/X8lv8vvXNz4cv+MUsCwHQQxqV9HpS+NfDS2t8D6Z/HMK
-	 EBomR6Du7bgyetQGT3GTgb/4n5KwpFEdMYA87cJLSlMXoZpRJPLiySkY75nHdLHkJa
-	 3aAhimH/2aCxA==
-Date: Fri, 31 May 2024 22:35:46 +0800
-From: Geliang Tang <geliang@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>,
-	John Fastabend <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 3/8] selftests/bpf: Use bpf_link attachments in
- test_sockmap
-Message-ID: <ZlngQqfkS-R1PNqk@T480>
-References: <cover.1716446893.git.tanggeliang@kylinos.cn>
- <32cf8376a810e2e9c719f8e4cfb97132ed2d1f9c.1716446893.git.tanggeliang@kylinos.cn>
- <6654beff96840_23de2086e@john.notmuch>
- <87wmnfujwg.fsf@cloudflare.com>
- <577531139c4db3cb35f3f40e23587bcb9815b0ba.camel@kernel.org>
- <66590f821d120_e5072085a@john.notmuch>
- <87wmnaw7x8.fsf@cloudflare.com>
+	s=arc-20240116; t=1717166464; c=relaxed/simple;
+	bh=EA1snWN6KFF5x58Kt5WwrvhXqKcKC51UqvoEgW2mLYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eB7/GOZTMuBjPDvIlQ8rnP/DKSHsUDsMUha1Ixq21dwA/CnBlnDSK0LW6ieLKLuPVGux+MHkCk+zGHogW6HA4WGfkPPyhohjfy5b6X3JpzOIcZjs8GtoGnQNpJ8WlMSENryU5bblH96NY2tq835AeCUpZ5snUv0hlsNZVn9SwGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MvrDWyHF; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7eaf9e5681aso9204139f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 07:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1717166461; x=1717771261; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SomH4SrINp7a9UmlUPOr1vNpjB9i9zy5D571kfh3Q3U=;
+        b=MvrDWyHFpzDBF2dtBnEeWlWw0s2mB1nwQdvyPyym6tMbE1ffjMiRssvYzdk6O6rslw
+         1W4ikXaxAiIkgJHEb3NZ3GiSDCV3CfS8i9MUJfKOPOYy+OzgaBvJdG1IaUeqGrIi1r1v
+         rg6Q83dpvTs/69GSlGu6d8As/dYKLlUmP0Klo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717166461; x=1717771261;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SomH4SrINp7a9UmlUPOr1vNpjB9i9zy5D571kfh3Q3U=;
+        b=KOCPOd5slnMXwkijDhQLjDfx/oCcZ1yhfyORQRDNFWukGKwvil6+oluNFTN+uePFoW
+         Hkhz/Y4nm2v8qLn4E8OLhsNztydqs/MJS91J5/L4qFfTeSKaDlTMmPbDvpMprwDtQCrL
+         q/e/FwWm0iquvTpxF74xa32P9T9C5tXkmULe19ZfBUBPe0ZRDQuusXxE2uMtmTszSBwb
+         t8ASORkIf0K9H06tBf81lvGZasmLuYDtVwh1u6m4g/H2zdITj4vzyqyqYGbhzhv5KNnp
+         Yto8NaPzpX0zYXrTsrOFyEYVx6xRHNb+OGCZFbfPb8XEatGyayhyaLr/b6DcGd16nIZL
+         6qjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcl4ijI7LFQa1+SjNRELG3nR19RGhE6BU+mMacXe7jX/wfRakcw1lFv+4R3UaXn9BUwpOJLRGdmaG2Wk1V4s65IYHPM31ghq0jdO6NR1Ek
+X-Gm-Message-State: AOJu0YyZ0RGzPM9wGsyNvT+xMWpmw3KQjOVx6/D2oqt0hZ1EPC/Stz1I
+	MHHuy0i4q9XaOSqWSFVbg9VegusPQmiqJnXwH43JTBhFhucT78GAYoeRyasChRU=
+X-Google-Smtp-Source: AGHT+IGsUGKjhnM1nomuA4q/rSCCqjBn03K1FeDVNYNScTmTrlQPUOkSjVi7mrCm63zBW4n0fHwJ+g==
+X-Received: by 2002:a5d:8485:0:b0:7de:e04b:42c3 with SMTP id ca18e2360f4ac-7eaffdb5092mr236846439f.0.1717166461094;
+        Fri, 31 May 2024 07:41:01 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b48cd01333sm496174173.161.2024.05.31.07.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 07:41:00 -0700 (PDT)
+Message-ID: <85472ab9-aa2e-4f5e-869d-5ab42e47c8a0@linuxfoundation.org>
+Date: Fri, 31 May 2024 08:41:00 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wmnaw7x8.fsf@cloudflare.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/tracing: Fix to check the required syscall
+ event
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <171714860864.198407.18416314586430149538.stgit@devnote2>
+ <171714862700.198407.14000969067636098427.stgit@devnote2>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <171714862700.198407.14000969067636098427.stgit@devnote2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 31, 2024 at 01:13:39PM +0200, Jakub Sitnicki wrote:
-> On Thu, May 30, 2024 at 04:45 PM -07, John Fastabend wrote:
-> > Geliang Tang wrote:
-> >> On Mon, 2024-05-27 at 21:36 +0200, Jakub Sitnicki wrote:
-> >> > On Mon, May 27, 2024 at 10:12 AM -07, John Fastabend wrote:
-> >> > > Geliang Tang wrote:
+On 5/31/24 03:43, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> [...]
+> Since test_duplicates.tc depends on syscalls/sys_enter_openat event,
+> it must add the event file to `requires`.
+> Without this fix, the test fails if CONFIG_FTRACE_SYSCALLS=n.
 > 
-> >> > > The one advantage of test_sockmap is we can have it run for longer
-> >> > > runs by pushing different options through so might be worth keeping
-> >> > > just for that.
-> >> > > 
-> >> > > If you really want links here I'm OK with that I guess just asking.
-> >> > 
-> >> > It was me who suggested the switch to bpf_link in reaction to a
-> >> > series
-> >> > of cleanups to prog_type and prog_attach_type submitted by Geliang.
-> >> 
-> >> Yes, patches 3-5 address Jakub's suggestion: switching attachments to
-> >> bpf_link.
-> >
-> > OK. Lets just take them the series lgtm. Jakub any other comments?
+> Fixes: 297e1dcdca3d ("selftests/ftrace: Add selftest for testing duplicate eprobes and kprobes")
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>   .../ftrace/test.d/dynevent/test_duplicates.tc      |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Gave it a run - all looks well. Thanks for the patches.
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> index d3a79da215c8..5f72abe6fa79 100644
+> --- a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> @@ -1,7 +1,7 @@
+>   #!/bin/sh
+>   # SPDX-License-Identifier: GPL-2.0
+>   # description: Generic dynamic event - check if duplicate events are caught
+> -# requires: dynamic_events "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
+> +# requires: dynamic_events "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README events/syscalls/sys_enter_openat
+>   
+>   echo 0 > events/enable
+>   
 > 
-> Geliang, is there some MPTCP+sockmap use-case you're working towards?
+> 
 
-Yes, indeed. I have been working on a task related to MPTCP+sockmap
-recently, at least related to this test_sockmap.c selftest. We recently
-received an issue with MPTCP [1], that is TLS cannot be set on MPTCP
-sockets. The reason is that both MPTCP and TLS are implemented on TCP ULP.
-And each socket only supports one type of TCP ULP.
+This change is already in mainline. I sent the fix up in my 6.10-rc1 pr?
+The short log is a slightly different:
 
-I simply modified this test_sockmap.c selftest to support MPTCP, so that
-it can be used as the first version of test for MPTCP+TLS. So I spent some
-time reading and debugging this test.
+commit f6c3c83db1d939ebdb8c8922748ae647d8126d91
+Author: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Date:   Tue May 21 09:00:22 2024 +0900
 
-The development of MPTCP+TLS is still ongoing, and currently only setsockopt
-part has been successfully supported. The idea is simple, use an array of
-tcp_ulp_ops in a socket, instead of a single one:
+     selftests/ftrace: Fix to check required event file
+     
+     The dynevent/test_duplicates.tc test case uses `syscalls/sys_enter_openat`
+     event for defining eprobe on it. Since this `syscalls` events depend on
+     CONFIG_FTRACE_SYSCALLS=y, if it is not set, the test will fail.
+     
+     Add the event file to `required` line so that the test will return
+     `unsupported` result.
+     
+     Fixes: 297e1dcdca3d ("selftests/ftrace: Add selftest for testing duplicate eprobes and kprobes")
+     Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 
-struct inet_connection_sock {
-      ... ...
-      const struct tcp_ulp_ops  *icsk_ulp_ops[ULP_INDEX_MAX];
-      void __rcu                *icsk_ulp_data[ULP_INDEX_MAX];
-}
-
-The entire patch is in my commit "mptcp: tls support" [2]. It's not finish
-yet, but I really want to hear your opinions, especially John's.
-
-[1]
-https://github.com/multipath-tcp/mptcp_net-next/issues/480
-[2]
-https://github.com/geliangtang/mptcp_net-next/commit/bba00a6cde75bab5a2c1c196d49812b4ed6addb0
-
-Thanks,
--Geliang
+thanks,
+-- Shuah
 
