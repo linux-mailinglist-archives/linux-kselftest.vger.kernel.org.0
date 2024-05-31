@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-11055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC9CB8D69E5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 21:40:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 521828D69E2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 21:39:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C12101C252E9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:40:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3C29289E50
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF4A1822E8;
-	Fri, 31 May 2024 19:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E7F17FACB;
+	Fri, 31 May 2024 19:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YItq/87l"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Z54wfO3J"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B243017CA09;
-	Fri, 31 May 2024 19:38:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A9117DE17;
+	Fri, 31 May 2024 19:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717184336; cv=fail; b=a34RFKGnJAM0VsDawFqOojx9wpq2hFPMqdXQeSUOZmnVixi8BWQnzRhDJXTfi/dyXn8YApbRKcVWrFOhrcESwOIuJJul8DExf51aEUw7vhKUoOsMT8D7ViGa+wbN8/xatc2FOtRP1/JOnNuMZQ1m9qIt7dY3imkT5M8gE9Kc44Q=
+	t=1717184334; cv=fail; b=RNWx7GwGjJwLdB0msFqSnKPdgBqSD1hSfmtx7fcZGXquIeYegki30UllwMnSaxt5lPSgNEJhTOZ/R4MuSC227PRLmK/a8ATw6A6ZwW+1kWNW5+aNPMem+KX2+f8RaCM9aQ3aCKbdk3GPVqPRNiGIueB76wNtVJcyPAKc6wrgO/Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717184336; c=relaxed/simple;
-	bh=lkHfXOkuMLyiPllYiOpX/2ad0kFdXhkI3Oj2E82h+kc=;
+	s=arc-20240116; t=1717184334; c=relaxed/simple;
+	bh=LcWrjcndeq3iuhARrc/mp+c08zzUu1zFoYgBoT4w7lM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QGE7uA6bMmSDnvoRH2GsCIcMP5MBW9pznfOUpwHJAs+wf7l7kPcT1OFanzuRlPF6P4H9Io4fPRlheuvh0oetrkfCRDnKw9l8xDXgZ6fjE3yGz8k4Kd9tbLs77vI2P/9RUx8BvL2S3JWVrOpBowbhhMkdPNQg7h/DmSN/6l9oW3Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YItq/87l; arc=fail smtp.client-ip=40.107.223.52
+	 Content-Type:MIME-Version; b=NB5YuMSD4M1s2S8h6Ah9E7TgTk4j46fCVoXdBm5b0H3IMSx16J6c+3x6KOjJxuyc2ZCHd11a7zVOpU/4urzfUlqLL1rTaO3XvROC/szVKoQU7deC1XCmm8CoJqzwOrCuzg1xV3pJw05WdXxV6tBNJS+8dbuwAemd5xhYCw9lHM4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Z54wfO3J; arc=fail smtp.client-ip=40.107.223.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=budO4adXbMb3am40Q/q4exmtmHA30iE6At/M38f5QvunGiPkFy6zdfGMDi7YuoMcXel06iJM8kfbogoXd4QZz/8O6FlXpCyBf94hW0l3vdAkoailK6zssOwzoi/8a7yRGFlgcnJ5K1rNw9l9VY7gUXNcCJIyubKGRqCkTLEm8b2oZrWArWF3B+Bra1fUuS+lp3r0qL2ym/nRdqsD4PacNXlEIqc0QvxPmhot6oflplK3XuixbQaeM0gaknv4q6BmDJoXI0iPqDG3CNYP++EGCJKJ7Dw8uNr4waxRRFxGxc5URO3JmVHTLvvLoFfRahCrAtePf1n9Z6zexQPtk9oGLw==
+ b=YuoYVURVWGhgeZdEncNBfj1gpHM2WXh1tDueuJ8eJ3uvjq+6DCLp2KMO8vUvNsooO0Sirne/yYbbCWM1OUNftRLh9LHEhGBpO7T7b2kCOgFbrn2Mo1HuuDMhZ5Y/VQF5X5M3poAQSt4mYUefR3UmvVyfwo+La9Wvus8Wc44Tq+lfMjn0mhpeRChkMc7HJ0MvMaZCS3RJ8IqFoR29Zdr5buYQFZV0nBc1HLFoVBDaxBoYdl5y6Xxd6RnGS0jHdPTjyAncWnxO/dlgPVwc7OtdoV5HDVYwMhMiRg1Bh7T7u0X3ufDWBs9wzhNSx/uKZ5nfS4NWPES63LqUy0ClsxKpwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lm9A87k1N76AjiGjL01RxZ+v8mTLpTcbZTy2c/TQ+PQ=;
- b=czISQ/kqWpLAUG8z7h5xF+/E7RG9VYrku1v+KA/g6D0blS64U/FZrj6eH4Eyj9z6kLosS6pYz9Y/7wBaG/3jdSq3litH1Sk2DOoe5rixcxAHF/S2k9iHnvoVo72VehU+jgwrdX7Cv1j4KIy7l+zHDN0mtR3ZfpgbYszn9jh264b0YK+pMU4t8yewD7kONf94CFA+n79SjPgysAVqb8rGEF1Uv6j/NmyhlJmJXUgDBq5CG9stNlOeZTCfuloWQted7d6mwHuv/9yidzV0c19fEj5OlflaSpyTZ0BOPkvjwaxXLHKaP+FMvKitJZbfa4zuZf7x1NKeSUdmex1IEzekKw==
+ bh=M9NVry3VUsyNcWz2ZdDnrII1PJ3GUu9peaR80x/6epU=;
+ b=BWal/cv453Fs0BZUN++AQYRfDNRP4klPOGrIvzKs9S5GczYJCH8/a1XXfcxM4weVhWZeIdEHh3qqrn5YSQXr8zAljsO03vgUsLSQe9MZhrXdq/sWpQY2oim8oJb59X93601rvTXsI+cgpsk9XFFtOiqdjNcRL6/T5KNX1QKflCWJuw5PIXmQYM+JTMno5L8tPxUehLS5+vf4PNrOvZnK25uIb1rjA+SGs+XIGLJSmH5kUZMM50PoqmoLRpc5PxFKfpz+h1DJP4C0kQQ8T8GWJW0Jt64JgyZuZrps9jLDeAt3n6xmqpEXH2dq3kdgAghZBXMRue4o79QuiOMe10Awdw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lm9A87k1N76AjiGjL01RxZ+v8mTLpTcbZTy2c/TQ+PQ=;
- b=YItq/87ljbgtW2hMZ0niYKVKB5VnFuUqs53rDoxfEHbubWhyckmcjFwiEvkAfTEgf2xzDAdBN75MGN9GdWl6C1iair7LDt8B9KXdAfFZb3gxuck3xwDxQTiS6h+yjpW4sScjKrycJ6HJL6TfdwuD1VPKi0gp0F5gdVDvC6Cw+aIdn9MF8Kl7taqJUZwZfrBJ7v8jnJVPr2CpgVtFVDZaVYVa3nZas56yJ0jVguimyLQJb+N+jetE6ON3Dli9JJnEOvOZ/hNmXeIHvaSFQ62Kjf9FdOogyRAjEEdTnNpPZVgn03DRWsOdoyEg23tGYqggbhJs30iSMH7I1SUWFc+KOw==
+ bh=M9NVry3VUsyNcWz2ZdDnrII1PJ3GUu9peaR80x/6epU=;
+ b=Z54wfO3JyZnFJ3IIhlFyvNsoxbWTSpLzx32beLbavEpKoEMeVxPxWbJO4wok+uAvgfWmq7T4fQRCR0ggApDWAWxzxaWPH54p5FfRSCU7dXAbeiW8x0gcVJ9fiTDtlZPS50FvNt9OZNIkfXK/a+hmN0PKGrN1IfcpwccD0skw5ewCh3AgjLsW31E6S8TqXZFMBloR3TeLMlrfFVZKDCvBJQPaB3Hd28f2jXH3b9/tiyBjq+SuI0X6/lhoHH5KrX0VmWJg31R/QFS1t5Qwf+D67TOhViVbL8XiBKx1gNBjCpI/ctnxEUs7oyj8aIIU/9Qt8ejYA3F5LpguKKFL8pgGmw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
@@ -75,17 +75,17 @@ Cc: angquan yu <angquan21@gmail.com>,
 	llvm@lists.linux.dev,
 	x86@kernel.org,
 	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 6/7] selftests/x86: remove (or use) unused variables and functions
-Date: Fri, 31 May 2024 12:38:37 -0700
-Message-ID: <20240531193838.108454-7-jhubbard@nvidia.com>
+Subject: [PATCH v3 7/7] selftests/x86: fix printk warnings reported by clang
+Date: Fri, 31 May 2024 12:38:38 -0700
+Message-ID: <20240531193838.108454-8-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240531193838.108454-1-jhubbard@nvidia.com>
 References: <20240531193838.108454-1-jhubbard@nvidia.com>
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0007.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::12) To BY5PR12MB4130.namprd12.prod.outlook.com
+X-ClientProxiedBy: SJ0PR05CA0097.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::12) To BY5PR12MB4130.namprd12.prod.outlook.com
  (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -95,195 +95,137 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SJ2PR12MB9008:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4dadd16-7edd-4ddb-4c71-08dc81a9483d
+X-MS-Office365-Filtering-Correlation-Id: e43449c7-8d04-48b5-4d69-08dc81a948e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|366007|376005;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UATSKJQ/05VgCWvjYa9X0qLABLSxmvBJ/a15BRlYXgeYo7EiWDwsWXiCIQ0r?=
- =?us-ascii?Q?nyBKnQqgDXrNWwRGHwqTw0NeiI7CdYywYIwNRHw3txwRFb2Ysg6Wh430P1iV?=
- =?us-ascii?Q?VDv4qXfkVPJz1S2P3/BPKYsx5N81t7jn0SsLVkrev5tcZcRo9KxrlHUntxLz?=
- =?us-ascii?Q?DLey/mEz3hPcSwuXBPWG+PDpnCtWLtsEO9w3f/c7FepfxKNANIb/iphMOWCb?=
- =?us-ascii?Q?V15z9PGXxqF2OZwYJy74hTgFeOY/BUvx85pOS0bjVFG9Hp0WcNYdZD6M7EjD?=
- =?us-ascii?Q?dQdKBZ+X95MRtoFiUzmDa1ut/uYCsaYr4yJpRbiiuGRHYO7zsNUi8mkguebx?=
- =?us-ascii?Q?ph+mubFtwN0V+XJsho773cWU5wXrInid2Kkk0nX2zqUdrbDgYnjpk8MytCTL?=
- =?us-ascii?Q?NxfM44hiCZSNizS/Rze3vMbXWUHF5ecnwaQebJaznngTWHpc/Ji+CTeS6Kwe?=
- =?us-ascii?Q?b7Efqm1WzAAQitK+o3w9gpF6JCRf46tBViKwdhEA9D7JVpKIFxcU9gaotesa?=
- =?us-ascii?Q?JxYL7YMvxpStMLjZt0TZFJCe1YMQXW05sb7qm5DfFwT2DnXnW45vbqWwqBAo?=
- =?us-ascii?Q?KUxgQePCv+4riFyqZ/cA1cKJfPRnrS+oxwJPEnpAvUJDMOfMY2WZSFyocH4g?=
- =?us-ascii?Q?Y4+4PnfW6tMVVE5W3PVGGzHwZDY91QUGRfBPTTR5cd4ikHE/dqsZMfVYlVUt?=
- =?us-ascii?Q?TE5QP3c5JZNPMF8Ws/cuXXO6iV0v0ui8HYSiJaBGYCpe39VuEAn5hNj8Kl9l?=
- =?us-ascii?Q?h0RnE9//WBEi15lP9ww5rYSNu16IfgadnxUbLbyTapJtLH1HN9fU0QXUs9kL?=
- =?us-ascii?Q?F93RsK7f0bIPv7gdWcczImrD0g3D86+i+Nvb1YMkJ40KpIqeeYUoTOSCyhIk?=
- =?us-ascii?Q?6OTxp5C/2npY6MiPz+qsn48Ag3ml1NitP8/MVMJZ2suf/Cz7AuOQuEhKk0V8?=
- =?us-ascii?Q?TwByS/97NJE/LvsMw1ni1uaYlyP8y5FWrJ7JWZj7UfpvD7PU+BQzYiDLHju+?=
- =?us-ascii?Q?lvvXflruW7pzVI9besaO7/OuwGAwl4Q3QmmKPDSt+4PlKbv4zO0y9AiHpZ/1?=
- =?us-ascii?Q?tr/i5SmgZAAMAWGgwNzxZKBvEADLVwkN2PIKj1gPqxOCJkkxQsVfp7OVtF6s?=
- =?us-ascii?Q?jj6Woja4QoKxqc940tJFBIPEZvtRwxHOTfubYMqPloWEcsUC7TKKh1FGJixh?=
- =?us-ascii?Q?8LA2W3SQUCewyDgAcJy2JT5bkhvjBUiGcxi27BPDaQ+iYj6w3G3Z4otSwu6U?=
- =?us-ascii?Q?eZPjJHe562aL+UQIA6qHzG/H1gJNEvdbbbRUPkoU4Q=3D=3D?=
+	=?us-ascii?Q?sXrdEkxm0kEbsA2jqP4hGdkYIa7Ljtr11xz5PIZyn5EoROBI+NwPF6gcnAjH?=
+ =?us-ascii?Q?8213L+PZQg4PrlBVrjGUVjjsbLg7oSYY92lvKKA6UO1+9ogHxAxSZox4BI66?=
+ =?us-ascii?Q?NTps3GLbPliS9vs6i4/CIvgpT0l/t8NRvCDwrMivgdkEnhGu0ICXeSfIgIX5?=
+ =?us-ascii?Q?JjsOAJ/00iU/cUaorue9k9lxYYq7ruGMMUbERULsPfoy9wuORq+DTUkQGl56?=
+ =?us-ascii?Q?HFmeiKKOVfEw9BRfAsuPKyz/+YA88cvdD73P0WlQSd1vF5aPDMFLMDgc64dB?=
+ =?us-ascii?Q?SNgPPBNGvMN4Bb31l8pdZ3mElVBjo5QUFKSdu4DjpFQ7iZg//BjjXW60snxf?=
+ =?us-ascii?Q?mlM3oi0BtJFwdjKhwIZL6xiShXzFCNYg3hugPjD+BsvjQEO+BNRPJo2lNeT/?=
+ =?us-ascii?Q?At4WjnAqUwKjySRO56ytg66/Hk9LyXb4wmDCVHHTi9eqG03IeusO8W/rpVhS?=
+ =?us-ascii?Q?8Ma0Rmuq4yaxiuuVrL5n+uaUX2WEIeMrLf51EcgpJCItf9PFfr0ZZ0WSnvjb?=
+ =?us-ascii?Q?5VgfOP3wb2L26NjeFn+fsRzvxy+j4eJ3EtP9eXGBfyTomMVqgpdx6lkLGfkx?=
+ =?us-ascii?Q?LKEMbPpaSdYC2N26meMTDaM++MVLIFKfoHYaKtBEsRwvdcFdkxl8X8hEputz?=
+ =?us-ascii?Q?rjo6tXtv9VkdxZ6Or1qnN0Np+yQdJ6i4w3A3Wgj/Qu5xrkIsnEOnWGicMLEI?=
+ =?us-ascii?Q?piZrqbTWceBAZ3T2QL0Fj2izZxFj+21YBnPA94ApEQ4U7BrAtUoTrQbN7+Ei?=
+ =?us-ascii?Q?KMMKk4iBjKcOQie8kNp3WAs0RbnLhErWLXxTvrXbgepBUDigD/W3d3WKlt5I?=
+ =?us-ascii?Q?RiLKs89Hnte2aG4hrUI8b9F6sfCP2uW8/Wb6BFg9LJY68HfLz0cNjmrSv3IM?=
+ =?us-ascii?Q?daj7Pr+6o6Jsv72YiAYZv0558yXdrSupkWOoDYHpuHBsgMZ2Ebzz+63COcDp?=
+ =?us-ascii?Q?6Xay2j0CIH6iaTIEvP7uGkTWgpvJ/FCnlcqCt+7HkwBaErnvYmqFmceWBBnR?=
+ =?us-ascii?Q?xsTfn0JCUnpoDrNTtDIGdfPIAIXThOM8lFEidMcInJPZ0pUQEk5sUaLIbm65?=
+ =?us-ascii?Q?jK7wc5J/sFcWPMeMhFc9oY7EWfKS4OKMkThB+SZp7x1rkpNPIJTRWGlMUoyU?=
+ =?us-ascii?Q?q/Spd0dTpNSSPQaOZKvozS1Ndyv4+CI8kHlFyzn5ri7QZ0OMfO+r3UHw0icR?=
+ =?us-ascii?Q?SSa0KlRmuTTZxnzG8Vfe5mXJzwHjfbOTFJPxr15tBsGr3i4+mGaJhBiU9i4A?=
+ =?us-ascii?Q?lnp7YXgO8qatrjdIm/Pn9uRuoVyrjWRGbQBNphyJSw=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(376005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?sX+CmANIn6QrDXWwE5IJ5m8xwQ4Zyy0ss+GI/q9qwCKJZf8Ux+hdP6CqwjzM?=
- =?us-ascii?Q?/kdyDQk8Kn5flE2FcFKaTFZkGA8wFDdNaJwja9tO9+c7myLxnd7QI8jSF0pW?=
- =?us-ascii?Q?WGtyX2s7+1Z7pIkXAP+NJ4LYxhocWD5RoMY8itNNybGuQYGiMNQfOwMkl8Wb?=
- =?us-ascii?Q?FH8vv8eYL3Zr4nfEZbEItKKtAhf6SDC4cddAFj0UCR4UssE/JtlJJKSnFU9z?=
- =?us-ascii?Q?+is7+GoBLXefLyvN9Vdogor/2g/Ug0nFNuK1B6RoI1CXq6hKnaJuraT+CLbq?=
- =?us-ascii?Q?A5mFZEWplffeZghZW4wKqBxYq9Jr3GyaehekjjC6voCsg3twfB4AxpYzjTEV?=
- =?us-ascii?Q?r6t7yJz0ps0tNuMAStNxPNT7DZ9F+0LJhrDL5M9iKnhcEwyE9FF7+VIqb72e?=
- =?us-ascii?Q?ScyouxNjozfSx5CS8rdvfv47q6R/4g8FmgNhwfSFHYdsvvayw/uYCB/Byfaa?=
- =?us-ascii?Q?V6FDpQKedHbq9rFh99UIxfVhD6bQ5L/VkaJda4nxjR3aqlZGbtX0pLQTMS7v?=
- =?us-ascii?Q?23nOglkG556RkZDNBtAlYN1ZU0grASsgjc10CUljHetKet1LVRmBgFuVqjC1?=
- =?us-ascii?Q?0k56HxCT4Yc7eyywma5hg0Xqhp8SMAfodQVnfIBzLrBPrp7BYulVH75bgqtO?=
- =?us-ascii?Q?pe1v2yDFhY+6GkamkvPjFEyvD0pgG9uGbW7YO6wTx2dm2BA3NZVm4oEMDMgN?=
- =?us-ascii?Q?yLUI5ZLjLL3ofnSbilQU1xk8bmWO64uGLfbte03lsAKqjCFrEiDxphatslQ5?=
- =?us-ascii?Q?n7LwkvMNK06LlzvgHMFMApswkr8m0MA+smZnM2dkcw95WABd0aT1Pev7lVpj?=
- =?us-ascii?Q?qNP4UKTz+IdvS/0AW5V3nMgwdiFYpePx2E13l4ZnXiDezPneX7/W6oKFYVF8?=
- =?us-ascii?Q?wkVkGsfWZTBNMESfbXMwuc/K4npjOUB+VN8GmHYUFBaADZJIVq0JhmiNqM6V?=
- =?us-ascii?Q?Q7uxFQqj4WPP29XPFYhQFXl+w/tz6LaKOhIfrCbHOn2HNbHGyrqPLHKAf1ek?=
- =?us-ascii?Q?u7yY2n0iPG9/DzQhxJuq9XA5ywR6EM/7OBmVV/wlYS+7lukgWoIn39Btp5qQ?=
- =?us-ascii?Q?4YjLW36XlsccB6rRhkc+5QIVdp0xL1AVLbQDzBamZB7Ew7auepiJ6Z/WprpF?=
- =?us-ascii?Q?cazegdFuZmCVaYJC5GX+sl2MvOgqizyZWixkluT8npOcmPoyBOD5GES+M0Yx?=
- =?us-ascii?Q?9POY1nwCxStGQ8MJeuU22hAf2orvdqFVzsWgYzFdvgvFcj66Gui8a0pRrnNa?=
- =?us-ascii?Q?wVFtIv6rkDeOwu0QZXKueiuoIjO334uDBWKpNJblYnHkm+oiXcI1r7GToOq4?=
- =?us-ascii?Q?Rxzzksphuh5iFkHXKw92LLWjxTR2Fe/FbVk7S2KC30e5v9mQ6+rFIwkYDnS9?=
- =?us-ascii?Q?0QU1e7WJWSFTLcvKSJfwG4dlBLffgn53eX15BK1KBzjUTwJTXykEPv6YzylC?=
- =?us-ascii?Q?Z+8CH4qzw1FP+zq2tIVxMhfQGDLOIlW3i81XDDnbUBS3Cu+i7Eg+/gl6z8zL?=
- =?us-ascii?Q?M5GCgGs1gHvcCANdE3i0oBsnPiY2rzd3evQXlSPQBB/D+pXaIMVKvSU370hu?=
- =?us-ascii?Q?lP4kNOb2Kso00vm/l4KZpJtxYI75FBnUA6j5YvLX?=
+	=?us-ascii?Q?QekZLF1DdLUf1PpNcrRJlgeB2uZ6Yq2hTMD3nGZxwHLoKpm9YC1fyOAzwt07?=
+ =?us-ascii?Q?FuvgDNbl2+U1ucDnhfbBTZ9oUh0aNkdfByFO8OM2fVlC3Hoa9keHZSsMRRpV?=
+ =?us-ascii?Q?CWHPbmyQzLmuKCB1xk+Kh7Dnr4oVgyDCbOc8haqHKoqaojhWG5FATgR8GrY1?=
+ =?us-ascii?Q?zBB+R8q5CPNFMBe3Y5l973SiWP9GiSGnwmxNsvHpx7k4TYFfWXjpc6st8a1R?=
+ =?us-ascii?Q?wcoPafakKX25qLki7vC9OD2v8cDMn+gZUOAyHz+6YOqpSuFXEQm6Of/dyOC6?=
+ =?us-ascii?Q?mR6I4EMwFLOfQKixA3GgSJA+XnijYBZw2a/VTemOcxQT/tFc+f4gaS3GepGs?=
+ =?us-ascii?Q?x5AD9Nznr/1Dc3cWASTyq9cXWz3bVONDk9rxnWrk2S4nERrs8+n5XouLkH+K?=
+ =?us-ascii?Q?XrmA9VS8cPlloDc7/D9syldESfK8AfaCGgpWa/4SD1v+1GNytsoGwN2tnpDU?=
+ =?us-ascii?Q?dwU3tBDoMKX9wDuxBObmDDbowrOaQdsXNx0WhzDU7cxL3Fa7FM+47gZTpONQ?=
+ =?us-ascii?Q?voSce9HKRkXxY5q5DadkspcySz3GGllK6ifFGA5z/8+cbu3jMLhDY/oXLFEA?=
+ =?us-ascii?Q?CdQdWk+eLzZDbRxiL1rUdAIssg+EzPg4yx//MBIKrBMqxPiJ8Myk0fyWEyD8?=
+ =?us-ascii?Q?0vApYH3qQP8sOEapYSTzCKhvOAMV7GtYjVr5BsmR7mHkAJ9uibU0EJ8xINjT?=
+ =?us-ascii?Q?Nu729xdmgzaeeOc0pG6s0HpPXPL9zeLwcivyOIAJXmdrWKKDQxNV+Mj5zWJV?=
+ =?us-ascii?Q?5wzJ382Pqs1u1tGOOJ1LQQDrCd9PzOE9goQ5s17BX7V+0YLyJKrJ7vnSGPpD?=
+ =?us-ascii?Q?MWGtIpJXg2rGxVBxdYmQ7QNOjqe0Pz97TrB2+n34vLlPOkB8DZHY4Et4tIdN?=
+ =?us-ascii?Q?rvBo+NbvctBIvGaCUNJP/Rq/rwDhGjVeRTsPBmyeHDqxRqcGelm28zjQOygB?=
+ =?us-ascii?Q?NdzWYO7oGZRQFGo+LPoHAbtSud+EFUgMOoJXfTRwMSjVWLZM7qAtCPJ7X5kb?=
+ =?us-ascii?Q?SZWdeKnyafn9p4blZcdqFg3QN+MA/JeK66EgfmYq8ztW9MJOpOEc0AhGymxA?=
+ =?us-ascii?Q?yR5pVGe3AWyfBNfHaPgoFk5osfBnUntP2g8hmZGF4FQ30YFPPLFwM94BdMzR?=
+ =?us-ascii?Q?V8WMaIrDsHFTGKRQ6mto0JylSajZvfaS8M4vBDIUp/Jjh/GNe7XLNrKwjWWi?=
+ =?us-ascii?Q?wpe7ii7s3a+VdbEosQ1EZmA5O+wvhvjm32YHaBV8V23ec2XINIJXXBGS5EC4?=
+ =?us-ascii?Q?4pXgfic1TCwCj6O0Rg7Y+Kzcm4h7bmDTu3LFOqrfLOoTppYPG51o4bHPiQ0D?=
+ =?us-ascii?Q?P9W7jThLlXSSNuswv4yldvZLRTYLtwKPjRMS5nwA++vyaJdyPhaQaw1p43ID?=
+ =?us-ascii?Q?6GieFkkYCKcB+HmXriDXyiX3ewhmsfuEcWGz7i86rrc10zoQuUt0rjvTHuxO?=
+ =?us-ascii?Q?QqFtt8AntY38lECtASizwsNwjz4aFg72LWFtMkXjb3PQGgng++BtP0Z0eIeP?=
+ =?us-ascii?Q?c3bpYyXZUUjh/u+fpIw/Q32kd+SGlg8neF+lYO+ongdxwY3XQmdCzkt+GbGG?=
+ =?us-ascii?Q?TyfC1Djfh1rbpBXpZdIBLNetzoj6dqvR73lE6bdb?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4dadd16-7edd-4ddb-4c71-08dc81a9483d
+X-MS-Exchange-CrossTenant-Network-Message-Id: e43449c7-8d04-48b5-4d69-08dc81a948e2
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 19:38:44.1955
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 19:38:45.2618
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CNEGRjnTAv/B4JHp5CB50V8Q/JUmmORUfIgqK/uEFjDon1wGedPoa2mSDZMFrKYsDDCCVqJT+DStueY5s6/nAw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5E6rJkENFqPkz4LVJD/Wtz1vXbZJQ9vYm4vEpY0tpYWjgmq7yuG0dRnOq/K108aKdI70GylbLVMMSWMU7AvsdA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9008
 
-When building with clang, via:
-
-    make LLVM=1 -C tools/testing/selftests
-
-...quite a few functions are variables are generating "unused" warnings.
-Fix the warnings by deleting the unused items.
-
-One item, the "nerrs" variable in vsdo_restorer.c's main(), is unused
-but probably wants to be returned from main(), as a non-zero result.
-That result is also unused right now, so another option would be to
-delete it entirely, but this way, main() also gets fixed. It was missing
-a return value.
+These warnings are all of the form, "the format specified a short
+(signed or unsigned) int, but the value is a full length int".
 
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/x86/amx.c               | 16 ----------------
- tools/testing/selftests/x86/fsgsbase.c          |  6 ------
- tools/testing/selftests/x86/syscall_arg_fault.c |  1 -
- tools/testing/selftests/x86/test_vsyscall.c     |  5 -----
- tools/testing/selftests/x86/vdso_restorer.c     |  2 ++
- 5 files changed, 2 insertions(+), 28 deletions(-)
+ tools/testing/selftests/x86/sigreturn.c     |  2 +-
+ tools/testing/selftests/x86/test_vsyscall.c | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 95aad6d8849b..1fdf35a4d7f6 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -39,16 +39,6 @@ struct xsave_buffer {
- 	};
- };
- 
--static inline uint64_t xgetbv(uint32_t index)
--{
--	uint32_t eax, edx;
--
--	asm volatile("xgetbv;"
--		     : "=a" (eax), "=d" (edx)
--		     : "c" (index));
--	return eax + ((uint64_t)edx << 32);
--}
--
- static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
- {
- 	uint32_t rfbm_lo = rfbm;
-@@ -164,12 +154,6 @@ static inline void clear_xstate_header(struct xsave_buffer *buffer)
- 	memset(&buffer->header, 0, sizeof(buffer->header));
- }
- 
--static inline uint64_t get_xstatebv(struct xsave_buffer *buffer)
--{
--	/* XSTATE_BV is at the beginning of the header: */
--	return *(uint64_t *)&buffer->header;
--}
--
- static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
- {
- 	/* XSTATE_BV is at the beginning of the header: */
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 8c780cce941d..50cf32de6313 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -109,11 +109,6 @@ static inline void wrgsbase(unsigned long gsbase)
- 	asm volatile("wrgsbase %0" :: "r" (gsbase) : "memory");
- }
- 
--static inline void wrfsbase(unsigned long fsbase)
--{
--	asm volatile("wrfsbase %0" :: "r" (fsbase) : "memory");
--}
--
- enum which_base { FS, GS };
- 
- static unsigned long read_base(enum which_base which)
-@@ -212,7 +207,6 @@ static void mov_0_gs(unsigned long initial_base, bool schedule)
- }
- 
- static volatile unsigned long remote_base;
--static volatile bool remote_hard_zero;
- static volatile unsigned int ftx;
- 
- /*
-diff --git a/tools/testing/selftests/x86/syscall_arg_fault.c b/tools/testing/selftests/x86/syscall_arg_fault.c
-index 461fa41a4d02..48ab065a76f9 100644
---- a/tools/testing/selftests/x86/syscall_arg_fault.c
-+++ b/tools/testing/selftests/x86/syscall_arg_fault.c
-@@ -29,7 +29,6 @@ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 		err(1, "sigaction");
- }
- 
--static volatile sig_atomic_t sig_traps;
- static sigjmp_buf jmpbuf;
- 
- static volatile sig_atomic_t n_errs;
-diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
-index d4c8e8d79d38..1c9895cfc660 100644
---- a/tools/testing/selftests/x86/test_vsyscall.c
-+++ b/tools/testing/selftests/x86/test_vsyscall.c
-@@ -97,11 +97,6 @@ static inline long sys_gtod(struct timeval *tv, struct timezone *tz)
- 	return syscall(SYS_gettimeofday, tv, tz);
- }
- 
--static inline int sys_clock_gettime(clockid_t id, struct timespec *ts)
--{
--	return syscall(SYS_clock_gettime, id, ts);
--}
--
- static inline long sys_time(time_t *t)
- {
- 	return syscall(SYS_time, t);
-diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
-index fe99f2434155..ac8d8e1e9805 100644
---- a/tools/testing/selftests/x86/vdso_restorer.c
-+++ b/tools/testing/selftests/x86/vdso_restorer.c
-@@ -92,4 +92,6 @@ int main()
- 		printf("[FAIL]\t!SA_SIGINFO handler was not called\n");
+diff --git a/tools/testing/selftests/x86/sigreturn.c b/tools/testing/selftests/x86/sigreturn.c
+index 5d7961a5f7f6..0b75b29f794b 100644
+--- a/tools/testing/selftests/x86/sigreturn.c
++++ b/tools/testing/selftests/x86/sigreturn.c
+@@ -487,7 +487,7 @@ static void sigtrap(int sig, siginfo_t *info, void *ctx_void)
+ 	greg_t asm_ss = ctx->uc_mcontext.gregs[REG_CX];
+ 	if (asm_ss != sig_ss && sig == SIGTRAP) {
+ 		/* Sanity check failure. */
+-		printf("[FAIL]\tSIGTRAP: ss = %hx, frame ss = %hx, ax = %llx\n",
++		printf("[FAIL]\tSIGTRAP: ss = %hx, frame ss = %x, ax = %llx\n",
+ 		       ss, *ssptr(ctx), (unsigned long long)asm_ss);
  		nerrs++;
  	}
-+
-+	return nerrs;
- }
+diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+index 1c9895cfc660..6de11b4df458 100644
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -247,7 +247,7 @@ static void test_getcpu(int cpu)
+ 
+ 	if (ret_sys == 0) {
+ 		if (cpu_sys != cpu)
+-			ksft_print_msg("syscall reported CPU %hu but should be %d\n",
++			ksft_print_msg("syscall reported CPU %u but should be %d\n",
+ 				       cpu_sys, cpu);
+ 
+ 		have_node = true;
+@@ -265,10 +265,10 @@ static void test_getcpu(int cpu)
+ 
+ 			if (cpu_vdso != cpu || node_vdso != node) {
+ 				if (cpu_vdso != cpu)
+-					ksft_print_msg("vDSO reported CPU %hu but should be %d\n",
++					ksft_print_msg("vDSO reported CPU %u but should be %d\n",
+ 						       cpu_vdso, cpu);
+ 				if (node_vdso != node)
+-					ksft_print_msg("vDSO reported node %hu but should be %hu\n",
++					ksft_print_msg("vDSO reported node %u but should be %u\n",
+ 						       node_vdso, node);
+ 				ksft_test_result_fail("Wrong values\n");
+ 			} else {
+@@ -290,10 +290,10 @@ static void test_getcpu(int cpu)
+ 
+ 			if (cpu_vsys != cpu || node_vsys != node) {
+ 				if (cpu_vsys != cpu)
+-					ksft_print_msg("vsyscall reported CPU %hu but should be %d\n",
++					ksft_print_msg("vsyscall reported CPU %u but should be %d\n",
+ 						       cpu_vsys, cpu);
+ 				if (node_vsys != node)
+-					ksft_print_msg("vsyscall reported node %hu but should be %hu\n",
++					ksft_print_msg("vsyscall reported node %u but should be %u\n",
+ 						       node_vsys, node);
+ 				ksft_test_result_fail("Wrong values\n");
+ 			} else {
 -- 
 2.45.1
 
