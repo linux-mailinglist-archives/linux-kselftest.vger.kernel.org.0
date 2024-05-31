@@ -1,96 +1,109 @@
-Return-Path: <linux-kselftest+bounces-11023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11ECB8D6598
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 17:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83FFF8D65AE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 17:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0BC728DB30
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:18:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40201283F11
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 15:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DCEC73502;
-	Fri, 31 May 2024 15:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="eyXVpzRP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB5F763FC;
+	Fri, 31 May 2024 15:26:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DF429A0;
-	Fri, 31 May 2024 15:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99941612EB;
+	Fri, 31 May 2024 15:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717168691; cv=none; b=sTnzHtxBULHKbYBm8yGHPNqnZJ8ijhy/kUYXtobWumySRb4hcxzruP0kTnSkDa+GLTNDqbLlm/LmOhLt5Krf63kQVw6mestiudYSHu6tAy1bdy3LrIFCAQLOeSBUx9TTXBQ8WUffC2dlp81ptcBxwT1otJ4+SxPc1LABamenH0Y=
+	t=1717169173; cv=none; b=V1AQDgUo0YYgPmkPXJPGQHFBGic6XuxMuDp61MtNOrPxjitbv5+d0P4N5ySBS2pg89C04sBe4FT3EZ855Ej5/qOYtqRWOIjaEfmy5JF4ZauCyYtSZvrdGiVGGRwvHd60Dj/suHsf7bxYfnErnxtMsQ2qANFtsSyhV6mGeCtHssA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717168691; c=relaxed/simple;
-	bh=S+OItTF7bkKx7msDIMufZGJM0il9tZ7Etrq9yxouKwU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rkexWLXQKGvN4EQ1d106ucLyLEs/sXyg51o/W3HQ7HDkbaDol9BCUhz3i385/wsTcnli3gbE3o8ZGluMdw/KyU3kmmqMobII2LkXReCqG6FFd4fbZ60JaOAUec0253M5ehAWerRLdJf/V0279Ts92494cKLPFpsvLVztefFqjE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=eyXVpzRP; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=nKhgMb1X5YJvQK8owPBySV+XIkHcz2ecLwi5G+M6A3A=; b=eyXVpzRPBjX41I0t
-	Lt84BGj3hQSRGBA+QVHG5TDxC2szJGGwRmccatNbYi1KW6bzOomx9H+Snvsna71O4tet3s/HqxQa3
-	lUHVF+oDiTW0O9VWgFG1WE8D/NrqBoAEcNOlCNG0Ju4ijrAwDkTwHb4FZ1qA3wukZ0lynkl1vRkHB
-	5HH4Af+wlotM+d95Sr5Q2sg/C4gAZWRXn64H9odkO4Ggrz53LKmxLV9mPbXXyekPPF3WN8ZUy49Yq
-	UbKAivZd1aWpy45LuqybGVD9DwbbQ3r+3ljns/3MqKzOd0mMaLRaBlPqgkbl227/KzV0Tu9K6fCOM
-	TqV4SCU248U9X2rHtQ==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1sD414-003bWQ-0t;
-	Fri, 31 May 2024 15:18:02 +0000
-From: linux@treblig.org
-To: davidgow@google.com
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] list: test: remove unused struct 'klist_test_struct'
-Date: Fri, 31 May 2024 16:18:01 +0100
-Message-ID: <20240531151801.128792-1-linux@treblig.org>
-X-Mailer: git-send-email 2.45.1
+	s=arc-20240116; t=1717169173; c=relaxed/simple;
+	bh=BIUy3OU4Yr8ghwL4539bzD9yt6/hC9ctf51iLpzRrKQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CgfAFqQY2BDlFTFHhi2tlUhS1FokH6o4CeyTciHXnnL9AkBQl+wHEpHk7u8RuN61PYs7yPI+sBJluC6qQolDz56IM/J63gap3aws8xCAW0h/E+KVLXn7Q1s/sZXnmOVU8Y+ogfu1a/EVUoAn60Forq5KQ3vPu9MPv/efHLklyU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.13.3] (g258.RadioFreeInternet.molgen.mpg.de [141.14.13.3])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 12F0661E5FE01;
+	Fri, 31 May 2024 17:25:47 +0200 (CEST)
+Message-ID: <cc00000d-302c-441e-9d65-9e75463db443@molgen.mpg.de>
+Date: Fri, 31 May 2024 17:25:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13
+ 9360
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Mark Brown <broonie@kernel.org>, linux-sound@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
+ <87cyp280yw.wl-tiwai@suse.de>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <87cyp280yw.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+Dear Takashi,
 
-'klist_test_struct' has been unused since the original
-commit 57b4f760f94d ("list: test: Test the klist structure").
 
-Remove it.
+Thank you very much for your reply.
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- lib/list-test.c | 6 ------
- 1 file changed, 6 deletions(-)
+Am 31.05.24 um 17:17 schrieb Takashi Iwai:
+> On Fri, 31 May 2024 07:50:33 +0200, Paul Menzel wrote:
 
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 0cc27de9cec8..383ee0ad582e 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -1201,12 +1201,6 @@ static struct kunit_suite hlist_test_module = {
- };
- 
- 
--struct klist_test_struct {
--	int data;
--	struct klist klist;
--	struct klist_node klist_node;
--};
--
- static int node_count;
- static struct klist_node *last_node;
- 
--- 
-2.45.1
+>> Running the ALSA kselftests with Linux 6.10-rc1, `mixer-test` shows
+>> ten failures:
+>>
+>>      # Totals: pass:24 fail:0 xfail:0 xpass:0 skip:11 error:0
+>>
+>> These are:
+>>
+>>      not ok 5 write_invalid.0.40
+>>      not ok 11 write_valid.0.39
+>>      not ok 18 write_valid.0.38
+>>      not ok 25 write_valid.0.37
+>>      not ok 201 write_invalid.0.12
+>>      not ok 208 write_invalid.0.11
+>>      not ok 264 write_invalid.0.3
+>>      not ok 271 write_invalid.0.2
+>>      not ok 278 write_invalid.0.1
+>>      not ok 285 write_invalid.0.0
+> 
+> Through a quick look, those are no real "failures".  It'd be more
+> preferable if the driver returns an error for invalid values, but
+> currently it's up to drivers how to deal with them, and some accept as
+> is but with correction of the values internally.  They are shown as
+> "skips" in the summary above you showed, after all.
 
+Sorry, somehow I copied the wrong line. The attachment actually contains:
+
+     # Totals: pass:217 fail:10 xfail:0 xpass:0 skip:60 error:0
+
+So it seems to be shown as failure.
+
+> A more strict check can be enabled by a kconfig option
+> CONFIG_SND_CTL_INPUT_VALIDATION=y generically.
+
+Thank you. I am going to test that out.
+
+
+Kind regards,
+
+Paul
 
