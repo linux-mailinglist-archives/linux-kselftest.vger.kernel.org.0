@@ -1,170 +1,151 @@
-Return-Path: <linux-kselftest+bounces-11028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F4338D671A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 18:45:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B54718D67FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 19:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01BF61F25D97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 16:45:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E797B1C24FCF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 17:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D0A16F85C;
-	Fri, 31 May 2024 16:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C8F171658;
+	Fri, 31 May 2024 17:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UCk/4hhx"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="QyJjOyCD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9815381A
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 16:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7851F95E
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 17:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717173947; cv=none; b=keDp3r5ihS1qm+jeBE05HOx9xJ2JrJOd0bBcPmGNMRCEuXVHpvXdUn1pRzCRqmGfHY9uMtgqFVMnXjhpshAJWknjQepeLGJGORv8AZlbIAPs/s5XInrlNagQpHvjc/JlsvFTfArqEJmePIXDheBUzFAorOUjfenr8iZJ7Imrgd4=
+	t=1717175795; cv=none; b=IypYjws7XkAfvWGbsdFBbXxnPVn03SPr2BVRBHFgwbCR3tofKuikIWCPdK2jW4ZymPWb0Kqj63kD2ux/2mGIhUVYBp5VyFP2tfAVRflOe2csBhyLYbU0jHzEhhjDZTVzrLbPwevO7Kl5Nd98hXgpnlUwwC1LTzG5dy3onsLRPvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717173947; c=relaxed/simple;
-	bh=36m2p7lcItP/+bB0ofDSLrkZ1c8ARR5jCIwAHfSrTs0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cbp0Um2di+vO68EWt3OZbBFiJDiTGa3wrkOgZnfvPz+E6Q8IOYEE4eQ+Cos8qMq7Vsnn+rtECy+e6IacDLZZ3aLaJYx6b9p2wNkHEJ+zD3TQ0LJWHd+xKEEOM+dMdrpzR6GvjCYdtB3B+728DXGZ2eUPst8WJozf0gUTbxybRDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UCk/4hhx; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-420107286ecso2235e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 09:45:45 -0700 (PDT)
+	s=arc-20240116; t=1717175795; c=relaxed/simple;
+	bh=QJiMfx1VkYzaL3RaAGVpbIAPVNXr6THDFTX9Pbli160=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tT7ik2kkJDBIEZj3U4fvMfxhk1Gd+OGnWssmLko5ZdqR8raMfAv9/Eyjg21GZElhMyqxosrubrsNiLPiJVqljjDI4NIm9aJU34334mX9OMgwimLoREiofdlla9ikSOfczMFtb7X9l7/FHLbue6jHx6KrKd3xg5oOqDwbwIdeTIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=QyJjOyCD; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2bf5ee192b1so1576184a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 10:16:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717173944; x=1717778744; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TH4bnbtSSVEcXN8q4TBBHbQcYVbG9UpE4sBQSCvIGBs=;
-        b=UCk/4hhxC9TTHJFm/SwPJSMMnlMhcDoNO2QA35JXbrLd6qvfLJGdG6clHM4wqdFN+T
-         X9kHvucJTzr2PLtYEqwtJjZzGfy3QbJPaN2Tn4j+uFo5PenwKGSmJ4VgKbhykJo08BU/
-         jbL/s1PqK5Xg6l+ZMFoJuzLbhaXh1sCZOHt4lHMlJ72lxFKovBtyGYHDND0RLXWCpjnJ
-         g7uxM7rcbbUFqkj1PrjED5cXUkMl18o97jggrgC40XtawhccskTMcTsSfWkUsX+kObQc
-         smI5WnvINM4M08+Q9/i0MnRBaBSHhUJsdHvq+0455OyIgScHxvcUnShXtXOWGp3QcHLj
-         UKWQ==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717175793; x=1717780593; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=yqWRLVLlf8HK65mtYsYWW4orYnhyUm5wUaOWoGjMQVA=;
+        b=QyJjOyCDOoLy6KKh3qZ5LcQ/yBltG8Ywx3AOFbofj1tQLBStE+WJhny4X1DAODxJu2
+         fM1rQbPbekVqtYdAd8sRAFjGAG1Ess2A6aEeHc+6bMnzXYq/lS2RgCt4Z1GfmndaA06Y
+         E6QoCAYpkaBxbOuQOs7G0dWPUcfOuSnzdxrQ/QxGOpe/mlwgsGuYsCOsF2e66I0tLPSV
+         9TjMsjDghnSmPpCEoc7lM3celX3i51UxUnqdTFmbeAVafT7tfDS+paUAP5B5LhgX2vLY
+         pH3HCgR9hZvsaRoaKEMBljw/S1EnekcBQblHXoltlOiB4xhYPhfQ9kEeQEbeOVqxlBNK
+         b2VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717173944; x=1717778744;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TH4bnbtSSVEcXN8q4TBBHbQcYVbG9UpE4sBQSCvIGBs=;
-        b=bctW1th2baAFMoqUIOkVDRoYT5n+Mw8kBf847ZAHfmh8z+rw85HqAdJY1KPZ2df2AP
-         pX4UJi9HXXyhWOD3q1CSPfzM/6cn5IkgJJiklQUrtC/TVnCf/T0Q5WLgh49DGKuqifve
-         FpQCTeCjzQaMcpP5MqdYtY2Id7X2gDGcQKJFJkdlDgWCW7J0uUx/uABHjb/y0/QJOY4n
-         KmJRGwJ9DZvhahFklU71EcLyq+kITzJQBHaEjMsxeyHC4w3AbEeOZ0pRIBkZvCyTS4XY
-         +ahdPLlB0p9m3KGev6dZyQ94MLq8hSCDLmc7TMBa5WmB1LkESHAloz1YiCyFX7aXyezc
-         pelw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMSdO2Pb2XOFqvhWTovAeZeFW6isy4YdTorxj6KAwqmsqkOP7TBEk3zF1iR4k59yDnJxPu5vmkK4PKt9yyFFXQ4k3ZSGntXcvzZm6zvIeC
-X-Gm-Message-State: AOJu0Yx4DiQ73Wa7DW0rtzLs/Rm2tLlUkRvGN2H3x8bennKIajY5slck
-	7QaBnWOd5NJms0ILvY1oUeHVneeHKIoaHejwEb3MW5uxYRp9xh6pozB5Vm+KkY1i9i5Cuxg+xi2
-	oFP1b19bnkiJ5JxnbbvxMsgA54dpVSk+zq45E
-X-Google-Smtp-Source: AGHT+IEq8Fs3z13ePwWrnbWJUDpx50btCGNNHylLrjkBr8g/csKK0P+GO3+xFEqljtHAVxZhGvPrjS68k6wXeE2cHVA=
-X-Received: by 2002:a05:600c:6546:b0:41f:9dd0:7168 with SMTP id
- 5b1f17b1804b1-4212c091f55mr2200815e9.2.1717173943952; Fri, 31 May 2024
- 09:45:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717175793; x=1717780593;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yqWRLVLlf8HK65mtYsYWW4orYnhyUm5wUaOWoGjMQVA=;
+        b=H6msjH8h5JKGzsxlssGM5JgUAnBeYO2WwnM7TNp1ABfRt9ERfQME+3FpkvLOLTyH2f
+         A6e8Q3M6gHpze08Fa81dJ3bpmrGNK0FOb1dE1nfvIEw3Fz0r8/cHLnEHyr32u7+Ke2wS
+         cdZ+MWD1OMWA+nmCp9bWnMpFmH8XSOjjZOaUjhBSUPJbc+iW1ny6BuuUyYAjJhgdUfOU
+         RXo4Gt3idXEckki0YaiyVPsS1g+FoKSVY3vUucsHqxA1jD6gpI6/xbkICISToz8lUNGj
+         ED01rBUSkU7kkGTPS33KbY7oQpyi9cIYoZilIVUMKDZT5SHM1tQ9UOFi8f0nPKq/jgVL
+         iT/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWIRfbaC1qwIPnpsBrXi4Qm98PXDJm3Ex2EIf2bwxWga9ortlKjnBB6fFpJr4yIn5iLwzW4Wa+/RZ/cne/aVKAQl/mX7amQVGzsrDCsycsK
+X-Gm-Message-State: AOJu0YwBfsvsRVstM3qjtHUC02KvMPvU/+3WhkjAPiwFJQD8EVrIaFa9
+	yuKNYErhowJxomAb8vEmwyWeY02rpZXPd7FOSmIUK6hGCjtCI2ltZJzEhuc1uRfjLwrpMQmtYiH
+	j
+X-Google-Smtp-Source: AGHT+IH60GCYaomw/84hHvyEOicsQdv88N7AmlAQSJOpAsq0Of84Nn+7RlO3q+vAPx8IBo9Kf325Fg==
+X-Received: by 2002:a17:90a:fe0d:b0:2bd:d6c6:f454 with SMTP id 98e67ed59e1d1-2c1c4453724mr3646813a91.21.1717175792959;
+        Fri, 31 May 2024 10:16:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1c28450d4sm1724542a91.55.2024.05.31.10.16.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 10:16:32 -0700 (PDT)
+Message-ID: <665a05f0.170a0220.17f3a2.4aca@mx.google.com>
+Date: Fri, 31 May 2024 10:16:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
- <ZlelW93_T6P-ZuSZ@google.com> <CAOUHufZdEpY6ra73SMHA33DegKxKaUM=Os7A7aDBFND6NkbUmQ@mail.gmail.com>
- <Zley-u_dOlZ-S-a6@google.com> <CADrL8HXHWg_MkApYQTngzmN21NEGNWC6KzJDw_Lm63JHJkR=5A@mail.gmail.com>
- <CAOUHufZq6DwpStzHtjG+TOiHaQ6FFbkTfHMCe8Yy0n_M9MKdqw@mail.gmail.com> <Zll2ILUNWE-JPi9U@linux.dev>
-In-Reply-To: <Zll2ILUNWE-JPi9U@linux.dev>
-From: Yu Zhao <yuzhao@google.com>
-Date: Fri, 31 May 2024 10:45:04 -0600
-Message-ID: <CAOUHufb_-w=B+NfHAUAo=O8bDXZBdXeeGRZD6kY=krN07srbGA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
- in aging
-To: Oliver Upton <oliver.upton@linux.dev>
-Cc: James Houghton <jthoughton@google.com>, Sean Christopherson <seanjc@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Ankit Agrawal <ankita@nvidia.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Catalin Marinas <catalin.marinas@arm.com>, David Matlack <dmatlack@google.com>, 
-	David Rientjes <rientjes@google.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Ryan Roberts <ryan.roberts@arm.com>, 
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-9-g0f42bdf59b4e4
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes kselftest-cpufreq: 7 runs,
+ 1 regressions (v6.10-rc1-9-g0f42bdf59b4e4)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, May 31, 2024 at 1:03=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Fri, May 31, 2024 at 12:05:48AM -0600, Yu Zhao wrote:
+kselftest/fixes kselftest-cpufreq: 7 runs, 1 regressions (v6.10-rc1-9-g0f42=
+bdf59b4e4)
 
-Let me add back what I said earlier:
+Regressions Summary
+-------------------
 
-  I'm not convinced, but it doesn't mean your point of view is
-  invalid. If you fully understand the implications of your design
-  choice and document them, I will not object.
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-> > All optimizations in v2 were measured step by step. Even that bitmap,
-> > which might be considered overengineered, brought a readily
-> > measuarable 4% improvement in memcached throughput on Altra Max
-> > swapping to Optane:
->
-> That's great, but taking an iterative approach to the problem allows
-> the reviewers and maintainers to come to their own conclusions about
-> each optimization independently. Squashing all of that together and
-> posting the result doesn't allow for this.
 
-That's your methodology, which I respect: as I said I won't stand in your w=
-ay.
+  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
+10-rc1-9-g0f42bdf59b4e4/plan/kselftest-cpufreq/
 
-But mine is backed by data, please do respect that as well, by doing
-what I asked: document your justifications.
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   fixes
+  Describe: v6.10-rc1-9-g0f42bdf59b4e4
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      0f42bdf59b4e428485aa922bef871bfa6cc505e0 =
 
-> Even if we were to take the series as-is, the door is wide open to
-> subsequent improvements.
->
-> > What I don't think is acceptable is simplifying those optimizations
-> > out without documenting your justifications (I would even call it a
-> > design change, rather than simplification, from v3 to v4).
->
-> No, sorry, there's nothing wrong with James' approach here.
 
-Sorry, are you saying "without documenting your justifications" is
-nothing wrong? If so, please elaborate.
 
-> The discussion that led to the design of v4 happened on list; you were
-> on CC. The general consensus on the KVM side was that the bitmap was
-> complicated and lacked independent justification. There was ample
-> opportunity to voice your concerns before he spent the time on v4.
+Test Regressions
+---------------- =
 
-Please re-read my previous emails -- I never object to the removal of
-the bitmap or James' approach.
 
-And please stop making assumptions -- I did voice my concerns with
-James privately.
 
-> You seriously cannot fault a contributor for respinning their work based
-> on the provided feedback.
+platform                     | arch  | lab         | compiler | defconfig  =
+         | regressions
+-----------------------------+-------+-------------+----------+------------=
+---------+------------
+meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
+selftest | 1          =
 
-Are you saying I faulted James for taking others' feedback? If so,
-where? And I'll make sure I don't give such an impression in the
-future.
 
-Also what do you think about the technical flaws and inaccurate
-understandings I pointed out? You seem to have a strong opinion on
-your iterate approach, but I hope you didn't choose to overlook the
-real meat of this discussion.
+  Details:     https://kernelci.org/test/plan/id/6659f888173da7849f7e70ce
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
+f42bdf59b4e4/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq=
+-meson-gxl-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.10-rc1-9-g0=
+f42bdf59b4e4/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-cpufreq=
+-meson-gxl-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/6659f888173d=
+a7849f7e70cf
+        new failure (last pass: v6.10-rc1) =
+
+ =20
 
