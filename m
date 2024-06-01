@@ -1,118 +1,163 @@
-Return-Path: <linux-kselftest+bounces-11073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F7A38D6D0F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Jun 2024 01:58:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33C078D6D31
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Jun 2024 02:44:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 813C4B2434E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2024 23:58:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DBF21C2145C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Jun 2024 00:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38CE12FB09;
-	Fri, 31 May 2024 23:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89AFE1878;
+	Sat,  1 Jun 2024 00:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gNw23xcu"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="3G8xlHjp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DE812F5A0;
-	Fri, 31 May 2024 23:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43D9EDC
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Jun 2024 00:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717199930; cv=none; b=B+HeIiD64TwHcEJb0tRBNFuIwEKC2w7lWKA6tBkVhM3JHgxsRu6v43gQEXYGkebqf/D24QIglFHRj+RXY5WKqsrKb+kHv4HsNrJuxtiAvF+EcBR614pHz/bYsp381kE1TKSw+B0zEnXd+NCqC++L8NiVkViVf21lPUqTpCHE8dY=
+	t=1717202675; cv=none; b=fyw98IYgg7sAEbiNke77NeFaaCcKXIs8tXyQSqNhpKxe+ivvVff7lrxq6Rc2BWW8kRijuerVsi+C4+ffpNz5y+ITkauvIipx1xu5P7vJBzTS+U67ePtX2I7PYWD3ZrU0W+dhGOBj+dOsBwjV0QV7N25/SOK50JwRDipUcxW/xJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717199930; c=relaxed/simple;
-	bh=ldIqUKdLlJfwvkEVGQ3sHNe9S9oGV6k/RiEd6WbAtWw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=Ove6f+sqRgHZeY/0XtlnDJR6rxLmbyvJFk9U9NDCcwC7DAKnTL8Uedj8cazd5AlJqspbSw7iet+ZsnyrYZVa8gGWWLFe8tSq/kok5s08xGlgUQhgvgZBY8z5TJGaPOLW0e19eNLlh62+awwH2P4H/8R/oaA8h/AzA7SdrdcUNa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gNw23xcu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44VFKboI031609;
-	Fri, 31 May 2024 23:58:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=JMeDuGU3mIo/lZd4M3HI1L
-	MWPzQogOGjr4Ob9FJRdK0=; b=gNw23xcuRtPSeK25vws03U1S4hNRLRmf6LfwDm
-	YSE5JBN7PyUjmkPAENkDO8ddSTebvIsdxiHgHANCvnGWed5aZa6iz0OZtgGj1++f
-	DqttMFcmyKRpquPqmnf6c+jsf0YJ8WZnwehccdVkF49yhkJ8EmjHJ2/xc09wOk8Y
-	Fowlt8PrfOdQZwUOSZyEfZlO/rWDMSkzeio7lL8LSKR41huddOMBkLZhZcwEhyOa
-	2j6fBW+ROevE9T3tbNUX0ApqP2G6zqPY3VEKS6Qt2/GNORIo7jO6h1Maqm+gt9p3
-	GXxYYrUaa7bMvmGcPujDgr/PCoV06Q42rFHSpqLDc6ushItw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yf8xa2jjt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 31 May 2024 23:58:43 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44VNwgDE003553
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 31 May 2024 23:58:42 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 31 May
- 2024 16:58:42 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Fri, 31 May 2024 16:58:42 -0700
-Subject: [PATCH] list: test: add the missing MODULE_DESCRIPTION() macro
+	s=arc-20240116; t=1717202675; c=relaxed/simple;
+	bh=L4bgoqTEPwFk2yxqpxSEzpZqsXhsFjiEKCAm65jSotk=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=eL5CjieST1W//R5El8Vl9oFXpllpZOsBP4gpcSA42xitzrRpCRkqqmq97/V27wbR/umbkx19F39rgwdT/6UkZOjzF4MFsINdh9gtEHPdtHT5/VTTuYXdbkusvL4NniSbysRBrCkN6fBqKwoeyLUTNCoIClIGu9IGwf9VVcGafZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=3G8xlHjp; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-6c27b1f2dfaso1467686a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 May 2024 17:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717202673; x=1717807473; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DiC6D3No/f13zxZoBE8wViK3SqRt2d6MOJuJYKvAPO0=;
+        b=3G8xlHjpS3WqT7V6ahO9rAXgfbTZgouezhLgX5HU14GU2sM+G1DL6WOghuCf3Fc/Jy
+         wiVzOiXZhskZfMZXdLxv+/2/B+Dq3zQL+jwl/NejHvVE/ovw6az7P5oHa0Txb6w/hNjV
+         9jJcKW/sDiWYQpRY32QfkhSAVby6362en5ng0rYBev+/SlxTUUwyzFlmsKe0sPr/PgSR
+         j2FhJFVxFhSGdV4NB5paaqwMKoMp6lFLjiM8cMHCo66Rqeg7EfNuzEDUc9qlwMo46G7X
+         XA+YmbtuZiS+svLaZxSFF8C5cW9ILa5NFEt9PgtmTdmf+8Tl0q6Z7B31+fxJgI/MBLJX
+         DOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717202673; x=1717807473;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DiC6D3No/f13zxZoBE8wViK3SqRt2d6MOJuJYKvAPO0=;
+        b=szpOSeGBHK8+axXw8+7mFMUOaVyRWV1RKfcYURxSDxPrnWHd1Elk19qre/ttUJxOtx
+         sT8ifVcAkxSCaLe8H1X7rEwR5MDT0595AwgB6ztY7gGYluJJzxtMk+gxtIKrpElP+g+L
+         SD/zy4aRaB1c+pquM/CP6mAB0Hxz5j1qFoIptErFqlG5A0ZMpkD4T/tAjLiL5YKwtXol
+         VlLbUdzbRt5wJMIkgUd9B7QQFlkeysx94pOO2QT4a0edtkyS8hJR9MyHe9yPi9Q4Rrdw
+         ykPjw/LVhcGIMtIPHNqXdN7cdv8Y4FyLxjBWMEuK3yHay+B9l0RTyPWnmikrEU/aGbHv
+         sKWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLnWe6MhaH9A5shSyWyhvQSyyXkI/BbOnqNiiqt58EvuWNeh0FR8vHLWrJDzM3zhSxal+90R2pCulhOVNzdyqh8LZPo9jd/A21tY8gXeRl
+X-Gm-Message-State: AOJu0YyHzehtVS5c70054szjOQCAHvyKRGJaZz2ymfZmQa1R6Ljsq2NL
+	xnfwu+EOYSDED/RUztiso9vdbNuYOiO3ZxTGNQS6fB5Uj2oyGJiYOfEy31ytSFOIdyP4sw3eMdJ
+	1
+X-Google-Smtp-Source: AGHT+IHze9T89P1sDEcGFjdEMMUPFMSFX8DQVNsTq7CvlDak++m895JHR9ff/NCIBY8OQPKV+rZ/Nw==
+X-Received: by 2002:a05:6a20:a110:b0:1b1:c77f:56c3 with SMTP id adf61e73a8af0-1b26f0e6f30mr4568402637.7.1717202672899;
+        Fri, 31 May 2024 17:44:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-702423da778sm2030669b3a.45.2024.05.31.17.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 17:44:32 -0700 (PDT)
+Message-ID: <665a6ef0.620a0220.51ed2.690e@mx.google.com>
+Date: Fri, 31 May 2024 17:44:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240531-md-lib-list-test-v1-1-50b79241cbb0@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIADFkWmYC/x2MQQ6CQAxFr0K6tsnAqKBXIS5mhipNYDTtaEgId
- 6ey+D95i/dWUBImhXu1gtCPld/ZoD5VkMaQX4Q8GEPjmrO7+BrnASeONi1YyO7a3jrvqPVdSmD
- aR+jJy5HsH8YxKGGUkNP4D02cvwvOQQsJbNsOoFZUp4EAAAA=
-To: David Gow <davidgow@google.com>, Andrew Morton <akpm@linux-foundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <kunit-dev@googlegroups.com>, <kernel-janitors@vger.kernel.org>,
-        Jeff Johnson
-	<quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UimDwExmiURfXs7MqVUsKGisFAUfD5VG
-X-Proofpoint-ORIG-GUID: UimDwExmiURfXs7MqVUsKGisFAUfD5VG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-31_14,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- impostorscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2405310183
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-11-g4bf15b1c657d2
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.10-rc1-11-g4bf15b1c657d2)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.10-rc1-1=
+1-g4bf15b1c657d2)
 
-Add the missing invocation of the MODULE_DESCRIPTION() macro.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/v6.10-rc1-11-g4bf15b1c657d2/
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Tree: kselftest
+Branch: fixes
+Git Describe: v6.10-rc1-11-g4bf15b1c657d2
+Git Commit: 4bf15b1c657d22d1d70173e43264e4606dfe75ff
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14cf94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14cf94
+
 ---
- lib/list-test.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 0cc27de9cec8..e87b9941206a 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -1499,4 +1499,5 @@ static struct kunit_suite klist_test_module = {
- 
- kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
- 
-+MODULE_DESCRIPTION("KUnit test for the Kernel Linked-list structures");
- MODULE_LICENSE("GPL v2");
-
----
-base-commit: b050496579632f86ee1ef7e7501906db579f3457
-change-id: 20240531-md-lib-list-test-679830e738cc
-
+For more info write to <info@kernelci.org>
 
