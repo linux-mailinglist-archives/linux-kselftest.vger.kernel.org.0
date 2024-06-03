@@ -1,136 +1,391 @@
-Return-Path: <linux-kselftest+bounces-11119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DD1E8D87D0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 19:22:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E2DF8D87E1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 19:26:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F022F1F233E4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 17:22:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F4224284D9D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 17:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05563136E13;
-	Mon,  3 Jun 2024 17:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43DC7136E34;
+	Mon,  3 Jun 2024 17:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ShGdTUIW"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="QMv/sq9l";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="aTQMV4Vu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE80C1366;
-	Mon,  3 Jun 2024 17:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F2A25622;
+	Mon,  3 Jun 2024 17:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717435360; cv=none; b=DWtorLhX/bCEnlAnjHI0COvSlOKrdLtetpcivTxXu7Wu61y466X76zaP1GSftJh3bh6Jf/dLrupyvnYNzOpJm2uTQC42sKDCpx3B31xAKcExUU2CYOhfZuALGuMzljOqSuXDS4Bm2/Cp6mu0apOKX2y8yqGhWHaoHubtjEmWWTQ=
+	t=1717435613; cv=none; b=RIuWc5lDryteDR1ye+Xge3+canpFI188f3ZKP6xXD5hllPCr/p5WTx6AclWdUNBAlIsLqxenZ6omCAq0R66dqUO+nRcZgZA3ASOBGhz1c2AmJW44YFjm/eSVBwTulqguypyKcKbGY9xzGyF5suZJLaUubcoBISetPwTGL7rcQCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717435360; c=relaxed/simple;
-	bh=PAcBig0jr2i/6jcLdHClnRIG0MzC33BZQfOwMSR1CeY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ua7Vu2pnTaNp7oV+s+RiWP6mr1ZMuGrufafjK7/ic6ubQoGII/YKes5+diJMQ6zaQSQoNHXArzOuBc6CGKshGicy4nhmR0z8EjSGNhrP9wlbctm3SCZ2vtno1jxycOpzjrVh9EgCWAD9GN5NU97F+PT/aUuIgwoQYkkQvvMIMSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ShGdTUIW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2BCC2BD10;
-	Mon,  3 Jun 2024 17:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717435360;
-	bh=PAcBig0jr2i/6jcLdHClnRIG0MzC33BZQfOwMSR1CeY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ShGdTUIWtmzffiVjGvECIt5B2x/fwBnoKj6QesSZaUgfY9ZNM4xxYh+FB/v5gNubB
-	 Y6hlpiaX2JT+xl4m9pwrbdO+z9xe1ENN75Wgi/WWNVRWe+LN8IZNjJQuF6umoh2kKN
-	 DaaN2G5lLIXuOoVucv4Rap3sKiGmv7ehqOZG5q4V8RzX3oZgf2J0nut/frhmfVi/Ny
-	 LQctRCkYzDWzYub9hJAGYVrK7+vXbb8jfPN6EDYBbO+4v6/tHW2RBDI5MmrJiDkk+Y
-	 L83CD+yokh0imQYenPefjX+kpnycLECwQ0cJuh9I7ZAG1kvwyXNhhE+XaOj1uMftcN
-	 yfaxAgcuhkzzA==
-Date: Mon, 3 Jun 2024 18:22:32 +0100
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jakub Kicinski <kuba@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Shengyu Li <shengyu.li.evgeny@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Jon Hunter <jonathanh@nvidia.com>, Ron Economos <re@w6rz.net>,
-	Ronald Warsow <rwarsow@gmx.de>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Will Drewry <wad@chromium.org>,
-	kernel test robot <oliver.sang@intel.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v7 04/10] selftests/harness: Fix interleaved scheduling
- leading to race conditions
-Message-ID: <9eb1e48e-b273-475a-9740-52deedf11ee2@sirena.org.uk>
-References: <20240511171445.904356-1-mic@digikod.net>
- <20240511171445.904356-5-mic@digikod.net>
- <9341d4db-5e21-418c-bf9e-9ae2da7877e1@sirena.org.uk>
- <187423fb-ec78-4318-9da0-5b27df62b71f@sirena.org.uk>
+	s=arc-20240116; t=1717435613; c=relaxed/simple;
+	bh=tohLD1yKYUlomeLNDMncipUmAMreIJUHy9J6Kz4ndEY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JNPwasXE9gHzTHgZrnnnjezwUadZiqDWE/JUKktzknOaxq5MV9cCoYQ7GgmCkHYv8KB0UeXwcJHjU9jjiOyYGjto1OQI/zznH25c92ghhedU7P+6S42LCB13taOXKqDp6eqRQgW+eLjRq+H7cI0upKWViIUNBbG420HQKk4YiIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=QMv/sq9l; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=aTQMV4Vu; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A6E9C1F387;
+	Mon,  3 Jun 2024 17:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1717435609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XqKXNtV1CrsKsGKUGtvKhf9a3rqvl/LN5KF8liPNUjo=;
+	b=QMv/sq9lFk+A8fpKR1w0ZtDWtAy/Y+n5VCPvRAG/dUNffUWhtxFAP5p8CazBByQWUs69aX
+	OQWMAx+fOxTKKHE4DNTSR2U7e2Jvy78+8dFMKjkbOE9Z9aLvNH/Ci+lgAme4RQAMXNq93k
+	Ud6JdlpdksrSe2pJGn5c04EOWGEuE74=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=aTQMV4Vu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1717435607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XqKXNtV1CrsKsGKUGtvKhf9a3rqvl/LN5KF8liPNUjo=;
+	b=aTQMV4Vuv2NRmgQX/TEupW4Ns9sLTklaJs3VZ0vL/Km5t+EQ0udO82kgG206pCTqwaMHqM
+	f5dhCFOTT6ZMtplcz0/iNNxM3n1+PC5vcxKDvJJDnIGPOWiYUKGLDu+TIviz2c+MMbXkNw
+	rlE4p8Opz0KQNHs+ZS+QmbOD1igJUeI=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2C57213A93;
+	Mon,  3 Jun 2024 17:26:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jOOSOdb8XWYGIAAAD6G6ig
+	(envelope-from <mpdesouza@suse.com>); Mon, 03 Jun 2024 17:26:46 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+Date: Mon, 03 Jun 2024 14:26:19 -0300
+Subject: [PATCH v3] selftests: livepatch: Test atomic replace against
+ multiple modules
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="46cg5PHekJwEmoXH"
-Content-Disposition: inline
-In-Reply-To: <187423fb-ec78-4318-9da0-5b27df62b71f@sirena.org.uk>
-X-Cookie: Don't let your status become too quo!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240603-lp-atomic-replace-v3-1-9f3b8ace5c9f@suse.com>
+X-B4-Tracking: v=1; b=H4sIALr8XWYC/33OQQ6CMBAF0KuYrh3TTqkBV97DsChlkCZASVurh
+ nB3Cxt27uYv5v2/sEDeUmC308I8JRusm3KQ5xMzvZ6eBLbNmSHHgitUMMygoxutAU/zoA1BxRs
+ pqeWibA3Lf7Onzn5281Hn3Hk3Quw96UOSAjcp0NBFChEmesN+JAECKlMWklCRLOkeXoEuxo0b3
+ dsQnf/uaxNuBf+GJcyWKFBUVdNclRaHVa/r+gNP3YA+/AAAAA==
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1717435604; l=10660;
+ i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
+ bh=tohLD1yKYUlomeLNDMncipUmAMreIJUHy9J6Kz4ndEY=;
+ b=4M7x2jwB5f1b1Sr/JBs58HJ6Z34OHAKkFCS7Ni/WC9qW7ezL3LEe3fBScNnnlMKDKVJUwe5xc
+ r+Uv0AUwwzEBfjZsPlTQDbWakWun160PGacGRXQE/eTtIOYa1jhX+Nd
+X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
+ pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+X-Spam-Flag: NO
+X-Spam-Score: -5.51
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: A6E9C1F387
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-5.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	DWL_DNSWL_LOW(-1.00)[suse.com:dkim];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MID_RHS_MATCH_FROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:dkim,suse.com:email,test-livepatch.sh:url];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_TRACE(0.00)[suse.com:+]
 
+Adapt the current test-livepatch.sh script to account the number of
+applied livepatches and ensure that an atomic replace livepatch disables
+all previously applied livepatches.
 
---46cg5PHekJwEmoXH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+---
+Changes since v2:
+* Used variables to stop the name of other livepatches applied to test
+  the atomic replace. (Joe)
 
-On Mon, Jun 03, 2024 at 05:27:52PM +0100, Mark Brown wrote:
-> On Mon, May 27, 2024 at 08:07:40PM +0100, Mark Brown wrote:
+Changes since v1:
+* Added checks in the existing test-livepatch.sh instead of creating a
+  new test file. (Joe)
+* Fixed issues reported by ShellCheck (Joe)
+---
+Changes in v3:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v2: https://lore.kernel.org/r/20240525-lp-atomic-replace-v2-1-142199bb65a1@suse.com
+---
+ .../testing/selftests/livepatch/test-livepatch.sh  | 138 +++++++++++++--------
+ 1 file changed, 89 insertions(+), 49 deletions(-)
 
-> > This is now in mainline and appears to be causing several tests (at
-> > least the ptrace vmaccess global_attach test on arm64, possibly also
-> > some of the epoll tests) that previously were timed out by the harness
-> > to to hang instead.  A bisect seems to point at this patch in
-> > particular, there was a bunch of discussion of the fallout of these
-> > patches but I'm afraid I lost track of it, is there something in flight
-> > for this?  -next is affected as well from the looks of it.
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index e3455a6b1158..ca770b8c62fc 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -4,7 +4,9 @@
+ 
+ . $(dirname $0)/functions.sh
+ 
+-MOD_LIVEPATCH=test_klp_livepatch
++MOD_LIVEPATCH1=test_klp_livepatch
++MOD_LIVEPATCH2=test_klp_syscall
++MOD_LIVEPATCH3=test_klp_callbacks_demo
+ MOD_REPLACE=test_klp_atomic_replace
+ 
+ setup_config
+@@ -16,33 +18,33 @@ setup_config
+ 
+ start_test "basic function patching"
+ 
+-load_lp $MOD_LIVEPATCH
++load_lp $MOD_LIVEPATCH1
+ 
+-if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
++if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH1: this has been live patched" ]] ; then
+ 	echo -e "FAIL\n\n"
+ 	die "livepatch kselftest(s) failed"
+ fi
+ 
+-disable_lp $MOD_LIVEPATCH
+-unload_lp $MOD_LIVEPATCH
++disable_lp $MOD_LIVEPATCH1
++unload_lp $MOD_LIVEPATCH1
+ 
+-if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
++if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH1: this has been live patched" ]] ; then
+ 	echo -e "FAIL\n\n"
+ 	die "livepatch kselftest(s) failed"
+ fi
+ 
+-check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+-livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
+-livepatch: '$MOD_LIVEPATCH': patching complete
+-% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
+-% rmmod $MOD_LIVEPATCH"
++check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko
++livepatch: enabling patch '$MOD_LIVEPATCH1'
++livepatch: '$MOD_LIVEPATCH1': initializing patching transition
++livepatch: '$MOD_LIVEPATCH1': starting patching transition
++livepatch: '$MOD_LIVEPATCH1': completing patching transition
++livepatch: '$MOD_LIVEPATCH1': patching complete
++% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH1/enabled
++livepatch: '$MOD_LIVEPATCH1': initializing unpatching transition
++livepatch: '$MOD_LIVEPATCH1': starting unpatching transition
++livepatch: '$MOD_LIVEPATCH1': completing unpatching transition
++livepatch: '$MOD_LIVEPATCH1': unpatching complete
++% rmmod $MOD_LIVEPATCH1"
+ 
+ 
+ # - load a livepatch that modifies the output from /proc/cmdline and
+@@ -53,7 +55,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ 
+ start_test "multiple livepatches"
+ 
+-load_lp $MOD_LIVEPATCH
++load_lp $MOD_LIVEPATCH1
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+@@ -69,26 +71,26 @@ unload_lp $MOD_REPLACE
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-disable_lp $MOD_LIVEPATCH
+-unload_lp $MOD_LIVEPATCH
++disable_lp $MOD_LIVEPATCH1
++unload_lp $MOD_LIVEPATCH1
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+-livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
+-livepatch: '$MOD_LIVEPATCH': patching complete
+-$MOD_LIVEPATCH: this has been live patched
++check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko
++livepatch: enabling patch '$MOD_LIVEPATCH1'
++livepatch: '$MOD_LIVEPATCH1': initializing patching transition
++livepatch: '$MOD_LIVEPATCH1': starting patching transition
++livepatch: '$MOD_LIVEPATCH1': completing patching transition
++livepatch: '$MOD_LIVEPATCH1': patching complete
++$MOD_LIVEPATCH1: this has been live patched
+ % insmod test_modules/$MOD_REPLACE.ko replace=0
+ livepatch: enabling patch '$MOD_REPLACE'
+ livepatch: '$MOD_REPLACE': initializing patching transition
+ livepatch: '$MOD_REPLACE': starting patching transition
+ livepatch: '$MOD_REPLACE': completing patching transition
+ livepatch: '$MOD_REPLACE': patching complete
+-$MOD_LIVEPATCH: this has been live patched
++$MOD_LIVEPATCH1: this has been live patched
+ $MOD_REPLACE: this has been live patched
+ % echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
+ livepatch: '$MOD_REPLACE': initializing unpatching transition
+@@ -96,35 +98,57 @@ livepatch: '$MOD_REPLACE': starting unpatching transition
+ livepatch: '$MOD_REPLACE': completing unpatching transition
+ livepatch: '$MOD_REPLACE': unpatching complete
+ % rmmod $MOD_REPLACE
+-$MOD_LIVEPATCH: this has been live patched
+-% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
+-% rmmod $MOD_LIVEPATCH"
++$MOD_LIVEPATCH1: this has been live patched
++% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH1/enabled
++livepatch: '$MOD_LIVEPATCH1': initializing unpatching transition
++livepatch: '$MOD_LIVEPATCH1': starting unpatching transition
++livepatch: '$MOD_LIVEPATCH1': completing unpatching transition
++livepatch: '$MOD_LIVEPATCH1': unpatching complete
++% rmmod $MOD_LIVEPATCH1"
+ 
+ 
+ # - load a livepatch that modifies the output from /proc/cmdline and
+ #   verify correct behavior
+-# - load an atomic replace livepatch and verify that only the second is active
+-# - remove the first livepatch and verify that the atomic replace livepatch
+-#   is still active
++# - load two addtional livepatches and check the number of livepatch modules
++#   applied
++# - load an atomic replace livepatch and check that the other three modules were
++#   disabled
++# - remove all livepatches besides the atomic replace one and verify that the
++#   atomic replace livepatch is still active
+ # - remove the atomic replace livepatch and verify that none are active
+ 
+ start_test "atomic replace livepatch"
+ 
+-load_lp $MOD_LIVEPATCH
++load_lp $MOD_LIVEPATCH1
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
++for mod in $MOD_LIVEPATCH2 $MOD_LIVEPATCH3; do
++	load_lp "$mod"
++done
++
++mods=(/sys/kernel/livepatch/*)
++nmods=${#mods[@]}
++if [ "$nmods" -ne 3 ]; then
++	die "Expecting three modules listed, found $nmods"
++fi
++
+ load_lp $MOD_REPLACE replace=1
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-unload_lp $MOD_LIVEPATCH
++mods=(/sys/kernel/livepatch/*)
++nmods=${#mods[@]}
++if [ "$nmods" -ne 1 ]; then
++	die "Expecting only one moduled listed, found $nmods"
++fi
++
++# These modules were disabled by the atomic replace
++for mod in $MOD_LIVEPATCH3 $MOD_LIVEPATCH2 $MOD_LIVEPATCH1; do
++	unload_lp "$mod"
++done
+ 
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+@@ -135,13 +159,27 @@ unload_lp $MOD_REPLACE
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+-livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
+-livepatch: '$MOD_LIVEPATCH': patching complete
+-$MOD_LIVEPATCH: this has been live patched
++check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko
++livepatch: enabling patch '$MOD_LIVEPATCH1'
++livepatch: '$MOD_LIVEPATCH1': initializing patching transition
++livepatch: '$MOD_LIVEPATCH1': starting patching transition
++livepatch: '$MOD_LIVEPATCH1': completing patching transition
++livepatch: '$MOD_LIVEPATCH1': patching complete
++$MOD_LIVEPATCH1: this has been live patched
++% insmod test_modules/$MOD_LIVEPATCH2.ko
++livepatch: enabling patch '$MOD_LIVEPATCH2'
++livepatch: '$MOD_LIVEPATCH2': initializing patching transition
++livepatch: '$MOD_LIVEPATCH2': starting patching transition
++livepatch: '$MOD_LIVEPATCH2': completing patching transition
++livepatch: '$MOD_LIVEPATCH2': patching complete
++% insmod test_modules/$MOD_LIVEPATCH3.ko
++livepatch: enabling patch '$MOD_LIVEPATCH3'
++livepatch: '$MOD_LIVEPATCH3': initializing patching transition
++$MOD_LIVEPATCH3: pre_patch_callback: vmlinux
++livepatch: '$MOD_LIVEPATCH3': starting patching transition
++livepatch: '$MOD_LIVEPATCH3': completing patching transition
++$MOD_LIVEPATCH3: post_patch_callback: vmlinux
++livepatch: '$MOD_LIVEPATCH3': patching complete
+ % insmod test_modules/$MOD_REPLACE.ko replace=1
+ livepatch: enabling patch '$MOD_REPLACE'
+ livepatch: '$MOD_REPLACE': initializing patching transition
+@@ -149,7 +187,9 @@ livepatch: '$MOD_REPLACE': starting patching transition
+ livepatch: '$MOD_REPLACE': completing patching transition
+ livepatch: '$MOD_REPLACE': patching complete
+ $MOD_REPLACE: this has been live patched
+-% rmmod $MOD_LIVEPATCH
++% rmmod $MOD_LIVEPATCH3
++% rmmod $MOD_LIVEPATCH2
++% rmmod $MOD_LIVEPATCH1
+ $MOD_REPLACE: this has been live patched
+ % echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
+ livepatch: '$MOD_REPLACE': initializing unpatching transition
 
-> FWIW I'm still seeing this on -rc2...
+---
+base-commit: 6d69b6c12fce479fde7bc06f686212451688a102
+change-id: 20240525-lp-atomic-replace-90b33ed018dc
 
-AFAICT this is due to the switch to using clone3() with CLONE_VFORK
-to start the test which means we never even call alarm() to set up the
-timeout for the test, let alone have the signal for it delivered.  I'm a
-confused about how this could ever work, with clone_vfork() the parent
-shouldn't run until the child execs (which won't happen here) or exits.
-Since we don't call alarm() until after we started the child we never
-actually get that far, but even if we reorder things we'll not get the
-signal for the alarm if the child messes up since the parent is
-suspended.
+Best regards,
+-- 
+Marcos Paulo de Souza <mpdesouza@suse.com>
 
-I'm not clear what the original race being fixed here was but it seems
-like we should revert this since the timeout functionality is pretty
-important?
-
---46cg5PHekJwEmoXH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZd+9cACgkQJNaLcl1U
-h9Dq9Qf/ayW5k2h3cIM8VUJF25GNHiI9zuUbaWYwfO31cGn2pVzpron7bMjMPquc
-mSEU7tXShn2QIvp2ihL+DGLgAWH8YPqoE6U47ifgpIU2CNHJhd6kqdqr8gBSqqoh
-qJ6UnxIlpcMRaudyTcBD+6Jp5riheZnt7Fhaiysdlrp0ba8ByRGktZQ6aRWCy0tp
-pRTY1U/MdKZ7dJ7jfNx2fKsmpgZnesoMnCjDePEc4/UqOatbJ8Yug9F1+CgmKM8J
-YPNU9qRl7KqV+1J/FAbSN1Ncla7G24E5xZHk+wlg2+YVfEGSuOqETgviczCbglPs
-u3axeb+jU57c8gYgrDhSASu5UN5IMw==
-=SmQ4
------END PGP SIGNATURE-----
-
---46cg5PHekJwEmoXH--
 
