@@ -1,127 +1,167 @@
-Return-Path: <linux-kselftest+bounces-11107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B5068D8295
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 14:43:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B120D8D82D7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 14:52:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFAEF1F25783
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 12:43:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45B2282CE4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 12:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD7212C552;
-	Mon,  3 Jun 2024 12:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4402712C816;
+	Mon,  3 Jun 2024 12:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lCvfpsXI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDNXqg0d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FE377105;
-	Mon,  3 Jun 2024 12:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A56286A6;
+	Mon,  3 Jun 2024 12:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717418585; cv=none; b=Xi7u/rjTpyznmSUhhKDWAUGPeUP3RRwFDZRahxNM0Us1l9QCsWviS1tCW2Ldu/WnKnUGwmCgVFdUNRWD+K+4sp+21a/Nzc6aW3El1JzW18JBONc7GTLOnd1vrkkUDkZ9Zm77CFC0MQ4Qxeuh09ol4hNP11QmBFcOJPAQKWTjK/c=
+	t=1717419162; cv=none; b=hBrB8hbcAPmq+hF/yGCDQfxmNLa9t6Ynw6rz+kFGpJD8Rtf9Qk6ftm2HNE34uoU41r5m4vjeuIrlSDGN5PWL8SLZOb6tJOaemJaw/F0WW4mGi2nffMZY9BDo6kKi44z/u/kqn3fZWKKnHMwIepuFgi5+/qxsqzd7oGai4ZJCJoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717418585; c=relaxed/simple;
-	bh=H4fmjwOwpParEuoJtbAW3YxLLR84hx0EJGLqThf2o7M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QBFGk2XfChOxkNY3zZX1fX1EVoer3VxunBUf9FIr8CQX0PXf6VSoEnvDoHPn0GgNZcr4CFUupBlOWnghcG5bCnLqN3sifksyGES8OVygyvJe5AkNGDlO335exBZkGUdVY5eiwFblqI8MYrtiPRdjop+Vvr23BheKlY+vtVmDUGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lCvfpsXI; arc=none smtp.client-ip=209.85.208.52
+	s=arc-20240116; t=1717419162; c=relaxed/simple;
+	bh=RQVuKO8KsmnX+HwIJQMFQ5nya3BRk3afvXUxYEj9As8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JzCP0Y8JsADxqLjwPxQgrU/i+cKAnGqcPnDN2IsPm8nyjFCoq/3nzWNdJbTofF8MaPfESkHko30A+bkF27tIYu+5qN5ZPynRR24ITNlzM2VKWD2MFoOW1okzQ+klUIxZr70fmyq9ckz0Cxsa9Rvwx6amXryvMtU8wRTgJabQ9IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDNXqg0d; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a31d63b6bso3669828a12.0;
-        Mon, 03 Jun 2024 05:43:03 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63947so3594221a12.1;
+        Mon, 03 Jun 2024 05:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717418582; x=1718023382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UqoQJRN01PNk+bAVmoa7Kjw5CtJf1nAglZVWYHoV7wI=;
-        b=lCvfpsXIwAo9toNGzUb0N6DsQmbNsPu3Wpzr16CwuRRAMlp71LzBBCINSlVvB625No
-         sgvRKJoVvHuYk/QNsxt1xgGrelUR4fg2pWxGEEPcsxuY0oMv8HbTrgVxreLaUPW28rW6
-         LFqNKxUteTA6HYyoR3utRgWBxcS92Kk7vYsTE/C+TK78fCxBRyPTnCNAoO2JoEWPS1/u
-         b6Z21goylK5qS7xs3l99Ovrlx1+yCVSxjV/TiuYuM5GvVG/vUJXEqZbKpsyMpsCPWl9L
-         P5D51lJdz5riTCpl5vr8f7L9Lb7mpV6WlGYA6RpeVXT61yJbfpBlVp8dfYw12QZujtDj
-         Jtlw==
+        d=gmail.com; s=20230601; t=1717419159; x=1718023959; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yfniF8fjsy176YDZGpwH9nU2UAljfW8YFG1uj+a6gnk=;
+        b=TDNXqg0dX/3loM6vbYTEyr1NEGurqH87sB+5Oad9YsQO8kzzevhnRIRepwpE7gcsTD
+         e35nWwMYzenHkE5RIg/I3W++ZCaUWmCHDc1PYl8lKDIvH83bHoZYpGMASE03KWWrSjji
+         CjyrVXtKVNa7ohmdSp8PJQPjpdJzHNBGK4rUgrNIwizcuiq7I0JxYEIdqWHlzdo0/+sD
+         m/0PtAF1kQlVSAjGBJK8iuo/OnY04hxEm+FLtW3zpw3TIH9jYpFgBSJ2faayxzSEB1xe
+         uMfTNgUHmWmwXabtHngny8PAph91C3UmTyfTr7thPkahB2ma8jCLC4QZGgwTjvsohHff
+         xwqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717418582; x=1718023382;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UqoQJRN01PNk+bAVmoa7Kjw5CtJf1nAglZVWYHoV7wI=;
-        b=avT85eDTlpAjlEKVZKlD3sqw032P8IquGhQc0wR1o23uI+onFwfTPtGegqpWx8px6Z
-         4WPFaJACHjtPZMp6pnJMAT3Z2kGB126/McXj5lYuBju6uXKQR3wbrSMWuCJUYty4yYnI
-         7yxQplebmDzLVTtKobZA/xpWVu9zsxiNPnLPCDoKA9y6eUGkcgQQKjRigkEruJ1POG99
-         oSKL/exeMGe4AQc4Il86ouRd3hSCfJ9FmuVKFupjdNRaooFd1KfGunuTOA74fUij6hW5
-         XR+I/tV6CKjKD7ldDUN+RmpWOPYrswKhoSP6+z7tV8BtHoPltiEurLcgz+zOEklu+rBB
-         L3nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVQcu8CZLPKfZCAosZzCsiOpdFmK5IukY3Irarc/914BD43eyUfuZvSs+FMp5pK1MF23ByqJBvMylckX7IuSg7S7UVMDpV11qrhkz4IWukM0s/a+1A3/Tx+rtufAjbdl/JtYEDqQBOLNdgtgvlZ5o0UeOvTzn36Ocoi2j2ZH9SqIQmRYltyhwwl0C7Lxg==
-X-Gm-Message-State: AOJu0YybQzXzy/H9OTEGK88tPus1inCY0vyimnLvr1RYaXxToN5JLWK6
-	KHRJdg0o8oLS0SkH+CeBEPIQ8XrThH6qR8QNU7z0k9tYjQTxzHVI8skFGF4Elb0=
-X-Google-Smtp-Source: AGHT+IEVUqFQKNVU07/Yn+CcKliW8whW8qzl9ojbUF81UIpNNC/tIg+ZIK/esE7bOiPUPXXCUi5xLw==
-X-Received: by 2002:a50:8ac4:0:b0:57a:4af6:319e with SMTP id 4fb4d7f45d1cf-57a4af632b3mr3729283a12.1.1717418582387;
-        Mon, 03 Jun 2024 05:43:02 -0700 (PDT)
-Received: from xps-15.. ([91.90.123.30])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-57a3e776c47sm4658364a12.20.2024.06.03.05.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 05:43:02 -0700 (PDT)
-From: Amer Al Shanawany <amer.shanawany@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>,
-	Hugh Dickins <hughd@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	kernel test robot <lkp@intel.com>,
-	Amer Al Shanawany <amer.shanawany@gmail.com>
-Subject: [PATCH] selftests: proc: remove unreached code and fix build warning
-Date: Mon,  3 Jun 2024 14:42:20 +0200
-Message-ID: <20240603124220.33778-1-amer.shanawany@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <202404010211.ygidvMwa-lkp@intel.com>
-References: <202404010211.ygidvMwa-lkp@intel.com>
+        d=1e100.net; s=20230601; t=1717419159; x=1718023959;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yfniF8fjsy176YDZGpwH9nU2UAljfW8YFG1uj+a6gnk=;
+        b=u25CydszaufKfcB2/I18ZPBtqNFaIDHz1T5R9Q2Kl0Ki7T4ZKAwNzj/M5BmKD3XmCb
+         LmtTcQJKVBOXA49Q/G6C6y4FUKUlASPF79RaoLFt8v17VdN20SmptVaGVsJF3TOAL0oX
+         fZSJkRm/+oVbp2nD6Isk75sUcCqFhB5aMfWyECMu6Z9I80+ZCxvNhv9km4Qg1BF3gkQF
+         9PGsEi6DZPKeLST8SsdTU7sj0/nE7aLPsze1TmdxCT4Oi3QwUPoEN5L++3HMkEmd5mQ7
+         dQf+ZacAe324iygpFgq+2XCbCq21I+/uAhhpIzYAFfqjUCuhh0WogjstPHndOY4G7lRv
+         770g==
+X-Forwarded-Encrypted: i=1; AJvYcCWxw9rRkDB0Ogq5peLF4uM8jksb5/RtXSVu8ITqP2Etf3tLyGu+DWlW1dC+Zz2kGkoshPRsqdqePi/0fqen2YacgddH3J5glwTMXdAhjdX/agIuDjMAWLo+VY81ypL4Jt4VtnFmH/q2obWvnxz4gs0ZjwkfUrzb7Zc7fEf0eFs5YY+ab+is2zHMVlvRUNFllAoN493jnbwkorxZVc2+fG4+biCgDD3mS/Ln+w3YHUzN2q2TGVo+sgWVfkmAgYLL+njjpwQKCuIQgMMc4q+bq4l2I8yGuEQ2uTvZQG5pOX2kTlXr3OD266ValHOnniLgQlQP2pVwxa2g7Ae5Ci4WFavLWY5RbC6xgkyt/ThfdA54olLUvmuAUVgwUgGfYPZixx/GdoWPfsVf4rqEBizzCenvpeQFgLcrYpFzOkCfwEH6pd92OUltjgem5zpPQJIw0NxAKaAic4Ejs8SDNzSuHJH8jFoPJbApd6sOfZboxmIZJDYYoIQHBiEyWNSRRbwhxZx+zYD9OQ==
+X-Gm-Message-State: AOJu0YyMk7f/HGvHRoBNrtTmSTQhhL7dLdBoe3vGrkHSQvcZCq+G46QV
+	Ptgn7ehM2OwFl+HGMzvZWG329x/hS0LtTkpQ6wvQ7HDPTBfowNCy0NeWUGFe
+X-Google-Smtp-Source: AGHT+IHWekmH9nbBwxtAyBA3aP0bAtq3ZvyaOoiHlV8Yt/cXh+LsKG2d/23Eymxd3zWFCpXjqiJUYw==
+X-Received: by 2002:a50:9b19:0:b0:56e:238e:372c with SMTP id 4fb4d7f45d1cf-57a3653a3d7mr5229810a12.26.1717419158381;
+        Mon, 03 Jun 2024 05:52:38 -0700 (PDT)
+Received: from [192.168.42.59] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a31b990easm5173294a12.6.2024.06.03.05.52.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jun 2024 05:52:38 -0700 (PDT)
+Message-ID: <fb8fd578-96b8-45b9-b6a9-fe407157122f@gmail.com>
+Date: Mon, 3 Jun 2024 13:52:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 01/14] netdev: add netdev_rx_queue_restart()
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-2-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240530201616.1316526-2-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-fix the following warning:
-proc-empty-vm.c:385:17: warning: ignoring return value of ‘write’
- declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  385 |                 write(1, buf, rv);
-      |                 ^~~~~~~~~~~~~~~~~
+On 5/30/24 21:16, Mina Almasry wrote:
+> Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+> 
+> Signed-off-by: David Wei <dw@davidwei.uk>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+...
+> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+> new file mode 100644
+> index 0000000000000..b3899358e5a9c
+> --- /dev/null
+> +++ b/net/core/netdev_rx_queue.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#include <linux/netdevice.h>
+> +#include <net/netdev_queues.h>
+> +#include <net/netdev_rx_queue.h>
+> +
+> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
+> +{
+> +	void *new_mem, *old_mem;
+> +	int err;
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/r/202404010211.ygidvMwa-lkp@intel.com/
-Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
----
- tools/testing/selftests/proc/proc-empty-vm.c | 3 ---
- 1 file changed, 3 deletions(-)
+I believe it should also do:
 
-diff --git a/tools/testing/selftests/proc/proc-empty-vm.c b/tools/testing/selftests/proc/proc-empty-vm.c
-index 56198d4ca2bf..b3f898aab4ab 100644
---- a/tools/testing/selftests/proc/proc-empty-vm.c
-+++ b/tools/testing/selftests/proc/proc-empty-vm.c
-@@ -381,9 +381,6 @@ static int test_proc_pid_statm(pid_t pid)
- 
- 	assert(rv >= 0);
- 	assert(rv <= sizeof(buf));
--	if (0) {
--		write(1, buf, rv);
--	}
- 
- 	const char *p = buf;
- 	const char *const end = p + rv;
+if (!dev->queue_mgmt_ops)
+	return -EOPNOTSUPP;
+
+> +
+> +	if (!dev->queue_mgmt_ops->ndo_queue_stop ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	DEBUG_NET_WARN_ON_ONCE(!rtnl_is_locked());
+
 -- 
-2.43.0
-
+Pavel Begunkov
 
