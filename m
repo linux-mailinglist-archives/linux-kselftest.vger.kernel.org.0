@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-11139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A9318FA5AB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 00:38:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ABF48FA5B0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 00:38:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBAB21F23EFB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 22:38:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2143283020
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 22:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A55B13D258;
-	Mon,  3 Jun 2024 22:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BE013D2A6;
+	Mon,  3 Jun 2024 22:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPc50aNm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+dM7326"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE96013D24F;
-	Mon,  3 Jun 2024 22:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BDB13D29D;
+	Mon,  3 Jun 2024 22:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717454296; cv=none; b=Z3HPQa8/M2HDCeySKi1q31Wm6h/exUezwSbNPol07whLJ5N6AHpdVqM4+68i1qL+W/LBSEgT6fHw8LoH0+jJCtYqu6+hUU8R3zkVEvZfUBq4MPyFX225q/94n3Lmb7YaoUMNFLYpbBGrCcS3iZnClavcPNQ5y+6ScFabMLHpBhw=
+	t=1717454297; cv=none; b=IC5adCuKW+dP8G8R7qnqWgI8xcXoZtTpGsX7YoJTRbvzCrb+cH8VL6jRq/c11AFLoVS1JumZuCGaqniglyq9bUwZLHSYJZHVSvlYiE52MCMk7h/eqMUuRcOFg80aQKJuFBa6zaD3dvWl0hRuz8dgXR3MrpT6D68AHHfzMAXLKNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717454296; c=relaxed/simple;
-	bh=wxvLpOW05IZBhoJ42Z143u9/Maq90L38LvE9Gw8PR+4=;
+	s=arc-20240116; t=1717454297; c=relaxed/simple;
+	bh=48RSG7/FicYJuswPyflH/1WuDmKoTrKDmJz1ZEqIa6w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZP4sUPMWVzDTSL4h2p0D2ZRj8s7SZdXu+tNKpxJDvpuw9OpEcdyntAZPjCK/JB3LWcBDnwKPW5ffJjmhP72pY2AaKT1bgX57ejnzYQDOnTsqQ6BtLp7OXoy+ZIAvlTH/neHEPfhxBotNLPxDaY1FTHJsJFWzCLy122z9Z/cSR4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PPc50aNm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC6EC32782;
-	Mon,  3 Jun 2024 22:38:14 +0000 (UTC)
+	 MIME-Version; b=FcAx/vA/cXlcp+vAPbZOzJ5nfGd0sMfthLNPBEW8MF34cx2nViVc9ZzthH1eBw6nxwzwbJEFpVPmz8FDbAkc5TXjt8T5cGtKKEqNOGdgoQlbfuHjl1Z2vmWfSyonpSJkqHb93go0pp5Fy/IKYGcDOUrVkN3uOS+KXS+XG8rHD9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+dM7326; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E11B2C4AF0A;
+	Mon,  3 Jun 2024 22:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717454295;
-	bh=wxvLpOW05IZBhoJ42Z143u9/Maq90L38LvE9Gw8PR+4=;
+	s=k20201202; t=1717454296;
+	bh=48RSG7/FicYJuswPyflH/1WuDmKoTrKDmJz1ZEqIa6w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PPc50aNmOSKQrpMjFdFU6Rb1ZIRY8y2FSPjOR73zZIjMSIyqLuEoFLplfEBph5D4m
-	 s0itCD2FqQSuep+trzNv4Yq0xJ5Zme7VPL+Y7mKrNdL+juLXRc28zRBlnlVDt8Pnn8
-	 SYO56Sxfk5jSAKXvz5oHNixC/J5wfFFc7+M4H9ZfYd0f9f8oumGBuJJ5BzJg92BEFh
-	 7iXLe7t49T42tjz9bEmt5RNglE+nF2Rm7vNvni4JrbVql+5SShLKUrAvixbwnX3K8u
-	 Uz+nLikpwjn6zOZFDR4ycdvy9pP0bbYjUyxQb0xFyMx1J/kK5YgBrq3EaCPeVSuKai
-	 t7Tk3NhGJSGGg==
+	b=L+dM7326TBX2TsA2rU/gemSffppyWfE+haTrmupAGraXKdIS/CobTC/iGsrk9x7rz
+	 bg0aB3q6vo1bzLHHV/+lCHd9JrAqj8H/HSY1QVbijrydPcxd6nbpNqNtp6btiP99Zk
+	 1dAhcjsdlAognkhUlONknBrD4GZSgQyYAnNAObc0ojQHUg1J8F0Odw8sr/XQN/lOU4
+	 b1hsltrH++L/gnW/piVL1jWKb8b3GKXO2trrlki2pwynLwDrF8H9+ah8aHiy7EBefY
+	 CPlU6r3u4pTFsMIB9tEpbFb5h2GTOSAoO5FMGmlCZS2QrXw7OWAsAjJeAKEYbyUS5d
+	 uYaJmQCQ/jriA==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>
@@ -61,10 +61,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Christian Marangi <ansuelsmth@gmail.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v5 03/11] dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
-Date: Mon,  3 Jun 2024 15:38:00 -0700
-Message-ID: <20240603223811.3815762-4-sboyd@kernel.org>
+	Maxime Ripard <maxime@cerno.tech>,
+	Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH v5 04/11] dt-bindings: test: Add KUnit empty node binding
+Date: Mon,  3 Jun 2024 15:38:01 -0700
+Message-ID: <20240603223811.3815762-5-sboyd@kernel.org>
 X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
 In-Reply-To: <20240603223811.3815762-1-sboyd@kernel.org>
 References: <20240603223811.3815762-1-sboyd@kernel.org>
@@ -76,32 +77,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the vendor prefix "test" to reserve a vendor prefix for bindings
-that are purely for testing device tree code. This allows test code to
-write bindings that can be checked by the schema validator.
+Describe a binding for an empty device node used by KUnit tests to
+confirm overlays load properly.
 
 Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/test/test,empty.yaml  | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/test/test,empty.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index fbf47f0bacf1..02a22c2722ec 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1456,6 +1456,8 @@ patternProperties:
-     description: Terasic Inc.
-   "^tesla,.*":
-     description: Tesla, Inc.
-+  "^test,.*":
-+    description: Reserved for use by tests. For example, KUnit.
-   "^tfc,.*":
-     description: Three Five Corp
-   "^thead,.*":
+diff --git a/Documentation/devicetree/bindings/test/test,empty.yaml b/Documentation/devicetree/bindings/test/test,empty.yaml
+new file mode 100644
+index 000000000000..030df7123af1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/test/test,empty.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/test/test,empty.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Empty node
++
++maintainers:
++  - David Gow <davidgow@google.com>
++  - Brendan Higgins <brendan.higgins@linux.dev>
++
++description:
++  An empty node to confirm tests can load device tree overlays.
++
++properties:
++  compatible:
++    const: test,empty
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    kunit-node {
++      compatible = "test,empty";
++    };
++...
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
