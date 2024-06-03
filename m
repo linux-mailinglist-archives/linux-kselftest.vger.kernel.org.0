@@ -1,175 +1,192 @@
-Return-Path: <linux-kselftest+bounces-11097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286D38D7C1D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 09:03:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D3FC8D7C2B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 09:07:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D22F91F22A23
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 07:03:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E976D1F22A1C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 07:07:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6745839FE5;
-	Mon,  3 Jun 2024 07:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0153A29F;
+	Mon,  3 Jun 2024 07:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="W/Dd/5SR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f4z3CfQ1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5845838DE1;
-	Mon,  3 Jun 2024 07:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A093FBB7;
+	Mon,  3 Jun 2024 07:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717398220; cv=none; b=kiN1nG4zlD3AQGVrspreCwJgjSOb5yJMwIUZxRSVCsqhTZFl4sPVGZBwRxGKrWY35ZzluxZgghvCTgfF6HqtzUeNVnIvMp+E262h3CvezrC29F9wJ43gNS98WMhSe5TP3UZBhHK3ipBT6MUb+1Uad8f2XsVkBGf+or4DJgvu1ZI=
+	t=1717398464; cv=none; b=uSmI5PJpxQCt30Ya8TSfW0Te6gXoZYMAeBnD5gQSGjrBiud6OtPdFeUSAdJboZ4/aNstPp5oRNPkktsg4qCtLkEesXjhsXV0G8LYrXyPd+ImTw9pBocLv+o9vY1WIKlAieHfke1IJwtLyUe22KOc+JLqylS275FaNMe5NY9qTw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717398220; c=relaxed/simple;
-	bh=UwiT9i7QKsZeFRnVhCPkDUyFUr4Bjhk57FjXtm5j1L8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kubhAyAyxHq81bQPnGxK0kYZvht0NgaHq+rvL9ZRk2Q1tWGNP433hH/C78hqkRmjPcEe/+vpjwv09eMaRTqFH18AXQUwVmQ8iLusP4w2Ah4qE90v5SnvMwL34gJCRXfXgbIt8YfphRAwZ2eOfLeBtsPoTpS72no/SpfgE5Y3CTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=W/Dd/5SR; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: lukma@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 3F25987D4F;
-	Mon,  3 Jun 2024 09:03:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1717398210;
-	bh=/5tiGd5pGdf6aZEybqPPhF21h6T2J0vgCrJD+FKGjZ4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=W/Dd/5SREWKMPK4oEMy7v3+vjc7htmpgltzvc24TyZeC/d0uQCMiH3On1ma/nhhhw
-	 BRP5coF/heAHFGGShfQHcOa7BT7fsRJZdRsSbGqcN4btXWfXHTKjJ7buhoCeVAh0+D
-	 14nUnNLwV9vxJMHogss93VcC+RZcpROMNSwI0GY32yZfh6Q212xWSTXdMgOM5zyya/
-	 SCYRQW2fFagpmaHgl3qtLl0jsewviYa9dzsfh1XrHJpthuoaYCBmVK/51iCmHJ+pMS
-	 p+N+Kcja8rPf50ghynmCs+WRtWu2qcsPjyIEfaG2hpNNYlG2A99UjL5g0uX/26P34N
-	 n66RaXV365N4w==
-Date: Mon, 3 Jun 2024 09:03:27 +0200
-From: Lukasz Majewski <lukma@denx.de>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, Paolo Abeni
- <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>, Vladimir Oltean
- <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>, Oleksij
- Rempel <o.rempel@pengutronix.de>, Tristram.Ha@microchip.com, Sebastian
- Andrzej Siewior <bigeasy@linutronix.de>, Ravi Gunasekaran
- <r-gunasekaran@ti.com>, Simon Horman <horms@kernel.org>, Nikita
- Zhandarovich <n.zhandarovich@fintech.ru>, Murali Karicheri
- <m-karicheri2@ti.com>, Arvid Brodin <Arvid.Brodin@xdin.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, "Ricardo B. Marliere" <ricardo@marliere.net>,
- Casper Andersson <casper.casan@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Geliang Tang <tanggeliang@kylinos.cn>,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] selftests: hsr: Extend the hsr_redbox.sh test to use
- fixed MAC addresses
-Message-ID: <20240603090327.44d43f53@wsk>
-In-Reply-To: <ZlfXmDN-W1dZRYQL@Laptop-X1>
-References: <20240529142232.2625747-1-lukma@denx.de>
-	<20240529142232.2625747-2-lukma@denx.de>
-	<ZlfXmDN-W1dZRYQL@Laptop-X1>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1717398464; c=relaxed/simple;
+	bh=7bLHus1w4I0H00CVIohqk6b85k/ALsgSRLOtf5tu+uU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=u64GwLH+UuGLYFW7ziSEOaOe809NY3SvUSaxfqfTlJ5oxEHMyfyqPzVggyqoK+5mTz6UnAnod00qDZBgDj8OVteNNJHcMZaK7KEDn47rgpto8QdzbCpjkfGBNgNHX8W9MnqgQCgvfOwICV102AD3pdvUO8lnlCVUgQvlTA7Y9e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f4z3CfQ1; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717398463; x=1748934463;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=7bLHus1w4I0H00CVIohqk6b85k/ALsgSRLOtf5tu+uU=;
+  b=f4z3CfQ12yfETHx0+A4x0O8urVO8235SeTFcLIkXiqLnOnswtE/246Qz
+   BMyP7sNw+ICYIEIBYOHAVjWiHx8P7mhQavVo0fSqn8nXlhzycjcXHPxkY
+   KUaqV2q6marqhkKHXn1V+j/dNMOBRy9n/oX0cvrB6TP1jvW5PwWFSA/jw
+   nwIFVGh2EQK3aRtfyVQh0KIaxjmADF8yv1yPbZxkT8pxZJnl2oR3VGrF/
+   CdeEnKNB1hTLPpeOQkfqbT2w4BWAat1fH3zSdBZMwGaBjqNRfc2MjDSTb
+   wW8DiMtm0iLF/3NzlwtK2VWqCDPValM7p40O60KyUHtKyxzSfk50KxvnZ
+   A==;
+X-CSE-ConnectionGUID: agH3RbLKRWyxe+ScTyPJdg==
+X-CSE-MsgGUID: +zg/HxqBTPawhQoUXfyeRw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11091"; a="14037704"
+X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
+   d="scan'208";a="14037704"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 00:07:43 -0700
+X-CSE-ConnectionGUID: ImDIemN4Rem3g8ch1zyFRw==
+X-CSE-MsgGUID: vU+cfdDfRAWGPzKCN0G5Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
+   d="scan'208";a="36871007"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.161])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 00:07:39 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 3 Jun 2024 10:07:35 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Babu Moger <babu.moger@amd.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
+    Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v5 02/16] selftests/resctrl: Calculate resctrl FS derived
+ mem bw over sleep(1) only
+In-Reply-To: <f6b1cf5f-b282-4a52-b09a-ac01ff5a6144@intel.com>
+Message-ID: <a8f550a2-b9f0-5656-e8e4-bafc977c4dac@linux.intel.com>
+References: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com> <20240531131142.1716-3-ilpo.jarvinen@linux.intel.com> <f6b1cf5f-b282-4a52-b09a-ac01ff5a6144@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z8W=oEaNQY.U9rvg.vX2APw";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: multipart/mixed; BOUNDARY="8323328-673171939-1717398144=:1529"
+Content-ID: <0fbd535e-c7be-3209-6627-5908e1495f37@linux.intel.com>
 
---Sig_/z8W=oEaNQY.U9rvg.vX2APw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Hi Hangbin,
+--8323328-673171939-1717398144=:1529
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <3143f12d-da6e-7a86-8815-6930cb9d94db@linux.intel.com>
 
-> On Wed, May 29, 2024 at 04:22:32PM +0200, Lukasz Majewski wrote:
-> > Fixed MAC addresses help with debugging as last four bytes identify
-> > the network namespace.
+On Fri, 31 May 2024, Reinette Chatre wrote:
+> On 5/31/24 6:11 AM, Ilpo J=E4rvinen wrote:
+> > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that performs
+> > the measurement over a duration of sleep(1) call. The memory bandwidth
+> > numbers from IMC are derived over this duration. The resctrl FS derived
+> > memory bandwidth, however, is calculated inside measure_vals() and only
+> > takes delta between the previous value and the current one which
+> > besides the actual test, also samples inter-test noise.
 > >=20
-> > Moreover, it allows to mimic the real life setup with for example
-> > bridge having the same MAC address on each port.
+> > Rework the logic in measure_vals() and get_mem_bw_imc() such that the
+> > resctrl FS memory bandwidth section covers much shorter duration
+> > closely matching that of the IMC perf counters to improve measurement
+> > accuracy.
 > >=20
-> > Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> > For the second read after rewind() to return a fresh value, also
+> > newline has to be consumed by the fscanf().
+> >=20
+> > Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+> > Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 > > ---
-> >  tools/testing/selftests/net/hsr/hsr_redbox.sh | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
 > >=20
-> > diff --git a/tools/testing/selftests/net/hsr/hsr_redbox.sh
-> > b/tools/testing/selftests/net/hsr/hsr_redbox.sh index
-> > 1f36785347c0..998103502d5d 100755 ---
-> > a/tools/testing/selftests/net/hsr/hsr_redbox.sh +++
-> > b/tools/testing/selftests/net/hsr/hsr_redbox.sh @@ -96,6 +96,21 @@
-> > setup_hsr_interfaces() ip -n "${ns4}" link set ns4eth1 up
-> >  	ip -n "${ns5}" link set ns5eth1 up
-> > =20
-> > +	ip -net "$ns1" link set address 00:11:22:00:01:01 dev
-> > ns1eth1
-> > +	ip -net "$ns1" link set address 00:11:22:00:01:02 dev
-> > ns1eth2 +
-> > +	ip -net "$ns2" link set address 00:11:22:00:02:01 dev
-> > ns2eth1
-> > +	ip -net "$ns2" link set address 00:11:22:00:02:02 dev
-> > ns2eth2
-> > +	ip -net "$ns2" link set address 00:11:22:00:02:03 dev
-> > ns2eth3 +
-> > +	ip -net "$ns3" link set address 00:11:22:00:03:11 dev
-> > ns3eth1
-> > +	ip -net "$ns3" link set address 00:11:22:00:03:11 dev
-> > ns3eth2
-> > +	ip -net "$ns3" link set address 00:11:22:00:03:11 dev
-> > ns3eth3
-> > +	ip -net "$ns3" link set address 00:11:22:00:03:11 dev
-> > ns3br1 =20
+> > v5:
+> > - Open mem bw file once and use rewind()
+> > - Read \n from the mem bw file to allow rewind to return a new value.
+> > v4:
+> > - Open resctrl mem bw file (twice) beforehand to avoid opening it durin=
+g
+> >    the test
+> > v3:
+> > - Don't drop Return: entry from perf_open_imc_mem_bw() func comment
+> > ---
+> >   tools/testing/selftests/resctrl/resctrl_val.c | 115 ++++++++++++-----=
+-
+> >   1 file changed, 80 insertions(+), 35 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/resctrl/resctrl_val.c
+> > b/tools/testing/selftests/resctrl/resctrl_val.c
+> > index f55f5989de72..6231275a6e6c 100644
+> > --- a/tools/testing/selftests/resctrl/resctrl_val.c
+> > +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+
+> >   @@ -616,13 +645,17 @@ static void initialize_llc_occu_resctrl(const c=
+har
+> > *ctrlgrp, const char *mongrp,
+> >   }
+> >     static int measure_vals(const struct user_params *uparams,
+> > -=09=09=09struct resctrl_val_param *param,
+> > -=09=09=09unsigned long *bw_resc_start)
+> > +=09=09=09struct resctrl_val_param *param)
+> >   {
+> > -=09unsigned long bw_resc, bw_resc_end;
+> > +=09unsigned long bw_resc, bw_resc_start, bw_resc_end;
+> > +=09FILE *mem_bw_fp;
+> >   =09float bw_imc;
+> >   =09int ret;
+> >   +=09mem_bw_fp =3D open_mem_bw_resctrl(mbm_total_path);
+> > +=09if (!mem_bw_fp)
+> > +=09=09return -1;
+> > +
 >=20
-> The ns3's mac addresses are same, is it a copy-paste error?
+> The comment below seems to refer to the resctrl measurement
+> that starts with the above snippet. Any reason why this snippet
+> is above the comment that follows since the comment seems to
+> apply to it?
+
+No particular reason. I've made the comment a function one now which=20
+seemed better placement for it.
+
+> >   =09/*
+> >   =09 * Measure memory bandwidth from resctrl and from
+> >   =09 * another source which is perf imc value or could
+
+> > @@ -630,22 +663,35 @@ static int measure_vals(const struct user_params
+> > *uparams,
+> >   =09 * Compare the two values to validate resctrl value.
+> >   =09 * It takes 1sec to measure the data.
+> >   =09 */
+> > -=09ret =3D get_mem_bw_imc(uparams->cpu, param->bw_report, &bw_imc);
+> > +=09ret =3D perf_open_imc_mem_bw(uparams->cpu);
+> >   =09if (ret < 0)
+> > -=09=09return ret;
+> > +=09=09goto close_fp;
+> >   -=09ret =3D get_mem_bw_resctrl(&bw_resc_end);
+> > +=09ret =3D get_mem_bw_resctrl(mem_bw_fp, &bw_resc_start);
+> >   =09if (ret < 0)
+> > -=09=09return ret;
+> > +=09=09goto close_fp;
 >=20
-
-No, it is to mimic the switch behaviour.
-
-> BTW, please add the target tree for the patch, e.g.
+> perf_close_imc_mem_bw() seems to be missing from error path?
 >=20
-> [PATCH net-next]
+> Symmetrical code is easier to understand. Looks like
+> perf_close_imc_mem_bw() stayed behind in get_mem_bw_imc() but I think
+> it would make things easier if get_mem_bw_imc() no longer calls
+> perf_close_imc_mem_bw() but instead leave that to the one that
+> calls perf_open_imc_mem_bw().
 
-Ok.
+Okay yeah, it makes things more tractable.
 
->=20
-> Thanks
-> Hangbin
-
-
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/z8W=oEaNQY.U9rvg.vX2APw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmZdar8ACgkQAR8vZIA0
-zr3YeAgAx49HYhwsbFX+W79el/XYDzgWltp7XpxTRGWmi5/Aed3UdY+Ym5KfoziB
-HOMZWYInj0H8Gx+85e9kgObLHv/0bDQGbpu19uBzmsrk6Scv7H9vqgZaSQzzpPT+
-041vngmHhdknG39xDN+AgT1OOZt95N7gAM7qZqD72bohRxhcJ6BSh7REdyG9kSv4
-Ow1KkBky9aKQCnATC2RQBVxL5ex3QKINpiGIeMYbhiVIpTDINU7Rl3U+Fj0aOgW1
-wtuD8a28UVBnmkXFs3aVB3N8DPBgVwmSKR/yJHGzCcTJEWLHjwrjX7u2F/ogZSmI
-k4Gwyja4rojDvqrA84zQy8ol83z75g==
-=iEHT
------END PGP SIGNATURE-----
-
---Sig_/z8W=oEaNQY.U9rvg.vX2APw--
+--=20
+ i.
+--8323328-673171939-1717398144=:1529--
 
