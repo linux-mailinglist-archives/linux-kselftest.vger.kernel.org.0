@@ -1,130 +1,157 @@
-Return-Path: <linux-kselftest+bounces-11103-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685818D7F08
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 11:41:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC9C8D80DC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 13:18:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 256F9285134
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 09:41:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B0B31F212DB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 11:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8F012EBE7;
-	Mon,  3 Jun 2024 09:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B96983CD9;
+	Mon,  3 Jun 2024 11:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="GPjBAhQK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iEMLzZI6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B94112EBE3;
-	Mon,  3 Jun 2024 09:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE04D433AE;
+	Mon,  3 Jun 2024 11:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717407236; cv=none; b=oZMto3F8+tTlsR5x+AAzHjOK7XLlcrqAI93/4kP0owc5nHdGBe5I4Pd1Uv8wISWRKZ8Rgt+xVBMr7guhm71V91XZsJz2OOJ2uiczzo0iRNExv+lKSS8Jlhre5ompbgW1ytf8v8+uo270OzPReTzRQkiDa8ZrgyS/auHGqDQQSCA=
+	t=1717413483; cv=none; b=PkvJV0hYR6rXBLpASsCllNEw3wNCVsSba1PUZLHc/npRFnCaf2BtbYbBwZWL+SUXMoCMJrDl5K3CRWEDitgKvIm5aUJMT9KN1WxgBznZnL2RZIqjv7C8597eO5x/vV60fIfmoHre/3m8Q3m9dhCxcLHxHNc1vub3oRBS5D+yH4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717407236; c=relaxed/simple;
-	bh=rtTnp6DNjxdV478Y4SxUq0UJyuySEc8owZ4xpBLB7IY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fPFjBlGmO/kALIxcHsqCkdmRU22Lg0ll+LH4QCePGck6uOKQtl5OH7xLqeS6dtDt/vHevx53nK28PagWCjbnVUiJ6Q0tmvp8NtgZJwJfPg7IMqtIqEu+ocUs8MEsIQLVYQUytIuoXR8mbOCY2dA7yYCTQO/whwwEQkyflP6SgKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=GPjBAhQK; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: lukma@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id E794D87E9D;
-	Mon,  3 Jun 2024 11:33:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1717407232;
-	bh=yzK/jJThiq2QGD8NcEQ2x+5IClGOW3kK8VcfEbej7CA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GPjBAhQKdEUY9tCk9OT3PavQXbxlGRBT6+08x+Z+a/R2Efg8w8la4e0MR904el3vl
-	 9xo9vR1pR4+ZrhfMrW1cpxYzEIiZD1+Fx17tY9gKYaEGLhsBWsqaafI0bhoJZ13RX2
-	 M59YdfFbjfu1Lq1LJE1+v8ZACPIHSeS8V9qizmb1ML7NMhRQNeynY1FdSEIQ/l0mad
-	 2iRa2OnMun9drouYCKgo4jRgDYX9mb2QyO/WqTwEcm7kgxqWMvNQVKu/bzFDdgRHzw
-	 YF0LDBVrcsXeOYQy997bRmgFt9o+ls0rH18R8cO/zm5rUqfWk7T9p2KeIDEUULA+Kc
-	 GtVTVHwfEFXFA==
-From: Lukasz Majewski <lukma@denx.de>
-To: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Eric Dumazet <edumazet@google.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Tristram.Ha@microchip.com,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Ravi Gunasekaran <r-gunasekaran@ti.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	Murali Karicheri <m-karicheri2@ti.com>,
-	Arvid Brodin <Arvid.Brodin@xdin.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	Casper Andersson <casper.casan@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Geliang Tang <tanggeliang@kylinos.cn>,
-	Shuah Khan <shuah@kernel.org>,
-	Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH net-next] selftests: hsr: Extend the hsr_redbox.sh test to use fixed MAC addresses
-Date: Mon,  3 Jun 2024 11:33:22 +0200
-Message-Id: <20240603093322.3150030-2-lukma@denx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240603093322.3150030-1-lukma@denx.de>
-References: <20240603093322.3150030-1-lukma@denx.de>
+	s=arc-20240116; t=1717413483; c=relaxed/simple;
+	bh=fNXSMsIfpEIa8xVCHoOcoT1rEHej/fTjnMleI/hRA2o=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IvlgPEhD1xGmeuOe7k7qd+Xm4zwYxZuKkvZEIE9blmnHz8XFGcT/DKdGczx7GoXTouluadsXltAL+37d9pydbxt2Th+fe+R/h0jeM/z4LT6Mi3wp0kVPI/XMk+VW/6yLQE0JWRq6qe0C0FlN+Vg9B+e9wWCOkzHHfdgkKJfiA+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iEMLzZI6; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57a68b0a229so480258a12.3;
+        Mon, 03 Jun 2024 04:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717413480; x=1718018280; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tl3ulKo5GJTw7HBOMHVnR1dxMRxq4LpVBTOeiObvY4Q=;
+        b=iEMLzZI6L0psMOZFXxkDtgFer225An3XKA5K0llVIC3UKC1xS9sJVhW79I+3wTjAEQ
+         vsBHKd2eIL+L4hL098uBSejQFeRj7Dq9uiL2TUHuUuQgp23tYFCpIfwBubqurnh13pAF
+         dTDl5tCRr1Uhwwsoyd49ICbB1A9nO9z/+2Y+HX1PMSmTIyFO0TZ/hJ+/S2xPiZK0Ap5L
+         eE906ZqFW5DUU6YvqrkFN0l+NW4Qaxd+Ho3I9O9zM1ayGF7Cr2ZqijOpDLmXxG/gFQNi
+         jG1+yg6CyNsyMevvJ+QjGaNpevyk88rpa4o5zuZaqiN4oPeAAmnmz6ZWDwDSnPJXhvT/
+         W0sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717413480; x=1718018280;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tl3ulKo5GJTw7HBOMHVnR1dxMRxq4LpVBTOeiObvY4Q=;
+        b=amGcQltsGvM4Crb2dHJGrOgBeL/JsSsDGulGlZ3GZD32zk0Dix+N+pDcfQ/1ewMMRS
+         9UhvEp2hC7fm/tZlhMIKinYbLJBJ8TZRrRj8MpJNlcp3qmvlhTi8QQodV+Jf1m5pFa4j
+         xQinpoVu3Jd+TbyZg3rnB+UP5/N4X7IFeeHqJavMHkKrNNWJzXyLkhiE80DMZpQkYgN6
+         i+Re8LowP2eFuIDeZ1qkk07+c9pi6pI+Uv1+1x5/kjEpa9W4PvpedNGgy5upR8ud+hmg
+         oH0dtWYc7FOu9uz+Z0jZzrLAOQb00vMokIKRt7ajV1yCmhQtI3MW22tc/wTX3EkRl+Ti
+         8e2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW6aUy3XN73lsZ4K2Pl0TS55C1FETRuoNd+KHgKQ0WHJbI/UnpnWeqWo5N/N2vWiZEETI5usOJCNx6RzgIyc8SYh7Hi4yVOTB72yUpK0r9NBsKBsnsKM8a7dh2zh5X5xU22FC5uw3X5Zkm3LePl
+X-Gm-Message-State: AOJu0YyGN7NXhQjwyCxQFWadscFsVxUx2esJS0DzepxKFS+uMwtyYFu1
+	K6Ya74IDkupbKjUUX41ToVbuAJTkUNHV4TeIgXKQVev8ge7YUlEDol6boc9iRgA=
+X-Google-Smtp-Source: AGHT+IH7ThME1P861evYzO3bn2mTV8SABwp5+HfMTEHS3eGeHuOpJXkBBO7KLO0pwIaFoGiwWdKZqw==
+X-Received: by 2002:a50:935c:0:b0:57a:4af6:3197 with SMTP id 4fb4d7f45d1cf-57a4af63298mr3451951a12.10.1717413479962;
+        Mon, 03 Jun 2024 04:17:59 -0700 (PDT)
+Received: from [10.67.234.135] ([91.90.123.30])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a31b99c42sm5074007a12.17.2024.06.03.04.17.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jun 2024 04:17:59 -0700 (PDT)
+Message-ID: <5dfdfa17-d3b3-408e-a8a6-b8dc0756eac3@gmail.com>
+Date: Mon, 3 Jun 2024 13:17:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: filesystems: fix warn_unused_result build
+ warnings
+From: Amer Al Shanawany <amer.shanawany@gmail.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Miklos Szeredi <mszeredi@redhat.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+References: <20240417184913.74734-1-amer.shanawany@gmail.com>
+ <58e0539d-423e-42e0-9ee4-8fc8e1eed94f@collabora.com>
+ <0910d537-c2e8-4932-8b0e-b5ce381e1ee1@gmail.com>
+Content-Language: en-US
+In-Reply-To: <0910d537-c2e8-4932-8b0e-b5ce381e1ee1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
 
-Fixed MAC addresses help with debugging as last four bytes identify the
-network namespace.
+On 5/4/24 19:17, Amer Al Shanawany wrote:
+> On 4/19/24 18:41, Muhammad Usama Anjum wrote:
+>> On 4/17/24 11:49 PM, Amer Al Shanawany wrote:
+>>> Fix the following warnings by adding return check and error messages.
+>>>
+>>> statmount_test.c: In function ‘cleanup_namespace’:
+>>> statmount_test.c:128:9: warning: ignoring return value of ‘fchdir’
+>>> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>>>   128 |         fchdir(orig_root);
+>>>       |         ^~~~~~~~~~~~~~~~~
+>>> statmount_test.c:129:9: warning: ignoring return value of ‘chroot’
+>>> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>>>   129 |         chroot(".");
+>>>       |         ^~~~~~~~~~~
+>>>
+>>> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+>> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>
+>>> ---
+>>>  .../selftests/filesystems/statmount/statmount_test.c | 12 ++++++++++--
+>>>  1 file changed, 10 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>>> index e6d7c4f1c85b..e8c019d72cbf 100644
+>>> --- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>>> +++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
+>>> @@ -125,8 +125,16 @@ static uint32_t old_root_id, old_parent_id;
+>>>  
+>>>  static void cleanup_namespace(void)
+>>>  {
+>>> -	fchdir(orig_root);
+>>> -	chroot(".");
+>>> +	int ret;
+>>> +
+>>> +	ret = fchdir(orig_root);
+>>> +	if (ret == -1)
+>>> +		ksft_perror("fchdir to original root");
+>>> +
+>>> +	ret = chroot(".");
+>>> +	if (ret == -1)
+>>> +		ksft_perror("chroot to original root");
+>>> +
+>>>  	umount2(root_mntpoint, MNT_DETACH);
+>>>  	rmdir(root_mntpoint);
+>>>  }
+> Hi,
+>
+> Can you please consider this patch?
+>
+> Thank  you
+>
+> Amer
+>
+>
+>
+Hello,
 
-Moreover, it allows to mimic the real life setup with for example bridge
-having the same MAC address on each port.
+Could you please consider this simple patch for fixing build warnings for kselftest ?
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
- tools/testing/selftests/net/hsr/hsr_redbox.sh | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Thank you
 
-diff --git a/tools/testing/selftests/net/hsr/hsr_redbox.sh b/tools/testing/selftests/net/hsr/hsr_redbox.sh
-index 1f36785347c0..998103502d5d 100755
---- a/tools/testing/selftests/net/hsr/hsr_redbox.sh
-+++ b/tools/testing/selftests/net/hsr/hsr_redbox.sh
-@@ -96,6 +96,21 @@ setup_hsr_interfaces()
- 	ip -n "${ns4}" link set ns4eth1 up
- 	ip -n "${ns5}" link set ns5eth1 up
- 
-+	ip -net "$ns1" link set address 00:11:22:00:01:01 dev ns1eth1
-+	ip -net "$ns1" link set address 00:11:22:00:01:02 dev ns1eth2
-+
-+	ip -net "$ns2" link set address 00:11:22:00:02:01 dev ns2eth1
-+	ip -net "$ns2" link set address 00:11:22:00:02:02 dev ns2eth2
-+	ip -net "$ns2" link set address 00:11:22:00:02:03 dev ns2eth3
-+
-+	ip -net "$ns3" link set address 00:11:22:00:03:11 dev ns3eth1
-+	ip -net "$ns3" link set address 00:11:22:00:03:11 dev ns3eth2
-+	ip -net "$ns3" link set address 00:11:22:00:03:11 dev ns3eth3
-+	ip -net "$ns3" link set address 00:11:22:00:03:11 dev ns3br1
-+
-+	ip -net "$ns4" link set address 00:11:22:00:04:01 dev ns4eth1
-+	ip -net "$ns5" link set address 00:11:22:00:05:01 dev ns5eth1
-+
- 	ip -net "${ns1}" link add name hsr1 type hsr slave1 ns1eth1 slave2 ns1eth2 supervision 45 version ${HSRv} proto 0
- 	ip -net "${ns2}" link add name hsr2 type hsr slave1 ns2eth1 slave2 ns2eth2 interlink ns2eth3 supervision 45 version ${HSRv} proto 0
- 
--- 
-2.20.1
-
+Amer
 
