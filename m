@@ -1,192 +1,111 @@
-Return-Path: <linux-kselftest+bounces-11098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D3FC8D7C2B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 09:07:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4F58D7EDD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 11:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E976D1F22A1C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 07:07:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE047289790
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 09:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0153A29F;
-	Mon,  3 Jun 2024 07:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D19129E95;
+	Mon,  3 Jun 2024 09:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f4z3CfQ1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afg+mk2v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A093FBB7;
-	Mon,  3 Jun 2024 07:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A511129A7A;
+	Mon,  3 Jun 2024 09:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717398464; cv=none; b=uSmI5PJpxQCt30Ya8TSfW0Te6gXoZYMAeBnD5gQSGjrBiud6OtPdFeUSAdJboZ4/aNstPp5oRNPkktsg4qCtLkEesXjhsXV0G8LYrXyPd+ImTw9pBocLv+o9vY1WIKlAieHfke1IJwtLyUe22KOc+JLqylS275FaNMe5NY9qTw4=
+	t=1717407046; cv=none; b=D2Bh+AIQVz8RxYqMLevBkx0ujO1m0TMAzdTo9QPa0bVtnoSo5MX4FJzZZ71QK2YHMXAJ7IdbMLDAO6aoEVq+O5IsPu1KBL+LanuKDUEQUtZYp9PwGjmERLTlKlNUJVAPcBRatNQO7DvLjcIRZR6EM543y3BGpJWr5sjKOunlLGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717398464; c=relaxed/simple;
-	bh=7bLHus1w4I0H00CVIohqk6b85k/ALsgSRLOtf5tu+uU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=u64GwLH+UuGLYFW7ziSEOaOe809NY3SvUSaxfqfTlJ5oxEHMyfyqPzVggyqoK+5mTz6UnAnod00qDZBgDj8OVteNNJHcMZaK7KEDn47rgpto8QdzbCpjkfGBNgNHX8W9MnqgQCgvfOwICV102AD3pdvUO8lnlCVUgQvlTA7Y9e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f4z3CfQ1; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717398463; x=1748934463;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=7bLHus1w4I0H00CVIohqk6b85k/ALsgSRLOtf5tu+uU=;
-  b=f4z3CfQ12yfETHx0+A4x0O8urVO8235SeTFcLIkXiqLnOnswtE/246Qz
-   BMyP7sNw+ICYIEIBYOHAVjWiHx8P7mhQavVo0fSqn8nXlhzycjcXHPxkY
-   KUaqV2q6marqhkKHXn1V+j/dNMOBRy9n/oX0cvrB6TP1jvW5PwWFSA/jw
-   nwIFVGh2EQK3aRtfyVQh0KIaxjmADF8yv1yPbZxkT8pxZJnl2oR3VGrF/
-   CdeEnKNB1hTLPpeOQkfqbT2w4BWAat1fH3zSdBZMwGaBjqNRfc2MjDSTb
-   wW8DiMtm0iLF/3NzlwtK2VWqCDPValM7p40O60KyUHtKyxzSfk50KxvnZ
-   A==;
-X-CSE-ConnectionGUID: agH3RbLKRWyxe+ScTyPJdg==
-X-CSE-MsgGUID: +zg/HxqBTPawhQoUXfyeRw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11091"; a="14037704"
-X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
-   d="scan'208";a="14037704"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 00:07:43 -0700
-X-CSE-ConnectionGUID: ImDIemN4Rem3g8ch1zyFRw==
-X-CSE-MsgGUID: vU+cfdDfRAWGPzKCN0G5Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
-   d="scan'208";a="36871007"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.161])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 00:07:39 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 3 Jun 2024 10:07:35 +0300 (EEST)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-    Babu Moger <babu.moger@amd.com>, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    LKML <linux-kernel@vger.kernel.org>, Fenghua Yu <fenghua.yu@intel.com>, 
-    Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v5 02/16] selftests/resctrl: Calculate resctrl FS derived
- mem bw over sleep(1) only
-In-Reply-To: <f6b1cf5f-b282-4a52-b09a-ac01ff5a6144@intel.com>
-Message-ID: <a8f550a2-b9f0-5656-e8e4-bafc977c4dac@linux.intel.com>
-References: <20240531131142.1716-1-ilpo.jarvinen@linux.intel.com> <20240531131142.1716-3-ilpo.jarvinen@linux.intel.com> <f6b1cf5f-b282-4a52-b09a-ac01ff5a6144@intel.com>
+	s=arc-20240116; t=1717407046; c=relaxed/simple;
+	bh=PlGq7u0Y2WD+2rPxC0bqOy2yBbVouV51QHxitKWWfYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k1ZRdZi63CBnWNOd6mKd1R6tqdkgtfUZLdZXHLrlYBbSRiwd2miihi8muIrFoWq2Ra80s6a5CbuyBXHWtuuUbss4yDOI4xth2RR4V/fdpqU1N5GEVIrgxGbmbZ6ttw2knmP57nfaxOheQjOCVgls2/gYQVMS5DaMQut32hK6jXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afg+mk2v; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2c1b9152848so2697769a91.1;
+        Mon, 03 Jun 2024 02:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717407044; x=1718011844; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pTfg4W7hBCVeAcgxRuU+2sIqAsGnPVdsC6neRJn0WXo=;
+        b=afg+mk2vaTpxEL6dIekCkJgKNAg+9hF/wdoLXv0fajDC6lttD5E4CsqoesSMzTWARR
+         yNGBmZEyDjt7lib2/zxXcdMMu0i8OPmKBP8EKbZyzcUsuSct6ugYrbYvcyi6oefxCvKQ
+         ETfGc/k+vQS6ENx9qMJw/etJpkqEceJhr4f1yIrBwKRtpPrzTpGikRo4L3vdhkC0/+bK
+         N6y5xVw76djuaHdatrC+fNKcys6B9Ly9iUcsgH//RvsHXSuQLvDl5lycPPlH6E4nnNda
+         4L9nrkZ2w0XlLP2qbSfMnodCFSDE+/d41n5B5kA9CO5l4jahc5PWz3twRkPzW4GlkZg3
+         60JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717407044; x=1718011844;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pTfg4W7hBCVeAcgxRuU+2sIqAsGnPVdsC6neRJn0WXo=;
+        b=AKqPZUPNXt/W7HLPnJEwLcvmBAqXEULrTaOZ142vbaS1vCizlo2Ns2JJDt6S8cKY/m
+         Pi6m+hL52G+RCZp6ULtJ+4+rw1Hb9kK0QMETr+JIiXT2ivQGVzx95rPx3ahSn16GtwA1
+         lWn326Kuz4n/Q20z5XGmWByMBUBK3Nc2W18OETOOphvQGD0c7oKLZYPYBzlVr+j/kPnJ
+         nTbIiRHBVZTDsJWN/jJYqStyJYCoG1QHG7EQ9AoyUW/dtme1qFRf30KpW/nuUwiomQKa
+         Xw8Yf+3Adi9R79UmpvtULVX3Qwr/lmnmRA31KGdNr4OAIgaE+FMiHZrzYqe8Q9E7CaJn
+         ou+w==
+X-Forwarded-Encrypted: i=1; AJvYcCVYGtXM2pAEPbtn/CFIwD0beOyg26iSjQbhlb4mc2/Q5Dbt6pYwCEMSn9Lm2s57CgQjPqKckeM1RrSionJpB7LyPGcvg5+QJXXBrq/u57i6
+X-Gm-Message-State: AOJu0YwLLENmSwwN2YsxxdnULRuiySp2jdQG910QA5niGUi2sZ0VsWAg
+	ml1Com/44Wi1IDYdhbNYwUyuEVQet25VFakGa/CUQp7oQ7LRNDRoAGXL6eIcFdp3Og==
+X-Google-Smtp-Source: AGHT+IHNshtVpxw2GSYIJLcmEx5FBtoZtIwmnPKolXjlWNGSHOkknjnUXczc8WB4BN7SMJLaAvFH9w==
+X-Received: by 2002:a17:90a:d987:b0:2c1:a58a:1146 with SMTP id 98e67ed59e1d1-2c1dc560848mr6665451a91.4.1717407043812;
+        Mon, 03 Jun 2024 02:30:43 -0700 (PDT)
+Received: from Laptop-X1.redhat.com ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a777d2f9sm8000429a91.27.2024.06.03.02.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jun 2024 02:30:43 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Lukasz Majewski <lukma@denx.de>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: hsr: add missing config for CONFIG_BRIDGE
+Date: Mon,  3 Jun 2024 17:30:19 +0800
+Message-ID: <20240603093019.2125266-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-673171939-1717398144=:1529"
-Content-ID: <0fbd535e-c7be-3209-6627-5908e1495f37@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+hsr_redbox.sh test need to create bridge for testing. Add the missing
+config CONFIG_BRIDGE in config file.
 
---8323328-673171939-1717398144=:1529
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <3143f12d-da6e-7a86-8815-6930cb9d94db@linux.intel.com>
+Fixes: eafbf0574e05 ("test: hsr: Extend the hsr_redbox.sh to have more SAN devices connected")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/hsr/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Fri, 31 May 2024, Reinette Chatre wrote:
-> On 5/31/24 6:11 AM, Ilpo J=E4rvinen wrote:
-> > For MBM/MBA tests, measure_vals() calls get_mem_bw_imc() that performs
-> > the measurement over a duration of sleep(1) call. The memory bandwidth
-> > numbers from IMC are derived over this duration. The resctrl FS derived
-> > memory bandwidth, however, is calculated inside measure_vals() and only
-> > takes delta between the previous value and the current one which
-> > besides the actual test, also samples inter-test noise.
-> >=20
-> > Rework the logic in measure_vals() and get_mem_bw_imc() such that the
-> > resctrl FS memory bandwidth section covers much shorter duration
-> > closely matching that of the IMC perf counters to improve measurement
-> > accuracy.
-> >=20
-> > For the second read after rewind() to return a fresh value, also
-> > newline has to be consumed by the fscanf().
-> >=20
-> > Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-> > Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >=20
-> > v5:
-> > - Open mem bw file once and use rewind()
-> > - Read \n from the mem bw file to allow rewind to return a new value.
-> > v4:
-> > - Open resctrl mem bw file (twice) beforehand to avoid opening it durin=
-g
-> >    the test
-> > v3:
-> > - Don't drop Return: entry from perf_open_imc_mem_bw() func comment
-> > ---
-> >   tools/testing/selftests/resctrl/resctrl_val.c | 115 ++++++++++++-----=
--
-> >   1 file changed, 80 insertions(+), 35 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/resctrl/resctrl_val.c
-> > b/tools/testing/selftests/resctrl/resctrl_val.c
-> > index f55f5989de72..6231275a6e6c 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> > +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+diff --git a/tools/testing/selftests/net/hsr/config b/tools/testing/selftests/net/hsr/config
+index 22061204fb69..241542441c51 100644
+--- a/tools/testing/selftests/net/hsr/config
++++ b/tools/testing/selftests/net/hsr/config
+@@ -2,3 +2,4 @@ CONFIG_IPV6=y
+ CONFIG_NET_SCH_NETEM=m
+ CONFIG_HSR=y
+ CONFIG_VETH=y
++CONFIG_BRIDGE=y
+-- 
+2.43.0
 
-> >   @@ -616,13 +645,17 @@ static void initialize_llc_occu_resctrl(const c=
-har
-> > *ctrlgrp, const char *mongrp,
-> >   }
-> >     static int measure_vals(const struct user_params *uparams,
-> > -=09=09=09struct resctrl_val_param *param,
-> > -=09=09=09unsigned long *bw_resc_start)
-> > +=09=09=09struct resctrl_val_param *param)
-> >   {
-> > -=09unsigned long bw_resc, bw_resc_end;
-> > +=09unsigned long bw_resc, bw_resc_start, bw_resc_end;
-> > +=09FILE *mem_bw_fp;
-> >   =09float bw_imc;
-> >   =09int ret;
-> >   +=09mem_bw_fp =3D open_mem_bw_resctrl(mbm_total_path);
-> > +=09if (!mem_bw_fp)
-> > +=09=09return -1;
-> > +
->=20
-> The comment below seems to refer to the resctrl measurement
-> that starts with the above snippet. Any reason why this snippet
-> is above the comment that follows since the comment seems to
-> apply to it?
-
-No particular reason. I've made the comment a function one now which=20
-seemed better placement for it.
-
-> >   =09/*
-> >   =09 * Measure memory bandwidth from resctrl and from
-> >   =09 * another source which is perf imc value or could
-
-> > @@ -630,22 +663,35 @@ static int measure_vals(const struct user_params
-> > *uparams,
-> >   =09 * Compare the two values to validate resctrl value.
-> >   =09 * It takes 1sec to measure the data.
-> >   =09 */
-> > -=09ret =3D get_mem_bw_imc(uparams->cpu, param->bw_report, &bw_imc);
-> > +=09ret =3D perf_open_imc_mem_bw(uparams->cpu);
-> >   =09if (ret < 0)
-> > -=09=09return ret;
-> > +=09=09goto close_fp;
-> >   -=09ret =3D get_mem_bw_resctrl(&bw_resc_end);
-> > +=09ret =3D get_mem_bw_resctrl(mem_bw_fp, &bw_resc_start);
-> >   =09if (ret < 0)
-> > -=09=09return ret;
-> > +=09=09goto close_fp;
->=20
-> perf_close_imc_mem_bw() seems to be missing from error path?
->=20
-> Symmetrical code is easier to understand. Looks like
-> perf_close_imc_mem_bw() stayed behind in get_mem_bw_imc() but I think
-> it would make things easier if get_mem_bw_imc() no longer calls
-> perf_close_imc_mem_bw() but instead leave that to the one that
-> calls perf_open_imc_mem_bw().
-
-Okay yeah, it makes things more tractable.
-
---=20
- i.
---8323328-673171939-1717398144=:1529--
 
