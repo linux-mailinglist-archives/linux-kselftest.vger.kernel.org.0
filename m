@@ -1,110 +1,135 @@
-Return-Path: <linux-kselftest+bounces-11105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD50B8D8164
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 13:38:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD5A88D81B7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 13:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B2531C2160D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 11:38:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 365B5B2111B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 11:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7FD84A46;
-	Mon,  3 Jun 2024 11:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC29086AFE;
+	Mon,  3 Jun 2024 11:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSABx7Iw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RIApz2ST"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C442124A08;
-	Mon,  3 Jun 2024 11:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2C886AE9;
+	Mon,  3 Jun 2024 11:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717414704; cv=none; b=MSdZ1Oz0VyMyCuJ8TVdc+F6rQrOLOOcHHRmZhFjYsagZgfgP6YoXk3O0+rtudaIIVJ4AlpCTBvi6BJ4q3NBFiBbHkBN9vTRjjbsAUf9GI3+QjKkQ8tve7WVpeOeQPfzmf0b3lTct34d5iJEiBVz63INmqq1Senv5gOW2nJ6L0BA=
+	t=1717415806; cv=none; b=A6cfqExfiKU3tRC4WVeceLV11A6edBdfjiCnRWiU0PzKEeHLeIPypCOkdeYcVtOEgxQBuiY8+bLnaxD4e6Umq5QDWOnPqQ4gq2Qz+28k4blUrQRrqv9gloOjU7SMngQ6bCZ15a8dwjguynPG1shH/bcxEonaVie21qDC3IDs1sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717414704; c=relaxed/simple;
-	bh=TWRC08F1B8xoRvMQiF3zg64H2B0opUb04uKXgiUGxC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oVzok/+Dct0wrd0nRtyod0SzS0xem8D7Y9I9BW0/4hs3wGhc7St90o15GaIapz9XCj6VPF/8is1VCutbcpIVQbL8exC3rfEZvKvXbhmarBT0RLsbm0AAgaX5lFSPE1Ccf9qn9hMSK4e1xOC6baycrR2ZL+c9u21SaeW2ipFDYuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSABx7Iw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058F9C2BD10;
-	Mon,  3 Jun 2024 11:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717414704;
-	bh=TWRC08F1B8xoRvMQiF3zg64H2B0opUb04uKXgiUGxC4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nSABx7Iw5P+O610S16NKTpohZgAsHIuHtjj7woP3hUNge8+QvuiMEPHlAXr8AyXQv
-	 QIAoqzJELkr8K5rA0en1jTy/WW1a2nov2gXyYn3hs+aCY8gzABYptJWKAbAGnpnFBp
-	 jKVTO4+GapEp1R5V2DbwDBXCC4ZXlyffPub0zhCfGAve5NfKAGeqeRhBsGC3EW0rk6
-	 p167mLa4ILVlgWc+iSQ+qCwu0bQr4ubxZn0F/AeE8HY9cGX/+m1KNiy6SEzqRjhYjY
-	 +ngrsn0pv/ydS944D0t8cYSCszW5icbuL5dBiBqHycPFoMAUY6t3chFDOinvAtjtQs
-	 oOdblXYCiVYCA==
-Date: Mon, 3 Jun 2024 12:38:18 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13
- 9360
-Message-ID: <c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
-References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
- <87cyp280yw.wl-tiwai@suse.de>
- <21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
- <878qzp97qh.wl-tiwai@suse.de>
+	s=arc-20240116; t=1717415806; c=relaxed/simple;
+	bh=QKTql34O8lDaqYmigvPLMWgqpx5wUV6YZyBk/TNIcmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C+sPyG2rREkeJOOavSBhRuOe11LdFK8VqGqo75iyPa78Y+FVAPW66L7a5IXtuDpraGiXwNgUErURXJFcD7b53MIas0gD+uSA1KALMIjl+uiBqyPECi61XaPU3WtWzzqYPnqmJdethuvdh+rXhl4YWnNpnL6mfBtk+GdeDkxys84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RIApz2ST; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a63359aaaa6so558099566b.2;
+        Mon, 03 Jun 2024 04:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717415803; x=1718020603; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HArPik3I7izu+6WonMf03QX2STUValM6DQn6IUu4hhc=;
+        b=RIApz2STa+9paTWsNVbMjOckujyMuiSRv1NC34V4NYDUJ5JxjP3VhRzLdUbBkF6pTm
+         lIxiQCa7cUUv5rhynexUCtWkiZVdAQ+95dnQABiJNNApP0X4iJ8XCX3lL5hh+pAJkr8R
+         NhwBV7g70ETcj81MQdO/HrkVWyi183Pg+QlJqEF5kZC3Vp0WMGrVqPaQ3axftcx0kpGB
+         LiMkaCNyyEN84T9f/FNqTC4WwWMBaZOKzJGCTlJo+OnD/Sk2NNQpMtdEt4kGYKy1V2j5
+         7cSMfpgKxiI22m7D2knsjnCIsH3rMuIp/SaK6FxPvoSHIWY/uB/HYS6QQKxoj8P+RsGI
+         GlzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717415803; x=1718020603;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HArPik3I7izu+6WonMf03QX2STUValM6DQn6IUu4hhc=;
+        b=IxQB3SEenqQamvJSWywRBnKf2ZljA/BEhg9drqwlkQHeFUEQHqhklfX5bczzUG2BVA
+         qx/wBYEt8WAxAqXR3cpptfksLHUpkGj60WxZ8A/eGI75tHBAFTXMIK8dAHlmNwD460EU
+         GzN4sAs705mFQmLT/9m+cTmdJNxhVXJ1TQDNdOfha+gzULFTvWB+i+vfiiBwy+j8VLR0
+         KTzgqeGX0ZXA9qXP13axoj9maj3LuIlfp/molMgUcgDUdObjMrfOjNfO51g+DtjjW2Rc
+         lIx/WV3+wAGw6g7oi/SNxdaIuEqqEJQ0FRwO5H4P6IylQpP2wTCAa8luQSmQ3jMIlf+K
+         IMBg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0yODtfH6MjySmVL8ioRAIYtvTXNNeGOhj/QYP7EciLFPFQqG6i8Xn/Vl0ow7BpJ8tPkG18LTvW6xFmw19ge2BfeliqH8VNRy+IoVUfexNyaZRisBfdHA/i9UAHD/xAS0QWzbmInxzJI9uFZDk
+X-Gm-Message-State: AOJu0YxdXMQVb+cMsmlxR2ZT+zTvv0S439Yn4hCzpZUo7QqcBNnKW18J
+	I5jnBvVkS0uKMxClyUj/lYvVVxpP3099/me+5nGqtn65kueaa7Nb
+X-Google-Smtp-Source: AGHT+IFk7AEDri/ImBDfMcpzA1gWV5IU3IKVTQAHuPklUwTdt3eUF3d+bPT7BRbEYly1JFmJtscrPA==
+X-Received: by 2002:a17:906:1dcc:b0:a55:b272:ea02 with SMTP id a640c23a62f3a-a682244a89amr660656166b.75.1717415803420;
+        Mon, 03 Jun 2024 04:56:43 -0700 (PDT)
+Received: from xps-15.. ([91.90.123.30])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a68f39b9294sm229634166b.180.2024.06.03.04.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jun 2024 04:56:42 -0700 (PDT)
+From: Amer Al Shanawany <amer.shanawany@gmail.com>
+To: Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Amer Al Shanawany <amer.shanawany@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] selftests: seccomp: fix format-zero-length warnings
+Date: Mon,  3 Jun 2024 13:54:47 +0200
+Message-ID: <20240603115447.30279-1-amer.shanawany@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="R3eNN6pTu5AITEFG"
-Content-Disposition: inline
-In-Reply-To: <878qzp97qh.wl-tiwai@suse.de>
-X-Cookie: Don't let your status become too quo!
+Content-Transfer-Encoding: 8bit
 
+seccomp_benchmark.c:197:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  197 |         ksft_print_msg("");
+      |                        ^~
+seccomp_benchmark.c:202:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  202 |         ksft_print_msg("");
+      |                        ^~
+seccomp_benchmark.c:204:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  204 |         ksft_print_msg("");
+      |                        ^~
 
---R3eNN6pTu5AITEFG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312260235.Uj5ug8K9-lkp@intel.com/
+Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_benchmark.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, May 31, 2024 at 08:06:14PM +0200, Takashi Iwai wrote:
-> Mark Brown wrote:
-> > On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
-> > > On Fri, 31 May 2024 07:50:33 +0200,
+diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+index b83099160fbc..ed04b89de9c6 100644
+--- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
++++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+@@ -194,14 +194,14 @@ int main(int argc, char *argv[])
+ 	ksft_set_plan(7);
+ 
+ 	ksft_print_msg("Running on:\n");
+-	ksft_print_msg("");
++	ksft_print_msg(" ");
+ 	system("uname -a");
+ 
+ 	ksft_print_msg("Current BPF sysctl settings:\n");
+ 	/* Avoid using "sysctl" which may not be installed. */
+-	ksft_print_msg("");
++	ksft_print_msg(" ");
+ 	system("grep -H . /proc/sys/net/core/bpf_jit_enable");
+-	ksft_print_msg("");
++	ksft_print_msg(" ");
+ 	system("grep -H . /proc/sys/net/core/bpf_jit_harden");
+ 
+ 	affinity();
+-- 
+2.43.0
 
-> > I would say these are all bugs, they show the driver not correcting the
-> > value and allowing users to read back out of range values that were
-> > written.  Even if the driver is accepting out of range values I'd expect
-> > it to transform them somehow when storing, the program will accept a
-> > mismatched read when testing this case but it will complain if the read
-> > value is not valid according to the control's info.
-
-> Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
-> that it'd be better to enable the input validation globally, something
-> like below.
-
-Yeah, I mean I tend to think the whole accepting invalid values thing is
-questionable to start off with so I do think that's a good idea.  That
-said we probably should still be fixing the drivers as well.
-
---R3eNN6pTu5AITEFG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZdqykACgkQJNaLcl1U
-h9Db1Qf/XNB3of8vi+itY+/Z8PKnPMk+cGR3J16JdHzuc/1XgNdh6tq48POjILKq
-BvcnLxqooWZylbzROrB8oJIA7Ffiv5bD7b8IberGiZyqj6WKZROFVUy27Z2I4ekV
-6aBcsjFvlnjIKUj+6xKYyaTe1PdBv3IyWlrW2xNT7Zwy4uN66FcYeP58EMWLfZKr
-QVHImNY9Vt2cnbVdHbb10qOqi+1fUI5iFqyE2t/ETxFQiioydWyxIDpG4vRDO/bt
-C3ZfqFkXLXOmdym3RoFCEVCKj2OchtgdgraE/VlKsqJOabXPEp6bYqnrF+bUGcjV
-goKrFZJ+W/YfnlIJjn1t37Z86ANYaQ==
-=iMu2
------END PGP SIGNATURE-----
-
---R3eNN6pTu5AITEFG--
 
