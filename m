@@ -1,50 +1,74 @@
-Return-Path: <linux-kselftest+bounces-11123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61EC48D881C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 19:40:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6823A8D889F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 20:31:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BF6B2849EE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 17:40:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 991931C225D1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 18:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55E4C13776A;
-	Mon,  3 Jun 2024 17:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1A3136E3A;
+	Mon,  3 Jun 2024 18:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U1Cuo7J1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J6ZvJLsO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A82F28382;
-	Mon,  3 Jun 2024 17:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870011CD38
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Jun 2024 18:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717436433; cv=none; b=WziCHoqP17BHzZHCa3RG/ZwpBFqsy9IKg3GrvWDGOToSPs7e5UQ0irJhJlg9euykwrHowyju/RKaE8x+V9SOiCIEUP1CmUf//dyq2njXcPPfUdgeDdqjGYdWx9ovF/swIDj+kWf5Hm3FlYFiP56d9I0aMGeXLnPyTWGR+UbWylw=
+	t=1717439490; cv=none; b=BlEvjKvJjuhf8/TBlH5F7JCGvcVTiCJvAHzXyZXiq8AvqE8dWOdWRA2QNWYrSqZ/lY5ghh5fY7Q7TDWWfQUli59ooQTwB1O03/eZeqgCWClucON8fckTRzqLwau5StAhEST7C3+wj5nTVU3mYLBzfYHJtZoOqMRJ0T7oVKKiXvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717436433; c=relaxed/simple;
-	bh=FoURyDPuzko2n+Ilmi4+Mdy9Jz/CXQLqOKqIY4qMQjo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MNjHIk1IJfYoXZFnqJeVzZSigG9dWg1OUPL8JJu67hLYgiz0Frz3multw7ekJs4YmPR2UFaqJ31usGtVFPex92Qf+TY98Y6oHkTyDxCMGU4VVc+EQhCcohitC23uT36A9ZTsV59PIQ+fJwirRRG75c33hlEUn4HknmKljcsDF8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U1Cuo7J1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 96B4EC4AF07;
-	Mon,  3 Jun 2024 17:40:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717436431;
-	bh=FoURyDPuzko2n+Ilmi4+Mdy9Jz/CXQLqOKqIY4qMQjo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=U1Cuo7J1d8ChoXYcaqX3iMHMXmn3VbzxeqaOvCT/6HJWiJd3iIxLb4QOLeDAdmqr5
-	 Q9Y9ERCzKWcukfKGGdx036U3AU3aqTQj6GCoqhU4ypn8QmbUklgtW7jvD/dpPa8y+j
-	 b58n3PImXSYytAGnBKLPn58OdBmfYhqf1JJsjJFwVjw1y3DOvlek6dDvdPd7wMVtJw
-	 Ci1ODKi9W7n6YZY2yrRe6w4ezBUdBO6l5MItoims7HrtBhoygqzW8CNxlQKy/sv6NI
-	 qpJoMD/yg30K992bjdReWZlxEYeUJaARouyXLK3hTEHx4gFopdk6BWqk6pohk9JbUg
-	 Gq/zvS5Jw18wg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B360C32766;
-	Mon,  3 Jun 2024 17:40:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1717439490; c=relaxed/simple;
+	bh=qsya4nkJf9ItcPXlY7BN+r2obn6IM42sPgazzJIezz0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EULorrA49/AnnvbD4yitr2wdMPTl0T61IbhCJnhCMEec2ax320UHKsanHYXFcNNb4P3pALywOc4PDgU/eyJYpGU7196gzZkX1/JmccTsqIVshSYeIUVEe2tQUU5dc3ydv3HuHVwN1RAPvhfwitdWVqLolHc4mTgHtUWUOS9aqBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J6ZvJLsO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1717439487;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Yl8vr4y8a6U6pmG4DWdxKYXNybm3u7Z5la/ggzjv+O4=;
+	b=J6ZvJLsO3i0nU6wtI1PqTTVjOvhFmlOJf4B/oDRDvL8oovn1mdZ+KtsmSwF3PmgzY48GyI
+	EQO5EyBMps2qGNjpzQA2QNaZXMQ2EjkgPJsfIA91VsI2dhNtyYxCaqhAiDMoNIiSseLxMp
+	CxgWT3ncKTWWpUIfsdWAp85FiAHjgOk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-602-ggZ-nkC7PtaeEckWHU-_Fg-1; Mon, 03 Jun 2024 14:31:25 -0400
+X-MC-Unique: ggZ-nkC7PtaeEckWHU-_Fg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19C038058D7;
+	Mon,  3 Jun 2024 18:31:25 +0000 (UTC)
+Received: from antares.redhat.com (unknown [10.39.193.112])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 93EC2105017A;
+	Mon,  3 Jun 2024 18:31:22 +0000 (UTC)
+From: Adrian Moreno <amorenoz@redhat.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	Adrian Moreno <amorenoz@redhat.com>,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 1/2] selftests: openvswitch: fix action formatting
+Date: Mon,  3 Jun 2024 20:31:19 +0200
+Message-ID: <20240603183121.2305013-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,58 +76,92 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/8] fixes for test_sockmap
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171743643149.23091.13857795050492444996.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Jun 2024 17:40:31 +0000
-References: <cover.1716446893.git.tanggeliang@kylinos.cn>
-In-Reply-To: <cover.1716446893.git.tanggeliang@kylinos.cn>
-To: Geliang Tang <geliang@kernel.org>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- jakub@cloudflare.com, tanggeliang@kylinos.cn, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-Hello:
+In the action formatting function ("dpstr"), the iteration is made over
+the nla_map, so if there are more than one attribute from the same type
+we only print the first one.
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Fix this by iterating over the actual attributes.
 
-On Thu, 23 May 2024 14:49:56 +0800 you wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> This patchset contains some fixes and improvements for test_sockmap.
-> 
-> 3-5: switching attachments to bpf_link as Jakub suggested in [1].
-> 1-2, 6-8: Small fixes.
-> 
-> [...]
+Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+---
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 48 +++++++++++--------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,1/8] selftests/bpf: Fix tx_prog_fd values in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/d95ba15b9784
-  - [bpf-next,2/8] selftests/bpf: Drop duplicate definition of i in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/a9f0ea175948
-  - [bpf-next,3/8] selftests/bpf: Use bpf_link attachments in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/3f32a115f61d
-  - [bpf-next,4/8] selftests/bpf: Replace tx_prog_fd with tx_prog in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/24bb90a42633
-  - [bpf-next,5/8] selftests/bpf: Drop prog_fd array in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/467a0c79b551
-  - [bpf-next,6/8] selftests/bpf: Fix size of map_fd in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/dcb681b659f2
-  - [bpf-next,7/8] selftests/bpf: Check length of recv in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/de1b5ea789dc
-  - [bpf-next,8/8] selftests/bpf: Drop duplicate bpf_map_lookup_elem in test_sockmap
-    https://git.kernel.org/bpf/bpf-next/c/49784c797932
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 1dd057afd3fb..b76907ac0092 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -437,40 +437,46 @@ class ovsactions(nla):
+     def dpstr(self, more=False):
+         print_str = ""
+ 
+-        for field in self.nla_map:
+-            if field[1] == "none" or self.get_attr(field[0]) is None:
++        for attr_name, value in self["attrs"]:
++            attr_desc = next(filter(lambda x: x[0] == attr_name, self.nla_map),
++                             None)
++            if not attr_desc:
++                raise ValueError("Unknown attribute: %s" % attr)
++
++            attr_type = attr_desc[1]
++
++            if attr_type == "none":
+                 continue
+             if print_str != "":
+                 print_str += ","
+ 
+-            if field[1] == "uint32":
+-                if field[0] == "OVS_ACTION_ATTR_OUTPUT":
+-                    print_str += "%d" % int(self.get_attr(field[0]))
+-                elif field[0] == "OVS_ACTION_ATTR_RECIRC":
+-                    print_str += "recirc(0x%x)" % int(self.get_attr(field[0]))
+-                elif field[0] == "OVS_ACTION_ATTR_TRUNC":
+-                    print_str += "trunc(%d)" % int(self.get_attr(field[0]))
+-                elif field[0] == "OVS_ACTION_ATTR_DROP":
+-                    print_str += "drop(%d)" % int(self.get_attr(field[0]))
+-            elif field[1] == "flag":
+-                if field[0] == "OVS_ACTION_ATTR_CT_CLEAR":
++            if attr_type == "uint32":
++                if attr_name == "OVS_ACTION_ATTR_OUTPUT":
++                    print_str += "%d" % int(value)
++                elif attr_name == "OVS_ACTION_ATTR_RECIRC":
++                    print_str += "recirc(0x%x)" % int(value)
++                elif attr_name == "OVS_ACTION_ATTR_TRUNC":
++                    print_str += "trunc(%d)" % int(value)
++                elif attr_name == "OVS_ACTION_ATTR_DROP":
++                    print_str += "drop(%d)" % int(value)
++            elif attr_type == "flag":
++                if attr_name == "OVS_ACTION_ATTR_CT_CLEAR":
+                     print_str += "ct_clear"
+-                elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
++                elif attr_name == "OVS_ACTION_ATTR_POP_VLAN":
+                     print_str += "pop_vlan"
+-                elif field[0] == "OVS_ACTION_ATTR_POP_ETH":
++                elif attr_name == "OVS_ACTION_ATTR_POP_ETH":
+                     print_str += "pop_eth"
+-                elif field[0] == "OVS_ACTION_ATTR_POP_NSH":
++                elif attr_name == "OVS_ACTION_ATTR_POP_NSH":
+                     print_str += "pop_nsh"
+-                elif field[0] == "OVS_ACTION_ATTR_POP_MPLS":
++                elif attr_name == "OVS_ACTION_ATTR_POP_MPLS":
+                     print_str += "pop_mpls"
+             else:
+-                datum = self.get_attr(field[0])
+-                if field[0] == "OVS_ACTION_ATTR_CLONE":
++                if attr_name == "OVS_ACTION_ATTR_CLONE":
+                     print_str += "clone("
+-                    print_str += datum.dpstr(more)
++                    print_str += value.dpstr(more)
+                     print_str += ")"
+                 else:
+-                    print_str += datum.dpstr(more)
++                    print_str += value.dpstr(more)
+ 
+         return print_str
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.45.1
 
 
