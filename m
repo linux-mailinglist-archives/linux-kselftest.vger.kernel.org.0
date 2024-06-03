@@ -1,147 +1,213 @@
-Return-Path: <linux-kselftest+bounces-11129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 539E18D8947
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 21:03:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 068218D8AC5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 22:12:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2571F2277B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 19:03:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9568C2855BC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2024 20:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675D613A256;
-	Mon,  3 Jun 2024 19:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F2A13B28D;
+	Mon,  3 Jun 2024 20:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DNl7k9Ua"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lYf2bfWf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2042.outbound.protection.outlook.com [40.107.220.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2871E130AD7
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Jun 2024 19:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717441374; cv=none; b=DPqi1Orye7QCq3Vz/+/viSqrgVKR/PZ0UH2ZMlQ+/+jmQZJ0iETm1zmp+FnR5oBwZ++kBfez6xIsnVGFgvFq33fU/glpWYHeymJPba/coDu4gDnd8Y3ydZIRlEUkwdPxRRsccpQCGUO2+hZNpusKvW3Gr3XOhhYSOhxG4DBf45I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717441374; c=relaxed/simple;
-	bh=o1242Noh5DwPdRlCuDUUZfqQFqyeDP+F6RVt3zLnvi8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gEngBYcGLniPvR9ITjWPDzXZOs/O4vM0QV6W60BbTXiI/lji3Xlu6CyVPt9HMBpyqQpXotwGuAwu/gPpuwddsFBs315BKq/T0txqXLdcixJyoJTfrmvHd6BwBKWLLK1RMQ4/cdLyW/4XF37lQYUsg0TG2XEfWYbUv4p+/WK3OaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DNl7k9Ua; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717441371;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TKPs5UyXdPWSkTr2LDWrvXdNXvQrucoVoL0neTHxTus=;
-	b=DNl7k9Ua5i2REuCNbejuVUgqh/uVnw/LmvcjkfyDyLW+2Kd6Qa5l+GoTb+LaonD1xcwhKa
-	yKhk7U5migcijeGFnwOIKW2mVgsrnUvmGvsXMI83l3HP4MxIo0FziOjYbjUS+TH95FezBV
-	OdJ3HVztoQFDGPNwed7H3TXGHqFbLuE=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-508-kKEZ1Yu9PGSd-Q2E547EFw-1; Mon,
- 03 Jun 2024 15:02:47 -0400
-X-MC-Unique: kKEZ1Yu9PGSd-Q2E547EFw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C1D43C025AD;
-	Mon,  3 Jun 2024 19:02:47 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.16.249])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id D141C1C0654B;
-	Mon,  3 Jun 2024 19:02:46 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Adrian Moreno <amorenoz@redhat.com>
-Cc: netdev@vger.kernel.org,  Pravin B Shelar <pshelar@ovn.org>,  "David S.
- Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] selftests: openvswitch: set value to nla
- flags
-In-Reply-To: <20240603183121.2305013-2-amorenoz@redhat.com> (Adrian Moreno's
-	message of "Mon, 3 Jun 2024 20:31:20 +0200")
-References: <20240603183121.2305013-1-amorenoz@redhat.com>
-	<20240603183121.2305013-2-amorenoz@redhat.com>
-Date: Mon, 03 Jun 2024 15:02:46 -0400
-Message-ID: <f7t5xup26jt.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142E7131182;
+	Mon,  3 Jun 2024 20:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717445538; cv=fail; b=oKqRiM/vui4euqaA+7u/iQb741kesl34u7mkpwfGnJdJ6DZW9EN5G7OKp7GSN1fvoftbUVW0HGjRJ24CRpeNsQw4Coj7eS9ynH9H0/nKj4Qnk0QBb8SGH23IkO9gKN3g3pQMU9Eo7itRQDO/R9TL+TX2PbYGM8SNrAGlR85q6uM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717445538; c=relaxed/simple;
+	bh=h9u41ekSBKwelnPSWJXz+DjA9y5hoiGve0rt9fhsFKQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=gRuYmM20DE6lH5lVELFub7bI4UuTYLduvtTyuhFi2sFcOu6lk75hEM+uCHV+VqOYGCtN15xP8hA/2tBEakVowbXp+AL1M/q9E6Z+Ma8nqeBalmtvdSnvIr9GldNozoVkJtXHwQwghoAZjEsW+vQkUyFklvcUFBSFA8OxfdW171w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lYf2bfWf; arc=fail smtp.client-ip=40.107.220.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G+pnJUGnHiqxfuHkjttsCmPU7+k7EqH7Y4qY9AaHRY2d1nW4vaT6jI269kr0i9N9WD/l0y5+ztJ3GQv+TflP2mzlnHXQp27CFgz7CkP+mzjj5XKxdpFEUY9HR58lA5+mznhpxXIBUns6TmemyrxkXGp3sO2Bz9Ko8eb8sBruSWaTouYiodmJs9Anui9/2sKCJO5TMeCYMOETpt5gUP4RD3bo5sCDizwtSuFBTw53Fk/g399zQucBKqnnzdlnDnp8O5NxIe/8sNbaIR300LCclcDku9uVmA2cdTHcQHwGWyR/EjYTiBNajrR1OipVEodfkq7n+fsHlhCzSSqo+JGtVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PdYayFlTQxq04QDWUElZrQgpVN83oeiGXaSXz/7mswE=;
+ b=LZX9how7TSDUcQn2hY9XkvZyQ2D9reuM1rGVO/qnMIteqoZe0RYVlhBVZt6sT8lCk0Snv986g+acv++cJn+NGvgqUYTOoquwOjGN/NKG0FrWrcBnocRTmWzYB31Yy6qncrxDCXH55g7mLqjGs0d8VsGxN2BnHPmQvyzKvuJW20Q99GsXHYCAzGodAzzlWHzXJGTvRGPXNHOWojlwyEF8aAZGpUnY438WMvQyNDhqJsK5oTLJDkEoPqkbhzXsugbw3m7jx0qVMvluQMoS5OC2OQfMkQMhrrbbMxJ4yX3jDFg8RVZRTJSrXO9wgRpZThAfq+jtCnzjgqlsf4HiFClEvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PdYayFlTQxq04QDWUElZrQgpVN83oeiGXaSXz/7mswE=;
+ b=lYf2bfWfld4zvEkdnaiiJxCdlirr5EVgCMIg1PU76G2gzW143QUDFgGfTNNpi+UQa5ykcThIrALghnB4WhLQo6ycA2Wt3v7L6wViUqvn7Amv+geMBBj16oPb1KmRcTHP/U9fFDmydURu70O4uqQc+5bsFbZwkh6y1mzyeO9zo03T3UudrSZwr2U5jM8ZBGsT+YV5OPLvsPAdSCj13+8Umrh+OH7pEZnh4IQGnSfd9eSd3ykBwhmmR7ZjsOwLXpfuDe6EmX3ROPwbID81lOZbS8Ryrh3vt1M1fyuFb1KZ0ornnWTSA0g4ACacbNBeio7YpdgtF9suwANmfbINFVH1LA==
+Received: from BL0PR02CA0130.namprd02.prod.outlook.com (2603:10b6:208:35::35)
+ by MN2PR12MB4304.namprd12.prod.outlook.com (2603:10b6:208:1d0::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27; Mon, 3 Jun
+ 2024 20:12:13 +0000
+Received: from BL6PEPF0001AB4B.namprd04.prod.outlook.com
+ (2603:10b6:208:35:cafe::c2) by BL0PR02CA0130.outlook.office365.com
+ (2603:10b6:208:35::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27 via Frontend
+ Transport; Mon, 3 Jun 2024 20:12:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL6PEPF0001AB4B.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7633.15 via Frontend Transport; Mon, 3 Jun 2024 20:12:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 3 Jun 2024
+ 13:11:48 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 3 Jun 2024
+ 13:11:48 -0700
+Message-ID: <d3b4bc6a-36ba-4716-b94e-c0e9217f6ff0@nvidia.com>
+Date: Mon, 3 Jun 2024 13:11:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] selftests/lib.mk: handle both LLVM=1 and CC=clang
+ builds
+From: John Hubbard <jhubbard@nvidia.com>
+To: Mark Brown <broonie@kernel.org>
+CC: Shuah Khan <shuah@kernel.org>, Muhammad Usama Anjum
+	<usama.anjum@collabora.com>, Beau Belgrave <beaub@linux.microsoft.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Naresh Kamboju
+	<naresh.kamboju@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+	sunliming <sunliming@kylinos.cn>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Nathan
+ Chancellor" <nathan@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
+References: <20240531183751.100541-1-jhubbard@nvidia.com>
+ <20240531183751.100541-2-jhubbard@nvidia.com>
+ <306eebf8-bb5d-4e1a-9fa3-ad3f4ea11b9c@sirena.org.uk>
+ <96216e54-ba8f-4fd7-b95a-13477c143575@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <96216e54-ba8f-4fd7-b95a-13477c143575@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4B:EE_|MN2PR12MB4304:EE_
+X-MS-Office365-Filtering-Correlation-Id: 16d63e2a-a61c-47a1-6a3a-08dc840973b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|7416005|36860700004|82310400017|376005|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SWxaSlRqU0pKay9oOVhzTC9QNmVkSm8rdnBTQjM1azdtV29pK0kxUThERjRS?=
+ =?utf-8?B?c1hYbHUza1VKcEE4SVJZMkxQWU85RnRCbTVGTHFIMDVWRXErYWk4UHRTdmVj?=
+ =?utf-8?B?Y1B4WkZ5d25FY0xwNG4wN2s2Y29ka3pXSWRsU1poaHBiNHVIbWdBaWZOdXJZ?=
+ =?utf-8?B?bXRtQlhKb3J3VTdUdG9zdEFsYmQ4ZnloYSt2eGZ2aHFXbnBpekZSZFJCbTV4?=
+ =?utf-8?B?WHlId0cwMDk5QVJ3dk1qMCs1dEltQndWdWFwcm1pbkEvNSt5V3NuTVQ4ZXNK?=
+ =?utf-8?B?bVRNS05jK3kzOWVBbGtxbFRWcWdOZWxhSjZvOFlRVmFyMTJtYWo5aFh3NzRU?=
+ =?utf-8?B?cWkwM1QvdDVuLzJzSzhndTJpbk5pcy8rbWQ4eEx5VWhCamZYR21Db3ZVSm50?=
+ =?utf-8?B?M3hXaTg1bjBndjExdFBWSDNUVm44VnZ5NWZUNUN6RnJGZzl1L2hVelYveG5E?=
+ =?utf-8?B?WlhabXRRclJnemhtMGdHcmdyNjBCOEdSTFBxWDc0RkZ1aHdMZEx1ZTQ3MkE1?=
+ =?utf-8?B?bUlxT3QvaXg1LzByK1Rldm5lWjdKOUI2NW80STZWc044SFVlZUtReDdjOHpp?=
+ =?utf-8?B?MTJjQ1hnTVFzVThtN05RWk5ZN2pDeTczUEZvMmJuOVFMaXZ0L1F3dVJoL1Fx?=
+ =?utf-8?B?VUJVakcxd3hFWlA5NTdrYTlwK0orNVdHT203a09iaTgvN1ZhM1l2dVQ0WXZ1?=
+ =?utf-8?B?ejlST1VBRXFhRFpSejl2d3NsWER0dmw3alYzbEpmUEFOQ1dMSEN1ZlluZnN0?=
+ =?utf-8?B?ZTM3MTlPYjV2WFpmdXNUMUtuZ3FTeTg4azRXSWk4ZEV1bGdmSGNSRVg4L3Yv?=
+ =?utf-8?B?Q0dock9iMjUrY2poaWN2OGFaRXk4MEdHSjdnTHE2bUxveWcwd1NEWXJaVm1v?=
+ =?utf-8?B?RE1pNGtld1RkSTlNZkNtNFF6cWMrR0M5VFcyTkg5cTFYUHZRUnZIbWxNams4?=
+ =?utf-8?B?ekM5MWs4OFZVSThPWmVDeGZ2aDFUNVZoNjBadVBuQ2tQZGMxWXNtTCtuS3JT?=
+ =?utf-8?B?bXYrWGJyc2Q0UncvSTF3YTZac0hBaFpmalM0UXNhNkY3NmRzZERLTS96Tkx1?=
+ =?utf-8?B?Mkh2cDZVMEl3b1FUZXhjRGx1VS9wQXI2bzg5OU5OVUZyNWtuenE2anRpeDZB?=
+ =?utf-8?B?QWk3eTBEODhzR052RDlWcFNNclZRM3NmUFNGQUcwTzNUdTl6bE43eUFzdkQ1?=
+ =?utf-8?B?cjVMcTlhMmRlS1NUTmlLRzkxTWl6L1E0UHV5MTFSNWdFWlpra2t3RnFnN1A3?=
+ =?utf-8?B?TVl3dVRjM1YzOWt3NmJ3cnlLclRKNk5tZW40bXppWkJpSSs1c3VnMW8ya3dp?=
+ =?utf-8?B?cTdVdmlzLzhrRDBCQmt0SUxXb0xJTldDUlpNTnRxc0lWQVZHVTNycXF2ejdN?=
+ =?utf-8?B?QUYzVHdydyt5eG02dW4rTG02a2pDaXpIZWcxdW9OSFV3aXVBdHl3aDBFbTl0?=
+ =?utf-8?B?Z2doWDdMbGFqUFJGNTZDa0hwMzBka1IzODB5SnJDTU8vQWFNcFUxajM0OC9a?=
+ =?utf-8?B?SkFwbDM3ak83bzkxbHRZdnhEWFExbHZPbGI2OXJ6cjdadm85S0o5QW9qT2p6?=
+ =?utf-8?B?R0lYaEZQMkVzMVFvR3Y4M0kzNjBQS1FnU3lUSVJpS0I1bithNEhMODJjMUl6?=
+ =?utf-8?B?VnlXdUFtM2JyMmJjWjFMZDJxdW9EMng2RThSWkVHRHg3MTJNSFIxSjI3dk4v?=
+ =?utf-8?B?eDdFYXZpSjUzYjJEMEhyVVNEUzVwRnZpNElEWkFWTndXNWxVMm5QY1VURlhG?=
+ =?utf-8?B?c0prUGh0VHRFbUdrdnVzaCt0bnRSRkxmUDR5cGJGd295TWtpU001dWlUYlIr?=
+ =?utf-8?Q?z7UWkjRXF5WiHLAHhzoeaQDT8wDTooI4pnF18=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(36860700004)(82310400017)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2024 20:12:10.8577
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16d63e2a-a61c-47a1-6a3a-08dc840973b5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4304
 
-Adrian Moreno <amorenoz@redhat.com> writes:
+On 6/3/24 10:09 AM, John Hubbard wrote:
+> On 6/3/24 8:32 AM, Mark Brown wrote:
+>> On Fri, May 31, 2024 at 11:37:50AM -0700, John Hubbard wrote:
+>>> The kselftests may be built in a couple different ways:
+>>>      make LLVM=1
+>>>      make CC=clang
+>>>
+>>> In order to handle both cases, set LLVM=1 if CC=clang. That way,the rest
+>>> of lib.mk, and any Makefiles that include lib.mk, can base decisions
+>>> solely on whether or not LLVM is set.
+>>
+>> ICBW but I believe there are still some architectures with clang but not
+>> lld support where there's a use case for using CC=clang.
+> 
+> I'm inclined to wait for those to make themselves known... :)
+> 
 
-> Netlink flags, although they don't have payload at the netlink level,
-> are represented as having a "True" value in pyroute2.
->
-> Without it, trying to add a flow with a flag-type action (e.g: pop_vlan)
-> fails with the following traceback:
->
-> Traceback (most recent call last):
->   File "[...]/ovs-dpctl.py", line 2498, in <module>
->     sys.exit(main(sys.argv))
->              ^^^^^^^^^^^^^^
->   File "[...]/ovs-dpctl.py", line 2487, in main
->     ovsflow.add_flow(rep["dpifindex"], flow)
->   File "[...]/ovs-dpctl.py", line 2136, in add_flow
->     reply = self.nlm_request(
->             ^^^^^^^^^^^^^^^^^
->   File "[...]/pyroute2/netlink/nlsocket.py", line 822, in nlm_request
->     return tuple(self._genlm_request(*argv, **kwarg))
->                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->   File "[...]/pyroute2/netlink/generic/__init__.py", line 126, in
-> nlm_request
->     return tuple(super().nlm_request(*argv, **kwarg))
->            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->   File "[...]/pyroute2/netlink/nlsocket.py", line 1124, in nlm_request
->     self.put(msg, msg_type, msg_flags, msg_seq=msg_seq)
->   File "[...]/pyroute2/netlink/nlsocket.py", line 389, in put
->     self.sendto_gate(msg, addr)
->   File "[...]/pyroute2/netlink/nlsocket.py", line 1056, in sendto_gate
->     msg.encode()
->   File "[...]/pyroute2/netlink/__init__.py", line 1245, in encode
->     offset = self.encode_nlas(offset)
->              ^^^^^^^^^^^^^^^^^^^^^^^^
->   File "[...]/pyroute2/netlink/__init__.py", line 1560, in encode_nlas
->     nla_instance.setvalue(cell[1])
->   File "[...]/pyroute2/netlink/__init__.py", line 1265, in setvalue
->     nlv.setvalue(nla_tuple[1])
->                  ~~~~~~~~~^^^
-> IndexError: list index out of range
->
-> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
-> ---
+...but thinking about this some more, maybe this patch is actually
+a Bad Idea. Because it is encouraging weirdness and divergence from
+how kbuild does it. And kbuild is very clear [1]:
 
-Acked-by: Aaron Conole <aconole@redhat.com>
 
-I don't know which pyroute2 version I had used when I tested this
-previously, but even on my current system I get this error now.  Thanks
-for the fix.
+Building with LLVM
 
->  tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index b76907ac0092..a2395c3f37a1 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -537,7 +537,7 @@ class ovsactions(nla):
->              for flat_act in parse_flat_map:
->                  if parse_starts_block(actstr, flat_act[0], False):
->                      actstr = actstr[len(flat_act[0]):]
-> -                    self["attrs"].append([flat_act[1]])
-> +                    self["attrs"].append([flat_act[1], True])
->                      actstr = actstr[strspn(actstr, ", ") :]
->                      parsed = True
+Invoke make via:
+
+make LLVM=1
+
+to compile for the host target. For cross compiling:
+
+make LLVM=1 ARCH=arm64
+
+The LLVM= argument
+
+LLVM has substitutes for GNU binutils utilities. They can be enabled individually. The full list of supported make variables:
+
+make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+
+LLVM=1 expands to the above.
+
+[1] https://docs.kernel.org/kbuild/llvm.html
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
 
