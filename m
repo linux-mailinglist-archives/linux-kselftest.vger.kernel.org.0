@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-11219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BC88FBD89
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 22:52:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C74C88FBD90
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 22:53:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C87151C2098F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 20:52:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FDC8282D16
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 20:53:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A901F14BF9B;
-	Tue,  4 Jun 2024 20:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B329E14BF85;
+	Tue,  4 Jun 2024 20:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s31lnDnQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtzebJxR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0FD14B97D;
-	Tue,  4 Jun 2024 20:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDAA14AD20;
+	Tue,  4 Jun 2024 20:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717534335; cv=none; b=JEHUmMdMkdxheaqBb4ZfwrJzl33JJop4HLS7qIdylWFo2C0POxdT3qofc0WdXewz7xVIXLMmv/iPVJM18eSPUIcvTWCOcoBZ5PuTg3UVqgbDK+QHZsILtIabMz67aa5Dw8OVUGYjkuGmiIaZA98hjftfPmoSzK8DWUEfi24e6X4=
+	t=1717534427; cv=none; b=tt9IDQ3g8OhyAD50FuQoT88DafeXFIDiKSqEZDJOYKW0rvkUehktaaK6TbCcQOE+tha/BxJJ5q1tKAg9V9tSD6lex85cB63nhjj1e2kTlK0/Rv+sD4EmpzlBQ4494t9cckNVPsthJIbfgnjnRYTslLM8KO66kR99w44Z0X9GTH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717534335; c=relaxed/simple;
-	bh=HQBS865jNCFeERnwf3D7e8dcgoXZ27Ob/udNNGmZ8Wc=;
+	s=arc-20240116; t=1717534427; c=relaxed/simple;
+	bh=dETldA+Uc3dn/2mRGg3NI1fmIioFc+Mu4RQpJ7i8mHI=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=dOwz13WNXF6B6TfeB6SgYPxOWEbw1AfDi4QWDrBtfkRbDf5OQIPWG9CNunGC6m0SRf+QK50obguebnP6YTvCeXGOlcs2zAHpBnimvkQdq4SsudIhwmIzaPNfAZ54mCxRJAZU6Yu/LPT3lmScN0i5pYZiGmz9L33BwPdif/uj9dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s31lnDnQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA22BC2BBFC;
-	Tue,  4 Jun 2024 20:52:14 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=TNgQlPnpyYI/+R+sGXNtGIRaufWTZU0v1XnBhmXWWAaAzl78ixeBQCAs32bOea1qtI5Y2j6aXEDPui8CxV7biAWUahk+r0dMzc7++QxWJjwqRuDTYRaT+EGugxFInIToe0qcvKViV+azRCZWxIs3PEJE5sPWsdRt0m68eAu6t7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtzebJxR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6F8C2BBFC;
+	Tue,  4 Jun 2024 20:53:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717534335;
-	bh=HQBS865jNCFeERnwf3D7e8dcgoXZ27Ob/udNNGmZ8Wc=;
+	s=k20201202; t=1717534427;
+	bh=dETldA+Uc3dn/2mRGg3NI1fmIioFc+Mu4RQpJ7i8mHI=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=s31lnDnQ5n9lX1U/f/J+fwRHpU2VAxpbPVARiVpMPbXvdRFLxMTBoZqcHniixUnLN
-	 8kQxtRTVo8GSV1D8/AL93eTkpdVKwJGBwR7nQjng6AleCLTHF2OrYwPqPYXx8LHA+G
-	 AmGBnJJDXkyKx6LwNkc14b4A5gC0RU5PSZxGv/ceBjM3OD/rX8y/ntYW/YMRvtGIbH
-	 EW74/UZXMb0E3q7PPJlKpOgE6YzJY6Gfg6NAih27K6sBK9ErFbet0BlHjEDnd/tjnI
-	 E9Iqx269vlTdLhwyKchsaQTOZDSn8TfqBt6LL85te2B1HxwhQX04tFMcvPDIU6b01Q
-	 eki5Kz1ZixbYQ==
-Message-ID: <8ae81e535968e6a2b3f4e09ea1b7a54f.sboyd@kernel.org>
+	b=mtzebJxRwhstbSAwjrrlOpacnZt5VvbrKBhixvPQfL4Ma3zZsmjysR5EXhoHmSZlt
+	 rZIXr/QwSb24TjxyOrhW1F48sgvIY4xy5AqfFHpKAdXuQY40Q7y+xVSHmVthDs3BG1
+	 Im9J755bSUUDJZiQ62csE2N0zrW0JfNG7puRCmIoJeb82g59vg53ECrV+rS8oOOA7i
+	 SBxTbiDA3xwr05hKS4rP2NqquQfqbVK5eYL3gEjW3jkrU6F7YVTu68g6qxM5LvBZ3A
+	 E2swq4tF2uSGTJnpHXmZXg/XasLHReeWL9iJsmuVNkVmkuMcs/9afQcsNs9c7Ug+pP
+	 c25HDMkUAVdjw==
+Message-ID: <912d8de4856d52c7bbced7104b95c0ad.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -56,19 +56,13 @@ Subject: Re: [PATCH v5 07/11] dt-bindings: test: Add single clk consumer
 From: Stephen Boyd <sboyd@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
 To: Rob Herring <robh@kernel.org>
-Date: Tue, 04 Jun 2024 13:52:12 -0700
+Date: Tue, 04 Jun 2024 13:53:44 -0700
 User-Agent: alot/0.10
 
 Quoting Rob Herring (2024-06-04 13:19:18)
-> On Tue, Jun 4, 2024 at 1:28=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wr=
-ote:
->=20
-> > And replace it with something that makes
-> > the test vendor prefix opt out of all checking? How is that done?  Some
-> > patch to dtschema directly?
 >=20
 > Yes, but I just added it for you.
->=20
 
-Thanks! I'll wait another day or two before resending then.
+Oh, we'll probably want to update checkpatch as well to ignore test
+vendor prefix.
 
