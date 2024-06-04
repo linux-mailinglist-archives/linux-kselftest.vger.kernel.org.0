@@ -1,215 +1,317 @@
-Return-Path: <linux-kselftest+bounces-11204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 610F28FB37C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 15:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACE868FB3C6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 15:28:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1049F1F21CAE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 13:21:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AB441F21013
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 13:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441C91465B3;
-	Tue,  4 Jun 2024 13:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C73146A7B;
+	Tue,  4 Jun 2024 13:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eYGNXesJ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C2KEBj+N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DE21465A7;
-	Tue,  4 Jun 2024 13:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717507283; cv=fail; b=o+eY1E+JLrx9FTNaPLHRzmCdfkIOMdgCwglWzssPCjx/hz0Y9KVv7PPeXrrI0IbkZe6HpbO5yYHCukmZohRVH73nLIL30NkC1xfQ4S9yNss//2UOxBd9iInU2dM3yx3kes8S1Bsih0SiMGAL+JIG9d7HVlmoZqKk5U2fX204SMQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717507283; c=relaxed/simple;
-	bh=Pp2nI6cGjhBiwj6mWNAlKdc3lS2feulNukqRYJ8u9tg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=D37VPR/L8S7aEGyBZdLroUI6wc/nz99z4RxOIk8X0En34rBGdq7gLK+NxLrNheXG9fmfpQOPFokSo90mJQjfBqq4dv7OwhAUENCsvyxaRmLVu8yNFcQwoxG4yLaNUvCqefY0q4/Fr2Jv7K2F24dzT5Modm5RyK9DHi2lAiyDWw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eYGNXesJ; arc=fail smtp.client-ip=40.107.243.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RofgbhC79ytxqUE/Cv2mias4WYMFrBdQ3HvO23/mEAXS5IjDuggGy3L99jMLIqIzoaT5j0n3jKu2nGk6mcf5BRkozHPRU1b10W9nOdMJBFqAW25SmbqFPCzP4W2gA3T+897TPrlMYkkIvJ9hSks9HNni8L+zcN3nLC9sJYgaSPL1YnmUK95d4faTmA3i7fIG0D9zxp1fS+J2SK5sZVBte+KT+Cs0+GUcCuzJb/yyyW7WSFL20rZ4GqWVtzKJa/19R+qfWGASeFOUtXdePygZjp4L5VCGLMXzQPridorB+/JgK6s4UiWVVifVI8m6GhzzqhI9dfq51epkR+VaG65qgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SZpNKe+kNbevzk/kZ7FYhhsyUvY3pvUwAKGx/smwNrc=;
- b=Wc2mns5ks9xX/EffiiXSSXXDnQeCKc7vaVo/f4mOBj3LWswdYbqcxAA6Q6BSoS3/Sei6mgnKPMRcZI8QPHhlQmPkpNQBfpHmKChVqeBVvEOWZJnWc29G6EyPC9+Zkx3ic685JnsEOPOQZr9yYixqtIOYCKVU9brCDLnp8WXdbipUsRiNakPycISz1KRgnfxwP3TktaYpt+Jk0qdqshdIik0yzvr/Qu9q3ubiViUp7X/5RpbGHvo5Jf88TuJj9YDacGSs4vjLS6I45U3WByrLM0/bYJKcWOKhtD8o28BrO+CS+FhryFKkm+qycm3hBiOrqDMiGPjuCDVFAdGKjmDtHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SZpNKe+kNbevzk/kZ7FYhhsyUvY3pvUwAKGx/smwNrc=;
- b=eYGNXesJMgDHsyhARTaEXntP4iqVnOp1peZsDaZly0+quwUsH2zGXIESO6jhXAamM9OOclmAfZRr8xVEeEzgRXmaFJvgqn9tJt74ThRYvgn5lixmhb2rHM7tqw7CvDkVx8OLU09cNrD7arZds8taJ9XV/Synjds1C5J10tHtorU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- DM4PR12MB6397.namprd12.prod.outlook.com (2603:10b6:8:b4::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7611.28; Tue, 4 Jun 2024 13:21:18 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb%4]) with mapi id 15.20.7587.035; Tue, 4 Jun 2024
- 13:21:18 +0000
-Message-ID: <fb7aeac0-ea8c-40f0-969a-c21020b823be@amd.com>
-Date: Tue, 4 Jun 2024 18:51:08 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] Add support for the Idle HLT intercept feature
-To: Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org,
- nikunj@amd.com, thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de,
- ajones@ventanamicro.com, manali.shukla@amd.com
-References: <20240528041926.3989-1-manali.shukla@amd.com>
- <CABgObfbz5kZZObu9dO=KPu8_mZvGmV1752SQzQckkrj5jPaTQg@mail.gmail.com>
- <Zl5kNh8znAYHHYuC@google.com>
-Content-Language: en-US
-From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <Zl5kNh8znAYHHYuC@google.com>
-Content-Type: text/plain; charset=UTF-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C578BF7;
+	Tue,  4 Jun 2024 13:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717507731; cv=none; b=cTQ7Vlgy7qHFAm/oAlkyz1cNE6qyKhR1u9Ybs7yuePBpXFrGxnpxNFJZtC84Us8wMKF27egqr+DZuardbvLtk0UYmOnbRUta3tBsmapb76Td0ttk7Ppa1EH43OUZndU1wyClWTJwbLozkg8l0FVY/7pXSwAX+YD3mKdkq+I/MmU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717507731; c=relaxed/simple;
+	bh=oyTjlmkCltJUaGMCykFubPmgbhm6riddvyGiZjwZeRU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Szh/xYcBibNSOtqKaxiYYHSQRk5pEKRv2rbvU9Wr4IyHIt3lvZ+hDEhvdC0CJaSNNu09Zwu0Q/S9edXHpFR6lpc1c6JUSB/1qwtj+faBCwXgNvJp2a7fMjbll0BAgt3gAyYHapSm6WXjE1isrgh/pk8SIX/yI9ZfR/w7aRHvD50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C2KEBj+N; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 454CtnIm028886;
+	Tue, 4 Jun 2024 13:28:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
+ content-transfer-encoding : date : from : message-id : mime-version :
+ subject : to; s=pp1; bh=8CBofm5wlQ/q9WILgTW18TMovmyhRmHItD/vxOqdcV4=;
+ b=C2KEBj+NqLVpf73cBhktmfO/VtEFxoN1d8y7xSsdsfXJGCiF0tOWN4Yv0E+Gf4ZZcyXu
+ W7sPOLfzHnKjPYDUq2DqTJe7bJYGD6zyGtcB9S6jO9Ns33f5bAvq+BTOLs43N86xU8m1
+ YVjpK9fcoLtCO0Ekkt0BzGGdjLBo4RcZrK3ZvFBpx95LRspA9H214mFUp6RIlb7dKIR8
+ xr0juPSYUOjUNGXJbadZjMNrvYgKfI46ECu/XuCnUigxBSKFUzo9vts8yLserrwgJjeR
+ CWwoT9kf5pT35dmEk7PrtgJQitru4t6fzqoIyfsi/AvwEwTRWHgfTU9XosRYJeIlG76n 8Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yj38fr38g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Jun 2024 13:28:16 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 454DSCma012438;
+	Tue, 4 Jun 2024 13:28:13 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yj38fr37s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Jun 2024 13:28:13 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 454BUql4026513;
+	Tue, 4 Jun 2024 13:28:08 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yggp2wrkg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Jun 2024 13:28:07 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 454DS4RA54067628
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 4 Jun 2024 13:28:06 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5922420043;
+	Tue,  4 Jun 2024 13:28:04 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8CB8520040;
+	Tue,  4 Jun 2024 13:28:02 +0000 (GMT)
+Received: from ltczz402-lp1.aus.stglabs.ibm.com (unknown [9.53.171.174])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  4 Jun 2024 13:28:02 +0000 (GMT)
+From: Donet Tom <donettom@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v2] selftest: mm: Test if hugepage does not get leaked during __bio_release_pages()
+Date: Tue,  4 Jun 2024 08:28:01 -0500
+Message-ID: <20240604132801.23377-1-donettom@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Qx7mLlbJFOIVZwOKNtiobcqmQr8Ygba1
+X-Proofpoint-GUID: OnUwfmU_Tp4pENvpCwfVgUwlYpuuV-2s
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0064.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::21) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|DM4PR12MB6397:EE_
-X-MS-Office365-Filtering-Correlation-Id: a868cc81-3b27-4f5c-5c07-08dc849937b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?alFNWXFLZFZVT0JFTW1kWEM5MkFiL2FaQU53dHZpcjB5aEZmNmFMUzJEN1oy?=
- =?utf-8?B?OVYrRWdSM2hzb2Q3NDNsUzJJRG4vc3NWazlGdnFMbVNWYldiMytZZXViSHlp?=
- =?utf-8?B?SG5mejF6anNRRXFwVUNVYlZDU1lHaTJTS0t2Z1NERSs4a3phN1p3c2RUMkNo?=
- =?utf-8?B?T1R1K0Z1MVZnZkJKVDA3TjhoUk9rT0FpSTRHbzVZczJUZUpMclM3QVRpYXlF?=
- =?utf-8?B?M0ZQb2VTeFZrakdNZWt4M0FuRmNuaUs0RUNwRi82S1pYL1lHWFBUYmVQR1lG?=
- =?utf-8?B?d0FwZlRkbmpkcVRWdU1ucVRiMFNhNWlMc3dicjdSV2xHU2RuK3NiTEhlL3NT?=
- =?utf-8?B?UU5ac0liWHAyUDR1dzRpeUNETUZPU1llak82YkxtdnNRYkZhNXRia2FMak4y?=
- =?utf-8?B?b3FCOTJzUFBZYXkzVklvYWdURkJtOG1ia2F4WE1ScWhDQmc2WjRCY1l0TUww?=
- =?utf-8?B?eWlhRTdYb0I1d1VWR1RLT0dZN0s2bDhscmtISHhKZ2lyempoYTJ1a3hVdG5n?=
- =?utf-8?B?VEpBbC9NYjJldmNuNWloM0wyeU8wQUtieE1Nb0xZV08zMXJsdTkxRVdNbFRZ?=
- =?utf-8?B?N2FUMUs2cmVubVhRMFdrejZQMngxUWRuc0FuYXM0V3lzRGVJNmJ4c1dpV25o?=
- =?utf-8?B?R3ovMHMvbkZKVlRiUkF6Snl5UTdLTjhvZTRpWm9xNlBwVDVVbXkzZU5udnhF?=
- =?utf-8?B?cTZ5ZW9Id1VLNko1bGs2UlJETWVnQThKdmxKbUlPSTl4b08yVzJIdG1NdW9W?=
- =?utf-8?B?eml6MzB2VkpVY3dXVm5DYjRoRzhNOGh5VXFoSDd3VUhzQUxER0F1NnhMRnlM?=
- =?utf-8?B?MkJ5MzZTQ3FFemo3RG9USzdCSTgyOXhlN0p4WWxJcG5JY3VKOHhYTVhhOWZz?=
- =?utf-8?B?L0JHcGxnejRmU2dMdHFpWlBnSzNXdmlab2JFbWxubnJrdWpwbEF0SSsxZTdP?=
- =?utf-8?B?WUtSVzl4bnE3amMzbHM3MFoxWVlza1N3YkIzdGtwNHZBVUNiVFJ3SWU5Y3ZG?=
- =?utf-8?B?S2lNd3BnSVB0aStneUpGNVZ6Q3ZCKzhLYWFxTDZEN2JtUkdNU3RXYlBKeGZ0?=
- =?utf-8?B?Z0FKcXpIcExkaVluVzU1SXExWWtseGZ5QWIyRUVzRXpJdU1YTHBQc0tmbXp5?=
- =?utf-8?B?R00vYUJRQWJ1VCt3LzBlY0kxbFEyL0JmOHpkcjNIcnlRQkZqYXkxYW56LzdU?=
- =?utf-8?B?VmtPY2R3dDE5TkkvZlQyRTA1cUJTSkZGbU9DYVo3a2dvc1ZycWg2UTZqT1M3?=
- =?utf-8?B?SHlqRHBnTW5vRk9tVGlBTTdlQ1RnTWdPZFg2ZzlhRTZVd2hSbkdjSzRZeDQr?=
- =?utf-8?B?VnFzYUd1UHBjQjIrdWFobVRSNVd1NWQra0lLSG9UWDU4eHErcS8vdFRwa3Jk?=
- =?utf-8?B?TXpUd2hUZlRXejhWUHZxRy9JQmM3VmlIbWY2Y2ltVExMV08yN0ZSY2RXaDRj?=
- =?utf-8?B?d0s1WXlWVjlYT21HQXNmV2ZHNXhkd0NObk9IVWpEZ3dJR1pOd094VU1aZklZ?=
- =?utf-8?B?YnJTMGV3cXZTeExxU0lJYXVWdGthZGJFY0doY05Kc0dCZmdQdGcrd0Y3cUly?=
- =?utf-8?B?OHV3Mk5ZdUtwRFErdlpiYk4vRlFVQ0pXZXI1L0kzRzBqd0p2M3FacCtvdzdm?=
- =?utf-8?B?bG5OT3pXeHBFTWRHTCt3V2Zrc3JXOXlXdkNRYjk3N0JwZ0lLaVR6WEFMRTJk?=
- =?utf-8?B?eFNyUklmN3NiYjVGdmlPdUxsTnVHQWhESWhZSDB6SnBnOU5sc1MvYXZBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M1hoZjgwMWhuaXJWWHNYdzI1YXdKeXhUWGE5eEVWTlFtOVJta2ZwOXAwVXd0?=
- =?utf-8?B?WTh2ZENJTXVVN2JnYVphS0pXMmhhL0dxK0hXR0MvMW5zRW1FcVdaQ1VVOHRG?=
- =?utf-8?B?Q0hxVnJST1lXUktDU1d6dFNLcnhJckt0Vjg5MEJkTklrKzljRjFpQWNjZnAv?=
- =?utf-8?B?Qkc5K29YSHJpY0RCMTlac3pzdmd4aUZOMUtHM0poUW9GeDg5dGsrQWl6aDU2?=
- =?utf-8?B?R2ptdW9jcnEyMXZ3WkRDY0RxVll5a3ZmTmZIdU5maHpXaGl1NlhDMWd6MlpL?=
- =?utf-8?B?aVpTZlZhYVVSZS9ncWoxWG0rN1lEd2J0SXlJYWFWZ3ZtK3BwbjRHZmdueE5s?=
- =?utf-8?B?RXNwVUg1Qm94MDh3bXZTWEdmcmZwbXRLU0x2d0JWOUI5cGcrbHBWenRKNkd6?=
- =?utf-8?B?U3Ixd3hxOWwxMUJyTWZwQzBHMzRITGkybmNhZ0RSdHBneHBtNnNIOFVPT2Fs?=
- =?utf-8?B?bm03bGxCbFNYek1UQ2FOaU1BZzZsZ0NCTHRCS2lvRjFzVXVoSHlCYkc0R2Iz?=
- =?utf-8?B?ek8yYWJPblQyeXRBZXNpN2I3TkkxVElEOW53TllTZFNSSGJ0dG1MNVo3b05D?=
- =?utf-8?B?SmlOT0xLQS9lS3NYeGJuOURSWGRrOFAvMEttTGJ2MWhYajBRbENnbUxTcEcx?=
- =?utf-8?B?N0VyUEo0VHhLRnlsdWxVV3BpS255NXlIeFFnSlhMY05pSVlSQklpWGR5MGFH?=
- =?utf-8?B?ZWtJaUxTQXVVNHl5bSt2NnlBV1d5czE1MjhIWWlXRThTQS8xNEZEMkQyWEFi?=
- =?utf-8?B?dHpkQTFlYjFUN2RteG5Za3ZXWDRqNEZMcjh3cHBFajdOWHEyZ01sc0JFbDdW?=
- =?utf-8?B?VjdON0VockZPRmJGbWczZFR4YTN5Y2pSU3ZOZUNDaHVEWlR5cEo4ZTFlWkpU?=
- =?utf-8?B?akJnNGErZG93YXd5QVRXNDRRbVYvVldyMnVxaGpPYTUxbjQzR1ZtSGRnMzRG?=
- =?utf-8?B?OU9NVEhWQWxEeGVxS1R2UVpTT2ZMcG1xN0RWb2Jjc1VSNnRBVnp6VGpUUGFa?=
- =?utf-8?B?akd3TGZLNGlkZURsa1N2cmd5dlJlaTBRSi9FNEN4eWNyeEZNaVc3RksrWG9x?=
- =?utf-8?B?c0xpaVU0NFRtcFpTRmYrM2I0a1JTN3JqTWJ2QktLTjEvdmdjNHJneVRUOGVJ?=
- =?utf-8?B?MmNZUDV4WWhkL0tJNkdReU96UW94QktSZ1dQdVNEYldObkh4cnhUQTRXdGdz?=
- =?utf-8?B?aDZlYnVRZjFISDhudTBkeVlUOCtTSUpCZkVRZ2JCR3NKbzZWZnl5ZWQvMjJt?=
- =?utf-8?B?Mmk1K2dNaE16cGF4WW1IMkNUVkRqc3VqQ2dGR2d0cTAxMGhBTkgzdmxtcDVh?=
- =?utf-8?B?YW5pT0RBZ29vOHlFZ09ZMW1EN0MrdFJqeERnWUpjblQrVy9TMVhTbDA0MmNQ?=
- =?utf-8?B?aVB6Mjg3UnRJMDQ0U1dWa3VsUmFVYmo0TE56bzZoRi91dUx6MFUwWkdDaGNW?=
- =?utf-8?B?ZzNKc0trMGlHY0dqdjZPWlR6SmZBRlhBcitnYkkxcm5oaDBoSXJ1c0ErWWFM?=
- =?utf-8?B?eFJmRVVLRUYyY2J3cmR3a0VoRjZ6QklPUEo1dU5sd3d0ZHgrOUR2ZVN1Vkp5?=
- =?utf-8?B?TUNIcVRzSEQ3c2dEREFDZ2orSy9jR3hsR2FVZGR6eVdGYW1GaEpBSHgwRllk?=
- =?utf-8?B?WmhCTjZTakpPWGhCd01ZNUE5WWxad0o5N0c0Rk5mSnlHYmdHR0NZNzNvVnpV?=
- =?utf-8?B?N2VpQkNPTGNpaVZIRHAyY25DeEdvZkFMalo5b3VjVFQ5YlY3Z3dTRHFKSEdP?=
- =?utf-8?B?TDNQWDNiM1ZKa1F4K0dITmlzRUZEbExLZnAzTXRXM1hUYnpPZ05TUnJTdlJr?=
- =?utf-8?B?S2xBcDBTQVl3V2tNR2Y1UmlOSjVpbXpkYWdiblBtZEo3VGxFRG5BZGZqTVNQ?=
- =?utf-8?B?V3UrS1MzOEMvaFIvb2MwVGhxMlJqYUUyMXd0dlF2Wmd4eDNoNCtuNkMvUjVD?=
- =?utf-8?B?cHNGYVFvM0ZYQ0lXWmVtV05uRytEeGJIVDNZdDFTNWh3K1dDWDltYjhiQ1FH?=
- =?utf-8?B?Q0tXTTJHd0xpQTlnaDB6Ym8rY3dZemhsRDRzQmJnSGxyWHc0NE5GdmVic0tD?=
- =?utf-8?B?Wjd1TWYzRDRhbHh6ZjE0eU9ubzhNbzNhSWFhazZLVWhIcXJsc1ZPMlduRWlr?=
- =?utf-8?Q?3KDTBcLl05rR8j1yhCIs93z06?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a868cc81-3b27-4f5c-5c07-08dc849937b9
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 13:21:18.3219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ii4tbviqjfSeNeTNmroXDNnUBbTDR6jyxLCqF6x46z7Ai4/fdR4MoWBWXea+sPkQFfZwr9VTkmT+PFmHaKJ2PA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6397
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-04_05,2024-06-04_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 malwarescore=0
+ suspectscore=0 clxscore=1015 phishscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2406040107
 
-On 6/4/2024 6:17 AM, Sean Christopherson wrote:
-> On Tue, May 28, 2024, Paolo Bonzini wrote:
->> On Tue, May 28, 2024 at 6:19 AM Manali Shukla <manali.shukla@amd.com> wrote:
->>>
->>> The upcoming new Idle HLT Intercept feature allows for the HLT
->>> instruction execution by a vCPU to be intercepted by the hypervisor
->>> only if there are no pending V_INTR and V_NMI events for the vCPU.
->>> When the vCPU is expected to service the pending V_INTR and V_NMI
->>> events, the Idle HLT intercept won’t trigger. The feature allows the
->>> hypervisor to determine if the vCPU is actually idle and reduces
->>> wasteful VMEXITs.
->>
->> Does this have an effect on the number of vmexits for KVM, unless AVIC
->> is enabled? Can you write a testcase for kvm-unit-tests' vmexit.flat
->> that shows an improvement?
->>
->> The reason I am wondering is because KVM does not really use V_INTR
->> injection. The "idle HLT" intercept basically differs from the basic
->> HLT trigger only in how it handles an STI;HLT sequence, as in that
->> case the interrupt can be injected directly and the HLT vmexit is
->> suppressed. But in that circumstance KVM would anyway use a V_INTR
->> intercept to detect the opening of the interrupt injection window (and
->> then the interrupt uses event injection rather than V_INTR). Again,
->> this is only true if AVIC is disabled, but that is the default.
->>
->> So unless I'm wrong in my analysis above, I'm not sure this series,
->> albeit small, is really worth it.
-> 
-> But aren't we hoping to enable x2AVIC by default sooner than later?
+Commit 1b151e2435fc ("block: Remove special-casing of compound
+pages") caused a change in behaviour when releasing the pages
+if the buffer does not start at the beginning of the page. This
+was because the calculation of the number of pages to release
+was incorrect.
+This was fixed by commit 38b43539d64b ("block: Fix page refcounts
+for unaligned buffers in __bio_release_pages()").
 
-The idle halt intercept feature not only suppresses HLT exit when a V_INTR
-event is pending during the execution of halt instruction, but it also
-suppresses HLT exit when a V_NMI event is pending during the execution of
-halt instruction. This capability will be advantageous in IBS virtualization
-and PMC virtualization functionalities, as both rely on VNMI for delivering
-virtualized interrupts from IBS and PMC hardware.
+We pin the user buffer during direct I/O writes. If this buffer is a
+hugepage, bio_release_page() will unpin it and decrement all references
+and pin counts at ->bi_end_io. However, if any references to the hugepage
+remain post-I/O, the hugepage will not be freed upon unmap, leading
+to a memory leak.
 
-> 
->> As things stand, it would be more interesting to enable this for nested VMs,
->> especially Hyper-V which does use V_INTR and V_TPL; even better, _emulating_
->> it on older processors would reduce the L2->L0->L1->L0->L2 path to a
->> less-expensive L2->L0->L2 vmexit.
+This patch verifies that a hugepage, used as a user buffer for DIO
+operations, is correctly freed upon unmapping, regardless of whether
+the offsets are aligned or unaligned w.r.t page boundary.
+
+Test Result  Fail Scenario (Without the fix)
+--------------------------------------------------------
+[]# ./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 6
+not ok 4 : Huge pages not freed!
+Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+Test Result  PASS Scenario (With the fix)
+---------------------------------------------------------
+[]#./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 4 : Huge pages freed successfully !
+Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+V2:
+- Addressed all review commets from Muhammad Usama Anjum
+V1:
+https://lore.kernel.org/all/20240523063905.3173-1-donettom@linux.ibm.com/#t
+
+Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+Co-developed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+---
+ tools/testing/selftests/mm/Makefile      |   1 +
+ tools/testing/selftests/mm/hugetlb_dio.c | 118 +++++++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/hugetlb_dio.c
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 3b49bc3d0a3b..a1748a4c7df1 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -73,6 +73,7 @@ TEST_GEN_FILES += ksm_functional_tests
+ TEST_GEN_FILES += mdwe_test
+ TEST_GEN_FILES += hugetlb_fault_after_madv
+ TEST_GEN_FILES += hugetlb_madv_vs_map
++TEST_GEN_FILES += hugetlb_dio
+ 
+ ifneq ($(ARCH),arm64)
+ TEST_GEN_FILES += soft-dirty
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+new file mode 100644
+index 000000000000..e4f4924179c8
+--- /dev/null
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program tests for hugepage leaks after DIO writes to a file using a
++ * hugepage as the user buffer. During DIO, the user buffer is pinned and
++ * should be properly unpinned upon completion. This patch verifies that the
++ * kernel correctly unpins the buffer at DIO completion for both aligned and
++ * unaligned user buffer offsets (w.r.t page boundary), ensuring the hugepage
++ * is freed upon unmapping.
++ */
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <sys/stat.h>
++#include <stdlib.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <string.h>
++#include <sys/mman.h>
++#include "vm_util.h"
++#include "../kselftest.h"
++
++void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
++{
++	int fd;
++	char *buffer =  NULL;
++	char *orig_buffer = NULL;
++	size_t h_pagesize = 0;
++	size_t writesize;
++	int free_hpage_b = 0;
++	int free_hpage_a = 0;
++	const int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
++	const int mmap_prot  = PROT_READ | PROT_WRITE;
++
++	writesize = end_off - start_off;
++
++	/* Get the default huge page size */
++	h_pagesize = default_huge_page_size();
++	if (!h_pagesize)
++		ksft_exit_fail_msg("Unable to determine huge page size\n");
++
++	/* Open the file to DIO */
++	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT);
++	if (fd < 0)
++		ksft_exit_fail_perror("Error opening file\n");
++
++	/* Get the free huge pages before allocation */
++	free_hpage_b = get_free_hugepages();
++	if (free_hpage_b == 0) {
++		close(fd);
++		ksft_exit_skip("No free hugepage, exiting!\n");
++	}
++
++	/* Allocate a hugetlb page */
++	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
++	if (orig_buffer == MAP_FAILED) {
++		close(fd);
++		ksft_exit_fail_perror("Error mapping memory\n");
++	}
++	buffer = orig_buffer;
++	buffer += start_off;
++
++	memset(buffer, 'A', writesize);
++
++	/* Write the buffer to the file */
++	if (write(fd, buffer, writesize) != (writesize)) {
++		munmap(orig_buffer, h_pagesize);
++		close(fd);
++		ksft_exit_fail_perror("Error writing to file\n");
++	}
++
++	/* unmap the huge page */
++	munmap(orig_buffer, h_pagesize);
++	close(fd);
++
++	/* Get the free huge pages after unmap*/
++	free_hpage_a = get_free_hugepages();
++
++	/*
++	 * If the no. of free hugepages before allocation and after unmap does
++	 * not match - that means there could still be a page which is pinned.
++	 */
++	if (free_hpage_a != free_hpage_b) {
++		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
++		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_fail(": Huge pages not freed!\n");
++	} else {
++		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
++		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_pass(": Huge pages freed successfully !\n");
++	}
++}
++
++int main(void)
++{
++	size_t pagesize = 0;
++
++	ksft_print_header();
++	ksft_set_plan(4);
++
++	/* Get base page size */
++	pagesize  = psize();
++
++	/* start and end is aligned to pagesize */
++	run_dio_using_hugetlb(0, (pagesize * 3));
++
++	/* start is aligned but end is not aligned */
++	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
++
++	/* start is unaligned and end is aligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
++
++	/* both start and end are unaligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
++
++	ksft_finished();
++}
++
+-- 
+2.43.0
 
 
