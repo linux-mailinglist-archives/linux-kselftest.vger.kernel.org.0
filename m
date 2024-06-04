@@ -1,153 +1,115 @@
-Return-Path: <linux-kselftest+bounces-11200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F0D8FB2EB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 14:53:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3B58FB330
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 15:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0867F1F2497C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 12:53:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC15FB2A406
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 12:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4319714A4FB;
-	Tue,  4 Jun 2024 12:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DBF8148855;
+	Tue,  4 Jun 2024 12:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="oQH303wy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NxMknA+X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB47145B15
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Jun 2024 12:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CA314882B;
+	Tue,  4 Jun 2024 12:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717505363; cv=none; b=ewpxesSJlunaW5YsLmvXKCYX+ZNRch2HFmTz4UNvctXe4atfVagJfl8EwAPXcY3kAojzyC3LadIx6VqjiXbwWvWrmqaPas0wTufuho0TmNLQBxQW5mC6Va6DfT1SiR4oXeoqLZgnouSBCzsLeHK0SJfTsRikDKpsGDT0Vz0jxk0=
+	t=1717505433; cv=none; b=EQee+zDe1W0JZkNm6wm+sVXxgpIGFyHNM8EWcuF959uwtB/fYrLRjjzY0f8/DLeC95JhVhlOz/RJT4WT0gSvNnAsE64uKwUMGlmRy9mbUMPEjw3Q4TN+K7YQ45G2cT7v4WIicoA8Pyi7O+AYP+RgGni34aahSJ2bzGdEqx0jRd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717505363; c=relaxed/simple;
-	bh=9gi4a4wTtOnHVdD3VSLP7Qeg3BmFkZjwDMVlBkbQhKs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uziKD150iQ+IDAR4KVlwKvhI4V6HPR6bOCKmGclZP/B52QWAuod71vTtzpKWFmoe+T+amdNJq6eE6Pv3HzfeDsaIX2T6daDF4aINHeySc0h0y+WPWOjzkX/wOd5b2VnF4rqLQJmfCr+9YBrcMzTH3hAB7ruSfrR4lK2wLO9MzZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=oQH303wy; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-64ecc2f111dso648990a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2024 05:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717505360; x=1718110160; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hg13op520E0l7vmsGSXJjwrEXGfoFkLadNxxD6X23VY=;
-        b=oQH303wyl92EQU98nM0yovW2mIBSccaLRA7ij57ulHx8t2FlEbiQ1qTvyOSfGrP497
-         gIVN+re6sV/T/9QEL6AR/6eU04npXIa/2/jZcqBKMX7y4Y9PQvF20i5NfVXYHUqUNjzB
-         RCyj+PCkOikcW3fXK1wCgWPsNX3Zom+46mE1OjcIZEm7JRLwQas9cQ2XKR7naadL1wvo
-         E9rKy8gjMhnIx08xX5/cMk+eNjbC5+MYLaCXULMWZRvMAC3m7U8PYJtlR3hF4jzLOsVv
-         fGYU0z7+q1b6m3FkSImGVb1FhvqTcj8qLqVHIOf3tufVsNpPmiuxXkd2NjP/HHwJfzBr
-         8rkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717505360; x=1718110160;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hg13op520E0l7vmsGSXJjwrEXGfoFkLadNxxD6X23VY=;
-        b=LzHeulRhDWfQtnNOADrlk69TfFltmgp1tx8jO6+EjHulsk+6AKpFQPRVmkOWhtGpkG
-         YVQHyE9Y0Kh1wOpOsnqbMJZwLntTxHmkbisDMW6PMNSNDzC5ERKva5UAyxPp/wNjUf71
-         JVL8Te7K7Igc2v5IJkZZFQs6FtdroKS0iuz30J+WWsDmFw5/B55Tik88va0ql+2EGrlL
-         s/i+3Ft99tRsANZMvvmJtMXYA76ZpM3XI7aMX98Fle+3kmarfJHv9aVedk/RaIvW9J05
-         E1LkvROfs8oKeJo+I5s7YwExPIqaK9MJUFjwrJpk1/iSRX79fNJAKhdey1te+QiQ8oP4
-         w95Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXmpV+xupceHieeK8wjjRn/c2y3di+ueNWyb7K4GfR2du1H+U1tyS05YOwfsEouGaSHtl+lhe3slnGHJJgMZY1hKT5zm9B7Obxrb2lDwH/0
-X-Gm-Message-State: AOJu0YzD6JVKOr4+MMTMdiWNDgTmz5PQwlUQAczRTIuZe+52ocYeIX9H
-	s6BJX3IRPYEY1Dn49yxHeTGj6ysMX3sbjXEqeU0sgVid8HtMvOEcDhYNjvNRUVg=
-X-Google-Smtp-Source: AGHT+IFjRaBoryIbYEQtignrxN6JqLYXY8gztujl1ilZT6KvEZR3UOMAvujw3x8ToyklOBgsdusl/Q==
-X-Received: by 2002:a17:902:ecc6:b0:1f5:e796:f247 with SMTP id d9443c01a7336-1f6371ff41amr134960595ad.6.1717505360188;
-        Tue, 04 Jun 2024 05:49:20 -0700 (PDT)
-Received: from carbon-x1.. ([2a01:e0a:999:a3a0:327b:5ba3:8154:37ed])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323ebc69sm83042885ad.211.2024.06.04.05.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 05:49:19 -0700 (PDT)
-From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Anup Patel <anup@brainfault.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
-	Atish Patra <atishp@atishpatra.org>,
-	linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 16/16] KVM: riscv: selftests: Add Zcmop extension to get-reg-list test
-Date: Tue,  4 Jun 2024 14:45:48 +0200
-Message-ID: <20240604124550.3214710-17-cleger@rivosinc.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240604124550.3214710-1-cleger@rivosinc.com>
-References: <20240604124550.3214710-1-cleger@rivosinc.com>
+	s=arc-20240116; t=1717505433; c=relaxed/simple;
+	bh=CLuSD10Auw3b45Rs7wDNc1Y+bI+7e6t/jKqHAQlZhBo=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=RBO9NZ4Dk82NMFN+kPHmM0J0RVUE3ZslteipjLwJCHwQ3anqAGwpbDpvPdMUp7IkuKRyCnWNq5RghDh68+0AacLnNrlpe8Vj3DxND5g1MgM0Hx6BQls5TRFv00gANYCRV/AHtzsQnB+mbA9Wkk+VIAz2BJ9UJ/eHSVYVoTh8AL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NxMknA+X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCD6C3277B;
+	Tue,  4 Jun 2024 12:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717505430;
+	bh=CLuSD10Auw3b45Rs7wDNc1Y+bI+7e6t/jKqHAQlZhBo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=NxMknA+X6kjkzdJE34TjJfT5bJm+unUH6RIKDrzTQ3rWpldei90v2NMZNZ3eUJB4b
+	 7n1NWjjUpL7oovMphxfKQCZdx1bMG5wiGuo7S1VuHhabzglGHjhoiqh7Bft+V5XLgq
+	 CQ6lyyCbDcscAzRNeMgLPXwQcGXbW38GJst6eTP9GL1YBJRdlytiZmGDE1KRO84n06
+	 GtWLn/d6usN3winasKQcnAThxqfpZlC4Gm6EIcTbTt9OQldb1kHh9/Pgk2Z8VCc7Nz
+	 uL8OsWtSCCQdMYHu7mZ5J3QY9pPJrQ3yYUsyPnWxUAnXP77e/7+RR6voWRRKRbZhTC
+	 WenSkITJvWQbw==
+Date: Tue, 04 Jun 2024 07:50:28 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Daniel Latypov <dlatypov@google.com>, Maxime Ripard <maxime@cerno.tech>, 
+ linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
+ patches@lists.linux.dev, "Rafael J . Wysocki" <rafael@kernel.org>, 
+ kunit-dev@googlegroups.com, Christian Marangi <ansuelsmth@gmail.com>, 
+ Saravana Kannan <saravanak@google.com>, linux-kselftest@vger.kernel.org, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20240603223811.3815762-8-sboyd@kernel.org>
+References: <20240603223811.3815762-1-sboyd@kernel.org>
+ <20240603223811.3815762-8-sboyd@kernel.org>
+Message-Id: <171750542807.3346.5048720218082629186.robh@kernel.org>
+Subject: Re: [PATCH v5 07/11] dt-bindings: test: Add single clk consumer
 
-The KVM RISC-V allows Zcmop extension for Guest/VM so add this
-extension to get-reg-list test.
 
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Acked-by: Anup Patel <anup@brainfault.org>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 4 ++++
- 1 file changed, 4 insertions(+)
+On Mon, 03 Jun 2024 15:38:04 -0700, Stephen Boyd wrote:
+> Describe a binding for a device that consumes a single clk in DT. This
+> will initially be used by a KUnit test to clk_get() the clk registered
+> by of_fixed_clk_setup() and test that it is setup properly.
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Rae Moar <rmoar@google.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  .../test/test,single-clk-consumer.yaml        | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/test/test,single-clk-consumer.yaml
+> 
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 864a701ef6c3..1a5637a6ea1e 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -60,6 +60,7 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCB:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCD:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCF:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZCMOP:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFH:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_ZFHMIN:
-@@ -431,6 +432,7 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(ZCB),
- 		KVM_ISA_EXT_ARR(ZCD),
- 		KVM_ISA_EXT_ARR(ZCF),
-+		KVM_ISA_EXT_ARR(ZCMOP),
- 		KVM_ISA_EXT_ARR(ZFA),
- 		KVM_ISA_EXT_ARR(ZFH),
- 		KVM_ISA_EXT_ARR(ZFHMIN),
-@@ -960,6 +962,7 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
- KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
- KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
- KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
-+KVM_ISA_EXT_SIMPLE_CONFIG(zcmop, ZCMOP);
- KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
- KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
- KVM_ISA_EXT_SIMPLE_CONFIG(zfhmin, ZFHMIN);
-@@ -1021,6 +1024,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_zcb,
- 	&config_zcd,
- 	&config_zcf,
-+	&config_zcmop,
- 	&config_zfa,
- 	&config_zfh,
- 	&config_zfhmin,
--- 
-2.45.1
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/test/test,single-clk-consumer.example.dtb: /example-0/clock-consumer: failed to match any schema with compatible: ['test,clk-fixed-rate']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240603223811.3815762-8-sboyd@kernel.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
