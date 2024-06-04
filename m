@@ -1,81 +1,55 @@
-Return-Path: <linux-kselftest+bounces-11171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 558B78FABCD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 09:25:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDFE48FAD3D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 10:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6F31C2155B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 07:25:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F8171F22817
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 08:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4B1A140387;
-	Tue,  4 Jun 2024 07:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5E61422B7;
+	Tue,  4 Jun 2024 08:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ezn05q3A"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XM/Poj30"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61C483CB4;
-	Tue,  4 Jun 2024 07:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1083F1420C4;
+	Tue,  4 Jun 2024 08:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717485901; cv=none; b=VaP2PEwh2XifzwfZBI/bnCv6QIyPvZjS4ZZ9bxxVXKIA9NujHAIsMtv21jsRyar8MusOP9fN4S08YxS631ttS4RNbo5IO/R5A434d+sxeA67VaPT5b4ZkME6nlVmROXHlWVYjGrcnW54yoUOkK82e94HWDYBbMj7KSch70+xRh8=
+	t=1717488868; cv=none; b=jp8AGm7V6g+Bzp5sRmx44DY0M4oY820LwvwAq3o4WbMRjT+AAWj0N3GwEy8snQVsBhrY1EoQyyfnOblU94fcUukyNEVc0C8KkecxbvAfQqSefOnwOGXD+pb3L1AGWR9hDQqA7RIQHuK4sFH3eNY2bnfekJw3N1O/Vxy/OHpRkM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717485901; c=relaxed/simple;
-	bh=DpEH2NbFw1m9Pv6+h2HbMRW9uEXYC1Z3v4mpBVv5ld4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rKrp1roSKMhyM2MPZJ0NMuvZ54hCEZ+cDrm2opZ/ITS1qGUzTI6bheuTIiaiTRLFthVwdHE0B23qX18ihK8pYRQ6y2Xr9zU4OId1slj/8Uehn9lrldOpmQHxW+pqdg0BfmC4WA7rPQIfNp+1a9lvQSxQXlFLYJUtx3W08my6iXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ezn05q3A; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4546oZFa012250;
-	Tue, 4 Jun 2024 07:24:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=pp1;
- bh=TtL2QBVjGNwMRr4Cw76yWWTalIAKrI0zspJ0pw5e688=;
- b=Ezn05q3AMgqIJ0Jx09VQAWnNbkfe+E0vIlDzRC0fd6IgWKzAcEZkDq245UgzlXUjkuN1
- 43iRkAMASj04GxCNALAEIGpcUNb+SoGV6uLst2skFclSa7U8vHzYPrA2fjY8SSEIIb1f
- IBO4kIu5j6H/bKpmUO0+HTmVwsrJ2fC1dX/W2IZYiBzGNMdXHIr6XHZ3IXRerVpma1ZB
- FoZ+ipI4pS+lm4q3atu37JAbLu6bv5uQ18eMaM8imTUeuNOf4YvAb4FKZTyK8fV0tDKF
- qK494Adcv/dufcj0qNQ6OAmUJUrE90y2jxF8hl94L98r0I3DHFpDsjyZbC8PlLjZab8j 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yhw35r7av-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 07:24:55 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4547MAZd008349;
-	Tue, 4 Jun 2024 07:24:54 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yhw35r7at-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 07:24:54 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4546xZga022840;
-	Tue, 4 Jun 2024 07:24:53 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ygg6m4dgw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 07:24:53 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4547Om7u46858632
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 4 Jun 2024 07:24:50 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 16E4A2004F;
-	Tue,  4 Jun 2024 07:24:48 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 94AE82004B;
-	Tue,  4 Jun 2024 07:24:47 +0000 (GMT)
-Received: from [9.171.41.81] (unknown [9.171.41.81])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  4 Jun 2024 07:24:47 +0000 (GMT)
-Message-ID: <211b39ae-af0c-4db9-8931-a1446f34c832@linux.ibm.com>
-Date: Tue, 4 Jun 2024 09:24:47 +0200
+	s=arc-20240116; t=1717488868; c=relaxed/simple;
+	bh=joAVenAxN13C55NLARYN11/9fHBvAfySGAsGpcf3tEg=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=fM45GdAnNXPu4WpxDea5bBmYufhegpFdWZzWd8IVXLl55vSXteciYGF3YbniRB5d/k8h+Vwafw/czMKDVtfwMBz8wOmoIh7IVCQpC/3mPdiubjosNI24NtISNY3yLTLZZSZ+Yjrwh0SWvdQtIaNSRqVumPraxAgwr7VUjMwE9sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XM/Poj30; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1717488865;
+	bh=joAVenAxN13C55NLARYN11/9fHBvAfySGAsGpcf3tEg=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=XM/Poj30EtOAaH9LN67fNc03QWKNL2hlYhAuC0ZeSna3A3o1uxS0UTVE9gSmxRL6Z
+	 Z8cNmDJns+Lra5ahgBah+sVJeY86eZVD0ZE1xaJkInfnrUOOT1f69AsJnNfjwT8DBI
+	 021Hs8uL8Zz2gtkzBcnH81uC+wc7/3+2WY5+ihIzZoIH1JePtz2d81poTybiWNH7hs
+	 ZIE54RACaOIe7uQ5K5vL4n0lueRS3pd6/PqESyutGsX1/42kCo5SSLNrXcL56Sidr2
+	 5rRz2LERta35aTZpqDNGvDI1NwbrYiOJQ7Z24bXJV6M7Ba44M4xxkRx7Opm8E2qcAc
+	 tTQvJaPlw7kBw==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9ABFA37821A5;
+	Tue,  4 Jun 2024 08:14:20 +0000 (UTC)
+Message-ID: <8e1e2f1d-a578-43c0-ad55-fb593967ac5e@collabora.com>
+Date: Tue, 4 Jun 2024 13:13:45 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,93 +57,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: drivers/s390x: Use SKIP() during FIXTURE_SETUP
-To: Kees Cook <keescook@chromium.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Steffen Eiden <seiden@linux.ibm.com>
-References: <20240518001806.work.381-kees@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Bug Report] selftests: arm64: build errors
+To: Mark Brown <broonie@kernel.org>
+References: <5ec0f2f3-5259-41a9-a25d-5baf1680dd10@collabora.com>
+ <7b7f4dd1-bc13-4827-84d6-20ebed7119b6@sirena.org.uk>
 Content-Language: en-US
-From: Janosch Frank <frankja@linux.ibm.com>
-Autocrypt: addr=frankja@linux.ibm.com; keydata=
- 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
-In-Reply-To: <20240518001806.work.381-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: F1D71ipIsyXGVV7YisShVYtUIgHGDYPE
-X-Proofpoint-ORIG-GUID: 8UteM9o0JBq9NV-bJRO4cCVimPRh_KlO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-06-04_03,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=393
- clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406040059
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <7b7f4dd1-bc13-4827-84d6-20ebed7119b6@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 5/18/24 02:18, Kees Cook wrote:
-> Instead of mixing selftest harness and ksft helpers, perform SKIP
-> testing from the FIXTURE_SETUPs. This also means TEST_HARNESS_MAIN does
-> not need to be open-coded.
+On 6/3/24 6:31 PM, Mark Brown wrote:
+> On Mon, Jun 03, 2024 at 06:28:16PM +0500, Muhammad Usama Anjum wrote:
 > 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+>> gcc pac.c /pauth/pac_corruptor.o /pauth/helper.o -o /pauth/pac -Wall -O2 -g
+>> -I/linux_mainline/tools/testing/selftests/  -I/linux_mainline/tools/include
+>> -mbranch-protection=pac-ret  -march=armv8.2-a
+>> In file included from pac.c:13:
+>> ../../kselftest_harness.h: In function ‘clone3_vfork’:
+>> ../../kselftest_harness.h:88:9: error: variable ‘args’ has initializer but
+>> incomplete type
+>>    88 |  struct clone_args args = {
+> 
+> This is in the generic code.
+> 
+>>   CC       check_prctl
+>> check_prctl.c: In function ‘set_tagged_addr_ctrl’:
+>> check_prctl.c:19:14: error: ‘PR_SET_TAGGED_ADDR_CTRL’ undeclared (first use
+>> in this function)
+>>    19 |  ret = prctl(PR_SET_TAGGED_ADDR_CTRL, val, 0, 0, 0);
+>>
+>> gcc -mbranch-protection=standard -DBTI=1 -ffreestanding -Wall -Wextra -Wall
+>> -O2 -g -I/linux_mainline/tools/testing/selftests/
+>> -I/linux_mainline/tools/include  -c -o /bti/test-bti.o test.c
+>> test.c: In function ‘handler’:
+>> test.c:85:50: error: ‘PSR_BTYPE_MASK’ undeclared (first use in this
+>> function); did you mean ‘PSR_MODE_MASK’?
+>>    85 |  write(1, &"00011011"[((uc->uc_mcontext.pstate & PSR_BTYPE_MASK)
+> 
+>> I've GCC 8 installed. I'm not expecting the errors because of a little
+>> older compiler. Any more ideas about the failures?
+> 
+> You need to run headers_install IIRC.
+I'm running:
+make headers && make -C tools/testing/selftests
 
-Adding the author in CC.
+I've tried gcc 12 as well.
 
 
-This changes the skip behavior from one single skip to a skip per test.
-Not an issue, but a change.
-
-But also we're generating invalid TAP AFAIK which we also have been 
-before but we can fix that in this patch.
-
- From what I understand this line should have a "#" prefix to show that 
-it's a comment:
-Enable CONFIG_S390_UV_UAPI and check the access rights on /dev/uv.
-
+-- 
+BR,
+Muhammad Usama Anjum
 
