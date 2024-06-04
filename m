@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-11180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E958FB254
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 14:34:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D658FB256
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 14:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C33C3B2315B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 12:34:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25BCF1C20E6F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 12:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA481474B2;
-	Tue,  4 Jun 2024 12:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0EE3147C85;
+	Tue,  4 Jun 2024 12:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KorNNrwt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbokmere"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0432C146D4D;
-	Tue,  4 Jun 2024 12:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1111474C4;
+	Tue,  4 Jun 2024 12:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717504373; cv=none; b=sEilIh24SMWeOxORzk4C3XpI07xfnfhlX7aR/dQOmyjEhImk9u85Qhyz7MhTl1nFRNCETf5/8bkDaYYjei/h1W7WYNbRn15GIJZhi1aKMr8SACKXfdS2cVQZB+4R4KDKMYhzjaiRr5t68nSek6MMYJu1XFzz5kjyr/E+5jmsheg=
+	t=1717504375; cv=none; b=N5xhFut6FBObf35JxZ62ORvBGfBtA+d6LuaEnGdNDn/KrtF9JW9Svmq+xM80hqJerCHXPZqfSFufMb4csxl1LOrlB+nNFuphPb0U+c5k2Pa8W0eLWmKpIUjIHftq03elf6fhFkJEfD5E2PxipEEpKbF0PitN0wXef0AT1Ypc0V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717504373; c=relaxed/simple;
-	bh=s5QTEl8avTLCywD+yMrBHIhLbHpxN43v91JE2hPsTQ4=;
+	s=arc-20240116; t=1717504375; c=relaxed/simple;
+	bh=SummDxouOGlU7IgU6AXvmDabJn0ASZr5+1Pu30VLmLg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MIbUzf3wdt0Vdis2MioDOGOkgn+yw8nNV5qgq+4KYwfN98H7+Nlh758MZH7rvUbzxLj83B1hXZyToZzb9I6mN9EKzP8NFL+vpHv/jimOia6GMmqg/s6U63dWaqVb5ei9vgfZK7zJENrixkaj59qhjuAvq91U2pms32tcbCyrvQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KorNNrwt; arc=none smtp.client-ip=209.85.167.42
+	 MIME-Version; b=dx7Ku8GjbDeAwquofX6e0bcLdTGbF4ufXGkEoIZgdjfL0LN59FwGWmzdjxHWSgi4+pycbyeHLCIy7+E7sTO7PEzpVQH8j/ZWOIZ3MHclUjOqKSUYZVI3lLjt9OBlS4F6DV2yePHOx5tMaJPpmGvUiv1vBZE4rZP1g7q5+UgD3yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbokmere; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52b9a7fb034so177510e87.1;
-        Tue, 04 Jun 2024 05:32:51 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2eaaa3be101so3842131fa.0;
+        Tue, 04 Jun 2024 05:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717504370; x=1718109170; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717504372; x=1718109172; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8sMeT1jEzulHyaa1CBMKL3RJvYNB57BjMb6V3pNuGo0=;
-        b=KorNNrwtaYwleKlF7EArYCPxAm5z9V33Fiy/j9cp/2RYKFhfuJz2sVFsodsmOdFXPB
-         KBC89Sw73smFNeEXdNnGCn/44xZLvJKT/vSCKX7hdgFP7Yc6A5NccXl5yr7/tuGmTAPs
-         FNQ9M2DP/9Iuus6eHGWlJ/hCYKwYPSVjG9nh5vdXWRAGHwwm1sgJecjOsb3AHCdX23cD
-         j4ZPlZ0O3KGSRbl8ayx0/UVqi38nTrdKl5NZXh62MzCZkyLQosEXpn+wSiZMo8qSOlzw
-         6h3U6tpZPbEhsuMleX0ktP/oHEU0b9RUdHq3X0U0vhthpELO7K1K3iYFddeqftzvq/1K
-         Rv7Q==
+        bh=pj+nK1mCKwm8YE53nt8me8RE7m7ZJlrzUOfVRauTT1Y=;
+        b=kbokmereWHltRD4E/iPdVncHIlXPoZNZ6EH2Th4TKLUbNW5PJ+xVPODWrjROjmFpXA
+         3G5Z0RsPOAkD8pjiuxlzac7NS8sDs4CadlRiHNixRR0W1FUJLoEgp4a2AFTsYVCAWrbK
+         RHfMNCC3ZMMsQFLtmOQvx101tjJ0z9+TmAcvq+ibjcX1wGeImhqNjr4DOw24oGPq+iWi
+         Xn9o6rxhjnhdyxZuCz1F6m2GC8MxIckDg/SWoBXgc9Uw72ERfB9nPMV/ZUg2iZO7qQmc
+         wXm8waU2DrYkh6ZIR4NqrO2ZY61HzBPB+PzBAY/18IaJOJZpn08awq9FOhk6MHNjaVhQ
+         KAUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717504370; x=1718109170;
+        d=1e100.net; s=20230601; t=1717504372; x=1718109172;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8sMeT1jEzulHyaa1CBMKL3RJvYNB57BjMb6V3pNuGo0=;
-        b=WHy8Nns2st8UN6Jnt1bfPVS9jYtHBhwLb6f4wEuaFruYvZE1mtVR5B5XihB+jmltrx
-         a0+q4zb2GNCyyoaKaeUa460GnXsIBl0r09M0HNjwQvuvlzw23OG3ZN+j3kxNsSSJb/Wl
-         ok+Omm3x2qLmcuTiejHsUaNDtcf5olMC1A6fMGv6mcgFM7e+3x6xadCq67yc1SC8m4Xy
-         geW2vxflPQRGuPjXPwGnXflLTREL7PZW50Nf9z1vUFpx1Dk/rDIQlshX2qp1fKevJCio
-         U55WtYY0gk8Fw6Z/O5VZaExULQ7hveuNy2tyGyIDTPZVeZnliXyPYzPiW2UfG306r1gt
-         jigg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtZmeNwgZMlUYRHKp7wTVyww1ZZP8Ax8A1yP2ZNU02YrynvKBLXxKUk1pw6OdAaJmbGRR8Bik4gn2lPY16VG99rF+Hq5zv+QCsIKahCuEZ9xPrSFUi5vnJpVHxnExqr/vGfD1c+Rc3TDMGUZ+/
-X-Gm-Message-State: AOJu0Yz5D24PF1Lgnd0hKkRLn3OyHtp/YyIDf6g2ITxZCYFgBDgqH9mb
-	45VptoWk4xCjHuJn42g7YttP9xg1AOdL8Ve7I28Z26Fupqhp/xdF
-X-Google-Smtp-Source: AGHT+IH4MqbZlrE8NuAF05L8iSWfy4SesXmj/SAsMMm0WfWl7qxM76jujmDju423FBfp7/kHx/nb/g==
-X-Received: by 2002:a05:6512:3b25:b0:52b:8909:58b1 with SMTP id 2adb3069b0e04-52b89702d1emr10752838e87.3.1717504369804;
-        Tue, 04 Jun 2024 05:32:49 -0700 (PDT)
+        bh=pj+nK1mCKwm8YE53nt8me8RE7m7ZJlrzUOfVRauTT1Y=;
+        b=WSPiBLFQwJYiYQLT0EESSJVqHFv1Cf6fN+Xwv9khO4b1rfXx2PHw+xRzvLPi32Xk4k
+         dHRGakykLpv4AtkUAXnpc9BV0Xo4GBeCnlgkTLi+QACx3/Zbt7W6EY0bVZ+/XK29avi5
+         c8m1c3MEnC6tgxD5W7ZAjBq6Zxrc35fy0ZLTF66Gi+3yBUI84JU1e8FE1H5ySl5p6X3a
+         R086k8Fzv46XhDzUgDe4g5NTSbFGNtw5fvxW6QfR69Qb5NRK7mwvZiztI7uO50E3afR+
+         95CVwwNbnf0XvvcAAaf8skB2j0L/0UMcZaTbKDQvL/pfJpJjlrXQx971PVTAkoUyz1L7
+         02eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDD/TRLfhQUHisgBXywj1T0RBJon9bXTuXUogAKn5VL0St48x0CW0ylXM0/pDOSLADw1b6fXcfBP59lIQQE0zgLSIgDdwlTtGVmCQoSwetiyHujxZqmNdRpUh4z12LjUm5es40w/x4bQUNa2nD
+X-Gm-Message-State: AOJu0Yw+29/ZW+ybSSSYe3iKMSKrdXBKGIHTMnp06FOxxIOZDEUY6DLY
+	mEEVhmIlailUbISPp6ZG4QwjtjLYhXvAazoALUC0sXyJfhqrs+gr
+X-Google-Smtp-Source: AGHT+IHcSXdDIh8lx41srPQud1VgcG+ztrz0/EsKzZCNwbU83kojtuotoQECws9hfEfQMcAclKpz1A==
+X-Received: by 2002:ac2:58ed:0:b0:52a:b1d7:222b with SMTP id 2adb3069b0e04-52b89834f33mr6602472e87.5.1717504371787;
+        Tue, 04 Jun 2024 05:32:51 -0700 (PDT)
 Received: from ivan-HLYL-WXX9.guest.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35e535567e9sm7209179f8f.21.2024.06.04.05.32.47
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35e535567e9sm7209179f8f.21.2024.06.04.05.32.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 05:32:49 -0700 (PDT)
+        Tue, 04 Jun 2024 05:32:51 -0700 (PDT)
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 To: brendan.higgins@linux.dev,
 	davidgow@google.com,
@@ -75,9 +75,9 @@ Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] kunit: kunit-test: Remove stub for log tests
-Date: Tue,  4 Jun 2024 13:32:01 +0100
-Message-Id: <20240604123204.10412-3-ivan.orlov0322@gmail.com>
+Subject: [PATCH 3/5] kunit: string-stream-test: Make it a separate module
+Date: Tue,  4 Jun 2024 13:32:02 +0100
+Message-Id: <20240604123204.10412-4-ivan.orlov0322@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240604123204.10412-1-ivan.orlov0322@gmail.com>
 References: <20240604123204.10412-1-ivan.orlov0322@gmail.com>
@@ -89,57 +89,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since now we are exporting string-stream functions into the KUnit
-namespace, we can safely use them in kunit-test when it is compiled as
-a module as well. So, remove the stubs used when kunit-test is compiled
-as a module. Import the KUnit namespace in the test.
+Currently, the only way to build string-stream-test is by setting
+CONFIG_KUNIT_TEST=y. However, CONFIG_KUNIT_TEST is a config option for
+a different test (`kunit-test.c`).
+
+Introduce a new Kconfig entry in order to be able to build the
+string-stream-test test as a separate module. Import the KUnit namespace
+in the test so we could have string-stream functions accessible.
 
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 ---
- lib/kunit/kunit-test.c | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
+ lib/kunit/Kconfig              | 8 ++++++++
+ lib/kunit/Makefile             | 2 +-
+ lib/kunit/string-stream-test.c | 2 ++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index e3412e0ca399..42178d5a97d1 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -577,12 +577,6 @@ static struct kunit_suite kunit_resource_test_suite = {
- 	.test_cases = kunit_resource_test_cases,
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 34d7242d526d..b0713c0f9265 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -45,6 +45,14 @@ config KUNIT_TEST
+ 	  purposes by developers interested in testing that KUnit works as
+ 	  expected.
+ 
++config KUNIT_STRING_STREAM_TEST
++	tristate "KUnit test for string-stream" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
++	help
++	  Enables the KUnit test for the string-stream (C++ stream style string
++	  builder used in KUnit for building messages). For the string-stream
++	  implementation, see lib/kunit/string-stream.c.
++
+ config KUNIT_EXAMPLE_TEST
+ 	tristate "Example test for KUnit" if !KUNIT_ALL_TESTS
+ 	default KUNIT_ALL_TESTS
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 900e6447c8e8..4793a3960f07 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -18,10 +18,10 @@ endif
+ obj-y +=				hooks.o
+ 
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
++obj-$(CONFIG_KUNIT_STRING_STREAM_TEST) += string-stream-test.o
+ 
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+-obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
+ obj-$(CONFIG_KUNIT_TEST) +=		assert_test.o
+ endif
+ 
+diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+index 7511442ea98f..d03cac934e04 100644
+--- a/lib/kunit/string-stream-test.c
++++ b/lib/kunit/string-stream-test.c
+@@ -534,3 +534,5 @@ static struct kunit_suite string_stream_test_suite = {
+ 	.init = string_stream_test_init,
  };
- 
--/*
-- * Log tests call string_stream functions, which aren't exported. So only
-- * build this code if this test is built-in.
-- */
--#if IS_BUILTIN(CONFIG_KUNIT_TEST)
--
- /* This avoids a cast warning if kfree() is passed direct to kunit_add_action(). */
- KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
- 
-@@ -637,17 +631,6 @@ static void kunit_log_newline_test(struct kunit *test)
- 		kunit_skip(test, "only useful when debugfs is enabled");
- 	}
- }
--#else
--static void kunit_log_test(struct kunit *test)
--{
--	kunit_skip(test, "Log tests only run when built-in");
--}
--
--static void kunit_log_newline_test(struct kunit *test)
--{
--	kunit_skip(test, "Log tests only run when built-in");
--}
--#endif /* IS_BUILTIN(CONFIG_KUNIT_TEST) */
- 
- static struct kunit_case kunit_log_test_cases[] = {
- 	KUNIT_CASE(kunit_log_test),
-@@ -871,4 +854,5 @@ kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
- 		  &kunit_current_test_suite, &kunit_device_test_suite,
- 		  &kunit_fault_test_suite);
- 
+ kunit_test_suites(&string_stream_test_suite);
 +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
- MODULE_LICENSE("GPL v2");
++MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
