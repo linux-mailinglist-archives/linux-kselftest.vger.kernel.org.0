@@ -1,104 +1,99 @@
-Return-Path: <linux-kselftest+bounces-11226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF838FBFD0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF4308FC00C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 01:41:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35DC2283872
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 23:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC072284743
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2024 23:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3117414D6E1;
-	Tue,  4 Jun 2024 23:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD6F614EC46;
+	Tue,  4 Jun 2024 23:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FAHOwFPB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oJW1vHPG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D080B14D43D
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Jun 2024 23:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7B614D29C
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Jun 2024 23:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717543785; cv=none; b=eGu0s8DQAp9YX4cxlTmsm9LDKYDxUz0SGmXzT/EpqbMEQxIFZ9YN/QqhhmB1iI2cJKRjvO2e42C6Wj49iADZBEwARiYFLfgxrZe0bAiOiv+mllGEFg+lr1+Z7ADdDx7bGE2H24+b/Ak5dpl5Ff4T2xVT79dGGgXInJOuYLrkqKk=
+	t=1717544401; cv=none; b=oPQ/a7QFxSG4Q5rPO9egkISXw8siFS8w8WvO9YUKXBowbdiEcaVFUrheOYD3vQ7ma4P6/Z4iI6OzS9BqVa62pTzXFyOSaSOpP7WdZy5CVBgBYbNFWEGulH+cJs8CwmX139aP75QtXFkf5H7Y1i4BPc/lxtAm8EEiMHrf05rZPak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717543785; c=relaxed/simple;
-	bh=NTOSuMKNlZjh5qgetQbTZmcQQXwN7LKuEZ9U+ZAncjc=;
+	s=arc-20240116; t=1717544401; c=relaxed/simple;
+	bh=ZkUU2s7YT2yjYFDYrFKN0OyDTFEWJ3XnBoulxDsjwm0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=M3zabt0Kh4awONyb/DHB+N11w1jiSQo0r+RTjX5elwPmtqmgHVElXE7BoHNDc5Sr8mLuj1A2yHbLJw3iR4YNbxa/sbjZDkWqodrVDVywt43uc+N8y21i25EBvsEYTf5uut/GWmgZzptY8G0i1vrAqM7MIdhhYCmS+TEW/8FIbvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FAHOwFPB; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=Mp37t7oGrUeQWAgviYpdhQd4CCkh5uK8mzahni+04HQ2JA7Onnt728RdGfw5STCPuTCVrJ5PEn7B/SZtFcouZCev7Fw52sVHoVA+F9Inl9F69VvQq6U0+mot3LoGqoPTcb0tQeBj44B8wh8+1JtUtqKi1lGrvDKDl1UHU6ggSLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oJW1vHPG; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2c1a559a0e8so300629a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2024 16:29:43 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62a1e9807c0so5424287b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2024 16:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717543783; x=1718148583; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717544399; x=1718149199; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+x51aoZ4NK0amIZazvXbm1aes7UfC8U/R8eR/ud4gNI=;
-        b=FAHOwFPBpFt4TnuPBq4x4DChftVHBms+jadKmPC/+JjLOBKc+YJ/WDB9renFGVBPtP
-         HlOvJ3AQJ6OSLe0PsyPbBkzSeM6YC6QRD6QJ8pVRhw3/bTYgPFoSZPw+VDBGExIWSbk7
-         dmpjYgD7aJ560Em5MhmYcnuEcbGMBGEXmGYF3oYsLi8szgSgyJ2eiVIHk4f1SL0d9eIs
-         bB3Hy9gr/PII+4W6a2sW/6IV2N4SNkTOdI+9j+Ao4kev7d5t+B1dgROw97CjEik69iRd
-         BjrpRUcQlBv1mG4k5FutNbJcEIfI24IrOLCXYYtyC0bbgvw5ZLEk/IjG7v32xY/UF19o
-         vCGw==
+        bh=SE7huESKi5HuBouKDmqrLhttjeAwWKTCKSgfCkXoz4M=;
+        b=oJW1vHPG8NiO3anCS5PKnK3QeAGkt4/Kw32b+mkuzMsFDXuZG9Vulnp77K5EgOOhJB
+         T8ewBZb/FIAeamk/vkCU65HATC/AH5mamtY5qxphMYLiNjvY4qKFJpkXmmoQMeF5Zo9Y
+         t+YeKHA2Gjcyq2OCvuiB0O8nkQBdGb7SeWfNRbJjckMAxYUm5euSN35GNCQhn3hh4bwt
+         fgqL4c7Wq+iPAcV3h3fAnCtHD1Amgc5E18zy3JKNcTFmt9JCmfGdGwzpGEAeBDtgz6kN
+         FwVTqaLiWRd01crOT+uNnJXVnudzWEdmB8UuuNxo/7A3HGuRA8tg26ozpCUBMCevmNXJ
+         dVVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717543783; x=1718148583;
+        d=1e100.net; s=20230601; t=1717544399; x=1718149199;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+x51aoZ4NK0amIZazvXbm1aes7UfC8U/R8eR/ud4gNI=;
-        b=FRSB4GOOYB7EG+5dBkn8AQg3QmDFcNg5g9BEfZ6VHNr7lyXLy2ZCffhxjDFv1LtGxM
-         p31lBdq4qDPJwZpQytT/Xun3UyRw02RXQbKEXBkbemlBa/ZYC4wkDc1BGePeiREbayXz
-         FTC9qx3iwfFyrBmCDM01PcZzFHPV0I1gnNgLUSftqb/7rkdkdTQjQ2FLmx78Enb3bLfP
-         DMfgVdOm2g/7hNuPledVHoLvh8Ju+UyUzbKBihsgfTsrF34RNAVK0wE/xQufE9PZJ6MT
-         OVbe3+VLUWEiTtgtkr3qoRF2aFf5Tc2m244NRFyhkYtquMWZM8K93UvzKHjKXgOrtV9X
-         9nRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxacOoazCNqNq6KR5dWlo87+RVhmpxZZY5mcyTI3PfHhb23dwsOiuOhEtSbsM70a1pyXRSO/wF13bNQiCNTG5USzMvkd60Hmdk1EEs39M9
-X-Gm-Message-State: AOJu0YxZ+Yd31XLumdzD07XjciBys+ehfWDPLx7aoHznAm8NOWlltReS
-	E1InHVmoRKmEBGsWmDtswitvYByBkuh64mAVrxzMC+54sqFsNdw05DUbhzKKtbLL2hIC2xecZz+
-	+rw==
-X-Google-Smtp-Source: AGHT+IExrVGyDj4SjTJZG5rOMmcDDREj9vNkffe0To8EYFE5NS2MHwZ2u6aszqpJQHooWRE6WzCHGDpCCg0=
+        bh=SE7huESKi5HuBouKDmqrLhttjeAwWKTCKSgfCkXoz4M=;
+        b=PrrGrke5/P5gifdYgJPZp/PQ3gjGvCMXx8DfRzGrpuYj3A4ecZ388xcUYwKK+vIus/
+         0kD9D0hqL68XrPII1dhA78oUfxGIreOztD1octShSG/P86FVOJUZ0yvPFmz8ErzuWElG
+         d3rbvXf9ERMsNpoA//76J4JUr+MjnNOMcivYrVRFW1unGWN1QIwz1JN5wsgHErMFYtPX
+         chEX8B7DAeNtMttluOep1/MlKYpD5uWQ1BGplrWIMkbs0jQMBPuh8VIKlCUpJ7EtPi29
+         Ss2H8FRt0AIDZ6uJcWa900WIoyavAg0phfR1S6MbG+XUDe23EH37y3WDvRiOyuTg63K+
+         CCbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqbUlC5lD7aSeBaVGOuekl0rDixoxha27ZyQHqCNNawThvzoJsfEfyeJl2+HhgfO5j9rjOHPK6PETCmEuHF6yBrkyPvx/JWBJoPp0LKOkT
+X-Gm-Message-State: AOJu0YztIKKhiOL6Deswbd5vs3prTNbWd+B+6ugzVFPYSqTGVNbyHAFZ
+	CSoolmwPGJUTaw1QMGwBFXY/TgmxTDVrMLyyRB+O50gE6Z1krry+Ifos3jfv9aUAX44hJhnh72Q
+	a8w==
+X-Google-Smtp-Source: AGHT+IFEUfCRDeqFSOjfCbxwRuJDNVLj1qRCvp9i4iWFvxVDCc1hcitsMhTyH4opoA5K/hQxiokX37nuRys=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:2309:b0:2b4:32df:9b7b with SMTP id
- 98e67ed59e1d1-2c25300652fmr48774a91.1.1717543782991; Tue, 04 Jun 2024
- 16:29:42 -0700 (PDT)
-Date: Tue,  4 Jun 2024 16:29:17 -0700
-In-Reply-To: <20240523154102.2236133-1-colin.i.king@gmail.com>
+ (user=seanjc job=sendgmr) by 2002:a81:c906:0:b0:618:9348:6b92 with SMTP id
+ 00721157ae682-62cabc4cd34mr9648967b3.1.1717544399227; Tue, 04 Jun 2024
+ 16:39:59 -0700 (PDT)
+Date: Tue,  4 Jun 2024 16:29:53 -0700
+In-Reply-To: <20240602235529.228204-1-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240523154102.2236133-1-colin.i.king@gmail.com>
+References: <20240602235529.228204-1-linux@treblig.org>
 X-Mailer: git-send-email 2.45.1.288.g0e0cd299f1-goog
-Message-ID: <171754270332.2777568.8736329166014206290.b4-ty@google.com>
-Subject: Re: [PATCH][next][V2] selftests: kvm: fix shift of 32 bit unsigned
- int more than 32 bits
+Message-ID: <171754329970.2779150.530235553362373493.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: selftests: remove unused struct 'memslot_antagonist_args'
 From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Colin Ian King <colin.i.king@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, shuah@kernel.org, 
+	linux@treblig.org
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Thu, 23 May 2024 16:41:02 +0100, Colin Ian King wrote:
-> Currrentl a 32 bit 1u value is being shifted more than 32 bits causing
-> overflow and incorrect checking of bits 32-63. Fix this by using the
-> BIT_ULL macro for shifting bits.
+On Mon, 03 Jun 2024 00:55:29 +0100, linux@treblig.org wrote:
+> 'memslot_antagonist_args' is unused since the original
+> commit f73a3446252e ("KVM: selftests: Add memslot modification stress
+> test").
 > 
-> Detected by cppcheck:
-> sev_init2_tests.c:108:34: error: Shifting 32-bit value by 63 bits is
-> undefined behaviour [shiftTooManyBits]
-> 
-> [...]
+> Remove it.
 
-Applied to kvm-x86 fixes, thanks!
+Applied to kvm-x86 selftests, thanks!
 
-[1/1] selftests: kvm: fix shift of 32 bit unsigned int more than 32 bits
-      https://github.com/kvm-x86/linux/commit/9a68cefe9f05
+[1/1] KVM: selftests: remove unused struct 'memslot_antagonist_args'
+      https://github.com/kvm-x86/linux/commit/f626279dea33
 
 --
 https://github.com/kvm-x86/linux/tree/next
