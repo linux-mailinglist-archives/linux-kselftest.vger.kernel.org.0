@@ -1,162 +1,291 @@
-Return-Path: <linux-kselftest+bounces-11275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3EE8FDA15
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 00:52:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB5248FDAD2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 01:47:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72D781F249FE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 22:52:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D64C01C22BF4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 23:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235E715FD1D;
-	Wed,  5 Jun 2024 22:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E1015FA9C;
+	Wed,  5 Jun 2024 23:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0TQV0nVv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9wOINd0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83902C153
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Jun 2024 22:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A205B2AE7F;
+	Wed,  5 Jun 2024 23:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717627951; cv=none; b=I3BcMPaP+5oL2YxW/2uvJdeAmsnZdVYwlZzdaZ3D6PO66PaaFWjyrr5RJ4bwwmCiYcajOqVqEYXVIjYhY8bLQc7x2Tdv19yamEdTiFQuZR06ldOeVBBB6wAg4dVXKitxKL5jpGyQsksVPsu5Qcfum4DuMimgTcCLd1Nu4/uqkSk=
+	t=1717631243; cv=none; b=T/VZVQYr8KfR4EfyVMmirv0n9mN/AsVxyKnwrZFlWL9a3mBnxAe5BDVC9RkiKhzk+TrV7mKR5kI5NzavQI3QVjRpY17VSqxXnkTmgYamZGnQfZI/zDL4Lnq2disaRDmSwAC8oCWBgJXGpf1ATTAHBY6w/hMIl4hQ9fAO5vGWjTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717627951; c=relaxed/simple;
-	bh=0cwXZcxCdrSifwf2gN5a3Jk2vxotO1McJQe9I4GT33w=;
+	s=arc-20240116; t=1717631243; c=relaxed/simple;
+	bh=Yh7e+MZK1NlEEhfWUcUENcGAh0vhZ1kB0W2n+WAnn1g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oAQmCFwAbAabIY+rSi8bbJOcPQtryA4bOXJxG3RQ3NAF/J39/GhJ+5xD+RhDeKFvynWB6mca1mPz5YL7A/V44mC+CugifAdQPFW+VkAbVxCtlSWepLtFknlVDSTU9bzvUcpiI/zP68D1jf24YAsBLlDbwadwjrl6LICD9ebUdLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0TQV0nVv; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7eb41c9260dso17303439f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jun 2024 15:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717627949; x=1718232749; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YSDCArb6+iGdyUdtqqd9pStleb4MvKmGGngMGBUDMQA=;
-        b=0TQV0nVvgn5hofYK1/x1fw40rnfd31W7fUoKze5PMgysPLu2vxMmRU404Vfos9gH/P
-         1Xtc/1sI3WtVPrs3buN8eS2n4GnFRygCvg7YQmw7QHFX8A7NBsfh/1+mGkCkclwsSnhQ
-         2h8pYtJ8bZoclrlm0HCDAISVNW5/vnoDphrPE04iW5m1NFSAzW7BSx2NPrWdYxFlKmc8
-         AWmIoDbc6XDaK9bxlBBy1m1mhPLnpALDjfLu6S9Go+Zf7YDFYx7tCRQ5WN+D8Z8qBv5a
-         c+6HLoX/J6NNI4f03xC2kf1PpPloM19x8FsjDpZZ3l7d+77QDQ5274Xa5Q/ZCwTSvOrj
-         X6iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717627949; x=1718232749;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSDCArb6+iGdyUdtqqd9pStleb4MvKmGGngMGBUDMQA=;
-        b=uPTvOAL6w1bII/toBxtUB3D1phZmHOX8d5SF/MDmYX5HGuWm45RBbk4fzGzXi1KQ6j
-         HENJutimLoZo5GQSx/s4xk/1hohs5j/+uK23pVo/mrAoLsf9LTPMWSM6r6NDfxwiikLr
-         nj725IddHAYZVbBsoXguBEiUII+nnWoX3zqwhIA9DrNAT0mbZweySysZFo303YylHU+N
-         6cD6UsKiO6eduV0fYkb/QGmN7biF9k+fA8ZTSaRZQhllILT6tiIPPzxlXOblcMzzuARl
-         O0T6uyvRZYDztUYue0ZoniqRyxyIbt/ZESLWdswYEJrkP1up6w/0lisE5t2D9aDzSu6K
-         DAYw==
-X-Forwarded-Encrypted: i=1; AJvYcCVjqAjZMw8cK4rGaEkuNMdq/7s/RJQnfwp10IJH/bE4z+ZI7xTWoQad0vf0C30WMqGoB93dUxAdVENfoBYSB9SDpUggCK9Nr1FsobSn0bNv
-X-Gm-Message-State: AOJu0YzHOTfqAVbnNC6cYAgex4UtEWIxxbLrklpVORSs99WdaXxgLC+c
-	6ekuAsUDcAeaq2AeSIaGlq+Ga8JkLkW3F7oE8yXzax7Fq6Tb2rZ0/B6SJ8cE3w==
-X-Google-Smtp-Source: AGHT+IGzKiuu7Olg+ErkMrLVtXTStiQhWRPUfQmlopnZPzGP8VPYwj/Ku5f0IqDPhNz9a6uiFJwWyw==
-X-Received: by 2002:a05:6e02:1fed:b0:374:9c23:a06a with SMTP id e9e14a558f8ab-374b1ee216fmr42265675ab.6.1717627948503;
-        Wed, 05 Jun 2024 15:52:28 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6de28f37482sm47423a12.94.2024.06.05.15.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 15:52:28 -0700 (PDT)
-Date: Wed, 5 Jun 2024 22:52:24 +0000
-From: Carlos Llamas <cmllamas@google.com>
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@android.com, llvm@lists.linux.dev, linux-mm@kvack.org
-Subject: Re: [PATCH v1 2/2] selftests/mm: Guard defines from shm
-Message-ID: <ZmDsKBrkh43-Zn8H@google.com>
-References: <20240605223637.1374969-1-edliaw@google.com>
- <20240605223637.1374969-3-edliaw@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iMW+G4Q0Haw/u2xiK8ezHQr86/gj6qE+N8z0bVN4NznoSvB7kB4gVHmChIyngGBOjF+XtrIXeqNdmH5fGdEMEvfuQ0sgWJF2GXHtvb49CixShNq/1vQI6hgtxt7RbKOHY3KK1TWZEHL+X7w8BjoGPNbEBrF7dHu8/yXvEkU74Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9wOINd0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA99C2BD11;
+	Wed,  5 Jun 2024 23:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717631243;
+	bh=Yh7e+MZK1NlEEhfWUcUENcGAh0vhZ1kB0W2n+WAnn1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T9wOINd0EQxN3A7+sl/amyoBdEKWAPiNYbYDP/UM0nzDUIB9RZtk3/3omKpnMp/d2
+	 kEXQiDghGj1O29YJ50YIm6M3QmkgSOgPd/ytxOjMq/xFAe4Yv2JwMxh+ky1kv9VoNk
+	 3uM5b7zN4735K02XRMaw8OfnGeZmLYicw1RZBwlssdvl2HtTKaBilCTYYrS8jhO6XK
+	 cOEGTQGqQerA7DgTtMBtoC6U3VrVDreB4grGjV6KjPouTUjJxyUD0Xm975oIgU0TQ0
+	 D8fuia0s12Nr9GN8fSXFpIuv5jJzrJMGJdhKqL/aKfQKQdNicxEHo+ise2QwybExFf
+	 khHfCXTeE5nXQ==
+Date: Wed, 5 Jun 2024 17:47:20 -0600
+From: Rob Herring <robh@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	patches@lists.linux.dev, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Daniel Latypov <dlatypov@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v5 05/11] of: Add a KUnit test for overlays and test
+ managed APIs
+Message-ID: <20240605234720.GA3441001-robh@kernel.org>
+References: <20240603223811.3815762-1-sboyd@kernel.org>
+ <20240603223811.3815762-6-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240605223637.1374969-3-edliaw@google.com>
+In-Reply-To: <20240603223811.3815762-6-sboyd@kernel.org>
 
-On Wed, Jun 05, 2024 at 10:36:35PM +0000, Edward Liaw wrote:
-> thuge-gen.c defines SHM_HUGE_* macros that are provided by the uapi
-> since 4.14. These macros get redefined when compiling with Android's
-> bionic because its sys/shm.h will import the uapi definitions.
+On Mon, Jun 03, 2024 at 03:38:02PM -0700, Stephen Boyd wrote:
+> Test the KUnit test managed overlay APIs. Confirm that platform devices
+> are created and destroyed properly. This provides us confidence that the
+> test managed APIs work correctly and can be relied upon to provide tests
+> with fake platform devices and device nodes via overlays compiled into
+> the kernel image.
 > 
-> However if linux/shm.h is included, with glibc, sys/shm.h will clash on
-> some struct definitions:
-> 
->   /usr/include/linux/shm.h:26:8: error: redefinition of ‘struct shmid_ds’
->      26 | struct shmid_ds {
->         |        ^~~~~~~~
->   In file included from /usr/include/x86_64-linux-gnu/bits/shm.h:45,
->                    from /usr/include/x86_64-linux-gnu/sys/shm.h:30:
->   /usr/include/x86_64-linux-gnu/bits/types/struct_shmid_ds.h:24:8: note: originally defined here
->      24 | struct shmid_ds
->         |        ^~~~~~~~
-
-I also hit this issue while using bionic. I have a thread reporting this
-issue here: https://lore.kernel.org/all/Zl4LC9lTNptB2xTJ@google.com/
-
-According to Andi Kleen, glibc and others should add these defines in
-their headers. So it make sense to me that we would need indefs to
-prevent a redefine macro issue.
-
-> 
-> For now, guard the SHM_HUGE_* defines with ifndef to prevent
-> redefinition warnings on Android bionic.
-> 
-> Signed-off-by: Edward Liaw <edliaw@google.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Rae Moar <rmoar@google.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
->  tools/testing/selftests/mm/thuge-gen.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/of/.kunitconfig            |   1 +
+>  drivers/of/Kconfig                 |  10 +++
+>  drivers/of/Makefile                |   1 +
+>  drivers/of/kunit_overlay_test.dtso |   9 +++
+>  drivers/of/overlay_test.c          | 116 +++++++++++++++++++++++++++++
+>  5 files changed, 137 insertions(+)
+>  create mode 100644 drivers/of/kunit_overlay_test.dtso
+>  create mode 100644 drivers/of/overlay_test.c
 > 
-> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-> index 034635317935..d50dc71cac32 100644
-> --- a/tools/testing/selftests/mm/thuge-gen.c
-> +++ b/tools/testing/selftests/mm/thuge-gen.c
-> @@ -34,10 +34,18 @@
->  #endif
+> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
+> index 5a8fee11978c..4c53d2c7a275 100644
+> --- a/drivers/of/.kunitconfig
+> +++ b/drivers/of/.kunitconfig
+> @@ -1,3 +1,4 @@
+>  CONFIG_KUNIT=y
+>  CONFIG_OF=y
+>  CONFIG_OF_KUNIT_TEST=y
+> +CONFIG_OF_OVERLAY_KUNIT_TEST=y
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index dd726c7056bf..0e2d608c3e20 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -107,6 +107,16 @@ config OF_OVERLAY
+>  	  While this option is selected automatically when needed, you can
+>  	  enable it manually to improve device tree unit test coverage.
 >  
->  #define SHM_HUGETLB     04000   /* segment will use huge TLB pages */
-> +#ifndef SHM_HUGE_SHIFT
-
-nit: I see this file uses the form "#if !defined()" above for
-MAP_HUGETLB. Perhaps it makes sense to use that and keep things
-consistent? I'm fine either way.
-
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
-
->  #define SHM_HUGE_SHIFT  26
-> +#endif
-> +#ifndef SHM_HUGE_MASK
->  #define SHM_HUGE_MASK   0x3f
-> +#endif
-> +#ifndef SHM_HUGE_2MB
->  #define SHM_HUGE_2MB    (21 << SHM_HUGE_SHIFT)
-> +#endif
-> +#ifndef SHM_HUGE_1GB
->  #define SHM_HUGE_1GB    (30 << SHM_HUGE_SHIFT)
-> +#endif
+> +config OF_OVERLAY_KUNIT_TEST
+> +	tristate "Device Tree overlay KUnit tests" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	select OF_OVERLAY
+> +	help
+> +	  This option builds KUnit unit tests for the device tree overlay code.
+> +
+> +	  If unsure, say N here, but this option is safe to enable.
+> +
+>  config OF_NUMA
+>  	bool
 >  
->  #define NUM_PAGESIZES   5
->  #define NUM_PAGES 4
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index 2ae909adde49..abd9c578343b 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -21,5 +21,6 @@ endif
+>  
+>  obj-$(CONFIG_KUNIT) += of_kunit_helpers.o
+>  obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
+> +obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
+>  
+>  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> diff --git a/drivers/of/kunit_overlay_test.dtso b/drivers/of/kunit_overlay_test.dtso
+> new file mode 100644
+> index 000000000000..85f20b4b4c16
+> --- /dev/null
+> +++ b/drivers/of/kunit_overlay_test.dtso
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +&{/} {
+> +	kunit-test {
+> +		compatible = "test,empty";
+> +	};
+> +};
+> diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
+> new file mode 100644
+> index 000000000000..9a8083c3a659
+> --- /dev/null
+> +++ b/drivers/of/overlay_test.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit tests for device tree overlays
+> + */
+> +#include <linux/device/bus.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <kunit/of.h>
+> +#include <kunit/test.h>
+> +
+> +static const char * const kunit_node_name = "kunit-test";
+> +static const char * const kunit_compatible = "test,empty";
+> +
+> +/* Test that of_overlay_apply_kunit() adds a node to the live tree */
+> +static void of_overlay_apply_kunit_apply(struct kunit *test)
+> +{
+> +	struct device_node *np;
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(test, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
+> +	of_node_put(np);
+> +}
+> +
+> +/*
+> + * Test that of_overlay_apply_kunit() creates platform devices with the
+> + * expected device_node
+> + */
+> +static void of_overlay_apply_kunit_platform_device(struct kunit *test)
+> +{
+> +	struct platform_device *pdev;
+> +	struct device_node *np;
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(test, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	of_node_put_kunit(test, np);
+
+Moving target, but we now have of_node_put() cleanups. Would that work 
+here instead?
+
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> +
+> +	pdev = of_find_device_by_node(np);
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, pdev);
+> +	if (pdev)
+> +		put_device(&pdev->dev);
+> +}
+> +
+> +static int of_overlay_bus_match_compatible(struct device *dev, const void *data)
+> +{
+> +	return of_device_is_compatible(dev->of_node, data);
+> +}
+> +
+> +/* Test that of_overlay_apply_kunit() cleans up after the test is finished */
+> +static void of_overlay_apply_kunit_cleanup(struct kunit *test)
+> +{
+> +	struct kunit fake;
+> +	struct platform_device *pdev;
+> +	struct device *dev;
+> +	struct device_node *np;
+> +
+> +	if (!IS_ENABLED(CONFIG_OF_OVERLAY))
+> +		kunit_skip(test, "requires CONFIG_OF_OVERLAY");
+> +	if (!IS_ENABLED(CONFIG_OF_EARLY_FLATTREE))
+> +		kunit_skip(test, "requires CONFIG_OF_EARLY_FLATTREE for root node");
+> +
+> +	kunit_init_test(&fake, "fake test", NULL);
+> +	KUNIT_ASSERT_EQ(test, fake.status, KUNIT_SUCCESS);
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(&fake, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	of_node_put(np); /* Not derefing 'np' after this */
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> +
+> +	pdev = of_find_device_by_node(np);
+
+Don't you need to hold a ref on np until here?
+
+
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> +	put_device(&pdev->dev); /* Not derefing 'pdev' after this */
+> +
+> +	/* Remove overlay */
+> +	kunit_cleanup(&fake);
+> +
+> +	/* The node and device should be removed */
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	KUNIT_EXPECT_PTR_EQ(test, NULL, np);
+> +	of_node_put(np);
+> +
+> +	dev = bus_find_device(&platform_bus_type, NULL, kunit_compatible,
+> +			      of_overlay_bus_match_compatible);
+> +	KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
+> +	put_device(dev);
+> +}
+> +
+> +static struct kunit_case of_overlay_apply_kunit_test_cases[] = {
+> +	KUNIT_CASE(of_overlay_apply_kunit_apply),
+> +	KUNIT_CASE(of_overlay_apply_kunit_platform_device),
+> +	KUNIT_CASE(of_overlay_apply_kunit_cleanup),
+> +	{}
+> +};
+> +
+> +/*
+> + * Test suite for test managed device tree overlays.
+> + */
+> +static struct kunit_suite of_overlay_apply_kunit_suite = {
+> +	.name = "of_overlay_apply_kunit",
+> +	.test_cases = of_overlay_apply_kunit_test_cases,
+> +};
+> +
+> +kunit_test_suites(
+> +	&of_overlay_apply_kunit_suite,
+> +);
+> +MODULE_LICENSE("GPL");
 > -- 
-> 2.45.1.467.gbab1589fc0-goog
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 > 
-
 
