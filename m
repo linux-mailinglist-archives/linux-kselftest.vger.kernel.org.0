@@ -1,175 +1,114 @@
-Return-Path: <linux-kselftest+bounces-11259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F408A8FD7B9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 22:42:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE368FD7C3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 22:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02D2D1C23734
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 20:42:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD9CA285026
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2024 20:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A046915F301;
-	Wed,  5 Jun 2024 20:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17A6157A41;
+	Wed,  5 Jun 2024 20:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D6nF7eOU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aMfLYeEu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD54A15EFD2
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Jun 2024 20:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A634913A897;
+	Wed,  5 Jun 2024 20:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717620151; cv=none; b=kFSte7rS+SnRHuIt04b/ydT4CA5hIDlt4Zmh36g8A4ltL8VIhg0oVTN9WX5VkOj5/V5poW2GNwVeRau3KeWnUFiU4itoNwGEjQVUVZeUqmukiME7RXBDmc0LJuieTrZm47Ac4bVwSZYbVKfq3jc0jsTxtdOlxOt+ZQM9fKA1u1c=
+	t=1717620548; cv=none; b=IG1tw2oGZ3Al1Jn3LBADNnYODiGdaakBuQG5V0dBbKibvFLoksqxTcaRCEGs1PKey6dRtguYIQnPnxnTFWsYKb2T7gG/5NLa/V7/ynXcx6AC5nDw6ioEDWGuOyQuD9rr3xsd5AZTmXZZ2QF/jQ/goyHnojg/oHznQaePU9s/Nuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717620151; c=relaxed/simple;
-	bh=mrcPVHvvCNX9pKlb1e9kvFdVYrO4YyHw/Sk2tS356ok=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VrSZ457Ucj8vVch4A073fwAytNkrkZ9aNUP63yj7LOD9i1U9YGmr/pgl9ePXY2PqB2P0vjOU6UvyYUGa7QneRVr39W0s2sWrNAGrpqij2XEXvN8A+QT3lSEmFkCRUYEHTU/rr7txBOUOUrgZ/oOMDOJBQkiadhess6hLbqo/m7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D6nF7eOU; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e724bc466fso3191211fa.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jun 2024 13:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717620148; x=1718224948; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mrcPVHvvCNX9pKlb1e9kvFdVYrO4YyHw/Sk2tS356ok=;
-        b=D6nF7eOUd+P3MFAcTNFjBZ9XEspzyHLGN33kZ1plO9v/AWX4dD2BKINpOEghOPiSUN
-         ch1rVIhXTkIZMuFk1QZzWJW5kcCOm4xRn1TTmKgaPwE1Obp+XoUtrhBFdXcvpAyot6ND
-         Hl+bjFw7Hi70VFS0PJHVbmId9dxCASWFnrrXjI0EUuztwKfP2wWkHnh6xFfYFkYn2he8
-         zpsxMLU1NoBqOiCAwIcB6HelXdPKVTs44db/L/78ZnPqKfMHDgeLjYQ+OZbFfjDvZwLE
-         z5/tAuOLdb+H258ijN++wQxx5sRydmZxEf43WSLpfbXQhNUwxBakPecNmvVgyImACRt1
-         kQLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717620148; x=1718224948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mrcPVHvvCNX9pKlb1e9kvFdVYrO4YyHw/Sk2tS356ok=;
-        b=wjuAmGZxAzDnQeAKkMMANxwBOGlw/Ylan/+3ji1ZS6xw7i3fRbOWNO80E99YYehC4q
-         Km3QVU8xfdfUdenqN0K21WYBZZyTAJjczaM43hbF5lSSPXA9H62SqC++REp9/H6PKL0e
-         79hqK47caZSUu7C+uY4U7Me+peuAAK85Fs08910i9vuiHk5u4G6VgCtFa7B3Jp0Xml1G
-         iZaVun7yQ3zfzBrBAsb34XBIiI4bXZgtyYIdQOpuJQqbNJROrqs915ImSjEdhCJdmG1A
-         jIi4VWeg0E8J4rDlK8804fttGWjgNdONeQ02mn7WCfQUTF+chsI5FhryrlyqgbkyML8t
-         AZxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVAkjF2jcYzZZGqWL+KWI1I8B6ukv2peBug7HDSHsBujE+uh/U+Or6+MWExIIBXSuUPXnr5B0mDP4pyj3LmtY1vQcGtBkH16UPwcXQ2iKRY
-X-Gm-Message-State: AOJu0YzMwIZsMyRkbKioXcVWti9RsJ6i+rlh3lkQJ2oggXYYvdf4u/aF
-	MdNFkFle1vCY1rxhk1WP5PabB1AO7Wg0hXq9LBQ6ZXtFob0Nk6RB8m/pRda2qNEgL7ZdXUXDvy+
-	/88yab4ob4mEtGGT8yO2BED5ayD2glWeuKJ2H
-X-Google-Smtp-Source: AGHT+IGmCpgKWs9HzI7BHjD0N+cxvlO675UiwlocG7NwR6PK+YVSsXxsmetDw/kfR1C4ad6r/GOAH4AIlHrJieXNb3c=
-X-Received: by 2002:a19:ca59:0:b0:523:8723:32de with SMTP id
- 2adb3069b0e04-52bab5078f6mr2278150e87.53.1717620147678; Wed, 05 Jun 2024
- 13:42:27 -0700 (PDT)
+	s=arc-20240116; t=1717620548; c=relaxed/simple;
+	bh=iooQD+slmT5/eWMAszFqIGNDD4xIV6olB6rXYeIs3mY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAYdol1aQaL1buXe9B24XIbE1uCe8AHNOPxnapDbjblfQA+jy5AebMxrNOD5STxG66oaPv1a2e3egA0Xzp2wlVlGBLWYZc0awrwqLgUoiecDr0WOwpUBWW1xJGEmx/H3+IQGGB9ygCpmna41XVuFiAUu4licXyK4+67aHHBdArg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aMfLYeEu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D9BC2BD11;
+	Wed,  5 Jun 2024 20:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717620548;
+	bh=iooQD+slmT5/eWMAszFqIGNDD4xIV6olB6rXYeIs3mY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aMfLYeEuBubeoqkdrxTGu8FGk8qrxsWuUD1ofvn5w07AN0a7jqA2lD3VFU1b5kl0R
+	 ErO0KxJ76uD3JoBs9pb2kQGKKXZC2Ucpbs6ARKc8uO33tS2cDRuaw0pB2NgzFHF2Wg
+	 5H1/HWBh0ui2bl9MEVa4KPBY3bZ99RpECqF8vJtGaR7xchr8ElmQUa0cih6PqEaTgN
+	 0jeq2pn1dhgol6hiwVd+VZrahUlUB8yOupYOefRmnQenw9AoJLXODQuoYTIuOrCX1n
+	 R7SF4mdRMj+fK0OBbX6PWDInRrNSa/EbYwwze9bWEF9v8M8x5rIzzOK98OBhUGhoX2
+	 GJAymk0oCumYQ==
+Date: Wed, 5 Jun 2024 21:48:54 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Bug Report] selftests: arm64: build errors
+Message-ID: <079b5dfc-b77e-4808-831a-c0d38c4923b4@sirena.org.uk>
+References: <5ec0f2f3-5259-41a9-a25d-5baf1680dd10@collabora.com>
+ <7b7f4dd1-bc13-4827-84d6-20ebed7119b6@sirena.org.uk>
+ <8e1e2f1d-a578-43c0-ad55-fb593967ac5e@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212204647.2170650-1-sagis@google.com> <ce967287157e830303fdd3d4a37e7d62a1698747.camel@intel.com>
- <CAAhR5DFmT0n9KWRMtO=FkWbm9_tXy1gP-mpbyF05mmLUph2dPA@mail.gmail.com>
- <59652393edbf94a8ac7bf8d069d15ecb826867e1.camel@intel.com> <7c3abac8c28310916651a25c30277fc1efbad56f.camel@intel.com>
-In-Reply-To: <7c3abac8c28310916651a25c30277fc1efbad56f.camel@intel.com>
-From: Sagi Shahar <sagis@google.com>
-Date: Wed, 5 Jun 2024 15:42:16 -0500
-Message-ID: <CAAhR5DH79H2+riwtu_+cw-OpdRm02ELdbVt6T_5TQG3t4qAs2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 00/29] TDX KVM selftests
-To: "Verma, Vishal L" <vishal.l.verma@intel.com>
-Cc: "vipinsh@google.com" <vipinsh@google.com>, "Aktas, Erdem" <erdemaktas@google.com>, 
-	"shuah@kernel.org" <shuah@kernel.org>, "Xu, Haibo1" <haibo1.xu@intel.com>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "Afranji, Ryan" <afranji@google.com>, 
-	"dmatlack@google.com" <dmatlack@google.com>, "seanjc@google.com" <seanjc@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"ackerleytng@google.com" <ackerleytng@google.com>, "Yamahata, Isaku" <isaku.yamahata@intel.com>, 
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
-	"Annapurve, Vishal" <vannapurve@google.com>, "runanwang@google.com" <runanwang@google.com>, 
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>, "pgonda@google.com" <pgonda@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="JhYnV4hMM1CPNckb"
+Content-Disposition: inline
+In-Reply-To: <8e1e2f1d-a578-43c0-ad55-fb593967ac5e@collabora.com>
+X-Cookie: Simulated picture.
+
+
+--JhYnV4hMM1CPNckb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 5, 2024 at 3:18=E2=80=AFPM Verma, Vishal L <vishal.l.verma@inte=
-l.com> wrote:
->
-> On Wed, 2024-06-05 at 20:15 +0000, Verma, Vishal L wrote:
-> > On Wed, 2024-06-05 at 15:10 -0500, Sagi Shahar wrote:
-> > > On Wed, Jun 5, 2024 at 1:38=E2=80=AFPM Verma, Vishal L <vishal.l.verm=
-a@intel.com> wrote:
-> > > >
-> > > > On Tue, 2023-12-12 at 12:46 -0800, Sagi Shahar wrote:
-> > > > > Hello,
-> > > > >
-> > > > > This is v4 of the patch series for TDX selftests.
-> > > > >
-> > > > > It has been updated for Intel=E2=80=99s v17 of the TDX host patch=
-es which was
-> > > > > proposed here:
-> > > > > https://lore.kernel.org/all/cover.1699368322.git.isaku.yamahata@i=
-ntel.com/
-> > > > >
-> > > > > The tree can be found at:
-> > > > > https://github.com/googleprodkernel/linux-cc/tree/tdx-selftests-r=
-fc-v5
-> > > >
-> > > > Hello,
-> > > >
-> > > > I wanted to check if there were any plans from Google to refresh th=
-is
-> > > > series for the current TDX patches and the kvm-coco-queue baseline?
-> > > >
-> > > I'm going to work on it soon and was planning on using Isaku's V19 of
-> > > the TDX host patches
-> >
-> > That's great, thank you!
-> >
-> > >
-> > > > I'm setting up a CI system that the team is using to test updates t=
-o
-> > > > the different TDX patch series, and it currently runs the KVM Unit
-> > > > tests, and kvm selftests, and we'd like to be able to add these thr=
-ee
-> > > > new TDX tests to that as well.
-> > > >
-> > > > I tried to take a quick shot at rebasing it, but ran into several
-> > > > conflicts since kvm-coco-queue has in the meantime made changes e.g=
-. in
-> > > > tools/testing/selftests/kvm/lib/x86_64/processor.c vcpu_setup().
-> > > >
-> > > > If you can help rebase this, Rick's MMU prep series might be a good
-> > > > baseline to use:
-> > > > https://lore.kernel.org/all/20240530210714.364118-1-rick.p.edgecomb=
-e@intel.com/
-> > >
-> > > This patch series only includes the basic TDX MMU changes and is
-> > > missing a lot of the TDX support. Not sure how this can be used as a
-> > > baseline without the rest of the TDX patches. Are there other patch
-> > > series that were posted based on this series which provides the rest
-> > > of the TDX support?
-> >
-> > Hm you're right, I was looking more narrowly because of the kvm-coco-
-> > queue conflicts, for some of which even v19 might be too old. The MMU
-> > prep series uses a much more recent kvm-coco-queue baseline.
-> >
-> > Rick, can we post a branch with /everything/ on this MMU prep baseline
-> > for this selftest refresh?
->
-> Actually I see the branch below does contain everything, not just the
-> MMU prep patches. Sagi, is this fine for a baseline?
->
-Maybe for internal development but I don't think I can post an
-upstream patchset based on an internal Intel development branch.
-Do you know if there's a plan to post a patch series based on that branch s=
-oon?
-> >
-> > > >
-> > > > This is also available in a tree at:
-> > > > https://github.com/intel/tdx/tree/tdx_kvm_dev-2024-05-30
-> > > >
-> > > > >
+On Tue, Jun 04, 2024 at 01:13:45PM +0500, Muhammad Usama Anjum wrote:
+> On 6/3/24 6:31 PM, Mark Brown wrote:
+> > On Mon, Jun 03, 2024 at 06:28:16PM +0500, Muhammad Usama Anjum wrote:
+
+> >> test.c: In function =E2=80=98handler=E2=80=99:
+> >> test.c:85:50: error: =E2=80=98PSR_BTYPE_MASK=E2=80=99 undeclared (firs=
+t use in this
+> >> function); did you mean =E2=80=98PSR_MODE_MASK=E2=80=99?
+> >>    85 |  write(1, &"00011011"[((uc->uc_mcontext.pstate & PSR_BTYPE_MAS=
+K)
+
+> >> I've GCC 8 installed. I'm not expecting the errors because of a little
+> >> older compiler. Any more ideas about the failures?
+
+> > You need to run headers_install IIRC.
+
+> I'm running:
+> make headers && make -C tools/testing/selftests
+
+> I've tried gcc 12 as well.
+
+It's your system headers (or not finding the kernel ones anyway) rather
+that the compiler.  For PSR_BTYPE_MASK it's ptrace.h that's needed.
+
+--JhYnV4hMM1CPNckb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZgzzUACgkQJNaLcl1U
+h9BxAgf/Wo+3F59fFxKwN2tfRUMG4wnzDNqfDur6Y3HdCHPXkeFySk5KbH9DJaKH
+rymjsMabTp2Tjq9eCeU1ceTa2jAiBLuOJxD83SblQXdyRWcnSy6+7PYYVzvdWrgP
+oJidYigkUWPSwCM8p/1B/ogwilVm9SY3eLY1n5vA5YRYXrdxVtvCOFRc/O7OB2NM
+pL6Odp9jippLJMUyBkyixv+e959tnPenBBQ1RGFqA01WWT/ytrZk8sanc4BMFwfb
+sc7Gk7gVrzKGjGcuoTPX3bU4EhBl2hFJ9JG38d07bkX60UpmKc9D8S84EvnqZW6F
+PynqM4Rgo9QJPf6m9leKtyayWn6LpA==
+=BwgQ
+-----END PGP SIGNATURE-----
+
+--JhYnV4hMM1CPNckb--
 
