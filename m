@@ -1,82 +1,81 @@
-Return-Path: <linux-kselftest+bounces-11301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 590C48FF16C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 17:58:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 016788FF173
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 17:59:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9723282029
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 15:58:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76CFD1F218C2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 15:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBC2198843;
-	Thu,  6 Jun 2024 15:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44BA197A7B;
+	Thu,  6 Jun 2024 15:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RTsWUHvO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YT27w4da"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D90F197A98
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Jun 2024 15:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FFC26ACB
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Jun 2024 15:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717689411; cv=none; b=uYqmD4asGz/sIF8kQki+uaI5+pe+cOwMNrrMYUM/dJego7Kc2hWeY/udt2s+j322SEsto4rkA3Z3C1w6/u2rnsdZ+lumOsWy2DKbW5hIgqb1xch0irjs4Q47MbWE14b5Jl0Uy9zJyCwcJ0WUe9L4YCH4OC35T+1WT6uSUYI8o/U=
+	t=1717689448; cv=none; b=kD3X3Rphtfa1I76AQmF7xOrHogV/MNpGqUkIl7VWV0bYIyNdXsWPsqPWJbg9j6crvdRcmjqCkEA7z8zFvS3EFaane0rEvntXKB1krLuQ3IutxO5UxitW44jYxHQd6W3FBQgJlIBfXazAtzcf3XJlphK7WrhgwrnpgcG/9qlyNKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717689411; c=relaxed/simple;
-	bh=n65GZzUczwFhc4ORxki7PkiT6dEccGLhcY4yBOHx/AU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rvdYG+ibKmjhCr9VyDj0c9XUvxc8B9otl35t01VFUw2st4h2cQ+/EKPr87UmYAbAcTvnrOO2lTthBGunlQzEJH9+Rpi9h7edVUgtnnKLstplUoqt+8pAWIbCww3SvuuwEgsZnILRjaZFCkSHhV23yhpTagLXaR7bIRAw8sgmWeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RTsWUHvO; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1717689448; c=relaxed/simple;
+	bh=e9zWBOR9qFpVS8sw2bNnQ0x9k2Yy36+5bbkqomE/RSI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=csPajnq9efrNjByu/Br8cyb1KVHokv7u5gX+qdl4FeQoPyX7Y29ZYtzEPXuV9bAIT0in+HrHrvhZN+e1aLa7EwzZYxJVsMjD+HR9r7FGqhY7a6xx+XBxFo5Z7JYxg70rbVEJ8hlF7WZhUanDsXMp6jGcgV6Q+Dad+rzC6tSh0hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YT27w4da; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717689407;
+	s=mimecast20190719; t=1717689446;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=rICVcq7FiKIUG7u7jIEiVO2tUcrUM6iWDXfWLjwwGZ4=;
-	b=RTsWUHvOOm8Vv/f3SEgcMVH/yo64HgjVsLNj3Lgg8lF7C4mWbpRfK5gnFDStrNnd88O5rc
-	58bRuOQ5GbfJ0VPBYvWyoYjR0LIKY2x9UIo299Xgmnkwt43k5MJJxB9g5pubISkJ09p6vS
-	Ei/tmFqCLoVCJaiWFJahDEWTJ0tK+5g=
+	bh=SC1/9LDY5BT6aCpZ61moOmkMqiCWJ7kUcV39vggIIMk=;
+	b=YT27w4daU6cn0dU/Zsue82fo0kZynAplFd2YAaHAk9ib8wCkbPeg6AOKz3TWzyzoNqaWHe
+	bvVWkJtPC+ZpQqqXSvZUiXXK3q/CH82/SDGXzGpEvhAc9xAkuxPyJX565gBpyNP9MaAnh3
+	wuEFXkZh6QcSZrN9QsWzt73rS+otqgM=
 Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
  [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-493-4T169ZikPCC27eYnYHEDew-1; Thu, 06 Jun 2024 11:56:46 -0400
-X-MC-Unique: 4T169ZikPCC27eYnYHEDew-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-42155e1f0aaso11243865e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 08:56:46 -0700 (PDT)
+ us-mta-14-fRvm7pStMKGSlbExfk_--g-1; Thu, 06 Jun 2024 11:57:24 -0400
+X-MC-Unique: fRvm7pStMKGSlbExfk_--g-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4215a37801aso8330145e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 08:57:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717689405; x=1718294205;
+        d=1e100.net; s=20230601; t=1717689443; x=1718294243;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=rICVcq7FiKIUG7u7jIEiVO2tUcrUM6iWDXfWLjwwGZ4=;
-        b=HXfJpZxMdGZ1FEMDVCiwv09rXbnVGT+wcIkJim0IgAiwBwR1B6lsl1ZBkisjgsq1Zf
-         ssFU0Nug/EKbTBP8Z6uk1A2sWMra1URe0dQc+lVCK/+Na3RwmUcFgFFzNP7KfkmotqSy
-         mHL8cS/8AV4xrTfz0Jge/Bp1lUT18HOjFBVRZqvV6ElISItMXPqjnFHpsPLnlHeJWIfV
-         itpZYdHvkbLmEjVYO62vUYigoRG3EQZeEEo6bQE6ilsV6JobwLXuI1eQc+V5kRNcFi4C
-         0w4ksdGkSfI24Qn2wM1wTv5TlltsGrEjuORyYK33XsX5YtaoPY4pYT1gcxAfOpxbDqui
-         JNLg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3VLV6cwmHQ2jOZvq72eXMPQ1QAVp7wgLi0crPST5RQ4xVKO7b6dCuWcgyu0hKakx+wrEUDPYXN6EUFOhrhSq/0iupn62OVeNlbSHMz9Lr
-X-Gm-Message-State: AOJu0YzE85GqaLxXheNg+JfgcNQuGh+H8DolKDvVcWlb3jMe02ptTIV9
-	AKgPaTJonDbxUkF74GeKECanMXmSOiV6K6mZEWBh3Rt9UiWmJSg7haxZWrMHm6SJxN4aakRWb2i
-	U4gUUkzxb4p4sKwgugKqlnsdOu0zM2siWBic8U+CnAVE3cloajq2fWrsRnKqn4/ceZ5zUxgTwAg
-	==
-X-Received: by 2002:a05:600c:19c7:b0:419:f911:680a with SMTP id 5b1f17b1804b1-421649ec4f1mr1464595e9.1.1717689405103;
-        Thu, 06 Jun 2024 08:56:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFICeY1PkRTCZuslnCo8zVl10rT73fNAObHJppOV3wt8/nIAR3iHGtkV3plGrDo/QKT1YfJ2Q==
-X-Received: by 2002:a05:600c:19c7:b0:419:f911:680a with SMTP id 5b1f17b1804b1-421649ec4f1mr1464195e9.1.1717689404416;
-        Thu, 06 Jun 2024 08:56:44 -0700 (PDT)
+        bh=SC1/9LDY5BT6aCpZ61moOmkMqiCWJ7kUcV39vggIIMk=;
+        b=X07jIe8cITeNwq8CK97bUQxUemDBmDNZ2EoSgLNhSaDpx8FmAq6qbfiYoGyzKD4oUx
+         3m6nZQ0IQVWM9cIPPPBlftGOK19/2Vq7C6LVEoGvDrZ8v+wAolqBEiCr6rVwohd81FPb
+         kTRy2Stc41OqSjQQZiUes5VND3pDgVNhWEHgeVa7MtXXKopj4hcj+9jpADyw+wRTz462
+         DnWYGqNyJeKCeeZlTaPZKxqesNg9L8IW7FbQu2morTrbHB/cMX5eC0RU2/CfYkL8BSG0
+         5OaXtWMsCy0RWGIOa2fPXH8FrB+TPAqW6EWXlZeicWnXX0O+dLlF4ml2XSz0kVMr/wQW
+         h07A==
+X-Forwarded-Encrypted: i=1; AJvYcCW0k4jWJENzgbElpw3lMgmUAcxWzw37431ojyGmTwH06OgQm6C/Z0wmTMjw4f1+XX0ZBKwSdNZEbavNLm1AKKTaELjEpMxHT8rXKC8YHb09
+X-Gm-Message-State: AOJu0YwEsstGnp/kIu8hjfwOQR95kh2pRn0UjOYYoAUV00sbSaLNgFW8
+	UaLG7KfIAHv8Dqh+hbRmXZuTeFWBQT/wjXc+D145ooX20kR0Dv2r1GfpsVbddpaRa9XQMXxNW3l
+	65cDljjmaxyFWtNoL90++2nq8WpVxalslK5YhaqEIfGkCy4u+y7sy3bLjPKZfEKmu2g==
+X-Received: by 2002:a05:600c:1907:b0:419:f241:633b with SMTP id 5b1f17b1804b1-421649ea685mr1084295e9.8.1717689443638;
+        Thu, 06 Jun 2024 08:57:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGk5zLo3YICJlxOU5MMINSR7YWvvw0UdWKmCe7wM+k92IrefCjUDz33sTgCiwbFQL06tJE/Wg==
+X-Received: by 2002:a05:600c:1907:b0:419:f241:633b with SMTP id 5b1f17b1804b1-421649ea685mr1084145e9.8.1717689443344;
+        Thu, 06 Jun 2024 08:57:23 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c710:8800:a73c:ec5b:c02c:5e0b? (p200300cbc7108800a73cec5bc02c5e0b.dip0.t-ipconnect.de. [2003:cb:c710:8800:a73c:ec5b:c02c:5e0b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421580fe371sm60070155e9.1.2024.06.06.08.56.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4215c19e97dsm26027125e9.5.2024.06.06.08.57.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 08:56:44 -0700 (PDT)
-Message-ID: <5b4e7ef2-3ced-4d4a-989c-e99b06598d32@redhat.com>
-Date: Thu, 6 Jun 2024 17:56:43 +0200
+        Thu, 06 Jun 2024 08:57:22 -0700 (PDT)
+Message-ID: <f199d120-2347-4bc0-8940-155c3c465de9@redhat.com>
+Date: Thu, 6 Jun 2024 17:57:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,13 +85,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] selftests/mm: use volatile keyword to not optimize mmap
  read variable
+From: David Hildenbrand <david@redhat.com>
 To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
  Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
 Cc: willy@infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  gost.dev@samsung.com, mcgrof@kernel.org, linux-kselftest@vger.kernel.org,
  Zi Yan <zi.yan@sent.com>, Pankaj Raghav <p.raghav@samsung.com>
 References: <20240606135835.600022-1-kernel@pankajraghav.com>
-From: David Hildenbrand <david@redhat.com>
+ <5b4e7ef2-3ced-4d4a-989c-e99b06598d32@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -139,51 +139,53 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240606135835.600022-1-kernel@pankajraghav.com>
+In-Reply-To: <5b4e7ef2-3ced-4d4a-989c-e99b06598d32@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 06.06.24 15:58, Pankaj Raghav (Samsung) wrote:
-> From: Pankaj Raghav <p.raghav@samsung.com>
+On 06.06.24 17:56, David Hildenbrand wrote:
+> On 06.06.24 15:58, Pankaj Raghav (Samsung) wrote:
+>> From: Pankaj Raghav <p.raghav@samsung.com>
+>>
+>> create_pagecache_thp_and_fd() in split_huge_page_test.c used the
+>> variable dummy to perform mmap read.
+>>
+>> However, this test was skipped even on XFS which has large folio
+>> support. The issue was compiler (gcc 13.2.0) was optimizing out the
+>> dummy variable, therefore, not creating huge page in the page cache.
+>>
+>> Add volatile keyword to force compiler not to optimize out the loop
+>> where we read from the mmaped addr.
+>>
+>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+>> ---
+>>    tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
+>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>> index d3c7f5fb3e7b..c573a58f80ab 100644
+>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> @@ -300,7 +300,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+>>    		char **addr)
+>>    {
+>>    	size_t i;
+>> -	int __attribute__((unused)) dummy = 0;
+>> +	volatile int __attribute__((unused)) dummy = 0;
+>>    
+>>    	srand(time(NULL));
+>>    
+>>
+>> base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
 > 
-> create_pagecache_thp_and_fd() in split_huge_page_test.c used the
-> variable dummy to perform mmap read.
+> The rick we do in some other tests is:
 > 
-> However, this test was skipped even on XFS which has large folio
-> support. The issue was compiler (gcc 13.2.0) was optimizing out the
-> dummy variable, therefore, not creating huge page in the page cache.
+> char *tmp;
 > 
-> Add volatile keyword to force compiler not to optimize out the loop
-> where we read from the mmaped addr.
-> 
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index d3c7f5fb3e7b..c573a58f80ab 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -300,7 +300,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
->   		char **addr)
->   {
->   	size_t i;
-> -	int __attribute__((unused)) dummy = 0;
-> +	volatile int __attribute__((unused)) dummy = 0;
->   
->   	srand(time(NULL));
->   
-> 
-> base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
+> tmp = *whatever;
+> asm volatile("" : "+r" (tmp));
 
-The rick we do in some other tests is:
-
-char *tmp;
-
-tmp = *whatever;
-asm volatile("" : "+r" (tmp));
-
+char tmp; of course. See cow.c as an example.
 
 -- 
 Cheers,
