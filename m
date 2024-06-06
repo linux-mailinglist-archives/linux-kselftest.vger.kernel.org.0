@@ -1,215 +1,193 @@
-Return-Path: <linux-kselftest+bounces-11300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62F8F8FF11A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 17:47:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 590C48FF16C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 17:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8488F1F21C09
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 15:47:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9723282029
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 15:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28D8197525;
-	Thu,  6 Jun 2024 15:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBC2198843;
+	Thu,  6 Jun 2024 15:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JqVMJ4Z5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RTsWUHvO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2BC19750F;
-	Thu,  6 Jun 2024 15:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717688839; cv=fail; b=eoqlTGTGeROzefyjrxcVuX4SocncWDUuyYpeGrUcn1WZAVEJjNSBmOrHL9GV7aAEgf8H3uy9QpiPEiicX44lWnr6m/UyAIDpkThEEHI8tgQAiaO+MqrPyHYWCaGoP8gwy2/wlvVKkqgHR55vdRZm1Mq5zBUQTXrRUz3T+Uw1siA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717688839; c=relaxed/simple;
-	bh=BWqbF8nTPOz+VN8Dh9mMUqIUVm3CFMTNzjbpjEJHCEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fhhMey6bxWWlsFMGoiQeMgKIqhv9wU7wnry+zoUW+KQ213VcloJuo8JfcN7DtRGkG8qNfEUnwrLCBniLCgjXiYox2yccBTp74+PCB5upjzCHb2BVj73/vUlA6GiXDsZobNcyy0KksPGC7nVW6aRKIpyUViRFLJHbn9OyghBFnlY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JqVMJ4Z5; arc=fail smtp.client-ip=40.107.237.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JbvKE6M4q8+GHUVr83vMM2F5A/5zwVDP+gJFz6qIFn9LCJFj6OSW4FJWabUQq1WMsH6ARd1Xx0HE2nF1Ir4JwHGLoQQPikWND1+VT9sBIg4rrx7l1PpEHDbDf23na+Vm7+bitElhgfiebH/MUCkDDGb2K/b3F9ERKM6ufnUvRGxLSNzum4XP0P33Djwf2Y3UUVvo+7YvrBOhX4mpH3f6Qj+DBdr9UOZ7/iMctt0oyVgrSUgpDPdvfaexM/SvxgkU8dNAP3NCP+NeXhlmeCtx+y1IDVxD1LZwtUlj5W/E0V02HXTeqai8IeKa3No0HVuoguf/yBQLIWZSh+m7j5Vlkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RewaFLtv4QdHev3PzSC77exHoPdolEOk8JTtyK9/Odc=;
- b=ML6PqKfzDS0/gBsZ+DJqmpFvegMmPA3Va9FWAVwuCeUgUjunus0puVy06EiP6Qd2l1GogD6+VAVjEzkBt+lFCdyv7mLOg2Marh7p34MMHV5dk4cwbrmyQgX0zFGEA7O1C4DsbhvSs9xvscdwOg7F+W+rDMBpsM/xN3Soi3tQr3rKkyUYdlDJO5GmVSLNtGesR/TtZGOpNqnCf90uMaTlzlsAuzfxb3xTB7c9tFlRBKMeyEyUiX2582f/axkp8TVJxejON2mMU5iecJjLgdqSMYhT+zL8aa7Ywx/sAwtf/khL2Ixk2+1q5/9bu+A/1cbGhSMhKWUHVSOhUDAqSviiZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RewaFLtv4QdHev3PzSC77exHoPdolEOk8JTtyK9/Odc=;
- b=JqVMJ4Z5GyVQ71XpQjp50p4tX//HjFdsvdSUoX8ZxrwTRdXna3BgfEt2/qEy8QfCXWN0KZD/KgPxGQdamQTwdNiFEckJOGxY0BTCO5UYQOAKTQAGLDLX/GUX598+e9CJR2gUSCyBDPHK22hhKcE8L2faJtkO0glXCxPhMajDavry/wFcEnDuxTHw/hpB6JZfO/xFTuZE8xuR2PenVEds3/vlsB5JrLzIjBbQVESJrXbjhHCTVuBrDTANx3C9Viiy/qARWOuUd4kpGr2qywEt6eo5/eIW+tnvx0VJKikaB45/kwzQmBrM7KiD38/joN2T/0co6C4nBYjj2pSe3uxryQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- MW4PR12MB7261.namprd12.prod.outlook.com (2603:10b6:303:229::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.35; Thu, 6 Jun
- 2024 15:47:13 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::f018:13a9:e165:6b7e]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::f018:13a9:e165:6b7e%4]) with mapi id 15.20.7633.021; Thu, 6 Jun 2024
- 15:47:13 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
-Cc: Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- linux-mm@kvack.org, gost.dev@samsung.com, mcgrof@kernel.org,
- willy@infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: [PATCH v2] selftests/mm: use global variable to not optimize mmap
- read variable
-Date: Thu, 06 Jun 2024 08:47:08 -0700
-X-Mailer: MailMate (1.14r6030)
-Message-ID: <744C4689-62F4-4565-988D-010824F4AB86@nvidia.com>
-In-Reply-To: <20240606154428.672643-1-kernel@pankajraghav.com>
-References: <20240606154428.672643-1-kernel@pankajraghav.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_1A98BCE4-F926-4E16-97A0-2C5DFDD51BEB_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BYAPR21CA0004.namprd21.prod.outlook.com
- (2603:10b6:a03:114::14) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D90F197A98
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Jun 2024 15:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717689411; cv=none; b=uYqmD4asGz/sIF8kQki+uaI5+pe+cOwMNrrMYUM/dJego7Kc2hWeY/udt2s+j322SEsto4rkA3Z3C1w6/u2rnsdZ+lumOsWy2DKbW5hIgqb1xch0irjs4Q47MbWE14b5Jl0Uy9zJyCwcJ0WUe9L4YCH4OC35T+1WT6uSUYI8o/U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717689411; c=relaxed/simple;
+	bh=n65GZzUczwFhc4ORxki7PkiT6dEccGLhcY4yBOHx/AU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rvdYG+ibKmjhCr9VyDj0c9XUvxc8B9otl35t01VFUw2st4h2cQ+/EKPr87UmYAbAcTvnrOO2lTthBGunlQzEJH9+Rpi9h7edVUgtnnKLstplUoqt+8pAWIbCww3SvuuwEgsZnILRjaZFCkSHhV23yhpTagLXaR7bIRAw8sgmWeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RTsWUHvO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1717689407;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rICVcq7FiKIUG7u7jIEiVO2tUcrUM6iWDXfWLjwwGZ4=;
+	b=RTsWUHvOOm8Vv/f3SEgcMVH/yo64HgjVsLNj3Lgg8lF7C4mWbpRfK5gnFDStrNnd88O5rc
+	58bRuOQ5GbfJ0VPBYvWyoYjR0LIKY2x9UIo299Xgmnkwt43k5MJJxB9g5pubISkJ09p6vS
+	Ei/tmFqCLoVCJaiWFJahDEWTJ0tK+5g=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-493-4T169ZikPCC27eYnYHEDew-1; Thu, 06 Jun 2024 11:56:46 -0400
+X-MC-Unique: 4T169ZikPCC27eYnYHEDew-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-42155e1f0aaso11243865e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 08:56:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717689405; x=1718294205;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rICVcq7FiKIUG7u7jIEiVO2tUcrUM6iWDXfWLjwwGZ4=;
+        b=HXfJpZxMdGZ1FEMDVCiwv09rXbnVGT+wcIkJim0IgAiwBwR1B6lsl1ZBkisjgsq1Zf
+         ssFU0Nug/EKbTBP8Z6uk1A2sWMra1URe0dQc+lVCK/+Na3RwmUcFgFFzNP7KfkmotqSy
+         mHL8cS/8AV4xrTfz0Jge/Bp1lUT18HOjFBVRZqvV6ElISItMXPqjnFHpsPLnlHeJWIfV
+         itpZYdHvkbLmEjVYO62vUYigoRG3EQZeEEo6bQE6ilsV6JobwLXuI1eQc+V5kRNcFi4C
+         0w4ksdGkSfI24Qn2wM1wTv5TlltsGrEjuORyYK33XsX5YtaoPY4pYT1gcxAfOpxbDqui
+         JNLg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3VLV6cwmHQ2jOZvq72eXMPQ1QAVp7wgLi0crPST5RQ4xVKO7b6dCuWcgyu0hKakx+wrEUDPYXN6EUFOhrhSq/0iupn62OVeNlbSHMz9Lr
+X-Gm-Message-State: AOJu0YzE85GqaLxXheNg+JfgcNQuGh+H8DolKDvVcWlb3jMe02ptTIV9
+	AKgPaTJonDbxUkF74GeKECanMXmSOiV6K6mZEWBh3Rt9UiWmJSg7haxZWrMHm6SJxN4aakRWb2i
+	U4gUUkzxb4p4sKwgugKqlnsdOu0zM2siWBic8U+CnAVE3cloajq2fWrsRnKqn4/ceZ5zUxgTwAg
+	==
+X-Received: by 2002:a05:600c:19c7:b0:419:f911:680a with SMTP id 5b1f17b1804b1-421649ec4f1mr1464595e9.1.1717689405103;
+        Thu, 06 Jun 2024 08:56:45 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFICeY1PkRTCZuslnCo8zVl10rT73fNAObHJppOV3wt8/nIAR3iHGtkV3plGrDo/QKT1YfJ2Q==
+X-Received: by 2002:a05:600c:19c7:b0:419:f911:680a with SMTP id 5b1f17b1804b1-421649ec4f1mr1464195e9.1.1717689404416;
+        Thu, 06 Jun 2024 08:56:44 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c710:8800:a73c:ec5b:c02c:5e0b? (p200300cbc7108800a73cec5bc02c5e0b.dip0.t-ipconnect.de. [2003:cb:c710:8800:a73c:ec5b:c02c:5e0b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421580fe371sm60070155e9.1.2024.06.06.08.56.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 08:56:44 -0700 (PDT)
+Message-ID: <5b4e7ef2-3ced-4d4a-989c-e99b06598d32@redhat.com>
+Date: Thu, 6 Jun 2024 17:56:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|MW4PR12MB7261:EE_
-X-MS-Office365-Filtering-Correlation-Id: 537fb452-baa4-473e-ef91-08dc863fef05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|366007|376005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hNMIbkHv4LFySB5+dNWldDQW9+A/U4GzLPV/5uILd7cS7xtsQQfdNJcJoXqg?=
- =?us-ascii?Q?A/fZymP1yGktki4B1lH3G0zetC9V95s+NjiJPOg0jDvgvLnVEyjMWap0+fKu?=
- =?us-ascii?Q?Uua7kF2li5Wz9GpwOTkz/6PBh/6MufOBCMNgpHAgWA3oaZNysxjxS+a5uyr/?=
- =?us-ascii?Q?H1/+SaTFAC4Lq4K40o3YptfG9PtzheQNPg0ki0c+Brw9kMvab4VgrNlOB3O2?=
- =?us-ascii?Q?DnvSkMn6ry7skx9Ne4mA09XH1QVj6QLpG0HZ+n2OrDjfGKsDUZjDUf+N0JL2?=
- =?us-ascii?Q?Ojci6xVmAYLUC8BdT1X9woO0dYj6IYmCLCtrBq0g065/tZAqO0OYmM5DnYVC?=
- =?us-ascii?Q?XxSmgTf0k0OQp4sZXLU8p67mbSMEzNY96d6lhSgu4xr+cmvRmNjeg28xipeL?=
- =?us-ascii?Q?1n70DrK6zv6lZT6cO+q9zai2lFLICwveK5hksWTwq4Ot3Ek7HYXQquKUO0RX?=
- =?us-ascii?Q?I9B0dpNsffUMV/+dknBLmjaBbv3FO6Bddonotq3vmvmIScC1iOOgxqELSf07?=
- =?us-ascii?Q?LK1TBm9+4Iq7ZvZWwBU+K/QGvki+e1ntEhvZwKYoFAGVKrzk6FtDJ2kI6Cst?=
- =?us-ascii?Q?1uZCyOolQSED8KO0HjDItMEolgivF+GVtkZNWp/9S4B5YlCrmgwNt2NXKIcd?=
- =?us-ascii?Q?n5HvWh3GzzUlxzqYZdivTKmrvjqrX1HRKwVnNrIX6rvSFSEbOR2ajYix+Z4j?=
- =?us-ascii?Q?0cf5Znt6bWKrcfPa1cOM0M6U3MjKyiM1Dx86GqDvCwgmZg79EZHuXQEjsT3A?=
- =?us-ascii?Q?FFAH3lq0HUATwV8TvTmAQg2rzlPIlnq5S3/Zb/rnoVlLwBy2K7msCxAqbDox?=
- =?us-ascii?Q?RkmPMVqIBz9nZZKsY+LuwqEnaHbccp41Iohm2yvBGzF73EJpC7NqJLXqIi/6?=
- =?us-ascii?Q?j31RaW1iUTsulwVGVqVbHifMdpcXf2qmVL5YCrq961AIZrUIg2LCqkv3Kq4T?=
- =?us-ascii?Q?SIhn6MnXST0oW8S5DFwzY8k9MT8+DOZ/61MqdpUUmO675wl/NTRGv+08O1ZW?=
- =?us-ascii?Q?f+kH7hLu/QWnLQdTYf6IdsQO+YpmCycozTq0etN6Z2IeFR0ZGwu9ddiRLzl7?=
- =?us-ascii?Q?AAD3t7OYUIeGCnN9+Hjo6ifYKS/l29/481Z6VTjzcZN3n39z63fb4AVxqfxK?=
- =?us-ascii?Q?b0cjilFY6TFqhF6VRQeqc42swJBr8zJ1vjMlzLjBepggVcqZmmFmcBPL2Slu?=
- =?us-ascii?Q?OFWxAXikjdGo9H1XuQMx1DSHE5t/qFV2MwPnNJRfMjG40sy4DEUw8FtLG3AM?=
- =?us-ascii?Q?Cw+t/x77ZILvxDFlIByGCc+NgfIUUjQdVzsg48FNLnn71Q7KDm5wU0FkKwqr?=
- =?us-ascii?Q?uOhJ53A8e+nkVuD0sVE9W3Fr?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Kx4Auz9Hr1D3n/aF5dfdaT2tHzyZ5CItqGPnR/24xvstCv+1D2ecT0CkMA/r?=
- =?us-ascii?Q?bXYXcV2TwvQJv64MAfe0wAvJe9g2NZ5a6eD3bI/3Rs4ZVjxq/3iKKsEcM3fT?=
- =?us-ascii?Q?Ogonq5EzNdDvhIv+mrBLVR415ioJYvYRR7yyXZZw32jNkqw2ffiGThimEtcQ?=
- =?us-ascii?Q?HH0/ft2C9sB+2sGTntjSi2yLrrJ21a3G0x8VO1qz8UYBdcHAX9mHNFtdv5a4?=
- =?us-ascii?Q?NGl+VHQnFdOtAT2l9VfW0OpVXvBRIT1N0dBkSYXfkPtsk5cDZj5dAs37Xofk?=
- =?us-ascii?Q?RC1ZZ831mhJJpYmhXx7wmGltVFceYvKUUAthFkq4wumk/DdW94cmjnthB7rh?=
- =?us-ascii?Q?RwPpcJdUIBC7yC7HaXQNjb3L31RC+3wlx7BXDC3KpSSC4SJMyRdK9QFDjyBE?=
- =?us-ascii?Q?IoyLjeKIrcci1idm5Nw79EGu60xH81jixhCs4bC59vt7ADbfpbn/WYcCQZmm?=
- =?us-ascii?Q?DzLvmi4Bb0YHbvsvaddWJqJMeS5/B2Poz9WrF6+eJgTB+Cv5DHjybzszmUXs?=
- =?us-ascii?Q?FWrR8iHmEXvYasbxsoGsrZVE9yccTWFI94eBC0PYOMjIxwaahGnLfPSZtwLy?=
- =?us-ascii?Q?h4Vn3VA87Ych6Kqu3rLqK+OvoQc3Yuyl2EvILB+kIlIs4hxTzfmmoNm9kvxB?=
- =?us-ascii?Q?8JG+w4St4H2EBVMP1Q4DkxlST3K3bcsIMTCMD1lUtnvNzliKwzhu+8M9rAZd?=
- =?us-ascii?Q?1F1IDvd1IRyT+VmSBJNyzKAcc97XcuFmgfkLkwZOXrPEC1Fd0EovqPASKKJT?=
- =?us-ascii?Q?2zTYJlQQzqRX42+u1JV4v0s8MQZyobX1aamSswmfuPnenp3ywW0LvPSzFgBV?=
- =?us-ascii?Q?yZyApWVXFie4nouTJfiT7bd8BN4hjD9//V5UaLDj/D04iaJUmEELb4yPoB6W?=
- =?us-ascii?Q?VbQMvNQ0lxUWXhhU56oDKW9rcyZMG9ggR/9rrI1LdKcDccSmiSMqzOBF0NZO?=
- =?us-ascii?Q?VychM1Xp/TZ/nRxz1C8d8DFbSeDeo83urTJWM+erbcxByj8F6WMc+LCIbHkp?=
- =?us-ascii?Q?LC+ktQE0QaeSot4sOL6cUYPIv1NGkxZignozPf4KLpC64VqY/qR0GaN+NbGV?=
- =?us-ascii?Q?UKgWij5tNbI1qKEbPKLjV8BTbCdEp3phD3lvuJbmVSkprUvWo6VBMzieWt03?=
- =?us-ascii?Q?f77DDlgz5ljaDk6r2hiQbAIU3h7LybUpuiFbBcMfH0KmI71MFCXC7NhmHBrB?=
- =?us-ascii?Q?qQk8DqmvIiS38FiHIY0/9OOotjsvC09MhFkvqwCI7RwtiLJ8iLDwRkp6oXp7?=
- =?us-ascii?Q?6P4ZB3IzI0hcZRdgtBPdmYnBr61PE67qYJVonpyyuzicmf3uwiyP4hHHguc9?=
- =?us-ascii?Q?psuspZFAPkpdy/MJZHF+oF7mMZjgccqA0Tuk83yOVCNiWGv8OP4VZqr7x7SG?=
- =?us-ascii?Q?xhv+/22uqYX1+NzTzvjbRfXjvcHMn+qdiKDsiruXBGajznKpO+eY9cwn0nZu?=
- =?us-ascii?Q?k+eP3/CpsXri60RaSCx5GX+1ZG/eTWplsrlBCaEvxE3h6hra0S8OHek7FTMM?=
- =?us-ascii?Q?OmJaDrL7qDKxruYSuhKolnhY2RBCXCxzTaT6gSAFfhnv73pm+n8aMh++adBa?=
- =?us-ascii?Q?rx2xxu+tluNKIwBTyu4=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 537fb452-baa4-473e-ef91-08dc863fef05
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 15:47:13.2097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fDn0kDBfLEz1bAhLWjEvgk55gFdWG22w2WCILWDndq1JWtX7xvRWQ5do5IRkvRix
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7261
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: use volatile keyword to not optimize mmap
+ read variable
+To: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>,
+ Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: willy@infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ gost.dev@samsung.com, mcgrof@kernel.org, linux-kselftest@vger.kernel.org,
+ Zi Yan <zi.yan@sent.com>, Pankaj Raghav <p.raghav@samsung.com>
+References: <20240606135835.600022-1-kernel@pankajraghav.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20240606135835.600022-1-kernel@pankajraghav.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---=_MailMate_1A98BCE4-F926-4E16-97A0-2C5DFDD51BEB_=
-Content-Type: text/plain
-
-On 6 Jun 2024, at 8:44, Pankaj Raghav (Samsung) wrote:
-
+On 06.06.24 15:58, Pankaj Raghav (Samsung) wrote:
 > From: Pankaj Raghav <p.raghav@samsung.com>
->
+> 
 > create_pagecache_thp_and_fd() in split_huge_page_test.c used the
 > variable dummy to perform mmap read.
->
+> 
 > However, this test was skipped even on XFS which has large folio
 > support. The issue was compiler (gcc 13.2.0) was optimizing out the
 > dummy variable, therefore, not creating huge page in the page cache.
->
-> Make it as a global variable to force the compiler not to optimize out
-> the loop where we read from the mmaped addr.
->
+> 
+> Add volatile keyword to force compiler not to optimize out the loop
+> where we read from the mmaped addr.
+> 
 > Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 > ---
-> Changes since v1:
-> - Make the dummy variable as a global variable(willy).
->
->  tools/testing/selftests/mm/split_huge_page_test.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
+>   tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index d3c7f5fb3e7b..c573a58f80ab 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -300,7 +300,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+>   		char **addr)
+>   {
+>   	size_t i;
+> -	int __attribute__((unused)) dummy = 0;
+> +	volatile int __attribute__((unused)) dummy = 0;
+>   
+>   	srand(time(NULL));
+>   
+> 
+> base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+The rick we do in some other tests is:
 
-Thanks.
+char *tmp;
 
-Best Regards,
-Yan, Zi
+tmp = *whatever;
+asm volatile("" : "+r" (tmp));
 
---=_MailMate_1A98BCE4-F926-4E16-97A0-2C5DFDD51BEB_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
 
------BEGIN PGP SIGNATURE-----
+-- 
+Cheers,
 
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmZh2fwPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqK3X8P/0cVGw5ksplTjZLQc/UzsKIiGw8yRt0JVX7b
-svcjBVXi8Ws1zyshjnwsyK9roLaoPheR7BE5DRcm3yRbsZrhgSAb3JkBK4Bf03Nm
-cdUr7TkE/TRe4cLontpGhPS57eWpiwK3pFk3EAawa9AhVCSwO+DR0btauRtEeRcG
-rXcpvAfeUixedDyHB+wPATtWI+CvRiuE0HYY2hq7leiBmYiDCt/WmQs/Kh3Y2zqm
-X84rK5mouAkkHrcJN6SmP3a7fWfzDH30rdxWnJnUe4wAz24gP9q+MMMZstY9PS89
-cWoZx+E/HIQl4j/Mt/92Ww2ulf4pFQUALcQt1QiHvJGVP5xrgN4o3F1sYmu8N0AZ
-a+gusMlTa++1d8kmt/UgOcvbho+qluSS5LuC3ImHPmDFS8C0JAYD0aA+JEo3V7RK
-vOb5BT936jv3abTWdKv+CbNQqdGypzEBQL1eoly6XLA9J+zUPRhEmqqz6qXSTdVD
-zOFRaeiYqJt/1wEh65AIcntDdfLfHByTDxSPON0C5z2JdNuZxhOq6fhEhDOQEObO
-W8Gaksk5o/a8mXc7Phr/o3Wtsu0pRr+R0R9T6wG+nA3X5Ku3jKcUkbKF9mJG5bpg
-9GhQbD6Gnh0qJWKROCq6ViBXvdxMKVE2L55jzBaA8bcBhX/pAfQqUKfo6foDIRuO
-T/466k2D
-=+DVO
------END PGP SIGNATURE-----
+David / dhildenb
 
---=_MailMate_1A98BCE4-F926-4E16-97A0-2C5DFDD51BEB_=--
 
