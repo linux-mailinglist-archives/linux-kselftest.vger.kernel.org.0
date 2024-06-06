@@ -1,190 +1,108 @@
-Return-Path: <linux-kselftest+bounces-11288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32C548FE46F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 12:39:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F2CF8FE75F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 15:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 880541F243C9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 10:39:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1AC7BB25AE7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 13:15:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DF8194AE0;
-	Thu,  6 Jun 2024 10:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LZ8Nor8T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6E2196432;
+	Thu,  6 Jun 2024 13:14:47 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C9A2561D;
-	Thu,  6 Jun 2024 10:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF5B196428;
+	Thu,  6 Jun 2024 13:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717670375; cv=none; b=d8rtOofgwRueMnCcbQ+HsJ2WADymQdWucjK+Wymw/VRO/0KLqS3TfmaJbxcYIsm2yQHDcN13lCpQR0vDouXVhYfM0Ow7u1bj+SrrOAtHBBBPFKleS1wQRQ7nYoPoPBf9h/MePJgQOXIsuB1jFN3mSyXa/oACZQdg5kXEC4nuOcU=
+	t=1717679687; cv=none; b=mQcb3FCIMmAqLwJcuEnwvLcJJAIAyMuJjaVh3DDKTD7cnH4E3ZfehahwNzul9vqoYnJ4Hq2m4Dr3L2sC+FV9tzleVfHU8P3pOkHF0W0cGulPZcj50Oni8/NT1xT1Mh3b4vDsvTzHGtL1v4gm9wJQ94331PM8FMft3XoADUG+M2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717670375; c=relaxed/simple;
-	bh=D0uunvsoqzLWPDiha1RwJom/MhZWK4E2NrSHDqVy/Ck=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Oj/yq37woPKMVJe3dWapseI9/CdOXHtUWnA3fYar0mm0Q0Gz0quDzd2zVyINYkY3OsO0rEEaoc87/7UUah3CES/e2pcZhy96GNq33Aeo5EgzEA/+2cp5njcBxArur/FDFLN/Uznq4IOBk2Xnj1t9nlTL1waSLKTtiFz8e12/AIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LZ8Nor8T; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1717670371;
-	bh=D0uunvsoqzLWPDiha1RwJom/MhZWK4E2NrSHDqVy/Ck=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=LZ8Nor8TvPK+ZdBUExhw0FqgdlmpE2nc5iWn4+ZbaJKbQf5ejCTkOR0lqbPQrdrfz
-	 zVbRSMty8z/GVB0lioNFVDSwJQE6AeO1zMcU4F7VXUEOXXh9QwvYadV/1UlApEl6vQ
-	 vw19Lx7Kbi61E48WXpgqsBJkXETyjZHbFfwv0IHtMtfGTUz0YPZOY4BuCBABM2BGFn
-	 coisQyjDD4KkLEcpqTWBxAU1+BB+KEe6rnzyIKIdYpCROrAjWx3Q5mVZMJSfiAoNkg
-	 XQZ0nKf9B8Gztk9OnxXD7JDMYJKTmkzoy30HxEq36xCOvW+fcNVL8z22BE08KNddcI
-	 7Qg3iqFjkUMAQ==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=arc-20240116; t=1717679687; c=relaxed/simple;
+	bh=gp3sNoq6XZoTI5NVdrBYpz34TiddWLflixAGr4p22MM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gr4sOaspVmmmzo01Hpz+0CSbsIMvpvE6lN95Aoqe79lkU90Zz1ytNFAhM7xw+xISNg0faUfK6za4fTKkI4MIyHts+uevmKmAtylIvuLCYw2bq79L3gMGwTEAZp/5b0cXV6NnEJK2ViVAeaCZChb1WBW9i48o20QD/mUzwQlqh9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=pankajraghav.com; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 82C303780627;
-	Thu,  6 Jun 2024 10:39:28 +0000 (UTC)
-Message-ID: <4f7e6f1b-bce1-41ec-b26f-f4fb53c3b276@collabora.com>
-Date: Thu, 6 Jun 2024 15:38:55 +0500
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Vw4YX4BqXz9scC;
+	Thu,  6 Jun 2024 15:14:40 +0200 (CEST)
+From: Pankaj Raghav <p.raghav@samsung.com>
+To: donettom@linux.ibm.com
+Cc: akpm@linux-foundation.org,
+	david@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	ritesh.list@gmail.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	songmuchun@bytedance.com,
+	tonyb@cybernetics.com,
+	willy@infradead.org
+Subject: Re: [PATCH] selftest: mm: Test if hugepage does not get leaked during __bio_release_pages()
+Date: Thu,  6 Jun 2024 13:14:29 +0000
+Message-ID: <20240606131436.592793-1-p.raghav@samsung.com>
+In-Reply-To: <20240604132801.23377-1-donettom@linux.ibm.com>
+References: <20240604132801.23377-1-donettom@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: mm: Make map_fixed_noreplace test names stable
-To: Mark Brown <broonie@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-References: <20240605-kselftest-mm-fixed-noreplace-v1-1-a235db8b9be9@kernel.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240605-kselftest-mm-fixed-noreplace-v1-1-a235db8b9be9@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/6/24 3:36 AM, Mark Brown wrote:
-> KTAP parsers interpret the output of ksft_test_result_*() as being the
-> name of the test.  The map_fixed_noreplace test uses a dynamically
-> allocated base address for the mmap()s that it tests and currently
-> includes this in the test names that it logs so the test names that are
-> logged are not stable between runs.  It also uses multiples of PAGE_SIZE
-> which mean that runs for kernels with different PAGE_SIZE configurations
-> can't be directly compared.  Both these factors cause issues for CI
-> systems when interpreting and displaying results.
-> 
-> Fix this by replacing the current test names with fixed strings
-> describing the intent of the mappings that are logged, the existing
-> messages with the actual addresses and sizes are retained as diagnostic
-> prints to aid in debugging.
-> 
-> Fixes: 4838cf70e539 ("selftests/mm: map_fixed_noreplace: conform test to TAP format output")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-> ---
->  tools/testing/selftests/mm/map_fixed_noreplace.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/map_fixed_noreplace.c b/tools/testing/selftests/mm/map_fixed_noreplace.c
-> index b74813fdc951..d53de2486080 100644
-> --- a/tools/testing/selftests/mm/map_fixed_noreplace.c
-> +++ b/tools/testing/selftests/mm/map_fixed_noreplace.c
-> @@ -67,7 +67,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error: munmap failed!?\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 5*PAGE_SIZE at base\n");
->  
->  	addr = base_addr + page_size;
->  	size = 3 * page_size;
-> @@ -76,7 +77,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error: first mmap() failed unexpectedly\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 3*PAGE_SIZE at base+PAGE_SIZE\n");
->  
->  	/*
->  	 * Exact same mapping again:
-> @@ -93,7 +95,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:1: mmap() succeeded when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 5*PAGE_SIZE at base\n");
->  
->  	/*
->  	 * Second mapping contained within first:
-> @@ -111,7 +114,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:2: mmap() succeeded when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 2*PAGE_SIZE at base+PAGE_SIZE\n");
->  
->  	/*
->  	 * Overlap end of existing mapping:
-> @@ -128,7 +132,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:3: mmap() succeeded when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 2*PAGE_SIZE  at base+(3*PAGE_SIZE)\n");
->  
->  	/*
->  	 * Overlap start of existing mapping:
-> @@ -145,7 +150,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:4: mmap() succeeded when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() 2*PAGE_SIZE bytes at base\n");
->  
->  	/*
->  	 * Adjacent to start of existing mapping:
-> @@ -162,7 +168,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:5: mmap() failed when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() PAGE_SIZE at base\n");
->  
->  	/*
->  	 * Adjacent to end of existing mapping:
-> @@ -179,7 +186,8 @@ int main(void)
->  		dump_maps();
->  		ksft_exit_fail_msg("Error:6: mmap() failed when it shouldn't have\n");
->  	}
-> -	ksft_test_result_pass("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_print_msg("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-> +	ksft_test_result_pass("mmap() PAGE_SIZE at base+(4*PAGE_SIZE)\n");
->  
->  	addr = base_addr;
->  	size = 5 * page_size;
-> 
-> ---
-> base-commit: c3f38fa61af77b49866b006939479069cd451173
-> change-id: 20240605-kselftest-mm-fixed-noreplace-44e7e55c861a
-> 
-> Best regards,
+> +void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+> +{
+> +	int fd;
+> +	char *buffer =  NULL;
+> +	char *orig_buffer = NULL;
+> +	size_t h_pagesize = 0;
+> +	size_t writesize;
+> +	int free_hpage_b = 0;
+> +	int free_hpage_a = 0;
+> +
+> +	writesize = end_off - start_off;
+> +
+> +	/* Get the default huge page size */
+> +	h_pagesize = default_huge_page_size();
+> +	if (!h_pagesize)
+> +		ksft_exit_fail_msg("Unable to determine huge page size\n");
+> +
+> +	/* Open the file to DIO */
+> +	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT);
 
--- 
-BR,
-Muhammad Usama Anjum
+I encountered a build error as follows in NixOS:
+
+In file included from /nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/fcntl.h:342,
+                 from hugetlb_dio.c:15:
+In function ‘open’,
+    inlined from ‘run_dio_using_hugetlb’ at hugetlb_dio.c:41:7:
+/nix/store/fwh4fxd747m0py3ib3s5abamia9nrf90-glibc-2.39-52-dev/include/bits/fcntl2.h:50:11: error: call to ‘__open_missing_mode’ declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
+   50 |           __open_missing_mode ();
+
+
+I saw a commit that fixed similar issues with open syscall before:
+8b65ef5ad486 ("selftests/mm: Fix build with _FORTIFY_SOURCE")
+
+So something like this should fix the issue?
+
+-       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT);
++       fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+
+> +	if (fd < 0)
+> +		ksft_exit_fail_msg("Error opening file");
+> +
+
 
