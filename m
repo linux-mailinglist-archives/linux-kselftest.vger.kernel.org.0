@@ -1,127 +1,146 @@
-Return-Path: <linux-kselftest+bounces-11308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1868FF4A0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 20:28:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84B628FF5BE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 22:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E6AA28D355
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 18:28:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8049F1C21632
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 20:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7811993A4;
-	Thu,  6 Jun 2024 18:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013F36EB5C;
+	Thu,  6 Jun 2024 20:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eR+tIULi"
+	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="O1ZmJ6Rl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1261991D3
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Jun 2024 18:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D1038F9C;
+	Thu,  6 Jun 2024 20:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717698492; cv=none; b=FrXLucEhsBbspo58UzOSdwTEyRqfUOnXmmNnJuUkbvZHJbejaK0chqFyV92d5MZFu3SBbNQu9KHEWfuqSvLmdwlllPjSJqIqFAMFXlEE2fZuZlyDjHJMlnXgOGejpuXmbpNgfAqkaqoiIR+bBrmd1JIWPR7sswIylQY7oj0l0rE=
+	t=1717705121; cv=none; b=vCJ251qkXfjCMhcDhWyblUdJgjXz8219QplneHKY3QQpSo8QO+DXfSE2eh5N6j7Ysc033+D99bt00OGPc43/mg/qTSy8S0/rHHQ81izIHtn7QDFGmnG0cV0NBvcV/SxR/5oXhSPo5yxroHq/HeOabRrLeaBPFk8uJl2a/F+U99s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717698492; c=relaxed/simple;
-	bh=hXBCWGDl6iQUiGgI3mnJqEYYxAygCL92+j7yppmzxuw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pTLwNkeH9PFtbCogUqS7RjIvAmdfk2oJ5RwrAaFDCtRLjOg+vXcmjYp4KtX0dXTXqbaaNwbRpQibnt4iSJlr4YAYDLlzi6OpX0UyNKP/yyLqIgGh3oNvwg4fTpzL2j/aNdG/9rvKhWVglAZBNhoFq65kjKXuwQfbUSlya6NNmhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eR+tIULi; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-35e573c0334so1438899f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 11:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1717698487; x=1718303287; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9pp+YQLbn+mewrs9te441F0Mjx0zH5J0mECKySXrOe4=;
-        b=eR+tIULi2oHBRMmc8VtesRQm+o3A9ShyBCKqnLXSpoP/8rMnvJgTAwMsd0AsrCUDtD
-         5PD2+BHa9zAGOmkQDP5wwkFAYGG4B9Vy5m6qumnLeAy8rhG2IN7uCKxwcuRugrFw+t3o
-         3P4pl/9W+K5YpMO8MlR4fy5D3JQhvzBjjuI3CwW5LS3mMXo+//xhyfcUSCpJZ9W7ddqx
-         lWiju48rjE0G9e2Mtg9TQZ+4YtLL8tFOXQGSoUyD0x0iXa9KZcsabtM7u4Pe0IVa3ONZ
-         BP83RGu9sfmODdAmxARniqd5LJp8LQmxY463EvZajTOiWm0W1ODcd9wWyOJLJTRPzIyF
-         Dr5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717698487; x=1718303287;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9pp+YQLbn+mewrs9te441F0Mjx0zH5J0mECKySXrOe4=;
-        b=nJaw925RWYs7PlCd6sUf6E11SHWWGbg2DpnneifL9cgQpdrLjn6Y46+LzsFMbXMLq5
-         whSMV3tBlZb8bTL7KOu/z/SkI4a3c4VS3yDIMGxt/wdRGAl3jS1cJKCfC8hNBw/XFbe0
-         cX8Ic2AKqeRzsn6VbgUGwftaSeouMU3qWjfRNaBpaoGG44QV3yZoYaYsjX/82818Zrxu
-         4UptgYqMDbDKThTaS7sXDuCdE/gVY3/2Tyhlgu0kKOS2uSPyFADYOTRDXDnN6QzkYvHs
-         IBT08XsYRtcZvJM4TsXdJxfZIhkVderAhdA7i+rpcn3ap6Mtmz98OdAxlHfEdwEy4w7c
-         WB0g==
-X-Forwarded-Encrypted: i=1; AJvYcCWEOQ0O9gPaxbg4j6SVMBTRe/ylO0619Ccm7ki7PAxmHZgkFePV9Pp8PQl+Gm7/2HwAUeGfEEhetpbUEjTLcuVMis/825p6nPLhnmKb+QIQ
-X-Gm-Message-State: AOJu0YyQXTf/+eZ42EPYQ8uVtNiZjQ8TyfqK11Mjff4xAAtaiPh8YZ1k
-	0B5gnUSdMPjgOkFxecD497L1TeEV1Q49ROAwK9gVPww4nABC+i36k7nJxlJZBLo=
-X-Google-Smtp-Source: AGHT+IGPYw+ErGrFYTd1ZWI76ONo/bVUSy0lOdhvbOoId04ZnFhN69Ko8hQMDbBfXHaA0IyeYu8obA==
-X-Received: by 2002:adf:f10f:0:b0:357:8a96:4eef with SMTP id ffacd0b85a97d-35ef0ddab9amr3182950f8f.31.1717698487366;
-        Thu, 06 Jun 2024 11:28:07 -0700 (PDT)
-Received: from ?IPv6:2804:5078:851:4000:58f2:fc97:371f:2? ([2804:5078:851:4000:58f2:fc97:371f:2])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2806bd7ddsm3880114a91.40.2024.06.06.11.28.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 11:28:06 -0700 (PDT)
-Message-ID: <0c3d947f230e2c7b737cffc2b6a326962edd890c.camel@suse.com>
-Subject: Re: [PATCH] selftests/livepatch: define max test-syscall processes
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Ryan Sullivan <rysulliv@redhat.com>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-  joe.lawrence@redhat.com, shuah@kernel.org
-Date: Thu, 06 Jun 2024 15:27:53 -0300
-In-Reply-To: <20240606135348.4708-1-rysulliv@redhat.com>
-References: <alpine.LSU.2.21.2405311304250.8344@pobox.suse.cz>
-	 <20240606135348.4708-1-rysulliv@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1 (by Flathub.org) 
+	s=arc-20240116; t=1717705121; c=relaxed/simple;
+	bh=cyu/1xEpXUTxEGqlT0D38XPGikaORzZ2nxSbTMl8Ksc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3BgZ3rFna4uOe9pC1zNRNhzmFrEjCyYYQJt5nAcMcwJW/V4DRQOxGhtU7qdMS2sDDEsohjsCiAiN68eLzzS2U/L0clQ7oZ/zWeLEhSJ9lGwP9uvKftFdUaPtgRU7htvdHpcmnfRaPmo2W1HdIji0AZGKmQYMz2oOJblKgJBSyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=O1ZmJ6Rl; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4VwFyg0Hnvz9sq3;
+	Thu,  6 Jun 2024 22:18:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
+	s=MBO0001; t=1717705115;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ohDaG0hOCzORTv2Q7Osb5vtnPE6ReKAWi9dBZ7ab1xc=;
+	b=O1ZmJ6RlSaIOZnPqzA910/zSq4CkE+BrWOeNVx/EF5z6ns2s5l8/eGtXfKm/IgSB7aQgWh
+	tX4O09EFjB0RqCkS8+vnZwUKX42BvYRExY1SAvJSJg6aFJdwdSnhEJ+Yi0SLMXNqmCGHgP
+	AR10WbEyD+zM4kInasIOD27qTCyeC18NseUz9ZlG/IpX7BlbQMOCt/eCGu3oXMsIPoGEeD
+	A92YRz07AVoOe/9WTPvYABVKoYDSWHdLSc6z+rP5/0drGs6GgGAqdNIOkDRgFma3bMXNln
+	pBG4Y5gAHVzaL8EhZ+Sd0OQeJk8xBrfEqDLIBlDO4e6QYQMMQ4nFlXZpD8nw7g==
+Date: Thu, 6 Jun 2024 20:18:31 +0000
+From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, willy@infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	gost.dev@samsung.com, mcgrof@kernel.org,
+	linux-kselftest@vger.kernel.org, Zi Yan <zi.yan@sent.com>,
+	Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: [PATCH] selftests/mm: use volatile keyword to not optimize mmap
+ read variable
+Message-ID: <20240606201831.ywmawi7xl6jgj3p4@quentin>
+References: <20240606135835.600022-1-kernel@pankajraghav.com>
+ <5b4e7ef2-3ced-4d4a-989c-e99b06598d32@redhat.com>
+ <f199d120-2347-4bc0-8940-155c3c465de9@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f199d120-2347-4bc0-8940-155c3c465de9@redhat.com>
+X-Rspamd-Queue-Id: 4VwFyg0Hnvz9sq3
 
-On Thu, 2024-06-06 at 09:53 -0400, Ryan Sullivan wrote:
-> Define a maximum allowable number of pids that can be livepatched in
-> test-syscall.sh as with extremely large machines the output from a
-> large number of processes overflows the dev/kmsg "expect" buffer in
-> the "check_result" function and causes a false error.
->=20
-> Reported-by: CKI Project <cki-project@redhat.com>
-> Signed-off-by: Ryan Sullivan <rysulliv@redhat.com>
+On Thu, Jun 06, 2024 at 05:57:21PM +0200, David Hildenbrand wrote:
+> On 06.06.24 17:56, David Hildenbrand wrote:
+> > On 06.06.24 15:58, Pankaj Raghav (Samsung) wrote:
+> > > From: Pankaj Raghav <p.raghav@samsung.com>
+> > > 
+> > > create_pagecache_thp_and_fd() in split_huge_page_test.c used the
+> > > variable dummy to perform mmap read.
+> > > 
+> > > However, this test was skipped even on XFS which has large folio
+> > > support. The issue was compiler (gcc 13.2.0) was optimizing out the
+> > > dummy variable, therefore, not creating huge page in the page cache.
+> > > 
+> > > Add volatile keyword to force compiler not to optimize out the loop
+> > > where we read from the mmaped addr.
+> > > 
+> > > Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> > > ---
+> > >    tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
+> > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> > > index d3c7f5fb3e7b..c573a58f80ab 100644
+> > > --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> > > +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> > > @@ -300,7 +300,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+> > >    		char **addr)
+> > >    {
+> > >    	size_t i;
+> > > -	int __attribute__((unused)) dummy = 0;
+> > > +	volatile int __attribute__((unused)) dummy = 0;
+> > >    	srand(time(NULL));
+> > > 
+> > > base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
+> > 
+> > The rick we do in some other tests is:
+> > 
+> > char *tmp;
+> > 
+> > tmp = *whatever;
+> > asm volatile("" : "+r" (tmp));
+> 
+> char tmp; of course. See cow.c as an example.
+Thanks David! I remember also seeing this when I grepped for volatile in
+the selftests directory.
 
-Hi Ryan,
+Willy gave the idea of making it as a global variable [1]. But your
+trick also works :)
 
-is this the same patch that you sent on ? I couldn't spot any changes,
-and you also didn't tagged a different version for this patch.
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index d3c7f5fb3e7b..9c957703c1f7 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -341,6 +341,7 @@ int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd,
+ 
+        for (size_t i = 0; i < fd_size; i++)
+                dummy += *(*addr + i);
++       asm volatile("" : "+r" (dummy));
+ 
+        if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
+                ksft_print_msg("No large pagecache folio generated, please provide a filesystem supporting large folio\n");
 
-> ---
-> =C2=A0tools/testing/selftests/livepatch/test-syscall.sh | 5 ++++-
-> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/livepatch/test-syscall.sh
-> b/tools/testing/selftests/livepatch/test-syscall.sh
-> index b76a881d4013..289eb7d4c4b3 100755
-> --- a/tools/testing/selftests/livepatch/test-syscall.sh
-> +++ b/tools/testing/selftests/livepatch/test-syscall.sh
-> @@ -15,7 +15,10 @@ setup_config
-> =C2=A0
-> =C2=A0start_test "patch getpid syscall while being heavily hammered"
-> =C2=A0
-> -for i in $(seq 1 $(getconf _NPROCESSORS_ONLN)); do
-> +NPROC=3D$(getconf _NPROCESSORS_ONLN)
-> +MAXPROC=3D128
-> +
-> +for i in $(seq 1 $(($NPROC < $MAXPROC ? $NPROC : $MAXPROC))); do
-> =C2=A0	./test_klp-call_getpid &
-> =C2=A0	pids[$i]=3D"$!"
-> =C2=A0done
+I am fine with either solutions. But using the trick asm volatile is more
+cleaner than making it a global variable IMO and makes it more uniform
+across the other mm tests.
 
+Let me know what others think.
+
+
+[1] https://lore.kernel.org/linux-mm/20240606154428.672643-1-kernel@pankajraghav.com/
 
