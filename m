@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-11384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7431900818
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 17:04:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79B9C90081F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 17:04:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91CF928A22C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:04:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04C2CB270CA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F7811990B2;
-	Fri,  7 Jun 2024 15:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A4E199E85;
+	Fri,  7 Jun 2024 15:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OgRNkV9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3dtdi9m"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E6C197521;
-	Fri,  7 Jun 2024 15:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48301993AF;
+	Fri,  7 Jun 2024 15:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717772534; cv=none; b=WsFKnpt1FjhnR6V3EmKzhJd0iXd5gTwUCiNxd8QofSMInQQbqa8HU8sm4JjpDdw9hnyYIpuUnkIy8fTK82r8uYdvcwihkSsbjSEDX8fVBOHdeAysF2s4asZeFkZ5rBoqFDXJoJyI583HAeHRKjSMV6HyN80d7U2TQkh+CjwQ0jI=
+	t=1717772537; cv=none; b=MkvJm62eppR6USTU7/8z/u063sYdVqng9imPOhCAsf8WDqNZFZF3HpHyT09QWoO0nmzanYtTN+XLt10Y8HRxUVOals7fH5HKXM34l/jMoOH6vL6KykKTd0INqlCGCdSw1mENbjf47S8337ly9SVOawIqCcBSespRZQT/4qy38ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717772534; c=relaxed/simple;
-	bh=uF8vT+OcPDdR5VdfX4WfqKuZuRJ7pOLHE27ORfVXlFg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CHvjRW7xEHBtgzFSg2K4yFaTJMXWrFFacvTBSuXejbOFpQK6rEAICZbj6TsS+1VVUTQDCM9yDH0lXup/CfRjIrOaN/UcwYNdgr4cHc2LM8cMF9X0kq+8ZQZc4XmAD0mAiOOLXSKE0khH3VDxQ9RSwnvWBbWzisdCd1JBxRyV6Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OgRNkV9V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C9CC2BBFC;
-	Fri,  7 Jun 2024 15:02:10 +0000 (UTC)
+	s=arc-20240116; t=1717772537; c=relaxed/simple;
+	bh=pYJNoB2u1ZqMObb+gIcRRwqEKrEEAYdKPGc5UfseMP0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ZnuoIr7HlHZyZOQUd0OMHqU3YzOi4wGQm1WN7Q81fxCKqVNi2ro5zv5W0tOEj9J3THt9BB+qxsumJk9FoyibTdNRkjNbtmuNecwagHTTytGTWkTHL7vHJPkw4JPLrip4F3usLYs8lmUBI3//W4S55Z01wLvrqhJyHP9M9fUxY0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3dtdi9m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56597C3277B;
+	Fri,  7 Jun 2024 15:02:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717772533;
-	bh=uF8vT+OcPDdR5VdfX4WfqKuZuRJ7pOLHE27ORfVXlFg=;
-	h=From:Subject:Date:To:Cc:From;
-	b=OgRNkV9VGlIiqIjSZo4jIJWcrQzU0COGkyi78cBkg3cKtjgtogWfVZWKbD6CD5h8W
-	 VRyfEsfQxh3Q8SpvnVep+nHhzruYU8tzsaV+GMyFRhD/1AsgWbzGmZyMpzsuo0kHmb
-	 7Zt+JCeYOM8C0zz77ryy6E4LsA2I6/MmPsw0vQK22A8iR7P6SlZSEpBDV0JoX5n9GH
-	 Z7t3YpRtBHvNJgAy0zvfFyBZFkBHsJnHJhre/wM1yMWaKzlD8cWJG43t0s0vb2kQy5
-	 bx94E9tOdG71lD2bnPrCqMPjhrj/Y4rG/2HAIsZpoN9u1KViTFTuWCcpHfkKHTwrVh
-	 XCaClJrwAOQSw==
+	s=k20201202; t=1717772537;
+	bh=pYJNoB2u1ZqMObb+gIcRRwqEKrEEAYdKPGc5UfseMP0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=M3dtdi9mUjtm8N+238H1NcPMhSbL/RJ4OT/Mtk4Bf40zaC2jIx+defBoaMm2w+w3F
+	 +2ttwNmWnkzd/fgyV1jru7JDsEtQISv0Q5lpDLP488zB1C2/V1q6Q6TbSgS2/z41+j
+	 fDMGDwTEDk4J1ggdSTLyaHbh5A+ndfu6L2xgXle4Fo3+Rk3ZrKwxq53DO1jWFojqCv
+	 ig02H9ipxPHI8z38s6DWekIciYu3Mx+X3+GRBnjPHnPbR7OSZkrCnMWCkME/xEzrpy
+	 C6yDcSrYje4AabCNg8eLbQf3x9P8nz9G+3feVyqasqgPbvfp3nyaR/Mmd934NyTDa1
+	 GHYm1ww6tsaWA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 0/4] mptcp: various fixes
-Date: Fri, 07 Jun 2024 17:01:47 +0200
-Message-Id: <20240607-upstream-net-20240607-misc-fixes-v1-0-1ab9ddfa3d00@kernel.org>
+Date: Fri, 07 Jun 2024 17:01:48 +0200
+Subject: [PATCH net 1/4] mptcp: ensure snd_una is properly initialized on
+ connect
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANsgY2YC/z2MQQ5AQAxFryJda9IRMYmriIWYogtDpohE3F1ZW
- L73898FyklYoc4uSHyIyhINXJ5BP3VxZJRgDAUVJVXkcV91S9zNGHnD386iPQ5ysuKryDvvQkV
- gmTXxN1ilATtBe98P4PwTtncAAAA=
+Message-Id: <20240607-upstream-net-20240607-misc-fixes-v1-1-1ab9ddfa3d00@kernel.org>
+References: <20240607-upstream-net-20240607-misc-fixes-v1-0-1ab9ddfa3d00@kernel.org>
+In-Reply-To: <20240607-upstream-net-20240607-misc-fixes-v1-0-1ab9ddfa3d00@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -63,63 +64,61 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
- Christoph Paasch <cpaasch@apple.com>, 
- YonglongLi <liyonglong@chinatelecom.cn>
+ Christoph Paasch <cpaasch@apple.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1437; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=uF8vT+OcPDdR5VdfX4WfqKuZuRJ7pOLHE27ORfVXlFg=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYyDyXD9GnRwMZjOUY8pzRftCN0te079/gk33y
- QAyGVFlIjmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmMg8gAKCRD2t4JPQmmg
- c+toEAC5Il+4G9yWn+KCtBNluOSVUDQ1BitLnWbvmxbZks94ofCsmkGIneSZlEx4E6dBjdq0OCa
- sRLtJ44sEd20/adnP4lBIEYhX1Nvdmgcokg9/8MkjhUMEsrDMtOVC4oXdd7Qny4q3eB7VEzw0AN
- SlIElE0hgYqucoXbSGLZQ+B19mhIryj2/iyD0pym/8mOckfybU3qls+9PyPsuZx7QWqEcMAFnL/
- VNl81+gke9qsq7+slP0T/I05fnqcA6VJTUy9d51g6FrEAutlFlYW31djKuIRYHmEDTO8kC+NKSq
- ewGw25W1To59re8VHRAFu2KNcyc9fBQIyZ4ilw1ntCRxa6W9f4RKQAfvBx0HoFudMfUIVRNw5ap
- ZBq9hLKDibELegf8ojRAO0IG2F36ATYVXRa8gqNtqkr0Rtd3bbA6qYJ+BuLVhVoz2bPf2W6jAvk
- Dko75mBdNWFvqKEZDZV4G0vbomOk+IDeyH7LA6Nwfn2X1buBrTgE9R29oI4a/DdKZJDmUJIwDk5
- Ig2j93I77bDntjyxGD1V5Dpj52qNxYmK7DSZVpWTOlZ0Nzx+rRbDJ1cjrlU4U146rOUJRYvwv7K
- nRC394Y0NlGcUeokkSBpy/f9jxmanVrtAYytUNQxY97e1zwfLg2Kw8CvtCwGAd83b3b1qZepwS/
- n39TKg6jAKJkx9w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1392; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=PfdPd1CZLVPmAQl+1xZ78iEyztMBE+4I5rQY3Km+0kE=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYyDy6NeVsQvpbGo14NOqTZi/PfttbvDw/or7B
+ hL5j/ruY1GJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmMg8gAKCRD2t4JPQmmg
+ c1dcEADORAJ4oXPVG4UPn9w/yCDwvL5Fyd1gVVSuLXaU6bLYhCcxscq7nRW/KKAjR3D7NGTLSCV
+ HDGYFThEosOr3CzqqcDSco5denpV3jews85JNm1q8/bYhpCKRRSGXqf4gWVs49NzRnBaGAWDJ3W
+ k3iEOzWfcPkjKILeb0mkIawct8pfi6QoYraMFy3Dsd7S51K/egDbNIU6f/9qTBDJahbU0u89Kz5
+ Z5TJvPVMI7ge88KQTDO2tk5wt9b71JeB0ltY89pqc+nftvC8qDnVgfeIr5BtktmjsSj5s41Wmpq
+ cCDKxW2uZQqtBvvYs/NtWmFpP8RtiY0pv8cFS7lUK2KYHVW5SkoYbJomEZU/Bu1Dw3giQxdSkkT
+ 6RPDWSNucwJ56LbnxELJojvW8djN1Jm+ugL5RKzvP6h4FHn0fJ7KGp5FeaZ1YXpdkxw4X1HoEiv
+ G6IdV3l1lbAd69Fk9X0431biHR2HAHiX5V9jJlBxd/a++c1CeDUdEPBKQglvpz7KoMS1z5yYv8V
+ DaVrPtbpNMcDdr1OOc0Ot8cFKuijXfvblPCghooMmxZP/0ZWy/rJOYgE4pp4zcxLD1Ckn6RfYsC
+ oCPULTeG8HbENfANDylqni4MOTCHVe5dEjSxMjrgmThqqVK1dw/qBPvig20nMOXA0DbbEDogXfP
+ jscIz7Ifr2RS1/Q==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-The different patches here are some unrelated fixes for MPTCP:
+From: Paolo Abeni <pabeni@redhat.com>
 
-- Patch 1 ensures 'snd_una' is initialised on connect in case of MPTCP
-  fallback to TCP followed by retransmissions before the processing of
-  any other incoming packets. A fix for v5.9+.
+This is strictly related to commit fb7a0d334894 ("mptcp: ensure snd_nxt
+is properly initialized on connect"). It turns out that syzkaller can
+trigger the retransmit after fallback and before processing any other
+incoming packet - so that snd_una is still left uninitialized.
 
-- Patch 2 makes sure the RmAddr MIB counter is incremented, and only
-  once per ID, upon the reception of a RM_ADDR. A fix for v5.10+.
+Address the issue explicitly initializing snd_una together with snd_nxt
+and write_seq.
 
-- Patch 3 doesn't update 'add addr' related counters if the connect()
-  was not possible. A fix for v5.7+.
-
-- Patch 4 updates the mailmap file to add Geliang's new email address.
-
+Suggested-by: Mat Martineau <martineau@kernel.org>
+Fixes: 8fd738049ac3 ("mptcp: fallback in case of simultaneous connect")
+Cc: stable@vger.kernel.org
+Reported-by: Christoph Paasch <cpaasch@apple.com>
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/485
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Geliang Tang (1):
-      mailmap: map Geliang's new email address
+ net/mptcp/protocol.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Paolo Abeni (1):
-      mptcp: ensure snd_una is properly initialized on connect
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 96b113854bd3..bb7dca8aa2d9 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -3740,6 +3740,7 @@ static int mptcp_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ 
+ 	WRITE_ONCE(msk->write_seq, subflow->idsn);
+ 	WRITE_ONCE(msk->snd_nxt, subflow->idsn);
++	WRITE_ONCE(msk->snd_una, subflow->idsn);
+ 	if (likely(!__mptcp_check_fallback(msk)))
+ 		MPTCP_INC_STATS(sock_net(sk), MPTCP_MIB_MPCAPABLEACTIVE);
+ 
 
-YonglongLi (2):
-      mptcp: pm: inc RmAddr MIB counter once per RM_ADDR ID
-      mptcp: pm: update add_addr counters after connect
-
- .mailmap                                        |  1 +
- net/mptcp/pm_netlink.c                          | 21 ++++++++++++++-------
- net/mptcp/protocol.c                            |  1 +
- tools/testing/selftests/net/mptcp/mptcp_join.sh |  5 +++--
- 4 files changed, 19 insertions(+), 9 deletions(-)
----
-base-commit: c44711b78608c98a3e6b49ce91678cd0917d5349
-change-id: 20240607-upstream-net-20240607-misc-fixes-024007171d60
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.43.0
 
 
