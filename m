@@ -1,203 +1,267 @@
-Return-Path: <linux-kselftest+bounces-11454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BAA9900DFF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 00:23:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79DC4900E05
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 00:26:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6FB71F223FB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:23:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4C91B2190E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C202155315;
-	Fri,  7 Jun 2024 22:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8250C155353;
+	Fri,  7 Jun 2024 22:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tkg1FErc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Go7BKEZV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F4F502BE;
-	Fri,  7 Jun 2024 22:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717799011; cv=fail; b=fmGECHU471ihh4B/krBRxoKgQyBgJc2icOSUnKZIROIprQm2E7kbT5A4bb6L70JJHogKGRuwfuC5fWm3VktFrdqVxnXe4Fc5cAABcwfVJymBlBc3tagF2MpAnfNhQp1knnYSIqluMH/BbVv+drriRlKHtaSAfLmv8/R1cWtiTwk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717799011; c=relaxed/simple;
-	bh=Sbmll9+qAjdrNPRjrpAl0I2Z8ln8LKF67udN3txIwcc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=utzm1SeLZCfYYkc+T9Yx0CZGX7TjrgOKsIcaRHFlQCDH9k0s9yQvbxdPdajN/0LK1FNJq64ltR4RK/1i9w2ikgjao7Diihmt93o7YZ8KrtuhiMKxKLT4yqelSpIi7aXHqmoz8m1Tjf6OkLbrUHnTUEv/1Ar0S5zeMj1RoSWustA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tkg1FErc; arc=fail smtp.client-ip=40.107.237.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kpX8TXTVqjg7wAiwhFxKQ6p+tl2n/+Ct7wHdVpNDs0BwYBpfKyQren9t7lQyr9dH59mnhErenj3nQwGQz6FA4N2Th5/pLDqxVRfqj1ibgXh6UXLavmtWLm6CarRjjp7Zv8Sp7n5oVlq9t9JyTQNLdY/gwunnIFFwpDAZe9/+Dk9ZLe/kZGVb43xiZV7Zk/1KAUEyyfwkWi5PPqaPXXMsMegchehzJ9Jcx5NC+WgaHU3U8EbZja6imW8jkQMf9LhAezdpvbGluvMZQcR1uYmA1Afint3gYj9CQT9jtgKaF4T0ej/NDz1RfkzPmYOhiulq+1GsI9BNzjKea8nOHWtIdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ffxxUmOl1qnu0YnFTRASpyfarCuN9RBn0Wjuir1F72E=;
- b=lSyo3cN6V2hR1dJSV1JXnT23t4IoPDZQowFXgcfRYldP0bweMtopdbA96pXD/pss+p4EhnZlD3qDWWQmkV/1mpYpHq/aeN2YSsgHvV7pUbC37hpn/VtNTkbZEsTCHxliYTfxnZj2MR8IKuZ3+Nr5q3Xfh0OQqRursqD6ThRT0K8RIGMiAMMS8BHEDcSAXu51v7Xi7jBhGPORoF3PKQUYTE/W7rDx+oZYs5RbIwpKRwzsMgYVBeBeG1tY9/0BsGMSe9BY81lld9ifZh0CVPRxulz2LT92RwKm8NMJfO+pDR/u7wHMg272oLmNV0+065Qmlnd+afq7uBLy86gGh4Azng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ffxxUmOl1qnu0YnFTRASpyfarCuN9RBn0Wjuir1F72E=;
- b=tkg1FErc1Zh7ONWgFdmUeN2YOgEMGNuFe+XgZYjNN+OCsEddPP39EVrs/OkBWbMSRl13G/qJhsJXsA5XY29IZDd+riV1PtOuMtj59iZ6qX7helUBKyrj6Qc9dJSaLZjdVIE49qv7zWbQbOhKakFaoti0iGbNBKhImUBIqwp3iKvDoCr8QADm0ZFtrzcE2kIbP6cSGQ7Z/CfWslqktyzWC18jfvMNA4fKXh86PRhEjoMxrzA5HQ7o541bYYj1v2fJYB/spLtt+hqDec3KuoAdAq2m0ivlrwILU4q7TAIa2KeY125mcXDMGnINBBDYn/RI0scuD6Y6YAinEOMPz5tv1g==
-Received: from BYAPR05CA0072.namprd05.prod.outlook.com (2603:10b6:a03:74::49)
- by MW5PR12MB5651.namprd12.prod.outlook.com (2603:10b6:303:19f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 7 Jun
- 2024 22:23:24 +0000
-Received: from SJ1PEPF00002314.namprd03.prod.outlook.com
- (2603:10b6:a03:74:cafe::b5) by BYAPR05CA0072.outlook.office365.com
- (2603:10b6:a03:74::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.14 via Frontend
- Transport; Fri, 7 Jun 2024 22:23:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF00002314.mail.protection.outlook.com (10.167.242.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7633.15 via Frontend Transport; Fri, 7 Jun 2024 22:23:24 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 7 Jun 2024
- 15:23:12 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 7 Jun 2024
- 15:23:12 -0700
-Message-ID: <46d5479f-644d-4b38-8643-a4dd1fa221d6@nvidia.com>
-Date: Fri, 7 Jun 2024 15:23:11 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A118C145341
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 22:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717799191; cv=none; b=uQQNaXX4ooujBJJan1IX0/TgMwdUfVdagoSfo0fVZavPX8Yk4uOg/XD35Cm9GXy/0h1tKb14ANx3kTn0qj/w6agrrV1Ed3pxmuPoF7TdeU7Cxdm0u3gWq48qSWVjn47dFzmZC7QJszpwfBJnLgO8oYQyXBcEW/2ntFq/gkfa5fs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717799191; c=relaxed/simple;
+	bh=8auu4zOjxSnRgN+53PqBdb3ZnnLuj5/n6TY1C6BVbhQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E1TdK+JuRScJV1yNKhiaRu/E65ZBIVuRjuxHnLoMFStul6cQZMeFnj7ZGTM0w0kAzA4k5ZqcwlhTuI9WlWY7UQ8QfZZwEY1LzdLVrT04AxritLn5RCxZkwTaHEQu06gQAxn8EmwOAa/Ezz0D+KXeDYh5wrGJPUHDwzIKQsP6q4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Go7BKEZV; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-35ef1e928c9so3011659f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 15:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717799188; x=1718403988; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TJ3OQQW+eHyCePm6E/J3FwFPQTGkY7d0el0lDRbI3xQ=;
+        b=Go7BKEZVPwr8B8/aMdgxQEt5PUJ6nmXMA0W8w8eusVxLPoqT60kBx9q54ZMrWrKqfh
+         2VrDV/TptjLTEn71R6a/NHXW2tJHDsdvJixoLQgX+7ozmsPp/1+R1X+GsgB/Ir/Hqkmg
+         s7mcJ4sc6aaZ1HWzcToVzE3lirNG0RSTmSvCbNb/V4uIgWfaWc6cR1SGBeZSywsfH2/H
+         UbimdRrAeowZUdW2m1pT3WbAKMrf4b+jlz2KNldsUzabamSV7iLYlACnWzV3PIUQe6ZU
+         qTLBRWH7+CR9Jw4gVK1FMYJajcFcq4ZLgZL17AC61riwpH69YLHbPCv7wqLI1oJjP3Mc
+         fMWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717799188; x=1718403988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TJ3OQQW+eHyCePm6E/J3FwFPQTGkY7d0el0lDRbI3xQ=;
+        b=WNsjzeH6oxPxvlyJas4XI7HUtdG0/SZBo4QcdMbKg0e5pFeMwAbGBnF6oxMBLP8Ipm
+         Kb9paNvmQgHJ00PaIXxImn2h04a1iH0zh/v66V5mV9AP2Qn30bmayD9ro9H1rshLwOM6
+         1Ilm0NYpZsWjJEoKEMpIlC29rr4vniLbkshTpKW1yKNSG7Dg9/LG+U7rNUJi8rUtUhzU
+         ySEulE2SV7+I9YhPUtOwlEAcuOnKmFuVmSrHvcXPAucY1FyYBLxiXf7Dzpv/aDDR2tgA
+         h8aUWKze1Rh09GUpccwzFvcqHRLA/s6vGKndwvUocqpKLO52quHxEJ0Mma3eQ4xPvnpm
+         hSnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdrDFrh9stTEz3f6/R/Eyrja7k6gtUSXMu/OJ2en+ct/luqRh2Atd2Va4oKygS/jj3EDpvit+8pWvGbPMkmDx7P0fwCi7h8Rj2jy5PzBht
+X-Gm-Message-State: AOJu0YznYQv4kEFMnaKn6ry9ZIOcoXSmXyA+2oBBxYyznj+PGAXV8ylf
+	puY0yJQaWWiBSkHsiZnB+x0eVsM14RORcfT4TWVfv5h48Bjoi8Lq5MXA+EyToxAaptx/9bQAM7p
+	x2i9KpzDEoddVdVmYV4Rw1S0VddBbz+Zbx4aE
+X-Google-Smtp-Source: AGHT+IG4fiWf2whywWOKYTELPDvRzqNwtYRFuyl5M1j+OGyfWA/hmL+B/m3tm3AJoZasegTNzzDHy4gCozES5Oz25vM=
+X-Received: by 2002:a5d:5744:0:b0:35f:e4d:f3dc with SMTP id
+ ffacd0b85a97d-35f0e4df6e3mr1309708f8f.9.1717799187682; Fri, 07 Jun 2024
+ 15:26:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/7] selftests/x86: avoid -no-pie warnings from clang
- during compilation
-To: Shuah Khan <shuah@kernel.org>
-CC: angquan yu <angquan21@gmail.com>, "Kirill A . Shutemov"
-	<kirill.shutemov@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, Binbin Wu
-	<binbin.wu@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, "Rick
- Edgecombe" <rick.p.edgecombe@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Valentin Obst <kernel@valentinobst.de>,
-	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <x86@kernel.org>
-References: <20240531193838.108454-1-jhubbard@nvidia.com>
- <20240531193838.108454-6-jhubbard@nvidia.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240531193838.108454-6-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002314:EE_|MW5PR12MB5651:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1bcd039-5d95-46e7-fa55-08dc87407245
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|7416005|36860700004|376005|1800799015|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?S0FHZlpMZ1VjZExiK2VQYnkzSjl0MUxZVWx3T3FkUjY5TkxSek40WGFyNlV0?=
- =?utf-8?B?T1JWVkZHVXRTVWUremQrcmNpQk5tYXZ1NEpjSnVkV0lhbngzTnAwQkpvNFJJ?=
- =?utf-8?B?OUNvb2wwZ3dxVDRubG5WTk5zckJFQWZSbjJQSXpPSFFheUF4bVBNbHBhVEx4?=
- =?utf-8?B?VU1qZHEzQXZlckVpYVRiZG8xTU4wcWNsZjR6RjlVV2ZaZjBOZmIyVzVkWW1j?=
- =?utf-8?B?SURFaHBFdUZHWGxPL2ExajVSRTVoRnYvY2laeXhRUVBjZ1E3R1VEMXNnQUVN?=
- =?utf-8?B?L0xuM0dKYjBmakdvRGRTYUpzTmszWW5rb2pUZVpUWHRLWm9Gc0xOUUlBUFVO?=
- =?utf-8?B?R2V6OFU2cjFmTGtVYWpsZTJtNXNvVFlycjhxSG95dWljdGs2eWduTTg3VGZu?=
- =?utf-8?B?K08vN3MrYTBrQzdQeGNrajI5dVEwa2dsZnd2dDFqa2YwMGsxNkJSSHVtUnht?=
- =?utf-8?B?ZHpVb0pHaC9LeFdzelNBQjVyM1gzUHprRmp2Q1ptL0Y0YTV3Zlg2VXZXWS9k?=
- =?utf-8?B?UHFDb0FQUVkyR096TFVkK0N3UGlIKzNsRXl5eEEwSzY5Y09MUEw2bEhxU2dl?=
- =?utf-8?B?SHRSZjB1RWJZQ3R2bmMvTnkycU1PVm51aVBEdkxzelpNeEVNMTFId1ZJUU42?=
- =?utf-8?B?VHJONkxzMEcvNVRoamNLVGhwVEs5SkI2RG4yVWFaRC9vYUdHYmVta25RVk40?=
- =?utf-8?B?MXpPVXFZbUNWckdXZlZqWm1DL0ozTU8vWUlKdDk4b0NGUkx0SnZteUZkMXgr?=
- =?utf-8?B?VDRqM2dIT2QvMDVrdEVpSXVUS1YvM2M2S3BQUFJSc012YWo5Z0MvcWl3Vllp?=
- =?utf-8?B?aGxEeGhrK3JKUTJ5eHhOT05ta3EzRmpsSXZ5YXVxV0JtUVJwdjNvd28rOWdH?=
- =?utf-8?B?cTlmN1lEVTNITUFlbzVWOXc1Z0RoRjZ4K3lvRDVaNnEyRFlBNGNsek1tQjZy?=
- =?utf-8?B?eXZWOGxHR2lwbGJkTFhvczFoWGc1c3dXbGdJNXBBUEs5Um5ZSmxxWVVYUDFo?=
- =?utf-8?B?UHdTZWltSHcwQXBuRC90cDFCOUc3a1k2c2pRdVBVZXpDeUJXcmFMbHJ3bUpx?=
- =?utf-8?B?YVlJeG5hVm1pV2Y0akhmWFBkV0dRVUVKMkpSQitMWmlEb21KODF1NVdua1hU?=
- =?utf-8?B?bkJXdTk5VTN0UEdIdTVybCtVR2FhZmtJd01Vc3ExTmgwVlBsSHFmZFo4QThI?=
- =?utf-8?B?RGpmbHgrNnZsLytWeFZXQWdNdnM5bk9tTXkxOGMwRG1nN08xK0FQT1R6UXpI?=
- =?utf-8?B?SzNBbElKUElFaFBKbjRDakp3WjJVRFlCNWd2T0NiQ2hLR0ZlWENkV2JKQk5k?=
- =?utf-8?B?d2hwUHdUY3hyTVd6TlFYTzZWWWZNVFExS2hjTWlZNWM5Y01nSTNDV0Y5ditP?=
- =?utf-8?B?ZHNvL3BIbnBmWW5YMThMRmIyVVlFSkVCRzE5TGVSN01aVkRGbE1Kd2JXQTgr?=
- =?utf-8?B?TVBjMlZta0pLenZmcitEVTZicHByMDY5RnQ5eWJxMW1xT3hENmx3MUdLcFBn?=
- =?utf-8?B?MGxMaWZqTUxBYzRpcHFmREd4N2J4bmRENzlaUS9GVDhSd3RwcnRnN1YrZ2g3?=
- =?utf-8?B?blRWK2VJUFlUcUM1Nkh4QnJ5c1NVVkdnbncyTXlYb2d3NDJjMFQ0enR4d2h1?=
- =?utf-8?B?L3lYdnpmOEhsSmQ4YyswdllpWEI3ZHkvYW41aXh6Rk9qUmJWOW9RNXlpbGQ0?=
- =?utf-8?B?NFY1blRybDJ5ODgvTEpxaGZZREJydWFhVExRN2FzUTdUSy9OQm5XZU4remFB?=
- =?utf-8?B?TDlnWGFpdEQ3VTYxOTBSL0Y4MEFNaU84S05DR1V3eXpTNjBJRk5sczNHeWgy?=
- =?utf-8?B?U0xYSi93TmF4RlNSUzJGMEhGRTFFdER0QUVhbGNlbzdaY0k0YTdTSFNVYWNQ?=
- =?utf-8?B?V3I4VnRXWkxGdU1jN1BZODlGQ0RuS3NWUVJDckowSitUQkE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(36860700004)(376005)(1800799015)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 22:23:24.3675
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1bcd039-5d95-46e7-fa55-08dc87407245
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002314.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5651
+References: <20240531213439.2958891-1-jiaqiyan@google.com> <20240531213439.2958891-2-jiaqiyan@google.com>
+In-Reply-To: <20240531213439.2958891-2-jiaqiyan@google.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Fri, 7 Jun 2024 15:26:16 -0700
+Message-ID: <CACw3F50+ZhetCbeym3fDzKQr8d+HY7WXNRYUD5jh4_gTUWWEig@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] mm/memory-failure: userspace controls
+ soft-offlining hugetlb pages
+To: naoya.horiguchi@nec.com, muchun.song@linux.dev, linmiaohe@huawei.com
+Cc: akpm@linux-foundation.org, shuah@kernel.org, corbet@lwn.net, 
+	osalvador@suse.de, rientjes@google.com, duenwen@google.com, fvdl@google.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Jane Chu <jane.chu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/31/24 12:38 PM, John Hubbard wrote:
-...
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index d0bb32bd5538..5c8757a25998 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -40,6 +40,13 @@ CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
->   # call32_from_64 in thunks.S uses absolute addresses.
->   ifeq ($(CAN_BUILD_WITH_NOPIE),1)
->   CFLAGS += -no-pie
++CC Jane.
+
+On Fri, May 31, 2024 at 2:34=E2=80=AFPM Jiaqi Yan <jiaqiyan@google.com> wro=
+te:
+>
+> Correctable memory errors are very common on servers with large
+> amount of memory, and are corrected by ECC. Soft offline is kernel's
+> additional recovery handling for memory pages having (excessive)
+> corrected memory errors. Impacted page is migrated to a healthy page
+> if mapped/inuse; the original page is discarded for any future use.
+>
+> The actual policy on whether (and when) to soft offline should be
+> maintained by userspace, especially in case of HugeTLB hugepages.
+> Soft-offline dissolves a hugepage, either in-use or free, into
+> chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+> If userspace has not acknowledged such behavior, it may be surprised
+> when later mmap hugepages MAP_FAILED due to lack of hugepages.
+> In addition, discarding the entire 1G memory page only because of
+> corrected memory errors sounds very costly and kernel better not
+> doing under the hood. But today there are at least 2 such cases:
+> 1. GHES driver sees both GHES_SEV_CORRECTED and
+>    CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+> 2. RAS Correctable Errors Collector counts correctable errors per
+>    PFN and when the counter for a PFN reaches threshold
+> In both cases, userspace has no control of the soft offline performed
+> by kernel's memory failure recovery.
+>
+> This commit gives userspace the control of soft-offlining HugeTLB
+> pages: kernel only soft offlines hugepage if userspace has opt-ed in
+> in for that specific hugepage size. The interface to userspace is a
+> new sysfs entry called softoffline_corrected_errors under the
+> /sys/kernel/mm/hugepages/hugepages-${size}kB directory:
+> * When softoffline_corrected_errors=3D0, skip soft offlining for all
+>   hugepages of size ${size}kB.
+> * When softoffline_corrected_errors=3D1, soft offline as before this
+>   patch series.
+>
+> So the granularity of the control is per hugepage size, and is kept
+> in corresponding hstate. By default softoffline_corrected_errors is
+> 1 to preserve existing behavior in kernel.
+>
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> ---
+>  include/linux/hugetlb.h | 17 +++++++++++++++++
+>  mm/hugetlb.c            | 34 ++++++++++++++++++++++++++++++++++
+>  mm/memory-failure.c     |  7 +++++++
+>  3 files changed, 58 insertions(+)
+>
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 2b3c3a404769..55f9e9593cce 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -685,6 +685,7 @@ struct hstate {
+>         int next_nid_to_free;
+>         unsigned int order;
+>         unsigned int demote_order;
+> +       unsigned int softoffline_corrected_errors;
+>         unsigned long mask;
+>         unsigned long max_huge_pages;
+>         unsigned long nr_huge_pages;
+> @@ -1029,6 +1030,16 @@ void hugetlb_unregister_node(struct node *node);
+>   */
+>  bool is_raw_hwpoison_page_in_hugepage(struct page *page);
+>
+> +/*
+> + * For certain hugepage size, when a hugepage has corrected memory error=
+(s):
+> + * - Return 0 if userspace wants to disable soft offlining the hugepage.
+> + * - Return > 0 if userspace allows soft offlining the hugepage.
+> + */
+> +static inline int hugetlb_softoffline_corrected_errors(struct folio *fol=
+io)
+> +{
+> +       return folio_hstate(folio)->softoffline_corrected_errors;
+> +}
 > +
-> +ifneq ($(LLVM),)
-> +# clang only wants to see -no-pie during linking. Here, we don't have a separate
-> +# linking stage, so a compiler warning is unavoidable without (wastefully)
-> +# restructuring the Makefile. Avoid this by simply disabling that warning.
-> +CFLAGS += -Wno-unused-command-line-argument
-> +endif
->   endif
->   
->   define gen-target-rule-32
-
-This actually can be improved slightly, as per our latest tentative
-decision about how to handle both LLVM=1 and CC=clang cases [1].
-
-If this series goes via Shuah's next tree, then I can put the
-CC_IS_CLANG fix from [1] on top of previous patches, that will work
-nicely.
-
-In other words, I think we can use this series as-is, and let the
-CC_IS_CLANG fix proceed just after that. Because it gets better a piece
-at a time: first we get rid of the warning for most cases, then we get
-rid of it for the odd "make CC=clang" case as well.
-
-[1] https://lore.kernel.org/6b32399f-d9c6-4df5-b1e5-755ef4acf25d@nvidia.com
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
+>  #else  /* CONFIG_HUGETLB_PAGE */
+>  struct hstate {};
+>
+> @@ -1226,6 +1237,12 @@ static inline bool hugetlbfs_pagecache_present(
+>  {
+>         return false;
+>  }
+> +
+> +static inline int hugetlb_softoffline_corrected_errors(struct folio *fol=
+io)
+> +{
+> +       return 1;
+> +}
+> +
+>  #endif /* CONFIG_HUGETLB_PAGE */
+>
+>  static inline spinlock_t *huge_pte_lock(struct hstate *h,
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 6be78e7d4f6e..a184e28ce592 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4325,6 +4325,38 @@ static ssize_t demote_size_store(struct kobject *k=
+obj,
+>  }
+>  HSTATE_ATTR(demote_size);
+>
+> +static ssize_t softoffline_corrected_errors_show(struct kobject *kobj,
+> +                                                struct kobj_attribute *a=
+ttr,
+> +                                                char *buf)
+> +{
+> +       struct hstate *h =3D kobj_to_hstate(kobj, NULL);
+> +
+> +       return sysfs_emit(buf, "%d\n", h->softoffline_corrected_errors);
+> +}
+> +
+> +static ssize_t softoffline_corrected_errors_store(struct kobject *kobj,
+> +                                                 struct kobj_attribute *=
+attr,
+> +                                                 const char *buf,
+> +                                                 size_t count)
+> +{
+> +       int err;
+> +       unsigned long input;
+> +       struct hstate *h =3D kobj_to_hstate(kobj, NULL);
+> +
+> +       err =3D kstrtoul(buf, 10, &input);
+> +       if (err)
+> +               return err;
+> +
+> +       /* softoffline_corrected_errors is either 0 or 1. */
+> +       if (input > 1)
+> +               return -EINVAL;
+> +
+> +       h->softoffline_corrected_errors =3D input;
+> +
+> +       return count;
+> +}
+> +HSTATE_ATTR(softoffline_corrected_errors);
+> +
+>  static struct attribute *hstate_attrs[] =3D {
+>         &nr_hugepages_attr.attr,
+>         &nr_overcommit_hugepages_attr.attr,
+> @@ -4334,6 +4366,7 @@ static struct attribute *hstate_attrs[] =3D {
+>  #ifdef CONFIG_NUMA
+>         &nr_hugepages_mempolicy_attr.attr,
+>  #endif
+> +       &softoffline_corrected_errors_attr.attr,
+>         NULL,
+>  };
+>
+> @@ -4655,6 +4688,7 @@ void __init hugetlb_add_hstate(unsigned int order)
+>         h =3D &hstates[hugetlb_max_hstate++];
+>         mutex_init(&h->resize_lock);
+>         h->order =3D order;
+> +       h->softoffline_corrected_errors =3D 1;
+>         h->mask =3D ~(huge_page_size(h) - 1);
+>         for (i =3D 0; i < MAX_NUMNODES; ++i)
+>                 INIT_LIST_HEAD(&h->hugepage_freelists[i]);
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 16ada4fb02b7..7094fc4c62e2 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -2776,6 +2776,13 @@ int soft_offline_page(unsigned long pfn, int flags=
+)
+>                 return -EIO;
+>         }
+>
+> +       if (PageHuge(page) &&
+> +           !hugetlb_softoffline_corrected_errors(page_folio(page))) {
+> +               pr_info("soft offline: %#lx: hugetlb page is ignored\n", =
+pfn);
+> +               put_ref_page(pfn, flags);
+> +               return -EINVAL;
+> +       }
+> +
+>         mutex_lock(&mf_mutex);
+>
+>         if (PageHWPoison(page)) {
+> --
+> 2.45.1.288.g0e0cd299f1-goog
+>
 
