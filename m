@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-11419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74495900A7E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:35:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A58DB900A81
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:35:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D275282F1D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:35:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31141B27412
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95D819FA75;
-	Fri,  7 Jun 2024 16:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C781A01AD;
+	Fri,  7 Jun 2024 16:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XXap2/9+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u6rxhvIF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA9319FA6D;
-	Fri,  7 Jun 2024 16:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3DA19FA96;
+	Fri,  7 Jun 2024 16:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717777889; cv=none; b=kiz+QmExXEO/4jNV9D4H0txG9QbQVHn3QUTpeGrRlSFJmqjQQHHObsnYwhXog2PO+/ntCTAW/WtecjL55AnLAEVA7ERT5jnusbXEG5XaqCeMR3wpXsMdceb0oSRa3kDrZOEdWojgDcqI5JbUFvz/CETyKCN4hqWN49OQzzbUPwU=
+	t=1717777892; cv=none; b=Kp+DSgwjJBgbs7HYlxRtCeSnjbLGxm2GWP92j5gnyemovnTBPsiw1tnJ9gk3VTziFGbjRTi3s9AIzOu5j2xBxZAgZ9A1NHIG51gUOffSex4x5zxHb38R81TOpmxZTopDgQtZAyJNmkzQTFg947zSRuA2EI5VzFJj8LBAxVuUzNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717777889; c=relaxed/simple;
-	bh=sw4QEfs+KCb/A6DQwxdbwqcDsSwr0+kHnEmigoHWK0w=;
+	s=arc-20240116; t=1717777892; c=relaxed/simple;
+	bh=wQfj7qGRvIbdxyBHMllxfwfWwHu6K8la+zAXvBAGPhw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ursgohw5/UFNU4gger3sfymtdfgCkmOpvvX8a8rjnE+l0pO2MmNcYPoqPnCwlPStiE5aO3SI60wRNjMLsXQSa/0mmjnB8RaTAqg29hHAR9QurvovkguXVeGqle8MyCqUaG4QRutlDmBmJoUZDKP6udNOP0hcCoUw7HacDVrbjN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XXap2/9+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A12C3277B;
-	Fri,  7 Jun 2024 16:31:26 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=dfPbIHWSxlkUboUbx/idZeWmOTwAvQNYdilMqggz9GFmFZZ8UczQru4aWp0NEH8A5Ie00xeH67S0q9NAMjhYwXjNukG5sRsgQmdvdGpOc6qhLmSWbUU7DzchbuPQPTjvByJE2zQlhQ+XKZOm8zlXw+iiNTCAryBLhFFw1V31L0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u6rxhvIF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE4FC2BBFC;
+	Fri,  7 Jun 2024 16:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717777889;
-	bh=sw4QEfs+KCb/A6DQwxdbwqcDsSwr0+kHnEmigoHWK0w=;
+	s=k20201202; t=1717777892;
+	bh=wQfj7qGRvIbdxyBHMllxfwfWwHu6K8la+zAXvBAGPhw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XXap2/9+6Mgpz4rsZQiP4U3wn9Ji3aZAbetmDgQHwODsMvA7Y9O21h5mktPaQngyd
-	 UdyoHfg5yWkJkOF3lWOPeYvhcF+OqsOpigsoN7mUtWH5TolhHMAEIhGXgdehL+LqZN
-	 09te+3ANUEuxvv1OYueodVhHsX4HXBxbB30PQDERyesS7P5LyDTqsm1jjBAQFJUAdp
-	 qqzxY4skgM47VijjOL6t6NO9nLRLOT3nDoTHIcDaXwZM0msD/yRCfjyb+9Rfb1i3pF
-	 swrIbFbOdZw+UtYZwLABYzUQ/i3jZDiWT7xMCwHp6jK9G5kArRj+eTAywjodhgReKQ
-	 wYTS2TSvAGpSA==
+	b=u6rxhvIFAWPwvagwDcc3jbZfhN2UdYverQrMmjDQ2Q51Gmd2QFlaLqdnLrpssza8d
+	 CKMG/v6KwfjmjmugdNW2Lb+T6qPMi9kIoKHNtXcTi2FrTNlfn2j1YMUtsamT6xM0+C
+	 S6GmSWvm5bsd5nuprq7t/N/KNIyRJ+9E3pNAZz1Hv/FfhWTzCd9kxVi3XkrmPwwLGH
+	 26oxhX4SaqDjJEyoLz0XlOeUvvTR9Z0gB+XrUpPI2AngsxyBB98XzlxrP0oMS90sbK
+	 b5WAP+awRlCYEhmkvjzziJRGRwtKHFfJq5y6+538n0DTVEMG7XDo8cjwsHL0MHWzI0
+	 wJTHVgZmriiaw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 07 Jun 2024 18:31:06 +0200
-Subject: [PATCH net-next 5/6] selftests: mptcp: lib: use setup/cleanup_ns
- helpers
+Date: Fri, 07 Jun 2024 18:31:07 +0200
+Subject: [PATCH net-next 6/6] selftests: mptcp: lib: use
+ wait_local_port_listen helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-5-e36986faac94@kernel.org>
+Message-Id: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-6-e36986faac94@kernel.org>
 References: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
 In-Reply-To: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
 To: mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>, 
@@ -64,83 +64,74 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <tanggeliang@kylinos.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1831; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=NgawBoCahqER20tDcfL15sESUXbmBfp0LJKw9SYNUQU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYzXPcU79zATimLx8e8BE3yaqIrwbD4vU/8c0u
- QxmVuccgmmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmM1zwAKCRD2t4JPQmmg
- c+XhD/44k2j3T/a7mrWv6mIOlgf/w6xvhret4faFIeRyGsODmr2o//NqM1j18Vx2Nq0CtA8tsNu
- +BK4ukFQagb4+X2vZ3/1agDb03/P+L5Qoqv0Zz7Cu9ZREd+/Kl7PoHIQhRF8JnmRZ4tR3WxP9oJ
- QWuZC9WmYqxPEgzKjTNkR7f6qVYOZ/MK2MJzCQIDyZ/KCPBb6xsgGY6zjvs1uTFEzk9pn4dURty
- EYiq6jANo8GhDWnpc7ijg8TLygOTnjg9e7aXM+KNArxmf07Kr4sFtgApqceS9x/hOfF9PDw/TGy
- XfJ8884DaKSt02N7kLy5Y7cwTIRg4QfrHW1o0QBe0BOvVj7ktUAOSHo+ZZ+ms+ikYeRV1ZNLrCW
- 5Ys2/ZOsH2SKdSFn4ijcPF0fQAlgo9HFbh0lwUMBEuhVdeM1hyCaDkqb1x2P2FiEDGVjxcADpgD
- Z8agqDzVvrRaKzx7hARrpuZYBhCiorj0l7hu1N/+OlII6TTV6TE421K7hMTcc07lEeY9s79E9GD
- ZxnpkdAdv30k9iW9l06LFR/kAMscyqMTBP0IuXw1i52eo+La1IWRgLX2YGApfzTsDO1nMz0yorW
- s7yPPdr2w5mb2yfAuuQiRl/RpCpW75u1Hy75MIxCXuxiT9WHUJbtiuupVKfsiq1oAn3IHn8MRYw
- FyYbxId/f9bCTgA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1644; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hTVnbzEs/VsxAGCcCO2AuB217Q1JKbIP3pRwVKJ7PZs=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYzXPBcA4sCxBfarG1xUmQxlXn00WagQs+0cnG
+ Bvz5J5yA4aJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmM1zwAKCRD2t4JPQmmg
+ c9mkEACVy5tLLQfLIZnrOaRPz5yK4BDZvZJWeWO4rxg4yBH/tdAIZSqGzWmefLVbg0x1wJVj4sj
+ KiVB+sFZdDX3a/WITR6wU5ze5HveNiRBRDbFjLYe0ALNNxvRna6WL/nfk/1o1wZl/Y0mrHJg13K
+ l0d6ZR1IRynKefzs6xAv8dtwDik6KA7h/EWbyefIZd56PHmM3SwHffiQG0tD/mBAhrT/XvQ5V8e
+ 3kF/ANYpGmnlfJdAcQY+0gpMC6PIc8LkbcJLmQRjGgnaGA7Nk1O8v7diEf5Nz6hVkvoA/CloFGU
+ eYcM/SpYR2jtb2Cqa/v9IKOHMaDXX9Vnr/K61G/0rQHjfhiOj0a8vNw1xKtU/eT2aG6Sv3M8uN7
+ uTdEE9mPGVC1RHF86ZB80KQ05G9gN9NBlQOx7W1H+hjzrSCPEa7lwpTGcRZWBzD4PC2nbt7MNn8
+ LAtkCx+me0kyE17XYT7nlCVNBIX3zdn7HmtzxlvDVM8BdplCDxBqj6zGH3GtPsd8aZlfwwsFx97
+ efUL/9qfZ3qn+DUvi6UlWOGEv8q4ildvas/qo6UrNT5VEw5ovZLb1N6klRLVs9uy653HttvAnde
+ trzopBm5hHZcgeKjBlAITSmgsF4O4SNL4pC5COQGZlZaum9Oq3TdEol7O0OOJSshDz8Ji5pLNBd
+ VcX9eTKX5m1K0nQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch includes lib.sh into mptcp_lib.sh, uses setup_ns helper
-defined in lib.sh to set up namespaces in mptcp_lib_ns_init(), and
-uses cleanup_ns to delete namespaces in mptcp_lib_ns_exit().
+This patch includes net_helper.sh into mptcp_lib.sh, uses the helper
+wait_local_port_listen() defined in it to implement the similar mptcp
+helper. This can drop some duplicate code.
+
+It looks like this helper from net_helper.sh was originally coming from
+MPTCP, but MPTCP selftests have not been updated to use it from this
+shared place.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index 6ffa9b7a3260..d9e30516dc72 100644
+index d9e30516dc72..194c8fc2e55a 100644
 --- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -1,6 +1,8 @@
- #! /bin/bash
+@@ -2,6 +2,7 @@
  # SPDX-License-Identifier: GPL-2.0
  
-+. "$(dirname "${0}")/../lib.sh"
-+
+ . "$(dirname "${0}")/../lib.sh"
++. "$(dirname "${0}")/../net_helper.sh"
+ 
  readonly KSFT_PASS=0
  readonly KSFT_FAIL=1
- readonly KSFT_SKIP=4
-@@ -438,17 +440,13 @@ mptcp_lib_check_tools() {
- }
+@@ -363,20 +364,7 @@ mptcp_lib_check_transfer() {
  
- mptcp_lib_ns_init() {
--	local sec rndh
+ # $1: ns, $2: port
+ mptcp_lib_wait_local_port_listen() {
+-	local listener_ns="${1}"
+-	local port="${2}"
 -
--	sec=$(date +%s)
--	rndh=$(printf %x "${sec}")-$(mktemp -u XXXXXX)
-+	if ! setup_ns ${@}; then
-+		mptcp_lib_pr_fail "Failed to setup namespace ${@}"
-+		exit ${KSFT_FAIL}
-+	fi
- 
- 	local netns
- 	for netns in "${@}"; do
--		eval "${netns}=${netns}-${rndh}"
+-	local port_hex
+-	port_hex="$(printf "%04X" "${port}")"
 -
--		ip netns add "${!netns}" || exit ${KSFT_SKIP}
--		ip -net "${!netns}" link set lo up
- 		ip netns exec "${!netns}" sysctl -q net.mptcp.enabled=1
- 		ip netns exec "${!netns}" sysctl -q net.ipv4.conf.all.rp_filter=0
- 		ip netns exec "${!netns}" sysctl -q net.ipv4.conf.default.rp_filter=0
-@@ -456,9 +454,10 @@ mptcp_lib_ns_init() {
+-	local _
+-	for _ in $(seq 10); do
+-		ip netns exec "${listener_ns}" cat /proc/net/tcp* | \
+-			awk "BEGIN {rc=1} {if (\$2 ~ /:${port_hex}\$/ && \$4 ~ /0A/) \
+-			     {rc=0; exit}} END {exit rc}" &&
+-			break
+-		sleep 0.1
+-	done
++	wait_local_port_listen "${@}" "tcp"
  }
  
- mptcp_lib_ns_exit() {
-+	cleanup_ns "${@}"
-+
- 	local netns
- 	for netns in "${@}"; do
--		ip netns del "${netns}"
- 		rm -f /tmp/"${netns}".{nstat,out}
- 	done
- }
+ mptcp_lib_check_output() {
 
 -- 
 2.43.0
