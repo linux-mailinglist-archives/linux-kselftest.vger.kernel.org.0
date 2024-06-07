@@ -1,67 +1,69 @@
-Return-Path: <linux-kselftest+bounces-11441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B441B900D0E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:35:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81F28900D11
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:36:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1B128940F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:35:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01E2C1F270F1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F01D145B1A;
-	Fri,  7 Jun 2024 20:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A93A154424;
+	Fri,  7 Jun 2024 20:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Yu8c9Syv"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ftj7s3hf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2CB18C3B
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 20:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA67514F9E6
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 20:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717792555; cv=none; b=ENY6peDf9HZ1eyHu973xgWnrQ7IifOX9gl/KXFxnUz7vYdEoDKc7Ljg6X4uIpw1UgfjGoUTge6ipHW4kSUs7IRaEUXnAzIfPMvR2lguIHHpSLUYjjjyBXt3ZDz85HIaaMJf3WZ7kUBq1rGHe+wBHLoNGBFnOgsEsa4c+TNWrWNo=
+	t=1717792558; cv=none; b=PnCC8rNG6E934iX//1WabSMCNXEYUDUxAORix+ouMxyurcmy+JpPe2q408wH5+6cSHZyxFci1PJWuXBrwB15sXnnhM6n+i2GZet88hbvX9SqIdFJXyRmYUeEABYDEhvk2GWHII49+Ny1KTSi+CLc9SWLs4CCW3xM8tT5Lkbg8kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717792555; c=relaxed/simple;
-	bh=0oUY7YekuzTgZuoCTclJAAQEBpsdR68wucgu8oAuMyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bqWQ4LOmHOvxFQBqlE53zpfZqjWtXgVWJbaPuDcaokoQwiQZW9XLa3e1FKupq2o13enRUVMGwnGGGkylt0WzV6xL7s9jjxLC4yOq7SohMWcQQbrvUexd+NbNH+4eno4waqGqW4qkiFQsn+2NuqjIWuDGj1HF/kFng2H06ib7BIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Yu8c9Syv; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1717792558; c=relaxed/simple;
+	bh=g6CX1AvKNa0Ad5jlGLH1uQ8N6quEUKwY01IZWX3Kczo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jU/3PXSwkXUIRh88jth9HEBvTPqNdVJoDZDwLmFPhenzpvboNAP7ldPADbiuxZyrg3jX/PISnsNcj03T8Pti1DO96iPBiwAHiaeDBoYeMENSCcL/0KFsFjuZMNnRapnfjpoeG0jUayx4ac4bu+my0qbWI+LzXJJnd/kkDIp+eAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ftj7s3hf; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-6e57506bb2dso456531a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 13:35:53 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f60a502bb2so19902515ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 13:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1717792553; x=1718397353; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/aZumHyRcpOIT74DOJSEusSl9YmG7Mt7kBbt+rZmDfc=;
-        b=Yu8c9SyvgOlVfndEI1c3sF7rl+2xLUBM5r4MAKSuEpDyrc4OJaURtDXOFAjzh3w83d
-         K1lX4xG+6jC2W9XbzQpn1y0c++GYLmYIJ07eZWkmMkCocpNFvmB8TUfTWXsEEyfGi6iB
-         vfmNZ3qlNpJ9QKkuhSsO6O2ZRS1qHyLojlUmU=
+        d=chromium.org; s=google; t=1717792556; x=1718397356; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/oXWJ5Wemf0IINqz67lVh3TgdBP0Qd9snz/STsYYB+I=;
+        b=ftj7s3hfA85GTj0475K0nRtrNghdGXdns5BTKw618i5koK3qmf/rmT5lksG5EkThgI
+         LAd2OMcqWGLw5fn3gVT0o9Rgz4iZvKM0xnpdT4y+44OVwzIqI9qNKJ8ILqWcRktdS3K5
+         Es7HAbOGFl6xphRdwo82KggtazMTzJSSwALtc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717792553; x=1718397353;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/aZumHyRcpOIT74DOJSEusSl9YmG7Mt7kBbt+rZmDfc=;
-        b=o5Ya13quDsAQgt5/g9qBg7D7z6UojGnddCmVw/ByMaOCX5lDOYg+8UN+Gz9+oeTvKj
-         DAxlkdF31pmQEhB0ui9P3R5Gb39okVC5LbnPNIcSDe1/dsbqq9w46C2AvVOJ0PE9NdTY
-         8o3eUQN60XTNkIsaqJHeJXgt1KNW3BYQbSRdCGIR9zmyR5zn6Y5xSYnNvR1APAbLdwRz
-         teh4m8/T58683Wej7nHdwZ9+IPYCd8XuGqHfNTKfpN8PuYbZrx+wgIIr/9thaLSMKXQZ
-         VfGQifDwMCHT5wRZqKd3mGTgOCXblieP4i+TPNVrfcfY/xXFbD89KpGTLyOmfg1hcIhj
-         j76A==
-X-Forwarded-Encrypted: i=1; AJvYcCVNLQJPdDLJzHr1syynortOnzq8uPaMOVDG6ROdLtX+26Nz4X1x+ligZA1VUTKzt1BnjEMPSeR3FxPnq4cLfGlazutt0bgn5HVn5rzqko9q
-X-Gm-Message-State: AOJu0Yykhr9zpqTm23WYRA4zrBUYIZuNToEcTSDWeBlLgagYiFUh8QAk
-	Ou3nq5zal8KV0AuxrMYwODE+lYTcpe0sJaHMplheC5/xbEnKHMNloDcfG0BTGg==
-X-Google-Smtp-Source: AGHT+IG0zwY6vWwEtQpPZbj4cEzreBvdQwz6RkitHdPJvAt200tHqjh+4UzHLnKkUgI6qaWZ3+6VsA==
-X-Received: by 2002:a17:90a:ee4a:b0:2c1:aa8e:d70 with SMTP id 98e67ed59e1d1-2c2bc7cf895mr4084944a91.0.1717792553031;
-        Fri, 07 Jun 2024 13:35:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717792556; x=1718397356;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/oXWJ5Wemf0IINqz67lVh3TgdBP0Qd9snz/STsYYB+I=;
+        b=A7HQACm+s83hrE0w0YfoLbJ4Zq6hkzYylgNwoDq1cpDtGP5W1lGIvrIExkEj1guzSl
+         8Kn2vkY7aT3itVbZgc+Uf8O67J4z56jT/yspgNkr85wB5lCrsGj30gsYKX7f8EAx3fyd
+         pwsSlmY+04mHfQAZ+gMeYQsI0Eg651tOJKOl+XTI7J7OeD7NovKCR9+YrFoOJwzuW1HJ
+         mxxRSBpO1YaUAk9eKY2P42j4ZklRPk6NxKHewRXiKOzK24T3bWlndiZCtpn+foy/c8Hq
+         GG0FrYbmypUxgvSUi8uc4zel+pq5/jxpOAqCEMFaWyQikMWbwkPn7uyEMf53DcESM204
+         F12Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWRBXS7bu1CP80mERwigYYA00OlWHsVS4lplmiFF1A21MUKawlBqsZIyO4BZlfmwi3BUmEKHfqEFCErhIQSJaYDrdoyLpbwTIVh1q2dlrHc
+X-Gm-Message-State: AOJu0YwHiFoBlvts5ynGg6lh0Hxpc1VhpDfS9CpiPNpwpL2xzsCyIEZ4
+	LKgKTR7LpoNh41RhgHP75Pp+peq5yTWjAecrRoQiTEus4zvQXAhSdvb71ryhrA==
+X-Google-Smtp-Source: AGHT+IFnrQY/Ai8Uk6udhcAWbv2t7ZCDY3TRPvTN4XQwhL+Rwb7V0TBa2XUWwrA1IeeDyrYAYKBOgQ==
+X-Received: by 2002:a17:902:c94f:b0:1f6:8a19:4562 with SMTP id d9443c01a7336-1f6dfc426d6mr25813685ad.24.1717792555893;
+        Fri, 07 Jun 2024 13:35:55 -0700 (PDT)
 Received: from localhost (213.126.145.34.bc.googleusercontent.com. [34.145.126.213])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2c2806d1be2sm5904787a91.55.2024.06.07.13.35.52
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-1f6bd7ccfd3sm38538225ad.132.2024.06.07.13.35.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 13:35:52 -0700 (PDT)
+        Fri, 07 Jun 2024 13:35:55 -0700 (PDT)
 From: jeffxu@chromium.org
 To: jeffxu@chromium.org
 Cc: akpm@linux-foundation.org,
@@ -79,10 +81,12 @@ Cc: akpm@linux-foundation.org,
 	pobrn@protonmail.com,
 	skhan@linuxfoundation.org,
 	stable@vger.kernel.org
-Subject: [PATCH v1 0/1] mm/memfd: add documentation for MFD_NOEXEC_SEAL
-Date: Fri,  7 Jun 2024 20:35:40 +0000
-Message-ID: <20240607203543.2151433-1-jeffxu@google.com>
+Subject: [PATCH v1 1/1] mm/memfd: add documentation for MFD_NOEXEC_SEAL MFD_EXEC
+Date: Fri,  7 Jun 2024 20:35:41 +0000
+Message-ID: <20240607203543.2151433-2-jeffxu@google.com>
 X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+In-Reply-To: <20240607203543.2151433-1-jeffxu@google.com>
+References: <20240607203543.2151433-1-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,68 +98,120 @@ Content-Transfer-Encoding: 8bit
 
 From: Jeff Xu <jeffxu@chromium.org>
 
-When MFD_NOEXEC_SEAL was introduced, there was one big mistake: it
-didn't have proper documentation. This led to a lot of confusion,
-especially about whether or not memfd created with the MFD_NOEXEC_SEAL
-flag is sealable. Before MFD_NOEXEC_SEAL, memfd had to explicitly set
-MFD_ALLOW_SEALING to be sealable, so it's a fair question.
+Add documentation for memfd_create flags: FMD_NOEXEC_SEAL
+and MFD_EXEC
 
-As one might have noticed, unlike other flags in memfd_create,
-MFD_NOEXEC_SEAL is actually a combination of multiple flags. The idea
-is to make it easier to use memfd in the most common way, which is
-NOEXEC + F_SEAL_EXEC + MFD_ALLOW_SEALING. This works with sysctl
-vm.noexec to help existing applications move to a more secure way of
-using memfd.
-
-Proposals have been made to put MFD_NOEXEC_SEAL non-sealable, unless
-MFD_ALLOW_SEALING is set, to be consistent with other flags [1] [2],
-Those are based on the viewpoint that each flag is an atomic unit,
-which is a reasonable assumption. However, MFD_NOEXEC_SEAL was
-designed with the intent of promoting the most secure method of using
-memfd, therefore a combination of multiple functionalities into one
-bit.
-
-Furthermore, the MFD_NOEXEC_SEAL has been added for more than one
-year, and multiple applications and distributions have backported and
-utilized it. Altering ABI now presents a degree of risk and may lead
-to disruption.
-
-MFD_NOEXEC_SEAL is a new flag, and applications must change their code
-to use it. There is no backward compatibility problem.
-
-When sysctl vm.noexec == 1 or 2, applications that don't set
-MFD_NOEXEC_SEAL or MFD_EXEC will get MFD_NOEXEC_SEAL memfd. And
-old-application might break, that is by-design, in such a system
-vm.noexec = 0 shall be used. Also no backward compatibility problem.
-
-I propose to include this documentation patch to assist in clarifying
-the semantics of MFD_NOEXEC_SEAL, thereby preventing any potential
-future confusion.
-
-This patch supersede previous patch which is trying different
-direction [3], and please remove [2] from mm-unstable branch when
-applying this patch.
-
-Finally, I would like to express my gratitude to David Rheinsberg and
-Barnabás Pőcze for initiating the discussion on the topic of sealability.
-
-[1]
-https://lore.kernel.org/lkml/20230714114753.170814-1-david@readahead.eu/
-
-[2] 
-https://lore.kernel.org/lkml/20240513191544.94754-1-pobrn@protonmail.com/
-
-[3]
-https://lore.kernel.org/lkml/20240524033933.135049-1-jeffxu@google.com/
-
-Jeff Xu (1):
-  mm/memfd: add documentation for MFD_NOEXEC_SEAL MFD_EXEC
-
+Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+---
  Documentation/userspace-api/index.rst      |  1 +
  Documentation/userspace-api/mfd_noexec.rst | 86 ++++++++++++++++++++++
  2 files changed, 87 insertions(+)
  create mode 100644 Documentation/userspace-api/mfd_noexec.rst
 
+diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+index 5926115ec0ed..8a251d71fa6e 100644
+--- a/Documentation/userspace-api/index.rst
++++ b/Documentation/userspace-api/index.rst
+@@ -32,6 +32,7 @@ Security-related interfaces
+    seccomp_filter
+    landlock
+    lsm
++   mfd_noexec
+    spec_ctrl
+    tee
+ 
+diff --git a/Documentation/userspace-api/mfd_noexec.rst b/Documentation/userspace-api/mfd_noexec.rst
+new file mode 100644
+index 000000000000..0d2c840f37e1
+--- /dev/null
++++ b/Documentation/userspace-api/mfd_noexec.rst
+@@ -0,0 +1,86 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++==================================
++Introduction of non executable mfd
++==================================
++:Author:
++    Daniel Verkamp <dverkamp@chromium.org>
++    Jeff Xu <jeffxu@chromium.org>
++
++:Contributor:
++	Aleksa Sarai <cyphar@cyphar.com>
++
++Since Linux introduced the memfd feature, memfd have always had their
++execute bit set, and the memfd_create() syscall doesn't allow setting
++it differently.
++
++However, in a secure by default system, such as ChromeOS, (where all
++executables should come from the rootfs, which is protected by Verified
++boot), this executable nature of memfd opens a door for NoExec bypass
++and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
++process created a memfd to share the content with an external process,
++however the memfd is overwritten and used for executing arbitrary code
++and root escalation. [2] lists more VRP in this kind.
++
++On the other hand, executable memfd has its legit use, runc uses memfd’s
++seal and executable feature to copy the contents of the binary then
++execute them, for such system, we need a solution to differentiate runc's
++use of  executable memfds and an attacker's [3].
++
++To address those above.
++ - Let memfd_create() set X bit at creation time.
++ - Let memfd be sealed for modifying X bit when NX is set.
++ - A new pid namespace sysctl: vm.memfd_noexec to help applications to
++   migrating and enforcing non-executable MFD.
++
++User API
++========
++``int memfd_create(const char *name, unsigned int flags)``
++
++``MFD_NOEXEC_SEAL``
++	When MFD_NOEXEC_SEAL bit is set in the ``flags``, memfd is created
++	with NX. F_SEAL_EXEC is set and the memfd can't be modified to
++	add X later. MFD_ALLOW_SEALING is also implied.
++	This is the most common case for the application to use memfd.
++
++``MFD_EXEC``
++	When MFD_EXEC bit is set in the ``flags``, memfd is created with X.
++
++Note:
++	``MFD_NOEXEC_SEAL`` implies ``MFD_ALLOW_SEALING``. In case that
++	app doesn't want sealing, it can add F_SEAL_SEAL after creation.
++
++
++Sysctl:
++========
++``pid namespaced sysctl vm.memfd_noexec``
++
++The new pid namespaced sysctl vm.memfd_noexec has 3 values:
++
++ - 0: MEMFD_NOEXEC_SCOPE_EXEC
++	memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++	MFD_EXEC was set.
++
++ - 1: MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL
++	memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++	MFD_NOEXEC_SEAL was set.
++
++ - 2: MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
++	memfd_create() without MFD_NOEXEC_SEAL will be rejected.
++
++The sysctl allows finer control of memfd_create for old-software that
++doesn't set the executable bit, for example, a container with
++vm.memfd_noexec=1 means the old-software will create non-executable memfd
++by default while new-software can create executable memfd by setting
++MFD_EXEC.
++
++The value of vm.memfd_noexec is passed to child namespace at creation
++time, in addition, the setting is hierarchical, i.e. during memfd_create,
++we will search from current ns to root ns and use the most restrictive
++setting.
++
++[1] https://crbug.com/1305267
++
++[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
++
++[3] https://lwn.net/Articles/781013/
 -- 
 2.45.2.505.gda0bf45e8d-goog
 
