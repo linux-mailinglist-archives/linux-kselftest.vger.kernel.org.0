@@ -1,176 +1,156 @@
-Return-Path: <linux-kselftest+bounces-11410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E01C900984
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 17:47:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F869009BF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 17:58:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DE8F1C21D45
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:47:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFC58287E32
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAF419924B;
-	Fri,  7 Jun 2024 15:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6ECB19A292;
+	Fri,  7 Jun 2024 15:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bV2l9gTf"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="A2odiTsw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9B842069;
-	Fri,  7 Jun 2024 15:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D9E19A2B4
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 15:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717775219; cv=none; b=n1zCCoJMFhb2IzzDdKl1WIWubf2DLr8lx1E8RYRBYhTHJM2p7YHBoBoymAoxnovgiL+cLo1XF4FY9WBBZIMmHiTDm7WYd/kzEEqwgW6n3k3ad92s/4bRlRH2CRRqWKM4k+4A1LoO3qq/k6C/hdt5O1l5pewwYEPloNgX0hKtPOc=
+	t=1717775903; cv=none; b=nWjuWQXks+uGcrFDk6jpvkdd2tXkicBjsw0aF65/Ize9u/1rZc3dpUXXmp/OtJ++y1bqbnBl+P9DcH6ADnHMpaMH/togUT81QDEdVTvQZQs5B4oC+9Izig2m7yJfSF0if44pafhNkUqttHQdLS92+Py4RxkZpxW0lP6hsqTCNGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717775219; c=relaxed/simple;
-	bh=pUi1jj8tXmg0xRXcCvgfXTh7VkciCJG7Z7ish9eOnAo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=a15CKSxesoL3OBmU2xR4I+2TZCTthl7cGDXecyI7vUI5AhqzjbJtVl0vFg8ha1QQh69rxtzpkh8NuyqRsD33KQdWCdGdiIPKoXo9uIzzn4ZToPCLL3dmiK/QaqHHUyZ4RXB7h76O/+YED+H4FOXAoAWFQ5iAqwMy1wjrUvPPMHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bV2l9gTf; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a6ef64b092cso46989966b.1;
-        Fri, 07 Jun 2024 08:46:57 -0700 (PDT)
+	s=arc-20240116; t=1717775903; c=relaxed/simple;
+	bh=s1JvENtGfwCSbl34GscOC+aW3XbtXE7cv0+2CV0e8uQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fDm+daHkNUTOVfy9FaZ0+6p+stG4gWVgElrXE4iNIohaMe+/PEW+AU5bwTFNfdSoY+av/WtRGAI2MrX7YCyPzfwE6a4NMAmSjzM5RLbpU3uaFI7lh+yl93XMv2XoIscdBOAkbGanISWULntXivxmo8z3dRw522OaktLxhbj/cvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=A2odiTsw; arc=none smtp.client-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-25488f4e55aso128598fac.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 08:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717775216; x=1718380016; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lbfQPuUVQZ6LzSSvTAQFunm5UA6lBQ6TlzjmJiAR6E0=;
-        b=bV2l9gTfTRJLJ8xpY1NfA0XIAY+8EAV8XU6woD1sSp+nB+vJ0X0M0VBKU0Klc0AY9f
-         bj9Ir9abN/mmbsQBOEtnpYJi48TwW11uQhPWjEohDOl3uNTeFhKHydpcJVlmvl6Tx/+S
-         BrIRdXFywHnRGRUgM4fi5QThOORoq+PZDeR007peFY4kklToZdovyDy8JHiWu3baSimO
-         gNDZfUsZrCup0mswgrZZKqLlSVlmOLA6ohcEIF2N7TDmYIJat923az4bm9LTk7XPaAXV
-         xc/cVnItzWarC5edv8KMkMIYdNNoa3OXviqStOfntpuH/wCH4mUTEj6Azzq1HKWEeq1U
-         dc9A==
+        d=chromium.org; s=google; t=1717775901; x=1718380701; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TEadrKSLCgbuFYvra79wv6BZ/tbvq8SfRbQUE/5o6is=;
+        b=A2odiTsw9WFX43GAf7A9LjVbjJdaFzR84DJqUae0HCzxhGNwD43rmMZmIHfC1zpb3j
+         1+yc2z6db0GsA+Po7fstjDRkYnOb/HDQk6RrAF3qSvOlAq1JaOKiSG+EGQBjY/YnxL/c
+         nv/i0lB4AfcSBRl95ur9XjHYLbTvrN9/+tcIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717775216; x=1718380016;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lbfQPuUVQZ6LzSSvTAQFunm5UA6lBQ6TlzjmJiAR6E0=;
-        b=JydQ4DNmt7X0dq3R1AtPDRjEVRTKHm5ku4kBphloBAuqOOjqdtzmLhhc9xnKTQv0pi
-         jlJSQ52OPHvdDFOaEQxegu8Ob1rOcEwCdWtyJ7UEdGh2b+OQP/vJHjZCOLyxcEJ3WRpS
-         x8Jon9u8zdd/5onBxvZdddHQlvy2o72wEfO0BHbqn/VOszVFfXxQVNLIZcn+rHKxUEX/
-         K3wYZ0B+/JSEVsukndrAbXL4XhF2Asm3SIxaKOqs6aAk0KXa4b/1i21jqiRCBr/vSIAQ
-         HqrNFq89lqYcJxLRjDsCHCovJShlJ0fiqnpSsRx/NGvPd4c3mnox1MaR4ybD8k1Ua57m
-         QLeg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGorgzCKdgSgRIcZ2EG7gZl5moGn36PrkjloHuYqyCxte2voXP5LWrwuPwxY8nMbVsU47HM52DTJAU5Mxea1RBcPjEVJX3V9nDNcyB+bTxySWOuJIYJw7uir5nC97eIYQerpzEfx0m3cjXoQrp+gvavTMWuBGuoHI3IMO8N+U4kUHgG2h78cffUtxcuAOVQ9D9RwGz2OatLZ0XMWzMpiLTBDcgQq9sGU3HHntUtr+lpXbFoDIH15KkLXi+f+cVLvQGsAP5MLb/kweCFYzGY87ZX2/hTQpUxcM9bVhCc29GZjBBVHwtEypfOUmLlJ23Qch7OiFHYhuDEyGTEtZIyLY7Wqg0YE494sOc9B1hOV1u2Hh8km1Tx8btMu7aflzhgVRbryYadtvnjaEM2KRBW3YD/Z0fSfm5bda1mKbztTCCF7MddWa0a2yFY6TC80zuJtSecTjqag6hBNXhKdPFFKX7/Ia4npXBYGcWKHPgzJU1pzyepJh8JuVYfbC2iOl+84z+i/BySg==
-X-Gm-Message-State: AOJu0YzJZxEXgcZ+2Jn/jkW/HEcbDsfYPa4mw7LxZ5fhkrIVdPSXSS/E
-	JzVWn7HGO5208uIFFki1B3beEZE7GB92C2qmr/Vav4MyIHyKz+ex
-X-Google-Smtp-Source: AGHT+IHNLBWp/XVpBOD9TpyXIo6UVwaGICDFe79d2rsv63T1VIQg3s8h/O/cdVr7crD9nPvkteKRtg==
-X-Received: by 2002:a17:906:398:b0:a66:414c:2abf with SMTP id a640c23a62f3a-a6cd60a189emr204889166b.26.1717775215622;
-        Fri, 07 Jun 2024 08:46:55 -0700 (PDT)
-Received: from [192.168.42.206] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806eb099sm263561666b.102.2024.06.07.08.46.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 08:46:55 -0700 (PDT)
-Message-ID: <a8df4459-30bf-4414-aeca-2f67c461adc4@gmail.com>
-Date: Fri, 7 Jun 2024 16:46:57 +0100
+        d=1e100.net; s=20230601; t=1717775901; x=1718380701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TEadrKSLCgbuFYvra79wv6BZ/tbvq8SfRbQUE/5o6is=;
+        b=OhdPSXy2jbV/gOUnunHLizBm+VwaL1mmR2syzL9a5TphirmN5vRzWihO99i2Sd2bdn
+         xxQHCGy9kr/lNokZHaqAxIkCCofeqpiYt4sRDVpG9ZUbt6a8ZKMIWFYRoenA+PRqucjY
+         Vo5X9/uF8yX46TqMNvY/Js09s2ZBLVVFAdprazVTsdmFyUvtE48xFeeJOO2RNEeJiAsp
+         3+yAEZhmugg9W/U3RJRuMttJnzCnk7mxozvgiUDxS+5PjgiFO66K48GniOHt7HhfKgFL
+         NQ6QbURpuldBMBY1SnJ6xXfky4cvt2igZTT0hHQE1uAoc9+ngP1AYnLPfbtJMn0+6faM
+         n6cA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4TkxmcSHYfXC8QQOrFWLw9yAPqzvAXGz2Mh+/sWeWYXZDmWSxsysY+1tiI4dffEUvmMneNy9Z2l00AhjQlbV69wCI+Y2Ts5YRw3zLlxl0
+X-Gm-Message-State: AOJu0YxYB5Na+qcRMLySeuO6/hw+KnB1kOspVOZ1V+1kwMuiXzSDuYwd
+	1V/qX2pqk08FU/Q0sP6T14dK2KMLypEM5Z/cvfOERq7tcgz9tMZYpEmDLM3dDWQH7Pu4xA8v7MQ
+	Z4PsJV4NaepqDP1Oki8uqHaEZIH3saFK+UsNH
+X-Google-Smtp-Source: AGHT+IH/nK4F4tRexrZp1VOlLuPeWYKcpRRXCgXdkWdzR5d80ML7hH7jCR2Ex7YNQ9Ay6MVBijqvI9/8yMfwBjsXrRM=
+X-Received: by 2002:a05:6871:289:b0:254:8bb9:d0c2 with SMTP id
+ 586e51a60fabf-2548bba70dbmr376857fac.33.1717775900892; Fri, 07 Jun 2024
+ 08:58:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: David Ahern <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>
-Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <8f44ca2a-8910-418f-b4a6-ca1e051484ba@gmail.com>
-Content-Language: en-US
-In-Reply-To: <8f44ca2a-8910-418f-b4a6-ca1e051484ba@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240513191544.94754-1-pobrn@protonmail.com> <CALmYWFt7MYbWrCDVEKH4DrMQGxaXA2kK8qth-JVxzkvMd6Ohtg@mail.gmail.com>
+ <20240522162324.0aeba086228eddd8aff4f628@linux-foundation.org>
+ <1KDsEBw8g7ymBVpGJZp9NRH1HmCBsQ_jjQ_jKOg90gLUFhW5W6lcG-bI4-5OPkrD24RiG7G83VoZL4SXPQjfldsNFDg7bFnFFgrVZWwSWXQ=@protonmail.com>
+ <08450f80-4c33-40db-886f-fee18e531545@app.fastmail.com> <CALmYWFv9dK5ZPzwx3WCLMXzuuDadvFxh84+8rrT7aL105+ZZAQ@mail.gmail.com>
+ <CALmYWFtedtEnfGFp5DYacHYOE7+GB8yoQC-iyw7JAxySmgQ7vw@mail.gmail.com>
+ <f880562e-9521-4270-82e2-c6fb14dc853a@app.fastmail.com> <CALmYWFuPBEM2DE97mQvB2eEgSO9Dvt=uO9OewMhGfhGCY66Hbw@mail.gmail.com>
+ <1e1edbdc-f91f-4106-baa6-b765b78e6abc@app.fastmail.com>
+In-Reply-To: <1e1edbdc-f91f-4106-baa6-b765b78e6abc@app.fastmail.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Fri, 7 Jun 2024 08:58:08 -0700
+Message-ID: <CABi2SkUMppyL_LRKJV6BfgGu=1GpGCEOdZ5VHCENMUtzHcRTkA@mail.gmail.com>
+Subject: Re: [PATCH v1] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
+To: David Rheinsberg <david@readahead.eu>
+Cc: Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	=?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	dmitry.torokhov@gmail.com, Daniel Verkamp <dverkamp@chromium.org>, hughd@google.com, 
+	jorgelo@chromium.org, skhan@linuxfoundation.org, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/7/24 16:42, Pavel Begunkov wrote:
-> On 6/7/24 15:27, David Ahern wrote:
->> On 6/7/24 7:42 AM, Pavel Begunkov wrote:
->>> I haven't seen any arguments against from the (net) maintainers so
->>> far. Nor I see any objection against callbacks from them (considering
->>> that either option adds an if).
->>
->> I have said before I do not understand why the dmabuf paradigm is not
->> sufficient for both device memory and host memory. A less than ideal
->> control path to put hostmem in a dmabuf wrapper vs extra checks and
->> changes in the datapath. The former should always be preferred.
-> 
-> If we're talking about types of memory specifically, I'm not strictly
-> against wrapping into dmabuf in kernel, but that just doesn't give
-> anything.
+Hi David,
 
-And the reason I don't have too strong of an opinion on that is
-mainly because it's just setup/cleanup path.
+On Fri, Jun 7, 2024 at 1:38=E2=80=AFAM David Rheinsberg <david@readahead.eu=
+> wrote:
+>
+> Hi
+>
+> On Tue, May 28, 2024, at 7:13 PM, Jeff Xu wrote:
+> >> > Another solution is to change memfd to be by-default sealable,
+> >> > although that will be an api change, but what side effect  will it b=
+e
+> >> > ?
+> >> > If we are worried about the memfd being sealed by an attacker, the
+> >> > malicious code could also overwrite the content since memfd is not
+> >> > sealed.
+> >>
+> >> You cannot change the default-seals retrospectively. There are existin=
+g shmem-users that share file-descriptors and *expect* the other party to b=
+e able to override data, but do *not* expect the other party to be able to =
+apply seals. Note that these models explicitly *want* shared, writable acce=
+ss to the buffer (e.g., render-client shares a buffer with the display serv=
+er for scanout), so just because you can *write* to a shmem-file does not m=
+ean that sharing is unsafe (e.g., using SIGBUS+mmap can safely deal with pa=
+ge-faults).
+> >>
+> > If the other party is controlled by an attacker, the attacker can
+> > write garbage to the shm-file/memfd, that is already the end of the
+> > game, at that point, sealing is no longer a concern, right?
+>
+> No. If a graphics client shares a buffer with a graphics server, the clie=
+nt is free to write garbage into the buffer. This is not unsafe. The graphi=
+cs server will display whatever the client writes into the buffer. This is =
+completely safe, without sealing and with a writable buffer.
+>
+> > If the threat-model is preventing attacker on the other side to write
+> > the garbage data, then F_SEAL_WRITE|F_SEAL_SHRINK|F_SEAL_GROW can be
+> > applied, in that case, default-sealable seems preferable because of
+> > less code change.
+>
+> Again, the threat-model is *NOT* concerned with writes.
+>
+> Graphics clients/servers are a good example where *ANY* data is valid and=
+ can be processed by the privileged server. Hence, *ANY* writes are allowed=
+ and safe. No need for any seals. Those setups existed way before `memfd_cr=
+eate` was added (including seals).
+>
+> However, when windows are resized, graphic buffers need to be resized as =
+well. In those setups, the graphics server might call `ftruncate(2)`. If yo=
+u suddenly make shmem-files sealable by default, a client can set `F_SEAL_S=
+HRINK/GROW` and the privileged graphics server will get an error from `ftru=
+ncate(2)`, which it might not be able to handle, as it correctly never expe=
+cted this to happen.
+>
 
-> But the main reason for allocations there is the difference in
-> approaches to the api. With io_uring the allocation callback is
-> responsible for getting buffers back from the user (via a shared
-> ring). No locking for the ring, and buffers are already in the
-> context (napi) where they would be consumed from. Removes some
-> headaches for the user (like batching before returning buffers),
-> and should go better with smaller buffers and such.
-> 
->> I also do not understand why the ifq cache 
-> 
-> I'm not sure what you mean by ifq cache. Can you elaborate?
-> 
->> and overloading xdp functions
-> 
-> Assuming it's about setup via xdp, it was marked for remaking in
-> RFCs for longer than desired but it's gone now in our tree (but
-> maybe not in the latest series).
-> 
->> have stuck around; I always thought both were added by Jonathan to
->> simplify kernel ports during early POC days.
-> 
+The graphic buffer  is a good example for shmem-files of
+not-sealable-by-default. Thanks for the details.
 
--- 
-Pavel Begunkov
+-Jeff
+
+
+> Thanks
+> David
 
