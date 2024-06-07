@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-11414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C96900A6C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:33:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03F86900A6E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E01EB2611A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:33:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9715A1F2117F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C4A19ADB9;
-	Fri,  7 Jun 2024 16:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBA419B5B0;
+	Fri,  7 Jun 2024 16:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8LJpdch"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NZeJOwBn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3310D134B2;
-	Fri,  7 Jun 2024 16:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEB619B5A1;
+	Fri,  7 Jun 2024 16:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717777875; cv=none; b=iQiyrJ+PABt5dxEWVInA4dBhCjitzw2j1/L1ZCpF8gHXqldW1g5274fW+YQMsAAzaQ21jbKtWrDIB2AWZnKgTHjt/Ib+RI9GNKPVSCmTsCnGl0eaHptf7k1RAWKob4a6xmoWKmOYN0LupkN8lOyfokUuEYFaMZtUMhWWYzfttl8=
+	t=1717777878; cv=none; b=MhgSCXg9aSE3XkiwX+A5mLOu6VSqn0wcijGLC/4RxbpfjFm+Db8h7eL3WKXWylJSIkuAZqvlq77kqM750S0+AdzCTVugAfs0PFkx0wwX9PaKFFyQ04YWj0JHQX1wwYjzKDYgqojvFSjrReKOyg1GVH1XdAnSJ2iJ3XmX2OZTp2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717777875; c=relaxed/simple;
-	bh=jhLtBrMAo8ryDnhWQTtDLfSSE4LNiPRN3afuSKN4v8Q=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YAFH9N3SkjM9RbGz3Q0A9wptXjHmpVkMSOCYJDRIZdxMe6nU3q038gwY/RXQ64K9dwx255PsvTvCRKTMnEekmLI/UfbIxaCq3YIQDyB03Km1hawFZ6nIBbTaUoGNwKj7UE3TsVyQzBbd6+VL0PGMXRl7Za6d252UU1JcrbTOrBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8LJpdch; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDC1C2BBFC;
-	Fri,  7 Jun 2024 16:31:11 +0000 (UTC)
+	s=arc-20240116; t=1717777878; c=relaxed/simple;
+	bh=fYt4PaaC7RD7kCNYM/oIuTd6c2zrPeCtLWUrgb6Sp+Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=guTM443aty7A/jtQz294uWsKG9lR4KBsWrksZgjkkyM9V132p/6yE2DbHglfbBDx8n3vHpqrNqHLGBLnUffe9DqRlIWmWcrbDiNY3/APgyoQMHGPRXMXTkMpMJCJqC0/9MwF5AgWrK7dmUFfxKRpqqdFrFS2pc0ia/UKpLWNZzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NZeJOwBn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECD2C32786;
+	Fri,  7 Jun 2024 16:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717777874;
-	bh=jhLtBrMAo8ryDnhWQTtDLfSSE4LNiPRN3afuSKN4v8Q=;
-	h=From:Subject:Date:To:Cc:From;
-	b=R8LJpdchzAmPkZB3CQqsWbRchh4lBgCpjcc/u5EtLHj7wDjm+cSEYIIUysptV7xKc
-	 +lql0j496256hrtgYFdnnBX5qq91mn8vg2fb1aHJcjUb3tGrA9NE9ffdxlCLnxMiyX
-	 Ck9mlHo/H4I1lOs4PKXq+BwA2ZTgciY2Ye22e5tRkWI8ldkd9B7zm8iqj+3JwoKkuD
-	 X4L3xWhA6CIzDp+0Dfm2kQA7ZuZZQcm5q1hH0M5w0RY6KyjOFbrdyul3JGA2pSBIDe
-	 t/24waOtkijFzszzL2lmoHwjV7bv921rdKAZ5t4e7oiqCkUjo3L6j9fL+bT7jqHXGA
-	 0ZNgLbOrKxcOQ==
+	s=k20201202; t=1717777877;
+	bh=fYt4PaaC7RD7kCNYM/oIuTd6c2zrPeCtLWUrgb6Sp+Y=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=NZeJOwBnq9zEi4m8mJltGqaxIoLEWvUblXilotDN9VEJfkIpoB6tEzsI3naIeUc+c
+	 8MU2pDz6npKH4aMyrb4QIceX0Typm+GUSFYfd4PQ9ziUQAwEGQzr5LTO3wpRt8qgA0
+	 KL5P+lJjN7FC4BC1sWkJSmzKaRqdpXf5SQST/wu6Bp70HRbVwd93xYy0fHzCoy1Bf5
+	 SQShnaybj1814IwDfOhhuTctAE3oRBflstZBkc2jbepBQbAS5NwGdmtKawdpjFGuv9
+	 HWeWSelwsou99pR3PIumQ22qrqTj3A0DP7HyhCfHWV6VGdXQl6nH4pirwm3G18zTD7
+	 3ga8FbflmH2MQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 0/6] selftests: mptcp: use net/lib.sh to manage
- netns
-Date: Fri, 07 Jun 2024 18:31:01 +0200
-Message-Id: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
+Date: Fri, 07 Jun 2024 18:31:02 +0200
+Subject: [PATCH net-next 1/6] selftests: net: lib: ignore possible errors
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,77 +52,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMU1Y2YC/z2NwQrCMBBEf6Xs2YU0rRX8FfEQ41QX2hiyqxRK/
- 91Q0MMcHjO8WUlRBErnZqWCj6i8UoX20FB8hvQAy70yeed7N7gTv7NaQZg5wWoW43+lmEaDmvK
- cLeZ9McmNu+GIvoNHGwNVcS4YZdlPL/TT0HXbvqkbt9+OAAAA
+Message-Id: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-1-e36986faac94@kernel.org>
+References: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
+In-Reply-To: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
 To: mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
  Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1664; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=jhLtBrMAo8ryDnhWQTtDLfSSE4LNiPRN3afuSKN4v8Q=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYzXPzkHF/dP9UOJPwz+3WRICf4XmqHzCwJCMy
- ZGrKGQ0BxGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmM1zwAKCRD2t4JPQmmg
- cw0vEADdwBa+vFOXcyCHnBWs8kybF7ImH9DJbc0enEgjonqQYfehgbizvU3ENFoJQlfqT7cC60A
- h/EHNbo9BkOdyh8ZfaISU25EJqTe9dbVDA+f1lOYnqxQMWEtkIEnhGV5A9pV32fVgBLtuG8Q7iF
- Huyz4W9yWD5a1c5xGz1fiz753EXts/qRuwJLbf2JPDHCP7zCHJoRNnDBotPjf0c3kRn9PkFK3bV
- YmM7MmxLBvl0J1Ho/SR5S0+D8ocQiWPdx7Lt7S3w8uyA55YxrPf+SDCpwoIF4/9N2vyRHOe+2x9
- S/yGZSkzJ60KtdCFJ55Anvf95U1SK9pjKZtLYPLyNmbEqiKnrLjpY7dofk/VqwKwF1gYhdthk4r
- A3e/fekh+j2ChXRcKKYgGbfjsTS0A0/lBRj9jpTnnQ7XIUlwBl2PWZN2NuraQihI5xrgpUrpAOe
- AiLSvugJMicSEQscVU8RPQ/YwVWiB5hONvuoyiy+M/zEgaaA+8yf3TM/o4N/1VEt8ZOT2auZd/i
- 3qmLl1dINopja5k9dp5FEaVjPDGHCx+3zU6ynNnTPhRcPeAPSYji+/Qvstr4/msfPG9hQ6eudlq
- um6qKw9RroBp04SbGptkHP3QpzMOtR5Ahm6hubzGl/R0dQ4nZZMLO90tMC46NEE+2nFJZWkCum1
- HwlEb88ashD45MQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=fYt4PaaC7RD7kCNYM/oIuTd6c2zrPeCtLWUrgb6Sp+Y=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmYzXP4whqHAe8UikCsoFniIMddqS3mBG3zRfPh
+ Nd796vYCEGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZmM1zwAKCRD2t4JPQmmg
+ c4XbEACZ/DkVHJ1xmqNVx8QUpeZX8p8Ekv7RWcll48q8DiyMGuCra1qj+grt5urv3UdudUc7OWV
+ KIheHt8qEiQBkKY5+ulcObRpKcwVcXsE6OkhmPUNNHz60DrXLW3/XaKqnKCWHv2PZSQgWY8wxEb
+ 9XmgMby/VfKUIVgsrGiXyH3+opVa8j6il4wA+73EAW9u6RaY0TJHb7oRPvO1AghpZZrcC58qnil
+ 4inqeX91s9cXYdk0+fVvO++TMXeaD73H/Bj3uEt7Be1yXoi1lCzdL2lMD4UChQtwphe2GesZPd4
+ n79JtyQqyBmPWDJP6Frb0sKc0mwldTTw1tNaq/kmY4xnJyLV5FnRHhhSTddWj2rnf1Ps76eJuks
+ y+ldr9yJj+a80I1h+2MpNsW7Rn1Cu8ueCcovULccdnldOeyG+RK3jTaUmGvGsMTV87GnV8XMgu6
+ 5hWcNqgLPh7hbKr69UjcAo+1NqzE0TwccCEvgZpWjwirGchx7Oevg5XUcoGwnFc03WIBEymCGbJ
+ K7gj3K0TmxJpAMWQhmlvkrF6GXktTN0KUmWbpjIXvYtP+5b3Q0KUJl0nfsqEd6LwfQC9kJ5r/+1
+ 2jGZtzaml70V40DtHKgoYMnGLicq7XuwdT2T4uSJ8fnCjXkKcsgbHalx4YNjlyikaatLSmT1k0/
+ amfNEKFPa+ZoaXQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-The goal of this series is to use helpers from net/lib.sh with MPTCP
-selftests.
+No need to disable errexit temporary, simply ignore the only possible
+and not handled error.
 
-- Patches 1 to 4 are some clean-ups and preparation in net/lib.sh:
-
-  - Patch 1 simplifies the code handling errexit by ignoring possible
-    errors instead of disabling errexit temporary.
-
-  - Patch 2 removes the netns from the list after having cleaned it, not
-    to try to clean it twice.
-
-  - Patch 3 removes the 'readonly' attribute for the netns variable, to
-    allow using the same name in local variables.
-
-  - Patch 4 removes the local 'ns' var, not to conflict with the global
-    one it needs to setup.
-
-- Patch 5 uses helpers from net/lib.sh to create and delete netns in
-  MPTCP selftests.
-
-- Patch 6 uses wait_local_port_listen helper from net/net_helper.sh.
-
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Geliang Tang (3):
-      selftests: net: lib: remove 'ns' var in setup_ns
-      selftests: mptcp: lib: use setup/cleanup_ns helpers
-      selftests: mptcp: lib: use wait_local_port_listen helper
+ tools/testing/selftests/net/lib.sh | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-Matthieu Baerts (NGI0) (3):
-      selftests: net: lib: ignore possible errors
-      selftests: net: lib: remove ns from list after clean-up
-      selftests: net: lib: do not set ns var as readonly
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 9155c914c064..b2572aff6286 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -128,25 +128,17 @@ slowwait_for_counter()
+ cleanup_ns()
+ {
+ 	local ns=""
+-	local errexit=0
+ 	local ret=0
+ 
+-	# disable errexit temporary
+-	if [[ $- =~ "e" ]]; then
+-		errexit=1
+-		set +e
+-	fi
+-
+ 	for ns in "$@"; do
+ 		[ -z "${ns}" ] && continue
+-		ip netns delete "${ns}" &> /dev/null
++		ip netns delete "${ns}" &> /dev/null || true
+ 		if ! busywait $BUSYWAIT_TIMEOUT ip netns list \| grep -vq "^$ns$" &> /dev/null; then
+ 			echo "Warn: Failed to remove namespace $ns"
+ 			ret=1
+ 		fi
+ 	done
+ 
+-	[ $errexit -eq 1 ] && set -e
+ 	return $ret
+ }
+ 
 
- tools/testing/selftests/net/lib.sh             | 55 +++++++++++++++-----------
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 33 +++++-----------
- 2 files changed, 42 insertions(+), 46 deletions(-)
----
-base-commit: a999973236543f0b8f6daeaa7ecba7488c3a593b
-change-id: 20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-365e43e2e1ca
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.43.0
 
 
