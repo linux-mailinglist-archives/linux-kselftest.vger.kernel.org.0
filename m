@@ -1,342 +1,685 @@
-Return-Path: <linux-kselftest+bounces-11322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 492178FF85A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 01:58:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB778FF8C5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 02:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0BE01F22774
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2024 23:58:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2783D286DDD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 00:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2F113E05C;
-	Thu,  6 Jun 2024 23:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509CAD527;
+	Fri,  7 Jun 2024 00:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TAjRbokS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VxA8yVTI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F49C8821;
-	Thu,  6 Jun 2024 23:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717718334; cv=fail; b=Y1dx5aYl1wzbDyxwzuZ4kE0Qli4y2ti8cCbMmHaWBtjrAUen6pPmdgBuIhDBArlsiZxq4X6csTPfrvorfQG791ZXgN0ktnPUQaUcNDR6EgFBzhNyUwpvMgiUnPzHh6g8pYqW7oYokihKtg2l6iApw3vY06Ej0bOGY5sbewdVB9I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717718334; c=relaxed/simple;
-	bh=5/sTRA2N3gTXEOQhfXPcMfp2yd7P9iI/rasMcUmF9z0=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZXRefA+eZvDtChubfAQOnshftR5tm5NTZk1arYPxEIPo1ILiqHBDB5SVz+q03Jpmok6EppfMSdV0tM6t5w+9kVQ7wl9bS+ghlkJ8+6e6iPDluvXMgV1NTSL0utGrTmvWCd0k0OilXQQi9xSTe4IPgAyGJtUwvWLtw4ae1Jxxic0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TAjRbokS; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717718332; x=1749254332;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5/sTRA2N3gTXEOQhfXPcMfp2yd7P9iI/rasMcUmF9z0=;
-  b=TAjRbokSgTzql9fiRQQuNxpq3qzxgKfTBu7KOoy0JgX/v7pxgblskrWs
-   q6O0FQNW1xmW9q3kINzt8gkZAukXaojd52qnu5h5NlnDHjGbKHPslY3b+
-   ghc8cDykS8M8M+l27qtQMaNTh/rMVttVerNO+buYQz8BvNf3ZF7zZKKQc
-   +jspdI82tBQO6jqcJWGdfjdd2sufTF5BTPhxuTYG+qzNJpaRQMyaiexOL
-   TfkjWqPG1mII4zrintTNzScUqDo7aKojqd6NvytWRwdR7tAjkPgqFshIc
-   Ox6vZK/8xZ6pQPS2f2vY0LwDZ2aE6+wVR0qwZzICq2Siozf8fnTLvBGTH
-   w==;
-X-CSE-ConnectionGUID: 9XGkF7ZJQnKVvj7uUCEtrg==
-X-CSE-MsgGUID: 1OUTs8eZRYOQPkDUCgbUHw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="25050782"
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="25050782"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 16:58:50 -0700
-X-CSE-ConnectionGUID: ILGIJdVnRMWBJ7GdHzwLBg==
-X-CSE-MsgGUID: 0lscCQSlTjOVkC1nIblNDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="75618266"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Jun 2024 16:58:50 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 6 Jun 2024 16:58:49 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 6 Jun 2024 16:58:49 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 6 Jun 2024 16:58:49 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 6 Jun 2024 16:58:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BYZjdcQs79+ivjsQMC9J3aX2h8O42ULsWKLO+j2n/4/lSkY91IzrJWVME+PcWE4WcVx1ENRNcr/Fg0e6lqw62cQVsWTkwwKLRYnsxDlgit5zd3jEiRPylQS956UT8NPDZH10vrR+3DtrJga5VER/W2uj0FScUW+3vSnRUK8qcBAkZ0WDOctvEpql7ynfs7TUHCu3UCX94SPjRb0PDkD/vLpBC8yQ107C/2vTVxzgYaMN7CJ80e9ROmue+XSGgzGhvbDxeW1pL24uR8FRmJgIAzbSzwTxyp+hqRxqt/naH0Ss3YaY8/Zcv1XENUkzTWCcIICSxxpKqaKPLHBdPjboQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+L/z5A40oSA0TgRPvaiDAE76tIOlsBiYUaA6u1Nw4HE=;
- b=WpZh2Q+bKr7GQScl+hrrYqUd11ticinVP+mhZ1p0ZI0BVjxFfk1BjVCZZM7RbLdE8vZ8QTFDOOhzVyyRWE0DpiyQeHd7vtGN+V6WmOn+sflOHATkDCWhot8WdMU8bLfgYMuwTlkdjDrajeY8CkHwR2cRT2AqGpQG2NreycXWlnu14g2ZgRQWBzATUch20lQqMwvk1QMZU8Sz4Mv50r5VdxzoWghwosFoRfLK3ri3UDTYw6M6ORhqHkv6hLIhIpimeysC/qdpwdqAbZe1dg5MJW1iMMGeKsQWreko+u+pgfrdAk4I5lQ+M28l5PbCAjdeNQ3Wq3UZF22yeer9b0zoVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by IA1PR11MB8098.namprd11.prod.outlook.com (2603:10b6:208:44b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.33; Thu, 6 Jun
- 2024 23:58:36 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::61a:aa57:1d81:a9cf%3]) with mapi id 15.20.7633.017; Thu, 6 Jun 2024
- 23:58:36 +0000
-Message-ID: <8553ddc2-ee0f-447d-8fe4-5a7dd84375f2@intel.com>
-Date: Thu, 6 Jun 2024 16:58:34 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/resctrl: Fix noncont_cat_run_test for AMD
-To: <babu.moger@amd.com>, <fenghua.yu@intel.com>, <shuah@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<ilpo.jarvinen@linux.intel.com>, <maciej.wieczor-retman@intel.com>,
-	<peternewman@google.com>, <eranian@google.com>
-References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
- <9a7213d2-a782-4342-93f2-acf191c745fd@intel.com>
- <3bd755d7-e5c7-3dc3-9875-4884c857e325@amd.com>
-From: Reinette Chatre <reinette.chatre@intel.com>
-Content-Language: en-US
-In-Reply-To: <3bd755d7-e5c7-3dc3-9875-4884c857e325@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0271.namprd04.prod.outlook.com
- (2603:10b6:303:89::6) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7C6A937
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 00:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717721496; cv=none; b=UP7JSNORIarKW7XPabACYch7T0zhODzwjpe0VXgLr1NgQI3QcnTDgJhiq6hUJaJ1HmEDAyZbkMAfsy1J1ab+boCBUIBnYPQjEDpFJSzz2fzvhAnXch36ghD6u8+kExUPG7Ury6nTLoOssCoObFUJ2F1vRwD6/SNKQB02X3b8r9c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717721496; c=relaxed/simple;
+	bh=VNji1yzRROeMCdOqTJIJjHlea6F/lyUYaISZibZwYSg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LxXM/qAH0qTlhS4nvWVL9It/rUPQpLkASlaq6C137/ZXraaU3FiftnCgRiTzyaiS317S0rCXZRngOIUrJLuTfVMwD7Ae/CZaXEN9NnuP+IZDj2oNPRC/EHIh3r/wXjn5MTkjJWxWkwPjf7XC5dpsjvCTZzXwT/HDSgNZia2JM+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VxA8yVTI; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dfa79b84623so2627568276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2024 17:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717721492; x=1718326292; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dVhDXhkK6znxXVk7QviPwY/Nc1Qoy5VmoPSCE310dtI=;
+        b=VxA8yVTIcHgdMWQPa/FbLyo63E7yk89TJDA03ossfCrSCTkRzanT9q/WHkRWeQ7WTG
+         4RNtnMDSGbbTIKc9lwfR+5Y2Aj9d+Aq6czoOXlwGHZgeiMd6UCA2nvGbYOH1zjadRjR+
+         Q9FR74gLNDkOIYL6jExf5B2ckumm/0bWjq2Ky3wEdbrF9FVgbhGjsWjRAVqEEsXzGqdM
+         P3ZDDeERs9ODm44k5J4N0FdqToSKm80oFIoHfQ4a+GhCxj1KD2NBfLw+LH/SxYHsnIgd
+         /CdHPUQ1M8JkSNNCuiFtKoNfbi0JZRtUFhV6jP7hVNgKVhD8ivyJClXYZwaeT6O5gLpy
+         RoyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717721492; x=1718326292;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dVhDXhkK6znxXVk7QviPwY/Nc1Qoy5VmoPSCE310dtI=;
+        b=ml79/ch6FalqUlcEIxjiy5QlYNozb/WsusGoLq8VoXn9eOxZXFreqbZsLKE1vdySj/
+         6m0bhNAN1mAEAVBp+8hczDqMnWmNvRMyzi4qUaecLel9Qdj7VHQ8QdT6pJZd6UjCoVYd
+         oI6OH/nzU3COzBxJTDAiSXEGVZIe662iFckWE31uHY7nRq+8f8I8pxqDc0DEii3XJpya
+         QLQG7uqdqs2XQ2NxaYCeU2Lk147kgzKRA6jSMxdlWnvBHf7drZFIpzIexszBRO1vzbOd
+         FN2ZP48AA7sgbdaJg6naP5tcO9p9NLlglD9/VqQyNTLVgSPB07IK+dec2iG28qe4iNE/
+         EMsg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZaBZEvwiwHFP4NaRZJJw2p+FvFFnSYoUiONldYTbN6f/B5yPfrRJZUgeMizrlk/kgd+NdRGtDQWZI47x8SItbQ6wclz7jIAmmpzbQVLUn
+X-Gm-Message-State: AOJu0YzS01eyc8UMWStMi81CcrHN7vfZa5NZhTCAxypvA0rfl+cTpH38
+	Ufr/wGLg+amrMwV5TXghNEZ+bNCqfRHGOuxs6AIBqsgRnU0fWdhYBMLFGD23wdT5K/sfFM/0jHN
+	A4IbcU4WZ8cCRcXEJhf7vUw==
+X-Google-Smtp-Source: AGHT+IFMQYk3cwbsXVWaC0FrJ4RplY3gFkdCM403zqYC+QDCB3UIy0FUkLS7xuA7JI/U3KVGktZ1x5K38LSsCcxv5w==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a05:6902:2b08:b0:df4:d6ca:fed0 with
+ SMTP id 3f1490d57ef6-dfaf6552c24mr161582276.4.1717721492297; Thu, 06 Jun 2024
+ 17:51:32 -0700 (PDT)
+Date: Fri,  7 Jun 2024 00:51:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA1PR11MB8098:EE_
-X-MS-Office365-Filtering-Correlation-Id: b12ccc43-ec4d-493b-2b7b-08dc86849455
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?VXJVQ2htSVUzMzJHZEVoNU53Yi9WWGZCOW9BS0FlaTdKMWpVbWQvN1FWZEpW?=
- =?utf-8?B?bmcwcXltK0pUd1BDcmpTOWx6K1FDZlYzMXhqajE1WVBCRVVxSTZSTFBVMTBY?=
- =?utf-8?B?bHJsVGkzYnRPWk1wdkU4SDJ4RUZuZzFENWp4QldHclQraFE3TExNMmhJYXdr?=
- =?utf-8?B?WlFYcnk0N0JicDExWEVlVE9ZaEUzUkxmU2pEajhVWDFab2U4WmdyVVg0MFB2?=
- =?utf-8?B?V241NW82UkZ1eGF2VFpKQ1lhZUYwK1VRdm9DVUlHQ0RvTjRjYnAyNGhCTndu?=
- =?utf-8?B?ekVKMitYdEpFaEdwQ2ZMNmJFZ3pBN3lmUmx3SUVnYXVzTCtmd28zOWVIRHNh?=
- =?utf-8?B?ZWtFOTB3VmRSajhqNjBCb21TZ0g0OURhcFBsMDNlaGN2c2FQQUtZL0lld1F4?=
- =?utf-8?B?OW14THM4eU91M2FGMGgza3RTYUpOdk1QU0lndWMxamtpY091ZXMxMUF0TE1F?=
- =?utf-8?B?YnFxeXlpNERSYTdDQW02dUZmdHA5SWg3cktPOVJobHA5VEludytsOTVOell2?=
- =?utf-8?B?MGVMZXB2dkVsMlFDbS8xdmd0MTR0SXBFNVYxWExqM1VtQzdmb0plSXEreCtP?=
- =?utf-8?B?dkJGVkNhWGE1cDVBTGFheld4K21SdHJHL0YzT3VNdVRkaEVqMmpKWGRWbHk0?=
- =?utf-8?B?NjdocWdlOHFlZ0g5bFJIK1ljZExHRlRrUmdUVnd5YjcrNVVIYndBdjlBcEow?=
- =?utf-8?B?OXlRZjg3Yk55UmZIWi8rbzFxbXhMYWY0cUFKcCsyMDJDSXc2VEh5MWV2UzY2?=
- =?utf-8?B?QkhCYWFOQzhFVXBxcEI4TFQ1d3l3dHorRlZmZ2ppcTR1bDRBYktmTVpGNkt4?=
- =?utf-8?B?aGxEam1MK3VnNGkvenpOa0RuOXRlVDhIK0tzV28xODNQVk5aWC9uS0FTeGhp?=
- =?utf-8?B?SHc5dlNOU0huNzFPVlNkdzVaQW9ucWx6SjFrOVQxR3ZOUmVwVHlWd1JUZzR2?=
- =?utf-8?B?NkpyUmMySjhyc08zV3g3cUVBcnpvQmsyTGoyNHkxZHVxaFNNTmphelFXSzRS?=
- =?utf-8?B?RGpoUUFSK3NXVVNHRW9KZlNwWW1JMUh4NlZ2a2pBeFgrYjkweDY0ZVVpRHE1?=
- =?utf-8?B?UU9RbDdyc2tPazFZeFFDNzl2a0lEMzhlblNSY1p3MFdTdUhJTTFNelBxR3J3?=
- =?utf-8?B?Zk1jZWVDU3NNaWhMcndZQWNtQkVsMjMvUENxOWR3UDFoZkszdUt1UU80R2to?=
- =?utf-8?B?R1c3cXdJZ1lETHpqbTZJUkt5b0gwU3VTWnhrcytDNjA3OEgwVG5yK3dPZGVQ?=
- =?utf-8?B?aFB4UFU3WjFwNDE5OU5nTzU3NVpHMno1S1lrWGVkdDJlYmtwaTJrN2NtY3Bs?=
- =?utf-8?B?MGdqMWN4TTdYcWVHYzd4UUVrRk5wTllSVmhKeWxIbitkTy93Y1NVaHRMalJl?=
- =?utf-8?B?MFEzV1k0N3BnWkJEU2FjTFd1eWNrUThwSU1vR1FWWGJvTTMyQS92ODlEcTlR?=
- =?utf-8?B?cGdsb1hhZ0EzTlJRdUlpalJMbGdENncvNGhTb0Z5YTFNdDJWUjVxakhmM1dN?=
- =?utf-8?B?a01WSnRZUFdGUTM2bmxlTHVtaDRqY3F0dmFTb3hCOEZlcGNoSkZLbGJvZkg0?=
- =?utf-8?B?dEdLdDE5UWlxWVZrSG5SWkNESjNvSkpadkNRY04rUFRvV1hiQmM2VlpDRmRr?=
- =?utf-8?B?Wk13VTFPbEVwVUZGc2JiRk4wK3VZNFAxcTdDZDdSMkJWQTdGRFJhbnZvakIy?=
- =?utf-8?B?OWFWZWd2MHlLNThSK3FOcE9WVy9oV3R1YXFxbWZjM2NQR1VRZXJDaGdUVlZi?=
- =?utf-8?Q?vOxg1pPUvvH3ViGhY8hCy6L3nny+irYZyvxff1Z?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c2dyVmxwRFd4UDNtM1hJRHltN3NuS1B3ZXluTmxHSC9pQ3pJTmpzbDhHYjhG?=
- =?utf-8?B?eERESWM5WWhEaktzSjExblh2Q3NiWTNaWk5kWWhVeFJMbDMzK1RkUXBMcDlJ?=
- =?utf-8?B?MThUMEl0azNEeWlzVWF1ZFhaQ1liQlFXQjhFdERIWGNNa21pdmJzQmZkeWxT?=
- =?utf-8?B?ekVDc1RQZkVwaHdNMC9iWEljMDdBeFVSUEN4cDd3TWtkbmxac243VXFBNVJC?=
- =?utf-8?B?ZzhRL3JLUXUxcjNjbi9MRStZaFNjNFVlRGlGYXJWcVEzYWVvcTNldXcxdUJ6?=
- =?utf-8?B?TVd2SWczQUhzYXdZZmJEU2lTeHUxNENaenhIWlczTmxJeEVOeDUwU1RERE8z?=
- =?utf-8?B?Z21ZTndVVnMvVFlRYUtNWS9oaHZQc2gvZkp3ekhoeEl5WUd5QUhIWGV5QjAz?=
- =?utf-8?B?Ukh5ZG5YUkNXd2I2S1NCcndseEJLQjk3M3kyaG1EWk1JQWRYdU9HWm9GYUdC?=
- =?utf-8?B?aDlUOXhGdUVDRnNCaHZKU2hQL0IyckxrdWVVTTRFYzZMdngyREVGY01wZGUr?=
- =?utf-8?B?a01pazN6SVVWNGNoSzVJTWM1dGRJWGN3OTdWL3Vnc0w2TE5zTGswblczZll6?=
- =?utf-8?B?L2dPUHNJdDk0d1lDd1FGcGlJbWZ0L0VlWENETlVJS3k1TTJMQjBVUEdrdGxF?=
- =?utf-8?B?aHFobklGdXJ4eDFmeXRTZ3ZOY2txZDNRY0k5NnNDUlBqbG04cFZtWHNodHBk?=
- =?utf-8?B?OVdDWENITG9ZU0lvQTJaKzBPeDZlTHhFakx1WllJbWRaR0o3STNUUXJkcStM?=
- =?utf-8?B?eTNsS2xhSDhmT0hrSHRqdEpxV215Sm1WRzR0N2Y2c2tNTkJzVmFsNmxvZjVP?=
- =?utf-8?B?ek1RcVFoWW1ScEEwWEpXZUhKc0E3N00wemlOYXZibGMzNGxBODBJQWtheE41?=
- =?utf-8?B?MVF2d2c3ei9VbWh0UE85Y3dxa3FFMWpGUkJVY1NwL3lwYmp1QkxsVmpUWHIw?=
- =?utf-8?B?cmRTM0VsZUQ1bjg4c244NUdOOEhkcmc0QWJKRUNZRlJjOTZaU1BHRHB6S0p5?=
- =?utf-8?B?OUJSZzROTXNIV1BNdktrTE9QbEJHeXNqa0JORGZ6QkNSc2dBSkJlbW4zbDJN?=
- =?utf-8?B?dlhVR29rVGVCV2pzQlEzUUNzelIydkN0KzdhRVZiTkVGazFwVGRWM1VvQnhQ?=
- =?utf-8?B?MkdNZVVLWk9XbEVub0toaXhHQnEyRk1FSjhRbC9uYWhXT3FuRmY4aDg1eVBs?=
- =?utf-8?B?dytMY3VOT25sUjRQL1MwOE10L0h2WllIZmI2QXF3SEtGY2V1a1oybloxM1F0?=
- =?utf-8?B?OHdJd01CSkd5R2Iwd1A5M1ppL1RTUnl0NGJEM08yaXFwbG5RaFBtMmt0YjYx?=
- =?utf-8?B?aWZBLzN0dVpnTkdyVXFEQ2VQQjIzQk1xWTdTOHdiWU5Jb2ZkMnVWanZtcG5q?=
- =?utf-8?B?R1dGbjZJTnRCc1B4VGlvd2p0R3g4b0lrU3lpR1ZJQkhNTGhhOFlFaU5wZjlp?=
- =?utf-8?B?bGdLMzRIUHZvTnp2VE4yRFRmYmhlZ3dSekZQcXMrMGxPZzdXZG9lWXpaVTQv?=
- =?utf-8?B?MStnaDZ2WWhIS0x4S1ZsQ0duZ3lvQ2FzRDJxUmlJU2p3TjlEbDVneVluTDNF?=
- =?utf-8?B?QXhmWGE3dEtET1dGZTJLNjhmOUtVbkd3VDJ3Um13YVJ1RVVGTXVDMGJGaGw1?=
- =?utf-8?B?YTNLempUMWp4NlFVcXNlVHVWT0FOKzJGMENUL2pEZjN3MjI2cHN4NTZBMU5V?=
- =?utf-8?B?L3Q1R3NMUDdwUDhJd0tNdDFqVTRpdTF1WGR1MnNLeHRoQldkZ1IvU2N0bm5O?=
- =?utf-8?B?ZGtGb09RcllWNVBXUjVsNmlTcDB3d3lYK1dJbm4vL3dsMXZmNGJRT1h4bW8x?=
- =?utf-8?B?bFVrTCtiNnJmMS9qTkUrU3ZZd1ZtT2hWZGU1NXUzZ1owSmRvVGcrdkFNNSth?=
- =?utf-8?B?N1VUcnVBdkNJTXp4N3E0RXJEcVo3OEVKbTQyeWZyekp6cHU2VUU0Q1BOaGlw?=
- =?utf-8?B?RWRUcDd0R3pTUjZmU0dZYmJjZXUwRDRjakhhaW9Yc2FLUzQyNGJiUURIdm9p?=
- =?utf-8?B?Sy9pZEVyTnVObVArWHB3cVBuUlpva0ltak1JdklmSm1qTTFiNnIyTmxFMUVn?=
- =?utf-8?B?bGlBMmxNUm0yRmx5R243eXp4STBNWHVSU25BZHJnU2VFUDNzUEZscU9DVGpN?=
- =?utf-8?B?bm5YOERmMUNWSXM5dnZ1bkpndmhsYXBiM2tmNGE1amVwOUVJRWZ3a2dkZlVV?=
- =?utf-8?B?UUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b12ccc43-ec4d-493b-2b7b-08dc86849455
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 23:58:36.3241
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: umj8PD7ETOln4OPF/PMQ27fpJgAuTyjVHIJBtmI9pK8ej5W7XsxbtVrMO27ZyYcOqB2CPFR9U3i+aAPgqcMQUAWeGYguiikjRtTZ0fv43fw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8098
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+Message-ID: <20240607005127.3078656-1-almasrymina@google.com>
+Subject: [PATCH net-next v11 00/13] Device Memory TCP
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Babu,
+v11: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D857457&s=
+tate=3D*
+=3D=3D=3D=3D
 
-On 6/6/24 4:09 PM, Moger, Babu wrote:
-> Hi Reinette,
-> 
-> 
-> On 6/6/2024 3:33 PM, Reinette Chatre wrote:
->> Hi Babu,
->>
->> On 6/5/24 2:36 PM, Babu Moger wrote:
->>> The selftest noncont_cat_run_test fails on AMD with the warnings. Reason
->>> is, AMD supports non contiguous CBM masks but does not report it via CPUID.
->>>
->>> Update noncont_cat_run_test to check for the vendor when verifying CPUID.
->>>
->>> Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test")
->>> Signed-off-by: Babu Moger <babu.moger@amd.com>
->>> ---
->>> This was part of the series
->>> https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
->>> Sending this as a separate fix per review comments.
->>> ---
->>>   tools/testing/selftests/resctrl/cat_test.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
->>> index d4dffc934bc3..b2988888786e 100644
->>> --- a/tools/testing/selftests/resctrl/cat_test.c
->>> +++ b/tools/testing/selftests/resctrl/cat_test.c
->>> @@ -308,7 +308,7 @@ static int noncont_cat_run_test(const struct resctrl_test *test,
->>>       else
->>>           return -EINVAL;
->>> -    if (sparse_masks != ((ecx >> 3) & 1)) {
->>> +    if ((get_vendor() == ARCH_INTEL) && sparse_masks != ((ecx >> 3) & 1)) {
->>>           ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
->>>           return 1;
->>>       }
->>
->> Since AMD does not report this support via CPUID it does not seem
->> appropriate to use CPUID at all on AMD when doing the hardware check.
->> I think the above check makes it difficult to understand what is different
->> on AMD.
->>
->> What if instead there is a new function, for example,
->> "static bool arch_supports_noncont_cat(const struct resctrl_test *test)"
->> that returns true if the hardware supports non-contiguous CBM?
-> 
-> Sure.
-> 
->>
->> The vendor check can be in there to make it obvious what is going on:
->>
->>      /* AMD always supports non-contiguous CBM. */
->>      if (get_vendor() == AMD)
->>          return true;
->>
->>      /* CPUID check for Intel here. */
->>
->> The "sparse_masks" from kernel can then be checked against
->> hardware support with an appropriate (no mention of CPUID)
->> error message if this fails.
->>
-> 
-> Something like this?
-> 
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index d4dffc934bc3..b75d220f29f6 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -288,11 +288,30 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
->          return ret;
->   }
-> 
-> +static bool arch_supports_noncont_cat(const struct resctrl_test *test)
-> +{
-> +       unsigned int eax, ebx, ecx, edx;
-> +
-> +       /* AMD always supports non-contiguous CBM. */
-> +       if (get_vendor() == ARCH_AMD) {
-> +               return true;
-> +       } else {
+Major Changes:
+--------------
 
-The else can be dropped since it follows a return.
-The rest of the code can be prefixed with a matching
-comment like:
-	/* Intel support for non-contiguous CBM needs to be discovered. */
+v11 addresses feedback received in v10. The major change is the removal
+of the memory provider ops as requested by Christoph. We still
+accomplish the same thing, but utilizing direct function calls with if
+statements rather than generic ops.
 
-(please feel free to improve)
+Additionally address sparse warnings, bugs and review comments from
+folks that reviewed.
 
-> +               if (!strcmp(test->resource, "L3"))
-> +                       __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-> +               else if (!strcmp(test->resource, "L2"))
-> +                       __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-> +               else
-> +                       return false;
-> +
-> +               return ((ecx >> 3) & 1);
-> +       }
-> +}
-> +
->   static int noncont_cat_run_test(const struct resctrl_test *test,
->                                  const struct user_params *uparams)
->   {
->          unsigned long full_cache_mask, cont_mask, noncont_mask;
-> -       unsigned int eax, ebx, ecx, edx, sparse_masks;
-> +       unsigned int sparse_masks;
->          int bit_center, ret;
->          char schemata[64];
-> 
-> @@ -301,15 +320,8 @@ static int noncont_cat_run_test(const struct resctrl_test *test,
->          if (ret)
->                  return ret;
-> 
-> -       if (!strcmp(test->resource, "L3"))
-> -               __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-> -       else if (!strcmp(test->resource, "L2"))
-> -               __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-> -       else
-> -               return -EINVAL;
-> -
-> -       if (sparse_masks != ((ecx >> 3) & 1)) {
-> -               ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
-> +       if (!(arch_supports_noncont_cat(test) && sparse_masks)) {
-> +               ksft_print_msg("Hardware does not support non-contiguous CBM!\n");
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
 
-Please fix the test as well as the message. It is not an error if hardware does
-not support non-contiguous CBM. It is an error if the hardware and kernel disagrees whether
-non-contiguous CBM is supported.
+https://github.com/mina/linux/commits/tcpdevmem-v11/
 
-Reinette
+Detailed changelog:
+-------------------
+
+- Fixes in netdev_rx_queue_restart() from Pavel & David.
+- Remove commit e650e8c3a36f5 ("net: page_pool: create hooks for
+custom page providers") from the series to address Christoph's
+feedback and rebased other patches on the series on this change.
+- Fixed build errors with CONFIG_DMA_SHARED_BUFFER &&
+  !CONFIG_GENERIC_ALLOCATOR build.
+- Fixed sparse warnings pointed out by Paolo.
+- Drop unnecessary gro_pull_from_frag0 checks.
+- Added Bagas reviewed-by to docs.
+
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Nikolay Aleksandrov <razor@blackwall.org>
+
+v10: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D852422&s=
+tate=3D*
+=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+v9 was sent right before the merge window closed (sorry!). v10 is almost
+a re-send of the series now that the merge window re-opened. Only
+rebased to latest net-next and addressed some minor iterative comments
+received on v9.
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v10/
+
+Detailed changelog:
+-------------------
+
+- Fixed tokens leaking in DONTNEED setsockopt (Nikolay).
+- Moved net_iov_dma_addr() to devmem.c and made it a devmem specific
+  helpers (David).
+- Rename hook alloc_pages to alloc_netmems as alloc_pages is now
+  preprocessor macro defined and causes a build error.
+
+v9:
+=3D=3D=3D
+
+Major Changes:
+--------------
+
+GVE queue API has been merged. Submitting this version as non-RFC after
+rebasing on top of the merged API, and dropped the out of tree queue API
+I was carrying on github. Addressed the little feedback v8 has received.
+
+Detailed changelog:
+------------------
+- Added new patch from David Wei to this series for
+  netdev_rx_queue_restart()
+  - Fixed sparse error.
+  - Removed CONFIG_ checks in netmem_is_net_iov()
+  - Flipped skb->readable to skb->unreadable
+  - Minor fixes to selftests & docs.
+
+RFC v8:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+- Fixed build error generated by patch-by-patch build.
+- Applied docs suggestions from Randy.
+
+RFC v7:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+This revision largely rebases on top of net-next and addresses the feedback
+RFCv6 received from folks, namely Jakub, Yunsheng, Arnd, David, & Pavel.
+
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
+
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v7/
+
+Detailed changelog:
+
+- Use admin-perm in netlink API.
+- Addressed feedback from Jakub with regards to netlink API
+  implementation.
+- Renamed devmem.c functions to something more appropriate for that
+  file.
+- Improve the performance seen through the page_pool benchmark.
+- Fix the value definition of all the SO_DEVMEM_* uapi.
+- Various fixes to documentation.
+
+Perf - page-pool benchmark:
+---------------------------
+
+Improved performance of bench_page_pool_simple.ko tests compared to v6:
+
+https://pastebin.com/raw/v5dYRg8L
+
+      net-next base: 8 cycle fast path.
+      RFC v6: 10 cycle fast path.
+      RFC v7: 9 cycle fast path.
+      RFC v7 with CONFIG_DMA_SHARED_BUFFER disabled: 8 cycle fast path,
+                                                     same as baseline.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+Perf is about the same regardless of the changes in v7, namely the
+removal of the static_branch_unlikely to improve the page_pool benchmark
+performance:
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+RFC v6:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+This revision largely rebases on top of net-next and addresses the little
+feedback RFCv5 received.
+
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
+
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v6/
+
+This version also comes with some performance data recorded in the cover
+letter (see below changelog).
+
+Detailed changelog:
+
+- Rebased on top of the merged netmem_ref changes.
+
+- Converted skb->dmabuf to skb->readable (Pavel). Pavel's original
+  suggestion was to remove the skb->dmabuf flag entirely, but when I
+  looked into it closely, I found the issue that if we remove the flag
+  we have to dereference the shinfo(skb) pointer to obtain the first
+  frag to tell whether an skb is readable or not. This can cause a
+  performance regression if it dirties the cache line when the
+  shinfo(skb) was not really needed. Instead, I converted the skb->dmabuf
+  flag into a generic skb->readable flag which can be re-used by io_uring
+  0-copy RX.
+
+- Squashed a few locking optimizations from Eric Dumazet in the RX path
+  and the DEVMEM_DONTNEED setsockopt.
+
+- Expanded the tests a bit. Added validation for invalid scenarios and
+  added some more coverage.
+
+Perf - page-pool benchmark:
+---------------------------
+
+bench_page_pool_simple.ko tests with and without these changes:
+https://pastebin.com/raw/ncHDwAbn
+
+AFAIK the number that really matters in the perf tests is the
+'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+cycles without the changes but there is some 1 cycle noise in some
+results.
+
+With the patches this regresses to 9 cycles with the changes but there
+is 1 cycle noise occasionally running this test repeatedly.
+
+Lastly I tried disable the static_branch_unlikely() in
+netmem_is_net_iov() check. To my surprise disabling the
+static_branch_unlikely() check reduces the fast path back to 8 cycles,
+but the 1 cycle noise remains.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+Major changes in RFC v5:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Rebased on top of 'Abstract page from net stack' series and used the
+   new netmem type to refer to LSB set pointers instead of re-using
+   struct page.
+
+2. Downgraded this series back to RFC and called it RFC v5. This is
+   because this series is now dependent on 'Abstract page from net
+   stack'[1] and the queue API. Both are removed from the series to
+   reduce the patch # and those bits are fairly independent or
+   pre-requisite work.
+
+3. Reworked the page_pool devmem support to use netmem and for some
+   more unified handling.
+
+4. Reworked the reference counting of net_iov (renamed from
+   page_pool_iov) to use pp_ref_count for refcounting.
+
+The full changes including the dependent series and GVE page pool
+support is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-rfcv5/
+
+[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D810774
+
+Major changes in v1:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Implemented MVP queue API ndos to remove the userspace-visible
+   driver reset.
+
+2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
+
+3. Removed RFC tag.
+
+Many smaller addressed comments across all the patches (patches have
+individual change log).
+
+Full tree including the rest of the GVE driver changes:
+https://github.com/mina/linux/commits/tcpdevmem-v1
+
+Changes in RFC v3:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Pulled in the memory-provider dependency from Jakub's RFC[1] to make the
+   series reviewable and mergeable.
+
+2. Implemented multi-rx-queue binding which was a todo in v2.
+
+3. Fix to cmsg handling.
+
+The sticking point in RFC v2[2] was the device reset required to refill
+the device rx-queues after the dmabuf bind/unbind. The solution
+suggested as I understand is a subset of the per-queue management ops
+Jakub suggested or similar:
+
+https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+
+This is not addressed in this revision, because:
+
+1. This point was discussed at netconf & netdev and there is openness to
+   using the current approach of requiring a device reset.
+
+2. Implementing individual queue resetting seems to be difficult for my
+   test bed with GVE. My prototype to test this ran into issues with the
+   rx-queues not coming back up properly if reset individually. At the
+   moment I'm unsure if it's a mistake in the POC or a genuine issue in
+   the virtualization stack behind GVE, which currently doesn't test
+   individual rx-queue restart.
+
+3. Our usecases are not bothered by requiring a device reset to refill
+   the buffer queues, and we'd like to support NICs that run into this
+   limitation with resetting individual queues.
+
+My thought is that drivers that have trouble with per-queue configs can
+use the support in this series, while drivers that support new netdev
+ops to reset individual queues can automatically reset the queue as
+part of the dma-buf bind/unbind.
+
+The same approach with device resets is presented again for consideration
+with other sticking points addressed.
+
+This proposal includes the rx devmem path only proposed for merge. For a
+snapshot of my entire tree which includes the GVE POC page pool support &
+device memory support:
+
+https://github.com/torvalds/linux/compare/master...mina:linux:tcpdevmem-v3
+
+[1] https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKb=
+LcL4pSOD1Jw@mail.gmail.com/T/
+
+Changes in RFC v2:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+The sticking point in RFC v1[1] was the dma-buf pages approach we used to
+deliver the device memory to the TCP stack. RFC v2 is a proof-of-concept
+that attempts to resolve this by implementing scatterlist support in the
+networking stack, such that we can import the dma-buf scatterlist
+directly. This is the approach proposed at a high level here[2].
+
+Detailed changes:
+1. Replaced dma-buf pages approach with importing scatterlist into the
+   page pool.
+2. Replace the dma-buf pages centric API with a netlink API.
+3. Removed the TX path implementation - there is no issue with
+   implementing the TX path with scatterlist approach, but leaving
+   out the TX path makes it easier to review.
+4. Functionality is tested with this proposal, but I have not conducted
+   perf testing yet. I'm not sure there are regressions, but I removed
+   perf claims from the cover letter until they can be re-confirmed.
+5. Added Signed-off-by: contributors to the implementation.
+6. Fixed some bugs with the RX path since RFC v1.
+
+Any feedback welcome, but specifically the biggest pending questions
+needing feedback IMO are:
+
+1. Feedback on the scatterlist-based approach in general.
+2. Netlink API (Patch 1 & 2).
+3. Approach to handle all the drivers that expect to receive pages from
+   the page pool (Patch 6).
+
+[1] https://lore.kernel.org/netdev/dfe4bae7-13a0-3c5d-d671-f61b375cb0b4@gma=
+il.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izPm6XRS54LdCDZVd0C75tA1zHSu6jLVO8n=
+zTLXCc=3DH7Nw@mail.gmail.com/
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+* TL;DR:
+
+Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
+r
+from device memory efficiently, without bouncing the data to a host memory
+buffer.
+
+* Problem:
+
+A large amount of data transfers have device memory as the source and/or
+destination. Accelerators drastically increased the volume of such transfer=
+s.
+Some examples include:
+- ML accelerators transferring large amounts of training data from storage =
+into
+  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
+% of
+  TPU compute time, improving data transfer throughput & efficiency can hel=
+p
+  improving GPU/TPU utilization.
+
+- Distributed training, where ML accelerators, such as GPUs on different ho=
+sts,
+  exchange data among them.
+
+- Distributed raw block storage applications transfer large amounts of data=
+ with
+  remote SSDs, much of this data does not require host processing.
+
+Today, the majority of the Device-to-Device data transfers the network are
+implemented as the following low level operations: Device-to-Host copy,
+Host-to-Host network transfer, and Host-to-Device copy.
+
+The implementation is suboptimal, especially for bulk data transfers, and c=
+an
+put significant strains on system resources, such as host memory bandwidth,
+PCIe bandwidth, etc. One important reason behind the current state is the
+kernel=E2=80=99s lack of semantics to express device to network transfers.
+
+* Proposal:
+
+In this patch series we attempt to optimize this use case by implementing
+socket APIs that enable the user to:
+
+1. send device memory across the network directly, and
+2. receive incoming network packets directly into device memory.
+
+Packet _payloads_ go directly from the NIC to device memory for receive and=
+ from
+device memory to NIC for transmit.
+Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
+ck
+normally. The NIC _must_ support header split to achieve this.
+
+Advantages:
+
+- Alleviate host memory bandwidth pressure, compared to existing
+ network-transfer + device-copy semantics.
+
+- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
+  of the PCIe tree, compared to traditional path which sends data through t=
+he
+  root complex.
+
+* Patch overview:
+
+** Part 1: netlink API
+
+Gives user ability to bind dma-buf to an RX queue.
+
+** Part 2: scatterlist support
+
+Currently the standard for device memory sharing is DMABUF, which doesn't
+generate struct pages. On the other hand, networking stack (skbs, drivers, =
+and
+page pool) operate on pages. We have 2 options:
+
+1. Generate struct pages for dmabuf device memory, or,
+2. Modify the networking stack to process scatterlist.
+
+Approach #1 was attempted in RFC v1. RFC v2 implements approach #2.
+
+** part 3: page pool support
+
+We piggy back on page pool memory providers proposal:
+https://github.com/kuba-moo/linux/tree/pp-providers
+
+It allows the page pool to define a memory provider that provides the
+page allocation and freeing. It helps abstract most of the device memory
+TCP changes from the driver.
+
+** part 4: support for unreadable skb frags
+
+Page pool iovs are not accessible by the host; we implement changes
+throughput the networking stack to correctly handle skbs with unreadable
+frags.
+
+** Part 5: recvmsg() APIs
+
+We define user APIs for the user to send and receive device memory.
+
+Not included with this series is the GVE devmem TCP support, just to
+simplify the review. Code available here if desired:
+https://github.com/mina/linux/tree/tcpdevmem
+
+This series is built on top of net-next with Jakub's pp-providers changes
+cherry-picked.
+
+* NIC dependencies:
+
+1. (strict) Devmem TCP require the NIC to support header split, i.e. the
+   capability to split incoming packets into a header + payload and to put
+   each into a separate buffer. Devmem TCP works by using device memory
+   for the packet payload, and host memory for the packet headers.
+
+2. (optional) Devmem TCP works better with flow steering support & RSS supp=
+ort,
+   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
+s the
+   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
+   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
+
+The NIC I have access to with these properties is the GVE with DQO support
+running in Google Cloud, but any NIC that supports these features would suf=
+fice.
+I may be able to help reviewers bring up devmem TCP on their NICs.
+
+* Testing:
+
+The series includes a udmabuf kselftest that show a simple use case of
+devmem TCP and validates the entire data path end to end without
+a dependency on a specific dmabuf provider.
+
+** Test Setup
+
+Kernel: net-next with this series and memory provider API cherry-picked
+locally.
+
+Hardware: Google Cloud A3 VMs.
+
+NIC: GVE with header split & RSS & flow steering support.
+
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: Shailend Chand <shailend@google.com>
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Jeroen de Borst <jeroendb@google.com>
+Cc: Praveen Kaligineedi <pkaligineedi@google.com>
+
+
+
+Mina Almasry (13):
+  netdev: add netdev_rx_queue_restart()
+  net: netdev netlink api to bind dma-buf to a net device
+  netdev: support binding dma-buf to netdevice
+  netdev: netdevice devmem allocator
+  page_pool: convert to use netmem
+  page_pool: devmem support
+  memory-provider: dmabuf devmem memory provider
+  net: support non paged skb frags
+  net: add support for skbs with unreadable frags
+  tcp: RX path for devmem TCP
+  net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
+  net: add devmem TCP documentation
+  selftests: add ncdevmem, netcat for devmem TCP
+
+ Documentation/netlink/specs/netdev.yaml |  57 +++
+ Documentation/networking/devmem.rst     | 258 +++++++++++
+ Documentation/networking/index.rst      |   1 +
+ arch/alpha/include/uapi/asm/socket.h    |   6 +
+ arch/mips/include/uapi/asm/socket.h     |   6 +
+ arch/parisc/include/uapi/asm/socket.h   |   6 +
+ arch/sparc/include/uapi/asm/socket.h    |   6 +
+ include/linux/skbuff.h                  |  61 ++-
+ include/linux/skbuff_ref.h              |  11 +-
+ include/linux/socket.h                  |   1 +
+ include/net/devmem.h                    | 124 ++++++
+ include/net/mp_dmabuf_devmem.h          |  46 ++
+ include/net/netdev_rx_queue.h           |   5 +
+ include/net/netmem.h                    | 208 ++++++++-
+ include/net/page_pool/helpers.h         | 153 +++++--
+ include/net/page_pool/types.h           |  22 +-
+ include/net/sock.h                      |   2 +
+ include/net/tcp.h                       |   5 +-
+ include/trace/events/page_pool.h        |  29 +-
+ include/uapi/asm-generic/socket.h       |   6 +
+ include/uapi/linux/netdev.h             |  19 +
+ include/uapi/linux/uio.h                |  17 +
+ net/bpf/test_run.c                      |   5 +-
+ net/core/Makefile                       |   3 +-
+ net/core/datagram.c                     |   6 +
+ net/core/dev.c                          |   6 +-
+ net/core/devmem.c                       | 375 ++++++++++++++++
+ net/core/gro.c                          |   3 +-
+ net/core/netdev-genl-gen.c              |  23 +
+ net/core/netdev-genl-gen.h              |   6 +
+ net/core/netdev-genl.c                  | 103 +++++
+ net/core/netdev_rx_queue.c              |  74 ++++
+ net/core/page_pool.c                    | 360 +++++++++-------
+ net/core/skbuff.c                       |  83 +++-
+ net/core/sock.c                         |  61 +++
+ net/ipv4/esp4.c                         |   3 +-
+ net/ipv4/tcp.c                          | 261 +++++++++++-
+ net/ipv4/tcp_input.c                    |  13 +-
+ net/ipv4/tcp_ipv4.c                     |  10 +
+ net/ipv4/tcp_minisocks.c                |   2 +
+ net/ipv4/tcp_output.c                   |   5 +-
+ net/ipv6/esp6.c                         |   3 +-
+ net/packet/af_packet.c                  |   4 +-
+ tools/include/uapi/linux/netdev.h       |  19 +
+ tools/testing/selftests/net/.gitignore  |   1 +
+ tools/testing/selftests/net/Makefile    |   5 +
+ tools/testing/selftests/net/ncdevmem.c  | 542 ++++++++++++++++++++++++
+ 47 files changed, 2759 insertions(+), 266 deletions(-)
+ create mode 100644 Documentation/networking/devmem.rst
+ create mode 100644 include/net/devmem.h
+ create mode 100644 include/net/mp_dmabuf_devmem.h
+ create mode 100644 net/core/devmem.c
+ create mode 100644 net/core/netdev_rx_queue.c
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+--=20
+2.45.2.505.gda0bf45e8d-goog
+
 
