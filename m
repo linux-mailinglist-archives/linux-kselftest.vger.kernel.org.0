@@ -1,74 +1,40 @@
-Return-Path: <linux-kselftest+bounces-11380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD8490055D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:46:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BF01900682
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:27:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19F691F22021
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 13:46:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B504B1C22AF4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 14:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D151D68F;
-	Fri,  7 Jun 2024 13:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gOc6YHPj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE3196C72;
+	Fri,  7 Jun 2024 14:27:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301EFDDA3;
-	Fri,  7 Jun 2024 13:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85C9719751A;
+	Fri,  7 Jun 2024 14:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717767956; cv=none; b=EpQwOt2btgxW2d51hqHBqA8w63EASkQ7ifkf/RLY1SlkVfdyC87+q/z1pWFjOk/CupEBl1lx8tSsgSDEAGGRoVYaoHYIixWfCUlxPwSwT6xryS0ypZGGbnF7Bg8uC1YZitUZUa24K1Mg4peAWlTktNT/Zcz4kyWuy711SDovxXo=
+	t=1717770427; cv=none; b=uWbD02gDF2Gix9CfMd4mlqNappa3CezKW41zh0mHi860Sut+43sCZDwyt+Lf62aYVREuQfcj1QLYb319+EwW6WiCLv9OIwDMAh0x4ag2OWZK0sf56+BxVNTxzHGiukV0WkaM6XUN3rcr3pWj1GNOlDfKy6NL6A9+JyOoJpT8tAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717767956; c=relaxed/simple;
-	bh=F8fSHuVPu9oovEd3fXldo8wtdCaVHB0Pd8MF0o9QeIs=;
+	s=arc-20240116; t=1717770427; c=relaxed/simple;
+	bh=nkg5aipuVLewQWXLC5+GDdVmYg8QV1wazg4SucZBGsE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e863ZhSiPEQcs5r5jFFfD7O7Cz1jTs0N2gyNaEJCT/IowVrUv1/1Tqfi0loARFmO/6LmPXjHmxbWJpIzQrU1ifqGN6f72qC3GmEJUVJ1IS3WotMDGAjf4kCKXG/yLgtjcO3goDmnCIL0+xLgqcDAVpaJQra/RERqOCn/LmgSXbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gOc6YHPj; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-578517c7ae9so2420479a12.3;
-        Fri, 07 Jun 2024 06:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717767953; x=1718372753; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F/r/t9G5Ibm8rqPv9khaLM6u/j/EOl3KKmdgoUFwllc=;
-        b=gOc6YHPjNaJMFISiYLXeURTbWReLuE+WlZJvHtrNfXLwlRrSLiao0qSR6nZjlLxyDy
-         qWcWuQR4lYbf2Z+x3qhUilK3aW+64x4q992civc09z2n5XJQsyDLOWsqPIy3o/juiJLS
-         pLHl4QOuxbAJuCPNpHAozwplUHLsMD6kKqzjQPQ2GObK/krAj+cKhcn+sipgMR4pvQJv
-         06R8Vo6QUEN+nlry/sCg7cWUlwv4jfLKW+OqBFGrN/bpfK9FSuJ+HfXGiprMeg1VnhDf
-         xn+grXeRIdjps92aFbACoolgei9k5RiU9TLtXWBVkig4XguIuvQtV4M3LvBWI9NCBuXs
-         Bokw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717767953; x=1718372753;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F/r/t9G5Ibm8rqPv9khaLM6u/j/EOl3KKmdgoUFwllc=;
-        b=aevlbsprYcrv3Y9uatHnVkgpjyaIVYZGreafpiWBErI/nHDyqWCAmaM8IIQRdC/ZsU
-         MXGfeLU4i5kSe8eGxRAh6SQ8WTxbJyCQA2vISTF2R0Kpr5wIwalj6z/ZVdVW0V2MSgxo
-         Iw5rJTcUD+3WcCEtq41E7HU/w9ZVoTjxTmwDZUJAPoBPcWwaquABsb1LsRqDAj0/z/DV
-         fGSO1OUgAyBosG0n82ReDUUZCYnv+jgBeprPyQO70oEBuUczLI9F6ucgAozHA/VuwvDU
-         WWSP2dM4OUb7jhWSLxbFPJVJ/cv/ehDMFP4j99QHl2MSnMnmeEwL5LQCerZ0WIeSwZNm
-         I+8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWpJIKq+5W/yW5+11vRxaBd2fG9sDY+G3JiCt4v8T/R4NFwaN3iyLLT4lR3YJ3r1Un5YNvplz8vvzh1otYiUbuxW6Wg3RzT0zLy8QzOvHBJiR1/CtDOiwiBgkCkDGxRbYKrOTh/26/WHhR7ca0/YO/kcgXo3yVLyp19fyDpeCKxZiKFC6Jlz78+SXBAWiNmDBUjEcDyNaWHZHbsjM5Nz8ZaTNUUwi5PTB5Sd7EQv1/xxbjDDxWS2Bt1AJo9mjLFg27PneRXqq2oTN5lEE3m/OcTvPo9IDRdL26A2drMJTAFwG1WDlCTASvGmtgyFZyPbJAdmObbd4goLZWaDhrpH/EMBgx00MOw5G1Q70o33b778a+4Oh6U4YsIQzsZAa9id1hR7Vc1b09osWtlZHitU9aOjPajZXikOMd3rA/rmHa4Vanh5igwDP+yZ9exbaI0LJAYuM3axaIt7V4yHSkNRn4re8IJkkR2Fy4fM05VkhpO67F+7PY+JtMFr2rWK9ty6pEhNO44+w==
-X-Gm-Message-State: AOJu0YwFLZUAlh3XLlV/m7Q7f7u0j1/Ba8MQ6jwExFfVl2+cRXgYd2ew
-	CAOAwf0qcxCxnuSfMiXI0S9sc1zRar8ezi+48g7QhvPCBfPuHNqy
-X-Google-Smtp-Source: AGHT+IFVOACJ8jhSl4BQSkTV7VPNec/iQ97B361R1DBH0V33lAwuXw0dKze57MI6+rDcTkZyQ3kqqw==
-X-Received: by 2002:a50:bac6:0:b0:57a:4c22:bd with SMTP id 4fb4d7f45d1cf-57c508292e9mr1554431a12.7.1717767953444;
-        Fri, 07 Jun 2024 06:45:53 -0700 (PDT)
-Received: from [192.168.42.51] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aae1412absm2766177a12.57.2024.06.07.06.45.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 06:45:53 -0700 (PDT)
-Message-ID: <ee9a55cd-7541-4865-ab2a-9e860b88c9e4@gmail.com>
-Date: Fri, 7 Jun 2024 14:45:55 +0100
+	 In-Reply-To:Content-Type; b=SOhcDVQF1RLPCD8EGtU7K+7tNPt8ttivdWlFb0jU8dQFM/gsmPAy45wQNkYpOqgwPXNJusmRSBSuEhOty5pmL3SRh3TiQ42BodIeH7YaZdfiML841qD5+Fb/GblU3IlkRHCPuRC29Hrx8qdHankz5pzfhrICgGYOP6Dt+GNp3Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52256153B;
+	Fri,  7 Jun 2024 07:27:29 -0700 (PDT)
+Received: from [192.168.0.102] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 883C63F64C;
+	Fri,  7 Jun 2024 07:27:00 -0700 (PDT)
+Message-ID: <6c946ece-3663-4520-a90a-68be4d93c56d@arm.com>
+Date: Fri, 7 Jun 2024 19:56:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,75 +42,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <ZmAgszZpSrcdHtyl@infradead.org>
+Subject: Re: [PATCH 2/2] selftests: Add a test mangling with uc_sigmask
+To: Mark Brown <broonie@kernel.org>
+Cc: shuah@kernel.org, oleg@redhat.com, stsp2@yandex.ru, mingo@kernel.org,
+ tglx@linutronix.de, mark.rutland@arm.com, ryan.roberts@arm.com,
+ suzuki.poulose@arm.com, Anshuman.Khandual@arm.com,
+ DeepakKumar.Mishra@arm.com, AneeshKumar.KizhakeVeetil@arm.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240607122319.768640-1-dev.jain@arm.com>
+ <20240607122319.768640-3-dev.jain@arm.com>
+ <ZmMHNZcYfNMW1Ft7@finisterre.sirena.org.uk>
+ <5d26ac17-a50a-46c4-8fcb-68eaa6d0ce2a@arm.com>
+ <ZmMOOOEg06SWQ05m@finisterre.sirena.org.uk>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZmAgszZpSrcdHtyl@infradead.org>
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <ZmMOOOEg06SWQ05m@finisterre.sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/5/24 09:24, Christoph Hellwig wrote:
-> On Mon, Jun 03, 2024 at 03:52:32PM +0100, Pavel Begunkov wrote:
->> The question for Christoph is what exactly is the objection here? Why we
->> would not be using well defined ops when we know there will be more
->> users?
-> 
-> The point is that there should be no more users.  If you need another
 
-Does that "No more" stops after devmem tcp? Or after io_uring
-proposal? For the latter I explained why io_uring has to do it
-for good design and that's it's not even related to the memory
-type used.
+On 6/7/24 19:12, Mark Brown wrote:
+> On Fri, Jun 07, 2024 at 06:53:27PM +0530, Dev Jain wrote:
+>> On 6/7/24 18:42, Mark Brown wrote:
+>>> On Fri, Jun 07, 2024 at 05:53:19PM +0530, Dev Jain wrote:
+>>>> + * Test describing a clear distinction between signal states - delivered and
+>>>> + * blocked, and their relation with ucontext.
+>>> This would be clearer if it said more positiviely what the relationship
+>>> between these things is actually expected to be and how they're tested.
+>>> Right now it's a bit hard to tell what the test is actually verifying.
+>> I thought I had described that quite well in the code comments.
+>> Anyways, I shall incorporate some detail into the initial test
+>> description too.
+> If the overview is confusing and people have to read the code to figure
+> out what it means then that's an issue...
 
-> case you are doing something very wrong.
 
-That's not a very illuminating answer
+You are right.
 
--- 
-Pavel Begunkov
+I shall post a v2 rather quickly, perhaps in 1-2 days;
+
+the SIGPIPE vs SIGSEGV mistake basically renders
+
+this patch useless (although the test would still
+
+pass), and makes the code unnecessarily hard
+
+to review.
+
 
