@@ -1,105 +1,148 @@
-Return-Path: <linux-kselftest+bounces-11445-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FAB6900D38
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:53:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C423E900D48
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 22:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A44D0283DB0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:53:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BAAA286F6A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B348C154C12;
-	Fri,  7 Jun 2024 20:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D291154BE8;
+	Fri,  7 Jun 2024 20:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="GFZ9KF6+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h1Acb6qt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9654F154BFB;
-	Fri,  7 Jun 2024 20:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9509D15380A
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 20:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717793576; cv=none; b=J5LnbssOv9C4yEZkAFnAQ2UccunpGSs9Vsz2FqvaJpuW3UikYVE9cdJVfOVNTTpMEnenpFgiM6IdDGjt5Vof9YKWYL8jOFF2IkXcf4ITIhL2gvYBggzMcBVbB41qsohBW8MsHtdsHpS8nBfNDJVOP46N4BiE5KsEGKmUKroiF5Q=
+	t=1717793931; cv=none; b=cSBSR2lULCLQKA8pv6Dj+EEXuwgw2dAc4EmLnxBScMGKDSFYeW6yJ3Sz9HKqeFOLeTDEpTDXuA/VEIsGz7R/TQCJlIaBJerr0bnFmXVJOlwQloT3o+qVO3hwN4q+AaBHVStSVQg8hhDey/Nc5zZZZDMToN4WbjRdWCSGO8kB6z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717793576; c=relaxed/simple;
-	bh=VMLxmXz/u3qMiTiYWYaIgTSjlhBqu0PyuRoBOBtThgY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GZz1HVNw+LSvzowPVDGil6ZimO8o/vf7AVeF7tZojOQ3xxHjMJ3ovtGHkfxGTMmANd1IuXcBctA8GDdmS9DzXIdDk51hMasYMFApmDmeDPGWjF7VGp1kGgJ8S39ywtIAGaLMSn3ELpfngLsJDY+ygwE82gEE5FLstvOk0YHFGBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=GFZ9KF6+; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Vwtgk3THBz9sGk;
-	Fri,  7 Jun 2024 22:52:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
-	s=MBO0001; t=1717793570;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GYQp9dC3UpZGBuYImicESfmUl6H1CygZfqRoSmgI07M=;
-	b=GFZ9KF6+TkSf21PJjhZ4xQoUU2T7OJrIN0wiyXn9te1gMwhL8I+ZOTrDBEj7B1aul3hKhC
-	ruUhiFiEpkmjpsMZLd9S6BUTUCiJl6enb/lTyCJVNIPgP59Uu43TGIgV3JzEllNNDXBu5L
-	PRsMgKT2cTd9G6uHkmrak67jlPrSR3NDdtvY9qXMF0DAjM3JCwzDqnki82q0t/Fmmpn/K/
-	qH/9eiiuaQuP1SuH5fjp0syHQE7pgt2JIotwB93EBjH67OcHOi1LiDTd3w+1DgLU9ClHWG
-	mMIQmwnslL42WT8ZbP401PvI2fnmldonX8gsnFQyo/Cov3dFW1t/m9Ky1NQqvQ==
-Date: Fri, 7 Jun 2024 20:52:47 +0000
-From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Donet Tom <donettom@linux.ibm.com>, Shuah Khan <shuah@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Tony Battersby <tonyb@cybernetics.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ritesh Harjani <ritesh.list@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Muchun Song <songmuchun@bytedance.com>,
-	David Hildenbrand <david@redhat.com>, p.raghav@samsung.com,
-	usama.anjum@collabora.com
-Subject: Re: [PATCH v4] selftest: mm: Test if hugepage does not get leaked
- during __bio_release_pages()
-Message-ID: <20240607205247.b7touyyblwcpamfm@quentin>
-References: <20240607182000.6494-1-donettom@linux.ibm.com>
- <20240607130623.76ba44371f8f406f5d1678b7@linux-foundation.org>
+	s=arc-20240116; t=1717793931; c=relaxed/simple;
+	bh=FAIKXg8ng7SkKYvCPIbsuz9ldAnNs4NGYA60+JUIfyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ME5fsTV0ddt/un9GoRR/cA5NoaJaRGIWZQ224OF8u22vkrZVOacO3WdaS3TzJ9eKzluKO3umrQLg0IDKLLYUKlSdXse1xWm6gEm1mCsxbG59AkvvIOD6D3XHXlntPTvxFjBwZXeCueoMdL1ErWbG21J1Stb6Wk0rmMyl3zspOWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h1Acb6qt; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7eb358b6f3cso5180339f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 13:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1717793929; x=1718398729; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bmjH9uZ7dKOwW5eDu1GVbx9ErW19+Z/Z7ndRTQTC2ac=;
+        b=h1Acb6qtaE/2Q3h5q399HU+kqEXss2xhg7uapaiVB5OQLgy9IHF9tY0Ucbq6t0g2hT
+         Vx8e4BUyDM+g0+foBQPWo1BkF7XbGl8/OEvHnqWB+xzzOkglXxiKy+gqw9MNOplm0BMC
+         a3zWVI67ujIrjLGkpaio4fXbcWdNQT/H+jRwk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717793929; x=1718398729;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmjH9uZ7dKOwW5eDu1GVbx9ErW19+Z/Z7ndRTQTC2ac=;
+        b=p8TGklnacWKqO8/JxOgSzdjt5RhRcHzdcSX/aIygk2bHS7MRr9NXyRGVvuJPUv9dU8
+         eWxnGfrt4Fue1H5pq29eP8xk8Gx5qQGJfGFJUBdUH2Xkxs05vhKLgYR2GLSal2HGZxn2
+         pkRxrX3sz+y1kRA4WwJDPWbXNO8o1/cekvqil2/kB7G7jHZvcFF5MtLRCkvJtEAmHFJI
+         b/XPGmF3EbRHJmlxwT8j5xTtte1fgHWfW03+D/aUzZqZbkKM/xtKpFV65eyis9wOXM6i
+         aOyxUyMoTjgEWULkHTCtjLd4eStmAKMy3RnglRVlCI9BtWDqjZSO+SojXou2dr7cCVbN
+         2zMg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/s63sYGchmqzSK7Bpj1IdAq8FGve+26pMI8kvFW1HRvkaWgGeTYMGvVomJ5hsuGDjIiGL6Uvd0U6ckzKbLN/QLahIuv4ErWLMSzQi3TMQ
+X-Gm-Message-State: AOJu0YxB4L2E8c+aP5+BTRW1ozRaaPDjvsZsMzn977N1+m/k8ymhawA+
+	XcG+Spy2uHWTr32QAtLT5eS2Gh+M70Es4Jv80HrXs94Ea3ArdfA8ed1IIJPwtwUStMJJIAQpbUb
+	Z
+X-Google-Smtp-Source: AGHT+IGdPrqvvHuiTzcFDgiw/G7IZNhxqs5K3o1qqCMtt7TpKmGN1YlnR/V94mLxkW9Fz6UGDE+l0Q==
+X-Received: by 2002:a05:6e02:1a8d:b0:374:9cfb:ee13 with SMTP id e9e14a558f8ab-37580236023mr39498985ab.0.1717793928617;
+        Fri, 07 Jun 2024 13:58:48 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-374bc12e6f9sm9780065ab.12.2024.06.07.13.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jun 2024 13:58:47 -0700 (PDT)
+Message-ID: <a461ba9f-b171-4b49-b282-1f4e2830f31e@linuxfoundation.org>
+Date: Fri, 7 Jun 2024 14:58:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240607130623.76ba44371f8f406f5d1678b7@linux-foundation.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: seccomp: fix format-zero-length warnings
+To: Amer Al Shanawany <amer.shanawany@gmail.com>, Kees Cook
+ <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+ Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+ kernel test robot <lkp@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <be032a65-e61b-40e0-a982-cb622ccca548@linuxfoundation.org>
+ <20240607124117.66769-2-amer.shanawany@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240607124117.66769-2-amer.shanawany@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 07, 2024 at 01:06:23PM -0700, Andrew Morton wrote:
-> On Fri,  7 Jun 2024 13:20:00 -0500 Donet Tom <donettom@linux.ibm.com> wrote:
+On 6/7/24 06:41, Amer Al Shanawany wrote:
+> fix the following errors by removing empty print statements:
+> seccomp_benchmark.c:197:24: warning: zero-length gnu_printf format
+>   string [-Wformat-zero-length]
+>    197 |         ksft_print_msg("");
+>        |                        ^~
+> seccomp_benchmark.c:202:24: warning: zero-length gnu_printf format
+>   string [-Wformat-zero-length]
+>    202 |         ksft_print_msg("");
+>        |                        ^~
+> seccomp_benchmark.c:204:24: warning: zero-length gnu_printf format
+>   string [-Wformat-zero-length]
+>    204 |         ksft_print_msg("");
+>        |                        ^~
 > 
-> > V4:
-> > - Added this test to run_vmtests.sh.
-> 
-> v4 also contains this change:
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202312260235.Uj5ug8K9-lkp@intel.com/
+> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+> ---
+> Changes v1 -> v2:
+> removed empty print statements
 
-I think v3 already had these changes [1]
+Kees,
 
-V3:
-- Fixed the build error when it is compiled with _FORTIFY_SOURCE.
+Is this change okay with you. I didn't see any use for
+these empty ksft_print_msg().
 
-[1] https://lore.kernel.org/linux-kselftest/20240607055046.138650-1-donettom@linux.ibm.com/
+I will take this patch if you are okay with the change.
+
+> ---
+>   tools/testing/selftests/seccomp/seccomp_benchmark.c | 3 ---
+>   1 file changed, 3 deletions(-)
 > 
-> --- a/tools/testing/selftests/mm/hugetlb_dio.c~selftest-mm-test-if-hugepage-does-not-get-leaked-during-__bio_release_pages-v4
-> +++ a/tools/testing/selftests/mm/hugetlb_dio.c
-> @@ -40,7 +40,7 @@ void run_dio_using_hugetlb(unsigned int
->  		ksft_exit_fail_msg("Unable to determine huge page size\n");
->  
->  	/* Open the file to DIO */
-> -	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT);
-> +	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
->  	if (fd < 0)
->  		ksft_exit_fail_perror("Error opening file\n");
->  
-> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+> index b83099160fbc..6fe34be6c693 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+> @@ -194,14 +194,11 @@ int main(int argc, char *argv[])
+>   	ksft_set_plan(7);
+>   
+>   	ksft_print_msg("Running on:\n");
+> -	ksft_print_msg("");
+>   	system("uname -a");
+>   
+>   	ksft_print_msg("Current BPF sysctl settings:\n");
+>   	/* Avoid using "sysctl" which may not be installed. */
+> -	ksft_print_msg("");
+>   	system("grep -H . /proc/sys/net/core/bpf_jit_enable");
+> -	ksft_print_msg("");
+>   	system("grep -H . /proc/sys/net/core/bpf_jit_harden");
+>   
+>   	affinity();
+
+
+thanks,
+-- Shuah
 
