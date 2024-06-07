@@ -1,231 +1,340 @@
-Return-Path: <linux-kselftest+bounces-11431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A7AB900BCA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:16:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50D8D900BD9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 20:20:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59F8C1C2219B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:16:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDA42B21302
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9342913C83E;
-	Fri,  7 Jun 2024 18:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B57139588;
+	Fri,  7 Jun 2024 18:20:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JLrIkfu0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nQuJRPll"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77ABA7347D;
-	Fri,  7 Jun 2024 18:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717784193; cv=fail; b=U/TcospTeGbXFd7Yj9hBkJOpnvlTgqDMw3/pIgVunDQ7yyjHkie55UHsWnR/jDGCzQ5UdSpRTi/pM2F8UBk1hYLniEkt15gSO+YV/cMcbC4n1WePY2jwD1iWdENkLJKAucvICscTLmLg9JRgy04gQPejmABxY+HqwhJVjYEvb7k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717784193; c=relaxed/simple;
-	bh=v5ndSTRZSVVtxuET0u/5Y+m8JwViWre8hTFK/WktoxY=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=aF+7olv9+Wg0+h2+6OsdzNAw79IP5gsPfuwAcyCZtSrNC7bEYuL9xdQUFqvO6h9ChDDvh+5lrY0wTPS9hOH5FQTpepbqdl7nJL7hU290ERbZilSL3B3wkYlTGZ5AkkjzVS3Nte8PRhzsjDVuGYd6JztoEGiwEi+rO4njjbH5ZxI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JLrIkfu0; arc=fail smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717784191; x=1749320191;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=v5ndSTRZSVVtxuET0u/5Y+m8JwViWre8hTFK/WktoxY=;
-  b=JLrIkfu06wz8wblBCOkF+ZVOZQ4wSo0zpBqv9oHUL3eIpb0Yu2dyqbi5
-   xIqlp9L2/ktWm31U0gBquR3cgzdbJ7QBVk/JoolHOwnyqy5WqOXCj6A9s
-   NEAyq8Hv2Y974vLRZyuPpKSajL9wAxMFoZ2H5V9xJAvHCzxLyLZLVoSsO
-   T7nFHKyPo6OmotllurhypaV9FC1cb1TO1wWlvmi6XGqw2pEHi+xaAehYI
-   GBYXlAjz5/Sv1OR4YyGsi4YFwxbZv8ERKDehOdBgvE1Q4eZUamGWVuBd/
-   nf2k62gx88l6vwbUxuUCHcsui6RsjFujphexkJXpNzeqsOP5g+9Baac72
-   Q==;
-X-CSE-ConnectionGUID: GrPiUTj6Q5qsN10X8T/uKg==
-X-CSE-MsgGUID: +8DS2wJWQkWTx1QgqYLxkg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="25921726"
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="25921726"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 11:16:31 -0700
-X-CSE-ConnectionGUID: oJLqSzWWRS6QWGkJZGYTUw==
-X-CSE-MsgGUID: hnDbmqA1QH+O2ZCLGL0K0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="38524030"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Jun 2024 11:16:31 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 7 Jun 2024 11:16:30 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 7 Jun 2024 11:16:30 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Fri, 7 Jun 2024 11:16:30 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 7 Jun 2024 11:16:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DP1eaUxu9c85KuOO7iGPiRHvWKdw6P5bkqysGkNsSNs+jMnRH/OnBZX+DTyfacwRj/FlIaDJwe0SqMmeaKIAui/c9m/qGzuyAQ6tJXJiz1UVkt0BkRqYxPRiyE+zcN280CNYJD92TkCCc+wz/zVL+PIABDmFCvOW9taRDXIaHMM4d0dzeMa3q7wjxnVZT+a5IXXrNy+Sky3QtyV9/E6zAG6ujq3PWeia12t5z+6uJv8crQJ3Yf7hdorSYWWc+v/zF4upXOOyHVIoetpI2D1S3Ydn3rcKUqo98B6XkEvrXu51Vdo+WtW3nlJ8RZV8ghNa1X32CWwo9p1XZgGhebKoUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hlMhuHt5C3uUgVTfXRqBeodMQkaphoYSRV4TN7h9Sz0=;
- b=T5AxG5Yp0uHouWZP4T+n7zw+19w3szPlHNPOyF5vEgdI4+N+lffeI7q//oCNPJ7UT+sTW5iIvn4J/Yc90YVhYd+EroDQZRIrsjA/kkYZccwrA56cMAqncb2d7z1uQx5jW1cKlnmPFg6ztW13ItXnhdY1AmYVCC3+0TzK6iFQ2yXfYolmClzFDgX+iD6zcfrEwN90z5SvqSexXq1//6t9D8e0m5BAFVou0Jh6oa885wdOE0oYssCoGd2668xfY6LJwSrNJQWfOw4IufpnCO8tdIoO0RowqXonWv2uPuKD5Z9ZNsy/tEbUE37lrvPPWYtjR4E6u0DvJQN2d4mFEFElFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by PH7PR11MB7605.namprd11.prod.outlook.com (2603:10b6:510:277::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.34; Fri, 7 Jun
- 2024 18:16:27 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::61a:aa57:1d81:a9cf%3]) with mapi id 15.20.7633.017; Fri, 7 Jun 2024
- 18:16:27 +0000
-Message-ID: <45758766-f3f6-455d-ba34-36b9fbad80cb@intel.com>
-Date: Fri, 7 Jun 2024 11:16:24 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 15/16] selftests/resctrl: Remove mongrp from CMT test
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
-	Babu Moger <babu.moger@amd.com>
-CC: Fenghua Yu <fenghua.yu@intel.com>, <linux-kernel@vger.kernel.org>, "Shuah
- Khan" <skhan@linuxfoundation.org>
-References: <20240607125316.7089-1-ilpo.jarvinen@linux.intel.com>
- <20240607125316.7089-16-ilpo.jarvinen@linux.intel.com>
-From: Reinette Chatre <reinette.chatre@intel.com>
-Content-Language: en-US
-In-Reply-To: <20240607125316.7089-16-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C3C4DA08;
+	Fri,  7 Jun 2024 18:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717784439; cv=none; b=QvaPmK60mGIcBCvwjN2RV1cYIgQkQAEbK+Q1q0QvAZX4Th+ph69nUlagL33QQjEV4Cgeo/j/+sg+8uhrPWjHYZJq/PFP1lvBTyyWb/d+OluFgvFp0wg29vn5Es8jtJA/FN/5PosSMgUhTioxpfQZPTF7pcTpK8CjBqab0CobzWM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717784439; c=relaxed/simple;
+	bh=RZ12aQi9yAohDKUTn0IKAy4katTS2pulT3gqwEHruZg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cPIrmfaUQGvK/gQLM9MuMlBH1CJJhzKOqkNdSXJBTOi3y8RpSTlMxmZP/679ZW7NZPilh95f+iMfGPPD/TbMaciy1RhsRT0t6DHJ4iVuH8Gu9CKjtO6W4a/tL/TX9QfRNoujRqUb5ciVrQVybb5Tp3YC0ryDI1uajyL2V2ncbv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nQuJRPll; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 457IBJGK028460;
+	Fri, 7 Jun 2024 18:20:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
+ content-transfer-encoding : date : from : message-id : mime-version :
+ subject : to; s=pp1; bh=8Of3jtOtNBCqPysJASfdDL2S3JSFKdLpSXFzpLYj2PY=;
+ b=nQuJRPllzByViz+Rnhu6mjt/SumqpxoyCeOwsm+X8P6K+7I7izig3HceiEPOIBn0OiFO
+ T7OyKtbvbPwbSnEygyzWU4BFp0hiBSwRDjEBH3hrw0CMlr2RULEKO/hfhrfDzvq3bVCz
+ Tyyy+KC+ORFXzmNHTXQQ859t5TRufnLf8rwIFLDGPZ205+AJu1K+kobAwQDs0lWX6p0d
+ pce0J9L4MkHMVDS03zPowdZe9O+MkmK+tYKFESvoWelMdGN7ou+vEsYASOlFMz3TpgSx
+ 9k+fl2ZxV+5+ToIdOSM/Jn/95rYr62evb+SJZkMzJ7yja5oS9HuA6TdEVYuv4VO5Q22r 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ym6yx030s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 18:20:09 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 457IK9Km015675;
+	Fri, 7 Jun 2024 18:20:09 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ym6yx030n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 18:20:09 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 457GnIBP026671;
+	Fri, 7 Jun 2024 18:20:07 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ygffnj0j7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 18:20:07 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 457IK31D44826968
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Jun 2024 18:20:05 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2AD520049;
+	Fri,  7 Jun 2024 18:20:03 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A62D520040;
+	Fri,  7 Jun 2024 18:20:01 +0000 (GMT)
+Received: from ltczz402-lp1.aus.stglabs.ibm.com (unknown [9.40.194.31])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Jun 2024 18:20:01 +0000 (GMT)
+From: Donet Tom <donettom@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>, p.raghav@samsung.com,
+        usama.anjum@collabora.com
+Subject: [PATCH v4] selftest: mm: Test if hugepage does not get leaked during __bio_release_pages()
+Date: Fri,  7 Jun 2024 13:20:00 -0500
+Message-ID: <20240607182000.6494-1-donettom@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Mt-ewEyqWzwNqnyY4Mdcwcwb3rVuufCr
+X-Proofpoint-GUID: H5jiUjmYy4Zoi_JUgEFfVW_eamQBcxgh
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0190.namprd04.prod.outlook.com
- (2603:10b6:303:86::15) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|PH7PR11MB7605:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbd7559b-939a-4494-1d8c-08dc871df261
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|366007|376005;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?ZEtMbkxoOFlmVmRNVHg3K0EvZXNPNmhPVWtHZE9VQXRpT3dyVzkyRTlqcVhJ?=
- =?utf-8?B?cnNwck12Yzc2d3dqdmlNNVZPWElkTXJaeUw2UUxWYkNjZ1RpcTcyS2ZiRXUy?=
- =?utf-8?B?bnhFT0xMcXplUFZCUk1ldGpQb21JR3hlQkdJQ1N1S083d25NMWZRbnRRbDEy?=
- =?utf-8?B?WVFhSlBYQWtHZzZwTmdVUC9DUTZOaDRXZ2Erb1BIdmhzMEtPVkJmVm00U0hz?=
- =?utf-8?B?T3BiTTk5azNDTDBzV0hNcU1KdWt3RFlQdGl6ZFg3OXJUQVFIaG8wNEVlcGN4?=
- =?utf-8?B?bXRXQkdxK1NzR01ZN0VxcmRFVnNJRTQ3bzBkcjZibXJRRkRYNytjOU5BNFpV?=
- =?utf-8?B?KytrSUxuV0JYSnpyQ2dqN01sVGhhelU1OHlrd1VobzRSRnJhNUNVVVV5S0h2?=
- =?utf-8?B?V0k3bVdoVEFyeFhiOVBRL3M0VS9VdHZIN1hvRkFlS09KWitLMlRqOHhUMkQy?=
- =?utf-8?B?UjBpVy9aeW9ERWVnc0hBZk9sMHM2ZTNlMlJEQUxqc1BjZElPcGUxWUpWQVZq?=
- =?utf-8?B?VTk4alU4cmRqdGxXb0wwMDZLR0FWMlJVd0ZuZGd0NCsrUWFBa2hERTZ4R29v?=
- =?utf-8?B?TytMaUtpUXJQL3E2d2U0RGMwUTc4ajZQL1hYQTNCaWZJVHJsbmJERFlscVZq?=
- =?utf-8?B?ZUJ5ckkraFE4bHJQeHdBdU8rM244a284NTFGTExQZWhHRGNPK1FtRFVaTU0w?=
- =?utf-8?B?UFV1a253WGJ2Uisxb1ZZRHFQVVlybGtOZGZnaGxxcnFLMUV1RG9VekNPVlJR?=
- =?utf-8?B?aWlPd1NDL1VweW9SbmdUWWhoaXVGTnV4V3BscmoyTDJVeTdiWlYzQURQdjVl?=
- =?utf-8?B?S2Nubzg5UGZPMWhBNGg2aFd6SmtJRmF4WUhSV1lhd0FsRmtrQ3E3KzdBNkFR?=
- =?utf-8?B?NVR1WDlTRm92QjY1S0tpM1ZxMEdjVlhTdUZ3VmRhbVpsK2liWEFTU1pvam9C?=
- =?utf-8?B?dXhJbnc0cVArZEhCM1hrdXVhTFo0dExDSEY4SWNhTGQ2SXV2NkNud2RRRGg4?=
- =?utf-8?B?bVljYTQyWlVxQjhobWt2NXBDQURpVjdtdWJtbFVwQ3JhOTJqNnFPcWIrYjBD?=
- =?utf-8?B?eHk2bko0YmpiazlvWGt2Sis5eGNBd3dWOXZXaTNNeGlTV09KaGRlb210NlBa?=
- =?utf-8?B?SzhzYUdVd2RYUUhYUWQ1UVJkekU1aml4ajR2aVRpMEZsWGEzdTZSN003c0Zt?=
- =?utf-8?B?Y0NyMVFWV3Yzd0NHdXhhRVgxeGhTNGxvMGNXTE5oOUhQdE01eGRBMzgvTnhM?=
- =?utf-8?B?b2YwQTd0cSs2enFiNXU3ZjFUaEJqT1Z1TDZzUHptVFFEUG9oYUhKdGE2VkMx?=
- =?utf-8?B?TU1XOCsvTkVJemtGRFNtYWgxVU45Vk1zbUdIK2tHblE3QXA3Vm1mWVkyM1li?=
- =?utf-8?B?V3lDdHRHOWU3ckV4YVl3VklNcmxCUm5hdWVlRkxrVWh6RENqZ2Jhc2tKWGVV?=
- =?utf-8?B?dmdNcDNHYTRaMDJpOWRWbUkwTFNyWFNodTIrYTY1MlhIZkxNNWtNdmh6TmI3?=
- =?utf-8?B?TGYzN0RFZFBGb08rczZURnhsWFN2NjFzczJWZEZJd3picUVCOUZRNWRsaWg5?=
- =?utf-8?B?QmdWY0ZTcWdWWVd1VCtCbWdJZWJXMUNlU2xwU3RyU3RNZXV0Mm1Wdmh1RHF5?=
- =?utf-8?B?WU1kQk81QmFzak5GaldMcWJqYVFVL2pPZDNYTkhPTkxIV1BvYjFadlo5Ykps?=
- =?utf-8?B?V0dZaStYRTBrRmVucWhWVm9CUHBCRFJoZG1Ydm1oSjJycm1reGNmWGNqa3pS?=
- =?utf-8?Q?p+3+GqxTKIJrFYfz5wCVu2/lLfWYAcugL5vPe3U?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aFQwTGYvM09vVHNJNzRYazFtMXZQUm9qZHlhVkJJTHUyRVZoZGtLdkRFaGZL?=
- =?utf-8?B?UnZMSVpPOHFxa0VDVU1nZnFacDNqQVBaZVNXRm00NVozUXVLdGdhOUhwN0dJ?=
- =?utf-8?B?amE0YlJoS3BWZFZNOEZEdjFhZ2pUc3h5VnZmdHBBVDlzZzFVUllZWXQ0d0U1?=
- =?utf-8?B?bHdtV1B5a3huUWV2NDhRUzNWRHZNL09JOFpmbXpaaTNSZDcyUVBNOWlVcUQ0?=
- =?utf-8?B?WitWbWxXOENaWk00RElNeFZDWStqUjQ0YTgvdllzcy9LNEVTWDFjUnF1Ulpa?=
- =?utf-8?B?M3orcC8yT2MrRDFLcktIdEpzOFlxWjJlNDZ3d2g5VURjZVc2Z1FlcnMzY2du?=
- =?utf-8?B?bVlVQ0pRQ2RUNzVLNnM2NHZCRVArMmxJOWFrYVVOVS9IT2JsSG9Hd1c2QkRX?=
- =?utf-8?B?WHQ4b28zOXdGQ242bEZwanZER0ZyNXk4Wmkydi9ScklTVWJ2Z2U4M3BnakhE?=
- =?utf-8?B?Qjl2aDBBWUV3V0g4bmpMVnoyaU1aaS8yWG9IT0JSeUlMZmFRSlFMZ0RXOFlR?=
- =?utf-8?B?bE40MkhKbGZaNHBWa0k4bzZlZW5ISVpFR0k0em5MdS9tVnFVL3N1V0xibFZq?=
- =?utf-8?B?WFBQcmhxY3ZDNzdoZE5tRE1VL0d1Vmc4UXFKMUpZTWpnWWJjckxlSXl0NW5Q?=
- =?utf-8?B?NW0zUUpwb1ZSR0FDL05samxPaldnMVZBYzNRbks3dkVjSldTVlp6UlJLYVdK?=
- =?utf-8?B?aHlmRGVldVFvM1JSb2Y3cmZsazIwNzV4NzhxWmIraTNEcm1DNHpVQ0d3dkZX?=
- =?utf-8?B?d0ZVM3VYTHBXNzhlczNJcW92SzdkViswTWk5OFVQbEZVQlBVeUtQV0hEMDlo?=
- =?utf-8?B?N28xSnE4TXJjS3crUGhsUGpaS1JiTDZRWkxlOXlBYTQ5SmJVT2lVRy9JSkRp?=
- =?utf-8?B?dlA0Vyt4bnpWQ25IOGxyN0RhTkRTdkNqYk1vU29oMktpUEtSRDdHRHZ5TEEv?=
- =?utf-8?B?cFAyWFhicVpDcTlqNVNyd1cxaGJFdE1ZRG1za21HUUpmL20zUmRNMTZaV2po?=
- =?utf-8?B?KzhTK3Y5WjA5MTdmc1FKY1dBRUh3WnN5RlZxeHNYYzFCeFVuRUxLeFoxVW9S?=
- =?utf-8?B?aUFFcjZhcHNwU1dFUks2TFV0d0tPdjdCWkczUS9TaFVFZGZXN1FVT1h5cytG?=
- =?utf-8?B?a3p2NXFCUGVUR28zT3huZGRUalkwZFBXek1SUCtaMFBXMFJYaWt2M1BRZWNX?=
- =?utf-8?B?Q2Z6U0hZTHh5ckwraHYxVU4waGZHZG1vRkpWVzRzZ2cwUWhVdnRYVlBlYTJY?=
- =?utf-8?B?K2ZlNTdndDNHL2hMMk9hK3lIaHZrc2EwWHk3SEFNVlFFQzllVjY2YnFCL0Jy?=
- =?utf-8?B?TU52YTYvOE1oRjA3QVpndS9SVlF5SEdCVU1ZK0xTSlNOOE51S1AzcnhpRUZp?=
- =?utf-8?B?d2ZOekVGaVpRSGluYTYwVnZjcVNqRjBCa0swSWxKajZMcmJpbERzdFVJRExF?=
- =?utf-8?B?R3A5c1RROHkzK0JtQUdXWGszM1ZGTHdlQStpSmNhZUhaRjU3ZG5vWE1KNU1q?=
- =?utf-8?B?V2Jna3lYbS94LzFGWlBlVGx6aXBaNFA3M3hEd0hQYTFDbEJIOGc0a1lyem9V?=
- =?utf-8?B?RjR1K1Z2NzhYM0FxUU5NdHRGM3hUUHkxazYxTEZ4aFdtNWJvMkg0Q2JiVWdm?=
- =?utf-8?B?ckwzZUhjU1B1MXYvSzNWVFp6dlk3Y0tpTmNuMWtZeWE3TGdHWHVTUE1HSDZj?=
- =?utf-8?B?ajY2WGRsei90VkFmQWYwbm9wbm9xZGgrY2VoREd0MEVUT1dhRGlJNlBudHlv?=
- =?utf-8?B?ZGkzWjQ3RTJjdUpnOXNVdUlibU5xdmhObUN0V3BaTWUxc0RFYVJLaUh1TTN1?=
- =?utf-8?B?bDVoWWx5cUZ6UEhEaEwzb1BXM2JVMHhNMnZKWDBlTWhLSmJSMTcrVjd3SFlx?=
- =?utf-8?B?T0tRVFdWMnFlMjNqYjErZmxKNVN1QmpZdzFReUJhdWhhUE5DNnhsTEVWWFNm?=
- =?utf-8?B?WDdHbEFJcmFwU0lmb3Nmb0h1azNxOFpJUTV3R0s1RXZnSS9MKzdYeEJyUmV5?=
- =?utf-8?B?djBkYWFVZ3pMUEhGZ1lXbzY2S3Uzc0xoT1RjQ3VWTVdQZlc4M0ZEdWNsTXhl?=
- =?utf-8?B?NHo0VnY0aFMzU1l6R3d5OUhvd1p5djdHWFFFZGcydUV4bGpRQnp0NUdnaWo5?=
- =?utf-8?B?WWxnZ1NCZENhazJGcWpZL0k4blJHSlZ1djFwOWR6MUFZUEpqZkxVZ2NGOHpm?=
- =?utf-8?B?alE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbd7559b-939a-4494-1d8c-08dc871df261
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 18:16:27.1431
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0EgFaJaQoqd546PvIArIuJ8uqAjRVe8bguwwBsehUPpLA5djKPcQiRj47MUZzVDbG7OQNRzUPtqxLG6ocD/D1prDZQCTwIPu6t/x3QlCogU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7605
-X-OriginatorOrg: intel.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-07_11,2024-06-06_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2406070135
 
-Hi Ilpo,
+Commit 1b151e2435fc ("block: Remove special-casing of compound
+pages") caused a change in behaviour when releasing the pages
+if the buffer does not start at the beginning of the page. This
+was because the calculation of the number of pages to release
+was incorrect.
+This was fixed by commit 38b43539d64b ("block: Fix page refcounts
+for unaligned buffers in __bio_release_pages()").
 
-On 6/7/24 5:53 AM, Ilpo Järvinen wrote:
-> The CMT selftest instantiates a monitor group to read LLC occupancy.
-> Since the test also creates a control group, it is unnecessary to
-> create another one for monitoring because control groups already
-> provide monitoring too.
-> 
-> Remove the unnecessary monitor group from the CMT selftest.
-> 
-> Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Tested-by: Babu Moger <babu.moger@amd.com>
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> --
+We pin the user buffer during direct I/O writes. If this buffer is a
+hugepage, bio_release_page() will unpin it and decrement all references
+and pin counts at ->bi_end_io. However, if any references to the hugepage
+remain post-I/O, the hugepage will not be freed upon unmap, leading
+to a memory leak.
 
-"--" -> "---" to prevent snippet below from being included in
-changelog.
+This patch verifies that a hugepage, used as a user buffer for DIO
+operations, is correctly freed upon unmapping, regardless of whether
+the offsets are aligned or unaligned w.r.t page boundary.
 
-Reinette
+Test Result  Fail Scenario (Without the fix)
+--------------------------------------------------------
+[]# ./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 6
+not ok 4 : Huge pages not freed!
+Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+Test Result  PASS Scenario (With the fix)
+---------------------------------------------------------
+[]#./hugetlb_dio
+TAP version 13
+1..4
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 1 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 2 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 3 : Huge pages freed successfully !
+No. Free pages before allocation : 7
+No. Free pages after munmap : 7
+ok 4 : Huge pages freed successfully !
+Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+V4:
+- Added this test to run_vmtests.sh.
+
+V3:
+- Fixed the build error when it is compiled with _FORTIFY_SOURCE.
+
+V2:
+- Addressed all review commets from Muhammad Usama Anjum
+https://lore.kernel.org/all/20240604132801.23377-1-donettom@linux.ibm.com/
+
+V1:
+https://lore.kernel.org/all/20240523063905.3173-1-donettom@linux.ibm.com/#t
+
+Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+Co-developed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/mm/Makefile       |   1 +
+ tools/testing/selftests/mm/hugetlb_dio.c  | 118 ++++++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh |   1 +
+ 3 files changed, 120 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/hugetlb_dio.c
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 3b49bc3d0a3b..a1748a4c7df1 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -73,6 +73,7 @@ TEST_GEN_FILES += ksm_functional_tests
+ TEST_GEN_FILES += mdwe_test
+ TEST_GEN_FILES += hugetlb_fault_after_madv
+ TEST_GEN_FILES += hugetlb_madv_vs_map
++TEST_GEN_FILES += hugetlb_dio
+ 
+ ifneq ($(ARCH),arm64)
+ TEST_GEN_FILES += soft-dirty
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+new file mode 100644
+index 000000000000..986f3b6c7f7b
+--- /dev/null
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program tests for hugepage leaks after DIO writes to a file using a
++ * hugepage as the user buffer. During DIO, the user buffer is pinned and
++ * should be properly unpinned upon completion. This patch verifies that the
++ * kernel correctly unpins the buffer at DIO completion for both aligned and
++ * unaligned user buffer offsets (w.r.t page boundary), ensuring the hugepage
++ * is freed upon unmapping.
++ */
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <sys/stat.h>
++#include <stdlib.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <string.h>
++#include <sys/mman.h>
++#include "vm_util.h"
++#include "../kselftest.h"
++
++void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
++{
++	int fd;
++	char *buffer =  NULL;
++	char *orig_buffer = NULL;
++	size_t h_pagesize = 0;
++	size_t writesize;
++	int free_hpage_b = 0;
++	int free_hpage_a = 0;
++	const int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
++	const int mmap_prot  = PROT_READ | PROT_WRITE;
++
++	writesize = end_off - start_off;
++
++	/* Get the default huge page size */
++	h_pagesize = default_huge_page_size();
++	if (!h_pagesize)
++		ksft_exit_fail_msg("Unable to determine huge page size\n");
++
++	/* Open the file to DIO */
++	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
++	if (fd < 0)
++		ksft_exit_fail_perror("Error opening file\n");
++
++	/* Get the free huge pages before allocation */
++	free_hpage_b = get_free_hugepages();
++	if (free_hpage_b == 0) {
++		close(fd);
++		ksft_exit_skip("No free hugepage, exiting!\n");
++	}
++
++	/* Allocate a hugetlb page */
++	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
++	if (orig_buffer == MAP_FAILED) {
++		close(fd);
++		ksft_exit_fail_perror("Error mapping memory\n");
++	}
++	buffer = orig_buffer;
++	buffer += start_off;
++
++	memset(buffer, 'A', writesize);
++
++	/* Write the buffer to the file */
++	if (write(fd, buffer, writesize) != (writesize)) {
++		munmap(orig_buffer, h_pagesize);
++		close(fd);
++		ksft_exit_fail_perror("Error writing to file\n");
++	}
++
++	/* unmap the huge page */
++	munmap(orig_buffer, h_pagesize);
++	close(fd);
++
++	/* Get the free huge pages after unmap*/
++	free_hpage_a = get_free_hugepages();
++
++	/*
++	 * If the no. of free hugepages before allocation and after unmap does
++	 * not match - that means there could still be a page which is pinned.
++	 */
++	if (free_hpage_a != free_hpage_b) {
++		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
++		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_fail(": Huge pages not freed!\n");
++	} else {
++		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
++		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
++		ksft_test_result_pass(": Huge pages freed successfully !\n");
++	}
++}
++
++int main(void)
++{
++	size_t pagesize = 0;
++
++	ksft_print_header();
++	ksft_set_plan(4);
++
++	/* Get base page size */
++	pagesize  = psize();
++
++	/* start and end is aligned to pagesize */
++	run_dio_using_hugetlb(0, (pagesize * 3));
++
++	/* start is aligned but end is not aligned */
++	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
++
++	/* start is unaligned and end is aligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
++
++	/* both start and end are unaligned */
++	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
++
++	ksft_finished();
++}
++
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 3157204b9047..5698d519170d 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -265,6 +265,7 @@ CATEGORY="hugetlb" run_test ./map_hugetlb
+ CATEGORY="hugetlb" run_test ./hugepage-mremap
+ CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+ CATEGORY="hugetlb" run_test ./hugetlb-madvise
++CATEGORY="hugetlb" run_test ./hugetlb_dio
+ 
+ nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
+ # For this test, we need one and just one huge page
+-- 
+2.43.0
+
 
