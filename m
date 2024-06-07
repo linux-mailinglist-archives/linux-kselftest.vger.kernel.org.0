@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-11423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2037900AC5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:51:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39C2F900AD1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FF91285369
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:51:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3CE31F2327E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D2D19AA5B;
-	Fri,  7 Jun 2024 16:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3434019AA6D;
+	Fri,  7 Jun 2024 16:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYIY/KbL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NbrS8nDR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED2E18059;
-	Fri,  7 Jun 2024 16:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671E31993B5;
+	Fri,  7 Jun 2024 16:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717779109; cv=none; b=Jo4HEzeOKyz+BCuM32R2lljja8X6oEiD2wPqAfCYGFgMpr0iwA9tJEGAFi00kz7CCYs1KHCWSg+5uimeWwFH8uMyDjUVc6Y9kw19KO58BiLf++S4h/3RhfAgDrQ9taN2MLSgGtu/uiFMPyp+4F5QQeUjIR8Z4jDPLOQITA2/ahg=
+	t=1717779455; cv=none; b=tioyv0D9tcoTgYYcVOeSi5JgIBSfjWw9y/qosypUwPpgqbXwDBXG3d0HC279EjC7l0AA5nWIECDUSPOqXkKGCXFGVnp7oZUCv1SrFs5HrLDLkTknkZsLXk/z9qZa/AI57DtZ9WEVwgXZugGUCBb7otL8B/u1cHZFFBLJdHJlxnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717779109; c=relaxed/simple;
-	bh=1bJjhIo+skwf0sz4/9yRR4Oy///FQ4QnkOz9x3xs0W8=;
+	s=arc-20240116; t=1717779455; c=relaxed/simple;
+	bh=vyIwv3aKDmIX4FeBkHbRcvl6eBbosit+VQOpM5pGDSk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HDDH3Q9aznlwl8nvYoMfnM8rAqNchpv/6wGptXXlzWIuHpFEA+t0SHoom1784V70oxB0p6DXJ3oKagrOLJUb0UMu5butGyNvgHL1JwZ/wDjENkEZwYQkq6FsqGH24jFZrRpqks1t2ZkHNAboPjAIjbDjiJhQ3jh3xNQ7Ns6bUwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYIY/KbL; arc=none smtp.client-ip=209.85.128.54
+	 To:Cc:Content-Type; b=D1ImrzdMf92Ejvi7oKrMURs6EzCrs1ogvbQ6hd/Nzy3LKTu+vKuOTXbUhsk0qyYjxDADPEUQcgSBf6Yp7i4ITkmYkK7wIw2oKiE8AI22Nt8yuwMqF2gJfzbsCOPbsvpE3fk1k9qsxLqYHFcU3Qw304RnEmVDbg5JLTZS2cY3Lmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NbrS8nDR; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4217926991fso2202045e9.3;
-        Fri, 07 Jun 2024 09:51:47 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-35e4aaa0f33so2289398f8f.0;
+        Fri, 07 Jun 2024 09:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717779106; x=1718383906; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717779452; x=1718384252; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tMxkWvAB89M9V9iTWfyILXsU7ZFICeIaKzWoaQWGLXg=;
-        b=iYIY/KbLE0cGYut2x9p1MDydEElrra8mGEnNBLXQsOuCX4SscFrVTzAPLsxxwxBQw9
-         IMfDqVb9kXYaCn7CCMi/VNkaA4DJrCLetwCzugrNfudVolr/YQvY8gNWFieYb5YEBt4G
-         gINHGn2uCCK2idUr/m2Oj2Qt0BgsrvQxjeIAkSj2CX/gIMJ5geeXoQbut6R2FMC5XDtD
-         nCop0If3qMkpkDjyPi4tIVjqh6wPtwgCQvviQpZNgXKmt5EyIHNgAK1wHhywoLlH86l5
-         zl5L8yMj2HoIGQnkknhkuBLoe4QPNbotxMphC6nmx1z8gc7VIFxz7OGEQRT4maRJNFHa
-         Aoog==
+        bh=lmqHN8HdU+Bg3/a80lxpWcORyiTb4GcEocv7nj+8/gA=;
+        b=NbrS8nDRek9OZd6qlaMFNVDk5CxE7vU079SSfcc6o9LgnaSagv1tRA1SeXqU7NVPd2
+         hloO91TczMpjfatYhsCjcIikbp4K9fmuoUGvbjtD9yFMqDnqlttgXDy+UsG26XYzN9Y3
+         7vFG5Le2ky5h2lAF4LvaxiLWGeyuuqD3287ctqU9+33R2/f2vx7h7V7jmwnkjPgprpdk
+         +sI99cf1my+fov8MSyzoWHJkoJyb10FA69wJZ9cinhem3yOYgppfB1e8N8zEYMo7J9lC
+         T2MP496FrWWB8l8+yCtQh0kLDHMUkD/dl3vaAo5ULPlXgNZfcQOY0XEK0AUi4jP8Ze5z
+         SJGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717779106; x=1718383906;
+        d=1e100.net; s=20230601; t=1717779452; x=1718384252;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tMxkWvAB89M9V9iTWfyILXsU7ZFICeIaKzWoaQWGLXg=;
-        b=r+p8zjajLpjf02uD0IDS0IZp0halm/AjFZ3NnjKmLXnLeMOrqbY8Es0HEEOY7tfCVk
-         3Ff9GVfpbVQqrT5t36ydBtE1xWcXe5OQp95EkhTIv3B3lDnPWaZTqRk6smJTCJL/VvOI
-         I5PEfCwNmgO4L8j9VQVyXfJvEbMK4+h93yROdFFtdZbGKcQIABXlaSrZkxTK7185G1Ty
-         mjtADS2q8ZEMlAKiihGn6YGVGdxZSyyw88ngobh4x2pssdJn1zwf8Qh8x29DPAu6cl2Z
-         o6pvQljS4Ukku7YN5PUTQyIJAqrexbXYtDyls4QMr3DD6GOVsulAiwy5gGHIAJ6eLtA/
-         s8xA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPhk6/aK/wFPr/AXGQQkMLRVSma8he3pezNSf3SXdix8tLuHI6d4c+AEveVFg2PD9t5us0B6SZbqfTGpt8dgbsJUjXlwIbDEgxmZG5TyfvWwkvODvEBqH/lKznBQSWPUvuFRPXKrRNKTVY7Ftu3e6U0vr4dk1O3+CKHU1na5tU/wvgJgycoq4iMJzt9vmbmJhdfPyvHrufHEnbc1Zf4zxjs/9srtcY/EyrwY4XVMiySHP5DoSQHOprWC0=
-X-Gm-Message-State: AOJu0YwjsVBoDzyXGBERxwb/7oKsJ6ZsCpqBfJIWG0D82PNlJNNlPL6W
-	e/3d7hMEb7dOqJ1xG5qhb4L432DZJcVSlPUkqlP/7Q3mJWRyhDCMhs0qUydv3iVKhXVA2TMWKwj
-	MQ0znys8VqAXtoA+ks2QmG68RxG0=
-X-Google-Smtp-Source: AGHT+IHHae77jPsMRuAMp85p7UQJ8UtEsFv+8X6HMvb/PiDrhcFw4+Xw/LR9J2hf5nG4gO8ySMa1c1vDnWV9tCzVeHA=
-X-Received: by 2002:a5d:6483:0:b0:354:df59:c9a4 with SMTP id
- ffacd0b85a97d-35efed08bd4mr2933676f8f.9.1717779105887; Fri, 07 Jun 2024
- 09:51:45 -0700 (PDT)
+        bh=lmqHN8HdU+Bg3/a80lxpWcORyiTb4GcEocv7nj+8/gA=;
+        b=H9kNh087m2tyrppNEvqkzkW8yVxrfuXAguK4YEZo1tQRoX3e5lURS6paCJGm9g6MsS
+         ROR+aFol2Qk9VkQ06MLfUM8YhRR3ERlpwZeGCojjDOhG+7VUqdZ3+K3n6BecbTAqvxIF
+         1czLojwSjv2ncjHhAvjhx2ML01pTzatli8/V6K5S1dTc4jFP+wPG3riBoZQysJf+WIwU
+         AU7y6WGfrCDzGvpGYOVr4tBwyDWTQ86XwV9DZ2eeAGFnHFpk1yFS0a02ZTogE5vNwwJg
+         2rGedni83g78FA4lwtEEGzmrE0tL1ih1YeilHGLKTvjRD1p2NMex2BhZXWUZTWrlpYL4
+         7rQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXR/aVDDY/6Go1GQ23PdDplzQ68G3MjBoadZd150pgzToN7qUMOjrT0vRsX8IWTNHPeRScvEapcFf2204BmEd57d/n/SELppmNwb6Wdo9q0HNrK5UuyQKQuxF63GdKIr+IQwCY3qDivFHigPAnE9Sbny4muULUF88WENJg+Exnfr2BN/sZVootjDsD7xCjl0L4u/llQX1wvqsw2JtTavORnI+lF08w17s65zpOA6HL0+i9nH7NTONZ59aM=
+X-Gm-Message-State: AOJu0Yxrhh0djTivncZuWYnmHu3+aYk/FscIYIpYnS5eOrw7WLHxf5eC
+	HDIVmiI2QRXkqUG7yT4s+f/kgz8PwneeGLb3b4PXsqrs4xeypoxQLMRyGAmBEUTX82OCZM9Bp4c
+	KwcbBiwC1xMhMUFFO4ZcbGBcQeu0=
+X-Google-Smtp-Source: AGHT+IFOPs2JBnUtGoSpAAD8HQDvIVuOuQG2vJVm8c00EsEeTwtYixqeKoDug5QLbfb3XvREuIb4kiRam1yvt/x8AU8=
+X-Received: by 2002:adf:8bd3:0:b0:355:7e4:3cfb with SMTP id
+ ffacd0b85a97d-35efed39e96mr2701786f8f.23.1717779451434; Fri, 07 Jun 2024
+ 09:57:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240607-hid_bpf_struct_ops-v2-0-3f95f4d02292@kernel.org> <20240607-hid_bpf_struct_ops-v2-3-3f95f4d02292@kernel.org>
-In-Reply-To: <20240607-hid_bpf_struct_ops-v2-3-3f95f4d02292@kernel.org>
+References: <20240607-hid_bpf_struct_ops-v2-0-3f95f4d02292@kernel.org> <20240607-hid_bpf_struct_ops-v2-15-3f95f4d02292@kernel.org>
+In-Reply-To: <20240607-hid_bpf_struct_ops-v2-15-3f95f4d02292@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 7 Jun 2024 09:51:34 -0700
-Message-ID: <CAADnVQJo71xGQKLTW6Z1xsTLjtikN8bfemPUF4zj2c2Uvi5JMw@mail.gmail.com>
-Subject: Re: [PATCH HID v2 03/16] HID: bpf: implement HID-BPF through bpf_struct_ops
+Date: Fri, 7 Jun 2024 09:57:20 -0700
+Message-ID: <CAADnVQ+xPtq=kw_MKPaQkeAhdPndhJs1S5DRBGtByBQ-BgdFmA@mail.gmail.com>
+Subject: Re: [PATCH HID v2 15/16] HID: bpf: rework hid_bpf_ops_btf_struct_access
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
 	Alexei Starovoitov <ast@kernel.org>, 
@@ -87,92 +87,174 @@ Cc: Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Jonathan Corb
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 7, 2024 at 8:28=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.o=
+On Fri, Jun 7, 2024 at 8:29=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.o=
 rg> wrote:
-> +struct hid_bpf_ops {
-> +       /* hid_id needs to stay first so we can easily change it
-> +        * from userspace.
-> +        */
-> +       int                     hid_id;
-> +       u32                     flags;
-> +
-> +       /* private: internal use only */
-> +       struct list_head        list;
-> +
-> +       /* public: rest is public */
-
-Didn't notice it before, but the above comments are misleading.
-The whole struct is private to the kernel and bpf prog, while
-registering, can only touch a handful.
-I'd drop "internal use" and "is public". It's not an uapi.
-
-> +
-> +/* fast path fields are put first to fill one cache line */
-
-Also misleading. The whole struct fits one cache line.
-
-> +
-> +       /**
-> +        * @hid_device_event: called whenever an event is coming in from =
-the device
-> +        *
-> +        * It has the following arguments:
-> +        *
-> +        * ``ctx``: The HID-BPF context as &struct hid_bpf_ctx
-> +        *
-> +        * Return: %0 on success and keep processing; a positive
-> +        * value to change the incoming size buffer; a negative
-> +        * error code to interrupt the processing of this event
-> +        *
-> +        * Context: Interrupt context.
-> +        */
-> +       int (*hid_device_event)(struct hid_bpf_ctx *ctx, enum hid_report_=
-type report_type);
-> +
-> +/* control/slow paths put last */
-> +
-> +       /**
-> +        * @hid_rdesc_fixup: called when the probe function parses the re=
-port descriptor
-> +        * of the HID device
-> +        *
-> +        * It has the following arguments:
-> +        *
-> +        * ``ctx``: The HID-BPF context as &struct hid_bpf_ctx
-> +        *
-> +        * Return: %0 on success and keep processing; a positive
-> +        * value to change the incoming size buffer; a negative
-> +        * error code to interrupt the processing of this device
-> +        */
-> +       int (*hid_rdesc_fixup)(struct hid_bpf_ctx *ctx);
-> +
-> +       /* private: internal use only */
-> +       struct hid_device *hdev;
-> +} ____cacheline_aligned_in_smp;
-
-Such alignment is an overkill.
-I don't think you can measure the difference.
-
-> +
->  struct hid_bpf_prog_list {
->         u16 prog_idx[HID_BPF_MAX_PROGS_PER_DEV];
->         u8 prog_cnt;
-> @@ -129,6 +188,10 @@ struct hid_bpf {
->         bool destroyed;                 /* prevents the assignment of any=
- progs */
 >
->         spinlock_t progs_lock;          /* protects RCU update of progs *=
-/
+> The idea is to provide a list of stucts and their editable fields.
+>
+> Currently no functional changes are introduced here, we will add some
+> more writeable fields in the next patch.
+>
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+>
+> ---
+>
+> new in v2
+> ---
+>  drivers/hid/bpf/hid_bpf_struct_ops.c | 91 +++++++++++++++++++++++++++---=
+------
+>  1 file changed, 69 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_b=
+pf_struct_ops.c
+> index 056d05d96962..944e6d91a36b 100644
+> --- a/drivers/hid/bpf/hid_bpf_struct_ops.c
+> +++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/hid_bpf.h>
+>  #include <linux/init.h>
+>  #include <linux/module.h>
+> +#include <linux/stddef.h>
+>  #include <linux/workqueue.h>
+>  #include "hid_bpf_dispatch.h"
+>
+> @@ -52,40 +53,86 @@ static int hid_bpf_ops_check_member(const struct btf_=
+type *t,
+>         return 0;
+>  }
+>
+> +struct hid_bpf_offset_write_range {
+> +       const char *struct_name;
+> +       u32 struct_length;
+> +       u32 start;
+> +       u32 end;
+> +};
 > +
-> +       struct hid_bpf_ops *rdesc_ops;
-> +       struct list_head prog_list;
-> +       struct mutex prog_list_lock;    /* protects RCU update of prog_li=
-st */
+>  static int hid_bpf_ops_btf_struct_access(struct bpf_verifier_log *log,
+>                                            const struct bpf_reg_state *re=
+g,
+>                                            int off, int size)
+>  {
+> -       const struct btf_type *state;
+> -       const struct btf_type *t;
+> -       s32 type_id;
+> +#define WRITE_RANGE(_name, _field, _start_offset, _end_offset)          =
+       \
+> +       {                                                                =
+       \
+> +               .struct_name =3D #_name,                                 =
+         \
+> +               .struct_length =3D sizeof(struct _name),                 =
+         \
+> +               .start =3D offsetof(struct _name, _field) + _start_offset=
+,        \
+> +               .end =3D offsetofend(struct _name, _field) + _end_offset,=
+         \
+> +       }
 
-mutex protects rcu update... sounds very odd.
-Just say that mutex protects prog_list update, because "RCU update"
-has a different meaning. RCU logic itself is what protects Update part of r=
-cU.
+reading comment /* minus 1 to ensure \0 at the end */
+in the next patch...
+I don't see this logic below.
+In general the manual byte offset adjustment
+looks like a footgun. Maybe add a flag for \0 and avoid
+messing with offsets?
 
-The rest looks good.
+>
+> -       type_id =3D btf_find_by_name_kind(reg->btf, "hid_bpf_ctx",
+> -                                       BTF_KIND_STRUCT);
+> -       if (type_id < 0)
+> -               return -EINVAL;
+> +       const struct hid_bpf_offset_write_range write_ranges[] =3D {
+> +               WRITE_RANGE(hid_bpf_ctx, retval, 0, 0),
+> +       };
+> +#undef WRITE_RANGE
+> +       const struct btf_type *state =3D NULL;
+> +       const struct btf_type *t;
+> +       const char *cur =3D NULL;
+> +       int i;
+>
+>         t =3D btf_type_by_id(reg->btf, reg->btf_id);
+> -       state =3D btf_type_by_id(reg->btf, type_id);
+> -       if (t !=3D state) {
+> -               bpf_log(log, "only access to hid_bpf_ctx is supported\n")=
+;
+> -               return -EACCES;
+> -       }
+>
+> -       /* out-of-bound access in hid_bpf_ctx */
+> -       if (off + size > sizeof(struct hid_bpf_ctx)) {
+> -               bpf_log(log, "write access at off %d with size %d\n", off=
+, size);
+> -               return -EACCES;
+> +       for (i =3D 0; i < ARRAY_SIZE(write_ranges); i++) {
+> +               const struct hid_bpf_offset_write_range *write_range =3D =
+&write_ranges[i];
+> +               s32 type_id;
+> +
+> +               /* we already found a writeable struct, but there is a
+> +                * new one, let's break the loop.
+> +                */
+> +               if (t =3D=3D state && write_range->struct_name !=3D cur)
+> +                       break;
+> +
+> +               /* new struct to look for */
+> +               if (write_range->struct_name !=3D cur) {
+> +                       type_id =3D btf_find_by_name_kind(reg->btf, write=
+_range->struct_name,
+> +                                                       BTF_KIND_STRUCT);
+> +                       if (type_id < 0)
+> +                               return -EINVAL;
+> +
+> +                       state =3D btf_type_by_id(reg->btf, type_id);
+> +               }
+> +
+> +               /* this is not the struct we are looking for */
+> +               if (t !=3D state) {
+> +                       cur =3D write_range->struct_name;
+> +                       continue;
+> +               }
+> +
+> +               /* first time we see this struct, check for out of bounds=
+ */
+> +               if (cur !=3D write_range->struct_name &&
+> +                   off + size > write_range->struct_length) {
+> +                       bpf_log(log, "write access for struct %s at off %=
+d with size %d\n",
+> +                               write_range->struct_name, off, size);
+> +                       return -EACCES;
+> +               }
+> +
+> +               /* now check if we are in our boundaries */
+> +               if (off >=3D write_range->start && off + size <=3D write_=
+range->end)
+> +                       return NOT_INIT;
+> +
+> +               cur =3D write_range->struct_name;
+>         }
+>
+> -       if (off < offsetof(struct hid_bpf_ctx, retval)) {
+> +
+> +       if (t !=3D state)
+> +               bpf_log(log, "write access to this struct is not supporte=
+d\n");
+> +       else
+>                 bpf_log(log,
+> -                       "write access at off %d with size %d on read-only=
+ part of hid_bpf_ctx\n",
+> -                       off, size);
+> -               return -EACCES;
+> -       }
+> +                       "write access at off %d with size %d on read-only=
+ part of %s\n",
+> +                       off, size, cur);
+>
+> -       return NOT_INIT;
+> +       return -EACCES;
+>  }
+>
+>  static const struct bpf_verifier_ops hid_bpf_verifier_ops =3D {
+>
+> --
+> 2.44.0
+>
 
