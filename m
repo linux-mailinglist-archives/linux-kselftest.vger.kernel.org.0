@@ -1,109 +1,109 @@
-Return-Path: <linux-kselftest+bounces-11339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E88DF8FFCB8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 09:09:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF618FFCBC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 09:10:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70E911F2AF6D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 07:09:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16755291B70
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 07:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9761215443C;
-	Fri,  7 Jun 2024 07:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E3E1552F8;
+	Fri,  7 Jun 2024 07:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="afkg41Y5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ctrLJ+vV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1589129410
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 07:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C692715442F
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 07:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717743898; cv=none; b=rC28LN5ZpfIZ0vc9cXtPielfeDi27aMy3nCpPvdyISU2okQFeC3mx3kD8hjnvL62OnJ7Cwxn9InjzMZ183TS+i/67mp+XNlEimWAGVvJ5NwyduNyo+p6XkRdFu6dma6T1cB7IXItdZETIh3OiE99Voc1ISUUHl9rxCr/NbZm5E0=
+	t=1717743924; cv=none; b=b/kajUx7Mp5vYew6svxpHrJHmZ/sC7ohb21jDH/G7TvdvixkRDwn+VqF4pRwQY22R6IP8enDql7zo0cDHUGJYIAJzp4qzAGjm3U0EDmdwYkmWoH9nVJ0AAYXjQ2Kykr06nbIScm+HNoc0S2Lddnx6ATBLywtdhDpkx6u2kj3osE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717743898; c=relaxed/simple;
-	bh=d+ApKubc5PVHhl3xdWwWMpVDvRb/+uOTBxjUL6txC0M=;
+	s=arc-20240116; t=1717743924; c=relaxed/simple;
+	bh=ge1eMszrNeG79toR1VsAbb0b+XgeO6Uj3B5RUGR6THE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rAgwYAwhtt1j/03kVgNJlDYFOTtLi6xCODyT1otupyc2L7T6KvcQ+DcHFbgMkMyy2iVZYwF73BSjgNdszWtkf4BzpGfGtoAxvjfz18lesD+gu/TxuYV7kwQ80AEgrkBxwVr4vtqpK8x5/ps352/jjVa5Ncl13E7Igopisuc0y1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=afkg41Y5; arc=none smtp.client-ip=209.85.160.177
+	 To:Cc:Content-Type; b=goMQRptA4CW+1k3RY/XiNVQtjUKhBKmDc/VnR+UxYE69ePTGJzjqkd9q9azBYwcqpVlXtnTxUr/yJEVX5YiPJZix+IIQjdGwbvlAX0p2tpLypsZ4/cZ45f29NP6jc4/FPvbkaK2VJIo/CG2d4LIX/obynXissjOhTjznBhtyW5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ctrLJ+vV; arc=none smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-44036ce0adaso240831cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 00:04:56 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4403f55ddf4so154321cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 00:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717743896; x=1718348696; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717743921; x=1718348721; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+ApKubc5PVHhl3xdWwWMpVDvRb/+uOTBxjUL6txC0M=;
-        b=afkg41Y5wGB+cti6yOyaNKOvdKTlDdL0BQNFTnp68q+BbPy3TIaM3oqH6OQH5IVxfw
-         fE3Zgb6vigyPxFBy5m4KUqyF6qWqk+kHXVdRrba10i48ygbbR0CYZ3+iXsIX7+S0W0EU
-         oVX96jeH240Le/ihnrXb2IiRBvXMb4SMA20FXSFdulN5HpBX3UFiY1BkkFr2GriqGnyp
-         c/KhjX71YBAqW8h1aqDNzK7Qntffv11nkduq8k3WNgv6S8DkJybXEO94ThgQCIKlsQKD
-         IPpMV123LL8Zi93kpSL16u4/CE8MWv+zXy7G2/UY14goKaxYCfIQnJcMI/st0T2tFAce
-         ro4w==
+        bh=ge1eMszrNeG79toR1VsAbb0b+XgeO6Uj3B5RUGR6THE=;
+        b=ctrLJ+vVz0hzgQJYQS1k6Y3pYY/kg8JhAVgP0/ZOcv5yiaTEMGpk2aMI43C/Xji5v7
+         oZSd4pUrg18zyYh2qBJ2WiMa1Ocpp57FlMQGYTnjxIXooAv6gfx7R/ThRSK6eAH/kbfB
+         jKYRCup6YqOkFj7V93W/6c7DfdTk4JYQrItUn5+MU+ukwtaMEk4CK4g5tUo60ljc7xWO
+         OBudLJs4nrkb2na7PRvAzurHR3Dsnn3NGaW7vp/WbzgS5yHnrqHBEPJnSmfOX/LFUnQ7
+         hcjRXbmo89cmh2Dunii0nMoetBiJYplSdajmtB2V1t+12YLtQsOsUXfwXL+1aibL5b7H
+         hi3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717743896; x=1718348696;
+        d=1e100.net; s=20230601; t=1717743921; x=1718348721;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d+ApKubc5PVHhl3xdWwWMpVDvRb/+uOTBxjUL6txC0M=;
-        b=d9ss/5kgGf0PB0uNVneZK81h+ieU1BSM9+ViZCj6PKWNTFDPuCQ1eh2Zwsm/obyzZ/
-         ivWCsV+WMnJkthYzBHiVvq122LFgV1adT5XxrAZo51SKgR6RII8W4oWmRDr1sqvxmR+X
-         oQtm8RS90MS8QsAspkZTXyBu3HDBUzyyh3f6X8VMOu5ToyCi5PiBtmeCAN78/vmjVhOE
-         aMT2Pt24MbDMyOgZnXOPj9pe2CtC+zairf2+OnJl9Qxgc37/NK021asb39dq4VQ9pvhb
-         YHad3dsrRClTq25ZJyyYBzeHp9lyCjiMViz1G+gg4RFE1lEetV3sShNJVHkSkTZL5w+c
-         49BA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDtRTV5CfaAE+Yo8KDbs95jYDB9HHTanQhsfbTW8ryHVyp5NbAhzzBiSwJee44hohsMgGbB0iQjH2P41iKCxIAvBBgLWUm6JrgUq0DD8uY
-X-Gm-Message-State: AOJu0Ywv2/spd7vYSDnBHnmPjHsj3l16gF7hua4ViMtwCSs0B/L3S7CF
-	0QB9+I8QGtxhCwYg+EXe/0u9FEw5cIUGMmePy6Go1PASF2q0BCkZQBr9xqS5OPligfsFkjiT/+U
-	urmFt1oHfL7I79SiBvnS3uxeMUzXzE1rv0/6U
-X-Google-Smtp-Source: AGHT+IGCIv8syTd9VWeWKZZ0SMIVQ9R/9GT+/Yk4N0uDWNCXVAzQSVpHPHb/ETP8A3dM4Ws7jhcojZPDgom9nhb5cjI=
-X-Received: by 2002:a05:622a:4ac6:b0:440:4abf:3e10 with SMTP id
- d75a77b69052e-4404abf3f7dmr502971cf.5.1717743895860; Fri, 07 Jun 2024
- 00:04:55 -0700 (PDT)
+        bh=ge1eMszrNeG79toR1VsAbb0b+XgeO6Uj3B5RUGR6THE=;
+        b=QplPYaLPvLEEyyyegte4C7DBFVpiet3z3swT1Cl+VX7y3sbAL8Gnq/BE2zA79EuPYu
+         GEeufzcZC1OiJDCL0KPTdN+2wCy6Pp2Gk8kGLekBKJu+5NHYZwYKXTdxPEBsFoeCU+11
+         4tBvcxzqYlE5QsYacCP7cYVroJL5cUBi00wO9zNGmcVsEmaVP3EdJaNFpcgXe22oHkTF
+         otvSvmObANCjUoU6k9qiKawQP2JcOhsuUFewSrxKjZKkx7i5DKZnRiOrbiktH62fU3ss
+         8rUK1mXCemCqN8SElfg4dCFfM4HV9zP3HHgbvVPFvHKuOHqOm9nGYig+aMyh5G2ocHZm
+         0R1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUU6cNynumYVJBKZov9LmAbArHtQ6ti0xmQrMptmFM0yguQxjL9543BYjdYNWARHhefjZIsReLnMfdBAJpCwVljQ+a/peDYze7yYYz5bqTD
+X-Gm-Message-State: AOJu0YyEnWUB4K1OHwigEZAZ/uzZHfKW6IRxZZBiLJ6BZb1LG8itSeHI
+	dp6RwdsS87IE/1mpcwwHVAwxdmT8Y5fA/B3mym4P1D99Kk3l6rkFD5XUGhdGFCs1YpcMpcGCCto
+	almC4uceSVBQEo4GnU5Vu7p3taoti3m4uki8P
+X-Google-Smtp-Source: AGHT+IH/R+cvtIHI1kAkTmVSndk1xsEvhq1ET9so2r01OzVDjHUY5mMlZ+sqfn6VluAvEL8ZVwjIKDx2tres9GCPCUQ=
+X-Received: by 2002:ac8:700e:0:b0:440:44e9:27b7 with SMTP id
+ d75a77b69052e-44044e92aafmr921121cf.4.1717743921394; Fri, 07 Jun 2024
+ 00:05:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240531-md-lib-list-test-v1-1-50b79241cbb0@quicinc.com>
-In-Reply-To: <20240531-md-lib-list-test-v1-1-50b79241cbb0@quicinc.com>
+References: <20240601-md-lib-kunit-framework-v1-1-f406bb629bde@quicinc.com>
+In-Reply-To: <20240601-md-lib-kunit-framework-v1-1-f406bb629bde@quicinc.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 7 Jun 2024 15:04:41 +0800
-Message-ID: <CABVgOSnBT=z0gxZ-5Y5eobCvveY-xN_e-pKHTWR=y16MO7wgnQ@mail.gmail.com>
-Subject: Re: [PATCH] list: test: add the missing MODULE_DESCRIPTION() macro
+Date: Fri, 7 Jun 2024 15:05:10 +0800
+Message-ID: <CABVgOS=bpff0aejxAWr=y=k-gOkq4QYw614svbaVkXs8Md+dQQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: add missing MODULE_DESCRIPTION() macros to core modules
 To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	kernel-janitors@vger.kernel.org
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c1bcfb061a476a7b"
+	boundary="0000000000004836e5061a476c7f"
 
---000000000000c1bcfb061a476a7b
+--0000000000004836e5061a476c7f
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 1 Jun 2024 at 07:58, Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
+On Sun, 2 Jun 2024 at 01:19, Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
 >
-> make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
+> make allmodconfig && make W=1 C=1 reports in lib/kunit:
+> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
 >
-> Add the missing invocation of the MODULE_DESCRIPTION() macro.
+> Add the missing invocations of the MODULE_DESCRIPTION() macro.
 >
 > Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 > ---
-
-Nice catch, thanks.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000c1bcfb061a476a7b
+--0000000000004836e5061a476c7f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -171,14 +171,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIB2A0vNHg5kwRlSo2WZhBGsRl8iGDByZtgpXYMV7BPNWMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDYwNzA3MDQ1NlowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIGmKy0FaBQCTp2tGEOrAT4IlaVtXvDGdxJVVGtHUxviIMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDYwNzA3MDUyMVowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBimhZ/
-T69aZlr570UOE7Hj/231guo0Zv8K0/kDc0idFaVxTIRUlyTQUMixL+dYn3/ZRFKqp10N1mcon7GQ
-UQYxjk/LV+dNQQjr8P0EKU0vSwQTdQyNBEmLpY6W1bNJd5xmw7cok0ZalkXNjC4BfGLLwmdCn2Tr
-OWDMoKGYzuFFUWKQjfoPSj5VHlej94h9igHvApoTcBIA/+yhZ6gVLqUxNVeMQtUkcILrLpDzcjPN
-xac1obcWGSFJeMZypBaX+ZR+QOqosmXwC7VBO3ljH62eREYCrAkYwXOE48Mncw2uskGQPmRQc7gV
-TQb53GHBE++6PFPPOZRCZORzFXS8yAt7
---000000000000c1bcfb061a476a7b--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBXLmx8
+lspNlDzkG3oPI6IOhun0mKkfImYY5mknRH0TgWF1jtQHyCOFiw+OkhpnamzbxTQPlT+aRKL33jWK
++eRs1tXwgqyxpJn4bWoK7or/zWPxB8U2YuOx+jv4cTB/vDRWIJ1AJKlmfvOjsYKxiLvTYCxcwnZ5
+yuOXwJqwWIBGnkimA5nUyOmLJur5l7xUNcA6LOD06HNiVzJtbUIHYnzJeYRxo3QBtnb9b94GaRMD
+uawWDuprn8F8YWiqtNWTM4ACWYfXKfMJlgWzu3W8pVxVUSQ/BNqjdMvBAOnTaJsSU78SMToobIba
+uU8OVDq15e2ur8uz/Tmv8hShnl7J9ni4
+--0000000000004836e5061a476c7f--
 
