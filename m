@@ -1,291 +1,342 @@
-Return-Path: <linux-kselftest+bounces-11412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824539009C7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 17:59:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F7E7900A69
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 18:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 807301C216DB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 15:59:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B459BB23DD4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 16:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329F6199EB3;
-	Fri,  7 Jun 2024 15:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593C1154444;
+	Fri,  7 Jun 2024 16:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nmznvAS0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p4cymL5u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6190519A2A8
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Jun 2024 15:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED79442A8D;
+	Fri,  7 Jun 2024 16:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717775974; cv=none; b=AiOl0mchV1jOCup0kl+dcY7F7NZjqkWXFEiwgfq6xDFq/ht1wBhb3Zp96Kr5f54MhstVFqjEJNzLaKUNrEB2cHU+IG9u7PYwe+zAt4sHDF8Qns3WmuoVpD+6AsjLaz3LXMlR3FDT5I/pYzbbCbdoIRXEDzkTt/eBnO1zMZVPoMA=
+	t=1717777865; cv=none; b=bRbvToNIaWYAnhQT0A7mcI8X1Nu5j0gxbZqlOUJVnYX/bc1WJdwJBjNWpmcPXGJ+he2vufsl3p8Tu3HzEfBUrT0jfTX+YUCGeiUQYPJvoAaPkiOESAEKvvoMJ6wmXwdzlI1fRhvnPoa5cuxlrxgfd+f7llGxJw287qJPHKUKRrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717775974; c=relaxed/simple;
-	bh=iq3vgahPJc1R2sFSNT7KHSLa4eLNSlV+Str2BooQvkM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kgM752+LmqihKCIDn6e41QkaguJQokGq8Qn/zXbSziNawMN+5zihp7j8/xlj9Q44YbISx/swMJZG+PRSvSU+pI2eDICzaSY0RTYyp4kuk80BMDkwRPW6iwoKPE2b91c5wUwpKyABkfyAhxW7B8PBaDyHH187F50hvxhkxnTx5HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nmznvAS0; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-24c9f892aeaso1187368fac.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2024 08:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1717775971; x=1718380771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6NHMt+xVhVtjzNsRDYJ5h2jc+BN/nMBD6W7NvHLgmaM=;
-        b=nmznvAS04yaaxDle7fLdSmnrgWW28hcYRKk3T0IqZaYucQfYz3UO9Tm32BGxvENW2F
-         xbJ4UbwPPnQoA8ZUyU7d3RlQb3T4L6is24FTY+uz47Zo/Ipi+BYlrjZ/YmL4JIg2uKak
-         m+OV629T3A0xIAf6rvUbHvUPEn4m5JZapr9S4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717775971; x=1718380771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6NHMt+xVhVtjzNsRDYJ5h2jc+BN/nMBD6W7NvHLgmaM=;
-        b=CnpcVMh93LZJSbqZJRPZ5hCFABrdqnM+Nev4BD/d7UX2tixzHUPJWDKFte1jjxMo6P
-         JkT3zPWgrk35HDc5CcE9B/Ctt7F2z9ZKoNPYqUmNJAAT/xFDGt3BECZRLgEiycYCdxJN
-         dgfquvKmHmKuMQVEZPMHq57iSc6kYA5KQJm3+QsLfeJ24KNHYkcj7AHy4baG9dEyDyD9
-         lIMKolAeIROQiED43prGrBJIjEcxF+DthJr+uZBlbN5OZNWjqn5sLUE+Hm0CvhaYEXNR
-         QeI/tMNjM9MkpZLqJi3oUEjXnRjnHiRfanAV3Pl3zas0KLwoC/ce+HoKDcRGEWavxdAf
-         8ytQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIvAEZEABtwsq7t9h9qjPoVYhYnxpzQziYf0XhyY7+oaCgAC5A4X2JYMMU2zuZlcbJ/K0UyafPdrWwtDaMmSLKnymBynJaTFKC6Yt5RifQ
-X-Gm-Message-State: AOJu0Ywvfk0pQFS1pArqXOoM4hvWRKedzDM1RjUJyEaKFXc3D/isArNk
-	feGUUbGo5JOQUNn0lKZpQbjpEqVVgFSLOHj2xhPFkW4z7W6OcFL96Mh7EI2oBSkwsWD69iChDU5
-	4az82W2LF09ptPPHX8tVp2ItU6YeXFfMVyPcG
-X-Google-Smtp-Source: AGHT+IEC31nw9ObtnGzw3zJl6fKelGiEgC9ZoPCarB7OMc+eN9hRyWGo2K+eWFqjbDdWgwjsJsikOOzysaE0DDaqvi0=
-X-Received: by 2002:a05:6870:c687:b0:229:f022:ef83 with SMTP id
- 586e51a60fabf-25464684289mr3475878fac.43.1717775971301; Fri, 07 Jun 2024
- 08:59:31 -0700 (PDT)
+	s=arc-20240116; t=1717777865; c=relaxed/simple;
+	bh=5fcWzP1JtsYTB5bS6Dkag0GNZfkt5dQJ7XznRIahZ1I=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=oCJb00aWdpOeKHW2vb0pHBCKT/YchrFu8jFMhuje8hp4aQj1q+dc22ACja/4mywA9F1LUkwrgNefZy6idBFBCqooJpsy37EE5dAn168TzwRkf6Sda5zlHDfqlWwEoBiq90l0bDlMKCAPK6rTsvFJT6ooydsWAlgUD9OJMtu8NVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=p4cymL5u; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 457GMi7k001701;
+	Fri, 7 Jun 2024 16:30:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=pp1;
+ bh=b+rgx8a9hBlcXWldkZelNn14vmoz8twzTq1om+Gm/2E=;
+ b=p4cymL5uiB4uxDrJX6h3k2ONQl4XwvFzuxCNfg8g2Ug6bUJiO59rLNw8B8dxzMUvV+jn
+ 9aiBVf6keKDkiaKz1+/DmKq3uco6RqXJMDVBdXRpZZjwf8cJLX9qQ4dnRj9BFc2hJYNx
+ OawMhqQOjrS9qijY4KvcPt5Sc21U0IqMDEUAIK4YbbGJ/5JUrqL78FO4B+rsg+GR5UqX
+ QLN5WGb8nqB1vkMHgzCYfMCkvh2F4DIqS8p3qD1TnO221+1nWHxY1OOZ8Bn2PYrd7Ulz
+ JbMclBHERnM27+ymmEZfZnh0DyzuGOkty21fueJnufdKOEG7DViWk/lzjTN2EbDmzKjn cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ym5ns00cn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 16:30:32 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 457GUVJT013214;
+	Fri, 7 Jun 2024 16:30:31 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ym5ns00cc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 16:30:31 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 457E55s8000790;
+	Fri, 7 Jun 2024 16:30:30 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ygdyuhys3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 16:30:30 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 457GUSsv30540050
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 7 Jun 2024 16:30:30 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 38B5F5805A;
+	Fri,  7 Jun 2024 16:30:28 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BA60F58063;
+	Fri,  7 Jun 2024 16:30:22 +0000 (GMT)
+Received: from [9.171.64.207] (unknown [9.171.64.207])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Jun 2024 16:30:22 +0000 (GMT)
+Message-ID: <9e54991c-3f9b-446c-8825-c0754eca1f90@linux.ibm.com>
+Date: Fri, 7 Jun 2024 22:00:20 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftest: mm: Test if hugepage does not get leaked
+ during __bio_release_pages()
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>, p.raghav@samsung.com
+References: <20240607055046.138650-1-donettom@linux.ibm.com>
+ <5ce292b6-179c-48e0-9079-ea07defbe178@collabora.com>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <5ce292b6-179c-48e0-9079-ea07defbe178@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UY8ZFngSGD77LIwgvnHQJdedPZBKIOkE
+X-Proofpoint-GUID: 9tX7ZUHweZstUjs3SgyarZCo6dKfEqpd
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240524033933.135049-1-jeffxu@google.com> <20240524033933.135049-2-jeffxu@google.com>
- <79b3aa3e-bc70-410e-9646-0b6880a4a74b@app.fastmail.com> <CALmYWFu61FkbboWkXUSKBGmXeiNtBwrgfizS5kNvPMx4ByUqPQ@mail.gmail.com>
- <b8cGJnU5ofWgsiKD5z8RGlW-2ijs7IW9h4LUg1tzFBu3agFinCvdxuiSaUDG_DfVen2vCDNu-QbGfOR7DeARf4jsy3CNNTfzQGMX1HfqHdo=@protonmail.com>
- <CALmYWFv+Tsqwv96oB4rTrJ7_ZC3CoNZFjmKFYKQgGZuceqZ6vg@mail.gmail.com> <2fQi6XI7TmRN_qi9xldglgYFujpzMvr0bbkxhYNJhY6VRYjDsyTDqavR6OPU6DNBtCKAPgBVKxV0SMo7WnjUaDit-zxsBZauGavgKzqcNy8=@protonmail.com>
-In-Reply-To: <2fQi6XI7TmRN_qi9xldglgYFujpzMvr0bbkxhYNJhY6VRYjDsyTDqavR6OPU6DNBtCKAPgBVKxV0SMo7WnjUaDit-zxsBZauGavgKzqcNy8=@protonmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 7 Jun 2024 08:59:20 -0700
-Message-ID: <CABi2SkXyHegwpZKF7ZVDAOsqzaHE4BdDQOMmbuJ+51HkQ3CmJg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] memfd: fix MFD_NOEXEC_SEAL to be non-sealable by default
-To: =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>
-Cc: Jeff Xu <jeffxu@google.com>, David Rheinsberg <david@readahead.eu>, 
-	Andrew Morton <akpm@linux-foundation.org>, cyphar@cyphar.com, dmitry.torokhov@gmail.com, 
-	Daniel Verkamp <dverkamp@chromium.org>, hughd@google.com, jorgelo@chromium.org, 
-	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	skhan@linuxfoundation.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Barnab=C3=A1s
-
-On Fri, May 31, 2024 at 11:56=E2=80=AFAM Barnab=C3=A1s P=C5=91cze <pobrn@pr=
-otonmail.com> wrote:
->
-> 2024. m=C3=A1jus 30., cs=C3=BCt=C3=B6rt=C3=B6k 0:24 keltez=C3=A9ssel, Jef=
-f Xu <jeffxu@google.com> =C3=ADrta:
->
-> > On Wed, May 29, 2024 at 2:46=E2=80=AFPM Barnab=C3=A1s P=C5=91cze <pobrn=
-@protonmail.com> wrote:
-> > >
-> > > Hi
-> > >
-> > >
-> > > 2024. m=C3=A1jus 29., szerda 23:30 keltez=C3=A9ssel, Jeff Xu <jeffxu@=
-google.com> =C3=ADrta:
-> > >
-> > > > Hi David and Barnab=C3=A1s
-> > > >
-> > > > On Fri, May 24, 2024 at 7:15=E2=80=AFAM David Rheinsberg <david@rea=
-dahead.eu> wrote:
-> > > > >
-> > > > > Hi
-> > > > >
-> > > > > On Fri, May 24, 2024, at 5:39 AM, jeffxu@chromium.org wrote:
-> > > > > > From: Jeff Xu <jeffxu@google.com>
-> > > > > >
-> > > > > > By default, memfd_create() creates a non-sealable MFD, unless t=
-he
-> > > > > > MFD_ALLOW_SEALING flag is set.
-> > > > > >
-> > > > > > When the MFD_NOEXEC_SEAL flag is initially introduced, the MFD =
-created
-> > > > > > with that flag is sealable, even though MFD_ALLOW_SEALING is no=
-t set.
-> > > > > > This patch changes MFD_NOEXEC_SEAL to be non-sealable by defaul=
-t,
-> > > > > > unless MFD_ALLOW_SEALING is explicitly set.
-> > > > > >
-> > > > > > This is a non-backward compatible change. However, as MFD_NOEXE=
-C_SEAL
-> > > > > > is new, we expect not many applications will rely on the nature=
- of
-> > > > > > MFD_NOEXEC_SEAL being sealable. In most cases, the application =
-already
-> > > > > > sets MFD_ALLOW_SEALING if they need a sealable MFD.
-> > > > >
-> > > > > This does not really reflect the effort that went into this. Shou=
-ldn't this be something along the lines of:
-> > > > >
-> > > > >     This is a non-backward compatible change. However, MFD_NOEXEC=
-_SEAL
-> > > > >     was only recently introduced and a codesearch revealed no bre=
-aking
-> > > > >     users apart from dbus-broker unit-tests (which have a patch p=
-ending
-> > > > >     and explicitly support this change).
-> > > > >
-> > > > Actually, I think we might need to hold on to this change. With deb=
-ian
-> > > > code search, I found more codes that already use MFD_NOEXEC_SEAL
-> > > > without MFD_ALLOW_SEALING. e.g. systemd [1], [2] [3]
-> > >
-> > > Yes, I have looked at those as well, and as far as I could tell,
-> > > they are not affected. Have I missed something?
-> > >
-> > In the example, the MFD was created then passed into somewhere else
-> > (safe_fork_full, open_serialization_fd, etc.), the scope and usage of
-> > mfd isn't that clear to me, you might have checked all the user cases.
-> > In addition, MFD_NOEXEC_SEAL  exists in libc and rust and go lib.  I
-> > don't know if debian code search is sufficient to cover enough apps .
-> > There is a certain risk.
-> >
-> > Fundamentally, I'm not convinced that making MFD default-non-sealable
-> > has  meaningful benefit, especially when MFD_NOEXEC_SEAL is new.
->
-> Certainly, there is always a risk, I did not mean to imply that there isn=
-'t.
-> However, I believe this risk is low enough to at least warrant an attempt=
- at
-> eliminating this inconsistency. It can always be reverted if it turns out=
- that
-> the effects have been vastly underestimated by me.
->
-> So I would still like to see this change merged.
->
-
-The MFD_NOEXEC_SEAL is a new flag, technically, ABI is not broken.
-The sysctl vm.memfd_noexec=3D1 or 2, is meant to help
-migration/enforcement of MFD_NOEXEC_SEAL, so it will break application
-if it is used pre-maturely, that is by-design.
-
-I think the main problem here is lack of documentation, instead of a code b=
-ug.
-ABI change shouldn't be treated lightly, given the risk, I would like
-to keep the API the same and add the documentation instead. I think
-that is the best route forward.
-
-Best Regards,
--Jeff
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-07_10,2024-06-06_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 adultscore=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2406070122
 
 
+On 6/7/24 11:53, Muhammad Usama Anjum wrote:
+> On 6/7/24 10:50 AM, Donet Tom wrote:
+>> Commit 1b151e2435fc ("block: Remove special-casing of compound
+>> pages") caused a change in behaviour when releasing the pages
+>> if the buffer does not start at the beginning of the page. This
+>> was because the calculation of the number of pages to release
+>> was incorrect.
+>> This was fixed by commit 38b43539d64b ("block: Fix page refcounts
+>> for unaligned buffers in __bio_release_pages()").
+>>
+>> We pin the user buffer during direct I/O writes. If this buffer is a
+>> hugepage, bio_release_page() will unpin it and decrement all references
+>> and pin counts at ->bi_end_io. However, if any references to the hugepage
+>> remain post-I/O, the hugepage will not be freed upon unmap, leading
+>> to a memory leak.
+>>
+>> This patch verifies that a hugepage, used as a user buffer for DIO
+>> operations, is correctly freed upon unmapping, regardless of whether
+>> the offsets are aligned or unaligned w.r.t page boundary.
+>>
+>> Test Result  Fail Scenario (Without the fix)
+>> --------------------------------------------------------
+>> []# ./hugetlb_dio
+>> TAP version 13
+>> 1..4
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 1 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 2 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 3 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 6
+>> not ok 4 : Huge pages not freed!
+>> Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+>>
+>> Test Result  PASS Scenario (With the fix)
+>> ---------------------------------------------------------
+>> []#./hugetlb_dio
+>> TAP version 13
+>> 1..4
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 1 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 2 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 3 : Huge pages freed successfully !
+>> No. Free pages before allocation : 7
+>> No. Free pages after munmap : 7
+>> ok 4 : Huge pages freed successfully !
+>> Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>
+>> V3:
+>> - Fixed the build error when it is compiled with _FORTIFY_SOURCE.
+>>
+>> V2:
+>> - Addressed all review commets from Muhammad Usama Anjum
+>> https://lore.kernel.org/all/20240604132801.23377-1-donettom@linux.ibm.com/
+>>
+>> V1:
+>> https://lore.kernel.org/all/20240523063905.3173-1-donettom@linux.ibm.com/#t
+>>
+>> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
+>> Co-developed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+>> Signed-off-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+>> ---
+>>   tools/testing/selftests/mm/Makefile      |   1 +
+>>   tools/testing/selftests/mm/hugetlb_dio.c | 118 +++++++++++++++++++++++
+> Missed my feedback on adding the test to vm_test.sh
+I was not able to find vm_test.sh file to add this test in selftests/mm. 
+could you please help me to get the correct vm_test.sh to add this?
 
+Thanks
+Donet
 >
-> Regards,
-> Barnab=C3=A1s P=C5=91cze
+> Other than this, LGTM. Please add following tag after the above change:
 >
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >
-> >
-> >
-> > >
-> > > Regards,
-> > > Barnab=C3=A1s
-> > >
-> > >
-> > > >
-> > > > I'm not sure if this  will break  more applications not-knowingly t=
-hat
-> > > > have started relying on MFD_NOEXEC_SEAL being sealable. The feature
-> > > > has been out for more than a year.
-> > > >
-> > > > Would you consider my augments in [4] to make MFD to be sealable by=
- default ?
-> > > >
-> > > > At this moment, I'm willing to add a document to clarify that
-> > > > MFD_NOEXEC_SEAL is sealable by default, and that an app that needs
-> > > > non-sealable MFD can  set  SEAL_SEAL.  Because both MFD_NOEXEC_SEAL
-> > > > and vm.memfd_noexec are new,  I don't think it breaks the existing
-> > > > ABI, and vm.memfd_noexec=3D0 is there for backward compatibility
-> > > > reasons. Besides, I honestly think there is little reason that MFD
-> > > > needs to be non-sealable by default.  There might be few rare cases=
-,
-> > > > but the majority of apps don't need that.  On the flip side, the fa=
-ct
-> > > > that MFD is set up to be sealable by default is a nice bonus for an
-> > > > app - it makes it easier for apps to use the sealing feature.
-> > > >
-> > > > What do you think ?
-> > > >
-> > > > Thanks
-> > > > -Jeff
-> > > >
-> > > > [1] https://codesearch.debian.net/search?q=3DMFD_NOEXEC_SEAL
-> > > > [2] https://codesearch.debian.net/show?file=3Dsystemd_256~rc3-5%2Fs=
-rc%2Fhome%2Fhomed-home.c&line=3D1274
-> > > > [3] https://sources.debian.org/src/elogind/255.5-1debian1/src/share=
-d/serialize.c/?hl=3D558#L558
-> > > > [4] https://lore.kernel.org/lkml/CALmYWFuPBEM2DE97mQvB2eEgSO9Dvt=3D=
-uO9OewMhGfhGCY66Hbw@mail.gmail.com/
-> > > >
-> > > >
-> > > > > > Additionally, this enhances the useability of  pid namespace sy=
-sctl
-> > > > > > vm.memfd_noexec. When vm.memfd_noexec equals 1 or 2, the kernel=
- will
-> > > > > > add MFD_NOEXEC_SEAL if mfd_create does not specify MFD_EXEC or
-> > > > > > MFD_NOEXEC_SEAL, and the addition of MFD_NOEXEC_SEAL enables th=
-e MFD
-> > > > > > to be sealable. This means, any application that does not desir=
-e this
-> > > > > > behavior will be unable to utilize vm.memfd_noexec =3D 1 or 2 t=
-o
-> > > > > > migrate/enforce non-executable MFD. This adjustment ensures tha=
-t
-> > > > > > applications can anticipate that the sealable characteristic wi=
-ll
-> > > > > > remain unmodified by vm.memfd_noexec.
-> > > > > >
-> > > > > > This patch was initially developed by Barnab=C3=A1s P=C5=91cze,=
- and Barnab=C3=A1s
-> > > > > > used Debian Code Search and GitHub to try to find potential bre=
-akages
-> > > > > > and could only find a single one. Dbus-broker's memfd_create() =
-wrapper
-> > > > > > is aware of this implicit `MFD_ALLOW_SEALING` behavior, and tri=
-es to
-> > > > > > work around it [1]. This workaround will break. Luckily, this o=
-nly
-> > > > > > affects the test suite, it does not affect
-> > > > > > the normal operations of dbus-broker. There is a PR with a fix[=
-2]. In
-> > > > > > addition, David Rheinsberg also raised similar fix in [3]
-> > > > > >
-> > > > > > [1]:
-> > > > > > https://github.com/bus1/dbus-broker/blob/9eb0b7e5826fc76cad7b02=
-5bc46f267d4a8784cb/src/util/misc.c#L114
-> > > > > > [2]: https://github.com/bus1/dbus-broker/pull/366
-> > > > > > [3]:
-> > > > > > https://lore.kernel.org/lkml/20230714114753.170814-1-david@read=
-ahead.eu/
-> > > > > >
-> > > > > > Cc: stable@vger.kernel.org
-> > > > > > Fixes: 105ff5339f498a ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_E=
-XEC")
-> > > > > > Signed-off-by: Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.com>
-> > > > > > Signed-off-by: Jeff Xu <jeffxu@google.com>
-> > > > > > Reviewed-by: David Rheinsberg <david@readahead.eu>
-> > > > >
-> > > > > Looks good! Thanks!
-> > > > > David
-> > > >
+>>   2 files changed, 119 insertions(+)
+>>   create mode 100644 tools/testing/selftests/mm/hugetlb_dio.c
+>>
+>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+>> index 3b49bc3d0a3b..a1748a4c7df1 100644
+>> --- a/tools/testing/selftests/mm/Makefile
+>> +++ b/tools/testing/selftests/mm/Makefile
+>> @@ -73,6 +73,7 @@ TEST_GEN_FILES += ksm_functional_tests
+>>   TEST_GEN_FILES += mdwe_test
+>>   TEST_GEN_FILES += hugetlb_fault_after_madv
+>>   TEST_GEN_FILES += hugetlb_madv_vs_map
+>> +TEST_GEN_FILES += hugetlb_dio
+>>   
+>>   ifneq ($(ARCH),arm64)
+>>   TEST_GEN_FILES += soft-dirty
+>> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+>> new file mode 100644
+>> index 000000000000..986f3b6c7f7b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+>> @@ -0,0 +1,118 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * This program tests for hugepage leaks after DIO writes to a file using a
+>> + * hugepage as the user buffer. During DIO, the user buffer is pinned and
+>> + * should be properly unpinned upon completion. This patch verifies that the
+>> + * kernel correctly unpins the buffer at DIO completion for both aligned and
+>> + * unaligned user buffer offsets (w.r.t page boundary), ensuring the hugepage
+>> + * is freed upon unmapping.
+>> + */
+>> +
+>> +#define _GNU_SOURCE
+>> +#include <stdio.h>
+>> +#include <sys/stat.h>
+>> +#include <stdlib.h>
+>> +#include <fcntl.h>
+>> +#include <stdint.h>
+>> +#include <unistd.h>
+>> +#include <string.h>
+>> +#include <sys/mman.h>
+>> +#include "vm_util.h"
+>> +#include "../kselftest.h"
+>> +
+>> +void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+>> +{
+>> +	int fd;
+>> +	char *buffer =  NULL;
+>> +	char *orig_buffer = NULL;
+>> +	size_t h_pagesize = 0;
+>> +	size_t writesize;
+>> +	int free_hpage_b = 0;
+>> +	int free_hpage_a = 0;
+>> +	const int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+>> +	const int mmap_prot  = PROT_READ | PROT_WRITE;
+>> +
+>> +	writesize = end_off - start_off;
+>> +
+>> +	/* Get the default huge page size */
+>> +	h_pagesize = default_huge_page_size();
+>> +	if (!h_pagesize)
+>> +		ksft_exit_fail_msg("Unable to determine huge page size\n");
+>> +
+>> +	/* Open the file to DIO */
+>> +	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+>> +	if (fd < 0)
+>> +		ksft_exit_fail_perror("Error opening file\n");
+>> +
+>> +	/* Get the free huge pages before allocation */
+>> +	free_hpage_b = get_free_hugepages();
+>> +	if (free_hpage_b == 0) {
+>> +		close(fd);
+>> +		ksft_exit_skip("No free hugepage, exiting!\n");
+>> +	}
+>> +
+>> +	/* Allocate a hugetlb page */
+>> +	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
+>> +	if (orig_buffer == MAP_FAILED) {
+>> +		close(fd);
+>> +		ksft_exit_fail_perror("Error mapping memory\n");
+>> +	}
+>> +	buffer = orig_buffer;
+>> +	buffer += start_off;
+>> +
+>> +	memset(buffer, 'A', writesize);
+>> +
+>> +	/* Write the buffer to the file */
+>> +	if (write(fd, buffer, writesize) != (writesize)) {
+>> +		munmap(orig_buffer, h_pagesize);
+>> +		close(fd);
+>> +		ksft_exit_fail_perror("Error writing to file\n");
+>> +	}
+>> +
+>> +	/* unmap the huge page */
+>> +	munmap(orig_buffer, h_pagesize);
+>> +	close(fd);
+>> +
+>> +	/* Get the free huge pages after unmap*/
+>> +	free_hpage_a = get_free_hugepages();
+>> +
+>> +	/*
+>> +	 * If the no. of free hugepages before allocation and after unmap does
+>> +	 * not match - that means there could still be a page which is pinned.
+>> +	 */
+>> +	if (free_hpage_a != free_hpage_b) {
+>> +		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
+>> +		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
+>> +		ksft_test_result_fail(": Huge pages not freed!\n");
+>> +	} else {
+>> +		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
+>> +		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
+>> +		ksft_test_result_pass(": Huge pages freed successfully !\n");
+>> +	}
+>> +}
+>> +
+>> +int main(void)
+>> +{
+>> +	size_t pagesize = 0;
+>> +
+>> +	ksft_print_header();
+>> +	ksft_set_plan(4);
+>> +
+>> +	/* Get base page size */
+>> +	pagesize  = psize();
+>> +
+>> +	/* start and end is aligned to pagesize */
+>> +	run_dio_using_hugetlb(0, (pagesize * 3));
+>> +
+>> +	/* start is aligned but end is not aligned */
+>> +	run_dio_using_hugetlb(0, (pagesize * 3) - (pagesize / 2));
+>> +
+>> +	/* start is unaligned and end is aligned */
+>> +	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3));
+>> +
+>> +	/* both start and end are unaligned */
+>> +	run_dio_using_hugetlb(pagesize / 2, (pagesize * 3) + (pagesize / 2));
+>> +
+>> +	ksft_finished();
+>> +}
+>> +
 
