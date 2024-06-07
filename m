@@ -1,122 +1,133 @@
-Return-Path: <linux-kselftest+bounces-11349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25ADE900041
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 12:06:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5FDD9000AB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 12:23:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC6131F24C27
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 10:06:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D4A9B23DDD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2024 10:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360E315EFC5;
-	Fri,  7 Jun 2024 10:03:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B6A15B967;
+	Fri,  7 Jun 2024 10:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WWS2h7mK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lpd2wmrQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B116E15DBBA;
-	Fri,  7 Jun 2024 10:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C7015B97B;
+	Fri,  7 Jun 2024 10:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717754615; cv=none; b=t50IItQcRC+4k6yffGGBQMZ+MCjJOLn0Hunk+uCdhSGPCKKWru7xubw8HQzUVEnZAMllaDvXQX8vDPoN9FxKBwHacdd8GAkBfXQTBjArmc/mlSwR2+63fsUldRbUXBWik1aSqfMlIILR62fCtxvfpP+Fse9vFqz8OXRTKEEvE+k=
+	t=1717755723; cv=none; b=VJ7FdqDZ6ScMzdMpeR/2fnqSAFzp0O9DAKcnznln9v+8TqzMQ6hJuw78GJxOOrKU8UkTJBXl9f7YZy6feHry7n0rGtlMrr1+8S4s1InbCJlriSEjUFP9tVVASQNHX0tc0FRlyKaJHtnjhaQBRrrtCfVdn55/WzBZx2lsXZAjfuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717754615; c=relaxed/simple;
-	bh=amMZc6m1aRSEtTlrDesVe38Db++HH1vW/7Yeem0LOHc=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=q01kqFWv7iA2Col1oaBs8of71/o88YayZGHLGUIDRZplJ83jMzQvz+R8+1z8QeagtWK5gZrOSxjdnqU0nyTmpld50bHBAmIxxuVNtbGYqQsdXLGaVMZP99tKuGLWRWT39pYHfP2+uopkD6e05RzBLFPtKM77OK1RQ1wB9Xe8M9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WWS2h7mK; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1717754612;
-	bh=amMZc6m1aRSEtTlrDesVe38Db++HH1vW/7Yeem0LOHc=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=WWS2h7mKUHQ/KjyyIMm4ZMV44uFbqpA23mdxJKsHdJ7buh3vkY7dDGJuTdJ+wHg+C
-	 hkyUxCvAUb8OpmSSwVqodtMbREdF2yIJh8oWpS3sgIfrWZGRnykvdYOjtiJvRM3WKD
-	 VrQ7ocvgE2iqIxy970gR/R/51ZwQeoGyQamDPfFUPXNtH8USjPcjkDv1Th+0X3AG0T
-	 5mmydkFWRKzfuWp9YyDh6FZFwm+vYJsiKAo+1cZtpbvJ/vc7PbuLoydZLQz4h0WgLe
-	 8t5c/hQ6z2cYB5cixQLjsDiHSIuzmGSjqAXgYLs8/A0H88hpnzVlHus8HU89ur6Rss
-	 BtW2xhMV7xurg==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 517EA37811D1;
-	Fri,  7 Jun 2024 10:03:27 +0000 (UTC)
-Message-ID: <06c41273-47c3-421a-8fbe-dbcf8321de7e@collabora.com>
-Date: Fri, 7 Jun 2024 15:04:01 +0500
+	s=arc-20240116; t=1717755723; c=relaxed/simple;
+	bh=ahHJ8hO6zogJughVEF60nwoGFTdLtVu43+xKCUgoGIQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=idfOOld7TBlzL1Bh6MJaY4CTF/Srz6OH2xL+nnSea6Qdht4jfMVcN6WmWncZgvqXK4XsDsTUoGXgnaJDzXY0nC4F4aizqYYKqZd7uC7yRQJ+ZKW42OTrPTQyw+qloN93f9puH4biWsAkSDy6J0hIlbG5yAk5bvUytHXJD/yVEGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lpd2wmrQ; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717755722; x=1749291722;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ahHJ8hO6zogJughVEF60nwoGFTdLtVu43+xKCUgoGIQ=;
+  b=Lpd2wmrQv9iX7nwBR/aIjkH0UuCSDfV9fuY1dHpVOt8RYR9mqtZRzfXm
+   YipLn8umA+/01AGyITE8sLZMZRPtautDpQJZ10csi2b4P0WwqfCwXZDeH
+   oAYV2nrC0utehp/LlujNZhWU54zH38ZeC4SjDyBqmDUD5G8EOXf+WhkEJ
+   mMXrdo1bQV1MKt0EkutyQfjQflzl4FcKFNnCtVedWg7VVPYYUywK4u6YV
+   yF48F+bCFkDbEnZdcH/V0+WhzzjCsXpfa8BdqGJNdxzkepXRMQBU4I91+
+   RUe/vwyOK4pXw90LKXVUsHjPzQL9aPQ1I28Hqydcu4GPCieKrosOiLRZ2
+   Q==;
+X-CSE-ConnectionGUID: n4rbJaRgRP+G+y4FquFLog==
+X-CSE-MsgGUID: x1xj6ZQVRkieShC9gc2xRQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="18322599"
+X-IronPort-AV: E=Sophos;i="6.08,220,1712646000"; 
+   d="scan'208";a="18322599"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 03:22:01 -0700
+X-CSE-ConnectionGUID: nP9v+ZaATTO0i86UUU8hFQ==
+X-CSE-MsgGUID: Av5Jl0VFSkigJPM84uILiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,220,1712646000"; 
+   d="scan'208";a="38730407"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.184])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 03:21:58 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 7 Jun 2024 13:21:54 +0300 (EEST)
+To: Babu Moger <babu.moger@amd.com>
+cc: fenghua.yu@intel.com, Reinette Chatre <reinette.chatre@intel.com>, 
+    shuah@kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-kselftest@vger.kernel.org, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    peternewman@google.com, eranian@google.com
+Subject: Re: [PATCH] selftests/resctrl: Fix noncont_cat_run_test for AMD
+In-Reply-To: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
+Message-ID: <475f7146-85ab-4992-5307-5dd4ab0184ee@linux.intel.com>
+References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, cmllamas@google.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, llvm@lists.linux.dev, linux-mm@kvack.org
-Subject: Re: [PATCH v1 1/2] selftests/mm: Include linux/mman.h
-To: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20240605223637.1374969-1-edliaw@google.com>
- <20240605223637.1374969-2-edliaw@google.com>
- <b5e4ca79-8be0-4085-adfa-e8ee1c855fdb@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <b5e4ca79-8be0-4085-adfa-e8ee1c855fdb@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="8323328-447825242-1717755714=:1044"
 
-On 6/7/24 2:44 PM, Muhammad Usama Anjum wrote:
-> On 6/6/24 3:36 AM, Edward Liaw wrote:
->> thuge-gen defines MAP_HUGE_* macros that are provided by linux/mman.h
->> since 4.15. Removes the macros and includes linux/mman.h instead.
->>
->> Signed-off-by: Edward Liaw <edliaw@google.com>
->> ---
->>  tools/testing/selftests/mm/thuge-gen.c | 5 +----
->>  1 file changed, 1 insertion(+), 4 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
->> index ea7fd8fe2876..034635317935 100644
->> --- a/tools/testing/selftests/mm/thuge-gen.c
->> +++ b/tools/testing/selftests/mm/thuge-gen.c
->> @@ -15,6 +15,7 @@
->>  
->>  #define _GNU_SOURCE 1
->>  #include <sys/mman.h>
->> +#include <linux/mman.h>
->>  #include <stdlib.h>
->>  #include <stdio.h>
->>  #include <sys/ipc.h>
->> @@ -28,10 +29,6 @@
->>  #include "vm_util.h"
->>  #include "../kselftest.h"
->>  
->> -#define MAP_HUGE_2MB    (21 << MAP_HUGE_SHIFT)
->> -#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
->> -#define MAP_HUGE_SHIFT  26
->> -#define MAP_HUGE_MASK   0x3f
-> Totally makes sense.
-> Reviewed-by: Muhammad Usama Anjum <usama.anju@collabora.com>
-Fixing typo:
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> 
->>  #if !defined(MAP_HUGETLB)
->>  #define MAP_HUGETLB	0x40000
->>  #endif
-> 
+--8323328-447825242-1717755714=:1044
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
--- 
-BR,
-Muhammad Usama Anjum
+On Wed, 5 Jun 2024, Babu Moger wrote:
+
+> The selftest noncont_cat_run_test fails on AMD with the warnings. Reason
+> is, AMD supports non contiguous CBM masks but does not report it via CPUI=
+D.
+>=20
+> Update noncont_cat_run_test to check for the vendor when verifying CPUID.
+>=20
+> Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test=
+")
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> ---
+> This was part of the series
+> https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
+> Sending this as a separate fix per review comments.
+> ---
+>  tools/testing/selftests/resctrl/cat_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/s=
+elftests/resctrl/cat_test.c
+> index d4dffc934bc3..b2988888786e 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -308,7 +308,7 @@ static int noncont_cat_run_test(const struct resctrl_=
+test *test,
+>  =09else
+>  =09=09return -EINVAL;
+> =20
+> -=09if (sparse_masks !=3D ((ecx >> 3) & 1)) {
+> +=09if ((get_vendor() =3D=3D ARCH_INTEL) && sparse_masks !=3D ((ecx >> 3)=
+ & 1)) {
+>  =09=09ksft_print_msg("CPUID output doesn't match 'sparse_masks' file con=
+tent!\n");
+>  =09=09return 1;
+>  =09}
+>=20
+
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+
+--=20
+ i.
+
+--8323328-447825242-1717755714=:1044--
 
