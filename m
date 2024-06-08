@@ -1,97 +1,96 @@
-Return-Path: <linux-kselftest+bounces-11497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7B8890138B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 23:17:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DCF190138E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 23:18:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C69AD1C20A65
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 21:17:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26E101F21B40
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 21:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8F047A73;
-	Sat,  8 Jun 2024 21:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA284AEC8;
+	Sat,  8 Jun 2024 21:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Llrm7/1a";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Jr6BhXAq"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="MA8InosA";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YT3wcUra"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from wflow3-smtp.messagingengine.com (wflow3-smtp.messagingengine.com [64.147.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CB14776F;
-	Sat,  8 Jun 2024 21:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A621487BC;
+	Sat,  8 Jun 2024 21:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717881399; cv=none; b=hHFg5mi25//qKnVjyCnO6l0RCaqx9LsosZTK7zTo3LcDs23W80oHQEH4YIb1LepjEVR+qgR08NNVUYYZzYNWz/D3Sg/utPUQOfiQj/LTM6WuS0g+OFWyVz8ogFGU0l6Kn0SG3MEEJ/DdYeEQlHFkcYZHUwO+Hhk5oqN0vPA6L7E=
+	t=1717881403; cv=none; b=ewVkrSrZ51TSq7+hIVRNx/o+2HJDGRO4rohf2rH5SGkt+/chZanJ6kSxBMFH7SSKZVbNmEiyRp9U171xeJfZSKT/pbMt0GVT17SmCrFiGTGtwiIg+ac9Xnet3F8WeiFB40i8gPTOUoSOHqV+7zx2e9QH/AhZPU22ZOr0/XwPy1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717881399; c=relaxed/simple;
-	bh=fBPXvgQBNpmEAIneidG+g4NUcTeJDU/Ff0Ik5m1ytq8=;
+	s=arc-20240116; t=1717881403; c=relaxed/simple;
+	bh=ijnUl0Hs27kSZo5nKTCwOlVMiTcVZASzt7fhb1OM00o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=inCiYdCQKVA+l8q7UY0gO/VmtGlbbwlrkPKQ1Cg3EPIqtUnMZ42g/0x+YFCqt6yqrUwgh/yp/Cq1JSPSxu+EwHi0DmVi52ycL75cMwX2GvMHV5M9M9gKwJhUaEGPSgYkymObx+RVON52sYU8MOdvmHPVkBG44gkvDHlcSdOVuAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=Llrm7/1a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Jr6BhXAq; arc=none smtp.client-ip=64.147.123.138
+	 MIME-Version; b=ZZ8kcp2n+jJHLKmmakPvj3mIieGUhgy38Y/WssT2y+347J1+NJmU2zKXswTn6NNvfdltRvJ1ZAkhQg0ImNMD463YsGHKzsmQosPsr3KBOagR5F6ITyTlXPYwkJU6GaCtCG0LoKXRsKtpAOYwBloFL6noMTtI15hz0RA6EqW0Zl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=MA8InosA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YT3wcUra; arc=none smtp.client-ip=64.147.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailflow.west.internal (Postfix) with ESMTP id 9BC402CC00FB;
-	Sat,  8 Jun 2024 17:16:35 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.west.internal (Postfix) with ESMTP id 7DEC32CC00F7;
+	Sat,  8 Jun 2024 17:16:39 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Sat, 08 Jun 2024 17:16:37 -0400
+  by compute4.internal (MEProxy); Sat, 08 Jun 2024 17:16:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1717881395; x=
-	1717888595; bh=ezeG0+F5tOubWbkL94aTK4e46SIjo+JWMalcSljhHdQ=; b=L
-	lrm7/1aCIWsUC97UpM+oMLf1BIAE1mEUkwtS/pIwYOSo/f1lhDE5S1kedyDUh/ur
-	Q8EMU3CogVenLrucqrwUDDojNEmYdOfZsXdVuY8JAReBeLGcdhe+pIH6v/I3A3qm
-	L2V/FzEfiq7Fre1PTCIM8NiN3mp6xFCBGbWcbSKIL55k5pwknXenrD/Gux0L0IIS
-	a4CwT8lW4O4w6+PpVAxoeiE/XbWE7O0PzMQmVwzpwYJqjC2XByFCfQ1IOOzu5jYL
-	jaqnXVoUI5mtdbmaWMLVhEfoZn2LJwqoGjyoey8aVwoxSBeXJT2SmT22+sAxfx0K
-	HNdx1QxY630V8QlKwAVEQ==
+	:reply-to:subject:subject:to:to; s=fm3; t=1717881399; x=
+	1717888599; bh=P8U/vSNSp1TElUyC4OwmdinUUv2kbxRZJWBSbm83Cm8=; b=M
+	A8InosAirC+uQq+1V/SjcpCYNW2Q5QgoI+gdHVzV6+Pf/sZqHnVYdHIBZJIQMHNf
+	ph3nwtDM6UObzd/Ly55JpKOrtUzW8aqlWnN1u/AXvbH5FIrAlv/4h0wDa2io1dpF
+	1gPNDfS0Wa6IaZQ4dDqvBrvhMUm6M+msKTuVUnyTbxv0RBFbFQVM/6JT3YlQL0eq
+	XzJc1cYQVboT2IKEHxOrgYKcIeqqwlaWoiXmZvtyr9M9xl3jc9rnVkxMtSZo9OX0
+	pLGBuzj4jflacPLKupbA9yoXweMrn83Ee+rR6WSVxDmmy08oHJowCkBffOFz+m4u
+	vLWQBDdVl4+RognTfekAw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717881395; x=
-	1717888595; bh=ezeG0+F5tOubWbkL94aTK4e46SIjo+JWMalcSljhHdQ=; b=J
-	r6BhXAqvAWDmZU4rxKVLUk6Ufd8KuVhtZ5JKjxQKkxDY59qabjlFy+kSKANVx5Mg
-	nvJOSzINSJKWyNhURXDfH1w+RNPuZlWU++PRKU1nA2swbNCEnd90i8viUoPMRTSG
-	RoXY82feyMSDArrrhFYBZYzyIsxQIyS09yTom0tLnR+sUfocDvEejEAp52zNIKQj
-	HUVaZpsOvL3QEhvvwLfOBmaKfQmKWjg8YWGKUWdKvpXo8tX1CxGYdEPnGZweLrUL
-	WZ9TF7AkDY4nropAfZJLETtbQGRen/3jd4eGvfPrGx0nPyo5G7Rs8IqYDIS/EiLr
-	O3KSf1rVr9DcBqk27+W8w==
-X-ME-Sender: <xms:M8pkZmnJZTDrqYmScBZVfb-4JQijRwBIl2sHMnnBZyMiLnr92sYo_g>
-    <xme:M8pkZt0zDRFFX9NdxlPcUB6Zd6tq0GirNl2UYfd-FQiCRzuahvz957L6TDbB-SJVt
-    hAgzbIoNS5Nmf1QKA>
-X-ME-Received: <xmr:M8pkZkr7U4ygKBC28HLnrPDkL1Dw55btspeKtcl3KT-AyRyy-GHPubng9xLVOPv9nPJvOTC71yHoPyq-aYOvFH0ktkamCrPgffLToX4->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedtgedgleegucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717881399; x=
+	1717888599; bh=P8U/vSNSp1TElUyC4OwmdinUUv2kbxRZJWBSbm83Cm8=; b=Y
+	T3wcUraR3ApdjVU7w14phOMIBw/pvQNN5FJiKM9RqB/gq6BKq24qHDrtylY24Wyc
+	Ahzw6dPr+zEBFhkfY0AbFD0I/f9ZxNEM/yDDuhHwG9ny7dMCTQdODFlcmpH9ZqND
+	vAsMtAPFXBzdwYFR0fX3ghjlGBddLq32bz49/rQpjnhCXyqR7Su5+f3l41ff3Yrn
+	eyKEGnrxaoC6zknUfOqWQVD6MPNgp8vRU1AT4Uxfn60bpnJieEGROwZQJHRvhJch
+	5yafa9+zeEz/fkV1rLWus3PfnYXKNpDScioFu631NNov6ZXJEN05z/e5eaaw2eh/
+	VLyEuAnzLAKmLQO04lzHw==
+X-ME-Sender: <xms:NspkZlqQYhq9py0T9oNI3SonrpdD1mI7DhiyagjAt1NurB00r0yVHg>
+    <xme:NspkZnpuljASwsYfQj5vv5oNeR8cXccONhFAvQ5ZrGp1L6je6v1DU5nZWEInRCQ52
+    hWlSfkBJf0vxoGq-w>
+X-ME-Received: <xmr:NspkZiP-JnO9GxYC0BIFnOavy5n9IX64VJWH0qXq-uYSNOahc--oOqHypsdjnOOHoII38DvUoYrIGpFHnTKah4xHA9IM3eCtBM3cDrkm>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedtgedgleefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:M8pkZqnmoUzyKtP-TjX3rdIFvRyAGMsroQhQANkwUpFRU01WWfRXgA>
-    <xmx:M8pkZk3QOoTXo1-Tro96mK6P8Oc-CHg5QRqlbknRubAJNNulvhlWcg>
-    <xmx:M8pkZht7EnIzTLlNkq5_CbbAKtLSdvDfFFPDpYPc5urLFcFzYIHNcg>
-    <xmx:M8pkZgU--oVnnA33X7IouUuWfq7vPRHiJv2uQnWI9nnU60XuWhYZkQ>
-    <xmx:M8pkZl70gGu5ekA00_lKkeeo49eNDhH82G1N8ZK_0uRkRorUciNL2BJc>
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:NspkZg4TFfdl9Jyx98jyCQyzk3JLaLxPHwRYM2qLLm-RFreMNSryRg>
+    <xmx:NspkZk51QxS2EbAIuHZ5nh1S3lenZwh_0kpMkxV9DYWC3HHUhq-cLQ>
+    <xmx:NspkZoii64SWkoE6uoDFCIp7YBjkbm99idHtnK56es_7fPz5aPxUCg>
+    <xmx:NspkZm71V4Q2BFZ65ECR8SyP5EwbXIylelTiYCbJMyOMpiR1iSQdcg>
+    <xmx:N8pkZqvZIutpkSvDwFMb1grYeVQkoFGBj-HtOq7tde_iYe3NW9-O5fw6>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Jun 2024 17:16:33 -0400 (EDT)
+ 8 Jun 2024 17:16:37 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
 To: shuah@kernel.org,
-	ast@kernel.org,
+	daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
-	daniel@iogearbox.net,
+	ast@kernel.org,
 	olsajiri@gmail.com,
 	quentin@isovalent.com,
 	alan.maguire@oracle.com,
 	acme@kernel.org
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
+Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	john.fastabend@gmail.com,
@@ -99,13 +98,14 @@ Cc: mykolal@fb.com,
 	sdf@google.com,
 	haoluo@google.com,
 	jolsa@kernel.org,
+	mykolal@fb.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 04/12] bpf: selftests: Fix bpf_cpumask_first_zero() kfunc prototype
-Date: Sat,  8 Jun 2024 15:16:00 -0600
-Message-ID: <ca7b772eed1684909e4131599fc91a6f0ff3e9ab.1717881178.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v4 05/12] bpf: selftests: Fix bpf_map_sum_elem_count() kfunc prototype
+Date: Sat,  8 Jun 2024 15:16:01 -0600
+Message-ID: <1ade365ced7051f2e18803d182ebe14c61b18309.1717881178.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1717881178.git.dxu@dxuuu.xyz>
 References: <cover.1717881178.git.dxu@dxuuu.xyz>
@@ -117,29 +117,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The prototype in progs/nested_trust_common.h is not in line with how the
-actual kfuncs are defined in kernel/bpf/cpumask.c. This causes compilation
-errors when kfunc prototypes are generated from BTF.
+The prototype in progs/map_percpu_stats.c is not in line with how the
+actual kfuncs are defined in kernel/bpf/map_iter.c. This causes
+compilation errors when kfunc prototypes are generated from BTF.
 
 Fix by aligning with actual kfunc definitions.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/progs/nested_trust_common.h | 2 +-
+ tools/testing/selftests/bpf/progs/map_percpu_stats.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/nested_trust_common.h b/tools/testing/selftests/bpf/progs/nested_trust_common.h
-index 83d33931136e..1784b496be2e 100644
---- a/tools/testing/selftests/bpf/progs/nested_trust_common.h
-+++ b/tools/testing/selftests/bpf/progs/nested_trust_common.h
-@@ -7,6 +7,6 @@
- #include <stdbool.h>
+diff --git a/tools/testing/selftests/bpf/progs/map_percpu_stats.c b/tools/testing/selftests/bpf/progs/map_percpu_stats.c
+index 10b2325c1720..63245785eb69 100644
+--- a/tools/testing/selftests/bpf/progs/map_percpu_stats.c
++++ b/tools/testing/selftests/bpf/progs/map_percpu_stats.c
+@@ -7,7 +7,7 @@
  
- bool bpf_cpumask_test_cpu(unsigned int cpu, const struct cpumask *cpumask) __ksym;
--bool bpf_cpumask_first_zero(const struct cpumask *cpumask) __ksym;
-+__u32 bpf_cpumask_first_zero(const struct cpumask *cpumask) __ksym;
+ __u32 target_id;
  
- #endif /* _NESTED_TRUST_COMMON_H */
+-__s64 bpf_map_sum_elem_count(struct bpf_map *map) __ksym;
++__s64 bpf_map_sum_elem_count(const struct bpf_map *map) __ksym;
+ 
+ SEC("iter/bpf_map")
+ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
 -- 
 2.44.0
 
