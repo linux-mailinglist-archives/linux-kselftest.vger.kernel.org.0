@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-11461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2220A900F33
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 04:11:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16380900F36
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 04:11:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FE0F1F22115
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 02:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F7F61F22196
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 02:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55930125D5;
-	Sat,  8 Jun 2024 02:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24FF0179BD;
+	Sat,  8 Jun 2024 02:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jOy7tgMz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AUtP3iKo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE4CD520;
-	Sat,  8 Jun 2024 02:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C29C1078B;
+	Sat,  8 Jun 2024 02:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717812636; cv=fail; b=NbmVgrrMU5C8KGZTu5Z94TDeQSSlbihKjkFNUDLrnJJkKc2HAC69E1JJPdctZb7zo8KUYxzso60FtSxonDig/1XzSjIYi550FypvVJy4byzpL7Ov+TiKVGBQcwiVs4qHup88IM2kYPDb1Ya+BIeiEviiWFCHZrzmvsoSW3Yhbf4=
+	t=1717812638; cv=fail; b=oV6GhBL9UFdT3ftEmPfKEI+gYDEOzGfKliaCdNRy/KhZb5FA/csibEXWDb/akApk5sY+5kt/xNm4cIRfol2y5qZMxHDAtn+ekqdRdIA02HWivJ95P8SgM85xGDFlqsrN9GIwNCJFmUxazPg+fd8ip5wd/oubGNUOe0KnK0rmyK8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717812636; c=relaxed/simple;
-	bh=BxGNrOHe2dfbHDfllX9TKbHgDuwBjx63EqJ45VYzzSA=;
+	s=arc-20240116; t=1717812638; c=relaxed/simple;
+	bh=WJsPbWyU+TAIdxc7hDxCm4VLRWpjWLcKRF3TeupLkSo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=seC5TcTyeCrSUbw+MGf9FlNY8toBCGQN6tmhqfCfSnun2k58nE29opbqesqcvAbMPkEJWE0SQWEb/EEtB+B6Ge3GcKzPuf/0yeSUttTOuoLdTyZ1Qlm9BS3kJnf9SfxQ4/Kkrshg5cnRD4HzWNq7LM/8+TyUrq2rnmqled9K+jg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jOy7tgMz; arc=fail smtp.client-ip=40.107.243.73
+	 Content-Type:MIME-Version; b=XTvutejyuj3SuiJXu4kKnUmav3zfd5VtqaxzUAPqTSGOzxckEA26w29Llpdt1ze/fBtSIMaoGOFS/ceEjAtHCiue/wbFOjAhA/2OEXWV7sFcj2rc1E8XtlwWcXmkbln05OC3XjwNAvtkqHjs+BbUacTk4MGikuqZh5C5tKOAcb8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AUtP3iKo; arc=fail smtp.client-ip=40.107.243.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FEB86y5js6X/KNB8PRbF8oVA+3d455xhaL5mikuk5Yu8mYXzN9hZZAUoj3yez7JFKKcBkFKTJX25CNu9YT3Xz1eMxAQ712dT3kagQOEWAvx+2ERkPuxxpvxlm1rNraCJJc1OzDI5vW82t7hn+ybclRcllVEKjJglPMqeJdHJps9o+d9SyXcPqQ1RbzH92SPlNV+9djKBqsxBfw1GTdqg0m1iTSbpDfZigBptTlXl4qRrhFH72XHb4WbuRCAIHxDBJAVC9O+qK/071Zuiaz6J4KBacJSlkp2DXMhktgki6rv1VaViVziyqiLn9XuBcWeap2Xac1CsZn8SwZP/ZzTfuA==
+ b=DT5z8Qd4j8TZoM+JRPNoY+lJwtS5jptW/e20j7SyYqQg0q9v8joK945rB9ZBfNfgoQ3oz2ZpAAW9kXNqlTmYT+eim91DJkClkXg8QzVrnBuxFpPqvrZ2LeU/IBBMANDEiQulu3w5ztxXvKF1cExbRwGIkXy0jGY4cog52vnZAlM1RGpqZ1wfJOTFZx//CrqfFH64mSWeOAJYQbvfCxF8A5ChxWALlVaMOrU7dr2YhFgGYOnqJmuDoGJuvEvpC+FWjRf4cCeJmNUm4T2mdIfa+a7UGlxwxjFDJxHprP+aGM0u25HDs/NXyv9ewfqLZvnoMkU5QV5ackn4LJcnvDSv9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eHcL2+kvCrCQkV4frQnNbum43yoJZFURF80YKG6CdtY=;
- b=lCNtwSYYThlUAKlOJNWDuWhUYQREIYcbcoRTfK9LMEAJ8wC1Z/6dnCXUP0X/UPvt1K8hMb6C7XWDTmqUYUQ7y8P4XWUQ/Q3lC9RcPQoRFLbYK3qDDoaM8+Panf5elsTebX0/LkUQ0E1PQSNtltlgZig2geVHrKSaKqilrHLpoUlvkisIIhQGCc+3xLw/os4aNk2VVMjcXPb+eU/KR68GGxcSJL4mUD1Vv4+xCK3Yon9PRqb6SijKBuU3kE2LsKG7xFHaedDKZtYoHw//kAIEjRn9UdAUtZvzvEQfyaN5SpB2w1bx6AszRfawbtey4ExiHkIGANlk1MCu8/1nJZouww==
+ bh=9oqGjv34FBcd1v87cGbIJRH+wqlBWpfcyFwWYrkFcN0=;
+ b=MzAq0vGMalS7VCWQ1Drwf8+0RizrYAFr/bLiiDDJO8pNKh5oGNMtXAOJhbCrU8/p2dykw2u4qMmAvmvXZO3ygG/tdIxbdq4Jk9EeoD/iktGyN6mx2EjJIqIK0OMxg/Y2RXdBJQxfua8e8sg68vJoC/p7tmuiHHvwckRRFwYET+KF3rPOcnx4V7hDDZhzoMd4EXdrCs7edVr1XjS5ePdvsmrgjTgxT40yACT7BDZnlIVDE/gtkYcqU9djZL/75EkOrRAi8ZoFoCoXjXE7Zda97R8NQEi2gdSTxnEhoXCi80mUEgEJoMv6wHE6SrsZjEiSl0fsoMrR2CKJIbrV1joIoQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eHcL2+kvCrCQkV4frQnNbum43yoJZFURF80YKG6CdtY=;
- b=jOy7tgMz4BgwvRfHPZm55TF4LrpIsOpwHRI0Y7wTv1UAUZjj/AqdVkQSkuGLFoxqSrFSnA4w1ZMviUbddoszt9c6CzKIVOc/3BUJlt7HASTpBuvCeH9mZSRXIZNMnvwLSQlaJfFyMcUCBX19RooOSD0sroNCfIiOD7B1ji+MjWpfb9JFC7bUwkRFvcMCjhB/aH59ZLMVZDdsj/qLpnvR4CgG3Dn1IeLEKeEBGQuiWBFbJuvmkr2uOJrp0Yh46J0jS5yumlCFyOSnnLcBkRkyRqtfo/3UGEJtz0TVGm3guUcdVrPQa1ZkKurUtUSvDSH5BH/8xCs9AjEBeZb3+HJqmw==
+ bh=9oqGjv34FBcd1v87cGbIJRH+wqlBWpfcyFwWYrkFcN0=;
+ b=AUtP3iKoEKUgXM2yfuVbwDQAazxsHN5jdmwgHeGlqblrXQgVW+KqH2oRkE/cMNPPsxB5V/s+ra0naeDkYPhHa+Oa6r6Y2VkIRpJGzT5mEym6l455GY6tzYf7DzG5qx3tb5vfyi1/u5l9yVo2OeoAj1RuFG71KNX47y+Albd6PPtveho87YGjpfwyRzM52TAqEsM58RI7BT/eHIcNf5rkjVxdBJ17XJeuYo6EUwl1CdSm3/kI1SubPV2zo6ptdO5/OviVbK3JCYKw/wo34Z5vS1GbiDt2jyG/6yPd5hSk0DxZivE/qzAtt7IsuOzRfDmzvO3NcUHtuoVWHj3f5O3q4g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
  by BY5PR12MB4196.namprd12.prod.outlook.com (2603:10b6:a03:205::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Sat, 8 Jun
- 2024 02:10:27 +0000
+ 2024 02:10:28 +0000
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07%4]) with mapi id 15.20.7633.036; Sat, 8 Jun 2024
- 02:10:27 +0000
+ 02:10:28 +0000
 From: John Hubbard <jhubbard@nvidia.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Jeff Xu <jeffxu@chromium.org>,
@@ -75,17 +75,17 @@ Cc: Andrei Vagin <avagin@google.com>,
 	linux-kselftest@vger.kernel.org,
 	LKML <linux-kernel@vger.kernel.org>,
 	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 4/5] selftests/mm: mseal, self_elf: factor out test macros and other duplicated items
-Date: Fri,  7 Jun 2024 19:10:22 -0700
-Message-ID: <20240608021023.176027-5-jhubbard@nvidia.com>
+Subject: [PATCH 5/5] selftests/mm: mseal, self_elf: rename TEST_END_CHECK to REPORT_TEST_PASS
+Date: Fri,  7 Jun 2024 19:10:23 -0700
+Message-ID: <20240608021023.176027-6-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240608021023.176027-1-jhubbard@nvidia.com>
 References: <20240608021023.176027-1-jhubbard@nvidia.com>
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::27) To BY5PR12MB4130.namprd12.prod.outlook.com
+X-ClientProxiedBy: SJ0PR03CA0262.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a0::27) To BY5PR12MB4130.namprd12.prod.outlook.com
  (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -95,247 +95,533 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|BY5PR12MB4196:EE_
-X-MS-Office365-Filtering-Correlation-Id: 805c58f5-5edf-4422-9ef2-08dc87602a49
+X-MS-Office365-Filtering-Correlation-Id: ce8fa89a-600f-422e-44c7-08dc87602ade
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|376005|366007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tgxsl/RdDmMXDYpHZq+XhGs26jEg6Ah1IfVxKPYWua3vDt195qKKinDnVQ24?=
- =?us-ascii?Q?jbNsewU29RNUmDuTjW1WMXu2cS7rt51k3g/cMo7CCbxlL57prLmUuWap7Y/a?=
- =?us-ascii?Q?RJk3LqBb1aYZ/dUAUbpAZNY7qC3n57Wkja83UJEyq+fSJ4OBVvB0S0ASB7gz?=
- =?us-ascii?Q?w86oQL2KEYcpWgwqpdE8wWpACiFIE3rzik0yb8ChIUpTB3EH+F2JplkGJZX0?=
- =?us-ascii?Q?uovvPv7WBY3ziHtEBf3eTlED7m9y/0z0o/tSKno2bRi4thEPXatWeGB0phaf?=
- =?us-ascii?Q?P7z6taX61QbSRCsHmJLTfLGLj0s01TvODLK5Q3cUTi8BDF28UdIKYJJLbXql?=
- =?us-ascii?Q?CvuJTxKKiDBHR6qshhZIIvPsmxqNXiD0Aaf6EfjKAaYJ3WQnHHWCeh0uvR5x?=
- =?us-ascii?Q?lF619SJp4ALUIz26SPK0KcllSifK1L87Uyy+VfazH29GerWBpOKq1pk+W6CS?=
- =?us-ascii?Q?fV78F8xPtwxDC8M1rjYAY53vqBR0MmPi492FA2xN0vOj7sYesnvbVc8BaGhD?=
- =?us-ascii?Q?xEFyY47wqGhClfiRyoV+c0IWP7pAXCNy1AHZylrT4KuPe6bI6n2LiLvQXuSQ?=
- =?us-ascii?Q?NiVSTwG3x+qwzA93Qt+nLz99g5De5kko1Qag7MNaGlsWbUpc6Z7qrhad4I4x?=
- =?us-ascii?Q?TU9Su5c+6f6frcdRdcJWwtQCQAbVxPROsR+hIp4OJm9O2mr3jf0kufq0k8tu?=
- =?us-ascii?Q?SfxtsNPpoFuf0779aa/38aLaFeTyi9X69rDWDw0lxZFYro5pPhNYD4krmsZD?=
- =?us-ascii?Q?ZKrWbvyMIGz2UIuBtWD8Rpzm647AZTrFq+UikUatEoI5O3yp7QeVO1kzlfmm?=
- =?us-ascii?Q?Hhvfyu+kpBwB2SMtzDN1c6vghghdVRxvnWBWuZX/X+zZRqaC37MDGl9Itu4y?=
- =?us-ascii?Q?Ahkq5T8XwTXmGbw9RbMB1r6cPwnZSBcM1ZvI5fLZDBtnIzoLWwn5Hwid6WwG?=
- =?us-ascii?Q?hTeaIR/OCxF64PpiwJcDWSeWVGUQFqQpccHJZnBq2mMavgNhpZlxOSwrdqHT?=
- =?us-ascii?Q?0k7/+fG4jtB5NO7YqWZEkQu3BzbGq0DZKE4oYLzRgibVY4ebxh6IMmsYTw3D?=
- =?us-ascii?Q?5LYno+vniTnpqSog2xxIeRqlTrSMe8duchh/uuf/GVnmAgJSiVVMCllvlU9i?=
- =?us-ascii?Q?CiGyMfulPNnaPQ9L10UVfLtiil6063QlBUl9GPylwM3ptB40/XIAjyE9Tu/m?=
- =?us-ascii?Q?eu/rCvMk0GR8c+esYYDp02jAIhdEuHUwwOPDQS0t4r97/Y9O4aDDQ1H0/9Wn?=
- =?us-ascii?Q?kEeBavMCb7ruXAOuJi9esU09+ie8ZjP0Y4vBKP8k+MCG78DpT1+LzILeqQE5?=
- =?us-ascii?Q?lLw=3D?=
+	=?us-ascii?Q?MC7ppyJdKvTeXYw4JfSKuJ2Vrm0SZGOlmr9m01GRrh/WJ8+FC7iEyZDZ8J5R?=
+ =?us-ascii?Q?o56R/3/vRO5RyI/PtIJ33SSRW8c6u5thJfJrK35r3Hn3EBuRtpaLsM88Wvvj?=
+ =?us-ascii?Q?LjLgcSZ6VnMcGVmsxW79P/rGHeIQo4qCrK8mKHIJAay6kEsh3DC14SnvTSZh?=
+ =?us-ascii?Q?vBLSC9wDpdF1ruufdVDVg0Ja9i1mCYZKpaZJDvygi/Jpv+lDto7P7inNUpmj?=
+ =?us-ascii?Q?zOqHWWgbLbh/StNxOK1smBYSzHtX/+8Hx2wMZIUbM5t7ANMnfc/qYEjeAs+N?=
+ =?us-ascii?Q?UuOpmj5DnkphGr9RgwbRIRl6HmLN/hFz3tTiLljo7+CSKYjvFvjE10alAhw6?=
+ =?us-ascii?Q?mspGC/cJnqa52pj5hXJecafIu99lmb0xL6gk4RaXKXARaN5CWYp9Nq6ktUFi?=
+ =?us-ascii?Q?0ekkbaOXchAi4Q/RBO+coWWGbuFJ1ukwlmvsX88AjNlexijXIcvqdzWoWQ+o?=
+ =?us-ascii?Q?FGwHv/lN6bLknndltugLbD/nnmGVVZSbg45Nib+OmdIne/XqG76dmqxMfldL?=
+ =?us-ascii?Q?oqk50Oa47NF/1U29Hie0xowakU7FpiEMtVCJIUSQweEhbQYKdx9+7w55BNmK?=
+ =?us-ascii?Q?2LPK8jJp8SJOo61REdBv4DkmXpswboHAnZUhmPWxiQczv+uxyitBnrftw/pq?=
+ =?us-ascii?Q?qz9J7GptU74IMuvSKLNGCUZDcEWxfYPfQF6zkOlELVblKcuXiwptvWFMuziM?=
+ =?us-ascii?Q?yXMvamBqNj+qVIw+BYlACeTrs4jiebGnauOHqXuvcYJnlTwMvSOgoeduRyzw?=
+ =?us-ascii?Q?xdwzzmZ7wQ62pd0/QmsI6b5/WDFGEmRCxC0VlM6R1NC2ZBJzrXu3Y09AYIdz?=
+ =?us-ascii?Q?NY0PHGn7DrunaFkJ9hMFO8QTKah9LtVCPzwkYZbMhWzPuY0bSzPzEDMAl85j?=
+ =?us-ascii?Q?aBIdAT9lL9iObZl0dDo5wA175N4PxyOBJSF52w9G1HNw+75LdDAuS3WypO05?=
+ =?us-ascii?Q?aw9Qlp6bmeHaNzqqO9kT9klbMAziJzGLM6Ea9fWO4eK1fv7E2H0UHfkZoHpN?=
+ =?us-ascii?Q?GtIufosFOkaGoes6VxTd8CL6TpPYo/CL2afV5XCQvEqGPVp2/H4bEI0CZbA9?=
+ =?us-ascii?Q?o1Kc0mVUszbzyOSQKL4NJOWnv/07Epf5i40XMiXj+bmFbYkRkzD57ONND+oP?=
+ =?us-ascii?Q?NFcK0RZYD07XqmUJOs7yMxsZnpybAwdn2o6fv95eH+l4LLH7eVhI6SzlqomG?=
+ =?us-ascii?Q?SuJ4eHP+OY3wYKRmx1sca40b14re5gw4W5CSZZjV1veCXSXDQ6FxBYjUgyY5?=
+ =?us-ascii?Q?VDEpXTFUcHQIkFCgEQaH+JW1gO669coCv9FRwx8uBMOyKgIWtAks0wbDvor1?=
+ =?us-ascii?Q?q9az3dsL2o/uhnqo8a/suiPN?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0zfjdmSUX4aQBkpu0bgfILpmm9OXrNuxzZrPBmQywLG9edQ90gCgSNhwMSPJ?=
- =?us-ascii?Q?MXTp8Fte6r1JdrpWFxF4oHQOs5a6P6vmDU/f8Ttq2dxBRqJa/mZzPxCsbVpk?=
- =?us-ascii?Q?n71udyldX+gKy5rpGF4XtpV5FLsiWvEex5SRGz4vGgm/EAxV4q7nvlle/qYM?=
- =?us-ascii?Q?RQ8dIKNZy33wROudMDXqTWm6rAVStAC3aS9C+tFub99fDQP0aznGRCDCgZ+K?=
- =?us-ascii?Q?eZnGTERlej9ncIs3P6F+qbMNCIDg20lF+yXmkEKqQkz5APS2Jy/wmehvLae7?=
- =?us-ascii?Q?4wvThiT5UhOpLpz/w7Qs54iTsxlSWVZUNcrtmdos4slHewjFe+s1rCEV/y59?=
- =?us-ascii?Q?zfvGsz1LOUHeezigARkCUu7GXYsytjTu3gqUtp56NXJoLQpaDB14MfE60HF0?=
- =?us-ascii?Q?vb2kW+4fzubRssNt4L8NaA+/9KNa95Dn1soNbpSdHamzCnNEd2ZrjWp/sMI1?=
- =?us-ascii?Q?PfE7ArWl93JnoLdwBssaQwLoMBML5RePMBm4waxLnb7dOyKWG7wdd2rrIsWz?=
- =?us-ascii?Q?TcC2+EG7hb0lEwF/ziTWV9E4FqZEl7ldqwSoYUm1hOx4qk2srmkT8Fr/9PEa?=
- =?us-ascii?Q?wSvDHkvpblqvaK9dza3Jv9sKhlWLbtMXUiS/mXd6ekolY84t6rWch2YyJFrX?=
- =?us-ascii?Q?CDiM/KDO83osf0soBg3QyMVXAKFaCVb5hZzH3oIYPznpm+7Txx02zVFre+ik?=
- =?us-ascii?Q?V2++x9c7Fq//oIqJ/lbhZUZkWwujFnKVDxOW5VSEhqD9uDTrpm6odO6g0AlF?=
- =?us-ascii?Q?sqSjANdCdX07ASBppPez0vI3ThhVdZTy6/jCZCsU6QHAVishjqgBsxEMnDOK?=
- =?us-ascii?Q?WkykbOhAKSA1hkQ3g0ackjY5xnX6FOeJsQqpomFBo9G/Ecs8/+mThwGl8YPs?=
- =?us-ascii?Q?TfNWXUNDUAh0i05AeoEhjnYtECgBCL9UkWCQX7rFR9HBZWQ5iekuu5fwES1O?=
- =?us-ascii?Q?e98sAuJDWd06bOBuXw+cWH9mkFMM6WXeSb8XNvEoSSLZePYIV0TzZmjeTXjN?=
- =?us-ascii?Q?GSGUwtxUz96l+EVAi6A6nmrWhx2t7cvf0/QwpLRaosHADQyYqN7TIj+P4X4l?=
- =?us-ascii?Q?ARGgkDAwESmz9LoK1HfSGIvRPSR4seli0CvkJJsbKpJqxmAr7xBC0kZ1YRBH?=
- =?us-ascii?Q?WGaWvBysvg9UDSt2EfChIdM1f16Ggwlno21IejYlHHqBteCStbvzjIoEj8n0?=
- =?us-ascii?Q?y6AZH5oIg5VoIYgr1C5uLNQ5q0zn1JZHxvtPflmoSPeYgwpzHY+zqmz4SY+R?=
- =?us-ascii?Q?sj0f6tnfTa9i0tGrexZOnIuYxIEB84G38sSDW3Rp6x2o523zgt+6TObDeNjE?=
- =?us-ascii?Q?Mczt4ZdEbgxkreYfOtnSPWLAMEEiZm+foHsTvO0W6kWWXwUE42P3vpwfk1uW?=
- =?us-ascii?Q?irit5dkRKfmg7DTbcGq4DeK+iB0E3imO2M2Iq8t2X3sistbJjJ+HgquJHszv?=
- =?us-ascii?Q?BY42eMmFGtSovEUw6KTIIuRqve4h4YfMJt+czUDWHsJyl7UhTesv2LPDktNg?=
- =?us-ascii?Q?mS6yrV0vMV6IDmjK9mWrAvdKil8bfX6ukjnMjxTKS9cJIKN6EQ8IC6y0Goda?=
- =?us-ascii?Q?zLgIkq5J76rCcGguBLiQb/2j8vpPvacL/eBCxZxi?=
+	=?us-ascii?Q?e453cPrrKhKSNiGRea5I1YhfWIM5ZNVcLwV7SGRqkthpSRoNpCuhzppJjz+o?=
+ =?us-ascii?Q?gfn4x8HpBpXHIg5Nxt+NoPAAu/0G44FUU+suRyLeY7E5glcxo2UtK/xpQtPW?=
+ =?us-ascii?Q?vo1HXDVQlsOVCfM8mYir4KSyySBZcvvPiPnL+4SUNXrIlajQXwILZNU4YFWT?=
+ =?us-ascii?Q?d6PU2WFZCdYXM39Uwho7lJqWipMrmdTMn3ZDWjIB/VnIPE5M3E3fna1Ad7qe?=
+ =?us-ascii?Q?scCQoKqSYRkil+gZaezcvYNDUeV3WH1zbYxLcyKVyhETs7M5Pcv/UazcLh0m?=
+ =?us-ascii?Q?1l2NLtHehw+XRfJevIsGXUdQoBAqAxYYXJVP0FkquZV6Risfr34xFvoX9bhR?=
+ =?us-ascii?Q?6l0xcZSmEFp7RiiUQ87xFcm+Xw8T8CT2Eygirv2uFC+MwNoHSp/iBnZt9O8d?=
+ =?us-ascii?Q?9KTzBoZGb8S9BUV5vPSQCVx23BeKNUbzsDl68Uf7k7lShSrEFT+GdUaPTpAc?=
+ =?us-ascii?Q?rz9kJ5fKpkYBUaIsYa0V+opOSWVqwJnNND6cAygyyrqXZTzSFCMtxVYzkaYI?=
+ =?us-ascii?Q?EnJS68xyqcbgHCuXk0c3C3XJjK0QnDLIUC4dRRSBa/IrXDJjm05oJemmAOwt?=
+ =?us-ascii?Q?iRPIulWzkyQ/gPCZljxrIwukyasKN4Q9EV1L+OIYqLQAdciJacow08//jp7D?=
+ =?us-ascii?Q?x2id0PLcDYrHWVUBWqwm3L9Z+2dXJQt/h6RbhStofYjh0ZnTBEtX9PMIOl4d?=
+ =?us-ascii?Q?5hsky5DgzTYUgeU88hoL6wESpT1US1AZs89alNgLuH63xRn1WJjuF9vcPlxb?=
+ =?us-ascii?Q?eth8OKfewYtIWricEYEqEjopW7NGBRsN0GEDuzmKokUflrZgP/QeeLBq6WJu?=
+ =?us-ascii?Q?LCAJac6d0hbUgCUHzwDj6c+q+o4GoZiRLXG2ZPcZddDfBwYJUMoUhXHPHHDq?=
+ =?us-ascii?Q?9TV5UeGHj+kG6rjmCyEfXApfuVKYj13/ai7QaQ9oiYwgZwOe1/qQ2slW4aWg?=
+ =?us-ascii?Q?c0eZy+m9Ez5K6ual5hZNp4EanlqgdkNmzWL0CZT6tfBT40wzcyg784x6AR18?=
+ =?us-ascii?Q?9Ehc4ztGBLJWpSouLMmQ339wrIG6S6Jq7oJe+Ui9H2iENT+TWMef6+95c2BB?=
+ =?us-ascii?Q?msV4nggLpYGqvDORgvvJMgws3cFCLA0yC/METg8J1IjcmRib4K2nEmwB5XFZ?=
+ =?us-ascii?Q?oLz/JV7Dmjc2gO9DfVO3Jh23JBgAO1ks4oMr7KTzQzfcPPZ3v3Z006+rcoAU?=
+ =?us-ascii?Q?w7mTK1S/uCerfWyO36rjLOkhVZyWKbOEqVVCEdfNXmSKM+WncU7aFLJ3gxWj?=
+ =?us-ascii?Q?KKlqhsc4WymjHawn2foEQGs+u+Ij/751divkcklxhHoGwAWvveQ4JU9IV7rf?=
+ =?us-ascii?Q?7W/uo4oWk2PywxPxX7xJdN9dhRTfJeXrQLiPBRYNX1gw/2sr+s1fkJEFz8X6?=
+ =?us-ascii?Q?rr9WCUc0BSK0+isQ/VUHB+UtsR0FcTQtcFtgvVzQQCBMUdapmngQTMbak60X?=
+ =?us-ascii?Q?YaeOZUUA5rXy7KKB8f5zlg527gqPaGZWimU1fVaA3nzAnbySolCAZqv1Lekw?=
+ =?us-ascii?Q?OqKXA91tx4r8bK94P1cQt6zCm9uXPqYZ28Gs7RG+U+Q8++LMQ6zAiAcByIWM?=
+ =?us-ascii?Q?6su8ejnpEZQyNM3hU+8p3uuCa8wfrTXTa14qrYA6?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 805c58f5-5edf-4422-9ef2-08dc87602a49
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce8fa89a-600f-422e-44c7-08dc87602ade
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2024 02:10:27.6512
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2024 02:10:28.6301
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sQhEcryErW2pRq7g53oNiIkqhs7DrMWZ3sWL6lcLzVdjWgbi2OQNFyELnB9cqlRxWXtvJBpjAR93AkoeGKVBHQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: EYba7BqkhXAUvows5GGdYzqgEU7hfkq1W6FncefgCaX3KTXT47pnXBp6tMpbJUsCGMXNq+GW+sN5UsoIVzmjrA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4196
 
-Clean up and move some copy-pasted items into mseal_helpers.h.
-
-1. The test macros can be made safer and simpler, by observing that they
-are invariably called when about to return. This means that the macros
-do not need an intrusive label to goto; they can simply return.
-
-2. PKEY* items. We cannot, unfortunately use pkey-helpers.h. The best we
-can do is to factor out these few items into mseal_helpers.h.
-
-3. These tests still need their own definition of u64, so also move that
-to the header file.
+Now that the test macros are factored out into their final location, and
+simplified, it's time to rename TEST_END_CHECK to something that
+represents its new functionality: REPORT_TEST_PASS.
 
 Cc: Jeff Xu <jeffxu@chromium.org>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/mseal_helpers.h | 40 ++++++++++++++++++
- tools/testing/selftests/mm/mseal_test.c    | 48 ----------------------
- tools/testing/selftests/mm/seal_elf.c      | 32 ---------------
- 3 files changed, 40 insertions(+), 80 deletions(-)
+ tools/testing/selftests/mm/mseal_helpers.h |  2 +-
+ tools/testing/selftests/mm/mseal_test.c    | 92 +++++++++++-----------
+ tools/testing/selftests/mm/seal_elf.c      |  2 +-
+ 3 files changed, 48 insertions(+), 48 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/mseal_helpers.h b/tools/testing/selftests/mm/mseal_helpers.h
-index b922d453a014..8c3bf77dcf19 100644
+index 8c3bf77dcf19..65ece62fdd0c 100644
 --- a/tools/testing/selftests/mm/mseal_helpers.h
 +++ b/tools/testing/selftests/mm/mseal_helpers.h
-@@ -3,3 +3,43 @@
- #ifndef __NR_mseal
- #define __NR_mseal 462
- #endif
-+
-+#define FAIL_TEST_IF_FALSE(test_passed)					\
-+	do {								\
-+		if (!(test_passed)) {					\
-+			ksft_test_result_fail("%s: line:%d\n",		\
-+						__func__, __LINE__);	\
-+			return;						\
-+		}							\
-+	} while (0)
-+
-+#define SKIP_TEST_IF_FALSE(test_passed)					\
-+	do {								\
-+		if (!(test_passed)) {					\
-+			ksft_test_result_skip("%s: line:%d\n",		\
-+						__func__, __LINE__);	\
-+			return;						\
-+		}							\
-+	} while (0)
-+
-+#define TEST_END_CHECK() ksft_test_result_pass("%s\n", __func__)
-+
-+#ifndef PKEY_DISABLE_ACCESS
-+#define PKEY_DISABLE_ACCESS	0x1
-+#endif
-+
-+#ifndef PKEY_DISABLE_WRITE
-+#define PKEY_DISABLE_WRITE	0x2
-+#endif
-+
-+#ifndef PKEY_BITS_PER_PKEY
-+#define PKEY_BITS_PER_PKEY	2
-+#endif
-+
-+#ifndef PKEY_MASK
-+#define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
-+#endif
-+
-+#ifndef u64
-+#define u64 unsigned long long
-+#endif
+@@ -22,7 +22,7 @@
+ 		}							\
+ 	} while (0)
+ 
+-#define TEST_END_CHECK() ksft_test_result_pass("%s\n", __func__)
++#define REPORT_TEST_PASS() ksft_test_result_pass("%s\n", __func__)
+ 
+ #ifndef PKEY_DISABLE_ACCESS
+ #define PKEY_DISABLE_ACCESS	0x1
 diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index 20949617a036..a29935d82027 100644
+index a29935d82027..f8e1c59f298e 100644
 --- a/tools/testing/selftests/mm/mseal_test.c
 +++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -19,54 +19,6 @@
- #include <sys/stat.h>
- #include "mseal_helpers.h"
+@@ -240,7 +240,7 @@ static void test_seal_addseal(void)
+ 	ret = sys_mseal(ptr, size);
+ 	FAIL_TEST_IF_FALSE(!ret);
  
--/*
-- * need those definition for manually build using gcc.
-- * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 mseal_test.c -o mseal_test
-- */
--#ifndef PKEY_DISABLE_ACCESS
--# define PKEY_DISABLE_ACCESS    0x1
--#endif
--
--#ifndef PKEY_DISABLE_WRITE
--# define PKEY_DISABLE_WRITE     0x2
--#endif
--
--#ifndef PKEY_BITS_PER_PKEY
--#define PKEY_BITS_PER_PKEY      2
--#endif
--
--#ifndef PKEY_MASK
--#define PKEY_MASK       (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
--#endif
--
--#define FAIL_TEST_IF_FALSE(c) do {\
--		if (!(c)) {\
--			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
--			goto test_end;\
--		} \
--	} \
--	while (0)
--
--#define SKIP_TEST_IF_FALSE(c) do {\
--		if (!(c)) {\
--			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
--			goto test_end;\
--		} \
--	} \
--	while (0)
--
--
--#define TEST_END_CHECK() {\
--		ksft_test_result_pass("%s\n", __func__);\
--		return;\
--test_end:\
--		return;\
--}
--
--#ifndef u64
--#define u64 unsigned long long
--#endif
--
- static unsigned long get_vma_size(void *addr, int *prot)
- {
- 	FILE *maps;
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_unmapped_start(void)
+@@ -268,7 +268,7 @@ static void test_seal_unmapped_start(void)
+ 	ret = sys_mseal(ptr + 2 * page_size, 2 * page_size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_unmapped_middle(void)
+@@ -300,7 +300,7 @@ static void test_seal_unmapped_middle(void)
+ 	ret = sys_mseal(ptr + 3 * page_size, page_size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_unmapped_end(void)
+@@ -329,7 +329,7 @@ static void test_seal_unmapped_end(void)
+ 	ret = sys_mseal(ptr, 2 * page_size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_multiple_vmas(void)
+@@ -360,7 +360,7 @@ static void test_seal_multiple_vmas(void)
+ 	ret = sys_mseal(ptr, size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_split_start(void)
+@@ -385,7 +385,7 @@ static void test_seal_split_start(void)
+ 	ret = sys_mseal(ptr + page_size, 3 * page_size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_split_end(void)
+@@ -410,7 +410,7 @@ static void test_seal_split_end(void)
+ 	ret = sys_mseal(ptr, 3 * page_size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_invalid_input(void)
+@@ -445,7 +445,7 @@ static void test_seal_invalid_input(void)
+ 	ret = sys_mseal(ptr - page_size, 5 * page_size);
+ 	FAIL_TEST_IF_FALSE(ret < 0);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_zero_length(void)
+@@ -469,7 +469,7 @@ static void test_seal_zero_length(void)
+ 	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_zero_address(void)
+@@ -495,7 +495,7 @@ static void test_seal_zero_address(void)
+ 	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_twice(void)
+@@ -515,7 +515,7 @@ static void test_seal_twice(void)
+ 	ret = sys_mseal(ptr, size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect(bool seal)
+@@ -539,7 +539,7 @@ static void test_seal_mprotect(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_start_mprotect(bool seal)
+@@ -569,7 +569,7 @@ static void test_seal_start_mprotect(bool seal)
+ 			PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_end_mprotect(bool seal)
+@@ -599,7 +599,7 @@ static void test_seal_end_mprotect(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_unalign_len(bool seal)
+@@ -628,7 +628,7 @@ static void test_seal_mprotect_unalign_len(bool seal)
+ 			PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_unalign_len_variant_2(bool seal)
+@@ -656,7 +656,7 @@ static void test_seal_mprotect_unalign_len_variant_2(bool seal)
+ 			PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_two_vma(bool seal)
+@@ -691,7 +691,7 @@ static void test_seal_mprotect_two_vma(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_two_vma_with_split(bool seal)
+@@ -738,7 +738,7 @@ static void test_seal_mprotect_two_vma_with_split(bool seal)
+ 			PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_partial_mprotect(bool seal)
+@@ -764,7 +764,7 @@ static void test_seal_mprotect_partial_mprotect(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_two_vma_with_gap(bool seal)
+@@ -807,7 +807,7 @@ static void test_seal_mprotect_two_vma_with_gap(bool seal)
+ 	ret = sys_mprotect(ptr + 3 * page_size, page_size, PROT_READ);
+ 	FAIL_TEST_IF_FALSE(ret == 0);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_split(bool seal)
+@@ -844,7 +844,7 @@ static void test_seal_mprotect_split(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mprotect_merge(bool seal)
+@@ -878,7 +878,7 @@ static void test_seal_mprotect_merge(bool seal)
+ 	ret = sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_READ);
+ 	FAIL_TEST_IF_FALSE(ret == 0);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_munmap(bool seal)
+@@ -903,7 +903,7 @@ static void test_seal_munmap(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ /*
+@@ -943,7 +943,7 @@ static void test_seal_munmap_two_vma(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ /*
+@@ -981,7 +981,7 @@ static void test_seal_munmap_vma_with_gap(bool seal)
+ 	ret = sys_munmap(ptr, size);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_munmap_start_freed(bool seal)
+@@ -1021,7 +1021,7 @@ static void test_munmap_start_freed(bool seal)
+ 		FAIL_TEST_IF_FALSE(size == 0);
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_munmap_end_freed(bool seal)
+@@ -1051,7 +1051,7 @@ static void test_munmap_end_freed(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_munmap_middle_freed(bool seal)
+@@ -1095,7 +1095,7 @@ static void test_munmap_middle_freed(bool seal)
+ 		FAIL_TEST_IF_FALSE(size == 0);
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_shrink(bool seal)
+@@ -1124,7 +1124,7 @@ static void test_seal_mremap_shrink(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_expand(bool seal)
+@@ -1156,7 +1156,7 @@ static void test_seal_mremap_expand(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_move(bool seal)
+@@ -1189,7 +1189,7 @@ static void test_seal_mremap_move(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mmap_overwrite_prot(bool seal)
+@@ -1217,7 +1217,7 @@ static void test_seal_mmap_overwrite_prot(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == ptr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mmap_expand(bool seal)
+@@ -1248,7 +1248,7 @@ static void test_seal_mmap_expand(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == ptr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mmap_shrink(bool seal)
+@@ -1276,7 +1276,7 @@ static void test_seal_mmap_shrink(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == ptr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_shrink_fixed(bool seal)
+@@ -1307,7 +1307,7 @@ static void test_seal_mremap_shrink_fixed(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == newAddr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_expand_fixed(bool seal)
+@@ -1338,7 +1338,7 @@ static void test_seal_mremap_expand_fixed(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == newAddr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_move_fixed(bool seal)
+@@ -1368,7 +1368,7 @@ static void test_seal_mremap_move_fixed(bool seal)
+ 	} else
+ 		FAIL_TEST_IF_FALSE(ret2 == newAddr);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_move_fixed_zero(bool seal)
+@@ -1400,7 +1400,7 @@ static void test_seal_mremap_move_fixed_zero(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_move_dontunmap(bool seal)
+@@ -1429,7 +1429,7 @@ static void test_seal_mremap_move_dontunmap(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_mremap_move_dontunmap_anyaddr(bool seal)
+@@ -1463,7 +1463,7 @@ static void test_seal_mremap_move_dontunmap_anyaddr(bool seal)
+ 
+ 	}
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ 
+@@ -1556,7 +1556,7 @@ static void test_seal_merge_and_split(void)
+ 	FAIL_TEST_IF_FALSE(size ==  22 * page_size);
+ 	FAIL_TEST_IF_FALSE(prot == 0x4);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_discard_ro_anon_on_rw(bool seal)
+@@ -1585,7 +1585,7 @@ static void test_seal_discard_ro_anon_on_rw(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_discard_ro_anon_on_pkey(bool seal)
+@@ -1632,7 +1632,7 @@ static void test_seal_discard_ro_anon_on_pkey(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_discard_ro_anon_on_filebacked(bool seal)
+@@ -1669,7 +1669,7 @@ static void test_seal_discard_ro_anon_on_filebacked(bool seal)
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 	close(fd);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_discard_ro_anon_on_shared(bool seal)
+@@ -1698,7 +1698,7 @@ static void test_seal_discard_ro_anon_on_shared(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ static void test_seal_discard_ro_anon(bool seal)
+@@ -1728,7 +1728,7 @@ static void test_seal_discard_ro_anon(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ int main(int argc, char **argv)
 diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
-index 4053951a535c..0fd129259647 100644
+index 0fd129259647..131fc13cd422 100644
 --- a/tools/testing/selftests/mm/seal_elf.c
 +++ b/tools/testing/selftests/mm/seal_elf.c
-@@ -18,38 +18,6 @@
- #include <sys/stat.h>
- #include "mseal_helpers.h"
+@@ -127,7 +127,7 @@ static void test_seal_elf(void)
+ 	FAIL_TEST_IF_FALSE(ret < 0);
+ 	ksft_print_msg("somestr is sealed, mprotect is rejected\n");
  
--/*
-- * need those definition for manually build using gcc.
-- * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 seal_elf.c -o seal_elf
-- */
--#define FAIL_TEST_IF_FALSE(c) do {\
--		if (!(c)) {\
--			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
--			goto test_end;\
--		} \
--	} \
--	while (0)
--
--#define SKIP_TEST_IF_FALSE(c) do {\
--		if (!(c)) {\
--			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
--			goto test_end;\
--		} \
--	} \
--	while (0)
--
--
--#define TEST_END_CHECK() {\
--		ksft_test_result_pass("%s\n", __func__);\
--		return;\
--test_end:\
--		return;\
--}
--
--#ifndef u64
--#define u64 unsigned long long
--#endif
--
- /*
-  * define sys_xyx to call syscall directly.
-  */
+-	TEST_END_CHECK();
++	REPORT_TEST_PASS();
+ }
+ 
+ int main(int argc, char **argv)
 -- 
 2.45.2
 
