@@ -1,169 +1,165 @@
-Return-Path: <linux-kselftest+bounces-11489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3974690111A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 11:21:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A2E190111C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 11:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B5ACB20E3A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 09:21:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18AB01C2172D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 09:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6BC176FDB;
-	Sat,  8 Jun 2024 09:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29166176FC9;
+	Sat,  8 Jun 2024 09:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pxzQn2E6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z2sxenVH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F471779BC
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Jun 2024 09:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DC0176FC6
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Jun 2024 09:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717838442; cv=none; b=f9nnloexjg+s8HalMNP49birXRuYUJ5VO9kSSLJU97YOXNKLS1FSozTLSUQD36r3yXvY48pzacmrHDJkSDs0i9fC1bkspmQM+5ywaYz67xKQiLynkywTa98Aps+OBUR47rZOIC5W9THR1e9sUO8u3/9E4gGdz+n/0qduPNGK/Ug=
+	t=1717838448; cv=none; b=MaRhHK2pFIOiLSCP6U1HBpmcjErHsmuyLAHH95/owLTKDWwmjaB71kB4k07ahhWUkyqgeHgCZYcMDmkb9p8SgaucDA3LjwDlVj7nTSJDNtDA8/rnTFaoQmv8Yu5hEBDqrkqwB9YSeAOfL63of8qW3iL/1Kru5L4wOR5gllTB+4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717838442; c=relaxed/simple;
-	bh=ZkhhemaKP8lCa6ClBeztHADRoDKIRRCsk/T4NIuMC64=;
+	s=arc-20240116; t=1717838448; c=relaxed/simple;
+	bh=XHTiiMU8Dn9RHfxbnfw+gr2xxqddY57jd51BbhxDSxc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NF76Yiic7pnR4XxOmVdD/rQhcg3ALtS5WoLV3S+RaE92ipsOocc3Z/V+O7ZBEeJzVZ0S7uLcdrujiNRw+OPy3XQlxkIrLQVDEDx7w2XPVwP4iFlpRHhqD6PBCDe9+lhu9LVmMic0rEC0ea7jrK0cTVp2q1J5wLJWpzx+iEXXgpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pxzQn2E6; arc=none smtp.client-ip=209.85.160.169
+	 To:Cc:Content-Type; b=DcMzlmYGDUQF6zFOqhxIzUrB0SDT5CPGGkMvkzZmXzUYpi5aHmD9dbVxF1AmQGxXDOtVue37ZRSElEI6alxeqWG3vdnosBX8QHYgIHrCT4UL1d2MH7gjAqqFdJnOpE7pO2XwxQi00ZXMb2+11ENyiWgA9QQvXTspzwf4kBwlmtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z2sxenVH; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4400cc0dad1so215821cf.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Jun 2024 02:20:40 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4400cc0dad1so215941cf.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Jun 2024 02:20:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717838439; x=1718443239; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717838445; x=1718443245; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XnqLfwU/A1Xjf8eRjuCMj3A1lwR+H6K/lbw2VTYgr+M=;
-        b=pxzQn2E6+6dtucl+p8GDVIFDA9piOroOSIboqBVupQnrNGFghE/CMYXl++wfaodzjh
-         DOuKBpLBIz9KVyLqd4MnYkTuzpodMnLqSK+bztG8os/2y35usZGhG8WBRKIxmScASQOH
-         US+vYVHPosPNgA7HfobP6py03gnvG53FZBZ9Xe5rCcP6ZZ1ka/RVOh0g+QCOdubpJ5v/
-         5MoTefefDWFh8ANMns8bHc9fYOQA3RaCHBI96AyITh5L/9OX3dgCLG4X7LlC9nt0bFX8
-         utpiVl2R8+S7km1YknFnK9rosOBHLiOGGYalBEptrpXZVItlubW1THkhIpmS8useqDkG
-         l9TA==
+        bh=gmJXfvJYKc09AI9QzY5AQiGxwM+K+KqbhH893O3NisU=;
+        b=z2sxenVH4ED8JSxSXt0SvriT5Mxbxhf19M0SW8kdppB2gplvjkgNbFYG2mdyeGBee3
+         gkN8WJNqhfRVrTiwzQs5wL0vKEGO182tESxGrS4SRzbjL3XzQC59NkgTTfhtE+wNsmlX
+         52ZAN6t40L6uBsnWRjFWUUZBzzxkUeqtKm6NrO0RwaSbkp+i4A6xC1/2xYP+oTFFQ6yP
+         Bsgtmc5wccFL4rJNSKEhNswQMpapNpjosE7r+eKYQILQ/qeszEhjvIOIgAZDeEwhpG1a
+         rzMJSPXpedxnn5fqqvaiiHQTmrqncMzledx+EhTN7hVmWEFcJC8iIF5+wJRixYn93gTe
+         z+qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717838439; x=1718443239;
+        d=1e100.net; s=20230601; t=1717838445; x=1718443245;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XnqLfwU/A1Xjf8eRjuCMj3A1lwR+H6K/lbw2VTYgr+M=;
-        b=IwB6r34L/sGX7HfafM4FtDPA2YKg+2OOReYtmtKCzbGwQfRjM2AxuA5oW32yhUo2Db
-         rZQVZXVxLUTAJBMMKhahiVyso8bVWZrbXExhXb49G2DIs0vVGPuaxM28/t0TjES9GEjr
-         Xx8ngkjW8WuGaA9AzZYVWVe7bE6DSTHc3/TcgX0oedz2RLpFggLkmUVonjEBZCmxRJtz
-         W1Ri+Q+1zqzD0/KxdjVYhCnMuD1IJf264LlgKBnowPMO5IG+WeVWF11Cw5Me1XoaXMqS
-         ruLdvY5ut26YTqLs1JnWRMv4M7/4EoWhEzhLBxl5h/QLQi243MT5QevKbyojRrRxUGLx
-         226A==
-X-Forwarded-Encrypted: i=1; AJvYcCU4ILC/4WWXe33b+kIB2flWg01qo+pYHOciUO9ntEjAe5eN7ssMvJLJnga8cxrKsZYyPaYMaMyCWv8ZxrWwOd8op2O6dkTNqkbc8+69yR5n
-X-Gm-Message-State: AOJu0YyVfU++LVKvpi5aQGGiRZH/b+tx1zfI/ZWRqJRJLx1igpZXji2X
-	jNl+WjpjJs7MNbPDlH4ynn0JJFw/hIsyEeDc3p9vsduANRdfwlSbtaoFe76QuJIkHsl2DZWwvR/
-	ps079x4/QlSWbgpw23Fpyr4Za4L/PNNePJ5ai
-X-Google-Smtp-Source: AGHT+IHpZXhPcXTAcXdqJRjtYi1u2AkTEZzkMFL58ERL5FdZueJh39/myZryZpRePKMRR8zE38LnWZZJ0UZjRV7QP/4=
-X-Received: by 2002:a05:622a:6106:b0:43e:3833:c5e3 with SMTP id
- d75a77b69052e-440577fbfedmr749301cf.11.1717838439279; Sat, 08 Jun 2024
- 02:20:39 -0700 (PDT)
+        bh=gmJXfvJYKc09AI9QzY5AQiGxwM+K+KqbhH893O3NisU=;
+        b=K48FYNOo6xfyQY9ClKlXMqvm5i/auGw+NjQ+KFZ/Rg5k7l+LVZcX8oe4LuugmmMZ+J
+         AGzffSuf5Vw1s1camwvjtXevzHBnvwY+HrvyqqSttHOOc4mrosRQsXvGhL4aEYnu4cSo
+         jMxryJyYOhYvG59twCHvlhzF7RVnvmFT+ino9Idyg721ouTx5SJaN+3fsTp6aXHOVtw2
+         4/RCGWwzGJTgmrDI3+MHn+l0p94zVRsUKqabUTkaiKK2LEVqNSWENzYgnWB/liaDleck
+         rttlCmyi3egLKbyCHcd3LvUF1n1BoLrgytCycL60FF28BK1YeStvX7ZoenScFtv11ddc
+         XNNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVsZz8OXHyef+eykQ3mc0YT4SybImauqkx4ctqV+mNmGaRI1w8m1kzN6ngCbhyBIZBPyt/cXBjgWSYdFgtKN6nydn1qMJxwr1FI1IrGK2Dq
+X-Gm-Message-State: AOJu0YwMHaFvNZxYukW+sGs57AS1hOiocQ4KxnWmv+veTli1Jojxs/oP
+	l+LCo/hbonU5PAGZ4sj6cqVUc28PqNLsqUyv46EY7pksgPNYFZLoWK7rZOVAYYANXxhOXKg8thw
+	BxAWAfWAkLopReuybKjLcpTqLGe1VOZI1Zyml
+X-Google-Smtp-Source: AGHT+IGrgwjRbQqe6L3dL9eB0TpHrKbIRHkqP2DO/QNgWX+bB3tzzJGyRY0yPu74Wzabgooqd58vk4NtzhxS4uVcQW8=
+X-Received: by 2002:a05:622a:228c:b0:43f:f92a:bdb with SMTP id
+ d75a77b69052e-440578d42c7mr1079781cf.13.1717838445384; Sat, 08 Jun 2024
+ 02:20:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240604123204.10412-1-ivan.orlov0322@gmail.com> <20240604123204.10412-4-ivan.orlov0322@gmail.com>
-In-Reply-To: <20240604123204.10412-4-ivan.orlov0322@gmail.com>
+References: <20240604123204.10412-1-ivan.orlov0322@gmail.com> <20240604123204.10412-5-ivan.orlov0322@gmail.com>
+In-Reply-To: <20240604123204.10412-5-ivan.orlov0322@gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 8 Jun 2024 17:20:27 +0800
-Message-ID: <CABVgOS=yQVDr8pvbfasf72Z7qoumeY7kwexZg5RVPVYBMkXUxA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] kunit: string-stream-test: Make it a separate module
+Date: Sat, 8 Jun 2024 17:20:34 +0800
+Message-ID: <CABVgOS=8S4QqAdNHs7hLXfD7HGq+eQNUqVbLkTu94-BUDTxOWA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kunit: assert: export non-static functions
 To: Ivan Orlov <ivan.orlov0322@gmail.com>
 Cc: brendan.higgins@linux.dev, rmoar@google.com, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000fd8889061a5d6d05"
+	boundary="00000000000058982f061a5d6e52"
 
---000000000000fd8889061a5d6d05
+--00000000000058982f061a5d6e52
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 4 Jun 2024 at 20:32, Ivan Orlov <ivan.orlov0322@gmail.com> wrote:
 >
-> Currently, the only way to build string-stream-test is by setting
-> CONFIG_KUNIT_TEST=y. However, CONFIG_KUNIT_TEST is a config option for
-> a different test (`kunit-test.c`).
->
-> Introduce a new Kconfig entry in order to be able to build the
-> string-stream-test test as a separate module. Import the KUnit namespace
-> in the test so we could have string-stream functions accessible.
+> Export non-static functions from the assert.c file into the KUnit
+> namespace in order to be able to access them from the tests if
+> they are compiled as modules.
 >
 > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 > ---
 
-Looks good to me. checkpatch complains about the help text not being
-long enough, but I personally can't think if what else to sensibly
-add.
-
-Reviewed-by: David Gow <davidgow@google.com>
+I think this could be merged with patch 5, as it's not useful on its
+own. Also, a few of the symbol names might be a little too generic to
+be exported: maybe we should give them a 'kunit_assert' prefix?
 
 Cheers,
 -- David
 
+>  lib/kunit/assert.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index 867aa5c4bccf..f394e4b8482f 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -38,6 +38,7 @@ void kunit_assert_print_msg(const struct va_format *message,
+>         if (message->fmt)
+>                 string_stream_add(stream, "\n%pV", message);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(kunit_assert_print_msg);
+>
+>  void kunit_fail_assert_format(const struct kunit_assert *assert,
+>                               const struct va_format *message,
+> @@ -112,6 +113,7 @@ VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
+>
+>         return ret;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(is_literal);
 
->  lib/kunit/Kconfig              | 8 ++++++++
->  lib/kunit/Makefile             | 2 +-
->  lib/kunit/string-stream-test.c | 2 ++
->  3 files changed, 11 insertions(+), 1 deletion(-)
+I'm a bit worried about having such a generic name exported, even
+conditionally and to a namespace. Maybe we could give this a
+'kunit_assert' prefix, or put it in a separate, more specific
+namespace?
+
 >
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 34d7242d526d..b0713c0f9265 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -45,6 +45,14 @@ config KUNIT_TEST
->           purposes by developers interested in testing that KUnit works as
->           expected.
+>  void kunit_binary_assert_format(const struct kunit_assert *assert,
+>                                 const struct va_format *message,
+> @@ -180,6 +182,7 @@ VISIBLE_IF_KUNIT bool is_str_literal(const char *text, const char *value)
 >
-> +config KUNIT_STRING_STREAM_TEST
-> +       tristate "KUnit test for string-stream" if !KUNIT_ALL_TESTS
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Enables the KUnit test for the string-stream (C++ stream style string
-> +         builder used in KUnit for building messages). For the string-stream
-> +         implementation, see lib/kunit/string-stream.c.
-> +
->  config KUNIT_EXAMPLE_TEST
->         tristate "Example test for KUnit" if !KUNIT_ALL_TESTS
->         default KUNIT_ALL_TESTS
-> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> index 900e6447c8e8..4793a3960f07 100644
-> --- a/lib/kunit/Makefile
-> +++ b/lib/kunit/Makefile
-> @@ -18,10 +18,10 @@ endif
->  obj-y +=                               hooks.o
+>         return strncmp(text + 1, value, len - 2) == 0;
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(is_str_literal);
+
+I'm a bit worried about having such a generic name exported, even
+conditionally and to a namespace. Maybe we could give this a
+'kunit_assert' prefix, or put it in a separate, more specific
+namespace?
+
+
+
+
+>  void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+>                                     const struct va_format *message,
+> @@ -232,6 +235,7 @@ void kunit_assert_hexdump(struct string_stream *stream,
+>                         string_stream_add(stream, " %02x ", buf1[i]);
+>         }
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(kunit_assert_hexdump);
 >
->  obj-$(CONFIG_KUNIT_TEST) +=            kunit-test.o
-> +obj-$(CONFIG_KUNIT_STRING_STREAM_TEST) += string-stream-test.o
->
->  # string-stream-test compiles built-in only.
->  ifeq ($(CONFIG_KUNIT_TEST),y)
-> -obj-$(CONFIG_KUNIT_TEST) +=            string-stream-test.o
->  obj-$(CONFIG_KUNIT_TEST) +=            assert_test.o
->  endif
->
-> diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-> index 7511442ea98f..d03cac934e04 100644
-> --- a/lib/kunit/string-stream-test.c
-> +++ b/lib/kunit/string-stream-test.c
-> @@ -534,3 +534,5 @@ static struct kunit_suite string_stream_test_suite = {
->         .init = string_stream_test_init,
->  };
->  kunit_test_suites(&string_stream_test_suite);
-> +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
-> +MODULE_LICENSE("GPL");
+>  void kunit_mem_assert_format(const struct kunit_assert *assert,
+>                              const struct va_format *message,
 > --
 > 2.34.1
 >
 
---000000000000fd8889061a5d6d05
+--00000000000058982f061a5d6e52
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -231,14 +227,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIL9UBCljNIvJ+EnhK/FUFH3aWWSu8owy3hArhxZiHOr9MBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDYwODA5MjAzOVowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIFZW3ZZqfOiqQvETl56Re8uP/Jgaqm3H2kZr3NxMcJlOMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDYwODA5MjA0NVowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBn/UmX
-YUT81mb4F+AtP2wSa3AF9D+w4CeEPzCckGcHLTW16FutofFrnv3DADjfrM6o/qGePHhFtK0RX6ad
-C0iqe8kRTL7vQpXwkTWn7UidoGYyCiH2lRnJe6k/QWmq8z1c21q0lBAsNUevZRCokq85W4R7F3cw
-d8ve8IDl//KLknvwGJNTT9uS/Is9NcyT5q6TIMlx7BIvf3B9IsxtQi3csInnXq41VCVYDyUj1SWN
-toMDBxRnejTeWSTwp6I/7RUE70/00omY1YZb/ggc230dgvJWfYCvBzl1uzVAUdRId9JQyb6iMR+2
-hIfvtbm5hFUe/qIjSsr4gBQTJsSoXCWz
---000000000000fd8889061a5d6d05--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAg+ui9
+EtrYptJ2hbQwJG8ktKZv+tIRQKgiOSZrl38Gk7kHjAEUptBjL2/+rmFUMwqoulolcX6hs4dyZOsJ
+RBOxUd5qvqeEo8tDX1HLAj3Y8cm0O3/SSeEC+UEQQqYDM9svvaQejEfhh2f8wZKcjzPA8Ec4iqeC
+gozYtfzAllvKZ+5pG+7GPPuSJJGgY7OSoJedvHT2sKaYxbwjOPLdrxC1qBx1lqYO8HnicqB5hRDF
+2jydK7SUMRF5BhdwzuTzC52v+/5eYFkCiRMN+07AEfDzZdfbGr08hYqOfcKeE/+nNiMTjLRO0QII
+9h4z92VZTViLCDWU2df7Du/Yyey2bP8Q
+--00000000000058982f061a5d6e52--
 
