@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-11475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 698F39010BB
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 11:02:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 166789010BF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 11:03:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B86CFB2294E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 09:02:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CEDC282D91
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 09:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF06017A918;
-	Sat,  8 Jun 2024 09:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C8C17B41C;
+	Sat,  8 Jun 2024 09:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mh9vEHf1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTUodsGo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF71217A902;
-	Sat,  8 Jun 2024 09:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF7A176FB8;
+	Sat,  8 Jun 2024 09:01:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717837293; cv=none; b=ft6wmTZg7zRwJa2vF5gokTs3L6/2iH4AumieXL9Xp8SA8tEOZTtqt962h/Rd8UUSC3Vc5RmwHIS6Af4CfqcKqO8yg5tIdHbMYcCEQHi84Ir2rinJqGcnkNCQmE4mKGy2jP/NG0PQ12xGp6Iq0bgg5LT5nSmcE7RVLeqPw7JY4SA=
+	t=1717837296; cv=none; b=aJunGQ2+hpa6jKPxH8DIaxhO9f1zt5JOTZyKFzCVnb0FFltlPoG1CJvSH/dx3PbhFNrfMde5AP8N8GeFHAYyD6AVJTSBEXamcJpkAWkfKjhiJYi5ZINDP56ROIzGTEjYyLCgmyeKrSPozsL0OvdUf6l7HHzfk4tY92q7hOKM+a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717837293; c=relaxed/simple;
-	bh=rsY5swL5ZI3DFuKCDu6J27a7EBDj2FlsZbpIR8sel3c=;
+	s=arc-20240116; t=1717837296; c=relaxed/simple;
+	bh=yG1pGkZtC9Anfz5EEv/yx6g2z75uDkKpVPn27LPVJiI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MJrEmP/eaVWaSHXJNQ2EEwv7oDGF9sHiJSL4UvMF0jQ3TCQq5OkAzufPprW/GWrj4hzvA+NPNXT2ou2okvlsfhL1jUqKKd4CMbW2cCZXlsxVDGg45CqN08cqiwJC3N9UPqmipevDRfLlAY2sk7Uk7JD8VAhMaSXG1yIQL3aknfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mh9vEHf1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04F1C4AF0C;
-	Sat,  8 Jun 2024 09:01:31 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QyFdGXmnH48G+5rStIe0MMPny0ZxdNDfeMmT1/4MoOkRqi6do3kEjBcQSnImNeJC83M13rK4b1HSs7xSbgtBeAxuuQxLfcBDP/c6DEoEcC8hAHt04kSAwr/yDsCKCyFZTHCSa35iFevhjfgcSmE+GLWR8IE75V5O6c0MDeAKu0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTUodsGo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2949C2BD11;
+	Sat,  8 Jun 2024 09:01:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717837293;
-	bh=rsY5swL5ZI3DFuKCDu6J27a7EBDj2FlsZbpIR8sel3c=;
+	s=k20201202; t=1717837295;
+	bh=yG1pGkZtC9Anfz5EEv/yx6g2z75uDkKpVPn27LPVJiI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Mh9vEHf13aGomaCDOUV9v8x/vfjekZxwi+z03Ulcb6YB65peCzf+d2kmzzZxIXUZG
-	 aRlotscRVi/r4dCceEGichw80/zAtpZen3WX1C5OWjm7D3vxXabrW9z2lssxGoEZXc
-	 T5lIsmhNVshYRw8ZiQ933IlTz5ZU9o0TP7GKqa7a6CgekmGBttlv+CWUskqUBUQP6B
-	 pily5FTDd28u2GO4SZk61mkyvZ8y5dpB7eKEKIPnw0WxXMFcQq4yOmmxi8ZyXFfroN
-	 eg4eDu+39D8qfsIXJrm/50pyXkBHhzFvfY92WKjZH5Kc8E9LVC6WjVt06mhZ458sTu
-	 LoS9tE0DWsqTw==
+	b=oTUodsGoZi8+kJ0TMURTzyRYjsRat4+kM7rE5qTYIwE8nVZHpPXWVGXphnpmS7EVm
+	 31ZvFTTn3kTkY1m8T86q3g/1UgRTmcQAlSd3/7nnULBIhVO9NR8SbmUggwdW9lzYPV
+	 mPffj5k90lLTzrKGhgbdznEvtZCgNfjbsPZIvB4OFrEColaVztXh91eAVaoZypbDNN
+	 p/rO8Gq52iph38riISvvz7bHsWySFH7nb1qsxsEQbIh+la3fbgbe3DSzeFuyBpYWEW
+	 FKODyO3mUKGULVjreW6zfNNO0iBtiDi+HX5iayN8eixd8rXogRvqwVrkrTlhbNExu2
+	 n+VuyCWkGq3MA==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Sat, 08 Jun 2024 11:01:17 +0200
-Subject: [PATCH HID v3 05/16] HID: samples: convert the 2 HID-BPF samples
- into struct_ops
+Date: Sat, 08 Jun 2024 11:01:18 +0200
+Subject: [PATCH HID v3 06/16] HID: bpf: add defines for HID-BPF SEC in
+ in-tree bpf fixes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240608-hid_bpf_struct_ops-v3-5-6ac6ade58329@kernel.org>
+Message-Id: <20240608-hid_bpf_struct_ops-v3-6-6ac6ade58329@kernel.org>
 References: <20240608-hid_bpf_struct_ops-v3-0-6ac6ade58329@kernel.org>
 In-Reply-To: <20240608-hid_bpf_struct_ops-v3-0-6ac6ade58329@kernel.org>
 To: Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
@@ -62,16 +62,16 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
  Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717837279; l=10438;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1717837279; l=8093;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=rsY5swL5ZI3DFuKCDu6J27a7EBDj2FlsZbpIR8sel3c=;
- b=5c0eSJb32M91HEWN+mAUmYRmF8+DSPoytm+2FpWPyiURx//cosyuE8uVlvsRw4Hlea0d7TcCX
- rxg/yAMJE3/BhqB+avqyuFbJK9OZyBSTSs1s1Fim6X0CDB3EY01O5WR
+ bh=yG1pGkZtC9Anfz5EEv/yx6g2z75uDkKpVPn27LPVJiI=;
+ b=y2ruVxmIfdZaADC4Dt0SFM02Fo3Ln8e4T1SbHzyVfn34BbP2CkJnPBFZD4iP/bnpQuNGVm41/
+ UdIoRi3f5MeAQa4IUZWj7BVcSyCPdkxnHTrtXqkbAhiC9L2HBy5YyTF
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-This is mostly mechanical: attach_prog is dropped, and
-the SEC are converted into struct_ops.
+We are going to switch over struct_ops, so instead of having to manually
+replace all fields one by one, let's have a common place to change it.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -79,349 +79,182 @@ Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
 no changes in v3
 
-no changes in v2 but the commit message.
+no changes in v2
 ---
- samples/hid/Makefile               |  5 ++--
- samples/hid/hid_bpf_attach.bpf.c   | 18 -------------
- samples/hid/hid_bpf_attach.h       | 14 ----------
- samples/hid/hid_mouse.bpf.c        | 26 +++++++++++++++----
- samples/hid/hid_mouse.c            | 39 ++++++++--------------------
- samples/hid/hid_surface_dial.bpf.c | 10 +++++--
- samples/hid/hid_surface_dial.c     | 53 +++++++++++---------------------------
- 7 files changed, 57 insertions(+), 108 deletions(-)
+ drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c     | 4 ++--
+ drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c       | 2 +-
+ drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c      | 4 ++--
+ drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c | 2 +-
+ drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c   | 2 +-
+ drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c             | 2 +-
+ drivers/hid/bpf/progs/XPPen__Artist24.bpf.c           | 4 ++--
+ drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c    | 6 +++---
+ drivers/hid/bpf/progs/hid_bpf.h                       | 3 +++
+ 9 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/samples/hid/Makefile b/samples/hid/Makefile
-index c128ccd49974..8ea59e9631a3 100644
---- a/samples/hid/Makefile
-+++ b/samples/hid/Makefile
-@@ -16,7 +16,6 @@ LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
- LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
- LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
- 
--EXTRA_HEADERS := hid_bpf_attach.h
- EXTRA_BPF_HEADERS := hid_bpf_helpers.h
- 
- hid_mouse-objs := hid_mouse.o
-@@ -207,8 +206,8 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
- LINKED_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
- clean-files += $(LINKED_SKELS)
- 
--hid_mouse.skel.h-deps := hid_mouse.bpf.o hid_bpf_attach.bpf.o
--hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o hid_bpf_attach.bpf.o
-+hid_mouse.skel.h-deps := hid_mouse.bpf.o
-+hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o
- 
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
- 
-diff --git a/samples/hid/hid_bpf_attach.bpf.c b/samples/hid/hid_bpf_attach.bpf.c
-deleted file mode 100644
-index d4dce4ea7c6e..000000000000
---- a/samples/hid/hid_bpf_attach.bpf.c
-+++ /dev/null
-@@ -1,18 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (c) 2022 Benjamin Tissoires
-- */
--
--#include "vmlinux.h"
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_tracing.h>
--#include "hid_bpf_attach.h"
--#include "hid_bpf_helpers.h"
--
--SEC("syscall")
--int attach_prog(struct attach_prog_args *ctx)
--{
--	ctx->retval = hid_bpf_attach_prog(ctx->hid,
--					  ctx->prog_fd,
--					  0);
--	return 0;
--}
-diff --git a/samples/hid/hid_bpf_attach.h b/samples/hid/hid_bpf_attach.h
-deleted file mode 100644
-index 35bb28b49264..000000000000
---- a/samples/hid/hid_bpf_attach.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/* Copyright (c) 2022 Benjamin Tissoires
-- */
--
--#ifndef __HID_BPF_ATTACH_H
--#define __HID_BPF_ATTACH_H
--
--struct attach_prog_args {
--	int prog_fd;
--	unsigned int hid;
--	int retval;
--};
--
--#endif /* __HID_BPF_ATTACH_H */
-diff --git a/samples/hid/hid_mouse.bpf.c b/samples/hid/hid_mouse.bpf.c
-index 7c8b453ccb16..bd901fa855c9 100644
---- a/samples/hid/hid_mouse.bpf.c
-+++ b/samples/hid/hid_mouse.bpf.c
-@@ -5,8 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include "hid_bpf_helpers.h"
- 
--SEC("fmod_ret/hid_bpf_device_event")
--int BPF_PROG(hid_y_event, struct hid_bpf_ctx *hctx)
-+static int hid_y_event(struct hid_bpf_ctx *hctx)
+diff --git a/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c b/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
+index dc26a7677d36..2c2c1637ade8 100644
+--- a/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
++++ b/drivers/hid/bpf/progs/FR-TEC__Raptor-Mach-2.bpf.c
+@@ -133,7 +133,7 @@ HID_BPF_CONFIG(
+  *   integer. We thus divide it by 30 to match what other joysticks are
+  *   doing
+  */
+-SEC("fmod_ret/hid_bpf_rdesc_fixup")
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc_raptor_mach_2, struct hid_bpf_ctx *hctx)
  {
- 	s16 y;
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-@@ -51,8 +50,7 @@ int BPF_PROG(hid_y_event, struct hid_bpf_ctx *hctx)
- 	return 0;
- }
- 
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, HID_MAX_DESCRIPTOR_SIZE /* size */);
+@@ -152,7 +152,7 @@ int BPF_PROG(hid_fix_rdesc_raptor_mach_2, struct hid_bpf_ctx *hctx)
+  * divide it by 30.
+  * Byte 34 is always null, so it is ignored.
+  */
 -SEC("fmod_ret/hid_bpf_device_event")
--int BPF_PROG(hid_x_event, struct hid_bpf_ctx *hctx)
-+static int hid_x_event(struct hid_bpf_ctx *hctx)
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(raptor_mach_2_fix_hat_switch, struct hid_bpf_ctx *hctx)
  {
- 	s16 x;
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-@@ -69,7 +67,19 @@ int BPF_PROG(hid_x_event, struct hid_bpf_ctx *hctx)
- 	return 0;
- }
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 64 /* size */);
+diff --git a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
+index 3d14bbb6f276..17fc55f6f02c 100644
+--- a/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
++++ b/drivers/hid/bpf/progs/HP__Elite-Presenter.bpf.c
+@@ -30,7 +30,7 @@ HID_BPF_CONFIG(
+  * pointer.
+  */
  
 -SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC("struct_ops/device_event")
-+int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx, enum hid_report_type type)
-+{
-+	int ret = hid_y_event(hctx);
-+
-+	if (ret)
-+		return ret;
-+
-+	return hid_x_event(hctx);
-+}
-+
-+
-+SEC("struct_ops/rdesc_fixup")
- int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
  {
  	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-@@ -109,4 +119,10 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
- 	return 0;
- }
+diff --git a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
+index ff759f2276f9..24b8a5aa05f3 100644
+--- a/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
++++ b/drivers/hid/bpf/progs/Huion__Kamvas-Pro-19.bpf.c
+@@ -191,7 +191,7 @@ static const __u8 fixed_rdesc[] = {
+ 	0xc0,                          // End Collection                      327
+ };
  
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops mouse_invert = {
-+	.rdesc_fixup = (void *)hid_rdesc_fixup,
-+	.device_event = (void *)hid_event,
-+};
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/samples/hid/hid_mouse.c b/samples/hid/hid_mouse.c
-index 018f1185f203..4b80d4e4c154 100644
---- a/samples/hid/hid_mouse.c
-+++ b/samples/hid/hid_mouse.c
-@@ -29,7 +29,6 @@
- #include <bpf/libbpf.h>
- 
- #include "hid_mouse.skel.h"
--#include "hid_bpf_attach.h"
- 
- static bool running = true;
- 
-@@ -76,18 +75,11 @@ static int get_hid_id(const char *path)
- int main(int argc, char **argv)
+-SEC("fmod_ret/hid_bpf_rdesc_fixup")
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc_huion_kamvas_pro_19, struct hid_bpf_ctx *hctx)
  {
- 	struct hid_mouse *skel;
--	struct bpf_program *prog;
-+	struct bpf_link *link;
- 	int err;
- 	const char *optstr = "";
- 	const char *sysfs_path;
--	int opt, hid_id, attach_fd;
--	struct attach_prog_args args = {
--		.retval = -1,
--	};
--	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
--			    .ctx_in = &args,
--			    .ctx_size_in = sizeof(args),
--	);
-+	int opt, hid_id;
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, HID_MAX_DESCRIPTOR_SIZE /* size */);
+@@ -215,7 +215,7 @@ int BPF_PROG(hid_fix_rdesc_huion_kamvas_pro_19, struct hid_bpf_ctx *hctx)
+  * - if there was this out-of-proximity event, we are entering
+  *   eraser mode, and we will until the next out-of-proximity.
+  */
+-SEC("fmod_ret/hid_bpf_device_event")
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(kamvas_pro_19_fix_3rd_button, struct hid_bpf_ctx *hctx)
+ {
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
+diff --git a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
+index 225cbefdbf0e..bee37872ee8c 100644
+--- a/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
++++ b/drivers/hid/bpf/progs/IOGEAR__Kaliber-MMOmentum.bpf.c
+@@ -21,7 +21,7 @@ HID_BPF_CONFIG(
+  * We just fix the report descriptor to enable those missing 7 buttons.
+  */
  
- 	while ((opt = getopt(argc, argv, optstr)) != -1) {
- 		switch (opt) {
-@@ -108,7 +100,7 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
+-SEC("fmod_ret/hid_bpf_rdesc_fixup")
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
+ {
+ 	const u8 offsets[] = {84, 112, 140};
+diff --git a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
+index c04abecab8ee..f9ad33f4a373 100644
+--- a/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
++++ b/drivers/hid/bpf/progs/Microsoft__XBox-Elite-2.bpf.c
+@@ -93,7 +93,7 @@ _Static_assert(sizeof(rdesc_assign_selection) == sizeof(fixed_rdesc_assign_selec
+ _Static_assert(sizeof(rdesc_assign_selection) + OFFSET_ASSIGN_SELECTION < ORIGINAL_RDESC_SIZE,
+ 	       "Rdesc at given offset is too big");
  
--	skel = hid_mouse__open_and_load();
-+	skel = hid_mouse__open();
- 	if (!skel) {
- 		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
- 		return -1;
-@@ -120,27 +112,18 @@ int main(int argc, char **argv)
- 		fprintf(stderr, "can not open HID device: %m\n");
- 		return 1;
- 	}
--	args.hid = hid_id;
-+	skel->struct_ops.mouse_invert->hid_id = hid_id;
- 
--	attach_fd = bpf_program__fd(skel->progs.attach_prog);
--	if (attach_fd < 0) {
--		fprintf(stderr, "can't locate attach prog: %m\n");
-+	err = hid_mouse__load(skel);
-+	if (err < 0) {
-+		fprintf(stderr, "can not load HID-BPF program: %m\n");
- 		return 1;
- 	}
- 
--	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
--		/* ignore syscalls */
--		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
--			continue;
--
--		args.retval = -1;
--		args.prog_fd = bpf_program__fd(prog);
--		err = bpf_prog_test_run_opts(attach_fd, &tattr);
--		if (err) {
--			fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
--				hid_id, err);
--			return 1;
--		}
-+	link = bpf_map__attach_struct_ops(skel->maps.mouse_invert);
-+	if (!link) {
-+		fprintf(stderr, "can not attach HID-BPF program: %m\n");
-+		return 1;
- 	}
- 
- 	signal(SIGINT, int_exit);
-diff --git a/samples/hid/hid_surface_dial.bpf.c b/samples/hid/hid_surface_dial.bpf.c
-index 1f80478c0918..d8d0fb07391f 100644
---- a/samples/hid/hid_surface_dial.bpf.c
-+++ b/samples/hid/hid_surface_dial.bpf.c
-@@ -10,7 +10,7 @@
- #define HID_UP_BUTTON		0x0009
- #define HID_GD_WHEEL		0x0038
+-SEC("fmod_ret/hid_bpf_rdesc_fixup")
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc, struct hid_bpf_ctx *hctx)
+ {
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
+diff --git a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
+index dc05aa48faa7..39d77c5e9172 100644
+--- a/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
++++ b/drivers/hid/bpf/progs/Wacom__ArtPen.bpf.c
+@@ -101,7 +101,7 @@ static inline __u8 *get_u8(__u8 *data, unsigned int offset)
+ 	return (__u8 *)get_bits(data, offset);
+ }
  
 -SEC("fmod_ret/hid_bpf_device_event")
-+SEC("struct_ops/device_event")
- int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx)
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(artpen_pressure_interpolate, struct hid_bpf_ctx *hctx)
  {
- 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-@@ -101,7 +101,7 @@ int set_haptic(struct haptic_syscall_args *args)
- }
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, PEN_REPORT_LEN /* size */);
+diff --git a/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
+index e1be6a12bb75..c938808bd589 100644
+--- a/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
++++ b/drivers/hid/bpf/progs/XPPen__Artist24.bpf.c
+@@ -91,7 +91,7 @@ static const __u8 fixed_rdesc[] = {
  
- /* Convert REL_DIAL into REL_WHEEL */
+ #define U16(index) (data[index] | (data[index + 1] << 8))
+ 
 -SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+SEC("struct_ops/rdesc_fixup")
- int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc_xppen_artist24, struct hid_bpf_ctx *hctx)
  {
  	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-@@ -130,5 +130,11 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
- 	return 0;
+@@ -152,7 +152,7 @@ static __u8 prev_state = 0;
+  *     E: TipSwitch                     InRange
+  *
+  */
+-SEC("fmod_ret/hid_bpf_device_event")
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(xppen_24_fix_eraser, struct hid_bpf_ctx *hctx)
+ {
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
+diff --git a/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
+index 65ef10036126..77ef8b95d52e 100644
+--- a/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
++++ b/drivers/hid/bpf/progs/XPPen__ArtistPro16Gen2.bpf.c
+@@ -82,7 +82,7 @@ static const __u8 fixed_rdesc[] = {
+ 	0xc0,                          // End Collection                      112
+ };
+ 
+-SEC("fmod_ret/hid_bpf_rdesc_fixup")
++SEC(HID_BPF_RDESC_FIXUP)
+ int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
+ {
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
+@@ -105,7 +105,7 @@ int BPF_PROG(hid_fix_rdesc_xppen_artistpro16gen2, struct hid_bpf_ctx *hctx)
+ 	return sizeof(fixed_rdesc);
  }
  
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops surface_dial = {
-+	.rdesc_fixup = (void *)hid_rdesc_fixup,
-+	.device_event = (void *)hid_event,
-+};
-+
- char _license[] SEC("license") = "GPL";
- u32 _version SEC("version") = 1;
-diff --git a/samples/hid/hid_surface_dial.c b/samples/hid/hid_surface_dial.c
-index 4bc97373a708..9dd363845a85 100644
---- a/samples/hid/hid_surface_dial.c
-+++ b/samples/hid/hid_surface_dial.c
-@@ -31,7 +31,6 @@
- #include <bpf/libbpf.h>
- 
- #include "hid_surface_dial.skel.h"
--#include "hid_bpf_attach.h"
- 
- static bool running = true;
- 
-@@ -86,34 +85,6 @@ static int get_hid_id(const char *path)
- 	return (int)strtol(str_id, NULL, 16);
+-SEC("fmod_ret/hid_bpf_device_event")
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(xppen_16_fix_eraser, struct hid_bpf_ctx *hctx)
+ {
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
+@@ -207,7 +207,7 @@ static void compensate_coordinates_by_tilt(__u8 *data, const __u8 idx,
+ 	data[idx+1] = coords >> 8;
  }
  
--static int attach_prog(struct hid_surface_dial *skel, struct bpf_program *prog, int hid_id)
--{
--	struct attach_prog_args args = {
--		.hid = hid_id,
--		.retval = -1,
--	};
--	int attach_fd, err;
--	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
--			    .ctx_in = &args,
--			    .ctx_size_in = sizeof(args),
--	);
--
--	attach_fd = bpf_program__fd(skel->progs.attach_prog);
--	if (attach_fd < 0) {
--		fprintf(stderr, "can't locate attach prog: %m\n");
--		return 1;
--	}
--
--	args.prog_fd = bpf_program__fd(prog);
--	err = bpf_prog_test_run_opts(attach_fd, &tattr);
--	if (err) {
--		fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
--			hid_id, err);
--		return 1;
--	}
--	return 0;
--}
--
- static int set_haptic(struct hid_surface_dial *skel, int hid_id)
+-SEC("fmod_ret/hid_bpf_device_event")
++SEC(HID_BPF_DEVICE_EVENT)
+ int BPF_PROG(xppen_16_fix_angle_offset, struct hid_bpf_ctx *hctx)
  {
- 	struct haptic_syscall_args args = {
-@@ -144,10 +115,10 @@ static int set_haptic(struct hid_surface_dial *skel, int hid_id)
- int main(int argc, char **argv)
- {
- 	struct hid_surface_dial *skel;
--	struct bpf_program *prog;
- 	const char *optstr = "r:";
-+	struct bpf_link *link;
- 	const char *sysfs_path;
--	int opt, hid_id, resolution = 72;
-+	int err, opt, hid_id, resolution = 72;
+ 	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 10 /* size */);
+diff --git a/drivers/hid/bpf/progs/hid_bpf.h b/drivers/hid/bpf/progs/hid_bpf.h
+index 7ee371cac2e1..1970faf84310 100644
+--- a/drivers/hid/bpf/progs/hid_bpf.h
++++ b/drivers/hid/bpf/progs/hid_bpf.h
+@@ -5,6 +5,9 @@
+ #ifndef ____HID_BPF__H
+ #define ____HID_BPF__H
  
- 	while ((opt = getopt(argc, argv, optstr)) != -1) {
- 		switch (opt) {
-@@ -189,7 +160,7 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
- 
--	skel = hid_surface_dial__open_and_load();
-+	skel = hid_surface_dial__open();
- 	if (!skel) {
- 		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
- 		return -1;
-@@ -201,15 +172,21 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
- 
-+	skel->struct_ops.surface_dial->hid_id = hid_id;
++#define HID_BPF_DEVICE_EVENT "fmod_ret/hid_bpf_device_event"
++#define HID_BPF_RDESC_FIXUP  "fmod_ret/hid_bpf_rdesc_fixup"
 +
-+	err = hid_surface_dial__load(skel);
-+	if (err < 0) {
-+		fprintf(stderr, "can not load HID-BPF program: %m\n");
-+		return 1;
-+	}
-+
- 	skel->data->resolution = resolution;
- 	skel->data->physical = (int)(resolution / 72);
- 
--	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
--		/* ignore syscalls */
--		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
--			continue;
--
--		attach_prog(skel, prog, hid_id);
-+	link = bpf_map__attach_struct_ops(skel->maps.surface_dial);
-+	if (!link) {
-+		fprintf(stderr, "can not attach HID-BPF program: %m\n");
-+		return 1;
- 	}
- 
- 	signal(SIGINT, int_exit);
+ struct hid_bpf_probe_args {
+ 	unsigned int hid;
+ 	unsigned int rdesc_size;
 
 -- 
 2.44.0
