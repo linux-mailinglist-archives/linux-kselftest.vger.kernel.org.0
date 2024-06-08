@@ -1,96 +1,97 @@
-Return-Path: <linux-kselftest+bounces-11496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10CBC901388
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 23:17:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B8890138B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 23:17:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 243221C20C73
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 21:17:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C69AD1C20A65
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 21:17:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6994446421;
-	Sat,  8 Jun 2024 21:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8F047A73;
+	Sat,  8 Jun 2024 21:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="YymvjcuH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Kodsly0W"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Llrm7/1a";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Jr6BhXAq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from wflow3-smtp.messagingengine.com (wflow3-smtp.messagingengine.com [64.147.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79FB45977;
-	Sat,  8 Jun 2024 21:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CB14776F;
+	Sat,  8 Jun 2024 21:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717881395; cv=none; b=P4wsD7D+/9mdmr5LAbiz7Pk3PuttPqftxNI/eoAVBZZ3BgpsNBl5QVjt9HfStY+J3eCzqu8K0RXHIeqAsoECgGWrG6/8bEUHLPShI8VJs+Duj+1oxpjMerS4beFpfhxdiaV/mSgBxS06/ClYClXWVYkJBfgJBSouen+9LoJCsT8=
+	t=1717881399; cv=none; b=hHFg5mi25//qKnVjyCnO6l0RCaqx9LsosZTK7zTo3LcDs23W80oHQEH4YIb1LepjEVR+qgR08NNVUYYZzYNWz/D3Sg/utPUQOfiQj/LTM6WuS0g+OFWyVz8ogFGU0l6Kn0SG3MEEJ/DdYeEQlHFkcYZHUwO+Hhk5oqN0vPA6L7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717881395; c=relaxed/simple;
-	bh=C20nHI0ZVkHtBEeLzwSZvfHbTdqmLiDwww6U/jfCpnQ=;
+	s=arc-20240116; t=1717881399; c=relaxed/simple;
+	bh=fBPXvgQBNpmEAIneidG+g4NUcTeJDU/Ff0Ik5m1ytq8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cH/yDCw52vVlZiAWlDwIiCzGcEhDYOx+sr6m7VX2gxlvlA/vN2wczMPmf119/hnOpwLJwIvJdylcEv3uCT2L2YK52eVdg1ADwDEzkdaE8bzVpDFASEjtsCM3rRIcv8LxnhCuhySxhjOay06TR12sJ8Vf48QN85KZRs9YxpeeTYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=YymvjcuH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Kodsly0W; arc=none smtp.client-ip=64.147.123.138
+	 MIME-Version; b=inCiYdCQKVA+l8q7UY0gO/VmtGlbbwlrkPKQ1Cg3EPIqtUnMZ42g/0x+YFCqt6yqrUwgh/yp/Cq1JSPSxu+EwHi0DmVi52ycL75cMwX2GvMHV5M9M9gKwJhUaEGPSgYkymObx+RVON52sYU8MOdvmHPVkBG44gkvDHlcSdOVuAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=Llrm7/1a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Jr6BhXAq; arc=none smtp.client-ip=64.147.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailflow.west.internal (Postfix) with ESMTP id F3DD62CC00FA;
-	Sat,  8 Jun 2024 17:16:31 -0400 (EDT)
+	by mailflow.west.internal (Postfix) with ESMTP id 9BC402CC00FB;
+	Sat,  8 Jun 2024 17:16:35 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Sat, 08 Jun 2024 17:16:33 -0400
+  by compute7.internal (MEProxy); Sat, 08 Jun 2024 17:16:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1717881391; x=
-	1717888591; bh=CiQLh9M3LuA21Zq/dhBIFvJTJ6E/6gJFz8kLjmANMqQ=; b=Y
-	ymvjcuHhJ7/70nGjwz27r9wY2LRsObxGnEGm/bz5FGPpsAx0HmVQBxck1CM+6XjU
-	W6QOhwWxRUH5VPPoNfGt6GTBe+uoA2tOSm/z/zMbbADyAeUWFzUN6ixA0JbQPG13
-	Jr7Dba7QMzVRaA9/PnpdG5SUc3/4RqVjW1j181NxhfJFtQ2hxJ3wZVXUpzduaNb4
-	4eYJ7OA2A3un2I/SRjQSU0y+i1Z9tFW4zTBmzI6nYBtRm2bx4cBU0nUpqUPhMtZw
-	VSA9fRCOaaQo79FOyOCySJtbgtq4/FhrqR4WflLO613bwdDVjX2YAWmWpj0RVEpd
-	G2O9JFbVaDoSFAkkQBVsg==
+	:reply-to:subject:subject:to:to; s=fm3; t=1717881395; x=
+	1717888595; bh=ezeG0+F5tOubWbkL94aTK4e46SIjo+JWMalcSljhHdQ=; b=L
+	lrm7/1aCIWsUC97UpM+oMLf1BIAE1mEUkwtS/pIwYOSo/f1lhDE5S1kedyDUh/ur
+	Q8EMU3CogVenLrucqrwUDDojNEmYdOfZsXdVuY8JAReBeLGcdhe+pIH6v/I3A3qm
+	L2V/FzEfiq7Fre1PTCIM8NiN3mp6xFCBGbWcbSKIL55k5pwknXenrD/Gux0L0IIS
+	a4CwT8lW4O4w6+PpVAxoeiE/XbWE7O0PzMQmVwzpwYJqjC2XByFCfQ1IOOzu5jYL
+	jaqnXVoUI5mtdbmaWMLVhEfoZn2LJwqoGjyoey8aVwoxSBeXJT2SmT22+sAxfx0K
+	HNdx1QxY630V8QlKwAVEQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717881391; x=
-	1717888591; bh=CiQLh9M3LuA21Zq/dhBIFvJTJ6E/6gJFz8kLjmANMqQ=; b=K
-	odsly0WUUgd3Yr0dJMj0oz5mq/aKLsDIShtDkW2pXGe+Dd9Wt5RJHc2IugYuYwJs
-	gMpVpzlDHeMzzsaiUTQ6zXtvOAqjic3MA+JHoISEih/qVVE/9G/c/idPjyj8D+x3
-	rLzICRlEflWNEJub5OehhMuwoefSL+8eqe7FMkqeFpaUudvOH3J5Xerna4CPDmRz
-	3s08p7qU+mAR8mhrefLahnp25yIMS4NhHsApBtBinpFnHAq1Lqz3JCZX1ABsfigI
-	o5vQHG3LrV6xUc82bQ+V9F7Cu54KB+sYAB1cLC5SiCytWmTYpP1GMP1Oj7IqYH7q
-	CQkmzxfGzYCW96Glb4ZUQ==
-X-ME-Sender: <xms:L8pkZvYUlHUb2PfLLGKTQ_SRH2ovPLYXmSRc4VLZVriKSu8htYsDLQ>
-    <xme:L8pkZuYMoAkTLNSHw91fyTDg95WGQiQ1e0TYjHcObWUTH0jg7u7jVYOlodoIV-bXf
-    Gj4X15sPCJ5yRXHpQ>
-X-ME-Received: <xmr:L8pkZh96JDTKoGF6la5ThWYj4EoXA6OX98HoHjuxqi_7KF58uJUEuH3xlEnx17xOsNMfj1qS7pUkjVV-ulEiu3DwyLfEMKfJ-ElekRN2>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717881395; x=
+	1717888595; bh=ezeG0+F5tOubWbkL94aTK4e46SIjo+JWMalcSljhHdQ=; b=J
+	r6BhXAqvAWDmZU4rxKVLUk6Ufd8KuVhtZ5JKjxQKkxDY59qabjlFy+kSKANVx5Mg
+	nvJOSzINSJKWyNhURXDfH1w+RNPuZlWU++PRKU1nA2swbNCEnd90i8viUoPMRTSG
+	RoXY82feyMSDArrrhFYBZYzyIsxQIyS09yTom0tLnR+sUfocDvEejEAp52zNIKQj
+	HUVaZpsOvL3QEhvvwLfOBmaKfQmKWjg8YWGKUWdKvpXo8tX1CxGYdEPnGZweLrUL
+	WZ9TF7AkDY4nropAfZJLETtbQGRen/3jd4eGvfPrGx0nPyo5G7Rs8IqYDIS/EiLr
+	O3KSf1rVr9DcBqk27+W8w==
+X-ME-Sender: <xms:M8pkZmnJZTDrqYmScBZVfb-4JQijRwBIl2sHMnnBZyMiLnr92sYo_g>
+    <xme:M8pkZt0zDRFFX9NdxlPcUB6Zd6tq0GirNl2UYfd-FQiCRzuahvz957L6TDbB-SJVt
+    hAgzbIoNS5Nmf1QKA>
+X-ME-Received: <xmr:M8pkZkr7U4ygKBC28HLnrPDkL1Dw55btspeKtcl3KT-AyRyy-GHPubng9xLVOPv9nPJvOTC71yHoPyq-aYOvFH0ktkamCrPgffLToX4->
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedtgedgleegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:L8pkZlpFt7RJcHlwxPKzdGv-WbPo3v3DuwqFcd0e0jKlET7HF9pFhg>
-    <xmx:L8pkZqonk9GL2joQpFWwRSJ6CvsWKfueUeg22UIT0WkFWDmbaMWkyg>
-    <xmx:L8pkZrQ76e5ri7dF6NgQ4mqf8EgMD_9TCNHrIZI0EBXEKwjC2MF4jA>
-    <xmx:L8pkZiq1f9mbftEroM9HXh_6hXdaT8-f9fp04qlI99Kl3ta9jRTS2g>
-    <xmx:L8pkZlfvK66XncROinGRdujIbJmbMnnKLqsj29obgikaaez6ZEEsF1mN>
+    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:M8pkZqnmoUzyKtP-TjX3rdIFvRyAGMsroQhQANkwUpFRU01WWfRXgA>
+    <xmx:M8pkZk3QOoTXo1-Tro96mK6P8Oc-CHg5QRqlbknRubAJNNulvhlWcg>
+    <xmx:M8pkZht7EnIzTLlNkq5_CbbAKtLSdvDfFFPDpYPc5urLFcFzYIHNcg>
+    <xmx:M8pkZgU--oVnnA33X7IouUuWfq7vPRHiJv2uQnWI9nnU60XuWhYZkQ>
+    <xmx:M8pkZl70gGu5ekA00_lKkeeo49eNDhH82G1N8ZK_0uRkRorUciNL2BJc>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Jun 2024 17:16:30 -0400 (EDT)
+ 8 Jun 2024 17:16:33 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
 To: shuah@kernel.org,
-	daniel@iogearbox.net,
+	ast@kernel.org,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
-	ast@kernel.org,
+	daniel@iogearbox.net,
 	olsajiri@gmail.com,
 	quentin@isovalent.com,
 	alan.maguire@oracle.com,
 	acme@kernel.org
-Cc: martin.lau@linux.dev,
+Cc: mykolal@fb.com,
+	martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	john.fastabend@gmail.com,
@@ -98,14 +99,13 @@ Cc: martin.lau@linux.dev,
 	sdf@google.com,
 	haoluo@google.com,
 	jolsa@kernel.org,
-	mykolal@fb.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 03/12] bpf: selftests: Fix fentry test kfunc prototypes
-Date: Sat,  8 Jun 2024 15:15:59 -0600
-Message-ID: <1f493cb7a7e5349f99e2badf0880b75dd6681898.1717881178.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v4 04/12] bpf: selftests: Fix bpf_cpumask_first_zero() kfunc prototype
+Date: Sat,  8 Jun 2024 15:16:00 -0600
+Message-ID: <ca7b772eed1684909e4131599fc91a6f0ff3e9ab.1717881178.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1717881178.git.dxu@dxuuu.xyz>
 References: <cover.1717881178.git.dxu@dxuuu.xyz>
@@ -117,42 +117,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The prototypes in progs/get_func_ip_test.c were not in line with how the
-actual kfuncs are defined in net/bpf/test_run.c. This causes compilation
+The prototype in progs/nested_trust_common.h is not in line with how the
+actual kfuncs are defined in kernel/bpf/cpumask.c. This causes compilation
 errors when kfunc prototypes are generated from BTF.
 
 Fix by aligning with actual kfunc definitions.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- .../testing/selftests/bpf/progs/get_func_ip_test.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/progs/nested_trust_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index 8956eb78a226..a89596f7585d 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -5,13 +5,13 @@
+diff --git a/tools/testing/selftests/bpf/progs/nested_trust_common.h b/tools/testing/selftests/bpf/progs/nested_trust_common.h
+index 83d33931136e..1784b496be2e 100644
+--- a/tools/testing/selftests/bpf/progs/nested_trust_common.h
++++ b/tools/testing/selftests/bpf/progs/nested_trust_common.h
+@@ -7,6 +7,6 @@
+ #include <stdbool.h>
  
- char _license[] SEC("license") = "GPL";
+ bool bpf_cpumask_test_cpu(unsigned int cpu, const struct cpumask *cpumask) __ksym;
+-bool bpf_cpumask_first_zero(const struct cpumask *cpumask) __ksym;
++__u32 bpf_cpumask_first_zero(const struct cpumask *cpumask) __ksym;
  
--extern const void bpf_fentry_test1 __ksym;
--extern const void bpf_fentry_test2 __ksym;
--extern const void bpf_fentry_test3 __ksym;
--extern const void bpf_fentry_test4 __ksym;
--extern const void bpf_modify_return_test __ksym;
--extern const void bpf_fentry_test6 __ksym;
--extern const void bpf_fentry_test7 __ksym;
-+extern int bpf_fentry_test1(int a) __ksym;
-+extern int bpf_fentry_test2(int a, __u64 b) __ksym;
-+extern int bpf_fentry_test3(char a, int b, __u64 c) __ksym;
-+extern int bpf_fentry_test4(void *a, char b, int c, __u64 d) __ksym;
-+extern int bpf_modify_return_test(int a, int *b) __ksym;
-+extern int bpf_fentry_test6(__u64 a, void *b, short c, int d, void *e, __u64 f) __ksym;
-+extern int bpf_fentry_test7(struct bpf_fentry_test_t *arg) __ksym;
- 
- extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
- 
+ #endif /* _NESTED_TRUST_COMMON_H */
 -- 
 2.44.0
 
