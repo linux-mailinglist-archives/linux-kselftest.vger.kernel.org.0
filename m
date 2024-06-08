@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-11460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E3A900F31
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 04:10:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2220A900F33
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 04:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5057C28346C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 02:10:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FE0F1F22115
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2024 02:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03991FC18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55930125D5;
 	Sat,  8 Jun 2024 02:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="K4ofHFid"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jOy7tgMz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623A4CA4E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE4CD520;
 	Sat,  8 Jun 2024 02:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.42
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.73
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717812635; cv=fail; b=iJR38d5fMBNnRmEEN/nVpxx8/EN7mwf4AXAj6VNXNPkwcvT5Pf0yuMPqbCuawUoG6lxgNfJf0BO+9k6TcL64N8+ONUawresROBUUCgHt8TFTMTAZ1EOZOEBAaMBqfx4CuM0r1MAIgFwfjRBUcL6G3FBwhpcerzrQTeV3fhLXZiY=
+	t=1717812636; cv=fail; b=NbmVgrrMU5C8KGZTu5Z94TDeQSSlbihKjkFNUDLrnJJkKc2HAC69E1JJPdctZb7zo8KUYxzso60FtSxonDig/1XzSjIYi550FypvVJy4byzpL7Ov+TiKVGBQcwiVs4qHup88IM2kYPDb1Ya+BIeiEviiWFCHZrzmvsoSW3Yhbf4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717812635; c=relaxed/simple;
-	bh=zzqEeSbHMdKVIHB/G4eL6lLIpGPR2PpOMMdSWwUgClA=;
+	s=arc-20240116; t=1717812636; c=relaxed/simple;
+	bh=BxGNrOHe2dfbHDfllX9TKbHgDuwBjx63EqJ45VYzzSA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CfykS7j1gkZhaz7jE7zQnPSiidqlCNaWhtk5wZf65iimgENrJhbGWmzbIp/0D9lwPSZAX8Wo/nFD5flEVS91o1pW3UVu2KAAVk3ZI1lmsLOmy6ZJR6E6fsxA8ejlrvkpv4pmObmrwiRAUTexpe09FIkcOItnWhbf32ngZoPcbBk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=K4ofHFid; arc=fail smtp.client-ip=40.107.243.42
+	 Content-Type:MIME-Version; b=seC5TcTyeCrSUbw+MGf9FlNY8toBCGQN6tmhqfCfSnun2k58nE29opbqesqcvAbMPkEJWE0SQWEb/EEtB+B6Ge3GcKzPuf/0yeSUttTOuoLdTyZ1Qlm9BS3kJnf9SfxQ4/Kkrshg5cnRD4HzWNq7LM/8+TyUrq2rnmqled9K+jg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jOy7tgMz; arc=fail smtp.client-ip=40.107.243.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K7MM/04yEVKR/HAbvqcqqlpZlevuLlfmTGPTJ5QBBJmK20hJV3t2c3ULJzYlYOt5PzqwgTyN1hkDgMzDJuMh4dA3+lBYTCtrC9FYf4pwEUbyLJD7N5Qk7pLgUp5RvgeiBPVdjX8YaSAFepx26CJuvil9SyNcuP1bO/CET3WB3DsVBTDZFy+NfNFvOl4SrsjZKAjSc/y624ou+nhCVWSjR6nM4tqmoDh1QnLfRLlJpWKWtLP767cldfCpLFayU1MfyNCWz1WPDdD1T+gPBvL3jwGxYyMaCk+tWVNzytNO8GmaPlp38FR4QsP4w3KoJinqtikpVDK1OgsWoW3thC5kfw==
+ b=FEB86y5js6X/KNB8PRbF8oVA+3d455xhaL5mikuk5Yu8mYXzN9hZZAUoj3yez7JFKKcBkFKTJX25CNu9YT3Xz1eMxAQ712dT3kagQOEWAvx+2ERkPuxxpvxlm1rNraCJJc1OzDI5vW82t7hn+ybclRcllVEKjJglPMqeJdHJps9o+d9SyXcPqQ1RbzH92SPlNV+9djKBqsxBfw1GTdqg0m1iTSbpDfZigBptTlXl4qRrhFH72XHb4WbuRCAIHxDBJAVC9O+qK/071Zuiaz6J4KBacJSlkp2DXMhktgki6rv1VaViVziyqiLn9XuBcWeap2Xac1CsZn8SwZP/ZzTfuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pZDWmta/WEXdEfNKbz6L8CJQ23neTi3jcvsGNZDTPnA=;
- b=hA8Dl39Fo5QT1cUiM/WA9grnSE9qDHHq9L+naDEepJTFp+99AHOMVSPV/LaJI2pV/HedHUntU+rpaONqEkcwO8H9jGvMeB6O8O6BcKr/P+5KAZS1L0zETczYMh1WK86GROXp1aFsPCFL52aVBmKqK8xFyw6ttCvYirSp+CcljuvRx3yvUWn8LtxcJ7AQ3OaVuLOHr3i0ENNIzE5x3p9usP5oZko3L8eMIwLTDxupDtTg9vSpb/qytR9/8ldR8Q4F9l6L1j1Q2XSJGcVgW4UBY9JNovp9BYtvnl2rJVHpFve0F6Eok3iIskbORDCFbDHkMGFaSGNix0Gvzg9nOTAPXA==
+ bh=eHcL2+kvCrCQkV4frQnNbum43yoJZFURF80YKG6CdtY=;
+ b=lCNtwSYYThlUAKlOJNWDuWhUYQREIYcbcoRTfK9LMEAJ8wC1Z/6dnCXUP0X/UPvt1K8hMb6C7XWDTmqUYUQ7y8P4XWUQ/Q3lC9RcPQoRFLbYK3qDDoaM8+Panf5elsTebX0/LkUQ0E1PQSNtltlgZig2geVHrKSaKqilrHLpoUlvkisIIhQGCc+3xLw/os4aNk2VVMjcXPb+eU/KR68GGxcSJL4mUD1Vv4+xCK3Yon9PRqb6SijKBuU3kE2LsKG7xFHaedDKZtYoHw//kAIEjRn9UdAUtZvzvEQfyaN5SpB2w1bx6AszRfawbtey4ExiHkIGANlk1MCu8/1nJZouww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pZDWmta/WEXdEfNKbz6L8CJQ23neTi3jcvsGNZDTPnA=;
- b=K4ofHFid38R13vXO8Lod44S1u1R3iPrv0KvAddkbmzB80JjlekbAUqgORHFAx+44KjIJdE3TWQ2DeXCpVQbbJzs8zstm+NKFa/6Zx6xhjc78HOiboQaQG27Wmvrg4aJheUk4SZqh8Oer/z/nEwD2i0IAdoVRgfiFVmZ3PswzXgHtJYC9MnJuY8GpMWsXHSjEel/VLM0PcVAyQv6ddUnUfMIq/mTtP9i4RO5JSlXw7olidIOfU8rnsUY8ajZZm6KNJWBxmvjGJSRPv1J1Z2j43Rm8fTVb8x0Rx/0A+bazn7umgb4xIA+01qO8S8bENzZX903wjH605xglCacj6Nng9g==
+ bh=eHcL2+kvCrCQkV4frQnNbum43yoJZFURF80YKG6CdtY=;
+ b=jOy7tgMz4BgwvRfHPZm55TF4LrpIsOpwHRI0Y7wTv1UAUZjj/AqdVkQSkuGLFoxqSrFSnA4w1ZMviUbddoszt9c6CzKIVOc/3BUJlt7HASTpBuvCeH9mZSRXIZNMnvwLSQlaJfFyMcUCBX19RooOSD0sroNCfIiOD7B1ji+MjWpfb9JFC7bUwkRFvcMCjhB/aH59ZLMVZDdsj/qLpnvR4CgG3Dn1IeLEKeEBGQuiWBFbJuvmkr2uOJrp0Yh46J0jS5yumlCFyOSnnLcBkRkyRqtfo/3UGEJtz0TVGm3guUcdVrPQa1ZkKurUtUSvDSH5BH/8xCs9AjEBeZb3+HJqmw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
@@ -75,17 +75,17 @@ Cc: Andrei Vagin <avagin@google.com>,
 	linux-kselftest@vger.kernel.org,
 	LKML <linux-kernel@vger.kernel.org>,
 	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 3/5] mm/selftests: kvm, mdwe fixes to avoid requiring "make headers"
-Date: Fri,  7 Jun 2024 19:10:21 -0700
-Message-ID: <20240608021023.176027-4-jhubbard@nvidia.com>
+Subject: [PATCH 4/5] selftests/mm: mseal, self_elf: factor out test macros and other duplicated items
+Date: Fri,  7 Jun 2024 19:10:22 -0700
+Message-ID: <20240608021023.176027-5-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240608021023.176027-1-jhubbard@nvidia.com>
 References: <20240608021023.176027-1-jhubbard@nvidia.com>
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BY5PR16CA0011.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::24) To BY5PR12MB4130.namprd12.prod.outlook.com
+X-ClientProxiedBy: SJ0PR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::27) To BY5PR12MB4130.namprd12.prod.outlook.com
  (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -95,130 +95,247 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|BY5PR12MB4196:EE_
-X-MS-Office365-Filtering-Correlation-Id: b60665d7-8178-418c-bd07-08dc876029ee
+X-MS-Office365-Filtering-Correlation-Id: 805c58f5-5edf-4422-9ef2-08dc87602a49
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|376005|366007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2qiHPAyWD8Hb6R5735J3OwTh83F1MuMFW/p67G1DfhsOtxiGYP74L05iHwht?=
- =?us-ascii?Q?9PNc7Amae3+XrG7hEiv7vU17WzoLj88HPXYAix77HKlybPmqjjSkoahdi986?=
- =?us-ascii?Q?lyfjhGKeMdKGtJ/bqbFdtgQJow4ZffU+qukhSR606C9Q3nQM5OQIKnr6aBfl?=
- =?us-ascii?Q?OpDjWkIBtTN8Fsd8d6WNJHEXDbU1ruEUiwriBYizIRKcwUbw6moLarsOgsZi?=
- =?us-ascii?Q?Lt4IR3JOEMba2U3yIjZvbRMbrnpqug6elmgE/lzzq3qeNZHXJMI/anUXg1M7?=
- =?us-ascii?Q?WJs3CjlGfH5FUpefi3W9fLtYHNUHoxkbPk6UQ4bTVK6s93LaP59Wj6pRFs2a?=
- =?us-ascii?Q?QGxNQULN0qpKMsq+gijfXYUjptiS8l+ylv26wyfrjbY/U99fV4s10ow4i6Vf?=
- =?us-ascii?Q?i3E5/ZeRH7di3oLeCF8ATpJ8GsRFyAKU5IjTh66i0J/Pe4/KhGAm3LP1cSM2?=
- =?us-ascii?Q?mFq3jk8/6uhPm0Q3ECVMvehp5Q94BcBRtH/i2w1NTyP+NQXAOzAdEnYW2tUv?=
- =?us-ascii?Q?neTr65v5FyrTwa28OF0jg6RIO6xf4po6sK8B4lO8yG7GgtNZo/8qNAiD2Di9?=
- =?us-ascii?Q?oz+EIlZL76jFosm4h4Gwqnz6UeNCoqqKhaCghj7lFuEo2E9+qvY9PJ63I2X0?=
- =?us-ascii?Q?LEKpb4fVv3aRTBbxPpHO5R+KiiA2vaaBq0m9gGKOz3i2HKxtmVabsWtGL1LG?=
- =?us-ascii?Q?zv+pwxSfV7tto0JPGU9SlHGA16vNAsf/UmQUltK4gLAsKynZr2xd6HinMXQW?=
- =?us-ascii?Q?N1ny85buF/kOIiOWSw+U3s43IkfDMMUL+NcOwglPOGXZjHAQHtGFDMBUeR6u?=
- =?us-ascii?Q?oDHPStcT3bBr/fWlmbiCHJwBEaEO+7l/k0eOlyY9KpsV0qgKTWGLadqUKfrl?=
- =?us-ascii?Q?MQo2nHTwXMsex6N30ilmyCUu5WVLzOXMheN6bgSAof8UNYN9RWdgb8mCFooX?=
- =?us-ascii?Q?RrgLEqMSZ5sK/pSY/BHXGtk1rMWJIbcyKppAlbaUEek/76woWxkkasFM7b5n?=
- =?us-ascii?Q?ptd20k17WD5dzSkSvB8ZmTDwMnACrUOKQJFqsZxmuZOWHhYBgEm4A8LSX7kQ?=
- =?us-ascii?Q?TBvKZ7XHqcS9s5T3PcBoVLbygL2IMFI4m+PqaApqhYyA/B61Na8dQM92ErvS?=
- =?us-ascii?Q?+K9FwBb7S3cAj33Qmy/DC6lC86WwjVpQ3PvHDmoxmsZUni4rv3GMPRpibZ3R?=
- =?us-ascii?Q?LfZttv+iaORjxLB9JyUI8Pfkp3sXGBaSjWuf1oH2YZcVu0MB4f99FbAeCWKZ?=
- =?us-ascii?Q?AgzD7hzwezCZrMsmvoIdWBhVqEPXxAY0QwHM1AZAd9s7MDurQB1RwunSECck?=
- =?us-ascii?Q?1vb2OsT9Uc2vbNdgz52ukT65?=
+	=?us-ascii?Q?tgxsl/RdDmMXDYpHZq+XhGs26jEg6Ah1IfVxKPYWua3vDt195qKKinDnVQ24?=
+ =?us-ascii?Q?jbNsewU29RNUmDuTjW1WMXu2cS7rt51k3g/cMo7CCbxlL57prLmUuWap7Y/a?=
+ =?us-ascii?Q?RJk3LqBb1aYZ/dUAUbpAZNY7qC3n57Wkja83UJEyq+fSJ4OBVvB0S0ASB7gz?=
+ =?us-ascii?Q?w86oQL2KEYcpWgwqpdE8wWpACiFIE3rzik0yb8ChIUpTB3EH+F2JplkGJZX0?=
+ =?us-ascii?Q?uovvPv7WBY3ziHtEBf3eTlED7m9y/0z0o/tSKno2bRi4thEPXatWeGB0phaf?=
+ =?us-ascii?Q?P7z6taX61QbSRCsHmJLTfLGLj0s01TvODLK5Q3cUTi8BDF28UdIKYJJLbXql?=
+ =?us-ascii?Q?CvuJTxKKiDBHR6qshhZIIvPsmxqNXiD0Aaf6EfjKAaYJ3WQnHHWCeh0uvR5x?=
+ =?us-ascii?Q?lF619SJp4ALUIz26SPK0KcllSifK1L87Uyy+VfazH29GerWBpOKq1pk+W6CS?=
+ =?us-ascii?Q?fV78F8xPtwxDC8M1rjYAY53vqBR0MmPi492FA2xN0vOj7sYesnvbVc8BaGhD?=
+ =?us-ascii?Q?xEFyY47wqGhClfiRyoV+c0IWP7pAXCNy1AHZylrT4KuPe6bI6n2LiLvQXuSQ?=
+ =?us-ascii?Q?NiVSTwG3x+qwzA93Qt+nLz99g5De5kko1Qag7MNaGlsWbUpc6Z7qrhad4I4x?=
+ =?us-ascii?Q?TU9Su5c+6f6frcdRdcJWwtQCQAbVxPROsR+hIp4OJm9O2mr3jf0kufq0k8tu?=
+ =?us-ascii?Q?SfxtsNPpoFuf0779aa/38aLaFeTyi9X69rDWDw0lxZFYro5pPhNYD4krmsZD?=
+ =?us-ascii?Q?ZKrWbvyMIGz2UIuBtWD8Rpzm647AZTrFq+UikUatEoI5O3yp7QeVO1kzlfmm?=
+ =?us-ascii?Q?Hhvfyu+kpBwB2SMtzDN1c6vghghdVRxvnWBWuZX/X+zZRqaC37MDGl9Itu4y?=
+ =?us-ascii?Q?Ahkq5T8XwTXmGbw9RbMB1r6cPwnZSBcM1ZvI5fLZDBtnIzoLWwn5Hwid6WwG?=
+ =?us-ascii?Q?hTeaIR/OCxF64PpiwJcDWSeWVGUQFqQpccHJZnBq2mMavgNhpZlxOSwrdqHT?=
+ =?us-ascii?Q?0k7/+fG4jtB5NO7YqWZEkQu3BzbGq0DZKE4oYLzRgibVY4ebxh6IMmsYTw3D?=
+ =?us-ascii?Q?5LYno+vniTnpqSog2xxIeRqlTrSMe8duchh/uuf/GVnmAgJSiVVMCllvlU9i?=
+ =?us-ascii?Q?CiGyMfulPNnaPQ9L10UVfLtiil6063QlBUl9GPylwM3ptB40/XIAjyE9Tu/m?=
+ =?us-ascii?Q?eu/rCvMk0GR8c+esYYDp02jAIhdEuHUwwOPDQS0t4r97/Y9O4aDDQ1H0/9Wn?=
+ =?us-ascii?Q?kEeBavMCb7ruXAOuJi9esU09+ie8ZjP0Y4vBKP8k+MCG78DpT1+LzILeqQE5?=
+ =?us-ascii?Q?lLw=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XbnsU/CARXPSNyLe7X0EEvKcL0h1QilFx+346PsYtjX3QqyBLVzFHzvf9qIL?=
- =?us-ascii?Q?SMDjKRi1PfA5kgoPgFX3KrMIOPDs66lUmOSznNZEH1MAcSTf41t+zJtirGhN?=
- =?us-ascii?Q?/ey3UEOIlHInhdX7+cflI4xBUziHYbZqB7bdinxtprUoof3dyB7ieHQ+xSGD?=
- =?us-ascii?Q?KFtTMB3Ni4QTtklNSB8fiuCHRFxuU3uJa8x/m+/NNE+jUxg8UM/oZggupedI?=
- =?us-ascii?Q?aU8F+9aknWhZ6EPP5XsYPrOPPkLOPYxFAhUeZDLVxRgTJE8wVjcjbYWr1MEA?=
- =?us-ascii?Q?UrEtWBEpJDF3yeGXm1VjWrPTmKSH5aLVFDiPPwnS1wYP7JVg9E/lVkcHUSQr?=
- =?us-ascii?Q?L867nwpNwOpTsagPlnm5uoBPWlwjmohSRdLDPKpnf+EJUTDbl4ykQy2iV24K?=
- =?us-ascii?Q?/eCvCG1toOVxGOmKYrVBamJQ0s4MpVnnpIwnScMFmOzL3H3sdff37oPWEto2?=
- =?us-ascii?Q?IR6pXmo0Z7Mpz/VJQdtBCG6XZXVxwaZflAjfGnqwTbVFZQjI0KpGbn24RMo4?=
- =?us-ascii?Q?cCDMoFi7/28ZgmnZ8F+IcLU7kPRZgv/A0voBMKPLit++uS16kUImWL6jRY02?=
- =?us-ascii?Q?xY3K7RT7DE6t3PoV9FMAD7eJuXi+moYmynXBQzF9zYqNQM1nox7e2KDjdMZm?=
- =?us-ascii?Q?Qjd10fBFhscEgipgGZf735GUgeWQKdf/Ym2oW95hhwSWR66jRW9yKe6DFLVk?=
- =?us-ascii?Q?uOPG9Ciro/Q6aRMZwbAU9IaT/bNXytzaqzupgtHfvb6aYlPJ1EIuDfxEWTae?=
- =?us-ascii?Q?9cqSx4WegScAmi5BS4Nw1ovfKwpxIodKAbubfv7vvaKp0y6AFZBm6mg7rovO?=
- =?us-ascii?Q?uNqSaZHxPq2dKUiv9GsBea+VNqnD6sWf8pDvxjZvXFRt2rNg8dBtenNU1TE8?=
- =?us-ascii?Q?3YbDxy8PR09odXAbzevT3eH3//uL0cgFWBzbHD3W5Mo/KNJq1pdoxbX4daPO?=
- =?us-ascii?Q?ElkwpdUWbvx6Q4zKsOlwT5NU02FnWfQmYvnM2cEfhZGgQf9+4vKwHmHSz1yZ?=
- =?us-ascii?Q?Sejwn0/SlBXwSAX12MXVxohYNNKpF1BFAIBEAzXUXugWVsOxE79FkDt5/H9x?=
- =?us-ascii?Q?MN+O+KF1euelwm8LUjmo86lzCcE7AvgIRZTiWYO+2y1qMN3tJ2hPfHFgFun3?=
- =?us-ascii?Q?Xm5TfSd7kDXLRZ8d1i6SNdrVw+SUaS08/zRhG2roZg69AT2QQLxV4gcBa2n7?=
- =?us-ascii?Q?6mini/BgfshvWdHPotEHEEPr5ujm/ig2aq81k529XXvCA3y93kpepEu5ulkz?=
- =?us-ascii?Q?tu7Pckz1YNX6n/UFBfRa5qW3T8118EhKDfnZeVaKB5xmNDmgJgN4pOuX1QF5?=
- =?us-ascii?Q?E3fI0c6fLEDIhKO6AM8JVd3UQePjs9DnSoOiZ2P39PnnsVKIRTdtY2+f3Afe?=
- =?us-ascii?Q?lURcg9f0m/aI10yi3e+LiQnd+wiCMhwWx/02ZQwbJb0pCZsAN2zGaPumY72w?=
- =?us-ascii?Q?WU0sELna3uZTD9Gll74cMSTcxc3ZLGCEuU3K+8IvDjuMDMCT71j2DpzxFeXp?=
- =?us-ascii?Q?lffPCQbPydcMJjAuJ8ozk0WaeRsDJSuzktq2Y7b0pRYQZtdEHSXZ3AKyhIuz?=
- =?us-ascii?Q?lZsdIZcaR1STGToIhHWwK8HTQbCOaZ1cqaavDm+8?=
+	=?us-ascii?Q?0zfjdmSUX4aQBkpu0bgfILpmm9OXrNuxzZrPBmQywLG9edQ90gCgSNhwMSPJ?=
+ =?us-ascii?Q?MXTp8Fte6r1JdrpWFxF4oHQOs5a6P6vmDU/f8Ttq2dxBRqJa/mZzPxCsbVpk?=
+ =?us-ascii?Q?n71udyldX+gKy5rpGF4XtpV5FLsiWvEex5SRGz4vGgm/EAxV4q7nvlle/qYM?=
+ =?us-ascii?Q?RQ8dIKNZy33wROudMDXqTWm6rAVStAC3aS9C+tFub99fDQP0aznGRCDCgZ+K?=
+ =?us-ascii?Q?eZnGTERlej9ncIs3P6F+qbMNCIDg20lF+yXmkEKqQkz5APS2Jy/wmehvLae7?=
+ =?us-ascii?Q?4wvThiT5UhOpLpz/w7Qs54iTsxlSWVZUNcrtmdos4slHewjFe+s1rCEV/y59?=
+ =?us-ascii?Q?zfvGsz1LOUHeezigARkCUu7GXYsytjTu3gqUtp56NXJoLQpaDB14MfE60HF0?=
+ =?us-ascii?Q?vb2kW+4fzubRssNt4L8NaA+/9KNa95Dn1soNbpSdHamzCnNEd2ZrjWp/sMI1?=
+ =?us-ascii?Q?PfE7ArWl93JnoLdwBssaQwLoMBML5RePMBm4waxLnb7dOyKWG7wdd2rrIsWz?=
+ =?us-ascii?Q?TcC2+EG7hb0lEwF/ziTWV9E4FqZEl7ldqwSoYUm1hOx4qk2srmkT8Fr/9PEa?=
+ =?us-ascii?Q?wSvDHkvpblqvaK9dza3Jv9sKhlWLbtMXUiS/mXd6ekolY84t6rWch2YyJFrX?=
+ =?us-ascii?Q?CDiM/KDO83osf0soBg3QyMVXAKFaCVb5hZzH3oIYPznpm+7Txx02zVFre+ik?=
+ =?us-ascii?Q?V2++x9c7Fq//oIqJ/lbhZUZkWwujFnKVDxOW5VSEhqD9uDTrpm6odO6g0AlF?=
+ =?us-ascii?Q?sqSjANdCdX07ASBppPez0vI3ThhVdZTy6/jCZCsU6QHAVishjqgBsxEMnDOK?=
+ =?us-ascii?Q?WkykbOhAKSA1hkQ3g0ackjY5xnX6FOeJsQqpomFBo9G/Ecs8/+mThwGl8YPs?=
+ =?us-ascii?Q?TfNWXUNDUAh0i05AeoEhjnYtECgBCL9UkWCQX7rFR9HBZWQ5iekuu5fwES1O?=
+ =?us-ascii?Q?e98sAuJDWd06bOBuXw+cWH9mkFMM6WXeSb8XNvEoSSLZePYIV0TzZmjeTXjN?=
+ =?us-ascii?Q?GSGUwtxUz96l+EVAi6A6nmrWhx2t7cvf0/QwpLRaosHADQyYqN7TIj+P4X4l?=
+ =?us-ascii?Q?ARGgkDAwESmz9LoK1HfSGIvRPSR4seli0CvkJJsbKpJqxmAr7xBC0kZ1YRBH?=
+ =?us-ascii?Q?WGaWvBysvg9UDSt2EfChIdM1f16Ggwlno21IejYlHHqBteCStbvzjIoEj8n0?=
+ =?us-ascii?Q?y6AZH5oIg5VoIYgr1C5uLNQ5q0zn1JZHxvtPflmoSPeYgwpzHY+zqmz4SY+R?=
+ =?us-ascii?Q?sj0f6tnfTa9i0tGrexZOnIuYxIEB84G38sSDW3Rp6x2o523zgt+6TObDeNjE?=
+ =?us-ascii?Q?Mczt4ZdEbgxkreYfOtnSPWLAMEEiZm+foHsTvO0W6kWWXwUE42P3vpwfk1uW?=
+ =?us-ascii?Q?irit5dkRKfmg7DTbcGq4DeK+iB0E3imO2M2Iq8t2X3sistbJjJ+HgquJHszv?=
+ =?us-ascii?Q?BY42eMmFGtSovEUw6KTIIuRqve4h4YfMJt+czUDWHsJyl7UhTesv2LPDktNg?=
+ =?us-ascii?Q?mS6yrV0vMV6IDmjK9mWrAvdKil8bfX6ukjnMjxTKS9cJIKN6EQ8IC6y0Goda?=
+ =?us-ascii?Q?zLgIkq5J76rCcGguBLiQb/2j8vpPvacL/eBCxZxi?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b60665d7-8178-418c-bd07-08dc876029ee
+X-MS-Exchange-CrossTenant-Network-Message-Id: 805c58f5-5edf-4422-9ef2-08dc87602a49
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2024 02:10:27.0586
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2024 02:10:27.6512
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XOUiUa4bDVCqtTg5O5IzGbsoQD+nCRFIP2SLtpJmzggqelYQ4FQro5aVd/nFKV+G5Fxr6SaFajig/7Kap19dgQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: sQhEcryErW2pRq7g53oNiIkqhs7DrMWZ3sWL6lcLzVdjWgbi2OQNFyELnB9cqlRxWXtvJBpjAR93AkoeGKVBHQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4196
 
-On Ubuntu 23.04, the kvm and mdwe selftests/mm build fails due to
-missing a few items that are found in prctl.h. Here is an excerpt of the
-build failures:
+Clean up and move some copy-pasted items into mseal_helpers.h.
 
-ksm_tests.c:252:13: error: use of undeclared identifier 'PR_SET_MEMORY_MERGE'
-...
-mdwe_test.c:26:18: error: use of undeclared identifier 'PR_SET_MDWE'
-mdwe_test.c:38:18: error: use of undeclared identifier 'PR_GET_MDWE'
+1. The test macros can be made safer and simpler, by observing that they
+are invariably called when about to return. This means that the macros
+do not need an intrusive label to goto; they can simply return.
 
-Fix these errors by adding the missing items to vm_util.h, and include
-vm_util.h from mdwe_test.c.
+2. PKEY* items. We cannot, unfortunately use pkey-helpers.h. The best we
+can do is to factor out these few items into mseal_helpers.h.
 
+3. These tests still need their own definition of u64, so also move that
+to the header file.
+
+Cc: Jeff Xu <jeffxu@chromium.org>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/mdwe_test.c |  1 +
- tools/testing/selftests/mm/vm_util.h   | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
+ tools/testing/selftests/mm/mseal_helpers.h | 40 ++++++++++++++++++
+ tools/testing/selftests/mm/mseal_test.c    | 48 ----------------------
+ tools/testing/selftests/mm/seal_elf.c      | 32 ---------------
+ 3 files changed, 40 insertions(+), 80 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-index 200bedcdc32e..cfe0b64d1567 100644
---- a/tools/testing/selftests/mm/mdwe_test.c
-+++ b/tools/testing/selftests/mm/mdwe_test.c
-@@ -15,6 +15,7 @@
- #include <unistd.h>
- 
- #include "../kselftest_harness.h"
-+#include "vm_util.h"
- 
- #ifndef __aarch64__
- # define PROT_BTI	0
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 9007c420d52c..99cbb7c0ea9d 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -61,3 +61,18 @@ unsigned long get_free_hugepages(void);
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+diff --git a/tools/testing/selftests/mm/mseal_helpers.h b/tools/testing/selftests/mm/mseal_helpers.h
+index b922d453a014..8c3bf77dcf19 100644
+--- a/tools/testing/selftests/mm/mseal_helpers.h
++++ b/tools/testing/selftests/mm/mseal_helpers.h
+@@ -3,3 +3,43 @@
+ #ifndef __NR_mseal
+ #define __NR_mseal 462
+ #endif
 +
-+#ifndef PR_SET_MEMORY_MERGE
-+#define PR_SET_MEMORY_MERGE		67
++#define FAIL_TEST_IF_FALSE(test_passed)					\
++	do {								\
++		if (!(test_passed)) {					\
++			ksft_test_result_fail("%s: line:%d\n",		\
++						__func__, __LINE__);	\
++			return;						\
++		}							\
++	} while (0)
++
++#define SKIP_TEST_IF_FALSE(test_passed)					\
++	do {								\
++		if (!(test_passed)) {					\
++			ksft_test_result_skip("%s: line:%d\n",		\
++						__func__, __LINE__);	\
++			return;						\
++		}							\
++	} while (0)
++
++#define TEST_END_CHECK() ksft_test_result_pass("%s\n", __func__)
++
++#ifndef PKEY_DISABLE_ACCESS
++#define PKEY_DISABLE_ACCESS	0x1
 +#endif
 +
-+#ifndef PR_GET_MEMORY_MERGE
-+#define PR_GET_MEMORY_MERGE		68
++#ifndef PKEY_DISABLE_WRITE
++#define PKEY_DISABLE_WRITE	0x2
 +#endif
 +
-+#ifndef PR_SET_MDWE
-+#define PR_SET_MDWE			65
-+#define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
-+#define PR_MDWE_NO_INHERIT		(1UL << 1)
-+#define PR_GET_MDWE			66
++#ifndef PKEY_BITS_PER_PKEY
++#define PKEY_BITS_PER_PKEY	2
 +#endif
++
++#ifndef PKEY_MASK
++#define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
++#endif
++
++#ifndef u64
++#define u64 unsigned long long
++#endif
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+index 20949617a036..a29935d82027 100644
+--- a/tools/testing/selftests/mm/mseal_test.c
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -19,54 +19,6 @@
+ #include <sys/stat.h>
+ #include "mseal_helpers.h"
+ 
+-/*
+- * need those definition for manually build using gcc.
+- * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 mseal_test.c -o mseal_test
+- */
+-#ifndef PKEY_DISABLE_ACCESS
+-# define PKEY_DISABLE_ACCESS    0x1
+-#endif
+-
+-#ifndef PKEY_DISABLE_WRITE
+-# define PKEY_DISABLE_WRITE     0x2
+-#endif
+-
+-#ifndef PKEY_BITS_PER_PKEY
+-#define PKEY_BITS_PER_PKEY      2
+-#endif
+-
+-#ifndef PKEY_MASK
+-#define PKEY_MASK       (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+-#endif
+-
+-#define FAIL_TEST_IF_FALSE(c) do {\
+-		if (!(c)) {\
+-			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
+-			goto test_end;\
+-		} \
+-	} \
+-	while (0)
+-
+-#define SKIP_TEST_IF_FALSE(c) do {\
+-		if (!(c)) {\
+-			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
+-			goto test_end;\
+-		} \
+-	} \
+-	while (0)
+-
+-
+-#define TEST_END_CHECK() {\
+-		ksft_test_result_pass("%s\n", __func__);\
+-		return;\
+-test_end:\
+-		return;\
+-}
+-
+-#ifndef u64
+-#define u64 unsigned long long
+-#endif
+-
+ static unsigned long get_vma_size(void *addr, int *prot)
+ {
+ 	FILE *maps;
+diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
+index 4053951a535c..0fd129259647 100644
+--- a/tools/testing/selftests/mm/seal_elf.c
++++ b/tools/testing/selftests/mm/seal_elf.c
+@@ -18,38 +18,6 @@
+ #include <sys/stat.h>
+ #include "mseal_helpers.h"
+ 
+-/*
+- * need those definition for manually build using gcc.
+- * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 seal_elf.c -o seal_elf
+- */
+-#define FAIL_TEST_IF_FALSE(c) do {\
+-		if (!(c)) {\
+-			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
+-			goto test_end;\
+-		} \
+-	} \
+-	while (0)
+-
+-#define SKIP_TEST_IF_FALSE(c) do {\
+-		if (!(c)) {\
+-			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
+-			goto test_end;\
+-		} \
+-	} \
+-	while (0)
+-
+-
+-#define TEST_END_CHECK() {\
+-		ksft_test_result_pass("%s\n", __func__);\
+-		return;\
+-test_end:\
+-		return;\
+-}
+-
+-#ifndef u64
+-#define u64 unsigned long long
+-#endif
+-
+ /*
+  * define sys_xyx to call syscall directly.
+  */
 -- 
 2.45.2
 
