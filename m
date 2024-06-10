@@ -1,175 +1,242 @@
-Return-Path: <linux-kselftest+bounces-11609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4BF902B6B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 00:15:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBECA902BE7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 00:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5F851C21FEC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 22:15:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 561751F22B51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 22:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD1315099E;
-	Mon, 10 Jun 2024 22:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB8D1509B9;
+	Mon, 10 Jun 2024 22:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="DV1B8yAB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V89JTE8L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E871509AC
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 22:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AA7145B09
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 22:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718057708; cv=none; b=OQ731h11lOeakjX1/dl+JcHMpwmAIBeArQbJnBuL8bRoYnrR9yeA8ep172S3MyjnDUKkgHARhZ9QwEk/2Xr5X1T5ZHCdEOm8aKSrhjB657Obp4ixLHlURFxuQPU6rPs+dGv7bLF1mz1CnS2pbeVefT4HXp07vc40vdisMrBeIvA=
+	t=1718060174; cv=none; b=K9SWDmo+o72h+7k8Sqtfx/Hx/zRvAhkQna3ayz1nj9s9+oetn3IFViQ4SRTE56a8MvQ8HIgF9NPGELY0uiktvex2uzWiS2yQYcLKbPdq+zcc7Q01wkwHyMbwH14GHS5eaCVKpSGdWcXc8EWlqNmIUTKt3Mr2MHMk6Cj23JmQ778=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718057708; c=relaxed/simple;
-	bh=z+wd9sAGfEDNr43zUFts3rXiT7ShOZVNnrA/+9o7y3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HK7nMcbau4K8/BqZMMv2K4vKmKIuYZncM5+yCprvrqvEDMrCvEeFF2d5q3wF+fJApYOiLrSvTkh7DfzYBZqTEvV/iHNVF17dIMhn+j702X7JDnSqFuPYbMvLdxHZz2cWelhUBzuyzPCquTc4P0ficI/v6/603hEQ7DRRCmNxDbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=DV1B8yAB; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7979198531fso66526785a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 15:15:05 -0700 (PDT)
+	s=arc-20240116; t=1718060174; c=relaxed/simple;
+	bh=BH1JboYIwXkKCG3pKMamJmIfStNwRUMSg5VBmTCr0WY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TFnU+HUBGfK6GlpKqvJYPVIDV8yvavz6ZzfYVaOFulvZ8KA2LUG2peSn7EYFJ/kFOPEU/NExP96t4s5VjscKq0vyjI9yn30MRbzCJLRrIj2j/KTyhhKgocUsBIGvXLi1Oip3RAQXBh9H0GqOMtRvB0moe6964uWPhUTRrG7mL4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V89JTE8L; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-35f1bc63981so1450745f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 15:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1718057705; x=1718662505; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=DV1B8yABKh8zcLUmgBZlPAFY0iTcPLR8YOx7LLCpFjMnV7rXNkaRxAYuvwk3C7PPOH
-         jZB05ZxEeozQlYPvsSKrdHH9XRsHaWMfRgA07nc67PzNRXJVUcgHaMaIwTLkn/0NBaej
-         Y+DkdkBwr03IdCK/sG3d/54s8BvaqhWBnl/jBki+4FuzFDk5MC/R7srQTW0MtfyTEffw
-         S/cazkXqzTrhTNLq77EhsuipjQDoKG+ONrmQBCCYr/YTuVzQ2K1qnCx+gVlmf+ptUByB
-         YHBold4jl4t0CXl3DWfVhfY0nGwvEmmEftLaTtJM4KO8eLCbZeisPO65pggAcwOIB0GE
-         jnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718057705; x=1718662505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1718060171; x=1718664971; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=iR9Ou8rSN4dFC7XwN4yVXxGlhW1q9fgLuXf3BeLczTAyy5tO4TrpC7vK/t8edClREF
-         6bCMq+mGPJvYoV3OnVJQNRE3iRsPPUag0o5/nzwa2Y4SwaXRMHlHWI3RaQx1SAaqpHq7
-         q3mAyqQsJsmgWt+9dIYbp7O2jFb/xERQ5UV9L1R0ZYDxoaaB9wVDYtmECPNCqBEWQ4B0
-         3tBro9AVSkOTbpwbTTVOSuroXKptPhfPyle8Rf1jyNG68CGozhwGRJ4XoTa0w2UP9VtB
-         x70pDGfnzNAaTtlzWo9GcMpyg9uM0dhO3D2xvt3wFCvpkNW3rh3cuDO90+LUlaCQOkWH
-         CXfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCW3P0KY7tdZKlG5ouZOyK0kBpsNORTvrVEMbDGH1VrOtXCEjwmQZveAl6ohMQFGt48Ix8xbpPazCs8AuDV2hHLSt9/qZKHOZcp1FMz8T4
-X-Gm-Message-State: AOJu0YyVbsTiKeIBtxlWwJxKDt2ZpVe+HHvyR0Z2VHGiNw2EOkq/tBnQ
-	qgxwrkxAKlmYpi0r4XSZpCF29gJ+ST8/Ly15W935xImbA7LeCNm4fGnA6NVIA18=
-X-Google-Smtp-Source: AGHT+IGNwK7dorh82QSLW5MV/WzZAixZNPt6ZilaFo6ceP30TQ1KYPRJL2ImTAjvrOrdYOBtAU+f5Q==
-X-Received: by 2002:a05:6214:4a06:b0:6b0:72ef:2877 with SMTP id 6a1803df08f44-6b072ef2a2bmr79573716d6.40.1718057705068;
-        Mon, 10 Jun 2024 15:15:05 -0700 (PDT)
-Received: from ziepe.ca ([128.77.69.89])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b076a42242sm20947266d6.59.2024.06.10.15.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 15:15:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1sGnI4-00FsKs-9Z;
-	Mon, 10 Jun 2024 19:15:00 -0300
-Date: Mon, 10 Jun 2024 19:15:00 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
-	Mina Almasry <almasrymina@google.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <20240610221500.GN791043@ziepe.ca>
-References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+        bh=quTZIKCYwo1oMqK9GegsysfKZz3tpeEKNEIgMJqv2pE=;
+        b=V89JTE8LT99wpQvASXfV6HTLqug3bj2Fw7SF9h5QJ/eyqteIdLiFgBgFiHgfhHISKl
+         Pj0l8mCp1vJBKG76XTIE31csIl5UV1kFD4ZE3FVQhRsKEJBPgtaB0qkTFB6i+uapyLJc
+         4mQA+s4ibjZpw8k9xmL7xXk8fJCegif7vQnsWr2LKYasSTAig5RAN8pZHLon1z2eiEZi
+         wQo0Gr5IqstVB6S7mJUAERJH5k7Mtz5kMg8xngPPNqn/5skdOwGpsz3v1RX8mUsMyT5k
+         wv0F9NbzvprU2a7a4O1wIfo+qGqfoFbCOh1dwKGEUc9x/qo4r0ehkCfs0apZUkNxFhff
+         IHHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718060171; x=1718664971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=quTZIKCYwo1oMqK9GegsysfKZz3tpeEKNEIgMJqv2pE=;
+        b=WMfm/ZiYLVXb07f1xHlBvfk0oIZfNn+ClidIHJOlow2NJRn0uk9HYjCvp1hlhwHA4y
+         MU5jID/7zk3Ci5X15Yc03J0XDN7cz1BK5KVut/OSpWAlepUrZOeKmEupi0Qu60D1tQgi
+         AOMufG4Byroi7ExXs7sIzHVXUE+4QWj86Rzx45qKJF12MK41/Riw9qq7+z+o0loR5nFl
+         IFNQXUznVdwdBtQPBAzCMu2vbZwaSiJxo5xmjEqZAGiknK98nKLUxnUmeRh36rETri8c
+         B6BLqdRNB0tchi1ylIQ3fs0lfyNGr20MSUC3sllTc6AqeoQv6Td2kD/XsY7noiqqOJED
+         +1tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmw1HHlRC+ZWeh5zIwCbLgFSZ3XMKnOJnaI8HFWS5tJ/RH19mKAlH9wFg+erl22i7gqELBvPXDAGihpembfIZRksps1+PXKmT9WGUl5yBP
+X-Gm-Message-State: AOJu0YyN5fqFN/Acizdvek7XUcCzm5tF7iOnNHBAVS9W21519CLgnBYy
+	8fHMCYWE4Mo79ou6Rux2igpZGHmevfZNu3r8VrQ9mfzW5A9PXXixST31wbeTzcW4A5ObweQK22A
+	vJRNLJIsOaxWsGikOmYZ7baSjiaU0QBnJoKqz
+X-Google-Smtp-Source: AGHT+IEWSnXDkOOuWxy4buVy5+bH83YnyNR4w4o3Mv7K46VM8aoNm19YQLygFNgF60V3lHzBQ/YzJdQu2mPPWV96c9Q=
+X-Received: by 2002:adf:f707:0:b0:35f:1243:a956 with SMTP id
+ ffacd0b85a97d-35f2b2c173bmr921417f8f.23.1718060170659; Mon, 10 Jun 2024
+ 15:56:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+References: <20240531213439.2958891-1-jiaqiyan@google.com> <21841726-6427-5a92-a3d1-8aac2687c01a@huawei.com>
+ <CACw3F52Ws2R-7kBbo29==tU=FOV=8aiWFZH2aL2DS_5nuTGO=w@mail.gmail.com> <2738aa0e-99d8-44d7-ac81-e38fd64591b7@oracle.com>
+In-Reply-To: <2738aa0e-99d8-44d7-ac81-e38fd64591b7@oracle.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Mon, 10 Jun 2024 15:55:58 -0700
+Message-ID: <CACw3F50rh08o0hAG1rSfUnuJ3wezjCa8_ZE4rUGRUntUfx+-OQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Userspace controls soft-offline HugeTLB pages
+To: Jane Chu <jane.chu@oracle.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, naoya.horiguchi@nec.com, 
+	akpm@linux-foundation.org, shuah@kernel.org, corbet@lwn.net, 
+	osalvador@suse.de, rientjes@google.com, duenwen@google.com, fvdl@google.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, muchun.song@linux.dev, 
+	Kefeng Wang <wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
-> On 6/10/24 16:16, David Ahern wrote:
+Thanks for your feedback, Jane!
 
-> > > There is no reason you shouldn't be able to use your fast io_uring
-> > > completion and lifecycle flow with DMABUF backed memory. Those are not
-> > > widly different things and there is good reason they should work
-> > > together.
-> 
-> Let's not mix up devmem TCP and dmabuf specifically, as I see it
-> your question was concerning the latter: "... DMABUF memory registered
-> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
-> support in future, as mentioned it's mostly the setup side. ABI,
-> buffer workflow and some details is a separate issue, and I don't
-> see how further integration aside from what we're already sharing
-> is beneficial, on opposite it'll complicate things.
+On Mon, Jun 10, 2024 at 12:41=E2=80=AFPM Jane Chu <jane.chu@oracle.com> wro=
+te:
+>
+> On 6/7/2024 3:22 PM, Jiaqi Yan wrote:
+>
+> > On Tue, Jun 4, 2024 at 12:19=E2=80=AFAM Miaohe Lin <linmiaohe@huawei.co=
+m> wrote:
+> >> On 2024/6/1 5:34, Jiaqi Yan wrote:
+> >>> Correctable memory errors are very common on servers with large
+> >>> amount of memory, and are corrected by ECC, but with two
+> >>> pain points to users:
+> >>> 1. Correction usually happens on the fly and adds latency overhead
+> >>> 2. Not-fully-proved theory states excessive correctable memory
+> >>>     errors can develop into uncorrectable memory error.
+> >> Thanks for your patch.
+> > Thanks Miaohe, sorry I missed your message (Gmail mistakenly put it in
+> > my spam folder).
+> >
+> >>> Soft offline is kernel's additional solution for memory pages
+> >>> having (excessive) corrected memory errors. Impacted page is migrated
+> >>> to healthy page if it is in use, then the original page is discarded
+> >>> for any future use.
+> >>>
+> >>> The actual policy on whether (and when) to soft offline should be
+> >>> maintained by userspace, especially in case of HugeTLB hugepages.
+> >>> Soft-offline dissolves a hugepage, either in-use or free, into
+> >>> chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+> >>> If userspace has not acknowledged such behavior, it may be surprised
+> >>> when later mmap hugepages MAP_FAILED due to lack of hugepages.
+> >> For in use hugetlb folio case, migrate_pages() is called. The hugetlb =
+pool
+> >> capacity won't be modified in that case. So I assume you're referring =
+to the
+> > I don't think so.
+> >
+> > For in-use hugetlb folio case, after migrate_pages, kernel will
+> > dissolve_free_hugetlb_folio the src hugetlb folio. At this point
+> > refcount of src hugetlb folio should be zero already, and
+> > remove_hugetlb_folio will reduce the hugetlb pool capacity (both
+> > nr_hugepages and free_hugepages) accordingly.
+> >
+> > For the free hugetlb folio case, dissolving also happens. But CE on
+> > free pages should be very rare (since no one is accessing except
+> > patrol scrubber).
+> >
+> > One of my test cases in patch 2/3 validates my point: the test case
+> > MADV_SOFT_OFFLINE a mapped page and at the point soft offline
+> > succeeds, both nr_hugepages and nr_freepages are reduced by 1.
+> >
+> >> free hugetlb folio case? The Hugetlb pool capacity is reduced in that =
+case.
+> >> But if we don't do that, we might encounter uncorrectable memory error=
+ later
+> > If your concern is more correctable error will develop into more
+> > severe uncorrectable, your concern is absolutely valid. There is a
+> > tradeoff between reliability vs performance (availability of hugetlb
+> > pages), but IMO should be decided by userspace.
+> >
+> >> which will be more severe? Will it be better to add a way to compensat=
+e the
+> >> capacity?
+> > Corner cases: What if finding physically contiguous memory takes too
+> > long? What if we can't find any physically contiguous memory to
+> > compensate? (then hugetlb pool will still need to be reduced).
+> >
+> > If we treat "compensate" as an improvement to the overall soft offline
+> > process, it is something we can do in future and it is something
+> > orthogonal to this control API, right? I think if userspace explicitly
+> > tells kernel to soft offline, then they are also well-prepared for the
+> > corner cases above.
+> >
+> >>> In addition, discarding the entire 1G memory page only because of
+> >>> corrected memory errors sounds very costly and kernel better not
+> >>> doing under the hood. But today there are at least 2 such cases:
+> >>> 1. GHES driver sees both GHES_SEV_CORRECTED and
+> >>>     CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+> >>> 2. RAS Correctable Errors Collector counts correctable errors per
+> >>>     PFN and when the counter for a PFN reaches threshold
+> >>> In both cases, userspace has no control of the soft offline performed
+> >>> by kernel's memory failure recovery.
+> >> Userspace can figure out the hugetlb folio pfn range by using `page-ty=
+pes -b huge
+> >> -rlN` and then decide whether to soft offline the page according to it=
+. But for
+> >> GHES driver, I think it has to be done in the kernel. So add a control=
+ in /sys/
+> >> seems like a good idea.
+> > Thanks.
+> >
+> >>> This patch series give userspace the control of soft-offlining
+> >>> HugeTLB pages: kernel only soft offlines hugepage if userspace has
+> >>> opt-ed in for that specific hugepage size, and exposed to userspace
+> >>> by a new sysfs entry called softoffline_corrected_errors under
+> >>> /sys/kernel/mm/hugepages/hugepages-${size}kB directory:
+> >>> * When softoffline_corrected_errors=3D0, skip soft offlining for all
+> >>>    hugepages of size ${size}kB.
+> >>> * When softoffline_corrected_errors=3D1, soft offline as before this
+> >> Will it be better to be called as "soft_offline_corrected_errors" or s=
+implify "soft_offline_enabled"?
+> > "soft_offline_enabled" is less optimal as it can't be extended to
+> > support something like "soft offline this PFN if something repeatedly
+> > requested soft offline this exact PFN x times". (although I don't
+> > think we need it).
+>
+> The "x time" thing is a threshold thing, and if your typical application
+> needs to have a say about performance(and maintaining physically
+> contiguous memory) over RAS, shouldn't that be baked into the driver
+> rather than hugetlbfs ?
 
-Again, I am talking about composability here, duplicating the DMABUF
-stuff into io_uring is not composable, it is just duplicating things.
+I mostly agree, only that I want to point out the threshold has
+already been maintained by some firmware. For example, CPER has
+something like the following defined in UEFI Spec Table N.5: Section
+Descriptor:
 
-It does not match the view that there should be two distinct layers
-here, one that provides the pages and one that manages the
-lifecycle. As HCH pushes for pages either come from the allocator and
-get to use the struct folio or the come from a dmabuf and they
-don't. That is it, the only two choices.
+  Bit 3 - Error threshold exceeded: If set, OS may choose to discontinue
+  use of this resource.
 
-The iouring stuff is trying to confuse the source of the pages with
-the lifecycle - which is surely convenient, but is why Christoph is
-opposing it.
+In this case, I think "enable_soft_offline" is a better name for "OS
+choose to discontinue use of this page" (enable_soft_offline=3D1) or not
+(enable_soft_offline=3D0). WDYT?
 
-Jason
+>
+> Also, I am not comfortable with this being hugetlbfs specific. What is
+> the objection to creating a "soft_offline_enabled" switch that is
+> applicable to any user page size?
+
+I have no objection to making the "soft_offline_enabled" switch to
+apply to anything (hugetlb, transparent hugepage, raw page, etc). The
+only reason my current patch is hugetlb specific is because
+softoffline behavior is very disruptive in the hugetlb 1G page case,
+and I want to start with a limited scope in my first attempt.
+
+If Miaohe, you, and other people are fine with making it applicable to
+any user pages, maybe a better interface for this could be at
+something like /sys/devices/system/memory/enable_soft_offline
+(location-wise close to /sys/devices/system/memory/soft_offline_page)?
+
+>
+> thanks,
+>
+> -jane
+>
+> >
+> > softoffline_corrected_errors is one char less, but if you insist,
+> > soft_offline_corrected_errors also works for me.
+> >
+> >> Thanks.
+> >> .
+> >>
 
