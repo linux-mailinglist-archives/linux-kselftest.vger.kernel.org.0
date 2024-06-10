@@ -1,148 +1,140 @@
-Return-Path: <linux-kselftest+bounces-11595-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1EAB90293D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 21:28:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E352902943
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 21:28:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A63A91F21295
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 19:28:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE1A6282800
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 19:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478E214D2AB;
-	Mon, 10 Jun 2024 19:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA2214F132;
+	Mon, 10 Jun 2024 19:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uDfvkV5c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzjQlIS/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1709314A85;
-	Mon, 10 Jun 2024 19:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F9C14F10E;
+	Mon, 10 Jun 2024 19:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718047675; cv=none; b=ltFRtXqiNAGsunryJnEldNT7m+ryRycT5PobBNi7zRdsYzrK92qvHK09fGVCZK3LLaZAgxlBpXlI0y/9H2lgU0PIcJPYCcjVoTY/wX97u+jWTkqpY1f8EmjEL5RuRmkPtFILDfY+AJue5qQTSNUezpnie2HuBYMvDkmea3F6nRQ=
+	t=1718047708; cv=none; b=S0rlFD+LJrqBGLH9WE1dB6iWor6+RjfC/WEZg90s/NqZsFMuEFg2ffrf2/bRL3xwjstYQPo5uGkCb6Qe/AAc+SXtdJ0bjjopq0zhaYSiZXRPu+T4UCH4STTm2NT9tUCfX/bucYOOJdnVGaDX0qfOlMIrmcoKfzg/F2sILJe1EQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718047675; c=relaxed/simple;
-	bh=QBgN9MHCavIxJhBcDljHXETz/zxwk+Ox8dykt2D+cqU=;
+	s=arc-20240116; t=1718047708; c=relaxed/simple;
+	bh=9PZjDT0V6Lj4GRK41zPSetvsgEiAtuFunhoEXkc3IY4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XTW1lzskvdYU+0XVtgdQsAjzOA2tRk9eZsngFc48FVqBZh8L7c96+lu10ci59uhMRmHHuov6OmOACIdyjPSWvu8X9MOduBdnJPgHR8jSPRaIJjxMfSP1aFSxWk+LEnKpxQKkC7XMGkCU5BSIyYrum+Jr8hKG7gaN3hlKmEJM0NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uDfvkV5c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AE9C2BBFC;
-	Mon, 10 Jun 2024 19:27:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WFvHkgMLTUO8m9y+g99r6QUDcO4GX4oK/0Vl4wjICoN1FzQd/ORgqWmHUwyGNA4soHMaIA6FwETvvyqDpMg+G3q0QPYSDkUyyxg3+vfMmxCaU7D8VXUlNvPP2/VQNUHIm84FJMw3C2SH8lslBOpLrmKZ0hIsnXC8MZmqDiUDYtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzjQlIS/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468B4C4AF1A;
+	Mon, 10 Jun 2024 19:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718047674;
-	bh=QBgN9MHCavIxJhBcDljHXETz/zxwk+Ox8dykt2D+cqU=;
+	s=k20201202; t=1718047708;
+	bh=9PZjDT0V6Lj4GRK41zPSetvsgEiAtuFunhoEXkc3IY4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uDfvkV5c5SnDUKilyooY0hegtuPeodzisyqHBP8aDjVVcZ00qz/umpRPJG53uEJM7
-	 RvP9950rmnTzG+cQdlnhFaB1ZhvJ+l8lTFS1/F2iTmaR9wZAkyoCsD3kMioBOEWuPh
-	 jw/bw5XWUzM/q46aw79wagIVQo7TCgjul/RVGVhh/MPeWPR8Bk1zzRGtzMnTIGoZS+
-	 dRi25BZobTeMjbqAqMcozNeQvV/I8EiTPigMJ2nFXnJbOE4YWl2A1P8Jau19igojuf
-	 efwYgck1Rco75IWDugNXbiq6HfrewN+zNdbspXtbxilqL2lhPcu6ZmtQQwIFT5ZN9l
-	 v1fu1GSYm1AWg==
-Date: Mon, 10 Jun 2024 12:27:54 -0700
-From: Kees Cook <kees@kernel.org>
-To: David Gow <davidgow@google.com>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <rmoar@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] kunit: test: Add vm_mmap() allocation resource
- manager
-Message-ID: <202406101217.D14DF2F00@keescook>
-References: <20240519190422.work.715-kees@kernel.org>
- <20240519191254.651865-1-keescook@chromium.org>
- <CABVgOSmD-v4rXDkcKgA1o2w-Ypzs_rYBKCx=2i2BWjWgd=o2pg@mail.gmail.com>
+	b=TzjQlIS/V6CcADcn39qu2MVD/FOA+Yr1qULzWAMawj4+ebOtJTsjTS8PWQReYHTUG
+	 t+b10QtTD4rZWBvXYcPEAXJyraxXaxdRcUcmIa/r/WJBUz8+ASC1ep3qdO5S8FAOBU
+	 OBfzwXkUZW57K73lsfZdzbkmqc3oyftFUt8BMrHSkwiTqIovF/ssJpOtVa9PkT7fJb
+	 W4+IRELYJ3POTYVbrVtiGU6Vl1PfN4RwR978eiSDoU7Dr/53/hcmvcGsZWM9uyEIsa
+	 P+HafwBaOUMhDp8SPgHnxzpgbr8YJHO+llEdJbpVEgLymDlFY+Q3jKcbI47wglfe73
+	 ALVBkh4DUZJdg==
+Date: Mon, 10 Jun 2024 20:28:22 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 02/13] dt-bindings: thead: add a vlen register length
+ property
+Message-ID: <20240610-envision-impart-7211e512f987@spud>
+References: <20240609-xtheadvector-v1-0-3fe591d7f109@rivosinc.com>
+ <20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com>
+ <20240610-unaltered-crazily-5b63e224d633@spud>
+ <Zmcr7pP+XEWHYTsy@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="zZEd5eFtiVuoCvyW"
+Content-Disposition: inline
+In-Reply-To: <Zmcr7pP+XEWHYTsy@ghost>
+
+
+--zZEd5eFtiVuoCvyW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOSmD-v4rXDkcKgA1o2w-Ypzs_rYBKCx=2i2BWjWgd=o2pg@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 08, 2024 at 04:44:16PM +0800, David Gow wrote:
-> On Mon, 20 May 2024 at 03:12, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > For tests that need to allocate using vm_mmap() (e.g. usercopy and
-> > execve), provide the interface to have the allocation tracked by KUnit
-> > itself. This requires bringing up a placeholder userspace mm.
-> >
-> > This combines my earlier attempt at this with Mark Rutland's version[1].
-> >
-> > Link: https://lore.kernel.org/lkml/20230321122514.1743889-2-mark.rutland@arm.com/ [1]
-> > Co-developed-by: Mark Rutland <mark.rutland@arm.com>
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> 
-> Thanks very much for this!
-> 
-> A few high-level thoughts:
-> - Do we want to move this into a separate file? test.{c,h} is already
-> getting pretty big, and this would probably fit more comfortably with
-> some of the resource-management bits, which are in their own files.
-> Not every test will need mm support.
+On Mon, Jun 10, 2024 at 09:38:06AM -0700, Charlie Jenkins wrote:
+> On Mon, Jun 10, 2024 at 05:29:23PM +0100, Conor Dooley wrote:
+> > On Sun, Jun 09, 2024 at 09:45:07PM -0700, Charlie Jenkins wrote:
+> > > Add a property analogous to the vlenb CSR so that software can detect
+> > > the vector length of each CPU prior to it being brought online.
+> > > Currently software has to assume that the vector length read from the
+> > > boot CPU applies to all possible CPUs. On T-Head CPUs implementing
+> > > pre-ratification vector, reading the th.vlenb CSR may produce an ille=
+gal
+> > > instruction trap, so this property is required on such systems.
+> > >=20
+> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/riscv/thead.yaml | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/riscv/thead.yaml b/Doc=
+umentation/devicetree/bindings/riscv/thead.yaml
+> > > index 301912dcd290..5e578df36ac5 100644
+> > > --- a/Documentation/devicetree/bindings/riscv/thead.yaml
+> > > +++ b/Documentation/devicetree/bindings/riscv/thead.yaml
+> > > @@ -28,6 +28,13 @@ properties:
+> > >            - const: sipeed,lichee-module-4a
+> > >            - const: thead,th1520
+> > > =20
+> > > +thead,vlenb:
+> >=20
+> > This needs to move back into cpus.yaml, this file documents root node
+> > compatibles (boards and socs etc) and is not for CPUs. If you want to
+> > restrict this to T-Head CPUs only, it must be done in cpus.yaml with
+> > a conditional `if: not: ... then: properties: thead,vlenb: false`.
+> >=20
+> > Please test your bindings.
+>=20
+> Now that I know `make dt_binding_check` exists I will use that in the
+> future!
 
-I'm happy to do that -- I was just following where kunit_kmalloc() was
-defined. I'll create a new file for it.
+And in this case dtbs_check would also complain about riscv,vlenb being
+undocumented - and complain about thead,vlenb not being a permitted cpu
+property either.
 
-> - It'd be nice for there to be a way to explicitly teardown/reset
-> this: I agree that this is made more awkward by KUnit cleanup normally
-> running on a different thread, but I could definitely see why a test
-> might want to unset/reset this, and it would be more consistent with
-> other resources.
+Thanks,
+Conor.
 
-Yeah, it's weird, but it's naturally managed?
+--zZEd5eFtiVuoCvyW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Otherwise, I have a few small questions below, but nothing essential.
-> There are a couple of test failures/hangs for the usercopy test (on
-> i386 and m68k), which may have origins here: I've mentioned them
-> there.
+-----BEGIN PGP SIGNATURE-----
 
-I'll look into this. I must have some 64/32 oversight...
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmdT1gAKCRB4tDGHoIJi
+0gELAP9N4Tu6RdQuKtMCvloFTO6BrRXNU2iSwXxMepsikmv0PQEAsVNMYTrc/cIX
+AooXc0b3saxiQGxb2MiZo/UtbA/dcAo=
+=DctY
+-----END PGP SIGNATURE-----
 
-> Reviewed-by: David Gow <davidgow@google.com>
-
-Thanks!
-
-> > +/*
-> > + * Arbitrarily chosen user address for the base allocation.
-> > + */
-> > +#define UBUF_ADDR_BASE SZ_2M
-> 
-> Are there any circumstances where we'd want a _different_ base address
-> here? Could it conflict with something / could tests require something
-> different?
-> 
-> I suspect it's fine to leave it like this until such a case actually shows up.
-
-Yeah, it shouldn't be important, and as Mark has pointed out, it might
-not be needed at all. I'll see what I can do.
-
-> > +       vres = kunit_alloc_resource(test,
-> > +                                   kunit_vm_mmap_init,
-> > +                                   kunit_vm_mmap_free,
-> > +                                   GFP_KERNEL,
-> > +                                   &params);
-> 
-> It could be easier to use kunit_add_action() here, rather than
-> kunit_alloc_resource(), as you wouldn't need the params struct to pass
-> things through.
-> 
-> The advantage to keeping the separate resource is that we can more
-> easily look it up later if we, for example, wanted to be able to make
-> it current on other threads (is that something we'd ever want to do?).
-
-I like having it follow the pattern of the other resource allocators,
-but if there's not a strong reason to switch, I'll leave it as-is.
-
--- 
-Kees Cook
+--zZEd5eFtiVuoCvyW--
 
