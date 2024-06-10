@@ -1,165 +1,140 @@
-Return-Path: <linux-kselftest+bounces-11591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E964B9028D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 20:41:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D10D79028FE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 21:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 929DA1F21D0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 18:41:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 451ED285160
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 19:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2171C1509A8;
-	Mon, 10 Jun 2024 18:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4708185626;
+	Mon, 10 Jun 2024 19:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0c5wjB2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdpTivhf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5525D14D2AB;
-	Mon, 10 Jun 2024 18:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154DF1B5A4;
+	Mon, 10 Jun 2024 19:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718044790; cv=none; b=BVuY/H1cGPsOeUGkmrYm3iXOwgVIKEv6fcEIvkatDFkax/fsf3A88F19pkA11V95Gd05k9d6TQy6n9A5ffDDn+Q6kD0NS/AAncB6ffmA6ObAodcMrs+RadvfrhvOemUSuqWUqUZBW+p6DKNNp5ecWwamYV/j2ZujyYqd17ttNUE=
+	t=1718046355; cv=none; b=ImcocjbFPYt0b8uz/z3sgakCa3E9x3qsDPnJMC6YJeKDGMfXKX0TaJ9KLUIeVEzov02Go2+hYXuqypnFSVg+lz6xR/kaANF8CxXCkeOkJvHeahaYHIs1/Giond4U5E4/mt2t54DbEP+E1yZGk4uXb3crd/rLRncqzH7ZHjnrOXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718044790; c=relaxed/simple;
-	bh=fKqD5f5/0GE7gIXsC0zZzonpmGQhNmbkyUx1u/Vw0+A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=guMUA3rbiEgi2jASIzNpC9AEoyVAgIpoxI+gbNhppNREsmGMj9gJhIrdGeQJNq8d99QINhvuUAi5bz/9FSdyPNtnllH3b5NgneKDScF0TQCWHX3w5mLf3GnNtWXu3Nxjle6QkUcoa1Jh6/O7l2xGmdmyRad0tMjCBk7633ihsi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0c5wjB2; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-354f3f6c3b1so3893110f8f.2;
-        Mon, 10 Jun 2024 11:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718044786; x=1718649586; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BX2BqskCUGTIe52ShH0n2+nBwA4ZfttYr38Hr8GVxi8=;
-        b=d0c5wjB23optI5QwwnJNtxcCi8aIz81ZdxsPEDCokP2zFvq8nwOUEEi6F+AyJ6cdp9
-         s0Xnu9FKac7Mmi+ARnJg6t54tz7GFLApRska++OMlAOFZKLntyKRbsgi++j5avRDQYeo
-         6D8xloxzgwwzcLm0h85ZNlMEJbYN1rWh/9bIR+EOmCkHi7Or7K8JXnmPTc8jZlLyZLUP
-         //OjRCnzQAbhvfS6tGypxMCXpctwZpV27ncUdVl7rMto5yFaso6vabm8UwKhue6RgdsZ
-         LLC4LM/z9Kmi84dp1yuaAADeMSDWzT8GeQHOMj8sbUinayeccmDdgrWIsnYgQcrT6gjf
-         JC6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718044786; x=1718649586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BX2BqskCUGTIe52ShH0n2+nBwA4ZfttYr38Hr8GVxi8=;
-        b=RSU6BJaNVWMJq6z5Bk0GjK6pv59e1WrqrdcIyx+3/u+M5O8PpiZ+8ffjCkxA0axHJ6
-         X9Y6lsd5hVwxafF8w6sKuM2xYoH/puroQeR5OnC1d1zD4AIA0VEeA2B6/1l85Kq9LGDw
-         tw3CElkW+A4mP3PlkZgI8KmWmaxpd0aQIybAG8tbFIrADlZFEPEamYOs8nbwAbHV8uau
-         fj3zUCuB5tbmiASs77yYl+qqp4a+YdbI8wThtnv0LBGGQnD4rQecw7v9dQeHQG3t/JJm
-         WVqLVNrSIebPeYP4nDdWlbiEC3Ap/IUD7j3YUbaEwhVSoJ0n67C716W5I15FHKNyHH5C
-         LE8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQI2THH7uvkZrK1QaxL2cL+RGjM72lPrrhvCL2VtPY3x2nMgjYe2AFueEybEgfNxh4xmrT2GUIWtgI2IKCdMuC5GQKFODigMURdqd8mCF6vO/MNpwFLWMCzE/JkWs2DcnoMIYwAnAsuSkPGmTUpsz5XmfwPoUllYe0a6NXE2zALJZWGYXlWjoLsPVUfqDiThuogOr9M2LkAeBknkt/OLzo32pWHVJSXT6UiBy69LHu8q/DRaWlAbWFOSo=
-X-Gm-Message-State: AOJu0YwoLr1nOXtrqmtPK5BVgZlQdu5VfebBrCtDOoHKULjjfkEEYwy0
-	kgFSzfMS1iiLsMPAacKc5qac07I3/htPjOkS09dIRFBrmXosRXt9sfSrqd/d9mi/9q95cYvv0Qa
-	5kDKUSe1HTQlN3/act+C1zDV8XtOnLKCw
-X-Google-Smtp-Source: AGHT+IEYrAxoBeRt81cMXgcWH8TrePlfB91jzBap0Ld2Ve1hPy9ZIMY5ysk44StmBEUJH2mf2Rq6ancHkMXukbEY6ro=
-X-Received: by 2002:a05:6000:1f8c:b0:35f:2935:7cfd with SMTP id
- ffacd0b85a97d-35f29357e38mr1550081f8f.27.1718044786305; Mon, 10 Jun 2024
- 11:39:46 -0700 (PDT)
+	s=arc-20240116; t=1718046355; c=relaxed/simple;
+	bh=ZQmVAWnF8v7SoLum4h6QPX+CI7BadFQV9FnQJOXaDio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cPc10ymUNrgJl7PSLRptk4k2XjDC7WsS4u01DCEDiNkiKsbfDPjETQtCWTWB/4pTUtXks2Xo4nCbxyQhPimrY5O++dJht6WU8CvthjlZomXiahcoPasEjlnXzc7dYAQRdr/lGvXdXe0yOi33JfHk8xlmwcIERqHpI4EJzy8UUus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdpTivhf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EDFC2BBFC;
+	Mon, 10 Jun 2024 19:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718046354;
+	bh=ZQmVAWnF8v7SoLum4h6QPX+CI7BadFQV9FnQJOXaDio=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PdpTivhfm4Myls0526XPowHUnRMG2EUiXYz51iLCtjh1PSP9XY2ALOcgt0TOy9mVd
+	 IWn8hUH6wRvswqGFwlgX9BXoO/Bm1BZOTFSP9/bepbRZRHEHYLP1WWXMl2JoAcR7Ue
+	 L+zee8qYk31KSb50Y37AuimPGwF1EjeKFIskbFTOKzkI2+PLmlLx/qDFW74wmlRRrO
+	 W3FhutcZ/aCQUjrtJgAo2tF84Q/BiHmlMRQPHGVBlyFnX4JT+mZzJ4V4hsAqxDLuVI
+	 419Rr/EzZ5+fszNp3FXDW0atHgW3YdjeNHx6tD2whp6iht11HeMamNj0+9mlFsEgoC
+	 rIEf3/1ZrXlBA==
+Date: Mon, 10 Jun 2024 12:05:54 -0700
+From: Kees Cook <kees@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Vitor Massaru Iha <vitor@massaru.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2] kunit: test: Add vm_mmap() allocation resource
+ manager
+Message-ID: <202406101202.3D887825@keescook>
+References: <20240519190422.work.715-kees@kernel.org>
+ <20240519191254.651865-1-keescook@chromium.org>
+ <ZksX4r0a1EGE_VPl@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608-hid_bpf_struct_ops-v3-0-6ac6ade58329@kernel.org> <20240608-hid_bpf_struct_ops-v3-15-6ac6ade58329@kernel.org>
-In-Reply-To: <20240608-hid_bpf_struct_ops-v3-15-6ac6ade58329@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 10 Jun 2024 11:39:35 -0700
-Message-ID: <CAADnVQLCyEZMyThCH6QNopBbWbNcpR+h2AaLhT0apEO7pOWrRQ@mail.gmail.com>
-Subject: Re: [PATCH HID v3 15/16] HID: bpf: rework hid_bpf_ops_btf_struct_access
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Alexei Starovoitov <ast@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZksX4r0a1EGE_VPl@J2N7QTR9R3>
 
-On Sat, Jun 8, 2024 at 2:01=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.o=
-rg> wrote:
->
-> The idea is to provide a list of stucts and their editable fields.
->
-> Currently no functional changes are introduced here, we will add some
-> more writeable fields in the next patch.
->
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
->
-> ---
->
-> changes in v3:
-> - rewrote WRITE_RANGE macro to not deal with offset from the caller side
->
-> new in v2
-> ---
->  drivers/hid/bpf/hid_bpf_struct_ops.c | 91 +++++++++++++++++++++++++++---=
-------
->  1 file changed, 69 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_b=
-pf_struct_ops.c
-> index 056d05d96962..b14eccb121e0 100644
-> --- a/drivers/hid/bpf/hid_bpf_struct_ops.c
-> +++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
-> @@ -16,6 +16,7 @@
->  #include <linux/hid_bpf.h>
->  #include <linux/init.h>
->  #include <linux/module.h>
-> +#include <linux/stddef.h>
->  #include <linux/workqueue.h>
->  #include "hid_bpf_dispatch.h"
->
-> @@ -52,40 +53,86 @@ static int hid_bpf_ops_check_member(const struct btf_=
-type *t,
->         return 0;
->  }
->
-> +struct hid_bpf_offset_write_range {
-> +       const char *struct_name;
-> +       u32 struct_length;
-> +       u32 start;
-> +       u32 end;
-> +};
-> +
->  static int hid_bpf_ops_btf_struct_access(struct bpf_verifier_log *log,
->                                            const struct bpf_reg_state *re=
-g,
->                                            int off, int size)
->  {
-> -       const struct btf_type *state;
-> -       const struct btf_type *t;
-> -       s32 type_id;
-> +#define WRITE_RANGE(_name, _field, _is_string)                          =
-       \
-> +       {                                                                =
-       \
-> +               .struct_name =3D #_name,                                 =
-         \
-> +               .struct_length =3D sizeof(struct _name),                 =
-         \
-> +               .start =3D offsetof(struct _name, _field),               =
-         \
-> +               .end =3D offsetofend(struct _name, _field) - !!(_is_strin=
-g),
+On Mon, May 20, 2024 at 10:29:06AM +0100, Mark Rutland wrote:
+> On Sun, May 19, 2024 at 12:12:52PM -0700, Kees Cook wrote:
+> > +/* Create and attach a new mm if it doesn't already exist. */
+> > +static int kunit_attach_mm(void)
+> > +{
+> > +	struct vm_area_struct *vma;
+> > +	struct mm_struct *mm;
+> > +
+> > +	if (current->mm)
+> > +		return 0;
+> 
+> My tests deliberately created/destroyed the mm for each test; surely we
+> don't want to inherit an MM in some arbitrary state? ... or is this just
+> so the mm can be allocated lazily upon the first mmap() within a test?
 
-so it works because char name[128]; had last byte as zero
-before prog writes into it (in addition to potentially having
-earlier 0 bytes), so the string is guaranteed
-to be null-terminated regardless of what prog writes into it.
-Right?
+It's for lazily creation and for supporting running the KUnit test as a
+module (where a userspace would exist). The old usercopy test worked
+against the existing userspace, so I'd want to continue to support that.
 
-Overall:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> > +
+> > +	mm = mm_alloc();
+> > +	if (!mm)
+> > +		return -ENOMEM;
+> > +
+> > +	if (mmap_write_lock_killable(mm))
+> > +		goto out_free;
+> > +
+> > +	/* Define the task size. */
+> > +	mm->task_size = TASK_SIZE;
+> > +
+> > +	/* Prepare the base VMA. */
+> > +	vma = vm_area_alloc(mm);
+> > +	if (!vma)
+> > +		goto out_unlock;
+> > +
+> > +	vma_set_anonymous(vma);
+> > +	vma->vm_start = UBUF_ADDR_BASE;
+> > +	vma->vm_end = UBUF_ADDR_BASE + PAGE_SIZE;
+> > +	vm_flags_init(vma, VM_READ | VM_MAYREAD | VM_WRITE | VM_MAYWRITE);
+> > +	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+> > +
+> > +	if (insert_vm_struct(mm, vma))
+> > +		goto out_free_vma;
+> > +
+> > +	mmap_write_unlock(mm);
+> 
+> Why do we need this VMA given you have kunit_vm_mmap()?
+
+When I was originally testing this, it seemed like I couldn't perform a
+vm_mmap() without an existing VMA.
+
+> This existed in my uaccess tests because I didn't use vm_mmap(), and I
+> wanted complete control over the addresses used.
+> 
+> Given you add kunit_vm_mmap(), I don't think we want this VMA -- it
+> doesn't serve any real purpose to tests, and accesses can erroneously
+> hit it, which is problematic.
+> 
+> UBUF_ADDR_BASE shouldn't be necessary either with kunit_vm_mmap(),
+> unless you want to use fixed addresses. That was just arbitrarily chosen
+> to be above NULL and the usual minimum mmap limit.
+
+I'll recheck whether this is needed. I think I had to make some other
+changes as well, so maybe something here ended up being redundant
+without my noticing it the first time.
+
+Thanks for looking this over!
+
+-- 
+Kees Cook
 
