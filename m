@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-11560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE381902538
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:16:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C52CC90253D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:17:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0997FB250CC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 15:16:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 546DEB24FAE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 15:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B96B13FD84;
-	Mon, 10 Jun 2024 15:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8C714373D;
+	Mon, 10 Jun 2024 15:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dfZV4kER"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Agqpb/TX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7808C13D63E;
-	Mon, 10 Jun 2024 15:15:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D3F140E4D;
+	Mon, 10 Jun 2024 15:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718032537; cv=none; b=SJfS8SLL3W+82kUdq1LiLqcj0N/hegywklIU32HV/ONNj7cvW09YfGZiEYEpJFhBkYrfr7E2bItFx+B14jnfjlGY3jib7BYSzWu737r8wYviehqk20nWW/90IVX5Q3ywWex2AId/wc2IRdP0ekEID/Pc+NiSsfqRR+KPEQL5K8M=
+	t=1718032545; cv=none; b=CR2Ugj2y5qRJJ2YrhYtSnjfPQJCL3syklVpTYG2dcyqWvN87zlADD/jRydJbCRtfgcM9oW7SRBTIkySVrZdH0fZ7+uv1TGPo7Hxk0HtRARLCy6f04OLMua5XsZxPagUlSdQEEjoWdh8ylrJc2XvgyjeFi48EQIEuMl2ISXPCNN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718032537; c=relaxed/simple;
-	bh=txOdnyzOZSlUtJWZAp7znb1Tmc2oa6fkNXyfq6rUxzM=;
+	s=arc-20240116; t=1718032545; c=relaxed/simple;
+	bh=f0+2Hn9SdO3OSRQSm+QVherXzyhhrJ+JeHDaV/jdYXI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b9nbcWfEHxnICyZyixvWaA/7pJrPUqg2I+DoMYrVPmQKljSyNhgIjDsZ6Skk/OBoKFj6Z+vP0XkVBGKJMZlNiRtkKw0pdZi0IxAujmYxA3z+1JfGCtQCxzO6X4b+mQ0skNXS+bxvkSPDgQJWR1lO1dMGJnEA1SAzru7dJ5xR2pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dfZV4kER; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version:Content-Type; b=WucR4NgfFbTd5+ANzjb1mN2T+k4CUOs3jk0bHJ9mDkOsPQFiw2itIT2l9vXPE7/4XE3bxbeWymDXljxXbrwFiXCvqgKQU0wJbVfzUMRoGx+PXY7fLXN5uB7bJfXOPCwY9OJgE/YrFu2/CDxgAcHWY0S/LChTurSXntLUNCnDcBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Agqpb/TX; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718032535; x=1749568535;
+  t=1718032544; x=1749568544;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=txOdnyzOZSlUtJWZAp7znb1Tmc2oa6fkNXyfq6rUxzM=;
-  b=dfZV4kERZq2GvxGuCCN81X8hKmXkDJp3AQfXZy4s5VZWS6+234BT3w09
-   7oBOCjl1ykgq4OD1SyQY1xbp1cViKcUEUwhPwc2EE+FVahw4HIKfNKgj5
-   kObGrpezo0vuDq4idl+yNgxS0Hi2+Y3PSdsXidZ0upUl+QYHgqXTVS0cJ
-   JWhGYAPvqNJwYxpdigpS2V0uFDE+SRkWx+RvBeApdwHx5VLITmpgRCTwn
-   jHPqPwGfx+wxc0INHauf/9OscgwZ61krDZJfpRpmax5IEIj+eOep+48zP
-   bwdkxudDzqP/8jdbIa4cJwi2LC1cdjBdaASnj78SA5cOdhXU8lhI4P0Rl
-   A==;
-X-CSE-ConnectionGUID: 4S6hxvVORmC7WRwpkf51bQ==
-X-CSE-MsgGUID: sivjGbmYTB2vAhNqoiqf8w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="18530775"
+  bh=f0+2Hn9SdO3OSRQSm+QVherXzyhhrJ+JeHDaV/jdYXI=;
+  b=Agqpb/TXAy8sOU/iPbqTYhofWOJ6QLusRbdpPpiBcpYV5w/dHxADIUkl
+   EifjpoCh1GJx8EZieAi/GzQGZLjtFSDV1wRWrzpeEnGJOdCvjKKdlWHPP
+   ubKwf/VkGMQRz8e1KejtiblQmHvfbRq1N20GBkNKWnXYTS9qdgRaZpKMw
+   xgtb/tZuzlnbdH5oCH0a7ffnpsB/Baq8U9T/52oa8hzaFV39BKlzoGq5S
+   SMtavf/4aLm+w05LYJ10F1jKVSxplK2hQuzJEI2+QIncNXpjRfTUcoodM
+   f5tUpJCE6noNgWTCA13gW34i4g4cKuluHIYONO+ZV1RRjOOgreApZkfc3
+   g==;
+X-CSE-ConnectionGUID: nIhYp4GaTIuGlPa0DukBnw==
+X-CSE-MsgGUID: /HNU6eTwRL2qPS2gXhqKFg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="18530804"
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="18530775"
+   d="scan'208";a="18530804"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:35 -0700
-X-CSE-ConnectionGUID: U7+C+GMgQEWFZgghv240MA==
-X-CSE-MsgGUID: kUSsJ7ggSvylhh3XsxYO3g==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:44 -0700
+X-CSE-ConnectionGUID: NyU76BH+Tbm9E9FZgNorSQ==
+X-CSE-MsgGUID: +OYHm8IWRninTprus44W/w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="39650649"
+   d="scan'208";a="39650674"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.194])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:31 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:40 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Fenghua Yu <fenghua.yu@intel.com>,
 	linux-kernel@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v7 03/16] selftests/resctrl: Make "bandwidth" consistent in comments & prints
-Date: Mon, 10 Jun 2024 18:14:44 +0300
-Message-Id: <20240610151457.7305-4-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v7 04/16] selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
+Date: Mon, 10 Jun 2024 18:14:45 +0300
+Message-Id: <20240610151457.7305-5-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
 References: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
@@ -83,91 +83,101 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Resctrl selftests refer to "bandwidth" currently in two other forms in
-the code ("B/W" and "band width").
+Both initialize_mem_bw_resctrl() and initialize_llc_occu_resctrl() that
+are called from resctrl_val() need to determine domain ID to construct
+resctrl fs related paths. Both functions do it by taking CPU ID which
+neither needs for any other purpose than determining the domain ID.
 
-Use "bandwidth" consistently everywhere. While at it, fix also one
-"over flow" -> "overflow" on a line that is touched by the change.
+Consolidate determining the domain ID into resctrl_val() and pass the
+domain ID instead of CPU ID to initialize_mem_bw_resctrl() and
+initialize_llc_occu_resctrl().
 
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Tested-by: Babu Moger <babu.moger@amd.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
-
-v3:
-- New patch
----
- tools/testing/selftests/resctrl/resctrl_val.c | 14 +++++++-------
- tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 33 ++++++++-----------
+ 1 file changed, 13 insertions(+), 20 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 3c7f6793c261..5fad7e757af3 100644
+index 5fad7e757af3..cccf6b80f3f3 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -361,11 +361,11 @@ static void do_imc_mem_bw_test(void)
- }
- 
- /*
-- * get_mem_bw_imc - Memory band width as reported by iMC counters
-+ * get_mem_bw_imc - Memory bandwidth as reported by iMC counters
-  * @bw_report: Bandwidth report type (reads, writes)
-  *
-- * Memory B/W utilized by a process on a socket can be calculated using
-- * iMC counters. Perf events are used to read these counters.
-+ * Memory bandwidth utilized by a process on a socket can be calculated
-+ * using iMC counters. Perf events are used to read these counters.
-  *
-  * Return: = 0 on success. < 0 on failure.
+@@ -450,19 +450,12 @@ void set_mbm_path(const char *ctrlgrp, const char *mongrp, int domain_id)
+  * initialize_mem_bw_resctrl:	Appropriately populate "mbm_total_path"
+  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
+  * @mongrp:			Name of the monitor group (mon grp)
+- * @cpu_no:			CPU number that the benchmark PID is binded to
++ * @domain_id:			Domain ID (cache ID; for MB, L3 cache ID)
+  * @resctrl_val:		Resctrl feature (Eg: mbm, mba.. etc)
   */
-@@ -379,7 +379,7 @@ static int get_mem_bw_imc(char *bw_report, float *bw_imc)
+ static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
+-				      int cpu_no, char *resctrl_val)
++				      int domain_id, char *resctrl_val)
+ {
+-	int domain_id;
+-
+-	if (get_domain_id("MB", cpu_no, &domain_id) < 0) {
+-		ksft_print_msg("Could not get domain ID\n");
+-		return;
+-	}
+-
+ 	if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
+ 		set_mbm_path(ctrlgrp, mongrp, domain_id);
  
- 	/*
- 	 * Get results which are stored in struct type imc_counter_config
--	 * Take over flow into consideration before calculating total b/w
-+	 * Take overflow into consideration before calculating total bandwidth.
- 	 */
- 	for (imc = 0; imc < imcs; imc++) {
- 		struct imc_counter_config *r =
-@@ -389,13 +389,13 @@ static int get_mem_bw_imc(char *bw_report, float *bw_imc)
- 
- 		if (read(r->fd, &r->return_value,
- 			 sizeof(struct membw_read_format)) == -1) {
--			ksft_perror("Couldn't get read b/w through iMC");
-+			ksft_perror("Couldn't get read bandwidth through iMC");
- 			return -1;
- 		}
- 
- 		if (read(w->fd, &w->return_value,
- 			 sizeof(struct membw_read_format)) == -1) {
--			ksft_perror("Couldn't get write bw through iMC");
-+			ksft_perror("Couldn't get write bandwidth through iMC");
- 			return -1;
- 		}
- 
-@@ -492,7 +492,7 @@ static FILE *open_mem_bw_resctrl(const char *mbm_bw_file)
- 
- 	fp = fopen(mbm_bw_file, "r");
- 	if (!fp)
--		ksft_perror("Failed to open total bw file");
-+		ksft_perror("Failed to open total memory bandwidth file");
- 
- 	return fp;
+@@ -621,19 +614,12 @@ static void set_cmt_path(const char *ctrlgrp, const char *mongrp, char sock_num)
+  * initialize_llc_occu_resctrl:	Appropriately populate "llc_occup_path"
+  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
+  * @mongrp:			Name of the monitor group (mon grp)
+- * @cpu_no:			CPU number that the benchmark PID is binded to
++ * @domain_id:			Domain ID (cache ID; for MB, L3 cache ID)
+  * @resctrl_val:		Resctrl feature (Eg: cat, cmt.. etc)
+  */
+ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+-					int cpu_no, char *resctrl_val)
++					int domain_id, char *resctrl_val)
+ {
+-	int domain_id;
+-
+-	if (get_domain_id("L3", cpu_no, &domain_id) < 0) {
+-		ksft_print_msg("Could not get domain ID\n");
+-		return;
+-	}
+-
+ 	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		set_cmt_path(ctrlgrp, mongrp, domain_id);
  }
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 1cade75176eb..9b86f826a40c 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -850,7 +850,7 @@ int validate_bw_report_request(char *bw_report)
- 	if (strcmp(bw_report, "total") == 0)
- 		return 0;
+@@ -765,10 +751,17 @@ int resctrl_val(const struct resctrl_test *test,
+ 	int ret = 0, pipefd[2];
+ 	char pipe_message = 0;
+ 	union sigval value;
++	int domain_id;
  
--	fprintf(stderr, "Requested iMC B/W report type unavailable\n");
-+	fprintf(stderr, "Requested iMC bandwidth report type unavailable\n");
+ 	if (strcmp(param->filename, "") == 0)
+ 		sprintf(param->filename, "stdio");
  
- 	return -1;
- }
++	ret = get_domain_id(test->resource, uparams->cpu, &domain_id);
++	if (ret < 0) {
++		ksft_print_msg("Could not get domain ID\n");
++		return ret;
++	}
++
+ 	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
+ 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
+ 		ret = validate_bw_report_request(param->bw_report);
+@@ -863,10 +856,10 @@ int resctrl_val(const struct resctrl_test *test,
+ 			goto out;
+ 
+ 		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
+-					  uparams->cpu, resctrl_val);
++					  domain_id, resctrl_val);
+ 	} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+ 		initialize_llc_occu_resctrl(param->ctrlgrp, param->mongrp,
+-					    uparams->cpu, resctrl_val);
++					    domain_id, resctrl_val);
+ 
+ 	/* Parent waits for child to be ready. */
+ 	close(pipefd[1]);
 -- 
 2.39.2
 
