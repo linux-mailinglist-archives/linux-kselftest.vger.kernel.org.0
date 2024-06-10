@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-11561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C52CC90253D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:17:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BE1E90253E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:17:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 546DEB24FAE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 15:16:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44E1428273C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 15:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8C714373D;
-	Mon, 10 Jun 2024 15:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85ED13DB9B;
+	Mon, 10 Jun 2024 15:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Agqpb/TX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M3CxDOK0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D3F140E4D;
-	Mon, 10 Jun 2024 15:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D68A81754;
+	Mon, 10 Jun 2024 15:16:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718032545; cv=none; b=CR2Ugj2y5qRJJ2YrhYtSnjfPQJCL3syklVpTYG2dcyqWvN87zlADD/jRydJbCRtfgcM9oW7SRBTIkySVrZdH0fZ7+uv1TGPo7Hxk0HtRARLCy6f04OLMua5XsZxPagUlSdQEEjoWdh8ylrJc2XvgyjeFi48EQIEuMl2ISXPCNN4=
+	t=1718032561; cv=none; b=u7uHCNYkX1ozX95EUJEZ0tlg0ILn8HUl3cWDGq+nrnV6PVdqSac9gMdWlwV+AXLw1Vp5EiYwpETTsjTcLGKpbvJNzgxJjMfxoXYpSf40V2rRHXHW949MxnQ+YN/GvNjh25EKji3X7BTSSJfcANhQ8T8M+ilP1xXsVtCwIojft00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718032545; c=relaxed/simple;
-	bh=f0+2Hn9SdO3OSRQSm+QVherXzyhhrJ+JeHDaV/jdYXI=;
+	s=arc-20240116; t=1718032561; c=relaxed/simple;
+	bh=J8MXk2+opYTa7xZQ/Gh3p+vp6i8luDzj3u3KMCcjByM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WucR4NgfFbTd5+ANzjb1mN2T+k4CUOs3jk0bHJ9mDkOsPQFiw2itIT2l9vXPE7/4XE3bxbeWymDXljxXbrwFiXCvqgKQU0wJbVfzUMRoGx+PXY7fLXN5uB7bJfXOPCwY9OJgE/YrFu2/CDxgAcHWY0S/LChTurSXntLUNCnDcBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Agqpb/TX; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version:Content-Type; b=kJQ7em0E9is4PR7upoJWOChgXnEXd/8L4Oy6JO2IZeGz20UVYrjFXAFCil0Za1LSOSVZpRQi/+TEdemDZt7GNS7gw2tLCFaO2YW0zqp0j8zHk8ARvemCnKWGO4MYb0ZJdTd9PnRt+qnojZnUHUfRxPN6NmXnG2izo71FZwdxfhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M3CxDOK0; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718032544; x=1749568544;
+  t=1718032560; x=1749568560;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=f0+2Hn9SdO3OSRQSm+QVherXzyhhrJ+JeHDaV/jdYXI=;
-  b=Agqpb/TXAy8sOU/iPbqTYhofWOJ6QLusRbdpPpiBcpYV5w/dHxADIUkl
-   EifjpoCh1GJx8EZieAi/GzQGZLjtFSDV1wRWrzpeEnGJOdCvjKKdlWHPP
-   ubKwf/VkGMQRz8e1KejtiblQmHvfbRq1N20GBkNKWnXYTS9qdgRaZpKMw
-   xgtb/tZuzlnbdH5oCH0a7ffnpsB/Baq8U9T/52oa8hzaFV39BKlzoGq5S
-   SMtavf/4aLm+w05LYJ10F1jKVSxplK2hQuzJEI2+QIncNXpjRfTUcoodM
-   f5tUpJCE6noNgWTCA13gW34i4g4cKuluHIYONO+ZV1RRjOOgreApZkfc3
+  bh=J8MXk2+opYTa7xZQ/Gh3p+vp6i8luDzj3u3KMCcjByM=;
+  b=M3CxDOK0ss7EAJuV9BL7cYnYiyZCFixr2FFgepsRQSRtNviP40f0TaCp
+   cc7b/KNlsoCxBA48MMpGXFGtumlB4IYC3wKP4FAPbfTEbKARG44QP+9mT
+   LoJ9h4wVkwmB/Kv4LWSieXQdjLdp9/SsUfJGPqxQJEZZnbaOTk5YoyMJB
+   sVAqWtKWX2mC480jHiosVgDUskbzH8FhZWJbL39itBIOM6mv/WViGWY06
+   5DPURsgkh5LSPRUiWKtrR+mt2Fg+B05G9uraaNRJ/g/4Q4pn1c7tprJd6
+   rc9+jObwTINQv8qwx+kTt5Dpz1a4KfZTKmBmariS8ErSpl/aebSeGAzy4
    g==;
-X-CSE-ConnectionGUID: nIhYp4GaTIuGlPa0DukBnw==
-X-CSE-MsgGUID: /HNU6eTwRL2qPS2gXhqKFg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="18530804"
+X-CSE-ConnectionGUID: 92IfzP8bSmmx4sUr1neZRw==
+X-CSE-MsgGUID: ovGRmyjAQj6+n0/lq9si4A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="18530836"
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="18530804"
+   d="scan'208";a="18530836"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:44 -0700
-X-CSE-ConnectionGUID: NyU76BH+Tbm9E9FZgNorSQ==
-X-CSE-MsgGUID: +OYHm8IWRninTprus44W/w==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:16:00 -0700
+X-CSE-ConnectionGUID: HoBNmIP0SxijAJWn9TI8rg==
+X-CSE-MsgGUID: vK+sG1WuQImm4pGnpP4DcA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="39650674"
+   d="scan'208";a="39650727"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.194])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:40 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:15:49 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Fenghua Yu <fenghua.yu@intel.com>,
 	linux-kernel@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v7 04/16] selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
-Date: Mon, 10 Jun 2024 18:14:45 +0300
-Message-Id: <20240610151457.7305-5-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v7 05/16] selftests/resctrl: Use correct type for pids
+Date: Mon, 10 Jun 2024 18:14:46 +0300
+Message-Id: <20240610151457.7305-6-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
 References: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
@@ -83,101 +83,143 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Both initialize_mem_bw_resctrl() and initialize_llc_occu_resctrl() that
-are called from resctrl_val() need to determine domain ID to construct
-resctrl fs related paths. Both functions do it by taking CPU ID which
-neither needs for any other purpose than determining the domain ID.
+A few functions receive PIDs through int arguments. PIDs variables
+should be of type pid_t, not int.
 
-Consolidate determining the domain ID into resctrl_val() and pass the
-domain ID instead of CPU ID to initialize_mem_bw_resctrl() and
-initialize_llc_occu_resctrl().
+Convert pid arguments from int to pid_t.
+
+Before printing PID, match the type to %d by casting to int which is
+enough for Linux (standard would allow using a longer integer type but
+generalizing for that would complicate the code unnecessarily, the
+selftest code does not need to be portable).
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Tested-by: Babu Moger <babu.moger@amd.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl_val.c | 33 ++++++++-----------
- 1 file changed, 13 insertions(+), 20 deletions(-)
 
+v5:
+- Cast to int before printing to match with %d.
+---
+ tools/testing/selftests/resctrl/cache.c       | 10 +++++-----
+ tools/testing/selftests/resctrl/resctrl.h     |  4 ++--
+ tools/testing/selftests/resctrl/resctrl_val.c |  8 ++++----
+ tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 1b339d6bbff1..1ff1104e6575 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -101,12 +101,12 @@ static int get_llc_occu_resctrl(unsigned long *llc_occupancy)
+  *
+  * Return:		0 on success, < 0 on error.
+  */
+-static int print_results_cache(const char *filename, int bm_pid, __u64 llc_value)
++static int print_results_cache(const char *filename, pid_t bm_pid, __u64 llc_value)
+ {
+ 	FILE *fp;
+ 
+ 	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
+-		printf("Pid: %d \t LLC_value: %llu\n", bm_pid, llc_value);
++		printf("Pid: %d \t LLC_value: %llu\n", (int)bm_pid, llc_value);
+ 	} else {
+ 		fp = fopen(filename, "a");
+ 		if (!fp) {
+@@ -114,7 +114,7 @@ static int print_results_cache(const char *filename, int bm_pid, __u64 llc_value
+ 
+ 			return -1;
+ 		}
+-		fprintf(fp, "Pid: %d \t llc_value: %llu\n", bm_pid, llc_value);
++		fprintf(fp, "Pid: %d \t llc_value: %llu\n", (int)bm_pid, llc_value);
+ 		fclose(fp);
+ 	}
+ 
+@@ -133,7 +133,7 @@ static int print_results_cache(const char *filename, int bm_pid, __u64 llc_value
+  * Return: =0 on success. <0 on failure.
+  */
+ int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
+-		       const char *filename, int bm_pid)
++		       const char *filename, pid_t bm_pid)
+ {
+ 	int ret;
+ 
+@@ -161,7 +161,7 @@ int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
+  *
+  * Return: =0 on success. <0 on failure.
+  */
+-int measure_llc_resctrl(const char *filename, int bm_pid)
++int measure_llc_resctrl(const char *filename, pid_t bm_pid)
+ {
+ 	unsigned long llc_occu_resc = 0;
+ 	int ret;
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 00d51fa7531c..e6f221236c79 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -174,8 +174,8 @@ void perf_event_initialize_read_format(struct perf_event_read *pe_read);
+ int perf_open(struct perf_event_attr *pea, pid_t pid, int cpu_no);
+ int perf_event_reset_enable(int pe_fd);
+ int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
+-		       const char *filename, int bm_pid);
+-int measure_llc_resctrl(const char *filename, int bm_pid);
++		       const char *filename, pid_t bm_pid);
++int measure_llc_resctrl(const char *filename, pid_t bm_pid);
+ void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines);
+ 
+ /*
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 5fad7e757af3..cccf6b80f3f3 100644
+index cccf6b80f3f3..5704fa3ba202 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -450,19 +450,12 @@ void set_mbm_path(const char *ctrlgrp, const char *mongrp, int domain_id)
-  * initialize_mem_bw_resctrl:	Appropriately populate "mbm_total_path"
-  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
-  * @mongrp:			Name of the monitor group (mon grp)
-- * @cpu_no:			CPU number that the benchmark PID is binded to
-+ * @domain_id:			Domain ID (cache ID; for MB, L3 cache ID)
-  * @resctrl_val:		Resctrl feature (Eg: mbm, mba.. etc)
+@@ -566,14 +566,14 @@ void signal_handler_unregister(void)
+  *
+  * Return:		0 on success, < 0 on error.
   */
- static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
--				      int cpu_no, char *resctrl_val)
-+				      int domain_id, char *resctrl_val)
+-static int print_results_bw(char *filename,  int bm_pid, float bw_imc,
++static int print_results_bw(char *filename, pid_t bm_pid, float bw_imc,
+ 			    unsigned long bw_resc)
  {
--	int domain_id;
--
--	if (get_domain_id("MB", cpu_no, &domain_id) < 0) {
--		ksft_print_msg("Could not get domain ID\n");
--		return;
--	}
--
- 	if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
- 		set_mbm_path(ctrlgrp, mongrp, domain_id);
+ 	unsigned long diff = fabs(bw_imc - bw_resc);
+ 	FILE *fp;
  
-@@ -621,19 +614,12 @@ static void set_cmt_path(const char *ctrlgrp, const char *mongrp, char sock_num)
-  * initialize_llc_occu_resctrl:	Appropriately populate "llc_occup_path"
-  * @ctrlgrp:			Name of the control monitor group (con_mon grp)
-  * @mongrp:			Name of the monitor group (mon grp)
-- * @cpu_no:			CPU number that the benchmark PID is binded to
-+ * @domain_id:			Domain ID (cache ID; for MB, L3 cache ID)
-  * @resctrl_val:		Resctrl feature (Eg: cat, cmt.. etc)
-  */
- static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
--					int cpu_no, char *resctrl_val)
-+					int domain_id, char *resctrl_val)
- {
--	int domain_id;
--
--	if (get_domain_id("L3", cpu_no, &domain_id) < 0) {
--		ksft_print_msg("Could not get domain ID\n");
--		return;
--	}
--
- 	if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
- 		set_cmt_path(ctrlgrp, mongrp, domain_id);
- }
-@@ -765,10 +751,17 @@ int resctrl_val(const struct resctrl_test *test,
- 	int ret = 0, pipefd[2];
- 	char pipe_message = 0;
- 	union sigval value;
-+	int domain_id;
+ 	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
+-		printf("Pid: %d \t Mem_BW_iMC: %f \t ", bm_pid, bw_imc);
++		printf("Pid: %d \t Mem_BW_iMC: %f \t ", (int)bm_pid, bw_imc);
+ 		printf("Mem_BW_resc: %lu \t Difference: %lu\n", bw_resc, diff);
+ 	} else {
+ 		fp = fopen(filename, "a");
+@@ -583,7 +583,7 @@ static int print_results_bw(char *filename,  int bm_pid, float bw_imc,
+ 			return -1;
+ 		}
+ 		if (fprintf(fp, "Pid: %d \t Mem_BW_iMC: %f \t Mem_BW_resc: %lu \t Difference: %lu\n",
+-			    bm_pid, bw_imc, bw_resc, diff) <= 0) {
++			    (int)bm_pid, bw_imc, bw_resc, diff) <= 0) {
+ 			ksft_print_msg("Could not log results\n");
+ 			fclose(fp);
  
- 	if (strcmp(param->filename, "") == 0)
- 		sprintf(param->filename, "stdio");
+@@ -828,7 +828,7 @@ int resctrl_val(const struct resctrl_test *test,
+ 		PARENT_EXIT();
+ 	}
  
-+	ret = get_domain_id(test->resource, uparams->cpu, &domain_id);
-+	if (ret < 0) {
-+		ksft_print_msg("Could not get domain ID\n");
-+		return ret;
-+	}
-+
- 	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
- 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
- 		ret = validate_bw_report_request(param->bw_report);
-@@ -863,10 +856,10 @@ int resctrl_val(const struct resctrl_test *test,
- 			goto out;
+-	ksft_print_msg("Benchmark PID: %d\n", bm_pid);
++	ksft_print_msg("Benchmark PID: %d\n", (int)bm_pid);
  
- 		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
--					  uparams->cpu, resctrl_val);
-+					  domain_id, resctrl_val);
- 	} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
- 		initialize_llc_occu_resctrl(param->ctrlgrp, param->mongrp,
--					    uparams->cpu, resctrl_val);
-+					    domain_id, resctrl_val);
+ 	/*
+ 	 * The cast removes constness but nothing mutates benchmark_cmd within
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 9b86f826a40c..917d677adbba 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -508,7 +508,7 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
  
- 	/* Parent waits for child to be ready. */
- 	close(pipefd[1]);
+ 		return -1;
+ 	}
+-	if (fprintf(fp, "%d\n", pid) < 0) {
++	if (fprintf(fp, "%d\n", (int)pid) < 0) {
+ 		ksft_print_msg("Failed to write pid to tasks file\n");
+ 		fclose(fp);
+ 
 -- 
 2.39.2
 
