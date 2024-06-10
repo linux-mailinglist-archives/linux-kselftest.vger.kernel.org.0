@@ -1,282 +1,261 @@
-Return-Path: <linux-kselftest+bounces-11587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02F44902807
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 19:51:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB30890280C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 19:52:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F64A286DB7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:51:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C24741C223A2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 17:52:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F75714884F;
-	Mon, 10 Jun 2024 17:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C6F14A0A0;
+	Mon, 10 Jun 2024 17:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="klFUu+L0"
+	dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b="Xkfjvm60"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A39314B978;
-	Mon, 10 Jun 2024 17:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718041893; cv=fail; b=dub6Qr9XsJVI4nTfO7HxscyLBnKplcC07RZyLL89I6gf5j2es8uLx0vI8taVKeqNE/D/pPyQBMS9Y8Ad45UwXC6Rzb6NNp9iKpjVlGJyHhbgTTt7Th2B9o0lnQmM/EdB2EmxexQFIoPCxuJIb4TU7S+sFtdEHvZD8ShOAN7ViV0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718041893; c=relaxed/simple;
-	bh=a+xp4L6pcnIGb3g0XrS7uZFmvaYunwvuvC2WcKsLRTU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=NFdUj1h/LMJCXx1dElh2djCvcaCAI80BCAVeYrgZ8T6wDONakLMKgHmHSTNEzNHxJbDS2nKngWps8c1CE84ZzuM3X+Hu3Yj4tCQ/j40QbJcsVhnxi0BNZoKGZJ7CwSR04dJwbYZPA23hxJF5orprXwwFn2BN0oQyFYhEgsb44ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=klFUu+L0; arc=fail smtp.client-ip=40.107.93.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PmRn0PXHbWtIYW1ykKjjdgtFq2rvpaNMUFR5p5nwWmRl6+44IR29Kyi6JQRVRQP0fk2tWOXUD2K2+g0P85crBcAz7gb2bNmMCbFFY8Cf5LBmuj8JYZPw3VZkiyO091JF9pAqCxJnvKrCmLeMhVcDk6JnEcnDoj90z8eVf7+ohKtwW7112EA6UJsqGAVwrF4+GhAvhG0UJV+C12myiU21xPfofTQNBcS919Y76Zs1ucCfE8xH8kT8SiwxoUY4uVIhrNku3XEFyOa5YoSPmy+i89Q2MrjZj3vkBbhLW/Eb5GFDN8lhbFwoobGDwQJgO8Sf8TLmbbmVTf5vToDHQlU+hA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1mW1dJwcFjejXwtjh93jH+bFn6/XJWi72t9a85vliN8=;
- b=AGdK6/Az4CaOX4y6Gs0DB3SNTRM08znrLyNTXIWLm//NGpTJhw9hF37VPTQZZkvTPo9yxTJYVvQXED5o3XxSwgc3wU811g1q84GhpXo4wTV6pRg9sx4mtPJceqXl/paDc57wIH6dgoHDAU0DVLGEMTWVwImb+cdXhLB/ib9nBoQj2CadbEnWj5YxQy2XjMTE7ScDPCx/uXkECwy91kJcFxP1j7+c/GjaJZCayjqPsSYq8WED1W/4CK1CYP8QdXum0bNY88hbpoOeSXQCYU9EENVj/ovRDq9N0chTs0w1a36zVr51kQ8iHyTlX77CkewhFHMxU9b+OXMyEwm4SBvJXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1mW1dJwcFjejXwtjh93jH+bFn6/XJWi72t9a85vliN8=;
- b=klFUu+L0GqnNSpnkPd+TVPZmyMSGds8tRGKjzN1e3kmi5DF8Jyt/XYm+VhgLwteBFKF64R7TzS7zN9NxPIyP5ppbWevB7IXiHwtcYYChp8ZEqWWEreA3eSo3pQn3iJohri6otEDjhoME0gw9864LBZtsBaiY0rmgnTtyXok0Z4Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Mon, 10 Jun
- 2024 17:51:28 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::b0ef:2936:fec1:3a87]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::b0ef:2936:fec1:3a87%4]) with mapi id 15.20.7633.036; Mon, 10 Jun 2024
- 17:51:28 +0000
-Message-ID: <0e153d27-fa1d-4c47-8d4e-a2004c991ffc@amd.com>
-Date: Mon, 10 Jun 2024 12:51:25 -0500
-User-Agent: Mozilla Thunderbird
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v2] selftests/resctrl: Fix noncont_cat_run_test for AMD
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: fenghua.yu@intel.com, Reinette Chatre <reinette.chatre@intel.com>,
- shuah@kernel.org, LKML <linux-kernel@vger.kernel.org>,
- linux-kselftest@vger.kernel.org,
- =?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
- peternewman@google.com, eranian@google.com
-References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
- <7679d70a0ea939db13ae9dac20de56644460d6df.1718035091.git.babu.moger@amd.com>
- <91052cec-071b-7cc7-5f85-4fa29ec2aea4@linux.intel.com>
-Content-Language: en-US
-From: "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <91052cec-071b-7cc7-5f85-4fa29ec2aea4@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DM5PR07CA0098.namprd07.prod.outlook.com
- (2603:10b6:4:ae::27) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A92D1482F6
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 17:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718041932; cv=none; b=jRGuHOA5rDn+JaNETbMRGEajJZ6j2fxbM/kd9S1Ox0vb28DZO5MRuBDktZ9TVKI6ancd9Pkpv8HLTv/oMzSlxUA4yaEAbqq1lB5hUv5SwYn8hpr8VL6y5l7GLGZRlKux8/D98rXJCbbM17x5yhPr/d5Jd1ydro14UrZpjTVpUbU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718041932; c=relaxed/simple;
+	bh=v44YU+l8fDTIyQ/px7h3zXXND4kIzPFteQ4qkB7IQ/0=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=bjOk72jfIxLg0bWF5K7GqFP3s9nADMQ6LvFUD+1cGI+ROr/xHJSJEkJkf8IL27aoEk1bemnh3s79TmsdK2LN6PCo389uHdYFnZRaWKKe59pmVIm4e8PSBXqwiDREFAzvLguMlTQqNf8o9TAA/jKVu3ZrnO7jmOmXRNfL9GtsKM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com; spf=pass smtp.mailfrom=jrtc27.com; dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b=Xkfjvm60; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jrtc27.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52bbdc237f0so283334e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 10:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user; t=1718041928; x=1718646728; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FWkRgN4oixQz2NDH8nagYU0C/GTWILi37MSJzJ0VQmc=;
+        b=Xkfjvm60rSiK5MZ6kKgSBTLIF3o1sgDk9J0ffR3u0kpgAQqAjxxTebLcryI2mi70Em
+         LMsY9/q7l0vERkJrql17vk4jA/Rqyw+YaMJyCo+8psQHrYYX4xeA2O009bUpATJFkjRv
+         H+nVIUyl4hsVPg+TjxlXewpiPI8XIUxZ8ddR0f7qzdaHKbOXjyblh2rsNCoSyzHssT9X
+         QYnNc6MSi2HAsR3HPmL5iD7Uhrw+6CNEXnHLiC0CTtXM/ROxQ+CxN73PDUyDfjiv0mhu
+         VsbXst/qCNQMxzylu7qiBbTyPn7j2Gps0eVnZiqag+Cp3tHP+VxMShjBzn61qvX5BVjH
+         hdhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718041928; x=1718646728;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FWkRgN4oixQz2NDH8nagYU0C/GTWILi37MSJzJ0VQmc=;
+        b=pjGk+lOxUQnPzI6Mlhl3MSwSC/piLpGco2EM2Br7oFRn+MNwrxA3MlNWMZHk5Y23iB
+         BF/l8fXb+k6he5SkclSPSk4ZbCkg690CqIe4dejc3TSNyMy2b31KSta/OSX6OIKG53Fq
+         QF51Jtm+9KqU1C3Pw/tauPz0Dv+a/sEVan4YA5KISjUuS2raMn3YFQRsgzc3zX8JiHaI
+         nN9QoKMSU9rlFdnwA91rJA7Gmh7V/KDNH2r3E1yKjJZEEtjqy9QHQxddEk2otFmDwg/P
+         /JDAlC3I03TYLhe2vivaVXdP5zHklpLk48Ta+inKAdqXvvxcdyTBAu8Zicq3dHaD/cU6
+         gsTA==
+X-Forwarded-Encrypted: i=1; AJvYcCU59NspjBIU0iO7cIWNSg+b9xRzz3aLiNR6SoKX1VM8TGX54eRX4EFRgnyAdoYDjFfT7D6VGPIn0oZtu9T8rAWJ12vNESyOoZnUkyj5OdXS
+X-Gm-Message-State: AOJu0YyPv959NmTGSg+14rUF+/onuuVb9UuzSJDIy30lnquAUHasDmcN
+	kdYDKdRGNTZkmZhPH9wj7IjRK7qQnUzOc29612CapCWIK8eccaADinN6+7o/gco=
+X-Google-Smtp-Source: AGHT+IH5OdYzcnTJ6D+zS8aIAAaJJTXjxs59RqwCSCJ2ph2wWmR2x/JtfntC1ryqtH5pn476yLkmFg==
+X-Received: by 2002:a05:6512:3baa:b0:52c:8ea3:1aea with SMTP id 2adb3069b0e04-52c8ea31d06mr2106714e87.34.1718041927588;
+        Mon, 10 Jun 2024 10:52:07 -0700 (PDT)
+Received: from smtpclient.apple ([131.111.5.201])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35f2598ac1esm2762915f8f.93.2024.06.10.10.52.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Jun 2024 10:52:07 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|MN0PR12MB5953:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60953e25-e388-46c1-d378-08dc8975f41f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K2hJTnBhOUlob1VHZTVYN05TZ1NUVVdYRFk4cE1xWlRRRTQ3MEpoYTZReWcr?=
- =?utf-8?B?anBobTZiMnZ3TmlIQmdiMkJPUHB1cFdyN0ZGV2tOTDdVTDBlNGtSSnBzZzIw?=
- =?utf-8?B?SWtpUXJqamJBNFFDd3BiQ0pYZ1ExdTFITW5LMHkrMzJLbUloU2pZNFRJaXBv?=
- =?utf-8?B?aGpDbHdmRWxpMXg5UTNtWFhKY09XV2owUE5RSGRtY1loZTltUG1FTC9jdnc0?=
- =?utf-8?B?eFQ1U3ZoVnBYMG9BLzFRcmQvUjBrZUNsMWtwd0syWWg5WWo3czc2K3Nvbmx2?=
- =?utf-8?B?amxkaHBWVDluZWZzRlF1elhGRytkT0dublpLUG15V05mL3NyNXEzS1V1L2tJ?=
- =?utf-8?B?SWNkcXVXS005eXZLdjZZYkZrNk1renovSkQ0TDZOQVU3aXF1c3B6d3I4d2pH?=
- =?utf-8?B?Yi9JQnJaTFVjK1Z0UmVCbjRDSDUzaVJiaEtqMVBxc3Y2czhmM3lrOGEwTGky?=
- =?utf-8?B?OHpIVWlNT290UmlaMGVvZWMybGJtc2RpL2hzbE04UU5LaVJqdXdBeWY4K0ky?=
- =?utf-8?B?Q3hDODlNMU9OZk1VYVdmNmpESGN5dTFyM3puaXgvaUdacDAzZXR6ekFObXFr?=
- =?utf-8?B?ZFYveWhEK29MYXFFamZBd0VRK082RmJBRFVDaUloWVpwVzFNK0Y0c3dhQlRy?=
- =?utf-8?B?MlNJcUpnc0sxeDJ3NVlLMFF0TTdDcFh0b2pEUlMvOFdSeWsyblZFdWZjMXRy?=
- =?utf-8?B?dnpTK1dpZSt6V0JVOStUdC9TekNjNldYSTZvR1c4YkloVVBKbFRqWmdKckNY?=
- =?utf-8?B?VFZQcElodC9USmFqck9LTlRNMFpWMTYrUU5iTXJWTGR3NWVMN3pVUG02MDg4?=
- =?utf-8?B?OUlTQldUM1I3SThJajRQcTZGajA1TkcySlVTc1A3aDBHL1NmeUE5NWdQUXR1?=
- =?utf-8?B?b04xeDVZRnFoaUtLdWo2dThidHB2RTBxaHlhbGlrNlpWV3hoUEtjVllVQlM2?=
- =?utf-8?B?UmRzNG1UTlBVeDRHSXZPT1p6LzZPSXQrTEZxNllJZWQ1UG8ra1BmMHozdkFX?=
- =?utf-8?B?eEVaTlFSbEUvamhCZG1vNFlhY3Z4bDdhbXNVVFhmMXo1ZzQ5TW5WcXRZaVkx?=
- =?utf-8?B?TnZBMS9YNE9RUlVyMVpSdTRrcWxOdldJUWpCaXJrN09WeGFYQ1U4TGg1dStJ?=
- =?utf-8?B?Mll4dUNTMVBabjBQU1ZsZHFmSm1xb2dwMzZaMkU2QzJ2OE0wbnJlMDdwNzh6?=
- =?utf-8?B?eGs1MGo5c1VmYmRtT2FvcXA0MkxQMzRLLzV5M1ptb29NaThISnBFcVdScDdI?=
- =?utf-8?B?S1poNmM3Ly9zWDExY2tVNEtIeXpiT0tzNnoxcGpwYWQ5aHVwRlp3TktvOEt5?=
- =?utf-8?B?cUx0OHNmYkFUOHdaTTg3dnhybHRraXFlS0o5M3VydC9oWXlCcmF3NHBVQU9K?=
- =?utf-8?B?Qjg4TmEyZXFDRjYzdDZZNU5KdSs4cUtwWTJWN1JJTDNNdXpYdW1GdkdTeFpu?=
- =?utf-8?B?UW9ZdENrQ0pvbi9oRW45RWNsOEFjVHJhWFdZa0tsWGFHRXJsK2YwR0FJQWpZ?=
- =?utf-8?B?NU9KTHdQN3plN2pDRmFYNDM4MXBQNXJBQlJtRWM3bkg4clQrTXNubEJNcHd1?=
- =?utf-8?B?Y20rLzhMaGdOa0F5NDdvMnJJY0ZzSEhrRVE0RVZ0REE2aHlSMXp6a1RYV2JI?=
- =?utf-8?B?UWM4cTRlZE9uS1V3QTROTUFxZVhqL1R2WnVwRVFKWjBaZjFtRXNTWHkyeVB1?=
- =?utf-8?Q?CnFA0q4JrZvb2AoKcKvM?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aTJaNXNzaE4zajFzblM1WkFza2RRckszSXdTU254VHJzT1RwUHF2aFNvc0Nr?=
- =?utf-8?B?bms5TkhKRmgwcXl2MmxsMnl5a2xnbVpveC9KSFlqMU9aN3Jud29CRWFoYm5s?=
- =?utf-8?B?NTlvd2NKUzZycUlRcG44eWZjRVh4RGpJRThTWko2SGdKSXpTbStacE9zb1Vp?=
- =?utf-8?B?WlBTOWlSYURjNzVnOUlDa1VlUjJ5QlRZWDhPb2JQc01MN2VUTDYwZVY3alNs?=
- =?utf-8?B?aVpwcncvMFBWVm1kM3pBcHhlckRGQzlvdUdhOW93UzVDZ25JN2pFeGcyU0xQ?=
- =?utf-8?B?UE9aZE9KNWlhOGNaK0NHODZGRHhjWktJa2x4ek5DSytTcjU0VXB5S0VBWWVr?=
- =?utf-8?B?dlNSWkFjRXJaZEJxeUY0VUMzRSthK1Q4NHlVSmE4bFJSM3M2Z3AvenhXRmZm?=
- =?utf-8?B?RXhSTGlwODdQRGJBQkVIZk4vODNHdjhicjd0dHhxTkcvMUc3Zk5OcUN1dWFa?=
- =?utf-8?B?ay95b0FBM1N2UmxPMUFXUmhSclRsSEU0KzZNOHpLeGNBMGc3S2pXWWZ2L2dR?=
- =?utf-8?B?bEl6WkV4VURVUEpVZnRpSGNXSTBhUm0rOFNVVU9LcHZKYkJPTmdzVk8xT05u?=
- =?utf-8?B?SFR6RXVPQldDL3NQU2lsVUZFK1dNMFZHcFlSRnQ1L1Q4ektUVHNDNUlNejRH?=
- =?utf-8?B?MWo2ZmIrSUVKLzJUMTFhN3p6S0IwRFRsNzNNdmRzTE5xRVQxWnIxdWIwRFF5?=
- =?utf-8?B?ZVJOSE94VzdRY1MvQzlFT2swSTFGVGtlVStuVjZJVGxTSFFzTlREUGpmT2tT?=
- =?utf-8?B?ZzkrRGxkNTBDUjJIaHA2VmpyTVhEMXZTZ2xaNnVUZi9NSGpZeWFtRUVaY0sz?=
- =?utf-8?B?MGVSbGM1M1VHeWR1OXdDS1FaUGlhNUdza0JRUThvT2dLK1d6RmgxNkFnbDdE?=
- =?utf-8?B?cVBxWXppajRIVm05Ulc4cUoydEpTSS9ObERBT09hR2RXN2hKZDd3T2pVOEVu?=
- =?utf-8?B?L2NDOG9acUhjTllOUEkrUVVFUGxjTzRBMFVWUVdpaGtHTUZURFlLZ2hJZzUz?=
- =?utf-8?B?ZkdBQ3hFMjNRdmEwbnZuWElIYWNhMVRWUlVBOXpGN3d0Tm1hZkVYS2RhWVkv?=
- =?utf-8?B?NldpNHUwSlBUZ2pHcjhscC9ra3pqUnZ0V3drckFRZ2xtb1QwUFJ3ZDYzaTNt?=
- =?utf-8?B?c2RMdkxNcU5aOEdHbUlhbW5pYzB5ckZKK3dYbVBFaVBkaHJLdVNTZEl1Q3F3?=
- =?utf-8?B?NThvaW9kNG5NSHU0R0JQOXdrL1N6RU5wQmhVNXJiMVU3djR4OVc4S2RvT3Vq?=
- =?utf-8?B?azBSNlB2VTI2elF3TkY0cVlTdDljaG1hTkFWMWI3S0htOFJoeUdhaUdZVnQ4?=
- =?utf-8?B?d3pZb1RrdnRzMExieHpFZ0Z5VWxoWVU1a0ZTVHZXWHU4aVZ0cDhqc200em1E?=
- =?utf-8?B?SlhkSDRIbjFPcnk3dit5STZRdmthMnRzSHBCTjViZkZ0aE9WSy9GNjVIOXhO?=
- =?utf-8?B?L1dFSFowNEs3TVRlcXFRR2R0TWRoR2FWdkFqUTJMVHFzOHcyU2xaY0xTaHRi?=
- =?utf-8?B?aGk4K3poZzdLbnpDOHBIWmFzbHd5TWErdWZVRE9CeStUUVB0Z2p0bk1Mblp4?=
- =?utf-8?B?R3VUNWh5Wk83NUh0S1lmWE1tM09mVWpXeFhzT3M4VE41ZXJEZlA1bzhwYW4x?=
- =?utf-8?B?d095YkZHc3dCQXZORFNkN0U4eXlQaCtOZVlKNGxiSHhudm1hSGU4UHhvTjNu?=
- =?utf-8?B?T1RJZW8veEc2QWtyanhmZDFsZ3ZRaWJqbnhOdGRaRzg1czdBWEhja2VhRTFk?=
- =?utf-8?B?dFRudWZIMXNOd2s5SUszZndTMTUwRmY0MHgwSm14WVpXMlo5SjdUNzEyczJh?=
- =?utf-8?B?RlU2ekQxSktZV1YyamZiaVg0WkxaQ0JxNkVBU1ZDZmFrV2g2UzJENTBDbWdo?=
- =?utf-8?B?ZW1jWGRMcS84aUt0SDFQaEhQNEZUb2tiTlFieU53Z1kvMHdHdXJOVUYrZDgy?=
- =?utf-8?B?YlhhL1lDTFA3NzlubUt2Nm1FRG8yVjBzM2tVa2Z2VnJCdnFlL1pnSDhpcStP?=
- =?utf-8?B?T1BuYzNsVWJYZlNnUW0xbkR2OThJOXphTzJnSWlCUUFRUHBYWEgyNzJJK3Rj?=
- =?utf-8?B?dUdNZTBQNW1HN1p3M0s3bGxMTWlpcFNsK0RWcDhmU2lLY2pRZis2SFg4dDBG?=
- =?utf-8?Q?AfSo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60953e25-e388-46c1-d378-08dc8975f41f
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2024 17:51:28.1146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r/hmDD4qf8WUsxcoxYASX7PFIRLBa8UNQ+5Jezj1YSSP+wwCBv57O2GnRUNp2Jbb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5953
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
+Subject: Re: [PATCH 05/13] riscv: vector: Use vlenb from DT for thead
+From: Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20240609-xtheadvector-v1-5-3fe591d7f109@rivosinc.com>
+Date: Mon, 10 Jun 2024 18:51:56 +0100
+Cc: Conor Dooley <conor@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Jisheng Zhang <jszhang@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>,
+ Guo Ren <guoren@kernel.org>,
+ Evan Green <evan@rivosinc.com>,
+ Andy Chiu <andy.chiu@sifive.com>,
+ linux-riscv <linux-riscv@lists.infradead.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ linux-sunxi@lists.linux.dev,
+ linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0944414F-321F-4159-AB85-C4B66AE9550B@jrtc27.com>
+References: <20240609-xtheadvector-v1-0-3fe591d7f109@rivosinc.com>
+ <20240609-xtheadvector-v1-5-3fe591d7f109@rivosinc.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
-Hi
+On 10 Jun 2024, at 05:45, Charlie Jenkins <charlie@rivosinc.com> wrote:
+>=20
+> If thead,vlenb is provided in the device tree, prefer that over =
+reading
+> the vlenb csr.
+>=20
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+> arch/riscv/include/asm/cpufeature.h |  2 ++
+> arch/riscv/kernel/cpufeature.c      | 48 =
++++++++++++++++++++++++++++++++++++++
+> arch/riscv/kernel/vector.c          | 12 +++++++++-
+> 3 files changed, 61 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/include/asm/cpufeature.h =
+b/arch/riscv/include/asm/cpufeature.h
+> index b029ca72cebc..e0a3164c7a06 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -31,6 +31,8 @@ DECLARE_PER_CPU(struct riscv_cpuinfo, =
+riscv_cpuinfo);
+> /* Per-cpu ISA extensions. */
+> extern struct riscv_isainfo hart_isa[NR_CPUS];
+>=20
+> +extern u32 thead_vlenb_of;
+> +
+> void riscv_user_isa_enable(void);
+>=20
+> #define _RISCV_ISA_EXT_DATA(_name, _id, _subset_exts, =
+_subset_exts_size) { \
+> diff --git a/arch/riscv/kernel/cpufeature.c =
+b/arch/riscv/kernel/cpufeature.c
+> index 2107c59575dd..0c01f33f2348 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -37,6 +37,8 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) =
+__read_mostly;
+> /* Per-cpu ISA extensions. */
+> struct riscv_isainfo hart_isa[NR_CPUS];
+>=20
+> +u32 thead_vlenb_of;
+> +
+> /**
+>  * riscv_isa_extension_base() - Get base extension word
+>  *
+> @@ -625,6 +627,46 @@ static void __init riscv_fill_vendor_ext_list(int =
+cpu)
+> }
+> }
+>=20
+> +static int has_thead_homogeneous_vlenb(void)
+> +{
+> + int cpu;
+> + u32 prev_vlenb =3D 0;
+> + u32 vlenb;
+> +
+> + /* Ignore vlenb if vector is not enabled in the kernel */
+> + if (!IS_ENABLED(CONFIG_RISCV_ISA_V))
 
-On 6/10/24 11:20, Ilpo Järvinen wrote:
-> On Mon, 10 Jun 2024, Babu Moger wrote:
-> 
->> The selftest noncont_cat_run_test fails on AMD with the warnings. Reason
-> 
-> noncont_cat_run_test()
+It=E2=80=99s not V though. You probably want to split out =E2=80=9Cvector=E2=
+=80=9D from =E2=80=9CV=E2=80=9D in
+Kconfig land. Most places want the former, I assume, but some want the
+latter.
 
-I want to mention the test here. not function. How about this?
+Jess
 
-"The selftest non-contiguous CBM test fails on AMD with the warnings."
+> + return 0;
+> +
+> + for_each_possible_cpu(cpu) {
+> + struct device_node *cpu_node;
+> +
+> + cpu_node =3D of_cpu_device_node_get(cpu);
+> + if (!cpu_node) {
+> + pr_warn("Unable to find cpu node\n");
+> + return -ENOENT;
+> + }
+> +
+> + if (of_property_read_u32(cpu_node, "thead,vlenb", &vlenb)) {
+> + of_node_put(cpu_node);
+> +
+> + if (prev_vlenb)
+> + return -ENOENT;
+> + continue;
+> + }
+> +
+> + if (prev_vlenb && vlenb !=3D prev_vlenb) {
+> + of_node_put(cpu_node);
+> + return -ENOENT;
+> + }
+> +
+> + prev_vlenb =3D vlenb;
+> + of_node_put(cpu_node);
+> + }
+> +
+> + thead_vlenb_of =3D vlenb;
+> + return 0;
+> +}
+> +
+> static int __init riscv_fill_hwcap_from_ext_list(unsigned long =
+*isa2hwcap)
+> {
+> unsigned int cpu;
+> @@ -689,6 +731,12 @@ static int __init =
+riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
+> riscv_fill_vendor_ext_list(cpu);
+> }
+>=20
+> + if (riscv_isa_vendor_extension_available(THEAD_VENDOR_ID, =
+XTHEADVECTOR) &&
+> +    has_thead_homogeneous_vlenb() < 0) {
+> + pr_warn("Unsupported heterogeneous vlenb detected, vector extension =
+disabled.\n");
+> + elf_hwcap &=3D ~COMPAT_HWCAP_ISA_V;
+> + }
+> +
+> if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
+> return -ENOENT;
+>=20
+> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> index 6727d1d3b8f2..3ba2f2432483 100644
+> --- a/arch/riscv/kernel/vector.c
+> +++ b/arch/riscv/kernel/vector.c
+> @@ -33,7 +33,17 @@ int riscv_v_setup_vsize(void)
+> {
+> unsigned long this_vsize;
+>=20
+> - /* There are 32 vector registers with vlenb length. */
+> + /*
+> + * There are 32 vector registers with vlenb length.
+> + *
+> + * If the thead,vlenb property was provided by the firmware, use that
+> + * instead of probing the CSRs.
+> + */
+> + if (thead_vlenb_of) {
+> + this_vsize =3D thead_vlenb_of * 32;
+> + return 0;
+> + }
+> +
+> riscv_v_enable();
+> this_vsize =3D csr_read(CSR_VLENB) * 32;
+> riscv_v_disable();
+>=20
+> --=20
+> 2.44.0
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-> 
-> (In general, use () when refering to a function, same thing in the 
-> shortlog).
-> 
-> "the warnings" sounds like I should know about what warning it fails with
-> but there's no previous context which tells that information. I suggest 
-> you either use "a warning" or quote the warning it fails with into the 
-> commit message.
-> 
->> is, AMD supports non contiguous CBM masks but does not report it via CPUID.
-> 
-> non-contiguous
-
-Sure.
-
-> 
->> Update noncont_cat_run_test to check for the vendor when verifying CPUID.
-> 
-> ()
-
-Sure.
-
-> 
->> Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test")
->> Signed-off-by: Babu Moger <babu.moger@amd.com>
->> ---
->> v2: Moved the non contiguous verification to a new function
->>     arch_supports_noncont_cat.
->>
->> v1:
->> This was part of the series
->> https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
->> Sending this as a separate fix per review comments.
->> ---
->>  tools/testing/selftests/resctrl/cat_test.c | 32 +++++++++++++++-------
->>  1 file changed, 22 insertions(+), 10 deletions(-)
->>
->> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
->> index d4dffc934bc3..742782438ca3 100644
->> --- a/tools/testing/selftests/resctrl/cat_test.c
->> +++ b/tools/testing/selftests/resctrl/cat_test.c
->> @@ -288,11 +288,30 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
->>  	return ret;
->>  }
->>  
->> +static bool arch_supports_noncont_cat(const struct resctrl_test *test)
->> +{
->> +	unsigned int eax, ebx, ecx, edx;
->> +
->> +	/* AMD always supports non-contiguous CBM. */
->> +	if (get_vendor() == ARCH_AMD)
->> +		return true;
->> +
->> +	/* Intel support for non-contiguous CBM needs to be discovered. */
->> +	if (!strcmp(test->resource, "L3"))
->> +		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
->> +	else if (!strcmp(test->resource, "L2"))
->> +		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
->> +	else
->> +		return false;
->> +
->> +	return ((ecx >> 3) & 1);
->> +}
->> +
->>  static int noncont_cat_run_test(const struct resctrl_test *test,
->>  				const struct user_params *uparams)
->>  {
->>  	unsigned long full_cache_mask, cont_mask, noncont_mask;
->> -	unsigned int eax, ebx, ecx, edx, sparse_masks;
->> +	unsigned int sparse_masks;
->>  	int bit_center, ret;
->>  	char schemata[64];
->>  
->> @@ -301,15 +320,8 @@ static int noncont_cat_run_test(const struct resctrl_test *test,
->>  	if (ret)
->>  		return ret;
->>  
->> -	if (!strcmp(test->resource, "L3"))
->> -		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
->> -	else if (!strcmp(test->resource, "L2"))
->> -		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
->> -	else
->> -		return -EINVAL;
->> -
->> -	if (sparse_masks != ((ecx >> 3) & 1)) {
->> -		ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
->> +	if (arch_supports_noncont_cat(test) != sparse_masks) {
->> +		ksft_print_msg("Hardware and kernel differ on non-contiguous CBM support!\n");
->>  		return 1;
-> 
-> This looks better than the previous version, thanks.
-
-Thanks.
-Babu Moger
 
