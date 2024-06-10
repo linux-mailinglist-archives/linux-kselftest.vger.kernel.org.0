@@ -1,154 +1,146 @@
-Return-Path: <linux-kselftest+bounces-11546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01CE901D32
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 10:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A8E901DF9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 11:20:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C2D61F2125E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 08:43:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 841BD1F22828
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 09:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9216F312;
-	Mon, 10 Jun 2024 08:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A3574054;
+	Mon, 10 Jun 2024 09:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="mnhLTPrt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oYdR8igH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F79GrgXI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow1-smtp.messagingengine.com (flow1-smtp.messagingengine.com [103.168.172.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E68B6F2F0;
-	Mon, 10 Jun 2024 08:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF92335A7
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 09:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718008929; cv=none; b=o5pQs48g5zsm8nTh2s5B0+7sciSSQJmKMGNDpN5lR72vdbFlho7YIAZi6+LRMA3czgCGnY9dGBD4QjeI8y+rI8VHSY/OkPs2iFjQnXsrxQuPCX+m60SuzjNqXad1RD0YDNnLGCS4c1A4oY8hOlBsoja8zRnVIH89a0NZef9S5yA=
+	t=1718011253; cv=none; b=NIliGv1GVvv6J2ZlthlbVVctb2fhVTuh/kKRjgO8rLaOjg4d8MRvBTUTv2uG1A1atxa8PBwOVIJstB+JIjjT9bd/06VCg2UkleGt6JgJ07NQP/ugoXKR7z0EAbJkefg7tpYcR2Ev2G8EjdJSNuvymAqYV9suOcuUsMuXRBWzIgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718008929; c=relaxed/simple;
-	bh=ITgA5tjnrazsj2z8uUTCi7sXYM16+9a2OVtLAQMXods=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Relsxzy4uQyga+2a98GurNHHEQIEExo26YbVWohBMv+H7mKKVdz/Hpmv/8odHhLY4IZNe7E16gGqOobQWcB+vJBqlXanCysjfuaXuXcpF3z94peuEkDooGfRXdYSOdvJ38e8Yu+WOMR72csTV9H1Mbq3uX+Iz22IdUpp3m/hr1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=mnhLTPrt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oYdR8igH; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailflow.nyi.internal (Postfix) with ESMTP id 5B03E200404;
-	Mon, 10 Jun 2024 04:42:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 10 Jun 2024 04:42:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1718008926; x=1718012526; bh=qmk9dz8QY8
-	vVMsdJ1Kd+/af5+W3nNXWO20q8csDii3A=; b=mnhLTPrtZQ/DDGiawOwuJeaWat
-	64250584gAjf2J/Dh8JvewKGYb34oCQE7URqIZHKpzJUeYA1kKsjDnhkfUZX+E68
-	+8LVxRN9t/wJJjEEuCIuLof7r8VwRIZrZVHEAxubGvtTPuErvpSMPolZc6h/FBs6
-	TnUtSUmlc0OkbJmubq9zDokuTpz7ngnJl4EEexVQqOAqSn6pQo4Yp6x54OpvrcCE
-	XoIpGEw5oanL1CCEcLnD1Mbujxjb6oms1X2GanNYQEYDUDbSg8aqnlDuyXX+O/MN
-	PNOtsnmF7Ft5GaBeljHc9lHlaU2Wz+ihucK9sDes64ynJ1BHh+vrhTVwTgQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1718008926; x=1718012526; bh=qmk9dz8QY8vVMsdJ1Kd+/af5+W3n
-	NXWO20q8csDii3A=; b=oYdR8igHwhuxgPsbo+C1eL/H3iR7gJqPSOM/AbjIQpfK
-	67ktft+vuRVUKOaSvQRrky9qaOMVWGj9avRo7pDMQvDIUFwkzbpuOiDn6K/TcgJt
-	K0frIvAmuJWqDSWzdLA0kJ+/Mque4OK/hfemuDOAqZAWyceRSHkX5eUTbIyt8DYe
-	OhZixUDRh5ix2wgO28sZgvD7JW1Xe/+XTSGgkl9r6Q/yVMV6LyMXNCZhBqlzO2Wo
-	mWBL3VIwKNRUn2DZuAKHbw6ioQD7VWsp8Bn9Ad8sFqGX9pKA8tZ6n3tYRn9gmqbD
-	Z3JJFybCaAzTgVcMBgq/Sa50HuXv9Mh3IMoYALTfUA==
-X-ME-Sender: <xms:XrxmZvzZP7xbrkP_X1Z_DJfplTPafejtRtkJI4A43LClUzmSIHIS5w>
-    <xme:XrxmZnRUTkndK9sE_BuuYIUb3li2sZXgcdw5psio_zlMRycF1h7dtvtqc0gXr60x-
-    dYdIq0OVEdPTi7AuKY>
-X-ME-Received: <xmr:XrxmZpWFigCDMyF99Q0x1VukZuZF0pDyfj4v2qucOFZZZDNBIvxynahcR2xUygWLyodScN7TnSc7OL_2djL-qWE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedutddgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddtjeenucfhrhhomheplfhonhgr
-    thhhrghnucevrghlmhgvlhhsuceojhgtrghlmhgvlhhsseefgiigtddrnhgvtheqnecugg
-    ftrfgrthhtvghrnhepkeekteegfefgvdefgfefffeufeffjedvudeijeehjeehffekjeek
-    leffueelgffgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepjhgtrghlmhgvlhhsseefgiigtddrnhgvth
-X-ME-Proxy: <xmx:XrxmZpgqPk_6F3e5JQ18-ltyf9uNdIpk3jU47q9k4RC_A1m-HkSIAA>
-    <xmx:XrxmZhB3IOiTK8sDG3QzU35vcUkoWUzUhlt1H4t01NxV3RSUPw8VgA>
-    <xmx:XrxmZiKucST3S9pfjfKdDEsNV54urVKt3wVhxz_XrYt_KNl9GdSMGg>
-    <xmx:XrxmZgBCzxwwvZvceM4u8WKtEVlmeP_3n1PIWsMJ5HQgJ1N61m6WRg>
-    <xmx:XrxmZtzmO1peIdr1owfiir_hApCQU2o9fIR5wZQfJTTv79xrcvqQ4J7P>
-Feedback-ID: i76614979:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Jun 2024 04:42:02 -0400 (EDT)
-Date: Mon, 10 Jun 2024 01:47:13 -0700
-From: Jonathan Calmels <jcalmels@3xx0.net>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Andrew Morgan <morgan@kernel.org>, brauner@kernel.org,
- 	ebiederm@xmission.com, Jonathan Corbet <corbet@lwn.net>,
- 	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- KP Singh <kpsingh@kernel.org>,
- 	Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>,
- 	Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- 	Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- 	Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
- Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
- John Johansen <john.johansen@canonical.com>,
- 	David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- 	Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, 	Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, containers@lists.linux.dev,
- 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, 	linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org, apparmor@lists.ubuntu.com,
- 	keyrings@vger.kernel.org, selinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] capabilities: Add user namespace capabilities
-Message-ID: <6pwskrbtmxjy2ti3xabfslmupjhat7dhrnbftinzhxgxnsveum@5jq5l6ws7hls>
-References: <20240609104355.442002-1-jcalmels@3xx0.net>
- <20240609104355.442002-2-jcalmels@3xx0.net>
- <20240610015024.GA2182786@mail.hallyn.com>
+	s=arc-20240116; t=1718011253; c=relaxed/simple;
+	bh=Xv/dEiCRkSpodmaL2d//ZO1u0bmo9WpTjN01UGyMVF0=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PSxfAGZV7Mk1q9TB3SDz2cepXupTIPwuCMBYwgzNzVY05e7RKq0Al8bzzNFZBamIOc8JvWHn6Bj9ZBjpHNlk47MpP9gvc8fO3Wli90SF1WQQoj5YkZSl/nhHfnFKpWaEcKCaMR2zPyfMu7kHJIBdK8cZGDpL2DictzGpWTQoy1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F79GrgXI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718011251;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8iJ6dvPVXFgwtQ4T7unQwyUfRp5ecBG5cGhKrfZARQs=;
+	b=F79GrgXIboyumavs4OktKj/EXLJydCCpWHRRADW6QGNKs6Mpz+q+ZDdpaHSgS0a43/OuM4
+	y7KGnPmWgYNzaBvKDLrPjg5XN4iXPsQegXPHMk7XflUYmu63rERySs3PDAbpNJ5BY72C4d
+	0/feck1Y3zMBFdPgV6j2UusTIFiTdIU=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-rN5hOhSAOaWOOmCReYtyeA-1; Mon, 10 Jun 2024 05:20:49 -0400
+X-MC-Unique: rN5hOhSAOaWOOmCReYtyeA-1
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-62a0841402aso69701777b3.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 02:20:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718011249; x=1718616049;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8iJ6dvPVXFgwtQ4T7unQwyUfRp5ecBG5cGhKrfZARQs=;
+        b=lcKMpzfkU+dIGd4iBFkPRVZgxeRvFDozT6lGbnitvU5EbGFDyOu+i6N8uwHrQtFFnb
+         VpKMUmR00Wpo5jFYBAf4BBypzti+iv6rMKNXVU8h2v8P9+N0RpHLNANLlEl0dNvAaPGq
+         hKDtvw6uZmyQUPbfWG5oalhQUzECprv2fZSEhvNXykv2DCC+1AUqRKPYoeyv0J05YUS9
+         7SgSSivg4G8oOJ/2fGQRUyj0Qc8cdIqjMNviVSsQQgNYPEihA0M4+xwNXaFXxMo2YRXU
+         owZ9/WimSjadzxNobb2DicxdxuVPK/2ANnq+0oIEC2ROUFtjm0DJitUjXoRiIf9Tmiys
+         f+Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCWb9nHugp4LkLA/JhXW7tfvA/ovQLkVIU7l5wh2OAV1TxUE6E0mSvpm3zIt04lMf8ICd/lamW5zqjdLZRbkTd+gaT3FAT8j6G+UU4IeSxSM
+X-Gm-Message-State: AOJu0Yym2GRYfN8IWOTRUUNjJkrotWeDfMMkDFYUt/5jGDZO+g6q9zsb
+	prAI9zM8B4+d4keJ1FPvoXTVZH/H7U4HxYKAa/WKybDKqfhjXgkyjlR0fQ/wXAGgNQlHOAP/IYc
+	3LpigbGdY3T2UpsrZwopMn4ozq6J/bVChs0EVU4yunW7DQMQgLPKRtol/5B+yzdQD3Tk4+1RUwT
+	i8FBivlLNZVGkwpSFYALn9zRC6fv3/u0OqLRu1uQKW
+X-Received: by 2002:a0d:e304:0:b0:61a:cea1:3c63 with SMTP id 00721157ae682-62cd56a9f69mr80025647b3.47.1718011248850;
+        Mon, 10 Jun 2024 02:20:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHFjnKBptFBgLEV5bzktHbMReA8zI8OX4PPVkODmioQ2wqMk8XLBtAg+pDd9bzT3M9lgzkU0g8BWKSGH4IH14Q=
+X-Received: by 2002:a0d:e304:0:b0:61a:cea1:3c63 with SMTP id
+ 00721157ae682-62cd56a9f69mr80025547b3.47.1718011248570; Mon, 10 Jun 2024
+ 02:20:48 -0700 (PDT)
+Received: from 311643009450 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 10 Jun 2024 05:20:47 -0400
+From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
+References: <20240603185647.2310748-1-amorenoz@redhat.com> <20240603185647.2310748-10-amorenoz@redhat.com>
+ <20240605194314.GX791188@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240610015024.GA2182786@mail.hallyn.com>
+In-Reply-To: <20240605194314.GX791188@kernel.org>
+Date: Mon, 10 Jun 2024 05:20:47 -0400
+Message-ID: <CAG=2xmMgEUVwhqSFV5uXe_HuXeMaN7kDPW5TpmcihHYe0seo+Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 9/9] selftests: openvswitch: add emit_sample test
+To: Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com, 
+	i.maximets@ovn.org, dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Jun 09, 2024 at 08:50:24PM GMT, Serge E. Hallyn wrote:
-> On Sun, Jun 09, 2024 at 03:43:34AM -0700, Jonathan Calmels wrote:
-> > Attackers often rely on user namespaces to get elevated (yet confined)
-> > privileges in order to target specific subsystems (e.g. [1]). Distributions
-> 
-> I'd modify this to say "in order to target *bugs* in specific subsystems" :)
+On Wed, Jun 05, 2024 at 08:43:14PM GMT, Simon Horman wrote:
+> On Mon, Jun 03, 2024 at 08:56:43PM +0200, Adrian Moreno wrote:
+> > Add a test to verify sampling packets via psample works.
+> >
+> > In order to do that, create a subcommand in ovs-dpctl.py to listen to
+> > on the psample multicast group and print samples.
+> >
+> > In order to also test simultaneous sFlow and psample actions and
+> > packet truncation, add missing parsing support for "userspace" and
+> > "trunc" actions.
+> >
+> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+>
+> ...
+>
+> > @@ -803,6 +819,25 @@ class ovsactions(nla):
+> >                  self["attrs"].append(["OVS_ACTION_ATTR_EMIT_SAMPLE", emitact])
+> >                  parsed = True
+> >
+> > +            elif parse_starts_block(actstr, "userspace(", False):
+> > +                uact = self.userspace()
+> > +                actstr = uact.parse(actstr[len("userpsace(") : ])
+>
+> nit: userspace
+>
+>      Flagged by checkpatch.pl --codespell
+>
 
-Ack
+Thanks. Will fix it.
 
-> > This effectively mimics the inheritable set rules and means that, by
-> > default, only root in the user namespace can regain userns capabilities
-> > previously dropped:
-> 
-> Something about this last sentence feels wrong, but I'm not sure what
-> the best alternative would be.  As is, though, it makes it sound as though
-> root in the userns can always regain previously dropped capabilities, but
-> that's not true if dropped in ancestor ns, or if root also dropped the
-> bits from its bounding set (right?).
+> > +                self["attrs"].append(["OVS_ACTION_ATTR_USERSPACE", uact])
+> > +                parsed = True
+> > +
+> > +            elif parse_starts_block(actstr, "trunc", False):
+> > +                parencount += 1
+> > +                actstr, val = parse_extract_field(
+> > +                    actstr,
+> > +                    "trunc(",
+> > +                    r"([0-9]+)",
+> > +                    int,
+> > +                    False,
+> > +                    None,
+> > +                )
+> > +                self["attrs"].append(["OVS_ACTION_ATTR_TRUNC", val])
+> > +                parsed = True
+> > +
+> >              actstr = actstr[strspn(actstr, ", ") :]
+> >              while parencount > 0:
+> >                  parencount -= 1
+>
 
-Right, the wording is a little bit confusing here I admit.
-What I meant to say is that if a cap is dropped in a *given* namespace,
-then it can only be regained by root there. But yes, caps can never be
-regained from ancestors ns. I'll try to rephrase it.
-
-BTW, this is rather strict, but I think that's what we want right,
-something simple? Alternative would be to have a new cap masked off by
-default, but if granted to a userns, allows you to regain ancestors
-caps.
 
