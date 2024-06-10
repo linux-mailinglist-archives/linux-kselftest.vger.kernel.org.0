@@ -1,573 +1,306 @@
-Return-Path: <linux-kselftest+bounces-11605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7428A902AA5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 23:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7126902B12
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 23:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDD9D1F22876
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 21:33:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EFA01F235DA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 21:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF50C1411DF;
-	Mon, 10 Jun 2024 21:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37FF1494B9;
+	Mon, 10 Jun 2024 21:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAc91S7n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M24K3IzU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6506823A3;
-	Mon, 10 Jun 2024 21:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718055211; cv=none; b=b1SMNeWHy0chnCKrrM9gJogL2z0hH0XXPRDOzo833RyqgO7XM3KE41tij2EJ+hM66SCRV8YmDH0Vw3KpOoq1nR4QTx/jcBzRkL8Ypvyz/hjAZeIdgxytzW2nqbsdwXK+p0oTva+5UWSpwN5qN0oUk+PDYw7CfA/RYmQ2yckL59k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718055211; c=relaxed/simple;
-	bh=GRnlzHKq5aMXH2GhwxdxPnYAkFdUtWZSo+OWffpaVfE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SS/p25Bg0A2+By65L/8HLQZHnktD/zk/D16oxRbK/pNmr1MLbVY+v4MyAp/qJpPM/6wl8YOiyVuMmDf1QKLuatV0IGdG7cOztfkesAae9MegcV9rRJwk5Pxhx8X7qM4PbBpFSi2ZcL87pB0vqUlu86ndq0WkllkmJfQnUwgVlKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAc91S7n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC95C4AF1C;
-	Mon, 10 Jun 2024 21:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718055210;
-	bh=GRnlzHKq5aMXH2GhwxdxPnYAkFdUtWZSo+OWffpaVfE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JAc91S7nbFtkADGUTbMbHpC2IcLORyoMvAXxg6Sbm5+ebymJwnwvMBm+uBDAi8F5R
-	 qxipyNMP7NyKPOB0k232lSARvfzlfrfH6TTH46T4cwe/SYcQ8dCFYXgnoEaUJUwF7E
-	 jmL1poJDtXvpIZ6bAXWA+qPk9OkcgSIh+v4BXP+Q0ScoyOyG87/K38TGcGbUwxtqFB
-	 drYZN1E58Fy1FPlN/iibnvsDDsDPNRA8oIdjr+/OzNmfujyP1Bmokf4ObAv5ZQWNbq
-	 zakxmAQWSd2gXHkoOArzY9Fe8xBQR/0OMCKhKQSpyF+MBmM+Vo2z3i+lOsYjUsP/HF
-	 sMGdM8qlgr+Fw==
-From: Kees Cook <kees@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Kees Cook <kees@kernel.org>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 2/2] usercopy: Convert test_user_copy to KUnit test
-Date: Mon, 10 Jun 2024 14:33:29 -0700
-Message-Id: <20240610213330.1310156-2-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240610213055.it.075-kees@kernel.org>
-References: <20240610213055.it.075-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA251879;
+	Mon, 10 Jun 2024 21:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718056702; cv=fail; b=qmWGxnCANVtH7vy8aLlDto0VGXh+ULG80h3XSi0x6689LAiQknuCN6JLLCUgpF6Sd8p+WzUyJ3X/0NeVQ0XN4SG4LmSLgoNIqqADDyYYmK2sb2HD9cts7CzK2hJLuNHzBj2w4faTXcXX7ryWHwbGAu4/XHZHJC0SB2iFzZZtKAE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718056702; c=relaxed/simple;
+	bh=/WLagHD9Dr97RwE74AVBCn92lzQ6MxZMi5SWTKoJf4g=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=H8jW73u+s920riY/SHtjRqWi+4sCiAC7Vb5DhbmWy0giTTiGRYUXvM49dNVDvX43Oen1oMLMghXAR8pvmDqcm54+pzebSSSMXNajLo3MOQn5xhYmC8htpNq3U7NN3/1WfZIOfxA/I0OhDoyev3ZI5qDTScUCeS4Zo0clORkR6K4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M24K3IzU; arc=fail smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718056700; x=1749592700;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/WLagHD9Dr97RwE74AVBCn92lzQ6MxZMi5SWTKoJf4g=;
+  b=M24K3IzUS0E8Aq0X/TOZZMcWZjupr8beiwgzwgVgR1DimAb5i9Zkce0a
+   PMrgJOBEaqhO2+O99a3KIlASfl4HH2Xj9egcy5ugmmk+ufV+FNZoFMxvv
+   G1rHokDtRuY6Am/X3ZpnRw898R+Sf6LxOL9fv2lYhnTW+TwHF0dmdsjIl
+   F7+lmUzuKVC9Jq+T6ww2+i8wt3FqOqjeVETPEkzjMRhItDqI5/HdIZq9C
+   td6vrfFEqH2oHHoMH2QMVMSK0aCN8+hubWP7I9xJmYeB/eazLOvOvuulv
+   QL+igrygx7Z+d41LQ8nGzqKvMdnbjchFkuksgR5cb99M1hKmGZpzi1unm
+   A==;
+X-CSE-ConnectionGUID: oKe4sp7XRNeX3FvzE09q/Q==
+X-CSE-MsgGUID: NLFgI9C3SMyuBsttfJ7VQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="26156445"
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="26156445"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 14:58:20 -0700
+X-CSE-ConnectionGUID: tDDghV1uQeqS1Kf6Lfx9iQ==
+X-CSE-MsgGUID: t5UmiXdhRT+/RsI2cRxKbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="39872617"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 10 Jun 2024 14:58:20 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 10 Jun 2024 14:58:19 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 10 Jun 2024 14:58:18 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Mon, 10 Jun 2024 14:58:18 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 10 Jun 2024 14:58:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OghuozQz2dhIoKIWrG9YHgjjfaYd1fE/l9L7HfrhNYx5dyvzUOM/fg1jUTlUNAV2d784iA1BN0DM7prw+f7hUwRK2Cyy7FTLF1htM9fZw0P0wOhBHOjLkWF7ZU7CUoRWg0afxz/3UvDwxYg2hobGPW3nZRxzpx5L8mS2KbiFcuY7XBhIEIWg/ADyyQLfbgtZmriBVRSDOylh9auroE761KnilZ26X3aL+LgqczveblALoLVKPPv5sPFlPLWjuigj3vX0Lts5dvqmrSbSyRZmhQ5KouzXHjvIyQ8XsmrjPu/8TMvvnnsKi7WE33VwF+6ggmiN2RoHliidbVkrv1R0ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TeSB16QjBecWWcsnmyCV96QZxh6ZanRtHGZ1PY0RS0I=;
+ b=kqoCHHGCnUofs35iURv1rIVjkwAnCkamaKRCsVgavzQBl51a9hFN7QBvENnBEKQPwvhDg3haiJo+FHkSTimOZMYLVU6FVpMJxLrtoePukDMVlyy6s6Zgomif78wWbPtntQAwhJy25isYXlRvmsfMVfTefSkr8qp13OK/jN3GbpmPtW430DK9yhNGohNzhYjMGCZIxjvGD3uMOq5X5bU3do1iaV/Z77gXS83GR8Jx31z5M15o8+q8sibdhdGre+GsIWsvPnYMEnJHSxez6HLdE9infl2JTwB9FDhtzmz71tHskkVCuEpVOTxvwBWoKIOGsmgbQbPVb50tZ8H8vV+n0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by SA0PR11MB4688.namprd11.prod.outlook.com (2603:10b6:806:72::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Mon, 10 Jun
+ 2024 21:58:17 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf%3]) with mapi id 15.20.7633.036; Mon, 10 Jun 2024
+ 21:58:17 +0000
+Message-ID: <a673b421-0857-4220-a7db-2d58bfc07981@intel.com>
+Date: Mon, 10 Jun 2024 14:58:14 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 00/16] selftests/resctrl: resctrl_val() related
+ cleanups & improvements
+To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+CC: Fenghua Yu <fenghua.yu@intel.com>, <linux-kernel@vger.kernel.org>, "Babu
+ Moger" <babu.moger@amd.com>, =?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?=
+	<maciej.wieczor-retman@intel.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>, <linux-kselftest@vger.kernel.org>
+References: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
+Content-Language: en-US
+From: Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20240610151457.7305-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR04CA0044.namprd04.prod.outlook.com
+ (2603:10b6:303:6a::19) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17970; i=kees@kernel.org; h=from:subject; bh=GRnlzHKq5aMXH2GhwxdxPnYAkFdUtWZSo+OWffpaVfE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmZ3EplFH97VNa3dWpoXuKJ2EVjs8oxzqd6qqbq dSJlbhHUimJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZmdxKQAKCRCJcvTf3G3A JhupD/oChI8KvX6ELI7TU1GIrmMet6CGbY+03yqABngtaU548/GGjFk4yQcjNAfDxHHObrOAWXj FgBGdIzFXvwvXHafCmwqgicebuczS+j8hxrCHrylf6PDr0epnjDBNgO006+lZA1uoISYq4OlWso u3765Y4mbNL6S2D+QNwdQ4s9Llb5bzt5FY6gmrnMr/dBIG3fYT7JnJDRt1nYKUyiYtK+/y87PW6 20Si4AzK6CDutoZ40n2oo6sICpPLYVv1ge8LP4XFcG7xqsEfCEqI5j62bAehL5dFZKnmtKt5+8N wrWAyIUd4tnsmPgmC8EVHSgu3qH2ZnLPWmkXuMPahTV/XL7soGUz2ToEQjS8zUa94zCAY6UJGwK iFoCt4SlLv5ualrcWQImHsjps/5AQh/AzRHKhu7iYuMFgE7c6dJ3aq0frMG+/UNHhQ2XLOLDbJi E4779kLqffHu2gEqUJH5nhMvGEwrbi/hMZMRnsz6gSlw44qVmciTn5i5b8sLXxOLd7MaG8MAaLo Wx8xvtqFWMekVJWYPT4PVXPik6tL6VVpK876zuV8s1IjCojQRa+W2rx24vmnUCht0NGp4J6rg9m HZNJHt2/Q3CqoBb52UWDPy/F8NK4R/uh0F4drh9UDYbH/984to9lP79WUWF9AKfaFbtmFSGl20p pNVmTUIKssE49/A==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SA0PR11MB4688:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f76b8e6-0ef1-4972-fc1f-08dc89986ed0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?R2hZV0ljQmRSL0FhQmpIMmVvWHZUdEZ2ODFsM3VjZVphdVI4WFIwd21wWThq?=
+ =?utf-8?B?VVJKd0t1aG9hTDRPS3pCQUF2Vy9UaGFiN21kODE1bk9wM0Nwd1U0TWlKcFdN?=
+ =?utf-8?B?MVdPSVBnL2R4TjR5bTI2ck9GT3VER2htQnRNOEdVei9JZjFkN29wV29RU0hu?=
+ =?utf-8?B?RitiZVZCaithVElIbmVyYmxLYk1PSzZNNnFnczB4U3FhcEhjYzlTYjM5QVpZ?=
+ =?utf-8?B?UUx0V2FKTlhZNzN1SlpyUTJUWFlkTjFzOW5WM0xQWUUranJWN3FLTjdSaE5p?=
+ =?utf-8?B?bE9ZWTV6MzFBMEZMQmE3azVlMFFrcFc3Yk5EUGg4Vk9vbmJOcDI0Tkx5ZzBX?=
+ =?utf-8?B?U293M3JDdjhkNW5iMkxqbDJYUVYxZVkyb2dVaERCRTY2S1NJTEl3TEY3RW5u?=
+ =?utf-8?B?UzBPZGRBY1QrSmhibjRLRmpLYm12TjZCK0Uyd3VOTWhDMUlaQVg5enZ0dTFi?=
+ =?utf-8?B?ZzJ3aEdPYVByTEdGS1lLV1BDd3lnOTNmNmdwV0JHaTM5NTFsMENmMndFenR5?=
+ =?utf-8?B?NVBNeFBIdys5Q0hnV0ZDSWw5RFJ5Q2RrSGtSZzI1L3dNcGVRcnA3V0hMWmdy?=
+ =?utf-8?B?akdIMjY5eXVlMlE5RGgySnBZTzF6NUpOWVRZRjR1N2pUeUViR0pTREV5Ykg2?=
+ =?utf-8?B?NmgvSFIyd1dqblZMbHNTaS9jYlNSVVhyTEtoZmF6WHFVeng3VVphTUVGUVBL?=
+ =?utf-8?B?bXdJT1Y3NkJJcjNSVW5uZVpWRjJzbTBLdGpTbk9mT3VGNUZiSGxiYy9aMC9X?=
+ =?utf-8?B?dUhLQTBHdk80M0hySy9GbGxlNklzTnRsVFRoYkNhNFQ1bGs1a2h6RXpZMzlQ?=
+ =?utf-8?B?SUgyTmJnZm9HSlBMSTdwSUFsSEcybzY2OXF4eGswODJFS3NwNkUzbnlIYXA1?=
+ =?utf-8?B?LyswamVnM1lod3plOWtmZjVTZXBxRzZOSkx4cmt2ZzZNTkNxdjB4VnRXV21N?=
+ =?utf-8?B?NEtFRzc0V1kyanZobURFMG1NQXZ4TFBucFMwSGgrVGlsWnUveGc3NDhINHRJ?=
+ =?utf-8?B?S2ZOT0FCOFJjbDFWUGhTZGhGbzAxNGtvWlJwSGhuUDZlVEJVNmlZNWt2Mlpo?=
+ =?utf-8?B?UDFOVHRIU3NlQzRKeGpWMHVQVXk5aFNMSzc3UDBCSXQxbG1MeUpXZVpHN2VM?=
+ =?utf-8?B?elNzR0NicUcwS0c4blZ1YXJpSHliN1ozY0lPKzdHTVloQmVybGtKZWxGbzNj?=
+ =?utf-8?B?eENvT1BWYWh5WXJhaHRTbU01U01mSnlNL21QUGRTT29PaU5YVC8zVUR0NmVp?=
+ =?utf-8?B?S09aK0o4c1d5UTRFTXlGbDNwQkluOXJ4c3p1TmJsTjdvVFNsZ3BTaTRMcmsw?=
+ =?utf-8?B?dDUwcnhYS0hUdjB2M0ZIR014QjdxM1R0bW8yY3dYVEZFbkFnTkNKYy9oZmtr?=
+ =?utf-8?B?ZXpnQUZNekwybUdpWlhVay9BeE4vclBWeEkxVmNwdFFRdTZoN3EyUXp0T0JW?=
+ =?utf-8?B?bE43S09lb3kvTkNHV00rNFk4S2x6aStwV1BEUEYvbXduRHRqdll5OTUxOTI5?=
+ =?utf-8?B?R0pBdTRqemZLRjBwNE9QNFZ2b3loUDJIbmJjK25pYWl3d1lpbWlyL1JlVVow?=
+ =?utf-8?B?bmhqTmNTNXdBZWw4Y2dseWpwNkxqakJmaGo0cTNuTURKdlgxVDk0dDhweWFu?=
+ =?utf-8?B?Zm5YOW9sUG9pQmFDdU8wWlRYdWlGZnFBL0FQaUdOODAwbThNR3NwaDJrOEhv?=
+ =?utf-8?B?NkltclI4d29md1RraDBHM0oycTAxSTcrdVBoMEQ0TWVIcXg4SEhaTk1VL2VK?=
+ =?utf-8?Q?lcoMm501yMSrkRS6tHPSTOpnUsUy70L9YofD2KO?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2R3TWgxbGUwOGVYeEVOKzhJamRWK1ZNckQwVjF3Ty9jL3g0Zy9CZTVNcHBG?=
+ =?utf-8?B?b0FwVGJ6UGZCem9rL210VHZQOEw4ekY4UGk5OFdHMVoyUFhQbUt4ZDl1NzB2?=
+ =?utf-8?B?T3pVUEY4ZFhJdEZaalAxeGJnNWNCUjJ5dlFTS1FndEkxTUFXNyt0Tlp5OEVw?=
+ =?utf-8?B?ZEl0anVUSG82N2wxdXFCMG5KN0hHSkU3R01oeHpadU9YUzdtajZ5T3FnUW9R?=
+ =?utf-8?B?cGZqRStzOU5OWGVXNVJOSkZyTDZhdVMwUTlLMmdXRGVKTWNHaWNtSUlVUXNm?=
+ =?utf-8?B?WnpvOG45bkNOaGVZc0M2M0pLRjViY2QwUkZldkJQUHN6VS9kNEM3MVNsdnQ1?=
+ =?utf-8?B?b0RGYVBPbFVpdkh6bHZhZTk0SWVUandyTjY5Qkl3bDIyTnJZYzhEK2p0MjdO?=
+ =?utf-8?B?QlZZSG9rZElobFdoeXR5R1AweGZ1eHZMc0ZYdHBIM1lJb2hDbElPMW5ST1E2?=
+ =?utf-8?B?c29HRWY0ZVZnUXNnV0lRWTVsN1BWUVJuSkdqc1I1ZGNRZjdPVi95SHg1WER0?=
+ =?utf-8?B?cTdneXpXb3lHWUpBSHVpWFJVTEk2bGRuWENzcmd6U0xVN3Y3TGlFQVhKQmxw?=
+ =?utf-8?B?NWFsb0Y0c1FJZWNMcGpVdDNqcVBETzVBZnNkb3Q2RXpDb1dNdmRUK21rWDZ0?=
+ =?utf-8?B?dlVqZm1EdFpTNkgwbHdLVzZCbC9YcWlkZHM4VG55QUxaVUJDak5qTS92QnhH?=
+ =?utf-8?B?WlMxOERKRitsQ0xLdUhsSE5FeE5ZUkVBZnk3Y1Y2YWhNRUU5U1c1WDRxZXVx?=
+ =?utf-8?B?OXNDT3NHSm9GRGJmeStBT291ZzRjdEZsSlZ2VUdwWk9ZM0ltQXFFUTBNYVdD?=
+ =?utf-8?B?QWNpdllBdFRpYWxnM1pZWFhOY3orbVRVZG1HMXRidUY0UnlkL3o4YU9KMm9a?=
+ =?utf-8?B?dkZmK3o4R2R0dWg4MHVhdFVOYnJ1bEdsNS92aGVNOC9UTE9XeGx5U01rUVRF?=
+ =?utf-8?B?ODMzUnUxSlRGaGdCZSs3K2c3MEVla3pIYmVnN2IwaGZYSEFtOGJRcUFOVm5Y?=
+ =?utf-8?B?T1RXdks1dmpuMGxOazF5UjZ4aXhJek8yaVF2d1dzOXB4T0UzeGNITnFZcXdM?=
+ =?utf-8?B?QkZOakx4QlhMa0gzbVlWNWpzM2tsd0xOYTNkNHk3M2J4Q2s0OU1YNEtrTXNl?=
+ =?utf-8?B?czhrM1p3aU1sSmUxTkV3b0lOekpXOGlyYkJ3QVRNVzBka25COWc3Y1pTWCtR?=
+ =?utf-8?B?Y2kvVHBmNVNVRkhqaUFraGY1ZTJBd3VFcjdBUHUrTk9BOFgvY0t1NVk3RDA1?=
+ =?utf-8?B?MGJ0Q1crY0tPS0N1VGI1MW9KVnBRRGFZWlpLaEJiU1hHR0J1amRTSWJqNHFa?=
+ =?utf-8?B?VXFCNG8vZTVXSGx5SVFYQ2IyaHlXVTJldVlMNmJDOXJFS1Fvc2xmekU1cHps?=
+ =?utf-8?B?MUFzOXBIV0U0QzFXU0pIa1NrbkQzRmlaeWxwL0RrRXg0OHNUVDN6Y3QyWHZh?=
+ =?utf-8?B?YlltSFIvZDV4bWhrS0gzMndxR1dPOCtTbmNvZEQzWXF2QTlVZk9kNHZqaURw?=
+ =?utf-8?B?cVhKQ1oyUWJKd1Y5S1hPN25uOCs4YVZHUXlLNTRTQkVxRGo0ZFhuYndIQ0pD?=
+ =?utf-8?B?RjgwQ08ySWNNZ2VPeDU0VWFMNFpodVdPdjFIUEI4NS8rOHpsYmdlbVBZckUw?=
+ =?utf-8?B?NnBNYkVPTkFpZTFqNVNDOEs3NGVWZkM2VXo5QWtSMlBKYTBxTEtmZGRKNXNn?=
+ =?utf-8?B?MVkrVFY5LzRiSURReUpXSTY4RTNpN09qTUhrUUtRMVdWT1g1QjhFTWw2d1Qx?=
+ =?utf-8?B?VWlDUkNVWXRzZWFRNHhSU0o1YWRJNnhvWjcvVUxIOXVUU2hRbnVHSk5odUd1?=
+ =?utf-8?B?aW5JWm94Y0RISG4yaFVNSlNta255blVDc3pnTXlRcEg5NjNBVnJ4L1VMUWU0?=
+ =?utf-8?B?UmIza3JQV2kwZElnRW83R21XbnRRL25QS25nVnEzU1I2cVR0cFZSb0JvdnZm?=
+ =?utf-8?B?eXNNMlY1NHMxZU40QzcraDVDQWR2U3ZVVTRXN05JSWtwTlhLLzhjMkhTd3B6?=
+ =?utf-8?B?a2QzNmw4MkRHa3pQMDBlaVd0TWRLWWNsQkpleC9Fb0t4ODgzL0JHMFJMMnJR?=
+ =?utf-8?B?ZTZhOGN1ZnZ3a0VaR2FFK1cwcUlXYXJzUFh2SGp3SGZkWGZzQnI1dFcrcWl2?=
+ =?utf-8?B?eVJpWVA5SFhqYWUxTzNORTBHTWgrSkVXUTNwcnVqdlFlekVlRzk4alZlRnhK?=
+ =?utf-8?B?b0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f76b8e6-0ef1-4972-fc1f-08dc89986ed0
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2024 21:58:16.9447
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ffl5TIG8Fm9zpFk3J4jO1c2WPIEOwABLHJ8hxJKXlbN+8OSN5ZMrhVjSsDsBRWa0jUP9HPSGxNP1pofiNBG2M/QV01g3vHfThOwofvht21M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4688
+X-OriginatorOrg: intel.com
 
-Convert the runtime tests of hardened usercopy to standard KUnit tests.
+Hi Shuah,
 
-Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Link: https://lore.kernel.org/r/20200721174654.72132-1-vitor@massaru.org
-Tested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- MAINTAINERS                                |   1 +
- lib/Kconfig.debug                          |  21 +-
- lib/Makefile                               |   2 +-
- lib/{test_user_copy.c => usercopy_kunit.c} | 273 ++++++++++-----------
- 4 files changed, 142 insertions(+), 155 deletions(-)
- rename lib/{test_user_copy.c => usercopy_kunit.c} (47%)
+Could you please consider this series for inclusion?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8754ac2c259d..0cd171ec6010 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11962,6 +11962,7 @@ F:	arch/*/configs/hardening.config
- F:	include/linux/overflow.h
- F:	include/linux/randomize_kstack.h
- F:	kernel/configs/hardening.config
-+F:	lib/usercopy_kunit.c
- F:	mm/usercopy.c
- K:	\b(add|choose)_random_kstack_offset\b
- K:	\b__check_(object_size|heap_object)\b
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 59b6765d86b8..561e346f5cb0 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2505,18 +2505,6 @@ config TEST_VMALLOC
- 
- 	  If unsure, say N.
- 
--config TEST_USER_COPY
--	tristate "Test user/kernel boundary protections"
--	depends on m
--	help
--	  This builds the "test_user_copy" module that runs sanity checks
--	  on the copy_to/from_user infrastructure, making sure basic
--	  user/kernel boundary testing is working. If it fails to load,
--	  a regression has been detected in the user/kernel memory boundary
--	  protections.
--
--	  If unsure, say N.
--
- config TEST_BPF
- 	tristate "Test BPF filter functionality"
- 	depends on m && NET
-@@ -2814,6 +2802,15 @@ config SIPHASH_KUNIT_TEST
- 	  This is intended to help people writing architecture-specific
- 	  optimized versions.  If unsure, say N.
- 
-+config USERCOPY_KUNIT_TEST
-+	tristate "KUnit Test for user/kernel boundary protections"
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the "usercopy_kunit" module that runs sanity checks
-+	  on the copy_to/from_user infrastructure, making sure basic
-+	  user/kernel boundary testing is working.
-+
- config TEST_UDELAY
- 	tristate "udelay test driver"
- 	help
-diff --git a/lib/Makefile b/lib/Makefile
-index 3b1769045651..fae5cc67b95a 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -78,7 +78,6 @@ obj-$(CONFIG_TEST_LKM) += test_module.o
- obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
- obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
- obj-$(CONFIG_TEST_SORT) += test_sort.o
--obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
-@@ -388,6 +387,7 @@ CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-truncation)
- CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-+obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
- 
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
-diff --git a/lib/test_user_copy.c b/lib/usercopy_kunit.c
-similarity index 47%
-rename from lib/test_user_copy.c
-rename to lib/usercopy_kunit.c
-index 5ff04d8fe971..f1689f2c5c7b 100644
---- a/lib/test_user_copy.c
-+++ b/lib/usercopy_kunit.c
-@@ -15,7 +15,7 @@
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
--#include <linux/vmalloc.h>
-+#include <kunit/test.h>
- 
- /*
-  * Several 32-bit architectures support 64-bit {get,put}_user() calls.
-@@ -31,26 +31,27 @@
- # define TEST_U64
- #endif
- 
--#define test(condition, msg, ...)					\
--({									\
--	int cond = (condition);						\
--	if (cond)							\
--		pr_warn("[%d] " msg "\n", __LINE__, ##__VA_ARGS__);	\
--	cond;								\
--})
-+struct usercopy_test_priv {
-+	char *kmem;
-+	char __user *umem;
-+	size_t size;
-+};
- 
- static bool is_zeroed(void *from, size_t size)
- {
- 	return memchr_inv(from, 0x0, size) == NULL;
- }
- 
--static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
-+/* Test usage of check_nonzero_user(). */
-+static void usercopy_test_check_nonzero_user(struct kunit *test)
- {
--	int ret = 0;
- 	size_t start, end, i, zero_start, zero_end;
-+	struct usercopy_test_priv *priv = test->priv;
-+	char __user *umem = priv->umem;
-+	char *kmem = priv->kmem;
-+	size_t size = priv->size;
- 
--	if (test(size < 2 * PAGE_SIZE, "buffer too small"))
--		return -EINVAL;
-+	KUNIT_ASSERT_GE_MSG(test, size, 2 * PAGE_SIZE, "buffer too small");
- 
- 	/*
- 	 * We want to cross a page boundary to exercise the code more
-@@ -84,8 +85,8 @@ static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
- 	for (i = zero_end; i < size; i += 2)
- 		kmem[i] = 0xff;
- 
--	ret |= test(copy_to_user(umem, kmem, size),
--		    "legitimate copy_to_user failed");
-+	KUNIT_EXPECT_EQ_MSG(test, copy_to_user(umem, kmem, size), 0,
-+		"legitimate copy_to_user failed");
- 
- 	for (start = 0; start <= size; start++) {
- 		for (end = start; end <= size; end++) {
-@@ -93,35 +94,32 @@ static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
- 			int retval = check_zeroed_user(umem + start, len);
- 			int expected = is_zeroed(kmem + start, len);
- 
--			ret |= test(retval != expected,
--				    "check_nonzero_user(=%d) != memchr_inv(=%d) mismatch (start=%zu, end=%zu)",
--				    retval, expected, start, end);
-+			KUNIT_EXPECT_EQ_MSG(test, retval, expected,
-+				"check_nonzero_user(=%d) != memchr_inv(=%d) mismatch (start=%zu, end=%zu)",
-+				retval, expected, start, end);
- 		}
- 	}
--
--	return ret;
- }
- 
--static int test_copy_struct_from_user(char *kmem, char __user *umem,
--				      size_t size)
-+/* Test usage of copy_struct_from_user(). */
-+static void usercopy_test_copy_struct_from_user(struct kunit *test)
- {
--	int ret = 0;
- 	char *umem_src = NULL, *expected = NULL;
-+	struct usercopy_test_priv *priv = test->priv;
-+	char __user *umem = priv->umem;
-+	char *kmem = priv->kmem;
-+	size_t size = priv->size;
- 	size_t ksize, usize;
- 
--	umem_src = kmalloc(size, GFP_KERNEL);
--	ret = test(umem_src == NULL, "kmalloc failed");
--	if (ret)
--		goto out_free;
-+	umem_src = kunit_kmalloc(test, size, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, umem_src);
- 
--	expected = kmalloc(size, GFP_KERNEL);
--	ret = test(expected == NULL, "kmalloc failed");
--	if (ret)
--		goto out_free;
-+	expected = kunit_kmalloc(test, size, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
- 
- 	/* Fill umem with a fixed byte pattern. */
- 	memset(umem_src, 0x3e, size);
--	ret |= test(copy_to_user(umem, umem_src, size),
-+	KUNIT_ASSERT_EQ_MSG(test, copy_to_user(umem, umem_src, size), 0,
- 		    "legitimate copy_to_user failed");
- 
- 	/* Check basic case -- (usize == ksize). */
-@@ -131,9 +129,9 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
- 	memcpy(expected, umem_src, ksize);
- 
- 	memset(kmem, 0x0, size);
--	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
-+	KUNIT_EXPECT_EQ_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize), 0,
- 		    "copy_struct_from_user(usize == ksize) failed");
--	ret |= test(memcmp(kmem, expected, ksize),
-+	KUNIT_EXPECT_EQ_MSG(test, memcmp(kmem, expected, ksize), 0,
- 		    "copy_struct_from_user(usize == ksize) gives unexpected copy");
- 
- 	/* Old userspace case -- (usize < ksize). */
-@@ -144,9 +142,9 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
- 	memset(expected + usize, 0x0, ksize - usize);
- 
- 	memset(kmem, 0x0, size);
--	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
-+	KUNIT_EXPECT_EQ_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize), 0,
- 		    "copy_struct_from_user(usize < ksize) failed");
--	ret |= test(memcmp(kmem, expected, ksize),
-+	KUNIT_EXPECT_EQ_MSG(test, memcmp(kmem, expected, ksize), 0,
- 		    "copy_struct_from_user(usize < ksize) gives unexpected copy");
- 
- 	/* New userspace (-E2BIG) case -- (usize > ksize). */
-@@ -154,7 +152,7 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
- 	usize = size;
- 
- 	memset(kmem, 0x0, size);
--	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize) != -E2BIG,
-+	KUNIT_EXPECT_EQ_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize), -E2BIG,
- 		    "copy_struct_from_user(usize > ksize) didn't give E2BIG");
- 
- 	/* New userspace (success) case -- (usize > ksize). */
-@@ -162,78 +160,46 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
- 	usize = size;
- 
- 	memcpy(expected, umem_src, ksize);
--	ret |= test(clear_user(umem + ksize, usize - ksize),
-+	KUNIT_EXPECT_EQ_MSG(test, clear_user(umem + ksize, usize - ksize), 0,
- 		    "legitimate clear_user failed");
- 
- 	memset(kmem, 0x0, size);
--	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
-+	KUNIT_EXPECT_EQ_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize), 0,
- 		    "copy_struct_from_user(usize > ksize) failed");
--	ret |= test(memcmp(kmem, expected, ksize),
-+	KUNIT_EXPECT_EQ_MSG(test, memcmp(kmem, expected, ksize), 0,
- 		    "copy_struct_from_user(usize > ksize) gives unexpected copy");
--
--out_free:
--	kfree(expected);
--	kfree(umem_src);
--	return ret;
- }
- 
--static int __init test_user_copy_init(void)
-+/*
-+ * Legitimate usage: none of these copies should fail.
-+ */
-+static void usercopy_test_valid(struct kunit *test)
- {
--	int ret = 0;
--	char *kmem;
--	char __user *usermem;
--	char *bad_usermem;
--	unsigned long user_addr;
--	u8 val_u8;
--	u16 val_u16;
--	u32 val_u32;
--#ifdef TEST_U64
--	u64 val_u64;
--#endif
--
--	kmem = kmalloc(PAGE_SIZE * 2, GFP_KERNEL);
--	if (!kmem)
--		return -ENOMEM;
-+	struct usercopy_test_priv *priv = test->priv;
-+	char __user *usermem = priv->umem;
-+	char *kmem = priv->kmem;
- 
--	user_addr = vm_mmap(NULL, 0, PAGE_SIZE * 2,
--			    PROT_READ | PROT_WRITE | PROT_EXEC,
--			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
--	if (user_addr >= (unsigned long)(TASK_SIZE)) {
--		pr_warn("Failed to allocate user memory\n");
--		kfree(kmem);
--		return -ENOMEM;
--	}
--
--	usermem = (char __user *)user_addr;
--	bad_usermem = (char *)user_addr;
--
--	/*
--	 * Legitimate usage: none of these copies should fail.
--	 */
- 	memset(kmem, 0x3a, PAGE_SIZE * 2);
--	ret |= test(copy_to_user(usermem, kmem, PAGE_SIZE),
--		    "legitimate copy_to_user failed");
-+	KUNIT_EXPECT_EQ_MSG(test, 0, copy_to_user(usermem, kmem, PAGE_SIZE),
-+	     "legitimate copy_to_user failed");
- 	memset(kmem, 0x0, PAGE_SIZE);
--	ret |= test(copy_from_user(kmem, usermem, PAGE_SIZE),
--		    "legitimate copy_from_user failed");
--	ret |= test(memcmp(kmem, kmem + PAGE_SIZE, PAGE_SIZE),
--		    "legitimate usercopy failed to copy data");
--
--#define test_legit(size, check)						  \
--	do {								  \
--		val_##size = check;					  \
--		ret |= test(put_user(val_##size, (size __user *)usermem), \
--		    "legitimate put_user (" #size ") failed");		  \
--		val_##size = 0;						  \
--		ret |= test(get_user(val_##size, (size __user *)usermem), \
--		    "legitimate get_user (" #size ") failed");		  \
--		ret |= test(val_##size != check,			  \
--		    "legitimate get_user (" #size ") failed to do copy"); \
--		if (val_##size != check) {				  \
--			pr_info("0x%llx != 0x%llx\n",			  \
--				(unsigned long long)val_##size,		  \
--				(unsigned long long)check);		  \
--		}							  \
-+	KUNIT_EXPECT_EQ_MSG(test, 0, copy_from_user(kmem, usermem, PAGE_SIZE),
-+	     "legitimate copy_from_user failed");
-+	KUNIT_EXPECT_EQ_MSG(test, 0, memcmp(kmem, kmem + PAGE_SIZE, PAGE_SIZE),
-+	     "legitimate usercopy failed to copy data");
-+
-+#define test_legit(size, check)						\
-+	do {								\
-+		size val_##size = (check);				\
-+		KUNIT_EXPECT_EQ_MSG(test, 0,				\
-+			put_user(val_##size, (size __user *)usermem),	\
-+			"legitimate put_user (" #size ") failed");	\
-+		val_##size = 0;						\
-+		KUNIT_EXPECT_EQ_MSG(test, 0,				\
-+			get_user(val_##size, (size __user *)usermem),	\
-+			"legitimate get_user (" #size ") failed");	\
-+		KUNIT_EXPECT_EQ_MSG(test, val_##size, check,		\
-+			"legitimate get_user (" #size ") failed to do copy"); \
- 	} while (0)
- 
- 	test_legit(u8,  0x5a);
-@@ -243,27 +209,30 @@ static int __init test_user_copy_init(void)
- 	test_legit(u64, 0x5a5b5c5d6a6b6c6d);
- #endif
- #undef test_legit
-+}
- 
--	/* Test usage of check_nonzero_user(). */
--	ret |= test_check_nonzero_user(kmem, usermem, 2 * PAGE_SIZE);
--	/* Test usage of copy_struct_from_user(). */
--	ret |= test_copy_struct_from_user(kmem, usermem, 2 * PAGE_SIZE);
--
--	/*
--	 * Invalid usage: none of these copies should succeed.
--	 */
-+/*
-+ * Invalid usage: none of these copies should succeed.
-+ */
-+static void usercopy_test_invalid(struct kunit *test)
-+{
-+	struct usercopy_test_priv *priv = test->priv;
-+	char __user *usermem = priv->umem;
-+	char *bad_usermem = (char *)usermem;
-+	char *kmem = priv->kmem;
-+	u64 *kmem_u64 = (u64 *)kmem;
- 
- 	/* Prepare kernel memory with check values. */
- 	memset(kmem, 0x5a, PAGE_SIZE);
- 	memset(kmem + PAGE_SIZE, 0, PAGE_SIZE);
- 
- 	/* Reject kernel-to-kernel copies through copy_from_user(). */
--	ret |= test(!copy_from_user(kmem, (char __user *)(kmem + PAGE_SIZE),
--				    PAGE_SIZE),
-+	KUNIT_EXPECT_NE_MSG(test, copy_from_user(kmem, (char __user *)(kmem + PAGE_SIZE),
-+						 PAGE_SIZE), 0,
- 		    "illegal all-kernel copy_from_user passed");
- 
- 	/* Destination half of buffer should have been zeroed. */
--	ret |= test(memcmp(kmem + PAGE_SIZE, kmem, PAGE_SIZE),
-+	KUNIT_EXPECT_EQ_MSG(test, memcmp(kmem + PAGE_SIZE, kmem, PAGE_SIZE), 0,
- 		    "zeroing failure for illegal all-kernel copy_from_user");
- 
- #if 0
-@@ -273,30 +242,31 @@ static int __init test_user_copy_init(void)
- 	 * to be tested in LKDTM instead, since this test module does not
- 	 * expect to explode.
- 	 */
--	ret |= test(!copy_from_user(bad_usermem, (char __user *)kmem,
--				    PAGE_SIZE),
-+	KUNIT_EXPECT_NE_MSG(test, copy_from_user(bad_usermem, (char __user *)kmem,
-+						 PAGE_SIZE), 0,
- 		    "illegal reversed copy_from_user passed");
- #endif
--	ret |= test(!copy_to_user((char __user *)kmem, kmem + PAGE_SIZE,
--				  PAGE_SIZE),
-+	KUNIT_EXPECT_NE_MSG(test, copy_to_user((char __user *)kmem, kmem + PAGE_SIZE,
-+					       PAGE_SIZE), 0,
- 		    "illegal all-kernel copy_to_user passed");
--	ret |= test(!copy_to_user((char __user *)kmem, bad_usermem,
--				  PAGE_SIZE),
-+	KUNIT_EXPECT_NE_MSG(test, copy_to_user((char __user *)kmem, bad_usermem,
-+					       PAGE_SIZE), 0,
- 		    "illegal reversed copy_to_user passed");
- 
--#define test_illegal(size, check)					    \
--	do {								    \
--		val_##size = (check);					    \
--		ret |= test(!get_user(val_##size, (size __user *)kmem),	    \
--		    "illegal get_user (" #size ") passed");		    \
--		ret |= test(val_##size != (size)0,			    \
--		    "zeroing failure for illegal get_user (" #size ")");    \
--		if (val_##size != (size)0) {				    \
--			pr_info("0x%llx != 0\n",			    \
--				(unsigned long long)val_##size);	    \
--		}							    \
--		ret |= test(!put_user(val_##size, (size __user *)kmem),	    \
--		    "illegal put_user (" #size ") passed");		    \
-+#define test_illegal(size, check)							\
-+	do {										\
-+		size val_##size = (check);						\
-+		/* get_user() */							\
-+		KUNIT_EXPECT_NE_MSG(test, get_user(val_##size, (size __user *)kmem), 0,	\
-+		    "illegal get_user (" #size ") passed");				\
-+		KUNIT_EXPECT_EQ_MSG(test, val_##size, 0,				\
-+		    "zeroing failure for illegal get_user (" #size ")");		\
-+		/* put_user() */							\
-+		*kmem_u64 = 0xF09FA4AFF09FA4AF;						\
-+		KUNIT_EXPECT_NE_MSG(test, put_user(val_##size, (size __user *)kmem), 0,	\
-+		    "illegal put_user (" #size ") passed");				\
-+		KUNIT_EXPECT_EQ_MSG(test, *kmem_u64, 0xF09FA4AFF09FA4AF,		\
-+		    "illegal put_user (" #size ") wrote to kernel memory!");		\
- 	} while (0)
- 
- 	test_illegal(u8,  0x5a);
-@@ -306,26 +276,45 @@ static int __init test_user_copy_init(void)
- 	test_illegal(u64, 0x5a5b5c5d6a6b6c6d);
- #endif
- #undef test_illegal
-+}
- 
--	vm_munmap(user_addr, PAGE_SIZE * 2);
--	kfree(kmem);
-+static int usercopy_test_init(struct kunit *test)
-+{
-+	struct usercopy_test_priv *priv;
-+	unsigned long user_addr;
- 
--	if (ret == 0) {
--		pr_info("tests passed.\n");
--		return 0;
--	}
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	test->priv = priv;
-+	priv->size = PAGE_SIZE * 2;
- 
--	return -EINVAL;
--}
-+	priv->kmem = kunit_kmalloc(test, priv->size, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->kmem);
- 
--module_init(test_user_copy_init);
-+	user_addr = kunit_vm_mmap(test, NULL, 0, priv->size,
-+			    PROT_READ | PROT_WRITE | PROT_EXEC,
-+			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-+	KUNIT_ASSERT_LT_MSG(test, user_addr, (unsigned long)TASK_SIZE,
-+		"Failed to allocate user memory");
-+	priv->umem = (char __user *)user_addr;
- 
--static void __exit test_user_copy_exit(void)
--{
--	pr_info("unloaded.\n");
-+	return 0;
- }
- 
--module_exit(test_user_copy_exit);
--
--MODULE_AUTHOR("Kees Cook <keescook@chromium.org>");
-+static struct kunit_case usercopy_test_cases[] = {
-+	KUNIT_CASE(usercopy_test_valid),
-+	KUNIT_CASE(usercopy_test_invalid),
-+	KUNIT_CASE(usercopy_test_check_nonzero_user),
-+	KUNIT_CASE(usercopy_test_copy_struct_from_user),
-+	{}
-+};
-+
-+static struct kunit_suite usercopy_test_suite = {
-+	.name = "usercopy",
-+	.init = usercopy_test_init,
-+	.test_cases = usercopy_test_cases,
-+};
-+
-+kunit_test_suites(&usercopy_test_suite);
-+MODULE_AUTHOR("Kees Cook <kees@kernel.org>");
- MODULE_LICENSE("GPL");
--- 
-2.34.1
+Thank you very much.
 
+Reinette
+
+On 6/10/24 8:14 AM, Ilpo Järvinen wrote:
+> Hi all,
+> 
+> This series does a number of cleanups into resctrl_val() and
+> generalizes it by removing test name specific handling from the
+> function.
+> 
+> v7:
+> - Truly use "bound to", not bounded to.
+> - Fix separator to use 3 dashes
+> 
+> v6:
+> - Adjust closing/rollback of the IMC perf
+> - Move the comment in measure_vals() to function level
+> - Capitalize MBM
+> - binded to -> bound to
+> - Language tweak into kerneldoc
+> - Removed stale paragraph from commit message
+> 
+> v5:
+> - Open mem bw file only once and use rewind().
+> - Add \n to mem bw file read to allow reading fresh values from the file.
+> - Return 0 if create_grp() is given NULL grp_name (matches the original
+>    behavior). Mention this in function's kerneldoc.
+> - Cast pid_t to int before printing with %d.
+> - Caps/typo fixes to kerneldoc and commit messages.
+> - Use imperative tone in commit messages and improve them based on points
+>    that came up during review.
+> 
+> v4:
+> - Merged close fix into IMC READ+WRITE rework patch
+> - Add loop to reset imc_counters_config fds to -1 to be able know which
+>    need closing
+> - Introduce perf_close_imc_mem_bw() to close fds
+> - Open resctrl mem bw file (twice) beforehand to avoid opening it during
+>    the test
+> - Remove MBM .mongrp setup
+> - Remove mongrp from CMT test
+> 
+> v3:
+> - Rename init functions to <testname>_init()
+> - Replace for loops with READ+WRITE statements for clarity
+> - Don't drop Return: entry from perf_open_imc_mem_bw() func comment
+> - New patch: Fix closing of IMC fds in case of error
+> - New patch: Make "bandwidth" consistent in comments & prints
+> - New patch: Simplify mem bandwidth file code
+> - Remove wrong comment
+> - Changed grp_name check to return -1 on fail (internal sanity check)
+> 
+> v2:
+> - Resolved conflicts with kselftest/next
+> - Spaces -> tabs correction
+> 
+> 
+> Ilpo Järvinen (16):
+>    selftests/resctrl: Fix closing IMC fds on error and open-code R+W
+>      instead of loops
+>    selftests/resctrl: Calculate resctrl FS derived mem bw over sleep(1)
+>      only
+>    selftests/resctrl: Make "bandwidth" consistent in comments & prints
+>    selftests/resctrl: Consolidate get_domain_id() into resctrl_val()
+>    selftests/resctrl: Use correct type for pids
+>    selftests/resctrl: Cleanup bm_pid and ppid usage & limit scope
+>    selftests/resctrl: Rename measure_vals() to measure_mem_bw_vals() &
+>      document
+>    selftests/resctrl: Simplify mem bandwidth file code for MBA & MBM
+>      tests
+>    selftests/resctrl: Add ->measure() callback to resctrl_val_param
+>    selftests/resctrl: Add ->init() callback into resctrl_val_param
+>    selftests/resctrl: Simplify bandwidth report type handling
+>    selftests/resctrl: Make some strings passed to resctrlfs functions
+>      const
+>    selftests/resctrl: Convert ctrlgrp & mongrp to pointers
+>    selftests/resctrl: Remove mongrp from MBA test
+>    selftests/resctrl: Remove mongrp from CMT test
+>    selftests/resctrl: Remove test name comparing from
+>      write_bm_pid_to_resctrl()
+> 
+>   tools/testing/selftests/resctrl/cache.c       |  10 +-
+>   tools/testing/selftests/resctrl/cat_test.c    |   5 +-
+>   tools/testing/selftests/resctrl/cmt_test.c    |  22 +-
+>   tools/testing/selftests/resctrl/mba_test.c    |  26 +-
+>   tools/testing/selftests/resctrl/mbm_test.c    |  26 +-
+>   tools/testing/selftests/resctrl/resctrl.h     |  49 ++-
+>   tools/testing/selftests/resctrl/resctrl_val.c | 371 ++++++++----------
+>   tools/testing/selftests/resctrl/resctrlfs.c   |  67 ++--
+>   8 files changed, 291 insertions(+), 285 deletions(-)
+> 
 
