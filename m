@@ -1,132 +1,113 @@
-Return-Path: <linux-kselftest+bounces-11543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14186901A51
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 07:42:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86732901B3E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 08:27:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A21C72820E7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 05:42:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6BF1C21277
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 06:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A0422F08;
-	Mon, 10 Jun 2024 05:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D30C17C66;
+	Mon, 10 Jun 2024 06:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FfTpgH48"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bzcadobU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E7C20B34;
-	Mon, 10 Jun 2024 05:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88291CF8A;
+	Mon, 10 Jun 2024 06:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717998070; cv=none; b=qwAq1b+kQk5eVWQXqHZ/ttvnY6s3Q1gRTs1Twnpx7eTKH+/rZeJle9EZycUszg5gtLZsJmgoB3Prxss8iw6CMChL3StVvWMWylyUv4LRMx/DI//sM6JgTyoz8U6Ym+Jd+63V+VLOHn2U6zvLXhc1ICs1vT83K9SMl6ELnf+8wio=
+	t=1718000831; cv=none; b=SLt/Z6OIUvOqleFMM5APuOjH8CRStniW+ZCdNNFjPpyXBUyu+R3M5435Dk9h6mZ9R7ON7z1F/xe+jdj0Ng3YnoaTEmBte6SDozlwhWi4JxhrjgLCVeavCruefSL93ABQtvL7dJQfyoVmC2oLkdPpSQGznlWcTeLjA6PbUX7IxtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717998070; c=relaxed/simple;
-	bh=ipCczr7QYa5QI1mKS580Ngx2AkBjsXEeRuQtWBoAi+0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qiQ/BJMAOGPMixLP5hH/gc+q23vyc6hT2pvntEgSM7TNW/CuittQNNCDoobPijCYyGOP+ojQaApQcxrzLBrbkT1oH/NXQBZwJrZpoLibCBABUV9rD1JeiRI8m7vWmeENGRF7b5koPnNlKbDFpulOJlRmv/Jl86DtLlsJ5WTaiWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FfTpgH48; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1717998067;
-	bh=ipCczr7QYa5QI1mKS580Ngx2AkBjsXEeRuQtWBoAi+0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FfTpgH48OTFMQWvJPP210pCXJj/fkW3rvBBFELUBcJntVuuHcLHDNM8huW5HjhDSN
-	 J5ENl9mSdRNzTKqsBkZnLuoJPs/xYFncLucQRdQr2+6kOi5n99OiBh/8m2M/PfIzNY
-	 4H434f15+WSGpytIIIbAB5HALnfiY6X46HeJFFGKi+EK2jlPxJH9m83uyhVR3SSTpq
-	 y9nKR08fMYdB3tgsiJyS/Z8OrFStlKxgh9YW1A2PHaN6A/P75N3/q++Y8ewzREGYUR
-	 GD+Jpkp/AKlfQbZxyipJFOfNc3XUciaeTxPKFM9rOLr95fMrjvcIPZ1acPEN5ZFk2P
-	 SEMqGEZM1jRng==
-Received: from deb.www.tendawifi.com (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8D296378217A;
-	Mon, 10 Jun 2024 05:41:05 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: kernel@collabora.com
-Subject: [PATCH v2 4/4] kselftests: vdso: vdso_test_gettimeofday: conform test to TAP output
-Date: Mon, 10 Jun 2024 10:41:29 +0500
-Message-Id: <20240610054129.1527389-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240610054129.1527389-1-usama.anjum@collabora.com>
-References: <20240610054129.1527389-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1718000831; c=relaxed/simple;
+	bh=46ontKYFYxBeCCy+CgEUCpaMHxEXAnXsVFaJAmuzFd4=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=ut5it7/ajUhfQlqjUVLNVddZH1OMeREYsWDF4pXxf9O8yAQppYOGPSXoJhdODc0gs9a2NdGSvjJMLH5f+Cfku2tN3mqFqFqFiIpEIFnbK5VOrGijCwQ4lZU0loivQg33H+LxfmU+TL+zHG1CbqFDa7edq11d1k1OvE4kKos0Qrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bzcadobU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B88FC2BBFC;
+	Mon, 10 Jun 2024 06:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718000830;
+	bh=46ontKYFYxBeCCy+CgEUCpaMHxEXAnXsVFaJAmuzFd4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=bzcadobUAHWCAsVpT480gaT0KnUkKTEceCmaDDbtm6xomykD5xW9NEl/cU9kwvlo7
+	 d/rM1rTG1tw55LKH1fWQ3/PLw4AD3TfFM4bUvU6VBrrJY1zcdULJKfPPRA5xr33SpV
+	 UKRuQkhSCjxeJtl10wwV2fQd2sEwaufKqPrRcSPDONcWRNfgOUonB3LHRPX2ioT3Fi
+	 G94UasDurkk8+B806ivHWRipGLfjuvYw+GZlnBOLschWwlYMzWVYaTNWAix4TIoljc
+	 TZ1+svjB2kHXJ6rCIqhkWPu7LFLe5pcGnQc1g0OlWvhYJa53wg2jivRsm5AEfdjTXa
+	 Hsnz9lqE3/Ryg==
+Date: Mon, 10 Jun 2024 00:27:09 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org, 
+ Jisheng Zhang <jszhang@kernel.org>, linux-kselftest@vger.kernel.org, 
+ Samuel Holland <samuel@sholland.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, 
+ linux-kernel@vger.kernel.org, Andy Chiu <andy.chiu@sifive.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Shuah Khan <shuah@kernel.org>, linux-sunxi@lists.linux.dev, 
+ devicetree@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Evan Green <evan@rivosinc.com>, linux-doc@vger.kernel.org, 
+ Guo Ren <guoren@kernel.org>
+In-Reply-To: <20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com>
+References: <20240609-xtheadvector-v1-0-3fe591d7f109@rivosinc.com>
+ <20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com>
+Message-Id: <171800082930.1000302.5109301877296329341.robh@kernel.org>
+Subject: Re: [PATCH 02/13] dt-bindings: thead: add a vlen register length
+ property
 
-Conform the layout, informational and status messages to TAP. No
-functional change is intended other than the layout of output messages.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- .../selftests/vDSO/vdso_test_gettimeofday.c   | 23 ++++++++++---------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+On Sun, 09 Jun 2024 21:45:07 -0700, Charlie Jenkins wrote:
+> Add a property analogous to the vlenb CSR so that software can detect
+> the vector length of each CPU prior to it being brought online.
+> Currently software has to assume that the vector length read from the
+> boot CPU applies to all possible CPUs. On T-Head CPUs implementing
+> pre-ratification vector, reading the th.vlenb CSR may produce an illegal
+> instruction trap, so this property is required on such systems.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/thead.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index ee4f1ca56a71a..2f42277b29ffe 100644
---- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -24,10 +24,13 @@ int main(int argc, char **argv)
- {
- 	const char *version = versions[VDSO_VERSION];
- 	const char **name = (const char **)&names[VDSO_NAMES];
--
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
- 	if (!sysinfo_ehdr) {
--		printf("AT_SYSINFO_EHDR is not present!\n");
-+		ksft_print_msg("AT_SYSINFO_EHDR is not present!\n");
- 		return KSFT_SKIP;
- 	}
- 
-@@ -38,20 +41,18 @@ int main(int argc, char **argv)
- 	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
- 
- 	if (!gtod) {
--		printf("Could not find %s\n", name[0]);
-+		ksft_print_msg("Could not find %s\n", name[0]);
- 		return KSFT_SKIP;
- 	}
- 
- 	struct timeval tv;
- 	long ret = gtod(&tv, 0);
- 
--	if (ret == 0) {
--		printf("The time is %lld.%06lld\n",
--		       (long long)tv.tv_sec, (long long)tv.tv_usec);
--	} else {
--		printf("%s failed\n", name[0]);
--		return KSFT_FAIL;
--	}
-+	if (ret == 0)
-+		ksft_test_result_pass("The time is %lld.%06lld\n",
-+				      (long long)tv.tv_sec, (long long)tv.tv_usec);
-+	else
-+		ksft_test_result_fail("%s failed\n", name[0]);
- 
--	return 0;
-+	ksft_finished();
- }
--- 
-2.39.2
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead.yaml: 'thead,vlenb' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
