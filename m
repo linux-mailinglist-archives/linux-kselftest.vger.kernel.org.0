@@ -1,113 +1,101 @@
-Return-Path: <linux-kselftest+bounces-11544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86732901B3E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 08:27:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 349D3901CFF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 10:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B6BF1C21277
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 06:27:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1E151F217CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 08:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D30C17C66;
-	Mon, 10 Jun 2024 06:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CB055887;
+	Mon, 10 Jun 2024 08:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bzcadobU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NjxkHvBS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88291CF8A;
-	Mon, 10 Jun 2024 06:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1650A3BBC5;
+	Mon, 10 Jun 2024 08:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718000831; cv=none; b=SLt/Z6OIUvOqleFMM5APuOjH8CRStniW+ZCdNNFjPpyXBUyu+R3M5435Dk9h6mZ9R7ON7z1F/xe+jdj0Ng3YnoaTEmBte6SDozlwhWi4JxhrjgLCVeavCruefSL93ABQtvL7dJQfyoVmC2oLkdPpSQGznlWcTeLjA6PbUX7IxtA=
+	t=1718008369; cv=none; b=upUp4WDkeuqor2PgbGjdRUOgLdYIQ6Br99HEXTyWhYHCpfn46gnj9+Gg5VSQw/yUDPc1VCFTbh+FUcMqn5HR+vi7eyAQezHvrurY++x0qsYUoBxYzo6IU4wIoSlL65iJyZRonYr8a3KYgqswBgWNUFLOURxWIAVRSYXuyIAsrFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718000831; c=relaxed/simple;
-	bh=46ontKYFYxBeCCy+CgEUCpaMHxEXAnXsVFaJAmuzFd4=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=ut5it7/ajUhfQlqjUVLNVddZH1OMeREYsWDF4pXxf9O8yAQppYOGPSXoJhdODc0gs9a2NdGSvjJMLH5f+Cfku2tN3mqFqFqFiIpEIFnbK5VOrGijCwQ4lZU0loivQg33H+LxfmU+TL+zHG1CbqFDa7edq11d1k1OvE4kKos0Qrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bzcadobU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B88FC2BBFC;
-	Mon, 10 Jun 2024 06:27:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718000830;
-	bh=46ontKYFYxBeCCy+CgEUCpaMHxEXAnXsVFaJAmuzFd4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=bzcadobUAHWCAsVpT480gaT0KnUkKTEceCmaDDbtm6xomykD5xW9NEl/cU9kwvlo7
-	 d/rM1rTG1tw55LKH1fWQ3/PLw4AD3TfFM4bUvU6VBrrJY1zcdULJKfPPRA5xr33SpV
-	 UKRuQkhSCjxeJtl10wwV2fQd2sEwaufKqPrRcSPDONcWRNfgOUonB3LHRPX2ioT3Fi
-	 G94UasDurkk8+B806ivHWRipGLfjuvYw+GZlnBOLschWwlYMzWVYaTNWAix4TIoljc
-	 TZ1+svjB2kHXJ6rCIqhkWPu7LFLe5pcGnQc1g0OlWvhYJa53wg2jivRsm5AEfdjTXa
-	 Hsnz9lqE3/Ryg==
-Date: Mon, 10 Jun 2024 00:27:09 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1718008369; c=relaxed/simple;
+	bh=qwlTEAsrFOsgcn64/ZD8Sup2dFP172zw2LGV9PDNcEU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pddjFUD88GIZLjC6V+o2vukOtLse7Q6Cdv1Hs6bYOIxs//0dYvl8B/AfL6p1vsx/d9QGpC/xhTssSvLX0hiaB3TPcqjbBJNqDB3kyRPabDtcmxiNibQ+HzHNXQy7+V2pwUR1LoYOLci+YNlgLGOIykB22a/2Lnjj6vC6EwwlCBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NjxkHvBS; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718008366;
+	bh=qwlTEAsrFOsgcn64/ZD8Sup2dFP172zw2LGV9PDNcEU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NjxkHvBSnt6ozcEI8ys9Px1t4oDvsuMqcwRDSZYUDqjnEVCaXtZiWI9pvBsaUqSed
+	 XrDPuxmeLt/nPS9vhZgEs8AkKbTOaZKiSLbW1g5R4hIGDoWsK/2r0aKMiWn/NAL+FP
+	 tm4T7pOsKabjQjqrJtEz8l5D1l7BFZWQDEty7aMXARPIglKv+QCR9ajdtA3m8kP32Q
+	 0D9m/9c0c8IFvCOZHBs5DuFZMQ51Y+/NqGi0LJiDw1LXcTcVyFERnqm90ekK6sa89f
+	 iyReNIOIqwqc8V789WoCl2JfXBKh9UnBj4t0ZAV+DqHmbPZ/xDREezLgCF2AY8N1Ki
+	 V037v+4RBt/xQ==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 7401A3782113;
+	Mon, 10 Jun 2024 08:32:44 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Add information about TAP conformance in tests
+Date: Mon, 10 Jun 2024 13:32:45 +0500
+Message-Id: <20240610083245.1938001-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org, 
- Jisheng Zhang <jszhang@kernel.org>, linux-kselftest@vger.kernel.org, 
- Samuel Holland <samuel@sholland.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, Jonathan Corbet <corbet@lwn.net>, 
- Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, 
- linux-kernel@vger.kernel.org, Andy Chiu <andy.chiu@sifive.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Shuah Khan <shuah@kernel.org>, linux-sunxi@lists.linux.dev, 
- devicetree@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Evan Green <evan@rivosinc.com>, linux-doc@vger.kernel.org, 
- Guo Ren <guoren@kernel.org>
-In-Reply-To: <20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com>
-References: <20240609-xtheadvector-v1-0-3fe591d7f109@rivosinc.com>
- <20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com>
-Message-Id: <171800082930.1000302.5109301877296329341.robh@kernel.org>
-Subject: Re: [PATCH 02/13] dt-bindings: thead: add a vlen register length
- property
+Content-Transfer-Encoding: 8bit
 
+Although "TAP" word is being used already in documentation, but it hasn't
+been defined in informative way for developers that how to write TAP
+conformant tests and what are the benefits. Write a short brief about it.
 
-On Sun, 09 Jun 2024 21:45:07 -0700, Charlie Jenkins wrote:
-> Add a property analogous to the vlenb CSR so that software can detect
-> the vector length of each CPU prior to it being brought online.
-> Currently software has to assume that the vector length read from the
-> boot CPU applies to all possible CPUs. On T-Head CPUs implementing
-> pre-ratification vector, reading the th.vlenb CSR may produce an illegal
-> instruction trap, so this property is required on such systems.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  Documentation/devicetree/bindings/riscv/thead.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ Documentation/dev-tools/kselftest.rst | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead.yaml: 'thead,vlenb' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240609-xtheadvector-v1-2-3fe591d7f109@rivosinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index dcf634e411bd9..b579f491f3e97 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -228,6 +228,14 @@ In general, the rules for selftests are
+  * Don't cause the top-level "make run_tests" to fail if your feature is
+    unconfigured.
+ 
++ * The output of tests must conform to the TAP standard to ensure high
++   testing quality and to capture failures/errors with specific details.
++   The kselftest.h and kselftest_harness.h headers provide wrappers for
++   outputting test results such as pass, fail, or skip etc. These wrappers
++   should be used instead of reinventing the wheel or using raw printf and
++   exit statements. CI systems can easily parse TAP output messages to
++   detect test failures.
++
+ Contributing new tests (details)
+ ================================
+ 
+-- 
+2.39.2
 
 
