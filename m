@@ -1,167 +1,180 @@
-Return-Path: <linux-kselftest+bounces-11548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0F6901E77
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 11:41:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A1F902163
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 14:16:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13EDC1C21437
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 09:41:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 493911C21151
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 12:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB5C74C09;
-	Mon, 10 Jun 2024 09:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65837FBAC;
+	Mon, 10 Jun 2024 12:16:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="RabQY3O+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LEIkqa0S"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="fqDNmK54"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow1-smtp.messagingengine.com (flow1-smtp.messagingengine.com [103.168.172.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E991DFD0;
-	Mon, 10 Jun 2024 09:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BADA7F7C6
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 12:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718012463; cv=none; b=ZXcq+8u6IJt5XKh9lDmPCzr+QcIM0TFxEaiXTaO3/rDZOC8eP/bVRugA5cWlRaP2j3zMY2UpqPmPu1WoT9sEUnlfiaxGkp5qxqJ/7kNg4ngtdsgtf2BZyiswt1f7mm26Rp8Zza67mTem+wbB7T/e5SOx98nyZRSUMI60nt0oDRU=
+	t=1718021791; cv=none; b=ONJoSE6jfFyA7wWSCUc3cwHGNvIwpTyNYqqPH0xVYA2UNkz/YgLsFXsOD4MlfpWZh7nxgB2MCXXNjYQoTfXPdblzepr5LxbaOBtk5mJoHKb5WZizeHZdkwu4PBvsOivsEb4GuARBSx/o+9WmZT0pFR/qn45+Ge6q1rXf2ij3OAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718012463; c=relaxed/simple;
-	bh=KNKCKklTuYVMpCezbUE7O/dEuK5srQjktU+JvcvNVFM=;
+	s=arc-20240116; t=1718021791; c=relaxed/simple;
+	bh=wqKQas949IIXrsipBtEwY28UkuazUZ16a21oKmwHiv8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ray4flBOg0A/9wGOjrVmFWjz2jI2hvpmFvY7YtQblUaTiWuvP/Cy9hNbDzk13ariUrL6gwx8JG9HtItIv95tzIMvwXUHeg+oYcrRdTZ0r9jToDgXVl0SyhhMrsyOuBzR6siQkq/Q1hxTR7tZUJK/HJLZJnw9vs4hnSdCCs1TrIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=RabQY3O+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LEIkqa0S; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailflow.nyi.internal (Postfix) with ESMTP id 963B22005E8;
-	Mon, 10 Jun 2024 05:41:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 10 Jun 2024 05:41:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1718012460;
-	 x=1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=
-	RabQY3O+4UNdZ0WFareLb30ij2ij24ABk6Lbynu1oSJqzBNhkIQQWgVpYAt6nxZs
-	xtCHgP0hZbwR5BCOd3+A6byK5nCv8/C39etwGTzwROaBpProdCKhOoilOPHqfX4G
-	9BPEw8rqUJ2b4bKJGD097P+GyZmNRYnlE9r5l/3qfgNTjwSIOS5iRdJ2/lcaKWol
-	Ags4NKBIAEP4oDf6E5eP9xySuXZbbf3Rf+ZjrT1E/LFJ3zILwD3bPZl1TONdqocr
-	gWE553KoKC/NxwfzjGl7vRY02Hm/52TNnjdQsoEmz4LyEbSX88ictmd9TYed7QO8
-	Vi4saa1D9ANVTGK3GtTJ1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718012460; x=
-	1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=L
-	EIkqa0ScrIZM+LbM+UQmyBMYTjnw/MyuAVysR6rU8V05ivy3cj/G/xnKynMg4RwD
-	eolvhub/c6EaaAHYadJ+LHXze9kE8kbNYL8xHi+ro2PkwCbmS7v5nIj546/lDQk9
-	yJwzxlK8VjIJ/0IDp2oqBanZ0aNkMNYqHjbhqleFLcoB499khNfsSlT1yTzGh7v9
-	EmPyHRchH8a+BvKi2JzSqd9BNH9HaOU+crMxGt5PAY7FNdjtc9zGlv90XwpX/kNt
-	z61R4Y3DicCu3qYARJku45VG37c3eRLbXkqD58xvt5HnwEavfIXbEfD+lINrb+ee
-	2mSP7VhAJ0kfxhctfS5Hw==
-X-ME-Sender: <xms:LMpmZkGE-eflvtIEwsg6gkccJ5iKsFDRlanTQlH5RisFANCJdKJnyA>
-    <xme:LMpmZtXR8YOXh-iU4niksBMDtYtw-CmQPn8lCGVt2gaM45IzD-8NGWoyXDI4nWDoL
-    kkOeYccTP4-FZd7dtM>
-X-ME-Received: <xmr:LMpmZuINOI586a9DVmBFpEqsB_OfZXOtQGQ0GqS9akWHKky-9_zNVRIlXhBtNkRDHXLyNKqvefaOW-1i3zckVOU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedutddgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeflohhn
-    rghthhgrnhcuvegrlhhmvghlshcuoehjtggrlhhmvghlshesfeiggidtrdhnvghtqeenuc
-    ggtffrrghtthgvrhhnpeetgedutdfggeetleefhfeuhedtheduteekieduvdeigeegvdev
-    vddtieekiedvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjtggrlhhmvghlshesfeiggidtrdhnvght
-X-ME-Proxy: <xmx:LMpmZmFhkvdeqlm-6M4BTtRkSBGnJu2kqG8SVUIoAI2XSG7pv1KIXQ>
-    <xmx:LMpmZqVggAwTWlvn6rCYXTiNLWrcaJIw9cfxq4zj3Pn-ofQbzZexnQ>
-    <xmx:LMpmZpMAgFgbzUj73s7QZU5vvEe0Q_iTEiktwCD-tvDzkRrejVc9lg>
-    <xmx:LMpmZh3iJSOiy9Hq-l1xA5WL35QxoPplcGdH5uexvRTvlDPFSPP6Sw>
-    <xmx:LMpmZjUhtKFQlMDDlAkcUK3LjflnnZDUVoqCSrR42egFwU8ZMoeN9jzO>
-Feedback-ID: i76614979:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Jun 2024 05:40:56 -0400 (EDT)
-Date: Mon, 10 Jun 2024 02:46:06 -0700
-From: Jonathan Calmels <jcalmels@3xx0.net>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: brauner@kernel.org, ebiederm@xmission.com,
- 	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
- 	James Morris <jmorris@namei.org>, KP Singh <kpsingh@kernel.org>,
- 	Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>,
- 	Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- 	Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- 	Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
- Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
- John Johansen <john.johansen@canonical.com>,
- 	David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- 	Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, 	Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, containers@lists.linux.dev,
- 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, 	linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org, apparmor@lists.ubuntu.com,
- 	keyrings@vger.kernel.org, selinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] capabilities: Add securebit to restrict userns
- caps
-Message-ID: <svpbmv37f5n537seb3cfsylnlzi6ftuad4dqi5unoycylmcf7r@6knq7sibdw7w>
-References: <20240609104355.442002-1-jcalmels@3xx0.net>
- <20240609104355.442002-3-jcalmels@3xx0.net>
- <20240610023301.GA2183903@mail.hallyn.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BnJsBz8jiP+UlSkvrY8kh7DV5cAQj4u5vX9PiNhlK8qVvDN5UMgaPFFRKPcGM1R2luJ4IKdoLPGFLCz+K2+aKF0UDMxTw5ON1E0sK7588TcFqtpMl1zZEmbZL2gwyO4nNCKCjHHo16lVGdeT94hIP45IGDcwjsDn8bspWRxup1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=fqDNmK54; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-627f3265898so44560067b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 05:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1718021788; x=1718626588; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sLBhiGTWQPkGSzXF44ZdseZQqm/Ay7CrbOb4xYeFmxw=;
+        b=fqDNmK54kqBa6EQtJoGnldfHFauQ6kcsHN8jJRtx3a3rll3Um/eyPaj3jVHFB+tyw7
+         oWllKFUvqeIWDHF887kAzWvvU2KdZlizeuujfZw56cW3rHyG0oOcnpydIhz7FnSl+hXL
+         U1KjenD06DybeKg4nnOats3t12CBNccFG6N8XmD8XbhnL0U0M5o2hd2PsPLpd5/9lTX1
+         NjMsJx1Nc/2JFedHyuBzS1TuVPQ0pno023UGN7oqWLiAo0tvFSQm4VVsGEzDH5kI2kIh
+         JYXjXf1y56GIE8lsAofXPKrSTQcUoBAoqT3pE/mAb6WpQ96S6WM6PKQTPTnkDqCnPnsn
+         7TJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718021788; x=1718626588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sLBhiGTWQPkGSzXF44ZdseZQqm/Ay7CrbOb4xYeFmxw=;
+        b=Cn32D+YkmVvj5Wcq08KEDuVsuqyBf15ndIBmjx5HrWx6HAc2eHnORaZOpVbDtCowmM
+         frc0uBD4pi+bpFGhe8UoCS2GMwB5XegwykCcE4aijUpWXN79TMBa81K3YfCtaBuoMV2Q
+         tRYj7TvdL6X/7fuoSzRLo/xlH3M4mGoaX2fjINdege61zGT4Dz8X3FS2f72YhTHUjgTZ
+         4PIjX+Pva979pr1FUkUymUkGgc49fIAtnlpUuHHDmwq+o9zxxmu+icD9KEct0PYq2bkK
+         DIfN3xHV6ZJGlx0riiS/9hhk0DF390Ehm56GGQOoUk2IiIHTtObbIXu5BekIUEAK1BxW
+         goSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOfc+RVZJdAHCZF2+E46TD7yyWduSyzhU8Xv4ljquhrBKj1IDT/WBSe2gv3B7MOFeOF9RrCDQtrsckMSYzVglDYIYIVLPRs1qO5HxvP3bf
+X-Gm-Message-State: AOJu0YxmheF1QVzcp9wQorXOd8Xu2Zou1tTcQBn+7PAyl2jVzQSVW3Zw
+	ngCB9v73U4DlcjWHLrDEnu5g5CKuboARGBlkNW7cK0TzMRLH6Z3qbRQMdXNJ83E=
+X-Google-Smtp-Source: AGHT+IHKUHpBEHdEL4hUatHn2U1DbF50V0YQ7tp+HSd+jRZUj7MSdsNfIMBQ/mHVI5dhq2ZCcmRiZw==
+X-Received: by 2002:a81:6fd5:0:b0:627:dca5:407b with SMTP id 00721157ae682-62cd55c0a56mr87073917b3.13.1718021786857;
+        Mon, 10 Jun 2024 05:16:26 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b04f6213dfsm45360126d6.23.2024.06.10.05.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jun 2024 05:16:26 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1sGdwn-00Di9E-NN;
+	Mon, 10 Jun 2024 09:16:25 -0300
+Date: Mon, 10 Jun 2024 09:16:25 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240610121625.GI791043@ziepe.ca>
+References: <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org>
+ <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240610023301.GA2183903@mail.hallyn.com>
+In-Reply-To: <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
 
-On Sun, Jun 09, 2024 at 09:33:01PM GMT, Serge E. Hallyn wrote:
-> On Sun, Jun 09, 2024 at 03:43:35AM -0700, Jonathan Calmels wrote:
-> > This patch adds a new capability security bit designed to constrain a
-> > task’s userns capability set to its bounding set. The reason for this is
-> > twofold:
+On Mon, Jun 10, 2024 at 02:07:01AM +0100, Pavel Begunkov wrote:
+> On 6/10/24 01:37, David Wei wrote:
+> > On 2024-06-07 17:52, Jason Gunthorpe wrote:
+> > > IMHO it seems to compose poorly if you can only use the io_uring
+> > > lifecycle model with io_uring registered memory, and not with DMABUF
+> > > memory registered through Mina's mechanism.
 > > 
-> > - This serves as a quick and easy way to lock down a set of capabilities
-> >   for a task, thus ensuring that any namespace it creates will never be
-> >   more privileged than itself is.
-> > - This helps userspace transition to more secure defaults by not requiring
-> >   specific logic for the userns capability set, or libcap support.
+> > By this, do you mean io_uring must be exclusively used to use this
+> > feature?
 > > 
-> > Example:
-> > 
-> >     # capsh --secbits=$((1 << 8)) --drop=cap_sys_rawio -- \
-> >             -c 'unshare -r grep Cap /proc/self/status'
-> >     CapInh: 0000000000000000
-> >     CapPrm: 000001fffffdffff
-> >     CapEff: 000001fffffdffff
-> >     CapBnd: 000001fffffdffff
-> >     CapAmb: 0000000000000000
-> >     CapUNs: 000001fffffdffff
+> > And you'd rather see the two decoupled, so userspace can register w/ say
+> > dmabuf then pass it to io_uring?
 > 
-> But you are not (that I can see, in this or the previous patch)
-> keeping SECURE_USERNS_STRICT_CAPS in securebits on the next
-> level unshare.  Though I think it's ok, because by then both
-> cap_userns and cap_bset are reduced and cap_userns can't be
-> expanded.  (Sorry, just thinking aloud here)
+> Personally, I have no clue what Jason means. You can just as
+> well say that it's poorly composable that write(2) to a disk
+> cannot post a completion into a XDP ring, or a netlink socket,
+> or io_uring's main completion queue, or name any other API.
 
-Right this is safe to reset, but maybe we do keep it if the secbit is
-locked? This is kind of a special case compared to the other bits.
+There is no reason you shouldn't be able to use your fast io_uring
+completion and lifecycle flow with DMABUF backed memory. Those are not
+widly different things and there is good reason they should work
+together.
 
-> > +	/* Limit userns capabilities to our parent's bounding set. */
-> 
-> In the case of userns_install(), it will be the target user namespace
-> creator's bounding set, right?  Not "our parent's"?
+Pretending they are totally different just because two different
+people wrote them is a very siloed view.
 
-Good point, I should reword this comment.
+> The devmem TCP callback can implement it in a way feasible to
+> the project, but it cannot directly post events to an unrelated
+> API like io_uring. And devmem attaches buffers to a socket,
+> for which a ring for returning buffers might even be a nuisance.
+
+If you can't compose your io_uring completion mechanism with a DMABUF
+provided backing store then I think it needs more work.
+
+Jason
 
