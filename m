@@ -1,146 +1,167 @@
-Return-Path: <linux-kselftest+bounces-11547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A8E901DF9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 11:20:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E0F6901E77
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 11:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 841BD1F22828
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 09:20:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13EDC1C21437
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 09:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A3574054;
-	Mon, 10 Jun 2024 09:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB5C74C09;
+	Mon, 10 Jun 2024 09:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F79GrgXI"
+	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="RabQY3O+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LEIkqa0S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from flow1-smtp.messagingengine.com (flow1-smtp.messagingengine.com [103.168.172.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF92335A7
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 09:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E991DFD0;
+	Mon, 10 Jun 2024 09:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718011253; cv=none; b=NIliGv1GVvv6J2ZlthlbVVctb2fhVTuh/kKRjgO8rLaOjg4d8MRvBTUTv2uG1A1atxa8PBwOVIJstB+JIjjT9bd/06VCg2UkleGt6JgJ07NQP/ugoXKR7z0EAbJkefg7tpYcR2Ev2G8EjdJSNuvymAqYV9suOcuUsMuXRBWzIgU=
+	t=1718012463; cv=none; b=ZXcq+8u6IJt5XKh9lDmPCzr+QcIM0TFxEaiXTaO3/rDZOC8eP/bVRugA5cWlRaP2j3zMY2UpqPmPu1WoT9sEUnlfiaxGkp5qxqJ/7kNg4ngtdsgtf2BZyiswt1f7mm26Rp8Zza67mTem+wbB7T/e5SOx98nyZRSUMI60nt0oDRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718011253; c=relaxed/simple;
-	bh=Xv/dEiCRkSpodmaL2d//ZO1u0bmo9WpTjN01UGyMVF0=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PSxfAGZV7Mk1q9TB3SDz2cepXupTIPwuCMBYwgzNzVY05e7RKq0Al8bzzNFZBamIOc8JvWHn6Bj9ZBjpHNlk47MpP9gvc8fO3Wli90SF1WQQoj5YkZSl/nhHfnFKpWaEcKCaMR2zPyfMu7kHJIBdK8cZGDpL2DictzGpWTQoy1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F79GrgXI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718011251;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8iJ6dvPVXFgwtQ4T7unQwyUfRp5ecBG5cGhKrfZARQs=;
-	b=F79GrgXIboyumavs4OktKj/EXLJydCCpWHRRADW6QGNKs6Mpz+q+ZDdpaHSgS0a43/OuM4
-	y7KGnPmWgYNzaBvKDLrPjg5XN4iXPsQegXPHMk7XflUYmu63rERySs3PDAbpNJ5BY72C4d
-	0/feck1Y3zMBFdPgV6j2UusTIFiTdIU=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-rN5hOhSAOaWOOmCReYtyeA-1; Mon, 10 Jun 2024 05:20:49 -0400
-X-MC-Unique: rN5hOhSAOaWOOmCReYtyeA-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-62a0841402aso69701777b3.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 02:20:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718011249; x=1718616049;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8iJ6dvPVXFgwtQ4T7unQwyUfRp5ecBG5cGhKrfZARQs=;
-        b=lcKMpzfkU+dIGd4iBFkPRVZgxeRvFDozT6lGbnitvU5EbGFDyOu+i6N8uwHrQtFFnb
-         VpKMUmR00Wpo5jFYBAf4BBypzti+iv6rMKNXVU8h2v8P9+N0RpHLNANLlEl0dNvAaPGq
-         hKDtvw6uZmyQUPbfWG5oalhQUzECprv2fZSEhvNXykv2DCC+1AUqRKPYoeyv0J05YUS9
-         7SgSSivg4G8oOJ/2fGQRUyj0Qc8cdIqjMNviVSsQQgNYPEihA0M4+xwNXaFXxMo2YRXU
-         owZ9/WimSjadzxNobb2DicxdxuVPK/2ANnq+0oIEC2ROUFtjm0DJitUjXoRiIf9Tmiys
-         f+Tw==
-X-Forwarded-Encrypted: i=1; AJvYcCWb9nHugp4LkLA/JhXW7tfvA/ovQLkVIU7l5wh2OAV1TxUE6E0mSvpm3zIt04lMf8ICd/lamW5zqjdLZRbkTd+gaT3FAT8j6G+UU4IeSxSM
-X-Gm-Message-State: AOJu0Yym2GRYfN8IWOTRUUNjJkrotWeDfMMkDFYUt/5jGDZO+g6q9zsb
-	prAI9zM8B4+d4keJ1FPvoXTVZH/H7U4HxYKAa/WKybDKqfhjXgkyjlR0fQ/wXAGgNQlHOAP/IYc
-	3LpigbGdY3T2UpsrZwopMn4ozq6J/bVChs0EVU4yunW7DQMQgLPKRtol/5B+yzdQD3Tk4+1RUwT
-	i8FBivlLNZVGkwpSFYALn9zRC6fv3/u0OqLRu1uQKW
-X-Received: by 2002:a0d:e304:0:b0:61a:cea1:3c63 with SMTP id 00721157ae682-62cd56a9f69mr80025647b3.47.1718011248850;
-        Mon, 10 Jun 2024 02:20:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHFjnKBptFBgLEV5bzktHbMReA8zI8OX4PPVkODmioQ2wqMk8XLBtAg+pDd9bzT3M9lgzkU0g8BWKSGH4IH14Q=
-X-Received: by 2002:a0d:e304:0:b0:61a:cea1:3c63 with SMTP id
- 00721157ae682-62cd56a9f69mr80025547b3.47.1718011248570; Mon, 10 Jun 2024
- 02:20:48 -0700 (PDT)
-Received: from 311643009450 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 10 Jun 2024 05:20:47 -0400
-From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
-References: <20240603185647.2310748-1-amorenoz@redhat.com> <20240603185647.2310748-10-amorenoz@redhat.com>
- <20240605194314.GX791188@kernel.org>
+	s=arc-20240116; t=1718012463; c=relaxed/simple;
+	bh=KNKCKklTuYVMpCezbUE7O/dEuK5srQjktU+JvcvNVFM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ray4flBOg0A/9wGOjrVmFWjz2jI2hvpmFvY7YtQblUaTiWuvP/Cy9hNbDzk13ariUrL6gwx8JG9HtItIv95tzIMvwXUHeg+oYcrRdTZ0r9jToDgXVl0SyhhMrsyOuBzR6siQkq/Q1hxTR7tZUJK/HJLZJnw9vs4hnSdCCs1TrIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=RabQY3O+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LEIkqa0S; arc=none smtp.client-ip=103.168.172.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailflow.nyi.internal (Postfix) with ESMTP id 963B22005E8;
+	Mon, 10 Jun 2024 05:41:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 10 Jun 2024 05:41:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1718012460;
+	 x=1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=
+	RabQY3O+4UNdZ0WFareLb30ij2ij24ABk6Lbynu1oSJqzBNhkIQQWgVpYAt6nxZs
+	xtCHgP0hZbwR5BCOd3+A6byK5nCv8/C39etwGTzwROaBpProdCKhOoilOPHqfX4G
+	9BPEw8rqUJ2b4bKJGD097P+GyZmNRYnlE9r5l/3qfgNTjwSIOS5iRdJ2/lcaKWol
+	Ags4NKBIAEP4oDf6E5eP9xySuXZbbf3Rf+ZjrT1E/LFJ3zILwD3bPZl1TONdqocr
+	gWE553KoKC/NxwfzjGl7vRY02Hm/52TNnjdQsoEmz4LyEbSX88ictmd9TYed7QO8
+	Vi4saa1D9ANVTGK3GtTJ1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718012460; x=
+	1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=L
+	EIkqa0ScrIZM+LbM+UQmyBMYTjnw/MyuAVysR6rU8V05ivy3cj/G/xnKynMg4RwD
+	eolvhub/c6EaaAHYadJ+LHXze9kE8kbNYL8xHi+ro2PkwCbmS7v5nIj546/lDQk9
+	yJwzxlK8VjIJ/0IDp2oqBanZ0aNkMNYqHjbhqleFLcoB499khNfsSlT1yTzGh7v9
+	EmPyHRchH8a+BvKi2JzSqd9BNH9HaOU+crMxGt5PAY7FNdjtc9zGlv90XwpX/kNt
+	z61R4Y3DicCu3qYARJku45VG37c3eRLbXkqD58xvt5HnwEavfIXbEfD+lINrb+ee
+	2mSP7VhAJ0kfxhctfS5Hw==
+X-ME-Sender: <xms:LMpmZkGE-eflvtIEwsg6gkccJ5iKsFDRlanTQlH5RisFANCJdKJnyA>
+    <xme:LMpmZtXR8YOXh-iU4niksBMDtYtw-CmQPn8lCGVt2gaM45IzD-8NGWoyXDI4nWDoL
+    kkOeYccTP4-FZd7dtM>
+X-ME-Received: <xmr:LMpmZuINOI586a9DVmBFpEqsB_OfZXOtQGQ0GqS9akWHKky-9_zNVRIlXhBtNkRDHXLyNKqvefaOW-1i3zckVOU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedutddgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeflohhn
+    rghthhgrnhcuvegrlhhmvghlshcuoehjtggrlhhmvghlshesfeiggidtrdhnvghtqeenuc
+    ggtffrrghtthgvrhhnpeetgedutdfggeetleefhfeuhedtheduteekieduvdeigeegvdev
+    vddtieekiedvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjtggrlhhmvghlshesfeiggidtrdhnvght
+X-ME-Proxy: <xmx:LMpmZmFhkvdeqlm-6M4BTtRkSBGnJu2kqG8SVUIoAI2XSG7pv1KIXQ>
+    <xmx:LMpmZqVggAwTWlvn6rCYXTiNLWrcaJIw9cfxq4zj3Pn-ofQbzZexnQ>
+    <xmx:LMpmZpMAgFgbzUj73s7QZU5vvEe0Q_iTEiktwCD-tvDzkRrejVc9lg>
+    <xmx:LMpmZh3iJSOiy9Hq-l1xA5WL35QxoPplcGdH5uexvRTvlDPFSPP6Sw>
+    <xmx:LMpmZjUhtKFQlMDDlAkcUK3LjflnnZDUVoqCSrR42egFwU8ZMoeN9jzO>
+Feedback-ID: i76614979:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Jun 2024 05:40:56 -0400 (EDT)
+Date: Mon, 10 Jun 2024 02:46:06 -0700
+From: Jonathan Calmels <jcalmels@3xx0.net>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: brauner@kernel.org, ebiederm@xmission.com,
+ 	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+ 	James Morris <jmorris@namei.org>, KP Singh <kpsingh@kernel.org>,
+ 	Matt Bobrowski <mattbobrowski@google.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ 	Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ 	Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ 	Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
+ Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
+ John Johansen <john.johansen@canonical.com>,
+ 	David Howells <dhowells@redhat.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>,
+ 	Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, 	Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, containers@lists.linux.dev,
+ 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, 	linux-security-module@vger.kernel.org,
+ bpf@vger.kernel.org, apparmor@lists.ubuntu.com,
+ 	keyrings@vger.kernel.org, selinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] capabilities: Add securebit to restrict userns
+ caps
+Message-ID: <svpbmv37f5n537seb3cfsylnlzi6ftuad4dqi5unoycylmcf7r@6knq7sibdw7w>
+References: <20240609104355.442002-1-jcalmels@3xx0.net>
+ <20240609104355.442002-3-jcalmels@3xx0.net>
+ <20240610023301.GA2183903@mail.hallyn.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240605194314.GX791188@kernel.org>
-Date: Mon, 10 Jun 2024 05:20:47 -0400
-Message-ID: <CAG=2xmMgEUVwhqSFV5uXe_HuXeMaN7kDPW5TpmcihHYe0seo+Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 9/9] selftests: openvswitch: add emit_sample test
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com, 
-	i.maximets@ovn.org, dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240610023301.GA2183903@mail.hallyn.com>
 
-On Wed, Jun 05, 2024 at 08:43:14PM GMT, Simon Horman wrote:
-> On Mon, Jun 03, 2024 at 08:56:43PM +0200, Adrian Moreno wrote:
-> > Add a test to verify sampling packets via psample works.
-> >
-> > In order to do that, create a subcommand in ovs-dpctl.py to listen to
-> > on the psample multicast group and print samples.
-> >
-> > In order to also test simultaneous sFlow and psample actions and
-> > packet truncation, add missing parsing support for "userspace" and
-> > "trunc" actions.
-> >
-> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
->
-> ...
->
-> > @@ -803,6 +819,25 @@ class ovsactions(nla):
-> >                  self["attrs"].append(["OVS_ACTION_ATTR_EMIT_SAMPLE", emitact])
-> >                  parsed = True
-> >
-> > +            elif parse_starts_block(actstr, "userspace(", False):
-> > +                uact = self.userspace()
-> > +                actstr = uact.parse(actstr[len("userpsace(") : ])
->
-> nit: userspace
->
->      Flagged by checkpatch.pl --codespell
->
+On Sun, Jun 09, 2024 at 09:33:01PM GMT, Serge E. Hallyn wrote:
+> On Sun, Jun 09, 2024 at 03:43:35AM -0700, Jonathan Calmels wrote:
+> > This patch adds a new capability security bit designed to constrain a
+> > task’s userns capability set to its bounding set. The reason for this is
+> > twofold:
+> > 
+> > - This serves as a quick and easy way to lock down a set of capabilities
+> >   for a task, thus ensuring that any namespace it creates will never be
+> >   more privileged than itself is.
+> > - This helps userspace transition to more secure defaults by not requiring
+> >   specific logic for the userns capability set, or libcap support.
+> > 
+> > Example:
+> > 
+> >     # capsh --secbits=$((1 << 8)) --drop=cap_sys_rawio -- \
+> >             -c 'unshare -r grep Cap /proc/self/status'
+> >     CapInh: 0000000000000000
+> >     CapPrm: 000001fffffdffff
+> >     CapEff: 000001fffffdffff
+> >     CapBnd: 000001fffffdffff
+> >     CapAmb: 0000000000000000
+> >     CapUNs: 000001fffffdffff
+> 
+> But you are not (that I can see, in this or the previous patch)
+> keeping SECURE_USERNS_STRICT_CAPS in securebits on the next
+> level unshare.  Though I think it's ok, because by then both
+> cap_userns and cap_bset are reduced and cap_userns can't be
+> expanded.  (Sorry, just thinking aloud here)
 
-Thanks. Will fix it.
+Right this is safe to reset, but maybe we do keep it if the secbit is
+locked? This is kind of a special case compared to the other bits.
 
-> > +                self["attrs"].append(["OVS_ACTION_ATTR_USERSPACE", uact])
-> > +                parsed = True
-> > +
-> > +            elif parse_starts_block(actstr, "trunc", False):
-> > +                parencount += 1
-> > +                actstr, val = parse_extract_field(
-> > +                    actstr,
-> > +                    "trunc(",
-> > +                    r"([0-9]+)",
-> > +                    int,
-> > +                    False,
-> > +                    None,
-> > +                )
-> > +                self["attrs"].append(["OVS_ACTION_ATTR_TRUNC", val])
-> > +                parsed = True
-> > +
-> >              actstr = actstr[strspn(actstr, ", ") :]
-> >              while parencount > 0:
-> >                  parencount -= 1
->
+> > +	/* Limit userns capabilities to our parent's bounding set. */
+> 
+> In the case of userns_install(), it will be the target user namespace
+> creator's bounding set, right?  Not "our parent's"?
 
+Good point, I should reword this comment.
 
