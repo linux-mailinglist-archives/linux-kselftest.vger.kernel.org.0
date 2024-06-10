@@ -1,134 +1,169 @@
-Return-Path: <linux-kselftest+bounces-11600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B899029B9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 22:09:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B2D9029C6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 22:12:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA5401F21081
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 20:09:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2C0D2833BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 20:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4008214F121;
-	Mon, 10 Jun 2024 20:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A07014F9F4;
+	Mon, 10 Jun 2024 20:12:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVRm4k/G"
+	dkim=pass (2048-bit key) header.d=toxicpanda-com.20230601.gappssmtp.com header.i=@toxicpanda-com.20230601.gappssmtp.com header.b="LYwY4ug2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18771B812;
-	Mon, 10 Jun 2024 20:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A9214F9CA
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 20:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718050163; cv=none; b=VbYsJH8VQ5FyhWVsCc3lTxvJiE2TTEDMMgcSoyXSKNdjSDDW0RTlldOT2jvSU+QMUjuztKSkifjp+ImMZwG1yrKuek6Wzr4GfKb5RiT7txs1vp0+K/wPvTaj9lC4VzYwvvbHHQimFqouPdSHCN/MOK/nQ774/vdJA7jA2pIjn5M=
+	t=1718050351; cv=none; b=f7X+5SAme9OhGms0iYwd7HVUIwkQnwWeO4LkahgLZICEtkTD8mt0HXLhGsNPBuAtAeG0f/baq2+xCEV5IDJU9K6t14Z86gUYsthjVrHCm94jW8FS4DS2iqsvsHMe417d8NhJQhT+HXnpX5hxggzF74Cdatbu0CoKczMwekeeHIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718050163; c=relaxed/simple;
-	bh=c1BneUUhSn4t+cH+YqJuyxjKUHmeZACdZHTDo5SeE1M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=lF+C6TILoxmtYc/xyNSB5B2AaKLxKsujQmGbO+Va/Rw4pF9luZerPFrnWbKr98kGzsk/tMOeC/wO/E40JEKtVWDP+Lsu6voQlqI7JLB7B7AKjcQnDQLq3WJNnBGlBhGenmKTFpOx9Oe1ry0kY/ZkMWLGgpC5IBSuhHJ8FUaZGN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVRm4k/G; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c315b569c8so323597a91.0;
-        Mon, 10 Jun 2024 13:09:21 -0700 (PDT)
+	s=arc-20240116; t=1718050351; c=relaxed/simple;
+	bh=b7+MwoWNMLPQ7YyhI/4+4s4P3K4STGUIbLhPZG0Mamc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=amb9M4ZOT7oDX07ss0JDZrQO/u7v7gna1z6+lOmakg79FnIfyEASifWlMIHW66mGylLtuKeTVo86lmWiRAf2NW71sfDiuVZqnbXu/C5JB02Pvdrvu2nasxOSF8dUc/hJPSYb1OZhk2BBlCgewC/bOAS6pi/CQOkSTsQUc5zXEYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=none smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda-com.20230601.gappssmtp.com header.i=@toxicpanda-com.20230601.gappssmtp.com header.b=LYwY4ug2; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toxicpanda.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-62a2424ec39so49314697b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 13:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718050161; x=1718654961; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0C8Qu+cw7poJliJ7fKZVJslfoPcxeWgTVGFWkb83UUc=;
-        b=LVRm4k/GvJgcB/VxjAEFCBHe2KkUbwHAlXmmqvYM7hL3hlhXm9+8ZDUqo7L9VybkKF
-         1Z7rpagl9dVrDmHSWh4DsQSYd8AO6aSHBTuv5pIyk/6E/HHmwFd9z6slX/FIYgJPSLeT
-         hhx9+3yQPaLPQPSWWpspdwm1dUGHwDSEJe93sLCaj/UOX3rJHHJeArm+CMOqSCk96c5L
-         MF2Sh0Gez7pkmrhTErlp9v1EHZmFqZFqBeyP/FlXgn9dToSuykOokS12BMJmrvaMrhRh
-         2I9MBujT6Ry2oC0aN4qGsYCoVksQU7mmX5EyhwjMJoTnTqHIfmiz0vOrAMUvHi02Vi5G
-         1fmA==
+        d=toxicpanda-com.20230601.gappssmtp.com; s=20230601; t=1718050348; x=1718655148; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q8U88OhWZh1tCo+0WQ1tID8xLxoIwnJftDZHFtRwK3o=;
+        b=LYwY4ug2iL/vJ4DIUm0/Hp2MvpGURHFsHfCR8hKgvsmAqgzRPxBeFZzp5Tfo48EbCo
+         Euj3YFKE98R3xDK+TVi4X08MQrChZxoR0ZdwAIKYcBEyuT6J6pRA6MFIWpmGlK1QH6yk
+         ayaE24UINt0NKI07iU6nbvvP+ur4CK0DddjWE0Gtpl8JlrD2yRSechl/xjLYVx0XPb6G
+         i76retKit/NIZmraE8AuogV1B4ponmQt72v7gY3tzehh7ckEOuDJ8LHGOKzXVFo5n2E+
+         4LMkjHweMxF1v6LeN1NaZpvEMI8QBe5KxGttDTh645mywME2cc7oJs1j5M/rPYABPg7M
+         UNcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718050161; x=1718654961;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0C8Qu+cw7poJliJ7fKZVJslfoPcxeWgTVGFWkb83UUc=;
-        b=cDgbuzUljIaYAFoepgUY+6U2iOksrMDIRnQUWpzF6if6WYwq59SuEJJ34Sn/Aj3qL2
-         uYFXAUTpkfTfGo4JGH0l/t+O998GuikS0yr2fLs8T8HUbGWPVZi1WHbS5twp39ZpY52/
-         g05c8Stam3llzd6uVTNaQvRvCFFCvza6Fz/64Z6miCs5cjiU5NgRWh4Fi7HaERUUBrzc
-         CNpNlGHCofJ99RzzW7T2iUUKlXWC20DF7KFBJXXI4ejBDwNicLcTwXWV70EYvSHFQ0cx
-         UhIGH+1vqlzh6FM/okpj4UPWvsofYT0fAM4TkgFvC7LHHRMmgfqrRso2T2gM4Eszqrv7
-         8A8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWmsGPShw4mimaUIloGTaj+Q0SF3if/+6aNKTCSqgAnq3jBHYpZgbYKooRJ16IdOZV2k5Kj7gp2SyevTVnM0gftj7M0vKcJOdzf5Yvdbrd8qbbnHeZfD1xCd3rm2ACEtV2TLnIgIE324g4C7Sqf
-X-Gm-Message-State: AOJu0Yw/rqD+FjU0oklJFhAoaQEyDo+Gg6+lNM016XYQMo564MlMggZ7
-	x9+maZ7q1JC2Xtutwqdg/GvDrwJ4ejpSdg3B29+mYpYmNI+8r0gN
-X-Google-Smtp-Source: AGHT+IG5RJTxDye8IWs6NAUfz0dC5ivrbZ8nUVy7iBZ2iO4vXvb4o3ZYxtEy61V0ReP9FwXy5od/4Q==
-X-Received: by 2002:a17:90a:5d18:b0:2c3:1e2a:b5f3 with SMTP id 98e67ed59e1d1-2c31e2ab6b2mr1868898a91.15.1718050160921;
-        Mon, 10 Jun 2024 13:09:20 -0700 (PDT)
-Received: from dev0.. ([47.31.175.114])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c31ed7133esm1176606a91.8.2024.06.10.13.09.15
+        d=1e100.net; s=20230601; t=1718050348; x=1718655148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q8U88OhWZh1tCo+0WQ1tID8xLxoIwnJftDZHFtRwK3o=;
+        b=uBMjDaUw+qfsVx4ut2iyyVsJersrYpvx1zDog97KrQXelVRQhPRDjeq3bpNF9WufJs
+         4xxsmVwhaksswtdMhqSg015BBwXbTb8Nb2Zg+Rb4hcC2JYNp+Jqy5pXNVf4sIi2herS0
+         TMRXYdkKd44VHmy7l6ZeKhjk6p3E57+YR7DgBNh2yxJfUZRrMnzi2ZhN/9SMz0HKzTnJ
+         ekIiEOlTNkEQbN+yZPS01KAo0WqL3H7TADns+loqq3iroO9FRsq3giHRH+SmxUmpu/eH
+         czlv1b1BCT5yTKu225QsaF36Q/bN0FaC1LzpvyGxF22c5BIg4O4dgYEU7lB8EHkNd8oG
+         BVtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWFEV3Dk1LA9SuhyyzMd7MCBa9sDj2lSgQbgroLhdmpMsEpC2jkLsn38j1/ySSbRR7Al88SnP9jfb/KTE9deg21pVkFWcy35i9uVLB0o8Tl
+X-Gm-Message-State: AOJu0Yw9GPz2Fwc/sZxGfwWf0M1mG+emcjmBQ1TyVTRdjqF3FHvLjDEB
+	j26eylBT3BzZ4pU3k0ql9gdY4Zp/ADNj7JQYimBFlNjCs0DFI01ei4LWOmJGC5c=
+X-Google-Smtp-Source: AGHT+IHAq2uat/BxStlvycvWIMemf9chq6bKvr5RgwVh7JekY7oKEJ33MFsCJYBOa4s18l+17nIrDA==
+X-Received: by 2002:a81:ef0e:0:b0:61a:f206:bad6 with SMTP id 00721157ae682-62cd55f6755mr90104707b3.30.1718050348318;
+        Mon, 10 Jun 2024 13:12:28 -0700 (PDT)
+Received: from localhost (syn-076-182-020-124.res.spectrum.com. [76.182.20.124])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-62ccaef2825sm17372997b3.139.2024.06.10.13.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 13:09:20 -0700 (PDT)
-From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: shuah@kernel.org,
-	brauner@kernel.org,
-	mszeredi@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com,
-	jain.abhinav177@gmail.com
-Subject: [PATCH] selftests: filesystems: add return value checks
-Date: Mon, 10 Jun 2024 20:09:09 +0000
-Message-Id: <20240610200909.55819-1-jain.abhinav177@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 10 Jun 2024 13:12:27 -0700 (PDT)
+Date: Mon, 10 Jun 2024 16:12:27 -0400
+From: Josef Bacik <josef@toxicpanda.com>
+To: Jonathan Calmels <jcalmels@3xx0.net>
+Cc: brauner@kernel.org, ebiederm@xmission.com,
+	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>,
+	John Johansen <john.johansen@canonical.com>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	containers@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	apparmor@lists.ubuntu.com, keyrings@vger.kernel.org,
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Introduce user namespace capabilities
+Message-ID: <20240610201227.GD235772@perftesting>
+References: <20240609104355.442002-1-jcalmels@3xx0.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240609104355.442002-1-jcalmels@3xx0.net>
 
-Add ksft_exit_fail_msg() return value checks for fchdir() & chroot()
-to address the selftests statmount test compile warnings
+On Sun, Jun 09, 2024 at 03:43:33AM -0700, Jonathan Calmels wrote:
+> This patch series introduces a new user namespace capability set, as
+> well as some plumbing around it (i.e. sysctl, secbit, lsm support).
+> 
+> First patch goes over the motivations for this as well as prior art.
+> 
+> In summary, while user namespaces are a great success today in that they
+> avoid running a lot of code as root, they also expand the attack surface
+> of the kernel substantially which is often abused by attackers. 
+> Methods exist to limit the creation of such namespaces [1], however,
+> application developers often need to assume that user namespaces are
+> available for various tasks such as sandboxing. Thus, instead of
+> restricting the creation of user namespaces, we offer ways for userspace
+> to limit the capabilities granted to them.
+> 
+> Why a new capability set and not something specific to the userns (e.g.
+> ioctl_ns)?
+> 
+>     1. We can't really expect userspace to patch every single callsite
+>     and opt-in this new security mechanism. 
+> 
+>     2. We don't necessarily want policies enforced at said callsites.
+>     For example a service like systemd-machined or a PAM session need to
+>     be able to place restrictions on any namespace spawned under it.
+> 
+>     3. We would need to come up with inheritance rules, querying
+>     capabilities, etc. At this point we're just reinventing capability
+>     sets.
+> 
+>     4. We can easily define interactions between capability sets, thus
+>     helping with adoption (patch 2 is an example of this)
+> 
+> Some examples of how this could be leveraged in userspace:
+> 
+>     - Prevent user from getting CAP_NET_ADMIN in user namespaces under SSH:
+>         echo "auth optional pam_cap.so" >> /etc/pam.d/sshd
+>         echo "!cap_net_admin $USER"     >> /etc/security/capability.conf
+>         capsh --secbits=$((1 << 8)) -- -c /usr/sbin/sshd
+> 
+>     - Prevent containers from ever getting CAP_DAC_OVERRIDE:
+>         systemd-run -p CapabilityBoundingSet=~CAP_DAC_OVERRIDE \
+>                     -p SecureBits=userns-strict-caps \
+>                     /usr/bin/dockerd
+>         systemd-run -p UserNSCapabilities=~CAP_DAC_OVERRIDE \
+>                     /usr/bin/incusd
+> 
+>     - Kernel could be vulnerable to CAP_SYS_RAWIO exploits, prevent it:
+>         sysctl -w cap_bound_userns_mask=0x1fffffdffff
+> 
+>     - Drop CAP_SYS_ADMIN for this shell and all the user namespaces below it:
+>         bwrap --unshare-user --cap-drop CAP_SYS_ADMIN /bin/sh
+> 
 
-statmount_test.c:127:2: warning: ignoring return value of ‘fchdir’,
-declared with attribute warn_unused_result [-Wunused-result]
-  127 |  fchdir(orig_root);
-      |  ^~~~~~~~~~~~~~~~~
-statmount_test.c:128:2: warning: ignoring return value of ‘chroot’,
-declared with attribute warn_unused_result [-Wunused-result]
-  128 |  chroot(".");
-      |  ^~~~~~~~~~~
+Where are the tests for this patchset?  I see you updated the bpf tests for the
+bpf lsm bits, but there's nothing to validate this new behavior or exercise the
+new ioctl you've added.  Thanks,
 
-Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
----
- .../filesystems/statmount/statmount_test.c          | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-index e6d7c4f1c85b..b5e1247233b6 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
-+++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-@@ -125,8 +125,17 @@ static uint32_t old_root_id, old_parent_id;
- 
- static void cleanup_namespace(void)
- {
--	fchdir(orig_root);
--	chroot(".");
-+	int ret;
-+
-+	ret = fchdir(orig_root);
-+	if (ret == -1)
-+		ksft_exit_fail_msg("changing current directory: %s\n",
-+				strerror(errno));
-+
-+	ret = chroot(".");
-+	if (ret == -1)
-+		ksft_exit_fail_msg("chroot: %s\n", strerror(errno));
-+
- 	umount2(root_mntpoint, MNT_DETACH);
- 	rmdir(root_mntpoint);
- }
--- 
-2.34.1
-
+Josef
 
