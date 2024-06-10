@@ -1,520 +1,209 @@
-Return-Path: <linux-kselftest+bounces-11624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D992902C21
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 01:00:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25CED902C58
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 01:13:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF7E31F232DB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 23:00:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5276EB24489
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2024 23:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E5A156674;
-	Mon, 10 Jun 2024 22:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B708153567;
+	Mon, 10 Jun 2024 23:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kSCHullA"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="U/88Gwdh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F529156248
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 22:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718060236; cv=none; b=KnJj72ri/AZQ3/+S4SwAA6JZxeRUamxnQhV5vxbElHoXvIgxN30Tnl0MkIit08AmG5hrH4SAWcSZiqlCKtxTvTHeCJz4MfvbMluV3jEmUYlZIrNJ8iSdJJvkIjkfM0zun9x9KaufUWBksx6o+dZTwRzFN5vp63dFt5mCYDcXF0w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718060236; c=relaxed/simple;
-	bh=89do+Iu5RzVkWiXYu8asYhzFXtnE5ZFmYADPVBsb7VU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Pqb12q2TlStNqklIgUdDy/FP6nTn8bSvpE7sp/Adf14siPR7SrtU91oIphkmNWS7Opxkd9AjmRYDkbsGolnDPhWqk7lGh7XK11VWq/hv0UixOyTNnz5kJ+ftrY5ulFkfgAe8OWqrshQSYTPreiFUDnWUBbdBF3xQcnlyT3ix1yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kSCHullA; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7046e87e9afso393038b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 15:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718060234; x=1718665034; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f2sfNsaQxId1BqeFASEoVxo8c/eR/7T/BctdU8871Fw=;
-        b=kSCHullAwFYcet1tsV6OEUJfoPwk1oRCvFx6ObXnII1EmUWu00ilD7NdyjT9jdJMlI
-         AW76J6JV6us8+jjjOp3nVLvd1heMqzBI7Knn697+lnhQncAEjxhwniOl5u3vox1mEvgI
-         JjtLGZ5DZu5FdjYUNEuys7VXvoAI5b/VjOOUJtCCj8Ot7dIKaEtzilu6DCZBEIUMN3SX
-         8XSDOI7B89tiLcrMCzYLmQpoaqoIwkgXtYMTRqP7gf5yKRb3ZCTstlj1Y1QcdndiB3ZB
-         zHAmfqQzDuRtxdmVE2zT23kcnToMoNKjckvswkpD8f4y68Uswv08/r1mc/TV1Kbj/hnX
-         iW5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718060234; x=1718665034;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f2sfNsaQxId1BqeFASEoVxo8c/eR/7T/BctdU8871Fw=;
-        b=aTkhKtX92YHUSxnbLHAbBsyzbxDJ7XnjVLuV+xL3/1T4XREsuLM5c+EezRLkyOADMA
-         /Dn3TGKfC8/4tuTEXoL6cKewG529AEie3/98DGvnqmYTOo45mR6fH99r3LQjXhyyk3tz
-         9h4sIz+2NGwx3shzJlMX7kszG+G/S0/qY3StpozRq7sftGrUwbFF/B8x/CazQHKWRbuK
-         X0GjO0B/jrgcrw4F6gsuIZsu/DaQL7sy2J6NVSGRRBhuPNoO+TOIdNQs6XTx1FdNTTgu
-         oFwUb0ncD8mG6yyBHHOp0MjdkHcMH8iFUevsgwSfkaysCUBnw92TAYZ2uOCkwiT0qVx2
-         gtAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXDmirHSMbtcm8rB55WjnESXpk09PG+JYM7DqC9yvV0gwkZuIM/fX/PJuBuW40uQJ4lp62D2feTdwfHHkfKhVhPeyPfyaFBzq47ZWsEAJnF
-X-Gm-Message-State: AOJu0Yz8DHXkul4YcLUiRRRjzJwjKIYFvuCkWXZbL1PQL4ygHnl9HJ77
-	fVi2mzPEHxNc+zpO/945EFniCq1bblrVZRgCUMy6ZtgTVj55ANAM+FsHZeIuiWw=
-X-Google-Smtp-Source: AGHT+IG5gATBAwtilqBsgoVJ4IFFd5D1WpFf5fI1m9Nuo3Drv8SUbgpBVuob85V8FuEKd/c+RhqCjg==
-X-Received: by 2002:a05:6a20:7483:b0:1b7:bdb3:7bc9 with SMTP id adf61e73a8af0-1b7bdb38093mr3629109637.30.1718060233867;
-        Mon, 10 Jun 2024 15:57:13 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f71b597072sm18355865ad.99.2024.06.10.15.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 15:57:13 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 10 Jun 2024 15:56:50 -0700
-Subject: [PATCH v2 13/13] selftests: riscv: Support xtheadvector in vector
- tests
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07356152178;
+	Mon, 10 Jun 2024 23:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718061102; cv=fail; b=Lk87eGA6Ep3Oxx/58HgiTLP2SYlJoYh54tHvQsTEi+2NPU9Fz8DBVoPS9eeHRo4bm2t0XUQW7fPONcM4YqrvKRyJ/Zz1Tj8K03oS59NDkv+pWCNwRQsTD5OoXSQ0jzzsPqNFPLiaCLDIA/U10ip8YTtQ68BKnZRO2j0QvNfb8+U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718061102; c=relaxed/simple;
+	bh=HMgSG8UkjeWErtNe1andYEpfGcAFGBVJ6ibXuKvKmmA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=E4gODxz0pf3GkZIax6NwxtBIwERwnvHxgyPl2r28wDZ7iBD2/8U8aUyiy3YNQi5acBLZY9MKGCTwKWqv8MK0gT0kOIHm4Wd/hP5EZNHSDpb1OJ3dXRL9JFTEBAFCiF0v53j7IMJ+f77vhQRAHEsNlv4tANoft7B7VAU4J0ZT0N8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=U/88Gwdh; arc=fail smtp.client-ip=40.107.220.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oSKEqcxmQJDQlvoD3tNeVvzREqZkm+mcc0ewGLR0Rwe37qtc8wsXzKsuw6uan3xEEQkpe1DP9bPoXMf0d0uIiVzncmdUATMERM6KGyFVNXVQN5NKnEGBJ7aOdYbyQvxAN8xHiHoU74ekWhNPazDxsYb2P6qOguAOIqlsQcFSrBV1mVdBJMTg4BiyE76DTUP8EaV+vsUzCRZiZlRQtnrAlRopT6bhB1Dmfmq7vf5klVg+4E1TxAr357ceNuI+0jHee4zlQYjXfB9yBbbVzgWDI3V7MP0OiH4PDyrhgSmyTT/qhJ4nZp/0R3WPkhfspM4ZLOiT6ze+8GDXFI2X5UXO7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aNygtwb2wnTXpfJn1S3LaaLSTo239Rak/iLV0Pld/1w=;
+ b=PnINjiqfP1bdCRW2BUjjdbf6lJqoM7Uas6fvTAZagRUQl4EOctan0hK8USEp0OolOBOaRbrx0GAAGUt9A56zR0bkKPXDmb/XdM9Rsc1h/6nExvpoSNc4SxEuR6vaJhWat7XIyIJxyfsEGRsK0k003t/BYrzh7xeVYS5Afkhh1ztAS3JngvvXxnrqAXtMIzHQektdS25PUujxzUBucbAu/c5xrJnvvvFgXEQg7ZMunF65yrcN2grgAOJ6lEyYd2Glgcf8o+7HzYpbYvL+UT3Ex59v+afju0+jxtdCfvxKYg35jRJj3F/+ljlEh46sRdEQtWKHegoptfXVZCuEgV5iuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aNygtwb2wnTXpfJn1S3LaaLSTo239Rak/iLV0Pld/1w=;
+ b=U/88GwdhLKCCZk0aO6XNI5GfG+jHMdFFsWF59Q3wlXeS/aUxgHW4Qxfnl0gFuR/lZM8XNLqnxfs0bebvt5xftH21nteKbcFubq1pV7QlewMQUoI4QPSwKiZkZT1PPXn1mOZ+as5LFRhjo9A/uub1I1RVnNO//VBy5EXhefkCaFE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by PH7PR12MB5854.namprd12.prod.outlook.com (2603:10b6:510:1d5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Mon, 10 Jun
+ 2024 23:11:35 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::b0ef:2936:fec1:3a87]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::b0ef:2936:fec1:3a87%4]) with mapi id 15.20.7633.036; Mon, 10 Jun 2024
+ 23:11:34 +0000
+Message-ID: <3078aee7-acbe-f912-9a99-941154dc4b13@amd.com>
+Date: Mon, 10 Jun 2024 18:11:31 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v2] selftests/resctrl: Fix noncont_cat_run_test for AMD
+Content-Language: en-US
+To: Reinette Chatre <reinette.chatre@intel.com>,
+ Babu Moger <babu.moger@amd.com>, fenghua.yu@intel.com, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ ilpo.jarvinen@linux.intel.com, maciej.wieczor-retman@intel.com,
+ peternewman@google.com, eranian@google.com
+References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
+ <7679d70a0ea939db13ae9dac20de56644460d6df.1718035091.git.babu.moger@amd.com>
+ <6a78de4e-8d36-400c-9eb5-d3d6aa9e1e23@intel.com>
+From: "Moger, Babu" <bmoger@amd.com>
+In-Reply-To: <6a78de4e-8d36-400c-9eb5-d3d6aa9e1e23@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1P222CA0086.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:35e::27) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240610-xtheadvector-v2-13-97a48613ad64@rivosinc.com>
-References: <20240610-xtheadvector-v2-0-97a48613ad64@rivosinc.com>
-In-Reply-To: <20240610-xtheadvector-v2-0-97a48613ad64@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>, Guo Ren <guoren@kernel.org>, 
- Evan Green <evan@rivosinc.com>, Andy Chiu <andy.chiu@sifive.com>, 
- Jessica Clarke <jrtc27@jrtc27.com>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718060203; l=13221;
- i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=89do+Iu5RzVkWiXYu8asYhzFXtnE5ZFmYADPVBsb7VU=;
- b=hXCsXDP5Dms3ebt1D61klS9mUcigFrYRv2D8uucx5SKNN38C4rEokCw42ny+QuZ7uoG79zySa
- uaElGNvlFlbB/tb0vefKq7BlIUYzndsr21p4/BPwU5us13GpHrkyXYV
-X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
- pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|PH7PR12MB5854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55b4ba2b-3806-4e99-e73f-08dc89a2ac2b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|366007|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NkZ0azFLZHpnYnh0VkNCNitQWDhzMjRUczd1M2RYYVhuZElDQXBOUDVsaVBM?=
+ =?utf-8?B?a25Ya3ljbVJ1dDVMWVk4UVhERXZPQ2tpUFBpNklUZXk2SUl4YmcyRmNwNk5q?=
+ =?utf-8?B?MDhsVkVaMkM0bG9nYVJEb1RIWUpnYnZpZW9kYW5NaGdtdGJ5M3Z6T3BlSnRi?=
+ =?utf-8?B?WDhMUElkazFjSnl5djB3QVhPOUVhcmtwYXRZNGhhdEhlK1pHZE4rdEFVd0Fh?=
+ =?utf-8?B?TnFTQnpaMG9RQ2RMNFZiL3M0alBZbzVaU2wzaUpXc3BJOGQ1anJVSHJpSDA5?=
+ =?utf-8?B?MlVQMUlSQXlIbWJkcGxiT1hKR2V0SHE0QjFwL0x2bThtWXplR003RGp3Ung5?=
+ =?utf-8?B?ajBUWi95ZUlkS01ZVGU3VUZBd2pCYlFqL2ZwcDIwTFpwcEFhSSt0djU1QmIr?=
+ =?utf-8?B?L1VPNjZIbVJNdlZJVmhPbHhFUXJxKzVhbVUxeGcvZE9qa2FJTU1ZemhZb2hX?=
+ =?utf-8?B?OUlvWk1uY3l3Ujh6VXUxVnBVSGcrVUh5YWU1ekFsVU5aUEYvd2VqMTJMWXAv?=
+ =?utf-8?B?M0IzODBEa2ZOcVM2SGlFdHE2NzdWWnpoOVhIT3p4Q2ZvcGMxVUxJRUc4ZGl2?=
+ =?utf-8?B?bWxPc3dWMnN0UlRVUUdYQ3dCL25sa0JaK1NIOGZKQnpSaTJ3d0FYa0FUYXRH?=
+ =?utf-8?B?ZHpqRmk5RElWRWdBOFMwZ0NmTlYwbHExbURrcDhJeVZ6VkVpM1VNRGhqMEhT?=
+ =?utf-8?B?WlRmZFV6aUVGaXRpT1E3bXJjeS9taFFyTml4TU9aYWNpajBEeUwyajJPRFI1?=
+ =?utf-8?B?akpxb3kvdm9veXlCUXpKNzUyRG5tQmd0NmFkL2ErUFJOVEJkTXlwT0xUWjg3?=
+ =?utf-8?B?TkxOWmJUR0o4L25BdTdTbHBKNXE0dnpzVTl5blo4bjVpR2JydlRZOVBUSXIv?=
+ =?utf-8?B?bzBqZEg1ZDBWWWpFWDYxNTZVQ3V4RWJtZzRFcWFFdGpydURQbFR5SlhWVHNR?=
+ =?utf-8?B?OGJYNEk2R0crSzY5OHNEVVV1c1p6MHgwZzUvMDNyeGpkelhLZUx0U0xIOStL?=
+ =?utf-8?B?OHYzUkM4RU5IcDczdm8vSGZuMGZwOXpGb25CNmkxSzB5akFhQUtoTDRSclpR?=
+ =?utf-8?B?WEJiWk91TGpCQkcwVERuc09wNnJuMFdZeEJJbTVNQ05xM0JUV2x2K2Q1c1R2?=
+ =?utf-8?B?Umg3UWl2SERKZlg2R0N5WjRSQ3JtZkJRR3JEdUhIekhiVzlmazFWWkszaDBP?=
+ =?utf-8?B?bE5oV1RRZTd0RFpuT0hzL1lHMmVKUE80OVJDRGsrT21GTThZcGM1ZzdNVmVn?=
+ =?utf-8?B?TXhnVkdmc1ZWWFQ0NTJUYXpTdkQ1M1JOZVE0SFVnZEpIektHenlzOGFqWUNC?=
+ =?utf-8?B?Q0NXdzVjTzNBWEI3ZDBYS0RWaW1wam1lT0lXTHJXRXhYN3BaQXYySFE5UzJh?=
+ =?utf-8?B?RWVXNjlRcVFrN2hoUS80QlQ4b1JzOGw4V3NuZ0pvZVpVc0syWVlORWZ5UGVH?=
+ =?utf-8?B?OVpERnQ4RHBNNzBQL0Z0NXR6eitTbkNtcUFnQ3RyNmRJS0dWS1lyb0dEQ1Zl?=
+ =?utf-8?B?cVBRcjYweERDZU5QMWs3YlVLQkx2U3NhM1dDalYweHEwcmhDa3ZGY0RQY3BN?=
+ =?utf-8?B?Ulg1cHRVQ0toS2ZGWW1DYk42NHVKa2ZFY0Npbm9qRDlkMTF1dDRnK3B3ZXlz?=
+ =?utf-8?B?L2pCaHVDMm9hTWxCSjFMV0ttby9SQ283a2g2NThBMEt0WDVQVTl0NTJzSkx2?=
+ =?utf-8?B?TEhONUlpdm5sSkVKMWRTR1M2VE1lcm44dWp5MHdUb0ZpQXVSQ1I2N0V6NjJ6?=
+ =?utf-8?Q?OUnV+VFVYFe67xxcwJL6M7ohRv/u4z8RXuMK9Y5?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YVF0SFpWZzVEWjhjVEcvdmlkSkswMkx6VERWLy9IcDQ2VTQ3Wk4yYUhSYnFB?=
+ =?utf-8?B?ZU9XLzBxM0NGaHAxdlVlUHA1Z1JpeS9rZjlQQ3RGQWE1OWpteVlYNmhnVVFT?=
+ =?utf-8?B?TXViRzd1K1BzNVdwS04wcUx4QmtUeVdQeGt0N25teVFtS1NJR3BlQnZvd3Zt?=
+ =?utf-8?B?QmdtbXFTYmZFa0NsNFdPMlQ4OVRPZElLcmVKeFFWU1NLd21sWjg3MmlmcW4y?=
+ =?utf-8?B?b2tva0JGNitpNVJyVzE2SUhNUHRYZjFXamk0SEh6NkNYcmVucWFnT2I1VCtJ?=
+ =?utf-8?B?M0FzQU1qQWRHZUFtN2wxR0hmQ1JVQjN6amlLNlBvZ3R4WHBmZVcwQklPMGk2?=
+ =?utf-8?B?L3RCLzFDSEt5THdWWEJqMjNFZHduanY3UFkzUCtNa2pXcDMvQXh0azFHQ0Rj?=
+ =?utf-8?B?V1RqQjA2WmVVOWxQNGNwbks5QnF5d0M1SGRoYTV5VmRFcGliWW5LS3RqTnM4?=
+ =?utf-8?B?UUdGc2ZGQlFUNzJqZ3BUWVVscklpNEJVd1hROWNJTDlTRzZiYmpSeHpwb0tI?=
+ =?utf-8?B?KzVQcDdVanRFNlAyZ1pxa25UVUFIcHlSVXZURkdZMm5XTXFKdGFpSExRVDVX?=
+ =?utf-8?B?N2E4K0lBaFF6N09ETzBja2lTUFRYYklNZktCaHVyOUt5OXMveGFKbXJnZFNL?=
+ =?utf-8?B?eEJWS2NCQUluMkxBdkZFa2dIMVFidXVFL3dqNGw5REtQbE1mY3ZhSlAwVU1B?=
+ =?utf-8?B?M3VVR1dnQUhpYXovZkhDU3lzbmQrWXBrRlQrOXhwSHNvMVY4OHBGY3dqV1N5?=
+ =?utf-8?B?RVpzT1MxaDNPS3pZVTBwaCtkVzBtU2k3Z1BqSllEVlFkUmpuTE5haEJmNFVS?=
+ =?utf-8?B?Tytad0xLcm5rV09mWWRaemQzc3ZCSTBPdlNLNGNzTUQybXZmQWx4ZHZpUFlB?=
+ =?utf-8?B?akpsSFMvbHl5UWg3SmlwczhTZVRTUXNSRWhJUEFSUHhEL0hCaUtyUnF0Qjhy?=
+ =?utf-8?B?U2U5WU5KNDY2QmswaVhGQnBZTElXMmF3NGg0eVdlRHN0aTdPNkdYSFVGZ3lZ?=
+ =?utf-8?B?dkFrTmo5UFdhTityek1WT1QxNG9Zb1VKNldNVmpQUGZMT3dQdDFWeXpDeURV?=
+ =?utf-8?B?TjVlM0xSbG80bzQyWGFFMzREcVZIY0k4eVYyUkhzZU05V2piWmlTVFovK25v?=
+ =?utf-8?B?dytva290K2ZoRU15aFlhMFR2SkxHb05sWnA5SW1kWWE4V3NucFBOOHhZWk41?=
+ =?utf-8?B?WHNRQVpSbi9LbE5uRVdSNzFFYnpEazRYdDUxb1JyTU5NcnhQbERGUFpZMDdB?=
+ =?utf-8?B?cmlVU3QzS05SVWZEWklpZmxrQ3pUQUpBaWI5cmZob3BYMlZpSHpkamVuc1pB?=
+ =?utf-8?B?WjFnWDNEOXhGTE1QQnQzVVFmVEpUdVhKSTdFT0l6RVVhTlBkUEFRRUJJVThO?=
+ =?utf-8?B?ajJjK0YwQWhRc3pHTm1aMHJzYlpUb3JiRUx0ckxCR3VKelMwMnNSSWtkdnBq?=
+ =?utf-8?B?ZmVISGRXQ0NUWktQdFBpd2JVcnBZZ1lmbk5JdzQwaXdpOGxNQlhaSmNJNmla?=
+ =?utf-8?B?cUJVNGJ5VEtVb0Mxc1lQMTBSakh3elVWZjFZQUlTQXU5RGpicEc1b0xTSG0x?=
+ =?utf-8?B?NkV0SjJDNkxxb3piMUJCWFFzRHhQZUYxanBnK1BCZlUvb3JFeFdlb0plUnVT?=
+ =?utf-8?B?cjR5eGRSUDRETjRReUgrUElobjhSL2k1enFpUVpyM1cvcloyNEYycWd1eE8z?=
+ =?utf-8?B?cUhOZzBjQkI1WERZVXVEcTdrdWhWMWhhQUpwaG0zWE9hSUdjNkVLRHZFak1O?=
+ =?utf-8?B?aU1Cc1pjbkdpNjYwWGcxeitXQW9WSmRSMFZwNEVua01KSzVQbmh0WUV0eVRj?=
+ =?utf-8?B?aFRvZVNQS0xPMUhmTlUzSFFMK3p1eVljVncrUnZXZE5GWU8zbGZiVW9TQ2J3?=
+ =?utf-8?B?c2YwSkpjTGRhT3pVQzRDYlYwcFh5RGkySXRKWWZnUytUUHJINERHejNwMUdt?=
+ =?utf-8?B?ZWRKL01sVEpDaEYwS3pGVFdXajl3Zlk2bnFyRjVmNkZkQWUzYWRWT1p2V1lL?=
+ =?utf-8?B?YXNLQjhxV1ZEQXMzOWpuNXdZN0NIaDQ5V2tNV295Y2puU1RoNzhaYUhJN2NL?=
+ =?utf-8?B?cTJaQ2hkTitxMUh1WTViVGxDa1J1S3hEY0xMNVFXUGVwT1VyQk95KzhEdmw2?=
+ =?utf-8?Q?/KaFHyStwlVHMiyFML0G9DPqP?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55b4ba2b-3806-4e99-e73f-08dc89a2ac2b
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2024 23:11:34.7392
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3PyNq/GHiMyYIZ0rgfxoyjY60puaV0tNjzskn7V3qdyh97OWiZdoouVvrzwaX5zz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5854
 
-Extend existing vector tests to be compatible with the xtheadvector
-instructions.
+Hi Reinette,
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- .../selftests/riscv/vector/v_exec_initval_nolibc.c | 23 ++++--
- tools/testing/selftests/riscv/vector/v_helpers.c   | 17 +++-
- tools/testing/selftests/riscv/vector/v_helpers.h   |  4 +-
- tools/testing/selftests/riscv/vector/v_initval.c   | 12 ++-
- .../selftests/riscv/vector/vstate_exec_nolibc.c    | 20 +++--
- .../testing/selftests/riscv/vector/vstate_prctl.c  | 91 ++++++++++++++--------
- 6 files changed, 115 insertions(+), 52 deletions(-)
+On 6/10/2024 4:32 PM, Reinette Chatre wrote:
+> Hi Babu,
+> 
+> (please do not send new version of patch in response to previous version)
 
-diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-index 74b13806baf0..58c29ea91b80 100644
---- a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-@@ -18,13 +18,22 @@ int main(int argc, char **argv)
- 	unsigned long vl;
- 	int first = 1;
- 
--	asm volatile (
--		".option push\n\t"
--		".option arch, +v\n\t"
--		"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
--		".option pop\n\t"
--		: [vl] "=r" (vl)
--	);
-+	if (argc > 2 && strcmp(argv[2], "x"))
-+		asm volatile (
-+			// 0 | zimm[10:0] | rs1 | 1 1 1 | rd |1010111| vsetvli
-+			// vsetvli	t4, x0, e8, m1, d1
-+			".insn		0b00000000000000000111111011010111\n\t"
-+			"mv		%[vl], t4\n\t"
-+			: [vl] "=r" (vl) : : "t4"
-+		);
-+	else
-+		asm volatile (
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
-+			".option pop\n\t"
-+			: [vl] "=r" (vl)
-+		);
- 
- #define CHECK_VECTOR_REGISTER(register) ({					\
- 	for (int i = 0; i < vl; i++) {						\
-diff --git a/tools/testing/selftests/riscv/vector/v_helpers.c b/tools/testing/selftests/riscv/vector/v_helpers.c
-index 15c22318db72..2c4df76eefe9 100644
---- a/tools/testing/selftests/riscv/vector/v_helpers.c
-+++ b/tools/testing/selftests/riscv/vector/v_helpers.c
-@@ -1,11 +1,21 @@
- // SPDX-License-Identifier: GPL-2.0-only
- 
- #include "../hwprobe/hwprobe.h"
-+#include <asm/vendor/thead.h>
- #include <stdlib.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <sys/wait.h>
- 
-+int is_xtheadvector_supported(void)
-+{
-+	struct riscv_hwprobe pair;
-+
-+	pair.key = RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0;
-+	riscv_hwprobe(&pair, 1, 0, NULL, 0);
-+	return pair.value & RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR;
-+}
-+
- int is_vector_supported(void)
- {
- 	struct riscv_hwprobe pair;
-@@ -15,9 +25,9 @@ int is_vector_supported(void)
- 	return pair.value & RISCV_HWPROBE_IMA_V;
- }
- 
--int launch_test(char *next_program, int test_inherit)
-+int launch_test(char *next_program, int test_inherit, int xtheadvector)
- {
--	char *exec_argv[3], *exec_envp[1];
-+	char *exec_argv[4], *exec_envp[1];
- 	int rc, pid, status;
- 
- 	pid = fork();
-@@ -29,7 +39,8 @@ int launch_test(char *next_program, int test_inherit)
- 	if (!pid) {
- 		exec_argv[0] = next_program;
- 		exec_argv[1] = test_inherit != 0 ? "x" : NULL;
--		exec_argv[2] = NULL;
-+		exec_argv[2] = xtheadvector != 0 ? "x" : NULL;
-+		exec_argv[3] = NULL;
- 		exec_envp[0] = NULL;
- 		/* launch the program again to check inherit */
- 		rc = execve(next_program, exec_argv, exec_envp);
-diff --git a/tools/testing/selftests/riscv/vector/v_helpers.h b/tools/testing/selftests/riscv/vector/v_helpers.h
-index 88719c4be496..67d41cb6f871 100644
---- a/tools/testing/selftests/riscv/vector/v_helpers.h
-+++ b/tools/testing/selftests/riscv/vector/v_helpers.h
-@@ -1,5 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- 
-+int is_xtheadvector_supported(void);
-+
- int is_vector_supported(void);
- 
--int launch_test(char *next_program, int test_inherit);
-+int launch_test(char *next_program, int test_inherit, int xtheadvector);
-diff --git a/tools/testing/selftests/riscv/vector/v_initval.c b/tools/testing/selftests/riscv/vector/v_initval.c
-index f38b5797fa31..be9e1d18ad29 100644
---- a/tools/testing/selftests/riscv/vector/v_initval.c
-+++ b/tools/testing/selftests/riscv/vector/v_initval.c
-@@ -7,10 +7,16 @@
- 
- TEST(v_initval)
- {
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	int xtheadvector = 0;
- 
--	ASSERT_EQ(0, launch_test(NEXT_PROGRAM, 0));
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
-+
-+	ASSERT_EQ(0, launch_test(NEXT_PROGRAM, 0, xtheadvector));
- }
- 
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-index 1f9969bed235..12d30d3b90fa 100644
---- a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-@@ -6,13 +6,16 @@
- 
- int main(int argc, char **argv)
- {
--	int rc, pid, status, test_inherit = 0;
-+	int rc, pid, status, test_inherit = 0, xtheadvector = 0;
- 	long ctrl, ctrl_c;
- 	char *exec_argv[2], *exec_envp[2];
- 
--	if (argc > 1)
-+	if (argc > 1 && strcmp(argv[1], "x"))
- 		test_inherit = 1;
- 
-+	if (argc > 2 && strcmp(argv[2], "x"))
-+		xtheadvector = 1;
-+
- 	ctrl = my_syscall1(__NR_prctl, PR_RISCV_V_GET_CONTROL);
- 	if (ctrl < 0) {
- 		puts("PR_RISCV_V_GET_CONTROL is not supported\n");
-@@ -53,11 +56,14 @@ int main(int argc, char **argv)
- 				puts("child's vstate_ctrl not equal to parent's\n");
- 				exit(-1);
- 			}
--			asm volatile (".option push\n\t"
--				      ".option arch, +v\n\t"
--				      "vsetvli x0, x0, e32, m8, ta, ma\n\t"
--				      ".option pop\n\t"
--				      );
-+			if (xtheadvector)
-+				asm volatile (".insn	0x00007ed7");
-+			else
-+				asm volatile (".option push\n\t"
-+					".option arch, +v\n\t"
-+					"vsetvli x0, x0, e32, m8, ta, ma\n\t"
-+					".option pop\n\t"
-+					);
- 			exit(ctrl);
- 		}
- 	}
-diff --git a/tools/testing/selftests/riscv/vector/vstate_prctl.c b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-index 528e8c544db0..375af40e88e6 100644
---- a/tools/testing/selftests/riscv/vector/vstate_prctl.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-@@ -11,7 +11,7 @@
- 
- #define NEXT_PROGRAM "./vstate_exec_nolibc"
- 
--int test_and_compare_child(long provided, long expected, int inherit)
-+int test_and_compare_child(long provided, long expected, int inherit, int xtheadvector)
- {
- 	int rc;
- 
-@@ -21,7 +21,7 @@ int test_and_compare_child(long provided, long expected, int inherit)
- 		       provided, rc);
- 		return -1;
- 	}
--	rc = launch_test(NEXT_PROGRAM, inherit);
-+	rc = launch_test(NEXT_PROGRAM, inherit, xtheadvector);
- 	if (rc != expected) {
- 		printf("Test failed, check %d != %ld\n", rc,  expected);
- 		return -2;
-@@ -36,7 +36,7 @@ TEST(get_control_no_v)
- {
- 	long rc;
- 
--	if (is_vector_supported())
-+	if (is_vector_supported() || is_xtheadvector_supported())
- 		SKIP(return, "Test expects vector to be not supported");
- 
- 	rc = prctl(PR_RISCV_V_GET_CONTROL);
-@@ -48,7 +48,7 @@ TEST(set_control_no_v)
- {
- 	long rc;
- 
--	if (is_vector_supported())
-+	if (is_vector_supported() || is_xtheadvector_supported())
- 		SKIP(return, "Test expects vector to be not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, PR_RISCV_V_VSTATE_CTRL_ON);
-@@ -61,12 +61,12 @@ TEST(vstate_on_current)
- 	long flag;
- 	long rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON;
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, flag);
--	EXPECT_EQ(0, rc) TH_LOG("Enabling V for current should always success");
-+	EXPECT_EQ(0, rc) TH_LOG("Enabling V for current should always succeed");
- }
- 
- TEST(vstate_off_eperm)
-@@ -74,99 +74,128 @@ TEST(vstate_off_eperm)
- 	long flag;
- 	long rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF;
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, flag);
--	EXPECT_EQ(EPERM, errno) TH_LOG("Disabling current's V alive must fail with EPERM(%d)", errno);
--	EXPECT_EQ(-1, rc) TH_LOG("Disabling current's V alive must fail with EPERM(%d)", errno);
-+	EXPECT_EQ(EPERM, errno) TH_LOG("Disabling V in current thread with V enabled must fail with EPERM(%d)", errno);
-+	EXPECT_EQ(-1, rc) TH_LOG("Disabling V in current thread with V enabled must fail with EPERM(%d)", errno);
- }
- 
- TEST(vstate_on_no_nesting)
- {
- 	long flag;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_ON, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_ON, 0, xtheadvector));
- }
- 
- TEST(vstate_off_nesting)
- {
- 	long flag;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn off next's vector explicitly and test */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_OFF, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_OFF, 1, xtheadvector));
- }
- 
- TEST(vstate_on_inherit_no_nesting)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test no inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_ON;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0, xtheadvector));
- }
- 
- TEST(vstate_on_inherit)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_ON;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1, xtheadvector));
- }
- 
- TEST(vstate_off_inherit_no_nesting)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
--
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 	/* Turn off next's vector explicitly and test no inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_OFF;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0, xtheadvector));
- }
- 
- TEST(vstate_off_inherit)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn off next's vector explicitly and test inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_OFF;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1, xtheadvector));
- }
- 
- /* arguments should fail with EINVAL */
-@@ -174,7 +203,7 @@ TEST(inval_set_control_1)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0xff0);
-@@ -187,7 +216,7 @@ TEST(inval_set_control_2)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0x3);
-@@ -200,7 +229,7 @@ TEST(inval_set_control_3)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0xc);
+Yes. I saw your comments on other thread. I will take care of it.
+
+> 
+> On 6/10/24 9:00 AM, Babu Moger wrote:
+>> The selftest noncont_cat_run_test fails on AMD with the warnings. Reason
+>> is, AMD supports non contiguous CBM masks but does not report it via 
+>> CPUID.
+>>
+>> Update noncont_cat_run_test to check for the vendor when verifying CPUID.
+>>
+>> Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT 
+>> test")
+>> Signed-off-by: Babu Moger <babu.moger@amd.com>
+>> ---
+> 
+> The changelog needs to be reworked based on discussion in other thread.
+
+Sure.
+
+> With that complete, for this patch you can add:
+> | Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+
+Thanks
 
 -- 
-2.44.0
-
+- Babu Moger
 
