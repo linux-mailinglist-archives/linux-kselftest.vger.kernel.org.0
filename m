@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-11630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD469902E28
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:00:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7071902E29
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E611C21E80
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:00:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44EAD284E3E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4535661;
-	Tue, 11 Jun 2024 02:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4835661;
+	Tue, 11 Jun 2024 02:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BC10WO+K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqmQMO3d"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37211AD21;
-	Tue, 11 Jun 2024 02:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86213C00;
+	Tue, 11 Jun 2024 02:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718071230; cv=none; b=sdUrqZ9Osfmor/cHgnaGapCQz+TOM9ELASqUXLTqU9rvuYqWtVmV8HanNYRL6gxBfMSK6x3iFtul2Zwrdy/wt4SOvujoJcGfy0eQE7kQphqRPrXCwKdeNZufcRLzhFblnwb2UbaLvL+z6gkMBtJnnk7xgauABczdpkW43q3sqAU=
+	t=1718071236; cv=none; b=iF1wQB1o7ZxGpF2UkihcuYFyBCkr8LD61lUn0S/4MTiexyqbI4NhVhpXTkztn3Y0+Rh/T3dx6TnpVIiJYGP6eQFx/3mLdlZFkgwvuFMuaH1t+yJ8Pk3Ker4KIzD+fhVL7cHzYSo72Bh6GTWSVlaF9CwWm2wADegbPkLKNEUX9lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718071230; c=relaxed/simple;
-	bh=EOuXoUhyZErUAKP/jyrB94SzTJRRLAYfeiAWVUX3QGA=;
+	s=arc-20240116; t=1718071236; c=relaxed/simple;
+	bh=HEbzerycj4AKQiB0vafBFrk8TauCU0t7sQlhkaeae6g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ee3DiIthH1LVccMYlaY6icoj/367l4Fnp2vmd8dVFR3hlYOL59Dgh1ANA0aO7CYS16bUiN62zzOTaXXMpxPxn01sY4Pn0OFCVjc9261b2/LW+eD0DKKKKzg4p4iv395/jIFbPLZuDGRI511JZ9qQEnztazfqhLhpwxCjh/q5gH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BC10WO+K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F89C2BBFC;
-	Tue, 11 Jun 2024 02:00:22 +0000 (UTC)
+	 MIME-Version; b=Pz+oz5ND6jjR+BLSsFB/lvBysifb5U9yGpgd9TGewgqdWPTO6vAayVvY9poLtQa5OugYnKaOqErIQpFd02l48YLe8CJd/eNXb0MTR3vgX1+QGsGr3+/f7th7BNGnXpRmz/opExitq4Zgk9Vgz1uvPxL61PDpOJLojTHh5/4LJ/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqmQMO3d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E630C2BBFC;
+	Tue, 11 Jun 2024 02:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718071229;
-	bh=EOuXoUhyZErUAKP/jyrB94SzTJRRLAYfeiAWVUX3QGA=;
+	s=k20201202; t=1718071236;
+	bh=HEbzerycj4AKQiB0vafBFrk8TauCU0t7sQlhkaeae6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BC10WO+KtQ0Q1WUUr768cLfJ/GzaRE5db7X5iBHx0yiTgbEa8fqAsb43N+0GFwJnp
-	 Fcig0JMy6Aw1bfBjZZVeaMYGzQynGkee6fE6TXP2HVVoYuk/FHrhT5pZJNygGafEE2
-	 olL2gO8sDWdxn8df6hfBIVHaGyVbaTTzet3XrsfOqO3nG0mwGTF7U+Pfb8eskRwcCj
-	 uqVQeNux37dikGj87vNJQbjLUe06sDYXyaUn4jTaqagbbL/IA7XolsNYckJ1HQvTnT
-	 UQd/NT0u5Dnzy0qbb8AW4s4CPqi3H69QPxktMZZ7VXnM1cpFc3LFMZQYCls27Q/IH8
-	 ObiPNbsG2M7+A==
+	b=nqmQMO3dwkT/Pv7TxNB3wJBD/1aVV311glXFk8i+Y9+fY5pacVmXBwXTh5+LkscIj
+	 RVJ1pY5Gm/Hh6wq2bcufsj/Df4X0dzM5b/xMPPseUxSD0yaylW0eAiQ4ruEMTKRojh
+	 mp03XLFPFRe4wDiW8xRyVspKzMle75ZqrZkej7z9+FBD85K3sioTt8zX4Y7lMTE7QP
+	 hmX7IKjHjpvS7TjIz6OjGfrbyr5Jw4oqbUjKH44BtnLa81F598aA3K33+r193tgzQK
+	 tM3ei4NV5BF0wG05ioxD/DNBGePBv07+E0cxpRchK2hQgudml+eXP12pRBOVvXfitr
+	 2GVNBj6h62EYA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 4/5] selftests/bpf: Use start_server_str in mptcp
-Date: Tue, 11 Jun 2024 09:59:37 +0800
-Message-ID: <bd2f838063195bb7e199df9d01e7f266dbb1d360.1718070940.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Use start_server_str in test_tcp_check_syncookie_user
+Date: Tue, 11 Jun 2024 09:59:38 +0800
+Message-ID: <39358e8cb8b91db5587d6e5ce735d12279981732.1718070940.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1718070939.git.tanggeliang@kylinos.cn>
 References: <cover.1718070939.git.tanggeliang@kylinos.cn>
@@ -75,34 +75,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Since start_server_str() is added now, it can be used in mptcp.c in
-start_mptcp_server() instead of using helpers make_sockaddr() and
-start_server_addr() to simplify the code.
+Since start_server_str() is added now, it can be used in script
+test_tcp_check_syncookie_user.c instead of start_server_addr() to
+simplify the code.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/mptcp.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ .../bpf/test_tcp_check_syncookie_user.c       | 29 ++-----------------
+ 1 file changed, 3 insertions(+), 26 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 4472aa404da0..00f63f3f19f4 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -104,13 +104,8 @@ static int start_mptcp_server(int family, const char *addr_str, __u16 port,
- 		.timeout_ms	= timeout_ms,
- 		.proto		= IPPROTO_MPTCP,
- 	};
--	struct sockaddr_storage addr;
--	socklen_t addrlen;
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+index aebc58c24dc5..3844f9b8232a 100644
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+@@ -156,10 +156,6 @@ static int v6only_false(int fd, void *opts)
+ int main(int argc, char **argv)
+ {
+ 	struct network_helper_opts opts = { 0 };
+-	struct sockaddr_in addr4;
+-	struct sockaddr_in6 addr6;
+-	struct sockaddr_in addr4dual;
+-	struct sockaddr_in6 addr6dual;
+ 	int server = -1;
+ 	int server_v6 = -1;
+ 	int server_dual = -1;
+@@ -181,36 +177,17 @@ int main(int argc, char **argv)
+ 		goto err;
+ 	}
  
--	if (make_sockaddr(family, addr_str, port, &addr, &addrlen))
--		return -1;
+-	memset(&addr4, 0, sizeof(addr4));
+-	addr4.sin_family = AF_INET;
+-	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+-	addr4.sin_port = 0;
+-	memcpy(&addr4dual, &addr4, sizeof(addr4dual));
 -
--	return start_server_addr(SOCK_STREAM, &addr, addrlen, &opts);
-+	return start_server_str(family, SOCK_STREAM, addr_str, port, &opts);
- }
+-	memset(&addr6, 0, sizeof(addr6));
+-	addr6.sin6_family = AF_INET6;
+-	addr6.sin6_addr = in6addr_loopback;
+-	addr6.sin6_port = 0;
+-
+-	memset(&addr6dual, 0, sizeof(addr6dual));
+-	addr6dual.sin6_family = AF_INET6;
+-	addr6dual.sin6_addr = in6addr_any;
+-	addr6dual.sin6_port = 0;
+-
+-	server = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr4,
+-				   sizeof(addr4), NULL);
++	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
+ 	if (server == -1)
+ 		goto err;
  
- static int verify_tsk(int map_fd, int client_fd)
+ 	opts.post_socket_cb = v6only_true;
+-	server_v6 = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6,
+-				      sizeof(addr6), &opts);
++	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
+ 	if (server_v6 == -1)
+ 		goto err;
+ 
+ 	opts.post_socket_cb = v6only_false;
+-	server_dual = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6dual,
+-					sizeof(addr6dual), &opts);
++	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
+ 	if (server_dual == -1)
+ 		goto err;
+ 
 -- 
 2.43.0
 
