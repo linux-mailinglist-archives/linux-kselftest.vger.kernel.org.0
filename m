@@ -1,140 +1,146 @@
-Return-Path: <linux-kselftest+bounces-11686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEA72904009
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:32:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F418904093
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:54:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C19201C224DC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:31:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3B111C22A13
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:54:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CF028E37;
-	Tue, 11 Jun 2024 15:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82DC13987D;
+	Tue, 11 Jun 2024 15:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZK+Nl6gt"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="BVBfk5ic";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o7i49d1u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow4-smtp.messagingengine.com (flow4-smtp.messagingengine.com [103.168.172.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D798381AA
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 15:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04AB3839C;
+	Tue, 11 Jun 2024 15:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718119913; cv=none; b=lFX7uQOOBhkEhvCW4xM7i0ulGeSW06EwgqRg1DTvCyhBcNtbTEOOhC8xOB7NIKZQqdzaUJeGnXOtMlXLAEeT9nDmAunuqS9lpw58vPaUyg/1WeG3aJeB8J0smJm0cN7X3IFn8qxaCvPLLdmaF/XdlwP4P5JXJZGVN49YZ/FZQ/Q=
+	t=1718121260; cv=none; b=mJCRQCFTOSaKmKVpSPc+U2Md9O9jPz6a7v3gio4q1W5u+e2W2kFgHraxJ1QKXmG8PEkwQPIA/7xzOKqz65CEf/QURu+i+cN7EXfAgWKi2oPQKPpMmTiYnlUBTKBefXi5uIJ6wrdDIYiq5XzcmlT+Bh0MMpJ4oW5SBZt0xJe8iVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718119913; c=relaxed/simple;
-	bh=nb/41p5cqxyjZu+y4cWwFNmsrVjqoLEmHFNnJV6EqpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nWVwjNsTAv0PYoH+DHuQCz6LLJe8FModGtUX5wcob3C6XxI/V0lrzVsf1sQ6BVXeAk/l526SvweqmswfVtJJYkQMXEhZ94mTssELNJRMG72gMya8P5yy99q/ERxYjz6Ww8gXN+pYQ+BYaD3+YmIeTTJ9vrQV5gblBUcMA9ra0to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZK+Nl6gt; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7955b839aeeso9753185a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 08:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1718119909; x=1718724709; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QgiG88rmAe4hGOcOH9NukgYDWLNdDqncNF+Hnp9N4/k=;
-        b=ZK+Nl6gtdw0YVGHn2MHxy4xGsmdCTn0xyogrFSyIso/kBVC3PGftNCr1o/uQa4ij5C
-         s9FO1G/wpH1Ew7AnabDkGrPlaiGhRphEaERqrRb/GOBmD0WvgFhPr79d4fqFruSvKLpI
-         X1188hhDVVU7m79TG7C4/QQ7V8ntC84v6kpBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718119909; x=1718724709;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QgiG88rmAe4hGOcOH9NukgYDWLNdDqncNF+Hnp9N4/k=;
-        b=KKVORpRSuAdcajWzyr4cX6FI9EEE6dXVZnweCLFbgM2GbfVUO/6wtYFOebk4vmw98R
-         jZMapQCIHyQIkgrbr5cTcEgXuEixbVtd8b8RRpZ0hcvQGpGNa5AzRMEIC2hIEEqA3yMu
-         cIE+ETaca5bHtWAk5ToMIdJc0k3vza4TrN82u4filgdN4W5eHq4ZwO1kPKc8TBwFX9v3
-         nK5iREobrZ9gmKQOewEyyfpuSyqZbUZ1fbr6Y/++Sa9v0iAV3qZxWgEcSRPwfTlxlQVN
-         gOwcWx+dVgyWVfKAEc9XlFbAjPR9ooEC72nwsmCgenmvQhM6SP5GRI2pSZeHXoEZCoQI
-         r6iw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ5fc4SQmWMGfCa7GSOJOfvM/fkeXzTT3/7Mj+1nSGX51mWLZ9MkuPEtzjynNH1MNqK/6MyIG+7l6dOm+u6F+q4fKWTSSsTqpDMHOPLByV
-X-Gm-Message-State: AOJu0Yz0p8vNZxS4kXvc2GurHQRWEknPN3lbVLixF9LSFQrAI2ODJjaS
-	PCd4H4pRxJzqO4FjPI8CnpCd+2jlbgu4c7zO67hUKoqvAfqVxsqbDi+YK8RJrsI=
-X-Google-Smtp-Source: AGHT+IEHDJL7YARi47dyxRN47x6RuENvb+peq4F6yfjVEpkHUHFAOpVDJJYWA+kTFDm+N6LjRwYthw==
-X-Received: by 2002:a05:620a:4886:b0:795:6b7b:6923 with SMTP id af79cd13be357-7956b7b6b78mr697052285a.3.1718119909316;
-        Tue, 11 Jun 2024 08:31:49 -0700 (PDT)
-Received: from ?IPV6:2607:fb91:213b:a129:544a:cc06:ea0:4045? ([2607:fb91:213b:a129:544a:cc06:ea0:4045])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79558163eeasm299849785a.124.2024.06.11.08.31.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jun 2024 08:31:49 -0700 (PDT)
-Message-ID: <e9d3060b-dacb-42a5-83bb-224678182a53@linuxfoundation.org>
-Date: Tue, 11 Jun 2024 09:31:46 -0600
+	s=arc-20240116; t=1718121260; c=relaxed/simple;
+	bh=VZqZaxrcAUgGpNBDDDgIyvW3HvA8U2wHvEt9CbBeF7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OUfkDAYiqLUPj0X4Q7eJYV8s7AT8o8YbBTg4dMkfJ/6fL/wyOpQzcQlpEZ0THw5kCnYRreLBqBmrZn1mtjPzCFZtHlmacEL0l2UBEs4Dnf9NbgS9x7HbGmIAep2iL6EqzjeWXxxY85XGOaO93u/5x1b3ku/YBAjPVHbvm6q25ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=BVBfk5ic; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=o7i49d1u; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.nyi.internal (Postfix) with ESMTP id AE809200303;
+	Tue, 11 Jun 2024 11:54:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 11 Jun 2024 11:54:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1718121257; x=1718128457; bh=/qwb4kBfjw
+	dkZhMXnXQWoxDNl+qAk6Ti4gLEpYdSNdc=; b=BVBfk5ic+f2qYjJ21uZvb10IIW
+	rRhCcp4zalutYEhnGjSgl3KAkDaIRVeXy5DECOa1CbzwGH7nNFLzgnkw724xyMwF
+	8AlpMEwZ1SJVo2ckKMYeJPhDBSALCyZGNHg7hXpD6e99JVWVg8BcnDe3/InxHyCx
+	aQZhlRJZgJfFPwK1KYqZ7LcaqadaqqEWlw7I4IFfWPXNeuR2Nf9C5JjaUQQQg3FR
+	6KzkzPAXx9TjTORdeyyCoTgqpWQ1yj6IuNGOU87GAc05pPzKlJ9njVyx7NyhnmJ6
+	12tTqMI34GTA54gx4t5QukpxuyHH4uvvDpYdT15h/slMPKeLtJZU1/xtR+Ug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1718121257; x=1718128457; bh=/qwb4kBfjwdkZhMXnXQWoxDNl+qA
+	k6Ti4gLEpYdSNdc=; b=o7i49d1unuDvyC0FuQy3Il0CvbBUUfvs1k4HQeW82jRN
+	QZyESnWYoAno/+sMpWrH292CDO/eDYzkNTIHG7A8X0THfhe9olDW3nO3SG2gqx78
+	zxTQVoX31uWZjtB2HfhjhWgBRjSoMTun82ZbbfMojz22Lb5KMZ+H5BQp3ZvmSCX+
+	LCOLZWuBp+MQx5MXR/wdpq/uUCxqpwlZFG/eZ8gEDQupM8Xrw6rrAnJTyd6cS0IF
+	DynKW4+uOFRhumli94bNSrZzxTtTqSHS57Bvs1TZc+kA4Ung2Mx+qc7autcTXcW+
+	8r00SdYrFHognNW9hQK88kulcp3Jy6Pzu9lCQj7NkQ==
+X-ME-Sender: <xms:KXNoZj0e20vi7dibCy4Cfnfh7QB2EpSyceUpqTGlSyi18euHuGuGrA>
+    <xme:KXNoZiHKqDcNNASaxe7weqblaqv_zmrfhkH4g9tvuG_VpCIS8mcWcr129BP9YK4MT
+    xEI2RuIS-KsTZnFdQ>
+X-ME-Received: <xmr:KXNoZj4ORESKoI2bYikeE7c9y_G9aHYJaVK8OnLPu6hXEC21FYmeb1kQRgCRlM5BfYQskXm8qEXZ3tXEa70UnUtx338NnCGz4g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduvddgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddt
+    tddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepvdefkeetuddufeeigedtheefffekuedukeehudffudfffffg
+    geeitdetgfdvhfdvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:KXNoZo0w0V8slEd2LBHniQIaPzjgGBf40qadZceI3Q0O-KZEyPOaCA>
+    <xmx:KXNoZmEe8AGJMvmPG6qEDMaLvehDRTFqxKVctaLxL9jgAuwUQyE7oA>
+    <xmx:KXNoZp-x2i7rKw12T-RA1RPeuWktEgl30_AFTkn2TIpQUQIT9GeN4Q>
+    <xmx:KXNoZjkM5IE8rnT7NmCEjp8T0_n_RAofsFnItfLBDpYVWtQWj-6NEg>
+    <xmx:KXNoZk_LiqI7dVDgvDVIQVG7Q4xOvqOX3ruB1wlJZXppVt-4KnVp7Ewn>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Jun 2024 11:54:15 -0400 (EDT)
+Date: Tue, 11 Jun 2024 09:54:14 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: shuah@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	daniel@iogearbox.net, quentin@isovalent.com, alan.maguire@oracle.com, acme@kernel.org, 
+	mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v4 06/12] bpf: selftests: Fix
+ bpf_session_cookie() kfunc prototype
+Message-ID: <chydnuotqnmamlfmgzgnwurj5flaegp2bjebxldqwc2y2ngs5x@3h4blknbqhlw>
+References: <cover.1717881178.git.dxu@dxuuu.xyz>
+ <34708481d71ea72c23a78a5209e04a76b261a01d.1717881178.git.dxu@dxuuu.xyz>
+ <Zmb52Qp__CBzbgDh@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: filesystems: add return value checks
-To: Abhinav Jain <jain.abhinav177@gmail.com>, shuah@kernel.org,
- brauner@kernel.org, mszeredi@redhat.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: javier.carrasco.cruz@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240610200909.55819-1-jain.abhinav177@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240610200909.55819-1-jain.abhinav177@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zmb52Qp__CBzbgDh@krava>
 
-On 6/10/24 14:09, Abhinav Jain wrote:
-> Add ksft_exit_fail_msg() return value checks for fchdir() & chroot()
-> to address the selftests statmount test compile warnings
+Hi Jiri,
+
+On Mon, Jun 10, 2024 at 03:04:25PM GMT, Jiri Olsa wrote:
+> On Sat, Jun 08, 2024 at 03:16:02PM -0600, Daniel Xu wrote:
+> > The prototype defined in bpf_kfuncs.h was not in line with how the
+> > actual kfunc was defined. This causes compilation errors when kfunc
+> > prototypes are generated from BTF.
+> > 
+> > Fix by aligning with actual kfunc definition.
+> > 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >  tools/testing/selftests/bpf/bpf_kfuncs.h                        | 2 +-
+> >  tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > index be91a6919315..3b6675ab4086 100644
+> > --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > @@ -77,5 +77,5 @@ extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> >  				      struct bpf_key *trusted_keyring) __ksym;
+> >  
+> >  extern bool bpf_session_is_return(void) __ksym __weak;
+> > -extern long *bpf_session_cookie(void) __ksym __weak;
+> > +extern __u64 *bpf_session_cookie(void) __ksym __weak;
 > 
-> statmount_test.c:127:2: warning: ignoring return value of ‘fchdir’,
-> declared with attribute warn_unused_result [-Wunused-result]
->    127 |  fchdir(orig_root);
->        |  ^~~~~~~~~~~~~~~~~
-> statmount_test.c:128:2: warning: ignoring return value of ‘chroot’,
-> declared with attribute warn_unused_result [-Wunused-result]
->    128 |  chroot(".");
->        |  ^~~~~~~~~~~
+> the original intent was to expose long instead of __u64 :-\
 > 
-> Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
-> ---
->   .../filesystems/statmount/statmount_test.c          | 13 +++++++++++--
->   1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-> index e6d7c4f1c85b..b5e1247233b6 100644
-> --- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
-> +++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-> @@ -125,8 +125,17 @@ static uint32_t old_root_id, old_parent_id;
->   
->   static void cleanup_namespace(void)
->   {
-> -	fchdir(orig_root);
-> -	chroot(".");
-> +	int ret;
-> +
-> +	ret = fchdir(orig_root);
-> +	if (ret == -1)
-> +		ksft_exit_fail_msg("changing current directory: %s\n",
-> +				strerror(errno));
-> +
-> +	ret = chroot(".");
-> +	if (ret == -1)
-> +		ksft_exit_fail_msg("chroot: %s\n", strerror(errno));
-> +
->   	umount2(root_mntpoint, MNT_DETACH);
->   	rmdir(root_mntpoint);
->   }
+> could we rather change the bpf_session_cookie function to return long?
+> should be just return value type change
 
+Sounds reasonable to me. I don't think the kfunc has made it to a
+release yet, so perhaps if we extract this commit out as a fix to bpf
+tree it can still make it into 6.10. That way we won't have to worry
+about any ABI changes.
 
-There is another prior patch that fixes the problem
-https://patchwork.kernel.org/project/linux-kselftest/patch/20240417184913.74734-1-amer.shanawany@gmail.com/
-
-thanks,
--- Shuah
-
-
-
+Thanks,
+Daniel
 
