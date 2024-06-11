@@ -1,226 +1,237 @@
-Return-Path: <linux-kselftest+bounces-11715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F879046D9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 00:18:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 425709046D1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 00:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 138D61F22BE3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 22:18:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AF71F23E6E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 22:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC4B152DE0;
-	Tue, 11 Jun 2024 22:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F809155308;
+	Tue, 11 Jun 2024 22:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mftvuLQp"
+	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="Pq9rjGAS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ISNh/oJu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2053.outbound.protection.outlook.com [40.107.101.53])
+Received: from wflow2-smtp.messagingengine.com (wflow2-smtp.messagingengine.com [64.147.123.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAEC38DC8;
-	Tue, 11 Jun 2024 22:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718144325; cv=fail; b=eVI7zSRl2WZ5HffL0QEigFPwFt25Xb7mpD/QkJQvmRP9ZhrbKV9eXDnYrX1a6wVhmmCjrFrQ3rayhRtGxC5c4eNOyHjoidgXs0x4DQX/+/fGSHNx5zEHLQE+zy1EE+9AONmrnWq+WQ+XfUgRmT9xQM4iB17uhhyjdVItPXtcp/s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718144325; c=relaxed/simple;
-	bh=PNgMVDVq/DFQgf+dmQ2MexV1n1SoZw0pIArr/AXZjRQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zxz1wYuySqI2+qqJbSHA+/Lc32/hxub2H85OX2EGf0BOjrMqo3qR4mkpmXGRzsQYkje3Diq4H0Tx+Mn3O+NFgO8gUzGawFIYQWIsdttuQZYmViDkmZL+WQPADBPMrF9FmyAM6+CEHwfjoVe6tvudtG/12szZuOzLsuMv30lO84Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mftvuLQp; arc=fail smtp.client-ip=40.107.101.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ui54omT3+isAkVgYFYZo3I/lly9zte+jUTVNl+E+fiLCYHCqNeOMplxchHfvzcwZT7N+JfiWVKVv2P53OPaaOs5ICKE5WUS+YIbN+x2zmarQkwIiBiliDxnnwnlnnfzs+pCLAa9jNlruXqmk78AFGM4O/cDFDemR/9EcdQYJ9xpUG/l7rG+xgDdcPqyIytcYQtS39C2hJY2vUCzvmdrUWvDOdzrEDpX/mbUCYU19lIkWw7pbw39aj8W82c+deD4my/0Z2Gi8Rt2gmm6Qlj/ooJUwFwK/uSCXF1ccPcvWxE8504BNt0nvnYv2MWoiX8V1fXnWzL2C26+/baPw8IMqvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nilAZyOAJcGr84DTsOo64++KertNlf4O0NKtHCoLV+Q=;
- b=AQRLgCe/QFRaTCubC7YPcZZUf/VdlLxQLd6KwjW530PVUqjV2cYMO5124QzVsiTG9ev/9FWfGuUclrAwznviWOpLbb/FE2v84qWaPMpF3z+pNeQJWmO1S5ndmzOreYTXGyxg0xaT86o7lT1DMhNqmc7ibe4wgp26PcR1naHylAMj8bU3Qp5oVWqjSzmmKZuYe8MEPVkOY00VrHnL9FT25B6YGEcvRyYhPB3I0vyyYOsgm1655Woh+rUB9vyS3Dzfoj5sijr0/bsXDfWVPxrvTYaeQJYre2/Okl2DxojnmKGDnM1z0zP2SbU2HacKL6KGNunkgi+6t16LQSfE4yhDSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nilAZyOAJcGr84DTsOo64++KertNlf4O0NKtHCoLV+Q=;
- b=mftvuLQpg86x+SGbk0Z743BKuaE8kDOMoRyaSbMj9m0zD5Ysfh8LXcizFKf4vtVjDBUNG6Socx/lioVFWWuHq4cBuX+5G9S725aw5UB5IjBwjFiaFKmACZ5JKSpJhCTwpNQrBrYWuHS+5OQ6st67lyNRm/Nh3hjAw9+vYGuig9w=
-Received: from CH0PR03CA0397.namprd03.prod.outlook.com (2603:10b6:610:11b::30)
- by DM6PR12MB4386.namprd12.prod.outlook.com (2603:10b6:5:28f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
- 2024 22:18:37 +0000
-Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
- (2603:10b6:610:11b:cafe::31) by CH0PR03CA0397.outlook.office365.com
- (2603:10b6:610:11b::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.17 via Frontend
- Transport; Tue, 11 Jun 2024 22:18:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Tue, 11 Jun 2024 22:18:37 +0000
-Received: from bmoger-ubuntu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 11 Jun
- 2024 17:18:35 -0500
-From: Babu Moger <babu.moger@amd.com>
-To: <fenghua.yu@intel.com>, <reinette.chatre@intel.com>, <shuah@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<ilpo.jarvinen@linux.intel.com>, <babu.moger@amd.com>,
-	<maciej.wieczor-retman@intel.com>, <peternewman@google.com>,
-	<eranian@google.com>
-Subject: [PATCH v3] selftests/resctrl: Fix non-contiguous CBM for AMD
-Date: Tue, 11 Jun 2024 17:18:30 -0500
-Message-ID: <96d276c11e69cfb1e29d50a12c8043555c06b404.1718144237.git.babu.moger@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
-References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F87438DC8;
+	Tue, 11 Jun 2024 22:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.137
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718144134; cv=none; b=O0BnY08yVEVn0WAAJx0Tgfo7wIF7syl5/PfW76t90Vh5T0ZVboPxLzyRiBLo6Krze168JGofkzXjuk6nUBtuOxiQA3IGN18RsB9LkjaoXGuoYMgKXumRL2qgZWGnFyOEQ0E8/v5gwOeXbPS1+QzF/qEcKZd1ZDdCS1G5toluK5E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718144134; c=relaxed/simple;
+	bh=GdAkFK62RY/EebkDCQaRIl7vglLd8+Mimrq9+Eb15nk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bhzmLOoOn31Z6acsu8IcW5TFA2ETxenJS4iEYTKdjnONyPHnh1I6GixBrbY0WphqExCjdX0jiXGJyceOYsHDZ7tVDcRtwNT+NND655CM89iHjYe4Eo5RhhgGz97tJ5oZsp/V4l8xz7vZvPLpzn4VnKfLrXWvWzLdx56saFYDGoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=Pq9rjGAS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ISNh/oJu; arc=none smtp.client-ip=64.147.123.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailflow.west.internal (Postfix) with ESMTP id C97482CC0169;
+	Tue, 11 Jun 2024 18:15:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 11 Jun 2024 18:15:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1718144127;
+	 x=1718147727; bh=hLoyDphzPvoA7UYBfDpLVZId/MwW/v8vWSAXuFf49/w=; b=
+	Pq9rjGAS1w/Bgo5vWiHK4C9GSmw8UEqW23zxfC6CU+LFTqGfGsPAhKcyrwHoj90O
+	2g7tjpvdho680sZED5/2pEYwnSPHE6Nyuowy4t+liSKxQFrggVMMiqon8nSX9UYe
+	oVBsXm4b6ZW6z97l0uDDa5lkmqrKrNH3jKXI/kXAvkXXFnrHwG6oKoSy/6j3AF1Y
+	8cm9z2VOiKm0Y60hTybScXH/pn1OM/r/TpGNjtGS43aretvWB4MzGA3unImRVifY
+	913jLZ1dcL0oU2fUqcd35OHYcKeVnIiStKNnfKqAViqm85MfWYGX9m8CAyZAGKTa
+	iabR1CZR/u5ovgrtmgo/zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718144127; x=
+	1718147727; bh=hLoyDphzPvoA7UYBfDpLVZId/MwW/v8vWSAXuFf49/w=; b=I
+	SNh/oJu/e8FBFK91pEhdVzPaxeoy0vJBcCYsFR5dTBa0eTNI52Mh6vmtzoNEnGGo
+	0nk1m7ki7/In22P/dp/EXcSDHlAz5BfLVF+KTy5T2BmEdmd9GgekK0iKTSeHoXrF
+	qgiz+C959oucHJqv+TsGRpUAUjs2GCWmVT1rVLthx5HBkCDuetmM/I23iDS5r0tT
+	W6HmZFu74Tm8QZns/LE00Y7Nh3h6HK7WrxdV+ExaadRJAJwmM9Qv5H0pqfa0EnHA
+	Pq+gmx9IfmHP/NPUS88TJZaod19sMGo6bD1rEZ6UeYk8d3P1h816uGx3p9eTi7ne
+	VZ5GqWvsh5NKbZvAPyg3A==
+X-ME-Sender: <xms:fsxoZqoVnHB2uGoc7C0A7BixBJXGpc11qlCUk3a6hvFctlK7PdBKkA>
+    <xme:fsxoZooRmtozI0oKjoRwzZnuKSw8qtfaYL--1NQiRvpNaw-gFmHdFKZpfzO16EY2q
+    Wz6KAFCvBXQU1xOAYA>
+X-ME-Received: <xmr:fsxoZvPL801GFa0JdYFCAOHyDF4GcEcnIZ4r8mQNRH4NDIvzS9R2KSXWHk7HkTFFGFWEcogO8cqqGrkZ0AEzTiM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedufedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeflohhn
+    rghthhgrnhcuvegrlhhmvghlshcuoehjtggrlhhmvghlshesfeiggidtrdhnvghtqeenuc
+    ggtffrrghtthgvrhhnpeetgedutdfggeetleefhfeuhedtheduteekieduvdeigeegvdev
+    vddtieekiedvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjtggrlhhmvghlshesfeiggidtrdhnvght
+X-ME-Proxy: <xmx:f8xoZp6U8TxIwbBdIkAUIulkUDaDRV4oFBo0EBVqjfd1jc3IUfHrRw>
+    <xmx:f8xoZp7_TUBZagIfh40y2sdsDedvT-h5VXVtRjmhUKH4ThdVyvjDuw>
+    <xmx:f8xoZphmbJ-AsduE8UunEraJ_Nu6pDRX9sPBXVa9qb7iygs6fiB0gg>
+    <xmx:f8xoZj7QERyBvlOn4w7jLMGtV-DEUFk1T2Viw9CMO6OeJGkw-uv4eA>
+    <xmx:f8xoZkIrhrrTIB3VBMJkOqlUb0VXeh5tcuzeAhLiHln_J1A0uzp3N8Xe>
+Feedback-ID: i76614979:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Jun 2024 18:15:23 -0400 (EDT)
+Date: Tue, 11 Jun 2024 15:20:33 -0700
+From: Jonathan Calmels <jcalmels@3xx0.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: John Johansen <john.johansen@canonical.com>, brauner@kernel.org,
+ 	ebiederm@xmission.com, Jonathan Corbet <corbet@lwn.net>,
+ 	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ 	KP Singh <kpsingh@kernel.org>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ 	Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ 	Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ 	Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
+ Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
+ David Howells <dhowells@redhat.com>,
+ 	Jarkko Sakkinen <jarkko@kernel.org>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ 	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, 	containers@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ 	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+ bpf@vger.kernel.org, 	apparmor@lists.ubuntu.com,
+ keyrings@vger.kernel.org, selinux@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM
+ hooks
+Message-ID: <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
+References: <20240609104355.442002-1-jcalmels@3xx0.net>
+ <20240609104355.442002-5-jcalmels@3xx0.net>
+ <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
+ <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
+ <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com>
+ <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|DM6PR12MB4386:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd7fa41d-1016-4f5e-f971-08dc8a64710b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230032|82310400018|36860700005|376006|1800799016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HciNAPNZaJ8cueGe9ZHoeUH/xHjA1Cc4kaTQJL9fSrROraFqLCiC0dj9jAJr?=
- =?us-ascii?Q?2WyrmDiE+m570cbEqTxrhfwYiBslRV6AZd9KzLcyfm0CC8bTi48cJuVZaI/p?=
- =?us-ascii?Q?CvgjaY/bqip3Yd4uryfce/o659M6Bf9/36mgsOA/ZQ7PDrLuDlPRw5fsiMj3?=
- =?us-ascii?Q?9Y/FUO9/QleuCoNrezs9keCuJaafOm+XnIYDeKPulVeV1nT87cI05I2Xyd6Q?=
- =?us-ascii?Q?GHU+WJ5/RTAnnWFH82fQ3ocyHJNr7vA/5YN6srJCOErL0ITkyff9L/gmWyx6?=
- =?us-ascii?Q?aWb5X97hSmsp6FWIvkMSjkwFu556cC1GO7i8UiUQrpvTsTsyo1PbmUBdU7DZ?=
- =?us-ascii?Q?ymTLGnp7LVdLFq/2cs1dQR0fzxZA0P4CpIEWQDRCoJOH6RhuY+TRi1p/7J3H?=
- =?us-ascii?Q?XuTMrfFj+xEsH88JsUPYHn7omXHI3qEkjiTtW0YJzqyIPTXUPAr68a5O2w02?=
- =?us-ascii?Q?Kkzwj30ZaYjt8F5Kea9k06U07HsrukC7nP/dyzooV8NO6tYUptRz1sd0AQjy?=
- =?us-ascii?Q?tIdBJU+Hp21+deHtMIUkWttmyv4NibAhOauXmSeVP6hSnVvPR6NH6SivZwSv?=
- =?us-ascii?Q?H0wxF90BltMa7r0TiRN7DbEoNcMM0/o/NNu/ZdKo76/ZELUHuv2U08rO976m?=
- =?us-ascii?Q?aS5OZjTOY4OuNi8Rl2Hw/Xx1sjqXbnLVGrIRu8KyLzw+1h35U2kVE+0s7CoL?=
- =?us-ascii?Q?rgoOCqx32kCkYv2+rWaS1p+nDcLVYZ3pYirDGJZ3ya/B3qJL0c++UwaOXm+d?=
- =?us-ascii?Q?5r4N7qnSjblsdMCCzPMpjD7Q19WnEpzHdZmbGpSPAb59Z/O6WIJrlf23QSau?=
- =?us-ascii?Q?9/v7JCqTWJkwUU9VU+5ZAXePiSMemtnIkKnoi2jn1J3aF3NUA8KqMIddYW0L?=
- =?us-ascii?Q?IJNNPsGzlI55BGW80D2vkMGQe2jcgziUrA8oLYkLjOSOz5On8RGC9ec5Q2zd?=
- =?us-ascii?Q?ggayKrviJby18dOOiNrq0W8pSwCZPDE2iijzI/xR8lLFxb30H2rKCngwS6SZ?=
- =?us-ascii?Q?UfMKs6c+4F9p9PgsheSEB/R/2db62xsZf48p07rAyAv+W4IMksJ2fXsqSJ1l?=
- =?us-ascii?Q?2WOMnR/WZJtv1Uvdr2/K9KDUdd+ntfSNxt6w8L9v9u3EWkqFwit+vma98ZqM?=
- =?us-ascii?Q?2RhINc8GU//DS5T70hLur5QjlVyMGr8x5bQNw6exUyFZGTXGr5AUWTTCVM9g?=
- =?us-ascii?Q?tkApqcujij/oJhK9p0rI1R2XlLDuYwPGvuNzQv8hgyov4BdAKcAY6cf4a6J3?=
- =?us-ascii?Q?bnQUjzqiEi0lkyTiT5bmc2/EXsWpT/L1VdEq173tG4IY0SCSUDnu+424Xjok?=
- =?us-ascii?Q?qgdqDa7Gn1fGSt/g+6pMAT3MwwIWjjKui4oT93PCtkWcCm3f8aAPjIxN+euA?=
- =?us-ascii?Q?i2U50Og=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230032)(82310400018)(36860700005)(376006)(1800799016);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 22:18:37.6646
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd7fa41d-1016-4f5e-f971-08dc8a64710b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4386
+In-Reply-To: <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
 
-The non-contiguous CBM test fails on AMD with:
-Starting L3_NONCONT_CAT test ...
-Mounting resctrl to "/sys/fs/resctrl"
-CPUID output doesn't match 'sparse_masks' file content!
-not ok 5 L3_NONCONT_CAT: test
+On Tue, Jun 11, 2024 at 03:01:01PM GMT, Paul Moore wrote:
+> On Tue, Jun 11, 2024 at 6:32 AM John Johansen
+> <john.johansen@canonical.com> wrote:
+> >
+> > On 6/11/24 01:09, Jonathan Calmels wrote:
+> > > On Sun, Jun 09, 2024 at 08:18:48PM GMT, Paul Moore wrote:
+> > >> On Sun, Jun 9, 2024 at 6:40 AM Jonathan Calmels <jcalmels@3xx0.net> wrote:
+> > >>>
+> > >>> This patch allows modifying the various capabilities of the struct cred
+> > >>> in BPF-LSM hooks. More specifically, the userns_create hook called
+> > >>> prior to creating a new user namespace.
+> > >>>
+> > >>> With the introduction of userns capabilities, this effectively provides
+> > >>> a simple way for LSMs to control the capabilities granted to a user
+> > >>> namespace and all its descendants.
+> > >>>
+> > >>> Update the selftests accordingly by dropping CAP_SYS_ADMIN in
+> > >>> namespaces and checking the resulting task's bounding set.
+> > >>>
+> > >>> Signed-off-by: Jonathan Calmels <jcalmels@3xx0.net>
+> > >>> ---
+> > >>>   include/linux/lsm_hook_defs.h                 |  2 +-
+> > >>>   include/linux/security.h                      |  4 +-
+> > >>>   kernel/bpf/bpf_lsm.c                          | 55 +++++++++++++++++++
+> > >>>   security/apparmor/lsm.c                       |  2 +-
+> > >>>   security/security.c                           |  6 +-
+> > >>>   security/selinux/hooks.c                      |  2 +-
+> > >>>   .../selftests/bpf/prog_tests/deny_namespace.c | 12 ++--
+> > >>>   .../selftests/bpf/progs/test_deny_namespace.c |  7 ++-
+> > >>>   8 files changed, 76 insertions(+), 14 deletions(-)
+> > >>
+> > >> I'm not sure we want to go down the path of a LSM modifying the POSIX
+> > >> capabilities of a task, other than the capabilities/commoncap LSM.  It
+> > >> sets a bad precedent and could further complicate issues around LSM
+> > >> ordering.
+> > >
+> > > Well unless I'm misunderstanding, this does allow modifying the
+> > > capabilities/commoncap LSM through BTF. The reason for allowing
+> > > `userns_create` to be modified is that it is functionally very similar
+> > > to `cred_prepare` in that it operates with new creds (but specific to
+> > > user namespaces because of reasons detailed in [1]).
+> >
+> > yes
+> >
+> > > There were some concerns in previous threads that the userns caps by
+> > > themselves wouldn't be granular enough, hence the LSM integration.
+> >
+> > > Ubuntu for example, currently has to resort to a hardcoded profile
+> > > transition to achieve this [2].
+> > >
+> >
+> > The hard coded profile transition, is because the more generic solution
+> > as part of policy just wasn't ready. The hard coding will go away before
+> > it is upstreamed.
+> >
+> > But yes, updating the cred really is necessary for the flexibility needed
+> > whether it is modifying the POSIX capabilities of the task or the LSM
+> > modifying its own security blob.
+> >
+> > I do share some of Paul's concerns about the LSM modifying the POSIX
+> > capabilities of the task, but also thing the LSM here needs to be
+> > able to modify its own blob.
+> 
+> To be clear, this isn't about a generic LSM needing to update its own
+> blob (LSM state), it is about the BPF LSM updating the capability
+> sets.  While we obviously must support a LSM updating its own state,
+> I'm currently of the opinion that allowing one LSM to update the state
+> of another LSM is only going to lead to problems.  We wouldn't want to
+> allow Smack to update AppArmor state, and from my current perspective
+> allowing the BPF LSM to update the capability state is no different.
+> 
+> It's also important to keep in mind that if we allow one LSM to do
+> something, we need to allow all LSMs to do something.  If we allow
+> multiple LSMs to manipulate the capability sets, how do we reconcile
+> differences in the desired capability state?  Does that resolution
+> change depending on what LSMs are enabled at build time?  Enabled at
+> boot?  Similarly, what about custom LSM ordering?
+> 
+> What about those LSMs that use a task's capabilities as an input to an
+> access control decision?  If those LSMs allow an access based on a
+> given capability set only to have a LSM later in the ordering modify
+> that capability set to something which would have resulted in an
+> access denial, do we risk a security regression?
 
-AMD always supports non-contiguous CBM but does not report it via CPUID.
+I understand the concerns, what I fail to understand however, is how is
+it any different from say the `cred_prepare` hook today?
 
-Fix the non-contiguous CBM test to use CPUID to discover non-contiguous
-CBM support only on Intel.
+> Our current approach to handling multiple LSMs is that each LSM is
+> limited to modifying its own state, and I'm pretty confident that we
+> stick to this model if we have any hope of preserving the sanity of
+> the LSM layer as a whole.  If you want to modify the capability set
+> you need to do so within the confines of the capability LSM and/or
+> modify the other related kernel subsystems (which I'm guessing will
+> likely necessitate a change in the LSMs, but that avenue is very
+> unclear if such an option even exists).
 
-Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test")
-Signed-off-by: Babu Moger <babu.moger@amd.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
-v3: Reworked changelong.
+What do you mean by "within the confines of the capability LSM" here?
 
-v2: Moved the non-contiguous CBM verification to a new function
-    arch_supports_noncont_cat.
-
-v1: This was part of the series
-    https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
-    Sending this as a separate fix per review comments.
----
- tools/testing/selftests/resctrl/cat_test.c | 32 +++++++++++++++-------
- 1 file changed, 22 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index d4dffc934bc3..742782438ca3 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -288,11 +288,30 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	return ret;
- }
- 
-+static bool arch_supports_noncont_cat(const struct resctrl_test *test)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	/* AMD always supports non-contiguous CBM. */
-+	if (get_vendor() == ARCH_AMD)
-+		return true;
-+
-+	/* Intel support for non-contiguous CBM needs to be discovered. */
-+	if (!strcmp(test->resource, "L3"))
-+		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-+	else if (!strcmp(test->resource, "L2"))
-+		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-+	else
-+		return false;
-+
-+	return ((ecx >> 3) & 1);
-+}
-+
- static int noncont_cat_run_test(const struct resctrl_test *test,
- 				const struct user_params *uparams)
- {
- 	unsigned long full_cache_mask, cont_mask, noncont_mask;
--	unsigned int eax, ebx, ecx, edx, sparse_masks;
-+	unsigned int sparse_masks;
- 	int bit_center, ret;
- 	char schemata[64];
- 
-@@ -301,15 +320,8 @@ static int noncont_cat_run_test(const struct resctrl_test *test,
- 	if (ret)
- 		return ret;
- 
--	if (!strcmp(test->resource, "L3"))
--		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
--	else if (!strcmp(test->resource, "L2"))
--		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
--	else
--		return -EINVAL;
--
--	if (sparse_masks != ((ecx >> 3) & 1)) {
--		ksft_print_msg("CPUID output doesn't match 'sparse_masks' file content!\n");
-+	if (arch_supports_noncont_cat(test) != sparse_masks) {
-+		ksft_print_msg("Hardware and kernel differ on non-contiguous CBM support!\n");
- 		return 1;
- 	}
- 
--- 
-2.34.1
-
+Arguably, if we do want fine-grained userns policies, we need LSMs to
+influence the userns capset at some point. Regardless of how or where we
+do this, it will always be subject to some sort of ordering. We could
+come up with some rules to limit surprises (e.g. caps can only be
+dropped, only possible through some hooks, etc), but at the end of the
+day, something needs to have the final word when it comes to deciding
+what the creds should be.
 
