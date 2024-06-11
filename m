@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-11668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C42249037A5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 11:17:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84AD1903799
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 11:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 258DDB21F51
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 09:14:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2596228A272
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 09:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E234176AA2;
-	Tue, 11 Jun 2024 09:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E84F176AA8;
+	Tue, 11 Jun 2024 09:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPcbD/Zq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZ2kLVPU"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4154E7346F;
-	Tue, 11 Jun 2024 09:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F3317625F;
+	Tue, 11 Jun 2024 09:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718097242; cv=none; b=rN2gozoLttNzL1C/oxdlhbDB0gPktU0Cns+quIgRFIJ99IlMiQBfHsvPhmxb+IBLM5nPugti8He3cLSOzw0KQdeCe3LZ57KtfpM1bPbW1IDrrv1YB9I7F6dv+1CWUA/hLY8FwKRGxIp842T8Mvo+xZxldB+DZO3k1BUXS0GNqbE=
+	t=1718097250; cv=none; b=KkRPb51o4hOXaKH0H3ggZjz4driduJIQces3acggbL8DcoaC3FIJ73zFermpBDEQqq30WtsRUysuuFwC+qeybPzbL5mmHuB/L3UqJWoqKcMvOPCtxVTsGMzq4845pFnGPNeuzkZPYX9CtCMLr5OGhkrCNOsUd9TIAlZ8BIkErOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718097242; c=relaxed/simple;
-	bh=NGYzuForK7vVwCclKUD8cf59XgCXGzNi7zSFHo5AoQE=;
+	s=arc-20240116; t=1718097250; c=relaxed/simple;
+	bh=VWF2BN3M74sWgL4r0nHVKCmPDvs57NQeQDcbDpP5OYs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bMi3DCe0IWCuB+dlyNNjDqmRy91CwtfI9iK61IX5FIS4HErtqAj5AygzYUYFP1sV7Ipv9kY/f30NG35txzwrzJexqvjFCi0vusl1jVNljJybUrxeTMvoPemVHvpR/SWL9dVaJ6yZUm1nJbGTiZQVuxoSQKcAxNcVpa7xDl9Mq/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPcbD/Zq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB110C32786;
-	Tue, 11 Jun 2024 09:13:53 +0000 (UTC)
+	 MIME-Version; b=syps506hIc52Y7MKUNXKhTJGM4/4isZCIrtDwDCLXyXHATs+763x9w1lm21upnqb6a5ezGBo3Yg38VTxmbJ0L8ug4iDeu6DNrwEjuWdoBTOaxuNO2V8zCGa22FTFcnnbMJaCRzRuYt86nV7/i3PWNnOCGT+WK8EZmieT+7BuJSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZ2kLVPU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 797AFC2BD10;
+	Tue, 11 Jun 2024 09:14:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718097241;
-	bh=NGYzuForK7vVwCclKUD8cf59XgCXGzNi7zSFHo5AoQE=;
+	s=k20201202; t=1718097250;
+	bh=VWF2BN3M74sWgL4r0nHVKCmPDvs57NQeQDcbDpP5OYs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GPcbD/ZqbC2yj9V6FisJZIoR46iVifeNMTphrHuPi1vvQ07UOJNXLS9tzsf9fkSvn
-	 F8qY++nQMQithhnnP4teiKe8M0ZspVctoVQVtLdwRh7GB4Ipzc4WGr0kHngSAX2+OW
-	 0/AoXmIYBLlLc0IsutPvhKXOYXXFCYS0Dox6ToQaxMjcpoT0a+ym9/7Rx9IiHQ7EHe
-	 UDMHUT5W4JoWh8qA8V9scatM725Y5H6ar8rxsv+mNpdeTGnZcnLETqLdZLgtoM0X/I
-	 iqs4/sd4KeMG7ihZDwYPP97h7IQgkdcOt0d2b/EmLJH50P2fOmtGsoRDhY//S3eRJ4
-	 PqPUudKut6zkQ==
+	b=eZ2kLVPUiamJO4LB+z77wLYTVv+v3VraBW/u+gAsNhHG/ActUp1et+OsVEyDz34cR
+	 cbShcphc/reNow5ZpTBmVeKB2l4q1ZJ/ABDCsK/Q48AqhqQjfq8rwZJjw2Jmimxiah
+	 z8Pj28WGQZkz2b5w2LYVMvqV02narhxaKk6iw+AkgeOPaLCer4+kcAuux/jKhQyO/I
+	 98yR78dZCj1RKovDfPk+4HhExDVWhIRGRN7XyTSlsU6c/NjPl9Dxlo6t6yW6ruUABB
+	 1Axf5wzxawQqOPYrRaO+x+IHXkHZpSoGuc4D4uxFBvS0c7R/0P+ejV6aaCKp0ivvoc
+	 bEsLGOak71gTg==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -66,9 +66,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next v6 1/2] tls: wait for receiving next skb for sk_redirect
-Date: Tue, 11 Jun 2024 17:13:34 +0800
-Message-ID: <3101675d11beac0ffe16a86877f7f0c5166605f6.1718096691.git.tanggeliang@kylinos.cn>
+Subject: [PATCH net-next v6 2/2] selftests/bpf: Add F_SETFL for fcntl in test_sockmap
+Date: Tue, 11 Jun 2024 17:13:35 +0800
+Message-ID: <dfbbec2d3144d8fd1022fa8326d53a3e511d63cb.1718096691.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1718096691.git.tanggeliang@kylinos.cn>
 References: <cover.1718096691.git.tanggeliang@kylinos.cn>
@@ -82,28 +82,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-tls_sw_recvmsg() doesn't work in nonblock mode, it returns -EAGAIN in
-that case. This patch fixes it, always wait for receiving the next skb
-for sk_redirect.
+Incorrect arguments are passed to fcntl() in test_sockmap.c when invoking
+it to set file status flags. If O_NONBLOCK is used as 2nd argument and
+passed into fcntl, -EINVAL will be returned (See do_fcntl() in fs/fcntl.c).
+The correct approach is to use F_SETFL as 2nd argument, and O_NONBLOCK as
+3rd one.
 
+Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- net/tls/tls_sw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/test_sockmap.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 305a412785f5..d2558856ceeb 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -2099,6 +2099,8 @@ int tls_sw_recvmsg(struct sock *sk,
- 					rxm->full_len = 0;
- 					if (err == __SK_DROP)
- 						consume_skb(skb);
-+					if (err == __SK_REDIRECT && flags & MSG_DONTWAIT)
-+						tls_rx_rec_wait(sk, psock, false, released);
- 					continue;
- 				}
- 			}
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 9cba4ec844a5..99d3ca8e44bb 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -604,7 +604,9 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
+ 		struct timeval timeout;
+ 		fd_set w;
+ 
+-		fcntl(fd, fd_flags);
++		if (fcntl(fd, F_SETFL, fd_flags))
++			goto out_errno;
++
+ 		/* Account for pop bytes noting each iteration of apply will
+ 		 * call msg_pop_data helper so we need to account for this
+ 		 * by calculating the number of apply iterations. Note user
 -- 
 2.43.0
 
