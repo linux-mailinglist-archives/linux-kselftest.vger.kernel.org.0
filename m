@@ -1,152 +1,167 @@
-Return-Path: <linux-kselftest+bounces-11681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11682-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04909903F1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 16:46:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DED82903F96
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:05:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 846EA281C9C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 14:46:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E25F11C24A80
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2226AD4C;
-	Tue, 11 Jun 2024 14:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876EF44C6E;
+	Tue, 11 Jun 2024 15:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="avwe33f7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AuymG5cx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33058171D8
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 14:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A0138F83
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 15:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718117205; cv=none; b=WcDYeHIt5e+V+olYCkD0okBEh2s1gE3rbT4uz+z3RiLQwhiVsTvDN73cwORnGT2/RpCN8Yk37DyslFrr/ny6RBEmSDx9vzK2UOIxXZEC9tyg09RyccphUQq+vWRarWpGDgl+G2i+5EoiHCjl9tbbncogOtBGgL8Nt1mCuFpvu/w=
+	t=1718118232; cv=none; b=Phh4mnxGzA/C/o2BQijccObCFZkG5yXNgjzxzgaJmPRn+owlKJixd5vHC8NNp2/JrsDWjv6sjGHXT2ObtyU5EWCn/uWKo65I5+W9oZ8Wh5o+LgX0zxLg0w+qU0QN71VZkOdidj1pjFO3IFsLZxZ2jdUiW76Ly+txXLu/CWfZM6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718117205; c=relaxed/simple;
-	bh=YS93EmhvsNCHUzkRltXmFg/kyvtPxR/SgrHEK/06tyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bMYIbf0HSPcpQtdxrr+X4RqoIwuDCfrCbukWzknKa+t1gfWWtgNdqzWXAa4nEt3rQ0+BqJcN3NuJDsN5OoLvdVOojLjEAcY4kclUGdjhiR0IDshoHO6Y+t9t0TZ3lXq6lnNIwkE4zkmnyyJCtB25hTVFj0HP9wb2NulP/cogsz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=avwe33f7; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-62ce5367661so4320737b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 07:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1718117203; x=1718722003; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y4oOmcc62KuINJgrDPpdqc07FOLSw//xTr8h1MxyG7o=;
-        b=avwe33f7YwCNbY0wvDVUzWsz61zGu4FoZj5mEyCP1cZub3xa44ZcFU6ClBVdD1L69D
-         gkKiGGyteHTx09aMfX5LPt7MsYVRZzhABWYhNC44EZfixjPPPdW9KJxdizB0rOt5B3TC
-         6OJOgrdqWGH5T3v+7tkNNcYxCKOrV7MKHyAeE=
+	s=arc-20240116; t=1718118232; c=relaxed/simple;
+	bh=DxHuSRyS2182VbMMPg8ECusV9XWBUw9c0Ua7Tz0GQfQ=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RaX7dom/dbZnSCs2qNEvth8AiaZJyXawtlQaBelHRIxPkvBU9W0Q6hvBCJy4zURwf5CKvPJr8SAsGE++0si+eNxiXgJq67faIjbDGXFY9wE57j7dGSXpRHfrHdR5tEIR9bgXrxtTkYJr8S7de/9u8esrsHFFm8vqJnRQISooR30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AuymG5cx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718118229;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1KOD3tvw2yUOuCBwejEuRkcEMN7XtQ6ZYq07uFnoBqQ=;
+	b=AuymG5cxKaOvyz314SY3mNHcTZLXKJJymaTtldiI1iISYTRrgM/tC8lMiUh4r4i5b83Bx3
+	QsjBmzBmZ5vuRqyMAMbd+wrsRFZXOHvScJGIaH+uc4Xz7m0xGdoYVPBaU4AXteZjguiaa7
+	XFubKaOCh6p9oWmJT7bLKWle4fkbZ2o=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-45z8Ae_9PWyQX0F43Qg1hQ-1; Tue, 11 Jun 2024 11:03:47 -0400
+X-MC-Unique: 45z8Ae_9PWyQX0F43Qg1hQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6b06ca589baso38920986d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 08:03:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718117203; x=1718722003;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4oOmcc62KuINJgrDPpdqc07FOLSw//xTr8h1MxyG7o=;
-        b=NGj29fJ9aVIT6fB0D85CQw6/61X1Oov0kRYOJLdOdc2J9mcFwYRTqv6oUDxgLesf8Y
-         Gn0bBfkahxbxw4tP4BbZYF5iCf6pnS27oVkf4tUFWzxHGCcZyWv5vAXWNjVl6A245q+0
-         6SRIFtdRhjxcT8hNZ8FJYM4IG6VDHo2aZSnzH59dIijawtSjloEw/yodH1fyeeRjQN+i
-         SuaM7yWUueO/kro3O1t8OuGBW1g1oxt+pwsVT9zpgA8KW/Vdo+pIrhll/0hKiLXseFnK
-         ggeYHEo5jmxu9pvELOFBWq0mSfFQ2PtvbMqSC9v/jwqhbMs6ntjp9u/s4XrfOl4IVl7m
-         i4lQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1+hljygdz0jQB8SW1Wsh2dcrhk68jHU39rOIjAGakLVM0uVWXinqGCZILcdnan9rQhGkvTcu7PiAC1BSzDFIXaqDSn7IBIAmoXaSeYiaB
-X-Gm-Message-State: AOJu0YxrtTgqbyRMV+3QUUsBpoFDL53+TzqRD1QXhjnCxeEw+hriHwqJ
-	Pq9X9n6tMh5zjMmE22zn/xP6mALa7easKkDrO91/BaWYcqklEBIzTD1lcSzdQm4=
-X-Google-Smtp-Source: AGHT+IFe8P/Dd7p7Ts3W5h3yhz58D2E6RxyLY9zdF0OLfzXhWlorREcO1afSNjtFCWT2/cvKS5K3Zg==
-X-Received: by 2002:a0d:fbc5:0:b0:622:cd7d:febd with SMTP id 00721157ae682-62cd568ebc8mr99646547b3.3.1718117201883;
-        Tue, 11 Jun 2024 07:46:41 -0700 (PDT)
-Received: from ?IPV6:2607:fb91:213b:a129:544a:cc06:ea0:4045? ([2607:fb91:213b:a129:544a:cc06:ea0:4045])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-62ccace8257sm20304497b3.43.2024.06.11.07.46.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jun 2024 07:46:41 -0700 (PDT)
-Message-ID: <43e24489-a3af-4e53-afc6-ff1dd9462ee2@linuxfoundation.org>
-Date: Tue, 11 Jun 2024 08:46:39 -0600
+        d=1e100.net; s=20230601; t=1718118226; x=1718723026;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1KOD3tvw2yUOuCBwejEuRkcEMN7XtQ6ZYq07uFnoBqQ=;
+        b=Nchlx73uRUGx0Y1FGe8ABkrUWXjRsV55gxlAN36NKfwxqBxdKj3SCTwym80jJMdcUY
+         tZdnjDO8tNX+ksVaB4use/S7Si1ty7HA1cVmFlY+XDhIaEWYWjRYjmhpuUMq3SQkdOCq
+         7oBMqKe9dN0oxTYlFkMpfT0fnJznJLT5TOJTqVEA+iPNw394pBdHo2P1a1k6h5poFwal
+         R8F/PsWkk776rItAdYUxeD+Z/yN6CJ83DGeq5w8nOXyGRc2YtNxlBmBXA7ni/nOA+RHk
+         GSB9woJJv77x5HNZOJmrcp/oJVaucwHV+wPfu8odhw2RL26MqXGVV6qwBwfhP58LsGnD
+         yJ6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX8ATwVi1OakK2gf51DbME5GQAdYwFzBbZ0ZvQxjJdgB9tPCQbqk7H4vxjSEJmU1aqpUyPsL0TQLbtZFrdpxGMB4fiEij6k14Za3FOC9qUF
+X-Gm-Message-State: AOJu0YyP8g5JxzjrAUJKpS9zJ3svgcmLE2Iag5DDJyPkr3kMrxgeWqdy
+	cRa69ZOkn1R4iccZoj338OMAD0aKjURQ2vxNiuDnqjIuyBQ6he7yUaAxB1rsC+rdTJJAGxzQMTv
+	awW5RE+ocSs9+lVt3zX8kquFU8HSMFYdFashvBp763D2i9paUlyLYMChmFC8tR9SWNsh29L8lkx
+	9Vk6i+xzTyd82aECGmqFBAZ9Eav1faOumHACRCTAW8
+X-Received: by 2002:a05:6214:5889:b0:6af:cd13:3adf with SMTP id 6a1803df08f44-6b059f15a02mr146830936d6.41.1718118226686;
+        Tue, 11 Jun 2024 08:03:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE8Fk310YG6KaykuurRnRYjKcqZ4xXhNfdb+Ut2CJiNwgIs0lhWrDGpn077i7CC8byIrzT0pPeZlUrEsg7upM4=
+X-Received: by 2002:a05:6214:5889:b0:6af:cd13:3adf with SMTP id
+ 6a1803df08f44-6b059f15a02mr146830506d6.41.1718118226132; Tue, 11 Jun 2024
+ 08:03:46 -0700 (PDT)
+Received: from 311643009450 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 11 Jun 2024 15:03:45 +0000
+From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
+References: <20240603183121.2305013-1-amorenoz@redhat.com> <20240603183121.2305013-2-amorenoz@redhat.com>
+ <f7t5xup26jt.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: seccomp: fix format-zero-length warnings
-To: Kees Cook <kees@kernel.org>
-Cc: Amer Al Shanawany <amer.shanawany@gmail.com>,
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- kernel test robot <lkp@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <be032a65-e61b-40e0-a982-cb622ccca548@linuxfoundation.org>
- <20240607124117.66769-2-amer.shanawany@gmail.com>
- <a461ba9f-b171-4b49-b282-1f4e2830f31e@linuxfoundation.org>
- <202406100957.750569FFD1@keescook>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <202406100957.750569FFD1@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <f7t5xup26jt.fsf@redhat.com>
+Date: Tue, 11 Jun 2024 15:03:45 +0000
+Message-ID: <CAG=2xmN+fp5B_b1KQq2T9DKrTQ_+Kqr6WbmrY0Gk1j3zZnY1YA@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/2] selftests: openvswitch: set value to nla flags
+To: Aaron Conole <aconole@redhat.com>
+Cc: netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	dev@openvswitch.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/10/24 10:59, Kees Cook wrote:
-> On Fri, Jun 07, 2024 at 02:58:47PM -0600, Shuah Khan wrote:
->> On 6/7/24 06:41, Amer Al Shanawany wrote:
->>> fix the following errors by removing empty print statements:
->>> seccomp_benchmark.c:197:24: warning: zero-length gnu_printf format
->>>    string [-Wformat-zero-length]
->>>     197 |         ksft_print_msg("");
->>>         |                        ^~
->>> seccomp_benchmark.c:202:24: warning: zero-length gnu_printf format
->>>    string [-Wformat-zero-length]
->>>     202 |         ksft_print_msg("");
->>>         |                        ^~
->>> seccomp_benchmark.c:204:24: warning: zero-length gnu_printf format
->>>    string [-Wformat-zero-length]
->>>     204 |         ksft_print_msg("");
->>>         |                        ^~
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://lore.kernel.org/oe-kbuild-all/202312260235.Uj5ug8K9-lkp@intel.com/
->>> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
->>> ---
->>> Changes v1 -> v2:
->>> removed empty print statements
->>
->> Kees,
->>
->> Is this change okay with you. I didn't see any use for
->> these empty ksft_print_msg().
->>
->> I will take this patch if you are okay with the change.
-> 
-> Dropping these means that the "#" marks go missing. Currently:
-> 
-> # Running on:
-> # Linux proton 6.5.0-25-generic #25~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Feb 20 16:09:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-> 
-> with the proposed patch:
-> 
-> # Running on:
-> Linux proton 6.5.0-25-generic #25~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Feb 20 16:09:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-> 
-> This breaks the TAP syntax for the test, so we should find a different
-> solution.
-> 
-> Perhaps:
-> 
-> ksft_print_msg("%s", "");
-> 
-> ?
-> 
+On Mon, Jun 03, 2024 at 03:02:46PM GMT, Aaron Conole wrote:
+> Adrian Moreno <amorenoz@redhat.com> writes:
+>
+> > Netlink flags, although they don't have payload at the netlink level,
+> > are represented as having a "True" value in pyroute2.
+> >
+> > Without it, trying to add a flow with a flag-type action (e.g: pop_vlan)
+> > fails with the following traceback:
+> >
+> > Traceback (most recent call last):
+> >   File "[...]/ovs-dpctl.py", line 2498, in <module>
+> >     sys.exit(main(sys.argv))
+> >              ^^^^^^^^^^^^^^
+> >   File "[...]/ovs-dpctl.py", line 2487, in main
+> >     ovsflow.add_flow(rep["dpifindex"], flow)
+> >   File "[...]/ovs-dpctl.py", line 2136, in add_flow
+> >     reply = self.nlm_request(
+> >             ^^^^^^^^^^^^^^^^^
+> >   File "[...]/pyroute2/netlink/nlsocket.py", line 822, in nlm_request
+> >     return tuple(self._genlm_request(*argv, **kwarg))
+> >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >   File "[...]/pyroute2/netlink/generic/__init__.py", line 126, in
+> > nlm_request
+> >     return tuple(super().nlm_request(*argv, **kwarg))
+> >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >   File "[...]/pyroute2/netlink/nlsocket.py", line 1124, in nlm_request
+> >     self.put(msg, msg_type, msg_flags, msg_seq=msg_seq)
+> >   File "[...]/pyroute2/netlink/nlsocket.py", line 389, in put
+> >     self.sendto_gate(msg, addr)
+> >   File "[...]/pyroute2/netlink/nlsocket.py", line 1056, in sendto_gate
+> >     msg.encode()
+> >   File "[...]/pyroute2/netlink/__init__.py", line 1245, in encode
+> >     offset = self.encode_nlas(offset)
+> >              ^^^^^^^^^^^^^^^^^^^^^^^^
+> >   File "[...]/pyroute2/netlink/__init__.py", line 1560, in encode_nlas
+> >     nla_instance.setvalue(cell[1])
+> >   File "[...]/pyroute2/netlink/__init__.py", line 1265, in setvalue
+> >     nlv.setvalue(nla_tuple[1])
+> >                  ~~~~~~~~~^^^
+> > IndexError: list index out of range
+> >
+> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+> > ---
+>
+> Acked-by: Aaron Conole <aconole@redhat.com>
+>
+> I don't know which pyroute2 version I had used when I tested this
+> previously, but even on my current system I get this error now.  Thanks
+> for the fix.
+>
 
-Thank you Kees. Yes that would work.
+Thanks Aaron. I'll resend as v2 with your ack as a stand-alone patch
+since the other patch of this series will be fixed by your soon-to-come
+series.
 
-Amer, please send me v3 based on Kees's suggestions.
-
-thanks,
--- Shuah
+> >  tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > index b76907ac0092..a2395c3f37a1 100644
+> > --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> > @@ -537,7 +537,7 @@ class ovsactions(nla):
+> >              for flat_act in parse_flat_map:
+> >                  if parse_starts_block(actstr, flat_act[0], False):
+> >                      actstr = actstr[len(flat_act[0]):]
+> > -                    self["attrs"].append([flat_act[1]])
+> > +                    self["attrs"].append([flat_act[1], True])
+> >                      actstr = actstr[strspn(actstr, ", ") :]
+> >                      parsed = True
+>
 
 
