@@ -1,70 +1,50 @@
-Return-Path: <linux-kselftest+bounces-11637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7E52902E59
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:27:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 491DC902ED0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 05:00:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 455C628242F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:27:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F289F1F229BA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 03:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7B8215AAD7;
-	Tue, 11 Jun 2024 02:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA9716F8E0;
+	Tue, 11 Jun 2024 03:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5XvMSB6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MocUnV5q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5748C04;
-	Tue, 11 Jun 2024 02:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F01341A84;
+	Tue, 11 Jun 2024 03:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718072877; cv=none; b=tA3w1FturxqwAXetQLZf+ZN7UzI57GrYMzKVWA2qs1xUhmKz0U6dCHQqMB8BogloYOAnGJhQhuIoghOCZBr3AHK6PS0qbEeVTdGPyHkeeWXpQZAxwXSjo4sRUlE8DeDAuI7sgOw9YI3eScifePpfe3rctgSPuQskB6MmlR8isYc=
+	t=1718074833; cv=none; b=e1marn4jn6s9YlS4JR9LGVEc58OojRANibHSw6/7+WJxpAheZkJjR9+nVH2foAkV53YIfPiw9OuameUyLUnUxZxerTasSDt1TYlboxQwdATatD6cjdjjyUGo2SOhZPkwHYv3FB/ByCUURz4mNdmP1mDV19LutzHF/hya1FQYwJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718072877; c=relaxed/simple;
-	bh=soo8O23hvdU9RFLYaLJElksgq2fkfTRKU7M9abjFpM8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qG9nDA0g6aScH4JzTz1+KwFSaos3levQInszDKA2JO7Vqepl47g3EFKCrpAcCrUPhxFZob4egRkdh75d0Jb/BKsvajm4piVofMBpk52nHxiO84wmCc4+wkcy7xR75iEg7KaSWXS7oWmFxUQGss98arhRFH5B4EBxnJ8ONI3kaRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5XvMSB6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA175C2BBFC;
-	Tue, 11 Jun 2024 02:27:49 +0000 (UTC)
+	s=arc-20240116; t=1718074833; c=relaxed/simple;
+	bh=pSvn6OcHpnhBY6s0/2yfy61tKQC/zFK2p4HFOCECfr0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kEXV5LLyrvSyY1mF6U3o4DHuYPWqB/kEmKkuPs2baMvEmUzi+WDV+M+NWTk946CR1drWQIYka5MIG7G4T2tFHYAshsROBqNUHklGsgsJGHFbfFnw1ELFp3nF/clmV4mwCznH54H7zV2i4ywdu+kItG1opHQJRGuF3V0rnSAKIYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MocUnV5q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5ACAC4AF1A;
+	Tue, 11 Jun 2024 03:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718072877;
-	bh=soo8O23hvdU9RFLYaLJElksgq2fkfTRKU7M9abjFpM8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U5XvMSB654yYtH2oIG8Dj+aLokfPKpehgjlyrDNLUbQkekdYVFrjMIGcdJBmIhGNT
-	 1ovX8mSheMvJfnlue84JruMedDlUeJsyEmW37eTJJqaqW43e500uJDGrvbYl/jWX8i
-	 q3hIYH+02Tc7nbvu7gL+1QmwbcZvZ8Anm6Yvl0PELG+PEtRD0rb4879RMEjEe3Nj63
-	 0dDbI4GFU/gn2jE9sRQtrw5D10cz059KCsxICIE4n1x09y2quMbISL6xp66Y6tMqSt
-	 1u8M24vc4j2js7b5Lz+DmR/p9SV0ZrOfpiqB4yiafLHlhvYhPOP81eNz+86I12UOBt
-	 jWMhi8m8wR4PQ==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Close netns in error paths in test_tunnel
-Date: Tue, 11 Jun 2024 10:27:28 +0800
-Message-ID: <cf6b9ac760c91d58078243e27be31ef811308296.1718072698.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1718072698.git.tanggeliang@kylinos.cn>
-References: <cover.1718072698.git.tanggeliang@kylinos.cn>
+	s=k20201202; t=1718074832;
+	bh=pSvn6OcHpnhBY6s0/2yfy61tKQC/zFK2p4HFOCECfr0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=MocUnV5qoySoc/QFMiOWq8PTOLuEDhWCiDxxBMWVezCFzsKJ9sPalLg9CGowmVtKI
+	 Zh/hdw56oGBIk2TS9zoDUZVQEtcwoaaveEpd02k/sYuYFZ6JLVkQEiQHNhdCsHEwG8
+	 MjXxXeviK8Of+dVuy/8QnmRO/9H0PVxFaXWfUyvphSTXE5AIQ85mgF/j3yXQnXKyDV
+	 sqAu69UoPhXoXJ+5DR4dDyp89ruLzt/HUpAW5kruRStNQKmVRit747UXviMEMjlAn0
+	 kkwyO/kefGtttQK32Z4bdC1bpvelLMwFSLNJ+tp9o8wUr9FsRb3OSIudDeY3/6dLwE
+	 QjU/dTwpIjfSw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADC87E7C76F;
+	Tue, 11 Jun 2024 03:00:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,80 +52,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] mptcp: various fixes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171807483270.24718.9377090151074860472.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Jun 2024 03:00:32 +0000
+References: <20240607-upstream-net-20240607-misc-fixes-v1-0-1ab9ddfa3d00@kernel.org>
+In-Reply-To: <20240607-upstream-net-20240607-misc-fixes-v1-0-1ab9ddfa3d00@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ dcaratti@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org, cpaasch@apple.com, liyonglong@chinatelecom.cn
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Hello:
 
-netns created by open_netns() should be closed in error paths in
-test_vxlan_tunnel(), test_ip6vxlan_tunnel() and test_ipip_tunnel().
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- .../selftests/bpf/prog_tests/test_tunnel.c    | 27 +++++++++++++------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+On Fri, 07 Jun 2024 17:01:47 +0200 you wrote:
+> The different patches here are some unrelated fixes for MPTCP:
+> 
+> - Patch 1 ensures 'snd_una' is initialised on connect in case of MPTCP
+>   fallback to TCP followed by retransmissions before the processing of
+>   any other incoming packets. A fix for v5.9+.
+> 
+> - Patch 2 makes sure the RmAddr MIB counter is incremented, and only
+>   once per ID, upon the reception of a RM_ADDR. A fix for v5.10+.
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-index cec746e77cd3..f19e8177bcec 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-@@ -448,14 +448,20 @@ static void test_vxlan_tunnel(void)
- 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
- 		goto done;
- 	ifindex = if_nametoindex(VXLAN_TUNL_DEV0);
--	if (!ASSERT_NEQ(ifindex, 0, "vxlan00 ifindex"))
-+	if (!ASSERT_NEQ(ifindex, 0, "vxlan00 ifindex")) {
-+		close_netns(nstoken);
- 		goto done;
-+	}
- 	tc_hook.ifindex = ifindex;
- 	set_dst_prog_fd = bpf_program__fd(skel->progs.vxlan_set_tunnel_dst);
--	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd"))
-+	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd")) {
-+		close_netns(nstoken);
- 		goto done;
--	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
-+	}
-+	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd)) {
-+		close_netns(nstoken);
- 		goto done;
-+	}
- 	close_netns(nstoken);
- 
- 	/* use veth1 ip 2 as tunnel source ip */
-@@ -521,14 +527,20 @@ static void test_ip6vxlan_tunnel(void)
- 	if (!ASSERT_OK_PTR(nstoken, "setns src"))
- 		goto done;
- 	ifindex = if_nametoindex(IP6VXLAN_TUNL_DEV0);
--	if (!ASSERT_NEQ(ifindex, 0, "ip6vxlan00 ifindex"))
-+	if (!ASSERT_NEQ(ifindex, 0, "ip6vxlan00 ifindex")) {
-+		close_netns(nstoken);
- 		goto done;
-+	}
- 	tc_hook.ifindex = ifindex;
- 	set_dst_prog_fd = bpf_program__fd(skel->progs.ip6vxlan_set_tunnel_dst);
--	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd"))
-+	if (!ASSERT_GE(set_dst_prog_fd, 0, "bpf_program__fd")) {
-+		close_netns(nstoken);
- 		goto done;
--	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd))
-+	}
-+	if (attach_tc_prog(&tc_hook, -1, set_dst_prog_fd)) {
-+		close_netns(nstoken);
- 		goto done;
-+	}
- 	close_netns(nstoken);
- 
- 	/* use veth1 ip 2 as tunnel source ip */
-@@ -615,8 +627,7 @@ static void test_ipip_tunnel(enum ipip_encap encap)
- 	if (!ASSERT_OK_PTR(nstoken, "setns"))
- 		goto done;
- 	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
--	if (!ASSERT_OK(err, "test_ping"))
--		goto done;
-+	ASSERT_OK(err, "test_ping");
- 	close_netns(nstoken);
- 
- done:
+Here is the summary with links:
+  - [net,1/4] mptcp: ensure snd_una is properly initialized on connect
+    https://git.kernel.org/netdev/net/c/8031b58c3a9b
+  - [net,2/4] mptcp: pm: inc RmAddr MIB counter once per RM_ADDR ID
+    https://git.kernel.org/netdev/net/c/6a09788c1a66
+  - [net,3/4] mptcp: pm: update add_addr counters after connect
+    https://git.kernel.org/netdev/net/c/40eec1795cc2
+  - [net,4/4] mailmap: map Geliang's new email address
+    https://git.kernel.org/netdev/net/c/74acb250e103
+
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
