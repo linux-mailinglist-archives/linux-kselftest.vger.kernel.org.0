@@ -1,144 +1,166 @@
-Return-Path: <linux-kselftest+bounces-11692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11693-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7C019042B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 19:49:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ED059042CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 19:52:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23E8828A0EF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:49:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7BE8EB22A5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B8B6FE16;
-	Tue, 11 Jun 2024 17:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3A6605BA;
+	Tue, 11 Jun 2024 17:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IPVFjqjN"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="zCuxTome"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9612C6F2ED
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 17:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACBF2570
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 17:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718128143; cv=none; b=DckULusAdqIjogPIJibCeHoxG0m1t+ew9lWRZhQwfMdHNLVRgK0nQuLoGilxB6NPdVGsW8aJjLtJebiqdSf6Xab82OemtTXZ4dpfd8IE5lyBAbSmFH/XI+IRNcNBeh/gOwLJy0Sp4ks6HnrHiy87dXoYVgrw/ZbYUIaAr7HM8PY=
+	t=1718128325; cv=none; b=qzugpfRXg6tf9IQDb+FKoh7iKiEPmmtQKQk0ZxroJa5B/TmHxlH3bAEDHaLw8md17DOYJTsgo7sCk5ejayF0K+7i6IYltWnpNfzfXk+VwOmapCiHfsWfbk+5q2WknZJKf9UkmOeJ5uiTBTxyW4cZOqor3hQ4+G/lUFgTdDaN5cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718128143; c=relaxed/simple;
-	bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=peaJsswF+tgEyXdmiDVaqGDD3Zdjs0sEVHUeCPKdvqip+YuVa0+nLpC0+H77wKlK0se23UbmhGZ3mlB0gbyuS8ByqLnh4E33szmSnBkNXp9okdDJHMR7jqGOdwVv59Qb8nx7IL4ljWjffKVP+7iOx9uUY+tB3K/xwek46YrDAhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IPVFjqjN; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52bc1261e8fso4797177e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 10:49:01 -0700 (PDT)
+	s=arc-20240116; t=1718128325; c=relaxed/simple;
+	bh=j6Mw7Dc/Rmamgq8D0n3FKdWISB6Vssoz9/RfITAP4S0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H56Adgjra8zkZNp7k+yvaFnaxmLl8T3JRWADaZdzhu2raotj7O2aVP8QYF1KRGmI1BZdV7t7PNeVvj2i+h011X29HG1MFy5qC+JlcwSP9CL2fqShhGQAy1NoVn1xZTIhJOOKvbloI3enVkr8OZ3JQHx6er4ixqvC+hK1dEPHhPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=zCuxTome; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1f692d6e990so55874295ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 10:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718128140; x=1718732940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
-        b=IPVFjqjN/tV8zxx7PkHbMF4K/IYb/jlC2tNit5JdvoLifzWpkyDf9JrBFefkflu+aW
-         hiA18c2EjQNXyBLcSixdWO0kk2xuSNuKdKO/T7XNH/JOiYXo+V6xtEBI+/UQnZVN4Wi4
-         wJmV3pBdP3FZ+M+BJPCgzvoMJX6U7b0v6zRx97/K244ibz8EcDPiJyb24JuTdFHzGOps
-         N87qOHVGTsz0jLlKV2cAcqOd96eJfNPr8SjRHvz2/Ne5EGuStsAG8Se3GTIfhH3848XQ
-         tTf1dm55Al2vnllfL+M3Kh3sVeZM4YFd8HbBIyODEajeZeimEvCZznCejuVCGbBO8fyz
-         HLTQ==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718128322; x=1718733122; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v+kzQ+TESmWH2rodDnJAJg+m005wAbuCyRq3fRyc+L4=;
+        b=zCuxTomerusXHn49OFrZiVcC8OlR/i02QrewLcCCtHLlKXSItsPoMxTuce7pUN1ZAW
+         I2BdcObaOaHiBFE7UGp4q+iEkREwhCAnA/ivrTXNxpuDl2tE5empr6hRpASREryjq9Fx
+         Zd7oNX/71MO02C7qQz1CcMCb+Jp0+TVo+56WmXaW7FrDwhGuhTaaRjl+njM+dA+itvNd
+         6uvmU7kxZ2cWr7eDsv4Wpz9In3bEDADlRBGJ+xos0tNzB7GQLWvReJry1M9lxjPaHR1k
+         XYVLB/Uq8Pmebhl5N8kuYnWGKQ+8cJKUNzV8uSk7J5LcWeVqMwcqgoSaQxrepF8rkk93
+         t2Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718128140; x=1718732940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
-        b=uF6xKBUMHfp1paMwBEyXH1+qdM8k4+pj6TraCXZWesiTdP766kd4esfpLRzKfqUYQv
-         DBhF4FePJ2rEsaHFkmgVLOpZ6/H7s+mmDDq4WUWeuhXf5iGYD0a05/2n2zzE8S3+yMmc
-         W+PjBXOAuZL8enlyVTxighgEQKIfBXUTR8HOtbVPODhTfZSRVWAFIrQWFuemD1Hf3iU2
-         xA1xI8E1Qfffo+dCbsluOasTXkXEcr7oBIZUikV0zvZrXV74seSpnd+3Bw4+5XHXvUG6
-         Nyc0q/2VpV4zvLTFDZEwLSnvOFT8e+o2lJ/EN4a9BFQr07Po5miiJiFHM6gYunnrFkVW
-         GiwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEqIitsVCjENgNf4biRIc1hy8/0GfI9PgVEC1vhCm6QNmUOGKqUqqq/5PdFBhOx0eOo8yWXyvlSTqZQSmLn0P+8weU9YNaj3vOS8FRSRq0
-X-Gm-Message-State: AOJu0Yy1+StGle5Cg1ng6rP/y1CeqzSplLgWcA7ncBp2rKSHaM4VtiS3
-	OAJz7Ijlh7a2jjCtaIa+m7caiDod1SVi1p7IT1QCY60oad0PZwQmY4LyLoMVr/iSZEJBEeiD3Q8
-	uX3FRAHRU8Phm2xzjAxWIpb58bJoqjW+G8zKEMP0lhsZueruV+G0xsjk=
-X-Google-Smtp-Source: AGHT+IGQwZWXRepZRotKaxzF2bqAPZNCNL5wX5Y/FzlEvs4cnUetjrNqG6bJ0xN0MmD46e2zpfETL/dJPuZcdCbp5Pc=
-X-Received: by 2002:a05:6512:324f:b0:52b:fc90:acdc with SMTP id
- 2adb3069b0e04-52bfc90ae01mr6138523e87.32.1718128139379; Tue, 11 Jun 2024
- 10:48:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718128322; x=1718733122;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v+kzQ+TESmWH2rodDnJAJg+m005wAbuCyRq3fRyc+L4=;
+        b=uM3f6c5XLIk5oCZnn4Nktdprf32/GfLhNvnTrGgm8WeI/b1M0XZlIeCPdyVoTST8F9
+         2UHeXKE+Wnua2H80/fehOS3OOtyCkEFjYTQzIu8/86qEoBm6hZJ7ZJVp6YGI9RYiBiLx
+         eSKLtZ0hZlyuDvxhRnK7uTqRdX9+ifh9mz+e73JQMItm21Cd8LRQjJgD54V359l5x3zS
+         xQD0CHfFHrvloDAj4Hnb04Re6PrJCka+9TbFRuXzVVRZTu3BZRa+lv6rJzUI60+lwQoz
+         QCfllBr6gc2hqNrR7pehr2+aNVHwqX0Y9TtDDXk4ry/+lPaqueZjLudBm5nz5t/djvA/
+         xZeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWqzkya8ANlecMbxKob7EbShb1+Pxb6WsOelnwE7rX9yCMD7aL0FmXN89EUxNX/Nz2vuOPy9JNr1MNK0I0fgSWSpRgRkHZEwbWeW+1LhsiE
+X-Gm-Message-State: AOJu0Yw9srxdiI/eWSxR2eSojw2VMI8Uiq5SLn+JFbaXAVl+bwWk9dj8
+	5SqZqz+8hLItcYRaPTaTUt1DitGzYsByLwz5udzY+ONronZaiDra5Xdg1WgPg+Q=
+X-Google-Smtp-Source: AGHT+IG0CXcMZTGrM4/Ht2qa5w3o4qJ6+EtsZ/LkU7bUGzv5nEqEbQ4X3YEnvEJE/XsG2nOTE7o+Wg==
+X-Received: by 2002:a17:902:e80a:b0:1f7:2490:cb69 with SMTP id d9443c01a7336-1f72490d4d6mr50156005ad.60.1718128321885;
+        Tue, 11 Jun 2024 10:52:01 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6fadca2b0sm59819315ad.206.2024.06.11.10.51.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 10:52:00 -0700 (PDT)
+Date: Tue, 11 Jun 2024 10:51:58 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Guo Ren <guoren@kernel.org>
+Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Evan Green <evan@rivosinc.com>, Andy Chiu <andy.chiu@sifive.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH 01/13] dt-bindings: riscv: Add xtheadvector ISA extension
+ description
+Message-ID: <ZmiOvgabh3Rd5Vad@ghost>
+References: <20240609-xtheadvector-v1-0-3fe591d7f109@rivosinc.com>
+ <20240609-xtheadvector-v1-1-3fe591d7f109@rivosinc.com>
+ <CAJF2gTTVu4ZQt+gK7pVYEDVG23Sic=jswkVvX4To=VAD0TMzxw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com> <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com> <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca> <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com> <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org> <ZmfuGUugiwMPdnkR@infradead.org>
-In-Reply-To: <ZmfuGUugiwMPdnkR@infradead.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 11 Jun 2024 10:48:47 -0700
-Message-ID: <CAHS8izOyV4ZFi=sC5BofaS2NQ=QDAKsmpd2Z1iaNDLpd9rOKVw@mail.gmail.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTTVu4ZQt+gK7pVYEDVG23Sic=jswkVvX4To=VAD0TMzxw@mail.gmail.com>
 
-On Mon, Jun 10, 2024 at 11:26=E2=80=AFPM Christoph Hellwig <hch@infradead.o=
-rg> wrote:
->
-> On Mon, Jun 10, 2024 at 09:16:43AM -0600, David Ahern wrote:
+On Tue, Jun 11, 2024 at 08:06:34PM +0800, Guo Ren wrote:
+> On Mon, Jun 10, 2024 at 12:45 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
 > >
-> > exactly. io_uring, page_pool, dmabuf - all kernel building blocks for
-> > solutions. This why I was pushing for Mina's set not to be using the
-> > name `devmem` - it is but one type of memory and with dmabuf it should
-> > not matter if it is gpu or host (or something else later on - cxl?).
->
-> While not really realted to the rest of the discussion I agree.
-> It really is dmabuf integration now, so let's call it that?
+> > The xtheadvector ISA extension is described on the T-Head extension spec
+> > Github page [1] at commit 95358cb2cca9.
+> >
+> > Link: https://github.com/T-head-Semi/thead-extension-spec/blob/95358cb2cca9489361c61d335e03d3134b14133f/xtheadvector.adoc [1]
+> >
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  Documentation/devicetree/bindings/riscv/extensions.yaml | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > index 468c646247aa..99d2a9e8c52d 100644
+> > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> > @@ -477,6 +477,10 @@ properties:
+> >              latency, as ratified in commit 56ed795 ("Update
+> >              riscv-crypto-spec-vector.adoc") of riscv-crypto.
+> >
+> > +        # vendor extensions, each extension sorted alphanumerically under the
+> > +        # vendor they belong to. Vendors are sorted alphanumerically as well.
+> > +
+> > +        # Andes
+> >          - const: xandespmu
+> >            description:
+> >              The Andes Technology performance monitor extension for counter overflow
+> > @@ -484,5 +488,11 @@ properties:
+> >              Registers in the AX45MP datasheet.
+> >              https://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
+> >
+> > +        # T-HEAD
+> > +        - const: xtheadvector
+> > +          description:
+> > +            The T-HEAD specific 0.7.1 vector implementation as written in
+> > +            https://github.com/T-head-Semi/thead-extension-spec/blob/95358cb2cca9489361c61d335e03d3134b14133f/xtheadvector.adoc.
+> URL changed
+> https://github.com/XUANTIE-RV/thead-extension-spec/blob/95358cb2cca9489361c61d335e03d3134b14133f/xtheadvector.adoc
 
-My mental model is that the feature folks care about is the ability to
-use TCP with device memory, and dmabuf is an implementation detail
-that is the format that device memory is packaged in. Although not
-likely given this discussion, in theory we could want to extend devmem
-TCP to support p2pdma for nvme, or some other format if a new one
-arises in device drivers. I also think it's more obvious to an end
-user what 'devmem TCP' aims to do rather than 'dmabuf TCP' especially
-if the user is not a kernel developer familiar with dmabuf.
+Oh okay I will change.
 
---=20
-Thanks,
-Mina
+Do you know the answer to the issue I raised? https://github.com/XUANTIE-RV/thead-extension-spec/issues/52
+
+- Charlie
+
+> 
+> Others, LGTM.
+> 
+> > +
+> >  additionalProperties: true
+> >  ...
+> >
+> > --
+> > 2.44.0
+> >
+> 
+> 
+> -- 
+> Best Regards
+>  Guo Ren
 
