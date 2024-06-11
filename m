@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-11628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11629-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2215902E23
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:00:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DC0D902E25
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:00:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5BA11C22034
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:00:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4713C2841A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DEC8C04;
-	Tue, 11 Jun 2024 02:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA57F3C00;
+	Tue, 11 Jun 2024 02:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQnPwHmT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdfrdtSO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7384C81;
-	Tue, 11 Jun 2024 02:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AF7AD21;
+	Tue, 11 Jun 2024 02:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718071212; cv=none; b=Q2QKWT7EhXaAYRLOX5ZudPShrsqtkKMeezGbmpi7CDJmZ3h5vGdomeLjuOW3C0IsnsfEZJ7hdf1/rimfE6PqsijLs5nMD0gRO27Xc05ZrC0prSZLK2n9m5+8k4FFwoJWmcFfZ5W7O/eVuhqH3gmW/O9+505lWwa2Iy+4GBOFgl0=
+	t=1718071222; cv=none; b=nCTJD/IHp8JCmMfJbaRf0/iNA9R4XbZG2Tc7P0w1Fmoe7vTNCpAK1BGDt7t7y5Xzs1/BIOK0a2JaIVQnc+D5o2YlgZeWCiViOwxAWcDFiIrRJF3pn5RInsRWH7hQQxKUnJ4jPXRXV/XwceXasDntFOdXh7rMfwKSK5Z4de5mFZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718071212; c=relaxed/simple;
-	bh=8EV55NK1hekoJ8C1IwqaoBlUiqoKSewbiQkaMFy1IqA=;
+	s=arc-20240116; t=1718071222; c=relaxed/simple;
+	bh=sdjlLBAsvE2W4eBhVZks7M8fUv20YbIs8/ERLLS59xg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m0PP1LVcQ3+zAARS3r0M5Yqz+gnBLr7wV2BO+5mgRQ1oOVQ57DFR5m62wGesuewt0pb+9XFaYr3xKB1cXtEOjFnQ6xxWoaE/Avhq7IRP88uy53ZWOu35bj2n3Hgrqq5S1g1nVnD5j0qT0s81rFarRRpbaNaLP/XoKiLGO3vg5mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQnPwHmT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2632AC2BBFC;
-	Tue, 11 Jun 2024 02:00:02 +0000 (UTC)
+	 MIME-Version; b=owA9MI8I0GAuRkxxia5ik44ZkglUTKp4IwZNlP/xBlYmoczlEKPoEE8WDxe1q0O/r7EjlsjqYt/ti9d4XflCe3Q3RyHBl0G96ompqs8pAPBY7GlZUZIEK0Od5afKI8ShsJzXHgOzxR9ZLVtyfkKI9y9moUxtO3O+wN6gywZ7lLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdfrdtSO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2EEC4AF5F;
+	Tue, 11 Jun 2024 02:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718071212;
-	bh=8EV55NK1hekoJ8C1IwqaoBlUiqoKSewbiQkaMFy1IqA=;
+	s=k20201202; t=1718071222;
+	bh=sdjlLBAsvE2W4eBhVZks7M8fUv20YbIs8/ERLLS59xg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aQnPwHmTbqBZ1bXmGaJM9HJemoZB1XPFaxpJbjY/JIOBwF9Z2C10MBFF1oX0l0AyP
-	 g0QhEUYnQRbtGWBOp64SeKRb9Prc8n/4l7WIa7IdNzPpmCdbyi/kigslhHyyi1zV9o
-	 AhKiJb+x0oOqCbItIGKbuSSN3QfLWvCmNdmYJfMIyfZGF5rQwDtSaNhjLy+5mA1pxg
-	 olwpSZKZIxxQlxcsYbp8cRBAfo0ObBgFJcz7jWyjRMiCJU41fmaYSkiv2/+TgEcFxt
-	 qC5XAELIhJ77Nm1UbfW3v7Z8PIUkkwem/WLobSAJVaTfTKOPtX7MqJGbafuNIfdvC6
-	 afApph1SlLFKQ==
+	b=CdfrdtSOagmZRRENoqnsqI8hEC1l//F0Cy0n/Mh1pzgjoR1eqLAqX/V0PHg1mfepG
+	 94Xbibw+s/mrXhkRXc8HryAMFC/ktH92wQAOg7ybTsozmoNc5ZuP03I2QHsLEPv6Vm
+	 d5RblyuZ2dFlq/p3qkEj2p0pJDIYP6Coep8bwNYWDjeuN91vgeDvU6PXH9UagMp3Oi
+	 Tcq8ZQDJikyfHnz71ThDDJ0vUN2C7jsglaHyqMk2OJOsLk6tTP82ZD2HIvdkwXmkpV
+	 ZaYFwd8ORhP+td9CT3KbVaRzVyJnF1PI5EuaHb+fB1eZe1LBFoI2p1w01euwN9giXK
+	 TED9pBh0A8vgg==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/5] selftests/bpf: Drop noconnect from network_helper_opts
-Date: Tue, 11 Jun 2024 09:59:35 +0800
-Message-ID: <9d2b9adc6e0892e4836c76d115658d6a41619789.1718070939.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 3/5] selftests/bpf: Drop must_fail from network_helper_opts
+Date: Tue, 11 Jun 2024 09:59:36 +0800
+Message-ID: <281d02d849e0f6bbf7b89f301301d0be5889107a.1718070940.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1718070939.git.tanggeliang@kylinos.cn>
 References: <cover.1718070939.git.tanggeliang@kylinos.cn>
@@ -75,102 +75,123 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch adds another new parameter "noconnect" for __connect_to_fd_opts,
-then opts->noconnect can be replaced by "noconnect" parameter in it. In
-test_bpf_ip_check_defrag_ok(), true is passed to it. And the strcut member
-"noconnect" of network_helper_opts can be dropped now.
+This patch adds another new parameter "must_fail" for __connect_to_fd_opts,
+then opts->must_fail can be replaced by "must_fail" parameter in it. In
+run_test() of cgroup_v1v2, true is passed to it, while false is passed in
+other places. And the strcut member "must_fail" of network_helper_opts can
+be dropped now.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c            | 6 +++---
+ tools/testing/selftests/bpf/network_helpers.c            | 8 ++++----
  tools/testing/selftests/bpf/network_helpers.h            | 3 +--
- tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c | 6 ++----
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c     | 5 +----
+ tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c | 4 ++--
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 902060a70e3b..0f53638ae5a0 100644
+index 0f53638ae5a0..1c4c783719b7 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -293,7 +293,7 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+ 	if (settimeo(fd, opts->timeout_ms))
+ 		goto error_close;
+ 
+-	if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
++	if (connect_fd_to_addr(fd, addr, addrlen, false))
+ 		goto error_close;
+ 
+ 	return fd;
 @@ -303,7 +303,7 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
  	return -1;
  }
  
--int __connect_to_fd_opts(int server_fd, int type,
-+int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
+-int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
++int __connect_to_fd_opts(int server_fd, int type, bool noconnect, bool must_fail,
  			 const struct network_helper_opts *opts)
  {
  	struct sockaddr_storage addr;
-@@ -352,7 +352,7 @@ int __connect_to_fd_opts(int server_fd, int type,
- 	    opts->post_socket_cb(fd, opts->cb_opts))
+@@ -353,7 +353,7 @@ int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
  		goto error_close;
  
--	if (!opts->noconnect)
-+	if (!noconnect)
- 		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
+ 	if (!noconnect)
+-		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
++		if (connect_fd_to_addr(fd, &addr, addrlen, must_fail))
  			goto error_close;
  
-@@ -365,7 +365,7 @@ int __connect_to_fd_opts(int server_fd, int type,
+ 	return fd;
+@@ -365,7 +365,7 @@ int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
  
  int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
  {
--	return __connect_to_fd_opts(server_fd, 0, opts);
-+	return __connect_to_fd_opts(server_fd, 0, false, opts);
+-	return __connect_to_fd_opts(server_fd, 0, false, opts);
++	return __connect_to_fd_opts(server_fd, 0, false, false, opts);
  }
  
  int connect_to_fd(int server_fd, int timeout_ms)
 diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 9a7cbea87967..e029d4ff983e 100644
+index e029d4ff983e..fefe2ed0c798 100644
 --- a/tools/testing/selftests/bpf/network_helpers.h
 +++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -24,7 +24,6 @@ typedef __u16 __sum16;
+@@ -23,7 +23,6 @@ typedef __u16 __sum16;
+ 
  struct network_helper_opts {
  	int timeout_ms;
- 	bool must_fail;
--	bool noconnect;
+-	bool must_fail;
  	int proto;
  	int (*post_socket_cb)(int fd, void *opts);
  	void *cb_opts;
-@@ -60,7 +59,7 @@ void free_fds(int *fds, unsigned int nr_close_fds);
+@@ -59,7 +58,7 @@ void free_fds(int *fds, unsigned int nr_close_fds);
  int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t len,
  		    const struct network_helper_opts *opts);
  int connect_to_fd(int server_fd, int timeout_ms);
--int __connect_to_fd_opts(int server_fd, int type,
-+int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
+-int __connect_to_fd_opts(int server_fd, int type, bool noconnect,
++int __connect_to_fd_opts(int server_fd, int type, bool noconnect, bool must_fail,
  			 const struct network_helper_opts *opts);
  int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts);
  int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
+index addf720428f7..124132b435ba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
+@@ -9,9 +9,6 @@
+ 
+ static int run_test(int cgroup_fd, int server_fd, bool classid)
+ {
+-	struct network_helper_opts opts = {
+-		.must_fail = true,
+-	};
+ 	struct connect4_dropper *skel;
+ 	int fd, err = 0;
+ 
+@@ -32,7 +29,7 @@ static int run_test(int cgroup_fd, int server_fd, bool classid)
+ 		goto out;
+ 	}
+ 
+-	fd = connect_to_fd_opts(server_fd, &opts);
++	fd = __connect_to_fd_opts(server_fd, 0, false, true, NULL);
+ 	if (fd < 0)
+ 		err = -1;
+ 	else
 diff --git a/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c b/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
-index 30349c866c77..330dfba95c56 100644
+index 330dfba95c56..948e1ca287a2 100644
 --- a/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
 +++ b/tools/testing/selftests/bpf/prog_tests/ip_check_defrag.c
-@@ -160,12 +160,10 @@ void test_bpf_ip_check_defrag_ok(bool ipv6)
- {
- 	struct network_helper_opts rx_opts = {
- 		.timeout_ms = 1000,
--		.noconnect = true,
- 	};
- 	struct network_helper_opts tx_ops = {
- 		.timeout_ms = 1000,
- 		.proto = IPPROTO_RAW,
--		.noconnect = true,
- 	};
- 	struct sockaddr_storage caddr;
- 	struct ip_check_defrag *skel;
-@@ -200,7 +198,7 @@ void test_bpf_ip_check_defrag_ok(bool ipv6)
+@@ -198,7 +198,7 @@ void test_bpf_ip_check_defrag_ok(bool ipv6)
  	nstoken = open_netns(NS0);
  	if (!ASSERT_OK_PTR(nstoken, "setns ns0"))
  		goto out;
--	client_tx_fd = __connect_to_fd_opts(srv_fd, SOCK_RAW, &tx_ops);
-+	client_tx_fd = __connect_to_fd_opts(srv_fd, SOCK_RAW, true, &tx_ops);
+-	client_tx_fd = __connect_to_fd_opts(srv_fd, SOCK_RAW, true, &tx_ops);
++	client_tx_fd = __connect_to_fd_opts(srv_fd, SOCK_RAW, true, false, &tx_ops);
  	close_netns(nstoken);
  	if (!ASSERT_GE(client_tx_fd, 0, "connect_to_fd_opts"))
  		goto out;
-@@ -209,7 +207,7 @@ void test_bpf_ip_check_defrag_ok(bool ipv6)
+@@ -207,7 +207,7 @@ void test_bpf_ip_check_defrag_ok(bool ipv6)
  	nstoken = open_netns(NS0);
  	if (!ASSERT_OK_PTR(nstoken, "setns ns0"))
  		goto out;
--	client_rx_fd = __connect_to_fd_opts(srv_fd, 0, &rx_opts);
-+	client_rx_fd = __connect_to_fd_opts(srv_fd, 0, true, &rx_opts);
+-	client_rx_fd = __connect_to_fd_opts(srv_fd, 0, true, &rx_opts);
++	client_rx_fd = __connect_to_fd_opts(srv_fd, 0, true, false, &rx_opts);
  	close_netns(nstoken);
  	if (!ASSERT_GE(client_rx_fd, 0, "connect_to_fd_opts"))
  		goto out;
