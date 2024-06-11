@@ -1,126 +1,109 @@
-Return-Path: <linux-kselftest+bounces-11706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B571B90460B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 23:01:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0D0F90461E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 23:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31301284A98
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 21:01:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20D7EB24C05
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 21:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E961534EC;
-	Tue, 11 Jun 2024 21:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56662154449;
+	Tue, 11 Jun 2024 21:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="H8G+Cvvc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VxGMHtiZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A58A386
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 21:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B454415442C;
+	Tue, 11 Jun 2024 21:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718139712; cv=none; b=J4fEghwls9/yX7+uKRq+IFVAwEPqoEbEUWEAf9aqbmhfgm2nOvSROHFkaqrkpwiHZKKPnpbeqHSW3609XGZGuzi9CLu+A5XzmbdmMlNKSd2Vb/nf+20vGHp7/KIgDnAxY3+tM32fg1ouDSxJSh3OARYWU6dA4XTckKzVly+fh9I=
+	t=1718140318; cv=none; b=uSsspC4HQu8XXnm1pW9zwlQm+6FxSiX8a3Y5kNCkVamN4oOh6fHwbcIktnU79C7AiyBdW3wab39CS1x9Z+Jqg2Fxa2UU4iqwcJyfDsO4JpXUTP2f5MdR4iA+37iYkgIDF9wm8gqWnxkRkNVWnmXVl5g+smZ1+tiy4WVJWlqo8Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718139712; c=relaxed/simple;
-	bh=khCJ8E7bxMFxUPTxBFiKAS1pgz9jQ6ioSS5uproRVZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MbxRKNL53BvKPdi6aGel/bBbVakbo0YZeoqUCp1bJc2EKOrWLu7hYtIkKVFC/jsVt1oLfMzUiR6lP7CpDycvtBOkJRDMaAZfyoPTxsn6zB4VUqKw0nxwQ8ivifLDIIQb/mG78vn+amMVSo9dbYgpVuQpbpgE/LLFazdLG21MM6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=H8G+Cvvc; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3d218bbba30so435746b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 14:01:50 -0700 (PDT)
+	s=arc-20240116; t=1718140318; c=relaxed/simple;
+	bh=cEdz3pPx0zFZuyZzlN3HhDAjH5K92x6qPhdCxkwqjEA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XhJ73iIOZndnbxJm9TkcmmZm6+s60LmNA5slYAn2ecvwF8w40TqV7JFUY9bQPO1vDuOEvJRvJnUOhYqT/xxTqEynIDaQVPu8GzbljGHS3/hybGJV9Dyktp2U2zbfubXCCm0QJRNe5shzcsAMZzMLWFyksCRorSNNZ/UQdPv7bXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VxGMHtiZ; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f700e4cb92so12643915ad.2;
+        Tue, 11 Jun 2024 14:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1718139709; x=1718744509; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k6zEkzkTuZ7txFA7Ps53axhuBCU7AlYnO5Uonpaq+8Q=;
-        b=H8G+CvvcHiPua9zmOnjmdhyt7RnPNu3CLX0n2bCmc6Z1sdar2TJcy9+Q0WNTLCimzt
-         AayRtEXo6xRFxJb4riMiz8vtNUixey1wIjyTiCHaMugYw1R1UFCDY9NVthrrYEduzH5D
-         0doPglp19iSp+v6V8tjJkmIm8YQNN+C6ggCgI=
+        d=gmail.com; s=20230601; t=1718140316; x=1718745116; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cEdz3pPx0zFZuyZzlN3HhDAjH5K92x6qPhdCxkwqjEA=;
+        b=VxGMHtiZyFAi6pvKHEkKyO/fQoXTZ9x3tPAIyxyMwGx3Z1njFG/TRxHLDLrstiSakt
+         WCYjAGoU7RSkfY0hbtmQwKrdgnqsjgvF9R7qDYicNWsxKSeeHj4koolPS6TvMkwhSY/U
+         WiUuvml0c6RtMU8drna7f1JFvaEYN2OG+U5ODAa8hihSgEzghJqn9ZVUxHRxHxoiYLEo
+         FFQZZrXzk9Q5VA0ZsrPWx/WE1MF3M3/xeQ9UVY1iSREyGpa00JrQAaisNi3IAjRpZ4+d
+         t+CyYZfvG3HuQG065CQKB1ahMmCzsN60NisuGw34tlzVL8vaUPK2kRfrr5XZtmsUklQt
+         CQ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718139709; x=1718744509;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k6zEkzkTuZ7txFA7Ps53axhuBCU7AlYnO5Uonpaq+8Q=;
-        b=Vm7tYnA91i0TNl6W6rjvniRJo/eSWxoEsuEIEQ3hh7zYjD2g40QXR8zJ8SBOx+qMsS
-         0/hQnENWgH/96JWINe4+dvT+UzRmcMKDZRlNofrn+qCHNoi6Ds2KhcaNjSxXOpNrpMQ8
-         F+wJjSbUzO2k2BqZY5ake2sZ7kSgPmY0tfWw0QK1GEmoyBP/dvGl/FqaF9zXP0NdKwWa
-         wNOYFcXu0f4JXLNU6Im85dS0aSn70zq33gNS3KL+D4xcslmbr8nwHP6/gQnH7PX+6U+K
-         Q5k+1ZZA1baO5J0NhQOSXcJDQ2Nim+3Etmk7jV97+GhXqencbOjMYEvdlr11Cz4pPK+f
-         IzCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVyHmksuoJscaWTMiWAK6Hvba3o7Gru22dre6J1K+wJ377M/xbXaOgEhcl1VepxQACNB8FwMn5rt1OT3eZHDZGru0Hu4n9B8nINZbZtsagc
-X-Gm-Message-State: AOJu0YzZaWzDm5U7guKSSjDT9EElbO5wUR9zZVoay6edFw7JTA2r5eUh
-	Mw7tFfQbiGsGlX994MC+mcpWxD85v42vBKOPQcRBVPV+AXy9K9pLUcONTr9wWj0=
-X-Google-Smtp-Source: AGHT+IG9GKImwKVUIgK2UrbzevVw6BqUCUpdNFpFowG/8v7VP6WnRqXnqwAjOpC+EOiwOZYSy6EfiQ==
-X-Received: by 2002:a05:6870:7812:b0:254:7dbe:1b89 with SMTP id 586e51a60fabf-25514be2464mr2489fac.1.1718139709359;
-        Tue, 11 Jun 2024 14:01:49 -0700 (PDT)
-Received: from [172.20.14.19] (ool-6c3a3e1d.static.optonline.net. [108.58.62.29])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-795332e1bd0sm540525185a.134.2024.06.11.14.01.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jun 2024 14:01:48 -0700 (PDT)
-Message-ID: <bdd4d8ff-9399-44c8-8e14-311c0a7a8838@linuxfoundation.org>
-Date: Tue, 11 Jun 2024 15:01:47 -0600
+        d=1e100.net; s=20230601; t=1718140316; x=1718745116;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cEdz3pPx0zFZuyZzlN3HhDAjH5K92x6qPhdCxkwqjEA=;
+        b=G1j0Skff+iIlsCkor+BUcbfjWvwfk11Jc2obPAeL1Lakqia/UvnCXREBuPSybtcLLZ
+         Z0wa7/+AxS8EInyekTflN1cUB7/k0Y0NrkSHnS7TMP/wzCYAS/AQAF+mRZoP5hE7JCzZ
+         kWPwGg/7nXJ5RfI0gVFDSsu48IUHwpvub16+6QMLzFDnu0/jl5WHHctHjvhUTsOFwrAQ
+         ZovOg7FQAciiJGOgWBe6nVZG9AsP3T1chd8zV22HZJySvh3UnsUrFwg1VxTBLl6cSOKb
+         ZzAdEKHdAHemnBwblgw7lde2Oc7tAT+TEqRrXelSjyPVFSaXYmhlqj7uFxTmPKp6ZI/j
+         Jbww==
+X-Forwarded-Encrypted: i=1; AJvYcCW9i1QrPChMcQdawIlfbLwr4THQeOgxfe52bLB+Tpek4cvz6y7LsMvmzOiO8dfU0FhKwBzH4rPWud71LW4DnGVd/f5Gs1+yy/1yi+is3yy0ea9APvmUm8SPTQM3B13d/zYpiwUJ
+X-Gm-Message-State: AOJu0Yx7iXyUjuuiBxM6WT7nzK7RAtdAQnxevlkSUahegriHSz8g1CrE
+	h8giK2nXYR0ba1m/FRk25wc5P6nUDG+6G30jciMxl5YKUTpbWtoS
+X-Google-Smtp-Source: AGHT+IHGhjitXPHSLmwpEKWOxcRkB09CCleEUgBSXUtzY7wNE50A7/T0BXndwkVz2bxLmuVxMr5Xrw==
+X-Received: by 2002:a17:902:d507:b0:1f8:393e:8b9a with SMTP id d9443c01a7336-1f83b613520mr932825ad.33.1718140315949;
+        Tue, 11 Jun 2024 14:11:55 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f72561cfb4sm26307015ad.268.2024.06.11.14.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 14:11:55 -0700 (PDT)
+Message-ID: <1f4c4d90ec6909ae74d595c213f45f9dd49a9867.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Use start_server_str in
+ mptcp
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Tue, 11 Jun 2024 14:11:50 -0700
+In-Reply-To: <bd2f838063195bb7e199df9d01e7f266dbb1d360.1718070940.git.tanggeliang@kylinos.cn>
+References: <cover.1718070939.git.tanggeliang@kylinos.cn>
+	 <bd2f838063195bb7e199df9d01e7f266dbb1d360.1718070940.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] selftests/openat2, fchmodat2: fix clang build
- failures
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Christian Brauner <brauner@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Alexey Gladkov <legion@kernel.org>, Valentin Obst <kernel@valentinobst.de>,
- linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240601014534.268360-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240601014534.268360-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 5/31/24 19:45, John Hubbard wrote:
-> These two subsystems require very similar fixes, so I'm sending them
-> out together.
-> 
-> Changes since the first version:
-> 
-> 1) Rebased onto Linux 6.10-rc1.
-> 
-> 2) Added a Reviewed-by tag from Ryan Roberts. See [1] for that.
-> 
-> Related work: I've sent a separate fix that allows "make CC=clang" to
-> work in addition to "make LLVM=1" [2].
-> 
-> [1] https://lore.kernel.org/518dd1e3-e31a-41c3-b488-9b75a64b6c8a@arm.com
-> [2] https://lore.kernel.org/20240531183751.100541-2-jhubbard@nvidia.com
-> 
-> John Hubbard (2):
->    selftests/openat2: fix clang build failures: -static-libasan,
->      LOCAL_HDRS
->    selftests/fchmodat2: fix clang build failure due to -static-libasan
-> 
->   tools/testing/selftests/fchmodat2/Makefile | 11 ++++++++++-
->   tools/testing/selftests/openat2/Makefile   | 14 ++++++++++++--
->   2 files changed, 22 insertions(+), 3 deletions(-)
-> 
-> 
-> base-commit: cc8ed4d0a8486c7472cd72ec3c19957e509dc68c
+On Tue, 2024-06-11 at 09:59 +0800, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+>=20
+> Since start_server_str() is added now, it can be used in mptcp.c in
+> start_mptcp_server() instead of using helpers make_sockaddr() and
+> start_server_addr() to simplify the code.
+>=20
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
 
-Applied to linux-kselftest fixes for Linux 6.10 next rc
-
-thanks,
--- Shuah
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
