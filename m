@@ -1,575 +1,262 @@
-Return-Path: <linux-kselftest+bounces-11645-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA6B902F86
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 06:28:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F35902F8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 06:34:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEA031F234F3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:28:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03EF62845D9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7511170829;
-	Tue, 11 Jun 2024 04:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DA116F91C;
+	Tue, 11 Jun 2024 04:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LETOhCIo"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aZe+HMqU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053F116FF5F
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 04:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718080072; cv=none; b=n1x8Deqv5NGHLwndxdZ5MekZD2jCFup51XzXmlH+RfLGGyfhfcXyHDvmiSmhYgQAtqiFCk1oONez6SAGGOxUnzkLOVnGh29lW8xgDIfhNfggMz8A6hEeFq4gCqOxyrBYPQlriF/3GgamBuXFrmXGPtFp637abc85LtIPVWcqc/s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718080072; c=relaxed/simple;
-	bh=R11Fz8CMWAdSmi2lcWYQk27qmS1GHLlt16YLGoG5YaY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gM8Um648ZvZJ0Eys6htqRL7FDldyCaGiasUe2gKEF7heVpn1HuK8XXzEmdZLf94ubRrhtAmMZXVrbMdiVMhqnKNUY25WDU4NBww4W4bn1+70uUvSDvpepOXvoA+w1HWlS8faQcM+NMM0BqBqBZKMG/SFOvRZYcGgwAjBLJlst8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LETOhCIo; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-254c22faf4cso824968fac.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jun 2024 21:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1718080070; x=1718684870; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5tkT2r/H8bywOCL29jQ9dOiEqES2E4TnDM1Uu+21t2c=;
-        b=LETOhCIoLtfI1D3itdfNcKXGqQZRgY0qeVa+hrjA5EEv2qVlHM/kf3qmROA+ImAYIl
-         Six/SRUIcmT5RNUZrO8tHNriknG9K9eFzbZf69gkXa7Acg/Nd1n1tNmS9R6pUAz4+rGo
-         qxKQwe0oSZvLJ3qwf/JNNybsl8xcNeLnYiHaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718080070; x=1718684870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5tkT2r/H8bywOCL29jQ9dOiEqES2E4TnDM1Uu+21t2c=;
-        b=dvoE34/CIK4OEJdzLhXo5i1Z54yUDb7WFJf0h9U71ASDROGNGYwFpUbveLCX5fHeWk
-         ztjfCNh0oy5IWELI/Zgup4TmPuOEiu5KokeGlCRzM4VLCcVswxOvdwqiGE695G+m9Y+f
-         PTmLxBLiygatMt1AM2+nCweEbz3+8MFOHP/MapE79z4CWTB/AVk/Exjxn7lb6BqADegt
-         YhjFulPy3qWlLOZzoiT1TRv83aSfqDcRO2RRjV3mzorHuAY/ckpCWpdTQfx+ozq5a/7H
-         hs64hNHxCeScDYD/kcGPIePS8CRNYb8ja6g24LrmN19MLtC5/l1gt2WMoodKz887DXiL
-         6tRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLbIcfn9BDyQ86R7xq7jz8crX7b4h3P5HQEXMnSVu5ZuM2+9+6mPc1Q74P+sGgU4lYPdCWjTyI42wizZJOZHNzCxkQ87EqD0PvmRqf2cNR
-X-Gm-Message-State: AOJu0YyD3Z6loCzcdW6ZXyrxZX/pyMwWop7PXqeN5b6U1ravThXTAPxS
-	OTlTglFTY/KYyXMsCFGfu128ya99bcWB6sStOdV6z2oJejCtuVoN0D1xqDGP93ZTc+WqxewUVtd
-	2Di4bhRRi5zsGmgkSJB46afNDJZNZWLnoX0pB
-X-Google-Smtp-Source: AGHT+IGvwQIkjiBkVYzpGSHTTqzmipObtEx9jWLxFxS1ErZDL3K0AvJpjFZrfUag8P1aiWtGde0J9gLS6s3SgZZN50Y=
-X-Received: by 2002:a05:6871:729:b0:254:8a91:4b71 with SMTP id
- 586e51a60fabf-2548a916a59mr10122918fac.56.1718080069954; Mon, 10 Jun 2024
- 21:27:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FF0386;
+	Tue, 11 Jun 2024 04:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718080456; cv=fail; b=VhbTUan3qlaCBh/YpGYAfqCukgKw2VqiiRueeYpkTfrE8CSAGPkgj/TDCdiiH/E+WIQVHBsFwHe4h5uGnkgYK50ZxgFG7S9RdBFNxzFeNcVjCTSNCH5aJHdlQBoqnYYX7YR6Olh5YeqmqD6ph2iVu2sEBTuaohTNmqo4b6bmZ8Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718080456; c=relaxed/simple;
+	bh=UO6jLYam64KBjmWmdPbcRuVGpj2binfo4XOTm7OzLmg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=F1hx7hIjxJSMNHMminp9OjecVCunMql6Vr9rBGov4RvJraEcIyicgbLgMBoKLxz6WcrUh+51geAmS0q+SRp6pWKv9X4qyI22BsVH/A9ZFhHPSqk2bZsdWP5tEvYlHsTuJr5emTF2zpuSg2R9SMECq/3rHWGTL/6uOUEj7uziiyI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aZe+HMqU; arc=fail smtp.client-ip=40.107.243.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A7DWfuhM8WoQ/hVqmmpis5nYxZ0vI5DxbHzAlOtwcmQrc9YYTAkY6j8nJRBrmtMTh0418ho1gwCkEWk0VCCRU/83xNlsAWc1Ut4JXGgPA+gHTIJdVV01iMIpRf8fPhs3jnNX+Gu1225SDKkx2/1UTVF/8GCxfLhys9bNIMqgWj0+DpF64cV/AV17Kxobmwk0pmr8kEv9ZySZd/QTO3q9XxM72B0u2qGkPJ1tLqr7Q+XoxuBgjCg+txMGwMPPj5tUVfA1U8UTDhZb+67CgdiX652tNlKtEeTgI8g0NLIvYhezBp6olbUqVkfgvde+EWWlypDVqMyRBY1NNhhwKZVSKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SpzIu5y0xnn9Pff+XF+K3wDFlsC8MQQwlt0AzxRTD7Q=;
+ b=M8CLbHtVAfUQ18kX9BmNHPX+XL8nXEIfuKkwo0aYGC6kumDiZtKunWPKzjLbQc9K87k8TPQaIH1wtt/nt+W0y6dEoV9c7099lgkWzJahe6YB9AJgn6WE9eM9zWGgwjiC6lZ8YM4j5aF9hEmf5px9fJfBvdY/7eB5n3AhDFWkclv75b3cvjQALvErkPkSgKGcrUm/LO2P/bHfebqfiyZRUiGz508Pb6fySV7r0LOHq73FRTQeCi4SbtWkjtREmrPLoCvpE10Y5PrZPajLXk0fhjSHgoBvpm59XCD0lP+DTBMyJ74NtlEDCK6c3DuqY82dUEWeIITDvGSA+pvagxyZFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SpzIu5y0xnn9Pff+XF+K3wDFlsC8MQQwlt0AzxRTD7Q=;
+ b=aZe+HMqU8uYdY8HJmH6XAG2qkHhsWlNXUkhnGNOkAeAi+L9OE9plID5NqCq8XFubEVE+6WfShCOKwpJDeZNN6TGJx4xAQkhu9nRyS3HvPILSBODBx1couuIzhClLnzgVnJiv28OU6ygK/C7SrS/YtgraMrk2a2fuOBc9ANZvO291iSqIVhgF96zpzZDMAVoS1fgRYG5NLmP6dASiDKwTffJdK6QNgoIQH9CoUFaGwXkuo6obuJGhjFnk+HBT50WSEk89zxliq4YA3FBQStiDhYQn54FGAB266pkpVcseHux3aanndywy/pCoHKBNUzr8s/FYRiVzhL3p7/CQwh37Kw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
+ by PH7PR12MB7186.namprd12.prod.outlook.com (2603:10b6:510:202::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
+ 2024 04:34:08 +0000
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::657e:28eb:3569:4f91]) by DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::657e:28eb:3569:4f91%6]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
+ 04:34:08 +0000
+Message-ID: <a8f9d4e2-8a12-4e5d-bd22-9c92955135f4@nvidia.com>
+Date: Mon, 10 Jun 2024 21:33:35 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] cleanups, fixes, and progress towards avoiding "make
+ headers"
+To: Jeff Xu <jeffxu@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Andrei Vagin <avagin@google.com>, Axel Rasmussen <axelrasmussen@google.com>,
+ Christian Brauner <brauner@kernel.org>, David Hildenbrand
+ <david@redhat.com>, Kees Cook <kees@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Peter Xu <peterx@redhat.com>, Rich Felker <dalias@libc.org>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20240608021023.176027-1-jhubbard@nvidia.com>
+ <CABi2SkVoNyXLrfU71gnv1qVUAADpUmFXiDoKKPc54MLb5JpB+Q@mail.gmail.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CABi2SkVoNyXLrfU71gnv1qVUAADpUmFXiDoKKPc54MLb5JpB+Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:a02:a8::15) To DM6PR12MB4140.namprd12.prod.outlook.com
+ (2603:10b6:5:221::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608021023.176027-1-jhubbard@nvidia.com> <20240608021023.176027-6-jhubbard@nvidia.com>
-In-Reply-To: <20240608021023.176027-6-jhubbard@nvidia.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Mon, 10 Jun 2024 21:27:39 -0700
-Message-ID: <CABi2SkUnQQC4cXhwV6BN==umEFsNpFRptxMKy3bHthPUv+pXwA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selftests/mm: mseal, self_elf: rename TEST_END_CHECK
- to REPORT_TEST_PASS
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Andrei Vagin <avagin@google.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Christian Brauner <brauner@kernel.org>, David Hildenbrand <david@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Peter Xu <peterx@redhat.com>, 
-	Rich Felker <dalias@libc.org>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4140:EE_|PH7PR12MB7186:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19d65ba0-a376-4add-b463-08dc89cfbbd3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|7416005|376005|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZCtRUzQxc0poN3cyekxodlg1SWhIa2JWbmp3VFRxS3hUVTlpL0hkL1hCWkZR?=
+ =?utf-8?B?RVc3elRQUzRLT3AzWjl3NUxPWlVrOUM4R3N5N0YrL2VIdEo2UWkvUzBOM0Fw?=
+ =?utf-8?B?NHczamorRHVVVUNWTHA0WXNDaEVrejJDaTVRTlVxQjdyeGxnNmFlL0ZHRVNi?=
+ =?utf-8?B?K1ZBZktOcUswazArYjl4a0hZZlluRDhINXdNbTBOTzBBdTNRL3R5TmU1ako5?=
+ =?utf-8?B?WS8zS0JEUmwzOHNhTUhSQlFxRTZ3d1hWUHJsV3BHSTNsR1VRYUZCQmg3Vzhh?=
+ =?utf-8?B?RnRyaUFCelQ1SVJYVmQwaFpRNHZFSWQ2UUpLUlA3UzRiWHpETUxmSyt4Mkpa?=
+ =?utf-8?B?Y3dsSWcyRWxiWjVqbVo4N0pOQTQvYU9XaE1mRDNxSXJNd3BuQ3dMUGE2Mjk3?=
+ =?utf-8?B?cFMzMzNRaWU1dE1LQ2cwdVBzS3NrQlFobGthNG9nQTkrVjVseFhCemxlOE9T?=
+ =?utf-8?B?bk1SUVdCVVRTaHQ5TVFRTU1PNnJMd1ZjaXFmdU1qZXBIMHZ4QUpBdFJPM01j?=
+ =?utf-8?B?aG44d2VNZEZVNnBUOEpRODBtRHJleUEvT2xTbDJmNWM1cDFheE15a0JtOGJu?=
+ =?utf-8?B?NEhWWEdneDRIR01OdlN1dzlNNEkrWnl1REJDa05mNUl5amRvYlhYRURlK0Ez?=
+ =?utf-8?B?UVV4NFhKelU5S3ZsMmZKTVBrM0xlRGtCRWs0L1VhQlNWNzBEc1Z4V0hZMng0?=
+ =?utf-8?B?eEpNNjV3WXpWR1RZQnJhWnpUWVZpYTRCVjdEQk1ONGJicmZZblJiRTIyODVm?=
+ =?utf-8?B?K3BVanNhY2hsNWpLelN3SjZrVDFWV2tjTkNPT1dlTTY4SlZnMTZrcVY0UGpr?=
+ =?utf-8?B?TERIMTY3QWFQZEdzSHJBNlUvc3EwcUZIL3pKM3R1TWNlOVA4dmVVZldJU0xS?=
+ =?utf-8?B?MS80eXRiOFVYb0FhODlYR0NERXlLRnM3Wnk0OEIyRE1mdkFBV0hnVUlkc2M0?=
+ =?utf-8?B?TzJEQXdxTWlpRkh1ZS85VmtJa2E0RzhZTllweHV6NWUzclJCb2VZOE1OTXhv?=
+ =?utf-8?B?OUREMkRoUWxTQm9waHNCZE5VNDJyYStRU3YyRjExRnNwb2tnWUVyY2pLTTRk?=
+ =?utf-8?B?Z00wOU1RVnR4N1JIeC8wcXR5Vkh5c2hkTG95b3N1SlltWVpxZ3Z0bVl4dHl5?=
+ =?utf-8?B?cnM0S0hoNnpka0N5TlVCaEd3a2w2czl4ZXhmOXh3bGdKSjhUM0JZR2VtL0ZP?=
+ =?utf-8?B?eHdLQkF1ZG5MS2pkVUU3anJLNnNvRG1GYyt0OEVoajJMRTU2RWVrSUJTV00w?=
+ =?utf-8?B?QlVFQW9kQ0JXa21mNFpsejJCZStxWHlCSG5ONC9pMjRoSHJEcHA3b3JBeGxo?=
+ =?utf-8?B?Zm1Dd0ZFQk9VNit6UVFOUTc1NFg1ZkR0VlJJUERYejVmYjlURzJVZ2ZDdnBx?=
+ =?utf-8?B?blJNQkFuYVlmVXd4azNMRDJ4cjNhSDhCRTJVdm52N25OSXZvenZtQzUvK3M0?=
+ =?utf-8?B?R3VsaDFobU1JblVaUUdaZFpUbE1iM3ByUDBOT2g5VjJ4L0JHNDFzd2daUlRE?=
+ =?utf-8?B?R05USDhOTzhXc1QxR3pwOWd4OWh0U0loc1VGVmVQN0IwVkxlUXZwSXJTa1dY?=
+ =?utf-8?B?a0lYR09CRzFDMnJ4Kzdub1dEMG82WnZnNzFVL3FUVmZHWVhDNWVMTVYvYzl6?=
+ =?utf-8?B?Rzg2VmdLc1hMZ0dTbm1xSk4zNWwrOGw1M2EvN2xDK04wd2lLdisydUg2aVhL?=
+ =?utf-8?B?eHlGdXgxRUdKNk56RU5LSndNNkpRRzlaNC9xd0toaUhTdzNVVUlOdWt1K2V1?=
+ =?utf-8?Q?ocsNiL7g8ebnQaxB1uWORhiv65ii+1io1rn1jr5?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RWlBd0dvN2x1aXI2dlJSdUFrTURhbzcvWkwvdjI2SjZTV1NPaFprYUpLU3Q0?=
+ =?utf-8?B?ZU5NdE94UFJFK2tISi9MRUdnYUtETzM3QkZqSlk3UGk4UzZmcG40RU80UVRY?=
+ =?utf-8?B?K0hqRkxrRWw2blQrbkRFTlVsTHZnQ2g3RFBrQmJaRmM2aGw5MVA2UWU1Z1pI?=
+ =?utf-8?B?dkQzTnhQeTlpdWNmSVZPU3UzM2o5WWVCMDRxMTkzSXdNS0NrTk9iT2lOL29h?=
+ =?utf-8?B?dGhCb0M2TTEwQWxJRW5kR2ErNGlPeUdISHZBWUVvVytWTWNzV0FpbHJZaDB0?=
+ =?utf-8?B?QUVnQTdIRUFoMFlpK1pkMWdJL3lsSlRPQkJVVlFiMUJLd3o2aW5TTGFTbkhS?=
+ =?utf-8?B?SW0za0JPVHFib3Y1M1A0ZXU2clNYcllOckVtQVE4eDhZT0RpMUFkMUJrWTd4?=
+ =?utf-8?B?QkpvUjl1YjgzdTBaQ29xNFJyZS94bVlvWTBiT0M4cm1PY0owMEF4VFYzR3pW?=
+ =?utf-8?B?L2JVb2VsMThZZlFBWDdFdG11blNEQncrZXlraDNrQmVucTZydHQ1a0c4aHhl?=
+ =?utf-8?B?WUtIc3NBRUtvVG5EL291MFBySTdOSWc2WmNZMFNxNHVNSHg1a0hjdGpLcGRP?=
+ =?utf-8?B?WWVmdlRybUpGQ2ovTjgwWkRsSmhPLzZFNVBmVzMxcWUzY2dmV2pXRk1CU1J6?=
+ =?utf-8?B?UXIxWGVGTnhoZ1BaYkp6cXo1VjhaaGdnZXF0T2sxVm94ZGpnTDdNVDdnUGpY?=
+ =?utf-8?B?bVlWaVJYcGxvVVlIci9DVzladkMwdVVtSDc4Q1ByWmcycTJLV3BzWTZ4c0Vx?=
+ =?utf-8?B?dk9XN1RzTUc4SlVZSTd4aFJ4L0Ezd1NtbGZJL2haTUNMTFBwclR0cGxjcUFl?=
+ =?utf-8?B?RG1wY2lSdE5QR1VrY0pTc202KzN2akMvMW1sUDByZXBIY28wY3o1MTlHb2hi?=
+ =?utf-8?B?MW9WY1pRUldTODJGQVEyU2syQnJzQWM5QVVoVndiVWgzbVYxVEVmb0JRakpu?=
+ =?utf-8?B?NFFMS0hBdXl5bkNMRHk2dW0rNWVON2EzNGM5RVQxa0llbDdveW1DeG15VVZ2?=
+ =?utf-8?B?TDdLSjZIVkVjeGlyRW9wQWtkYUdRaUlUL1dScUt2c2NLTXlpc0VYUUlVQ3Fs?=
+ =?utf-8?B?bFBOejcxT3JjRVlXajc5NWpFZll4M2F1bDI4Q1hTRzVqeFN6NHlHeUNOc0pI?=
+ =?utf-8?B?eFppNSthdjc5WFpYY2h4ZGlyTHBicG51dDM1N1VON2ZGSzhXWWwrSmcxbkk2?=
+ =?utf-8?B?MEdTdHZWelVPT0pCS2VaMHpiczVUbG1EUWVXQWpXZ1YvM3Y2OUVCdmF4Wm9J?=
+ =?utf-8?B?UTQ0ZGNDUjJWa01XWStZSEhHRnhucktHc2U4Q0h5VlBjMXlsRkdFTDRoM1hx?=
+ =?utf-8?B?U01iSzdWbzZVZkVlUUNkUTBtRXgrUkdYV2FPUXVjWEZpME42NDBaWWRmVjZ4?=
+ =?utf-8?B?OUw3cS9IMlRxMm1EWUJZeWlrZkU3dXNMc1NxNG5WSmVXelZvVU80R3djazVo?=
+ =?utf-8?B?VGpyRUl5YTJRbGxPMWZMTFpUOVlBQ3l1Ui8zakZNT1lmN0t1UnJXcDB0OVEx?=
+ =?utf-8?B?dnFYbXFBZHduL2lrUWZ3NDFVdDZsaFhWbCtCaUU1T1p0OXpXUU1MeVFkYWtI?=
+ =?utf-8?B?V1hLdXRPR3ZnRUZqajR1VjVYSk5ac0piWG9BTDA2MG1XMTk3QjduREQwK3Mz?=
+ =?utf-8?B?dk91V0JzMTNqZ1hyZUxHRm5icVMweE9QaTVwWUdoOXBwZXN0ZTU4eDU2YzZH?=
+ =?utf-8?B?MmdQSExuYk93ZXYzSU01b09kZnk5d3RSUXhrc1Rsd0diRTZMOFpFVnhSU0xr?=
+ =?utf-8?B?clZreHhjZnNUdE1oemx1K2dtbG1JdFIxU3dTN3dkbEdUdlBqK1RPWnZ2R3ow?=
+ =?utf-8?B?bjVtLzg4b2xoR1FRKytzYU5NajlCaEpKSVZKV01pREZUSnZpM2FKNmJndmNO?=
+ =?utf-8?B?NDFVUW4rKzBiT0thRHJ2R3I2RytTTm0wS3RRU1hORU5LdjNRK01yTGZnaTNw?=
+ =?utf-8?B?K0xoUkhVQzkxYlpXcnFiVU54YWppNFN4RGRDVDVkLzRSMHFwcDZxQkNlOGZJ?=
+ =?utf-8?B?QytBU09HR3orUTBmSU9kU1djSWI5QUNxZzhpdjlqM1FHRjdRaXUxVVlhUjU5?=
+ =?utf-8?B?OGVJa21RU0taMEpXQWxtdEhPcm1lNCtyTzVlekVONEx2LzNrQVM0RzljTldS?=
+ =?utf-8?B?eW4yWnpNbUVFQlQwTU1PNnRiY1M5YlBqM0NrNTV0N2JpUW1NSW9mTVluNlpt?=
+ =?utf-8?B?a3c9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19d65ba0-a376-4add-b463-08dc89cfbbd3
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 04:34:08.3403
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dOhL+3eOD5LfHIod3BAFkyRrCbOMAYmUzPPU9yoWAuZzg9KCovTBhLCBHd7z4RhcBkW1u4WiVmHOgxHIZavskQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7186
 
-Hi
+On 6/10/24 9:21 PM, Jeff Xu wrote:
+> Hi
+> 
+> 
+> On Fri, Jun 7, 2024 at 7:10 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>>
+>> Eventually, once the build succeeds on a sufficiently old distro, the
+>> idea is to delete $(KHDR_INCLUDES) from the selftests/mm build, and then
+>> after that, from selftests/lib.mk and all of the other selftest builds.
+>>
+>> For now, this series merely achieves a clean build of selftests/mm on a
+>> not-so-old distro: Ubuntu 23.04:
+>>
+>> 1. Add __NR_mseal.
+>>
+>> 2. Add fs.h, taken as usual from a snapshot of ./usr/include/linux/fs.h
+>> after running "make headers". This is how we have agreed to do this sort
+>> of thing, see [1].
+>>
+> What is the "official" way to build selftests/mm ?
 
-On Fri, Jun 7, 2024 at 7:10=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
-rote:
->
-> Now that the test macros are factored out into their final location, and
-> simplified, it's time to rename TEST_END_CHECK to something that
-> represents its new functionality: REPORT_TEST_PASS.
->
-> Cc: Jeff Xu <jeffxu@chromium.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+ From Documentation/dev-tools/kselftest.rst, it is:
 
-Reviewed-by: Jeff Xu <jeffxu@chromium.org>
-Tested-by: Jeff Xu <jeffxu@chromium.org>
+   $ make headers
+   $ make -C tools/testing/selftests
 
-> ---
->  tools/testing/selftests/mm/mseal_helpers.h |  2 +-
->  tools/testing/selftests/mm/mseal_test.c    | 92 +++++++++++-----------
->  tools/testing/selftests/mm/seal_elf.c      |  2 +-
->  3 files changed, 48 insertions(+), 48 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/mseal_helpers.h b/tools/testing/s=
-elftests/mm/mseal_helpers.h
-> index 8c3bf77dcf19..65ece62fdd0c 100644
-> --- a/tools/testing/selftests/mm/mseal_helpers.h
-> +++ b/tools/testing/selftests/mm/mseal_helpers.h
-> @@ -22,7 +22,7 @@
->                 }                                                       \
->         } while (0)
->
-> -#define TEST_END_CHECK() ksft_test_result_pass("%s\n", __func__)
-> +#define REPORT_TEST_PASS() ksft_test_result_pass("%s\n", __func__)
->
->  #ifndef PKEY_DISABLE_ACCESS
->  #define PKEY_DISABLE_ACCESS    0x1
-> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/self=
-tests/mm/mseal_test.c
-> index a29935d82027..f8e1c59f298e 100644
-> --- a/tools/testing/selftests/mm/mseal_test.c
-> +++ b/tools/testing/selftests/mm/mseal_test.c
-> @@ -240,7 +240,7 @@ static void test_seal_addseal(void)
->         ret =3D sys_mseal(ptr, size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_unmapped_start(void)
-> @@ -268,7 +268,7 @@ static void test_seal_unmapped_start(void)
->         ret =3D sys_mseal(ptr + 2 * page_size, 2 * page_size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_unmapped_middle(void)
-> @@ -300,7 +300,7 @@ static void test_seal_unmapped_middle(void)
->         ret =3D sys_mseal(ptr + 3 * page_size, page_size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_unmapped_end(void)
-> @@ -329,7 +329,7 @@ static void test_seal_unmapped_end(void)
->         ret =3D sys_mseal(ptr, 2 * page_size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_multiple_vmas(void)
-> @@ -360,7 +360,7 @@ static void test_seal_multiple_vmas(void)
->         ret =3D sys_mseal(ptr, size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_split_start(void)
-> @@ -385,7 +385,7 @@ static void test_seal_split_start(void)
->         ret =3D sys_mseal(ptr + page_size, 3 * page_size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_split_end(void)
-> @@ -410,7 +410,7 @@ static void test_seal_split_end(void)
->         ret =3D sys_mseal(ptr, 3 * page_size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_invalid_input(void)
-> @@ -445,7 +445,7 @@ static void test_seal_invalid_input(void)
->         ret =3D sys_mseal(ptr - page_size, 5 * page_size);
->         FAIL_TEST_IF_FALSE(ret < 0);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_zero_length(void)
-> @@ -469,7 +469,7 @@ static void test_seal_zero_length(void)
->         ret =3D sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_zero_address(void)
-> @@ -495,7 +495,7 @@ static void test_seal_zero_address(void)
->         ret =3D sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_twice(void)
-> @@ -515,7 +515,7 @@ static void test_seal_twice(void)
->         ret =3D sys_mseal(ptr, size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect(bool seal)
-> @@ -539,7 +539,7 @@ static void test_seal_mprotect(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_start_mprotect(bool seal)
-> @@ -569,7 +569,7 @@ static void test_seal_start_mprotect(bool seal)
->                         PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_end_mprotect(bool seal)
-> @@ -599,7 +599,7 @@ static void test_seal_end_mprotect(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_unalign_len(bool seal)
-> @@ -628,7 +628,7 @@ static void test_seal_mprotect_unalign_len(bool seal)
->                         PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_unalign_len_variant_2(bool seal)
-> @@ -656,7 +656,7 @@ static void test_seal_mprotect_unalign_len_variant_2(=
-bool seal)
->                         PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_two_vma(bool seal)
-> @@ -691,7 +691,7 @@ static void test_seal_mprotect_two_vma(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_two_vma_with_split(bool seal)
-> @@ -738,7 +738,7 @@ static void test_seal_mprotect_two_vma_with_split(boo=
-l seal)
->                         PROT_READ | PROT_WRITE);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_partial_mprotect(bool seal)
-> @@ -764,7 +764,7 @@ static void test_seal_mprotect_partial_mprotect(bool =
-seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_two_vma_with_gap(bool seal)
-> @@ -807,7 +807,7 @@ static void test_seal_mprotect_two_vma_with_gap(bool =
-seal)
->         ret =3D sys_mprotect(ptr + 3 * page_size, page_size, PROT_READ);
->         FAIL_TEST_IF_FALSE(ret =3D=3D 0);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_split(bool seal)
-> @@ -844,7 +844,7 @@ static void test_seal_mprotect_split(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mprotect_merge(bool seal)
-> @@ -878,7 +878,7 @@ static void test_seal_mprotect_merge(bool seal)
->         ret =3D sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_REA=
-D);
->         FAIL_TEST_IF_FALSE(ret =3D=3D 0);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_munmap(bool seal)
-> @@ -903,7 +903,7 @@ static void test_seal_munmap(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  /*
-> @@ -943,7 +943,7 @@ static void test_seal_munmap_two_vma(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  /*
-> @@ -981,7 +981,7 @@ static void test_seal_munmap_vma_with_gap(bool seal)
->         ret =3D sys_munmap(ptr, size);
->         FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_munmap_start_freed(bool seal)
-> @@ -1021,7 +1021,7 @@ static void test_munmap_start_freed(bool seal)
->                 FAIL_TEST_IF_FALSE(size =3D=3D 0);
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_munmap_end_freed(bool seal)
-> @@ -1051,7 +1051,7 @@ static void test_munmap_end_freed(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_munmap_middle_freed(bool seal)
-> @@ -1095,7 +1095,7 @@ static void test_munmap_middle_freed(bool seal)
->                 FAIL_TEST_IF_FALSE(size =3D=3D 0);
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_shrink(bool seal)
-> @@ -1124,7 +1124,7 @@ static void test_seal_mremap_shrink(bool seal)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_expand(bool seal)
-> @@ -1156,7 +1156,7 @@ static void test_seal_mremap_expand(bool seal)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_move(bool seal)
-> @@ -1189,7 +1189,7 @@ static void test_seal_mremap_move(bool seal)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mmap_overwrite_prot(bool seal)
-> @@ -1217,7 +1217,7 @@ static void test_seal_mmap_overwrite_prot(bool seal=
-)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D ptr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mmap_expand(bool seal)
-> @@ -1248,7 +1248,7 @@ static void test_seal_mmap_expand(bool seal)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D ptr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mmap_shrink(bool seal)
-> @@ -1276,7 +1276,7 @@ static void test_seal_mmap_shrink(bool seal)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D ptr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_shrink_fixed(bool seal)
-> @@ -1307,7 +1307,7 @@ static void test_seal_mremap_shrink_fixed(bool seal=
-)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D newAddr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_expand_fixed(bool seal)
-> @@ -1338,7 +1338,7 @@ static void test_seal_mremap_expand_fixed(bool seal=
-)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D newAddr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_move_fixed(bool seal)
-> @@ -1368,7 +1368,7 @@ static void test_seal_mremap_move_fixed(bool seal)
->         } else
->                 FAIL_TEST_IF_FALSE(ret2 =3D=3D newAddr);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_move_fixed_zero(bool seal)
-> @@ -1400,7 +1400,7 @@ static void test_seal_mremap_move_fixed_zero(bool s=
-eal)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_move_dontunmap(bool seal)
-> @@ -1429,7 +1429,7 @@ static void test_seal_mremap_move_dontunmap(bool se=
-al)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_mremap_move_dontunmap_anyaddr(bool seal)
-> @@ -1463,7 +1463,7 @@ static void test_seal_mremap_move_dontunmap_anyaddr=
-(bool seal)
->
->         }
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->
-> @@ -1556,7 +1556,7 @@ static void test_seal_merge_and_split(void)
->         FAIL_TEST_IF_FALSE(size =3D=3D  22 * page_size);
->         FAIL_TEST_IF_FALSE(prot =3D=3D 0x4);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_discard_ro_anon_on_rw(bool seal)
-> @@ -1585,7 +1585,7 @@ static void test_seal_discard_ro_anon_on_rw(bool se=
-al)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_discard_ro_anon_on_pkey(bool seal)
-> @@ -1632,7 +1632,7 @@ static void test_seal_discard_ro_anon_on_pkey(bool =
-seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_discard_ro_anon_on_filebacked(bool seal)
-> @@ -1669,7 +1669,7 @@ static void test_seal_discard_ro_anon_on_filebacked=
-(bool seal)
->                 FAIL_TEST_IF_FALSE(!ret);
->         close(fd);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_discard_ro_anon_on_shared(bool seal)
-> @@ -1698,7 +1698,7 @@ static void test_seal_discard_ro_anon_on_shared(boo=
-l seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  static void test_seal_discard_ro_anon(bool seal)
-> @@ -1728,7 +1728,7 @@ static void test_seal_discard_ro_anon(bool seal)
->         else
->                 FAIL_TEST_IF_FALSE(!ret);
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  int main(int argc, char **argv)
-> diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selfte=
-sts/mm/seal_elf.c
-> index 0fd129259647..131fc13cd422 100644
-> --- a/tools/testing/selftests/mm/seal_elf.c
-> +++ b/tools/testing/selftests/mm/seal_elf.c
-> @@ -127,7 +127,7 @@ static void test_seal_elf(void)
->         FAIL_TEST_IF_FALSE(ret < 0);
->         ksft_print_msg("somestr is sealed, mprotect is rejected\n");
->
-> -       TEST_END_CHECK();
-> +       REPORT_TEST_PASS();
->  }
->
->  int main(int argc, char **argv)
-> --
-> 2.45.2
->
+> I tried a few ways, but it never worked, i.e. due to head missing.
+
+You are correct. Today's rules require "make headers" first. But
+I'm working on getting rid of that requirement, because it causes
+problems for some people and situations.
+
+(Even worse is the follow-up rule, in today's documentation,
+that tells us to *run* the selftests from within Make! This
+is just madness. Because the tests need to run as root in
+many cases. And Make will try to rebuild if necessary...thus
+filling your tree full of root-owned files...but that's for
+another time.)
+
+> 
+> 1>
+> cd tools/testing/selftests/mm
+> make
+> 
+> migration.c:10:10: fatal error: numa.h: No such file or directory
+>     10 | #include <numa.h>
+>        |          ^~~~~~~~
+> compilation terminated.
+> 
+> 2>
+> make headers
+> make -C tools/testing/selftests
+> 
+> make[1]: Entering directory
+> '/usr/local/google/home/jeffxu/mm/tools/testing/selftests/mm'
+>    CC       migration
+> migration.c:10:10: fatal error: numa.h: No such file or directory
+>     10 | #include <numa.h>
+> 
+
+Well, actually, for these, one should install libnuma-dev and
+numactl (those are Ubuntu package names. Arch Linux would be:
+numactl).
+
+I think. The idea is: use system headers if they are there, and
+local kernel tree header files if the items are so new that they
+haven't made it to $OLDEST_DISTO_REASONABLE.
+
+Something like that.
+
+So if you systematically install various packages on your machine,
+then apply the various patches that I have floating around, then
+you will be able to build selftests/mm without "make headers", at
+this point. Or so I claim.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
 
