@@ -1,145 +1,136 @@
-Return-Path: <linux-kselftest+bounces-11631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7071902E29
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:00:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4E46902E3B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 04:12:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44EAD284E3E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:00:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB0A71C20B3A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 02:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4835661;
-	Tue, 11 Jun 2024 02:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A695FBA34;
+	Tue, 11 Jun 2024 02:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqmQMO3d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZxHSNDg7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86213C00;
-	Tue, 11 Jun 2024 02:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799CAB65E;
+	Tue, 11 Jun 2024 02:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718071236; cv=none; b=iF1wQB1o7ZxGpF2UkihcuYFyBCkr8LD61lUn0S/4MTiexyqbI4NhVhpXTkztn3Y0+Rh/T3dx6TnpVIiJYGP6eQFx/3mLdlZFkgwvuFMuaH1t+yJ8Pk3Ker4KIzD+fhVL7cHzYSo72Bh6GTWSVlaF9CwWm2wADegbPkLKNEUX9lY=
+	t=1718071971; cv=none; b=qVLgtlsBnIFaQ4apdcUFJyxO2/5s/hWGZ3SYbxkIbO45pexS5AVYo6+JgVLYyWZss6pQrFy6wXFrIpaWncIFF8eOPcBM1xbBpuwSecbzNq9PQGHHEdKrxsTGZFiL01X+eiM0iD71KghW3i8mVOhoLdvmDLU3r1vPbI1rGW8CtoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718071236; c=relaxed/simple;
-	bh=HEbzerycj4AKQiB0vafBFrk8TauCU0t7sQlhkaeae6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pz+oz5ND6jjR+BLSsFB/lvBysifb5U9yGpgd9TGewgqdWPTO6vAayVvY9poLtQa5OugYnKaOqErIQpFd02l48YLe8CJd/eNXb0MTR3vgX1+QGsGr3+/f7th7BNGnXpRmz/opExitq4Zgk9Vgz1uvPxL61PDpOJLojTHh5/4LJ/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqmQMO3d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E630C2BBFC;
-	Tue, 11 Jun 2024 02:00:30 +0000 (UTC)
+	s=arc-20240116; t=1718071971; c=relaxed/simple;
+	bh=TyA403amK9lcRVjAZTflcdsXdF/2I86jaIjKOguFtHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=duo9mXXvkwL0GzuMybnjAmDWvETo6e2YnS00yW82a/Q+CNxKFswnIZyk2YKjIkGUz7hCJhoYXPjB+XRuhysRSvyjtuOpeFxMppE/cyepcUm6zut1qKvzsUw/gmCZApoWeuBLC2PtELXXLhmGB0q/x0aC/+urFZLsgwW1RB7A1UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZxHSNDg7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1333C2BBFC;
+	Tue, 11 Jun 2024 02:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718071236;
-	bh=HEbzerycj4AKQiB0vafBFrk8TauCU0t7sQlhkaeae6g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nqmQMO3dwkT/Pv7TxNB3wJBD/1aVV311glXFk8i+Y9+fY5pacVmXBwXTh5+LkscIj
-	 RVJ1pY5Gm/Hh6wq2bcufsj/Df4X0dzM5b/xMPPseUxSD0yaylW0eAiQ4ruEMTKRojh
-	 mp03XLFPFRe4wDiW8xRyVspKzMle75ZqrZkej7z9+FBD85K3sioTt8zX4Y7lMTE7QP
-	 hmX7IKjHjpvS7TjIz6OjGfrbyr5Jw4oqbUjKH44BtnLa81F598aA3K33+r193tgzQK
-	 tM3ei4NV5BF0wG05ioxD/DNBGePBv07+E0cxpRchK2hQgudml+eXP12pRBOVvXfitr
-	 2GVNBj6h62EYA==
+	s=k20201202; t=1718071971;
+	bh=TyA403amK9lcRVjAZTflcdsXdF/2I86jaIjKOguFtHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZxHSNDg7+iNDJ7huYTPg2B22EWZs9HJTAN9UiaJ2NxFSfvfujUoVTj8LZd9W5KJQf
+	 pjN0QcjcKa5q5FfuOg6kBokLhpRek40zE08qln4pRtoZzh+eGicEegm13arExhFnc3
+	 ow8ZnefshIPYFE+N2joWZGouPU6XF+EmiCnttzLCWuUVphlfL7Vazo5k4IB/pFQKTw
+	 mJ/9C7MSPqKmeW0mYYs/IEDsrjPOJSNJVm/8QQXxMq1MxfPARj7sNwFBdb0rAc5s/V
+	 iFbTJT/+gE8UHnhNZ+F/+2HdDWrqcebrRSxWgAxgL/nCpG+f3/kNClfrVskdeBBRBk
+	 Z6mwDA6qtHOoQ==
+Date: Tue, 11 Jun 2024 10:12:40 +0800
 From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Use start_server_str in test_tcp_check_syncookie_user
-Date: Tue, 11 Jun 2024 09:59:38 +0800
-Message-ID: <39358e8cb8b91db5587d6e5ce735d12279981732.1718070940.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1718070939.git.tanggeliang@kylinos.cn>
-References: <cover.1718070939.git.tanggeliang@kylinos.cn>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Enable INET_XFRM_TUNNEL in config
+Message-ID: <ZmeymDeduB5UogEx@T480>
+References: <acb442e38544bc5c60dcaa61d56ca1e6bbbc82fe.1715823610.git.tanggeliang@kylinos.cn>
+ <978a90ad-2e4c-ac06-30bf-6449444d47f9@iogearbox.net>
+ <8c406b8d6cf2347589c1e40f0b87095550306c4a.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c406b8d6cf2347589c1e40f0b87095550306c4a.camel@linux.ibm.com>
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Wed, May 29, 2024 at 02:01:06AM +0200, Ilya Leoshkevich wrote:
+> On Fri, 2024-05-24 at 18:27 +0200, Daniel Borkmann wrote:
+> > On 5/16/24 3:41 AM, Geliang Tang wrote:
+> > > From: Geliang Tang <tanggeliang@kylinos.cn>
+> > > 
+> > > The kconfigs CONFIG_INET_XFRM_TUNNEL and CONFIG_INET6_XFRM_TUNNEL
+> > > are
+> > > needed by test_tunnel tests. This patch enables them together with
+> > > the
+> > > dependent kconfigs CONFIG_INET_IPCOMP and CONFIG_INET6_IPCOMP.
+> > > 
+> > > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> > > ---
+> > >   tools/testing/selftests/bpf/config | 4 ++++
+> > >   1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/bpf/config
+> > > b/tools/testing/selftests/bpf/config
+> > > index eeabd798bc3a..8aa56e6bdac1 100644
+> > > --- a/tools/testing/selftests/bpf/config
+> > > +++ b/tools/testing/selftests/bpf/config
+> > > @@ -95,3 +95,7 @@ CONFIG_XDP_SOCKETS=y
+> > >   CONFIG_XFRM_INTERFACE=y
+> > >   CONFIG_TCP_CONG_DCTCP=y
+> > >   CONFIG_TCP_CONG_BBR=y
+> > > +CONFIG_INET_IPCOMP=y
+> > > +CONFIG_INET_XFRM_TUNNEL=y
+> > > +CONFIG_INET6_IPCOMP=y
+> > > +CONFIG_INET6_XFRM_TUNNEL=y
+> > > 
+> > 
+> > [ +Ilya ]
+> > 
+> > Looks like this triggers a boot hang on s390x :
+> > 
+> > https://github.com/kernel-patches/bpf/actions/runs/9215175853/job/25353574288
+> 
+> Hi,
+> 
+> I could not reproduce this neither with vmtest nor with my own build,
+> and it doesn't look related.
+> 
+> I'm not exactly sure what could cause d_alloc_parallel() to hang, but
+> apparently the CI is using a different vmtest script, which uses 9p to
+> mount root - perhaps there is a deadlock in 9p?
+> 
+> Can someone retrigger the build to see if the issue persists?
 
-Since start_server_str() is added now, it can be used in script
-test_tcp_check_syncookie_user.c instead of start_server_addr() to
-simplify the code.
+Hi Daniel, Ilya,
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- .../bpf/test_tcp_check_syncookie_user.c       | 29 ++-----------------
- 1 file changed, 3 insertions(+), 26 deletions(-)
+I'll resend this patch together with another fix for test_tunnel soon. At
+that time, CI can be triggered again.
 
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index aebc58c24dc5..3844f9b8232a 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -156,10 +156,6 @@ static int v6only_false(int fd, void *opts)
- int main(int argc, char **argv)
- {
- 	struct network_helper_opts opts = { 0 };
--	struct sockaddr_in addr4;
--	struct sockaddr_in6 addr6;
--	struct sockaddr_in addr4dual;
--	struct sockaddr_in6 addr6dual;
- 	int server = -1;
- 	int server_v6 = -1;
- 	int server_dual = -1;
-@@ -181,36 +177,17 @@ int main(int argc, char **argv)
- 		goto err;
- 	}
- 
--	memset(&addr4, 0, sizeof(addr4));
--	addr4.sin_family = AF_INET;
--	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
--	addr4.sin_port = 0;
--	memcpy(&addr4dual, &addr4, sizeof(addr4dual));
--
--	memset(&addr6, 0, sizeof(addr6));
--	addr6.sin6_family = AF_INET6;
--	addr6.sin6_addr = in6addr_loopback;
--	addr6.sin6_port = 0;
--
--	memset(&addr6dual, 0, sizeof(addr6dual));
--	addr6dual.sin6_family = AF_INET6;
--	addr6dual.sin6_addr = in6addr_any;
--	addr6dual.sin6_port = 0;
--
--	server = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr4,
--				   sizeof(addr4), NULL);
-+	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
- 	if (server == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_true;
--	server_v6 = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6,
--				      sizeof(addr6), &opts);
-+	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
- 	if (server_v6 == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_false;
--	server_dual = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6dual,
--					sizeof(addr6dual), &opts);
-+	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
- 	if (server_dual == -1)
- 		goto err;
- 
--- 
-2.43.0
+I changed this patch status as "Superseded" on patchwork.
 
+Thanks,
+-Geliang
+
+> 
+> Best regards,
+> Ilya
 
