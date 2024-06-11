@@ -1,376 +1,167 @@
-Return-Path: <linux-kselftest+bounces-11694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86909042D6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 19:55:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F06590432F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 20:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1962728C17F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:55:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1E21B232CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 18:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DB554F8C;
-	Tue, 11 Jun 2024 17:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F427581B;
+	Tue, 11 Jun 2024 18:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="N4Adh+lG";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="laDchB16"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ORBH1T28"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852D13D388;
-	Tue, 11 Jun 2024 17:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718128548; cv=fail; b=QHLL/FSGGnapMOKy5M+g110wKtuzTbC3j/u8QusQQ8iPB+JdoMoFucv9d86NY3dUiVmrWwHXyLLaSxZkSMW/1MGGyeT8zn4PRbvaIexUNRUqfwGddQGzgsPmdPppq67Ruu6Ml5pFkn9eVfbbGoRWrTYCHMOx1cRzcJck+3KjYkE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718128548; c=relaxed/simple;
-	bh=7V/GKwMWB+r+ZX2KFQgKwuEFG4SbBtltLKUbv/mW1NE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EnPH9moeRm5Wi1m6HYkCqJ+/l2nBCfmA3hTK8JWVqsAjre8usKTywA9hG+DT9wnQs691SQ9SHRwinVAWaOhMUEF8XsPOF7jMDRk0NBzel2nL2+RCgOTh+zgKxgpVGrq7pUu0UW1G0ugjoJNBDUcEVLwiMOnV34UsMc/t1WUIYik=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=N4Adh+lG; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=laDchB16; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45BFhbub012582;
-	Tue, 11 Jun 2024 17:55:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	message-id:date:subject:to:cc:references:from:in-reply-to
-	:content-type:content-transfer-encoding:mime-version; s=
-	corp-2023-11-20; bh=Uuvz455fN86XLlstPAxa755wgMIsSq254o5XuQleJfI=; b=
-	N4Adh+lGJBP6FhoOLppNtnFEiZSdS6YGhV1OidMDw/ywoNXB06gr/+wdZIP+NDi6
-	vo8e0jaVuW7pQ6LcAZJVnMqWg/W5PlYtg+P13bBbVpg9uL+sEz4G0NruE85dejQl
-	Lhm8AAkRpjukC/lHfOyrBcCpVR7mfHtuGuyu3kBtYeSHdreqtwVqcXt7n79DK1W4
-	HxmlBP4CdcZO+yJes7gVQBPY+UqEU1mlf+EswJH8k7hGcTV+XpleKwRBhCTFP11j
-	TjSxHRDlKs1tsuyrSFGjt/zQ7QucfePqoYi9ij7GzXSAo+1adZlAA3Tj+txmEVn5
-	T2oVggWx7lZnh66tLcXPXA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ymhaj5ewt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 11 Jun 2024 17:55:16 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45BGqlFA014365;
-	Tue, 11 Jun 2024 17:55:15 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ynceuabjg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 11 Jun 2024 17:55:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nfs2w+FDd+OVEfQBCxsJqDbMG4oGPG0ycAbHRboexOlV5ViK1j9NCo3UfC0q4PjF8eOWqgO5l4N4Ub/5WrehQAMw1VDrz54rjCDGwigOkkXAwkmvgy4JJYkKNaXiWTCmMWtv6F7lnMokAb/c8rwnVjDM0GmBrZETdI7MzYOgDOvsolMDBPDLEOQAxYBe85IfdRL/bJZBE9bc+Qxt0kyqgYe6hYqM8138BcjNUE/gSYdqm1h1BMAemxV9B175HqL4QlqiU9dpJMJWhf+qq4dK6V/FkB166E4fk/8J9wa7cw52RcWj8Y8SFn2O1uk8xaZytii6C9iYc1nY1k6asClaHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uuvz455fN86XLlstPAxa755wgMIsSq254o5XuQleJfI=;
- b=dJ7Xuxq59OqvHGfPl58flPMQlwpxgLmStjM96WUUcP3aSjVCmYOCOHNbABdG4dyuq2N3Ma7TzHw8RLzBCWmWlcXiHs5noLwGB0O2Il8cmraWMUMQBLp+Q7ezrDNb67SYjradilv/pU5ja5oYAKnZD1st/nqnK2mrbFkU/7HmBTxuX7hp0yhHfPu/nCpYLX5pk1KNdBsSo8Bm7yeJZ4npkWUZZoyE1zgBHyyNJTKA95Qtb+Z2JhsQZidNesBoenuY4DoZ4QJliXoJegFukLtNCwpmA+zespQtffB9XcZ8qHLv16s3W1rAybSSzoURYS/68lhxG9kh/DVH81aK8gVhXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5D75915A
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 18:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718129377; cv=none; b=pf/3VwL+AM3T291sYYA3bRcX95YyFh1WxfDxhYoAK+zZDT0KXEBWL8BS30RV7bZbeluv9JGhndE8GsLCHwb1ouED9tWa8HiNgUVWqVb39jejcKkaH15S2lseHdhfp4lmWMYMuxOu0u1pUG0IOXYuzBgKBk283JGla4NYSuPcsmo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718129377; c=relaxed/simple;
+	bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t7Gng67tq2jp7nPXOSP+xyi7e17kwXqMMlvjvTLRhDmSmVliSYHS0W81iO9DIZsrNaIqLcmfhTTME80B+wl1KFMihyFQXU++quK7dhn4rlsydNBZ7drb3GbLSHV2UXSj9dnAZm72VYkwoD0oBH649Q7mF33gvejVGbNtee6A2fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ORBH1T28; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a6265d3ba8fso604874466b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 11:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uuvz455fN86XLlstPAxa755wgMIsSq254o5XuQleJfI=;
- b=laDchB161AKT1BLhsN3JiYlMJLTC5zIvthk0ZukSoZlcX0R/wTommkcN4iSTXs0qMat6MHzIZIZZULl/hpaz6jAgwfxml7ZIDCZPlToh5LBEOUkklT0Dq5CROGXeTqT6QJQJ9usU09C8gV3DDvD1dSFNfqZR2rsJiGqMS/zubkc=
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
- by BLAPR10MB5204.namprd10.prod.outlook.com (2603:10b6:208:328::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
- 2024 17:55:13 +0000
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::3db0:ec21:1957:f1b3]) by SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::3db0:ec21:1957:f1b3%6]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
- 17:55:13 +0000
-Message-ID: <f446406d-7739-4367-ac68-0a3f30c04612@oracle.com>
-Date: Tue, 11 Jun 2024 10:55:08 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/3] Userspace controls soft-offline HugeTLB pages
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, naoya.horiguchi@nec.com,
-        akpm@linux-foundation.org, shuah@kernel.org, corbet@lwn.net,
-        osalvador@suse.de, rientjes@google.com, duenwen@google.com,
-        fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, muchun.song@linux.dev,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20240531213439.2958891-1-jiaqiyan@google.com>
- <21841726-6427-5a92-a3d1-8aac2687c01a@huawei.com>
- <CACw3F52Ws2R-7kBbo29==tU=FOV=8aiWFZH2aL2DS_5nuTGO=w@mail.gmail.com>
- <2738aa0e-99d8-44d7-ac81-e38fd64591b7@oracle.com>
- <CACw3F50rh08o0hAG1rSfUnuJ3wezjCa8_ZE4rUGRUntUfx+-OQ@mail.gmail.com>
-Content-Language: en-US
-From: Jane Chu <jane.chu@oracle.com>
-In-Reply-To: <CACw3F50rh08o0hAG1rSfUnuJ3wezjCa8_ZE4rUGRUntUfx+-OQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0071.namprd03.prod.outlook.com
- (2603:10b6:a03:331::16) To SJ0PR10MB4429.namprd10.prod.outlook.com
- (2603:10b6:a03:2d1::14)
+        d=google.com; s=20230601; t=1718129370; x=1718734170; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
+        b=ORBH1T28Kv+Gm9vfDRFh0o9KoHNuPBRhIxafHB3qgyANZSEAx+9LLa6Wv5Iv2FulVM
+         1C4r4QsMP/tolax4DaWy4QrJlMTPTRDUpbMg8JdQqiADkwRyXa1Iy11Ylt5B7YbjRIRq
+         OctBI7JiWrNqmKnqBVdhpMRueuExFqKOmwSK+7OfBSrsjK4SgORfTkvjgaMoS3DMo0Q7
+         FkTsN8QksrcUNYzFDEG1UmAfTCd8yxst6SYakYd6YSlIZ9FEq+7SBeD6XMUjZNk9BCcy
+         Wrv4JJvkiSqmCMz3b9EpLjg4cplFB6acY4gYixvwk4VoXVVCe+PzWeGjji2mognTN5AY
+         C0/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718129370; x=1718734170;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
+        b=MUVGRVecOx6d0R3zYo8SoEM4Bob6be2VyjliXCOE1odQ5Mtrh7ZfTgc4w5HgGZJeFp
+         zSvb4cQF3OuMvuDPT+ioCPc1Xe0kML/nl+CV9VgQ4TZyjUqj9/fKaxsXeNh0m20W8Yoq
+         2dB9+t7GB6nYSBvZJh3tQ7b75ZRk6iTaBY+cfg9P0JRSZX/ak9lYmx8DLrZ7yTc85Cy3
+         qkjZq6CzIkDDwAJigrYyu0Gj9V+xkfoWcec9eu+MqXjuJ63EyvbOHHk5ksJ3lwfpIPPI
+         NniBh30OG83Q+TPwRd3+EMqrp0UkwB4zS64hKAiP2M9p7fDqr0r+485QYe22ig34F0Kh
+         pFTw==
+X-Forwarded-Encrypted: i=1; AJvYcCW1vWIMoPAiKrR1MaJeBeHuzQY5rAiYsJdRoJBhN+C1wocK3jeybs6VZ/6kvxbduSWKOZ9wnTg7Q6hffvS8H+s6mWEk246eEOdVcMiuSO6h
+X-Gm-Message-State: AOJu0YxkmBGW+kb9z1EcJK9YINlxgh81ymQX0mQDiT9jp35VGVSchNGW
+	MBNgPvEv+yBhyYqZ5/ufVY514BQAQnHkzsLFuxn7+hU9WfXqCLtVbJXXnCcoS7kLriDifJXGZ2E
+	nb8Vw+sllQxOhd1k/nJxgXqyxN6QwTFTWcNT9
+X-Google-Smtp-Source: AGHT+IHSnbMlQQE9x/zPWpkI90JIlOTBHgyEzLn5RoXQZyiGaSSB2YwhfXwjdqq72pgI+LQF0hGDSafJjuWqavJQlB4=
+X-Received: by 2002:a17:906:4742:b0:a6f:393a:9dea with SMTP id
+ a640c23a62f3a-a6f393aa161mr132795366b.77.1718129370030; Tue, 11 Jun 2024
+ 11:09:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4429:EE_|BLAPR10MB5204:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d5b658a-7bc3-47cc-6503-08dc8a3fa48d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230032|1800799016|366008|376006|7416006;
-X-Microsoft-Antispam-Message-Info: 
-	=?utf-8?B?UmF0ZllNOXdEaGdNdlFHeEM0ZE1rUEU1QmVxMW9rMU1BZWdnajArbFlKNDdi?=
- =?utf-8?B?eGVodHNRSFM0ZlJmbndtTDk0bXduMVZ1NHhtMXFCZVVYNGNzNWxTVi9VT042?=
- =?utf-8?B?TUwzTGZ0V0pEb2lEcXRnVEZoUFc5aEhqTi9DWHltSnVhczFMNFZZZXQ2c0N4?=
- =?utf-8?B?aDkvVk00UUdEU0w1THU4andmN2Y4S0puOVVoQ0tHTGttMUhubk5pdXVxSENR?=
- =?utf-8?B?cEpBVit6NW1CdDZvVnJ2NVE2b05ZWUp1ZEVjUks2UjZpb202Sy9FMUlFalc5?=
- =?utf-8?B?N1l5N3c1VHZ4eUpscm9seEV2UDZ2K3ZIdWZLL3hOSWVjWVFNQVpJZ2FvMGNW?=
- =?utf-8?B?Rk1nRnNHS2RVU3BTUmQzUFZUVGU3dGZLQmlmR0VQcDdLMStnREtMNmxtazlS?=
- =?utf-8?B?ZHczNkJjbERsYy90endJMmwva2oyMEhUTndUS0ZEdXNJaUZHNkZJQnF5dGM5?=
- =?utf-8?B?cEQ5Q0w1L3V6RktKZXpTcjN5bHYyL3R6UDkvNWtHNDZRT0ZqVXUydk96KzRq?=
- =?utf-8?B?aVNEU3pTdXpDSG13Q0JRK01odGRvVXdBK3d0dFFNdHRpc1NDS1FwZXMvOHVt?=
- =?utf-8?B?aG9FcHV2Y04zOFlPVnd0ZkttYmhVMVdWSTNmQ1h0N1BINmRlQ0F0UWk4dFJP?=
- =?utf-8?B?YTBKdk1ydlNVdFJOQWYzdDJWRStPZXpHelBVbjhYZzBzM1p3b00ybDdZbGI3?=
- =?utf-8?B?akROUzNKVFdnbE9URFhINXVzbzh0UHg5TW9zSStPMUhBQllQcnhRUUFoczNh?=
- =?utf-8?B?bkJIRFBXWkxhUG5kUDVpZzNjUEpLcmUvKzFldFc2UkxmdzNOOCtzV2s5aE40?=
- =?utf-8?B?b3R4Ym1LVkRzbFBtWEJ3ZTJnZ0JiWVhSOE0vQ3pQV3NVODI3UmQ1cThKcmxM?=
- =?utf-8?B?ekdrVlQ0clVEYlBMZ2FiNjA3QXAxRWwzeGtqYWxzUVlkb294RUFWTjFKNTk3?=
- =?utf-8?B?UURqSzducGxKYTRkTElqeSs3bVk3eHJvZ0hjdUdaMEhrSmhDdlFmcUxNZGxH?=
- =?utf-8?B?M2l1V0xPYi96WC9JUWMrdk15MGljMXlXcitnUlpnMnRhd0R3VEJkRDh3Vk82?=
- =?utf-8?B?VUl6UVgwTmxKRzNSS2d1bUhvVlRuOHNmMUc4WjQrcmoydElubnVjRFZhUlVp?=
- =?utf-8?B?ckZBM09acTh5ejR6ZURRMSsrVjB1VEd3MDl5UnhqVHdGZkF6ekhOalFsMjlq?=
- =?utf-8?B?WmQ4MlUyMm9HK0x5dndLWmNFS2VCL25xYUxqQmlCNjlsbDA1TUFUVUczUEVU?=
- =?utf-8?B?TWg2Q1BBczk3eEl3NG1KNHlRQVFBcHlyYnJ6UzRNRDQvZUxiWXBkZFhLQnBN?=
- =?utf-8?B?WTRmbzdJRE90NGJZcnJpWlV1dzF1cEF4ek1hOENTTW5OdS9CN1FadVZIUTVT?=
- =?utf-8?B?NURZODE2SVhTb05CRE04Y3dvQ3FnSVVJaW5QUjhFUWkrckk4TEZwWWd3Ujd5?=
- =?utf-8?B?N3JxRFBMWFN4UXBjOW96czZyUXpxSGZNaGx6NnZUdUx0SmZycFpzVEViVXpM?=
- =?utf-8?B?S0lpeG54Yjk3UWtWaXkzbUlyS0VlTDR0UVBLRzI0S2Y5Zll1ZEdZZllxb2Ra?=
- =?utf-8?B?UHZ2U1VtbDRQMHBUejJwb1NGVUE2VlZib2dkN05GTFdCUXdOWXdDRUVwcC9P?=
- =?utf-8?B?Sk1rSnkrQ2xwN0RWcWVOVzg2d3pmUi9sWUhHanV4K1JsUk9UVmdhTndlQWxN?=
- =?utf-8?B?T3hpVTFLUUFuWExpNlRjdlZycjFkTmJlWGpGRWRuaVZ2dzd1eGpFVTJGRnMz?=
- =?utf-8?Q?DH5Um4KoVNCO4BVusnhpz0w3g5mGQCr4aU22dBr?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230032)(1800799016)(366008)(376006)(7416006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?NFhCSk15ZFpOSThlOEpGQ2V3ZUw4UVVxY1RadXFFVDY3SWtEZys4anJYd2J3?=
- =?utf-8?B?MmxRaFk0K09weHNCbTBzQ3RwTFA0WXFUNndwcGZ2bngwWTRETHdVdVRlbllR?=
- =?utf-8?B?SlNCczlWTnd0ZDhNVmdxTlI2dE5oQ3Y5WjR6THdiam40TFU0cHR0NW4wUi9R?=
- =?utf-8?B?RmVGZjdwbC84RVFYbCtmNnJOOThlS3pDS21LQmRFWGN6cDF5NkRhMmpoeTJn?=
- =?utf-8?B?bk9pdVF3Z1N1a2tnNmZ6Y2ZaWTVlRlFqeWdEOEdSOVdiYWc4ZTg0Zm5lbDFT?=
- =?utf-8?B?MXgwTmdXOVk2SDY3RHhZZWhwZmdia01yTzFYN1MwTDVoOWEzUER5ZjRlbmxS?=
- =?utf-8?B?TlBMNUp2WDgxM2NaUktjaXZtazE4Sk1MS2pWb2RaYXNLS09mWUF6N3lRSi9U?=
- =?utf-8?B?b3VuaGNuOSsvR1Yxa1htVC91SzVwZVNNaHI5Vk1SMHJJQ2M2bkJ5RXFQSi9r?=
- =?utf-8?B?VzRkd3lQWWZTZW9aQ21xYUdzZXdoQnJaUlpNaUF1dnlKd0NYTVJmUHdjMUli?=
- =?utf-8?B?SEdXdlk3UEhlR1hYWCt6ai9OS3lvckRXdVIxamo1UlozbGkxeVl1RnUyN2Jt?=
- =?utf-8?B?REliZ2pQRk0yZDFTbVVkUzNCRVJNd25aRWtCaDE3UnFFWlBmZnhTK01hdHFi?=
- =?utf-8?B?RUtTV2R2ODZPUEZxVVcrM0hOZlJnbXJlTkErWkJyd2tTNkp3ZU5XWkxzVUta?=
- =?utf-8?B?V05MTmptRGo1ZUFPWCtyZVBwL0Z1VFJzK1I2WlBHQWRYZ0xpMGFqc2hyck5S?=
- =?utf-8?B?R1NKZFNtV0QrRWNCMmFPVHh3TXIrUHdXSGJUVXZpMEJGYlFnRDg4SDNYUGRx?=
- =?utf-8?B?VU13TTJFZVBicmhBWXdGZnBvdTdRbFkvMm44UlNrSE5UT0k5Ky82OVY5N29I?=
- =?utf-8?B?c0tNSjFjMndLc2ZPZEVIL0REWDRacDJTdVJ5c1ZVbENwMFN1WXRFc2RzcTlK?=
- =?utf-8?B?Q3dMc3k5NndvRnhxOEZ0RVQyOVEwY0lucXVMZjZodk5SQUFJYkwrU0JHbVdG?=
- =?utf-8?B?TEpWbHdoOGQ4NjJoUmdQa3FYOVNhWjFvYmJYOVRvVnl0VWhLNG8vTlJvMGhz?=
- =?utf-8?B?WWpaYUhXa1FLOU52Z0ovN1JnczZWWTVCWHM3dVV3TDVrWHEyL0RWNjhtOUhq?=
- =?utf-8?B?WkE1ZlRzemFQSTNyZnlxVURvb1FwZUtPR2dDQ2tFMEJScytaeU9PZG15cXRE?=
- =?utf-8?B?TFdpRVcwTDU0Zld1NEE1NWFNTGovb3pQSlpNZlUwdmp5cHlCS05WZXVwN25x?=
- =?utf-8?B?ZDcrMldrbnU2TDRJaFFmSC9XVU1hRUtPQUdBYXF5ZjVDQ3RFbEYzM1pwUEFJ?=
- =?utf-8?B?OFNETStvcnRRMmlteTRkTXp6Y1pMZ0YwY3Z1cy85RmNuMHFYSHJ2SmdMZVZw?=
- =?utf-8?B?ZjRSUllPL3F4N0VCeUwya3d2M0VIeWRYZDJxNTVrSzdxR2J5SGlXVHFPVkI0?=
- =?utf-8?B?SE5SUGNoNGtRVFI1eDNLWmZmWXMzeENJS29jYjN6SENtVFYyb2JzejFURUtv?=
- =?utf-8?B?WTZJMHZCemEvTlZacTNPa0dLVjBuUVVLS3NHWE5WaDAra2xNeWM0NzhMSWpI?=
- =?utf-8?B?MG1OL3h1VHMxUElSMUszUnBpSnZsemtLRTAxaVlxWEpheUxGRWxUdnFXVzZX?=
- =?utf-8?B?aTlpbVVtUmNDSjZJb1gzSlJOcnBXdkZRRDNqVFlGVjR1anNCQlZFSHArcEF3?=
- =?utf-8?B?R25jMlU0bzh1UE9rZFNqaEYrUGhBT3VCOTU2WFo4dzUxclFveC94ai9GOUl0?=
- =?utf-8?B?VHpCU1IyRXNBOGxLVExldXJ5WTRnU1p5RnRFbUdPOUVtRngxcjQ4dkltaGU2?=
- =?utf-8?B?bVNSNHdHckNZVEdmN0cvK2NBMmRyM2pKLzMvSk9Bem4rVGwzaU1JOVZJdW1v?=
- =?utf-8?B?STlsazhkR2RXVXdvaHVnNmc3VjRvUnBmR3NNLzJhODYzNHd5dzg0czlITm5H?=
- =?utf-8?B?N1ZYTmVvMVhUZjlPZ0Z6a1JZMFdzWXJXMGNPdFJPNCthU21hYXE5Qk5vOEVH?=
- =?utf-8?B?NTB5Mk5BVGpYZWhmcEJlajVmb2dzSlowTXRHMkl2QUJ1Mk5GcDVHVmVmNlEz?=
- =?utf-8?B?ZjNQeFVzOTlqVW5Gb080enRmMG5xa0kxa0xaMkxac0pVamJ1VnB5dGxVZlVo?=
- =?utf-8?Q?P1jHtRE7mdSIr9LG+S/IXmVLq?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	IXHafbelvDAWiy+N78AhnS3Gmi2QinCH28DNUt+Jh1/qCEt7p5P2AtBH63m61tarYLh+tlKRpSU+w3JkiVgOgdzqHcyp+QmTCv6wsnOWQgni0Ehgmu+QfpbuV39BRKhuwPku1hjW6iA4VELwk5yb7eM7bt/ub2UZL5x2hv/THamFh8iSGjj2bTfPJooYtVATLglNCLgbpEfjQOY1dOLLMhuLRo+71MD/QkV+voIN+wgJlaRbWLYx0SVkdke/DHv3a7oacA4nZqIkaWEqNa6jy23XNKA5m2w5ABIxGTgopcBqVhQ3kkRpob8HGDZcrTydXTjHSGY9FCaFqmPtbdbD/95FzTZHnBBmYVwBJebFczgVdPW40X/fdLqWGfN01MhYag0TdkajnWTqGwAzquxEn/wjXdhA1Qk0ILmfr+rc7qy+XMHt4RiUtClwqjeAMLWqD6UKL2Re07F5o4V9mhpiAoU0MbS3IOG3ZMG7Ikx4NhJow1FOepsX0NTdIlx3jKWylKeCj2+bnMgPlkWFTeIlr4eOfNaBTF9K/8XuFovDm2KfHU1Ak4v9nr3Kjbj9McbOQWnuzd1uW+FzC9UXNQTv71hWCd8PlGU463U3a78v/Rc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d5b658a-7bc3-47cc-6503-08dc8a3fa48d
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 17:55:12.9226
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cxNkzHqawOTEZDdjuNM96aa7aTMubsvOpYnjd5ARZ2DWSJpzFAl2Rk1krIvrix8Pl5WGkGlpo4impOCK4LHt2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5204
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-11_09,2024-06-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406110123
-X-Proofpoint-GUID: DUPCtPQdKl7qDUGV44PjG7f_HxoiDU3e
-X-Proofpoint-ORIG-GUID: DUPCtPQdKl7qDUGV44PjG7f_HxoiDU3e
+References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com> <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca> <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com> <20240610121625.GI791043@ziepe.ca>
+ <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org> <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+ <20240610221500.GN791043@ziepe.ca>
+In-Reply-To: <20240610221500.GN791043@ziepe.ca>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 11 Jun 2024 11:09:15 -0700
+Message-ID: <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
+	David Wei <dw@davidwei.uk>, Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/10/2024 3:55 PM, Jiaqi Yan wrote:
-
-> Thanks for your feedback, Jane!
+On Mon, Jun 10, 2024 at 3:15=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrot=
+e:
 >
-> On Mon, Jun 10, 2024 at 12:41 PM Jane Chu <jane.chu@oracle.com> wrote:
->> On 6/7/2024 3:22 PM, Jiaqi Yan wrote:
->>
->>> On Tue, Jun 4, 2024 at 12:19 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>>> On 2024/6/1 5:34, Jiaqi Yan wrote:
->>>>> Correctable memory errors are very common on servers with large
->>>>> amount of memory, and are corrected by ECC, but with two
->>>>> pain points to users:
->>>>> 1. Correction usually happens on the fly and adds latency overhead
->>>>> 2. Not-fully-proved theory states excessive correctable memory
->>>>>      errors can develop into uncorrectable memory error.
->>>> Thanks for your patch.
->>> Thanks Miaohe, sorry I missed your message (Gmail mistakenly put it in
->>> my spam folder).
->>>
->>>>> Soft offline is kernel's additional solution for memory pages
->>>>> having (excessive) corrected memory errors. Impacted page is migrated
->>>>> to healthy page if it is in use, then the original page is discarded
->>>>> for any future use.
->>>>>
->>>>> The actual policy on whether (and when) to soft offline should be
->>>>> maintained by userspace, especially in case of HugeTLB hugepages.
->>>>> Soft-offline dissolves a hugepage, either in-use or free, into
->>>>> chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
->>>>> If userspace has not acknowledged such behavior, it may be surprised
->>>>> when later mmap hugepages MAP_FAILED due to lack of hugepages.
->>>> For in use hugetlb folio case, migrate_pages() is called. The hugetlb pool
->>>> capacity won't be modified in that case. So I assume you're referring to the
->>> I don't think so.
->>>
->>> For in-use hugetlb folio case, after migrate_pages, kernel will
->>> dissolve_free_hugetlb_folio the src hugetlb folio. At this point
->>> refcount of src hugetlb folio should be zero already, and
->>> remove_hugetlb_folio will reduce the hugetlb pool capacity (both
->>> nr_hugepages and free_hugepages) accordingly.
->>>
->>> For the free hugetlb folio case, dissolving also happens. But CE on
->>> free pages should be very rare (since no one is accessing except
->>> patrol scrubber).
->>>
->>> One of my test cases in patch 2/3 validates my point: the test case
->>> MADV_SOFT_OFFLINE a mapped page and at the point soft offline
->>> succeeds, both nr_hugepages and nr_freepages are reduced by 1.
->>>
->>>> free hugetlb folio case? The Hugetlb pool capacity is reduced in that case.
->>>> But if we don't do that, we might encounter uncorrectable memory error later
->>> If your concern is more correctable error will develop into more
->>> severe uncorrectable, your concern is absolutely valid. There is a
->>> tradeoff between reliability vs performance (availability of hugetlb
->>> pages), but IMO should be decided by userspace.
->>>
->>>> which will be more severe? Will it be better to add a way to compensate the
->>>> capacity?
->>> Corner cases: What if finding physically contiguous memory takes too
->>> long? What if we can't find any physically contiguous memory to
->>> compensate? (then hugetlb pool will still need to be reduced).
->>>
->>> If we treat "compensate" as an improvement to the overall soft offline
->>> process, it is something we can do in future and it is something
->>> orthogonal to this control API, right? I think if userspace explicitly
->>> tells kernel to soft offline, then they are also well-prepared for the
->>> corner cases above.
->>>
->>>>> In addition, discarding the entire 1G memory page only because of
->>>>> corrected memory errors sounds very costly and kernel better not
->>>>> doing under the hood. But today there are at least 2 such cases:
->>>>> 1. GHES driver sees both GHES_SEV_CORRECTED and
->>>>>      CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
->>>>> 2. RAS Correctable Errors Collector counts correctable errors per
->>>>>      PFN and when the counter for a PFN reaches threshold
->>>>> In both cases, userspace has no control of the soft offline performed
->>>>> by kernel's memory failure recovery.
->>>> Userspace can figure out the hugetlb folio pfn range by using `page-types -b huge
->>>> -rlN` and then decide whether to soft offline the page according to it. But for
->>>> GHES driver, I think it has to be done in the kernel. So add a control in /sys/
->>>> seems like a good idea.
->>> Thanks.
->>>
->>>>> This patch series give userspace the control of soft-offlining
->>>>> HugeTLB pages: kernel only soft offlines hugepage if userspace has
->>>>> opt-ed in for that specific hugepage size, and exposed to userspace
->>>>> by a new sysfs entry called softoffline_corrected_errors under
->>>>> /sys/kernel/mm/hugepages/hugepages-${size}kB directory:
->>>>> * When softoffline_corrected_errors=0, skip soft offlining for all
->>>>>     hugepages of size ${size}kB.
->>>>> * When softoffline_corrected_errors=1, soft offline as before this
->>>> Will it be better to be called as "soft_offline_corrected_errors" or simplify "soft_offline_enabled"?
->>> "soft_offline_enabled" is less optimal as it can't be extended to
->>> support something like "soft offline this PFN if something repeatedly
->>> requested soft offline this exact PFN x times". (although I don't
->>> think we need it).
->> The "x time" thing is a threshold thing, and if your typical application
->> needs to have a say about performance(and maintaining physically
->> contiguous memory) over RAS, shouldn't that be baked into the driver
->> rather than hugetlbfs ?
-> I mostly agree, only that I want to point out the threshold has
-> already been maintained by some firmware. For example, CPER has
-> something like the following defined in UEFI Spec Table N.5: Section
-> Descriptor:
+> On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
+> > On 6/10/24 16:16, David Ahern wrote:
 >
->    Bit 3 - Error threshold exceeded: If set, OS may choose to discontinue
->    use of this resource.
+> > > > There is no reason you shouldn't be able to use your fast io_uring
+> > > > completion and lifecycle flow with DMABUF backed memory. Those are =
+not
+> > > > widly different things and there is good reason they should work
+> > > > together.
+> >
+> > Let's not mix up devmem TCP and dmabuf specifically, as I see it
+> > your question was concerning the latter: "... DMABUF memory registered
+> > through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
+> > support in future, as mentioned it's mostly the setup side. ABI,
+> > buffer workflow and some details is a separate issue, and I don't
+> > see how further integration aside from what we're already sharing
+> > is beneficial, on opposite it'll complicate things.
 >
-> In this case, I think "enable_soft_offline" is a better name for "OS
-> choose to discontinue use of this page" (enable_soft_offline=1) or not
-> (enable_soft_offline=0). WDYT?
-
-Yes, as long as enable_soft_offline=1 is the default. Out of thought, I 
-suppose the CE count and threshold can be retrieved by the GHES driver? 
-I haven't checked. If so, maybe another way is to implement a per task 
-CE threshold: add a new field.ce_thresholdto the tsak struct, add a 
-function to prctl(2) for a user thread to specify a CE threshold, also a 
-function to retrieve the firmware defined default CE threshold, and let 
-soft_offline_page() check against the task->ce_threshold to decide 
-whether to offline the page. If you want to apply the CE threshold to 
-patrol scrub triggered soft offline, than you could define a 
-global/system wide CE threshold. That said, this might be an overblown 
-to what you need, I'm just letting it out there for the sake of brain 
-storming.
-
+> Again, I am talking about composability here, duplicating the DMABUF
+> stuff into io_uring is not composable, it is just duplicating things.
 >
->> Also, I am not comfortable with this being hugetlbfs specific. What is
->> the objection to creating a "soft_offline_enabled" switch that is
->> applicable to any user page size?
-> I have no objection to making the "soft_offline_enabled" switch to
-> apply to anything (hugetlb, transparent hugepage, raw page, etc). The
-> only reason my current patch is hugetlb specific is because
-> softoffline behavior is very disruptive in the hugetlb 1G page case,
-> and I want to start with a limited scope in my first attempt.
+> It does not match the view that there should be two distinct layers
+> here, one that provides the pages and one that manages the
+> lifecycle. As HCH pushes for pages either come from the allocator and
+> get to use the struct folio or the come from a dmabuf and they
+> don't. That is it, the only two choices.
 >
-> If Miaohe, you, and other people are fine with making it applicable to
-> any user pages, maybe a better interface for this could be at
-> something like /sys/devices/system/memory/enable_soft_offline
-> (location-wise close to /sys/devices/system/memory/soft_offline_page)?
-
-Or, you could use /proc/sys/vm/enable_soft_offline, side by side with 
-the existing 'memory_failure_early_kill' and 'memory_failure_recovery' 
-switches.
-
-You could also make 'enable_soft_offline' a per process option, similar 
-to 'PR_MCE_KILL_EARLY' in prctl(2).*
-*
-
-thanks,
-
--jane
-
+> The iouring stuff is trying to confuse the source of the pages with
+> the lifecycle - which is surely convenient, but is why Christoph is
+> opposing it.
 >
->> thanks,
->>
->> -jane
->>
->>> softoffline_corrected_errors is one char less, but if you insist,
->>> soft_offline_corrected_errors also works for me.
->>>
->>>> Thanks.
->>>> .
->>>>
+
+Just curious: in Pavel's effort, io_uring - which is not a device - is
+trying to share memory with the page_pool, which is also not a device.
+And Pavel is being asked to wrap the memory in a dmabuf. Is dmabuf
+going to be the kernel's standard for any memory sharing between any 2
+components in the future, even when they're not devices? As in you
+expect dmabuf exporters which are not devices to be added to the
+kernel? Currently the only dmabuf exporter which is not a device
+(AFAIK) is udmabuf, which is used for testing and emulation, not
+really a production thing, I think.
+
+--=20
+Thanks,
+Mina
 
