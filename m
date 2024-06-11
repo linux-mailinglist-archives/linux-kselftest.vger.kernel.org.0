@@ -1,132 +1,147 @@
-Return-Path: <linux-kselftest+bounces-11683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F75F903F9D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A207F903FD5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:17:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DC582849D5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:06:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BAB7282D99
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503245579F;
-	Tue, 11 Jun 2024 15:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D5D18E1E;
+	Tue, 11 Jun 2024 15:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f2YWHNa+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VgLvUuAW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738E33A27B
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 15:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C79922331;
+	Tue, 11 Jun 2024 15:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118269; cv=none; b=e/7IDZvmTq/XHhMLEHrbqxbblfFHlQLRNCQaCvXnHTcy3nU0OdH7ywOZ3y1EiNB75DpPvhVjzWRhnUBhOLOwl1briIjdOKRiL0QFlOugflffTZBIh8EqzH2XKy5nMtn408LXCPUvy/HFpftlJarZgFBq2wMFL4mBYsP5fIm00iU=
+	t=1718119040; cv=none; b=gfD/+1C1sYnRPe++K9MgGLVMtclTsJHK+cHPXPIgpbz9ZMiKP3Et8lfZws7zZZCgIGAc/r3/+WvhlhL38X7o7BULUsrJnoyPqtFiXhLni6UtikFUSGMUpwW48CuyM+o7NYYtue/zM/vpOa4l7lGYcFjatH8RK1idDFmCq174H4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718118269; c=relaxed/simple;
-	bh=AkUd3nITwa1Nsrx5FGIDh+oFc9gDF9r3YGUNfEDGOdc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DsreyYotAjTn5Td/C7FqCxb39ygBfJM/jR8NRvHzKu6zKkZoTU12sdRJDopsunYWMkfEGiKhI5ECQmqr4seHMq9EDIZdqB7CxBrBAlyWLXCUMpqyV3G18iaZ/PPOxS9aO97T+pwaYalNTlY57chz46OSsMaN3Fn95KSaxx4gLPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f2YWHNa+; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3d21e7aab20so214551b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 08:04:27 -0700 (PDT)
+	s=arc-20240116; t=1718119040; c=relaxed/simple;
+	bh=hBDZsMo7XS37/WDuKhGZamh2Y8ndhFFxERQL6K36UXg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ha87SV/ZfCqiWtypmJH7HzFKt7hKUVqhUbmCLZXO1UzeO1qHjHBI3qXEHbx28jTrpMOB+gRQ6m6Eqgu86f1canxrnQXixbXLsyj3W4JFc8zo0lzMZT/2arhcjolEA4KVvfjH/LYvIl+OM7X+u1jhmn57D5jsX3zrBnnhlb8nt88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VgLvUuAW; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-375932c94f0so5991305ab.0;
+        Tue, 11 Jun 2024 08:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1718118266; x=1718723066; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U1vw+2ACNqWtSlz7WiuesM2J8QxhMf27utzH+YpcgUU=;
-        b=f2YWHNa+NzKq6p06NcHmTrhmFPxBNtf57gmsdOhfH8ZMkjt7WXez7KiFFABFba2guQ
-         E7R9Hk3EWcEqvvov7f37ydSrEy0UyhahCv+hphrtrbf/ghRwesyD9P3jOjFUKYTuFWkb
-         5VyPBtCQk4a45pX81xHF894pzb9xnol4pxoRY=
+        d=gmail.com; s=20230601; t=1718119038; x=1718723838; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nm8XxZQUI/HGBg0dmgtwj323sJEbBxn99UO8Ys/CJ9E=;
+        b=VgLvUuAW3hoQynsupjdqD9j89X5YIcLvcrikcLl80qOqooqgXbgTzy7CSga3IyBtkC
+         Y79USyklvNidMOO9BFmQiWdwkHA8pfIwcqQWVSkYykLQSwIMo9KcLlLk1HEQNmzTWNOg
+         1pySgk+L6LXcBTURG4tTB4O3UVpqzYlwnPavahwcgbD0VgcX4hS5bBV1TWfGAPoC5qLU
+         KinXhly2Da9cudCl4gAtKMDH3wTKZaGkKgIfB/QFf7uR1knJsYqk5JQd+DQYZ7HpxrDU
+         73Ak8ouahfVb4aU0bIBncED/8mUylAGCcqJJ5blnCJ7Kf/3GBN/YD7GTXg2dxL/oQDgm
+         wlrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718118266; x=1718723066;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1vw+2ACNqWtSlz7WiuesM2J8QxhMf27utzH+YpcgUU=;
-        b=B3vdsm5Qr+pU2bjnFkPlFfwuqrVB0OPSNcz7pztFZvJGJ9riF/sZkw3tbAyHxMWo21
-         PxHZ5+mifot6ZyOJuT6THOMWkWe60jHIxRA3aGaChQXOgJyJehNmXDz+MKweax42vzV8
-         Nj1tHcRRzBtMFPvuUXkO3jAOStMR8GJT5f6uXrw6VpWLKMOm/WN2qvAq6pJ1mf8MQJfg
-         BSp3r5jHn4nj/S6z31xDjMWfE4L7x6nbX/wfqwyLzSW85aUI5rdFZBfIaYX9aDvKJBNK
-         rAZF8uSjkymVG3ZGQnt+egX0QwYxrAS4FxgLWdpv2VW7j87MrkgyHqz26EzwtrDCWGoG
-         LKiA==
-X-Forwarded-Encrypted: i=1; AJvYcCX68KHEnOxzjQB3AFyMF4eVkOgXF7V5poJjNC59G/CHdIEDSw9yaVulDLU6ZNbvkXV+vihvwfLg+M0XQ1iuU4xu+KvtfJ4hxGtc674W+hpm
-X-Gm-Message-State: AOJu0YzZbKD0kkZCPA00JddIaws1TdzNmopu2+YMJ+xakScHYwm4hTBW
-	POO723K2Gisb/RytOyFEUrb+7fB0eVCdljwA1SuSJsjudGTptA+a8iQnZhUqV2qTl40VKVvLLfQ
-	V
-X-Google-Smtp-Source: AGHT+IGlfmuk878CG8En5W5lnHLDlQmd3V99IlMUJd8rH48VkCqYhG6rTzSfb4MZ//slpZJu5TCXQw==
-X-Received: by 2002:a05:6808:1b08:b0:3d2:2356:d271 with SMTP id 5614622812f47-3d22356d368mr9188713b6e.1.1718118266435;
-        Tue, 11 Jun 2024 08:04:26 -0700 (PDT)
-Received: from ?IPV6:2607:fb91:213b:a129:544a:cc06:ea0:4045? ([2607:fb91:213b:a129:544a:cc06:ea0:4045])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-62ccacadc00sm20643537b3.1.2024.06.11.08.04.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jun 2024 08:04:26 -0700 (PDT)
-Message-ID: <0556ee55-6bdf-4392-8933-03539768f671@linuxfoundation.org>
-Date: Tue, 11 Jun 2024 09:04:24 -0600
+        d=1e100.net; s=20230601; t=1718119038; x=1718723838;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nm8XxZQUI/HGBg0dmgtwj323sJEbBxn99UO8Ys/CJ9E=;
+        b=jqxcJARRl/+2dEPCTBDscAsQfzqZBv+qHMqB5DYEF2rvy5kRmvMMgsRJzDCSGe1ol8
+         SNBO69zPakYnsSOfBFnkRoVXOuY58HDn4qkfWdcgndyRk8A8mM4+kLZu+O8+mUvdSLTs
+         DyUrtgJsZgRUaNce/7Z3V21da7iNfxeMCEWMgbj5cK5BIlrZ7D3UG1g5sWt8VT9KR/8x
+         uZyBWmtMmaownRQZEBe5tUTyykyD4DFf+sPfwRpLYYBMHTjKqWsFtvC+qEYmwdspOHNB
+         uBfjz4rlmkoRi1S5eB4fh1SS37DgbZVOuBClK9yhQoLXQbe7B67iaTfX66FCUB79nMcC
+         mnUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBuc4YAnpap3saxLecuCxYoyMm49Kj9QigNRjqfyXFA/dhcgamQPo3pdU49k70XMUl6clbObryT70L8lKfX4Nv+Dqdk8bZSSGTxUWl+FjyvmVBqyYppt2Hj49MSjRqoxBSOm9jIndD1UUbGqyK
+X-Gm-Message-State: AOJu0YyQKL5HIwlGboqclLaHDfgnyHiDnsz7xkAACZh+RxzhKiiAMVEI
+	tx5Hoviol075duR6VSGb1HiWcZoaLmKGQZfqDLtFbcvKKR2F4HHj
+X-Google-Smtp-Source: AGHT+IExm5GtDuYDkONfdjBbLVN8LHjWknlg7VwmafjrbNWIyXPsbRtYVK9WGAtqfWsQ86KMykmh4w==
+X-Received: by 2002:a05:6e02:2169:b0:375:a535:f7c7 with SMTP id e9e14a558f8ab-375a535fbdemr67209805ab.0.1718119037631;
+        Tue, 11 Jun 2024 08:17:17 -0700 (PDT)
+Received: from xps-15.. ([91.90.123.30])
+        by smtp.googlemail.com with ESMTPSA id 8926c6da1cb9f-4b7cbacb0d1sm2001416173.4.2024.06.11.08.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 08:17:17 -0700 (PDT)
+From: Amer Al Shanawany <amer.shanawany@gmail.com>
+To: Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	kernel test robot <lkp@intel.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Amer Al Shanawany <amer.shanawany@gmail.com>
+Subject: [PATCH v3] selftests: seccomp: fix format-zero-length warnings
+Date: Tue, 11 Jun 2024 17:16:08 +0200
+Message-ID: <20240611151638.5767-1-amer.shanawany@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <43e24489-a3af-4e53-afc6-ff1dd9462ee2@linuxfoundation.org>
+References: <43e24489-a3af-4e53-afc6-ff1dd9462ee2@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: proc: remove unreached code and fix build
- warning
-To: Alexey Dobriyan <adobriyan@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Amer Al Shanawany <amer.shanawany@gmail.com>,
- Shuah Khan <shuah@kernel.org>,
- Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>,
- Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- kernel test robot <lkp@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <202404010211.ygidvMwa-lkp@intel.com>
- <20240603124220.33778-1-amer.shanawany@gmail.com>
- <14f55053-2ff8-4086-8aac-b8ee2d50a427@p183>
- <20240604202531.5d559ec4daed484a7a23592c@linux-foundation.org>
- <eb9b2d6e-91eb-4fdc-b352-b3d0c290da2f@p183>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <eb9b2d6e-91eb-4fdc-b352-b3d0c290da2f@p183>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/7/24 09:25, Alexey Dobriyan wrote:
-> On Tue, Jun 04, 2024 at 08:25:31PM -0700, Andrew Morton wrote:
->> On Mon, 3 Jun 2024 17:24:47 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
->>
->>> On Mon, Jun 03, 2024 at 02:42:20PM +0200, Amer Al Shanawany wrote:
->>>> fix the following warning:
->>>> proc-empty-vm.c:385:17: warning: ignoring return value of ‘write’
->>>
->>>> --- a/tools/testing/selftests/proc/proc-empty-vm.c
->>>> +++ b/tools/testing/selftests/proc/proc-empty-vm.c
->>>> @@ -381,9 +381,6 @@ static int test_proc_pid_statm(pid_t pid)
->>>
->>>> -	if (0) {
->>>> -		write(1, buf, rv);
->>>> -	}
->>>
->>> no thanks
->>
->> Why not?
->>
->> Why does that code exist anyway?  It at least needs a comment.
-> 
-> OK, whatever.
-> 
-> If test fails, it better record buggy output somewhere (to coredump or to terminal).
+fix the following errors by using string format specifier and an empty
+parameter:
 
-+1 on reporting results - the best way to do this is to add a meaningful message
-for users to understand what went wrong.
+seccomp_benchmark.c:197:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  197 |         ksft_print_msg("");
+      |                        ^~
+seccomp_benchmark.c:202:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  202 |         ksft_print_msg("");
+      |                        ^~
+seccomp_benchmark.c:204:24: warning: zero-length gnu_printf format
+ string [-Wformat-zero-length]
+  204 |         ksft_print_msg("");
+      |                        ^~
 
-Please suggest how you would like this warning addressed and report the error.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312260235.Uj5ug8K9-lkp@intel.com/
+Suggested-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
+---
+v1 -> v2: removed empty print statements
+v2 -> v3: used Kees's suggestion
+---
+ tools/testing/selftests/seccomp/seccomp_benchmark.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+index b83099160fbc..94886c82ae60 100644
+--- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
++++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
+@@ -194,14 +194,14 @@ int main(int argc, char *argv[])
+ 	ksft_set_plan(7);
+ 
+ 	ksft_print_msg("Running on:\n");
+-	ksft_print_msg("");
++	ksft_print_msg("%s", "");
+ 	system("uname -a");
+ 
+ 	ksft_print_msg("Current BPF sysctl settings:\n");
+ 	/* Avoid using "sysctl" which may not be installed. */
+-	ksft_print_msg("");
++	ksft_print_msg("%s", "");
+ 	system("grep -H . /proc/sys/net/core/bpf_jit_enable");
+-	ksft_print_msg("");
++	ksft_print_msg("%s", "");
+ 	system("grep -H . /proc/sys/net/core/bpf_jit_harden");
+ 
+ 	affinity();
+-- 
+2.43.0
+
 
