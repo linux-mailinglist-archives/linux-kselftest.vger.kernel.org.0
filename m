@@ -1,126 +1,141 @@
-Return-Path: <linux-kselftest+bounces-11688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855EB9040A6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 17:59:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66ABD9040D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 18:06:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B168285EA1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 15:59:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 190B11F23959
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2024 16:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E2D3B28F;
-	Tue, 11 Jun 2024 15:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F533B1A3;
+	Tue, 11 Jun 2024 16:04:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="s/ry5662"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y3FxDznW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D73839C
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 15:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EC743AC5;
+	Tue, 11 Jun 2024 16:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718121558; cv=none; b=qI+nqdYgD72YnhMX4S+wkFIfNS3zSh0HvfuWs5RKDfPeUo1GamzcB3Gdr4pR0roFHVwm6o9J/WWd7r0FqHXRfBqgn8l3podNqbUpNsVHQXbgMSDSK/PsJGWaybxJ/FyMzXMNyMirWbPYIsfvnsI6RYko8t0tqY1yEoNzfn/mcD8=
+	t=1718121851; cv=none; b=HbRjfuUQeUfiJ1cvpz0+1ONX8dkCbiuZoukcypOBtCYzbQtXQE1va0E5p5Pex5uS65Ui23+s3Fwm8Vf3JM3AFM/LDFG2JRdeHQ8bxDT4vnend7a8OMTPuqBc+0QWybRwwdUq1k7NiAYkK5oB3Wp5jmfwm0Q7az02kRLcdR95Vvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718121558; c=relaxed/simple;
-	bh=HsSfwE4c9FKwzt2D18mve0ctqok3simx/c6Sk4d9mD8=;
+	s=arc-20240116; t=1718121851; c=relaxed/simple;
+	bh=OnTkHejPNw3tngPD/gLNuIdXyEPXReQ7Og4rR03tJUM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bbkgalp3h3vMPozlUxRlkeegYnQtDsh9NoCcWEypTRq2Bn37m8tPtCCKIobCecG40W4d6C/zhtaVI+liufGI+vrHLBYMNmg5jmDtl613FgUiOZiuNs9+oTdLqrwdIPD1wGIuyDGN9WZFAlfwbgnjMLrkcGDk5nY/+sa+A1RlloM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=s/ry5662; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-57c75464e77so1663163a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 08:59:15 -0700 (PDT)
+	 To:Cc:Content-Type; b=OXjqk6xzCpXFkODmH2sDHY56pUCl/SfbBV7J4NMKGOs65zGL7cfGHL5b7XLUsiSE+iBCdz3QP+cXx1eziTFNLE1o+3O/OZHJJyGCEAPwlEEPS+WdSnb+gvYSPakdUGVYNNFlM6bEwDRTAwXQGNveQuUd1htAOWKjkDcx6GCfLBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y3FxDznW; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-35f188e09a8so2589575f8f.2;
+        Tue, 11 Jun 2024 09:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718121554; x=1718726354; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718121848; x=1718726648; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7KeeLnew4Dr2lt2iWiQJB+NWU2kaX728eR1Y/pdt+oA=;
-        b=s/ry5662Ge+hWbpEAGorm7hqKMZpZcv4wxPprCcclHLcbNXybxPYxyzYt6SpTbK8lk
-         xzj/neGZvGQCCVqomCcHuBX2n2t5Sw/wma4lwmXtiUrCxkHh9ijuHpJwxy/nnyM08uvu
-         nhKM77yPVFu9B91OourqJO+UmrDMiajArZkBNTRan+yrSGUAAc4P2UoYeXT+3cn7uLzM
-         KrmG64DemnXC017Qhj749vZw5+c3BcaQlR9Lfxct3b1kgWEig7quSDiYXDVBcBPqxK6J
-         u94g/GyF0iKyegEROSXhGtbmOi72nRF2tfisVYDw9nFdq7FhW5gS/5i8SlGd0zf3euvD
-         WiHg==
+        bh=A7OxeEGQvtZSHolpPtCDm/Oc1t2xdqPNsViOQEbQvYo=;
+        b=Y3FxDznWQnY/DlmkqbIvfxgWrT7ToMPIPIy79BjpQvNz4bCM587yDrZUpJWCo7OqsA
+         zSPUdZAAKEn5yPVcuVRnWe3gflnyDqia0GERna9fOVGGFQeeGx6jbwGoQ+2rvZ0D4XNt
+         SS9pIRMpBM/FVsJJ+zE3eR2crSXiRv66iICm9+0YB8jlpQr+E7NcqKvr5XL8czNcBSXQ
+         J/B0q0Xot3fhxcyI/W+roE+BJVVVK7jidPpYjYflHb8ptsU9arWK5z0lKzz5BAC2rsoO
+         2QrFB0PL74kGnzrxqZBiouk4rY8WFSy5E6MrCvAcC+aKxC60aSIqudxjHP72+CWc9eAn
+         GFpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718121554; x=1718726354;
+        d=1e100.net; s=20230601; t=1718121848; x=1718726648;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7KeeLnew4Dr2lt2iWiQJB+NWU2kaX728eR1Y/pdt+oA=;
-        b=F8gX39QnXnoixq/79eqX8mX68YJo1tVyfgRjR6UfA3fvZNeEUs5JdOeGIq78SnIaPQ
-         7pNsS7r1uEXSngZ69qNk5z7KkQODpAAzBMVVAeEenk644VHdCYP63VVevU1SN3M4WbMa
-         H+BcecteLYtDDjTFeuJedBBWxDxT2jhvqLJBebM3GJASXU3NihCW5ZUsJzxLlA6EW2Ou
-         /v92K/Fa7uvw/E0cxmhyv5LlnrpyFnkQ81FVaKHtl7gjjg1zE4Ofkd6y9+XT9FANTKcL
-         TEZGKfFJ+C/0bvRVUVKML/TQsmgpcP/78C+e1E3JYQ9HL9C8NOG53eL7WPTnq5g7RHft
-         Fo0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWKBF044G2UU2g8kdhRSOZ35DhGgWRcq5TAuiceOTs6De2WQXqbi8SOmzD13b0RkRFXSQcqiEzuGLJ11rdayVKMqyazb/zwGUDAyjvLbgMH
-X-Gm-Message-State: AOJu0YwcHqQQtUcdC0M6jUOKL1Y/QiqkV0IllC4c2OqbHAzHwODl2f65
-	iWNgT8EU6REYa1XS6K2gFZ6gVWtcVOpZOu8q+C+Xj0tG4eTEqRBlDjUNbFeEGuhnzDRkZVlF4Vh
-	hb9DJWPg1lkX850bm0wDrvuvJg2JpwoNZhNQyYA==
-X-Google-Smtp-Source: AGHT+IFtN4cYhXjGsiGLi9dtTvtTxex9wzVTtZ32q9gZra1QREy0esNjyQa0xfTpDsvoF9kv8aqdxu0J/DY1HdrDZBE=
-X-Received: by 2002:a17:906:2811:b0:a6e:f7bc:dcab with SMTP id
- a640c23a62f3a-a6ef7bcdd76mr607353666b.65.1718121553604; Tue, 11 Jun 2024
- 08:59:13 -0700 (PDT)
+        bh=A7OxeEGQvtZSHolpPtCDm/Oc1t2xdqPNsViOQEbQvYo=;
+        b=iCM/+kmQ/z0ro2vMgxluhX5GukcuZ+wGGPevbS9xbMyx0xzrFm+zUqTs5YMPYulVjY
+         MYZcAoc1mJnG9n8y8hNJ+vuxNi8UXsaS6fA6a+7zSzaXgVH3oGMssd4I3a1Y9sfRV2uZ
+         OtVr4pv3PCunsGSECmmsDZEjKSTtGTjdJ1EE3ZEylIr00zX4pFGeqraVH2qSbzEj+hgq
+         p2GMLz+3n2sVIvpe6hhWZHJTHTnbzWkzTNy5gGd9EJwEJRpalmsC3z+UgfBUREmPsIBn
+         6wSPwxFqKMDz1Eo5tQmrFGZxlVvQ3DaKA4bTGLFiJXEMYMazBMMc8R0bz6tMA4qBPEn6
+         UvUg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7P7vMTpC1fvoEhMlc0iQE6ijGjN5aTcORAM8TivAXlcKkON8uwviNnfi3LiQtUWDPZLv7sy1yqMS9eboDvjL52NbhBjoaBNgvHKxjwJEm8+NUR8HUTEPHOIxFpvCL/7b+xkqsp16Ccqederohv6V1dMg+kIC2fgnilAUkNdmN/EOq
+X-Gm-Message-State: AOJu0YwxIw7ogwH9ZUfZgOaJKVGZKlw6ji9CuQXVX1tb3fxlGDMVcYru
+	18bJlsI3iEf7SUcx1RPEq8A6oMc/RFNqjU0BlEvi1L2vUTSQWBpPva8lR39CUmG2bO/p0LdRqY4
+	0r6nPDWJW4Yy1VBCwOe/FIRkL3XE=
+X-Google-Smtp-Source: AGHT+IGgf1ls3cDJ6B8jZSckjsi3R4ehKyK6BuvWyiUq1Q0BRGfbAUe6LlHVpdwqmLIfrHbT/2TI3nOOqIIwwdeGhAY=
+X-Received: by 2002:a5d:6608:0:b0:354:f7a4:7862 with SMTP id
+ ffacd0b85a97d-35efed2baacmr8566577f8f.19.1718121847806; Tue, 11 Jun 2024
+ 09:04:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240610-xtheadvector-v2-0-97a48613ad64@rivosinc.com> <20240610-xtheadvector-v2-11-97a48613ad64@rivosinc.com>
-In-Reply-To: <20240610-xtheadvector-v2-11-97a48613ad64@rivosinc.com>
-From: Evan Green <evan@rivosinc.com>
-Date: Tue, 11 Jun 2024 08:58:37 -0700
-Message-ID: <CALs-Hsu2jFAfr7H9UfLd9VHEZvpfF7Q6Chxko3XbBZBCU94eSw@mail.gmail.com>
-Subject: Re: [PATCH v2 11/13] riscv: hwprobe: Document thead vendor extensions
- and xtheadvector extension
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Andy Chiu <andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Andrew Jones <ajones@ventanamicro.com>
+References: <cover.1717881178.git.dxu@dxuuu.xyz> <34708481d71ea72c23a78a5209e04a76b261a01d.1717881178.git.dxu@dxuuu.xyz>
+ <Zmb52Qp__CBzbgDh@krava> <chydnuotqnmamlfmgzgnwurj5flaegp2bjebxldqwc2y2ngs5x@3h4blknbqhlw>
+In-Reply-To: <chydnuotqnmamlfmgzgnwurj5flaegp2bjebxldqwc2y2ngs5x@3h4blknbqhlw>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 11 Jun 2024 09:03:56 -0700
+Message-ID: <CAADnVQJdt5K3o6SrnVzzBVf+5BmJ3Wo5TTLvULE7rKJPkKqmbQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 06/12] bpf: selftests: Fix bpf_session_cookie()
+ kfunc prototype
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Quentin Monnet <quentin@isovalent.com>, 
+	Alan Maguire <alan.maguire@oracle.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 3:57=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
+On Tue, Jun 11, 2024 at 8:54=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> Document support for thead vendor extensions using the key
-> RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0 and xtheadvector extension using
-> the key RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR.
+> Hi Jiri,
 >
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: Evan Green <evan@rivosinc.com>
-> ---
->  Documentation/arch/riscv/hwprobe.rst | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> On Mon, Jun 10, 2024 at 03:04:25PM GMT, Jiri Olsa wrote:
+> > On Sat, Jun 08, 2024 at 03:16:02PM -0600, Daniel Xu wrote:
+> > > The prototype defined in bpf_kfuncs.h was not in line with how the
+> > > actual kfunc was defined. This causes compilation errors when kfunc
+> > > prototypes are generated from BTF.
+> > >
+> > > Fix by aligning with actual kfunc definition.
+> > >
+> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > > ---
+> > >  tools/testing/selftests/bpf/bpf_kfuncs.h                        | 2 =
++-
+> > >  tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c | 2 =
++-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing=
+/selftests/bpf/bpf_kfuncs.h
+> > > index be91a6919315..3b6675ab4086 100644
+> > > --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > > +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > > @@ -77,5 +77,5 @@ extern int bpf_verify_pkcs7_signature(struct bpf_dy=
+nptr *data_ptr,
+> > >                                   struct bpf_key *trusted_keyring) __=
+ksym;
+> > >
+> > >  extern bool bpf_session_is_return(void) __ksym __weak;
+> > > -extern long *bpf_session_cookie(void) __ksym __weak;
+> > > +extern __u64 *bpf_session_cookie(void) __ksym __weak;
+> >
+> > the original intent was to expose long instead of __u64 :-\
+> >
+> > could we rather change the bpf_session_cookie function to return long?
+> > should be just return value type change
 >
-> diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/ri=
-scv/hwprobe.rst
-> index 204cd4433af5..9c0ef8c57228 100644
-> --- a/Documentation/arch/riscv/hwprobe.rst
-> +++ b/Documentation/arch/riscv/hwprobe.rst
-> @@ -214,3 +214,13 @@ The following keys are defined:
->
->  * :c:macro:`RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE`: An unsigned int which
->    represents the size of the Zicboz block in bytes.
-> +
-> +* :c:macro:`RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0`: A bitmask containing =
-the
+> Sounds reasonable to me. I don't think the kfunc has made it to a
+> release yet, so perhaps if we extract this commit out as a fix to bpf
+> tree it can still make it into 6.10. That way we won't have to worry
+> about any ABI changes.
 
-Our recent snafoo with CPUPERF_0 popped into my memory
-when reading this. Does this work properly with the WHICH_CPUS flag?
-Specifically, we need hwprobe_key_is_bitmask() to return true for this
-key since it's a bitmask.
+kfunc-s can be changed at any time. Keep targeting bpf-next for everything.
 
