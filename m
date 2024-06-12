@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-11805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A48A905EC6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 00:52:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3039905F34
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 01:31:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97C1EB21A99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 22:52:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50A7B1F225CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 23:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3F612C550;
-	Wed, 12 Jun 2024 22:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C3712D1E8;
+	Wed, 12 Jun 2024 23:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gRPsHtDf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vPnpl7Og"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5AF129A7B
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 22:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD8112CD96
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 23:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718232743; cv=none; b=gVPRl5Kbhsc36VZL2MKkVewYRrWV50C1o/jCqPu5lSmKXWDJuBaPgTmdFu0UExGb+n92/+WylPXPouH+4i4WjgxbKLkllvQIfJd5DejWHZ77sizbc582teY5CKvw2sZGExy7DDbbOZ/MpNO1etfHoCHpnNoBm5SDyRYbXSyZ09Y=
+	t=1718235098; cv=none; b=MynDut0NmTSBZWVSsjk6OTHW2s15bb9iZEBy3fbc+QtTQ5xdi7BRakI8VWokRtsp2v4b0qQJ7YBRAHE5HtVxyoM5BWFAEF9EoYZ3a3fe+GM4NbUbtJYqUbmP3M4OT6jwlWneTBuUhgR9XhOdBFGcDNnQO1BRBT+6n1SlQIhgquI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718232743; c=relaxed/simple;
-	bh=9PhuIo3IyQcw4P814d2ZMnmgCFWhfOyk4PBN98JGULk=;
+	s=arc-20240116; t=1718235098; c=relaxed/simple;
+	bh=4SDKp1waJzXqdTd/ActDvagt62Ph9uX2CozVVnbthGw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LePo/HeZ2/X/qVJBXnb9vP5mfwOrZBwZfK//K0lJnf45MNpf1Ndgmi+dVIctR964IxDW96Q8vtgEqG/ydlXzh7p8ezZihYuyPbM7PrtCUo91Oc7noI2nm++Dku06tYBocLgk4edU6aLFD09pvAIzxpPlLd9kUPaqjKiZ+Z4Czp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gRPsHtDf; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=OUOjNjseYGZXP3wie/K4XPajA20wV0hDDNJ+pmyufqhiYLlz1+J+MiR2wny1uuYrpTujGVipVy6CuRNqM0QuiL+tr0+p2yQphJpVUydRY5w60O7oSOigf/7E7tzwkOYAPpevcDn30B8zB1GDFRHkoVXBg3EObN3qqXKeqrqN17I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vPnpl7Og; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2c24109ad3fso271110a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 15:52:20 -0700 (PDT)
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2c4a1c9c0e0so290279a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 16:31:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718232740; x=1718837540; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718235097; x=1718839897; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIMdKxazuAYEMA3ljsiIyftbOZIGg9iFuuIIcdrawL4=;
-        b=gRPsHtDfrTBjQEBqcQ1gFhMBD6QElhzLJRL5nfJ1bhGAcXrtbzJFd8fETBP+NCoD2B
-         cHKeO3xW8m7natSTX7GkDXf8dfZArO8Zwulw9axQ5aMSYx7jNmdBCdCRsIPwwAgLM+af
-         s+es2dmYhvZ+PIlVH579GX+JC5unx+YUq17V4ybR9DgDQo3cL/r0vtJH8UHI+UMGiHbl
-         kLK92MT1adTxKU1sxAeszcDsj9pLg1968Z6CdBIegZ+0GbVYvhT5dgDH91LCpRAesKpj
-         Vz6auP8qaa80nHKGmKLh73DsFhNN9OGo/si1QJmLSo8LWUw2FMxlGLozw9bvOnobufji
-         HYjA==
+        bh=L/SyTTg+Pb2L8jVOL9JfQwGKpPzI3PRlHDd/+KWWSxs=;
+        b=vPnpl7OgTw3m1W9f7qd8zuFbhpnIj+Jd34ThUJ7cL7UUofqkzRWLXa51Txwe4/fgxL
+         PLzlDOasbRE+NzMuzxMsbsjUmjMh6HEYZPereLw5PaVNb8BVZzMrebU+Q81WpBJq7CPt
+         GqouZtMhHxB7yb43W4Zs/RcZMGIN1WXLa5N6v64RhHdchIZvE9y2s3HQzP+2zejVkIsE
+         D/qFO96+CjbH0nAd0oZsiCShLpItkPvCrABUdqVUmHILxr55EOKKcRgURxnQ8zF+0vYP
+         xqjDo2Whtgb7BT4Tsq/V0HUpLKSHFphdLrYRrTmQTYmOXlENmugklXmS1yPBJ5Re6sh1
+         IF3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718232740; x=1718837540;
+        d=1e100.net; s=20230601; t=1718235097; x=1718839897;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIMdKxazuAYEMA3ljsiIyftbOZIGg9iFuuIIcdrawL4=;
-        b=s72QkzbqYUaeY6qdNLTV5e16hZlbTED76skbnaU1JIESvr3ci0KTJcYmBAOQMQZaJ5
-         tWkG8/CLJP8nUAR5nAwScy/ufq+uCsHPbG0Twa2tVjkj8whOU4yiFiCnlpgaYPZAyrCy
-         KatkxhLJgSHAL2yfoJ5FoI0qF3SO34fXUIlsZe7QiCIeW9Zv7a9NU7ObeDDqE7oacC0u
-         YRJU6Gn/7iW4A/bAvVRAIBJ9muehJggTaTepnN1RbS0cc9cKNN39+xQDusvYLDby5XDc
-         D3l1+JqijHaIXN4J3Fgd/vol0IPsuLJr5dVv/ENMe1CHDvKyR0punu43ckSVNk+HTU/O
-         pk5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWNSPwtciaVbzEP6+BHAi2ZPKJ0eAtwfd8CpBPSHBVVeBHIDyoqMFpbbdIOaT1/mkylZQEs9E9EXTHMVEj60NGaM5jWCQPrkcT9OHryEzE7
-X-Gm-Message-State: AOJu0YwZgUA5ZR+t1LSkPgDnprEXO/75u3+CdAJc1OT4HOMg2JOHDiuy
-	wPOYjLnP+Qzi7m3bLPLNE3yHWoOxOv43Skk1dK4yOVwoxtQDl7IGN7fQECVWZYsH/SRo/r7twmL
-	oiQ==
-X-Google-Smtp-Source: AGHT+IGCAHPANQ/LEowM3vH0tyHfCNdFfhePy3s7fIN6woZGNNV+qREcLXSH6cGMz5j2YasglzwODR04zqY=
+        bh=L/SyTTg+Pb2L8jVOL9JfQwGKpPzI3PRlHDd/+KWWSxs=;
+        b=VhXw+2r2djFthdTUXJGrzfS8+LYZ1FJ2cGwfp5JRXjKj4vpawhgxgHcEGjhC3XDc71
+         YVz2yByW1hIR3WIG1kC8n+abrI0LmlDQwwAjUHTijh2414Xowg2kkfWMf3814HDMmgEn
+         2GoA1KwZkcgHafF9cKua6CTCbZd83rDj53SJqElTtFkAn8t4S+vjRSd2iVG1iqeVypqa
+         sDD8rRnnaom7PIREEV7u3+NpjxJ/riHYipHpx3QzXcNwc/vo1ABAcT0+D6uwu8Ssvr6B
+         gvyKJFEU59Dr5gvS/QnqXLMwXuiccyRcdOmnQ2JqwQjMeFiJFseZ+ggU//wsDoHARgPD
+         ozwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCSkWRIo5scNBad2EGPN65893r0Ix+CWXI4Ez/pRr3zh5LAxH1um9cRGHSHIMN7SruoYYrgfvwV+ohOw2Lty1VgIMtcnNJjyIq7SVcQyOb
+X-Gm-Message-State: AOJu0YyuOdtGquVwuMmHnBIoP3IHQ06vvKqJ2lPF4b+6cqBBKEmPdrSh
+	jrTqKhI+l59/aoL1a9LM2jpnTsnzkBjlhBA7idOHhXsNxOON6HxtDk0Y/YQY3NY1EGsSbD4cYZq
+	2MA==
+X-Google-Smtp-Source: AGHT+IFF6ktwP1UGkcUZHB0WhdUhwnLGJBuZ/L5no7UNOMPx0KJvnv6kZJUd9YOHzqFhW28idnkubVIueTQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:fb4a:b0:2c2:dffd:1d9e with SMTP id
- 98e67ed59e1d1-2c4a7606ed2mr8825a91.1.1718232740203; Wed, 12 Jun 2024 15:52:20
+ (user=seanjc job=sendgmr) by 2002:a17:90a:62c9:b0:2c2:c65f:52dc with SMTP id
+ 98e67ed59e1d1-2c4a770e8f6mr9058a91.6.1718235096779; Wed, 12 Jun 2024 16:31:36
  -0700 (PDT)
-Date: Wed, 12 Jun 2024 15:52:18 -0700
-In-Reply-To: <20240207172646.3981-13-xin3.li@intel.com>
+Date: Wed, 12 Jun 2024 16:31:35 -0700
+In-Reply-To: <Zj7f+JWbVfIBIK8h@chao-email>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,187 +73,76 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-13-xin3.li@intel.com>
-Message-ID: <Zmomoj-PngmXHlxQ@google.com>
+ <ZjBiLDJ4SdQ0p5xm@chao-email> <SA1PR11MB6734740F9B6085E0997A4179A8E72@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <Zj7f+JWbVfIBIK8h@chao-email>
+Message-ID: <Zmov1x2KFtoMN3Vm@google.com>
 Subject: Re: [PATCH v2 12/25] KVM: VMX: Handle FRED event data
 From: Sean Christopherson <seanjc@google.com>
-To: Xin Li <xin3.li@intel.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	pbonzini@redhat.com, corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	shuah@kernel.org, vkuznets@redhat.com, peterz@infradead.org, 
-	ravi.v.shankar@intel.com, xin@zytor.com
+To: Chao Gao <chao.gao@intel.com>
+Cc: Xin3 Li <xin3.li@intel.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "peterz@infradead.org" <peterz@infradead.org>, 
+	Ravi V Shankar <ravi.v.shankar@intel.com>, "xin@zytor.com" <xin@zytor.com>
 Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Feb 07, 2024, Xin Li wrote:
-> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> index 4889754415b5..6b796c5c9c2b 100644
-> --- a/arch/x86/include/asm/vmx.h
-> +++ b/arch/x86/include/asm/vmx.h
-> @@ -256,8 +256,12 @@ enum vmcs_field {
->  	PID_POINTER_TABLE_HIGH		= 0x00002043,
->  	SECONDARY_VM_EXIT_CONTROLS	= 0x00002044,
->  	SECONDARY_VM_EXIT_CONTROLS_HIGH	= 0x00002045,
-> +	INJECTED_EVENT_DATA		= 0x00002052,
-> +	INJECTED_EVENT_DATA_HIGH	= 0x00002053,
->  	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
->  	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
-> +	ORIGINAL_EVENT_DATA		= 0x00002404,
-> +	ORIGINAL_EVENT_DATA_HIGH	= 0x00002405,
+On Sat, May 11, 2024, Chao Gao wrote:
+> On Fri, May 10, 2024 at 05:36:03PM +0800, Li, Xin3 wrote:
+> >> >+               if (kvm_is_fred_enabled(vcpu)) {
+> >> >+                       u64 event_data = 0;
+> >> >+
+> >> >+                       if (is_debug(intr_info))
+> >> >+                               /*
+> >> >+                                * Compared to DR6, FRED #DB event data saved on
+> >> >+                                * the stack frame have bits 4 ~ 11 and 16 ~ 31
+> >> >+                                * inverted, i.e.,
+> >> >+                                *   fred_db_event_data = dr6 ^ 0xFFFF0FF0UL
+> >> >+                                */
+> >> >+                               event_data = vcpu->arch.dr6 ^ DR6_RESERVED;
+> >> >+                       else if (is_page_fault(intr_info))
+> >> >+                               event_data = vcpu->arch.cr2;
+> >> >+                       else if (is_nm_fault(intr_info))
+> >> >+                               event_data =
+> >> >+ to_vmx(vcpu)->fred_xfd_event_data;
+> >> >+
+> >> 
+> >> IMO, deriving an event_data from CR2/DR6 is a little short-sighted because the
+> >> event_data and CR2/DR6 __can__ be different, e.g., L1 VMM __can__ set CR2 to A
+> >> and event_data field to B (!=A) when injecting #PF.
+> >
+> >VMM should guarantee a FRED guest _sees_ consistent values in CR6/DR6
+> >and event data. If not it's just a VMM bug that we need to fix.
+> 
+> I don't get why VMM should.
+> 
+> I know the hardware will guarantee this. And likely KVM will also do this.
+> but I don't think it is necessary for KVM to assume L1 VMM will guarantee
+> this. because as long as L2 guest is enlightened to read event_data from stack
+> only, the ABI between L1 VMM and L2 guest can be: CR2/DR6 may be out of sync
+> with the event_data. I am not saying it is good that L1 VMM deviates from the
+> real hardware behavior. But how L1 VMM defines this ABI with L2 has nothing to
+> do with KVM as L0. KVM shouldn't make assumptions on that.
 
-Are these the actual names from the SDM?  E.g. is there no FRED_ prefix to clue
-in readers that they are FRED specific? (unless they aren't FRED specific?)
+Right, but in that case the propagation of event_data would be from vmcs12 =>
+vmcs02, which is handled by prepare_vmcs02_early().
 
->  	VMCS_LINK_POINTER               = 0x00002800,
->  	VMCS_LINK_POINTER_HIGH          = 0x00002801,
->  	GUEST_IA32_DEBUGCTL             = 0x00002802,
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index ee61d2c25cb0..f622fb90a098 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1871,9 +1871,29 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
->  		vmcs_write32(VM_ENTRY_INSTRUCTION_LEN,
->  			     vmx->vcpu.arch.event_exit_inst_len);
->  		intr_info |= INTR_TYPE_SOFT_EXCEPTION;
-> -	} else
-> +	} else {
->  		intr_info |= INTR_TYPE_HARD_EXCEPTION;
->  
-> +		if (kvm_is_fred_enabled(vcpu)) {
-> +			u64 event_data = 0;
-> +
-> +			if (is_debug(intr_info))
-> +				/*
-> +				 * Compared to DR6, FRED #DB event data saved on
-> +				 * the stack frame have bits 4 ~ 11 and 16 ~ 31
-> +				 * inverted, i.e.,
-> +				 *   fred_db_event_data = dr6 ^ 0xFFFF0FF0UL
-> +				 */
-> +				event_data = vcpu->arch.dr6 ^ DR6_RESERVED;
-> +			else if (is_page_fault(intr_info))
-> +				event_data = vcpu->arch.cr2;
-> +			else if (is_nm_fault(intr_info))
-> +				event_data = to_vmx(vcpu)->fred_xfd_event_data;
-> +
-> +			vmcs_write64(INJECTED_EVENT_DATA, event_data);
-> +		}
-> +	}
-> +
->  	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
->  
->  	vmx_clear_hlt(vcpu);
-> @@ -7082,8 +7102,11 @@ static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
->  	 *
->  	 * Queuing exception is done in vmx_handle_exit. See comment there.
->  	 */
-> -	if (vcpu->arch.guest_fpu.fpstate->xfd)
-> +	if (vcpu->arch.guest_fpu.fpstate->xfd) {
->  		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> +		to_vmx(vcpu)->fred_xfd_event_data = vcpu->arch.cr0 & X86_CR0_TS
+For this flow, it specifically handles exception injection from _L0 KVM_, in which
+case KVM should always follow the architectural behavior.
 
-kvm_is_cr0_bit_set(), don't read vcpu->arch.cr0 directly.
+Ahh, but the code in with __vmx_complete_interrupts() is wrong.  Overwriting
+vcpu->arch.{dr6,cr2} is wrong, because theres no telling what was in vmcs02.
+And even if vmcs02 holds DR6/CR2 values, those might be L2 values, i.e. shouldn't
+clobber the vCPU state.
 
-> +			? 0 : vcpu->arch.guest_fpu.xfd_err;
-
-Maybe this?
-
-		if (kvm_is_cr0_bit_set(vcpu, X86_CR0_TS))
-			to_vmx(vcpu)->fred_xfd_event_data = 0;
-		else
-			to_vmx(vcpu)->fred_xfd_event_data = vcpu->arch.guest_fpu.xfd_err;
-
-Hmm, but why does this need to be cached _now_?  I.e. why does fred_xfd_event_data
-need to exist?  Wouldn't it be simpler and more robust to use vcpu->arch.guest_fpu.xfd_err
-directly in vmx_inject_exception()?
-
-> +	}
->  }
->  
->  static void handle_exception_irqoff(struct vcpu_vmx *vmx)
-> @@ -7199,29 +7222,28 @@ static void vmx_recover_nmi_blocking(struct vcpu_vmx *vmx)
->  					      vmx->loaded_vmcs->entry_time));
->  }
->  
-> -static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
-> -				      u32 idt_vectoring_info,
-> -				      int instr_len_field,
-> -				      int error_code_field)
-> +static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu, bool vectoring)
->  {
-> -	u8 vector;
-> -	int type;
-> -	bool idtv_info_valid;
-> -
-> -	idtv_info_valid = idt_vectoring_info & VECTORING_INFO_VALID_MASK;
-> +	u32 event_id = vectoring ? to_vmx(vcpu)->idt_vectoring_info
-> +				 : vmcs_read32(VM_ENTRY_INTR_INFO_FIELD);
-
-
-Preferred style for ternary operators is:
-
-	u32 event_id = vectoring ? to_vmx(vcpu)->idt_vectoring_info :
-				   vmcs_read32(VM_ENTRY_INTR_INFO_FIELD);
-
-That said, I don't think this is a net positive versus passing in all params.
-The bare true/false is somewhat inscrutable, and in this code, it's hard to
-understand why KVM looks at X instead of Y without the conext of the caller.
-
-> +	int instr_len_field = vectoring ? VM_EXIT_INSTRUCTION_LEN
-> +					: VM_ENTRY_INSTRUCTION_LEN;
-> +	int error_code_field = vectoring ? IDT_VECTORING_ERROR_CODE
-> +					 : VM_ENTRY_EXCEPTION_ERROR_CODE;
-> +	int event_data_field = vectoring ? ORIGINAL_EVENT_DATA
-> +					 : INJECTED_EVENT_DATA;
-> +	u8 vector = event_id & INTR_INFO_VECTOR_MASK;
-> +	int type = event_id & INTR_INFO_INTR_TYPE_MASK;
->  
->  	vcpu->arch.nmi_injected = false;
->  	kvm_clear_exception_queue(vcpu);
->  	kvm_clear_interrupt_queue(vcpu);
->  
-> -	if (!idtv_info_valid)
-> +	if (!(event_id & INTR_INFO_VALID_MASK))
->  		return;
->  
->  	kvm_make_request(KVM_REQ_EVENT, vcpu);
->  
-> -	vector = idt_vectoring_info & VECTORING_INFO_VECTOR_MASK;
-> -	type = idt_vectoring_info & VECTORING_INFO_TYPE_MASK;
-> -
->  	switch (type) {
->  	case INTR_TYPE_NMI_INTR:
->  		vcpu->arch.nmi_injected = true;
-> @@ -7236,10 +7258,31 @@ static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
->  		vcpu->arch.event_exit_inst_len = vmcs_read32(instr_len_field);
->  		fallthrough;
->  	case INTR_TYPE_HARD_EXCEPTION:
-> -		if (idt_vectoring_info & VECTORING_INFO_DELIVER_CODE_MASK) {
-> -			u32 err = vmcs_read32(error_code_field);
-> -			kvm_requeue_exception_e(vcpu, vector, err);
-> -		} else
-> +		if (kvm_is_fred_enabled(vcpu)) {
-> +			/* Save event data for being used as injected-event data */
-> +			u64 event_data = vmcs_read64(event_data_field);
-> +
-> +			switch (vector) {
-> +			case DB_VECTOR:
-> +				/* %dr6 should be equal to (event_data ^ DR6_RESERVED) */
-
-DR6, no need to use assembly syntax, but I'd just drop this comment, as well as
-the CR2 comment.  They add no insight beyond what the code literally does.
-
-> +				vcpu->arch.dr6 = event_data ^ DR6_RESERVED;
-> +				break;
-> +			case NM_VECTOR:
-> +				to_vmx(vcpu)->fred_xfd_event_data = event_data;
-> +				break;
-> +			case PF_VECTOR:
-> +				/* %cr2 should be equal to event_data */
-> +				vcpu->arch.cr2 = event_data;
-> +				break;
-> +			default:
-> +				WARN_ON(event_data != 0);
-> +				break;
-> +			}
-> +		}
+It's not clear to me that we need to do anything new for FRED in
+__vmx_complete_interrupts().  The relevant VMCS fields should already hold the
+correct values, there's no reason to clobber vCPU state.  The reason KVM grabs
+things like instruction length and error code is because that information is
+visible to other aspects of injection, e.g. to adjust RIP and pushed the error
+code on the stack.
 
