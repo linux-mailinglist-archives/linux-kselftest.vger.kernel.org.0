@@ -1,158 +1,105 @@
-Return-Path: <linux-kselftest+bounces-11730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D42790493A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:57:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFA3E904943
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 05:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 936AEB20FCC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:57:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E070285C06
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 03:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0074BDF62;
-	Wed, 12 Jun 2024 02:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D25F514;
+	Wed, 12 Jun 2024 03:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7X9r7QQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SXtI/rnI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B894A1B;
-	Wed, 12 Jun 2024 02:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959E32D60C;
+	Wed, 12 Jun 2024 03:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718161051; cv=none; b=GIB+rUGTEHpiZ+/KD5SmLJHGyqnw5/ySpiRqfwHjLmNrviEqhmGi1SM0eWV9tSgJRel8SGzOdJZDPShnjOEZyQzbThOsQA4j99dhmEHDv4tnm0DuhtEB9/0UVQ5WtJ6JVsbfUo6CcZ2QRoIgs+ox1QNGxIoODxJka9UlW7/+tWE=
+	t=1718161238; cv=none; b=G7h6qmdqkTTNPdKYzR5oyKnXUru59bugaomz6xAyWChabsPgJRSise71y3AhjdbEDZB5ev2hRAC9xq3hkBxtRIKzvAdGqg/9oxfjJAke3QofqkIz0ChaRGS7xsBDoiU0mMTCZncIjIuvy5gb7gkUKwZabF4oLoyLM7RLHBmimlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718161051; c=relaxed/simple;
-	bh=Lx1//KtDjXhN3gOtqkYpZDXLlUXymjn1NFe3pPMA3JQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KXZvNEkshQ3L/UBZRN0Gzf4kNVWhneg3dJewfgEw6m/hgpxFH94gdQ3pgiaDPZhQ0FY4Z+6vkiuJtMwTAJkvFFChHRiwYh3nUSBj1DqznV+UsLdbLz5jIAZN4kK49I7BmombnT7h1vHxpFjPmteQHvyh8pDtw6w47hI8j2PNpXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7X9r7QQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DCBC2BD10;
-	Wed, 12 Jun 2024 02:57:30 +0000 (UTC)
+	s=arc-20240116; t=1718161238; c=relaxed/simple;
+	bh=J/kQkK84KQJAkIFQhoiCtHTv4yGPIAirFnvd3aW3x2Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Z8p7BhrjtcL+nrHSo5LEoXvtoOqHT1+A6PEHMNBJy1m4muDilMQcIGo7I2AOau4m8daw7ZLl+zmVpIEk5eXamW9xzIMvm0WyWz+WXj4w5j3hzzxNMBJvd/VUtzaTDGfgU2aE2APIWQh0lcLLajTAVyzMF538VdDqdVDCLrGQzHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SXtI/rnI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71BCCC32786;
+	Wed, 12 Jun 2024 03:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718161050;
-	bh=Lx1//KtDjXhN3gOtqkYpZDXLlUXymjn1NFe3pPMA3JQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=b7X9r7QQPvMEpHtSYVEHEXtaF9ZCNUKgVw6Bvxx8q6uNxa6N0Giu0UPXGVWXNlcH+
-	 Mr5QpelutejxQc9GY0lz8FFPHiBEqbzdDL5lbcs+mnhLPM34fVvJtiSH26y0Nb7Scp
-	 3a7cTWe80szAn1LFrIuSc9EGgm+9kTBclYY3cIGnAZWir8iQTpg8UscGHS2E0n0apH
-	 OYA7HHyS7Cb6L1W5nZPed6SHtFnF30fM1kEo2F1EJ5fZXE+yVMD79gBXgiwOQZsfM6
-	 TJusoauNwVJi9mwkVQFJxs1hHxHA7Wqroc+i0s91vg1Mg/DjXdoUalRx0k4maDuiT3
-	 neDpi6F5H8tCQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 024F1CE250F; Tue, 11 Jun 2024 19:57:29 -0700 (PDT)
-Date: Tue, 11 Jun 2024 19:57:29 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, lance@osuosl.org,
-	mark.rutland@arm.com
-Subject: Re: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's
- need
-Message-ID: <def32dd4-b205-45b8-a5ed-e6e28a0ac4f4@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
+	s=k20201202; t=1718161238;
+	bh=J/kQkK84KQJAkIFQhoiCtHTv4yGPIAirFnvd3aW3x2Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=SXtI/rnIth8j9oQDxbtTNNpSDTVyRo+yikew61JFqkGM+8i73aXqcSL2ukTqWHDeJ
+	 gQPEUPk8JQljrLwi0Kr+ZkWDir80ErunONy/7gFX9F3wfZ/q9KD09hp9du1X5ULZyE
+	 +mBwDDae6qMLsTXQsCpPTGw2CW1Yhqpu44crupj9nZXmQAntGHNo/qc0n6nCY4WGPw
+	 5Uu1zfZ4I9kRM5qIj0mRbrLBfBWk7n/haowc/UkR4R95M4WS3cNeGOCjpj4U5UfqXR
+	 gvAGukxWrcKdsPTKyjDsANM9682YMuP2scfeT2VvdA3/GTGPXF/jlJQ0M0IWTaFrrP
+	 3+ip3ZYHe4Szg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 636AAC54BB2;
+	Wed, 12 Jun 2024 03:00:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/6] selftests: mptcp: use net/lib.sh to manage
+ netns
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171816123840.11889.13593974623249727089.git-patchwork-notify@kernel.org>
+Date: Wed, 12 Jun 2024 03:00:38 +0000
+References: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
+In-Reply-To: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, martineau@kernel.org,
+ geliang@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, tanggeliang@kylinos.cn
 
-On Wed, Jun 12, 2024 at 01:35:27AM +0000, Zhouyi Zhou wrote:
-> Add CFcommon.arch for the various arch's need for rcutorture.
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 07 Jun 2024 18:31:01 +0200 you wrote:
+> The goal of this series is to use helpers from net/lib.sh with MPTCP
+> selftests.
 > 
-> According to [1] and [2], this patch
-> Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
-> x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> - Patches 1 to 4 are some clean-ups and preparation in net/lib.sh:
 > 
-> The patch has been revised and improved under
-> Paul E. McKenney's guidance [3].
+>   - Patch 1 simplifies the code handling errexit by ignoring possible
+>     errors instead of disabling errexit temporary.
 > 
-> [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
-> [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
-> [3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
-> 
-> Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
-> 
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> [...]
 
-Much better, thank you!
+Here is the summary with links:
+  - [net-next,1/6] selftests: net: lib: ignore possible errors
+    https://git.kernel.org/netdev/net-next/c/7e0620bc6a5e
+  - [net-next,2/6] selftests: net: lib: remove ns from list after clean-up
+    https://git.kernel.org/netdev/net-next/c/92fe5670271a
+  - [net-next,3/6] selftests: net: lib: do not set ns var as readonly
+    https://git.kernel.org/netdev/net-next/c/577db6bd5750
+  - [net-next,4/6] selftests: net: lib: remove 'ns' var in setup_ns
+    https://git.kernel.org/netdev/net-next/c/f8a2d2f874b7
+  - [net-next,5/6] selftests: mptcp: lib: use setup/cleanup_ns helpers
+    https://git.kernel.org/netdev/net-next/c/f265d3119a29
+  - [net-next,6/6] selftests: mptcp: lib: use wait_local_port_listen helper
+    https://git.kernel.org/netdev/net-next/c/1af3bc912eac
 
-I queued and pushed for review and testing with the usual editing,
-so please let me know if I messed anything up.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I added Mark on CC in case he has thoughts from an ARM perspective.
 
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 29cf4c63d04b9752a32e33d46a57717121353ef7
-Author: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed Jun 12 01:35:27 2024 +0000
-
-    rcutorture: Add CFcommon.arch for the various arch's need
-    
-    Add CFcommon.arch for the various arch's need for rcutorture.
-    
-    In accordance with [1] and [2], this patch moves x86 specific kernel
-    option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
-    
-    [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
-    [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
-    
-    Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
-    
-    Link: https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
-    
-    Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options")
-    Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-    Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-    Cc: Mark Rutland <mark.rutland@arm.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-index b33cd87536899..ad79784e552d2 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-@@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORTURE_KCONFIG_GDB_ARG"
- config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KASAN_ARG"
- config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCSAN_ARG"
- config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_ARG"
-+config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
-+		      "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null`"
- cp $T/KcList $resdir/ConfigFragment
- 
- base_resdir=`echo $resdir | sed -e 's/\.[0-9]\+$//'`
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-index 0e92d85313aa7..cf0387ae53584 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-@@ -1,6 +1,5 @@
- CONFIG_RCU_TORTURE_TEST=y
- CONFIG_PRINTK_TIME=y
--CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
- CONFIG_KVM_GUEST=y
- CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-new file mode 100644
-index 0000000000000..2770560d56a0c
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-@@ -0,0 +1 @@
-+CONFIG_HYPERVISOR_GUEST=y
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-new file mode 100644
-index 0000000000000..2770560d56a0c
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-@@ -0,0 +1 @@
-+CONFIG_HYPERVISOR_GUEST=y
 
