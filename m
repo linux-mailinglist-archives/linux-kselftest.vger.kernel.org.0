@@ -1,116 +1,134 @@
-Return-Path: <linux-kselftest+bounces-11751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5C67904EFF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 11:19:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEFA490500C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 12:08:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8964B1F24CE5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 09:19:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D09011C21875
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 10:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317F116D9C6;
-	Wed, 12 Jun 2024 09:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717E016F0C3;
+	Wed, 12 Jun 2024 10:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JE0+tbvW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCDtxszx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044832AEE3;
-	Wed, 12 Jun 2024 09:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFC816E89E;
+	Wed, 12 Jun 2024 10:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718183975; cv=none; b=gf3dTN+vTKR6ZdnTPf3Bp9OeldBPlpoB+H6XzFKt6/+T0LE/djLa2s0Jvl29w4RgPS8IsE3gZ3ImtwkZKHMHDBwJ9004yB9elzGcFVMO4D3P8gyWriwyDrpdbRdxK6WEabHBkUhmDucQrC+HGM5pxsfJp5NocJpfxJljCXhzGLM=
+	t=1718186845; cv=none; b=NLcO/dv2Ppg5YFTY1rjKKcYP6fhN2jsiZ8f0soIwT2pvfugvx3QadikG/V8lwxlMsgHIOWrfninSQeisOFFLXvIxRoMfufIynmD/9TyEPc/gwgkKL/MEKKCDgrc9sDXooVlYVVIPbr7ahBvGva2Y74kxiTzl2YrjYiIb+VuaLPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718183975; c=relaxed/simple;
-	bh=VWF2BN3M74sWgL4r0nHVKCmPDvs57NQeQDcbDpP5OYs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XUERAZY0Kp7nBi5HoJ3Djtvb1+w2ALGhQMPLg3W757wgprRSz8rzqmKa7ryeckk5iUxKf13yk2UYPeFnrk1pbRKIbzzPbIC1bD4DQil8hubYM67mC2xxTyFkdpNTNJKZUJW/x88LsykxBfI82st5JhGHd6HJ53gQm0IV6azwoww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JE0+tbvW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235B7C4AF48;
-	Wed, 12 Jun 2024 09:19:26 +0000 (UTC)
+	s=arc-20240116; t=1718186845; c=relaxed/simple;
+	bh=wijopm0nhucG+7m8+AH2LAOLzwedkcVS1zjeQR1rbGE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kWtwmJyAHDZpQo3I090ZMx7GPYH93lzY30w2EbYQtl1a+EXmTbRkmeOX7p4RC6m8qNwfXi387ZmnbEhclwqFresxXPE68C4cjPXykAw1mXc1zJ2CC1h/YXkWPTTj/0CLN78hCs2v/OxBUpt5jWa1rg+Fyka8oRRAyH9NifaAZpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCDtxszx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD94C32789;
+	Wed, 12 Jun 2024 10:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718183974;
-	bh=VWF2BN3M74sWgL4r0nHVKCmPDvs57NQeQDcbDpP5OYs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JE0+tbvW0j09JGIOaGiJqVIXDw22trEwQWoQp1DZrucwJbpk9i3ecI1z6nknrbee7
-	 Snc9xO/vHP9RIGSZKy/T3ycP1ENXlaPr9+lr4VcdLwLP3D2mYQpGOV4ejo9ocqBb+w
-	 A5RdWYF0w498tf+elYvXPPVzfAUjppUfPacpCqZEfUCASLfl8I+WC4iIysj+MykTO9
-	 MtOpZO+ChidNQXfTmUPebdpYoXW9w/XLjw63rn/PyoatC5/p96DrW3D/kzsnu8ZyEW
-	 g+HFiqTBcJM6S5xdd+iZOASF7xaZNyAMCdGD0ncGMkFWWsqp+5IpI6QNLGK+l5qB/6
-	 n/fd56Dy9dQig==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
+	s=k20201202; t=1718186844;
+	bh=wijopm0nhucG+7m8+AH2LAOLzwedkcVS1zjeQR1rbGE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=eCDtxszxNoB0piqxLuB/bD6m5JPZBy2liC/2ayWxt71f4cTQCaPFw/Wr6S6U81R0/
+	 WB5Brgoy4oB+3lpQCkkBTJQ2h/PvJV051cwaoluv4tGNAtFW4516zoYm1aPXz/LmWP
+	 S5OD1m1AYqm2/T8w9SUKCHOebT4JUcGaGTX4FzoiMIKmn9+qlnkv0UEayd5tFMIq3v
+	 AL5CkssPTZLYThiIaEKcHOfFheTV8ziG414PmBVrwH2j6Yky4ACVfxH4nv553eLh8L
+	 Cb52Tvaqm0beIXCv5AdDhIdwwmsdCIrP92H2CGWk6zjgglufiPb9p16AakkQrh+Srb
+	 PnscSM29EsFpw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sHKt0-0037CS-An;
+	Wed, 12 Jun 2024 11:07:22 +0100
+Date: Wed, 12 Jun 2024 11:07:21 +0100
+Message-ID: <8634pilbja.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: Shaoqin Huang <shahuang@redhat.com>,
+	kvmarm@lists.linux.dev,
+	Eric Auger <eauger@redhat.com>,
+	Sebastian Ott <sebott@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH net-next v7 2/2] selftests/bpf: Add F_SETFL for fcntl in test_sockmap
-Date: Wed, 12 Jun 2024 17:19:04 +0800
-Message-ID: <783f589f00b91ae3f8812a736fd64b4eb4251364.1718182183.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1718182183.git.tanggeliang@kylinos.cn>
-References: <cover.1718182183.git.tanggeliang@kylinos.cn>
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: Re: [RFC PATCH v1 0/2] KVM: arm64: Making BT Field in ID_AA64PFR1_EL1 writable
+In-Reply-To: <Zmkyi39Pz6Wqll-7@linux.dev>
+References: <20240612023553.127813-1-shahuang@redhat.com>
+	<Zmkyi39Pz6Wqll-7@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, shahuang@redhat.com, kvmarm@lists.linux.dev, eauger@redhat.com, sebott@redhat.com, cohuck@redhat.com, catalin.marinas@arm.com, james.morse@arm.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org, yuzenghui@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Wed, 12 Jun 2024 06:30:51 +0100,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> Hi Shaoqin,
+> 
+> On Tue, Jun 11, 2024 at 10:35:50PM -0400, Shaoqin Huang wrote:
+> > Hi guys,
+> > 
+> > I'm trying to enable migration from MtCollins(Ampere Altra, ARMv8.2+) to
+> > AmpereOne(AmpereOne, ARMv8.6+), the migration always fails when migration from
+> > MtCollins to AmpereOne due to some register fields differing between the
+> > two machines.
+> > 
+> > In this patch series, we try to make more register fields writable like
+> > ID_AA64PFR1_EL1.BT. This is first step towards making the migration possible.
+> > Some other hurdles need to be overcome. This is not sufficient to make the
+> > migration successful from MtCollins to AmpereOne.
+> 
+> It isn't possible to transparently migrate between these systems. The
+> former has a cntfrq of 25MHz, and the latter has a cntfrq of 1GHz. There
+> isn't a mechanism for scaling the counter frequency, and I have zero
+> appetite for a paravirt interface.
 
-Incorrect arguments are passed to fcntl() in test_sockmap.c when invoking
-it to set file status flags. If O_NONBLOCK is used as 2nd argument and
-passed into fcntl, -EINVAL will be returned (See do_fcntl() in fs/fcntl.c).
-The correct approach is to use F_SETFL as 2nd argument, and O_NONBLOCK as
-3rd one.
+Note that there *is* an architectural workaround in the form of
+FEAT_CNTSC. But of course:
 
-Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/test_sockmap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+- it is optional (and likely not implemented)
+- it is global (hence affecting all SW running on the machine)
+- it invalidates the requirements of ARMv8.6 (who cares?)
+- KVM has nothing to do with it (yay!)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 9cba4ec844a5..99d3ca8e44bb 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -604,7 +604,9 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 		struct timeval timeout;
- 		fd_set w;
- 
--		fcntl(fd, fd_flags);
-+		if (fcntl(fd, F_SETFL, fd_flags))
-+			goto out_errno;
-+
- 		/* Account for pop bytes noting each iteration of apply will
- 		 * call msg_pop_data helper so we need to account for this
- 		 * by calculating the number of apply iterations. Note user
+So if the two systems (from the same manufacturer) were ever designed
+to allow migration between the two, they would have at least baked
+some of that in.
+
+As for the paravirt interface, I agree that this is a non-starter
+(been there, done that, dumped it in the bin).
+
+The patch itself is interesting and may be of use once it has been put
+to a compiler and not just dumped on the list without any testing.
+
+	M.
+
 -- 
-2.43.0
-
+Without deviation from the norm, progress is not possible.
 
