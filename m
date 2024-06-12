@@ -1,153 +1,157 @@
-Return-Path: <linux-kselftest+bounces-11725-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1797904878
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 03:36:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CED19048C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:11:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37828284F40
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 01:36:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B01A1F23768
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5994A15;
-	Wed, 12 Jun 2024 01:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993304696;
+	Wed, 12 Jun 2024 02:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHOJVDHK"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="wBW4yYtP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700984C90;
-	Wed, 12 Jun 2024 01:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A195664
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 02:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718156150; cv=none; b=sr8aOhQ00c+rBcERpS5CGab8Z4ZK7JyyFVz0IVP6x7w1JzuoIUaMgCiks/K6zjwa8ZD09Ffsem44OK8gIrucNRkop6Tfkw2/xcLFICmYVzht/zI1jxguuvbRXmsQ9ev1UcBfQd6PU0xtw5N/pcYnCx1PY9lr0+N8BB73iP5RNR8=
+	t=1718158298; cv=none; b=g2nsCC0hnOvR2fLeQIz+l5Tx975zVDrdhvSmGj4bKrH37xue1LHYZ7vh0ZKSGbiKpTeWhjGM71eWggPUyA+5xYOIelkYcLR1fsYymgSeTBdZ3a/ixMgzxBwnImduwHm/46c0WilKXQ5pgPBxlnO5iYwLA/4z2QxoGiqY5KxxrEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718156150; c=relaxed/simple;
-	bh=yTYu+zjzSnvVXtDPpg8jDiEvElerW8Sdp2y1QzZxXgg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O3E/fDKkRjWLi4ftU+/VwIb9QcZYL0D+24eUDaTFQs4pQc1SObZHSZyEYiyriWqQ9Jk62lle3Y08C7opUZiJS9AgMDB20PrHL/oVoBzU2TjIF1zpCULHHEGmMYFUe7cI2xNfQPtUp42XuF/esDRlOiL2evI1oY6dRu+hcJi2ou0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHOJVDHK; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2c2ecd25e5aso2995715a91.2;
-        Tue, 11 Jun 2024 18:35:49 -0700 (PDT)
+	s=arc-20240116; t=1718158298; c=relaxed/simple;
+	bh=4Eiz0wP4UnE1R7S3ag+tCN//C4vGsaCH1uGfc2rZXaY=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=WD+eJwJ+R24bZm/soZ9zboUTe8m7cZugHCcjgF3eVJVb9/ww/Wu3qWUtAUKMcIjq2Tt1ncu+7MKg3TH4aQTIFWUPjSdSdmp68Zv6idU1hvZphbR/30msGjBCsYuuzeV4CDIw527yAL5N5SvDoTwSIZulj80e1cQBQ/RsMX+wscc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=wBW4yYtP; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f7274a453bso17038645ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 19:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718156149; x=1718760949; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHJbujBLIYDpnFz6RlBGq04LsufYNQpcJYJ5eGH4g8U=;
-        b=cHOJVDHK62uNRG3x2xbt1KLyVLQXGM3F9zzb6103EX2vZT0/kx0yQNL4kbNMmO1zFg
-         jmkEFmyuUiprnMXtv6HEuGLVQ7fH6tK95ZL6Hdj3sHf233Jp1PzxHx06psghV9vtVG/5
-         kvptRyfxwyQlOsPQ+YbV97W84MbQ6kC44gAAFb0iWcTjq08hnLTaLV6CoZ9A1Pnq3q7s
-         Tv38bXla56TlQigJg/fZW8OJKz7Q5SsHTyG6BrGwX5D+yoaaykiBOGjVKiVEEyLCUT4M
-         rkrEdstTQlVbG/bF6a5UbU5cm3M6WMqgYo5t7N+M3Ua/6C5znL2ZbXJF1jBbwFVF9Q3x
-         m7og==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718158296; x=1718763096; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uz2MkN53avJ8QPGmdHu+I2yHEKPqF9KR06SF6VOOLEM=;
+        b=wBW4yYtPBkuQakxOLbLHTSzbxTGmpXDeYrlREIm6hQcD/Pnby4RhoVFqh6vfivWVmx
+         jUPUobdV+SdOhXVgXSq47fzd0hKzoA+JnMFjGqkIx+f+W6QZ5jUdbkyvQQ+Xxk7KuU0g
+         R99eXSUa7f38DBfsPLfe7szf6Dr/C5eVSX/9MA0Xvry8rQRuCdoLdvTDtln6gs+ucJyq
+         5EieF039bb4aWJlZh5PSBSrI8OV/4lDazY02PF45uYJhG3jcmYUoNJPwdd0BkGCNnq2H
+         Wetmq1mooNje9wtnmjP7fwrCU5O1KPQmJiItxb4tdiwCwujxWwXv+WxYKuimieNWwq9x
+         4IXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718156149; x=1718760949;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1718158296; x=1718763096;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aHJbujBLIYDpnFz6RlBGq04LsufYNQpcJYJ5eGH4g8U=;
-        b=LRvkivQEhsZh31Maox69gWir4QVStrkHWidBHeaX5EaDi82obhS3ipVDR901jPCNeJ
-         dlTCQSpX+EfyNBW1joUIXyTHb9x8dcSXzIgAp2zTc2WV5fgBQtO6FTrVfFGZ0wmQc9l1
-         ZnyWnb93DJG8B1tOBgZ3HrKN9Yf1hnjKr1UcoUBFoVN7k+juk2hktqRifRVppSz5ewWw
-         xtH/JzevtgXdMkfwAP0sZIuvpDU6/1peDiEkiDyI3bOkPIjf0TclRdLuSrdb0Wc4rNFg
-         IvGUL43cNoY+RKoEQ5EwdXL54xKvBLkiaWiMHfeea1E9GhRk72ylj6z5COhub0JjiuhX
-         LuqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWKaqKAckizLeRzxvOCsrIyfLkvPBLIqJBbFn057nS7uWUHpvrOlqdzDtI6QOqlhaKuNFyMmyYkUbGMb4DARKlHCja1HYel3b56CL+prhaVa4wHidbLMMZbLh5Vzu9ak0GKEIuD+DQL/7qReJmoBpWTXZWc1d1EtxQF4u0d0x7bEh5h
-X-Gm-Message-State: AOJu0YzamCECoQhNclHP6jk3/pW8GJR3TnTbZWicpk+TGHudiPcYviOs
-	pwddbImHzhmfCegn7qbhABRmxw8sEL5lf0cAvzzaiAdjbi7wLru/
-X-Google-Smtp-Source: AGHT+IFoOJlhlpGlmRm6t3JCw3P6OWv/Au5K+gL709xRpxP59BZGI0pbcGS0VqxcrwG3Ji8SDkGPXQ==
-X-Received: by 2002:a17:90a:c4:b0:2c4:aa8e:4efb with SMTP id 98e67ed59e1d1-2c4aa8e5204mr240435a91.40.1718156148586;
-        Tue, 11 Jun 2024 18:35:48 -0700 (PDT)
-Received: from localhost.localdomain (140-211-169-189-openstack.osuosl.org. [140.211.169.189])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4a76abe66sm295715a91.56.2024.06.11.18.35.48
+        bh=Uz2MkN53avJ8QPGmdHu+I2yHEKPqF9KR06SF6VOOLEM=;
+        b=jKw0LPTrKUCbVX7YFJnS+P9T0ZFP6OUJrLcS9AxmQX7lK4HJ39kL3HoQXiO8It9iJf
+         t3tAYUnoAD6G9XIj4xv4hbFsQQ9AeU6esR3vTjU+lQM4q+ecUOvsO1PlI9TEh8U6YRM4
+         Ontc7B8smdC5Ge+kU5NQ5iyzMuWKHQ/y4HfCLEOLgszgnwCpco7sLQcODyCM0XMHm5Hg
+         +EDxh2Gnap9gbEr9ICHC2X7URW0cOYBPXZpp0kH3CLv3SQxk2RI+oj04vH6QHSvcDqq2
+         RjTtFm4evrPrU9HlDXfOoi6C9coGhKbt8s6aNHc27f2k7HA18Lyt2W/rKuoRHAoNP6tG
+         uRLw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9L4xf3m35OiBEgYg+L2btJl3sAHZdaDSEdHx3QEJ9ZG+84VyUUc9kkFNyVc+TkJTYXVY/+jcZZctJc1hv8ehMGzIqt02JCJAkPfBJwJAQ
+X-Gm-Message-State: AOJu0Yxi8Cy6l5ACzfE1sJHfFLyNJu9+oFz4gE8NGLzFgeDLY5asUQ3K
+	YKT7U8ZUvxsg09fLnsiwC+9kX3JuC3Ubt0RovdZtaXv+uMsQds1SD50Ibcn2qsQ=
+X-Google-Smtp-Source: AGHT+IFpOD6y8amq2sXsuPDDgCTEZEo55Bp1BSowcH/O5aVp7WEQwmpk0XALVlb8hjfKrdawnB6eqQ==
+X-Received: by 2002:a17:902:e80c:b0:1f7:c33:aa7b with SMTP id d9443c01a7336-1f83b51bf76mr6727785ad.12.1718158295587;
+        Tue, 11 Jun 2024 19:11:35 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd80de1esm108454595ad.294.2024.06.11.19.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 18:35:48 -0700 (PDT)
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-To: paulmck@kernel.org,
-	linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	lance@osuosl.org
-Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's need
-Date: Wed, 12 Jun 2024 01:35:27 +0000
-Message-Id: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Jun 2024 19:11:35 -0700 (PDT)
+Message-ID: <666903d7.170a0220.1160b2.fb21@mx.google.com>
+Date: Tue, 11 Jun 2024 19:11:35 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-2-g64f5bc57b24e
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 5 builds: 0 failed, 5 passed,
+ 1 warning (v6.10-rc1-2-g64f5bc57b24e)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Add CFcommon.arch for the various arch's need for rcutorture.
+kselftest/next build: 5 builds: 0 failed, 5 passed, 1 warning (v6.10-rc1-2-=
+g64f5bc57b24e)
 
-According to [1] and [2], this patch
-Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
-x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.10-rc1-2-g64f5bc57b24e/
 
-The patch has been revised and improved under
-Paul E. McKenney's guidance [3].
+Tree: kselftest
+Branch: next
+Git Describe: v6.10-rc1-2-g64f5bc57b24e
+Git Commit: 64f5bc57b24e8c7935d51732571d405acfcf4b99
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-[1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
-[2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
-[3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
+Warnings Detected:
 
-Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
+arm64:
 
-Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14cf94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14cf94
+
 ---
- tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh       | 2 ++
- tools/testing/selftests/rcutorture/configs/rcu/CFcommon        | 1 -
- tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686   | 1 +
- tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64 | 1 +
- 4 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-index b33cd8753689..ad79784e552d 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-@@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORTURE_KCONFIG_GDB_ARG"
- config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KASAN_ARG"
- config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCSAN_ARG"
- config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_ARG"
-+config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
-+		      "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null`"
- cp $T/KcList $resdir/ConfigFragment
- 
- base_resdir=`echo $resdir | sed -e 's/\.[0-9]\+$//'`
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-index 0e92d85313aa..cf0387ae5358 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-@@ -1,6 +1,5 @@
- CONFIG_RCU_TORTURE_TEST=y
- CONFIG_PRINTK_TIME=y
--CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
- CONFIG_KVM_GUEST=y
- CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-new file mode 100644
-index 000000000000..2770560d56a0
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-@@ -0,0 +1 @@
-+CONFIG_HYPERVISOR_GUEST=y
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-new file mode 100644
-index 000000000000..2770560d56a0
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-@@ -0,0 +1 @@
-+CONFIG_HYPERVISOR_GUEST=y
--- 
-2.25.1
-
+For more info write to <info@kernelci.org>
 
