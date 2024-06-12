@@ -1,111 +1,299 @@
-Return-Path: <linux-kselftest+bounces-11795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 499E2905C68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 21:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B9BB905C67
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 21:59:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F358B1F2202E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 19:59:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 169C31F23FB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 19:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DEF84A36;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7A284A24;
 	Wed, 12 Jun 2024 19:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdZ0ef3s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UKl3kZhV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F8783CD7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC1F74079;
 	Wed, 12 Jun 2024 19:59:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718222362; cv=none; b=dnrenxnhZLiXVtdA295dBGkfcGqCCr5dlhFITYevvnvCKYdIWmmwRJV8ZbcOEWKgz7PEfpvLkShVzTYpkyl6ZNNkfHFjReES+RZxT0OdeZd8J3s7KSyTtuhiD0MkdZ/zWchckLIVKt75jE2zt7KvzG6+uU8KjE+QDLcqnbBPX+M=
+	t=1718222362; cv=none; b=DqAAZQz1Qc1mYVGm51YNP1UotiOa7qvDdQ9XvqnjefkQGJwpb78LWsCa1eoeAOrq1/WqfYfbc0k2SzIrIpAAJ9LYMa0u90du2/QRGWC5dHYZ1Is4ENM1NZjtKQv6DUCuCQbtTMu8cyIUbH81KQKPNp5aTClGtzJqD0T6MVA8pOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718222362; c=relaxed/simple;
-	bh=ywb3uiBG2wy3W42HC/zKfdSwk5lSiUjJmg2WrX2ndXU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fh/GtxsAV2TxQHrlDXQFXIdjqcCauPcuhuYwAiXah//qyP4rz5z3aFutbxoIcG+q/hRW9MpBp2AgcCpyoK4WXZx5MioJSrygU6e+8geAd6DnGhN39N7CtFTg85ieJydD4IgpzlBThUv4C8KNnw8AsC0sglmnQKesS4lTEWkgUYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdZ0ef3s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C4BC4AF1C;
+	bh=gQgeucopIFvRVCQF4ceGCKz1t07xM+X5iOVy95uccjk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Xq3qTG63iGEVzTKdP1ewrZeI4yLiBWtkgF9M1dKL9rwY6z/1Zz5AG7eDIxo6bit/QJbspoJn8e1wZSqhM8TUCFUgdSTVULHdqo9NjLt72hImuD9dw9XjT4dvq+1FRhGCPcdzGGHNMGb3sjM3eDqRgfBIadTTTN+dvfMGUg4QP1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UKl3kZhV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4C6C116B1;
 	Wed, 12 Jun 2024 19:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718222361;
-	bh=ywb3uiBG2wy3W42HC/zKfdSwk5lSiUjJmg2WrX2ndXU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gdZ0ef3swbOtu4F1HBTAPQa2DzYdERqCN34g33CXEgeljn2/5A/haffsVyUg/tYWR
-	 LCMfDwCvEj1TJ9phJbS1CZ77BY3DR/CZcChUJBnU1zAWSyMIMoW4HK5Qpr+6a+nrG8
-	 68b1H5hyFBuLWtjh7J7Q+MJR/bQ2Iv1K7XPH5aSnR4nMJlM5+jeywtEeVvqJ5BrOZA
-	 +Wmv6Rhv2Tmg+0cqattKws4UN32cG3Yw72GJj0rLd5VUzYF7G7ez4k+hHShDOUqaaK
-	 N/aONIMtabnXL9D/MebPj0W2APDB0OZbpdMrQ4KHQiY49AaKFX6r/ul7I7r3MbaFHr
-	 Ks3CbTVPu4sIA==
+	bh=gQgeucopIFvRVCQF4ceGCKz1t07xM+X5iOVy95uccjk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=UKl3kZhVXMEQWk0rL50H9tF9IHBSDs+fVjhQGW42FbfODB+S0naJePqfsW5g7/JKi
+	 VW8qY4iWOxDWAA5QnfkkREieUYrzxqXE77QyKX0iojrJNDQGOcGKl68fFgI4Vh6ukF
+	 4CaYm+uxvFkwsm4nxLSS+Qhh7C+TyqB4b5CsmuF/wZa+BiatUAh0czyLOjiBincA6N
+	 bLCeTRRYhcIA2cqDB4lXjSLVD1Ceij3661JndLj5NLxcRgUPfy+JKtgdGmonMNqvYs
+	 LBvD6hGiD88HFRJ1FdXClG3OJInsk0yBKJZCAs4dOsabQPB/omhR0l4+rJCWxwXSM1
+	 JvUbwOSO76ceA==
 From: Kees Cook <kees@kernel.org>
 To: Mark Rutland <mark.rutland@arm.com>
 Cc: Kees Cook <kees@kernel.org>,
+	David Gow <davidgow@google.com>,
 	Vitor Massaru Iha <vitor@massaru.org>,
 	Ivan Orlov <ivan.orlov0322@gmail.com>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
 	Rae Moar <rmoar@google.com>,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v3 0/2] usercopy: Convert test_user_copy to KUnit test
-Date: Wed, 12 Jun 2024 12:59:17 -0700
-Message-Id: <20240612195412.make.760-kees@kernel.org>
+Subject: [PATCH v3 1/2] kunit: test: Add vm_mmap() allocation resource manager
+Date: Wed, 12 Jun 2024 12:59:18 -0700
+Message-Id: <20240612195921.2685842-1-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240612195412.make.760-kees@kernel.org>
+References: <20240612195412.make.760-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1667; i=kees@kernel.org; h=from:subject:message-id; bh=ywb3uiBG2wy3W42HC/zKfdSwk5lSiUjJmg2WrX2ndXU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmaf4XEwSV7IuaeeCDHXmAIPUInE1HVQWFespdR wraZVkQQGuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZmn+FwAKCRCJcvTf3G3A JqH9D/9txSQCi1FIJJQ1Ag5Xwl/86L58GRfBVKTS7JD15KOFdocuGu52/CNwtYotA7DPcEheBXh oFDx8vdj5N4pRHTTDUYAHDcEhlPjZ/1ddI8SH5RJJgdNV8hv+RPVhe96Q1q2WFSKXPPsOdQ6iD8 qQQ131S6g/B3hqKD3DjNi6ypugExxOAR+7j8x8JTxONfQDjBuSWgvM+vanCM1XPHBNwBAztqfY+ nPECZuj3ZP9ulqjCe6tMhN93aSAe1UaFk6oO0utpnnMEC++sPTfMY3Xk8DH1WQ3yzTyJ6gg2XJO BjF5k3uAvtLU+mmRDzS/XvCWzsLTnFRrs568HlUPRB7uL9pdFM9NYdeiyDbokbmY1SMM4A147Cd cBs89TcwDjz6XBRwjL5Tc5a3gE+hu/wqWGVSa9+PBOIZLM6oCBqhpa34XqxRkx8vyUdlU2/P90L ZqC1gEYRVog8cZDSOXiYeD/D+MfMa3g1ZJ6qcazC27OjXrHN/avdgm0Bqq0Gh6AfBDe3+C8tNSt 5+axJO5e2tDqVwwSJ/5E2/b2Qw48tVaNuq9vhR1DQf/g96fJnt4JktzDR7cgaB6fHtGEDyX2I1y sE+iNvtFaffCjonvPp1iIUbRkns4sbrCPzQU8uBk8fiua3TT7y6vyg8jab5+DmYTlNw/qxFt8cS f/U9LEWdteKKV
- 5g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6270; i=kees@kernel.org; h=from:subject; bh=gQgeucopIFvRVCQF4ceGCKz1t07xM+X5iOVy95uccjk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmaf4XuIRCT8NnVJGnJWFziMecus/DIzUDHhQ+G 38BprOXOvaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZmn+FwAKCRCJcvTf3G3A Jtn6D/46Rfh4zJS6vBl7xbJXDk3oIL0oWLD+jfCBA3u4l4U0xMMqvSfXhDEntBmnPiDgQVi9Bcs 6ErHoErU3Ee1//9FRYsHYIG285IeqLcZ6JZvDJRJ0m5F7mv11KOjHB0y1E5uYxzwh3TgwUdJ0ra 4lrMXY111Ef3HauaCUNGu/yVbA+N9G+reZg+gASME9zM93mCCj6OnHRqx5CJoSxIIRCfwZRGHlR ZKPKWb7BYsLMV2Lml8bXu7bldKw0g4ucfH98xq46UjJ19wYrZVtwXuLMPhtcW2kgTEC5qaSgxuY MaEUTI2BZnwvLW6RCqfDzmOA5wfYZTc8/isVHZ3zYN0Q5fY1ZGFDoe+EUvv+YNMakIBcluxPyMS J6fCueMJp2Cn+eiJuS53dlTMJEEVFw94GYZpNITJgtt5uoVSrSBwiApSb37CrUKG0/G/Xi6lrZA 3b0KPzD6MXYMSnncMS2K5wYxrBw1oAHkVPY6GegE8rpecm4XjTASULxDkcd3wDjGIvNSffD5Z79 r8UXvyxrnyV2Z8Y+dpzVKiHcSeJNbmezVH8Zrptyx592nPhi2sM8927u7lOzlmiyMgpgkYFPexF 2NMBoZGrI3GMJwyw7LUPTBcUGwGJTJP7+StB8+lda45BmLS27DbobzDnfhhQIn1RWssnmQc7xNM gqwuj7BSWlNuZPA==
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
+For tests that need to allocate using vm_mmap() (e.g. usercopy and
+execve), provide the interface to have the allocation tracked by KUnit
+itself. This requires bringing up a placeholder userspace mm.
 
-This builds on the proposal[1] from Mark and lets me convert the
-existing usercopy selftest to KUnit. Besides adding this basic test to
-the KUnit collection, it also opens the door for execve testing (which
-depends on having a functional current->mm), and should provide the
-basic infrastructure for adding Mark's much more complete usercopy tests.
+This combines my earlier attempt at this with Mark Rutland's version[1].
 
- v3:
-  - use MEMEQ KUnit helper (David)
-  - exclude pathological address confusion test for systems with separate
-    address spaces, noticed by David
-  - add KUnit-conditional exports for alloc_mm() and arch_pick_mmap_layout()
-    noticed by 0day
- v2: https://lore.kernel.org/lkml/20240610213055.it.075-kees@kernel.org/
- v1: https://lore.kernel.org/lkml/20240519190422.work.715-kees@kernel.org/
+Normally alloc_mm() and arch_pick_mmap_layout() aren't exported for
+modules, so export these only for KUnit testing.
 
--Kees
-
-[1] https://lore.kernel.org/lkml/20230321122514.1743889-2-mark.rutland@arm.com/
-
-Kees Cook (2):
-  kunit: test: Add vm_mmap() allocation resource manager
-  usercopy: Convert test_user_copy to KUnit test
-
- MAINTAINERS                                |   1 +
- include/kunit/test.h                       |  17 ++
- kernel/fork.c                              |   3 +
- lib/Kconfig.debug                          |  21 +-
- lib/Makefile                               |   2 +-
- lib/kunit/Makefile                         |   1 +
- lib/kunit/user_alloc.c                     | 113 +++++++++
- lib/{test_user_copy.c => usercopy_kunit.c} | 282 ++++++++++-----------
- mm/util.c                                  |   3 +
- 9 files changed, 288 insertions(+), 155 deletions(-)
+Link: https://lore.kernel.org/lkml/20230321122514.1743889-2-mark.rutland@arm.com/ [1]
+Co-developed-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ include/kunit/test.h   |  17 +++++++
+ kernel/fork.c          |   3 ++
+ lib/kunit/Makefile     |   1 +
+ lib/kunit/user_alloc.c | 113 +++++++++++++++++++++++++++++++++++++++++
+ mm/util.c              |   3 ++
+ 5 files changed, 137 insertions(+)
  create mode 100644 lib/kunit/user_alloc.c
- rename lib/{test_user_copy.c => usercopy_kunit.c} (46%)
 
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index e32b4cb7afa2..ec61cad6b71d 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -480,6 +480,23 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
+ 	return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
+ }
+ 
++/**
++ * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
++ * @test: The test context object.
++ * @file: struct file pointer to map from, if any
++ * @addr: desired address, if any
++ * @len: how many bytes to allocate
++ * @prot: mmap PROT_* bits
++ * @flag: mmap flags
++ * @offset: offset into @file to start mapping from.
++ *
++ * See vm_mmap() for more information.
++ */
++unsigned long kunit_vm_mmap(struct kunit *test, struct file *file,
++			    unsigned long addr, unsigned long len,
++			    unsigned long prot, unsigned long flag,
++			    unsigned long offset);
++
+ void kunit_cleanup(struct kunit *test);
+ 
+ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt, ...);
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 99076dbe27d8..cea203197136 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -115,6 +115,8 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/task.h>
+ 
++#include <kunit/visibility.h>
++
+ /*
+  * Minimum number of threads to boot the kernel
+  */
+@@ -1334,6 +1336,7 @@ struct mm_struct *mm_alloc(void)
+ 	memset(mm, 0, sizeof(*mm));
+ 	return mm_init(mm, current, current_user_ns());
+ }
++EXPORT_SYMBOL_IF_KUNIT(mm_alloc);
+ 
+ static inline void __mmput(struct mm_struct *mm)
+ {
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 309659a32a78..56dd67dc6e57 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -2,6 +2,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+ 
+ kunit-objs +=				test.o \
+ 					resource.o \
++					user_alloc.o \
+ 					static_stub.o \
+ 					string-stream.o \
+ 					assert.o \
+diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
+new file mode 100644
+index 000000000000..76d3d1345ed7
+--- /dev/null
++++ b/lib/kunit/user_alloc.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit userspace memory allocation resource management.
++ */
++#include <kunit/resource.h>
++#include <kunit/test.h>
++#include <linux/kthread.h>
++#include <linux/mm.h>
++
++struct kunit_vm_mmap_resource {
++	unsigned long addr;
++	size_t size;
++};
++
++/* vm_mmap() arguments */
++struct kunit_vm_mmap_params {
++	struct file *file;
++	unsigned long addr;
++	unsigned long len;
++	unsigned long prot;
++	unsigned long flag;
++	unsigned long offset;
++};
++
++/* Create and attach a new mm if it doesn't already exist. */
++static int kunit_attach_mm(void)
++{
++	struct mm_struct *mm;
++
++	if (current->mm)
++		return 0;
++
++	mm = mm_alloc();
++	if (!mm)
++		return -ENOMEM;
++
++	/* Define the task size. */
++	mm->task_size = TASK_SIZE;
++
++	/* Make sure we can allocate new VMAs. */
++	arch_pick_mmap_layout(mm, &current->signal->rlim[RLIMIT_STACK]);
++
++	/* Attach the mm. It will be cleaned up when the process dies. */
++	kthread_use_mm(mm);
++
++	return 0;
++}
++
++static int kunit_vm_mmap_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_vm_mmap_params *p = context;
++	struct kunit_vm_mmap_resource vres;
++	int ret;
++
++	ret = kunit_attach_mm();
++	if (ret)
++		return ret;
++
++	vres.size = p->len;
++	vres.addr = vm_mmap(p->file, p->addr, p->len, p->prot, p->flag, p->offset);
++	if (!vres.addr)
++		return -ENOMEM;
++	res->data = kmemdup(&vres, sizeof(vres), GFP_KERNEL);
++	if (!res->data) {
++		vm_munmap(vres.addr, vres.size);
++		return -ENOMEM;
++	}
++
++	return 0;
++}
++
++static void kunit_vm_mmap_free(struct kunit_resource *res)
++{
++	struct kunit_vm_mmap_resource *vres = res->data;
++
++	/*
++	 * Since this is executed from the test monitoring process,
++	 * the test's mm has already been torn down. We don't need
++	 * to run vm_munmap(vres->addr, vres->size), only clean up
++	 * the vres.
++	 */
++
++	kfree(vres);
++	res->data = NULL;
++}
++
++unsigned long kunit_vm_mmap(struct kunit *test, struct file *file,
++			    unsigned long addr, unsigned long len,
++			    unsigned long prot, unsigned long flag,
++			    unsigned long offset)
++{
++	struct kunit_vm_mmap_params params = {
++		.file = file,
++		.addr = addr,
++		.len = len,
++		.prot = prot,
++		.flag = flag,
++		.offset = offset,
++	};
++	struct kunit_vm_mmap_resource *vres;
++
++	vres = kunit_alloc_resource(test,
++				    kunit_vm_mmap_init,
++				    kunit_vm_mmap_free,
++				    GFP_KERNEL,
++				    &params);
++	if (vres)
++		return vres->addr;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(kunit_vm_mmap);
++
++MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+diff --git a/mm/util.c b/mm/util.c
+index c9e519e6811f..df37c47d9374 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -26,6 +26,8 @@
+ 
+ #include <linux/uaccess.h>
+ 
++#include <kunit/visibility.h>
++
+ #include "internal.h"
+ #include "swap.h"
+ 
+@@ -482,6 +484,7 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+ 	clear_bit(MMF_TOPDOWN, &mm->flags);
+ }
+ #endif
++EXPORT_SYMBOL_IF_KUNIT(arch_pick_mmap_layout);
+ 
+ /**
+  * __account_locked_vm - account locked pages to an mm's locked_vm
 -- 
 2.34.1
 
