@@ -1,273 +1,271 @@
-Return-Path: <linux-kselftest+bounces-11744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21A58904DE3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 10:16:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D46904DD8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 10:16:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AD5C2821B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 08:16:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2547EB207AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 08:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42052168C33;
-	Wed, 12 Jun 2024 08:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDD816D319;
+	Wed, 12 Jun 2024 08:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Xc+92hCH"
+	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="T/COupJO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Q1t7Oopg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from wflow5-smtp.messagingengine.com (wflow5-smtp.messagingengine.com [64.147.123.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D35115279B;
-	Wed, 12 Jun 2024 08:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A355416D305;
+	Wed, 12 Jun 2024 08:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718180213; cv=none; b=UPjzd8ZWIwWVa5yL8AYDUTCpm5/1A6O0ErL3YArEuhRSCUBp1GEZuIrN469u/HKxgVhcTXHnIJASQEO1p2EwRsSN3b8S239mlU2LLmk2SwENebwKDBRW0TRa4Q89Z0gpVwY7kBVEPuo2zwfBO4r+Ms+hznw0nQQcEl1xw1MzifI=
+	t=1718180148; cv=none; b=deuYjV9nKHnGLkYfwfED7o3lUPR0/MFNmCpqhtaDOvm4EMBvbcEOnUGBfjSRpbCZcJSZ1RYIi1EqN0ngido1OsgXDYs9h45fPWfuR62w80ykrEgkKAMVaQAQzT1nvvR2b5KE/OVCXUgwM1FGMxnCbcjt4kXC31Vc58JfCGmhFZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718180213; c=relaxed/simple;
-	bh=Yg97OsjtcY3yk1e+X2kIqRNCmOwcA8lmuN0BccmJp1w=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=r7DkSc3NdUHV+NnVFaE9lmO/ruBU+72IaWqRXRcm0CeU6TBAjcqOlY2mQj/yrlwleZRKMPgxYDouGX7PJMyOd2fdtcizvkbM427HzaxtZK80MBfZuPppErM4hYObAQAw89BVuxzX2PdnH9Ws3+aq0KQGVSxkMSw9l3CSLc4VGx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Xc+92hCH; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718180209;
-	bh=Yg97OsjtcY3yk1e+X2kIqRNCmOwcA8lmuN0BccmJp1w=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=Xc+92hCH52rej/sP6x6VK+kHGHGlTm2WhSJg3MJWkGfjDr019xsMMlkisR+4kVWqS
-	 KJYh9UP96g88t0hLyrCwmQRUgb/nvkfQZEv/k67Nf+aCu4B8B20iAqz0e2YbEa37l7
-	 97X2K2JgZhyXagoQ2bS2tiyb0MXQJ2mVemD4FmjllWbrzOLewAHwNTaS9RIs7PlPJ3
-	 5rmSLUzAQR4VYT9gtfD4842oJJa6Zu0Q5vos3emaEv5xFQXv/Puzm/RyGsqLLRsbO1
-	 R96kLsBkz36kBGu/M0ZkRNBxQJ46UZ+2P3oU/uYG5rBMlplK8uD65h01wBd2mb4e7p
-	 Hf/gaWkJRh4tQ==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 053CD378216D;
-	Wed, 12 Jun 2024 08:16:46 +0000 (UTC)
-Message-ID: <87e6beea-4618-4a5c-a883-42ef64a2d584@collabora.com>
-Date: Wed, 12 Jun 2024 13:17:23 +0500
+	s=arc-20240116; t=1718180148; c=relaxed/simple;
+	bh=U6hukzBbxKrvojtraGdCUg5S848y4qN0OYQuMf0rzt8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nPBxECaVt8IPUzcE/h+brj/Pizn8iUe3t2kAg62fb/+qwW2rPShxzVf6zJ0EySVPwHHfZ0eyhGJsbcdCffXlAO3GPjnL+ds62jqBijMwMOoHFu5117epb8GpQR+LhzUFHoNfSVCcb0LsDWnz+smHkKyXonCz6SYTrQzGvHYfoZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=T/COupJO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Q1t7Oopg; arc=none smtp.client-ip=64.147.123.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.west.internal (Postfix) with ESMTP id 56FE02CC01F5;
+	Wed, 12 Jun 2024 04:15:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 12 Jun 2024 04:15:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718180142;
+	 x=1718183742; bh=HeipJvuPUXcxMs0ABdL536egEdVvkPwYQPNqw34NrRM=; b=
+	T/COupJOcGQBBzKb4rbSed3jgNiyDZbxjs5JEtO62DxXUNSbNnBaXJ6I3BPKd6Z+
+	6ARsd0guK71kwjXw1RDdKg5FDdOuWZkhwcyazmIZQ+0GGUiPXA//nZRmjiyKDLNQ
+	H3/FNjklRKt6S0bTwlxmBGERxBLF6m4484BT0r9L+hTKInVQ+3ZYLh5YNyhJQYXp
+	ZZZMseNCt+e5LtkzAJE90jHuYM3sIq1I7W7lunhkpVB8TAmty1La50EuAaJ2vR/x
+	PTEbGgbt62p4WoIo7bG36hXKZCWOBjYI6WmrR/4jUJFSGtN1AaNl7FrHu6maHb+C
+	adktYiXIICDWSH7ngkbRJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718180142; x=
+	1718183742; bh=HeipJvuPUXcxMs0ABdL536egEdVvkPwYQPNqw34NrRM=; b=Q
+	1t7OopgDslFmy8Sn7kpNoKmWbzt3Z2MGoExLH6bfO3TYPzfnfQmHEmYzcMmDYeHV
+	4dOdhWYUwwev8eBSiP2BjHKfakaj7tjqMPnm2sdSXNNRycOPLgtwenCOF46yNAyx
+	pPGsiB5WI1cN0szwAA8d9Y57IMMJlW3Ei1JOljlO9f5ryb0xDOh5eGgEy9Jj/ToU
+	J12o9vnGWKGOfi3Pf99MDmRwkD/fZLuT0kChTde7Io3QW+/d+bIpBFmWeAnhDtLL
+	Sktq4hNvnEGvGrHexapT4Ja5f4O0hdjtDsDaNSAJp70b6y8l05Fy5XHVTfs3iZLk
+	IGtT76BrLZv7Sbyt6kHjw==
+X-ME-Sender: <xms:LllpZr8xON2t8JBtvP8z2r9RPYAmVXKWxpra7VsoLzksHIWrVAqsTw>
+    <xme:LllpZnvkqHMbLn7nTwJpStwes9BHkU7PymLNoNE0gBFFBIWcXFG3r7Wg35DH8sg6E
+    Ww3SmzOnbYfBIBkWs8>
+X-ME-Received: <xmr:LllpZpAi9D44gg8B35OwmmG863qQRbZ6qMZRrXVT34TXUCAV6qQheTcH-4QZDZnznyXra_ThPng13sWtDhfFg7Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeflohhn
+    rghthhgrnhcuvegrlhhmvghlshcuoehjtggrlhhmvghlshesfeiggidtrdhnvghtqeenuc
+    ggtffrrghtthgvrhhnpeetgedutdfggeetleefhfeuhedtheduteekieduvdeigeegvdev
+    vddtieekiedvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjtggrlhhmvghlshesfeiggidtrdhnvght
+X-ME-Proxy: <xmx:LllpZneDoyZ-RX3X4rVUuUmiN2s53H0HQpEPmjarSlJmdbeNsrC-cg>
+    <xmx:LllpZgOos_vdtrYhH4zy-fXOAUsMnhJPoF2-A5YI2fB8xlNbQzKhqQ>
+    <xmx:LllpZpnXG5LqLB-ZltLJVdyjPBFYDlsy8SHeGNxT_BRuOggOAb-DYg>
+    <xmx:LllpZqvTNxszjuD5ehQbJyHiu7_SOSqdldAZXDNby64nJkUiYieeqQ>
+    <xmx:LllpZquORTNviG0fl8x754yxTGr1qD6L8k5YykdTsQFtiAHXFTPbkZnD>
+Feedback-ID: i76614979:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Jun 2024 04:15:38 -0400 (EDT)
+Date: Wed, 12 Jun 2024 01:20:49 -0700
+From: Jonathan Calmels <jcalmels@3xx0.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: John Johansen <john.johansen@canonical.com>, brauner@kernel.org,
+ 	ebiederm@xmission.com, Jonathan Corbet <corbet@lwn.net>,
+ 	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ 	KP Singh <kpsingh@kernel.org>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ 	Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ 	Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ 	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ 	Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
+ Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
+ David Howells <dhowells@redhat.com>,
+ 	Jarkko Sakkinen <jarkko@kernel.org>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ 	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, 	containers@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ 	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+ bpf@vger.kernel.org, 	apparmor@lists.ubuntu.com,
+ keyrings@vger.kernel.org, selinux@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM
+ hooks
+Message-ID: <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
+References: <20240609104355.442002-1-jcalmels@3xx0.net>
+ <20240609104355.442002-5-jcalmels@3xx0.net>
+ <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
+ <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
+ <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com>
+ <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
+ <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
+ <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com
-Subject: Re: [PATCH v2 1/4] kselftests: vdso: vdso_test_clock_getres: conform
- test to TAP output
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240610054129.1527389-1-usama.anjum@collabora.com>
- <20240610054129.1527389-2-usama.anjum@collabora.com>
- <7b020209-3b20-48f4-92fb-099d80aee625@linuxfoundation.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <7b020209-3b20-48f4-92fb-099d80aee625@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com>
 
-On 6/12/24 1:32 AM, Shuah Khan wrote:
-> On 6/9/24 23:41, Muhammad Usama Anjum wrote:
->> Conform the layout, informational and status messages to TAP. No
->> functional change is intended other than the layout of output messages.
->> Use kselftest_harness.h to conform to TAP as the number of tests depend
->> on the available options at build time. The kselftest_harness makes the
+On Tue, Jun 11, 2024 at 06:38:31PM GMT, Paul Moore wrote:
+> On Tue, Jun 11, 2024 at 6:15 PM Jonathan Calmels <jcalmels@3xx0.net> wrote:
+> > On Tue, Jun 11, 2024 at 03:01:01PM GMT, Paul Moore wrote:
+> > > On Tue, Jun 11, 2024 at 6:32 AM John Johansen
+> > > <john.johansen@canonical.com> wrote:
+> > > >
+> > > > On 6/11/24 01:09, Jonathan Calmels wrote:
+> > > > > On Sun, Jun 09, 2024 at 08:18:48PM GMT, Paul Moore wrote:
+> > > > >> On Sun, Jun 9, 2024 at 6:40 AM Jonathan Calmels <jcalmels@3xx0.net> wrote:
+> > > > >>>
+> > > > >>> This patch allows modifying the various capabilities of the struct cred
+> > > > >>> in BPF-LSM hooks. More specifically, the userns_create hook called
+> > > > >>> prior to creating a new user namespace.
+> > > > >>>
+> > > > >>> With the introduction of userns capabilities, this effectively provides
+> > > > >>> a simple way for LSMs to control the capabilities granted to a user
+> > > > >>> namespace and all its descendants.
+> > > > >>>
+> > > > >>> Update the selftests accordingly by dropping CAP_SYS_ADMIN in
+> > > > >>> namespaces and checking the resulting task's bounding set.
+> > > > >>>
+> > > > >>> Signed-off-by: Jonathan Calmels <jcalmels@3xx0.net>
+> > > > >>> ---
+> > > > >>>   include/linux/lsm_hook_defs.h                 |  2 +-
+> > > > >>>   include/linux/security.h                      |  4 +-
+> > > > >>>   kernel/bpf/bpf_lsm.c                          | 55 +++++++++++++++++++
+> > > > >>>   security/apparmor/lsm.c                       |  2 +-
+> > > > >>>   security/security.c                           |  6 +-
+> > > > >>>   security/selinux/hooks.c                      |  2 +-
+> > > > >>>   .../selftests/bpf/prog_tests/deny_namespace.c | 12 ++--
+> > > > >>>   .../selftests/bpf/progs/test_deny_namespace.c |  7 ++-
+> > > > >>>   8 files changed, 76 insertions(+), 14 deletions(-)
+> > > > >>
+> > > > >> I'm not sure we want to go down the path of a LSM modifying the POSIX
+> > > > >> capabilities of a task, other than the capabilities/commoncap LSM.  It
+> > > > >> sets a bad precedent and could further complicate issues around LSM
+> > > > >> ordering.
+> > > > >
+> > > > > Well unless I'm misunderstanding, this does allow modifying the
+> > > > > capabilities/commoncap LSM through BTF. The reason for allowing
+> > > > > `userns_create` to be modified is that it is functionally very similar
+> > > > > to `cred_prepare` in that it operates with new creds (but specific to
+> > > > > user namespaces because of reasons detailed in [1]).
+> > > >
+> > > > yes
+> > > >
+> > > > > There were some concerns in previous threads that the userns caps by
+> > > > > themselves wouldn't be granular enough, hence the LSM integration.
+> > > >
+> > > > > Ubuntu for example, currently has to resort to a hardcoded profile
+> > > > > transition to achieve this [2].
+> > > > >
+> > > >
+> > > > The hard coded profile transition, is because the more generic solution
+> > > > as part of policy just wasn't ready. The hard coding will go away before
+> > > > it is upstreamed.
+> > > >
+> > > > But yes, updating the cred really is necessary for the flexibility needed
+> > > > whether it is modifying the POSIX capabilities of the task or the LSM
+> > > > modifying its own security blob.
+> > > >
+> > > > I do share some of Paul's concerns about the LSM modifying the POSIX
+> > > > capabilities of the task, but also thing the LSM here needs to be
+> > > > able to modify its own blob.
+> > >
+> > > To be clear, this isn't about a generic LSM needing to update its own
+> > > blob (LSM state), it is about the BPF LSM updating the capability
+> > > sets.  While we obviously must support a LSM updating its own state,
+> > > I'm currently of the opinion that allowing one LSM to update the state
+> > > of another LSM is only going to lead to problems.  We wouldn't want to
+> > > allow Smack to update AppArmor state, and from my current perspective
+> > > allowing the BPF LSM to update the capability state is no different.
+> > >
+> > > It's also important to keep in mind that if we allow one LSM to do
+> > > something, we need to allow all LSMs to do something.  If we allow
+> > > multiple LSMs to manipulate the capability sets, how do we reconcile
+> > > differences in the desired capability state?  Does that resolution
+> > > change depending on what LSMs are enabled at build time?  Enabled at
+> > > boot?  Similarly, what about custom LSM ordering?
+> > >
+> > > What about those LSMs that use a task's capabilities as an input to an
+> > > access control decision?  If those LSMs allow an access based on a
+> > > given capability set only to have a LSM later in the ordering modify
+> > > that capability set to something which would have resulted in an
+> > > access denial, do we risk a security regression?
+> >
+> > I understand the concerns, what I fail to understand however, is how is
+> > it any different from say the `cred_prepare` hook today?
 > 
+> The existing cred_prepare hooks only operate on their own small
+> portion of the cred::security blob.  What you are proposing would be
+> the BPF LSM operating on the capability sets that it does not "own"
+> (they belong to the capability LSM).
 > 
-> How does converting to kselftest_harness help with available options ay
-> build time? Can you explain?
+> If you see that as a minor difference, please understand that if you
+> skip past that you have all the issues I mentioned in my previous
+> message to deal with.
 > 
-> I am not seeing any value in converting this test to the harness? I want
-> to see a better justification.
-
-Before:
-./vdso_test_clock_getres
-clock_id: CLOCK_REALTIME [PASS]
-clock_id: CLOCK_BOOTTIME [PASS]
-clock_id: CLOCK_TAI [PASS]
-clock_id: CLOCK_REALTIME_COARSE [PASS]
-clock_id: CLOCK_MONOTONIC [PASS]
-clock_id: CLOCK_MONOTONIC_RAW [PASS]
-clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-
-Here is the output of the test before this patch. The test output test
-names and if they are passed or failed. It doesn't output information
-related to error when it occurs. I wanted to convert it to standard format
-by using kselftest.h where we can get the error related information as
-well. But as the number of tests depend on how many of CLOCK_BOOTTIME,
-CLOCK_TAI etc are defined, static counting is difficult. Test harness is
-best suited for this. Output:
-
-./vdso_test_clock_getres
-TAP version 13
-1..7
-# Starting 7 tests from 1 test cases.
-#  RUN           global.clock_realtime ...
-#            OK  global.clock_realtime
-ok 1 global.clock_realtime
-#  RUN           global.clock_boottime ...
-#            OK  global.clock_boottime
-ok 2 global.clock_boottime
-#  RUN           global.clock_tai ...
-#            OK  global.clock_tai
-ok 3 global.clock_tai
-#  RUN           global.clock_realtime_coarse ...
-#            OK  global.clock_realtime_coarse
-ok 4 global.clock_realtime_coarse
-#  RUN           global.clock_monotonic ...
-#            OK  global.clock_monotonic
-ok 5 global.clock_monotonic
-#  RUN           global.clock_monotonic_raw ...
-#            OK  global.clock_monotonic_raw
-ok 6 global.clock_monotonic_raw
-#  RUN           global.clock_monotonic_coarse ...
-#            OK  global.clock_monotonic_coarse
-ok 7 global.clock_monotonic_coarse
-# PASSED: 7 / 7 tests passed.
-# Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Not only the code is simplified, the descriptive error is printed on
-console that what went wrong. Example if a test case fails:
-
-#  RUN           global.clock_realtime ...
-# vdso_test_clock_getres.c:66:clock_realtime:Expected 1 (1) == ((x.tv_sec
-!= y.tv_sec) || (x.tv_nsec != y.tv_nsec)) (0)
-# clock_realtime: Test terminated by assertion
-#          FAIL  global.clock_realtime
-not ok 1 global.clock_realtime
-
+> > > Our current approach to handling multiple LSMs is that each LSM is
+> > > limited to modifying its own state, and I'm pretty confident that we
+> > > stick to this model if we have any hope of preserving the sanity of
+> > > the LSM layer as a whole.  If you want to modify the capability set
+> > > you need to do so within the confines of the capability LSM and/or
+> > > modify the other related kernel subsystems (which I'm guessing will
+> > > likely necessitate a change in the LSMs, but that avenue is very
+> > > unclear if such an option even exists).
+> >
+> > What do you mean by "within the confines of the capability LSM" here?
 > 
->> test easy to convert and presents better maintainability.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes since v1:
->> - Update commit message to include that kselftest_harness has been used
->>    to conform to TAP and why
->> ---
->>   .../selftests/vDSO/vdso_test_clock_getres.c   | 68 +++++++++----------
->>   1 file changed, 33 insertions(+), 35 deletions(-)
->>
->> diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
->> b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
->> index 38d46a8bf7cba..c1ede40521f05 100644
->> --- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
->> +++ b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
->> @@ -25,7 +25,7 @@
->>   #include <unistd.h>
->>   #include <sys/syscall.h>
->>   -#include "../kselftest.h"
->> +#include "../kselftest_harness.h"
->>     static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
->>   {
->> @@ -54,18 +54,8 @@ const char *vdso_clock_name[12] = {
->>   /*
->>    * This function calls clock_getres in vdso and by system call
->>    * with different values for clock_id.
->> - *
->> - * Example of output:
->> - *
->> - * clock_id: CLOCK_REALTIME [PASS]
->> - * clock_id: CLOCK_BOOTTIME [PASS]
->> - * clock_id: CLOCK_TAI [PASS]
->> - * clock_id: CLOCK_REALTIME_COARSE [PASS]
->> - * clock_id: CLOCK_MONOTONIC [PASS]
->> - * clock_id: CLOCK_MONOTONIC_RAW [PASS]
->> - * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>    */
->> -static inline int vdso_test_clock(unsigned int clock_id)
->> +static inline void vdso_test_clock(struct __test_metadata *_metadata,
->> unsigned int clock_id)
->>   {
->>       struct timespec x, y;
->>   @@ -73,52 +63,60 @@ static inline int vdso_test_clock(unsigned int
->> clock_id)
->>       clock_getres(clock_id, &x);
->>       syscall_clock_getres(clock_id, &y);
->>   -    if ((x.tv_sec != y.tv_sec) || (x.tv_nsec != y.tv_nsec)) {
->> -        printf(" [FAIL]\n");
->> -        return KSFT_FAIL;
->> -    }
->> -
->> -    printf(" [PASS]\n");
->> -    return KSFT_PASS;
->> +    ASSERT_EQ(0, ((x.tv_sec != y.tv_sec) || (x.tv_nsec != y.tv_nsec)));
->>   }
->>   -int main(int argc, char **argv)
->> -{
->> -    int ret = 0;
->> -
->>   #if _POSIX_TIMERS > 0
->>     #ifdef CLOCK_REALTIME
->> -    ret += vdso_test_clock(CLOCK_REALTIME);
->> +TEST(clock_realtime)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_REALTIME);
->> +}
->>   #endif
->>     #ifdef CLOCK_BOOTTIME
->> -    ret += vdso_test_clock(CLOCK_BOOTTIME);
->> +TEST(clock_boottime)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_BOOTTIME);
->> +}
->>   #endif
->>     #ifdef CLOCK_TAI
->> -    ret += vdso_test_clock(CLOCK_TAI);
->> +TEST(clock_tai)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_TAI);
->> +}
->>   #endif
->>     #ifdef CLOCK_REALTIME_COARSE
->> -    ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
->> +TEST(clock_realtime_coarse)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_REALTIME_COARSE);
->> +}
->>   #endif
->>     #ifdef CLOCK_MONOTONIC
->> -    ret += vdso_test_clock(CLOCK_MONOTONIC);
->> +TEST(clock_monotonic)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_MONOTONIC);
->> +}
->>   #endif
->>     #ifdef CLOCK_MONOTONIC_RAW
->> -    ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
->> +TEST(clock_monotonic_raw)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_MONOTONIC_RAW);
->> +}
->>   #endif
->>     #ifdef CLOCK_MONOTONIC_COARSE
->> -    ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
->> +TEST(clock_monotonic_coarse)
->> +{
->> +    vdso_test_clock(_metadata, CLOCK_MONOTONIC_COARSE);
->> +}
->>   #endif
->>   -#endif
->> -    if (ret > 0)
->> -        return KSFT_FAIL;
->> +#endif /* _POSIX_TIMERS > 0 */
->>   -    return KSFT_PASS;
->> -}
->> +TEST_HARNESS_MAIN
-> 
-> thanks,
-> -- Shuah
-> 
-> 
+> Basically security/commoncap.c.  One could make a lot of arguments
+> about if it is, or isn't, a LSM, but commoncap.c registers LSM hooks
+> which is pretty much the definition of a LSM from an implementation
+> point of view.
 
--- 
-BR,
-Muhammad Usama Anjum
+Yes, hence the proposal to give it more fine-grained controls than
+what's currently available. But to your point, unlike the others,
+its own state (i.e. capsets) is shared, so this gets questionable.
+
+> > Arguably, if we do want fine-grained userns policies, we need LSMs to
+> > influence the userns capset at some point.
+> 
+> One could always use, or develop, a LSM that offers additional
+> controls around exercising capabilities.  There are currently four
+> in-tree LSMs, including the capabilities LSM, which supply a
+> security_capable() hook that is used by the capability-based access
+> controls in the kernel; all of these hook implementations work
+> together within the LSM framework and provide an additional level of
+> control/granularity beyond the existing capabilities.
+
+Right, but the idea was to have a simple and easy way to reuse/trigger
+as much of the commoncap one as possible from BPF. If we're saying we
+need to reimplement and/or use a whole new framework, then there is
+little value.
+
+TBH, I don't feel strongly about this, which is why it is absent from
+v1. However, as John pointed out, we should at least be able to modify
+the blob if we want flexible userns caps policies down the road.
 
