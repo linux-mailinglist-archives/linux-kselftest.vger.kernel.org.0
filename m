@@ -1,103 +1,187 @@
-Return-Path: <linux-kselftest+bounces-11741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1095904CD3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 09:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 185E1904CE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 09:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56ECB1F259AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 07:27:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3EB11F24722
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 07:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FD716C69E;
-	Wed, 12 Jun 2024 07:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EDD7404F;
+	Wed, 12 Jun 2024 07:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MkGtJ0sD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfSjfjhc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1816845948;
-	Wed, 12 Jun 2024 07:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B9329413;
+	Wed, 12 Jun 2024 07:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718177214; cv=none; b=ufp5crxxu9tnopAu5qHEZY+NRh4vtgrtLYTBKkpDZVEofjaYnPDr0YPui0wurj01L0LkEur5pkEQcDqd3zySlcerPRxLRgYlIF1xCxZqFc7f1pCUSPHpGEAjDWu8jwko0FJktlNYneyOus40VhlurKUAYA1htBOO4eHebRLRKX4=
+	t=1718177621; cv=none; b=i7R7qm/CMt5/66Vi6EWSjON8jsxY9d4HePLeihrvHURZGncP0Zzf+72UY8/tseLT29L7Hx+6Lqby66/MsDYWSnXDJsg1k8R+c2SIy5TOL8Kj0ePvg63fGgBgpSYKcLnWCtSbYA03nxyNvgiN3lOoXofRXV3cDuJ59038vt2Bfw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718177214; c=relaxed/simple;
-	bh=ThVc3Kcb94KGiefhslXFeJ1mJHzv8+sc5d1DSQ7YMek=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R72Wa8aTZByya2Q4z80a8gYSjodhWz0+7xy80qk3lFAV6FNFkRcbVQQTdAa+jRiiFM32Dq7QldHJu0IBX3QaO+m8oAt6lShLaXoovBx58sIGaeE3e9NNPVGR/wxq1iXFGvPI/ukmn61rqEsKVt7ZdqXkkWmPl3Mf2dwnmMtr/N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MkGtJ0sD; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718177211;
-	bh=ThVc3Kcb94KGiefhslXFeJ1mJHzv8+sc5d1DSQ7YMek=;
-	h=From:To:Cc:Subject:Date:From;
-	b=MkGtJ0sDzDTkbpC9gw+IAYvsTc3PFbOoSZSoYQOIY/pp9oLv2Z9LCSzyTi4Ds4FpG
-	 Xd9KKPWWMdPfAuSR36phaQ3DX994pxmC+flK9fiNoDrZkoYQKsBMy/2mX4bxiaTmCg
-	 D3TKlq/T3DKAO0W8PrqyahkDxMyDTwg4zdGX+eRAgOzwkvkh7d0abDphN07CpiJes1
-	 SS4Xadlf6DxXjOUw6ZKCTN8fh4MeL77EWYcaLWx1u1H67dyYjfm67YctjWxAxDHzSX
-	 s/dpKLe14Yt7uDV29e0fd1FobPnHIGBeAHBq2bOieX0jhgo4+rprR9YtnQp/SWDed3
-	 YGvfsAe0i/NhQ==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 273113781188;
-	Wed, 12 Jun 2024 07:26:48 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: Add information about TAP conformance in tests
-Date: Wed, 12 Jun 2024 12:27:23 +0500
-Message-Id: <20240612072723.4146613-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1718177621; c=relaxed/simple;
+	bh=SUfIAtDi5cgpBLZQB/Du7Hs4SYoZugQDNHll79iQU7w=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=jmXPkwSbygxyNiVJH6Pa/k6akS1G70H7k/ZFShoZoU7v1u2pmtWatsqTHtyJDZO2nRhlqq7I0/rk58z4SnExA4jvPEkj0mSqror6X3rqpAhIxqrFyJ9xuYuuZ1igvTXh8caNZDLWvOWX+ves5MqPXZhrZSqcRX5SATL/t8WTGfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfSjfjhc; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718177620; x=1749713620;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SUfIAtDi5cgpBLZQB/Du7Hs4SYoZugQDNHll79iQU7w=;
+  b=HfSjfjhc0idvtlaYA3dBl9llfvSkBfshB8IsEXJo0yFgWQNhOYonCpQu
+   W25shQcUg0x+UQ4aIIRcxtwFJhqkQT/bmMYYuBoo61japlCrGrbIr0SPs
+   BGxTJ1SW6dnQM3rxY18AYgvqqTXSZgdaPxDo5Jh1LcPiYmdtFXbbj3Mts
+   gK4931YgDtXKVFTqvn5XUy6FVoM7iRnTYMm4XVOWfwXm476Wv321zYsTi
+   JKo3S9UJrapyfqDN2L4uj7jggzn6/SVeQD4+W2yCXHFUcyXTjWMD/Rmmw
+   qsm/ZcaV08NFj7Wl3dH1NRjsFdOzXftGs8i8LLmqY8GZEnckW90A81NQZ
+   Q==;
+X-CSE-ConnectionGUID: dA/g+31YQQmoJC0NEyep4A==
+X-CSE-MsgGUID: 2HWeL1TvQ4qIjLfxaBRCVA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="26041609"
+X-IronPort-AV: E=Sophos;i="6.08,232,1712646000"; 
+   d="scan'208";a="26041609"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 00:33:39 -0700
+X-CSE-ConnectionGUID: RgCrLq4xQ6C3yjzVbbQBkQ==
+X-CSE-MsgGUID: Sp4CeumZRcu/J86gUJIRZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,232,1712646000"; 
+   d="scan'208";a="39592979"
+Received: from unknown (HELO localhost) ([10.245.247.204])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 00:33:35 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 12 Jun 2024 10:33:30 +0300 (EEST)
+To: Babu Moger <babu.moger@amd.com>
+cc: fenghua.yu@intel.com, Reinette Chatre <reinette.chatre@intel.com>, 
+    shuah@kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-kselftest@vger.kernel.org, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    peternewman@google.com, eranian@google.com
+Subject: Re: [PATCH v3] selftests/resctrl: Fix non-contiguous CBM for AMD
+In-Reply-To: <96d276c11e69cfb1e29d50a12c8043555c06b404.1718144237.git.babu.moger@amd.com>
+Message-ID: <dbb757c2-072c-5689-2122-157532715a63@linux.intel.com>
+References: <3a6c9dd9dc6bda6e2582db049bfe853cd836139f.1717622080.git.babu.moger@amd.com> <96d276c11e69cfb1e29d50a12c8043555c06b404.1718144237.git.babu.moger@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-1864459413-1718177611=:1312"
 
-Although "TAP" word is being used already in documentation, but it hasn't
-been defined in informative way for developers that how to write TAP
-conformant tests and what are the benefits. Write a short brief about it.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes since v1:
-- Update documentation by modifying and removing sentences
----
- Documentation/dev-tools/kselftest.rst | 7 +++++++
- 1 file changed, 7 insertions(+)
+--8323328-1864459413-1718177611=:1312
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index dcf634e411bd9..f3766e326d1e3 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -228,6 +228,13 @@ In general, the rules for selftests are
-  * Don't cause the top-level "make run_tests" to fail if your feature is
-    unconfigured.
- 
-+ * The output of tests must conform to the TAP standard to ensure high
-+   testing quality and to capture failures/errors with specific details.
-+   The kselftest.h and kselftest_harness.h headers provide wrappers for
-+   outputting test results. These wrappers should be used for pass,
-+   fail, exit, and skip messages. CI systems can easily parse TAP output
-+   messages to detect test results.
-+
- Contributing new tests (details)
- ================================
- 
--- 
-2.39.2
+On Tue, 11 Jun 2024, Babu Moger wrote:
 
+> The non-contiguous CBM test fails on AMD with:
+> Starting L3_NONCONT_CAT test ...
+> Mounting resctrl to "/sys/fs/resctrl"
+> CPUID output doesn't match 'sparse_masks' file content!
+> not ok 5 L3_NONCONT_CAT: test
+>=20
+> AMD always supports non-contiguous CBM but does not report it via CPUID.
+>=20
+> Fix the non-contiguous CBM test to use CPUID to discover non-contiguous
+> CBM support only on Intel.
+>=20
+> Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test=
+")
+> Signed-off-by: Babu Moger <babu.moger@amd.com>
+> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+
+Thanks.
+
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+--=20
+ i.
+
+> ---
+> v3: Reworked changelong.
+>=20
+> v2: Moved the non-contiguous CBM verification to a new function
+>     arch_supports_noncont_cat.
+>=20
+> v1: This was part of the series
+>     https://lore.kernel.org/lkml/cover.1708637563.git.babu.moger@amd.com/
+>     Sending this as a separate fix per review comments.
+> ---
+>  tools/testing/selftests/resctrl/cat_test.c | 32 +++++++++++++++-------
+>  1 file changed, 22 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/s=
+elftests/resctrl/cat_test.c
+> index d4dffc934bc3..742782438ca3 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -288,11 +288,30 @@ static int cat_run_test(const struct resctrl_test *=
+test, const struct user_param
+>  =09return ret;
+>  }
+> =20
+> +static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+> +{
+> +=09unsigned int eax, ebx, ecx, edx;
+> +
+> +=09/* AMD always supports non-contiguous CBM. */
+> +=09if (get_vendor() =3D=3D ARCH_AMD)
+> +=09=09return true;
+> +
+> +=09/* Intel support for non-contiguous CBM needs to be discovered. */
+> +=09if (!strcmp(test->resource, "L3"))
+> +=09=09__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+> +=09else if (!strcmp(test->resource, "L2"))
+> +=09=09__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+> +=09else
+> +=09=09return false;
+> +
+> +=09return ((ecx >> 3) & 1);
+> +}
+> +
+>  static int noncont_cat_run_test(const struct resctrl_test *test,
+>  =09=09=09=09const struct user_params *uparams)
+>  {
+>  =09unsigned long full_cache_mask, cont_mask, noncont_mask;
+> -=09unsigned int eax, ebx, ecx, edx, sparse_masks;
+> +=09unsigned int sparse_masks;
+>  =09int bit_center, ret;
+>  =09char schemata[64];
+> =20
+> @@ -301,15 +320,8 @@ static int noncont_cat_run_test(const struct resctrl=
+_test *test,
+>  =09if (ret)
+>  =09=09return ret;
+> =20
+> -=09if (!strcmp(test->resource, "L3"))
+> -=09=09__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+> -=09else if (!strcmp(test->resource, "L2"))
+> -=09=09__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+> -=09else
+> -=09=09return -EINVAL;
+> -
+> -=09if (sparse_masks !=3D ((ecx >> 3) & 1)) {
+> -=09=09ksft_print_msg("CPUID output doesn't match 'sparse_masks' file con=
+tent!\n");
+> +=09if (arch_supports_noncont_cat(test) !=3D sparse_masks) {
+> +=09=09ksft_print_msg("Hardware and kernel differ on non-contiguous CBM s=
+upport!\n");
+>  =09=09return 1;
+>  =09}
+> =20
+>=20
+--8323328-1864459413-1718177611=:1312--
 
