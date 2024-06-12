@@ -1,158 +1,114 @@
-Return-Path: <linux-kselftest+bounces-11753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8FC905004
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 12:07:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C520990509A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 12:43:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55E17282F16
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 10:07:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ECE5284645
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 10:43:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C46116E874;
-	Wed, 12 Jun 2024 10:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2480C16EC04;
+	Wed, 12 Jun 2024 10:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OFvsLr87"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oktXjwWY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9633416E869;
-	Wed, 12 Jun 2024 10:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF42416E881;
+	Wed, 12 Jun 2024 10:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718186827; cv=none; b=Lv3pTX00XV3rDblw505T8x6HCZHnpsRoIaSpXyFS2OyGVsDuKwALiLDGMrsRjhruFfLAzqtfjpiOoGdyhsybiN5vmgeHWY+9rJ6+LBcWH1LO5bInFfqAlBiPEFVk7s+Ax+aEyQVDWPtMAQX7HAuyIJh1KdR0R6atGy2LznWn03s=
+	t=1718189008; cv=none; b=sPPBLByf++gj99MU1xLsFTL37W9NYhxi+sYdIQwHLyyGon962A88MZJRYrAZNdqQ+wNEc6q/Ys7lEJBxQhXKSSyLhwWL74LWnIneejtcqxdGpBAMuEmPjdKJoWi9ZvaP97zil2bJSXqkixXIu0oG7sxLTMcCKilsdEs9hgkpw6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718186827; c=relaxed/simple;
-	bh=X/C2WqCcPHscguVgaI/7U9QXjrr1tO8TEK9q3Vlnxgk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tb+J4kztVkk4dQbMqNIwdansBIH29dX1vVSXYFL0sl/oaMx0qd0yraOmKapzEHB/CJmQwTK3Q/BMdWKFgedtS9ObwqX+oF75nl7zIzP8JOGGW3JUuDRppzW7XDp3nu4VXtv541yCJVV6HIjcxwvpFq2NZKMfcdQVQR5C91xYZvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OFvsLr87; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718186823;
-	bh=X/C2WqCcPHscguVgaI/7U9QXjrr1tO8TEK9q3Vlnxgk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OFvsLr874lYy7M8r62tSRG1Phh9L6X6TPJKovdXuTYTTftf9fwUfAl5xEHIDgh204
-	 dthWmaxjrjAmvr+msJD45LdFRp4x3cZQgK864ZLtFvXBO/aeK70LXLBH2N0HVHTMQ9
-	 s+lvkMqCW934EUS10Bpo5KQVkjixQh/qfKoFLMUUUxWrhUd//bxi32DMx2KPJS3v/v
-	 uVKTpEDxjLP4FcUBtPRDesSnpakZ8zWNyPbWlcAHVocJLzTySDqs6/UwLPoWND6sZp
-	 3lwvqCFJ0JrlGDMcyTZxJenxRflqEbis+ySEqpaFFDHbmBxQ1tHraMfARiw0XNTvX6
-	 LOCNs9JQ/C+Uw==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D5F8E3780EC6;
-	Wed, 12 Jun 2024 10:07:02 +0000 (UTC)
-From: Laura Nao <laura.nao@collabora.com>
-To: laura.nao@collabora.com
-Cc: Tim.Bird@sony.com,
-	broonie@kernel.org,
-	dan.carpenter@linaro.org,
-	davidgow@google.com,
-	dianders@chromium.org,
-	groeck@chromium.org,
-	kernel@collabora.com,
-	kernelci@lists.linux.dev,
-	lenb@kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	rafael@kernel.org,
-	robh+dt@kernel.org,
-	saravanak@google.com,
-	shuah@kernel.org
-Subject: Re: [RFC PATCH v2 0/2] Add a test to verify device probing on ACPI platforms
-Date: Wed, 12 Jun 2024 12:07:36 +0200
-Message-Id: <20240612100736.149752-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240308144933.337107-1-laura.nao@collabora.com>
-References: <20240308144933.337107-1-laura.nao@collabora.com>
+	s=arc-20240116; t=1718189008; c=relaxed/simple;
+	bh=i0AkVG96HZP+xZlgakshFx4WYDgJ6NHv2HEdMjfHNzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dj/YibfbEiEl47f41N+t+jnhxm2KWcLg33AVj/p9qYtkhL2SuxnrNjX0f3DHX56mxVeV9DRYL0BUiXMNWpr3GYPZIOfo8L0k6KO0Gd3tpQLJc4IpISahs+JjM4ZmHJQkrtksBTx0by0H5cYh0UMSkIlvHiMAdH38A9DM5YC5F9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oktXjwWY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DE0C3277B;
+	Wed, 12 Jun 2024 10:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718189007;
+	bh=i0AkVG96HZP+xZlgakshFx4WYDgJ6NHv2HEdMjfHNzM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oktXjwWY0SjBMdlI1iZB4rWkwiB5T05GruABT09QkcllcPLknmNITngDkJ7UMNaVV
+	 7Fdv2sgReaQFCD3tdrl+PQWXYifjYJ4Dsyu/D0h8ZZtxyCNx8tErP0cfR9Naw+Enng
+	 GPYw0bbfHVB0ppCEf09EdsHw84edZ2TvDOlkyLjKvx0P5Ib9CTIJOUHsjyrq1jdnnb
+	 YhpATUXX70LETG2uNLsk5gafHeLU1rcxvHvBx0p54u3Dc/gTG82bVYjiOv+5hjpcQL
+	 g8YAI2sdNPrGmcGDYJD8lbWIOgr1cRe4XJpdcBR+1HlfgMfZZFdOBxDWsM9gzaV21H
+	 Yu/8O4vQJkbDw==
+Date: Wed, 12 Jun 2024 11:43:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: mm: Make map_fixed_noreplace test names stable
+Message-ID: <Zml7zMzgBLEpMm8J@finisterre.sirena.org.uk>
+References: <20240605-kselftest-mm-fixed-noreplace-v1-1-a235db8b9be9@kernel.org>
+ <20240611152317.8e72edb3a545a685a2a0b395@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="taj9yIMJlp9FRGvc"
+Content-Disposition: inline
+In-Reply-To: <20240611152317.8e72edb3a545a685a2a0b395@linux-foundation.org>
+X-Cookie: Your love life will be... interesting.
 
-Hi Shuah and Rafael,
 
-On 3/8/24 15:49, Laura Nao wrote:
-> Hello,
-> 
-> This v2 addresses some issues observed when running the ACPI probe
-> kselftest proposed in v1[1] across various devices and improves the overall
-> reliability of the test.
-> 
-> The acpi-extract-ids script has been improved to:
-> - Parse both .c and .h files
-> - Add an option to print only IDs matched by a driver (i.e. defined in an
-> ACPI match tables or in lists of IDs provided by the drivers)
-> 
-> The test_unprobed_devices.sh script relies on sysfs information to
-> determine if a device was successfully bound to a driver. Not all devices
-> listed in /sys/devices are expected to have a driver folder, so the script
-> has been adjusted to handle these cases and avoid generating false
-> negatives.
-> 
-> The test_unprobed_devices.sh test script logic has been modified to:
-> - Check the status attribute (when available) to exclusively test hardware
->    devices that are physically present, enabled and operational
-> - Traverse only ACPI objects with a physical_node* link, to ensure testing
->    of correctly enumerated devices
-> - Skip devices whose HID or CID are not matched by any driver, as
->    determined by the list generated through the acpi-extract-ids script
-> - Skip devices with HID or CID listed in the ignored IDs list. This list
->    has been added to contain IDs of devices that don't require a driver or
->    cannot be represented as platform devices (e.g. ACPI container and module
->    devices).
-> - Skip devices that are natively enumerated and don't need a driver, such
->    as certain PCI bridges
-> - Skip devices unassigned to any subsystem, devices linked to other devices
->    and class devices
-> 
-> Some of the heuristics used by the script are suboptimal and might require
-> adjustments over time. This kind of tests would greatly benefit from a
-> dedicated interface that exposes information about devices expected to be
-> matched by drivers and their probe status. Discussion regarding this matter
-> was initiated in v1.
-> 
-> As of now, I have not identified a suitable method for exposing this
-> information; I plan on submitting a separate RFC to propose some options
-> and engage in discussion. Meanwhile, this v2 focuses on utilizing already
-> available information to provide an ACPI equivalent of the existing DT
-> kselftest [2].
-> 
-> Adding in CC the people involved in the discussion at Plumbers [3], feel
-> free to add anyone that might be interested in this.
-> 
-> This series depends on:
-> - https://lore.kernel.org/all/20240102141528.169947-1-laura.nao@collabora.com/T/#u
-> - https://lore.kernel.org/all/20240131-ktap-sh-helpers-extend-v1-0-98ffb468712c@collabora.com/
-> 
-> Thanks,
-> 
-> Laura
-> 
-> [1] https://lore.kernel.org/all/20230925155806.1812249-2-laura.nao@collabora.com/T/
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/dt
-> [3] https://www.youtube.com/watch?v=oE73eVSyFXQ&t=9377s
+--taj9yIMJlp9FRGvc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Just wanted to gently check in on your thoughts regarding this series. 
-We've conducted some initial testing with it in KernelCI and it's proven 
-its worth by catching a driver probe regression [1] on some x86_64 
-platforms.
-Your feedback would be greatly appreciated.
+On Tue, Jun 11, 2024 at 03:23:17PM -0700, Andrew Morton wrote:
+> On Wed, 05 Jun 2024 23:36:12 +0100 Mark Brown <broonie@kernel.org> wrote:
 
-Thanks!
+> > KTAP parsers interpret the output of ksft_test_result_*() as being the
+> > name of the test.  The map_fixed_noreplace test uses a dynamically
+> > allocated base address for the mmap()s that it tests and currently
+> > includes this in the test names that it logs so the test names that are
+> > logged are not stable between runs.  It also uses multiples of PAGE_SIZE
+> > which mean that runs for kernels with different PAGE_SIZE configurations
+> > can't be directly compared.  Both these factors cause issues for CI
+> > systems when interpreting and displaying results.
 
-Laura
+> > Fix this by replacing the current test names with fixed strings
+> > describing the intent of the mappings that are logged, the existing
+> > messages with the actual addresses and sizes are retained as diagnostic
+> > prints to aid in debugging.
 
-[1] https://lore.kernel.org/all/20240530153727.843378-1-laura.nao@collabora.com/
+> This sounds fairly annoying and I'm inclined to backport the fix into
+> -stable kernels(?).
 
+It's annoying but more of a UI issue than anything too serious - for my
+setup it just translates into not validating those individual tests and
+instead only paying attention to the overall result of the program.
+Personally I'd say that it reaches the severity where it might be worth
+sending for v6.10 but not to stable.
+
+--taj9yIMJlp9FRGvc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZpe8sACgkQJNaLcl1U
+h9A3rQf/X65fpQaBQdsPSyX4tv50iov2KxXIBmL++mft/PrqcYvGNIQAtxXjeXQZ
+Q5f7YQ4YcCHlUCjw3ic7zLPox1YNobi7ZBSCU/QvZ9YeWhA3/Ud8Q9CdYPKwx3ZS
+xhK9NZpQ5WO2QOmtRfSLkdMCTnYV36oM4K4gb9duQOJtEZfh769/AmbVzLLnCoab
+WIlqmwoMrkfMieNk+H8z/1i2jFWVTxHRiM73dMv6SiWCIjQbMixCXlOMvsf9bCYc
+6Eol5gIsfEHmL7qbVi+d+MLC4uypLuA35Mtqvez3EGl1spWKsjV9NsxA2kD7hyVm
+CE/qEsbVD4KHawxWtsoSbAT4PyHPfw==
+=/+tZ
+-----END PGP SIGNATURE-----
+
+--taj9yIMJlp9FRGvc--
 
