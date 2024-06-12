@@ -1,146 +1,106 @@
-Return-Path: <linux-kselftest+bounces-11778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49DAD9057FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 18:03:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 370FB90581F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 18:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E47E41F2319E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 16:03:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE371C20D08
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 16:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33CEA18754D;
-	Wed, 12 Jun 2024 15:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506A1181D07;
+	Wed, 12 Jun 2024 16:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="eliLoaVM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qwQrhihj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pMeJkFwC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wflow4-smtp.messagingengine.com (wflow4-smtp.messagingengine.com [64.147.123.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E12181326;
-	Wed, 12 Jun 2024 15:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2465B181BAF;
+	Wed, 12 Jun 2024 16:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718207979; cv=none; b=f1Lfb4Qf/S5W/SBgwM44b5Vt0JABKzyuxmHNAhIPXDFLijgd4jX1D7d0DJDNezwK5PCX9T5Y4e6Wn8lFOU/s7gXZdzxLONm9ETn851IWLPqOA61XDYtAhJYx9N4Fo90RJyNQCKFFq+MY7Mf1t6wdrNaMC8yrx3Y6gM6wVkrFL7Y=
+	t=1718208315; cv=none; b=LPS9C6HKkCmbwNz+Db6nMjHMGz8u8tvReYUNO79+A6ZLqXmHHI+UutlXAwrAyEZfcz2co64mXcKpdL3WKb45jvJkKPqDxQNHsjMdjh2EscaqiB4nFohznMtn+e1NVdfSRzqJO6RtXxV3Ory497T4oQdx4zlTJrZz435YCz0IWKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718207979; c=relaxed/simple;
-	bh=TOFne6BN9+jp4V2XtWfmJB9qi/B/gw1rR+0HcAVMVvc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dgagkjMRN1xaVEpwnWvkZboJFSl5XpG9cEPDzE5CobqyjMYbiotvlh+X7ue58ziVVHJ29kwR+xfs4Q6tTXbvzoa1JYU+g8F3V2IkDg7Sc8uxEdiscTDdchjqv04RMy4i6zl+4cS0Xlqp4mnBrUgtkFQspXCcqMxhQ/WHZn5VLzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=eliLoaVM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qwQrhihj; arc=none smtp.client-ip=64.147.123.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailflow.west.internal (Postfix) with ESMTP id B6A632CC0185;
-	Wed, 12 Jun 2024 11:59:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 12 Jun 2024 11:59:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1718207975; x=
-	1718215175; bh=NBRZD+tUpDA7hRgb1FdxgpatpLh/bjjqfKZS5VAHywE=; b=e
-	liLoaVMxelbRHSY2KNxUfr0Zo1ncwSpU167os0IehP62611Ica5yNxgOsy6b2u0r
-	qkNIICdjCL07qV3atOKiEOFavpk6Cgq3d7T0z0WAjpIUlTt9nAd6hXU1JlTK7tGd
-	dA58/fgxebPTqgldckWz4P2yZtxpQZRRdRQ7nuw4NH4SlirxspVR4mYYlAi+OUKV
-	0JopmzxuSJDoxta+GVt9uvCUgYfiFN67N6gKX02L84dD4d+Vv3tJ15zF6CBMtpPD
-	rrxQTwkGsg5vDh3RKqf6Q1KMwS1R4dWPPLu2JNDzkP77B5XPY2QqQoHaJjIU0Mk2
-	Gibmoq1Jj1FQvb9QdjY5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718207975; x=
-	1718215175; bh=NBRZD+tUpDA7hRgb1FdxgpatpLh/bjjqfKZS5VAHywE=; b=q
-	wQrhihjNJNCsMO9cB68oxmWZI1wHTCo8eqNR82BJn7A/BXLQ3dSQyq2Y5zdyM23X
-	jEqbhijvpMWkfcrfuv4aesa6XeMvQkD027KSxYcs7b7i/LOIXsfuxK3bN7KLb15t
-	oVbblELqsEvwnCEJWOa08kvXSOZlsEkiNTZS/q4wlv4PVUrE5dLXd/FHsYKUI/TH
-	VKdiou4r6H2UFpmXlYXxRbwxBzcN9shNtTHc3aNW8N46LtaLjwfFmbe9++CUkBjj
-	2nmQz4Yn0zL8/vEGctyC4QuyWjpNAHKOfn3vDtT78rloCGUXkOcrzNnSPUOz6MTY
-	YB31RTWTrxiE/3/brlpSw==
-X-ME-Sender: <xms:58VpZpw4YYYClFZq7KpXgY6mfudMguwO1biD6A47eJf3kqWJ7Gcpwg>
-    <xme:58VpZpReB1BEWKDIXemXytc5yGzDDRxyYoRuziwlLov--MXOTo-n0qw8I77w3R6Bf
-    FBFdOOvUPLq4fMvBw>
-X-ME-Received: <xmr:58VpZjWV7DHMNhHpym8KK1NDXMOREuRscXeP5OgONHNp5RYyFxvUo7Mdnl9TJ3bObqreNsp5zY9HtgVM8Bu_J4pHfdP7ITwhc74lKKrC>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgepvdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:58VpZriRiJdFY7-ErDuYiukEUkXCXfQWzJlE1Os6-gEXh16ueuyxLQ>
-    <xmx:58VpZrAf9VmcUjlXEplfPZ4hu571XFlchWTJB1Bg20OZ0CJYDcYvug>
-    <xmx:58VpZkI6_d5I4trR4SamqHoFq_tBuOOL8OctPwbXdT5-f5wW9PF2sA>
-    <xmx:58VpZqCrntc2x5aJda7tJCB4hqOsqTsDD-QdhPX6oYZY_dpobMDvBw>
-    <xmx:58VpZiUhvUidVyA4wsEGl7iL_ik4IONVIGYI3nzGxk3n0ad86TCWmR_7>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 11:59:33 -0400 (EDT)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	eddyz87@gmail.com,
-	olsajiri@gmail.com,
-	quentin@isovalent.com,
-	alan.maguire@oracle.com,
-	acme@kernel.org
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 11/12] bpf: selftests: xfrm: Opt out of using generated kfunc prototypes
-Date: Wed, 12 Jun 2024 09:58:35 -0600
-Message-ID: <afe0bb1c50487f52542cdd5230c4aef9e36ce250.1718207789.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1718207789.git.dxu@dxuuu.xyz>
-References: <cover.1718207789.git.dxu@dxuuu.xyz>
+	s=arc-20240116; t=1718208315; c=relaxed/simple;
+	bh=Ny4Zo9sSjpAd2us+A20fiV+uPm/Io6ALD4EkL1KRJLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rU6iGPZb0gLl2KGW7PrAIjYhJYPt7o3rlqmgQz4x5yCPsduQXE6TrDsTmt9ALbcHWZAbY830+VGpzfpsvwv6YLCJtBgJ1FUrX3UsqiUaQLM3jgmVRV1PlCMdQUNqhRZSAcPVzRIdwssYxybaVFAhFqpxucrPxyW+seRPXoDHeA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pMeJkFwC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9465AC116B1;
+	Wed, 12 Jun 2024 16:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718208314;
+	bh=Ny4Zo9sSjpAd2us+A20fiV+uPm/Io6ALD4EkL1KRJLk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pMeJkFwCZ0WTDF4ljPjlGfDMyqVn+v64jg2pWTV/0ZblFt2n9uKbnTRBP/Yj7P8yw
+	 8b+s8FesDan3H+w6UiNCQknu/4ogxBnU+JGARIQ6JPGzImR5qyingt2CvuB1HlNOWg
+	 1Hip5h7QoNRv4zau38l6ho6RseBnXOrGPnHS/x9IIgx1CN5JoxcuhZi3t6LSDuZ71p
+	 JSiyZlVIaCpotS3SV8sYW//MbhDZMbTsSugtkHLgFGSPB8OcLWtxy2+5jEkCsFW1O+
+	 VfuJniHXFgVSh+lEcLmlgbtFvKUpcV9MjU83c74ym5qXQeH+l2/1UbZldnHBO0B7KC
+	 3uSAYR4rnnXGg==
+Date: Wed, 12 Jun 2024 09:05:14 -0700
+From: Kees Cook <kees@kernel.org>
+To: David Gow <davidgow@google.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Vitor Massaru Iha <vitor@massaru.org>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <rmoar@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usercopy: Convert test_user_copy to KUnit test
+Message-ID: <202406120903.D0EF1C6@keescook>
+References: <20240610213055.it.075-kees@kernel.org>
+ <20240610213330.1310156-2-kees@kernel.org>
+ <CABVgOSmFL50_qYOBROkE9LZx__W6MLnHWahGnAVuLBDVO4k1zQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOSmFL50_qYOBROkE9LZx__W6MLnHWahGnAVuLBDVO4k1zQ@mail.gmail.com>
 
-The xfrm_info selftest locally defines an aliased type such that folks
-with CONFIG_XFRM_INTERFACE=m/n configs can still build the selftests.
-See commit aa67961f3243 ("selftests/bpf: Allow building bpf tests with CONFIG_XFRM_INTERFACE=[m|n]").
+On Wed, Jun 12, 2024 at 05:13:39PM +0800, David Gow wrote:
+> On Tue, 11 Jun 2024 at 05:33, Kees Cook <kees@kernel.org> wrote:
+> >
+> > Convert the runtime tests of hardened usercopy to standard KUnit tests.
+> >
+> > Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
+> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> > Link: https://lore.kernel.org/r/20200721174654.72132-1-vitor@massaru.org
+> > Tested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> 
+> This looks good, particularly with the x86 fix applied.
 
-Thus, it is simpler if this selftest opts out of using enerated kfunc
-prototypes. The preprocessor macro this commit uses will be introduced
-in the final commit.
+Thanks!
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/progs/xfrm_info.c | 1 +
- 1 file changed, 1 insertion(+)
+> It's still hanging on m68k -- I think at the 'illegal reversed
+> copy_to_user passed' test -- but I'll admit to not having tried to
+> debug it further.
 
-diff --git a/tools/testing/selftests/bpf/progs/xfrm_info.c b/tools/testing/selftests/bpf/progs/xfrm_info.c
-index f6a501fbba2b..a1d9f106c3f0 100644
---- a/tools/testing/selftests/bpf/progs/xfrm_info.c
-+++ b/tools/testing/selftests/bpf/progs/xfrm_info.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define BPF_NO_KFUNC_PROTOTYPES
- #include "vmlinux.h"
- #include "bpf_tracing_net.h"
- #include <bpf/bpf_helpers.h>
+For my own future reference, I have reproduced this with:
+
+$ sudo apt install gcc-m68k-linux-gnu
+$ tools/testing/kunit/kunit.py run --arch m68k --make_option CROSS_COMPILE=m68k-linux-gnu- usercopy
+
+I'll figure it out...
+
+> One other (set of) notes below about using KUNIT_EXPECT_MEMEQ_MSG(),
+> otherwise (assuming the m68k stuff isn't actually a regression, which
+> I haven't tested but I imagine is unlikely),
+
+I should really read all the API docs every few releases. :) I will
+switch to KUNIT_EXPECT_MEMEQ_MSG!
+
 -- 
-2.44.0
-
+Kees Cook
 
