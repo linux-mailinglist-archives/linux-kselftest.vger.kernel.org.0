@@ -1,59 +1,61 @@
-Return-Path: <linux-kselftest+bounces-11728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B472790490D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:36:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42FC590490F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:36:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 605D81F24414
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:36:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE841C2157F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9500DF9EF;
-	Wed, 12 Jun 2024 02:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A261F602;
+	Wed, 12 Jun 2024 02:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JfbOMOqm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A/j8+vHC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB53CB667
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 02:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2901CB651
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 02:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718159775; cv=none; b=f53aQZAtWby7UZm815C2ALa7ApTXwLqZLCN0dn4AUINucpItDphatzTOWIoC7fdebID6yLX8VctsJQySB/D7GCk0tXWwFV+GbiL2xgSKJSUeETjmFzeqiNptjH5W6zTjJKDxjzWfzvVStaRfD4r7nuGm8nnxV3ET+98YI0xfqcw=
+	t=1718159778; cv=none; b=snmKZqw2AazRIh+8/zYvYP3VwWa6vFsW/dfunHdNnRn5oOJ8FxWRHouPNPkav76OJ7ERKn7p3g2Q0qTkrbYf1fYI0MQkzwtdjtc3TFQeeRoz51B0iBAn0P8RGkdo4Yrbs0gDe5KxrumXjHb8JBOnMv8n3dLJvXByN8lm4aDtFQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718159775; c=relaxed/simple;
-	bh=+zTXVVp9zEYSS8FpmkYG3jt7vMygW3q5VbDW7BOSSik=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c5t+7BzVNDFf/5htrC4IgwvGUUnR9GwwZTgHZcp2A+9K/ELUTMVRMIYL/+xHb4oOo8CHcG7mGUfKVDvFm3G3c9dPRElC5+irPKrvncx/Fdf2IsWWw8q2zbFTxi9LhkbBaiZkOOzpcEGRW5ZdAH0f/N66n+DMbdmaQLX61nwRQSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JfbOMOqm; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1718159778; c=relaxed/simple;
+	bh=+C9CpexBYFfnMpqRsSGyPaSylMt0LZhxG8Bqf4uE1vc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Dm53EK8yJm9q45A63B6argXQ7zDwgb9Ue0RlJ3PgMYwm5xPkWIHpYGlF07I/0zFonjiwkRxWqbpis5OwgwfywyA43MZTpAO+r5iChRFM2qLQXZDON+4OeVy5SRax6t43mhmPgufXtoJBhE1m0loHe1FXyjLnoEJXjGk8kBtcdjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A/j8+vHC; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718159772;
+	s=mimecast20190719; t=1718159776;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rm5KrzlMz16jgYDKm0W+81rd6UxTby42kLMaocYRJT4=;
-	b=JfbOMOqmnoX0TLvZ8wCA94qgw3V2gZ7ALSL1H6Uti7ncN1majBr03iGYq5yr0dfT+Y90MK
-	+Tcbp4vX6AaIs+PXU4N2RVwR9ML7vBi5+bFXKHT3NDbOecdX8cYM4IemwdxXgp6lz8LEoa
-	Ib7aPhaNQtKVh9mMJHE/LrLCZhQJDe4=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ARgZIxE+11qj8ADHfG2c1X50fN5kwjd0+5g/sQvCIdY=;
+	b=A/j8+vHCji6fIt6iNeEaxEGdG/MbqlX3xenreMMsv/2SGlMHL9BlSaYpA0BQV818YC4bNe
+	8rCwKqc7W8vUXYKXMT89Tm9n79DZdoM85u9Jgc5mGWh8O9KsVuVFxwqgHi/FZP8Yc/uCI6
+	2giLJJEzqUrnpl5oHtZD/bFwu+ChqXs=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-582-I3EBlmaWOheMu2EXI5MiEQ-1; Tue,
- 11 Jun 2024 22:36:06 -0400
-X-MC-Unique: I3EBlmaWOheMu2EXI5MiEQ-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-529-Hv6NuDmENy6inG_gTUu0Zg-1; Tue,
+ 11 Jun 2024 22:36:10 -0400
+X-MC-Unique: Hv6NuDmENy6inG_gTUu0Zg-1
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E358019560BD;
-	Wed, 12 Jun 2024 02:36:02 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA4F219560B2;
+	Wed, 12 Jun 2024 02:36:08 +0000 (UTC)
 Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1E53B19560AD;
-	Wed, 12 Jun 2024 02:35:58 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5386619560AD;
+	Wed, 12 Jun 2024 02:36:06 +0000 (UTC)
 From: Shaoqin Huang <shahuang@redhat.com>
 To: Oliver Upton <oliver.upton@linux.dev>,
 	Marc Zyngier <maz@kernel.org>,
@@ -62,20 +64,20 @@ Cc: Eric Auger <eauger@redhat.com>,
 	Sebastian Ott <sebott@redhat.com>,
 	Cornelia Huck <cohuck@redhat.com>,
 	Shaoqin Huang <shahuang@redhat.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
 	James Morse <james.morse@arm.com>,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: [RFC PATCH v1 0/2] KVM: arm64: Making BT Field in ID_AA64PFR1_EL1 writable
-Date: Tue, 11 Jun 2024 22:35:50 -0400
-Message-Id: <20240612023553.127813-1-shahuang@redhat.com>
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v1 2/2] KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
+Date: Tue, 11 Jun 2024 22:35:52 -0400
+Message-Id: <20240612023553.127813-3-shahuang@redhat.com>
+In-Reply-To: <20240612023553.127813-1-shahuang@redhat.com>
+References: <20240612023553.127813-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,26 +87,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Hi guys,
+Add test for the BT field in the ID_AA64PFR1_EL1 register.
 
-I'm trying to enable migration from MtCollins(Ampere Altra, ARMv8.2+) to
-AmpereOne(AmpereOne, ARMv8.6+), the migration always fails when migration from
-MtCollins to AmpereOne due to some register fields differing between the
-two machines.
-
-In this patch series, we try to make more register fields writable like
-ID_AA64PFR1_EL1.BT. This is first step towards making the migration possible.
-Some other hurdles need to be overcome. This is not sufficient to make the
-migration successful from MtCollins to AmpereOne.
-
-Shaoqin Huang (2):
-  KVM: arm64: Allow BT field in ID_AA64PFR1_EL1 writable
-  KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
-
- arch/arm64/kvm/sys_regs.c                         | 2 +-
+Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+---
  tools/testing/selftests/kvm/aarch64/set_id_regs.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ 1 file changed, 6 insertions(+)
 
+diff --git a/tools/testing/selftests/kvm/aarch64/set_id_regs.c b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+index 16e2338686c1..5381b8ec5562 100644
+--- a/tools/testing/selftests/kvm/aarch64/set_id_regs.c
++++ b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+@@ -133,6 +133,11 @@ static const struct reg_ftr_bits ftr_id_aa64pfr0_el1[] = {
+ 	REG_FTR_END,
+ };
+ 
++static const struct reg_ftr_bits ftr_id_aa64pfr1_el1[] = {
++	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, BT, 0),
++	REG_FTR_END,
++};
++
+ static const struct reg_ftr_bits ftr_id_aa64mmfr0_el1[] = {
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, ECV, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, EXS, 0),
+@@ -199,6 +204,7 @@ static struct test_feature_reg test_regs[] = {
+ 	TEST_REG(SYS_ID_AA64ISAR1_EL1, ftr_id_aa64isar1_el1),
+ 	TEST_REG(SYS_ID_AA64ISAR2_EL1, ftr_id_aa64isar2_el1),
+ 	TEST_REG(SYS_ID_AA64PFR0_EL1, ftr_id_aa64pfr0_el1),
++	TEST_REG(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1_el1),
+ 	TEST_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0_el1),
+ 	TEST_REG(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1_el1),
+ 	TEST_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2_el1),
 -- 
 2.40.1
 
