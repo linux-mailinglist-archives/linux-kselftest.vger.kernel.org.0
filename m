@@ -1,137 +1,90 @@
-Return-Path: <linux-kselftest+bounces-11759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16D890520A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 14:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21C7C9052C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 14:43:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E964F1C236F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 12:06:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BC951C21238
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 12:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1173D16F901;
-	Wed, 12 Jun 2024 12:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A359173322;
+	Wed, 12 Jun 2024 12:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="b+K+9yut"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQz9aj/a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AA716F28D
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 12:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DC517083D;
+	Wed, 12 Jun 2024 12:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718193971; cv=none; b=tE2RHdJYvZxiF1oYJRbXVTuz4sKedZCIC0n/6WT3UsdzanJZ9QYKst0Ad/5ZdA3yvCgeOylJ4Gv9PkxdOm3GSfK40oSmRa+oBFTEcITCXVZqHu+hyslD089NbRm+M77XsPAw+3gCRTCQugemW0HLzn+IhoqUJNWCP8rH8XYIjZs=
+	t=1718196125; cv=none; b=Xh8NHHj24nkcILBoQZmbd7qNHtU2a0c4VpZASCU4ivw1qnCeL1wNRz1VKo8XM5k0jNz1QF/yYRbuet2bJaMC66A/2o6MfckWwbukOq8KgVqXae56rBznnEHOX8p5CEHcMKpwAhNuvxt6F90zx/KrKhVs4F89HU9BWEXALNw6edU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718193971; c=relaxed/simple;
-	bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fl3uX9ChuoQujG1TMY2FTyCL7NtDxEotjRKsLjb/6i2zfgGXF/S6QMXeLsaSmWs5VQbpPzmof0H5aIVwJ46RFVbZYdajDniD2MjGwO3Wu4Kf9UIHb6ElW0JAc8ybWiWo7viBXCA1aTvqH4WCE8Xq0Eocxddy82B0klNiLxqJd6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=b+K+9yut; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-440608f5ce4so19371401cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 05:06:08 -0700 (PDT)
+	s=arc-20240116; t=1718196125; c=relaxed/simple;
+	bh=2eS5AS9BXmEOhaWNRS+1JFWwcMxQFs94YTD2RJKbNJI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hHHum1i3SlbTU4t3VucCRaRuacmjBcIACAaf5toDq9SxNga3CUSoTXIgZUHS1tr6bugS8vXbdkRSQN913t2NTzUOtb8D9e6q7OPwAPqwFA5DHkXa8QBjPFLdK/MIA+w1tzc6FR7rav6wc3TcxXvWu6TR+tjnjP6wZKG1Y5RcksM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQz9aj/a; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-579fa270e53so3590988a12.3;
+        Wed, 12 Jun 2024 05:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1718193967; x=1718798767; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718196122; x=1718800922; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
-        b=b+K+9yutIZvL7EhYnDc9PCqyJQyg2rNZnBSM82DUh/mVjbpDQy0AjlTT1QxvPywdj1
-         5x3Bd9/ca2iYboUwAHk3ommKdZwLtidiIZFwneX47/uHtGfpvI9RYqChNL0+zSjfMHo1
-         eLjMobFz+Qu1oy3MVyvb4rEeOUKTLSjore47JD2UdH3oqgTIkXqhVcGm+UYAEnMiQ+T5
-         RK5UP92BF1rCkwKJet0x6kGN6ceBNfxoJL/qrz8UJcsTrQpKGIJJ91JIlvqFFjM3nnYj
-         7adAlrkKUSp2YwiQ+JcrIa0p91XG2fUzPI4njv/lY/djRSEZJX+zpmehJwwsBOi4fkfY
-         pCDg==
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yaWg4m5Bnwvqv8YcEFmBCH4VJg0dR5I+06fePYSf13o=;
+        b=GQz9aj/afkHFwSE+qfS7yErjJNwZ3dqH/CVpt/uScG6PPvAgz3psfh5X2tfM5UkD5G
+         pMpPWb4kcN1dDIw255l8CNNR1iNb20Ou/aTXjxFlKJjea4rt4sRPTd48tVpb2pIQdVsk
+         egSJgonwMBzBSe+RAj8ktDDMAnZUX6wgTCDgUk9l5JImsmrZfoGJPvRalcv+DIRDMyG1
+         jHoGWc2jx+JMtMxwGYqkFjd7Ujxobl6Qm6TL4y4DdRtun8eeLFRsY4ShelDgqCSSi4TR
+         tXTHmgqHQaMZualXvuY3Ti8aYXSEiyxWOQsVRKMpKB2M/CxcQRtN8rviXz50ltPBGYXY
+         M+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718193967; x=1718798767;
+        d=1e100.net; s=20230601; t=1718196122; x=1718800922;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
-        b=T3kdUdbHOxPW1DsdE9K5Zvm/u3WhSWQjY+FA/qaMzBb8W8qzA+avawzbpwHrUigIuC
-         sW+8Woepagl8LooMt9elIUqMWnJAWF64JcziyovQOEEwl0qPjI6MuhuvyjENW2q/NWjX
-         P1mEJTN1zsJM2OPmnsAsKirSRBHSS++Io5UXXlWhsYqLTTc/QuntxWCwmqaHqdCoiQIK
-         pjEz7eTN7jeXjBs9DQgUPhHPN/mwfKyp7qrN7C2WrHNmQZfW0DajMHTminPf6kXHb2fp
-         X+ZfQleMzYirGBMoZAR/DateVs0fhGIs5pyHWfwJ0MIYbCOEGdOPisfBxoslwULNU39J
-         6bVA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIUuyk4kH8yaHMJHh5hKfAY/WBJ02HdOUxyzqte1D4gZnDKlm0inH/rL2xUFYH/ZhbxZd5kMX5l1nsJenpdvnhl3imtBoycMw8XQXDmHCk
-X-Gm-Message-State: AOJu0YxA+o7JB7V4HDQQOZxBfmfBJKhbOEXc5YR1IG2jTh8jePHuB13s
-	CAjRbUmHHin+hUBkBPrF49jbDUs4msCL6tIBjAcUE2ZDYcvS7iciAKg0rCU2BDM=
-X-Google-Smtp-Source: AGHT+IElu+dk9DZ7aij8c0y6F8TXy6i5LV0OSLpqQpTgGbv9PZ9NHP5JfFSWjv6MHZMgeDua9fHUGQ==
-X-Received: by 2002:a05:622a:30f:b0:440:5de2:2a03 with SMTP id d75a77b69052e-4415abae5a3mr13859041cf.1.1718193967008;
-        Wed, 12 Jun 2024 05:06:07 -0700 (PDT)
-Received: from ziepe.ca ([128.77.69.89])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44152b1585bsm12849751cf.27.2024.06.12.05.06.06
+        bh=yaWg4m5Bnwvqv8YcEFmBCH4VJg0dR5I+06fePYSf13o=;
+        b=uxLgpnww9Z6SjezGbjaT+yZatl0H1B3lCSUR8B/aKoadM8Jg1Z0rIFlPulyVTqDljC
+         P1u/DzT/mC5uYObHJ/Ye6JSkoZbbcidIASIaIuS2AdyA7h7J3TxJAmvxF9XqsyzKgeBq
+         /VV60FJz4seiMdx6AFqnuN7EeN1ac9VUeXy20Ac1FQSuLXzior+pcFRkYYAwphfWNOV9
+         fnhXa9XrQERqjJ19nRaufGX54i3x4uHafi0xDv+9kMcFSNqsBTL4Z6vzC4PT3l5UGqPU
+         6VGlVk3gQe2fuFJHpMfrhCCHsLhICC6P+QWTkcNBD9kTU9ZlgDc88V5m4GGvJUKQ3icw
+         XWmw==
+X-Forwarded-Encrypted: i=1; AJvYcCVRw4D6jDupSDBmHBnjwU4OgVhTPFbbkBR/1gihrSjAWwNju7cu0GnMcvlqo2uIfSs8vIJeIliReb8QQXpc7j6mt/n60uqxDwl6oQSles3n2pv8Ww7fB9iRB7ed7lgTUNq48yvineZTG7zfknyp9eufNnXzfWV6lx6ggHYfkoi0folk
+X-Gm-Message-State: AOJu0Yw5N1xIXqrbq2WsvZRTRz7okxE2NWYjWA7+Qd+azetaf2XmQLn0
+	QwKZEwv1UQmf/UdCBcspOWRKccL/cMgd9S5BNS4/XTO+OyGzkCIS
+X-Google-Smtp-Source: AGHT+IEurYY9mBvYQqhqXDFmp4P8HwN0BoTp0cQDJ0TSoIEs17WlcQeFx3uNCZL+rbnmP83DTCb74A==
+X-Received: by 2002:a50:d7dd:0:b0:57c:74b1:bf51 with SMTP id 4fb4d7f45d1cf-57ca97626b3mr1524272a12.20.1718196122177;
+        Wed, 12 Jun 2024 05:42:02 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57c9f32f079sm1869654a12.88.2024.06.12.05.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jun 2024 05:06:06 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1sHMjq-008UjB-Tl;
-	Wed, 12 Jun 2024 09:06:02 -0300
-Date: Wed, 12 Jun 2024 09:06:02 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <20240612120602.GQ791043@ziepe.ca>
-References: <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
- <20240610221500.GN791043@ziepe.ca>
- <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
+        Wed, 12 Jun 2024 05:42:01 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 12 Jun 2024 14:41:59 +0200
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Jiri Olsa <olsajiri@gmail.com>, shuah@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+	quentin@isovalent.com, alan.maguire@oracle.com, acme@kernel.org,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+	haoluo@google.com, mykolal@fb.com, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v4 03/12] bpf: selftests: Fix fentry test kfunc
+ prototypes
+Message-ID: <ZmmXl1NHgwOEXy4F@krava>
+References: <cover.1717881178.git.dxu@dxuuu.xyz>
+ <1f493cb7a7e5349f99e2badf0880b75dd6681898.1717881178.git.dxu@dxuuu.xyz>
+ <Zmb_hJQqxi44Nj5B@krava>
+ <gwrlw7wtc72vz3ky2pltvpoadtjlezv6kdrs6wf3ptsecyu2sh@aexbk4rotm3x>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -140,23 +93,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
+In-Reply-To: <gwrlw7wtc72vz3ky2pltvpoadtjlezv6kdrs6wf3ptsecyu2sh@aexbk4rotm3x>
 
-On Tue, Jun 11, 2024 at 11:09:15AM -0700, Mina Almasry wrote:
+On Tue, Jun 11, 2024 at 10:58:26AM -0600, Daniel Xu wrote:
+> On Mon, Jun 10, 2024 at 03:28:36PM GMT, Jiri Olsa wrote:
+> > On Sat, Jun 08, 2024 at 03:15:59PM -0600, Daniel Xu wrote:
+> > > The prototypes in progs/get_func_ip_test.c were not in line with how the
+> > > actual kfuncs are defined in net/bpf/test_run.c. This causes compilation
+> > > errors when kfunc prototypes are generated from BTF.
+> > > 
+> > > Fix by aligning with actual kfunc definitions.
+> > > 
+> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > > ---
+> > >  .../testing/selftests/bpf/progs/get_func_ip_test.c | 14 +++++++-------
+> > >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> > > index 8956eb78a226..a89596f7585d 100644
+> > > --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> > > +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> > > @@ -5,13 +5,13 @@
+> > >  
+> > >  char _license[] SEC("license") = "GPL";
+> > >  
+> > > -extern const void bpf_fentry_test1 __ksym;
+> > > -extern const void bpf_fentry_test2 __ksym;
+> > > -extern const void bpf_fentry_test3 __ksym;
+> > > -extern const void bpf_fentry_test4 __ksym;
+> > > -extern const void bpf_modify_return_test __ksym;
+> > > -extern const void bpf_fentry_test6 __ksym;
+> > > -extern const void bpf_fentry_test7 __ksym;
+> > > +extern int bpf_fentry_test1(int a) __ksym;
+> > 
+> > hum, the only registered one as kfunc is bpf_fentry_test1, to allow fmodret
+> > also there's bpf_fentry_test9 as kfunc, which AFAICS is not really needed
+> 
+> I think bpf_modify_return_test() is also registered. But otherwise yeah,
+> I think I was overaggressive here. Are you thinking something like this?
 
-> Just curious: in Pavel's effort, io_uring - which is not a device - is
-> trying to share memory with the page_pool, which is also not a device.
-> And Pavel is being asked to wrap the memory in a dmabuf. Is dmabuf
-> going to be the kernel's standard for any memory sharing between any 2
-> components in the future, even when they're not devices?
+yes, looks good
 
-dmabuf is how we are refcounting non-struct page memory, there is
-nothing about it that says it has to be MMIO memory, or even that the
-memory doesn't have struct pages.
+> 
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> index a89596f7585d..2011cacdeb18 100644
+> --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> @@ -6,12 +6,11 @@
+>  char _license[] SEC("license") = "GPL";
+> 
+>  extern int bpf_fentry_test1(int a) __ksym;
+> -extern int bpf_fentry_test2(int a, __u64 b) __ksym;
+> -extern int bpf_fentry_test3(char a, int b, __u64 c) __ksym;
+> -extern int bpf_fentry_test4(void *a, char b, int c, __u64 d) __ksym;
+>  extern int bpf_modify_return_test(int a, int *b) __ksym;
+> -extern int bpf_fentry_test6(__u64 a, void *b, short c, int d, void *e, __u64 f) __ksym;
+> -extern int bpf_fentry_test7(struct bpf_fentry_test_t *arg) __ksym;
 
-All it says is that the memory is alive according to dmabuf
-refcounting rules. And the importer obviously don't get to touch the
-underlying folios, if any.
+I did not realize bpf_fentry_test6/7 are not used.. ok
 
-Jason
+thanks,
+jirka
+
+> +
+> +extern const void bpf_fentry_test2 __ksym;
+> +extern const void bpf_fentry_test3 __ksym;
+> +extern const void bpf_fentry_test4 __ksym;
+> 
+>  extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
 
