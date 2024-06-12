@@ -1,119 +1,95 @@
-Return-Path: <linux-kselftest+bounces-11788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E55E1905A77
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 20:11:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3982905B60
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 20:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A63E1F22CCA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 18:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC6B28E272
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 18:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3270C183079;
-	Wed, 12 Jun 2024 18:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 605D45A4C0;
+	Wed, 12 Jun 2024 18:44:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TJ8VDYVu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnIdIh9G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655A4183068
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 18:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34117757E5;
+	Wed, 12 Jun 2024 18:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718215863; cv=none; b=sYRU6YWM4Aic673ic6j+DEMfvrLvSwSRBMxrEW7HNX9WczuAWrMVW5O6k3ReCDK7HafdBBZMO1d6MTNAxmsthnnr3mSCgEianhB8qdaa6B9WUi5HSbgXZKfkiDWYrDTq8/RdyzIFJB4FtAkz1U3+XjiZLw3sj5dCbgcsCtKoZFE=
+	t=1718217873; cv=none; b=YRE+yXq/ZnUMIvvjN+5uMLxowbYTPYoWm03kyXpvozg2FbNlYgvYjGfdKZTqNpMijrY/Sp07g/s1+5rlmvXM0yz23sumkT60nBabuI7uSc3P+xtmEU3cCN5pLr4I7Jr+5S5JMjdOsZTkrBlcmNK3Pwra02yRjbai7rESLD7+mkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718215863; c=relaxed/simple;
-	bh=byfky6BG4g1mjW3Wr/3DNMmcw/qupLWQ0lVzTwpwdZo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DGJVep9VD/js1QgDzvWJsDV/+l7v6h+y7OY2PY503nTl7chsUWtIyEenn6wR4eogumMM2WArlQzszFsoutC37T9vjUqDh5rC5E4+jfnHvVZfIPLgrpLjQ9xakUppa7Zpm5AiFKBLgLnoJasyQ8kf4BhZpYVh8cqjBcTy9qG1fcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TJ8VDYVu; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-627e9a500faso2402397b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 11:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718215860; x=1718820660; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bysuRKx6ASJn7sotbzdgYdmXjsZucWIObzR9RYJqi4M=;
-        b=TJ8VDYVu0hwx/RCUpkOjmyYMvNc1yt/sQ18Mm7A2DP1umNdlEPLHYVA8dMxco+PPCv
-         PUVhxjfMG5xjrATU6BsdSFri2UNCRSd5A9ljGWRJ3UtIeNO3IQoPEzhkHglXMPdE0qQ/
-         k0cy9YMPUG6ssoRVc9AYs9v8n7cQbwSopKc/y72gRbKBBlJx5sSCI55eMb2rn9bSkK4i
-         50xlJ/qG1wpeHF75QAVeMCrDB0h4PJ3xQtzSAi9e712GsNmTY4rUd81Ka+3hc0CCg7eC
-         6gBCICoqmDuZGCdOPTOTRUFM83L3SolNFqQwrL2kbwyJUWBa91TIv4Jb63XXq9hvKsQS
-         FflA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718215860; x=1718820660;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bysuRKx6ASJn7sotbzdgYdmXjsZucWIObzR9RYJqi4M=;
-        b=OEV3D1i5Wz2X8aX6OqSECFUfkp9wBbn7SXq5fvd1dNNO4iQjBl/zDc8Ytz0eZUJvnb
-         j1uhRdiUhfVe+boEMfyqyNxqRRngjHuFkUQ/zwgPgAYdGeUjdDre9rBJobFvPmvmZXwS
-         btHo8y5ao1VlsY2AFQOJld5BVDiWz7g9SZ+U4/AiWtuFTkfGVmhqEx8+sdOKi0CBeTxi
-         pvJI7dSmde0b0xtmBFyjpJp36lVPL2L1ITWmB9kSDCGljluBL/a1/bX9G46vRTViEu/H
-         xdLtJkxSmIOl5fwQVGZiv+ShEqoG80ilbl/HZnqj08oWWvwxnXJ521WO1KxdgVBo2txD
-         OZgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXVZa/5qppZ/5HdRm/xMaYJIbTiXau2rTvTRRq0AqSTT/Q9xB5phBQvLhICIVxv33/AYtS5ehyXX4ytFcl/PT3KmOTUoEqleGz6z1moSKG6
-X-Gm-Message-State: AOJu0Yx9cCbAu9wRjBwcS8FWE5zsbyIXDTXF1UZUgsYrySLS2uraYN8s
-	O4NzhOZMbN8zd2Gsey7jkYWXnzykyHQAjbRHSXzJRyZXSvpkGSOlGmZQ3MBPiCEbIPJiRKyO+Od
-	1Xw==
-X-Google-Smtp-Source: AGHT+IFdlsyNfCopJx9MGc/lpAH0uLI55vrBd5uBQ720M/Quh9qtzfjG5LFD+1WcYsruY1pOCRVfaawqImE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:b19b:0:b0:de4:654f:9ad0 with SMTP id
- 3f1490d57ef6-dfe66b65b58mr79044276.6.1718215860399; Wed, 12 Jun 2024 11:11:00
- -0700 (PDT)
-Date: Wed, 12 Jun 2024 11:10:58 -0700
-In-Reply-To: <6bd821a3-9dbe-499c-ae17-afce70076299@arm.com>
+	s=arc-20240116; t=1718217873; c=relaxed/simple;
+	bh=yqaEOGVGz/BenIqXBokoUcl0MRlmm1/UI7MPcy+JMbI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=swIOj+3mlTAYEvbUDmC3Fu0rQJI6WKPNMFiJQNtSNMXIO8JfUfpaMWrjKxHAcJcBgSwXVgAp8w4dUES7QLsfQpOxq9xzysuLQqKZbzg94aP1H9CRkBEt94eNk69Z/yLh7lwqxjpAQrsjIa3gOjcLQtfK8st6OCfog4e/9SL9zt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnIdIh9G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A5EC116B1;
+	Wed, 12 Jun 2024 18:44:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718217870;
+	bh=yqaEOGVGz/BenIqXBokoUcl0MRlmm1/UI7MPcy+JMbI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YnIdIh9GKOd77HAfLlrrY3rPi1M8c9CWwC/vR2tfplbfJSafpnCSXuRVwQwe+NX8P
+	 i08JylThZesu0MVSXTKvVCJ16tEnrkfByE58j8SR6yqNP7ovYvlJzf2rleNXUwMKPg
+	 CGl+2p2ojDEHNwpTgUavUVtksFFEuGIbUMTZpoQxMrIEhAmXjzk9ZOQRf7VRdvHUFr
+	 joEDK63vJKyH98tR/viDwrxCnET4lkDfdkFGNnEszDIiBvWJWaBS/xfsmFHFUASkLr
+	 x0hxZeJHJ0oCQyLp+IFkgd7sjqIN896OULF7pie2E6xPa0eC7SnRooW8PadIClT5MY
+	 vFnC2zsBBURQg==
+Date: Wed, 12 Jun 2024 11:44:30 -0700
+From: Kees Cook <kees@kernel.org>
+To: Amer Al Shanawany <amer.shanawany@gmail.com>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	kernel test robot <lkp@intel.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v3] selftests: seccomp: fix format-zero-length warnings
+Message-ID: <202406121144.0EE6C17FF@keescook>
+References: <43e24489-a3af-4e53-afc6-ff1dd9462ee2@linuxfoundation.org>
+ <20240611151638.5767-1-amer.shanawany@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240612104500.425012-1-usama.anjum@collabora.com> <6bd821a3-9dbe-499c-ae17-afce70076299@arm.com>
-Message-ID: <ZmnksmC4u5lP5am9@google.com>
-Subject: Re: [PATCH 1/2] selftests: kvm: remove print_skip()
-From: Sean Christopherson <seanjc@google.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	Haibo Xu <haibo1.xu@intel.com>, Anup Patel <anup@brainfault.org>, 
-	Andrew Jones <ajones@ventanamicro.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Thomas Huth <thuth@redhat.com>, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, kernel@collabora.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240611151638.5767-1-amer.shanawany@gmail.com>
 
-On Wed, Jun 12, 2024, Dev Jain wrote:
+On Tue, Jun 11, 2024 at 05:16:08PM +0200, Amer Al Shanawany wrote:
+> fix the following errors by using string format specifier and an empty
+> parameter:
 > 
-> On 6/12/24 16:14, Muhammad Usama Anjum wrote:
-> > 
-> > 
-> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> > index 4f5881d4ef66d..695c45635d257 100644
-> > --- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> > @@ -144,10 +144,9 @@ int main(int argc, char *argv[])
-> >   	free((void *)hv_cpuid_entries);
-> >   	if (!kvm_cpu_has(X86_FEATURE_VMX) ||
-> > -	    !kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS)) {
-> > -		print_skip("Enlightened VMCS is unsupported");
-> > -		goto do_sys;
-> > -	}
-> > +	    !kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS))
-> > +		ksft_exit_skip("Enlightened VMCS is unsupported\n");
-> > +
+> seccomp_benchmark.c:197:24: warning: zero-length gnu_printf format
+>  string [-Wformat-zero-length]
+>   197 |         ksft_print_msg("");
+>       |                        ^~
+> seccomp_benchmark.c:202:24: warning: zero-length gnu_printf format
+>  string [-Wformat-zero-length]
+>   202 |         ksft_print_msg("");
+>       |                        ^~
+> seccomp_benchmark.c:204:24: warning: zero-length gnu_printf format
+>  string [-Wformat-zero-length]
+>   204 |         ksft_print_msg("");
+>       |                        ^~
 > 
-> Isn't it incorrect to delete 'goto do_sys'? ksft_exit_skip() will exit and the
-> program will never jump to that label. At other places too you have deleted the 'goto'.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202312260235.Uj5ug8K9-lkp@intel.com/
+> Suggested-by: Kees Cook <kees@kernel.org>
+> Signed-off-by: Amer Al Shanawany <amer.shanawany@gmail.com>
 
-Ya, exiting instead of continuing on will break these tests.
+Thanks!
+
+Reviewed-by: Kees Cook <kees@kernel.org>
+
+-- 
+Kees Cook
 
