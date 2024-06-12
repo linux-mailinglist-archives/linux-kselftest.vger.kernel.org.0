@@ -1,124 +1,158 @@
-Return-Path: <linux-kselftest+bounces-11729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42FC590490F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:36:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D42790493A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:57:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE841C2157F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:36:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 936AEB20FCC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A261F602;
-	Wed, 12 Jun 2024 02:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0074BDF62;
+	Wed, 12 Jun 2024 02:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A/j8+vHC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7X9r7QQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2901CB651
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 02:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B894A1B;
+	Wed, 12 Jun 2024 02:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718159778; cv=none; b=snmKZqw2AazRIh+8/zYvYP3VwWa6vFsW/dfunHdNnRn5oOJ8FxWRHouPNPkav76OJ7ERKn7p3g2Q0qTkrbYf1fYI0MQkzwtdjtc3TFQeeRoz51B0iBAn0P8RGkdo4Yrbs0gDe5KxrumXjHb8JBOnMv8n3dLJvXByN8lm4aDtFQk=
+	t=1718161051; cv=none; b=GIB+rUGTEHpiZ+/KD5SmLJHGyqnw5/ySpiRqfwHjLmNrviEqhmGi1SM0eWV9tSgJRel8SGzOdJZDPShnjOEZyQzbThOsQA4j99dhmEHDv4tnm0DuhtEB9/0UVQ5WtJ6JVsbfUo6CcZ2QRoIgs+ox1QNGxIoODxJka9UlW7/+tWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718159778; c=relaxed/simple;
-	bh=+C9CpexBYFfnMpqRsSGyPaSylMt0LZhxG8Bqf4uE1vc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Dm53EK8yJm9q45A63B6argXQ7zDwgb9Ue0RlJ3PgMYwm5xPkWIHpYGlF07I/0zFonjiwkRxWqbpis5OwgwfywyA43MZTpAO+r5iChRFM2qLQXZDON+4OeVy5SRax6t43mhmPgufXtoJBhE1m0loHe1FXyjLnoEJXjGk8kBtcdjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A/j8+vHC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718159776;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ARgZIxE+11qj8ADHfG2c1X50fN5kwjd0+5g/sQvCIdY=;
-	b=A/j8+vHCji6fIt6iNeEaxEGdG/MbqlX3xenreMMsv/2SGlMHL9BlSaYpA0BQV818YC4bNe
-	8rCwKqc7W8vUXYKXMT89Tm9n79DZdoM85u9Jgc5mGWh8O9KsVuVFxwqgHi/FZP8Yc/uCI6
-	2giLJJEzqUrnpl5oHtZD/bFwu+ChqXs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-529-Hv6NuDmENy6inG_gTUu0Zg-1; Tue,
- 11 Jun 2024 22:36:10 -0400
-X-MC-Unique: Hv6NuDmENy6inG_gTUu0Zg-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA4F219560B2;
-	Wed, 12 Jun 2024 02:36:08 +0000 (UTC)
-Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5386619560AD;
-	Wed, 12 Jun 2024 02:36:06 +0000 (UTC)
-From: Shaoqin Huang <shahuang@redhat.com>
-To: Oliver Upton <oliver.upton@linux.dev>,
-	Marc Zyngier <maz@kernel.org>,
-	kvmarm@lists.linux.dev
-Cc: Eric Auger <eauger@redhat.com>,
-	Sebastian Ott <sebott@redhat.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Shaoqin Huang <shahuang@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 2/2] KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
-Date: Tue, 11 Jun 2024 22:35:52 -0400
-Message-Id: <20240612023553.127813-3-shahuang@redhat.com>
-In-Reply-To: <20240612023553.127813-1-shahuang@redhat.com>
-References: <20240612023553.127813-1-shahuang@redhat.com>
+	s=arc-20240116; t=1718161051; c=relaxed/simple;
+	bh=Lx1//KtDjXhN3gOtqkYpZDXLlUXymjn1NFe3pPMA3JQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KXZvNEkshQ3L/UBZRN0Gzf4kNVWhneg3dJewfgEw6m/hgpxFH94gdQ3pgiaDPZhQ0FY4Z+6vkiuJtMwTAJkvFFChHRiwYh3nUSBj1DqznV+UsLdbLz5jIAZN4kK49I7BmombnT7h1vHxpFjPmteQHvyh8pDtw6w47hI8j2PNpXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7X9r7QQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DCBC2BD10;
+	Wed, 12 Jun 2024 02:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718161050;
+	bh=Lx1//KtDjXhN3gOtqkYpZDXLlUXymjn1NFe3pPMA3JQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=b7X9r7QQPvMEpHtSYVEHEXtaF9ZCNUKgVw6Bvxx8q6uNxa6N0Giu0UPXGVWXNlcH+
+	 Mr5QpelutejxQc9GY0lz8FFPHiBEqbzdDL5lbcs+mnhLPM34fVvJtiSH26y0Nb7Scp
+	 3a7cTWe80szAn1LFrIuSc9EGgm+9kTBclYY3cIGnAZWir8iQTpg8UscGHS2E0n0apH
+	 OYA7HHyS7Cb6L1W5nZPed6SHtFnF30fM1kEo2F1EJ5fZXE+yVMD79gBXgiwOQZsfM6
+	 TJusoauNwVJi9mwkVQFJxs1hHxHA7Wqroc+i0s91vg1Mg/DjXdoUalRx0k4maDuiT3
+	 neDpi6F5H8tCQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 024F1CE250F; Tue, 11 Jun 2024 19:57:29 -0700 (PDT)
+Date: Tue, 11 Jun 2024 19:57:29 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc: linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, lance@osuosl.org,
+	mark.rutland@arm.com
+Subject: Re: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's
+ need
+Message-ID: <def32dd4-b205-45b8-a5ed-e6e28a0ac4f4@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
 
-Add test for the BT field in the ID_AA64PFR1_EL1 register.
+On Wed, Jun 12, 2024 at 01:35:27AM +0000, Zhouyi Zhou wrote:
+> Add CFcommon.arch for the various arch's need for rcutorture.
+> 
+> According to [1] and [2], this patch
+> Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
+> x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> 
+> The patch has been revised and improved under
+> Paul E. McKenney's guidance [3].
+> 
+> [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
+> [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
+> [3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
+> 
+> Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
+> 
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
 
-Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
----
- tools/testing/selftests/kvm/aarch64/set_id_regs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Much better, thank you!
 
-diff --git a/tools/testing/selftests/kvm/aarch64/set_id_regs.c b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-index 16e2338686c1..5381b8ec5562 100644
---- a/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-@@ -133,6 +133,11 @@ static const struct reg_ftr_bits ftr_id_aa64pfr0_el1[] = {
- 	REG_FTR_END,
- };
+I queued and pushed for review and testing with the usual editing,
+so please let me know if I messed anything up.
+
+I added Mark on CC in case he has thoughts from an ARM perspective.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 29cf4c63d04b9752a32e33d46a57717121353ef7
+Author: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed Jun 12 01:35:27 2024 +0000
+
+    rcutorture: Add CFcommon.arch for the various arch's need
+    
+    Add CFcommon.arch for the various arch's need for rcutorture.
+    
+    In accordance with [1] and [2], this patch moves x86 specific kernel
+    option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+    
+    [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
+    [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
+    
+    Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
+    
+    Link: https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
+    
+    Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options")
+    Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+    Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+    Cc: Mark Rutland <mark.rutland@arm.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+index b33cd87536899..ad79784e552d2 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+@@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORTURE_KCONFIG_GDB_ARG"
+ config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KASAN_ARG"
+ config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCSAN_ARG"
+ config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_ARG"
++config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
++		      "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null`"
+ cp $T/KcList $resdir/ConfigFragment
  
-+static const struct reg_ftr_bits ftr_id_aa64pfr1_el1[] = {
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, BT, 0),
-+	REG_FTR_END,
-+};
-+
- static const struct reg_ftr_bits ftr_id_aa64mmfr0_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, ECV, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, EXS, 0),
-@@ -199,6 +204,7 @@ static struct test_feature_reg test_regs[] = {
- 	TEST_REG(SYS_ID_AA64ISAR1_EL1, ftr_id_aa64isar1_el1),
- 	TEST_REG(SYS_ID_AA64ISAR2_EL1, ftr_id_aa64isar2_el1),
- 	TEST_REG(SYS_ID_AA64PFR0_EL1, ftr_id_aa64pfr0_el1),
-+	TEST_REG(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1_el1),
- 	TEST_REG(SYS_ID_AA64MMFR0_EL1, ftr_id_aa64mmfr0_el1),
- 	TEST_REG(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1_el1),
- 	TEST_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2_el1),
--- 
-2.40.1
-
+ base_resdir=`echo $resdir | sed -e 's/\.[0-9]\+$//'`
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+index 0e92d85313aa7..cf0387ae53584 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
++++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+@@ -1,6 +1,5 @@
+ CONFIG_RCU_TORTURE_TEST=y
+ CONFIG_PRINTK_TIME=y
+-CONFIG_HYPERVISOR_GUEST=y
+ CONFIG_PARAVIRT=y
+ CONFIG_KVM_GUEST=y
+ CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+new file mode 100644
+index 0000000000000..2770560d56a0c
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+@@ -0,0 +1 @@
++CONFIG_HYPERVISOR_GUEST=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+new file mode 100644
+index 0000000000000..2770560d56a0c
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+@@ -0,0 +1 @@
++CONFIG_HYPERVISOR_GUEST=y
 
