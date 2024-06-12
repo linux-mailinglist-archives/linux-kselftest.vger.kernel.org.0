@@ -1,122 +1,108 @@
-Return-Path: <linux-kselftest+bounces-11723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E196904800
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:25:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B210790485D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 03:23:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F41031F23A9F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 00:25:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA8AD1C230CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 01:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1865864A;
-	Wed, 12 Jun 2024 00:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88F8B663;
+	Wed, 12 Jun 2024 01:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i8X407/A"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TWNW4uPm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6937391
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 00:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488904A0A
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 01:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718151943; cv=none; b=TQw4d6JbAyww/NGtc1t8hMwTTFQQI++vl/JyZzBewUBPCqsc+q2/YbNgazZ1L0Jwq14L/HyPj9glg9omqaq+jf4ueiGSV3B1LLRYe+jAXzqS3hKQDmrV2h5YM1BtsLFERwRXdWKeGCim/3gsarYtg/+ufiWSKwW4bBgqfAkLVNI=
+	t=1718155356; cv=none; b=g8BeWDt/2PBHcc1MjGDD9GBNW7Rn1lMFLpI1NaI4OyT17ba+3BLPvGkZH6WmrkrPE0/7HP5qukVDvM/hTJ+Iaf5/NyewdsaOFV3YbnBCwr/42HddQSdhRNmvdcv8WRdnZ0ntX0Jbl+BXwpcsCv87ZzldUUf24J2MT4Yf9r9yAxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718151943; c=relaxed/simple;
-	bh=z/2yRwkdCljaoKOGpO1d2golTaGcCNFoMOn1+YpkLfE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=UQNhrZ+Ys9toosnqM1Km+10XIafUPS+r8ClLnlOSBNro1FZGLmagvH3AVZw8QM+4AC0oUipsNvWunA8WHzV3tlU+6xbxdG52Q/2zZVUn4Du+YQ8zLcd0droTsedYT8TtP9yUgENiFovpkAz+nPQMmG1nl2TarRGQnczdwCrTym8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i8X407/A; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1718155356; c=relaxed/simple;
+	bh=WGnoUKkk0REcKP8DhUp6zDAS3aC/MvLXK96rqZdtGaE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Ht6SVUhEhfTdhJdWuhlzb1PdiFiQuV5byXQJbBISq/HbBBDEWTP+m5mWYYGzOxo2Od9DjA492BPkFmNZ7eqqRhnsSOEscgh3SXqiBk4EgC6c0SFwL+q1X4spne5yAkEGolwRvAEjfer9duivPDAbQYsUOhF86Fvtr/owFNVAUn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TWNW4uPm; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f70ec6ff8bso71315ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 17:25:41 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1f717559ed9so3003235ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2024 18:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718151941; x=1718756741; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+        d=google.com; s=20230601; t=1718155354; x=1718760154; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Jx+dpbpF1izwf17SLEuAd5VzAXe6OlxL8ty7yz0tFc=;
-        b=i8X407/A0YY/mdpWHqmmx/bhe9zB592ikYXDIffpV+sE/Q6AeHpRPLmLtRDwYTZlLd
-         gjVDUfU9FRfoYMwf9Y6S660E1VSkp17kyFMxXlUyT5CWsSjDvSBKC+gy3KKS7if7aUV7
-         N/8EFZFNp2VZxPL/ww1n0JUnK63kH2lgeRXcGfMVRJjnn+srcrnOgOKxc6DjNthwnjpp
-         +KZt8JdcPumhoP36Yf8oK2XvfoO9dDKifYXhlzxMaGQfvw8gkM0bq2fPubzKwq3heqf3
-         lh8VOWoKpzh9A9JhOhQcvfEp1seFLbn7C0IZXDSYxvvpIOZKWXTrTp3Z11dgr/hs++bR
-         OS4w==
+        bh=gsl38OeWaseD0bhgbBqk9c5YeD4h+uI4W9a9RzJGJxI=;
+        b=TWNW4uPmoCtD1IYxVlnGWtOFopz23CqzKM7Ta9ZhWtWOIaP0uB6qfDEhOaOu9VZ+Mz
+         LVWoyGJ3eF6bYWJviiaKIiT50JNvwAJVQR2bN32yFE0fhjW1c85qZfkFSiXlQzXrby7K
+         C2RiZkKz478f73eEHbCjXjr+fHb/ifYS3KjqnX0a9lJKGzGO6nnGo07fZyDRcXPKYOHL
+         xbE+3cBDGqkWO2ojvSVT1Zp6X9ewrqsiuKI36CsVdlaFpoZLnOfQ3TRiR3gCxWNn9wnm
+         1kAl6tINXhYadeBiwdECZz9d6sBwPzWAPG5NFFYvw7fvGk5R2AR5lpwA7VrqmhxNMM3A
+         87cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718151941; x=1718756741;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+        d=1e100.net; s=20230601; t=1718155354; x=1718760154;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Jx+dpbpF1izwf17SLEuAd5VzAXe6OlxL8ty7yz0tFc=;
-        b=Ud79Yp/+8B0GKFRXgWZXobwRLSyongNS9sozRWOb8omj12s7QvBEwxbxzZEF1xwBBx
-         3G56PrD7W8H4c5O0jZG4b+OzoPiKgqOinzruzI6/rQQk+7aLecjNl3ULedf/ZyT95QSC
-         06mzBvyWteaKJVVobmoMrpC07JiSpToTssn14dOvldn4eJ3wLNz9Ymr9WdgDU11hZWXn
-         PbXUt1tiMx6Z+zsGklHq2JCcrHnebn7iFJ8G8U5QyK5peU92zJ1sUGT6qy5EFozC65k/
-         CEu0DPE1VEj268kmHBDZgwzSUtVQsfXa1YWQVF5ZryFLlgsujc6Y6IUrvD2SKx/+LeJH
-         xvgA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKDK16SB46CHDceVQtCj9mN3TB+4b0AIOplORbh7NXka1+cFMAFXXvF/J8xiprjCl8VwF3lETtljExBIV9dc77+K0UE/0NvkBgC71k01tD
-X-Gm-Message-State: AOJu0YxFPbYXjrDxNgpGglaefkxymqyagnPf/PpaGbZnCT1/TUhit0gR
-	oGhMMeDdTpKJXiKUPJ0VrHAj0C0HNim1/j7e4h4nhETP/kB5GV3Yx5dtFvbopA==
-X-Google-Smtp-Source: AGHT+IHlya7vwInxFDp0+EWhOLwMIyetA4gB6RV8l5p0Exjin5Bjm2songabBXlS19x4W+pEVmxc2Q==
-X-Received: by 2002:a17:902:9048:b0:1f7:1c96:d2e8 with SMTP id d9443c01a7336-1f838ddb9fcmr1323935ad.10.1718151940686;
-        Tue, 11 Jun 2024 17:25:40 -0700 (PDT)
-Received: from [2620:0:1008:15:290:7df3:2a02:3982] ([2620:0:1008:15:290:7df3:2a02:3982])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70595da2deesm4287777b3a.159.2024.06.11.17.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 17:25:39 -0700 (PDT)
-Date: Tue, 11 Jun 2024 17:25:38 -0700 (PDT)
-From: David Rientjes <rientjes@google.com>
-To: Jiaqi Yan <jiaqiyan@google.com>
-cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
-    muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
-    corbet@lwn.net, osalvador@suse.de, duenwen@google.com, fvdl@google.com, 
-    linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-    linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] docs: mm: add enable_soft_offline sysctl
-In-Reply-To: <20240611215544.2105970-4-jiaqiyan@google.com>
-Message-ID: <9461874d-e2d6-25fc-813c-9c9bb0ad1aec@google.com>
-References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-4-jiaqiyan@google.com>
+        bh=gsl38OeWaseD0bhgbBqk9c5YeD4h+uI4W9a9RzJGJxI=;
+        b=Ozkudf9GBp1cfVgDflg5f7j8AW4/o8iSlV8qhqAcMc/e3OTlBjEFFHUE7Ye2eS+sI5
+         pQKzsDMUgHECxFqEkTi9RsNdvMnWXGw5/CiYmYEXDEQsuzUypw60wCnKMgi+MV8rCFkG
+         7QGz1W4DFBG58jEmVGjjQTuwhOEcG1XXPvHV4jwxp4dDyZSoAvadmGweVzkXd5WFQN52
+         6QUVJbCNkEfML2c7SXKtkWqgcgY6G0QyzgUfpukOd7B2x0JkA7LgaRWfEMzIAtQ1AJDI
+         h59XT7Xpx5TvX1UW1HARQxZnD97GrwqDWR4nCIuwK7SzZpZcnawV84lQBmPmO9TfDBgW
+         Ncpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUY8mROLzjckt5tGy9V3Y6rsRyXNiP2Z/UfVpfj4Ze9hXfRoFzTWRyYvytE1bIkMjENf3vaR8EQtF6160AXbnZL+P1IuAmdj3w27yE9Dq1N
+X-Gm-Message-State: AOJu0YzIBMqkDcUfi0C5bvn24GJR6o1NpbzRlmzX2pXLAxgp6YeFaBPL
+	QJKnYaw4cO2uxNFo2AmN31uBqGXNRBBQadxGfpzP4kgLPR4FLjaaVbOMkvDrQOCqv+5RQkNre4Q
+	jDQ==
+X-Google-Smtp-Source: AGHT+IEPXS0kQUQ/tPmBAPKKg/I7Y+RcRDR1CVCBZLmkEfVOXjdKLVUFBQyIA6kDe8AFI35PJE3jQvrv8rg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2281:b0:1f6:d661:1ff2 with SMTP id
+ d9443c01a7336-1f83b1932d9mr505795ad.4.1718155354497; Tue, 11 Jun 2024
+ 18:22:34 -0700 (PDT)
+Date: Tue, 11 Jun 2024 18:18:44 -0700
+In-Reply-To: <20240605050835.30491-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+References: <20240605050835.30491-1-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+Message-ID: <171803414611.3348413.15273837667155862569.b4-ty@google.com>
+Subject: Re: [PATCH v2] KVM: selftest: Add a common check to identify AMD cpu
+ in perf event filter test
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Manali Shukla <manali.shukla@amd.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, nikunj@amd.com, 
+	thomas.lendacky@amd.com, sandipan.das@amd.com, ravi.bangoria@amd.com, 
+	ananth.narayan@amd.com
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, 11 Jun 2024, Jiaqi Yan wrote:
+On Wed, 05 Jun 2024 05:08:35 +0000, Manali Shukla wrote:
+> PMU event filter test fails on zen4 architecture because of the
+> unavailability of family and model check for zen4 in use_amd_pmu().
+> use_amd_pmu() is added to detect architectures that supports event
+> select 0xc2 umask 0 as "retired branch instructions".
+> 
+> Model ranges in is_zen1(), is_zen2() and is_zen3() are used only for
+> sever SOCs, so they might not cover all the model ranges which supports
+> retired branch instructions.
+> 
+> [...]
 
-> @@ -267,6 +268,20 @@ used::
->  These are informational only.  They do not mean that anything is wrong
->  with your system.  To disable them, echo 4 (bit 2) into drop_caches.
->  
-> +enable_soft_offline
-> +===================
-> +Control whether to soft offline memory pages that have (excessive) correctable
-> +memory errors.  It is your call to choose between reliability (stay away from
-> +fragile physical memory) vs performance (brought by HugeTLB or transparent
-> +hugepages).
-> +
+Applied to kvm-x86 selftests, with a fair bit of massaging (as described in my
+previous reply).
 
-Could you expand upon the relevance of HugeTLB or THP in this 
-documentation?  I understand the need in some cases to soft offline memory 
-after a number of correctable memory errors, but it's not clear how the 
-performance implications plays into this.  The paragraph below goes into a 
-difference in the splitting behavior, are hugepage users the only ones 
-that should be concerned with this?
+[1/1] KVM: selftest: Add a common check to identify AMD cpu in perf event filter test
+      https://github.com/kvm-x86/linux/commit/6f19c3165d9f
 
-> +When setting to 1, kernel attempts to soft offline the page when it thinks
-> +needed.  For in-use page, page content will be migrated to a new page.  If
-> +the oringinal hugepage is a HugeTLB hugepage, regardless of in-use or free,
-
-s/oringinal/original/
-
-> +it will be dissolved into raw pages, and the capacity of the HugeTLB pool
-> +will reduce by 1.  If the original hugepage is a transparent hugepage, it
-> +will be split into raw pages.  When setting to 0, kernel won't attempt to
-> +soft offline the page.  Its default value is 1.
->  
-
-This behavior is the same for all architectures?
+--
+https://github.com/kvm-x86/linux/tree/next
 
