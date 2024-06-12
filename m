@@ -1,153 +1,119 @@
-Return-Path: <linux-kselftest+bounces-11786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10D4C9059EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 19:30:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F7A1905A6C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 20:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0D7F285B71
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 17:30:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF692847ED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 18:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F0B1836E2;
-	Wed, 12 Jun 2024 17:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF2F183063;
+	Wed, 12 Jun 2024 18:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cHTfEDbH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TWUF0D7I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA240183072
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 17:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0155316E895;
+	Wed, 12 Jun 2024 18:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718213361; cv=none; b=qpXdJgXOaYZNRvhMCapQTZKy01Q2H37x2Cl+PvbkVnDAW15qByr9GggrCmttjfjhb5jTiakZ4vkwtjkD/CRfquRsva1QC2I3GNtHEgKgdz3mxPObJ85kDssitLF0Q7Y/Qtb1LaoiW6/hj2NTcCCwB0Rg3BdcDU0ayEkaKuR3ueQ=
+	t=1718215833; cv=none; b=WPrZ7wkWwzbKnTc0ORFVCElEiBwQcs54bK2pK3HYezLHQqhdxSz8LjvBFYHhJ79XRmA8gj3AWiWNgDuC+n6XV57rUyHShKxJ17Xnc7W/LerwbXFmkMFs2iCvkf9Ywm/khxW/tYHWrqOgviEJhDRtLpQsPFIOLcGGHoGIo1P7c4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718213361; c=relaxed/simple;
-	bh=SqHXwxyX0hOMrGyXlbcSlWw9tiq1bd472LhKjNZO0j4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DT3upuRFUVuAHRJKiXIlPfYVG+XRHbWeA4VNrAJBF0oyif4BlJbMCJS3FH8CXKGkrxUPkOWBinfBz2rCHdpUpipwyzv4PqBngLNe78jgHpA+q+6oRaoOFune4mTjeYJ/ScWV1ejTOWJye5rkRYpVRmYsE1J7foA1Gs5/zbTXr9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cHTfEDbH; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dfe41f7852cso127835276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 10:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1718213359; x=1718818159; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=60lvPuusqxavVhRXfVcmrSoiIVupdLi0rpCh21972os=;
-        b=cHTfEDbHk6HIEEn0Ouvd1wUDoXpMYFN/HZO3ahKHW+K15xPGFiMJcf8MVBZfy7Lndu
-         9B0gJUKFP12+r7Xc0M3Fq2RqW+bZgItpodmOakdof6kuTbSmAdWWeM2ubU1BlyQiebMb
-         MvuxAQamRDwQeIW9ZFBIcvc59CZMvSKdRtNzitNXU8JHVrEMDHNC/i5Yf9gBEwfkTVAI
-         KAIunmbnZvUDIKtLlMs0yrTuey7ImwDoH+0hvUxrPZx76Hy4yG9yQD5DOFiP9PpUxuj6
-         EIcmmCaIDNDCFGvrURI3v936AvRLS4oTV3eYPx2TdJldxRqJalPrHlTJbKC7D+B/tmAO
-         4PzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718213359; x=1718818159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60lvPuusqxavVhRXfVcmrSoiIVupdLi0rpCh21972os=;
-        b=tZpr58DjzyNgu2ZoB8jzMyN6oLAox6aKqRydNokPO6BtU+PFa2oV0bdORep+c27tlQ
-         lZNIybCYrM4rNd9hGM8+YydKFUxWna0Zc16Gj3EGAalosrbVecLU6zfxLOScbWEGf93N
-         VRtzeT2JUB+OqlC0MmczwZs18zF3i+AKZSiy4h56cSg90C8n5IOwhsHbnJLYmKKYHaIZ
-         q6zykJoXIsmeezGgoBGNUEvoZcGxPykrFpg4zP1/9uvWeowW+fpBTnPJAhPILK/sFpc8
-         ug9vyIPxOPAgd/HgKDIsaXSZ6GghRzAkeqhSPVT1J9q00Yw22G4vQoYjQR7wcY0EdXnY
-         332w==
-X-Forwarded-Encrypted: i=1; AJvYcCUxI9J/+US6sBMjIgWU3hSVgpcTAneMra2cS6ncTHWFkK3+xL/lRNCNX5s0gtKQR0wvWcakgGk9pLtLp5yIlsTb7QtyoKl/cQhbouUnF01H
-X-Gm-Message-State: AOJu0YzxZuNc+g2nxizHNxR78TCl/gF+rVFEl7ZH3/rcCZ2TpyJxItKi
-	mcJpeepQfgwfQqfuvKDNB/I1fEPtM7r66i1HrRcrzXJJbjSM4lfkIT38akDMSzVbph+Mx9ymRdE
-	IohzKoqWKOtY3/8M2nE7I5FvrJyitvnC0y9yL
-X-Google-Smtp-Source: AGHT+IEhGQzLLgCG9zMe0EWuDP1y2oVPtsHywKe/9At+CIXkctODudh6oHfrQfYIPwmYuFhbkIgUb9iq6CY+5R6qw6E=
-X-Received: by 2002:a25:7:0:b0:de6:1695:13a3 with SMTP id 3f1490d57ef6-dfe62f1a60dmr2505543276.0.1718213358736;
- Wed, 12 Jun 2024 10:29:18 -0700 (PDT)
+	s=arc-20240116; t=1718215833; c=relaxed/simple;
+	bh=zxGx4UHWoFeslODIvuI4YPtEigCLjSm31dy2cb55Oz4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=k4WKtG1kg0Gc9Q2LcQ0Z1xIzyHOihsI5lZtYZnjfOgHQQW04/HcdG/bE3IAA3UoxBZ5/P2ruELUGdffvubs9WehZOHIgsM9eczE3SoMza1Ny+eIdGGMSF4VFjLHU57wWCAo0fotAdtMJacxwAKtH+k0uHDmZjFpXp4dU0RByN6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TWUF0D7I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 72475C32786;
+	Wed, 12 Jun 2024 18:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718215831;
+	bh=zxGx4UHWoFeslODIvuI4YPtEigCLjSm31dy2cb55Oz4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TWUF0D7IRN5Vo2R7IFWkPtDTNF++1BL+Rgac5joXi+V6G+etTmFy8BLu+h6L7ExVi
+	 So01cJN5cilVjQ+l2BOZRbCDzBz4l0jx/528FVGADA91iX16nEcQqhk7C+I3XC2HK7
+	 h8YY+rz3VaV27PABMQPe+XFO0A3f09JiU6xuOpIhAcnYGpceK3myDMpXIhk8UsbUdW
+	 44QYK4zDYozKR6bdgJ0AuhU4boMkic+TRxvaa7l46+NcC0mz6N2MBj6oFYUg2r+kni
+	 oNTBDRvYmIZCWXND1t6CZDNcgogj3r8+3POtzOg865W7XV0bEc8neCi90WXcaEyIdz
+	 QYprE511ev6Tw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58136C43618;
+	Wed, 12 Jun 2024 18:10:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240609104355.442002-1-jcalmels@3xx0.net> <20240609104355.442002-5-jcalmels@3xx0.net>
- <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
- <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
- <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com> <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
- <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
- <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com> <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
-In-Reply-To: <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 12 Jun 2024 13:29:06 -0400
-Message-ID: <CAHC9VhRGJTND25MFk4gR-FGxoLhMmgUrMpz_YoMFOwL6kr28zQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM hooks
-To: Jonathan Calmels <jcalmels@3xx0.net>
-Cc: John Johansen <john.johansen@canonical.com>, brauner@kernel.org, ebiederm@xmission.com, 
-	Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Joel Granados <j.granados@samsung.com>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	containers@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, keyrings@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 00/12] bpf: Support dumping kfunc prototypes from
+ BTF
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171821583135.29771.8486292481897939634.git-patchwork-notify@kernel.org>
+Date: Wed, 12 Jun 2024 18:10:31 +0000
+References: <cover.1718207789.git.dxu@dxuuu.xyz>
+In-Reply-To: <cover.1718207789.git.dxu@dxuuu.xyz>
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, fsverity@lists.linux.dev, andrii@kernel.org,
+ jolsa@kernel.org, linux-kbuild@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ olsajiri@gmail.com, quentin@isovalent.com, alan.maguire@oracle.com,
+ acme@kernel.org, eddyz87@gmail.com, kernel-team@meta.com
 
-On Wed, Jun 12, 2024 at 4:15=E2=80=AFAM Jonathan Calmels <jcalmels@3xx0.net=
-> wrote:
-> On Tue, Jun 11, 2024 at 06:38:31PM GMT, Paul Moore wrote:
-> > On Tue, Jun 11, 2024 at 6:15=E2=80=AFPM Jonathan Calmels <jcalmels@3xx0=
-.net> wrote:
+Hello:
 
-...
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> > > Arguably, if we do want fine-grained userns policies, we need LSMs to
-> > > influence the userns capset at some point.
-> >
-> > One could always use, or develop, a LSM that offers additional
-> > controls around exercising capabilities.  There are currently four
-> > in-tree LSMs, including the capabilities LSM, which supply a
-> > security_capable() hook that is used by the capability-based access
-> > controls in the kernel; all of these hook implementations work
-> > together within the LSM framework and provide an additional level of
-> > control/granularity beyond the existing capabilities.
->
-> Right, but the idea was to have a simple and easy way to reuse/trigger
-> as much of the commoncap one as possible from BPF. If we're saying we
-> need to reimplement and/or use a whole new framework, then there is
-> little value.
+On Wed, 12 Jun 2024 09:58:24 -0600 you wrote:
+> This patchset enables both detecting as well as dumping compilable
+> prototypes for kfuncs.
+> 
+> The first commit instructs pahole to DECL_TAG kfuncs when available.
+> This requires v1.27 which was released on 6/11/24. With it, users will
+> be able to look at BTF inside vmlinux (or modules) and check if the
+> kfunc they want is available.
+> 
+> [...]
 
-I can appreciate how allowing direct manipulation of capability bits
-from a BPF LSM looks attractive, but my hope is that our discussion
-here revealed that as you look deeper into making it work there are a
-number of pitfalls which prevent this from being a safe option for
-generalized systems.
+Here is the summary with links:
+  - [bpf-next,v5,01/12] kbuild: bpf: Tell pahole to DECL_TAG kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/ebb79e96f1ea
+  - [bpf-next,v5,02/12] bpf: selftests: Fix bpf_iter_task_vma_new() prototype
+    https://git.kernel.org/bpf/bpf-next/c/718135f5bd24
+  - [bpf-next,v5,03/12] bpf: selftests: Fix fentry test kfunc prototypes
+    https://git.kernel.org/bpf/bpf-next/c/dff96e4f5078
+  - [bpf-next,v5,04/12] bpf: selftests: Fix bpf_cpumask_first_zero() kfunc prototype
+    https://git.kernel.org/bpf/bpf-next/c/89f0b1abac49
+  - [bpf-next,v5,05/12] bpf: selftests: Fix bpf_map_sum_elem_count() kfunc prototype
+    https://git.kernel.org/bpf/bpf-next/c/ac42f636dc11
+  - [bpf-next,v5,06/12] bpf: Make bpf_session_cookie() kfunc return long *
+    https://git.kernel.org/bpf/bpf-next/c/2b8dd87332cd
+  - [bpf-next,v5,07/12] bpf: selftests: Namespace struct_opt callbacks in bpf_dctcp
+    https://git.kernel.org/bpf/bpf-next/c/0ce089cbdc6a
+  - [bpf-next,v5,08/12] bpf: verifier: Relax caller requirements for kfunc projection type args
+    https://git.kernel.org/bpf/bpf-next/c/ec209ad86324
+  - [bpf-next,v5,09/12] bpf: treewide: Align kfunc signatures to prog point-of-view
+    https://git.kernel.org/bpf/bpf-next/c/cce4c40b9606
+  - [bpf-next,v5,10/12] bpf: selftests: nf: Opt out of using generated kfunc prototypes
+    https://git.kernel.org/bpf/bpf-next/c/f709124dd72f
+  - [bpf-next,v5,11/12] bpf: selftests: xfrm: Opt out of using generated kfunc prototypes
+    https://git.kernel.org/bpf/bpf-next/c/c567cba34585
+  - [bpf-next,v5,12/12] bpftool: Support dumping kfunc prototypes from BTF
+    https://git.kernel.org/bpf/bpf-next/c/770abbb5a25a
 
-> TBH, I don't feel strongly about this, which is why it is absent from
-> v1. However, as John pointed out, we should at least be able to modify
-> the blob if we want flexible userns caps policies down the road.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-As discussed in this thread, there are existing ways to provide fine
-grained control over exercising capabilities that can be safely used
-within the LSM framework.  I don't want to speak to what John is
-envisioning, but he should be aware of these mechanisms, and if I
-recall he did voice a level of concern about the same worries I
-mentioned.
 
-I'm happy to discuss ways in which we can adjust the LSM hooks/layer
-to support different approaches to capability controls, but one LSM
-directly manipulating the state of another is going to be a no vote
-from me.
-
---=20
-paul-moore.com
 
