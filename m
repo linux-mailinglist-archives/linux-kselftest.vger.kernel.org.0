@@ -1,84 +1,111 @@
-Return-Path: <linux-kselftest+bounces-11727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB5FA9048DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:20:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B472790490D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 04:36:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B2D9B241B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:20:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 605D81F24414
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2024 02:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29FE6FB2;
-	Wed, 12 Jun 2024 02:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9500DF9EF;
+	Wed, 12 Jun 2024 02:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D66Bvnvi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JfbOMOqm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B7B847C;
-	Wed, 12 Jun 2024 02:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB53CB667
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 02:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718158675; cv=none; b=jqjyPFRf9hB3DzsznJxxQHKUnhVmvPTZcTLps70uPgSYMIaccGiJ1BZYeHiWY1E7w5PdGBni+KuJ3IW7pZ3P9B/6UOA9hfOj/D21M6iTtcV0zoNYt9mOgvn589w+0lj3zXCP3+f+DJtVnHwmRlhi/HCskCuEyIFr7Vkbq/Al+1s=
+	t=1718159775; cv=none; b=f53aQZAtWby7UZm815C2ALa7ApTXwLqZLCN0dn4AUINucpItDphatzTOWIoC7fdebID6yLX8VctsJQySB/D7GCk0tXWwFV+GbiL2xgSKJSUeETjmFzeqiNptjH5W6zTjJKDxjzWfzvVStaRfD4r7nuGm8nnxV3ET+98YI0xfqcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718158675; c=relaxed/simple;
-	bh=BxYwZHOKNpm9NiGnRCPulpeS5GyBzWDtwt98wauBrmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JxCnsyZQLttmzqRsajIxyHJAS4ovWelKNGMXc9lTIO3LkYs6nILd0C4kzWEJopGUnDrS+9I1wmBm6wmKdjx/2PoEi4TDOpg5+BJclRM6pWJLbh7poebSz9NzSFcBPMnG2uK5TQ8EQO0wOvSLcup5MWVfldeDrAto+CdFK5Cfz10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D66Bvnvi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF6AC2BD10;
-	Wed, 12 Jun 2024 02:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718158675;
-	bh=BxYwZHOKNpm9NiGnRCPulpeS5GyBzWDtwt98wauBrmo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=D66Bvnvih3zRod+zJqkxbA5+cGNDx1zOYKk7mTGTw6FsDP+m3EHUxs/M5PnayFbCM
-	 JG35+lZ1dh4HnNf1J9dG1bPmZz+nKvh49yFxjHqNeiTadz5uyj7UFZ6CPpEZbQ0K5r
-	 Kabyu6HJXm0XRWN4HO/MHzi03bjEJXpKhZ8J5eGPY393GOppMHVtaf79prWCfWU1Q7
-	 c1jhbjqW5DOJi/RiD0OPK8SwFKE71bLs6ydKIQJ9E5LtyP114s/m7Wvj8ELymDPoiG
-	 tKJJuNGUFrz+9oLqsO5zSAUSnJH5UHESNztppnC1yStdHK5jV+pwcWsx9RC2tIuZXk
-	 9dW2RdhpuUsxA==
-Date: Tue, 11 Jun 2024 19:17:53 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
- <shuah@kernel.org>, Boris Pismenny <borisp@nvidia.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Jakub Sitnicki <jakub@cloudflare.com>, Geliang Tang
- <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v6 1/2] tls: wait for receiving next skb for
- sk_redirect
-Message-ID: <20240611191753.1b3d703a@kernel.org>
-In-Reply-To: <3101675d11beac0ffe16a86877f7f0c5166605f6.1718096691.git.tanggeliang@kylinos.cn>
-References: <cover.1718096691.git.tanggeliang@kylinos.cn>
-	<3101675d11beac0ffe16a86877f7f0c5166605f6.1718096691.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1718159775; c=relaxed/simple;
+	bh=+zTXVVp9zEYSS8FpmkYG3jt7vMygW3q5VbDW7BOSSik=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c5t+7BzVNDFf/5htrC4IgwvGUUnR9GwwZTgHZcp2A+9K/ELUTMVRMIYL/+xHb4oOo8CHcG7mGUfKVDvFm3G3c9dPRElC5+irPKrvncx/Fdf2IsWWw8q2zbFTxi9LhkbBaiZkOOzpcEGRW5ZdAH0f/N66n+DMbdmaQLX61nwRQSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JfbOMOqm; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718159772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rm5KrzlMz16jgYDKm0W+81rd6UxTby42kLMaocYRJT4=;
+	b=JfbOMOqmnoX0TLvZ8wCA94qgw3V2gZ7ALSL1H6Uti7ncN1majBr03iGYq5yr0dfT+Y90MK
+	+Tcbp4vX6AaIs+PXU4N2RVwR9ML7vBi5+bFXKHT3NDbOecdX8cYM4IemwdxXgp6lz8LEoa
+	Ib7aPhaNQtKVh9mMJHE/LrLCZhQJDe4=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-582-I3EBlmaWOheMu2EXI5MiEQ-1; Tue,
+ 11 Jun 2024 22:36:06 -0400
+X-MC-Unique: I3EBlmaWOheMu2EXI5MiEQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E358019560BD;
+	Wed, 12 Jun 2024 02:36:02 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1E53B19560AD;
+	Wed, 12 Jun 2024 02:35:58 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Eric Auger <eauger@redhat.com>,
+	Sebastian Ott <sebott@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Shaoqin Huang <shahuang@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [RFC PATCH v1 0/2] KVM: arm64: Making BT Field in ID_AA64PFR1_EL1 writable
+Date: Tue, 11 Jun 2024 22:35:50 -0400
+Message-Id: <20240612023553.127813-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Tue, 11 Jun 2024 17:13:34 +0800 Geliang Tang wrote:
-> tls_sw_recvmsg() doesn't work in nonblock mode, it returns -EAGAIN in
-> that case. This patch fixes it, always wait for receiving the next skb
-> for sk_redirect.
+Hi guys,
 
-Is this commit message basically saying "block in nonblock mode" or am
-I missing something? Either way you have to at least improve the commit
-message..
+I'm trying to enable migration from MtCollins(Ampere Altra, ARMv8.2+) to
+AmpereOne(AmpereOne, ARMv8.6+), the migration always fails when migration from
+MtCollins to AmpereOne due to some register fields differing between the
+two machines.
+
+In this patch series, we try to make more register fields writable like
+ID_AA64PFR1_EL1.BT. This is first step towards making the migration possible.
+Some other hurdles need to be overcome. This is not sufficient to make the
+migration successful from MtCollins to AmpereOne.
+
+Shaoqin Huang (2):
+  KVM: arm64: Allow BT field in ID_AA64PFR1_EL1 writable
+  KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
+
+ arch/arm64/kvm/sys_regs.c                         | 2 +-
+ tools/testing/selftests/kvm/aarch64/set_id_regs.c | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
 -- 
-pw-bot: cr
+2.40.1
+
 
