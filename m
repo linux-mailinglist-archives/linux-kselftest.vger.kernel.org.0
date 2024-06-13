@@ -1,213 +1,192 @@
-Return-Path: <linux-kselftest+bounces-11901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D61907DB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 22:55:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A750C907E20
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 23:27:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B385285B75
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 20:55:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57CEA286EED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 21:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD14613BAE4;
-	Thu, 13 Jun 2024 20:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B30813BAD9;
+	Thu, 13 Jun 2024 21:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LY4ASSj5"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oZtYBjiv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2089.outbound.protection.outlook.com [40.107.244.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9F013B787
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 20:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718312114; cv=none; b=XGcgHE3UdREKzSM9RC2gokI0lvcBpjoMpXuKjixDtIgQLVhtXmdNJ4T8vMheSO6QR6XJYFnCrBbmuqps4XT6e3nRADMMtZ+x7BZ1loZ8nczuGwuQ0T3q0aY+OqK79BsGLSFlhTzRV8eUFrVz2ccwRoKEPTeeihbpJyViMvfvFWA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718312114; c=relaxed/simple;
-	bh=l5BZRVe4EjUxYN3yXF5F7zfYiMw/7+iKLgPHpiV/pbM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VZFqASrTGggz982qhp2IEM6cnEuXYtR3JFmm8RYrMjmoO/cvc0Kkr8qrJfM2fS6i+3Vg3iJvNloOAdxugxxfeDIr+KPIyOZFQpX2Fp1wnk8OTAuke3NbA6GDGvipvjyZEpXIIoOlNZzvh6mUyuyIi1iHjwTXDKFCkmOv68ZINRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LY4ASSj5; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-62a087c3a92so15590127b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 13:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1718312112; x=1718916912; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mcXAwgD8G/DtMBTj2XjZiXsT2OTNX1kHEG3gcoNV7As=;
-        b=LY4ASSj5sD1R9fmYZn5gSBdQcVKzA/Abv6SD3GZehE/Wn/sDSFoAp1R/vhdCDnwbf+
-         b83ZV/RHzrYz32yqmtZQVOwlbNCk5jFSSY8Ik3l/S3j10VNT7tVhSg7az9C8eBWBFjdy
-         j2PuEv2yLn903jg6kZp4KtNTlc5UaM4pK+W38Sx7a9auud2uZ5LoWNHqLqacnv8dYGrW
-         xRALKPOwEPfpDwZ5tuXLIxYXsGseEFUbyVIVyPZpZ90SbdwdV6aaDp/xx0S+06fJ6bbx
-         WBaG+a7x50apV2PFHdkYt6I9t/ZZGrkI6JfBLa14L/dhPQ/Y7UR4OpHbRhwRJkSnhMEb
-         p5MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718312112; x=1718916912;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mcXAwgD8G/DtMBTj2XjZiXsT2OTNX1kHEG3gcoNV7As=;
-        b=kvf9EKoCOon/SPknM2kiipF1vqYfm4tL+J56KeUXXdxv8GscoAXb4uMkM3l8oJx9ZJ
-         FENuVyk/pWdMELQP2vb+k+EwH7EYaM/PGQUrxrdHX8nbd7mNtV1LrLmof1zF9n+0dzcC
-         c3ifljQ7UDJaobt119ueBpmb4PyyiNi/FGfoTY6saI77u+EskOWS2y9PJTGD714sV9jf
-         vTLrD9o0Quz/cWDb//E2lGvRsWwlSc5D+kCsZGT7DQEXKqw8WSYfgxU0i7PSpEC+5RKq
-         cKWtZCxWu6QsraahvH+b5DEC7BSPJSN4MJYZnf3Dl9pvz5avhZIals5I2TQAREhAiuL5
-         GDpg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfw8KSLf4Qdfce62zQKKIoCwqB9flbQf+rgBAQCqMDW4mAYR/d87p7bsBhuv66bh0lwLBz/DTBGKDiIkFKn3N4Whm0mNOKx7V/JcANUHM8
-X-Gm-Message-State: AOJu0YwlIkn2lWZh9h5+xw4VnoTgbwoElMx4HyL8NyI3ZvpS2yCy9dzi
-	FNgGsPFF1ZMyLUnYxKtyuwAR9VMD2ESxTd6gbjbMdN4skXr/khY9tl858WU3PMSHQjrp0r2/e1D
-	MLubwkav/537N4O0u0KidxUDulC79Ot8GsZ96
-X-Google-Smtp-Source: AGHT+IGDrzqvYL8x8To8WRZC5EK4ZE7eYh19cN6eIrPp+Dp9L8DQSAkqnp5RVfEyty6oWnZormmtfNXBsvqkuSccnaA=
-X-Received: by 2002:a81:910f:0:b0:62f:ad9c:cd4 with SMTP id
- 00721157ae682-6322470facfmr6187707b3.41.1718312111715; Thu, 13 Jun 2024
- 13:55:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E072F50;
+	Thu, 13 Jun 2024 21:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718314072; cv=fail; b=X4c1hZ7Q3TdPdhp2d82M48B67ndz0BEtwsT0optz4PYcqEJf/889AtJGzJSJYadKEVyXTCfGKwMG4QIBdEk1vW4YPmG1CgPs9tYFyjN7r81P6JHGQwFPfpBYPPNdfLiypUg4Y4BFxVZQwd+qiay1Onsjo+b9u1Fo2wOrGCp1TUk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718314072; c=relaxed/simple;
+	bh=X9ntUHDT6FhFfsHO3dp5GBcHryuJB6ipgdU7OyhQ0/0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=seUTbLaYICT8RXSviwvpXUFxz6WXjNrjEwic1u0/Ev4TKKjx8O2xbfKmL/82QUWQb4w4W3szGZQOXUE2y41IB4H+W03d/tQKrExVdR4BtNRKJv1JeEm6DOhWJE8lUnclTCU6yB63ZFsh24zRrUhk2iyVdNxpX9xmN+LAd1+m55A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oZtYBjiv; arc=fail smtp.client-ip=40.107.244.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UyArAknt/HGxWpjlI3G7HUAJWntj1HFIlnkassHcsliKpp0OU2buY7wTpiG8eeOKflURpgnTPYAgme2mAEiT0B/cWiqOSbF4+eeEvqRgSnHCDZrQkWJ0CFwsBJUDEcQwWbKGCzZ+CdE2K4Qqf0zNvXAFwrU5+VW2hqgYT39ZxJy/Me/hm9rCF2ViEdI3UqsKoz/LfAkGJ58jcxzkbrhoHO+/+3FVqXbTR4MGlm7/sqJknyGYC8qEuDdayhCIalhb64A6cBuPyIV44WlkASaE0ssqQZ9zUu+p7l2B/EKKv65HJUCn5r+t6Zp4QAnAsti2jr0BCUzRyFDE47PFGk3snA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MCD2K9stkfF+DF07OeBSfogi05llm/h2UUmjAdU3Hww=;
+ b=SzzlnIWkvpGp8yECZe2t7A0GO0uuv/qz/1Eg9mwSqZ81e07CUV9VuozQxVpKeWILwWRCggout9TbvW/wPfpQBX0VN23FFXgRkEmc57LSXcA/UxtCZz3WtJI+/PI701kUoW4bxhZXMdwyaaGTDXsz7zpevq5QlsrDrhgMxvNLU81yGhcwBeQbcCUhAm/Xz0ZK93cndPWinTXFIoJD5BEpJx+AoINWTEr2IHehmgqKPtjN3hOKvi+m3d9PfcSGy0syN7SzFX0rh1rtpnpba7zPU1sJePX08hkfoMuwHPuXBD7u9iRrpncgZWgUFeTK9JDDUS4wrKAfgHC4yeNNRJHXvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MCD2K9stkfF+DF07OeBSfogi05llm/h2UUmjAdU3Hww=;
+ b=oZtYBjiv5VCSDJ+ZeZovd+EmpSFF3QHew1ZQEAw4ETfXB5s7u+gijYgMlj2ZEREDTXIhTL1255GnsnO8Ks8XP3/480ug+jd3GsfnPed4XiUx8ZRcRVw0hp20qx6n1eIMZdT+oSzN2uJNEqB1TaduBEX2t4QPfBlZcWt7VrY0YmTdvYetxHLV8HI3xAK49miNnKWY0Ra/1O7xMLncfwJQVQARZGqRfxeXvi0fqoMAC2SX7y19O/RnLXQicXomK6CzofdXpKp5CrW2BUZ4352b9n5iPeqXGJcEmcBy8XY4qp2PDHKllh+OdG1nUxF13/K7rk09VT6t7LCSB35fNVINEQ==
+Received: from PH8PR05CA0020.namprd05.prod.outlook.com (2603:10b6:510:2cc::27)
+ by PH8PR12MB7301.namprd12.prod.outlook.com (2603:10b6:510:222::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Thu, 13 Jun
+ 2024 21:27:47 +0000
+Received: from CY4PEPF0000EDD5.namprd03.prod.outlook.com
+ (2603:10b6:510:2cc:cafe::f6) by PH8PR05CA0020.outlook.office365.com
+ (2603:10b6:510:2cc::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.14 via Frontend
+ Transport; Thu, 13 Jun 2024 21:27:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000EDD5.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Thu, 13 Jun 2024 21:27:47 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 13 Jun
+ 2024 14:27:32 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 13 Jun
+ 2024 14:27:31 -0700
+Message-ID: <2c6f86b4-8151-4bb8-8400-3ea546ca10ac@nvidia.com>
+Date: Thu, 13 Jun 2024 14:27:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240609104355.442002-5-jcalmels@3xx0.net> <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
- <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
- <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com> <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
- <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
- <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com>
- <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
- <CAHC9VhRGJTND25MFk4gR-FGxoLhMmgUrMpz_YoMFOwL6kr28zQ@mail.gmail.com>
- <ba8d88c8-a251-4c1f-8653-1082b0a101dd@canonical.com> <zwh766li4dwx5be6uxnxl2lhtxb4jsiua4atilpqvoeuksgz2h@v3pna3o3ewkp>
-In-Reply-To: <zwh766li4dwx5be6uxnxl2lhtxb4jsiua4atilpqvoeuksgz2h@v3pna3o3ewkp>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 13 Jun 2024 16:55:00 -0400
-Message-ID: <CAHC9VhTaD+LxEL8hMdbvFFJgU1xbEtmN7gSwSdKRS=hX_uVnVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM hooks
-To: Jonathan Calmels <jcalmels@3xx0.net>
-Cc: John Johansen <john.johansen@canonical.com>, brauner@kernel.org, ebiederm@xmission.com, 
-	Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Joel Granados <j.granados@samsung.com>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	containers@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, keyrings@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] cleanups, fixes, and progress towards avoiding "make
+ headers"
+From: John Hubbard <jhubbard@nvidia.com>
+To: David Hildenbrand <david@redhat.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>, Shuah Khan
+	<shuah@kernel.org>
+CC: Andrei Vagin <avagin@google.com>, Axel Rasmussen
+	<axelrasmussen@google.com>, Christian Brauner <brauner@kernel.org>, Kees Cook
+	<kees@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, "Liam R .
+ Howlett" <Liam.Howlett@oracle.com>, Muhammad Usama Anjum
+	<usama.anjum@collabora.com>, Peter Xu <peterx@redhat.com>, Rich Felker
+	<dalias@libc.org>, <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
+References: <20240608021023.176027-1-jhubbard@nvidia.com>
+ <b5dd99c7-866b-467c-9f76-d043e887394c@redhat.com>
+ <c1277bf6-a211-49eb-80af-726f16ca1802@nvidia.com>
+ <17b503f8-5d0c-48a3-9eeb-85b01583f9bb@redhat.com>
+ <b60c8c02-5497-4c6c-ae60-86309e55f1bd@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <b60c8c02-5497-4c6c-ae60-86309e55f1bd@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD5:EE_|PH8PR12MB7301:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93452456-e830-405f-57a4-08dc8befabb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230035|376009|7416009|82310400021|1800799019|36860700008;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?a2JHYVZSa1FTQXZZL0tiQzZGWmdnU1JUVTUyVlJLK1Exc3IzRHloQ3Rhbk5p?=
+ =?utf-8?B?WWticStQTW0vQ1FoN09nMWZwbDI3SmtBOTZ4U1VUY08yTVdMOXlNRzZCTUVT?=
+ =?utf-8?B?ZzgwM2hwYmNSTWdIK3NLZDZGS3h3WVlSM2tOVTB3Qk1uaWpjaG5JOEtxSmF4?=
+ =?utf-8?B?VlNCOW83Z3NRaW9aTlVYTmNpQzUxSlBuTUlrUWorYjM1bXN1ZzZnTTdxQi9N?=
+ =?utf-8?B?aFFNWTc4ak5vVk5CRUJUZUx2SnBqN2RWd0RBbVFnRkQvMW9wWXlKTDFQOVlv?=
+ =?utf-8?B?YWJnZy9NN3U0TEJ2RDJXWlE0NG5HZS9ILzczQXhvcnB2akl2TElMOWNjTndX?=
+ =?utf-8?B?bE1hblFIZkIxNGhHUXVZTTdCZXFpbjVVaklUVU9MOGtObFFGQkJrS202U0ww?=
+ =?utf-8?B?UVc4NmlOdmJzMFYvRnN2WGlFRFRxMUdkKzg4TG1nVDNXclFpb0JVNFY2K3BK?=
+ =?utf-8?B?Vnpwc1ZEbjZwbDE2OWtrY0drdTFCUjE1d1dyMktOdjhBc1BiR3FWUWJFanB3?=
+ =?utf-8?B?MkFpWmxGYTE4RDc1b3R4c2Y0d3NlWWU4ZUp5VFBOUHVYRmNoZFBWUUgrUmlS?=
+ =?utf-8?B?ekdSUXFRaituTlUxRXI3c0RxNmpCbVY2aDVwRlVLK3BnY3lIUERNUzNtTkFD?=
+ =?utf-8?B?NkhWbGZwVXNkZlBkaFhnUzE4S3Z6Y2szOS9rTGppM0NmZzZvbStJS2tycDRH?=
+ =?utf-8?B?WVYrSjVyKzFRMXFnbnlDTWlJQVo1WVZ0eXVQTkVMK3NtQ0thWTVoUUk2TjIx?=
+ =?utf-8?B?Z3ovcit0eXVaVTRzZ2UyUVV0ei90WXZaRkxwb2pJcUZBb2NJd0Vqbzc0dzl1?=
+ =?utf-8?B?Q2dPakJKK0FqMXFJSWpWSm1zVXhiSWN0dVRFQW1pSjc2ZXRuUHFMNi9Sa0Uv?=
+ =?utf-8?B?RFpPR2ZNSTZLMkJCUlNQYUF3TzIzTE94Wk5CeUZwU25HaUp6QWU4NW0yTitT?=
+ =?utf-8?B?QUJ0YlFXNlI3TFJmWEx3OHBmSlpsQXNUNzhhbENaRWZLVnRLQi84Zi9acUdZ?=
+ =?utf-8?B?VlNTb1F4WUU5TVVQVzdtYzUxdVZRcHZzT1ZBL2IycHlqbXJxQUV6bGVxM1JR?=
+ =?utf-8?B?YVJPQnphbkZCN0Vnd2FhUTBkenVCNXRoZVZRL2tUcFVpSmxGMCtNTXJrT3ZC?=
+ =?utf-8?B?clphbDZjTCszQ3hFVnNmNkMrY0U4Z1UrU21tV0JJUFc5RitHMi9ZMkhPK1RK?=
+ =?utf-8?B?VFlNUVVaZjZSNGhMVWY4SXpyVnpWeDArbkQybnNjcnVCTEdXY1ZoeksyN0U0?=
+ =?utf-8?B?bEVkaHJ2UkVJYXE2SWhRWHBWanFtRmdraVd1T24xa09zWUZjQlNZS1JyNXF6?=
+ =?utf-8?B?c3lzaEdJOXp1NnhtZUt4YStvRGJKVWRSMjRHaTJvUVdtMStqdmhpQ1FjenRL?=
+ =?utf-8?B?UUcwZDR3eW5yaGNreEhtRFlkM0Vqc1psdXIrbTVmc255MnNyTDdOcUZDa0RK?=
+ =?utf-8?B?RzB3a0dsdlZ4Q1cybnRwQVI0MWVqNmxvRTcxMDhyVU4wRDA2ZGVyampnZ3Vo?=
+ =?utf-8?B?a05uU2o2b1FaN2RMaEZCQUp5RWhZMmdxQjVoYktJZUxCZ0JKZXkvVXJ3RENa?=
+ =?utf-8?B?QmJ6ZHd1SkZPTHlIVXI5ZEhDV2o0T0hSL0lrUFZtWjcySCt0Q0VVaFdzQkxF?=
+ =?utf-8?B?Y2E2SGI1OG5uT0paUElFK2twQllQN04wODJjTUMxd0NQZFgwZk43MTJsZ3VH?=
+ =?utf-8?B?M2M5czlXeHZ0QVN6UUJqS0FRaVZydkNISThodjJDbTBnclI0WW1Cc3FhaDZK?=
+ =?utf-8?B?SmdGbjI5YjF3TmdEeDZxcm5ueW5KMGY5RWZoMVFja09Mb0F1c041c1gvdWt2?=
+ =?utf-8?B?Y1BmUnpZYzFncnFiTkdyMW1MaDExemw0Vk9MSkdqQldFZVM5UFNwNlF4SG9H?=
+ =?utf-8?B?YmE1SUI1SkkrRFg4TnVsVWk5aklLY2dnNjF5U2plbVVZTUE9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230035)(376009)(7416009)(82310400021)(1800799019)(36860700008);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 21:27:47.2866
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93452456-e830-405f-57a4-08dc8befabb2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD5.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7301
 
-On Thu, Jun 13, 2024 at 4:45=E2=80=AFAM Jonathan Calmels <jcalmels@3xx0.net=
-> wrote:
-> On Wed, Jun 12, 2024 at 08:54:28PM GMT, John Johansen wrote:
-> > On 6/12/24 10:29, Paul Moore wrote:
-> > > On Wed, Jun 12, 2024 at 4:15=E2=80=AFAM Jonathan Calmels <jcalmels@3x=
-x0.net> wrote:
-> > > > On Tue, Jun 11, 2024 at 06:38:31PM GMT, Paul Moore wrote:
-> > > > > On Tue, Jun 11, 2024 at 6:15=E2=80=AFPM Jonathan Calmels <jcalmel=
-s@3xx0.net> wrote:
-> > >
-> > > ...
-> > >
-> > > > > > Arguably, if we do want fine-grained userns policies, we need L=
-SMs to
-> > > > > > influence the userns capset at some point.
-> > > > >
-> > > > > One could always use, or develop, a LSM that offers additional
-> > > > > controls around exercising capabilities.  There are currently fou=
-r
-> > > > > in-tree LSMs, including the capabilities LSM, which supply a
-> > > > > security_capable() hook that is used by the capability-based acce=
-ss
-> > > > > controls in the kernel; all of these hook implementations work
-> > > > > together within the LSM framework and provide an additional level=
- of
-> > > > > control/granularity beyond the existing capabilities.
-> > > >
-> > > > Right, but the idea was to have a simple and easy way to reuse/trig=
-ger
-> > > > as much of the commoncap one as possible from BPF. If we're saying =
-we
-> > > > need to reimplement and/or use a whole new framework, then there is
-> > > > little value.
-> > >
-> > > I can appreciate how allowing direct manipulation of capability bits
-> > > from a BPF LSM looks attractive, but my hope is that our discussion
-> > > here revealed that as you look deeper into making it work there are a
-> > > number of pitfalls which prevent this from being a safe option for
-> > > generalized systems.
-> > >
-> > > > TBH, I don't feel strongly about this, which is why it is absent fr=
-om
-> > > > v1. However, as John pointed out, we should at least be able to mod=
-ify
-> > > > the blob if we want flexible userns caps policies down the road.
-> > >
-> > > As discussed in this thread, there are existing ways to provide fine
-> > > grained control over exercising capabilities that can be safely used
-> > > within the LSM framework.  I don't want to speak to what John is
-> > > envisioning, but he should be aware of these mechanisms, and if I
-> > > recall he did voice a level of concern about the same worries I
-> > > mentioned.
-> > >
-> >
-> > sorry, I should have been more clear. I envision LSMs being able to
-> > update their own state in the userns hook.
-> >
-> > Basically the portion of the patch that removes const from the
-> > userns hook.
->
-> Yes, pretty sure we'll need this regardless.
->
-> > An LSM updating the capset is worrysome for all the reasons you
-> > pointed out, and I think a few more. I haven't had a chance to really
-> > look at v2 yet, so I didn't want to speak directly on the bpf part of
-> > the patch without first giving a good once over.
+On 6/12/24 7:11 PM, John Hubbard wrote:
+> On 6/12/24 1:24 AM, David Hildenbrand wrote:
+>> On 11.06.24 22:54, John Hubbard wrote:
+>>> On 6/11/24 2:36 AM, David Hildenbrand wrote:
+>>>> On 08.06.24 04:10, John Hubbard wrote:
+...
+>>> You remembered correctly, but the situation is slighly muddier than
+>>> one would prefer. :)
+>>
+>>
+>> Absolutely, and I appreciate that you are trying to improve the situation.
+>>
+> 
+> I think the attempts to further tease apart the include headers could
+> go into a separate, subsequent series, yes? And let this one go in
+> unmolested for now?
+  
 
+On second thought, it is actually much easier than I thought, let me
+post a v2 with the unistd.h header fixes, after all.
 
-> > > I'm happy to discuss ways in which we can adjust the LSM hooks/layer
-> > > to support different approaches to capability controls, but one LSM
-> > > directly manipulating the state of another is going to be a no vote
-> > > from me.
-> >
-> > I might not be as hard no as Paul here, I am always willing to listen
-> > to arguments, but it would have to be a really good argument to
-> > modify the capset, when there are multiple LSMs in play on a system.
->
-> The way I see it, it's more about enhancing the capability LSM with BPF
-> hooks and have it modify its own state dynamically, not so much
-> crosstalk between two distinct LSM frameworks (say one where the BPF
-> LSM implements a lot of things like capable()).
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-As I mentioned previously, if you want to do something with the
-capability sets you simply need to do it within the confines of
-security/commoncap.c.  If you're really set on the "MUST BE BPF!" way
-of life, and you can convince Serge (capabilities maintainer) that it
-would be a good idea, you could propose a dedicated BPF hook within
-the capabilities LSM.  I'm not sure how wise that would be, but it
-would resolve a lot of the LSM ordering/stacking issues that we've
-discussed.
-
-> If we think there is no way we can come up with something that's safe
-> enough, and that the risks outweigh the benefits, fine by me, we can
-> drop this patch from the series.
-
-To be clear, this patch is not acceptable at this point in time.  With
-the understanding that I haven't looked that closely at the rest of
-the patchset, it looks fairly well contained to the capabilities code
-which means it is largely up to Serge, not me.
-
-I will mention that you should update the audit code to recognize the
-new capability set, look at kernel/auditsc.c for more information.
-
---=20
-paul-moore.com
 
