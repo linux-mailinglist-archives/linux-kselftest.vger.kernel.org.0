@@ -1,113 +1,105 @@
-Return-Path: <linux-kselftest+bounces-11867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B85907597
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 16:48:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34FC90764B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 17:15:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27BA51C23B08
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 14:48:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 667262842CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 15:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86B112C526;
-	Thu, 13 Jun 2024 14:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B991A149C44;
+	Thu, 13 Jun 2024 15:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hwg5ghc1"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UUCThmTd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07CE7E76D;
-	Thu, 13 Jun 2024 14:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7481494D0;
+	Thu, 13 Jun 2024 15:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718290049; cv=none; b=b0jv8JEFNznohwLcwi46wltLz6HjaDdYwzbvQWApN4z/GPUeTROh5OE6peIIkaDdP5rHYQhXbUhFidv5C1XsArDyRUXYTKWEVZ0d/t7Zp9IEIwpCsR4ktClfFgpQwZV1hUnHbWk6A+jbhAbjIXIY8knxeMuj3M9bzXKQ8U6unu4=
+	t=1718291712; cv=none; b=GmGhnMu/HkHZ2A+/Jy7O0jjc9K/1WajVuyePXxV8uN7BSYbX+wDJXdmky2hBPghi4rqdmLStEttmWj/a5LOyeMly3ahbIAkNyJGeNzEoopf2USCrQe9qNGl9GdIi2+hgIIZQK9hPk4BDuinlSB7TUsK3+X3mX+eReLBrBBKkl4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718290049; c=relaxed/simple;
-	bh=kjzDGOG2YXMGDf6L85vqKWOLSBd/y+drS146eunQElM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HkLDVXa705sal3g2VZx2CPT6uiOG5lNgK9qPYoV+jwaVfo21QmTkih570x5VwrumE52zzimQVKGSdtXcJw+rpodpap0dWenN5DXqMtAT/tgpDHXo82w+iMyeBElBQSFlg9dV3ENvIAs80Vfg9k6Mgxp92iZmMcxLqOfGTeb4268=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hwg5ghc1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B95C32786;
-	Thu, 13 Jun 2024 14:47:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718290049;
-	bh=kjzDGOG2YXMGDf6L85vqKWOLSBd/y+drS146eunQElM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hwg5ghc1ZNz7jjOf9igMuFsFU/zOhkMsDbUhpJuEz1nr7Kc/Za+nMY6fXggf3SUpM
-	 aw4j3b1+5GyFLkQbWkbTwfU4JCH1+A1gzgCGjBix+eoShbE1qQ9cKf3DXgGVLEMEWT
-	 q2VMZhj08lzDgA9MhyvRLAJezfO+L4uIt36v8Vb4XKEHKdGMJ1sHUuw/LDN0OL90nF
-	 6UHNs/m9UjwnmOTm6RDX6OV5Gt8slm8BaGAQA3wqhADtRX6EQpY+FWHBfZUEKEEz3E
-	 VD/k6HAMaurA3jcAjhGup1iAsq4POeoJIX/nnOC73+DtUIgiCHUdzf3LTY7oUCUgMx
-	 nBZU+XpGCVEGw==
-Date: Thu, 13 Jun 2024 08:47:26 -0600
-From: Keith Busch <kbusch@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Nilay Shroff <nilay@linux.ibm.com>, l@kbusch-mbp.dhcp.thefacebook.com,
-	Keith Busch <kbusch@meta.com>, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	hch@lst.de, sagi@grimberg.me, davidgow@google.com,
-	akpm@linux-foundation.org, venkat88@linux.vnet.ibm.com
-Subject: Re: [PATCH 1/2] list: introduce a new cutting helper
-Message-ID: <ZmsGfle1aZQauzRb@kbusch-mbp.dhcp.thefacebook.com>
-References: <20240612155135.3060667-1-kbusch@meta.com>
- <f0e4c51c-8227-4f5c-876f-38fbb4a0e1bf@linux.ibm.com>
- <ZmrscxG51gFRDVlM@kbusch-mbp>
- <c475f0d8-3bc9-4d65-8fce-586f4b75b4fc@linux.ibm.com>
- <ZmsD_HDLBQAqOOU3@kbusch-mbp.dhcp.thefacebook.com>
- <31eb40f9-d68d-4348-b1fd-3cf057939297@paulmck-laptop>
+	s=arc-20240116; t=1718291712; c=relaxed/simple;
+	bh=3ozSPTlSEgTYrRu6Ije/gYJYhDxZM9wnwxZkXNIo93s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=V7Yu6dXF431Q3hsgnHbZtJPVOjv//sRizpzafA0kFjUQQJ2JLe/1kEO0/pe1yf9LLSBTUT728UWdREWYmUEH3PFLILZ/d3qDMWoF1jROcFkDabE2bpLQnZhnEpDR6YiDtyAa6dgy7MLcpgHqvL6J51W5hdDYp4umhdZA5Gj9AS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UUCThmTd; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718291709;
+	bh=3ozSPTlSEgTYrRu6Ije/gYJYhDxZM9wnwxZkXNIo93s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=UUCThmTdzPIbMLr/IpB5mxKKfkA/O7KmzK4VF6Hv1GBu4JuUWkPHVnCmB+vnCPLub
+	 igLGRvGl0LFc3dGnqJ3TFJfVjV+dtbZr0r/xlGLQt/CeLT//209TPeN+1GONijYXW0
+	 hQja/LRZrxNHit93PdSFKJ4FqBCqp6RPQ1fMsX7qmQu8C3YtbjT3fRFpj8QYGSXPWl
+	 ekxk0LXvyI0O7zrP3hxRNrhjjG3VTY+/tf+AkNBE48rHuYLESbyDJ88FoenNOmhwgs
+	 rqX0IPGOoFzllDYwwFj+0GpnR8rIgRERrc/lDUysa9jnqKQPRxyELs+A5Q+KkqlJeR
+	 f+gH+4OVAUr5w==
+Received: from [192.168.1.250] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6EAC4378143B;
+	Thu, 13 Jun 2024 15:15:07 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH 0/2] kselftest: devices: Allow running test on more
+ platforms
+Date: Thu, 13 Jun 2024 11:14:50 -0400
+Message-Id: <20240613-kselftest-discoverable-probe-mt8195-kci-v1-0-7b396a9b032d@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31eb40f9-d68d-4348-b1fd-3cf057939297@paulmck-laptop>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOoMa2YC/x3NQQqDMBBA0avIrDuQDGraXqW4iMnYDlojmSAF8
+ e4NLt/m/wOUs7DCszkg8y4qaa2wtwbCx69vRonVQIZa01vCWXmZCmvBKBrSztmPC+OW08j4LXf
+ 76HAOgsGTdS0510cDtbZlnuR3nV7Def4BuUDenHkAAAA=
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-usb@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernelci@lists.linux.dev, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.13.0
 
-On Thu, Jun 13, 2024 at 07:43:35AM -0700, Paul E. McKenney wrote:
-> On Thu, Jun 13, 2024 at 08:36:44AM -0600, Keith Busch wrote:
-> > On Thu, Jun 13, 2024 at 07:11:52PM +0530, Nilay Shroff wrote:
-> > > On 6/13/24 18:26, Keith Busch wrote:
-> > > > But that's not the problem for the rcu case. It's the last line that's
-> > > > the problem:
-> > > > 
-> > > >  	list->prev->next = list;
-> > > > 
-> > > > We can't change forward pointers for any element being detached from
-> > > > @head because a reader iterating the list may see that new pointer value
-> > > > and end up in the wrong list, breaking iteration. A synchronize rcu
-> > > > needs to happen before forward pointers can be mucked with, so it still
-> > > > needs to be done in two steps. Oh bother...
-> > > 
-> > > Agree and probably we may break it down using this API:
-> > > static inline void list_cut_rcu(struct list_head *list,
-> > >  		struct list_head *head, struct list_head *entry, 
-> > > 		void (*sync)(void))
-> > > {
-> > >  	list->next = entry;
-> > >  	list->prev = head->prev;
-> > > 	__list_del(entry->prev, head);
-> > > 	sync();
-> > >  	entry->prev = list;
-> > >  	list->prev->next = list;
-> > > }
-> > 
-> > Yes, that's the pattern, but I think we need an _srcu() variant: the
-> > "sync" callback needs to know the srcu_struct.
-> 
-> Just make a helper function like this:
-> 
-> 	static void my_synchronize_srcu(void)
-> 	{
-> 		synchronize_srcu(&my_srcu_struct);
-> 	}
-> 
-> Or am I missing something subtle here?
+This series adds two new features required to be able to run the test on
+more platforms on KernelCI.
 
-That would work if we had a global srcu, but the intended usage
-dynamically allocates one per device the driver is attached to, so a
-void callback doesn't know which one to sync.
+The first patch adds a parameter to allow overriding the directory in
+which the board files will be looked for. Since the board files are
+hosted in a separate repository [1], this parameter allows overlaying
+those files on the filesystem and passing the location to the test.
+
+The second is needed for one platform in particular, MT8195, in which
+the usb controllers are instanced from a two-level deep DT node that
+doesn't allow unique matching based on the existing properties.
+
+[1] https://github.com/kernelci/platform-test-parameters
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Nícolas F. R. A. Prado (2):
+      kselftest: devices: Allow specifying boards directory through parameter
+      kselftest: devices: Add of-fullname-regex property
+
+ .../selftests/devices/boards/google,spherion.yaml  |  4 +++
+ .../selftests/devices/test_discoverable_devices.py | 37 +++++++++++++++++++++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+---
+base-commit: d97496ca23a2d4ee80b7302849404859d9058bcd
+change-id: 20240612-kselftest-discoverable-probe-mt8195-kci-ca21742776d0
+
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
 
