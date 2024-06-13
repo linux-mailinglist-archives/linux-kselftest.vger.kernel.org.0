@@ -1,94 +1,108 @@
-Return-Path: <linux-kselftest+bounces-11875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31B7890781E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 18:20:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F589907823
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 18:20:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF9841F21C4D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 16:19:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DA122848C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 16:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDD6714600F;
-	Thu, 13 Jun 2024 16:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0451494B8;
+	Thu, 13 Jun 2024 16:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ku1Qua7F";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ex5hiPog"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="AuHSE0wX";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z7KN7GMd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from flow2-smtp.messagingengine.com (flow2-smtp.messagingengine.com [103.168.172.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDB612FB1B;
-	Thu, 13 Jun 2024 16:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505E6145B34;
+	Thu, 13 Jun 2024 16:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718295593; cv=none; b=OEVUk8XST9BWZgfH/+gyitVjYYh40+hqeFjk4fRC/Lu68GNEoMRHBdRE9JNBisBQe6M3anJFNuS744J58Rsi0CL644cJkLuPUFlo1JQl+5Pq2puFxtIr8qqPV2RdfsZdDHYMRn1292ZEyrACqUd2rQgb3ujY8hinsbFyThBGZXg=
+	t=1718295594; cv=none; b=ns/iAVPaT+LnY3Yy+MoPaouIg2BHZ4O9aHWxF5m9IuKfCQA3yIYoHdmiSYTwSJKQ4qPJNYu206NsuAznMzP1zcGIwQaqBR0gnKLAFp6PuUg1FSvkHeg6vzPxxCKPcvzQjLig0cWRXIOhLwD02GyqNEwfTvJhExUR2vKwP3WSNGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718295593; c=relaxed/simple;
-	bh=il9CR8RWy5mrfp/6orJ5atyRWhBkbb+ud6If3Ho1ruk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SrGI6/ZXhh1jF66x1RMHpzlWxI7eNwY6hbFfhjWXa45qSjerkg5Lj8lXOCbaESE2ZMguzBdID9Y3bMGVfbINFeust0MbYwjBsZUQORfyxZNPNoOGKO5EK1Z6eEzNl7/eqKI1pJcWzLG1gMpQxSnTl6iyw1TvRyvvSCuXpX3AESA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=ku1Qua7F; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ex5hiPog; arc=none smtp.client-ip=103.168.172.151
+	s=arc-20240116; t=1718295594; c=relaxed/simple;
+	bh=d3SufosQ8LT0bZ8SGHYXs1ztJ5ewWIW0QjqdtzH28Jk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=m0M9U12lshMO1Br8DdwG9wA6EAE9UPuKGnStfyXu0ZoKGC3geUnN0GO2ibyMzD/1ctTG87SyPvI7RPp5dI0Tp02yL5GwDfflRBsi3W0MRI5i+W3Wx3QdoF1Ung+EVa9uzoPwXM5sJjYiT1DkgXp4MmKeJr39QUFgxsNzR/25VKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=AuHSE0wX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z7KN7GMd; arc=none smtp.client-ip=103.168.172.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.nyi.internal (Postfix) with ESMTP id F3A8C1380085;
-	Thu, 13 Jun 2024 12:19:48 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.nyi.internal (Postfix) with ESMTP id 5029720025B;
+	Thu, 13 Jun 2024 12:19:52 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 13 Jun 2024 12:19:49 -0400
+  by compute4.internal (MEProxy); Thu, 13 Jun 2024 12:19:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=fm3; t=1718295588; x=1718381988; bh=5rMtixePuS3RXG9fhXTba
-	9T3LKerJ1M2yNaJfMQKX+E=; b=ku1Qua7F6q+gf+Wl4mMA4EPg+XIn4k56jQtnO
-	ir7MRm73iOJpTE5jB3/FVc4jHtRGvq8nRs02y9VFRub7NTqhSA8qhuezgZPRy589
-	FZ+4EmxDBoEjws92rvd89FyyDY/ezBhiFEDsmLwC/YjBCapjbe0FFz4RkhxHdwyJ
-	SydlTvrxayKo1z1/QXewJ2oaJ3TlkhnXJdeS8wiepxDYajIFdZhB8EmfBz06H5ze
-	XPjiHFHz16zZusXNDL/fMfdqNrncZF/U8dvCDjYk2vTqFtJ7wkXLjV0XFnQQEWEB
-	HWdzmosgl3407OR3Po84H1mWuVw7ISkFMNg1RJjvV5eLyGpGg==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1718295592; x=
+	1718302792; bh=VXllBy0OPIEM37txsmqZHMLIf8msa/NYcue55B8lNbE=; b=A
+	uHSE0wXiX7haWc1A6vaFcNkyAjimPaYSf53X0tie9Y275Rz0d5Nx10awqhxJmzwo
+	DxKbag8tNUHdGZem1IoaDe4mtPncOJOdhbNbD3bh0Cge6NUw2e0Di+OD0ACX7uv+
+	f84k1tubNdkX5tC5tjxWBPg7sIx+kPNFUmt5PX33XhMBKqBxUIye0QhqNcAl82mn
+	R90uCtDg7hbSt2IYwW0+9q9qFjazKieOPjZ+plO9KDtXPTG9snXpTpcK53wGbWr4
+	eJqrKJbjW86AY4mZkd4hJbcnZIwIMepZkJCsrDmxvmt1rQgkV40YZUuCAi+YksRW
+	yPs/KOH+U0dERGZCjNwPQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1718295588; x=1718381988; bh=5rMtixePuS3RXG9fhXTba9T3LKer
-	J1M2yNaJfMQKX+E=; b=Ex5hiPogIdUbiPplzt0oMW+QTVHyGEpTYrqLLSaj1/Rs
-	P5sNJ2Mv7X1SYi8Xx9THVSDtgObRvAnOeTRjaPIEe2vc0wcDlhK1CMr7QF56hB8M
-	adDQzUhG5M2NCKKhogwLF35la7ZBmbKOEFhX9Fl/zv+UVtUW5JeLdHJiFkBG6NzY
-	FveTzhYAFmVsg7f+2YlB7L2V6Teu8Zlw02MkRfK7qn3f8nXzQ7wk3UKWftql+YsD
-	ng2KLJFAd1IaonajUBUEVlIcNw9VWKI9+/oDmo2V9q2DpNkYPkrZ9b/7N1EKyA+u
-	gUNCnlmKqDU/+ZNMTQTCdOteuN4hoYk5A3UySgNqpw==
-X-ME-Sender: <xms:JBxrZhNioB2l0mVkRuFWjpf_ukegMefGgena3BedRK3NYRPQuSg4kw>
-    <xme:JBxrZj_w4OAJXx7W1Ug_0BJtrd-ibkvNfeant_ANKy46Ct1-2ihotMTl8TMUweVnM
-    k8ZL_MY_LR3WLbhZg>
-X-ME-Received: <xmr:JBxrZgQ9E-uW_OYbgwmDtK599HHllIFcU7hD984pjzPFF44g6mYgwAkfSfLD8IdJksrtxyhaTRlDWRyi_OX2Wq9pls5R4v99WGdHvTXp>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedujedgleeiucetufdoteggodetrfdotf
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718295592; x=
+	1718302792; bh=VXllBy0OPIEM37txsmqZHMLIf8msa/NYcue55B8lNbE=; b=Z
+	7KN7GMdgJzoqn7hDkLHdIbni4eqPA/T8LvJRFaP2iFOTwYTgZ1CnwkIbc2f8Efhb
+	nyE7PEoG7leOoc5PlLlB0sbf4QipU/X7GGlvWeMAE/7rQNpronxznL3vvpiXDW0J
+	04uTIhVyltrgWxQoBmMa8r/30z1Ik/RCSP+Nh/WhOJJyF08sl/+y7pJYqiy7R9pZ
+	DETsLd61HoM8hv18wKOD73YkulU6xWFJf4IRQUsSw9qPOXW+9xIiz1pOXNIcrTHz
+	AjOdHKi3YbY3eQbvXOJBIWJgrBFHgOscde63jSJGmEaMtxkBBTyvgYOsPubsMvhn
+	7Hx7YAzXtonMi6LmKC6ow==
+X-ME-Sender: <xms:KBxrZggc88fBx22-jszG00wm5wFrVH4vJV93g6NFxVuoLb9QWc1AaA>
+    <xme:KBxrZpA7CJ2YNfhWdgjL4MLEHO8NpdSZwlNNr3NCy3A7X3ft_cF0xfe9K3TfFAtMT
+    zY6QY70ve5Nyevg-g>
+X-ME-Received: <xmr:KBxrZoEUJQIVdRRU5rk2AqGoN15-LOY7PFALzqAX9MYZhAyyVoQZM63f30_SF0c_6AA4IsEznKKvKKSdDgY-o12lonwsuTg6xHkhLjN3>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedujedgleejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvdeggfetgfelhefhueefke
-    duvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:JBxrZtv-lVzhGlwS21tc_kIJ1zYsR98YF8cHM_IrArIcs24Vlx5RgA>
-    <xmx:JBxrZpcJ_kb6ewjILe1OMzJkKryxsFffx4MGeJrVI1ocdrDfxSfZwg>
-    <xmx:JBxrZp1b4sBVXhXQryQfYJF20t7VLJOZ8PDrA7_ertyYHQ_HY-oCWA>
-    <xmx:JBxrZl-hCYwHb6cbojmmM1nMc7KhO196Jeuw4jvztq_AN_Ji88IhbA>
-    <xmx:JBxrZjsI80lZ3g8RNCysLBdXZdzRbUGWs_T7bvdiezGFrqGrSAm-xifm>
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlvdefmdenucfjughrpefhvf
+    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepleeiudehhfetffeiud
+    dtjefguddtkeduleeuleevkeejiedtfeeuuedtleehvdefnecuffhomhgrihhnpehkvghr
+    nhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:KBxrZhQNBUQ_aaBCBymQJmlTHn8di6vZBkihe38Ru6j-fq-h4Wv3Ig>
+    <xmx:KBxrZtxNmiKykVhSo_NykiI-moc9_mgSQARPqKxOPU047p4-c5oMtw>
+    <xmx:KBxrZv5qXW0lmwUzgyH3j5FloabEpRJkbcuDP8P6bdv7tT2Di6GT0A>
+    <xmx:KBxrZqxTrNdmmhAB-EAJ2DXYtRtMMwa-5qliN-Nxp-5peju9IlBOSQ>
+    <xmx:KBxrZkjaDo_yWGyXKfIsQNbRMXWzwMPJA_vr7bE0anIsxyClBShIM8L_>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Jun 2024 12:19:47 -0400 (EDT)
+ 13 Jun 2024 12:19:50 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: ast@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+To: daniel@iogearbox.net,
+	andrii@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	nathan@kernel.org,
 	dxu@dxuuu.xyz,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: "sfr@canb.auug.org.aukernel-team"@meta.com
-Subject: [PATCH bpf-next 0/2] Fixes for kfunc prototype generation
-Date: Thu, 13 Jun 2024 10:19:24 -0600
-Message-ID: <cover.1718295425.git.dxu@dxuuu.xyz>
+	eddyz87@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"sfr@canb.auug.org.aukernel-team"@meta.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next 2/2] bpf: selftests: Do not use generated kfunc prototypes for arena progs
+Date: Thu, 13 Jun 2024 10:19:26 -0600
+Message-ID: <fc59a617439ceea9ad8dfbb4786843c2169496ae.1718295425.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <cover.1718295425.git.dxu@dxuuu.xyz>
+References: <cover.1718295425.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,20 +111,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset fixes new warnings and errors that kfunc prototype
-generation caused.
+When selftests are built with a new enough clang, the arena selftests
+opt-in to use LLVM address_space attribute annotations for arena
+pointers.
 
-Daniel Xu (2):
-  bpf: Fix bpf_dynptr documentation comments
-  bpf: selftests: Do not use generated kfunc prototypes for arena progs
+These annotations are not emitted by kfunc prototype generation. This
+causes compilation errors when clang sees conflicting prototypes.
 
- kernel/bpf/helpers.c                                     | 4 ++--
+Fix by opting arena selftests out of using generated kfunc prototypes.
+
+Fixes: 770abbb5a25a ("bpftool: Support dumping kfunc prototypes from BTF")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/r/202406131810.c1B8hTm8-lkp@intel.com/
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
  tools/testing/selftests/bpf/progs/arena_htab.c           | 1 +
  tools/testing/selftests/bpf/progs/arena_list.c           | 1 +
  tools/testing/selftests/bpf/progs/verifier_arena.c       | 1 +
  tools/testing/selftests/bpf/progs/verifier_arena_large.c | 1 +
- 5 files changed, 6 insertions(+), 2 deletions(-)
+ 4 files changed, 4 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/arena_htab.c b/tools/testing/selftests/bpf/progs/arena_htab.c
+index 1e6ac187a6a0..cf938cf8c11e 100644
+--- a/tools/testing/selftests/bpf/progs/arena_htab.c
++++ b/tools/testing/selftests/bpf/progs/arena_htab.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
++#define BPF_NO_KFUNC_PROTOTYPES
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+diff --git a/tools/testing/selftests/bpf/progs/arena_list.c b/tools/testing/selftests/bpf/progs/arena_list.c
+index 93bd0600eba0..3a2ddcacbea6 100644
+--- a/tools/testing/selftests/bpf/progs/arena_list.c
++++ b/tools/testing/selftests/bpf/progs/arena_list.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
++#define BPF_NO_KFUNC_PROTOTYPES
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index 93144ae6df74..67509c5d3982 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
+ 
++#define BPF_NO_KFUNC_PROTOTYPES
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+index ef66ea460264..6065f862d964 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
+ 
++#define BPF_NO_KFUNC_PROTOTYPES
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
 -- 
 2.44.0
 
