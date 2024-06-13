@@ -1,192 +1,416 @@
-Return-Path: <linux-kselftest+bounces-11902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A750C907E20
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 23:27:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B803907EA5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 00:13:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57CEA286EED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 21:27:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5051F2151B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 22:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B30813BAD9;
-	Thu, 13 Jun 2024 21:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F397E13DDC6;
+	Thu, 13 Jun 2024 22:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oZtYBjiv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dpu8iKaq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2089.outbound.protection.outlook.com [40.107.244.89])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E072F50;
-	Thu, 13 Jun 2024 21:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718314072; cv=fail; b=X4c1hZ7Q3TdPdhp2d82M48B67ndz0BEtwsT0optz4PYcqEJf/889AtJGzJSJYadKEVyXTCfGKwMG4QIBdEk1vW4YPmG1CgPs9tYFyjN7r81P6JHGQwFPfpBYPPNdfLiypUg4Y4BFxVZQwd+qiay1Onsjo+b9u1Fo2wOrGCp1TUk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718314072; c=relaxed/simple;
-	bh=X9ntUHDT6FhFfsHO3dp5GBcHryuJB6ipgdU7OyhQ0/0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=seUTbLaYICT8RXSviwvpXUFxz6WXjNrjEwic1u0/Ev4TKKjx8O2xbfKmL/82QUWQb4w4W3szGZQOXUE2y41IB4H+W03d/tQKrExVdR4BtNRKJv1JeEm6DOhWJE8lUnclTCU6yB63ZFsh24zRrUhk2iyVdNxpX9xmN+LAd1+m55A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oZtYBjiv; arc=fail smtp.client-ip=40.107.244.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UyArAknt/HGxWpjlI3G7HUAJWntj1HFIlnkassHcsliKpp0OU2buY7wTpiG8eeOKflURpgnTPYAgme2mAEiT0B/cWiqOSbF4+eeEvqRgSnHCDZrQkWJ0CFwsBJUDEcQwWbKGCzZ+CdE2K4Qqf0zNvXAFwrU5+VW2hqgYT39ZxJy/Me/hm9rCF2ViEdI3UqsKoz/LfAkGJ58jcxzkbrhoHO+/+3FVqXbTR4MGlm7/sqJknyGYC8qEuDdayhCIalhb64A6cBuPyIV44WlkASaE0ssqQZ9zUu+p7l2B/EKKv65HJUCn5r+t6Zp4QAnAsti2jr0BCUzRyFDE47PFGk3snA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MCD2K9stkfF+DF07OeBSfogi05llm/h2UUmjAdU3Hww=;
- b=SzzlnIWkvpGp8yECZe2t7A0GO0uuv/qz/1Eg9mwSqZ81e07CUV9VuozQxVpKeWILwWRCggout9TbvW/wPfpQBX0VN23FFXgRkEmc57LSXcA/UxtCZz3WtJI+/PI701kUoW4bxhZXMdwyaaGTDXsz7zpevq5QlsrDrhgMxvNLU81yGhcwBeQbcCUhAm/Xz0ZK93cndPWinTXFIoJD5BEpJx+AoINWTEr2IHehmgqKPtjN3hOKvi+m3d9PfcSGy0syN7SzFX0rh1rtpnpba7zPU1sJePX08hkfoMuwHPuXBD7u9iRrpncgZWgUFeTK9JDDUS4wrKAfgHC4yeNNRJHXvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MCD2K9stkfF+DF07OeBSfogi05llm/h2UUmjAdU3Hww=;
- b=oZtYBjiv5VCSDJ+ZeZovd+EmpSFF3QHew1ZQEAw4ETfXB5s7u+gijYgMlj2ZEREDTXIhTL1255GnsnO8Ks8XP3/480ug+jd3GsfnPed4XiUx8ZRcRVw0hp20qx6n1eIMZdT+oSzN2uJNEqB1TaduBEX2t4QPfBlZcWt7VrY0YmTdvYetxHLV8HI3xAK49miNnKWY0Ra/1O7xMLncfwJQVQARZGqRfxeXvi0fqoMAC2SX7y19O/RnLXQicXomK6CzofdXpKp5CrW2BUZ4352b9n5iPeqXGJcEmcBy8XY4qp2PDHKllh+OdG1nUxF13/K7rk09VT6t7LCSB35fNVINEQ==
-Received: from PH8PR05CA0020.namprd05.prod.outlook.com (2603:10b6:510:2cc::27)
- by PH8PR12MB7301.namprd12.prod.outlook.com (2603:10b6:510:222::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Thu, 13 Jun
- 2024 21:27:47 +0000
-Received: from CY4PEPF0000EDD5.namprd03.prod.outlook.com
- (2603:10b6:510:2cc:cafe::f6) by PH8PR05CA0020.outlook.office365.com
- (2603:10b6:510:2cc::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.14 via Frontend
- Transport; Thu, 13 Jun 2024 21:27:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000EDD5.mail.protection.outlook.com (10.167.241.201) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7677.15 via Frontend Transport; Thu, 13 Jun 2024 21:27:47 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 13 Jun
- 2024 14:27:32 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 13 Jun
- 2024 14:27:31 -0700
-Message-ID: <2c6f86b4-8151-4bb8-8400-3ea546ca10ac@nvidia.com>
-Date: Thu, 13 Jun 2024 14:27:31 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B526113B580
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 22:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718316820; cv=none; b=gHTCaql3Z5twz9kM6hDqIFLV6uioIVBXJ9UT3c4y3Mkvy5Vcfsni0z2RFpQXF6+DsTX1Rzjts34UJJP9nCAjhSMSzLecfJHDrICEZFgr5PqYpLVdU+D5cSr5jvIKUPuxZsUmJV++vUKutPwF/M+jTAhzF58AKZt3HnN/Z+dlnRw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718316820; c=relaxed/simple;
+	bh=mwX/Ut3liG+2eL4EiqMYYCOWpRlKdeioXbS3wyxFBs0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dW2ZVubvQ6bMszKHFVFeAY6xltmtnJEYDfbkzKufZHh2izbcJ1pnW19rBgOm+MFNogwGF7OYVJ+6qZrnVkNk3N0V3Dmb6GHL7dlMJDbN2K9kbOc0J70uUjOd9K0J3mDUzxlzZEqTloZWiKMQm9hSond3LEVIqCRrdzWG3eokYvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dpu8iKaq; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718316819; x=1749852819;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mwX/Ut3liG+2eL4EiqMYYCOWpRlKdeioXbS3wyxFBs0=;
+  b=Dpu8iKaqYt6+FdzfexAr9SKhKEagjMC4SyMEDEXztXide4nx9JZUb2RU
+   iUeXRcZGulbPuHAS8ljHdEN+/ndXGYX0c0tbFoPYiwxB9mpZE4FSNi0cJ
+   iEcbHDODunK/FIIC64g0XBBS7giOK0Px34VDg3WwI0SmxVDNj7eblTJSO
+   E663sEhm10Fiw6HR5gKLhJb0RGRnN9zzlyenX5eCaeMZFmeunwo7n8+n5
+   EOYuhD7BOSozKnFBPyENVOSkfEvFJmRGu8Sl3NAFF3vbj47qGnKQzK7FN
+   N549h6AGA4Kt2jwMzhFigp0XQBoT2BJZqZIO+tyzYKWZ5kf94AouC6oa5
+   A==;
+X-CSE-ConnectionGUID: kvbwb0OrS5SC1oCRk9tXww==
+X-CSE-MsgGUID: SgR4FBAHSE2mVG2EAAvGRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="32720587"
+X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
+   d="scan'208";a="32720587"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 15:13:38 -0700
+X-CSE-ConnectionGUID: Tc0wLCpTSm23vyp5b7zatw==
+X-CSE-MsgGUID: rE40TlMOSMimxsMr6bf50g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
+   d="scan'208";a="45214117"
+Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 15:13:38 -0700
+From: Vivek Kasireddy <vivek.kasireddy@intel.com>
+To: dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Hugh Dickins <hughd@google.com>,
+	Peter Xu <peterx@redhat.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dongwon Kim <dongwon.kim@intel.com>,
+	Junxiao Chang <junxiao.chang@intel.com>,
+	linux-kselftest@vger.kernel.org,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Dave Airlie <airlied@redhat.com>
+Subject: [PATCH v15 9/9] selftests/udmabuf: Add tests to verify data after page migration
+Date: Thu, 13 Jun 2024 14:42:11 -0700
+Message-ID: <20240613214741.1029446-10-vivek.kasireddy@intel.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240613214741.1029446-1-vivek.kasireddy@intel.com>
+References: <20240613214741.1029446-1-vivek.kasireddy@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] cleanups, fixes, and progress towards avoiding "make
- headers"
-From: John Hubbard <jhubbard@nvidia.com>
-To: David Hildenbrand <david@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>, Shuah Khan
-	<shuah@kernel.org>
-CC: Andrei Vagin <avagin@google.com>, Axel Rasmussen
-	<axelrasmussen@google.com>, Christian Brauner <brauner@kernel.org>, Kees Cook
-	<kees@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, "Liam R .
- Howlett" <Liam.Howlett@oracle.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Peter Xu <peterx@redhat.com>, Rich Felker
-	<dalias@libc.org>, <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>
-References: <20240608021023.176027-1-jhubbard@nvidia.com>
- <b5dd99c7-866b-467c-9f76-d043e887394c@redhat.com>
- <c1277bf6-a211-49eb-80af-726f16ca1802@nvidia.com>
- <17b503f8-5d0c-48a3-9eeb-85b01583f9bb@redhat.com>
- <b60c8c02-5497-4c6c-ae60-86309e55f1bd@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <b60c8c02-5497-4c6c-ae60-86309e55f1bd@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD5:EE_|PH8PR12MB7301:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93452456-e830-405f-57a4-08dc8befabb2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230035|376009|7416009|82310400021|1800799019|36860700008;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a2JHYVZSa1FTQXZZL0tiQzZGWmdnU1JUVTUyVlJLK1Exc3IzRHloQ3Rhbk5p?=
- =?utf-8?B?WWticStQTW0vQ1FoN09nMWZwbDI3SmtBOTZ4U1VUY08yTVdMOXlNRzZCTUVT?=
- =?utf-8?B?ZzgwM2hwYmNSTWdIK3NLZDZGS3h3WVlSM2tOVTB3Qk1uaWpjaG5JOEtxSmF4?=
- =?utf-8?B?VlNCOW83Z3NRaW9aTlVYTmNpQzUxSlBuTUlrUWorYjM1bXN1ZzZnTTdxQi9N?=
- =?utf-8?B?aFFNWTc4ak5vVk5CRUJUZUx2SnBqN2RWd0RBbVFnRkQvMW9wWXlKTDFQOVlv?=
- =?utf-8?B?YWJnZy9NN3U0TEJ2RDJXWlE0NG5HZS9ILzczQXhvcnB2akl2TElMOWNjTndX?=
- =?utf-8?B?bE1hblFIZkIxNGhHUXVZTTdCZXFpbjVVaklUVU9MOGtObFFGQkJrS202U0ww?=
- =?utf-8?B?UVc4NmlOdmJzMFYvRnN2WGlFRFRxMUdkKzg4TG1nVDNXclFpb0JVNFY2K3BK?=
- =?utf-8?B?Vnpwc1ZEbjZwbDE2OWtrY0drdTFCUjE1d1dyMktOdjhBc1BiR3FWUWJFanB3?=
- =?utf-8?B?MkFpWmxGYTE4RDc1b3R4c2Y0d3NlWWU4ZUp5VFBOUHVYRmNoZFBWUUgrUmlS?=
- =?utf-8?B?ekdSUXFRaituTlUxRXI3c0RxNmpCbVY2aDVwRlVLK3BnY3lIUERNUzNtTkFD?=
- =?utf-8?B?NkhWbGZwVXNkZlBkaFhnUzE4S3Z6Y2szOS9rTGppM0NmZzZvbStJS2tycDRH?=
- =?utf-8?B?WVYrSjVyKzFRMXFnbnlDTWlJQVo1WVZ0eXVQTkVMK3NtQ0thWTVoUUk2TjIx?=
- =?utf-8?B?Z3ovcit0eXVaVTRzZ2UyUVV0ei90WXZaRkxwb2pJcUZBb2NJd0Vqbzc0dzl1?=
- =?utf-8?B?Q2dPakJKK0FqMXFJSWpWSm1zVXhiSWN0dVRFQW1pSjc2ZXRuUHFMNi9Sa0Uv?=
- =?utf-8?B?RFpPR2ZNSTZLMkJCUlNQYUF3TzIzTE94Wk5CeUZwU25HaUp6QWU4NW0yTitT?=
- =?utf-8?B?QUJ0YlFXNlI3TFJmWEx3OHBmSlpsQXNUNzhhbENaRWZLVnRLQi84Zi9acUdZ?=
- =?utf-8?B?VlNTb1F4WUU5TVVQVzdtYzUxdVZRcHZzT1ZBL2IycHlqbXJxQUV6bGVxM1JR?=
- =?utf-8?B?YVJPQnphbkZCN0Vnd2FhUTBkenVCNXRoZVZRL2tUcFVpSmxGMCtNTXJrT3ZC?=
- =?utf-8?B?clphbDZjTCszQ3hFVnNmNkMrY0U4Z1UrU21tV0JJUFc5RitHMi9ZMkhPK1RK?=
- =?utf-8?B?VFlNUVVaZjZSNGhMVWY4SXpyVnpWeDArbkQybnNjcnVCTEdXY1ZoeksyN0U0?=
- =?utf-8?B?bEVkaHJ2UkVJYXE2SWhRWHBWanFtRmdraVd1T24xa09zWUZjQlNZS1JyNXF6?=
- =?utf-8?B?c3lzaEdJOXp1NnhtZUt4YStvRGJKVWRSMjRHaTJvUVdtMStqdmhpQ1FjenRL?=
- =?utf-8?B?UUcwZDR3eW5yaGNreEhtRFlkM0Vqc1psdXIrbTVmc255MnNyTDdOcUZDa0RK?=
- =?utf-8?B?RzB3a0dsdlZ4Q1cybnRwQVI0MWVqNmxvRTcxMDhyVU4wRDA2ZGVyampnZ3Vo?=
- =?utf-8?B?a05uU2o2b1FaN2RMaEZCQUp5RWhZMmdxQjVoYktJZUxCZ0JKZXkvVXJ3RENa?=
- =?utf-8?B?QmJ6ZHd1SkZPTHlIVXI5ZEhDV2o0T0hSL0lrUFZtWjcySCt0Q0VVaFdzQkxF?=
- =?utf-8?B?Y2E2SGI1OG5uT0paUElFK2twQllQN04wODJjTUMxd0NQZFgwZk43MTJsZ3VH?=
- =?utf-8?B?M2M5czlXeHZ0QVN6UUJqS0FRaVZydkNISThodjJDbTBnclI0WW1Cc3FhaDZK?=
- =?utf-8?B?SmdGbjI5YjF3TmdEeDZxcm5ueW5KMGY5RWZoMVFja09Mb0F1c041c1gvdWt2?=
- =?utf-8?B?Y1BmUnpZYzFncnFiTkdyMW1MaDExemw0Vk9MSkdqQldFZVM5UFNwNlF4SG9H?=
- =?utf-8?B?YmE1SUI1SkkrRFg4TnVsVWk5aklLY2dnNjF5U2plbVVZTUE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230035)(376009)(7416009)(82310400021)(1800799019)(36860700008);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2024 21:27:47.2866
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93452456-e830-405f-57a4-08dc8befabb2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD5.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7301
+Content-Transfer-Encoding: 8bit
 
-On 6/12/24 7:11 PM, John Hubbard wrote:
-> On 6/12/24 1:24 AM, David Hildenbrand wrote:
->> On 11.06.24 22:54, John Hubbard wrote:
->>> On 6/11/24 2:36 AM, David Hildenbrand wrote:
->>>> On 08.06.24 04:10, John Hubbard wrote:
-...
->>> You remembered correctly, but the situation is slighly muddier than
->>> one would prefer. :)
->>
->>
->> Absolutely, and I appreciate that you are trying to improve the situation.
->>
-> 
-> I think the attempts to further tease apart the include headers could
-> go into a separate, subsequent series, yes? And let this one go in
-> unmolested for now?
-  
+Since the memfd pages associated with a udmabuf may be migrated
+as part of udmabuf create, we need to verify the data coherency
+after successful migration. The new tests added in this patch try
+to do just that using 4k sized pages and also 2 MB sized huge
+pages for the memfd.
 
-On second thought, it is actually much easier than I thought, let me
-post a v2 with the unistd.h header fixes, after all.
+Successful completion of the tests would mean that there is no
+disconnect between the memfd pages and the ones associated with
+a udmabuf. And, these tests can also be augmented in the future
+to test newer udmabuf features (such as handling memfd hole punch).
 
-thanks,
+The idea for these tests comes from a patch by Mike Kravetz here:
+https://lists.freedesktop.org/archives/dri-devel/2023-June/410623.html
+
+v1->v2: (suggestions from Shuah)
+- Use ksft_* functions to print and capture results of tests
+- Use appropriate KSFT_* status codes for exit()
+- Add Mike Kravetz's suggested-by tag
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: Dongwon Kim <dongwon.kim@intel.com>
+Cc: Junxiao Chang <junxiao.chang@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Dave Airlie <airlied@redhat.com>
+Acked-by: Gerd Hoffmann <kraxel@redhat.com>
+Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+---
+ .../selftests/drivers/dma-buf/udmabuf.c       | 214 +++++++++++++++---
+ 1 file changed, 183 insertions(+), 31 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+index c812080e304e..6062723a172e 100644
+--- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+@@ -9,52 +9,162 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <malloc.h>
++#include <stdbool.h>
+ 
+ #include <sys/ioctl.h>
+ #include <sys/syscall.h>
++#include <sys/mman.h>
+ #include <linux/memfd.h>
+ #include <linux/udmabuf.h>
++#include "../../kselftest.h"
+ 
+ #define TEST_PREFIX	"drivers/dma-buf/udmabuf"
+ #define NUM_PAGES       4
++#define NUM_ENTRIES     4
++#define MEMFD_SIZE      1024 /* in pages */
+ 
+-static int memfd_create(const char *name, unsigned int flags)
++static unsigned int page_size;
++
++static int create_memfd_with_seals(off64_t size, bool hpage)
++{
++	int memfd, ret;
++	unsigned int flags = MFD_ALLOW_SEALING;
++
++	if (hpage)
++		flags |= MFD_HUGETLB;
++
++	memfd = memfd_create("udmabuf-test", flags);
++	if (memfd < 0) {
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = ftruncate(memfd, size);
++	if (ret == -1) {
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return memfd;
++}
++
++static int create_udmabuf_list(int devfd, int memfd, off64_t memfd_size)
++{
++	struct udmabuf_create_list *list;
++	int ubuf_fd, i;
++
++	list = malloc(sizeof(struct udmabuf_create_list) +
++		      sizeof(struct udmabuf_create_item) * NUM_ENTRIES);
++	if (!list) {
++		ksft_print_msg("%s: [FAIL, udmabuf-malloc]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	for (i = 0; i < NUM_ENTRIES; i++) {
++		list->list[i].memfd  = memfd;
++		list->list[i].offset = i * (memfd_size / NUM_ENTRIES);
++		list->list[i].size   = getpagesize() * NUM_PAGES;
++	}
++
++	list->count = NUM_ENTRIES;
++	list->flags = UDMABUF_FLAGS_CLOEXEC;
++	ubuf_fd = ioctl(devfd, UDMABUF_CREATE_LIST, list);
++	free(list);
++	if (ubuf_fd < 0) {
++		ksft_print_msg("%s: [FAIL, udmabuf-create]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return ubuf_fd;
++}
++
++static void write_to_memfd(void *addr, off64_t size, char chr)
++{
++	int i;
++
++	for (i = 0; i < size / page_size; i++) {
++		*((char *)addr + (i * page_size)) = chr;
++	}
++}
++
++static void *mmap_fd(int fd, off64_t size)
+ {
+-	return syscall(__NR_memfd_create, name, flags);
++	void *addr;
++
++	addr = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
++	if (addr == MAP_FAILED) {
++		ksft_print_msg("%s: ubuf_fd mmap fail\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return addr;
++}
++
++static int compare_chunks(void *addr1, void *addr2, off64_t memfd_size)
++{
++	off64_t off;
++	int i = 0, j, k = 0, ret = 0;
++	char char1, char2;
++
++	while (i < NUM_ENTRIES) {
++		off = i * (memfd_size / NUM_ENTRIES);
++		for (j = 0; j < NUM_PAGES; j++, k++) {
++			char1 = *((char *)addr1 + off + (j * getpagesize()));
++			char2 = *((char *)addr2 + (k * getpagesize()));
++			if (char1 != char2) {
++				ret = -1;
++				goto err;
++			}
++		}
++		i++;
++	}
++err:
++	munmap(addr1, memfd_size);
++	munmap(addr2, NUM_ENTRIES * NUM_PAGES * getpagesize());
++	return ret;
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+ 	struct udmabuf_create create;
+ 	int devfd, memfd, buf, ret;
+-	off_t size;
+-	void *mem;
++	off64_t size;
++	void *addr1, *addr2;
++
++	ksft_print_header();
++	ksft_set_plan(6);
+ 
+ 	devfd = open("/dev/udmabuf", O_RDWR);
+ 	if (devfd < 0) {
+-		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+-		       TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg(
++			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
++			TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+ 	if (memfd < 0) {
+-		printf("%s: [skip,no-memfd]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
+ 	if (ret < 0) {
+-		printf("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
+-		exit(77);
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
+ 	}
+ 
+-
+ 	size = getpagesize() * NUM_PAGES;
+ 	ret = ftruncate(memfd, size);
+ 	if (ret == -1) {
+-		printf("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
+-		exit(1);
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
+ 	}
+ 
+ 	memset(&create, 0, sizeof(create));
+@@ -64,44 +174,86 @@ int main(int argc, char *argv[])
+ 	create.offset = getpagesize()/2;
+ 	create.size   = getpagesize();
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-1]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-1]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-1]\n", TEST_PREFIX);
+ 
+ 	/* should fail (size not multiple of page) */
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = getpagesize()/2;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-2]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-2]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-2]\n", TEST_PREFIX);
+ 
+ 	/* should fail (not memfd) */
+ 	create.memfd  = 0; /* stdin */
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf >= 0) {
+-		printf("%s: [FAIL,test-3]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf >= 0)
++		ksft_test_result_fail("%s: [FAIL,test-3]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-3]\n", TEST_PREFIX);
+ 
+ 	/* should work */
++	page_size = getpagesize();
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
+ 	create.memfd  = memfd;
+ 	create.offset = 0;
+ 	create.size   = size;
+ 	buf = ioctl(devfd, UDMABUF_CREATE, &create);
+-	if (buf < 0) {
+-		printf("%s: [FAIL,test-4]\n", TEST_PREFIX);
+-		exit(1);
+-	}
++	if (buf < 0)
++		ksft_test_result_fail("%s: [FAIL,test-4]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-4]\n", TEST_PREFIX);
++
++	munmap(addr1, size);
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 4k size pages)*/
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, false);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-5]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-5]\n", TEST_PREFIX);
++
++	close(buf);
++	close(memfd);
++
++	/* should work (migration of 2MB size huge pages)*/
++	page_size = getpagesize() * 512; /* 2 MB */
++	size = MEMFD_SIZE * page_size;
++	memfd = create_memfd_with_seals(size, true);
++	addr1 = mmap_fd(memfd, size);
++	write_to_memfd(addr1, size, 'a');
++	buf = create_udmabuf_list(devfd, memfd, size);
++	addr2 = mmap_fd(buf, NUM_PAGES * NUM_ENTRIES * getpagesize());
++	write_to_memfd(addr1, size, 'b');
++	ret = compare_chunks(addr1, addr2, size);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL,test-6]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS,test-6]\n", TEST_PREFIX);
+ 
+-	fprintf(stderr, "%s: ok\n", TEST_PREFIX);
+ 	close(buf);
+ 	close(memfd);
+ 	close(devfd);
++
++	ksft_print_msg("%s: ok\n", TEST_PREFIX);
++	ksft_print_cnts();
++
+ 	return 0;
+ }
 -- 
-John Hubbard
-NVIDIA
+2.45.1
 
 
