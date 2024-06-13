@@ -1,204 +1,199 @@
-Return-Path: <linux-kselftest+bounces-11827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0099062E0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 05:55:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11700906319
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 06:42:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B484AB22821
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 03:54:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CBCD2837B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 04:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F424131BDD;
-	Thu, 13 Jun 2024 03:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AFE6132135;
+	Thu, 13 Jun 2024 04:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="An6aC73w"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h8+oLAbw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D3F130ACF;
-	Thu, 13 Jun 2024 03:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A536318C05
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 04:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718250892; cv=none; b=OX7nPdXEVOf8cetP099JitcjBA0m9uHOzXjQYG1hQB06D8N4tXj+kJwb4woWC+Ck5uTwnNhCx2YEoSci9K8KXtcUPfwz/yjvhV8J3ZngjvUC0HvAf9P99ABdRIju0xg+V6a1LFHPYdCx0yNBk/+HhxbE1lsSLEFnk7wnSf98qPQ=
+	t=1718253718; cv=none; b=OSMk/ri1cRmQSf6eH707DSKgFUjJFphXmaQz6FYOVHzSoOpt7VkJ1mRXCRyGktvWG/XRcXTfzkkeVLBx2ivjmCGltEywwaFcQHNvS0Mdhg8oLPe08K2gl5Rs3d3szaxVrYzwsTr6r06gZ/24Bc0hPYngd5g/Q3oWkI1uavfgqg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718250892; c=relaxed/simple;
-	bh=4IRlCB/4nUSbZwsJUsWYdboTwZ+C4w4yUEx925ojR84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sHuCGAHKnmZvQ+1iH1Rq70d4vnhArf9XB0M8t/TfbDMMNrd6nuy+mjHRq45y62hdkq5u2+O79LdgRiAZLqJjHe+Bc4XYuL1ZTrsE41/1jv0AaaQVSwd+miGYidCFPCS6FBg9WSPkqgGIclbTod7GUX6d3b4ELBMYlohC2cFTI8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=An6aC73w; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [192.168.192.83] (unknown [50.39.103.33])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CF5353F2CF;
-	Thu, 13 Jun 2024 03:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1718250879;
-	bh=xYQFrwIswvtW1GDA70qHgG50RX/kaBNY/JfSUQQLhR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=An6aC73w/ZU7OmxOvSuz+41Bk29n1RzGYRS+uRav0+cXNZDYiw0ei2+4KT0DLIQmR
-	 9MPSEbJLAQuXnRU2l1p5K7g/ngtisXCiqJY7+DpIcX5gf4NxXTNZ2gQBcyTwkHaWl2
-	 an0g3lTyh8FUBr/bb/bwBKK+Xtp76qqkp6BMD6e2lqrSMqPfvZYNBGaxIdZEzNL8GV
-	 tBGXvU3Wtn4rdYuAH+yDwsroZEcMpfJlu5/xnvb9ExOtXOW8NG1DzWyKKjscsSy82e
-	 fJk1rQRpk9QlhZcG88cuwit7OGlxxr/aGxauV5NxUS3y54lAajmfI41kRTr0kmKwzQ
-	 Vl+U1To6ETOYA==
-Message-ID: <ba8d88c8-a251-4c1f-8653-1082b0a101dd@canonical.com>
-Date: Wed, 12 Jun 2024 20:54:28 -0700
+	s=arc-20240116; t=1718253718; c=relaxed/simple;
+	bh=mgFaVEkRJJ2uytecW7ZhAKPb3IvO0F98zOKjaL9HoVE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qQgg6hPGwxGZXD2K7AjINTXP/+s/UyTBcGnd/+r73HkSZt9PwfqXIghaiL1CgUQQ0/MzQcF6gxGNnoMJqKeK2kj1TiAxh9NvEY/UAKUndbIQKD1kPylMcUu1C4mYrfbtxBnLr9yiKBMimks9pHVPGMk94Llpj9IuGb98uyhMZCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h8+oLAbw; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4405dffca81so96151cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2024 21:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718253715; x=1718858515; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VRPo8XykKuKLZCCTlzHm3BOR8rt8gMP3qbLxMzsDgo8=;
+        b=h8+oLAbwC0UWU3RiTjVMaWjqJJ9wnoZnHIWCAe8IuI0PEewIennd3QBvCI+1iEzvps
+         z0zcZgcOfTZkj858VC4NUx5shSvpx9c7463UXqJD+prpoOXf+8mmlNxhw/ly48hs6tdB
+         2yhuSEPu98FSrDqiexho4/3jySZyq/JLp/jPAlVF4pOLdimAYekhBA4Qink7CIdB4kAz
+         etER/cMzIzbuMeOmMogTc+0/T4JIxPQN6muhcK9fh1EyegcMupvnCaDdkZu7+q2btIMU
+         xbRbnIlWmL1/YnVEw+UZ/eB7gECXzxq6rzkcajWVgKnm7UIe7MzfiiXrsubgwHiBy0Tj
+         OTHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718253715; x=1718858515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VRPo8XykKuKLZCCTlzHm3BOR8rt8gMP3qbLxMzsDgo8=;
+        b=g0uO6XMN6zV8eQKsXFRR9mgASkUmARZ0LC+MEIYApUsK1YdwOEzBF8dB4V5sp7xmpE
+         FZlGkYNbY5ILGMyVKp+TMdVJ24WElXeSSSTEDvaSuWcXTzdsR2X5S9bVBrRj60i8tPgs
+         aLxyb6V2PxgvtI/lJgAgC3ZoDneKSgN0cnZg0v2mc7+/HkJwsTUqS2as/BlYsDeagmnS
+         7Kw0Nn3JVWI0Gj411zkeiPfaRr8uxTUM6GPcRCUhaT65C98XEXL7PaTvJb6gPilda+fa
+         Vg8m5kiqigbl1NaEamzFRjatF4p8U6edSgYtYMcWNFNaGKENsRbA54XYOTT4UO/5iisl
+         2B+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXpeqopZfiZjS0wWxgeYW1TN9jRRrktoxakJD/v87d/A28R/nwcwcj7i2MfF+r56fUiH8XBypncn766KBmIYKye+P3p7VF8Vl6YwfrT58p5
+X-Gm-Message-State: AOJu0YyjrVGXCiDwXSFTLN8cmS8+bMQO+B3/GFbZaqQE+M+RW8ggNfxJ
+	ZhDm+iIxYt15RXd66hrJkWKDWRTQHNkzOnSUXfazP17lfM1GQHN/44BeiZcg55Dly+3o4DlXdjG
+	8Ve9m1xJjXh5RbXNFIJMwWx+Ko7w5pi+aqA9i
+X-Google-Smtp-Source: AGHT+IFOeD2lEDrAC9SmGhHIQT3OetKm369fvbmb+I0GGZ1L4wD4tqk4b1rkJ3p+KRy11Yqi49TIr0u1Z7qaEH3UQfU=
+X-Received: by 2002:a05:622a:2996:b0:442:1115:8c68 with SMTP id
+ d75a77b69052e-4421115a23dmr170761cf.18.1718253715478; Wed, 12 Jun 2024
+ 21:41:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM
- hooks
-To: Paul Moore <paul@paul-moore.com>, Jonathan Calmels <jcalmels@3xx0.net>
-Cc: brauner@kernel.org, ebiederm@xmission.com,
- Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, KP Singh <kpsingh@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>,
- David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, containers@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org, apparmor@lists.ubuntu.com, keyrings@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20240609104355.442002-1-jcalmels@3xx0.net>
- <20240609104355.442002-5-jcalmels@3xx0.net>
- <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
- <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
- <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com>
- <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
- <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
- <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com>
- <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
- <CAHC9VhRGJTND25MFk4gR-FGxoLhMmgUrMpz_YoMFOwL6kr28zQ@mail.gmail.com>
-Content-Language: en-US
-From: John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-In-Reply-To: <CAHC9VhRGJTND25MFk4gR-FGxoLhMmgUrMpz_YoMFOwL6kr28zQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240612195412.make.760-kees@kernel.org>
+In-Reply-To: <20240612195412.make.760-kees@kernel.org>
+From: David Gow <davidgow@google.com>
+Date: Thu, 13 Jun 2024 12:41:43 +0800
+Message-ID: <CABVgOSn+ApgyT0imi9cNLz2ojRoSE08H6Z8iYNhxXiKmG=FGzg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] usercopy: Convert test_user_copy to KUnit test
+To: Kees Cook <kees@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Vitor Massaru Iha <vitor@massaru.org>, 
+	Ivan Orlov <ivan.orlov0322@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <rmoar@google.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-hardening@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000005f6ebb061abe1e12"
 
-On 6/12/24 10:29, Paul Moore wrote:
-> On Wed, Jun 12, 2024 at 4:15 AM Jonathan Calmels <jcalmels@3xx0.net> wrote:
->> On Tue, Jun 11, 2024 at 06:38:31PM GMT, Paul Moore wrote:
->>> On Tue, Jun 11, 2024 at 6:15 PM Jonathan Calmels <jcalmels@3xx0.net> wrote:
-> 
-> ...
-> 
->>>> Arguably, if we do want fine-grained userns policies, we need LSMs to
->>>> influence the userns capset at some point.
->>>
->>> One could always use, or develop, a LSM that offers additional
->>> controls around exercising capabilities.  There are currently four
->>> in-tree LSMs, including the capabilities LSM, which supply a
->>> security_capable() hook that is used by the capability-based access
->>> controls in the kernel; all of these hook implementations work
->>> together within the LSM framework and provide an additional level of
->>> control/granularity beyond the existing capabilities.
->>
->> Right, but the idea was to have a simple and easy way to reuse/trigger
->> as much of the commoncap one as possible from BPF. If we're saying we
->> need to reimplement and/or use a whole new framework, then there is
->> little value.
-> 
-> I can appreciate how allowing direct manipulation of capability bits
-> from a BPF LSM looks attractive, but my hope is that our discussion
-> here revealed that as you look deeper into making it work there are a
-> number of pitfalls which prevent this from being a safe option for
-> generalized systems.
-> 
->> TBH, I don't feel strongly about this, which is why it is absent from
->> v1. However, as John pointed out, we should at least be able to modify
->> the blob if we want flexible userns caps policies down the road.
-> 
-> As discussed in this thread, there are existing ways to provide fine
-> grained control over exercising capabilities that can be safely used
-> within the LSM framework.  I don't want to speak to what John is
-> envisioning, but he should be aware of these mechanisms, and if I
-> recall he did voice a level of concern about the same worries I
-> mentioned.
-> 
+--0000000000005f6ebb061abe1e12
+Content-Type: text/plain; charset="UTF-8"
 
-sorry, I should have been more clear. I envision LSMs being able to
-update their own state in the userns hook.
+On Thu, 13 Jun 2024 at 03:59, Kees Cook <kees@kernel.org> wrote:
+>
+> Hi,
+>
+> This builds on the proposal[1] from Mark and lets me convert the
+> existing usercopy selftest to KUnit. Besides adding this basic test to
+> the KUnit collection, it also opens the door for execve testing (which
+> depends on having a functional current->mm), and should provide the
+> basic infrastructure for adding Mark's much more complete usercopy tests.
+>
+>  v3:
+>   - use MEMEQ KUnit helper (David)
+>   - exclude pathological address confusion test for systems with separate
+>     address spaces, noticed by David
+>   - add KUnit-conditional exports for alloc_mm() and arch_pick_mmap_layout()
+>     noticed by 0day
+>  v2: https://lore.kernel.org/lkml/20240610213055.it.075-kees@kernel.org/
+>  v1: https://lore.kernel.org/lkml/20240519190422.work.715-kees@kernel.org/
+>
+> -Kees
+>
+> [1] https://lore.kernel.org/lkml/20230321122514.1743889-2-mark.rutland@arm.com/
 
-Basically the portion of the patch that removes const from the
-userns hook.
+Thanks! This looks good to me (and passes everything here). Unless
+there's a compelling reason not to, I think we can take this via the
+KUnit tree.
 
-An LSM updating the capset is worrysome for all the reasons you
-pointed out, and I think a few more. I haven't had a chance to really
-look at v2 yet, so I didn't want to speak directly on the bpf part of
-the patch without first giving a good once over.
+Cheers,
+-- David
 
-> I'm happy to discuss ways in which we can adjust the LSM hooks/layer
-> to support different approaches to capability controls, but one LSM
-> directly manipulating the state of another is going to be a no vote
-> from me.
-> 
-I might not be as hard no as Paul here, I am always willing to listen
-to arguments, but it would have to be a really good argument to
-modify the capset, when there are multiple LSMs in play on a system.
+--0000000000005f6ebb061abe1e12
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-
+MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+JEfDtvHU6wy3MSBE3/TrMFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
+BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
+BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
+Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
+FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
+YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
+AGwXYwvLVjByVooZ+uKzQVW2nnClCIizd0jfARuMRTPNAWI2uOBSKoR0T6XWsGsVvX1vBF0FA+a9
+DQOd8GYqzEaKOiHDIjq/o455YXkiKhPpxDSIM+7st/OZnlkRbgAyq4rAhAjbZlceKp+1vj0wIvCa
+4evQZvJNnJvTb4Vcnqf4Xg2Pl57hSUAgejWvIGAxfiAKG8Zk09I9DNd84hucIS2UIgoRGGWw3eIg
+GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
+kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
+MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
+IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
+hvcNAQkEMSIEIJYtGkrVsgks7lglUsdqY4JLHn7HxvPa6tpf+po/mcWhMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDYxMzA0NDE1NVowaQYJKoZIhvcNAQkPMVww
+WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAPCAJE
+LNFejvNIXL0WkbnttVtfjKPAJjRjXMFLFiexyjLzCkKgkwq/VoBuLHwJLh20cxS91ms/6iN3iEcA
+dFAJZuSy1npZGi6IX4jHFzwetK1sYv8izl8xw+U9xlOttQKvSNFAYFCcjaUQh0QZcZ+EnZ6JGBBo
+6iU7HtmI/ulJW9iUboRUOE/hFOeCQrOZBCjLe91JfwYUjeEuXG4odszz0i9gGLt+26Y6sxH3T3bF
+nJuDwZRRwNZrcZUZLWyFAyEZCEpH5Aql7dNU8NVHlVNoqQx7AiAXBRhoKc6m0rQusdenKh1TahPS
+EBApliwaCe+a+jBmzuh2SfVF1dMDSDUd
+--0000000000005f6ebb061abe1e12--
 
