@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-11877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A2AA9078DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 18:56:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A60819078EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 18:58:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7294B1C23742
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 16:56:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 596B01F21E7C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 16:58:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B340114A088;
-	Thu, 13 Jun 2024 16:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADC426AF0;
+	Thu, 13 Jun 2024 16:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lPSXC9he"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0/fb2Y2b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7D1420BC
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 16:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618EA1339A4
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 16:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718297744; cv=none; b=QY0lm+h65CPTYvElz7GDpofoF//iXTDiXhNsPUF9frmhN7o/QV6Kv5bZXeC7datHPe4biw0b5ETroj3/qxLlkJn5omjl6Lqup8FWFq9UFDnGs/tbBNO7UaUw4xdu3MS2lEnF9m4QbJEygtBVXzI2EIlxkPz5s8G0mqVrPXyKLys=
+	t=1718297869; cv=none; b=j5Ho6gT3wVgZjSSRZYFwZYhXSGQE8MmGo/WhTXORZGKijh1utD9Zxz18vmLR70T6rrOJ56tmbznKQ7IbdnWrrabyGnCVHKMGq85GVL/ppLfYXRfUw17XHMv4SDo2maHKHOO0zXmuNBa33IuhwL1QBEExCI3zKaAQd9TNdm/oiTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718297744; c=relaxed/simple;
-	bh=JBcO41UleHNq3lhHasPs977C4yzTa+av52awcjkovk0=;
+	s=arc-20240116; t=1718297869; c=relaxed/simple;
+	bh=vL3n1P+q2IBBOi6oygriT7cY6UeZAqtzHG3QyT41Bkk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pjMnFZf228kcvm1NcXmL7qLoYy1HBV6+dlXEJRBhG228pNmn4haV43JsJx7+YDkxXP6kdWR5dlQW7Rgpv8Iamnw86bV4csj7lKOowh8BzLhz+wloZoutrca8OhKQoabMFwNyY3yHqSaCIeJjg7TauBBa8CFaEODu/u9s55zfCGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lPSXC9he; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=pXbOiQ1fjsH15g9nc5gp6w0UyRLZVwTbmQtceLW3ktSGb1fVJ3Pdv6aCqVU9WLF2z7dPI3r8Gyu+B7/yejUrbOes7TjhvlSYsaJbCEeLxmd+871adqk0QU+zAWl1e5us+9k1O9SLTeHEDEeOY7UJvvNGMpUbgBxHxPCgnWlgFM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0/fb2Y2b; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-627f20cff42so20678097b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 09:55:41 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-62fb36d7f5fso23532377b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 09:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718297741; x=1718902541; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718297863; x=1718902663; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9CYt9bUQNxiXkzpZqytzyg53ZWv58TJdgtMwrRPm6U=;
-        b=lPSXC9heprNeF8vL2j4xpLJh3aiTpXy9XicaYRrOPgkQlY8jqYcB26meROjBBxof19
-         aKypBhw7bwuWFGZP5z3t/bWSVqHFDQHwXTVXEZRvdMU8mkGtXPIjG4r/NNYSsOp8Hqj2
-         oIrIEZMQ4d2UfQ5Rgperkj9Zb9KmyDQ33LAsFYNunEI0P3ZqpWfKtx1hKOFfe7zdyUgx
-         Dw45r6nR9vOREuYDYzDAxYchjT/tKPWhUwLk89rmY2MDGcCg/mPG+jeo8z3ncHn5DQhS
-         tZAgHZUL8/PpBWlGwB+2X2ePpqD86UTrpYVE/lVKZr8ZY8ORn783y2l4M79pozTSrQ00
-         34IQ==
+        bh=4d54lSkwQxb+qpzxsG/q3gJ1Ug5mGtZ+nd2FA07+/50=;
+        b=0/fb2Y2bOgaCrpafZwTD9ZWi+uqEz6qzoiuoaRcMDmxKVwE7jOQIDH1lWZVxE7ZJPm
+         Gm9K2IyGlOtkq5tbQoiZFviBLeKDX7tfLK+iWHF66m489WHVLObKNoSsFugQgVn+WpVf
+         KG55Z9TKkQ7qfoDzjLZWAAIn8UnOpo32J234a3jV9fCh3DWBes5VwPnie0DDhdAyhouU
+         0fNAp2ECFb6Ws4g6MfGoGT9oSqL78qLuD/0EeprzD2l9XizwZZCUHe4xUglLSW6PYSoe
+         d89ns3zEQZssnwOXTViWaZc1HJ2fE8XrbE2zZEjf15HjLRw2lurXChV/a21feJaHE7Lr
+         f3AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718297741; x=1718902541;
+        d=1e100.net; s=20230601; t=1718297863; x=1718902663;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9CYt9bUQNxiXkzpZqytzyg53ZWv58TJdgtMwrRPm6U=;
-        b=rk97NkXDWZAZOH35nP5cuHPJcQF6sSFzRGj6w2USsbN78XCo5uyu5+/yKFACvBUWPR
-         YeCG9cBElfWvUZO6giy77VVpycXSYCdDdlYmFbT3mKZ2e9A7rbA8h1nog7aZcXDS/pyL
-         LJN2AJQtzT0OqwEFjyV/70ak8CDHBct5CDMBoEpjYVnCPUVJ7WzsYsLnQ4Fg7TN7RwLd
-         gULuKlokg71oR2yMkVieZB60u/GWBtIrbxJbHAz3jpFySkMmMA//j7vTe16Gr1JDrRmR
-         LWV2pwU09QnAo5NcTd4OWH8pmkRnXBmorHIq+wBEhB1jMBNREuxxdl3xroMLe9aXgrv/
-         +NXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFGnLSXgBlWcbdSwbP9NP9QEndhzo3U1Qb9quAf2JnRU2kBIkLEBDFWlS4Hs9IVa8tBU/3meMFWvJ+lt2Pk49jgc8DUiXDfFshZND2gKB6
-X-Gm-Message-State: AOJu0Yya8wYql/6Nss+bjh9DOWtFCpip6Ew2o+8H1EtnNf0sWq8UMvtg
-	FnVkbP1nUpbPBC6Rq1cHKJ0+sQ7eM9pPKfC5yFoM/A7lA2wXPmaiBiYmmbyO7GbCdy3A1Lf/Ddh
-	swg==
-X-Google-Smtp-Source: AGHT+IHCQlTH8aUKVHWrREgqElX3I3HQvj6sWaaSxtbwu4nlawWKgv1Yel798rbyLMa4rUaGweqDKSAm9QU=
+        bh=4d54lSkwQxb+qpzxsG/q3gJ1Ug5mGtZ+nd2FA07+/50=;
+        b=RqiqnuyV7Hn5q5v6lXVQ8ZP5qjg/nfEGW61OVZx/QQO+DB0IFjG1XXBtdwCLB4n87O
+         SZBeTL6HKoOFcxtdSlyQUjjXJHLBXbS6WelfTqWisEZzjCCdfXX3je1+zevqJoqalPwI
+         464gYIMo5JSYxa9NWAJkBVDOC+JxNdtAeeRuDp3BodpprPhTe8lz3eE3lDvePkBEf0j3
+         NaOlmhIODb8CfWbhhbaep4qI/0TbkeblPz5ljNUgUKTt/IGHT0bMCmKsRXg7G/wntaFl
+         wKOAvgIR/fKGcD1bnQtgkzq2fRq3mPomu9mwp4aL0Du9aPX//yLv5qVHaDBZRaCRzkiU
+         r9YA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLZPK7RZ0LNVbvoLY2ojt91qqUqkurYq3Z/55cvxQSrOkopZmEvpqMAvwQKyrWSRPVCEy9UwaUfp0upJf8nCzJ2LGHIqms53eqtwRyEF4g
+X-Gm-Message-State: AOJu0YxmPZMR6xDwID8QWuxAPzKy9yRY0U40Svy8FxA1DZ0qcxXu+clX
+	AS7mLWljMeCMDEg3lwFThuMm63rz+bz1u02/iChKVxdMAm44g+dJVSgmq+c4zgGYneFzNQz5rZ2
+	bIw==
+X-Google-Smtp-Source: AGHT+IEYQjre4Uvteh6kfBtG71/rE+jFaH2gbIc1og+uNbgyV0WUL2F6w9jh8gI3FyDLev3v/l4STVjq0oQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:100f:b0:dfd:d6ec:4e3b with SMTP id
- 3f1490d57ef6-dff15399367mr1866276.7.1718297740902; Thu, 13 Jun 2024 09:55:40
+ (user=seanjc job=sendgmr) by 2002:a05:690c:6706:b0:622:cd98:3b89 with SMTP id
+ 00721157ae682-63224b005fcmr8987b3.9.1718297863344; Thu, 13 Jun 2024 09:57:43
  -0700 (PDT)
-Date: Thu, 13 Jun 2024 09:55:39 -0700
-In-Reply-To: <20240207172646.3981-12-xin3.li@intel.com>
+Date: Thu, 13 Jun 2024 09:57:41 -0700
+In-Reply-To: <20240207172646.3981-13-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-12-xin3.li@intel.com>
-Message-ID: <Zmski7ixgWOE7Snl@google.com>
-Subject: Re: [PATCH v2 11/25] KVM: x86: Add kvm_is_fred_enabled()
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-13-xin3.li@intel.com>
+Message-ID: <ZmslBVWkRHAjIXrE@google.com>
+Subject: Re: [PATCH v2 12/25] KVM: VMX: Handle FRED event data
 From: Sean Christopherson <seanjc@google.com>
 To: Xin Li <xin3.li@intel.com>
 Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -86,52 +86,40 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 Content-Type: text/plain; charset="us-ascii"
 
 On Wed, Feb 07, 2024, Xin Li wrote:
-> Add kvm_is_fred_enabled() to get if FRED is enabled on a vCPU.
-> 
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> ---
-> 
-> Change since v1:
-> * Explain why it is ok to only check CR4.FRED (Chao Gao).
-> ---
->  arch/x86/kvm/kvm_cache_regs.h | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-> index 75eae9c4998a..1d431c703fdf 100644
-> --- a/arch/x86/kvm/kvm_cache_regs.h
-> +++ b/arch/x86/kvm/kvm_cache_regs.h
-> @@ -187,6 +187,23 @@ static __always_inline bool kvm_is_cr4_bit_set(struct kvm_vcpu *vcpu,
->  	return !!kvm_read_cr4_bits(vcpu, cr4_bit);
->  }
+> @@ -7382,6 +7419,24 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
 >  
-> +/*
-> + * It's enough to check just CR4.FRED (X86_CR4_FRED) to tell if
-> + * a vCPU is running with FRED enabled, because:
-> + * 1) CR4.FRED can be set to 1 only _after_ IA32_EFER.LMA = 1.
-> + * 2) To leave IA-32e mode, CR4.FRED must be cleared first.
-> + *
-> + * More details at FRED Spec 6.0 Section 4.2 Enabling in CR4.
+>  	vmx_disable_fb_clear(vmx);
+>  
+> +	/*
+> +	 * %cr2 needs to be saved after a VM exit and restored before a VM
+> +	 * entry in case a VM exit happens immediately after delivery of a
+> +	 * guest #PF but before guest reads %cr2.
+> +	 *
+> +	 * A FRED guest should read its #PF faulting linear address from
+> +	 * the event data field in its FRED stack frame instead of %cr2.
+> +	 * But the FRED 5.0 spec still requires a FRED CPU to update %cr2
+> +	 * in the normal way, thus %cr2 is still updated even for a FRED
+> +	 * guest.
+> +	 *
+> +	 * Note, an NMI could interrupt KVM:
+> +	 *   1) after VM exit but before CR2 is saved.
+> +	 *   2) after CR2 is restored but before VM entry.
+> +	 * And a #PF could happen durng NMI handlng, which overwrites %cr2.
+> +	 * Thus exc_nmi() should save and restore %cr2 upon entering and
+> +	 * before leaving to make sure %cr2 not corrupted.
+> +	 */
 
-Please don't reference specific sections/tables/fields in comments.  They always
-become stale.  And the code+comments always reflect the current state, i.e. don't
-need to worry about spec revisions and whatnot.  If there is a spec change, then
-there darn well needs to be a way for software to differentiate old vs. new, at
-which point there will be accompanying code to capture the difference.
+This is 99.9% noise.  What software does or does not do with respect to CR2 is
+completely irrelevant.  The *only* thing that matters is the architectural
+behavior, and architecturally guest CR2 _must_ be up-to-date at all times because
+CR2 accesses cannot be intercepted.  So, just say:
 
-Even in changelogs, references specific specs by section number is usually
-discouraged.  Again, it shouldn't matter if its FRED spec 6.0 vs. spec 5.0,
-because if there is a difference between those two, then the code better be
-different too.
+	/*
+	 * Note, even though FRED delivers the faulting linear address via the
+	 * event data field on the stack, CR2 is still updated.
+	 */
 
-Instead, for the changelog, if it's really necessary/helpful, reference the section
-by name and/or keyword, as those are much less likely to become stale.
-
-> + */
-> +static __always_inline bool kvm_is_fred_enabled(struct kvm_vcpu *vcpu)
-
-This doesn't need to be __always_inline, it's not used from a noinstr section.
-kvm_is_cr4_bit_set() is  __always_inline so that @cr4_bit is guaranteed to be a
-compile-time constant, otherwise the BUILD_BUG_ON() would fail.
+>  	if (vcpu->arch.cr2 != native_read_cr2())
+>  		native_write_cr2(vcpu->arch.cr2);
+>  
 
