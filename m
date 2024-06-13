@@ -1,58 +1,59 @@
-Return-Path: <linux-kselftest+bounces-11853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55DBC9072F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 14:56:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02FA490730D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 15:00:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EACCA2847C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 12:56:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01E591C21966
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 13:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78988139CFE;
-	Thu, 13 Jun 2024 12:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0C41428E2;
+	Thu, 13 Jun 2024 13:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQR+v4m7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qggwRUUL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A0B17FD;
-	Thu, 13 Jun 2024 12:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6ED22AF15;
+	Thu, 13 Jun 2024 13:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718283382; cv=none; b=XCPTmy9x0beN/8cvyPx4FAA2ov/mmD2NX6oWoNIMcWEfVku2H3X2dZ0WWzB82CV849kNToM8KXiWzrDPNJ5pFRkfzJXidw8nFGhO7GMBcn/8wIKV9gfcE+LRiqFvkBhz5+JPYZWJK95sdthlVtMT4yBoFMDnO7T/N7SeKlMR7/w=
+	t=1718283642; cv=none; b=R+Xx+T8d1n5z/yaXFZvZsrOjAMQPY/CyScJuUzV6ODNecIlxfAufPCgoZ0ecQCaTll6RpefhzjZh3fV+eiKgA73trV1lzM+XZ0L+5dW7RPt7E2G84iHlolXkY5faqb1wFbQoms52A+9lYbTUMOroxHbUNHn8dm8D2rXyyHlMpEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718283382; c=relaxed/simple;
-	bh=bsPL3KQAP7mYRKsmkdNID7B/zfeUGn2fmiXDfN/6S7k=;
+	s=arc-20240116; t=1718283642; c=relaxed/simple;
+	bh=J+FOEDQ8EizaWwa5B+nADOYSJHbx/xeNUz9hDlllVAA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UtTNywKuKwlGSFsTmPNz8vhR2J2oN7VB07ESEavDu5hErF2FECDjBIgZOFLg8k5Pn5bELIKQoeY2bAytfaVxqI2T46zK2bhw+Z11CWJcz3WlpTTKO4rtBCbT/6n0zNj6u1QxjldDRmCW3Sc1cwheoj/9f+vEGSzmcXz2R75Mk9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQR+v4m7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A45C2BBFC;
-	Thu, 13 Jun 2024 12:56:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dPhsB9DmoOq9kRjehwg/Rt6+B7nRjeGgcBhZVc/uHb/I7h/iAb/dwyft/MeUjuCEvd1COmI5ETOymQ5f73Ci9rLlaXEwqShnuxTl+Fqtqyns6ik330OpPXX3cVIiAkN5NRSRnCv4FNRu3TBH+t/8jioYZL3NWOjs2DCLZvLKMSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qggwRUUL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB77C2BBFC;
+	Thu, 13 Jun 2024 13:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718283382;
-	bh=bsPL3KQAP7mYRKsmkdNID7B/zfeUGn2fmiXDfN/6S7k=;
+	s=k20201202; t=1718283642;
+	bh=J+FOEDQ8EizaWwa5B+nADOYSJHbx/xeNUz9hDlllVAA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nQR+v4m7I9qXfqIZYmNf1l+zzpKYSFwfe105O2wE+UmX6I3Vljl8g6q1yaIjTa09Q
-	 lHyY4re5v2wpkOQG6WWRVtMp/+g/7Frk4vwd5nFbgnzdnJZt39ILbiBwOyrN8XDIda
-	 FPA4G8/3RTGOB8msLFSwiz5nAtnyKQqsQ8Blr/jrY+BIbtZKBNw/THboHlUc0yTWbs
-	 sPvIgDFqmrKpDNkdbByQVHobIdVlz75IJ0FNpA8N8dOkTxenlEC3WjAayWMN2aTcFN
-	 8Hm0w925eJ9g/SMIwsctjlSeFt0d1145cW4mey1+qqyqNgBGxYudQ1SzTMOAelx90c
-	 rOqSpg33Llnjg==
-Date: Thu, 13 Jun 2024 06:56:19 -0600
+	b=qggwRUULEqiXxuZ7j5UvKifzy33DHtdZrKO56gBNXhQgLtA73AndYpzFdFKPtgajQ
+	 eZ2FrWkaHiyu1CdoFUoJoAYYrvE/N2+CUEp/qa3f0Af+VlZQyOvYOKG67D0tjcqo0x
+	 3EW1/WldLUz1c60Qlz/5z2q1SN7/pTXJ3oF6Xdw9Bd3BKzB0X/HP6kxPWzRVlb+7z4
+	 9mbcbdJWED1dzELNE6rA9JFZltzNE25ja+CDOS0rLms/EmFDwbgjCb9OqLuY02UOac
+	 Ml+wL3j/PPtPYrIAHbcgznafOfDKP/T+JvE6NY0UA7S9SC3cj2JEtsBYFk0OTfG0WS
+	 sRAQ05C8tc5Xg==
+Date: Thu, 13 Jun 2024 07:00:40 -0600
 From: Keith Busch <kbusch@kernel.org>
-To: Nilay Shroff <nilay@linux.ibm.com>
-Cc: Keith Busch <kbusch@meta.com>, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	hch@lst.de, sagi@grimberg.me, paulmck@kernel.org,
-	davidgow@google.com, akpm@linux-foundation.org,
+To: Christoph Hellwig <hch@lst.de>
+Cc: Nilay Shroff <nilay@linux.ibm.com>, Keith Busch <kbusch@meta.com>,
+	linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sagi@grimberg.me,
+	paulmck@kernel.org, davidgow@google.com, akpm@linux-foundation.org,
 	venkat88@linux.vnet.ibm.com
 Subject: Re: [PATCH 1/2] list: introduce a new cutting helper
-Message-ID: <ZmrscxG51gFRDVlM@kbusch-mbp>
+Message-ID: <ZmrteDHF_HlWHFth@kbusch-mbp>
 References: <20240612155135.3060667-1-kbusch@meta.com>
  <f0e4c51c-8227-4f5c-876f-38fbb4a0e1bf@linux.ibm.com>
+ <20240613081016.GA21500@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,59 +62,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0e4c51c-8227-4f5c-876f-38fbb4a0e1bf@linux.ibm.com>
+In-Reply-To: <20240613081016.GA21500@lst.de>
 
-On Thu, Jun 13, 2024 at 10:26:11AM +0530, Nilay Shroff wrote:
-> On 6/12/24 21:21, Keith Busch wrote:
-> > +static inline void list_cut(struct list_head *list,
-> > +		struct list_head *head, struct list_head *entry)
-> > +{
-> > +	list->next = entry;
-> > +	list->prev = head->prev;
-> > +	head->prev = entry->prev;
-> > +	entry->prev->next = head;
-> > +	entry->prev = list;
-> > +	list->prev->next = list;
-> > +}
-> I am wondering whether we really need the _rcu version of list_cut here?
-> I think that @head could point to an _rcu protected list and that's true 
-> for this patch. So there might be concurrent readers accessing @head using
-> _rcu list-traversal primitives, such as list_for_each_entry_rcu().
+On Thu, Jun 13, 2024 at 10:10:16AM +0200, Christoph Hellwig wrote:
+> On Thu, Jun 13, 2024 at 10:26:11AM +0530, Nilay Shroff wrote:
+> > I am wondering whether we really need the _rcu version of list_cut here?
+> > I think that @head could point to an _rcu protected list and that's true 
+> > for this patch. So there might be concurrent readers accessing @head using
+> > _rcu list-traversal primitives, such as list_for_each_entry_rcu().
 > 
-> An _rcu version of list_cut():
+> Yes, I can't see how this works for a RCU lists without very careful
+> memory ordering.
 > 
-> static inline void list_cut_rcu(struct list_head *list,
-> 		struct list_head *head, struct list_head *entry)
-> {
-> 	list->next = entry;
-> 	list->prev = head->prev;
-> 	head->prev = entry->prev;
-> 	rcu_assign_pointer(list_next_rcu(entry->prev), head);
-> 	entry->prev = list;
-> 	list->prev->next = list;
-> }
+> Btw, another thing - the old vs new list ordering is reversed vs
+> list_splice*, which is a bit confusing (as are the parameter names
+> both for list_splice* and this new helper).  Can you switch them
+> around to match?
 
-I was initially thinking similiar, but this is really just doing a
-"list_del", and the rcu version calls the same generic __list_del()
-helper. To make this more clear, we could change
-
-	head->prev = entry->prev;
-	entry->prev->next = head;
-
-To just this:
-
-	__list_del(entry->prev, head);
-
-And that also gets the "WRITE_ONCE" usage right.
-
-But that's not the problem for the rcu case. It's the last line that's
-the problem:
-
- 	list->prev->next = list;
-
-We can't change forward pointers for any element being detached from
-@head because a reader iterating the list may see that new pointer value
-and end up in the wrong list, breaking iteration. A synchronize rcu
-needs to happen before forward pointers can be mucked with, so it still
-needs to be done in two steps. Oh bother...
+The parameters follow the existing conventions from list_cut_back and
+list_cut_position. Those functions cut off from the head to the "entry",
+and this one cuts off the "entry" to the tail instead.
 
