@@ -1,40 +1,82 @@
-Return-Path: <linux-kselftest+bounces-11829-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F5790632A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 06:51:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E3DD906331
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 06:56:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1CBCB21120
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 04:51:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 673411C22932
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2024 04:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6304113247D;
-	Thu, 13 Jun 2024 04:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7D213440E;
+	Thu, 13 Jun 2024 04:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lq6hG4Gl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6CCA446CF;
-	Thu, 13 Jun 2024 04:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B48A133402;
+	Thu, 13 Jun 2024 04:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718254311; cv=none; b=g98g1uwB6lETUIpYA2RK4Qtx8bSl6lH/Fn5BOVQEMOczZW/qcpGxnw8EveYImbRLyHZz7h8C+WOZlMmDljRUeQqJ4jvSR+VadOtbAdFzXcHVwRx36PxOGN1oksohxrSTVUMgHyhlbCa+rAvSFOVibVuGLuS7NMSGbhjGnp1wRh4=
+	t=1718254616; cv=none; b=JW+b0hLlxpgR4nsGqkkzth6r7HQeu4WDxDgM/hrOZw/e26HZxU2+oy16w8d8mfhNhgLpn90kA2hyV5dmrsM5evh0xn1A08Jp0b/4w48llgJizyAvr/Ab2RgtboZ7vvhkb0or0w/I2DQSEg2tJZzmvyMYbRWu0zrHGeSG7TqRyTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718254311; c=relaxed/simple;
-	bh=XMWE/qKJYHRLlJwTts9vGKC7pShgpwVODiKw4rZJ7eo=;
+	s=arc-20240116; t=1718254616; c=relaxed/simple;
+	bh=kgX3Nm4c9dD57nkkKSdjttYWL75oIEz2/ufa6W5fGjU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QY5TVwP7Mp2X79kmxm9wbivuhn9wNqXXJ9AcY3o65B0EaIo1TXa7u8ruTgIPpuPFq0W2BfApcHp2Lx/ckxt8nz2EOnqPFLxMHO+yy3RXi7WIIa17yXr49UR8GkI/sa6hbYqAUagEg78oF1+T4E6lOqlOLoV0dw8DVxx4P3vgmUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 417511042;
-	Wed, 12 Jun 2024 21:52:12 -0700 (PDT)
-Received: from [10.162.43.11] (e116581.arm.com [10.162.43.11])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F9953F5A1;
-	Wed, 12 Jun 2024 21:51:42 -0700 (PDT)
-Message-ID: <920f2e27-39ee-4c53-9c90-63d67e7d7586@arm.com>
-Date: Thu, 13 Jun 2024 10:21:39 +0530
+	 In-Reply-To:Content-Type; b=eRE7v34vlD7VVY6B24iSLMoNaAfEeIJ/XBJRfaLgaulYGlYn37V2mZoadXLMow7A3xpoludYvJeDfpt+jLTMgNh8tFXGc2LQ1Xi0871/C77W5LEzJ620odFOB3n5FGaZiOGIpawFhrjkTB1LjcLdHC/OWiwiVgSC8yB1TDagzY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lq6hG4Gl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45D3QG58004084;
+	Thu, 13 Jun 2024 04:56:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=L
+	cvDt7OPVUu3ArFq0u1SgjMVx8F4xgs1vND8lkroj6A=; b=lq6hG4Gl058C6i7c3
+	4v1Hg+jcvKxjX0TflwCC5x/I7sC92RygQNlNFgu7Z6Eh0s3kcN0rY92zmIZZ+pGW
+	mjR2xxKuOBJ3BeK1xREYta2hELpLeZ8voyyHMt1rJP542wvS3c/0rFQSXPmdR228
+	MLsBt/VseRFz0Vj4m7y0NipscrQVzbE+m3zgY2vlfp7VNZls49S8MNUInvVHQW9L
+	B8NCiBckVm8163aap/lGyH0x7WiQMZqFkECEorENXx9qMl7oan2jFecY0DNeS5N+
+	05XpqXWoT57ScRM2bh8/Bcyvc2z4ewS9aIWodoMLZOS2+ES+NwX2r5C3PaabhelL
+	bhUjg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yqrexr7p5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 13 Jun 2024 04:56:20 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 45D4uKFZ016879;
+	Thu, 13 Jun 2024 04:56:20 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yqrexr7p2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 13 Jun 2024 04:56:20 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45D2c5TV027234;
+	Thu, 13 Jun 2024 04:56:18 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3yn2114a1y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 13 Jun 2024 04:56:18 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45D4uGKH12780262
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 13 Jun 2024 04:56:18 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5756D5806A;
+	Thu, 13 Jun 2024 04:56:16 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8852F5804B;
+	Thu, 13 Jun 2024 04:56:12 +0000 (GMT)
+Received: from [9.109.198.180] (unknown [9.109.198.180])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 13 Jun 2024 04:56:12 +0000 (GMT)
+Message-ID: <f0e4c51c-8227-4f5c-876f-38fbb4a0e1bf@linux.ibm.com>
+Date: Thu, 13 Jun 2024 10:26:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,154 +84,90 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests: Add a test mangling with uc_sigmask
-To: Mark Brown <broonie@kernel.org>
-Cc: shuah@kernel.org, oleg@redhat.com, stsp2@yandex.ru, mingo@kernel.org,
- tglx@linutronix.de, mark.rutland@arm.com, ryan.roberts@arm.com,
- suzuki.poulose@arm.com, Anshuman.Khandual@arm.com,
- DeepakKumar.Mishra@arm.com, AneeshKumar.KizhakeVeetil@arm.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240611075650.814397-1-dev.jain@arm.com>
- <20240611075650.814397-3-dev.jain@arm.com>
- <Zmg0GoGnJFbPysfK@finisterre.sirena.org.uk>
- <ec1973ee-909d-41a2-8b32-256302d190b4@arm.com>
- <ZmmfkbuCl61rEPs-@finisterre.sirena.org.uk>
+Subject: Re: [PATCH 1/2] list: introduce a new cutting helper
+To: Keith Busch <kbusch@meta.com>, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: hch@lst.de, sagi@grimberg.me, paulmck@kernel.org, davidgow@google.com,
+        akpm@linux-foundation.org, venkat88@linux.vnet.ibm.com,
+        Keith Busch <kbusch@kernel.org>
+References: <20240612155135.3060667-1-kbusch@meta.com>
 Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <ZmmfkbuCl61rEPs-@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Nilay Shroff <nilay@linux.ibm.com>
+In-Reply-To: <20240612155135.3060667-1-kbusch@meta.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X7BOL0pcpB9f662VV2on1fcsNMUG1n_b
+X-Proofpoint-ORIG-GUID: 4K8fSil0TRknxnKhplPX_Ccm3UDHN2nG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-12_12,2024-06-13_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2405170001 definitions=main-2406130032
 
 
-On 6/12/24 18:46, Mark Brown wrote:
-> On Wed, Jun 12, 2024 at 10:14:01AM +0530, Dev Jain wrote:
->> On 6/11/24 16:55, Mark Brown wrote:
->>> On Tue, Jun 11, 2024 at 01:26:50PM +0530, Dev Jain wrote:
->>>> + * A signal is said to be delivered, when the program takes action on the
->>>> + * signal: such action may involve termination of the process, ignoring the
->>>> + * signal, terminating with core dump, stopping the process, or continuing the
->>>> + * process if it was currently stopped. A signal is said to be blocked when the
->>>> + * program refuses to take any of the above actions; note that, this is not the
->>>> + * same as ignoring the signal. At a later time, the program may unblock the
->>>> + * signal and then it will have to take one of the five actions
->>>> + * described above.
->>> I'm not sure that's what my understanding of a blocked signal is, I
->>> would interpret "blocked" as a signal being masked (this usage can be
->>> seen in for example sigaction(2)).  I'd also interpret delivery of the
->>> signal as happening when the signal handler is invoked rather than
->>> something that the handler has control over (the comment later on says
->>> that so I think it's just an issue here).  Perhaps I'm confused about
->>> terminology though, this is just usage I've picked up and ICBW.
->> Isn't "signal being masked" equivalent to what I wrote...
->> man signal(7): Under "Signal mask and pending signals":-
->> "A signal may be blocked, which means that it will not be delivered
->> until it is later unblocked."
->> Under "Signal dispositions":-
->> "Each signal has a current disposition, which determines how the
->> process behaves when it is delivered the signal."
-> The point is that the delivery and blocking are done prior to the
-> process getting involved in the handling of the signal, the delivery
-> happens when the signal handler is invoked.  The program requests
-> delivery or blocking but it doesn't actually do the delivery or blocking
-> itself.
 
+On 6/12/24 21:21, Keith Busch wrote:
+> From: Keith Busch <kbusch@kernel.org>
+> 
+> Provide a helper to remove elements from a list to the end, and place
+> those elements in a new list.
+> 
+> Signed-off-by: Keith Busch <kbusch@kernel.org>
+> ---
+>  include/linux/list.h | 20 ++++++++++++++++++++
+>  lib/list-test.c      | 29 +++++++++++++++++++++++++++++
+>  2 files changed, 49 insertions(+)
+> 
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index 5f4b0a39cf46a..f22850e854820 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -520,6 +520,26 @@ static inline void list_cut_before(struct list_head *list,
+>  	entry->prev = head;
+>  }
+>  
+> +/**
+> + * list_cut - cut a list into two from the entry
+> + * @list: a new list to add all removed entries
+> + * @head: a list with entries
+> + * @entry: an entry within head, could be the head itself
+> + *
+> + * This helper removes elements from @head starting at @entry until the end,
+> + * and appends them to @lists.
+> + */
+> +static inline void list_cut(struct list_head *list,
+> +		struct list_head *head, struct list_head *entry)
+> +{
+> +	list->next = entry;
+> +	list->prev = head->prev;
+> +	head->prev = entry->prev;
+> +	entry->prev->next = head;
+> +	entry->prev = list;
+> +	list->prev->next = list;
+> +}
+I am wondering whether we really need the _rcu version of list_cut here?
+I think that @head could point to an _rcu protected list and that's true 
+for this patch. So there might be concurrent readers accessing @head using
+_rcu list-traversal primitives, such as list_for_each_entry_rcu().
 
-I guess we agree on the same thing; so, how about I rephrase the delivery
-and blocking code comments this way:
-"A process can request blocking of a signal by masking it into its set of
-blocked signals; such a signal, when sent to the process by the kernel, will
-get blocked by the process and it may later unblock it and take an action.
-At that point, the signal will be "delivered".
-A signal sent by the kernel to the process, is said to be delivered to the
-process when the process takes an action upon receipt of the signal: such
-action may include termination, or jumping to a signal handler."
+An _rcu version of list_cut():
 
->
->> "The comment later on says that", which comment and what does it say,
->> sorry didn't get you.
-> That signals are blocked before the process sees them.
->
->>>> + * For standard signals (also see real-time signals in the man page), multiple
->>>> + * blocked instances of the same signal are not queued; such a signal will
->>>> + * be delivered just once.
->>> See also SA_NODEFER.
->> Yes, thanks for the note, but do  need to include it in the
->> comments? This is a specific setting...
-> TBH I'm not sure what you mean there by real time signals, I can't see
-> a reference to real time in the copies of signal(2), signal(7) or
-> sigaction(2) on my system.  I suspect SA_NODEFER is the actual thing
-> here.
+static inline void list_cut_rcu(struct list_head *list,
+		struct list_head *head, struct list_head *entry)
+{
+	list->next = entry;
+	list->prev = head->prev;
+	head->prev = entry->prev;
+	rcu_assign_pointer(list_next_rcu(entry->prev), head);
+	entry->prev = list;
+	list->prev->next = list;
+}
 
-
-Real-time signals get a mention on signal(7), under the heading
-"Real-time signals":
-"Multiple instances of real-time signals can be queued.  By
-contrast, if multiple instances of a standard signal are
-delivered while that signal is currently blocked, then only
-one instance is queued."
-
-I guess SA_NODEFER has no relation with queuing; it is used to not
-block the signal for which the handler was installed.
-
->
->>>> +	/* SEGV has been blocked in sa_mask, but ucontext is invariant */
->>>> +	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGSEGV);
->>>> +	ksft_test_result(ret == 0, "SEGV not blocked in ucontext\n");
->>> We're not manipulating the masks outside of main() so it's a bit unclear
->>> what the mention of ucontext being invariant is all about here?
->> This is the point I raised in the cover letter and in this program:  the mask
->> stores the set of blocked signals. What should happen when I block signals
->> using sigaction()? According to the man pages, one could easily come to
->> an erroneous conclusion that these signals will also be present as blocked
->> in ucontext. I am making a point that, SEGV and USR1 have been blocked,
->> but they have not been added into ucontext, i.e ucontext is invariant w.r.t
->> to before and in the handler.
-> I still don't follow what the above means.  When you say "invariant" you
-> don't specify with respect to what, and it's not clear to me why the
-> saved context in ucontext would have changed without the handler writing
-> to it.  For clarity I think this needs to say what the ucontext is
-> expected to be the same as/different to.
-
-
-The ucontext at this stage is supposed to be empty, I guess I'll replace
-the word "invariant" then.
-"it's not clear to me why the saved context in ucontext would have changed
-without the handler writing to it" - by invariant I meant, the set of blocked
-signals before invocation of handler is exactly the set of signals blocked in
-ucontext, which, in this case, is the empty set. I'll just write that ucontext
-is empty.
-
->
-> The general flow with signals is that the context at the time the signal
-> is delivered is saved to the context structure, then the signal handler
-> context is set up and the signal handler invoked.  There are a number of
-> ways in which the signal handler context may differ from the context
-> that was interrupted, additional signals being masked is one of those.
-> On return from the signal handler the context is then restored from
-> memory and we restart from that context, potentially including
-> modifications made during handling.  This means that the state in the
-> signal handler may be different to the state in the context that was
-> preempted by it.
->
->>>> +	act.sa_sigaction = &handler_verify_ucontext;
->>>> +	if (sigaction(SIGUSR1, &act, NULL))
->>>> +		ksft_exit_fail_perror("Cannot install handler");
->>>> +
->>>> +	if (raise(SIGUSR1))
->>>> +		ksft_exit_fail_perror("raise");
->>>> +
->>>> +	ksft_print_msg("USR2 still blocked on return from handler\n");
->>> But we just raised SIGUSR1 rather than SIGUSR2?  If nothing else this
->>> bit is a little unclear.
->> Before raise(SIGUSR1), we register a handler for it: handler_verify_ucontext.
->> So, we jump there, we verify that USR2 is present in ucontext (since we mangled
->> with ucontext before), then we raise(SIGUSR2): the program must not terminate
->> since USR2 is blocked in &current->blocked. This is described by ksft_print_msg().
-> Like I say I think this needs a comment, it's not obvious from the
-> immediate code what the USR1 handler is doing and we're not doing
-> anything in this context to verify anything about USR2 so it looks like
-> a missed search/replace.
-
-Okay, I'll add a comment.
+Thanks,
+--Nilay
 
 
