@@ -1,55 +1,81 @@
-Return-Path: <linux-kselftest+bounces-11926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 175E9908AF3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 13:42:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B025A908AF6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 13:42:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7A2C28B156
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 11:42:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 339C328B1F5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 11:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A7F19599C;
-	Fri, 14 Jun 2024 11:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8328195B01;
+	Fri, 14 Jun 2024 11:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="dxlN9qs9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UmByOVj2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2621922D1;
-	Fri, 14 Jun 2024 11:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BF219599C
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 11:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718365339; cv=none; b=PR1sIqmurfGTufQDg0aLezqVyby5qypMK5V/NFUxSYykVoUf8SxFqmtDKPLZhqQaYLlHo8jnQ2M/M9xroSdOI30c0MwuH3/wNUbZuL5QjlhOyf9O0f8pgd2OcWyf8v+62WKe0zOoPSHbIewFDInPy1Oyms8S3zMl/A4xEOKBIv8=
+	t=1718365358; cv=none; b=ZtxqP54dwzVZdLCEB3o2o6yT5aJL+RDazXxBT+sFYmb3QpAJxbFbqR6h6CqMpOuuD4BmXzSWzlvlJgT3JZsThKK4T2SC2sdhk0eYDZqmqt+KAib08dpMTGlbAfAgqbWVDWNYe7fHLoO7Zbo+KbHlBq/rCO/1MyOwFn+k+FOQuLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718365339; c=relaxed/simple;
-	bh=ETjS0VAmo/bQBxMYxBS/SwpWJNtHeXmKX1S52jNgQFw=;
+	s=arc-20240116; t=1718365358; c=relaxed/simple;
+	bh=hVZaXClb8YH9qvz97ZEwzE1i0kxb6RNI4BzeFUGcHdc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oNC0wMaboRLg0lTze7ihZCb33Tse5ebr1vvuyntKUqPKBls5MQ28GAihbb0YVq2ugABPYEWpwlvjHInJYP894QP1/4r61qV48dkcX6Q3SgviN7B0yx2p7aNzKug+YMLfyj0AE8ewyz9VJkFwGpHGidIB5wl+DMLP/rd4LI0NcNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=dxlN9qs9; arc=none smtp.client-ip=77.48.224.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 7E1F55B9F;
-	Fri, 14 Jun 2024 13:42:12 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 7E1F55B9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1718365332; bh=ybKy/kqdsCP6xleJYKh1yxLoVwhRHDXJ2rzl12HZUMA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dxlN9qs9UzeLQ4Ely/pkbuZo80Ay9GorlZcpRJXS0npkPTNxUcj2fJfreO3s6Jjhp
-	 0TyJfSP/gdsu7Z5nDyAKg6ibyrU3xwBtj9bVEirnWvPxE99OxwCz8Jo+vaf76DN0pC
-	 0p5wyHeeRy/RetCF9equPSDwidxjWFFf5dT14pXo=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: perex)
-	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Fri, 14 Jun 2024 13:42:06 +0200 (CEST)
-Message-ID: <6496e595-48e7-4c92-8239-7bf8fc9d73d9@perex.cz>
-Date: Fri, 14 Jun 2024 13:42:05 +0200
+	 In-Reply-To:Content-Type; b=BeIbKrmFRoEI7uDW46sZYnZ5ukvcTJB3m+I97WLlxhWcu9vNzoDiqf0lnKBTnu05Bp5Odth+pzOdSXmlwFamc/kXJhNsrWFEMVjjDLg42lD+HsJS05k3bkiaMn1lNdWGZIFwndB3eBQOLChCI+dXf8Xt4tMlf2mK7scrm+69hDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UmByOVj2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718365356;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=XXNWd08UpDrUoLaDSemWxBmdphtjcrXbt9rmtguMKlI=;
+	b=UmByOVj2LEIG5Lm5DQKSr+Hgk27YPfNBd8au2CU0n74T2L6DLnpjOkiZrlmh36qUMhPkDN
+	POKp3IapvYEC+SueLPIDpR5O4UMnk5BqPwxzT01egsDrrZQPs4XTXaZBUxQHTHUNeROg0c
+	4dEEuJ0PT7vwVKuCZsDQlrlIzi/Ddoc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-PUKW4_4_P1ShjFL5Gcx-eg-1; Fri, 14 Jun 2024 07:42:34 -0400
+X-MC-Unique: PUKW4_4_P1ShjFL5Gcx-eg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-42120e123beso19537365e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 04:42:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718365353; x=1718970153;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XXNWd08UpDrUoLaDSemWxBmdphtjcrXbt9rmtguMKlI=;
+        b=EYY/toQJxMpySumGLkjyeIZAqr2K5J/b94vR9keR/GdtYoV32UmuGJpOnE7Z7/Trx9
+         ejIBuOMNXPuPBi74zcFONO7WRmgE6a2DmXyaCSqseT40BV+LwXavooB9Mu3W+qxRUf36
+         xq4FyMLR11lfXpJEAexBeBeqQe1ltO1oQ52fmpShus/Pz1OH55xL8xn7AxjFbR8GrNDj
+         sFQWPGlrJr1hBtyT2eSvOfxL4Kh6YbLRq8fwPVOx1sjwliiRVEX5xepFqUwX0RqmTZfB
+         m2G4CVFAK/X9ZLa2Su1S+fP4Bpy63lTwIz0u8oVJsa9RHN3jbhznk7T3Gy2b21E2Dj69
+         hdrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXLw4/4k+ZGmtcYv9XCEjx+u/B8uBla0DtSf8MFXIYsILk6obeoqm+hkFlybKnmvRabVFW+HbM1AOBEJgXfhn2w3WKZL7eIV4ep2SwN7K0
+X-Gm-Message-State: AOJu0YwFLkVrx7x6v/px4hfuCV7Hn+iO3gm7p3kHIYNW4ypSkSkmLm7w
+	J9+yafUmGV8Rfx9mjYYedF6C1ToMMs20HViAViZPb8iFDHUSu/VRIS20gf0oUhR4C4pysLd4UWk
+	HqWdDWorq+Wuo6Q2tZxpwHfWUN+MyhRdDuK000vkEEqgw06A+zFVciDHrkV0TjIRxjw==
+X-Received: by 2002:a05:600c:1f94:b0:421:f43d:dadd with SMTP id 5b1f17b1804b1-4230484c52bmr28971855e9.33.1718365353468;
+        Fri, 14 Jun 2024 04:42:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGtUipV2eNLCznRAMcgt+sPsKPl3oqaV9hUdXChEZr6dor4vA/9vXUz0gOGUwmWG/ulsqqu7A==
+X-Received: by 2002:a05:600c:1f94:b0:421:f43d:dadd with SMTP id 5b1f17b1804b1-4230484c52bmr28971655e9.33.1718365353069;
+        Fri, 14 Jun 2024 04:42:33 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f4f:2b00:69b5:3684:56c:6dd5? (p200300d82f4f2b0069b53684056c6dd5.dip0.t-ipconnect.de. [2003:d8:2f4f:2b00:69b5:3684:56c:6dd5])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36075104a8fsm4169001f8f.110.2024.06.14.04.42.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jun 2024 04:42:32 -0700 (PDT)
+Message-ID: <b41f3392-fd0e-4df7-8e29-754def75376b@redhat.com>
+Date: Fri, 14 Jun 2024 13:42:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,102 +83,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13
- 9360
-To: Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Takashi Iwai <tiwai@suse.com>,
- linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
- <87cyp280yw.wl-tiwai@suse.de>
- <21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
- <878qzp97qh.wl-tiwai@suse.de>
- <c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
- <87h6dv92tl.wl-tiwai@suse.de>
-From: Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH 0/5] cleanups, fixes, and progress towards avoiding "make
+ headers"
+To: John Hubbard <jhubbard@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: Andrei Vagin <avagin@google.com>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Christian Brauner <brauner@kernel.org>, Kees Cook <kees@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Peter Xu <peterx@redhat.com>, Rich Felker <dalias@libc.org>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20240608021023.176027-1-jhubbard@nvidia.com>
+ <b5dd99c7-866b-467c-9f76-d043e887394c@redhat.com>
+ <c1277bf6-a211-49eb-80af-726f16ca1802@nvidia.com>
+ <17b503f8-5d0c-48a3-9eeb-85b01583f9bb@redhat.com>
+ <b60c8c02-5497-4c6c-ae60-86309e55f1bd@nvidia.com>
+ <2c6f86b4-8151-4bb8-8400-3ea546ca10ac@nvidia.com>
 Content-Language: en-US
-Autocrypt: addr=perex@perex.cz; keydata=
- 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
-In-Reply-To: <87h6dv92tl.wl-tiwai@suse.de>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <2c6f86b4-8151-4bb8-8400-3ea546ca10ac@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 14. 06. 24 13:33, Takashi Iwai wrote:
-> On Mon, 03 Jun 2024 13:38:18 +0200,
-> Mark Brown wrote:
+On 13.06.24 23:27, John Hubbard wrote:
+> On 6/12/24 7:11 PM, John Hubbard wrote:
+>> On 6/12/24 1:24 AM, David Hildenbrand wrote:
+>>> On 11.06.24 22:54, John Hubbard wrote:
+>>>> On 6/11/24 2:36 AM, David Hildenbrand wrote:
+>>>>> On 08.06.24 04:10, John Hubbard wrote:
+> ...
+>>>> You remembered correctly, but the situation is slighly muddier than
+>>>> one would prefer. :)
+>>>
+>>>
+>>> Absolutely, and I appreciate that you are trying to improve the situation.
+>>>
 >>
->> On Fri, May 31, 2024 at 08:06:14PM +0200, Takashi Iwai wrote:
->>> Mark Brown wrote:
->>>> On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
->>>>> On Fri, 31 May 2024 07:50:33 +0200,
->>
->>>> I would say these are all bugs, they show the driver not correcting the
->>>> value and allowing users to read back out of range values that were
->>>> written.  Even if the driver is accepting out of range values I'd expect
->>>> it to transform them somehow when storing, the program will accept a
->>>> mismatched read when testing this case but it will complain if the read
->>>> value is not valid according to the control's info.
->>
->>> Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
->>> that it'd be better to enable the input validation globally, something
->>> like below.
->>
->> Yeah, I mean I tend to think the whole accepting invalid values thing is
->> questionable to start off with so I do think that's a good idea.  That
->> said we probably should still be fixing the drivers as well.
+>> I think the attempts to further tease apart the include headers could
+>> go into a separate, subsequent series, yes? And let this one go in
+>> unmolested for now?
+>    
 > 
-> OK, I'm going to submit a patch set for addressing those.
+> On second thought, it is actually much easier than I thought, let me
+> post a v2 with the unistd.h header fixes, after all.
 
-I think that this check should be optional (as discussed some years ago), 
-because the driver code can implement the validation / bitmask handling in a 
-more efficient way that we can do in the ALSA core code. Those double checks 
-are not so nice. But they may be enabled by default as suggested to log 
-problems for users building custom kernels, IMHO.
-
-					Jaroslav
+Great! :)
 
 -- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+Cheers,
+
+David / dhildenb
 
 
