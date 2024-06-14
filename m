@@ -1,156 +1,190 @@
-Return-Path: <linux-kselftest+bounces-11917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6ECD90830A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 06:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B37EE908664
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 10:35:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01E8DB22A58
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 04:40:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5EC1B2490D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 08:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331921474A6;
-	Fri, 14 Jun 2024 04:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B431190068;
+	Fri, 14 Jun 2024 08:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MrXkLg84"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEadpkbK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B685146D6A
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 04:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B0B190044;
+	Fri, 14 Jun 2024 08:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718340041; cv=none; b=j/W5ttZz6jdqmH2aLDmtIylRs8WFTCaQU0tiRqfHKKejTtLmoecZLG/O67nLzD3vRzhVFJD/qdEbeCraUj+9aItQGKDsgS+Upz7BCABCEzuvCD8kXDvdzaT8iyDqBUXhYJmMgnl/eKFmYApdiORwJ/FE1NIBO1HU+XJJBsmyVuE=
+	t=1718354123; cv=none; b=HHEwvY/JjJKyAwzXyHY9jlB2MuW1/ajuepz8D4wQpPDXMMcfzzdEtGLjd8ApJrTsT+UDAeOB+/ayAYF2luESv1F2SZ78tX45t4SPRZ0c5pNaj4NqTtGSxjcZTQ1jnBUNU0+mZ/Khi+tr7sU2FNbkV7xyQUdD7L8jthv/uJIh05U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718340041; c=relaxed/simple;
-	bh=eNn5sF/0OujnxZsAQT7n4zaO4fElnsdrJ3NYPpfOQHs=;
+	s=arc-20240116; t=1718354123; c=relaxed/simple;
+	bh=a5UwVV67a2jLUz2GPxUMVFlQhY06wFG1TwJdC7MdDFA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mI550S1q7h26uNxc/mXU1YbM+v6CVKSrc5uD9lC7x+tDMRKOYYDL4fiET/9yQ/1u1e17h8cZkV6CzStSomqu0xrFFtrLz1CVIspB3THdwA7QsEJDYMPXik9/dNE6A51FYj4S+EQanwtqZNKNOa/aNmrgF8um44NcnDpEOE1ua20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MrXkLg84; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so30532021fa.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2024 21:40:38 -0700 (PDT)
+	 To:Cc:Content-Type; b=OIemyxWxxyFg16SZqNQIF7traYozctxlp/d9ncTY6rgCPQcrJJTUJ03uVkBV8wJFS7sogwSCkLrhEaOEkSNXS3994WmJi8rc4rMhh48pkzfsQufa2EchQUB7yGd7tpM3fpJMdPqYvLubzzreQ5PYmXVDLRS9vpyE/TZGnSU+vgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEadpkbK; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-4ed09e0141bso77220e0c.2;
+        Fri, 14 Jun 2024 01:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718340037; x=1718944837; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718354120; x=1718958920; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kR7b6aZyZ2ErhsA0LvgqlgbPkmTng+vkDIc2255311w=;
-        b=MrXkLg84ZY8N2IswP1VtCmWEMTWgpWhAr/qg3y8gs/+8Wx/oebkTeiuJu+6sJ1EvEw
-         YD+tIMD0SMCaEoPpULoSZLbbWootuBMNRs9rOQF1RUN1mihgSq5XfzJQ7aVPG8BaWahT
-         FqvAnprGnMXDtl7l2CZ0Zy5UyQRJ/oINfqieGSf2YX2j724AcEsQSRKj2jHxlAGXBSNl
-         8jkIVFH9GtMS2wGn5UfBZ4Ziqg9DgOtozLEmmt0Xv/uLq6j72M6kfLPFfEe9qkYaeNV7
-         6M8cPpy9I8Hm4BN12Z9kO8m5CdMyJ2SOzblaIDSJ6wuinw8Oz/OD5Rl4ertjC0OOVXI5
-         zuWg==
+        bh=UBD23S6qCIO944R+FXPTl9o8IozbKBuB6Ed3Es8CaDg=;
+        b=QEadpkbKsGDLcBPXmZuVWLLsC+th99e5eei1yFkASESzCgW2H3wjTTDCSXWyx8kRFE
+         hLWrZY4i/ewGqMgxq7REYw8bG75+SDbmsMu40WW17IMINC4VIbbuX1A4zyN4CjlY0PYQ
+         /lFGHPToNCdi5y0vwIKIoWiF/PYz/GqvH9Re28+Ir+Anco4YrBiN80Olo7S77BSqIYmU
+         623Dfb1LFMpbWpSjqmgtbVfv66XBVhcBs1DOFgR1AfiRLDJrcY4iipbZTpWVye8gbp6y
+         8zshWBICwx530+7smbWUrl+c/ED9ZGilFIQTr3iRx9UBlNfrZOnGY92IkS0Q8KlzpaGM
+         d/1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718340037; x=1718944837;
+        d=1e100.net; s=20230601; t=1718354120; x=1718958920;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kR7b6aZyZ2ErhsA0LvgqlgbPkmTng+vkDIc2255311w=;
-        b=fXcnXqainqCWzmz1rjIJtOl+l546xd4rzEKvyge9aJ85b8EMDNlfT2gyJKv86vsh9B
-         NRwvQlVNQoW1LT3HmuywXVxwNO7p7bKt9MWvGyZ49HMhGMx5DKEvwkwwWvPlpwT5rVsc
-         nlFI+R88Zdj1ot/zOCk0ME/Ma5vuwvl+7bjhqffNRprCkBHZA686MGJjYcVJ1sZtu9eH
-         0euZ7SyNLUuoUTZuqOqZJ/q0P8qSswgLcbYixALAc9sxcnnWfvzP5Az8ZY3nBwnPPaXU
-         jAojfhNe9wzxckM29E3/ZC1xIURNgy+rTaC5AVoEcHlwJC+5ZJ7xQldDRAX9DIXg1W/o
-         G/KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrcAbLZosDWOstCG9Ir1KbtR0gfQOT1UdQ9j2nMFaKj2uD0nod5XsiyKHEx2D6aU7z5L1yKMkae0rRYwKHAHvaUN99fWs5cQLw76LXpVeG
-X-Gm-Message-State: AOJu0YweqMz6mVMh9GTFhlkP6DUUD3X/yIcmt5a8RumyfY0TTOT+d/NG
-	2ucLwC+xOUaVsV9cERHMu8FarF9qtJ0G7jG81qq27yRPU1KOhdJl9F7eZ1VvhcVN6H7tT07R38x
-	cAP2/O9I8YwiEMgjKJ/VIP1wX6TzpR+oDeL87Jv7vC5Swlu2o/mBT4CQ=
-X-Google-Smtp-Source: AGHT+IF+QwVsnGgzoMf0Qw+xtz4R8CDXmuxU4LRGzv8WS6/BQHNgwgM8v9u52HDoANwX7UmBcb4VUEBhXtKfrjHouB0=
-X-Received: by 2002:a19:6449:0:b0:52c:84ac:8fa2 with SMTP id
- 2adb3069b0e04-52ca6e56eb8mr1005405e87.7.1718340036348; Thu, 13 Jun 2024
- 21:40:36 -0700 (PDT)
+        bh=UBD23S6qCIO944R+FXPTl9o8IozbKBuB6Ed3Es8CaDg=;
+        b=PHuHDJtkbxuL7QLxkNR/71NncFPLITHGqWRY4FJGUBy8kuOkdA2LSevRhvUJQyK7hO
+         xGOqp98RsOxS41SWqfoVbxZ3kyZXibHbFcW4mDadoL/R5pIlqC5HJ/IHUeE0cRgv7kWh
+         2ibYrcEEQRq1MTLLVIvu5UrZHDbf/ybz+dr+EBA/Rir7VjwZ78EciaEP8QfcGxdO9K6j
+         TY6dmsxYPUy9vLMUWhkkzIO3+oWFp8IKBx8ch9jsfjNko7Yp5Gyc786MnnDZrGtkwpnx
+         o3tPU6c6twwu5KSDOxgSWx7oUgLjlNyIairNIUJOv7Yp/GLJtBWR+yYBx+tMzC6DHJax
+         +Cmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWaBv1py8K9ZAAKdYtOFtgbhHolJ3aXK0Q09iW8Qgfk33KHJ5HuNyCgNEQ/mvE1Zv7plQo55u3iyut1Eabs07BlBWI/CgFu1k0ha9+QzSjYF2Oa9M/Lj0Kx8TW5QJu+NzqXkGnZY6S9+aJ6
+X-Gm-Message-State: AOJu0YxS3nt25SpkzdvLcWBiNSMD6O8YWoa91aqvBAZfQxXm4mA+BuPn
+	xlEr3Eu/r4Iu6585NJQj/osWQoGPNSR4VOcjj/6xi8K30EZAaIEDKCDfk3GlYwnkCqJcyOGGS6M
+	16cOatN76NmvtRLBg66zj7HL2Veo=
+X-Google-Smtp-Source: AGHT+IHAmjFbkdS+fr6ZkZVORCPbzkeRgK12X1TuMm6vxt/E1AeV5iBgZCISuEWwsLGiP5eLuFDQttNR3nt1R6jEfL0=
+X-Received: by 2002:a05:6102:1610:b0:48d:b0a3:fe34 with SMTP id
+ ada2fe7eead31-48db0a40226mr1249530137.2.1718354120499; Fri, 14 Jun 2024
+ 01:35:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240613013557.1169171-1-almasrymina@google.com> <20240613183453.2423e23b@kernel.org>
-In-Reply-To: <20240613183453.2423e23b@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 13 Jun 2024 21:40:24 -0700
-Message-ID: <CAHS8izNqMOAONExpBwtJBqseRnyv+ukw5LbFdevQXD4zc+7thg@mail.gmail.com>
-Subject: Re: [PATCH net-next v12 00/13] Device Memory TCP
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-2-jiaqiyan@google.com>
+In-Reply-To: <20240611215544.2105970-2-jiaqiyan@google.com>
+From: Lance Yang <ioworker0@gmail.com>
+Date: Fri, 14 Jun 2024 16:35:09 +0800
+Message-ID: <CABzRoyYGY2EgT5wC9o98Vn_auh59poQ-OOnKceCiWQAJrbZoBw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] mm/memory-failure: userspace controls
+ soft-offlining pages
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
+	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
+	corbet@lwn.net, osalvador@suse.de, rientjes@google.com, duenwen@google.com, 
+	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 13, 2024 at 6:35=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Thu, 13 Jun 2024 01:35:37 +0000 Mina Almasry wrote:
-> > v12: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D8597=
-47&state=3D*
->
-> patches 5 and 6 transiently break the build
->
-> ../include/trace/events/page_pool.h:65:23: error: use of undeclared ident=
-ifier 'NET_IOV'
->    65 |                   __entry->netmem & NET_IOV, __entry->pfn, __entr=
-y->release)
->       |                                     ^
-> ../include/trace/events/page_pool.h:91:23: error: use of undeclared ident=
-ifier 'NET_IOV'
->    91 |                   __entry->netmem & NET_IOV, __entry->pfn, __entr=
-y->hold)
->       |                                     ^
->
-> Looking at NIPA status the builders are 12h behind, so please don't
-> repost immediately. This series takes a lot of compute cycles to build.
->
-> FWIW there is a docker version of NIPA checks in the nipa repo.
->
-> https://github.com/linux-netdev/nipa/tree/main/docker
->
-> IDK if it still works, but could help avoid mistakes..
+Hi Jiaqi,
 
-My sincere apologies. I have trouble with the patch-by-patch
-allmodconfig build being very slow on my setup with the headers I'm
-touching, and I've been running into false positives with the C=3D1 &
-W=3D1 checks. I've been trying to look at the nipa scripts and porting
-them over to my setup. I'll take a look at the docker image and if
-not, at least make sure the patch-by-patch allmodconfig with C=3D1 and
-W=3D1 is working.
+On Wed, Jun 12, 2024 at 5:56=E2=80=AFAM Jiaqi Yan <jiaqiyan@google.com> wro=
+te:
+>
+> Correctable memory errors are very common on servers with large
+> amount of memory, and are corrected by ECC. Soft offline is kernel's
+> additional recovery handling for memory pages having (excessive)
+> corrected memory errors. Impacted page is migrated to a healthy page
+> if inuse; the original page is discarded for any future use.
+>
+> The actual policy on whether (and when) to soft offline should be
+> maintained by userspace, especially in case of an 1G HugeTLB page.
+> Soft-offline dissolves the HugeTLB page, either in-use or free, into
+> chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+> If userspace has not acknowledged such behavior, it may be surprised
+> when later mmap hugepages MAP_FAILED due to lack of hugepages.
+> In case of a transparent hugepage, it will be split into 4K pages
+> as well; userspace will stop enjoying the transparent performance.
+>
+> In addition, discarding the entire 1G HugeTLB page only because of
+> corrected memory errors sounds very costly and kernel better not
+> doing under the hood. But today there are at least 2 such cases:
+> 1. GHES driver sees both GHES_SEV_CORRECTED and
+>    CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+> 2. RAS Correctable Errors Collector counts correctable errors per
+>    PFN and when the counter for a PFN reaches threshold
+> In both cases, userspace has no control of the soft offline performed
+> by kernel's memory failure recovery.
+>
+> This commit gives userspace the control of softofflining any page:
+> kernel only soft offlines raw page / transparent hugepage / HugeTLB
+> hugepage if userspace has agreed to. The interface to userspace is a
+> new sysctl called enable_soft_offline under /proc/sys/vm. By default
+> enable_soft_line is 1 to preserve existing behavior in kernel.
 
---=20
+s/enable_soft_line/enable_soft_offline
+
+>
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> ---
+>  mm/memory-failure.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index d3c830e817e3..23415fe03318 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -68,6 +68,8 @@ static int sysctl_memory_failure_early_kill __read_most=
+ly;
+>
+>  static int sysctl_memory_failure_recovery __read_mostly =3D 1;
+>
+> +static int sysctl_enable_soft_offline __read_mostly =3D 1;
+> +
+>  atomic_long_t num_poisoned_pages __read_mostly =3D ATOMIC_LONG_INIT(0);
+>
+>  static bool hw_memory_failure __read_mostly =3D false;
+> @@ -141,6 +143,15 @@ static struct ctl_table memory_failure_table[] =3D {
+>                 .extra1         =3D SYSCTL_ZERO,
+>                 .extra2         =3D SYSCTL_ONE,
+>         },
+> +       {
+> +               .procname       =3D "enable_soft_offline",
+> +               .data           =3D &sysctl_enable_soft_offline,
+> +               .maxlen         =3D sizeof(sysctl_enable_soft_offline),
+> +               .mode           =3D 0644,
+> +               .proc_handler   =3D proc_dointvec_minmax,
+> +               .extra1         =3D SYSCTL_ZERO,
+> +               .extra2         =3D SYSCTL_ONE,
+> +       }
+>  };
+>
+>  /*
+> @@ -2771,6 +2782,11 @@ int soft_offline_page(unsigned long pfn, int flags=
+)
+>         bool try_again =3D true;
+>         struct page *page;
+>
+> +       if (!sysctl_enable_soft_offline) {
+> +               pr_info("soft offline: %#lx: OS-wide disabled\n", pfn);
+> +               return -EINVAL;
+
+IMO, "-EPERM" might sound better ;)
+
+Using "-EPERM" indicates that the operation is not permitted due to
+the OS-wide configuration.
+
 Thanks,
-Mina
+Lance
+
+> +       }
+> +
+>         if (!pfn_valid(pfn)) {
+>                 WARN_ON_ONCE(flags & MF_COUNT_INCREASED);
+>                 return -ENXIO;
+> --
+> 2.45.2.505.gda0bf45e8d-goog
+>
+>
 
