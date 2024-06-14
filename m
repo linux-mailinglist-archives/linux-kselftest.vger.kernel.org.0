@@ -1,55 +1,71 @@
-Return-Path: <linux-kselftest+bounces-11960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C10908F3E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 17:45:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4E3908F53
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 17:50:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148B31C20382
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:45:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 439961C21251
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E394F16A36E;
-	Fri, 14 Jun 2024 15:44:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCA216C690;
+	Fri, 14 Jun 2024 15:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="o0jd3Zjq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JEFUOk64"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD7315ECC8;
-	Fri, 14 Jun 2024 15:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B41146A7D
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 15:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718379863; cv=none; b=brlNZRoN0vKQ4x6enS7he3Z29T2R/mO6Fr54vPSx2Mzq3zlq9FMTghJ7FdVkIt3QtKpsOZlSPV4j12Ktq9AQb3Pt+8fltBXviIKaUtYuswOJnL9Se/xcGfivMPUzNFsOJP7D448O8siKg2e7g1InFwSu7nEDST9BCtawC4NwTII=
+	t=1718380212; cv=none; b=X3PwjaMx0G6ctswgJRuQ7pEbs/GfF8csxUwlJC6/arY4EPVKaiyVNehHUuAOidYlcxZtXBlQzAd92JnoIy9UXg1dNKqIrzP/404JP23qgJgS1V3uXB0DiRFWz5ZmytSQtDsE1aGgsGW1E3sgLsyi1Nafg8YF8kMVYpvqdxge5i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718379863; c=relaxed/simple;
-	bh=/784mX3FdpfJspi5T8/rDU8CVG+q24/rpo7TZ1n7zm8=;
+	s=arc-20240116; t=1718380212; c=relaxed/simple;
+	bh=Of89akR2CMY7eKqsbXy1fnKj5CKC+LPr7lSvKGw04Bk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WggHG5F1UfSt2Q3dwjFES/BrHQYHYVSQ57QWRXasLEfdMyQz2CZupQ25zSWN7fqlRVluQtB490NXwT4KycdOSF9+hqw9P3d0bm74LGIJj0kX7dOi6HY/HYD0FZYQIiGNk8DgKVzgaNPiptlhHmNvpyNOUtm/2ZpixJHNDYT2Pic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=o0jd3Zjq; arc=none smtp.client-ip=77.48.224.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 9926F6829;
-	Fri, 14 Jun 2024 17:44:18 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 9926F6829
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1718379858; bh=Hl0NX60AKMldIJ+PeuUEQTYMlolG8hhKWeSTZBDpzbg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=o0jd3Zjqw7K+duJ/6BPQqQ8zIPOT1C7guzgA41qJG+BEBv+USX47Hy1H8U2KgPZPM
-	 W85SRdvrbnwlZV/72sEKJdDbBMtSsbLJznPIgGrdI3w42kAHz4FQGbrqlwO/YFiYf6
-	 HrWPELi+yATzbxg0TfFX3OwDlRupu5eJNx031Ksg=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: perex)
-	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Fri, 14 Jun 2024 17:44:13 +0200 (CEST)
-Message-ID: <289165bd-af13-4fbf-b1f4-f9539b4d0eec@perex.cz>
-Date: Fri, 14 Jun 2024 17:44:13 +0200
+	 In-Reply-To:Content-Type; b=oT0k2YniZR44dhTGDsa+51SYnXulU2t2f8/bVF8u0BAPG+1rMlwnoD+96bsLvB/67UAANvEyFpUvWfHEx0q+9aVAS8ZlssiB6ETGIjx/+dpJ5TOxuhkMLzTNmTzmLx1DF3UMmMSRQZr+91XWebm8EaxdgtI5tnvCmMLdb6zfCJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JEFUOk64; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7eb65738383so10735139f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 08:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1718380209; x=1718985009; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=leswT/yscKTO7Z6a2Wo4H81HBTQclZtl7oZCfZGayWM=;
+        b=JEFUOk64Xehez37N8Ti+kOaFFa9DgSD7wBfgcPUjejHu4TsQm/SjvO3cjT5LcSZ1sG
+         uexAbovOukDc2l2/xKJ4npb9p1ufMB5fWGv5vMfqOSQoBDWhfgQeWYtAQWEj8NY1mTHR
+         ENN1fVISWmorYKmRkbCdxlD+h91reH7b+UG6k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718380209; x=1718985009;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=leswT/yscKTO7Z6a2Wo4H81HBTQclZtl7oZCfZGayWM=;
+        b=VwId01broCfXoXVo4GxwTA2Qb5WJBMwUSWiodWaekfCY5v64fUsd5Ya5nW3B5i6dSE
+         GJvDsTdTLHWj0F2kDNieTiYaFGruMCYozJ5zXgd9EyW4nZuHifBD6d/4qwjIF1sg09FB
+         wxhCJQ4uLkXSThrM4NOmihMaX0dJd9cNChDGDjyR5Ai/2lzHGYzH0UXrn0PSWarbE9kA
+         ToKYjwzcBz6IyCy+7S5r9Ug5fijHcTl59fhunEZFSv2GBVSxYI1nfQSCTLffd1u9SDZG
+         Ke2rfBTXH5i61+MEicOtXXwVMOtU0Og1+3FYqMhrzuAo0wOsXmH18y/ScDP2BCw0ihxq
+         lS2w==
+X-Forwarded-Encrypted: i=1; AJvYcCVDI+vaQmDSxVRU4c+rYcSblSSqivxd02CXgkeGGP3E+qfPsAtklVhngcgnpJUzngOV+Y++/UbN4Dyf5hf3/Ti9Tc3pKq5fnM+94ysy9ffO
+X-Gm-Message-State: AOJu0YwQ6eXopZMmUVEx5FZXznv01tPjXOqCdGmrTWQdW7jE5G6s3Vg1
+	SMRXLF8zI+vGU/OwCtFv7qHEefUk2uTCbbuh8hdIRagvylZ9QIqoBm40Bb6bdyQ=
+X-Google-Smtp-Source: AGHT+IED3HSMfmB9vnuFFL8MFycsr72SN22gD5z+fwYlkLvh2hJe5W48P0uXhfkKYgekiV4qCO0SEg==
+X-Received: by 2002:a6b:6b16:0:b0:7eb:730b:f0c2 with SMTP id ca18e2360f4ac-7ebeaef9959mr278165839f.0.1718380208121;
+        Fri, 14 Jun 2024 08:50:08 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b956915c17sm979497173.43.2024.06.14.08.50.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jun 2024 08:50:07 -0700 (PDT)
+Message-ID: <90e61842-e933-4d6f-a3b5-c802382fe96a@linuxfoundation.org>
+Date: Fri, 14 Jun 2024 09:50:05 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,74 +73,98 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] ALSA: hda: Add input value sanity checks to HDMI
- channel map controls
-To: Takashi Iwai <tiwai@suse.de>, linux-sound@vger.kernel.org
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mark Brown <broonie@kernel.org>,
- linux-kselftest@vger.kernel.org
-References: <20240614153717.30143-1-tiwai@suse.de>
- <20240614153717.30143-7-tiwai@suse.de>
+Subject: Re: [PATCH v3 2/2] usercopy: Convert test_user_copy to KUnit test
+To: Kees Cook <kees@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc: Vitor Massaru Iha <vitor@massaru.org>,
+ Ivan Orlov <ivan.orlov0322@gmail.com>, David Gow <davidgow@google.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-hardening@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240612195412.make.760-kees@kernel.org>
+ <20240612195921.2685842-2-kees@kernel.org>
 Content-Language: en-US
-From: Jaroslav Kysela <perex@perex.cz>
-Autocrypt: addr=perex@perex.cz; keydata=
- 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
-In-Reply-To: <20240614153717.30143-7-tiwai@suse.de>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240612195921.2685842-2-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 14. 06. 24 17:37, Takashi Iwai wrote:
-> Add a simple sanity check to HD-audio HDMI Channel Map controls.
-> Although the value might not be accepted for the actual connection, we
-> can filter out some bogus values beforehand, and that should be enough
-> for making kselftest happier.
+On 6/12/24 13:59, Kees Cook wrote:
+> Convert the runtime tests of hardened usercopy to standard KUnit tests.
 > 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> Additionally disable usercopy_test_invalid() for systems with separate
+> address spaces (or no MMU) since it's not sensible to test for address
+> confusion there (e.g. m68k).
+> 
+> Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
+> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> Link: https://lore.kernel.org/r/20200721174654.72132-1-vitor@massaru.org
+> Tested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>   MAINTAINERS                                |   1 +
+>   lib/Kconfig.debug                          |  21 +-
+>   lib/Makefile                               |   2 +-
+>   lib/{test_user_copy.c => usercopy_kunit.c} | 282 ++++++++++-----------
+>   4 files changed, 151 insertions(+), 155 deletions(-)
+>   rename lib/{test_user_copy.c => usercopy_kunit.c} (46%)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8754ac2c259d..0cd171ec6010 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11962,6 +11962,7 @@ F:	arch/*/configs/hardening.config
+>   F:	include/linux/overflow.h
+>   F:	include/linux/randomize_kstack.h
+>   F:	kernel/configs/hardening.config
+> +F:	lib/usercopy_kunit.c
+>   F:	mm/usercopy.c
+>   K:	\b(add|choose)_random_kstack_offset\b
+>   K:	\b__check_(object_size|heap_object)\b
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 59b6765d86b8..561e346f5cb0 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2505,18 +2505,6 @@ config TEST_VMALLOC
+>   
+>   	  If unsure, say N.
+>   
+> -config TEST_USER_COPY
+> -	tristate "Test user/kernel boundary protections"
+> -	depends on m
+> -	help
+> -	  This builds the "test_user_copy" module that runs sanity checks
+> -	  on the copy_to/from_user infrastructure, making sure basic
+> -	  user/kernel boundary testing is working. If it fails to load,
+> -	  a regression has been detected in the user/kernel memory boundary
+> -	  protections.
+> -
+> -	  If unsure, say N.
+> -
+>   config TEST_BPF
+>   	tristate "Test BPF filter functionality"
+>   	depends on m && NET
+> @@ -2814,6 +2802,15 @@ config SIPHASH_KUNIT_TEST
+>   	  This is intended to help people writing architecture-specific
+>   	  optimized versions.  If unsure, say N.
+>   
+> +config USERCOPY_KUNIT_TEST
+> +	tristate "KUnit Test for user/kernel boundary protections"
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This builds the "usercopy_kunit" module that runs sanity checks
+> +	  on the copy_to/from_user infrastructure, making sure basic
+> +	  user/kernel boundary testing is working.
+> +
 
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Please carry the following line forward as well to be complete assuming
+it is relevant.
 
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+If unsure, say N.
+
+thanks,
+-- Shuah
 
 
