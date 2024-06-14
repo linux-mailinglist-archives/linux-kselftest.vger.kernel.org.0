@@ -1,90 +1,58 @@
-Return-Path: <linux-kselftest+bounces-11905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB4B9080AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 03:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01D7F908107
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 03:49:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82DA91F22CB1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 01:35:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA59C1F22622
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 01:49:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41E01581E5;
-	Fri, 14 Jun 2024 01:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE631822ED;
+	Fri, 14 Jun 2024 01:49:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sg9ZtS8y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZuRyDC4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872431773D;
-	Fri, 14 Jun 2024 01:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E420157A43;
+	Fri, 14 Jun 2024 01:49:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718328897; cv=none; b=VsHrwmH5eYxeiKZFTbnBcWzlULoydE+R7s6cx1jJa8c0Ccth2DsEIxMIH9nHk4a9IH9RD01S/Pk4IPQ+WD/KR570Xa5XYQGDp6oxp9G/KjvqL9QdJdHM3Vszn1XrX8cMTaGXhxOAstp5A/rWavqEs63mJk4VS1VevaXQNjp4rSA=
+	t=1718329780; cv=none; b=LvaJYSEYCvzl8uhdyDsnchsZNYoZ6uwNkk2XL70/Y6P5woPwz1/hx4RdcdN0Bausy/ZvSzqDF/3jTlPadpk+YYB9CazKVO6ostrQgs5acZd6A9u4dHLcD7cpGryRXwnaz5obnSZKPzvG7UpJNWEbeh0n0+bLLzKkVQuKzsnY6uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718328897; c=relaxed/simple;
-	bh=CYOxmE4ntQW4bNMvxq9UIlsEBzTRL4qLB1FV48Xatv4=;
+	s=arc-20240116; t=1718329780; c=relaxed/simple;
+	bh=wF21a3UbyHjTYi79R6tU+R0QlOd02VCTZTRWQtWvJA8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=USAUY/NF7f9lomUFU0/3qPvQFhIc5mrecPjwbnTHMK6Ruj5KN6zhnD0kQWa7XUT8H7DTvXi24TGeT5fFQ/5ScIs7yqdZcsE0rumG+c9rCTUfme+LP9Q6HJ0SIHzXqIqsEIOosy1u+qd6OimLeN+3c5iD+j7F/h9+2UI6gYg0ovU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sg9ZtS8y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61242C2BBFC;
-	Fri, 14 Jun 2024 01:34:54 +0000 (UTC)
+	 MIME-Version:Content-Type; b=fkh759iw0+yeFEnxW0FZ/DLnWtt7ZDPEompLfD2qpOPjec95BAI+vZiGNOzSPGCOw5iXjsLgf1+I35UVz4drN1JzESrTpnm//5k7OQA47DvfueIvFrzCTSqRx+YM/Ad5dsCN6R2UKynAWvSAI44N7mkUCyROjT0QwuSc5bKGdPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZuRyDC4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7803EC2BBFC;
+	Fri, 14 Jun 2024 01:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718328897;
-	bh=CYOxmE4ntQW4bNMvxq9UIlsEBzTRL4qLB1FV48Xatv4=;
+	s=k20201202; t=1718329780;
+	bh=wF21a3UbyHjTYi79R6tU+R0QlOd02VCTZTRWQtWvJA8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sg9ZtS8yEezxbjTVPI568a2KvEHqvKq8ud8+uPe6dGMbTueQSEMPMAgj2PCgXuIB9
-	 Il047nqeXnP6P/oSYmAKQCAxosjwrgYOaHdSYN8DpizcnGRlWkldLzTTe90OSa9FGv
-	 MBAW9iL444FGaNr9FcdswWY3pHc51pXPD6UDrHaFRQu/JWFwS+m0CctYfvcTP+Y/us
-	 3tPXqBkvjF/1WlqhH8l2wOQHXRcCWEIeW4JHfm3b/MLKWXXuS8tFi+ZMZi3LlOasMl
-	 Pv1svqR65L1eeiVLZrRKEQMiPGyOnYtk2TTlgDn5OVb4lEV9805bZIfH/6hgbdu1Gs
-	 S7zj/D1FRPg8w==
-Date: Thu, 13 Jun 2024 18:34:53 -0700
+	b=pZuRyDC4P9T+WD15psdYAt86/T2Uw9ftn8QYqxeCyxoVzI0SzQAWqg0nSvqePTT8q
+	 S47JPXjOHH9P7wlbw/or3iVnsK/97Xj7pxX/OQigs2eSjY6g0uBD/e86k20hokoJIs
+	 O4ZV+cra2FY2IvVOPubNh40VEg8wh4tXKpetQN6nzKf8tHwWDeZoQl/aztnC8G2EYP
+	 MWrFw1rIHX7j6i6Hyn+BkKeMBI+5QVh0FHfSk+qGEWWAvne0MR3ox3TWMw4/q35tW3
+	 0xcEBA7Ftfu/Nx+HuqnwEpy7Dd6pjxS1SpL8ke87gudyw9LwDISWJ8XCIxg+tk3QKj
+	 Btm8dmHcw3zlw==
+Date: Thu, 13 Jun 2024 18:49:38 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Sergey Shtylyov <s.shtylyov@omp.ru>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Christian
- =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Bagas Sanjaya
- <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v12 00/13] Device Memory TCP
-Message-ID: <20240613183453.2423e23b@kernel.org>
-In-Reply-To: <20240613013557.1169171-1-almasrymina@google.com>
-References: <20240613013557.1169171-1-almasrymina@google.com>
+To: Abhinav Jain <jain.abhinav177@gmail.com>
+Cc: horms@kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
+Subject: Re: [PATCH v2] sefltests: net: Add on/off checks for network
+ interface non fixed features
+Message-ID: <20240613184938.0cc8cc56@kernel.org>
+In-Reply-To: <20240609132124.51683-1-jain.abhinav177@gmail.com>
+References: <20240609132124.51683-1-jain.abhinav177@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,24 +62,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 13 Jun 2024 01:35:37 +0000 Mina Almasry wrote:
-> v12: https://patchwork.kernel.org/project/netdevbpf/list/?series=859747&state=*
+On Sun,  9 Jun 2024 13:21:24 +0000 Abhinav Jain wrote:
+> This patch addresses the TODO (add non fixed feature on/off check).
+> I have tested it manually on my system and made changes as suggested in v1
 
-patches 5 and 6 transiently break the build
+>  	echo "PASS: $netdev: ethtool list features"
+> -	#TODO for each non fixed features, try to turn them on/off
+> +
+> +	while read -r FEATURE VALUE FIXED; do
+> +		[ "$FEATURE" != "Features" ] || continue # Skip "Features" line
+> +		[ "$FIXED" != "[fixed]" ] || continue # Skip fixed features
+> +		feature = "${FEATURE%:*}"
+> +
+> +		ethtool --offload "$netdev" "$feature" off
+> +		if [ $? -eq 0 ]; then
+> +			echo "PASS: $netdev: Turned off feature: $feature"
+> +		else
+> +			echo "FAIL: $netdev: Failed to turn off feature: $feature"
+> +		fi
+> +
+> +		ethtool --offload "$netdev" "$feature" on
 
-../include/trace/events/page_pool.h:65:23: error: use of undeclared identifier 'NET_IOV'
-   65 |                   __entry->netmem & NET_IOV, __entry->pfn, __entry->release)
-      |                                     ^
-../include/trace/events/page_pool.h:91:23: error: use of undeclared identifier 'NET_IOV'
-   91 |                   __entry->netmem & NET_IOV, __entry->pfn, __entry->hold)
-      |                                     ^
+You do off then on, so you assume the feature was on to begin with.
+Not all features will be on. You gotta change the order based on
+the initial state so that the feature goes back to what it was.
 
-Looking at NIPA status the builders are 12h behind, so please don't
-repost immediately. This series takes a lot of compute cycles to build.
+> +		if [ $? -eq 0 ]; then
+> +			echo "PASS: $netdev: Turned on feature: $feature"
+> +		else
+> +			echo "FAIL: $netdev: Failed to turn on feature: $feature"
+> +		fi
+> +	done < "$TMP_ETHTOOL_FEATURES"
 
-FWIW there is a docker version of NIPA checks in the nipa repo.
+More importantly, tho, currently in our CI this test passes:
 
-https://github.com/linux-netdev/nipa/tree/main/docker
+https://netdev.bots.linux.dev/contest.html?test=netdevice-sh
 
-IDK if it still works, but could help avoid mistakes..
+But it doesn't do anything:
+
+https://netdev-3.bots.linux.dev/vmksft-net/results/638724/98-netdevice-sh/stdout
+https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/638544/90-netdevice-sh/stdout
+
+Because I'm guessing the VM does not have any interface to test.
+
+Before we extend the test could you please make the test automatically
+add a veth or netdevsim device if there is no testable device on the
+system? Make sure you remove it before exiting.
+
+You can look at tests in tools/testing/selftests/drivers/net/netdevsim
+for inspiration and library scripts which can be reused.
 
