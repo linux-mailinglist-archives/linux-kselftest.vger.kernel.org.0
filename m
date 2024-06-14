@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-11970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E669090B3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 18:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F5A9090B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 18:44:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39F3DB2E281
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 16:42:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E08BB21686
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 16:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7F717FAD9;
-	Fri, 14 Jun 2024 16:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0991190072;
+	Fri, 14 Jun 2024 16:43:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D5516DEB8;
-	Fri, 14 Jun 2024 16:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD6D181B91;
+	Fri, 14 Jun 2024 16:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718383314; cv=none; b=nJ47RHXT2McGJJYSkFJ9mPL2rYmZJzgMVYyg8tfypCeKqENHkRQ7ftyTWD+R2wwnZ9AlIM8+JXz2VQZDizf0ibrVWh4vFTcK95mpnQ8yYuZ5QyuBcCMeLOmAZnsfkPVZ4PbWE5du4MCawE2uEve7dHd4Jt1jlgz8Q+30VGYwGF0=
+	t=1718383405; cv=none; b=hcrjxva/fwxfgr4uRsQY4wmZGoTfBV9md7JTNoMuVq2DuKUvIA0/iocPYXGyZQsW0yMFpD8T6Xm75PArQLrhWfM4PxGfg8ig/WL0vdYZNd4n007qdcAmAZ6siGis0aPQtGk5yHvKE28DjKH4nGaqPArS4Z8XaL+HRL90kt8wCaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718383314; c=relaxed/simple;
-	bh=/Uw6tWeDCRT+Vh+fNOGNy+yjTZXxTtHoYiAnj+slZ44=;
+	s=arc-20240116; t=1718383405; c=relaxed/simple;
+	bh=jjK16E41dr1jwYKnMEUEtk5I3mLh25F5pNmx0OCJsxY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o7rIZvrujT+Vnjw5DtEK++9t85a2iXb9IufEkuan7tMNlOowit0u3k4v6Tdf/9n86ciARPbL9+H8nLKqM8h0JP8VTuYERJG5LwR7NYmbjWxxXz4k6MT8YSkJn85mWL/gClyXcFt3e6okExawz9lEkvM+O8WIT+RoURtLszIBfIE=
+	 MIME-Version:Content-Type; b=GVBjYXJV1wQ2VESIhP8uWLLipygj/VkPcE4Gux+jG5bULqLwZh5gKKjP3h7bG6y4G3hVQYuARAw1HsisNWYl4gSCLbKZMT8xr+ZO2hEL4W8vgMVbDMfU9Fo9kf87xA56jjit8PwuvXuKOuV1jN10Q95p3gUMD/kv/IbR8h3M6dU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1F1C2BD10;
-	Fri, 14 Jun 2024 16:41:52 +0000 (UTC)
-Date: Fri, 14 Jun 2024 12:41:51 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1109AC2BD10;
+	Fri, 14 Jun 2024 16:43:23 +0000 (UTC)
+Date: Fri, 14 Jun 2024 12:43:22 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
  <linux-trace-kernel@vger.kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Ali Zahraee <ahzahraee@gmail.com>, Shuah
- Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org, Linus Torvalds
- <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] tracing/selftests: Run the ownership test twice
-Message-ID: <20240614124151.33ee0dc6@rorschach.local.home>
-In-Reply-To: <20240523124541.7dd4cca9@gandalf.local.home>
-References: <20240523124541.7dd4cca9@gandalf.local.home>
+ <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@kernel.org>, Shuah
+ Khan <shuahkhan@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Fix test to handle both old and new
+ kernels
+Message-ID: <20240614124322.36ad7652@rorschach.local.home>
+In-Reply-To: <20240515013620.098cb37a@rorschach.local.home>
+References: <20240515013620.098cb37a@rorschach.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -57,83 +57,49 @@ Shuah,
 
 Can you take this through your tree?
 
+Thanks,
+
 -- Steve
 
 
-On Thu, 23 May 2024 12:45:41 -0400
+On Wed, 15 May 2024 01:36:20 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
 > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> A regression happened where running the ownership test passes on the first
-> iteration but fails running it a second time. This was caught and fixed,
-> but a later change brought it back. The regression was missed because the
-> automated tests only run the tests once per boot.
+> The function "scheduler_tick" was renamed to "sched_tick" and a selftest
+> that used that function for testing function trace filtering used that
+> function as part of the test.
 > 
-> Change the ownership test to iterate through the tests twice, as this will
-> catch the regression with a single run.
+> But the change causes it to fail when run on older kernels. As tests
+> should not fail on older kernels, add a check to see which name is
+> available before testing.
 > 
+> Fixes: 86dd6c04ef9f2 ("sched/balancing: Rename scheduler_tick() => sched_tick()")
 > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  .../ftrace/test.d/00basic/test_ownership.tc   | 34 +++++++++++--------
->  1 file changed, 20 insertions(+), 14 deletions(-)
+>  .../ftrace/test.d/ftrace/func_set_ftrace_file.tc         | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> index c45094d1e1d2..71e43a92352a 100644
-> --- a/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/00basic/test_ownership.tc
-> @@ -83,32 +83,38 @@ run_tests() {
->  	done
->  }
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> index 073a748b9380..263f6b798c85 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> @@ -19,7 +19,14 @@ fail() { # mesg
 >  
-> -mount -o remount,"$new_options" .
-> +# Run the tests twice as leftovers can cause issues
-> +for loop in 1 2 ; do
->  
-> -run_tests
-> +	echo "Running iteration $loop"
->  
-> -mount -o remount,"$mount_options" .
-> +	mount -o remount,"$new_options" .
->  
-> -for d in "." "events" "events/sched" "events/sched/sched_switch" "events/sched/sched_switch/enable" $canary; do
-> -	test "$d" $original_group
-> -done
-> +	run_tests
+>  FILTER=set_ftrace_filter
+>  FUNC1="schedule"
+> -FUNC2="sched_tick"
+> +if grep '^sched_tick\b' available_filter_functions; then
+> +    FUNC2="sched_tick"
+> +elif grep '^scheduler_tick\b' available_filter_functions; then
+> +    FUNC2="scheduler_tick"
+> +else
+> +    exit_unresolved
+> +fi
 > +
-> +	mount -o remount,"$mount_options" .
-> +
-> +	for d in "." "events" "events/sched" "events/sched/sched_switch" "events/sched/sched_switch/enable" $canary; do
-> +		test "$d" $original_group
-> +	done
 >  
->  # check instances as well
+>  ALL_FUNCS="#### all functions enabled ####"
 >  
-> -chgrp $other_group instances
-> +	chgrp $other_group instances
->  
-> -instance="$(mktemp -u test-XXXXXX)"
-> +	instance="$(mktemp -u test-XXXXXX)"
->  
-> -mkdir instances/$instance
-> +	mkdir instances/$instance
->  
-> -cd instances/$instance
-> +	cd instances/$instance
->  
-> -run_tests
-> +	run_tests
->  
-> -cd ../..
-> +	cd ../..
->  
-> -rmdir instances/$instance
-> +	rmdir instances/$instance
->  
-> -chgrp $original_group instances
-> +	chgrp $original_group instances
-> +done
->  
->  exit 0
 
 
