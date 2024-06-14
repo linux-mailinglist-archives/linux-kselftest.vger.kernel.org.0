@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-11933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2B8B908BB5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 14:31:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1454908BBB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 14:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34DCA1F22A2A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 12:31:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71A87286D49
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 12:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58D2D198840;
-	Fri, 14 Jun 2024 12:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BDB8196C7B;
+	Fri, 14 Jun 2024 12:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IMbqWjvw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F4IOpaTz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F2712D74D
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 12:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985EA14D29B
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 12:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718368295; cv=none; b=JiNz4CNrNH8AOiRKLP8W0Scayoq3ZeM1a4ko0lTD8MfrUrTqTqx1IvhT/QXyCpUd3kC0HswJz+YjB7MAq1b5KgwAGWx+jy5+KJ70X0oHRUsu7aLp452PfjPqA0SCjL1xY6aHQaxNXb0Lb9dAxOrQM0ukp853pzUjXQA4REnDPH0=
+	t=1718368347; cv=none; b=jSY0dxrkBS4XXVN+0dnBhaC1gq8ps9WFVrBb2B2Abo/L/wu5OsncqZcjoOVC8zdamCK9LnhNr42CKiwRpgJ+ZYWy66UMOROvHa4xWcbLTOYyFvj0UnWcAFYx3dI7XHXS1Y/l2DJK7BUgon4+CLw2z6Qgt7HP8qPfCy5dXhFauvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718368295; c=relaxed/simple;
-	bh=1foHEJZ2AgWP/jXKAqpboSK8aKD0+BWLStyImLGSVoY=;
+	s=arc-20240116; t=1718368347; c=relaxed/simple;
+	bh=unj9T+8T5abtTHOKw1WlHenCCmuODCN3uPhBjmY/QjU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zj1YCFG8bdTf5aHq1NPec5ZWpjRgV4t9DEKDhCYZq7Xotk2hypDNLcMPg4rBH+DH4MSpzz/5xkORJ4oLZLF00n9swHdfQTImT3Ixy925uOWzkvC9xGkFnoTPfKTM5vruQ4I6Bjr5l41iqWo74RrX/uoD0zJRCcNCJhT3teeJIDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IMbqWjvw; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=bsu6FH5MP+IHhzbKKGTT9+YMiUINV9E8w7sGggIRDnAz0cIJhzFeAbrrmjkS9hUeKBYS3EfbqG52tve2lFLSZKxhYbb4RdrADwkxPsRRpd59I6To8P+TMx3yHCiEkzt5zKIxbexpa4CoXQkq8/1mOTPOCI3NWrts9/ujVod15Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F4IOpaTz; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718368291;
+	s=mimecast20190719; t=1718368344;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Ew/FZZEC4sTrez8tNLGwBrr3I/RGY3w5LpbK17nwm8g=;
-	b=IMbqWjvwVwBZ76sfD39oK2O3yrddNOC6W1XNKvd/2C4T0oIS2fL+IPQ6Uh2rCpoUQfaC9A
-	9Spl+YFCzOH2gRBKUCfFzyBs3vw+vBWb3nAPqslq0ZqQm/k5WobfGoa+gg8VYiiA6ri1fb
-	+ou55lMJeIhXQ1avZHBGO/SJ5zkMycM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Qv4UeeUDlJSpPi4tS9iRS5bdmFfBhluxvgTR/MQ7F+g=;
+	b=F4IOpaTzi/8hKeK0BpEPQLd/oT/hI2aaEvo3V69trz5vkStE8Sic2dJGXnYMLMS14HGQyn
+	Ad6Y90YY5xrQGa7I6csABRwtx29RvVrE9jgfNUvvkeRo2DmwIRFx+2jJFoBQpll8JM7H/N
+	AMNzr3GJes0DARQ0BlCtZ6iKpFueJLI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-573-1zxtKWZDMYuMY8InqxaTqg-1; Fri, 14 Jun 2024 08:31:30 -0400
-X-MC-Unique: 1zxtKWZDMYuMY8InqxaTqg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4217b3d2044so16460965e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 05:31:30 -0700 (PDT)
+ us-mta-452-wNKTQZE7NMyVEwmZsT8vow-1; Fri, 14 Jun 2024 08:32:23 -0400
+X-MC-Unique: wNKTQZE7NMyVEwmZsT8vow-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4217f941ca8so14566845e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 05:32:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718368289; x=1718973089;
+        d=1e100.net; s=20230601; t=1718368342; x=1718973142;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Ew/FZZEC4sTrez8tNLGwBrr3I/RGY3w5LpbK17nwm8g=;
-        b=t+jagHLgiLDgXzQOEne57MjYSIC3LEc6wbizCQzo4HTnw71K37JQj0V0dBYpmO4ygw
-         pnoJDoLlUsiTszpYP7PD8aCNO5Xyt8EMRKXdG9bWNhkBY4nOS566W5eczAVPwk40XDpH
-         /AKGk3gqJRSDSv/ySe9dgLl3q4L+/ez5fKr93BLUyEUoQjWSdKtj+1iXuVtnCNecxVTO
-         +h+MqoBw7jRgcXUw1cOzEB56FKoTkddSKKlk2pUoQzvQ4FSgK+GTMJ5sO7G397JbzHM/
-         5ljMNjXnTAuz25dbtbDxm7JUS+fe1Qlj/WMF2M3MRBcPDLKCl3VPbbKaOJIUWLGb2qH9
-         mhuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUEGaLmbYDeQL6f2TkG4zmV0UqriNFu9OBRPYO0UKmn9y++BxbRfu6KDmhgn77VQ/frRbCgdwFGG+O8i75NrhQKTtiRfsT8u6YP/JI5dCDb
-X-Gm-Message-State: AOJu0Yx0ZKz4n/25oYe7k039naMBC4nx0vVvXIJikEbDa54gZ3164lEt
-	zfyJAh3HzCWOjv5BTDgb2pv1EaM4zulgjYVME7Zg+7/4OBIy7qxv0UrsQN5bvmWUDi26gWLr0jr
-	kqP0wHx7lM92ojK0dHQJe9Qx7BmrL7coWdidqhuvXJWjIkP2YRKZTaKd2nD+0zTAwOA==
-X-Received: by 2002:a05:600c:3d8f:b0:422:5d3d:34cd with SMTP id 5b1f17b1804b1-42304828c67mr28631445e9.16.1718368289182;
-        Fri, 14 Jun 2024 05:31:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEilsGkYX9QIjJ0txMGDNjVEpCbnBHQEM7cdmx8BxYa7HtZktEg/yA4D/RZXU7H8H0kuUE74Q==
-X-Received: by 2002:a05:600c:3d8f:b0:422:5d3d:34cd with SMTP id 5b1f17b1804b1-42304828c67mr28631225e9.16.1718368288733;
-        Fri, 14 Jun 2024 05:31:28 -0700 (PDT)
+        bh=Qv4UeeUDlJSpPi4tS9iRS5bdmFfBhluxvgTR/MQ7F+g=;
+        b=cutYWaRr1gUDHMaNP6k7KW6qd8ynt/JfkmMewewq27rKJ/rYzf8BH9qwlKozFD23lL
+         qh5tBVtAERiyWQyYhNqwxhwSGPWUjdoVa2mVkjlAQIyhgaNdp2OP/+1oquwl6HXRy3wc
+         HfjfI8NOIweQ25tm9iGbbMIYo811RTdsyi5E95snPM9KpP0ug0aosqBTqFNasCR106FN
+         exB+Yr02TKYazRt1CcmLl57s7SGi+PkgwqOPP64ZSZa9BKgnzIzEJfGHg5g/pbudhWaz
+         5b2uO7tQTLgfZREqX/MUbA4BxaYE0SU6dYL+W7Og6+dIyVF+FIjTnoMRdMD8mc8cvJVk
+         mTzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxKVN563Bmz8iKQh8dDayBSknuN+53KvqD1XOrYFM6W+39N6Z2FucXYlGRfS/G2G5T4vbLR85YhKYVynfPNWyzUdX7nhiq7LCOQfoJCedn
+X-Gm-Message-State: AOJu0YyCwH3Azbbit0l7z59wnszWRr6Axc1MBjZ+3pBRoQqoNejuFHmz
+	OhpPgL6hn4+IVVlVZ3/pWYwT33mngJ2TcNxSRtgLmpG4ZLGhULGvdHNxcMB5zVdu2XFE7NqLqxg
+	Bi9de0Ws2C058QzCuFt5TsiTFwaL/+gv8nDgTi+wCS67tLcUTLjtF54FPUX/Lmvn1ww==
+X-Received: by 2002:a7b:c3d8:0:b0:420:173f:e1e9 with SMTP id 5b1f17b1804b1-4230482bd13mr20031775e9.21.1718368342200;
+        Fri, 14 Jun 2024 05:32:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGjM92OLN5N6TyehLFw8nPrKH0Xa1IoYpfgLz1PVSEJoZJpK0WPd0TyW0jx0VWLVkuB1quBQw==
+X-Received: by 2002:a7b:c3d8:0:b0:420:173f:e1e9 with SMTP id 5b1f17b1804b1-4230482bd13mr20031545e9.21.1718368341768;
+        Fri, 14 Jun 2024 05:32:21 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f4f:2b00:69b5:3684:56c:6dd5? (p200300d82f4f2b0069b53684056c6dd5.dip0.t-ipconnect.de. [2003:d8:2f4f:2b00:69b5:3684:56c:6dd5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-422f641a5b4sm59225685e9.41.2024.06.14.05.31.27
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42286fe9184sm93848965e9.13.2024.06.14.05.32.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jun 2024 05:31:28 -0700 (PDT)
-Message-ID: <56effc69-b7c6-4e89-8cd3-e344f673d750@redhat.com>
-Date: Fri, 14 Jun 2024 14:31:27 +0200
+        Fri, 14 Jun 2024 05:32:21 -0700 (PDT)
+Message-ID: <795f1d32-a44d-4000-8029-76f9693a2114@redhat.com>
+Date: Fri, 14 Jun 2024 14:32:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] selftests/mm: kvm, mdwe fixes to avoid requiring
- "make headers"
+Subject: Re: [PATCH v2 6/6] selftests/mm: remove local __NR_* definitions
 To: John Hubbard <jhubbard@nvidia.com>,
  Andrew Morton <akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>,
  Shuah Khan <shuah@kernel.org>
@@ -98,7 +97,7 @@ Cc: Andrei Vagin <avagin@google.com>,
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  LKML <linux-kernel@vger.kernel.org>
 References: <20240614023009.221547-1-jhubbard@nvidia.com>
- <20240614023009.221547-6-jhubbard@nvidia.com>
+ <20240614023009.221547-7-jhubbard@nvidia.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -146,67 +145,33 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240614023009.221547-6-jhubbard@nvidia.com>
+In-Reply-To: <20240614023009.221547-7-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 14.06.24 04:30, John Hubbard wrote:
-> On Ubuntu 23.04, the kvm and mdwe selftests/mm build fails due to
-> missing a few items that are found in prctl.h. Here is an excerpt of the
-> build failures:
+> This continues the work on getting the selftests to build without
+> requiring people to first run "make headers" [1].
 > 
-> ksm_tests.c:252:13: error: use of undeclared identifier 'PR_SET_MEMORY_MERGE'
-> ...
-> mdwe_test.c:26:18: error: use of undeclared identifier 'PR_SET_MDWE'
-> mdwe_test.c:38:18: error: use of undeclared identifier 'PR_GET_MDWE'
+> Now that the system call numbers are in the correct, checked-in
+> locations in the kernel tree (./tools/include/uapi/asm/unistd*.h),
+> make sure that the mm selftests include that file (indirectly).
 > 
-> Fix these errors by adding the missing items to vm_util.h, and include
-> vm_util.h from mdwe_test.c.
+> Doing so provides guaranteed definitions at build time, so remove all of
+> the checks for "ifdef __NR_xxx" in the mm selftests, because they will
+> always be true (defined).
+> 
+> [1] commit e076eaca5906 ("selftests: break the dependency upon local
+> header files")
 > 
 > Cc: David Hildenbrand <david@redhat.com>
+> Cc: Jeff Xu <jeffxu@chromium.org>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->   tools/testing/selftests/mm/mdwe_test.c |  1 +
->   tools/testing/selftests/mm/vm_util.h   | 15 +++++++++++++++
->   2 files changed, 16 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-> index 200bedcdc32e..cfe0b64d1567 100644
-> --- a/tools/testing/selftests/mm/mdwe_test.c
-> +++ b/tools/testing/selftests/mm/mdwe_test.c
-> @@ -15,6 +15,7 @@
->   #include <unistd.h>
->   
->   #include "../kselftest_harness.h"
-> +#include "vm_util.h"
->   
->   #ifndef __aarch64__
->   # define PROT_BTI	0
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 9007c420d52c..99cbb7c0ea9d 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -61,3 +61,18 @@ unsigned long get_free_hugepages(void);
->   
->   #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
->   #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-> +
-> +#ifndef PR_SET_MEMORY_MERGE
-> +#define PR_SET_MEMORY_MERGE		67
-> +#endif
-> +
-> +#ifndef PR_GET_MEMORY_MERGE
-> +#define PR_GET_MEMORY_MERGE		68
-> +#endif
-> +
-> +#ifndef PR_SET_MDWE
-> +#define PR_SET_MDWE			65
-> +#define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
-> +#define PR_MDWE_NO_INHERIT		(1UL << 1)
-> +#define PR_GET_MDWE			66
-> +#endif
 
-What's the reason we don't target "linux/prctl.h" here? :)
+Lovely
+
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Cheers,
