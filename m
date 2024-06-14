@@ -1,128 +1,198 @@
-Return-Path: <linux-kselftest+bounces-11982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 567729094AA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 01:18:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEAA89094B5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 01:21:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4444B21A48
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 23:18:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 586F01F23E05
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 23:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD37419005B;
-	Fri, 14 Jun 2024 23:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A3D188CA0;
+	Fri, 14 Jun 2024 23:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KN0preVS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WEIlC0cb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB7818FC6C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 23:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39CA186E3C
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 23:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718406619; cv=none; b=VZLWRiWiA2eXdTJG0HYi+kPA5iZnY8F/LpiUzcfWDcTzFG3B765QV+w1ofhUEyZ6ziIGyNSgvVLw4R4M2wmebzJxMeQILPKH/1OV6Zl6out5OwzECwtC2RzmY/BRVtK9DX0uM2BvU4wSpWQ1+ktf+3jY83zZHooNTd1hN5Df+fs=
+	t=1718406972; cv=none; b=lEedayDSxU08c6+lSWT9n69NxKdxV5dMwKjs8DPyQSCml/R2HOO5V6ZEF+jlIVuqauhsPwLd9HBbSNekEe+j4Bh67FiRgs+lCRGXutfQWaueO08mglKHQGsdFfVuZrGt65IDKcWproX/212d9FoDhRrsvfwvJkIqK2n+Oj8Yzl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718406619; c=relaxed/simple;
-	bh=HBZ8c72MkYU8netKasktWfqGShzs0OT54b/QhebpP2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cdvvpAz6GgOxjxSCCY10hfaM/jjdDa25e/LMmx7c0yDyQn2kKjOE81xIJvsouIYkTKszzqSpWKgZQ67XIlohjUt+Eb5jVncc8foAMHjUC4YBEV1k4M5Fmb1Vwl7eLgIfl9P2bpm/tQaTWQvtkJs+YQDwvf6+bthW5ZK44zAFagY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KN0preVS; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1718406972; c=relaxed/simple;
+	bh=1PXiu3XyrGn6eioRMQi+2p0r/15GuzVsN093zgKL+z0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cRak18Ofc2rigaWnCxgeho+2+5Yqb9SzovV8BmlFF1kOPgOQFmeWQ2lcxi8KdaCaUPUrEk9ILRYzhfIWCg+XZdhDkTcZn1mQHQD/E8ddLLu3heUkvOEAxCLSJxqtBCIUc9G11/nJZ7ethrMNWFIgygpEIq+4yVZ1BsmrnnxeBIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WEIlC0cb; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1f70c457823so22893835ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 16:10:17 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-35f0d6255bdso2398485f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 16:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718406616; x=1719011416; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLrLbkLvm0tzY1MpEgPbssfKu8Uj01vCeIVrV1R6cSw=;
-        b=KN0preVSUBg8oW44G6gLpUTyabnGj+IwrbB483ZUWb8jirmE32n2xp5Q4nzoaYzPBR
-         pjhvSVVB41tgPACvUACPafFHctssUpVZcH/PxLI1bzTkgA/Z73FCC3WRDULPxpgfNw3l
-         qY+/9+pNBCx+UvaFKVK/An9xf3CA5+smhOCbYCk3xoE9hXKwC2qUDPr2ajGCJ5zSAvfL
-         bEMIx4T3jcwtXRnOCn/IR/G3Bc8xCzYMCH8KmDojGU6qPUAGkDAzytZa7/3ptyQXUfrt
-         rLeK8p5Y7u0IQN813j1+lTv3APMYDmkdEXkL87OUXCsSIJ8Mlo6DMPdtTSaamPShm/x/
-         jBiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718406616; x=1719011416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1718406969; x=1719011769; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MLrLbkLvm0tzY1MpEgPbssfKu8Uj01vCeIVrV1R6cSw=;
-        b=Clt76L9PL693wEBxBA2qKiM4VGtJ5Hz/HLddnoDUsG43pKLlPc1c1l6cKOwoo0y3eB
-         suJs0hw8GWkvMp+RnGGTZbrk2sO0Qt+MZZsOmzXetO5CAVNdqc3LBECkfZSIYka8Gfw3
-         G2mOiBGiviGBU4uBwWRZCw7jqUyEDHahNPVTIT/3i+7sq3BQf6156+XhLbfvEeZkf4Pk
-         9dc6ApjFkBhNV2rOzBt/TumbGE6kfSceYZ1nV+D7Ka+6rrpK7MP3z0+sNCzi2L24rVaC
-         lnTx2dBGAzhwoB5QNlw/5jnraHkptPfAkS3W2iC7w4IGMDfRMcSVevMXk3tLQxkZc3GQ
-         YG2w==
-X-Forwarded-Encrypted: i=1; AJvYcCX+LLzJaz8r5O6PY99dOgAJ9IuDhj71C8a/wHmuEyEVr5yBVZ/12Pkhqme2citD9MwqKKYYkSv2lmC3bktR1QLlG6NnUyOocvqoI/iK/sU4
-X-Gm-Message-State: AOJu0YziEyDrw9OXm75UhW1VlfN7NWciODYVVEmwZH1JCZuVzO33ino6
-	UGN/F1pMxcw3qaHE/TSIlyB3OQKJTBGpikwjZB1R31E5od/EoHBTqE7QqwZTXQ==
-X-Google-Smtp-Source: AGHT+IFcGsUH/QLxSXoL5wsJjIp8jl2vBep3vY4YHvN9/DueuGnm24AE2rupPbUPlpI7DAnWqNrRNg==
-X-Received: by 2002:a17:903:32c9:b0:1f4:7713:8f6 with SMTP id d9443c01a7336-1f8629fb039mr39146585ad.52.1718406615926;
-        Fri, 14 Jun 2024 16:10:15 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f485ccsm37485285ad.279.2024.06.14.16.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 16:10:15 -0700 (PDT)
-Date: Fri, 14 Jun 2024 23:10:12 +0000
-From: Carlos Llamas <cmllamas@google.com>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2] selftests/vDSO: fix clang build errors and warnings
-Message-ID: <ZmzN1CBv5j9YV543@google.com>
-References: <20240527211622.290635-1-jhubbard@nvidia.com>
- <ZmiXqOHYaLLX557z@google.com>
- <2461f002-fdd4-4bf5-b797-827069cafc4b@nvidia.com>
- <8a6f384f-02b7-4a0b-90dd-e6843909e8a9@nvidia.com>
+        bh=LahH6YvliG7eYlUbvikNbUEjbap7UqWjJYCEVPQs1io=;
+        b=WEIlC0cbjlsU29zG3suUH6LAoVVZBEU9a+RoHqxwLlF9WMXTCvBWjj1O+m4cr+MgF3
+         NSR+KXgyc8tId+UVSbfEIa9SxnD37TvpMnLBEGjDioXbj014iJ6P97MiaV51zK3EE3gi
+         mW4zpXDK3IVxEi7JhHUS8gCaqWE4hcrLMc2Q9sYOonHEgYT01uvld8OA0wIFpokNwGEm
+         lZBuJmyS2RAGZpBRRngt5hMaONIkjxYiyrViMmnv7j/b2rCD4qfyyJHEZFZM2qCp7BHd
+         fXv4ZhJ1cn/uE26Le/5pQG4vfkxEh4lRI2RXkYeihAMRDLHKp5pLVU7EdiGS4UkeNO8m
+         W2nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718406969; x=1719011769;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LahH6YvliG7eYlUbvikNbUEjbap7UqWjJYCEVPQs1io=;
+        b=lPgqE0PP8sooERkNJ8it5tI1p3M+4Wb7cqVpsU/fl6z5kew9J1IJMwcTrAipKJwIkQ
+         mVaNbIffP0kscaEXArM6HhWTLMvkf60hqPvktu8ldnVdvUKDM+TpfHS/vrJKORcM5Lq8
+         n6DPf0jCdie9Zyh3m8gmSmjzqZ8q311uHOP+/pVcyOmG7Yic3+/SF3EPlws9MeYYngzp
+         ChYnpP77l9sn4YYNBzoZE1zNntu9sjkibgZ8trd72Fk1YEe5Nn7XCKwqygNaHL058XNJ
+         r0Cd7/cFCtw3X8R9fxHqfBPUKTADx69XjvE018Ats2qPM1kybeTOMrFe7VDpfwWZ1ewz
+         g+NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfbmxbvGeQ2ovbpF8wssIqkzHv/qSnwDlTJArvbws/isR6THyv4CsQxnmrdYi8+TfK+J1mNjWeZcr3gdng+nx3fqr41gOXgQAgBvFp5j40
+X-Gm-Message-State: AOJu0YxxVh+oKtXKTjw3r3OIqa1jaU3wtOCqBLVwT31+kxczU0U68Eqq
+	L+SWHxSOEJajzVXr2YcWRC24wPDF+1bXSwlNcZn8lIHmDWzE8yk/6tZcjD/vqV4DjMi+KMd1FYz
+	vY1sK3p8WI5ZwJDo+sa8n+bo2lAL0IAufN6O5
+X-Google-Smtp-Source: AGHT+IGSGeWdWrHeyLBhi8ahJUOIBOV4p81XB0K8UtbxXZp0W1Hbsh5/A+lYxE2gXbWBKN4sXqq0XRi16MlYhpjbjow=
+X-Received: by 2002:a05:6000:4583:b0:360:8768:8dda with SMTP id
+ ffacd0b85a97d-36087688e20mr695294f8f.7.1718406968805; Fri, 14 Jun 2024
+ 16:16:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a6f384f-02b7-4a0b-90dd-e6843909e8a9@nvidia.com>
+References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-4-jiaqiyan@google.com>
+ <9461874d-e2d6-25fc-813c-9c9bb0ad1aec@google.com>
+In-Reply-To: <9461874d-e2d6-25fc-813c-9c9bb0ad1aec@google.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Fri, 14 Jun 2024 16:15:56 -0700
+Message-ID: <CACw3F525-4w9N5wSVrbTnSz=g=4SxvXD=dWL9nsf1iQuaYj8OQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] docs: mm: add enable_soft_offline sysctl
+To: David Rientjes <rientjes@google.com>
+Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
+	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
+	corbet@lwn.net, osalvador@suse.de, duenwen@google.com, fvdl@google.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Lance Yang <ioworker0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 14, 2024 at 03:56:01PM -0700, John Hubbard wrote:
-> On 6/14/24 3:51 PM, John Hubbard wrote:
-> > On 6/11/24 11:30 AM, Carlos Llamas wrote:
-> > > On Mon, May 27, 2024 at 02:16:22PM -0700, John Hubbard wrote:
-> ...
-> > > Reviewed-by: Carlos Llamas <cmllamas@google.com>
-> > 
-> > Thanks for the review! I have no earthly idea what will happen next.
-> > I'd like to hear at least something from the maintainers about their
-> > intentions here.
-> > 
-> 
-> In fact, I have two more patches for vDSO (these are separate issues,
-> for the Makefile), and I just noticed that there are several accumulated
-> Reviewed-by and Tested-by tags on this patch here. So I think the way
-> forward is this:
-> 
-> I'll post a v3, with three patches for vDSO selftests, and the latest
-> tags. And let's see how that fares.
-> 
+Thanks for your questions, David!
 
-Yeap, a resend would have been good. This time it might be best to bring
-Andy and Thomas in the loop too.
+On Tue, Jun 11, 2024 at 5:25=E2=80=AFPM David Rientjes <rientjes@google.com=
+> wrote:
+>
+> On Tue, 11 Jun 2024, Jiaqi Yan wrote:
+>
+> > @@ -267,6 +268,20 @@ used::
+> >  These are informational only.  They do not mean that anything is wrong
+> >  with your system.  To disable them, echo 4 (bit 2) into drop_caches.
+> >
+> > +enable_soft_offline
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Control whether to soft offline memory pages that have (excessive) cor=
+rectable
+> > +memory errors.  It is your call to choose between reliability (stay aw=
+ay from
+> > +fragile physical memory) vs performance (brought by HugeTLB or transpa=
+rent
+> > +hugepages).
+> > +
+>
+> Could you expand upon the relevance of HugeTLB or THP in this
+> documentation?  I understand the need in some cases to soft offline memor=
+y
+> after a number of correctable memory errors, but it's not clear how the
+> performance implications plays into this.  The paragraph below goes into =
+a
 
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+To be accurate, I should say soft offlining transparent hugepage
+impacts performance, and soft offlining hugetlb hugepage impacts
+capacity. It may be clearer to first explain soft-offline's behaviors
+and implications, so that user knows what is the cost of soft-offline,
+then talks about the behavior of enable_soft_offline:
 
-> thanks,
-> -- 
-> John Hubbard
-> NVIDIA
-> 
+  Correctable memory errors are very common on servers. Soft-offline is ker=
+nel's
+  handling for memory pages having (excessive) corrected memory errors.
+
+  For different types of page, soft-offline has different behaviors / costs=
+.
+  - For a raw error page, soft-offline migrates the in-use page's content t=
+o
+    a new raw page.
+  - For a page that is part of a transparent hugepage, soft-offline splits =
+the
+    transparent hugepage into raw pages, then migrates only the raw error p=
+age.
+    As a result, user is transparently backed by 1 less hugepage, impacting
+    memory access performance.
+  - For a page that is part of a HugeTLB hugepage, soft-offline first migra=
+tes
+    the entire HugeTLB hugepage, during which a free hugepage will be consu=
+med
+    as migration target. Then the original hugepage is dissolved into raw
+    pages without compensation, reducing the capacity of the HugeTLB pool b=
+y 1.
+
+  It is user's call to choose between reliability (staying away from fragil=
+e
+  physical memory) vs performance / capacity implications in transparent an=
+d
+  HugeTLB cases.
+
+> difference in the splitting behavior, are hugepage users the only ones
+> that should be concerned with this?
+
+If the cost of migrating a raw page is negligible, then yes, only
+hugepage users should be concerned and think about should they disable
+soft offline.
+
+>
+> > +When setting to 1, kernel attempts to soft offline the page when it th=
+inks
+> > +needed.  For in-use page, page content will be migrated to a new page.=
+  If
+> > +the oringinal hugepage is a HugeTLB hugepage, regardless of in-use or =
+free,
+>
+> s/oringinal/original/
+
+To fix in v3.
+
+>
+> > +it will be dissolved into raw pages, and the capacity of the HugeTLB p=
+ool
+> > +will reduce by 1.  If the original hugepage is a transparent hugepage,=
+ it
+> > +will be split into raw pages.  When setting to 0, kernel won't attempt=
+ to
+> > +soft offline the page.  Its default value is 1.
+> >
+>
+> This behavior is the same for all architectures?
+>
+
+Yes, enable_soft_offline has the same behavior for all architectures,
+and default=3D1.
+
+It may be worth mentioning that setting enable_soft_offline to 0 means:
+- If RAS Correctable Errors Collector is running, its request to soft
+offline pages will be ignored.
+- On ARM, the request to soft offline pages from GHES driver will be ignore=
+d.
+- On PARISC, the request to soft offline pages from Page Deallocation
+Table will be ignored.
+
+I can add these clarifications in v3 if they are valuable.
 
