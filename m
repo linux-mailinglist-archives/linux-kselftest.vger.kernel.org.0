@@ -1,200 +1,162 @@
-Return-Path: <linux-kselftest+bounces-11924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23BF6908ADB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 13:32:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79490908AD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 13:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A27302883C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 11:32:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 075B81F21209
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 11:32:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F153F195969;
-	Fri, 14 Jun 2024 11:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F06A1922C0;
+	Fri, 14 Jun 2024 11:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lb9gJZwF"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rxtRXEBE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mJ4LRxTQ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rxtRXEBE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mJ4LRxTQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703ED78C90;
-	Fri, 14 Jun 2024 11:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8253378C90;
+	Fri, 14 Jun 2024 11:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718364771; cv=none; b=tMXdKd/xphvahM+KAo3T4zKEdm3knh98DWtGpoZStCgBAJOiLRg+O8ludx2SepqmMg3zdoLB/wfYZ13nMpdIR38ES8rrB3/H1WHEskydDDQlr6J9yCH5dWY66uiPECr0xzVCTSjqgTvsrctQhwpaogzj7EQc7IgZGEQrM9ZVtOA=
+	t=1718364770; cv=none; b=H3hqs2vynxyi13c3RYPywesp4stv6iNBazTWm/ciAoCrWxT/cfPKwIYWLm+smmEgCrlLE1JQrKYtebRLW/lio2iB9PCBn/CSdyYSGS078iWwCQ8+rNvaOb3mW8zzTMn7xcbxxOtmYNZyJC9lCdg1bpIFAXZBLaaPv+ygwfWa/QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718364771; c=relaxed/simple;
-	bh=BZxQFdVeG2QT4ILRMGsZqQyCOlQ7KBcsO2feZ2kEUnE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BYMjed0XbC8g4Ps3uOkxNb2mLjF9ONinZNsDCZF8DTE6puCds4BJQ+b/27qui/ljbJQ3DP9BwOwVi/8cuG39BlUV7Fq0d8HWrJxr5Trzcnp2hRSCeBUry7t29L+8DULPUpXBpkKAoW7tvCU1EOk2Rxfd35MEsZKk5gREq827Ckk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lb9gJZwF; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2547e1c7bbeso993612fac.2;
-        Fri, 14 Jun 2024 04:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718364769; x=1718969569; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eEf7gvt8spx/WQGM8gzqsUzpDdVScLyfQu5pad8/08k=;
-        b=lb9gJZwFVst+oCJbvuSIl8UjtLDgsCDR3mTnL3HrL81nB98jNpATEVy1bfNV2L2aW5
-         39R/gAAugqZ//48eX9P48N1m2yO8OvCnrB1TQzGzum9nOEgCOFL9sKQy67DrYGFz+GGx
-         RD/4P7dYqur/GnbFL930MQoOk03sLJBL4jmjCrmBhXAO1yQ8S9PsS5P/kd6UESjqtmEX
-         EwvYmgRiOVQtCZq6zj1RnsF9DYCH5n5BCeTQ8plcX41qm5L+yZ7a5iUaGOFm84k9qp5F
-         aQPHKjQ5BEYTHfjJKEnVcL0drXx7UIfO+FlAFglh/KQAZMTI5M2js+COmr/BUPwexVTm
-         oG4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718364769; x=1718969569;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eEf7gvt8spx/WQGM8gzqsUzpDdVScLyfQu5pad8/08k=;
-        b=e8Wxi5vRn5CRaVlkfoJmsZ+UVSxoS9r3kVTiLaO274SqSwgIhhObU+zF5AsoiadeMF
-         ysYykb7Sm/9Rp0BfpcN9/eXGnDK93g0tT0ExayUjFs8ovMCvJYMVu1qKBOthzoTzMQd2
-         qsxgN+y9W4aI75u3RzJG/z2GRAfOMXEyc9gLhTYS+XHSX63mhEU6ohfMcKaJGjxkoDn/
-         YsOV3HYAh2sw/FsXnwYLRjvUo13EA0+5u8/1Hm4TxboMi5pmu7Omal0m7gorjLMxAP4c
-         OA9J0DOReOs8SdYYPnh0T8NsrTtOXbcG8FhS8bILzYi5504z4mH1cEc+m1ndZ7SvLik+
-         4LNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBDgDThT0cY+KHXpsMHH6b5T88Cu1WzWjucoa1KiQ5MyLfgTOB3x3YB8EHZ/TWpTxUgOtyhg9Q2h6fELbg/reYOvz7JCjLDwQiszD59GJU5kgFDsY/Uoa8MeIE2ZxCpmmHtctqGWREIlvkoO4By1VyblkZJDQDrgLWN18BRfgWCXWs/MQ6
-X-Gm-Message-State: AOJu0YzC0oLxmY6KaARUkvSdKfZIGTjBbZktem40Fx3D6zbAA0dn5oKr
-	geRp4zG36szlDZJNK4uRmocmlr4eidvaV5hBGg6WMkcBZMFdFJSc
-X-Google-Smtp-Source: AGHT+IGWbIK7SenoDtzFtCrqP2fbskbuS12NCnmeZb5JH1qUBznPIz22Vy037PSvdnlOhNciw6zXwg==
-X-Received: by 2002:a05:6870:1488:b0:254:8e90:2d19 with SMTP id 586e51a60fabf-2584288bdb7mr2467251fac.4.1718364769311;
-        Fri, 14 Jun 2024 04:32:49 -0700 (PDT)
-Received: from dev0.. ([49.43.162.104])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705cc91dc0asm2841474b3a.34.2024.06.14.04.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 04:32:48 -0700 (PDT)
-From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: kuba@kernel.org,
-	horms@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com,
-	jain.abhinav177@gmail.com
-Subject: [PATCH v3] sefltests: net: Add on/off checks for network interface non fixed features
-Date: Fri, 14 Jun 2024 11:32:40 +0000
-Message-Id: <20240614113240.41550-1-jain.abhinav177@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1718364770; c=relaxed/simple;
+	bh=NBtEaNmbsTJCymlIquc1Dvbcv407nCNkYKp41aRNGvE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RAsXx3TVuluRlItJ7o2A/VI2yFX+Jxv5JmaCpsU5kjIof1q/fGRiUgMZ1WygvlG67RXjZSGBXvODu6ddxQEWClOccOKv7knA8hqxWHy86/nJt/KXvkMetU7HGR7bcyxRcG2vdSRp6uREsIdmgvWCDg+lXO9+WQ/qD7UMQFyVR/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rxtRXEBE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mJ4LRxTQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rxtRXEBE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mJ4LRxTQ; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 727E6203F9;
+	Fri, 14 Jun 2024 11:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718364766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=rxtRXEBE3JaPBn7JCQhg+74yRHKSETDEvAyNqHn5DDe36tqdLbQOh1j534eX9oDWCwZh1q
+	pICdipMedjigW0tl6FVonbClP+v9LAhQmRtwQtKs1CXjBfOlzWcPL9QuTvatOEchizcVCc
+	3cYjgL3In8wjtJ4YW3CmG3xhbdfreUg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718364766;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=mJ4LRxTQDsKEUyNntf2LbX8m5+oT+UYOHiOgxMZrbz2VVsTzi4jf596/moeR+fVZasDFF7
+	kRYOvDD0oB4MrsBA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718364766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=rxtRXEBE3JaPBn7JCQhg+74yRHKSETDEvAyNqHn5DDe36tqdLbQOh1j534eX9oDWCwZh1q
+	pICdipMedjigW0tl6FVonbClP+v9LAhQmRtwQtKs1CXjBfOlzWcPL9QuTvatOEchizcVCc
+	3cYjgL3In8wjtJ4YW3CmG3xhbdfreUg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718364766;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OHfqrYa/9tev/K9EyZaq0Uq+1EvUZ06X32SKQIlbZpo=;
+	b=mJ4LRxTQDsKEUyNntf2LbX8m5+oT+UYOHiOgxMZrbz2VVsTzi4jf596/moeR+fVZasDFF7
+	kRYOvDD0oB4MrsBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3B7A713AAF;
+	Fri, 14 Jun 2024 11:32:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id PIIbDV4qbGYfGgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 14 Jun 2024 11:32:46 +0000
+Date: Fri, 14 Jun 2024 13:33:10 +0200
+Message-ID: <87h6dv92tl.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: testing/selftests/alsa/mixer-test: 10 failures on Dell XPS 13 9360
+In-Reply-To: <c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
+References: <1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de>
+	<87cyp280yw.wl-tiwai@suse.de>
+	<21f73368-5db6-49a1-b8b7-9b06e698327a@sirena.org.uk>
+	<878qzp97qh.wl-tiwai@suse.de>
+	<c9707ade-bd43-419b-8959-0b45d572facd@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-This patch addresses the TODO (add non fixed feature on/off check).
-I have tested it manually on my system after making changes as suggested
-in v1 and v2 linked below for reference.
-Patch now restores the features being tested to their initial state.
+On Mon, 03 Jun 2024 13:38:18 +0200,
+Mark Brown wrote:
+> 
+> On Fri, May 31, 2024 at 08:06:14PM +0200, Takashi Iwai wrote:
+> > Mark Brown wrote:
+> > > On Fri, May 31, 2024 at 05:17:43PM +0200, Takashi Iwai wrote:
+> > > > On Fri, 31 May 2024 07:50:33 +0200,
+> 
+> > > I would say these are all bugs, they show the driver not correcting the
+> > > value and allowing users to read back out of range values that were
+> > > written.  Even if the driver is accepting out of range values I'd expect
+> > > it to transform them somehow when storing, the program will accept a
+> > > mismatched read when testing this case but it will complain if the read
+> > > value is not valid according to the control's info.
+> 
+> > Ideally, yeah.  But it's a whack-a-mole game, and my gut feeling is
+> > that it'd be better to enable the input validation globally, something
+> > like below.
+> 
+> Yeah, I mean I tend to think the whole accepting invalid values thing is
+> questionable to start off with so I do think that's a good idea.  That
+> said we probably should still be fixing the drivers as well.
 
-Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
----
-PATCH v2:
-https://lore.kernel.org/all/20240609132124.51683-1-jain.abhinav177@gmail.com/
+OK, I'm going to submit a patch set for addressing those.
 
-Changes since v2:
- - Added a check for netdev if it exists.
- - If netdev doesn't exist, create a veth pair for testing.
- - Restore the feature being tested to its intial state.
 
-PATCH v1:
-https://lore.kernel.org/all/20240606212714.27472-1-jain.abhinav177@gmail.com/
-
-Changes since v1:
- - Removed the addition of tail command as it was not required after
-   below change.
- - Used read to parse the temp features file rather than using for loop
-   and took out awk/grep/sed from v1.
----
- tools/testing/selftests/net/netdevice.sh | 55 +++++++++++++++++++++++-
- 1 file changed, 54 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/netdevice.sh b/tools/testing/selftests/net/netdevice.sh
-index e3afcb424710..d937d39dda6a 100755
---- a/tools/testing/selftests/net/netdevice.sh
-+++ b/tools/testing/selftests/net/netdevice.sh
-@@ -104,6 +104,20 @@ kci_netdev_ethtool()
- {
- 	netdev=$1
- 
-+	#check if netdev is provided as an argument
-+	if [ -z "$netdev" ]; then
-+		echo "No network device provided, creating a veth pair"
-+		ip link add veth0 type veth peer name veth1
-+		netdev="veth0"
-+		veth_created=1
-+	else
-+		#check if the provided netdev exists
-+		if ! ip link show "$netdev" > /dev/null 2>&1; then
-+			echo "Network device $netdev does not exist."
-+			return 1
-+		fi
-+	fi
-+
- 	#check presence of ethtool
- 	ethtool --version 2>/dev/null >/dev/null
- 	if [ $? -ne 0 ];then
-@@ -124,11 +138,50 @@ kci_netdev_ethtool()
- 		return 1
- 	fi
- 	echo "PASS: $netdev: ethtool list features"
--	#TODO for each non fixed features, try to turn them on/off
-+
-+	while read -r FEATURE VALUE FIXED; do
-+		[ "$FEATURE" != "Features" ] || continue # Skip "Features" line
-+		[ "$FIXED" != "[fixed]" ] || continue # Skip fixed features
-+		feature = "${FEATURE%:*}"
-+
-+		initial_state=$(ethtool -k "$netdev" | grep "$feature:" | awk '{print $2}')
-+		ethtool --offload "$netdev" "$feature" off
-+		if [ $? -eq 0 ]; then
-+			echo "PASS: $netdev: Turned off feature: $feature"
-+		else
-+			echo "FAIL: $netdev: Failed to turn off feature: $feature"
-+		fi
-+
-+		ethtool --offload "$netdev" "$feature" on
-+		if [ $? -eq 0 ]; then
-+			echo "PASS: $netdev: Turned on feature: $feature"
-+		else
-+			echo "FAIL: $netdev: Failed to turn on feature: $feature"
-+		fi
-+
-+		#restore the feature to its initial state
-+		ethtool --offload "$netdev" "$feature" "$initial_state"
-+		if [$? -eq 0]; then
-+			echo "PASS: $netdev: Restore feature $feature to" \
-+				" initial state $initial_state"
-+		else
-+			echo "FAIL: $netdev: Failed to restore feature " \
-+				"$feature to initial state $initial_state"
-+		fi
-+
-+	done < "$TMP_ETHTOOL_FEATURES"
-+
- 	rm "$TMP_ETHTOOL_FEATURES"
- 
- 	kci_netdev_ethtool_test 74 'dump' "ethtool -d $netdev"
- 	kci_netdev_ethtool_test 94 'stats' "ethtool -S $netdev"
-+
-+	#clean up veth interface pair if it was created
-+	if ["$veth_created" ]; then
-+		ip link delete veth0
-+		echo "Removed veth pair"
-+	fi
-+
- 	return 0
- }
- 
--- 
-2.34.1
-
+Takashi
 
