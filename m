@@ -1,104 +1,163 @@
-Return-Path: <linux-kselftest+bounces-11943-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD8F908C13
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 14:53:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D337C908C3C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:06:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 459A11F27A3F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 12:53:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CD6A281F8D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 13:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094FB199EA2;
-	Fri, 14 Jun 2024 12:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F727196C7B;
+	Fri, 14 Jun 2024 13:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Psl1aZww"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="N/RJTUIx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531B5195F1D
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 12:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486B01946CF;
+	Fri, 14 Jun 2024 13:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718369611; cv=none; b=u58sRZ2iOXYP9EQJxLJCqnBrsUMjSWkOyPsOe+bCTtjNFVGLgxYXsGhmk3gskhP2lo3A0d6+7UQuQ9hsM3THrT3f8A8dIp36cWYCTCDiZQ2fk5WrNc5rrNhtbm4u6c/2qWBg1gXJGFk1TP2g7BEwbKqotvNuYCCyPgdzEqXLuCk=
+	t=1718370398; cv=none; b=a0Ha6GW7a003oDsQoYf345KKny+Fy0fZOUAsyC79WfG983+7zU7WpJthMKieKqqKaBxJQaSGvMYjzST7bzOs8RQKV1mBhTDzE65WSRnVlguzQzvtZwy3wN6hci1k8Rj08qVnzjwDBIW95pe6Tma0IycvmLkxjvrN9x1MydTE4ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718369611; c=relaxed/simple;
-	bh=IjjAwUBZev5pXBrNN6OXYQrTj6ZG0bm1/jBwSbAoyHo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J/ojOLOFVRxk6AiseLyOwLJ2rm+UEq6OeWo0EKGBXYgsDdp+I3eYltTQBgtevkMHNRpY7Q40wGm4EPjwla0hFU7mVrr2LFTWQ5rPmD7DU0bwTNFY3vP+slH/iw+xOKsXLZG3aBVyfPMXkOamXn7sW+erpBPlNgRGsgqaE5coTSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Psl1aZww; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-57c73a3b3d7so2335896a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 05:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1718369606; x=1718974406; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AoilSNR0Zv9v33itSh5XbUtg3+zoaXog3gNUXdNH/44=;
-        b=Psl1aZwwmuIFW/1zL6zAJ3Y6G+Bq9Yhaz2cbFzQe3vqU9hla9djXlNA6VyVIY6rhGt
-         XcN9OzuSoEDQHD3n5R+I8ZZwvlmBAazFXgPMAAm5Sa8B26Xb9b/rvhmFvTNjAhG+Mt7N
-         MtuM5DY6VpWvcBpbQRmDfupShS72eWGsF8Hz6zQNm9Ved8+a7kx36slyLHQq9TOioRZw
-         koSRw9HXsg8sEpbMVAsJJHhobUYoZ/iZwen1PkPELeHSIMRhv3nYTBa15YeDsAhCb6ze
-         JM0emCQbVxOOF8+S+CLSz6v5ApvAbicHSU/VsIMBZFr/CpB/51hxx8idw8O8SQqguXCo
-         18qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718369606; x=1718974406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AoilSNR0Zv9v33itSh5XbUtg3+zoaXog3gNUXdNH/44=;
-        b=QboExOPHuCtVI2wSCTWqGRVq8WI+RWLoPrEGI9nmWxBkr/3rDr/8xFYIFTuqweoBos
-         KZz1VScojo1G7NFOSc4bRFZE4dhdkNw200LpYJwujaHfVg6csU0mEWn5uap5A5p/63IU
-         IS31CA2Tpu0HktD1Nmhr9w1h5XcaKn35LhF0dJe9GARF60AlI0/L7RPCNFNnxtOuJZJL
-         +rInQzAeGAkG9osU8D9LJ7dYrIBkUwKWPngSvoPj4f6RHBv3T3C1Jd03ePeXVZoEKWHO
-         7tcBhAg/LFeHke9EH18zLqhMS3xt+zhVHaBvss4rjGX7BcPfCh1bKkUlJMfrU3TCOoO4
-         krpw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8SP2js90SVitXPFqH5XSOpgWsr7MaFVUVthfYbkzbDLad/0LBolGd+L4ghaFvi33oEC9KjVgykFWmSv7MnWnQL3lNDwCSnnKZyT2/gkkJ
-X-Gm-Message-State: AOJu0YyFQrLeG3WDrNG53JQlF6Jy1pu9fiHpzsoxymwP7qZFIll+DsO6
-	JAsPRd3+wWcWVfEPgkGXxRiw82sAfLB4sNvMgIAJxqwqdNMQ1nWAcp195yJ7x0w=
-X-Google-Smtp-Source: AGHT+IGUus8CsHftN39O9H3qVE2BWyF8K5O66Ib/Z5sLKQuE1yqYOfnw41+llGSpUsXUjxyHYw7cvQ==
-X-Received: by 2002:a17:907:868d:b0:a6f:1285:4950 with SMTP id a640c23a62f3a-a6f60d20434mr184216566b.17.1718369606586;
-        Fri, 14 Jun 2024 05:53:26 -0700 (PDT)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f416dfsm182365366b.164.2024.06.14.05.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 05:53:26 -0700 (PDT)
-Date: Fri, 14 Jun 2024 14:53:24 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Ryan Sullivan <rysulliv@redhat.com>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mpdesouza@suse.com,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH] selftests/livepatch: define max test-syscall processes
-Message-ID: <Zmw9RFNjQjqIR4ro@pathway.suse.cz>
-References: <alpine.LSU.2.21.2405311304250.8344@pobox.suse.cz>
- <20240606135348.4708-1-rysulliv@redhat.com>
+	s=arc-20240116; t=1718370398; c=relaxed/simple;
+	bh=uZ9xb5uVhAay2TCN/oHcQp1dd793QmrmYrMjp20edjA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nh7jq690k9KlOAREjvo/O3nBfVRxkJlU7nwGh9w0zqB2uv+c2V8ZM6rNVqSpIDMz5quCjKWLcNqvaR4HdzWX+hzXJbnV84TB8krgBSn0DQpbkKEpgFV+qpLqsG2d7WWEGFpAKTxkyf4C0seCXBy3eijK1+V9uNIBtPEifD44R8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=N/RJTUIx; arc=none smtp.client-ip=77.48.224.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id E82555B9F;
+	Fri, 14 Jun 2024 15:06:30 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz E82555B9F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+	t=1718370390; bh=MklYortutucpnlx9a2+9svUMnbkcQ8sPV/qsn/379UI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=N/RJTUIxCXP8n/FxDdpls8IgwCYPTz8QBQ/pQOpbL6zTndhfHutQytN+1rBjTcJOo
+	 4OJumx2iKNKPRrp5kznA+aS4FcerfpqNuWL4BCUgky1MfmE/IVu0M/N6uUiNkr5jAS
+	 qNtGD//v7+xEfdsjjMJNpz0I4GxUOW09NKXWuxKg=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: perex)
+	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+	Fri, 14 Jun 2024 15:06:25 +0200 (CEST)
+Message-ID: <f7df8606-1697-4e82-bcdc-ef7b595ff83c@perex.cz>
+Date: Fri, 14 Jun 2024 15:06:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240606135348.4708-1-rysulliv@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] ALSA: control: Apply sanity check of input values for
+ user elements
+To: Takashi Iwai <tiwai@suse.de>, linux-sound@vger.kernel.org
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mark Brown <broonie@kernel.org>,
+ linux-kselftest@vger.kernel.org
+References: <20240614124728.27901-1-tiwai@suse.de>
+ <20240614124728.27901-4-tiwai@suse.de>
+Content-Language: en-US
+From: Jaroslav Kysela <perex@perex.cz>
+Autocrypt: addr=perex@perex.cz; keydata=
+ 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
+In-Reply-To: <20240614124728.27901-4-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu 2024-06-06 09:53:48, Ryan Sullivan wrote:
-> Define a maximum allowable number of pids that can be livepatched in
-> test-syscall.sh as with extremely large machines the output from a
-> large number of processes overflows the dev/kmsg "expect" buffer in
-> the "check_result" function and causes a false error.
+On 14. 06. 24 14:47, Takashi Iwai wrote:
+> Although we have already a mechanism for sanity checks of input values
+> for control writes, it's not applied unless the kconfig
+> CONFIG_SND_CTL_INPUT_VALIDATION is set due to the performance reason.
+> Nevertheless, it still makes sense to apply the check for user
+> elements despite of its cost, as that's the only way to filter out the
+> invalid values; the user controls are handled solely in ALSA core
+> code, and there is no corresponding driver, after all.
 > 
-> Reported-by: CKI Project <cki-project@redhat.com>
-> Signed-off-by: Ryan Sullivan <rysulliv@redhat.com>
+> This patch enables the input value validation for user control
+> elements no matter whether CONFIG_SND_CTL_INPUT_VALIDATION is set or
+> not.  The kselftest will be happier with this change, as the incorrect
+> values will be bailed out now with errors.
+> 
+> For other normal controls, the check is applied still only when
+> CONFIG_SND_CTL_INPUT_VALIDATION is set.
+> 
+> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>   sound/core/control.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/core/control.c b/sound/core/control.c
+> index fb0c60044f7b..50890983d7e2 100644
+> --- a/sound/core/control.c
+> +++ b/sound/core/control.c
+> @@ -1317,7 +1317,8 @@ static int snd_ctl_elem_write(struct snd_card *card, struct snd_ctl_file *file,
+>   	snd_ctl_build_ioff(&control->id, kctl, index_offset);
+>   	result = snd_power_ref_and_wait(card);
+>   	/* validate input values */
+> -	if (IS_ENABLED(CONFIG_SND_CTL_INPUT_VALIDATION) && !result) {
+> +	if ((IS_ENABLED(CONFIG_SND_CTL_INPUT_VALIDATION) ||
+> +	     (vd->access & SNDRV_CTL_ELEM_ACCESS_USER)) && !result) {
+>   		struct snd_ctl_elem_info info;
 
-JFYI, the patch has been committed into livepatching.git,
-branch for-6.11.
+The info structure for user elements may be used directly without this 
+intermediate variable for the validation. But it may be a possible future 
+improvement.
 
-Best Regards,
-Petr
+					Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
 
