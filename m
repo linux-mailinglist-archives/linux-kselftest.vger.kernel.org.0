@@ -1,123 +1,107 @@
-Return-Path: <linux-kselftest+bounces-11950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F0A1908E05
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 16:57:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0169908E9B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 17:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 754541C230DC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 14:57:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 707E6288D37
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D181E15B118;
-	Fri, 14 Jun 2024 14:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9583C16B754;
+	Fri, 14 Jun 2024 15:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RqiA2VIr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHpA3rsH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E215EFC1
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 14:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678A015EFDF;
+	Fri, 14 Jun 2024 15:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718377053; cv=none; b=VovI16RsSIReylBo30o9X+Rf721mAV55dMNbkcp/nTEV/DZfh7/3zW1wvP80aVJ57Mq75MdkQjt2G5oiitXvkaFAY8QsT6MsYOcJ4UZZiyxjwBU9yCx12vXotuiBuZyiKWlJc9gHyxSd5GMpA6HIBmqCAMszB0XW2tDz1FRKLio=
+	t=1718378618; cv=none; b=D9/mxI0VvFOxka9tDBDs9Zg/XStgKQjLzz2tRgKYy/xQe8+Rsk6vSC5xX8Mfm1AYJa11A9vS4gyd5q6HsDe+ic7WtwzJsoAbZGbrQ5q2GbmQZ+6YZfL82cUUMfbwt1fmH5ymXYaTHUCwrFex+WkffyH8Er2/Xhb8u8XlKkFkA/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718377053; c=relaxed/simple;
-	bh=PDBN7CfZoySclWGICiQXNm0dLSN3WzDrHOHH5KLuTBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gACxzUcDx9NoCHR/mSoUCHY7b4OlkCCPnkiYjJwv8XZFnEgVkhf0XJMTCsuF0il7FJKP7xj0nEJqXxhCWe0qkDiHvwrNMuehwg8VZshAQdCZs9ibrkBmx9Icpp+9RuF6gBxD0Yjm3X463/CFcZQ/D56EmNmx43QPxl88PLliu7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RqiA2VIr; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-24542b8607fso1131828fac.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 07:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1718377029; x=1718981829; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PDBN7CfZoySclWGICiQXNm0dLSN3WzDrHOHH5KLuTBY=;
-        b=RqiA2VIrxAOZYTsqAo8GuIbdlsUvpOHlVWfUE5OZ2lOHx3TehibFiFxCa4fso0dFQw
-         ZdMZAgNLfrA9TEpk10rYcsqx2RmMkBADquXriPe8v0k5UoIjKTl/Lv4jDdQ2BX7K0nUz
-         aE0bhrbcm7wLkCANOH5rpITri/4e+Bd+96WVo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718377029; x=1718981829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PDBN7CfZoySclWGICiQXNm0dLSN3WzDrHOHH5KLuTBY=;
-        b=kwA4xlpY8CcapuMrREn+HSP+A/9PV93lQ3i2+YSo0mJyi3yG+LqzeDZCrj3vYq0WlY
-         XiDT4x1xbfaHf7XFeLOt/TG6588KQsqpX8nJ+vYY9++Jv3r3ZT40xTHxJnAWPLF1BVPh
-         RtLEUHOlkgvnwGXDUNNKAbiM4DZDno3A6L8d4YAMX1BC8Evi5RxTPjTodwH7E55+sGO6
-         rYCpBuLypKEflFJJe5oVBBYCdtq0RvEXeaYWgIF//+6cSkVjh/73oVowhG1LbQ1ZkI9U
-         u+eFebAN/w4DRoDxSneF26D/LnMTqJwr7rfUXlT9QnHzGapi1HQtYLTkLO0+Os8NArRX
-         /Xiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrk/3A4ODGFgDGvV9TVixcIxef8wqwtljb+yNHPlEKTjf8Uy2tJ8Xa+1EGV0GWHG3jq/+c6vcrwFf255pNW8HTQfnoqsBtDGon9zxRQH+2
-X-Gm-Message-State: AOJu0Yw+zVwJ4hFhV1ftbdpi0CA6vrnBn7rXK72jvTaHRIvGAZiDYHTe
-	aS394oIWFXU9nxqfevAIOsSR6VZlC6orQphpKFYJaQr9nGcNONbCSTWCqMbwtYNPquYhD1Z+shK
-	TEUs0FzQMIMcQL388yw23YMLeKYJZdpDtYhdM
-X-Google-Smtp-Source: AGHT+IEUcAWOw1CVNlN0YcNfMetLlCT81YqYJzny/v8B5VIR1b7mnqvJKLKUWEnEomwJ3Vd4mFsoMMwH5EJv6fYqHso=
-X-Received: by 2002:a05:6871:72c:b0:24f:c241:4d16 with SMTP id
- 586e51a60fabf-25842be40f2mr3448708fac.50.1718377029521; Fri, 14 Jun 2024
- 07:57:09 -0700 (PDT)
+	s=arc-20240116; t=1718378618; c=relaxed/simple;
+	bh=D8SdDyZNxqPcDlfI0tBoGYiGmsRowmEdQjGm0ySvkak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gih61EeyzpPTpTGolZy6AdY6oR3N13U0OUOvJDkdHGBPEiUUfhHJydo9EEqyGbbM1OoosqYL5OrVom7wg0J/matmY/mTmVE/JEHknRy57p3WiYRNtloH9sZyL/3PywKKNinytD7C39e3wePuSWemONcwXgeN966M4O/bn67T/kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHpA3rsH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FFA3C2BD10;
+	Fri, 14 Jun 2024 15:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718378618;
+	bh=D8SdDyZNxqPcDlfI0tBoGYiGmsRowmEdQjGm0ySvkak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sHpA3rsHkpa6n6ixnEQO/NMuV/ZkYgZKABpMdhSMNnw5sd8BMJIJmB0IeNM2bVWTV
+	 8pt8diEECJ6RQLI+eaOzpI+0wzuHj1ZcD6cfZVsNNp3j0cIhdH0abpP1MzFw3YS192
+	 Bn0/xMXehyj0xc0h+LCZsMLv/mEFrFFooNnOBORaKEdtGYxj13kFgplmulbDkBr/0T
+	 mqdtEoxMQKPcwdS3fmdGN6hMMGvVw78VY0hxpjnzs3/cdoXFwOOvc9HQYK9k97Jz6i
+	 F9/z3o3bMhh9hJFqjDkkAxwqTG18R57nHz6Y7Gj+mv8P9DdxZazw5cNLSu2e5BrhVv
+	 vgNxLYRGfQFSw==
+Date: Fri, 14 Jun 2024 16:23:34 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	James Morse <james.morse@arm.com>,
+	Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: selftests: arm64: fp-stress: KERNEL-1-0/3-0/4-0/6-0 - gcc-13 -
+ Failed - clang-pass
+Message-ID: <Zmxgds7Ms5K6wmkj@finisterre.sirena.org.uk>
+References: <CA+G9fYtobhBTnH1=2oHxesLfyYd2VGK55nJn+iniWPj2vyNCOQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240614023009.221547-1-jhubbard@nvidia.com> <20240614023009.221547-3-jhubbard@nvidia.com>
- <4c6ffb1e-0381-4d5e-afa2-f8809f0b445f@redhat.com>
-In-Reply-To: <4c6ffb1e-0381-4d5e-afa2-f8809f0b445f@redhat.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 14 Jun 2024 07:56:57 -0700
-Message-ID: <CABi2SkXcb_GaSomWrj+n8tEg-VmR3e5bLpqw0-h9K=6gkiBxow@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] selftests/mm: mseal, self_elf: factor out test
- macros and other duplicated items
-To: David Hildenbrand <david@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Andrei Vagin <avagin@google.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Muhammad Usama Anjum <usama.anjum@collabora.com>, 
-	Peter Xu <peterx@redhat.com>, Rich Felker <dalias@libc.org>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HD+u2jxYKMXTxpY3"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtobhBTnH1=2oHxesLfyYd2VGK55nJn+iniWPj2vyNCOQ@mail.gmail.com>
+X-Cookie: Your love life will be... interesting.
+
+
+--HD+u2jxYKMXTxpY3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 14, 2024 at 5:28=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 14.06.24 04:30, John Hubbard wrote:
-> > Clean up and move some copy-pasted items into a new mseal_helpers.h.
-> >
-> > 1. The test macros can be made safer and simpler, by observing that the=
-y
-> > are invariably called when about to return. This means that the macros
-> > do not need an intrusive label to goto; they can simply return.
-> >
-> > 2. PKEY* items. We cannot, unfortunately use pkey-helpers.h. The best w=
-e
-> > can do is to factor out these few items into mseal_helpers.h.
-> >
-> > 3. These tests still need their own definition of u64, so also move tha=
-t
-> > to the header file.
-> >
-> > Cc: Jeff Xu <jeffxu@chromium.org>
-> > Cc: David Hildenbrand <david@redhat.com>
-> > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> > ---
->
-> Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Jeff Xu <jeffxu@google.com>
+On Thu, Jun 13, 2024 at 07:21:15PM +0530, Naresh Kamboju wrote:
+> The following selftests: arm64 tests failed on FVP-aemva test and kernel
+> built with gcc-13 but pass with clang.
+>=20
+> arm64_fp-stress_KERNEL-1-0/3-0/4-0/6-0 - gcc-13 - Failed
+> arm64_fp-stress_KERNEL-1-0/3-0/4-0/6-0 - clang-18 - Pass
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+This seems vanishingly unlikely to be compiler related without some
+other information suggesting why it might compiler related.  It is more
+likely that your GCC run suffered the very intermittent glitch which
+we've been aware of for a while.
+
+--HD+u2jxYKMXTxpY3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZsYHUACgkQJNaLcl1U
+h9CAWwf/a0pSAw+DbWzM6Fe/PkhNmHLgbX+JX3F3jqYiNkqSry4njPH92PLX89Bx
+1FAcozNEF+GBfOMVJMyv9dkcE+YD8zIOC34vW5VYcHHnSsMXNZT9RrWWs6dWG0LS
+0FqH0mGjAJwk0ainYOBk/d+94Re0NP5vpHIOhqZ+vc+KM5t0bGRV/iIE6xiGlRqD
+40abY7vf9rdtMi+2qMLgR98VHI/32g2W3sPOjQSNogZKkw70s7txIfhoqIyA0WNK
+blLo5P4ehHnFwiq/JnjAtqKjc7Bgbs/l4E51jUDmomJ8LUcDU04MVVNd1WiGPSZW
+7+zPuhIcdrDn/AxrovzeewO1wloBuA==
+=i8mz
+-----END PGP SIGNATURE-----
+
+--HD+u2jxYKMXTxpY3--
 
