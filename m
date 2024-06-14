@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-11959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8F7E908F62
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 17:53:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00C10908F3E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 17:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E047B2FC8D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148B31C20382
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2024 15:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A256516FF3C;
-	Fri, 14 Jun 2024 15:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E394F16A36E;
+	Fri, 14 Jun 2024 15:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="VBY0YdOf"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="o0jd3Zjq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287D915B562;
-	Fri, 14 Jun 2024 15:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD7315ECC8;
+	Fri, 14 Jun 2024 15:44:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718379811; cv=none; b=Gbe1AowC1GdrSMpz1mca14jM4mDIw3FVkP+bTeI6OUA7xd9I/q6Z0l3vtKEv7UdOViFSw0ak2MGaxL/lZkGfdSgyX1eXJ32OApMmx7gUopAIwSO5ghARhWG7K5+bi66BoGRNFXK0YQ3o8LnXWZ3drzLrwAPtjhdH8RHIT4URXUA=
+	t=1718379863; cv=none; b=brlNZRoN0vKQ4x6enS7he3Z29T2R/mO6Fr54vPSx2Mzq3zlq9FMTghJ7FdVkIt3QtKpsOZlSPV4j12Ktq9AQb3Pt+8fltBXviIKaUtYuswOJnL9Se/xcGfivMPUzNFsOJP7D448O8siKg2e7g1InFwSu7nEDST9BCtawC4NwTII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718379811; c=relaxed/simple;
-	bh=gfJh0KLdIBxx/2VO3X8bmJn5G6ZbPkMHhyz/3daS9Jw=;
+	s=arc-20240116; t=1718379863; c=relaxed/simple;
+	bh=/784mX3FdpfJspi5T8/rDU8CVG+q24/rpo7TZ1n7zm8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BEsknU3Z+/cSfQpjwseJmFwkVN1fsib9t3Aoxb+7tf8900+qoeaDgJ+n6BVBQNQMbpY4MfqD5XmDFxZX0OFzNueIaiyh27OIe4VxVSBNFmpadELi3gtOtExURRVF4Y0OxUHk/9lcP7eeD0x3Ez+Mw+J0jqdio94W4RLfxKx0RMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=VBY0YdOf; arc=none smtp.client-ip=77.48.224.245
+	 In-Reply-To:Content-Type; b=WggHG5F1UfSt2Q3dwjFES/BrHQYHYVSQ57QWRXasLEfdMyQz2CZupQ25zSWN7fqlRVluQtB490NXwT4KycdOSF9+hqw9P3d0bm74LGIJj0kX7dOi6HY/HYD0FZYQIiGNk8DgKVzgaNPiptlhHmNvpyNOUtm/2ZpixJHNDYT2Pic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=o0jd3Zjq; arc=none smtp.client-ip=77.48.224.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
 Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 71F386829;
-	Fri, 14 Jun 2024 17:43:18 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 71F386829
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 9926F6829;
+	Fri, 14 Jun 2024 17:44:18 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 9926F6829
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1718379798; bh=pKyCBIG37S95OvjrMPzdQjMyZTMc6DIGXA8JryFQ0dw=;
+	t=1718379858; bh=Hl0NX60AKMldIJ+PeuUEQTYMlolG8hhKWeSTZBDpzbg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VBY0YdOfJvBzekvy8GGq4zvf+yAQdWKahBgZh4kds+Aln5Ep39pBTEKM7JAkT/eiN
-	 hT93yXebUzKsyFCGeFO4zFPLhB1jaAVtt/Q754Vx6mfkeFoTorgHPn4F/d4wQcjY+X
-	 t3IM8YOxLQmscR7dIj1K8YAlFGjkpEhF+yUlufzk=
+	b=o0jd3Zjqw7K+duJ/6BPQqQ8zIPOT1C7guzgA41qJG+BEBv+USX47Hy1H8U2KgPZPM
+	 W85SRdvrbnwlZV/72sEKJdDbBMtSsbLJznPIgGrdI3w42kAHz4FQGbrqlwO/YFiYf6
+	 HrWPELi+yATzbxg0TfFX3OwDlRupu5eJNx031Ksg=
 Received: from [192.168.100.98] (unknown [192.168.100.98])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: perex)
 	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Fri, 14 Jun 2024 17:43:13 +0200 (CEST)
-Message-ID: <8ba92fe6-9382-47ed-9a4d-2affe55ef617@perex.cz>
-Date: Fri, 14 Jun 2024 17:43:12 +0200
+	Fri, 14 Jun 2024 17:44:13 +0200 (CEST)
+Message-ID: <289165bd-af13-4fbf-b1f4-f9539b4d0eec@perex.cz>
+Date: Fri, 14 Jun 2024 17:44:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,15 +57,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] kselftest/alsa: mixer-test: Skip write
- verification for volatile controls
+Subject: Re: [PATCH v2 6/6] ALSA: hda: Add input value sanity checks to HDMI
+ channel map controls
 To: Takashi Iwai <tiwai@suse.de>, linux-sound@vger.kernel.org
 Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Mark Brown <broonie@kernel.org>,
  linux-kselftest@vger.kernel.org
 References: <20240614153717.30143-1-tiwai@suse.de>
- <20240614153717.30143-5-tiwai@suse.de>
-From: Jaroslav Kysela <perex@perex.cz>
+ <20240614153717.30143-7-tiwai@suse.de>
 Content-Language: en-US
+From: Jaroslav Kysela <perex@perex.cz>
 Autocrypt: addr=perex@perex.cz; keydata=
  xsFNBFvNeCsBEACUu2ZgwoGXmVFGukNPWjA68/7eMWI7AvNHpekSGv3z42Iy4DGZabs2Jtvk
  ZeWulJmMOh9ktP9rVWYKL9H54gH5LSdxjYYTQpSCPzM37nisJaksC8XCwD4yTDR+VFCtB5z/
@@ -109,18 +109,16 @@ Autocrypt: addr=perex@perex.cz; keydata=
  k8vz1gDNeG7HOIh46GnKIrQiUXVzAuUvM5vI9YaW3YRNTcn3pguQRt+Tl9Y6G+j+yvuLL173
  m4zRUU6DOygmpQAVYSOJvKAJ07AhQGaWAAi5msM6BcTU4YGcpW7FHr6+xaFDlRHzf1lkvavX
  WoxP1IA1DFuBMeYMzfyi4qDWjXc+C51ZaQd39EulYMh+JVaWRoY=
-In-Reply-To: <20240614153717.30143-5-tiwai@suse.de>
+In-Reply-To: <20240614153717.30143-7-tiwai@suse.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 14. 06. 24 17:37, Takashi Iwai wrote:
-> The control elements with volatile flag don't guarantee that the
-> written values are actually saved for the next reads, hence we can't
-> verify the written values reliably.  Skip the verification after write
-> tests for those volatile controls for avoiding confusion.
+> Add a simple sanity check to HD-audio HDMI Channel Map controls.
+> Although the value might not be accepted for the actual connection, we
+> can filter out some bogus values beforehand, and that should be enough
+> for making kselftest happier.
 > 
-> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
 > Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
