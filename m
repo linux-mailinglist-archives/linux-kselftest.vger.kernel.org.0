@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-11993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-11994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 809CD9095E6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 05:37:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344C59095FA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 06:25:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0E831F23A1B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 03:37:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A28A0B2275C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 04:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE4F8BE8;
-	Sat, 15 Jun 2024 03:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2708D8F70;
+	Sat, 15 Jun 2024 04:25:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="fGyk/dMR"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="13YJRHp8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27493D60
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Jun 2024 03:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B400D502
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Jun 2024 04:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718422666; cv=none; b=hVQF9GFnAk8OlI40SDNMRreOPMGxfNeS7wNAex/2uRabJdpNqQOocq+1jPohxQVWq0Ur0xMq8uig8e0fWgCDBjOOi9bEaHULMTcLKaplcZcBC1ZVIQSSibCwPUkiqnPx5GPelAx+0PClv12yxsLIRAlncDhsvl/+EYMpyKqx+hw=
+	t=1718425534; cv=none; b=cWwPLiP2Ayc9V3Efc34MMljw9AVgn65KObswJHWrxIyrw2iUa9dRvP51+gme3dk5qgkw/VRhi0NXSvU4CUs95vB2dTHjQu/ffORwjUxtGVHM2flKeevFfViQqY3ptncWwNyyfXOtQvTv3M2Rk2c+VgIhgAK2H1GYx1neLnyvWy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718422666; c=relaxed/simple;
-	bh=sVMfCiZg94+yWGYZORXG4L9SWFeU0rYgD7CbcubGV7M=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=U7Fv/PlkZenw8TJqgq4w9NjsyaIM+QskcbJXZ5a4h5ojmGMBJOpyu/imHc5CBwSaEAND1xksljnivueSGUoOGj+Ad4ObCDUuMZTQ+CiPInv7YvU4KiTQB/DOuGGLhd/iL0iAOMQzBhVLiSERzOLQSj25EvUvTlA64cTnifOArQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=fGyk/dMR; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1718425534; c=relaxed/simple;
+	bh=Y2r2K3uqXwcy81vdln7C7cr9SzC+/pXN4fc0wgOF+5Y=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=o3R2CuGifptKOfjqscJE5wkyRGbKKkSCge2ztI6XAcK8EOpvHi26cLUXkOwOipe7PG3mruehhiE/gjwDOy3hhXMpPUfA3Kc3uxJ412bas1eVONigDuZIvz8cF3puG2PsWsluZQbtABUgcYaizy4HwTkx/7n4r01LiYnLiihES0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=13YJRHp8; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f65a3abd01so24511375ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 20:37:44 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f8395a530dso25578805ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 21:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718422664; x=1719027464; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718425531; x=1719030331; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=d0jNhvwoBlxRYFAWL2M3fOxVyCzGQcy5b+oObsdvFms=;
-        b=fGyk/dMRqJ0aVILbr6A6uQzXTBKBAXyCu6FODwJeHus3RxaobQWdbwqvL7f1a+dKw4
-         58WlQzosSjL+WzkkCM0mVCdvI2/tYKpRQsZFkF3maFsL5d49AcKnTx6ryHgtIVgFv2aW
-         HHrVHOchkCN2sn3k+O9I60OTB2I6+yweND88GrXE2ZyBiyHKC6G5SsPMWG+IJ6fwqiPa
-         0Ojy1Y5gbw8cLPtL0lbzBQDSMwyk/Yg/NU7s48fBjbnrAfXRW39LoGa8jZvQMfJ8SnPz
-         EUugdJqIWL378DDMxjf5qIpdGeGFC/oDpyQ7w0QnZ2zBQeh4jdPyp3XJgPleCvUz8t9V
-         rGNA==
+        bh=UhpOnUpS0Xo4s3kq4rj/lBrPd+8l/ikkkerNdqkyCvE=;
+        b=13YJRHp816rOLJ6m+sVcwR7+iNAqSKX794ItTOlM9wvCSgN1VA3tzCPBz7bvAIDtB7
+         r7wF4hyEobmzaNeinLErb4USbVORjP13e8n2CE50PUOAzwixk0W2+z+cHfqjJvdaiTPM
+         g73Mw5qY17ulyHeqXxmNnPF5O0+zy2agKMhbjS/6Ialtr408DOP/bAlSFLlfsjauGQTf
+         SSTfHPFa5oMIfQWs2uHqvwhDNZkysdtPEkv7uTbzx5zWXrG+0nbYsHzWhJRASnatZIoE
+         tmGKXgYz6CPaRmPqjs4+lKXaZmfMRPcp2OKvnGRC5lkY/pwR9AMVEYCMdNDC+QrS89Jz
+         5J1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718422664; x=1719027464;
+        d=1e100.net; s=20230601; t=1718425531; x=1719030331;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d0jNhvwoBlxRYFAWL2M3fOxVyCzGQcy5b+oObsdvFms=;
-        b=XdaENVLLgrSrkqb/lvixCKqEQFI88zMmbxi1sdoIi9pTmzMp5Wa3aIEp76Y3oQANNJ
-         fEMeINh1lXj8z48ig8f/TqGnq2gFCAtSGrQIHDmdDEVaY0u6ImbFIQWMoSXMcoHmewKc
-         5L8duUjbLOxJ96UMUts1LPwJiRBw3+7S2NXvi6oXtdl/LHfvCHqP8hkcBqJj8cjWYH+L
-         j0Lsc64V2uU2D7k/sIvGjolz2H3W1GZiZSswqBMbAOxbTmHB2krXshkXntJEOHxxKRZg
-         wcXPy3hYx+eaKYJDe5pLQLxy8x0S7YarZzz+rGKQNSLdmpxcImjymnGdRVJDd0Sq/rN7
-         hTCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVZAct3ilJi0jYupYwxpLDLkJHzg1ZDa4eKHeZzKoAKnmnxMQ98sTniMmstE3oM90VAtZhln3jo2Ep5EMiGSdI9O6a/6QSsUfLDy6nwz5Hg
-X-Gm-Message-State: AOJu0YxzXM3dTqFicB0gU3QKUU78yhiknbnu+xxTS/igUyGGraM18JKb
-	Q9gU4X21ehoWjHY5/v5Q7giU6E/YJDSdjHefftxt1k1QBGEbVGeSFwlFCqaQJdQ=
-X-Google-Smtp-Source: AGHT+IG6Zg3obVhv2P++d1udljt1qMn347hqnqhNk0WDGApChHuDxwWZz5fFkwY7Xn4fKS6wKdFelg==
-X-Received: by 2002:a17:902:da85:b0:1f4:7ee6:af17 with SMTP id d9443c01a7336-1f862a000cemr56726445ad.64.1718422664024;
-        Fri, 14 Jun 2024 20:37:44 -0700 (PDT)
+        bh=UhpOnUpS0Xo4s3kq4rj/lBrPd+8l/ikkkerNdqkyCvE=;
+        b=f8NEehnIpcqKbv18yStD8Lq6GKOafEZMuLcSBBT8InGkf9pkfEoEg3s9bFfV+YRwgt
+         Hf5Kb3wsykJg51odKGze6G2rnhcA2xBJgyoJJ1wqb1OfOJFszWn7HsbFogeYUqnPUnzq
+         LaykCVD3fxhTOhZWi0FP4X9Uc122TyEh+eAEU3CxJ+vNKMrug/P5BYD+06TcOKZ22HwP
+         4FzmOtsDV/HX3kyVk0A9U30sxUwZh6w744Zs70lAqnu4GZ3kLkp7GNKtDhx+N7P/oBpP
+         xVCufIEhMTcBhsbuD/yBpAgqgYiL2bNvSd8//S0op2eemMtKNi0rMKVg5Sru/17MzeN1
+         efMw==
+X-Forwarded-Encrypted: i=1; AJvYcCWheKFPMHleE8e5zyZOO/iCmvtitZnpZmf8c1raOEUZPhVLePBxn0BvLTHu25bT/+qODzF4u+RubRwtyUiyJMpJc2ljIfSDGOuzK9G9zCRy
+X-Gm-Message-State: AOJu0Yy50iKQ8yxgK5jkPMCK7FhhnkJyhXDfCwdrkg9SWZRSL1Dv7UH9
+	CQt3FrcFyDrPsnYvgvaZ5HvnQy1Bd2H/pgBYU4n67kahj+E0lXafdNsHAvlj8hw=
+X-Google-Smtp-Source: AGHT+IEWyiejrzm9pPuyzDS5RHbPkzl/1dU114CKrNt7VEL5FUswR4Vfm6veWjDxj3RV11e7acXJ2A==
+X-Received: by 2002:a17:902:ea07:b0:1f8:3b20:381a with SMTP id d9443c01a7336-1f8626d2519mr50434695ad.20.1718425530944;
+        Fri, 14 Jun 2024 21:25:30 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855e72483sm40402145ad.96.2024.06.14.20.37.43
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855ee6a7bsm40744935ad.159.2024.06.14.21.25.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 20:37:43 -0700 (PDT)
-Message-ID: <666d0c87.170a0220.7dd5c.d09e@mx.google.com>
-Date: Fri, 14 Jun 2024 20:37:43 -0700 (PDT)
+        Fri, 14 Jun 2024 21:25:30 -0700 (PDT)
+Message-ID: <666d17ba.170a0220.35c10.cfb9@mx.google.com>
+Date: Fri, 14 Jun 2024 21:25:30 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -75,26 +75,26 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: linux_kselftest-fixes-6.10-rc3-4-ged3994ac847e
+X-Kernelci-Kernel: v6.10-rc1-2-g64f5bc57b24e
 X-Kernelci-Report-Type: build
-X-Kernelci-Branch: fixes
+X-Kernelci-Branch: next
 X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes build: 8 builds: 0 failed, 8 passed,
- 1 warning (linux_kselftest-fixes-6.10-rc3-4-ged3994ac847e)
+Subject: kselftest/next build: 8 builds: 0 failed, 8 passed,
+ 1 warning (v6.10-rc1-2-g64f5bc57b24e)
 To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
  shuah@kernel.org
 From: "kernelci.org bot" <bot@kernelci.org>
 
-kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning (linux_kself=
-test-fixes-6.10-rc3-4-ged3994ac847e)
+kselftest/next build: 8 builds: 0 failed, 8 passed, 1 warning (v6.10-rc1-2-=
+g64f5bc57b24e)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/linux_kselftest-fixes-6.10-rc3-4-ged3994ac847e/
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.10-rc1-2-g64f5bc57b24e/
 
 Tree: kselftest
-Branch: fixes
-Git Describe: linux_kselftest-fixes-6.10-rc3-4-ged3994ac847e
-Git Commit: ed3994ac847e0d6605f248e7f6776b1d4f445f4b
+Branch: next
+Git Describe: v6.10-rc1-2-g64f5bc57b24e
+Git Commit: 64f5bc57b24e8c7935d51732571d405acfcf4b99
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
 est.git
 Built: 4 unique architectures
