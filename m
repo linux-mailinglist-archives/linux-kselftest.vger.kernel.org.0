@@ -1,161 +1,210 @@
-Return-Path: <linux-kselftest+bounces-12005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12006-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADDF9096AD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 10:02:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F34D9096FC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 10:30:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1AC81C21FCB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 08:02:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBCC71F222A1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 08:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A06117BA5;
-	Sat, 15 Jun 2024 08:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83A618037;
+	Sat, 15 Jun 2024 08:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="XtIhAW0w";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="F7wLuAaJ"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="d6s7TFlZ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Zd7P6hNT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PndSsm2R";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ro3UtvlO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D843E171B0;
-	Sat, 15 Jun 2024 08:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE0B1CFBC;
+	Sat, 15 Jun 2024 08:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718438564; cv=none; b=QIUkzbHTdDsYCDmi7WikGDkSni5Q8wbbdnq9Btx0sKC7NtciLyiM+yoGgsTyHJt8tpKuKKOb89UT9WYQq93VNZZICFjl7St6M857tXw7i00RtMuY34tXcmbkPyOySmofkAJ+TCsgCAZW7fk306qj8XvSEVmh/ITzVM7ri41unuQ=
+	t=1718440197; cv=none; b=VM4Ard+rYp/nFtbzzs42bBzfw/S0rl/pBfEvRSI/kLTC/w0pydKG8tu2E1aFNpgz64FSKRhoT2FDImj50vXoX2dWimJmbO2x7b7w7+3rBEl7oAeJcKeWd2xpZGIDI2I2LgiYnyi8zgt3ywyOa/EPtwd1le5TBPSR7g9GW99G3UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718438564; c=relaxed/simple;
-	bh=QvARnw7AZhKjjQZEHPIbrdOAmJBynmSEuT5URqajrxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CDqE2lkiD30d6jySHLCH/vyjUVqhH34HLt99179zrFm2aVJaT23lYpeuNlpVSXbzAuegWyfZfudK3G0l1rqEVhTllQPVjiAfc/pABfnDAxEDSrT+JkhTzFf/d7zouA3PZbf3cOY8Eiab++daW/1Xv+Rnq9M1U4AucKO8Rhk2+cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=XtIhAW0w; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=F7wLuAaJ; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfout.nyi.internal (Postfix) with ESMTP id C700213803BE;
-	Sat, 15 Jun 2024 04:02:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 15 Jun 2024 04:02:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1718438560; x=
-	1718524960; bh=D02etgLXt8LNRqfGRrozVpFaw8dGLSbYbhownIAXV0U=; b=X
-	tIhAW0wLIoj+mTEQQrSbfwqNN0mJjJEEOH3VzM87ZPM/t/8TOGLGgDAdGbkntWS0
-	OA4Am0u+u6KlKSUM1Ep0Np3So3Akwrco946q4+k7kUigsQO0DVdJH/vIfGez/bPK
-	MsF+naIQBbNh87zT5ugQJhb1HCoFRISWUH65dxOr1BHocoPDuBH0ab7mmKgJiK0O
-	0ivAUmQnI09kgV2Z9NEbOaYh2Yf6u+fLCODn49M5UFy2bezx5Oep8bq6h/6uyy3i
-	9pLf9jhXEF/iPEo70clhq5tff9ljC/kb0MLYsF8pVPWCRe02RdZmlg4K9DRDA6Tx
-	KtsvzAeL0B6dMaxWhJ7mQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1718438560; x=1718524960; bh=D02etgLXt8LNRqfGRrozVpFaw8dG
-	LSbYbhownIAXV0U=; b=F7wLuAaJPR/pKuyWJM+phWXmRI4VqNnkqlHCh/g9QKN1
-	Hmn6fPqs+AZf/r9KJZFlRQgXkZ17yIWltGlwf57202kb9qxhinHF1/c4g090TqKQ
-	j/vpbulA2AT0+X+b2dGE97l+EalSJQrdWEZp/QyqtdvzL6exb8lmh/DHstNbixp5
-	ddgejDp6pN4r4YTs5+sqIh0GudPYMS4Q953z37lAqVSaqN/7FVBcv3N3AocBZakw
-	WyrOjeZrMcFWnYQ/8b5j4xyLG/AlIbvTJhO6ws+8yxrnMLTsshgnvdPxiV1KvK81
-	2FblP7PVqMG5Ppk4erkcyf2u8woISFJSZcAiqkwUFA==
-X-ME-Sender: <xms:oEptZrGXyIcRnSj-CwuzSuOrLAfVaFDjSgSHcDwl7VuU4lH4wE3yfA>
-    <xme:oEptZoW406XXBMLK_c0l5ucAaYgxrNAHf3N_oSTkmn-o9I4eUc9X_3hlnF_8TMzNE
-    GvkD0sNDzPacJEsWZg>
-X-ME-Received: <xmr:oEptZtJm6Towjaw4u14wmf96xz2jvqiJ_4TMMtGhaR12O-FHiJORmwgQmAvwoN5rJnWQDP0AK-gaJ3apqgpABj63KBWLwEs8tsM3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvtddguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghk
-    rghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhih
-    drjhhpqeenucggtffrrghtthgvrhhnpeehhffhteetgfekvdeiueffveevueeftdelhfej
-    ieeitedvleeftdfgfeeuudekueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:oEptZpHfPPLAxm7D6fp5kwyMbHmsSACoOTCIGtmaU6kEltaRxTrivQ>
-    <xmx:oEptZhU7t-gW96_uJ-sPZpbEssa3b4oyMgmi3KlgNNJa421JfoimWg>
-    <xmx:oEptZkOiW-Nvb9jQF8uj9R1184K6VySOnqvHdqL9Usk4oLQ-iCE6-g>
-    <xmx:oEptZg3aLURdUVVcVYlfV1Y3ZgTQ8i942hQWQFTnBn7Gy_f7EdaT5Q>
-    <xmx:oEptZjJLv9LkoLzFCbrmTm5XIvi2SIsmX81yc5bpPs6KHb-GzR3vLoTb>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 15 Jun 2024 04:02:38 -0400 (EDT)
-Date: Sat, 15 Jun 2024 17:02:35 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: linux-sound@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	s=arc-20240116; t=1718440197; c=relaxed/simple;
+	bh=27kVOwGhuh+hyYnGedPXIunXzWGqwdCDTWzecz6GW50=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E6Wv07PveuuHO6xDzxXXF2ijFK6l09a7nHzFx0MqCJiGI+G1CspSOiZIDYuC0jtP8RqpoHvPVstUgaSavzZdJ0i8fNA4Jep3X3PbPvX40lO10Nu3igRHKrQaYjei2CYhcxkyk9eacCt2O11NKNvmG8DbOafIqxcj2xY1NtNKIpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=d6s7TFlZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Zd7P6hNT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PndSsm2R; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ro3UtvlO; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EFCEC20FD9;
+	Sat, 15 Jun 2024 08:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718440188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j2S/z+hkksxKZKAznuoIFYVD3E8l+bEpqh8nUCf+uGQ=;
+	b=d6s7TFlZoksib+8TwcscxdVxwl+HDlI63HSEn2Y7ilkbA5awajQkgzG1HGCWmWVNw2vAs4
+	T/H2cNNa6IGOLh28XqtewDHjN8Dm9DKemeJJVuRWFDvyId7RJsfHqQzotC3oNGXAHcb1Vd
+	J4a8RhsudJQhFB9cqM55VJ01FsNEt5Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718440188;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j2S/z+hkksxKZKAznuoIFYVD3E8l+bEpqh8nUCf+uGQ=;
+	b=Zd7P6hNTjsPnY3li5Q2lG6RYHxIXwpr/5MRaPUGza/kyWE0wTdUnlPC2UE1ct2ez/ktalo
+	053lPcdFVvDAewDw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718440186; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j2S/z+hkksxKZKAznuoIFYVD3E8l+bEpqh8nUCf+uGQ=;
+	b=PndSsm2RAmagqC5kOib6HsvEyFu16nW3EXFlJwlXqYH7qxd3lAnth8jgYmFFvQV4rYG6LM
+	/tl35o/Sea4pkt00MhoHz+F1lZc8bHUK/84wQJaJggMfhPwSxgtG7Kl9m/FfAoJPnYARdo
+	i4+4ps2pF1kFRVFCabc+qouWz4uacvk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718440186;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j2S/z+hkksxKZKAznuoIFYVD3E8l+bEpqh8nUCf+uGQ=;
+	b=Ro3UtvlO2sk2aG9OgWrauz3T1xOQ2pnpuMp+XdVZOEtcziL/FQPnppkvKKjnrr4hGIpeig
+	PzBPBifFe49Cc4BA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AEFB213A7F;
+	Sat, 15 Jun 2024 08:29:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 9toAKfpQbWbOWgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sat, 15 Jun 2024 08:29:46 +0000
+Date: Sat, 15 Jun 2024 10:30:10 +0200
+Message-ID: <87tthu6225.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	linux-sound@vger.kernel.org,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] ALSA: control: Apply sanity check of input values
- for user elements
-Message-ID: <20240615080235.GA508000@workstation.local>
+Subject: Re: [PATCH v2 3/6] ALSA: control: Apply sanity check of input values for user elements
+In-Reply-To: <20240615080235.GA508000@workstation.local>
 References: <20240614153717.30143-1-tiwai@suse.de>
- <20240614153717.30143-4-tiwai@suse.de>
- <20240615051329.GA494527@workstation.local>
- <871q4y7jgt.wl-tiwai@suse.de>
+	<20240614153717.30143-4-tiwai@suse.de>
+	<20240615051329.GA494527@workstation.local>
+	<871q4y7jgt.wl-tiwai@suse.de>
+	<20240615080235.GA508000@workstation.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871q4y7jgt.wl-tiwai@suse.de>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-On Sat, Jun 15, 2024 at 09:28:50AM +0200, Takashi Iwai wrote:
-> > In the commit coment, I can see "that's the only way to filter out the
-> > invalid values", however it not so good idea, since the ALSA control core
-> > function loses transparency against control elements somehow.
+On Sat, 15 Jun 2024 10:02:35 +0200,
+Takashi Sakamoto wrote:
 > 
-> Transparency?  The sanity check of input values is done in each driver
-> side, hence some overhead is more or less always present, depending on
-> the implementation.
->
-> > Furthermore, I can see "there is no corresponding driver", however it is
-> > suspicious somehow. It would be smart to charge the validation
-> > implementation for user-defined control element set if forcing it.
+> On Sat, Jun 15, 2024 at 09:28:50AM +0200, Takashi Iwai wrote:
+> > > In the commit coment, I can see "that's the only way to filter out the
+> > > invalid values", however it not so good idea, since the ALSA control core
+> > > function loses transparency against control elements somehow.
+> > 
+> > Transparency?  The sanity check of input values is done in each driver
+> > side, hence some overhead is more or less always present, depending on
+> > the implementation.
+> >
+> > > Furthermore, I can see "there is no corresponding driver", however it is
+> > > suspicious somehow. It would be smart to charge the validation
+> > > implementation for user-defined control element set if forcing it.
+> > 
+> > The context there implies that, in the case of user elements, all
+> > handled in sound/core/control.c, and there is no other dedicated
+> > driver code handling the control put for those controls, hence
+> > sound/core/control.c is the only place where we can address the
+> > issue.
 > 
-> The context there implies that, in the case of user elements, all
-> handled in sound/core/control.c, and there is no other dedicated
-> driver code handling the control put for those controls, hence
-> sound/core/control.c is the only place where we can address the
-> issue.
+> If you can force the validation to _all_ of the existing drivers by any
+> kind of mechanism, it would be. Actually, not. We can have such driver
+> which handles the write request without such validation, and control core
+> allows it. The kernel configuration is to ease the detection of such
+> drivers (and applications) in application runtime. Therefore the
+> transparency would be lost by the patch.
 
-If you can force the validation to _all_ of the existing drivers by any
-kind of mechanism, it would be. Actually, not. We can have such driver
-which handles the write request without such validation, and control core
-allows it. The kernel configuration is to ease the detection of such
-drivers (and applications) in application runtime. Therefore the
-transparency would be lost by the patch.
+In principle, the validation should be done for *every* kcontrol.  The
+lack of the validation was ignored so far with a naive assumption that
+the driver treats properly nevertheless.  But since we're checking it
+more strictly in kselftest, the problem became more obvious, and this
+is a corresponding fix for user control element part.  HD-audio driver
+had another issues and they are fixed in other patches of this
+series.
 
-Assuming that two control element exist in a sound card, which has the
-same information and TLV response, except for the flag of
-SNDRV_CTL_ELEM_ACCESS_USER. For the same value data, one operation with
-SNDRV_CTL_IOCTL_ELEM_WRITE is successful, and another operation with
-SNDRV_CTL_ELEM_ACCESS_USER is failed. When encountering this issue,
-the programmer of the application suspect the bug pertaining to the latter
-control, then the programmer find the latter has
-SNDRV_CTL_ELEM_ACCESS_USER. Then the programmer would judge that 'I got
-it, it is a bug of user-defined control element set' even if the program
-includes the bug for min/max/step computation and the underlying sound
-driver includes the bug not to validate value data.
+> Assuming that two control element exist in a sound card, which has the
+> same information and TLV response, except for the flag of
+> SNDRV_CTL_ELEM_ACCESS_USER. For the same value data, one operation with
+> SNDRV_CTL_IOCTL_ELEM_WRITE is successful, and another operation with
+> SNDRV_CTL_ELEM_ACCESS_USER is failed. When encountering this issue,
+> the programmer of the application suspect the bug pertaining to the latter
+> control, then the programmer find the latter has
+> SNDRV_CTL_ELEM_ACCESS_USER. Then the programmer would judge that 'I got
+> it, it is a bug of user-defined control element set' even if the program
+> includes the bug for min/max/step computation and the underlying sound
+> driver includes the bug not to validate value data.
 
-The patch loses transparency in the above step. Without the patch, both
-operations finish with the equivalent result.
+No, it's a wrong understanding, other way round: the driver must
+validate the values by itself.
+
+> The patch loses transparency in the above step. Without the patch, both
+> operations finish with the equivalent result.
+> 
+> Nevertheless, I think the validation is itself preferable.
+
+The validation is not "preferable" but rather "mandatory".
+
+> In my opinion,
+> the validation before/after the call of 'snd_kcontrol_put_t' would result
+> in the different argument. The 'validate-before-call' is the argument of
+> control core function, while 'validate-after-call is the argument of
+> implementation of user-defined element set. The patch should belong to the
+> latter to extend current implementation of user-defined element set.
+> Thus I suggest to put the validation into the put callback function,
+> regardless of the optimization to which you address.
+
+I don't get the argument, sorry.
+If you have a better point, please submit an incremental patch.
 
 
-Nevertheless, I think the validation is itself preferable. In my opinion,
-the validation before/after the call of 'snd_kcontrol_put_t' would result
-in the different argument. The 'validate-before-call' is the argument of
-control core function, while 'validate-after-call is the argument of
-implementation of user-defined element set. The patch should belong to the
-latter to extend current implementation of user-defined element set.
-Thus I suggest to put the validation into the put callback function,
-regardless of the optimization to which you address.
+thanks,
 
-
-Regards
-
-Takashi Sakamoto
+Takashi
 
