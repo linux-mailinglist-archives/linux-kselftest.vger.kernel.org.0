@@ -1,62 +1,98 @@
-Return-Path: <linux-kselftest+bounces-12004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EFB2909697
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 09:40:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADDF9096AD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 10:02:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4EF32835F8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 07:40:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1AC81C21FCB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 08:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4443C17BA7;
-	Sat, 15 Jun 2024 07:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A06117BA5;
+	Sat, 15 Jun 2024 08:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILeH0ixd"
+	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="XtIhAW0w";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="F7wLuAaJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1379118637;
-	Sat, 15 Jun 2024 07:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D843E171B0;
+	Sat, 15 Jun 2024 08:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718437211; cv=none; b=i9shQzjnekdlb9FG98tOvcDkzwewLIM64Xwy941jqfNrWL6NAes2nD/d2O0nP3UlIDLZO/yT0qxaV5wPUkaCs/jTSdZiu+nFXuJ2F8fK6ckH+i1neCgBVG/HcO0ZXhXpjmBxSG2OLpTeoC2ZnZqRJw3wk1nESEGUpKsQS23Dp+k=
+	t=1718438564; cv=none; b=QIUkzbHTdDsYCDmi7WikGDkSni5Q8wbbdnq9Btx0sKC7NtciLyiM+yoGgsTyHJt8tpKuKKOb89UT9WYQq93VNZZICFjl7St6M857tXw7i00RtMuY34tXcmbkPyOySmofkAJ+TCsgCAZW7fk306qj8XvSEVmh/ITzVM7ri41unuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718437211; c=relaxed/simple;
-	bh=5E36F1hoIXadjD9zZM5/pSWRGkOJeeo4SUAJ1PtAlbM=;
+	s=arc-20240116; t=1718438564; c=relaxed/simple;
+	bh=QvARnw7AZhKjjQZEHPIbrdOAmJBynmSEuT5URqajrxU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dyAIxCpY3cl8AF/s/rDL6jXJTxKTakFqv2ZBAiDSdCzYFbvnB+8JiCTHS30a9z72ozDtvaTHlXrhqxZDY19aLNL5hp+wXI9Apm/aOBqeWQO5RoKNgUKWVTbc9eXlHu+N1AOy/xkMQYOrlZgdqi88qxZbDhvKfw6y/p6lB2dM80M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILeH0ixd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8E8C116B1;
-	Sat, 15 Jun 2024 07:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718437210;
-	bh=5E36F1hoIXadjD9zZM5/pSWRGkOJeeo4SUAJ1PtAlbM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ILeH0ixdjcxDCLWVf+63wI1nFsGK/yl8btuJY9vFg68XHCjSZpbj7xaPIhzOGdJvj
-	 rUhXlhidunG+qU6CpUGgVUp7X9SYhLCyPm5aknRDlZ6VMKXhzgVJ74ayokfQaWqr03
-	 0I0thoV/qZ9N7X8A2wgWntmbDxsnOPr4Z1pQNtykjYqZhae5GOX3QyG92gEA2xQbxV
-	 H+/RvQitzv+guzu5Go0lriN0mT5UCkjqng9Y8aMI0VlBadruaJmEFVGwsa0pcZZAr2
-	 sVcLUJORYEDCdd0IWekj2padDhMvA/Qeo3uxjP5b7HDJ1PDT6C0vxtlJ6Cgxadwee9
-	 /x6FaBcWsgt0Q==
-Date: Sat, 15 Jun 2024 08:40:05 +0100
-From: Simon Horman <horms@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/6] selftests: net: lib: remove ns from list
- after clean-up
-Message-ID: <20240615074005.GB8447@kernel.org>
-References: <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-0-e36986faac94@kernel.org>
- <20240607-upstream-net-next-20240607-selftests-mptcp-net-lib-v1-2-e36986faac94@kernel.org>
- <20240614104006.GC8447@kernel.org>
- <54e9c949-da29-4a19-af29-55aac52afbf9@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CDqE2lkiD30d6jySHLCH/vyjUVqhH34HLt99179zrFm2aVJaT23lYpeuNlpVSXbzAuegWyfZfudK3G0l1rqEVhTllQPVjiAfc/pABfnDAxEDSrT+JkhTzFf/d7zouA3PZbf3cOY8Eiab++daW/1Xv+Rnq9M1U4AucKO8Rhk2+cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=XtIhAW0w; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=F7wLuAaJ; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailfout.nyi.internal (Postfix) with ESMTP id C700213803BE;
+	Sat, 15 Jun 2024 04:02:40 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 15 Jun 2024 04:02:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1718438560; x=
+	1718524960; bh=D02etgLXt8LNRqfGRrozVpFaw8dGLSbYbhownIAXV0U=; b=X
+	tIhAW0wLIoj+mTEQQrSbfwqNN0mJjJEEOH3VzM87ZPM/t/8TOGLGgDAdGbkntWS0
+	OA4Am0u+u6KlKSUM1Ep0Np3So3Akwrco946q4+k7kUigsQO0DVdJH/vIfGez/bPK
+	MsF+naIQBbNh87zT5ugQJhb1HCoFRISWUH65dxOr1BHocoPDuBH0ab7mmKgJiK0O
+	0ivAUmQnI09kgV2Z9NEbOaYh2Yf6u+fLCODn49M5UFy2bezx5Oep8bq6h/6uyy3i
+	9pLf9jhXEF/iPEo70clhq5tff9ljC/kb0MLYsF8pVPWCRe02RdZmlg4K9DRDA6Tx
+	KtsvzAeL0B6dMaxWhJ7mQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1718438560; x=1718524960; bh=D02etgLXt8LNRqfGRrozVpFaw8dG
+	LSbYbhownIAXV0U=; b=F7wLuAaJPR/pKuyWJM+phWXmRI4VqNnkqlHCh/g9QKN1
+	Hmn6fPqs+AZf/r9KJZFlRQgXkZ17yIWltGlwf57202kb9qxhinHF1/c4g090TqKQ
+	j/vpbulA2AT0+X+b2dGE97l+EalSJQrdWEZp/QyqtdvzL6exb8lmh/DHstNbixp5
+	ddgejDp6pN4r4YTs5+sqIh0GudPYMS4Q953z37lAqVSaqN/7FVBcv3N3AocBZakw
+	WyrOjeZrMcFWnYQ/8b5j4xyLG/AlIbvTJhO6ws+8yxrnMLTsshgnvdPxiV1KvK81
+	2FblP7PVqMG5Ppk4erkcyf2u8woISFJSZcAiqkwUFA==
+X-ME-Sender: <xms:oEptZrGXyIcRnSj-CwuzSuOrLAfVaFDjSgSHcDwl7VuU4lH4wE3yfA>
+    <xme:oEptZoW406XXBMLK_c0l5ucAaYgxrNAHf3N_oSTkmn-o9I4eUc9X_3hlnF_8TMzNE
+    GvkD0sNDzPacJEsWZg>
+X-ME-Received: <xmr:oEptZtJm6Towjaw4u14wmf96xz2jvqiJ_4TMMtGhaR12O-FHiJORmwgQmAvwoN5rJnWQDP0AK-gaJ3apqgpABj63KBWLwEs8tsM3>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvtddguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghk
+    rghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhih
+    drjhhpqeenucggtffrrghtthgvrhhnpeehhffhteetgfekvdeiueffveevueeftdelhfej
+    ieeitedvleeftdfgfeeuudekueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:oEptZpHfPPLAxm7D6fp5kwyMbHmsSACoOTCIGtmaU6kEltaRxTrivQ>
+    <xmx:oEptZhU7t-gW96_uJ-sPZpbEssa3b4oyMgmi3KlgNNJa421JfoimWg>
+    <xmx:oEptZkOiW-Nvb9jQF8uj9R1184K6VySOnqvHdqL9Usk4oLQ-iCE6-g>
+    <xmx:oEptZg3aLURdUVVcVYlfV1Y3ZgTQ8i942hQWQFTnBn7Gy_f7EdaT5Q>
+    <xmx:oEptZjJLv9LkoLzFCbrmTm5XIvi2SIsmX81yc5bpPs6KHb-GzR3vLoTb>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 15 Jun 2024 04:02:38 -0400 (EDT)
+Date: Sat, 15 Jun 2024 17:02:35 +0900
+From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: linux-sound@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] ALSA: control: Apply sanity check of input values
+ for user elements
+Message-ID: <20240615080235.GA508000@workstation.local>
+References: <20240614153717.30143-1-tiwai@suse.de>
+ <20240614153717.30143-4-tiwai@suse.de>
+ <20240615051329.GA494527@workstation.local>
+ <871q4y7jgt.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,62 +101,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <54e9c949-da29-4a19-af29-55aac52afbf9@kernel.org>
+In-Reply-To: <871q4y7jgt.wl-tiwai@suse.de>
 
-Hi Matthieu,
-
-Likewise, thanks for your response.
-
-On Fri, Jun 14, 2024 at 04:42:38PM +0200, Matthieu Baerts wrote:
-> Hi Simon,
+On Sat, Jun 15, 2024 at 09:28:50AM +0200, Takashi Iwai wrote:
+> > In the commit coment, I can see "that's the only way to filter out the
+> > invalid values", however it not so good idea, since the ALSA control core
+> > function loses transparency against control elements somehow.
 > 
-> Thank you for your reply!
+> Transparency?  The sanity check of input values is done in each driver
+> side, hence some overhead is more or less always present, depending on
+> the implementation.
+>
+> > Furthermore, I can see "there is no corresponding driver", however it is
+> > suspicious somehow. It would be smart to charge the validation
+> > implementation for user-defined control element set if forcing it.
 > 
-> On 14/06/2024 12:40, Simon Horman wrote:
-> > On Fri, Jun 07, 2024 at 06:31:03PM +0200, Matthieu Baerts (NGI0) wrote:
-> >> Instead of only appending items to the list, removing them when the
-> >> netns has been deleted.
-> >>
-> >> By doing that, we can make sure 'cleanup_all_ns()' is not trying to
-> >> remove already deleted netns.
-> > 
-> > I do wonder if we can go a step further and use an associative array for
-> > ns_list (maybe renamed).  I think this would reduce remove_ns_list to
-> > something like:
-> > 
-> > 	unset ns_list["$item"]
-> 
-> I agree that it would ease the removal of one item -- which is not
-> complex to deal with the new helper :) -- but do you see any other benefits?
-> 
-> For the moment, there is no other value to associate with, so we would
-> do something like NS_MAP["$ns"]=1. We could link the name of the global
-> variable, but that's not needed for the tests for the moment.
-> 
-> Also, I don't know if it is important, but when we will iterate over the
-> list of netns, it will not be done following the same order items have
-> been added into the hashmap. So we will change the order in which items
-> are deleted.
+> The context there implies that, in the case of user elements, all
+> handled in sound/core/control.c, and there is no other dedicated
+> driver code handling the control put for those controls, hence
+> sound/core/control.c is the only place where we can address the
+> issue.
 
-I agree that it would probably end up being a NS_MAP["$ns"]=1,
-i.e. a dummy value as there is no natural one to use.
+If you can force the validation to _all_ of the existing drivers by any
+kind of mechanism, it would be. Actually, not. We can have such driver
+which handles the write request without such validation, and control core
+allows it. The kernel configuration is to ease the detection of such
+drivers (and applications) in application runtime. Therefore the
+transparency would be lost by the patch.
 
-I had not considered the order issue.
+Assuming that two control element exist in a sound card, which has the
+same information and TLV response, except for the flag of
+SNDRV_CTL_ELEM_ACCESS_USER. For the same value data, one operation with
+SNDRV_CTL_IOCTL_ELEM_WRITE is successful, and another operation with
+SNDRV_CTL_ELEM_ACCESS_USER is failed. When encountering this issue,
+the programmer of the application suspect the bug pertaining to the latter
+control, then the programmer find the latter has
+SNDRV_CTL_ELEM_ACCESS_USER. Then the programmer would judge that 'I got
+it, it is a bug of user-defined control element set' even if the program
+includes the bug for min/max/step computation and the underlying sound
+driver includes the bug not to validate value data.
 
-And yes, the benefit I see would be limited to removal.
-Which as you point out is not a terrible burden with the helper you added.
-While, OTOH, my idea adds complexity and unknowns elsewhere.
+The patch loses transparency in the above step. Without the patch, both
+operations finish with the equivalent result.
 
-So overall, perhaps it's best left as an idea for later.
-As the code changes for other reasons (who knows what?)
-an associative array may make more sense than it does now.
 
-> > OTOH, perhaps this breaks with older versions of bash that we still
-> > care about.
-> 
-> Good point. I don't have the answer, but associative arrays are starting
-> to be quite old now :)
+Nevertheless, I think the validation is itself preferable. In my opinion,
+the validation before/after the call of 'snd_kcontrol_put_t' would result
+in the different argument. The 'validate-before-call' is the argument of
+control core function, while 'validate-after-call is the argument of
+implementation of user-defined element set. The patch should belong to the
+latter to extend current implementation of user-defined element set.
+Thus I suggest to put the validation into the put callback function,
+regardless of the optimization to which you address.
 
-Yes, I think so too.
-But I also thought it was worth mentioning.
+
+Regards
+
+Takashi Sakamoto
 
