@@ -1,163 +1,151 @@
-Return-Path: <linux-kselftest+bounces-11998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C830909619
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 07:13:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB1590961C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 07:23:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 162BE1C213D6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 05:13:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F96B1C213F4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 05:23:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC48EAFA;
-	Sat, 15 Jun 2024 05:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5131A101DE;
+	Sat, 15 Jun 2024 05:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="GoSuQ9cn";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gxIq/0H+"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cC2A5cUG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD40E573;
-	Sat, 15 Jun 2024 05:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCCDFBEF
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Jun 2024 05:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718428419; cv=none; b=dKftL0BYqyTg/3az0xbsEyRANzguuZ2tuk9koVKZNx8gPTkAbwBNhJxWuBdZtzQiYHkR5MitrgxKSXkb/0vkTgZRws6vWbvDiq9y3CXUuWefkGFGXusd4fnJImbg8iulZcd7Bilad2pNjNxQSx/c2Vqu7h0krjENfZ7bWVhMc6E=
+	t=1718429029; cv=none; b=R9pI71EoWjb7uimhlpOEppjaQEHS53myirXr+VhMmF9Uhhcm3QNo2QZxPFaxxdfMMFVnJCKphPgDdhnqMR/Gk7d6wgwzMiomgt92bBdAgiymvZU/apqyQq4eYLkdisCZ//OsHcgOCWf+2u8YNatnZKqTlWhfGGlUMIdk5Ds5qmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718428419; c=relaxed/simple;
-	bh=SI1QOdKUoEppwPF2MWp9YUkmuFhIruEH+JNhT0Da0oE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CiTZX51u3TYiBYL+TC1XGWfe3nJ8n+ljRByME2U2M3PBEX3xIkVzyLOSMiJGPf4/2oc/tdX2BH1koKODnYoy2Z9rXM7vbM552AplvbFWBjT74KYuHqdVebm8Byn+4AeJANW0cbpE0ajxJk2o+BBUZU6gosw+3Qv290ei+ZMx+5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=GoSuQ9cn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gxIq/0H+; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 5C8AD13803E8;
-	Sat, 15 Jun 2024 01:13:35 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sat, 15 Jun 2024 01:13:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1718428415; x=
-	1718514815; bh=ULe3PHZaVWu+u67al/fCAttGBkzxQ4k67WbosEG1VZw=; b=G
-	oSuQ9cn2uLDM5kStNzwuAwg6aTRqGeMHr2Q4+Xqtr/hwRjEt4L8XKA9avF0AUCth
-	cdXkM5qIMhUyIHNo2Sa1vyx9kB6oBxFtCljcUR8l2II5ZYv++cd+YGkLDyhkZzKT
-	ipZ/hhiegMeUQagkDLC+vSKlQNmxGSmhkMc5MmYwL8KVs4QG5sfg/5eSbr2YRoFI
-	u3lsSuptZ+vAdgn8KnKwrZ0b9ue0kDTkGniyF8vDBdYWj7PClyacFGe1oHUVJvPW
-	QLnbexSHVLO3xtWzpUiUdaXg9adc+zB4JiRb5iiUXL7Cf7ove6aCp2a3QYarJZ0K
-	9y/i/NcaZYQHHMl68BMUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1718428415; x=1718514815; bh=ULe3PHZaVWu+u67al/fCAttGBkzx
-	Q4k67WbosEG1VZw=; b=gxIq/0H+o95VvUXA+EQLc9TbEBUbGv/ykgz2Qt8zYO9s
-	N41zrKN5QPG6zrIF9VtjAbvnqK8jLOV3rdLLRXKmKKPDzlNJWs81YANSddzjeJXV
-	WVsLiTlIe9E6+K3VjM/YWIPMmodRlG79JLTphUB+AbudnFRDVvn64pY9kptqbwNU
-	qEQEpS5SJlYToOyNsjJByCKm2fe/p67TDk7MlAPm/H2aE0B5+Snm+4ZRPb3PFGv+
-	NNxM9x9qv0YZbKoFDoPCOCm3vetLSm/hzwyg1kE9VAW5gajeqKqtHArrj7KK8Cd3
-	5X2uvGrS9MqB4sbV5sKSltGqmltn/B/RZ7kxhnzZDw==
-X-ME-Sender: <xms:_iJtZtZD08mZgl66GcflaJTSmIfTgqMo0LUu62J-e0BQSjWPxD0IPA>
-    <xme:_iJtZkZCJCMCZ9lEAKV1RBgEk86iISZow5bUe6_wUZxCy8CwuJ0Rq5-ZNfH0PeFlX
-    9fyVY2z6KZh_64bxdo>
-X-ME-Received: <xmr:_iJtZv9z402i-cyeNoPhbqtqSjbwy28S0poPM7qHN3DzVAE2PUg3RY9K41osJ-8M6YSzkJQpNWMu-qocSEnTqkkoU41ORRmkC3_E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvtddgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
-    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
-    hjpheqnecuggftrfgrthhtvghrnhepveeilefhudekffehkeffudduvedvfeduleelfeeg
-    ieeljeehjeeuvdeghfetvedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghs
-    hhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:_iJtZrrpBtrpaya9HfVApA4DNzE6__WEYAnLwvw22PcAgrfGxfKS9A>
-    <xmx:_iJtZopkqgqsFyUUbglsuVCRwfpPC4hRYG_7EM7pF96GBv5WEUaunQ>
-    <xmx:_iJtZhRn_3xhSG01a8vr-k45s3AxwxIMlTS413O_wVD5O54XYP0deQ>
-    <xmx:_iJtZgptaIAii_MajcXgYlnhYRbjF3rIZtxOyz5Bw5TYH5tYUDNJdg>
-    <xmx:_yJtZpdKkY3-KRSguDyx6fAYM45wriwKtIINps3pnL-ZlCal7_hxaH9Q>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 15 Jun 2024 01:13:32 -0400 (EDT)
-Date: Sat, 15 Jun 2024 14:13:29 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: linux-sound@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] ALSA: control: Apply sanity check of input values
- for user elements
-Message-ID: <20240615051329.GA494527@workstation.local>
-References: <20240614153717.30143-1-tiwai@suse.de>
- <20240614153717.30143-4-tiwai@suse.de>
+	s=arc-20240116; t=1718429029; c=relaxed/simple;
+	bh=u2+nYbtAcimfFYtek3xTNjZ/gppp8Y+Edp20/wiRWek=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tg/ESMA/L1Ag0Du3Zfma7h7MT1puXsxFFzXfbnUnqB+NFIF4v6vHe9EDRZeniKwIXrqUo1okVpBytrmYeBdb40enKIn7egRVVSX5XqXJY9Ntn95qGt+DiZQWMRni3kVnYUzIlwxeqbHqLEhrbI+ZGFVC1R91YSrpdn2MPU6+O2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=cC2A5cUG; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f70fdc9644so29595245ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Jun 2024 22:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718429027; x=1719033827; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9XyVNfBmsQm4qr7l+PQrf+G+1gezwS0WSjVzhhgQGk0=;
+        b=cC2A5cUGDpdqRG1YXzh95waCK+xXG/hhYQEdQuYRDZHBoRV1GxbvCb/LWm0sOpHE4Q
+         uDOICfAX0sq3qRFfDH3K+jBycw3FCXmSPGccHisgA4wQ9dCAeU56FdGgQGM3j+iXYNpV
+         ahAmkKFIhGUxgMa4zgvVbBknbo3QkZwFj+EgIrQsR9YdRZWiPnC2reQ1vsp/wCMJjB6J
+         cS4NXym/iXj9KqeALoDldWVOrMq2RRj2fwQ8v5YFFl8K/CS+6OchKi6w1sVJ47gseZRL
+         sopa8bptch0FwMFZX9gZ5oS4jRYApFw0Zt8/HE9lWmmC1iQOyr6n7RG0b+6RY5ReYXFe
+         A0KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718429027; x=1719033827;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9XyVNfBmsQm4qr7l+PQrf+G+1gezwS0WSjVzhhgQGk0=;
+        b=TMICPeA4K7BocuIjLzsVkxb/dRqUk9O6cpqu/qHRYhmqftLIfsGVqwwokaegnm2Em6
+         7S5PMFVtfl+QcLmpFM/CmTvPediTLn6i/mKFmNiWVsx4OCuJY8iZJwfA4oDfk8Bv/jtd
+         8pBcpbQSYbA4DmKzuDRLm8f99pcs/czzH4kyBznPphe2jyaQYHt7xLGD4eTKsn1f3owL
+         au3cyJ8a0E+WR/PkZPpgl5pQ79iVPWKlMVjqh/07HEMUT40ocs3MR5TEPvC5y1o/qmZb
+         mcUf4uK3hdtYAFv4eq3aYrnA6AcGjTWud7/7vHrYqk6r44Owdm9C7t6BXImWWq6T8tmf
+         jMvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQE6CYW86mwoptKOsvMr656R+rmmjf/iDUpjNWBp/uljSsGwjZfujSBOR3zLGKWE6H4RHoIsKtfZ8ZcvJXWvQusnYnwI5rbGruAxzpdlO8
+X-Gm-Message-State: AOJu0Yw9KjlOK5eAE4/QU7+BKzHxH5yALXlmZYSuB67JZN+Biyj3/C++
+	0lNE/o8pIyVHQKJS8/EzfH6Bra4nT2BkkLa+Pti7jxJNH/WFDEcEfPS1I9rNCeuymBAtTSppqmd
+	X
+X-Google-Smtp-Source: AGHT+IHZBhMYdHkP2suwD1t9oJpYvQBvTKbJyVhnin3BRp+MfZJN0eGlobgEtBdmEQiFVTD7G+1MIA==
+X-Received: by 2002:a17:902:f68e:b0:1f7:22b4:8240 with SMTP id d9443c01a7336-1f862322e45mr63129295ad.29.1718429027058;
+        Fri, 14 Jun 2024 22:23:47 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f1770csm41710155ad.230.2024.06.14.22.23.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jun 2024 22:23:45 -0700 (PDT)
+Message-ID: <666d2561.170a0220.29a44.d05f@mx.google.com>
+Date: Fri, 14 Jun 2024 22:23:45 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240614153717.30143-4-tiwai@suse.de>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-2-g64f5bc57b24e
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-lkdtm: 5 runs,
+ 1 regressions (v6.10-rc1-2-g64f5bc57b24e)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi,
+kselftest/next kselftest-lkdtm: 5 runs, 1 regressions (v6.10-rc1-2-g64f5bc5=
+7b24e)
 
-On Fri, Jun 14, 2024 at 05:37:12PM +0200, Takashi Iwai wrote:
-> Although we have already a mechanism for sanity checks of input values
-> for control writes, it's not applied unless the kconfig
-> CONFIG_SND_CTL_INPUT_VALIDATION is set due to the performance reason.
-> Nevertheless, it still makes sense to apply the check for user
-> elements despite of its cost, as that's the only way to filter out the
-> invalid values; the user controls are handled solely in ALSA core
-> code, and there is no corresponding driver, after all.
-> 
-> This patch enables the input value validation for user control
-> elements no matter whether CONFIG_SND_CTL_INPUT_VALIDATION is set or
-> not.  The kselftest will be happier with this change, as the incorrect
-> values will be bailed out now with errors.
-> 
-> For other normal controls, the check is applied still only when
-> CONFIG_SND_CTL_INPUT_VALIDATION is set.
-> 
-> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
-> Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->  sound/core/control.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/core/control.c b/sound/core/control.c
-> index fb0c60044f7b..50890983d7e2 100644
-> --- a/sound/core/control.c
-> +++ b/sound/core/control.c
-> @@ -1317,7 +1317,8 @@ static int snd_ctl_elem_write(struct snd_card *card, struct snd_ctl_file *file,
->  	snd_ctl_build_ioff(&control->id, kctl, index_offset);
->  	result = snd_power_ref_and_wait(card);
->  	/* validate input values */
-> -	if (IS_ENABLED(CONFIG_SND_CTL_INPUT_VALIDATION) && !result) {
-> +	if ((IS_ENABLED(CONFIG_SND_CTL_INPUT_VALIDATION) ||
-> +	     (vd->access & SNDRV_CTL_ELEM_ACCESS_USER)) && !result) {
->  		struct snd_ctl_elem_info info;
->  
->  		memset(&info, 0, sizeof(info));
+Regressions Summary
+-------------------
 
-In my opinion, the validation in 'snd_ctl_elem_user_put()' is preferable
-instead. In the function, it is free to access to 'struct
-user_element.info' for the validation.
-
-In the commit coment, I can see "that's the only way to filter out the
-invalid values", however it not so good idea, since the ALSA control core
-function loses transparency against control elements somehow.
-Furthermore, I can see "there is no corresponding driver", however it is
-suspicious somehow. It would be smart to charge the validation
-implementation for user-defined control element set if forcing it.
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 1          =
 
 
-Regards
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+0-rc1-2-g64f5bc57b24e/plan/kselftest-lkdtm/
 
-Takashi Sakamoto
+  Test:     kselftest-lkdtm
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.10-rc1-2-g64f5bc57b24e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      64f5bc57b24e8c7935d51732571d405acfcf4b99 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/666908f1c1df1ae62c7e707b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.10-rc1-2-g64=
+f5bc57b24e/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-lkdtm-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.10-rc1-2-g64=
+f5bc57b24e/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-lkdtm-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/666908f1c1df1a=
+e62c7e707c
+        new failure (last pass: v6.10-rc1) =
+
+ =20
 
