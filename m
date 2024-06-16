@@ -1,93 +1,92 @@
-Return-Path: <linux-kselftest+bounces-12015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C22909C24
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 09:34:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5F0909C26
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 09:34:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4A551F224D4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 07:34:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1769028131A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 07:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F0B17C9F6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98E217DE36;
 	Sun, 16 Jun 2024 07:34:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zp0o5oA/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zqMzCaWQ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zp0o5oA/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zqMzCaWQ"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mv8qOk+q";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gPIKth/H";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mv8qOk+q";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gPIKth/H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB18A178CDF;
-	Sun, 16 Jun 2024 07:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364A7178CE2;
+	Sun, 16 Jun 2024 07:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718523278; cv=none; b=mb5iL94qKIvwd9PTQn2qqDDbWFvaD4mkxdzzVXwSD4APiVfOtMsi/tdKpHu0kFvSzWJ3OUMIWMhAyvip813Em28V0hM857c9UwKxM8BRvM3ihlvds7www2zkqTcGXdI75M3FsjvyXjmawlp9uOt+moJISbTyK/KkuA1vun8e3WA=
+	t=1718523278; cv=none; b=h+0kPgWycQsBZHhuglXvM5PsIOaUaqI8yH1Q4To7qXEkHL2lRa+wlRtSXJ7sZuUAuGnVl8Tyr4uPCfxWsDdljj8+vrrYis+qcGBwRGhF2++1LATyk9J9tgFpXA+dt+j6Asclpa6eZE0pByUwmR8L2J9H6k3B06LOvwlQyFG3gDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718523278; c=relaxed/simple;
-	bh=jhHFFFxw+TQY8tMMgflq+/MItjuQAQ7L4GPqyFiQCSs=;
+	bh=ewFCmvWdTHUP5TXobHOgdvphPMgBV6JL4KA/1hdYfoc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kYVrjRdH9pISwJQjxkdfmHPuspQUkVGQNdX/I07mIm3S3FWxzpPJZyfQzsFcyPeKQ8N3hXUeVL1ErpBsbPkHjb+eb2mm3FXGHolXOMVyKcVkShNpmUt+CeKhsFCZX9SlZxuoyyAA3ZY/Mog+Kd3+oyJgwAmMivqx/SWtDNa+Q2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zp0o5oA/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zqMzCaWQ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zp0o5oA/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zqMzCaWQ; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=J8IVGJLUCS431Q6sZOQm0KxPzdGPW/b+61fb/cNsPeOpSu8oacipD6hbrSnJEy98o1xHzJwZOcZywquezQH9qM+atJIoq5vjtHcCDha8TwQJR3EQFpB3JvzkdYZ7cToWxT6WKpZEQubAVfIRzljQWyT5T/21GR/4ph5opx/ysro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mv8qOk+q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gPIKth/H; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mv8qOk+q; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gPIKth/H; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 057EA3506C;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3C1413506D;
 	Sun, 16 Jun 2024 07:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	t=1718523275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/949HUx6nZDACgffMOe488Rg+F1Zwk2M5jAJ2WOsB34=;
-	b=zp0o5oA/J1jraVXKAb5sM319KV8YKvN7cIiUu6yPw932Ro/hDm4u2kmvOX+/cEwmBsL2x+
-	NWAp61Zlp05tDUGcaeaIwb/wS4imaKs1e7xYYit6OS2pWXy28jKj9ATuUoODsU5aGkJzHc
-	7NtciDoUcIdxWIZtZeu5c4+wA0FweCk=
+	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
+	b=mv8qOk+qAEXWyVxD+Prqbw5hMQ/I4ml24EMkSogPvhC/TiMA+amX72JnnV/x+R/8hkLmoT
+	Qhta0rlH5ndHWjeSdnvIAo48TEdS9ZI2m/blMk27IpcWNdhsXRoLQBctcrjffcUi8vuNO1
+	snpdeFrs45HOe+Abz9PkeQfMDeh/hOw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1718523275;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/949HUx6nZDACgffMOe488Rg+F1Zwk2M5jAJ2WOsB34=;
-	b=zqMzCaWQEet7xwuaMmVJI93d9m7yAEbw0g/WEANx+I4HDLS8q7FUSUF+JZoExAg4Vk9LV0
-	qQB26g+Le6gJ9JAA==
+	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
+	b=gPIKth/H+VIqqi33dw+pggarQ9DhF97auNo7U2tclTjJlx929g5YRVcOZWhMteeAfNeDly
+	R1Li83k6QUgoNPCg==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="zp0o5oA/";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zqMzCaWQ
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	t=1718523275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/949HUx6nZDACgffMOe488Rg+F1Zwk2M5jAJ2WOsB34=;
-	b=zp0o5oA/J1jraVXKAb5sM319KV8YKvN7cIiUu6yPw932Ro/hDm4u2kmvOX+/cEwmBsL2x+
-	NWAp61Zlp05tDUGcaeaIwb/wS4imaKs1e7xYYit6OS2pWXy28jKj9ATuUoODsU5aGkJzHc
-	7NtciDoUcIdxWIZtZeu5c4+wA0FweCk=
+	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
+	b=mv8qOk+qAEXWyVxD+Prqbw5hMQ/I4ml24EMkSogPvhC/TiMA+amX72JnnV/x+R/8hkLmoT
+	Qhta0rlH5ndHWjeSdnvIAo48TEdS9ZI2m/blMk27IpcWNdhsXRoLQBctcrjffcUi8vuNO1
+	snpdeFrs45HOe+Abz9PkeQfMDeh/hOw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1718523275;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/949HUx6nZDACgffMOe488Rg+F1Zwk2M5jAJ2WOsB34=;
-	b=zqMzCaWQEet7xwuaMmVJI93d9m7yAEbw0g/WEANx+I4HDLS8q7FUSUF+JZoExAg4Vk9LV0
-	qQB26g+Le6gJ9JAA==
+	bh=qrkTl4bH7rGV7b1L3DA5zVOqzeTHEo1PLxkVkHx1bOY=;
+	b=gPIKth/H+VIqqi33dw+pggarQ9DhF97auNo7U2tclTjJlx929g5YRVcOZWhMteeAfNeDly
+	R1Li83k6QUgoNPCg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BC86013AB9;
-	Sun, 16 Jun 2024 07:34:34 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05D5713ABC;
+	Sun, 16 Jun 2024 07:34:35 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0IDDLIqVbmYVCwAAD6G6ig
+	id +JUDAIuVbmYVCwAAD6G6ig
 	(envelope-from <tiwai@suse.de>); Sun, 16 Jun 2024 07:34:34 +0000
 From: Takashi Iwai <tiwai@suse.de>
 To: linux-sound@vger.kernel.org
@@ -96,9 +95,9 @@ Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 2/6] ALSA: hda: Return -EINVAL for invalid volume/switch inputs
-Date: Sun, 16 Jun 2024 09:34:43 +0200
-Message-ID: <20240616073454.16512-3-tiwai@suse.de>
+Subject: [PATCH v3 3/6] ALSA: control: Apply sanity check of input values for user elements
+Date: Sun, 16 Jun 2024 09:34:44 +0200
+Message-ID: <20240616073454.16512-4-tiwai@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240616073454.16512-1-tiwai@suse.de>
 References: <20240616073454.16512-1-tiwai@suse.de>
@@ -109,115 +108,77 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 057EA3506C
-X-Spam-Score: -5.01
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-5.01 / 50.00];
+X-Spamd-Result: default: False [-2.80 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
-	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ARC_NA(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_TRACE(0.00)[suse.de:+];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
 	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-So far the HD-audio driver has been tolerant about the input values
-and accepts any values by correcting the amp volume and switch values
-internally.  But now our own selftest starts complaining about this
-behavior, so let's be picky and change the behavior to return -EINVAL
-for invalid input values instead.
+Although we have already a mechanism for sanity checks of input values
+for control writes, it's not applied unless the kconfig
+CONFIG_SND_CTL_INPUT_VALIDATION is set due to the performance reason.
+Nevertheless, it still makes sense to apply the same check for user
+elements despite of its cost, as that's the only way to filter out the
+invalid values; the user controls are handled solely in ALSA core
+code, and there is no corresponding driver, after all.
+
+This patch adds the same input value validation for user control
+elements at its put callback.  The kselftest will be happier with this
+change, as the incorrect values will be bailed out now with errors.
+
+For other normal controls, the check is applied still only when
+CONFIG_SND_CTL_INPUT_VALIDATION is set.
 
 Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
 Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- sound/pci/hda/hda_codec.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ sound/core/control.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
-index 325e8f0b99a8..3dd1bda0c5c6 100644
---- a/sound/pci/hda/hda_codec.c
-+++ b/sound/pci/hda/hda_codec.c
-@@ -1496,7 +1496,7 @@ update_amp_value(struct hda_codec *codec, hda_nid_t nid,
- 	/* ofs = 0: raw max value */
- 	maxval = get_amp_max_value(codec, nid, dir, 0);
- 	if (val > maxval)
--		val = maxval;
-+		return -EINVAL;
- 	return snd_hda_codec_amp_update(codec, nid, ch, dir, idx,
- 					HDA_AMP_VOLMASK, val);
- }
-@@ -1547,13 +1547,21 @@ int snd_hda_mixer_amp_volume_put(struct snd_kcontrol *kcontrol,
- 	unsigned int ofs = get_amp_offset(kcontrol);
- 	long *valp = ucontrol->value.integer.value;
- 	int change = 0;
-+	int err;
+diff --git a/sound/core/control.c b/sound/core/control.c
+index fb0c60044f7b..1dd2337e2930 100644
+--- a/sound/core/control.c
++++ b/sound/core/control.c
+@@ -1480,12 +1480,16 @@ static int snd_ctl_elem_user_get(struct snd_kcontrol *kcontrol,
+ static int snd_ctl_elem_user_put(struct snd_kcontrol *kcontrol,
+ 				 struct snd_ctl_elem_value *ucontrol)
+ {
+-	int change;
++	int err, change;
+ 	struct user_element *ue = kcontrol->private_data;
+ 	unsigned int size = ue->elem_data_size;
+ 	char *dst = ue->elem_data +
+ 			snd_ctl_get_ioff(kcontrol, &ucontrol->id) * size;
  
- 	if (chs & 1) {
--		change = update_amp_value(codec, nid, 0, dir, idx, ofs, *valp);
-+		err = update_amp_value(codec, nid, 0, dir, idx, ofs, *valp);
-+		if (err < 0)
-+			return err;
-+		change |= err;
- 		valp++;
- 	}
--	if (chs & 2)
--		change |= update_amp_value(codec, nid, 1, dir, idx, ofs, *valp);
-+	if (chs & 2) {
-+		err = update_amp_value(codec, nid, 1, dir, idx, ofs, *valp);
-+		if (err < 0)
-+			return err;
-+		change |= err;
-+	}
- 	return change;
- }
- EXPORT_SYMBOL_GPL(snd_hda_mixer_amp_volume_put);
-@@ -2149,15 +2157,20 @@ int snd_hda_mixer_amp_switch_put(struct snd_kcontrol *kcontrol,
- 	int change = 0;
- 
- 	if (chs & 1) {
-+		if (*valp < 0 || *valp > 1)
-+			return -EINVAL;
- 		change = snd_hda_codec_amp_update(codec, nid, 0, dir, idx,
- 						  HDA_AMP_MUTE,
- 						  *valp ? 0 : HDA_AMP_MUTE);
- 		valp++;
- 	}
--	if (chs & 2)
-+	if (chs & 2) {
-+		if (*valp < 0 || *valp > 1)
-+			return -EINVAL;
- 		change |= snd_hda_codec_amp_update(codec, nid, 1, dir, idx,
- 						   HDA_AMP_MUTE,
- 						   *valp ? 0 : HDA_AMP_MUTE);
-+	}
- 	hda_call_check_power_status(codec, nid);
- 	return change;
- }
++	err = sanity_check_input_values(ue->card, ucontrol, &ue->info, false);
++	if (err < 0)
++		return err;
++
+ 	change = memcmp(&ucontrol->value, dst, size) != 0;
+ 	if (change)
+ 		memcpy(dst, &ucontrol->value, size);
 -- 
 2.43.0
 
