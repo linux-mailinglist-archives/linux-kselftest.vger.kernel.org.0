@@ -1,168 +1,144 @@
-Return-Path: <linux-kselftest+bounces-12010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97CF9098D9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 17:20:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6655909B6C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 05:39:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61B8B281D39
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jun 2024 15:20:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E34021C20EDD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jun 2024 03:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792F34964A;
-	Sat, 15 Jun 2024 15:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADFAC3BBE5;
+	Sun, 16 Jun 2024 03:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="CDcrwCau";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jTpjkbCK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3C94F5FB;
-	Sat, 15 Jun 2024 15:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BE3946F;
+	Sun, 16 Jun 2024 03:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718464814; cv=none; b=t/qDyQvBWykUa4Y55oUZok5TibYHV4ya+DPfbm/tfss2drYKrCmPmzv8XQKA6VYB2L1Floj0Ilw1AE3uwlj9LgJtokPfB/LpoesMnLsNUHdxacBi8bBFjcjd6PJo/EQo5I5A9oi1q20psg931hxXzeYEyQunRIn3cjH9P45KFW0=
+	t=1718509179; cv=none; b=fuoIZ7p8ZfPbiUiYBiMf9Be9varuqhK3GdHR/r8n/TIb202AR9my5O2K8jhNUHHrLeDlAU1u7xb47zYaElNqy5f1b/QTlcfH71oDKKxRNiwv3AzT9vApuv4dGYU39QWEqXzGFAZy2RC9tkf1Hc1Qc2tkAM+OOUbREMhRQLVYoIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718464814; c=relaxed/simple;
-	bh=IFh8KhffQ3yr0f1VsXFjXTwbEQq/G+GmRuWLfL7ScZg=;
+	s=arc-20240116; t=1718509179; c=relaxed/simple;
+	bh=7D4dshEE0owSMVmON8T+vWUatwFJHMpZ3QKpk7xnXTo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R+doN4MywucFqVQdmjAMERqw4cu9tTMxZHkRX8o3/YXzxyLv0e2ioersrlQqdzSnigwT/H9d74yOFtuqN5hBz5zlwSJIpANGeYAaynva9oWH46Qzh+u1a7JzOR/nBBa7pcberwNrQRHxiY6EH8DcyNcgJqpwAoc1PsJlnbY/6Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id A5A8DC18; Sat, 15 Jun 2024 10:20:10 -0500 (CDT)
-Date: Sat, 15 Jun 2024 10:20:10 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Jonathan Calmels <jcalmels@3xx0.net>
-Cc: John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>, brauner@kernel.org,
-	ebiederm@xmission.com, Jonathan Corbet <corbet@lwn.net>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>,
-	David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	containers@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	apparmor@lists.ubuntu.com, keyrings@vger.kernel.org,
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] bpf,lsm: Allow editing capabilities in BPF-LSM
- hooks
-Message-ID: <20240615152010.GB44653@mail.hallyn.com>
-References: <CAHC9VhT5XWbhoY2Nw5jQz4GxpDriUdHw=1YsQ4xLVUtSnFxciA@mail.gmail.com>
- <z2bgjrzeq7crqx24chdbxnaanuhczbjnq6da3xw6al6omjj5xz@mqbzzzfva5sw>
- <887a3658-2d8d-4f9e-98f2-27124bb6f8e6@canonical.com>
- <CAHC9VhQFNPJTOct5rUv3HT6Z2S20mYdW75seiG8no5=fZd7JjA@mail.gmail.com>
- <uuvwcdsy7o4ulmrdzwffr6uywfacmlkjrontmjdj44luantpok@dtatxaa6tzyv>
- <CAHC9VhRnthf8+KgfuzFHXWEAc9RShDO0G_g0kc1OJ-UTih1ywg@mail.gmail.com>
- <rgzhcsblub7wedm734n56cw2qf6czjb4jgck6l5miur6odhovo@n5tgrco74zce>
- <CAHC9VhRGJTND25MFk4gR-FGxoLhMmgUrMpz_YoMFOwL6kr28zQ@mail.gmail.com>
- <ba8d88c8-a251-4c1f-8653-1082b0a101dd@canonical.com>
- <zwh766li4dwx5be6uxnxl2lhtxb4jsiua4atilpqvoeuksgz2h@v3pna3o3ewkp>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lvrsGAXiAIJg4NqB07Vq8idEp8jr+dOzMYfCmDFeShF8k13eWC/mHgOoN7mrZOJV1nY5E0DMrc/0R4JCI8fkGDtBiWuA+7ov5kftY7rPZiuh/Gjqjo76NUgwo5u8y44fCsROgUH1IvLfnpt46P1uUkswbJ+6n2JBDIHGbVhxE9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=CDcrwCau; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jTpjkbCK; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 8A7A413800E5;
+	Sat, 15 Jun 2024 23:39:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Sat, 15 Jun 2024 23:39:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1718509176; x=
+	1718595576; bh=rDnFR1LEPJ1H9/yPWYumA2WahuuPUTtitar8t78RgZM=; b=C
+	DcrwCauzZEFTxCIbJE9f6jM/GM6MIrtfpzg24EirmirMCywhf8bhakKdlTYppVZf
+	V9/1pmCSI/EH1fFkAWpFDVvhTuFcBo0boihRUb/VQwudLQAmWZpR4XFk3TJVllG4
+	/f6c2rfxUWVXzY1QKnmT7WOBLJTtzWtfASEARL2IGgSpq1dczjyDk31crz6AyFFP
+	6m4B0DEzmA1LiJ7iwgbSBAaHQLRdm1fSWhkAeWB/PJexROFzptm5v4mq8n+Buh1K
+	qFzCWtmr0JFI+BOCFp4T/pcsqV3pwm7oA6z+zaRE7pZqtF45LwTMi92o/0eVtOdW
+	AY5bf9EtUI0Q99cif5/wA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1718509176; x=1718595576; bh=rDnFR1LEPJ1H9/yPWYumA2WahuuP
+	UTtitar8t78RgZM=; b=jTpjkbCKAwlV6n4Ay9vWkjVFwgHxG/tf5+LOc//QMFkn
+	1NPvUoxLM2WIz/OpOYbsRjPnUucNMaXtOJ6r0mpWFsT3uxqYk3XrT924Kx8acB/6
+	n2RA0GLHG1SXITO4/w4e2rZbwIAu5jSPe4HMMFtfcKQShPl8TEOH1N0qAelIeUIF
+	2oz+06LwLal/iwwBdifSfkcMbqNUzfvi+jO1BdC+NsNd/ZAJQnL5WFsv4PWMRj54
+	mjxPIWmjyS9dUCiflXEg44MAOApIJvgMJnviwNNZzyysyJFuQhDE9nl4owtr60sP
+	eS5Gi85HHYRuBMv0fKwQjpNYOxUgyYirLbNOmdO+Og==
+X-ME-Sender: <xms:dl5uZrIQrljN5rZd7PqIlECNh2UtMag11PFuxRUnWmGx-Tq1Tx2fDg>
+    <xme:dl5uZvIjKy3w4PRP1VBfM06GEEfraCJAt-EcoCQ3FBAZbLU_trdBsTuL1ep8xo8ZN
+    ZL4P3YylqVbrUXr_Ug>
+X-ME-Received: <xmr:dl5uZjsSIvQDmIo8lh48bVV2b0K6Jz2FjzRgozl_hQY_nSrvx8FhBE47Bm_lYpT-sx_KdSVLTz4vJaGDy-f3wTZjhsm8Wmjz4g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvvddgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecuggftrfgrthhtvghrnhepveeilefhudekffehkeffudduvedvfeduleelfeeg
+    ieeljeehjeeuvdeghfetvedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghs
+    hhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:d15uZkYxKsxpXEVeD3nNivhkvW1BzMwcMERHse7dudF_IpWGK_KgHA>
+    <xmx:d15uZiajBzOp60Wkq4TRFIh8lXDbhYL2jdZNcWXWquez6ja_tri_Dg>
+    <xmx:d15uZoA3w3J72yk9-ek1pZCtSlOnj7Uezyl2LWzX8IwEYaSGEhcAfQ>
+    <xmx:d15uZgYzmd39XKpK_tyTmsxI69dEL8Blj9-OMS5ahRnHYRdamoBfoA>
+    <xmx:eF5uZnMGadwDzmxsfppUno9TvMVNFeBvzfXeUTxlT7pnWNzm_hgI-qf_>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 15 Jun 2024 23:39:33 -0400 (EDT)
+Date: Sun, 16 Jun 2024 12:39:31 +0900
+From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: linux-sound@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] ALSA: control: Apply sanity check of input values
+ for user elements
+Message-ID: <20240616033931.GA518788@workstation.local>
+References: <20240614153717.30143-1-tiwai@suse.de>
+ <20240614153717.30143-4-tiwai@suse.de>
+ <20240615051329.GA494527@workstation.local>
+ <871q4y7jgt.wl-tiwai@suse.de>
+ <20240615080235.GA508000@workstation.local>
+ <87tthu6225.wl-tiwai@suse.de>
+ <87le365tei.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <zwh766li4dwx5be6uxnxl2lhtxb4jsiua4atilpqvoeuksgz2h@v3pna3o3ewkp>
+In-Reply-To: <87le365tei.wl-tiwai@suse.de>
 
-On Thu, Jun 13, 2024 at 01:50:29AM -0700, Jonathan Calmels wrote:
-> On Wed, Jun 12, 2024 at 08:54:28PM GMT, John Johansen wrote:
-> > On 6/12/24 10:29, Paul Moore wrote:
-> > > On Wed, Jun 12, 2024 at 4:15 AM Jonathan Calmels <jcalmels@3xx0.net> wrote:
-> > > > On Tue, Jun 11, 2024 at 06:38:31PM GMT, Paul Moore wrote:
-> > > > > On Tue, Jun 11, 2024 at 6:15 PM Jonathan Calmels <jcalmels@3xx0.net> wrote:
-> > > 
-> > > ...
-> > > 
-> > > > > > Arguably, if we do want fine-grained userns policies, we need LSMs to
-> > > > > > influence the userns capset at some point.
-> > > > > 
-> > > > > One could always use, or develop, a LSM that offers additional
-> > > > > controls around exercising capabilities.  There are currently four
-> > > > > in-tree LSMs, including the capabilities LSM, which supply a
-> > > > > security_capable() hook that is used by the capability-based access
-> > > > > controls in the kernel; all of these hook implementations work
-> > > > > together within the LSM framework and provide an additional level of
-> > > > > control/granularity beyond the existing capabilities.
-> > > > 
-> > > > Right, but the idea was to have a simple and easy way to reuse/trigger
-> > > > as much of the commoncap one as possible from BPF. If we're saying we
-> > > > need to reimplement and/or use a whole new framework, then there is
-> > > > little value.
-> > > 
-> > > I can appreciate how allowing direct manipulation of capability bits
-> > > from a BPF LSM looks attractive, but my hope is that our discussion
-> > > here revealed that as you look deeper into making it work there are a
-> > > number of pitfalls which prevent this from being a safe option for
-> > > generalized systems.
-> > > 
-> > > > TBH, I don't feel strongly about this, which is why it is absent from
-> > > > v1. However, as John pointed out, we should at least be able to modify
-> > > > the blob if we want flexible userns caps policies down the road.
-> > > 
-> > > As discussed in this thread, there are existing ways to provide fine
-> > > grained control over exercising capabilities that can be safely used
-> > > within the LSM framework.  I don't want to speak to what John is
-> > > envisioning, but he should be aware of these mechanisms, and if I
-> > > recall he did voice a level of concern about the same worries I
-> > > mentioned.
-> > > 
-> > 
-> > sorry, I should have been more clear. I envision LSMs being able to
-> > update their own state in the userns hook.
-> > 
-> > Basically the portion of the patch that removes const from the
-> > userns hook.
+On Sat, Jun 15, 2024 at 01:37:09PM +0200, Takashi Iwai wrote:
+> From: Takashi Iwai <tiwai@suse.de>
+> Subject: [PATCH v3] ALSA: control: Apply sanity check of input values for user elements
 > 
-> Yes, pretty sure we'll need this regardless.
+> Although we have already a mechanism for sanity checks of input values
+> for control writes, it's not applied unless the kconfig
+> CONFIG_SND_CTL_INPUT_VALIDATION is set due to the performance reason.
+> Nevertheless, it still makes sense to apply the same check for user
+> elements despite of its cost, as that's the only way to filter out the
+> invalid values; the user controls are handled solely in ALSA core
+> code, and there is no corresponding driver, after all.
 > 
-> > An LSM updating the capset is worrysome for all the reasons you
-> > pointed out, and I think a few more. I haven't had a chance to really
-> > look at v2 yet, so I didn't want to speak directly on the bpf part of
-> > the patch without first giving a good once over.
-> > 
-> > > I'm happy to discuss ways in which we can adjust the LSM hooks/layer
-> > > to support different approaches to capability controls, but one LSM
-> > > directly manipulating the state of another is going to be a no vote
-> > > from me.
-> > > 
-> > I might not be as hard no as Paul here, I am always willing to listen
-> > to arguments, but it would have to be a really good argument to
-> > modify the capset, when there are multiple LSMs in play on a system.
+> This patch adds the same input value validation for user control
+> elements at its put callback.  The kselftest will be happier with this
+> change, as the incorrect values will be bailed out now with errors.
 > 
-> The way I see it, it's more about enhancing the capability LSM with BPF
-> hooks and have it modify its own state dynamically, not so much
-> crosstalk between two distinct LSM frameworks (say one where the BPF
-> LSM implements a lot of things like capable()).
+> For other normal controls, the check is applied still only when
+> CONFIG_SND_CTL_INPUT_VALIDATION is set.
 > 
-> In this context and with enough safeguards (say we only allow dropping
-> caps) this could be a net positive. Sure, ordering could come into play
-> in very specific scenarios, but at this point I would expect the
-> admin/LSM author to be conscious about it.
-> 
-> If we think there is no way we can come up with something that's safe
-> enough, and that the risks outweigh the benefits, fine by me, we can
-> drop this patch from the series.
+> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Closes: https://lore.kernel.org/r/1d44be36-9bb9-4d82-8953-5ae2a4f09405@molgen.mpg.de
+> Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>  sound/core/control.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-I think pursuing patches 1-3 now, and punting on 4 until later, would
-be great.
+Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+
+
+Thanks
+
+Takashi Sakamoto
 
