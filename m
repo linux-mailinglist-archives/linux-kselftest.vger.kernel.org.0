@@ -1,74 +1,71 @@
-Return-Path: <linux-kselftest+bounces-12100-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254C390BAA7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 21:15:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC1190BAB1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 21:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 283121C22109
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2416281C0D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30862198A03;
-	Mon, 17 Jun 2024 19:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7F6198E88;
+	Mon, 17 Jun 2024 19:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HANXyEhB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RcM5b/Jk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12CF4E2;
-	Mon, 17 Jun 2024 19:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C4F18A934
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 19:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718651721; cv=none; b=nOFEykaLR32XHhIsTPSpeti4x1pSgUi6Dl2fYXWEG70+9MxN+I37ayCmqtdoCyeovyUaqsyRvM+tiMEJ+D6O+2yD3RJHSn+62j63TjlUKa/k+9gpYDeFT4aUYoFvpTrzz1EVw4WU48YwQy64LByKoqJuBi8hUZumRAB/s5AbGNE=
+	t=1718651843; cv=none; b=DYZQco7TTI/ABzFIufVD8YY5jG2NQC2gJZxF8HFVPh+uB3CVRrVsLdQm9YstZKsPF2rB9c0SzgEeFKXr3NRSxsChxgjDSgLa/aGr1Q+d1yb1QKhVk9S7yEx9CzSXAD4PtXEFIyVlja+Obb01hr+unCWiuvtq8AA1P5+YF9qXpls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718651721; c=relaxed/simple;
-	bh=nsufkampkQL2B/KAL+B3WIShcveSuYLyusXyX+/OFns=;
+	s=arc-20240116; t=1718651843; c=relaxed/simple;
+	bh=jQKjgH/IeJSbhbllaf+iVIq0r/CllhXzET0SeRnnSRo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RffSTQOBRSHzSr3kDdWL/C2dnPSH570Zc6yHv/xeKghqfvE/s6jH23VKH6yGlD7DIzZqygheVNbA68uOAtqAZqbbxQVN1kffdDHdsdf8UDq6xOQtEB8/wPhFPHggPXWusKslN1pf/SXURKzAzC/J2zQX1FL+Rkknf0i7f+koSW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HANXyEhB; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-57cce3bc8c6so2771519a12.3;
-        Mon, 17 Jun 2024 12:15:19 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=NQ92GCq8JXM+wKe4kUJipYx/tsJ6oTFow1cUjECqJEbf5bmiNq+9ke6ujLn4Av9mK3ncfQ32yLEfKvjqjWOf3cqJtAAmwgNcJEVYb23Char5ZiR3Yim76TsCW5j0+zagcjpHtUjj1egQpNaa9d4iT/+vMGmx/dvTEZfqKGNd8wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RcM5b/Jk; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7eedf4ae265so6827439f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 12:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718651718; x=1719256518; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1718651840; x=1719256640; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RTI1O6QA7ca9OdFzDxJ8jDm0hCKKz6E+AKsMSF5c9gg=;
-        b=HANXyEhB51G9lWZwRDA1TOvJNnGv/ofkV+kDmuSt/rKrULJ6xyRh2HBWyjyqHEQASJ
-         +j7agjw4Kva8YAgjMVVUSMq6z+QlPRLneyycPJz0BjrIccphF3ydLvKSrEDa6f0aD/4y
-         JV0BVMsa9E12gzG93ygjZTWzxGCxeOligbNCtOGOaKeEA6hXIhS3HMwLr03TheiWv7NZ
-         FOAh09l9mNZ/zDXe2go2ChA07t4phg7nyZRkTHz/7UdHHyI/Kk4xz4+mQY867Mgcjxx6
-         t3mxgEhNP4/HK5JHevm1CAseJKqIKADOUneXl6l+krvaFjvBFDfaTZTPMH8NX66CBc3s
-         0f0w==
+        bh=uxDCmX69tkQkw7FEhpYwJ22/GtNZFk3dnE10Jhs2Vfw=;
+        b=RcM5b/JkvHHb/X+dWLUVatx1pvkpDokDo4WXM2E0UUG/zyLXEU5nFFIPTq0AM8SVaU
+         WUkZCzfcmILe6DnBN7D3HrtCNae98AiwxylcD4S1rm+bksha3YvsA+DB7NHf118o1hZZ
+         0JpEioi60kD9gMpFiGyjQcWZy/rVeERVhTrdQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718651718; x=1719256518;
+        d=1e100.net; s=20230601; t=1718651840; x=1719256640;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTI1O6QA7ca9OdFzDxJ8jDm0hCKKz6E+AKsMSF5c9gg=;
-        b=hWb6mdp7gFx/3r5K2QEq/32nA2uOmpLT3UIJljCRaYUHehZDMSigXAj+DX0eXYaHNb
-         rJNOWD2DGsbcN+yjKdnGhgJWHXO2XQPavgD2jTyidZpW/2EHk40h9T6hfQuiysBXYBSv
-         zKJgDvvuAgYFunpTpVIkb6vVvFnY/EfF/ztYYCxURodBPi0raS9Bv/uFEFvghUTBaTbg
-         HUOIMUmwlXoqR2zFjYuOm3IrJ7jZjyJGiz5TGQ5RkthN+exgYweZ1zoRiAj1zeGzTGkb
-         oGAuncXmY1iTb13lOfxfbyXFLIT7HW3pKueEmIta2RXNdkTKfqy4XhIYVqCL6eWNPOOe
-         l5aA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgzo9l7x071P6jenBNY0DCnB4K1SSENdBQkUqPbXJYpsyWrkJABFnDCxfuQ93OP7SgZbb63ReQ/JWy5uStVdU74EmZXXWKOJQ/rpiNQb1XokJctAMJdOHzlIIWA7C8yqY8cc36lWneIlqmvBU61PPpQKNhz8wD7GJaZJf+CDx9/Nr2EGhrIeANrCEwlwxOda6hYJwAayjpTpU9z4wRAH+K8/ENDTL+SyMV8YUg9IIW8PwZDYMBWnCyFnLQNhkZ/rEifvawAjpOZVs8qXI/BPaER6CZ6I/dD/0fBtzr9dzd+yA4vgXwOPay3V5bDdZ3rVpgP1gBq1pJy5chAciQKiAG3ZH062A5zt3gk6/YRt5+DFSz6hdwwD1nDyg9axp1pIO0YGDElcC/fqQ6wktkbAFXd5hIEP/7RjBbZKOfGjPnWymqD8rCRjq2cOzxh5WtFXCpwLuV2y24GC1yydE7KsD6Ftbd7uB8ZKtEd8ke8UyeVI8ioJDSzMMOyQaEOtYIiCTIVvRIZQ==
-X-Gm-Message-State: AOJu0YycgqRiOaGC3XEhLbbGkw9FaW8+UbsV7HoeYegOKY/XZfgp5Sjp
-	eHRNZ3KyX+uDD6ur2G4cSvKuzLrNxMGMipc4Co0JKB8h/LTUDgda
-X-Google-Smtp-Source: AGHT+IHBSjL7hP+WPtAP2SKF5/rsbIqC60y9fVUpbG/XrFpirHjiCxXr5Vsl09CmHgTmroNfpH7Tcw==
-X-Received: by 2002:a50:9b45:0:b0:57c:9cd3:4f96 with SMTP id 4fb4d7f45d1cf-57cbd908fcdmr6110311a12.40.1718651717456;
-        Mon, 17 Jun 2024 12:15:17 -0700 (PDT)
-Received: from [192.168.42.137] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57ce0457d82sm2034856a12.39.2024.06.17.12.15.15
+        bh=uxDCmX69tkQkw7FEhpYwJ22/GtNZFk3dnE10Jhs2Vfw=;
+        b=cJ6huQ2rmfKY1D4fWlglKeiE7Bu3PuzIb+aJRpWrUC0kEDsX3bfJCYhkK0ww/ntcQk
+         lElGAhuKevZ3x4FEBbyDdeeHBaybiLQLUeaN2dTCpxjlMz9+8Cdxa1P4uYc8tUEPkmIu
+         K0uo7NcJAbPWrBn/4ifJr+c/c+5+t1E8d5FfgI/O/Z07ynOAoK0msneB21XjkKOgxHpb
+         y77Gvn3DOouI6LPtgYTKkmu53+bPYlMuaGG7uXBcy4kGC753ODzbztedCO7Tnr0a0+m/
+         bMZStVxsIpkl/IzeQMnNFMytkkomMkVzkayuoRAHajf4VuS2xgFI1stZhrdvB3E/71Dh
+         JuBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/debgSeEss0I1nVacopNpQ3kNQZcntbUwsEDhbnbdxXiZ8ritW5rx2E3GRRLV1gV8UcrQaOS+bczO+fySP51HnXvFTWK3Kt5NwAoDJHzc
+X-Gm-Message-State: AOJu0YwjH0EvM0zwsXCCHZ0PIvddMIKEz7P3AzolECGIhlJ5Ke0cm0T4
+	/VbkVYWLVv5Dwe9pkrPPg0+c4yXwlYdxe6kYxaV1X2lkjIF+UA0HveQqWmpHDE0=
+X-Google-Smtp-Source: AGHT+IHOg3FPItf6+cCu8wcgQmloKpiojh3fisdmWTlg+Lr2TYt3VwBpFvvZ6liZuV86R4UCrSrAdA==
+X-Received: by 2002:a05:6602:142:b0:7eb:66a5:d1c with SMTP id ca18e2360f4ac-7ebeaefca76mr980500639f.0.1718651840458;
+        Mon, 17 Jun 2024 12:17:20 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4b9569ef5a4sm2733310173.117.2024.06.17.12.17.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 12:15:16 -0700 (PDT)
-Message-ID: <ff109ca0-3056-45fd-b1ae-5482e1affeb0@gmail.com>
-Date: Mon, 17 Jun 2024 20:15:17 +0100
+        Mon, 17 Jun 2024 12:17:20 -0700 (PDT)
+Message-ID: <93ea1bde-4dac-409b-8c3c-0f6c0239bb1c@linuxfoundation.org>
+Date: Mon, 17 Jun 2024 13:17:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,112 +73,105 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
- Mina Almasry <almasrymina@google.com>, Christoph Hellwig
- <hch@infradead.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
- <20240610221500.GN791043@ziepe.ca>
+Subject: Re: [PATCH v3 2/2] usercopy: Convert test_user_copy to KUnit test
+To: Kees Cook <kees@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Vitor Massaru Iha
+ <vitor@massaru.org>, Ivan Orlov <ivan.orlov0322@gmail.com>,
+ David Gow <davidgow@google.com>, Brendan Higgins
+ <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-hardening@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240612195412.make.760-kees@kernel.org>
+ <20240612195921.2685842-2-kees@kernel.org>
+ <90e61842-e933-4d6f-a3b5-c802382fe96a@linuxfoundation.org>
+ <202406171157.A97ACED1B@keescook>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240610221500.GN791043@ziepe.ca>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <202406171157.A97ACED1B@keescook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/10/24 23:15, Jason Gunthorpe wrote:
-> On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
->> On 6/10/24 16:16, David Ahern wrote:
-> 
->>>> There is no reason you shouldn't be able to use your fast io_uring
->>>> completion and lifecycle flow with DMABUF backed memory. Those are not
->>>> widly different things and there is good reason they should work
->>>> together.
+On 6/17/24 13:00, Kees Cook wrote:
+> On Fri, Jun 14, 2024 at 09:50:05AM -0600, Shuah Khan wrote:
+>> On 6/12/24 13:59, Kees Cook wrote:
+>>> Convert the runtime tests of hardened usercopy to standard KUnit tests.
+>>>
+>>> Additionally disable usercopy_test_invalid() for systems with separate
+>>> address spaces (or no MMU) since it's not sensible to test for address
+>>> confusion there (e.g. m68k).
+>>>
+>>> Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
+>>> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+>>> Link: https://lore.kernel.org/r/20200721174654.72132-1-vitor@massaru.org
+>>> Tested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+>>> Reviewed-by: David Gow <davidgow@google.com>
+>>> Signed-off-by: Kees Cook <kees@kernel.org>
+>>> ---
+>>>    MAINTAINERS                                |   1 +
+>>>    lib/Kconfig.debug                          |  21 +-
+>>>    lib/Makefile                               |   2 +-
+>>>    lib/{test_user_copy.c => usercopy_kunit.c} | 282 ++++++++++-----------
+>>>    4 files changed, 151 insertions(+), 155 deletions(-)
+>>>    rename lib/{test_user_copy.c => usercopy_kunit.c} (46%)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 8754ac2c259d..0cd171ec6010 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -11962,6 +11962,7 @@ F:	arch/*/configs/hardening.config
+>>>    F:	include/linux/overflow.h
+>>>    F:	include/linux/randomize_kstack.h
+>>>    F:	kernel/configs/hardening.config
+>>> +F:	lib/usercopy_kunit.c
+>>>    F:	mm/usercopy.c
+>>>    K:	\b(add|choose)_random_kstack_offset\b
+>>>    K:	\b__check_(object_size|heap_object)\b
+>>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>>> index 59b6765d86b8..561e346f5cb0 100644
+>>> --- a/lib/Kconfig.debug
+>>> +++ b/lib/Kconfig.debug
+>>> @@ -2505,18 +2505,6 @@ config TEST_VMALLOC
+>>>    	  If unsure, say N.
+>>> -config TEST_USER_COPY
+>>> -	tristate "Test user/kernel boundary protections"
+>>> -	depends on m
+>>> -	help
+>>> -	  This builds the "test_user_copy" module that runs sanity checks
+>>> -	  on the copy_to/from_user infrastructure, making sure basic
+>>> -	  user/kernel boundary testing is working. If it fails to load,
+>>> -	  a regression has been detected in the user/kernel memory boundary
+>>> -	  protections.
+>>> -
+>>> -	  If unsure, say N.
+>>> -
+>>>    config TEST_BPF
+>>>    	tristate "Test BPF filter functionality"
+>>>    	depends on m && NET
+>>> @@ -2814,6 +2802,15 @@ config SIPHASH_KUNIT_TEST
+>>>    	  This is intended to help people writing architecture-specific
+>>>    	  optimized versions.  If unsure, say N.
+>>> +config USERCOPY_KUNIT_TEST
+>>> +	tristate "KUnit Test for user/kernel boundary protections"
+>>> +	depends on KUNIT
+>>> +	default KUNIT_ALL_TESTS
+>>> +	help
+>>> +	  This builds the "usercopy_kunit" module that runs sanity checks
+>>> +	  on the copy_to/from_user infrastructure, making sure basic
+>>> +	  user/kernel boundary testing is working.
+>>> +
 >>
->> Let's not mix up devmem TCP and dmabuf specifically, as I see it
->> your question was concerning the latter: "... DMABUF memory registered
->> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
->> support in future, as mentioned it's mostly the setup side. ABI,
->> buffer workflow and some details is a separate issue, and I don't
->> see how further integration aside from what we're already sharing
->> is beneficial, on opposite it'll complicate things.
+>> Please carry the following line forward as well to be complete assuming
+>> it is relevant.
+>>
+>> If unsure, say N.
 > 
-> Again, I am talking about composability here, duplicating the DMABUF
-> stuff into io_uring is not composable, it is just duplicating things.
-
-Ok, then registering, say, a dmabuf via devmem TCP and then using it
-in io_uring. Let's say we make devmem TCP API to be able to register
-a dmabuf without using it, from where io_uring can take ownership
-over it and use in the flow. And I strongly believe the same memory
-region/dmabuf should never be used by both at the same time and hence
-lifetime of any such memory should be exclusively bound to io_uring.
-
-That leaves the user api, where to add memory you need to create
-a netlink socket and pass everything through it, which is an extra
-step, and then letting know io_uring that it can use the memory, not
-forgetting to eject it from netlink. That's not a good api as far as
-it goes with io_uring.
-
-I don't think slight duplicating of registration is a problem when
-the upside is much cleaner API. Internals, however, can be easily
-shared. We can even say that the net stack should provide helpers
-like init_page_pool_from_dmabuf_fd() and now allow poking into
-related bits aside from it (initialising net_iov / etc.).
-
-> It does not match the view that there should be two distinct layers
-> here, one that provides the pages and one that manages the
-> lifecycle. As HCH pushes for pages either come from the allocator and
-> get to use the struct folio or the come from a dmabuf and they
-> don't. That is it, the only two choices.
+> I've explicitly removed that because it would be repetitive if it were
+> included for all KUnit tests.
 > 
-> The iouring stuff is trying to confuse the source of the pages with
-> the lifecycle - which is surely convenient, but is why Christoph is
-> opposing it.
 
--- 
-Pavel Begunkov
+Thanks for the explanation.
+
+thanks,
+-- Shuah
 
