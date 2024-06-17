@@ -1,220 +1,236 @@
-Return-Path: <linux-kselftest+bounces-12085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5406E90B87F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:53:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E772D90B8A0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:57:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C63FD1F233CC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 17:53:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71CCA1F254C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 17:57:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064A418FDA7;
-	Mon, 17 Jun 2024 17:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1996194154;
+	Mon, 17 Jun 2024 17:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJvI+Jbl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bF2CV1r9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D8343165;
-	Mon, 17 Jun 2024 17:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06C416CD3D
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 17:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718646777; cv=none; b=FUrOZCmUNjwSlHb13tz7fZ+djJc5O99SH78kfJ6q70FQCAYfnP8Ll+lwAK0yJKBajjp6ugg7KbV8WEhNMlznvl1Gj98A8HqdJE1dilr44rv+3YbIkkDA7WN+aOTGkQPMDpNPkghyrTw9FxF27YkrilcOlyVa7pAyvkP/eI2QiTs=
+	t=1718647021; cv=none; b=CkKsqTXXtM77x25zj5oiiJ9sfNIzDy74r9n0+N1gSWPqVl5oO/q21o1gF/r0lgmnGZ6jMPFSj51dhMcv1eCrCMZxXXeITksiM8GKN7Ke/Q44gqOWi4SeAAm6rwyvwPboiCyauZoFoO24nwGAnbwoeW/RG74oCCKWU+RrMUDvdKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718646777; c=relaxed/simple;
-	bh=4gsJQl6qIuVWg7RhN46VmapVAsYSwUdCY7u3dkVR+gE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tqYtZ/zRxVmlUjtsDeLgqJfU/ZE9OrN6nRW296lYXdplr72SO1kLbEW6sxTDcJfjef2V0Vf9o61vmvkfMOK36sjRwnqMOpM//8nA26sx8aTwPRhOuY8nX8ZsL4svMwWNbEd//i+XzHDc8p4g50pqceomdpkebEK+scYpr4oLS9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJvI+Jbl; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-35f22d3abf1so4200228f8f.1;
-        Mon, 17 Jun 2024 10:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718646774; x=1719251574; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TpAELCdjsBD+JrbERWD7mTd4OMlGherBa7u+JgUwCuU=;
-        b=OJvI+JblguvKGVK+cKS5/Y1J+iPdmCU6EpTZkh1BJcQvrf4hencWnze+98rj0W+5EE
-         qGX4gcd8av+qUlxqfVvmzsNb0XSWNEycXVYsVAY4M6LuViV0jK1EYRaaYmEm7GwlYxLd
-         a1EGKm9hqQ+pZ6Vit4jwiDVdbkCbmsK8EmMXCsY1WiFBAAFp8273ciC7TCogfcwKghVS
-         y/mpn6AkrEi/sJuPtXfkAkI8vvO2MBWq61H/JgfJv2x52bZymVhg7DwGZAIowjKIIVjy
-         LkxDpB2WDlFl6SjGTTrylP/X8O/HTE4h0vrF3cS5rNwTh/HAjkjwGr51BBnpLvWQoZ/F
-         diYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718646774; x=1719251574;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpAELCdjsBD+JrbERWD7mTd4OMlGherBa7u+JgUwCuU=;
-        b=F6ih09aXGXTy7yoMigH3gvPEBfTp3yqOj+F1D4PKIL3JLpo81n2YdG62xnEx+c9Ncm
-         tp7N82jf95NmoJtFVqfn6wRtUr603E2+L90Bdh1kcaSdcJfbRmLClwZvWBJqgiZTRXCo
-         6UFqqVGddzKbzrH7qGOQz+fFf6Znki26drKBXLMLSThmhILMDBWytkke3W5YKO74qd65
-         APCwF5mTRTXjdEEGsExScVAqG83lmXUPhMsdiA/6BPqFG3O+3VM4Bof5+3LCVHkNS47X
-         5lw/TH1VIHJNi9Wi4MyfzwTPF6uV9hVzCT4YWJ6kiCE4oTd19W+vy/JBRmwxmk1cMhy+
-         QUMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8yw/wfKSJRj4jH9Ifto4+AA5apFJgxD7BANjXfKGfH57fCUy1Dm0aU+L0mchmVGn/hCX5uVSS30NSygzzmLoggDJ99T7QCUklYWOXxR6GavhmmHnSpnIBWOaVnhAqQ4RBOh0yLIp/QN6TBLWBGrsDwqX4bX+eEBxT9hFaxHJqwy0zGPYEdXqYD0a3Y8TeTAuEIhEBk0ou98Hw//2g5Ky6Z3qqfL0eMpHQwt5VMwUIwvkhoaS07xFGrBNoixIoy9YnqQ8xil0SHSb253Q+O5H5cgohsT/pxqpxFYDI8Ks2VOAm0g9CXsQyPiwh+81eg276FiBiMLqHZ3z/9n/HtAnyclUjt712Zq8fnFNvLviGQ0TjbohHNkNGoCYdIyrQh7p8/CUXGYptegbLI8SiHYeKGrjbyVyer7oa77HVGttP6cZOuAOvvHn2TR4c6y5a7sfZUUMVbfFu3+0kAoCKGyM2B9AOAUP7LyHVw+wvrwzgc5UzQ6DR9KDJtUDkCBG56vYnA2R7uOFwiHYibatwIRE5cej2kSp+h9KKvitnQlAbToLyDbU2iWjf
-X-Gm-Message-State: AOJu0YyKeXhR7A9hqsPVjUq989Kx9dNfyHtCYgr67TOAlaOoqnNpOoi6
-	Dejxd+7677Vhm3vnqBQIqie1pfBRs1SRjR4aWgAv9Lw64y3RwIMR
-X-Google-Smtp-Source: AGHT+IGl45hl8z5GTV7cP0mMya2j77Ernk+fngMh6lTe4ik8n3cM/4R8lGNxKRhI8iXovlNIXIeAXQ==
-X-Received: by 2002:adf:efc9:0:b0:35f:219d:e529 with SMTP id ffacd0b85a97d-3607a78338cmr10492439f8f.47.1718646774132;
-        Mon, 17 Jun 2024 10:52:54 -0700 (PDT)
-Received: from [192.168.42.223] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56ecdce5sm531595666b.108.2024.06.17.10.52.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 10:52:53 -0700 (PDT)
-Message-ID: <fa9f8d25-9f68-4f63-a070-639e23917827@gmail.com>
-Date: Mon, 17 Jun 2024 18:52:54 +0100
+	s=arc-20240116; t=1718647021; c=relaxed/simple;
+	bh=YgElG/kLYYqsxODcHai0Njk6U1Rwapx3rdtvB7AtEUc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=BwWvmIkqeLmrA57YCuGOXMpVONDRJcWYNA9YnaWjykwViKrufFLuE9FK1vs2WnDcb4I5BZDkFbOe5t3hiwIT+r4bDEM7QENwL8ULLCRkgthnmF/6kceAEhNoSiA7uHHGKiRhdcDvFb7mKHzBRpRqCf7XFOcXFAY3tygrFqFwL9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bF2CV1r9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718647018;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=v3+RmOlksDfTAFqNkTKQ0MNP70H7CNovcQRO+KHXRTU=;
+	b=bF2CV1r9W/H1p7M2zmJoMLiO/s/Mf5u24ydX1PDLHz3rSK4/UjnqtVRFfEmG5rPOdH/XwW
+	O/yYMIen6YlCsHk+V0kHhXaKzcEN3HM2LC0ix6dtkD1pxnO3buyVtOlMdxMC6uNebkX3+H
+	K/qvRcMOvKxq11LvKr6/w234h2gqhXc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-fOJ4-S3DPlaZpk_sfowdOQ-1; Mon,
+ 17 Jun 2024 13:56:52 -0400
+X-MC-Unique: fOJ4-S3DPlaZpk_sfowdOQ-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D82E19560B8;
+	Mon, 17 Jun 2024 17:56:51 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.16.41])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6AB141956087;
+	Mon, 17 Jun 2024 17:56:48 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
+  linux-kernel@vger.kernel.org,  Ilya Maximets <i.maximets@ovn.org>,
+  Stefano Brivio <sbrivio@redhat.com>,  Eric Dumazet <edumazet@google.com>,
+  linux-kselftest@vger.kernel.org,  Jakub Kicinski <kuba@kernel.org>,
+  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan <shuah@kernel.org>,  "David
+ S. Miller" <davem@davemloft.net>
+Subject: Re: [ovs-dev] [RFC net-next 4/7] selftests: openvswitch: Add
+ support for tunnel() key.
+In-Reply-To: <20240616162743.GJ8447@kernel.org> (Simon Horman's message of
+	"Sun, 16 Jun 2024 17:27:43 +0100")
+References: <20240613181333.984810-1-aconole@redhat.com>
+	<20240613181333.984810-5-aconole@redhat.com>
+	<20240616162743.GJ8447@kernel.org>
+Date: Mon, 17 Jun 2024 13:56:46 -0400
+Message-ID: <f7t7cenmp0h.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 05/13] page_pool: convert to use netmem
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-6-almasrymina@google.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-6-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On 6/13/24 02:35, Mina Almasry wrote:
-> Abstrace the memory type from the page_pool so we can later add support
-> for new memory types. Convert the page_pool to use the new netmem type
-> abstraction, rather than use struct page directly.
-> 
-> As of this patch the netmem type is a no-op abstraction: it's always a
-> struct page underneath. All the page pool internals are converted to
-> use struct netmem instead of struct page, and the page pool now exports
-> 2 APIs:
-> 
-> 1. The existing struct page API.
-> 2. The new struct netmem API.
+Simon Horman <horms@kernel.org> writes:
 
-nits below,
+> On Thu, Jun 13, 2024 at 02:13:30PM -0400, Aaron Conole wrote:
+>> This will be used when setting details about the tunnel to use as
+>> transport.  There is a difference between the ODP format between tunnel():
+>> the 'key' flag is not actually a flag field, so we don't support it in the
+>> same way that the vswitchd userspace supports displaying it.
+>> 
+>> Signed-off-by: Aaron Conole <aconole@redhat.com>
+>
+> ...
+>
+>> @@ -1265,6 +1265,165 @@ class ovskey(nla):
+>>                  init=init,
+>>              )
+>>  
+>> +    class ovs_key_tunnel(nla):
+>> +        nla_flags = NLA_F_NESTED
+>> +
+>> +        nla_map = (
+>> +            ("OVS_TUNNEL_KEY_ATTR_ID", "be64"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "ipaddr"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_DST", "ipaddr"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_TOS", "uint8"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_TTL", "uint8"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT", "flag"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_CSUM", "flag"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_OAM", "flag"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_GENEVE_OPTS", "array(uint32)"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_TP_SRC", "be16"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_TP_DST", "be16"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_VXLAN_OPTS", "none"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_IPV6_SRC", "ipaddr"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_IPV6_DST", "ipaddr"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_PAD", "none"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_ERSPAN_OPTS", "none"),
+>> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_INFO_BRIDGE", "flag"),
+>> +        )
+>> +
+>> +        def parse(self, flowstr, mask=None):
+>> +            if not flowstr.startswith("tunnel("):
+>> +                return None, None
+>> +
+>> +            k = ovskey.ovs_key_tunnel()
+>> +            if mask is not None:
+>> +                mask = ovskey.ovs_key_tunnel()
+>> +
+>> +            flowstr = flowstr[len("tunnel("):]
+>> +
+>> +            v6_address = None
+>> +
+>> +            fields = [
+>> +                ("tun_id=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_ID",
+>> +                 0xffffffffffffffff, None, None),
+>> +
+>> +                ("src=", r"([0-9a-fA-F\.]+)", str,
+>> +                 "OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "255.255.255.255", "0.0.0.0",
+>> +                 False),
+>> +                ("dst=", r"([0-9a-fA-F\.]+)", str,
+>> +                 "OVS_TUNNEL_KEY_ATTR_IPV4_DST", "255.255.255.255", "0.0.0.0",
+>> +                 False),
+>> +
+>> +                ("ipv6_src=", r"([0-9a-fA-F:]+)", str,
+>> +                 "OVS_TUNNEL_KEY_ATTR_IPV6_SRC",
+>> +                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
+>> +                ("ipv6_dst=", r"([0-9a-fA-F:]+)", str,
+>> +                 "OVS_TUNNEL_KEY_ATTR_IPV6_DST",
+>> +                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
+>> +
+>> +                ("tos=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TOS", 255, 0,
+>> +                 None),
+>> +                ("ttl=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TTL", 255, 0,
+>> +                 None),
+>> +
+>> +                ("tp_src=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_SRC",
+>> +                 65535, 0, None),
+>> +                ("tp_dst=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_DST",
+>> +                 65535, 0, None),
+>> +            ]
+>> +
+>> +            forced_include = ["OVS_TUNNEL_KEY_ATTR_TTL"]
+>> +
+>> +            for prefix, regex, typ, attr_name, mask_val, default_val, v46_flag in fields:
+>> +                flowstr, value = parse_extract_field(flowstr, prefix, regex, typ, False)
+>> +                if not attr_name:
+>> +                    raise Exception("Bad list value in tunnel fields")
+>> +
+>> +                if value is None and attr_name in forced_include:
+>> +                    value = default_val
+>> +                    mask_val = default_val
+>> +
+>> +                if value is not None:
+>> +                    if v6_address is None and v46_flag is not None:
+>> +                        v6_address = v46_flag
+>
+> By my reading, at this point v6_address will only be None if v46_flag is
+> not None.  IF so, the condition below seems excessive.
 
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Agreed - thanks for the suggestions.
 
+>> +                    if v6_address is not None and v46_flag is not None \
+>> +                       and v46_flag != v6_address:
+>> +                        raise ValueError("Cannot mix v6 and v4 addresses")
+>
+> I wonder if we can instead express this as (completely untested!):
+>
+>                     if v46_flag is not None:
+>                         if v6_address is None:
+>                             v6_address = v46_flag
+>                         if v46_flag != v6_address:
+>                             raise ValueError("Cannot mix v6 and v4 addresses")
+>
+>> +                    k["attrs"].append([attr_name, value])
+>> +                    if mask is not None:
+>> +                        mask["attrs"].append([attr_name, mask_val])
+>> +                else:
+>> +                    if v6_address is not None and v46_flag is not None \
+>> +                       and v46_flag != v6_address:
+>> +                        continue
+>> +                    if v6_address is None and v46_flag is not None:
+>> +                        continue
+>
+> And I wonder if this is a bit easier on the eyes (also completely untested):
+>
+>                     if v46_flag is not None:
+>                         if v6_address is None or v46_flag != v6_address:
+>                             continue
 
-> Keeping the existing API is transitional; we do not want to refactor all
-> the current drivers using the page pool at once.
-> 
-> The netmem abstraction is currently a no-op. The page_pool uses
-> page_to_netmem() to convert allocated pages to netmem, and uses
-> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
-> 
-> Follow up patches to this series add non-paged netmem support to the
-> page_pool. This change is factored out on its own to limit the code
-> churn to this 1 patch, for ease of code review.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->   #endif /* _NET_NETMEM_H */
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-> index 873631c79ab16..5e129d5304f53 100644
-> --- a/include/net/page_pool/helpers.h
-> +++ b/include/net/page_pool/helpers.h
-> @@ -55,6 +55,8 @@
->   #include <linux/dma-mapping.h>
->   
->   #include <net/page_pool/types.h>
-> +#include <net/net_debug.h>
-> +#include <net/netmem.h>
->   
->   #ifdef CONFIG_PAGE_POOL_STATS
->   /* Deprecated driver-facing API, use netlink instead */
-> @@ -103,7 +105,7 @@ static inline struct page *page_pool_dev_alloc_pages(struct page_pool *pool)
->    * Get a page fragment from the page allocator or page_pool caches.
->    *
->    * Return:
-> - * Return allocated page fragment, otherwise return NULL.
-> + * Return allocated page fragment, otherwise return 0.
+I folded both of these in and did some quick testing.  Thanks Simon!
 
-It's a page_pool_dev_alloc_frag()'s comment, and the function
-still returns a pointer.
+>> +                    if mask is not None:
+>> +                        mask["attrs"].append([attr_name, default_val])
+>> +
+>> +            if k["attrs"][0][0] != "OVS_TUNNEL_KEY_ATTR_ID":
+>> +                raise ValueError("Needs a tunid set")
+>
+> ...
+>
+>> @@ -1745,7 +1905,7 @@ class OvsVport(GenericNetlinkSocket):
+>>          )
+>>  
+>>          TUNNEL_DEFAULTS = [("geneve", 6081),
+>> -                           ("vxlan", 4798)]
+>> +                           ("vxlan", 4789)]
+>>  
+>>          for tnl in TUNNEL_DEFAULTS:
+>>              if ptype == tnl[0]:
+>
+> As noted in my response to PATCH 1/7, I think that the
+> change in the hunk above belongs there rather than here.
 
-...
->   static inline void *page_pool_alloc_va(struct page_pool *pool,
-> @@ -172,7 +174,8 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
->   	struct page *page;
->   
->   	/* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
-> -	page = page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM);
-> +	page = netmem_to_page(
-> +		page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM));
->   	if (unlikely(!page))
->   		return NULL;
->   
-> @@ -189,7 +192,7 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
->    * it returns va of the allocated page or page fragment.
->    *
->    * Return:
-> - * Return the va for the allocated page or page fragment, otherwise return NULL.
-> + * Return the va for the allocated page or page fragment, otherwise return 0.
-
-ditto
-
->    */
->   static inline void *page_pool_dev_alloc_va(struct page_pool *pool,
->   					   unsigned int *size)
-> @@ -212,6 +215,11 @@ page_pool_get_dma_dir(const struct page_pool *pool)
->   	return pool->p.dma_dir;
->   }
->   
-> +static inline void page_pool_fragment_netmem(netmem_ref netmem, long nr)
-> +{
-> +	atomic_long_set(&netmem_to_page(netmem)->pp_ref_count, nr);
-> +}
-...
-
--- 
-Pavel Begunkov
 
