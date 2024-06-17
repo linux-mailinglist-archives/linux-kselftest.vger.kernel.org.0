@@ -1,60 +1,63 @@
-Return-Path: <linux-kselftest+bounces-12051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 917E790B012
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 15:50:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0A690AF71
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 15:34:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81788B2D22B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 13:34:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8753D28C9A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 13:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1ECB1AC234;
-	Mon, 17 Jun 2024 13:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52B01AC44F;
+	Mon, 17 Jun 2024 13:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gWi0GOzF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJwlCP2Z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93FE19A2B7;
-	Mon, 17 Jun 2024 13:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EA31AC449;
+	Mon, 17 Jun 2024 13:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630517; cv=none; b=SXwO5fLppebWvpPgYvHC2QLag+WgwSE34Rd0YT1h7Y0/PHbArwQZ12FOAIdTrmHjBw8DXU6f/JArifSkMyUunSzPtVT9Fj8ZPbEY1u4zzucnnEVIEbrlg8DdlDwtSWJWwZqpCpYtFe69LcdKoSsdCUQ/Do54YVu5ij5OM2kVv28=
+	t=1718630520; cv=none; b=A3QOCo9+sj0hwdm9d5b9WrTQoz+obuWICLT2ljqYe1jAupuLwAXKo6eu88ePZkr7bvU6sebQywIQMbbJk7fRVLHfNMl6+QGZhSUmrxXig2NJe0SHr7oIdPdUVcXwpfGfGkBK5WgMyO5MLVoiMII470vqXKjd9kYG7wsnXE5bSO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630517; c=relaxed/simple;
-	bh=xVqRJugbodHNTwrbdds9RCp4ryI4PtFZUFV14jUvP8o=;
+	s=arc-20240116; t=1718630520; c=relaxed/simple;
+	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FieDyMLse+qKalrTl6RSyBixxoZ9F1fEFDX7ewyFlm3vMi4kpQqivyWJgjfobW+yX3CGvjGxxGK3o3AnGoH2X9RHuHDz1xQJuSb3u3Ka8tKSeKLCvRXhaWO0ZuvMJ3WzJDo3VyfhrCAlLX6K8rBI+Ni+JbWqi1XAweEjpzH+Gvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gWi0GOzF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F52C2BD10;
-	Mon, 17 Jun 2024 13:21:56 +0000 (UTC)
+	 MIME-Version; b=NHN/GJYSCbh625hurTDpFzQYMTtU2rBRzt6Wh9BtMZ5zzIKO9GVkUmAY79kp6sEgarW1jYDhfNeZnoW/7M96vLUm89cIxc3kZt7kwv0ubaBoB6tFF4aRaeaz6HisieqiKV+OVNK5lpMRgPR3fosQ1bXZonM5uSodgJhoB7YAzGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJwlCP2Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3404C4AF1C;
+	Mon, 17 Jun 2024 13:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718630517;
-	bh=xVqRJugbodHNTwrbdds9RCp4ryI4PtFZUFV14jUvP8o=;
+	s=k20201202; t=1718630520;
+	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gWi0GOzFKwZ5UwvqHeU0pOWc+l+0babKMuehuSvlY+X+DzEm7a9wbbQA6bWFntoWy
-	 GF+p9WRFttbtNePVv0kk2qXunfCyIWs6WCLvA7r5t53yEGBOSlhGH3VkNNxZSYltNf
-	 k7nkCVPcgp7FaVz8avqYnwmud0jA/+Vi1VtCyM9EzyVAr87HdDWmadJuTTrKcPH8DN
-	 d/dG6vRaam9gVnl/An8642OEonXo5FGICjjyEdvoZmB+UkFDYjHOyprIX2iXJbn/fZ
-	 +KleWQjCdjU9zoSonw5i5Azoyk5mh0O4mn7YYwv4Jwf9aVIx4KKgLgPMUPdxMNqxgj
-	 lzlo97MRzu4mw==
+	b=AJwlCP2Zc0X+nmjY+kcdnpTK2FMNDEBAOx9lpom/dC/cjZ387qqH1pcWgQ+yKCZyf
+	 lkYMbu1DSx3PaX8deNvMGimnMHYzvk/o9GseRdiijnyxA/7EDaH5VSJSm8BfbOt2c/
+	 D87KNHSpfzQvpRRnEnqhXkDIbfA98ATfbqElzy5ogF2pFz+76COhzDLLlFXnAwICPm
+	 IK4rbAmGiAnNZCLv4qZyo3zSyTF69kvr2j+f1kqy7755Ofgs5xLyyqH3Z21E7NrmTz
+	 ZdrUoalrOD5a1/1/ct8cKrgm1fEwtQ5DUp5plRDi1HQEMyGVBC8MS3eyb2T93kRhBM
+	 4yl0NK5SnIRxw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
+Cc: John Hubbard <jhubbard@nvidia.com>,
+	Edward Liaw <edliaw@google.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
+	tglx@linutronix.de,
+	mingo@redhat.com,
 	shuah@kernel.org,
-	avagin@google.com,
-	brauner@kernel.org,
-	hu.yadi@h3c.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 27/44] selftests/overlayfs: Fix build error on ppc64
-Date: Mon, 17 Jun 2024 09:19:40 -0400
-Message-ID: <20240617132046.2587008-27-sashal@kernel.org>
+	nathan@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.9 28/44] selftests/futex: pass _GNU_SOURCE without a value to the compiler
+Date: Mon, 17 Jun 2024 09:19:41 -0400
+Message-ID: <20240617132046.2587008-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240617132046.2587008-1-sashal@kernel.org>
 References: <20240617132046.2587008-1-sashal@kernel.org>
@@ -64,42 +67,56 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.9.5
 Content-Transfer-Encoding: 8bit
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: John Hubbard <jhubbard@nvidia.com>
 
-[ Upstream commit e8b8c5264d4ebd248f60a5cef077fe615806e7a0 ]
+[ Upstream commit cb708ab9f584f159798b60853edcf0c8b67ce295 ]
 
-Fix build error on ppc64:
-  dev_in_maps.c: In function ‘get_file_dev_and_inode’:
-  dev_in_maps.c:60:59: error: format ‘%llu’ expects argument of type
-  ‘long long unsigned int *’, but argument 7 has type ‘__u64 *’ {aka ‘long
-  unsigned int *’} [-Werror=format=]
+It's slightly better to set _GNU_SOURCE in the source code, but if one
+must do it via the compiler invocation, then the best way to do so is
+this:
 
-By switching to unsigned long long for u64 for ppc64 builds.
+    $(CC) -D_GNU_SOURCE=
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+...because otherwise, if this form is used:
+
+    $(CC) -D_GNU_SOURCE
+
+...then that leads the compiler to set a value, as if you had passed in:
+
+    $(CC) -D_GNU_SOURCE=1
+
+That, in turn, leads to warnings under both gcc and clang, like this:
+
+    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
+
+Fix this by using the "-D_GNU_SOURCE=" form.
+
+Reviewed-by: Edward Liaw <edliaw@google.com>
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/futex/functional/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-index 759f86e7d263e..2862aae58b79a 100644
---- a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-+++ b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #define _GNU_SOURCE
-+#define __SANE_USERSPACE_TYPES__ // Use ll64
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index a392d0917b4e5..994fa3468f170 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+-CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
++CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
  
- #include <inttypes.h>
- #include <unistd.h>
+ LOCAL_HDRS := \
 -- 
 2.43.0
 
