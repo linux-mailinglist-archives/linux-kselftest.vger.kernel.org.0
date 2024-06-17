@@ -1,236 +1,119 @@
-Return-Path: <linux-kselftest+bounces-12086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E772D90B8A0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:57:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DA4790B8EB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 20:04:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71CCA1F254C1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 17:57:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4398A1C23CA9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 18:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1996194154;
-	Mon, 17 Jun 2024 17:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C68111991B4;
+	Mon, 17 Jun 2024 18:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bF2CV1r9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YEOB0lJP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06C416CD3D
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 17:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FED51990DC
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 18:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718647021; cv=none; b=CkKsqTXXtM77x25zj5oiiJ9sfNIzDy74r9n0+N1gSWPqVl5oO/q21o1gF/r0lgmnGZ6jMPFSj51dhMcv1eCrCMZxXXeITksiM8GKN7Ke/Q44gqOWi4SeAAm6rwyvwPboiCyauZoFoO24nwGAnbwoeW/RG74oCCKWU+RrMUDvdKk=
+	t=1718647353; cv=none; b=RObwLDNRocr8iuy22sfz4WBXkBWGz6+/jbfntyNeOa1h1+jKU/JcFvGLDjQdcmU9S47h3xexE+gEHPvp8wvuc3UJYkZvddVe5/V6ggTfxkXtjUT7p8Brm1CbdnsY8jJiS6ECT+oGha+ju+NDANB4sByLUdzjVSaTzkskfImfbfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718647021; c=relaxed/simple;
-	bh=YgElG/kLYYqsxODcHai0Njk6U1Rwapx3rdtvB7AtEUc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BwWvmIkqeLmrA57YCuGOXMpVONDRJcWYNA9YnaWjykwViKrufFLuE9FK1vs2WnDcb4I5BZDkFbOe5t3hiwIT+r4bDEM7QENwL8ULLCRkgthnmF/6kceAEhNoSiA7uHHGKiRhdcDvFb7mKHzBRpRqCf7XFOcXFAY3tygrFqFwL9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bF2CV1r9; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1718647353; c=relaxed/simple;
+	bh=Jkg1obHM/vTGjyrs0Vbnp8XnJ3MsjzZbXkLumGAgbFc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rK3CigFRv2owQ0gaMSjP/dYIDmn4t08yJOkxD1qtL61EUUsv0PUrfghonlF3NZHg6Jh8cZdemDp6rOp27vnfmRIB+Rsc+DlYbTeTvMxz6KNMMggonmxnZz9wGWvLx7qdl0fLLq6YLbi8zXgcr4Ws1WZT1R1eYJtRMBXV10joRBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YEOB0lJP; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718647018;
+	s=mimecast20190719; t=1718647351;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v3+RmOlksDfTAFqNkTKQ0MNP70H7CNovcQRO+KHXRTU=;
-	b=bF2CV1r9W/H1p7M2zmJoMLiO/s/Mf5u24ydX1PDLHz3rSK4/UjnqtVRFfEmG5rPOdH/XwW
-	O/yYMIen6YlCsHk+V0kHhXaKzcEN3HM2LC0ix6dtkD1pxnO3buyVtOlMdxMC6uNebkX3+H
-	K/qvRcMOvKxq11LvKr6/w234h2gqhXc=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WZR6KXHFj1nYjg6X4UiL6MUXyvMQKOMKT1uk25ibU0s=;
+	b=YEOB0lJPqvZng/VjEp3lAI754nGdxRceMYR6PWswfalmibbLtwo1borprL28pVxKUF6fKp
+	HkWOB6f+XtjXqn+0vnV5Pp8dlwEowt+6Spb8SSk4nPXQI4dkaZPJ6J/+rqPRIKgEL1sL5U
+	xyAbym2gmjKA8fU8FFBumqBrfPzb7f0=
 Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-fOJ4-S3DPlaZpk_sfowdOQ-1; Mon,
- 17 Jun 2024 13:56:52 -0400
-X-MC-Unique: fOJ4-S3DPlaZpk_sfowdOQ-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-32-sbceSbKlN3y4p3pgP7gGvw-1; Mon,
+ 17 Jun 2024 14:02:25 -0400
+X-MC-Unique: sbceSbKlN3y4p3pgP7gGvw-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D82E19560B8;
-	Mon, 17 Jun 2024 17:56:51 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.16.41])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6AB141956087;
-	Mon, 17 Jun 2024 17:56:48 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 963421956062;
+	Mon, 17 Jun 2024 18:02:22 +0000 (UTC)
+Received: from RHTRH0061144.redhat.com (unknown [10.22.16.41])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8B61E1956087;
+	Mon, 17 Jun 2024 18:02:19 +0000 (UTC)
 From: Aaron Conole <aconole@redhat.com>
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
-  linux-kernel@vger.kernel.org,  Ilya Maximets <i.maximets@ovn.org>,
-  Stefano Brivio <sbrivio@redhat.com>,  Eric Dumazet <edumazet@google.com>,
-  linux-kselftest@vger.kernel.org,  Jakub Kicinski <kuba@kernel.org>,
-  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan <shuah@kernel.org>,  "David
- S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [RFC net-next 4/7] selftests: openvswitch: Add
- support for tunnel() key.
-In-Reply-To: <20240616162743.GJ8447@kernel.org> (Simon Horman's message of
-	"Sun, 16 Jun 2024 17:27:43 +0100")
-References: <20240613181333.984810-1-aconole@redhat.com>
-	<20240613181333.984810-5-aconole@redhat.com>
-	<20240616162743.GJ8447@kernel.org>
-Date: Mon, 17 Jun 2024 13:56:46 -0400
-Message-ID: <f7t7cenmp0h.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+To: netdev@vger.kernel.org
+Cc: dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Stefano Brivio <sbrivio@redhat.com>,
+	=?UTF-8?q?Adri=C3=A1n=20Moreno?= <amorenoz@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Subject: [PATCH net-next 0/7] selftests: net: Switch pmtu.sh to use the internal ovs script.
+Date: Mon, 17 Jun 2024 14:02:11 -0400
+Message-ID: <20240617180218.1154326-1-aconole@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Simon Horman <horms@kernel.org> writes:
+Currently, if a user wants to run pmtu.sh and cover all the provided test
+cases, they need to install the Open vSwitch userspace utilities.  This
+dependency is difficult for users as well as CI environments, because the
+userspace build and setup may require lots of support and devel packages
+to be installed, system setup to be correct, and things like permissions
+and selinux policies to be properly configured.
 
-> On Thu, Jun 13, 2024 at 02:13:30PM -0400, Aaron Conole wrote:
->> This will be used when setting details about the tunnel to use as
->> transport.  There is a difference between the ODP format between tunnel():
->> the 'key' flag is not actually a flag field, so we don't support it in the
->> same way that the vswitchd userspace supports displaying it.
->> 
->> Signed-off-by: Aaron Conole <aconole@redhat.com>
->
-> ...
->
->> @@ -1265,6 +1265,165 @@ class ovskey(nla):
->>                  init=init,
->>              )
->>  
->> +    class ovs_key_tunnel(nla):
->> +        nla_flags = NLA_F_NESTED
->> +
->> +        nla_map = (
->> +            ("OVS_TUNNEL_KEY_ATTR_ID", "be64"),
->> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "ipaddr"),
->> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_DST", "ipaddr"),
->> +            ("OVS_TUNNEL_KEY_ATTR_TOS", "uint8"),
->> +            ("OVS_TUNNEL_KEY_ATTR_TTL", "uint8"),
->> +            ("OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT", "flag"),
->> +            ("OVS_TUNNEL_KEY_ATTR_CSUM", "flag"),
->> +            ("OVS_TUNNEL_KEY_ATTR_OAM", "flag"),
->> +            ("OVS_TUNNEL_KEY_ATTR_GENEVE_OPTS", "array(uint32)"),
->> +            ("OVS_TUNNEL_KEY_ATTR_TP_SRC", "be16"),
->> +            ("OVS_TUNNEL_KEY_ATTR_TP_DST", "be16"),
->> +            ("OVS_TUNNEL_KEY_ATTR_VXLAN_OPTS", "none"),
->> +            ("OVS_TUNNEL_KEY_ATTR_IPV6_SRC", "ipaddr"),
->> +            ("OVS_TUNNEL_KEY_ATTR_IPV6_DST", "ipaddr"),
->> +            ("OVS_TUNNEL_KEY_ATTR_PAD", "none"),
->> +            ("OVS_TUNNEL_KEY_ATTR_ERSPAN_OPTS", "none"),
->> +            ("OVS_TUNNEL_KEY_ATTR_IPV4_INFO_BRIDGE", "flag"),
->> +        )
->> +
->> +        def parse(self, flowstr, mask=None):
->> +            if not flowstr.startswith("tunnel("):
->> +                return None, None
->> +
->> +            k = ovskey.ovs_key_tunnel()
->> +            if mask is not None:
->> +                mask = ovskey.ovs_key_tunnel()
->> +
->> +            flowstr = flowstr[len("tunnel("):]
->> +
->> +            v6_address = None
->> +
->> +            fields = [
->> +                ("tun_id=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_ID",
->> +                 0xffffffffffffffff, None, None),
->> +
->> +                ("src=", r"([0-9a-fA-F\.]+)", str,
->> +                 "OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "255.255.255.255", "0.0.0.0",
->> +                 False),
->> +                ("dst=", r"([0-9a-fA-F\.]+)", str,
->> +                 "OVS_TUNNEL_KEY_ATTR_IPV4_DST", "255.255.255.255", "0.0.0.0",
->> +                 False),
->> +
->> +                ("ipv6_src=", r"([0-9a-fA-F:]+)", str,
->> +                 "OVS_TUNNEL_KEY_ATTR_IPV6_SRC",
->> +                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
->> +                ("ipv6_dst=", r"([0-9a-fA-F:]+)", str,
->> +                 "OVS_TUNNEL_KEY_ATTR_IPV6_DST",
->> +                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
->> +
->> +                ("tos=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TOS", 255, 0,
->> +                 None),
->> +                ("ttl=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TTL", 255, 0,
->> +                 None),
->> +
->> +                ("tp_src=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_SRC",
->> +                 65535, 0, None),
->> +                ("tp_dst=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_DST",
->> +                 65535, 0, None),
->> +            ]
->> +
->> +            forced_include = ["OVS_TUNNEL_KEY_ATTR_TTL"]
->> +
->> +            for prefix, regex, typ, attr_name, mask_val, default_val, v46_flag in fields:
->> +                flowstr, value = parse_extract_field(flowstr, prefix, regex, typ, False)
->> +                if not attr_name:
->> +                    raise Exception("Bad list value in tunnel fields")
->> +
->> +                if value is None and attr_name in forced_include:
->> +                    value = default_val
->> +                    mask_val = default_val
->> +
->> +                if value is not None:
->> +                    if v6_address is None and v46_flag is not None:
->> +                        v6_address = v46_flag
->
-> By my reading, at this point v6_address will only be None if v46_flag is
-> not None.  IF so, the condition below seems excessive.
+The kernel selftest suite includes an ovs-dpctl.py utility which can
+interact with the openvswitch module directly.  This lets developers and
+CI environments run without needing too many extra dependencies - just
+the pyroute2 python package.
 
-Agreed - thanks for the suggestions.
+This series enhances the ovs-dpctl utility to provide support for set()
+and tunnel() flow specifiers, better ipv6 handling support, and the
+ability to add tunnel vports, and LWT interfaces.  Finally, it modifies
+the pmtu.sh script to call the ovs-dpctl.py utility rather than the
+typical OVS userspace utilities.
 
->> +                    if v6_address is not None and v46_flag is not None \
->> +                       and v46_flag != v6_address:
->> +                        raise ValueError("Cannot mix v6 and v4 addresses")
->
-> I wonder if we can instead express this as (completely untested!):
->
->                     if v46_flag is not None:
->                         if v6_address is None:
->                             v6_address = v46_flag
->                         if v46_flag != v6_address:
->                             raise ValueError("Cannot mix v6 and v4 addresses")
->
->> +                    k["attrs"].append([attr_name, value])
->> +                    if mask is not None:
->> +                        mask["attrs"].append([attr_name, mask_val])
->> +                else:
->> +                    if v6_address is not None and v46_flag is not None \
->> +                       and v46_flag != v6_address:
->> +                        continue
->> +                    if v6_address is None and v46_flag is not None:
->> +                        continue
->
-> And I wonder if this is a bit easier on the eyes (also completely untested):
->
->                     if v46_flag is not None:
->                         if v6_address is None or v46_flag != v6_address:
->                             continue
+Aaron Conole (7):
+  selftests: openvswitch: Support explicit tunnel port creation.
+  selftests: openvswitch: Refactor actions parsing.
+  selftests: openvswitch: Add set() and set_masked() support.
+  selftests: openvswitch: Add support for tunnel() key.
+  selftests: openvswitch: Support implicit ipv6 arguments.
+  selftests: net: Use the provided dpctl rather than the vswitchd for
+    tests.
+  selftests: net: add config for openvswitch
 
-I folded both of these in and did some quick testing.  Thanks Simon!
+ tools/testing/selftests/net/config            |   5 +
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 372 +++++++++++++++---
+ tools/testing/selftests/net/pmtu.sh           | 145 +++++--
+ 3 files changed, 453 insertions(+), 69 deletions(-)
 
->> +                    if mask is not None:
->> +                        mask["attrs"].append([attr_name, default_val])
->> +
->> +            if k["attrs"][0][0] != "OVS_TUNNEL_KEY_ATTR_ID":
->> +                raise ValueError("Needs a tunid set")
->
-> ...
->
->> @@ -1745,7 +1905,7 @@ class OvsVport(GenericNetlinkSocket):
->>          )
->>  
->>          TUNNEL_DEFAULTS = [("geneve", 6081),
->> -                           ("vxlan", 4798)]
->> +                           ("vxlan", 4789)]
->>  
->>          for tnl in TUNNEL_DEFAULTS:
->>              if ptype == tnl[0]:
->
-> As noted in my response to PATCH 1/7, I think that the
-> change in the hunk above belongs there rather than here.
+-- 
+2.45.1
 
 
