@@ -1,161 +1,235 @@
-Return-Path: <linux-kselftest+bounces-12103-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1CAA90BD7E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 00:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9759F90BDB9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 00:41:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 560A72820AD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 22:26:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424B7282C02
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 22:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FCD199238;
-	Mon, 17 Jun 2024 22:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9704E1991DC;
+	Mon, 17 Jun 2024 22:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8GS1nrN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QvURCjwb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A76198E9E;
-	Mon, 17 Jun 2024 22:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111C81D953B;
+	Mon, 17 Jun 2024 22:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718663168; cv=none; b=K+gMfpNmjL0P1m6cixRUvT7y/YDEH8fWxTBO2feSLbI8T0PUYtq5hKIlKWDpO26AQ+cA0GreqoRXK2Y+Oxexi91AjndXXsHrGcvOlFdOpNEZKXa3Vnr8sjWIQ+xGK5XyHm2IGFrEAAYjApuYe9x9N1woSYAB3n4VL8R89WRXdh0=
+	t=1718664096; cv=none; b=LP9sMyFgb6b8yeSN/lo6YSkiptuv4VrPIkqO3QfoYZ/Pjj7qw4LLLphi4vECGULMONB1Kc8jiJOYykF4AzZsFDjjnhskwpyVc/ImMrHVy/XgzcSTKto36vJ4pC59zgLTyagng9T2n2OzFKqi/EQ43ThFjxjgC6V9LHU6DYfswLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718663168; c=relaxed/simple;
-	bh=WnKdnf8toMJeFBnLdKSlbykGNXt8GLauAnpYj6hAGlc=;
+	s=arc-20240116; t=1718664096; c=relaxed/simple;
+	bh=QtGV/R4adHLMd1k17SRurpscLI7Ufo8DBbF7CILGQCY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UcfVD5Xvd/gzSwUllXsLxmC96+Qbuiv+jbhj9Q0l57mk7nk7kh9JlQ8xha42ytmAi7hlT5YnsvytGO6+WzB0QeYHC61W1CvG8QBVlVDQT8evEeCSpU2B60aKAQmw86SeNEby0AnQo7bG3unLB7mz/VjVOt14WV7O//H2G2FlKjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8GS1nrN; arc=none smtp.client-ip=209.85.215.180
+	 To:Cc:Content-Type; b=hLID23EkW9uCRcQmUGCQoqpFba9WDeR2/7HzDpjecUZ+bHVZkbgUDZOvAgL59MQDGJiDxWjgZGz8G/eSTfCZJOQZfP0iS6QGAv56ekGgTCJNLhb2/Th97oPKmqf5ALaF823vLePLAJDrQe94saNg7bnFp2xO4IEx3k4m/Q/WE1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QvURCjwb; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-6e5fd488d9fso3616199a12.3;
-        Mon, 17 Jun 2024 15:26:06 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-6e3ff7c4cc8so3568842a12.3;
+        Mon, 17 Jun 2024 15:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718663166; x=1719267966; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718664094; x=1719268894; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CWZR9+o4MQmZdZglbiV2Ru8G5/u2Xf1KFlJWCQsbllM=;
-        b=e8GS1nrNcbKykP1pKwZJ8A0NcnQyMNfJfRjXxKVn/W0jT3K46diNpHFigdCnhAUbOU
-         C4cUQupYEmPSzDhijEs4/IxtbT86jClBpzGq7i9W1QXK5Ys4jTDnH7xEN6ETsm/xf30s
-         Upj5VThi78dKJZj+Kc2knwUOpHrP2qYKuutqEl5Islq8hjoTzCwbyCAyHod8uM4NL9fJ
-         ysRS1xF7kfTk7CvNOZvCfBKxMsNCJoHr6ISbwLPdt5XQApI+8vpmpEnGJWIcFASZlgy7
-         iVuZ7scq+pAYO44fAo7wWzpP53AQSUDLCFplvdUqaBVrQ4TscXDuuB7BHDefd4vjz66U
-         KnAg==
+        bh=k9R71IhZlLlWSDzgVp7mTHB+mnPcb3UWEQe+UrX+TEQ=;
+        b=QvURCjwbAMc/RZxiXlJwIlYA/frtPwVE4VzLxgXdxy9P2cVyzIT9jVeQRkXftRhlLL
+         MWUeEPaszjUwdAa8VQCNmaudtkZNI5pkx6DiievZ7xaW8jeTOEXnza2/vr8GhFyzz01U
+         CrqBaRiLP2fMNuJ1DInKYz+M/gXrnM5vKq+wCp6yVH9g8XnJOQrPLu7yB7YZAiMM/N8j
+         u+XFQn9sHGNFBKl0Psi2bOHWQ10lbByc9OTncDLI0Ng+q+sZjj81jXtyIcv/3Q2zVAyP
+         ipp5uPnJOK3v/TfAUK0TIHEAlwsrBaNqlHidvnFoifpdKgbLOvd0Ok3MS2wXszJxKddH
+         eQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718663166; x=1719267966;
+        d=1e100.net; s=20230601; t=1718664094; x=1719268894;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CWZR9+o4MQmZdZglbiV2Ru8G5/u2Xf1KFlJWCQsbllM=;
-        b=iJuHrAteBzYFcWdI9BiUMvU1iKhUzM2XwlsAHTjedeuKwXlsfrYRlDRwhxMkGy3hS0
-         CfP0tLKtsJZWgLnjpa4VWBO3d+Mts5ZGEPvD+R/tu4dTfT/4w3S1OIfvOoK9EUrEoHhE
-         pUxupSJCOxcPUKlsgqLZ1q47lg+EtjzRU0iUshmbAiybsvPNsOhb6bfQ9X2qS3Ue0wdQ
-         WNx/GsZ94bpvwLuQzffvS84CDJGszu816tiFDgZat7gsxRYZmg/eC3syMdnQ3djPT5C4
-         zstVEoCdrRBoT1GM9amKMe5e1Tr6mvf5ZAq3qR3JzIItpLyvDJ1ZCoezwwxM4cZlFWpZ
-         QD5g==
-X-Forwarded-Encrypted: i=1; AJvYcCVnXz/Mtg/G7vkmPk38GBJ+H8JdG0iuQdmI95gMQNnp/2vG1/Fd1aS5JNp4yjDfx26A3KhHDb1zgdkDhvqjvsSF8Pz0xHr2CUnL7KZjvc1oHLVDEf4e6AEPESEC+NcRSvu/5q6YeE9V2+QEBfaJEpce8nyzv0Nz71e+gP54dew85peN
-X-Gm-Message-State: AOJu0YxgTjah58NIMGRQklaIdF84UFqxNPyHBEw0ntkm/DQY5RreHuSP
-	CaDT2c2IAUV7Pkd78hywD+fSBbiZO43evBlRYrjFy4dPbL/LNbMpNbbGT7iK7sEMcujembmAxWb
-	MD3Bd8ZZhIKzUpAaleTzc+LKKzu0=
-X-Google-Smtp-Source: AGHT+IEMTnYx4VeeS5H3uXM8OvL59xMSDb5iEb4PnFyF6+3PrFuMDUUfJAzp0SGo+Ah4wYrfPfTkzKbZocSI9aB7mqs=
-X-Received: by 2002:a17:90b:8d5:b0:2c2:cefc:abe2 with SMTP id
- 98e67ed59e1d1-2c4dbb41b40mr13043877a91.31.1718663165850; Mon, 17 Jun 2024
- 15:26:05 -0700 (PDT)
+        bh=k9R71IhZlLlWSDzgVp7mTHB+mnPcb3UWEQe+UrX+TEQ=;
+        b=tsgjWc7CJERws3Sph2ex1NJ7WtIDWIenFZTsryLn7kzuKmYBp2Tctpj9GOGiMHSwZv
+         hL/K71XmPM8a25c3C2gxz0t6wauvRouvHnnTByZ4PRB4OAG/vaDcT0fepcKHHBshx3Sm
+         M7N6tUjDCu3maV9w3uPJqZnXlOaakpYtafGgTEwMqcNd6O5of6VaDU2bwkT0Tx9frDds
+         drXE8A8b7s7nDXeY6IQrMmVAn58/izodtHQERS53/5cICFJjqyo49/gu50jvGdCeusmc
+         3TXlk1hgyVMIJePeBtvKb0qbihhf4i6By3T0Y2thd8nam3CyOEgitOHN7e2Y57kl9Gop
+         8SyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLafdH6MtXcv2Y1thiCMtkOnTz8tk5/21H0VR03S6qp9VX3nUSMiR9wcL/TNkqbZ4Bgc8JTsO/QYl2KGNFigbhQ9ZqnxfzKnDNlhJdsW6QrPslbflNe9p6hJGKvwhcj3fXJZOaJ+QQg5PVzysEa/Vf3UCpbMhp8CGr5jGDj5NqHLWu
+X-Gm-Message-State: AOJu0Yy7vPWdfcR7zBXgbqQ2oP+XuUo67dKU/lRyHkxCI/MonkUyyjYf
+	pGdnZrImQYQ+joaYlEqylimqphSlRmjPNEhzEIPuqvBO89wkmlzbn/ssnsugJP/5xtveHhtVf11
+	2J8g+V7Wz+n4oTa1fOjtF+o3Vspg=
+X-Google-Smtp-Source: AGHT+IFsVVHidNeYyK9JJtQowF1AOqQP+lrEGQoui7QGo2YyXJa1GfP9ueU48L6g2ogGiUGhLZzYY9QeJGgKrkuyfr8=
+X-Received: by 2002:a17:90a:c903:b0:2c3:3d22:b304 with SMTP id
+ 98e67ed59e1d1-2c4db13220dmr9894853a91.3.1718664094126; Mon, 17 Jun 2024
+ 15:41:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1717881178.git.dxu@dxuuu.xyz> <34708481d71ea72c23a78a5209e04a76b261a01d.1717881178.git.dxu@dxuuu.xyz>
- <Zmb52Qp__CBzbgDh@krava>
-In-Reply-To: <Zmb52Qp__CBzbgDh@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 17 Jun 2024 15:25:53 -0700
-Message-ID: <CAEf4BzaT7XNnGFUqAr=+pi106bT0o4=TJ7JLOPNjZEBHw4+M7Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 06/12] bpf: selftests: Fix bpf_session_cookie()
- kfunc prototype
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, ast@kernel.org, andrii@kernel.org, 
-	eddyz87@gmail.com, daniel@iogearbox.net, quentin@isovalent.com, 
-	alan.maguire@oracle.com, acme@kernel.org, mykolal@fb.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
+ <def32dd4-b205-45b8-a5ed-e6e28a0ac4f4@paulmck-laptop> <ZnBkHosMDhsh4H8g@J2N7QTR9R3>
+ <76deed7a-9852-4d21-bbcc-8b14e267fe89@paulmck-laptop>
+In-Reply-To: <76deed7a-9852-4d21-bbcc-8b14e267fe89@paulmck-laptop>
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date: Tue, 18 Jun 2024 06:41:22 +0800
+Message-ID: <CAABZP2z0-zHTADL5REThay5CYcfSBaHA4mUXO6NYu-JJA7=Xvg@mail.gmail.com>
+Subject: Re: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's need
+To: paulmck@kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, lance@osuosl.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 6:04=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Tue, Jun 18, 2024 at 12:47=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
+rg> wrote:
 >
-> On Sat, Jun 08, 2024 at 03:16:02PM -0600, Daniel Xu wrote:
-> > The prototype defined in bpf_kfuncs.h was not in line with how the
-> > actual kfunc was defined. This causes compilation errors when kfunc
-> > prototypes are generated from BTF.
+> On Mon, Jun 17, 2024 at 05:28:14PM +0100, Mark Rutland wrote:
+> > On Tue, Jun 11, 2024 at 07:57:29PM -0700, Paul E. McKenney wrote:
+> > > On Wed, Jun 12, 2024 at 01:35:27AM +0000, Zhouyi Zhou wrote:
+> > > > Add CFcommon.arch for the various arch's need for rcutorture.
+> > > >
+> > > > According to [1] and [2], this patch
+> > > > Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
+> > > > x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> > > >
+> > > > The patch has been revised and improved under
+> > > > Paul E. McKenney's guidance [3].
+> > > >
+> > > > [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi=
+@gmail.com/
+> > > > [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d59=
+0@paulmck-laptop/
+> > > > [3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195=
+e3@paulmck-laptop/T/
+> > > >
+> > > > Tested in x86_64 and PPC VM of Open Source Lab of Oregon State Univ=
+ersity.
+> > > >
+> > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > >
+> > > Much better, thank you!
+> > >
+> > > I queued and pushed for review and testing with the usual editing,
+> > > so please let me know if I messed anything up.
+> > >
+> > > I added Mark on CC in case he has thoughts from an ARM perspective.
 > >
-> > Fix by aligning with actual kfunc definition.
+> > Ah, thanks!
 > >
-> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > ---
-> >  tools/testing/selftests/bpf/bpf_kfuncs.h                        | 2 +-
-> >  tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/s=
-elftests/bpf/bpf_kfuncs.h
-> > index be91a6919315..3b6675ab4086 100644
-> > --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-> > +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-> > @@ -77,5 +77,5 @@ extern int bpf_verify_pkcs7_signature(struct bpf_dynp=
-tr *data_ptr,
-> >                                     struct bpf_key *trusted_keyring) __=
-ksym;
-> >
-> >  extern bool bpf_session_is_return(void) __ksym __weak;
-> > -extern long *bpf_session_cookie(void) __ksym __weak;
-> > +extern __u64 *bpf_session_cookie(void) __ksym __weak;
+> > >From a quick scan, the only thing I spot is that CONFIG_KVM_GUEST is
+> > also not an arm64 thing, and only exists on x86 & powerpc, so pulling
+> > that out too would be nice.
+yes, CONFIG_KVM_GUEST exists in powerpc & x86, which makes me think it
+is global.
 >
-> the original intent was to expose long instead of __u64 :-\
+> Thank you for looking this over!
 >
+> Zhouyi, would you be willing to add this change, either as a new version
+> of this patch or as a new patch on top of it?  (Your choice.)
+Thanks to Paul and Mark's guidance, I achieved a lot during this process ;-=
+)
 
-Cookies internally are always u64 (8 byte values). Marking them
-internally in the kernel as long could lead to problems on 32-bit
-architectures, potentially (it still needs to be 64-bit value
-according to BPF contract, but we'll allocate only 4 bytes for them).
+I am going to create a new version of the patch, and test is both on
+X86 and PowerPC
 
-It seems better and safer to be explicit with __u64/u64 for cookies everywh=
-ere.
-
-What am I missing?
-
-> could we rather change the bpf_session_cookie function to return long?
-> should be just return value type change
+Cheers
+Zhouyi
 >
-> thanks,
-> jirka
+> > That aside, this looks good to me; having the infrastructure to do this
+> > per-arch is nice!
 >
+> Glad you like it!  May we have your ack?
+Very happy that Mark likes it ;-)
 >
-> >  #endif
-> > diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_session_coo=
-kie.c b/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c
-> > index d49070803e22..0835b5edf685 100644
-> > --- a/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c
-> > +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c
-> > @@ -25,7 +25,7 @@ int BPF_PROG(trigger)
+>                                                         Thanx, Paul
+>
+> > Mark.
 > >
-> >  static int check_cookie(__u64 val, __u64 *result)
-> >  {
-> > -     long *cookie;
-> > +     __u64 *cookie;
-> >
-> >       if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
-> >               return 1;
-> > --
-> > 2.44.0
-> >
+> > >
+> > >                                                     Thanx, Paul
+> > >
+> > > ---------------------------------------------------------------------=
+---
+> > >
+> > > commit 29cf4c63d04b9752a32e33d46a57717121353ef7
+> > > Author: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > Date:   Wed Jun 12 01:35:27 2024 +0000
+> > >
+> > >     rcutorture: Add CFcommon.arch for the various arch's need
+> > >
+> > >     Add CFcommon.arch for the various arch's need for rcutorture.
+> > >
+> > >     In accordance with [1] and [2], this patch moves x86 specific ker=
+nel
+> > >     option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> > >
+> > >     [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhou=
+yi@gmail.com/
+> > >     [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d=
+590@paulmck-laptop/
+> > >
+> > >     Tested in x86_64 and PPC VM of Open Source Lab of Oregon State Un=
+iversity.
+> > >
+> > >     Link: https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb6=
+6195e3@paulmck-laptop/T/
+> > >
+> > >     Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options")
+> > >     Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > >     Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > >     Cc: Mark Rutland <mark.rutland@arm.com>
+> > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > >
+> > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh=
+ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > index b33cd87536899..ad79784e552d2 100755
+> > > --- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > @@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORT=
+URE_KCONFIG_GDB_ARG"
+> > >  config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KAS=
+AN_ARG"
+> > >  config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCS=
+AN_ARG"
+> > >  config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_=
+ARG"
+> > > +config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
+> > > +                 "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null=
+`"
+> > >  cp $T/KcList $resdir/ConfigFragment
+> > >
+> > >  base_resdir=3D`echo $resdir | sed -e 's/\.[0-9]\+$//'`
+> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon =
+b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > index 0e92d85313aa7..cf0387ae53584 100644
+> > > --- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > @@ -1,6 +1,5 @@
+> > >  CONFIG_RCU_TORTURE_TEST=3Dy
+> > >  CONFIG_PRINTK_TIME=3Dy
+> > > -CONFIG_HYPERVISOR_GUEST=3Dy
+> > >  CONFIG_PARAVIRT=3Dy
+> > >  CONFIG_KVM_GUEST=3Dy
+> > >  CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=3Dn
+> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.=
+i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+> > > new file mode 100644
+> > > index 0000000000000..2770560d56a0c
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+> > > @@ -0,0 +1 @@
+> > > +CONFIG_HYPERVISOR_GUEST=3Dy
+> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.=
+x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+> > > new file mode 100644
+> > > index 0000000000000..2770560d56a0c
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+> > > @@ -0,0 +1 @@
+> > > +CONFIG_HYPERVISOR_GUEST=3Dy
 
