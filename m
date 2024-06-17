@@ -1,117 +1,119 @@
-Return-Path: <linux-kselftest+bounces-12044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D4190AB21
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 12:33:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C3DE90AB2D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 12:34:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FC6628524D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 10:33:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 461441F223BC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 10:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AE5192B87;
-	Mon, 17 Jun 2024 10:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188861940B3;
+	Mon, 17 Jun 2024 10:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HhIdOlgr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i8lwyU1i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC231922CA;
-	Mon, 17 Jun 2024 10:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E222190069;
+	Mon, 17 Jun 2024 10:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718620422; cv=none; b=l2yrL6Vhd3G+DumRfilUR4JhyQnKoKUJt4KbUeVO6G+6hjGN+pHSYKSmTf/QZbiCpuyS8tXvXQNfvgZv7V8kexcN/+cDtWai6zkYNhPxlLzfls6YRTIPxF9EKi2l0KrFgUzfDNtm7SnHkQih+gT6MYqRHLG7V7wooewREeyFUyE=
+	t=1718620481; cv=none; b=sQ/gDkeYkUi4yI8GcO/DMdYB2lwH67O5wkzUPZFRnUxY/Lh+1RoFW35RMTlsTvPbSXKevSLmNsTbD5X3i6FoXbYB0Twusb9HjRSOXzdh2bXdKMBU8mgwKpNMceUpmwuX5Iy8GT9EACMVS/BYhoBsniE+KJcvzxqyE16xzHbz3Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718620422; c=relaxed/simple;
-	bh=GZCp+iDL1kVJIIxty+nR0Ri78rNJu23FjKywHpYE2cY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cmAceY22i/A36Z0qALUNAG/b/cQF0nOxhH+Hu6DLtcQPTyusVgWFeWFt1PGcxuya59/0WaU2TDzWcTFkIXOjkCz++yt54F0pcbop1czwgQJgsW9Tg62KyoA82giiF3UNuBRdVhyBhJzbRC6o889Rq7F0YisfvlFNCPQ8o/clz5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HhIdOlgr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7ECFC2BD10;
-	Mon, 17 Jun 2024 10:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718620422;
-	bh=GZCp+iDL1kVJIIxty+nR0Ri78rNJu23FjKywHpYE2cY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HhIdOlgrqzPp6XRwtRZ1BRxGn6bvkL1flQFtKCPtDa6CEkNu0GhKj7ANVSkCst2sK
-	 JMjfLMyiXc8D3sAL84/mpsk6LpL1AWBJ4kr47nl5XTsqvALcI9C3GhzorCeYxWRanp
-	 WOQjF/Utrl3+cSTT5tWs3cwVXYowRhsBODH/2qHiP8dH58zWg13okMtl33XIBNrhSx
-	 j2AUWF8Enx3DTJYLgpy6TsPhPFNeqVXWkQbMwaUMLm7AcDpygrjDDkgl38oDr7DbsO
-	 OPs5cu/pHOLYCTwYe9JKuDX0Njx2lMXUO8C3HxF1wgvpJavmmgRd0PDS+QztVxCxKA
-	 KnlT4CB6fpdqg==
-Date: Mon, 17 Jun 2024 11:33:37 +0100
-From: Simon Horman <horms@kernel.org>
-To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Aaron Conole <aconole@redhat.com>, Adrian Moreno <amorenoz@redhat.com>,
-	Pravin B Shelar <pshelar@ovn.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net] selftests: openvswitch: Use bash as interpreter
-Message-ID: <20240617103337.GQ8447@kernel.org>
-References: <20240617-ovs-selftest-bash-v1-1-7ae6ccd3617b@kernel.org>
- <594b79b7-452c-488f-8a7f-4ee95698bff2@intel.com>
+	s=arc-20240116; t=1718620481; c=relaxed/simple;
+	bh=R6kuMQcODbpcdFv6Mmo7QCnm98Fnuy+ktalW6vWVeGc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nxs1TqUwV4AVHUCifhWeZwPZ6Ysb2Lo0NmZdKBtFT0Oq+vWFMPqVYPVWODiNQBlhy144NREx3TPBvIpPXP16y+T488sKpLMYDnYB6ZF3t/LdcVYr3QMzdwXxfWm9ilFrNFPrX9SROiyal5w8XbBbgfWO/Q0dhccA2NDvtkUngcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i8lwyU1i; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6f8ebbd268so45137266b.0;
+        Mon, 17 Jun 2024 03:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718620478; x=1719225278; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R6kuMQcODbpcdFv6Mmo7QCnm98Fnuy+ktalW6vWVeGc=;
+        b=i8lwyU1iLT/2ge+jjO0YUM3ezUfxFEDzcSZsMvRsRDu3JFzFgpmxX04AZ4xyVt8i+B
+         eqyN+HIpZQOrEM0DjeeuA5rx+JvOsTtEvj9+cjDSM7wf+M+v+JZfrRi9/JUcc6SdgR0b
+         IiSa/8gmfNSqYvOYg+ibid1qME1mZPEUodSZ3QbZm3QUsNinUfEgu7m5ARawJ09zGrc9
+         9PyTwXpN2QyhcdwTKjNcI4ej4Ll63fCVBUGCn0vdp6KgkeqdHf4mxAJrm6sQTDFMsnfb
+         j89IDSNsJqHll4BCTqk053ZhNj36f1YEa73wT6yd1df6q4WdUA7QhlTplgJok4Xzgvmy
+         g5Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718620478; x=1719225278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R6kuMQcODbpcdFv6Mmo7QCnm98Fnuy+ktalW6vWVeGc=;
+        b=LbHKqvXB6PZPZQUmLtkZArxT4ISXXU2K6xRP8mIgQUEIIfEJDyfZuhveaaan/7LhdQ
+         pFq1Ruygy2TmqZsUa+In9xsSES+CKXAAsdZOOMeUT1+LqNkXFtjzevClc5+O2TCJ53Yx
+         L2O7ivVBgWdT2ZfohuWQgSfq9I6TkiBVKHHBtJ004xjqNW4xEOj7T5VcvVl9R1Da2WWd
+         Ob2H69/jyGges7nc74yGRlGdKcJ7KhxU4VFglrw5rw5tbxHzAxW87wEGJRKGWwoLwTma
+         tGbRrm9mrC52olmqm27i9oL+CUurz9HmlpnAB7qjh2izHmhxBPEekREIJxh3sxwKC4tW
+         Lf4A==
+X-Forwarded-Encrypted: i=1; AJvYcCWipA54OV9L4MU0cAxlv10gZPluDDbKEk/nSSAxsDKX7SmVULx72rPdUjqkRNDCGCZd2BmJpN1PKaOVrE/g/zdNiNAWWKpPSUJq8K0SPzSptOZhBvWN4trnzFl6NNxXDzC3hptJXQ09Tml8
+X-Gm-Message-State: AOJu0YyADVTmyc81jvao+10EVdm5eoWeQ3oC7+NmxF59KRrOZEVXVmrW
+	k4E4RF3TDqQ6C2UVd/PDvNZfq4Ju8eGA0RhQdF79KljwpQ0LddFDPO2dKh3V9BtgoEAOPs6XYVe
+	yavghDQ/zbTtoBtdD2Dabcu2gDJA=
+X-Google-Smtp-Source: AGHT+IEJ9LDSRjzd5mprtbVbxdNtfSDp0HSYO8YB7ccTmM+wVFsIlIajqFMms5d2WwHu1fSJMH1UsG3vIb+/dvYP9p0=
+X-Received: by 2002:a17:906:d157:b0:a6f:46f1:5434 with SMTP id
+ a640c23a62f3a-a6f523ec1ccmr873561966b.6.1718620477464; Mon, 17 Jun 2024
+ 03:34:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <594b79b7-452c-488f-8a7f-4ee95698bff2@intel.com>
+References: <20240611215544.2105970-1-jiaqiyan@google.com> <20240611215544.2105970-2-jiaqiyan@google.com>
+ <CABzRoyYGY2EgT5wC9o98Vn_auh59poQ-OOnKceCiWQAJrbZoBw@mail.gmail.com>
+ <CACw3F5134NmmLNr4zXHV1h0sLMTGcAJLpApQ7Fv_-DtUieD7zw@mail.gmail.com>
+ <786a08ff-aa7e-49d5-f589-0a405c7e1a34@huawei.com> <ea8c5e390bd18c532b768dd9eeaa105a@suse.de>
+ <8faf45d3-0722-2b9e-f641-9d081aad5a82@huawei.com>
+In-Reply-To: <8faf45d3-0722-2b9e-f641-9d081aad5a82@huawei.com>
+From: Lance Yang <ioworker0@gmail.com>
+Date: Mon, 17 Jun 2024 18:34:26 +0800
+Message-ID: <CAK1f24mRaScJgKc7E4riQ6xTc-SVx_PanTJkA3duwpJZVhyxFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] mm/memory-failure: userspace controls
+ soft-offlining pages
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Oscar Salvador <osalvador@suse.de>, Jiaqi Yan <jiaqiyan@google.com>, nao.horiguchi@gmail.com, 
+	jane.chu@oracle.com, muchun.song@linux.dev, akpm@linux-foundation.org, 
+	shuah@kernel.org, corbet@lwn.net, rientjes@google.com, duenwen@google.com, 
+	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 17, 2024 at 12:05:11PM +0200, Przemek Kitszel wrote:
-> On 6/17/24 10:28, Simon Horman wrote:
-> > openvswitch.sh makes use of substitutions of the form ${ns:0:1}, to
-> > obtain the first character of $ns. Empirically, this is works with bash
-> > but not dash. When run with dash these evaluate to an empty string and
-> > printing an error to stdout.
-> > 
-> >   # dash -c 'ns=client; echo "${ns:0:1}"' 2>error
-> >   # cat error
-> >   dash: 1: Bad substitution
-> >   # bash -c 'ns=client; echo "${ns:0:1}"' 2>error
-> >   c
-> >   # cat error
-> > 
-> > This leads to tests that neither pass nor fail.
-> > F.e.
-> > 
-> >   TEST: arp_ping                                                      [START]
-> >   adding sandbox 'test_arp_ping'
-> >   Adding DP/Bridge IF: sbx:test_arp_ping dp:arpping {, , }
-> >   create namespaces
-> >   ./openvswitch.sh: 282: eval: Bad substitution
-> >   TEST: ct_connect_v4                                                 [START]
-> >   adding sandbox 'test_ct_connect_v4'
-> >   Adding DP/Bridge IF: sbx:test_ct_connect_v4 dp:ct4 {, , }
-> >   ./openvswitch.sh: 322: eval: Bad substitution
-> >   create namespaces
-> > 
-> > Resolve this by making openvswitch.sh a bash script.
-> > 
-> > Fixes: 918423fda910 ("selftests: openvswitch: add an initial flow programming case")
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> 
-> That's good fix,
-> Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-> 
-> sidenote: I like very much the idea to use the least powerful tool, like
-> sh vs bash, awk vs gawk, but it breaks when we forget what is outside of
-> the scope of the former/standard.
-> Perhaps for shell, we could convert all the selftests at once?
+On Mon, Jun 17, 2024 at 4:16=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
+rote:
+>
+> On 2024/6/17 15:51, Oscar Salvador wrote:
+> > On 2024-06-17 09:31, Miaohe Lin wrote:
+> >
+> >> IMHO, it might not be suitable to use EAGAIN. Because it means
+> >> "Resource temporarily unavailable" and
+> >> this can be solved by simply retry later without any further actions
+> >> taken. But I might be wrong.
+> >
+> > We usually use 'EOPNOTSUPP' when we fail due to a setting not being set=
+.
+> > EPERM is more for a capability matter.
+
+Agreed. Let's use 'EOPNOTSUPP' here ;)
 
 Thanks,
+Lance
 
-Now that you mention it, I have the same feelings.
-
-Do we ever expect to use the minimal tools, when other
-parts of the test suite depend on the enhanced ones?
-
-...
+>
+> Thanks Oscar. So we should return EOPNOTSUPP here.
+>
+> Thanks.
+> .
 
