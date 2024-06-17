@@ -1,106 +1,141 @@
-Return-Path: <linux-kselftest+bounces-12083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D923090B851
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:40:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E172A90B85A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 19:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA2851C21253
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 17:40:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 922381F222A1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 17:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 098831891BD;
-	Mon, 17 Jun 2024 17:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F3F1891B9;
+	Mon, 17 Jun 2024 17:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZZS2E4bo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uGpG03KP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442B31891A5
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 17:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8AB1891A5;
+	Mon, 17 Jun 2024 17:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718646045; cv=none; b=ofTIE0ugjJaVlx5RM/goF2dl5+a9Hbz8XtBAsTHuFfU8ZPcTOGNXnACi1Fq1CqqBH3n1sra/MW3Veh055VQ063POxZUwM6FlZfyJocEQwaQ6Bvt1E4L2C+BU9iAer1Lan9EMwxVQ97sTMQZBQadGnPMc6vUsa7WkhKuo1ASs86k=
+	t=1718646079; cv=none; b=ALEZmkXzxNnkdYVBO4XfGwPTGgLLFmXCw/9vK+PbtE1A2BFOBTDPcKCh2+MNBpgnGj0v+q1ceYxffW2Bm3jBagKwn+Ay/3+JqMh9VigXR86FOMFOE3PxG8na/wXIY0XQywQ6gJtv+FDBFp+FM+UgrNJLRWNbsCJNNKHWTbEqQsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718646045; c=relaxed/simple;
-	bh=O44bg5IN3bpweFi97y7tt8VcamC1B+cu2qGxErr7ez8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WtAF1CNPZgJkPkcm6J0Q4uJdSUFX25m79S8c5w5KWNeOl+9HKFWpikKJGbrHIDysu+suMukprLrs6O4O190Bq1TSYoGF0t+cO9oGIhkatVMdJnPST9dXvcgYCqTuyR/095a6GHRqX0MiDu10C/+OQKhwxnl3UULHjzTlYN1pMM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZZS2E4bo; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: shahuang@redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1718646042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=okv/SBVT+t/mscY2NbGXxvwNhjZy/ckRAi7DnSHOqKA=;
-	b=ZZS2E4bouTntLdhRdKDBwzqHEL50a8ctu3G8V36RUt1ypOp+M+UED4Hve02PlfU857ISH9
-	+2z7zqvoPPesAU+CJb5hrVqJLOOec7PeOFz2fNoIuEuztzqoQCLxUP8QmVYYZegmLfJLQS
-	qSyw/Mt5PuufQBHEqPeIIYO+5J3HuoU=
-X-Envelope-To: maz@kernel.org
-X-Envelope-To: kvmarm@lists.linux.dev
-X-Envelope-To: catalin.marinas@arm.com
-X-Envelope-To: james.morse@arm.com
-X-Envelope-To: kvm@vger.kernel.org
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: pbonzini@redhat.com
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: suzuki.poulose@arm.com
-X-Envelope-To: will@kernel.org
-X-Envelope-To: yuzenghui@huawei.com
-Date: Mon, 17 Jun 2024 17:40:36 +0000
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Shaoqin Huang <shahuang@redhat.com>
-Cc: Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	James Morse <james.morse@arm.com>, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1718646079; c=relaxed/simple;
+	bh=SyTGqPdHpuy3gJMpwFjM312Sys8XLnxtGOp+tF8HIfM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kEuvdhLAsLyAzaZ7xadAFPSLMQ/dztKWRTu7iZySgJIvaCo/BXaajwPWRBcYiA0LFge70JeQvlEviOtn+Z+j6DtMQjBzyQTyZWccNfah/NDElXR2jDFzTqhxT9GM4a2g1s0wRpMlQoJukhWsOrcwcQVm3KjsZH/DIkvD04Gr60Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uGpG03KP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CD1C2BD10;
+	Mon, 17 Jun 2024 17:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718646079;
+	bh=SyTGqPdHpuy3gJMpwFjM312Sys8XLnxtGOp+tF8HIfM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uGpG03KPdReyjC1/opQWeFUmIa7rjKz4qdzL3Hsr8+an6ghDa2V8srd0gkZoUKP9R
+	 +eXn5MKn0jYpfdVERyjjKRjlwi1bsgAIgxK73PHYGeg/Pp1dKh4lH2iCBuThx89NQk
+	 99GdpyvBmDe9YgiA5pKjb4uH6OAigy4vZfgbP9ibxuaKDKV/0Xr9rv8xZtnoZD1ZZj
+	 yzUIMi5ez50LW1KmtrQLIWoIaa+wgg/CtGw/fF17npZJaWn/hBzXDyA1HnSlmwwoew
+	 794/yiqgBtyjM/dOxETPIz99qXy/lESnTAbZoMVpaximCgFT4CW6VS53ZRbPAy77qk
+	 /hKIqpqIHV1mQ==
+From: Kees Cook <kees@kernel.org>
+To: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v1 0/2] KVM: arm64: Making BT Field in ID_AA64PFR1_EL1
- writable
-Message-ID: <ZnB1FPw3Eg8-61mL@linux.dev>
-References: <20240617075131.1006173-1-shahuang@redhat.com>
+	kunit-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit/usercopy: Disable testing on !CONFIG_MMU
+Date: Mon, 17 Jun 2024 10:41:15 -0700
+Message-Id: <20240617174111.work.408-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240617075131.1006173-1-shahuang@redhat.com>
-X-Migadu-Flow: FLOW_OUT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2180; i=kees@kernel.org; h=from:subject:message-id; bh=SyTGqPdHpuy3gJMpwFjM312Sys8XLnxtGOp+tF8HIfM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmcHU71lN3gU2U5/SabG8LFXiX7hR8Kwm6xAE7y fRNHDG70PKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZnB1OwAKCRCJcvTf3G3A JiWJEACZ5pYWV/fr4xGq+aSoVJGknbuIT4sUIOHFs6bjERXU4LaLDpqPiQ7EXSIbt5ikxK9TD2a PnkHJEECwZSrQr9XZWnMETsHm82Pzy8lgYW0PQZDSg1vyiLJejZAdFNMBfE9y1b0Y/I2zzXhEEm 3umRoPCnNWVER7j/NZ+SDnYETclRNJP5DayslHfYmdd+7ixn0vrjVYWf72kaoJitTor+DKk74In D6+QAfroH2RvrvTAMrG7dgtTGnWahj+xQpqBlZH38pLtPOe1QjA2VrtNAa/RffIHS+vT5IxqqHU 6Fn1Uzlry7ZUxNPK1FySQxTbsBKC4PRLLwP3i1A/Rw4VPwdZWAdqj543xIFivMOIuGX6EpmtUiY al7xYvYqBbriDWeIm+kaNvXJOXri7Qor/jXcGG0XAT3VsDQdZnrYL1PD91OrsUheWQ6oW+TeHrS fotG8J2+PleZj7iGZYXJHqHwpPVTQ9mRckQA5zFJNguxx3GaoVmA+KBFEnhJP9XK7sn/d9MqX0x Y31O1zS7LDzDYlxjxQl6PgoYiAk3NwcEJFd2+LBwV9opREay5cOy2tn1rx17s2RER74jRdJ99ig qF1yxmGx8AVF0zph9SVyTY199DWOaVWlJkPJOi2yMfFCqIrcOzIKo7hQ0C3u8ttQ/1tfmf1Y20c /HOkTB5O3lzQu
+ eQ==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 17, 2024 at 03:51:29AM -0400, Shaoqin Huang wrote:
-> In this patch series, we try to make more register fields writable like
-> ID_AA64PFR1_EL1.BT since this can benifit the migration between some of the
-> machines which have different BT values.
-> 
-> Changelog:
-> ----------
-> RFCv1 -> v1:
->   * Fix the compilation error.
->   * Delete the machine specific information and make the description more
->     generable.
+Since arch_pick_mmap_layout() is an inline for non-MMU systems, disable
+this test there.
 
-Can you please address Marc's feedback?
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202406160505.uBge6TMY-lkp@intel.com/
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: linux-hardening@vger.kernel.org
+Cc: linux-mm@kvack.org
+---
+ lib/kunit/user_alloc.c | 4 ++++
+ lib/usercopy_kunit.c   | 5 +++++
+ mm/util.c              | 2 ++
+ 3 files changed, 11 insertions(+)
 
-If we only make things writable a field at a time it's going to take
-forever to catch up w/ the architecture.
-
-https://lore.kernel.org/kvmarm/86zfrpjkt6.wl-maz@kernel.org/
-
+diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
+index 76d3d1345ed7..ae935df09a5e 100644
+--- a/lib/kunit/user_alloc.c
++++ b/lib/kunit/user_alloc.c
+@@ -30,6 +30,10 @@ static int kunit_attach_mm(void)
+ 	if (current->mm)
+ 		return 0;
+ 
++	/* arch_pick_mmap_layout() is only sane with MMU systems. */
++	if (!IS_ENABLED(CONFIG_MMU))
++		return -EINVAL;
++
+ 	mm = mm_alloc();
+ 	if (!mm)
+ 		return -ENOMEM;
+diff --git a/lib/usercopy_kunit.c b/lib/usercopy_kunit.c
+index 45f1e558c464..e819561a540d 100644
+--- a/lib/usercopy_kunit.c
++++ b/lib/usercopy_kunit.c
+@@ -290,6 +290,11 @@ static int usercopy_test_init(struct kunit *test)
+ 	struct usercopy_test_priv *priv;
+ 	unsigned long user_addr;
+ 
++	if (!IS_ENABLED(CONFIG_MMU)) {
++		kunit_skip(test, "Userspace allocation testing not available on non-MMU systems");
++		return 0;
++	}
++
+ 	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
+ 	test->priv = priv;
+diff --git a/mm/util.c b/mm/util.c
+index df37c47d9374..e70e8e439258 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -484,7 +484,9 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+ 	clear_bit(MMF_TOPDOWN, &mm->flags);
+ }
+ #endif
++#ifdef CONFIG_MMU
+ EXPORT_SYMBOL_IF_KUNIT(arch_pick_mmap_layout);
++#endif
+ 
+ /**
+  * __account_locked_vm - account locked pages to an mm's locked_vm
 -- 
-Thanks,
-Oliver
+2.34.1
+
 
