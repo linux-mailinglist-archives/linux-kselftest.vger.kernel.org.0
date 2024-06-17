@@ -1,235 +1,185 @@
-Return-Path: <linux-kselftest+bounces-12104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9759F90BDB9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 00:41:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F46D90BFB4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 01:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424B7282C02
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 22:41:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F09C61F21EED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 23:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9704E1991DC;
-	Mon, 17 Jun 2024 22:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB731194C94;
+	Mon, 17 Jun 2024 23:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QvURCjwb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZWzVSWK6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111C81D953B;
-	Mon, 17 Jun 2024 22:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD28518F2D1
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 23:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718664096; cv=none; b=LP9sMyFgb6b8yeSN/lo6YSkiptuv4VrPIkqO3QfoYZ/Pjj7qw4LLLphi4vECGULMONB1Kc8jiJOYykF4AzZsFDjjnhskwpyVc/ImMrHVy/XgzcSTKto36vJ4pC59zgLTyagng9T2n2OzFKqi/EQ43ThFjxjgC6V9LHU6DYfswLo=
+	t=1718666241; cv=none; b=JSmRWzLIk62qTFVtdqgJKw7OwDWVXJlgGqjhsMF8MRC+v7Izo9b5Kj/hqdlzuqRtUhbsLfH2Szxn0/V49aCPG9/kKLKTJvwxbmd5gTwi/Fzfv3I32mnZ5YR9VpEDi1d0sYiRgV3E7kkENHMHKgqKcl4gT3vZ8CWIv9r1VS0m92E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718664096; c=relaxed/simple;
-	bh=QtGV/R4adHLMd1k17SRurpscLI7Ufo8DBbF7CILGQCY=;
+	s=arc-20240116; t=1718666241; c=relaxed/simple;
+	bh=TIVKLKBbPeyPY3DUp3NhHPp0olJ3tYleN+y+FMgAMUk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hLID23EkW9uCRcQmUGCQoqpFba9WDeR2/7HzDpjecUZ+bHVZkbgUDZOvAgL59MQDGJiDxWjgZGz8G/eSTfCZJOQZfP0iS6QGAv56ekGgTCJNLhb2/Th97oPKmqf5ALaF823vLePLAJDrQe94saNg7bnFp2xO4IEx3k4m/Q/WE1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QvURCjwb; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-6e3ff7c4cc8so3568842a12.3;
-        Mon, 17 Jun 2024 15:41:34 -0700 (PDT)
+	 To:Cc:Content-Type; b=gGUZN0ReWe49P17jWdk9UsoJHArtiO/lAkIa/1KxyyiCWhKh1M3va5CLNlmjipGV2ni6U6b+rEsWFe6WuS8trut3bzfA2GOhNajVEekzqv8BtM0Vz16EHxa5yb0zc4yoLMsAMNnbfs1bzVgk2ZTXw1+/5FMLyjfdoaPax7Gv2TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZWzVSWK6; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42172ed3487so35669435e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 16:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718664094; x=1719268894; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718666237; x=1719271037; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k9R71IhZlLlWSDzgVp7mTHB+mnPcb3UWEQe+UrX+TEQ=;
-        b=QvURCjwbAMc/RZxiXlJwIlYA/frtPwVE4VzLxgXdxy9P2cVyzIT9jVeQRkXftRhlLL
-         MWUeEPaszjUwdAa8VQCNmaudtkZNI5pkx6DiievZ7xaW8jeTOEXnza2/vr8GhFyzz01U
-         CrqBaRiLP2fMNuJ1DInKYz+M/gXrnM5vKq+wCp6yVH9g8XnJOQrPLu7yB7YZAiMM/N8j
-         u+XFQn9sHGNFBKl0Psi2bOHWQ10lbByc9OTncDLI0Ng+q+sZjj81jXtyIcv/3Q2zVAyP
-         ipp5uPnJOK3v/TfAUK0TIHEAlwsrBaNqlHidvnFoifpdKgbLOvd0Ok3MS2wXszJxKddH
-         eQNg==
+        bh=y26m8KMuV8p2bUSqQESXrG+REwA97eviu6gSbQ4tKIc=;
+        b=ZWzVSWK6nd4VBy9m5OLrLwqGaSeKyfvtFmgtzoqwCwgkiujJme7qfP2el7BZDrFyut
+         UttUaqsOB8ZIQEwJ2Ku0By4E35DLp1/zUpG6zjdlT2PPp74bJWCJn9a5mGzDV5hhl86X
+         Pgwdo19QpaZi5SeQLn6aiZvbRDeXHQFXFoUhG1BMqy+iHhXp9fg6vUbjcPk5kt3Sc3d0
+         UqD0Xu0IDrg0p5YankOS88AnTbbxnblTDZqE4sumKShOHx9sZGOSMyIHrepcu/CCcAoE
+         Ig0lG4687sUx1opUutvqSOAcqyhctgVKRKlTp45PXD00pdOYjeK8IPdezKbRAH7KeaPd
+         U1+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718664094; x=1719268894;
+        d=1e100.net; s=20230601; t=1718666237; x=1719271037;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k9R71IhZlLlWSDzgVp7mTHB+mnPcb3UWEQe+UrX+TEQ=;
-        b=tsgjWc7CJERws3Sph2ex1NJ7WtIDWIenFZTsryLn7kzuKmYBp2Tctpj9GOGiMHSwZv
-         hL/K71XmPM8a25c3C2gxz0t6wauvRouvHnnTByZ4PRB4OAG/vaDcT0fepcKHHBshx3Sm
-         M7N6tUjDCu3maV9w3uPJqZnXlOaakpYtafGgTEwMqcNd6O5of6VaDU2bwkT0Tx9frDds
-         drXE8A8b7s7nDXeY6IQrMmVAn58/izodtHQERS53/5cICFJjqyo49/gu50jvGdCeusmc
-         3TXlk1hgyVMIJePeBtvKb0qbihhf4i6By3T0Y2thd8nam3CyOEgitOHN7e2Y57kl9Gop
-         8SyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLafdH6MtXcv2Y1thiCMtkOnTz8tk5/21H0VR03S6qp9VX3nUSMiR9wcL/TNkqbZ4Bgc8JTsO/QYl2KGNFigbhQ9ZqnxfzKnDNlhJdsW6QrPslbflNe9p6hJGKvwhcj3fXJZOaJ+QQg5PVzysEa/Vf3UCpbMhp8CGr5jGDj5NqHLWu
-X-Gm-Message-State: AOJu0Yy7vPWdfcR7zBXgbqQ2oP+XuUo67dKU/lRyHkxCI/MonkUyyjYf
-	pGdnZrImQYQ+joaYlEqylimqphSlRmjPNEhzEIPuqvBO89wkmlzbn/ssnsugJP/5xtveHhtVf11
-	2J8g+V7Wz+n4oTa1fOjtF+o3Vspg=
-X-Google-Smtp-Source: AGHT+IFsVVHidNeYyK9JJtQowF1AOqQP+lrEGQoui7QGo2YyXJa1GfP9ueU48L6g2ogGiUGhLZzYY9QeJGgKrkuyfr8=
-X-Received: by 2002:a17:90a:c903:b0:2c3:3d22:b304 with SMTP id
- 98e67ed59e1d1-2c4db13220dmr9894853a91.3.1718664094126; Mon, 17 Jun 2024
- 15:41:34 -0700 (PDT)
+        bh=y26m8KMuV8p2bUSqQESXrG+REwA97eviu6gSbQ4tKIc=;
+        b=KCI0+9io7Ir9WbkVVjPzfys++prs5woIE3yBq43Lx9dLnqqs7JG7vUFtSfgOvjIUad
+         ozM17CMN2uHq3SLK+swLwK8A0bRqSolUP+f3qzzRuJ7oStrSdJaxamQ6+XPqJseVX+Xp
+         HwTNGs3YE8xEwjYAvZi/dnfwzlv88skVhmI//HqvUEWclYLbSfZFuCNBkhfnuZAJxK+y
+         xgu5IxwrVfx3S3o2uzfCwhU+pjwKeW5YpRyiItGuFBorbF9oy2b5fMDSi2nEn4OHF9ax
+         FElfkXZqKi5LPBBQsH/oIDzvHsuB8lU+aB+sMmvE9ihy9mGRR5JdLlFtZ61Bpf3b1Jzq
+         Y8lw==
+X-Forwarded-Encrypted: i=1; AJvYcCUG4lhCSlpUx6xLRSIOmT5Z7j0PUjn0N4gcDD87De0ETaw0qHlIDuFXeTnOL/WBF4Z/lpJd8NxQ5ZTps8oHC89emY2+Lsas4tqD0t6U6up+
+X-Gm-Message-State: AOJu0YzXWmSC8haQEow6OBG/Jv3lUzDOYIwQwbCV7Yk4Ob/g0VC77ryI
+	n3dsafUyDy7TOSOBR9AUgbaTDEJckuiOvqGSJg320mCe9Iw5/BuT9IJTetgItrfssZq1GZGzuc9
+	Fk+AJRr5BK7oKJ64WynrbVmMS2Z9eV952PLlR
+X-Google-Smtp-Source: AGHT+IF4HzjtSiEJm/JF7RZmDBSylbGJKMvF570CPPPNOrU07F5yzEv/z3JKNLnewEVpPcf1lCjwtP+ww+rMlM3/Cw4=
+X-Received: by 2002:a5d:468a:0:b0:360:709c:5040 with SMTP id
+ ffacd0b85a97d-3607a736520mr8281019f8f.2.1718666236739; Mon, 17 Jun 2024
+ 16:17:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
- <def32dd4-b205-45b8-a5ed-e6e28a0ac4f4@paulmck-laptop> <ZnBkHosMDhsh4H8g@J2N7QTR9R3>
- <76deed7a-9852-4d21-bbcc-8b14e267fe89@paulmck-laptop>
-In-Reply-To: <76deed7a-9852-4d21-bbcc-8b14e267fe89@paulmck-laptop>
-From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date: Tue, 18 Jun 2024 06:41:22 +0800
-Message-ID: <CAABZP2z0-zHTADL5REThay5CYcfSBaHA4mUXO6NYu-JJA7=Xvg@mail.gmail.com>
-Subject: Re: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's need
-To: paulmck@kernel.org
-Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, lance@osuosl.org
+References: <20240617170545.3820912-1-jiaqiyan@google.com> <20240617170545.3820912-2-jiaqiyan@google.com>
+ <20240617121348.4ee672a1d6bc9202b3ad0e08@linux-foundation.org>
+In-Reply-To: <20240617121348.4ee672a1d6bc9202b3ad0e08@linux-foundation.org>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Mon, 17 Jun 2024 16:17:01 -0700
+Message-ID: <CACw3F51wq4H-Hoxvm7GgCKodAR4Wy28hwBD=VngcF-fbxyRmUg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] mm/memory-failure: userspace controls
+ soft-offlining pages
+To: Andrew Morton <akpm@linux-foundation.org>, linmiaohe@huawei.com
+Cc: nao.horiguchi@gmail.com, jane.chu@oracle.com, ioworker0@gmail.com, 
+	muchun.song@linux.dev, shuah@kernel.org, corbet@lwn.net, osalvador@suse.de, 
+	rientjes@google.com, duenwen@google.com, fvdl@google.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 18, 2024 at 12:47=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
-rg> wrote:
+On Mon, Jun 17, 2024 at 12:13=E2=80=AFPM Andrew Morton
+<akpm@linux-foundation.org> wrote:
 >
-> On Mon, Jun 17, 2024 at 05:28:14PM +0100, Mark Rutland wrote:
-> > On Tue, Jun 11, 2024 at 07:57:29PM -0700, Paul E. McKenney wrote:
-> > > On Wed, Jun 12, 2024 at 01:35:27AM +0000, Zhouyi Zhou wrote:
-> > > > Add CFcommon.arch for the various arch's need for rcutorture.
-> > > >
-> > > > According to [1] and [2], this patch
-> > > > Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
-> > > > x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
-> > > >
-> > > > The patch has been revised and improved under
-> > > > Paul E. McKenney's guidance [3].
-> > > >
-> > > > [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi=
-@gmail.com/
-> > > > [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d59=
-0@paulmck-laptop/
-> > > > [3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195=
-e3@paulmck-laptop/T/
-> > > >
-> > > > Tested in x86_64 and PPC VM of Open Source Lab of Oregon State Univ=
-ersity.
-> > > >
-> > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > >
-> > > Much better, thank you!
-> > >
-> > > I queued and pushed for review and testing with the usual editing,
-> > > so please let me know if I messed anything up.
-> > >
-> > > I added Mark on CC in case he has thoughts from an ARM perspective.
+> On Mon, 17 Jun 2024 17:05:43 +0000 Jiaqi Yan <jiaqiyan@google.com> wrote:
+>
+> > Correctable memory errors are very common on servers with large
+> > amount of memory, and are corrected by ECC. Soft offline is kernel's
+> > additional recovery handling for memory pages having (excessive)
+> > corrected memory errors. Impacted page is migrated to a healthy page
+> > if it is in-use; the original page is discarded for any future use.
 > >
-> > Ah, thanks!
+> > The actual policy on whether (and when) to soft offline should be
+> > maintained by userspace, especially in case of an 1G HugeTLB page.
+> > Soft-offline dissolves the HugeTLB page, either in-use or free, into
+> > chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+> > If userspace has not acknowledged such behavior, it may be surprised
+> > when later failed to mmap hugepages due to lack of hugepages.
+> > In case of a transparent hugepage, it will be split into 4K pages
+> > as well; userspace will stop enjoying the transparent performance.
 > >
-> > >From a quick scan, the only thing I spot is that CONFIG_KVM_GUEST is
-> > also not an arm64 thing, and only exists on x86 & powerpc, so pulling
-> > that out too would be nice.
-yes, CONFIG_KVM_GUEST exists in powerpc & x86, which makes me think it
-is global.
+> > In addition, discarding the entire 1G HugeTLB page only because of
+> > corrected memory errors sounds very costly and kernel better not
+> > doing under the hood. But today there are at least 2 such cases
+> > doing so:
+> > 1. GHES driver sees both GHES_SEV_CORRECTED and
+> >    CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+> > 2. RAS Correctable Errors Collector counts correctable errors per
+> >    PFN and when the counter for a PFN reaches threshold
+> > In both cases, userspace has no control of the soft offline performed
+> > by kernel's memory failure recovery.
+> >
+> > This commit gives userspace the control of softofflining any page:
+> > kernel only soft offlines raw page / transparent hugepage / HugeTLB
+> > hugepage if userspace has agreed to. The interface to userspace is a
+> > new sysctl at /proc/sys/vm/enable_soft_offline. By default its value
+> > is set to 1 to preserve existing behavior in kernel. When set to 0,
+> > soft-offline (e.g. MADV_SOFT_OFFLINE) will fail with EOPNOTSUPP.
+> >
 >
-> Thank you for looking this over!
->
-> Zhouyi, would you be willing to add this change, either as a new version
-> of this patch or as a new patch on top of it?  (Your choice.)
-Thanks to Paul and Mark's guidance, I achieved a lot during this process ;-=
-)
+> Seems reasonable.  A very simple patch.
 
-I am going to create a new version of the patch, and test is both on
-X86 and PowerPC
+Thanks for taking a look, Andrew!
 
-Cheers
-Zhouyi
 >
-> > That aside, this looks good to me; having the infrastructure to do this
-> > per-arch is nice!
+> Is there sufficient instrumentation in place for userspace to be able
+> to know that these errors are occurring?  To be able to generally
+> monitor the machine's health?
+
+For corrected memory errors, in general they are available in kernel
+logs. On X86 Machine Check handling will log unparsed MCs (one needs
+to read mci_status to know what exactly the error is). On ARM, GHES
+logs parsed CPER (already containing error type and error severity).
+The shortcoming is logs are rate limited. So in a burst of corrected
+memory errors the user may not be able to figure out exactly how many
+there were.
+
+For uncorrectable memory errors, num_poisoned_pages is a reliable counter.
+
 >
-> Glad you like it!  May we have your ack?
-Very happy that Mark likes it ;-)
->
->                                                         Thanx, Paul
->
-> > Mark.
+> > @@ -2783,6 +2795,12 @@ int soft_offline_page(unsigned long pfn, int fla=
+gs)
+> >               return -EIO;
+> >       }
 > >
-> > >
-> > >                                                     Thanx, Paul
-> > >
-> > > ---------------------------------------------------------------------=
----
-> > >
-> > > commit 29cf4c63d04b9752a32e33d46a57717121353ef7
-> > > Author: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > Date:   Wed Jun 12 01:35:27 2024 +0000
-> > >
-> > >     rcutorture: Add CFcommon.arch for the various arch's need
-> > >
-> > >     Add CFcommon.arch for the various arch's need for rcutorture.
-> > >
-> > >     In accordance with [1] and [2], this patch moves x86 specific ker=
-nel
-> > >     option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
-> > >
-> > >     [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhou=
-yi@gmail.com/
-> > >     [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d=
-590@paulmck-laptop/
-> > >
-> > >     Tested in x86_64 and PPC VM of Open Source Lab of Oregon State Un=
-iversity.
-> > >
-> > >     Link: https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb6=
-6195e3@paulmck-laptop/T/
-> > >
-> > >     Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options")
-> > >     Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-> > >     Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > >     Cc: Mark Rutland <mark.rutland@arm.com>
-> > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > >
-> > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh=
- b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-> > > index b33cd87536899..ad79784e552d2 100755
-> > > --- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-> > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-> > > @@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORT=
-URE_KCONFIG_GDB_ARG"
-> > >  config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KAS=
-AN_ARG"
-> > >  config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCS=
-AN_ARG"
-> > >  config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_=
-ARG"
-> > > +config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
-> > > +                 "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null=
-`"
-> > >  cp $T/KcList $resdir/ConfigFragment
-> > >
-> > >  base_resdir=3D`echo $resdir | sed -e 's/\.[0-9]\+$//'`
-> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon =
-b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-> > > index 0e92d85313aa7..cf0387ae53584 100644
-> > > --- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
-> > > @@ -1,6 +1,5 @@
-> > >  CONFIG_RCU_TORTURE_TEST=3Dy
-> > >  CONFIG_PRINTK_TIME=3Dy
-> > > -CONFIG_HYPERVISOR_GUEST=3Dy
-> > >  CONFIG_PARAVIRT=3Dy
-> > >  CONFIG_KVM_GUEST=3Dy
-> > >  CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=3Dn
-> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.=
-i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-> > > new file mode 100644
-> > > index 0000000000000..2770560d56a0c
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
-> > > @@ -0,0 +1 @@
-> > > +CONFIG_HYPERVISOR_GUEST=3Dy
-> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.=
-x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-> > > new file mode 100644
-> > > index 0000000000000..2770560d56a0c
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
-> > > @@ -0,0 +1 @@
-> > > +CONFIG_HYPERVISOR_GUEST=3Dy
+> > +     if (!sysctl_enable_soft_offline) {
+> > +             pr_info("%#lx: OS-wide disabled\n", pfn);
+>
+> This doesn't seem a very good message.  There's no indication that it
+> comes from the memory failure code at all.  If the sysadmin sees this
+> come out in the kernels logs, he/she will have to grep the kernel
+> sources just to figure out where the message came from.  Perhaps we can
+> be more helpful here..
+
+For sure. I took it for granted that any pr_info will have the "Memory
+failure: " prefix, but now realize there is a `#undef pr_fmt` +
+`#define pr_fmt(fmt) "" fmt` just above unpoison_memory.
+
+I propose to do `#define pr_fmt(fmt) "Soft offline: " fmt` above
+mf_isolate_folio, so that any soft-offline related code generates logs
+with the same following format:
+
+  "Soft offline: 0x${pfn}: ${detailed_message}"
+
+If everyone thinks this is reasonable, in v4 I can insert a new commit
+to make the log formats unified.
+
+>
+> > +             put_ref_page(pfn, flags);
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> >       mutex_lock(&mf_mutex);
+> >
+>
+>
 
