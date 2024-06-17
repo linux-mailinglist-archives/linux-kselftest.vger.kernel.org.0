@@ -1,70 +1,116 @@
-Return-Path: <linux-kselftest+bounces-12041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C3AB90A88C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 10:34:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0E1B90A964
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 11:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E56CD283B67
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 08:34:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46C5528B673
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 09:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304F219067F;
-	Mon, 17 Jun 2024 08:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619DA1922EF;
+	Mon, 17 Jun 2024 09:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAUys201"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TySteEnA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0874D190679;
-	Mon, 17 Jun 2024 08:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39046191481;
+	Mon, 17 Jun 2024 09:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718613241; cv=none; b=gPht25t4oQWKoOzlgz8/IeqUBLXW00GLwzR2uDjagucmvSSdEo+3mZW1BxFcYLppvMwrNx3sGOOfSVbR9XDWdMX1Ia6VcFBtL10+/UChAq89znLhbKCwlHUJWGL7uj6+MIrUHeVYu/estxw5AQGoX0gC2E2ScETYWoyI5VyznRc=
+	t=1718615849; cv=none; b=f0dTO7iV7IIEs+cDDEOqjMmAiDqB25UyCTgAE9E+igtdfm2UbEIfTYE0QuIToBqYvqRnrCXfqTBaMowiiMGXcqYDumyXMUJBbS37Par7a7PhFF3DK9W/Yw6hqz6AEqqdWKg68KLh59dRCKJXrkMF3OZzFMV47q8xQ+K0y08RoEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718613241; c=relaxed/simple;
-	bh=ek0iCBSuhwxmBUkXZ25YiD2CARKWMEhFftoQUiEh56g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H+Qx16PsShcJFbOAbImIJMFTMOvkQoqc+I9EZpqDcC641l0X563liBd8ovaf5naOQGjVFxqPlO2UnwfpQObcocarCF4Mz+Wfrbxkxn8nIn61qAS2Jr3zaQGgfWsSRd9yTYhsb1R0myIgupbw3bPeV0u7jl1XkMMrYL4sTrYNSxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAUys201; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4A0C4AF48;
-	Mon, 17 Jun 2024 08:33:54 +0000 (UTC)
+	s=arc-20240116; t=1718615849; c=relaxed/simple;
+	bh=LHVbipfLrY85jDixqu/erFFUG3QdqWCHYShbScuh0sI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ldhWjGevq+IgusH8Zg8cbr9g4qzsBPd/U05EJ5TImsMqKV4HSmf4Dt55qUqwePb6TuaQ8sGr6FxckImxafJ/ZgbbUeoHO9SD1PZOXFRaiIDmlR4e7oy7fYIFCIS0CItxe9ORI7dm9RwrbC/Hm+B7xrlvOz7Dfo4FqZjLx76K8sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TySteEnA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38964C2BD10;
+	Mon, 17 Jun 2024 09:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718613240;
-	bh=ek0iCBSuhwxmBUkXZ25YiD2CARKWMEhFftoQUiEh56g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PAUys201J8c7+ROTjLTWwfsb8nz/U2qXjomVQzIoxGNWOUcvPqxrPkY3b64Vc7B9R
-	 pluexHMy56kqg8Vh5JkZeyJPZlJCndTDS8laqsglMGzjYbvYG04jniXmYlXINwuoWZ
-	 zubNlHg2rfMF0LR3Ri08zrOjQpIbUsnpZCofGtEfSLWDF9flsRxaUnA/XBp3DZdjU1
-	 5NfiNtNMBCdHjDzWXn4AHYAXz+SGYyiIQkRkpho0QtF12UD6pF9UzPhsC9CfCVW7m9
-	 00xJWNWc5VyHiJv758haO6j7tnu73yIGJQVYLGEfvj+SrD6XZPJdizo5rrVtFX/ZLL
-	 a6uRThP2vdC3Q==
+	s=k20201202; t=1718615848;
+	bh=LHVbipfLrY85jDixqu/erFFUG3QdqWCHYShbScuh0sI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=TySteEnAyJiiKNiDnLjB75Ve6lwB5fW6Q5cBd7DmHP21mw5RylOZaKpYUxTb4ZXGJ
+	 fGTZXVtG6ajqqy4syDnvCYPyBMGBBYW5n5rhWDgM9aO1y3qtFovD/T+yEpKhSXs/kE
+	 iCw+8lj4GbMLUAkgmizFRJbpuZeqjYuHV12Et1T9wpC1zlLK2B/+ko/A5OWWYSSuV4
+	 O5zqpPijxGhnL9da+3A4HKqYjZob46KgN5uYEAL1il/0y8V4CC8pE7cEKYZ72xobNr
+	 lLWSbANHcCcvE+VYK04HaosTFwHgo5DoOuzPi199q0q3Tazs0d4mNYcGKTzoLw0NT6
+	 JUrCdDFbmXyhw==
+Message-ID: <47a472d1ff1e9ec37b71d371cbc00395811f56c0.camel@kernel.org>
+Subject: Re: [PATCH mptcp-next v3 0/6] use network helpers, part 7
 From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
+To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH mptcp-next v3 6/6] selftests/bpf: Use start_server_str in test_tcp_check_syncookie_user
-Date: Mon, 17 Jun 2024 16:33:11 +0800
-Message-ID: <5b1f4e6fd899a858d2357c4df7038364b9686176.1718612857.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+Date: Mon, 17 Jun 2024 17:17:20 +0800
 In-Reply-To: <cover.1718612857.git.tanggeliang@kylinos.cn>
 References: <cover.1718612857.git.tanggeliang@kylinos.cn>
+Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ TO0tfEdfAX7IENcV87h2yAFBZkaA==
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.0-1build2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,74 +119,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Sorry, v3 breaks the CI.
+Changes Requested.
 
-Since start_server_str() is added now, it can be used in script
-test_tcp_check_syncookie_user.c instead of start_server_addr() to
-simplify the code.
+-Geliang
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../bpf/test_tcp_check_syncookie_user.c       | 29 ++-----------------
- 1 file changed, 3 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index aebc58c24dc5..3844f9b8232a 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -156,10 +156,6 @@ static int v6only_false(int fd, void *opts)
- int main(int argc, char **argv)
- {
- 	struct network_helper_opts opts = { 0 };
--	struct sockaddr_in addr4;
--	struct sockaddr_in6 addr6;
--	struct sockaddr_in addr4dual;
--	struct sockaddr_in6 addr6dual;
- 	int server = -1;
- 	int server_v6 = -1;
- 	int server_dual = -1;
-@@ -181,36 +177,17 @@ int main(int argc, char **argv)
- 		goto err;
- 	}
- 
--	memset(&addr4, 0, sizeof(addr4));
--	addr4.sin_family = AF_INET;
--	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
--	addr4.sin_port = 0;
--	memcpy(&addr4dual, &addr4, sizeof(addr4dual));
--
--	memset(&addr6, 0, sizeof(addr6));
--	addr6.sin6_family = AF_INET6;
--	addr6.sin6_addr = in6addr_loopback;
--	addr6.sin6_port = 0;
--
--	memset(&addr6dual, 0, sizeof(addr6dual));
--	addr6dual.sin6_family = AF_INET6;
--	addr6dual.sin6_addr = in6addr_any;
--	addr6dual.sin6_port = 0;
--
--	server = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr4,
--				   sizeof(addr4), NULL);
-+	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
- 	if (server == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_true;
--	server_v6 = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6,
--				      sizeof(addr6), &opts);
-+	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
- 	if (server_v6 == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_false;
--	server_dual = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6dual,
--					sizeof(addr6dual), &opts);
-+	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
- 	if (server_dual == -1)
- 		goto err;
- 
--- 
-2.43.0
+On Mon, 2024-06-17 at 16:33 +0800, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> v3:
+>  - rename start_client to client_socket
+>  - Use connect_to_addr in connect_to_fd_opt
+> 
+> v2:
+>  - update patch 2, extract a new helper start_client.
+>  - drop patch 3, keep must_fail in network_helper_opts.
+> 
+> Drop type and noconnect from network_helper_opts. And use
+> start_server_str
+> in mptcp and test_tcp_check_syncookie_user.
+> 
+> Patches 1-4 address Martin's comments in the previous series.
+> 
+> Geliang Tang (6):
+>   selftests/bpf: Drop type from network_helper_opts
+>   selftests/bpf: Use connect_to_addr in connect_to_fd_opt
+>   selftests/bpf: Add client_socket helper
+>   selftests/bpf: Drop noconnect from network_helper_opts
+>   selftests/bpf: Use start_server_str in mptcp
+>   selftests/bpf: Use start_server_str in
+> test_tcp_check_syncookie_user
+> 
+>  tools/testing/selftests/bpf/network_helpers.c | 100 ++++++++--------
+> --
+>  tools/testing/selftests/bpf/network_helpers.h |   6 +-
+>  .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |   2 +-
+>  .../selftests/bpf/prog_tests/cgroup_v1v2.c    |   4 +-
+>  .../bpf/prog_tests/ip_check_defrag.c          |  10 +-
+>  .../testing/selftests/bpf/prog_tests/mptcp.c  |   7 +-
+>  .../bpf/test_tcp_check_syncookie_user.c       |  29 +----
+>  7 files changed, 56 insertions(+), 102 deletions(-)
+> 
 
 
