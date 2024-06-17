@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-12091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5BA990B8F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 20:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 615A690B8F2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 20:05:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A7A7286CF6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 18:05:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1304B286E64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2024 18:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965D51993AB;
-	Mon, 17 Jun 2024 18:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3031993AF;
+	Mon, 17 Jun 2024 18:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FMkubtpt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gzgQiOS9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF45E199391
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8BC199382
 	for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2024 18:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718647361; cv=none; b=CVI6y4USb4VKbfOIr3MmAXdnt/NHPlduxHUe+7CkcV+aBP7Za0nM36ltRSC/dv+aVpk4pho0BSZ6i0r4RquhV9xsnfVbWp8f9wBtFMrdvPLsfVumbNhpdOZlWGnfX4A+ZB0yjvIRinFtOfIg+W5Y8x9ahqCouFR/K3cPJw+mchI=
+	t=1718647360; cv=none; b=m3CsyJcgNlQwPZCXFZV1sBY9IJPYJlGr3jYIgFRiWh3qiTjdAtsMaUppMqvUTcPniqdWPpGHhVf9CyVpj7U5L0yMcagdA7KKuNmSfBHxgs+XdMpfo24SkpE+Eu0ugZxlYP0CGb32bq81j4w2xp61EK6QX7IdLjj3j4vSGxsuHSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718647361; c=relaxed/simple;
-	bh=v2RLB6gYzEDX+VCX5LHy5PgJ4jOX5BIh4g4psyqxrzA=;
+	s=arc-20240116; t=1718647360; c=relaxed/simple;
+	bh=DM5Ex803zS7MOxfWJYf5m05LJwFNJsDu1bx7wMEtVz4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ms0oI4keWXp7XoJKA1X1dIsB92oacnIiYBILNa4+VO1+6P4x08+mZDEYfqFru5qzLVZ8yz8yYoVgxxzE5oZFeZETKxxjOepQ0MqRS06jHIW1fTFZU0EPoXFjX2DTg5+a4KawqbvV7Wg1jDckqbJnRGx995rQ3SEAMH2Z9kIKj8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FMkubtpt; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=dZVGSf9XEUhaHFjUwbnCrlCSeH8TOSm5B+1Kc+Fdqhu64egsmDO2D1y5HSSm/XdZ9FdvgSaovrEuo3hc2e4nyWmL25tA7b+iER0tE21ucg6U2ZpY7KNyh+do/w79d2CI52Ify4gglfTdYxEdSfOHkVb/4j+YwvP99arHpHKkG20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gzgQiOS9; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718647359;
+	s=mimecast20190719; t=1718647358;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8XDaQsqwAgS9Ix3vAlEwU82EinwRpR6JSa/aEwAYx6g=;
-	b=FMkubtpt3A7iIRwi6O4bvAZ8Z8zpHE22PQNOYSxNpbmtkdCwOd6wVN1EX/57Nn0nligJND
-	2BS4fE+hDzSqAzGJOpIUE/o5+dASS4+TCx3WDFhWiMMrR97KVkkSdHFDE+1ryezhxpoj9/
-	KYwqj3uPTQ0ulVqg1PG6uJE5FzKl7go=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=4KlgFTzGvRQ9KF2HWnCZmoGsdCauwElV+Abi5MawrNg=;
+	b=gzgQiOS9xvbpHuwMtFnTfTK6/Y7FEB602ykNxktjdwQe09F2sKQjx2xOeyRPbKDM1lyRNa
+	4NV/IGLuub3ldb+7GbB3rBLfRuisw1OcK7hEbLT7FJrL1BpA1HlObitV2gJ4GJ6diXm6T7
+	JRC2M65OAbyimQtH+FwIdhr0zPpkFsg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-182-eYR_E4J8NWOG5yY3yqKsmg-1; Mon,
- 17 Jun 2024 14:02:35 -0400
-X-MC-Unique: eYR_E4J8NWOG5yY3yqKsmg-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-173-sQvNQ5O2NVa0UDecge8GcQ-1; Mon,
+ 17 Jun 2024 14:02:37 -0400
+X-MC-Unique: sQvNQ5O2NVa0UDecge8GcQ-1
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7485D1956071;
-	Mon, 17 Jun 2024 18:02:32 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 56C7F19560B9;
+	Mon, 17 Jun 2024 18:02:35 +0000 (UTC)
 Received: from RHTRH0061144.redhat.com (unknown [10.22.16.41])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 636001956087;
-	Mon, 17 Jun 2024 18:02:29 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 853FF19560AF;
+	Mon, 17 Jun 2024 18:02:32 +0000 (UTC)
 From: Aaron Conole <aconole@redhat.com>
 To: netdev@vger.kernel.org
 Cc: dev@openvswitch.org,
@@ -70,9 +70,9 @@ Cc: dev@openvswitch.org,
 	Stefano Brivio <sbrivio@redhat.com>,
 	=?UTF-8?q?Adri=C3=A1n=20Moreno?= <amorenoz@redhat.com>,
 	Simon Horman <horms@kernel.org>
-Subject: [PATCH net-next 3/7] selftests: openvswitch: Add set() and set_masked() support.
-Date: Mon, 17 Jun 2024 14:02:14 -0400
-Message-ID: <20240617180218.1154326-4-aconole@redhat.com>
+Subject: [PATCH net-next 4/7] selftests: openvswitch: Add support for tunnel() key.
+Date: Mon, 17 Jun 2024 14:02:15 -0400
+Message-ID: <20240617180218.1154326-5-aconole@redhat.com>
 In-Reply-To: <20240617180218.1154326-1-aconole@redhat.com>
 References: <20240617180218.1154326-1-aconole@redhat.com>
 Precedence: bulk
@@ -84,94 +84,215 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-These will be used in upcoming commits to set specific attributes for
-interacting with tunnels.  Since set() will use the key parsing routine, we
-also make sure to prepend it with an open paren, for the action parsing to
-properly understand it.
+This will be used when setting details about the tunnel to use as
+transport.  There is a difference between the ODP format between tunnel():
+the 'key' flag is not actually a flag field, so we don't support it in the
+same way that the vswitchd userspace supports displaying it.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-Tested-by: Simon Horman <horms@kernel.org>
 Signed-off-by: Aaron Conole <aconole@redhat.com>
 ---
- .../selftests/net/openvswitch/ovs-dpctl.py    | 37 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 167 +++++++++++++++++-
+ 1 file changed, 166 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 4db20b38b481..4c235ff07aeb 100644
+index 4c235ff07aeb..2f16df2fb16b 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -284,7 +284,7 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_UNSPEC", "none"),
-         ("OVS_ACTION_ATTR_OUTPUT", "uint32"),
-         ("OVS_ACTION_ATTR_USERSPACE", "userspace"),
--        ("OVS_ACTION_ATTR_SET", "none"),
-+        ("OVS_ACTION_ATTR_SET", "ovskey"),
-         ("OVS_ACTION_ATTR_PUSH_VLAN", "none"),
-         ("OVS_ACTION_ATTR_POP_VLAN", "flag"),
-         ("OVS_ACTION_ATTR_SAMPLE", "none"),
-@@ -292,7 +292,7 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_HASH", "none"),
-         ("OVS_ACTION_ATTR_PUSH_MPLS", "none"),
-         ("OVS_ACTION_ATTR_POP_MPLS", "flag"),
--        ("OVS_ACTION_ATTR_SET_MASKED", "none"),
-+        ("OVS_ACTION_ATTR_SET_MASKED", "ovskey"),
-         ("OVS_ACTION_ATTR_CT", "ctact"),
-         ("OVS_ACTION_ATTR_TRUNC", "uint32"),
-         ("OVS_ACTION_ATTR_PUSH_ETH", "none"),
-@@ -469,6 +469,18 @@ class ovsactions(nla):
-                     print_str += "clone("
-                     print_str += datum.dpstr(more)
-                     print_str += ")"
-+                elif field[0] == "OVS_ACTION_ATTR_SET" or \
-+                     field[0] == "OVS_ACTION_ATTR_SET_MASKED":
-+                    print_str += "set"
-+                    field = datum
-+                    mask = None
-+                    if field[0] == "OVS_ACTION_ATTR_SET_MASKED":
-+                        print_str += "_masked"
-+                        field = datum[0]
-+                        mask = datum[1]
-+                    print_str += "("
-+                    print_str += field.dpstr(mask, more)
-+                    print_str += ")"
-                 else:
-                     try:
-                         print_str += datum.dpstr(more)
-@@ -547,6 +559,25 @@ class ovsactions(nla):
-                 self["attrs"].append(("OVS_ACTION_ATTR_CLONE", subacts))
-                 actstr = actstr[parsedLen:]
-                 parsed = True
-+            elif parse_starts_block(actstr, "set(", False):
-+                parencount += 1
-+                k = ovskey()
-+                actstr = actstr[len("set("):]
-+                actstr = k.parse(actstr, None)
-+                self["attrs"].append(("OVS_ACTION_ATTR_SET", k))
-+                if not actstr.startswith(")"):
-+                    actstr = ")" + actstr
-+                parsed = True
-+            elif parse_starts_block(actstr, "set_masked(", False):
-+                parencount += 1
-+                k = ovskey()
-+                m = ovskey()
-+                actstr = actstr[len("set_masked("):]
-+                actstr = k.parse(actstr, m)
-+                self["attrs"].append(("OVS_ACTION_ATTR_SET_MASKED", [k, m]))
-+                if not actstr.startswith(")"):
-+                    actstr = ")" + actstr
-+                parsed = True
-             elif parse_starts_block(actstr, "ct(", False):
-                 parencount += 1
-                 actstr = actstr[len("ct(") :]
-@@ -1312,7 +1343,7 @@ class ovskey(nla):
-                 mask["attrs"].append([field[0], m])
-             self["attrs"].append([field[0], k])
+@@ -709,7 +709,7 @@ class ovskey(nla):
+         ("OVS_KEY_ATTR_ARP", "ovs_key_arp"),
+         ("OVS_KEY_ATTR_ND", "ovs_key_nd"),
+         ("OVS_KEY_ATTR_SKB_MARK", "uint32"),
+-        ("OVS_KEY_ATTR_TUNNEL", "none"),
++        ("OVS_KEY_ATTR_TUNNEL", "ovs_key_tunnel"),
+         ("OVS_KEY_ATTR_SCTP", "ovs_key_sctp"),
+         ("OVS_KEY_ATTR_TCP_FLAGS", "be16"),
+         ("OVS_KEY_ATTR_DP_HASH", "uint32"),
+@@ -1269,6 +1269,163 @@ class ovskey(nla):
+                 init=init,
+             )
  
--            flowstr = flowstr[strspn(flowstr, "),") :]
-+            flowstr = flowstr[strspn(flowstr, "), ") :]
++    class ovs_key_tunnel(nla):
++        nla_flags = NLA_F_NESTED
++
++        nla_map = (
++            ("OVS_TUNNEL_KEY_ATTR_ID", "be64"),
++            ("OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "ipaddr"),
++            ("OVS_TUNNEL_KEY_ATTR_IPV4_DST", "ipaddr"),
++            ("OVS_TUNNEL_KEY_ATTR_TOS", "uint8"),
++            ("OVS_TUNNEL_KEY_ATTR_TTL", "uint8"),
++            ("OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT", "flag"),
++            ("OVS_TUNNEL_KEY_ATTR_CSUM", "flag"),
++            ("OVS_TUNNEL_KEY_ATTR_OAM", "flag"),
++            ("OVS_TUNNEL_KEY_ATTR_GENEVE_OPTS", "array(uint32)"),
++            ("OVS_TUNNEL_KEY_ATTR_TP_SRC", "be16"),
++            ("OVS_TUNNEL_KEY_ATTR_TP_DST", "be16"),
++            ("OVS_TUNNEL_KEY_ATTR_VXLAN_OPTS", "none"),
++            ("OVS_TUNNEL_KEY_ATTR_IPV6_SRC", "ipaddr"),
++            ("OVS_TUNNEL_KEY_ATTR_IPV6_DST", "ipaddr"),
++            ("OVS_TUNNEL_KEY_ATTR_PAD", "none"),
++            ("OVS_TUNNEL_KEY_ATTR_ERSPAN_OPTS", "none"),
++            ("OVS_TUNNEL_KEY_ATTR_IPV4_INFO_BRIDGE", "flag"),
++        )
++
++        def parse(self, flowstr, mask=None):
++            if not flowstr.startswith("tunnel("):
++                return None, None
++
++            k = ovskey.ovs_key_tunnel()
++            if mask is not None:
++                mask = ovskey.ovs_key_tunnel()
++
++            flowstr = flowstr[len("tunnel("):]
++
++            v6_address = None
++
++            fields = [
++                ("tun_id=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_ID",
++                 0xffffffffffffffff, None, None),
++
++                ("src=", r"([0-9a-fA-F\.]+)", str,
++                 "OVS_TUNNEL_KEY_ATTR_IPV4_SRC", "255.255.255.255", "0.0.0.0",
++                 False),
++                ("dst=", r"([0-9a-fA-F\.]+)", str,
++                 "OVS_TUNNEL_KEY_ATTR_IPV4_DST", "255.255.255.255", "0.0.0.0",
++                 False),
++
++                ("ipv6_src=", r"([0-9a-fA-F:]+)", str,
++                 "OVS_TUNNEL_KEY_ATTR_IPV6_SRC",
++                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
++                ("ipv6_dst=", r"([0-9a-fA-F:]+)", str,
++                 "OVS_TUNNEL_KEY_ATTR_IPV6_DST",
++                 "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", "::", True),
++
++                ("tos=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TOS", 255, 0,
++                 None),
++                ("ttl=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TTL", 255, 0,
++                 None),
++
++                ("tp_src=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_SRC",
++                 65535, 0, None),
++                ("tp_dst=", r"(\d+)", int, "OVS_TUNNEL_KEY_ATTR_TP_DST",
++                 65535, 0, None),
++            ]
++
++            forced_include = ["OVS_TUNNEL_KEY_ATTR_TTL"]
++
++            for prefix, regex, typ, attr_name, mask_val, default_val, v46_flag in fields:
++                flowstr, value = parse_extract_field(flowstr, prefix, regex, typ, False)
++                if not attr_name:
++                    raise Exception("Bad list value in tunnel fields")
++
++                if value is None and attr_name in forced_include:
++                    value = default_val
++                    mask_val = default_val
++
++                if value is not None:
++                    if v46_flag is not None:
++                        if v6_address is None:
++                            v6_address = v46_flag
++                        if v46_flag != v6_address:
++                            raise ValueError("Cannot mix v6 and v4 addresses")
++                    k["attrs"].append([attr_name, value])
++                    if mask is not None:
++                        mask["attrs"].append([attr_name, mask_val])
++                else:
++                    if v46_flag is not None:
++                        if v6_address is None or v46_flag != v6_address:
++                            continue
++                    if mask is not None:
++                        mask["attrs"].append([attr_name, default_val])
++
++            if k["attrs"][0][0] != "OVS_TUNNEL_KEY_ATTR_ID":
++                raise ValueError("Needs a tunid set")
++
++            if flowstr.startswith("flags("):
++                flowstr = flowstr[len("flags("):]
++                flagspos = flowstr.find(")")
++                flags = flowstr[:flagspos]
++                flowstr = flowstr[flagspos + 1:]
++
++                flag_attrs = {
++                    "df": "OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT",
++                    "csum": "OVS_TUNNEL_KEY_ATTR_CSUM",
++                    "oam": "OVS_TUNNEL_KEY_ATTR_OAM"
++                }
++
++                for flag in flags.split("|"):
++                    if flag in flag_attrs:
++                        k["attrs"].append([flag_attrs[flag], True])
++                        if mask is not None:
++                            mask["attrs"].append([flag_attrs[flag], True])
++
++            flowstr = flowstr[strspn(flowstr, ", ") :]
++            return flowstr, k, mask
++
++        def dpstr(self, mask=None, more=False):
++            print_str = "tunnel("
++
++            flagsattrs = []
++            for k in self["attrs"]:
++                noprint = False
++                if k[0] == "OVS_TUNNEL_KEY_ATTR_ID":
++                    print_str += "tun_id=%d" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV4_SRC":
++                    print_str += "src=%s" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV4_DST":
++                    print_str += "dst=%s" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV6_SRC":
++                    print_str += "ipv6_src=%s" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_IPV6_DST":
++                    print_str += "ipv6_dst=%s" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TOS":
++                    print_str += "tos=%d" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TTL":
++                    print_str += "ttl=%d" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TP_SRC":
++                    print_str += "tp_src=%d" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_TP_DST":
++                    print_str += "tp_dst=%d" % k[1]
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_DONT_FRAGMENT":
++                    noprint = True
++                    flagsattrs.append("df")
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_CSUM":
++                    noprint = True
++                    flagsattrs.append("csum")
++                elif k[0] == "OVS_TUNNEL_KEY_ATTR_OAM":
++                    noprint = True
++                    flagsattrs.append("oam")
++
++                if not noprint:
++                    print_str += ","
++
++            if len(flagsattrs):
++                print_str += "flags(" + "|".join(flagsattrs) + ")"
++            print_str += ")"
++            return print_str
++
+     class ovs_key_mpls(nla):
+         fields = (("lse", ">I"),)
  
-         return flowstr
- 
+@@ -1277,6 +1434,7 @@ class ovskey(nla):
+             ("OVS_KEY_ATTR_PRIORITY", "skb_priority", intparse),
+             ("OVS_KEY_ATTR_SKB_MARK", "skb_mark", intparse),
+             ("OVS_KEY_ATTR_RECIRC_ID", "recirc_id", intparse),
++            ("OVS_KEY_ATTR_TUNNEL", "tunnel", ovskey.ovs_key_tunnel),
+             ("OVS_KEY_ATTR_DP_HASH", "dp_hash", intparse),
+             ("OVS_KEY_ATTR_CT_STATE", "ct_state", parse_ct_state),
+             ("OVS_KEY_ATTR_CT_ZONE", "ct_zone", intparse),
+@@ -1379,6 +1537,13 @@ class ovskey(nla):
+                 lambda x: False,
+                 True,
+             ),
++            (
++                "OVS_KEY_ATTR_TUNNEL",
++                "tunnel",
++                None,
++                False,
++                False,
++            ),
+             (
+                 "OVS_KEY_ATTR_CT_STATE",
+                 "ct_state",
 -- 
 2.45.1
 
