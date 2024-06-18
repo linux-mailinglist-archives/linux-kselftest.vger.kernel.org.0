@@ -1,82 +1,81 @@
-Return-Path: <linux-kselftest+bounces-12169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12170-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD2B90DD1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 22:14:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DA1790DD23
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 22:18:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6FDD1C2218E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 20:14:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF9DAB221BB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 20:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC50016EB78;
-	Tue, 18 Jun 2024 20:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C4C16630B;
+	Tue, 18 Jun 2024 20:18:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ENYMfO1Y"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ujafPQ6l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E469156F25;
-	Tue, 18 Jun 2024 20:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB10439AEC;
+	Tue, 18 Jun 2024 20:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.70
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718741663; cv=fail; b=gYHwk/NEVhK/FAsJqXK8TavFDkoZW7zHfBcBxN63PYmLSWb3xTEITTplCGIYdrK+RNmhmkcUhHdJ7pSilc0N2KAd3BfFvJBzpikeRJnAOVmH6wQQ9KPwrJp7ZP8HxCrEFz9VUxPScUJgjjx2jYYWcl2smQfP1dWeUgFIeeHtOCE=
+	t=1718741897; cv=fail; b=suUqY5muNIMOAv8GSzOgj20WVL/tEEQoULi7aFK8VEhMkcApSqwMAtJAm4Cukh7BWZ5inzXUOJ3f6zw+xKbfzvjd1VNfdJjjjdI4dkdzYD+sTVDo3n981t8JgZpcxc+mxX5CSgQAuaL3p+Rj6j5AZ3rhTCl7PxkapByfxyyOc/Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718741663; c=relaxed/simple;
-	bh=9Mi2A01YJndftjBrCp8Dy3LGPcw7VGkuDcP8GWEcEJA=;
+	s=arc-20240116; t=1718741897; c=relaxed/simple;
+	bh=QMACK3j7zvKFZENZ050wFltHghVR5bhMIf4vdCFVqNg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=mqeHwBJvLA9WLP+lyCF5XolBIocYdHeWIJTjNctDpEHLJ/5MI+KqNcy1BVV/3l9d8uezC6iZKcmjhJ32UTuhUvYrQpP6of3nGJYRvRhbf+EmOk7rODmnnTj6uAFv8ceWHxmaQ4b9ER7L2rkBXUy0Hyz5I3Tup7jsL8y7X8sbioE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ENYMfO1Y; arc=fail smtp.client-ip=40.107.243.40
+	 In-Reply-To:Content-Type; b=UuUgm7YEFo1e3ysh34hN3MXvjGawN9N2Ia85+tzdG8VYLaQ5GmD+/iAdsTu6I9GRrHkefe9zqWuUgK5SOY6b41hBG8tjPqpwoh0kZQjGHJnMpRYDHhFkJIEq81xLhVTmigjQ1hz6jOov3HNvO6tSMB6aeepsGlWiU9JYzjIEfns=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ujafPQ6l; arc=fail smtp.client-ip=40.107.243.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JHVt8dYueFD5HnamqXrSssi2pd5vllFgslBfl03hGGyq9PUV8cla8VyTxBk7KTkbJ5gKw4NHDDGme+4J+O+XvQKl3Drenm1wqOou0AG0YDp+uXLLkHZwc/HW3Xv8IFAarBLYNCku4JeeHwl+nJ9qk+L/T/4zr5T9ostjQWEUH2T2XtotApcH7+Qgsj6NFfj7ddWfjJTBBK1fqevR8QVT1NABgjkrDGyIOWD3DEjjQClnrdjZku84S7AaIKkB05dq2XbVUfGkUZos/CIisjzuN/hLgakSsYgdSJwBuX/cAEhr+ZN4jHkopuWw2YDuRGaPcDCqbTESux4tJ5sEqWiqig==
+ b=Ol9OMKezxjhWGgcy+o1xZLeH3dbf6a9P5FV3DT2NJ6ESHrXR0tBDkW+0j3Q9rRrlkefctf03qw3XsSvlsU7uUqstn6fUTuYkQPx/A20ue/fH74t89Hk8rOAWH1/dy+t9wXb46YnAUU1bopAcaOcRPii6v/n293jt2qI6eMTVDYzohjv+NNFUyg1nIQvlTtycyv4mUjMkPXoIrswgxt9YMKr4v8p3Jn+XxJRAkkvGnGEJUXUyMYptC5FXnxj+29iUBKhvSgMwnUfW0ipkDUxXb90BFkzp0zzynPSGhj6m5ktHEv7mIpzS+mwRMfA6XxMV0ELj9ejsN8zXudcz0idmaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ANFJbhWFT9hCZ6ZWUkGbNvpfG/z/lMrP8b4fhljEpxI=;
- b=f/5mTVJjHv1s4HTXrkr2DgzpPvxDBrekHwFD6tDvTJlsNwB4Z1DSsJfjs0E3dSp5nX5L4Qsji9d6lAXkOaU05nRV2zIdmuo/Qab+abzqxYC6P8wTr10N5kNGbjMJ3HFQaYKkT58rbeTXXCnICuckkDtjruamyAiangUErCBrrFqVbbsAHvUu6Mj6ocG3l2SwdQ9AfGjm1bBoEpMkuqKw2aWIxXcy7p9RK3GgOMyFS21CYu+ks/UZHEcWYD/UFhjNFWcA6LZJwsiWC8QDym1m77ebRyqq/2AZ8aAHTBpMF15CjWioWROy2+w8ffSu4Za43VMjHJyzUm6ZM8I7tyNfFQ==
+ bh=wVDHdYuFP+kqsUn27U7YfO/tGnwP1lh1X+8L4cX0UW0=;
+ b=blhMt8dT/OOyKDkAbKMHxqjJw2Ty+tpitkzoCWCUjjGD35m74+57BozYYj/ur1winx1YrBdP371no2iUiZcTsU+s+x0Mu3zk+vPue5477YcfMYzCDbVXToIr80lLbN1ZRc1jUDd3Wsr97btgZZk3PTUNmoIFr5/Dsl8x/9DN9JrWPcSTms1l4bSd0WU5K+NTkR+KrLYJjwmsEZkDdgK9az9Z1igA7rJuL/b47kjbYHjH/oEaaT01z6jMFOyjnSho+EI89EfAcfOZz8jrYuNBov9JAinWnRD4SX/JWRxRg9bQen/shV+opikRIrFKP6GCXy7vCOkdZF3bbvkA5TwUxg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
+ 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ANFJbhWFT9hCZ6ZWUkGbNvpfG/z/lMrP8b4fhljEpxI=;
- b=ENYMfO1YQAzvJZbZqBH6j43VMl9iX7jm6FiV7cjg/ssq5i58EdBNoUR1ujnTM1Jh0sZW/cGAsKWBkUEmLUBllkecdUNFDenk0GEFxzMnnhCEJV45UyqQsq7R/E8lP0lPuIkB114lRQxta7oNyz1svsxb/u1o5QauTBDxkOb1mu1kEz84D9hqJQltrH1Lq4UxGIQ3Ed9JB34KUNmg3dU7VmbgSMvOgbNKyM/EgYz4yKLCYiSMbzueaBgfzIIOdTdv++f9FX/Q5JPagMO2r77d24GAEID8lDQ/DarEmtqx+e3AcDT6PYgjTX94+56r3cq9VyfrjA1/BV4EADNee9A8iQ==
-Received: from DM6PR06CA0009.namprd06.prod.outlook.com (2603:10b6:5:120::22)
- by LV8PR12MB9134.namprd12.prod.outlook.com (2603:10b6:408:180::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31; Tue, 18 Jun
- 2024 20:14:19 +0000
-Received: from DS3PEPF000099D6.namprd04.prod.outlook.com
- (2603:10b6:5:120:cafe::21) by DM6PR06CA0009.outlook.office365.com
- (2603:10b6:5:120::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31 via Frontend
- Transport; Tue, 18 Jun 2024 20:14:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ bh=wVDHdYuFP+kqsUn27U7YfO/tGnwP1lh1X+8L4cX0UW0=;
+ b=ujafPQ6ltkp1opyZ1GQr1CFJl+AZ4LaZHPezRT1YW2OqJSg1eSgWAze8maSw68rjynIRoUZE9UMEO1rcafYpl6uUCjiiDNUiqgWclFOlNDUMzvDTH56sQBpVOFeojtKhlJR8iF65rhNu4TVpIUBi03CnWaBOhGnoxRBjE9WzLVVapFjL2yh7v7A89WBUg1wDTqlUpdjgZ+pnk/92nJRJJYf426R6GPfMAz5JFTGUgW5DEeNGT4dSIiDJ1VxQhAKFi1A8F2qDtqsc2Q55uceMEL+IhYS6X4mGIy/yLa7ghiTFVBNG8YsefBuAxISZhCLXewXnaB7Kv8CrkcHjCHzwwg==
+Received: from DS0PR17CA0020.namprd17.prod.outlook.com (2603:10b6:8:191::27)
+ by DM4PR12MB6012.namprd12.prod.outlook.com (2603:10b6:8:6c::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.31; Tue, 18 Jun 2024 20:18:10 +0000
+Received: from CY4PEPF0000E9D7.namprd05.prod.outlook.com
+ (2603:10b6:8:191:cafe::2) by DS0PR17CA0020.outlook.office365.com
+ (2603:10b6:8:191::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.32 via Frontend
+ Transport; Tue, 18 Jun 2024 20:18:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS3PEPF000099D6.mail.protection.outlook.com (10.167.17.7) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7677.15 via Frontend Transport; Tue, 18 Jun 2024 20:14:19 +0000
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000E9D7.mail.protection.outlook.com (10.167.241.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Tue, 18 Jun 2024 20:18:08 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 18 Jun
- 2024 13:14:06 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ 2024 13:17:46 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 18 Jun
- 2024 13:14:05 -0700
-Message-ID: <9d08f768-b9da-4a44-9d75-a16d6cde6b66@nvidia.com>
-Date: Tue, 18 Jun 2024 13:14:05 -0700
+ 2024 13:17:45 -0700
+Message-ID: <01685978-f6b1-4c24-8397-22cd3c24b91a@nvidia.com>
+Date: Tue, 18 Jun 2024 13:17:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,154 +83,283 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/6] selftests/mm: mseal, self_elf: fix missing
- __NR_mseal
-To: David Hildenbrand <david@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>, Shuah Khan
-	<shuah@kernel.org>
+Subject: Re: [PATCH v3 2/6] selftests/mm: mseal, self_elf: factor out test
+ macros and other duplicated items
+To: Andrew Morton <akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>,
+	Shuah Khan <shuah@kernel.org>
 CC: Andrei Vagin <avagin@google.com>, Axel Rasmussen
-	<axelrasmussen@google.com>, Christian Brauner <brauner@kernel.org>, Kees Cook
-	<kees@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, "Liam R .
- Howlett" <Liam.Howlett@oracle.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Peter Xu <peterx@redhat.com>, Rich Felker
-	<dalias@libc.org>, <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>
+	<axelrasmussen@google.com>, Christian Brauner <brauner@kernel.org>, "David
+ Hildenbrand" <david@redhat.com>, Kees Cook <kees@kernel.org>, Kent Overstreet
+	<kent.overstreet@linux.dev>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, Peter Xu
+	<peterx@redhat.com>, Rich Felker <dalias@libc.org>, <linux-mm@kvack.org>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 References: <20240618022422.804305-1-jhubbard@nvidia.com>
- <20240618022422.804305-2-jhubbard@nvidia.com>
- <0b152bea-ccb6-403e-9c57-08ed5e828135@redhat.com>
+ <20240618022422.804305-3-jhubbard@nvidia.com>
 Content-Language: en-US
 From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <0b152bea-ccb6-403e-9c57-08ed5e828135@redhat.com>
+In-Reply-To: <20240618022422.804305-3-jhubbard@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D6:EE_|LV8PR12MB9134:EE_
-X-MS-Office365-Filtering-Correlation-Id: e193a25b-d43f-4802-be59-08dc8fd33c3f
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D7:EE_|DM4PR12MB6012:EE_
+X-MS-Office365-Filtering-Correlation-Id: c627987e-0283-4c9b-d14b-08dc8fd3c4c7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230037|7416011|1800799021|376011|36860700010|82310400023;
+	BCL:0;ARA:13230037|7416011|376011|36860700010|1800799021|82310400023;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?c1AzWEVLaWJtbXNCWGIrK2hxeXMxUlcxaVp1U3RUTGpJbFZTQXVWTkU5Si9s?=
- =?utf-8?B?Y2dyblFsU2JaL1Zrb0toWHN0SzdXdEsrN0w4M0s3bi9pZDF2Ymw1ZXVYeFJI?=
- =?utf-8?B?dGdrYjJVcHpyazlVZDAwWG4wK0xoUnlhUFdBNml2Qi9sTFR1OE0zY0Z0MjhI?=
- =?utf-8?B?NjRKclFtcWVCQ0tqbUQ5VC9XVHBLQ3FKUExGeUlrUThESTU0cmtnU3FHZGp5?=
- =?utf-8?B?Z2hGaUtsR0xqMHpSaFA1Sm9ic0xBUzN4dHpXdDRnWFZxRHNVT0JocWRJT2pQ?=
- =?utf-8?B?cnFlL3VyR3NSbzFyek9xVXRhOTlLRGV4MDM2QjMxd3NsNDB6WnhUSjFIbEU2?=
- =?utf-8?B?MzhMb3hhbGFNdS9uNmw3QU8raVlDTU5tRXZzb0hpQUs2ejJIb3RLdVlPZkxl?=
- =?utf-8?B?VWRtMEM4ZGFvbGJGMFYwRGpjZjFvN2FNSW9GRXYwVGQ1OGFNeGJoajRpcnJz?=
- =?utf-8?B?dkNITGw4Z29kTTR4YWh0WUNmUmxQc2w2QWhxN1BKOGZZVlMwVTVMbDY2dkRw?=
- =?utf-8?B?cFN4bnR1Q2ZudFUwb2dlRXA0cmUxVHR1dHlid1J1amJaWlJzVHNxWXBLaXlO?=
- =?utf-8?B?WVV2VW5sVVFGRVZFV3h4bEpIODNWamx1SkhWNGw3RjNIMEVNTkdoKzgxSk1z?=
- =?utf-8?B?QzF3YjJWVjVwM3RNamZKNUhLR1pFTFo3cWo4Z28vekN3M2hGRk43WUw2dlJs?=
- =?utf-8?B?ekZVLzlURlNDZXhzTTNPaTJEQ0t6cUxqUFZ4R1dLSUZ2WlJoaUpINlFNcVUv?=
- =?utf-8?B?citzcVJ6R1pVOE8zOGxQYkUvSjNnZVFhZ2luYXNUandqWHpvSVdYdE84enJn?=
- =?utf-8?B?V1BraFRGS0NqeWNwK3JySElNVE85U0NyRWRLVHhZT2hIZFdYdlBWSmlEQVlK?=
- =?utf-8?B?MFIrS1NVamZqUms1R05LRDNBaGNnbGplY3pSVmF0WTN0UGpndzJQTUp6Y3ZN?=
- =?utf-8?B?TWRCclU4eDdGSGVpS0dGK0hKRTExaVoyV2ZDUjU0M2ZqVm11cFBHNWdQZmhQ?=
- =?utf-8?B?cFJBQ1JqRzZzcWJKbmVabGxzeFBWKzV1RFhmRlE1UlJxd1VyWVNGL25TTlVE?=
- =?utf-8?B?MUJaNHdVV1FzY3FQWks3Q0xoT25DUlF6cHN4NFVORk5xK0hFY2xQVDVManhB?=
- =?utf-8?B?aFQ0RTErQXpMREdTVzU2UTN6SnJuNWhHNU5sR1dRTjJFQlZFVXlkeVpTYWtS?=
- =?utf-8?B?VTAxeHlBdzI0OUxFUHBYdWtmdXBJd0xIbDVsOGdZd29FSUhwN2xmL0hVNnRH?=
- =?utf-8?B?M0s4Qm1uOW4wT0VYa1Z6enFENFBmRmtmQTExak9sdXoxTi83aUN2MXVsdW5p?=
- =?utf-8?B?ZFBoMWc1WDl2aDdxSXVUUFNHQjMzZ2pGTGcrY0RkWHZ5WGoyQmZiM1dnTWIy?=
- =?utf-8?B?bGdLODdOZWlmMWxDK25UYzZYNUorcFJyTkYyNHk0T3QwUlhjWUo5c0h6WXY3?=
- =?utf-8?B?R2k3MTFOQzhXcWtoeVZ3YzltaE16dnpidWJNSjZYQ29DYVFlaXMyTnhGTjlZ?=
- =?utf-8?B?ZDFQRXdrdFAzZGszeVBxdDkySGRIak1haitJMEcwTWR6RWQ0dkpxVXptSHhh?=
- =?utf-8?B?MVgzbE5ubW5waU44b2NBcURjL0ZybnA4SmZ0NU0zNVYrdzhOb1hjQllDRS93?=
- =?utf-8?B?d0RiYXB2OW51cFB5RGVMQTlMaGUrVG5QcUp2WmsvaUZ6U3JhdkRpSExlZHFo?=
- =?utf-8?B?S0hFdDl4T2luUndFOHE5M1NrT0MrbldiWEVTbEU3NXpRYVR2Q1ZrT1pQTG9s?=
- =?utf-8?B?QTUyc1lLNC80WkFDS1EwVTNpV1JQK1FQeHAySytFY1E3SVl1Q1h2eTdGL094?=
- =?utf-8?B?WEFieThrQ0QyUzBmSUoreXAyVndTVHBwL2JsQWg1ZktKWTlEbG5ORUpkM1JO?=
- =?utf-8?B?dlFBUGF4OXpGSGFwT2pEa1BSTmVISG8reVNlWmhwbkFlTnc9PQ==?=
+	=?utf-8?B?VUNvMVg5Zy9UZ2k3enJGV2FwV0VpM3lDTHdSN3g2QUlZVlV6OWo0QWJ0VDhM?=
+ =?utf-8?B?cmdFNGQyeDRYejNWNEV6NG5uOVIya1ROUVBUSzFEUUdBZnp6alM3a3k0SEly?=
+ =?utf-8?B?SEtGckVncXRBTlhDRmFDSVhFZWZzMy8rQVVHd3p4UEVKUkNiS3RobElRUnlq?=
+ =?utf-8?B?cDdTeWtWWVU1MXg3T0NWSEEwQUZnMzJIUVZzMG5Tb0h2VjRPMG1ZaEV5bWJQ?=
+ =?utf-8?B?L05oTGIzcXdqYnVTS29HaFN4c1ExYjZGb3cwN01KS01ubmpuVC8vWldaU2pO?=
+ =?utf-8?B?aWN2RXpJZjhySGpNMG5lYytZQzNGNjlqZGpta2RPU28xczNBWXBUTHZEZjIv?=
+ =?utf-8?B?c00vMC82MlR2YVVaeFo3YjdLaEk3S3RIcW1uTHY4d3IybHU1amtPMnN0VEpz?=
+ =?utf-8?B?NHpCZlhZSzkxNU1rcy9SRjZzN1NSK3pkZDdNdVJBVUx2YnRReHcvd3g2dmdL?=
+ =?utf-8?B?dTdOMnBKczEwdFFBV0JYNTBBZldOSWV5a3hUTnZFYzhtVlhyL3F0eDdzMXVJ?=
+ =?utf-8?B?MmJjUnZkNEFpMzI3cG44L2VEMkdKNy9ZZVdBQk4zMkhGZUxhZmFDSnh6SUxT?=
+ =?utf-8?B?YnFSeUZwcXpjUTUva0hxSXN0L0tsUGF6VnlKTkJhTTJLRDBCMnpIUCs0dEV6?=
+ =?utf-8?B?YndPTWFvOSttdDIrM2JEQVN1TDRkWUxLRjVVcmtHVysyYzNXWXFGVHU2R2Nz?=
+ =?utf-8?B?c1RjaU91WWI2TjBCa0RiQURvN1F6ZE5xSlg3aXhpNVd3b0FTTmhQS0hmVXNr?=
+ =?utf-8?B?NWlYTXJ3M09VOGRkQUYxSFRnNytSdFdyRUVldnlwSnZDNTlEV0VwcVVzSHg5?=
+ =?utf-8?B?TmkwRFdHd3duOUNLYktBNzB3VXRjMHlzOWk1MEdBZVM1SVRhRzFlTWg0Qkkz?=
+ =?utf-8?B?QTU3OWczREZHdk1DVEFLSFJMVGx5enFodTFWT1luWkx1ZXRzT3RvZE85dC9y?=
+ =?utf-8?B?TzVHbXJ0MDRDMmcvUzNhc0xnL0NNWkg3QnFGY0krN3k1ejlGMk4rMGVucUVJ?=
+ =?utf-8?B?aWtENmlDQk1aVFcwL2Q5cWtyUEZtMEZSZ2Q4LzhxWlc5aEJ4RkQvazZkYnhB?=
+ =?utf-8?B?MVdPbzlGdnpTQXpOa1d0bnNyaDl0VHNsRENIVmJqQjB1YUtZTkdXZEg4ZVV0?=
+ =?utf-8?B?R1Z6RDZoY1lCSFFzVGsxUUtjOGZNMU5CUUdpaGQyM3dEVFUvaWVPK0lXR0dF?=
+ =?utf-8?B?SUYvU0pXaUFiNHI4WHZsTS9kWStCckt4Wm9TeDIxWUFXbVVRVzB2cE52Lzlt?=
+ =?utf-8?B?d0hDeHIvNFhXemU0TkRvc0pmOXBJVnZia0VuSnZLbEhlN1hLVkNCcytKRWd3?=
+ =?utf-8?B?UU80cmlsN0xMTzhlZ2VZTm5qNnlEV3p1WW80SHpRSjQzSVVFK0ZhVU9QZ09J?=
+ =?utf-8?B?YmY1UzVKSGc1WXRYTDY1dUZiekpocnF6N2dQN3FqdFc5b2NPbFhpbk5XK3JC?=
+ =?utf-8?B?ZFdTQXJwcHQyTEF0ZmJwS0dSZUl3VmRtZ0hBeDFaU2tXSkFqQWV1c2ZxMXJX?=
+ =?utf-8?B?MytYYVlUVldqRlhqOHpBdE1rT3dzSXpQclJRM3hORGl6aGZuTHpiaVo4K3po?=
+ =?utf-8?B?U2ZPZy93Nm9ZOVAvMFU2ZDgvMTBpcDFSQnVQbE1TOWlOZkw4ZUFRY0ZJOHR6?=
+ =?utf-8?B?bGFFZ2RxNTE2THNCcm5SWWRHdURHek9xY0hyVEdJcGhhMmhFRUZ4djU1NWJ0?=
+ =?utf-8?B?N3pUYW55WHhLaDUxQ2tLOFhVdFhSeEhFZnd4MmxtU0Q3UWlIZ3E1RG9rdEdI?=
+ =?utf-8?B?WTJqdEE3SGFoUkVDOWZTejg1WCtVOG1wYjU3UUZzR1dxMUxzWVJic0VNcXpD?=
+ =?utf-8?B?Tmw0ZzBDNFE5ZVk5TkdmYW0xb3hnNHBaQWJvQ1VwbnJsSkI4ODB4YW1jTlJS?=
+ =?utf-8?B?L1h5Y2RGOFBua2swNmVLZGFNa1dZc3ZEQmVyajRhT0xZSlE9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230037)(7416011)(1800799021)(376011)(36860700010)(82310400023);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230037)(7416011)(376011)(36860700010)(1800799021)(82310400023);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 20:14:19.0043
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 20:18:08.0193
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e193a25b-d43f-4802-be59-08dc8fd33c3f
+X-MS-Exchange-CrossTenant-Network-Message-Id: c627987e-0283-4c9b-d14b-08dc8fd3c4c7
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099D6.namprd04.prod.outlook.com
+	CY4PEPF0000E9D7.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9134
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6012
 
-On 6/17/24 11:56 PM, David Hildenbrand wrote:
-> On 18.06.24 04:24, John Hubbard wrote:
-...
->> diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
->> index f2babec79bb6..27bf2f84231d 100644
->> --- a/tools/testing/selftests/mm/seal_elf.c
->> +++ b/tools/testing/selftests/mm/seal_elf.c
->> @@ -2,7 +2,7 @@
->>   #define _GNU_SOURCE
->>   #include <sys/mman.h>
->>   #include <stdint.h>
->> -#include <unistd.h>
->> +#include <asm-generic/unistd.h>
->>   #include <string.h>
->>   #include <sys/time.h>
->>   #include <sys/resource.h>
+On 6/17/24 7:24 PM, John Hubbard wrote:
+> Clean up and move some copy-pasted items into a new mseal_helpers.h.
 > 
-> Still confused. Let's take a look at "microblaze".
+> 1. The test macros can be made safer and simpler, by observing that they
+> are invariably called when about to return. This means that the macros
+> do not need an intrusive label to goto; they can simply return.
 > 
-> arch/microblaze/include/asm/unistd.h
->   -> #include <uapi/asm/unistd.h>
+> 2. PKEY* items. We cannot, unfortunately use pkey-helpers.h. The best we
+> can do is to factor out these few items into mseal_helpers.h.
 > 
-> arch/microblaze/include/uapi/asm/unistd.h
->   -> #include <asm/unistd_32.h>
->    -> Generated during "make headers"
-> 
-> usr/include/asm/unistd_32.h is generated via
-> arch/microblaze/kernel/syscalls/Makefile with the syshdr command.
-> 
-> So we never end up including asm-generic/unistd.h directly on microblaze, but rather converts it (IIUC) to something else.
->
+> 3. These tests still need their own definition of u64, so also move that
+> to the header file.
 
-Yes.
+And I just noticed that I left out this one:
+
+4. Be sure to include the new mseal_helpers.h in the Makefile dependencies.
+
+In other words, this hunk is also needed:
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 3b49bc3d0a3b..23daa097d5b7 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -2,6 +2,7 @@
+  # Makefile for mm selftests
   
-> That will work as expected here?
-> 
+  LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
++LOCAL_HDRS += $(selfdir)/mm/mseal_helpers.h
+  
+  include local_config.mk
 
-No. :)
 
-The problem, and the source of confusion here, is that for most user
-space programs, the header file inclusion behaves as you've mentioned
-above. However, those programs are installed on a single computer that
-has a single set of asm and kernel headers installed.
+I'll send out a v4 with that, once we resolve the discussion around patch 1/6.
 
-We are quite special here, because we are building a set of user space
-programs that:
-
-     a) Mostly avoids using the installed (distro) system header files.
-
-     b) Must build (and run) on all supported CPU architectures
-
-     c) Must occasionally use symbols that have so new that they have not
-        yet been included in the distro's header files.
-
-Doing (a) creates a new problem: how to get a set of cross-platform
-headers that works in all cases.
-
-Fortunately, asm-generic headers solve that one. Which is why we need to
-use them here.
-
-The reason this hasn't really come up yet, is that until now, the
-kselftests requirement (which I'm trying to remove) was that "make
-headers" must first be run. That allowed the selftests to get a snapshot
-of sufficiently new header files that looked just like (and conflict
-with) the installed system headers.
-
-I can update the commit description with some of the above, if it helps.
 
 thanks,
 -- 
 John Hubbard
 NVIDIA
+
+> 
+> Cc: Jeff Xu <jeffxu@chromium.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/mseal_helpers.h | 41 ++++++++++++++++++
+>   tools/testing/selftests/mm/mseal_test.c    | 49 +---------------------
+>   tools/testing/selftests/mm/seal_elf.c      | 33 +--------------
+>   3 files changed, 43 insertions(+), 80 deletions(-)
+>   create mode 100644 tools/testing/selftests/mm/mseal_helpers.h
+> 
+> diff --git a/tools/testing/selftests/mm/mseal_helpers.h b/tools/testing/selftests/mm/mseal_helpers.h
+> new file mode 100644
+> index 000000000000..108d3fd0becb
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/mseal_helpers.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#define FAIL_TEST_IF_FALSE(test_passed)					\
+> +	do {								\
+> +		if (!(test_passed)) {					\
+> +			ksft_test_result_fail("%s: line:%d\n",		\
+> +						__func__, __LINE__);	\
+> +			return;						\
+> +		}							\
+> +	} while (0)
+> +
+> +#define SKIP_TEST_IF_FALSE(test_passed)					\
+> +	do {								\
+> +		if (!(test_passed)) {					\
+> +			ksft_test_result_skip("%s: line:%d\n",		\
+> +						__func__, __LINE__);	\
+> +			return;						\
+> +		}							\
+> +	} while (0)
+> +
+> +#define TEST_END_CHECK() ksft_test_result_pass("%s\n", __func__)
+> +
+> +#ifndef PKEY_DISABLE_ACCESS
+> +#define PKEY_DISABLE_ACCESS	0x1
+> +#endif
+> +
+> +#ifndef PKEY_DISABLE_WRITE
+> +#define PKEY_DISABLE_WRITE	0x2
+> +#endif
+> +
+> +#ifndef PKEY_BITS_PER_PKEY
+> +#define PKEY_BITS_PER_PKEY	2
+> +#endif
+> +
+> +#ifndef PKEY_MASK
+> +#define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+> +#endif
+> +
+> +#ifndef u64
+> +#define u64 unsigned long long
+> +#endif
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+> index 58c888529f42..d4d6ae42f502 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -17,54 +17,7 @@
+>   #include <sys/ioctl.h>
+>   #include <sys/vfs.h>
+>   #include <sys/stat.h>
+> -
+> -/*
+> - * need those definition for manually build using gcc.
+> - * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 mseal_test.c -o mseal_test
+> - */
+> -#ifndef PKEY_DISABLE_ACCESS
+> -# define PKEY_DISABLE_ACCESS    0x1
+> -#endif
+> -
+> -#ifndef PKEY_DISABLE_WRITE
+> -# define PKEY_DISABLE_WRITE     0x2
+> -#endif
+> -
+> -#ifndef PKEY_BITS_PER_PKEY
+> -#define PKEY_BITS_PER_PKEY      2
+> -#endif
+> -
+> -#ifndef PKEY_MASK
+> -#define PKEY_MASK       (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+> -#endif
+> -
+> -#define FAIL_TEST_IF_FALSE(c) do {\
+> -		if (!(c)) {\
+> -			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
+> -			goto test_end;\
+> -		} \
+> -	} \
+> -	while (0)
+> -
+> -#define SKIP_TEST_IF_FALSE(c) do {\
+> -		if (!(c)) {\
+> -			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
+> -			goto test_end;\
+> -		} \
+> -	} \
+> -	while (0)
+> -
+> -
+> -#define TEST_END_CHECK() {\
+> -		ksft_test_result_pass("%s\n", __func__);\
+> -		return;\
+> -test_end:\
+> -		return;\
+> -}
+> -
+> -#ifndef u64
+> -#define u64 unsigned long long
+> -#endif
+> +#include "mseal_helpers.h"
+>   
+>   static unsigned long get_vma_size(void *addr, int *prot)
+>   {
+> diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
+> index 27bf2f84231d..45c73213775b 100644
+> --- a/tools/testing/selftests/mm/seal_elf.c
+> +++ b/tools/testing/selftests/mm/seal_elf.c
+> @@ -16,38 +16,7 @@
+>   #include <sys/ioctl.h>
+>   #include <sys/vfs.h>
+>   #include <sys/stat.h>
+> -
+> -/*
+> - * need those definition for manually build using gcc.
+> - * gcc -I ../../../../usr/include   -DDEBUG -O3  -DDEBUG -O3 seal_elf.c -o seal_elf
+> - */
+> -#define FAIL_TEST_IF_FALSE(c) do {\
+> -		if (!(c)) {\
+> -			ksft_test_result_fail("%s, line:%d\n", __func__, __LINE__);\
+> -			goto test_end;\
+> -		} \
+> -	} \
+> -	while (0)
+> -
+> -#define SKIP_TEST_IF_FALSE(c) do {\
+> -		if (!(c)) {\
+> -			ksft_test_result_skip("%s, line:%d\n", __func__, __LINE__);\
+> -			goto test_end;\
+> -		} \
+> -	} \
+> -	while (0)
+> -
+> -
+> -#define TEST_END_CHECK() {\
+> -		ksft_test_result_pass("%s\n", __func__);\
+> -		return;\
+> -test_end:\
+> -		return;\
+> -}
+> -
+> -#ifndef u64
+> -#define u64 unsigned long long
+> -#endif
+> +#include "mseal_helpers.h"
+>   
+>   /*
+>    * define sys_xyx to call syscall directly.
+
 
 
