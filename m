@@ -1,159 +1,106 @@
-Return-Path: <linux-kselftest+bounces-12139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 635F090CA8D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 13:55:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3744E90CC1C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 14:43:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62FA01C20FC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 11:55:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CBF81C22D47
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 12:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3B315573A;
-	Tue, 18 Jun 2024 11:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0C415B10B;
+	Tue, 18 Jun 2024 12:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zd6H5iZd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rl6S6ljP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CD4155395;
-	Tue, 18 Jun 2024 11:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7038015AADE;
+	Tue, 18 Jun 2024 12:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718710813; cv=none; b=uQ0rJ0wKVL85mgx+TmU5WKhCxrQ3Ca07md+Ki3wfxWta6cWLOg3WoqjHWPPkL5UbK1Upf0iHeb9vC/5slQnaBYuauxtmY+POSN4m0VxlgLhRdhb+bpcHNgHJKulgtJhWgYKblk8aTK/WAZAYlUZyg5LxWg+0ZnBg598L+ExSgTM=
+	t=1718714233; cv=none; b=pZ240sBEW3Xf+LFFeEvIlHGo+6Mj00g2ZcD/BMuAvxB2tqDP1BhRXzCZM8YuuJLyNTVyELkmXiNv/0akaHRTQHIPHo0oPvzko6xPZPY3zQ1yS7QUyFLhw8sBCn1U+HExgGzRTP11h4vn8UwDbb8GuxKNNQCCoFregziKVN8wLrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718710813; c=relaxed/simple;
-	bh=3lZSziatHbH2qXjBGEliNz48M5CThCwzTut2GQxW/ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bvcAhQ6KrYtT+/HjjdV+oKBqxgUonSMjclSzpXDJfs0pMiVmZKJiOpBQYvmhBpqmwQI2MPeeO8OIcz/W3cWJX9/xCRpc1zrEG6ohYIoCa5BRhg2KMuPIKebQAZ6T6c8fUDX5LaJPkrSFr7uM+mNYZ1YqAAFI0Q1U9Z/dIB4Drlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zd6H5iZd; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57d046f4afdso122887a12.1;
-        Tue, 18 Jun 2024 04:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718710810; x=1719315610; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkL4gZeTFn58PzKiilUj2Jvl065qOPmkOqhQzjfXBnk=;
-        b=Zd6H5iZdbt8XYrfM2c+f7fRN7pCzYXBksdwvBb0rdNXRBxONFTQDLayIHoZ+1CEXKx
-         z5SllyqlzVGi80jVh73AHKRsH63GWMac+aeveM04pcuDmZP3mQhIq+kDiQSgqsl+PGet
-         n2lFAa/p//6cKg4gLSasMyAPxS++8j9SsE6skJXnJr+4caGKSQZK52PxFMaAgFSHyBw2
-         xxwmtUNapB+zvvO5B40i627zWXlyDuTyJ+NYd7XmRE4N0k2mCuc16vfgnmgTKWCEAw5Q
-         nqNxF+LnbjDvaUmE6l26Wc1Nv0okGS/vz197nZPs/bg5jUAu462HfoQ5ybiXZ6ERwqPd
-         u82Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718710810; x=1719315610;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkL4gZeTFn58PzKiilUj2Jvl065qOPmkOqhQzjfXBnk=;
-        b=GBIGOqzZq2XAW3KCDfN1EmVQyLepGq+cuu03oMyOBwF62P2ge1xhW6DCCHwXAR/V6z
-         qK3NcRTvKYGKqDIBYWBR5lx+3RHk/ioWyoQMi8kU12n6OQjF+cYeAa5bEkF7kVNLgLkM
-         leIZvWTsbppJ6qxN7oscPR0OQAjouGf9zlBuErWadQrWQ7BbwiieGxBjAJkUVWtH/pnK
-         wTDAJbLWM4ZSPx52JkuQN7lfqDp+uDqs9OXomhA8z1OAJxVms54czAoJZGj/OMYQP7Xd
-         yoabcgPQykIpbg7bou3mtvhH1ukLohtoh0qtJk54nHMwy0g58wNjkUybgU3QYROu7cTW
-         j4xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgN38X9zN+uyEV7T0gxN+LeuE8FuV37KNXm+hxNG32EirvvuIINK58S9tJ6MGhDQHTeoyB8dgB+SH44W7RqRvvOeMI3b2KgDWB7+KVAvEsxNqiAqAdkn3osk6hXf1WT64Emb1jDRvlmGDNvqlkdiys2kTTpEv9nZcny5GdsiXu3DhpTozBEFTBZXR/ezLo8TOevHbDnTNAIJug4t4f3opiNBBcZ1P68bgiMAVVSOZoe63pddRSQfQuUR1xvEWVnHB4ZXBub6vQq3B7KaVR2POFLbIAceNCpvN95jFyDLfmV9KLezQhzvFueSxSgPkK5jCf/RJAb/lSoza+Np3Ve7NLEuceYu2e/OEyfMTUgmQqu5ZzMg2EOC7wtjxLecLd30jOSKyQKWBRGpEUaDk/bpGxdMUBTQKfj/HxM2i3ZfCPt5kRtSiaZYcfqsW2s9wAS9ABejpYn0QGCv67XGdS72p2RjhgwnodsyCcFtOmIFpdILL08SCCdcBX2PE9pnXKjoiFrqQThQ==
-X-Gm-Message-State: AOJu0Yyu+0jmklM2ZhBMzxVNr2twcG2AiZG115jlFy82HSOI/NAL6onb
-	luNa5JP8WtLN487yuqGa7DYBUPTaas/6TBVPyMLdm/nSfLyaZ2KX
-X-Google-Smtp-Source: AGHT+IHTXs6888aBCQaVqx3Ld2cescOW04wu9+DX8hnGCFhgSs6AKtIOVIvQW1zhvtYJcvE1BCkIfg==
-X-Received: by 2002:a50:c30b:0:b0:579:d673:4e67 with SMTP id 4fb4d7f45d1cf-57cbd6c7495mr9752771a12.26.1718710810253;
-        Tue, 18 Jun 2024 04:40:10 -0700 (PDT)
-Received: from [192.168.42.11] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72e9515sm7685752a12.41.2024.06.18.04.40.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 04:40:09 -0700 (PDT)
-Message-ID: <204af618-03f7-4f2e-bbcb-7111011f78bf@gmail.com>
-Date: Tue, 18 Jun 2024 12:40:09 +0100
+	s=arc-20240116; t=1718714233; c=relaxed/simple;
+	bh=+zv0kuWfAVEeu8/6gmrKhn5F4FAKZ4nfFgp5KKdCQfw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HWLeAYDXfAjmL+Om5lJ13DXXcfJj5L5qPDtTn/0wbHv6ecGk7LsbOqvEmp1D0zNPi9sIr3nPv3gMVKA8bYSBP7HumnZlZ0gfMUxULGvdGB+h/AXavBcGJ2wPEC0QUcAHai+bidG6yhUkXX+8dni2rSM7Q9L56quv5FefO94Qzmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rl6S6ljP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC063C3277B;
+	Tue, 18 Jun 2024 12:37:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718714233;
+	bh=+zv0kuWfAVEeu8/6gmrKhn5F4FAKZ4nfFgp5KKdCQfw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Rl6S6ljP1Oq42zNySXtb/4YP/ORfyYjvCdksVyWbL8mleRoE7/bkOULQUa3Ja4vnv
+	 Sre6Oiku7rJBefYrAWuqCMJKU/pw3wf6AdksplsShhN0Ge22pLUl3Tkxn4/Y2zNyZ/
+	 +riy6bZuAzL62G0sZ+bQ+Bs9RIJIlT2A+QYEtKOV6HF+qZ8KfrZyF4qDDpa8RkAhS0
+	 vDEgiWX20F2QKGewl1ucHiTTY/U24JLGRptEOuz6ZaxT8OfAepER6LIV60uwMMr9S0
+	 HN8TvzOppPUEJWIYEVqMfeBg1R0Qt7601LKxDx/e1et/TnLYeZ7ne+Jpsw7+p8r5WJ
+	 umZYPBklCy5xQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	nphamcs@gmail.com,
+	hannes@cmpxchg.org,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.9 25/44] selftests: cachestat: Fix build warnings on ppc64
+Date: Tue, 18 Jun 2024 08:35:06 -0400
+Message-ID: <20240618123611.3301370-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240618123611.3301370-1-sashal@kernel.org>
+References: <20240618123611.3301370-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <ZmAgszZpSrcdHtyl@infradead.org>
- <ee9a55cd-7541-4865-ab2a-9e860b88c9e4@gmail.com>
- <Zmfv6_uWAVavYJNj@infradead.org>
- <8ca3e144-75f3-4e57-9ae0-cc88f245094e@gmail.com>
- <ZnEshp0VICflc6Bg@infradead.org>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZnEshp0VICflc6Bg@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.9.5
+Content-Transfer-Encoding: 8bit
 
-On 6/18/24 07:43, Christoph Hellwig wrote:
-> On Mon, Jun 17, 2024 at 07:04:43PM +0100, Pavel Begunkov wrote:
->>> There should be no other memory source other than the page allocator
->>> and dmabuf.  If you need different life time control for your
->>> zero copy proposal don't mix that up with the contol of the memory
->>> source.
->>
->> No idea how I'm mixing it up when I was explaining exactly this
->> all along as well as that the callback (and presumably the call
->> site in general) you was so eager to nack is used exactly to
->> implement the life time control.
-> 
-> And that's exactly my point.  You want to use one callback to mix
-> allocation source and life time control.  
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-No, it only takes the role of life time control and doesn't
-care about the source. The allocation source step with
-corresponding initialisation happens separately and
-priorly, at initialisation time.
+[ Upstream commit bc4d5f5d2debf8bb65fba188313481549ead8576 ]
 
-> That's the perfect recipe
-> to create an un-extensible un-composable mess
+Fix warnings like:
+  test_cachestat.c: In function ‘print_cachestat’:
+  test_cachestat.c:30:38: warning: format ‘%llu’ expects argument of
+  type ‘long long unsigned int’, but argument 2 has type ‘__u64’ {aka
+  ‘long unsigned int’} [-Wformat=]
+
+By switching to unsigned long long for u64 for ppc64 builds.
+
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/cachestat/test_cachestat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
+index b171fd53b004e..632ab44737ec3 100644
+--- a/tools/testing/selftests/cachestat/test_cachestat.c
++++ b/tools/testing/selftests/cachestat/test_cachestat.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #define _GNU_SOURCE
++#define __SANE_USERSPACE_TYPES__ // Use ll64
+ 
+ #include <stdio.h>
+ #include <stdbool.h>
 -- 
-Pavel Begunkov
+2.43.0
+
 
