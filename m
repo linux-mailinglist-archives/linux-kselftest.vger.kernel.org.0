@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109F290CEBC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 15:19:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6107890CD86
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 15:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F388B26107
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 13:12:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 746A21C2265E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 13:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E50E1AE093;
-	Tue, 18 Jun 2024 12:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E5F1B29C9;
+	Tue, 18 Jun 2024 12:42:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ifiRM5GW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfCXqkCV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343FF1AD9FC;
-	Tue, 18 Jun 2024 12:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8071B29C6;
+	Tue, 18 Jun 2024 12:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718714530; cv=none; b=igtL4OMxU0R49mw1MV5RA2+jToU73+wMksToIqjl36ySwgzfwacXKlePExyERFp9LdQIGCqT9ytM/jjECwAPGeNKC11V84LLbKRcOcV5//0VydlNyuR84qsaZtymX80FBOMh8BGGoO5pEn2ZAK6WcljwPvjFdM706lSewYYj16k=
+	t=1718714563; cv=none; b=TjdbnbUjRp05JAVXXKHFwC1BqRVyYmyn8m0P0pl3JUbeRmQnoNsLvFwmCkqdRoKQV21irl+SE5fLxPGJoo0fx1EO2FsyB5jCI1s+zUN9F9+XDKYXMXKEyByR5xHpgLis1JWukL6ZO3SJ4Gt8AS5SehmGgEPropB/ESiCWie++k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718714530; c=relaxed/simple;
-	bh=RS9U/3BUr1Q86veiwVYktTTSLMNsseftXRF1uo2D5Yc=;
+	s=arc-20240116; t=1718714563; c=relaxed/simple;
+	bh=o9y2ImBDUHBIFJ58FSRGbv0KBquKYclerjTIRvuoJ8w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KBOJ+0CpGZj+OMTzstFHDtVQkwO/4bR1Tn8pJ8QCzPujenOnUNN5HYeoM/6rfxKHy6/ef3gUCVK7U1X8NUigddWzk1XS6FNZR0ZIOqq/JvSck2yuQnZ74Uat21q53cPY3HKg7hKPIiktXL7+5ylX1UTrDe2RHpECwE/nFccKJ48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ifiRM5GW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A172DC3277B;
-	Tue, 18 Jun 2024 12:42:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ERYWXWfSMupbp5GMlxFgPNH2C5f/mudrRlWxbNK6/NUiKXK2fuNZ8TnKjuQF65iefymKEOKgVTnypqgrgm5bsTWt+gqfMzAmsOoA+I9czB3SBzrB+oMLgo4gIRYJ8CLqSx/OaAccydHTDp0I9sqWXAD/k/N0IKMHim/JGEKLoP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfCXqkCV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B75FC3277B;
+	Tue, 18 Jun 2024 12:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718714529;
-	bh=RS9U/3BUr1Q86veiwVYktTTSLMNsseftXRF1uo2D5Yc=;
+	s=k20201202; t=1718714562;
+	bh=o9y2ImBDUHBIFJ58FSRGbv0KBquKYclerjTIRvuoJ8w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ifiRM5GW9/ozWh94dbgSclZ3EBhNnokSah7Ltm1LYR8i9xgeYn75x62qdEU9Kj///
-	 IiozMN/St2WfemsX47AbG53W4Sc6r1YYJDsdRXCd8JLe0rXxF7ODzxIhfqSDAUnnnT
-	 Z/KOHoN2JXRRhxNK77qU9dLHYTkhMdLtWThjr1R61T5cEmOxmyRLbdMRQOqNPxyiFr
-	 2gydkPpptByndRSr4S33yj3VM4VvpJSrKpFLq+vPgM4kxKdTcnI9vcy3fvnyDQedOR
-	 xNQNp2xaO0B4moPxUrIJV47tGExwN/3CA6uTkW99Pzrnk63mALnDtkjpQx0C9ckT1J
-	 n+aDMPArc80Xw==
+	b=FfCXqkCV8f0urpUHjNls9lqEDjU4TWUv6ssDilj+TdVL4zvuvl39bmj5c6MG4FBcj
+	 PSPwfpm3h93mklSKuMIMkWpCl8mgowlMYtyPyy6Op5thO5dySMscP0jy5OPELRIkKj
+	 sgbCfBhJYNzzF05dJj1ozd87Vk2Zo1dFrWbba+jvvGMol09vKkYJ2uvSePBzs0bhyQ
+	 Cybqz0FqHh6ujJVu/MkRaJGoBvHKswbbGPLDHmXmk674oqDaaxw/UnvUGQ5BGWUO81
+	 9ii9Kn8s15EQD64WYnExRb4fYPBMtzjOAgN2yI4lwyYMf4FJ5PqJce7Z4zRzXtRkDl
+	 8aXiGeRPQQ3gQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,15 +49,15 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	shuah@kernel.org,
-	ilpo.jarvinen@linux.intel.com,
 	maciej.wieczor-retman@intel.com,
+	ilpo.jarvinen@linux.intel.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 14/21] selftests/openat2: Fix build warnings on ppc64
-Date: Tue, 18 Jun 2024 08:41:13 -0400
-Message-ID: <20240618124139.3303801-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 06/13] selftests/openat2: Fix build warnings on ppc64
+Date: Tue, 18 Jun 2024 08:42:17 -0400
+Message-ID: <20240618124231.3304308-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240618124139.3303801-1-sashal@kernel.org>
-References: <20240618124139.3303801-1-sashal@kernel.org>
+In-Reply-To: <20240618124231.3304308-1-sashal@kernel.org>
+References: <20240618124231.3304308-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.161
+X-stable-base: Linux 5.10.219
 Content-Transfer-Encoding: 8bit
 
 From: Michael Ellerman <mpe@ellerman.id.au>
@@ -92,7 +92,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index 7fb902099de45..f9d2b0ec77564 100644
+index 453152b58e7f0..1045df1a98c07 100644
 --- a/tools/testing/selftests/openat2/openat2_test.c
 +++ b/tools/testing/selftests/openat2/openat2_test.c
 @@ -5,6 +5,7 @@
