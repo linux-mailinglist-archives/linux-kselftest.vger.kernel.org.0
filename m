@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C85190C2AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 06:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A7C490C2AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 06:07:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1138E282EE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 04:07:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AE9628303A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 04:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0862F136E1D;
-	Tue, 18 Jun 2024 04:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E81158A21;
+	Tue, 18 Jun 2024 04:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NAKm/Wc+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K39SREdO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7E02595;
-	Tue, 18 Jun 2024 04:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC782595;
+	Tue, 18 Jun 2024 04:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718683670; cv=none; b=oxpV2TDuIP2sgPrRMtLpgtsI9kE2HtOUT2XTCI6ImGykqel3kfM0zrLZOzYjXk2HTjfUSGLtoafXxRiZ0zQui1JAr4qF6mmYle/e6p0CJVujCi4p7XCecQeNoPdi3KZF49H3VhxiqOtD03DiPhZzydDTZzsGNPsusplsRV0j+X0=
+	t=1718683676; cv=none; b=WOlUlc0IfxuQSRJ2rZZyyGJLuRYUjUDf1J2kibQRuFqTv48jbltOETDztYVknmDxpYgDQJr4Q5Ps3+ELE4MGJyfQtR/lXBVUq8+tN2MIbFTev40xGUreFJCXu18qnCdNTM3FixuAP9GWtVDoOc+lhi5/QMRg2LL+joPslO9hLe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718683670; c=relaxed/simple;
-	bh=0rjNeAgSfA9rNmcaBi7nAyQg190Rhp086VAjo0t8FUc=;
+	s=arc-20240116; t=1718683676; c=relaxed/simple;
+	bh=LgLu2BDQEqIlcROtCzfjnqir6VeDbEN4B9SGDbwbc4k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cv7WQvN9sJH4db6lgO1BUADtJAleWQ/hF9yqfIoKporP1zDOv/y2OWaV0aEYaHzmHcHxq80taDuT8iKh1IYxZVmMrJDlNVjGbX+/Aoo1kDMh6I3usIAm8SE0TQna2q+J8XVFj7Sr/So5HTFh+cQasHsRp7xHCjJnaPMsRryqEzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NAKm/Wc+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74305C4AF61;
-	Tue, 18 Jun 2024 04:07:43 +0000 (UTC)
+	 MIME-Version; b=HHMzSYr3G8J+/K+UuME0DU28hhxGDvNmXHJhLAWZNaCWOuuTJ9MhIjuRc2vqgmWrS8kPFFyuMQfNBzdISWF2yBjnAe9ypoliityUGqnskUcu731pG3nxaajFZmyaJ18J8kzKoTTCctGVeZVg46UT+iqB1oOUk407SdOXsy95p2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K39SREdO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBF0C3277B;
+	Tue, 18 Jun 2024 04:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718683670;
-	bh=0rjNeAgSfA9rNmcaBi7nAyQg190Rhp086VAjo0t8FUc=;
+	s=k20201202; t=1718683676;
+	bh=LgLu2BDQEqIlcROtCzfjnqir6VeDbEN4B9SGDbwbc4k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NAKm/Wc+kgIy/A3ynTSuaNeyeEf4/W7uKewfwGlRnCTPGqRybSR4Nk2Rbx47okpgr
-	 /q7B+BnOak33HdsO4hQgxk+Ra+iK2C0ThXEWdWkRIKRaTGpc+DxxLbDqTR8czSslag
-	 kJpJMPlQqVUToL4buHugl7R3sKAQt8OYfecGgApdYyz6foJmSyPgHFmAPnFip54Do2
-	 rg71X8ZYjkk5NzxBlMl/RBIrkB2yS4LRy43yneXICbJNTAFCsagJwuBKAZd7faOpZh
-	 0VHBIBtVcdEq+JwbHwP+ctRNhEeJsiwq7wqsvmq2ZzARIpbeKhOzSIWMJeeQF8qKJ5
-	 XfDi27K7W0loA==
+	b=K39SREdOYyiSVf7CPcY+PD8radE6AEP23yN1jQVoZQwvVuMigkmF5HOPR8r/PDC8D
+	 Y1HIUbQ1+i5fC1T81hSsFTjUw/gW1RdZSsn0MvkmRU8UNuhUovAbOxwQrvpjSQcnIH
+	 pmoyHH8DT6XGPAhb080RT3UDo6hBUDKFDJkfuks/KmQ4fXxLQOe7+3lDC1M8NLfqpi
+	 CShM4wnrex7aepoYXZLu0oLl9ZhVgwMMmu8SKF+11ZfN2NlEVe5+XDTZyFLclkAJZe
+	 P3fxNVamcZuUsYl+Jmn/zdI0wXEbF0R4X5Loay42eoAkDIoOXrwBPSheXL/RNaDce9
+	 +le9jJqh5cLKg==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/6] selftests/bpf: Use connect_to_addr in connect_to_fd_opt
-Date: Tue, 18 Jun 2024 12:06:52 +0800
-Message-ID: <da1e43cbd8fbaaed3249ffcfa3ce3fc460455e0e.1718683292.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v4 3/6] selftests/bpf: Add client_socket helper
+Date: Tue, 18 Jun 2024 12:06:53 +0800
+Message-ID: <7413bca7c2c345ce8eaf3e63e51506faad41926c.1718683292.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1718683292.git.tanggeliang@kylinos.cn>
 References: <cover.1718683292.git.tanggeliang@kylinos.cn>
@@ -75,69 +75,68 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch moves "post_socket_cb" and "noconnect" into connect_to_addr(),
-then connect_to_fd_opts() can be implemented by getsockname() and
-connect_to_addr(). This change makes connect_to_* interfaces more unified.
+This patch extracts a new helper client_socket() from connect_to_fd_opts()
+to create the client socket, but don't connect to the server. Then
+connect_to_fd_opts() can be implemented using client_socket() and
+connect_fd_to_addr(). This helper can be used in connect_to_addr() too,
+and make "noconnect" opts useless.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 44 ++++---------------
- 1 file changed, 8 insertions(+), 36 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 37 +++++++++++++++----
+ tools/testing/selftests/bpf/network_helpers.h |  2 +
+ 2 files changed, 31 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index c0efccaae488..16c2586c33ad 100644
+index 16c2586c33ad..47c86987de12 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -293,9 +293,14 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
- 	if (settimeo(fd, opts->timeout_ms))
- 		goto error_close;
+@@ -249,6 +249,34 @@ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 	return -1;
+ }
  
--	if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
++int client_socket(int family, int type,
++		  const struct network_helper_opts *opts)
++{
++	int fd;
++
++	if (!opts)
++		opts = &default_opts;
++
++	fd = socket(family, type, opts->proto);
++	if (fd < 0) {
++		log_err("Failed to create client socket");
++		return -1;
++	}
++
++	if (settimeo(fd, opts->timeout_ms))
++		goto error_close;
++
 +	if (opts->post_socket_cb &&
 +	    opts->post_socket_cb(fd, opts->cb_opts))
- 		goto error_close;
- 
-+	if (!opts->noconnect)
-+		if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
-+			goto error_close;
++		goto error_close;
 +
- 	return fd;
- 
- error_close:
-@@ -306,51 +311,18 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
- int connect_to_fd_opts(int server_fd, int type, const struct network_helper_opts *opts)
- {
- 	struct sockaddr_storage addr;
--	struct sockaddr_in *addr_in;
--	socklen_t addrlen, optlen;
--	int fd, protocol;
-+	socklen_t addrlen;
- 
++	return fd;
++
++error_close:
++	save_errno_close(fd);
++	return -1;
++}
++
+ static int connect_fd_to_addr(int fd,
+ 			      const struct sockaddr_storage *addr,
+ 			      socklen_t addrlen, const bool must_fail)
+@@ -284,19 +312,12 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
  	if (!opts)
  		opts = &default_opts;
  
--	if (opts->proto) {
--		protocol = opts->proto;
--	} else {
--		if (getsockopt(server_fd, SOL_SOCKET, SO_PROTOCOL, &protocol, &optlen)) {
--			log_err("getsockopt(SOL_PROTOCOL)");
--			return -1;
--		}
--	}
--
- 	addrlen = sizeof(addr);
- 	if (getsockname(server_fd, (struct sockaddr *)&addr, &addrlen)) {
- 		log_err("Failed to get server addr");
+-	fd = socket(addr->ss_family, type, opts->proto);
++	fd = client_socket(addr->ss_family, type, opts);
+ 	if (fd < 0) {
+ 		log_err("Failed to create client socket");
  		return -1;
  	}
  
--	addr_in = (struct sockaddr_in *)&addr;
--	fd = socket(addr_in->sin_family, type, protocol);
--	if (fd < 0) {
--		log_err("Failed to create client socket");
--		return -1;
--	}
--
 -	if (settimeo(fd, opts->timeout_ms))
 -		goto error_close;
 -
@@ -145,19 +144,22 @@ index c0efccaae488..16c2586c33ad 100644
 -	    opts->post_socket_cb(fd, opts->cb_opts))
 -		goto error_close;
 -
--	if (!opts->noconnect)
--		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
--			goto error_close;
--
--	return fd;
--
--error_close:
--	save_errno_close(fd);
--	return -1;
-+	return connect_to_addr(type, &addr, addrlen, opts);
- }
- 
- int connect_to_fd(int server_fd, int timeout_ms)
+ 	if (!opts->noconnect)
+ 		if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
+ 			goto error_close;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index c92bed35dfe2..e89eadfb02d6 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -57,6 +57,8 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
+ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t len,
+ 		      const struct network_helper_opts *opts);
+ void free_fds(int *fds, unsigned int nr_close_fds);
++int client_socket(int family, int type,
++		  const struct network_helper_opts *opts);
+ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t len,
+ 		    const struct network_helper_opts *opts);
+ int connect_to_fd(int server_fd, int timeout_ms);
 -- 
 2.43.0
 
