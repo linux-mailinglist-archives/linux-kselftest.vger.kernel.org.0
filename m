@@ -1,158 +1,203 @@
-Return-Path: <linux-kselftest+bounces-12155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0980B90D625
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 16:53:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBA9B90D5B6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 16:43:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1253B2E7B4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 14:34:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45F521F2017B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 14:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED9A148310;
-	Tue, 18 Jun 2024 14:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEF716DC1D;
+	Tue, 18 Jun 2024 14:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GtOJ81v+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uuj9PezC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBF31494BD;
-	Tue, 18 Jun 2024 14:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F14016ABC6;
+	Tue, 18 Jun 2024 14:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718720114; cv=none; b=RZ92rQboyNqhGouAgT2+YvpL4kdljIByvVF4c4olKvFiHcp29yLBd/iQ6tpPiACZwBUnUsHCrD3nRDLB0yE6obnN7kGTGr7qjzYBIJ6l3yAYE5A/nFPQL/MiMRTvVteucrbc8dltGriQfH5bi9BhlCTudxwA1A23WrDVfJ1hbGM=
+	t=1718721001; cv=none; b=eTCvG+SsII/T5pdzStoDMjDrnnXmUb1eynswHigWxkol8tm61Tg20xURqEQ17J+WCi/yquHQjeHJJOZ9E/T9NaBZepaAvOsZgm5wCMN6JOgYBq0x2tcwMlE737smL9KGwUOZ8YyFlqCtZbH/Pbz+Ze9COEG3S9Kb/+w4sxf0uTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718720114; c=relaxed/simple;
-	bh=XiNA2bmdGPVnZdV4xtxYDEsTyXlfzKtM5Af0h6rckcY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PrIhnjdQ3eFAC/s1Hfns7ZSxdBYc+hBJXxmWK8jgcyhuu88SYny0e/891uHIeYBjzhQvC6aJeRcmRmfxTr7NiOmIVHphwVDmf3ZlkxSd9gnQEEFVp+WS8hd48MTC6WccRNSxh+16pMOFFvuAVzApHKxkkxgP9UipQAjnp0TdglU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GtOJ81v+; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718720110;
-	bh=XiNA2bmdGPVnZdV4xtxYDEsTyXlfzKtM5Af0h6rckcY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GtOJ81v+Je2ts2llIY4JtQP+EhBh0b6nAgBFnBy8mnn8gQANH1xUIs1cflsysPYx1
-	 nF4IXO2o1g5eSxbP07PZ3KjEZrTjMmv9zXyL4xGJIt7qF4h5GbsX19H7jf87qHrouX
-	 P8UwmgizejGFxTMs1IdRZefyVq7E6VpoO4ecS5kY1AYpJHw8eS1fef2JJoi4/nNI7i
-	 9r5V261N6SBK6WYlr+8rVjsTzdASUiikmVczTzHSHMKBvfkfnhZUyuDjGYDH3BiOF1
-	 cvOW9RpFsEDX0UTaaRyOYWpPqJDEsrNadCIo3VMbw2r9z1ZOqSqdVeSDjEZ3JWqnMA
-	 N68VUBBjuVA+Q==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8B7783780F7F;
-	Tue, 18 Jun 2024 14:15:10 +0000 (UTC)
-From: Laura Nao <laura.nao@collabora.com>
-To: kernelci@lists.linux.dev
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Testing Quality Call notes - 2024-06-13
-Date: Tue, 18 Jun 2024 16:15:29 +0200
-Message-Id: <20240618141529.60741-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1718721001; c=relaxed/simple;
+	bh=aAUJ4RS80Dus1HHmyBu5Y79cj3kmhTtE0lhAPkwjXdw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gvCKJYOQsA6sBiWQ20MZfDZOIBQEq7hmCj4PllV1TV7SiOHNKE5f8tm6yNSrAMfAPRlHyGXt9KZ4GLie04Ymk8EX8hIn1SHkOJndORk9vBEMRRE8KnyLJpZESujAvh8SBwhOSyeVz289gygGzyy9UO1tfXkOapTMmZP0D//LfRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uuj9PezC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED115C3277B;
+	Tue, 18 Jun 2024 14:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718721001;
+	bh=aAUJ4RS80Dus1HHmyBu5Y79cj3kmhTtE0lhAPkwjXdw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Uuj9PezC/ZxGAMrDosUCIHXsmiBrPiQAVgFQ+UzY+2DiHMzAjbUQdBjeCCw+YZVO6
+	 ThiOA1ny8FYt3bNQ2SEnrqLxfsYDldgJI72jd7/PGwkrYRB7r7YxZv+JK7d8Mm32aq
+	 CoYpUOCOTxo9rPY04Xe11IKaRp7dWf6I1Xy7BtFKIILI80CGftyVoAmE+uoxKF9wlc
+	 j9DdMjxZYLZthtHNeHr2fyLC4jYz04CNZ24Gc5sYHSjF42+SVHydc2XAYc4tqbj9PN
+	 vXfTKNGW0mLROQnyYyABI7H/sMd+W2Aak8LQ+eY7nnpwkZOH6uXTRURQDDkJ5KESUV
+	 h/8QdvYtHVnow==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 92409CE04AF; Tue, 18 Jun 2024 07:30:00 -0700 (PDT)
+Date: Tue, 18 Jun 2024 07:30:00 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	lance@osuosl.org
+Subject: Re: [PATCH V3] rcutorture: Add CFcommon.arch for the various arch's
+ need
+Message-ID: <7150e2fa-c627-435c-97d2-80065d1f1920@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240612013527.1325751-1-zhouzhouyi@gmail.com>
+ <def32dd4-b205-45b8-a5ed-e6e28a0ac4f4@paulmck-laptop>
+ <ZnBkHosMDhsh4H8g@J2N7QTR9R3>
+ <76deed7a-9852-4d21-bbcc-8b14e267fe89@paulmck-laptop>
+ <CAABZP2z0-zHTADL5REThay5CYcfSBaHA4mUXO6NYu-JJA7=Xvg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAABZP2z0-zHTADL5REThay5CYcfSBaHA4mUXO6NYu-JJA7=Xvg@mail.gmail.com>
 
-Hello,
+On Tue, Jun 18, 2024 at 06:41:22AM +0800, Zhouyi Zhou wrote:
+> On Tue, Jun 18, 2024 at 12:47 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Jun 17, 2024 at 05:28:14PM +0100, Mark Rutland wrote:
+> > > On Tue, Jun 11, 2024 at 07:57:29PM -0700, Paul E. McKenney wrote:
+> > > > On Wed, Jun 12, 2024 at 01:35:27AM +0000, Zhouyi Zhou wrote:
+> > > > > Add CFcommon.arch for the various arch's need for rcutorture.
+> > > > >
+> > > > > According to [1] and [2], this patch
+> > > > > Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options") by moving
+> > > > > x86 specific kernel option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> > > > >
+> > > > > The patch has been revised and improved under
+> > > > > Paul E. McKenney's guidance [3].
+> > > > >
+> > > > > [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
+> > > > > [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
+> > > > > [3] https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
+> > > > >
+> > > > > Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
+> > > > >
+> > > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > >
+> > > > Much better, thank you!
+> > > >
+> > > > I queued and pushed for review and testing with the usual editing,
+> > > > so please let me know if I messed anything up.
+> > > >
+> > > > I added Mark on CC in case he has thoughts from an ARM perspective.
+> > >
+> > > Ah, thanks!
+> > >
+> > > >From a quick scan, the only thing I spot is that CONFIG_KVM_GUEST is
+> > > also not an arm64 thing, and only exists on x86 & powerpc, so pulling
+> > > that out too would be nice.
+> yes, CONFIG_KVM_GUEST exists in powerpc & x86, which makes me think it
+> is global.
+> >
+> > Thank you for looking this over!
+> >
+> > Zhouyi, would you be willing to add this change, either as a new version
+> > of this patch or as a new patch on top of it?  (Your choice.)
+> Thanks to Paul and Mark's guidance, I achieved a lot during this process ;-)
+> 
+> I am going to create a new version of the patch, and test is both on
+> X86 and PowerPC
 
-KernelCI is hosting a bi-weekly call on Thursday to discuss improvements
-to existing upstream tests, the development of new tests to increase 
-kernel testing coverage, and the enablement of these tests in KernelCI. 
-In recent months, we at Collabora have focused on various kernel areas, 
-assessing the tests already available upstream and contributing patches 
-to make them easily runnable in CIs.
+Very good, looking forward to it!
 
-Below is a list of the tests we've been working on and their latest 
-status updates, as discussed in the last meeting held on 2024-06-13:
+							Thanx, Paul
 
-*ACPI probe kselftest*
-
-- Proposing new kselftest to detect unprobed devices on ACPI platforms:
-  https://lore.kernel.org/all/20240308144933.337107-1-laura.nao@collabora.com
-- Regression on acpi_fan driver detected and fixed upstream after
-  preliminary testing in KernelCI. Sent follow-up on RFCv2. 
-
-*USB/PCI devices kselftest*
-
-- Upstream test to detect unprobed devices on discoverable buses:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dacf1d7a78bf8a131346c47bfba7fe1f3ff44beb 
-- Preparing to enable the test in KernelCI on MediaTek Chromebooks in the
-  Collabora LAVA lab - see: https://github.com/kernelci/kernelci-pipeline/issues/579
-
-*Watchdog kselftest*
-
-- Adding KTAP output and limiting the ping loop to run the test 
-  individually in CIs:  https://lore.kernel.org/all/20240506111359.224579-1-laura.nao@collabora.com
-- Received feedback on series, discussion ongoing
-
-*Watchdog reset test*
-
-- Implementing out-of-tree test in KernelCI to detect device reset after 
-  watchdog timeout expiration: 
-  https://github.com/kernelci/kernelci-pipeline/issues/608
-- Enabled test in KernelCI for all ARM64 and AMD Chromebooks, currently 
-  monitoring the results
-
-*Error log test*
-
-- Proposing new kselftest to report device log errors:
-  https://lore.kernel.org/all/20240423-dev-err-log-selftest-v1-0-690c1741d68b@collabora.com/
-- Standardizing error log format suggested for easier parsing, including 
-  for kernel panic/oops/warning messages.
-
-*Suspend/resume in cpufreq kselftest*
-
-- Enabling suspend/resume test within the cpufreq kselftest in KernelCI
-- Adding parameter support to kselftest script in KernelCI:
-  https://github.com/Linaro/test-definitions/pull/511 
-- Planning to add support for rtcwake in the test, to enable automated
-  resume 
-- Considering measuring latency for suspend and resume processes
-
-*TAP conformance in kselftests*
-
-- Ongoing improvements to KVM selftests, discussion ongoing upstream
-  https://lore.kernel.org/all/20240422170842.2073979-1-usama.anjum@collabora.com/
-  https://lore.kernel.org/all/20240612104500.425012-1-usama.anjum@collabora.com/
-- Enabling more kselftests in KernelCI  (dmabuf-heaps, exec, and iommu): 
-  https://github.com/kernelci/kernelci-pipeline/pull/640/
-
-*Boot time test*
-
-- Investigating possibility of adding new test upstream to measure the 
-  kernel boot time and detect regressions 
-- Need to investigate available interfaces for reporting boot/probe times
-- Multiple measurement points may be necessary, need to establish a clear 
-  definition of "boot" first
-- Influenced by defconfig; testing with various kernel configurations 
-  recommended
-
-*Possible improvements to kselftest documentation*
-
-- Document tests excluded from default kselftest run and parameter 
-  support
-
-*Test configuration reporting in KernelCI*
-
-- Discussing reporting more details on the test configuration used:
-  https://github.com/kernelci/kernelci-pipeline/issues/636
-
-Please reply to this thread if you'd like to join the call or discuss 
-any of the topics further. We look forward to collaborating with the 
-community to improve upstream tests and expand coverage to more areas 
-of interest within the kernel.
-
-Best regards,
-
-Laura Nao
+> Cheers
+> Zhouyi
+> >
+> > > That aside, this looks good to me; having the infrastructure to do this
+> > > per-arch is nice!
+> >
+> > Glad you like it!  May we have your ack?
+> Very happy that Mark likes it ;-)
+> >
+> >                                                         Thanx, Paul
+> >
+> > > Mark.
+> > >
+> > > >
+> > > >                                                     Thanx, Paul
+> > > >
+> > > > ------------------------------------------------------------------------
+> > > >
+> > > > commit 29cf4c63d04b9752a32e33d46a57717121353ef7
+> > > > Author: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > Date:   Wed Jun 12 01:35:27 2024 +0000
+> > > >
+> > > >     rcutorture: Add CFcommon.arch for the various arch's need
+> > > >
+> > > >     Add CFcommon.arch for the various arch's need for rcutorture.
+> > > >
+> > > >     In accordance with [1] and [2], this patch moves x86 specific kernel
+> > > >     option CONFIG_HYPERVISOR_GUEST to CFcommon.arch
+> > > >
+> > > >     [1] https://lore.kernel.org/all/20240427005626.1365935-1-zhouzhouyi@gmail.com/
+> > > >     [2] https://lore.kernel.org/all/059d36ce-6453-42be-a31e-895abd35d590@paulmck-laptop/
+> > > >
+> > > >     Tested in x86_64 and PPC VM of Open Source Lab of Oregon State University.
+> > > >
+> > > >     Link: https://lore.kernel.org/lkml/cd3709dc-2c08-4ac2-a19b-d8edb66195e3@paulmck-laptop/T/
+> > > >
+> > > >     Fixes: a6fda6dab93c ("rcutorture: Tweak kvm options")
+> > > >     Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > > >     Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > >     Cc: Mark Rutland <mark.rutland@arm.com>
+> > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > >
+> > > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > > index b33cd87536899..ad79784e552d2 100755
+> > > > --- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+> > > > @@ -68,6 +68,8 @@ config_override_param "--gdb options" KcList "$TORTURE_KCONFIG_GDB_ARG"
+> > > >  config_override_param "--kasan options" KcList "$TORTURE_KCONFIG_KASAN_ARG"
+> > > >  config_override_param "--kcsan options" KcList "$TORTURE_KCONFIG_KCSAN_ARG"
+> > > >  config_override_param "--kconfig argument" KcList "$TORTURE_KCONFIG_ARG"
+> > > > +config_override_param "$config_dir/CFcommon.$(uname -m)" KcList \
+> > > > +                 "`cat $config_dir/CFcommon.$(uname -m) 2> /dev/null`"
+> > > >  cp $T/KcList $resdir/ConfigFragment
+> > > >
+> > > >  base_resdir=`echo $resdir | sed -e 's/\.[0-9]\+$//'`
+> > > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > > index 0e92d85313aa7..cf0387ae53584 100644
+> > > > --- a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon
+> > > > @@ -1,6 +1,5 @@
+> > > >  CONFIG_RCU_TORTURE_TEST=y
+> > > >  CONFIG_PRINTK_TIME=y
+> > > > -CONFIG_HYPERVISOR_GUEST=y
+> > > >  CONFIG_PARAVIRT=y
+> > > >  CONFIG_KVM_GUEST=y
+> > > >  CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=n
+> > > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+> > > > new file mode 100644
+> > > > index 0000000000000..2770560d56a0c
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.i686
+> > > > @@ -0,0 +1 @@
+> > > > +CONFIG_HYPERVISOR_GUEST=y
+> > > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64 b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+> > > > new file mode 100644
+> > > > index 0000000000000..2770560d56a0c
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/CFcommon.x86_64
+> > > > @@ -0,0 +1 @@
+> > > > +CONFIG_HYPERVISOR_GUEST=y
 
