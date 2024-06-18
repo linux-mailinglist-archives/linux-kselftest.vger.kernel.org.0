@@ -1,188 +1,186 @@
-Return-Path: <linux-kselftest+bounces-12158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0599690D81B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 18:05:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A418290DA23
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 18:58:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0255C1C242AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 16:05:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6320F28467A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jun 2024 16:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108C44D8A2;
-	Tue, 18 Jun 2024 16:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6389513A400;
+	Tue, 18 Jun 2024 16:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hTtQeW2Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hb2rLFAP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDB946B91
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 16:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8D61CA80;
+	Tue, 18 Jun 2024 16:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718726693; cv=none; b=ZxNQtFPe1Tzj41yq7FexSBzTV/VxuZwA/xZNATiX1zCpj0j0wYIm2+hDe/36hCIFjkgu1G9HpaSVoRSz9Gl8CHpGY3Kx1U9PhKjODTSAkz2SjOx7gnBJ3oh1DaGr7JCuNaKbexa9WpmrWcRudPRfgNQUlfN8tooGtwpYyLidYKQ=
+	t=1718729918; cv=none; b=F1PuGKOIc2JSOWyZejKXZHaISa4Ur+HMh/se7jLn8aDG4xR7sCdDgm3n52KckGPG6/Tk3CxGo8QqRU/PTU1M/EQhcQSeUvv5ADQNIJ/ALL7GaEVbEOzmJfT/QARjWsR2rvNeAMpqKKMdJnxeKy3E9j/Rl1jILcPLqtadVR/hQU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718726693; c=relaxed/simple;
-	bh=GP0uR3tvQbzcrtWs6IScgA94dZLZ1PgMYu17zBOgD/E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GbrLPYltg74+E+7zcG240hVC+qPjzwpMg1UHCHbIIqgv8e6fERw0Mvh8VphvXaSWKOMDY17GMDzC6i17XwnNCgt3fR8fW8dwP7vfKY3lUecfM2gVMf1fD4Cnhar+xGwQNZA2pzUAdr68u6RML9k/U1GdN9Nzaz5fxkhUxs+pvaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hTtQeW2Y; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718726690;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EkKajcuHyi0uetV3u4rjxeb0Qgka5tO9IJGy0qxthnw=;
-	b=hTtQeW2Y+Y6D4GaJ85881o0i1wKWukBXoSqS1B47RN/CvKT4cdDBTs8V8TJvd0oRaSUDNT
-	xQgiS8JGbNd6NP6H3Nau8MZ9pybkcOZrU6SLuBFUuwFVz0G/37izo9t7IE+ZA5CK7MVeoO
-	C9t1wHcr/Ah2hieMeYElAdZJwRQKZUo=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-31-gL5KrjedPw-grVOatKz9IQ-1; Tue,
- 18 Jun 2024 12:04:42 -0400
-X-MC-Unique: gL5KrjedPw-grVOatKz9IQ-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 701BF19560BF;
-	Tue, 18 Jun 2024 16:04:40 +0000 (UTC)
-Received: from RHTRH0061144 (dhcp-17-72.bos.redhat.com [10.18.17.72])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 877C13000218;
-	Tue, 18 Jun 2024 16:04:38 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: netdev@vger.kernel.org
-Cc: dev@openvswitch.org,  Simon Horman <horms@kernel.org>,
-  linux-kernel@vger.kernel.org,  Stefano Brivio <sbrivio@redhat.com>,  Eric
- Dumazet <edumazet@google.com>,  linux-kselftest@vger.kernel.org,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net-next 5/7] selftests: openvswitch: Support
- implicit ipv6 arguments.
-In-Reply-To: <20240617180218.1154326-6-aconole@redhat.com> (Aaron Conole's
-	message of "Mon, 17 Jun 2024 14:02:16 -0400")
-References: <20240617180218.1154326-1-aconole@redhat.com>
-	<20240617180218.1154326-6-aconole@redhat.com>
-Date: Tue, 18 Jun 2024 12:04:36 -0400
-Message-ID: <f7tr0cujkyz.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1718729918; c=relaxed/simple;
+	bh=CGLMfP+9fmPVHWYRrQk0VH746bSAgH57jOcdZOrbsm4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f2f6xI7Ps3XQdvnvyTBVA9MWAtB9gXWZy3wOx6pvgki+AixAAIoJ0L+36tNj5My5sHo1wIUHjYKTLYh6VJxjwDzg0aXPCS2Frq5XJxneXUipbcTVxsGcHCdb/H8yt8voJGUziuU7WMEgqR1Yw5VU15USGGQTKjMQZXL+JOsd34E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hb2rLFAP; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-709423bc2e5so1902937a12.0;
+        Tue, 18 Jun 2024 09:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718729916; x=1719334716; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=amL0dvQdgPJSIGkY5besFFBPs9/nrgT130CTChfqsCg=;
+        b=Hb2rLFAPAI59X2EYs53ta2d+SUuVicN+gWfN41BhaDcH3eey3moOl7gfdBc13r9v8v
+         0Q/nUaem093sOO9Yc4amhiGhP29OI7jB2hv+8FIeM5w5xv1ocTI+QdhUgiTC/7ID9hdk
+         qXkcHRKgGqhiIPzlXas5dTryprV1qiLRlzTU0QNgNfZAjp7X18ITy4GdGwy0nEYDL8X7
+         z6aamTjtiqBRljOXeje08KaWxmvpp8GHUEDOt5lKS58nQ61bFdmqCLEZRErll+xbvdmX
+         dNzWARM90xwRKq8Hn1HKiCxyikfNjcGK3zWSp42eLInH46UXD5/dfTQOndFAsTasOK2s
+         U1fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718729916; x=1719334716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=amL0dvQdgPJSIGkY5besFFBPs9/nrgT130CTChfqsCg=;
+        b=T2xPyPS0kbxQwDQq8M8dQ7eI5m0cs8I7eNIDmeRxBjJRYWtVCYDaPoy0kXVooLDPuu
+         rK+foKkOAy8oubCNRxsp5YcePWJjE9nqnxfEOibL/7TxQuKMqtf9BBQvvYaZCFGhvyo4
+         gqveeFIupcY+XA3O2SZ8ihATMXlcxL9FGuFwgQf0FB4ScW0/Fccxp0g6egUAsQunZvJP
+         HMRVHcmgw61XBfssdmWasWBnPMIf5P42kwttfUfQ0+ToI4XHyEnHXR0rTC8iWiXlhKAU
+         raY+N//k4i+x/CZ/Cb5BYaW0bk5FnyCING8sVnVrbeB490SV7kVF4pJZwUWyBV2eFHYk
+         agUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOJ8e2Lh3cu8FaOz57ecqCLOB8mAFwZPvkLA5TmVQXPG8MSxpHTQAlmGprRCF2Tb2UtWgpu5PPKAZia7nVgpU7kyQkWUxKKSdFEYMs7tVySsSxMCUpKvOVFKkE5hwbaZd/8oC76HlGSY23Pk3V26XatKtXCWu22AwVo9o2sXWH0vFI
+X-Gm-Message-State: AOJu0YxmA1BkqePo7g5vQGnVXtnmNj33Eftxy0jVSwUQYy2aMjq8ROAK
+	fjQdb0fPCZQLEIoiJGEghC9ROyU6WJ0eIhJhn0EM0lQ+E+A43WhO12KvDAEx7ckSXJij2qGbOmQ
+	ztDlBidVh7RPK28pPwWBZ6S4+txA=
+X-Google-Smtp-Source: AGHT+IGAKcPHkZAX1pWY+gmY9Pwq3uPjHV5FgVn6f9ezL8+Y0l5A6TL0X7loIn/HOeudP+0S0KFX54LgmHNxJj1liW8=
+X-Received: by 2002:a17:90a:128e:b0:2c0:238c:4ee6 with SMTP id
+ 98e67ed59e1d1-2c7b57f3b2fmr325160a91.2.1718729916022; Tue, 18 Jun 2024
+ 09:58:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+References: <cover.1717881178.git.dxu@dxuuu.xyz> <34708481d71ea72c23a78a5209e04a76b261a01d.1717881178.git.dxu@dxuuu.xyz>
+ <Zmb52Qp__CBzbgDh@krava> <CAEf4BzaT7XNnGFUqAr=+pi106bT0o4=TJ7JLOPNjZEBHw4+M7Q@mail.gmail.com>
+ <ZnGBANDTF80gNDHR@krava>
+In-Reply-To: <ZnGBANDTF80gNDHR@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 18 Jun 2024 09:58:23 -0700
+Message-ID: <CAEf4BzZVfppin_mfEJF9eVcZUu9hds5PKuLysWOXeSJ7gdV3dg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 06/12] bpf: selftests: Fix bpf_session_cookie()
+ kfunc prototype
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, ast@kernel.org, andrii@kernel.org, 
+	eddyz87@gmail.com, daniel@iogearbox.net, quentin@isovalent.com, 
+	alan.maguire@oracle.com, acme@kernel.org, mykolal@fb.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Aaron Conole <aconole@redhat.com> writes:
-
-> The current iteration of IPv6 support requires explicit fields to be set
-> in addition to not properly support the actual IPv6 addresses properly.
-> With this change, make it so that the ipv6() bare option is usable to
-> create wildcarded flows to match broad swaths of ipv6 traffic.
+On Tue, Jun 18, 2024 at 5:43=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
 >
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Tested-by: Simon Horman <horms@kernel.org>
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
-> ---
->  .../selftests/net/openvswitch/ovs-dpctl.py    | 42 ++++++++++++-------
->  1 file changed, 27 insertions(+), 15 deletions(-)
+> On Mon, Jun 17, 2024 at 03:25:53PM -0700, Andrii Nakryiko wrote:
+> > On Mon, Jun 10, 2024 at 6:04=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
+wrote:
+> > >
+> > > On Sat, Jun 08, 2024 at 03:16:02PM -0600, Daniel Xu wrote:
+> > > > The prototype defined in bpf_kfuncs.h was not in line with how the
+> > > > actual kfunc was defined. This causes compilation errors when kfunc
+> > > > prototypes are generated from BTF.
+> > > >
+> > > > Fix by aligning with actual kfunc definition.
+> > > >
+> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/bpf_kfuncs.h                        | =
+2 +-
+> > > >  tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c | =
+2 +-
+> > > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testi=
+ng/selftests/bpf/bpf_kfuncs.h
+> > > > index be91a6919315..3b6675ab4086 100644
+> > > > --- a/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > > > +++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+> > > > @@ -77,5 +77,5 @@ extern int bpf_verify_pkcs7_signature(struct bpf_=
+dynptr *data_ptr,
+> > > >                                     struct bpf_key *trusted_keyring=
+) __ksym;
+> > > >
+> > > >  extern bool bpf_session_is_return(void) __ksym __weak;
+> > > > -extern long *bpf_session_cookie(void) __ksym __weak;
+> > > > +extern __u64 *bpf_session_cookie(void) __ksym __weak;
+> > >
+> > > the original intent was to expose long instead of __u64 :-\
+> > >
+> >
+> > Cookies internally are always u64 (8 byte values). Marking them
+> > internally in the kernel as long could lead to problems on 32-bit
+> > architectures, potentially (it still needs to be 64-bit value
+> > according to BPF contract, but we'll allocate only 4 bytes for them).
+> >
+> > It seems better and safer to be explicit with __u64/u64 for cookies eve=
+rywhere.
 >
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index 2f16df2fb16b..2062e7e6e99e 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -200,6 +200,18 @@ def convert_ipv4(data):
->  
->      return int(ipaddress.IPv4Address(ip)), int(ipaddress.IPv4Address(mask))
->  
-> +def convert_ipv6(data):
-> +    ip, _, mask = data.partition('/')
-> +
-> +    if not ip:
-> +        ip = mask = 0
-> +    elif not mask:
-> +        mask = 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'
-> +    elif mask.isdigit():
-> +        mask = ipaddress.IPv6Network("::/" + mask).hostmask
-> +
-> +    return ipaddress.IPv6Address(ip).packed, ipaddress.IPv6Address(mask).packed
-> +
->  def convert_int(size):
->      def convert_int_sized(data):
->          value, _, mask = data.partition('/')
-> @@ -941,21 +953,21 @@ class ovskey(nla):
->                  "src",
->                  "src",
->                  lambda x: str(ipaddress.IPv6Address(x)),
-> -                lambda x: int.from_bytes(x, "big"),
-> -                lambda x: ipaddress.IPv6Address(x),
-> +                lambda x: ipaddress.IPv6Address(x).packed if x else 0,
-> +                convert_ipv6,
->              ),
->              (
->                  "dst",
->                  "dst",
->                  lambda x: str(ipaddress.IPv6Address(x)),
-> -                lambda x: int.from_bytes(x, "big"),
-> -                lambda x: ipaddress.IPv6Address(x),
-> +                lambda x: ipaddress.IPv6Address(x).packed if x else 0,
-> +                convert_ipv6,
->              ),
-> -            ("label", "label", "%d", int),
-> -            ("proto", "proto", "%d", int),
-> -            ("tclass", "tclass", "%d", int),
-> -            ("hlimit", "hlimit", "%d", int),
-> -            ("frag", "frag", "%d", int),
-> +            ("label", "label", "%d", lambda x: int(x) if x else 0),
-> +            ("proto", "proto", "%d", lambda x: int(x) if x else 0),
-> +            ("tclass", "tclass", "%d", lambda x: int(x) if x else 0),
-> +            ("hlimit", "hlimit", "%d", lambda x: int(x) if x else 0),
-> +            ("frag", "frag", "%d", lambda x: int(x) if x else 0),
->          )
->  
->          def __init__(
-> @@ -1152,8 +1164,8 @@ class ovskey(nla):
->              (
->                  "target",
->                  "target",
-> -                lambda x: str(ipaddress.IPv6Address(x)),
-> -                lambda x: int.from_bytes(x, "big"),
-> +                lambda x: ipaddress.IPv6Address(x).packed,
+> hum, I based that on what we did for kprobe session,
+> but I guess it makes sense just for bpf side:
 
-This (and the following str() calls) shouldn't have been changed.  I'll
-send a v2.  Sorry about the noise.  It isn't visible in this test, but
-when doing some additional ipv6 test development for a future series, I
-caught it.
+yep, exactly, long is 64-bit only for BPF "architecture", but
+internally it will be 4 bytes for 32-bit architectures, which will
+potentially lead to problems. With recent kfunc vmlinux.h generation,
+it's probably better to stick to explicitly sized types.
 
-> +                convert_ipv6,
->              ),
->              ("sll", "sll", macstr, lambda x: int.from_bytes(x, "big")),
->              ("tll", "tll", macstr, lambda x: int.from_bytes(x, "big")),
-> @@ -1237,14 +1249,14 @@ class ovskey(nla):
->              (
->                  "src",
->                  "src",
-> -                lambda x: str(ipaddress.IPv6Address(x)),
-> -                lambda x: int.from_bytes(x, "big", convertmac),
-> +                lambda x: ipaddress.IPv6Address(x).packed,
-> +                convert_ipv6,
->              ),
->              (
->                  "dst",
->                  "dst",
-> -                lambda x: str(ipaddress.IPv6Address(x)),
-> -                lambda x: int.from_bytes(x, "big"),
-> +                lambda x: ipaddress.IPv6Address(x).packed,
-> +                convert_ipv6,
->              ),
->              ("tp_src", "tp_src", "%d", int),
->              ("tp_dst", "tp_dst", "%d", int),
-
+>
+>   https://lore.kernel.org/bpf/CAEf4BzbyQpKvZS-mUECLRq3gyBJbsqQghOKyAbutoB=
+76mJM8xw@mail.gmail.com/
+>
+> jirka
+>
+> >
+> > What am I missing?
+> >
+> > > could we rather change the bpf_session_cookie function to return long=
+?
+> > > should be just return value type change
+> > >
+> > > thanks,
+> > > jirka
+> > >
+> > >
+> > > >  #endif
+> > > > diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_session=
+_cookie.c b/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie.c
+> > > > index d49070803e22..0835b5edf685 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie=
+.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_session_cookie=
+.c
+> > > > @@ -25,7 +25,7 @@ int BPF_PROG(trigger)
+> > > >
+> > > >  static int check_cookie(__u64 val, __u64 *result)
+> > > >  {
+> > > > -     long *cookie;
+> > > > +     __u64 *cookie;
+> > > >
+> > > >       if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
+> > > >               return 1;
+> > > > --
+> > > > 2.44.0
+> > > >
 
