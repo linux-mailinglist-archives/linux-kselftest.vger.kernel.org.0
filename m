@@ -1,159 +1,128 @@
-Return-Path: <linux-kselftest+bounces-12209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B563B90E29F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 07:23:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD7C890E2A7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 07:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F5DB1F23176
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 05:23:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FF6D1F240CA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 05:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23665466B;
-	Wed, 19 Jun 2024 05:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224A355893;
+	Wed, 19 Jun 2024 05:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CC+aG7Od";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="klF9jX88";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CC+aG7Od";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="klF9jX88"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="egHOHM37"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F317628EC;
-	Wed, 19 Jun 2024 05:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E21055897
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 05:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718774632; cv=none; b=da3QA7ZxJELw1rKPXWE4YyWEyPEsIsr+lo3PiyLtj3Qrj2ofopAC0U8j4HY2HNvnSc0Ac3atRLdrQWT5BOsEeA1NAKToE8Izy4bUqNT3AOA2FDTWgZeEwfmo1RDpF/tGA3/c2XqKF+WsXALAlPG5PCaDOfmy/SbSzE1NrON584s=
+	t=1718774759; cv=none; b=BbEiH6tqFLTRiRHzdYULzEavEWjHXk86A4Hl/CZDphmcDjRUD2cN3Y0uLQROOQq1FlIJC1h8n4hOJM+R91XFMCUgOULYZI+PvBSugSEKixsjB7C3qVylZIgcmDSQB+dbABVvZ3oBjJa/z6Dfi5LBCrMDDBXNoP7cyW/pjTURdrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718774632; c=relaxed/simple;
-	bh=KaS68tC7mDah+eDYNqO+Yrrvd9o3NFQnpxOCYinQTyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i2OSY2C2qnes2be8+pjjLZEzTaMvlqp1SciHwvSUf6sQ1yC+jclrrPQSU3wk470hk/SgVITv7scLpZkNcR+XUAJRti7LdzC7HO0/MqoYKx7KYjTfFhbVsd0iXpNf8aPaR8BPiLkj6qRP723vtesTxOtaqYED4EuowrbzE9KsaX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CC+aG7Od; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=klF9jX88; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CC+aG7Od; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=klF9jX88; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1EF571F7D8;
-	Wed, 19 Jun 2024 05:23:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1718774629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cXTlgSHDZjc1Is0RTeFzg2tLZPe/dlFJM8+192GwUh8=;
-	b=CC+aG7OdhiVVbIE0d9/C++DTJ1b/s6k8fLezYp2sJTx/3u6PCSNuENCV/27MYvbjrE05xu
-	lgJo6YgFVq6gGiWI+Ai6UvQdW9//ACbwSCN6t+7Q8mn5JxeIBzLu8HN9Y44k3sk7rB5r0x
-	i6uVZUPm/Ad4BKzdrExj3J7e4+I+BTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1718774629;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cXTlgSHDZjc1Is0RTeFzg2tLZPe/dlFJM8+192GwUh8=;
-	b=klF9jX880MfqKE+halkart24l9VtRseQ+0BkvDmz8kSs0eNgiaMDpFN/HPxWHMvDa50DCy
-	gHFRciyh6CkUo5Cg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=CC+aG7Od;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=klF9jX88
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1718774629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cXTlgSHDZjc1Is0RTeFzg2tLZPe/dlFJM8+192GwUh8=;
-	b=CC+aG7OdhiVVbIE0d9/C++DTJ1b/s6k8fLezYp2sJTx/3u6PCSNuENCV/27MYvbjrE05xu
-	lgJo6YgFVq6gGiWI+Ai6UvQdW9//ACbwSCN6t+7Q8mn5JxeIBzLu8HN9Y44k3sk7rB5r0x
-	i6uVZUPm/Ad4BKzdrExj3J7e4+I+BTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1718774629;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cXTlgSHDZjc1Is0RTeFzg2tLZPe/dlFJM8+192GwUh8=;
-	b=klF9jX880MfqKE+halkart24l9VtRseQ+0BkvDmz8kSs0eNgiaMDpFN/HPxWHMvDa50DCy
-	gHFRciyh6CkUo5Cg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 53A6913AAF;
-	Wed, 19 Jun 2024 05:23:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 17PTEWRrcmZ1ZgAAD6G6ig
-	(envelope-from <osalvador@suse.de>); Wed, 19 Jun 2024 05:23:48 +0000
-Date: Wed, 19 Jun 2024 07:23:46 +0200
-From: Oscar Salvador <osalvador@suse.de>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com,
-	ioworker0@gmail.com, muchun.song@linux.dev,
-	akpm@linux-foundation.org, shuah@kernel.org, corbet@lwn.net,
-	rientjes@google.com, duenwen@google.com, fvdl@google.com,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] mm/memory-failure: userspace controls
- soft-offlining pages
-Message-ID: <ZnJrYuFroToIm2v0@localhost.localdomain>
-References: <20240617170545.3820912-1-jiaqiyan@google.com>
- <20240617170545.3820912-2-jiaqiyan@google.com>
- <ZnJmsqvJz63imq3O@localhost.localdomain>
+	s=arc-20240116; t=1718774759; c=relaxed/simple;
+	bh=t9EaaUg3L/TRQLJ6x2jYN3aMV18XlDlw2j8eGqK4Z10=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gkfAvNLFFZN5w+ya3vxQMsycoWUx3ZAdA2PxGMO1whNXYqaZ/eCgTVJk0+h8bAcGvZZ9aIWa/1dNXtZwKZ33PQMsykmXDecRhYmaoSZD907ykQUDNvqKP53WsGtrd4qv0QI34UWPZ7kbKi3Tv75qIAGNQvry44jr9ZQZjm8O9e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=egHOHM37; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-361785bfa71so992728f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 22:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718774756; x=1719379556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uwQGsaeVkR2wdQtFm/A8WK6CqmtUyAoP0AL0lGKk5Q0=;
+        b=egHOHM37xxZZVk2qD4PknPPw2jWJRxhPM1cz25eqGf3ryv7g8avMNeRIApJDuwU7T7
+         OcYIqkKiLQesuaWzibRumMzVpTFi7fUMd2wOvW1BDPd4flxokZqdKifgJQT8DCz8sZNG
+         PenpIqvwIsoWTnfXleMIP6hBPZjpKdb0EexA/C0COYg/jDzpZTBgQXi6lfDpmBUgBho7
+         zRfOD0qEp2BCHA6pZ1KGU/NzTBe44Sb8clfxt6vus5Q9puZNkLUwA0PGl+dyrSHlmaHs
+         nCkCtPVUtUyyYQl1Y8RNFcr69EJDpRcLLxAIvbjAOnwpJgKDclI3qn6/Q/hFUYWBYXGh
+         NeQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718774756; x=1719379556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uwQGsaeVkR2wdQtFm/A8WK6CqmtUyAoP0AL0lGKk5Q0=;
+        b=uxSZPHbUFJO1+lMdCffuRC/cnSziQdi/OUahmTZeQWd2e7QQtSICaveXqYj+Xk+pie
+         bQ9Zf4lAuHnf7VfM9AvEMD0yyWs3cdiQGUDiT+H+5elFKBhkEnYBqtvjrTqjjOdW/AUj
+         mz0CH+f3AMoNU4Nm+vgu7zHVUsUmbwSdxKf1lO8BUfk2J/htdy7Eoqj6GQmdkzNcCFrY
+         pcW+TcljY4KH/PJaTfxX3s7cVxEO4gY55H5rmrauhDZTx+Uj36nn+WJu1Z/KavAf0kWP
+         fa0nWOqjALtRl7NAnXpi/Jg1Lgv5eMs4rZWRPkt1xpiq19e9SKDfy2RpMU6VVBqiK9Iy
+         HhTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWr0Oyy181FxPasgedrC/xDr3Bqgie9lLzIdL4ZR+dS7VjQ4Z6UdKAehaDblkxeAwI4JZ9BdqHRWVa6ckOe1o1EPP91Zdwgn3ECULHo7pk+
+X-Gm-Message-State: AOJu0YzANusfs/ofoM0LF2e9oPBnTvT7PNrdACX1fo64n/VVC9Fr/wk3
+	jEE8poyxPQk3HtJCOw9SGpAYnxi77VZwVxXbgpM74M/nOWMRTjIS/YK29GWwYcXcYhJ396b9irO
+	fKeRizAWDcMaDq4/NFR/7cqm785/+ekv9FEM4
+X-Google-Smtp-Source: AGHT+IHIJAsmZ4zkrcutJrcSMRBI2Bt/fiEgHmTrXDGLrPqmD2yvGF4Y0K9pp6S1TS65bsqrBUo/eSG0vK+aIBsGNDQ=
+X-Received: by 2002:a05:6000:144:b0:360:746b:6015 with SMTP id
+ ffacd0b85a97d-363170eca2bmr1114580f8f.11.1718774755356; Tue, 18 Jun 2024
+ 22:25:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240617170545.3820912-1-jiaqiyan@google.com> <20240617170545.3820912-2-jiaqiyan@google.com>
+ <ZnJmsqvJz63imq3O@localhost.localdomain>
 In-Reply-To: <ZnJmsqvJz63imq3O@localhost.localdomain>
-X-Rspamd-Queue-Id: 1EF571F7D8
-X-Spam-Score: -3.01
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,huawei.com,oracle.com,linux.dev,linux-foundation.org,kernel.org,lwn.net,google.com,kvack.org,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	TAGGED_RCPT(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Tue, 18 Jun 2024 22:25:43 -0700
+Message-ID: <CACw3F53SQHQaaBAyEMww=iPXENhG3uVbEzedG+0S+gvz+O3kPQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] mm/memory-failure: userspace controls
+ soft-offlining pages
+To: Oscar Salvador <osalvador@suse.de>
+Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
+	ioworker0@gmail.com, muchun.song@linux.dev, akpm@linux-foundation.org, 
+	shuah@kernel.org, corbet@lwn.net, rientjes@google.com, duenwen@google.com, 
+	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 19, 2024 at 07:03:46AM +0200, Oscar Salvador wrote:
-> We should not be doing anything if soft_offline is disabled, so this check should
+On Tue, Jun 18, 2024 at 10:03=E2=80=AFPM Oscar Salvador <osalvador@suse.de>=
+ wrote:
+>
+> On Mon, Jun 17, 2024 at 05:05:43PM +0000, Jiaqi Yan wrote:
+> > - * Returns 0 on success
+> > - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event
+> > + * Returns 0 on success,
+> > + *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
+> > + *         -EOPNOTSUPP if disabled by /proc/sys/vm/enable_soft_offline=
+,
+> >   *         < 0 otherwise negated errno.
+> >   *
+> >   * Soft offline a page, by migration or invalidation,
+> > @@ -2783,6 +2795,12 @@ int soft_offline_page(unsigned long pfn, int fla=
+gs)
+> >               return -EIO;
+> >       }
+> >
+> > +     if (!sysctl_enable_soft_offline) {
+> > +             pr_info("%#lx: OS-wide disabled\n", pfn);
+> > +             put_ref_page(pfn, flags);
+> > +             return -EOPNOTSUPP;
+> > +     }
+>
+> We should not be doing anything if soft_offline is disabled, so this chec=
+k should
 > be placed upfront, at the very beginning of the function.
 > Then you can remove the 'put_ref_page' call.
 
-Sorry, I managed to confuse myself, this has to stay as is.
+I think if MF_COUNT_INCREASED is in flags, we still need to
+put_ref_page(), right?
 
--- 
-Oscar Salvador
-SUSE Labs
+>
+>
+> --
+> Oscar Salvador
+> SUSE Labs
 
