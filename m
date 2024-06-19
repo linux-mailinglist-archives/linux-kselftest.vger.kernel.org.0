@@ -1,162 +1,128 @@
-Return-Path: <linux-kselftest+bounces-12191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4ACB90E12D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 03:17:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B6C90E17A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 04:01:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FF171F22ACC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 01:17:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 007F72820D7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA6B5227;
-	Wed, 19 Jun 2024 01:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="d+WB/7VR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10EDF3D57E;
+	Wed, 19 Jun 2024 02:01:44 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E1123A8
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 01:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13ECE7470;
+	Wed, 19 Jun 2024 02:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718759839; cv=none; b=umocPUlKG1E+nyG4fNUAY0VR4DeHB6xsUeXmYmU/lfbr4s0p5zRN21jreXWiSf3WAH2c463Zf3baTvRjFoxNrktHmbWblL3nIZv4ZFqnkVp9Q94cutGI0sepPMJeQTPMMAZ8wYG3d4GVXCFTarPrnPDeN5opY+yjquDS1/Pp2Pk=
+	t=1718762504; cv=none; b=S1KNl5lpqmqfPPvc7+s47uv+bG5YuaV+iKcZCKtyl6jUah1jYlUW3lFovzoZkfBl5LWPxaLtJCpcOkedOCjvcFyK7OaNbnC03kwf8Nc47/Z8/AgpgVrRoC/+0t+te8cP4WGEUOJus2h7KoCVgO7M3pwKYNX5OD7SRXBYkJfYuiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718759839; c=relaxed/simple;
-	bh=r1BO3ohYWqvNEJxdDtk+dFEGCIEf1Wf43o5NQMif+HI=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=LM7G93byAlN20vdqiM/uE9maQtjJQunEriecgB8dPUQmOMHvauU6MnG2Lkb6pDeDxNHsI/VOzwjOWSWBGqrWcZX6Tnd5iFdZw6GL/IumUY6k2lb0HFL74/CcWCb9qCU7byqZoG9sTZu4xPpBv5znDiEUbwTDUl5bj8WQqP7yFLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=d+WB/7VR; arc=none smtp.client-ip=209.85.215.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-6e3741519d7so4186038a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 18:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718759837; x=1719364637; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xReDvTzDNEJkC8OAu/M7/FNa5LHNulGR05A49zLRYUE=;
-        b=d+WB/7VRNBMMONNRCD7SMNZTbNsncBiQVTBe/2D4Gi+2WfspE7aiH02oYsMkQ6x2My
-         KU8xZzQRPBbV4G8ttXuyt7ZC9+O+ljFeH5XqcRwzXNXifu3phZq93K0wFqyQVGcVzCYx
-         rSBw486iaA265j0V6BOidnWCiRgxlXx+Zv4f3XfvJ9PcNvmH9Tt7Uc8EJ5ma/+d7peRc
-         GdSh4DePGjGItI/UN+hbdYBqviSYZpLvjtiVH/rK5HlZLrV1tb9MGvnEfYKQp/vp6Fvw
-         cggjNPhVFTLvWqWg7j+SbQY0PwPexMaJ59O7awl6m+nhz4v8S20lGWMfvjw196ZxfD2S
-         6p1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718759837; x=1719364637;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xReDvTzDNEJkC8OAu/M7/FNa5LHNulGR05A49zLRYUE=;
-        b=gtoirqe45gG98N3YhRVAEKaC5fgMqcAtRGafbKqYtATCe8n+iQV3dZImruI85paOs+
-         0YZYzpHZq2J40lpDYIn95dhOPHWurNJm9UKkbl+2VCbt3MLtqEAQtFAWggZFjRX/+4lv
-         jSjuPeUPcbG9zi4xivi7S7dfpskBuwAqSRQRx6YzLIOYydCr35bmVT1CO7McN7e2qvqD
-         6CM1mZ7x7DI6YcNuVc4GUxQINa6xq0w7JGOV6WGjVQpQqfZnxKSe51euK5a7+DDCEl61
-         QB3QNHY+HhcA1QM0aCS4P63FWsZCw9AcNmU6vkCAc65BvQFc4BnB+y4IpVkEQoZx7K74
-         qHCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVfYUAbpjjBWkSQTJI6vCNh3R+YeLckD9M8/KwfBDraDIYHKdsljLEKU2vD62fzytZwPKW6YgqPG4GGraorTDcCMi5ldjZ0nFouR+ZQnx/y
-X-Gm-Message-State: AOJu0YzOnfoH1o7ogrND9hpMvXTCKBgMlbbauHBKC8uPHc6yNLA6h+sR
-	e9NZIb3eyg+Bi1YLdj2453di9v0KX2GoNRX0uVgKTqLVyvjzdj1Wg7l/QdMgU5Y=
-X-Google-Smtp-Source: AGHT+IFf3/NBGyRV/HLjuvvOue7jXHwJlhnMwmlSDdeWkLA7FMCstRZwg/xcP3sbmBTfOqe77iU4Ww==
-X-Received: by 2002:a17:90b:954:b0:2c2:7bbe:d6ba with SMTP id 98e67ed59e1d1-2c7b59fa6demr1323410a91.8.1718759837016;
-        Tue, 18 Jun 2024 18:17:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4a769bc3dsm13834322a91.37.2024.06.18.18.17.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 18:17:16 -0700 (PDT)
-Message-ID: <6672319c.170a0220.23e10.7848@mx.google.com>
-Date: Tue, 18 Jun 2024 18:17:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1718762504; c=relaxed/simple;
+	bh=Fa7JE2b6dXrhrG9ZpxQ/R79R+ygTJTKKTIW7ZGyH2QY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=leIowckh0Xli1NwWGw2yacOWUiSuM87IGzFUf6eW8clJcIAhVFLUZXPKsGrU6WJHXKQXux7EktUAaBpsH92peVQEG4P54a7Zsw0rfHtZwQSzkixdfsmVpj6Ehw/bCrm2mBWyDFXBYLjW5RQZiUl9G0/aUUqNg95NIROc5jOzJ0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from ThinkPad-T480s.. (unknown [121.237.44.152])
+	by APP-05 (Coremail) with SMTP id zQCowACHjeX3O3JmKoWbEQ--.13480S2;
+	Wed, 19 Jun 2024 10:01:27 +0800 (CST)
+From: zhouquan@iscas.ac.cn
+To: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: oleg@redhat.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	andy.chiu@sifive.com,
+	shuah@kernel.org,
+	charlie@rivosinc.com,
+	zhouquan@iscas.ac.cn
+Subject: [RFC PATCH 1/2] riscv: Expose orig_a0 in the user_regs_struct structure
+Date: Wed, 19 Jun 2024 10:01:27 +0800
+Message-Id: <d4c7da80b72375c75836303bc744e4db9eeec218.1718693532.git.zhouquan@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1718693532.git.zhouquan@iscas.ac.cn>
+References: <cover.1718693532.git.zhouquan@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc1-19-g15a783a493b02
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
- 1 warning (v6.10-rc1-19-g15a783a493b02)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACHjeX3O3JmKoWbEQ--.13480S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW7WF4rXr4fJF4kKrWfXwb_yoW8Xw1DpF
+	Zakwn7KFWrurWvkry7ZF4DWr4UJwn8K343KrWIy34Yv3WUtF45ZrZ3Gw1qyr1fJayvqFyx
+	uFySkr98A3WDZ3JanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+	4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+	Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbV
+	WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+	xVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrw
+	CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+	14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+	IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+	0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU6MKtUUUUU=
+X-CM-SenderInfo: 52kr31xxdqqxpvfd2hldfou0/1tbiBwwNBmZyBf6gSQAAsG
 
-kselftest/next build: 6 builds: 0 failed, 6 passed, 1 warning (v6.10-rc1-19=
--g15a783a493b02)
+From: Quan Zhou <zhouquan@iscas.ac.cn>
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.10-rc1-19-g15a783a493b02/
+Expose orig_a0 to userspace to ensure that users can modify
+the actual value of `a0` in the traced process through the
+ptrace(PTRACE_SETREGSET, ...) path. Since user_regs_struct is
+a subset of pt_regs, we also need to adjust the position of
+the orig_a0 field in pt_regs to achieve the correct copy.
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.10-rc1-19-g15a783a493b02
-Git Commit: 15a783a493b021975f3dd12bdd95a7080df0e8cf
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Warnings Detected:
-
-arm64:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14cf94
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14cf94
-
+Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 ---
-For more info write to <info@kernelci.org>
+ arch/riscv/include/asm/ptrace.h      | 4 ++--
+ arch/riscv/include/uapi/asm/ptrace.h | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
+index b5b0adcc85c1..37f48d40ae46 100644
+--- a/arch/riscv/include/asm/ptrace.h
++++ b/arch/riscv/include/asm/ptrace.h
+@@ -45,12 +45,12 @@ struct pt_regs {
+ 	unsigned long t4;
+ 	unsigned long t5;
+ 	unsigned long t6;
++	/* a0 value before the syscall */
++	unsigned long orig_a0;
+ 	/* Supervisor/Machine CSRs */
+ 	unsigned long status;
+ 	unsigned long badaddr;
+ 	unsigned long cause;
+-	/* a0 value before the syscall */
+-	unsigned long orig_a0;
+ };
+ 
+ #define PTRACE_SYSEMU			0x1f
+diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
+index a38268b19c3d..3e37f80cb3e8 100644
+--- a/arch/riscv/include/uapi/asm/ptrace.h
++++ b/arch/riscv/include/uapi/asm/ptrace.h
+@@ -54,6 +54,8 @@ struct user_regs_struct {
+ 	unsigned long t4;
+ 	unsigned long t5;
+ 	unsigned long t6;
++	/* a0 value before the syscall */
++	unsigned long orig_a0;
+ };
+ 
+ struct __riscv_f_ext_state {
+-- 
+2.34.1
+
 
