@@ -1,146 +1,164 @@
-Return-Path: <linux-kselftest+bounces-12205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D97590E1C8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 04:56:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 388F890E288
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 07:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08FAF1F235D6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:56:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C783B2109F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 05:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC42150249;
-	Wed, 19 Jun 2024 02:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894514B5A6;
+	Wed, 19 Jun 2024 05:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UT/gw0A3"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="dbwi9B83";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2PzFtr15";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="dbwi9B83";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2PzFtr15"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B403F5227;
-	Wed, 19 Jun 2024 02:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C18C2594;
+	Wed, 19 Jun 2024 05:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718765783; cv=none; b=PjrBPkpYaxXMlbb3wRkeGGSeUn/RAD4+B7xst7nU3rUAGtwJ8q+MRLoBqQ3pDn8evpGUFdcYhlWNlAGYX3Czhm/qtiJWje3z9IJZFaBfwvh0yFVfDtr/wJh1AXDIFYfC3limvyNTwPDtvj8p/1iO9XjocjeJvQe2OCgNYIo9gJE=
+	t=1718773432; cv=none; b=aQdPVkEDBhOLOGwlgBz3+oTLIBOMzUAurE3dtfVsCdBZOoOA6FWfQ03FRvcXJeuRL2HXacooVRJumHCPthSFpp++UfQ+bUD0rxYb5yStaG6fFrZfUJBpiHJjLN6heqMffkkT7N3G2PUkQJpmmFri4/VXR8EXmRkXAbalhnoTOvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718765783; c=relaxed/simple;
-	bh=ek0iCBSuhwxmBUkXZ25YiD2CARKWMEhFftoQUiEh56g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RWBDzTYRVmGhz2B5kjkI34HcUILhp0hF3YZRO+hqRoU2MFFoL7zw6AYlNM7bQoHfC4sUYu74Y8SC4p0dl4HFePoSvU9bEpmAM1AbcH+iMpe6udT52qygJ5kk5iAgZi5AaUiHLg7Yp4PAsdP1wTdJXqYDngwRlyaI4fJfumWwQz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UT/gw0A3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8734CC4AF1A;
-	Wed, 19 Jun 2024 02:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718765783;
-	bh=ek0iCBSuhwxmBUkXZ25YiD2CARKWMEhFftoQUiEh56g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UT/gw0A3HcImMJcHlTQ2ZZqgOsEsflFsqVnXwCQpfwuiqId2yQP+E8ZbWcOGetSkR
-	 y2prm+pSJq5IzTsv8hQ94PZBPAhgkCxrCkIEZg2e3dYKajcdZoyuWPQ+YxlqmHGy1V
-	 j3h8zmG8gE+poDpeKy4dK740orZ8RHIDEBjz/XAcJlFYek4Zl0oNTIYnnCKoblhNUs
-	 yrj5Nuc/XsD77KTxLprBhMr2A77PtU4CH21REEauAlDDuEWybVNiu65ZnZwmNC64f6
-	 YRqKxyD7Q8yFhy0VTKOjmGybh9hv5MJalO/UAUjkFRWb3of0q4eyFVsYxnBFiZnDOH
-	 UlsHNkgjQDHfw==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 6/6] selftests/bpf: Use start_server_str in test_tcp_check_syncookie_user
-Date: Wed, 19 Jun 2024 10:51:11 +0800
-Message-ID: <898be0e7459a8d408638157f41e43767d86f9077.1718765124.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1718765123.git.tanggeliang@kylinos.cn>
-References: <cover.1718765123.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1718773432; c=relaxed/simple;
+	bh=3Bzur2hClK4e7WFVRaL3cl+GMxCS9B93/1MBxx+s4po=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QfkuQXURBAOTNlGqKNBZG9oGsL7wqoKtwpsXE+Ms3Uara9O+AWRaQwLaeLVfx5wmuDZXZMJ5ctny8IijtHRLsb7h1VsTDFBCzwK5FwnG3jSM32gxQvC1i8QoSCl1izjcuHK80WJO5++7JTX4MEKcOS7fEUientD2CrwRggcRx/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=dbwi9B83; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2PzFtr15; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=dbwi9B83; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2PzFtr15; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DA8081F7CC;
+	Wed, 19 Jun 2024 05:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718773428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XdNAJea0S6CPZeM4xRERRTfOhFTKjQqO+lH0ABKDivM=;
+	b=dbwi9B83Ru9C8eTWGFvA0DybmcDpwG24WK/4NmvD9bP0ODDbFpvGusi3DecdoISJND7sdp
+	xhgnwbLJ8M7X10mfYO4jgZEP5T/uj4aJpTHGxCNHYHtTFuUdY58YY8ZLOikDqJHXgyLfmW
+	/W4xHUpgZ6TZ6k0IylMrkHuJOfXbEgo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718773428;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XdNAJea0S6CPZeM4xRERRTfOhFTKjQqO+lH0ABKDivM=;
+	b=2PzFtr15ZIkAPObLlVVbQ7Ny3pni/8Nx45a2yhcqaQ4w25hWk67ysDnxl2kWnArHoUY8l2
+	f2WROdLl+yTPjGDQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1718773428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XdNAJea0S6CPZeM4xRERRTfOhFTKjQqO+lH0ABKDivM=;
+	b=dbwi9B83Ru9C8eTWGFvA0DybmcDpwG24WK/4NmvD9bP0ODDbFpvGusi3DecdoISJND7sdp
+	xhgnwbLJ8M7X10mfYO4jgZEP5T/uj4aJpTHGxCNHYHtTFuUdY58YY8ZLOikDqJHXgyLfmW
+	/W4xHUpgZ6TZ6k0IylMrkHuJOfXbEgo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1718773428;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XdNAJea0S6CPZeM4xRERRTfOhFTKjQqO+lH0ABKDivM=;
+	b=2PzFtr15ZIkAPObLlVVbQ7Ny3pni/8Nx45a2yhcqaQ4w25hWk67ysDnxl2kWnArHoUY8l2
+	f2WROdLl+yTPjGDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 17F5113AAA;
+	Wed, 19 Jun 2024 05:03:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id PZa/ArRmcmZwYQAAD6G6ig
+	(envelope-from <osalvador@suse.de>); Wed, 19 Jun 2024 05:03:48 +0000
+Date: Wed, 19 Jun 2024 07:03:46 +0200
+From: Oscar Salvador <osalvador@suse.de>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com,
+	ioworker0@gmail.com, muchun.song@linux.dev,
+	akpm@linux-foundation.org, shuah@kernel.org, corbet@lwn.net,
+	rientjes@google.com, duenwen@google.com, fvdl@google.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] mm/memory-failure: userspace controls
+ soft-offlining pages
+Message-ID: <ZnJmsqvJz63imq3O@localhost.localdomain>
+References: <20240617170545.3820912-1-jiaqiyan@google.com>
+ <20240617170545.3820912-2-jiaqiyan@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617170545.3820912-2-jiaqiyan@google.com>
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,huawei.com,oracle.com,linux.dev,linux-foundation.org,kernel.org,lwn.net,google.com,kvack.org,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Mon, Jun 17, 2024 at 05:05:43PM +0000, Jiaqi Yan wrote:
+> - * Returns 0 on success
+> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event
+> + * Returns 0 on success,
+> + *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
+> + *         -EOPNOTSUPP if disabled by /proc/sys/vm/enable_soft_offline,
+>   *         < 0 otherwise negated errno.
+>   *
+>   * Soft offline a page, by migration or invalidation,
+> @@ -2783,6 +2795,12 @@ int soft_offline_page(unsigned long pfn, int flags)
+>  		return -EIO;
+>  	}
+>  
+> +	if (!sysctl_enable_soft_offline) {
+> +		pr_info("%#lx: OS-wide disabled\n", pfn);
+> +		put_ref_page(pfn, flags);
+> +		return -EOPNOTSUPP;
+> +	}
 
-Since start_server_str() is added now, it can be used in script
-test_tcp_check_syncookie_user.c instead of start_server_addr() to
-simplify the code.
+We should not be doing anything if soft_offline is disabled, so this check should
+be placed upfront, at the very beginning of the function.
+Then you can remove the 'put_ref_page' call.
+ 
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../bpf/test_tcp_check_syncookie_user.c       | 29 ++-----------------
- 1 file changed, 3 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index aebc58c24dc5..3844f9b8232a 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -156,10 +156,6 @@ static int v6only_false(int fd, void *opts)
- int main(int argc, char **argv)
- {
- 	struct network_helper_opts opts = { 0 };
--	struct sockaddr_in addr4;
--	struct sockaddr_in6 addr6;
--	struct sockaddr_in addr4dual;
--	struct sockaddr_in6 addr6dual;
- 	int server = -1;
- 	int server_v6 = -1;
- 	int server_dual = -1;
-@@ -181,36 +177,17 @@ int main(int argc, char **argv)
- 		goto err;
- 	}
- 
--	memset(&addr4, 0, sizeof(addr4));
--	addr4.sin_family = AF_INET;
--	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
--	addr4.sin_port = 0;
--	memcpy(&addr4dual, &addr4, sizeof(addr4dual));
--
--	memset(&addr6, 0, sizeof(addr6));
--	addr6.sin6_family = AF_INET6;
--	addr6.sin6_addr = in6addr_loopback;
--	addr6.sin6_port = 0;
--
--	memset(&addr6dual, 0, sizeof(addr6dual));
--	addr6dual.sin6_family = AF_INET6;
--	addr6dual.sin6_addr = in6addr_any;
--	addr6dual.sin6_port = 0;
--
--	server = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr4,
--				   sizeof(addr4), NULL);
-+	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
- 	if (server == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_true;
--	server_v6 = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6,
--				      sizeof(addr6), &opts);
-+	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
- 	if (server_v6 == -1)
- 		goto err;
- 
- 	opts.post_socket_cb = v6only_false;
--	server_dual = start_server_addr(SOCK_STREAM, (struct sockaddr_storage *)&addr6dual,
--					sizeof(addr6dual), &opts);
-+	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
- 	if (server_dual == -1)
- 		goto err;
- 
 -- 
-2.43.0
-
+Oscar Salvador
+SUSE Labs
 
