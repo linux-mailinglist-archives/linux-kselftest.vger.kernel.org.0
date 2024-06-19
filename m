@@ -1,117 +1,160 @@
-Return-Path: <linux-kselftest+bounces-12194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73FB190E186
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 04:08:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEC0490E18F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 04:15:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 149952833EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:08:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 195381C2256F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1ED214277;
-	Wed, 19 Jun 2024 02:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B783A315BA;
+	Wed, 19 Jun 2024 02:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="0rLrk4vX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D6BE541;
-	Wed, 19 Jun 2024 02:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5DC208AD
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 02:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718762878; cv=none; b=uJQ9RjntckK/Iqm49+FNGmVlq9o7BslsPMa7pHS/fmKBNZ82MknMXioKCXuuR4XMMXhpIHdZF3DU8/Iz1KMZ+MFGEmayMtSZArYNMHZns+sxd0doo4STD8jQqevyenyV13w5CgfHpmO6MR5gDCjE0Z0PHms3tbTC3hZJEiiugLk=
+	t=1718763335; cv=none; b=mUs/IZ3ngADuJSO4AhAnbFRsrd0ubprtxdn/s4nzv3HDXGvMT+63yzAugYJ/kvgpg4tgU0kIr69Y1AR3eLDsveNPYMQqYuexnjbhvJAfNCfxA35/H9Hx7tgB9b29prwxJOqfovc1kqDGOUCJkBoXNyJX4pFvKULywL1jWTLzxLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718762878; c=relaxed/simple;
-	bh=meFezo5W5aHSV7AeLtOxr2/C/HpnBtJlUo16/5qvthw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zuwu7d8uSIm6vZO/9wUQ+/b8q4byt8xLTOa8RvXwg2ORgKW8nqfOHPxriCybssIA+yDarIGK49ZpSEnADqR3PQ4XV8jJK2nbXVxjLH1tmjZGbnjV3/i1gHhCRqzgp8mOkVioCRwZv7lKt+J1xDFCR+AJPN2akdjrNazLz9xVSwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from ThinkPad-T480s.. (unknown [121.237.44.152])
-	by APP-05 (Coremail) with SMTP id zQCowACnr+fFO3Jmjn6bEQ--.46102S2;
-	Wed, 19 Jun 2024 10:00:38 +0800 (CST)
-From: zhouquan@iscas.ac.cn
-To: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: oleg@redhat.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	andy.chiu@sifive.com,
-	shuah@kernel.org,
-	charlie@rivosinc.com,
-	zhouquan@iscas.ac.cn
-Subject: [RFC PATCH 0/2] riscv: Expose orig_a0 to userspace for ptrace to set the actual a0
-Date: Wed, 19 Jun 2024 10:00:37 +0800
-Message-Id: <cover.1718693532.git.zhouquan@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1718763335; c=relaxed/simple;
+	bh=Z/usW02Fa7jvlE9kha+9hRHNb4cobtrNB8H32qyRp04=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=eJSa4zePgIqKm/sdkSMyCNerlvJgrlSHS8IoxrL/RhzRScD8UkIdtaUPKkqeAQ2kWhMdc3pxq/gdNfu3lkXsc/TJnUrx/EEjncDo5WxZ7aQ9ajamZ2Bp6Vgx5aNC7C9yNs3r0uD+InV+Ab/nCEkh9gn3hxCWwDiVUvjq9PuzdY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=0rLrk4vX; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-70627716174so728869b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 19:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1718763333; x=1719368133; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CD7HVDZjyxLSMSGkfMKDEVD4RaGNItgTwmjuudrTbeM=;
+        b=0rLrk4vX33HxSDLeCtDhXpQpR3c7Z7+WpOywDjdlCF8l+ZSTKM1BguM/OfzJjn0HMj
+         rmp7Y3gGeOXE5eeazAKGXMprjvvobZcdu3ieJiAXbtwy9lGX7ypQRe4bJWe+s5WuEexK
+         NRDB9OtA3NWR1m0anW+WOQcp2zXEan7G/VJYMmP5AzA1aLn1VrGc0VAQvTWGD9E/Yipg
+         i4Cb9CrJjccKXFlO4CIrNnG4e2UzKNQPo4rM/m4X7t0+99ALymKguZQbnkft3Qug04wS
+         xKwskII3Klua5o5maPtqQdxKK4QF1PXr3ePY6XIeZQl1B/yWdvfWkUSPbktW24O3cAQh
+         tnyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718763333; x=1719368133;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CD7HVDZjyxLSMSGkfMKDEVD4RaGNItgTwmjuudrTbeM=;
+        b=unCKw/R7SuwsvUv05VulV0B3jmy0J1GkBNXnB6CN3zjStlncD52u4BCsgExR7XuPBT
+         fywgiXYyKOx0IFMc/8ElMzm9s0mUxj38IKkaKrt1VviaNKN5+2Xzj9RWQ7fEisRLrFx9
+         RwIgItW8M4sL+N7GZmDEA3q6LDD58uWj3bvTCYQsWOjJ4SdrAplOqinx7AyumoIJSTt4
+         HBxrJhK4xvkISXQcJ/d9tClBS51+SPqEfhvQ7S8/b+KM2P919IDGlAvGPjTmWoGC1NZt
+         vpm7KocpuSd3fRaKMY9IaVPX01rKrXiw4W9DwJjwxEmrDw1bV+YDoNoT5Rqmg6SYcFAD
+         69Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCXWreLshjjesCIoUwfYEnWRFEEOmW9jCCGNi8lbOeXpEN8bBm9+CIn1VtaUPsuIISe1Sk7+lalKrspKtGTOd1Wz/FZlLEd5SaEQyFKYTqRI
+X-Gm-Message-State: AOJu0YziHpLPCIPTFTu/H9XoioFVx1qGry+pRwOfRhxZNo6QWnO3U2vX
+	WIlIm3or1BwCUJCTb7eS/khUnw/x7iYkxib8/R4cGdm93+hPyjZ5ztS1PFNOAXY=
+X-Google-Smtp-Source: AGHT+IGLdo/pjdV/98xZekzFkV0ayFoFNj2RgRKJBOL/W4c1oO8ih8cTvfp78g03jTHU+fRB96fegg==
+X-Received: by 2002:aa7:8d0f:0:b0:705:dd44:ae8a with SMTP id d2e1a72fcca58-70629c146cdmr1342388b3a.7.1718763333534;
+        Tue, 18 Jun 2024 19:15:33 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ef260437sm5827989b3a.85.2024.06.18.19.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 19:15:31 -0700 (PDT)
+Message-ID: <66723f43.050a0220.9a45a.f107@mx.google.com>
+Date: Tue, 18 Jun 2024 19:15:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACnr+fFO3Jmjn6bEQ--.46102S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43Ar1fXryUtFW7Zw4rGrg_yoW8Cw4rpa
-	95KwnYk3W8JFy2ya1xXw4UXr4rAa4fWrW3G3WxZry3ZrW8tryvqr4xKa1Yqr93CayxWryf
-	ZF1Ikr15C3WUZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
-	1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-	628vn2kIc2xKxwAKzVCY07xG64k0F24lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMx
-	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjRpBDUUUUU==
-X-CM-SenderInfo: 52kr31xxdqqxpvfd2hldfou0/1tbiCRANBmZyBxOZHgAAsV
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-19-g15a783a493b02
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-seccomp: 5 runs,
+ 3 regressions (v6.10-rc1-19-g15a783a493b02)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-From: Quan Zhou <zhouquan@iscas.ac.cn>
+kselftest/next kselftest-seccomp: 5 runs, 3 regressions (v6.10-rc1-19-g15a7=
+83a493b02)
 
-Due to the path that modifies a0 in syscall_enter_from_user_mode before the
-actual execution of syscall_handler [1], the kernel currently saves a0 to
-orig_a0 at the entry point of do_trap_ecall_u as an original copy of a0.
-Once the syscall is interrupted and later resumed, the restarted syscall
-will use orig_a0 to continue execution.
+Regressions Summary
+-------------------
 
-The above rules generally apply except for ptrace(PTRACE_SETREGSET,),
-where the kernel will ignore the tracer's setting of tracee/a0 and
-will restart with the tracee's original a0 value. For the current
-kernel implementation of ptrace, projects like CRIU/Proot will
-encounter issues where the a0 setting becomes ineffective when
-performing ptrace(PTRACE_{SET/GET}REGSET,).
-
-Here is a suggested solution, expose orig_a0 to userspace so that ptrace
-can choose whether to set orig_a0 based on the actual scenario. In fact,
-x86/orig_eax and loongArch/orig_a0 have adopted similar solutions.
-
-[1] link: https://lore.kernel.org/lkml/20230403-crisping-animosity-04ed8a45c625@spud/T/
-
-Quan Zhou (2):
-  riscv: Expose orig_a0 in the user_regs_struct structure
-  riscv: selftests: Add a ptrace test to check a0 of restarted syscall
-
- arch/riscv/include/asm/ptrace.h               |   4 +-
- arch/riscv/include/uapi/asm/ptrace.h          |   2 +
- tools/testing/selftests/riscv/Makefile        |   2 +-
- tools/testing/selftests/riscv/abi/.gitignore  |   1 +
- tools/testing/selftests/riscv/abi/Makefile    |  12 ++
- .../riscv/abi/ptrace_restart_syscall.c        | 148 ++++++++++++++++++
- 6 files changed, 166 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/riscv/abi/.gitignore
- create mode 100644 tools/testing/selftests/riscv/abi/Makefile
- create mode 100644 tools/testing/selftests/riscv/abi/ptrace_restart_syscall.c
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 3          =
 
 
-base-commit: 6ba59ff4227927d3a8530fc2973b80e94b54d58f
--- 
-2.34.1
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+0-rc1-19-g15a783a493b02/plan/kselftest-seccomp/
 
+  Test:     kselftest-seccomp
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.10-rc1-19-g15a783a493b02
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      15a783a493b021975f3dd12bdd95a7080df0e8cf =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                  | regressions
+---------------------------+-------+---------------+----------+------------=
+------------------+------------
+mt8192-asurada-spherion-r0 | arm64 | lab-collabora | gcc-10   | defconfig+k=
+se...4-chromebook | 3          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6672342d7c55b478d77e706d
+
+  Results:     104 PASS, 3 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.10-rc1-19-g1=
+5a783a493b02/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
+a/kselftest-seccomp-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.10-rc1-19-g1=
+5a783a493b02/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabor=
+a/kselftest-seccomp-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-seccomp.seccomp_seccomp_benchmark: https://kernelci.org/test/=
+case/id/6672342d7c55b478d77e706f
+        new failure (last pass: v6.10-rc1-2-g64f5bc57b24e) =
+
+
+  * kselftest-seccomp.seccomp_seccomp_benchmark_entry_2_bitmapped: https://=
+kernelci.org/test/case/id/6672342d7c55b478d77e7071
+        new failure (last pass: v6.10-rc1-2-g64f5bc57b24e) =
+
+
+  * kselftest-seccomp.seccomp_seccomp_benchmark_per-filter_last_2_diff_per-=
+filter_filters_4: https://kernelci.org/test/case/id/6672342d7c55b478d77e7074
+        new failure (last pass: v6.10-rc1-2-g64f5bc57b24e) =
+
+ =20
 
