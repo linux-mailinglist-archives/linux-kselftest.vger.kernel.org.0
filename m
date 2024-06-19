@@ -1,117 +1,129 @@
-Return-Path: <linux-kselftest+bounces-12211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03FE390E2A9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 07:27:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61ECC90E345
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 08:18:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFE8C1F24053
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 05:27:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F164C2824B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 06:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BDBD55887;
-	Wed, 19 Jun 2024 05:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0ADF6F2FE;
+	Wed, 19 Jun 2024 06:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3xvDjMUi"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="Wlw7pjbC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679DA28EC
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 05:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C713073455
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 06:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718774834; cv=none; b=OZ2mSCdv5ym4raYnQf9S5S8m17LE/I7SPqpxI/doONbzgZSup30LkLz1gulfGba/CjQxncaKwfoJkCKFh8wSnWMEkL4A6Mo3ZcjB3Lwkg0qdWsd1WcZw6wk5iHoEtePyOAcItH5SJ0L8s/ruuJBU8sn6nHZKDyew0bLif6uleV0=
+	t=1718777877; cv=none; b=IMa2STH/RTHlfD4PlKLAs7cC73DH/Yz1ZVSUe8138TWvyv/5zHAuBX8hijedDfT5w+4krZYP4nak2+pKrkhuWuR6lNIHXrTHs9q4xRpzvBRvL0A1YkFcC1fozqsn2+99LUNbRmGhzL0kcEJ4sjcjag87jI19TsW4ev97W4tsVkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718774834; c=relaxed/simple;
-	bh=TaldpaFdVU9VKO80EHQfPadmZ9ehSii7vDuV8VjyxKI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Or3vhlk7slOKXw8EYe2PqxsENJ174ySY5W8+H8vG75ldA8comIHH68GdUy4w98kUVtb1dKBn6nuXBVzKgXGCgMk5D+q18CYdDZwEgrkIts+BY3uqbdUeRPV4l8Am2QMqaoS/5CMHB7Z44exb1b4MD9VZ/JsXl385KOdlHDfLFLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3xvDjMUi; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42249a4f9e4so44274875e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 22:27:13 -0700 (PDT)
+	s=arc-20240116; t=1718777877; c=relaxed/simple;
+	bh=9JxSuB2e5zHpPnsceJPM2Z4u5/cle2vjrbTlQxjKR8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hzEObybfvWNbktf2QQGm9U/+k3nv7uIm127kj9ih0iMDVppYiNQAXfvg8VRs2EX57Iz4W+SrSw/pNTlgy6r7uEW1+X1hYMcVEnPCYxNahj8pbXLYoh3LknEp7OsO0ew+2Cxapxq3HLD6Fy7EbQbbEkg/mNKmjeZ3MJZK5Ft22gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=Wlw7pjbC; arc=none smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-3627ef1fc07so974226f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 23:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718774832; x=1719379632; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UMKzlr4YMJj/i6AQp9On5aFVd7CtHU1kUwtqMK4CQp0=;
-        b=3xvDjMUigsR4c/Z4Ic5yt2d4G2yQYON2CtOE6OC2V6pEj5JfZdXq3RKbcUIUh/xuig
-         2H5jRq8/9irM1fJzA/VUpt32Q7YJALsKtYrngOEgQ33zKgk4x1LqbgjsInehC5RGvgV6
-         H3JJE+JtZqjxCm+vapN+9AKCnwj7neGxcudTxHZSNfLyuL1IiNpaoKWSYnohXfqtOOmd
-         0eSSk6h8G0bW2c0KVKggkSgaGj4QxKB7Xas+7OONcAdITCwy5gVDANI/8U3y6P7+rf/Z
-         ODsY4o+IEqWxL0Zvd++RG6HrTEInx2cPx8TeVBWkjX3PbyZTAzNOBpUK4xTBnX6Kthq9
-         DpdA==
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1718777873; x=1719382673; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q9tHSYcUn51SyAd1faMtIy/AKsEtmmYSS3K41DfIPoQ=;
+        b=Wlw7pjbC25lg0bmVjKrA8SBtXNXkYcR0krkBWzmfTv1qDTeciFtKglhRg9ZW6DOquY
+         IS16qPH3ZNEtw/T0FKSym+tQ3OY46h9wORjSkwVI53I0c6/2KinyMXqnlr+iRhKTpI9S
+         lWCQzxMPOs55SHx0odIu5fn0tfoeIxsNC62JKQE4qpo5Bl1rawxweg94K2sUxr5way2r
+         eUOKVAASeF8Hg5cVygTgz26nokM5ph65EDnafqqe98GPUAr/Ppldak/8RtsoU+CX9Gea
+         Q94nbAOfEk4XcJ6IvHPMk4MLzYh4i4nTdzo30m0ctGQnc6B4NmwPwOdq7o4aQjK3juWU
+         6HBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718774832; x=1719379632;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UMKzlr4YMJj/i6AQp9On5aFVd7CtHU1kUwtqMK4CQp0=;
-        b=JKqUz90mIan4u3lWOE+wYuPPWW0rEEW9VUvzYdqMxuySpkUbR2/rFCMnWXaX/jDVFt
-         qByOaNI9aBGScyTONp+TzbtsHnjCPS1BkrrAYSx8bF8cA1BQxv09B8L9tlqoXGOGjIfv
-         B631CqL1cOrK33CWhaMqFPT4K2r8ihARlxSFNYGFGQLD3F6qYkGKE+7fMQ3bFDE+I9YN
-         spg3UDazOJUgwGiOhNE45XLvGHq2SrQLEd5c5XkEju8LcPsUoFVjIr3Fgysg44hvJm//
-         rgWnfcI+55KItcSr5qC0TdR2WnNGUSFEDoIW407Z+mmCzhymc9xhB2nOrRhZ0klwHdAf
-         e2yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpsDcN6fUpCEqFwS17qCh4isPGDuXWgkRqpxMRGiV9w/DWtXZWB9GqR2qC43rysbxjF1g109qRHcx8tacMfTDgC/4V/Gtl2jOmfho+644q
-X-Gm-Message-State: AOJu0YxQ2I6q14re2X7OaSbOBLCdb/DNflAnszX0216uofEexpTJaMwW
-	Luv6FFt4mnNQ+esMr54SlKxxgM4PnPQz4FDUbEOd1ORTwcE3I9yMM4+RoElXlh6VHip6YDSK/c+
-	WLFHXKxtbO53vg/Br/6ILBFyVQmhB4fj9JDqB
-X-Google-Smtp-Source: AGHT+IFJQWZ+KHiN/+sHKwZP16by1QOEq1WGoR1DxEL2A3UFRInhIe7af0qptcWZ7wTRqX0VaIgipvW1b8Mme6mmrZQ=
-X-Received: by 2002:a5d:69c8:0:b0:35f:2635:5b61 with SMTP id
- ffacd0b85a97d-3631989352fmr1085996f8f.51.1718774831425; Tue, 18 Jun 2024
- 22:27:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718777873; x=1719382673;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q9tHSYcUn51SyAd1faMtIy/AKsEtmmYSS3K41DfIPoQ=;
+        b=AI/zWK3LnsBfmx0onKh5iK3Df/xaHrvr8DzvIkq89MvBzXsXOjzpNWSzQ5JfyvRpLx
+         4zvkeXulmuwMtIZOlal4oax+JF8Px7IFrqtooA/77s/Dg8IzG6onHKg/BTdvoJShNEAu
+         dZ9rUzsX5sK8H2pUI8ZgQoP7Rq17WpI/Du8cbum4QX4WHjTirzdNSjVBVPCjuNu7OZwt
+         Ky2LkG9O2rk5i4kRmFenZ9p3IuF1x8sj10lbqfg7ajZxWPqbX5ZV48WxpD2LxJgIRgsk
+         Q1Vz53uN4n6CwGNzlY0D2KP90kJBhX2yhJPmJO18/ZsX9nGyIPtDDeH3L0i9UtNwMjl0
+         G2Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrWC27jh6l6FETSMta6em4QRNW3oMRqzwSjRie5Wo759iLWGhyyvL5bqjpJaIrcJ/qAO7HfKEk3G4IN2WISvVvFvbd81r5u/jK/XAg7sGX
+X-Gm-Message-State: AOJu0Yyxks4kBwwqEXIhJo5ShcZBpWhqdEWeiHcdbuOZExkNDGMoPDTc
+	RiPcTFdO/mYh/L3W56SnglsN3+xUnsqLMpcJSsJSVJAU8gXUhfky31DEaWfTkgFy/mQG4qLx/GO
+	6WE+2og==
+X-Google-Smtp-Source: AGHT+IEdGqwuPmkL1V/kYBiEFfGbh6LP5DzFOB/llA59skIBzGQ4ntMUTADfLf03eLYt7oZOFgktEg==
+X-Received: by 2002:a5d:51ce:0:b0:362:f853:603c with SMTP id ffacd0b85a97d-36317c77507mr1035090f8f.32.1718777872719;
+        Tue, 18 Jun 2024 23:17:52 -0700 (PDT)
+Received: from localhost ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3608fb0b145sm9878962f8f.102.2024.06.18.23.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 23:17:52 -0700 (PDT)
+From: Jiri Pirko <jiri@resnulli.us>
+To: netdev@vger.kernel.org
+Cc: kuba@kernel.org,
+	matttbe@kernel.org,
+	mst@redhat.com,
+	jasowang@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	eperezma@redhat.com,
+	shuah@kernel.org,
+	petrm@nvidia.com,
+	pabeni@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	virtualization@lists.linux.dev
+Subject: [PATCH net] selftests: virtio_net: add forgotten config options
+Date: Wed, 19 Jun 2024 08:17:48 +0200
+Message-ID: <20240619061748.1869404-1-jiri@resnulli.us>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240617170545.3820912-1-jiaqiyan@google.com> <20240617170545.3820912-2-jiaqiyan@google.com>
- <ZnJmsqvJz63imq3O@localhost.localdomain> <ZnJo73kZk5EDxq0D@localhost.localdomain>
-In-Reply-To: <ZnJo73kZk5EDxq0D@localhost.localdomain>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Tue, 18 Jun 2024 22:26:59 -0700
-Message-ID: <CACw3F52X3BUCeB7OUhbEzEHy7y2vdNO60pybz2x9OdhyZOoStw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] mm/memory-failure: userspace controls
- soft-offlining pages
-To: Oscar Salvador <osalvador@suse.de>
-Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
-	ioworker0@gmail.com, muchun.song@linux.dev, akpm@linux-foundation.org, 
-	shuah@kernel.org, corbet@lwn.net, rientjes@google.com, duenwen@google.com, 
-	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 18, 2024 at 10:13=E2=80=AFPM Oscar Salvador <osalvador@suse.de>=
- wrote:
->
-> On Wed, Jun 19, 2024 at 07:03:46AM +0200, Oscar Salvador wrote:
-> > On Mon, Jun 17, 2024 at 05:05:43PM +0000, Jiaqi Yan wrote:
-> > > +   if (!sysctl_enable_soft_offline) {
-> > > +           pr_info("%#lx: OS-wide disabled\n", pfn);
-> > > +           put_ref_page(pfn, flags);
-> > > +           return -EOPNOTSUPP;
-> > > +   }
-> >
-> > We should not be doing anything if soft_offline is disabled, so this ch=
-eck should
-> > be placed upfront, at the very beginning of the function.
-> > Then you can remove the 'put_ref_page' call.
->
-> Also, I would go for a pr_info_once here, as otherwise we can spam the lo=
-g quite
-> easy.
+From: Jiri Pirko <jiri@nvidia.com>
 
-Nice catch. I will do pr_info_once in v4.
+One may use tools/testing/selftests/drivers/net/virtio_net/config
+for example for vng build command like this one:
+$ vng -v -b -f tools/testing/selftests/drivers/net/virtio_net/config
 
->
-> --
-> Oscar Salvador
-> SUSE Labs
+In that case, the needed kernel config options are not turned on.
+Add the missed kernel config options.
+
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Closes: https://lore.kernel.org/netdev/20240617072614.75fe79e7@kernel.org/
+Reported-by: Matthieu Baerts <matttbe@kernel.org>
+Closes: https://lore.kernel.org/netdev/1a63f209-b1d4-4809-bc30-295a5cafa296@kernel.org/
+Fixes: ccfaed04db5e ("selftests: virtio_net: add initial tests")
+Signed-off-by: Jiri Pirko <jiri@nvidia.com>
+---
+ tools/testing/selftests/drivers/net/virtio_net/config | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/drivers/net/virtio_net/config b/tools/testing/selftests/drivers/net/virtio_net/config
+index f35de0542b60..040b600d52f1 100644
+--- a/tools/testing/selftests/drivers/net/virtio_net/config
++++ b/tools/testing/selftests/drivers/net/virtio_net/config
+@@ -1,2 +1,8 @@
+ CONFIG_VIRTIO_NET=y
+ CONFIG_VIRTIO_DEBUG=y
++CONFIG_NET_L3_MASTER_DEV=y
++CONFIG_IPV6_MULTIPLE_TABLES=y
++CONFIG_NET_VRF=m
++CONFIG_BPF_SYSCALL=y
++CONFIG_CGROUP_BPF=y
++CONFIG_IPV6=y
+-- 
+2.45.1
+
 
