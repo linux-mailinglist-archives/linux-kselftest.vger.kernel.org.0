@@ -1,137 +1,173 @@
-Return-Path: <linux-kselftest+bounces-12255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 444F590F398
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 18:05:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F120790F416
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 18:34:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B1E7B293C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 16:04:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D9E283755
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 16:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E829115EFBE;
-	Wed, 19 Jun 2024 15:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B311B1534E9;
+	Wed, 19 Jun 2024 16:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="w9bel0pK"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="SODf2MPX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415DF15EFAC;
-	Wed, 19 Jun 2024 15:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2316714F9EB
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 16:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718812584; cv=none; b=VCgQZFNsRFQ78QLAMYlBfDO/IKpIEGbnJViQMp+yOj3W1lcWdxJof50FEQU/mZQgKh/W7WysbquwOPra4mKmddswg5ImhTtHfX/PtGvx3kO+oZFvg46j5dfLB3zqzrxCPDp0/ijTuI1LnwlhfJoDV9GCbPVSch1w7rPF4eoZrDg=
+	t=1718814862; cv=none; b=leU5xj1uHMPzfKkFJQq7MbRlLyDCez0zE0mS4VOO4+r4PgXkIYf2BWal298Y3ZlYYWh3VBoGOqrXg7B1m22i92Hz0exUVtD/X5GitIoOv7EkDpmTYoei5tOMgmTaOuyepF3lM0mxm0DtlkwcGVmW1qp+4bsO49Q0eJRnA5q40ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718812584; c=relaxed/simple;
-	bh=qVFiV6fvIAdt+msPlYj4zF9r0yL04OzXmen0AIs9Bek=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QknAv92n/EGWRNilvRJUBtN3gHUd3/S4UzoTn52QIo1ijnq56+nOsBL9GcjO5eFLxL0B+3B7TixrDrwjfzOOsSad48VZ5Ohxy04TFV+Ks+l2my3EleCnCebJ6VCAKs2XoPMOWVbAaBEXkDyAZJDISK9G7mvMIlpBjxOQzXaNf0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=w9bel0pK; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718812581;
-	bh=qVFiV6fvIAdt+msPlYj4zF9r0yL04OzXmen0AIs9Bek=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=w9bel0pKAw/GWTTQsgU/KgHWCmR+LN56PnoIgWo4Tr0ruwOU5RTp9cDdWRmdXuYZf
-	 kc6KRbxT/JvDKGeFUtMS3vrdZy9Fzni5nqHmIpx8+prA2pV0x3+7qzDlll4ipB79VR
-	 w5peLdXbpPO55P22rmOldRmfLg0F6mFGjRy1pL7CNvJ206He4OKYAqIICDvXv6fXVr
-	 IVqrictBwtAXrnS/HfLoqu/Jz9iPwDb4aqaOvWLxuTiHr+fzv8+eKsSZZ/O0BPQ1qZ
-	 zUVCbx32SFRFDQFLs4S6klnagb5eaMb/BY0VDzcloWTzesmW+nrk6PpVL7UrhJxyOb
-	 vP3WkOvnz+aTg==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1198E37821A9;
-	Wed, 19 Jun 2024 15:56:21 +0000 (UTC)
-From: Laura Nao <laura.nao@collabora.com>
-To: tim.bird@sony.com
-Cc: kernelci@lists.linux.dev,
-	laura.nao@collabora.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: RE: Testing Quality Call notes - 2024-06-13
-Date: Wed, 19 Jun 2024 17:56:56 +0200
-Message-Id: <20240619155656.49768-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <SA3PR13MB637241E8BDBDDD625D4F5129FDCE2@SA3PR13MB6372.namprd13.prod.outlook.com>
-References: <SA3PR13MB637241E8BDBDDD625D4F5129FDCE2@SA3PR13MB6372.namprd13.prod.outlook.com>
+	s=arc-20240116; t=1718814862; c=relaxed/simple;
+	bh=sWXfe3iROAv5nunMV/T4SIqsE90qqOYqjalWoYIQLNg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qNxiLOqevHKbV+xpCEUjtoUhxjGNgQBEDgx587una9HVfNdxzgRQzavboAAKlDYOjgdoH8Jpg6Ts8rnjACqVYBBD4ShKcu1BA5a9Nht+BU2YnTj8yhUsFzVMMMMFe6jXg10xv2n5wkpytLFtNGmwU+2v+RPZ8lqmOxBb/DNlMLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=SODf2MPX; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-63258caaa91so51614057b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 09:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1718814860; x=1719419660; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eTFDXI3lmE89xsXWjsBu8Z87GpVx8y3WY9kndQ0G3Gg=;
+        b=SODf2MPXUD/inhB9ZtlYlD84hfxYzjhXeiikobWzaM1pcA77EfeDJmsH9zNNRBorOA
+         D9c0VQUciNOCB76tfq1s13vwYnnZ3f+akptgtsehgEgReJj6k8Ikl6VaaJpFSxZgM5Mg
+         Q1wkeg3JatlgRzSUDRAxEVemsSh7IvC7cuRh+ghj/2WyCid2KD9oubusgrm0ulSEzZ7v
+         KkGV3xHoVjWtuQsYQd4YcL5CciyIFTwGsKk7Vot+J/cRaSb2rNNxHj2OBc74/k5h4AC4
+         jKbakHk1uvegVzJorWizxtmA/st3BoFe4NFgOkBY/dz5ocOTZPYnXaVOn2Jw8EdpCxOD
+         IFZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718814860; x=1719419660;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eTFDXI3lmE89xsXWjsBu8Z87GpVx8y3WY9kndQ0G3Gg=;
+        b=Qm/pl9UsxY4bLW1M6jovd64tD8jgozYVxraD7LwZdUxpbDDFRDgDTq+MOnEO89C9AC
+         AMnQYhtgzRcxy7T3VjsxD3DyFwSUEY2JVdl0J1IAwOx7KjW+rsBrEnhkQacArRTSaCgb
+         K/Cvn8Y7UeIGsCj4APGnCwhZpwEOXJo+edvgukLc5yJDlhv/S8c2iSkpmLL0rE+qfnPj
+         Q9uWIPkd7f1IREmpIgOmJnTpnAQXG9w91wTMpDKNZnsdLZ6C5sSJ6Xl7LpjOY0P+mblz
+         HYp83C3k4BHCu83MGlTJ6Ar3XhHZQpqBJl/mRHDKpXugJVlSawyCvbHnslBedrtaTels
+         9Jqw==
+X-Forwarded-Encrypted: i=1; AJvYcCWNo9KQX+zrtfI+RR6BKaQ0WUaGTfAqw7qW2RFAfaPCzETKSBrP6FNiHw8B42S/lN4d2ksyHfxAEfhMvW0bgDM6UPM5xHeoscXsUDvUGRO7
+X-Gm-Message-State: AOJu0Yy1T1yuzlixvyVKKthNRe5NeghMfsgj5knGM2ZE71nIuNW/vXt5
+	1c22+X/lmVyCvhAihTdNjbTf4AUKHJ+rQaIOcq2rskeU4qUOHIZNzdg7D0Mp9qhlxSYLfzViPxm
+	2vH+YQWBTX54e4oLotSIbG3VfRWFGxqnswAd3
+X-Google-Smtp-Source: AGHT+IHu6b6GzxTUmoaKY8FCnkWOQQ5arRuKCg2OzKx7h+qxUq7WqX1BaUl/DWaLG0aZ1MBJukslwKHs4gsEbHoMAg4=
+X-Received: by 2002:a05:690c:80f:b0:617:fe2a:a0aa with SMTP id
+ 00721157ae682-63a8d736f33mr33957447b3.6.1718814860138; Wed, 19 Jun 2024
+ 09:34:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
+ <CAHC9VhTs8p1nTUXXea2JmF0FCEU6w39gwQRMtwACqM=+EBj1jw@mail.gmail.com>
+ <7cf03a6ba8dbf212623aab2dea3dac39482e8695.camel@huaweicloud.com>
+ <CAHC9VhSCw6RweTs6whAu4v6t4n7gxUWJtjmzY-UXrdzW0H+YJA@mail.gmail.com> <520d2dc2ff0091335a280a877fa9eb004af14309.camel@huaweicloud.com>
+In-Reply-To: <520d2dc2ff0091335a280a877fa9eb004af14309.camel@huaweicloud.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 19 Jun 2024 12:34:09 -0400
+Message-ID: <CAHC9VhRD1kBwqtkF+_cxCUCeNPp+0PAiNP-rG06me6gRQyYcyg@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: corbet@lwn.net, jmorris@namei.org, serge@hallyn.com, 
+	akpm@linux-foundation.org, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
+	alexandre.torgue@foss.st.com, mic@digikod.net, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
+	linux-integrity@vger.kernel.org, wufan@linux.microsoft.com, 
+	pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org, 
+	pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, jikos@kernel.org, 
+	mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de, 
+	kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tim,
+On Wed, Jun 19, 2024 at 11:55=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Wed, 2024-06-19 at 11:49 -0400, Paul Moore wrote:
+> > On Wed, Jun 19, 2024 at 3:59=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Tue, 2024-06-18 at 19:20 -0400, Paul Moore wrote:
+> > > > On Mon, Apr 15, 2024 at 10:25=E2=80=AFAM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > >
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > Integrity detection and protection has long been a desirable feat=
+ure, to
+> > > > > reach a large user base and mitigate the risk of flaws in the sof=
+tware
+> > > > > and attacks.
+> > > > >
+> > > > > However, while solutions exist, they struggle to reach the large =
+user
+> > > > > base, due to requiring higher than desired constraints on perform=
+ance,
+> > > > > flexibility and configurability, that only security conscious peo=
+ple are
+> > > > > willing to accept.
+> > > > >
+> > > > > This is where the new digest_cache LSM comes into play, it offers
+> > > > > additional support for new and existing integrity solutions, to m=
+ake
+> > > > > them faster and easier to deploy.
+> > > > >
+> > > > > The full documentation with the motivation and the solution detai=
+ls can be
+> > > > > found in patch 14.
+> > > > >
+> > > > > The IMA integration patch set will be introduced separately. Also=
+ a PoC
+> > > > > based on the current version of IPE can be provided.
+> > > >
+> > > > I'm not sure we want to implement a cache as a LSM.  I'm sure it wo=
+uld
+> > > > work, but historically LSMs have provided some form of access contr=
+ol,
+> > > > measurement, or other traditional security service.  A digest cache=
+,
+> > > > while potentially useful for a variety of security related
+> > > > applications, is not a security service by itself, it is simply a f=
+ile
+> > > > digest storage mechanism.
+> > >
+> > > Uhm, currently the digest_cache LSM is heavily based on the LSM
+> > > infrastructure:
+> >
+> > I understand that, but as I said previously, I don't believe that we
+> > want to support a LSM which exists solely to provide a file digest
+> > cache.  LSMs should be based around the idea of some type of access
+> > control, security monitoring, etc.
+> >
+> > Including a file digest cache in IMA, or implementing it as a
+> > standalone piece of kernel functionality, are still options.  If you
+> > want to pursue this, I would suggest that including the digest cache
+> > as part of IMA would be the easier of the two options; if it proves to
+> > be generally useful outside of IMA, it can always be abstracted out to
+> > a general kernel module/subsystem.
+>
+> Ok. I thought about IPE and eBPF as potential users. But if you think
+> that adding as part of IMA would be easier, I could try to pursue that.
 
-On 6/18/24 19:29, Bird, Tim wrote:
->> -----Original Message-----
->> From: Laura Nao <laura.nao@collabora.com>
->>
->> KernelCI is hosting a bi-weekly call on Thursday to discuss improvements
->> to existing upstream tests, the development of new tests to increase
->> kernel testing coverage, and the enablement of these tests in KernelCI.
-> 
-> This is interesting.  Is it possible for me to join this bi-weekly call?
-> If so, can you send me info on how to join?
-> 
+It isn't clear to me how this would interact with IPE and/or eBPF, but
+if you believe there is value there I would encourage you to work with
+those subsystem maintainers.  If the consensus is that a general file
+digest cache is useful then you should pursue the digest cache as a
+kernel subsystem, just not a LSM.
 
-We have sent an invitation to the meeting, let us know if you 
-didn't receive it and we'll resend it. Please note that the meeting is 
-currently scheduled for 13:00 UTC, which unfortunately is not very 
-PDT-friendly. 
-
->> In recent months, we at Collabora have focused on various kernel areas,
->> assessing the tests already available upstream and contributing patches
->> to make them easily runnable in CIs.
->>
-> ...
-> 
->>
->> *Boot time test*
->>
->> - Investigating possibility of adding new test upstream to measure the
->>    kernel boot time and detect regressions
->> - Need to investigate available interfaces for reporting boot/probe times
->> - Multiple measurement points may be necessary, need to establish a clear
->>    definition of "boot" first
->> - Influenced by defconfig; testing with various kernel configurations
->>    recommended
-> 
-> I'm extremely interested in this.  I was planning on creating some boot time instrumentation
-> and a boot time test, this summer (before LPC in September).  I would be
-> thrilled to talk to other developers about this (either by e-mail, in your bi-weekly
-> call, or at Plumbers) before I get too far into it.
-> 
-
-That's great to hear! We're just beginning our investigation by reviewing 
-the available interfaces and assessing how to use them in a potential 
-in-tree test. We would be happy to discuss this further during the 
-testing quality meeting on June 27th, or sooner via email. We'll reach 
-out once we have some ideas to propose and discuss.
-
-> If others are working on measuring, testing,  or reducing boot time, please
-> consider joining the "Embedded and IOT" micro-conference at Plumbers in September.
-> 
-> One of the chief topics of that micro-conference will be boot time.  Please contact me
-> and I can let you know instructions for submitting a topic proposal for the event.
-> (Or just submit something at: https://lpc.events/event/18/abstracts/)
-> The instrumentation and testing of boot time would be a great topic for the
-> micro-conference!!
-> 
->   -- Tim
-> 
-
-Thanks for the heads up, we'll keep this in mind!
-
-Best,
-
-Laura
-
+--=20
+paul-moore.com
 
