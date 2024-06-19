@@ -1,170 +1,173 @@
-Return-Path: <linux-kselftest+bounces-12188-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAADB90E080
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:12:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 464B490E0C5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 02:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD9081C2118C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 00:12:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C290D2833F1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2024 00:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B715337B;
-	Wed, 19 Jun 2024 00:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D4A15CE;
+	Wed, 19 Jun 2024 00:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aUoeFcz7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I1r9twxW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC08368;
-	Wed, 19 Jun 2024 00:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E93B1C3E
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 00:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718755918; cv=none; b=SqAgcU+yjcuzFTiI7DPRyaKc+n44/nFfiNsWZVqlm/AswkNOfLRjM92ycfUyuJlLqB8AjD9QuabzYUkff5tYjx8C0r9IFUs+RF9GYDGMudX3Q2e1R9F9Ot9OgVIdNm2Ju9jvO0Vu48lnbriEi/dUQF5GSyuZUc5PutLuAjK1KeQ=
+	t=1718756531; cv=none; b=TKIet/Q6PbeiGfPmES3IYQA9lNQ5CRSsNDXjJq+JNUk+YUTcsIIywivbOX1KrvLDYXeS1eXzC3Qy75ydH5VBGlKXWE90z+e0gpad4UgpZEO0K2/Le+QlmzTgaU9XA+6JNb5UalrMekQi26BxiA93o2HLGdMu12TbeUobbpMN7ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718755918; c=relaxed/simple;
-	bh=LWcZ51UxFIRAL/r9A4s2Tdn7a2it7Yp0C+WI7OUTKg8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YUU2RtJDAvfOrqKzjrx137PEEX4EcFWSV9HBPVkoBj2Zezh8g2I+2vJqXoTDcMU6yiEoD7iR/BblurSH4fWMWUd2a3i4d0ooVihV1QJSUKgPuKH3DDHBSeOw7ix2SwGGijvGNn2DeI7fsuI85zYdPDaEXHZrYt0bTrQVAYuEYds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aUoeFcz7; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ILZsTY006075;
-	Wed, 19 Jun 2024 00:11:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=KZU+R13/Ttt99a5SqVwpops+
-	V2v9unmEIBAarn5mQJ4=; b=aUoeFcz7t0nCQEjWostul9clAp42UKksOciHpmfX
-	BwK8DQjww10rB09sy64oKigiCAb2GNwdzt52Q9qX7DFBzwfCHcRnkit0mEeOKR0G
-	/nXNhJy4o8uyw6SfMesilR4yikPpZ+d+6qWVRxk10UI/2Wxry41K7almnowA1TmC
-	1CQ8HLVxkU3nzFJTxyyrg9hFlXUiEyA7UkvElK/VWb6pa5bd9aN4n0HTWBJ58dNL
-	m1FAst1BuKTColUSDvYSINCM8xfR0u2B3a2XlnsQAeSTfgp3SLQAEeiD7sFdkVLh
-	+0Ht84cwvYmR3Zn1brs/Uyr7A8yO1YHX4rT4xKtWwEO8Lg==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yuj9u07pe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jun 2024 00:11:05 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45J0B1e7014737
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Jun 2024 00:11:01 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 18 Jun 2024 17:11:00 -0700
-Date: Tue, 18 Jun 2024 17:11:00 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, <maz@kernel.org>
-CC: <kvm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <pbonzini@redhat.com>,
-        Fuad Tabba
-	<tabba@google.com>, <chenhuacai@kernel.org>,
-        <mpe@ellerman.id.au>, <anup@brainfault.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <seanjc@google.com>,
-        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <willy@infradead.org>,
-        <akpm@linux-foundation.org>, <xiaoyao.li@intel.com>,
-        <yilun.xu@intel.com>, <chao.p.peng@linux.intel.com>,
-        <jarkko@kernel.org>, <amoorthy@google.com>, <dmatlack@google.com>,
-        <yu.c.zhang@linux.intel.com>, <isaku.yamahata@intel.com>,
-        <mic@digikod.net>, <vbabka@suse.cz>, <vannapurve@google.com>,
-        <ackerleytng@google.com>, <mail@maciej.szmigiero.name>,
-        <david@redhat.com>, <michael.roth@amd.com>, <wei.w.wang@intel.com>,
-        <liam.merwick@oracle.com>, <isaku.yamahata@gmail.com>,
-        <kirill.shutemov@linux.intel.com>, <suzuki.poulose@arm.com>,
-        <steven.price@arm.com>, <quic_eberman@quicinc.com>,
-        <quic_mnalajal@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_svaddagi@quicinc.com>, <quic_cvanscha@quicinc.com>,
-        <quic_pderrin@quicinc.com>, <quic_pheragu@quicinc.com>,
-        <catalin.marinas@arm.com>, <james.morse@arm.com>,
-        <yuzenghui@huawei.com>, <oliver.upton@linux.dev>, <maz@kernel.org>,
-        <will@kernel.org>, <qperret@google.com>, <keirf@google.com>
-Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
-Message-ID: <20240618170853139-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
+	s=arc-20240116; t=1718756531; c=relaxed/simple;
+	bh=qM+LxVb3gd4Cbbp6AwSC8O9zXKOmQtVsfa3JiOHGIIg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XfsJgc6a3UTmWH21ggKyiGcCmG+WpMCTbLk0aKGNBI7XJzhqi/FpIhOvISlm9S3IOfE3RW3VDFcyBKuHAB5BMabre/cMGsL6Eu+CszCRfH1uncuoaBemdkAZzXWMwkmbhuTMihMcuGi0IZsNOGWO7lcRd/USUmupm+rgltM39NY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I1r9twxW; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1f66f2e4cc7so82846475ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jun 2024 17:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718756530; x=1719361330; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ahBmUPS4Gd/AZ2DWokpFsWoFXzbZMIx0lYvExMMEgDs=;
+        b=I1r9twxWQRxXYWRGLBkRuBkU8DXC53/eyeemo0zH+L7zK2N62hO4IRfjVcMzaHYXmU
+         7S3OEb9goyKGpw2i1gYjo/kFeKYERSUQlJLHCf2zVACVwqS8+51pLfSbSigmcm16+jXG
+         qB964P56z0fJ8M16rDSow0rRwfvMQBD7nhrWCNT7A7pW0kSAC3o0hbA/hNnwxIkE0OlT
+         KOB/ZQZpFmQpWavEvzd0s5Hr6HEdwJmyO69L1kRRQd7+8vFXwJn8YqAzQExicCa5/QbO
+         UD3sYYkErNXOl/B3L7uGC0nBVJKwoI6q07cbCX/bjvaUMHqypuqpfmhTMPKkPmBl3VBJ
+         3zfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718756530; x=1719361330;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ahBmUPS4Gd/AZ2DWokpFsWoFXzbZMIx0lYvExMMEgDs=;
+        b=WY/acTrXCM/OCJqlkw1KFM/55Eyy1SKjVR5UxlKirKLNKrwu3ABeYuyrxqETyX+uvm
+         ZZZ4QkvB734nJBInm9fzkY5vnV0dhwlQlkrzvn6kcXkel8qWVch1+x9CLqdXpOCgWKje
+         MQt17I0mN1yXn6Pit/zAiUZFNU9SqmIu6xYVtXYuslmoFBLQK8dvABe3APYuw8NZqVxu
+         TKlTa6v7jk+xrtBU52tnwNTgSUEOQ+9m12nwk+WB26OO53EbwbVSGyXbA4IEoSQjUQgF
+         KB+miAFuiWA3mOQ4G1+pZKL1ejfSLcybVxq/OaaXZAqwYuv2wx+sXMK77o8t4Npj452W
+         S1CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzO8qt1vbsManNiS9unrbQp/8m389lFAfLOxSvefd9GvFUo7lsQRXLQZ7YOHThU7Q3SeeZ018WsI/fqajLCr7XzxsXcxR+TEDyhHRQJccC
+X-Gm-Message-State: AOJu0YwqDV+obloQbnyTBrPXjjLthq4duVFAQ7ewyvXxBYJT4vU1kyuP
+	QDwKQpv8k2sfTJWYr2M4wy9t0CN7Ka9smRmtEQqZL++e46XR4PCNqBDeSXT3riNkJ4XyrL2Rp/V
+	vqg==
+X-Google-Smtp-Source: AGHT+IGuzqkcfFNHspKhd9S3iQjNf5nMtU8q6h/0CLbWzogJs2rTSXjiomF+jr/wK3M2dHQupyre3nYJvrc=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
+ (user=edliaw job=sendgmr) by 2002:a17:902:e744:b0:1f6:fbea:7959 with SMTP id
+ d9443c01a7336-1f9aa25aaa7mr302005ad.0.1718756529581; Tue, 18 Jun 2024
+ 17:22:09 -0700 (PDT)
+Date: Wed, 19 Jun 2024 00:22:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YwAw23Mh7tamv-wTy3-W4oEdnIM4fPV1
-X-Proofpoint-ORIG-GUID: YwAw23Mh7tamv-wTy3-W4oEdnIM4fPV1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_06,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 phishscore=0
- bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406190000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.627.g7a2c4fd464-goog
+Message-ID: <20240619002204.2492673-1-edliaw@google.com>
+Subject: [PATCH] selftests/futex: Order calls in futex_requeue
+From: Edward Liaw <edliaw@google.com>
+To: shuah@kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, 
+	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Edward Liaw <edliaw@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-b4 wasn't happy with my copy/paste of the CC list from Fuad's series
-[1]. CC'ing them here.
+Like fbf4dec70277 ("selftests/futex: Order calls to futex_lock_pi"),
+which fixed a flake in futex_lock_pi due to racing between the parent
+and child threads.
 
-[1]: https://lore.kernel.org/all/20240222161047.402609-1-tabba@google.com/
+The same issue can occur in the futex_requeue test, because it expects
+waiterfn to make progress to futex_wait before the parent starts to
+requeue. This is mitigated by the parent sleeping for WAKE_WAIT_US, but
+it still fails occasionally. This can be reproduced by adding a sleep in
+the waiterfn before futex_wait:
 
-On Tue, Jun 18, 2024 at 05:05:06PM -0700, Elliot Berman wrote:
-> In arm64 pKVM and QuIC's Gunyah protected VM model, we want to support
-> grabbing shmem user pages instead of using KVM's guestmemfd. These
-> hypervisors provide a different isolation model than the CoCo
-> implementations from x86. KVM's guest_memfd is focused on providing
-> memory that is more isolated than AVF requires. Some specific examples
-> include ability to pre-load data onto guest-private pages, dynamically
-> sharing/isolating guest pages without copy, and (future) migrating
-> guest-private pages.  In sum of those differences after a discussion in
-> [1] and at PUCK, we want to try to stick with existing shmem and extend
-> GUP to support the isolation needs for arm64 pKVM and Gunyah. To that
-> end, we introduce the concept of "exclusive GUP pinning", which enforces
-> that only one pin of any kind is allowed when using the FOLL_EXCLUSIVE
-> flag is set. This behavior doesn't affect FOLL_GET or any other folio
-> refcount operations that don't go through the FOLL_PIN path.
-> 
-> [1]: https://lore.kernel.org/all/20240319143119.GA2736@willie-the-truck/
-> 
-> Tree with patches at:
-> https://git.codelinaro.org/clo/linux-kernel/gunyah-linux/-/tree/sent/exclusive-gup-v1
-> 
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
-> Elliot Berman (2):
->       mm/gup-test: Verify exclusive pinned
->       mm/gup_test: Verify GUP grabs same pages twice
-> 
-> Fuad Tabba (3):
->       mm/gup: Move GUP_PIN_COUNTING_BIAS to page_ref.h
->       mm/gup: Add an option for obtaining an exclusive pin
->       mm/gup: Add support for re-pinning a normal pinned page as exclusive
-> 
->  include/linux/mm.h                    |  57 ++++----
->  include/linux/mm_types.h              |   2 +
->  include/linux/page_ref.h              |  74 ++++++++++
->  mm/Kconfig                            |   5 +
->  mm/gup.c                              | 265 ++++++++++++++++++++++++++++++----
->  mm/gup_test.c                         | 108 ++++++++++++++
->  mm/gup_test.h                         |   1 +
->  tools/testing/selftests/mm/gup_test.c |   5 +-
->  8 files changed, 457 insertions(+), 60 deletions(-)
-> ---
-> base-commit: 6ba59ff4227927d3a8530fc2973b80e94b54d58f
-> change-id: 20240509-exclusive-gup-66259138bbff
-> 
-> Best regards,
-> -- 
-> Elliot Berman <quic_eberman@quicinc.com>
-> 
+TAP version 13
+1..2
+not ok 1 futex_requeue simple returned: 0
+not ok 2 futex_requeue simple returned: 0
+not ok 3 futex_requeue many returned: 0
+not ok 4 futex_requeue many returned: 0
+
+Instead, replace the sleep with barriers to make the sequencing
+explicit.
+
+Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ .../selftests/futex/functional/futex_requeue.c       | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index 51485be6eb2f..8f7d3e8bf32a 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -12,9 +12,9 @@
+ 
+ #define TEST_NAME "futex-requeue"
+ #define timeout_ns  30000000
+-#define WAKE_WAIT_US 10000
+ 
+ volatile futex_t *f1;
++static pthread_barrier_t barrier;
+ 
+ void usage(char *prog)
+ {
+@@ -32,6 +32,8 @@ void *waiterfn(void *arg)
+ 	to.tv_sec = 0;
+ 	to.tv_nsec = timeout_ns;
+ 
++	pthread_barrier_wait(&barrier);
++
+ 	if (futex_wait(f1, *f1, &to, 0))
+ 		printf("waiter failed errno %d\n", errno);
+ 
+@@ -70,13 +72,15 @@ int main(int argc, char *argv[])
+ 	ksft_print_msg("%s: Test futex_requeue\n",
+ 		       basename(argv[0]));
+ 
++	pthread_barrier_init(&barrier, NULL, 2);
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+ 	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
+ 		error("pthread_create failed\n", errno);
+ 
+-	usleep(WAKE_WAIT_US);
++	pthread_barrier_wait(&barrier);
++	pthread_barrier_destroy(&barrier);
+ 
+ 	info("Requeuing 1 futex from f1 to f2\n");
+ 	res = futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
+@@ -99,6 +103,7 @@ int main(int argc, char *argv[])
+ 		ksft_test_result_pass("futex_requeue simple succeeds\n");
+ 	}
+ 
++	pthread_barrier_init(&barrier, NULL, 11);
+ 
+ 	/*
+ 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
+@@ -109,7 +114,8 @@ int main(int argc, char *argv[])
+ 			error("pthread_create failed\n", errno);
+ 	}
+ 
+-	usleep(WAKE_WAIT_US);
++	pthread_barrier_wait(&barrier);
++	pthread_barrier_destroy(&barrier);
+ 
+ 	info("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
+ 	res = futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
+-- 
+2.45.2.627.g7a2c4fd464-goog
+
 
