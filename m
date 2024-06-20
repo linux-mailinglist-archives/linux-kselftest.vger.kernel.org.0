@@ -1,206 +1,405 @@
-Return-Path: <linux-kselftest+bounces-12381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E46D89116A5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 01:18:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE2C9116E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 01:34:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71D171F2205B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 23:18:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80727B22531
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 23:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB3748663A;
-	Thu, 20 Jun 2024 23:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B7C2143737;
+	Thu, 20 Jun 2024 23:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="soktvMm+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP2d6cSB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC83C3838A;
-	Thu, 20 Jun 2024 23:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718925503; cv=fail; b=d95BurlhGdB/YZkqyjXFtA1/dP4YXiO/sKgquzapunuJhoVlHapR42Eyezj5lA4JYq8Hl2/T/qWsL0QyRZwg0ueNWOyQlNQtpEoxPFmo+JwqFQJtiMbH9QwPmEdZhvIzd9Q2SQ4UJOmHxHRHFQlwl+SwydwK2vmHuSCzsX2GU8E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718925503; c=relaxed/simple;
-	bh=8JEETYAdS60YO2f4Ie/NnfUuadq6I70NMai3rIv7k2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Cq8sUDmD4pnVMP8oMIFralBHzM34d79wqfEdKKXGtML+iqJkT5xqWEMYqgGywnhGl3LhB0foZFT1KMtQjMdjWNmkt2KurzGv4d+uKz1sGp8sfLkeSMpLgrly34R78ROvV0EE48iIhXkhEctrV0suov8fPJbmLvyMq6QYoRcy0nI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=soktvMm+; arc=fail smtp.client-ip=40.107.223.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Azuasez8Tz4iE0kOdCDytO+4dB62J4/Hqe8bwhMEdoA5LU2sMJclyXHyz8dLfFXgodL0gy4JU3JZNpIx6aYm2n+p8KB1S2+tFCuB1qd318Su3pzApL++JZgSmlGC9smtelylJhnAH8/AB7QPN+uuUHsTiOEg/6Zz3jSTnSyXWP9MchxpeWkYn1R89bzkN3dJ78BIKjnH03QpSoHk0H/SNcGX3BoFelQQ1a6Jj0ZmqDv8JOuZf7w2m6ViAHGui4O6Vne3JUsTI7IWWq9qnDWVHP9vsoC6qOD4AhouOOjKTHmIOzAQypWmrB+Je4ij3wsnoeBeO8akQysoL/OtxXTtKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jP5RlNLT2c5iA6sWM+aTPNKb/U5iNVyL4yQ4RUP3xXw=;
- b=g6Gr+v5zwKgAz2djfQ7B97RGfCvQvTEcmyyxUbXezjzVjyT+hvaAlwpaQacRld2b1xm4yg8Q0JGj9hhLUV8RQjZJipAQgpo4MbrGi0ecb6dN6qa4SfsZZZljiykqzhD6rEqvfKmHUpuwA3kYrmu9v8sTgm+zlvCEa0Bph+Om+osVTX1U00Hl7Bw9WwUe5MTO6H4WRNaEyK8Z3PKcjwde39U37/9o4S3Vyyr+FRMNVR7DR4qMNKd2Oupjk0Oje6t2rCLX0eLF20R33eJLucwQMoTGaWUabZJwuMW++bNBBBZM84JTw5zEwK+zgX/QDbKX8IM5/mtIfGiHR/K5vbqldg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jP5RlNLT2c5iA6sWM+aTPNKb/U5iNVyL4yQ4RUP3xXw=;
- b=soktvMm+8io1JEvU81Xnh6N3OooGRN9HAKy6xissurrmMghtMR+8G/ZL+E5rBd1Kyj+x8flJpEKzzGjlu5KuBgiTef6w6lq89P1NycSNsJC4XCHJpQIR8MljAmZdNaCgQO8gffFkwaHRngbCyL777M3bYRCXgMhEkVFDyGu1o5vGmCmULAi7gfzwzhTVlEHOhrziofxXRoi/5NPfpH2PbjFotTQVVPoVKb978zQ53jsLLQ4n/VUPoWRvgh4sJGHvYTv7DUQI8g4QPMj4SH46atT65P0HUDgfq/sYfiviVRwr8YkI5mIhIC/9h7cFubWQwxgiUTxSaUZ/wL6Qp/CfWw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
- by MW4PR12MB7310.namprd12.prod.outlook.com (2603:10b6:303:22c::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.33; Thu, 20 Jun
- 2024 23:18:16 +0000
-Received: from DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::c296:774b:a5fc:965e]) by DM6PR12MB3849.namprd12.prod.outlook.com
- ([fe80::c296:774b:a5fc:965e%5]) with mapi id 15.20.7677.030; Thu, 20 Jun 2024
- 23:18:15 +0000
-Date: Thu, 20 Jun 2024 20:18:14 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: David Hildenbrand <david@redhat.com>, Fuad Tabba <tabba@google.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-	maz@kernel.org, kvm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com
-Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
-Message-ID: <20240620231814.GO2494510@nvidia.com>
-References: <7fb8cc2c-916a-43e1-9edf-23ed35e42f51@nvidia.com>
- <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
- <CA+EHjTxWWEHfjZ9LJqZy+VCk43qd3SMKiPF7uvAwmDdPeVhrvQ@mail.gmail.com>
- <20240619115135.GE2494510@nvidia.com>
- <ZnOsAEV3GycCcqSX@infradead.org>
- <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
- <20240620135540.GG2494510@nvidia.com>
- <6d7b180a-9f80-43a4-a4cc-fd79a45d7571@redhat.com>
- <20240620142956.GI2494510@nvidia.com>
- <20240620140516768-0700.eberman@hu-eberman-lv.qualcomm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240620140516768-0700.eberman@hu-eberman-lv.qualcomm.com>
-X-ClientProxiedBy: BL1PR13CA0166.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::21) To DM6PR12MB3849.namprd12.prod.outlook.com
- (2603:10b6:5:1c7::26)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7784378C67
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 23:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718926470; cv=none; b=BBkb1eErOjiowlzAWCZCabe6js0XbBafiEq0rsZNM4Der4kSoqXNYeMPCyeFQCeWEOykO8CXBatNdkf0KAlMGW0mto6P+9gbPimvjfmAfWtm+C5Ti9lAWFKMZUGmDT9ECQEe/0wwXGhclfC5iOviGT+c7/sQnV7TkfZE8rs9MHk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718926470; c=relaxed/simple;
+	bh=h+moqWorq8WvFStIQy5VbHeBGz2hkRvmvutoj2g9ghU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QSeP8HbbhmNb2aI6zvKcws7ZpsFYN8Em7+xwkLxVOFgHhDw/KmUloR4upsHn0DmVeXvM37c5BBLscmLBUt+IhHEl5DBUonXY65efq/wC1xXj1rcH/ZPMbN7VpkBYtsmIkQfXTrP9pbLkEB3+EmZpKRvulliKh2fCkulXtj/UDR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP2d6cSB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F52C4AF0F
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 23:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718926470;
+	bh=h+moqWorq8WvFStIQy5VbHeBGz2hkRvmvutoj2g9ghU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FP2d6cSBCNJ2FYG31gdCxnZm8ZYdLIF6LM+Vewbqpac1vi8/lk+SB/ZQDd6gVqUO9
+	 fJtYZAPRH9KKKe1qckyUI30J8O77/CaafAm5CFL/iG/Gt0zyGkqis0XaHpOVTvl/0H
+	 VF5oX9UALiYzom/gTeo9+Jebqf0Aw1ZFm1AdOi1QmlhzJxMRC954FfMshLrMIO3uWJ
+	 FY5S9fB6N9c/bNbw1us+qlMKLFkZgRfvxkeKFQF/TSIHE/ZDMxZbdmK7vN9jo77UTI
+	 XYgVuM0sb/aCI0l/rLnPoGBWyqCm0W/aIYHm2XxQpJa2XL9hxgXMCeaRDD/E0CtZoT
+	 Zjut9ESCHxqkA==
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-375fb45f465so4899765ab.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 16:34:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUHiUeTwJlt4usKv7gsVsY2si+X7bTAZEVpnOxMecvcsTg1qPM8/yXnWih/BVbi7qrUkx9mUzurByypqNo0ujl6Kr4zNFKBhLQ6Xknm54ma
+X-Gm-Message-State: AOJu0YxMV7OQA8oQcfl3VVgdR7zPJW9juwX0qiAopjHzFlwHumZvxx0K
+	gX5N22W+gb0RDgTHjcbw/RMjR/RIhMP5yuI8Vv7i6rfE5ZXG39qtqTTtPnJ6X2zrsS8cQWmdJKw
+	Av67SNE/XiSLdLl80hxv9nRg9C8pskdjWFall
+X-Google-Smtp-Source: AGHT+IHkE6H7TRF7ZbXgZtSv58+TsNMbdTF2zyStl9uhMjCL1hM2Me4FJ+Y4JrGQFubTLf9mxa3mCd4FS8rNzUWdgTE=
+X-Received: by 2002:a92:ca0c:0:b0:375:a8a8:8e7 with SMTP id
+ e9e14a558f8ab-3761d6b359cmr75324335ab.8.1718926469153; Thu, 20 Jun 2024
+ 16:34:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|MW4PR12MB7310:EE_
-X-MS-Office365-Filtering-Correlation-Id: 070151a9-9eb1-4392-d844-08dc917f4356
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230037|1800799021|366013|7416011|376011;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tJRb1gBsNB67gckDCGSB+JnAmdmBr4fj+g/Ef+xRadhUo8K7lE0wfjJqY24j?=
- =?us-ascii?Q?K+v3OZ2VSaMMbd1RjUfqZctxol6E+o6s7u204VzQSJBPSWFumYSf8hQ66Fpx?=
- =?us-ascii?Q?1CmuAI8F9Xmao3bLCSnWZW9JxZ/AZwJMIz/wLC4660KYSx5KqItR3DMHndse?=
- =?us-ascii?Q?brStZGFZ6z0ETXHtdlm4Nk7RD9M4rfgyo1yhGzOXKFkmG+m45LKjIbZdD31K?=
- =?us-ascii?Q?Qp/iyKxgFLQD4UpzT4dq56npRTw/ZUZRf8hlEW4nuwPajhiJ6YkNYoEb+yB2?=
- =?us-ascii?Q?cRb7zyZNcYs60yn6iyp/p1VHCKl8zRih0IiyRZIuCuDMAFExRxxidc0OQiAR?=
- =?us-ascii?Q?0557wwH4JR2VIHjYBOSznc88HnSfuR5shTO71lkt09H9ha/RRpXlUBGa+gLy?=
- =?us-ascii?Q?29BRpoIXflr1JGeHx1RWGwR7dUOkAPPhnujltixM0uRjPu8kycxVYBye5i1i?=
- =?us-ascii?Q?JmyfayssKPR684zCtGRGlKAt3buXwjDgcqpDhMiApIcbFc7CoWTVRHoUv0Iy?=
- =?us-ascii?Q?EDNJuAfdMXLp1fs4a3P00ftIqYZ4GhJKW++13UVlFlGnJIU+SUjO7ej1r4r6?=
- =?us-ascii?Q?e/G5LNim70IzQGsEcFjQDUFzBYexzj8GHdy85jjtczxSIp7K1QAc0Db97Sny?=
- =?us-ascii?Q?rWmIqdXlJ3j8MQWPk9u8VrO/qfHHK9nqHtgZBpZQ59HAeBal70SH2MqZS9se?=
- =?us-ascii?Q?oZAvN3HGlkfvf6+Xw5+zXol7vRCjXECtScsUEMxDKARf5X/E3cUKcMR0jQCJ?=
- =?us-ascii?Q?bG41cRPQCoYFsF47qUFxDIisXlOZ0AMPXAIC9J0Ep4I2pcXs20inHuae6gaU?=
- =?us-ascii?Q?tdi/XbkKjDmi1P4muoKfufKe53WVroFTkwVMAyKk/aOXIt5kz1zKv6bVUJiI?=
- =?us-ascii?Q?466mBcs0TvW4VXoNgN+XWT8AXsPznlKpZKhnBy/pqWUzx+8ooIt8p9hDWzzT?=
- =?us-ascii?Q?++LVQHnxVFM3lgegf8fLuKmwb6hPUKMVtSRK1HeGBFNsexydFKsU4Qr9GkwJ?=
- =?us-ascii?Q?F4LoLrVgsxSyfdmjeZhaRCi8YqysLUcrfX8SU3fanSc4p0ZKfUqvFYrV7I0A?=
- =?us-ascii?Q?ULXx/EzZ44w1xKVo7B4I+KRe9klTZ5Cleqg934QS8wZ0gXTmDFTkpuBClwKa?=
- =?us-ascii?Q?To4AimGXtuIsQYfGK99/kvxsz4SgqQIw94RQJ4dGUuHMmE/5xNQskd7Wl0Ep?=
- =?us-ascii?Q?a17MZFjPHi+XsRh/Z7OpaubaTIxlBj7zS177efQasW+BiwaD2/r1qOQKevuy?=
- =?us-ascii?Q?6F+8saDXW2+M3Wyn1/O4SBCIgH1LnKS6E1LCjOUNVMlkR2fzYUCmI2nukhEw?=
- =?us-ascii?Q?hy0Pb//tax+BN+CfDepxnLMH?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(7416011)(376011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QVwwQuD6axeUkyVGTCacpSzjkSrgtPuWN7GQWhGF5t448KCvUwcLEMFt32DD?=
- =?us-ascii?Q?jYv55XQvfx0kpY3p8wtga9Jfb4nhRP6zwbz9mu/gWsdhoZHiTC+y3eKEYz5n?=
- =?us-ascii?Q?q/DwUmxOHyk+0BWgGUhB0DYI5VaSa1tr4lFH8UTm3a3toyHrndMmbGCKAO23?=
- =?us-ascii?Q?vf8HuuOpuo/kG7kV5ajZoiFfWmNCzLdJStxNUF83GdaMzYERWoiRzPEBzI9E?=
- =?us-ascii?Q?i0b+omr4jZxgfF2pmFBGQS1X1kAtlg265Qcjd9J28hrmibYXpotB7hk/b0aS?=
- =?us-ascii?Q?tIxaqsCje4QfyxIkOnEcp5IBIu99niD/+mBbV14NBw8BdkE8QLykAFiTlpn1?=
- =?us-ascii?Q?fpDjCrtC4IvxMmSH22+8RywMfKS/pw5kH7rDoMfzbMsVpL4Wmy59Zbmdb+y4?=
- =?us-ascii?Q?Xj9oIV+tRci595TSngpmNO01FWzn75jn4pqacJg2y5Uz/nucxY1PEKk4EGh/?=
- =?us-ascii?Q?ez3MkJ5bW4G9ZIWftnU2Ip/tAJOHOnHM0Cl76MhBvQ4QuoqwtEDREbNGZX0p?=
- =?us-ascii?Q?/sd9eEVODQ9OBHs67m1yRbSKrSaMYc9gCc2PJxiAkXycp089g2EZGEBTCd28?=
- =?us-ascii?Q?3Znr4VAnyJFiQQHkgE+iCThALUR3JbMWfKF0KVDen+QsrIn4DfoeP9FjoBK5?=
- =?us-ascii?Q?fNMFmHkBWAiYB6Lz6IMtdvYlqtsaYC+gh6BNIjdxZaXXE4NonyFKkBJukt58?=
- =?us-ascii?Q?XkOTrZG14NhMa/xHh2+IekFSJnR+mknughUZr2JkmQontWqbuiE8VDUErDE/?=
- =?us-ascii?Q?Bdy16uIZScd9mArca0zRh4ji6qEzR1CFai26eGZBqfzGMUDQfn8ZwMhnS3ZO?=
- =?us-ascii?Q?5J39ayL/NMZeO8Z4+sCr5ETTflGFbHhusjIeS8llhk+ffpNK8T3WmSY3g+W3?=
- =?us-ascii?Q?ABVRrpceGVFmByA/RqZlT969qWAzDO0rKZlWRXMTzTZOAfAWFZoZDx89+NTT?=
- =?us-ascii?Q?8aowAsFDb9wQ2BtCNj9xKzcK9ABEEscgH8J92J0f3QdEpcEPFCq/9b94p5tu?=
- =?us-ascii?Q?YLZWYbhhHMc8IaUmFAIQjjuRE1Aqv8Y+qBriYOs2uEn/9oto9ZHQgp54Ftn9?=
- =?us-ascii?Q?WyGiJ4XqwZGPh0PnV2hyJsWMzGX7AlQcfAFjQuvYgW9iLV60UEYRUHOPY1KO?=
- =?us-ascii?Q?e9d1IQWo3f5B9suil4oz09gVs00jmdzfHg2t8zz2lDsC7+w/7q+VRa/n4gcY?=
- =?us-ascii?Q?ue6OcoGrXNj9ehQx2OwC1j2PnC1Xsuu/nJBAKmgGiJ6CZiVh4FfuA3JxX9W6?=
- =?us-ascii?Q?gbjQkJMCCY1o8z0UbjrM7JVbSOgu/xKoWYHKiv5mmjjffH+fYe8NuKJw1f/M?=
- =?us-ascii?Q?YXna3OAnNN0MpxfJplIPO7xYOFJIDxmGFn31pE2VDRtPkQQ18BPvf/xzWAWD?=
- =?us-ascii?Q?JU1UpgnjRY4MrWf6jqh+VH6sjIIndyam8t/lucI2aTANa/GaNtifPxJJIBDS?=
- =?us-ascii?Q?Z9Ym1Cj87F8r0/a1W/EWh6HWs1WQvw41snOou6ZwzOzmOUtCyyp6J+NOg6yP?=
- =?us-ascii?Q?DD+MZsFKPUjZvv1MUYvoYDbJ/ZKrzi8QOoKnuDOuL0VVFynrxSXJmMCtqsPP?=
- =?us-ascii?Q?MvNhEzS+KWurmlQ/SoDM//VKs6M4ICj1hF1gHt/y?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 070151a9-9eb1-4392-d844-08dc917f4356
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2024 23:18:15.7583
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z5R79aZKEUu8jlujOfBPtXvNJtof4s5IshWEF7AubgBBXsUWbx1uBMa1JEJ+Plpp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7310
+References: <20240620002648.75204-1-21cnbao@gmail.com>
+In-Reply-To: <20240620002648.75204-1-21cnbao@gmail.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Thu, 20 Jun 2024 16:34:16 -0700
+X-Gmail-Original-Message-ID: <CAF8kJuOserGkULxghiMFP=UhC_DdVaYVXZhqu6RY=SHT3mszpQ@mail.gmail.com>
+Message-ID: <CAF8kJuOserGkULxghiMFP=UhC_DdVaYVXZhqu6RY=SHT3mszpQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: Introduce a test program to assess swap
+ entry allocation for thp_swapout
+To: Barry Song <21cnbao@gmail.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
+	ryan.roberts@arm.com, david@redhat.com, hughd@google.com, 
+	kaleshsingh@google.com, kasong@tencent.com, linux-kernel@vger.kernel.org, 
+	ying.huang@intel.com, linux-kselftest@vger.kernel.org, 
+	Barry Song <v-songbaohua@oppo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 20, 2024 at 03:47:23PM -0700, Elliot Berman wrote:
-> On Thu, Jun 20, 2024 at 11:29:56AM -0300, Jason Gunthorpe wrote:
-> > On Thu, Jun 20, 2024 at 04:01:08PM +0200, David Hildenbrand wrote:
-> > > Regarding huge pages: assume the huge page (e.g., 1 GiB hugetlb) is shared,
-> > > now the VM requests to make one subpage private. 
-> > 
-> > I think the general CC model has the shared/private setup earlier on
-> > the VM lifecycle with large runs of contiguous pages. It would only
-> > become a problem if you intend to to high rate fine granual
-> > shared/private switching. Which is why I am asking what the actual
-> > "why" is here.
-> > 
-> 
-> I'd let Fuad comment if he's aware of any specific/concrete Anrdoid
-> usecases about converting between shared and private. One usecase I can
-> think about is host providing large multimedia blobs (e.g. video) to the
-> guest. Rather than using swiotlb, the CC guest can share pages back with
-> the host so host can copy the blob in, possibly using H/W accel. I
-> mention this example because we may not need to support shared/private
-> conversions at granularity finer than huge pages. 
+Hi Barry,
 
-I suspect the more useful thing would be to be able to allocate actual
-shared memory and use that to shuffle data without a copy, setup much
-less frequently. Ie you could allocate a large shared buffer for video
-sharing and stream the video frames through that memory without copy.
+Thanks for the wonderful test program.
 
-This is slightly different from converting arbitary memory in-place
-into shared memory. The VM may be able to do a better job at
-clustering the shared memory allocation requests, ie locate them all
-within a 1GB region to further optimize the host side.
+I have also used other swap test programs as well. A lot of those
+tests are harder to setup up and run.
 
-> Jason, do you have scenario in mind? I couldn't tell if we now had a
-> usecase or are brainstorming a solution to have a solution.
+This test is very quick and simple to run. It can test some hard to
+hit corner cases for me.
 
-No, I'm interested in what pKVM is doing that needs this to be so much
-different than the CC case..
+I am able to reproduce the warning and the kernel oops with this test progr=
+am.
+So for me, I am using it as a functional test that my allocator did
+not produce a crash.
+In that regard, it definitely provides value as a function test.
 
-Jason
+Having a fall percentage output is fine, as long as we don't fail the
+test based on performance number.
+
+I am also fine with moving the test to under tools/mm etc. I see good
+value to include the test in the tree one way or the other.
+
+
+On Wed, Jun 19, 2024 at 5:27=E2=80=AFPM Barry Song <21cnbao@gmail.com> wrot=
+e:
+>
+> From: Barry Song <v-songbaohua@oppo.com>
+>
+> Both Ryan and Chris have been utilizing the small test program to aid
+> in debugging and identifying issues with swap entry allocation. While
+> a real or intricate workload might be more suitable for assessing the
+> correctness and effectiveness of the swap allocation policy, a small
+> test program presents a simpler means of understanding the problem and
+> initially verifying the improvements being made.
+>
+> Let's endeavor to integrate it into the self-test suite. Although it
+> presently only accommodates 64KB and 4KB, I'm optimistic that we can
+> expand its capabilities to support multiple sizes and simulate more
+> complex systems in the future as required.
+>
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> ---
+>  tools/testing/selftests/mm/Makefile           |   1 +
+>  .../selftests/mm/thp_swap_allocator_test.c    | 192 ++++++++++++++++++
+>  2 files changed, 193 insertions(+)
+
+Assume we want to keep it as selftest.
+You did not add your test in run_vmtests.sh.
+
+You might need something like this:
+
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -418,6 +418,14 @@ CATEGORY=3D"thp" run_test ./khugepaged -s 2
+
+ CATEGORY=3D"thp" run_test ./transhuge-stress -d 20
+
++# config and swapon zram here.
++
++CATEGORY=3D"thp" run_test ./thp_swap_allocator_test
++
++CATEGORY=3D"thp" run_test ./thp_swap_allocator_test -s
++
++# swapoff zram here.
++
+ # Try to create XFS if not provided
+ if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+     if test_selected "thp"; then
+
+
+You can use the following XFS test as an example of how to setup the zram s=
+wap.
+XFS uses file system mount, you use swapon.
+
+Also you need to update the usage string in run_vmtests.sh.
+
+BTW, here is how I invoke the test runs:
+
+kselftest_override_timeout=3D500 make -C tools/testing/selftests
+TARGETS=3Dmm run_tests
+
+The time out is not for this test, it is for some other test before
+the thp_swap which exit run_vmtests.sh before hitting thp_swap. I am
+running in a VM so it is slower than native machine.
+
+>  create mode 100644 tools/testing/selftests/mm/thp_swap_allocator_test.c
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftest=
+s/mm/Makefile
+> index e1aa09ddaa3d..64164ad66835 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -65,6 +65,7 @@ TEST_GEN_FILES +=3D mseal_test
+>  TEST_GEN_FILES +=3D seal_elf
+>  TEST_GEN_FILES +=3D on-fault-limit
+>  TEST_GEN_FILES +=3D pagemap_ioctl
+> +TEST_GEN_FILES +=3D thp_swap_allocator_test
+>  TEST_GEN_FILES +=3D thuge-gen
+>  TEST_GEN_FILES +=3D transhuge-stress
+>  TEST_GEN_FILES +=3D uffd-stress
+> diff --git a/tools/testing/selftests/mm/thp_swap_allocator_test.c b/tools=
+/testing/selftests/mm/thp_swap_allocator_test.c
+> new file mode 100644
+> index 000000000000..4443a906d0f8
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/thp_swap_allocator_test.c
+> @@ -0,0 +1,192 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * thp_swap_allocator_test
+> + *
+> + * The purpose of this test program is helping check if THP swpout
+> + * can correctly get swap slots to swap out as a whole instead of
+> + * being split. It randomly releases swap entries through madvise
+> + * DONTNEED and do swapout on two memory areas: a memory area for
+> + * 64KB THP and the other area for small folios. The second memory
+> + * can be enabled by "-s".
+> + * Before running the program, we need to setup a zRAM or similar
+> + * swap device by:
+> + *  echo lzo > /sys/block/zram0/comp_algorithm
+> + *  echo 64M > /sys/block/zram0/disksize
+> + *  echo never > /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/en=
+abled
+> + *  echo always > /sys/kernel/mm/transparent_hugepage/hugepages-64kB/ena=
+bled
+> + *  mkswap /dev/zram0
+> + *  swapon /dev/zram0
+
+This setup needs to go into run_vmtest.sh as well.
+
+Also tear it down after the test.
+
+Chris
+
+> + * The expected result should be 0% anon swpout fallback ratio w/ or
+> + * w/o "-s".
+> + *
+> + * Author(s): Barry Song <v-songbaohua@oppo.com>
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <string.h>
+> +#include <sys/mman.h>
+> +#include <errno.h>
+> +#include <time.h>
+> +
+> +#define MEMSIZE_MTHP (60 * 1024 * 1024)
+> +#define MEMSIZE_SMALLFOLIO (1 * 1024 * 1024)
+> +#define ALIGNMENT_MTHP (64 * 1024)
+> +#define ALIGNMENT_SMALLFOLIO (4 * 1024)
+> +#define TOTAL_DONTNEED_MTHP (16 * 1024 * 1024)
+> +#define TOTAL_DONTNEED_SMALLFOLIO (768 * 1024)
+> +#define MTHP_FOLIO_SIZE (64 * 1024)
+> +
+> +#define SWPOUT_PATH \
+> +       "/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout"
+> +#define SWPOUT_FALLBACK_PATH \
+> +       "/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout_=
+fallback"
+> +
+> +static void *aligned_alloc_mem(size_t size, size_t alignment)
+> +{
+> +       void *mem =3D NULL;
+> +
+> +       if (posix_memalign(&mem, alignment, size) !=3D 0) {
+> +               perror("posix_memalign");
+> +               return NULL;
+> +       }
+> +       return mem;
+> +}
+> +
+> +static void random_madvise_dontneed(void *mem, size_t mem_size,
+> +               size_t align_size, size_t total_dontneed_size)
+> +{
+> +       size_t num_pages =3D total_dontneed_size / align_size;
+> +       size_t i;
+> +       size_t offset;
+> +       void *addr;
+> +
+> +       for (i =3D 0; i < num_pages; ++i) {
+> +               offset =3D (rand() % (mem_size / align_size)) * align_siz=
+e;
+> +               addr =3D (char *)mem + offset;
+> +               if (madvise(addr, align_size, MADV_DONTNEED) !=3D 0)
+> +                       perror("madvise dontneed");
+> +
+> +               memset(addr, 0x11, align_size);
+> +       }
+> +}
+> +
+> +static unsigned long read_stat(const char *path)
+> +{
+> +       FILE *file;
+> +       unsigned long value;
+> +
+> +       file =3D fopen(path, "r");
+> +       if (!file) {
+> +               perror("fopen");
+> +               return 0;
+> +       }
+> +
+> +       if (fscanf(file, "%lu", &value) !=3D 1) {
+> +               perror("fscanf");
+> +               fclose(file);
+> +               return 0;
+> +       }
+> +
+> +       fclose(file);
+> +       return value;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +       int use_small_folio =3D 0;
+> +       int i;
+> +       void *mem1 =3D aligned_alloc_mem(MEMSIZE_MTHP, ALIGNMENT_MTHP);
+> +       void *mem2 =3D NULL;
+> +
+> +       if (mem1 =3D=3D NULL) {
+> +               fprintf(stderr, "Failed to allocate 60MB memory\n");
+> +               return EXIT_FAILURE;
+> +       }
+> +
+> +       if (madvise(mem1, MEMSIZE_MTHP, MADV_HUGEPAGE) !=3D 0) {
+> +               perror("madvise hugepage for mem1");
+> +               free(mem1);
+> +               return EXIT_FAILURE;
+> +       }
+> +
+> +       for (i =3D 1; i < argc; ++i) {
+> +               if (strcmp(argv[i], "-s") =3D=3D 0)
+> +                       use_small_folio =3D 1;
+> +       }
+> +
+> +       if (use_small_folio) {
+> +               mem2 =3D aligned_alloc_mem(MEMSIZE_SMALLFOLIO, ALIGNMENT_=
+MTHP);
+> +               if (mem2 =3D=3D NULL) {
+> +                       fprintf(stderr, "Failed to allocate 1MB memory\n"=
+);
+> +                       free(mem1);
+> +                       return EXIT_FAILURE;
+> +               }
+> +
+> +               if (madvise(mem2, MEMSIZE_SMALLFOLIO, MADV_NOHUGEPAGE) !=
+=3D 0) {
+> +                       perror("madvise nohugepage for mem2");
+> +                       free(mem1);
+> +                       free(mem2);
+> +                       return EXIT_FAILURE;
+> +               }
+> +       }
+> +
+> +       for (i =3D 0; i < 100; ++i) {
+> +               unsigned long initial_swpout;
+> +               unsigned long initial_swpout_fallback;
+> +               unsigned long final_swpout;
+> +               unsigned long final_swpout_fallback;
+> +               unsigned long swpout_inc;
+> +               unsigned long swpout_fallback_inc;
+> +               double fallback_percentage;
+> +
+> +               initial_swpout =3D read_stat(SWPOUT_PATH);
+> +               initial_swpout_fallback =3D read_stat(SWPOUT_FALLBACK_PAT=
+H);
+> +
+> +               random_madvise_dontneed(mem1, MEMSIZE_MTHP, ALIGNMENT_MTH=
+P,
+> +                               TOTAL_DONTNEED_MTHP);
+> +
+> +               if (use_small_folio) {
+> +                       random_madvise_dontneed(mem2, MEMSIZE_SMALLFOLIO,
+> +                                       ALIGNMENT_SMALLFOLIO,
+> +                                       TOTAL_DONTNEED_SMALLFOLIO);
+> +               }
+> +
+> +               if (madvise(mem1, MEMSIZE_MTHP, MADV_PAGEOUT) !=3D 0) {
+> +                       perror("madvise pageout for mem1");
+> +                       free(mem1);
+> +                       if (mem2 !=3D NULL)
+> +                               free(mem2);
+> +                       return EXIT_FAILURE;
+> +               }
+> +
+> +               if (use_small_folio) {
+> +                       if (madvise(mem2, MEMSIZE_SMALLFOLIO, MADV_PAGEOU=
+T) !=3D 0) {
+> +                               perror("madvise pageout for mem2");
+> +                               free(mem1);
+> +                               free(mem2);
+> +                               return EXIT_FAILURE;
+> +                       }
+> +               }
+> +
+> +               final_swpout =3D read_stat(SWPOUT_PATH);
+> +               final_swpout_fallback =3D read_stat(SWPOUT_FALLBACK_PATH)=
+;
+> +
+> +               swpout_inc =3D final_swpout - initial_swpout;
+> +               swpout_fallback_inc =3D final_swpout_fallback - initial_s=
+wpout_fallback;
+> +
+> +               fallback_percentage =3D (double)swpout_fallback_inc /
+> +                       (swpout_fallback_inc + swpout_inc) * 100;
+> +
+> +               printf("Iteration %d: swpout inc: %lu, swpout fallback in=
+c: %lu, Fallback percentage: %.2f%%\n",
+> +                               i + 1, swpout_inc, swpout_fallback_inc, f=
+allback_percentage);
+
+
+Chris
+
+> +       }
+> +
+> +       free(mem1);
+> +       if (mem2 !=3D NULL)
+> +               free(mem2);
+> +
+> +       return EXIT_SUCCESS;
+> +}
+> --
+> 2.34.1
+>
+>
 
