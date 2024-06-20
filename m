@@ -1,225 +1,168 @@
-Return-Path: <linux-kselftest+bounces-12371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61AE89115BD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 00:30:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74AD49115C1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 00:32:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4F161F230CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 22:30:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96CAB1C20D27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 22:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFA28288F;
-	Thu, 20 Jun 2024 22:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750668288F;
+	Thu, 20 Jun 2024 22:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ldaDGIyB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ziWgiCQs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33476F2F1
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 22:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8B464A98
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 22:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718922633; cv=none; b=ogdEODC9uorNggOWWj2tyNoBObuF4yp8YHtv5A3neLGrfzEhvK9OI3jNWz8x7cohsN87e1zX/cMRoojrvPgE6QGT8YARRr6e9I/EKf9jA/Qsv5FtqG/Gb3SqurtVs3EY3ewjylnfAUnD4GiAtvDFnnuoIZxpFGsZZ4FvnzvssUA=
+	t=1718922751; cv=none; b=BTQRreXBc1Fpmvq/XVU16G4lZcen+XlRTv5HMoafUXJyfTJIZ6jNUZKR0GuiocV/upDdutHeonfrwSAn79Iv9GHbMzh7RqeKqnfCOAVxmtcqWCPv83S+/5GgG207SGi/bEsVVgznoJ1+J7htc1tpVZpAgwLC/RUb2C3S7ThObs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718922633; c=relaxed/simple;
-	bh=qU/CK7cK2ztIubEiOnDLG3FhSQGWI8q05/wnLRMya7c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mZJi4jAaJBmBZSdR3/9DBfZ4OQH2ESn5rI3asvcdYRegxPXfARNkGSK4ZGNxhlICTGYyTqgJBhanNI1tjZU+UtSs2c68lFMWlhNXxger+EdnVsWyWEL+6tWHbsPW97e/bMFy+QQzijcinrrtY7XaeDCblFJNUmpTtmfa8FJhHFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ldaDGIyB; arc=none smtp.client-ip=209.85.166.169
+	s=arc-20240116; t=1718922751; c=relaxed/simple;
+	bh=wPyrfyOcJKrFlQqdsvbVInKDWmVrmJ7EXk00664mnVY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bbIv6gg2bnb+xEg5TY876Hhe0JH4LUZ9jV+aDdh3PTXsXCChJiG8d17grE3Y+gPXYe5efTBmcdTj09zOeDtQreVTEkbkuddUjO0zljd0D6Ba1W9u5Mjck+GPVuQsbqicCdnzqZZI0tfz6OLkV3m77GMdKmitBnKY+22qFBwSvpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ziWgiCQs; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-375bb80e5b8so17605ab.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 15:30:31 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-63bb7fb3229so24736187b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 15:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718922631; x=1719527431; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zHREBPCUIs8n+I6KtcDeDKXi3C09zaSei5HzCaoQhXU=;
-        b=ldaDGIyBvF6wDNkosaJ+hgro8FvJeadsCQP3rIOCRZ9OZ36+IkbsIKQpOdnwh3ou8G
-         syTScZJIW/zBzuSHM3SGawhMcpw8+f0ppw8zLQ+gbFWFFJPNz627hT/dq/nuA+d5eGs7
-         +93+UDvrEbbRqx/bWooE0skUu9ENoFEsIqlH7+JkABeb9t9VXhtRjCpqjUyxu82f/Y1D
-         02erSUOoki57n3Yk/pYxqUXb55Ine+PnZnxeUuEB6+DqoHdQnt6a6/xHcV6pJ9HbBM9r
-         jBzuAX+ZghWUtK3bpYdO/rfAn3t7xS/fe9luRyb1oEDsNhAue5aX6Z6+3GQ6hH2PYHKi
-         vPEw==
+        d=google.com; s=20230601; t=1718922749; x=1719527549; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=auxotihlkK8h83W2bzIbhNSOdi4xEkdwqnFVqelIJic=;
+        b=ziWgiCQsN9kHQVwWz8Jd4IxEBbuqnWoj8jhuS3W+HMzXKnyaXj1Y7wW9Odo/BEkVXs
+         WOHDy9T3CvcmONF+9FL8ZxJM7EJ+f9wHhnLJly+WbDucpb7feu9MfCYbiqkyRrL8o6dF
+         pKV04Rn/3VVE+BQwZaKhb3kDrSgMIWT9KHajvToounQ+NkOffF6IHQ0Xybr6mCz7+beX
+         h6Mytig4cQZtgcHnC3kKSveZ6tBEDqepaA4iXjqa0oJKLngkhHHUFI5PVZUYn2yLpotE
+         iM8x0bdOAcQ2fYQzEWFCHJfAXTuhtoOk/M6Aoj5lNFyopW1lqj+32WX0dg3Nd5qCYc1C
+         AA+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718922631; x=1719527431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zHREBPCUIs8n+I6KtcDeDKXi3C09zaSei5HzCaoQhXU=;
-        b=Sgq29vm668NL0PkELjMgcvlpfA1p3YW7wrsTtjv9hOWJyosJsIpolIYYeIeghbqlvy
-         Jpj9S9RWxlFM1RFGHH809Vz6OTrHivBecVPkXQ6xO1OjjcEzt++KcgyHU6TABRQsDv+A
-         pk2C16vcVxr7pFUuLIMzFAcIW8BDHGrM3fOtomGL1XqkS/H6wLNY/3pN8+RiQsENbhYz
-         iABg46rukXlBNiy2a/m2u1DGqYITqWHG9M5qcwVqCUmsx5boK6pgkJ3iobKu0LM/i6x1
-         tOkYtMvP+TC/prRA1VSGl13kqkySzXpaAoBQMZrQdiEWou2CppMOpYl59GqxjHrHpLFj
-         u/OA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6F9uKK5pkN37gfybzHjCH27p7I0UHN1QTu66rZ9OveadR1xUsYOXitf65MbPIdtbZuBmlV5iOsfcfnQtSywgzCsofpDLTHd1QpshkZM3n
-X-Gm-Message-State: AOJu0YwZBdXmItcpTaT2HbWwIyRw+IBv0yEkH+6o5xYEnEwh2m7dd/f/
-	yPyXSA8S/EX47/OG5vrD7gtWrybbJ+1KyRTNK6npu8ydJC+2kTxawIBA5L/jCOcKv5l7R0JwHaL
-	cwNI15xIttcGSbJEfoIrwyBdVTxx2ItBp3Qpy
-X-Google-Smtp-Source: AGHT+IG3QZzSrTWr7FqOD3AtuM1SKP3sfyODhN7mg13aomMD50DF/jtHQSYwrOACQW7sSeuYOA45Mb+PEMZtdzwhpq8=
-X-Received: by 2002:a92:dc10:0:b0:375:9e2b:a832 with SMTP id
- e9e14a558f8ab-3762f4f3869mr453635ab.21.1718922630941; Thu, 20 Jun 2024
- 15:30:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718922749; x=1719527549;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=auxotihlkK8h83W2bzIbhNSOdi4xEkdwqnFVqelIJic=;
+        b=oNil3Vy/ygLxghdmGeAJFQXAmFYs8qztQ/rgprDyvbIsUXRUY36AJrOY9FRErDwXZF
+         Ga4y5B+fDTPVr69i/mBlxOZsfmHdgMQ+V42f1JJWOTIkMbzXq2BFCW1NgDzV5UrC3E8Q
+         SKanDDh2gl/vn5QyZ5PHU6SWT7udrKnRohzJKpm1GnHqzYldKZkRzoufibbK5BEHNu/x
+         rM5NydnokMT+utlVO7Xmn+qXeuTbzNIc4gZVziyIO5d7RUuq5lc39BHFoC30Hq93NyEL
+         6jWYyCUWBKKMcd7fv3e7z8Pz33+Adiq1KcAx3u4yiy9Tolly+lXswQ2k/mmRPaxQmMoj
+         oT+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWJfrRkibS5zxNslKEWCEAP77fGFzPChcqoLmxq4JnfYfZCM9w4i+m8ig6Cq4PZy/V5GRDREn/IyXgWY6RL0AOClJZ/XeNykLfknGUlUKq0
+X-Gm-Message-State: AOJu0Ywld161QG4XJSbhdwOmODeCYy+yGN1M8+EhqVcEa21u7NyMxhsj
+	zNd+Na7GfsnuxPzGrtxWYH2crycPJKvNWEJIYNlVkhFDrFr3eEGlajHMcwJ5qlerdRF/PQGQQnj
+	Vbw==
+X-Google-Smtp-Source: AGHT+IGHcNRLshBOMyztBLTs8rVKhKRXiJZQJYiLLVyOYcXhh1aFZDp6gOCGM/6iHRYpAGgEpAN5Al5CfjI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:6105:b0:62f:5d17:3628 with SMTP id
+ 00721157ae682-63a8ae564c0mr15344897b3.0.1718922748971; Thu, 20 Jun 2024
+ 15:32:28 -0700 (PDT)
+Date: Thu, 20 Jun 2024 15:32:27 -0700
+In-Reply-To: <53d1e7c5-3e77-467b-be33-a618c3bb6cb3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240619083200.1047073-1-shahuang@redhat.com> <20240619083200.1047073-2-shahuang@redhat.com>
-In-Reply-To: <20240619083200.1047073-2-shahuang@redhat.com>
-From: Raghavendra Rao Ananta <rananta@google.com>
-Date: Thu, 20 Jun 2024 15:30:18 -0700
-Message-ID: <CAJHc60zNNsaALEV6XPdwuTZo1_0y2dT--MLMad0ar5Htt8jCtQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/3] KVM: selftests: aarch64: Add helper function for
- the vpmu vcpu creation
-To: Shaoqin Huang <shahuang@redhat.com>
-Cc: Oliver Upton <oliver.upton@linux.dev>, Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev, 
-	Eric Auger <eric.auger@redhat.com>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <ZnOsAEV3GycCcqSX@infradead.org> <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
+ <20240620135540.GG2494510@nvidia.com> <6d7b180a-9f80-43a4-a4cc-fd79a45d7571@redhat.com>
+ <20240620142956.GI2494510@nvidia.com> <385a5692-ffc8-455e-b371-0449b828b637@redhat.com>
+ <20240620163626.GK2494510@nvidia.com> <66a285fc-e54e-4247-8801-e7e17ad795a6@redhat.com>
+ <ZnSRZcap1dc2_WBV@google.com> <53d1e7c5-3e77-467b-be33-a618c3bb6cb3@redhat.com>
+Message-ID: <ZnSt-_dkjStvT1WB@google.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+From: Sean Christopherson <seanjc@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Fuad Tabba <tabba@google.com>, 
+	Christoph Hellwig <hch@infradead.org>, John Hubbard <jhubbard@nvidia.com>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>, maz@kernel.org, 
+	kvm@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Shaoqin
+On Thu, Jun 20, 2024, David Hildenbrand wrote:
+> On 20.06.24 22:30, Sean Christopherson wrote:
+> > On Thu, Jun 20, 2024, David Hildenbrand wrote:
+> > > On 20.06.24 18:36, Jason Gunthorpe wrote:
+> > > > On Thu, Jun 20, 2024 at 04:45:08PM +0200, David Hildenbrand wrote:
+> > > > 
+> > > > > If we could disallow pinning any shared pages, that would make life a lot
+> > > > > easier, but I think there were reasons for why we might require it. To
+> > > > > convert shared->private, simply unmap that folio (only the shared parts
+> > > > > could possibly be mapped) from all user page tables.
+> > > > 
+> > > > IMHO it should be reasonable to make it work like ZONE_MOVABLE and
+> > > > FOLL_LONGTERM. Making a shared page private is really no different
+> > > > from moving it.
+> > > > 
+> > > > And if you have built a VMM that uses VMA mapped shared pages and
+> > > > short-term pinning then you should really also ensure that the VM is
+> > > > aware when the pins go away. For instance if you are doing some virtio
+> > > > thing with O_DIRECT pinning then the guest will know the pins are gone
+> > > > when it observes virtio completions.
+> > > > 
+> > > > In this way making private is just like moving, we unmap the page and
+> > > > then drive the refcount to zero, then move it.
+> > > Yes, but here is the catch: what if a single shared subpage of a large folio
+> > > is (validly) longterm pinned and you want to convert another shared subpage
+> > > to private?
+> > > 
+> > > Sure, we can unmap the whole large folio (including all shared parts) before
+> > > the conversion, just like we would do for migration. But we cannot detect
+> > > that nobody pinned that subpage that we want to convert to private.
+> > > 
+> > > Core-mm is not, and will not, track pins per subpage.
+> > > 
+> > > So I only see two options:
+> > > 
+> > > a) Disallow long-term pinning. That means, we can, with a bit of wait,
+> > >     always convert subpages shared->private after unmapping them and
+> > >     waiting for the short-term pin to go away. Not too bad, and we
+> > >     already have other mechanisms disallow long-term pinnings (especially
+> > >     writable fs ones!).
+> > 
+> > I don't think disallowing _just_ long-term GUP will suffice, if we go the "disallow
+> > GUP" route than I think it needs to disallow GUP, period.  Like the whole "GUP
+> > writes to file-back memory" issue[*], which I think you're alluding to, short-term
+> > GUP is also problematic.  But unlike file-backed memory, for TDX and SNP (and I
+> > think pKVM), a single rogue access has a high probability of being fatal to the
+> > entire system.
+> 
+> Disallowing short-term should work, in theory, because the
 
-On Wed, Jun 19, 2024 at 1:32=E2=80=AFAM Shaoqin Huang <shahuang@redhat.com>=
- wrote:
->
-> Create a vcpu with vpmu would be a common requirement for the vpmu test,
-> so add the helper function for the vpmu vcpu creation. And use those
-> helper function in the vpmu_counter_access.c test.
->
-> Use this chance to delete the meaningless ASSERT about the pmuver,
-> because KVM does not advertise an IMP_DEF PMU to guests.
->
-> No functional changes intended.
->
-> Reviewed-by: Eric Auger <eric.auger@redhat.com>
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->  .../kvm/aarch64/vpmu_counter_access.c         | 32 ++++---------------
->  .../selftests/kvm/include/aarch64/vpmu.h      | 28 ++++++++++++++++
->  2 files changed, 34 insertions(+), 26 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
->
-> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c b/=
-tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> index d31b9f64ba14..68da44198719 100644
-> --- a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> @@ -16,6 +16,7 @@
->  #include <processor.h>
->  #include <test_util.h>
->  #include <vgic.h>
-> +#include <vpmu.h>
->  #include <perf/arm_pmuv3.h>
->  #include <linux/bitfield.h>
->
-> @@ -407,18 +408,8 @@ static void guest_code(uint64_t expected_pmcr_n)
->  /* Create a VM that has one vCPU with PMUv3 configured. */
->  static void create_vpmu_vm(void *guest_code)
->  {
-> -       struct kvm_vcpu_init init;
-> -       uint8_t pmuver, ec;
-> -       uint64_t dfr0, irq =3D 23;
-> -       struct kvm_device_attr irq_attr =3D {
-> -               .group =3D KVM_ARM_VCPU_PMU_V3_CTRL,
-> -               .attr =3D KVM_ARM_VCPU_PMU_V3_IRQ,
-> -               .addr =3D (uint64_t)&irq,
-> -       };
-> -       struct kvm_device_attr init_attr =3D {
-> -               .group =3D KVM_ARM_VCPU_PMU_V3_CTRL,
-> -               .attr =3D KVM_ARM_VCPU_PMU_V3_INIT,
-> -       };
-> +       uint8_t ec;
-> +       uint64_t irq =3D 23;
->
->         /* The test creates the vpmu_vm multiple times. Ensure a clean st=
-ate */
->         memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-> @@ -430,26 +421,15 @@ static void create_vpmu_vm(void *guest_code)
->                                         guest_sync_handler);
->         }
->
-> -       /* Create vCPU with PMUv3 */
-> -       vm_ioctl(vpmu_vm.vm, KVM_ARM_PREFERRED_TARGET, &init);
-> -       init.features[0] |=3D (1 << KVM_ARM_VCPU_PMU_V3);
-> -       vpmu_vm.vcpu =3D aarch64_vcpu_add(vpmu_vm.vm, 0, &init, guest_cod=
-e);
-> +       vpmu_vm.vcpu =3D vm_vcpu_add_with_vpmu(vpmu_vm.vm, 0, guest_code)=
-;
->         vcpu_init_descriptor_tables(vpmu_vm.vcpu);
->         vpmu_vm.gic_fd =3D vgic_v3_setup(vpmu_vm.vm, 1, 64);
->         __TEST_REQUIRE(vpmu_vm.gic_fd >=3D 0,
->                        "Failed to create vgic-v3, skipping");
->
-> -       /* Make sure that PMUv3 support is indicated in the ID register *=
-/
-> -       vcpu_get_reg(vpmu_vm.vcpu,
-> -                    KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &dfr0);
-> -       pmuver =3D FIELD_GET(ARM64_FEATURE_MASK(ID_AA64DFR0_EL1_PMUVer), =
-dfr0);
-> -       TEST_ASSERT(pmuver !=3D ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
-> -                   pmuver >=3D ID_AA64DFR0_EL1_PMUVer_IMP,
-> -                   "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pm=
-uver);
-> -
->         /* Initialize vPMU */
-> -       vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
-> -       vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
-> +       vpmu_set_irq(vpmu_vm.vcpu, irq);
-> +       vpmu_init(vpmu_vm.vcpu);
->  }
->
->  static void destroy_vpmu_vm(void)
-> diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/t=
-esting/selftests/kvm/include/aarch64/vpmu.h
-> new file mode 100644
-> index 000000000000..5ef6cb011e41
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <kvm_util.h>
-> +
-> +static inline struct kvm_vcpu *vm_vcpu_add_with_vpmu(struct kvm_vm *vm,
-> +                                                    uint32_t vcpu_id,
-> +                                                    void *guest_code)
-> +{
-> +       struct kvm_vcpu_init init;
-> +
-> +       /* Create vCPU with PMUv3 */
-> +       vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +       init.features[0] |=3D (1 << KVM_ARM_VCPU_PMU_V3);
-> +
-> +       return aarch64_vcpu_add(vm, 0, &init, guest_code);
-> +}
-> +
-> +static void vpmu_set_irq(struct kvm_vcpu *vcpu, int irq)
-> +{
-> +       kvm_device_attr_set(vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                           KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +}
-> +
-> +static void vpmu_init(struct kvm_vcpu *vcpu)
-> +{
-> +       kvm_device_attr_set(vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                           KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> +}
-> --
-> 2.40.1
->
->
-Reviewed-by: Raghavendra Rao Ananta <rananta@google.com>
+By "short-term", I assume you mean "long-term"?  Or am I more lost than I realize?
 
-- Raghavendra
+> writes-to-fileback has different issues (the PIN is not the problem but the
+> dirtying).
+>
+> It's more related us not allowing long-term pins for FSDAX pages, because
+> the lifetime of these pages is determined by the FS.
+> 
+> What we would do is
+> 
+> 1) Unmap the large folio completely and make any refaults block.
+> -> No new pins can pop up
+> 
+> 2) If the folio is pinned, busy-wait until all the short-term pins are
+>    gone.
+
+This is the step that concerns me.   "Relatively short time" is, well, relative.
+Hmm, though I suppose if userspace managed to map a shared page into something
+that pins the page, and can't force an unpin, e.g. by stopping I/O?, then either
+there's a host userspace bug or a guest bug, and so effectively hanging the vCPU
+that is waiting for the conversion to complete is ok.
+
+> 3) Safely convert the relevant subpage from shared -> private
+> 
+> Not saying it's the best approach, but it should be doable.
 
