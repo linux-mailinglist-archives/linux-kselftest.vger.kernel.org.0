@@ -1,135 +1,127 @@
-Return-Path: <linux-kselftest+bounces-12373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B17A9115D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 00:47:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E59F59115D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 00:48:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 055C32835C0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 22:47:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7341C1F219AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 22:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128C113D8BA;
-	Thu, 20 Jun 2024 22:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F4D13D278;
+	Thu, 20 Jun 2024 22:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jzDuUyQG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1jU33LW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5324D79949;
-	Thu, 20 Jun 2024 22:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB1279949;
+	Thu, 20 Jun 2024 22:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718923669; cv=none; b=CzkGQmJMWZ8eqsktGXK4K47asKhjogkx4ayaZ5anF3OF1R1zM2cpCSyPFpNDURD50aFiI9DZ1NxQlXviMBxEWPhVx5YT2nhUQPr8X/Ye8phXNVwhFTB7kOMC+uSP2ROhkPoWaYMwux5qXwIbnpex3g/xGB+iMoPmumqeeerzwRM=
+	t=1718923678; cv=none; b=QjaYZ0pvlUYif7hz9gv4w1FpaqTA9l6IKWCkbyxT+7fWs3FFkvbUIoiWS1pgtgs+00SYMfuxQ4nAl0RYbfkyLuD+fqqepj3eKzbCSfjPvYnR4E7VurQ05uxezraR+5QCzBhv2WUiVoUe/0GmBvLGAow8nNq8puu+vruE9wEkUW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718923669; c=relaxed/simple;
-	bh=VVG0u6kJx6gy9QOoxI0WCnMXxw0wTHsd0ZhQUmx+USY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mRmmIuyuFDCd55xpGC9COrhv+USOcDApPYmeWjQz7EsJItYhS7jot0fyyJaOUGNshuRbMIaOuaZhQAu9aT2DPHwMqcvJcED/hjmAXllm83ODX77/aw1mJ+bOfDZBDRDLElRpYnzwteJq6Ff0MkYF3+lWiLcMq7YHJfRSvVsZ+rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jzDuUyQG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45KHL5uN010657;
-	Thu, 20 Jun 2024 22:47:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=UzU1DFJ4xrF/xX5fZgyh2T96
-	UuT9FhaFK+d/7JtKvNI=; b=jzDuUyQGbn/J5EKIcYa/VYyT6OqYGWRl6bqvdfBm
-	3wqaJ1kW3cK+p3bp+S8gDKtYC2fjQKzeafmoZOdNL5jgDJAlv5dHmWM3iYx6boFC
-	k3gtvbWxU1U6uPELCKJJklxknTxfqq857nvR8yrOnU0E9WFI57Y3Bp5sAlzTgSxP
-	0f1K34rmJ/hg4RCtOtL9GNcM1T599TPeJFAUNzYoeb8Xd6afUpkGpFgfo8YHSuak
-	Ygf1FYljOGhG+Cu69kI4+siX7WaQyk9h1FQpyeb6AY3tfs5IsyMmfEppO7aK18nC
-	IBAAIYcIebPJBK0YN1PA30VlduHppw5LISHTDmfqwYJtMw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yvrrc8stu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Jun 2024 22:47:26 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45KMlORB009447
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Jun 2024 22:47:24 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 20 Jun 2024 15:47:24 -0700
-Date: Thu, 20 Jun 2024 15:47:23 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: David Hildenbrand <david@redhat.com>, Fuad Tabba <tabba@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-        <maz@kernel.org>, <kvm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <pbonzini@redhat.com>
-Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
-Message-ID: <20240620140516768-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
- <7fb8cc2c-916a-43e1-9edf-23ed35e42f51@nvidia.com>
- <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
- <CA+EHjTxWWEHfjZ9LJqZy+VCk43qd3SMKiPF7uvAwmDdPeVhrvQ@mail.gmail.com>
- <20240619115135.GE2494510@nvidia.com>
- <ZnOsAEV3GycCcqSX@infradead.org>
- <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
- <20240620135540.GG2494510@nvidia.com>
- <6d7b180a-9f80-43a4-a4cc-fd79a45d7571@redhat.com>
- <20240620142956.GI2494510@nvidia.com>
+	s=arc-20240116; t=1718923678; c=relaxed/simple;
+	bh=OcvbwW7S3KCiswLqyMQtEzqQAARGiwx0OKDa49cIg7Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=q0xPJUciPh63P/PBK06POPoZRtj8FCDek3ZLQp2MhUej0tg2YSUg25JGt/+Xj6S5g003LxrS5kk5r1WkkOHkOfE7ebqL8nQEepfMT3TOv79zDfSZfCeQhvDTaeWyohErf9YbI0nwgCDyc/w4yAamlrgvji9QqscsfzTyYI6cbCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1jU33LW; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70601bcfddcso1398767b3a.3;
+        Thu, 20 Jun 2024 15:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718923676; x=1719528476; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OcvbwW7S3KCiswLqyMQtEzqQAARGiwx0OKDa49cIg7Q=;
+        b=G1jU33LW12GSlQR5lcXCrppX2FaGnEJGFxPlZkvDZCSA1BnP+SVLcftdXvXyCkXWN4
+         tUUbMI0Rax4zCWEGh3uHEmSBmZg0eMGqEPACUP+LtTYBmmXYQWK4mU3J6vwjMsPRi7ao
+         0ViylUTA+Clep24iYsUc0wcpgD02PIC6i4BthxiwO0TubN5zRxxidWg8zjkqUlp+4Avt
+         FUzahOErLXWXvqirlaEKx7xcqi0x6dDWUtIH53Iu1ExGfKnizFAgPFSPtt8UdhQ79kiE
+         h2yB15j4N174uCgLcXS8EhAGXGR+aJfopds3TKA2S7DhyXX6oHaZJriB4soK7bCyfgqy
+         0B+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718923676; x=1719528476;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OcvbwW7S3KCiswLqyMQtEzqQAARGiwx0OKDa49cIg7Q=;
+        b=hsTwzh56S30OCNkNgux2W0jlSGDoV71oqIYW5dNPV4EBWY/BV20JVWFO23QevGeBUu
+         xon2pQCZTk7EeU8wSR/vBVT0uhuoO5Y8g2qAkpUHJ9nO9vDifzk1XXISucCl/cYsAcab
+         g0TlnaO9BCRgqJ6xoIBGFBDSXJ215VQt2IujVhZi38N4MvoLVRaeMoRCP7ynKI2kNBOw
+         NhuruRhVO+ftG8z/sYBvbjH2v8mrNhDAm9XnuHE4QWgV4XAC+S3JONFsmPsns9TW35lD
+         iBuN2p8MW5kJb0FkBNRaTPSZ6ng3xJTD3TGgFteF7ME751B8X1bfmBwRNr0DmzHVnHZy
+         7zjg==
+X-Forwarded-Encrypted: i=1; AJvYcCUD9QgmULgX7VKPnyKSB45UsZBwop64OnUY0u4WZpoH4fO/tED07qQKCfueo9XZRh5zbT2C2EvV5+vFkA3YEB5k8OzVfDPHUVsc4H6GW+T2UoqlYKsUWk4VJFWotYTH2zKliIX0
+X-Gm-Message-State: AOJu0YxbIIwUN9IDuidjdTScL9htXe1qlVwqr0fo6MCFdG35r/gbPJzB
+	b3viMIxKZ9dchUQ/uGeiWr8Xx33CuJqGU+4wkC0QnWyzX3VQ/Pfz
+X-Google-Smtp-Source: AGHT+IEoMH0Ce8g6qfFMZbOXebkjN73qYU8/dxgw8wLxiefPV1DEmm0c1OczhJyqHnfrQiY4q62xWw==
+X-Received: by 2002:a05:6a20:77a5:b0:1b6:dffa:d6ec with SMTP id adf61e73a8af0-1bcbb5e34e5mr6819067637.46.1718923676519;
+        Thu, 20 Jun 2024 15:47:56 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c7e4ff97e2sm2233227a91.10.2024.06.20.15.47.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 15:47:55 -0700 (PDT)
+Message-ID: <dd1387bfa694e7d1f792441d1e2e80b9b85c8c35.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] selftests/bpf: Drop type from
+ network_helper_opts
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Thu, 20 Jun 2024 15:47:50 -0700
+In-Reply-To: <db1a7bdb3ae9b51001c1220d1783d816302598a7.1718765123.git.tanggeliang@kylinos.cn>
+References: <cover.1718765123.git.tanggeliang@kylinos.cn>
+	 <db1a7bdb3ae9b51001c1220d1783d816302598a7.1718765123.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240620142956.GI2494510@nvidia.com>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rmA4Wwy_3KWwSQd6c-bmt4HkSHSDNN4N
-X-Proofpoint-ORIG-GUID: rmA4Wwy_3KWwSQd6c-bmt4HkSHSDNN4N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-20_10,2024-06-20_04,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxlogscore=771 spamscore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2406140001 definitions=main-2406200166
 
-On Thu, Jun 20, 2024 at 11:29:56AM -0300, Jason Gunthorpe wrote:
-> On Thu, Jun 20, 2024 at 04:01:08PM +0200, David Hildenbrand wrote:
-> > Regarding huge pages: assume the huge page (e.g., 1 GiB hugetlb) is shared,
-> > now the VM requests to make one subpage private. 
-> 
-> I think the general CC model has the shared/private setup earlier on
-> the VM lifecycle with large runs of contiguous pages. It would only
-> become a problem if you intend to to high rate fine granual
-> shared/private switching. Which is why I am asking what the actual
-> "why" is here.
-> 
+On Wed, 2024-06-19 at 10:51 +0800, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+>=20
+> The opts.{type, noconnect} is at least a bit non intuitive or unnecessary=
+.
+> The only use case now is in test_bpf_ip_check_defrag_ok which ends up
+> bypassing most (or at least some) of the connect_to_fd_opts() logic. It's
+> much better that test should have its own connect_to_fd_opts() instead.
+>=20
+> This patch adds a new "type" parameter for connect_to_fd_opts(), then
+> opts->type and getsockopt(SO_TYPE) can be replaced by "type" parameter in
+> it.
+>=20
+> In connect_to_fd(), use getsockopt(SO_TYPE) to get "type" value and pass
+> it to connect_to_fd_opts().
+>=20
+> In bpf_tcp_ca.c and cgroup_v1v2.c, "SOCK_STREAM" types are passed to
+> connect_to_fd_opts(), and in ip_check_defrag.c, different types "SOCK_RAW=
+"
+> and "SOCK_DGRAM" are passed to it.
+>=20
+> With these changes, the strcut member "type" of network_helper_opts can b=
+e
+> dropped now.
+>=20
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
 
-I'd let Fuad comment if he's aware of any specific/concrete Anrdoid
-usecases about converting between shared and private. One usecase I can
-think about is host providing large multimedia blobs (e.g. video) to the
-guest. Rather than using swiotlb, the CC guest can share pages back with
-the host so host can copy the blob in, possibly using H/W accel. I
-mention this example because we may not need to support shared/private
-conversions at granularity finer than huge pages. The host and guest can
-negotiate the minimum size that can be converted and you never run into
-issue where subpages of a folio are differently shared. I can't think of
-a usecase where we need such granularity for converting private/shared.
-
-Jason, do you have scenario in mind? I couldn't tell if we now had a
-usecase or are brainstorming a solution to have a solution.
-
-Thanks,
-Elliot
-
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
