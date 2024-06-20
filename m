@@ -1,210 +1,252 @@
-Return-Path: <linux-kselftest+bounces-12344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BB9F910D34
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 18:38:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EF69910D1F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 18:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11551281EF8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 16:38:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31DC81C23EA8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 16:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F891B47AF;
-	Thu, 20 Jun 2024 16:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDC91B29C5;
+	Thu, 20 Jun 2024 16:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aKBNCDef"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1071AF6B5;
-	Thu, 20 Jun 2024 16:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3671B29B9
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 16:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718901408; cv=none; b=UfCyrUk8sLKthRizpaK4Yp++95c1tMZYyzq/G28qqaeDKbQFsv2SI0OXcOFnqWlSqe89VQrRjjU/Q9p1+sZHmk7bHLIP8ChbBfhZoxNJjhsWguV25YxYbYosiXKyisBljOnipLEQM1MU3jxX3Qn0uAQC6R1r4Jy85ODDzO80yFg=
+	t=1718901201; cv=none; b=R9ooh82kB5yo/IbDaI2KjRVFbX6nxVJ3dPhrbOh57UGI7GBFOMy6JnWXSOQgj005etLkirk5TlHouv9X8c/dwQaxUUsxKEKuIhFymFK0IDkGAC03wRdTo0OQmSRvbIzfzlHElXi+r1VWy2MqCNtjvvIdy9crMrtDO49feQBWL4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718901408; c=relaxed/simple;
-	bh=/FB2RUdre/ZjOda/nl0rOq4y08iAj3AOWo2+O5PRaVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRLKFzGoyAIvBpHn1fZjkHEIJEAkYvfJ8K//ioDp6qhn/4NWrd1tkF3iQIWDeww/h7md7hmkLkzCn1qYnmonXwQYH+NZc2mrUycG/VaQgmWX6qrlNwKnfhZvTdVBhZcjAHIpyF7+2Ho6j6mdbA5GnHor0KpJP5sykLCNXKuzXkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 45KGWaQr029678;
-	Thu, 20 Jun 2024 11:32:36 -0500
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 45KGWYJi029676;
-	Thu, 20 Jun 2024 11:32:34 -0500
-Date: Thu, 20 Jun 2024 11:32:34 -0500
-From: "Dr. Greg" <greg@enjellic.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Paul Moore <paul@paul-moore.com>, corbet@lwn.net, jmorris@namei.org,
-        serge@hallyn.com, akpm@linux-foundation.org, shuah@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        mic@digikod.net, linux-security-module@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org, wufan@linux.microsoft.com,
-        pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,
-        mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
-        dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
-        ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de,
-        kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
-Message-ID: <20240620163234.GA27816@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com> <CAHC9VhTs8p1nTUXXea2JmF0FCEU6w39gwQRMtwACqM=+EBj1jw@mail.gmail.com> <7cf03a6ba8dbf212623aab2dea3dac39482e8695.camel@huaweicloud.com> <CAHC9VhSCw6RweTs6whAu4v6t4n7gxUWJtjmzY-UXrdzW0H+YJA@mail.gmail.com> <520d2dc2ff0091335a280a877fa9eb004af14309.camel@huaweicloud.com> <CAHC9VhRD1kBwqtkF+_cxCUCeNPp+0PAiNP-rG06me6gRQyYcyg@mail.gmail.com> <2b335bdd5c20878e0366dcf6b62d14f73c2251de.camel@huaweicloud.com>
+	s=arc-20240116; t=1718901201; c=relaxed/simple;
+	bh=UxbdEJzEfTFGGdJutifmUiiqZYkHXI3z/2GfVjcxnU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mL+IYlccqFziEWVNSMI58IKrhHlXPmjpB4P00txNB2dJO3nZNy1Ji+0uUARSe3WpC8bYEx1SXQlHdlBUTGlGDOQd9m+uLRAItuF/VYWNHs/hxJD2sHGJbDUuhBHg7uc+BpaQOgVhAun1dhAHTvDsBLADWqm8DauHBlCVfBENqKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aKBNCDef; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-422954bbe29so147525e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 09:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718901198; x=1719505998; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4B53UjI6PoAGWaCsloRkiHZtuTpGHM2ZWrCUhiNKWNY=;
+        b=aKBNCDefQ8eWTyPfXJ9RtovKFKfxPq8D8X4PC1xQ3oQe3+eZTogbm4dH8debKbJiR7
+         X04ZlMc4OFNOvjKqqu4ElN/5/dspZOY1gICTkF/Ugizm4KoQADbw6w0S65PSPEjZoenY
+         CZks5w7KxyTKhPMzue6BQuDPLUI0idYbmFi5fgzYIwiTrz9hFxVOENEAGO/+AJMv+vqa
+         6gPJgNXiw1ZeY25o9d/p4w9xb7rvF1JJwP55WmkcSw5h6THtWMS7KbCfxMQ8bXmOepZr
+         WGVKZ7RKEi3pi0I2oPVLCMh6H+P54JJp7sO8FH6oapLtmOzTm3PYMr3N4SpmTKbp/kgq
+         +2fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718901198; x=1719505998;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4B53UjI6PoAGWaCsloRkiHZtuTpGHM2ZWrCUhiNKWNY=;
+        b=tSSn7cZ+UPN2mZyFZ870GziaYVYam3tDTUA6SI3wBug/ddfXDgbi92h/b0RJLb3dxK
+         OwPjLOUmMjG9rqkybwl9OItgKW5OylqvvzbXCPmYhcyCNimU/icvzz3afJce/9mSSVfr
+         SM7yxlnMjSLmyGbBEaP0+/HSP5jiaCbsk/o5UvcWNHoRdfaeVV/oyof5GVGxkY55S4co
+         Ivhaqa4cyZuqqxgdwg0EfZA2t48LUdg6xL5/3qXX0UpcMO+LuVfd2t6sHdXs2bluD207
+         qFsktceBeNAX/J6Em8rDlOLPOOKf929uSOWLES38fBjrpzmXzbpoT6REMFKADoNoRhYU
+         e0Eg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpa/tpctJjqdy66u/we3QHD6JXg/7h5ApkhscTsKNaRT+tcJRThPDajvuMa6XKfS+5RjzhOhDEPPQ+KUIIVK5UPha18GnCEFAYjnot4Pd+
+X-Gm-Message-State: AOJu0YzpzSoAZG5kiFgNpZShEzPsaUXSzzZsEjOty5hSBX+/0mI1BZja
+	T3B9oP+pjR2IdQoHKfN1kJ8mLLJHuEZtkxt1MSohPhKjk4m5k8ZRLCvuZDlkKg==
+X-Google-Smtp-Source: AGHT+IEz2SgAboLf42+BQNW/d36kQQhVc7F1UusAvGsQvMHx+tzIbLyscYR5TmIlxga6H6/BKgdcwQ==
+X-Received: by 2002:a05:600c:34d6:b0:424:7ac9:4d9a with SMTP id 5b1f17b1804b1-4247ac95619mr2095555e9.1.1718901197463;
+        Thu, 20 Jun 2024 09:33:17 -0700 (PDT)
+Received: from google.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0c9e27sm30767025e9.23.2024.06.20.09.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 09:33:16 -0700 (PDT)
+Date: Thu, 20 Jun 2024 16:33:12 +0000
+From: Mostafa Saleh <smostafa@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: John Hubbard <jhubbard@nvidia.com>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+	maz@kernel.org, kvm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+	Fuad Tabba <tabba@google.com>, Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+Message-ID: <ZnRZyBy_uxtjQHsz@google.com>
+References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
+ <7fb8cc2c-916a-43e1-9edf-23ed35e42f51@nvidia.com>
+ <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
+ <ZnQpslcah7dcSS8z@google.com>
+ <1ab73f42-9397-4fc7-8e62-2627b945f729@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2b335bdd5c20878e0366dcf6b62d14f73c2251de.camel@huaweicloud.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 20 Jun 2024 11:32:36 -0500 (CDT)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1ab73f42-9397-4fc7-8e62-2627b945f729@redhat.com>
 
-On Wed, Jun 19, 2024 at 06:37:49PM +0200, Roberto Sassu wrote:
+Hi David,
 
-Good morning Roberto, I hope your week is going well, greetings to
-everyone copied else as well.
-
-> On Wed, 2024-06-19 at 12:34 -0400, Paul Moore wrote:
-> > On Wed, Jun 19, 2024 at 11:55???AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Wed, 2024-06-19 at 11:49 -0400, Paul Moore wrote:
-> > > > On Wed, Jun 19, 2024 at 3:59???AM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > On Tue, 2024-06-18 at 19:20 -0400, Paul Moore wrote:
-> > > > > > On Mon, Apr 15, 2024 at 10:25???AM Roberto Sassu
-> > > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > 
-> > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > 
-> > > > > > > Integrity detection and protection has long been a desirable feature, to
-> > > > > > > reach a large user base and mitigate the risk of flaws in the software
-> > > > > > > and attacks.
-> > > > > > > 
-> > > > > > > However, while solutions exist, they struggle to reach the large user
-> > > > > > > base, due to requiring higher than desired constraints on performance,
-> > > > > > > flexibility and configurability, that only security conscious people are
-> > > > > > > willing to accept.
-> > > > > > > 
-> > > > > > > This is where the new digest_cache LSM comes into play, it offers
-> > > > > > > additional support for new and existing integrity solutions, to make
-> > > > > > > them faster and easier to deploy.
-> > > > > > > 
-> > > > > > > The full documentation with the motivation and the solution details can be
-> > > > > > > found in patch 14.
-> > > > > > > 
-> > > > > > > The IMA integration patch set will be introduced separately. Also a PoC
-> > > > > > > based on the current version of IPE can be provided.
-> > > > > > 
-> > > > > > I'm not sure we want to implement a cache as a LSM.  I'm sure it would
-> > > > > > work, but historically LSMs have provided some form of access control,
-> > > > > > measurement, or other traditional security service.  A digest cache,
-> > > > > > while potentially useful for a variety of security related
-> > > > > > applications, is not a security service by itself, it is simply a file
-> > > > > > digest storage mechanism.
-> > > > > 
-> > > > > Uhm, currently the digest_cache LSM is heavily based on the LSM
-> > > > > infrastructure:
-> > > > 
-> > > > I understand that, but as I said previously, I don't believe that we
-> > > > want to support a LSM which exists solely to provide a file digest
-> > > > cache.  LSMs should be based around the idea of some type of access
-> > > > control, security monitoring, etc.
-> > > > 
-> > > > Including a file digest cache in IMA, or implementing it as a
-> > > > standalone piece of kernel functionality, are still options.  If you
-> > > > want to pursue this, I would suggest that including the digest cache
-> > > > as part of IMA would be the easier of the two options; if it proves to
-> > > > be generally useful outside of IMA, it can always be abstracted out to
-> > > > a general kernel module/subsystem.
-> > > 
-> > > Ok. I thought about IPE and eBPF as potential users. But if you think
-> > > that adding as part of IMA would be easier, I could try to pursue that.
+On Thu, Jun 20, 2024 at 04:14:23PM +0200, David Hildenbrand wrote:
+> On 20.06.24 15:08, Mostafa Saleh wrote:
+> > Hi David,
 > > 
-> > It isn't clear to me how this would interact with IPE and/or eBPF, but
-> > if you believe there is value there I would encourage you to work with
-> > those subsystem maintainers.  If the consensus is that a general file
-> > digest cache is useful then you should pursue the digest cache as a
-> > kernel subsystem, just not a LSM.
-
-> Making it a kernel subsystem would likely mean replicating what the LSM
-> infrastructure is doing, inode (security) blob and being notified about
-> file/directory changes.
+> > On Wed, Jun 19, 2024 at 09:37:58AM +0200, David Hildenbrand wrote:
+> > > Hi,
+> > > 
+> > > On 19.06.24 04:44, John Hubbard wrote:
+> > > > On 6/18/24 5:05 PM, Elliot Berman wrote:
+> > > > > In arm64 pKVM and QuIC's Gunyah protected VM model, we want to support
+> > > > > grabbing shmem user pages instead of using KVM's guestmemfd. These
+> > > > > hypervisors provide a different isolation model than the CoCo
+> > > > > implementations from x86. KVM's guest_memfd is focused on providing
+> > > > > memory that is more isolated than AVF requires. Some specific examples
+> > > > > include ability to pre-load data onto guest-private pages, dynamically
+> > > > > sharing/isolating guest pages without copy, and (future) migrating
+> > > > > guest-private pages.  In sum of those differences after a discussion in
+> > > > > [1] and at PUCK, we want to try to stick with existing shmem and extend
+> > > > > GUP to support the isolation needs for arm64 pKVM and Gunyah.
+> > > 
+> > > The main question really is, into which direction we want and can develop
+> > > guest_memfd. At this point (after talking to Jason at LSF/MM), I wonder if
+> > > guest_memfd should be our new target for guest memory, both shared and
+> > > private. There are a bunch of issues to be sorted out though ...
+> > > 
+> > > As there is interest from Red Hat into supporting hugetlb-style huge pages
+> > > in confidential VMs for real-time workloads, and wasting memory is not
+> > > really desired, I'm going to think some more about some of the challenges
+> > > (shared+private in guest_memfd, mmap support, migration of !shared folios,
+> > > hugetlb-like support, in-place shared<->private conversion, interaction with
+> > > page pinning). Tricky.
+> > > 
+> > > Ideally, we'd have one way to back guest memory for confidential VMs in the
+> > > future.
+> > > 
+> > > 
+> > > Can you comment on the bigger design goal here? In particular:
+> > > 
+> > > 1) Who would get the exclusive PIN and for which reason? When would we
+> > >     pin, when would we unpin?
+> > > 
+> > > 2) What would happen if there is already another PIN? Can we deal with
+> > >     speculative short-term PINs from GUP-fast that could introduce
+> > >     errors?
+> > > 
+> > > 3) How can we be sure we don't need other long-term pins (IOMMUs?) in
+> > >     the future?
+> > 
+> > Can you please clarify more about the IOMMU case?
+> > 
+> > pKVM has no merged upstream IOMMU support at the moment, although
+> > there was an RFC a while a go [1], also there would be a v2 soon.
+> > 
+> > In the patches KVM (running in EL2) will manage the IOMMUs including
+> > the page tables and all pages used in that are allocated from the
+> > kernel.
+> > 
+> > These patches don't support IOMMUs for guests. However, I don't see
+> > why would that be different from the CPU? as once the page is pinned
+> > it can be owned by a guest and that would be reflected in the
+> > hypervisor tracking, the CPU stage-2 and IOMMU page tables as well.
 > 
-> I guess I will go for the IMA route...
+> So this is my thinking, it might be flawed:
+> 
+> In the "normal" world (e.g., vfio), we FOLL_PIN|FOLL_LONGTERM the pages to
+> be accessible by a dedicated device. We look them up in the page tables to
+> pin them, then we can map them into the IOMMU.
+> 
+> Devices that cannot speak "private memory" should only access shared memory.
+> So we must not have "private memory" mapped into their IOMMU.
+> 
+> Devices that can speak "private memory" may either access shared or private
+> memory. So we may have"private memory" mapped into their IOMMU.
+> 
 
-This thread brings up an issue that we have been thinking about but
-has been on the back burner.
+Private pages must not be accessible to devices owned by the
+host, and for that we have the same rules as the CPU:
+A) The hypervisor doesn’t trust the host, and must enforce that using the CPU
+   stage-2 MMU.
+B) It’s preferable that userspace doesn’t, and hence these patches (or guest_memfd...)
 
-Roberto, I'm assuming you have seen our TSEM submissions go by.  Our
-V4 release will be immediately after the Fourth of July holiday week
-here in the states.
+We need the same rules for DMA, otherwise it is "simple" to instrument a DMA attack,
+so we need a protection by the IOMMU. pKVM at the moment provides 2 ways of
+establishing that (each has their own trade-off which are not relevant here):
 
-Since TSEM implements a generic security modeling framework for the
-kernel, it ends up implementing a superset of IMA functionality.  That
-required us to implement our own file digest generation and cacheing
-infrastructure.
+1) pKVM manages the IOMMUs and provides a hypercall interface to map/unmap in
+   the IOMMU, looking at the rules
 
-Given the trajectory that things are on with respect to security,
-there is only going to be more demand for file digests and their
-associated cacheing.  Doesn't seem like it makes a lot of sense to
-have multiple teams replicating what is largely the same
-functionality.
+   For A), pKVM has its own per-page metadata which tracks page state, which can
+   prevent mapping private pages in the IOMMU and transitioning pages to private
+   if they are mapped in the IOMMU.
 
-If your group would have interest, we would certainly be willing to
-entertain conversations on how we could collaborate to brew up
-something that would be of mutual benefit to everyone who has a need
-for this type of infrastructure.
+   For B), userspace won’t be able to map private pages(through VFIO/IOMMUFD), as
+   the hypercall interface would fail if the pages are private.
 
-As you noted, consumers of the BPF LSM would also be a clear candidate
-for generic infrastructure.  One of the issues blocking a BPF based
-integrity implementation is that BPF itself is not going to be able
-generate digests on its own.  So it would seem to make sense to have
-whatever gets built have a kfunc accessible API.  Plenty of other
-additional warts on that front as well but getting access to digests
-is the necessary starting point.
+   This proposal is the one on the list.
 
-Given what we have seen with IMA's challenge with respect to overlayfs
-issues and file versioning issues in general, it would seem to be of
-profit to have all these issues addressed uniformally and in one
-place.
+2) pKVM manages a second stage of the IOMMU (as SMMUv3), and let the kernel map what
+   it wants in stage-1 and pKVM would use a mirrored page table of the CPU MMU stage-2.
 
-Since virtually everything that is accessing this infrastructure is
-going to be an LSM, we would envision API's out of a common
-infrastructure, invoked by the event handlers of the various LSM's
-interested in integrity information, driving the cache generation and
-maintenance.  That would seem to have all of the benefits of being
-implemented by the LSM infrastructure without necessarily being an
-'LSM' in and of itself.
+   For A) Similar to the CPU, stage-2 IOMMU will protect the private pages.
 
-We assume that everyone would want to maintain the O(1) lookup
-characteristics of what the LSM inode blob mechanism provides.  We
-would presume that a common cacheing architecture would return a
-pointer to the structure that the digest cache maintains describing
-the various digests associated with the contents of a file, as there
-will be a need for multiple digest support, when an LSM hands the
-cache an inode referencing a file.  An LSM could then place that
-pointer in its own inode blob for future reference.
+   For B) userspace can map private pages in the first stage IOMMU, and that would
+   result in stage-2 fault, AFAIK, SMMUv3 is the only Arm implementation that
+   supports nesting in Linux, for that the driver would only print a page fault,
+   and ideally the kernel wouldn’t crash, although that is really hardware
+   dependant how it handle faults, and I guess assigning a device through VFIO
+   to userspace comes with similar risks already (bogus MMIO access can
+   crash the system).
 
-Either that, probably better, stick a pointer into the inode structure
-itself that references it's digest cache object and it would get
-populated by the first event that opens the associated file.
+   This proposal only exists in Android at the moment(However I am working on
+   getting an SMMUv3 compliant implementation that can be posted upstream).
 
-> Roberto
+> 
+> What I see (again, I might be just wrong):
+> 
+> 1) How would the device be able to grab/access "private memory", if not
+>    via the user page tables?
 
-So an open invitation to anyone that would want to discuss
-requirements around a common implementation.
+I hope the above answers the question, but just to confirmn, a device owned by
+the host shouldn’t access the memory as the host kernel is not trusted and
+can instrument DMA attacks. Device assignment (passthrough) is another story.
 
-Have a good weekend.
+> 2) How would we be able to convert shared -> private, if there is a
+>    longterm pin from that IOMMU? We must dynamically unmap it from the
+>    IOMMU.
 
-As always,
-Dr. Greg
+Depending on which solution from the above, for
+1) The transition from shared -> private would fail
+2) The private page would be unmapped from the stage-2 IOMMU (similar to the
+   stage-2 CPU MMU)
 
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
+> 
+> I assume when you're saying "In the patches KVM (running in EL2) will manage
+> the IOMMUs  including the page tables", this is easily solved by not relying
+> on pinning: KVM just knows what to update and where. (which is a very
+> different model than what VFIO does)
+> 
+
+Yes, that's is not required to protect private memory.
+
+Thanks,
+Mostafa
+
+> Thanks!
+> 
+> -- 
+> Cheers,
+> 
+> David / dhildenb
+> 
 
