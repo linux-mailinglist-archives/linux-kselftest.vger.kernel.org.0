@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-12353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAB9C91115D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 20:52:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A577191115F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 20:52:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9511628165B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 18:52:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 977591C21543
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 18:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373531B9AC4;
-	Thu, 20 Jun 2024 18:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096421BA06A;
+	Thu, 20 Jun 2024 18:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DSZeZWeO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nmmrU4Ix"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2B91B47D4
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 18:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5331B47D9
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 18:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718909343; cv=none; b=EnRVxeKc6fBnE+NRG0lwkD4ObrV7e7xmyv+tO7qBm/0/zN4di/fU9j2fb3XbWVWolgTLG32mnuxcJaAS0hKQOJRhHfuUmCXffudPUbo4S/pghB/PqB9SxkLJFXaKlSxW7Z6KPd8zDZLITDBbmAouwlqY1eC8MdhKybvMvW06Nnw=
+	t=1718909344; cv=none; b=mpy/xC5FMQ5crZlWfhiDTv8zJEXypDDPy3gN7PW0Fhx8ZN+FpnSZQQ1ePd5kvU1IQG7i1FJ/8JWz+DxekxTR44etZJKErf369A3lCXx7l/WaisCEFmKJytiMACnG8Bh5alW4/XwXdNs834Nq8wAknIAti0cgsVJo0/6t1tYpQbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718909343; c=relaxed/simple;
-	bh=ZJlt/X6PrwPET2Sqp74JHEjJORFV5iRxJOPxh1IkXWU=;
+	s=arc-20240116; t=1718909344; c=relaxed/simple;
+	bh=0UdOCczW7R86+kDUSQgo4G5iSbtYqPKnphLsunWLTVg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=olGlISMDiF9cguN08bV6EjT2R6FirjyShfpWGnemBOxpVzWu3GYGoJoaoMiUMrEhBev30JMNL5V0UYEt/sFfoe1YXH4V6UTMbqMDE7UwnJLcF3c2dXJygUQz6+CNTRzy/GthM9Vu/WxHoOJHQiPaDUhJX3vZ6Nx9TT2l3G6jZjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DSZeZWeO; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=gcWvZyqLJZQSCpvks6eIrqgAhi0wBswwH7vhchwjMDhzb7ztw5MQ50hHVmDMO9avrN7dBWc+RPVKXLcWYoXjpczf/pkJC6cRXUPmMumBmdeNmuf9o2a7nuoZ2e+AhQ7GAKtxPveW8WC94Aibb2GSBb8lSCO273o05hT07oIN6gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nmmrU4Ix; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1f66f2e4cc7so18089485ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 11:49:01 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-6e82b36467eso1345530a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 11:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718909341; x=1719514141; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718909343; x=1719514143; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wu1wVc+3ogmDWb1QmIkKTSRvM9RrOiJDS3aYm0qmOo=;
-        b=DSZeZWeORNCuRiyaJXFyNoaWlTDlW/QAL6e92L4nVXeOLETbPXb4D64wwGqvh+vUx/
-         V26/bXPkdEh2J4+bfPitLGzT/ZRXkABpEOJxr7/Cu4H6srob/GnbBQMCtePb/dKpu8FV
-         sI8c2Gj+agLVuughCjjwvd7NJ0QZiMG73VpHv1cK0xaP6IIxIjCF+pikbOFXxWLGiMSc
-         B58gYms5he5TeemZnCGqTzCjvMeqY2iFbIZ5n33fXrneWC0xtHfus2B5lAWW1q//PG1I
-         Rv2OMzb9Fn2ykgkDlgX6AXrB0wGyN/UhkQl0++vJmk3LWzoouoaxyYX6XWUjTXGobgy8
-         CbZA==
+        bh=2HH+9CcttK5GdfJZnghTUQdGY7/vHW0gb5YShHVqiKQ=;
+        b=nmmrU4IxAeW4tsY/m0/nhWFp21/C9SgAm4A6jFmiCvJcW9OnzbiH0GaduPreOdWnqD
+         pZ43aKS0Ae7VicL/uci5bLf82r6VcFCDlb0hogNx5O3l09sxHCFuw8qgfZ4xr0mKVPi0
+         XPPUU0cXDegn+B+qE02ZfZ0YftZLf8YnRsOitSY97NAUWR/pzOn32aKverYiBVXMT4XV
+         ZlcXDC1mTV0pNGCfZ3UnJhw2Mj4iXyG2praEuIYLnvmhrV6Ysu0CNZOba7i/XWAwTq/G
+         xDbAr+nqyxkXkN7tIKL/cf/s0UQI2kWKEfLoqDmFZl2nq6bUzhQHzG5OVmEeqh4lLIPV
+         9UHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718909341; x=1719514141;
+        d=1e100.net; s=20230601; t=1718909343; x=1719514143;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wu1wVc+3ogmDWb1QmIkKTSRvM9RrOiJDS3aYm0qmOo=;
-        b=oF4kX90d2eB9e3z/p4bbBca6rxLo7Aku6zzPrqAKeiQxNqNFFGyjE/5KhYSt/PUo2S
-         ccClE5XHITYdYMm/7ar+Fwsv09Jmqk9VUhvDhiiQtJy6ocZWH1ibEHuYFNDBgAwIekd/
-         3dbu3tG/m7SCqymZXoga7LkyPCu5tXag5oWzv4WTqSRuZpj5r9Dk2VGF8mueQXmG/ek+
-         Zd4/AkG/ESeiGSMO8Mm/kG8Q3GDOqzKbVkXKlaHs4hP6mpE67TfWAM2NGqyFoczq2OsD
-         S2+cg/G58mQXW3OfEPCw7VQEQJqkkkdbiDDOTU1xAxYJsJPZY1Fxfr1u34Y1HEddPEE0
-         RwuA==
-X-Forwarded-Encrypted: i=1; AJvYcCUojjuvhLiNEB7eF6KTYadnxR/fSr4E0sJWZzgJidQbnZr4XUBMgNxCGhFU7Es9tApnFuIji5kYtpZvbLy1fINqFimYy8yYwBqlkN/eZ8u3
-X-Gm-Message-State: AOJu0Yz1otR59w5H5ZVJjExdAU8QwlvEeEfPFhkaq675h2/MSEmg7Azm
-	7UBAqGSC8Vkj0DMIoa1Jdqs37OMeDIK5oEG0pVFx+UVbXdS7LHXTQK6cvklCnidAXz5wz8V8eiK
-	Xpr7X8yRoZQ==
-X-Google-Smtp-Source: AGHT+IEjuzQzaeOO0XPvpr1aZfzic9vLyfJJ9ryfPTpvci6d1NFaBB/sikXz1OAKxDRDMP415k8OVyAsWAiWxg==
+        bh=2HH+9CcttK5GdfJZnghTUQdGY7/vHW0gb5YShHVqiKQ=;
+        b=FPoFRYpcMVUY0ACdMIK0C60w4w+mKTwUn4ki1JUFeLqOI3JT/MaHFXS4dA/cCCURzU
+         FP9sT173/XkMGV16XIygC0cp6O3AL9BRxeWSD7ccrb7x6/D0AYHBCnAOrzBz8lU2cJmT
+         oduLldTWZba3bdhh4w4qJV25hdEuGw8BV0x3h6EbSg6agJ068VVG5oblm+uSV+oHYoSl
+         kzvuukyRO4KqH7E8RvMSWT3stq0mXsNknVDTh/muTUnq04dOdIL12O9Yar1bsizF57AE
+         O8Pi2qn+MRhfEjsZeHMX3jYaD91wjMiYaT12r2wCc1O8MoNPu9KZ+jCP/ZOnqa23dDNM
+         cRyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWSfhzAUgOtZIYe0XIJ9oXQqpcd2wawkxbi/iQIwgzXbjjuEeatKnAxAQAQKSi0eShpib1wwDlWuntxT/wHaK1dw+47q2/DBcIGiIPW37gJ
+X-Gm-Message-State: AOJu0YymMmOe8TcrcfYf1ZIX0dEC/wHqnZlKEEcE5PzsKE65cdUp9J/m
+	Xid76fWB0kdFaAZwJ+wfZV6hRclVhlWpE3mcYEMcs53QO0VLoqrnJSYskj9dHgP7Kd2qqMAG6dP
+	ZQg3noBvdHg==
+X-Google-Smtp-Source: AGHT+IHCsKQY1SzbhPGtb+37q7POGRig59xntnButnizlbSZlNSEHkAssfeNabPHgq9LHWi5d8wkBGQwyLwzZA==
 X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a17:903:110d:b0:1f6:77fc:c576 with SMTP
- id d9443c01a7336-1f9aa39e4a8mr4906245ad.1.1718909341152; Thu, 20 Jun 2024
- 11:49:01 -0700 (PDT)
-Date: Thu, 20 Jun 2024 18:48:53 +0000
+ (user=jiaqiyan job=sendgmr) by 2002:a17:903:124c:b0:1f6:ee9e:f602 with SMTP
+ id d9443c01a7336-1f9aa3cd264mr166835ad.4.1718909342518; Thu, 20 Jun 2024
+ 11:49:02 -0700 (PDT)
+Date: Thu, 20 Jun 2024 18:48:54 +0000
 In-Reply-To: <20240620184856.600717-1-jiaqiyan@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240620184856.600717-1-jiaqiyan@google.com>
 X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
-Message-ID: <20240620184856.600717-2-jiaqiyan@google.com>
-Subject: [PATCH v4 1/4] mm/memory-failure: refactor log format in soft offline code
+Message-ID: <20240620184856.600717-3-jiaqiyan@google.com>
+Subject: [PATCH v4 2/4] mm/memory-failure: userspace controls soft-offlining pages
 From: Jiaqi Yan <jiaqiyan@google.com>
 To: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
 	osalvador@suse.de
@@ -85,88 +85,99 @@ Cc: muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org,
 	linux-doc@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Logs from soft_offline_page and soft_offline_in_use_page have
-different formats than majority of the memory failure code:
+Correctable memory errors are very common on servers with large
+amount of memory, and are corrected by ECC. Soft offline is kernel's
+additional recovery handling for memory pages having (excessive)
+corrected memory errors. Impacted page is migrated to a healthy page
+if inuse; the original page is discarded for any future use.
 
-  "Memory failure: 0x${pfn}: ${lower_case_message}"
+The actual policy on whether (and when) to soft offline should be
+maintained by userspace, especially in case of an 1G HugeTLB page.
+Soft-offline dissolves the HugeTLB page, either in-use or free, into
+chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+If userspace has not acknowledged such behavior, it may be surprised
+when later failed to mmap hugepages due to lack of hugepages.
+In case of a transparent hugepage, it will be split into 4K pages
+as well; userspace will stop enjoying the transparent performance.
 
-Convert them to the following format:
+In addition, discarding the entire 1G HugeTLB page only because of
+corrected memory errors sounds very costly and kernel better not
+doing under the hood. But today there are at least 2 such cases
+doing so:
+1. when GHES driver sees both GHES_SEV_CORRECTED and
+   CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+2. RAS Correctable Errors Collector counts correctable errors per
+   PFN and when the counter for a PFN reaches threshold
+In both cases, userspace has no control of the soft offline performed
+by kernel's memory failure recovery.
 
-  "Soft offline: 0x${pfn}: ${lower_case_message}"
-
-No functional change in this commit.
+This commit gives userspace the control of softofflining any page:
+kernel only soft offlines raw page / transparent hugepage / HugeTLB
+hugepage if userspace has agreed to. The interface to userspace is a
+new sysctl at /proc/sys/vm/enable_soft_offline. By default its value
+is set to 1 to preserve existing behavior in kernel. When set to 0,
+soft-offline (e.g. MADV_SOFT_OFFLINE) will fail with EOPNOTSUPP.
 
 Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 ---
- mm/memory-failure.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ mm/memory-failure.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index d3c830e817e3..2a097af7da0e 100644
+index 2a097af7da0e..623aa93aff5a 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -2631,6 +2631,9 @@ int unpoison_memory(unsigned long pfn)
- }
- EXPORT_SYMBOL(unpoison_memory);
+@@ -68,6 +68,8 @@ static int sysctl_memory_failure_early_kill __read_mostly;
  
-+#undef pr_fmt
-+#define pr_fmt(fmt) "Soft offline: " fmt
+ static int sysctl_memory_failure_recovery __read_mostly = 1;
+ 
++static int sysctl_enable_soft_offline __read_mostly = 1;
 +
- static bool mf_isolate_folio(struct folio *folio, struct list_head *pagelist)
- {
- 	bool isolated = false;
-@@ -2686,7 +2689,7 @@ static int soft_offline_in_use_page(struct page *page)
+ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
  
- 	if (!huge && folio_test_large(folio)) {
- 		if (try_to_split_thp_page(page)) {
--			pr_info("soft offline: %#lx: thp split failed\n", pfn);
-+			pr_info("%#lx: thp split failed\n", pfn);
- 			return -EBUSY;
- 		}
- 		folio = page_folio(page);
-@@ -2698,7 +2701,7 @@ static int soft_offline_in_use_page(struct page *page)
- 	if (PageHWPoison(page)) {
- 		folio_unlock(folio);
- 		folio_put(folio);
--		pr_info("soft offline: %#lx page already poisoned\n", pfn);
-+		pr_info("%#lx page already poisoned\n", pfn);
- 		return 0;
+ static bool hw_memory_failure __read_mostly = false;
+@@ -141,6 +143,15 @@ static struct ctl_table memory_failure_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
++	{
++		.procname	= "enable_soft_offline",
++		.data		= &sysctl_enable_soft_offline,
++		.maxlen		= sizeof(sysctl_enable_soft_offline),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	}
+ };
+ 
+ /*
+@@ -2749,8 +2760,9 @@ static int soft_offline_in_use_page(struct page *page)
+  * @pfn: pfn to soft-offline
+  * @flags: flags. Same as memory_failure().
+  *
+- * Returns 0 on success
+- *         -EOPNOTSUPP for hwpoison_filter() filtered the error event
++ * Returns 0 on success,
++ *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
++ *         -EOPNOTSUPP if disabled by /proc/sys/vm/enable_soft_offline,
+  *         < 0 otherwise negated errno.
+  *
+  * Soft offline a page, by migration or invalidation,
+@@ -2786,6 +2798,13 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 		return -EIO;
  	}
  
-@@ -2711,7 +2714,7 @@ static int soft_offline_in_use_page(struct page *page)
- 	folio_unlock(folio);
- 
- 	if (ret) {
--		pr_info("soft_offline: %#lx: invalidated\n", pfn);
-+		pr_info("%#lx: invalidated\n", pfn);
- 		page_handle_poison(page, false, true);
- 		return 0;
- 	}
-@@ -2728,13 +2731,13 @@ static int soft_offline_in_use_page(struct page *page)
- 			if (!list_empty(&pagelist))
- 				putback_movable_pages(&pagelist);
- 
--			pr_info("soft offline: %#lx: %s migration failed %ld, type %pGp\n",
-+			pr_info("%#lx: %s migration failed %ld, type %pGp\n",
- 				pfn, msg_page[huge], ret, &page->flags);
- 			if (ret > 0)
- 				ret = -EBUSY;
- 		}
- 	} else {
--		pr_info("soft offline: %#lx: %s isolation failed, page count %d, type %pGp\n",
-+		pr_info("%#lx: %s isolation failed, page count %d, type %pGp\n",
- 			pfn, msg_page[huge], page_count(page), &page->flags);
- 		ret = -EBUSY;
- 	}
-@@ -2786,7 +2789,7 @@ int soft_offline_page(unsigned long pfn, int flags)
++	if (!sysctl_enable_soft_offline) {
++		pr_info_once("%#lx: disabled by /proc/sys/vm/enable_soft_offline\n",
++			pfn);
++		put_ref_page(pfn, flags);
++		return -EOPNOTSUPP;
++	}
++
  	mutex_lock(&mf_mutex);
  
  	if (PageHWPoison(page)) {
--		pr_info("%s: %#lx page already poisoned\n", __func__, pfn);
-+		pr_info("%#lx: page already poisoned\n", pfn);
- 		put_ref_page(pfn, flags);
- 		mutex_unlock(&mf_mutex);
- 		return 0;
 -- 
 2.45.2.741.gdbec12cfda-goog
 
