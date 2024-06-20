@@ -1,52 +1,81 @@
-Return-Path: <linux-kselftest+bounces-12313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7845491024B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 13:14:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0E0C9102D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 13:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D2BAB20E9D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 11:14:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18FC11F224B6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 11:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93CC1AB34E;
-	Thu, 20 Jun 2024 11:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD77A1ABCA9;
+	Thu, 20 Jun 2024 11:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="1UB+nWLx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GbH+06cr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB841AB51C;
-	Thu, 20 Jun 2024 11:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFB61AB91A
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 11:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718882028; cv=none; b=GNc7NxVbj/1UiPOm5cIP26mtiJ6H+4hXdUHo2ndK3CXbWL4faYGDLO2wXLWaQAUjPWetvRbLaTtoY9OMUULAnO7lLIMnWEsZ6xRlNmQ2JPdsgP/iwy65LLLJcTaUNpllTOJd9rSZA34HzOaIAgVofIcXDMA6e//9h/HMrT7VjPc=
+	t=1718883249; cv=none; b=KFqe+xBBTAV3f9L9JE3rItTfV+JskQSVTlkPDiqEl170/weXm0clvsorBDjLlb4yChE9qoEgDrb0EugA7u4tDBdhwR3AekvTj7Xl/RXWc9wQP/tojcM+IlTpdMbm3hnBm1XXdEL4xElHiPNi9hrn7HrRzmZq89gxJk7AapNK5Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718882028; c=relaxed/simple;
-	bh=qXWXn20DLjOvdynp5l2hKvCtHgV3z7caocvHt0KndnE=;
+	s=arc-20240116; t=1718883249; c=relaxed/simple;
+	bh=mF+bdyjinq6Vn5fzXWPKuTIhkeaBZ0XZIHAmz8B6ojI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m/aXGhOzvvdRW20Jcr49LsTcmgKr5nj27mKVozkw7Fq2VhXcAc3vSkCd1o8L4z2HZ4yslnzYa1f+7LAlAz05z9DkhJfUAij0EBtcwhArZl0oEYpmU8Jm0a7aCanPTIJ9QtZxSMWlXOHVwE7NOqQ1rs8/72kkwDVPkdrwnIrRU4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=1UB+nWLx; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=MLs6jfg4MFmxc6TQ6d1ve0pAXTgxupjGBEjBUWMxfIo=; t=1718882026;
-	x=1719314026; b=1UB+nWLxqrWa9e9z6WDX62YqiBdzc+zFISNCGVoHINDaGuj1igz80xRJeylU+
-	9ZakMOqAdWcCE6/KvfHQhz+Wl23Nk6ia3l1FW3tF+LAmvnVhIVSJJ7khG/vAl8K21eqwR5hZ//+NW
-	Q5F3M7mtMkgPPmls+wmy3zswjM2DEBauZKp0m06Oqxn5g/5uwaJPqqPuaAk8l4pq4jFIN4cPqaLJm
-	aZHjUnv1+eJ8BOXx5I2cqyv7+aaxdJYvC6b8ZYMT3fdK4lHmb3TwawpMGOFC7E2T4WTAu3hackHMJ
-	jcaZExYm655d41Bo/SAIFjaLtBlOlPjYbiik1YlE/dcyjfv1ww==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1sKFja-0000FD-2X; Thu, 20 Jun 2024 13:13:42 +0200
-Message-ID: <c42587a6-67e6-4f86-b865-9376bc4c0ed0@leemhuis.info>
-Date: Thu, 20 Jun 2024 13:13:41 +0200
+	 In-Reply-To:Content-Type; b=lYfzzQ0dPoq22xm/enDg+4rKLxHxZDZ25sv9gs27Drs5a2AlUOXLD+mtv75L1GvTmvDe2W36PLzp4RjNcBUPn8MN5mxlMsRsd0rMqw8zRh8Df3+pUMMHKpOeX6Rfzym9ys1M12gMOiVXLyPHmUYxtyuf87xUoaURmwTNpB4qSgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GbH+06cr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718883247;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=48uMSb3XQmRcndFEBSyjvxLuZw9qFtbAeLLtQCpxcKw=;
+	b=GbH+06crNlNHMBZ0qsMsGS4gucwL1CNP7PVzlpqpJ0lRLk8i9I7ywo7zx//5eTD6onK1eT
+	VZ2NynldgsP16kXdq6kMkglDxU7CTt1mhXEYbi4sBMUXzJeWP+yYuX4ejsbt+nD9KZXSk1
+	NJx7waml2SMa/4ZZmetwV8AxoNueNrA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-seDgk59VMd2pmcbyMGNR-A-1; Thu, 20 Jun 2024 07:34:05 -0400
+X-MC-Unique: seDgk59VMd2pmcbyMGNR-A-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-42117a61bccso6370065e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 04:34:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718883244; x=1719488044;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=48uMSb3XQmRcndFEBSyjvxLuZw9qFtbAeLLtQCpxcKw=;
+        b=HJLRfeibRwp98aurLSL9CivG2tCcAS2Crg/Et8Z7fXQyO+xiQVX4NF5DdbnMRYjL38
+         5hIHgp887jblNQL8LUQ7gi1e6aZv7JD6TOfIfwZvMg1woXh79RYD+v4Pb5WnLzzmQU3h
+         HFzI31Lf4aFFj0Ekn2yGTUDt9jUInFR8QQWmXADkZmLuWpCoOgrKVC0Ve+sBwydcNeyH
+         BaMynCu7cgbxqF+MGv2HcydtwJsDd+fFj3CnpBFL/rZhEpfUVJYFkvY4xoLu72roQ2/Q
+         DJKHp/uw0wf/bIwBCXiuMMnBJRTyuRSHFi5/1VK6XHiRkFUXqtzWrTHeoTtgVEMdODbg
+         vNdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUc9DX1fY4gqBpyqgh5IymkL1J3C9FIOyChllznkUqTMPPDjjb0vft0PoxoCD3tZU3E+s3A1ApV2Vqs6EQBFIPOouZWjF5F9+Mo0kvIlK38
+X-Gm-Message-State: AOJu0YwYsJ8yuMRLqPv67ZtypQRvQpcrFTPRUpgplOzx+dmMPPyaEHj5
+	cb6NDpy1kG8JvRwMHuewd5wgAtg19GExP+fSXca0bCl/YjAz02wKiG/GDFN8gbH/y3Lp2VJGjar
+	LsEd/qkj0W+Xh3ssd3VB02HnVpv8zlds35isXDbqUhc3GwhCQNUUL0cs2z8gXaUG7BA==
+X-Received: by 2002:a05:600c:22c9:b0:421:a575:99c9 with SMTP id 5b1f17b1804b1-42475180a22mr35613695e9.20.1718883244492;
+        Thu, 20 Jun 2024 04:34:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG+gxLFhA6YR817ALtxUbcnfky/pm0YRBBStXqXm4QjjI7azdieywTSEVo5C7aQNuyXlKhmNA==
+X-Received: by 2002:a05:600c:22c9:b0:421:a575:99c9 with SMTP id 5b1f17b1804b1-42475180a22mr35613445e9.20.1718883243982;
+        Thu, 20 Jun 2024 04:34:03 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c719:5b00:61af:900f:3aef:3af3? (p200300cbc7195b0061af900f3aef3af3.dip0.t-ipconnect.de. [2003:cb:c719:5b00:61af:900f:3aef:3af3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0b8f37sm22818715e9.1.2024.06.20.04.34.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jun 2024 04:34:03 -0700 (PDT)
+Message-ID: <d0b20f47-384d-49f1-8449-0da6da11089c@redhat.com>
+Date: Thu, 20 Jun 2024 13:34:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,77 +83,97 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] tools: kernel-chktaint: Fix bashism, simplify code
-To: Petr Vorel <pvorel@suse.cz>, linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org
-References: <20240618090641.359008-1-pvorel@suse.cz>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: en-US, de-DE
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <20240618090641.359008-1-pvorel@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] selftests/mm: Introduce a test program to assess swap
+ entry allocation for thp_swapout
+To: Ryan Roberts <ryan.roberts@arm.com>, Barry Song <21cnbao@gmail.com>,
+ akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org
+Cc: chrisl@kernel.org, hughd@google.com, kaleshsingh@google.com,
+ kasong@tencent.com, linux-kernel@vger.kernel.org, ying.huang@intel.com,
+ linux-kselftest@vger.kernel.org, Barry Song <v-songbaohua@oppo.com>
+References: <20240620002648.75204-1-21cnbao@gmail.com>
+ <f3c18806-34ac-41d3-8c79-d7dd6504547e@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <f3c18806-34ac-41d3-8c79-d7dd6504547e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1718882026;dcfc27da;
-X-HE-SMSGID: 1sKFja-0000FD-2X
 
-On 18.06.24 11:06, Petr Vorel wrote:
-> '==' is bashism, '=' needs to be used for comparison.
-> With this fix script can work on systems where the default shell is
-> dash, busybox ash or any other strictly POSIX compatible shell.
+On 20.06.24 11:04, Ryan Roberts wrote:
+> On 20/06/2024 01:26, Barry Song wrote:
+>> From: Barry Song <v-songbaohua@oppo.com>
+>>
+>> Both Ryan and Chris have been utilizing the small test program to aid
+>> in debugging and identifying issues with swap entry allocation. While
+>> a real or intricate workload might be more suitable for assessing the
+>> correctness and effectiveness of the swap allocation policy, a small
+>> test program presents a simpler means of understanding the problem and
+>> initially verifying the improvements being made.
+>>
+>> Let's endeavor to integrate it into the self-test suite. Although it
+>> presently only accommodates 64KB and 4KB, I'm optimistic that we can
+>> expand its capabilities to support multiple sizes and simulate more
+>> complex systems in the future as required.
 > 
-> While at it, also improve:
-> * remove "x" in the comparison (not needed for decades)
-> * use $# for checking number of arguments
-> * cleanup whitespace
+> I'll try to summarize the thread with Huang Ying by suggesting this test program
+> is "neccessary but not sufficient" to exhaustively test the mTHP swap-out path.
+> I've certainly found it useful and think it would be a valuable addition to the
+> tree.
 > 
-> Fixes: 4ab5a5d2a4a22 ("tools: add a kernel-chktaint to tools/debugging")
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> That said, I'm not convinced it is a selftest; IMO a selftest should provide a
+> clear pass/fail result against some criteria and must be able to be run
+> automatically by (e.g.) a CI system.
 
-Acked-by: Thorsten Leemhuis <linux@leemhuis.info>
+Likely we should then consider moving other such performance-related 
+thingies out of the selftests?
 
-Ciao, Thorsten
+-- 
+Cheers,
+
+David / dhildenb
+
 
