@@ -1,328 +1,162 @@
-Return-Path: <linux-kselftest+bounces-12289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36B4690FA3C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 02:27:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EEB290FABF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 03:05:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65109B21610
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 00:27:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51392830BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 01:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5578A80B;
-	Thu, 20 Jun 2024 00:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DB0C8FB;
+	Thu, 20 Jun 2024 01:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3mtCkuD"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Vii7E5rg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F9F64C;
-	Thu, 20 Jun 2024 00:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D29412E4A
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 01:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718843228; cv=none; b=ndIYfXAOYrvR3EYPXxwZgKzcfqXJVM449llf83X+yhC4PoA1ElWrg360J0m0xQSeIXdpr3XSXggfHhI6X8Xyp7BgGel76sboNIrIlApgYURqfFKlMBF3YxnnqtxMc2IDxBVW7xZwhVUFFYWcFL4UsNl5tv+lcrGSfsX0LLznPow=
+	t=1718845515; cv=none; b=lQXgH+JYgXurIdz8/PJPHf9AHvV38IEDxTZsNlLxeQZWRNKrYarDSWDX3vW+RDptC9IRdpRDPWSpmoL/rQVi/nGOjZnqRtB/Z0yxFa32KQrTCeUy4/iKXkFY/34cuQMHUVZI5dcmQ9TC23+/HkmHHZu+VX3V66k092PVB7xpDxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718843228; c=relaxed/simple;
-	bh=bz3ViVq8/ema1ANLsu/KH87HhKpcqFGpBqv5TCzfcMU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Sznmgb+w4w7WtVUbsU4/r+0sdMBAxtVvFNAxwMO+wEyGpo+VjTjrdl3aBfg4hByncMaC/DBzDAKm0yGih4NV2EcZZ0YuOCsATy9/Oj6oeeOql0BhdGNl9smalC4UopfruY/Zyu96ApOZXP+644sDQOZRZyEZi0n41SxA3p/l6fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3mtCkuD; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-705bf368037so366924b3a.0;
-        Wed, 19 Jun 2024 17:27:06 -0700 (PDT)
+	s=arc-20240116; t=1718845515; c=relaxed/simple;
+	bh=lp+GG3GoaTI9n94FGwNm9Zmf660rX/a/Rdm97RuaZXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jGLWMX8hc2HQ6Zi/xuAebDKOpx+SeGy/V3KP/JJ2QDpX4SW8YxwW9SpoK7xyfIXdKhrh9pstcweKTi3LV5a96FPaOzW4F1RfjC1xdjBLNLWnAk5qhq4OtCMOFaSMYC2HWcwiJsIjL8m+OwvCsefACXFAg0EdWPsy7zZTJelGgnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Vii7E5rg; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70631cd9e50so344694b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 18:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718843226; x=1719448026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/phkDRQOzz1mys5+rBCaSnbv5F7N/ucY8CBHIGfrx8g=;
-        b=W3mtCkuDHY8JEZBWvzlZC3CsTSGi7B4fNaL6hJWPdJY80erW5/7jbt0RMpaNlY0SV+
-         b/OVWYzF48xS+meknY0MN00e/+Kf2DDcjeOBfD+A4Z5ui/QW2YVhTnkhahMPwGH83ZVB
-         BbD9BKq/OdphaIBpycL9L1RDy9fmxWue3aiGZ1Gf7S2072jom/rh9LAJt1kT5/7If9Em
-         85JSinGTfe7Raloe9zOFyPMtIUUJeVRc+cQTcGRGV8pWuxjtz/HZ4nq6b2foV6+Nv/zW
-         FtxC56E0kHpTFzkg/uB4GFebVRC/oqrbgizBud1U5Wv4+eSScabGicJXCNMEu5dstSHs
-         2sgA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718845511; x=1719450311; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lTj093P79K2ULCRNhl2VLvyYHssujM99KgD8c+1HoEo=;
+        b=Vii7E5rgMZAkHFbVQFCh+xlNQiMKyG1e1NbUjR/9bD5yOGoIDLbPdiZkYdLFoMYIwe
+         yItEQxD22mdYNRh2DeAGEhrApFXt1v9GlzlpJtg/NKOvV2v8RSm4LYYABMQi5tMmcLbx
+         8tHiew/JI+gYv5s4YyRR2R8r0UWsLE8tJ1Dzl2i0YKVFHaCiB+Cf0L2bk+S6Hm3KxZma
+         gl5xgLyqLQ9gv3/zzTaSpKo7YhEn8pBpbeHZ/bvuAR8fJV5dicL/491LiBOkP/ME8ycC
+         i+O1IGj394L+GMTNAr1kytfePtBdtRLESvGat9WI6Iuymawd4EyR+PqkqfW0L4tZiIbu
+         Htjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718843226; x=1719448026;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/phkDRQOzz1mys5+rBCaSnbv5F7N/ucY8CBHIGfrx8g=;
-        b=et1DN2d15P1YpKZdHq77X0NwYk8OoP4bTiwnIneYqw2CEsHxvSJPrIPNJZW8pGAlEJ
-         ddq1G1HFiTCz7fwYorS0TWddQ51SzM0KvZPJdKsZ0tHWutdWMza0xM7C1YWBH8gqDGK3
-         hhuDc0CFAfo+Sz2Q6ghidLbvLz625+NKpHvYbcGl8VP4TSsemd+v2qaIZuZ7VNioibxS
-         kWqARdk0HTGpmQRE3vgx0eUI7vrC8v+muNbsoV5bCNJAXe5gYMYtgiAeWTNGzHMJE9YK
-         PUJclyvQzW6JmUSy5IrVm+2ziSNvj1lOXhONgchF4nPQq2u1Q0qS9ryNeBw2a3Qak5sk
-         xZ0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCULyfndJ1OlymQb7uTvh8vFUaqsbIiyAEhEY4Fvi4DuET7J83sLLwgnqjn67n50UcBw3GB/XL90rU9RQB502yraoaXFvn7D1MdwBVDzpC5XdfRWkX8iZXKCHDI+y63ri9vKgeVOe0+MDM0jmom1
-X-Gm-Message-State: AOJu0YwmrBU4BLHriHQzMkC90NtWmYHf/B16shoqCUvLPnPNwf4R5Qhh
-	IFw+2JcJiIqK7Cyc32mSmhm8IIbIBfEBGTG33Qljzkpbviwd0Fgx
-X-Google-Smtp-Source: AGHT+IEKP///BAxzukR21Dn0SGKbKyRk6+T0rDc0H3AwIZxrIsHI7d6TiHcl1VqbM0vqcWGSiAyMEA==
-X-Received: by 2002:a05:6a00:2f43:b0:704:1ac0:bf16 with SMTP id d2e1a72fcca58-70629c1fcbbmr3686506b3a.5.1718843225789;
-        Wed, 19 Jun 2024 17:27:05 -0700 (PDT)
-Received: from localhost.localdomain ([2407:7000:8942:5500:aaa1:59ff:fe57:eb97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705cc967356sm11273385b3a.63.2024.06.19.17.27.01
+        d=1e100.net; s=20230601; t=1718845511; x=1719450311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lTj093P79K2ULCRNhl2VLvyYHssujM99KgD8c+1HoEo=;
+        b=hY5sV7EfybsiQXUGchTdptK8h53X65d9TJRxX/L6iOsTetN3aCItUztLOng/t8Ltih
+         e1sCxFM9URMcw7vKSNcNGRFCWMyHGsBKPTotg+jXoMId4rnJB+NdywyCX5MsQzMHBzIW
+         0Yp0bnEe0GsLClu4ulp+VQb4lJD6RUPQVyEzvKxZLAx1UOyXlIEv5u2/1ItMqpa/gLUr
+         zfm/9qMi2xJVIXabyNTtSemnvxYUPDkQh3HD5Wm2Z7R3R39jCjCrqZq0rbrgpsRWN4fs
+         wJhhwDvvLX5KRLxVFpnQ4Li+O0ifJWPQrIMoIBrUakvf/DLaMOhdGOm0F0w58mQeyu6Q
+         ogNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdC5ggdnnweUxWTh74RMKbjn0v02PCTSo1DHNzyUG2il6ecCH9J4zfBdYWU+cVDssRhGoPnvotr1MGXYy63ZS0kcYP0Q22AnPEuTtJH4C1
+X-Gm-Message-State: AOJu0Ywv0waM4dw0AQQbG4jPk0s2qYy89vibzRLMKcynj9J2cSIk4byJ
+	TSA6p1HO5S1IY2iaTXQ7a8/beF2nPhLwEZ7b4wGUqx56PNJ7YG57LgZPaLSlAlU=
+X-Google-Smtp-Source: AGHT+IFHG2YtBQ7dbN3z7grTnecoiBOyImNaiLDLLK/3MPitmfNNntYDhXLJZlDFsG7HRSOmDZO/YA==
+X-Received: by 2002:a05:6a20:3c8c:b0:1b5:d00e:98d7 with SMTP id adf61e73a8af0-1bcbb5a8acdmr5418879637.24.1718845511409;
+        Wed, 19 Jun 2024 18:05:11 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855e5ba93sm124827385ad.3.2024.06.19.18.05.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jun 2024 17:27:05 -0700 (PDT)
-From: Barry Song <21cnbao@gmail.com>
-To: akpm@linux-foundation.org,
-	shuah@kernel.org,
-	linux-mm@kvack.org
-Cc: ryan.roberts@arm.com,
-	chrisl@kernel.org,
-	david@redhat.com,
-	hughd@google.com,
-	kaleshsingh@google.com,
-	kasong@tencent.com,
-	linux-kernel@vger.kernel.org,
-	ying.huang@intel.com,
-	linux-kselftest@vger.kernel.org,
-	Barry Song <v-songbaohua@oppo.com>
-Subject: [PATCH] selftests/mm: Introduce a test program to assess swap entry allocation for thp_swapout
-Date: Thu, 20 Jun 2024 12:26:48 +1200
-Message-Id: <20240620002648.75204-1-21cnbao@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Jun 2024 18:05:10 -0700 (PDT)
+Date: Wed, 19 Jun 2024 18:05:08 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: zhouquan@iscas.ac.cn
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, oleg@redhat.com,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	andy.chiu@sifive.com, shuah@kernel.org
+Subject: Re: [RFC PATCH 1/2] riscv: Expose orig_a0 in the user_regs_struct
+ structure
+Message-ID: <ZnOARMA1I0yRoNh8@ghost>
+References: <cover.1718693532.git.zhouquan@iscas.ac.cn>
+ <d4c7da80b72375c75836303bc744e4db9eeec218.1718693532.git.zhouquan@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4c7da80b72375c75836303bc744e4db9eeec218.1718693532.git.zhouquan@iscas.ac.cn>
 
-From: Barry Song <v-songbaohua@oppo.com>
+On Wed, Jun 19, 2024 at 10:01:27AM +0800, zhouquan@iscas.ac.cn wrote:
+> From: Quan Zhou <zhouquan@iscas.ac.cn>
+> 
+> Expose orig_a0 to userspace to ensure that users can modify
+> the actual value of `a0` in the traced process through the
+> ptrace(PTRACE_SETREGSET, ...) path. Since user_regs_struct is
+> a subset of pt_regs, we also need to adjust the position of
+> the orig_a0 field in pt_regs to achieve the correct copy.
+> 
+> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> ---
+>  arch/riscv/include/asm/ptrace.h      | 4 ++--
+>  arch/riscv/include/uapi/asm/ptrace.h | 2 ++
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
+> index b5b0adcc85c1..37f48d40ae46 100644
+> --- a/arch/riscv/include/asm/ptrace.h
+> +++ b/arch/riscv/include/asm/ptrace.h
+> @@ -45,12 +45,12 @@ struct pt_regs {
+>  	unsigned long t4;
+>  	unsigned long t5;
+>  	unsigned long t6;
+> +	/* a0 value before the syscall */
+> +	unsigned long orig_a0;
+>  	/* Supervisor/Machine CSRs */
+>  	unsigned long status;
+>  	unsigned long badaddr;
+>  	unsigned long cause;
+> -	/* a0 value before the syscall */
+> -	unsigned long orig_a0;
+>  };
+>  
+>  #define PTRACE_SYSEMU			0x1f
+> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
+> index a38268b19c3d..3e37f80cb3e8 100644
+> --- a/arch/riscv/include/uapi/asm/ptrace.h
+> +++ b/arch/riscv/include/uapi/asm/ptrace.h
+> @@ -54,6 +54,8 @@ struct user_regs_struct {
+>  	unsigned long t4;
+>  	unsigned long t5;
+>  	unsigned long t6;
+> +	/* a0 value before the syscall */
+> +	unsigned long orig_a0;
+>  };
+>  
+>  struct __riscv_f_ext_state {
+> -- 
+> 2.34.1
+> 
 
-Both Ryan and Chris have been utilizing the small test program to aid
-in debugging and identifying issues with swap entry allocation. While
-a real or intricate workload might be more suitable for assessing the
-correctness and effectiveness of the swap allocation policy, a small
-test program presents a simpler means of understanding the problem and
-initially verifying the improvements being made.
+This is a good addition!
 
-Let's endeavor to integrate it into the self-test suite. Although it
-presently only accommodates 64KB and 4KB, I'm optimistic that we can
-expand its capabilities to support multiple sizes and simulate more
-complex systems in the future as required.
+Since orig_a0 is no longer at the bottom of pt_regs, MAX_REG_OFFSET is
+now incorrect.
 
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
----
- tools/testing/selftests/mm/Makefile           |   1 +
- .../selftests/mm/thp_swap_allocator_test.c    | 192 ++++++++++++++++++
- 2 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/mm/thp_swap_allocator_test.c
+Can you adjust the value of:
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index e1aa09ddaa3d..64164ad66835 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -65,6 +65,7 @@ TEST_GEN_FILES += mseal_test
- TEST_GEN_FILES += seal_elf
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
-+TEST_GEN_FILES += thp_swap_allocator_test
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += uffd-stress
-diff --git a/tools/testing/selftests/mm/thp_swap_allocator_test.c b/tools/testing/selftests/mm/thp_swap_allocator_test.c
-new file mode 100644
-index 000000000000..4443a906d0f8
---- /dev/null
-+++ b/tools/testing/selftests/mm/thp_swap_allocator_test.c
-@@ -0,0 +1,192 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * thp_swap_allocator_test
-+ *
-+ * The purpose of this test program is helping check if THP swpout
-+ * can correctly get swap slots to swap out as a whole instead of
-+ * being split. It randomly releases swap entries through madvise
-+ * DONTNEED and do swapout on two memory areas: a memory area for
-+ * 64KB THP and the other area for small folios. The second memory
-+ * can be enabled by "-s".
-+ * Before running the program, we need to setup a zRAM or similar
-+ * swap device by:
-+ *  echo lzo > /sys/block/zram0/comp_algorithm
-+ *  echo 64M > /sys/block/zram0/disksize
-+ *  echo never > /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/enabled
-+ *  echo always > /sys/kernel/mm/transparent_hugepage/hugepages-64kB/enabled
-+ *  mkswap /dev/zram0
-+ *  swapon /dev/zram0
-+ * The expected result should be 0% anon swpout fallback ratio w/ or
-+ * w/o "-s".
-+ *
-+ * Author(s): Barry Song <v-songbaohua@oppo.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <errno.h>
-+#include <time.h>
-+
-+#define MEMSIZE_MTHP (60 * 1024 * 1024)
-+#define MEMSIZE_SMALLFOLIO (1 * 1024 * 1024)
-+#define ALIGNMENT_MTHP (64 * 1024)
-+#define ALIGNMENT_SMALLFOLIO (4 * 1024)
-+#define TOTAL_DONTNEED_MTHP (16 * 1024 * 1024)
-+#define TOTAL_DONTNEED_SMALLFOLIO (768 * 1024)
-+#define MTHP_FOLIO_SIZE (64 * 1024)
-+
-+#define SWPOUT_PATH \
-+	"/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout"
-+#define SWPOUT_FALLBACK_PATH \
-+	"/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout_fallback"
-+
-+static void *aligned_alloc_mem(size_t size, size_t alignment)
-+{
-+	void *mem = NULL;
-+
-+	if (posix_memalign(&mem, alignment, size) != 0) {
-+		perror("posix_memalign");
-+		return NULL;
-+	}
-+	return mem;
-+}
-+
-+static void random_madvise_dontneed(void *mem, size_t mem_size,
-+		size_t align_size, size_t total_dontneed_size)
-+{
-+	size_t num_pages = total_dontneed_size / align_size;
-+	size_t i;
-+	size_t offset;
-+	void *addr;
-+
-+	for (i = 0; i < num_pages; ++i) {
-+		offset = (rand() % (mem_size / align_size)) * align_size;
-+		addr = (char *)mem + offset;
-+		if (madvise(addr, align_size, MADV_DONTNEED) != 0)
-+			perror("madvise dontneed");
-+
-+		memset(addr, 0x11, align_size);
-+	}
-+}
-+
-+static unsigned long read_stat(const char *path)
-+{
-+	FILE *file;
-+	unsigned long value;
-+
-+	file = fopen(path, "r");
-+	if (!file) {
-+		perror("fopen");
-+		return 0;
-+	}
-+
-+	if (fscanf(file, "%lu", &value) != 1) {
-+		perror("fscanf");
-+		fclose(file);
-+		return 0;
-+	}
-+
-+	fclose(file);
-+	return value;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int use_small_folio = 0;
-+	int i;
-+	void *mem1 = aligned_alloc_mem(MEMSIZE_MTHP, ALIGNMENT_MTHP);
-+	void *mem2 = NULL;
-+
-+	if (mem1 == NULL) {
-+		fprintf(stderr, "Failed to allocate 60MB memory\n");
-+		return EXIT_FAILURE;
-+	}
-+
-+	if (madvise(mem1, MEMSIZE_MTHP, MADV_HUGEPAGE) != 0) {
-+		perror("madvise hugepage for mem1");
-+		free(mem1);
-+		return EXIT_FAILURE;
-+	}
-+
-+	for (i = 1; i < argc; ++i) {
-+		if (strcmp(argv[i], "-s") == 0)
-+			use_small_folio = 1;
-+	}
-+
-+	if (use_small_folio) {
-+		mem2 = aligned_alloc_mem(MEMSIZE_SMALLFOLIO, ALIGNMENT_MTHP);
-+		if (mem2 == NULL) {
-+			fprintf(stderr, "Failed to allocate 1MB memory\n");
-+			free(mem1);
-+			return EXIT_FAILURE;
-+		}
-+
-+		if (madvise(mem2, MEMSIZE_SMALLFOLIO, MADV_NOHUGEPAGE) != 0) {
-+			perror("madvise nohugepage for mem2");
-+			free(mem1);
-+			free(mem2);
-+			return EXIT_FAILURE;
-+		}
-+	}
-+
-+	for (i = 0; i < 100; ++i) {
-+		unsigned long initial_swpout;
-+		unsigned long initial_swpout_fallback;
-+		unsigned long final_swpout;
-+		unsigned long final_swpout_fallback;
-+		unsigned long swpout_inc;
-+		unsigned long swpout_fallback_inc;
-+		double fallback_percentage;
-+
-+		initial_swpout = read_stat(SWPOUT_PATH);
-+		initial_swpout_fallback = read_stat(SWPOUT_FALLBACK_PATH);
-+
-+		random_madvise_dontneed(mem1, MEMSIZE_MTHP, ALIGNMENT_MTHP,
-+				TOTAL_DONTNEED_MTHP);
-+
-+		if (use_small_folio) {
-+			random_madvise_dontneed(mem2, MEMSIZE_SMALLFOLIO,
-+					ALIGNMENT_SMALLFOLIO,
-+					TOTAL_DONTNEED_SMALLFOLIO);
-+		}
-+
-+		if (madvise(mem1, MEMSIZE_MTHP, MADV_PAGEOUT) != 0) {
-+			perror("madvise pageout for mem1");
-+			free(mem1);
-+			if (mem2 != NULL)
-+				free(mem2);
-+			return EXIT_FAILURE;
-+		}
-+
-+		if (use_small_folio) {
-+			if (madvise(mem2, MEMSIZE_SMALLFOLIO, MADV_PAGEOUT) != 0) {
-+				perror("madvise pageout for mem2");
-+				free(mem1);
-+				free(mem2);
-+				return EXIT_FAILURE;
-+			}
-+		}
-+
-+		final_swpout = read_stat(SWPOUT_PATH);
-+		final_swpout_fallback = read_stat(SWPOUT_FALLBACK_PATH);
-+
-+		swpout_inc = final_swpout - initial_swpout;
-+		swpout_fallback_inc = final_swpout_fallback - initial_swpout_fallback;
-+
-+		fallback_percentage = (double)swpout_fallback_inc /
-+			(swpout_fallback_inc + swpout_inc) * 100;
-+
-+		printf("Iteration %d: swpout inc: %lu, swpout fallback inc: %lu, Fallback percentage: %.2f%%\n",
-+				i + 1, swpout_inc, swpout_fallback_inc, fallback_percentage);
-+	}
-+
-+	free(mem1);
-+	if (mem2 != NULL)
-+		free(mem2);
-+
-+	return EXIT_SUCCESS;
-+}
--- 
-2.34.1
+#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
+
+in arch/riscv/include/asm/ptrace.h to be:
+
+#define MAX_REG_OFFSET offsetof(struct pt_regs, cause)
+
+This is something that is very easy to miss. I think it would be
+valuable to leave a comment at the top of struct pt_regs pointing out
+that MAX_REG_OFFSET needs to be adjusted if struct pt_regs changes.
+
+- Charlie
+
 
 
