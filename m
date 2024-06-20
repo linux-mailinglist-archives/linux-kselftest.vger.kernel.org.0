@@ -1,219 +1,225 @@
-Return-Path: <linux-kselftest+bounces-12324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FCE910579
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 15:10:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2875B9106E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 15:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7A5286A19
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 13:10:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C2B4B2461B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 13:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5DF8175E;
-	Thu, 20 Jun 2024 13:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74C11AD9C1;
+	Thu, 20 Jun 2024 13:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jye64+iQ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BBlbmiTA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2059.outbound.protection.outlook.com [40.107.93.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0151AAE34
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 13:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718888890; cv=none; b=b+nnSGMrsu0h8uEaseaVe9fA081TBZD8dMbbN0PWRULaOv/fo9O4C8Fn6AGC15LLKnNzTURIRvuKwB60N2U50lTStkcj+6tbGTcHHcm0SxESRsS5yp8BFyuZdP8GtCOVxgZUDeEpCWQJoN62kpdAI6xOwEWv5/9r2FEnzilN/aY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718888890; c=relaxed/simple;
-	bh=Nd5/hPdaVzyaCPja9J9QJBucAO/XJpZ+1uhijZYQ7fg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CYK+f6S7G+wcJtspOOoT4SqErCYUBWZPaHqcSqqjOQKLkhCqyduEFWi5tqCLBQmxZIYMvMBsQe6p9qtphaS0AqKzxWkyiCURyWmxboE3gLQBzP6usGZFtXMFcT579ETZQ2arq1GG4FEQmCRB9zr1xl8Y3onlXsB+Ct9g1CJ5aYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jye64+iQ; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-423b89f9042so136075e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 06:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718888887; x=1719493687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sokuciGEMqDWfb/GyCKAbwKFQZy9XN+HQFh0M9GkJEc=;
-        b=jye64+iQUf5Q22WYI1bW2qakhtko/K6W5NB1dXd/wdVeLgH5b8VP9R3SJjkU5Xg/Qg
-         NTkGml8A1f3UfF3IVPp/XroIcpCVV0ed2h8JV7hMFZH+bWmNt7flwiPFB4zNJcOjsrfk
-         MU58yhn0vKKAJJVzwmsmdqMZLBsK0k45PsUlWtXm5MpJ2ga/UFy5m/UUfJ3iDdCkuj04
-         lAJDLk9uDGhOoiOVzhYu1UXWSQX9ok6rsgLhdh8ATjEzHBSwhkcNtqmEWEZcsot9IOAu
-         yJL4xmekP5Tt+qPD5Nmx645PRWhY6Tc+43L2Zv0dRr+gmjWnRGS2AuKsUjhCG0jv/X1y
-         cQoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718888887; x=1719493687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sokuciGEMqDWfb/GyCKAbwKFQZy9XN+HQFh0M9GkJEc=;
-        b=rVAC6nUeCfDQLCcDQSnUjVUzCYaF4JMVY748HqCyYSbiFCFEGo5oqQ5h+w4T79Leyh
-         0oHAGVabEiAKsR/VX73UIOz7DioR7DMBKA/sNyVhq0GC23XqJIW4wo/6DbBBeG9og/5u
-         PIQTE0XxX16uGzYW8ZlYvhoPRUB032bI9h5AVWuoOderf7ij8I1AUd0AepsqXJSAkL6X
-         FNgWnCJyzfc1VzHLHuFiXRs+5xsUtOfVHSCTlrCp8eqFcyjVSYYTskb80+TVlYApjiqy
-         w7xiHm8EGnyjAGb0pi86eQogFJKGsBF5++AqqeTYZjcEZOZn4M2m94IFtOA9JCkfbmz0
-         9HTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmcSybbVLEOmvMQLb2xzq5C3unlldbTbZIZaco9lDwrjBMeXcav/R+IIdQjSgrvP5jkCHr+aF1tTGEmEu9pIiR9LbO2OFpZwFxdiJ0AaD1
-X-Gm-Message-State: AOJu0YxGj6kOI6krKsI8nzleesVWQApqbH6+eBlnWuGSLekCCC1c62QJ
-	VDM80fuOL13O/wLYYFLGIp2/r8oKxiqzJLy+zgkTYthlzrAhO3upXKlsY+pt6g==
-X-Google-Smtp-Source: AGHT+IHp9bazFhbmExqFkMfkC/8CdeFqGQa/Ablhwe0BqRz1q3OFlFoqlZtJH067QyRn9E0j/SDL1Q==
-X-Received: by 2002:a05:600c:4e0c:b0:41b:8715:1158 with SMTP id 5b1f17b1804b1-424758fd22bmr3600115e9.6.1718888887221;
-        Thu, 20 Jun 2024 06:08:07 -0700 (PDT)
-Received: from google.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36075c6fa4esm19579496f8f.67.2024.06.20.06.08.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jun 2024 06:08:06 -0700 (PDT)
-Date: Thu, 20 Jun 2024 13:08:02 +0000
-From: Mostafa Saleh <smostafa@google.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E248348CCD;
+	Thu, 20 Jun 2024 13:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718891748; cv=fail; b=skB3CmB8hkHz1hmNgu+ixohR9O3sD368jH2nzpBv3wWJLrMegkqJm8OjmjysthyzDRH/eMIn7Bi+U9DS7iYgIVnasR8GgFUxx2EjGaJSSf2DOs4f3aJd51v8D7ddyGP0MJ0gi0oko6xzLSs60kTTQbog1iGz8tLFySsyHnF1wDM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718891748; c=relaxed/simple;
+	bh=nI15mm40W7zMyr7NZlfXOB1PNXbWIH5RM1mA0Or4Yok=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rha1Q4KYQsEOjzD292yAGle07m+jeGPN3HlZSJyhKPBEMXNAvu/o0P2wxfXya4327PqP9wYscK0ftubjRy/sGPnR4XZxd1FWTYTiWLD8uvl3SjfQJKNWK3Cq1UVaCz5KzZ4j/FqnC/zNWUpJmyvRtv+Cig8RsYY591wnvc2uDWo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BBlbmiTA; arc=fail smtp.client-ip=40.107.93.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T9fMiN9cvdkp5C+V647OdRHi7WqjXAk1F/Y70vjLnFijE5FfQXGjO99JgShO7TVjG2Ftr5JZzG6joHz5gobVBsp3R9pBJ1R4mM7aE2SI9PnrSobJ6zP6QnCl4Op+RDWYxdMZHGB8PDznH598cMKZCISHLPYk/xOZZh971LGNEKeZwlbmbjPynXi4AtQSIrubcQkFi3Q/WorZ48ukzkeM5fKECF1V9ZYYEdC2FAL1UhOYgxeJODBZQQR/H6OSGzFdmG7q4AXteMYg8FLOGqvCPW8NFkSjHQOP9hqktE/ivzIH18eD4wVpsaVaSNgY8IORoq7PF9jtpXtVV7xsDYzRlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/IsWb3NVnOr8uUFvzDtaqHlzaVg9d+GNRRJgkOyoth4=;
+ b=knW9ReQ7MEbcyrTyzU2cT4jTESwiaDssb/1cQOwcp7Jmre8Rud8ROxp5ymgT1RKRoXzN7TQS/ukLUIr9gINIOHLqyAjEedF+AoUGH88BfRVaUeIho4ll+babSQrLCh+IY0g2iDyGKUYGltgiNxN3ysr3tT9eWqlgh+4asSVbcxq3tCNc1QxEHL1mcwfG97AR6UGkf7+/r2XmcpHvnMGR5ruXY3nm3sr9ba9V5gTckhO8csmG++LOirv1PwD5pIe0oSPm5ZTQVn02PLJnvxpJVfz1OAmE1rsYY2imb04sn9ioATdVkIlcklV1AGnmvg6gEiqpAsKxueLvqToBRxNbZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/IsWb3NVnOr8uUFvzDtaqHlzaVg9d+GNRRJgkOyoth4=;
+ b=BBlbmiTAOkrDYo1f0gIHGLjGOMmmYzfKmRrpCia6RnQtishkjNvZAWYfO4HzGzpWaILM/Pu2yU7er+wz3aIsDX1w42t8mfiEAe1L3BQO8XGc9QWNB+Aersccsl0X+2jDIJLgD271ZsKojBqWDlET/9avvMxx7I2pkTfo0M55LSdLPVqF9s6a+Ky0u/ivvSAImdaGbyAGu4r+z8HX7ijI/iDmmA3kwZEGQmHklKQEQyQJ6p4kiXcEJzz9oQuvDiZ3uJg38/vSPzFLVvWUMwTU/O8lCqbHR8OVpyIi/RtFmUiNHQlUjUEXq4OOhm2RkL+PMslmuqDbLzvRnFCtMQotqA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
+ by PH7PR12MB9256.namprd12.prod.outlook.com (2603:10b6:510:2fe::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Thu, 20 Jun
+ 2024 13:55:43 +0000
+Received: from DM6PR12MB3849.namprd12.prod.outlook.com
+ ([fe80::c296:774b:a5fc:965e]) by DM6PR12MB3849.namprd12.prod.outlook.com
+ ([fe80::c296:774b:a5fc:965e%5]) with mapi id 15.20.7677.030; Thu, 20 Jun 2024
+ 13:55:43 +0000
+Date: Thu, 20 Jun 2024 10:55:40 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	David Hildenbrand <david@redhat.com>,
+	John Hubbard <jhubbard@nvidia.com>,
 	Elliot Berman <quic_eberman@quicinc.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
 	maz@kernel.org, kvm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-	Fuad Tabba <tabba@google.com>, Jason Gunthorpe <jgg@nvidia.com>
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com
 Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
-Message-ID: <ZnQpslcah7dcSS8z@google.com>
+Message-ID: <20240620135540.GG2494510@nvidia.com>
 References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
  <7fb8cc2c-916a-43e1-9edf-23ed35e42f51@nvidia.com>
  <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
+ <CA+EHjTxWWEHfjZ9LJqZy+VCk43qd3SMKiPF7uvAwmDdPeVhrvQ@mail.gmail.com>
+ <20240619115135.GE2494510@nvidia.com>
+ <ZnOsAEV3GycCcqSX@infradead.org>
+ <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
+X-ClientProxiedBy: BL1PR13CA0292.namprd13.prod.outlook.com
+ (2603:10b6:208:2bc::27) To DM6PR12MB3849.namprd12.prod.outlook.com
+ (2603:10b6:5:1c7::26)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|PH7PR12MB9256:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6332ba6-6459-4dba-0462-08dc9130acda
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|1800799021|366013|376011|7416011;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UEtnMjNjU21BSXBqSUdsKzhDVXd1TVNPbmlENlA4bVJ3eDM4bUV5K2NmWkNv?=
+ =?utf-8?B?S2hQT2ZNK2thLzkyb2V3U1lRcEQ1eTEyek9LS29uem1iclhQT3dTbGZlenpT?=
+ =?utf-8?B?c29GTk9JRmlnUGh0Uk96TFRDZ2F3WnJaR2lqR0Zoc1g5aUl4bkRTRWtuRS8v?=
+ =?utf-8?B?SzFMemdlc2wxU3Bqb0dsbFhBWnhKVjlDTCs0dlZTbHJZb1ZtRGFlY1FGVlo4?=
+ =?utf-8?B?WElad1pnNlRmZjNkRkxaQnRPK21FZUZtTDdHRWh1RUxiYlNySVZ3bGlSR3dF?=
+ =?utf-8?B?NXBSSTlna0p3Z2k2aldqSk5GSWRqL0ozcWxYQlFtL09UMTQrY1UvVVoxWUs3?=
+ =?utf-8?B?bWhERGFmci90RTR6NUJnYmkwY1lFMWRWdUkvemtIYW4vaGl6Y21lWFFXVHpk?=
+ =?utf-8?B?dzJIWnJNWTJ3bEpRV0pnYWZkZ0hKaHBMeitUUlRPSWpwYVVjZEZQdVBCbzFQ?=
+ =?utf-8?B?MTlpY004UXdJRXhINGRnT21nV3RMVHlIZHR4a3prR3dTUndudjVnR1VCam5m?=
+ =?utf-8?B?UlZjbWFsVVIvcU5FdW50bytIMnhoVXFOUlBwM0YvQmZvVHRnK0Uvbk1DVXhD?=
+ =?utf-8?B?a0tIbDZNUHZHbXlweU9mcXRMWWsxUDY2VWUrQ2FsSFVaM2pYYnlBUkVwS01P?=
+ =?utf-8?B?c053TVliZE5hZUQzcXQxL2Z1bEhQTmk4Y05NTWxZN1NESWJkL21zblNubXBF?=
+ =?utf-8?B?aXliWFRmbmlKc1R0TU44SEVPZW5yQ3FLZlRheVk5dmpxdWoreEVHZXNWbG95?=
+ =?utf-8?B?VnE1Y3B2MktaWTdmQ1JMLzRETllxRnpEbngwc25tYlN4MU5PdzFBZkZXMWps?=
+ =?utf-8?B?WEVUMkRiUDhiZWl5M0poV2x6YXFSN2ljcG45MnlVWEVmQXlHRVhZOXF0MUUy?=
+ =?utf-8?B?alM5S3YwNlVReTZwbTFBMnBGRFBoM09VOW9wM0l0V2lNUlpndkdTWDNNZHhj?=
+ =?utf-8?B?d1JCNC9UN3ZEdktqd3htdjdiemVhS2lGNkN3VDdoaUJTUGtWVWoveTFyTit3?=
+ =?utf-8?B?TVhTc1lKWEg3YTJJUWtJQ0I0bVdiMlNnVGQrZFMyOFFvTmtUdjA1WGhxYk9O?=
+ =?utf-8?B?akE0eVo4MTFGMkdIZGJkZ1h6aVlxNWI2WTFYa3lKOFNkMUFGS2pPVVF6dVBV?=
+ =?utf-8?B?SEpFY2lmb1BoTXBFMUdzZkMyWmdyR0sxa0w1Q3lmcXBrY2tQWnVoSlFIWFR0?=
+ =?utf-8?B?Z0MzNUpoTVcrdUpnR2hUNllLWlNnNHV3eFIrUFdubWw1b3VMN2VGTWlmSWNr?=
+ =?utf-8?B?Z1JRRjFlMDZwMEN5QmFDalZ1ZHdjaUlleE01dUxxemprOCt2UjZkV3NzVXJQ?=
+ =?utf-8?B?OEROTnBLaHdXeks5THpnOGJlVFZuTGZJZ0FlTWZJUVI2UVJXR25DN2Nvck1B?=
+ =?utf-8?B?b21xNmkxOHlUTEJIamxtb0JjZFBtRlk3bGNMSTdlWHlZaEtnMUdlaUhmRHlm?=
+ =?utf-8?B?MzVZUFh3ejNsTnUyMUI4OXVPMkJDdzhlY1VMcHhOZ0JqV1E3bHgvZTZ2c3pN?=
+ =?utf-8?B?ekhTam4wWlZFbTMwMy9OMHR0UWpRNWZSVEVYKytiMk1RcE1zekU1TTd3Wnll?=
+ =?utf-8?B?NWJWT0NZbEdBc01Db0tFYUhsbFV4bGFIVU1IL0FxQmlpZFRRT0VCZzdaZnQ4?=
+ =?utf-8?B?NmxjMHRUZ0g2dWdLSG5nNUl6VnZvbzhBTTk2RW1Od1NubDVIT3VpSDRneUhS?=
+ =?utf-8?B?ZGpRTEw4eEVHN25xNkxWcEo5ZWpDT0RpZTNVMjVrM25KYzF6eWNodFN0VWZy?=
+ =?utf-8?Q?3kZchIMpqiOdmNsHQ4ABU1/FqyYIQn+8VX+qzg+?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(376011)(7416011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SnFXY1BHQWZUaEhwbGg0TjdQRndtZ1B5YytJUFRXV2MyMTRYVzdyRTBPTFcy?=
+ =?utf-8?B?NXlFTVRVdnZVbUtYVlRFdmNueGFBZU1IUzQ0QTAyalRNUFRLUkJxM3NBMTBO?=
+ =?utf-8?B?cnV2WnJiUk9neW40YzdaOUtVYm5CdkQ5L0VBN1gyWkJMOVhwSVo3WUtYbjEz?=
+ =?utf-8?B?bG9BN2Q1RjFWVVdxbUdHK3ZwVlI3cGRBWkhHS3VDZzVhMFZkaFJyY1FEM2Ew?=
+ =?utf-8?B?K2dkakJyMTBrd1VoY3BKd2ZSZlYwNDNIL2UxQk1YVkFwelJZQXdNcDdYaUdY?=
+ =?utf-8?B?ejhFSGlqSDlmMzRtWW5rMmowZnc2a21TWHNsQmtBTTlrNzVmTGlIWlJDNVp4?=
+ =?utf-8?B?MmpNNGs4ZmZHMVl4NDk0by9UU2NhcnhnNmJRL2QwY1UwN1N3OWptbzFZbXor?=
+ =?utf-8?B?WkdZdGRjT2NMWVhIVG5nWFQzMXBXUjMrcjhXOE4rREFsU0RvVDF6WDhJemRw?=
+ =?utf-8?B?NDJOOEU3K0tlc1AxQngzcmRIYy9CVldaclFQb21aejR6enJSWk5OS054VVlZ?=
+ =?utf-8?B?S3FUbGQxbVl5QWlOQ0MwYld6UTAyRmZUZFNGS29NYmhEYmNsSFM2aW9sdE9G?=
+ =?utf-8?B?ZW5ya3AvaGwxbXpYVXJodFhRN25IMTRVRDVqNExaN3hmYXFQNklWMFI5a1FC?=
+ =?utf-8?B?QnEyQWZkMHNwRDlhSkR0SlNuSTcrcTRqcDNXS2dESHFnSm9lc0N2aGhNRzMv?=
+ =?utf-8?B?c0tMcjMwSFFYK2UvMWdkRzVpTXowQ2pMQnc4WHRGNjMyWWU5MDhSaVlSejJz?=
+ =?utf-8?B?REdsOVU0L1VRTVRYOEZPK3BPSHVpcnZuR0duc1g5Rng2YnZBOFU3MGhudloy?=
+ =?utf-8?B?NytFakZxd0NzaEw3SkZWaVZXaXBoaEpjcGRwWC9UY2syY0MveFpuMXdOOXRW?=
+ =?utf-8?B?OGdEUnhRVEszdU9GUWFxbDhaNGloVDk3UVVJNGVHTm50ZWlkT3BuUFdjVEZF?=
+ =?utf-8?B?QzhtWkJNSkVrQW5lRlkvQkxNYko0cnYxUHVhTmNOYnNuNHlPWUtEL1JYNEhR?=
+ =?utf-8?B?Ly80ZmZMdWw5czRYMFRNYjMyR0RMVDJrb3lDQVQ5V2JwUGxFMU9YSEN4QmVu?=
+ =?utf-8?B?bzdhVS9Uc3lJVTRMSzNPQ1BZTnNyeHJSQnVGY3JXekpVK0U5Z3lPM3VDUUUx?=
+ =?utf-8?B?RDJFTGtaODdMT1IyaHo4amZUR3pxdExJQitxK2FZSXQ0ZTQvaUZXZG4vRjl3?=
+ =?utf-8?B?cnpJUjFWODlVRHhkejFGMmI1YVdMZ1R1MjlmSTlmUlBZeWNBYkI0aWtHMzls?=
+ =?utf-8?B?TGJiK21Bd3hJRUJ2VHpBZVFJdmlmZVp2Nzh3bVBFY20vcjM2UHRrdlhUWitV?=
+ =?utf-8?B?cHFBeUQrRVYxYlhoUVUzV1Z6cHpuRmJKZ1M5TVFvRk5BcFJXN2FtQ1VYaXdJ?=
+ =?utf-8?B?aFJkbVBqSG1kZEdpdzVLdDA3WWJQZVQ1cHNGdlRhRkxPTHdwUHBNekJkMGVl?=
+ =?utf-8?B?eVpiZEx0V2VZdnhNWEtQU3dnekpBV25VVDc5UkZLSGVZcWJzdGtKMEV4Y3Va?=
+ =?utf-8?B?ZE5iVUlmeWcwa0Fwc3pJUnZURkJQSXo0dTZvbE1YdXVEd1krK0dCKzFWTzlT?=
+ =?utf-8?B?ekJseFFkZCtJUlhJZ1ZFYzR5U2VHcENXa0lpU3VTQnBXS2RpVjJaMXFPMFpG?=
+ =?utf-8?B?V0JYMGp6bmxLL0RZU003eEcvNy9zNDVJTzZha2Vra0JCQ0FZbmdPYk4zaFNX?=
+ =?utf-8?B?TkYwVmtwU29pUTM5OFJwb0kyeU4rZTRPQkJ0Q3pGYlg5M2hBKzlTTXptb1l6?=
+ =?utf-8?B?ZGRRYS9qV2ROZGsrK0g0Z0VUZW9kUGZVRU8ybUMwbk5MdytNL04yRFJOb1BM?=
+ =?utf-8?B?WkZSalV2am5qeUpWRysyMTNrM25YR25NRHd4L0ZnUnd2RTRLN2NhdWJvMDJU?=
+ =?utf-8?B?ZFZJVmhHRzU1M1J2cXhLQTdnb0lENWQvVTNBTEt5K1R2ZFVBRCtYaSsvd2hU?=
+ =?utf-8?B?MHRUZDJHUjl1TjVnSkh2QWVINnpJRTYxZ0tIZ2JySjIyeUM2ZFRBZStvWmkz?=
+ =?utf-8?B?M1R5cUd5d25nR2toMmxmZDk4UnZKVXRMR0RSZC9NcU1hT1E2WmhlMUd2REdO?=
+ =?utf-8?B?NE1iU25aT2xlS2hKd2RXUmRWenVPM3l1dTYxTlR2MTYwZ2E4c0laN05wUWx4?=
+ =?utf-8?Q?B9Z0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6332ba6-6459-4dba-0462-08dc9130acda
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2024 13:55:42.9243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gS2b0uF2ZOS/nrxSpAg3wV9EXjNTPUHFJR65jWGL7ukrFJ32z3GcreGvfh97s56X
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9256
 
-Hi David,
-
-On Wed, Jun 19, 2024 at 09:37:58AM +0200, David Hildenbrand wrote:
+On Thu, Jun 20, 2024 at 09:32:11AM +0100, Fuad Tabba wrote:
 > Hi,
 > 
-> On 19.06.24 04:44, John Hubbard wrote:
-> > On 6/18/24 5:05 PM, Elliot Berman wrote:
-> > > In arm64 pKVM and QuIC's Gunyah protected VM model, we want to support
-> > > grabbing shmem user pages instead of using KVM's guestmemfd. These
-> > > hypervisors provide a different isolation model than the CoCo
-> > > implementations from x86. KVM's guest_memfd is focused on providing
-> > > memory that is more isolated than AVF requires. Some specific examples
-> > > include ability to pre-load data onto guest-private pages, dynamically
-> > > sharing/isolating guest pages without copy, and (future) migrating
-> > > guest-private pages.  In sum of those differences after a discussion in
-> > > [1] and at PUCK, we want to try to stick with existing shmem and extend
-> > > GUP to support the isolation needs for arm64 pKVM and Gunyah.
+> On Thu, Jun 20, 2024 at 5:11 AM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Wed, Jun 19, 2024 at 08:51:35AM -0300, Jason Gunthorpe wrote:
+> > > If you can't agree with the guest_memfd people on how to get there
+> > > then maybe you need a guest_memfd2 for this slightly different special
+> > > stuff instead of intruding on the core mm so much. (though that would
+> > > be sad)
+> >
+> > Or we're just not going to support it at all.  It's not like supporting
+> > this weird usage model is a must-have for Linux to start with.
 > 
-> The main question really is, into which direction we want and can develop
-> guest_memfd. At this point (after talking to Jason at LSF/MM), I wonder if
-> guest_memfd should be our new target for guest memory, both shared and
-> private. There are a bunch of issues to be sorted out though ...
-> 
-> As there is interest from Red Hat into supporting hugetlb-style huge pages
-> in confidential VMs for real-time workloads, and wasting memory is not
-> really desired, I'm going to think some more about some of the challenges
-> (shared+private in guest_memfd, mmap support, migration of !shared folios,
-> hugetlb-like support, in-place shared<->private conversion, interaction with
-> page pinning). Tricky.
-> 
-> Ideally, we'd have one way to back guest memory for confidential VMs in the
-> future.
-> 
-> 
-> Can you comment on the bigger design goal here? In particular:
-> 
-> 1) Who would get the exclusive PIN and for which reason? When would we
->    pin, when would we unpin?
-> 
-> 2) What would happen if there is already another PIN? Can we deal with
->    speculative short-term PINs from GUP-fast that could introduce
->    errors?
-> 
-> 3) How can we be sure we don't need other long-term pins (IOMMUs?) in
->    the future?
+> Sorry, but could you please clarify to me what usage model you're
+> referring to exactly, and why you think it's weird? It's just that we
+> have covered a few things in this thread, and to me it's not clear if
+> you're referring to protected VMs sharing memory, or being able to
+> (conditionally) map a VM's memory that's backed by guest_memfd(), or
+> if it's the Exclusive pin.
 
-Can you please clarify more about the IOMMU case?
+Personally I think mapping memory under guest_memfd is pretty weird.
 
-pKVM has no merged upstream IOMMU support at the moment, although
-there was an RFC a while a go [1], also there would be a v2 soon.
+I don't really understand why you end up with something different than
+normal CC. Normal CC has memory that the VMM can access and memory it
+cannot access. guest_memory is supposed to hold the memory the VMM cannot
+reach, right?
 
-In the patches KVM (running in EL2) will manage the IOMMUs including
-the page tables and all pages used in that are allocated from the
-kernel.
+So how does normal CC handle memory switching between private and
+shared and why doesn't that work for pKVM? I think the normal CC path
+effectively discards the memory content on these switches and is
+slow. Are you trying to make the switch content preserving and faster?
 
-These patches don't support IOMMUs for guests. However, I don't see
-why would that be different from the CPU? as once the page is pinned
-it can be owned by a guest and that would be reflected in the
-hypervisor tracking, the CPU stage-2 and IOMMU page tables as well.
+If yes, why? What is wrong with the normal CC model of slow and
+non-preserving shared memory? Are you trying to speed up IO in these
+VMs by dynamically sharing pages instead of SWIOTLB?
 
-[1] https://lore.kernel.org/kvmarm/20230201125328.2186498-1-jean-philippe@linaro.org/
+Maybe this was all explained, but I reviewed your presentation and the
+cover letter for the guest_memfd patches and I still don't see the why
+in all of this.
 
-Thanks,
-Mostafa
-
-> 
-> 4) Why are GUP pins special? How one would deal with other folio
->    references (e.g., simply mmap the shmem file into a different
->    process).
-> 
-> 5) Why you have to bother about anonymous pages at all (skimming over s
->    some patches), when you really want to handle shmem differently only?
-> 
-> > > To that
-> > > end, we introduce the concept of "exclusive GUP pinning", which enforces
-> > > that only one pin of any kind is allowed when using the FOLL_EXCLUSIVE
-> > > flag is set. This behavior doesn't affect FOLL_GET or any other folio
-> > > refcount operations that don't go through the FOLL_PIN path.
-> 
-> So, FOLL_EXCLUSIVE would fail if there already is a PIN, but !FOLL_EXCLUSIVE
-> would succeed even if there is a single PIN via FOLL_EXCLUSIVE? Or would the
-> single FOLL_EXCLUSIVE pin make other pins that don't have FOLL_EXCLUSIVE set
-> fail as well?
-> 
-> > > 
-> > > [1]: https://lore.kernel.org/all/20240319143119.GA2736@willie-the-truck/
-> > > 
-> > 
-> > Hi!
-> > 
-> > Looking through this, I feel that some intangible threshold of "this is
-> > too much overloading of page->_refcount" has been crossed. This is a very
-> > specific feature, and it is using approximately one more bit than is
-> > really actually "available"...
-> 
-> Agreed.
-> 
-> > 
-> > If we need a bit in struct page/folio, is this really the only way? Willy
-> > is working towards getting us an entirely separate folio->pincount, I
-> > suppose that might take too long? Or not?
-> 
-> Before talking about how to implement it, I think we first have to learn
-> whether that approach is what we want at all, and how it fits into the
-> bigger picture of that use case.
-> 
-> > 
-> > This feels like force-fitting a very specific feature (KVM/CoCo handling
-> > of shmem pages) into a more general mechanism that is running low on
-> > bits (gup/pup).
-> 
-> Agreed.
-> 
-> > 
-> > Maybe a good topic for LPC!
-> 
-> The KVM track has plenty of guest_memfd topics, might be a good fit there.
-> (or in the MM track, of course)
-> 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
+Jason
 
