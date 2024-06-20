@@ -1,177 +1,310 @@
-Return-Path: <linux-kselftest+bounces-12365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58753911431
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 23:15:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7D4691159F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 00:22:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A2061C208DA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 21:14:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D009283196
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 22:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0E981AD0;
-	Thu, 20 Jun 2024 21:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B0815748C;
+	Thu, 20 Jun 2024 22:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2teeYkrw"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="AroCWOny"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FC080055
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 21:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B24E155C86
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 22:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718918032; cv=none; b=bBQVR6bWP5iLri/8W+ueEOQramiCd68lEn1lH2RqcEm0+QHoJfIIOqmfsxuoIDcF3LPQuWxUzna2UEzEL3MB/2iL3Z2Kz4L21mwMQ5zViFhBJ3CxkfZUakjEVJMk1JRIoOJ+T2EGItzrcEAwvdLcl8hzuuOY1FglISUd3tvbQWU=
+	t=1718921981; cv=none; b=Euw2lBO3sKJHCstxmluYxIjjhOT+BUdVl3SPQIgKBj/kKNttRxCUMIVXiaNLIGGnMnlOiqG657hdQUZi/OphO1eIbiz40zLc2s/dm5irzYIEOBEw2woTXYWPxCjbyOntE5l1MeBf2CMuey/4q6U1o75mIsTICwhrrjkO0aFt57A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718918032; c=relaxed/simple;
-	bh=/XhhmhhowDYXjOJixYSeA/pTMAKP6y9kWx5xd+g6HSI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Igl16yZoEC8OFm2m+zXIT5hHvklZhBm43nI4MLpN8OBG0GI9VLi23+4dQ3MBkJBCHG23lPclQy3KKcx+ACIK6pOcX9b6yNSxhUC5sgvYRxtA+vShdaUJxytiQywSO1yAaP4W8879CuEa5Il0tlvgdgAW4J3v3jrDx6vhMeBJ41U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2teeYkrw; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52bc25a7b9fso1379e87.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 14:13:49 -0700 (PDT)
+	s=arc-20240116; t=1718921981; c=relaxed/simple;
+	bh=WuC+c7gIRxQRfWzku/JuPQzydIUAyqXMs6It56sQNMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jnaj4fpZxAhJCmHh289lW2YGhjxJ617FzwKdY4259PSObmA/cTcCBJ+rAiXR1fTn97C6ymzHWMCHep7sdHdfpW8jb9ktHoMxbB8L+vr5YvodCpuj1GefNlqtW3T6sLq5aKkqba+btauUUW4+//jMerKROwM2LGeMkdEEllZ0+Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=AroCWOny; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-444be1a2b01so2999591cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 15:19:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718918028; x=1719522828; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3J5efzHbrBSBEUK5Mw1SAdOtVm61ZWMUI1FF8AD69eY=;
-        b=2teeYkrwq4d7hQgYPLM8sQgVwStRk2Wbxca3QqACfhyCeSet4np7WykAlsovLTxTgP
-         gevqBPywOzZ9agMGpTlAGbn6elyE5FZ0Z4fVwnCbr4vTlk5QUYiGUyR1X20N5/3uBV1X
-         HCIJzLVOXhaSboWSDvnCLaSr/B2U32TevWL2sPwp12KADsqdD013l6rDOd5GWC7ZJCyA
-         lYcxUxxyopA7/CGd39IdHCJ9RkOhsLoKUVItTi9ROpp/x5/aE6QVVEnIe3/Gvvj1MeQZ
-         d6bd+bWrR+CVVUIgH5OlXkMzWKWQN/Lu7Dy6DSAJftpxzfaeJ1URnU3NeDjWMl+uBr8q
-         XCkw==
+        d=cloudflare.com; s=google09082023; t=1718921977; x=1719526777; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OuArwN7o7WoLSKyeVKHPzr4B3WlUmOtTdlRtE1mmap8=;
+        b=AroCWOnyAVjCqE9HJkbK7DrfC3TaBY3hEpcK8HJ6pa1LGzCOYm7N/vo/WdS+EgFpPS
+         vZrdY52YYBOwbFU/haZpsDQfOtBP8y99oIgLqQ8jO4M+tYaGeS7rQhsd8pzZRlNBRsh7
+         K+7jBeewXmTkQaJbPAvAwHsr1j6g+pr1Ep23np6sRp67oNcw5GJqxaaQqe6ItMphcA57
+         5HreJGL5QzhDGT97OA2g7F7GFfPt0vXWi+W2ax98nCfcLJq3a/tlGglM2aJ2N5RFBkCT
+         OEcWdYq/DFO6Si0OXFC95PSJDprXK7pmvlirEyStl07BllW6Jw9XC9wrqpUZb5jTylBh
+         FP/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718918028; x=1719522828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3J5efzHbrBSBEUK5Mw1SAdOtVm61ZWMUI1FF8AD69eY=;
-        b=B3vn/UVaJTF5nkxyzIaWmHNt+8EscKYA8b8CRB0pG2ZRiYhn5KPWKXpSj5DQEW+545
-         CeV0nEc+tmqtz+vyj4d3wHdN0EWfwKOtZX4M+3/4JwAi3vA4Z6jf6BMa+QDV420aw4r8
-         5/tROHLJTWf38sHi8NHcSI47cwxaDFBdjOHuNUPZ9ocR2mHixpDbs9pu/bW06T6UEn8P
-         HGi2+aHXtSfWNqEcLdWDXLUvizFHi+DOFyGPJclC+uQFRZXjdBSeqJKXW5Im5GyClmsZ
-         2talruJZ6NBEzFhlrloHg5sQORcIcJXsysZGC5YL1YZ18XImoegevWJ3VUmeZQ55wdqm
-         JT8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW5b8Rqm3xn2T7j0dX07fSN/sTvJHcwnpD2KgnAmnjg1DaNCw05wNxFEyTy32dnV8qWuagvP9o3+H3Amvf8glN3GdbMxTzlIzYLqmdmsDro
-X-Gm-Message-State: AOJu0YwM9+2fSyXPmD3Q5VwNCnCmLJZVzCSVcqQ45jjOpHvS+EuC76es
-	I/vTLCozNWleWQTFzoDduSxE0EyRKl295/wEE3SrxMzT99b8ua5f2f0vjwVfm1WREtnxWEg//a9
-	1z+0HTB/2/1iZw0EoD1Jzw5F0ajQa3WE9JyJZ1PqOd5JdUC1vcA==
-X-Google-Smtp-Source: AGHT+IEn8AqNmJKcntBraToyOLUgVbU+xEWQhtkU0QjCiHRU8X5rQAoXIzT/mO+rjYRWXps3yrWu2Ehhip3ibGm/BdE=
-X-Received: by 2002:a05:6512:acc:b0:52c:cbdf:f9ed with SMTP id
- 2adb3069b0e04-52cd46a7379mr147587e87.0.1718918027535; Thu, 20 Jun 2024
- 14:13:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718921977; x=1719526777;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OuArwN7o7WoLSKyeVKHPzr4B3WlUmOtTdlRtE1mmap8=;
+        b=Dj1y0inAu2CWoWSR/xmQVpKQsMNE3N8T2h4x3UiycN1A7HXB3WkB6DKFsOUzW5ugLz
+         dx/GJu7KyaYVfys5iOWyijlJnKTL9i4oFasBa3K5rm552BqOcRahggAfaU4rUiOs5+0K
+         f2n0OeJ7vGy3kfYGqXkKKCy9fHonYA5j/sFw/NI0AS35D6cuMkUpKhelGaLVaiv1a7VC
+         R9nhCQduSwtzGlBBjWr443ePFpsnGp/S+uRhzhiwehDfgnTy9lGdmOvw3wEtbTJmRQXm
+         H/jDD0Hw4QNxMvTSd2oVxFBjPjxVfsNmx8XLvUjKuo2pr12sTkdyCc3wiqGNTqtvToUr
+         gI6g==
+X-Forwarded-Encrypted: i=1; AJvYcCWoCOIN7VhZwivbE2YphLZGSN0UmPivaCyul2IWuuLu0HXi8JSNl/M1JiDYT7NLQN2wlIVIFSm3wO1Z0pu8iD5z5NVSqEHM2Q8Q43N542WF
+X-Gm-Message-State: AOJu0Yyy//v1mTCLiM5DL1byovz4ncx09y26aahunct2cEv0x3AmPsgC
+	m97wX+sHMQo3WGAG/kf3pzgVGjzco8XMo+CIyDDOhcZ/5UdcDHl6xw2sUqg1fmw=
+X-Google-Smtp-Source: AGHT+IE90gJSTf/sLdYoKoD9DTjeGf3DuiiwFPO4yuige78jRidVqNJPFiNlxGOmBXNcyVc3qM70vw==
+X-Received: by 2002:ac8:5a4c:0:b0:440:279c:fa0a with SMTP id d75a77b69052e-444a7a5537bmr78675951cf.53.1718921977535;
+        Thu, 20 Jun 2024 15:19:37 -0700 (PDT)
+Received: from debian.debian ([2a09:bac5:7a49:19cd::292:40])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-444c2b95594sm1965991cf.48.2024.06.20.15.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 15:19:36 -0700 (PDT)
+Date: Thu, 20 Jun 2024 15:19:34 -0700
+From: Yan Zhai <yan@cloudflare.com>
+To: netdev@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC net-next 9/9] bpf: selftests: test disabling GRO by XDP
+Message-ID: <04f25110b5f4c240b56dd9d449b6496096c74ab5.1718919473.git.yan@cloudflare.com>
+References: <cover.1718919473.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619202511.it.861-kees@kernel.org>
-In-Reply-To: <20240619202511.it.861-kees@kernel.org>
-From: Rae Moar <rmoar@google.com>
-Date: Thu, 20 Jun 2024 17:13:35 -0400
-Message-ID: <CA+GJov5ZpFxKxK44SAb_B8SzWUF9uQV13A8BcVPijo0CV0mStg@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit/usercopy: Disable testing on !CONFIG_MMU
-To: Kees Cook <kees@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, kernel test robot <lkp@intel.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1718919473.git.yan@cloudflare.com>
 
-On Wed, Jun 19, 2024 at 4:25=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
-> Since arch_pick_mmap_layout() is an inline for non-MMU systems, disable
-> this test there.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202406160505.uBge6TMY-lkp@i=
-ntel.com/
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Test the case when XDP disables GRO for a packet, the effect is actually
+reflected on the receiving side.
 
-Hello!
+Signed-off-by: Yan Zhai <yan@cloudflare.com>
+---
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/xdp_offloading.c | 122 ++++++++++++++++++
+ .../selftests/bpf/progs/xdp_offloading.c      |  50 +++++++
+ 3 files changed, 173 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_offloading.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xdp_offloading.c
 
-This looks good to me. And seems to fix the problem. Thanks for the fix!
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2fb16da78dce..e789392f44bd 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -96,3 +96,4 @@ CONFIG_XDP_SOCKETS=y
+ CONFIG_XFRM_INTERFACE=y
+ CONFIG_TCP_CONG_DCTCP=y
+ CONFIG_TCP_CONG_BBR=y
++CONFIG_SKB_GRO_CONTROL=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_offloading.c b/tools/testing/selftests/bpf/prog_tests/xdp_offloading.c
+new file mode 100644
+index 000000000000..462296d9689a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_offloading.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include "xdp_offloading.skel.h"
++
++/* run tcp server in ns1, client in ns2, and transmit 10MB data */
++static void run_tcp_test(const char *server_ip)
++{
++	struct nstoken *ns1 = NULL, *ns2 = NULL;
++	struct sockaddr_storage server_addr;
++	int total_bytes = 10 * 1024 * 1024;
++	int server_fd = -1, client_fd = -1;
++	int server_port = 5555;
++
++	socklen_t addrlen = sizeof(server_addr);
++
++	if (!ASSERT_OK(make_sockaddr(AF_INET, server_ip, server_port,
++				     &server_addr, &addrlen), "make_addr"))
++		goto err;
++
++	ns1 = open_netns("ns1");
++	if (!ASSERT_OK_PTR(ns1, "setns ns1"))
++		goto err;
++
++	server_fd = start_server_str(AF_INET, SOCK_STREAM, "0.0.0.0",
++				     server_port, NULL);
++	if (!ASSERT_NEQ(server_fd, -1, "start_server_str"))
++		goto err;
++
++	ns2 = open_netns("ns2");
++	if (!ASSERT_OK_PTR(ns2, "setns ns2"))
++		goto err;
++
++	client_fd = connect_to_addr(SOCK_STREAM, &server_addr, addrlen, NULL);
++	if (!ASSERT_NEQ(client_fd, -1, "connect_to_addr"))
++		goto err;
++
++	/* send 10MB data */
++	if (!ASSERT_OK(send_recv_data(server_fd, client_fd, total_bytes),
++		       "send_recv_data"))
++		goto err;
++
++err:
++	if (server_fd != -1)
++		close(server_fd);
++	if (client_fd != -1)
++		close(client_fd);
++	if (ns1)
++		close_netns(ns1);
++	if (ns2)
++		close_netns(ns2);
++}
++
++/* This test involves two netns:
++ *     NS1              |           NS2
++ *                      |
++ *        ---->  veth1 --> veth_offloading(xdp)-->(tp:netif_receive_skb)
++ *        |             |                              |
++ *        |             |                              v
++ *    tcp-server        |                         tcp-client
++ *
++ *   a TCP server in NS1 sends data through veth1, and the XDP program on
++ *   "xdp_offloading" is what we test against. This XDP program will apply
++ *   offloadings and we examine these at netif_receive_skb tracepoint if the
++ *   offloadings are propagated to skbs.
++ */
++void test_xdp_offloading(void)
++{
++	const char *xdp_ifname = "veth_offloading";
++	struct nstoken *nstoken = NULL;
++	struct xdp_offloading *skel = NULL;
++	struct bpf_link *link_xdp, *link_tp;
++	const char *server_ip = "192.168.0.2";
++	const char *client_ip = "192.168.0.3";
++	int ifindex;
++
++	SYS(out, "ip netns add ns1");
++	SYS(out, "ip netns add ns2");
++	SYS(out, "ip -n ns1 link add veth1 type veth peer name %s netns ns2",
++	    xdp_ifname);
++	SYS(out, "ip -n ns1 link set veth1 up");
++	SYS(out, "ip -n ns2 link set veth_offloading up");
++	SYS(out, "ip -n ns1 addr add dev veth1 %s/31", server_ip);
++	SYS(out, "ip -n ns2 addr add dev %s %s/31", xdp_ifname, client_ip);
++
++	SYS(out, "ip netns exec ns2 ethtool -K %s gro on", xdp_ifname);
++
++	nstoken = open_netns("ns2");
++	if (!ASSERT_OK_PTR(nstoken, "setns"))
++		goto out;
++
++	skel = xdp_offloading__open();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	ifindex = if_nametoindex(xdp_ifname);
++	if (!ASSERT_NEQ(ifindex, 0, "ifindex"))
++		goto out;
++
++	memcpy(skel->rodata->target_ifname, xdp_ifname, IFNAMSIZ);
++
++	if (!ASSERT_OK(xdp_offloading__load(skel), "load"))
++		goto out;
++
++	link_xdp = bpf_program__attach_xdp(skel->progs.xdp_disable_gro, ifindex);
++	if (!ASSERT_OK_PTR(link_xdp, "xdp_attach"))
++		goto out;
++
++	link_tp = bpf_program__attach(skel->progs.observe_skb_gro_disabled);
++	if (!ASSERT_OK_PTR(link_tp, "xdp_attach"))
++		goto out;
++
++	run_tcp_test(server_ip);
++
++	ASSERT_NEQ(__sync_fetch_and_add(&skel->bss->invalid_skb, 0), 0,
++		   "check invalid skbs");
++out:
++	if (nstoken)
++		close_netns(nstoken);
++	SYS_NOFAIL("ip netns del ns1");
++	SYS_NOFAIL("ip netns del ns2");
++}
+diff --git a/tools/testing/selftests/bpf/progs/xdp_offloading.c b/tools/testing/selftests/bpf/progs/xdp_offloading.c
+new file mode 100644
+index 000000000000..5fd88d75b008
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/xdp_offloading.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++#define IFNAMSIZ 16
++
++/* using a special ifname to filter unrelated traffic */
++const __u8 target_ifname[IFNAMSIZ];
++
++/* test outputs: these counters should be 0 to pass tests */
++int64_t invalid_skb = 0;
++
++extern int bpf_xdp_disable_gro(struct xdp_md *xdp) __ksym;
++
++/*
++ * Observing: after XDP disables GRO, gro_disabled bit should be set
++ * and gso_size should be 0.
++ */
++SEC("tp_btf/netif_receive_skb")
++int BPF_PROG(observe_skb_gro_disabled, struct sk_buff *skb)
++{
++	struct skb_shared_info *shinfo =
++		(struct skb_shared_info *)(skb->head + skb->end);
++	char devname[IFNAMSIZ];
++	int gso_size;
++
++	__builtin_memcpy(devname, skb->dev->name, IFNAMSIZ);
++	if (bpf_strncmp(devname, IFNAMSIZ, (const char *)target_ifname))
++		return 0;
++
++	if (!skb->gro_disabled)
++		__sync_fetch_and_add(&invalid_skb, 1);
++
++	gso_size = BPF_CORE_READ(shinfo, gso_size);
++	if (gso_size)
++		__sync_fetch_and_add(&invalid_skb, 1);
++
++	return 0;
++}
++
++SEC("xdp")
++int xdp_disable_gro(struct xdp_md *xdp)
++{
++	bpf_xdp_disable_gro(xdp);
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.30.2
 
-Reviewed-by: Rae Moar <rmoar@google.com>
 
--Rae
-
-> ---
-> Resending as v2 with Shuah in To:
-> ---
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Rae Moar <rmoar@google.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-hardening@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> ---
->  lib/kunit/user_alloc.c | 4 ++++
->  lib/usercopy_kunit.c   | 5 +++++
->  mm/util.c              | 2 ++
->  3 files changed, 11 insertions(+)
->
-> diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
-> index 76d3d1345ed7..ae935df09a5e 100644
-> --- a/lib/kunit/user_alloc.c
-> +++ b/lib/kunit/user_alloc.c
-> @@ -30,6 +30,10 @@ static int kunit_attach_mm(void)
->         if (current->mm)
->                 return 0;
->
-> +       /* arch_pick_mmap_layout() is only sane with MMU systems. */
-> +       if (!IS_ENABLED(CONFIG_MMU))
-> +               return -EINVAL;
-> +
->         mm =3D mm_alloc();
->         if (!mm)
->                 return -ENOMEM;
-> diff --git a/lib/usercopy_kunit.c b/lib/usercopy_kunit.c
-> index 45f1e558c464..e819561a540d 100644
-> --- a/lib/usercopy_kunit.c
-> +++ b/lib/usercopy_kunit.c
-> @@ -290,6 +290,11 @@ static int usercopy_test_init(struct kunit *test)
->         struct usercopy_test_priv *priv;
->         unsigned long user_addr;
->
-> +       if (!IS_ENABLED(CONFIG_MMU)) {
-> +               kunit_skip(test, "Userspace allocation testing not availa=
-ble on non-MMU systems");
-> +               return 0;
-> +       }
-> +
->         priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
->         test->priv =3D priv;
-> diff --git a/mm/util.c b/mm/util.c
-> index df37c47d9374..e70e8e439258 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -484,7 +484,9 @@ void arch_pick_mmap_layout(struct mm_struct *mm, stru=
-ct rlimit *rlim_stack)
->         clear_bit(MMF_TOPDOWN, &mm->flags);
->  }
->  #endif
-> +#ifdef CONFIG_MMU
->  EXPORT_SYMBOL_IF_KUNIT(arch_pick_mmap_layout);
-> +#endif
->
->  /**
->   * __account_locked_vm - account locked pages to an mm's locked_vm
-> --
-> 2.34.1
->
 
