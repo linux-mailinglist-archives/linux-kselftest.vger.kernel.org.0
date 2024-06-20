@@ -1,162 +1,220 @@
-Return-Path: <linux-kselftest+bounces-12290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12291-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EEB290FABF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 03:05:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9519090FB11
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 03:55:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D51392830BD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 01:05:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 096361F219CA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 01:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DB0C8FB;
-	Thu, 20 Jun 2024 01:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9BBE1173F;
+	Thu, 20 Jun 2024 01:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Vii7E5rg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WPMSPr+o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D29412E4A
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 01:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD68E13ACC;
+	Thu, 20 Jun 2024 01:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718845515; cv=none; b=lQXgH+JYgXurIdz8/PJPHf9AHvV38IEDxTZsNlLxeQZWRNKrYarDSWDX3vW+RDptC9IRdpRDPWSpmoL/rQVi/nGOjZnqRtB/Z0yxFa32KQrTCeUy4/iKXkFY/34cuQMHUVZI5dcmQ9TC23+/HkmHHZu+VX3V66k092PVB7xpDxc=
+	t=1718848550; cv=none; b=FOVzzk5AtOgqGIg7L2cefJIFKaQuKtriwwwrLbS2fUDA2+0XUM+HQRuhMAtsFHpZOcAq9glzoqdtpRRnn2psyw+p7cbWia3RkYl7bjUGdVLoTdJOTQ0s/rwpNeBxhF9ZW80Nv5ejsBt5rw7FEbdJv+W8aNCEN3YvYHdMoKlcMKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718845515; c=relaxed/simple;
-	bh=lp+GG3GoaTI9n94FGwNm9Zmf660rX/a/Rdm97RuaZXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jGLWMX8hc2HQ6Zi/xuAebDKOpx+SeGy/V3KP/JJ2QDpX4SW8YxwW9SpoK7xyfIXdKhrh9pstcweKTi3LV5a96FPaOzW4F1RfjC1xdjBLNLWnAk5qhq4OtCMOFaSMYC2HWcwiJsIjL8m+OwvCsefACXFAg0EdWPsy7zZTJelGgnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Vii7E5rg; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70631cd9e50so344694b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Jun 2024 18:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718845511; x=1719450311; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTj093P79K2ULCRNhl2VLvyYHssujM99KgD8c+1HoEo=;
-        b=Vii7E5rgMZAkHFbVQFCh+xlNQiMKyG1e1NbUjR/9bD5yOGoIDLbPdiZkYdLFoMYIwe
-         yItEQxD22mdYNRh2DeAGEhrApFXt1v9GlzlpJtg/NKOvV2v8RSm4LYYABMQi5tMmcLbx
-         8tHiew/JI+gYv5s4YyRR2R8r0UWsLE8tJ1Dzl2i0YKVFHaCiB+Cf0L2bk+S6Hm3KxZma
-         gl5xgLyqLQ9gv3/zzTaSpKo7YhEn8pBpbeHZ/bvuAR8fJV5dicL/491LiBOkP/ME8ycC
-         i+O1IGj394L+GMTNAr1kytfePtBdtRLESvGat9WI6Iuymawd4EyR+PqkqfW0L4tZiIbu
-         Htjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718845511; x=1719450311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lTj093P79K2ULCRNhl2VLvyYHssujM99KgD8c+1HoEo=;
-        b=hY5sV7EfybsiQXUGchTdptK8h53X65d9TJRxX/L6iOsTetN3aCItUztLOng/t8Ltih
-         e1sCxFM9URMcw7vKSNcNGRFCWMyHGsBKPTotg+jXoMId4rnJB+NdywyCX5MsQzMHBzIW
-         0Yp0bnEe0GsLClu4ulp+VQb4lJD6RUPQVyEzvKxZLAx1UOyXlIEv5u2/1ItMqpa/gLUr
-         zfm/9qMi2xJVIXabyNTtSemnvxYUPDkQh3HD5Wm2Z7R3R39jCjCrqZq0rbrgpsRWN4fs
-         wJhhwDvvLX5KRLxVFpnQ4Li+O0ifJWPQrIMoIBrUakvf/DLaMOhdGOm0F0w58mQeyu6Q
-         ogNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdC5ggdnnweUxWTh74RMKbjn0v02PCTSo1DHNzyUG2il6ecCH9J4zfBdYWU+cVDssRhGoPnvotr1MGXYy63ZS0kcYP0Q22AnPEuTtJH4C1
-X-Gm-Message-State: AOJu0Ywv0waM4dw0AQQbG4jPk0s2qYy89vibzRLMKcynj9J2cSIk4byJ
-	TSA6p1HO5S1IY2iaTXQ7a8/beF2nPhLwEZ7b4wGUqx56PNJ7YG57LgZPaLSlAlU=
-X-Google-Smtp-Source: AGHT+IFHG2YtBQ7dbN3z7grTnecoiBOyImNaiLDLLK/3MPitmfNNntYDhXLJZlDFsG7HRSOmDZO/YA==
-X-Received: by 2002:a05:6a20:3c8c:b0:1b5:d00e:98d7 with SMTP id adf61e73a8af0-1bcbb5a8acdmr5418879637.24.1718845511409;
-        Wed, 19 Jun 2024 18:05:11 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855e5ba93sm124827385ad.3.2024.06.19.18.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jun 2024 18:05:10 -0700 (PDT)
-Date: Wed, 19 Jun 2024 18:05:08 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: zhouquan@iscas.ac.cn
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, oleg@redhat.com,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	andy.chiu@sifive.com, shuah@kernel.org
-Subject: Re: [RFC PATCH 1/2] riscv: Expose orig_a0 in the user_regs_struct
- structure
-Message-ID: <ZnOARMA1I0yRoNh8@ghost>
-References: <cover.1718693532.git.zhouquan@iscas.ac.cn>
- <d4c7da80b72375c75836303bc744e4db9eeec218.1718693532.git.zhouquan@iscas.ac.cn>
+	s=arc-20240116; t=1718848550; c=relaxed/simple;
+	bh=oYiCbiHBTA6hmiZiPSlVupDRi4CFIhK9ABCT+BZpfDE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QaAkDzXcCNZOu2egk50/CcTPj1jG+BSFnSy4jqdXD3n1K+8mPtrR8ApLTR1cR8j7lpD4840vrCYpb7ov92zg4fVuLfZWxXxUzBR28xkJAd4AatomvvxMX8SWG66EUpVjN4E1PSJz0D7Iiz1H18zFPwfvfTp5de/SYxVdxFA3Lag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WPMSPr+o; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718848549; x=1750384549;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=oYiCbiHBTA6hmiZiPSlVupDRi4CFIhK9ABCT+BZpfDE=;
+  b=WPMSPr+ouY0dKzEvA1qSTXoUIIUzjTnl8bYX4wKNgyi9Sa67lUuovxeF
+   FPlOj1s5v27M9o/2wXYKPswjaGgb+izk9GJFRFgeYDgKqkLqxWy160Ma6
+   LMALxp8EDf6Glvbgg+/fRzskuDo5ZHhSi4vOQY+DNlX4WAD3FegzR4xxy
+   65qDiFWOXfL/ta1K2Nf+lyA3/GyoLQpRaKivD8sybZ7MlFnGfMU19Up5Y
+   EZo9FOMpR0uGmpzk6bErsJw+3Wt0EKylwETCXdFlaaLH/okJdjnkw7Jop
+   M845p8051DG/oVnx3cYSOiynxs9yhM5InxHYHepMOPmgX+Oy9JhUKMFmh
+   A==;
+X-CSE-ConnectionGUID: 5HiTOYZ2QI+v9AB2cxZLJg==
+X-CSE-MsgGUID: Dwfn185xR16JnwcoSJQVUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="38318192"
+X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
+   d="scan'208";a="38318192"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 18:55:47 -0700
+X-CSE-ConnectionGUID: bvHPT9LURfCgiupFdU7bWg==
+X-CSE-MsgGUID: J9K3wdFHT++zEai5EBrbtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
+   d="scan'208";a="46454253"
+Received: from unknown (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 18:55:44 -0700
+From: "Huang, Ying" <ying.huang@intel.com>
+To: Barry Song <21cnbao@gmail.com>
+Cc: akpm@linux-foundation.org,  shuah@kernel.org,  linux-mm@kvack.org,
+  ryan.roberts@arm.com,  chrisl@kernel.org,  david@redhat.com,
+  hughd@google.com,  kaleshsingh@google.com,  kasong@tencent.com,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Barry
+ Song <v-songbaohua@oppo.com>
+Subject: Re: [PATCH] selftests/mm: Introduce a test program to assess swap
+ entry allocation for thp_swapout
+In-Reply-To: <20240620002648.75204-1-21cnbao@gmail.com> (Barry Song's message
+	of "Thu, 20 Jun 2024 12:26:48 +1200")
+References: <20240620002648.75204-1-21cnbao@gmail.com>
+Date: Thu, 20 Jun 2024 09:53:53 +0800
+Message-ID: <87zfrg2xce.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4c7da80b72375c75836303bc744e4db9eeec218.1718693532.git.zhouquan@iscas.ac.cn>
+Content-Type: text/plain; charset=ascii
 
-On Wed, Jun 19, 2024 at 10:01:27AM +0800, zhouquan@iscas.ac.cn wrote:
-> From: Quan Zhou <zhouquan@iscas.ac.cn>
-> 
-> Expose orig_a0 to userspace to ensure that users can modify
-> the actual value of `a0` in the traced process through the
-> ptrace(PTRACE_SETREGSET, ...) path. Since user_regs_struct is
-> a subset of pt_regs, we also need to adjust the position of
-> the orig_a0 field in pt_regs to achieve the correct copy.
-> 
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+Barry Song <21cnbao@gmail.com> writes:
+
+> From: Barry Song <v-songbaohua@oppo.com>
+>
+> Both Ryan and Chris have been utilizing the small test program to aid
+> in debugging and identifying issues with swap entry allocation. While
+> a real or intricate workload might be more suitable for assessing the
+> correctness and effectiveness of the swap allocation policy, a small
+> test program presents a simpler means of understanding the problem and
+> initially verifying the improvements being made.
+>
+> Let's endeavor to integrate it into the self-test suite. Although it
+> presently only accommodates 64KB and 4KB, I'm optimistic that we can
+> expand its capabilities to support multiple sizes and simulate more
+> complex systems in the future as required.
+
+IIUC, this is a performance test program instead of functionality test
+program.  Does it match the purpose of the kernel selftest?
+
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
 > ---
->  arch/riscv/include/asm/ptrace.h      | 4 ++--
->  arch/riscv/include/uapi/asm/ptrace.h | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-> index b5b0adcc85c1..37f48d40ae46 100644
-> --- a/arch/riscv/include/asm/ptrace.h
-> +++ b/arch/riscv/include/asm/ptrace.h
-> @@ -45,12 +45,12 @@ struct pt_regs {
->  	unsigned long t4;
->  	unsigned long t5;
->  	unsigned long t6;
-> +	/* a0 value before the syscall */
-> +	unsigned long orig_a0;
->  	/* Supervisor/Machine CSRs */
->  	unsigned long status;
->  	unsigned long badaddr;
->  	unsigned long cause;
-> -	/* a0 value before the syscall */
-> -	unsigned long orig_a0;
->  };
->  
->  #define PTRACE_SYSEMU			0x1f
-> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
-> index a38268b19c3d..3e37f80cb3e8 100644
-> --- a/arch/riscv/include/uapi/asm/ptrace.h
-> +++ b/arch/riscv/include/uapi/asm/ptrace.h
-> @@ -54,6 +54,8 @@ struct user_regs_struct {
->  	unsigned long t4;
->  	unsigned long t5;
->  	unsigned long t6;
-> +	/* a0 value before the syscall */
-> +	unsigned long orig_a0;
->  };
->  
->  struct __riscv_f_ext_state {
-> -- 
-> 2.34.1
-> 
+>  tools/testing/selftests/mm/Makefile           |   1 +
+>  .../selftests/mm/thp_swap_allocator_test.c    | 192 ++++++++++++++++++
+>  2 files changed, 193 insertions(+)
+>  create mode 100644 tools/testing/selftests/mm/thp_swap_allocator_test.c
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index e1aa09ddaa3d..64164ad66835 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -65,6 +65,7 @@ TEST_GEN_FILES += mseal_test
+>  TEST_GEN_FILES += seal_elf
+>  TEST_GEN_FILES += on-fault-limit
+>  TEST_GEN_FILES += pagemap_ioctl
+> +TEST_GEN_FILES += thp_swap_allocator_test
+>  TEST_GEN_FILES += thuge-gen
+>  TEST_GEN_FILES += transhuge-stress
+>  TEST_GEN_FILES += uffd-stress
+> diff --git a/tools/testing/selftests/mm/thp_swap_allocator_test.c b/tools/testing/selftests/mm/thp_swap_allocator_test.c
+> new file mode 100644
+> index 000000000000..4443a906d0f8
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/thp_swap_allocator_test.c
+> @@ -0,0 +1,192 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * thp_swap_allocator_test
+> + *
+> + * The purpose of this test program is helping check if THP swpout
+> + * can correctly get swap slots to swap out as a whole instead of
+> + * being split. It randomly releases swap entries through madvise
+> + * DONTNEED and do swapout on two memory areas: a memory area for
+> + * 64KB THP and the other area for small folios. The second memory
+> + * can be enabled by "-s".
+> + * Before running the program, we need to setup a zRAM or similar
+> + * swap device by:
+> + *  echo lzo > /sys/block/zram0/comp_algorithm
+> + *  echo 64M > /sys/block/zram0/disksize
+> + *  echo never > /sys/kernel/mm/transparent_hugepage/hugepages-2048kB/enabled
+> + *  echo always > /sys/kernel/mm/transparent_hugepage/hugepages-64kB/enabled
+> + *  mkswap /dev/zram0
+> + *  swapon /dev/zram0
+> + * The expected result should be 0% anon swpout fallback ratio w/ or
+> + * w/o "-s".
+> + *
+> + * Author(s): Barry Song <v-songbaohua@oppo.com>
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <string.h>
+> +#include <sys/mman.h>
+> +#include <errno.h>
+> +#include <time.h>
+> +
+> +#define MEMSIZE_MTHP (60 * 1024 * 1024)
+> +#define MEMSIZE_SMALLFOLIO (1 * 1024 * 1024)
+> +#define ALIGNMENT_MTHP (64 * 1024)
+> +#define ALIGNMENT_SMALLFOLIO (4 * 1024)
+> +#define TOTAL_DONTNEED_MTHP (16 * 1024 * 1024)
+> +#define TOTAL_DONTNEED_SMALLFOLIO (768 * 1024)
+> +#define MTHP_FOLIO_SIZE (64 * 1024)
+> +
+> +#define SWPOUT_PATH \
+> +	"/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout"
+> +#define SWPOUT_FALLBACK_PATH \
+> +	"/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/swpout_fallback"
+> +
+> +static void *aligned_alloc_mem(size_t size, size_t alignment)
+> +{
+> +	void *mem = NULL;
+> +
+> +	if (posix_memalign(&mem, alignment, size) != 0) {
+> +		perror("posix_memalign");
+> +		return NULL;
+> +	}
+> +	return mem;
+> +}
+> +
+> +static void random_madvise_dontneed(void *mem, size_t mem_size,
+> +		size_t align_size, size_t total_dontneed_size)
+> +{
+> +	size_t num_pages = total_dontneed_size / align_size;
+> +	size_t i;
+> +	size_t offset;
+> +	void *addr;
+> +
+> +	for (i = 0; i < num_pages; ++i) {
+> +		offset = (rand() % (mem_size / align_size)) * align_size;
+> +		addr = (char *)mem + offset;
+> +		if (madvise(addr, align_size, MADV_DONTNEED) != 0)
+> +			perror("madvise dontneed");
 
-This is a good addition!
+IIUC, this simulates align_size (generally 64KB) swap-in.  That is, it
+simulate the effect of large size swap-in when it's not available in
+kernel.  If we have large size swap-in in kernel in the future, this
+becomes unnecessary.
 
-Since orig_a0 is no longer at the bottom of pt_regs, MAX_REG_OFFSET is
-now incorrect.
+Additionally, we have not reached the consensus that we should always
+swap-in with swapped-out size.  So, I suspect that this test may not
+reflect real situation in the future.  Although it doesn't reflect
+current situation too.
 
-Can you adjust the value of:
+> +
+> +		memset(addr, 0x11, align_size);
+> +	}
+> +}
+> +
 
-#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
+[snip]
 
-in arch/riscv/include/asm/ptrace.h to be:
-
-#define MAX_REG_OFFSET offsetof(struct pt_regs, cause)
-
-This is something that is very easy to miss. I think it would be
-valuable to leave a comment at the top of struct pt_regs pointing out
-that MAX_REG_OFFSET needs to be adjusted if struct pt_regs changes.
-
-- Charlie
-
-
+--
+Best Regards,
+Huang, Ying
 
