@@ -1,176 +1,229 @@
-Return-Path: <linux-kselftest+bounces-12335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65C67910982
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 17:15:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAEA4910A02
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 17:37:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA762B21A72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 15:15:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D3B51F21BEA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2024 15:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7B61B0111;
-	Thu, 20 Jun 2024 15:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604D01B013E;
+	Thu, 20 Jun 2024 15:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yNoLuSR+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE481AF6AA;
-	Thu, 20 Jun 2024 15:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05FF1B1405
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 15:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718896505; cv=none; b=dv+OjOInUdc2s1dznZPkkZn9BrQmjF4cKULMSxIdAz47EbwsGSb0Z5EDPvJift1GlsV7pFjbfHNXIX8bw2rNzjXxm7x6FFyRPoVEyTDD+OtB96NuC/V6103L4wLrrO87mpLn26++Q4DWXQhI+1SC5JfKeZsgnN7CcK+UutpJemA=
+	t=1718897827; cv=none; b=g/2VpwgPzXshvq+WQ/jYBiFx08vzQsf6ikbEuzYypfYt7KuDiQFBGd11GUSZlGIyNyB6vpwMK8mjUsPDQcT82ypinaQAR8joXbLtUi2p1v4d9mThzuTfTESnOOIy9SDpPNmH/Jf7YJFt/2G4DxnVZrX83zSJA9j9pw1rRqVxvcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718896505; c=relaxed/simple;
-	bh=B+ANxAr5I5iCOeavRB0jI50wfQL2dL1ZXhcF7hJaeXA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=npfehlmsGrSKtXBVAyspnxjuKnUYLuiqsFwjgyFPu7GiR+ijnG8/8A1yGAeb1J2OpFEiBoukgyYurSstsygVHxwhjv6MCpq9MORamzZzmqZD9Z7gqGxUs1JgyHdEcFBdoPWyNO0bZtxasMNDjrj1sCHc48W28mDuYRSvMKTcBkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4W4k3T5t3mz9v7Jj;
-	Thu, 20 Jun 2024 22:52:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 50AA214010C;
-	Thu, 20 Jun 2024 23:14:53 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwB3_zlXR3RmAzTNAA--.2719S2;
-	Thu, 20 Jun 2024 16:14:52 +0100 (CET)
-Message-ID: <c96db3ab0aec6586b6d55c3055e7eb9fea6bf4e3.camel@huaweicloud.com>
-Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: corbet@lwn.net, jmorris@namei.org, serge@hallyn.com, 
- akpm@linux-foundation.org, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
- alexandre.torgue@foss.st.com, mic@digikod.net, 
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- bpf@vger.kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
- linux-integrity@vger.kernel.org, wufan@linux.microsoft.com,
- pbrobinson@gmail.com,  zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
- pmatilai@redhat.com,  jannh@google.com, dhowells@redhat.com,
- jikos@kernel.org, mkoutny@suse.com,  ppavlu@suse.com, petr.vorel@gmail.com,
- mzerqung@0pointer.de, kgold@linux.ibm.com,  Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Thu, 20 Jun 2024 17:14:28 +0200
-In-Reply-To: <CAHC9VhQp1wsm+2d6Dhj1gQNSD0z_Hgj0cFrVf1=Zs94LmgfK0A@mail.gmail.com>
-References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
-	 <CAHC9VhTs8p1nTUXXea2JmF0FCEU6w39gwQRMtwACqM=+EBj1jw@mail.gmail.com>
-	 <7cf03a6ba8dbf212623aab2dea3dac39482e8695.camel@huaweicloud.com>
-	 <CAHC9VhSCw6RweTs6whAu4v6t4n7gxUWJtjmzY-UXrdzW0H+YJA@mail.gmail.com>
-	 <520d2dc2ff0091335a280a877fa9eb004af14309.camel@huaweicloud.com>
-	 <CAHC9VhRD1kBwqtkF+_cxCUCeNPp+0PAiNP-rG06me6gRQyYcyg@mail.gmail.com>
-	 <2b335bdd5c20878e0366dcf6b62d14f73c2251de.camel@huaweicloud.com>
-	 <CAHC9VhSOMLH69+q_wt2W+N9SK92KGp5n4YgzpsXMcO2u7YyaTg@mail.gmail.com>
-	 <e9114733eedff99233b1711b2b05ab85b7c19ca9.camel@huaweicloud.com>
-	 <CAHC9VhQp1wsm+2d6Dhj1gQNSD0z_Hgj0cFrVf1=Zs94LmgfK0A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1718897827; c=relaxed/simple;
+	bh=dQq91PMv6Hkh8U29G1UUbSNmF8C3plGL3zWrnxSr1eM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=anTuqDQ86I6aXhvIy65na6pQYBW87xskaeNRRds/S8IVeBYSnNi2KBqhcEFFH0jrquArZfhskRnXrxZvTzRNegun+LZq8fvQVgN0Q2NoISDtBajpLPHCD/H5XPn8/YJWDYo863xQ5uPFAw4BqO635z7Sbpbdk/s7WDYXtI5ojPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yNoLuSR+; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2c7a8dc68aeso1175853a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2024 08:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718897825; x=1719502625; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YcvtK+onJiZBymHPHugY4FRoclgetOnfb6qMYuc/RYA=;
+        b=yNoLuSR+bnSKkFDS2PNQ6Acibp41lJSgBOgUVCWGIxVcxcEwmysZxaADQqQyQPnOYF
+         a1neb757Ngznv26AR4GB1FC/VfV2z6S4zWsJ8IDgdl0pdnGdgAdd44LSRx8Bwfdq2pRC
+         anxA245nafljElRXEM43PtNkqa4J6j58cj7ICnP2hMwhPrz55PKvym1r3fFRslSYNJ7u
+         GIGLgSvHhrVGWcbXwsoO7GOzAsYioFSgRoUZ+d3ZdzcZx2lYs0b8iH/zq8cHIYstLGBR
+         Qq69jibbwsp8f2+cVw0d84wVLW5YVcjulFss/qnxhmpiR58R/bT7zoDRB7M2NOhe0QxA
+         /wTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718897825; x=1719502625;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YcvtK+onJiZBymHPHugY4FRoclgetOnfb6qMYuc/RYA=;
+        b=l8+M/HRFw15FGmuU6oN5LnWn5dXthvIkL+ERq4ya5v9LhxFn0vsbJcZXOlo2lXinRV
+         3SRPNA4xT1M6u58PG0fRAEgR1x1J7zmWYMx41BhOYqtKBi4BALuXHMknKCnP+o/Bg2mx
+         0/v2SkHVGeAnfQ1pPAmTG3BKD3Df4CEd6piJk3ImuGxpBd3LS7lOKALBE2x0vOTA8Rnl
+         R7G3OepAZoWQ4GL5etG2qGz0A4lKrSHPg2+hlnHwaS1Iwmw2GPybxZQuP53nSIO4yoDs
+         H+8qF8FG34azpv0o9YfXhG3+sckWVkAfWfwvw5AecedUBvsTFwlKm3rHFXH4o6+g/tyE
+         649A==
+X-Forwarded-Encrypted: i=1; AJvYcCUJIBILlbcLEjCs1fRKgpiFqZ9xC/fxvGmbvG56vDjvKZgDUy/griZhonPCyHEsdrupPsZLU8q9Umrkgzbw8SOuhiYS09bZoV4BeYvid3aE
+X-Gm-Message-State: AOJu0YywCy89OegtCqbRPoLcDJm3i8ZKuW6ICpmChXIWbhdIVyypcSsi
+	CGFOhK36gLQzcqpEkIw40oX4Rtj78/lehpe2JKqWbKi5POy9IBo+CJgNj59nzdBgCDu9knccl3W
+	0jA==
+X-Google-Smtp-Source: AGHT+IHXhor/kuVW03oouyq1tDyLAY6GkCcCTg8hiO3HTvemYmIW2WnCN2V89ElanisIBodVVNdjjBCJ40M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:3703:b0:2c4:aafe:75ec with SMTP id
+ 98e67ed59e1d1-2c7b4e45665mr16589a91.0.1718897824912; Thu, 20 Jun 2024
+ 08:37:04 -0700 (PDT)
+Date: Thu, 20 Jun 2024 08:37:03 -0700
+In-Reply-To: <CA+EHjTz_=J+bDpqciaMnNja4uz1Njcpg5NVh_GW2tya-suA7kQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwB3_zlXR3RmAzTNAA--.2719S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF18uFyDJF15AF1xZw1UZFb_yoW5Xw17pa
-	9rCF1Ykr4vqryfCwn2v3W7Z3WFvrZ8tF17Wwn8Xry5Cryq9r1Ikw1I9F4UuFWDXrn5u3Wa
-	yF42vFya9rn8uaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAI
-	cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
-	CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj595mQACsJ
+Mime-Version: 1.0
+References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
+ <7fb8cc2c-916a-43e1-9edf-23ed35e42f51@nvidia.com> <14bd145a-039f-4fb9-8598-384d6a051737@redhat.com>
+ <CA+EHjTxWWEHfjZ9LJqZy+VCk43qd3SMKiPF7uvAwmDdPeVhrvQ@mail.gmail.com>
+ <20240619115135.GE2494510@nvidia.com> <CA+EHjTz_=J+bDpqciaMnNja4uz1Njcpg5NVh_GW2tya-suA7kQ@mail.gmail.com>
+Message-ID: <ZnRMn1ObU8TFrms3@google.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, David Hildenbrand <david@redhat.com>, John Hubbard <jhubbard@nvidia.com>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>, maz@kernel.org, 
+	kvm@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	pbonzini@redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-06-20 at 10:48 -0400, Paul Moore wrote:
-> On Thu, Jun 20, 2024 at 5:12=E2=80=AFAM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Wed, 2024-06-19 at 14:43 -0400, Paul Moore wrote:
-> > > On Wed, Jun 19, 2024 at 12:38=E2=80=AFPM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > >=20
-> > > > Making it a kernel subsystem would likely mean replicating what the=
- LSM
-> > > > infrastructure is doing, inode (security) blob and being notified a=
-bout
-> > > > file/directory changes.
-> > >=20
-> > > Just because the LSM framework can be used for something, perhaps it
-> > > even makes the implementation easier, it doesn't mean the framework
-> > > should be used for everything.
-> >=20
-> > It is supporting 3 LSMs: IMA, IPE and BPF LSM.
-> >=20
-> > That makes it a clear target for the security subsystem, and as you
-> > suggested to start for IMA, if other kernel subsystems require them, we
-> > can make it as an independent subsystem.
+On Wed, Jun 19, 2024, Fuad Tabba wrote:
+> Hi Jason,
 >=20
-> Have you discussed the file digest cache functionality with either the
-> IPE or BPF LSM maintainers?  While digest_cache may support these
-
-Well, yes. I was in a discussion since long time ago with Deven and
-Fan. The digest_cache LSM is listed in the Use Case section of the IPE
-cover letter:
-
-https://lore.kernel.org/linux-integrity/1716583609-21790-1-git-send-email-w=
-ufan@linux.microsoft.com/
-
-I also developed an IPE module back in the DIGLIM days:
-
-https://lore.kernel.org/linux-integrity/a16a628b9e21433198c490500a987121@hu=
-awei.com/
-
-As for eBPF, I just need to make the digest_cache LSM API callable by
-eBPF programs, very likely not requiring any change on the eBPF
-infrastructure itself. As an example of the modification needed, you
-could have a look at:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/ker=
-nel/trace/bpf_trace.c?h=3Dv6.10-rc4#n1381
-
-
-Once the digest_cache LSM API is exposed in eBPF, you could write a
-simple file integrity check (taken from my DIGLIM eBPF), not tested:
-
-SEC("lsm.s/bprm_creds_for_exec")
-int BPF_PROG(exec, struct linux_binprm *bprm)
-{
-	u8 digest[MAX_DIGEST_SIZE] =3D { 0 };
-	digest_cache_found_t found;
-	struct digest_cache;
-	int algo;
-
-	algo =3D bpf_ima_file_hash(bprm->file, digest, sizeof(digest));
-	if (algo < 0)
-		return -EPERM;
-
-	digest_cache =3D bpf_digest_cache_get(bprm->file->f_path.dentry);
-	if (!digest_cache)
-		return -EPERM;
-
-	found =3D bpf_digest_cache_lookup(bprm->file->f_path.dentry,
-					digest_cache, digest, algo);
-
-	bpf_digest_cache_put(digest_cache);
-	return found ? 0 : -EPERM;
-}
-
-Roberto
-
-> LSMs, I don't recall seeing any comments from the other LSM
-> developers; if you are going to advocate for this as something outside
-> of IMA, it would be good to see a show of support for the other LSMs.
+> On Wed, Jun 19, 2024 at 12:51=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com>=
+ wrote:
+> >
+> > On Wed, Jun 19, 2024 at 10:11:35AM +0100, Fuad Tabba wrote:
+> >
+> > > To be honest, personally (speaking only for myself, not necessarily
+> > > for Elliot and not for anyone else in the pKVM team), I still would
+> > > prefer to use guest_memfd(). I think that having one solution for
+> > > confidential computing that rules them all would be best. But we do
+> > > need to be able to share memory in place, have a plan for supporting
+> > > huge pages in the near future, and migration in the not-too-distant
+> > > future.
+> >
+> > I think using a FD to control this special lifetime stuff is
+> > dramatically better than trying to force the MM to do it with struct
+> > page hacks.
+> >
+> > If you can't agree with the guest_memfd people on how to get there
+> > then maybe you need a guest_memfd2 for this slightly different special
+> > stuff instead of intruding on the core mm so much. (though that would
+> > be sad)
+> >
+> > We really need to be thinking more about containing these special
+> > things and not just sprinkling them everywhere.
 >=20
+> I agree that we need to agree :) This discussion has been going on
+> since before LPC last year, and the consensus from the guest_memfd()
+> folks (if I understood it correctly) is that guest_memfd() is what it
+> is: designed for a specific type of confidential computing, in the
+> style of TDX and CCA perhaps, and that it cannot (or will not) perform
+> the role of being a general solution for all confidential computing.
 
+That isn't remotely accurate.  I have stated multiple times that I want gue=
+st_memfd
+to be a vehicle for all VM types, i.e. not just CoCo VMs, and most definite=
+ly not
+just TDX/SNP/CCA VMs.
+
+What I am staunchly against is piling features onto guest_memfd that will c=
+ause
+it to eventually become virtually indistinguishable from any other file-bas=
+ed
+backing store.  I.e. while I want to make guest_memfd usable for all VM *ty=
+pes*,
+making guest_memfd the preferred backing store for all *VMs* and use cases =
+is
+very much a non-goal.
+
+From an earlier conversation[1]:
+
+ : In other words, ditch the complexity for features that are well served b=
+y existing
+ : general purpose solutions, so that guest_memfd can take on a bit of comp=
+lexity to
+ : serve use cases that are unique to KVM guests, without becoming an unmai=
+ntainble
+ : mess due to cross-products.
+
+> > > Also, since pin is already overloading the refcount, having the
+> > > exclusive pin there helps in ensuring atomic accesses and avoiding
+> > > races.
+> >
+> > Yeah, but every time someone does this and then links it to a uAPI it
+> > becomes utterly baked in concrete for the MM forever.
+>=20
+> I agree. But if we can't modify guest_memfd() to fit our needs (pKVM,
+> Gunyah), then we don't really have that many other options.
+
+What _are_ your needs?  There are multiple unanswered questions from our la=
+st
+conversation[2].  And by "needs" I don't mean "what changes do you want to =
+make
+to guest_memfd?", I mean "what are the use cases, patterns, and scenarios t=
+hat
+you want to support?".
+
+ : What's "hypervisor-assisted page migration"?  More specifically, what's =
+the
+ : mechanism that drives it?
+
+ : Do you happen to have a list of exactly what you mean by "normal mm stuf=
+f"?  I
+ : am not at all opposed to supporting .mmap(), because long term I also wa=
+nt to
+ : use guest_memfd for non-CoCo VMs.  But I want to be very conservative wi=
+th respect
+ : to what is allowed for guest_memfd.   E.g. host userspace can map guest_=
+memfd,
+ : and do operations that are directly related to its mapping, but that's a=
+bout it.
+
+That distinction matters, because as I have stated in that thread, I am not
+opposed to page migration itself:
+
+ : I am not opposed to page migration itself, what I am opposed to is addin=
+g deep
+ : integration with core MM to do some of the fancy/complex things that lea=
+d to page
+ : migration.
+
+I am generally aware of the core pKVM use cases, but I AFAIK I haven't seen=
+ a
+complete picture of everything you want to do, and _why_.
+
+E.g. if one of your requirements is that guest memory is managed by core-mm=
+ the
+same as all other memory in the system, then yeah, guest_memfd isn't for yo=
+u.
+Integrating guest_memfd deeply into core-mm simply isn't realistic, at leas=
+t not
+without *massive* changes to core-mm, as the whole point of guest_memfd is =
+that
+it is guest-first memory, i.e. it is NOT memory that is managed by core-mm =
+(primary
+MMU) and optionally mapped into KVM (secondary MMU).
+
+Again from that thread, one of most important aspects guest_memfd is that V=
+MAs
+are not required.  Stating the obvious, lack of VMAs makes it really hard t=
+o drive
+swap, reclaim, migration, etc. from code that fundamentally operates on VMA=
+s.
+
+ : More broadly, no VMAs are required.  The lack of stage-1 page tables are=
+ nice to
+ : have; the lack of VMAs means that guest_memfd isn't playing second fiddl=
+e, e.g.
+ : it's not subject to VMA protections, isn't restricted to host mapping si=
+ze, etc.
+
+[1] https://lore.kernel.org/all/Zfmpby6i3PfBEcCV@google.com
+[2] https://lore.kernel.org/all/Zg3xF7dTtx6hbmZj@google.com
 
