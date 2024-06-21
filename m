@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-12419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B3EF911FA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 10:57:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B1A5911FA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 10:58:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10B61F20F34
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 08:57:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FB06B2210C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 08:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D299F16F26B;
-	Fri, 21 Jun 2024 08:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF8F16F82F;
+	Fri, 21 Jun 2024 08:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQ1Ac5HG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sn0wEPw+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AE116DEA2;
-	Fri, 21 Jun 2024 08:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5584316F29F;
+	Fri, 21 Jun 2024 08:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718960192; cv=none; b=Gu2OoR7kJxH+3iURJNDA0eyNymad4tLkcIh5CNLMVx3MP/5T1suVe3StFfZu0DVWqp5CQlAUwc/9/K6omYIUgAlGQonQDj5HYmnPRGqVIZ9Z+3reDadlbkHdrNILphBLaB87wIyhEw0SYHa27+iDif2z1OJtNIG4b4MgjDbZpYQ=
+	t=1718960195; cv=none; b=F/fsOxYzzkCChNhCOJaovAj97k7pSJlkrVhCPD4Y0/TKtos8Lin9uSwTriOCef2VRH7zK2fBcXumjEnELugo2QDa65QmF3jtph3m4iJVRrrhcpzr94jZBrlerB1iOcUAxaWvq/f4kG//2b552qvp1zUEtZ9e64VhzncdZYxEK0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718960192; c=relaxed/simple;
-	bh=y33ev/OTZs7XXrfVAbnT4fpGU9UPD2zKcmYgHXfHD8k=;
+	s=arc-20240116; t=1718960195; c=relaxed/simple;
+	bh=JiKAdKFDZbn+4Mk7WQIyo9I38Zbpy7zp3+6aI6igqbA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Xtam+aGC9BuewwtJDbTIlxNBGl2fvhEQ3zurBQRNGpBIHzGivBCpi59HHltQ6H76DHi3a4I3a8Slig9vieM64dmaTJFvwEmJZ05C4L1UG9H3ALySTLerPPfncGHu7sCABpY0g0FPArSVNrXGFr09+xZCeNNRE2Qq6JKg9Ao76x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQ1Ac5HG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A114CC2BBFC;
-	Fri, 21 Jun 2024 08:56:30 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=lk77+9dG5ZY+sTuR0BUx+5ILwRX+6QCA9g5bPtLdoGcdrzjNyjauFSIPjB0gfWTt3MLZzgOCIBH+g15ss/kuZN+hPJ3DZlU32GUOKpPMNMh/pmsjQhoVM+sVVsDWnyJKFVXnWLKvtj7qVqnxzUe673BYvV+I8EkcfaF6XgP76p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sn0wEPw+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B1FC4AF08;
+	Fri, 21 Jun 2024 08:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718960192;
-	bh=y33ev/OTZs7XXrfVAbnT4fpGU9UPD2zKcmYgHXfHD8k=;
+	s=k20201202; t=1718960194;
+	bh=JiKAdKFDZbn+4Mk7WQIyo9I38Zbpy7zp3+6aI6igqbA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=TQ1Ac5HGez8vRd2m/g1WYsx8H+U4gwwuFYzjMqmtJxmt600JjquO6p2JeO+MC/JXE
-	 bSOEklcyCoNFhAiJKMbXwD1TCPVQVIuNOxKh4SV+4t1PIjeuZZUjLoALqiNoAouA+s
-	 k7E67EWyCwO1LzHmfznKvGQpOSCgNjgJIEBHlK2QOybhAugqJVyz+v4yPPr2Qjgkz+
-	 dNND+0yGHHnMU+J6sHDcKv05VviyPJChBMbC7oDVdaQ9lKjXepiSzKixhhKh7NDmni
-	 9PlyjnE+IxCB59nj5vpMrcefW/ld5Sa9uq8a8KXat/M06ID16M2IXLhyz25QpuJdhF
-	 LOLmLAZAUh4Rw==
+	b=Sn0wEPw+HCs/deCxPnFMHmQfGM5PGkQQJoE8QLJ5BNzdV5YdqARbUNnmeGUD/TjIF
+	 finOTKNMxxV13JDHvo4uWGD85KDQaJ009bIEPi/zcpYEPp1kAosza20l2cOPPsxrr7
+	 Cdwe08HS/FdBzpmjuGH1QDj21ERulTb2tdGs+0zz4glqCqvaC8F09RkQmMt/XIXjTw
+	 CAiFDrbIrAww8fqWrhR8SkXNiH/2BS/TPZKSPIxPzeT+XpMHYfBN0DmKlFAQ7o8uR1
+	 IpmBkou5rh9HIX+vnoJ3QoeY3vSNLNtzFPUy/x6PcWDYz5NRr6DyNzSYihqrspKf4F
+	 OmNMWjKGxHryQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Fri, 21 Jun 2024 10:55:50 +0200
-Subject: [PATCH HID 05/12] selftests/hid: add tests for hid_hw_raw_request
- HID-BPF hooks
+Date: Fri, 21 Jun 2024 10:55:51 +0200
+Subject: [PATCH HID 06/12] HID: bpf: add HID-BPF hooks for
+ hid_hw_output_report
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-hid_hw_req_bpf-v1-5-d7ab8b885a0b@kernel.org>
+Message-Id: <20240621-hid_hw_req_bpf-v1-6-d7ab8b885a0b@kernel.org>
 References: <20240621-hid_hw_req_bpf-v1-0-d7ab8b885a0b@kernel.org>
 In-Reply-To: <20240621-hid_hw_req_bpf-v1-0-d7ab8b885a0b@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -62,250 +62,235 @@ Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718960178; l=7379;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718960178; l=8890;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=y33ev/OTZs7XXrfVAbnT4fpGU9UPD2zKcmYgHXfHD8k=;
- b=IRKBtNvBa4FiwpYHW7rS9BCgSRmJ4Epg6dh8Fvr+fFLfrwNFfcrEXnrUi3Eq547UuzR8h7381
- QDFr7pJTJmwBJRuNu7jpK/Qtxu1m4mr6NF2oMKs8NPDMX1U16TrKCHp
+ bh=JiKAdKFDZbn+4Mk7WQIyo9I38Zbpy7zp3+6aI6igqbA=;
+ b=A40eBbux7mjTHkaBaSi0kYGAPwOUzKuJ8sApL1yg1JZUYSyV9Ab2gjVuLrKbeJXnexw57KXWn
+ ttYAlTrfh3/D8yc6ilZLLKT/ArsdZc6fDLiAF+1D5LEioC4QPlFHm2T
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-We add 3 new tests:
-- first, we make sure we can prevent the raw_request to happen
-- second, we make sure that we can detect that a given hidraw client
-  was actually doing the request, and for that client only, call ourself
-  hid_bpf_hw_request(), returning a custom value
-- last, we ensure that we can not loop between hooks for
-  hid_hw_raw_request() and manual calls to hid_bpf_hw_request() from that
-  hook
+Same story than hid_hw_raw_requests:
+
+This allows to intercept and prevent or change the behavior of
+hid_hw_output_report() from a bpf program.
+
+The intent is to solve a couple of use case:
+  - firewalling a HID device: a firewall can monitor who opens the hidraw
+    nodes and then prevent or allow access to write operations on that
+    hidraw node.
+  - change the behavior of a device and emulate a new HID feature request
+
+The hook is allowed to be run as sleepable so it can itself call
+hid_hw_output_report(), which allows to "convert" one feature request into
+another or even call the feature request on a different HID device on the
+same physical device.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/hid/hid_bpf.c   | 109 ++++++++++++++++++++++++++++++++
- tools/testing/selftests/hid/progs/hid.c |  79 +++++++++++++++++++++++
- 2 files changed, 188 insertions(+)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 45e173db35bd..f97d56337d8a 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -470,6 +470,11 @@ static void detach_bpf(FIXTURE_DATA(hid_bpf) * self)
- 		close(self->hidraw_fd);
- 	self->hidraw_fd = 0;
- 
-+	if (!self->skel)
-+		return;
-+
-+	hid__detach(self->skel);
-+
- 	for (i = 0; i < ARRAY_SIZE(self->hid_links); i++) {
- 		if (self->hid_links[i])
- 			bpf_link__destroy(self->hid_links[i]);
-@@ -575,6 +580,8 @@ static void load_programs(const struct test_program programs[],
- 							 programs[i].name + 4);
- 	}
- 
-+	hid__attach(self->skel);
-+
- 	self->hidraw_fd = open_hidraw(self->dev_id);
- 	ASSERT_GE(self->hidraw_fd, 0) TH_LOG("open_hidraw");
+---
+
+Here checkpatch complains about:
+WARNING: use of RCU tasks trace is incorrect outside BPF or core RCU code
+
+However, we are jumping in BPF code, so I think this is correct, but I'd
+like to have the opinion on the BPF folks.
+---
+ drivers/hid/bpf/hid_bpf_dispatch.c   | 37 ++++++++++++++++++++++++++++++++----
+ drivers/hid/bpf/hid_bpf_struct_ops.c |  1 +
+ drivers/hid/hid-core.c               | 10 ++++++++--
+ drivers/hid/hidraw.c                 |  2 +-
+ include/linux/hid.h                  |  3 ++-
+ include/linux/hid_bpf.h              | 24 ++++++++++++++++++++++-
+ 6 files changed, 68 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 8d6e08b7c42f..2a29a0625a3b 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -111,6 +111,38 @@ int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
  }
-@@ -919,6 +926,108 @@ TEST_F(hid_bpf, test_hid_user_raw_request_call)
- 	ASSERT_EQ(args.data[1], 2);
- }
+ EXPORT_SYMBOL_GPL(dispatch_hid_bpf_raw_requests);
  
-+/*
-+ * Call hid_hw_raw_request against the given uhid device,
-+ * check that the program is called and prevents the
-+ * call to uhid.
-+ */
-+TEST_F(hid_bpf, test_hid_filter_raw_request_call)
++int dispatch_hid_bpf_output_report(struct hid_device *hdev,
++				   __u8 *buf, u32 size, __u64 source,
++				   bool from_bpf)
 +{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_test_filter_raw_request" },
++	struct hid_bpf_ctx_kern ctx_kern = {
++		.ctx = {
++			.hid = hdev,
++			.allocated_size = size,
++			.size = size,
++		},
++		.data = buf,
++		.from_bpf = from_bpf,
 +	};
-+	__u8 buf[10] = {0};
-+	int err;
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	/* first check that we did not attach to device_event */
-+
-+	/* inject one event */
-+	buf[0] = 1;
-+	buf[1] = 42;
-+	uhid_send_event(_metadata, self->uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
-+	ASSERT_EQ(buf[0], 1);
-+	ASSERT_EQ(buf[1], 42);
-+	ASSERT_EQ(buf[2], 0) TH_LOG("leftovers_from_previous_test");
-+
-+	/* now check that our program is preventing hid_hw_raw_request() */
-+
-+	/* emit hid_hw_raw_request from hidraw */
-+	/* Get Feature */
-+	memset(buf, 0, sizeof(buf));
-+	buf[0] = 0x1; /* Report Number */
-+	err = ioctl(self->hidraw_fd, HIDIOCGFEATURE(sizeof(buf)), buf);
-+	ASSERT_LT(err, 0) TH_LOG("unexpected success while reading HIDIOCGFEATURE: %d", err);
-+	ASSERT_EQ(errno, 20) TH_LOG("unexpected error code while reading HIDIOCGFEATURE: %d",
-+				    errno);
-+
-+	/* remove our bpf program and check that we can now emit commands */
-+
-+	/* detach the program */
-+	detach_bpf(self);
-+
-+	self->hidraw_fd = open_hidraw(self->dev_id);
-+	ASSERT_GE(self->hidraw_fd, 0) TH_LOG("open_hidraw");
-+
-+	err = ioctl(self->hidraw_fd, HIDIOCGFEATURE(sizeof(buf)), buf);
-+	ASSERT_GE(err, 0) TH_LOG("error while reading HIDIOCGFEATURE: %d", err);
-+}
-+
-+/*
-+ * Call hid_hw_raw_request against the given uhid device,
-+ * check that the program is called and can issue the call
-+ * to uhid and transform the answer.
-+ */
-+TEST_F(hid_bpf, test_hid_change_raw_request_call)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_test_hidraw_raw_request" },
-+	};
-+	__u8 buf[10] = {0};
-+	int err;
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	/* emit hid_hw_raw_request from hidraw */
-+	/* Get Feature */
-+	memset(buf, 0, sizeof(buf));
-+	buf[0] = 0x1; /* Report Number */
-+	err = ioctl(self->hidraw_fd, HIDIOCGFEATURE(sizeof(buf)), buf);
-+	ASSERT_EQ(err, 3) TH_LOG("unexpected returned size while reading HIDIOCGFEATURE: %d", err);
-+
-+	ASSERT_EQ(buf[0], 2);
-+	ASSERT_EQ(buf[1], 3);
-+	ASSERT_EQ(buf[2], 4);
-+}
-+
-+/*
-+ * Call hid_hw_raw_request against the given uhid device,
-+ * check that the program is not making infinite loops.
-+ */
-+TEST_F(hid_bpf, test_hid_infinite_loop_raw_request_call)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_test_infinite_loop_raw_request" },
-+	};
-+	__u8 buf[10] = {0};
-+	int err;
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	/* emit hid_hw_raw_request from hidraw */
-+	/* Get Feature */
-+	memset(buf, 0, sizeof(buf));
-+	buf[0] = 0x1; /* Report Number */
-+	err = ioctl(self->hidraw_fd, HIDIOCGFEATURE(sizeof(buf)), buf);
-+	ASSERT_EQ(err, 3) TH_LOG("unexpected returned size while reading HIDIOCGFEATURE: %d", err);
-+}
-+
- /*
-  * Attach hid_insert{0,1,2} to the given uhid device,
-  * retrieve and open the matching hidraw node,
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 2e7e5a736dc6..0ad452fcca58 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -306,3 +306,82 @@ SEC(".struct_ops.link")
- struct hid_bpf_ops test_insert3 = {
- 	.hid_device_event = (void *)hid_test_insert3,
- };
-+
-+SEC("?struct_ops/hid_hw_request")
-+int BPF_PROG(hid_test_filter_raw_request, struct hid_bpf_ctx *hctx, unsigned char reportnum,
-+	     enum hid_report_type rtype, enum hid_class_request reqtype, __u64 source)
-+{
-+	return -20;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops test_filter_raw_request = {
-+	.hid_hw_request = (void *)hid_test_filter_raw_request,
-+};
-+
-+static struct file *current_file;
-+
-+SEC("fentry/hidraw_open")
-+int BPF_PROG(hidraw_open, struct inode *inode, struct file *file)
-+{
-+	current_file = file;
-+	return 0;
-+}
-+
-+SEC("?struct_ops.s/hid_hw_request")
-+int BPF_PROG(hid_test_hidraw_raw_request, struct hid_bpf_ctx *hctx, unsigned char reportnum,
-+	     enum hid_report_type rtype, enum hid_class_request reqtype, __u64 source)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 3 /* size */);
++	struct hid_bpf_ops *e;
 +	int ret;
 +
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* check if the incoming request comes from our hidraw operation */
-+	if (source == (__u64)current_file) {
-+		data[0] = reportnum;
-+
-+		ret = hid_bpf_hw_request(hctx, data, 2, rtype, reqtype);
-+		if (ret != 2)
-+			return -1;
-+		data[0] = reportnum + 1;
-+		data[1] = reportnum + 2;
-+		data[2] = reportnum + 3;
-+		return 3;
++	rcu_read_lock_trace();
++	list_for_each_entry_rcu(e, &hdev->bpf.prog_list, list) {
++		if (e->hid_hw_output_report) {
++			ret = e->hid_hw_output_report(&ctx_kern.ctx, source);
++			if (ret)
++				goto out;
++		}
 +	}
++	ret = 0;
 +
-+	return 0;
++out:
++	rcu_read_unlock_trace();
++	return ret;
 +}
++EXPORT_SYMBOL_GPL(dispatch_hid_bpf_output_report);
 +
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops test_hidraw_raw_request = {
-+	.hid_hw_request = (void *)hid_test_hidraw_raw_request,
-+};
-+
-+SEC("?struct_ops.s/hid_hw_request")
-+int BPF_PROG(hid_test_infinite_loop_raw_request, struct hid_bpf_ctx *hctx, unsigned char reportnum,
-+	     enum hid_report_type rtype, enum hid_class_request reqtype, __u64 source)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 3 /* size */);
+ u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+ {
+ 	int ret;
+@@ -441,10 +473,7 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
+ 	if (!dma_data)
+ 		return -ENOMEM;
+ 
+-	ret = hid_ops->hid_hw_output_report(hdev,
+-						dma_data,
+-						size,
+-						(__u64)ctx);
++	ret = hid_ops->hid_hw_output_report(hdev, dma_data, size, (__u64)ctx, true);
+ 
+ 	kfree(dma_data);
+ 	return ret;
+diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
+index 93c824ba6a65..71143a65a99c 100644
+--- a/drivers/hid/bpf/hid_bpf_struct_ops.c
++++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+@@ -45,6 +45,7 @@ static int hid_bpf_ops_check_member(const struct btf_type *t,
+ 	switch (moff) {
+ 	case offsetof(struct hid_bpf_ops, hid_rdesc_fixup):
+ 	case offsetof(struct hid_bpf_ops, hid_hw_request):
++	case offsetof(struct hid_bpf_ops, hid_hw_output_report):
+ 		break;
+ 	default:
+ 		if (prog->sleepable)
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 0164aacf07ac..5a5fa4a32cbc 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2445,9 +2445,11 @@ int hid_hw_raw_request(struct hid_device *hdev,
+ }
+ EXPORT_SYMBOL_GPL(hid_hw_raw_request);
+ 
+-int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64 source)
++int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64 source,
++			   bool from_bpf)
+ {
+ 	unsigned int max_buffer_size = HID_MAX_BUFFER_SIZE;
 +	int ret;
+ 
+ 	if (hdev->ll_driver->max_buffer_size)
+ 		max_buffer_size = hdev->ll_driver->max_buffer_size;
+@@ -2455,6 +2457,10 @@ int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64
+ 	if (len < 1 || len > max_buffer_size || !buf)
+ 		return -EINVAL;
+ 
++	ret = dispatch_hid_bpf_output_report(hdev, buf, len, source, from_bpf);
++	if (ret)
++		return ret;
 +
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* always forward the request as-is to the device, hid-bpf should prevent
-+	 * infinite loops.
+ 	if (hdev->ll_driver->output_report)
+ 		return hdev->ll_driver->output_report(hdev, buf, len);
+ 
+@@ -2472,7 +2478,7 @@ int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64
+  */
+ int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len)
+ {
+-	return __hid_hw_output_report(hdev, buf, len, 0);
++	return __hid_hw_output_report(hdev, buf, len, 0, false);
+ }
+ EXPORT_SYMBOL_GPL(hid_hw_output_report);
+ 
+diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
+index 4ba3131de614..c2396916cdaa 100644
+--- a/drivers/hid/hidraw.c
++++ b/drivers/hid/hidraw.c
+@@ -140,7 +140,7 @@ static ssize_t hidraw_send_report(struct file *file, const char __user *buffer,
+ 
+ 	if ((report_type == HID_OUTPUT_REPORT) &&
+ 	    !(dev->quirks & HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP)) {
+-		ret = __hid_hw_output_report(dev, buf, count, (__u64)file);
++		ret = __hid_hw_output_report(dev, buf, count, (__u64)file, false);
+ 		/*
+ 		 * compatibility with old implementation of USB-HID and I2C-HID:
+ 		 * if the device does not support receiving output reports,
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 24d0d7c0bd33..1533c9dcd3a6 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -1130,7 +1130,8 @@ int __hid_hw_raw_request(struct hid_device *hdev,
+ 			 size_t len, enum hid_report_type rtype,
+ 			 enum hid_class_request reqtype,
+ 			 __u64 source, bool from_bpf);
+-int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64 source);
++int __hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len, __u64 source,
++			   bool from_bpf);
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+ 		       size_t len, enum hid_report_type rtype,
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index bb6cc5c7c705..3872c6fac62b 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -69,7 +69,7 @@ struct hid_ops {
+ 				  enum hid_class_request reqtype,
+ 				  __u64 source, bool from_bpf);
+ 	int (*hid_hw_output_report)(struct hid_device *hdev, __u8 *buf, size_t len,
+-				    __u64 source);
++				    __u64 source, bool from_bpf);
+ 	int (*hid_input_report)(struct hid_device *hid, enum hid_report_type type,
+ 				u8 *data, u32 size, int interrupt, u64 source);
+ 	struct module *owner;
+@@ -152,6 +152,24 @@ struct hid_bpf_ops {
+ 			       enum hid_report_type rtype, enum hid_class_request reqtype,
+ 			       __u64 source);
+ 
++	/**
++	 * @hid_hw_output_report: called whenever a hid_hw_output_report() call is emitted
++	 * on the HID device
++	 *
++	 * It has the following arguments:
++	 *
++	 * ``ctx``: The HID-BPF context as &struct hid_bpf_ctx
++	 * ``source``: a u64 referring to a uniq but identifiable source. If %0, the
++	 *             kernel itself emitted that call. For hidraw, ``source`` is set
++	 *             to the associated ``struct file *``.
++	 *
++	 * Return: %0 to keep processing the request by hid-core; any other value
++	 * stops hid-core from processing that event. A positive value should be
++	 * returned with the number of bytes written to the device; a negative error
++	 * code interrupts the processing of this call.
 +	 */
-+	data[0] = reportnum;
++	int (*hid_hw_output_report)(struct hid_bpf_ctx *ctx, __u64 source);
 +
-+	ret = hid_bpf_hw_request(hctx, data, 2, rtype, reqtype);
-+	if (ret == 2)
-+		return 3;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops test_infinite_loop_raw_request = {
-+	.hid_hw_request = (void *)hid_test_infinite_loop_raw_request,
-+};
+ 
+ 	/* private: do not show up in the docs */
+ 	struct hid_device *hdev;
+@@ -179,6 +197,8 @@ int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
+ 				  u32 size, enum hid_report_type rtype,
+ 				  enum hid_class_request reqtype,
+ 				  __u64 source, bool from_bpf);
++int dispatch_hid_bpf_output_report(struct hid_device *hdev, __u8 *buf, u32 size,
++				   __u64 source, bool from_bpf);
+ int hid_bpf_connect_device(struct hid_device *hdev);
+ void hid_bpf_disconnect_device(struct hid_device *hdev);
+ void hid_bpf_destroy_device(struct hid_device *hid);
+@@ -193,6 +213,8 @@ static inline int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
+ 						u32 size, enum hid_report_type rtype,
+ 						enum hid_class_request reqtype,
+ 						u64 source, bool from_bpf) { return 0; }
++static inline int dispatch_hid_bpf_output_report(struct hid_device *hdev, __u8 *buf, u32 size,
++						 __u64 source, bool from_bpf) { return 0; }
+ static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
+ static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
+ static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
 
 -- 
 2.44.0
