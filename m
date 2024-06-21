@@ -1,262 +1,108 @@
-Return-Path: <linux-kselftest+bounces-12468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DCB7912E84
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 22:32:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EBD3912EB0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 22:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DBAB1F2144C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 20:32:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CF58B2151A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 20:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FBC17BB28;
-	Fri, 21 Jun 2024 20:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF53117BB09;
+	Fri, 21 Jun 2024 20:43:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a1aBUw0V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X5j/pW30"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D4417BB10
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Jun 2024 20:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019D617B431
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Jun 2024 20:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719001907; cv=none; b=lgq0y0wJDnbjAgGR1+kwFpnh4tqvVlEHT/s2AQryciLSzwfdcgJU7IzO/GhCzYJdqntZiYspUQAqkxaQiPZYzzHWfLUXD5+xV2+g4RwTpHNtiwjEcq5S+RRNEiOLUMMiNrojjWH6NgKTm6XeahkTE7+U3xjFnDvl1j2+Nc1wFGA=
+	t=1719002594; cv=none; b=VSAxazg00uhedKkU8VUO5DUTPpDtdM4sTyA5MDz9YvkWfoKAvbm8LPKgVn83SfMEk/nGNTjGQFMaZZlh42HLhw80At1a9f38pNmkqapKtWFvtReqpNrbcrh0/wlh0GjScTuNV00bkddlSmxFjdbm/mfKmmnjNGi+e9bR2icXQZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719001907; c=relaxed/simple;
-	bh=J/WeQifhAeBIIgjlkHp6YVizjCJ078ih4ojm5iVrUNI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bgl5UnAawW7MGqFdas8QcskLcIcnP64FzrmTjIoqYUkZ0Tymr87S1vfcyBIMoFqZAVYzM2PtTtB9IX7NHD5Q54pSaHo1Z3P3LK0Gk/znvvkxsKs6cVAvOgHkI+RpWm3M/1kwiHj/jtkPKM0Sjex1BtOqyO6NSoFb+tMlle8kIRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a1aBUw0V; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a6ef8bf500dso261853466b.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jun 2024 13:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719001904; x=1719606704; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CnCN0NXOSNtwy42IdVdysfTTD5ti/ff9XMDOhhfiLx4=;
-        b=a1aBUw0VkzZ3oSHlCqDR+ATOXDYi+sX+izSgTyOwlIGSfvtoki8ooXg63v6L0Z3SBf
-         KiyzZ1pJvQ1WWzksNTFwyyeoqTssrN8S10fKlK5s9S/d//Xvdx2XwzEhza32lsyerNAI
-         rrRvIQQqKXdtV/r5lndW2K+6e9aaYnNAPI/MpYaRwcXuVF5DzUOzTrBFgxEDNxedSwyv
-         BDdLcthc9hfrnKRIXR37CCa55VW1UJHSxCushckLKFvJozqRZelHSsccnM0cLejLlUU3
-         IKIynf0IwbAzXqvQqepVmjQ/q13kNtP0V4e9VpvIE+GxavHiACiAIZqmCNhoB7dnJzlU
-         DDtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719001904; x=1719606704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CnCN0NXOSNtwy42IdVdysfTTD5ti/ff9XMDOhhfiLx4=;
-        b=Q7anHaTHbjGYC9nqBM7Txut0CUlDYENcsizMEf/8v0FTlQZsWrLECBRYfUyrL7wUzP
-         O+yf3P64prfy63918G4JzwbMNDj+9k31lOR+rUvQbCl89i+oV+uJmIxERnNznN3utIcq
-         aOfUAdmRuMrvlxFmMqJvA47xcaq8eN32gxSrlGzUq8fd2oRxb4ptT7CT4kb6IhC++KUs
-         BgG34byBiOBhDXBFHUtNDtxdT2NthSTCXN19J5GXLJNkXOnjPbuh426Tx+oggBA5GATo
-         sAcyUTo4f169qHcTIDaXiyIB2xdgwGy6bVvQt/Yf0iyAeWVWcut/s7q629D/DK+9mx2h
-         vnTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIRKeOS50oYgHLGH2Zgq+GRHK/miLBWCRQKKDSZsFrstrJIHE4fccthjvvClU/NaKEPqVPJLbj9H+RgdC4kJP6bJ94Du5jC8BJ8lkr2wPK
-X-Gm-Message-State: AOJu0YxmT1MRFiJtP3Ft5C6TrGW2B15dYro17T3b8QvtYzoTTHFrtmRg
-	2KF+MxwtlOF/LPnBnTP/Zp4tkcXcdbnVKunUPzySAujIlFnWZTRo8F7ImWHZXp1ObFMJGY+ki3j
-	a29hk9l/1M3p5Y/CylJGwMdueUu15SkDT7hOD
-X-Google-Smtp-Source: AGHT+IH800HqMIWMw3Gfm64r6WN21nh+bezjnNGagk7G9R1DzDSpY7p4WYQEQWPwKzYCAyy4hb9MTRJUxXOTUM+VMbg=
-X-Received: by 2002:a17:906:f349:b0:a6f:49eb:31a5 with SMTP id
- a640c23a62f3a-a6fab7d0b64mr465681666b.77.1719001903259; Fri, 21 Jun 2024
- 13:31:43 -0700 (PDT)
+	s=arc-20240116; t=1719002594; c=relaxed/simple;
+	bh=dRy5vRpeDiTqPPMeffSPGkngJuGcPYfg8nXfrG0yiZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=J8r9o3shDfNJ3jmlPolnfBAArdQEofc3ITfPKOojEUJdWQ0CGqLfsKb1mlaKWllz0xpVUUo9aV1S3Ubve1aoWIVG6CPtuAP6fUtPIU2KBHWq+52/GJ+zMVHGMnS4kkHZfFpXITGvCljH08ctXRTlIs0U6v5MhGQjDyVE/Zx3fvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X5j/pW30; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719002591;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gZl2w99Fl76PceNodwmMtywOPMfrUGpvEcdrP2/nIC4=;
+	b=X5j/pW30+mrDwp/NLWOxqEH8E7R+lX9FedRHVLWhEfypiVXqWCbOp9T9gK7TrpA3GkNkMY
+	doZrV4r6OdOkPWH2wbmNUmMhfZSPmFcCzKFtlZ54vdtn3SSIoJzmt9blkYhH6U53VjDHQl
+	v3JpFe4Xf/weUjNTwt/vO4Qnk/i5LkE=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-340-jqGj7A73Nm-7eRKxT-_AmQ-1; Fri,
+ 21 Jun 2024 16:43:08 -0400
+X-MC-Unique: jqGj7A73Nm-7eRKxT-_AmQ-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 765491955E7E;
+	Fri, 21 Jun 2024 20:43:07 +0000 (UTC)
+Received: from starship.lan (unknown [10.22.18.76])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 18B171955E72;
+	Fri, 21 Jun 2024 20:43:05 +0000 (UTC)
+From: Maxim Levitsky <mlevitsk@redhat.com>
+To: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH 0/1] KVM: selftests: pmu_counters_test: increase robustness of LLC cache misses
+Date: Fri, 21 Jun 2024 16:43:04 -0400
+Message-Id: <20240621204305.1730677-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-11-almasrymina@google.com> <20a6a727-d9f2-495c-bf75-72c27740dd82@gmail.com>
-In-Reply-To: <20a6a727-d9f2-495c-bf75-72c27740dd82@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 21 Jun 2024 13:31:29 -0700
-Message-ID: <CAHS8izMce36FwLhFB0znHQYmxpe5hmTSXtZA7+b5VsmSJUfhRw@mail.gmail.com>
-Subject: Re: [PATCH net-next v12 10/13] tcp: RX path for devmem TCP
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Jun 17, 2024 at 9:36=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> On 6/13/24 02:35, Mina Almasry wrote:
-> >
-> > The pages awaiting freeing are stored in the newly added
-> > sk->sk_user_frags, and each page passed to userspace is get_page()'d.
-> > This reference is dropped once the userspace indicates that it is
-> > done reading this page.  All pages are released when the socket is
-> > destroyed.
->
-> One small concern is that if the pool gets destroyed (i.e.
-> page_pool_destroy) before sockets holding netiov, page pool will
-> semi-busily poll until the sockets die or such and will spam with
-> pr_warn(). E.g. when a user drops the nl but leaks data sockets
-> and continues with its userspace business. You can probably do
-> it in a loop and create dozens of such pending
-> page_pool_release_retry().
->
+Recent CI failures brought my attention to the fact that pmu_counters_test=
+=0D
+sometimes fails because it doesn't get any LLC cache misses.=0D
+=0D
+It apparently happens because CLFLUSH can race with CPU prediction.=0D
+=0D
+To attempt to fix this, implement a more aggressive cache flushing - now it=
+ is flushed=0D
+on each iteration of the measured loop which should at least reduce by orde=
+r=0D
+of magnitude the chance of this happening.=0D
+=0D
+This patch survived more that a day of running in a loop on a Comet Lake ma=
+chine,=0D
+where the test used to fail after about 10-20 minites.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (1):=0D
+  KVM: selftests: pmu_counters_test: increase robustness of LLC cache=0D
+    misses=0D
+=0D
+ .../selftests/kvm/x86_64/pmu_counters_test.c  | 20 +++++++++----------=0D
+ 1 file changed, 9 insertions(+), 11 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 
-Yes, true, but this is not really an issue with netiovs per se, it's a
-quirk with the page_pool in general. If a non-devmem page_pool is
-destroyed while there are pages waiting in the receive queues to be
-recvmsg'd, the behavior you described happens anyway AFAIU.
-
-Jakub did some work to improve this. IIRC he disabled the regular
-warning and he reparents the orphan page_pools so they appear in the
-stats of his netlink API.
-
-Since this is behavior already applying to pages, I did not seek to
-improve it as I add devmem support, I just retain it. We could improve
-it in a separate patchset, but I do not see this behavior as a
-critical issue really, especially since the alarming pr_warn has been
-removed.
-
-> > +static int tcp_xa_pool_refill(struct sock *sk, struct tcp_xa_pool *p,
-> > +                           unsigned int max_frags)
-> > +{
-> > +     int err, k;
-> > +
-> > +     if (p->idx < p->max)
-> > +             return 0;
-> > +
-> > +     xa_lock_bh(&sk->sk_user_frags);
-> > +
-> > +     tcp_xa_pool_commit_locked(sk, p);
-> > +
-> > +     for (k =3D 0; k < max_frags; k++) {
-> > +             err =3D __xa_alloc(&sk->sk_user_frags, &p->tokens[k],
-> > +                              XA_ZERO_ENTRY, xa_limit_31b, GFP_KERNEL)=
-;
-> > +             if (err)
-> > +                     break;
-> > +     }
-> > +
-> > +     xa_unlock_bh(&sk->sk_user_frags);
-> > +
-> > +     p->max =3D k;
-> > +     p->idx =3D 0;
-> > +     return k ? 0 : err;
-> > +}
->
-> Personally, I'd prefer this optimisation to be in a separate patch,
-> especially since there is some degree of hackiness to it.
->
->
-
-To be honest this optimization is very necessary from my POV. We ran
-into real production problems due to the excessive locking when we use
-regular xa_alloc(), and Eric implemented this optimization to resolve
-that. I simply squashed the optimization for this upstream series.
-
-If absolutely necessary I can refactor it into a separate patch or
-carry the optimization locally, but this seems like a problem everyone
-looking to use devmem TCP will re-discover, so probably worth just
-having here?
-
-> > +             /* if remaining_len is not satisfied yet, we need to go t=
-o the
-> > +              * next frag in the frag_list to satisfy remaining_len.
-> > +              */
-> > +             skb =3D skb_shinfo(skb)->frag_list ?: skb->next;
-> > +
-> > +             offset =3D offset - start;
->
-> It's an offset into the current skb, isn't it? Wouldn't
-> offset =3D 0; be less confusing?
->
-
-Seems so, AFAICT. Let me try to apply this and see if it trips up any tests=
-.
-
-> > +     } while (skb);
-> > +
-> > +     if (remaining_len) {
-> > +             err =3D -EFAULT;
-> > +             goto out;
-> > +     }
->
-> Having data left is not a fault,
-
-I think it is. The caller of tcp_recvmsg_dmabuf() expects all of
-remaining_len to be used up, otherwise it messes up with the math in
-the caller. __skb_datagram_iter(), which is the equivalent to this one
-for pages, regards having left over data as a fault and also returns
--EFAULT, AFAICT.
-
-> and to get here you
-> need to get an skb with no data left, which shouldn't
-> happen. Seems like everything you need is covered by
-> the "!sent" check below.
->
-
-I think we can get here if we run out of skbs with data, no?
-
-> > @@ -2503,6 +2504,15 @@ static void tcp_md5sig_info_free_rcu(struct rcu_=
-head *head)
-> >   void tcp_v4_destroy_sock(struct sock *sk)
-> >   {
-> >       struct tcp_sock *tp =3D tcp_sk(sk);
-> > +     __maybe_unused unsigned long index;
-> > +     __maybe_unused void *netmem;
->
-> How about adding a function to get rid of __maybe_unused?.
->
-> static void sock_release_devmem_frags() {
-> #ifdef PP
->         unsigned index;
->         ...
-> #endif PP
-> }
->
-
-Will do.
-
-> Also, even though you wire it up for TCP, since ->sk_user_frags
-> is in struct sock I'd expect the release to be somewhere in the
-> generic sock path like __sk_destruct(), and same for init.
-> Perhpas, it's better to leave it for later.
->
-
-
---=20
-Thanks,
-Mina
 
