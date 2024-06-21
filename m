@@ -1,195 +1,135 @@
-Return-Path: <linux-kselftest+bounces-12455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E32912B50
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 18:26:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45518912BB8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 18:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D591A1C23E30
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 16:26:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41F628A1D3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jun 2024 16:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AABAE15FCFE;
-	Fri, 21 Jun 2024 16:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792481607AB;
+	Fri, 21 Jun 2024 16:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aid5b4T7"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="A+IJsWTy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C5410A39;
-	Fri, 21 Jun 2024 16:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C3C15AACD;
+	Fri, 21 Jun 2024 16:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718987175; cv=none; b=TlWBFeEbw/Lyj1Rd7n9GniNrefJ9OQdYxS1/CoCj0eVMCcX22u3WWi+s5qTYcSzbl28tJnFEQof0GEmq0Z/5pQtpR3G3itStU7RhK9y52DlW8HGSp0S+G253hY0erjuAkWRmWAvufy7y0++SbMHu69ZfA1v8WpiC8BbmWP5t/TY=
+	t=1718988513; cv=none; b=d7Jbp01N4V68KuJt4IgIQ4lNqFBIUejZiYBUcUyz3vNxcMaSsQ2GPzCQN2W2qUcml4SqhNTRDjYyubwHu66T4MFExTt2FOcDFM807S8Gy9tO0wncrCvSEV7vDnyRb02W8TT1TdDXvDnDCnTvX5bjFb5xjfHzHWOIboxwxFfu1Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718987175; c=relaxed/simple;
-	bh=syaw2j1CKNhKileFRhZaU0gaJjIh+YpnaVjx+YB5jbA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JIRWPwqAfi6HQMumrgbeciWomlY3V8l+7gDOV2/56lm36B2XZFwe/efsdRiTb472cZxfd1eGJw9jqtclKgX0DlPOnaH+LRkGJxzLIoRQx0+sxVWufhDAqRa2fAiIneM8jZG/1HMrv6RkSLYVVR/cgfK0DLtmEtRrMjQ7aFeqqbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aid5b4T7; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42189d3c7efso24593105e9.2;
-        Fri, 21 Jun 2024 09:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718987172; x=1719591972; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2G5sctyY5+akJotF0NYZBVeqJ4gLFW6IE6iMuGoc2hc=;
-        b=Aid5b4T7HqsUpD2CeIijka/5BYSfZX2u67OiQNvQEMNtbd3mUYD+8ti1CwIMJONcnY
-         kby1LW1FC2CG1t9dsLKOgNjCDbGS344LPkYTwHQSBgr9BjMLx84I4G3dxOfJVP1P/1aF
-         Iyh0/C4VzxTLyRgC3k5GHbNphkCAiGrh1J4TKQSGJWbYDNt9KuinjiVWiDD42srsdwvp
-         qSyBrPpkQP3JxMoJ8KkPA3pCULL8lHXERqAB2UlXBlo+eL0C0VJj3sM0HxptRnnMLpa5
-         Am+4r6hWt1ZOx2yX2KVxktSdu4YVcwqKAFkfsMoArHdRzH/E8zbKt4TcQ5+GP8xTzrJ0
-         IwSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718987172; x=1719591972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2G5sctyY5+akJotF0NYZBVeqJ4gLFW6IE6iMuGoc2hc=;
-        b=sX4PTazIsenMU6EtxHDYvpP8qEtn+JhnPP7NKXk5Zq3fiOE+JEqabVvVsjeERmLYew
-         twiqpVI5G6qtLJyhA45oF8EFomevQ92LqxuOyc1y7UhoDS6AchgBQzaD00iUr9+kM2hc
-         zCbq/ZjGXRBgsj5c5Or54gE/TdbujMDinQl6hqau/v4WrJbo59hu+MQoz7r8WmXHcIIK
-         aQNcL5JTldUX7xPivhwrpFNPis0ZH34uGYJuz6VWVqGFcD7aGuxKVso2pO6KO1ZRz1T8
-         41cwyB9hri7EzGzzG7BYaZGq8dFvS3aPuw04vCYYnLri+X+NB4nW+f/zn2jDzypLdC/b
-         lrbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVomdJeHiYxc9eDA+NiLSOP3uIFuMTvj7uALfkYWYHqXi6R61CCwaKLhPcy7Hmk//fOHlbWy+eoI0F5qux9buWopOO+oH9iS0NWYfT60W6bxOtfCR9BGATglA1gnTPfUAw1cDAIO+yIm8GkJBEpsDn4s9On/cpyBV7vrsrBilYrWI+UjJOJhA1LiWNWFYzBaRCJqs/t/LG4q7kYc1C1PVWUglfj78wMxldx64fepnmqkMx6z/qwJJGGDLY=
-X-Gm-Message-State: AOJu0Yz/2Tmu4PXP2rmdEKkd4ZX+fA8KUvrykZvw2vhQaseKUsjxv62q
-	mem9RbbprAiso/vH1xsISFq+ktm0Te5Wxz1howDd6Ct0mJt51E1tfieHHx6Hx4ZsCSh1PZqBp1s
-	2p3SGlRq2MhLTNrPjCyH0zo35rbc=
-X-Google-Smtp-Source: AGHT+IFSihQV0lS2A8sdrIWW8qjAtXJa85Cfo+eO9dbfvheawX77yi34eO4/SQ3D/TDwMdwQ6G6tYXsv4r3cj5RyB98=
-X-Received: by 2002:a05:600c:181c:b0:422:1a82:3ed2 with SMTP id
- 5b1f17b1804b1-424752969b0mr86309965e9.27.1718987172113; Fri, 21 Jun 2024
- 09:26:12 -0700 (PDT)
+	s=arc-20240116; t=1718988513; c=relaxed/simple;
+	bh=2oDv7yWK4jWUecZVTx9gl68b5tjRysNEgybb/kT8zWk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I2Hul496hNR7dyb8mgKVCWXhHIK89ZBQ8mb81lG62SST3agYYYpsE2qY57JRQ1NTV2qy7YNC6UhuitatsWVq0Ok26hdFWs1gJm61IuCbG1jhxoprcDZAI5WJqINYJ/MFrL4IhA7X/tG7o+5oVXhJql2BmKG2pFHDrnOHDACWl/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=A+IJsWTy; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45L8i1Ng021385;
+	Fri, 21 Jun 2024 16:48:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=DxXR79j7IAQOq7IjTwDrGmIl
+	/JNCaDgNGNDv5UsM/nM=; b=A+IJsWTyqO4MoOJvSaM34NxxhBRkTfx9CDox+fRJ
+	y6NGRZMHeb6oFmWIb5RCzMoFfx64oA/bpei9N3NKgo0Jm51NHrm5HUyhwFUzSHRc
+	dUJPA84czm1SahtW+SLp/1+uX1Hr3LTM1ji5tWmDnWGLkUEjc0F09kipnv+1a5qJ
+	A5Y1WK5bOU+LcvFW6aNPn74IsiCmZh05aZ3EgKXpS8zgl1pCS8nyMpcjmCKTLCof
+	Tzv/sXNTMwq/+pHsuXnQPvyR6YytMlyGus8VTKgJgAqM10rlkfV3sQQ/fc4dtTpr
+	Qc6/CJgrD2ZXcfOZ1Vu5TKzxAlsIHx89whPICXNjPFlZAg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yw69213ps-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jun 2024 16:48:10 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45LGm8w3005843
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jun 2024 16:48:08 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 21 Jun 2024 09:48:07 -0700
+Date: Fri, 21 Jun 2024 09:48:06 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Quentin Perret <qperret@google.com>
+CC: David Hildenbrand <david@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        Fuad Tabba <tabba@google.com>, Christoph Hellwig <hch@infradead.org>,
+        John
+ Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+        <maz@kernel.org>, <kvm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <pbonzini@redhat.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+Message-ID: <20240621093120954-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <ZnOsAEV3GycCcqSX@infradead.org>
+ <CA+EHjTxaCxibvGOMPk9Oj5TfQV3J3ZLwXk83oVHuwf8H0Q47sA@mail.gmail.com>
+ <20240620135540.GG2494510@nvidia.com>
+ <6d7b180a-9f80-43a4-a4cc-fd79a45d7571@redhat.com>
+ <20240620142956.GI2494510@nvidia.com>
+ <20240620140516768-0700.eberman@hu-eberman-lv.qualcomm.com>
+ <20240620231814.GO2494510@nvidia.com>
+ <ZnUsmFFslBWZxGIq@google.com>
+ <c05f2a97-5863-4da7-bfae-2d6873a62ebe@redhat.com>
+ <ZnVG9oZL4GT0uFy_@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240621-hid_hw_req_bpf-v1-0-d7ab8b885a0b@kernel.org>
- <20240621-hid_hw_req_bpf-v1-6-d7ab8b885a0b@kernel.org> <CAADnVQ+us6cQepSGWbOB4K1bb_0Wh43Cpo4zXJxB2d+SVpYinQ@mail.gmail.com>
- <dcbgoe7gija3fn5zsooulnq3jey4twwqvsxjv4yjijacnrlt2h@q6obu65ifctt>
-In-Reply-To: <dcbgoe7gija3fn5zsooulnq3jey4twwqvsxjv4yjijacnrlt2h@q6obu65ifctt>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 21 Jun 2024 09:26:00 -0700
-Message-ID: <CAADnVQKE6RyGUhQbTiOfa15=D9B_vtAg=VMDv8cfYrUKOv5UFQ@mail.gmail.com>
-Subject: Re: [PATCH HID 06/12] HID: bpf: add HID-BPF hooks for hid_hw_output_report
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, "open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZnVG9oZL4GT0uFy_@google.com>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _kjYZRfv7U_QpYslJuL5ZSJCgoCZ6bnT
+X-Proofpoint-GUID: _kjYZRfv7U_QpYslJuL5ZSJCgoCZ6bnT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-21_08,2024-06-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=371 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406210121
 
-On Fri, Jun 21, 2024 at 9:08=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
-org> wrote:
->
-> On Jun 21 2024, Alexei Starovoitov wrote:
-> > On Fri, Jun 21, 2024 at 1:56=E2=80=AFAM Benjamin Tissoires <bentiss@ker=
-nel.org> wrote:
-> > >
-> > > Same story than hid_hw_raw_requests:
-> > >
-> > > This allows to intercept and prevent or change the behavior of
-> > > hid_hw_output_report() from a bpf program.
-> > >
-> > > The intent is to solve a couple of use case:
-> > >   - firewalling a HID device: a firewall can monitor who opens the hi=
-draw
-> > >     nodes and then prevent or allow access to write operations on tha=
-t
-> > >     hidraw node.
-> > >   - change the behavior of a device and emulate a new HID feature req=
-uest
-> > >
-> > > The hook is allowed to be run as sleepable so it can itself call
-> > > hid_hw_output_report(), which allows to "convert" one feature request=
- into
-> > > another or even call the feature request on a different HID device on=
- the
-> > > same physical device.
-> > >
-> > > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> > >
-> > > ---
-> > >
-> > > Here checkpatch complains about:
-> > > WARNING: use of RCU tasks trace is incorrect outside BPF or core RCU =
-code
-> > >
-> > > However, we are jumping in BPF code, so I think this is correct, but =
-I'd
-> > > like to have the opinion on the BPF folks.
-> > > ---
-> > >  drivers/hid/bpf/hid_bpf_dispatch.c   | 37 ++++++++++++++++++++++++++=
-++++++----
-> > >  drivers/hid/bpf/hid_bpf_struct_ops.c |  1 +
-> > >  drivers/hid/hid-core.c               | 10 ++++++++--
-> > >  drivers/hid/hidraw.c                 |  2 +-
-> > >  include/linux/hid.h                  |  3 ++-
-> > >  include/linux/hid_bpf.h              | 24 ++++++++++++++++++++++-
-> > >  6 files changed, 68 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid=
-_bpf_dispatch.c
-> > > index 8d6e08b7c42f..2a29a0625a3b 100644
-> > > --- a/drivers/hid/bpf/hid_bpf_dispatch.c
-> > > +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-> > > @@ -111,6 +111,38 @@ int dispatch_hid_bpf_raw_requests(struct hid_dev=
-ice *hdev,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(dispatch_hid_bpf_raw_requests);
-> > >
-> > > +int dispatch_hid_bpf_output_report(struct hid_device *hdev,
-> > > +                                  __u8 *buf, u32 size, __u64 source,
-> > > +                                  bool from_bpf)
-> > > +{
-> > > +       struct hid_bpf_ctx_kern ctx_kern =3D {
-> > > +               .ctx =3D {
-> > > +                       .hid =3D hdev,
-> > > +                       .allocated_size =3D size,
-> > > +                       .size =3D size,
-> > > +               },
-> > > +               .data =3D buf,
-> > > +               .from_bpf =3D from_bpf,
-> > > +       };
-> > > +       struct hid_bpf_ops *e;
-> > > +       int ret;
-> > > +
-> > > +       rcu_read_lock_trace();
-> > > +       list_for_each_entry_rcu(e, &hdev->bpf.prog_list, list) {
-> > > +               if (e->hid_hw_output_report) {
-> > > +                       ret =3D e->hid_hw_output_report(&ctx_kern.ctx=
-, source);
-> > > +                       if (ret)
-> > > +                               goto out;
-> > > +               }
-> > > +       }
-> > > +       ret =3D 0;
-> > > +
-> > > +out:
-> > > +       rcu_read_unlock_trace();
-> >
-> > same question.
->
-> re What is this for?:
->
-> e->hid_hw_output_report might sleep, so using a plain rcu_read_lock()
-> introduces warnings.
+On Fri, Jun 21, 2024 at 09:25:10AM +0000, Quentin Perret wrote:
+> On Friday 21 Jun 2024 at 10:02:08 (+0200), David Hildenbrand wrote:
+> > Sure, there might be cases like "pKVM can handle access to private pages in
+> > user page mappings", "AMD-SNP will not crash the host if writing to private
+> > pages" but there are not factors that really make a difference for a common
+> > solution.
+> 
+> Sure, there isn't much value in differentiating on these things. One
+> might argue that we could save one mmap() on the private->shared
+> conversion path by keeping all of guest_memfd mapped in userspace
+> including private memory, but that's most probably not worth the
+> effort of re-designing the whole thing just for that, so let's forget
+> that.
+> 
+> The ability to handle stage-2 faults in the kernel has implications in
+> other places however. It means we don't need to punch holes in the
+> kernel linear map when donating memory to a guest for example, even with
+> 'crazy' access patterns like load_unaligned_zeropad(). So that's good.
+> 
 
-Ok, but just replacing rcu_read_lock() with rcu_read_lock_trace()
-doesn't fix it.
-rcu and rcu_tasks_trace are different.
-If you're using call_rcu to wait for GP to free an element in that
-list the thing will go wrong.
+The ability to handle stage-2 faults in the kernel is something that's
+specific to arm64 pKVM though. We do want to punch holes in the linear
+map for Gunyah case. I don't think this is blocking issue. I only want
+to point out we can't totally ignore the linear map.
 
-If you really need rcu life times here use srcu. It's a much better fit.
-There will be srcu_read_lock() here, paired with call_srcu().
+Thanks,
+Elliot
+
 
