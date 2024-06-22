@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDFC913161
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2024 03:24:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51CED913163
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2024 03:24:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF52A286736
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2024 01:24:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CCE928655F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2024 01:24:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F674A07;
-	Sat, 22 Jun 2024 01:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A9F4A0F;
+	Sat, 22 Jun 2024 01:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="au1encha"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u+u+KqqY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECDA4404;
-	Sat, 22 Jun 2024 01:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB7A4404;
+	Sat, 22 Jun 2024 01:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719019463; cv=none; b=nEo8Oi0DzY7DTynjGi6yNHkWmKbQYLRslKXhJC3smXqr9HIM0/sTf8zUWOfqt/9+AR5y+eACf9wF71iUPK5N5RlPOt5IvBlDWcfXfdDiqU96mweheT1DL5kxZ9BgTJP8LiFLXLGl2YN2qfBVb308y0ThfVD8RqUPvnRMVOGYYhw=
+	t=1719019468; cv=none; b=SVZCGgzcyg6cYCGruXAP0W19+094WMZ0h0jFzGqJmME59NqzVlTUMIQMTv5+xPUwdj3zK0+1WlYZnzTGVoslbAiXYX5hY/GyhPj4UlPgvnmCUorXiCMkahe1MnTQUCMhh1IzoW+X9BL8WhgWg9QnLZrbSRFrkiGpXaP5BrNL6dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719019463; c=relaxed/simple;
-	bh=BjQ5/tmBwgON0M53VKil/t5eyQrCC3L1Lla7CBl+1EE=;
+	s=arc-20240116; t=1719019468; c=relaxed/simple;
+	bh=Uv3Veawq41cRk7HDSAwkwv8rOMzc6SdcshDahoslgfI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NlRteGNvz1fxqXhMlgd+bJOtvpJyMDjFkWZ17IjolHkZdOUbd+TMzY2IzRK1PM3zC5RI/iRyp0bR9E7DT0w99R1BGiNInA4ynU7Z5devN+LjsfKllCPbsN2pEK0gkj/SLUqThiDZIHLyiU9+1GpWjf4WI99K6cjCDOV60EWXnwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=au1encha; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47672C4AF0B;
-	Sat, 22 Jun 2024 01:24:19 +0000 (UTC)
+	 MIME-Version; b=O4s5EVr69/T9cHtj1AZ4474qC3hHH76yXC825u3GnScSkZ14ZSsHXXX3eAUHKamUMCgOmcjNdF6jvvBlO2Is8uanrcxn4PPLHBUjyRU9ShDIYWfc/cuT3CabqeOzj1ZFqg9AmF77Y+wL1TxNzXeacAtM88zAuPnbgWPLS6ygwrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u+u+KqqY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A689FC4AF0E;
+	Sat, 22 Jun 2024 01:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719019463;
-	bh=BjQ5/tmBwgON0M53VKil/t5eyQrCC3L1Lla7CBl+1EE=;
+	s=k20201202; t=1719019467;
+	bh=Uv3Veawq41cRk7HDSAwkwv8rOMzc6SdcshDahoslgfI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=au1enchaWfdwxhxfBZW2kHw/3+SMz/4o+4mVwI8/LkW/CRdbF3kKJRSxqWZAdjZbt
-	 Laxj2iIncAj0/E5RBn0uJZiGCYjqXyduag56aKJ7/LtTOu+5o2fze2QWDu5M+s0zQE
-	 ibi8M5QS0E6hcUJhfJ/xE4b7a8Yin+1IQ5vLIow6dvMUOZBRVqJHIG3LZEl9tk6HxW
-	 hP/hIRgpDs5MbaBSn8waeCUpMcAVS/MyDAR/Cx84Feim/UVJ22yJ3O+rQTONC/cLDa
-	 XQYY5+roYMcekquGHRgCe2iPLPKUNr7bRCEWZG5vHPhSR45pNDAYx6mZXZyK17TSNv
-	 ftbj6lQ5v5CbQ==
+	b=u+u+KqqYo2FJiBRP4cxO2af9rnXb3x+/1oBI0i+XJINI0JQe9jfzuA4huODHgxAJa
+	 wVQRZ6YR/8Yi8OwfUBYiMKETJM4D9Cj8Z6EQZBtv62R3QBVrRFhwJO26KxDud5aX7a
+	 EaCAb/uebhLz0E7qe5MADNsuw8OcU85rvilDJBoPKDrlFK9T+FyrSyAnXylSwIkBg1
+	 PyWTXVrVQ0tEDENuaNJtcEzVP3tSi4r01v9v7FCbYKiJkdlsw5aSm5eBIh0raAh0Nr
+	 YLZ75RvIF81zNkjircBzdL+msqssNc9zqbmT42r+XYOlnup3SyNHl8+6Ld5GR9kwIJ
+	 mA7467wE4NI5w==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/7] selftests/bpf: Use connect_to_addr in sk_lookup
-Date: Sat, 22 Jun 2024 09:23:45 +0800
-Message-ID: <bb4d6006afc3b26f082b96eab79e38e1d835d482.1719019125.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 6/7] selftests/bpf: Drop inetaddr_len in sk_lookup
+Date: Sat, 22 Jun 2024 09:23:46 +0800
+Message-ID: <1f4b505f4a18308691cc72a9535cc4805f83965a.1719019125.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1719019125.git.tanggeliang@kylinos.cn>
 References: <cover.1719019125.git.tanggeliang@kylinos.cn>
@@ -75,51 +75,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Use public network helpers make_sockaddr() and connect_to_addr() instead
-of using the local defined function make_socket() and connect().
-
-This make_socket() can be dropped latter.
+This patch adds a new parameter "len" for make_socket() to get the length
+of the address by make_sockaddr(), then local helper inetaddr_len() can be
+dropped.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/sk_lookup.c      | 20 +++++++------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+ .../testing/selftests/bpf/prog_tests/sk_lookup.c  | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index 4a4fc22ed0d2..ba386484f785 100644
+index ba386484f785..d3821bf350a1 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -230,23 +230,17 @@ static int make_server(int sotype, const char *ip, int port,
- 
- static int make_client(int sotype, const char *ip, int port)
- {
-+	int family = is_ipv6(ip) ? AF_INET6 : AF_INET;
-+	struct network_helper_opts opts = {
-+		.timeout_ms = IO_TIMEOUT_SEC,
-+	};
- 	struct sockaddr_storage addr = {0};
--	int err, fd;
-+	socklen_t len;
- 
--	fd = make_socket(sotype, ip, port, &addr);
--	if (fd < 0)
-+	if (make_sockaddr(family, ip, port, &addr, &len))
- 		return -1;
- 
--	err = connect(fd, (void *)&addr, inetaddr_len(&addr));
--	if (CHECK(err, "make_client", "connect")) {
--		log_err("failed to connect client socket");
--		goto fail;
--	}
--
--	return fd;
--fail:
--	close(fd);
--	return -1;
-+	return connect_to_addr(sotype, &addr, len, &opts);
+@@ -108,20 +108,14 @@ static int attach_reuseport(int sock_fd, struct bpf_program *reuseport_prog)
+ 	return 0;
  }
  
- static __u64 socket_cookie(int fd)
+-static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
+-{
+-	return (addr->ss_family == AF_INET ? sizeof(struct sockaddr_in) :
+-		addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) : 0);
+-}
+-
+ static int make_socket(int sotype, const char *ip, int port,
+-		       struct sockaddr_storage *addr)
++		       struct sockaddr_storage *addr, socklen_t *len)
+ {
+ 	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
+ 	int err, family, fd;
+ 
+ 	family = is_ipv6(ip) ? AF_INET6 : AF_INET;
+-	err = make_sockaddr(family, ip, port, addr, NULL);
++	err = make_sockaddr(family, ip, port, addr, len);
+ 	if (CHECK(err, "make_address", "failed\n"))
+ 		return -1;
+ 
+@@ -1220,6 +1214,7 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
+ 	int map_fd, server_fd, client_fd;
+ 	struct bpf_link *link1, *link2;
+ 	int prog_idx, done, err;
++	socklen_t len;
+ 
+ 	map_fd = bpf_map__fd(t->run_map);
+ 
+@@ -1249,11 +1244,11 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
+ 	if (err)
+ 		goto out_close_server;
+ 
+-	client_fd = make_socket(SOCK_STREAM, EXT_IP4, EXT_PORT, &dst);
++	client_fd = make_socket(SOCK_STREAM, EXT_IP4, EXT_PORT, &dst, &len);
+ 	if (client_fd < 0)
+ 		goto out_close_server;
+ 
+-	err = connect(client_fd, (void *)&dst, inetaddr_len(&dst));
++	err = connect(client_fd, (void *)&dst, len);
+ 	if (CHECK(err && !t->expect_errno, "connect",
+ 		  "unexpected error %d\n", errno))
+ 		goto out_close_client;
 -- 
 2.43.0
 
