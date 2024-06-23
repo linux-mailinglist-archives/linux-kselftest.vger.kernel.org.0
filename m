@@ -1,143 +1,179 @@
-Return-Path: <linux-kselftest+bounces-12522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0684913C4F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jun 2024 17:26:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C7FE913C7F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jun 2024 17:43:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77C00B20D2E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jun 2024 15:26:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17ADA1F227CD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jun 2024 15:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06F0181CF4;
-	Sun, 23 Jun 2024 15:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9971822D4;
+	Sun, 23 Jun 2024 15:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i7grALWB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ig2qEl3L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3434C181D01
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Jun 2024 15:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7977F1822C1;
+	Sun, 23 Jun 2024 15:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719156405; cv=none; b=kGOtBaG8dZHvOjGrHekxQZRUx3zWH7TlmRyaKV2Dlz5qffdHswhV5EcM6DjWBCrZMlbECK5LaGsqsstnj5nsREzNacuBHdDa3uAzbGpoTOwLq0KHkvvdsixXsaRtveRJGAwgNcDW+DAjXmtStwJEF10WxERylZ9IJiOLqMFEzco=
+	t=1719157385; cv=none; b=sDeiA8yEtr1ERb8jh+30IfWNXXcKhuWy4HxXiAo1o5DTK7a+0fg4pjrNWgfDoC7J3qk6V0E0tCb2Zh4Y3FD9PqDdxbP/BxyeBOvIcP5V/HPk3uGzpxcFWZfw60UxCW5MwHBiEVaVBdvKUjiRvFbNFa1npove0MInvVkEuzsEFD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719156405; c=relaxed/simple;
-	bh=ooh7IaQj+cWRnQdaw8/1O4YXQwna4SUhIk+dL5M7/JU=;
+	s=arc-20240116; t=1719157385; c=relaxed/simple;
+	bh=lOo+ByMOxJv+uOcBMeubi7V3Rm4GnZ1uYp8z+JG4D7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qBJV8f4jT2IzKVZwfBDqpL0Hwj9sB0ZW+gKcxvj2y2k7uHSDRn/z7790MV0KzgJZDGVArovtrTjXmvW305J87KEaeTIh9tk5mbdaA4As6iSpwgZIwgkdjw+oa+PEdweSJXH1sd37/9dBz9Xq3ruj22aA4WpcZj69lFHMJDANAAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i7grALWB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719156403;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pFXK8G1SadQvGVrWX2KcQ+fiVJ5r+OsD2zAk1SpxTqU=;
-	b=i7grALWBBNd5WFPJXUzlrFzwvqD3yrhfG9mBkZ1C82ZSlzp0+iYHMJHoLQuZBXcivn1J14
-	yMsUUC8i3z76gd/MAFijp3JHUuapexcriBbu+t3R9+6RsiEFQDYZMCkLiziZR5BUw+3dPU
-	ta5i5+TOPVxyLLkXocFBs+hpwk6ds6Y=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-356-h5P48UCoP1CcXGgtGc_qEA-1; Sun, 23 Jun 2024 11:26:41 -0400
-X-MC-Unique: h5P48UCoP1CcXGgtGc_qEA-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3d52868214aso213569b6e.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 23 Jun 2024 08:26:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719156401; x=1719761201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pFXK8G1SadQvGVrWX2KcQ+fiVJ5r+OsD2zAk1SpxTqU=;
-        b=GlhtSsw94Wl2Fw6HsDKHnx/2A+iXO/8ctSVfCRdk6RXmGjYOzo8Qvm3KaFunfll3kE
-         GD7OeNHPBmDJ/7/anpEoRnDiE4C9WoGx3kG/mk9mLBkBsOnbVCcEPrbJgu3R33R9Yj1B
-         tNWUXFVOpYGm4y3A/Koq1epp/oIP8DhDuJG4h2iGp3cSWfUA+AE1ew2XrRRGECLF85W+
-         C4QK0FFjzkUDXbY66Fk1oiQWWRkCvbI0Zu7vPOLQFJckbC8SzSHNVbLZAcRIEp1eSPir
-         WbAPRp8BtnDdZBeR27XkCQp/X4VKoVN0w6QDoiPLQO3Nx6Xwo0QV6MbUauVJtBYfaQWH
-         ZZFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ+PzvGLH9rjYn6DQ9wedxzIef0zlwtCPSqmYmyA7H8vbdzoLp19XX3L8duM3cA3Q58OVTY4Bt7eUt2ubC+n+eBfC59PBjUfssYLrRZOe4
-X-Gm-Message-State: AOJu0YwF3haay32cZDXFxIF4yn02T8w+Z4zAvSGZg/+vXf//Kh1zjCcy
-	BsKIBlZSC0jzDNuV6FT21mqE6bT71xpMeoxqIWHfPNrNqT4UElaAflCm340UTLN5+svheyhEwUw
-	PBTUwA6+XwGJWJvrzDHcZ+01XSF0x5D2nLe4wIuAykFplrc86n0QCi9b6q3fkUCZ2Kw==
-X-Received: by 2002:a05:6808:2392:b0:3d5:4326:3601 with SMTP id 5614622812f47-3d54326392bmr4078221b6e.1.1719156400676;
-        Sun, 23 Jun 2024 08:26:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHwMz32C8X8OkYsczYb+AeCSDZLUo60k21JarMrjxnPjcSuR/TnvND69SCP53Zz/0qBqCliHQ==
-X-Received: by 2002:a05:6808:2392:b0:3d5:4326:3601 with SMTP id 5614622812f47-3d54326392bmr4078192b6e.1.1719156400151;
-        Sun, 23 Jun 2024 08:26:40 -0700 (PDT)
-Received: from x1n (pool-99-254-121-117.cpe.net.cable.rogers.com. [99.254.121.117])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-444c2b6b048sm32901281cf.38.2024.06.23.08.26.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jun 2024 08:26:39 -0700 (PDT)
-Date: Sun, 23 Jun 2024 11:26:37 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Audra Mitchell <audra@redhat.com>, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, jack@suse.cz, aarcange@redhat.com,
-	rppt@linux.vnet.ibm.com, shli@fb.com, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, raquini@redhat.com
-Subject: Re: [PATCH v2 1/3] Fix userfaultfd_api to return EINVAL as expected
-Message-ID: <Zng-rfCPvSaGvL7p@x1n>
-References: <20240621181224.3881179-1-audra@redhat.com>
- <20240621180330.6993d5fd0bda4da230e45f0d@linux-foundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ltnAK0ng+EdQ4iMmyxYl1RJvjsFBujwEyP3yfympcE7yfi1YuXIOrK6o4K7YIVx1QNWo0NbfR7lUq3wFzbseYWholSP3fr6WX3NNl4sT9rb4EMwLg5rPm3dFxwZPj9hVk8WVPegt4Q2cu3U7ebQhl1Wie5EhJhPJdWkZXvZPMis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ig2qEl3L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56C6C2BD10;
+	Sun, 23 Jun 2024 15:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719157385;
+	bh=lOo+ByMOxJv+uOcBMeubi7V3Rm4GnZ1uYp8z+JG4D7U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ig2qEl3L4TVco7WlBwgMQUjId3RGZgfm6ZSQSHOUzIJt7J2AV7Kl9d399jRG/+/kk
+	 yMdLpjNVa+o4mc419wbWElR7rwCDvJ7Odk5KwyJgy+AYatwVFBCtVjSamnAmi4LMFN
+	 484fIdjkW+ZcWzV9AYNokqANEnZZjNRA2A/MfG37zTPPZunAVYCGVKw6ZVAe/mJDHG
+	 n0Dar0++YGiGAgaRGvenduDqIdQozpvXoQnbL/N/TLBDiG9WV79LnkqZ2Il8O+UqV9
+	 5Oeqnog/H75h1RByve23ecbkHVll3UcSUVnIP6kdJcX6RvSKWM+ts5ntO7bc+qra3d
+	 oUKygciaWfakQ==
+Date: Sun, 23 Jun 2024 16:42:59 +0100
+From: Conor Dooley <conor@kernel.org>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Anup Patel <anup@brainfault.org>, Shuah Khan <shuah@kernel.org>,
+	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v7 08/16] riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
+Message-ID: <20240623-cornbread-preteen-4ec287aa165c@spud>
+References: <20240619113529.676940-1-cleger@rivosinc.com>
+ <20240619113529.676940-9-cleger@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="XCIoMUFlsNIN40u9"
 Content-Disposition: inline
-In-Reply-To: <20240621180330.6993d5fd0bda4da230e45f0d@linux-foundation.org>
+In-Reply-To: <20240619113529.676940-9-cleger@rivosinc.com>
 
-On Fri, Jun 21, 2024 at 06:03:30PM -0700, Andrew Morton wrote:
-> On Fri, 21 Jun 2024 14:12:22 -0400 Audra Mitchell <audra@redhat.com> wrote:
-> 
-> > Currently if we request a feature that is not set in the Kernel
-> > config we fail silently and return all the available features. However,
-> > the man page indicates we should return an EINVAL.
-> > 
-> > We need to fix this issue since we can end up with a Kernel warning
-> > should a program request the feature UFFD_FEATURE_WP_UNPOPULATED on
-> > a kernel with the config not set with this feature.
-> > 
-> >  [  200.812896] WARNING: CPU: 91 PID: 13634 at mm/memory.c:1660 zap_pte_range+0x43d/0x660
-> >  [  200.820738] Modules linked in:
-> >  [  200.869387] CPU: 91 PID: 13634 Comm: userfaultfd Kdump: loaded Not tainted 6.9.0-rc5+ #8
-> >  [  200.877477] Hardware name: Dell Inc. PowerEdge R6525/0N7YGH, BIOS 2.7.3 03/30/2022
-> >  [  200.885052] RIP: 0010:zap_pte_range+0x43d/0x660
-> > 
-> > Fixes: e06f1e1dd499 ("userfaultfd: wp: enabled write protection in userfaultfd API")
-> 
-> A userspace-triggerable WARN is bad.  I added cc:stable to this.
 
-Andrew,
+--XCIoMUFlsNIN40u9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note that this change may fix a WARN, but it may also start to break
-userspace which might be worse if it happens, IMHO.  I forgot to mention
-that here, but only mentioned that in v1, and from that POV not copying
-stable seems the right thing.
+On Wed, Jun 19, 2024 at 01:35:18PM +0200, Cl=E9ment L=E9ger wrote:
+> The Zc* standard extension for code reduction introduces new extensions.
+> This patch adds support for Zca, Zcf, Zcd and Zcb. Zce, Zcmt and Zcmp
+> are left out of this patch since they are targeting microcontrollers/
+> embedded CPUs instead of application processors.
+>=20
+> Signed-off-by: Cl=E9ment L=E9ger <cleger@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/include/asm/hwcap.h |  4 +++
+>  arch/riscv/kernel/cpufeature.c | 55 +++++++++++++++++++++++++++++++++-
+>  2 files changed, 58 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index 18859277843a..b12ae3f2141c 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -87,6 +87,10 @@
+>  #define RISCV_ISA_EXT_ZVE64F		78
+>  #define RISCV_ISA_EXT_ZVE64D		79
+>  #define RISCV_ISA_EXT_ZIMOP		80
+> +#define RISCV_ISA_EXT_ZCA		81
+> +#define RISCV_ISA_EXT_ZCB		82
+> +#define RISCV_ISA_EXT_ZCD		83
+> +#define RISCV_ISA_EXT_ZCF		84
+> =20
+>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
+> =20
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index a3af976f36c9..aa631fe49b7c 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -111,6 +111,9 @@ static int riscv_ext_zicboz_validate(const struct ris=
+cv_isa_ext_data *data,
+> =20
+>  #define __RISCV_ISA_EXT_DATA(_name, _id) _RISCV_ISA_EXT_DATA(_name, _id,=
+ NULL, 0, NULL)
+> =20
+> +#define __RISCV_ISA_EXT_DATA_VALIDATE(_name, _id, _validate) \
+> +			_RISCV_ISA_EXT_DATA(_name, _id, NULL, 0, _validate)
+> +
+>  /* Used to declare pure "lasso" extension (Zk for instance) */
+>  #define __RISCV_ISA_EXT_BUNDLE(_name, _bundled_exts) \
+>  	_RISCV_ISA_EXT_DATA(_name, RISCV_ISA_EXT_INVALID, _bundled_exts, \
+> @@ -122,6 +125,37 @@ static int riscv_ext_zicboz_validate(const struct ri=
+scv_isa_ext_data *data,
+>  #define __RISCV_ISA_EXT_SUPERSET_VALIDATE(_name, _id, _sub_exts, _valida=
+te) \
+>  	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), _vali=
+date)
+> =20
+> +static int riscv_ext_zca_depends(const struct riscv_isa_ext_data *data,
 
-https://lore.kernel.org/all/ZjuIEH8TW2tWcqXQ@x1n/
+It's super minor, but my OCD doesn't like this being called "depends"
+when the others are all called "validate".
 
-        In summary: I think we can stick with Fixes on e06f1e1dd499, but we
-        don't copy stable.  The major reason we don't copy stable here is
-        not only about complexity of such backport, but also that there can
-        be apps trying to pass in unsupported bits (even if the kernel
-        didn't support it) but keep using MISSING mode only, then we
-        shouldn't fail them easily after a stable upgrade.  Just smells
-        dangerous to backport.
+> +				 const unsigned long *isa_bitmap)
+> +{
+> +	if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA))
+> +		return 0;
+> +
+> +	return -EPROBE_DEFER;
+> +}
+> +static int riscv_ext_zcd_validate(const struct riscv_isa_ext_data *data,
+> +				  const unsigned long *isa_bitmap)
+> +{
+> +	if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA) &&
+> +	    __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_d))
+> +		return 0;
+> +
+> +	return -EPROBE_DEFER;
+> +}
+> +
+> +static int riscv_ext_zcf_validate(const struct riscv_isa_ext_data *data,
+> +				  const unsigned long *isa_bitmap)
+> +{
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		return -EINVAL;
+> +
+> +	if (__riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_ZCA) &&
+> +	    __riscv_isa_extension_available(isa_bitmap, RISCV_ISA_EXT_f))
+> +		return 0;
+> +
+> +	return -EPROBE_DEFER;
+> +}
 
-I'm not sure what's the best solution for this.  A sweet spot might be that
-we start to fix it in new kernels only but not stable ones.
+--XCIoMUFlsNIN40u9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Peter Xu
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnhCgwAKCRB4tDGHoIJi
+0ojNAP4zqID4s2fTIoOLI3MwCtAFLJWCKaU3UhLxLueoiVavOgD+I+moOCuXJqHu
+LFPQJbfCtkhdREIdkaCj+l4fuZIM5AI=
+=tBDW
+-----END PGP SIGNATURE-----
 
+--XCIoMUFlsNIN40u9--
 
