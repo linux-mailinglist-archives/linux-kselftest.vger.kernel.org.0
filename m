@@ -1,180 +1,101 @@
-Return-Path: <linux-kselftest+bounces-12553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4719191477C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 12:29:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC1F914E64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 15:28:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F193F2868D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 10:29:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDE891C220DA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 13:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150AE1369AE;
-	Mon, 24 Jun 2024 10:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C3BB13D89A;
+	Mon, 24 Jun 2024 13:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="RR0c0+ac"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PXB+HlCv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E036B3BBF2;
-	Mon, 24 Jun 2024 10:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305591311A1;
+	Mon, 24 Jun 2024 13:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719224960; cv=none; b=NlL/Au6AuJgXN72diZi27wB5tMLWgbCAE0lif43PQgLvIwt2GFYw267Kvn5pS3wBS6SQ5WN9cQCtJTVFfQNgan6J3Oaxubb2EVXxfNe72bxA7Jw2GkZ98rnXDESZ0HbuLw+R+ZUFtZkgeTiCdIj/+8C+bzE0MNNsWAZnENUbvpY=
+	t=1719235689; cv=none; b=FGJA7AgXBMhW5GfmG7zJVcrR6ikxbNHlEBbq1DWmGGGGWLVrw7UjtlD3xevyyhJx5cWRPrRrCjBOMtn4dyusOoOcXnOFNt5PeVgPBJbMyO79XlBuIYlyj1h+IC5GyCTxbxgBg3hovMs9fJJiXR07mcXkMfLYXK/sBNbHEMbwgII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719224960; c=relaxed/simple;
-	bh=wNeAG9yIK0CZl4N/ZkvXzvReYFJ5z22Ul9DecMcs2k4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iULAN8kUD0YoJ0cMj2EC6sbh1n5MRCjme3y6EKWdmFkCVVTh90HlsL5zQFsQV0eSEUmtlaevMxx54l1mfjsfjPpaRI/Rq9lHbZbTEPQxBD+ZSPG/D/w5mi+GyOn823bSqPoviG2NJUCaNzOMz2QQXpl57aiCt6JHc1nKdaIZArg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=RR0c0+ac; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719224959; x=1750760959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wNeAG9yIK0CZl4N/ZkvXzvReYFJ5z22Ul9DecMcs2k4=;
-  b=RR0c0+ac84k6ftIqr5qrbitbQnOjleuaqa2scbLpUQq0PpKEy7I+6XRv
-   JdVbNjr+LQP/lwMSQDDe2I+ODVmrYadb7TOvGVPep+0sdgvQ++pzN9jgm
-   sTxcxQw4AO7TCe76/j5CHYGnFjMxiBW0kZVYq7JNc4GSJyO1jh/ool5qZ
-   XB9xybuo0g9Q5gBgCg7NJR3L/S49kI6GuZy+AHo+rDv57QdJVXpX4t8cm
-   /xoV4duUxrN7fCbL3b53TtwmzKHE8oTftzPu/TJU0IhwRBEvLdoZuSwF4
-   KGrpSRspt2y5+poUEC6EAwxG62yCiCgNwSx+DEY5wJUkhZVSfyRod3V95
-   Q==;
-X-CSE-ConnectionGUID: waFIp9S2RTGCYk7TOATuyQ==
-X-CSE-MsgGUID: TZMuc6vpTuuD6P8hbW5QIA==
-X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
-   d="asc'?scan'208";a="28414746"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Jun 2024 03:29:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 24 Jun 2024 03:28:59 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Mon, 24 Jun 2024 03:28:56 -0700
-Date: Mon, 24 Jun 2024 11:28:41 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-CC: Conor Dooley <conor@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Anup Patel
-	<anup@brainfault.org>, Shuah Khan <shuah@kernel.org>, Atish Patra
-	<atishp@atishpatra.org>, <linux-doc@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<kvm-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v7 08/16] riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
-Message-ID: <20240624-remission-dominoes-9f22be5ba999@wendy>
-References: <20240619113529.676940-1-cleger@rivosinc.com>
- <20240619113529.676940-9-cleger@rivosinc.com>
- <20240623-cornbread-preteen-4ec287aa165c@spud>
- <c59a8897-34a1-4dc3-b68b-35dddf55c937@rivosinc.com>
+	s=arc-20240116; t=1719235689; c=relaxed/simple;
+	bh=Zn2Kd04iJelTbJ0C0rm+TQpRo5c6Rg3np49R/GQosys=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EhoiFW4Wwtu/ieRbOFbbsVYbCKCDFv5gqU4yCgKWLp2P0yWkXLwUTycW/dPWNrw+yUclOtawbz0r9ioEH1xExDvDDLlU+xA3jBP+rBMAHU6thgJaoNJfw+7FCIAY2zwznJ8A4gYvDtYxx4oxilY6mTkf0cw5MDQRdidi33IqJws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PXB+HlCv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFCBC32782;
+	Mon, 24 Jun 2024 13:28:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719235688;
+	bh=Zn2Kd04iJelTbJ0C0rm+TQpRo5c6Rg3np49R/GQosys=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PXB+HlCvLUIFyEAfztGxKcY8Enc/NVWxkKorr1dqr0QQ/7yTz0w2nVHXiUsL6xqz8
+	 C2rLCHj+45+nByrm2TG+G5bwTdRBX7p79PCjK5PZMH8J0W2ngiXrjxHLTBop8CtKEF
+	 2zMIGHgDsBIE/yeFxI/l/ySlXnnA6oQthFlI8WyJ9yiwtGsV6x8H3z1CdjofOsraAz
+	 mnVFDGkyUBXMdUBoSP4N7yyjBAxzx9+vS7apOiRa2mrAHOAv0gW96RLSvzDxXpWICf
+	 foSZFZIVkvaHuARysyhWXThhjV52GhLe3jMJ1W/8u4/GDejGWxMYwXf1Mb21mUqnO+
+	 jqSZs+uwcsPUQ==
+From: Geliang Tang <geliang@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Miao Xu <miaxu@meta.com>,
+	Yuran Pereira <yuran.pereira@hotmail.com>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 0/3] Fixes for BPF selftests on loongarch
+Date: Mon, 24 Jun 2024 21:27:54 +0800
+Message-ID: <cover.1719234744.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="022xOD13U5wpppzg"
-Content-Disposition: inline
-In-Reply-To: <c59a8897-34a1-4dc3-b68b-35dddf55c937@rivosinc.com>
+Content-Transfer-Encoding: 8bit
 
---022xOD13U5wpppzg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-On Mon, Jun 24, 2024 at 10:24:51AM +0200, Cl=E9ment L=E9ger wrote:
->=20
->=20
-> On 23/06/2024 17:42, Conor Dooley wrote:
-> > On Wed, Jun 19, 2024 at 01:35:18PM +0200, Cl=E9ment L=E9ger wrote:
-> >> The Zc* standard extension for code reduction introduces new extension=
-s.
-> >> This patch adds support for Zca, Zcf, Zcd and Zcb. Zce, Zcmt and Zcmp
-> >> are left out of this patch since they are targeting microcontrollers/
-> >> embedded CPUs instead of application processors.
-> >>
-> >> Signed-off-by: Cl=E9ment L=E9ger <cleger@rivosinc.com>
-> >> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >> ---
-> >>  arch/riscv/include/asm/hwcap.h |  4 +++
-> >>  arch/riscv/kernel/cpufeature.c | 55 +++++++++++++++++++++++++++++++++-
-> >>  2 files changed, 58 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/h=
-wcap.h
-> >> index 18859277843a..b12ae3f2141c 100644
-> >> --- a/arch/riscv/include/asm/hwcap.h
-> >> +++ b/arch/riscv/include/asm/hwcap.h
-> >> @@ -87,6 +87,10 @@
-> >>  #define RISCV_ISA_EXT_ZVE64F		78
-> >>  #define RISCV_ISA_EXT_ZVE64D		79
-> >>  #define RISCV_ISA_EXT_ZIMOP		80
-> >> +#define RISCV_ISA_EXT_ZCA		81
-> >> +#define RISCV_ISA_EXT_ZCB		82
-> >> +#define RISCV_ISA_EXT_ZCD		83
-> >> +#define RISCV_ISA_EXT_ZCF		84
-> >> =20
-> >>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
-> >> =20
-> >> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufea=
-ture.c
-> >> index a3af976f36c9..aa631fe49b7c 100644
-> >> --- a/arch/riscv/kernel/cpufeature.c
-> >> +++ b/arch/riscv/kernel/cpufeature.c
-> >> @@ -111,6 +111,9 @@ static int riscv_ext_zicboz_validate(const struct =
-riscv_isa_ext_data *data,
-> >> =20
-> >>  #define __RISCV_ISA_EXT_DATA(_name, _id) _RISCV_ISA_EXT_DATA(_name, _=
-id, NULL, 0, NULL)
-> >> =20
-> >> +#define __RISCV_ISA_EXT_DATA_VALIDATE(_name, _id, _validate) \
-> >> +			_RISCV_ISA_EXT_DATA(_name, _id, NULL, 0, _validate)
-> >> +
-> >>  /* Used to declare pure "lasso" extension (Zk for instance) */
-> >>  #define __RISCV_ISA_EXT_BUNDLE(_name, _bundled_exts) \
-> >>  	_RISCV_ISA_EXT_DATA(_name, RISCV_ISA_EXT_INVALID, _bundled_exts, \
-> >> @@ -122,6 +125,37 @@ static int riscv_ext_zicboz_validate(const struct=
- riscv_isa_ext_data *data,
-> >>  #define __RISCV_ISA_EXT_SUPERSET_VALIDATE(_name, _id, _sub_exts, _val=
-idate) \
-> >>  	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), _v=
-alidate)
-> >> =20
-> >> +static int riscv_ext_zca_depends(const struct riscv_isa_ext_data *dat=
-a,
-> >=20
-> > It's super minor, but my OCD doesn't like this being called "depends"
-> > when the others are all called "validate".
->=20
-> Ok, let's make a deal. You review patch 14/16 and I'll make the machine
-> part of you happy and call this function validate ;)
+When I ran BPF selftests on loongarch recently, some errors occur. Fix
+them in this set.
 
-I generally avoid the hwprobe patches intentionally :) I'm not even
-expecting a respin for this tbh, I'd like to just get it in so that I
-can do things on top of it.
+Geliang Tang (3):
+  skmsg: null check for page in sk_msg_recvmsg
+  inet: null check for close in inet_release
+  selftests/bpf: Null checks for link in bpf_tcp_ca
 
---022xOD13U5wpppzg
-Content-Type: application/pgp-signature; name="signature.asc"
+ net/core/skmsg.c                                    |  2 ++
+ net/ipv4/af_inet.c                                  |  3 ++-
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 12 ++++++++----
+ 3 files changed, 12 insertions(+), 5 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.43.0
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnlKWAAKCRB4tDGHoIJi
-0qTZAQDW6NkBEEY0BpVBm4oazaou8r5axQXRsRokUPZuDY/Q/wEA7XbMZLRFekMt
-ZYMxRfkbyf9XPgmg2W/WvyHnahDlhA4=
-=Ozsy
------END PGP SIGNATURE-----
-
---022xOD13U5wpppzg--
 
