@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8E9914E6A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 15:28:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAEC3914E72
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 15:28:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 817B91F222AA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 13:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FA7C1F23106
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 13:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7537413D8B2;
-	Mon, 24 Jun 2024 13:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4A413DDB9;
+	Mon, 24 Jun 2024 13:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMZZYA4e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALYDvSoD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4783E1311A1;
-	Mon, 24 Jun 2024 13:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF0E13DBB1;
+	Mon, 24 Jun 2024 13:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719235702; cv=none; b=O8q68ZnfS3hkoulFhScNPdeRap5aDiQwsTILjxJJ7z9Bu4+5Z8c+9XsDiXA/H7+JJFSZUyZ0M+hohn8DbnJPHbNNPyc1pjg9w5Cvdi+VPQY2fEhOk4Q8bmes1Si5NvieE42n1ASwTttQV09gU0y2ECkgA4JsKzPV55NrbRk3mU4=
+	t=1719235708; cv=none; b=Fi+Q+cCzoReAEeaUO7ATvEv0ye+soTlbE3NMLbm/0PO9b/JUH2rkC/oiqO/Ifr/E7Ohl0EZooxyA+fzYIkIl/F8dND/+EQNWkY15fe8ok/3Ox0AUu/xursvHEetOgB4dt8YmN8k7NDufXhaTpw1gu40M24xRYxfyS7x3NtMOOBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719235702; c=relaxed/simple;
-	bh=5Ddt6qeq/cry8dPpV4780GUeJDB/yqbUatiugsUhPSI=;
+	s=arc-20240116; t=1719235708; c=relaxed/simple;
+	bh=7tbsczf0PnCDywXyYKxY9m9ikEjYKv17QDMOEKE013s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NQfZQnGtU3O63XNBKU2a3uXDporXagSjBs1sX/YtgGQ8N/ZL3L3UNFW0zdGLC7d+BP4Hy8ptLyCWl9uXk0Q2B958K6mMFNzUKUDK0O19s68lTwErBtwhag/baK/Psjl1vtjd7LX72kp8UjDDQ5kbH/se7g31VUB6vcw1rd+Vnx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMZZYA4e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0473C4AF12;
-	Mon, 24 Jun 2024 13:28:15 +0000 (UTC)
+	 MIME-Version; b=FUGwGvrlHuEVHHjFkQjaUR/M5Vv/oUSsYoULm/YLF46JtYPMxqEssSQWW7qJzez7CVZEdPLQACtr8HcwhQvDLkTK13gcchKi3YZ1vVEQaEAb4p51UAYnfT1bM1qasWncgaswWfqO0JPOex2XAcM5YM3bowNlMdw9y1v+cT/oRqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALYDvSoD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65197C2BBFC;
+	Mon, 24 Jun 2024 13:28:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719235701;
-	bh=5Ddt6qeq/cry8dPpV4780GUeJDB/yqbUatiugsUhPSI=;
+	s=k20201202; t=1719235708;
+	bh=7tbsczf0PnCDywXyYKxY9m9ikEjYKv17QDMOEKE013s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gMZZYA4ekNe03y5MbivdPdW+01znzLqwtftHEzl2vhjgG8eAjxhF3LlXYnw5Ldm1C
-	 gdGQ5ae5j971St3QcT8OMOgwU4NlcLTcxNHNf7h51hm46sqUr1AFWJ8Rdt5UTsEXBQ
-	 0WRYPWtk3kzNChzJ8kbsnd7XN7XApr9xznPajmU05ekqLWtsOUrGNho3d/A6c/3Vsu
-	 aOMQtSy83VsXlZvoH8gWBV8e1E6Cir1F8+jzsqCNCfxgbcB8tlh7xJzYA+4/CVYJJX
-	 /Tiv7V19rTTOwi1tRTph1LA9CX8TM1RM9P6B8FPoQ3865hFqEobzLUbmEgDTx6h0rj
-	 HWyE5II+AdVKw==
+	b=ALYDvSoDguX6hkvidoP/m8vFAK/hTQU0da2pxIYiQ0rW+zGM3SP1mAaP7/pD67twv
+	 TbqeYIDXzMTivwN1CeOYklU98jEWYG39vJbKgoJRm0X2kWdvDVC8rRerIfaEG6vZve
+	 7WM8lGoMtqzWsygD+/jTtHkG2ty0EQrJi8jhiOIWUH+oTcj7jguxrfsRY1eOtE5qO2
+	 bHeKj1HP2yMRNp+EA2S7SSuNjffiuQv+TK56WT+Tg0stfDZSlbYZBKpmusv/sQLmfV
+	 iF9mGb8IcKlhFP7NpOtKeTSLysVVggeZJFy1BfSATP7AYpBJjgqiL9K47JWLcI7lQ+
+	 wxz1SqMJ2KvWg==
 From: Geliang Tang <geliang@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
@@ -69,9 +69,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 2/3] inet: null check for close in inet_release
-Date: Mon, 24 Jun 2024 21:27:56 +0800
-Message-ID: <7b0b49dff962845b26918fce56cbe4444175db4f.1719234744.git.tanggeliang@kylinos.cn>
+Subject: [PATCH net 3/3] selftests/bpf: Null checks for link in bpf_tcp_ca
+Date: Mon, 24 Jun 2024 21:27:57 +0800
+Message-ID: <0f91336b3f464b63ef2f223bba7759adc81affdb.1719234744.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1719234744.git.tanggeliang@kylinos.cn>
 References: <cover.1719234744.git.tanggeliang@kylinos.cn>
@@ -85,87 +85,101 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Run the following BPF selftests on loongarch:
+Run BPF selftests bpf_tcp_ca on loongarch:
 
-# ./test_progs -t sockmap_listen
+# ./test_progs -t bpf_tcp_ca
 
-A Kernel panic occurs:
+A "Segmentation fault" error occurs:
 
 '''
- Oops[#1]:
- CPU: 49 PID: 233429 Comm: new_name Tainted: G           OE      6.10.0-rc2+ #20
- Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018-V4.0.11
- pc 0000000000000000 ra 90000000051ea4a0 tp 900030008549c000 sp 900030008549fe00
- a0 9000300152524a00 a1 0000000000000000 a2 900030008549fe38 a3 900030008549fe30
- a4 900030008549fe30 a5 90003000c58c8d80 a6 0000000000000000 a7 0000000000000039
- t0 0000000000000000 t1 90003000c58c8d80 t2 0000000000000001 t3 0000000000000000
- t4 0000000000000001 t5 900000011a1bf580 t6 900000011a3aff60 t7 000000000000006b
- t8 00000fffffffffff u0 0000000000000000 s9 00007fffbbe9e930 s0 9000300152524a00
- s1 90003000c58c8d00 s2 9000000006c81568 s3 0000000000000000 s4 90003000c58c8d80
- s5 00007ffff236a000 s6 00007ffffbc292b0 s7 00007ffffbc29998 s8 00007fffbbe9f180
-    ra: 90000000051ea4a0 inet_release+0x60/0xc0
-   ERA: 0000000000000000 0x0
-  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
-  PRMD: 0000000c (PPLV0 +PIE +PWE)
-  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
-  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
- ESTAT: 00030000 [PIF] (IS= ECode=3 EsubCode=0)
-  BADV: 0000000000000000
-  PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
- Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp
- Process new_name (pid: 233429, threadinfo=00000000b9196405, task=00000000c01df45b)
- Stack : 0000000000000000 90003000c58c8e20 90003000c58c8d00 900000000505960c
-         0000000000000000 9000000101c6ad20 9000300086524540 00000000082e0003
-         900030008bf57400 90000000050596bc 900030008bf57400 900000000434acac
-         0000000000000016 00007ffff224e060 00007fffbbe9f180 900030008bf57400
-         0000000000000000 9000000004341ce0 00007fffbbe9f180 00007ffff2369000
-         900030008549fec0 90000000054476ec 000000000000006b 9000000003f71da4
-         000000000000003a 00007ffff22b8a44 00007fffbbe9f8e0 00007fffbbe9e680
-         ffffffffffffffda 0000000000000000 0000000000000000 0000000000000000
-         00007fffbbe9f288 0000000000000000 0000000000000000 0000000000000039
-         84c2431493ceab6e 84c23ceb2827425e 0000000000000007 00007ffff2271600
-         ...
- Call Trace:
- [<900000000505960c>] __sock_release+0x4c/0xe0
- [<90000000050596bc>] sock_close+0x1c/0x40
- [<900000000434acac>] __fput+0xec/0x2e0
- [<9000000004341ce0>] sys_close+0x40/0xa0
- [<90000000054476ec>] do_syscall+0x8c/0xc0
- [<9000000003f71da4>] handle_syscall+0xc4/0x160
-
- Code: (Bad address in era)
-
- ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Fatal exception
- Kernel relocated by 0x3d50000
-  .text @ 0x9000000003f50000
-  .data @ 0x90000000055b0000
-  .bss  @ 0x9000000006ca9400
- ---[ end Kernel panic - not syncing: Fatal exception ]---
+ test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
+ test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
+ #29/1    bpf_tcp_ca/dctcp:FAIL
+ test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
+ test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
+ #29/2    bpf_tcp_ca/cubic:FAIL
+ test_dctcp_fallback:PASS:dctcp_skel 0 nsec
+ test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
+ test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
+ #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
+ test_write_sk_pacing:PASS:open_and_load 0 nsec
+ test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
+ #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
+ test_update_ca:PASS:open 0 nsec
+ test_update_ca:FAIL:attach_struct_ops unexpected error: -524
+ settcpca:FAIL:setsockopt unexpected setsockopt: actual -1 == expected -1
+ (network_helpers.c:99: errno: No such file or directory) Failed to call post_socket_cb
+ start_test:FAIL:start_server_str unexpected start_server_str: actual -1 == expected -1
+ test_update_ca:FAIL:ca1_ca1_cnt unexpected ca1_ca1_cnt: actual 0 <= expected 0
+ #29/9    bpf_tcp_ca/update_ca:FAIL
+ #29      bpf_tcp_ca:FAIL
+ Caught signal #11!
+ Stack trace:
+ ./test_progs(crash_handler+0x28)[0x5555567ed91c]
+ linux-vdso.so.1(__vdso_rt_sigreturn+0x0)[0x7ffffee408b0]
+ ./test_progs(bpf_link__update_map+0x80)[0x555556824a78]
+ ./test_progs(+0x94d68)[0x5555564c4d68]
+ ./test_progs(test_bpf_tcp_ca+0xe8)[0x5555564c6a88]
+ ./test_progs(+0x3bde54)[0x5555567ede54]
+ ./test_progs(main+0x61c)[0x5555567efd54]
+ /usr/lib64/libc.so.6(+0x22208)[0x7ffff2aaa208]
+ /usr/lib64/libc.so.6(__libc_start_main+0xac)[0x7ffff2aaa30c]
+ ./test_progs(_start+0x48)[0x55555646bca8]
+ Segmentation fault
 '''
 
-This is because "close" is NULL in that case. This patch adds null
-check for it in inet_release() to fix this error.
+This is because "link" is NULL in that case. This patch adds null
+checks for link in bpf_tcp_ca to fix this error.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- net/ipv4/af_inet.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index b24d74616637..8e926018d011 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -434,7 +434,8 @@ int inet_release(struct socket *sock)
- 		if (sock_flag(sk, SOCK_LINGER) &&
- 		    !(current->flags & PF_EXITING))
- 			timeout = sk->sk_lingertime;
--		sk->sk_prot->close(sk, timeout);
-+		if (sk->sk_prot && sk->sk_prot->close)
-+			sk->sk_prot->close(sk, timeout);
- 		sock->sk = NULL;
- 	}
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index bceff5900016..8c0306f344e9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -411,7 +411,8 @@ static void test_update_ca(void)
+ 		return;
+ 
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		return;
+ 
+ 	do_test(&opts);
+ 	saved_ca1_cnt = skel->bss->ca1_cnt;
+@@ -447,7 +448,8 @@ static void test_update_wrong(void)
+ 		return;
+ 
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		return;
+ 
+ 	do_test(&opts);
+ 	saved_ca1_cnt = skel->bss->ca1_cnt;
+@@ -484,7 +486,8 @@ static void test_mixed_links(void)
+ 	ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl");
+ 
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		return;
+ 
+ 	do_test(&opts);
+ 	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
+@@ -536,7 +539,8 @@ static void test_link_replace(void)
+ 	bpf_link__destroy(link);
+ 
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_2);
+-	ASSERT_OK_PTR(link, "attach_struct_ops_2nd");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops_2nd"))
++		return;
+ 
+ 	/* BPF_F_REPLACE with a wrong old map Fd. It should fail!
+ 	 *
 -- 
 2.43.0
 
