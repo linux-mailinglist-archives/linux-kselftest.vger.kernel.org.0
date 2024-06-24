@@ -1,126 +1,100 @@
-Return-Path: <linux-kselftest+bounces-12571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EE76915790
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 22:09:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA4319157C6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 22:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE5F4284AB3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 20:09:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DE061F21309
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 20:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9094E1A01D0;
-	Mon, 24 Jun 2024 20:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FC11A01D9;
+	Mon, 24 Jun 2024 20:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Och5tVUO"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="bh4tqL67"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A6913D88B;
-	Mon, 24 Jun 2024 20:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E586219D88F
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 20:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719259741; cv=none; b=VUeGPhNT2dTzGKsAed941QNEzHaIpNnlkqg3hT7kbT8NrnKTB0w+gyKw0UG4Ju05NRp1uQn05rFRsY9z2mc2WlkoWuJY1xZzDTfb8CXddy8WUCDj2IUxtzF4PCA5YUTvVQ1/5ezS7yGBGn7Rb/WBjDCJxTcX/wtb30Xzg4cOvpI=
+	t=1719260335; cv=none; b=lAXjNlOUe55x190GL0mZ60rwFuHrPUcPzoqOzK3vqb/Z+tbbX0z79Zz76KC9nvHUrW2xtuEe1+y2a1NboHOEjsyva0Ygh0vXODWgEhaZq0/MtOSddgZL/XCvIDDZ6nvYWJ9QTRA1wE1geuQ//kwwa7t/F5Y5zkQAaOQTsU5JKmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719259741; c=relaxed/simple;
-	bh=v9XA/acd7GIFg6atm+pVGycwFmXdg3oXP2esFHiMfjs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JZ6o/h+HIXxoNmSpFp/AfLYrDXolLgvOX0X74byiTCHDbPoCL3tNR3wJtCgX6VgeHsa7Rhf51e6W7sJhuWHrrEZxKotNDbcQDLI5WlddQMY+EZo+rhCgSIxsnOps0s8Z+FqwmudG5w80JvuOmEwRpqoO/RazI0v6renn5AtTT/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Och5tVUO; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1f9b523a15cso34035605ad.0;
-        Mon, 24 Jun 2024 13:08:59 -0700 (PDT)
+	s=arc-20240116; t=1719260335; c=relaxed/simple;
+	bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bYO7GrYAPrEtU3JcLD47YSWaJRrKby0LNkeeSAKuJniztojAjYweuk6Bulho8HqHt3zOb7rGwKcZhvw9Jg+lD87oaEvSjtTeFnMwFR4kdHTI6KBrIspDEspIiEbNMCcHj7tspYUaUUK+WkKbzbv3ID73JaulEm3kpjc93uo11CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=bh4tqL67; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a7245453319so306913166b.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 13:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719259739; x=1719864539; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=o3qBFF/GlmL4MBB59sv0DAYcfMRRvC1IpCS1LsZtTJ8=;
-        b=Och5tVUOw/PP7O+e6ofL4cpOTlGuNRcSgsobW9jwvEkuZVYSobwpWm/TQUw529582Y
-         JaNiOsVIOQB3uPFIE79OJz3MKUEH2GUT2x8ve/NjBp378YF15F4va2OCPM72gju+0MEV
-         IM76DhN1wvwP2WktgUhgsgbkmbY063bvTn0LBAng63SZYRwVjlqJUW/nD5XzEaKmosKi
-         hPSfJk9FmVKzC2Ny/nxVlSi8ne26Sxem/K8gTOv/buWMVHYHwwmp8zEx5n2VZkQW05QJ
-         hfWRWbwYRmk8dRCHBwo/FlEpYJrabzOfBUKjM/LgLVDuM0P5ROlva9fjajJyBPJg7JsV
-         FHww==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719260332; x=1719865132; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
+        b=bh4tqL67qwrLSvvomB0GYyaZRmfZ8C7/jtMJQbLXq+rTsGgIZuiWYFNpH++Al2dWQe
+         hbXXTwtmc/nJTyFciBIUyb/nFVP2i0yZv+cRV/AdaaBu5l+jIqgrzOhqtdqss228H7/9
+         i8h6A8Ur0MSfXq7LyHaH1OyNoZINRlrNnrD1blCrAB47CY7g8CVSdW+lyEBneNDoMjXe
+         W5zbLbwk2DQZz+HxdsIKlagFzxlicQN+NmlsCNiyY+6v5KtMiBtt3Enem/giGaJqHjpw
+         C+m8Ls3NamUo4rAwDvC3+9fqEAkj692/nhnSK8M6U0ZFwGzggR/PeALd2V1pYOe2ovRV
+         +0Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719259739; x=1719864539;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o3qBFF/GlmL4MBB59sv0DAYcfMRRvC1IpCS1LsZtTJ8=;
-        b=DP2+CNM9K+CVcwjKzwGNJq3MFR2h03q/45UBePWuqj+j/LoEtG3vSdhv/YOqQ9N5J4
-         CKCOekgVoj7OJMhjxnEWB9pdHSt5EEfAVkub13fi0RgmUn3ts6fprk0laXl5DjkLm5hf
-         Rvfq4/O6za2Nz4U3DXKB92EOgVLr2XBo5bfjjbks1EvHvQ6QTAmAPuorRZ8GdAwAJSdB
-         cHxte2oBSzSFF+ZkGzfmAiU2hgCzsPhUw7syW5hJ4vpFo3NJvnLGvtOZzwfqTyP9ywDK
-         OQ7V9vAaqoXG5SZpkTg1fk7Qxx9fRujsg4v7+bS6+UJX/v/5lkGgUkEqgQ7KhDmdxIIq
-         RGFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOxfdxTd2u5XzPrFDM0FoVX/I5DzL7DPrjN2+97wscAllZG7YO5aEuO3JXyc/F7Sxr1eZ0hD3T6MadETfLaozb66QkaPciJ9B2gosoh9F+von3tY0BnoMajqjdQ26C25VnDvWMAXZgcu5epSuujnftXBIuwXr7cEd8mcg4
-X-Gm-Message-State: AOJu0YyoEp5yPIG90/HPH9GaWcp/P85FJvcnnmYE4BObx6FDIQO4wmsd
-	ji/YtiexRwcMnRaitPzYTl/G1i+bn8DWzkJ9wMhohnQeNcPdh0f/
-X-Google-Smtp-Source: AGHT+IHtqGhA1oGSsWRALy10Ivk7ZFyIpcHu3DiUYekvGcHMPaEM0WO4ivSWF8I1IBNqgLqkMWZK9g==
-X-Received: by 2002:a17:902:f688:b0:1f9:fb0f:ba05 with SMTP id d9443c01a7336-1fa0fb045f7mr91600865ad.26.1719259739328;
-        Mon, 24 Jun 2024 13:08:59 -0700 (PDT)
-Received: from [192.168.0.31] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb3c6134sm66716075ad.143.2024.06.24.13.08.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 13:08:58 -0700 (PDT)
-Message-ID: <048c6575cb97baa4b7022a1b0a061fa0aecf3db0.camel@gmail.com>
-Subject: Re: [PATCH net 3/3] selftests/bpf: Null checks for link in
- bpf_tcp_ca
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Geliang Tang <geliang@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>,  Jakub Sitnicki <jakub@cloudflare.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, David
- Ahern <dsahern@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Mykola
- Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
- <shuah@kernel.org>,  Mykyta Yatsenko <yatsenko@meta.com>, Miao Xu
- <miaxu@meta.com>, Yuran Pereira <yuran.pereira@hotmail.com>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 24 Jun 2024 13:08:53 -0700
-In-Reply-To: <0f91336b3f464b63ef2f223bba7759adc81affdb.1719234744.git.tanggeliang@kylinos.cn>
-References: <cover.1719234744.git.tanggeliang@kylinos.cn>
-	 <0f91336b3f464b63ef2f223bba7759adc81affdb.1719234744.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        d=1e100.net; s=20230601; t=1719260332; x=1719865132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
+        b=vffKLSr3yRcGBygYjR253nBZQGs4lXvpTnp3rW3d6NUMqHTpN9TF8hLlQWnYL+nC9v
+         K3tO/RLsahnMIanqNPoU2yHpRmzi9MNAiZ9DkUm0ZvJp5NRBWGPyjyGMAtff0XA/STkq
+         +mMcUh+5IUMimpjHHFfrG5ffyex9SSFz2mwHqdgf0Dr+ihGAvMGhGgfsKCHqOFe7NrkL
+         q3hfR4m+y9gXV25RNxJVvBBd8o8BOg4X5+7AhUhEEoT7owvJ2NbzTaaouL6Fo0sgRUpE
+         iDcYb4TEE/jRuiVG2+/qq3qOq7OKSV3B90onHwl0bqnQVL3I1yUlqke0hi1CiKjYuUhQ
+         vGRw==
+X-Forwarded-Encrypted: i=1; AJvYcCW26yAh615gyJKEXYxf7m1GmP/cGdJD3qMxykEkwU8qQS9QsCM5bs6wW0mI6BUJQPrZirk/PITFn1JgFzlbzewMvzAAI1UB+rynAvEHVHkZ
+X-Gm-Message-State: AOJu0Yzfn6175MySTCdCfyeELo73i4XoMQzkOU5y6yHVQK0PdEU9j/c3
+	RIZu149EEVPQyQWAu3easFMaZJactLVyR8aQAhfOQ2cGtUhH4jmTL9CT2ASRhLYzzkOUuLan31D
+	TCgEEcyuQCm0jv8xrtLtZm/0qiOK8R5hoN3kciQ==
+X-Google-Smtp-Source: AGHT+IHYKa/ycS20058DIxTuE4TPZj+Ne6GJbbNiJ5FbYcQC6EiSPJWgGfnJ/EyOzoXs+/hcdQEshUVAiI2Wx8GhYRs=
+X-Received: by 2002:a17:907:8b91:b0:a6f:6df5:a264 with SMTP id
+ a640c23a62f3a-a70275ea47emr586904366b.1.1719260332160; Mon, 24 Jun 2024
+ 13:18:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240619113529.676940-1-cleger@rivosinc.com> <20240619113529.676940-15-cleger@rivosinc.com>
+In-Reply-To: <20240619113529.676940-15-cleger@rivosinc.com>
+From: Evan Green <evan@rivosinc.com>
+Date: Mon, 24 Jun 2024 13:18:16 -0700
+Message-ID: <CALs-HssLx_AZ_pBDECfVH7REoSkyz-=bECPYDeNZkfe59DdBGQ@mail.gmail.com>
+Subject: Re: [PATCH v7 14/16] riscv: hwprobe: export Zcmop ISA extension
+To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Anup Patel <anup@brainfault.org>, 
+	Shuah Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2024-06-24 at 21:27 +0800, Geliang Tang wrote:
+On Wed, Jun 19, 2024 at 4:41=E2=80=AFAM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
+osinc.com> wrote:
+>
+> Export Zcmop ISA extension through hwprobe.
+>
+> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
 
-[...]
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/=
-testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-> index bceff5900016..8c0306f344e9 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-> @@ -411,7 +411,8 @@ static void test_update_ca(void)
->  		return;
-> =20
->  	link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
-> -	ASSERT_OK_PTR(link, "attach_struct_ops");
-> +	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-> +		return;
-
-At this point the 'skel' is initialized and needs a call to
-tcp_ca_update__destroy(). Please add a label at the end of this
-function and goto there instead of 'return'.
-
-Same problem in the rest of the hunks.
-
-[...]
+Reviewed-by: Evan Green <evan@rivosinc.com>
 
