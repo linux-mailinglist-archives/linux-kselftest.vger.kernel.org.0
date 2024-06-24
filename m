@@ -1,188 +1,182 @@
-Return-Path: <linux-kselftest+bounces-12569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 432F09154D4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 18:54:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FEEA9156E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 21:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65E3B1C213F7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:54:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 344DB1C23053
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 19:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA8019EEAE;
-	Mon, 24 Jun 2024 16:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D18219EEDC;
+	Mon, 24 Jun 2024 19:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sk6FP6tx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="20Ng9izA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D01619DFAC
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 16:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E84143C42
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 19:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719248044; cv=none; b=Sqo2upg4a3c+dDAiX1LUsHSkxG9vu0EbBz/u0W8yXxlUw3/59TuLch0DZnTh3vVZgqiLsEUk07L4NM25UiKSzZQKaVTHXDysJ2chz9dPM+fW97CBTzo1gK1wat0h6XXrwilOn06yfGmXFpbMYkgMLPCMOuaWczFK7zUiGVtdpck=
+	t=1719255789; cv=none; b=Y6hqmqzg0AoSANe8aKH+6N0EvDzvbMFmVGVYQa/HwNk7BHtBTqxocou/jGRqN8kVpbWK4pGvV4JGvTkX44qlvWz86HG3IUn/+IUO69uaBbY7tmHJeavnZt4uyp+x81XVPw/2u4pHW+a+DBimcT9ZyvqPh7DgoVyX8cKHy0VF1eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719248044; c=relaxed/simple;
-	bh=5bohiIQjuFlZ3MC0ytH3G+PZ787pPsJS6tdm3PoEEOI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kcnmTjWYfNxVKWBCpCJ58hkbxrX2oNpL16UfuosL2jfMBsUVK7DQvsA1zbU3gR5mBwFClWyEIy+BN3J3NIx6bKdpJcFO/C4WzrNKojsbwVNzxJUmlDBuMSNMicW8YOUPYcpeLjeQUmFl1Ye/7USv0VzSbs0iSXe1OiNj18MFIiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sk6FP6tx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719248042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FnHUA8KFPQfgKOFjau5SADjiwWEi99JYmDlhSDmtX0c=;
-	b=Sk6FP6txuTNB/usSrRSuH5savxbeFbOB10ieX+2Z2SBSOQMs+6JncwyCrGeR57coIUdsG8
-	rnrF3gNQUUJi41+yfRTNVdZA6thS+2KebSjUnKWPuFoXJzilcjN31VmZJfP+TN6Zikegrx
-	rlVWtm3pmZhgM28UVD5OkqZ0atVW/fE=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-fE7PfUYeN4qMpNTNcuGP-g-1; Mon,
- 24 Jun 2024 12:53:58 -0400
-X-MC-Unique: fE7PfUYeN4qMpNTNcuGP-g-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7F49019560A7;
-	Mon, 24 Jun 2024 16:53:52 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.9.58])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 74E201955D83;
-	Mon, 24 Jun 2024 16:53:48 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Pravin B
- Shelar <pshelar@ovn.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Paolo Abeni <pabeni@redhat.com>,  Shuah
- Khan <shuah@kernel.org>,  Stefano Brivio <sbrivio@redhat.com>,
-  =?utf-8?Q?Adri=C3=A1n?=
- Moreno <amorenoz@redhat.com>,  Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH v2 net-next 0/7] selftests: net: Switch pmtu.sh to use
- the internal ovs script.
-In-Reply-To: <f7ttthjh33w.fsf@redhat.com> (Aaron Conole's message of "Sun, 23
-	Jun 2024 15:26:59 -0400")
-References: <20240620125601.15755-1-aconole@redhat.com>
-	<20240621180126.3c40d245@kernel.org> <f7ttthjh33w.fsf@redhat.com>
-Date: Mon, 24 Jun 2024 12:53:45 -0400
-Message-ID: <f7tpls6gu3q.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1719255789; c=relaxed/simple;
+	bh=nQJx7U4wppzNzHU/CuJjWT7D6ot8GC1fGwOFHaM9x9I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=o71LT2/wbGjdL6OE+7ct7BC9s0XdAn2pdIOQWnJeC/bIq45r58COoec8M476Pdn+LW+mYH6i+CDTV78wW9llZadqoVXwNDz/VzHw8dj8NZdO8RrzuU3vAub9Onf0vGSEzyBJU3nOv01I2lFd0H4M5b8a34qNlSFINOEplibo9jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=20Ng9izA; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-6c559235c6eso6004780a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 12:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719255787; x=1719860587; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o7o/m1CH/dRBIzMMb+h/etu/CnjVEHuwDUi7ZpKVVv0=;
+        b=20Ng9izA0F1I67bV94JTpEsoAL6UpG/z4oOrIWJqhL+H3PdpdCjRX3XsCMrgsNF2oP
+         vieh/cAap+B4Rz+hyGxfgAKZV9YaXekI1EahgkxG2VsUelKGWWxkrYDzQQxN2KPFJapr
+         WHAsoAxI44FNDA0dxpbFSwSotFaUqAu3jJ8i5ycN9nQNki8h6FdP+qmrhbvSSXtuBlua
+         cyeo0Xu7o0kAfwu33aP80cd96jaD5JYWKl5CCu92tc2CiKwJc5UG2C48Dt+N2UjbZdbG
+         CYyWPtyn+zKPNTz7Sy5NQ+W0hlYnIl0E7mP8cBKCxYg3hfXBLXFqCUeDgIMKPw3hQz+v
+         RKNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719255787; x=1719860587;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o7o/m1CH/dRBIzMMb+h/etu/CnjVEHuwDUi7ZpKVVv0=;
+        b=rTV1oRdq/ytYqwXbG5rkUvL71RdAy0jZK6JCC25mKodBP/gsuDhEISQ5df5sjKT7/d
+         3QddjQaH2+NcZgnwl9+PzCyk1OQA+zaIuJNJ5wjA1of76cQmYhwrRWHtySZKajuHQgrm
+         mEeFqQiGTYq8hNlv/IoQtJuhAD+EOvs8QOEqRTlGLol5MZeMAMR/Icth8KqN53fsP8IF
+         GuUxNJG+cq8rU/193RL5pdDLEdK9TNkl0kKTo9/nDUTIDBJHvFujCdnYSL1c81qDohyQ
+         1JVVlnegUkTsFC+JitBgvfLf9BPQui4WKhJnUBbXsIidYWYaJdNEuqpM2DF4u2awpfVn
+         24aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQhjwWqizT27lUotktuBfdXU4ZG5um7C5iSk5/awitE/5ahDYREODIG69d9ywS2kYkQLdY2Y9JZSn0FRFepOuGXF+L2DNQkAj7nWjAnS0P
+X-Gm-Message-State: AOJu0YyUq3aKdtkuirg+PhPdrzMJpCLyf6Kg4gDHBSsX33lhQzsChnSH
+	pUMYT1V/ryvgZt1hriHPEX+UovjihpOWTAyibqmeKTYd+03zQEDDhu5HfhcMmkibE/z7bXmYl2Q
+	URg==
+X-Google-Smtp-Source: AGHT+IHDUra1AWqKgVEmx2cHjqVYae4a6BBkOB3zJOshknnYOHghCXWpyZttMxipDCeP9+v4upkb3HpjkA0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:3d43:0:b0:71a:1f6f:1d0f with SMTP id
+ 41be03b00d2f7-71b5c3db10amr16088a12.6.1719255786814; Mon, 24 Jun 2024
+ 12:03:06 -0700 (PDT)
+Date: Mon, 24 Jun 2024 12:03:05 -0700
+In-Reply-To: <20240621095319587-0700.eberman@hu-eberman-lv.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Mime-Version: 1.0
+References: <CA+EHjTxWWEHfjZ9LJqZy+VCk43qd3SMKiPF7uvAwmDdPeVhrvQ@mail.gmail.com>
+ <20240619115135.GE2494510@nvidia.com> <CA+EHjTz_=J+bDpqciaMnNja4uz1Njcpg5NVh_GW2tya-suA7kQ@mail.gmail.com>
+ <ZnRMn1ObU8TFrms3@google.com> <CA+EHjTxvOyCqWRMTS3mXHznQtAJzDJLgqdS0Er2GA9FGdxd1vA@mail.gmail.com>
+ <4c8b81a0-3a76-4802-875f-f26ff1844955@redhat.com> <CA+EHjTzvjsc4DKsNFA6LVT44YR_1C5A2JhpVSPG=R9ottfu70A@mail.gmail.com>
+ <8e9436f2-6ebb-4ce1-a44f-2a941d354e2a@redhat.com> <CA+EHjTzj9nDEG_ANMM3z90b08YRHegiX5ZqgvLihYS2bSyw1KA@mail.gmail.com>
+ <20240621095319587-0700.eberman@hu-eberman-lv.qualcomm.com>
+Message-ID: <ZnnC6eh-zl16Cxn3@google.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+From: Sean Christopherson <seanjc@google.com>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Fuad Tabba <tabba@google.com>, David Hildenbrand <david@redhat.com>, 
+	David Rientjes <rientjes@google.com>, Jason Gunthorpe <jgg@nvidia.com>, John Hubbard <jhubbard@nvidia.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthew Wilcox <willy@infradead.org>, maz@kernel.org, kvm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	pbonzini@redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Aaron Conole <aconole@redhat.com> writes:
+On Fri, Jun 21, 2024, Elliot Berman wrote:
+> On Fri, Jun 21, 2024 at 11:16:31AM +0100, Fuad Tabba wrote:
+> > On Fri, Jun 21, 2024 at 10:10=E2=80=AFAM David Hildenbrand <david@redha=
+t.com> wrote:
+> > > On 21.06.24 10:54, Fuad Tabba wrote:
+> > > > On Fri, Jun 21, 2024 at 9:44=E2=80=AFAM David Hildenbrand <david@re=
+dhat.com> wrote:
+> > > >>
+> > > >>>> Again from that thread, one of most important aspects guest_memf=
+d is that VMAs
+> > > >>>> are not required.  Stating the obvious, lack of VMAs makes it re=
+ally hard to drive
+> > > >>>> swap, reclaim, migration, etc. from code that fundamentally oper=
+ates on VMAs.
+> > > >>>>
+> > > >>>>    : More broadly, no VMAs are required.  The lack of stage-1 pa=
+ge tables are nice to
+> > > >>>>    : have; the lack of VMAs means that guest_memfd isn't playing=
+ second fiddle, e.g.
+> > > >>>>    : it's not subject to VMA protections, isn't restricted to ho=
+st mapping size, etc.
+> > > >>>>
+> > > >>>> [1] https://lore.kernel.org/all/Zfmpby6i3PfBEcCV@google.com
+> > > >>>> [2] https://lore.kernel.org/all/Zg3xF7dTtx6hbmZj@google.com
+> > > >>>
+> > > >>> I wonder if it might be more productive to also discuss this in o=
+ne of
+> > > >>> the PUCKs, ahead of LPC, in addition to trying to go over this in=
+ LPC.
+> > > >>
+> > > >> I don't know in  which context you usually discuss that, but I cou=
+ld
+> > > >> propose that as a topic in the bi-weekly MM meeting.
+> > > >>
+> > > >> This would, of course, be focused on the bigger MM picture: how to=
+ mmap,
+> > > >> how how to support huge pages, interaction with page pinning, ... =
+So
+> > > >> obviously more MM focused once we are in agreement that we want to
+> > > >> support shared memory in guest_memfd and how to make that work wit=
+h core-mm.
+> > > >>
+> > > >> Discussing if we want shared memory in guest_memfd might be betetr
+> > > >> suited for a different, more CC/KVM specific meeting (likely the "=
+PUCKs"
+> > > >> mentioned here?).
+> > > >
+> > > > Sorry, I should have given more context on what a PUCK* is :) It's =
+a
+> > > > periodic (almost weekly) upstream call for KVM.
+> > > >
+> > > > [*] https://lore.kernel.org/all/20230512231026.799267-1-seanjc@goog=
+le.com/
+> > > >
+> > > > But yes, having a discussion in one of the mm meetings ahead of LPC
+> > > > would also be great. When do these meetings usually take place, to =
+try
+> > > > to coordinate across timezones.
 
-> Jakub Kicinski <kuba@kernel.org> writes:
->
->> On Thu, 20 Jun 2024 08:55:54 -0400 Aaron Conole wrote:
->>> This series enhances the ovs-dpctl utility to provide support for set()
->>> and tunnel() flow specifiers, better ipv6 handling support, and the
->>> ability to add tunnel vports, and LWT interfaces.  Finally, it modifies
->>> the pmtu.sh script to call the ovs-dpctl.py utility rather than the
->>> typical OVS userspace utilities.
->>
->> Thanks for the work! 
->>
->> Looks like the series no longer applies because of other changes
->> to the kernel config. Before it stopped applying we got some runs,
->> here's what I see:
->>
->> https://netdev-3.bots.linux.dev/vmksft-net/results/648440/3-pmtu-sh/stdout
->>
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS vxlan4: PMTU exceptions                             [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS vxlan4: PMTU exceptions - nexthop objects           [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS vxlan4: PMTU exceptions                             [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS vxlan4: PMTU exceptions - nexthop objects           [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS vxlan6: PMTU exceptions                             [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS vxlan6: PMTU exceptions - nexthop objects           [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS vxlan6: PMTU exceptions                             [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS vxlan6: PMTU exceptions - nexthop objects           [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS geneve4: PMTU exceptions                            [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS geneve4: PMTU exceptions - nexthop objects          [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS geneve4: PMTU exceptions                            [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS geneve4: PMTU exceptions - nexthop objects          [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS geneve6: PMTU exceptions                            [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv4, OVS geneve6: PMTU exceptions - nexthop objects          [FAIL]
->> # Cannot find device "ovs_br0"
->> # TEST: IPv6, OVS geneve6: PMTU exceptions                            [FAIL]
->> # Cannot find device "ovs_br0"
->>
->> Any idea why? Looks like kernel config did include OVS, perhaps we need
->> explicit modprobe now? I don't see any more details in the logs.
->
-> Strange.  I expected that the module should have automatically been
-> loaded when attempting to communicate with the OVS genetlink family
-> type.  At least, that is how it had been working previously.
->
-> I'll spend some time looking into it and resubmit a rebased version.
-> Thanks, Jakub!
+Let's do the MM meeting.  As evidenced by the responses, it'll be easier to=
+ get
+KVM folks to join the MM meeting as opposed to other way around.
 
-If the ovs module isn't available, then I see:
+> > > It's Wednesday, 9:00 - 10:00am PDT (GMT-7) every second week.
+> > >
+> > > If we're in agreement, we could (assuming there are no other planned
+> > > topics) either use the slot next week (June 26) or the following one
+> > > (July 10).
+> > >
+> > > Selfish as I am, I would prefer July 10, because I'll be on vacation
+> > > next week and there would be little time to prepare.
+> > >
+> > > @David R., heads up that this might become a topic ("shared and priva=
+te
+> > > memory in guest_memfd: mmap, pinning and huge pages"), if people here
+> > > agree that this is a direction worth heading.
+> >=20
+> > Thanks for the invite! Tentatively July 10th works for me, but I'd
+> > like to talk to the others who might be interested (pKVM, Gunyah, and
+> > others) to see if that works for them. I'll get back to you shortly.
+> >=20
+>=20
+> I'd like to join too, July 10th at that time works for me.
 
-#   ovs_bridge not supported
-# TEST: IPv4, OVS vxlan4: PMTU exceptions                             [SKIP]
-
-But if it is available, I haven't been able to reproduce such ovs_br0
-setup failure - things work.
-
-My branch is rebased on 568ebdaba6370c03360860f1524f646ddd5ca523
-
-Additionally, the "Cannot find device ..." text comes from an iproute2
-utility output.  The only place we actually interact with that is via
-the call at pmtu.sh:973:
-
-	run_cmd ip link set ovs_br0 up
-
-Maybe it is possible that the link isn't up (could some port memory
-allocation or message be delaying it?) yet in the virtual environment.
-To confirm, is it possible to run in the constrained environment, but
-put a 5s sleep or something?  I will add the following either as a
-separate patch (ie 7/8), or I can fold it into 6/7 (and drop Stefano's
-ACK waiting for another review):
-
-
-wait_for_if() {
-   if ip link show "$2" >/dev/null 2>&1; then return 0; fi
-
-   for d in `seq 1 30`; do
-      sleep 1
-      if ip link show "$2" >/dev/null 2>&1; then return 0; fi
-   done
-   return 1
-}
-
-....
- 	setup_ovs_br_internal || setup_ovs_br_vswitchd || return $ksft_skip
-+	wait_for_if "ovs_br0"
- 	run_cmd ip link set ovs_br0 up
-....
-
-Does it make sense or does it seem like I am way off base?
-
+July 10th works for me too.
 
