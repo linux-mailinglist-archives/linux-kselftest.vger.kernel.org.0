@@ -1,179 +1,216 @@
-Return-Path: <linux-kselftest+bounces-12561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86033915032
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B647C915136
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:59:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B50CEB20B93
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 14:42:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC172B25FC8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 14:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F4119AD67;
-	Mon, 24 Jun 2024 14:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5986F19AD81;
+	Mon, 24 Jun 2024 14:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G0MuKjJB"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="duOHb2za"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493C919AA75
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 14:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C0192B67;
+	Mon, 24 Jun 2024 14:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719240129; cv=none; b=UQNX+yESuYBynmLogR9+T8J5P+G+xfAlCKNVO2E5FvVC4CLYYSEYoM2FjO7DPJJSWZVCUyyM10fJ1I9sGJsmyjN9Ml6q7AXtgXc9eCJIMTB2Usal5/Bv/TVABt8peie48/WotkzStQmv5F8js5E8T7iy/gPOGsiEP9dIcZdxiAU=
+	t=1719241186; cv=none; b=G518ZWZmRyX74a8764Es3je2wb4nkZABa19xouSJLCcrC3APicnqOFLV8NMJl6PpRTCJyshz/hre4HYU/UkFVo68QiNRgCcDRzZFw64sBuiz8Nn8O7Ea9716mI0waKtRl6SdAJnJtW41QswU+0H5Xcj36RqhqA9x1xe6F1HiykY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719240129; c=relaxed/simple;
-	bh=/fNP9lHtI2TK5RrwMbpkvfnkfdvJsuINBBNwCdflfCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c8Rv/px4CtL8CwgoFfOZsGVI1ExS0hHNMl77wJQTwAM65FYE3iEN8lnH9BTFhKtzIu/bkCnzzK+G2YLmXV5X/UjrKQ53Jw/1xAtA3/Hyf2wkvGoI646Ft+l+lRJavm1EH0JWJj6/XlOP7/OTgr1ADbOFNIdCh/I4150zI3pDjC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G0MuKjJB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719240126;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2YSFwvfLTs34coaqSsJLjio1esrhhUEBzaPezL3zICw=;
-	b=G0MuKjJBn7tWo5mE1ECkgoOR70T7wD1hYHAdXQllXFNJ0kfpe/8XaYpg3O5FYAJ6QD84je
-	rie5jjJsvW+upC0Kk81pRTAgu5YgGmsIRbTkSojFVIeX8X9HrORUQDalvkPz/a97fwYObM
-	yRwTogLJqf1HalSIQeUpzW/lherd9qM=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-81-dSjvzxhsNIa0rdM45-yBeA-1; Mon, 24 Jun 2024 10:42:04 -0400
-X-MC-Unique: dSjvzxhsNIa0rdM45-yBeA-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6b50790e82bso12660796d6.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 07:42:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719240124; x=1719844924;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2YSFwvfLTs34coaqSsJLjio1esrhhUEBzaPezL3zICw=;
-        b=VedIcKjccRtrhfJ4rG9nJba+qwfilq5LXUpPvcTwmOA8y9/sADMscts27MB5cBFISW
-         LjN5OPPNnkAxufwHVVZKGEL3C18T/+ivf52/4Sc7IoAIguun5Vgi9Djr22CA7jbr7dPc
-         HGSUozQILKrify3TarLQ4Am+SDU2+VCWF8X0bs9wuNMGDUfW6pcJH8Lz65J9HyF22U7M
-         xQJKcvzNU8jqJQHdWNK4PE4RLHb+3m2aqkxE90jel2/60AIgbl8AWK7VZVRVLyd4QBd7
-         yeaIxbzQkTNTVDtvafO6d/+pll1e6cavAoMI+1xNsT8g+2vuuY7BY++3QmwIoUsWH8UV
-         vn6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWy7hIDNYTxqOu8XvgOdbOw38/hVczwWuHRtrz0GdSHQqhZ8StfUSGaAb4UCUUb2OpinIae4FGZ8VJ8J5Y90t1V88b3UkpoYbHwd29NxSE4
-X-Gm-Message-State: AOJu0YxfyXzW0XizfTKIsdm/q/Ux/qMmEMEuXcvAkmvl+r9cOW3YL7ju
-	U53+wZRg5n7vPlTOZW7juoT8kVO6G4qGTp/oeTZaDtvkJPK2fzEKO3Pgbwvd6nko0NSqIKtPLGm
-	zbX925X0x1kCsZnckr+bt4CiY1YRVU8GbVHi6YS7FfLBQ2j7Wv06f5qTcd7W57NYcXQ==
-X-Received: by 2002:ac8:5753:0:b0:441:1de:8ab0 with SMTP id d75a77b69052e-444cf75fffbmr68514021cf.2.1719240124114;
-        Mon, 24 Jun 2024 07:42:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGggCmyM4O7AbDKTFNzE+M2A0XkOn8q4QKOyaCtAAJssRP1VcmWE+zk9J/aPMuu0F6mZDXJWw==
-X-Received: by 2002:ac8:5753:0:b0:441:1de:8ab0 with SMTP id d75a77b69052e-444cf75fffbmr68513631cf.2.1719240123513;
-        Mon, 24 Jun 2024 07:42:03 -0700 (PDT)
-Received: from x1n (pool-99-254-121-117.cpe.net.cable.rogers.com. [99.254.121.117])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-444c2b3689csm42757861cf.20.2024.06.24.07.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 07:42:03 -0700 (PDT)
-Date: Mon, 24 Jun 2024 10:42:00 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Audra Mitchell <audra@redhat.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	aarcange@redhat.com, akpm@linux-foundation.org,
-	rppt@linux.vnet.ibm.com, shli@fb.com, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, raquini@redhat.com
-Subject: Re: [PATCH v2 3/3] Turn off test_uffdio_wp if
- CONFIG_PTE_MARKER_UFFD_WP is not configured.
-Message-ID: <ZnmFuAR7yNG_6zp6@x1n>
-References: <20240621181224.3881179-1-audra@redhat.com>
- <20240621181224.3881179-3-audra@redhat.com>
- <ZnXwT_vkyVbIJefN@x1n>
- <Znl6dfM_qbH3hIvH@fedora>
+	s=arc-20240116; t=1719241186; c=relaxed/simple;
+	bh=9xaJDh1TnKMficbAlDxInx8h5y/0mTRX9rf4/9QzidI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PIgESnw062mwq1TJBu+WUkVHkYuCu0AQxx6hiTnK3B4OF2AvkhwV3KzRM3YzdithnfjF08r92dFvLNdZ8LMXltl0u016cw55Ec7q4C679M9LgR86ydZdJyUr1f6qbjzUbzK7ehQIG922FkmHPRwdyZeXiLnOjK5OdAhWHS81amI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=duOHb2za; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1719241182;
+	bh=9xaJDh1TnKMficbAlDxInx8h5y/0mTRX9rf4/9QzidI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=duOHb2zal2/Ccb+OTlEFXhUjQcuf7n8vGx5x3QJFjBLTT8QL/FFitFpWz7miBGC5p
+	 gXoAzbuAftUNaEFXkwnli+TSKoHKU7lAOEjPAGIWORfMIuwdu41uGbnq/TNfHIufDP
+	 s+x3bbWIAp8jxf4zrHhy+YvEYcbimiUNyZdaVeBB0QZpyibRelSqHQvgSoS5orBYqc
+	 l3oxKgurQgElLqqJduuUvo+WanP/nH3cxYD6GgfgNDs3gbuprxt/x1NoeEPSk+Ljqb
+	 6U8Vyq8XNPEbfCZemaW/GZ8Tz5Jf0F19KkJNC7MYpG97AdFOLPZtxZGaeonguEb6X5
+	 ceM0VfDjSUO8A==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5305A378216C;
+	Mon, 24 Jun 2024 14:59:41 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: skhan@linuxfoundation.org
+Cc: kernel@collabora.com,
+	laura.nao@collabora.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH 0/2] Modify the watchdog selftest for execution with
+Date: Mon, 24 Jun 2024 17:00:04 +0200
+Message-Id: <20240624150004.116810-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <76a6a3d1-bbf7-436a-a977-4e5c49db69ac@linuxfoundation.org>
+References: <76a6a3d1-bbf7-436a-a977-4e5c49db69ac@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Znl6dfM_qbH3hIvH@fedora>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 24, 2024 at 09:53:57AM -0400, Audra Mitchell wrote:
-> On Fri, Jun 21, 2024 at 05:27:43PM -0400, Peter Xu wrote:
-> > On Fri, Jun 21, 2024 at 02:12:24PM -0400, Audra Mitchell wrote:
-> > > If CONFIG_PTE_MARKER_UFFD_WP is disabled, then testing with test_uffdio_up
-> > 
-> > Here you're talking about pte markers, then..
-> > 
-> > > enables calling uffdio_regsiter with the flag UFFDIO_REGISTER_MODE_WP. The
-> > > kernel ensures in vma_can_userfault() that if CONFIG_PTE_MARKER_UFFD_WP
-> > > is disabled, only allow the VM_UFFD_WP on anonymous vmas.
-> > > 
-> > > Signed-off-by: Audra Mitchell <audra@redhat.com>
-> > > ---
-> > >  tools/testing/selftests/mm/uffd-stress.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-> > > index b9b6d858eab8..2601c9dfadd6 100644
-> > > --- a/tools/testing/selftests/mm/uffd-stress.c
-> > > +++ b/tools/testing/selftests/mm/uffd-stress.c
-> > > @@ -419,6 +419,9 @@ static void parse_test_type_arg(const char *raw_type)
-> > >  	test_uffdio_wp = test_uffdio_wp &&
-> > >  		(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP);
-> > >  
-> > > +	if (test_type != TEST_ANON && !(features & UFFD_FEATURE_WP_UNPOPULATED))
-> > > +		test_uffdio_wp = false;
-> > 
-> > ... here you're checking against wp_unpopulated.  I'm slightly confused.
-> > 
-> > Are you running this test over shmem/hugetlb when the WP feature isn't
-> > supported?
-> >
-> > I'm wondering whether you're looking for UFFD_FEATURE_WP_HUGETLBFS_SHMEM
-> > instead.
+On 6/21/24 23:08, Shuah Khan wrote:
+> On 6/18/24 07:40, Laura Nao wrote:
+>> Hi Shuah,
+>>
+>> On 6/7/24 23:07, Shuah Khan wrote:
+>>> On 6/7/24 03:53, Laura Nao wrote:
+>>>> Hi Shuah,
+>>>>
+>>>> On 6/7/24 01:03, Shuah Khan wrote:
+>>>>> On 6/6/24 03:57, Laura Nao wrote:
+>>>>>> Hi Shuah,
+>>>>>>
+>>>>>> On 5/6/24 13:13, Laura Nao wrote:
+>>>>>>> The watchdog selftest script supports various parameters for
+>>>>>>> testing
+>>>>>>> different IOCTLs. The watchdog ping functionality is validated
+>>>>>>> by
+>>>>>>> starting
+>>>>>>> a loop where the watchdog device is periodically pet, which can
+>>>>>>> only
+>>>>>>> be
+>>>>>>> stopped by the user interrupting the script.
+>>>>>>>
+>>>>>>> This results in a timeout when running this test using the
+>>>>>>> kselftest
+>>>>>>> runner
+>>>>>>> with no non-oneshot parameters (or no parameters at all):
+>>>>>
+>>>>>
+>>>>> Sorry for the delay on this.
+>>>>>
+>>>>> This test isn't include in the default kselftest run? How are you
+>>>>> running this?
+>>>>>
+>>>>
+>>>> The goal of this series is to enable the test to be run using the
+>>>> kselftest runner individually, not as part of the default run. So
+>>>> for
+>>>> example w/out args:
+>>>>
+>>>> make -C tools/testing/selftests TARGETS=watchdog run_tests
+>>>>
+>>>> or with args:
+>>>>
+>>>> KSELFTEST_WATCHDOG_TEST_ARGS='-b -d -e -s -t 12 -T 3 -n 7 -N -L' 
+>>>> make -C
+>>>> tools/testing/selftests TARGETS=watchdog run_tests
+>>>>>>>
+>>>>>>>      TAP version 13
+>>>>>>>      1..1
+>>>>>>>      # timeout set to 45
+>>>>>>>      # selftests: watchdog: watchdog-test
+>>>>>>>      # Watchdog Ticking Away!
+>>>>>>>      # .............................................#
+>>>>>>>      not ok 1 selftests: watchdog: watchdog-test # TIMEOUT 45 
+>>>>>>> seconds
+>>>>>>>
+>>>>>>> To address this issue, the first patch in this series limits the
+>>>>>>> loop
+>>>>>>> to 5
+>>>>>>> iterations by default and adds support for a new '-c' option to
+>>>>>>> customize
+>>>>>>> the number of pings as required.
+>>>>>>>
+>>>>>>> The second patch conforms the test output to the KTAP format.
+>>>>>>>
+>>>>>>
+>>>>>> Gentle ping - any thoughts on this series? It would simplify
+>>>>>> running
+>>>>>> the
+>>>>>> watchdog kselftest in CI environments by leveraging the runner.
+>>>>>>
+>>>>>
+>>>>> This test isn't intended to be included in the default run. It
+>>>>> requires
+>>>>> loading a watchdog driver first. Do you load the driver from the
+>>>>> runner?
+>>>>>
+>>>>
+>>>> I get this test requires watchdog drivers to be loaded (which in
+>>>> this
+>>>> case can't be added to a config fragment that goes with the 
+>>>> selftest, as
+>>>> they are platform-specific) and therefore cannot be included in the
+>>>> default run. However, having ktap output support and limiting the
+>>>> ping
+>>>> loop would allow the test to be run individually in the same way as
+>>>> other selftests (so through the kselftest runner).
+>>>>
+>>>> Naturally, driver dependencies must be met for the test to run and
+>>>> produce valid results. From my understanding the runner itself
+>>>> cannot
+>>>> ensure this, so in this case it would be up to the user or CI to
+>>>> enable/load the appropriate drivers before running the test.
+>>>> If these dependencies are not satisfied, the test could just exit
+>>>> with a skip code.
+>>>>
+>>>> Does this make sense to you? or is the kselftest runner intended to
+>>>> be
+>>>> used to run exclusively a subset of tests in the selftests
+>>>> directory
+>>>> (i.e. the ones that don't have platform-specific driver
+>>>> requirements)?
+>>>>
+>>>
+>>> There are several tests that aren't included in the default run
+>>> because
+>>> they have dependencies and potentially damaging to the running
+>>> system.
+>>> These tests are not included for a reason.
+>>>
+>>> The first step would to be ensure writing shell script to load and
+>>> unload the watchdog module and then pass in existing parameters such
+>>> as the oneshot to run the test.
+>>>
+>>> There is no need to add a new parameter yet. Also there is no need
+>>> to
+>>> convert this to ktap yet.
+>>>
+>>
+>> To clarify, I understand that this test is not suitable for the
+>> default
+>> run, and I do not intend to change that. The patch series is meant to
+>> make the test usable in a non-interactive environment, such as a CI,
+>> when explicitly enabled and with the required modules already loaded.
+>>
 > 
-> I can confirm, its all really confusing... So in userfaultfd_api, we disable
-> three features if CONFIG_PTE_MARKER_UFFD_WP is not enabled- including 
-> UFFD_FEATURE_WP_UNPOPULATED:
+> The test can be with one shot timer - how is this test currently not
+> usable and how are your changes making it usable?
 > 
-> #ifndef CONFIG_PTE_MARKER_UFFD_WP
->         uffdio_api.features &= ~UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
->         uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
->         uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
-> #endif
-> 
-> If you run the userfaultfd selftests with the run_vmtests script we get
-> several failures stemming from trying to call uffdio_regsiter with the flag 
-> UFFDIO_REGISTER_MODE_WP. However, the kernel ensures in vma_can_userfault() 
-> that if CONFIG_PTE_MARKER_UFFD_WP is disabled, only allow the VM_UFFD_WP -
-> which is set when you pass the UFFDIO_REGISTER_MODE_WP flag - on 
-> anonymous vmas.
-> 
-> In parse_test_type_arg() I added the features check against 
-> UFFD_FEATURE_WP_UNPOPULATED as it seemed the most well know feature/flag. I'm 
-> more than happy to take any suggestions and adapt them if you have any! 
 
-There're documents for these features in the headers:
-
-	 * UFFD_FEATURE_WP_HUGETLBFS_SHMEM indicates that userfaultfd
-	 * write-protection mode is supported on both shmem and hugetlbfs.
-	 *
-	 * UFFD_FEATURE_WP_UNPOPULATED indicates that userfaultfd
-	 * write-protection mode will always apply to unpopulated pages
-	 * (i.e. empty ptes).  This will be the default behavior for shmem
-	 * & hugetlbfs, so this flag only affects anonymous memory behavior
-	 * when userfault write-protection mode is registered.
-
-While in this context ("test_type != TEST_ANON") IIUC the accurate feature
-to check is UFFD_FEATURE_WP_HUGETLBFS_SHMEM.
-
-In most kernels they should behave the same indeed, but note that since
-UNPOPULATED was introduced later than shmem/hugetlb support, it means on
-some kernel the result of checking these two features will be different.
+In a non-interactive environment, the current test can only be run
+through the oneshot parameters, making it impossible to test the
+WDIOC_KEEPALIVE ioctl (since the ping loop is only interrupted by
+SIGINT). So the first patch enables testing of the WDIOC_KEEPALIVE ioctl
+in such an environment, by making the ping loop finite. 
+The second patch allows the reuse of the ktap result parser used for
+other kselftests, eliminating the need for a custom parser for this
+test.
 
 Thanks,
 
--- 
-Peter Xu
+Laura
 
 
