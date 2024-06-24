@@ -1,70 +1,76 @@
-Return-Path: <linux-kselftest+bounces-12543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F524914127
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 06:35:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F539914276
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 08:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 499A31C2130D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 04:35:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB5B01C212A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 06:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B041FDDBC;
-	Mon, 24 Jun 2024 04:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACBC21340;
+	Mon, 24 Jun 2024 06:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MjW6cImh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQMmIajA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879AFD272;
-	Mon, 24 Jun 2024 04:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C03208B6;
+	Mon, 24 Jun 2024 06:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719203716; cv=none; b=bmLhNaFnm84yJT7YVHzCSn1bLWilG9mGXjhgQ6Oe1iNXmrf+0oPbWMuNwLr05Vzgfvmf1nj/WF6tWBJFXa++BeKvtdDRbKQIyU+cRx82+tDfcY2CSbmMYlIqRcm3HQ9A9SAazcQtzoPuE6L7aCrgKoTzVYtpbhvaCvH0EwSSXaA=
+	t=1719209029; cv=none; b=aXuMNd16uQVy+CQsW4ppOWycSWRxp1j0mrYOBMGdaL6nSMVwbzoVZOh9xsWyXkkDXN3tjnMIE/NIZ6Uc4eOBQ00/Ok17XEjEW5ljMaMyIWX9IxkZFzQzkUlX8jGOLdborN34hM5Xl93kecVb6XtS2BGp7Qlr+3rsZEBm9RgHodI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719203716; c=relaxed/simple;
-	bh=NUcvhzvIWuSrzj8jF97gJxnz+3HAHz0QSs+9uEknrlQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kbFIqqcns0huv79BIIcFT/xlBffZ5y76YKZ/qv+8QrjzfJ408YG0odFGoV+qUFyHUXxGe5blt1sANoFcHjaWPjPGfe0YUM/ztCGihWrGyfzkyXZfZoByIqs8z3yNILanjhd7UwAnEqI1J/3Y7KejIkKmc7WTNHvef40OvjehN5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MjW6cImh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50FAC32789;
-	Mon, 24 Jun 2024 04:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719203716;
-	bh=NUcvhzvIWuSrzj8jF97gJxnz+3HAHz0QSs+9uEknrlQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MjW6cImhrOikhmDQNuEWN5epW0uK8J7QiQL5O4sb9lkm4gGt6P97LONCOF0tpoJiO
-	 3WgxmlUfotpKDVBdr9thKceve1Ov8VjGQAqdIYhqhKNaXAwzc9w8/iqgHS7t70srBj
-	 QUrv8mot4n0P3aYIbsoZCuQ20JqTxJ8n81ZHRo4ZUBAntFOXvZu+zW7RAtV1Dmv8rK
-	 8n9JOaIS3ArMCTInBrvOp8LtFjr8ZkDpNHZgpwsd637t5Q1i4Zord/ePTl5j0NkvIw
-	 m4JPZtdLFMshjJyF51W6eTap+3lrHZE6PMhGnnHgxfLduYTxXoNPo0zdLccZHmj47z
-	 x8yva6NPuqQAg==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 9/9] selftests/bpf: Use connect_to_addr in sk_lookup
-Date: Mon, 24 Jun 2024 12:33:56 +0800
-Message-ID: <26ad08128e97ad9a2647edc4714e182460a56394.1719203293.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1719203293.git.tanggeliang@kylinos.cn>
-References: <cover.1719203293.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1719209029; c=relaxed/simple;
+	bh=4MJAvZidXD59taQAHgNZO5Zgziq/Q/mwSOxc7RqrgI4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=djTURJhbk3SycfCEdjwHMkfCJAg5YaN+xYzCWpwkdz0ZtKRxeiSeuO+6mfKkQpx6H9WuOh7nauHQQ42yk2zBqOHJTAMHX//aaybfn59wGo77+kRxH8XenePhZ4FSrRfbniV76j7VdCmK3AC+nT4qWEo66h0ZCbkFpQl0JL/6xKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQMmIajA; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719209027; x=1750745027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4MJAvZidXD59taQAHgNZO5Zgziq/Q/mwSOxc7RqrgI4=;
+  b=cQMmIajAA3y8scZfU6/JVdV/copf3sluSwItQbidk1pXufb1oDnoTssY
+   TBmNiM7h035DjiRVlt0HMIk/0k9C5lxL7QLxbywWP8DRq9MsEs//pBvc3
+   lOsOOGUSOdwNfHiKihlGUmC3nFgRmwvMQ3B+mNcX4JAPPJn29ijqANLCy
+   vY+YG4VaM6SLrERBqP8sICZ4z1Eywxim1BlFWjpnlwkroDFv/5tMZ4z6C
+   WSCPcyJB8LZ2AjmR2eaYTJ0dXJRhz3KlDkupruSJxV5q1zXBtggvgu7Pm
+   tSJmkLmest9GVQQ/k42lp9/O6pwhxtFNTzhnScWbBWItVPgV97H7qvYNN
+   w==;
+X-CSE-ConnectionGUID: eohXCTClSbCCi+qJn4cYYg==
+X-CSE-MsgGUID: T5XZQr0HScmp14Z8OmSEbA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11112"; a="19979355"
+X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
+   d="scan'208";a="19979355"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2024 23:03:46 -0700
+X-CSE-ConnectionGUID: Y6zBlsyOQruZLaa+3/nJJg==
+X-CSE-MsgGUID: FUBJrCxISx+Z8BjVWr3htQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
+   d="scan'208";a="43090360"
+Received: from yujie-x299.sh.intel.com ([10.239.159.77])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2024 23:03:44 -0700
+From: Yujie Liu <yujie.liu@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH net] selftests: net: remove unneeded IP_GRE config
+Date: Mon, 24 Jun 2024 13:55:39 +0800
+Message-Id: <20240624055539.2092322-1-yujie.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,165 +79,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+It seems that there is no definition for config IP_GRE, and it is not a
+dependency of other configs, so remove it.
 
-Use public network helpers make_sockaddr() and connect_to_addr() instead
-of using make_socket() + connect() or make_client().
+linux$ find -name Kconfig | xargs grep "IP_GRE"
+<-- nothing
 
-Now local defined functions inetaddr_len(), make_socket() and make_client()
-all can be dropped.
+There is a IPV6_GRE config defined in net/ipv6/Kconfig. It only depends
+on NET_IPGRE_DEMUX but not IP_GRE.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Fixes: 04fe7c5029cb ("selftests: fill in some missing configs for net")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yujie Liu <yujie.liu@intel.com>
 ---
- .../selftests/bpf/prog_tests/sk_lookup.c      | 83 ++++---------------
- 1 file changed, 16 insertions(+), 67 deletions(-)
+ tools/testing/selftests/net/config | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index e1c5b7d1fb3a..5556796068f0 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -108,46 +108,6 @@ static int attach_reuseport(int sock_fd, struct bpf_program *reuseport_prog)
- 	return 0;
- }
- 
--static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
--{
--	return (addr->ss_family == AF_INET ? sizeof(struct sockaddr_in) :
--		addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) : 0);
--}
--
--static int make_socket(int sotype, const char *ip, int port,
--		       struct sockaddr_storage *addr)
--{
--	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
--	int err, family, fd;
--
--	family = is_ipv6(ip) ? AF_INET6 : AF_INET;
--	err = make_sockaddr(family, ip, port, addr, NULL);
--	if (CHECK(err, "make_address", "failed\n"))
--		return -1;
--
--	fd = socket(addr->ss_family, sotype, 0);
--	if (CHECK(fd < 0, "socket", "failed\n")) {
--		log_err("failed to make socket");
--		return -1;
--	}
--
--	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
--	if (CHECK(err, "setsockopt(SO_SNDTIMEO)", "failed\n")) {
--		log_err("failed to set SNDTIMEO");
--		close(fd);
--		return -1;
--	}
--
--	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
--	if (CHECK(err, "setsockopt(SO_RCVTIMEO)", "failed\n")) {
--		log_err("failed to set RCVTIMEO");
--		close(fd);
--		return -1;
--	}
--
--	return fd;
--}
--
- static int setsockopts(int fd, void *opts)
- {
- 	struct cb_opts *co = (struct cb_opts *)opts;
-@@ -195,27 +155,6 @@ static int setsockopts(int fd, void *opts)
- 	return err;
- }
- 
--static int make_client(int sotype, const char *ip, int port)
--{
--	struct sockaddr_storage addr = {0};
--	int err, fd;
--
--	fd = make_socket(sotype, ip, port, &addr);
--	if (fd < 0)
--		return -1;
--
--	err = connect(fd, (void *)&addr, inetaddr_len(&addr));
--	if (CHECK(err, "make_client", "connect")) {
--		log_err("failed to connect client socket");
--		goto fail;
--	}
--
--	return fd;
--fail:
--	close(fd);
--	return -1;
--}
--
- static __u64 socket_cookie(int fd)
- {
- 	__u64 cookie;
-@@ -584,8 +523,13 @@ static void run_lookup_prog(const struct test *t)
- 		.post_socket_cb = setsockopts,
- 		.cb_opts	= &cb_opts,
- 	};
-+	struct network_helper_opts cli_opts = {
-+		.timeout_ms = IO_TIMEOUT_SEC,
-+	};
- 	int server_fds[] = { [0 ... MAX_SERVERS - 1] = -1 };
- 	int client_fd, reuse_conn_fd = -1;
-+	struct sockaddr_storage addr = {};
-+	socklen_t len = sizeof(addr);
- 	struct bpf_link *lookup_link;
- 	int i, err;
- 
-@@ -616,9 +560,6 @@ static void run_lookup_prog(const struct test *t)
- 	 * BPF socket lookup.
- 	 */
- 	if (t->reuseport_has_conns) {
--		struct sockaddr_storage addr = {};
--		socklen_t len = sizeof(addr);
--
- 		/* Add an extra socket to reuseport group */
- 		reuse_conn_fd = start_server_str(family, t->sotype, t->listen_at.ip,
- 						 t->listen_at.port, &srv_opts);
-@@ -635,7 +576,9 @@ static void run_lookup_prog(const struct test *t)
- 			goto close;
- 	}
- 
--	client_fd = make_client(t->sotype, t->connect_to.ip, t->connect_to.port);
-+	if (make_sockaddr(family, t->connect_to.ip, t->connect_to.port, &addr, &len))
-+		goto close;
-+	client_fd = connect_to_addr(t->sotype, &addr, len, &cli_opts);
- 	if (client_fd < 0)
- 		goto close;
- 
-@@ -1263,10 +1206,14 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
- 		.post_socket_cb = setsockopts,
- 		.cb_opts	= &cb_opts,
- 	};
-+	struct network_helper_opts cli_opts = {
-+		.timeout_ms = IO_TIMEOUT_SEC,
-+	};
- 	struct sockaddr_storage dst = {};
- 	int map_fd, server_fd, client_fd;
- 	struct bpf_link *link1, *link2;
- 	int prog_idx, done, err;
-+	socklen_t len;
- 
- 	map_fd = bpf_map__fd(t->run_map);
- 
-@@ -1296,11 +1243,13 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
- 	if (err)
- 		goto out_close_server;
- 
--	client_fd = make_socket(SOCK_STREAM, EXT_IP4, EXT_PORT, &dst);
-+	if (make_sockaddr(AF_INET, EXT_IP4, EXT_PORT, &dst, &len))
-+		goto out_close_server;
-+	client_fd = connect_to_addr(SOCK_STREAM, &dst, len, &cli_opts);
- 	if (client_fd < 0)
- 		goto out_close_server;
- 
--	err = connect(client_fd, (void *)&dst, inetaddr_len(&dst));
-+	err = 0;
- 	if (CHECK(err && !t->expect_errno, "connect",
- 		  "unexpected error %d\n", errno))
- 		goto out_close_client;
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index d4891f7a2bfa..f46e27cd1e70 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -26,7 +26,6 @@ CONFIG_INET_ESP=y
+ CONFIG_INET_ESP_OFFLOAD=y
+ CONFIG_NET_FOU=y
+ CONFIG_NET_FOU_IP_TUNNELS=y
+-CONFIG_IP_GRE=m
+ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_ADVANCED=y
+ CONFIG_NF_CONNTRACK=m
 -- 
-2.43.0
+2.34.1
 
 
