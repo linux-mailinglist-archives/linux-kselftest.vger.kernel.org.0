@@ -1,164 +1,180 @@
-Return-Path: <linux-kselftest+bounces-12552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD38F914770
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 12:26:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4719191477C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 12:29:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDD851C233FF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 10:26:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F193F2868D0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 10:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E897C13BAFE;
-	Mon, 24 Jun 2024 10:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150AE1369AE;
+	Mon, 24 Jun 2024 10:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PyZ9islg"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="RR0c0+ac"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351E513BAC3;
-	Mon, 24 Jun 2024 10:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E036B3BBF2;
+	Mon, 24 Jun 2024 10:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719224671; cv=none; b=r0MhsXi/BMusNKspCF2ckMkTHi7OgQIJ+Q5sSulrUSvUh/li9fkflia3wGPl9xJ9Jzlb9HU8umT0vY62qaQfB+zR4/WcNuyAHsdsD0+XSleFh++ZLbQ50dnKesX/yqaKAoSV7A3yJEd1uWpa1FiCLXqHOKFLkERjcWHWXeCIZDc=
+	t=1719224960; cv=none; b=NlL/Au6AuJgXN72diZi27wB5tMLWgbCAE0lif43PQgLvIwt2GFYw267Kvn5pS3wBS6SQ5WN9cQCtJTVFfQNgan6J3Oaxubb2EVXxfNe72bxA7Jw2GkZ98rnXDESZ0HbuLw+R+ZUFtZkgeTiCdIj/+8C+bzE0MNNsWAZnENUbvpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719224671; c=relaxed/simple;
-	bh=FxNKrE8jcwE4rIT+PnGILKZCGFn+N9HPzKAqEQC1pzo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oXPnOoqJmO/6P0hxTR6Dd0hANSSHmllLRQOL7lae53c4bQAxuFk+RtkJ4bppCZuslF3GB4rUQBfE60j8eRCxdI+I7YbsyAVV3CM9j+/PazSYFUJ/7Ci1lr+Yrtp3FeJPE9lHG1nLo5a7DgFWbHqtvnlIwhDteUK+ZopKq3luKIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PyZ9islg; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3651ee582cfso2250496f8f.2;
-        Mon, 24 Jun 2024 03:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719224668; x=1719829468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lHdI+h5DqWakYO4MXCjstj5TeeRaVKzxo+aLIe7ivLw=;
-        b=PyZ9islgn97IM6kIJZUzouncSHS3ZYsptPvO+sWYoRpgLBmJ9hMB30V+UkBbXsDkGG
-         UH9V/AXIycZu98PI+d1HnN8GJm4NS1vg40UwhI8V6TNECShIRPEX15MVzsJCbnSWL9Ws
-         4QK0ALcIQ58ehOWDFIgdoJMOcVRJfTWLTsV7GAHoVn83F0PC0hnxELZdCmn5LY6f6Dk2
-         5RHkxylHZ/PhXkg4E62VMmKgD6Pa0bEiTMEZK7Ew2gKDoumRK0puizbKHgmW+bMTBLVi
-         wX2rYxre9lamdIrNbbu2e+pDJh1GVTT6Nsb+boiQzzK3Fpi4X0jEUW6xkrGz99PqleHe
-         71sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719224668; x=1719829468;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lHdI+h5DqWakYO4MXCjstj5TeeRaVKzxo+aLIe7ivLw=;
-        b=WKLrjbLU0GgkBP5PD1FyGdCX2QSwdaIGRBWEIChN8e7YgqHlrkA40xo9kt1batROf4
-         rSLQdliQmwpWVnUPskzv4V6GLe1Ur1zXqS3/KPgFXkRePgQX2PPHLy4/78B4zNpc5DhQ
-         45uqkdAnwuAUE2o+RMRxYNZVosp9qNGrQ0WIlrQ3e1CSrEMoFNF/N9PixAx1kFEBr/lp
-         ANOs1JP9UB4fYPxmjOseu4RmmlJg1Wud4d0sfT5dN5SQbXR7UCovUWNJmAIEmH4rWatV
-         eoAZRaRbgAipKf8vUYw2TDLqaz4aDqChdhC3IlnkgKBrTitNDdcj99iH5Ot4aLsiHJDo
-         7snQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbbqlmYuutcWPDwyKCcRU6eaIn/WrNguKokZy5TFee/zYGF3XY9lHFVsLDt4XvxgFeKix1W9NUZ3HUe5b29ZuyUAxV98E9UnM179UH0nDTNhbiRmfudBxS/ZApMiudAgaMt14dJfjMU28uJxTEK2ZmyFfiQmHAzBCo7PEj8Qwvxcttt9NB6hok
-X-Gm-Message-State: AOJu0YzJCzCQK3djhpZRuLH5syaAHBiTqzo3zJo8bnEcmQ7+fFQ8stAm
-	/c+8y7M1tPISu52+5zVizfcW5V7JfczTJvnuI/mdwX7tmEdYV2GC
-X-Google-Smtp-Source: AGHT+IHIv6eTVUjcCSv5PALPamjZJ2P7b67H8kH7mtEoHBRhV3vZ5HrlkaE6y1SHgknz6Et0SHWPCA==
-X-Received: by 2002:a5d:448c:0:b0:364:aafb:5fd7 with SMTP id ffacd0b85a97d-366e95d2968mr2825122f8f.45.1719224668366;
-        Mon, 24 Jun 2024 03:24:28 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:aac:705d:6ec5:53d3:2412:2d96])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3663a2f6af9sm9685315f8f.73.2024.06.24.03.24.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 03:24:27 -0700 (PDT)
-From: Emanuele Ghidoli <ghidoliemanuele@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Cc: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	jjang@nvidia.com,
-	kobak@nvidia.com,
-	mochs@nvidia.com
-Subject: [PATCH v1 2/2] selftests: rtc: rtctest: skip alarm test if alarm resolution is one minute
-Date: Mon, 24 Jun 2024 12:23:54 +0200
-Message-Id: <20240624102354.894871-3-ghidoliemanuele@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240624102354.894871-1-ghidoliemanuele@gmail.com>
-References: <20240624102354.894871-1-ghidoliemanuele@gmail.com>
+	s=arc-20240116; t=1719224960; c=relaxed/simple;
+	bh=wNeAG9yIK0CZl4N/ZkvXzvReYFJ5z22Ul9DecMcs2k4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iULAN8kUD0YoJ0cMj2EC6sbh1n5MRCjme3y6EKWdmFkCVVTh90HlsL5zQFsQV0eSEUmtlaevMxx54l1mfjsfjPpaRI/Rq9lHbZbTEPQxBD+ZSPG/D/w5mi+GyOn823bSqPoviG2NJUCaNzOMz2QQXpl57aiCt6JHc1nKdaIZArg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=RR0c0+ac; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1719224959; x=1750760959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wNeAG9yIK0CZl4N/ZkvXzvReYFJ5z22Ul9DecMcs2k4=;
+  b=RR0c0+ac84k6ftIqr5qrbitbQnOjleuaqa2scbLpUQq0PpKEy7I+6XRv
+   JdVbNjr+LQP/lwMSQDDe2I+ODVmrYadb7TOvGVPep+0sdgvQ++pzN9jgm
+   sTxcxQw4AO7TCe76/j5CHYGnFjMxiBW0kZVYq7JNc4GSJyO1jh/ool5qZ
+   XB9xybuo0g9Q5gBgCg7NJR3L/S49kI6GuZy+AHo+rDv57QdJVXpX4t8cm
+   /xoV4duUxrN7fCbL3b53TtwmzKHE8oTftzPu/TJU0IhwRBEvLdoZuSwF4
+   KGrpSRspt2y5+poUEC6EAwxG62yCiCgNwSx+DEY5wJUkhZVSfyRod3V95
+   Q==;
+X-CSE-ConnectionGUID: waFIp9S2RTGCYk7TOATuyQ==
+X-CSE-MsgGUID: TZMuc6vpTuuD6P8hbW5QIA==
+X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
+   d="asc'?scan'208";a="28414746"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Jun 2024 03:29:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 24 Jun 2024 03:28:59 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Mon, 24 Jun 2024 03:28:56 -0700
+Date: Mon, 24 Jun 2024 11:28:41 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+CC: Conor Dooley <conor@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Anup Patel
+	<anup@brainfault.org>, Shuah Khan <shuah@kernel.org>, Atish Patra
+	<atishp@atishpatra.org>, <linux-doc@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<kvm-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v7 08/16] riscv: add ISA parsing for Zca, Zcf, Zcd and Zcb
+Message-ID: <20240624-remission-dominoes-9f22be5ba999@wendy>
+References: <20240619113529.676940-1-cleger@rivosinc.com>
+ <20240619113529.676940-9-cleger@rivosinc.com>
+ <20240623-cornbread-preteen-4ec287aa165c@spud>
+ <c59a8897-34a1-4dc3-b68b-35dddf55c937@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="022xOD13U5wpppzg"
+Content-Disposition: inline
+In-Reply-To: <c59a8897-34a1-4dc3-b68b-35dddf55c937@rivosinc.com>
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+--022xOD13U5wpppzg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are two types of alarm tests: one that tests alarms on minute boundaries
-and another that tests alarms on second boundaries. For RTCs with one-minute
-resolution, only the minute boundary test should be run. Skip the second boundary
-alarm test for these RTCs.
+On Mon, Jun 24, 2024 at 10:24:51AM +0200, Cl=E9ment L=E9ger wrote:
+>=20
+>=20
+> On 23/06/2024 17:42, Conor Dooley wrote:
+> > On Wed, Jun 19, 2024 at 01:35:18PM +0200, Cl=E9ment L=E9ger wrote:
+> >> The Zc* standard extension for code reduction introduces new extension=
+s.
+> >> This patch adds support for Zca, Zcf, Zcd and Zcb. Zce, Zcmt and Zcmp
+> >> are left out of this patch since they are targeting microcontrollers/
+> >> embedded CPUs instead of application processors.
+> >>
+> >> Signed-off-by: Cl=E9ment L=E9ger <cleger@rivosinc.com>
+> >> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> >> ---
+> >>  arch/riscv/include/asm/hwcap.h |  4 +++
+> >>  arch/riscv/kernel/cpufeature.c | 55 +++++++++++++++++++++++++++++++++-
+> >>  2 files changed, 58 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/h=
+wcap.h
+> >> index 18859277843a..b12ae3f2141c 100644
+> >> --- a/arch/riscv/include/asm/hwcap.h
+> >> +++ b/arch/riscv/include/asm/hwcap.h
+> >> @@ -87,6 +87,10 @@
+> >>  #define RISCV_ISA_EXT_ZVE64F		78
+> >>  #define RISCV_ISA_EXT_ZVE64D		79
+> >>  #define RISCV_ISA_EXT_ZIMOP		80
+> >> +#define RISCV_ISA_EXT_ZCA		81
+> >> +#define RISCV_ISA_EXT_ZCB		82
+> >> +#define RISCV_ISA_EXT_ZCD		83
+> >> +#define RISCV_ISA_EXT_ZCF		84
+> >> =20
+> >>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
+> >> =20
+> >> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufea=
+ture.c
+> >> index a3af976f36c9..aa631fe49b7c 100644
+> >> --- a/arch/riscv/kernel/cpufeature.c
+> >> +++ b/arch/riscv/kernel/cpufeature.c
+> >> @@ -111,6 +111,9 @@ static int riscv_ext_zicboz_validate(const struct =
+riscv_isa_ext_data *data,
+> >> =20
+> >>  #define __RISCV_ISA_EXT_DATA(_name, _id) _RISCV_ISA_EXT_DATA(_name, _=
+id, NULL, 0, NULL)
+> >> =20
+> >> +#define __RISCV_ISA_EXT_DATA_VALIDATE(_name, _id, _validate) \
+> >> +			_RISCV_ISA_EXT_DATA(_name, _id, NULL, 0, _validate)
+> >> +
+> >>  /* Used to declare pure "lasso" extension (Zk for instance) */
+> >>  #define __RISCV_ISA_EXT_BUNDLE(_name, _bundled_exts) \
+> >>  	_RISCV_ISA_EXT_DATA(_name, RISCV_ISA_EXT_INVALID, _bundled_exts, \
+> >> @@ -122,6 +125,37 @@ static int riscv_ext_zicboz_validate(const struct=
+ riscv_isa_ext_data *data,
+> >>  #define __RISCV_ISA_EXT_SUPERSET_VALIDATE(_name, _id, _sub_exts, _val=
+idate) \
+> >>  	_RISCV_ISA_EXT_DATA(_name, _id, _sub_exts, ARRAY_SIZE(_sub_exts), _v=
+alidate)
+> >> =20
+> >> +static int riscv_ext_zca_depends(const struct riscv_isa_ext_data *dat=
+a,
+> >=20
+> > It's super minor, but my OCD doesn't like this being called "depends"
+> > when the others are all called "validate".
+>=20
+> Ok, let's make a deal. You review patch 14/16 and I'll make the machine
+> part of you happy and call this function validate ;)
 
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
----
- tools/testing/selftests/rtc/rtctest.c | 30 +++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+I generally avoid the hwprobe patches intentionally :) I'm not even
+expecting a respin for this tbh, I'd like to just get it in so that I
+can do things on top of it.
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 63ce02d1d5cc..d741a548ef76 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -82,6 +82,22 @@ static void nanosleep_with_retries(long ns)
- 	}
- }
- 
-+static int rtc_get_features(int fd, uint64_t *features)
-+{
-+	struct rtc_param param = { 0 };
-+	int rc;
-+
-+	param.param = RTC_PARAM_FEATURES;
-+	param.index = 0;
-+	rc = ioctl(fd, RTC_PARAM_GET, &param);
-+	if (rc < 0)
-+		return rc;
-+
-+	*features = param.uvalue;
-+
-+	return 0;
-+}
-+
- TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 	int rc;
- 	long iter_count = 0;
-@@ -197,6 +213,13 @@ TEST_F(rtc, alarm_alm_set) {
- 	fd_set readfds;
- 	time_t secs, new;
- 	int rc;
-+	int rc_feat;
-+	uint64_t rtc_feat;
-+
-+	rc_feat = rtc_get_features(self->fd, &rtc_feat);
-+
-+	if (!rc_feat && (rtc_feat & _BITUL(RTC_FEATURE_ALARM_RES_MINUTE)))
-+		SKIP(return, "Skipping test since only one minute resolution alarms are supported.");
- 
- 	if (self->fd == -1 && errno == ENOENT)
- 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-@@ -255,6 +278,13 @@ TEST_F(rtc, alarm_wkalm_set) {
- 	fd_set readfds;
- 	time_t secs, new;
- 	int rc;
-+	int rc_feat;
-+	uint64_t rtc_feat;
-+
-+	rc_feat = rtc_get_features(self->fd, &rtc_feat);
-+
-+	if (!rc_feat && (rtc_feat & _BITUL(RTC_FEATURE_ALARM_RES_MINUTE)))
-+		SKIP(return, "Skipping test since only one minute resolution alarms are supported.");
- 
- 	if (self->fd == -1 && errno == ENOENT)
- 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--- 
-2.34.1
+--022xOD13U5wpppzg
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnlKWAAKCRB4tDGHoIJi
+0qTZAQDW6NkBEEY0BpVBm4oazaou8r5axQXRsRokUPZuDY/Q/wEA7XbMZLRFekMt
+ZYMxRfkbyf9XPgmg2W/WvyHnahDlhA4=
+=Ozsy
+-----END PGP SIGNATURE-----
+
+--022xOD13U5wpppzg--
 
