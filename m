@@ -1,216 +1,125 @@
-Return-Path: <linux-kselftest+bounces-12562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B647C915136
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:59:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DFB491534D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 18:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC172B25FC8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 14:59:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18E6A285134
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5986F19AD81;
-	Mon, 24 Jun 2024 14:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDC019DF45;
+	Mon, 24 Jun 2024 16:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="duOHb2za"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vTyTVcpT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C0192B67;
-	Mon, 24 Jun 2024 14:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DED142625
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 16:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719241186; cv=none; b=G518ZWZmRyX74a8764Es3je2wb4nkZABa19xouSJLCcrC3APicnqOFLV8NMJl6PpRTCJyshz/hre4HYU/UkFVo68QiNRgCcDRzZFw64sBuiz8Nn8O7Ea9716mI0waKtRl6SdAJnJtW41QswU+0H5Xcj36RqhqA9x1xe6F1HiykY=
+	t=1719245952; cv=none; b=t3sd7tpMDRVh1QzxgdrX/yf0kYdPFaZR62hOlvzfJvkKttaTBA2vgNWq6Vi36HFFzM+J+XSkTXHNwgpXE3TRBU59pYRDOMf59peBnOqMMaX2aZmyOgss+2VbM89MaHuYlPjSjTThKIehrrSZXt41JQOb8jRK322CS5fH7VXtyh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719241186; c=relaxed/simple;
-	bh=9xaJDh1TnKMficbAlDxInx8h5y/0mTRX9rf4/9QzidI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PIgESnw062mwq1TJBu+WUkVHkYuCu0AQxx6hiTnK3B4OF2AvkhwV3KzRM3YzdithnfjF08r92dFvLNdZ8LMXltl0u016cw55Ec7q4C679M9LgR86ydZdJyUr1f6qbjzUbzK7ehQIG922FkmHPRwdyZeXiLnOjK5OdAhWHS81amI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=duOHb2za; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1719241182;
-	bh=9xaJDh1TnKMficbAlDxInx8h5y/0mTRX9rf4/9QzidI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=duOHb2zal2/Ccb+OTlEFXhUjQcuf7n8vGx5x3QJFjBLTT8QL/FFitFpWz7miBGC5p
-	 gXoAzbuAftUNaEFXkwnli+TSKoHKU7lAOEjPAGIWORfMIuwdu41uGbnq/TNfHIufDP
-	 s+x3bbWIAp8jxf4zrHhy+YvEYcbimiUNyZdaVeBB0QZpyibRelSqHQvgSoS5orBYqc
-	 l3oxKgurQgElLqqJduuUvo+WanP/nH3cxYD6GgfgNDs3gbuprxt/x1NoeEPSk+Ljqb
-	 6U8Vyq8XNPEbfCZemaW/GZ8Tz5Jf0F19KkJNC7MYpG97AdFOLPZtxZGaeonguEb6X5
-	 ceM0VfDjSUO8A==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5305A378216C;
-	Mon, 24 Jun 2024 14:59:41 +0000 (UTC)
-From: Laura Nao <laura.nao@collabora.com>
-To: skhan@linuxfoundation.org
-Cc: kernel@collabora.com,
-	laura.nao@collabora.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Subject: Re: [PATCH 0/2] Modify the watchdog selftest for execution with
-Date: Mon, 24 Jun 2024 17:00:04 +0200
-Message-Id: <20240624150004.116810-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <76a6a3d1-bbf7-436a-a977-4e5c49db69ac@linuxfoundation.org>
-References: <76a6a3d1-bbf7-436a-a977-4e5c49db69ac@linuxfoundation.org>
+	s=arc-20240116; t=1719245952; c=relaxed/simple;
+	bh=nyAl615ThVvV+3Fn0R2Zo+cJmdR4uumn11lPVUXlXNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nKnoMCdjVE1T5e5+Vi2no9Y4Jt4Nsn3crusuy77s3D2psWYpdUiAEFezBmRPeAMkYjO7gpoDBQtEumfKvFGsdqKQ2/A1R3bnmqGaEBcuDd8xBhSaxNi7S0gH5NmMkN5NG2Z1XYgq/XoMBhFhD3hUn5SQu9rsqD+86JltnwpQ+fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vTyTVcpT; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4217990f8baso40010605e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 09:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719245949; x=1719850749; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=exDolX4nznB1E5gtLAh07wVpA+L122DNFPurXAqZ6H8=;
+        b=vTyTVcpTyvd1j2Z2OSpZs5fwdG7jtc1P39YjNdkPu3Fj8NSg0SKkhegMMAxkqyKYe1
+         6s/DjMeDhbWOlRpbqImqQ9cfqz+2lSm97XltNxcrhnrciZzPZXe44AEKBuAS672dVGOU
+         z42qRmYouhK3bIqCjrP1Eg09RpWkXvUYUBzRIxzmvougqNY2EhMjcJcJlQ9o6DnoClRC
+         XRI8x0ql8jg1WLVplLu9FJgz02JovFogci/5xa0gUelj8n0Mjrp9EL7/u4XSXPWlzAwv
+         qYJ0S7qMx5lmXv4o+nYz4qA10af1CuMLKZmy9Ot7alpqTMxveO/ykr8zE4iEkcXIQ2l7
+         6kmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719245949; x=1719850749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=exDolX4nznB1E5gtLAh07wVpA+L122DNFPurXAqZ6H8=;
+        b=b6OpXOEKh6cWVZkLYO0DQm5jEFDIcVYD2JjWvCPNwfoADHrw1lmFF/AkmBsEAC9N+C
+         F1UzMjKyPqCEUcGnPZ0GmVdyfJ8YlF/71or4FDm1ZgWIkqyR6LWYmWBexW0IHQ9G/d9W
+         TA/PeaKScJdwcVFao9kL48QWd44Swv6IIQqG3qRaEAVBSUVNc6qqEsW/b2p7f42sR5YP
+         V3iq2acaUmNrIdCnynSO0Ei/z86oQnJAZrMBDkWjyodYBE1tJNJ8ii/8mBy060oCWBzF
+         nDTWoO3WrmXKSaYHsGM2rWE4zf3ZAe1AaXqJPnZBNUv1H1uzhrqAHjDT16Qmsd8XLsC1
+         pW8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXriq6JZfnIKbwkNbMNrMYiKoEyua+ySnphgRMrSRSrMhGXM9+4uC6qgmbrY58qSzREWYz372wiIb363ZCk8uJHKEUGtdtCnUiQ+mEN6e8Y
+X-Gm-Message-State: AOJu0YwwsIkznl4XKl5SFWXutHz+4VtqQ4t3+SksGVZ6LcJDWqZVmVh4
+	EgtEan3tCNYpiYdSXEC80yZa90WPXB2+UF7IyHHYlKIy41rbKlKKhvzgAglDZXLfZwBaPd4zPsJ
+	xkSfPukyOSj4Y45PE507jqoF+oIYRSJjeRsfH
+X-Google-Smtp-Source: AGHT+IGSVw5qqaiDJoJAzv1QgeYc1bbCjN8cj3oSXD+wUBpbm1EzCyUsNE5BXJsde0s7ePDGMdkvsVzOvReKFpqIj9s=
+X-Received: by 2002:a7b:cd91:0:b0:421:9502:3f24 with SMTP id
+ 5b1f17b1804b1-4248b958d46mr33592405e9.14.1719245949267; Mon, 24 Jun 2024
+ 09:19:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240620184856.600717-1-jiaqiyan@google.com> <20240620184856.600717-3-jiaqiyan@google.com>
+ <a272d16f-fb9a-48df-c90a-e848f2d44210@huawei.com>
+In-Reply-To: <a272d16f-fb9a-48df-c90a-e848f2d44210@huawei.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Mon, 24 Jun 2024 09:18:55 -0700
+Message-ID: <CACw3F52XdxHJhDDyz1jM9SEuLYO21rvyCVZdn56-h2k=XaKiQg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] mm/memory-failure: userspace controls
+ soft-offlining pages
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
+	corbet@lwn.net, rientjes@google.com, duenwen@google.com, fvdl@google.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, nao.horiguchi@gmail.com, jane.chu@oracle.com, 
+	osalvador@suse.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/21/24 23:08, Shuah Khan wrote:
-> On 6/18/24 07:40, Laura Nao wrote:
->> Hi Shuah,
->>
->> On 6/7/24 23:07, Shuah Khan wrote:
->>> On 6/7/24 03:53, Laura Nao wrote:
->>>> Hi Shuah,
->>>>
->>>> On 6/7/24 01:03, Shuah Khan wrote:
->>>>> On 6/6/24 03:57, Laura Nao wrote:
->>>>>> Hi Shuah,
->>>>>>
->>>>>> On 5/6/24 13:13, Laura Nao wrote:
->>>>>>> The watchdog selftest script supports various parameters for
->>>>>>> testing
->>>>>>> different IOCTLs. The watchdog ping functionality is validated
->>>>>>> by
->>>>>>> starting
->>>>>>> a loop where the watchdog device is periodically pet, which can
->>>>>>> only
->>>>>>> be
->>>>>>> stopped by the user interrupting the script.
->>>>>>>
->>>>>>> This results in a timeout when running this test using the
->>>>>>> kselftest
->>>>>>> runner
->>>>>>> with no non-oneshot parameters (or no parameters at all):
->>>>>
->>>>>
->>>>> Sorry for the delay on this.
->>>>>
->>>>> This test isn't include in the default kselftest run? How are you
->>>>> running this?
->>>>>
->>>>
->>>> The goal of this series is to enable the test to be run using the
->>>> kselftest runner individually, not as part of the default run. So
->>>> for
->>>> example w/out args:
->>>>
->>>> make -C tools/testing/selftests TARGETS=watchdog run_tests
->>>>
->>>> or with args:
->>>>
->>>> KSELFTEST_WATCHDOG_TEST_ARGS='-b -d -e -s -t 12 -T 3 -n 7 -N -L' 
->>>> make -C
->>>> tools/testing/selftests TARGETS=watchdog run_tests
->>>>>>>
->>>>>>>      TAP version 13
->>>>>>>      1..1
->>>>>>>      # timeout set to 45
->>>>>>>      # selftests: watchdog: watchdog-test
->>>>>>>      # Watchdog Ticking Away!
->>>>>>>      # .............................................#
->>>>>>>      not ok 1 selftests: watchdog: watchdog-test # TIMEOUT 45 
->>>>>>> seconds
->>>>>>>
->>>>>>> To address this issue, the first patch in this series limits the
->>>>>>> loop
->>>>>>> to 5
->>>>>>> iterations by default and adds support for a new '-c' option to
->>>>>>> customize
->>>>>>> the number of pings as required.
->>>>>>>
->>>>>>> The second patch conforms the test output to the KTAP format.
->>>>>>>
->>>>>>
->>>>>> Gentle ping - any thoughts on this series? It would simplify
->>>>>> running
->>>>>> the
->>>>>> watchdog kselftest in CI environments by leveraging the runner.
->>>>>>
->>>>>
->>>>> This test isn't intended to be included in the default run. It
->>>>> requires
->>>>> loading a watchdog driver first. Do you load the driver from the
->>>>> runner?
->>>>>
->>>>
->>>> I get this test requires watchdog drivers to be loaded (which in
->>>> this
->>>> case can't be added to a config fragment that goes with the 
->>>> selftest, as
->>>> they are platform-specific) and therefore cannot be included in the
->>>> default run. However, having ktap output support and limiting the
->>>> ping
->>>> loop would allow the test to be run individually in the same way as
->>>> other selftests (so through the kselftest runner).
->>>>
->>>> Naturally, driver dependencies must be met for the test to run and
->>>> produce valid results. From my understanding the runner itself
->>>> cannot
->>>> ensure this, so in this case it would be up to the user or CI to
->>>> enable/load the appropriate drivers before running the test.
->>>> If these dependencies are not satisfied, the test could just exit
->>>> with a skip code.
->>>>
->>>> Does this make sense to you? or is the kselftest runner intended to
->>>> be
->>>> used to run exclusively a subset of tests in the selftests
->>>> directory
->>>> (i.e. the ones that don't have platform-specific driver
->>>> requirements)?
->>>>
->>>
->>> There are several tests that aren't included in the default run
->>> because
->>> they have dependencies and potentially damaging to the running
->>> system.
->>> These tests are not included for a reason.
->>>
->>> The first step would to be ensure writing shell script to load and
->>> unload the watchdog module and then pass in existing parameters such
->>> as the oneshot to run the test.
->>>
->>> There is no need to add a new parameter yet. Also there is no need
->>> to
->>> convert this to ktap yet.
->>>
->>
->> To clarify, I understand that this test is not suitable for the
->> default
->> run, and I do not intend to change that. The patch series is meant to
->> make the test usable in a non-interactive environment, such as a CI,
->> when explicitly enabled and with the required modules already loaded.
->>
-> 
-> The test can be with one shot timer - how is this test currently not
-> usable and how are your changes making it usable?
-> 
+On Sun, Jun 23, 2024 at 8:41=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
+rote:
+>
+> On 2024/6/21 2:48, Jiaqi Yan wrote:
+> > Correctable memory errors are very common on servers with large
+> ...
+> >
+> >  /*
+> > @@ -2749,8 +2760,9 @@ static int soft_offline_in_use_page(struct page *=
+page)
+> >   * @pfn: pfn to soft-offline
+> >   * @flags: flags. Same as memory_failure().
+> >   *
+> > - * Returns 0 on success
+> > - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event
+> > + * Returns 0 on success,
+> > + *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
+> > + *         -EOPNOTSUPP if disabled by /proc/sys/vm/enable_soft_offline=
+,
+>
+> No strong opinion, but it might be better to write as "or disabled by /pr=
+oc/sys/vm/enable_soft_offline".
 
-In a non-interactive environment, the current test can only be run
-through the oneshot parameters, making it impossible to test the
-WDIOC_KEEPALIVE ioctl (since the ping loop is only interrupted by
-SIGINT). So the first patch enables testing of the WDIOC_KEEPALIVE ioctl
-in such an environment, by making the ping loop finite. 
-The second patch allows the reuse of the ktap result parser used for
-other kselftests, eliminating the need for a custom parser for this
-test.
+Sure, will update in v5 (which is mainly about the kselftest-related change=
+s).
 
-Thanks,
+>
+> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Laura
+Thanks Miaohe!
 
+> Thanks.
+> .
+>
 
