@@ -1,100 +1,109 @@
-Return-Path: <linux-kselftest+bounces-12572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA4319157C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 22:19:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFAF29158C9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 23:22:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DE061F21309
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 20:19:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45C8BB24298
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 21:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FC11A01D9;
-	Mon, 24 Jun 2024 20:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8EB71A08C4;
+	Mon, 24 Jun 2024 21:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="bh4tqL67"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1AcWet8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E586219D88F
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 20:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478C01A0705;
+	Mon, 24 Jun 2024 21:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719260335; cv=none; b=lAXjNlOUe55x190GL0mZ60rwFuHrPUcPzoqOzK3vqb/Z+tbbX0z79Zz76KC9nvHUrW2xtuEe1+y2a1NboHOEjsyva0Ygh0vXODWgEhaZq0/MtOSddgZL/XCvIDDZ6nvYWJ9QTRA1wE1geuQ//kwwa7t/F5Y5zkQAaOQTsU5JKmI=
+	t=1719264115; cv=none; b=SIJGuObsQVBoh9SELw9yVO6hQJtRkHtVw8Iq/hXGuYhLsE7NAk0toNnvtXSf04+mNTFJj3OYF2kYA2yqEtQHEZkmMuj6d9WxHIOrlpJrRLHiXwGSryL5G7eN1MS356X/iaNW96wOHDTqGtv3hUrK5V/uATf7zN70/8SsrRuPQNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719260335; c=relaxed/simple;
-	bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYO7GrYAPrEtU3JcLD47YSWaJRrKby0LNkeeSAKuJniztojAjYweuk6Bulho8HqHt3zOb7rGwKcZhvw9Jg+lD87oaEvSjtTeFnMwFR4kdHTI6KBrIspDEspIiEbNMCcHj7tspYUaUUK+WkKbzbv3ID73JaulEm3kpjc93uo11CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=bh4tqL67; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a7245453319so306913166b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 13:18:53 -0700 (PDT)
+	s=arc-20240116; t=1719264115; c=relaxed/simple;
+	bh=K2nPn5+KXr5fsJLrzV+n/VjSsb6iFSG6s/idgmFCEOQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ahR8xBXWgKk79cDaUXEbDt5bywgEnmYpmc60jWmXG0sUmT48fqkSxBYEq1j7PIaOGA7FKdzNeaEce/qDTjI5M44i/6jfyoRoc/ia69BMyk2arep0zPHTdky7lSrS0OOIymMAnRjN5cciKIihYi1SyitFS3kPamJr0DpNMXh2uKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e1AcWet8; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fa2ea1c443so14330455ad.0;
+        Mon, 24 Jun 2024 14:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719260332; x=1719865132; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
-        b=bh4tqL67qwrLSvvomB0GYyaZRmfZ8C7/jtMJQbLXq+rTsGgIZuiWYFNpH++Al2dWQe
-         hbXXTwtmc/nJTyFciBIUyb/nFVP2i0yZv+cRV/AdaaBu5l+jIqgrzOhqtdqss228H7/9
-         i8h6A8Ur0MSfXq7LyHaH1OyNoZINRlrNnrD1blCrAB47CY7g8CVSdW+lyEBneNDoMjXe
-         W5zbLbwk2DQZz+HxdsIKlagFzxlicQN+NmlsCNiyY+6v5KtMiBtt3Enem/giGaJqHjpw
-         C+m8Ls3NamUo4rAwDvC3+9fqEAkj692/nhnSK8M6U0ZFwGzggR/PeALd2V1pYOe2ovRV
-         +0Gg==
+        d=gmail.com; s=20230601; t=1719264113; x=1719868913; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K2nPn5+KXr5fsJLrzV+n/VjSsb6iFSG6s/idgmFCEOQ=;
+        b=e1AcWet8ny+7G4zynIWEfEwejSvliiLO9mK+KzRJZI6JP4FRmnIFY4wRrsEMYgZmMZ
+         7eDXHzfLqyEfh7oL6W1NoJ3pX6DM2X7CEruNIGvt4cmm6FWqk2bFUCf/3eKx7kTlYB58
+         r+0f1f2CDBuXkyFbs+C9RcHigHWBjpmDEK7cBzvkbm8L0t5Z8p0XHGGP91nxZQNcpD+l
+         ykH/qLs5FQ6UoLxw4muz3SXGxbZlcyJxGEqJxxqhqgvweAh8LKQJR2o60SOR4AAI10/+
+         7hLnQbFl9Nel8GdUuZPu1Dih1QBvRJJNkY2SxpFtRwImRIK9vKK5575gjxNpKyp2JAet
+         Pl6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719260332; x=1719865132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CYPMKzKXzPtEKhl5KLn1rsXOXuPsd77VL4h50H+aCL0=;
-        b=vffKLSr3yRcGBygYjR253nBZQGs4lXvpTnp3rW3d6NUMqHTpN9TF8hLlQWnYL+nC9v
-         K3tO/RLsahnMIanqNPoU2yHpRmzi9MNAiZ9DkUm0ZvJp5NRBWGPyjyGMAtff0XA/STkq
-         +mMcUh+5IUMimpjHHFfrG5ffyex9SSFz2mwHqdgf0Dr+ihGAvMGhGgfsKCHqOFe7NrkL
-         q3hfR4m+y9gXV25RNxJVvBBd8o8BOg4X5+7AhUhEEoT7owvJ2NbzTaaouL6Fo0sgRUpE
-         iDcYb4TEE/jRuiVG2+/qq3qOq7OKSV3B90onHwl0bqnQVL3I1yUlqke0hi1CiKjYuUhQ
-         vGRw==
-X-Forwarded-Encrypted: i=1; AJvYcCW26yAh615gyJKEXYxf7m1GmP/cGdJD3qMxykEkwU8qQS9QsCM5bs6wW0mI6BUJQPrZirk/PITFn1JgFzlbzewMvzAAI1UB+rynAvEHVHkZ
-X-Gm-Message-State: AOJu0Yzfn6175MySTCdCfyeELo73i4XoMQzkOU5y6yHVQK0PdEU9j/c3
-	RIZu149EEVPQyQWAu3easFMaZJactLVyR8aQAhfOQ2cGtUhH4jmTL9CT2ASRhLYzzkOUuLan31D
-	TCgEEcyuQCm0jv8xrtLtZm/0qiOK8R5hoN3kciQ==
-X-Google-Smtp-Source: AGHT+IHYKa/ycS20058DIxTuE4TPZj+Ne6GJbbNiJ5FbYcQC6EiSPJWgGfnJ/EyOzoXs+/hcdQEshUVAiI2Wx8GhYRs=
-X-Received: by 2002:a17:907:8b91:b0:a6f:6df5:a264 with SMTP id
- a640c23a62f3a-a70275ea47emr586904366b.1.1719260332160; Mon, 24 Jun 2024
- 13:18:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719264113; x=1719868913;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K2nPn5+KXr5fsJLrzV+n/VjSsb6iFSG6s/idgmFCEOQ=;
+        b=PU/caULvZbcwOUogynmLdVFdVVZghq/+Jxezjyy3PiTqaArJCEv+aHpk4pKm0Z9lEL
+         9N0PAF1HpfFwklA9LWTFQLoL4AG0PaHgn+nI3B0zPXjPhfMAKbcb740dAt01ODS+r1eR
+         AZTnnJLqpbIoMzkOBZqY2lFm6434q8vl4sLJ68CrOloGZpgO85achFM4a1GycnttJe4U
+         6KHcJSaEMvm9W0wxekRlJCNlSZSYJ9KbN8jBUipizVYGxN+4S51SEOmgN1HrKVJ9B+Cn
+         dWXgmS8EzPsX7CACSjtuIW1/PUlQcngLdOLALr95TXuSeluswl+9brLseayzSvwEXsMt
+         G9gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXkB6tRL4ZYuEAgfCF+t6LeOA9y/2sTmD5Wd9cm5FLuaVUgBescE0BzgI2Dka6496kUKQGzUAsoYLcu/zH+mzgntyuOmfb3VKqauyTfD9qwN0zEyAWcVc4+mI5T1NThQ0k1MZ7+
+X-Gm-Message-State: AOJu0Ywa8dlOUqq8EVGON9SLWKehnEchPMPqDcLD8fW0Eyq688BjJKkx
+	ASfTTkz7qFnEadswXnEsY2xfGEiYMNFSVp3tJXPiozthSb7VBNdN
+X-Google-Smtp-Source: AGHT+IEb9zvrdrM3OIpz6L19RKtvKlJlwDJeeVDO3+id/OqYV4mHGPqzxTgvEwVxot5NXRYNrw0KXQ==
+X-Received: by 2002:a17:902:db07:b0:1fa:e0c:8bd4 with SMTP id d9443c01a7336-1fa23f07142mr60141675ad.68.1719264113273;
+        Mon, 24 Jun 2024 14:21:53 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb2f0353sm67212815ad.23.2024.06.24.14.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 14:21:52 -0700 (PDT)
+Message-ID: <dc971af1ec9204a4be2924c20c26006890c61d84.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 4/9] selftests/bpf: Use make_sockaddr in
+ sockmap_ktls
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Mon, 24 Jun 2024 14:21:47 -0700
+In-Reply-To: <7f6985c0ad1c031662ff677b6b4be5f51f920c4a.1719203293.git.tanggeliang@kylinos.cn>
+References: <cover.1719203293.git.tanggeliang@kylinos.cn>
+	 <7f6985c0ad1c031662ff677b6b4be5f51f920c4a.1719203293.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619113529.676940-1-cleger@rivosinc.com> <20240619113529.676940-15-cleger@rivosinc.com>
-In-Reply-To: <20240619113529.676940-15-cleger@rivosinc.com>
-From: Evan Green <evan@rivosinc.com>
-Date: Mon, 24 Jun 2024 13:18:16 -0700
-Message-ID: <CALs-HssLx_AZ_pBDECfVH7REoSkyz-=bECPYDeNZkfe59DdBGQ@mail.gmail.com>
-Subject: Re: [PATCH v7 14/16] riscv: hwprobe: export Zcmop ISA extension
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Anup Patel <anup@brainfault.org>, 
-	Shuah Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 19, 2024 at 4:41=E2=80=AFAM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
-osinc.com> wrote:
->
-> Export Zcmop ISA extension through hwprobe.
->
-> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
+On Mon, 2024-06-24 at 12:33 +0800, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+>=20
+> This patch uses public helper make_sockaddr() exported in network_helpers=
+.h
+> instead of open-coding in sockmap_ktls.c. This can avoid duplicate code.
+>=20
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
 
-Reviewed-by: Evan Green <evan@rivosinc.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
