@@ -1,151 +1,188 @@
-Return-Path: <linux-kselftest+bounces-12568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A6BA9153FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 18:34:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 432F09154D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 18:54:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B8461F214D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:34:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65E3B1C213F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2024 16:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9349E19E809;
-	Mon, 24 Jun 2024 16:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA8019EEAE;
+	Mon, 24 Jun 2024 16:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zNAKiJWR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sk6FP6tx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DF319E7F5
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 16:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D01619DFAC
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 16:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719246840; cv=none; b=Wp0Ms59A52/zmzYcARhRQcjyyZJQ5w3ZlpmWKvkbfiNC591mZlmN+k88Lpgiq/f0wIF6pXrHQi7M/EeuG3DAP9dsIcVKl5ujIbAKg7+Iz8buMualIaiXhNQaSz+XvmZf1MO+5tAXpq3vFcNEQGJyROuUG0PuU/EUoRO4uQJEdv8=
+	t=1719248044; cv=none; b=Sqo2upg4a3c+dDAiX1LUsHSkxG9vu0EbBz/u0W8yXxlUw3/59TuLch0DZnTh3vVZgqiLsEUk07L4NM25UiKSzZQKaVTHXDysJ2chz9dPM+fW97CBTzo1gK1wat0h6XXrwilOn06yfGmXFpbMYkgMLPCMOuaWczFK7zUiGVtdpck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719246840; c=relaxed/simple;
-	bh=7Wo1vdpRujfwVa5E2lZDEmMHiqeYmjrjdL5DzTInIks=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Xy2B5ZKUYO55hMd4H6QczkI5hk5EMT/lFce/5xeiJickNeyXOF8iJXvcewRdCoGmonwH4gt/WE2zvEgFA5xlAA3bcpPsQoKNLCx9txOywnqBfFQyw/V4eDSXDXEtUidAjxKVa0jDKrsAMJjiHqSYdOfVm8dKkL+Lz1iHbANe+FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zNAKiJWR; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1f98f733043so47172125ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2024 09:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719246838; x=1719851638; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GVvAVLVgyp7BPn3YqnrE+Un4CdtD1Zv3a2093D82WyY=;
-        b=zNAKiJWRrdiyMLcRtS9CEAPvNDVlwcMAU4MbzbBKU9uiSTu+/hgU1K4WcLc+7VEtXG
-         E9s+XDKLBrFmHqG14TD9iVDtkOxr1kZ8KnbNWeDxXhL9wcL8YH9lTi8TJ6GTWtRonNkJ
-         8GPMnhdGp0WoTSLbdTGPQpiAqNDanbJn9dajd8JF4g/h+UvEXaYyFza/QWaWWdfuOtUS
-         76guww4d5ehYg3CSJgBSb4S/zEvb5eksfwAODnml17yZB2l/DHhc4axqxm9eVA7oqlhY
-         Ejl5XdXhWnzqYFCjgCmnA9gZWU6OBvoD2xLChuE23L9jtXxo6KwwxY0kHq08TOkId0lF
-         xkiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719246838; x=1719851638;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GVvAVLVgyp7BPn3YqnrE+Un4CdtD1Zv3a2093D82WyY=;
-        b=C1jIbaAc4vfk9rQ7bAv73bEHMgikvOZmjzTJAGXuqOi8pe7PK6xPsudu575USxpkBr
-         7hwhhUQwouZahizRLNn2zIaEdeR7YGrh30b1hJRX+iHD9/pBrbBSOnUgvcTEreKRN3sl
-         QIcbowo63ub08zmhuV9AOxN6cU+i4p8bz/ZOOxhtjGkIa0aN+ozNGC1DbuZT2NzLvYd9
-         s8KzLKXvpM3DjfDy1M+XtXDeDHf4aOEHhxVu3kucRDIAF7DoUuMD5+/SACzcR9XSbg0p
-         nfGGvZICqF0nHrElDW5756fUPIlePC4XDZ8Gf8CPYanT38r1iGeuxqTyUGDnUq/ptNnk
-         ZKuA==
-X-Forwarded-Encrypted: i=1; AJvYcCUgJq8wgf4L8mlb04HhL4kxNlxMl4W9JiN4cOkUhmd7/uf3BwzOGOpoidR17f42YyElaYYypu9WVCuCRfkbeMrmjYZXbTaZCiYAnuM301bQ
-X-Gm-Message-State: AOJu0YzAKfDd3ybm9Mi32DXtO1wCFM8ifyj1MJ7VYsOnjYPWhHfaiYQE
-	qtFW9swZUSLGJlgfUPRa++Y+gKxFl+6W8ajUibfuN1Y5+BlsjfbekcybD0BIlKXQwI327t4zudn
-	ExPk5SpAe6g==
-X-Google-Smtp-Source: AGHT+IFQ03M3aTRppiNCfLsuYEASJusj+ybeUo8fprfJ1Y1kR44v8CZCgZBXMkKg6JbKjrrKoR1HPHTKxUnd6g==
-X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a17:902:e74c:b0:1f9:c823:d3 with SMTP id
- d9443c01a7336-1fa1d516b81mr196425ad.6.1719246837884; Mon, 24 Jun 2024
- 09:33:57 -0700 (PDT)
-Date: Mon, 24 Jun 2024 16:33:48 +0000
-In-Reply-To: <20240624163348.1751454-1-jiaqiyan@google.com>
+	s=arc-20240116; t=1719248044; c=relaxed/simple;
+	bh=5bohiIQjuFlZ3MC0ytH3G+PZ787pPsJS6tdm3PoEEOI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kcnmTjWYfNxVKWBCpCJ58hkbxrX2oNpL16UfuosL2jfMBsUVK7DQvsA1zbU3gR5mBwFClWyEIy+BN3J3NIx6bKdpJcFO/C4WzrNKojsbwVNzxJUmlDBuMSNMicW8YOUPYcpeLjeQUmFl1Ye/7USv0VzSbs0iSXe1OiNj18MFIiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sk6FP6tx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719248042;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FnHUA8KFPQfgKOFjau5SADjiwWEi99JYmDlhSDmtX0c=;
+	b=Sk6FP6txuTNB/usSrRSuH5savxbeFbOB10ieX+2Z2SBSOQMs+6JncwyCrGeR57coIUdsG8
+	rnrF3gNQUUJi41+yfRTNVdZA6thS+2KebSjUnKWPuFoXJzilcjN31VmZJfP+TN6Zikegrx
+	rlVWtm3pmZhgM28UVD5OkqZ0atVW/fE=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-638-fE7PfUYeN4qMpNTNcuGP-g-1; Mon,
+ 24 Jun 2024 12:53:58 -0400
+X-MC-Unique: fE7PfUYeN4qMpNTNcuGP-g-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7F49019560A7;
+	Mon, 24 Jun 2024 16:53:52 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.9.58])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 74E201955D83;
+	Mon, 24 Jun 2024 16:53:48 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Pravin B
+ Shelar <pshelar@ovn.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
+ Dumazet <edumazet@google.com>,  Paolo Abeni <pabeni@redhat.com>,  Shuah
+ Khan <shuah@kernel.org>,  Stefano Brivio <sbrivio@redhat.com>,
+  =?utf-8?Q?Adri=C3=A1n?=
+ Moreno <amorenoz@redhat.com>,  Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH v2 net-next 0/7] selftests: net: Switch pmtu.sh to use
+ the internal ovs script.
+In-Reply-To: <f7ttthjh33w.fsf@redhat.com> (Aaron Conole's message of "Sun, 23
+	Jun 2024 15:26:59 -0400")
+References: <20240620125601.15755-1-aconole@redhat.com>
+	<20240621180126.3c40d245@kernel.org> <f7ttthjh33w.fsf@redhat.com>
+Date: Mon, 24 Jun 2024 12:53:45 -0400
+Message-ID: <f7tpls6gu3q.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240624163348.1751454-1-jiaqiyan@google.com>
-X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
-Message-ID: <20240624163348.1751454-5-jiaqiyan@google.com>
-Subject: [PATCH v5 4/4] docs: mm: add enable_soft_offline sysctl
-From: Jiaqi Yan <jiaqiyan@google.com>
-To: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
-	ioworker0@gmail.com
-Cc: muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
-	corbet@lwn.net, osalvador@suse.de, rientjes@google.com, duenwen@google.com, 
-	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Add the documentation for soft offline behaviors / costs, and what
-the new enable_soft_offline sysctl is for.
+Aaron Conole <aconole@redhat.com> writes:
 
-Acked-by: Oscar Salvador <osalvador@suse.de>
+> Jakub Kicinski <kuba@kernel.org> writes:
+>
+>> On Thu, 20 Jun 2024 08:55:54 -0400 Aaron Conole wrote:
+>>> This series enhances the ovs-dpctl utility to provide support for set()
+>>> and tunnel() flow specifiers, better ipv6 handling support, and the
+>>> ability to add tunnel vports, and LWT interfaces.  Finally, it modifies
+>>> the pmtu.sh script to call the ovs-dpctl.py utility rather than the
+>>> typical OVS userspace utilities.
+>>
+>> Thanks for the work! 
+>>
+>> Looks like the series no longer applies because of other changes
+>> to the kernel config. Before it stopped applying we got some runs,
+>> here's what I see:
+>>
+>> https://netdev-3.bots.linux.dev/vmksft-net/results/648440/3-pmtu-sh/stdout
+>>
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS vxlan4: PMTU exceptions                             [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS vxlan4: PMTU exceptions - nexthop objects           [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS vxlan4: PMTU exceptions                             [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS vxlan4: PMTU exceptions - nexthop objects           [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS vxlan6: PMTU exceptions                             [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS vxlan6: PMTU exceptions - nexthop objects           [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS vxlan6: PMTU exceptions                             [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS vxlan6: PMTU exceptions - nexthop objects           [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS geneve4: PMTU exceptions                            [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS geneve4: PMTU exceptions - nexthop objects          [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS geneve4: PMTU exceptions                            [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS geneve4: PMTU exceptions - nexthop objects          [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS geneve6: PMTU exceptions                            [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv4, OVS geneve6: PMTU exceptions - nexthop objects          [FAIL]
+>> # Cannot find device "ovs_br0"
+>> # TEST: IPv6, OVS geneve6: PMTU exceptions                            [FAIL]
+>> # Cannot find device "ovs_br0"
+>>
+>> Any idea why? Looks like kernel config did include OVS, perhaps we need
+>> explicit modprobe now? I don't see any more details in the logs.
+>
+> Strange.  I expected that the module should have automatically been
+> loaded when attempting to communicate with the OVS genetlink family
+> type.  At least, that is how it had been working previously.
+>
+> I'll spend some time looking into it and resubmit a rebased version.
+> Thanks, Jakub!
 
-Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
----
- Documentation/admin-guide/sysctl/vm.rst | 32 +++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+If the ovs module isn't available, then I see:
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index e86c968a7a0e..71463a7b3e2a 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -36,6 +36,7 @@ Currently, these files are in /proc/sys/vm:
- - dirtytime_expire_seconds
- - dirty_writeback_centisecs
- - drop_caches
-+- enable_soft_offline
- - extfrag_threshold
- - highmem_is_dirtyable
- - hugetlb_shm_group
-@@ -267,6 +268,37 @@ used::
- These are informational only.  They do not mean that anything is wrong
- with your system.  To disable them, echo 4 (bit 2) into drop_caches.
- 
-+enable_soft_offline
-+===================
-+Correctable memory errors are very common on servers. Soft-offline is kernel's
-+solution for memory pages having (excessive) corrected memory errors.
-+
-+For different types of page, soft-offline has different behaviors / costs.
-+- For a raw error page, soft-offline migrates the in-use page's content to
-+  a new raw page.
-+- For a page that is part of a transparent hugepage,  soft-offline splits the
-+  transparent hugepage into raw pages, then migrates only the raw error page.
-+  As a result, user is transparently backed by 1 less hugepage, impacting
-+  memory access performance.
-+- For a page that is part of a HugeTLB hugepage, soft-offline first migrates
-+  the entire HugeTLB hugepage, during which a free hugepage will be consumed
-+  as migration target.  Then the original hugepage is dissolved into raw
-+  pages without compensation, reducing the capacity of the HugeTLB pool by 1.
-+
-+It is user's call to choose between reliability (staying away from fragile
-+physical memory) vs performance / capacity implications in transparent and
-+HugeTLB cases.
-+
-+For all architectures, enable_soft_offline controls whether to soft offline
-+memory pages.  When setting to 1, kernel attempts to soft offline the pages
-+whenever it thinks needed.  When setting to 0, kernel returns EOPNOTSUPP to
-+the request to soft offline the pages.  Its default value is 1.
-+
-+It is worth mentioning that after setting enable_soft_offline to 0, the
-+following requests to soft offline pages will not be performed:
-+- Request to soft offline pages from RAS Correctable Errors Collector.
-+- On ARM, the request to soft offline pages from GHES driver.
-+- On PARISC, the request to soft offline pages from Page Deallocation Table.
- 
- extfrag_threshold
- =================
--- 
-2.45.2.741.gdbec12cfda-goog
+#   ovs_bridge not supported
+# TEST: IPv4, OVS vxlan4: PMTU exceptions                             [SKIP]
+
+But if it is available, I haven't been able to reproduce such ovs_br0
+setup failure - things work.
+
+My branch is rebased on 568ebdaba6370c03360860f1524f646ddd5ca523
+
+Additionally, the "Cannot find device ..." text comes from an iproute2
+utility output.  The only place we actually interact with that is via
+the call at pmtu.sh:973:
+
+	run_cmd ip link set ovs_br0 up
+
+Maybe it is possible that the link isn't up (could some port memory
+allocation or message be delaying it?) yet in the virtual environment.
+To confirm, is it possible to run in the constrained environment, but
+put a 5s sleep or something?  I will add the following either as a
+separate patch (ie 7/8), or I can fold it into 6/7 (and drop Stefano's
+ACK waiting for another review):
+
+
+wait_for_if() {
+   if ip link show "$2" >/dev/null 2>&1; then return 0; fi
+
+   for d in `seq 1 30`; do
+      sleep 1
+      if ip link show "$2" >/dev/null 2>&1; then return 0; fi
+   done
+   return 1
+}
+
+....
+ 	setup_ovs_br_internal || setup_ovs_br_vswitchd || return $ksft_skip
++	wait_for_if "ovs_br0"
+ 	run_cmd ip link set ovs_br0 up
+....
+
+Does it make sense or does it seem like I am way off base?
 
 
