@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFB2091610B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 10:25:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7551B91610D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 10:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54813B20A01
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 08:25:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AA6D1F228D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 08:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2951482FC;
-	Tue, 25 Jun 2024 08:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CD7148319;
+	Tue, 25 Jun 2024 08:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="goChjrcn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m33CQZh5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70091474A0;
-	Tue, 25 Jun 2024 08:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118601474A0;
+	Tue, 25 Jun 2024 08:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719303918; cv=none; b=DT7faVaY34D2i/X23qHApkZJg8luA9cTFJClcpQh7iX1gPYvgribvXTH7BZadThLFCocGvUUR1XW0fCf7B4alVSb3hcJlB38m/NUjjA8qX37mEueuXcU55fItTlktt5ySABoK3h2nV7Tx5ve+1lESJedCtS+7xVxZVpeLhnQfyM=
+	t=1719303925; cv=none; b=Y0P6tmTwAhYw5iXvfw9crtHylGSsxhwJPnKdgTQwbP5q14+kDQKi/NqBN0wVEr3buoHj8bKN7b8bAul1o6U8se0DXUcI5emrmxXTqpaUkZUwV1diPbHD/6+1aCp1pBWZhEtzHpB7JZwugNlUvRDd2z11hvLvgO1EqChHcDVqFxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719303918; c=relaxed/simple;
-	bh=NOh5xw0s5xNDDvjS0rvhfb6yCX/QDWEsU9TJBuvxigs=;
+	s=arc-20240116; t=1719303925; c=relaxed/simple;
+	bh=Bh7S+Is8s0WxM/UarsSsROTHakfmcXDoWorFr9rAb1g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=coI3V4BZu7t3o5UtZ6aFlYwKmXpFcu5wr0Is9v96RMddqDpSjP+y/x2mRV9UoyvTh2I2Pi0jSPa3X1jVrhdc4UYzzjFy+FtIrPJQdCujvinBvsYrID0peNF8xLDrE73eLQagizqa1C5VMa2z79sbSqpVo1nrq3M7nkeQYskY/Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=goChjrcn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F73C4AF0C;
-	Tue, 25 Jun 2024 08:25:10 +0000 (UTC)
+	 MIME-Version; b=jQHYGMi2xLBp4OujWjA0QIy35qpRHy6CARKP9EiKQ5mtTTSs4l3w0dJgAGoQBEFukSYLMv3YTrhMni6GlKPsrD5rFlYts/EMB2te+f79339nVHEOKB8pBEuGkH7O4U3+kcR9ZrwEMfcLCvkm662TfZoONzO/WNFnKbrP0kXe97c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m33CQZh5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41E6C32781;
+	Tue, 25 Jun 2024 08:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719303917;
-	bh=NOh5xw0s5xNDDvjS0rvhfb6yCX/QDWEsU9TJBuvxigs=;
+	s=k20201202; t=1719303924;
+	bh=Bh7S+Is8s0WxM/UarsSsROTHakfmcXDoWorFr9rAb1g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=goChjrcnB8iLgq2ptTk2wa5SxCBcW/vtGmXBjhsdevBg7Qm4CAyvj22IfsQfuSpA0
-	 aloQAlDXSuRdGEK7kjXH2Ci/J1TdElCkLFoyFipTjnSNqM9GH80zI/DoCpxXl3DPo/
-	 KNM57PiqDrYYI746jxRqM9QLARCfG/DhHTo/84ATwtMfkIp0XMWtBApWAL69Avj3FN
-	 6rt1EvB/hVPj44EVd3YnXrQ2f6CRTeG2a5qxm0ltUYsYo2RaPn+RTw2R+pR8adPCzk
-	 Cdk/+eR88uGU6jaOL0nGo+JMP/17O2gbmBCFTR95EcRR/NIhnAH61oywrcef/SSFeH
-	 AmrcLp1JvttFA==
+	b=m33CQZh58IyuyT7tjqDy+rtNuhQ1kI1LP2QE1lMGLo4KIKdSolRNgg3Ht+XV0xTyM
+	 B2zKqtRJoK5cXP6SgD/0SG0Ff96ZwoHFrGO73ZVgSAkWMYKHb0OvXn5BbI9SWvRqaJ
+	 A/VgC9blz6Y3hQeEl+ssb2vrNYPy7Z1h77XEKi/tn/kXZugp8XJ6x7xMK8SJ5V0fa5
+	 cP8jt6qZA9seay2xI/KkbJct3ptoP6LqyZX+tiZNxS1xq8SR6E+itObFS4ZHC8neFH
+	 WGGB4Wbs/pOHvgGOE3dZmYlPQaXcKjvmobjcD57GBj51a9C9J2+a7JiBAmd+5hf7LJ
+	 LbYd3PhqXBQ5A==
 From: Geliang Tang <geliang@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
@@ -71,9 +71,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/4] skmsg: null check for sg_page in sk_msg_memcopy_from_iter
-Date: Tue, 25 Jun 2024 16:24:37 +0800
-Message-ID: <3643756b626bf18fdc38dd50fc41c5acca61e9b3.1719302367.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 3/4] inet: null check for close in inet_release
+Date: Tue, 25 Jun 2024 16:24:38 +0800
+Message-ID: <ad1ecbd205b357f1f73500522a2d495cb6c0cbe1.1719302367.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1719302367.git.tanggeliang@kylinos.cn>
 References: <cover.1719302367.git.tanggeliang@kylinos.cn>
@@ -89,81 +89,86 @@ From: Geliang Tang <tanggeliang@kylinos.cn>
 
 Run the following BPF selftests on Loongarch:
 
-./test_sockmap
+./test_progs -t sockmap_listen
 
 A Kernel panic occurs:
 
 '''
  Oops[#1]:
- CPU: 20 PID: 23245 Comm: test_sockmap Tainted: G           OE      6.10.0-rc2+ #32
+ CPU: 49 PID: 233429 Comm: new_name Tainted: G           OE      6.10.0-rc2+ #20
  Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018-V4.0.11
- pc 900000000426cd1c ra 90000000043a315c tp 900010008bfbc000 sp 900010008bfbf8a0
- a0 ffffffffffffffe4 a1 900010008bfbfe20 a2 9000100089cd9400 a3 0000000000000003
- a4 900010008bfbfb80 a5 900010008bfbfe20 a6 0000000000000000 a7 00000000000000d3
- t0 0000000000000000 t1 0000000000000000 t2 0000000000008000 t3 0000000000000000
- t4 0000000000000000 t5 0000000000000000 t6 0000000000000006 t7 fffffef1fea12c80
- t8 fffffffffffffffc u0 0000000400000005 s9 0000000000000003 s0 0000000000000000
- s1 0000000000000012 s2 900010008b9bbc00 s3 0000000000000018 s4 0000020000000000
- s5 fffffffffffffffc s6 000000007fffffff s7 0000000000000002 s8 9000100089cd9400
-    ra: 90000000043a315c tcp_bpf_sendmsg+0x23c/0x420
-   ERA: 900000000426cd1c sk_msg_memcopy_from_iter+0xbc/0x220
+ pc 0000000000000000 ra 90000000051ea4a0 tp 900030008549c000 sp 900030008549fe00
+ a0 9000300152524a00 a1 0000000000000000 a2 900030008549fe38 a3 900030008549fe30
+ a4 900030008549fe30 a5 90003000c58c8d80 a6 0000000000000000 a7 0000000000000039
+ t0 0000000000000000 t1 90003000c58c8d80 t2 0000000000000001 t3 0000000000000000
+ t4 0000000000000001 t5 900000011a1bf580 t6 900000011a3aff60 t7 000000000000006b
+ t8 00000fffffffffff u0 0000000000000000 s9 00007fffbbe9e930 s0 9000300152524a00
+ s1 90003000c58c8d00 s2 9000000006c81568 s3 0000000000000000 s4 90003000c58c8d80
+ s5 00007ffff236a000 s6 00007ffffbc292b0 s7 00007ffffbc29998 s8 00007fffbbe9f180
+    ra: 90000000051ea4a0 inet_release+0x60/0xc0
+   ERA: 0000000000000000 0x0
   CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
   PRMD: 0000000c (PPLV0 +PIE +PWE)
-  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
+  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
   ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
- ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
-  BADV: 0000000000000040
+ ESTAT: 00030000 [PIF] (IS= ECode=3 EsubCode=0)
+  BADV: 0000000000000000
   PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
- Modules linked in: tls xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT
- Process test_sockmap (pid: 23245, threadinfo=00000000aeb68043, task=00000000781bb2f1)
- Stack : 0000000000000000 900010008bfbfe20 0000000000000000 0000000000000003
-         0000000000000000 900010008bfbf94c 900010008bfbf950 0000000000000000
-         0000000000000003 0000000000000003 900010008bfbfe10 900010008beeb400
-         9000100089cd9400 0000000000000003 900010008b9bbc00 90000000043a315c
-         0000000000084000 900010008bfbfe20 900010008bfbf958 900010008beeb5ac
-         900010087fffd500 0000000000000000 7fffffffffffffff 0000000000000000
-         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+ Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp
+ Process new_name (pid: 233429, threadinfo=00000000b9196405, task=00000000c01df45b)
+ Stack : 0000000000000000 90003000c58c8e20 90003000c58c8d00 900000000505960c
+         0000000000000000 9000000101c6ad20 9000300086524540 00000000082e0003
+         900030008bf57400 90000000050596bc 900030008bf57400 900000000434acac
+         0000000000000016 00007ffff224e060 00007fffbbe9f180 900030008bf57400
+         0000000000000000 9000000004341ce0 00007fffbbe9f180 00007ffff2369000
+         900030008549fec0 90000000054476ec 000000000000006b 9000000003f71da4
+         000000000000003a 00007ffff22b8a44 00007fffbbe9f8e0 00007fffbbe9e680
+         ffffffffffffffda 0000000000000000 0000000000000000 0000000000000000
+         00007fffbbe9f288 0000000000000000 0000000000000000 0000000000000039
+         84c2431493ceab6e 84c23ceb2827425e 0000000000000007 00007ffff2271600
          ...
  Call Trace:
- [<900000000426cd1c>] sk_msg_memcopy_from_iter+0xbc/0x220
- [<90000000043a315c>] tcp_bpf_sendmsg+0x23c/0x420
- [<90000000041cafc8>] __sock_sendmsg+0x68/0xe0
- [<90000000041cc4bc>] ____sys_sendmsg+0x2bc/0x360
- [<90000000041cea18>] ___sys_sendmsg+0xb8/0x120
- [<90000000041cf1f8>] __sys_sendmsg+0x98/0x100
- [<90000000045b76ec>] do_syscall+0x8c/0xc0
- [<90000000030e1da4>] handle_syscall+0xc4/0x160
+ [<900000000505960c>] __sock_release+0x4c/0xe0
+ [<90000000050596bc>] sock_close+0x1c/0x40
+ [<900000000434acac>] __fput+0xec/0x2e0
+ [<9000000004341ce0>] sys_close+0x40/0xa0
+ [<90000000054476ec>] do_syscall+0x8c/0xc0
+ [<9000000003f71da4>] handle_syscall+0xc4/0x160
 
- Code: 001532f7  0014f210  001036ed <28c10204> 298043ed  28c8632c  0010c5ef  0010bc84  0014ed8c
+ Code: (Bad address in era)
 
  ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Fatal exception
+ Kernel relocated by 0x3d50000
+  .text @ 0x9000000003f50000
+  .data @ 0x90000000055b0000
+  .bss  @ 0x9000000006ca9400
+ ---[ end Kernel panic - not syncing: Fatal exception ]---
 '''
 
-This is because "sg_page(sge)" is NULL in that case. This patch adds null
-check for it in sk_msg_memcopy_from_iter() to fix this error.
+This is because "sk->sk_prot->close" pointer is NULL in that case. This
+patch adds null check for it in inet_release() to fix this error.
 
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- net/core/skmsg.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/ipv4/af_inet.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index bafcc1e2eadf..495b18b5dce5 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -375,6 +375,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- 
- 	do {
- 		sge = sk_msg_elem(msg, i);
-+		if (!sg_page(sge))
-+			goto out;
- 		/* This is possible if a trim operation shrunk the buffer */
- 		if (msg->sg.copybreak >= sge->length) {
- 			msg->sg.copybreak = 0;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index b24d74616637..34a719e98c69 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -434,7 +434,8 @@ int inet_release(struct socket *sock)
+ 		if (sock_flag(sk, SOCK_LINGER) &&
+ 		    !(current->flags & PF_EXITING))
+ 			timeout = sk->sk_lingertime;
+-		sk->sk_prot->close(sk, timeout);
++		if (sk->sk_prot->close)
++			sk->sk_prot->close(sk, timeout);
+ 		sock->sk = NULL;
+ 	}
+ 	return 0;
 -- 
 2.43.0
 
