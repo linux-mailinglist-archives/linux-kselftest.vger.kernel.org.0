@@ -1,737 +1,185 @@
-Return-Path: <linux-kselftest+bounces-12742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7DC49171E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 21:58:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 466E49172AE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 22:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAB4D1C232A7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 19:58:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFA32B2289F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 20:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBA4181CE0;
-	Tue, 25 Jun 2024 19:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DB317E44D;
+	Tue, 25 Jun 2024 20:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MBcUNi5e"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SbhQ5+fi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4060D181CF2
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 19:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283A817E443
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 20:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719345285; cv=none; b=W3IHw79py88G9nVCJE5nkMablysXDb1BoW3xCtfcIzb1zaR/QXHPvUTnOquFKtW1MZbLmnNZo4AOZ8s3V9g6KQbe3KvTOXFfgucJYJ0gMXa5QiZJUxXrmEp4oMWag2nnupPgqJZFWA8Gfkq+FrcVbVLr1VW2hlCeizb0d0ZDhU0=
+	t=1719348746; cv=none; b=RhZdkyzbXHZ0EAS/hyTWvySNOO60y9dXRTD/hMgyuSy1A0Vqrt9ewSgV/W7ZfJptMPTDBw2sqGF7kKBbIcBH0B+r70DAx0iiUmuyxZ4y+B2raNxytAJVZc0/4P7CZre++8amIrarJnodELNAPhJ+DuQngTsIAxsNDfXdvcthIXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719345285; c=relaxed/simple;
-	bh=Br8FJTa1gWhy+XA9c6qJ8j4wzWPr8UepVmk/sBYVGhM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gOPxFFz8xTa2FCsg6UDsnAoE3Dt8yWTcgrPRWiMg0et4Bl4iMhGs6SveQvtXvh+Y8WtQS9H8anbUHI0IkYNnJIAq9mK3P99kbaxk+YBuq5/gtjWkVaNu+7sf0x+9vLxUDLjl2pmtpPdov7KkoGwTXwpd0H3I2h1bMYluRcXXbWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MBcUNi5e; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-64507372362so64471747b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 12:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719345275; x=1719950075; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=22bjBJSFHF6mgE/vq3jKe8j3RYXRUm1WUoO7T7s0eHM=;
-        b=MBcUNi5elr2vGnUkt4u990O9Rg36OdXkewgmTJi0B2HotT8zhjarsuqPYuNUWP0KuD
-         Zcz99M1xrdfZhBKUvbqQwxINiIBwnCgbURySwqp9g5ltgdOgL3FGofV2KlERBfqhbkjO
-         4mcXGUltEg2ARv0iXQyrNjCXFj9rp9PBn+995z6kNMEiiqRLs7dLmoEivLIzu7kHZ7eD
-         LG97DcU5UiNGTGatjHoOZd28wllVkBpqXosLy6sPe5xB+/8yzeu4at/K7pPxRFRMMD9P
-         vYFKfKXfuvWtprsrMbSwwZN9CPnQQC4J/a2sxVolTQT4XZ075gsrIIO9TuFO4v2akewu
-         AP4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719345275; x=1719950075;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=22bjBJSFHF6mgE/vq3jKe8j3RYXRUm1WUoO7T7s0eHM=;
-        b=g8qEEl0SZfHF5h5N2zuMCEFTUESJF1CCtdDsX8aGfxN+qr+R1YK7O88CWptmJGBKr0
-         LBdCIRp7dh8jg5ux3fpnGip+CWBwk3WnQfnL5/dTaORODMSI1aWQoBFnodOxjVpWPmAr
-         Sg5adFAmcjBSxrE2HMK4S+SXR6R98hAanJjKH4+Nuc6DvxCEY0FDb5k4YOCruOUO2xYt
-         XtLk4agAnk/Gd5S0a5vC+wT+NbKVB0rihMNHCg1kM1e1MSRMFsB4+/G7TJWVvaLAwKKP
-         NVn2FqskwYKt2tiilNwHXeWJz6w1IoZ+YtFnZAybpDGbvTnArPYYoAtQ3Wt1Zep5XRNx
-         DmhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWy2uh9gTQ+HF4WN8iRRMhGPgsacJC4WNBMvMQS3nCMqck3uAR4f81NFB9vqKyxOLOn6kxc30NFsnmLE95y38gY7kOY60Hfc8u//fusFf65
-X-Gm-Message-State: AOJu0YwYaXQh3dG5nf56gZKcKEYcVFtK2WZnBe7B5wOKsk+yG+Dn3pGh
-	uS90q+RGp3pFu3A3y2Cf6f/sWyjjrzpK2PIPdcd160hb76aULGILc7vJu064O6FJI/yJUjQgap8
-	RA0Jr3mIQ2rUZbJfpcCwy/w==
-X-Google-Smtp-Source: AGHT+IFzeJS1sPQvlOhWF9OH6VmJuFCWAO4+KyOVCdxJrqKSyhjgvoBmT3nTChKHoc8Kk3WaQ0BY1zLSJFnmIlEK1w==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a05:690c:660a:b0:647:def5:ccac with
- SMTP id 00721157ae682-647def5d11dmr10277b3.3.1719345274976; Tue, 25 Jun 2024
- 12:54:34 -0700 (PDT)
-Date: Tue, 25 Jun 2024 19:54:01 +0000
-In-Reply-To: <20240625195407.1922912-1-almasrymina@google.com>
+	s=arc-20240116; t=1719348746; c=relaxed/simple;
+	bh=uLpyspHsOJZpl8ujIBjIKTlFGOw88JhZ313fyg7H/vE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PpknBAy6P0K7JtgQ1ohhDIzlF5H0UnT4ASnaXCdCa9el9mn7FyfCV5bB4ng2Rp94il8SkucmgvxFyC68fGd++EpmrqahKWMkDnDxNkIORgOBxDVvwXIj5aWwNVv5el0OKECqb+71pPjA6IhyTwJpC4jTAJ1bXvghiEH3udSn/D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SbhQ5+fi; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719348744;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Mmiz7N4bo+YXsTzfcC89n0DjJE2KKXEsJFR42MeBhh8=;
+	b=SbhQ5+fiaRzFxlS51nU+1kxdrcLoXVrA7yLwoR2cPa/grbQuj8xiDNVAxTxd/6MwaHhhnw
+	SjGOQIuTmbMFogw84NFkRN/nf5Bg46Vy9Am6zZYT0p5x58oNF/iBWwFsNkFatrGI4qUFMN
+	cz9ScsjMnOpsFF09jvdLJR+cMYEPqmY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-97-_Kt5agcLPaaB9DvZuz1TyQ-1; Tue,
+ 25 Jun 2024 16:52:17 -0400
+X-MC-Unique: _Kt5agcLPaaB9DvZuz1TyQ-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9862819560A0;
+	Tue, 25 Jun 2024 20:52:16 +0000 (UTC)
+Received: from antares.redhat.com (unknown [10.39.193.93])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5E2281955E72;
+	Tue, 25 Jun 2024 20:52:13 +0000 (UTC)
+From: Adrian Moreno <amorenoz@redhat.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	horms@kernel.org,
+	i.maximets@ovn.org,
+	dev@openvswitch.org,
+	Adrian Moreno <amorenoz@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v5 00/10] net: openvswitch: Add sample multicasting.
+Date: Tue, 25 Jun 2024 22:51:43 +0200
+Message-ID: <20240625205204.3199050-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240625195407.1922912-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
-Message-ID: <20240625195407.1922912-14-almasrymina@google.com>
-Subject: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for devmem TCP
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
-sends and receives data using the devmem TCP APIs. It uses udmabuf as
-the dmabuf provider. It is compatible with a regular netcat running on
-a peer, or a ncdevmem running on a peer.
+** Background **
+Currently, OVS supports several packet sampling mechanisms (sFlow,
+per-bridge IPFIX, per-flow IPFIX). These end up being translated into a
+userspace action that needs to be handled by ovs-vswitchd's handler
+threads only to be forwarded to some third party application that
+will somehow process the sample and provide observability on the
+datapath.
 
-In addition to normal netcat support, ncdevmem has a validation mode,
-where it sends a specific pattern and validates this pattern on the
-receiver side to ensure data integrity.
+A particularly interesting use-case is controller-driven
+per-flow IPFIX sampling where the OpenFlow controller can add metadata
+to samples (via two 32bit integers) and this metadata is then available
+to the sample-collecting system for correlation.
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+** Problem **
+The fact that sampled traffic share netlink sockets and handler thread
+time with upcalls, apart from being a performance bottleneck in the
+sample extraction itself, can severely compromise the datapath,
+yielding this solution unfit for highly loaded production systems.
 
----
-v9: https://lore.kernel.org/netdev/20240403002053.2376017-15-almasrymina@google.com/
-- Remove unused nic_pci_addr entry (Cong).
+Users are left with little options other than guessing what sampling
+rate will be OK for their traffic pattern and system load and dealing
+with the lost accuracy.
 
-v6:
-- Updated to bind 8 queues.
-- Added RSS configuration.
-- Added some more tests for the netlink API.
+Looking at available infrastructure, an obvious candidated would be
+to use psample. However, it's current state does not help with the
+use-case at stake because sampled packets do not contain user-defined
+metadata.
 
-Changes in v1:
-- Many more general cleanups (Willem).
-- Removed driver reset (Jakub).
-- Removed hardcoded if index (Paolo).
+** Proposal **
+This series is an attempt to fix this situation by extending the
+existing psample infrastructure to carry a variable length
+user-defined cookie.
 
-RFC v2:
-- General cleanups (Willem).
+The main existing user of psample is tc's act_sample. It is also
+extended to forward the action's cookie to psample.
 
----
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   5 +
- tools/testing/selftests/net/ncdevmem.c | 542 +++++++++++++++++++++++++
- 3 files changed, 548 insertions(+)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
+Finally, a new OVS action (OVS_SAMPLE_ATTR_EMIT_SAMPLE) is created.
+It accepts a group and an optional cookie and uses psample to
+multicast the packet and the metadata.
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 49a56eb5d0368..9cd3c99c6e5d4 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -17,6 +17,7 @@ ipv6_flowlabel
- ipv6_flowlabel_mgr
- log.txt
- msg_zerocopy
-+ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index bc3925200637c..e693a39df4b4f 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -5,6 +5,10 @@ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
- # Additional include paths needed by kselftest.h
- CFLAGS += -I../
-+CFLAGS += -I../../../net/ynl/generated/
-+CFLAGS += -I../../../net/ynl/lib/
-+
-+LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-@@ -94,6 +98,7 @@ TEST_PROGS += fdb_flush.sh
- TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
-+TEST_GEN_FILES += ncdevmem
- 
- TEST_FILES := settings
- TEST_FILES += in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_veth.sh
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-new file mode 100644
-index 0000000000000..e00255e54f77b
---- /dev/null
-+++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -0,0 +1,542 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
-+#include <linux/uio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <errno.h>
-+#define __iovec_defined
-+#include <fcntl.h>
-+#include <malloc.h>
-+#include <error.h>
-+
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include <linux/memfd.h>
-+#include <linux/if.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+#include <libmnl/libmnl.h>
-+#include <linux/types.h>
-+#include <linux/netlink.h>
-+#include <linux/genetlink.h>
-+#include <linux/netdev.h>
-+#include <time.h>
-+
-+#include "netdev-user.h"
-+#include <ynl.h>
-+
-+#define PAGE_SHIFT 12
-+#define TEST_PREFIX "ncdevmem"
-+#define NUM_PAGES 16000
-+
-+#ifndef MSG_SOCK_DEVMEM
-+#define MSG_SOCK_DEVMEM 0x2000000
-+#endif
-+
-+/*
-+ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
-+ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
-+ *
-+ * Usage:
-+ *
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
-+ *		-p 5201 -v 7
-+ *
-+ *	On client:
-+ *	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-+ *		tr \\n \\0 | \
-+ *		head -c 5G | \
-+ *		nc <server IP> 5201 -p 5201
-+ *
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ */
-+
-+static char *server_ip = "192.168.1.4";
-+static char *client_ip = "192.168.1.2";
-+static char *port = "5201";
-+static size_t do_validation;
-+static int start_queue = 8;
-+static int num_queues = 8;
-+static char *ifname = "eth1";
-+static unsigned int ifindex = 3;
-+static unsigned int iterations;
-+static unsigned int dmabuf_id;
-+
-+void print_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		printf("%02hhX ", p[i]);
-+	printf("\n");
-+}
-+
-+void print_nonzero_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i++)
-+		putchar(p[i]);
-+	printf("\n");
-+}
-+
-+void validate_buffer(void *line, size_t size)
-+{
-+	static unsigned char seed = 1;
-+	unsigned char *ptr = line;
-+	int errors = 0;
-+	size_t i;
-+
-+	for (i = 0; i < size; i++) {
-+		if (ptr[i] != seed) {
-+			fprintf(stderr,
-+				"Failed validation: expected=%u, actual=%u, index=%lu\n",
-+				seed, ptr[i], i);
-+			errors++;
-+			if (errors > 20)
-+				error(1, 0, "validation failed.");
-+		}
-+		seed++;
-+		if (seed == do_validation)
-+			seed = 0;
-+	}
-+
-+	fprintf(stdout, "Validated buffer\n");
-+}
-+
-+static void reset_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
-+		 "eth1");
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
-+		 "eth1");
-+	system(command);
-+}
-+
-+static void configure_rss(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -X %s equal %d",
-+		 ifname, start_queue);
-+	system(command);
-+}
-+
-+static void configure_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s src-port %s dst-port %s queue %d",
-+		 ifname, client_ip, server_ip, port, port, start_queue);
-+	system(command);
-+}
-+
-+static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
-+			 struct netdev_queue_dmabuf *queues,
-+			 unsigned int n_queue_index, struct ynl_sock **ys)
-+{
-+	struct netdev_bind_rx_req *req = NULL;
-+	struct netdev_bind_rx_rsp *rsp = NULL;
-+	struct ynl_error yerr;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!*ys) {
-+		fprintf(stderr, "YNL: %s\n", yerr.msg);
-+		return -1;
-+	}
-+
-+	req = netdev_bind_rx_req_alloc();
-+	netdev_bind_rx_req_set_ifindex(req, ifindex);
-+	netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
-+	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
-+
-+	rsp = netdev_bind_rx(*ys, req);
-+	if (!rsp) {
-+		perror("netdev_bind_rx");
-+		goto err_close;
-+	}
-+
-+	if (!rsp->_present.dmabuf_id) {
-+		perror("dmabuf_id not present");
-+		goto err_close;
-+	}
-+
-+	printf("got dmabuf id=%d\n", rsp->dmabuf_id);
-+	dmabuf_id = rsp->dmabuf_id;
-+
-+	netdev_bind_rx_req_free(req);
-+	netdev_bind_rx_rsp_free(rsp);
-+
-+	return 0;
-+
-+err_close:
-+	fprintf(stderr, "YNL failed: %s\n", (*ys)->err.msg);
-+	netdev_bind_rx_req_free(req);
-+	ynl_sock_destroy(*ys);
-+	return -1;
-+}
-+
-+static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
-+{
-+	struct udmabuf_create create;
-+	int ret;
-+
-+	*devfd = open("/dev/udmabuf", O_RDWR);
-+	if (*devfd < 0) {
-+		error(70, 0,
-+		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		      TEST_PREFIX);
-+	}
-+
-+	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (*memfd < 0)
-+		error(70, 0, "%s: [skip,no-memfd]\n", TEST_PREFIX);
-+
-+	/* Required for udmabuf */
-+	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0)
-+		error(73, 0, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+
-+	ret = ftruncate(*memfd, dmabuf_size);
-+	if (ret == -1)
-+		error(74, 0, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = *memfd;
-+	create.offset = 0;
-+	create.size = dmabuf_size;
-+	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
-+	if (*buf < 0)
-+		error(75, 0, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+}
-+
-+int do_server(void)
-+{
-+	char ctrl_data[sizeof(int) * 20000];
-+	struct netdev_queue_dmabuf *queues;
-+	size_t non_page_aligned_frags = 0;
-+	struct sockaddr_in client_addr;
-+	struct sockaddr_in server_sin;
-+	size_t page_aligned_frags = 0;
-+	int devfd, memfd, buf, ret;
-+	size_t total_received = 0;
-+	socklen_t client_addr_len;
-+	bool is_devmem = false;
-+	char *buf_mem = NULL;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	char iobuf[819200];
-+	char buffer[256];
-+	int socket_fd;
-+	int client_fd;
-+	size_t i = 0;
-+	int opt = 1;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	reset_flow_steering();
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	/* Flow steer our devmem flows to start_queue */
-+	configure_flow_steering();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.idx = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].idx = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED)
-+		error(1, 0, "mmap()");
-+
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0)
-+		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0)
-+		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	printf("binding to address %s:%d\n", server_ip,
-+	       ntohs(server_sin.sin_port));
-+
-+	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, bind]\n", TEST_PREFIX);
-+
-+	ret = listen(socket_fd, 1);
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, listen]\n", TEST_PREFIX);
-+
-+	client_addr_len = sizeof(client_addr);
-+
-+	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Waiting or connection on %s:%d\n", buffer,
-+	       ntohs(server_sin.sin_port));
-+	client_fd = accept(socket_fd, &client_addr, &client_addr_len);
-+
-+	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Got connection from %s:%d\n", buffer,
-+	       ntohs(client_addr.sin_port));
-+
-+	while (1) {
-+		struct iovec iov = { .iov_base = iobuf,
-+				     .iov_len = sizeof(iobuf) };
-+		struct dmabuf_cmsg *dmabuf_cmsg = NULL;
-+		struct dma_buf_sync sync = { 0 };
-+		struct cmsghdr *cm = NULL;
-+		struct msghdr msg = { 0 };
-+		struct dmabuf_token token;
-+		ssize_t ret;
-+
-+		is_devmem = false;
-+		printf("\n\n");
-+
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+		ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
-+		printf("recvmsg ret=%ld\n", ret);
-+		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
-+			continue;
-+		if (ret < 0) {
-+			perror("recvmsg");
-+			continue;
-+		}
-+		if (ret == 0) {
-+			printf("client exited\n");
-+			goto cleanup;
-+		}
-+
-+		i++;
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+			    (cm->cmsg_type != SCM_DEVMEM_DMABUF &&
-+			     cm->cmsg_type != SCM_DEVMEM_LINEAR)) {
-+				fprintf(stdout, "skipping non-devmem cmsg\n");
-+				continue;
-+			}
-+
-+			dmabuf_cmsg = (struct dmabuf_cmsg *)CMSG_DATA(cm);
-+			is_devmem = true;
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_LINEAR) {
-+				/* TODO: process data copied from skb's linear
-+				 * buffer.
-+				 */
-+				fprintf(stdout,
-+					"SCM_DEVMEM_LINEAR. dmabuf_cmsg->frag_size=%u\n",
-+					dmabuf_cmsg->frag_size);
-+
-+				continue;
-+			}
-+
-+			token.token_start = dmabuf_cmsg->frag_token;
-+			token.token_count = 1;
-+
-+			total_received += dmabuf_cmsg->frag_size;
-+			printf("received frag_page=%llu, in_page_offset=%llu, frag_offset=%llu, frag_size=%u, token=%u, total_received=%lu, dmabuf_id=%u\n",
-+			       dmabuf_cmsg->frag_offset >> PAGE_SHIFT,
-+			       dmabuf_cmsg->frag_offset % getpagesize(),
-+			       dmabuf_cmsg->frag_offset, dmabuf_cmsg->frag_size,
-+			       dmabuf_cmsg->frag_token, total_received,
-+			       dmabuf_cmsg->dmabuf_id);
-+
-+			if (dmabuf_cmsg->dmabuf_id != dmabuf_id)
-+				error(1, 0,
-+				      "received on wrong dmabuf_id: flow steering error\n");
-+
-+			if (dmabuf_cmsg->frag_size % getpagesize())
-+				non_page_aligned_frags++;
-+			else
-+				page_aligned_frags++;
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			if (do_validation)
-+				validate_buffer(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+			else
-+				print_nonzero_bytes(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			ret = setsockopt(client_fd, SOL_SOCKET,
-+					 SO_DEVMEM_DONTNEED, &token,
-+					 sizeof(token));
-+			if (ret != 1)
-+				error(1, 0,
-+				      "SO_DEVMEM_DONTNEED not enough tokens");
-+		}
-+		if (!is_devmem)
-+			error(1, 0, "flow steering error\n");
-+
-+		printf("total_received=%lu\n", total_received);
-+	}
-+
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+cleanup:
-+
-+	munmap(buf_mem, dmabuf_size);
-+	close(client_fd);
-+	close(socket_fd);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	ynl_sock_destroy(ys);
-+
-+	return 0;
-+}
-+
-+void run_devmem_tests(void)
-+{
-+	struct netdev_queue_dmabuf *queues;
-+	int devfd, memfd, buf;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	size_t i = 0;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.idx = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].idx = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	/* Closing the netlink socket does an implicit unbind */
-+	ynl_sock_destroy(ys);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int is_server = 0, opt;
-+
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:f:n:i:d:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			is_server = 1;
-+			break;
-+		case 's':
-+			server_ip = optarg;
-+			break;
-+		case 'c':
-+			client_ip = optarg;
-+			break;
-+		case 'p':
-+			port = optarg;
-+			break;
-+		case 'v':
-+			do_validation = atoll(optarg);
-+			break;
-+		case 'q':
-+			num_queues = atoi(optarg);
-+			break;
-+		case 't':
-+			start_queue = atoi(optarg);
-+			break;
-+		case 'f':
-+			ifname = optarg;
-+			break;
-+		case 'd':
-+			ifindex = atoi(optarg);
-+			break;
-+		case 'i':
-+			iterations = atoll(optarg);
-+			break;
-+		case '?':
-+			printf("unknown option: %c\n", optopt);
-+			break;
-+		}
-+	}
-+
-+	for (; optind < argc; optind++)
-+		printf("extra arguments: %s\n", argv[optind]);
-+
-+	run_devmem_tests();
-+
-+	if (is_server)
-+		return do_server();
-+
-+	return 0;
-+}
+--
+v4 -> v5:
+- Rebased.
+- Removed lefover enum value and wrapped some long lines in selftests.
+
+v3 -> v4:
+- Rebased.
+- Addressed Jakub's comment on private and unused nla attributes.
+
+v2 -> v3:
+- Addressed comments from Simon, Aaron and Ilya.
+- Dropped probability propagation in nested sample actions.
+- Dropped patch v2's 7/9 in favor of a userspace implementation and
+consume skb if emit_sample is the last action, same as we do with
+userspace.
+- Split ovs-dpctl.py features in independent patches.
+
+v1 -> v2:
+- Create a new action ("emit_sample") rather than reuse existing
+  "sample" one.
+- Add probability semantics to psample's sampling rate.
+- Store sampling probability in skb's cb area and use it in emit_sample.
+- Test combining "emit_sample" with "trunc"
+- Drop group_id filtering and tracepoint in psample.
+
+rfc_v2 -> v1:
+- Accommodate Ilya's comments.
+- Split OVS's attribute in two attributes and simplify internal
+handling of psample arguments.
+- Extend psample and tc with a user-defined cookie.
+- Add a tracepoint to psample to facilitate troubleshooting.
+
+rfc_v1 -> rfc_v2:
+- Use psample instead of a new OVS-only multicast group.
+- Extend psample and tc with a user-defined cookie.
+
+Adrian Moreno (10):
+  net: psample: add user cookie
+  net: sched: act_sample: add action cookie to sample
+  net: psample: skip packet copy if no listeners
+  net: psample: allow using rate as probability
+  net: openvswitch: add emit_sample action
+  net: openvswitch: store sampling probability in cb.
+  selftests: openvswitch: add emit_sample action
+  selftests: openvswitch: add userspace parsing
+  selftests: openvswitch: parse trunc action
+  selftests: openvswitch: add emit_sample test
+
+ Documentation/netlink/specs/ovs_flow.yaml     |  17 ++
+ include/net/psample.h                         |   5 +-
+ include/uapi/linux/openvswitch.h              |  31 +-
+ include/uapi/linux/psample.h                  |  11 +-
+ net/openvswitch/Kconfig                       |   1 +
+ net/openvswitch/actions.c                     |  63 +++-
+ net/openvswitch/datapath.h                    |   3 +
+ net/openvswitch/flow_netlink.c                |  33 ++-
+ net/openvswitch/vport.c                       |   1 +
+ net/psample/psample.c                         |  16 +-
+ net/sched/act_sample.c                        |  12 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 114 +++++++-
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 272 +++++++++++++++++-
+ 13 files changed, 563 insertions(+), 16 deletions(-)
+
 -- 
-2.45.2.741.gdbec12cfda-goog
+2.45.1
 
 
