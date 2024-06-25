@@ -1,156 +1,164 @@
-Return-Path: <linux-kselftest+bounces-12632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E00F91621E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 11:15:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 541EE916414
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 11:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023C21F21375
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 09:15:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9576CB27F27
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 09:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B541494C9;
-	Tue, 25 Jun 2024 09:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D70D149E0A;
+	Tue, 25 Jun 2024 09:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vFogaGaW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XUhW1xbt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4795F1487EF;
-	Tue, 25 Jun 2024 09:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02927149E03
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 09:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719306895; cv=none; b=B9DSyfDrQtccH2J5YBl9SmJxAW/rcH53zyJ45CO4tcQH+lZPy/7Kf5SEEenkjZ4NyntGkgKMS3r7YX/ZP0Dfqmg4WmCrvguR4rEyJr6VIPCYUEOmJYyP7LZAr4L9gH08/nUukCxhTpO8Jl8qEP4ooI6iHVWsPkTsQG+wLgZBMDs=
+	t=1719309208; cv=none; b=DvwgsW2c00BUe7oociHoxdrFMZaiZL5XnqB5k6VMiwpe7Rz/WiSx0W+iMl/4yinrFbYYoDV78D93joQS2YAcWfg9WmJr0xhCrzjPIDRPEXQ46rhF+eUVfC7vD2IO3OnoeHYMlvHM8YAw/RQbfQz6w15cgT3yTD2KP4DxpeuHl98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719306895; c=relaxed/simple;
-	bh=K+nlXl7dTQZO6kYcB7cvvUNPw1K7ggy0UaaAYt1aAVk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mddn/0UUzQfLgTQqOS48khE2k2x7ehr7Xt9HnLE7ZCZ6WHIDycxSp3l75LamfN4B3eL+lhgJK+L0Bg483j2B34OgDzwXxwZxjwwd7JJvlbN9yFliYV8qkfJ8a5UgyU+h9Tg3IP9R/reAG+dxVhWPdC+1Vu9NrhNI4ZZa9pvrvkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vFogaGaW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9CCC4AF0A;
-	Tue, 25 Jun 2024 09:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719306894;
-	bh=K+nlXl7dTQZO6kYcB7cvvUNPw1K7ggy0UaaAYt1aAVk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vFogaGaWm2Mcuxf9jkaEPhc8mt3wnZNPTykrQk9aJRmLgW5BXEU9TJlCdOeNq/V8T
-	 H0fxseI8H40zrU9So/3SZoyGuAcC0OfqsaQJv2u18SjuN5UEPrwTw9ZOuV867uMgz2
-	 NEo+fJzUn/16e3ZOR1I3LMY2ob6iT8knUF2oukml+PS2/d3xlCLmej5KuabWCVmZUg
-	 3lnRU/qmx18/x7bIVlbK/fvWgG4EWpVJz6WF2Gv9Vax51C0uJyDaGx5kiVgXmTMmt8
-	 Mr7GNfG9NvqfRCi4YMeCfbD0Sy1lfnjecJOpj6W++8HWQiLIjfwGex6v+8UzzG74EG
-	 S5LH2v5z7HjHw==
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a689ad8d1f6so671937766b.2;
-        Tue, 25 Jun 2024 02:14:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUlA1rxXFo0kEnMlNLUK8MP3WnHPiA80rpGN8X7i81GIQLA5whQhjRqQTdIcCdX+iB1N1kFrQ8e0XuTEXQl7E5G7F9B8iiDXvRLce2m2NZ87njPpvGraBwq2eTnVzJmGDmx+wvQXF3jnDk2CStQf/3tPXUB52zNwU7s9wRS
-X-Gm-Message-State: AOJu0YwFN2q+N931b9E2lMfwk+QWiTf1GcOqkJOVgpj2Z6vOrBePMdG5
-	Lq9exZlsa2GHiFQM21ylBYSOnpHvnMUhMG5nULtVcUICPhai2R3VRpBHSJGFQeDhL0bTlXymZDJ
-	0zZAxUKAaUmybEPtbxVb9vwPC73A=
-X-Google-Smtp-Source: AGHT+IHNqCtF5BzUsAKtHwK5+zo/ZybbxNHxbJjrvFe5SxKrdBham53XzGi/IpCBAJ2Qzpk6BV66r1+KQSKS+EtqlrU=
-X-Received: by 2002:a17:907:8e93:b0:a6e:f62d:bd02 with SMTP id
- a640c23a62f3a-a7245c84f2emr444738166b.7.1719306893342; Tue, 25 Jun 2024
- 02:14:53 -0700 (PDT)
+	s=arc-20240116; t=1719309208; c=relaxed/simple;
+	bh=R3FCxbaMJtybn040DrjxA8NUBVBQpqRvUPiknZOt1TI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OUuwDO3o7f8SHytTFTMMp12pEswUBMq1Nha5VmMx/gB9ngLGlG0OMoVcOTeIE1A4oX1c82lg+ZGnx4UVFAxyXND9p7Xe8VtSJ47qNR6Ol2/BS7ItEMPnwTm7fYUsepRjYcG23FimIW2Lasw4MIvEqbPoUl2eoIgYTCkMv5chumM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XUhW1xbt; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719309206;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VCDVg82SvAc+NbfdoyAHMeVF+Y0QRccTMhp18TkLsuQ=;
+	b=XUhW1xbtgt9Fg7v344OXvOxL+uw007NmulTq+BYFywBeh4N7IsbTPTeZckqg90n+qyGDLa
+	A3q9mI9BcB6OwJvRwUw8NQSMsnSsh8jxrNtq9xyfJS46OgKe83xn1BJTsiiluzpUdUwAVx
+	grXJtMF6DzIMX8rjOo1HBv/MhGHmnc8=
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
+ [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-dqxBdBmwND-ZPLYixWjH_A-1; Tue, 25 Jun 2024 05:53:24 -0400
+X-MC-Unique: dqxBdBmwND-ZPLYixWjH_A-1
+Received: by mail-vs1-f69.google.com with SMTP id ada2fe7eead31-48f51d851d2so3208029137.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 02:53:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719309203; x=1719914003;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VCDVg82SvAc+NbfdoyAHMeVF+Y0QRccTMhp18TkLsuQ=;
+        b=BnDkgrGZXsph3SnZDNh7MVbakOW1aN+XgE1bOWbjtZAh2+HHzhyDbcxP4mA6vYi7Kb
+         xyLw1OaiGgqb1Z4zRsLGQfNK3c8GOcrtsHE97W+zLyxZlPLsf0sNYJFt6n9gwpsdM78a
+         F0KvHVyN2Bm1s7XIHf3WP2KECNOG/8r7717TYbglZ3riJ9w9aHsDz8N1N4Q7wWeJ31cZ
+         c8EmeEwQl0JBv65E1QmXsY0+u6xRx9oYyamaFs1NOWZxdoWQfvOFggqraunIuWUPOmnx
+         lwiQ9TxEQuEkW7V6l93PIpmKkg2iqea6IhXNQn8/hNJHI+6wwfT3DlgpPJqvgI4HiDij
+         0sbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUYx/SzhniR19xkXdlVgBLUD8k2VDcWUtw71iYIz+zM2ZkWNF2EKEjs8HI6Ai/kXmlpbCMJ5K7xmhwuVI1jUkbxo/UMM0K/z8i+AXRL30DT
+X-Gm-Message-State: AOJu0Yy+O4l73QJYCT/8mEXzzcVwgLZkyYm6WPMkpuQnTXv2fk5Dh/CD
+	4YLikc2BzuS+EYI88zLcafWuUvDIZtP6oIdjg/SLlyJMHY/aaa0owmeJLThV83kaokntcb7vtN7
+	41/LnrZOERH6DmTWDIIVl+qAby5eXUH5Agir6EkuMaW+um1ToCm6OmZXImPw0VxCoqA==
+X-Received: by 2002:a05:6102:34c2:b0:48f:2f28:833c with SMTP id ada2fe7eead31-48f529c9ab0mr6186851137.5.1719309203349;
+        Tue, 25 Jun 2024 02:53:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE7GVgIeXQfikh8im4fFadRGZfZMvzwXv5Lgjya/R6ZwlnSU1s7SQ/q+IhvLlQc4qI0cL2giQ==
+X-Received: by 2002:a05:6102:34c2:b0:48f:2f28:833c with SMTP id ada2fe7eead31-48f529c9ab0mr6186831137.5.1719309202782;
+        Tue, 25 Jun 2024 02:53:22 -0700 (PDT)
+Received: from maya.cloud.tilaa.com (maya.cloud.tilaa.com. [164.138.29.33])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-444c96b06a2sm45955701cf.15.2024.06.25.02.53.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jun 2024 02:53:22 -0700 (PDT)
+Date: Tue, 25 Jun 2024 11:52:17 +0200
+From: Stefano Brivio <sbrivio@redhat.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org,
+ dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, =?UTF-8?B?QWRy?=
+ =?UTF-8?B?acOhbg==?= Moreno <amorenoz@redhat.com>, Simon Horman
+ <horms@kernel.org>
+Subject: Re: [PATCH v2 net-next 0/7] selftests: net: Switch pmtu.sh to use
+ the internal ovs script.
+Message-ID: <20240625115217.07c820c9@elisabeth>
+In-Reply-To: <20240624153023.6fabd9f1@kernel.org>
+References: <20240620125601.15755-1-aconole@redhat.com>
+	<20240621180126.3c40d245@kernel.org>
+	<f7ttthjh33w.fsf@redhat.com>
+	<f7tpls6gu3q.fsf@redhat.com>
+	<20240624153023.6fabd9f1@kernel.org>
+Organization: Red Hat
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1719302367.git.tanggeliang@kylinos.cn> <CAAhV-H6=xEKDFS4f5hiOqw-gx1nKiXkQq8Kmr8ZsgQe9A3gbtw@mail.gmail.com>
- <2319d0d58ccd879ebbc47f368475240bf06870ff.camel@kernel.org>
-In-Reply-To: <2319d0d58ccd879ebbc47f368475240bf06870ff.camel@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 25 Jun 2024 17:14:41 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Ceo9EYAXw=acPX-cfqTQnRb1ht46WWWeSwEsz7M5x9Q@mail.gmail.com>
-Message-ID: <CAAhV-H4Ceo9EYAXw=acPX-cfqTQnRb1ht46WWWeSwEsz7M5x9Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] Fixes for BPF selftests on Loongarch
-To: Geliang Tang <geliang@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, Miao Xu <miaxu@meta.com>, 
-	Yuran Pereira <yuran.pereira@hotmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 25, 2024 at 5:08=E2=80=AFPM Geliang Tang <geliang@kernel.org> w=
-rote:
->
-> On Tue, 2024-06-25 at 16:29 +0800, Huacai Chen wrote:
-> > On Tue, Jun 25, 2024 at 4:25=E2=80=AFPM Geliang Tang <geliang@kernel.or=
-g>
-> > wrote:
-> > >
-> > > From: Geliang Tang <tanggeliang@kylinos.cn>
-> > >
-> > > v2:
-> > >  - add patch 2, a new fix for sk_msg_memcopy_from_iter.
-> > >  - update patch 3, only test "sk->sk_prot->close" as Eric
-> > > suggested.
-> > >  - update patch 4, use "goto err" instead of "return" as Eduard
-> > >    suggested.
-> > >  - add "fixes" tag for patch 1-3.
-> > >  - change subject prefixes as "bpf-next" to trigger BPF CI.
-> > >  - cc Loongarch maintainers too.
-> > >
-> > > BPF selftests seem to have not been fully tested on Loongarch. When
-> > > I
-> > > ran these tests on Loongarch recently, some errors occur. This
-> > > patch set
-> > > contains some null-check related fixes for these errors.
-> > Is the root cause that LoongArch lacks bpf trampoline?
->
-> No. These errors don't seem to be directly related to the lack of BPF
-> trampoline. I have indeed got some errors since lacking BPF trampoline,
-> which is probably like this:
-If so, these errors seem not specific to LoongArch.
+On Mon, 24 Jun 2024 15:30:23 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Huacai
+> On Mon, 24 Jun 2024 12:53:45 -0400 Aaron Conole wrote:
+> > Additionally, the "Cannot find device ..." text comes from an iproute2
+> > utility output.  The only place we actually interact with that is via
+> > the call at pmtu.sh:973:
+> > 
+> > 	run_cmd ip link set ovs_br0 up
+> > 
+> > Maybe it is possible that the link isn't up (could some port memory
+> > allocation or message be delaying it?) yet in the virtual environment.  
+> 
+> Depends on how the creation is implemented, normally device creation
+> over netlink is synchronous.
 
->
->  test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
->  test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
->  #29/1    bpf_tcp_ca/dctcp:FAIL
->  test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
->  test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
->  #29/2    bpf_tcp_ca/cubic:FAIL
->  test_dctcp_fallback:PASS:dctcp_skel 0 nsec
->  test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
->  test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
->  #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
->  test_write_sk_pacing:PASS:open_and_load 0 nsec
->  test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
->  #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
->
-> Thanks,
-> -Geliang
->
-> >
-> > Huacai
-> >
-> > >
-> > > Geliang Tang (4):
-> > >   skmsg: null check for sg_page in sk_msg_recvmsg
-> > >   skmsg: null check for sg_page in sk_msg_memcopy_from_iter
-> > >   inet: null check for close in inet_release
-> > >   selftests/bpf: Null checks for link in bpf_tcp_ca
-> > >
-> > >  net/core/skmsg.c                                 |  4 ++++
-> > >  net/ipv4/af_inet.c                               |  3 ++-
-> > >  .../selftests/bpf/prog_tests/bpf_tcp_ca.c        | 16
-> > > ++++++++++++----
-> > >  3 files changed, 18 insertions(+), 5 deletions(-)
-> > >
-> > > --
-> > > 2.43.0
-> > >
->
+It also looks like pyroute2 would keep everything synchronous (unless
+you call NetlinkSocket.bind(async_cache=True))... weird.
+
+> Just to be sure have you tried to repro with vng:
+> 
+> https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style
+> 
+> ? It could be the base OS difference, too, but that's harder to confirm.
+> 
+> > To confirm, is it possible to run in the constrained environment, but
+> > put a 5s sleep or something?  I will add the following either as a
+> > separate patch (ie 7/8), or I can fold it into 6/7 (and drop Stefano's
+> > ACK waiting for another review):
+> > 
+> > 
+> > wait_for_if() {
+> >    if ip link show "$2" >/dev/null 2>&1; then return 0; fi
+> > 
+> >    for d in `seq 1 30`; do
+> >       sleep 1
+> >       if ip link show "$2" >/dev/null 2>&1; then return 0; fi
+> >    done
+> >    return 1
+> > }
+> > 
+> > ....
+> >  	setup_ovs_br_internal || setup_ovs_br_vswitchd || return $ksft_skip
+> > +	wait_for_if "ovs_br0"
+> >  	run_cmd ip link set ovs_br0 up
+> > ....
+> > 
+> > Does it make sense or does it seem like I am way off base?  
+> 
+> sleep 1 is a bit high (sleep does accept fractional numbers!)
+
+This script was originally (and mostly is) all nice and POSIX (where
+sleep doesn't take fractional numbers), so, if you don't mind, I'd
+rather prefer "sleep 0.1 || sleep 1". :)
+
+-- 
+Stefano
+
 
