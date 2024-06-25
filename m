@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-12636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E949A9167BB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 14:26:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A0E9167BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 14:26:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93FD41F242F1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 12:26:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75CDE1C25AEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 12:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33261553B3;
-	Tue, 25 Jun 2024 12:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDE8156654;
+	Tue, 25 Jun 2024 12:24:45 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC77D1553AF;
-	Tue, 25 Jun 2024 12:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84DF1553AF;
+	Tue, 25 Jun 2024 12:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719318279; cv=none; b=dbIYE5i9EOmT9CxTVjDPcvOMQKx6NlLc4jJsyTawwcsDx9tQWDokmqYDBsHFm5GWz8jDJkIkkdTNCDwGReT00K3jB9EJcJeaOP/VUZs8LEWXSQyctQbP/+XmHRpfz4N8wqWTbc+aZfAvEUNaigEn+Z7kVUeViBDQi29m6DOg46s=
+	t=1719318285; cv=none; b=EO8nWxkfE6sLvDwRvuvDvla/rWwI4Gg967YIKX0C8Wk6ljLUmcsVoe+rJQCo29ww2CEWF+MgWjQhsz+eo0SbC8MjU4e+G/6cSRFGcYOLAJCNbf2ZKX9dv1gPwzWPyAOWV1gt2DeAGpmY+3kqRHgBF6Hp/+rKsMH9mIiMrJ56pcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719318279; c=relaxed/simple;
-	bh=MVs5z0/RG/otjMsFB/U3mOThMHQjhs1d7gbRxQCETTM=;
+	s=arc-20240116; t=1719318285; c=relaxed/simple;
+	bh=1PSrTGcZOk8NrG6nmdRKoCA3QkgwzXuWtNM9SyFayRI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LSHYiNpsu2uiQm4kCgMgasWFdWyxz0qkq1LXV6X/TIm4Elyu/LD1brYY2uW7/1vclERADUbga/mIeAvXdvNOO0J0xtRoIVGlIeSCFDK9LwY5r9tU3QTbHYCleWOIe+mQJzIaQD25sgqIuRu9R430gZMKdBgnopWOKxtUFANJOYw=
+	 MIME-Version; b=fknvmXIR0SjResHu9Qps1ROsVZxdFfdO/houUMQUu+fV42IpUUpHvtrp5YXRraza19SPrAKqV0BAgR3L2CMbhgW33aT2uRN/jmKR84qGff4The9EdIXjHSGk3aqavSbWnK+jdVqj54K156wA8VgSYkc73ntLErmXWvfCTNGn7Z4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 795F5339;
-	Tue, 25 Jun 2024 05:25:02 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F259339;
+	Tue, 25 Jun 2024 05:25:08 -0700 (PDT)
 Received: from e116581.blr.arm.com (e116581.arm.com [10.162.41.12])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B600F3F766;
-	Tue, 25 Jun 2024 05:24:32 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 370573F766;
+	Tue, 25 Jun 2024 05:24:37 -0700 (PDT)
 From: Dev Jain <dev.jain@arm.com>
 To: shuah@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
@@ -49,9 +49,9 @@ Cc: broonie@kernel.org,
 	aneesh.kumar@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Dev Jain <dev.jain@arm.com>
-Subject: [PATCH v3 1/9] selftests/arm: Add mm test
-Date: Tue, 25 Jun 2024 17:54:00 +0530
-Message-Id: <20240625122408.1439097-2-dev.jain@arm.com>
+Subject: [PATCH v3 2/9] selftests/arm: Add elf test
+Date: Tue, 25 Jun 2024 17:54:01 +0530
+Message-Id: <20240625122408.1439097-3-dev.jain@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240625122408.1439097-1-dev.jain@arm.com>
 References: <20240625122408.1439097-1-dev.jain@arm.com>
@@ -63,113 +63,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch tests the 4GB VA restriction for 32-bit processes; it is
-required to test the compat layer, whether the kernel knows that it is
-running a 32-bit process or not. Chunks are allocated until the VA gets
-exhausted; mmap must fail beyond 4GB. This is asserted against the VA
-mappings found in /proc/self/maps.
+This patch introduces an ELF parsing test. A basic sanity check is
+required to ensure that we are actually testing a 32-bit build.
 
 Signed-off-by: Dev Jain <dev.jain@arm.com>
 ---
 v2->v3:
- - Split into multiple testcases
+ - Introduce two more testcases
 
- tools/testing/selftests/arm/mm/compat_va.c | 89 ++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/arm/mm/compat_va.c
+ tools/testing/selftests/arm/elf/parse_elf.c | 77 +++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 tools/testing/selftests/arm/elf/parse_elf.c
 
-diff --git a/tools/testing/selftests/arm/mm/compat_va.c b/tools/testing/selftests/arm/mm/compat_va.c
+diff --git a/tools/testing/selftests/arm/elf/parse_elf.c b/tools/testing/selftests/arm/elf/parse_elf.c
 new file mode 100644
-index 000000000000..20aa419eff29
+index 000000000000..6eb8fb91f6a7
 --- /dev/null
-+++ b/tools/testing/selftests/arm/mm/compat_va.c
-@@ -0,0 +1,89 @@
++++ b/tools/testing/selftests/arm/elf/parse_elf.c
+@@ -0,0 +1,77 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2024 ARM Limited
 + *
 + * Author : Dev Jain <dev.jain@arm.com>
 + *
-+ * Tests 4GB VA restriction for 32 bit process
++ * Parse elf header to confirm 32-bit process
 + */
 +
 +#define _GNU_SOURCE
 +#include <stdio.h>
-+#include <stdlib.h>
 +#include <unistd.h>
-+#include <sys/mman.h>
++#include <stdlib.h>
++#include <elf.h>
++#include <stdint.h>
 +
-+#include <linux/sizes.h>
 +#include <kselftest.h>
 +
-+#define MAP_CHUNK_SIZE	SZ_1M
-+#define NR_CHUNKS_4G	((SZ_1G / MAP_CHUNK_SIZE) * 4)	/* prevent overflow */
++/* The ELF file header.  This appears at the start of every ELF file. */
 +
-+static int validate_address_hint(void)
++struct elf_header {
++	unsigned char	e_ident[16];	/* Magic number and other info */
++	uint16_t	e_type;		/* Object file type */
++	uint16_t	e_machine;	/* Architecture */
++	uint32_t	e_version;	/* Object file version */
++	uint32_t	e_entry;	/* Entry point virtual address */
++	uint32_t	e_phoff;	/* Program header table file offset */
++	uint32_t	e_shoff;	/* Section header table file offset */
++	uint32_t	e_flags;	/* Processor-specific flags */
++	uint16_t	e_ehsize;	/* ELF header size in bytes */
++	uint16_t	e_phentsize;	/* Program header table entry size */
++	uint16_t	e_phnum;	/* Program header table entry count */
++	uint16_t	e_shentsize;	/* Section header table entry size */
++	uint16_t	e_shnum;	/* Section header table entry count */
++	uint16_t	e_shstrndx;	/* Section header string table index */
++};
++
++#define ELFCLASS32	1
++#define EM_ARM		40
++
++void read_elf_header(const char  *elfFile)
 +{
-+	char *ptr;
++	struct elf_header header;
++	FILE *file;
++	int ret;
 +
-+	ptr = mmap((void *) (1UL << 29), MAP_CHUNK_SIZE, PROT_READ |
-+		   PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	file = fopen(elfFile, "r");
++	if (!file)
++		ksft_exit_fail_perror("/proc/self/exe");
 +
-+	if (ptr == MAP_FAILED)
-+		return 0;
++	/* store header in struct */
++	if (fread(&header, 1, sizeof(header), file) != sizeof(header))
++		ksft_exit_fail_perror("fread");
 +
-+	return -1;
++	if (fclose(file))
++		ksft_exit_fail_perror("fclose");
++
++	/* sanity check: does it really follow ELF format */
++	ret = (header.e_ident[0] == 0x7f && header.e_ident[1] == 'E'
++	       && header.e_ident[2] == 'L' && header.e_ident[3] == 'F');
++
++	ksft_test_result(ret == 1, "Follows ELF format\n");
++
++	ksft_test_result(header.e_ident[4] == ELFCLASS32, "ELF is 32 bit\n");
++
++	ksft_test_result(header.e_machine == EM_ARM, "Machine type\n");
 +}
 +
 +int main(int argc, char *argv[])
 +{
-+	char *ptr[NR_CHUNKS_4G + 3];
-+	char line[1000];
-+	int chunks;
-+	FILE *file;
-+	int ret;
-+	int i;
-+
 +	ksft_print_header();
-+	ksft_set_plan(2);
++	ksft_set_plan(3);
 +
-+	/* try allocation beyond 4 GB */
-+	for (i = 0; i < NR_CHUNKS_4G + 3; ++i) {
-+		ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
-+			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+
-+		if (ptr[i] == MAP_FAILED) {
-+			if (validate_address_hint())
-+				ksft_exit_fail_msg("VA exhaustion failed\n");
-+			break;
-+		}
-+	}
-+
-+	chunks = i;
-+
-+	ret = (chunks < NR_CHUNKS_4G);
-+	ksft_test_result(ret, "mmapped chunks under 4GB\n");
-+
-+	/* parse /proc/self/maps, confirm 32 bit VA mappings */
-+	file = fopen("/proc/self/maps", "r");
-+	if (!file)
-+		ksft_exit_fail_perror("/proc/self/maps");
-+
-+	ret = 0;
-+	while (fgets(line, sizeof(line), file)) {
-+		const char *whitespace_loc, *hyphen_loc;
-+
-+		hyphen_loc = strchr(line, '-');
-+		whitespace_loc = strchr(line, ' ');
-+
-+		if (!(hyphen_loc && whitespace_loc))
-+			ksft_exit_fail_msg("Unexpected format\n");
-+
-+		ret |= ((hyphen_loc - line > 8) ||
-+			(whitespace_loc - hyphen_loc > 9));
-+	}
-+
-+	ksft_test_result(!ret, "Memory map within 32 bits\n");
-+
-+	for (i = 0; i < chunks; ++i)
-+		munmap(ptr[i], MAP_CHUNK_SIZE);
++	read_elf_header("/proc/self/exe");
 +
 +	ksft_finished();
 +}
