@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12623-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 521D7916107
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 10:25:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFB2091610B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 10:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F094B1F2291E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 08:25:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54813B20A01
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 08:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17639148307;
-	Tue, 25 Jun 2024 08:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2951482FC;
+	Tue, 25 Jun 2024 08:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAwZY4P5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="goChjrcn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02A31474A0;
-	Tue, 25 Jun 2024 08:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70091474A0;
+	Tue, 25 Jun 2024 08:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719303911; cv=none; b=lfn5toCX72oa0r+p4VxfUQrWYrS91qeRAYUi2cZYGORRdDZnG1vQ9Q7tBt9VVIyQ7qv0uQ6gbkxIcSmh79noBQWxBcM8pZh2qLe4+4L2Yz5Yio9MEl79CGEUXNC0k+Go5z2bYG8feX6duy96ajJ7iyEhqfxUGacOWvNM6VHk/04=
+	t=1719303918; cv=none; b=DT7faVaY34D2i/X23qHApkZJg8luA9cTFJClcpQh7iX1gPYvgribvXTH7BZadThLFCocGvUUR1XW0fCf7B4alVSb3hcJlB38m/NUjjA8qX37mEueuXcU55fItTlktt5ySABoK3h2nV7Tx5ve+1lESJedCtS+7xVxZVpeLhnQfyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719303911; c=relaxed/simple;
-	bh=GV6RzNRiu+NFo0nRbcqXXn65F5CbOzF0HE2HroGeUgE=;
+	s=arc-20240116; t=1719303918; c=relaxed/simple;
+	bh=NOh5xw0s5xNDDvjS0rvhfb6yCX/QDWEsU9TJBuvxigs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f6IAmCD0aw9ZbJ6ImTiImegRxfGgXLMkJscvmSDJPrsOuX4RfOE1O5Jbsdj/knFQOFldognp7HSAacyKT9X+9uCag150ZwRkVyayMB9ZfKqdqZl9WqBxlNBmQv+UmW58kWi9CVudSP+bj4GwqEPnRZk9QmgwCI3piuS7KslCsOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAwZY4P5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1580C32789;
-	Tue, 25 Jun 2024 08:25:02 +0000 (UTC)
+	 MIME-Version; b=coI3V4BZu7t3o5UtZ6aFlYwKmXpFcu5wr0Is9v96RMddqDpSjP+y/x2mRV9UoyvTh2I2Pi0jSPa3X1jVrhdc4UYzzjFy+FtIrPJQdCujvinBvsYrID0peNF8xLDrE73eLQagizqa1C5VMa2z79sbSqpVo1nrq3M7nkeQYskY/Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=goChjrcn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F73C4AF0C;
+	Tue, 25 Jun 2024 08:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719303909;
-	bh=GV6RzNRiu+NFo0nRbcqXXn65F5CbOzF0HE2HroGeUgE=;
+	s=k20201202; t=1719303917;
+	bh=NOh5xw0s5xNDDvjS0rvhfb6yCX/QDWEsU9TJBuvxigs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HAwZY4P5qnXs2cHBEiga+yj3iGNMFi82pL8hcLO4Z/X9mfIlAfJP3ikVng5IqjOw/
-	 Q5CiSd7an7Rj/WKCXer4As5VbEOF9/02bh/dnme43GzluUPsjN3pyXQGpkQaFsDHLR
-	 fHD1dfLFhbF8QnjXwZHCTl3qDES+49dgr646WyzBhMtDpfl6HkviUoA4ctf76nS5w8
-	 dx8WXRWWbU2djtRuKkCjwVxUPhvX/tyzKuX2nj0yqXsqzR1iRNzmEN2myZXBBGYrhC
-	 tgAmSZHcTIDtWrjzNc7vie/YN2bHF1UCMv7ScDhQvGXsdSST6KqDkWFxv3ZZfoTnsJ
-	 7OPqDpfkWvtcw==
+	b=goChjrcnB8iLgq2ptTk2wa5SxCBcW/vtGmXBjhsdevBg7Qm4CAyvj22IfsQfuSpA0
+	 aloQAlDXSuRdGEK7kjXH2Ci/J1TdElCkLFoyFipTjnSNqM9GH80zI/DoCpxXl3DPo/
+	 KNM57PiqDrYYI746jxRqM9QLARCfG/DhHTo/84ATwtMfkIp0XMWtBApWAL69Avj3FN
+	 6rt1EvB/hVPj44EVd3YnXrQ2f6CRTeG2a5qxm0ltUYsYo2RaPn+RTw2R+pR8adPCzk
+	 Cdk/+eR88uGU6jaOL0nGo+JMP/17O2gbmBCFTR95EcRR/NIhnAH61oywrcef/SSFeH
+	 AmrcLp1JvttFA==
 From: Geliang Tang <geliang@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
@@ -71,9 +71,9 @@ Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/4] skmsg: null check for sg_page in sk_msg_recvmsg
-Date: Tue, 25 Jun 2024 16:24:36 +0800
-Message-ID: <072709ce77b04dc77523d4e8763c1fb47bf0913d.1719302367.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 2/4] skmsg: null check for sg_page in sk_msg_memcopy_from_iter
+Date: Tue, 25 Jun 2024 16:24:37 +0800
+Message-ID: <3643756b626bf18fdc38dd50fc41c5acca61e9b3.1719302367.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1719302367.git.tanggeliang@kylinos.cn>
 References: <cover.1719302367.git.tanggeliang@kylinos.cn>
@@ -89,24 +89,24 @@ From: Geliang Tang <tanggeliang@kylinos.cn>
 
 Run the following BPF selftests on Loongarch:
 
-./test_progs -t sockmap_basic
+./test_sockmap
 
 A Kernel panic occurs:
 
 '''
  Oops[#1]:
- CPU: 22 PID: 2824 Comm: test_progs Tainted: G           OE      6.10.0-rc2+ #18
+ CPU: 20 PID: 23245 Comm: test_sockmap Tainted: G           OE      6.10.0-rc2+ #32
  Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018-V4.0.11
- pc 9000000004162774 ra 90000000048bf6c0 tp 90001000aa16c000 sp 90001000aa16fb90
- a0 0000000000000000 a1 0000000000000000 a2 0000000000000000 a3 90001000aa16fd70
- a4 0000000000000800 a5 0000000000000000 a6 000055557b63aae8 a7 00000000000000cf
- t0 0000000000000000 t1 0000000000004000 t2 0000000000000048 t3 0000000000000000
- t4 0000000000000001 t5 0000000000000002 t6 0000000000000001 t7 0000000000000002
- t8 0000000000000018 u0 9000000004856150 s9 0000000000000000 s0 0000000000000000
- s1 0000000000000000 s2 90001000aa16fd70 s3 0000000000000000 s4 0000000000000000
- s5 0000000000004000 s6 900010009284dc00 s7 0000000000000001 s8 900010009284dc00
-    ra: 90000000048bf6c0 sk_msg_recvmsg+0x120/0x560
-   ERA: 9000000004162774 copy_page_to_iter+0x74/0x1c0
+ pc 900000000426cd1c ra 90000000043a315c tp 900010008bfbc000 sp 900010008bfbf8a0
+ a0 ffffffffffffffe4 a1 900010008bfbfe20 a2 9000100089cd9400 a3 0000000000000003
+ a4 900010008bfbfb80 a5 900010008bfbfe20 a6 0000000000000000 a7 00000000000000d3
+ t0 0000000000000000 t1 0000000000000000 t2 0000000000008000 t3 0000000000000000
+ t4 0000000000000000 t5 0000000000000000 t6 0000000000000006 t7 fffffef1fea12c80
+ t8 fffffffffffffffc u0 0000000400000005 s9 0000000000000003 s0 0000000000000000
+ s1 0000000000000012 s2 900010008b9bbc00 s3 0000000000000018 s4 0000020000000000
+ s5 fffffffffffffffc s6 000000007fffffff s7 0000000000000002 s8 9000100089cd9400
+    ra: 90000000043a315c tcp_bpf_sendmsg+0x23c/0x420
+   ERA: 900000000426cd1c sk_msg_memcopy_from_iter+0xbc/0x220
   CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
   PRMD: 0000000c (PPLV0 +PIE +PWE)
   EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
@@ -114,43 +114,36 @@ A Kernel panic occurs:
  ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
   BADV: 0000000000000040
   PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
- Modules linked in: bpf_testmod(OE) xt_CHECKSUM xt_MASQUERADE xt_conntrack
- Process test_progs (pid: 2824, threadinfo=0000000000863a31, task=000000001cba0874)
- Stack : 0000000000000001 fffffffffffffffc 0000000000000000 0000000000000000
-         0000000000000018 0000000000000000 0000000000000000 90000000048bf6c0
-         90000000052cd638 90001000aa16fd70 900010008bf51580 900010009284f000
-         90000000049f2b90 900010009284f188 900010009284f178 90001000861d4780
-         9000100084dccd00 0000000000000800 0000000000000007 fffffffffffffff2
-         000000000453e92f 90000000049aae34 90001000aa16fd60 900010009284f000
-         0000000000000000 0000000000000000 900010008bf51580 90000000049f2b90
-         0000000000000001 0000000000000000 9000100084dc3a10 900010009284f1ac
-         90001000aa16fd40 0000555559953278 0000000000000001 0000000000000000
-         90001000aa16fdc8 9000000005a5a000 90001000861d4780 0000000000000800
+ Modules linked in: tls xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT
+ Process test_sockmap (pid: 23245, threadinfo=00000000aeb68043, task=00000000781bb2f1)
+ Stack : 0000000000000000 900010008bfbfe20 0000000000000000 0000000000000003
+         0000000000000000 900010008bfbf94c 900010008bfbf950 0000000000000000
+         0000000000000003 0000000000000003 900010008bfbfe10 900010008beeb400
+         9000100089cd9400 0000000000000003 900010008b9bbc00 90000000043a315c
+         0000000000084000 900010008bfbfe20 900010008bfbf958 900010008beeb5ac
+         900010087fffd500 0000000000000000 7fffffffffffffff 0000000000000000
+         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+         0000000000000000 0000000000000000 0000000000000000 0000000000000000
          ...
  Call Trace:
- [<9000000004162774>] copy_page_to_iter+0x74/0x1c0
- [<90000000048bf6c0>] sk_msg_recvmsg+0x120/0x560
- [<90000000049f2b90>] tcp_bpf_recvmsg_parser+0x170/0x4e0
- [<90000000049aae34>] inet_recvmsg+0x54/0x100
- [<900000000481ad5c>] sock_recvmsg+0x7c/0xe0
- [<900000000481e1a8>] __sys_recvfrom+0x108/0x1c0
- [<900000000481e27c>] sys_recvfrom+0x1c/0x40
- [<9000000004c076ec>] do_syscall+0x8c/0xc0
- [<9000000003731da4>] handle_syscall+0xc4/0x160
+ [<900000000426cd1c>] sk_msg_memcopy_from_iter+0xbc/0x220
+ [<90000000043a315c>] tcp_bpf_sendmsg+0x23c/0x420
+ [<90000000041cafc8>] __sock_sendmsg+0x68/0xe0
+ [<90000000041cc4bc>] ____sys_sendmsg+0x2bc/0x360
+ [<90000000041cea18>] ___sys_sendmsg+0xb8/0x120
+ [<90000000041cf1f8>] __sys_sendmsg+0x98/0x100
+ [<90000000045b76ec>] do_syscall+0x8c/0xc0
+ [<90000000030e1da4>] handle_syscall+0xc4/0x160
 
- Code: 0010b09b  440125a0  0011df8d <28c10364> 0012b70c  00133305  0013b1ac  0010dc84  00151585
+ Code: 001532f7  0014f210  001036ed <28c10204> 298043ed  28c8632c  0010c5ef  0010bc84  0014ed8c
 
  ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Fatal exception
- Kernel relocated by 0x3510000
-  .text @ 0x9000000003710000
-  .data @ 0x9000000004d70000
-  .bss  @ 0x9000000006469400
- ---[ end Kernel panic - not syncing: Fatal exception ]---
 '''
 
 This is because "sg_page(sge)" is NULL in that case. This patch adds null
-check for it in sk_msg_recvmsg() to fix this error.
+check for it in sk_msg_memcopy_from_iter() to fix this error.
 
 Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
@@ -159,18 +152,18 @@ Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
  1 file changed, 2 insertions(+)
 
 diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index fd20aae30be2..bafcc1e2eadf 100644
+index bafcc1e2eadf..495b18b5dce5 100644
 --- a/net/core/skmsg.c
 +++ b/net/core/skmsg.c
-@@ -432,6 +432,8 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 			sge = sk_msg_elem(msg_rx, i);
- 			copy = sge->length;
- 			page = sg_page(sge);
-+			if (!page)
-+				goto out;
- 			if (copied + copy > len)
- 				copy = len - copied;
- 			copy = copy_page_to_iter(page, sge->offset, copy, iter);
+@@ -375,6 +375,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 
+ 	do {
+ 		sge = sk_msg_elem(msg, i);
++		if (!sg_page(sge))
++			goto out;
+ 		/* This is possible if a trim operation shrunk the buffer */
+ 		if (msg->sg.copybreak >= sge->length) {
+ 			msg->sg.copybreak = 0;
 -- 
 2.43.0
 
