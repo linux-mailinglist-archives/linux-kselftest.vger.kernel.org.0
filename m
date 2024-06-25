@@ -1,124 +1,152 @@
-Return-Path: <linux-kselftest+bounces-12754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB5E9174C4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 01:34:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C2091750E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 01:55:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C7621C20CAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 23:34:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63596B222A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 23:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81FA17F4F6;
-	Tue, 25 Jun 2024 23:34:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB33E17F513;
+	Tue, 25 Jun 2024 23:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="V/wG5oku"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jhx0FuWv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7DA176248
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 23:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224B117F4FE
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 23:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719358457; cv=none; b=m7quISj7ggZWuid9eq+jbxRhLYxs8RWGVJj6SWtZ+JvSIZrIiSW4ZjNfQUTROjgYVFv2id+S5GrkJBEjlvxi37R1GeS4eAtsBzflOtK3zMp2hZbEDksC0mz7MSeopbvlvhsGxxC6oKaNbzWjEQ2rNAhosWSyEvEuf5GqADwQuwE=
+	t=1719359722; cv=none; b=qh9p0hWw7KdLdBIkBzkUI1TzfDcEe1D2pqsUGdZsQFIm3qbFo6C8DQpuonDAEAXVgYy5FvgZp+udbb/sbQOsVuy3xNKPnGWEmaXHTpC/hp6jfeVv0BqGj/F38hdMUkXJcYrSr2ELIHboCNOr2CmzF1p3MJA3gPt5IQJGnFfbEpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719358457; c=relaxed/simple;
-	bh=JW5+38U/vcohXyeiKPUGkpLsj7sweQrd3uPWwGSP2dA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pB95S9ouSwSuVD3bnu4V7nS2fkCN1BEhRszq/v9iWG45Fy2k83ABKYUOB4WAuoh1QVkZWLof3Zx7AGBhWU4XHKCFu4Xpwk7qLgUw1mM3A0EAY/NeLVzg485xPCQhUjw3KOX5x/1fVXPKyaeIUN64lyZKtyLjHp8inzUewowX/3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=V/wG5oku; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7eeecebb313so17505839f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 16:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719358455; x=1719963255; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fLoxHe91BqYGbErrOqOVZAihyCRQ1/q/QL1BRJCrC+o=;
-        b=V/wG5okuWv18Vfa9pCOLL2nMRWl0biru0lnT4hzlLivPncC8sUFRvm6gMENvRd81ux
-         QxzPGLVY1A39TY2Xzr/l8CPnCCX9uwuvpizox9qSO1liYdMtH4JUSn4TZnVi60Ig1RYx
-         IIvjxXMb9wbIZszaG50NROd83GnyXknc7sdyA=
+	s=arc-20240116; t=1719359722; c=relaxed/simple;
+	bh=krO4Bk2vIQHWJwLs8mW87UwC7KXFTsvPy0EbDIVPu3Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eZZhFM+w+orfKIDrVtduZ7ytNakt475q760gP134fQ+B5qoJFP1gmG4d1SYzYqWRv10tlWesBCGc+zZHBn6hjCGQ0rjykDx9IBc7oPykDtMDy7up7O4o1aY6tZN9QNB+gVAiMFX+gRfm3aEnNUQkJT05wxsLs6ZuqUEgg9GBmy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jhx0FuWv; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719359720;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=30MprqR9jKeSlYWvSkx3JBbBoLzb8YQKJ6HRn0CFdGo=;
+	b=Jhx0FuWvWnprOTNyymSMjDslkQNyWk85/nA+twVGBCWbCdJQpUXp4fkIHzkZ/b6s5ZCd7h
+	6nSIFU+zG9Yx7EMAquzVZbMs3S2AnxTktv1s+r5eSNuvaI4ujsjqJitvx1fI+7nCQs9wV1
+	XhKQXcF9LcvsSvIEL+r+PlJZlLTyLZU=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-671-DmSnhsurNC2ZfQojhrxIaw-1; Tue, 25 Jun 2024 19:55:18 -0400
+X-MC-Unique: DmSnhsurNC2ZfQojhrxIaw-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3d1ca308617so1066361b6e.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 16:55:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719358455; x=1719963255;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fLoxHe91BqYGbErrOqOVZAihyCRQ1/q/QL1BRJCrC+o=;
-        b=RL4Vt9ENe+3SeLBBpiQBD5kaZEUq9an1m/TX7NP1SzCiCp9WWDeZ1A9O1OXmnAchNw
-         EB1Z7j5H9xzk5TN92XVDoHnSlPQCJhUxXQ3k2QsbO9GNrOGYwHQm6eiJTr3Ikf3IqO0F
-         2GLHdcptiqAFqQtzVohzw15lnXRBufmpS49uZix1QqtsCwOdd8IiQS+7YV9k4YTM/Czd
-         FiRXnW2aevWbydIA/tz7Ej9VvRtErMpCLoXgy7tDxYf11imoldGWIwlLFilcpAEwwnM/
-         8qBBiNhEOVCIIsw87tH0F3cESMUzTtzWrW1rVsvv3qv31b/wa0bYtpcaGNOyHuqbN32U
-         pBBg==
-X-Gm-Message-State: AOJu0YzwhdSEpaqum8tkorGdzQ7yjHv1+JQZ5cV6HT7Aq8fc6MUs/3ap
-	OEkmbI+z1+PZJGtNxKmfRucXzfgqtGAeEd2+1Mgz/uau4rE30agH1mRi+AKWy7o=
-X-Google-Smtp-Source: AGHT+IHFxsdnrHHCJW39/Lbu9cUGENC+vnEtRYVDBjLq63CwNtPtBkCUmNgYxOl/tyW+mRbcBoYz8w==
-X-Received: by 2002:a05:6602:3148:b0:7f3:9ef8:30a4 with SMTP id ca18e2360f4ac-7f39ef8334dmr991110139f.1.1719358455001;
-        Tue, 25 Jun 2024 16:34:15 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb458ba8efsm645345173.8.2024.06.25.16.34.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 16:34:14 -0700 (PDT)
-Message-ID: <f975fe76-92f4-4af0-a91d-0f3d8938f6b2@linuxfoundation.org>
-Date: Tue, 25 Jun 2024 17:34:13 -0600
+        d=1e100.net; s=20230601; t=1719359718; x=1719964518;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30MprqR9jKeSlYWvSkx3JBbBoLzb8YQKJ6HRn0CFdGo=;
+        b=F8ikT0XUyTFz+miNCyCcxvtHki3yRUwXOIbBHpS7ucF3KoTAcGxdG5kW3AgoN0IjNw
+         iDInaqbpqc+kB3hF24wwkzLAPa8/ql5N7Xgwe+ESlrw2E7ROOvIVI5LZM6woO1i+Gngk
+         7evvW4Fi74yXdIP4g0Tvb+PtFa/zBQsR7Y/6aZ0+qsdBBLfYzJqRPPnIn2AV2ftpbqMS
+         4dbYfVh9NrXj3dJrHmPBhmv42Yy/9djpSWVaMZq7dRGtJe1v2NHbfAS7491KkFzOtP7s
+         +HQLsHXu6LzjXWqseUNpolHGRcd/Hbx32St8+ui4i0RBnTLkGuK3yAgExLx6qVx+rrML
+         im0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUdUB5qQffh1fGJPxnciQFMOeLFFgMjKTdjRCfm7rCFTDdC+p/RLAZsQEDrgSjYpEEJBtMi0LieDQuspkab8v1wYBmrm+Y1YKOZe+5Kx/Bw
+X-Gm-Message-State: AOJu0YwwtKy76y+GJV7hZCJXpVZ5q5ullcEICiDiRToranJX+zeEiKKJ
+	5YeBlTjmmxtMG/HXZgGlaBm9Ao5CC8VcYTZmlZgyIx8GttzLL9JKd/fRpoF0uFNJxwgUp1Zkhjq
+	Zob3dV0/+J8ksV44rjwtSZTUXkyfwIW5FqrKuC+f8oA+o9prpzCspiEItzPRijWFBDQ==
+X-Received: by 2002:a05:6808:10d0:b0:3d2:1b8a:be58 with SMTP id 5614622812f47-3d53ecf3880mr15046271b6e.3.1719359717812;
+        Tue, 25 Jun 2024 16:55:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHlf/FwRDBkisWWdxUhp5HLyrRnE/m8oDfhxzRCIqhtKcbQ1/6uO9ya2nFcAESOd4bBmfb1vg==
+X-Received: by 2002:a05:6808:10d0:b0:3d2:1b8a:be58 with SMTP id 5614622812f47-3d53ecf3880mr15046235b6e.3.1719359717110;
+        Tue, 25 Jun 2024 16:55:17 -0700 (PDT)
+Received: from x1n (pool-99-254-121-117.cpe.net.cable.rogers.com. [99.254.121.117])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79bce91f16esm452957085a.77.2024.06.25.16.55.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 16:55:16 -0700 (PDT)
+Date: Tue, 25 Jun 2024 19:55:14 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Audra Mitchell <audra@redhat.com>, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, jack@suse.cz, aarcange@redhat.com,
+	rppt@linux.vnet.ibm.com, shli@fb.com, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, raquini@redhat.com
+Subject: Re: [PATCH v2 3/3] Turn off test_uffdio_wp if
+ CONFIG_PTE_MARKER_UFFD_WP is not configured.
+Message-ID: <ZntY4jIojSrjoW1M@x1n>
+References: <20240621181224.3881179-1-audra@redhat.com>
+ <20240621181224.3881179-3-audra@redhat.com>
+ <ZnXwT_vkyVbIJefN@x1n>
+ <Znl6dfM_qbH3hIvH@fedora>
+ <ZnmFuAR7yNG_6zp6@x1n>
+ <20240625160558.e1650f874ab039e4d6c2b650@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/13] Centralize _GNU_SOURCE definition into lib.mk
-To: Andrew Morton <akpm@linux-foundation.org>, Edward Liaw <edliaw@google.com>
-Cc: linux-kselftest@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
- Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
- <andrealmeid@igalia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Kevin Tian <kevin.tian@intel.com>, Paolo Bonzini <pbonzini@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org,
- usama.anjum@collabora.com, seanjc@google.com, kernel-team@android.com,
- linux-mm@kvack.org, iommu@lists.linux.dev, kvm@vger.kernel.org,
- netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-sgx@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240624232718.1154427-1-edliaw@google.com>
- <20240625135234.d52ef77c0d84cb19d37dc44f@linux-foundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240625135234.d52ef77c0d84cb19d37dc44f@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240625160558.e1650f874ab039e4d6c2b650@linux-foundation.org>
 
-On 6/25/24 14:52, Andrew Morton wrote:
-> On Mon, 24 Jun 2024 23:26:09 +0000 Edward Liaw <edliaw@google.com> wrote:
+On Tue, Jun 25, 2024 at 04:05:58PM -0700, Andrew Morton wrote:
+> On Mon, 24 Jun 2024 10:42:00 -0400 Peter Xu <peterx@redhat.com> wrote:
 > 
->> Centralizes the definition of _GNU_SOURCE into lib.mk and addresses all
->> resulting macro redefinition warnings.
->>
->> These patches will need to be merged in one shot to avoid redefinition
->> warnings.
+> > >         uffdio_api.features &= ~UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
+> > >         uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
+> > >         uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
+> > > #endif
+> > > 
+> > > If you run the userfaultfd selftests with the run_vmtests script we get
+> > > several failures stemming from trying to call uffdio_regsiter with the flag 
+> > > UFFDIO_REGISTER_MODE_WP. However, the kernel ensures in vma_can_userfault() 
+> > > that if CONFIG_PTE_MARKER_UFFD_WP is disabled, only allow the VM_UFFD_WP -
+> > > which is set when you pass the UFFDIO_REGISTER_MODE_WP flag - on 
+> > > anonymous vmas.
+> > > 
+> > > In parse_test_type_arg() I added the features check against 
+> > > UFFD_FEATURE_WP_UNPOPULATED as it seemed the most well know feature/flag. I'm 
+> > > more than happy to take any suggestions and adapt them if you have any! 
+> > 
+> > There're documents for these features in the headers:
+> > 
+> > 	 * UFFD_FEATURE_WP_HUGETLBFS_SHMEM indicates that userfaultfd
+> > 	 * write-protection mode is supported on both shmem and hugetlbfs.
+> > 	 *
+> > 	 * UFFD_FEATURE_WP_UNPOPULATED indicates that userfaultfd
+> > 	 * write-protection mode will always apply to unpopulated pages
+> > 	 * (i.e. empty ptes).  This will be the default behavior for shmem
+> > 	 * & hugetlbfs, so this flag only affects anonymous memory behavior
+> > 	 * when userfault write-protection mode is registered.
+> > 
+> > While in this context ("test_type != TEST_ANON") IIUC the accurate feature
+> > to check is UFFD_FEATURE_WP_HUGETLBFS_SHMEM.
+> > 
+> > In most kernels they should behave the same indeed, but note that since
+> > UNPOPULATED was introduced later than shmem/hugetlb support, it means on
+> > some kernel the result of checking these two features will be different.
 > 
-> Yes, please do this as a single patch and resend?
+> I'm unsure what to do with this series.  Peter, your review comments
+> are unclear - do you request updates?
 
-Since the change is limited to makefiles and one source file
-we can manage it with one patch.
+Yes, or some clarification from Audra would also work.
 
-Please send single patch and I will apply to next and we can resolve
-conflicts if any before the merge window rolls around.
+What I was trying to say is here I think the code should check against
+UFFD_FEATURE_WP_HUGETLBFS_SHMEM instead.
 
-thanks,
--- Shuah
+Thanks,
+
+-- 
+Peter Xu
+
 
