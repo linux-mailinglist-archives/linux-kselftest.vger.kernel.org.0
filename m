@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-12719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A69916FCA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 20:06:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D58916FCB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 20:06:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2EB91F229C9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 18:06:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 659CC1F21F6F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 18:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E339817B511;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4D917BB09;
 	Tue, 25 Jun 2024 18:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owYguYF0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sc+31Mqf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C3817B437;
-	Tue, 25 Jun 2024 18:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F4217B438;
+	Tue, 25 Jun 2024 18:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719338746; cv=none; b=ncGnnF1hbTyLpUecEW78dphQpEngqe59A7OMeAa2KuIY4UuTcLxiP6mTni1bzy5qqe5nUTpRaBGsd8F36/IB0UTNp4qgpnp5g8u9JimBAA5TsURpzG7TWAzFHHWhlUEo18CJwP/NHyW7yC5LZSpuIAhqgAbITOD3bHyec8rbqUY=
+	t=1719338746; cv=none; b=EnBmFdQLlDn9APVGTK0lv0k9D5SejLNhBTYGYpHnGllE+I0MhTPHhajPF+qyczFzKiUXmY/aFRk7Mc5ZChYp0cuuOXmHpPfrPFXnMx8B0wUErx+q6fZYqGm51tVzWecGa7ryzJsiRgE8XuYeUGqzOPYsC3EO0m8LzOXEQ9tvEnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719338746; c=relaxed/simple;
-	bh=IqlT1IPKcASfwAbySeLSD/8umJwtipY7yMwxEMFH+lY=;
+	bh=ywuSH6qCkdeHkBE80ZCaTZoKmSWBRtvzgEieCdzLvOc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mis8g+C3Tvz+ST65kdoOooTQLuT1QLZnCITtvx92Ox4b+8FS7Snn2jnopRyMWt82beoh1XFPL9igwIBGQ0N92iclMA2+++yCEVJC5aDBrXC0x1NZD9I9jiLxfIiGYda/LzaXKWBNuSJwMpD4IvnZxFIWAsZgQb6VvRBRJNubKok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owYguYF0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20FCAC4AF11;
+	 MIME-Version; b=ZB7ajgUJi3SgPwCRQz8e+vZTZKZ///aiQBvnORH0EWp+so3kMNVpRkNF+0FLIZAIYOcPU7LeaGU3fHUD2Lw4zYyDxYTfbiBXNvbThAfgNrUqkQEK9+Tg13Jd2l7OtP39UOLKrWgXb9epAATmfe1TygLM3sEgFvBstdvC4Q61rj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sc+31Mqf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE19C4AF0A;
 	Tue, 25 Jun 2024 18:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719338745;
-	bh=IqlT1IPKcASfwAbySeLSD/8umJwtipY7yMwxEMFH+lY=;
+	s=k20201202; t=1719338746;
+	bh=ywuSH6qCkdeHkBE80ZCaTZoKmSWBRtvzgEieCdzLvOc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=owYguYF08Cx4JYwOY6o1g0owoG2dsbNcaU/uOyKCAB27ayZjRretUhozMpE1EHQlu
-	 Aj/K7T8lVNM7nt8K2aJagUURVKGF67WC2KKzKvP+ndwQ3nlbi/8hIhtH4xJJwEwWMC
-	 ThpMW7G8krb7u9VhvABkwUTDXPcgKXz2DBHuNhgWEaVQl394tetaG8Ms9gUq5MH2sS
-	 aS+Rv3BrsQ4PHUfZhg9IkyG8wZvNHeeLcdD4K1a5CBmgnPIjFRZKzgHV9xNgresdvb
-	 aFOt+PLj2NZTMUdfPsJUIpGXnhZePKEGbStW8i8bxkRVLIiz5q1uhRGX2tOE6rOD9D
-	 bnZlZ4OaBptyQ==
+	b=Sc+31Mqfm7OWQ/QmyXmPnb6jz1ppHcjAVkVMJ103bsVJhmTZeMfZSEzV0KfD463mE
+	 Jfa3Ujynn3hCCArqzfJyoQk0aNGRgAf7QpPtNGn/1JbrBpQXkp/TBfc/VKg5eqi9Bp
+	 4pZn6ivEFleWQ08gkTga3GNnGE8dJIqueR/Xu8PYWmAVmda2ZMZPe23GZE8RBO9AvX
+	 4GRqw/WU6iEV0kYPjq8Z8oMCo2/COA1yLCqidJZjFsKOt63LyFdZvxEGWCyUElhuFm
+	 MUzVwaBzNnFJYumVJC+UaZbqqfLgkonFu9qi5myPcSoQ7P2pjo+A3komKxNcWG3waB
+	 ixjwGIK9+g4sg==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -49,9 +49,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/8] selftests/damon/_damon_sysfs: support schemes_update_tried_regions
-Date: Tue, 25 Jun 2024 11:05:32 -0700
-Message-Id: <20240625180538.73134-3-sj@kernel.org>
+Subject: [PATCH 3/8] selftests/damon: implement a program for even-numbered memory regions access
+Date: Tue, 25 Jun 2024 11:05:33 -0700
+Message-Id: <20240625180538.73134-4-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240625180538.73134-1-sj@kernel.org>
 References: <20240625180538.73134-1-sj@kernel.org>
@@ -63,77 +63,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement schemes_update_tried_regions DAMON sysfs command on
-_damon_sysfs.py, to use on implementations of future tests for the
-feature.
+To test schemes_tried_regions feature, we need to have a program having
+specific number of regions that having different access pattern.
+Existing artificial access pattern generator, 'access_memory', cannot be
+used for the purpose, since it accesses only one region at a given time.
+Extending it could be an option, but since the purpose and the
+implementation are pretty simple, implementing another one from the
+scratch is better.
+
+Implement such another artificial memory access program that alloctes
+user-defined number/size regions and accesses even-numbered regions.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/_damon_sysfs.py | 35 ++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ tools/testing/selftests/damon/Makefile        |  2 +-
+ .../selftests/damon/access_memory_even.c      | 42 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/damon/access_memory_even.c
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index 2bd44c32be1b..f975742f29b3 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -175,16 +175,24 @@ class DamosStats:
-         self.sz_applied = sz_applied
-         self.qt_exceeds = qt_exceeds
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index 29a22f50e762..7b972b5cf487 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -4,7 +4,7 @@
+ TEST_GEN_FILES += huge_count_read_write
+ TEST_GEN_FILES += debugfs_target_ids_read_before_terminate_race
+ TEST_GEN_FILES += debugfs_target_ids_pid_leak
+-TEST_GEN_FILES += access_memory
++TEST_GEN_FILES += access_memory access_memory_even
  
-+class DamosTriedRegion:
-+    def __init__(self, start, end, nr_accesses, age):
-+        self.start = start
-+        self.end = end
-+        self.nr_accesses = nr_accesses
-+        self.age = age
+ TEST_FILES = _chk_dependency.sh _debugfs_common.sh
+ 
+diff --git a/tools/testing/selftests/damon/access_memory_even.c b/tools/testing/selftests/damon/access_memory_even.c
+new file mode 100644
+index 000000000000..3be121487432
+--- /dev/null
++++ b/tools/testing/selftests/damon/access_memory_even.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Artificial memory access program for testing DAMON.
++ *
++ * Receives number of regions and size of each region from user.  Allocate the
++ * regions and repeatedly access even numbered (starting from zero) regions.
++ */
 +
- class Damos:
-     action = None
-     access_pattern = None
-     quota = None
-     apply_interval_us = None
--    # todo: Support watermarks, stats, tried_regions
-+    # todo: Support watermarks, stats
-     idx = None
-     context = None
-     tried_bytes = None
-     stats = None
-+    tried_regions = None
- 
-     def __init__(self, action='stat', access_pattern=DamosAccessPattern(),
-                  quota=DamosQuota(), apply_interval_us=0):
-@@ -398,6 +406,31 @@ class Kdamond:
-         err = write_file(os.path.join(self.sysfs_dir(), 'state'), 'on')
-         return err
- 
-+    def update_schemes_tried_regions(self):
-+        err = write_file(os.path.join(self.sysfs_dir(), 'state'),
-+                         'update_schemes_tried_regions')
-+        if err is not None:
-+            return err
-+        for context in self.contexts:
-+            for scheme in context.schemes:
-+                tried_regions = []
-+                tried_regions_dir = os.path.join(
-+                        scheme.sysfs_dir(), 'tried_regions')
-+                for filename in os.listdir(
-+                        os.path.join(scheme.sysfs_dir(), 'tried_regions')):
-+                    tried_region_dir = os.path.join(tried_regions_dir, filename)
-+                    if not os.path.isdir(tried_region_dir):
-+                        continue
-+                    region_values = []
-+                    for f in ['start', 'end', 'nr_accesses', 'age']:
-+                        content, err = read_file(
-+                                os.path.join(tried_region_dir, f))
-+                        if err is not None:
-+                            return err
-+                        region_values.append(int(content))
-+                    tried_regions.append(DamosTriedRegion(*region_values))
-+                scheme.tried_regions = tried_regions
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <time.h>
 +
-     def update_schemes_tried_bytes(self):
-         err = write_file(os.path.join(self.sysfs_dir(), 'state'),
-                 'update_schemes_tried_bytes')
++int main(int argc, char *argv[])
++{
++	char **regions;
++	clock_t start_clock;
++	int nr_regions;
++	int sz_region;
++	int access_time_ms;
++	int i;
++
++	if (argc != 3) {
++		printf("Usage: %s <number> <size (bytes)>\n", argv[0]);
++		return -1;
++	}
++
++	nr_regions = atoi(argv[1]);
++	sz_region = atoi(argv[2]);
++
++	regions = malloc(sizeof(*regions) * nr_regions);
++	for (i = 0; i < nr_regions; i++)
++		regions[i] = malloc(sz_region);
++
++	while (1) {
++		for (i = 0; i < nr_regions; i++) {
++			if (i % 2 == 0)
++				memset(regions[i], i, sz_region);
++		}
++	}
++	return 0;
++}
 -- 
 2.39.2
 
