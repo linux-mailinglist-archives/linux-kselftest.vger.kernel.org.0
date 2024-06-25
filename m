@@ -1,78 +1,81 @@
-Return-Path: <linux-kselftest+bounces-12750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864C8917448
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 00:35:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9746491744F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 00:35:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8D05B23834
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 22:35:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21CC31F24991
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2024 22:35:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8839A17F393;
-	Tue, 25 Jun 2024 22:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C651802DB;
+	Tue, 25 Jun 2024 22:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c+xHHygr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9w5lPGF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEF117F374
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 22:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF5717F37E
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 22:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719354902; cv=none; b=Ngj3lSw/Z9OgEOabRMlMwvLQ1A8Ga1KDcrag0i9n/74ye4pr9Jb4nqNKVHOfoIFHdLYkzuOWegZAdzGTCLA1viBvFdOXgfheOwFPDaF2GLInaaja3pWhqnitC11QkT/E46Fr5rwP/o0fpHXZsykx2FmRqvYSrxCMGCiGyhC6/jc=
+	t=1719354908; cv=none; b=Q3QavLjkDpo3CbEgNuPqhrVsKL7ByTlQRWelPhPSdS3mIzl4w2U2sGd1Akz6PBFi3pr5RuABzdTeiL9yV5krl5rRtT3bgNIvHz/xPA1tIPuP0JfgcUI4OePRznwG5nTNcQWzkbjdNS7vNjejIWbwJg2IPBdsJMHfYYF0ryiIOn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719354902; c=relaxed/simple;
-	bh=91Z7ox9LiBjORVtCWaAzB8GD58RrfZz+zWI0Wxs5FyY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=kXidyBR8NmWjEWM4ir9dcoU5zZUxxiZDnOEI4vinUgTmULCoeTmn2lF9R3It3jsttm4rO90SifMzPvEDnDDXkw4dSan78HPVAD4v5/ZJN3l60hkKiQW/VwEvqVCDwgSTHXIb0xKQL8tCQ03DkruE0FDnBMm5A2y3PDiH2Y1vHI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c+xHHygr; arc=none smtp.client-ip=209.85.210.202
+	s=arc-20240116; t=1719354908; c=relaxed/simple;
+	bh=Nz14t21hcHX1PDz4gX9brGggz6D63/l/IGgEClEx/P4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EN8LfYgZ6YALsGYjsa6tAAymuDwgEv01J/yb4+gUH/Sfn0/NIRm4AC0Oim1PKbxC/XCGSSxgPRqBJuapeSehuWvbdbUh2mM64QNJFI8582UlKAUYtT4/a43YbG2Bt8nzNBd1G1rn/RP5ZZl8mNAuigz9V1IcPvfCMbGqAEVE8Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9w5lPGF; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7065df788f6so6695019b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 15:35:00 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-63bf1d3fb2dso134765197b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 15:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719354900; x=1719959700; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KACPm6o1sF6MfYdPebomXscoE9qCB1ha0g1j4OaH67g=;
-        b=c+xHHygrtnx3ar0uqm0QnBauxwQRcQHGDB4+KqRa+qVZ6AP2sBSOHc2t4rAP+4xtc/
-         jNZmyp0ZC7AD0QDzcMj5AeCn44eDwFQ+UJLGbapw0AMRut/OCLT/mzf7pIDvDdNb2Ufe
-         OkknPhAsq+vcMblteP5T+SPFpGFKmz5gBuaDxzR2LSEV1dHxuBCRhvOBFoRqsofR4uat
-         u7CqKcu3egVHcX5uGPl9xuv/4J8aMuF3xW+e6aWnqZ9/+x3BMOgIAkT8y54BdYAunfVY
-         zpLSpfcBsZs+AVN45RRvjXvCqus4saGtRXR74luxea9WwS0pX8nd1ka+QQQJX/8QvRTp
-         mAoQ==
+        d=google.com; s=20230601; t=1719354906; x=1719959706; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=87Jin1neXman428FZaPVpz5vAZT4i6hdnDg6P39Dvmk=;
+        b=a9w5lPGFkvEHqX7Ur9CtiBrJdPl81kg/iiuCHuO3/z8rBMRM/x66ivrFeX1FDoErs+
+         pyZG8yWEHOu/MSV09IJn6bbo1BTZqEZhHbil12mnfZsHPHcIuacgM/Gfnh07wyWzjZ94
+         JQu+cCQNZIOloc5k08TH8lkfxSxqgugEzUfb6Rr3rS2bpq2nTW0PQFlX8k4TJ3q0jiuU
+         luA+lByx5419POnseP7N2T1Gy2xZ2ozippbjv+AglvXRL6I0duMJKSoRDP5JZj4of2+b
+         JAWwLA70gr/V/EaN7vaiH3iQLQnx80K0kC4g3FEq2tgJ5ZTbtFfwDD7ggV4RhMdXY63b
+         R12Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719354900; x=1719959700;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KACPm6o1sF6MfYdPebomXscoE9qCB1ha0g1j4OaH67g=;
-        b=lOxU6qZGNP1hhtj3S80mP84vwWjddP/2ELeNnnSx+K4BV/Es36jhCbDosJl4ykL/+1
-         rmS4lDUPjIhTX24NvoehaV6DRilokQfE1VVknQLH+1lOxrlB/yT60Xp5pu5Geqbfr4Y0
-         c2h9TATxO5q6UEKa3bTN/RWoJ6+zxVNAXo3SX3dnSzN1AGdFZDabi8dnZWSvVc6xAi8F
-         vRtWigFnX6XNuRD/QXk2H9uuIKEiPT9Of/lsTkp/qR/I/RNndvZld0bUAXcxMcEau9BC
-         KO7+fef6FxBQDYCILEYAx6x3jy8VxZplKcjfMXX9uI5h8kOcRkNGN73RwdE90bkN+ebQ
-         GJoA==
-X-Gm-Message-State: AOJu0Yzt2UMV5VpFTWSMdLzt5Iy8+8g/cne6tOJV8vN29mpGzEGh0QuA
-	GFoS5UZVSoKB0X+50WZh58IXaKopk4jstUkJ204jmJNgvXjgamMjGXQO/MmKJ5BruHpnQuVc9l3
-	YYQ5u10FhqJ7MJLss/uSo2EXT8AOzcqAF54QegR5YpSvslkwfUPyQ26dTeTfgeA7e8fkErowiMi
-	7mEbyePYwEtnV8uaqMYHYSsVGKoW3/XMwumF6gonGOsr7D
-X-Google-Smtp-Source: AGHT+IFpOX5CcrzFldMsRz/JodHWPPYjtr1mfNvHUywvuU1/bJCVZhZ6TnspYz+fdShAF0CdfuxKj2ZiUg4=
+        d=1e100.net; s=20230601; t=1719354906; x=1719959706;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=87Jin1neXman428FZaPVpz5vAZT4i6hdnDg6P39Dvmk=;
+        b=vwEF/QlBtVsmKR/i66agVE3EE1Lkq3TEZS2eJW0BvIMus1KIxdpmzpxtNw8blEKIgl
+         0OmL1vG+bN7ZWB1u3139db1mG15NK1cTfckcq+E2pfpR3PiH8VzElsY07qFlCUeZWVkC
+         igBpZW29A4Tv/mE3eIS8uLQEcNBSx+RLkdP2pUfrmB0iLdf8gnJzsaDm9pI6psnfTN2C
+         85AAAcpg041GghNBSJm7IdHmd2oaRGlVK5Aa9cB5TVGAdia/kBAR75/WStgLENU743aO
+         TPp68bv04ZPy188W1gDqfQ/P3XS2LHlX/sGN40oehXS7hdP+SP7noRYN3OjP9+3/Zesx
+         O1Jw==
+X-Gm-Message-State: AOJu0YxyVsDBgr8zp/opJ0tewVtTc4sQI1ELfMjblUyEFih1F+1E85SX
+	PNiU2FFt6nOPlZ04vj8Ci8tddCD8nPpIiu6VSzejDR/V6Strga/+34KTe/JABYA/npq2mYdLtbm
+	l4Y/PTiHgGVOrgxFdBbLfV+cJA3KqMf71z9X5qKym33kkhtTl0w9XzonJtgd8I2Z0q7L1312wB6
+	IpKaNF8pGF9WWIlTGzRueB9R/FYK4o5NKClz5sBAVFqtWc
+X-Google-Smtp-Source: AGHT+IEGuPw81A+vd3VK4UXWXuPsSlJshJybw2PugwKr4mE141Kgqb4D3k0bZmkq8unTm2UAe55tWdXFj6o=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6a00:3698:b0:706:3f17:ca6 with SMTP id
- d2e1a72fcca58-706746c2606mr330723b3a.3.1719354899705; Tue, 25 Jun 2024
- 15:34:59 -0700 (PDT)
-Date: Tue, 25 Jun 2024 22:34:44 +0000
+ (user=edliaw job=sendgmr) by 2002:a05:690c:6112:b0:61c:89a4:dd5f with SMTP id
+ 00721157ae682-643a76e6dd7mr1219237b3.0.1719354904824; Tue, 25 Jun 2024
+ 15:35:04 -0700 (PDT)
+Date: Tue, 25 Jun 2024 22:34:45 +0000
+In-Reply-To: <20240625223454.1586259-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240625223454.1586259-1-edliaw@google.com>
 X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
-Message-ID: <20240625223454.1586259-1-edliaw@google.com>
-Subject: [PATCH v7 0/1] Centralize _GNU_SOURCE definition into lib.mk
+Message-ID: <20240625223454.1586259-2-edliaw@google.com>
+Subject: [PATCH v7 1/1] selftests: Centralize -D_GNU_SOURCE= to CFLAGS in lib.mk
 From: Edward Liaw <edliaw@google.com>
 To: linux-kselftest@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>, 
 	Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -89,53 +92,23 @@ Cc: linux-kernel@vger.kernel.org, usama.anjum@collabora.com, seanjc@google.com,
 	kernel-team@android.com, Edward Liaw <edliaw@google.com>, linux-mm@kvack.org, 
 	iommu@lists.linux.dev, kvm@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-sgx@vger.kernel.org
+	linux-sgx@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Centralizes the definition of _GNU_SOURCE into lib.mk and addresses all
-resulting macro redefinition warnings.
+Centralize the _GNU_SOURCE definition to CFLAGS in lib.mk.  Remove
+redundant defines from Makefiles that import lib.mk.  Convert any usage
+of "#define _GNU_SOURCE 1" to "#define _GNU_SOURCE".
 
-The initial attempt at this patch was abandoned because it affected
-lines in many source files and caused a large amount of churn. However,
-from earlier discussions, centralizing _GNU_SOURCE is still desireable.
-This attempt limits the changes to 1 source file and 14 Makefiles.
+This uses the form "-D_GNU_SOURCE=", which is equivalent to
+"#define _GNU_SOURCE".
 
-This is condensed into a single commit to avoid redefinition warnings
-from partial merges.
+Otherwise using "-D_GNU_SOURCE" is equivalent to "-D_GNU_SOURCE=1" and
+"#define _GNU_SOURCE 1", which is less commonly seen in source code and
+would require many changes in selftests to avoid redefinition warnings.
 
-v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-edliaw@google.com/
-v2: https://lore.kernel.org/linux-kselftest/20240507214254.2787305-1-edliaw@google.com/
- - Add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-   location.
- - Remove #define _GNU_SOURCE from source code to resolve redefinition
-   warnings.
-v3: https://lore.kernel.org/linux-kselftest/20240509200022.253089-1-edliaw@google.com/
- - Rebase onto linux-next 20240508.
- - Split patches by directory.
- - Add -D_GNU_SOURCE directly to CFLAGS in lib.mk.
- - Delete additional _GNU_SOURCE definitions from source code in
-   linux-next.
- - Delete additional -D_GNU_SOURCE flags from Makefiles.
-v4: https://lore.kernel.org/linux-kselftest/20240510000842.410729-1-edliaw@google.com/
- - Rebase onto linux-next 20240509.
- - Remove Fixes tag from patches that drop _GNU_SOURCE definition.
- - Restore space between comment and includes for selftests/damon.
-v5: https://lore.kernel.org/linux-kselftest/20240522005913.3540131-1-edliaw@google.com/
- - Rebase onto linux-next 20240521
- - Drop initial patches that modify KHDR_INCLUDES.
- - Incorporate Mark Brown's patch to replace static_assert with warning.
- - Don't drop #define _GNU_SOURCE from nolibc and wireguard.
- - Change Makefiles for x86 and vDSO to append to CFLAGS.
-v6: https://lore.kernel.org/linux-kselftest/20240624232718.1154427-1-edliaw@google.com/
- - Rewrite patch to use -D_GNU_SOURCE= form in lib.mk.
- - Reduce the amount of churn significantly by allowing definition to
-   coexist with source code macro defines.
-v7:
- - Squash patch into a single commit.
-
-Edward Liaw (1):
-  selftests: Centralize -D_GNU_SOURCE= to CFLAGS in lib.mk
-
+Suggested-by: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
  tools/testing/selftests/exec/Makefile             | 1 -
  tools/testing/selftests/futex/functional/Makefile | 2 +-
  tools/testing/selftests/intel_pstate/Makefile     | 2 +-
@@ -153,7 +126,193 @@ Edward Liaw (1):
  tools/testing/selftests/tmpfs/Makefile            | 1 -
  15 files changed, 12 insertions(+), 15 deletions(-)
 
---
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index ab67d58cfab7..ba012bc5aab9 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+-CFLAGS += -D_GNU_SOURCE
+ 
+ ALIGNS := 0x1000 0x200000 0x1000000
+ ALIGN_PIES        := $(patsubst %,load_address.%,$(ALIGNS))
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 994fa3468f17..f79f9bac7918 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+-CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
++CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
+ 
+ LOCAL_HDRS := \
+diff --git a/tools/testing/selftests/intel_pstate/Makefile b/tools/testing/selftests/intel_pstate/Makefile
+index 05d66ef50c97..f45372cb00fe 100644
+--- a/tools/testing/selftests/intel_pstate/Makefile
++++ b/tools/testing/selftests/intel_pstate/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS := $(CFLAGS) -Wall -D_GNU_SOURCE
++CFLAGS := $(CFLAGS) -Wall
+ LDLIBS += -lm
+ 
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+diff --git a/tools/testing/selftests/iommu/Makefile b/tools/testing/selftests/iommu/Makefile
+index 32c5fdfd0eef..fd6477911f24 100644
+--- a/tools/testing/selftests/iommu/Makefile
++++ b/tools/testing/selftests/iommu/Makefile
+@@ -2,8 +2,6 @@
+ CFLAGS += -Wall -O2 -Wno-unused-function
+ CFLAGS += $(KHDR_INCLUDES)
+ 
+-CFLAGS += -D_GNU_SOURCE
+-
+ TEST_GEN_PROGS :=
+ TEST_GEN_PROGS += iommufd
+ TEST_GEN_PROGS += iommufd_fail_nth
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index ac280dcba996..4ee37abf70ff 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -231,7 +231,7 @@ LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
+ endif
+ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+ 	-Wno-gnu-variable-sized-type-not-at-end -MD -MP -DCONFIG_64BIT \
+-	-D_GNU_SOURCE -fno-builtin-memcmp -fno-builtin-memcpy \
++	-fno-builtin-memcmp -fno-builtin-memcpy \
+ 	-fno-builtin-memset -fno-builtin-strnlen \
+ 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+ 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 7b299ed5ff45..d6edcfcb5be8 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -196,6 +196,9 @@ endef
+ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
+ 	$(CLEAN)
+ 
++# Build with _GNU_SOURCE by default
++CFLAGS += -D_GNU_SOURCE=
++
+ # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
+ # make USERCFLAGS=-Werror USERLDFLAGS=-static
+ CFLAGS += $(USERCFLAGS)
+diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+index d50dc71cac32..e4370b79b62f 100644
+--- a/tools/testing/selftests/mm/thuge-gen.c
++++ b/tools/testing/selftests/mm/thuge-gen.c
+@@ -13,7 +13,7 @@
+    sudo ipcs | awk '$1 == "0x00000000" {print $2}' | xargs -n1 sudo ipcrm -m
+    (warning this will remove all if someone else uses them) */
+ 
+-#define _GNU_SOURCE 1
++#define _GNU_SOURCE
+ #include <sys/mman.h>
+ #include <linux/mman.h>
+ #include <stdlib.h>
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index bc3925200637..8eaffd7a641c 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for net selftests
+ 
+-CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
++CFLAGS +=  -Wall -Wl,--no-as-needed -O2 -g
+ CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
+ # Additional include paths needed by kselftest.h
+ CFLAGS += -I../
+diff --git a/tools/testing/selftests/net/tcp_ao/Makefile b/tools/testing/selftests/net/tcp_ao/Makefile
+index 522d991e310e..bd88b90b902b 100644
+--- a/tools/testing/selftests/net/tcp_ao/Makefile
++++ b/tools/testing/selftests/net/tcp_ao/Makefile
+@@ -26,7 +26,7 @@ LIB	:= $(LIBDIR)/libaotst.a
+ LDLIBS	+= $(LIB) -pthread
+ LIBDEPS	:= lib/aolib.h Makefile
+ 
+-CFLAGS	:= -Wall -O2 -g -D_GNU_SOURCE -fno-strict-aliasing
++CFLAGS	+= -Wall -O2 -g -fno-strict-aliasing
+ CFLAGS	+= $(KHDR_INCLUDES)
+ CFLAGS	+= -iquote ./lib/ -I ../../../../include/
+ 
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index 6066f607f758..ee424a9f075f 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -Wall -O2 -Wno-unused-function
+-CFLAGS += -D_GNU_SOURCE
+ LDFLAGS += -pthread
+ 
+ TEST_GEN_PROGS :=
+diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+index 021863f86053..f408bd6bfc3d 100644
+--- a/tools/testing/selftests/resctrl/Makefile
++++ b/tools/testing/selftests/resctrl/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE
++CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
+ CFLAGS += $(KHDR_INCLUDES)
+ 
+ TEST_GEN_PROGS := resctrl_tests
+diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
+index 627c5fa6d1ab..23605782639e 100644
+--- a/tools/testing/selftests/ring-buffer/Makefile
++++ b/tools/testing/selftests/ring-buffer/Makefile
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -Wl,-no-as-needed -Wall
+ CFLAGS += $(KHDR_INCLUDES)
+-CFLAGS += -D_GNU_SOURCE
+ 
+ TEST_GEN_PROGS = map_test
+ 
+diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
+index c333263f2b27..4664ed79e20b 100644
+--- a/tools/testing/selftests/riscv/mm/Makefile
++++ b/tools/testing/selftests/riscv/mm/Makefile
+@@ -3,7 +3,7 @@
+ # Originally tools/testing/arm64/abi/Makefile
+ 
+ # Additional include paths needed by kselftest.h and local headers
+-CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
++CFLAGS += -std=gnu99 -I.
+ 
+ TEST_GEN_FILES := mmap_default mmap_bottomup
+ 
+diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+index 867f88ce2570..03b5e13b872b 100644
+--- a/tools/testing/selftests/sgx/Makefile
++++ b/tools/testing/selftests/sgx/Makefile
+@@ -12,7 +12,7 @@ OBJCOPY := $(CROSS_COMPILE)objcopy
+ endif
+ 
+ INCLUDES := -I$(top_srcdir)/tools/include
+-HOST_CFLAGS := -Wall -Werror -g $(INCLUDES) -fPIC
++HOST_CFLAGS := -Wall -Werror -g $(INCLUDES) -fPIC $(CFLAGS)
+ HOST_LDFLAGS := -z noexecstack -lcrypto
+ ENCL_CFLAGS += -Wall -Werror -static-pie -nostdlib -ffreestanding -fPIE \
+ 	       -fno-stack-protector -mrdrnd $(INCLUDES)
+diff --git a/tools/testing/selftests/tmpfs/Makefile b/tools/testing/selftests/tmpfs/Makefile
+index aa11ccc92e5b..3be931e1193f 100644
+--- a/tools/testing/selftests/tmpfs/Makefile
++++ b/tools/testing/selftests/tmpfs/Makefile
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -Wall -O2
+-CFLAGS += -D_GNU_SOURCE
+ 
+ TEST_GEN_PROGS :=
+ TEST_GEN_PROGS += bug-link-o-tmpfile
+-- 
 2.45.2.803.g4e1b14247a-goog
 
 
