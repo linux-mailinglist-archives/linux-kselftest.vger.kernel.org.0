@@ -1,233 +1,187 @@
-Return-Path: <linux-kselftest+bounces-12767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F903917706
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 05:58:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 718A19177E0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 07:08:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E0C283B13
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 03:58:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DBB41C227E5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 05:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A51D8248D;
-	Wed, 26 Jun 2024 03:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A1B13541B;
+	Wed, 26 Jun 2024 05:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G5vSLlMS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yJQpeAbR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C45347C7
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 03:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE50728E7
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 05:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719374279; cv=none; b=LxlrRZwfhd/0VNe28Is8DER1meR05wjFNd2oyfH0mezgtfWdhF5Y40qr7C3E9GRDtBq/zHlV1Ly/EeFk35Y7p89NMSp+kPaTwDtCCihkL8bs766FNpkzXylC8VbbP07Gf2Qxa0EKHl4IysxoGv7VxcNswxD22Q9k+9y0Pxp6dLI=
+	t=1719378505; cv=none; b=lL8YFLAJ9Gy5v8K+TNjwjQkdqwMcAdK4fJpmsurlDHa3+flej3PUbE3/v3yvg/SBgTleSjgUHz5wxFZUw5xsvMkIiLvmRI5HT6XDEejLJyqAsLm5o+duin6OngbGLQ5jhOR7DWNrQW4PHQCzitAjwQjankF+460/+iPk4ldeSWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719374279; c=relaxed/simple;
-	bh=/jOkK/GB36l5OeNHSL9FJ3Y553WdQcl90bcmcyPU/dA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PPTq6LgfYiPLFnubJiyLXKBZg4Fu4nkiykhahojLHbbpud8kfhbkXkVruTMomjtfLxioZAx5ZJ+vkOVfsWjlSasmdVLwt3AU0UCnpb6aYrraXAwme2t3AMGLUVY3ncnrb/kbVAGhEN2J0+roP/2s1UZuy19vBbQVyBkzBxNpyzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G5vSLlMS; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1719378505; c=relaxed/simple;
+	bh=jeEuRsnMW42UDJL4uCR8Lby79ZLU5/csNxUpONX88SY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=L4HojHiittq7I7B3njF2hgqY+OMYb/T/S3pH8T3OarExTYnm44+s9AMLytaDKehgvf8klcMEqCa+k306x5XBJ7KyUv2UMBf2Z1UWkfECem5ZXsBtiPBOX8ntywT8geZTp9o+is5rxg1CiL4Da9rl/BC/bhma+7lJjSECxqotL3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yJQpeAbR; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-424ad289912so3296695e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 20:57:56 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7065df788f7so227492b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 22:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719374275; x=1719979075; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msH6Ni8XjmIv87Xn+7LRokn7k7HhrU+c2RpRB9CU8Zo=;
-        b=G5vSLlMStCSZF/fAdoSdwpjy0DTWV2nsa2LJrtDDQKGV5doVD0JcUN5B9wiDYLCxdz
-         yJm5gZIVv0poUOJwElizaQy+ESqBhGSzBZwpShaeHG7Sv3fxG4Tq71O3Tc4zVNrtC6hI
-         dd6apx6CSoOUCiw1Zr8Qvmzr49/8/yWVzr8IgaxrL/g7rC3/WUtYs7jfHhxKfK8/5WYB
-         icqCtdFmVTsv6cVCJAjQDYbnMaGa5L3C6lNYC2tHJohHZpc303yUfxINLkLYdmGPAd83
-         L0jtxIGSjCMEwSN6rVcCjYnfDFt3XrUvHtJ/TjcraBP1od0yKFWL9UVS0vm9Blfj7kiL
-         +EJA==
+        d=google.com; s=20230601; t=1719378503; x=1719983303; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CGDqphXBU6R+lNPyRUopWgvG7yuYFqi637jqIyNGWis=;
+        b=yJQpeAbRG4C/W/M3+obLA27dCf43xhbJ03KYX/s+qr5vdtZftfuXAfUKHqqrEWl/Rz
+         bDbhgqiDJbqug826WCOuW8QmzyCGtOgxXynR1nF77WoR+GhqxN//Yvj8B5/Wg80CxGgL
+         GVJVdL7wPvnXYcyJybI0gfWhr+yNrwz6P2wOOSru5hPyDg8shDCVIe7Z/reVxwLvQH5b
+         xxzUyjJ/Ue/HafxAjQuBI2JdJSblhOlqPjiGqoLb08DmZRlql4KDkl9D34CKtZgYD93Y
+         sMSmT+5ubnCcV1wWAQxeT8oje/S5KRdgw11JdSLcud4hfG1EZA0aZCCHUZfqPRPxFPn6
+         AvmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719374275; x=1719979075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=msH6Ni8XjmIv87Xn+7LRokn7k7HhrU+c2RpRB9CU8Zo=;
-        b=UR8rN2cmO3MKT7O/KbxkWA7c11GSRuP2TgvRopGD+2FJa6RMxAY1AYYP1dilOIYRq4
-         I89yIGtOzGUPSaFJMHDd96FR59pf+4mhDNSvfkYEVUxfRYbL+aVIPZaMV7yW6fMeLZ/9
-         DT+ZSNJp9H1MrS3HXDn8XK4vb00280VecL405M8cnY/z5Br9rXSFw852ZX2qa53OsCpE
-         Aj0zGVaVBbqYEfjA0T8QsgJ4s3XmoI6uNC5K0XFE/0woCRpquGD/V7YfZ/U/NtJibuwy
-         0FJYhukcmHSpIJTcTYikCEOe5fdBGJu30eJ0wbVVPQdtg6QJdAv6a+4qZmiyo+Gh9BM1
-         pKEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFKt/5PYSM6bWoXaTfGOYyLl+ciFzCEALXCHM0nBz5OpOpL+zTBVniXfEG/4JnJuWZ3trMYIseCUuL7z1u9v+giBuDUHELtNO42CGGUPvN
-X-Gm-Message-State: AOJu0YzGIKqOc+0dYFdrGlrbEwGVw8LPSVB7Z5STZpdrPVNVOXNKxib8
-	RW42DQ8Au2Cx2NEqdFy2IYlc4C1VmtsrLRuMxwY2/ZVqnwRMOesEbwmwIe2iriq/JKIcSmmhvsj
-	lc/QTguK9wZdvI9CK81qBZKLNA8S/mdhvDouQ
-X-Google-Smtp-Source: AGHT+IGuXXtl+E+WLOr/DRy3HX5YGqfni5q3C91JuUMbkVHAWgZ+NvdKFU4lQlqlvsl5Uu1kziQ3Kjz5SQYtHYDMhto=
-X-Received: by 2002:adf:f887:0:b0:361:dde2:87a0 with SMTP id
- ffacd0b85a97d-366e4f0cd03mr6529981f8f.65.1719374275190; Tue, 25 Jun 2024
- 20:57:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719378503; x=1719983303;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CGDqphXBU6R+lNPyRUopWgvG7yuYFqi637jqIyNGWis=;
+        b=Fgxlx8irjiI88KYc0Wf+Bq+BLdYIKp86SfP0xQkCQoEvhyC2CFD3i9szTBDtPYLjTQ
+         zBeHycKLCD/usASZgoaBt+UDvpDSFxaE0hDtHAvTkbpatjoErC/IgODqYEm1SxgtYYJ0
+         yZs3a88oPMPLHLn8abYoXCfIH63snsgSh36LfvIpinMz/TdtZfhTCPk3evx/Q3SohstQ
+         4hau+Tc8zC0xeT38CVzPwq3GzbYpfe6OTGIYtsNVbS0/o6iZrQdvvW3kB7RZ69ksSgQE
+         xLI+i5ID+Qy/obQZcCqPKVLbNxdHf1GPQr28aCitvqPSJNveWGIjC+R/9Umkslv3T8Fc
+         3wyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfpJOjFPZ/oGQiuBQpyfuV3AYbk1iX+AqRYEefEPjaLwcWsLYMrnFnzr6V9YLPmD13o+1xIiaf6jwMU2lbcDziU3u2CVzdWq7tJOHUMHiI
+X-Gm-Message-State: AOJu0YwBXqb9eRbhHMwFQBjRKX02AY4q02IdZIpwWqr4mSXxpDALIcxO
+	eCBBT2/NRAf1J15OeY2a/D+CHnKgJIEM8CXiSZyOE9awAS/E9Vp/lIpZ2i3tqWxAAZoNIOC/ds+
+	YfdMjd5ZZJA==
+X-Google-Smtp-Source: AGHT+IFb+0VOH/8Ji5MJY9Uzpp2NjXzdjAP0KEkJlwDoF3zvJdDZjjCYpaexBLDLoxcxVDGz7IEJNGYV1Aobyw==
+X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
+ (user=jiaqiyan job=sendgmr) by 2002:a05:6a00:4309:b0:705:d750:83dd with SMTP
+ id d2e1a72fcca58-70669e5e132mr340822b3a.0.1719378502937; Tue, 25 Jun 2024
+ 22:08:22 -0700 (PDT)
+Date: Wed, 26 Jun 2024 05:08:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240624163348.1751454-1-jiaqiyan@google.com> <20240624163348.1751454-4-jiaqiyan@google.com>
- <609062d2-977c-4229-8c66-d15bb8e47eb8@huawei.com> <CACw3F51yApRGaKcKmeEo-SYbt-nxULCwe2imCnsaPP8m4UBW6g@mail.gmail.com>
- <6afa8830-1a58-5e57-7d73-9601768bcda0@huawei.com>
-In-Reply-To: <6afa8830-1a58-5e57-7d73-9601768bcda0@huawei.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
+Message-ID: <20240626050818.2277273-1-jiaqiyan@google.com>
+Subject: [PATCH v6 0/4] Userspace controls soft-offline pages
 From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Tue, 25 Jun 2024 20:57:43 -0700
-Message-ID: <CACw3F52V6GEYOOC2HLxBuA_6uzaExvex_zYd1rW27DW1iFv9Uw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] selftest/mm: test enable_soft_offline behaviors
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
+To: nao.horiguchi@gmail.com, linmiaohe@huawei.com
+Cc: jane.chu@oracle.com, rdunlap@infradead.org, ioworker0@gmail.com, 
+	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
 	corbet@lwn.net, osalvador@suse.de, rientjes@google.com, duenwen@google.com, 
 	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, nao.horiguchi@gmail.com, jane.chu@oracle.com, 
-	ioworker0@gmail.com
+	linux-doc@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 25, 2024 at 6:54=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
-rote:
->
-> On 2024/6/26 7:57, Jiaqi Yan wrote:
-> > On Tue, Jun 25, 2024 at 12:05=E2=80=AFAM Miaohe Lin <linmiaohe@huawei.c=
-om> wrote:
-> >>
-> >> On 2024/6/25 0:33, Jiaqi Yan wrote:
-> >>> Add regression and new tests when hugepage has correctable memory
-> >> ...
-> >>> diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tool=
-s/testing/selftests/mm/hugetlb-soft-offline.c
-> >>> new file mode 100644
-> >>> index 000000000000..16fe52f972e2
-> >>> --- /dev/null
-> >>> +++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> >>> @@ -0,0 +1,227 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0
-> >>> +/*
-> >>> + * Test soft offline behavior for HugeTLB pages:
-> >>> + * - if enable_soft_offline =3D 0, hugepages should stay intact and =
-soft
-> >>> + *   offlining failed with EINVAL.
-> >>
-> >> s/failed with EINVAL/failed with EOPNOTSUPP/g
-> >
-> > To be fixed in v6.
-> >
-> >>
-> >>> + * - if enable_soft_offline =3D 1, a hugepage should be dissolved an=
-d
-> >>> + *   nr_hugepages/free_hugepages should be reduced by 1.
-> >>> + *
-> >>> + * Before running, make sure more than 2 hugepages of default_hugepa=
-gesz
-> >>> + * are allocated. For example, if /proc/meminfo/Hugepagesize is 2048=
-kB:
-> >>> + *   echo 8 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-> >>> + */
-> >>> +
-> >> ...
-> >>> +static void test_soft_offline_common(int enable_soft_offline)
-> >>> +{
-> >>> +     int fd;
-> >>> +     int expect_errno =3D enable_soft_offline ? 0 : EOPNOTSUPP;
-> >>> +     struct statfs file_stat;
-> >>> +     unsigned long hugepagesize_kb =3D 0;
-> >>> +     unsigned long nr_hugepages_before =3D 0;
-> >>> +     unsigned long nr_hugepages_after =3D 0;
-> >>> +     int ret;
-> >>> +
-> >>> +     ksft_print_msg("Test soft-offline when enabled_soft_offline=3D%=
-d\n",
-> >>> +                    enable_soft_offline);
-> >>> +
-> >>> +     fd =3D create_hugetlbfs_file(&file_stat);
-> >>> +     if (fd < 0) {
-> >>> +             ksft_exit_fail_msg("Failed to create hugetlbfs file\n")=
-;
-> >>> +             return;
-> >>> +     }
-> >>> +
-> >>> +     hugepagesize_kb =3D file_stat.f_bsize / 1024;
-> >>> +     ksft_print_msg("Hugepagesize is %ldkB\n", hugepagesize_kb);
-> >>> +
-> >>> +     if (set_enable_soft_offline(enable_soft_offline)) {
-> >>> +             ksft_exit_fail_msg("Failed to set enable_soft_offline\n=
-");
-> >>
-> >> Call destroy_hugetlbfs_file() in error path?
-> >
-> > As the counterpart of destroy_hugetlbfs_file, I think the test only
-> > needs to close(fd). Will add it in v6.
-> >
-> >>
-> >>> +             return;
-> >>> +     }
-> >>> +
-> >>> +     if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_before) !=
-=3D 0) {
-> >>> +             ksft_exit_fail_msg("Failed to read nr_hugepages\n");
-> >>> +             return;
-> >>> +     }
-> >>> +
-> >>> +     ksft_print_msg("Before MADV_SOFT_OFFLINE nr_hugepages=3D%ld\n",
-> >>> +                    nr_hugepages_before);
-> >>> +
-> >>> +     ret =3D do_soft_offline(fd, 2 * file_stat.f_bsize, expect_errno=
-);
-> >>> +
-> >>> +     if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_after) !=
-=3D 0) {
-> >>> +             ksft_exit_fail_msg("Failed to read nr_hugepages\n");
-> >>> +             return;
-> >>> +     }
-> >>> +
-> >>> +     ksft_print_msg("After MADV_SOFT_OFFLINE nr_hugepages=3D%ld\n",
-> >>> +             nr_hugepages_after);
-> >>> +
-> >>> +     if (enable_soft_offline) {
-> >>> +             if (nr_hugepages_before !=3D nr_hugepages_after + 1) {
-> >>> +                     ksft_test_result_fail("MADV_SOFT_OFFLINE should=
- reduced 1 hugepage\n");
-> >>> +                     return;
-> >>> +             }
-> >>> +     } else {
-> >>> +             if (nr_hugepages_before !=3D nr_hugepages_after) {
-> >>> +                     ksft_test_result_fail("MADV_SOFT_OFFLINE reduce=
-d %lu hugepages\n",
-> >>> +                             nr_hugepages_before - nr_hugepages_afte=
-r);
-> >>> +                     return;
-> >>> +             }
-> >>> +     }
-> >>> +
-> >>> +     ksft_test_result(ret =3D=3D 0,
-> >>> +                      "Test soft-offline when enabled_soft_offline=
-=3D%d\n",
-> >>> +                      enable_soft_offline);
-> >>
-> >> Call destroy_hugetlbfs_file() when test finished ?
-> >
-> > Test can just close(fd) once nr_hugepages_after is read.
->
-> I'm sorry but I can't find the code to call close(fd) after nr_hugepages_=
-after is read.
+Correctable memory errors are very common on servers with large
+amount of memory, and are corrected by ECC, but with two
+pain points to users:
+1. Correction usually happens on the fly and adds latency overhead
+2. Not-fully-proved theory states excessive correctable memory
+   errors can develop into uncorrectable memory error.
 
-Sorry, I meant in v6 I will add close(fd) after nr_hugepages_after.
+Soft offline is kernel's additional solution for memory pages
+having (excessive) corrected memory errors. Impacted page is migrated
+to healthy page if it is in use, then the original page is discarded
+for any future use.
 
-> IMO create_hugetlbfs_file() would fail to create a new hugetlb file later=
- if close(fd)
-> is not called when testing previous enable_soft_offline =3D 1 testcase. B=
-ecause a hugetlb
-> file with same name is already there. But I might miss something.
+The actual policy on whether (and when) to soft offline should be
+maintained by userspace, especially in case of an 1G HugeTLB page.
+Soft-offline dissolves the HugeTLB page, either in-use or free, into
+chunks of 4K pages, reducing HugeTLB pool capacity by 1 hugepage.
+If userspace has not acknowledged such behavior, it may be surprised
+when later mmap hugepages MAP_FAILED due to lack of hugepages.
+In case of a transparent hugepage, it will be split into 4K pages
+as well; userspace will stop enjoying the transparent performance.
 
-Yes, this is an absolutely valid concern, and should be address in v6
-by adding close(fd) after nr_hugepages_after.
+In addition, discarding the entire 1G HugeTLB page only because of
+corrected memory errors sounds very costly and kernel better not
+doing under the hood. But today there are at least 2 such cases:
+1. GHES driver sees both GHES_SEV_CORRECTED and
+   CPER_SEC_ERROR_THRESHOLD_EXCEEDED after parsing CPER.
+2. RAS Correctable Errors Collector counts correctable errors per
+   PFN and when the counter for a PFN reaches threshold
+In both cases, userspace has no control of the soft offline performed
+by kernel's memory failure recovery.
 
->
-> Thanks.
-> .
->
+This patch series give userspace the control of softofflining any page:
+kernel only soft offlines raw page / transparent hugepage / HugeTLB
+hugepage if userspace has agreed to. The interface to userspace is a
+new sysctl called enable_soft_offline under /proc/sys/vm. By default
+enable_soft_line is 1 to preserve existing behavior in kernel.
+
+Changelog
+v5=> v6:
+* incorporate feedbacks from Miaohe Lin <linmiaohe@huawei.com>
+* add a ':' in soft offline log.
+* close hugetlbfs file descriptor in selftest.
+* no need to "return" after ksft_exit_fail_msg.
+
+v4 => v5:
+* incorporate feedbacks from Muhammad Usama Anjum
+  <usama.anjum@collabora.com>
+* refactor selftest to use what available in kselftest.h
+
+v3 => v4:
+* incorporate feedbacks from Miaohe Lin <linmiaohe@huawei.com>,
+  Andrew Morton <akpm@linux-foundation.org>, and
+  Oscar Salvador <osalvador@suse.de>.
+* insert a refactor commit to unify soft offline's logs to follow
+  "Soft offline: 0x${pfn}: ${message}" format.
+* some rewords in document: fail => will not perform.
+* v4 is still based on commit 83a7eefedc9b ("Linux 6.10-rc3"),
+  akpm/mm-stable.
+
+v2 => v3:
+* incorporate feedbacks from Miaohe Lin <linmiaohe@huawei.com>,
+  Lance Yang <ioworker0@gmail.com>, Oscar Salvador <osalvador@suse.de>,
+  and David Rientjes <rientjes@google.com>.
+* release potential refcount if enable_soft_offline is 0.
+* soft_offline_page() returns EOPNOTSUPP if enable_soft_offline is 0.
+* refactor hugetlb-soft-offline.c, for example, introduce
+  test_soft_offline_common to reduce repeated code.
+* rewrite enable_soft_offline's documentation, adds more details about
+  the cost of soft-offline for transparent and hugetlb hugepages, and
+  components that are impacted when enable_soft_offline becomes 0.
+* fix typos in commit messages.
+* v3 is still based on commit 83a7eefedc9b ("Linux 6.10-rc3").
+
+v1 => v2:
+* incorporate feedbacks from both Miaohe Lin <linmiaohe@huawei.com> and
+  Jane Chu <jane.chu@oracle.com>.
+* make the switch to control all pages, instead of HugeTLB specific.
+* change the API from
+  /sys/kernel/mm/hugepages/hugepages-${size}kB/softoffline_corrected_errors
+  to /proc/sys/vm/enable_soft_offline.
+* minor update to test code.
+* update documentation of the user control API.
+* v2 is based on commit 83a7eefedc9b ("Linux 6.10-rc3").
+
+Jiaqi Yan (4):
+  mm/memory-failure: refactor log format in soft offline code
+  mm/memory-failure: userspace controls soft-offlining pages
+  selftest/mm: test enable_soft_offline behaviors
+  docs: mm: add enable_soft_offline sysctl
+
+ Documentation/admin-guide/sysctl/vm.rst       |  32 +++
+ mm/memory-failure.c                           |  38 ++-
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   1 +
+ .../selftests/mm/hugetlb-soft-offline.c       | 228 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   4 +
+ 6 files changed, 296 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/hugetlb-soft-offline.c
+
+-- 
+2.45.2.741.gdbec12cfda-goog
+
 
