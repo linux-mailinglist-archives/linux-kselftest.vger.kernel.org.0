@@ -1,91 +1,172 @@
-Return-Path: <linux-kselftest+bounces-12783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D80B6917E8D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 12:43:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EE3A917F4B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 13:14:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 154A51C20EDC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 10:43:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1F8A1C2239D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 11:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086C218306C;
-	Wed, 26 Jun 2024 10:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE0F17E45E;
+	Wed, 26 Jun 2024 11:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6/KVl26"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="h9AVUdF8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07711822F9;
-	Wed, 26 Jun 2024 10:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5451817D356
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 11:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719398503; cv=none; b=h8s5UDVxfkzuzhINaSe/S8jJV5DYw/IPV8gTnLd1TPxxi8IQ2BgRcxYAf5hNLkrxHyq9A/4Aqge8p3fGc/g8CfdtgDKY7VuPWyXVppD+c0AG/ujT2Kn+qsws0G1ng/wXv658SEwW//upE6NrZjpGP45A08hq9w+B2L3XfNv1h0o=
+	t=1719400477; cv=none; b=fAq/VCwX63EyeJ1/s65lpn6epWvDoa1+zvLOfIse1fFUP7Y10uzzJBuZUQGYEa16fjQqBImH2S/1QOOA4x4Ln2y0xUV9WqCs3vSvZmYlkIeTCYXdlA0np7idggFwfwyO0sTM2lYENNT0bLJlCvrKqGC0ggn/Bh/0UTxoo2vz98I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719398503; c=relaxed/simple;
-	bh=5liAa5eq+JjIRvMH4LLV+J2ftrJA8xP0V0652DuHtkE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nEmbitIYYN0PNBGqz6zD6TSThwGlox9iqBdvWDrQUVQE/UhaiRFetmfe9F5XrTgGlHD2uSyQJZEs5SxymDoTJAZgkOHPN/mC3y4AQtvW7M9PnSj52Vu170zbTtIMcwzvjCWOkIV3NBBtLUNVS9lS0H/9mTshj5zpLSnk0ZPJNd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6/KVl26; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A620DC32786;
-	Wed, 26 Jun 2024 10:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719398503;
-	bh=5liAa5eq+JjIRvMH4LLV+J2ftrJA8xP0V0652DuHtkE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U6/KVl26xDBLftI1+kDRvccEqK2MWbddiTESoO0Esin9P86fdZ7jGHqry8xatNikm
-	 iGGX8Aws55BlWxKicoIsQDu5vOUFMSe9dB2elSQlDKOzahCVEvl5ReiVDpyW6R1Mg0
-	 N63h+53UB634bkgUhbHsKTV8L0MjgOP1YSGRf+WNmUMsLJZ2rP87g3AqDpXPJdPRRm
-	 Gl9LjvCvHi8qNIV0/7c+9atP/HzS/55sQbny3kl9anMD/mE1924kKfpeteQQ7Ct2pB
-	 F4F9y1qpdcnpav2mazBGZaxPE64hEklMGk/byd1lyWNNazEafJjxWgOheX5bmRg+96
-	 RFtHDhv/W3Oag==
-Date: Wed, 26 Jun 2024 11:41:38 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: ivan.orlov0322@gmail.com, perex@perex.cz, tiwai@suse.com,
-	shuah@kernel.org, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/alsa:Add memset to initialize memory
-Message-ID: <755d4876-9ce5-436e-aeeb-200f02ad7819@sirena.org.uk>
-References: <20240626095817.5037-1-zhujun2@cmss.chinamobile.com>
+	s=arc-20240116; t=1719400477; c=relaxed/simple;
+	bh=QxJ6Ryg0MTGf1ol2NkihM25bbyjZ46x5noyiSJpXA5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ufte4/CjH9rzxdgeyKCx3B92EkvTty7C015k83myynbNJpb2XVvQyLB2Bp42N4nh+VYP9glNrmFETTLDLU65z/QpuhD/3c4cZ4scXjmwGCDITn6dWc4Q3rx5o7PsDVqXJ+ZhUmC555T2USukofiP7scbMYRA8JT+iIj1TCa6rug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=h9AVUdF8; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57d4ee2aaabso114650a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 04:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1719400474; x=1720005274; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EtgNgXw4xx+u3otM9wLzx6tVvs8OZ+sqt5uPSGOj0/8=;
+        b=h9AVUdF86aQFnEBTDVJTpNaUDe6H52Xsi9ulCPMSQ15LhujD6yb5M/hlENLB/cb4aW
+         gZ1gCDP1MxZJWA+j/Q0Uv3CCL+guwnAv4v9l4RE3a8Wjfen4xDAqeO0m8I3tEdKfryQy
+         l/pKWL5IHUKu0N/OMnnaM/iwp/Td9ZTTyt6eKtzUAdX8b+69YiMNwSFtjES5YopOr75q
+         CrRK6Q0imqsrBaFJEJVNPTDdIGYSLkBxDCmMn6rIzltxTxwugjd1x37qjP1aYeRJ0Xs6
+         Lzn6y1DE98I06KKNcim15PsRjsU5dTcpuFpGCEl3a4vwFIr+pcW8dVRYrM19zOO5eemK
+         CzZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719400474; x=1720005274;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EtgNgXw4xx+u3otM9wLzx6tVvs8OZ+sqt5uPSGOj0/8=;
+        b=h9LjVNGynQkKGwPW02m0xSrQUnMplhgy+rQK7zolgHJxaCGMJ/V7+GHewLvQ1L+oUS
+         RPpCoVQSlYYa02wvfit0FEepuoJusVqNl+YCOIsprbhM6qLNFY9hQg70HFKNEz9SqVMw
+         AG+kJb+tIrRJZKoKfXtSKc1JYUfm1sy8kIUd4BfBKSWJYRn1pVYwWxSMYo3Thzks31jx
+         TEL8a4UDbM+xztFcZYCuFzDszhuYdlMftnXkAPzuj0gQ0kMQhMeDGZZ9zPhrU9hHkPPT
+         uEty6Zf1g+AKQ7hEBQJHqtLtn1IGQoz7IiVAnhIVCNYKiMQIR/ggnVjdGMeTgFUuRuAk
+         vCaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPhVScP6PtIKUJSreUL8yE945jkekCAntSof6Z8gX1QFAGEGe7BgvjBVtMADqWb3a0hsruPZIxkarS67hHOP0l7J/OiXr8P8PntOHOzfKb
+X-Gm-Message-State: AOJu0YztxXZPaFD933hGryprUvaFXkqTOs/Na25gvSfaoiiKNxgZxQma
+	DP6vu7+QvmTgw9UAPSAdymJ/W+1BNWSm0P+zZ9eeOW0PXSfTf4CMcUnmqQNPbck=
+X-Google-Smtp-Source: AGHT+IGayyA9DDFhDYoFM+ga8k4lnKPETjVZJrjYalViZSne124FOI0Yd/seFB4YsVb6tDnNMrZMyg==
+X-Received: by 2002:a50:d79e:0:b0:57d:101f:ae9f with SMTP id 4fb4d7f45d1cf-57d4bdc76c9mr6673624a12.33.1719400473452;
+        Wed, 26 Jun 2024 04:14:33 -0700 (PDT)
+Received: from [192.168.51.243] ([78.128.78.220])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d303d7b26sm7088836a12.3.2024.06.26.04.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jun 2024 04:14:33 -0700 (PDT)
+Message-ID: <1d0483b9-13bc-426e-a57a-69044d5098c1@blackwall.org>
+Date: Wed, 26 Jun 2024 14:14:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="942wIzHHpXhuyjzx"
-Content-Disposition: inline
-In-Reply-To: <20240626095817.5037-1-zhujun2@cmss.chinamobile.com>
-X-Cookie: Results vary by individual.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v14 11/13] net: add SO_DEVMEM_DONTNEED setsockopt
+ to release RX frags
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240625195407.1922912-1-almasrymina@google.com>
+ <20240625195407.1922912-12-almasrymina@google.com>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20240625195407.1922912-12-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 25/06/2024 22:53, Mina Almasry wrote:
+> Add an interface for the user to notify the kernel that it is done
+> reading the devmem dmabuf frags returned as cmsg. The kernel will
+> drop the reference on the frags to make them available for reuse.
+> 
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+> 
+> v10:
+> - Fix leak of tokens (Nikolay).
+> 
+> v7:
+> - Updated SO_DEVMEM_* uapi to use the next available entry (Arnd).
+> 
+> v6:
+> - Squash in locking optimizations from edumazet@google.com. With his
+>    changes we lock the xarray once per sock_devmem_dontneed operation
+>    rather than once per frag.
+> 
+> Changes in v1:
+> - devmemtoken -> dmabuf_token (David).
+> - Use napi_pp_put_page() for refcounting (Yunsheng).
+> - Fix build error with missing socket options on other asms.
+> 
+> ---
+>   arch/alpha/include/uapi/asm/socket.h  |  1 +
+>   arch/mips/include/uapi/asm/socket.h   |  1 +
+>   arch/parisc/include/uapi/asm/socket.h |  1 +
+>   arch/sparc/include/uapi/asm/socket.h  |  1 +
+>   include/uapi/asm-generic/socket.h     |  1 +
+>   include/uapi/linux/uio.h              |  4 ++
+>   net/core/sock.c                       | 61 +++++++++++++++++++++++++++
+>   7 files changed, 70 insertions(+)
+> 
+
+FWIW,
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 
 
---942wIzHHpXhuyjzx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Jun 26, 2024 at 02:58:17AM -0700, Zhu Jun wrote:
-> Add memset to initialize the requested memory
-
-Why?
-
---942wIzHHpXhuyjzx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ78GIACgkQJNaLcl1U
-h9B6lwgAgO34y5xxu4pQjPXhvISych0YvoDsDFvW7n12BQ6Xmo80RCY4lQrxMs32
-BRKKoaUe3vux5+8mOjs7/skY3V43ToRyoN5gFIwXOf21Gg/EogUYxAKXYrd1MXai
-mlXG7ukuEbXf5g9UdxPeyj2bV71Ft/HOHnlflckQCJh+6xkpeMy+Gmq+fQF9+a1/
-mZkunXXibYE71ZeWGsyT7KaSRH7PJ9e8kCxeagDTiIorv3bah24w2+Mu1e/cD/xQ
-UPHCH+nvt8RMC+KQgC6t9yDZoytHKw5ulpN1nOcD/SKLt2a2FJmMkSlHTHJcIYRV
-JHfHD8h4U33BFJl6YFhbqWTDw7F6ng==
-=Zfgl
------END PGP SIGNATURE-----
-
---942wIzHHpXhuyjzx--
 
