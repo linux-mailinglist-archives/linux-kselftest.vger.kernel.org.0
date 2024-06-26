@@ -1,187 +1,204 @@
-Return-Path: <linux-kselftest+bounces-12810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE28D918343
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 15:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 32B9B918337
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 15:50:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 699861F21190
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 13:51:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A81321F212E7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 13:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B4D18EFE8;
-	Wed, 26 Jun 2024 13:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0926B18C329;
+	Wed, 26 Jun 2024 13:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M7TgyvOq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOY4waer"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786F818E755;
-	Wed, 26 Jun 2024 13:47:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EEF18A930;
+	Wed, 26 Jun 2024 13:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719409635; cv=none; b=YEGf4G0SDa+C1d2gy5fYZd8yIcziu92VBT6xALJkG/6NiOcjGbxUKRAeG9PQPhdOGnGv4tAYCgnxd5yBAcJkddX/h+ascP3nZnbbAayH4BgpgiQRfsfOCw/1pkTDM5nkW9aK0RDzvpW3xjLfRqFmFrANbi3d0EEg/eLx01L5gOM=
+	t=1719409631; cv=none; b=Nskh2wVHuRaa1O99Cj8Bm2HLncELHf9gg0S5cO2MFcWf+DJ5QWmj/ztOFLWN1l4l8ciQuY7JXlYUnYmvGsl9VASxHIctID9OA+uMiG7uHw6UjU2l3IUGF2WJ8DgYPPmgYVbEt7mGVws101olWQ31yrKIwXWeBs9anrWNFpZ5xZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719409635; c=relaxed/simple;
-	bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NPqwuL+s//UYPAZ8sBkQ2mDNJw94M/bHi+uageZJGGa+WtL3j5nq6J6H2kvaSdILv75kIcC/7+TD7WUQIYYLe/xi+2BZZJKcs7SzIb+6C55UyeV7uaIt418zdA+5NA6Y9HrzwgG0G1B71NNzWSyi3bps2U7mfDkAdJpF4eGvExI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M7TgyvOq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F55BC4AF07;
-	Wed, 26 Jun 2024 13:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719409635;
-	bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=M7TgyvOqh+G8JBHZHxNOGoIIsb0OsioBMMg+gOn3TNV2PLOLkJ4AFX/7QXQhW2132
-	 XYagHiEHIDF3QcAPTMADf7q5VPdhGTK7+owjeNWkzBJ1cXERnJ/1h1iykUccDUp4PE
-	 kuD1m9RrzITqb69QiZOIi/HxAY299c+0rPcgtu0J3NNyRRKFeEt6ndbKgLrReKiIKC
-	 wguo+WVHSMkOPKQiq7dWMNaB4ardr+pcIv2Rpi4IsAoT+ONvZ+YBv5mbuX82d2JhHw
-	 KXt2QnVFzV2gGVnLVKrRtAA2ERheboepDnc0EgKd8WTobmRObueqSzVRoAdBmWSofZ
-	 hIdu+Z7T9P6Fg==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 26 Jun 2024 15:46:34 +0200
-Subject: [PATCH HID v2 13/13] selftests/hid: add an infinite loop test for
- hid_bpf_try_input_report
+	s=arc-20240116; t=1719409631; c=relaxed/simple;
+	bh=rSsKiSc4dFI2tkoNlNTsDyIXyV57SbU85aojGhTzijM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IS4L1n5z0jO+9GfrS7x+Wa7lw9lsHTpb7S7XR6iot1aDA3Q/HIzX6bPm7ic4H1lEeodrZx5zyLFW1dNryAiVtf55rvRX5jPFj7iSinw5tyogS/a9X9ONHknpaPUWhGO0UTfRYhifi03+RetQSmuhRGjU94nZlVpb/H9+yiDS4CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOY4waer; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6fdd947967so486955566b.2;
+        Wed, 26 Jun 2024 06:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719409628; x=1720014428; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
+        b=MOY4waermEgQGuDE/Z8Y91XE2m4Ji5CPK4kC3p6Mnk2ayoMVI/SG65zt2wESlXtPfK
+         4KJ4dT4BFUpOpaqoqBlWyqtgZYxrT3/8odwLGRYevviDiMv3u7BAjD7RUzEyHt9YuKK5
+         PyXWs1hBKTH9vAuyEruOFF3/bHxu4fYyxjQDfEfEbzdkQ1G1fYGeJy8RNL/IUF816Hlz
+         8DMRrZjLvgY8p/ZJnJ4NUBnKKINfgZR8Qli/2ZiwTeDwklD+CYaVSCNTrIH/Mr/WvXQT
+         tZTWS4RHhJLwZZeQ+AJs86bufZTrzfKtVErT6dvxHXJQuZs4VFxORPXmfXFmDK01rV/i
+         kc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719409628; x=1720014428;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
+        b=Jnt35k//YwAVGuzHfZh8oJyhuoIesVL/tvbkqP0HEX8lnlYYeSrhRkx8Uz47TFmy3n
+         kCT2mmAk4/sMf1DMa4O0lGbfA5wwhDqD0FSCglggbXAzCO/UDnPedWOvbZbwqM9rlzPJ
+         EfqLAFhs3FbD6bisISS2jTTIhysCDFhbNfrzoRpxygkCR3Hkf9pk/kVmDJlPXjttsPCF
+         i0SQiGcf/K449qks1Sv77AJGFXWueLdGytrZ2igq43eECxIdhgw0XnBXOX2yUAglLdst
+         w5sme/tI2ApZ+uPfUfQoA7CirHzA7Xhh98WOwH1alnItst7faEuWNPTcgRtVFJKLS7Y6
+         aaFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVoYWzSe3SpUqdUjR/pFPb+AQ8AeNv6+vEvMb/FqwD1Jj/8rWL2+IT4AJtujG9kDovVVffMBBtAWAWjdodOZON+2mpYJo4c29u3bAG3cRyAzBtEtQt3KFN8KHk5I20ToPonF0rVhgBRe6YEhUnFfy2/nY8fUZooUev6k9iSU2y/8BMAKNNFWs245rr/OZlHApRW3vR2BDOI4CgWpWCAcVX2RCN6StbQPQiVQNx0upsDi6wXGX1JFHRRe/rAjEihGgNy7pJRWrtxIPs9FTb25FK90L8e+kYWWDzptlkH6AE3o+U1SPJzGLYfFB4QFHQNG5DA0OYjE/Yk1t3OLy5peSrFpj3DZN/YUVKM7ne8IrVCKunUcT8Fv2sewFa5Nl0f/pH5RrwFLCw5cLR5rD9iAdkkckIboLLpMrTNgT4eC1KmyG+g4wjBPGXju9FeykxzWr/gHQ3pi3eeJdldectuPPLgZFNve5eWRnnYzvUUmT73ZT9koxqV0yjXMkxAx6fpF+DgPiZuVQ==
+X-Gm-Message-State: AOJu0YxHsN5weWDKj5nJu5tI3DNP8gz9E11kO3w4rW4xJSJWUBRqFnQM
+	7RKQEuGE3D6RX391dTfXUL4lQ/V4+llJST0mSkd2z4Fl9tEMsB6m
+X-Google-Smtp-Source: AGHT+IGD5mGfND6mvQHeN5VakSdcpLJO5iAUu9YTrHEpvfoG3vNqvyJwqGy3yIJ4e8gaM2b8isOyjg==
+X-Received: by 2002:a17:907:c01a:b0:a72:8c5e:f3d with SMTP id a640c23a62f3a-a728c5e112amr201037566b.49.1719409628168;
+        Wed, 26 Jun 2024 06:47:08 -0700 (PDT)
+Received: from [192.168.42.3] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7244cbce5bsm425759166b.79.2024.06.26.06.47.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jun 2024 06:47:07 -0700 (PDT)
+Message-ID: <09bdd7e5-75ca-42d5-8e59-a8ec05da89c7@gmail.com>
+Date: Wed, 26 Jun 2024 14:47:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v13 11/13] net: add SO_DEVMEM_DONTNEED setsockopt
+ to release RX frags
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240625024721.2140656-1-almasrymina@google.com>
+ <20240625024721.2140656-12-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240625024721.2140656-12-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240626-hid_hw_req_bpf-v2-13-cfd60fb6c79f@kernel.org>
-References: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-In-Reply-To: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719409602; l=3521;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=coSvairEXZ/UoBj93IfzT1BpGcOK/jnPrORkflCNJ84=;
- b=y3R38nLnIx95jobpAICJH1TPSo58IZ3qiL3BnUPgxNlYvk6mTJ8bIWv2euPxrMe7T3qg3vOGa
- jOkMsJiAcShAU0XVpvS0VDk6ymvazKa9awoDZgpz/V6UVXz4BJjAvYA
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-We don't want this call to allow an infinite loop in HID-BPF, so let's
-have some tests.
+On 6/25/24 03:47, Mina Almasry wrote:
+> Add an interface for the user to notify the kernel that it is done
+> reading the devmem dmabuf frags returned as cmsg. The kernel will
+> drop the reference on the frags to make them available for reuse.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+The sock_devmem_dontneed loop is a bit crude, but that can
+be handled by follow up patches.
 
----
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
-no changes in v2
----
- tools/testing/selftests/hid/hid_bpf.c   | 41 +++++++++++++++++++++++++++++++++
- tools/testing/selftests/hid/progs/hid.c | 37 +++++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
-
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 36bbad8e0f9f..dc0408a831d0 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -1204,6 +1204,47 @@ TEST_F(hid_bpf, test_multiply_events)
- 	ASSERT_EQ(buf[1], 52);
- }
- 
-+/*
-+ * Call hid_bpf_input_report against the given uhid device,
-+ * check that the program is not making infinite loops.
-+ */
-+TEST_F(hid_bpf, test_hid_infinite_loop_input_report_call)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_test_infinite_loop_input_report" },
-+	};
-+	__u8 buf[10] = {0};
-+	int err;
-+
-+	LOAD_PROGRAMS(progs);
-+
-+	/* emit hid_hw_output_report from hidraw */
-+	buf[0] = 1; /* report ID */
-+	buf[1] = 2;
-+	buf[2] = 42;
-+
-+	uhid_send_event(_metadata, self->uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
-+	ASSERT_EQ(buf[0], 1);
-+	ASSERT_EQ(buf[1], 3);
-+
-+	/* read the data from hidraw: hid_bpf_try_input_report should work exactly one time */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, 6) TH_LOG("read_hidraw");
-+	ASSERT_EQ(buf[0], 1);
-+	ASSERT_EQ(buf[1], 4);
-+
-+	/* read the data from hidraw: there should be none */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(self->hidraw_fd, buf, sizeof(buf));
-+	ASSERT_EQ(err, -1) TH_LOG("read_hidraw");
-+}
-+
- /*
-  * Attach hid_insert{0,1,2} to the given uhid device,
-  * retrieve and open the matching hidraw node,
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 46feeb91d1d5..ee9bbbcf751b 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -561,3 +561,40 @@ SEC(".struct_ops.link")
- struct hid_bpf_ops test_multiply_events = {
- 	.hid_device_event = (void *)hid_test_multiply_events,
- };
-+
-+SEC("?struct_ops/hid_device_event")
-+int BPF_PROG(hid_test_infinite_loop_input_report, struct hid_bpf_ctx *hctx,
-+	     enum hid_report_type report_type, __u64 source)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 6 /* size */);
-+	__u8 buf[6];
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/*
-+	 * we have to use an intermediate buffer as hid_bpf_input_report
-+	 * will memset data to \0
-+	 */
-+	__builtin_memcpy(buf, data, sizeof(buf));
-+
-+	/* always forward the request as-is to the device, hid-bpf should prevent
-+	 * infinite loops.
-+	 * the return value is ignored so the event is passing to userspace.
-+	 */
-+
-+	hid_bpf_try_input_report(hctx, report_type, buf, sizeof(buf));
-+
-+	/* each time we process the event, we increment by one data[1]:
-+	 * after each successful call to hid_bpf_try_input_report, buf
-+	 * has been memcopied into data by the kernel.
-+	 */
-+	data[1] += 1;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct hid_bpf_ops test_infinite_loop_input_report = {
-+	.hid_device_event = (void *)hid_test_infinite_loop_input_report,
-+};
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 9abc4fe259535..040c66ac26244 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+...
+>   
+> +#ifdef CONFIG_PAGE_POOL
+> +static noinline_for_stack int
+> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +{
+> +	unsigned int num_tokens, i, j, k, netmem_num = 0;
+> +	struct dmabuf_token *tokens;
+> +	netmem_ref netmems[16];
+> +	int ret = 0;
+> +
+> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
+> +		return -EBADF;
+> +
+> +	if (optlen % sizeof(struct dmabuf_token) ||
+> +	    optlen > sizeof(*tokens) * 128)
+> +		return -EINVAL;
+> +
+> +	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
+> +	if (!tokens)
+> +		return -ENOMEM;
+> +
+> +	num_tokens = optlen / sizeof(struct dmabuf_token);
+> +	if (copy_from_sockptr(tokens, optval, optlen)) {
+> +		kvfree(tokens);
+> +		return -EFAULT;
+> +	}
+> +
+> +	xa_lock_bh(&sk->sk_user_frags);
+> +	for (i = 0; i < num_tokens; i++) {
+> +		for (j = 0; j < tokens[i].token_count; j++) {
+> +			netmem_ref netmem = (__force netmem_ref)__xa_erase(
+> +				&sk->sk_user_frags, tokens[i].token_start + j);
+> +
+> +			if (netmem &&
+> +			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
+> +				netmems[netmem_num++] = netmem;
+> +				if (netmem_num == ARRAY_SIZE(netmems)) {
+> +					xa_unlock_bh(&sk->sk_user_frags);
+> +					for (k = 0; k < netmem_num; k++)
+> +						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +					netmem_num = 0;
+> +					xa_lock_bh(&sk->sk_user_frags);
+> +				}
+> +				ret++;
+> +			}
+> +		}
+> +	}
+> +
+> +	xa_unlock_bh(&sk->sk_user_frags);
+> +	for (k = 0; k < netmem_num; k++)
+> +		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +
+> +	kvfree(tokens);
+> +	return ret;
+> +}
+> +#endif
 
 -- 
-2.44.0
-
+Pavel Begunkov
 
