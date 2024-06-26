@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-12782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC572917E7C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 12:42:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D80B6917E8D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 12:43:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78B6B283A6C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 10:42:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 154A51C20EDC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 10:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356F2180A95;
-	Wed, 26 Jun 2024 10:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086C218306C;
+	Wed, 26 Jun 2024 10:41:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhOnnaeI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6/KVl26"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABF51802B2;
-	Wed, 26 Jun 2024 10:41:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07711822F9;
+	Wed, 26 Jun 2024 10:41:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719398481; cv=none; b=umYznTLaWoQQfs+VJoMh8M/HBTSiyNT5VZyS3jNDP4hwzQi/JnSHDGp//UauXDOQNNESqeKXxKUoJqTa9f5yAN2CsnvXnTX0LpAJOEgYgyY/jUPq9KP3l+CP/QSX2KzyYN5aaOIcj/Rm7Dv9yvsSJz83yJCiFYqHzMoVmizg6gs=
+	t=1719398503; cv=none; b=h8s5UDVxfkzuzhINaSe/S8jJV5DYw/IPV8gTnLd1TPxxi8IQ2BgRcxYAf5hNLkrxHyq9A/4Aqge8p3fGc/g8CfdtgDKY7VuPWyXVppD+c0AG/ujT2Kn+qsws0G1ng/wXv658SEwW//upE6NrZjpGP45A08hq9w+B2L3XfNv1h0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719398481; c=relaxed/simple;
-	bh=8JRrbvdAtdMCg9rjhTDzqTVZ64Nzi3Z/WEFd3S5PQqo=;
+	s=arc-20240116; t=1719398503; c=relaxed/simple;
+	bh=5liAa5eq+JjIRvMH4LLV+J2ftrJA8xP0V0652DuHtkE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jWz+no9CriuYpjxAGThvZGzA6YbFoSj03Wf48BS9jVz1BLrg2OvzZ/m96YMdRF+9wBNbmAZ5T3fOGvNHKTFsncYump4+v5gImI8BJrXhL5N03kk4azCBygdo065LImwIYlPET7gwm6ds2wZ7VMshzdqcUcq3bN29PdEMNShBG1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhOnnaeI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D99C32786;
-	Wed, 26 Jun 2024 10:41:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nEmbitIYYN0PNBGqz6zD6TSThwGlox9iqBdvWDrQUVQE/UhaiRFetmfe9F5XrTgGlHD2uSyQJZEs5SxymDoTJAZgkOHPN/mC3y4AQtvW7M9PnSj52Vu170zbTtIMcwzvjCWOkIV3NBBtLUNVS9lS0H/9mTshj5zpLSnk0ZPJNd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6/KVl26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A620DC32786;
+	Wed, 26 Jun 2024 10:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719398480;
-	bh=8JRrbvdAtdMCg9rjhTDzqTVZ64Nzi3Z/WEFd3S5PQqo=;
+	s=k20201202; t=1719398503;
+	bh=5liAa5eq+JjIRvMH4LLV+J2ftrJA8xP0V0652DuHtkE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PhOnnaeIJPx3r5BGpY96hElJRPB2pxJ9lzJcDXfyu098QzAKK+VHNKIKH8QnVH6g5
-	 7HSga5yRHl+fxUA19L+k6ObM79x1cvfzdQLOLVL4Go7s1dm0Ad3vKa1DvkRlrRgXo/
-	 ycoU0ImDKdFauY8uhhrh6X/565Jw7PXlCTY+4BtGpUMdA/3zJEBBzrxSzyggL4TmZX
-	 viSGYlv69h0FS5qfcaX7JhqflhQHt7JRYkg+pfvF2pTqTJWoX5WYcUN6WBxSMuOJEZ
-	 sGX2PjKbj6sXmKWkKgh/8gSS3Z+lsBcaEuDA/8ecJn7fDLvBr8ZTY5eWy7pWVPi0E4
-	 Eqpqodvdr9v8w==
-Date: Wed, 26 Jun 2024 11:41:16 +0100
+	b=U6/KVl26xDBLftI1+kDRvccEqK2MWbddiTESoO0Esin9P86fdZ7jGHqry8xatNikm
+	 iGGX8Aws55BlWxKicoIsQDu5vOUFMSe9dB2elSQlDKOzahCVEvl5ReiVDpyW6R1Mg0
+	 N63h+53UB634bkgUhbHsKTV8L0MjgOP1YSGRf+WNmUMsLJZ2rP87g3AqDpXPJdPRRm
+	 Gl9LjvCvHi8qNIV0/7c+9atP/HzS/55sQbny3kl9anMD/mE1924kKfpeteQQ7Ct2pB
+	 F4F9y1qpdcnpav2mazBGZaxPE64hEklMGk/byd1lyWNNazEafJjxWgOheX5bmRg+96
+	 RFtHDhv/W3Oag==
+Date: Wed, 26 Jun 2024 11:41:38 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Zhu Jun <zhujun2@cmss.chinamobile.com>
 Cc: ivan.orlov0322@gmail.com, perex@perex.cz, tiwai@suse.com,
 	shuah@kernel.org, linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/alsa:Replace malloc with calloc
-Message-ID: <f6a18c7c-8a7a-43c9-80af-b3ecc7f5d6bc@sirena.org.uk>
-References: <20240626095409.4908-1-zhujun2@cmss.chinamobile.com>
+Subject: Re: [PATCH] selftests/alsa:Add memset to initialize memory
+Message-ID: <755d4876-9ce5-436e-aeeb-200f02ad7819@sirena.org.uk>
+References: <20240626095817.5037-1-zhujun2@cmss.chinamobile.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,45 +57,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Pq6Hk9X7r8UpRpuz"
+	protocol="application/pgp-signature"; boundary="942wIzHHpXhuyjzx"
 Content-Disposition: inline
-In-Reply-To: <20240626095409.4908-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20240626095817.5037-1-zhujun2@cmss.chinamobile.com>
 X-Cookie: Results vary by individual.
 
 
---Pq6Hk9X7r8UpRpuz
+--942wIzHHpXhuyjzx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2024 at 02:54:09AM -0700, Zhu Jun wrote:
-> Using calloc to handling memory allocation, calloc
-> can initialize the allocated memory
+On Wed, Jun 26, 2024 at 02:58:17AM -0700, Zhu Jun wrote:
+> Add memset to initialize the requested memory
 
->  		SKIP(return, "Can't read patterns. Probably, module isn't loaded");
-> =20
->  	card_name =3D malloc(127);
-> +	memset(card_name, 0, 127);
->  	ASSERT_NE(card_name, NULL);
->  	self->params.buffer_size =3D 16384;
->  	self->params.period_size =3D 4096;
+Why?
 
-The change does not match the changelog.
-
---Pq6Hk9X7r8UpRpuz
+--942wIzHHpXhuyjzx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ78EsACgkQJNaLcl1U
-h9ChTgf+JhG8Jj5uuS2NnzYVhJl9Fwjel+gvakwP0yLxm9A4FCfQkhSlmu7T1j1k
-xd3bgj2JYB9qJOFG/MG8P/CpSdbEj7oeNQWs9V4LQ9Kc469IXbLAvWa7IYip28lF
-YhJg62+x/VXqTAHahmlxeDHOq8FZjX60SMIPADtNaia6tXHAa9vWKzXHwgw1BbiB
-he2BR5x2a0oSSwqmWY3qrr3CYHjWrHoMBYX0XWeEWKUQ/tZF6+OaTrmnPJdPxl3z
-DHC0HHm3WjnL9/nhMLxSr7JJy6GxuuFDLEf0RaZdsLbdJCAERoruYDdkgU8BOvaz
-Yrx5ERtOOlR4vK7PZkUxeC1JmoJK+Q==
-=lroO
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ78GIACgkQJNaLcl1U
+h9B6lwgAgO34y5xxu4pQjPXhvISych0YvoDsDFvW7n12BQ6Xmo80RCY4lQrxMs32
+BRKKoaUe3vux5+8mOjs7/skY3V43ToRyoN5gFIwXOf21Gg/EogUYxAKXYrd1MXai
+mlXG7ukuEbXf5g9UdxPeyj2bV71Ft/HOHnlflckQCJh+6xkpeMy+Gmq+fQF9+a1/
+mZkunXXibYE71ZeWGsyT7KaSRH7PJ9e8kCxeagDTiIorv3bah24w2+Mu1e/cD/xQ
+UPHCH+nvt8RMC+KQgC6t9yDZoytHKw5ulpN1nOcD/SKLt2a2FJmMkSlHTHJcIYRV
+JHfHD8h4U33BFJl6YFhbqWTDw7F6ng==
+=Zfgl
 -----END PGP SIGNATURE-----
 
---Pq6Hk9X7r8UpRpuz--
+--942wIzHHpXhuyjzx--
 
