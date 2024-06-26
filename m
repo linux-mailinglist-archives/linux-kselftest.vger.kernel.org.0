@@ -1,151 +1,159 @@
-Return-Path: <linux-kselftest+bounces-12772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 157E79177EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 07:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3896791784C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 07:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C072B283198
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 05:08:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E75A8281351
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 05:49:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135AB13C810;
-	Wed, 26 Jun 2024 05:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VIyIwzd4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90329149E05;
+	Wed, 26 Jun 2024 05:49:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA77913D635
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 05:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C691442FF;
+	Wed, 26 Jun 2024 05:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719378514; cv=none; b=EJDD+7xiyj3JzXBZ8iiGB1rLJmy2KTDPdhiA4We2peCp2RG4Q6f0OsXmeyS6kYduCwUY2NJyfFUU0lq65QbxFIC0qU05gg85uLeVuf+Uq3wIj25NX2VLub3O/1VDVHR/indgAGAAFGah5Diewgtl/tOUhpqE7x7KSKQ3dPKVYLk=
+	t=1719380975; cv=none; b=YPKYi95hz+g6tdOxSAFc8N8kZ+oxnsh5PbKCeKa+9NXL98snbOnyqhsYTg+3NhAvmm2fsSIHGGejHUAurcwEVKFukI0XMS3VRzrrj1e88KFuD/PHIiVTmpS7WmkiXl5QYbM06Vyt12cznvc5jUY2SSzqgASkyErFJqnM19rpnpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719378514; c=relaxed/simple;
-	bh=6RTswbAavt5pcU+GjXWq0ODhw/9EICs853/4bjB6N8o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=H2j/gHiJWzcGXLvqY6KMt49wHrpWFDB9eE5pAY8OXM9q3a7RaVi3pd5eO2fRNVJesKwrqDbuOwMdzfVnXzSzOn6PyTjxa1FcwH+Z/w9wzf9vTe6FNIn3aGRhIBI8SYVC3KaNn0n2CX6W0Mje3jxzhFvVtODJPeM+f8mfzqTsstc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VIyIwzd4; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jiaqiyan.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e032d4cf26aso2115201276.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2024 22:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719378510; x=1719983310; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fs5YbFk0qJzpaxZmqawYh52QCdlQJr8uKPRepM7gFQs=;
-        b=VIyIwzd44aKZC7G4XzySnl/zVWyQhq1Owrj17ZvNhK0a4AyKc9CpoPpQIx/AD7qpLi
-         ZOo7Xwj0DuxHmAMpdjJAin2QIeXKXkM8Crg9itk6en/JZWL6B+PnaJj+4GhCGjfLdm+b
-         9a7ZNhVLz7KN6lzySDtGKlKU1jO+7w3fsYvMzyRp2G9H9YS/SwrTwpZLdJh2S5QHEw6I
-         uXGvSXTq953VN180wdsJt5AyEkYpOH/vImRR7WE9pebFEAANxGM9fagUBCHJpZytLSye
-         dctycQnz5mQJNzpPN6vh2ny+1N4wPog5L0OZHELZiUnCxjPG2cp+IjmuGZzUKpHZJASI
-         43Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719378510; x=1719983310;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fs5YbFk0qJzpaxZmqawYh52QCdlQJr8uKPRepM7gFQs=;
-        b=facXg78C6xWL5xaCtGCqeDSzU6NTVeMbAZ6Y7pz/xp8Bb2uIo4jFcvlj7R43eXREmc
-         nQBJuBmw3z72ZiPa9YZy+ZDWvCYZGYYd4RjctCzrZkambAb4BtlOHWbQmwpwEI2A2onf
-         BlLAwb8Fyq257Zs7m3Dg80wPd6KRauPq2nk/toZOzdkzSkC7ixqEhicO676ZA81E8IQb
-         ZetSedtonjBqMaEuTbbpby/ZI1vaGUCoG4SfrBOk1SUHiQ5nb/h9vnnJ9fgONYtPa0Ro
-         LnzaQYa4gS7vTOsczy/tC5ZAGagEgIAz9BMEh5OhpBtvV7sR/6NZOJ3mggeTALtgJRLf
-         kFlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8jh8FxoTF1RXzEjWAIDCDfbcMt7OdhZtTirKxRPkwq4qUG6jq6bQDHV9OdEChwoRvzA068ZlDiSrkihOALLrv+CNwRmN4Wq4a/zr+jHO2
-X-Gm-Message-State: AOJu0YwFBRFKa46R0VuiOawxxKOHXbAcY8ElIcjJcOapTBKmL0AW6sHL
-	Rss2MgP5MaMyZ0FmRVM6J9nGKjvvkiNeQd9yFNhLk0gW7V7SY+DJ0xFJCb3zkAOQISV1rXjVhZB
-	klYbhqCzt6A==
-X-Google-Smtp-Source: AGHT+IFbYtXNPHY4Pw0FRa6rRjfHtPjWM7CA5XFPN+LXvpcfxkrH7JF+YaAawTMCM5hKGPwKQTJAsq2tclvKYg==
-X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a05:6902:2b0a:b0:dff:83e:b259 with SMTP
- id 3f1490d57ef6-e0304040464mr362430276.6.1719378509753; Tue, 25 Jun 2024
- 22:08:29 -0700 (PDT)
-Date: Wed, 26 Jun 2024 05:08:18 +0000
-In-Reply-To: <20240626050818.2277273-1-jiaqiyan@google.com>
+	s=arc-20240116; t=1719380975; c=relaxed/simple;
+	bh=OqpFOb7gWh697oJ9QwobEt22wm59FAMqYCI1flbwIbc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OaqlYvPtH1HH/W8uaenXx097N6T+9MSgXVdlL3nx3Kumq8xsV6sknj/Zm/4BdRyhXguOT9V7wp2/0LkjR6nSm2szWlXJ8LPmXiNA6BgKhY41kY3oh1vUwQkdWFLJrRqFpinTnZdq8JJ3Ur3ZTPVNz32gBwHq4J1JmyX6ncvKLsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC647339;
+	Tue, 25 Jun 2024 22:49:56 -0700 (PDT)
+Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5147A3F6A8;
+	Tue, 25 Jun 2024 22:49:27 -0700 (PDT)
+From: Dev Jain <dev.jain@arm.com>
+To: shuah@kernel.org,
+	oleg@redhat.com
+Cc: mingo@kernel.org,
+	tglx@linutronix.de,
+	mark.rutland@arm.com,
+	ryan.roberts@arm.com,
+	broonie@kernel.org,
+	suzuki.poulose@arm.com,
+	Anshuman.Khandual@arm.com,
+	DeepakKumar.Mishra@arm.com,
+	aneesh.kumar@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dev Jain <dev.jain@arm.com>
+Subject: [PATCH v3 0/2] Add test to distinguish between thread's signal mask and ucontext_t
+Date: Wed, 26 Jun 2024 11:18:45 +0530
+Message-Id: <20240626054847.1463889-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240626050818.2277273-1-jiaqiyan@google.com>
-X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
-Message-ID: <20240626050818.2277273-5-jiaqiyan@google.com>
-Subject: [PATCH v6 4/4] docs: mm: add enable_soft_offline sysctl
-From: Jiaqi Yan <jiaqiyan@google.com>
-To: nao.horiguchi@gmail.com, linmiaohe@huawei.com
-Cc: jane.chu@oracle.com, rdunlap@infradead.org, ioworker0@gmail.com, 
-	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
-	corbet@lwn.net, osalvador@suse.de, rientjes@google.com, duenwen@google.com, 
-	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Add the documentation for soft offline behaviors / costs, and what
-the new enable_soft_offline sysctl is for.
+This patch series is motivated by the following observation:
 
-Acked-by: Oscar Salvador <osalvador@suse.de>
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
-Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
----
- Documentation/admin-guide/sysctl/vm.rst | 32 +++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Raise a signal, jump to signal handler. The ucontext_t structure dumped
+by kernel to userspace has a uc_sigmask field having the mask of blocked
+signals. If you run a fresh minimalistic program doing this, this field
+is empty, even if you block some signals while registering the handler
+with sigaction().
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index e86c968a7a0e..71463a7b3e2a 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -36,6 +36,7 @@ Currently, these files are in /proc/sys/vm:
- - dirtytime_expire_seconds
- - dirty_writeback_centisecs
- - drop_caches
-+- enable_soft_offline
- - extfrag_threshold
- - highmem_is_dirtyable
- - hugetlb_shm_group
-@@ -267,6 +268,37 @@ used::
- These are informational only.  They do not mean that anything is wrong
- with your system.  To disable them, echo 4 (bit 2) into drop_caches.
- 
-+enable_soft_offline
-+===================
-+Correctable memory errors are very common on servers. Soft-offline is kernel's
-+solution for memory pages having (excessive) corrected memory errors.
-+
-+For different types of page, soft-offline has different behaviors / costs.
-+- For a raw error page, soft-offline migrates the in-use page's content to
-+  a new raw page.
-+- For a page that is part of a transparent hugepage, soft-offline splits the
-+  transparent hugepage into raw pages, then migrates only the raw error page.
-+  As a result, user is transparently backed by 1 less hugepage, impacting
-+  memory access performance.
-+- For a page that is part of a HugeTLB hugepage, soft-offline first migrates
-+  the entire HugeTLB hugepage, during which a free hugepage will be consumed
-+  as migration target.  Then the original hugepage is dissolved into raw
-+  pages without compensation, reducing the capacity of the HugeTLB pool by 1.
-+
-+It is user's call to choose between reliability (staying away from fragile
-+physical memory) vs performance / capacity implications in transparent and
-+HugeTLB cases.
-+
-+For all architectures, enable_soft_offline controls whether to soft offline
-+memory pages.  When set to 1, kernel attempts to soft offline the pages
-+whenever it thinks needed.  When set to 0, kernel returns EOPNOTSUPP to
-+the request to soft offline the pages.  Its default value is 1.
-+
-+It is worth mentioning that after setting enable_soft_offline to 0, the
-+following requests to soft offline pages will not be performed:
-+- Request to soft offline pages from RAS Correctable Errors Collector.
-+- On ARM, the request to soft offline pages from GHES driver.
-+- On PARISC, the request to soft offline pages from Page Deallocation Table.
- 
- extfrag_threshold
- =================
+Here is what the man-pages have to say:
+
+sigaction(2): "sa_mask specifies a mask of signals which should be blocked
+(i.e., added to the signal mask of the thread in which the signal handler
+is invoked) during execution of the signal handler. In addition, the
+signal which triggered the handler will be blocked, unless the SA_NODEFER
+flag is used."
+
+signal(7): Under "Execution of signal handlers", (1.3) implies:
+
+"The thread's current signal mask is accessible via the ucontext_t
+object that is pointed to by the third argument of the signal handler."
+
+But, (1.4) states:
+
+"Any signals specified in act->sa_mask when registering the handler with
+sigprocmask(2) are added to the thread's signal mask.  The signal being
+delivered is also added to the signal mask, unless SA_NODEFER was
+specified when registering the handler.  These signals are thus blocked
+while the handler executes."
+
+There clearly is no distinction being made in the man pages between
+"Thread's signal mask" and ucontext_t; this logically should imply
+that a signal blocked by populating struct sigaction should be visible
+in ucontext_t.
+
+Here is what the kernel code does (for Aarch64):
+
+do_signal() -> handle_signal() -> sigmask_to_save(), which returns
+&current->blocked, is passed to setup_rt_frame() -> setup_sigframe() ->
+__copy_to_user(). Hence, &current->blocked is copied to ucontext_t
+exposed to userspace. Returning back to handle_signal(),
+signal_setup_done() -> signal_delivered() -> sigorsets() and
+set_current_blocked() are responsible for using information from
+struct ksignal ksig, which was populated through the sigaction()
+system call in kernel/signal.c:
+copy_from_user(&new_sa.sa, act, sizeof(new_sa.sa)),
+to update &current->blocked; hence, the set of blocked signals for the
+current thread is updated AFTER the kernel dumps ucontext_t to
+userspace.
+
+Assuming that the above is indeed the intended behaviour, because it
+semantically makes sense, since the signals blocked using sigaction()
+remain blocked only till the execution of the handler, and not in the
+context present before jumping to the handler (but nothing can be
+confirmed from the man-pages), the series introduces a test for
+mangling with uc_sigmask. I will send a separate series to fix the
+man-pages.
+
+The proposed selftest has been tested out on Aarch32, Aarch64 and x86_64.
+
+v2->v3:
+ - ucontext describes current state -> ucontext describes interrupted context
+ - Add a comment for blockage of USR2 even after return from handler
+ - Describe blockage of signals in a better way
+
+v1->v2:
+ - Replace all occurrences of SIGPIPE with SIGSEGV
+ - Fixed a mismatch between code comment and ksft log
+ - Add a testcase: Raise the same signal again; it must not be queued
+ - Remove unneeded <assert.h>, <unistd.h>
+ - Give a detailed test description in the comments; also describe the
+   exact meaning of delivered and blocked
+ - Handle errors for all libc functions/syscalls
+ - Mention tests in Makefile and .gitignore in alphabetical order
+
+v1:
+ - https://lore.kernel.org/all/20240607122319.768640-1-dev.jain@arm.com/
+
+Dev Jain (2):
+  selftests: Rename sigaltstack to generic signal
+  selftests: Add a test mangling with uc_sigmask
+
+ tools/testing/selftests/Makefile              |   2 +-
+ .../{sigaltstack => signal}/.gitignore        |   3 +-
+ .../{sigaltstack => signal}/Makefile          |   3 +-
+ .../current_stack_pointer.h                   |   0
+ .../selftests/signal/mangle_uc_sigmask.c      | 194 ++++++++++++++++++
+ .../sas.c => signal/sigaltstack.c}            |   0
+ 6 files changed, 199 insertions(+), 3 deletions(-)
+ rename tools/testing/selftests/{sigaltstack => signal}/.gitignore (57%)
+ rename tools/testing/selftests/{sigaltstack => signal}/Makefile (53%)
+ rename tools/testing/selftests/{sigaltstack => signal}/current_stack_pointer.h (100%)
+ create mode 100644 tools/testing/selftests/signal/mangle_uc_sigmask.c
+ rename tools/testing/selftests/{sigaltstack/sas.c => signal/sigaltstack.c} (100%)
+
 -- 
-2.45.2.741.gdbec12cfda-goog
+2.34.1
 
 
