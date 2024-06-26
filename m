@@ -1,109 +1,120 @@
-Return-Path: <linux-kselftest+bounces-12786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B1A7918056
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 13:56:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF049180D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 14:19:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E67C1F289CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 11:56:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AE4C28AFB9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 12:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504AA180A76;
-	Wed, 26 Jun 2024 11:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SbWwYXXl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4182B181326;
+	Wed, 26 Jun 2024 12:19:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7D21802B2
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2024 11:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6AE17F51C;
+	Wed, 26 Jun 2024 12:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719402983; cv=none; b=dCobVDl3myj/cQ0Ygbm4YiPMLLcoxn8QZMv8ur/lANpfgDeEfBLhyfILG7yP9Vd6Rv45B6kYoIFpbQXf673Wo7Xps2kpotr+V1/fISAvKh20+ohCg96fqgazCQ7Eaj75NHfUkrmVb83K3uYf7HxcvGfq3wkKFTf6S2uRNIj0o1k=
+	t=1719404354; cv=none; b=uTOKvZ+NcGHYOZYbChiDaDwnCojjim67N6mbHNPXU+b2C/7qTVXMUQt2BbuoqlYqR2t0L7vSYIIwVUbOFb3TF8qULe/zEnm07awb/3MMQe/dsD2P0kr3GNmqJygN7xusMCu4NlL0Si4/YotNe5+H625LFZIf5uQlLeg5wXRCSLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719402983; c=relaxed/simple;
-	bh=lgWICHNHPuubQOwpPjvNZahWKQ8qhmpoYioYgoXyJo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRWXvf1xmOD28I22c0V2pUsxuMtEumVdNWbnSm9ML4toxeAJ7TCcs0snzip2wX4011WEEqJmllsUsaI4F9Sh+qBKATjAvlvwvphub3h4QhOg9um4YWInE8QTvDIGe7TH5/mXAGV/zMRy7ap341FPI2HIMKT3mqdc6ET7gAghQZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SbWwYXXl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719402980;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IeDy1CF3yxC2mGRBAE7SbitMy+vsryV2IcHQr9VWleA=;
-	b=SbWwYXXlItClmeVPEm8RAp/wTT3UVT6zaN6AI072lHBk6L8afN3BLQwm9JLbHeiU9vewdT
-	G7lbBF01yw0d5RfYKctdwj4YPmyI6bfn2ndVR/e8VgQJiRRtx5DqjzsSqxPQr267z8OvSu
-	Ex+n/UE41tpoL6VegBO6PYzvwWvWiNE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-517-ThZg6DUDNf6i1AC3i71SbA-1; Wed,
- 26 Jun 2024 07:56:14 -0400
-X-MC-Unique: ThZg6DUDNf6i1AC3i71SbA-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB2F11955EAB;
-	Wed, 26 Jun 2024 11:56:11 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.94])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 2E6E61956054;
-	Wed, 26 Jun 2024 11:56:06 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 26 Jun 2024 13:54:38 +0200 (CEST)
-Date: Wed, 26 Jun 2024 13:54:32 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: shuah@kernel.org, mingo@kernel.org, tglx@linutronix.de,
-	mark.rutland@arm.com, ryan.roberts@arm.com, broonie@kernel.org,
-	suzuki.poulose@arm.com, Anshuman.Khandual@arm.com,
-	DeepakKumar.Mishra@arm.com, aneesh.kumar@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] selftests: Add a test mangling with uc_sigmask
-Message-ID: <20240626115410.GA27271@redhat.com>
-References: <20240626054847.1463889-1-dev.jain@arm.com>
- <20240626054847.1463889-3-dev.jain@arm.com>
+	s=arc-20240116; t=1719404354; c=relaxed/simple;
+	bh=wnVtmWQ6PmYLBeKxwt/VIXua22iiG221nO/TfX26YHU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YF8BvUsSYvQxzk2+KXbdmE3YThSKbKvXYUvBekjMXajYOS1tQfEfT2C+dLtaAoNyy5iYCLEZcnMeFyMezXrohy10EoGGwcrdv2eJMl0hpjLAkASYhiE+NkQyP3lHFReE7Bz2vHRINBJkX+N9GJ/do8D05Dsjww/RwJH+YHAobH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-03 (Coremail) with SMTP id rQCowABXeiwWB3xm0Y2VEg--.247S2;
+	Wed, 26 Jun 2024 20:18:41 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	make24@iscas.ac.cn,
+	iii@linux.ibm.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: improve file descriptor closure handling
+Date: Wed, 26 Jun 2024 20:18:28 +0800
+Message-Id: <20240626121828.2859797-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240626054847.1463889-3-dev.jain@arm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowABXeiwWB3xm0Y2VEg--.247S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4ftw17uw43ZF1kWryrCrg_yoW8JFyUpa
+	y8tw1jkFyrWr17Jr18Gwn7XF10gF4kJry5CF47tFy3uw45XryxJF1Ska15Kr95KrZavan0
+	yw1ayr9Ikr4DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWUWVWUuwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUeVyIUUUUU
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-On 06/26, Dev Jain wrote:
->
-> +int main(int argc, char *argv[])
-> +{
-> +	struct sigaction act, act2;
-> +	sigset_t *set, *oldset;
+serial_test_fexit_stress() has a non-robust handling of file descriptor
+closure. If an error occurs, the function may exit without closing open
+file descriptors, potentially causing resource leaks.
 
-...
+Fix the issue by closing file descriptors in reverse order and starting
+from the last opened. Ensure proper closure even if an error occurs early.
 
-> +	set = malloc(sizeof(sigset_t *));
-> +	if (!set)
-> +		ksft_exit_fail_perror("malloc");
-> +
-> +	oldset = malloc(sizeof(sigset_t *));
+Fixes: 8fb9fb2f1728 ("selftests/bpf: Query BPF_MAX_TRAMP_LINKS using BTF")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/fexit_stress.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Why malloc() ?
-
-Can't you simply do
-
-	sigset_t set, oldset;
-
-and then use sigemptyset(&set) / etc ?
-
-Oleg.
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
+index 596536def43d..b1980bd61583 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
+@@ -49,11 +49,14 @@ void serial_test_fexit_stress(void)
+ 	ASSERT_OK(err, "bpf_prog_test_run_opts");
+ 
+ out:
+-	for (i = 0; i < bpf_max_tramp_links; i++) {
++	if (i >= bpf_max_tramp_links)
++		i = bpf_max_tramp_links - 1;
++	while (i >= 0) {
+ 		if (link_fd[i])
+ 			close(link_fd[i]);
+ 		if (fexit_fd[i])
+ 			close(fexit_fd[i]);
++		i--;
+ 	}
+ 	free(fd);
+ }
+-- 
+2.25.1
 
 
