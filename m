@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-12860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B2591A9CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 16:52:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AC891A9CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 16:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C07462825C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 14:52:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80432284429
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 14:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE20197A76;
-	Thu, 27 Jun 2024 14:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1FB19885B;
+	Thu, 27 Jun 2024 14:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="B1DbU8VJ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="gczdeiNf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2075.outbound.protection.outlook.com [40.107.236.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314D91514EE;
-	Thu, 27 Jun 2024 14:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841A51514EE;
+	Thu, 27 Jun 2024 14:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719499817; cv=fail; b=V7KZN9ou5LIAjLPg/c4POaTM+E9uA0Xt7Jo6ReN3BCjUH+Z7TXtnx3C2w9DLAQU07g0FvGwaP0s9GJkwis+xefD+5TBzTlHEB4alFK3FJs+VELWPsUYm68f1F2oGXekVmRRKiL8J2NP7G1AYp2bnRRaCWHUZqp9Cfip+4kk1UDY=
+	t=1719499825; cv=fail; b=RscF1Z2eGDwdA+DWSYsvZ9zT2cYvhdqdoeiclsBxjuKAItLwaTG7XXoqaDAFHm94PPU9apWDHmQrletrMKvtz5897kK9aBwsSuKdXbPLPdd13lWVQ+6u4c+B5yuAyFZi0uL0EnNxeYfIYlnOPtiVBaBRHR0BCdQ/Rfe7UFVwKek=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719499817; c=relaxed/simple;
-	bh=1ER9F8Nc6O25JXIqbiwPmmMnw5hG2w9Xbs+Pn9AbN1A=;
+	s=arc-20240116; t=1719499825; c=relaxed/simple;
+	bh=3BiBV6z3cZVF8huW0vjaKRGbRfsyIaJlYAqZ2timINA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q/EojjRNnfO9sV01ujvoHwG221MKXd9YUA++xraSQxRSVYp7l+P5FuO55jQRVWuznvT3arUrwGZzAqoIuuWstLmzpDxCGMMFlqehhiBTwuxTkzbMa7onAwNPI20AwcOU9eefFrHO6jIFxvQ7icy0grMunagYxk6EAJwJGB1aN8g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=B1DbU8VJ; arc=fail smtp.client-ip=40.107.220.45
+	 MIME-Version:Content-Type; b=C1fthqPxK6cc7RspHdC4v7AEja265s57JeE3YLYj4jmbe3mo9KTWQ3VFmvx6bp5kFBtPltSG4A5mLuCUvAmCOBwph/XB2h67WjJ2DjeudrliscAObfxTtxgkaP0jCYHbks8MXtNjIsn5rQ0MTYkDmlVpriD5sxZKefjVU8Uugbw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=gczdeiNf; arc=fail smtp.client-ip=40.107.236.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DtNze17arHjcSXD4yCyCH1BYqZy0f+WXPsf+LcEQSpAUOgw0k9GWxSElOqM1jH7LyHfmFt+WSt9fU0hAS79yNtJnh4Iar76Iq/pwVtvtBXa07KcVfZmUgCAWpQvVXLt/xTvr3naxlMrsxC+8hIs1yabUrBY/3Ey3WbQblVscIX9uuJCEaUwcVVN3tJAUSF7O4kOetKDCQAapj4pCcKuOENTnng2qs+iOs9xjddtripbRCuTrQHYBdfptjb830ePTzHlCpcVfz2dC25udtkb/CWKH91RSMA6P74YeBJRWLOqo9sMEM2XkRO5JKnrXKQCnN3wwFWtcGwa0EV2cpLfcgg==
+ b=UxhYHr1FWwdRoV/ELkLw3yngWoumwozwNbGXz1j508+OwHB8jmGMFOR2lJwQ9bDbFInRezdhn1CgQDdjqiofLBSAqsZ1sb5O0t07uMrb9BlXax+N1+evSnzRcDhOQPykaRLlHKQU5s00r9hnkAvbQKnrVQJxthlUJ7WK5CBK4KiBcAhVz2WQfwkl0XdDdMxHLFDN/x5SAckAymcUVI3/npuw2YddmHJwV3ZUYqYDcRfS64nvPjNqJ80SCZAPgaVjwhkap0zHDKMcXD7E8MleuLvI6XLTfqZKHyFhKX9c1fZNFnPklcby2ZjIEpFEDI9SmgGJJl0NcaTUEQ4X923RAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0hDTKGw+NIaZglVPeNcnnWDO83EzK1dFhVkge87ZpHQ=;
- b=WeZrlHELMUNrfaVERcQMWBUpGk6GDZzoVGa5x2pgMcvfZ3KmJTyZo7auGiWEzGP+a3T8kPo3sJ/PnqGeMNMSs0EdnL4tMneHvr897Z5IV87LYKp4E4E6pbLKRJwGoPTsyBvtyf33kRE0rBAYW5SeDjh8GZfQ9Cd87BLuoUNXGxRCfKCxxsNHeyYLWwmFqbZqM/nDeuMXQdXprWuLKH7yeBHrARn82WYhvFf/MJfrx/VkhXxCP1SD3K74ZjqdnA/q6nqH/q6zal4rrXevVqKasBOUvFro6k4RipK0/xruUqwkgPwVc+4OPMoCmL2zn2RwucjC2Z3iK23JH/E8xOcD/w==
+ bh=O+Ja5Q7JldMDAIgiy+s7yGatQJaSNmspwBWVPgmTcAs=;
+ b=cLOgR36Aye2kTD0n2sj30/AGnAAj0sRsIOL52Hq82XRHfzHe0eDPZk1EUTUPcd04GwhHNk7JVObLnSapNd3nS9dY8wNbp4Y/uFExCepKwkzHjTnYKd9KU3nJF9eGPgNtZN1AgX+NfF5h8e70X1JnMCYi/iQZ5+gXESDLBp07OGG/mzCbWskSi7mxa67Xc7vnyzymGPk3v2Qj40LAYlx4r6cFJ7n3guwxDE9LQcWb57CTGppv7RfWdjRqVPQhHHP58Q7zvECCep2CrcbYQunBbqWNMXZwZu0xxhtdrv+QEXvjMtm/UMjo7+BmcDPveYioo+XLUu8IcpZC/Dp5V/0q/g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0hDTKGw+NIaZglVPeNcnnWDO83EzK1dFhVkge87ZpHQ=;
- b=B1DbU8VJbHoiDyLN2CZ/nUuXL4NvTuhhP2XVKWpRF0ON8LUAiy1EOMFQC26lDMRPzHEEL/iV+Pvfjrlhfb9Sn+yNx86GiKgPGd4V3lK3wK07NYuYPzw4kiAni4F8vWfoRljGnBKzC9rKOhljGoCt7CZZYIGUc3hCkMpkH/UUOntBNrbOu08hVeBWudp+V1dnEdBLeZtFDyPL9TFg3IVwhnrdGklJ+XXK2YfkAXKJXwTe/EeijHJ7fis49UE+Tf3uCPQ8WODC3+MWZkglDwHZstuVjjDNaRHmpEiOT861yEKAUJNSSS8rOwziHYZWEmxGAinWJoSwMxMID3h6yEl3oA==
-Received: from BYAPR21CA0016.namprd21.prod.outlook.com (2603:10b6:a03:114::26)
- by LV2PR12MB5991.namprd12.prod.outlook.com (2603:10b6:408:14f::9) with
+ bh=O+Ja5Q7JldMDAIgiy+s7yGatQJaSNmspwBWVPgmTcAs=;
+ b=gczdeiNfY4HxeX8aSmIxSKU+hgUSkGaan24qLpD6MyJLCo7M+Xp4tDSZjfzKeGfazlHkZB0VNH04M9YymkgJDmoxAYcIniV/5+tDZt1xZgC+AY/BMtfDe3S5DlpMMzQIOZQoU4ShIbOiRNjkjdaCPbIZievAr4aIe26ZL6VPty0stXGm4YpN9MoeDKKpEIyoSivKxsppyyD8jO53/GKjwyQ0dpFMrXxq6e7JWbD4ZuXK8GWGUIZjCyYN51JoU1EwZchcT9CpxG0zFoW37YRxsGbGvZtScBdCW/dCQPGeCSbV+okE6hyvpx1jZF9P0DZizjDdKP4mljId8ZZu4JxtRQ==
+Received: from CH0PR04CA0054.namprd04.prod.outlook.com (2603:10b6:610:77::29)
+ by SJ0PR12MB6759.namprd12.prod.outlook.com (2603:10b6:a03:44b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.26; Thu, 27 Jun
- 2024 14:50:05 +0000
-Received: from SJ1PEPF00002311.namprd03.prod.outlook.com
- (2603:10b6:a03:114:cafe::eb) by BYAPR21CA0016.outlook.office365.com
- (2603:10b6:a03:114::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.8 via Frontend
- Transport; Thu, 27 Jun 2024 14:50:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.34; Thu, 27 Jun
+ 2024 14:50:18 +0000
+Received: from DS3PEPF000099DC.namprd04.prod.outlook.com
+ (2603:10b6:610:77:cafe::1f) by CH0PR04CA0054.outlook.office365.com
+ (2603:10b6:610:77::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.26 via Frontend
+ Transport; Thu, 27 Jun 2024 14:50:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF00002311.mail.protection.outlook.com (10.167.242.165) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS3PEPF000099DC.mail.protection.outlook.com (10.167.17.198) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7677.15 via Frontend Transport; Thu, 27 Jun 2024 14:50:04 +0000
+ 15.20.7677.15 via Frontend Transport; Thu, 27 Jun 2024 14:50:18 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 27 Jun
- 2024 07:49:54 -0700
+ 2024 07:50:00 -0700
 Received: from yaviefel.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 27 Jun
- 2024 07:49:48 -0700
+ 2024 07:49:54 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,9 +84,9 @@ CC: Danielle Ratson <danieller@nvidia.com>, Petr Machata <petrm@nvidia.com>,
 	Benjamin Poirier <bpoirier@nvidia.com>, Shuah Khan <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, Simon Horman <horms@kernel.org>,
 	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 05/12] selftests: mirror: do_test_span_dir_ips(): Install accurate taps
-Date: Thu, 27 Jun 2024 16:48:42 +0200
-Message-ID: <c66248f2825a2669898534b0034da85ea4f94e5a.1719497773.git.petrm@nvidia.com>
+Subject: [PATCH net-next 06/12] selftests: mirror: mirror_test(): Allow exact count of packets
+Date: Thu, 27 Jun 2024 16:48:43 +0200
+Message-ID: <bbfa9e1f6a6aeaa15a03d4e824e7f2c960446053.1719497773.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <cover.1719497773.git.petrm@nvidia.com>
 References: <cover.1719497773.git.petrm@nvidia.com>
@@ -102,51 +102,51 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002311:EE_|LV2PR12MB5991:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa7c1fec-cfb0-4576-7bce-08dc96b86e30
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099DC:EE_|SJ0PR12MB6759:EE_
+X-MS-Office365-Filtering-Correlation-Id: a401c448-5f77-421c-1a81-08dc96b87669
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6+rYVa5x8YtUx+z3VQtyb2A2CQV62SirzKPkUW8mExts/Nuo8iYTbpQuY+nk?=
- =?us-ascii?Q?LeVDNRm9ecqwaWmiHF/wQY3UK/adkTbjtdnlkps71ClbMqrwB21NV9DVSg8G?=
- =?us-ascii?Q?VHwEa6xPB+mLvpxi/vmTuhmAyB6FIhAH1p5V97bXyvQcfv888oOUb3f87xa0?=
- =?us-ascii?Q?zibf1PbRcLc/50f+uIP/FegvuE1utqepsbpfjtirXu0K7gNYMDF8GTzd6Pfy?=
- =?us-ascii?Q?IvJ4rL3B1tMiCoXTTMIxGH0/yyG5kq5Mk+rmVleHfNfxkqrstize3lB1+3il?=
- =?us-ascii?Q?jJD+uGhLW4fBBOUOrlNDe3ohO97JyXSFuxFYRdivXBt/nFfivv2p2ZEwXf8e?=
- =?us-ascii?Q?eY/Bq8su44kIEVABWBTpUfFc901YyIP5C7dIy4cEmvew3c/zzW8i0K6T40qr?=
- =?us-ascii?Q?ibmMDAixZZT/hG5XDJSN444hcyT/1bUhX7vhc9mH4kK4mVWfa50OGW0xG03P?=
- =?us-ascii?Q?gFparceNut4HE6YlcvqUEKea/bhIoN6n0FomG6iswPAau141aW9f6lZS46tJ?=
- =?us-ascii?Q?Cs3vRopE2wTIf6aNCMfn+7q2y0Y7yOagS5Zom3miz9/6YNJ8f40/mKrMGXiO?=
- =?us-ascii?Q?WXXR3gR88Nm0sXx9aU0iNUfZdr3A+EUj3YuYvvqIRwImSnrJfMCm5mW/3cDW?=
- =?us-ascii?Q?xPYSXv1OkYAlcDVIiiBz6kLuE6THbkzgYgsBqoqikCUXtT/wyIdG/b7xp3Ky?=
- =?us-ascii?Q?NYGc1ly9gveitmIQGWyFw2jR6idTJiEAOeOG8YiEXnyqoOioUpKLFjeLkJtR?=
- =?us-ascii?Q?CMO4gb3v5CrBtYlZ7HKLD/4HvGuknnDf9iCjYF8VANDg0siEhcz5a+KY0fm3?=
- =?us-ascii?Q?wGKQns6JZAmDzZ34LHSUBL+t1UHv41PgyNP9fMVhgl/QdRVlSmQi6kzcS/0r?=
- =?us-ascii?Q?76Ghg8iHLZ8BG+pmS2SzvE+H4gSNVRFyJin4I4lLxOCoEfIqP3JVAGl+Ocr9?=
- =?us-ascii?Q?GT38dF4LDNZVfZwzplfpB06LHqDfjZ/cFAFY1KvgRvYh7Jc/RKdHzRxUQmzD?=
- =?us-ascii?Q?atm+kOkDFDAOpZrNGvLZWkru45mDpDTdMga3sRjgxVjphkyhunH5UB32l633?=
- =?us-ascii?Q?LJWWVZlrmo7cqlIX5j3REoDidXhSgcRfBRZ9R9QXqlPv8hz1KOAECp/rVYNl?=
- =?us-ascii?Q?9ttrclv3zmWUjkSdPy7VkEe99cAIPE268DtRX8j6cYhDD2Xzx+4tQ4Mn5nfG?=
- =?us-ascii?Q?tIBfLiWns+WabDUd0aPXfEt95gvoCZNl9cM5OgSm22IE1dnS5lqAnoG0Em8X?=
- =?us-ascii?Q?v2xbgF/BI9CzIp74FEob7BfNfbaWIMzL0iSVdizJ6o5GSI6u1lB29hCuSCbU?=
- =?us-ascii?Q?BKkC5qVJCLWwBVq1JfCazUAlpcp5TE790g2oR519ZcRiKE7TX7C77oV8Psrw?=
- =?us-ascii?Q?e5K90xEoPP1/yojzsFxBb8oz5nLkPH0f+4PvpCF7/l28LLBqUEw31lsj4+8h?=
- =?us-ascii?Q?Ky4kqNCIrKYrRCuxZv+VzJ9qOJMR7bJA?=
+	=?us-ascii?Q?Y7Iz+9YipxK2yPYO9KVBdCK/skBIbSOR5EjjyGcu0QFKGJKDhPg0BpgNYE4J?=
+ =?us-ascii?Q?z+4JTl5Ny4gRRKNJcVKhUHgvDoAf4Z7cwik2H2dTIEKxw2MSgywhcFoHYe13?=
+ =?us-ascii?Q?ZxbFCIgF4i19jG62FfbMb3tnhLWQB1/+7JKuyK2kURv7FoLTgR1ZxRZVRdDF?=
+ =?us-ascii?Q?VVZOdnIxITtVT/64+ddA+4G2jB1NfbMXXWUXtk89mk6IMRyrnmI71NvXVhap?=
+ =?us-ascii?Q?bECKcUviW6dnKXKqGOGNkN4YWcNZjCc+K5EIc1KZX04ltwySZLkDRt2OCkKe?=
+ =?us-ascii?Q?NIFnSXquESiGVJt2O4unrSt0IhNQmXg4QR3WrQYxmI2J67CcBC4MVhqKJibm?=
+ =?us-ascii?Q?VWAeVehxx4jm4prNj8HC8jnCpN9ZcjiRMtUBncieZs1qY6voM7+SXcMfVYDP?=
+ =?us-ascii?Q?hIbVELIk0LMCEIeZb29CyT1IvckgaMn2Wm6NRRx/ZSXCE3q/lJksNzSzsw/Z?=
+ =?us-ascii?Q?HJ9FmmvaISMXnBsgQd5SFv20cQaSoLrFZEEJsZRmV9gTRUpqKEwsAIgh8jcy?=
+ =?us-ascii?Q?L97t6r5MWwc5jr04Wh7YcMI8zSggWfBai6NGBNjJtU21vEtPTQK+jwxYskli?=
+ =?us-ascii?Q?WEXCPkFU2SAZwZkuHcw6daHSudOIjGlZQTjFiot12mzULdK4S4tSc72Gy11J?=
+ =?us-ascii?Q?zLucMmINaAsvqmAWPGuGQ35mM4q+Ym4mqlk2/hmWAVFhzz9n+G6MdTwuN7YI?=
+ =?us-ascii?Q?4dCnFQDH7/jdJSpdlnTmMYlATvly+MBH8nV3Pl6wENQuVzLCJvRwPEpH6G8e?=
+ =?us-ascii?Q?UNPB1Nb6MkkFUdDOiGeyap07VA/QccQhHUnoQf07967htZOJyy/PCICyDZoT?=
+ =?us-ascii?Q?vQhH1CrNPOd039j1nzQkaFkgv59DyKp+NdqYEi2J7ZWzDnNOPndjLyN61yRj?=
+ =?us-ascii?Q?LN855eRlaH7CGm6Cg2Tlv3FAIKWuh3h1fOk5mb3uh3fEy5l6MzjWgVnsnsf0?=
+ =?us-ascii?Q?x9yM4OK5YkQqnDF5sJw1Jxr/xLdzJliCDdiNxggZbUJKSUCJxPADhbeH70T/?=
+ =?us-ascii?Q?M2hcNKdmuT6oOTeTugxA2wumiwOYUZRkIJtaOJz/WRYWD4SdPMAdUpRQBSus?=
+ =?us-ascii?Q?0hI7rARqy6J2mQ8anudi1ugBI9Iz2nKNhfEhmGkJVZvjD+4kF7Nxcxzbse23?=
+ =?us-ascii?Q?Bwqm4M9MXfwsxYjttBwbmxu6cu0sNxZe0d4xgjf+87Q4vjYkI1ffIAAohGJw?=
+ =?us-ascii?Q?ief6Gv1fXtNN4zpWK7QvLWky/SfS2Wq6nL+30lEY43XzCQBbHHNzE8Uq9Vk8?=
+ =?us-ascii?Q?RPKrtnRCdAb9R4w3V6Y4UXcQ2RJtxYmUpf4Go/VTg0Xqn6o9thzwwUbx+nGc?=
+ =?us-ascii?Q?6SLhZkIZrsPf/O84WHGK8E35fIRsxkxQx8qMk0WWw23cLY14FdVG6f4j2NyU?=
+ =?us-ascii?Q?awhujMRdwvA++X/3VckzB4p1aKRfaLlBvKNZNk9AKximWElYOECTWneNNMmB?=
+ =?us-ascii?Q?WMSVuvrGEGfJDUTyyf0FX059xjOlcbgt?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2024 14:50:04.6431
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2024 14:50:18.2953
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa7c1fec-cfb0-4576-7bce-08dc96b86e30
+X-MS-Exchange-CrossTenant-Network-Message-Id: a401c448-5f77-421c-1a81-08dc96b87669
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002311.namprd03.prod.outlook.com
+	DS3PEPF000099DC.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5991
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6759
 
 The mirroring selftests work by sending ICMP traffic between two hosts.
 Along the way, this traffic is mirrored to a gretap netdevice, and counter
@@ -162,208 +162,127 @@ therefore simply use matchall, one uses flower to match on IP address.
 As a result, the selftests are noisy, because besides the primary ICMP
 traffic, any amount of other service traffic is mirrored as well.
 
-However, often the counter tap is installed at the remote end of the gretap
-tunnel. Since this is a SW-datapath scenario anyway, we can make the filter
-arbitrarily accurate.
+mirror_test() accommodated this noisiness by giving the counters an
+allowance of several packets. But in the previous patch, where possible,
+counter taps were changed to match only on an exact ICMP message. At least
+in those cases, we can demand an exact number of packets to match.
 
-Thus in this patch, add parameters forward_type and backward_type to
-several mirroring test helpers, as some other helpers already have. Then
-change do_test_span_dir_ips() to instead of installing one generic tap and
-using it for test in both directions, install the tap for each direction
-separately, matching on the ICMP type given by these parameters.
+Where the tap is installed on a connective netdevice, the exact matching is
+not practical (though with u32, anything is possible). In those places,
+there should still be some leeway -- and probably bigger than before,
+because experience shows that these tests are very noisy.
+
+To that end, change mirror_test() so that it can be either called with an
+exact number to expect, or with an expression. Where leeway is needed,
+adjust callers to pass a ">= 10" instead of mere 10.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 Reviewed-by: Danielle Ratson <danieller@nvidia.com>
 ---
- .../selftests/net/forwarding/mirror_gre.sh    | 12 +++++-----
- .../net/forwarding/mirror_gre_lib.sh          | 23 +++++++++++++++----
- .../net/forwarding/mirror_gre_neigh.sh        | 14 ++++++-----
- .../selftests/net/forwarding/mirror_lib.sh    | 15 +++++++++---
- 4 files changed, 44 insertions(+), 20 deletions(-)
+ .../net/forwarding/mirror_gre_bridge_1q_lag.sh     |  2 +-
+ .../selftests/net/forwarding/mirror_gre_changes.sh |  2 +-
+ .../selftests/net/forwarding/mirror_gre_lib.sh     |  2 +-
+ .../testing/selftests/net/forwarding/mirror_lib.sh | 14 +++++++++-----
+ .../selftests/net/forwarding/mirror_vlan.sh        |  2 +-
+ 5 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre.sh b/tools/testing/selftests/net/forwarding/mirror_gre.sh
-index 00def4b04145..b645cb8d696a 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre.sh
-@@ -91,17 +91,17 @@ test_two_spans()
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q_lag.sh b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q_lag.sh
+index c53148b1dc63..b719d24a4ae5 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q_lag.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q_lag.sh
+@@ -239,7 +239,7 @@ test_lag_slave()
+ 	setup_wait_dev $host_dev
+ 	$ARPING -I br1 192.0.2.130 -qfc 1
+ 	sleep 2
+-	mirror_test vrf-h1 192.0.2.1 192.0.2.18 $host_dev 1 10
++	mirror_test vrf-h1 192.0.2.1 192.0.2.18 $host_dev 1 ">= 10"
  
- 	mirror_install $swp1 ingress gt4 "matchall $tcflags"
- 	mirror_install $swp1 egress gt6 "matchall $tcflags"
--	quick_test_span_gre_dir gt4
--	quick_test_span_gre_dir gt6
-+	quick_test_span_gre_dir gt4 8 0
-+	quick_test_span_gre_dir gt6 0 8
+ 	# Test lack of connectivity when both slaves are down.
+ 	ip link set dev $up_dev down
+diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
+index 3796f4256c9c..b57fb9f069f4 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_changes.sh
+@@ -81,7 +81,7 @@ test_span_gre_ttl()
  
- 	mirror_uninstall $swp1 ingress
--	fail_test_span_gre_dir gt4
--	quick_test_span_gre_dir gt6
-+	fail_test_span_gre_dir gt4 8 0
-+	quick_test_span_gre_dir gt6 0 8
+ 	ip link set dev $tundev type $type ttl 50
+ 	sleep 2
+-	mirror_test v$h1 192.0.2.1 192.0.2.2 $h3 77 10
++	mirror_test v$h1 192.0.2.1 192.0.2.2 $h3 77 ">= 10"
  
- 	mirror_install $swp1 ingress gt4 "matchall $tcflags"
- 	mirror_uninstall $swp1 egress
--	quick_test_span_gre_dir gt4
--	fail_test_span_gre_dir gt6
-+	quick_test_span_gre_dir gt4 8 0
-+	fail_test_span_gre_dir gt6 0 8
- 
- 	mirror_uninstall $swp1 ingress
- 	log_test "two simultaneously configured mirrors ($tcflags)"
+ 	ip link set dev $tundev type $type ttl 100
+ 	tc filter del dev $h3 ingress pref 77
 diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-index 2bed2a4013aa..e49535ce1cdd 100644
+index e49535ce1cdd..cc3a0a3f83ba 100644
 --- a/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
 +++ b/tools/testing/selftests/net/forwarding/mirror_gre_lib.sh
-@@ -7,8 +7,11 @@ quick_test_span_gre_dir_ips()
- 	local tundev=$1; shift
- 	local ip1=$1; shift
- 	local ip2=$1; shift
-+	local forward_type=$1; shift
-+	local backward_type=$1; shift
+@@ -76,7 +76,7 @@ full_test_span_gre_dir_vlan_ips()
+ 	tc filter add dev $h3 ingress pref 77 prot 802.1q \
+ 		flower $vlan_match \
+ 		action pass
+-	mirror_test v$h1 $ip1 $ip2 $h3 77 10
++	mirror_test v$h1 $ip1 $ip2 $h3 77 '>= 10'
+ 	tc filter del dev $h3 ingress pref 77
  
--	do_test_span_dir_ips 10 h3-$tundev "$ip1" "$ip2"
-+	do_test_span_dir_ips 10 h3-$tundev "$ip1" "$ip2" \
-+			     "$forward_type" "$backward_type"
- }
- 
- fail_test_span_gre_dir_ips()
-@@ -84,8 +87,11 @@ full_test_span_gre_dir_vlan_ips()
- quick_test_span_gre_dir()
- {
- 	local tundev=$1; shift
-+	local forward_type=${1-8}; shift
-+	local backward_type=${1-0}; shift
- 
--	quick_test_span_gre_dir_ips "$tundev" 192.0.2.1 192.0.2.2
-+	quick_test_span_gre_dir_ips "$tundev" 192.0.2.1 192.0.2.2 \
-+				    "$forward_type" "$backward_type"
- }
- 
- fail_test_span_gre_dir()
-@@ -139,12 +145,15 @@ full_test_span_gre_stp_ips()
- 	local what=$1; shift
- 	local ip1=$1; shift
- 	local ip2=$1; shift
-+	local forward_type=$1; shift
-+	local backward_type=$1; shift
- 	local h3mac=$(mac_get $h3)
- 
- 	RET=0
- 
- 	mirror_install $swp1 ingress $tundev "matchall $tcflags"
--	quick_test_span_gre_dir_ips $tundev $ip1 $ip2
-+	quick_test_span_gre_dir_ips $tundev $ip1 $ip2 \
-+				    "$forward_type" "$backward_type"
- 
- 	bridge link set dev $nbpdev state disabled
- 	sleep 1
-@@ -152,7 +161,8 @@ full_test_span_gre_stp_ips()
- 
- 	bridge link set dev $nbpdev state forwarding
- 	sleep 1
--	quick_test_span_gre_dir_ips $tundev $ip1 $ip2
-+	quick_test_span_gre_dir_ips $tundev $ip1 $ip2 \
-+				    "$forward_type" "$backward_type"
- 
- 	mirror_uninstall $swp1 ingress
- 
-@@ -164,7 +174,10 @@ full_test_span_gre_stp()
- 	local tundev=$1; shift
- 	local nbpdev=$1; shift
- 	local what=$1; shift
-+	local forward_type=${1-8}; shift
-+	local backward_type=${1-0}; shift
- 
- 	full_test_span_gre_stp_ips "$tundev" "$nbpdev" "$what" \
--				   192.0.2.1 192.0.2.2
-+				   192.0.2.1 192.0.2.2 \
-+				   "$forward_type" "$backward_type"
- }
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_neigh.sh b/tools/testing/selftests/net/forwarding/mirror_gre_neigh.sh
-index 0f2c38eca2a3..0615f9244406 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_neigh.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_neigh.sh
-@@ -60,15 +60,17 @@ test_span_gre_neigh()
- 	local addr=$1; shift
- 	local tundev=$1; shift
- 	local direction=$1; shift
-+	local forward_type=$1; shift
-+	local backward_type=$1; shift
- 	local what=$1; shift
- 
- 	RET=0
- 
- 	ip neigh replace dev $swp3 $addr lladdr 00:11:22:33:44:55
- 	mirror_install $swp1 $direction $tundev "matchall $tcflags"
--	fail_test_span_gre_dir $tundev
-+	fail_test_span_gre_dir $tundev "$forward_type" "$backward_type"
- 	ip neigh del dev $swp3 $addr
--	quick_test_span_gre_dir $tundev
-+	quick_test_span_gre_dir $tundev "$forward_type" "$backward_type"
  	mirror_uninstall $swp1 $direction
- 
- 	log_test "$direction $what: neighbor change ($tcflags)"
-@@ -76,14 +78,14 @@ test_span_gre_neigh()
- 
- test_gretap()
- {
--	test_span_gre_neigh 192.0.2.130 gt4 ingress "mirror to gretap"
--	test_span_gre_neigh 192.0.2.130 gt4 egress "mirror to gretap"
-+	test_span_gre_neigh 192.0.2.130 gt4 ingress 8 0 "mirror to gretap"
-+	test_span_gre_neigh 192.0.2.130 gt4 egress 0 8 "mirror to gretap"
- }
- 
- test_ip6gretap()
- {
--	test_span_gre_neigh 2001:db8:2::2 gt6 ingress "mirror to ip6gretap"
--	test_span_gre_neigh 2001:db8:2::2 gt6 egress "mirror to ip6gretap"
-+	test_span_gre_neigh 2001:db8:2::2 gt6 ingress 8 0 "mirror to ip6gretap"
-+	test_span_gre_neigh 2001:db8:2::2 gt6 egress 0 8 "mirror to ip6gretap"
- }
- 
- test_all()
 diff --git a/tools/testing/selftests/net/forwarding/mirror_lib.sh b/tools/testing/selftests/net/forwarding/mirror_lib.sh
-index ee0fd71ad2fd..6a0c66d7ba7f 100644
+index 6a0c66d7ba7f..1fc8545da6e0 100644
 --- a/tools/testing/selftests/net/forwarding/mirror_lib.sh
 +++ b/tools/testing/selftests/net/forwarding/mirror_lib.sh
-@@ -61,9 +61,14 @@ do_test_span_dir_ips()
- 	local dev=$1; shift
- 	local ip1=$1; shift
- 	local ip2=$1; shift
-+	local forward_type=${1-8}; shift
-+	local backward_type=${1-0}; shift
+@@ -44,14 +44,17 @@ mirror_test()
+ 		local type="icmp echoreq"
+ 	fi
  
--	icmp_capture_install $dev
-+	icmp_capture_install $dev "type $forward_type"
- 	mirror_test v$h1 $ip1 $ip2 $dev 100 $expect
-+	icmp_capture_uninstall $dev
++	if [[ -z ${expect//[[:digit:]]/} ]]; then
++		expect="== $expect"
++	fi
 +
-+	icmp_capture_install $dev "type $backward_type"
- 	mirror_test v$h2 $ip2 $ip1 $dev 100 $expect
- 	icmp_capture_uninstall $dev
- }
-@@ -73,8 +78,11 @@ quick_test_span_dir_ips()
- 	local dev=$1; shift
- 	local ip1=$1; shift
- 	local ip2=$1; shift
-+	local forward_type=${1-8}; shift
-+	local backward_type=${1-0}; shift
- 
--	do_test_span_dir_ips 10 "$dev" "$ip1" "$ip2"
-+	do_test_span_dir_ips 10 "$dev" "$ip1" "$ip2" \
-+			     "$forward_type" "$backward_type"
+ 	local t0=$(tc_rule_stats_get $dev $pref)
+ 	$MZ $proto $vrf_name ${sip:+-A $sip} -B $dip -a own -b bc -q \
+ 	    -c 10 -d 100msec -t $type
+ 	sleep 0.5
+ 	local t1=$(tc_rule_stats_get $dev $pref)
+ 	local delta=$((t1 - t0))
+-	# Tolerate a couple stray extra packets.
+-	((expect <= delta && delta <= expect + 2))
++	((delta $expect))
+ 	check_err $? "Expected to capture $expect packets, got $delta."
  }
  
- fail_test_span_dir_ips()
-@@ -95,7 +103,8 @@ test_span_dir_ips()
+@@ -146,8 +149,8 @@ do_test_span_vlan_dir_ips()
+ 	# The traffic is meant for local box anyway, so will be trapped to
+ 	# kernel.
+ 	vlan_capture_install $dev "skip_hw vlan_id $vid vlan_ethtype $ul_proto"
+-	mirror_test v$h1 $ip1 $ip2 $dev 100 $expect
+-	mirror_test v$h2 $ip2 $ip1 $dev 100 $expect
++	mirror_test v$h1 $ip1 $ip2 $dev 100 "$expect"
++	mirror_test v$h2 $ip2 $ip1 $dev 100 "$expect"
+ 	vlan_capture_uninstall $dev
+ }
+ 
+@@ -159,7 +162,8 @@ quick_test_span_vlan_dir_ips()
  	local ip1=$1; shift
  	local ip2=$1; shift
  
--	quick_test_span_dir_ips "$dev" "$ip1" "$ip2"
-+	quick_test_span_dir_ips "$dev" "$ip1" "$ip2" \
-+				"$forward_type" "$backward_type"
+-	do_test_span_vlan_dir_ips 10 "$dev" "$vid" "$ul_proto" "$ip1" "$ip2"
++	do_test_span_vlan_dir_ips '>= 10' "$dev" "$vid" "$ul_proto" \
++				  "$ip1" "$ip2"
+ }
  
- 	icmp_capture_install $dev "type $forward_type"
- 	mirror_test v$h1 $ip1 $ip2 $dev 100 10
+ fail_test_span_vlan_dir_ips()
+diff --git a/tools/testing/selftests/net/forwarding/mirror_vlan.sh b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+index 074165f46a9d..bc3297846511 100755
+--- a/tools/testing/selftests/net/forwarding/mirror_vlan.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_vlan.sh
+@@ -85,7 +85,7 @@ test_tagged_vlan_dir()
+ 	RET=0
+ 
+ 	mirror_install $swp1 $direction $swp3.555 "matchall $tcflags"
+-	do_test_span_vlan_dir_ips 10 "$h3.555" 111 ip 192.0.2.17 192.0.2.18
++	do_test_span_vlan_dir_ips '>= 10' "$h3.555" 111 ip 192.0.2.17 192.0.2.18
+ 	do_test_span_vlan_dir_ips  0 "$h3.555" 555 ip 192.0.2.17 192.0.2.18
+ 	mirror_uninstall $swp1 $direction
+ 
 -- 
 2.45.0
 
