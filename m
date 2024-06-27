@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-12889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FEA091B2AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 01:28:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 506B391B2C9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 01:32:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDC75281AFB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 23:28:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DAF11C21AEF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 23:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A341A2FA0;
-	Thu, 27 Jun 2024 23:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17A8D210E4;
+	Thu, 27 Jun 2024 23:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WKH1vHvD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PJL4YZlB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243063FBA5;
-	Thu, 27 Jun 2024 23:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEC1199E93;
+	Thu, 27 Jun 2024 23:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719530890; cv=none; b=a5gLX+NcPmcUg5K9bovI2s5YFEYmsbiFw8lqDI/lFnwzEW/o6FIMi6PvJs/VwnqP9R17+7epUw87rQpqIHApDcIbTO5xYcGRNBSPV/X3CAzq2Gc3obK9vlJioZMXDS/FQ2FA0it/FRaoTdc3AxQGLpI/Ae/5zLwfW1gdZ/qBkYA=
+	t=1719531154; cv=none; b=m7BGpS4acHpBZBh+CHyZI1G2ee1XdQYrN9LgHn8F9lIfOFOsfvyjbBHf0RZh7iibHfBSltI72IX+Hf/X2WESkSMSRigxuwq2atodCXa7Jw1Ev+wgyqrwN3jCJmV8mWD4xXANeVdeFKASrE2e14zZmNPPQIFOFjmC7F/F0EUBy48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719530890; c=relaxed/simple;
-	bh=V2s3SFvzaMHtNwDR5PAPF/n+Oes+hWUxarUWBL0dXDU=;
+	s=arc-20240116; t=1719531154; c=relaxed/simple;
+	bh=4kzXNwWo2EHiiSbt+rLI28KXowWz8U1l+u+WwoIRZjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MJNTlqmzWuMOhEnVyAjurSXeJTc6NqT4iSr5fO0zO+rx1ZjI9np6+LZr5ukVmABjvILF3oPYzShJGixH5yy5mmSlc9tUt2riRWSU85Di0YhYtD/wPwsZFZhDwHD/OpekvcGSAbTVtAs2DjXeD7Ygn35QP/oGq8oHRnYP+Q0vHfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WKH1vHvD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31507C32786;
-	Thu, 27 Jun 2024 23:28:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=PVfG6t7hJ3qH8hrO6i9hKX/TtCbe+017Co2Bz0C7QGEg/WuApYG5wvgHYPIFwGFsvjWKmGg7Oytn2hy1cvr/NZdjsj4yYMU/rsVLzz12HgcK0f7Ug9AbvlXX+hjjbHdeP/zmIM55Si6heXZ7YagtiODRXUBLgkV0BfMqgShNLAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PJL4YZlB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254A9C2BBFC;
+	Thu, 27 Jun 2024 23:32:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719530889;
-	bh=V2s3SFvzaMHtNwDR5PAPF/n+Oes+hWUxarUWBL0dXDU=;
+	s=k20201202; t=1719531153;
+	bh=4kzXNwWo2EHiiSbt+rLI28KXowWz8U1l+u+WwoIRZjw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WKH1vHvDE+fE4x6QqWRgt51PUZJpoEyzJ6dPfcggpgZ3056N3kq4EMXn/8I7CA5Mf
-	 rodM9Iiqnoo88ADSXHa9777lLJRVa6rOHGY0oqotPp0Bi5fCXT1gaz6MZRJ7oshadv
-	 6H0GbC6zUgesjAtelSYu8G0HKc5mwnvVDqGoB1rUQLdHQExV/3tQcbHyN7jgGRes02
-	 u3UE1HYfm+BSMe2OiIqsm6vVf+14WF812bSJ3frFNLXg4v71iz1wTqMLp6cVr51MK7
-	 yBFuzhzxXLm2zQ46R2KQ5jRteQD+8P9v+8POhwAZ2oel+VrOcpOSLt7Qln7glRmlBh
-	 qTw2M2r9Qc1mQ==
-Date: Thu, 27 Jun 2024 16:28:08 -0700
+	b=PJL4YZlB/EyVo/kD3oN81Xg9KTvXfFf4RrYwYtyFFM6jE7baV3gkoYTzTar71gy2J
+	 TIayh4gGeyyrmpDTn9dnB6k373E2sB+YKojDs9Uk22zMetAdG63I7Z9rfUVf2t4AMW
+	 8iqocCJznyKUA3r0sXRrmVS2aPUDw6E+3TtJ5CYuEfexBsUGD5fmxVMVKwey4tZtJZ
+	 9u8HYP8fSExbiuxYIR3IOWF+xcEqqQGWhtTvlfGZO4Wz/rRzf+cELFMRSqnUASzbns
+	 LhzB0nfIJ7o8APnEDTHoNwGP2BpZrU2bGR8MGC8NSFcu5JeVdvD0FuUO89D8RJgOJA
+	 0TEy+bBXgte6w==
+Date: Thu, 27 Jun 2024 16:32:32 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Florian Westphal <fw@strlen.de>
-Cc: allison.henderson@oracle.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, rds-devel@oss.oracle.com,
- linux-rdma@vger.kernel.org, oberpar@linux.ibm.com, chuck.lever@oracle.com,
- vegard.nossum@oracle.com
-Subject: Re: [PATCH net-next v1 2/3] net: rds: add option for GCOV profiling
-Message-ID: <20240627162808.015c25a7@kernel.org>
-In-Reply-To: <20240626012834.5678-3-allison.henderson@oracle.com>
+To: allison.henderson@oracle.com
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
+ oberpar@linux.ibm.com, chuck.lever@oracle.com, vegard.nossum@oracle.com
+Subject: Re: [PATCH net-next v1 3/3] selftests: rds: add testing
+ infrastructure
+Message-ID: <20240627163232.1c2b5e49@kernel.org>
+In-Reply-To: <20240626012834.5678-4-allison.henderson@oracle.com>
 References: <20240626012834.5678-1-allison.henderson@oracle.com>
-	<20240626012834.5678-3-allison.henderson@oracle.com>
+	<20240626012834.5678-4-allison.henderson@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,14 +62,31 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 25 Jun 2024 18:28:33 -0700 allison.henderson@oracle.com wrote:
+On Tue, 25 Jun 2024 18:28:34 -0700 allison.henderson@oracle.com wrote:
 > From: Vegard Nossum <vegard.nossum@oracle.com>
 > 
-> To better our unit tests we need code coverage to be part of the kernel.
-> This patch borrows heavily from how CONFIG_GCOV_PROFILE_FTRACE is
-> implemented
+> This adds some basic self-testing infrastructure for RDS-TCP.
+> 
+> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+> Signed-off-by: Allison Henderson <allison.henderson@oracle.com>
+> ---
+>  Documentation/dev-tools/gcov.rst           |  11 +
+>  MAINTAINERS                                |   1 +
+>  tools/testing/selftests/Makefile           |   1 +
+>  tools/testing/selftests/net/rds/Makefile   |  13 +
+>  tools/testing/selftests/net/rds/README.txt |  41 ++++
+>  tools/testing/selftests/net/rds/config.sh  |  56 +++++
+>  tools/testing/selftests/net/rds/init.sh    |  69 ++++++
+>  tools/testing/selftests/net/rds/run.sh     | 271 +++++++++++++++++++++
+>  tools/testing/selftests/net/rds/test.py    | 251 +++++++++++++++++++
 
-Hi Florian, IIRC you were able to generate test coverage reports for
-nftables / netfilter. Is this the approach you used? I'm not sure how
-well adding a Kconfig knob for every module would scale..
+Let's start with adding selftests, well integrated with kselftest infra.
+This is how we execute the tests in networking:
+https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style
+
+If you want to use python please use tools/testing/selftests/net/lib/py/
+instead adding another wrappers.
+-- 
+pw-bot: cr
 
