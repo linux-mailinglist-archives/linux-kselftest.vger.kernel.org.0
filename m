@@ -1,135 +1,142 @@
-Return-Path: <linux-kselftest+bounces-12832-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12833-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CE77919B5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 01:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E2591919C09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 02:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17E5F281E74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2024 23:42:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8CA282917
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 00:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81E9194158;
-	Wed, 26 Jun 2024 23:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D57917FE;
+	Thu, 27 Jun 2024 00:46:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDS91rAU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBlNUmVM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4564F173338;
-	Wed, 26 Jun 2024 23:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69A5A50;
+	Thu, 27 Jun 2024 00:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719445330; cv=none; b=LEf/ejqPXVIk3Zl8OVOyEtrjyxKilz7uRwNypMdBtg4e9J4PkLPONMdkz+dc9pphJa0HUbcjU9Cqs8MpzYvHjwNGU1FUF1pnuUnT2OwKLFkXbnYD7XDDObjHiFSOd7GzMq+e42tR0T0/pEMay2gmCI7r+ihzRuXkjRitCd4OmNA=
+	t=1719449198; cv=none; b=dffrzsLCroNS9h1WB8+Yu55SaT96NPALW5h/2VQC3peqhoUQ0TsJRAHHteGw+rESE3dbN9LNOUtCSajqxo84xnNnj7h/OWBurqNALw12isCUzqpyMzNNHzZVpRfqdxvfqRxdXnYMWpDCpvlsXI6hmw3f3OV3o8A24o3xoMk9+bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719445330; c=relaxed/simple;
-	bh=sMeLhiwFv/j1a88YDMUKlL+AXEf7JJBJVtTWqgBJsBo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lhemvMIpYfT6Gnp87sd0CI9mwyrMUmiDyNAGwZ6C0HLJyahpQHKhzb5Q8At6iNmFbh5+9hmvVZJTPXJ4j4XujyNAZN7jEy1+GNsUQq54dt5YTO5GjjZ6u2O93rt2i+UTGpXuUo6W090xnXo+ztE8FqmEFxpaJ3udjfrWyHedW9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDS91rAU; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7067272245aso3464305b3a.1;
-        Wed, 26 Jun 2024 16:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719445328; x=1720050128; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F8van3ONhsMj39x+CZK6w7GS9JJmzbBkImHTnPcwvUI=;
-        b=TDS91rAUrbHx7G+kUFo73jPXhuDS3JO/tDF5L9HQbry2avZpHb8F0gYdUbX9fepf0T
-         OOFKIKx7OkBv+PwM71Wwi2zUNWltwtkdBWNf0MEPdZY+rIXc0TSUT07pRtWdgNWjD5uc
-         CFdqp0VnsZNqS8z2q7d+QXC8lebTR4Rc1ghpEF/j7vRmkK+eCFPu3tqjN5866koTMFjg
-         vkCak8rOvXRhEsUNN0BFHYqebmupFN17AhcHFGCmggfGd3YknVLBI4aKpLqGaHW+2lLf
-         C+5HABQb6IUkbT4W1RwhI0WZ/NUFMc8eCheisXuVt8hkvGVZTvQ8a1UQ8xFXm9Z/JCR1
-         BPFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719445328; x=1720050128;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F8van3ONhsMj39x+CZK6w7GS9JJmzbBkImHTnPcwvUI=;
-        b=CM177GkgwiqhZmdCnDwuDG93VlW1NAClALzaoZNId0qLfDQvTlN86oR70BOhSu7yYU
-         PCZeJODU4M0mXhJhZkwfY18HpheSKXBlpd/XacvMMLilPC+jmyR6FchSUBktPP/pVTcN
-         UlQYvtVV9J9nzXSd0jSgmmazWZtm6Yv5VbvvQVtHG7ga7OLguVJcfyUV4kH2AeeNXqkW
-         8VU3o4AYaRN7gB8Un1MYC/9uXj6xEZLGkhumJuuLS8TJfDgJnEYt2wXYWmhp51VFpAux
-         i4LvEX863+xleUlaGt35I304sN+fPU6hEdEJKQCzlZDd07NYF9lcvXv4PFrheSjk/h0w
-         CGJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLciGFgvFmjLx0DSGw0OeM41a+Nd+QpiCGdzhe0/Lsq0NurgKcicIquzIge6s5YfafDVH3Ypqt5VeJjcBNo8l+qYti5CQHi8pqANucOmvROmNTsEqJAmfNO45DWIEkFuUF56YSwF4bD/CrKPq1UNxk4SQHhRMCp0Ab6u4AEycDg+qR
-X-Gm-Message-State: AOJu0Ywt8Z2euMGDW/DPHANizN0QfBaCMrd95zKC4/GvusJFhij+J2mX
-	af1dkWM1DT/k1kgh1w63shaUJGSdbA6eeSGvQKQaMHZCXrOFWjBeI6jdjWbxDeIfdE6kvcog6VD
-	L/0IrZEDQvR1QWxO4TPP599c1smfiYg==
-X-Google-Smtp-Source: AGHT+IFzbQjuLKsUJ+jLS+EMYdJEh0LApRPYjHXhLeR3ZZ2Z87WNrYOcTLB/RrmDqo+olpA5R7fWtcofOW8HuqgWYh8=
-X-Received: by 2002:a05:6a21:19b:b0:1b5:be9e:42fc with SMTP id
- adf61e73a8af0-1bcf7ecaad1mr12478728637.32.1719445328466; Wed, 26 Jun 2024
- 16:42:08 -0700 (PDT)
+	s=arc-20240116; t=1719449198; c=relaxed/simple;
+	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e29aBtSG5yk6cFLdUcnnEn6RFj9wDNBzdPp4zP4Jeksm16qg7avahlVDm3hjcfYB1tuokJ7m8F0h5j8sHtVSHbcpiJavSUIB+oANT8FQcdSqYLj8khQpxh5DFfPrNxtkiohAGM319MfYbv0dYgDPImW5PuOPgaAsYTCHYpKL3b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBlNUmVM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B63CC116B1;
+	Thu, 27 Jun 2024 00:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719449197;
+	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mBlNUmVMzPFiiYZI8a8E65frgk5k1lxp0RkrYfN3Nlf/2A5ch4UMQN/KRSpXjJb2O
+	 djBU41eFDkc5BhBiVK+bvijq7reE+WvVLOjI6abwchbipLi50MqkLBcE9HAZXML2ZB
+	 vcXNkl0oVc41ZWhheArOwYfFHV0uN/gdJSrWAvNZjaO4ES7wR4BNnUbOfdxD7g2qby
+	 10el+2M74ZCpdaxOCG4dY/gaD016jFvumOcdSt4+KsTBMcEqxEPu2v7WSj29kUUMx0
+	 pwpxnw8AxBcF47BxCRsv11U6w9kvZBBbsJL9xFpmJWoMiS8guNVpQsYJOkzW+Fd5BG
+	 bUJejdYs3QDaw==
+Date: Wed, 26 Jun 2024 17:46:34 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Christian
+ =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Bagas Sanjaya
+ <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
+ devmem TCP
+Message-ID: <20240626174634.2adec19d@kernel.org>
+In-Reply-To: <20240626150822.742eaf6a@kernel.org>
+References: <20240625195407.1922912-1-almasrymina@google.com>
+	<20240625195407.1922912-14-almasrymina@google.com>
+	<20240626150822.742eaf6a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240626121828.2859797-1-make24@iscas.ac.cn>
-In-Reply-To: <20240626121828.2859797-1-make24@iscas.ac.cn>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 26 Jun 2024 16:41:56 -0700
-Message-ID: <CAEf4BzZ555XPu=E6c-10ShgZ9UscHq+4Ub8S12Bz7FTioHu=wA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: improve file descriptor closure handling
-To: Ma Ke <make24@iscas.ac.cn>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
-	shuah@kernel.org, iii@linux.ibm.com, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 26, 2024 at 5:19=E2=80=AFAM Ma Ke <make24@iscas.ac.cn> wrote:
->
-> serial_test_fexit_stress() has a non-robust handling of file descriptor
-> closure. If an error occurs, the function may exit without closing open
-> file descriptors, potentially causing resource leaks.
->
-> Fix the issue by closing file descriptors in reverse order and starting
-> from the last opened. Ensure proper closure even if an error occurs early=
-.
->
-> Fixes: 8fb9fb2f1728 ("selftests/bpf: Query BPF_MAX_TRAMP_LINKS using BTF"=
-)
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-> ---
->  tools/testing/selftests/bpf/prog_tests/fexit_stress.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
+On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
+> On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
+> > +CFLAGS += -I../../../net/ynl/generated/
+> > +CFLAGS += -I../../../net/ynl/lib/
+> > +
+> > +LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a  
+> 
+> Not as easy as this.. Please add this commit to your series:
+> https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d36875d8c47
+> 
+> And here's an example of how you then use ynl.mk to code gen and build
+> for desired families (note the ordering of variables vs includes,
+> I remember that part was quite inflexible..):
+> https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3eadf5091bb3
 
-there is no need for this change, I've applied your previous patch but
-adjusted > 0 checks, see my comment there. That should be enough.
+Investigating this further my patches will not work for O=xyz builds
+either. Please squash this into the relevant changes:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c b/tool=
-s/testing/selftests/bpf/prog_tests/fexit_stress.c
-> index 596536def43d..b1980bd61583 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_stress.c
-> @@ -49,11 +49,14 @@ void serial_test_fexit_stress(void)
->         ASSERT_OK(err, "bpf_prog_test_run_opts");
->
->  out:
-> -       for (i =3D 0; i < bpf_max_tramp_links; i++) {
-> +       if (i >=3D bpf_max_tramp_links)
-> +               i =3D bpf_max_tramp_links - 1;
-> +       while (i >=3D 0) {
->                 if (link_fd[i])
->                         close(link_fd[i]);
->                 if (fexit_fd[i])
->                         close(fexit_fd[i]);
-> +               i--;
->         }
->         free(fd);
->  }
-> --
-> 2.25.1
->
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index db60d2718b35..9966e5b7139b 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -9,7 +9,8 @@ TEST_PROGS := \
+ 	stats.py \
+ # end of TEST_PROGS
+ 
+-# YNL files
++# YNL files, must be before "include ..lib.mk"
++EXTRA_CLEAN += $(OUTPUT)/libynl.a
+ YNL_GEN_FILES := psp_responder
+ TEST_GEN_FILES += $(YNL_GEN_FILES)
+ 
+diff --git a/tools/testing/selftests/net/ynl.mk b/tools/testing/selftests/net/ynl.mk
+index 0e01ad12b30e..59cb26cf3f73 100644
+--- a/tools/testing/selftests/net/ynl.mk
++++ b/tools/testing/selftests/net/ynl.mk
+@@ -18,6 +18,4 @@ $(YNL_OUTPUTS): CFLAGS += \
+ 
+ $(OUTPUT)/libynl.a:
+ 	$(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS="$(YNL_GENS)" libynl.a
+-	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a ./
+-
+-EXTRA_CLEAN += libynl.a
++	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
 
