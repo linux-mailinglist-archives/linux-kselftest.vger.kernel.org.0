@@ -1,146 +1,127 @@
-Return-Path: <linux-kselftest+bounces-12882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA06491B08C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 22:38:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FCD391B0D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 22:48:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 926981F22BBC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 20:38:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 490DE287F09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 20:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E42F19EEA4;
-	Thu, 27 Jun 2024 20:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584EB19538D;
+	Thu, 27 Jun 2024 20:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aq2RCfGz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UiHVlzMV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89897406F;
-	Thu, 27 Jun 2024 20:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85B914D6EB;
+	Thu, 27 Jun 2024 20:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719520693; cv=none; b=oY6O0LnrlI2UXOI5dGXYscIUptKRo0ALZlHdRNgyVQJiQR+VzDizV1AULq2e2kBGj0wcNOs3XugwHNLpTW9wXgmxtBV5Fi2Q3HxGHIJFjiLIXafyb9B670nDpJwMju3VI2U7ku1mzgoN2ZJfaU4jWiqlYfuJLRtGV5UxWqD/YN8=
+	t=1719521223; cv=none; b=Lz+9k/LJw7EUPQyAcHxRVdElpH+Kw8tQShvsoG+E1YyykUhnAc2irLidsNpE0pTXdGqV6QmqRM30yd+SXfOQMqnPjErn/Y2wdRRdHfjSoliZalEr1LBcSDgrfi/P3+ZDX5z5Cz50FTlxzbAE1b41ZyUuNELsNWHhOEU2qzuHQgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719520693; c=relaxed/simple;
-	bh=BVd54t8V4yKL8SKq4Rb7omF+EHGftWCggGNhkkhUTrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MbYucVRPU3dOMTLhbDtk1WyWeSTspc90HohGizwGnfM7ODl/oBx3Vvjnwln6As2CAWGNC+J2Gpy+qhJnU1Ae677r6f3s8gSK05oGRxGbNL9aAkhvuVS2LXIMwXjU5O6w5Ds59lWqmh4uFIwjjS2EQbapbOt6ouie+MvC3t3kWBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aq2RCfGz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3370FC2BBFC;
-	Thu, 27 Jun 2024 20:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719520692;
-	bh=BVd54t8V4yKL8SKq4Rb7omF+EHGftWCggGNhkkhUTrU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aq2RCfGz4duksXUC/Ro09d4mdUrL2HO3rip3byDd+QuyDD8cNPr1eCL+3dY1DtY8e
-	 uXjxU3NBu2WfTEiWoGyW+QTBc4FA0EHq1t0SW3573ctREq0SWP0yN7A+oA4EDP5X4x
-	 XxtIIlpuOldYd/c4p2A30+1BW7YH6bCdXhsu4/kKCVxOJohr8TwYW9PDpbN+rY6u0r
-	 g2qx1g8xEuf85sy1eN2YRz93lNEWUNUUFUd1/sbENqAK6gSKw88I//hM9sjDmh1C99
-	 Mba2sR93tzi4TgGidxaGQrPcwZduqxOZDQ9TILxLEsgZNlbOpCM3nQ4D6VedAsGLBC
-	 FRNkwQU0t/iBw==
-Date: Thu, 27 Jun 2024 13:38:09 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bagas Sanjaya
- <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
- devmem TCP
-Message-ID: <20240627133809.0700722f@kernel.org>
-In-Reply-To: <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
-References: <20240625195407.1922912-1-almasrymina@google.com>
-	<20240625195407.1922912-14-almasrymina@google.com>
-	<20240626150822.742eaf6a@kernel.org>
-	<20240626174634.2adec19d@kernel.org>
-	<CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+	s=arc-20240116; t=1719521223; c=relaxed/simple;
+	bh=J8wNVkW9OKohBk0CThwH8fl/CaAJdYl/rgs+UdQZL7Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iSOdoJ3pYwgUe18nk3PLCBxhvz0xWpgiezHhSEoj5gJGt5zyVEGVHHHH/Jg52ZkHrlhRwJw+KO38c7SQzqGPRacyrngpfen10H4Bj6O3+scUfAstQ+53IJPHeosRTuwCnwOet9tZXDlkcmo7/t5Hk8PnhC+1aj/Wn4Dg1JdPuEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UiHVlzMV; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-363ba6070b1so322808f8f.0;
+        Thu, 27 Jun 2024 13:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719521220; x=1720126020; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/Me/sbbhBxto6mnhtQrh+i2DsVi3fAKWy8wDnRaFHY=;
+        b=UiHVlzMVR03D+A7sFhjmhjHRJDoICXwOejWCEXWNFVXiehnDaSAq3Y4CMcJ+++lGtN
+         VDCkuA+VTy/YIR6OcqhOEIxu8jq6qePOAIDsbxnm2zdSHNnNC7me6sWMCQGN93pmS4pT
+         Egbf/375X5kF37q9uftTzM0wqyown2xyMfdj1UIJxe9RCI1c1hOzzGCNxbcKLP8KLBEs
+         7xugtdceI7nMaj2GRMZwND4olVoGg5AuGbz+34jxTarCyEgRfzhrWPt2El7AIMJjYll2
+         /bZWrpRoh4ErdVWDgiy6ZSnam2YRiafFrk0UVTVMB0mAiLjHqXTEJAqQOEt3nYwmiebE
+         5I5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719521220; x=1720126020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/Me/sbbhBxto6mnhtQrh+i2DsVi3fAKWy8wDnRaFHY=;
+        b=imnPbafzRHSbkbsDq+8BhGxtfdTTJ+c9oULBnEAWmHyJt54dxBGE1Sne9a4qFBY53D
+         ksJX26gnM4fjpKv0zMEhNcSb6uN4bxkCabMFtxfSwE+fk8vflmiFrLLATQZ6xTLYrn3o
+         sExneWKyx1TC+Ee/a8yPBYcxYWGGeGQ4wavlWX0tEwCosAAIoDuqXBthu20XrkbGpYYy
+         N2LxXVqvkDYXCz1n3GJDH5XgDxERZPmiwbBDzVUVh0C9CP2sS47t/sifvDNKzwILWzk5
+         XYu6z3Ibu17VbM3XWQFYQpUiqJAZ/X+DJq6pjIosAGEuT5Byv8K81hS6gp2pZE7g7d9j
+         Vi8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXN3bvPSKkanjtYDkyeca9+IthaYoUNEOqun6wmU8PCfVjMI1oebaAErH/sb/bLe9KEVUpokfSsjXKPZDHhiOoMpYBkMEz7iUOTn4Ovumxs+iwtzkP74m8w8210mdXh/6/gcwQ5MqKvQuXXIbk2
+X-Gm-Message-State: AOJu0YyNkXn8s7UYUtxq/aNFNX5XJ5vpCQRlC6xX/wf7HyKTsMj9hXks
+	5klQ00btgNs4B4ItKXhwXuqrBDkfDUhe6zt4NcQuCCYFsYk7XSmd
+X-Google-Smtp-Source: AGHT+IF2026K0+YMF6WMPXg6qWK7Jt9C4b1hNOawNu/M2emVzus5D+Sxs8FcCnpa0u+mfx/k0/54/A==
+X-Received: by 2002:a05:600c:4aa9:b0:425:5ed5:b416 with SMTP id 5b1f17b1804b1-4255ed5b5edmr42671975e9.1.1719521219646;
+        Thu, 27 Jun 2024 13:46:59 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:d20e:7300:8731:b664:1f4a:5ab4? ([2a01:4b00:d20e:7300:8731:b664:1f4a:5ab4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b097b77sm6432615e9.33.2024.06.27.13.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jun 2024 13:46:59 -0700 (PDT)
+Message-ID: <c63690e7-53b6-4751-ab89-40469d68275d@gmail.com>
+Date: Thu, 27 Jun 2024 21:46:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] kunit: Merge assertion test into kunit-test.c
+To: Rae Moar <rmoar@google.com>
+Cc: brendan.higgins@linux.dev, davidgow@google.com,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+References: <20240618170331.264851-1-ivan.orlov0322@gmail.com>
+ <20240618170331.264851-6-ivan.orlov0322@gmail.com>
+ <CA+GJov6u0+y-GBS4c2pvEmvUdoezMpXD-MJO3e_G90yefMV-iQ@mail.gmail.com>
+Content-Language: en-US
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <CA+GJov6u0+y-GBS4c2pvEmvUdoezMpXD-MJO3e_G90yefMV-iQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 27 Jun 2024 12:55:38 -0700 Mina Almasry wrote:
-> `git clean -fdx && make  headers_install && make -C
-> ./tools/testing/selftests/net` works
+On 6/21/24 22:38, Rae Moar wrote:
+> On Tue, Jun 18, 2024 at 1:03 PM Ivan Orlov <ivan.orlov0322@gmail.com> wrote:
+>>
+>> Since assert_test covers the part of the KUnit core (the assertion
+>> formatting functions), I believe it would be better to have it merged
+>> into kunit-test (as it is done for other tests for the KUnit core).
+>>
+>> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 > 
-> `git clean -fdx && make  headers_install && make -C
-> ./tools/testing/selftests/net ncdevmem` doesn't work with this error:
+> Hello!
+> 
+> This looks good to me. I don't know if it was necessary to move the
+> assert tests but I definitely see the reasoning. Happy with this as it
+> is. There are a few checkpatch warnings I have mentioned below but I
+> think the use case makes it necessary.
+> 
+> Reviewed-by: Rae Moar <rmoar@google.com>
+> 
+> Thanks!
+> -Rae
+> 
 
-Hm, I haven't tested this exact combination. Makefiles are fun!
+Hi Rae,
 
-I think in this case you're just hitting the built-in make rule,
-you're not exercising our Makefile logic much. This should make 
-it work:
+Thank you so much for the review, and sorry for the late reply ( I've 
+been on vacation this week, and didn't have access to my inbox :( ).
 
-diff --git a/tools/testing/selftests/lib.mk
-b/tools/testing/selftests/lib.mk index 429535816dbd..a274ae8cd72b 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -45,7 +45,7 @@ endif # LLVM
- 
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
--       OUTPUT := $(shell pwd)
-+       OUTPUT := .
-        DEFAULT_INSTALL_HDR_PATH := 1
-     endif
- endif
+And yes, since we want to get the actual pointer address "%px" is our 
+only option :(
 
-But it will probably break the makefile for others?
+-- 
+Kind regards,
+Ivan Orlov
 
-All our targets are defined (or magically redefined) as $(OUTPUT)/name
-if you call make directly OUTPUT is not defined, so our rules would
-mathc on /name, which obviously doesn't exist. Adding OUTPUT=. on
-command line would also work (I think):
-
-make -C ./tools/testing/selftests/net OUTPUT=. ncdevmem
-
-Another option would be for OUTPUT to contain the trailing /, always,
-to avoid the /name problem, but:
-
-$ git grep '$(OUTPUT)/' -- tools/testing/selftests/ | wc -l 
-414
-
-so good luck changing that :(
-
-Long story short what you're trying doesn't really appear to be
-supported by kselftest makefile infra, so don't worry about it.
 
