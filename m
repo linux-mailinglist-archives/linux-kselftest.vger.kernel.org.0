@@ -1,134 +1,167 @@
-Return-Path: <linux-kselftest+bounces-12873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D66991AE0B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 19:30:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FD5B91AE58
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 19:42:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE03E283365
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 17:29:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35B1328DB05
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 17:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF91F19A295;
-	Thu, 27 Jun 2024 17:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C286F199238;
+	Thu, 27 Jun 2024 17:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LTDrlDZb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bRAQV1Dp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD74199225
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 17:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6881C6A7
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 17:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719509395; cv=none; b=Fl8OopMkBONRYTyuuCPKVYI6n8inEBR2Y6yU0dhv5bxkoau/yCrHnzppDQIiHwa2u0cm/Sa8UZz0ITVCIooO1tzpi8f9Ovo8cm5MpLtIdXfm2ZiDvbmaAzAp9jDSHABMTEhVBHAcnZ5Ow1u9+PiV6sOq1+HHpmztA9gUNdIzCJM=
+	t=1719510142; cv=none; b=n1TarK/ISkEEMk/wGFMvHpRxIwISBUpGopJcyHHdGMRsJJpUBvoh27LB8wmbJKSzKSVN2RgqP7dxl5Kx71IdYL7+AKPyQX2bGn2DbaJCO9oDDolynSFEZIVeKvBkOziwEM5ZS8DRmKFWNkvuL7POJuzpCVZSkNWXfpPtNb40Shg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719509395; c=relaxed/simple;
-	bh=zWsElhqpj4fMB+iLijGBpbu+QyUcM22M9Gs8UsyVQ+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qfQ/mtnvqNzO23hy3djtQt2WkqWRwF0jM/D2PG1m+encsNuv42QTTWFfdOA3fVY+Md8BQqgq+DDiU+1jMrcxeK9G9wo9vQlOaxPWCQ7GjXbUHnMbQtLhnFks2I4HINEYcmr1apk9RXr1indtU/Zd2sBto0KyOOf3CF29ZDnWV3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LTDrlDZb; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-37a80cb5c94so269685ab.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 10:29:54 -0700 (PDT)
+	s=arc-20240116; t=1719510142; c=relaxed/simple;
+	bh=QWiCFle1OjlmoDLkJTUXa/Nbue5uZFbpxYfIHw4qoco=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=G9l28OYHB0WxJX4FEgmGhz5NCzaS8YVHuZK3lp758vjv5smk6XeqUXsE3fmcIvQoC2EmVQFekMJATbqTaxIAm/aNpzoyD9fQZCWYqn0qXB+WxcNIstd0hljeHv3C9WgtGo92XxV7g0PMFitvgyscrflL/YeD+OwSbvwFoWVUADw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bRAQV1Dp; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-64507372362so116073277b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 10:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719509393; x=1720114193; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TE7XfWBRNZhzVuyF1wDQxkJAMsIzL6P4kt13AjBK80I=;
-        b=LTDrlDZbYAUGwe0++UQvffpkWM2BTpjWdp2i7Y/GzEdHk+EQUTT3lnv7hEwXE4OWI4
-         br7xEs4erwWPXVaCBFZ1mD2MVFKf7bOtbhHi58HHLupWL/XxXfS/BF7LUhOvdj2Vy1uI
-         htMGZBx0l15VJMLG1Er4xdEPcsSMDF3je2Xr0=
+        d=google.com; s=20230601; t=1719510140; x=1720114940; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1sQpJMlhaOImbaZsmQPczRmnXse/xZ0ADeEMYCxzlHY=;
+        b=bRAQV1Dp5u5Adi3cLjCobR05EDS+7XtfTblwgoAQ6i0LcBITtl2aeHrQrK6R7gsqrU
+         nGoKGSCKkH7iE1905nRzgCDq7fxDRqVM5XfgQffNnxluFhMafO1kBlDPb65eGwCmQGuA
+         GCN0nkdv2HB+2kyW0I1B4SF71atzgayuRyAUVkPeUu1nrPZriuvch9r/gk1wb/Rj/qta
+         xg0apBKlYyGT8iwS4HhkB4ImrXR3+8KDhlg19rxa1HrXSqFnWV/AMXSJDVzwV9PpDKYp
+         YozyGDw5xHRPwaJXJwwaGU1WGxtaKvszww9E+pxr2sNP8QmHZC3S8tWjbBm9SFiPQno/
+         GjTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719509393; x=1720114193;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TE7XfWBRNZhzVuyF1wDQxkJAMsIzL6P4kt13AjBK80I=;
-        b=RlXNuCAHCm9KlK6xFpUcweisn6YfdxkNQecSJimmz7glatsu2ORHLhidVk7VwqI8BA
-         G3YHZ5Kbf4XUWc30Kqj7/Xg/jYjmVrtwToDPIPfmjw0F9gRjhrhUoKeUPWrB4f+gNyxx
-         j72yHHuzcdm5q1ZuVUlbijnsCwVc/n8dHM9WbQyBA/aCrYTEUt3R6X7raAaUCUlxM7Sm
-         Pg2X+wV94pgMvs1DL25t190bAThYqrC7tJmhmIN8ehToEXnqNmVbxrUpkOkl2dQ8mbCS
-         zGoDF74cLf6L81AqoNkFRSlTVaUfifNMr6WdUwvU0o9qAo0q7SWVOxRjX29av7F3pEBw
-         XJsQ==
-X-Gm-Message-State: AOJu0YxD4DZAFooVYq4193Ssv33JvKD5JNgk5/MlQW+LQsuwHlP7+DvN
-	rzX23zGIzdaRn/Jdx3oPGMhzdFTvyhqotAYVFn3RqdVbAWXFiCI3e/e+nA//xdc=
-X-Google-Smtp-Source: AGHT+IGuv22TRRCkg0w93q8TXiGPUGSAq+F4m8yDrb26yLn3ifVMjUoHjcL8Je5l13wqAxyS4FmOOg==
-X-Received: by 2002:a05:6e02:4b2:b0:379:2b4d:d5de with SMTP id e9e14a558f8ab-3792b4dd9cdmr38555345ab.2.1719509393382;
-        Thu, 27 Jun 2024 10:29:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad4370c46sm10305ab.64.2024.06.27.10.29.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jun 2024 10:29:53 -0700 (PDT)
-Message-ID: <8b040e83-5eda-4b59-96a9-d76cb4f80d70@linuxfoundation.org>
-Date: Thu, 27 Jun 2024 11:29:52 -0600
+        d=1e100.net; s=20230601; t=1719510140; x=1720114940;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1sQpJMlhaOImbaZsmQPczRmnXse/xZ0ADeEMYCxzlHY=;
+        b=lvZtol2tkD6nqf54zSKFG9zKbszt97EzYY9RNSwtOZ4Jp8IrjbuOxoNGLuZbS+jJN8
+         BRGxwR95UcNpcfu55QFTL+XK1HcvM0spow7XGD6jgAR1nA82Zg2d2EMKJIvjyrDpCTUB
+         oSiwcIFSuXcQsSsnaoIl4syYdChckkiRq1p7ngn/MVEu/7Dg3sa5R6CCallemaUb4R7f
+         FrCxsbMFNDnrSTvHewLeK4CWQhEs58HRdCCoRuvfWxzSDn5TgnWFhoIXTJ6gPhbNJcAV
+         cKGvp9rJV4MEDXdD9RMGVG/ShuJviShyRUdggFQKzQl8wjFeD+U32aHNsiDL0HyiBRP/
+         jdww==
+X-Forwarded-Encrypted: i=1; AJvYcCUO3rzM9dszprI9FGpIMzskWesmuDg6SnFvzD7xC3BkyaOY23bRFMQCghtSn4PZ/CQ1RcFMDZFD97mBZCUPp8EipD/UpOj5eQVykjLgS8RE
+X-Gm-Message-State: AOJu0Ywgo9iM2g/Jg7enRN/9PUi55YKUREZegd3edX18j2myQBMtu7ao
+	xB9aJWTHQpMoR4nseb7FuRu0bYS604hdpFCX4qYI89XXWIgXTIlICb58Jrjt6qCYtPbS5JG06zj
+	8yQ==
+X-Google-Smtp-Source: AGHT+IE8qFFP1ajg6w4kSm8Qn4ro9HS/brjSiPL5I1EbZHI/6XKc4cVAGbMPmz4OZwpyYhZSw4GJu61Pw7M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:c16:b0:631:9b3b:525d with SMTP id
+ 00721157ae682-642997c4d57mr470617b3.4.1719510140198; Thu, 27 Jun 2024
+ 10:42:20 -0700 (PDT)
+Date: Thu, 27 Jun 2024 10:42:18 -0700
+In-Reply-To: <20240621204305.1730677-2-mlevitsk@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/capabilities: Fix possible file leak in
- copy_fromat_to
-To: Ma Ke <make24@iscas.ac.cn>, shuah@kernel.org, usama.anjum@collabora.com,
- swarupkotikalapudi@gmail.com, amer.shanawany@gmail.com, kees@kernel.org,
- akpm@linux-foundation.org, luto@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240627015732.2974078-1-make24@iscas.ac.cn>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240627015732.2974078-1-make24@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20240621204305.1730677-1-mlevitsk@redhat.com> <20240621204305.1730677-2-mlevitsk@redhat.com>
+Message-ID: <Zn2ker_KZ7Fk-7W1@google.com>
+Subject: Re: [PATCH 1/1] KVM: selftests: pmu_counters_test: increase
+ robustness of LLC cache misses
+From: Sean Christopherson <seanjc@google.com>
+To: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 6/26/24 19:57, Ma Ke wrote:
-> The open() function returns -1 on error. openat() and open() initialize
-> 'from' and 'to', and only 'from' validated with 'if' statement. If the
-> initialization of variable 'to' fails, we should better check the value
-> of 'to' and close 'from' to avoid possible file leak. Improve the checking
-> of 'from' additionally.
+On Fri, Jun 21, 2024, Maxim Levitsky wrote:
+> Currently this test does a single CLFLUSH on its memory location
+> but due to speculative execution this might not cause LLC misses.
 > 
-> Fixes: 32ae976ed3b5 ("selftests/capabilities: Add tests for capability evolution")
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-> ---
-> Changes in v2:
-> - modified the patch according to suggestions;
-> - found by customized static analysis tool.
-
-Care to give more details on this customized static analysis
-tool?
-
-> ---
->   tools/testing/selftests/capabilities/test_execve.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+> Instead, do a cache flush on each loop iteration to confuse the prediction
+> and make sure that cache misses always occur.
 > 
-> diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
-> index 47bad7ddc5bc..6406ab6aa1f5 100644
-> --- a/tools/testing/selftests/capabilities/test_execve.c
-> +++ b/tools/testing/selftests/capabilities/test_execve.c
-> @@ -145,10 +145,14 @@ static void chdir_to_tmpfs(void)
->   static void copy_fromat_to(int fromfd, const char *fromname, const char *toname)
->   {
->   	int from = openat(fromfd, fromname, O_RDONLY);
-> -	if (from == -1)
-> +	if (from < 0)
->   		ksft_exit_fail_msg("open copy source - %s\n", strerror(errno));
->   
->   	int to = open(toname, O_CREAT | O_WRONLY | O_EXCL, 0700);
-> +	if (to < 0) {
-> +		close(from);
-> +		ksft_exit_fail_msg("open copy destination - %s\n", strerror(errno));
-> +	}
->   
->   	while (true) {
->   		char buf[4096];
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  .../selftests/kvm/x86_64/pmu_counters_test.c  | 20 +++++++++----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> index 96446134c00b7..ddc0b7e4a888e 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> @@ -14,8 +14,8 @@
+>   * instructions that are needed to set up the loop and then disabled the
+>   * counter.  1 CLFLUSH/CLFLUSHOPT/NOP, 1 MFENCE, 2 MOV, 2 XOR, 1 WRMSR.
+>   */
+> -#define NUM_EXTRA_INSNS		7
+> -#define NUM_INSNS_RETIRED	(NUM_BRANCHES + NUM_EXTRA_INSNS)
+> +#define NUM_EXTRA_INSNS		5
+> +#define NUM_INSNS_RETIRED	(NUM_BRANCHES * 2 + NUM_EXTRA_INSNS)
 
-thanks,
--- Shuah
+The comment above is stale.  I also think it's worth adding a macro to capture
+that the '2' comes from having two instructions in the loop body (three, if we
+keep the MFENCE).
 
+>  static uint8_t kvm_pmu_version;
+>  static bool kvm_has_perf_caps;
+> @@ -133,9 +133,8 @@ static void guest_assert_event_count(uint8_t idx,
+>   * doesn't need to be clobbered as the input value, @pmc_msr, is restored
+>   * before the end of the sequence.
+>   *
+> - * If CLFUSH{,OPT} is supported, flush the cacheline containing (at least) the
+> - * start of the loop to force LLC references and misses, i.e. to allow testing
+> - * that those events actually count.
+> + * If CLFUSH{,OPT} is supported, flush the cacheline containing the CLFUSH{,OPT}
+> + * instruction on each loop iteration to ensure that LLC cache misses happen.
+>   *
+>   * If forced emulation is enabled (and specified), force emulation on a subset
+>   * of the measured code to verify that KVM correctly emulates instructions and
+> @@ -145,10 +144,9 @@ static void guest_assert_event_count(uint8_t idx,
+>  #define GUEST_MEASURE_EVENT(_msr, _value, clflush, FEP)				\
+>  do {										\
+>  	__asm__ __volatile__("wrmsr\n\t"					\
+> -			     clflush "\n\t"					\
+> -			     "mfence\n\t"					\
+
+Based on your testing, it's probably ok to drop the mfence, but I don't see any
+reason to do so.  It's not like that mfence meaningfully affects the runtime, and
+anything easy/free we can do to avoid flaky tests is worth doing.
+
+I'll post and apply a v2, with a prep patch to add a NUM_INSNS_PER_LOOP macro and
+keep the MFENCE (I'll be offline all of next week, and don't want to push anything
+to -next tomorrow, even though the risk of breaking anything is minimal).
+
+> -			     "1: mov $" __stringify(NUM_BRANCHES) ", %%ecx\n\t"	\
+> -			     FEP "loop .\n\t"					\
+> +			     " mov $" __stringify(NUM_BRANCHES) ", %%ecx\n\t"	\
+> +			     "1: " clflush "\n\t"				\
+> +			     FEP "loop 1b\n\t"					\
+>  			     FEP "mov %%edi, %%ecx\n\t"				\
+>  			     FEP "xor %%eax, %%eax\n\t"				\
+>  			     FEP "xor %%edx, %%edx\n\t"				\
+> @@ -163,9 +161,9 @@ do {										\
+>  	wrmsr(pmc_msr, 0);							\
+>  										\
+>  	if (this_cpu_has(X86_FEATURE_CLFLUSHOPT))				\
+> -		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflushopt 1f", FEP);	\
+> +		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflushopt .", FEP);	\
+>  	else if (this_cpu_has(X86_FEATURE_CLFLUSH))				\
+> -		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflush 1f", FEP);	\
+> +		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflush .", FEP);	\
+>  	else									\
+>  		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "nop", FEP);		\
+>  										\
+> -- 
+> 2.26.3
+> 
 
