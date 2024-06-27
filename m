@@ -1,142 +1,114 @@
-Return-Path: <linux-kselftest+bounces-12833-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2591919C09
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 02:46:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5492B919D16
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 03:58:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8CA282917
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 00:46:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2CF2B228BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 01:58:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D57917FE;
-	Thu, 27 Jun 2024 00:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBlNUmVM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DF66AD7;
+	Thu, 27 Jun 2024 01:58:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69A5A50;
-	Thu, 27 Jun 2024 00:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459AF6AC0;
+	Thu, 27 Jun 2024 01:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719449198; cv=none; b=dffrzsLCroNS9h1WB8+Yu55SaT96NPALW5h/2VQC3peqhoUQ0TsJRAHHteGw+rESE3dbN9LNOUtCSajqxo84xnNnj7h/OWBurqNALw12isCUzqpyMzNNHzZVpRfqdxvfqRxdXnYMWpDCpvlsXI6hmw3f3OV3o8A24o3xoMk9+bA=
+	t=1719453484; cv=none; b=nMjNTd7B/rsqiP4TAnh61R4lLgKgD2mBZ3vX9Tuykx1uG4z651R6uWqL5xklvuNBACNToIlg3hP69LDn+W9pliTr7tAeSjQeHUscUPKouqAZDhSvy9LX1nCdqXD3JMq9Lxsz/yKQo4NEdPGkqiZdY/trkKI5DT9s9aptrFanm4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719449198; c=relaxed/simple;
-	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e29aBtSG5yk6cFLdUcnnEn6RFj9wDNBzdPp4zP4Jeksm16qg7avahlVDm3hjcfYB1tuokJ7m8F0h5j8sHtVSHbcpiJavSUIB+oANT8FQcdSqYLj8khQpxh5DFfPrNxtkiohAGM319MfYbv0dYgDPImW5PuOPgaAsYTCHYpKL3b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBlNUmVM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B63CC116B1;
-	Thu, 27 Jun 2024 00:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719449197;
-	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mBlNUmVMzPFiiYZI8a8E65frgk5k1lxp0RkrYfN3Nlf/2A5ch4UMQN/KRSpXjJb2O
-	 djBU41eFDkc5BhBiVK+bvijq7reE+WvVLOjI6abwchbipLi50MqkLBcE9HAZXML2ZB
-	 vcXNkl0oVc41ZWhheArOwYfFHV0uN/gdJSrWAvNZjaO4ES7wR4BNnUbOfdxD7g2qby
-	 10el+2M74ZCpdaxOCG4dY/gaD016jFvumOcdSt4+KsTBMcEqxEPu2v7WSj29kUUMx0
-	 pwpxnw8AxBcF47BxCRsv11U6w9kvZBBbsJL9xFpmJWoMiS8guNVpQsYJOkzW+Fd5BG
-	 bUJejdYs3QDaw==
-Date: Wed, 26 Jun 2024 17:46:34 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Christian
- =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Bagas Sanjaya
- <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
- devmem TCP
-Message-ID: <20240626174634.2adec19d@kernel.org>
-In-Reply-To: <20240626150822.742eaf6a@kernel.org>
-References: <20240625195407.1922912-1-almasrymina@google.com>
-	<20240625195407.1922912-14-almasrymina@google.com>
-	<20240626150822.742eaf6a@kernel.org>
+	s=arc-20240116; t=1719453484; c=relaxed/simple;
+	bh=QtWF5D6wtWtzMUjsvVghrZTI6m0RYR/eXMJY/MsGWvQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JEUKKSw8oxJgMWuYGnkcdKQjaxANac61pOo5onHWz1DAhFwEdUx5aRkj4EszVqjQ/vgdNBQCTgt1hpqgTd3q3pQvuJ4GhE0Da5Z0yFHOfhbXM4RmWz19RcZpASzvIWkMWO/RMJhW/jqOWhcvPFHZ4o/56HYTCX2aAabUqM4b7Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-05 (Coremail) with SMTP id zQCowAC3v7cSx3xmZCAgAA--.4237S2;
+	Thu, 27 Jun 2024 09:57:41 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: shuah@kernel.org,
+	usama.anjum@collabora.com,
+	swarupkotikalapudi@gmail.com,
+	make24@iscas.ac.cn,
+	amer.shanawany@gmail.com,
+	kees@kernel.org,
+	akpm@linux-foundation.org,
+	luto@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/capabilities: Fix possible file leak in copy_fromat_to
+Date: Thu, 27 Jun 2024 09:57:32 +0800
+Message-Id: <20240627015732.2974078-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAC3v7cSx3xmZCAgAA--.4237S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr1rAF4UXr15Xr4kCF4xtFb_yoW8XF17pa
+	48G3yYka4IgF47t3WUJ3yvqa409Fs7JrW7tr1DG3sFvr1fGr1vqF4xKFWUta47urZaqa4S
+	v392qFs5Z3WDJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9I14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWUWVWUuwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+	W8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8C
+	rVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxV
+	WUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS
+	5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026x
+	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+	JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
+	IYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
-> On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
-> > +CFLAGS += -I../../../net/ynl/generated/
-> > +CFLAGS += -I../../../net/ynl/lib/
-> > +
-> > +LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a  
-> 
-> Not as easy as this.. Please add this commit to your series:
-> https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d36875d8c47
-> 
-> And here's an example of how you then use ynl.mk to code gen and build
-> for desired families (note the ordering of variables vs includes,
-> I remember that part was quite inflexible..):
-> https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3eadf5091bb3
+The open() function returns -1 on error. openat() and open() initialize
+'from' and 'to', and only 'from' validated with 'if' statement. If the
+initialization of variable 'to' fails, we should better check the value
+of 'to' and close 'from' to avoid possible file leak. Improve the checking
+of 'from' additionally.
 
-Investigating this further my patches will not work for O=xyz builds
-either. Please squash this into the relevant changes:
+Fixes: 32ae976ed3b5 ("selftests/capabilities: Add tests for capability evolution")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+Changes in v2:
+- modified the patch according to suggestions;
+- found by customized static analysis tool.
+---
+ tools/testing/selftests/capabilities/test_execve.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index db60d2718b35..9966e5b7139b 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -9,7 +9,8 @@ TEST_PROGS := \
- 	stats.py \
- # end of TEST_PROGS
+diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
+index 47bad7ddc5bc..6406ab6aa1f5 100644
+--- a/tools/testing/selftests/capabilities/test_execve.c
++++ b/tools/testing/selftests/capabilities/test_execve.c
+@@ -145,10 +145,14 @@ static void chdir_to_tmpfs(void)
+ static void copy_fromat_to(int fromfd, const char *fromname, const char *toname)
+ {
+ 	int from = openat(fromfd, fromname, O_RDONLY);
+-	if (from == -1)
++	if (from < 0)
+ 		ksft_exit_fail_msg("open copy source - %s\n", strerror(errno));
  
--# YNL files
-+# YNL files, must be before "include ..lib.mk"
-+EXTRA_CLEAN += $(OUTPUT)/libynl.a
- YNL_GEN_FILES := psp_responder
- TEST_GEN_FILES += $(YNL_GEN_FILES)
+ 	int to = open(toname, O_CREAT | O_WRONLY | O_EXCL, 0700);
++	if (to < 0) {
++		close(from);
++		ksft_exit_fail_msg("open copy destination - %s\n", strerror(errno));
++	}
  
-diff --git a/tools/testing/selftests/net/ynl.mk b/tools/testing/selftests/net/ynl.mk
-index 0e01ad12b30e..59cb26cf3f73 100644
---- a/tools/testing/selftests/net/ynl.mk
-+++ b/tools/testing/selftests/net/ynl.mk
-@@ -18,6 +18,4 @@ $(YNL_OUTPUTS): CFLAGS += \
- 
- $(OUTPUT)/libynl.a:
- 	$(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS="$(YNL_GENS)" libynl.a
--	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a ./
--
--EXTRA_CLEAN += libynl.a
-+	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
+ 	while (true) {
+ 		char buf[4096];
+-- 
+2.25.1
+
 
