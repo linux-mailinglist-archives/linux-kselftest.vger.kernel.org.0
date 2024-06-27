@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-12880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5546D91AFEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 21:56:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29F7691B085
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 22:37:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7F7BB211A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 19:56:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 971A21F22B3A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 20:37:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F5E19CCFE;
-	Thu, 27 Jun 2024 19:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEFA19E82A;
+	Thu, 27 Jun 2024 20:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pKZGc8sT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JH490QjO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B902019B591
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 19:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D2A19E828
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 20:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719518157; cv=none; b=OdwGhGxH1tioYe0gfQ04roJomr3Oeb6Y+eXCgZVRYNNBmh1IyCDKcsm/gF3v+9OCiAuX9pbZSxAzDvGZZkJ3aJoRXZnEr4hhiMtWcovoVHEE1rRQYRHF1biGRU2xIGxayHBUhyY25K8d8ZlrF6+yLxJJL4Z9YWuswtfL9zaUFzc=
+	t=1719520636; cv=none; b=JFHkw7bE/qADwkac2dIpkr83xHXwQnqiOYKKx1M0kBDU3mjHZFuFk/7nSP/Ugt4ofAtP/kxfGMnLmkTrf/ae18ZYBEsDRzQRqonjz6GxRQ0LOeJ7/pqBblpx3+7Gs5me2wbC+phIyg+jAk6bKQy+xYxGR89qWAG4hfTcBMPikJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719518157; c=relaxed/simple;
-	bh=36GxoZjliAZT52Uum3hkhku+z1zWUxDL4YWuJDbCmCU=;
+	s=arc-20240116; t=1719520636; c=relaxed/simple;
+	bh=l10tJwz6XFZeNVP6zM+7j5f7jFyPN3goI9ctALUvyQY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=frmxoPgqSpT1Gom7G7XgSvz58EtmtVRykEZbh0w0ndsW64aYut+8BKeVZznRKz1v5ygummsfeOvsHeKpmwr8J3kCoQg/UpYPy69vqYnXkja0Po2P7BPqYdnc3rc31YSN66JGZK+rVdBS3PS6Je8F8jCTZEB/NDP2j3FgjUUvJAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pKZGc8sT; arc=none smtp.client-ip=209.85.167.47
+	 To:Cc:Content-Type; b=eBztZ+XCGbd0Otvrsi75fXx/V5LshmJnBDPxwmWjR+gM1pX1/lAQtlVFAcBTFrjmu/qn8p8W58fWX0mfBVKr4pb/mMBocVI1rDoCTPNTCusu94cjQK75womEFvbTtQSNJB/BRy51RWZCE5tKBkuUFTKhVpf3nnI+bQSB86Yg7z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JH490QjO; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52cdbc20faeso8185944e87.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 12:55:54 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a689ad8d1f6so1107162766b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 13:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719518153; x=1720122953; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1719520631; x=1720125431; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HwbPl7/RVFpU7jHcXTQEjahrmwW8PQdQrA+IV3FhN4w=;
-        b=pKZGc8sTJiPK8evW+kyTJom27vWLLcaatgTP+pqNNLik3mw1pmxqfY8BC6C2Oa9+oI
-         o0sCCeMv+WZal6hDaWgzmHoncPuHmkHoAWo/Ck/6FuDrAQdLlfhkR9KmZsxGc443vkjr
-         5ujWzSTQNw9wjOOwbnW3XPU61Dca2ugh48ywLYRU+VcRpd7i3tp/cfEjewfSyXRILNvv
-         sJgKRnx3yzI5aWIHj3tc6qE6MNwWNocuDjwigxiw7d7HiOc30Xdd29sJqDUtaTNLWPyr
-         RN1F5aOe5ICn2RmnfOTaJ1d72Wl+yAJWGgOJhh7wOYjxwW+dPqi2218Mw9ed924jYzNQ
-         0M7w==
+        bh=RQogwTjNx9bNj44zcbbVune0WA12P5prs4FgoFEzpbE=;
+        b=JH490QjOzzKkUifvue0qj9hvV1PpFSz94aTH7xFspk0JwnFfHxBJe5HSWeCyq6hBUE
+         vQdJu5FLvDVc9psecXewQIqybmVCxlRJMy0ZB30MqTqYmjSnvlemvqrNd2r4jH5xTZKv
+         O5AMB/9mHOZNwy/OkllmtEL2SzUSVm5RCV+i91fSYC4FOSYiGfoxF58K5KY5x7+pxTTY
+         Q//gQmqUPVYyttWCzNiV8Lr9VFOiEB6XU1EgepKhQMpHmaw+5Lfg+5VP05eKA8qNHRrg
+         NBIvo87rMNlLbBchA+dtps5tpRrq68Xt3kDnjEnZCT+JE/VIUHD9n+VL6iF6PZInpsGt
+         /Cpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719518153; x=1720122953;
+        d=1e100.net; s=20230601; t=1719520631; x=1720125431;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HwbPl7/RVFpU7jHcXTQEjahrmwW8PQdQrA+IV3FhN4w=;
-        b=AnrRnaw2zcI9wXAZZo2EPceYL64DfCdAZ0j6zYEvPIFsnliBF8qh+H++I7Rn4NdJBD
-         fd7xWbOvGoQnnqfgAfnhkIFCKlxLuSPS6nX1kqGLHsCNc8oWDvo7rE63qnRCTo0KiqmD
-         Q9+AY2v/zeo91SY2u8ywak99ZITKsqmZfKAg15h8eNvFCSQaB3NJTU0ULJ04Ughxli8g
-         b1Gaed9FNIQ6a+It1fZmYvKmw3A2HrJgRC0XK9sAUWN4tlij48H2Fkn5B/AmTgperNSq
-         vNBHG+zoU6UV7lmhCHhusGgjHVuQCiBFl/1HGGOClPgmPUHp14rx4tkFmzGtQtc2NfNq
-         S0Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCWAw+cavOJbPP6qkNpKGOPZbRyASuAcYl3QpzlYx+mEIWXiSvtUIM3nwLh5z1kXHIPwpEtGYuQ5O3WGw3lePikDS+Bi1eEUyRN/pOewzQ1J
-X-Gm-Message-State: AOJu0YwMG0ZsK9RtGzoAyocbj4qMZhV3xCNmQvwceoaZrqTSnP242Gcw
-	0GIzxbmsika7GX1DNbtImgh5dlZuPiJCbbU6vmHaS/AWexouaNM2nzuIAdkm5ojHiO1SL5T3Lkr
-	MEJOt5J3Pm83vUyboDSENNhvX+Gya0NmgibpU
-X-Google-Smtp-Source: AGHT+IHrIkqcjhj0KSGiy7gblVxOce/ysoGeptTitOpdzuEly5ueVJ0/ZUmc2dX4a/lyh+Q8t0Uj2uTJuS+Tj9wzWDM=
-X-Received: by 2002:a05:6512:2004:b0:516:d692:5e0b with SMTP id
- 2adb3069b0e04-52ce185f9d6mr8027892e87.54.1719518152535; Thu, 27 Jun 2024
- 12:55:52 -0700 (PDT)
+        bh=RQogwTjNx9bNj44zcbbVune0WA12P5prs4FgoFEzpbE=;
+        b=RHWjH9wisQizip9Dh0gxDPWIh4KLJTScJeYuY1j6k5L/hlZagAgYhs1l5tl60j0O7K
+         ndRqTcj+Mneg0j4ifrK1UhyDwt3HprWTh2EYmW9wG4052YCPgevghib1+cD7AheJT9oW
+         nbN4YBNsBfNdKKw9tUR4H+7IZ/eMLIvW73vbJkIiIsFf9PtH+zQ9fAEWvAf8Irn0XUjV
+         kqrb0LXNFuM6GnqoFRxcX+8EJUzuhJypZ2Um9/fZkBU3k4GwZEbdEwl+jcrTrqdvuT7E
+         ljV2UOM5/3CPrRfvt/AViB9o0DQ9O2AL5TV+0uFgIXnbteRAMkl29xVWyOUj0YF1UMGj
+         7SlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUe/PcSZb/qi7rgw4Qmx1Www8WBcTlpVZ1BjczYtfv5SeN0D82hdzZLIEP/PUMz1ETP6zWZcf92IwtSBGXA+LLOIQwdGfBckoIG31S8URUn
+X-Gm-Message-State: AOJu0YwLrMzhF0EbdwvZJyfgENXeqCYteaeISIRSqQKO+pQB0v5VyWi5
+	6xsLcmi9GgPUQYtd7FFa3ygQxOVigmY0UxvjE8gXqDto33te/CCyOuiKMQzELTb4EHTsBHPdJLj
+	e1kTmahmeQv+QnT53RtDSp1O1Fa4CzVkwaP9t
+X-Google-Smtp-Source: AGHT+IG01bZgMAGjP5tBPFfqopXM4TOonnMGd8+pitaPiRdrQl4LD+zRRX7r67IiLYfZMFYiFwI3es5iQtpASdeKF2c=
+X-Received: by 2002:a17:906:6b10:b0:a72:5226:331d with SMTP id
+ a640c23a62f3a-a7252263f95mr778859566b.70.1719520631048; Thu, 27 Jun 2024
+ 13:37:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,11 +73,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240625195407.1922912-1-almasrymina@google.com>
  <20240625195407.1922912-14-almasrymina@google.com> <20240626150822.742eaf6a@kernel.org>
- <20240626174634.2adec19d@kernel.org>
-In-Reply-To: <20240626174634.2adec19d@kernel.org>
+ <20240626174634.2adec19d@kernel.org> <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+In-Reply-To: <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 27 Jun 2024 12:55:38 -0700
-Message-ID: <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+Date: Thu, 27 Jun 2024 13:36:57 -0700
+Message-ID: <CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
 Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
  devmem TCP
 To: Jakub Kicinski <kuba@kernel.org>
@@ -114,121 +114,71 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2024 at 5:46=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Thu, Jun 27, 2024 at 12:55=E2=80=AFPM Mina Almasry <almasrymina@google.c=
+om> wrote:
 >
-> On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
-> > On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
-> > > +CFLAGS +=3D -I../../../net/ynl/generated/
-> > > +CFLAGS +=3D -I../../../net/ynl/lib/
-> > > +
-> > > +LDLIBS +=3D ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/pr=
-otos.a
+> On Wed, Jun 26, 2024 at 5:46=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
+wrote:
 > >
-> > Not as easy as this.. Please add this commit to your series:
-> > https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d=
-36875d8c47
+> > On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
+> > > On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
+> > > > +CFLAGS +=3D -I../../../net/ynl/generated/
+> > > > +CFLAGS +=3D -I../../../net/ynl/lib/
+> > > > +
+> > > > +LDLIBS +=3D ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/=
+protos.a
+> > >
+> > > Not as easy as this.. Please add this commit to your series:
+> > > https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f=
+1d36875d8c47
+> > >
+> > > And here's an example of how you then use ynl.mk to code gen and buil=
+d
+> > > for desired families (note the ordering of variables vs includes,
+> > > I remember that part was quite inflexible..):
+> > > https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca=
+3eadf5091bb3
 > >
-> > And here's an example of how you then use ynl.mk to code gen and build
-> > for desired families (note the ordering of variables vs includes,
-> > I remember that part was quite inflexible..):
-> > https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3e=
-adf5091bb3
+> > Investigating this further my patches will not work for O=3Dxyz builds
+> > either. Please squash this into the relevant changes:
+> >
 >
-> Investigating this further my patches will not work for O=3Dxyz builds
-> either. Please squash this into the relevant changes:
+> Thanks! I cherry-picked commit 15dbefa97fb98 ("tools: net: package
+> libynl for use in selftests"), and then applied the diff below to the
+> series [1].
 >
+> Now:
+>
+> `git clean -fdx && make  headers_install && make -C
+> ./tools/testing/selftests/net` works
+>
+> `git clean -fdx && make  headers_install && make -C
+> ./tools/testing/selftests/net ncdevmem` doesn't work with this error:
+>
+> make: Entering directory
+> '/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/ne=
+t'
+> gcc -Wall -Wl,--no-as-needed -O2 -g -I../../../../usr/include/
+> -isystem /usr/local/google/home/almasrymina/cos-kernel/tools/testing/self=
+tests/../../../usr/include
+> -I../     ncdevmem.c  -lmnl -o ncdevmem
+> ncdevmem.c:34:10: fatal error: netdev-user.h: No such file or directory
+>    34 | #include "netdev-user.h"
+>       |          ^~~~~~~~~~~~~~~
+> compilation terminated.
+> make: *** [<builtin>: ncdevmem] Error 1
+>
+> It seems specifying the target doesn't trigger the libynl.a to be
+> built. Isn't this a bug, or is that expected?
 
-Thanks! I cherry-picked commit 15dbefa97fb98 ("tools: net: package
-libynl for use in selftests"), and then applied the diff below to the
-series [1].
+Nevermind, from a closer look at the docs, it looks like the proper
+way to build one test is:
 
-Now:
+`make -C ./tools/testing/selftests/net TARGETS=3Dncdevmem`, which works.
 
-`git clean -fdx && make  headers_install && make -C
-./tools/testing/selftests/net` works
-
-`git clean -fdx && make  headers_install && make -C
-./tools/testing/selftests/net ncdevmem` doesn't work with this error:
-
-make: Entering directory
-'/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/net'
-gcc -Wall -Wl,--no-as-needed -O2 -g -I../../../../usr/include/
--isystem /usr/local/google/home/almasrymina/cos-kernel/tools/testing/selfte=
-sts/../../../usr/include
--I../     ncdevmem.c  -lmnl -o ncdevmem
-ncdevmem.c:34:10: fatal error: netdev-user.h: No such file or directory
-   34 | #include "netdev-user.h"
-      |          ^~~~~~~~~~~~~~~
-compilation terminated.
-make: *** [<builtin>: ncdevmem] Error 1
-
-It seems specifying the target doesn't trigger the libynl.a to be
-built. Isn't this a bug, or is that expected? I took a bit of a look
-into it but couldn't figure it out immediately. If it is a bug, any
-pointers would be appreciated (but I'm digging into it anyway).
-
-[1] The diff on top of the series-with-cherry-pick that I'm testing with:
-
-diff --git a/tools/testing/selftests/net/Makefile
-b/tools/testing/selftests/net/Makefile
-index 7ba1505dc2eb4..1d3b99e9c12e8 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -5,10 +5,6 @@ CFLAGS +=3D  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS +=3D -I../../../../usr/include/ $(KHDR_INCLUDES)
- # Additional include paths needed by kselftest.h
- CFLAGS +=3D -I../
--CFLAGS +=3D -I../../../net/ynl/generated/
--CFLAGS +=3D -I../../../net/ynl/lib/
--
--LDLIBS +=3D ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
-
- LDLIBS +=3D -lmnl
-
-@@ -100,7 +96,11 @@ TEST_PROGS +=3D fdb_flush.sh
- TEST_PROGS +=3D fq_band_pktlimit.sh
- TEST_PROGS +=3D vlan_hw_filter.sh
- TEST_PROGS +=3D bpf_offload.py
--TEST_GEN_FILES +=3D ncdevmem
-+
-+# YNL files, must be before "include ..lib.mk"
-+EXTRA_CLEAN +=3D $(OUTPUT)/libynl.a
-+YNL_GEN_FILES :=3D ncdevmem
-+TEST_GEN_FILES +=3D $(YNL_GEN_FILES)
-
- TEST_FILES :=3D settings
- TEST_FILES +=3D in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_v=
-eth.sh
-@@ -111,6 +111,10 @@ TEST_INCLUDES :=3D forwarding/lib.sh
-
- include ../lib.mk
-
-+# YNL build
-+YNL_GENS :=3D netdev
-+include ynl.mk
-+
- $(OUTPUT)/epoll_busy_poll: LDLIBS +=3D -lcap
- $(OUTPUT)/reuseport_bpf_numa: LDLIBS +=3D -lnuma
- $(OUTPUT)/tcp_mmap: LDLIBS +=3D -lpthread -lcrypto
-diff --git a/tools/testing/selftests/net/ynl.mk
-b/tools/testing/selftests/net/ynl.mk
-index 0e01ad12b30ec..59cb26cf3f738 100644
---- a/tools/testing/selftests/net/ynl.mk
-+++ b/tools/testing/selftests/net/ynl.mk
-@@ -18,6 +18,4 @@ $(YNL_OUTPUTS): CFLAGS +=3D \
-
- $(OUTPUT)/libynl.a:
-        $(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS=3D"$(YNL_GENS)" lib=
-ynl.a
--       $(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a ./
--
--EXTRA_CLEAN +=3D libynl.a
-+       $(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
-
-
-
-
+`make -C ./tools/testing/selftests/net ncdevmem` was just a weird way
+I was building the tests that worked for me, but it doesn't actually
+show up in the docs. I'm guessing I can ignore the failure.
 
 --=20
 Thanks,
