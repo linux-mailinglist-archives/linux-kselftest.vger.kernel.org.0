@@ -1,115 +1,236 @@
-Return-Path: <linux-kselftest+bounces-12879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71DF991AFDC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 21:51:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5546D91AFEA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 21:56:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0E421C2223A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 19:51:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7F7BB211A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 19:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66F2A19AD7B;
-	Thu, 27 Jun 2024 19:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F5E19CCFE;
+	Thu, 27 Jun 2024 19:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ncJYO6dW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pKZGc8sT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3966D2D047;
-	Thu, 27 Jun 2024 19:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B902019B591
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 19:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719517901; cv=none; b=A4tt0b9N0S/6pUnXINAza0S26GNADWy+udktmqeolW3oEKXYRky3QQwbfEK3sk+8ko+0KwQwiQtxIgHHa8E7KynLMIjXJBxW4L83w5vfUrJhkxUnW30HSX/3xQH/Mlqdn/ZAWTbEpDtb6JM+AiOopr5Zkq6opPcXRlUrQng6GQQ=
+	t=1719518157; cv=none; b=OdwGhGxH1tioYe0gfQ04roJomr3Oeb6Y+eXCgZVRYNNBmh1IyCDKcsm/gF3v+9OCiAuX9pbZSxAzDvGZZkJ3aJoRXZnEr4hhiMtWcovoVHEE1rRQYRHF1biGRU2xIGxayHBUhyY25K8d8ZlrF6+yLxJJL4Z9YWuswtfL9zaUFzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719517901; c=relaxed/simple;
-	bh=Nu1MRTR8v5XZDzasqGr9q3u/QsN2RJit7rTafzcIyNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rs9ZVj6qi430hk++56IJDB4AlSIreaIdcoE28XbPkfUPyWuAbuevisUOkEbfAbRgdLcwlrM7t17wIILSsePY0aW5O5ZQgfxX9bCF4PE1drDsyUs/071dvWHXq30IrJ79xiY9Ew9C9QjSXAvS1EO3mahzhA87uahXCwOVj+NhF5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ncJYO6dW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1951C2BBFC;
-	Thu, 27 Jun 2024 19:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719517900;
-	bh=Nu1MRTR8v5XZDzasqGr9q3u/QsN2RJit7rTafzcIyNQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ncJYO6dWOutz3bVPLug/SKtimLBtIFl2hZJ2Q1YZ9intQ04YU2is9yRqu0Y99Cbd5
-	 bhfVqX9W4LqJW5DuwPbvxYXYV0R7nPVcFMa6dGisKLYI/xFZhUoPRzf5o9Mvf5g0aK
-	 9BYglQSXNObyOf3Blf200WvjFm5/5SJWGy1FEGPC+5xyRzljYw3AIvhZm3tpmo8K40
-	 fgg3vpGa1XWzyRpRP/ytzSwx8C27OhzvU4ogPO6JytvVMANzjksPoQraxajkzt3QEc
-	 GO/AE0Qfah2TTBZEvKhq1xM0ExorUyyjmLiTpb0gllKaR3BBYMXMCfRNDPMcN4b6zw
-	 RJ5Y6tvKiuZzw==
-Date: Thu, 27 Jun 2024 12:51:40 -0700
-From: Kees Cook <kees@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Mark Rutland <mark.rutland@arm.com>, David Gow <davidgow@google.com>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <rmoar@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] kunit: test: Add vm_mmap() allocation resource
- manager
-Message-ID: <202406271250.A227529@keescook>
-References: <20240612195412.make.760-kees@kernel.org>
- <20240612195921.2685842-1-kees@kernel.org>
- <d32df98c-fd3c-466b-bc8f-47cec1c7bebf@roeck-us.net>
+	s=arc-20240116; t=1719518157; c=relaxed/simple;
+	bh=36GxoZjliAZT52Uum3hkhku+z1zWUxDL4YWuJDbCmCU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=frmxoPgqSpT1Gom7G7XgSvz58EtmtVRykEZbh0w0ndsW64aYut+8BKeVZznRKz1v5ygummsfeOvsHeKpmwr8J3kCoQg/UpYPy69vqYnXkja0Po2P7BPqYdnc3rc31YSN66JGZK+rVdBS3PS6Je8F8jCTZEB/NDP2j3FgjUUvJAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pKZGc8sT; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52cdbc20faeso8185944e87.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2024 12:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719518153; x=1720122953; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HwbPl7/RVFpU7jHcXTQEjahrmwW8PQdQrA+IV3FhN4w=;
+        b=pKZGc8sTJiPK8evW+kyTJom27vWLLcaatgTP+pqNNLik3mw1pmxqfY8BC6C2Oa9+oI
+         o0sCCeMv+WZal6hDaWgzmHoncPuHmkHoAWo/Ck/6FuDrAQdLlfhkR9KmZsxGc443vkjr
+         5ujWzSTQNw9wjOOwbnW3XPU61Dca2ugh48ywLYRU+VcRpd7i3tp/cfEjewfSyXRILNvv
+         sJgKRnx3yzI5aWIHj3tc6qE6MNwWNocuDjwigxiw7d7HiOc30Xdd29sJqDUtaTNLWPyr
+         RN1F5aOe5ICn2RmnfOTaJ1d72Wl+yAJWGgOJhh7wOYjxwW+dPqi2218Mw9ed924jYzNQ
+         0M7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719518153; x=1720122953;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HwbPl7/RVFpU7jHcXTQEjahrmwW8PQdQrA+IV3FhN4w=;
+        b=AnrRnaw2zcI9wXAZZo2EPceYL64DfCdAZ0j6zYEvPIFsnliBF8qh+H++I7Rn4NdJBD
+         fd7xWbOvGoQnnqfgAfnhkIFCKlxLuSPS6nX1kqGLHsCNc8oWDvo7rE63qnRCTo0KiqmD
+         Q9+AY2v/zeo91SY2u8ywak99ZITKsqmZfKAg15h8eNvFCSQaB3NJTU0ULJ04Ughxli8g
+         b1Gaed9FNIQ6a+It1fZmYvKmw3A2HrJgRC0XK9sAUWN4tlij48H2Fkn5B/AmTgperNSq
+         vNBHG+zoU6UV7lmhCHhusGgjHVuQCiBFl/1HGGOClPgmPUHp14rx4tkFmzGtQtc2NfNq
+         S0Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAw+cavOJbPP6qkNpKGOPZbRyASuAcYl3QpzlYx+mEIWXiSvtUIM3nwLh5z1kXHIPwpEtGYuQ5O3WGw3lePikDS+Bi1eEUyRN/pOewzQ1J
+X-Gm-Message-State: AOJu0YwMG0ZsK9RtGzoAyocbj4qMZhV3xCNmQvwceoaZrqTSnP242Gcw
+	0GIzxbmsika7GX1DNbtImgh5dlZuPiJCbbU6vmHaS/AWexouaNM2nzuIAdkm5ojHiO1SL5T3Lkr
+	MEJOt5J3Pm83vUyboDSENNhvX+Gya0NmgibpU
+X-Google-Smtp-Source: AGHT+IHrIkqcjhj0KSGiy7gblVxOce/ysoGeptTitOpdzuEly5ueVJ0/ZUmc2dX4a/lyh+Q8t0Uj2uTJuS+Tj9wzWDM=
+X-Received: by 2002:a05:6512:2004:b0:516:d692:5e0b with SMTP id
+ 2adb3069b0e04-52ce185f9d6mr8027892e87.54.1719518152535; Thu, 27 Jun 2024
+ 12:55:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d32df98c-fd3c-466b-bc8f-47cec1c7bebf@roeck-us.net>
+References: <20240625195407.1922912-1-almasrymina@google.com>
+ <20240625195407.1922912-14-almasrymina@google.com> <20240626150822.742eaf6a@kernel.org>
+ <20240626174634.2adec19d@kernel.org>
+In-Reply-To: <20240626174634.2adec19d@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 27 Jun 2024 12:55:38 -0700
+Message-ID: <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
+ devmem TCP
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 22, 2024 at 06:47:39AM -0700, Guenter Roeck wrote:
-> Hi,
-> 
-> On Wed, Jun 12, 2024 at 12:59:18PM -0700, Kees Cook wrote:
-> > For tests that need to allocate using vm_mmap() (e.g. usercopy and
-> > execve), provide the interface to have the allocation tracked by KUnit
-> > itself. This requires bringing up a placeholder userspace mm.
-> > 
-> > This combines my earlier attempt at this with Mark Rutland's version[1].
-> > 
-> > Normally alloc_mm() and arch_pick_mmap_layout() aren't exported for
-> > modules, so export these only for KUnit testing.
-> > 
-> > Link: https://lore.kernel.org/lkml/20230321122514.1743889-2-mark.rutland@arm.com/ [1]
-> 
-> FWIW, not sure I understand what the above link has to do with this patch.
+On Wed, Jun 26, 2024 at 5:46=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
+> > On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
+> > > +CFLAGS +=3D -I../../../net/ynl/generated/
+> > > +CFLAGS +=3D -I../../../net/ynl/lib/
+> > > +
+> > > +LDLIBS +=3D ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/pr=
+otos.a
+> >
+> > Not as easy as this.. Please add this commit to your series:
+> > https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d=
+36875d8c47
+> >
+> > And here's an example of how you then use ynl.mk to code gen and build
+> > for desired families (note the ordering of variables vs includes,
+> > I remember that part was quite inflexible..):
+> > https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3e=
+adf5091bb3
+>
+> Investigating this further my patches will not work for O=3Dxyz builds
+> either. Please squash this into the relevant changes:
+>
 
-Both the above Link and this patch were implementing KUnit usercopy
-tests (and the required infrastructure).
+Thanks! I cherry-picked commit 15dbefa97fb98 ("tools: net: package
+libynl for use in selftests"), and then applied the diff below to the
+series [1].
 
-> 
-> > Co-developed-by: Mark Rutland <mark.rutland@arm.com>
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Reviewed-by: David Gow <davidgow@google.com>
-> > Signed-off-by: Kees Cook <kees@kernel.org>
-> 
-> This patch results in a build failure for nommu_kc705_defconfig if kunit tests
-> are also enabled.
-> 
-> ERROR: modpost: vmlinux: local symbol 'arch_pick_mmap_layout' was exported
-> 
-> If CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT=n, CONFIG_MMU=n, and
-> CONFIG_KUNIT=y, arch_pick_mmap_layout is exported. However, if
-> CONFIG_MMU=n, it is declared as static inline function.
+Now:
 
-I replied in the other thread too, but this has had a fix pending:
-https://lore.kernel.org/lkml/202406271005.4E767DAE@keescook/
+`git clean -fdx && make  headers_install && make -C
+./tools/testing/selftests/net` works
 
-I pinged the patch again today.
+`git clean -fdx && make  headers_install && make -C
+./tools/testing/selftests/net ncdevmem` doesn't work with this error:
 
--Kees
+make: Entering directory
+'/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/net'
+gcc -Wall -Wl,--no-as-needed -O2 -g -I../../../../usr/include/
+-isystem /usr/local/google/home/almasrymina/cos-kernel/tools/testing/selfte=
+sts/../../../usr/include
+-I../     ncdevmem.c  -lmnl -o ncdevmem
+ncdevmem.c:34:10: fatal error: netdev-user.h: No such file or directory
+   34 | #include "netdev-user.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [<builtin>: ncdevmem] Error 1
 
--- 
-Kees Cook
+It seems specifying the target doesn't trigger the libynl.a to be
+built. Isn't this a bug, or is that expected? I took a bit of a look
+into it but couldn't figure it out immediately. If it is a bug, any
+pointers would be appreciated (but I'm digging into it anyway).
+
+[1] The diff on top of the series-with-cherry-pick that I'm testing with:
+
+diff --git a/tools/testing/selftests/net/Makefile
+b/tools/testing/selftests/net/Makefile
+index 7ba1505dc2eb4..1d3b99e9c12e8 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -5,10 +5,6 @@ CFLAGS +=3D  -Wall -Wl,--no-as-needed -O2 -g
+ CFLAGS +=3D -I../../../../usr/include/ $(KHDR_INCLUDES)
+ # Additional include paths needed by kselftest.h
+ CFLAGS +=3D -I../
+-CFLAGS +=3D -I../../../net/ynl/generated/
+-CFLAGS +=3D -I../../../net/ynl/lib/
+-
+-LDLIBS +=3D ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
+
+ LDLIBS +=3D -lmnl
+
+@@ -100,7 +96,11 @@ TEST_PROGS +=3D fdb_flush.sh
+ TEST_PROGS +=3D fq_band_pktlimit.sh
+ TEST_PROGS +=3D vlan_hw_filter.sh
+ TEST_PROGS +=3D bpf_offload.py
+-TEST_GEN_FILES +=3D ncdevmem
++
++# YNL files, must be before "include ..lib.mk"
++EXTRA_CLEAN +=3D $(OUTPUT)/libynl.a
++YNL_GEN_FILES :=3D ncdevmem
++TEST_GEN_FILES +=3D $(YNL_GEN_FILES)
+
+ TEST_FILES :=3D settings
+ TEST_FILES +=3D in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_v=
+eth.sh
+@@ -111,6 +111,10 @@ TEST_INCLUDES :=3D forwarding/lib.sh
+
+ include ../lib.mk
+
++# YNL build
++YNL_GENS :=3D netdev
++include ynl.mk
++
+ $(OUTPUT)/epoll_busy_poll: LDLIBS +=3D -lcap
+ $(OUTPUT)/reuseport_bpf_numa: LDLIBS +=3D -lnuma
+ $(OUTPUT)/tcp_mmap: LDLIBS +=3D -lpthread -lcrypto
+diff --git a/tools/testing/selftests/net/ynl.mk
+b/tools/testing/selftests/net/ynl.mk
+index 0e01ad12b30ec..59cb26cf3f738 100644
+--- a/tools/testing/selftests/net/ynl.mk
++++ b/tools/testing/selftests/net/ynl.mk
+@@ -18,6 +18,4 @@ $(YNL_OUTPUTS): CFLAGS +=3D \
+
+ $(OUTPUT)/libynl.a:
+        $(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS=3D"$(YNL_GENS)" lib=
+ynl.a
+-       $(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a ./
+-
+-EXTRA_CLEAN +=3D libynl.a
++       $(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
+
+
+
+
+
+--=20
+Thanks,
+Mina
 
