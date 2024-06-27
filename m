@@ -1,110 +1,143 @@
-Return-Path: <linux-kselftest+bounces-12884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56F391B0D7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 22:49:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EDE691B0DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 22:49:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9591DB25352
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 20:49:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F5821C20322
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2024 20:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6451A01B0;
-	Thu, 27 Jun 2024 20:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81A719538D;
+	Thu, 27 Jun 2024 20:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fm14q7G0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cb0CFj0K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4948219F49C;
-	Thu, 27 Jun 2024 20:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D534EB37;
+	Thu, 27 Jun 2024 20:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521263; cv=none; b=F6KYTp9qln4e2C9yZ7+Htv2tNwe9hdGzxMo7aMM0wlTAgOkhlp0XfTr/R7mfLUkhfYMZApKDeM9F4E/CHLkGYQGw59bEFH7mUfsQlHP0PWuND1xGupX3m6Iec0UjYkEYBK7B+ZP1DRdqqMrGKqVHYFqWdaw6EDTW8WSZnnuMIAM=
+	t=1719521368; cv=none; b=Znb2MBffdz3w5PIVaEsqTAzFW0fxrp2zGGpzlgyxcF6DRjksUJcGUDEPtiek1cUmzS5yxxcSdIvjQHDTy6JUCOER+vWfxj98F3bEO1tLgRPmRW8ZNlk6wSa+BubZxpWASQ7CL7ifUBX2KxmUme02YRWh0FszlaO6c8BSBmuP3D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521263; c=relaxed/simple;
-	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ChNBTvjtJNeBD8/HgEQmU3kwoU/Jwu2TbQMoMIdL594Dpgz+E1Ov4gCElmWBbL/uD1i55IgkwXrq6viT+dYbvWuCbmNGVo+vYKYYLCJ+mPoZ3Is/in5kFwtRRgnXdcuce4BlfWkThbz0W0sxNYR4kjUsnhyPYk+1wtCnXeF1Bwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fm14q7G0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8520C2BBFC;
-	Thu, 27 Jun 2024 20:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719521262;
-	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fm14q7G0XfP2HRyb1ZONJ+pqWBWPdhH2d6IjA0ofu+ehRYg/250v2wrmD+hEAIzhy
-	 5caUG+fhduRYCsICV5ZrbBJAXKlcmtzxiOCz6jFU00UwMVMtD6dbVR0LU5kxOr3Vzi
-	 0cAbW2JKPpLqSba16PMnQX/dcfAOoGDpmPAXuSdllZi6nWn1C7I2SU1ch36qi0pxGU
-	 IihY3N5vgcgKBWatl6HEJmjhiMyCz8n3KjAwTl+PBG+9aUmYsI19ix1s++aG1UBGv+
-	 aAFQxni9Alv0KyIBRf2yCiEWUthS2Fyw4DdcUmhxlFEm6zWfMYW2ck/kevCRcJ1ha3
-	 waS1l0dqJcZJQ==
-Date: Thu, 27 Jun 2024 13:47:38 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bagas Sanjaya
- <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
- devmem TCP
-Message-ID: <20240627134738.163f97e3@kernel.org>
-In-Reply-To: <CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
-References: <20240625195407.1922912-1-almasrymina@google.com>
-	<20240625195407.1922912-14-almasrymina@google.com>
-	<20240626150822.742eaf6a@kernel.org>
-	<20240626174634.2adec19d@kernel.org>
-	<CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
-	<CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
+	s=arc-20240116; t=1719521368; c=relaxed/simple;
+	bh=9itKQ8NPvTVa7rAwdliA6XXmBJcdkDjX1DmA4yRWAfc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nBjjyIlJi1lM01LHth+hgSzlpIt0gn7syC2sj+2w0yTsPBvBbE1g/WNBBRARgYK8700YgsdAR6ayLyc+W05yVijRBu3qBARYi0taarFWc0ant0c4z5PRfgW/1HC/OXLkka64kcQrwXiYERDMTYdSyyINi8x0DOK5o4aOFt0rKes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cb0CFj0K; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-424ab8c2d95so3747905e9.2;
+        Thu, 27 Jun 2024 13:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719521365; x=1720126165; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=712BBCnkNdAhV8vgO2qEZbgLKKlhXAC/8YoQa6MyJOc=;
+        b=Cb0CFj0KklZmp+8ALugfzZo71IOnqiZHeaX0pPOoocQfTRAXlJBY7Ut6xTqRFH6Kqm
+         p2nlnYO48UsDsIc/ku6TBDbez6FCf65UNTXeVHPMrvS0Q5iITBK/msVSACW6CYc21oEm
+         IJaoPuqyGVHONAlrJHQr0bueLuHvt9gNeb6NYgWx4uxVa+K2OHTsHMxIg8ggbrCnlmai
+         SFUbWpQW2QJ7qDr6KzhA5RWpzIwPwjbncxVU+dltmVmV3PchvJwqHO5C4rllTgumuUyf
+         l4rJfmAC78RxV6K1tl+M0dQS5QUcnWGik18T7Ik9Opb3cf/bmM8lVrYYVmM2Z3u4VMkm
+         DTXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719521365; x=1720126165;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=712BBCnkNdAhV8vgO2qEZbgLKKlhXAC/8YoQa6MyJOc=;
+        b=nHPRCqbpsGEo7WuHHiJovE0LpHq273sk5l1fiqJQGvAuHPbspaXKnFvltDM1rwkhk/
+         +wg5a5KQKaDRFl6ybAGhIS7XeI0Udg/8pJVQAwvgHxGeDFq3AVW+sxvR3jcZFwzJ7wHA
+         3TpWAimZ6NKZF9U+L6EmW551MrB2ZWWSvLFffqHw72sJpkzkxhl80HUVHH/IvpBacFjB
+         JqNenP19EzVcsBSMjk77freGiioqRLYy4Y3xdwcY1Z/Xr/UnYStG4VkIf8G4V1sI6IPX
+         pck1OLVwjHslreqZ/79iZq+jpADQ9t1X2EvUsFrmbVC667+xSOyjCSWfHQYELqEGYpNL
+         ZY/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUF3w8HA9JYBgUnWldgQFiDzZ7xtbY3eRZvX84T6DOdr8gKJQOznZvwVfmyy+RSelVi8tydqLYE1UdzWdMcfUFkH4LxU8Q4GTg+mSvk
+X-Gm-Message-State: AOJu0YyRAbi+UdczJuLYJfa645b+Uy5US5XB01LR3MOb1x++faYZg8+q
+	QSH1fK/4eNfhUCPa2UpizfxsILO7yQvG07O/ufr2m2isuZOcrWM0
+X-Google-Smtp-Source: AGHT+IF3FRjrbOPc86T5q4CmYnylpgdssA66mUjBTNsE2/t0rwKdUVUy8dYyOpl+55dG11uvZ5EVAQ==
+X-Received: by 2002:a05:600c:8a4:b0:425:65b1:abb4 with SMTP id 5b1f17b1804b1-42565b1b003mr19406175e9.0.1719521365145;
+        Thu, 27 Jun 2024 13:49:25 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:d20e:7300:8731:b664:1f4a:5ab4? ([2a01:4b00:d20e:7300:8731:b664:1f4a:5ab4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256af3cf85sm7349855e9.4.2024.06.27.13.49.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jun 2024 13:49:24 -0700 (PDT)
+Message-ID: <2f45ce9b-3d12-4cb0-9a52-a053bd4bfe50@gmail.com>
+Date: Thu, 27 Jun 2024 21:49:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/5] kunit: string-stream-test: Make it a separate
+ module
+To: Jeff Johnson <quic_jjohnson@quicinc.com>, brendan.higgins@linux.dev,
+ davidgow@google.com, rmoar@google.com
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+References: <20240618170331.264851-1-ivan.orlov0322@gmail.com>
+ <20240618170331.264851-4-ivan.orlov0322@gmail.com>
+ <dd58758a-7689-48a3-bc89-2cef3858c4b4@quicinc.com>
+Content-Language: en-US
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <dd58758a-7689-48a3-bc89-2cef3858c4b4@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 27 Jun 2024 13:36:57 -0700 Mina Almasry wrote:
-> `make -C ./tools/testing/selftests/net TARGETS=ncdevmem`, which works.
+On 6/19/24 19:09, Jeff Johnson wrote:
+> On 6/18/24 10:03, Ivan Orlov wrote:
+>> Currently, the only way to build string-stream-test is by setting
+>> CONFIG_KUNIT_TEST=y. However, CONFIG_KUNIT_TEST is a config option for
+>> a different test (`kunit-test.c`).
+>>
+>> Introduce a new Kconfig entry in order to be able to build the
+>> string-stream-test test as a separate module. Import the KUnit namespace
+>> in the test so we could have string-stream functions accessible.
+>>
+>> Reviewed-by: David Gow <davidgow@google.com>
+>> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+>> ---
+>> V1 -> V2:
+>> - No changes
+>>
+>>   lib/kunit/Kconfig              | 8 ++++++++
+>>   lib/kunit/Makefile             | 2 +-
+>>   lib/kunit/string-stream-test.c | 2 ++
+>>   3 files changed, 11 insertions(+), 1 deletion(-)
+>>
+> ...
+> 
+>> diff --git a/lib/kunit/string-stream-test.c 
+>> b/lib/kunit/string-stream-test.c
+>> index 7511442ea98f..d03cac934e04 100644
+>> --- a/lib/kunit/string-stream-test.c
+>> +++ b/lib/kunit/string-stream-test.c
+>> @@ -534,3 +534,5 @@ static struct kunit_suite string_stream_test_suite 
+>> = {
+>>       .init = string_stream_test_init,
+>>   };
+>>   kunit_test_suites(&string_stream_test_suite);
+>> +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+>> +MODULE_LICENSE("GPL");
+> 
+> missing MODULE_DESCRIPTION()
+> this will cause a warning with make W=1
+> 
 
-AFAIU the most supported incantation would have to be something rather
-insane, like:
+Hi Jeff,
 
-make -C tools/testing/selftests TARGETS=net TEST_GEN_PROGS="$(pwd)/tools/testing/selftests/net/tls" TEST_GEN_FILES=""
+Thank you for noticing this, I'm going to add the MODULE_DESCRIPTION in 
+the V3 of this patch series.
 
-but yes, don't worry.
+-- 
+Kind regards,
+Ivan Orlov
+
 
