@@ -1,128 +1,111 @@
-Return-Path: <linux-kselftest+bounces-12951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31E691C862
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 23:46:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD2B91C909
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 00:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4B0E1C20CC8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 21:46:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CAEF286794
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 22:24:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AAF77F7F7;
-	Fri, 28 Jun 2024 21:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213F280C09;
+	Fri, 28 Jun 2024 22:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="glwPWTWn"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LgYJUz1e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADEB48788
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 21:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8205F77F10;
+	Fri, 28 Jun 2024 22:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719611165; cv=none; b=PkMDNcirPQSDkzBAZgp5JDAnNH0fzmi6J3qMosrrhzSxtaqeQzPJRHWuLoTO7kjHBiGf3qWafuscyRg3d/cEpGDXemV0zw7lBXbnKEJGytoscNVMb2anTRdjM5dRdDBlQ3InXRwQaX0nZ2okEF8BjLjD9trFWCnwD3Ow9/74Clg=
+	t=1719613439; cv=none; b=jBGU8xWdga86JcLut5Y6eaf2h+UszoZLp/VOtsfZihVEpTRGrwVSaMe2aouJOyz64bgEbHULqKXBPserzBx0nbwyIepbbFDxw65YJRYem4qAXmaDEI+5x5qjhMIDZ5C+l0r3KgDhlvcU3IlmGkWCTU7k3Y0VmNabQos9Rk23gXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719611165; c=relaxed/simple;
-	bh=OB3Wr2ru3wShEzudQkoJjiRFTKGld9qFcmtWs0Umma0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m6Rr5LKK9+7Lm4epJl4aOFZFFxTWoCWAMoou8uz8UO8A369gMWvplHKYhVa7MBhFGPW1atHRRthY6pmh+4gbqypQUojO9oyh0PI4jwvPyA9+cTVjZYjTwwi2vFv9/RgRKfn3b96qjvx1KyRq+rxd3L8B/zAMbytX3BbXUlfu4Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=glwPWTWn; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7f3d2f12d26so2085239f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 14:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1719611162; x=1720215962; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jXD+Wgu9HPieHOq5j7Skd1mCiZ8SACBN4o7XWJsIIks=;
-        b=glwPWTWnzCuNlI4ROfXK1HLhdRanR8revQQbmun8/DAFpswzACpc9kf6y6bxKaiJ6F
-         rcM4gsHXCeBkwP1PmgIPHh6TI3RrVTCz1mmZTtFc/XgVnjm7J6Bis6Mr7QeSw16ZRTGs
-         Er87v27nVnbceEBzb0Ff2b5cEHxPPHhU5KtIE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719611162; x=1720215962;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jXD+Wgu9HPieHOq5j7Skd1mCiZ8SACBN4o7XWJsIIks=;
-        b=sR51eHl/rojj5/+fFUrOdSZylXz0CR68tY4lHWeSoTXgOFbKoD6C06J3/oaqc37uET
-         uJ5NjR/unxSxZABzkxD79pJuj8qRHWvoRvN/6vixD1G8ZM5kZZ7IfDOrY5Su4LBFoNWp
-         6o/2BU6zilo+s6qBULcKDHWJzo6DHhQnomaxrljdjOTNX5We7J8H9oob+jSybj7/jZX5
-         loCStotTUd1nVVM/j+7rFNO3iBfQYOuQGC7jSTAcQDZcbTUV54RTIT7IWCcwNGFaBEOH
-         MBlfKqH4Lq+gqQvU0vMgkimDWK6jw5/ob+xWHgq7epkhpJjCotgGAL5yWfrgvNy4hj6Q
-         XDnA==
-X-Gm-Message-State: AOJu0Yw9ZLh6LoHV0geoD3jC33IyWYxQ8vCHlXSbIbs1onJOSa5AJhfL
-	YLzEaYwyFwooKn4lx1wnRBEOWVm+4e3LT5OUYaJ26diOvfygAMqHPGkSuI04lz0=
-X-Google-Smtp-Source: AGHT+IGo3fWI1OD0BMxUMA1ZPYK2vbnSnMktP0APM8qy7zFHw3P3IMjKDStnU4CheqoJvYjeSTASHw==
-X-Received: by 2002:a05:6602:3fca:b0:7eb:2c45:4688 with SMTP id ca18e2360f4ac-7f39dd12493mr2282879139f.2.1719611161714;
-        Fri, 28 Jun 2024 14:46:01 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-7f61d0fecc4sm67160539f.35.2024.06.28.14.46.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 14:46:01 -0700 (PDT)
-Message-ID: <813c866d-c5f1-4f29-8854-4a789fd035cd@linuxfoundation.org>
-Date: Fri, 28 Jun 2024 15:46:00 -0600
+	s=arc-20240116; t=1719613439; c=relaxed/simple;
+	bh=yWpDidoG0tNCH8bt6FciDlaBbMXMnRFfIlxkW5JUxFo=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=cTkTZKL0cizMsHYjxm9pAlnwKFKdTif4h7AqUFfwVkdMmb/BqrXuuzt/VqumOwgflOmR9cXw9/vaZqQM8o0xjPENdAiRE7yREXxZxpIk99Z/PWOs2tJD//uGIWT3JyCmALDQdaan6zIISrR4uvk8bbC6gPUI4at9G8QNJoHMd54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LgYJUz1e; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Jkls7DPW/4o7NdOxSD9CxZNsNVkHS6JiAhzOjoNpQLo=; b=LgYJUz1eu9lsDGAtZqLeLHpK6k
+	JmmM7cEYTQku5QNZS47zR+Hzc/AndCBjK1Vj03fF+rFnfsBW6R8unLWn7n2gbybr8z7bFDY6QzeSn
+	xs+vSy7a/MIyVF8fhSQIwhKtG9TU6yWKbd7wlsCmURpfI2tZDxCnLCgNu0GsTC3SRUwYXjk6fAsnU
+	YdAwyA4SulvUc9yVez2H+27ncpI9csp8nEzunmGZkFyfwX4AVkgKDX+Z9tZTMjiqMVRAAfkFrdh+H
+	NMeLmY8z/c4/1Yv/xQ8dQ3+FJplTAXNee2BWMgPBLgxAiH30nn1FOdvIfTQxmpgEXcTkmC4c4tyi0
+	kxCkLw4g==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sNJzz-0000No-Np; Sat, 29 Jun 2024 00:23:19 +0200
+Received: from [178.197.249.38] (helo=linux.home)
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sNJzz-000DOB-0r;
+	Sat, 29 Jun 2024 00:23:18 +0200
+Subject: Re: [PATCH] selftests/bpf:fix a resource leak
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240627060107.8682-1-zhujun2@cmss.chinamobile.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <847bcc7c-e54e-648a-be47-59e0a6d0853e@iogearbox.net>
+Date: Sat, 29 Jun 2024 00:23:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] tools/nolibc: implement strerror()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Willy Tarreau <w@1wt.eu>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240426-nolibc-strerror-v1-0-76a4c9c5271d@weissschuh.net>
- <d6021c7c-271a-4aaa-82af-5a8ac7aac60b@t-8ch.de>
+In-Reply-To: <20240627060107.8682-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <d6021c7c-271a-4aaa-82af-5a8ac7aac60b@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27320/Fri Jun 28 10:37:18 2024)
 
-On 5/2/24 10:10, Thomas Weißschuh wrote:
-> Hi Shuah,
+On 6/27/24 8:01 AM, Zhu Jun wrote:
+> The requested resources should be closed before return
+> in main(), otherwise resource leak will occur
 > 
-> On 2024-04-26 13:08:55+0000, Thomas Weißschuh wrote:
->> Adds a simple implementation of strerror() and makes use of it in
->> kselftests.
->>
->> Shuah, could you Ack patch 3?
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+> ---
+>   tools/testing/selftests/bpf/test_sockmap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Friendly ping for an Ack of patch 3 of this series.
-> 
-> After that I'd like to submit an updated nolibc pull request to you for 6.10.
-> 
->> Willy, this should work *without* your Ack.
->>
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> ---
->> Thomas Weißschuh (3):
->>        selftests/nolibc: introduce condition to run tests only on nolibc
->>        tools/nolibc: implement strerror()
->>        selftests: kselftest: also use strerror() on nolibc
->>
->>   tools/include/nolibc/stdio.h                 | 10 ++++++++
->>   tools/testing/selftests/kselftest.h          |  8 -------
->>   tools/testing/selftests/nolibc/nolibc-test.c | 36 ++++++++++++++++++----------
->>   3 files changed, 33 insertions(+), 21 deletions(-)
->> ---
->> base-commit: a3063ba97f31e0364379a3ffc567203e3f79e877
->> change-id: 20240425-nolibc-strerror-67f4bfa03035
->>
->> Best regards,
->> -- 
->> Thomas Weißschuh <linux@weissschuh.net>
+> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+> index a34e95040994..03d5dd617c4a 100644
+> --- a/tools/testing/selftests/bpf/test_sockmap.c
+> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+> @@ -2092,7 +2092,7 @@ int main(int argc, char **argv)
+>   	if (err) {
+>   		fprintf(stderr, "populate program: (%s) %s\n",
+>   			bpf_file, strerror(errno));
+> -		return 1;
+> +		goto out;
+>   	}
+>   	running = 1;
 
-Sorry for the delay o this.
+There's one more when cgroup_setup_and_join() fails a bit higher up
+where we end up leaking options.whitelist/options.blacklist. Maybe
+could you reorder the free() towards the end, add a new label, set
+err to cg_fd and jump there.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Thanks,
+Daniel
 
