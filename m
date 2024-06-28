@@ -1,196 +1,214 @@
-Return-Path: <linux-kselftest+bounces-12939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE37991C4C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 19:25:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A855E91C509
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 19:38:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD9B11C22462
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 17:25:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 582AE284BD0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 17:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBDA1CCCA6;
-	Fri, 28 Jun 2024 17:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCB0A1CCCCE;
+	Fri, 28 Jun 2024 17:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="blEU5tDu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XQlmC1rR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DD61CB33B
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 17:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D764CB37
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 17:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719595516; cv=none; b=dTThkmEICf3GWfUjhxNr/AxYd4E7bF16uEISk6UkU5yVycKpCH99UvRmdY8lcXk48yEw+oHIDTV7p9G1diTeE5ZDB3ErICw/+T9zGtmqvht2Wc74LWsJfDCsTGQtkcj+/hb802dlGA9USKCNYAufjKt8g2M0HLuiqwQAi2EDfLk=
+	t=1719596293; cv=none; b=QqOBbQZE02KshYATjQdEHQfMatjYltrKiMTM5FxNYMWx0bGBnGWp78UtXEkL/gCr97iOX9Uy77FikanP5H8zDivpsQ9rAmUfnFuuV74NgA40yOcQobDwJh8EOumXBJTpSJUyKH9FpyG/kFHMbfyggqNbSUNGAaHKpNRvAGN3h6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719595516; c=relaxed/simple;
-	bh=kq1fpL86p3CAakLQbNhpZmymFcmjyTTnrGV3h0AgDm0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=udC6lphs0UGwxcku5Pfcy9zWu/9RO1WhgQKSqUfhUNpqCbFOTOgRdV6VssUNRFpHdhpjGZA30zYdN6M3u+yhvR4RG135JFrerrQ1OiixGK6Wa90j2vAHz09qKq8H9txnj1S4ByrLpU3d1v7JY9tPJ0dtv9YxHVj8QGGE+h46yXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=blEU5tDu; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42565697036so12328305e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 10:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719595513; x=1720200313; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=caKA1ZLZy4Gxv4ZL6Bf0GGH+gpZqMfFYuX6KpD7fNlo=;
-        b=blEU5tDu3IEAyIanTnVhuFKUcTpFJoNUgrSdcBP7RVXUBT7Nv1RIAEc1Afs9qgHWK2
-         1jbhpH6b945m1sogPKGsS6wOtpIphtC6itawFslUnWQVF/pIUzArdwLPWAdFGXTFOCvJ
-         sOYj1v0DIjWF+mIAXEOWXC6y5rKzRv9v04g2y0Ef3JjDuaGDOh4zgTSfV7Ldc5eSAPXx
-         WGCOoIe/6DTe0i5AlRo5vfxBHn+ytaX9QyeZc6z4AxXXoA+0bLj7C5+p56WC/fOQ7zfw
-         M6UE8gyseC9jjkWDnRyWQjPNblOo+JiB/tJV2frL77FPr8BeMO6kvAkjoBX9bTN3lUgd
-         Nz6Q==
+	s=arc-20240116; t=1719596293; c=relaxed/simple;
+	bh=m4fUe9aaj4TOFlCepZRFIJXwB4CGuQ8OTm/7XSW9YaA=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uZahbwJlqM/zF260pKhMOZPAqkKyM4z7556+rEgQImAt+8xYmDOzaT7ufdN39ayJlQwv9bfdOWsCIvMcgEL1tAwCuq467QZxKu8NRVPf5B5Dgz/3MbYZ2qDULnhRhIDbQj6CedMH6prHFo9M7qWs+4aEWtdzRbuhN1J27W9wLtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XQlmC1rR; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719596290;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FG7X97i4qW1z+GDWPEv3aIODEGnqEtsm7as7nCoOOqE=;
+	b=XQlmC1rRY3UKLjNPd/l3CeOp3RRLHE3W2WmM5X4ck9cuocay0CaR5xSPe5mkK1oHnJRfH8
+	GkKGHMEa/5b9p2NJc8ly+32+x21i8ktcivxpDzX3zDbcUnYbwCMa+dVAGesUnOgQxvNLFO
+	e0LTSbk3eeYQvYPiLD4KY2DE+XiIki8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-484-AWK2t8WCOgeZSbxVJMOjog-1; Fri, 28 Jun 2024 13:38:08 -0400
+X-MC-Unique: AWK2t8WCOgeZSbxVJMOjog-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6b593236489so38781186d6.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 10:38:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719595513; x=1720200313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=caKA1ZLZy4Gxv4ZL6Bf0GGH+gpZqMfFYuX6KpD7fNlo=;
-        b=J1uvVR2UKlIayRKxDTo/tGBAbt3v9nJkRLZLqfqfiFjzg2/bLhCiI917EpbuCY9QkG
-         AJWWAfrBtj4zp875/4+QmmmRCQSbwpxjU/OkmDlLhLvlfXDSMbsKmmr1AwrctGHuJDOm
-         sMj46VzOgoxJuPgm19x9w7wwkY3RDyGzDgbtpxZHgfRABCKjWMFYIc67muIXSxNnEtCQ
-         Yl12bXsgpQRIlqtfGgSMOmujdOdn138kuVEHi80DT/zz+kgbscYQTkrUixkjjdC6JDAb
-         5YgVfQdpHYotYTneut9NTwAPokYgFSBcQWqHnRvO+zKBfSwG371XFOjDN3GGlVfVYDue
-         ySqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2uqrQV3KqRiBgyM7jATH6wGWWQiZiHG5kYt5W5Hp3KG+bO6HAI/kav78ot8eh5ciYYW+v5ZXiBPDh7av4aKAfpmlWjIO2m8h6HVKZzA4K
-X-Gm-Message-State: AOJu0YzN1LAvpD6aB/psCvs0tAEoNrHIQFZ+IDtr4v1acrDOI/sB2Yue
-	9rMsiX+YqaIKs6ygYmFr2ED+tev6jW0p9HFiEM+TD4Qs90x+Mhel2nVWMhdMVRUKoc/XtGnIl6k
-	ynP/lKb21WV4wzrR4gwXKNGIXSb/TWhPpMGRk
-X-Google-Smtp-Source: AGHT+IHaga+0HZwFoMa7vh1+QWpuNmbt+Pa/Udmt9iDW5i8J5dXuxOLSqkHGx+gHqUzkUgc64qZI0rblrxW0ml7XPRE=
-X-Received: by 2002:a5d:648c:0:b0:367:42bc:b2dc with SMTP id
- ffacd0b85a97d-36760a6ab1fmr2440949f8f.7.1719595513311; Fri, 28 Jun 2024
- 10:25:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719596288; x=1720201088;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FG7X97i4qW1z+GDWPEv3aIODEGnqEtsm7as7nCoOOqE=;
+        b=NeSZo92w7/c6msfPFOEmtcCxqnuZK2aYUjE6XIdwtWFNTcNXKFDMWgM5Wgrzu9D4RM
+         Mm7z4ptTMDQIumnUbSOASCjUFmVHDF/21r/bv9KY72z2PSxtX3czsaNomQ8atfjgPTv1
+         VR5zwfuIlcOsgzj0HsZKILTdrQGtCC4Noiov/m5BNYl5hlAmXB1CL3/K+qSMeUNL+YZk
+         mnqss/1iljXWMrtJ9d2QGKRjnMF0cc99TJwbD7eK/taSySU9ELPsXaXELr9YBSSd4FuO
+         4PAVwS2S2MzlJCwySgaC9DAWfjUYQOT7oos/lYSpAJy+p0dtGmA8fC2bdDNOOi1cLosb
+         8jxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpxrtqvpsPEoWdAKdZbRYi6irsmURUJ0yQtYWnezEjtxAQzxQ3LyVVoejeYRqsmG60whsTny7nX9AyJggDqsiNxV2sHbEHFACW0y9kR/un
+X-Gm-Message-State: AOJu0Yy3kmv3jGxX+12zfz7NjwvSkOBNTKBuDKw0/UCXHOBDafP13vmz
+	9aTaqb+N5lkZdQcY6PAM+5SZaORmfloBitzlpy/Gtxdo5u/T+QeJ95m2kmpSTkRP/ALfNOMJnVB
+	Q7JLkiVQtiRxvmaC1xvEaSPAZJf/m6f2NYVMXd+Kbfjs/84+zXCbsfJKiLiTe2nxgK7c8lQkHBd
+	ODxQIXLLXysPlescFXPQqlwrCrAt4lR0aNvSPWw84e
+X-Received: by 2002:a05:6214:2426:b0:6b5:81ac:6b84 with SMTP id 6a1803df08f44-6b5a543aecfmr33787606d6.14.1719596288440;
+        Fri, 28 Jun 2024 10:38:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEWTYtV7gIpxyVZKHipinFNRKEVPmLzoCNCAXu+gjnA+zxXXpUvizyXL+8OfyBOweK9SgBFIISpcquha9V/fdo=
+X-Received: by 2002:a05:6214:2426:b0:6b5:81ac:6b84 with SMTP id
+ 6a1803df08f44-6b5a543aecfmr33787376d6.14.1719596288113; Fri, 28 Jun 2024
+ 10:38:08 -0700 (PDT)
+Received: from 311643009450 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 28 Jun 2024 17:38:07 +0000
+From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
+References: <20240628110559.3893562-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240626050818.2277273-1-jiaqiyan@google.com> <20240626050818.2277273-4-jiaqiyan@google.com>
- <0a28831c-b28e-6db5-0ef3-70940e75d4d2@huawei.com>
-In-Reply-To: <0a28831c-b28e-6db5-0ef3-70940e75d4d2@huawei.com>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Fri, 28 Jun 2024 10:25:02 -0700
-Message-ID: <CACw3F52DHhTM4M8GEURjft_Qx=kvzRvFxHp-pkYdpXAim7anMg@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] selftest/mm: test enable_soft_offline behaviors
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: jane.chu@oracle.com, rdunlap@infradead.org, ioworker0@gmail.com, 
-	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
-	corbet@lwn.net, osalvador@suse.de, rientjes@google.com, duenwen@google.com, 
-	fvdl@google.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Naoya Horiguchi <nao.horiguchi@gmail.com>
+In-Reply-To: <20240628110559.3893562-1-amorenoz@redhat.com>
+Date: Fri, 28 Jun 2024 17:38:07 +0000
+Message-ID: <CAG=2xmPnqMJzoPuzBRGfjqVRwispcsuPo32hKoko4=hwYZrFTg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 00/10] net: openvswitch: Add sample multicasting.
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com, echaudro@redhat.com, horms@kernel.org, 
+	i.maximets@ovn.org, dev@openvswitch.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 27, 2024 at 8:29=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
-rote:
+On Fri, Jun 28, 2024 at 01:05:36PM GMT, Adrian Moreno wrote:
+> ** Background **
+> Currently, OVS supports several packet sampling mechanisms (sFlow,
+> per-bridge IPFIX, per-flow IPFIX). These end up being translated into a
+> userspace action that needs to be handled by ovs-vswitchd's handler
+> threads only to be forwarded to some third party application that
+> will somehow process the sample and provide observability on the
+> datapath.
 >
-> On 2024/6/26 13:08, Jiaqi Yan wrote:
-> > Add regression and new tests when hugepage has correctable memory
-> > errors, and how userspace wants to deal with it:
-> > * if enable_soft_offline=3D1, mapped hugepage is soft offlined
-> > * if enable_soft_offline=3D0, mapped hugepage is intact
-> >
-> > Free hugepages case is not explicitly covered by the tests.
-> >
-> > Hugepage having corrected memory errors is emulated with
-> > MADV_SOFT_OFFLINE.
+> A particularly interesting use-case is controller-driven
+> per-flow IPFIX sampling where the OpenFlow controller can add metadata
+> to samples (via two 32bit integers) and this metadata is then available
+> to the sample-collecting system for correlation.
 >
-> Thanks for update.
+> ** Problem **
+> The fact that sampled traffic share netlink sockets and handler thread
+> time with upcalls, apart from being a performance bottleneck in the
+> sample extraction itself, can severely compromise the datapath,
+> yielding this solution unfit for highly loaded production systems.
 >
-> >
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > ---
-> >  tools/testing/selftests/mm/.gitignore         |   1 +
-> >  tools/testing/selftests/mm/Makefile           |   1 +
-> >  .../selftests/mm/hugetlb-soft-offline.c       | 228 ++++++++++++++++++
-> >  tools/testing/selftests/mm/run_vmtests.sh     |   4 +
-> >  4 files changed, 234 insertions(+)
-> >  create mode 100644 tools/testing/selftests/mm/hugetlb-soft-offline.c
-> ...
-> > +static void test_soft_offline_common(int enable_soft_offline)
-> > +{
-> > +     int fd;
-> > +     int expect_errno =3D enable_soft_offline ? 0 : EOPNOTSUPP;
-> > +     struct statfs file_stat;
-> > +     unsigned long hugepagesize_kb =3D 0;
-> > +     unsigned long nr_hugepages_before =3D 0;
-> > +     unsigned long nr_hugepages_after =3D 0;
-> > +     int ret;
-> > +
-> > +     ksft_print_msg("Test soft-offline when enabled_soft_offline=3D%d\=
-n",
-> > +                    enable_soft_offline);
-> > +
-> > +     fd =3D create_hugetlbfs_file(&file_stat);
-> > +     if (fd < 0)
-> > +             ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
-> > +
-> > +     hugepagesize_kb =3D file_stat.f_bsize / 1024;
-> > +     ksft_print_msg("Hugepagesize is %ldkB\n", hugepagesize_kb);
-> > +
-> > +     if (set_enable_soft_offline(enable_soft_offline)) {
+> Users are left with little options other than guessing what sampling
+> rate will be OK for their traffic pattern and system load and dealing
+> with the lost accuracy.
 >
-> Nit: should this be written as if (set_enable_soft_offline(enable_soft_of=
-fline) !=3D 0) to keep consistent with below code?
+> Looking at available infrastructure, an obvious candidated would be
+> to use psample. However, it's current state does not help with the
+> use-case at stake because sampled packets do not contain user-defined
+> metadata.
+>
+> ** Proposal **
+> This series is an attempt to fix this situation by extending the
+> existing psample infrastructure to carry a variable length
+> user-defined cookie.
+>
+> The main existing user of psample is tc's act_sample. It is also
+> extended to forward the action's cookie to psample.
+>
+> Finally, a new OVS action (OVS_SAMPLE_ATTR_EMIT_SAMPLE) is created.
+> It accepts a group and an optional cookie and uses psample to
+> multicast the packet and the metadata.
+>
+> --
+> v5 -> v6:
+> - Renamed emit_sample -> psample
+> - Addressed unused variable and conditionally compilation of function.
+>
+> v4 -> v5:
+> - Rebased.
+> - Removed lefover enum value and wrapped some long lines in selftests.
+>
+> v3 -> v4:
+> - Rebased.
+> - Addressed Jakub's comment on private and unused nla attributes.
+>
+> v2 -> v3:
+> - Addressed comments from Simon, Aaron and Ilya.
+> - Dropped probability propagation in nested sample actions.
+> - Dropped patch v2's 7/9 in favor of a userspace implementation and
+> consume skb if emit_sample is the last action, same as we do with
+> userspace.
+> - Split ovs-dpctl.py features in independent patches.
+>
+> v1 -> v2:
+> - Create a new action ("emit_sample") rather than reuse existing
+>   "sample" one.
+> - Add probability semantics to psample's sampling rate.
+> - Store sampling probability in skb's cb area and use it in emit_sample.
+> - Test combining "emit_sample" with "trunc"
+> - Drop group_id filtering and tracepoint in psample.
+>
+> rfc_v2 -> v1:
+> - Accommodate Ilya's comments.
+> - Split OVS's attribute in two attributes and simplify internal
+> handling of psample arguments.
+> - Extend psample and tc with a user-defined cookie.
+> - Add a tracepoint to psample to facilitate troubleshooting.
+>
+> rfc_v1 -> rfc_v2:
+> - Use psample instead of a new OVS-only multicast group.
+> - Extend psample and tc with a user-defined cookie.
+>
+>
+> Adrian Moreno (10):
+>   net: psample: add user cookie
+>   net: sched: act_sample: add action cookie to sample
+>   net: psample: skip packet copy if no listeners
+>   net: psample: allow using rate as probability
+>   net: openvswitch: add psample action
+>   net: openvswitch: store sampling probability in cb.
+>   selftests: openvswitch: add psample action
+>   selftests: openvswitch: add userspace parsing
+>   selftests: openvswitch: parse trunc action
+>   selftests: openvswitch: add psample test
+>
+>  Documentation/netlink/specs/ovs_flow.yaml     |  17 ++
+>  include/net/psample.h                         |   5 +-
+>  include/uapi/linux/openvswitch.h              |  31 +-
+>  include/uapi/linux/psample.h                  |  11 +-
+>  net/openvswitch/Kconfig                       |   1 +
+>  net/openvswitch/actions.c                     |  65 ++++-
+>  net/openvswitch/datapath.h                    |   3 +
+>  net/openvswitch/flow_netlink.c                |  32 ++-
+>  net/openvswitch/vport.c                       |   1 +
+>  net/psample/psample.c                         |  16 +-
+>  net/sched/act_sample.c                        |  12 +
+>  .../selftests/net/openvswitch/openvswitch.sh  | 115 +++++++-
+>  .../selftests/net/openvswitch/ovs-dpctl.py    | 272 +++++++++++++++++-
+>  13 files changed, 565 insertions(+), 16 deletions(-)
+>
+> --
+> 2.45.2
+>
 
-for sure
+Patchwork says this patch is not applying on net-next. I'll wait for
+some reviews and rebase+resubmit it later tonight or tomorrow.
 
->
-> > +             close(fd);
-> > +             ksft_exit_fail_msg("Failed to set enable_soft_offline\n")=
-;
-> > +     }
-> > +
-> > +     if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_before) !=3D=
- 0) {
-> > +             close(fd);
-> > +             ksft_exit_fail_msg("Failed to read nr_hugepages\n");
-> > +     }
-> > +
-> > +     ksft_print_msg("Before MADV_SOFT_OFFLINE nr_hugepages=3D%ld\n",
-> > +                    nr_hugepages_before);
-> > +
-> > +     ret =3D do_soft_offline(fd, 2 * file_stat.f_bsize, expect_errno);
-> > +
-> > +     if (read_nr_hugepages(hugepagesize_kb, &nr_hugepages_after) !=3D =
-0) {
-> > +             close(fd);
-> > +             ksft_exit_fail_msg("Failed to read nr_hugepages\n");
-> > +     }
-> > +
-> ...
-> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> > index 3157204b9047..781117fac1ba 100755
-> > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > @@ -331,6 +331,10 @@ CATEGORY=3D"hugetlb" run_test ./thuge-gen
-> >  CATEGORY=3D"hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
-> >  CATEGORY=3D"hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
-> >  if $RUN_DESTRUCTIVE; then
-> > +nr_hugepages_tmp=3D$(cat /proc/sys/vm/nr_hugepages)
-> > +echo 8 > /proc/sys/vm/nr_hugepages
-> > +CATEGORY=3D"hugetlb" run_test ./hugetlb-soft-offline
-> > +echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
->
-> Should we save and restore the value of /proc/sys/vm/enable_soft_offline =
-too?
+Thanks.
+Adri=C3=A1n
 
-absolutely, thanks for catching.
-
->
-> With above fixed, this patch looks good to me.
-> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks Miaohe, I will send out v7 with fixes.
-
-> Thanks.
-> .
->
 
