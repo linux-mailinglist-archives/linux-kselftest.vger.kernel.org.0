@@ -1,81 +1,78 @@
-Return-Path: <linux-kselftest+bounces-12910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F78691B680
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 07:48:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4CC991B6AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 08:05:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 065231F239A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 05:48:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2173D1C20D18
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 06:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055AB46453;
-	Fri, 28 Jun 2024 05:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0D6481A4;
+	Fri, 28 Jun 2024 06:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IdvJB7KS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JtdGV2u+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAAB4249F5;
-	Fri, 28 Jun 2024 05:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF9547796
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 06:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719553708; cv=none; b=F3cPbFrrT1xNlTo6v/Wg57CZhFuy4OR0+OjgxbTdhDFGGno30cNcZBcbr2p+Mhlj0yKKK7ow1lzBwUQayW8XHRXFFnS0doOgv/+7SOhgEJWwz8jgWeVO80xOnBHVSL/sv13KGciLeHfZH7OgV/th1HUD1TW3e1cpYzdtDhP+F5s=
+	t=1719554711; cv=none; b=XhDzUttljfmXa9vmQ0ENLybjfdjKplXkAq9UtEGRU9VBmY7sUinekYMGKhcB7ZeZtFSBXzeayZnN9ybMpGNVMU8+OQOwNgjsZsdo8gSQDXWgNJtI7wg7NlWaU7zybkjMks4CcOlUbsp/49bmpL0m19/1H8r98UuHpa1661xkm+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719553708; c=relaxed/simple;
-	bh=OwRJINa0VpSHf4btc8behed4mXZR6PARmtNNKKc9ul8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HOBgOLjxFjaD9wUU9EtwJ83eGgBHFjBJndddEz1umkJuu0uuoaYe0Q6lEof71TM3cniAqCtNzQrEwbF1vZmUn9Oe3G5wa5HrwLb5/iYa+9A2PUtSqCz9mC/APVxx24EVCoxSlRm20Jg8SzbBbGGRBN2CGTHDMLjLt79A6Bbo2WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IdvJB7KS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1335EC116B1;
-	Fri, 28 Jun 2024 05:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719553708;
-	bh=OwRJINa0VpSHf4btc8behed4mXZR6PARmtNNKKc9ul8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IdvJB7KSj7DVi4U5dVFIZWaR0+Kc305E8R9meKJdhm6/hYAuOdmWrJeSsibO13wLA
-	 PwPCr+lTnw8H9QmDdLsap+f/FCr57hQNlWNQR7rki0mwVF9+XwLzgjY6uMFL0+E8b+
-	 shB0fiPFrmsSyndjAhiypoxV1R0qFEiSeJvFhhGfYU/nNdsWQJug9SUdPcaBQxs/6u
-	 wu4DZhdD82fOrxF+nU5Zq1wm+cqTkE9ZN78Yqpd1uK+oFDvZY86Sp/CF7aAGy2Ug8Q
-	 Vs4ItS4DBozZJjZ6zpAJjAHksCUVxGszyF979SfC8Uvv+ZpgrnG/Z6fHk7i0EGqFs6
-	 qM5AY+iWQ86Ow==
-From: Geliang Tang <geliang@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	David Ahern <dsahern@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
+	s=arc-20240116; t=1719554711; c=relaxed/simple;
+	bh=lU1XvXjiFFxsti9Je9vlciruaCZtXmC+z+HqWsgjafU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lDqubKYdBkehFRX5o4aOnU/IdcTRgkk4UK8rk+CxboTikWzYtByeCElSmeLR5ymQmxu6EY2puFDl2kDfe8SSFbcCWII6XSCXOW3TwwuPn7krOq863IHr54FRRS9JEdXYSL2TeeC4woGGpls9OJQtNfcXMOxnZ/1EEoUzBT8OTpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JtdGV2u+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719554709;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ajvn4ITctkTMolN6abYxpt2/qWjVElb6xUSFcHxU6sg=;
+	b=JtdGV2u+8g8Kc1ujLZhReX8T3pOeq5bzZd2uvPD2u5hgxvkPA5Wmtg5s7UdKujzrMqral4
+	BGE2OIz0LD/vdaCwQ2QYAuvY0jPxy0sJe0XblPYPyTa8ypJgqZigz8qVdulMBNjFt5fxX8
+	wuRLfcDD4adMQ2NoASldHu99357Vbns=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-554-Uu0m_sE3NF6Jx4ije6529w-1; Fri,
+ 28 Jun 2024 02:05:05 -0400
+X-MC-Unique: Uu0m_sE3NF6Jx4ije6529w-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C1E91955DA6;
+	Fri, 28 Jun 2024 06:05:03 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0819419560A3;
+	Fri, 28 Jun 2024 06:04:59 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Shaoqin Huang <shahuang@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Miao Xu <miaxu@meta.com>,
-	Yuran Pereira <yuran.pereira@hotmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 2/2] skmsg: bugfix for sk_msg sge iteration
-Date: Fri, 28 Jun 2024 13:47:48 +0800
-Message-ID: <56d8ec28df901432e7bde4953795166ce2edd472.1719553101.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1719553101.git.tanggeliang@kylinos.cn>
-References: <cover.1719553101.git.tanggeliang@kylinos.cn>
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH v3 0/2] Allow userspace to change ID_AA64PFR1_EL1
+Date: Fri, 28 Jun 2024 02:04:50 -0400
+Message-Id: <20240628060454.1936886-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,92 +80,58 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Allow userspace to change the guest-visible value of the register with
+some severe limitation:
 
-Every time run this BPF selftests (./test_sockmap) on a Loongarch platform,
-a Kernel panic occurs:
+  - No changes to features not virtualized by KVM (MPAM_frac, RAS_frac,
+    SME, RNDP_trap).
 
-'''
- Oops[#1]:
- CPU: 20 PID: 23245 Comm: test_sockmap Tainted: G     OE 6.10.0-rc2+ #32
- Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018
- ... ...
-    ra: 90000000043a315c tcp_bpf_sendmsg+0x23c/0x420
-   ERA: 900000000426cd1c sk_msg_memcopy_from_iter+0xbc/0x220
-  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
-  PRMD: 0000000c (PPLV0 +PIE +PWE)
-  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
-  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
- ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
-  BADV: 0000000000000040
-  PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
- Modules linked in: tls xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT
- Process test_sockmap (pid: 23245, threadinfo=00000000aeb68043, task=...)
- Stack : ... ...
-         ...
- Call Trace:
- [<900000000426cd1c>] sk_msg_memcopy_from_iter+0xbc/0x220
- [<90000000043a315c>] tcp_bpf_sendmsg+0x23c/0x420
- [<90000000041cafc8>] __sock_sendmsg+0x68/0xe0
- [<90000000041cc4bc>] ____sys_sendmsg+0x2bc/0x360
- [<90000000041cea18>] ___sys_sendmsg+0xb8/0x120
- [<90000000041cf1f8>] __sys_sendmsg+0x98/0x100
- [<90000000045b76ec>] do_syscall+0x8c/0xc0
- [<90000000030e1da4>] handle_syscall+0xc4/0x160
+  - No changes to features (CSV2_frac, NMI, MTE_frac, GCS, THE, MTEX,
+    DF2, PFAR) which haven't been added into the ftr_id_aa64pfr1[].
+    Because the struct arm64_ftr_bits definition for each feature in the
+    ftr_id_aa64pfr1[] is used by arm64_check_features. If they're not
+    existing in the ftr_id_aa64pfr1[], the for loop won't check the if
+    the new_val is safe for those features.
 
- Code: ...
+For the question why can't those fields be hidden depending on the VM
+configuration? I don't find there is the related VM configuration, maybe we
+should add the new VM configuration?
 
- ---[ end trace 0000000000000000 ]---
-'''
+I'm not sure I'm right, so if there're any problems please help to point out and
+I will fix them.
 
-This crash is because a NULL pointer is passed to page_address() in
-sk_msg_memcopy_from_iter(). Due to the difference in architecture,
-page_address(0) will not trigger a panic on the X86 platform but will panic
-on the Loogarch platform. So this bug was hidden on the x86 platform, but
-now it is exposed on the Loogarch platform.
+Also add the selftest for it.
 
-This bug is a logic error indeed. In sk_msg_memcopy_from_iter(), an invalid
-"sge" is always used:
+Changelog:
+----------
+v2 -> v3:
+  * Give more description about why only part of the fields can be writable.
+  * Updated the writable mask by referring the latest ARM spec.
 
-	if (msg->sg.copybreak >= sge->length) {
-		msg->sg.copybreak = 0;
-		sk_msg_iter_var_next(i);
-		if (i == msg->sg.end)
-			break;
-		sge = sk_msg_elem(msg, i);
-	}
+v1 -> v2:
+  * Tackling the full register instead of single field.
+  * Changing the patch title and commit message.
 
-If the value of i is 2, msg->sg.end is also 2 when entering this if block.
-sk_msg_iter_var_next() increases i by 1, and now i is 3, which is no longer
-equal to msg->sg.end. The break will not be triggered, and the next sge
-obtained by sk_msg_elem(3) will be an invalid one.
+RFCv1 -> v1:
+  * Fix the compilation error.
+  * Delete the machine specific information and make the description more
+    generable.
 
-The correct approach is to check (i == msg->sg.end) first, and then invoke
-sk_msg_iter_var_next() if they are not equal.
+RFCv1: https://lore.kernel.org/all/20240612023553.127813-1-shahuang@redhat.com/
+v1: https://lore.kernel.org/all/20240617075131.1006173-1-shahuang@redhat.com/
+v2: https://lore.kernel.org/all/20240618063808.1040085-1-shahuang@redhat.com/
 
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- net/core/skmsg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Shaoqin Huang (2):
+  KVM: arm64: Allow userspace to change ID_AA64PFR1_EL1
+  KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 44952cdd1425..1906d0d0eeac 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -378,9 +378,9 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- 		/* This is possible if a trim operation shrunk the buffer */
- 		if (msg->sg.copybreak >= sge->length) {
- 			msg->sg.copybreak = 0;
--			sk_msg_iter_var_next(i);
- 			if (i == msg->sg.end)
- 				break;
-+			sk_msg_iter_var_next(i);
- 			sge = sk_msg_elem(msg, i);
- 		}
- 
+ arch/arm64/kvm/sys_regs.c                         | 4 +++-
+ tools/testing/selftests/kvm/aarch64/set_id_regs.c | 8 ++++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
 -- 
-2.43.0
+2.40.1
 
 
