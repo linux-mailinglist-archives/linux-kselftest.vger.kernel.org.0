@@ -1,147 +1,122 @@
-Return-Path: <linux-kselftest+bounces-12925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF7ED91BBA4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 11:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EF1C91BC13
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 12:00:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74FFC281534
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 09:39:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 597C9285880
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 10:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E4215575D;
-	Fri, 28 Jun 2024 09:38:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58AE21509B6;
+	Fri, 28 Jun 2024 10:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="YR9Mhgsk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxgzzkOU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A4A155CBF
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 09:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3090529CED;
+	Fri, 28 Jun 2024 10:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719567497; cv=none; b=hrU4R5TzmfMciHeMLVYLo+YZkVGUWK4cYVbW+8019tIIczxRWcAQTkpgi0vr4uAZqh+M6p8EkLLY1qa3WQIoIi9fwv1R54i4K9D9hmyrCHYpaCSv32cilMharLUfv5Cg+LKb4upwSv8RYRoZn378fRRtVtho7Ml6VQSC1H3Rq4A=
+	t=1719568835; cv=none; b=QGaBWg869+1ANGPlfvcmih91gPEpZu8Tu8K0Q/rHci9QXwkhATcxTgPfTXeonDNlfCGcjwyATteDaPRK/MMVvTPQtCga6AVx4omqvphy8sotNqzg6qKMlE5v6Vl2hvsQKZliR1GYNLcsli/+M7NbPe5tP4piqG1y/Wysi231qFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719567497; c=relaxed/simple;
-	bh=rAYKbcFrJvZXsWHsMuE+Qgzs7qeLTNluD8iqVeBQttI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Kp+bO1GVU4IQW0Jp2xQOIgrzXmRGnJ/IB6+wsMs3jld9st7/areA35r+k0DhyI2RjYXkcQfa2jKn6gmFtjvlAhnTxIMFZLh0xMwK4H5Ej14ONEIn4vlccu30rHejn5RyUGynt+IFu5qT2hkW0XQvOXD6B7umwBGZZQUyjvrW+4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=YR9Mhgsk; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7180308e90bso269885a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 02:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1719567496; x=1720172296; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PpDCA7CnSWtIO6seFJ4J0hDKtH06inwXMPU5CaySLhw=;
-        b=YR9MhgskAfBll9YVySYF9m74I5u4YR5ecQ5lDKH4PtLhrsPXyL/IglGduE9YLGpMpU
-         0HV/HvK6tF97pojzwnjS8LNQf5Fb+69hu+tCuTtAxLmJmU5wHuh11g0X6JExpsDsYdUR
-         67qYsQL69NXvPY5wBMXLNGwvlC3s81rlUw5FOqMlwKE69nDSXeGt+oT69mDYXDsKrjRP
-         JZbagdpzsNGC0Fkr4orlVwPdtv2w43KHh3CZIRZVN4TUQaM6VLj+oKgguDSnsdLjtYEW
-         zWX08+m8N/ysbYSI3iSekZuYzDHbbUfsd5TXhGbl38fLV1dhTnUcrkzP6tGBwaX0U8WI
-         2/lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719567496; x=1720172296;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PpDCA7CnSWtIO6seFJ4J0hDKtH06inwXMPU5CaySLhw=;
-        b=DY5vCzZc6aDzmvdE6Z8B1PEbY0Jt//NXDZVaFpMc62af3bpglH74wzsIN0RHp6FSzR
-         Fhiuq/PcTIVq5vHS9nWrkmJlAiECPfPyAdxJlFBeNaB0knsNKQirpUMrWfE8ooizyeaE
-         l3tWII8MzTdHzX07tpRZCvdAtbMUYngwjnmAQscDbG/wCr/thm8Q+CQ6voB14Eoswi7c
-         qY52jEbyGHAQP1WuooBMtJQjIxd1RZrKJCgBlYDIcJxf9e8G8VHa/1LVpaI1ngb/CpND
-         sqxNOC7x5dmAf9/ak9SY8RgqMA66mPjWYXuKZhnqa9ntIJK8z9KzD6xKt9Wqs4vQ+VRA
-         Hnaw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5u2FdGccrdP9xNRCY5YAuGTitq2iyZbwv53TCFHgEtUlmnAk8n2LcejDEU73k4Wx5YsiR0aNnSZ3bUlGkS+BMpFJyv0/Fz5GObVZGCZBB
-X-Gm-Message-State: AOJu0YxH1/VoB6VdMlvGqiA5X16P5s6RxOYx+A1u/2Vq0iUy3DRjNMlx
-	pixMrBd/T25PjdyAtcuZk4uKKBumZk9MuBPupisvLxAUOIvpK5Ax1UJrna4PvGY=
-X-Google-Smtp-Source: AGHT+IG3L14BlCwHPiIKSplLpOkLLGSwZSlMj6M+WV18XsZAbw/WIXgi64YPVTn0Axv2MFnAlS9dBg==
-X-Received: by 2002:a05:6a20:45b:b0:1bd:2703:840 with SMTP id adf61e73a8af0-1bd270308damr8420473637.33.1719567495751;
-        Fri, 28 Jun 2024 02:38:15 -0700 (PDT)
-Received: from hsinchu26.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10c6c8dsm11087155ad.26.2024.06.28.02.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 02:38:15 -0700 (PDT)
-From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-To: linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	kvm-riscv@lists.infradead.org,
-	kvm@vger.kernel.org
-Cc: greentime.hu@sifive.com,
-	vincent.chen@sifive.com,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 4/4] KVM: riscv: selftests: Add Svade and Svadu Extension to get-reg-list test
-Date: Fri, 28 Jun 2024 17:37:08 +0800
-Message-Id: <20240628093711.11716-5-yongxuan.wang@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240628093711.11716-1-yongxuan.wang@sifive.com>
-References: <20240628093711.11716-1-yongxuan.wang@sifive.com>
+	s=arc-20240116; t=1719568835; c=relaxed/simple;
+	bh=sttuXA446k6D9TJkn9PvBWJSSFpboC++0Ostq9+OwfY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bILXP6hIlCTuXvToW/dOABu+wU5LG5lBOJUnAsRrCfdhzYOpzveW5g5O1CmgUBu6AwjsqzbW2kmGa181eQaGCcTRgi8cODWuQDehdn1HXCCHz2OyIxH8dR3Tutou8nUbJYYrj41L5SOzntn7llIdCaO8KBGdp8gJJp5PK9JaeG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxgzzkOU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AF2EBC2BD10;
+	Fri, 28 Jun 2024 10:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719568834;
+	bh=sttuXA446k6D9TJkn9PvBWJSSFpboC++0Ostq9+OwfY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=YxgzzkOUxuXEoS4aFJ8R5NvZe+jIIY+YODEYxMcQ+uWPpEAfjvdkNK5rrGPHVrbvR
+	 JE2KYX3p1YapwXaOxnhU8BOnpltMUXJZ5qJLAd0HtHjnaMRdhEirySCpQjgj3jWZ27
+	 aXr6q3S2pqeiSVEGpw8YnysQikQYdc61usFV6KIb6KkI/oI1yrw4TZeext7DCruDUP
+	 n0kmCxerLDPms5Wwf1LwUGmIAl1RI6h0lhKynxSX/sPrrGNZ3CYlENt8DT/xjoNKdr
+	 hUkmgWKaOQQAwqfxLQDfviKCXAUCNQN0sxVr9T3XM+pwi/n++rfZx21HRW/I2ohl4R
+	 AfGkq7ZAoiJng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E644C43336;
+	Fri, 28 Jun 2024 10:00:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 00/12] selftest: Clean-up and stabilize mirroring
+ tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171956883464.3919.11261341369331277136.git-patchwork-notify@kernel.org>
+Date: Fri, 28 Jun 2024 10:00:34 +0000
+References: <cover.1719497773.git.petrm@nvidia.com>
+In-Reply-To: <cover.1719497773.git.petrm@nvidia.com>
+To: Petr Machata <petrm@nvidia.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, netdev@vger.kernel.org, danieller@nvidia.com,
+ idosch@nvidia.com, liuhangbin@gmail.com, bpoirier@nvidia.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, horms@kernel.org,
+ mlxsw@nvidia.com
 
-Update the get-reg-list test to test the Svade and Svadu Extensions are
-available for guest OS.
+Hello:
 
-Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 222198dd6d04..1d32351ad55e 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -45,6 +45,8 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSAIA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSCOFPMF:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSTC:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVADE:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVADU:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVINVAL:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVNAPOT:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVPBMT:
-@@ -411,6 +413,8 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(SSAIA),
- 		KVM_ISA_EXT_ARR(SSCOFPMF),
- 		KVM_ISA_EXT_ARR(SSTC),
-+		KVM_ISA_EXT_ARR(SVADE),
-+		KVM_ISA_EXT_ARR(SVADU),
- 		KVM_ISA_EXT_ARR(SVINVAL),
- 		KVM_ISA_EXT_ARR(SVNAPOT),
- 		KVM_ISA_EXT_ARR(SVPBMT),
-@@ -935,6 +939,8 @@ KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
- KVM_ISA_EXT_SUBLIST_CONFIG(smstateen, SMSTATEEN);
- KVM_ISA_EXT_SIMPLE_CONFIG(sscofpmf, SSCOFPMF);
- KVM_ISA_EXT_SIMPLE_CONFIG(sstc, SSTC);
-+KVM_ISA_EXT_SIMPLE_CONFIG(svade, SVADE);
-+KVM_ISA_EXT_SIMPLE_CONFIG(svadu, SVADU);
- KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
- KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
- KVM_ISA_EXT_SIMPLE_CONFIG(svpbmt, SVPBMT);
-@@ -991,6 +997,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_smstateen,
- 	&config_sscofpmf,
- 	&config_sstc,
-+	&config_svade,
-+	&config_svadu,
- 	&config_svinval,
- 	&config_svnapot,
- 	&config_svpbmt,
+On Thu, 27 Jun 2024 16:48:37 +0200 you wrote:
+> The mirroring selftests work by sending ICMP traffic between two hosts.
+> Along the way, this traffic is mirrored to a gretap netdevice, and counter
+> taps are then installed strategically along the path of the mirrored
+> traffic to verify the mirroring took place.
+> 
+> The problem with this is that besides mirroring the primary traffic, any
+> other service traffic is mirrored as well. At the same time, because the
+> tests need to work in HW-offloaded scenarios, the ability of the device to
+> do arbitrary packet inspection should not be taken for granted. Most tests
+> therefore simply use matchall, one uses flower to match on IP address.
+> As a result, the selftests are noisy.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,01/12] selftests: libs: Expand "$@" where possible
+    https://git.kernel.org/netdev/net-next/c/d5fbb2eb33c2
+  - [net-next,02/12] selftests: mirror: Drop direction argument from several functions
+    https://git.kernel.org/netdev/net-next/c/28e67746b73d
+  - [net-next,03/12] selftests: lib: tc_rule_stats_get(): Move default to argument definition
+    https://git.kernel.org/netdev/net-next/c/9b5d5f272654
+  - [net-next,04/12] selftests: mirror_gre_lag_lacp: Check counters at tunnel
+    https://git.kernel.org/netdev/net-next/c/95e7b860e16d
+  - [net-next,05/12] selftests: mirror: do_test_span_dir_ips(): Install accurate taps
+    https://git.kernel.org/netdev/net-next/c/833415358f34
+  - [net-next,06/12] selftests: mirror: mirror_test(): Allow exact count of packets
+    https://git.kernel.org/netdev/net-next/c/a86e0df9ce25
+  - [net-next,07/12] selftests: mirror: Drop dual SW/HW testing
+    https://git.kernel.org/netdev/net-next/c/d361d78fe2cc
+  - [net-next,08/12] selftests: mlxsw: mirror_gre: Simplify
+    https://git.kernel.org/netdev/net-next/c/388b2d985a13
+  - [net-next,09/12] selftests: mirror_gre_lag_lacp: Drop unnecessary code
+    https://git.kernel.org/netdev/net-next/c/95d33989cee5
+  - [net-next,10/12] selftests: libs: Drop slow_path_trap_install()/_uninstall()
+    https://git.kernel.org/netdev/net-next/c/4e9cd3d03af2
+  - [net-next,11/12] selftests: libs: Drop unused functions
+    https://git.kernel.org/netdev/net-next/c/06704a0d5e67
+  - [net-next,12/12] selftests: mlxsw: mirror_gre: Obey TESTS
+    https://git.kernel.org/netdev/net-next/c/098ba97d0e89
+
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
