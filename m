@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-12952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12953-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD2B91C909
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 00:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4CF91C936
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 00:38:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CAEF286794
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 22:24:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86AC828757A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 22:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213F280C09;
-	Fri, 28 Jun 2024 22:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D0F81729;
+	Fri, 28 Jun 2024 22:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LgYJUz1e"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MWV6RuhZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8205F77F10;
-	Fri, 28 Jun 2024 22:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29C97B3F3;
+	Fri, 28 Jun 2024 22:38:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719613439; cv=none; b=jBGU8xWdga86JcLut5Y6eaf2h+UszoZLp/VOtsfZihVEpTRGrwVSaMe2aouJOyz64bgEbHULqKXBPserzBx0nbwyIepbbFDxw65YJRYem4qAXmaDEI+5x5qjhMIDZ5C+l0r3KgDhlvcU3IlmGkWCTU7k3Y0VmNabQos9Rk23gXY=
+	t=1719614319; cv=none; b=n1x/MXiFjrIVa2rOcmacaL5BgS0LANV4TtdK/vuvqgdtK0IQ07HnU42fpjAvRhSsW+N5gyPrI/3T/needZbGq9p+9gehnGTLOPjJSlE/BbZWyE3QgBtNunfEHVCNl7fsJnqOX0MavJYUo4qAylXjysyrQmpmc6a4RFTRW3Q140U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719613439; c=relaxed/simple;
-	bh=yWpDidoG0tNCH8bt6FciDlaBbMXMnRFfIlxkW5JUxFo=;
+	s=arc-20240116; t=1719614319; c=relaxed/simple;
+	bh=iKhzXq5JAa4rnm6W+0jIhIrVPDSej6AO7EJ7vWE19mY=;
 	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=cTkTZKL0cizMsHYjxm9pAlnwKFKdTif4h7AqUFfwVkdMmb/BqrXuuzt/VqumOwgflOmR9cXw9/vaZqQM8o0xjPENdAiRE7yREXxZxpIk99Z/PWOs2tJD//uGIWT3JyCmALDQdaan6zIISrR4uvk8bbC6gPUI4at9G8QNJoHMd54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LgYJUz1e; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=PK97o4t6F7LNYgZqdxFlX3I3x14zogv70/UVtecIN75K/kuQD8YlfUdKt2A+11JJI6xxoLCiKo0tOhgZN/qCVLC2smyMaVLBmNY85TKsWJDXeyg5ZnjYWHYW838WF1pbaJq/UYHYWllgqwTzYuJOF2Ny3/AfCcMCIXULC2HjUX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MWV6RuhZ; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -36,34 +36,40 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Jkls7DPW/4o7NdOxSD9CxZNsNVkHS6JiAhzOjoNpQLo=; b=LgYJUz1eu9lsDGAtZqLeLHpK6k
-	JmmM7cEYTQku5QNZS47zR+Hzc/AndCBjK1Vj03fF+rFnfsBW6R8unLWn7n2gbybr8z7bFDY6QzeSn
-	xs+vSy7a/MIyVF8fhSQIwhKtG9TU6yWKbd7wlsCmURpfI2tZDxCnLCgNu0GsTC3SRUwYXjk6fAsnU
-	YdAwyA4SulvUc9yVez2H+27ncpI9csp8nEzunmGZkFyfwX4AVkgKDX+Z9tZTMjiqMVRAAfkFrdh+H
-	NMeLmY8z/c4/1Yv/xQ8dQ3+FJplTAXNee2BWMgPBLgxAiH30nn1FOdvIfTQxmpgEXcTkmC4c4tyi0
-	kxCkLw4g==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
+	bh=BaALS8gPF7XBWlriyHr8hek8u4Itk7JbvtgTcprjFzM=; b=MWV6RuhZQuzfGy0rDzTGEfeYyJ
+	Pu/BPy6MB2lBFNp6BXB4zgZnygABXoL9oZEKRNVzC3pOG07/xf2YDbHoi+2pafCYl/KWao+ziEjch
+	32mq2i6wIaqz/u5vRo+nEeAwnFviUoPuJB81Nu402QkdTNkLMcPAN3ssRQZNsIQm6kxudv1MqdtpY
+	W076G8CrtWSkh/tU3QdRLrtNPewe/hjSXS7LU1XKvv5wK/XdcQZiMO9OE3zSVqHUalhw/a2lcNs2X
+	tn18MDmrQKD2dIXKwsZ+/7Rkxl+4m5ZJ/YmIgAJPMz9hixE4nfu/pZ6kC7LkxlBV6AH4nUME1L/iL
+	4pXTnlCA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1sNJzz-0000No-Np; Sat, 29 Jun 2024 00:23:19 +0200
+	id 1sNKEb-0002Pl-66; Sat, 29 Jun 2024 00:38:25 +0200
 Received: from [178.197.249.38] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1sNJzz-000DOB-0r;
-	Sat, 29 Jun 2024 00:23:18 +0200
-Subject: Re: [PATCH] selftests/bpf:fix a resource leak
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240627060107.8682-1-zhujun2@cmss.chinamobile.com>
+	id 1sNKEZ-000CLP-39;
+	Sat, 29 Jun 2024 00:38:24 +0200
+Subject: Re: [PATCH bpf-next v5 6/9] selftests/bpf: Use start_server_str in
+ sk_lookup
+To: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1719293738.git.tanggeliang@kylinos.cn>
+ <244b5ac86c177f9f9c38304e07a1e3cc0d9bb92d.1719293738.git.tanggeliang@kylinos.cn>
 From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <847bcc7c-e54e-648a-be47-59e0a6d0853e@iogearbox.net>
-Date: Sat, 29 Jun 2024 00:23:18 +0200
+Message-ID: <5c03ff1b-f500-27a0-b8d0-7223b84dbe71@iogearbox.net>
+Date: Sat, 29 Jun 2024 00:38:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 Precedence: bulk
@@ -72,39 +78,45 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240627060107.8682-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <244b5ac86c177f9f9c38304e07a1e3cc0d9bb92d.1719293738.git.tanggeliang@kylinos.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27320/Fri Jun 28 10:37:18 2024)
 
-On 6/27/24 8:01 AM, Zhu Jun wrote:
-> The requested resources should be closed before return
-> in main(), otherwise resource leak will occur
-> 
-> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
-> ---
->   tools/testing/selftests/bpf/test_sockmap.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> index a34e95040994..03d5dd617c4a 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -2092,7 +2092,7 @@ int main(int argc, char **argv)
->   	if (err) {
->   		fprintf(stderr, "populate program: (%s) %s\n",
->   			bpf_file, strerror(errno));
-> -		return 1;
-> +		goto out;
->   	}
->   	running = 1;
+On 6/25/24 7:42 AM, Geliang Tang wrote:
+[...]
+> +static int make_server(int sotype, const char *ip, int port,
+> +		       struct bpf_program *reuseport_prog)
+> +{
+> +	struct cb_opts cb_opts = {
+> +		.family = is_ipv6(ip) ? AF_INET6 : AF_INET,
+> +		.sotype = sotype,
+> +		.reuseport = reuseport_prog,
+> +	};
+> +	struct network_helper_opts opts = {
+> +		.backlog	= SOMAXCONN,
+> +		.post_socket_cb = setsockopts,
+> +		.cb_opts	= &cb_opts,
+> +	};
+> +	int err, fd = -1;
 
-There's one more when cgroup_setup_and_join() fails a bit higher up
-where we end up leaking options.whitelist/options.blacklist. Maybe
-could you reorder the free() towards the end, add a new label, set
-err to cg_fd and jump there.
+nit: fd doesn't need init given you call start_server_str right away
+
+> +	fd = start_server_str(cb_opts.family, sotype, ip, port, &opts);
+> +	if (CHECK(fd < 0, "start_server_addr", "failed\n"))
+
+
+if (!ASSERT_GE(fd, 0, "start_server_str"))
+
+> +		return -1;
+>   
+>   	/* Late attach reuseport prog so we can have one init path */
+>   	if (reuseport_prog) {
+> 
+
+Rest of the series LGTM.
 
 Thanks,
 Daniel
