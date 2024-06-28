@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-12930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A679791BD19
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 13:08:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ED9C91BD20
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 13:08:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3B2F1C21FD6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 11:08:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18E6128543F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 11:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC2D21586E7;
-	Fri, 28 Jun 2024 11:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B55158A0D;
+	Fri, 28 Jun 2024 11:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aOs1k6La"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ECF4L5Ak"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC36158219
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 11:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FBA156F20
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2024 11:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719572811; cv=none; b=bvin/2XCA0LczRSDsTiuY57ZkyhmpwizUUyndV/sDKutTNSMnZqobsvg6HuRHPHtVtqp9GJa9xoMLotO5toKcvC6CcpmbFpmCdc+UdZcrjHOSvm9rkxSSqVAZ4xReZ84AhumHjQvDIdTOBFVIBcOzU06NcLQPbkT0M2fn+ito+8=
+	t=1719572817; cv=none; b=AZr05Cywb2fEraGXNM941y+e3kJd+vu9DnWmf5CpNdehfhYH/n0RKh90tmJswiVk82CskUOXN/5BVEPBBd2drmSvufbtx06IPZwg7nm/0RyDu5qaXnFjTHhPTDeQywZcxNIrxCYsX4QTS7z0BDLlvII3v95F2DtNUsrPVPFqyUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719572811; c=relaxed/simple;
-	bh=OiU+/BS9eUxTW1HGCZtrPJkUg6q9RjfXWDRhEHV0YiM=;
+	s=arc-20240116; t=1719572817; c=relaxed/simple;
+	bh=rkv1VNds7uAqcd2tBv7bZbM1dcwAaEjQmCR8IYBakIA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kNLE+UzQVtznHalKOrXu8fsFz1j6EgERl17VysJajP2vGvOYqNEV7jVS4vdgur7ly8KTNTaJo1E4YZCZvnSfPTnGQBWjbZnk0sF/hL9bGktsk1Snwq+OQx3eaneB791F8FwjLH2JH87eXfYQAHa4HQXeT24fNYv+omigmWlm3cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aOs1k6La; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=NlEOgZtcqcLPhQjm77sd9eeHixFdDz4bELdfycqngq/fHtSgETTnv4G+UkqC4t7lfkbjI06bR7dycQz67poQf7I4jLuIdow/4JAQlT4r6dAlBTg8CjWCdc8JejMdbFUQzkuSlDSpryM8/4nAk0CI7iiC35MVqn2HbajFNAETTqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ECF4L5Ak; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719572809;
+	s=mimecast20190719; t=1719572815;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eD6ant/vl8AM2GLeDzaVRZlnU/b9wAppQ2l+ypA4tgU=;
-	b=aOs1k6LanUCKcQioALy9ngYSAu+bt5qWKdk11XiszGREUVd3kBEs+8HfoJvQxsFp80wSNd
-	0ZYWe7GQPCWz3svyLLqqCejyMMfTPl8iBBk2wWotxNV0KSJ3rLNJZLZBqlR7o79APhL5SF
-	1PKcpE1IYmnQPVVxyzgu3YDMpxFw7JM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=sZ5tfBQljJ4Vkpo4jqnqySlIa20XIFqiwFygXryQvLo=;
+	b=ECF4L5AkwGgtqdkU9YOnPfNkaLVqjZnMRw6KNH6XixJ/r/YyWgkYHgStQix02/63aoGIeL
+	50EiKQzGwj/g2o883Qsm6erwA81utr8sCqShZUZJX6phM6+GtKvmPtnzJ1RcbgVotJOvo9
+	4+c7+y9txk6EAk7zFQ7Gfjy9FOczHjk=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-633-l8hvcfhHPhKzhIFPdC8YtQ-1; Fri,
- 28 Jun 2024 07:06:45 -0400
-X-MC-Unique: l8hvcfhHPhKzhIFPdC8YtQ-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-553-DTcSKPHjNDaXxJW3Vg_wMQ-1; Fri,
+ 28 Jun 2024 07:06:50 -0400
+X-MC-Unique: DTcSKPHjNDaXxJW3Vg_wMQ-1
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D7121944D20;
-	Fri, 28 Jun 2024 11:06:44 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 12150194510D;
+	Fri, 28 Jun 2024 11:06:49 +0000 (UTC)
 Received: from antares.redhat.com (unknown [10.39.194.173])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C5A6019560B2;
-	Fri, 28 Jun 2024 11:06:39 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BADE819560B2;
+	Fri, 28 Jun 2024 11:06:44 +0000 (UTC)
 From: Adrian Moreno <amorenoz@redhat.com>
 To: netdev@vger.kernel.org
 Cc: aconole@redhat.com,
@@ -72,9 +72,9 @@ Cc: aconole@redhat.com,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v6 07/10] selftests: openvswitch: add psample action
-Date: Fri, 28 Jun 2024 13:05:43 +0200
-Message-ID: <20240628110559.3893562-8-amorenoz@redhat.com>
+Subject: [PATCH net-next v6 08/10] selftests: openvswitch: add userspace parsing
+Date: Fri, 28 Jun 2024 13:05:44 +0200
+Message-ID: <20240628110559.3893562-9-amorenoz@redhat.com>
 In-Reply-To: <20240628110559.3893562-1-amorenoz@redhat.com>
 References: <20240628110559.3893562-1-amorenoz@redhat.com>
 Precedence: bulk
@@ -86,220 +86,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Add sample and psample action support to ovs-dpctl.py.
+The userspace action lacks parsing support plus it contains a bug in the
+name of one of its attributes.
 
-Refactor common attribute parsing logic into an external function.
+This patch makes userspace action work.
 
+Reviewed-by: Aaron Conole <aconole@redhat.com>
 Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
 ---
- .../selftests/net/openvswitch/ovs-dpctl.py    | 162 +++++++++++++++++-
- 1 file changed, 161 insertions(+), 1 deletion(-)
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 24 +++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 9f8dec2f6539..4dc6ceca7e1e 100644
+index 4dc6ceca7e1e..fa73f82639fe 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -8,6 +8,7 @@ import argparse
- import errno
- import ipaddress
- import logging
-+import math
- import multiprocessing
- import re
- import struct
-@@ -58,6 +59,7 @@ OVS_FLOW_CMD_DEL = 2
- OVS_FLOW_CMD_GET = 3
- OVS_FLOW_CMD_SET = 4
+@@ -575,13 +575,27 @@ class ovsactions(nla):
+                 print_str += "userdata="
+                 for f in self.get_attr("OVS_USERSPACE_ATTR_USERDATA"):
+                     print_str += "%x." % f
+-            if self.get_attr("OVS_USERSPACE_ATTR_TUN_PORT") is not None:
++            if self.get_attr("OVS_USERSPACE_ATTR_EGRESS_TUN_PORT") is not None:
+                 print_str += "egress_tun_port=%d" % self.get_attr(
+-                    "OVS_USERSPACE_ATTR_TUN_PORT"
++                    "OVS_USERSPACE_ATTR_EGRESS_TUN_PORT"
+                 )
+             print_str += ")"
+             return print_str
  
-+UINT32_MAX = 0xFFFFFFFF
- 
- def macstr(mac):
-     outstr = ":".join(["%02X" % i for i in mac])
-@@ -267,6 +269,75 @@ def parse_extract_field(
-     return str_skipped, data
- 
- 
-+def parse_attrs(actstr, attr_desc):
-+    """Parses the given action string and returns a list of netlink
-+    attributes based on a list of attribute descriptions.
-+
-+    Each element in the attribute description list is a tuple such as:
-+        (name, attr_name, parse_func)
-+    where:
-+        name: is the string representing the attribute
-+        attr_name: is the name of the attribute as defined in the uAPI.
-+        parse_func: is a callable accepting a string and returning either
-+            a single object (the parsed attribute value) or a tuple of
-+            two values (the parsed attribute value and the remaining string)
-+
-+    Returns a list of attributes and the remaining string.
-+    """
-+    def parse_attr(actstr, key, func):
-+        actstr = actstr[len(key) :]
-+
-+        if not func:
-+            return None, actstr
-+
-+        delim = actstr[0]
-+        actstr = actstr[1:]
-+
-+        if delim == "=":
-+            pos = strcspn(actstr, ",)")
-+            ret = func(actstr[:pos])
-+        else:
-+            ret = func(actstr)
-+
-+        if isinstance(ret, tuple):
-+            (datum, actstr) = ret
-+        else:
-+            datum = ret
-+            actstr = actstr[strcspn(actstr, ",)"):]
-+
-+        if delim == "(":
-+            if not actstr or actstr[0] != ")":
-+                raise ValueError("Action contains unbalanced parentheses")
-+
-+            actstr = actstr[1:]
-+
-+        actstr = actstr[strspn(actstr, ", ") :]
-+
-+        return datum, actstr
-+
-+    attrs = []
-+    attr_desc = list(attr_desc)
-+    while actstr and actstr[0] != ")" and attr_desc:
-+        found = False
-+        for i, (key, attr, func) in enumerate(attr_desc):
-+            if actstr.startswith(key):
-+                datum, actstr = parse_attr(actstr, key, func)
-+                attrs.append([attr, datum])
-+                found = True
-+                del attr_desc[i]
-+
-+        if not found:
-+            raise ValueError("Unknown attribute: '%s'" % actstr)
-+
-+        actstr = actstr[strspn(actstr, ", ") :]
-+
-+    if actstr[0] != ")":
-+        raise ValueError("Action string contains extra garbage or has "
-+                         "unbalanced parenthesis: '%s'" % actstr)
-+
-+    return attrs, actstr[1:]
-+
-+
- class ovs_dp_msg(genlmsg):
-     # include the OVS version
-     # We need a custom header rather than just being able to rely on
-@@ -285,7 +356,7 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_SET", "none"),
-         ("OVS_ACTION_ATTR_PUSH_VLAN", "none"),
-         ("OVS_ACTION_ATTR_POP_VLAN", "flag"),
--        ("OVS_ACTION_ATTR_SAMPLE", "none"),
-+        ("OVS_ACTION_ATTR_SAMPLE", "sample"),
-         ("OVS_ACTION_ATTR_RECIRC", "uint32"),
-         ("OVS_ACTION_ATTR_HASH", "none"),
-         ("OVS_ACTION_ATTR_PUSH_MPLS", "none"),
-@@ -304,8 +375,85 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_ADD_MPLS", "none"),
-         ("OVS_ACTION_ATTR_DEC_TTL", "none"),
-         ("OVS_ACTION_ATTR_DROP", "uint32"),
-+        ("OVS_ACTION_ATTR_PSAMPLE", "psample"),
-     )
- 
-+    class psample(nla):
-+        nla_flags = NLA_F_NESTED
-+
-+        nla_map = (
-+            ("OVS_PSAMPLE_ATTR_UNSPEC", "none"),
-+            ("OVS_PSAMPLE_ATTR_GROUP", "uint32"),
-+            ("OVS_PSAMPLE_ATTR_COOKIE", "array(uint8)"),
-+        )
-+
-+        def dpstr(self, more=False):
-+            args = "group=%d" % self.get_attr("OVS_PSAMPLE_ATTR_GROUP")
-+
-+            cookie = self.get_attr("OVS_PSAMPLE_ATTR_COOKIE")
-+            if cookie:
-+                args += ",cookie(%s)" % \
-+                        "".join(format(x, "02x") for x in cookie)
-+
-+            return "psample(%s)" % args
-+
 +        def parse(self, actstr):
-+            desc = (
-+                ("group", "OVS_PSAMPLE_ATTR_GROUP", int),
-+                ("cookie", "OVS_PSAMPLE_ATTR_COOKIE",
-+                    lambda x: list(bytearray.fromhex(x)))
++            attrs_desc = (
++                ("pid", "OVS_USERSPACE_ATTR_PID", int),
++                ("userdata", "OVS_USERSPACE_ATTR_USERDATA",
++                    lambda x: list(bytearray.fromhex(x))),
++                ("egress_tun_port", "OVS_USERSPACE_ATTR_EGRESS_TUN_PORT", int)
 +            )
 +
-+            attrs, actstr = parse_attrs(actstr, desc)
-+
++            attrs, actstr = parse_attrs(actstr, attrs_desc)
 +            for attr in attrs:
 +                self["attrs"].append(attr)
 +
 +            return actstr
 +
-+    class sample(nla):
-+        nla_flags = NLA_F_NESTED
-+
-+        nla_map = (
-+            ("OVS_SAMPLE_ATTR_UNSPEC", "none"),
-+            ("OVS_SAMPLE_ATTR_PROBABILITY", "uint32"),
-+            ("OVS_SAMPLE_ATTR_ACTIONS", "ovsactions"),
-+        )
-+
-+        def dpstr(self, more=False):
-+            args = []
-+
-+            args.append("sample={:.2f}%".format(
-+                100 * self.get_attr("OVS_SAMPLE_ATTR_PROBABILITY") /
-+                UINT32_MAX))
-+
-+            actions = self.get_attr("OVS_SAMPLE_ATTR_ACTIONS")
-+            if actions:
-+                args.append("actions(%s)" % actions.dpstr(more))
-+
-+            return "sample(%s)" % ",".join(args)
-+
-+        def parse(self, actstr):
-+            def parse_nested_actions(actstr):
-+                subacts = ovsactions()
-+                parsed_len = subacts.parse(actstr)
-+                return subacts, actstr[parsed_len :]
-+
-+            def percent_to_rate(percent):
-+                percent = float(percent.strip('%'))
-+                return int(math.floor(UINT32_MAX * (percent / 100.0) + .5))
-+
-+            desc = (
-+                ("sample", "OVS_SAMPLE_ATTR_PROBABILITY", percent_to_rate),
-+                ("actions", "OVS_SAMPLE_ATTR_ACTIONS", parse_nested_actions),
-+            )
-+            attrs, actstr = parse_attrs(actstr, desc)
-+
-+            for attr in attrs:
-+                self["attrs"].append(attr)
-+
-+            return actstr
-+
-     class ctact(nla):
-         nla_flags = NLA_F_NESTED
+     def dpstr(self, more=False):
+         print_str = ""
  
-@@ -637,6 +785,18 @@ class ovsactions(nla):
-                 self["attrs"].append(["OVS_ACTION_ATTR_CT", ctact])
+@@ -797,6 +811,12 @@ class ovsactions(nla):
+                 self["attrs"].append(["OVS_ACTION_ATTR_PSAMPLE", psampleact])
                  parsed = True
  
-+            elif parse_starts_block(actstr, "sample(", False):
-+                sampleact = self.sample()
-+                actstr = sampleact.parse(actstr[len("sample(") : ])
-+                self["attrs"].append(["OVS_ACTION_ATTR_SAMPLE", sampleact])
-+                parsed = True
-+
-+            elif parse_starts_block(actstr, "psample(", False):
-+                psampleact = self.psample()
-+                actstr = psampleact.parse(actstr[len("psample(") : ])
-+                self["attrs"].append(["OVS_ACTION_ATTR_PSAMPLE", psampleact])
++            elif parse_starts_block(actstr, "userspace(", False):
++                uact = self.userspace()
++                actstr = uact.parse(actstr[len("userspace(") : ])
++                self["attrs"].append(["OVS_ACTION_ATTR_USERSPACE", uact])
 +                parsed = True
 +
              actstr = actstr[strspn(actstr, ", ") :]
