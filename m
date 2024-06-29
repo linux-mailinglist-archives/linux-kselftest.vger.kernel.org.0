@@ -1,125 +1,119 @@
-Return-Path: <linux-kselftest+bounces-12954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C208691C9A0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 01:37:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6694691C9F4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 03:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BE1E1F23483
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2024 23:37:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D05B1F230DD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2024 01:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ABD4823DD;
-	Fri, 28 Jun 2024 23:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF69184F;
+	Sat, 29 Jun 2024 01:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0oFgDG9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4dYNNz4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1696BA53;
-	Fri, 28 Jun 2024 23:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9896386;
+	Sat, 29 Jun 2024 01:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719617856; cv=none; b=iPt1Vv6uqeIT2bzRQk4E05A1tQPKfdh7cA0nsz4YzO6chMpt/73t1wwzDHlXCfL3GZa30iL9pBzAXMADukVA+mil93BOj2lGqOZ4rzfuFazwBeeGEiEyhcqwDR8bHY+SDKgylN9BR0wRM2PSrhPzzmZQ3GDMwWyv3KiFAC5Bcq8=
+	t=1719624036; cv=none; b=QVW3LMxswVyJBBzhfqNtiNPWZwH333eUxb3zK7oR/OxeJxJRT6P4Gp2RZfEe2ARXq9ZHVZo7mo4DuorcIvv8UKcwDfVKzy8Gq4iWtclGv3/1wHhHByPE8xsbyz2EXjBsAhnbr2G9E9O4C8Umapg5NIbCBBxPorWUqEZunDWy8jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719617856; c=relaxed/simple;
-	bh=ka4qv5fSLX3tQEYbDwggV9HujoAfjXbpNQOaFpCPECo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nj8biq7Kib5gHy+DqdV8Bk84CJkcrucvI1JGGJ0RwSqvo1slMg1G7M0uUNYVRu3OvksyM1S6q8jOsZ2/uWoYfk0cwZ9Y41QlNhaLSsUay/FYQsmErj6sbhIssGwTaSphQDW2pQBeyZUnVeBSO3A5UAekk3lYXATMOIDpMMqBhvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0oFgDG9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E2AC116B1;
-	Fri, 28 Jun 2024 23:37:34 +0000 (UTC)
+	s=arc-20240116; t=1719624036; c=relaxed/simple;
+	bh=80hrZdggvw9Deb3WWXxiN3Y4Sr3TbeCHrdXSTuAiccM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=msEwsI99PloH4lk0QmcikdgPLN4LCdoEGb6kH/sVC+Wpy8z8MoFe117CHP/j8r4/TEMdUT7Q6PVgpHmFd+fb+Q81mIhAmc9el4ietm14UbTZBt+Ul+G2TX0IgMKidiB1f5yjnx1ECfNwZyMsWMW+J2qwQ7NRuIFpGZmK691oCIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4dYNNz4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4EAC116B1;
+	Sat, 29 Jun 2024 01:20:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719617855;
-	bh=ka4qv5fSLX3tQEYbDwggV9HujoAfjXbpNQOaFpCPECo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=k0oFgDG9PKaaq9/wANCyXCMDwZ+ICzZdRmfEoFgfF+4nASNyYPGFm1l9DIAuJ0ljs
-	 SUGMjQjClDN6P/mH3WCnt94IAJq6vQvX35Q6J7H77WX66F3E9MajKKyGvN8HX6sptF
-	 xfztLrilYfG4/2VnfS4V2uMSK4DsnqfpcWGJx7ZRxKjLnxj/Xa9ilbmJ4q3IQw7Qn5
-	 PV+VfMU7x9b+id9XUwnKhGs3/Mni3yvO/te2apIEdS0N0GSGER4xWgSTBbenNCCbrF
-	 SMT03PaOgc/JmINaYpZ7ghvzqvM4LmTkw++La5CmtYs4kozY19xC0N4KqyHqodW88D
-	 5A/EeDE67CiZA==
-Date: Fri, 28 Jun 2024 16:37:33 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Aaron Conole <aconole@redhat.com>
-Cc: netdev@vger.kernel.org, dev@openvswitch.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Pravin B
- Shelar <pshelar@ovn.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Stefano Brivio <sbrivio@redhat.com>, =?UTF-8?B?QWRy?=
- =?UTF-8?B?acOhbg==?= Moreno <amorenoz@redhat.com>, Simon Horman
- <horms@kernel.org>
-Subject: Re: [PATCH net-next v3 0/7] selftests: net: Switch pmtu.sh to use
- the internal ovs script.
-Message-ID: <20240628163733.08077094@kernel.org>
-In-Reply-To: <f7th6ddx7ty.fsf@redhat.com>
-References: <20240625172245.233874-1-aconole@redhat.com>
-	<20240628081526.66a6b5c6@kernel.org>
-	<f7th6ddx7ty.fsf@redhat.com>
+	s=k20201202; t=1719624036;
+	bh=80hrZdggvw9Deb3WWXxiN3Y4Sr3TbeCHrdXSTuAiccM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q4dYNNz48OjqfJOYP+nk4tUIR8kaXSRDWYKQFilDwBI48kzK58HrgmklsovxW27gM
+	 RYxBd5mtoM1QZzTTCsOCWOJP2iMTAgRQmnzN4LKRhYjc2I8NDZfREILLYQ0xXu+JkZ
+	 BB9PrH8zy0qVyXjI92cPr1veuOLwYShNHrBn5Lu+aChElKbrlGchXaZz8RxF71jBoX
+	 GMKEjpxCKyQ6lDasBT64Oc2TUJv1f1XnzfGyYwvFPYvSyLXAFIV1teCz++Bj/dXlOP
+	 K30rixw0TEteUms0Ojza5s33Bj1iho3p+/YHBAXNi5gdTTsTrS9eKzUc4lotbqtw3m
+	 rE80m4XpsYqJQ==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v6 0/9] use network helpers, part 8
+Date: Sat, 29 Jun 2024 09:20:10 +0800
+Message-ID: <cover.1719623708.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 28 Jun 2024 14:04:09 -0400 Aaron Conole wrote:
-> > I also added the OvS tests themselves, and those are not passing, yet:
-> > https://netdev.bots.linux.dev/contest.html?test=openvswitch-sh
-> > Could you take a look and LMK if these are likely env issues or
-> > something bad in the test itself?  
-> 
-> I saw that.  I was looking for a place in the nipa repository where I
-> could submit a small fix, because I noticed in the stdout:
-> 
->   make -C tools/testing/selftests TARGETS="net/openvswitch"
->   TEST_PROGS=openvvswitch.sh TEST_GEN_PROGS="" run_tests
->   
-> and I think the TEST_PROGS=openvvswitch.sh is misspelled (but it seems
-> to not matter too much for the run_test target).
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-:o that's a weird bug, whatever is echoing back the input from the VMs
-stdin to stdout is duplicating 74th character?! but as you say looks
-like the VM gets the right input, it's just the echo.
+v6:
+ - update patch 6 as Daniel suggested. (thanks)
 
-> From what I understand, there are two things causing it to be flaky.
-> First, the module detection is a bit flaky (and that's why it results is
-> some 'skip' reports).  Additionally, the connection oriented tests
-> include negative cases and those hit timeouts.  The default is to
-> declare failure after 45s.  That can be seen in:
-> 
->   https://netdev-3.bots.linux.dev/vmksft-net/results/659601/91-openvswitch-sh/stdout
->   ...
->   # timeout set to 45
->   ...
->   # TEST: nat_connect_v4                                                [START]
->   # Terminated
->   # Terminated
-> 
-> This is showing that the timeout is too short.
-> 
-> I have patches ready for these issues, but I didn't know if you would
-> like me to submit config 
+v5:
+ - keep make_server and make_client as Eduard suggested.
 
-config meaning make OvS built in? We have a number of tests using
-module auto-loading, I don't think there were major issues with it.
-(well, the rebuilding of modules is a bit questionable with vng,
-but we do 'make mrproper' between each build to work around that).
+v4:
+ - a new patch to use make_sockaddr in sockmap_ktls.
+ - a new patch to close fd in error path in drop_on_reuseport.
+ - drop make_server() in patch 7.
+ - drop make_client() too in patch 9.
 
-> and settings files to go under net/openvswitch,
-> or if you would prefer to see the openvswitch.sh script, and
-> ovs-dpctl.py utilities move out of their net/openvswitch/ directory.  If
-> the latter, I can submit patches quickly with config and settings (and a
-> small change to the script itself) that addresses these.  If you'd
-> prefer the former (moving around the files), I'll need to spend some
-> additional time modifying pmtu and doing a larger test.  I don't have a
-> strong opinion on either approach.
+v3:
+ - a new patch to add backlog for network_helper_opts.
+ - use start_server_str in sockmap_ktls now, not start_server.
 
-Since we talked about it a while back I gave in and implemented support
-for combining multiple targets in a single runner. So it doesn't matter
-any more (barring bugs in NIPA), up to you.
+v2:
+ - address Eduard's comments in v1. (thanks)
+ - fix errors reported by CI.
+
+This patch set uses network helpers in sockmap_ktls and sk_lookup, and
+drop three local helpers tcp_server(), inetaddr_len() and make_socket()
+in them.
+
+Geliang Tang (9):
+  selftests/bpf: Add backlog for network_helper_opts
+  selftests/bpf: Use start_server_str in sockmap_ktls
+  selftests/bpf: Use connect_to_fd in sockmap_ktls
+  selftests/bpf: Use make_sockaddr in sockmap_ktls
+  selftests/bpf: Close fd in error path in drop_on_reuseport
+  selftests/bpf: Use start_server_str in sk_lookup
+  selftests/bpf: Use connect_to_fd in sk_lookup
+  selftests/bpf: Use connect_to_addr in sk_lookup
+  selftests/bpf: Drop make_socket in sk_lookup
+
+ tools/testing/selftests/bpf/network_helpers.c |   2 +-
+ tools/testing/selftests/bpf/network_helpers.h |   1 +
+ .../selftests/bpf/prog_tests/sk_lookup.c      | 141 +++++++-----------
+ .../selftests/bpf/prog_tests/sockmap_ktls.c   |  51 ++-----
+ 4 files changed, 61 insertions(+), 134 deletions(-)
+
+-- 
+2.43.0
+
 
