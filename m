@@ -1,99 +1,200 @@
-Return-Path: <linux-kselftest+bounces-12968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B18F91D0EF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jun 2024 11:53:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AAD891D136
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jun 2024 12:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A80E4B20D03
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jun 2024 09:53:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22926281864
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jun 2024 10:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F69212E1E9;
-	Sun, 30 Jun 2024 09:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B201C139CF3;
+	Sun, 30 Jun 2024 10:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B2C3xgKL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWfmX3zh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBE12772A
-	for <linux-kselftest@vger.kernel.org>; Sun, 30 Jun 2024 09:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD08F12AAC6;
+	Sun, 30 Jun 2024 10:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719741197; cv=none; b=fxmB+/CgkbtV0rrPh0MC75uoYKQuLf8bBgXZ8gpEPb4Qg+GltaGNbltcuIElgTT3Tb/v7MfIeAiAew6wM2t7/sAnGldo/U+lucbJEPm2JLCa8urOThFXtE3nCaNw5aycw2DPpoc7FfcH8jyJ6kFlS33i1ZmFdZBm0pD+sl0jMg4=
+	t=1719744269; cv=none; b=BPwAxuVt4LokrT0ErmCSKdTp+XRbX/BBu66sRbbkJrM55JxvzMbL/jZAfOcYyQvDTpu3g/Njn0R4qhD48EyZpsjxjdHGRp4IOluD1/MgOPa+eRKynNKIFdKzFp+p35hJbyUpFkzSVgBXyGn+02o5imvqkGpabId2yPlDjjGItzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719741197; c=relaxed/simple;
-	bh=48tWzKXqrBuNTITJbFvFyQpBeuNJqHizCnO3J2qvL5k=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sX/XahQwM03h/B33JyP6buVovU5+M5CP5KYQ/baER2msxjnWlgaiRjHKW1maBpEwDAsG8AF9FkgIbpKj4osNUKZ6QMMYMvoGHSKN/T9yv/eUMnSnSySp6PoF5mhJ4HWDtBCJIMPVY9VRVzrDI/7R66Dv12c+cq5u/boS9gRhkWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B2C3xgKL; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fa901ad6f3so131575ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Jun 2024 02:53:15 -0700 (PDT)
+	s=arc-20240116; t=1719744269; c=relaxed/simple;
+	bh=Ckm/UMWon9GZwPjTzl0XhxzfXtwCQ85XxSeLPS4Mg24=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cftpErHgL32cXKBtHOeAuslpLh43xHBcZzx/eOJo+yLlwJ5ABi87x2I1gxDHkamAJHXYYgbHFoa8DcxJWlsdtISw8X8oLqBtsWGmhaMuxIZuoihICSEDTi5uFzTWjgn6iuLrB2ilpIqe8b6LlAEFjpkgG+jn3kv6M9TJSFpEk78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWfmX3zh; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57d1782679fso2551596a12.0;
+        Sun, 30 Jun 2024 03:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719741195; x=1720345995; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuqrLG/iyQEUDQZ+GHH+AA9MRCDZPgNYvRKehcIb46Y=;
-        b=B2C3xgKLwDh3Cl2gZxkzhol+ojp+4TJxn37EW43RMsF8w5VDLjBY+PcZW+SNB8V91T
-         FNNIz+K+E7lfmMlPAypUavlx3sEMFT3g3TH2k/kULdFjy8eBciGQPowrX+43vDCV3VGN
-         GnAxCzPkoscy5l9bppTHDFCSU113/iiVBv+HWH5WXcnsaATw5jm/KlWAwEWqdwdo1kdu
-         wsXd0FwuqWiAm9+9i9N6BVvk8iCBgVQmCZpDKaLfttuACkGkqwwxgQqz/CG68/2TVAvY
-         f+QHCLUuBLGUkZY/k6xC5XK/jb/1nfyVgAPVM3BahW1ndMkoqTK+SyDXSewbS33ov3Xm
-         0Z0g==
+        d=gmail.com; s=20230601; t=1719744266; x=1720349066; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nxZ3tJj5i7QOrkJh0VIa529AtPkb/VxWhsoREUbh1oY=;
+        b=HWfmX3zhIJpIPll9gn0znjuX+pAppEyJuEfizbVHT4aPY/QXuqCMtcSajrI+SDW4Pe
+         msTeEiSg+JbfemlM1+EgTYbjdD+ieUxW/JAzPcYI/0huIW1luS2CKynpAxR6A+W8uOO0
+         9ilOohFDbJEPUuTzR2R/+72YF2kSbz7Y//mkl2PO5tdWtMT5qW1KNKfAwGMxzzlI89MC
+         VTMEqEIhn//W22MRsaSW3DsZLqsKOtp1URHXl2+WTe2UpcmZjuM2qMtIz+7iDq0J6r8W
+         nRA+iO9be0pbhHTRxNfU+zjaCw2yw+EI+Y9xr7VI+P9WgPzlGzfkas48kT5s9p1YwjHe
+         8Zvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719741195; x=1720345995;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuqrLG/iyQEUDQZ+GHH+AA9MRCDZPgNYvRKehcIb46Y=;
-        b=kur4nPtUNrL3stkE8Y2RrCo/25BhQKHOIApEZl/EM7ohnK62jP5dalnJhTS9QFBXsQ
-         4G8YNQGLVdrn1mLOFxnFUAC2bQKkQVudtTcZkGN0x/28WI38DZNyBTt3xJUThaL59SZ7
-         LcSm5UyavkswC2992ymO8WHl9v9aj5HVeYQ+S5Q82/csCovRRt4th7XOQ9Eqid52fH8H
-         Zwl7piNnPFz90ukv/n7Jt6f0VPToYY22bBO5EOR7Z1aigPMlPJsmnHfNw7C6GLj8KG37
-         9YCgk3fl80Pi7LcniGFtaD75o7J/vOCQcwAjuMp6LAv/jmfVLQudBGdc4aYK0w5gn1Tl
-         wx9g==
-X-Forwarded-Encrypted: i=1; AJvYcCU5KbDdFlcGetDcmiRBEtClDF/HUn7wqC2fgybR6V23mWe2YjKLNDvA4q8jk+hPdh2ct6goQksxxoE9E7IUGRlVnKycE12q+ks+gZkDP8f1
-X-Gm-Message-State: AOJu0YxVDlscVYlubyPqnFUvivnjPLh97dY/6M7373GPmNrAxIcW+hB/
-	VuuHIygRdLUAJmoRqzDL22MP1EwV+i74cTHPuEPSb18q1/98DCIeGuJKbTfb2A==
-X-Google-Smtp-Source: AGHT+IGh0tdaPei75Qvv/3PC2bsHbzXwLxc5ZYZMwJ/JLo/HH99KuZQ9cFRZGl4AvEJMKXkY9e+sew==
-X-Received: by 2002:a17:903:25d2:b0:1f6:794c:f409 with SMTP id d9443c01a7336-1fad8ef3758mr2142825ad.23.1719741194329;
-        Sun, 30 Jun 2024 02:53:14 -0700 (PDT)
-Received: from [2620:0:1008:15:66f9:a021:890c:52c9] ([2620:0:1008:15:66f9:a021:890c:52c9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10e392asm43679945ad.78.2024.06.30.02.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jun 2024 02:53:13 -0700 (PDT)
-Date: Sun, 30 Jun 2024 02:53:13 -0700 (PDT)
-From: David Rientjes <rientjes@google.com>
-To: Jiaqi Yan <jiaqiyan@google.com>
-cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
-    ioworker0@gmail.com, muchun.song@linux.dev, akpm@linux-foundation.org, 
-    shuah@kernel.org, rdunlap@infradead.org, corbet@lwn.net, osalvador@suse.de, 
-    duenwen@google.com, fvdl@google.com, ak@linux.intel.com, 
-    linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-    linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 4/4] docs: mm: add enable_soft_offline sysctl
-In-Reply-To: <20240628205958.2845610-5-jiaqiyan@google.com>
-Message-ID: <ba5f7c49-c601-c28c-f37d-d2c2e147e382@google.com>
-References: <20240628205958.2845610-1-jiaqiyan@google.com> <20240628205958.2845610-5-jiaqiyan@google.com>
+        d=1e100.net; s=20230601; t=1719744266; x=1720349066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nxZ3tJj5i7QOrkJh0VIa529AtPkb/VxWhsoREUbh1oY=;
+        b=w4irnSMPrZ3uzrCNdniolBAi8rcq98C9isP6jzwgs0MjAGy+aIBkd3yke316bADMYQ
+         ET6oS5KmFQfBjv6V1C33nhnStKtWtzq9zBJj1Ma+ahvtR4LubSilf+GHaw5LB8AEhY9l
+         P/p2Cyf4XBtrRUPpUkU83kIDBqjbeY5qLEawd9k86F8WusMVRo8EDNyUlGgbvVHhyGzk
+         E/bxmprckGiavbuUKwEliIBWI6iTs/zq8JmWHY8NkxXYg4MT/r0i2lS1A6IMWUYeFcex
+         L+NHWGEVY1wFaQVNjbEwbdSJlJCXKnAmVd7UHkmdpeaG7k4v+56+RhPjuB0JH0N/oft2
+         V2Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCXky86WM9L6kdEQi6ls9632ggMaqg9BOfNlDVFCVMG1R1eIwmXOdH67xG90QhhFbYJUbXgi82Uh0ppcfNA+AF+1Jw+ARwbD06uQ70ZKp1nJgLRJ1RHluSlnEyro5EnLCWU9E+s9G5ypFH0b
+X-Gm-Message-State: AOJu0YxyMoeoDY6wbpPp8XFl5ueQbqvJchBEobJcKjlMw4rUa3KIMntA
+	Ul4w1txzRzOOOitF5zpWbenYOlrT8aO430HwCxwaUH0Zav/aA19agvuHxu2mKH6+zu+sECVIx+j
+	KCs3aYkAVl8WGlbCCTluchPudFVg=
+X-Google-Smtp-Source: AGHT+IEwNnRMTNLVFa2Vct7GYPnmOxdeoHNqOi6hW20KZkNAdRp96NVMLfzP0R695C5mK/j/t4BulFbOfccJlSwZwUY=
+X-Received: by 2002:a05:6402:5111:b0:57c:da58:51e7 with SMTP id
+ 4fb4d7f45d1cf-5879eaff6cemr2096516a12.1.1719744266033; Sun, 30 Jun 2024
+ 03:44:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20240628205958.2845610-1-jiaqiyan@google.com> <20240628205958.2845610-2-jiaqiyan@google.com>
+In-Reply-To: <20240628205958.2845610-2-jiaqiyan@google.com>
+From: Lance Yang <ioworker0@gmail.com>
+Date: Sun, 30 Jun 2024 18:44:12 +0800
+Message-ID: <CAK1f24n_SftNx2WG0UE_d-1tZGieR6VDfeFx9DGjakHQ0VpZuA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] mm/memory-failure: refactor log format in soft
+ offline code
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: nao.horiguchi@gmail.com, linmiaohe@huawei.com, jane.chu@oracle.com, 
+	muchun.song@linux.dev, akpm@linux-foundation.org, shuah@kernel.org, 
+	rdunlap@infradead.org, corbet@lwn.net, osalvador@suse.de, rientjes@google.com, 
+	duenwen@google.com, fvdl@google.com, ak@linux.intel.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 28 Jun 2024, Jiaqi Yan wrote:
-
-> Add the documentation for soft offline behaviors / costs, and what
-> the new enable_soft_offline sysctl is for.
-> 
-> Acked-by: Oscar Salvador <osalvador@suse.de>
+On Sat, Jun 29, 2024 at 5:00=E2=80=AFAM Jiaqi Yan <jiaqiyan@google.com> wro=
+te:
+>
+> Logs from soft_offline_page and soft_offline_in_use_page have
+> different formats than majority of the memory failure code:
+>
+>   "Memory failure: 0x${pfn}: ${lower_case_message}"
+>
+> Convert them to the following format:
+>
+>   "Soft offline: 0x${pfn}: ${lower_case_message}"
+>
+> No functional change in this commit.
+>
 > Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 
-Acked-by: David Rientjes <rientjes@google.com>
+LGTM. Feel free to add:
+Reviewed-by: Lance Yang <ioworker0@gmail.com>
+
+Thanks,
+Lance
+
+
+> ---
+>  mm/memory-failure.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 2cf7acc286de..685ab9a77966 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -2640,6 +2640,9 @@ int unpoison_memory(unsigned long pfn)
+>  }
+>  EXPORT_SYMBOL(unpoison_memory);
+>
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "Soft offline: " fmt
+> +
+>  static bool mf_isolate_folio(struct folio *folio, struct list_head *page=
+list)
+>  {
+>         bool isolated =3D false;
+> @@ -2695,7 +2698,7 @@ static int soft_offline_in_use_page(struct page *pa=
+ge)
+>
+>         if (!huge && folio_test_large(folio)) {
+>                 if (try_to_split_thp_page(page, true)) {
+> -                       pr_info("soft offline: %#lx: thp split failed\n",=
+ pfn);
+> +                       pr_info("%#lx: thp split failed\n", pfn);
+>                         return -EBUSY;
+>                 }
+>                 folio =3D page_folio(page);
+> @@ -2707,7 +2710,7 @@ static int soft_offline_in_use_page(struct page *pa=
+ge)
+>         if (PageHWPoison(page)) {
+>                 folio_unlock(folio);
+>                 folio_put(folio);
+> -               pr_info("soft offline: %#lx page already poisoned\n", pfn=
+);
+> +               pr_info("%#lx: page already poisoned\n", pfn);
+>                 return 0;
+>         }
+>
+> @@ -2720,7 +2723,7 @@ static int soft_offline_in_use_page(struct page *pa=
+ge)
+>         folio_unlock(folio);
+>
+>         if (ret) {
+> -               pr_info("soft_offline: %#lx: invalidated\n", pfn);
+> +               pr_info("%#lx: invalidated\n", pfn);
+>                 page_handle_poison(page, false, true);
+>                 return 0;
+>         }
+> @@ -2737,13 +2740,13 @@ static int soft_offline_in_use_page(struct page *=
+page)
+>                         if (!list_empty(&pagelist))
+>                                 putback_movable_pages(&pagelist);
+>
+> -                       pr_info("soft offline: %#lx: %s migration failed =
+%ld, type %pGp\n",
+> +                       pr_info("%#lx: %s migration failed %ld, type %pGp=
+\n",
+>                                 pfn, msg_page[huge], ret, &page->flags);
+>                         if (ret > 0)
+>                                 ret =3D -EBUSY;
+>                 }
+>         } else {
+> -               pr_info("soft offline: %#lx: %s isolation failed, page co=
+unt %d, type %pGp\n",
+> +               pr_info("%#lx: %s isolation failed, page count %d, type %=
+pGp\n",
+>                         pfn, msg_page[huge], page_count(page), &page->fla=
+gs);
+>                 ret =3D -EBUSY;
+>         }
+> @@ -2795,7 +2798,7 @@ int soft_offline_page(unsigned long pfn, int flags)
+>         mutex_lock(&mf_mutex);
+>
+>         if (PageHWPoison(page)) {
+> -               pr_info("%s: %#lx page already poisoned\n", __func__, pfn=
+);
+> +               pr_info("%#lx: page already poisoned\n", pfn);
+>                 put_ref_page(pfn, flags);
+>                 mutex_unlock(&mf_mutex);
+>                 return 0;
+> --
+> 2.45.2.803.g4e1b14247a-goog
+>
 
