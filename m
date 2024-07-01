@@ -1,89 +1,113 @@
-Return-Path: <linux-kselftest+bounces-13001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A00191DE21
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 13:35:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 328DC91DF84
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 14:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0711E1F2227C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 11:35:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD6A2828E3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 12:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA4314B061;
-	Mon,  1 Jul 2024 11:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E87158DA1;
+	Mon,  1 Jul 2024 12:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oLBnuc/m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F312B9C6;
-	Mon,  1 Jul 2024 11:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABEC77115;
+	Mon,  1 Jul 2024 12:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719833588; cv=none; b=mJsLn0nTb8hUfLNM8GInzqrso/zhTuShEAkQwM+LFDCtFjLOJjMGI3Dut+ytHKAjUKF9upl47QYgKN5OEt8Nz7D7fZczZEjjxYBdyjIRfr9vB8Wwrxq9uTV4hmdybXQJFcD+0kQwNH0S7E9DtIwr8TczQTGjrtYiTon5qwXGUuM=
+	t=1719837606; cv=none; b=qqxoxsCCy3zxnjNshNvZBtdT6A4zcU0d98Vc5bybg7FZdPsWcfxddvbO7192UNcSfp1scbBHoP3XHdg35ObP/7Q1Bw6XQU88KpChlPBjiT2SdOS9yvySWGlAOytEZn+q+6N6/osVMqOmVrDNiBQBuYfDPqJV3ry47eEAIn/UrAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719833588; c=relaxed/simple;
-	bh=4+Ivk6b2jrBFJKc513Er8JVn7rnOHx579gQcUdHuc9A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tThuozjWfCcDDA2SsVtRyNCE7Y9Xl/9KDx1JcvAhIBZiyCdYfFyoRnmaieCBDI/BQAbgxxa8IMQR7zx/Dx4LaGkG0hj/amKWFJFO4eAUtnvb4prsx/Bi/HoP308edCkfc/W8fieq88220rBmLIGD/oXFTKyZ9VbGXPMI0PbqHPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee1668293e5196-afa90;
-	Mon, 01 Jul 2024 19:32:53 +0800 (CST)
-X-RM-TRANSID:2ee1668293e5196-afa90
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain.localdomain (unknown[10.54.5.252])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3668293e3681-69d77;
-	Mon, 01 Jul 2024 19:32:53 +0800 (CST)
-X-RM-TRANSID:2ee3668293e3681-69d77
-From: Liu Jing <liujing@cmss.chinamobile.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Liu Jing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] selftest: epoll_busy_poll: remove unnecessary assignment in TEST_F(epoll_busy_poll, test_get_params)
-Date: Mon,  1 Jul 2024 19:32:51 +0800
-Message-Id: <20240701113251.6630-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1719837606; c=relaxed/simple;
+	bh=e+eEkYsgdY+YmdywxsbLna9/WCkd8alNpTWRJQTosNE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kHoOknxx+3Ac+mTQVfuhzBfSR+vMlAtCG4Ubm2H6KjMGq7vP6VNBFvo3teffk4NaET/83crdSrvbsimyGru7ccU0yIzBf86g1uooy1aWvM4eMH5kSHq187tFcJy/lq3BtK5SVFq/bIFcc6/VXqglX4p0RxXYBnlFG0aq8wVKwsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oLBnuc/m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBF2C116B1;
+	Mon,  1 Jul 2024 12:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719837606;
+	bh=e+eEkYsgdY+YmdywxsbLna9/WCkd8alNpTWRJQTosNE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=oLBnuc/mj5AteF6VpOm8Vf5fizejOW4VPUI82MQN8GQzguOhWgFsf0gjFGxWVyj4p
+	 +HNwU7nCieS8rcICMq96EpVTMOOe1Gq4hOoLUTjnY/BZ+YKK36wie2onoO9ByRYy42
+	 939Eh9egAXsYRH7zLw1SsugS5GJNHSUdinTDAjE1Y4BLKCFq2rA3ACI7xNR5LGqeOD
+	 bBv2r7fougAwm6e+mBTpn7/QpJ88S61c+HZXToLlfvQyT7/xwmVggWARaf4BOJ4Rtz
+	 XoI39h+F8THY1Gk3+W5Hsjrcm3jx/V9QKRGYsYGju0HtiBsv/briCpXoBgx/vHTfOY
+	 i0gFSgavcol6Q==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v2 0/4] Fix warnings in for-6.11/bpf
+Date: Mon, 01 Jul 2024 14:39:48 +0200
+Message-Id: <20240701-fix-cki-v2-0-20564e2e1393@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJSjgmYC/2WMQQ6CMBBFr0Jm7RhaoTWuvIdhUeoUJphipqbRk
+ N7dytbl+//lbZBImBJcmg2EMideYwV9aMDPLk6EfK8MutVda7TFwG/0C2M4WX3uez8GE6DaT6F
+ 67aXbUHnm9Frls4ez+q3/jaxQoR4768l5pYy7LiSRHsdVJhhKKV8t1lrPnwAAAA==
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+ kernel test robot <lkp@intel.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+ Mirsad Todorovac <mtodorovac69@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719837604; l=1561;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=e+eEkYsgdY+YmdywxsbLna9/WCkd8alNpTWRJQTosNE=;
+ b=xR6TwFULWoXBOP88iMBAyq5yaUBdDpXWbTvsjow53tNj+wbpjRyCVPuvnq564t34BQOev+cqe
+ 0OPeta2p0r4ARuOtXB9Yl9PQ67o3jfvwtcmooC4CH7TLWWJmwMKW5TD
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-In the TEST_F(epoll_busy_poll, test_get_params), the initialized value of 'ret' is unused,
-because it will be assigned by the ioctl.thus remove it.
+We had several complains in linux-next that there were warnings:
 
-Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+CKI was not happy: it was the same situation than in an early report
+when HID-BPF was initially included: the automatically generated
+vmlinux.h doesn't contain all of the required structs and the
+compilation of the bpf program fails.
+
+We have multiple pointer to int cast complains and some docs that were
+not rendered properly.
+
+Include everything here.
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- tools/testing/selftests/net/epoll_busy_poll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Also fix the pointer to int casts
+- Also fix the docs complains
+- Link to v1: https://lore.kernel.org/r/20240627-fix-cki-v1-1-2b47ceac116a@kernel.org
 
-diff --git a/tools/testing/selftests/net/epoll_busy_poll.c b/tools/testing/selftests/net/epoll_busy_poll.c
-index 16e457c2f877..652b0957b6c5 100644
---- a/tools/testing/selftests/net/epoll_busy_poll.c
-+++ b/tools/testing/selftests/net/epoll_busy_poll.c
-@@ -130,7 +130,7 @@ TEST_F(epoll_busy_poll, test_get_params)
- 	 * the default should be default and all fields should be zero'd by the
- 	 * kernel, so set params fields to garbage to test this.
- 	 */
--	int ret = 0;
-+	int ret;
- 
- 	self->params.busy_poll_usecs = 0xff;
- 	self->params.busy_poll_budget = 0xff;
+---
+Benjamin Tissoires (4):
+      selftests/hid: ensure CKI can compile our new tests on old kernels
+      HID: bpf: fix gcc warning and unify __u64 into u64
+      HID: bpf: doc fixes for hid_hw_request() hooks
+      HID: bpf: doc fixes for hid_hw_request() hooks
+
+ drivers/hid/bpf/hid_bpf_dispatch.c                 |  8 +++---
+ drivers/hid/bpf/hid_bpf_struct_ops.c               |  2 +-
+ drivers/hid/hid-core.c                             |  4 +--
+ drivers/hid/hidraw.c                               |  6 ++---
+ include/linux/hid_bpf.h                            | 31 +++++++++++++---------
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  | 16 +++++++++++
+ 6 files changed, 44 insertions(+), 23 deletions(-)
+---
+base-commit: d3e15189bfd4d0a9d3a7ad8bd0e6ebb1c0419f93
+change-id: 20240627-fix-cki-f372855cbf6f
+
+Best regards,
 -- 
-2.33.0
-
-
+Benjamin Tissoires <bentiss@kernel.org>
 
 
