@@ -1,172 +1,149 @@
-Return-Path: <linux-kselftest+bounces-12995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DAEA91DB11
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 11:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 802DD91DB42
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 11:15:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74A7B1C216D6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 09:08:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0F201C21A32
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 09:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C08684A5E;
-	Mon,  1 Jul 2024 09:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3AE84D04;
+	Mon,  1 Jul 2024 09:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HX8xRUjL"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="pYwFDWas"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C73084A39;
-	Mon,  1 Jul 2024 09:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4BE84FDF;
+	Mon,  1 Jul 2024 09:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719824891; cv=none; b=OFjbGYcuLPjCfGrsaNVp0B4/lX60XoFjVDY+ZkO8XjHzVbbQobwedSYvkTo6jBs8FODY+D/g+oBP0IqhzVdOed3Rctk+NIq5Gp47l7+u/3RrgF8Yo0sgw03Nt6O8uUnQM3Sr57ZEtne/tJDuuOFt1T31lXP+x49VvabopC+02QA=
+	t=1719825312; cv=none; b=hURZtuBxNzreWHaLXYh508xi1H/Gq8Bex2c6CLisTO1TT2mhveKO4nF2f/NJjlFqHI98N4USVBwLSeFJ+AOL+p+mPCrFQcdGSMQpAXuB8dl6rKqpqErAvRPrsewm4FxqmfnTkILOgWodC+gB5QD1IYhyGM7DlfztpK1SWGFgEmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719824891; c=relaxed/simple;
-	bh=UGbdqgf/9Fvo9l2zX/CGYhdGSnuNCps876YVS1NTX9M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ARe1t+LB1AFopbpbRILY/4t7kvNSrrsKqSbJfhOai5uf8obrb1WjZ2Qt+b5dozataiXF7+x0kwb5QV5cUq7ejSyMJfY5t56ww4j5hijYpdMyUZCQ72xnoXuYc1bH4+x8Q7O7ZM8Th8DpCdoEG8rEAFtnG7Lz4S1IhUqtH6cjwhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HX8xRUjL; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1719824886; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=FRI1Dyi5c7hnorQrmeEYTjeSPUtzZqzzroY7gFiFk8s=;
-	b=HX8xRUjLPs6W4cmJQ1ztNB0NysfB+OSgNgnX/XyyCo94FEas0rdfZwx9lAeGTQ8BEw2dJqMhpqi5mrabPiWDV9OFUurkkcb1YYHzHc8KBo5WjBfpdXvZmkPZ4HNe1MlPvcHWPhts/3JN/SnQwUsoGDOk84aM9IBb82ai6L7jm8Q=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033068173054;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=29;SR=0;TI=SMTPD_---0W9cYRWS_1719824883;
-Received: from 30.221.145.205(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0W9cYRWS_1719824883)
-          by smtp.aliyun-inc.com;
-          Mon, 01 Jul 2024 17:08:04 +0800
-Message-ID: <ead4fbea-dfee-4454-b89a-a03166cde0db@linux.alibaba.com>
-Date: Mon, 1 Jul 2024 17:08:02 +0800
+	s=arc-20240116; t=1719825312; c=relaxed/simple;
+	bh=EXNMgrTiEPpQEAXGI28JpwhOg3RrTVpofGQB0ZCOThM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sssmpbkAQS4Hu/GRVRn1eGGXNafcxzSJnp1+yq8iTzTdLtPxlQ6agUNjB8QMP/9Cj8oYp0Zmj8ru0bAFok1Uci42167VCrVV3iSjCRmD8y8eKkAlYiDJ+qE1IeQ0Jl7B1ohBglr8Hr1fewN/eU/jOzrzPrSoIvPZ9mCrwcTbU2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=pYwFDWas; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4WCL3Y69kfz9scS;
+	Mon,  1 Jul 2024 11:15:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1719825305;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K+QZIagZ7OIN+OXgwfZRx/CoBfAQFQoz16267s73MDs=;
+	b=pYwFDWasuVUv2oq5EADkqN8xdmyWO1Ksa+jbTDgxQBgyW36GGZfo3SVqgJn8NlrtOjT+3B
+	MmF3NGRLL5CFQELInQnWKIeI/NiKK9DOx3RqVDHqNjIC7WsGgqR1m58eALH8RT5mNTSL+0
+	GHTajev72Wy2CnjyTKVEeMblP6r4fFyipplHzHLHvd6YLmv5fIkY3mFjivTHe55Sd8gnHB
+	SoA015X2UfHjNRzt34d0RVh3uM30ks6VDJkRgjzyWfOGRcReoqjA/J+GYRbs0z1t/A+w5I
+	38d3me6jtRY9FaarJWI4bsN83RxqCH8lc4Ly2EOIYOyA5L2VMIE/mICllU1/EA==
+Date: Mon, 1 Jul 2024 02:14:54 -0700
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, kernel@collabora.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests: openat2: don't print total number of tests
+ and then skip
+Message-ID: <20240701.085146-junky.rubs.mossy.crews-uyuNIdHgWxb@cyphar.com>
+References: <20240522214647.3568788-1-usama.anjum@collabora.com>
+ <1fc06a15-f06e-4db1-ace5-b9d52250d0df@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/2] skmsg: prevent empty ingress skb from
- enqueuing
-To: Geliang Tang <geliang@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, David Ahern <dsahern@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Mykyta Yatsenko <yatsenko@meta.com>, Miao Xu <miaxu@meta.com>,
- Yuran Pereira <yuran.pereira@hotmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1719553101.git.tanggeliang@kylinos.cn>
- <5b6a55017ab616131f7de1268b60cb34e99941a1.1719553101.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-From: "D. Wythe" <alibuda@linux.alibaba.com>
-In-Reply-To: <5b6a55017ab616131f7de1268b60cb34e99941a1.1719553101.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="seca4cj23snjpkde"
+Content-Disposition: inline
+In-Reply-To: <1fc06a15-f06e-4db1-ace5-b9d52250d0df@collabora.com>
 
 
+--seca4cj23snjpkde
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/28/24 1:47 PM, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->
-> Run this BPF selftests (./test_progs -t sockmap_basic) on a Loongarch
-> platform, a Kernel panic occurs:
->
-> '''
-> Oops[#1]:
-> CPU: 22 PID: 2824 Comm: test_progs Tainted: G           OE  6.10.0-rc2+ #18
-> Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018
->     ... ...
->     ra: 90000000048bf6c0 sk_msg_recvmsg+0x120/0x560
->    ERA: 9000000004162774 copy_page_to_iter+0x74/0x1c0
->   CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
->   PRMD: 0000000c (PPLV0 +PIE +PWE)
->   EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
->   ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
-> ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
->   BADV: 0000000000000040
->   PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
-> Modules linked in: bpf_testmod(OE) xt_CHECKSUM xt_MASQUERADE xt_conntrack
-> Process test_progs (pid: 2824, threadinfo=0000000000863a31, task=...)
-> Stack : ...
->          ...
-> Call Trace:
-> [<9000000004162774>] copy_page_to_iter+0x74/0x1c0
-> [<90000000048bf6c0>] sk_msg_recvmsg+0x120/0x560
-> [<90000000049f2b90>] tcp_bpf_recvmsg_parser+0x170/0x4e0
-> [<90000000049aae34>] inet_recvmsg+0x54/0x100
-> [<900000000481ad5c>] sock_recvmsg+0x7c/0xe0
-> [<900000000481e1a8>] __sys_recvfrom+0x108/0x1c0
-> [<900000000481e27c>] sys_recvfrom+0x1c/0x40
-> [<9000000004c076ec>] do_syscall+0x8c/0xc0
-> [<9000000003731da4>] handle_syscall+0xc4/0x160
->
-> Code: ...
->
-> ---[ end trace 0000000000000000 ]---
-> Kernel panic - not syncing: Fatal exception
-> Kernel relocated by 0x3510000
->   .text @ 0x9000000003710000
->   .data @ 0x9000000004d70000
->   .bss  @ 0x9000000006469400
-> ---[ end Kernel panic - not syncing: Fatal exception ]---
-> '''
->
-> This crash happens every time when running sockmap_skb_verdict_shutdown
-> subtest in sockmap_basic.
->
-> This crash is because a NULL pointer is passed to page_address() in
-> sk_msg_recvmsg(). Due to the difference in architecture, page_address(0)
-> will not trigger a panic on the X86 platform but will panic on the
-> Loogarch platform. So this bug was hidden on the x86 platform, but now
-> it is exposed on the Loogarch platform.
+On 2024-07-01, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+> Adding more people for review
+>=20
+> On 5/23/24 2:46 AM, Muhammad Usama Anjum wrote:
+> > Don't print that 88 sub-tests are going to be executed. But then skip.
+> > The error is printed that executed test was only 1 while 88 should have
+> > run:
+> >=20
+> > Old output:
+> >   TAP version 13
+> >   1..88
+> >   ok 2 # SKIP all tests require euid =3D=3D 0
+> >   # Planned tests !=3D run tests (88 !=3D 1)
+> >   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> >=20
+> > New and correct output:
+> >   TAP version 13
+> >   1..0 # SKIP all tests require euid =3D=3D 0
+> >=20
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > ---
+> >  tools/testing/selftests/openat2/resolve_test.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/tes=
+ting/selftests/openat2/resolve_test.c
+> > index bbafad440893c..5472ec478d227 100644
+> > --- a/tools/testing/selftests/openat2/resolve_test.c
+> > +++ b/tools/testing/selftests/openat2/resolve_test.c
+> > @@ -508,12 +508,13 @@ void test_openat2_opath_tests(void)
+> >  int main(int argc, char **argv)
+> >  {
+> >  	ksft_print_header();
+> > -	ksft_set_plan(NUM_TESTS);
+> > =20
+> >  	/* NOTE: We should be checking for CAP_SYS_ADMIN here... */
+> > -	if (geteuid() !=3D 0)
+> > +	if (geteuid())
 
-Maybe Loongarch ?  Besides that, LGTM.
-Reviewed-by: D. Wythe <alibuda@linux.alibaba.com>
+This change isn't necessary, !=3D 0 makes what we're checking clearer.
 
->
-> The root cause is an empty skb (skb->len == 0) is put on the queue.
->
-> In this case, in sk_psock_skb_ingress_enqueue(), num_sge is zero, and no
-> page is put to this sge (see sg_set_page in sg_set_page), but this empty
-> sge is queued into ingress_msg list.
->
-> And in sk_msg_recvmsg(), this empty sge is used, and a NULL page is
-> got by sg_page(sge). Pass this NULL-page to copy_page_to_iter(), it
-> passed to kmap_local_page() and page_address(), then kernel panics.
->
-> To solve this, we should prevent empty skb from putting on the queue. So
-> in sk_psock_verdict_recv(), if the skb->len is zero, drop this skb.
->
-> Fixes: ef5659280eb1 ("bpf, sockmap: Allow skipping sk_skb parser program")
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->   net/core/skmsg.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index fd20aae30be2..44952cdd1425 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1184,7 +1184,7 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
->   
->   	rcu_read_lock();
->   	psock = sk_psock(sk);
-> -	if (unlikely(!psock)) {
-> +	if (unlikely(!psock || !len)) {
->   		len = 0;
->   		tcp_eat_skb(sk, skb);
->   		sock_drop(sk, skb);
+> >  		ksft_exit_skip("all tests require euid =3D=3D 0\n");
+> > =20
+> > +	ksft_set_plan(NUM_TESTS);
+> > +
+> >  	test_openat2_opath_tests();
+> > =20
+> >  	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
+>=20
+> --=20
+> BR,
+> Muhammad Usama Anjum
 
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--seca4cj23snjpkde
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZoJzjgAKCRAol/rSt+lE
+bxhiAQCCSg+NVT9wtQ5TWZos7rAeoiAPbTt6VZEfxt5Ib3xwOwEAh6BegHRFZA0d
+OVTVzTsB+2YtqxW8oIxQQVxJoD8dhQo=
+=iOwh
+-----END PGP SIGNATURE-----
+
+--seca4cj23snjpkde--
 
