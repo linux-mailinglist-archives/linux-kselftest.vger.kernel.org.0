@@ -1,197 +1,120 @@
-Return-Path: <linux-kselftest+bounces-13020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DF0491E560
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 18:31:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0BB91E7B1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 20:34:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E61572811B3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 16:31:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DFA91C22203
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 18:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C7E16D9C9;
-	Mon,  1 Jul 2024 16:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4F+tGQB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B91816F0CF;
+	Mon,  1 Jul 2024 18:34:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0D16CD1E;
-	Mon,  1 Jul 2024 16:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBEF16C844;
+	Mon,  1 Jul 2024 18:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719851468; cv=none; b=QuihPWW1Oy0TnAvXr9rpz8weKlBHpptILsrPFoCq2Ayt88Tt547pWoGkjDhnNRsmkCM5L1om6pBQ30431cMqm7ORqnWgULGSER7UAEcyZpVpAwqf1DYTPctZi53IRGpfa09BM9bI7aWmBIyI+z9sEW9wBK3xIEcndG5Q4fj2KOQ=
+	t=1719858865; cv=none; b=bLk96bPx9kLqaj24cr9RDpDaXuvzXw2UDWY8aZEazXzMD/W8JoTJFNDlXkixN5SHObVA/oRJsM9gDH35r51Cn/QEJpUXIHJ1npMx5AgYEbRwN+D4glOlnpjxzwZ+O1mlu8H7ggwyDrrh5aG7BkI4CNoYmgEqOBURDKdrsPmhj2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719851468; c=relaxed/simple;
-	bh=3+N9mukdDXyzFCGLQCqPnIa6llv8dipDxdiIJdfI2BM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KzlSOUdp+qNaEdXVXIkrAo9vM8+jbMF2MzEDQxwViZS6MXqrHQckO6UrftH2QV3gmNyjwzkwcJtc9rYcQAI8npJcvZqsyTtODlAiOcszSKFrxZdrJE5e3u9QvJNAwVt2WdB0HpaDgIl/mvRr92LqmLOt3puBxN6zMt+jqzj3SoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4F+tGQB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C198C116B1;
-	Mon,  1 Jul 2024 16:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719851467;
-	bh=3+N9mukdDXyzFCGLQCqPnIa6llv8dipDxdiIJdfI2BM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H4F+tGQB8Hcw87QnKmezQg520Gcp5L4jM+vlgj/UvG/nEhKg/o+U8avYMj889kQ8g
-	 KIg7e1oHvlgRbaS0lVEGaX9Dpcz62o8QoQUDwCx2FMMYNUGNk2F2Tq9mvcLntsK7nb
-	 L1h+t+YpXW+ATKfe9HihuqDHd0V1dYx8Bjb1Ts6ySXWD40NBsiWcQrrkbWjtHMmfjt
-	 ON1nAkADPcHpVd8atehi1jgeZRXwizYT/9NejhyxvEpEF85JaxML+n6m0C/V0Mapwp
-	 NQoMb123Zw2J4sno25BdiU2/gmzOht3CR7t0U44mQEqALZpCB30da2WDJ7T4qkEij6
-	 SKBaTMmQ3lbhQ==
-Date: Mon, 1 Jul 2024 17:31:01 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Samuel Holland <samuel.holland@sifive.com>
-Cc: Charlie Jenkins <charlie@rivosinc.com>, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
-	Andy Chiu <andy.chiu@sifive.com>,
-	Jessica Clarke <jrtc27@jrtc27.com>, peterlin@andestech.com
-Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to the
- D1/D1s devicetree
-Message-ID: <20240701-pyromania-spinster-709a6c8cc460@spud>
-References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
- <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
- <0cc13581-5cc4-4a25-a943-7a896f42da4c@sifive.com>
- <20240701-prancing-outpost-3cbce791c554@spud>
- <7ab7d629-6993-4cad-b5b7-62bddfc74a49@sifive.com>
+	s=arc-20240116; t=1719858865; c=relaxed/simple;
+	bh=qnBhsbC4WESNiDDc/d77ys1TcQzeK/0ng/S3oNQv8JA=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NiyzFLUDOQOtrS/GvfEaJmQyjbYWX6AeoEsGap5ltGjRYQihNQlCSAdXUtl8J3fDsvsQgRpHIuvDCCK+DPWpoGxZNEadoLmUzuBHDQk1TScnzXoaovGO0QJ7XVgSn1yfuS7OUNyLE5fiBJ3JQbPf/wuV5sgN10qdhgDB583vT3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=ovn.org; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ovn.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 413AEC0005;
+	Mon,  1 Jul 2024 18:34:18 +0000 (UTC)
+Message-ID: <79258c61-9658-4f9b-b564-f2e14440a7c5@ovn.org>
+Date: Mon, 1 Jul 2024 20:34:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="MRFAVKKck9xRQIr9"
-Content-Disposition: inline
-In-Reply-To: <7ab7d629-6993-4cad-b5b7-62bddfc74a49@sifive.com>
+User-Agent: Mozilla Thunderbird
+Cc: i.maximets@ovn.org, aconole@redhat.com, echaudro@redhat.com,
+ horms@kernel.org, dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7 10/10] selftests: openvswitch: add psample
+ test
+To: Adrian Moreno <amorenoz@redhat.com>, netdev@vger.kernel.org
+References: <20240630195740.1469727-1-amorenoz@redhat.com>
+ <20240630195740.1469727-11-amorenoz@redhat.com>
+Content-Language: en-US
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <20240630195740.1469727-11-amorenoz@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: i.maximets@ovn.org
+
+On 6/30/24 21:57, Adrian Moreno wrote:
+> Add a test to verify sampling packets via psample works.
+> 
+> In order to do that, create a subcommand in ovs-dpctl.py to listen to
+> on the psample multicast group and print samples.
+> 
+> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+> ---
+>  .../selftests/net/openvswitch/openvswitch.sh  | 115 +++++++++++++++++-
+>  .../selftests/net/openvswitch/ovs-dpctl.py    |  73 ++++++++++-
+>  2 files changed, 182 insertions(+), 6 deletions(-)
 
 
---MRFAVKKck9xRQIr9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This version seems to work correctly with and without arguments.
 
-On Mon, Jul 01, 2024 at 11:11:55AM -0500, Samuel Holland wrote:
-> Hi Conor, Charlie,
->=20
-> On 2024-07-01 11:07 AM, Conor Dooley wrote:
-> > On Mon, Jul 01, 2024 at 10:27:01AM -0500, Samuel Holland wrote:
-> >> On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
-> >>> The D1/D1s SoCs support xtheadvector so it can be included in the
-> >>> devicetree. Also include vlenb for the cpu.
-> >>>
-> >>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >>> ---
-> >>>  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 3 ++-
-> >>
-> >> The other C906/C910/C920-based SoCs need devicetree updates as well, a=
-lthough
-> >> they don't necessarily need to be part of this series:
-> >>
-> >>  - sophgo/cv18xx.dtsi
-> >>  - sophgo/sg2042-cpus.dtsi
-> >>  - thead/th1520.dtsi
-> >=20
-> > Yeah, I think I pointed that out before with the same "escape hatch" of
-> > it not needing to be in the same series.
-> >=20
-> >>
-> >>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/ris=
-cv/boot/dts/allwinner/sun20i-d1s.dtsi
-> >>> index 64c3c2e6cbe0..6367112e614a 100644
-> >>> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> >>> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> >>> @@ -27,7 +27,8 @@ cpu0: cpu@0 {
-> >>>  			riscv,isa =3D "rv64imafdc";
-> >>
-> >> The ISA string should be updated to keep it in sync with riscv,isa-ext=
-ensions.
-> >=20
-> > This probably looks like this cos I said that the kernel shouldn't parse
-> > vendor extensions from "riscv,isa". My rationale was that we have
-> > basically no control of what a vendor extension means in riscv,isa so=
-=20
-> > we shouldn't parse them from it (so marginally worse than standard
-> > extensions, where it means what the spec says except when it doesn't).
-> >=20
-> > Given how we implement the parsing, it also meant we weren't implying
-> > meanings for vendor extensions ACPI-land, where we also can't ensure the
-> > meanings or that they remain stable. That change is in a different
-> > series:
-> > https://patchwork.kernel.org/project/linux-riscv/patch/20240609-support=
-_vendor_extensions-v2-1-9a43f1fdcbb9@rivosinc.com/
-> >=20
-> > Although now that I think about it, this might break xandespmu... I
-> > dunno if the Andes guys switched over to using the new property outside
-> > of the single dts in the kernel tree using their SoC. We could
-> > potentially special-case that extension if they haven't - but my
-> > position on this mostly is that if you want to use vendor extensions you
-> > should not be using riscv,isa (even if the regex doesn't complain if you
-> > add them). I'd like to leave the code in the other patch as-is if we can
-> > help it.
-> >=20
-> > I added Yu Chien Peter Lin here, maybe they can let us know what they're
-> > doing.
->=20
-> OK, that makes sense to me. Then please ignore my original comment.
-
-Should the xandespmu thing be an issue, I'd suggest we just do something
-like the following, in place of the new switch arm added by Charlie:
-
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index ec4bff7a827c..bb99b4055ec2 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -628,6 +628,17 @@ static void __init riscv_parse_isa_string(const char *=
-isa, unsigned long *bitmap
- 		if (unlikely(ext_err))
- 			continue;
-=20
-+		if (*ext =3D=3D 'x' && acpi_disabled) {
-+			/*
-+			 * xandespmu predates this "rule", so special case it for
-+			 * hysterical raisins
-+			 */
-+			if (strncasecmp(ext, "xandespmu", ext_end - ext)) {
-+				pr_warn_once("Vendor extensions are ignored in riscv,isa. Use riscv,is=
-a-extensions instead.");
-+				break;
-+			}
-+		}
-+
- 		match_isa_ext(ext, ext_end, bitmap);
- 	}
- }
-
-
---MRFAVKKck9xRQIr9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoLZxAAKCRB4tDGHoIJi
-0vx9AP9TcSJwtzFrkZkNIG3vs0nSWuu1I+CFqCZfZtrYfWH8RQEAxGeKP2P/oodO
-cyCHRd/9NqDoz5j8eiXpnwlmjUtaKAk=
-=AA89
------END PGP SIGNATURE-----
-
---MRFAVKKck9xRQIr9--
+Tested-by: Ilya Maximets <i.maximets@ovn.org>
 
