@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-12987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-12988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB70391D98B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 10:01:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA5A491D9FA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 10:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA4351C21600
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 08:01:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A95E42820BF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 08:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7580242047;
-	Mon,  1 Jul 2024 08:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373F454F87;
+	Mon,  1 Jul 2024 08:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="NPa412Fr"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="eYd9C5+K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF251EB39;
-	Mon,  1 Jul 2024 08:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C912C6BB;
+	Mon,  1 Jul 2024 08:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719820915; cv=none; b=OK6kWvZvgUKadd7F5PmxleY5NgJYRh5nzYk9liprDaCov70LPU9RDlHrxpXElgxzIJZi3oaHMAtaTMrgqH2KDdBCg25+IgSqIJesqfzGCOzIlOv7OC7h5zFy0wXSFNXlEYwAkRwfts4dhRsQIm09R65w18HV5qwVQ40Nr4MGhNY=
+	t=1719822800; cv=none; b=K+96CLRxrzyjYxMQouBtDweSGZKd4vbzPr0uDFOfi6mhDwjFBG1K1qXwmxHvY6H98zQ8XRvsedb6nMFWRfVKxk5yBZpkAlueTEvdv6su6WInM3jKHpXzjrTPkGUK0m/1YCXSRJeJJGyObI+Mfxnnl68pV2kPS//yue1ufmztnE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719820915; c=relaxed/simple;
-	bh=vHZsiYbVuLK8PNijbZkO2ITL1Z6pcGf5q74vYq9jzEg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=hCLiEDj95tJZKQnGRa63VbtuGzSVmcYoDMqIrXmQMlE7xmSiFiPzq0lJbPV6c7WtU7E7kVZmLI+OiSXFkP8IVvsvEgDdVqlVLcBggiRa8iksnaMddyJ9Bx/opR0KnKKXTrP2H1LIVTD8r7CmiCNBOP+o6GYmKt1VE3z/4W146fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=NPa412Fr; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1719820885; x=1720425685; i=markus.elfring@web.de;
-	bh=XMjo85fqdujP80T25ZWnN55NRa54zLobA87TTomVDrA=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=NPa412FrmCBZuIGal3jrn9O06XHbIqxQWQevki1VbsLVJ5rDdS6/Q0xok3Bjorzf
-	 DIsJJC8QA2gO6r4GDPoa2GVAvuDmcyTdjIsSAAfwUG8Mmpmzlk7UPQolAwfWsuBZ4
-	 aomV3oiNogFm6VXjc3jQG2QoSVUkA4RR+HuvGvm8LkMHnP16cjeRX7Nc8achUdpiG
-	 HqFENMiIq8zB8IvaCRzYuam/VUOMzgmcw8b5zb4BgJbK76kPGfqfpqWOrwfOMP/yP
-	 2IIwfhbmiMn9BXmjt8QaMrxfCx4rU/31Zwol+5wXTeALBCnwHWAU3isDvuzDLfZen
-	 KO9MHMcAu21h7WpPjg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MsaS7-1s8aw22d59-00zkZa; Mon, 01
- Jul 2024 10:01:25 +0200
-Message-ID: <a194b5d3-d3f8-48a4-a010-d98381107b80@web.de>
-Date: Mon, 1 Jul 2024 10:01:13 +0200
+	s=arc-20240116; t=1719822800; c=relaxed/simple;
+	bh=KJK9NggzMkpfJ3LPI28wGASdmgxIriUy+xQWzpaXGQY=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ipia4v+UgYYQ4fN4kfbgFd5aYOc7ARHJ+QPDOunnmR+06YV1i/BwOEdrmTUBZXdLJnvUGS/bG+6E1Vqw3ZpUtL5FsPxWFPxXXwc18+SZ5MfqIur7wIiwMOX42JC+zx6f9NMcghWl+b+FDnO5rHkq6vFhzAAt7JMDqGLDU0WjWrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=eYd9C5+K; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1719822796;
+	bh=KJK9NggzMkpfJ3LPI28wGASdmgxIriUy+xQWzpaXGQY=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=eYd9C5+KXuppOBjQ6nsOw3yaGVfV0BRaXjFaqZTtjK9pc3Q7mnWNbW3Jn66PLron9
+	 LAqaovV4cGwx3yYnJX2rh+I770R5vKjWu+cXrENlirWih1I3qhD9hEn+tZwsn3EJkd
+	 vbdrWOb+9Dr7zGWFdJEN2Fn65Jfr2e57jAPlCcAHDZKcI0Y4glZdgGPlbMk4X2iF5W
+	 mcN7k4ha+Jd2S4BWOk0lOJUanvA8luW8qZzcZwqUvV+AsZ7oi6HZsPA4BhmK6XYtKz
+	 Mj5ZLRDF1TcnkDELjR9gndSC1jrvGM9VUFc9OL3vYHILjdinMD6UINNlKxfHT+dB7X
+	 syRmFbiOp+ZDQ==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6507C3782109;
+	Mon,  1 Jul 2024 08:33:12 +0000 (UTC)
+Message-ID: <f7d8502e-21b8-43f9-ad81-dbbe07df5300@collabora.com>
+Date: Mon, 1 Jul 2024 13:33:08 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,95 +57,141 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Ma Ke <make24@iscas.ac.cn>, linux-kselftest@vger.kernel.org,
- Amer Al Shanawany <amer.shanawany@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski
- <luto@kernel.org>, Kees Cook <kees@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Shuah Khan <shuah@kernel.org>,
- Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Julia Lawall <julia.lawall@inria.fr>
-References: <20240630130038.3671507-1-make24@iscas.ac.cn>
-Subject: Re: [PATCH v3] selftests/capabilities: Fix possible file leak in
- copy_fromat_to
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240630130038.3671507-1-make24@iscas.ac.cn>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests: firmware: conform test to TAP
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Kees Cook <keescook@chromium.org>
+References: <20240520163759.1427653-1-usama.anjum@collabora.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240520163759.1427653-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ITtbtaJRixQcC4ydQvWAh70vkNkfeTcFFOSJ+GWUnF3ZF7ZPydo
- iv9KGBeu0yaw+ZcByKAnvwFn1SaSqT3D+ij7Wdqfz5ToAAYq4q2lBfPHH1OW4wjEBPuFoqb
- Zjl96yT1l3VpqNWijbS5KiGTMPWlDnbniWZkJsiJ5+S4imLHpSiU0SzzIpTgq7wNBmdaj0F
- LI4AEC1n+35wXxG9SIHQQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:y2osiQM7q8c=;1aLLusO+miy302MIfA0gbIrnF0A
- BRAcS6kQibZuLPI9SQ0XEz/rYmslI66qtnLOpXUsiAy7IbSMEFdYV9HXNcxCp7JA9FEldlm1M
- 0WsRd1pCBE7x9vhZ8iNqqbatNkGl7Tv0oxaV82ERi8WALuJq3xwBvHFyTEI0Iz8kHsu5g6LCC
- FiMQfO6YPgsnNgH1t7fvYTvOVDvetlxQX7ep7U4lIjvTopnZN11u3fnskr8i5ci/JnTDG/bVw
- a67A2Zhk68LHUmq4qqSbf4gYM03eKhjpKxQLyMHFRzA3av6ZvX1vGlwX5G4nHuAoxULXmBi2g
- trlpVc6L5i1qn5vNpIgHgfxIEGDTpf2yyJAhSIHGLYD6NlmSf6CuzwGIwH7Tl91cxrpYKe5Md
- yCOIt+G7zSL/w/l3cU17iBSzBxLVIqClb332iWI/K3nJRl5kX/ervhyzOpIH7xWVJlpMQh0oX
- ClLYQmjboR9CXPMaN6jvGUnwrGlBeQbSLu0onZYWxm77JSUHTl1RcFRixBU4mdYihFFK0V0XR
- E8ux8/AO8yhjNLVKvJmXZP924bnxTJAP8rpU/oLMnIYQhf6APShgNcia7UT61/61nNKhcTG0e
- C6XRYeT7g245SMYwmK18EmMsLOmqiXorWhZ9/ZAAxeaTnnQiHYSGoo9C+rE4PGBtyh1n8MZsv
- bAhr/cB/Q/LV3sKgWgaca0KsqGyfjo/yOx9rc1ZeT99fAwQzlmISheez54jY3hWfTi7yL3Bv9
- cDzzTxK8dGTFxrE7K+/tY6XborgX6KN2CDEt4cRuvIgKli+ww3DD417AmzNzoODKt3nCe5kY6
- CJ5zeKTCTrRHKbP9ZFASljiv1+fJzQ5XXgzzkzDfcHdQ8=
+Content-Transfer-Encoding: 7bit
 
->                                        =E2=80=A6 openat() and open() ini=
-tialize
-> 'from' and 'to', and only 'from' validated with 'if' statement.
+Adding missing maintainer and reviser.
 
-Why do you find such information helpful?
-
-
->                                                                 If the
-> initialization of variable 'to' fails,
-
-The variable assignment will usually succeed.
-A stored return value would eventually indicate a failed function call.
-
-
->                                        we should better check the value
-> of 'to' and close 'from' to avoid possible file leak. Improve the checki=
-ng
-> of 'from' additionally.
-
-Please split desired changes into separate update steps.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.10-rc6#n168
-
-
-How do you think about to use a summary phrase like =E2=80=9CComplete erro=
-r handling
-in copy_fromat_to()=E2=80=9D?
-
-
-Under which circumstances would you become interested to take remaining
-patch review concerns better into account?
-
-
-=E2=80=A6
+On 5/20/24 9:37 PM, Muhammad Usama Anjum wrote:
+> Conform the layout, informational and status messages to TAP. No
+> functional change is intended other than the layout of output messages.
+> Without using TAP messages, the passed/failed/skip test names cannot be
+> found. This is a prepartory patch, more patches will be sent to comform
+> the test completely.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
-> Changes in v3:
-> - Thank you for your interest in our vulnerability detection method. We
-> extract vulnerability characteristics from a known vulnerability and mat=
-ch
-> the same characteristics in the project code. As our work is still in
-> progress, we are not able to disclose it at this time. =E2=80=A6
+>  .../selftests/firmware/fw_run_tests.sh        | 63 ++++++++++++-------
+>  1 file changed, 40 insertions(+), 23 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
+> index f6d95a2d51249..5063c75345680 100755
+> --- a/tools/testing/selftests/firmware/fw_run_tests.sh
+> +++ b/tools/testing/selftests/firmware/fw_run_tests.sh
+> @@ -6,6 +6,9 @@
+>  
+>  set -e
+>  
+> +DIR="$(dirname $(readlink -f "$0"))"
+> +source "${DIR}"/../kselftest/ktap_helpers.sh
+> +
+>  TEST_DIR=$(dirname $0)
+>  source $TEST_DIR/fw_lib.sh
+>  
+> @@ -26,54 +29,68 @@ run_tests()
+>  	proc_set_force_sysfs_fallback $1
+>  	proc_set_ignore_sysfs_fallback $2
+>  	$TEST_DIR/fw_upload.sh
+> +
+> +	ktap_test_pass "Completed"
+>  }
+>  
+>  run_test_config_0001()
+>  {
+> -	echo "-----------------------------------------------------"
+> -	echo "Running kernel configuration test 1 -- rare"
+> -	echo "Emulates:"
+> -	echo "CONFIG_FW_LOADER=y"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER=n"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+> +	ktap_print_msg "-----------------------------------------------------"
+> +	ktap_print_msg "Running kernel configuration test 1 -- rare"
+> +	ktap_print_msg "Emulates:"
+> +	ktap_print_msg "CONFIG_FW_LOADER=y"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=n"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+>  	run_tests 0 1
+>  }
+>  
+>  run_test_config_0002()
+>  {
+> -	echo "-----------------------------------------------------"
+> -	echo "Running kernel configuration test 2 -- distro"
+> -	echo "Emulates:"
+> -	echo "CONFIG_FW_LOADER=y"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER=y"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+> +	ktap_print_msg "-----------------------------------------------------"
+> +	ktap_print_msg "Running kernel configuration test 2 -- distro"
+> +	ktap_print_msg "Emulates:"
+> +	ktap_print_msg "CONFIG_FW_LOADER=y"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=n"
+>  	proc_set_ignore_sysfs_fallback 0
+>  	run_tests 0 0
+>  }
+>  
+>  run_test_config_0003()
+>  {
+> -	echo "-----------------------------------------------------"
+> -	echo "Running kernel configuration test 3 -- android"
+> -	echo "Emulates:"
+> -	echo "CONFIG_FW_LOADER=y"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER=y"
+> -	echo "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
+> +	ktap_print_msg "-----------------------------------------------------"
+> +	ktap_print_msg "Running kernel configuration test 3 -- android"
+> +	ktap_print_msg "Emulates:"
+> +	ktap_print_msg "CONFIG_FW_LOADER=y"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER=y"
+> +	ktap_print_msg "CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y"
+>  	run_tests 1 0
+>  }
+>  
+> +ktap_print_header
+> +
+>  check_mods
+>  check_setup
+>  
+> -echo "Running namespace test: "
+> -$TEST_DIR/fw_namespace $DIR/trigger_request
+> -echo "OK"
+> -
+>  if [ -f $FW_FORCE_SYSFS_FALLBACK ]; then
+> +	ktap_set_plan "4"
+> +
+>  	run_test_config_0001
+>  	run_test_config_0002
+>  	run_test_config_0003
+>  else
+> -	echo "Running basic kernel configuration, working with your config"
+> +	ktap_set_plan "2"
+> +
+> +	ktap_print_msg "Running basic kernel configuration, working with your config"
+>  	run_tests
+>  fi
+> +
+> +ktap_print_msg "Running namespace test: "
+> +$TEST_DIR/fw_namespace $DIR/trigger_request
+> +if [ $? -eq 0 ]; then
+> +    ktap_test_pass "fw_namespace completed successfully"
+> +else
+> +    ktap_test_fail "fw_namespace failed"
+> +fi
+> +
+> +ktap_finished
 
-* In which time range do you plan to publish an official announcement?
-
-* Will similar software research approaches be discussed further?
-
-
-> - found by customized static analysis tool.
-> ---
-
-Would you like to replace a duplicate marker line by a blank line?
-
-
-Regards,
-Markus
+-- 
+BR,
+Muhammad Usama Anjum
 
