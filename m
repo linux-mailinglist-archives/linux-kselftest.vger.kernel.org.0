@@ -1,153 +1,249 @@
-Return-Path: <linux-kselftest+bounces-13025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE06E91E82A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 21:05:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4419191EA63
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 23:32:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6E212838A4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 19:05:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACAD8B21233
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 21:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD7D16F293;
-	Mon,  1 Jul 2024 19:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F3F171086;
+	Mon,  1 Jul 2024 21:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2MyhNwXk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IVHhwud/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E9616F0F9
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jul 2024 19:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327D4383A2
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jul 2024 21:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719860704; cv=none; b=EByt+rcoo1TgYvDYFOoGLZ3Gltgked45COWH3wk5BCeiySmt/TbYaXleoAjf0N/uzW3Sh7HgOpQYS97VJFEVp2Tb3HCASOTmAlDV9Kd9kGbosG0slorhwJTuujLaWylIj+rA9bqK7x6KingRVTPk/EfrjTFA4hgazP8kNiIupGc=
+	t=1719869532; cv=none; b=qZsIDB7y/axCAMvX7JhoaQKwDwnIPOFuVPA9+Lalu9FZWkg5h2rZElzhaQSVsAuMqWaoNdJkv8AqtUPX3aGCohU8X2P2cJJIAGdEnfh7plu7E3y56Q8gLxyiQlG7cTOwx2kc7MbqAn362fUk4Mf4aIEboQhCjahHyZ4PhqVn3bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719860704; c=relaxed/simple;
-	bh=8k0AtF9KiolyJWuK8HLhDCv/hmVhr/rBk1ct5cuT9AA=;
+	s=arc-20240116; t=1719869532; c=relaxed/simple;
+	bh=tEUarioCUcFbNaP2RfuhoLjmS+WOS0rQMGx8A45M7DA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GhD/cofJJWc7rPhk7Gr9OHWiUaQ82XqneFpP+7zMFmj2Y+yjXI5dndT3wqRJOJggzfCiezXfxu0D8K50ANS+9/OiE7/XrC+zP0BHSX/9vYCcgD+JMuqUjxv9BcRLduZwxNkA0KGNVRWtt16QZLiKuV9kBDDqHICT7t/ImPtgHxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2MyhNwXk; arc=none smtp.client-ip=209.85.219.48
+	 To:Cc:Content-Type; b=kFES5UDXm5JIgfxJvXSeh1Yu3iLtGehCztaWaVGf9DdJWQnrvEy6/p5aV/yta+Itc8FtUiblIQxg8AljzlQhrsKSbrFpCD/ZWsmZk9NutC/PDtkcCQ8L5h/WEPlUyY3c3XIbAm7OAbNlKqMAdilHbOyK2xchCrilJp7zB3C06oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IVHhwud/; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6b5834b3a95so16612766d6.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 12:05:02 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-44664ad946eso496031cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 14:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719860702; x=1720465502; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1719869529; x=1720474329; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1iyaJckUfwKLOavZsL0Dti/NvsfMxOg4fM60nbeLb3c=;
-        b=2MyhNwXkCa2AA3Z+FkWBFUSIczECBuY034xv2sUMnsVK1JAGLplHV/guNmfssGc5I1
-         D8a0j2y08JPde7IkGpN8LX30r6ezveA3/hMjlXq8zLe04mWt0qnAaEPrTDd2BA5v2l+6
-         Iv6dLD0aQ4owbIcrPfZLc6za9Tr+2iQ9eqqZvMOtORPI139I+ePbnZT4DFLnSJ0yCTX/
-         I/orwGmbJSNtOjqGr9Dob5WykAAa2DWlpbQrXkaBJxQatFPLN+TjE2bJtG1b6pQdCRRg
-         3423j6YO0fWBhsDvK3mvzQk7JxL7pIv0ng1zlCqmSW/aZyWSkjeH3DBPrQtlyq6xCOFw
-         myxQ==
+        bh=J67WCzSlHWFlY+A0bs0l9CZDhvuEPnOb2uXCOASkodI=;
+        b=IVHhwud/zfLQIbn58QsKQsL3whsnz7AViRU0ou1kwBl7FGSslNBm0w4lF7X8sfHKzv
+         YMKN3zP5rhzOFHbzCumzC+2KIf8WSUzX2DiO7V8MEi6sy5dBqzozEF+aVvAr/JxnxcZc
+         OmerQ+zFleeamSPwUpBcSE3OH/JlcCJw9GNZrVlpcw2R0zd+qxPKtpIWb1GaolrQAI6P
+         w1XWn735jrV6d8eFEv3NmgN6Lm569mKb0e4LmeOvXS4df+rEbw2mk3PVN5+6tX3ztyPI
+         /LyyAh2niOqM1neZXEhXKuFzr6GuRNffSgwmCD5vcy0sVur6i8aLwz9ZIhFBotGRfiSI
+         VUmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719860702; x=1720465502;
+        d=1e100.net; s=20230601; t=1719869529; x=1720474329;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1iyaJckUfwKLOavZsL0Dti/NvsfMxOg4fM60nbeLb3c=;
-        b=V8do3CyuRU6gQ1lxYKXorCIMN48CNGMtMQsEgUIsswKtv9b7s10P/849Y/DIucWoQT
-         o7TNzatXMY+47I8bqGFjZSIFW9T1RfUhJSBSzqP0+k5futnzcDHcBdd/q4K+UblbRE4M
-         PHP6xKFLaEVo6LiHVde9BsyDJ5jqU36w/8V+uzIApXKOGbCVdMppoTCQDsgh2+kQBGvq
-         4WLsk+hERM+VXqIqz7UbNj7SfctCO3HZxiXHaE6+6P3IPm5KnjMZd/jFQ/yU3hwWWpLa
-         ioB5Tzj7p5jQ5gXpTC5c+8snQws1nr9KmV5Ice7W/I4+pPeWkWnin+7sqjLDVsHV5Qnw
-         p1DA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIX2O213fBlJAXjGbU9Tb4q5XmgslDIue9ERRveLtqPUQo7tWKuFSzgX2Ly68GnJrPur2Sn1wEtggj1+u2cyfgrnXrgGWLoVDmjk8eHFmN
-X-Gm-Message-State: AOJu0Yz8Xl0O/pRr9qgukR4ryxciTc8gRTVKIsioflysFrgn5wG02mw9
-	tQfF2taXYugJS5dI3KiXZHBB68kGe7HKQVRj/plU8bhTNM5FFHpjpL+kRacYwiPLejioYb/84c4
-	OTjJ6mj94+gUG8VkyVcRiY6EPx26ol6/Ve7kY
-X-Google-Smtp-Source: AGHT+IFMk/Fy8HmApu9Nagm7rkVtZNRgXI7ZtAkmxpMtHuX4P9lSyGrItN72Z9tf2GD9wH/LCrC3alUkG3t3FzAjxFY=
-X-Received: by 2002:ad4:5762:0:b0:6b5:413a:3f96 with SMTP id
- 6a1803df08f44-6b5b704f0e0mr82787156d6.10.1719860701461; Mon, 01 Jul 2024
- 12:05:01 -0700 (PDT)
+        bh=J67WCzSlHWFlY+A0bs0l9CZDhvuEPnOb2uXCOASkodI=;
+        b=xLRBmfaFwTAYJ72pmrozlJKB+ypoYvmotmN7pSBsR4WA55RHDKNzV6HP1O2CstotTS
+         St1+3At09UGKjtXfrPXzAruDCtSZ2YIYm5wRdYNLssTTp0DgvaQlhIVn+LPmqugFoyjs
+         cEOeHkjPzCFEpbFa7gswpFmztEnW82l2pxiXnMVJCj2tGt2ycxPBLnwYwguBzkbRqtjK
+         ely6UsDTH9tJeCsH0+RewT9DbNXvHkBHedKyQyn7S5jOPmKersXJY7mFa39YaUK6v7f1
+         /RoMG/9GvUz3bPlYRybhJ40vCYOZHOL4N5LAQXpY7ed1qUFQvrvrfDvnTIi7mtW8WTK1
+         Wvkw==
+X-Forwarded-Encrypted: i=1; AJvYcCX//+vwbYdhs71buErF/2DxE+AGNu10JrixyIr4wsn4luFkJBPUM24uqB5pYwkQWfnm+SxZ+ZH68SxzdSbvTZnnwqk7RWWtnf8FOSvwjs+X
+X-Gm-Message-State: AOJu0YxyQjaw53TTt4de07F/6g/XwVBcz0Rgf2BwL0rFrV9GcAVoXKmz
+	sTdh/Q8Z21iN9srMj+fCSZISh1/FkumV996OGsHB85xTMN054tAjpvkHUR1CXIhriJjOoEUxkab
+	Zo9nGEDdqZaRoG2gJv2LhlX5QU7Y+qhF4KEio
+X-Google-Smtp-Source: AGHT+IEH0ZITXe2UCv0cCHd5aHLEsR7t11euWOBqlLR/sVZ1A0ADj29+NfF1nQB1AvlbSYyoohooEFV9znnGPJZS9rQ=
+X-Received: by 2002:ac8:4d51:0:b0:444:ccfc:fd with SMTP id d75a77b69052e-4465def170emr5251491cf.3.1719869529008;
+ Mon, 01 Jul 2024 14:32:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628003253.1694510-1-almasrymina@google.com>
- <20240628003253.1694510-3-almasrymina@google.com> <m27ce9cris.fsf@gmail.com>
-In-Reply-To: <m27ce9cris.fsf@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 1 Jul 2024 12:04:49 -0700
-Message-ID: <CAHS8izNM8TjJ1DU+7gzq-0kH=tVeM6j-QsaKk=2FHNDF6RLwnA@mail.gmail.com>
-Subject: Re: [PATCH net-next v15 02/14] net: netdev netlink api to bind
- dma-buf to a net device
-To: Donald Hunter <donald.hunter@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
+References: <20240630184912.37335-1-pobrn@protonmail.com>
+In-Reply-To: <20240630184912.37335-1-pobrn@protonmail.com>
+From: Jeff Xu <jeffxu@google.com>
+Date: Mon, 1 Jul 2024 14:31:28 -0700
+Message-ID: <CALmYWFv-y9N2pK-Rq9GY4duHynWCUrwi2BRnoihoNzLHVNvTUg@mail.gmail.com>
+Subject: Re: [PATCH v4] memfd: `MFD_NOEXEC_SEAL` should not imply `MFD_ALLOW_SEALING`
+To: =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, cyphar@cyphar.com, 
+	david@readahead.eu, dmitry.torokhov@gmail.com, dverkamp@chromium.org, 
+	hughd@google.com, jorgelo@chromium.org, keescook@chromium.org, 
+	skhan@linuxfoundation.org, stable@vger.kernel.org, 
+	Jeff Xu <jeffxu@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 28, 2024 at 3:10=E2=80=AFAM Donald Hunter <donald.hunter@gmail.=
-com> wrote:
+Hi
+
+On Sun, Jun 30, 2024 at 11:49=E2=80=AFAM Barnab=C3=A1s P=C5=91cze <pobrn@pr=
+otonmail.com> wrote:
 >
-> Mina Almasry <almasrymina@google.com> writes:
-> > +  -
-> > +    name: bind-dmabuf
-> > +    attributes:
-> > +      -
-> > +        name: ifindex
-> > +        doc: netdev ifindex to bind the dma-buf to.
+> `MFD_NOEXEC_SEAL` should remove the executable bits and set `F_SEAL_EXEC`
+> to prevent further modifications to the executable bits as per the commen=
+t
+> in the uapi header file:
 >
-> Minor nit:
+>   not executable and sealed to prevent changing to executable
 >
-> The series uses a mix of dmabuf and dma-buf but the doc additions
-> (devmem.rst) consistently uses dmabuf. I think it would be helpful to be
-> consistent here and say 'devmem dmabuf' in the docstring to highlight
-> whos dmabuf it is and keep the generated netdev docs in alignment.
+> However, commit 105ff5339f498a ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EX=
+EC")
+> that introduced this feature made it so that `MFD_NOEXEC_SEAL` unsets
+> `F_SEAL_SEAL`, essentially acting as a superset of `MFD_ALLOW_SEALING`.
 >
+> Nothing implies that it should be so, and indeed up until the second vers=
+ion
+> of the of the patchset[0] that introduced `MFD_EXEC` and `MFD_NOEXEC_SEAL=
+`,
+> `F_SEAL_SEAL` was not removed, however, it was changed in the third revis=
+ion
+> of the patchset[1] without a clear explanation.
+>
+> This behaviour is surprising for application developers, there is no
+> documentation that would reveal that `MFD_NOEXEC_SEAL` has the additional
+> effect of `MFD_ALLOW_SEALING`. Additionally, combined with `vm.memfd_noex=
+ec=3D2`
+> it has the effect of making all memfds initially sealable.
+>
+The documentation is in linux main (653c5c75115c), I hope this gives
+clarity to the usage of MFD_NOEXEC_SEAL flag to application
+developers, furthermore I'm working on man page for memfd_create.
 
-To be honest, even the dmabuf docs mixes 'dma-buf' and 'dmabuf', to my eye:
+> So do not remove `F_SEAL_SEAL` when `MFD_NOEXEC_SEAL` is requested,
+> thereby returning to the pre-Linux 6.3 behaviour of only allowing
+> sealing when `MFD_ALLOW_SEALING` is specified.
+>
+> Now, this is technically a uapi break. However, the damage is expected
+> to be minimal. To trigger user visible change, a program has to do the
+> following steps:
+>
+>  - create memfd:
+>    - with `MFD_NOEXEC_SEAL`,
+>    - without `MFD_ALLOW_SEALING`;
+>  - try to add seals / check the seals.
+>
+> But that seems unlikely to happen intentionally since this change
+> essentially reverts the kernel's behaviour to that of Linux <6.3,
+> so if a program worked correctly on those older kernels, it will
+> likely work correctly after this change.
+>
+During V3 patch discussion,  I sent my reasoning, but here are summaries:
 
-https://docs.kernel.org/driver-api/dma-buf.html
+- As one might have noticed, unlike other flags in memfd_create,
+MFD_NOEXEC_SEAL is actually a combination of multiple flags. The idea
+is to make it easier to use memfd in the most common way, which is
+NOEXEC + F_SEAL_EXEC + MFD_ALLOW_SEALING.
 
-I can edit these docs I'm adding so these are consistent.
+- The new sysctl vm.noexec =3D 1 helps existing applications move to a
+more secure way of using memfd. IMO, MFD_ALLOW_SEALING is included by
+default because most applications would rather have it than not. In
+any case, an app can set F_SEAL_SEAL to disable the sealing.
 
-But on 'devmem dmabuf', not sure to be honest. Technically all dmabufs
-are supported, even non-devmem ones. I'm not sure non-devmem dmabufs
-are common at all, the only example I can think of is udmabuf whose
-primary user is qemu and testing, so it's somewhat implied that the
-dmabuf is devmem, and even if it isn't, it would be supported. I
-prefer to keep the docs saying just 'dmabuf' as technically all are
-supported. Maybe I should add a note about this somewhere in the
-dedicated docs.
+- MFD_NOEXEC_SEAL has been added for more than one year, multiple
+applications and distributions have backported and utilized it.
+Altering ABI now presents a degree of risk and may lead to
+disruptions.
 
---=20
-Thanks,
-Mina
+Best regards,
+-Jeff
+
+> I have used Debian Code Search and GitHub to try to find potential
+> breakages, and I could only find a single one. dbus-broker's
+> memfd_create() wrapper is aware of this implicit `MFD_ALLOW_SEALING`
+> behaviour, and tries to work around it[2]. This workaround will
+> break. Luckily, this only affects the test suite, it does not affect
+> the normal operations of dbus-broker. There is a PR with a fix[3].
+>
+> I also carried out a smoke test by building a kernel with this change
+> and booting an Arch Linux system into GNOME and Plasma sessions.
+>
+> There was also a previous attempt to address this peculiarity by
+> introducing a new flag[4].
+>
+> [0]: https://lore.kernel.org/lkml/20220805222126.142525-3-jeffxu@google.c=
+om/
+> [1]: https://lore.kernel.org/lkml/20221202013404.163143-3-jeffxu@google.c=
+om/
+> [2]: https://github.com/bus1/dbus-broker/blob/9eb0b7e5826fc76cad7b025bc46=
+f267d4a8784cb/src/util/misc.c#L114
+> [3]: https://github.com/bus1/dbus-broker/pull/366
+> [4]: https://lore.kernel.org/lkml/20230714114753.170814-1-david@readahead=
+.eu/
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.com>
+> ---
+>
+> * v3: https://lore.kernel.org/linux-mm/20240611231409.3899809-1-jeffxu@ch=
+romium.org/
+> * v2: https://lore.kernel.org/linux-mm/20240524033933.135049-1-jeffxu@goo=
+gle.com/
+> * v1: https://lore.kernel.org/linux-mm/20240513191544.94754-1-pobrn@proto=
+nmail.com/
+>
+> This fourth version returns to removing the inconsistency as opposed to d=
+ocumenting
+> its existence, with the same code change as v1 but with a somewhat extend=
+ed commit
+> message. This is sent because I believe it is worth at least a try; it ca=
+n be easily
+> reverted if bigger application breakages are discovered than initially im=
+agined.
+>
+> ---
+>  mm/memfd.c                                 | 9 ++++-----
+>  tools/testing/selftests/memfd/memfd_test.c | 2 +-
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/memfd.c b/mm/memfd.c
+> index 7d8d3ab3fa37..8b7f6afee21d 100644
+> --- a/mm/memfd.c
+> +++ b/mm/memfd.c
+> @@ -356,12 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
+>
+>                 inode->i_mode &=3D ~0111;
+>                 file_seals =3D memfd_file_seals_ptr(file);
+> -               if (file_seals) {
+> -                       *file_seals &=3D ~F_SEAL_SEAL;
+> +               if (file_seals)
+>                         *file_seals |=3D F_SEAL_EXEC;
+> -               }
+> -       } else if (flags & MFD_ALLOW_SEALING) {
+> -               /* MFD_EXEC and MFD_ALLOW_SEALING are set */
+> +       }
+> +
+> +       if (flags & MFD_ALLOW_SEALING) {
+>                 file_seals =3D memfd_file_seals_ptr(file);
+>                 if (file_seals)
+>                         *file_seals &=3D ~F_SEAL_SEAL;
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/s=
+elftests/memfd/memfd_test.c
+> index 95af2d78fd31..7b78329f65b6 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -1151,7 +1151,7 @@ static void test_noexec_seal(void)
+>                             mfd_def_size,
+>                             MFD_CLOEXEC | MFD_NOEXEC_SEAL);
+>         mfd_assert_mode(fd, 0666);
+> -       mfd_assert_has_seals(fd, F_SEAL_EXEC);
+> +       mfd_assert_has_seals(fd, F_SEAL_SEAL | F_SEAL_EXEC);
+>         mfd_fail_chmod(fd, 0777);
+>         close(fd);
+>  }
+> --
+> 2.45.2
+>
+>
 
