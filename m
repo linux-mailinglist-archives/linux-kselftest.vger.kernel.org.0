@@ -1,200 +1,145 @@
-Return-Path: <linux-kselftest+bounces-13013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91F591E42B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 17:32:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8D091E427
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 17:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D97FCB21EE5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 15:24:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C731B260F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jul 2024 15:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15CC15A84A;
-	Mon,  1 Jul 2024 15:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88DC316CD2A;
+	Mon,  1 Jul 2024 15:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jHSorZUM"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="HS38yrSu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A57353AC;
-	Mon,  1 Jul 2024 15:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3313316CD29
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Jul 2024 15:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719847478; cv=none; b=PGPw3hhNkmv31aEMspngip01LO5gtg6kX9SelLL3ZcnpYUbzGipZ3wn3Db9Cwf4DtqJDxs2oZ102mRIxbm58FGPr9oVC3ofgPyGDTVMJ3nhcTeaoPjtOoiAJtfUrOgq1YTznM8wv/PlucOgxdMQcKuS7FGpBpmG63tpbAZnOm+M=
+	t=1719847628; cv=none; b=ZbUVBV1csAZY+EliasDIH3/IUKOvSmrrRP+GNKejhsimEeTgKRZk6Of63vK3KYs+F52Chcc2rah4/NmQzPeeBtE9OCkAHHuqgRxyr6ntEPJeYsRZO8s45EQKbu8sBWcjA/5QkIysOBpASFKKYn686LudYPxWzissEivAyav3Ols=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719847478; c=relaxed/simple;
-	bh=zO9zhZD7NeH4rydIMT73BHxp3UakCkHYLjUnbSxaWL4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kJ6pcwnKVpCSHvzjUWMf0Eg1A3W4u3/sgxt4U9kxXr1v3EhmcDp5Zu2BVkVgZ2WX0bqxQXjv3oCYUXtIqNK9U4+VTSzcO0v/EHnXsObiEfmmTrcNXxZIgN56IH0tu1CjUNKmMwz+vyL4em6NY08rwIpjro+cU94zpWBbx/IghXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jHSorZUM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D071C116B1;
-	Mon,  1 Jul 2024 15:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719847477;
-	bh=zO9zhZD7NeH4rydIMT73BHxp3UakCkHYLjUnbSxaWL4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=jHSorZUMcXuesKtFDjbDCSGsCvspP9sWAA7tNS1fw/HExjeozcLWG0z2yMGHqB5O+
-	 9I/zg6EdRkmi8yYFSalWQsWa+rgpA4VhQCDx+esHyvmqs8xqtluJbU6dmGlc/WaLhj
-	 fP4nC6mF9amPo04nt/8zU+r2BYaa2OYr8qLCsl5geD2k/YEAzJUzRAHAyv1VkZQa++
-	 ZukTBZcCMuwz4iTLq4+9mCn72AeWcgTsVnqPKAzjyuqBX/2QZhOlCaHxEvegeeOnXk
-	 TJ5OgwEi8TYUXZG1AKvE0ylIbwSXNgy3MQy2VwcmPLValdgH2AWRlN8dFnKpVqpiqh
-	 etcPLf5r9kq9Q==
-Message-ID: <c082049759b7caa2368e61f34f7f7c4671429533.camel@kernel.org>
-Subject: Re: [PATCH] selftests: tpm2: conform test to TAP output
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Date: Mon, 01 Jul 2024 15:24:34 +0000
-In-Reply-To: <af21c2d7-46ce-4a18-88a5-c0d4bccaf1dc@collabora.com>
-References: <20240426091435.2742024-1-usama.anjum@collabora.com>
-	 <4fb5ad2e-cc9f-4ad6-94a5-7de9f503ab94@collabora.com>
-	 <af21c2d7-46ce-4a18-88a5-c0d4bccaf1dc@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 (3.52.2-1.fc40) 
+	s=arc-20240116; t=1719847628; c=relaxed/simple;
+	bh=prvpyfxMSkwGiYfGgE9IF5heVeaqD/cLLatLbI2ZMVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K+h03EvO639PmNtiCelvHrQXJR8F13SjzfGe/GDEWnAc3s4ZW2CYtv64r/OvmIBVaPtm/GGLp1xGDYwcHL5uMJvcKZS1IXkoxAJgxU9G8Ee9p+ZfMQOHU8OpeeXLHQtwEUc+DaHGmTY1YYDaHmkhoZmHiYdP/i48/6Ym5HlcwKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=HS38yrSu; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6b42574830fso15041576d6.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 08:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1719847625; x=1720452425; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VGtKsAafTDSpHUpnTbaoLrGWrMjaJvN7kW+LOjav24E=;
+        b=HS38yrSuSAHHbb7zdeWv9fkaaDyJQUVptdBAY547TOBtrWl1y/20gzRPS4/yoaOV1L
+         /aWjtRDW9dMcjc+44WHEUEx3UG8j5C1YHMnyxXWHvFli+uIFwyP+UJUBUkeEkmD/l5Uf
+         SfvlDB912kdrfbPQqpc8lIOiwUMlu7HbfnKhGFBvBAPgC7tSsv+y6LubSms4X7i9FvWL
+         4hvXOunkih0sh0OkY0n8VOTKC1oFSFdwcZHMaQG0/aSqO5iH4GPTVvEb4cw1DhiEYbK4
+         Tx2/dgBvG9TiNaOkEPgYbDEXwjofjvBwKTuKxY7TpEvr5eZaiX4W8XyHNdFTkZUQwJfz
+         dzzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719847625; x=1720452425;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGtKsAafTDSpHUpnTbaoLrGWrMjaJvN7kW+LOjav24E=;
+        b=n+NezFgvreFlaZWzkSXdXka9zZDvIosvnLGqXqABmTwv6W1LBhABOGpIzLHDsYDZ9X
+         lawVQrxSykABPG/Sr9l89BBXsp12L033gZhvhVGHuzCBBEh/kNOzNdiYre8iZMgPyyxB
+         DKQUy5oEoboLe/D9UsI4i4EXn1CvrtNLNqpfJTaCACPLJTy8GZ4PRPN39a7bfUJwRJI4
+         qX7CndG9pnAMn0W94nbwOkmTpEoCQtDtWT3sA8ZfS3pm73UfELXp9l3wBVEh0KAtQsMM
+         1S3itIt10w4qb/L6ViJqg1VNS936Wdp/f6KWv8Ifejh8t5fPQ3kxqtWzQoxRq4aCh5cX
+         RYBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOZtRilP8wIDH4vJNnB6o6zdnAjqc9hmpmKtq67zd8A1vHVUw1cLYCapBm4NR9UKPHzRn/siEQjS4NOslqK3KQ12oaDo2ZKlzONC/mt86+
+X-Gm-Message-State: AOJu0YzgZOuXlGcjNLWOaakFy4/g5IV7jc+qiTQFnGQxI0VyL51ktn4R
+	zPwxTW7x+VPL+e0VmCLfaNXplinAxPcjHY55xPEqY16LrKjsRcnVlAMEF3kxEs0=
+X-Google-Smtp-Source: AGHT+IFm7J11+wdhrgMT/TGaX0Rc7thLKL2Wg4raKr9nb+KKvQo276Bk7ZpHF10bnd8Q9L9dV3BTgw==
+X-Received: by 2002:a05:6214:19ce:b0:6b0:4201:3840 with SMTP id 6a1803df08f44-6b5b7148e19mr79621526d6.40.1719847625201;
+        Mon, 01 Jul 2024 08:27:05 -0700 (PDT)
+Received: from [100.64.0.1] ([147.124.94.167])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b59e581ed4sm33779996d6.69.2024.07.01.08.27.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Jul 2024 08:27:04 -0700 (PDT)
+Message-ID: <0cc13581-5cc4-4a25-a943-7a896f42da4c@sifive.com>
+Date: Mon, 1 Jul 2024 10:27:01 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to the
+ D1/D1s devicetree
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Conor Dooley <conor.dooley@microchip.com>, Conor Dooley <conor@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>, Guo Ren <guoren@kernel.org>,
+ Evan Green <evan@rivosinc.com>, Andy Chiu <andy.chiu@sifive.com>,
+ Jessica Clarke <jrtc27@jrtc27.com>
+References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
+ <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
+Content-Language: en-US
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-07-01 at 13:40 +0500, Muhammad Usama Anjum wrote:
-> Adding Jarkko
->=20
-> On 5/28/24 10:05 AM, Muhammad Usama Anjum wrote:
-> > Kind reminder
-> >=20
-> > On 4/26/24 2:14 PM, Muhammad Usama Anjum wrote:
-> > > The python unittest is being used for executing tests. TAP output
-> > > cannot be added in the unittest framework. The python unittest is bei=
-ng
-> > > run from a script. Add the output TAP logs to the script. Add "#"
-> > > prefix to the python unittest output which will mark all output as
-> > > informational TAP messages. Check exit status of the python unittest =
-to
-> > > decide if test passed or failed. Not sure why but python unittest
-> > > outputs logs in stderr. So redirect the logs to stdout and then add
-> > > prefix.
-> > >=20
-> > > Specify the bash explicitly instead of sh to run these tests as all o=
-f
-> > > the kselftests are shifting towards using bash explicitly. Some
-> > > interpreters have different syntax and cause issues.
-> > >=20
-> > > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> > > ---
-> > > =C2=A0tools/testing/selftests/tpm2/test_async.sh | 24 +++++++++++++++=
-+------
-> > > =C2=A0tools/testing/selftests/tpm2/test_smoke.sh | 19 ++++++++++++++-=
---
-> > > =C2=A0tools/testing/selftests/tpm2/test_space.sh | 19 ++++++++++++++-=
---
-> > > =C2=A03 files changed, 50 insertions(+), 12 deletions(-)
-> > >=20
-> > > diff --git a/tools/testing/selftests/tpm2/test_async.sh
-> > > b/tools/testing/selftests/tpm2/test_async.sh
-> > > index 43bf5bd772fd4..0e6e5d9d649fb 100755
-> > > --- a/tools/testing/selftests/tpm2/test_async.sh
-> > > +++ b/tools/testing/selftests/tpm2/test_async.sh
-> > > @@ -1,10 +1,22 @@
-> > > -#!/bin/sh
-> > > +#!/bin/bash
-> > > =C2=A0# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> > > =C2=A0
-> > > -# Kselftest framework requirement - SKIP code is 4.
-> > > -ksft_skip=3D4
-> > > +DIR=3D"$(dirname $(readlink -f "$0"))"
-> > > +source "${DIR}"/../kselftest/ktap_helpers.sh
-> > > =C2=A0
-> > > -[ -e /dev/tpm0 ] || exit $ksft_skip
-> > > -[ -e /dev/tpmrm0 ] || exit $ksft_skip
-> > > +ktap_print_header
-> > > =C2=A0
-> > > -python3 -m unittest -v tpm2_tests.AsyncTest
-> > > +[ -e /dev/tpm0 ] || ktap_finished
-> > > +[ -e /dev/tpmrm0 ] || ktap_finished
-> > > +
-> > > +ktap_set_plan 1
-> > > +
-> > > +python3 -m unittest -v tpm2_tests.AsyncTest 2>&1 | sed "s/^/# /"
-> > > +
-> > > +if [ ${PIPESTATUS[0]} -eq $ksft_pass ]; then
-> > > +	ktap_test_pass "tpm2_tests.AsyncTest"
-> > > +else
-> > > +	ktap_test_fail "tpm2_tests.AsyncTest"
-> > > +fi
-> > > +
-> > > +ktap_finished
-> > > diff --git a/tools/testing/selftests/tpm2/test_smoke.sh
-> > > b/tools/testing/selftests/tpm2/test_smoke.sh
-> > > index 58af963e5b55a..2219a180de91d 100755
-> > > --- a/tools/testing/selftests/tpm2/test_smoke.sh
-> > > +++ b/tools/testing/selftests/tpm2/test_smoke.sh
-> > > @@ -1,9 +1,22 @@
-> > > -#!/bin/sh
-> > > +#!/bin/bash
-> > > =C2=A0# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> > > =C2=A0
-> > > =C2=A0# Kselftest framework requirement - SKIP code is 4.
-> > > -ksft_skip=3D4
-> > > +DIR=3D"$(dirname $(readlink -f "$0"))"
-> > > +source "${DIR}"/../kselftest/ktap_helpers.sh
-> > > +
-> > > +ktap_print_header
-> > > =C2=A0
-> > > =C2=A0[ -e /dev/tpm0 ] || exit $ksft_skip
-> > > =C2=A0
-> > > -python3 -m unittest -v tpm2_tests.SmokeTest
-> > > +ktap_set_plan 1
-> > > +
-> > > +python3 -m unittest -v tpm2_tests.SmokeTest 2>&1 | sed "s/^/# /"
-> > > +
-> > > +if [ ${PIPESTATUS[0]} -eq $ksft_pass ]; then
-> > > +	ktap_test_pass "tpm2_tests.AsyncTest"
-> > > +else
-> > > +	ktap_test_fail "tpm2_tests.AsyncTest"
-> > > +fi
-> > > +
-> > > +ktap_finished
-> > > diff --git a/tools/testing/selftests/tpm2/test_space.sh
-> > > b/tools/testing/selftests/tpm2/test_space.sh
-> > > index 04c47b13fe8ac..6a55d13d74983 100755
-> > > --- a/tools/testing/selftests/tpm2/test_space.sh
-> > > +++ b/tools/testing/selftests/tpm2/test_space.sh
-> > > @@ -1,9 +1,22 @@
-> > > -#!/bin/sh
-> > > +#!/bin/bash
-> > > =C2=A0# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> > > =C2=A0
-> > > =C2=A0# Kselftest framework requirement - SKIP code is 4.
-> > > -ksft_skip=3D4
-> > > +DIR=3D"$(dirname $(readlink -f "$0"))"
-> > > +source "${DIR}"/../kselftest/ktap_helpers.sh
-> > > +
-> > > +ktap_print_header
-> > > =C2=A0
-> > > =C2=A0[ -e /dev/tpmrm0 ] || exit $ksft_skip
-> > > =C2=A0
-> > > -python3 -m unittest -v tpm2_tests.SpaceTest
-> > > +ktap_set_plan 1
-> > > +
-> > > +python3 -m unittest -v tpm2_tests.SpaceTest 2>&1 | sed "s/^/# /"
-> > > +
-> > > +if [ ${PIPESTATUS[0]} -eq $ksft_pass ]; then
-> > > +	ktap_test_pass "tpm2_tests.AsyncTest"
-> > > +else
-> > > +	ktap_test_fail "tpm2_tests.AsyncTest"
-> > > +fi
-> > > +
-> > > +ktap_finished
-> >=20
->=20
+Hi Charlie,
 
-Cc me to the next patch version.
+On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
+> The D1/D1s SoCs support xtheadvector so it can be included in the
+> devicetree. Also include vlenb for the cpu.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 3 ++-
 
-BR, Jarkko
+The other C906/C910/C920-based SoCs need devicetree updates as well, although
+they don't necessarily need to be part of this series:
+
+ - sophgo/cv18xx.dtsi
+ - sophgo/sg2042-cpus.dtsi
+ - thead/th1520.dtsi
+
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> index 64c3c2e6cbe0..6367112e614a 100644
+> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> @@ -27,7 +27,8 @@ cpu0: cpu@0 {
+>  			riscv,isa = "rv64imafdc";
+
+The ISA string should be updated to keep it in sync with riscv,isa-extensions.
+
+Regards,
+Samuel
+
+>  			riscv,isa-base = "rv64i";
+>  			riscv,isa-extensions = "i", "m", "a", "f", "d", "c", "zicntr", "zicsr",
+> -					       "zifencei", "zihpm";
+> +					       "zifencei", "zihpm", "xtheadvector";
+> +			thead,vlenb = <128>;
+>  			#cooling-cells = <2>;
+>  
+>  			cpu0_intc: interrupt-controller {
+> 
+
 
