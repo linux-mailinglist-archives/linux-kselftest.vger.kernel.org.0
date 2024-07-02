@@ -1,83 +1,84 @@
-Return-Path: <linux-kselftest+bounces-13030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E7A91EDEA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 06:34:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9852291EE65
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 07:37:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 146CA1F231DE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 04:34:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 083B0B22998
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 05:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11092836A;
-	Tue,  2 Jul 2024 04:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252A253E31;
+	Tue,  2 Jul 2024 05:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="aEeuSrFr"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="2y3U4cXc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E89B81F
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 04:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA4835280
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 05:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719894861; cv=none; b=cOOoT+EY2shK/jb/+9IhkQ6jAmEheWn5FIBft38tfDjwaJo0HU2AviPMMyqhiWJ5FJBsmoojhfa/FFdHvN4IYzdmqUnSMa80oI4xyRV+nj/tMliU2WOIrfy+1n1/tZNt5P5yXDye4GrEo6+hdBRIs0WNTxnCKD2Vq+xHp8ykdi4=
+	t=1719898657; cv=none; b=nhQbuIDhuPeh9QWm3cwkqQQQnQveMpoT+5pGVHSqcU2Gj9nF/8aHlMF/HTEPSuv7KW+3Y1AkkJRgDPMNgW6xTah5Ddykh/yhkapGJliQEi1Fi7QM8jm54kf4ts9M1GLD4bFV/cVQPOo00QGhtz9X3HBEQaVWMyV9WtGKP88K0oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719894861; c=relaxed/simple;
-	bh=q2Cc35SOsDHpJeJOWn7FTe19A5jZWBMPUxY/THw20DE=;
+	s=arc-20240116; t=1719898657; c=relaxed/simple;
+	bh=VVbh0fQ7/Q2au2kwoY1UK0e85qra4bt9HY3Ly61I5K0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b2H7O8kQh8Buue/BI8MJ1/PcQ9CI2U+746l9ZMElj+dX7u2zcdxukH4rUV6exPuSTa6FtS8UjHszlatrWZal3aqyziOlS8vMAhjuBZ8cvxUlBo1HTi+PH6BP3EGvE/U6LtpkPVNbdkp4DP4JDCS6IeYRSE0CC+rZxtZBL4BUhck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=aEeuSrFr; arc=none smtp.client-ip=209.85.219.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=UgNy/VFeumKR+Mj4Zy30S8276aj6A3crTUS1NAywkQztp8VAZbP06NfgE1kHLLp4z+axx6D08nqY8Kv1379H0TxCHi9vpFR1xMwhLtIHne/9IlGAEKbPEgA5NVI+Z+DCHabn3SP+Xb3orKK6q8oI6sBvlVYeYHvjbfmnoF3RX1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=2y3U4cXc; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e03a0faee1eso47467276.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 21:34:20 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fa55dbf2e7so20423205ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 22:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719894859; x=1720499659; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719898653; x=1720503453; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h4yh23E/AmlByOcWJD4eWcZh7D8p3BbXHSztKcWq0cA=;
-        b=aEeuSrFrQVtv2G4B7g86L1WmTDy6WmabvepSyX+zHaRVtwLQFrPqhcN/WHj5udzSm5
-         zRJlwC1dPR2ILzEUphxHrXaSuQuvl6F9wYUWMNekG4FEXgKOL7ui94xIMykH+/pH8aze
-         hp+tGnEJj6lXaIlN86HI6gZm3/5PU08yMWZoOcU5tZvgc1l88WwrTq8eZSEeReKA4GuQ
-         oN3NpLk+iXoT0hqbn5oUyZ8FRyWkdOglo+9vRCXVBQFCNymIv7EmI9iZ5Atb2o01Vx0O
-         5fqkuDRvzRR/v7dzkscDNy4uUkkmpj6cye0IseqwaX1hCWo41r9zx7NSlifd59UopjUf
-         v0aQ==
+        bh=QylUuXEtNL3Eo0vKPHJFlDtSdhA+F4KnUDy2bHeIjjY=;
+        b=2y3U4cXcNcx5T2KOxAFsBFR6Vayr//5HhAnuY1M26FAqDH9qdyP2kGo83qayKSB6lG
+         LGIf+a5SPuNncRhoniY2+XGLJvRB0mEMuZz28IbHJm+icyf8/k88IxEVV2e7UphHWvpm
+         jve4YAHOZlpdR80fL/op9YR8tM5B6pao7lfNVRdqA2+Qt8mx07DQcMADu0mFMxwvegOR
+         OGzSSuqbJ5l3VSLwECJCkqL+wPGA8QmoxyT3xQUhNpNU13yJdwTCDOfyIb8H+p/JJ2dr
+         0KJVcIxLgkszJehD/YuoPHcIiCJE/UAnj9ahQdwAa3egGDBjWno+rSjf7tXqreZOlJkq
+         +IYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719894859; x=1720499659;
+        d=1e100.net; s=20230601; t=1719898653; x=1720503453;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h4yh23E/AmlByOcWJD4eWcZh7D8p3BbXHSztKcWq0cA=;
-        b=IX7akvBIImO/QyU7yv9kLLEFnplhF13CEKQXTgbqTy1QIIutQaCDSI6Zq2ReiZ3Vgc
-         qUM30VhoO56Zef+glOq1vhwJaaXHNUmijYyXtkB5GH9zTk1UDqIDjH/QINWHbq0qMgIC
-         6uz6WL0DskmwZwTocilSf2FJr/bMcdxRI6qlSdVrMd1AH4apbMEEwgZMe+f9a0+29Zdo
-         3ANsnWh2x9D8cVmJsuCOfmD0PRBlNFd3TOe8sSYthE973QchFACSZBEY3AgkO94Uug/v
-         73wjgnANUoftMLY+oT2vWyzg/y3C35lw6P7qK0sOvrQdzLdYGmoq5BtCrc2mKjXIAQwv
-         mDhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSw+c5ZHwgkar3rTmayH0pMU6ujBKXc6nOn6494mqcenJHKsoHOESTEG7pR8zBucyiSfW3JFsl4njORH8KFHrqsgNd/L3zriNOj0Kf2iih
-X-Gm-Message-State: AOJu0Yy5gEYpDpG+bcK6N4zXTCXQbVaGz87+A1+91KhoGL2BpBNQFL7t
-	sF1v+3WCRAFsoRX+hP9Pz9y4Y+2uCQ0N7gIUdQ4azOo2OjUCg09qjOUZmUJVK+g=
-X-Google-Smtp-Source: AGHT+IFr7sVN2iw1k2zfGO5K3dhcutxzXrXIQmhw11TwtYUrAFSIAsviplllqAK0LOhKsh6tA8qHVg==
-X-Received: by 2002:a25:53c9:0:b0:dff:4862:b0a with SMTP id 3f1490d57ef6-e036ec357fcmr8474625276.46.1719894859404;
-        Mon, 01 Jul 2024 21:34:19 -0700 (PDT)
+        bh=QylUuXEtNL3Eo0vKPHJFlDtSdhA+F4KnUDy2bHeIjjY=;
+        b=rDbo6RJGDwyAHbWSt+2YtGYCglwA66DiorpUWEPnG/x6kqI6F0LHJOvQSRXf147Zfp
+         ZtwfX7eTbWhBh7tRv36LSdYC1/jOi6xk69L/bYB9kcGxv58Af1s+5BJp4beOx9xdh5dH
+         WVX1HSOpx5Ssp5w0xZn3UaJ/y956qdFARwK6ui0HCBtlLLVx11zSNsjOFL7McVA4MyoK
+         88LIaMLenJbzFMxEmVn6hCzIrXHmDRfk3cGuGTz2wh60/rar+SJC9sEZ6K/dxuUxcM6r
+         yqS5MUB1xMGad1RHvEDYvl0RBP48ZaoPjL03lmVX3cp/kokvlLFP0OGkLHRDwaUcuZ6v
+         VEsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHlr76LKTkIW0RJx/nOL97EckJTNhmmyTIRVwwFf3BrdHkXGSSxetxmOnxFmwBypbzL4LL1mYAS4z+gTqRlF9o+tXmS1UG9EXPMU/nFEds
+X-Gm-Message-State: AOJu0Yw9go2J+CxMRp3RvxIz7SA8VGfknpJuoT/OjglnViE09uc+VVj8
+	EuHS6BP6GUrVXrZhGoLftJLzu7KPVmqG7TyhGYnBOEUX89KJIyqnuqBXQgzaQP/KuSaOOD0HvL7
+	c
+X-Google-Smtp-Source: AGHT+IHD/AlEviT8SXJiTbsVNwnXf2yMzxVXULAD/ULUcJEhqMDI0cnZbgXoTsLn/2TmyvmqZXXKYw==
+X-Received: by 2002:a17:902:e5cb:b0:1f6:6ef0:dae4 with SMTP id d9443c01a7336-1fadbca5bc3mr43646675ad.32.1719898653462;
+        Mon, 01 Jul 2024 22:37:33 -0700 (PDT)
 Received: from ghost ([2601:647:5700:6860:a569:328b:99ad:ce17])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72c6d3efeddsm5826997a12.88.2024.07.01.21.34.18
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10d15a9sm74873685ad.37.2024.07.01.22.37.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 21:34:18 -0700 (PDT)
-Date: Mon, 1 Jul 2024 21:34:16 -0700
+        Mon, 01 Jul 2024 22:37:32 -0700 (PDT)
+Date: Mon, 1 Jul 2024 22:37:30 -0700
 From: Charlie Jenkins <charlie@rivosinc.com>
 To: zhouquan@iscas.ac.cn
 Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, oleg@redhat.com,
 	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
 	andy.chiu@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH v1 1/2] riscv: Expose orig_a0 in the user_regs_struct
- structure
-Message-ID: <ZoODSMYCRbNcZWaY@ghost>
+Subject: Re: [PATCH v1 2/2] riscv: selftests: Add a ptrace test to verify
+ syscall parameter modification
+Message-ID: <ZoOSGt9jbKn1f37d@ghost>
 References: <cover.1719408040.git.zhouquan@iscas.ac.cn>
- <a424caf3072d12ef6ba0c56c411789fb3282e844.1719408040.git.zhouquan@iscas.ac.cn>
+ <1e9cbab1b0badc05592fce46717418930076a6ae.1719408040.git.zhouquan@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,80 +87,201 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a424caf3072d12ef6ba0c56c411789fb3282e844.1719408040.git.zhouquan@iscas.ac.cn>
+In-Reply-To: <1e9cbab1b0badc05592fce46717418930076a6ae.1719408040.git.zhouquan@iscas.ac.cn>
 
-On Thu, Jun 27, 2024 at 11:02:46AM +0800, zhouquan@iscas.ac.cn wrote:
+On Thu, Jun 27, 2024 at 11:02:54AM +0800, zhouquan@iscas.ac.cn wrote:
 > From: Quan Zhou <zhouquan@iscas.ac.cn>
 > 
-> Expose orig_a0 to userspace to ensure that users can modify
-> the actual value of `a0` in the traced process through the
-> ptrace(PTRACE_SETREGSET, ...) path.
-> 
-> The addition of orig_a0 also requires the following adjustments:
-> 1) Adjust the position of orig_a0 in pt_regs to ensure correct copying.
-> 2) MAX_REG_OFFSET should match the new bottom of pt_regs.
+> This test checks that orig_a0 allows a syscall argument to be modified,
+> and that changing a0 does not change the syscall argument.
 > 
 > Suggested-by: Charlie Jenkins <charlie@rivosinc.com>
 > Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 > ---
->  arch/riscv/include/asm/ptrace.h      | 7 ++++---
->  arch/riscv/include/uapi/asm/ptrace.h | 2 ++
->  2 files changed, 6 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/riscv/Makefile       |   2 +-
+>  tools/testing/selftests/riscv/abi/.gitignore |   1 +
+>  tools/testing/selftests/riscv/abi/Makefile   |  12 ++
+>  tools/testing/selftests/riscv/abi/ptrace.c   | 124 +++++++++++++++++++
+>  4 files changed, 138 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/riscv/abi/.gitignore
+>  create mode 100644 tools/testing/selftests/riscv/abi/Makefile
+>  create mode 100644 tools/testing/selftests/riscv/abi/ptrace.c
 > 
-> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-> index b5b0adcc85c1..380cf54c1f3d 100644
-> --- a/arch/riscv/include/asm/ptrace.h
-> +++ b/arch/riscv/include/asm/ptrace.h
-> @@ -12,6 +12,7 @@
+> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
+> index 7ce03d832b64..98541dc2f164 100644
+> --- a/tools/testing/selftests/riscv/Makefile
+> +++ b/tools/testing/selftests/riscv/Makefile
+> @@ -5,7 +5,7 @@
+>  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
 >  
->  #ifndef __ASSEMBLY__
->  
-> +/* MAX_REG_OFFSET should match the bottom of pt_regs */
->  struct pt_regs {
->  	unsigned long epc;
->  	unsigned long ra;
-> @@ -45,12 +46,12 @@ struct pt_regs {
->  	unsigned long t4;
->  	unsigned long t5;
->  	unsigned long t6;
-> +	/* a0 value before the syscall */
-> +	unsigned long orig_a0;
->  	/* Supervisor/Machine CSRs */
->  	unsigned long status;
->  	unsigned long badaddr;
->  	unsigned long cause;
-> -	/* a0 value before the syscall */
-> -	unsigned long orig_a0;
->  };
->  
->  #define PTRACE_SYSEMU			0x1f
-> @@ -64,7 +65,7 @@ struct pt_regs {
->  
->  #define user_mode(regs) (((regs)->status & SR_PP) == 0)
->  
-> -#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
-> +#define MAX_REG_OFFSET offsetof(struct pt_regs, cause)
->  
->  /* Helpers for working with the instruction pointer */
->  static inline unsigned long instruction_pointer(struct pt_regs *regs)
-> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
-> index a38268b19c3d..3e37f80cb3e8 100644
-> --- a/arch/riscv/include/uapi/asm/ptrace.h
-> +++ b/arch/riscv/include/uapi/asm/ptrace.h
-> @@ -54,6 +54,8 @@ struct user_regs_struct {
->  	unsigned long t4;
->  	unsigned long t5;
->  	unsigned long t6;
-> +	/* a0 value before the syscall */
-> +	unsigned long orig_a0;
->  };
->  
->  struct __riscv_f_ext_state {
+>  ifneq (,$(filter $(ARCH),riscv))
+> -RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn
+> +RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn abi
+>  else
+>  RISCV_SUBTARGETS :=
+>  endif
+> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
+> new file mode 100644
+> index 000000000000..d61c51358965
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/abi/.gitignore
+> @@ -0,0 +1 @@
+> +ptrace
+> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
+> new file mode 100644
+> index 000000000000..808d48a91ad7
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/abi/Makefile
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2021 ARM Limited
+> +# Originally tools/testing/arm64/abi/Makefile
+> +
+> +CFLAGS += -I$(top_srcdir)/tools/include
+> +
+> +TEST_GEN_PROGS := ptrace
+> +
+> +include ../../lib.mk
+> +
+> +$(OUTPUT)/ptrace: ptrace.c
+> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+> new file mode 100644
+> index 000000000000..f85f927cd685
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+> @@ -0,0 +1,124 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <fcntl.h>
+> +#include <signal.h>
+> +#include <errno.h>
+> +#include <sys/types.h>
+> +#include <sys/ptrace.h>
+> +#include <sys/stat.h>
+> +#include <sys/user.h>
+> +#include <sys/wait.h>
+> +#include <sys/uio.h>
+> +#include <linux/elf.h>
+> +#include <linux/unistd.h>
+> +#include <asm/ptrace.h>
+> +
+> +#include "../../kselftest_harness.h"
+> +
+> +#define ORIG_A0_MODIFY      0x01
+> +#define A0_MODIFY           0x02
+> +#define A0_OLD              0x03
+> +#define A0_NEW              0x04
+> +
+> +#define perr_and_exit(fmt, ...)					\
+> +	({								\
+> +	 	char buf[256];						\
+
+Apologies, I missed this in the last review. In the above line there is
+a space in the middle of the tabs before `char buf[256];`.
+
+> +		snprintf(buf, sizeof(buf), "%s:%d: " fmt ": %m\n",	\
+> +			__func__, __LINE__, ##__VA_ARGS__);		\
+> +		perror(buf);						\
+> +		exit(-1);						\
+> +	})
+> +
+> +static inline void resume_and_wait_tracee(pid_t pid, int flag)
+> +{
+> +	int status;
+> +
+> +	if (ptrace(flag, pid, 0, 0))
+> +		perr_and_exit("failed to resume the tracee %d\n", pid);
+> +
+> +	if (waitpid(pid, &status, 0) != pid)
+> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
+> +}
+> +
+> +static void ptrace_test(int opt, int *result)
+> +{
+> +	int status;
+> +	pid_t pid;
+> +	struct user_regs_struct regs;
+> +	struct iovec iov = {
+> +		.iov_base = &regs,
+> +		.iov_len = sizeof(regs),
+> +	};
+> +
+> +	pid = fork();
+> +	if (pid == 0) {
+> +		/* Mark oneself being traced */
+> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
+> +		if (val)
+> +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
+> +
+> +		kill(getpid(), SIGSTOP);
+> +
+> +		/* Perform exit syscall that will be intercepted */
+> +		exit(A0_OLD);
+> +	}
+> +	if (pid < 0)
+> +		exit(1);
+> +
+> +	if (waitpid(pid, &status, 0) != pid)
+> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
+> +
+> +	/* Stop at the entry point of the syscall */
+> +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
+> +
+> +	/* Check tracee orig_a0 before the syscall */
+> +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
+> +		perr_and_exit("failed to get tracee registers\n");
+> +	if (regs.orig_a0 != A0_OLD)
+> +		perr_and_exit("unexpected orig_a0: 0x%lx\n", regs.orig_a0);
+> +
+> +	/* Modify a0/orig_a0 for the syscall */
+> +	switch (opt) {
+> +	case A0_MODIFY:
+> +		regs.a0 = A0_NEW;
+> +		break;
+> +	case ORIG_A0_MODIFY:
+> +		regs.orig_a0 = A0_NEW;
+> +		break;
+> +	}
+> +
+> +	if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &iov))
+> +		perr_and_exit("failed to set tracee registers\n");
+> +
+> +	/* Resume the tracee */
+> +	ptrace(PTRACE_CONT, pid, 0, 0);
+> +	if (waitpid(pid, &status, 0) != pid)
+> +		perr_and_exit("failed to wait for the tracee\n");
+> +
+> +	*result = WEXITSTATUS(status);
+> +}
+> +
+> +TEST(ptrace_modify_a0)
+> +{
+> +	int result;
+> +
+> +	ptrace_test(A0_MODIFY, &result);
+> +
+> +	/* The modification of a0 cannot affect the first argument of the syscall */
+> +	EXPECT_EQ(A0_OLD, result);
+> +}
+> +
+> +TEST(ptrace_modify_orig_a0)
+> +{
+> +	int result;
+> +
+> +	ptrace_test(ORIG_A0_MODIFY, &result);
+> +
+> +	/* Only modify orig_a0 to change the first argument of the syscall */
+> +	EXPECT_EQ(A0_NEW, result);
+> +}
+> +
+> +TEST_HARNESS_MAIN
 > -- 
 > 2.34.1
 > 
-
-Thank you!
 
 Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 
