@@ -1,124 +1,102 @@
-Return-Path: <linux-kselftest+bounces-13057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13058-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0687923E97
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 15:14:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82665923EF2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 15:29:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85C661F250FD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 13:14:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B50191C22BE7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 13:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECA919F49A;
-	Tue,  2 Jul 2024 13:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1424A1B4C58;
+	Tue,  2 Jul 2024 13:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2e3SWN+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P0tZOY9r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D80F19DF78
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 13:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A0F1B4C32
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 13:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719926082; cv=none; b=ATP0oNGJkWE/rF3qE3+p5cohcRegk1aMAKxrQWVSkDJseyT1di1mWr4785muptyxYHCNSjw8Zf5sMU5hOPdfaMvmwefG6ueyBp8eAVWmuBGyUvIeDJilUf0YICrhdfHnvNmjrqqzdqKN6p3hPj6+BNoupXGy7Cx2yNlY/DfTfHU=
+	t=1719926930; cv=none; b=sCo5CwPpd0dIJFu+TaQFz49BvXg5yjgMXl4JoR631MnmBuA9h+dScvfeSbICkoXqn3I32hJOs8ZbxKeh2rkVwGxowExh7eNMK5tJTB24VT6jfudtrBVOawgagQS+2BeiydMsyQf/9DYtsFLUFxgfN+7yx9/BlLK9WnpuOxPEYtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719926082; c=relaxed/simple;
-	bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FPgHDJNXH3Mf/sXIM1cWRz0eozcKt/omjZlPwSSgC+FN/i2c9G8eUMwI5TahwLh6nowsgI2k1nKvgKylnQon4xxJ1sPiBGLr7QTi5JUfyPU2/JC61S5D0PV4vTb9Q7f2JSIoynDBysTaJe4oXXBSRCKuIIO0WIIbyCcuJXslFIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2e3SWN+; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57d119fddd9so21820a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2024 06:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719926078; x=1720530878; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-        b=P2e3SWN+yseDMp90p9VEzZHdkGUJX9Ld0Lj6dP8ekUsLe8WFMUvAkLLe78MDS5i4EN
-         tR404H/0eeBkXwqz6cEs0wa8kKW0z3UTY4UZ/Z2VHDf9iA94POb9ISGx+gxT15YkEzv/
-         WmZ3qHVASbx8qKTwDFYpM8WY0IUd7M0XZYIHHxmOLGp3HsBz1gJM+bvXXvIKLLEq51UY
-         UK2jscCD6GaFo29bpNziVw68wgEtOjjhlNCcjACm1kB3mVAzPq17QH7ewZq15jN4VR3Q
-         SxTV1baqz7uqrV15hW4+z0toLL/X1R4jw8Cgsc0bmvj2xTdgtrRgIRz5fH/9T2GwHcum
-         MWFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719926078; x=1720530878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-        b=uG+31mxagXKRe91SCUF7AWvtQuste4mFpQuJzXFNFGUJspU14G7dMibjMJWwN5vilE
-         gJiA64pioTUcaw21zmfPb+JBkcTzw5eBE5noZLGtAV41LtMQnbVL7syxkCqW9sZno7Vq
-         cindkcrkFpotLstuEnqlLjZtWuWeNQeP2c6NOEDMaGo/RszJ3vC+tZ1kRr4sbjOjvzTF
-         2mM9q5oHud6DDyqxXEUiq0PCEc++XRaN+WTMqtzdIdtxp4oFy1Qpi97hbT/gVsexJz2l
-         iVzyXcobLZwmzmNEVTkAwWslMHA3Ty9sQfCti5B58QsHQlIjLip6SdNZ8ayHH486uzAA
-         6Bwg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2e3ZPooXIyEIBELcodGCBqhG4EfB7bpWdPWgmfIZVHF3xL9cW71klZZ3FXGT+7JAIxFsXZEqew9NbbQ3gUV0JpylDrsJ607rLAmMUv2hh
-X-Gm-Message-State: AOJu0YxcrrWLq6OL6ZnqfE1ldlkQg1JgomteGQ0ZFAiocgHZ5uHF8Ujb
-	VgdkEgD/sgfMu169QeU7YhBLbImpA71BqaQpHyB1BEYW2NlYm9Saqi2dcluSlWRCI1+m84GL2JX
-	J7rYAUevXDx3AlEOzqFnkSbhaH8rP6xzwu1su
-X-Google-Smtp-Source: AGHT+IERKkCVpVomNRYr8KNFI5e5JCBWRQ7HMLMgDv1aOW++vU+Fu31VZ6RrRqWEtIXBu1Sq7l+LYKSRxYEU9Pq/83U=
-X-Received: by 2002:a50:9308:0:b0:57d:32ff:73ef with SMTP id
- 4fb4d7f45d1cf-5872f79a720mr634350a12.6.1719926077342; Tue, 02 Jul 2024
- 06:14:37 -0700 (PDT)
+	s=arc-20240116; t=1719926930; c=relaxed/simple;
+	bh=q4svAmMc1YfDU639c9nrEQ3wazxYZ3hYbGX2/VSIc/w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tExOnK4nf8yHewH8SafMjNHgtUP5tdrPC8g3pdIiLDI1+rurJyG4P3wOoOpcH8ilgUvl9zsjof0vRXgAycy8+MA++NtXVm0+cAOTfoLxcQZOmA/4OWS2mTdqdseDwA/L3AcBHXX+l4/xHuVI4IvQ4mhDyMvkzHuGoyrUSR6r17E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P0tZOY9r; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719926927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TZPqfUHHXo3++9COyemfH9RMfBNgVvcEH+ci6+xoSdQ=;
+	b=P0tZOY9ri6vjWd+n1PWrEvLeudWwJECHBAS8DP66g+oapBq4o3+ssuhc+7h8LEGBCs0vnv
+	pRbbzwHmmIfZlEZlS7J7DRky+DuyXzeQt47T5B1LigKuQL7hs5I+IaF2obXyyJp1bD1/3j
+	QYoVpYcNpoUg8tYJE6orqlXcdR47+nM=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-q5tTnlavPdSRguWfHzVwdQ-1; Tue,
+ 02 Jul 2024 09:28:40 -0400
+X-MC-Unique: q5tTnlavPdSRguWfHzVwdQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 82C6C19560A7;
+	Tue,  2 Jul 2024 13:28:34 +0000 (UTC)
+Received: from RHTRH0061144.bos.redhat.com (dhcp-17-72.bos.redhat.com [10.18.17.72])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CD56319560A3;
+	Tue,  2 Jul 2024 13:28:31 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: netdev@vger.kernel.org
+Cc: dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Adri=C3=A1n=20Moreno?= <amorenoz@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Subject: [PATCH net-next 0/3] selftests: openvswitch: Address some flakes in the CI environment
+Date: Tue,  2 Jul 2024 09:28:27 -0400
+Message-ID: <20240702132830.213384-1-aconole@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628003253.1694510-1-almasrymina@google.com> <20240628003253.1694510-9-almasrymina@google.com>
-In-Reply-To: <20240628003253.1694510-9-almasrymina@google.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 2 Jul 2024 15:14:22 +0200
-Message-ID: <CANn89iJ1ys-eNyM3BGQ1PuLKsbo+Kcj78wfoAtaFPygQdYawkg@mail.gmail.com>
-Subject: Re: [PATCH net-next v15 08/14] net: support non paged skb frags
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Fri, Jun 28, 2024 at 2:33=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> Make skb_frag_page() fail in the case where the frag is not backed
-> by a page, and fix its relevant callers to handle this case.
->
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->
+These patches aim to make using the openvswitch testsuite more reliable.
+These should address the major sources of flakiness in the openvswitch
+test suite allowing the CI infrastructure to exercise the openvswitch
+module for patch series.  There should be no change for users who simply
+run the tests (except that patch 3/3 does make some of the debugging a bit
+easier by making some output more verbose).
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Aaron Conole (3):
+  selftests: openvswitch: Bump timeout to 15 minutes.
+  selftests: openvswitch: Attempt to autoload module.
+  selftests: openvswitch: Be more verbose with selftest debugging.
+
+ .../selftests/net/openvswitch/openvswitch.sh  | 23 ++++++++++++-------
+ .../selftests/net/openvswitch/settings        |  1 +
+ 2 files changed, 16 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/net/openvswitch/settings
+
+-- 
+2.45.1
+
 
