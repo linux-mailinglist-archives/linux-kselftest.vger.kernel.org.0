@@ -1,219 +1,197 @@
-Return-Path: <linux-kselftest+bounces-13069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ACD5924245
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 17:25:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1202924295
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 17:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E51EB282DE7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 15:25:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ECCC1F235F4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 15:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B15A1BBBD4;
-	Tue,  2 Jul 2024 15:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976C61BD017;
+	Tue,  2 Jul 2024 15:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kEkbHH/X";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ITaMGUSc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2rFR4+1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486761AD9E7;
-	Tue,  2 Jul 2024 15:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7841BD00E;
+	Tue,  2 Jul 2024 15:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719933937; cv=none; b=qFhGJxrsimjSVcupi/i2uUl3KOtmBokWE7CaubfYxG9Yj7qdrYTvRWBRAQLGn3/7MA+6jw9F6VASJPXQUvneIuYwW6AGHNWvcYzL7qAs2DDwh7Hy/8akiGkL8x/tm2ZMQuiR4b0An7Z7A9K/ZuwjtN89jv91yT76r7LmsSWUIJM=
+	t=1719934774; cv=none; b=Gp5VufWosYcdvEPo9DRdTL0NwjPk8jjGR4xBiQNMTOu3QwSjUpJxljKAHqTZDKP4lqtu5ZiSrHLgwFah4TzkHPYNsGIyADICWTMGMztoiJCkk0BuPeSoD1c3UdwsYyCiNxJemtFWBttr6J7coSVb4wykBxAiLKMksIUmTUEQpzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719933937; c=relaxed/simple;
-	bh=yRg+8F091FuUES+JYKaVyH2G6lgo5Hr0AeAjnDuBU74=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=NrygjBQt21fiUZGQlq0tNCGsHpwtpaKc3OvR6wr7fkJtQk7qcV2Aa+axJX1dx6U39HVVK8JFlbLt1IEFDIzQTY8E44qjrEMtFhHfHHWxWcrp/jqXTGi3MT3gUkY2FcmjXOdODvCVObUKbBfhH9+8xw+cHXp1/XjNhafvnpss2U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kEkbHH/X; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ITaMGUSc; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 48F9413804AD;
-	Tue,  2 Jul 2024 11:25:33 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 02 Jul 2024 11:25:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1719933933; x=1720020333; bh=//A1hzQZrR
-	Fs+Jf7FIQ+nCDerLffGWLM2hRD5dKs7d4=; b=kEkbHH/XWCSn06of/wqt97JCcJ
-	d63/Ez6gIB61Do7L3zzyqlwIy1tVZClPACYGlmn2ihv8WrN2RKGIuE/YWSDyC5X3
-	NyOBG9hCHKcF6B3d0U6ABCoD0ABGEWQ4onpwFrpFKgwhkPriO5tL2mLgWIzO/S5V
-	BK65nyq5m/J6OOYIDUMu7j60fcabWeGzEZ/nBnJlg794+Dt+QugkelVT9hEEp7Sw
-	Fb6pognCnQ28sK53xdF4VE9qsQQ0GWTJbnxxBqYdwtuQTnzrL2C+BkxLIGKS77ML
-	e992b6+4qaUoXXMBF0AqrVDeY8pVe53x+UuXMFbiYP/7AuoX43hHfXvDlb/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1719933933; x=1720020333; bh=//A1hzQZrRFs+Jf7FIQ+nCDerLff
-	GWLM2hRD5dKs7d4=; b=ITaMGUScvo3efaios+nmJ+l2HFnt+Ouk1xOR9SCejBQX
-	X+nMNacgNPtPKVi4irj4dEYmGrr8FNITbhQUvWqAYQQPILNRrWJVHQULFVvNoLM7
-	rTdtpiL1WJQ2qMf+/vYV45qnUD9+xhUBPDPwmPbuPForpfbAg5MR7IWuf4lWJOgu
-	ZjcC9O6LcbgYKxFqEkJjij/TmMxzFEnaFEMin+DhBtFLzdFURKTy10k+bo8qqvn6
-	Y6zNLEL+rF6C87PnO3yUyXaOLtKKo2b6FHT7E7qU6piIjRurUT67VkufhxxxVfli
-	WkgrL30i15fkwtNeO2lCJCtYhLxBOKJhGEzhWh11AQ==
-X-ME-Sender: <xms:7BuEZttoIOu3FgcnRTCwlUY9enW-fWdSGJA21XR6uYg7nZNfEvYT4A>
-    <xme:7BuEZmeD2xZcTgq_x095S6hIFE_CXNZyvUj2JjppPZHG2X6yvowIK7ZB0ttBhCkdS
-    mKq1RK7-XDTo4l4GAg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehgdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:7BuEZgzV2V9m7yHeP1-CY_1ToL-7saFDkeYbauhzrcIdP0hWxpdECQ>
-    <xmx:7BuEZkPqG5nj4biEtgHDOMbrIFpZ-CZs4LyXyDGqrlwrKeiI3XmUng>
-    <xmx:7BuEZt-0YpFxDaNOoYfGLVTo6xVdfiYwpii7nZD9L9GApKzNrmdlDg>
-    <xmx:7BuEZkX5ATZdeALUPYBN_7NUDUsZodxq3UocvaVEljBw0ouzzUeugQ>
-    <xmx:7RuEZhWiOkzLt1hDorcP0Kt54ntgBJmUM8iMCFrY5Nkd-AbR7KPNeG0_>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A1149B60092; Tue,  2 Jul 2024 11:25:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
+	s=arc-20240116; t=1719934774; c=relaxed/simple;
+	bh=g+sRA4FxF0h1IXfXKKTkTHt+QuvIbChKxddB8lzK4EU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ABwyb6unX5BvqAFwMerMVvzSKFyIQVHOufBqhn9aoK4ZmWTNA89jy6pCsmDJdMbojzJ27JjZIzuW9LaqU6us7n/oKZvPuqU0MeGuwDqaQTsfVcTSHw09hN1CgGAY8zsu4oEDpdYhOcj1u3JhubT7Rdpdk9Wr48z+0L0JyoBiByg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2rFR4+1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A64C5C4AF0C;
+	Tue,  2 Jul 2024 15:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719934773;
+	bh=g+sRA4FxF0h1IXfXKKTkTHt+QuvIbChKxddB8lzK4EU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h2rFR4+1H8QAjHvU9Nz3JkKytSJuyGXKQhLFL1bLBu4/dRgrX3qdt0w6Xq/S6XkFZ
+	 ZlB8VolHFV5FXsu4clie838j9pElkHVJKrVH2pYsB34+zZPYXftXRi0jLjnmKosCF+
+	 XRqvP4pTy97ke6vL8nabJ3odm4GxIbubsDZztRCtBQhRkPTZeOcs6LUWEU8C684usv
+	 5ZbydD7hBTg+SJjg+VwMNbV0djJTy9wrTgEA/3DLdINP+ZmnGY9KmI+sMgil7QiQMZ
+	 t9VU8adMQ/COk9f2GOfv1+DkuhttuUaaPgJg/2LUPc3gtKxmh4MJHSExYyjk3CSlLz
+	 jq57ItKWe1/vg==
+Date: Tue, 2 Jul 2024 16:39:26 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Yu-Chien Peter Lin <peterlin@andestech.com>
+Cc: Samuel Holland <samuel.holland@sifive.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>, tim609@andestech.com,
+	dminus@andestech.com, ycliang@andestech.com
+Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to the
+ D1/D1s devicetree
+Message-ID: <20240702-protegee-exploring-49c0dbd831e5@spud>
+References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
+ <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
+ <0cc13581-5cc4-4a25-a943-7a896f42da4c@sifive.com>
+ <20240701-prancing-outpost-3cbce791c554@spud>
+ <7ab7d629-6993-4cad-b5b7-62bddfc74a49@sifive.com>
+ <20240701-pyromania-spinster-709a6c8cc460@spud>
+ <ZoPMEaq8wKzXhFuA@APC323>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <35691b55-436c-4c52-b241-f0c5326227cb@app.fastmail.com>
-In-Reply-To: <20240628003253.1694510-11-almasrymina@google.com>
-References: <20240628003253.1694510-1-almasrymina@google.com>
- <20240628003253.1694510-11-almasrymina@google.com>
-Date: Tue, 02 Jul 2024 17:25:11 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mina Almasry" <almasrymina@google.com>, Netdev <netdev@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Donald Hunter" <donald.hunter@gmail.com>,
- "Jonathan Corbet" <corbet@lwn.net>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "Steffen Klassert" <steffen.klassert@secunet.com>,
- "Herbert Xu" <herbert@gondor.apana.org.au>,
- "David Ahern" <dsahern@kernel.org>,
- "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
- shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Bagas Sanjaya" <bagasdotme@gmail.com>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Nikolay Aleksandrov" <razor@blackwall.org>,
- "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
- "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Yunsheng Lin" <linyunsheng@huawei.com>,
- "Shailend Chand" <shailend@google.com>,
- "Harshitha Ramamurthy" <hramamurthy@google.com>,
- "Shakeel Butt" <shakeel.butt@linux.dev>,
- "Jeroen de Borst" <jeroendb@google.com>,
- "Praveen Kaligineedi" <pkaligineedi@google.com>,
- "Willem de Bruijn" <willemb@google.com>,
- "Kaiyuan Zhang" <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v15 10/14] tcp: RX path for devmem TCP
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="hXUitlnmUnc9XLtm"
+Content-Disposition: inline
+In-Reply-To: <ZoPMEaq8wKzXhFuA@APC323>
 
-On Fri, Jun 28, 2024, at 02:32, Mina Almasry wrote:
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
-> @@ -140,6 +140,11 @@
->  #define SO_PASSPIDFD		76
->  #define SO_PEERPIDFD		77
-> 
-> +#define SO_DEVMEM_LINEAR	78
-> +#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
-> +#define SO_DEVMEM_DMABUF	79
-> +#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
 
-Something is still wrong with the number assignment:
+--hXUitlnmUnc9XLtm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
-> @@ -151,6 +151,11 @@
->  #define SO_PASSPIDFD		76
->  #define SO_PEERPIDFD		77
-> 
-> +#define SO_DEVMEM_LINEAR	78
-> +#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
-> +#define SO_DEVMEM_DMABUF	79
-> +#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
-> +
->  #if !defined(__KERNEL__)
-> 
->  #if __BITS_PER_LONG == 64
+On Tue, Jul 02, 2024 at 05:46:42PM +0800, Yu-Chien Peter Lin wrote:
+> On Mon, Jul 01, 2024 at 05:31:01PM +0100, Conor Dooley wrote:
+> > On Mon, Jul 01, 2024 at 11:11:55AM -0500, Samuel Holland wrote:
+> > > Hi Conor, Charlie,
+> > >=20
+> > > On 2024-07-01 11:07 AM, Conor Dooley wrote:
+> > > > On Mon, Jul 01, 2024 at 10:27:01AM -0500, Samuel Holland wrote:
+> > > >> On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
+> > > >>> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch=
+/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > > >>> index 64c3c2e6cbe0..6367112e614a 100644
+> > > >>> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > > >>> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > > >>> @@ -27,7 +27,8 @@ cpu0: cpu@0 {
+> > > >>>  			riscv,isa =3D "rv64imafdc";
+> > > >>
+> > > >> The ISA string should be updated to keep it in sync with riscv,isa=
+-extensions.
+> > > >=20
+> > > > This probably looks like this cos I said that the kernel shouldn't =
+parse
+> > > > vendor extensions from "riscv,isa". My rationale was that we have
+> > > > basically no control of what a vendor extension means in riscv,isa =
+so=20
+> > > > we shouldn't parse them from it (so marginally worse than standard
+> > > > extensions, where it means what the spec says except when it doesn'=
+t).
+> > > >=20
+> > > > Given how we implement the parsing, it also meant we weren't implyi=
+ng
+> > > > meanings for vendor extensions ACPI-land, where we also can't ensur=
+e the
+> > > > meanings or that they remain stable. That change is in a different
+> > > > series:
+> > > > https://patchwork.kernel.org/project/linux-riscv/patch/20240609-sup=
+port_vendor_extensions-v2-1-9a43f1fdcbb9@rivosinc.com/
+> > > >=20
+> > > > Although now that I think about it, this might break xandespmu... I
+> > > > dunno if the Andes guys switched over to using the new property out=
+side
+> > > > of the single dts in the kernel tree using their SoC. We could
+> > > > potentially special-case that extension if they haven't - but my
+> > > > position on this mostly is that if you want to use vendor extension=
+s you
+> > > > should not be using riscv,isa (even if the regex doesn't complain i=
+f you
+> > > > add them). I'd like to leave the code in the other patch as-is if w=
+e can
+> > > > help it.
+> > > >=20
+> > > > I added Yu Chien Peter Lin here, maybe they can let us know what th=
+ey're
+> > > > doing.
+> > >=20
+> > > OK, that makes sense to me. Then please ignore my original comment.
+> >=20
+> > Should the xandespmu thing be an issue, I'd suggest we just do something
+> > like the following, in place of the new switch arm added by Charlie:
+> >=20
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
+ure.c
+> > index ec4bff7a827c..bb99b4055ec2 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -628,6 +628,17 @@ static void __init riscv_parse_isa_string(const ch=
+ar *isa, unsigned long *bitmap
+> >  		if (unlikely(ext_err))
+> >  			continue;
+> > =20
+> > +		if (*ext =3D=3D 'x' && acpi_disabled) {
+> > +			/*
+> > +			 * xandespmu predates this "rule", so special case it for
+> > +			 * hysterical raisins
+> > +			 */
+> > +			if (strncasecmp(ext, "xandespmu", ext_end - ext)) {
+> > +				pr_warn_once("Vendor extensions are ignored in riscv,isa. Use risc=
+v,isa-extensions instead.");
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> >  		match_isa_ext(ext, ext_end, bitmap);
+> >  	}
+> >  }
+> >=20
+>=20
+> Thanks for the hands-up!
+> We don't use the deprecated riscv,isa to specify xandespmu, so no
+> need to address this special case.
 
-so alpha and mips use the same numbering system as
-the generic version for existing numbers
+Great, that's good to know - thanks!
 
-> diff --git a/arch/parisc/include/uapi/asm/socket.h 
-> b/arch/parisc/include/uapi/asm/socket.h
-> index be264c2b1a117..2b817efd45444 100644
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
-> @@ -132,6 +132,11 @@
->  #define SO_PASSPIDFD		0x404A
->  #define SO_PEERPIDFD		0x404B
-> 
-> +#define SO_DEVMEM_LINEAR	78
-> +#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
-> +#define SO_DEVMEM_DMABUF	79
-> +#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
+--hXUitlnmUnc9XLtm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-parisc uses a different number, but you start using the
-generic version here. This is probably fine but needs 
-a comment.
+-----BEGIN PGP SIGNATURE-----
 
-> index 8ce8a39a1e5f0..25a2f5255f523 100644
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -135,6 +135,11 @@
->  #define SO_PASSPIDFD		76
->  #define SO_PEERPIDFD		77
-> 
-> +#define SO_DEVMEM_LINEAR	98
-> +#define SCM_DEVMEM_LINEAR	SO_DEVMEM_LINEAR
-> +#define SO_DEVMEM_DMABUF	99
-> +#define SCM_DEVMEM_DMABUF	SO_DEVMEM_DMABUF
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoQfLgAKCRB4tDGHoIJi
+0hXfAQCCxZXEBqT4cPTHb0LGQh6uikBkC+CR23ztTmUdfDTFHgD+LGxDU34bLk9W
+K+AGaZjFkN9dMlpWdebZ/9qZ/D4iqAY=
+=KERh
+-----END PGP SIGNATURE-----
 
-These on the other hand look like a typo: did you
-mean number 78 and 79 instead of 98 and 99?
-
-Alternatively, you could continue with number 87,
-which is the next unused number on sparc, and have
-the same numbers on all architectures?
-
-     Arnd
+--hXUitlnmUnc9XLtm--
 
