@@ -1,158 +1,198 @@
-Return-Path: <linux-kselftest+bounces-13040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D4E7923A31
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 11:34:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87102923AC6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 11:54:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B862B1F230E6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 09:34:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 050E6B234B4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 09:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F91A153836;
-	Tue,  2 Jul 2024 09:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A862158848;
+	Tue,  2 Jul 2024 09:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBQTEMyM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IYqWcMJF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205AE1534E1;
-	Tue,  2 Jul 2024 09:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A301586CF
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 09:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719912846; cv=none; b=aK+U8WYOuJ7GtRYCq5S4o+VurZ6BZGjzkExImn6D5EO++L/O4sgwUTwC4Qb/aNWTyd3NfajRaVX1p1bs0nkqZJrzFRWaSaXHjCUEDJ+fC+vf/I9bQz0TZcpYQUTUw7N0cABvlNzek2vmYHwXbxPlf5BrI72L6mW0PzOSrT1Xwsc=
+	t=1719914029; cv=none; b=Zn/Uy3ZLO9mluMIMv8UdMF4bRPlncck/sLLmAyWJwFBoi7fTUolH6G/sCa2eLbC/SeSLlWBbuuvUzVFizxXn4x3tgoHokacVczHXwbAxb4U/Quy7dO4EdO9eU5vMThwqTJFVIRdlFoWy2Bo6rFS5hG2S8sZucBA83qLr9slOsP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719912846; c=relaxed/simple;
-	bh=OHn1ckY1ViIAHvmeaBhl4RVsY7dCnn6nSLzEnFbY7H4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZW/ZWAE8PWBDV7xBcy8wXiZnJUzv/DbGcknm/KLOtczYwYvt2GXZkbuToscH4e1X/la4o8fBdjbVywjk57Rr7CqRIe/KFvWreN07S7xPpPalQhFkTUU2Zo2rr+FI+7EKk0lvxHcqPLucJIHwHgL6RZ0r2DNcnaXDbAXVPy23WV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBQTEMyM; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7021f23d699so534806a34.3;
-        Tue, 02 Jul 2024 02:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719912844; x=1720517644; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cWXvodTV40xpsQgD046diOP7NF2BEo3aGKT0Hy04vKs=;
-        b=ZBQTEMyMDKJbU7hV744Uytoc4LJt9baatO8fqoptKJc9Z6ro2IBfYXw7pgCyEjNVka
-         mQMYMgImdC78+P7u+yYC3VST6hxf3lUHmjA5Ro9iZ6MXzFz7rZmfjNoSQL2OcptYJ2Ra
-         m345jFhs+hq4sYbJlbDD13fdtYotW0j4Ikiwyshse+segDtvTmSJDVfP49YT4eX1ka8a
-         uRB/VehcZ7UFbpaWhvzQTmvKlLjMfiksmK+4AGW3AmATmJY962ZoEC01yl5U4F+rJpWb
-         WI1Lnm975IkRObQjQCT9XdKkysfd6wgwhYoZF2gY22Kf1imTKSuNbW1BtjrOfBJRJ1dm
-         zS+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719912844; x=1720517644;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cWXvodTV40xpsQgD046diOP7NF2BEo3aGKT0Hy04vKs=;
-        b=FMwbeWHAQLjLb1vH4tMak+t6Cb/IfZTUh4W+YH/h3baoGw7wiBN3U/NNief9mfwFab
-         bcEvJo8NdLa7aMrHSd8GS26JeV3aqK2clyMjfNUwFqfPLz0GlOCJs9eiq6imrAOM/2UL
-         pjw6W7naqQmwQ09zKOwcXW48VCUxuIPapghNZxc8QtuNMjWsLJcGPH4NkqN36q/UUNpO
-         wohXuF+kj6GVs6oZH1/O9BNZoIRfWX6JCqYDDyvSrZ+cU7Pn8sFjgNAwHfWpko0OMA1s
-         kmB/wkjzxDMvsPoLAZxBVx5C3Cb3f1gKVx+qnP05qyeLnBABUd8o8b15Mk3DM0DfkvsK
-         5hxg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYuE2OThn+wRxZcttJaMU2LGuhuLsNf7hgO96g7843Q7e/QJqBVzdF3UnVtb0pInbhr1gCmJNYVAfQPJXw+mAXES49dfH5pGPO6VG+k38zEf+Kz8+LRpMtc//pQPgjpwDwmJW9fY4Ub4juKQTgT4vifcjcIpOWJFfX7Vvb/zSFhQ2cQrajr2ElHWRluwQ4uW2118Jt8Z5Qu1cNk0SyCs4WiHMIpH1PTPiQFaf/1VvpZ9pLMq/u9awn72PIqZthT5/wc/jplKmY/9oQqpEFVNrKmFz1UWVw3KPxzREmRQjraLNZYJpkF8NOjXFXrTYUhvr9piGwCWy8DK0dGVYCsf9SjgR4ZA0FoN7apwC+HJl4YmRM2QlMv3npTpowXJJ1fkLq+t8LTqqfCRskCOUF56mPwVD6TqVFYtWZKtgTRipJn84yYmv0XjYJTqq3b1HZYXl01y8+DhDXDPFLsEcuSAZJxs1im0xAuTQlVla1RA==
-X-Gm-Message-State: AOJu0YxGHUwcH6dyWfY+L6ZATyv8il+kySKOUoA1Fesao4R5WCL8JVBl
-	l+qs9paJIkBuDdraXFZIses39FBPR/+cn7wixwFlAd0dw45okRCKzNoMYAA5w3SmxTJrp1ayET+
-	IcFGpvnWL4Lb1bG3iF0gNu7lGCQQ=
-X-Google-Smtp-Source: AGHT+IEDzJCkSxic9thzD1A+qXwSy94/OFeuEZqEmxDLENKBg+0OkSwbEdt7g8VxaiGVVFbl4hnPJFDds9/ibJSVDwQ=
-X-Received: by 2002:a05:6870:56ab:b0:254:aae8:d822 with SMTP id
- 586e51a60fabf-25db3432ec4mr7759858fac.26.1719912844128; Tue, 02 Jul 2024
- 02:34:04 -0700 (PDT)
+	s=arc-20240116; t=1719914029; c=relaxed/simple;
+	bh=59rFT6bkUS+dB3SilvF7+EgBhQRDj12JRdiB7gC2UEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p1gS4n85LZuuxoOdSIKR9TB5ovBKVBr/DSz43KHf1ScBVACmqHJzhWrFHCJ2AF/2fz53vrK0OpszdQOeS7vm0hQW9rnSKlrPv9grDSYOl/y2IsL8Mf5U941Zp9JpXGZ07fKJefmwkN4rFeRmlc3/JpBIk+te5Sl1DOAfguLohp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IYqWcMJF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719914026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6wtzyAnYbN33jH1u/SHNAN7lsd54LbwMy7ec7PPXYwo=;
+	b=IYqWcMJFAU9yI7W9ol81/PlDIGW3Bm9t12dkPg1+ZteBkVpcuH166mS0+sI8Fr86y0xBp6
+	weFlnbMOKpMQK6ttoS/Qhs2LxqrgEMPe/U4jcz0yNUUlqG8cpKX1iQev303IoHE8dLkQ7m
+	KIQs0rHXJPa4XZZV6uImd9inZT+0+4U=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-Lg6_T5oqOcCvrCPwgoO2YQ-1; Tue,
+ 02 Jul 2024 05:53:43 -0400
+X-MC-Unique: Lg6_T5oqOcCvrCPwgoO2YQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1F8EC195608B;
+	Tue,  2 Jul 2024 09:53:42 +0000 (UTC)
+Received: from antares.redhat.com (unknown [10.39.194.50])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9291B19560A3;
+	Tue,  2 Jul 2024 09:53:38 +0000 (UTC)
+From: Adrian Moreno <amorenoz@redhat.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	horms@kernel.org,
+	i.maximets@ovn.org,
+	dev@openvswitch.org,
+	Adrian Moreno <amorenoz@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v8 00/10] net: openvswitch: Add sample multicasting.
+Date: Tue,  2 Jul 2024 11:53:17 +0200
+Message-ID: <20240702095336.596506-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628003253.1694510-1-almasrymina@google.com>
- <20240628003253.1694510-3-almasrymina@google.com> <m27ce9cris.fsf@gmail.com> <CAHS8izNM8TjJ1DU+7gzq-0kH=tVeM6j-QsaKk=2FHNDF6RLwnA@mail.gmail.com>
-In-Reply-To: <CAHS8izNM8TjJ1DU+7gzq-0kH=tVeM6j-QsaKk=2FHNDF6RLwnA@mail.gmail.com>
-From: Donald Hunter <donald.hunter@gmail.com>
-Date: Tue, 2 Jul 2024 10:33:52 +0100
-Message-ID: <CAD4GDZznS=0xG+ms6bLKSwQFNTqxSqi8fdoNM97ymwcnqX3yhg@mail.gmail.com>
-Subject: Re: [PATCH net-next v15 02/14] net: netdev netlink api to bind
- dma-buf to a net device
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Mon, 1 Jul 2024 at 20:05, Mina Almasry <almasrymina@google.com> wrote:
->
-> On Fri, Jun 28, 2024 at 3:10=E2=80=AFAM Donald Hunter <donald.hunter@gmai=
-l.com> wrote:
-> >
-> > Mina Almasry <almasrymina@google.com> writes:
-> > > +  -
-> > > +    name: bind-dmabuf
-> > > +    attributes:
-> > > +      -
-> > > +        name: ifindex
-> > > +        doc: netdev ifindex to bind the dma-buf to.
-> >
-> > Minor nit:
-> >
-> > The series uses a mix of dmabuf and dma-buf but the doc additions
-> > (devmem.rst) consistently uses dmabuf. I think it would be helpful to b=
-e
-> > consistent here and say 'devmem dmabuf' in the docstring to highlight
-> > whos dmabuf it is and keep the generated netdev docs in alignment.
->
-> To be honest, even the dmabuf docs mixes 'dma-buf' and 'dmabuf', to my ey=
-e:
->
-> https://docs.kernel.org/driver-api/dma-buf.html
->
-> I can edit these docs I'm adding so these are consistent.
->
-> But on 'devmem dmabuf', not sure to be honest. Technically all dmabufs
-> are supported, even non-devmem ones. I'm not sure non-devmem dmabufs
-> are common at all, the only example I can think of is udmabuf whose
-> primary user is qemu and testing, so it's somewhat implied that the
-> dmabuf is devmem, and even if it isn't, it would be supported. I
-> prefer to keep the docs saying just 'dmabuf' as technically all are
-> supported. Maybe I should add a note about this somewhere in the
-> dedicated docs.
+** Background **
+Currently, OVS supports several packet sampling mechanisms (sFlow,
+per-bridge IPFIX, per-flow IPFIX). These end up being translated into a
+userspace action that needs to be handled by ovs-vswitchd's handler
+threads only to be forwarded to some third party application that
+will somehow process the sample and provide observability on the
+datapath.
 
-That's a fair point. If you could mention it in the docs, that would be gre=
-at.
+A particularly interesting use-case is controller-driven
+per-flow IPFIX sampling where the OpenFlow controller can add metadata
+to samples (via two 32bit integers) and this metadata is then available
+to the sample-collecting system for correlation.
 
-Thanks,
-Donald.
+** Problem **
+The fact that sampled traffic share netlink sockets and handler thread
+time with upcalls, apart from being a performance bottleneck in the
+sample extraction itself, can severely compromise the datapath,
+yielding this solution unfit for highly loaded production systems.
+
+Users are left with little options other than guessing what sampling
+rate will be OK for their traffic pattern and system load and dealing
+with the lost accuracy.
+
+Looking at available infrastructure, an obvious candidated would be
+to use psample. However, it's current state does not help with the
+use-case at stake because sampled packets do not contain user-defined
+metadata.
+
+** Proposal **
+This series is an attempt to fix this situation by extending the
+existing psample infrastructure to carry a variable length
+user-defined cookie.
+
+The main existing user of psample is tc's act_sample. It is also
+extended to forward the action's cookie to psample.
+
+Finally, a new OVS action (OVS_SAMPLE_ATTR_PSAMPLE) is created.
+It accepts a group and an optional cookie and uses psample to
+multicast the packet and the metadata.
+
+--
+v7 -> v8:
+- Rebased
+- Redirect flow insertion to /dev/null to avoid spat in test.
+- Removed inline keyword in stub execute_psample_action function.
+
+v6 -> v7:
+- Rebased
+- Fixed typo in comment.
+
+v5 -> v6:
+- Renamed emit_sample -> psample
+- Addressed unused variable and conditionally compilation of function.
+
+v4 -> v5:
+- Rebased.
+- Removed lefover enum value and wrapped some long lines in selftests.
+
+v3 -> v4:
+- Rebased.
+- Addressed Jakub's comment on private and unused nla attributes.
+
+v2 -> v3:
+- Addressed comments from Simon, Aaron and Ilya.
+- Dropped probability propagation in nested sample actions.
+- Dropped patch v2's 7/9 in favor of a userspace implementation and
+consume skb if emit_sample is the last action, same as we do with
+userspace.
+- Split ovs-dpctl.py features in independent patches.
+
+v1 -> v2:
+- Create a new action ("emit_sample") rather than reuse existing
+  "sample" one.
+- Add probability semantics to psample's sampling rate.
+- Store sampling probability in skb's cb area and use it in emit_sample.
+- Test combining "emit_sample" with "trunc"
+- Drop group_id filtering and tracepoint in psample.
+
+rfc_v2 -> v1:
+- Accommodate Ilya's comments.
+- Split OVS's attribute in two attributes and simplify internal
+handling of psample arguments.
+- Extend psample and tc with a user-defined cookie.
+- Add a tracepoint to psample to facilitate troubleshooting.
+
+rfc_v1 -> rfc_v2:
+- Use psample instead of a new OVS-only multicast group.
+- Extend psample and tc with a user-defined cookie.
+
+Adrian Moreno (10):
+  net: psample: add user cookie
+  net: sched: act_sample: add action cookie to sample
+  net: psample: skip packet copy if no listeners
+  net: psample: allow using rate as probability
+  net: openvswitch: add psample action
+  net: openvswitch: store sampling probability in cb.
+  selftests: openvswitch: add psample action
+  selftests: openvswitch: add userspace parsing
+  selftests: openvswitch: parse trunc action
+  selftests: openvswitch: add psample test
+
+ Documentation/netlink/specs/ovs_flow.yaml     |  17 ++
+ include/net/psample.h                         |   5 +-
+ include/uapi/linux/openvswitch.h              |  31 +-
+ include/uapi/linux/psample.h                  |  11 +-
+ net/openvswitch/Kconfig                       |   1 +
+ net/openvswitch/actions.c                     |  66 ++++-
+ net/openvswitch/datapath.h                    |   3 +
+ net/openvswitch/flow_netlink.c                |  32 ++-
+ net/openvswitch/vport.c                       |   1 +
+ net/psample/psample.c                         |  16 +-
+ net/sched/act_sample.c                        |  12 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 115 +++++++-
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 272 +++++++++++++++++-
+ 13 files changed, 566 insertions(+), 16 deletions(-)
+
+-- 
+2.45.2
+
 
