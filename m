@@ -1,84 +1,96 @@
-Return-Path: <linux-kselftest+bounces-13031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9852291EE65
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 07:37:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CFDE91EE81
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 07:46:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 083B0B22998
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 05:37:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27A1A1F22627
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 05:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252A253E31;
-	Tue,  2 Jul 2024 05:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECDA7433A6;
+	Tue,  2 Jul 2024 05:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="2y3U4cXc"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="xU+Qz5vt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA4835280
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 05:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636BF35280
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jul 2024 05:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719898657; cv=none; b=nhQbuIDhuPeh9QWm3cwkqQQQnQveMpoT+5pGVHSqcU2Gj9nF/8aHlMF/HTEPSuv7KW+3Y1AkkJRgDPMNgW6xTah5Ddykh/yhkapGJliQEi1Fi7QM8jm54kf4ts9M1GLD4bFV/cVQPOo00QGhtz9X3HBEQaVWMyV9WtGKP88K0oE=
+	t=1719899174; cv=none; b=W3f3cJSGOCpb79C+o8RZe2OJX3IxnchMglGtqaigo53LuqKcFoZM1QQsP4E3Obx3xTHQ4dokknIAfcVo7exdzMU3Ai5Hct88OHcQKgun6waSE0U9+lcipRryewNMWIkCIFUmEZqd9uQrGHJD4HO/WjuNxHSU0CM39ueYsYb3Uu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719898657; c=relaxed/simple;
-	bh=VVbh0fQ7/Q2au2kwoY1UK0e85qra4bt9HY3Ly61I5K0=;
+	s=arc-20240116; t=1719899174; c=relaxed/simple;
+	bh=AdkaUjRTJIhO/K8YUDZQ1Q0hdKG/eUYO18zWbxAkJ+k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UgNy/VFeumKR+Mj4Zy30S8276aj6A3crTUS1NAywkQztp8VAZbP06NfgE1kHLLp4z+axx6D08nqY8Kv1379H0TxCHi9vpFR1xMwhLtIHne/9IlGAEKbPEgA5NVI+Z+DCHabn3SP+Xb3orKK6q8oI6sBvlVYeYHvjbfmnoF3RX1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=2y3U4cXc; arc=none smtp.client-ip=209.85.214.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=IpkQmUa5iYtGM5bHvy5vtaJuVFjdP/ZrsmLNeW+wfXufnTu2/0NwHab4Yv4nDPjfo/cgkbsUHYeANlvT9+OC7LfCVLzaUjh3B77EACZH1b8xRaJWKrC3nyQVDgG78mWGQu+2CLKekaGUJ5b3z1TmjGGDQXAKLVzt1UHGImqKKZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=xU+Qz5vt; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fa55dbf2e7so20423205ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 22:37:34 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70679845d69so2412468b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2024 22:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719898653; x=1720503453; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719899173; x=1720503973; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QylUuXEtNL3Eo0vKPHJFlDtSdhA+F4KnUDy2bHeIjjY=;
-        b=2y3U4cXcNcx5T2KOxAFsBFR6Vayr//5HhAnuY1M26FAqDH9qdyP2kGo83qayKSB6lG
-         LGIf+a5SPuNncRhoniY2+XGLJvRB0mEMuZz28IbHJm+icyf8/k88IxEVV2e7UphHWvpm
-         jve4YAHOZlpdR80fL/op9YR8tM5B6pao7lfNVRdqA2+Qt8mx07DQcMADu0mFMxwvegOR
-         OGzSSuqbJ5l3VSLwECJCkqL+wPGA8QmoxyT3xQUhNpNU13yJdwTCDOfyIb8H+p/JJ2dr
-         0KJVcIxLgkszJehD/YuoPHcIiCJE/UAnj9ahQdwAa3egGDBjWno+rSjf7tXqreZOlJkq
-         +IYw==
+        bh=BGGBEWgqwliEqnZATHjMM1K2Xkz4OG63sXpZDZIsbfo=;
+        b=xU+Qz5vtMWlGv7Gpl1n5kg3KOGQIqSgzjPs7s2nu71MB+EpE9biNDMVboQiGHCcpyf
+         7cR47w3w2+9SjvSB/MBcX1JC62f0LrS/vHHcaqlNUF1ZoVOZSolmCMcQlFu/rmzj2giO
+         PwXFtHM6BITw4FDAy7Z8UQ1jzlhmsM8FwsTKFhFvnppjICROWWSHjAVp7/McPhAJ22sT
+         uBWqUH4WVrs+UlavQrViqht1TjsWuQd74/OOmtd4zpxem9KlGDCm18GUH/On6PYF8KbH
+         0dfZZwv6GCgVwmhy/mcAL5snTQdjZZTYfHzN8iz7AkTOuCKO0s8q/8YQlkXAvFV8fAn/
+         OWfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719898653; x=1720503453;
+        d=1e100.net; s=20230601; t=1719899173; x=1720503973;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QylUuXEtNL3Eo0vKPHJFlDtSdhA+F4KnUDy2bHeIjjY=;
-        b=rDbo6RJGDwyAHbWSt+2YtGYCglwA66DiorpUWEPnG/x6kqI6F0LHJOvQSRXf147Zfp
-         ZtwfX7eTbWhBh7tRv36LSdYC1/jOi6xk69L/bYB9kcGxv58Af1s+5BJp4beOx9xdh5dH
-         WVX1HSOpx5Ssp5w0xZn3UaJ/y956qdFARwK6ui0HCBtlLLVx11zSNsjOFL7McVA4MyoK
-         88LIaMLenJbzFMxEmVn6hCzIrXHmDRfk3cGuGTz2wh60/rar+SJC9sEZ6K/dxuUxcM6r
-         yqS5MUB1xMGad1RHvEDYvl0RBP48ZaoPjL03lmVX3cp/kokvlLFP0OGkLHRDwaUcuZ6v
-         VEsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHlr76LKTkIW0RJx/nOL97EckJTNhmmyTIRVwwFf3BrdHkXGSSxetxmOnxFmwBypbzL4LL1mYAS4z+gTqRlF9o+tXmS1UG9EXPMU/nFEds
-X-Gm-Message-State: AOJu0Yw9go2J+CxMRp3RvxIz7SA8VGfknpJuoT/OjglnViE09uc+VVj8
-	EuHS6BP6GUrVXrZhGoLftJLzu7KPVmqG7TyhGYnBOEUX89KJIyqnuqBXQgzaQP/KuSaOOD0HvL7
-	c
-X-Google-Smtp-Source: AGHT+IHD/AlEviT8SXJiTbsVNwnXf2yMzxVXULAD/ULUcJEhqMDI0cnZbgXoTsLn/2TmyvmqZXXKYw==
-X-Received: by 2002:a17:902:e5cb:b0:1f6:6ef0:dae4 with SMTP id d9443c01a7336-1fadbca5bc3mr43646675ad.32.1719898653462;
-        Mon, 01 Jul 2024 22:37:33 -0700 (PDT)
+        bh=BGGBEWgqwliEqnZATHjMM1K2Xkz4OG63sXpZDZIsbfo=;
+        b=vZAbRYQpMdDCdK157Ctunc7zLEf5EkywSiOCYqWwZKQ9nMULDb4aQQ+HdO+fG2IYb6
+         uw5iX9abyLwzWsDMIwrkMOeFkZY0aT35sKLfxA+5itB2tg3LTj246rcXuvWd8EHu/7cv
+         4/GTfGN41G94T7jO164P/H++caAOeLR2Fheu7rjBI4QR8P/z/n0hm+x0WOzcUNUYhsdG
+         Z4GAScqmrDeAWUOWEUL8OF5N1U8dll1diK+aKGzB4yQwDmp1mPRuh1JPNmmvtdezdGtH
+         s3xbs1p6ThRqejBL0El1izdb2mgw1r4+HQC1IWT3lAbBwxDJoeBX8wLyWGpC6cKWHmbk
+         r9PA==
+X-Forwarded-Encrypted: i=1; AJvYcCWeYaQX8oyoKoCd4psTrDPdUC0yN+a6DZDDLiUlne2oP+BViFW9y5xMCzw43H+zTqAWLV+e4Fd6+ZxLM3nEUEUrDOrD2iB/wOzp53hs0Ce2
+X-Gm-Message-State: AOJu0YyjXIKFteFpx9VLlmmNNMcizUxja34LVR2e0gq/Lo4nLIn7KOPM
+	oz8Bf2K45XqVtLGZBhnny1Bo9Czw+QA3avMVL5cYsf5wqxyQvQNDgR4gBFuVHEE=
+X-Google-Smtp-Source: AGHT+IG2WieA6d2VXCXPEULk6bM4rk8RGnz2VXlb5+XlqbXE2HDHRrkVhtC3A7gynucOeClBzA/BEQ==
+X-Received: by 2002:a05:6a00:3e1d:b0:705:9a28:aa04 with SMTP id d2e1a72fcca58-70aaaefd5ddmr6625232b3a.23.1719899172664;
+        Mon, 01 Jul 2024 22:46:12 -0700 (PDT)
 Received: from ghost ([2601:647:5700:6860:a569:328b:99ad:ce17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10d15a9sm74873685ad.37.2024.07.01.22.37.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70803ecf95bsm7787118b3a.140.2024.07.01.22.46.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 22:37:32 -0700 (PDT)
-Date: Mon, 1 Jul 2024 22:37:30 -0700
+        Mon, 01 Jul 2024 22:46:12 -0700 (PDT)
+Date: Mon, 1 Jul 2024 22:46:08 -0700
 From: Charlie Jenkins <charlie@rivosinc.com>
-To: zhouquan@iscas.ac.cn
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, oleg@redhat.com,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	andy.chiu@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH v1 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Message-ID: <ZoOSGt9jbKn1f37d@ghost>
-References: <cover.1719408040.git.zhouquan@iscas.ac.cn>
- <1e9cbab1b0badc05592fce46717418930076a6ae.1719408040.git.zhouquan@iscas.ac.cn>
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Heiko Stuebner <heiko@sntech.de>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>
+Subject: Re: [PATCH v3 07/13] riscv: csr: Add CSR encodings for
+ VCSR_VXRM/VCSR_VXSAT
+Message-ID: <ZoOUIJIxnwpqxBHR@ghost>
+References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
+ <20240619-xtheadvector-v3-7-bff39eb9668e@rivosinc.com>
+ <54232f3e-4fea-4996-a90b-6de51e1c51e0@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,202 +99,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1e9cbab1b0badc05592fce46717418930076a6ae.1719408040.git.zhouquan@iscas.ac.cn>
+In-Reply-To: <54232f3e-4fea-4996-a90b-6de51e1c51e0@sifive.com>
 
-On Thu, Jun 27, 2024 at 11:02:54AM +0800, zhouquan@iscas.ac.cn wrote:
-> From: Quan Zhou <zhouquan@iscas.ac.cn>
+On Mon, Jul 01, 2024 at 10:49:23AM -0500, Samuel Holland wrote:
+> Hi Charlie,
 > 
-> This test checks that orig_a0 allows a syscall argument to be modified,
-> and that changing a0 does not change the syscall argument.
+> On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
+> > The VXRM vector csr for xtheadvector has an encoding of 0xa and VXSAT
+> > has an encoding of 0x9.
+> > 
+> > Co-developed-by: Heiko Stuebner <heiko@sntech.de>
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/csr.h | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> > index 18e178d83401..9086639a3dde 100644
+> > --- a/arch/riscv/include/asm/csr.h
+> > +++ b/arch/riscv/include/asm/csr.h
+> > @@ -220,6 +220,8 @@
+> >  #define VCSR_VXRM_MASK			3
+> >  #define VCSR_VXRM_SHIFT			1
+> >  #define VCSR_VXSAT_MASK			1
+> > +#define VCSR_VXSAT			0x9
+> > +#define VCSR_VXRM			0xa
 > 
-> Suggested-by: Charlie Jenkins <charlie@rivosinc.com>
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> ---
->  tools/testing/selftests/riscv/Makefile       |   2 +-
->  tools/testing/selftests/riscv/abi/.gitignore |   1 +
->  tools/testing/selftests/riscv/abi/Makefile   |  12 ++
->  tools/testing/selftests/riscv/abi/ptrace.c   | 124 +++++++++++++++++++
->  4 files changed, 138 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/riscv/abi/.gitignore
->  create mode 100644 tools/testing/selftests/riscv/abi/Makefile
->  create mode 100644 tools/testing/selftests/riscv/abi/ptrace.c
+> These are normal CSR indexes, so the prefix should be just "CSR_".
+
+Ok, I can change them.
+
+- Charlie
+
 > 
-> diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-> index 7ce03d832b64..98541dc2f164 100644
-> --- a/tools/testing/selftests/riscv/Makefile
-> +++ b/tools/testing/selftests/riscv/Makefile
-> @@ -5,7 +5,7 @@
->  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->  
->  ifneq (,$(filter $(ARCH),riscv))
-> -RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn
-> +RISCV_SUBTARGETS ?= hwprobe vector mm sigreturn abi
->  else
->  RISCV_SUBTARGETS :=
->  endif
-> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-> new file mode 100644
-> index 000000000000..d61c51358965
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/abi/.gitignore
-> @@ -0,0 +1 @@
-> +ptrace
-> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-> new file mode 100644
-> index 000000000000..808d48a91ad7
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/abi/Makefile
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2021 ARM Limited
-> +# Originally tools/testing/arm64/abi/Makefile
-> +
-> +CFLAGS += -I$(top_srcdir)/tools/include
-> +
-> +TEST_GEN_PROGS := ptrace
-> +
-> +include ../../lib.mk
-> +
-> +$(OUTPUT)/ptrace: ptrace.c
-> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> new file mode 100644
-> index 000000000000..f85f927cd685
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> @@ -0,0 +1,124 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <signal.h>
-> +#include <errno.h>
-> +#include <sys/types.h>
-> +#include <sys/ptrace.h>
-> +#include <sys/stat.h>
-> +#include <sys/user.h>
-> +#include <sys/wait.h>
-> +#include <sys/uio.h>
-> +#include <linux/elf.h>
-> +#include <linux/unistd.h>
-> +#include <asm/ptrace.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +
-> +#define ORIG_A0_MODIFY      0x01
-> +#define A0_MODIFY           0x02
-> +#define A0_OLD              0x03
-> +#define A0_NEW              0x04
-> +
-> +#define perr_and_exit(fmt, ...)					\
-> +	({								\
-> +	 	char buf[256];						\
-
-Apologies, I missed this in the last review. In the above line there is
-a space in the middle of the tabs before `char buf[256];`.
-
-> +		snprintf(buf, sizeof(buf), "%s:%d: " fmt ": %m\n",	\
-> +			__func__, __LINE__, ##__VA_ARGS__);		\
-> +		perror(buf);						\
-> +		exit(-1);						\
-> +	})
-> +
-> +static inline void resume_and_wait_tracee(pid_t pid, int flag)
-> +{
-> +	int status;
-> +
-> +	if (ptrace(flag, pid, 0, 0))
-> +		perr_and_exit("failed to resume the tracee %d\n", pid);
-> +
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> +}
-> +
-> +static void ptrace_test(int opt, int *result)
-> +{
-> +	int status;
-> +	pid_t pid;
-> +	struct user_regs_struct regs;
-> +	struct iovec iov = {
-> +		.iov_base = &regs,
-> +		.iov_len = sizeof(regs),
-> +	};
-> +
-> +	pid = fork();
-> +	if (pid == 0) {
-> +		/* Mark oneself being traced */
-> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-> +		if (val)
-> +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
-> +
-> +		kill(getpid(), SIGSTOP);
-> +
-> +		/* Perform exit syscall that will be intercepted */
-> +		exit(A0_OLD);
-> +	}
-> +	if (pid < 0)
-> +		exit(1);
-> +
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> +
-> +	/* Stop at the entry point of the syscall */
-> +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
-> +
-> +	/* Check tracee orig_a0 before the syscall */
-> +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> +		perr_and_exit("failed to get tracee registers\n");
-> +	if (regs.orig_a0 != A0_OLD)
-> +		perr_and_exit("unexpected orig_a0: 0x%lx\n", regs.orig_a0);
-> +
-> +	/* Modify a0/orig_a0 for the syscall */
-> +	switch (opt) {
-> +	case A0_MODIFY:
-> +		regs.a0 = A0_NEW;
-> +		break;
-> +	case ORIG_A0_MODIFY:
-> +		regs.orig_a0 = A0_NEW;
-> +		break;
-> +	}
-> +
-> +	if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &iov))
-> +		perr_and_exit("failed to set tracee registers\n");
-> +
-> +	/* Resume the tracee */
-> +	ptrace(PTRACE_CONT, pid, 0, 0);
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee\n");
-> +
-> +	*result = WEXITSTATUS(status);
-> +}
-> +
-> +TEST(ptrace_modify_a0)
-> +{
-> +	int result;
-> +
-> +	ptrace_test(A0_MODIFY, &result);
-> +
-> +	/* The modification of a0 cannot affect the first argument of the syscall */
-> +	EXPECT_EQ(A0_OLD, result);
-> +}
-> +
-> +TEST(ptrace_modify_orig_a0)
-> +{
-> +	int result;
-> +
-> +	ptrace_test(ORIG_A0_MODIFY, &result);
-> +
-> +	/* Only modify orig_a0 to change the first argument of the syscall */
-> +	EXPECT_EQ(A0_NEW, result);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> -- 
-> 2.34.1
+> Regards,
+> Samuel
 > 
-
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-
+> >  
+> >  /* symbolic CSR names: */
+> >  #define CSR_CYCLE		0xc00
+> > 
+> 
 
