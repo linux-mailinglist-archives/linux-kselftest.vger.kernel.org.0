@@ -1,218 +1,259 @@
-Return-Path: <linux-kselftest+bounces-13052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C706C923B43
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 12:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7B2923B20
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 12:14:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3246F283026
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 10:19:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E99E8283C8A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 10:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76235158845;
-	Tue,  2 Jul 2024 10:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C44ED1581EF;
+	Tue,  2 Jul 2024 10:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0tclhjDb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F83A1586D5;
-	Tue,  2 Jul 2024 10:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14873157493;
+	Tue,  2 Jul 2024 10:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719915575; cv=none; b=ZHsCw2kHaqI9nBFuzRFpC25sbY2UDBsFRzZfnJOgZeKQ6JyfDeM8rX9Slevsal7u2ftYbJPK9xdaubgWtjZ1OcmJ/vlZsTyvhNYZ5YOXgqqdQDV1r68LFAEs8isj89T3UNensb1+W2oF/M/pTT85upcjqFYnRTRs2NOBADysYHQ=
+	t=1719915247; cv=none; b=oUBxbQqGBNJ9009ak8MvZiVyadoobGI8+kPPeZTOIcBNDoEH4JJJBCxW67P2SoCLO+9C/Tl14KxLi5V1TyFTI4zgvFmNJhaUS7/8lqPASHDkD6HVKtteCKZBCiT6LS03GZsmW+ZJClfQyYE6/exwhEfTDFD7AJASPEOEJ+kIqms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719915575; c=relaxed/simple;
-	bh=0ajCnf3SAOP6eQuHMw4tQTjVDmgvoTdZApQsPOmIy/8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fadEMSV94xSd2sD7lNbGAuWTP+ddghjaeSEzGEewsoeyNrt1cPGlpXT1rHe7zF1ZDFlNa5YRpEVh/CYNW19xW2S28JxGuaTsU44+IOhM1UwMur8OT4VfOtCrI7iJXX5wajbKrwovAUsIez2NErTEqGsQhgq5TkNlO0YUw66F1ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
-	by Atcsqr.andestech.com with ESMTP id 4629lobI053789;
-	Tue, 2 Jul 2024 17:47:50 +0800 (+08)
-	(envelope-from peterlin@andestech.com)
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 4629kkj0053530
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Tue, 2 Jul 2024 17:46:46 +0800 (+08)
-	(envelope-from peterlin@andestech.com)
-Received: from APC323 (10.0.12.98) by ATCPCS34.andestech.com (10.0.1.134) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 2 Jul
- 2024 17:46:46 +0800
-Date: Tue, 2 Jul 2024 17:46:42 +0800
-From: Yu-Chien Peter Lin <peterlin@andestech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Samuel Holland <samuel.holland@sifive.com>,
-        Charlie Jenkins
-	<charlie@rivosinc.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
-        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt
-	<palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang
-	<jszhang@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec
-	<jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jonathan
- Corbet <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
-        Guo Ren
-	<guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
-        Andy Chiu
-	<andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>,
-        <tim609@andestech.com>, <dminus@andestech.com>,
-        <ycliang@andestech.com>
-Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to the
- D1/D1s devicetree
-Message-ID: <ZoPMEaq8wKzXhFuA@APC323>
-References: <20240619-xtheadvector-v3-0-bff39eb9668e@rivosinc.com>
- <20240619-xtheadvector-v3-3-bff39eb9668e@rivosinc.com>
- <0cc13581-5cc4-4a25-a943-7a896f42da4c@sifive.com>
- <20240701-prancing-outpost-3cbce791c554@spud>
- <7ab7d629-6993-4cad-b5b7-62bddfc74a49@sifive.com>
- <20240701-pyromania-spinster-709a6c8cc460@spud>
+	s=arc-20240116; t=1719915247; c=relaxed/simple;
+	bh=cXBW4k+LFtbqeY3R4gWzZ7cHioln/0kjtKo1pO9erV0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VYD5FftkLyarmnROT1zICVdWwVpTZZd0BopwXGomlmVsuSejhCGQjJB/HVYAkXOgGAyWQg1wacq74UFsl1C9hSrx0P6055UCR5ojeYOY56LMz8lY9YNsVOvEgDgLfypmfeAAyOW65ll/XGwUNJKgsKUfXUeeYs0xYxr8Fw2olSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0tclhjDb; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1719915244;
+	bh=cXBW4k+LFtbqeY3R4gWzZ7cHioln/0kjtKo1pO9erV0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=0tclhjDbZqKGfRHfKV6z4ixp8io+RohuioDODtMI9ZRkBNitiOYLoIlgTb+679TZ7
+	 m1gzk4gDgOE54YN4PHvY5+F2UDHpqT0mReKBiH55lVYomf+esNSixXEPah58JTt/WQ
+	 oprgpNVYzTHloDFEHbMQmXcGYD/3IqP7UkXUiJjB+aO+JTumAnE+Q2ZyCKqkDGW8Lu
+	 6bA0hG1UoRA8UBPy6RM3ZXvn5m1lvu/0NkTkH1HdM2Ywii8/kySNVrUyimAlS16YFX
+	 3E+aUmSbetjLTsnTmpNblvgQFPjTuazzmZHzeW2Z/Yq8ULH/PgG9Ok9TzFBloUDa5L
+	 L02JvTVm0HefA==
+Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5F7683782194;
+	Tue,  2 Jul 2024 10:13:58 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: kernel@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] selftests/thermel/intel: conform the test to TAP output
+Date: Tue,  2 Jul 2024 15:12:52 +0500
+Message-Id: <20240702101259.1251377-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240701-pyromania-spinster-709a6c8cc460@spud>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 4629lobI053789
+Content-Transfer-Encoding: 8bit
 
-Hi Conor,
+Conform the layout, informational and status messages to TAP. No
+functional change is intended other than the layout of output messages.
 
-On Mon, Jul 01, 2024 at 05:31:01PM +0100, Conor Dooley wrote:
-> [EXTERNAL MAIL]
+The test has infitie loop to read the value of index_str. Break the loop
+after successfully reading the value once and finished the test.
 
-> Date: Mon, 1 Jul 2024 17:31:01 +0100
-> From: Conor Dooley <conor@kernel.org>
-> To: Samuel Holland <samuel.holland@sifive.com>
-> Cc: Charlie Jenkins <charlie@rivosinc.com>,
->  linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
->  linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
->  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Conor Dooley
->  <conor.dooley@microchip.com>, Rob Herring <robh@kernel.org>, Krzysztof
->  Kozlowski <krzk+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
->  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
->  Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
->  Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
->  Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Guo Ren
->  <guoren@kernel.org>, Evan Green <evan@rivosinc.com>, Andy Chiu
->  <andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>,
->  peterlin@andestech.com
-> Subject: Re: [PATCH v3 03/13] riscv: dts: allwinner: Add xtheadvector to
->  the D1/D1s devicetree
-> 
-> On Mon, Jul 01, 2024 at 11:11:55AM -0500, Samuel Holland wrote:
-> > Hi Conor, Charlie,
-> > 
-> > On 2024-07-01 11:07 AM, Conor Dooley wrote:
-> > > On Mon, Jul 01, 2024 at 10:27:01AM -0500, Samuel Holland wrote:
-> > >> On 2024-06-19 6:57 PM, Charlie Jenkins wrote:
-> > >>> The D1/D1s SoCs support xtheadvector so it can be included in the
-> > >>> devicetree. Also include vlenb for the cpu.
-> > >>>
-> > >>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > >>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > >>> ---
-> > >>>  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 3 ++-
-> > >>
-> > >> The other C906/C910/C920-based SoCs need devicetree updates as well, although
-> > >> they don't necessarily need to be part of this series:
-> > >>
-> > >>  - sophgo/cv18xx.dtsi
-> > >>  - sophgo/sg2042-cpus.dtsi
-> > >>  - thead/th1520.dtsi
-> > > 
-> > > Yeah, I think I pointed that out before with the same "escape hatch" of
-> > > it not needing to be in the same series.
-> > > 
-> > >>
-> > >>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >>>
-> > >>> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > >>> index 64c3c2e6cbe0..6367112e614a 100644
-> > >>> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > >>> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > >>> @@ -27,7 +27,8 @@ cpu0: cpu@0 {
-> > >>>  			riscv,isa = "rv64imafdc";
-> > >>
-> > >> The ISA string should be updated to keep it in sync with riscv,isa-extensions.
-> > > 
-> > > This probably looks like this cos I said that the kernel shouldn't parse
-> > > vendor extensions from "riscv,isa". My rationale was that we have
-> > > basically no control of what a vendor extension means in riscv,isa so 
-> > > we shouldn't parse them from it (so marginally worse than standard
-> > > extensions, where it means what the spec says except when it doesn't).
-> > > 
-> > > Given how we implement the parsing, it also meant we weren't implying
-> > > meanings for vendor extensions ACPI-land, where we also can't ensure the
-> > > meanings or that they remain stable. That change is in a different
-> > > series:
-> > > https://patchwork.kernel.org/project/linux-riscv/patch/20240609-support_vendor_extensions-v2-1-9a43f1fdcbb9@rivosinc.com/
-> > > 
-> > > Although now that I think about it, this might break xandespmu... I
-> > > dunno if the Andes guys switched over to using the new property outside
-> > > of the single dts in the kernel tree using their SoC. We could
-> > > potentially special-case that extension if they haven't - but my
-> > > position on this mostly is that if you want to use vendor extensions you
-> > > should not be using riscv,isa (even if the regex doesn't complain if you
-> > > add them). I'd like to leave the code in the other patch as-is if we can
-> > > help it.
-> > > 
-> > > I added Yu Chien Peter Lin here, maybe they can let us know what they're
-> > > doing.
-> > 
-> > OK, that makes sense to me. Then please ignore my original comment.
-> 
-> Should the xandespmu thing be an issue, I'd suggest we just do something
-> like the following, in place of the new switch arm added by Charlie:
-> 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index ec4bff7a827c..bb99b4055ec2 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -628,6 +628,17 @@ static void __init riscv_parse_isa_string(const char *isa, unsigned long *bitmap
->  		if (unlikely(ext_err))
->  			continue;
->  
-> +		if (*ext == 'x' && acpi_disabled) {
-> +			/*
-> +			 * xandespmu predates this "rule", so special case it for
-> +			 * hysterical raisins
-> +			 */
-> +			if (strncasecmp(ext, "xandespmu", ext_end - ext)) {
-> +				pr_warn_once("Vendor extensions are ignored in riscv,isa. Use riscv,isa-extensions instead.");
-> +				break;
-> +			}
-> +		}
-> +
->  		match_isa_ext(ext, ext_end, bitmap);
->  	}
->  }
-> 
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v1:
+- Use ksft_exit_fail_perror if read() returns error
+- Break the infinite loop after printing index_str
+---
+ .../intel/workload_hint/workload_hint_test.c  | 103 ++++++++----------
+ 1 file changed, 43 insertions(+), 60 deletions(-)
 
-Thanks for the hands-up!
-We don't use the deprecated riscv,isa to specify xandespmu, so no
-need to address this special case.
+diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+index 217c3a641c537..0e5f07efc8a2b 100644
+--- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
++++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+@@ -9,6 +9,7 @@
+ #include <fcntl.h>
+ #include <poll.h>
+ #include <signal.h>
++#include "../../../kselftest.h"
+ 
+ #define WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/notification_delay_ms"
+ #define WORKLOAD_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_hint_enable"
+@@ -31,17 +32,13 @@ void workload_hint_exit(int signum)
+ 	/* Disable feature via sysfs knob */
+ 
+ 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
+-	if (fd < 0) {
+-		perror("Unable to open workload type feature enable file\n");
+-		exit(1);
+-	}
++	if (fd < 0)
++		ksft_exit_fail_perror("Unable to open workload type feature enable file");
+ 
+-	if (write(fd, "0\n", 2) < 0) {
+-		perror("Can' disable workload hints\n");
+-		exit(1);
+-	}
++	if (write(fd, "0\n", 2) < 0)
++		ksft_exit_fail_perror("Can' disable workload hints");
+ 
+-	printf("Disabled workload type prediction\n");
++	ksft_print_msg("Disabled workload type prediction\n");
+ 
+ 	close(fd);
+ }
+@@ -54,32 +51,27 @@ int main(int argc, char **argv)
+ 	char delay_str[64];
+ 	int delay = 0;
+ 
+-	printf("Usage: workload_hint_test [notification delay in milli seconds]\n");
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	ksft_print_msg("Usage: workload_hint_test [notification delay in milli seconds]\n");
+ 
+ 	if (argc > 1) {
+ 		ret = sscanf(argv[1], "%d", &delay);
+-		if (ret < 0) {
+-			printf("Invalid delay\n");
+-			exit(1);
+-		}
++		if (ret < 0)
++			ksft_exit_fail_perror("Invalid delay");
+ 
+-		printf("Setting notification delay to %d ms\n", delay);
++		ksft_print_msg("Setting notification delay to %d ms\n", delay);
+ 		if (delay < 0)
+-			exit(1);
+-
+-		sprintf(delay_str, "%s\n", argv[1]);
++			ksft_exit_fail_msg("delay can never be negative\n");
+ 
+ 		sprintf(delay_str, "%s\n", argv[1]);
+ 		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
+-		if (fd < 0) {
+-			perror("Unable to open workload notification delay\n");
+-			exit(1);
+-		}
++		if (fd < 0)
++			ksft_exit_fail_perror("Unable to open workload notification delay");
+ 
+-		if (write(fd, delay_str, strlen(delay_str)) < 0) {
+-			perror("Can't set delay\n");
+-			exit(1);
+-		}
++		if (write(fd, delay_str, strlen(delay_str)) < 0)
++			ksft_exit_fail_perror("Can't set delay");
+ 
+ 		close(fd);
+ 	}
+@@ -93,65 +85,56 @@ int main(int argc, char **argv)
+ 
+ 	/* Enable feature via sysfs knob */
+ 	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
+-	if (fd < 0) {
+-		perror("Unable to open workload type feature enable file\n");
+-		exit(1);
+-	}
++	if (fd < 0)
++		ksft_exit_fail_perror("Unable to open workload type feature enable file");
+ 
+-	if (write(fd, "1\n", 2) < 0) {
+-		perror("Can' enable workload hints\n");
+-		exit(1);
+-	}
++	if (write(fd, "1\n", 2) < 0)
++		ksft_exit_fail_perror("Can' enable workload hints");
+ 
+ 	close(fd);
+ 
+-	printf("Enabled workload type prediction\n");
++	ksft_print_msg("Enabled workload type prediction\n");
+ 
+ 	while (1) {
+ 		fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE, O_RDONLY);
+-		if (fd < 0) {
+-			perror("Unable to open workload type file\n");
+-			exit(1);
+-		}
++		if (fd < 0)
++			ksft_exit_fail_perror("Unable to open workload type file");
+ 
+-		if ((lseek(fd, 0L, SEEK_SET)) < 0) {
+-			fprintf(stderr, "Failed to set pointer to beginning\n");
+-			exit(1);
+-		}
++		if ((lseek(fd, 0L, SEEK_SET)) < 0)
++			ksft_exit_fail_perror("Failed to set pointer to beginning");
+ 
+-		if (read(fd, index_str, sizeof(index_str)) < 0) {
+-			fprintf(stderr, "Failed to read from:%s\n",
+-			WORKLOAD_TYPE_INDEX_ATTRIBUTE);
+-			exit(1);
+-		}
++		if (read(fd, index_str, sizeof(index_str)) < 0)
++			ksft_exit_fail_perror("Failed to read from: workload_type_index");
+ 
+ 		ufd.fd = fd;
+ 		ufd.events = POLLPRI;
+ 
+ 		ret = poll(&ufd, 1, -1);
+ 		if (ret < 0) {
+-			perror("poll error");
+-			exit(1);
++			ksft_exit_fail_perror("poll error");
+ 		} else if (ret == 0) {
+-			printf("Poll Timeout\n");
++			ksft_print_msg("Poll Timeout\n");
+ 		} else {
+-			if ((lseek(fd, 0L, SEEK_SET)) < 0) {
+-				fprintf(stderr, "Failed to set pointer to beginning\n");
+-				exit(1);
+-			}
++			if ((lseek(fd, 0L, SEEK_SET)) < 0)
++				ksft_exit_fail_perror("Failed to set pointer to beginning");
+ 
+ 			if (read(fd, index_str, sizeof(index_str)) < 0)
+-				exit(0);
++				ksft_exit_fail_perror("Failed to read");
+ 
+ 			ret = sscanf(index_str, "%d", &index);
+ 			if (ret < 0)
++				ksft_exit_fail_msg("Read negative value unexpectedly\n");
++			if (index > WORKLOAD_TYPE_MAX_INDEX) {
++				ksft_print_msg("Invalid workload type index\n");
++			} else {
++				ksft_print_msg("workload type:%s\n", workload_types[index]);
+ 				break;
+-			if (index > WORKLOAD_TYPE_MAX_INDEX)
+-				printf("Invalid workload type index\n");
+-			else
+-				printf("workload type:%s\n", workload_types[index]);
++			}
+ 		}
+ 
+ 		close(fd);
+ 	}
++
++	ksft_test_result_pass("Successfully read\n");
++	ksft_finished();
+ }
+-- 
+2.39.2
 
-Regards,
-Peter Lin
 
