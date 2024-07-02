@@ -1,88 +1,170 @@
-Return-Path: <linux-kselftest+bounces-13091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66980924BA7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 00:39:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34802924BFE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 01:08:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C409DB2214E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 22:39:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 581061C225E6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2024 23:08:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A6D12EBF3;
-	Tue,  2 Jul 2024 22:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B0717A58A;
+	Tue,  2 Jul 2024 23:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NY4oq/I7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKOeoQz2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD0C1DA30E;
-	Tue,  2 Jul 2024 22:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BD91DA30B;
+	Tue,  2 Jul 2024 23:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719959966; cv=none; b=Y2iZciSXqiRy+gqhnrRuYhuhf2AIWJiXBVedmPY3TS3JrrCc7cH6qSlIoHsByBw2xjKG9bOx81qDvN6APvTopufHXqvAz3sGO34lOC0caJNeag5X/EGgoPTAL98oJZAWAfnH2h6oIb9+ohVS7DaxYORwGLfFRcgCrAnSj8F1s8g=
+	t=1719961699; cv=none; b=e9+7SSH2reRIIItYNF4rsG68lR+b2byhWWhD0oeXwgxPw8CWrcv6SpEbk9niSEcEwGiwRRFvTb3kM6vi0BEWR8SbAhzWqxDHN0qeIwdAUWgqguGeBGm0X9PdTrMLG8RuapOdd6lPIPY8giu4eUdsBbaR1248HQZ55pvW8IcX6wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719959966; c=relaxed/simple;
-	bh=LgnI/y/ID6Jy6F31lOFO9UJIUnQJCf1qYLS9n9iNhAM=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=gdfD1TOH4iwuoqIkRMOx9uIS9+yZRbkmsVZ3HgiWtDLxJ4tuZWT+3gL6Fx2+o7sEeagUzvXhJFmMsMcFv95rGFf7XHCH0M4w/nDZuSMBefIR1nChmyww3tEuamZA4wBLGBv0KUy1MPavYsG2gBM2pxWoxmRgUsHgR4VNqsg9qNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NY4oq/I7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59534C116B1;
-	Tue,  2 Jul 2024 22:39:25 +0000 (UTC)
+	s=arc-20240116; t=1719961699; c=relaxed/simple;
+	bh=4v44RV6ZEhl5+m0N3QwHq5yw1b9JD/QuNu1dEFKSJeM=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=s8P9nPTBw+Dzi7fIL640QLZlXjrwymsghhDuCaGEc3oJYfd2regOUSfl249Vjdsb4OE7V4Ip1z+glS9ptgT5WKPQzFy2hyoU/Ym5eu7dSK62YteqH45OEGJSEvCFux2ZmmHoqVdFpJZt1Uiu7Hbf/eihDhTU12CwNdthb5fNAHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKOeoQz2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45151C116B1;
+	Tue,  2 Jul 2024 23:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719959965;
-	bh=LgnI/y/ID6Jy6F31lOFO9UJIUnQJCf1qYLS9n9iNhAM=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=NY4oq/I7w5IZfNPKQcSPPbrf+mR/IhrVFUXlrVxQQXGchIqAFgHzIxznu7UQeAf3+
-	 r5kwVgJVg9xCHZAccEJxvWG95SADm+ZQdSsSzAhuDYVbvddjyurP3UYSzR2Se5UUS9
-	 MLaFmKTtYwNkODF7N0fjGJq7J7MCiwj64AcybBuRRcmZSqsM9P+a/uVQGb9cssmtNV
-	 in4oHMY7hzoQ1QwWZiq/q1epeB37+ivyO3OmOT6eqgtzBkk4aTkujQDjAMsa3O+jcb
-	 ki2+UyIFajsB6ky8XlKMwjIwuWltdSzNoIE1HQhYahkPAf4ED4VxLPuc66EI16Jw6o
-	 H9G6DSxj0QsQw==
-Message-ID: <2863a45a9fa0479707672c52164ceb0d.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1719961699;
+	bh=4v44RV6ZEhl5+m0N3QwHq5yw1b9JD/QuNu1dEFKSJeM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hKOeoQz2MrfDh4zxOhfGVOl7TDqIfZolkzOZUV+QX1k8sEnbvumGB5RtIv80SPRPE
+	 3hyWP6JFC3nUhnCTbUt/PqY1WWRkH5AOg13+pgqhl5nGQhQFyAT2nsaf4Q0qROpKZN
+	 QuGCPr5/vYMe3VDgf/o7S1DYa6MRsJXJZeCRSNhMvXbi4NoW41FD6UioTveZNLCFyQ
+	 Fs0jcejnZmGxR2RNn/WIf4Jy7Jv7RUPl3oN69Q6Kp5/LhAcCYVmvLID+hG7OnKawg+
+	 X8q51OjG2l7n0tp6fR6QTUMZ4sRVR5cjSIW6EOO7q9DO8d6a6fnFfTi9r0zbdNra57
+	 QXjQq7RKiM0rA==
+Date: Wed, 3 Jul 2024 08:08:14 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Tom Zanussi <zanussi@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] tracing: Support poll on event hist file
+Message-Id: <20240703080814.c8bbe5b27ad70a5520262a6d@kernel.org>
+In-Reply-To: <4ec0e4822293763691d8699750b0df88385ab646.camel@kernel.org>
+References: <171932861260.584123.15653284949837094747.stgit@devnote2>
+	<4ec0e4822293763691d8699750b0df88385ab646.camel@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOS=duqR0Lea0i92pWR-618iRGkvvATk30MJrU7RRDR8LPg@mail.gmail.com>
-References: <20240603223811.3815762-1-sboyd@kernel.org> <20240603223811.3815762-3-sboyd@kernel.org> <CABVgOS=duqR0Lea0i92pWR-618iRGkvvATk30MJrU7RRDR8LPg@mail.gmail.com>
-Subject: Re: [PATCH v5 02/11] of: Add test managed wrappers for of_overlay_apply()/of_node_put()
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>
-To: David Gow <davidgow@google.com>
-Date: Tue, 02 Jul 2024 15:39:23 -0700
-User-Agent: alot/0.10
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Quoting David Gow (2024-06-13 00:48:54)
->=20
-> This looks good to me.
->=20
-> I was a little confused at first by some of the wrapper names: in
-> particular that of_overlay_fdt_apply_kunit() is applying the overlay
-> immediately, and deferring a cleanup action, but of_node_put_kunit()
-> is not doing anything immediately, and deferring the put action. My
-> feeling is that the ideal thing would be to have wrappers for all of
-> the of_* functions which return a node which needs to be 'put', and
-> have those wrappers add an of_node_put() action. You could then have
-> of_node_put_kunit() provide a way to trigger that action early. But
-> that seems like it'd be a lot of work and generate a lot of wrappers
-> we otherwise wouldn't need, so this seems an okay compromise to be
-> able to keep using the existing of_ functions. The documentation /
-> comments help make this more clear, too.
->=20
-> So, no actual problems. (Assuming you don't want to put the
-> documentation under the devicetree rather than under KUnit -- it can
-> go either way.)
->=20
-> Reviewed-by: David Gow <davidgow@google.com>
->=20
+On Sun, 30 Jun 2024 16:07:43 -0500
+Tom Zanussi <zanussi@kernel.org> wrote:
 
-Thanks. I'll just leave this alone as I feel like the kunit postfix
-means "do stuff when test is done".
+> Hi Masami,
+> 
+> On Wed, 2024-06-26 at 00:16 +0900, Masami Hiramatsu (Google) wrote:
+> > Hi,
+> > 
+> > Here is an RFC patch to support polling on event 'hist' file.
+> > 
+> > There has been interest in allowing user programs to monitor kernel
+> > events in real time. Ftrace provides `trace_pipe` interface to wait
+> > on events in the ring buffer, but it is needed to wait until filling
+> > up a page with events in the ring buffer. We can also peek the
+> > `trace` file periodically, but that is inefficient way to monitor
+> > a randomely happening event.
+> > 
+> > This patch set allows user to `poll`(or `select`, `epoll`) on event
+> > histogram interface. As you know each event has its own `hist` file
+> > which shows histograms generated by trigger action. So user can set
+> > a new hist trigger on any event you want to monitor, and poll on the
+> > `hist` file until it is updated.
+> > 
+> > There are 2 poll events are supported, POLLIN and POLLPRI. POLLIN
+> > means that there are any readable update on `hist` file and this
+> > event will be flashed only when you call read(). So, this is
+> > useful if you want to read the histogram periodically.
+> > The other POLLPRI event is for monitoring trace event. Like the
+> > POLLIN, this will be returned when the histogram is updated, but
+> > you don't need to read() the file and use poll() again.
+> > 
+> > Note that this waits for histogram update (not event arrival), thus
+> > you must set a histogram on the event at first.
+> > 
+> > Here is an example usage:
+> > 
+> > ----
+> > TRACEFS=/sys/kernel/tracing
+> > EVENT=$TRACEFS/events/sched/sched_process_free
+> > 
+> > # setup histogram trigger and enable event
+> > echo "hist:key=comm" >> $EVENT/trigger
+> > echo 1 > $EVENT/enable
+> > 
+> > # Wait for update
+> > poll $EVENT/hist
+> > 
+> > # Event arrived.
+> > echo "process free event is comming"
+> > tail $TRACEFS/trace
+> > ----
+> > 
+> > The 'poll' command is in the selftest patch.
+> > 
+> > You can take this series also from here;
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/event-hist-poll
+> > 
+> > Thank you,
+> 
+> I think this is a clever use of the histogram files, and will be very
+> useful for real-time monitoring apps. I'm looking forward to using it
+> myself - thanks for doing this.
+> 
+> For the whole series,
+> 
+> Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+
+Thanks Tom!
+
+I found an issue in the selftests (can not support old stable kernel) so
+let me update it.
+
+Thank you,
+
+> 
+> > 
+> > ---
+> > 
+> > Masami Hiramatsu (Google) (3):
+> >       tracing/hist: Add poll(POLLIN) support on hist file
+> >       tracing/hist: Support POLLPRI event for poll on histogram
+> >       selftests/tracing: Add hist poll() support test
+> > 
+> > 
+> >  include/linux/trace_events.h                       |    5 +
+> >  kernel/trace/trace_events.c                        |   18 ++++
+> >  kernel/trace/trace_events_hist.c                   |  101
+> > +++++++++++++++++++-
+> >  tools/testing/selftests/ftrace/Makefile            |    3 +
+> >  tools/testing/selftests/ftrace/poll.c              |   34 +++++++
+> >  .../ftrace/test.d/trigger/trigger-hist-poll.tc     |   46 +++++++++
+> >  6 files changed, 204 insertions(+), 3 deletions(-)
+> >  create mode 100644 tools/testing/selftests/ftrace/poll.c
+> >  create mode 100644
+> > tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+> > 
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
