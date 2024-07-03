@@ -1,163 +1,165 @@
-Return-Path: <linux-kselftest+bounces-13130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E5D926385
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 16:36:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9AC49263D4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 16:51:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DE541C214A7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 14:36:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BDBAB2ACFF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 14:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F85117B424;
-	Wed,  3 Jul 2024 14:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB38117B41F;
+	Wed,  3 Jul 2024 14:48:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XedO6SOC"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Q48s6RI8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF8118C08;
-	Wed,  3 Jul 2024 14:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF3A175555;
+	Wed,  3 Jul 2024 14:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720017389; cv=none; b=Y46P7DHjy3XcqDLA3jRyeL52GNU4fOMTc9IGaX5o+9Bg+5/7ptJYBLwdx+dvnoQCeMMnA/wB9n+ygpSIhXRkhG3DeljcMREwxB323yDHrt+lUOjDTGy1s6tFYWog+o7ZBv+qiM06+C929AoecanFUjjuacgvCENr67d5gghtq94=
+	t=1720018105; cv=none; b=r5SEiSZ4kcRk2A240+9BrHGmQhdEVis8k/oltnCaBlUE9Mm4S0X6fE4QWuAUwxLyhIrGgId+sWq28aSn6uQJfZ1cWVSWaSpUMDdyjm421pWXjA++A9TN2hDK65Pv8hnMPZZfZEy4X/ZcO0YSYvnmVOYAe0VZO/p8Udp5+GCdHyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720017389; c=relaxed/simple;
-	bh=0FRQ/R/L7Gbr+E5NMPB583fDoSDZ+fMcFqkwqezzyfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m6dkUzR6YPa4UZ6QDJCF5Qt3/X8WkS6dPm3bdusbc/hXyeFmF193/O4oCQrsSgZQnYaz0IpPfq86h3feeZv45luXqdcY913OE+uoJXf1ROu2Ihlxuf33/fpKzB+HIDE9GB4G3qnQovp9u76uvI67GFLhqHTQK+bD4pEstHcxut0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XedO6SOC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72812C2BD10;
-	Wed,  3 Jul 2024 14:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720017388;
-	bh=0FRQ/R/L7Gbr+E5NMPB583fDoSDZ+fMcFqkwqezzyfk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XedO6SOC064WlD2AAR0roKkRMad5NWj+aUN3DQmnvW/HYoyZmxgXCAzgtENP6rlhI
-	 85KCzyuwI7Fb/du6Ne9/B2/MTPHqnCOALJxyz3ST1/fVmJDyqFIYNZcs/af/Sk4g6K
-	 MI7YjtLkcJMsJPUlPk464hFjVNW3y8eHxn7/GYb0=
-Date: Wed, 3 Jul 2024 16:36:25 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Roman Kagan <rkagan@amazon.de>
-Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Fares Mehanna <faresx@amazon.de>, Alexander Graf <graf@amazon.de>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	linux-kselftest@vger.kernel.org, nh-open-source@amazon.com,
-	linux-mm@kvack.org, David Woodhouse <dwmw@amazon.co.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH RFC 3/3] drivers/misc: add test driver and selftest for
- proclocal allocator
-Message-ID: <2024070305-dining-giggly-587b@gregkh>
-References: <20240621201501.1059948-1-rkagan@amazon.de>
- <20240621201501.1059948-4-rkagan@amazon.de>
+	s=arc-20240116; t=1720018105; c=relaxed/simple;
+	bh=sSmi/QQtkeOZdLU3gOEqDxI3RiWJeWbg7igI09J26/0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=kKZ7hAP2BXhy+14H+9YgDTlROzufrE2/8A020dHo065KpnLGc4RJ9qiESlmX9q8eUhuWGjVPSIp5H7PXtrvCz0tMY9buCv6UAz/l/37BQaaRp6aM6lIHzntV2nNlt+iTQuWvrH3P1ibeS8tHpA8wKAnJp+aAatULYO245z586Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Q48s6RI8; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1720018100;
+	bh=sSmi/QQtkeOZdLU3gOEqDxI3RiWJeWbg7igI09J26/0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Q48s6RI8N+y96cIfFNYxS73uByb5ja1AYUcBxfwXrTl72x1ycffDXcCJRlRxkTuza
+	 RGxG1Xwfk5vxaWIXrxoL0uFoTT5ncoiLlY1wAVqnR1XpX9r7z3wBgrfgQUdpu4uasB
+	 kPDqQmXdWlmZOZAWkI5fEbr9sS6no1VmkqMjMc36yOQh0Z9s9ulO8x5SaQ8eUCxzpT
+	 /0h5ry0XTrIsTmMscyDSBJY3TGQl+jHD25ekM7wexHmsH1c8sVHGFZNF1l5s/YlNoS
+	 DUAa/+9iKJhMRfin2E0ExNMXukgYW36DZXqutcZAcMmLNP76X9nMJ80XDveacWfUd/
+	 xdHTANYUTItUQ==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C698837821A0;
+	Wed,  3 Jul 2024 14:48:19 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: skhan@linuxfoundation.org
+Cc: kernel@collabora.com,
+	laura.nao@collabora.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH 1/2] selftests/watchdog: limit ping loop and allow configuring the number of pings
+Date: Wed,  3 Jul 2024 16:48:55 +0200
+Message-Id: <20240703144855.89747-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <818d06c2-c5d6-4559-a8c9-9bf9e21c30f6@linuxfoundation.org>
+References: <818d06c2-c5d6-4559-a8c9-9bf9e21c30f6@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240621201501.1059948-4-rkagan@amazon.de>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 21, 2024 at 10:15:01PM +0200, Roman Kagan wrote:
-> Introduce a simple driver for functional and stress testing of proclocal
-> kernel allocator.  The driver exposes a device node /dev/proclocal-test,
-> which allows userland programs to request creation of proclocal areas
-> and to obtain their addresses as seen by the kernel, and in addition to
-> read and write kernel memory at arbitrary address content (simplified
-> /dev/kmem good enough to access proclocal allocations under selftest
-> responsibility).
+On 6/27/24 20:48, Shuah Khan wrote:
+> On 5/6/24 05:13, Laura Nao wrote:
+>> In order to run the watchdog selftest with the kselftest runner, the
+>> loop responsible for pinging the watchdog should be finite. This
+>> change limits the loop to 5 iterations by default and introduces a new
+>> '-c' option to adjust the number of pings as needed.
 > 
-> The driver is not meant for use with production kernels, as it exposes
-> internal kernel pointers and data.
+> This patch makes the test run finite in all cases changing the bevavior
+> to run it forever?
 
-Then you MUST taint the kernel and throw up huge warnings whenever it is
-loaded, otherwise distros will build this in and end up running it.
+Correct.
 
-
+>>
+>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>> ---
+>>   tools/testing/selftests/watchdog/watchdog-test.c | 16 ++++++++++++++--
+>>   1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c 
+>> b/tools/testing/selftests/watchdog/watchdog-test.c
+>> index bc71cbca0dde..786cc5a26206 100644
+>> --- a/tools/testing/selftests/watchdog/watchdog-test.c
+>> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
+>> @@ -24,16 +24,18 @@
+>>   #include <linux/watchdog.h>
+>>   #define DEFAULT_PING_RATE    1
+>> +#define DEFAULT_PING_COUNT    5
+>>   int fd;
+>>   const char v = 'V';
+>> -static const char sopts[] = "bdehp:st:Tn:NLf:i";
+>> +static const char sopts[] = "bdehp:c:st:Tn:NLf:i";
+>>   static const struct option lopts[] = {
+>>       {"bootstatus",          no_argument, NULL, 'b'},
+>>       {"disable",             no_argument, NULL, 'd'},
+>>       {"enable",              no_argument, NULL, 'e'},
+>>       {"help",                no_argument, NULL, 'h'},
+>>       {"pingrate",      required_argument, NULL, 'p'},
+>> +    {"pingcount",     required_argument, NULL, 'c'},
+>>       {"status",              no_argument, NULL, 's'},
+>>       {"timeout",       required_argument, NULL, 't'},
+>>       {"gettimeout",          no_argument, NULL, 'T'},
+>> @@ -90,6 +92,8 @@ static void usage(char *progname)
+>>       printf(" -h, --help\t\tPrint the help message\n");
+>>       printf(" -p, --pingrate=P\tSet ping rate to P seconds (default 
+>> %d)\n",
+>>              DEFAULT_PING_RATE);
+>> +    printf(" -c, --pingcount=C\tSet number of pings to C (default 
+>> %d)\n",
+>> +           DEFAULT_PING_COUNT);
+>>       printf(" -t, --timeout=T\tSet timeout to T seconds\n");
+>>       printf(" -T, --gettimeout\tGet the timeout\n");
+>>       printf(" -n, --pretimeout=T\tSet the pretimeout to T seconds\n");
+>> @@ -172,6 +176,7 @@ int main(int argc, char *argv[])
+>>   {
+>>       int flags;
+>>       unsigned int ping_rate = DEFAULT_PING_RATE;
+>> +    unsigned int ping_count = DEFAULT_PING_COUNT;
+>>       int ret;
+>>       int c;
+>>       int oneshot = 0;
+>> @@ -248,6 +253,12 @@ int main(int argc, char *argv[])
+>>                   ping_rate = DEFAULT_PING_RATE;
+>>               printf("Watchdog ping rate set to %u seconds.\n", 
+>> ping_rate);
+>>               break;
+>> +        case 'c':
+>> +            ping_count = strtoul(optarg, NULL, 0);
+>> +            if (!ping_count)
+>> +                ping_count = DEFAULT_PING_COUNT;
+>> +            printf("Number of pings set to %u.\n", ping_count);
+>> +            break;
+>>           case 's':
+>>               flags = 0;
+>>               oneshot = 1;
+>> @@ -336,9 +347,10 @@ int main(int argc, char *argv[])
+>>       signal(SIGINT, term);
+>> -    while (1) {
+>> +    while (ping_count > 0) {
+>>           keep_alive();
+>>           sleep(ping_rate);
+>> +        ping_count--;
 > 
-> Also add a basic selftest that uses this driver.
-> 
-> Signed-off-by: Roman Kagan <rkagan@amazon.de>
-> ---
->  drivers/misc/Makefile                         |   1 +
->  tools/testing/selftests/proclocal/Makefile    |   6 +
->  drivers/misc/proclocal-test.c                 | 200 ++++++++++++++++++
->  .../selftests/proclocal/proclocal-test.c      | 150 +++++++++++++
->  drivers/misc/Kconfig                          |  15 ++
->  tools/testing/selftests/proclocal/.gitignore  |   1 +
->  6 files changed, 373 insertions(+)
->  create mode 100644 tools/testing/selftests/proclocal/Makefile
->  create mode 100644 drivers/misc/proclocal-test.c
->  create mode 100644 tools/testing/selftests/proclocal/proclocal-test.c
->  create mode 100644 tools/testing/selftests/proclocal/.gitignore
-> 
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 153a3f4837e8..33c244cee92d 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -69,3 +69,4 @@ obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
->  obj-$(CONFIG_TPS6594_ESM)	+= tps6594-esm.o
->  obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
->  obj-$(CONFIG_NSM)		+= nsm.o
-> +obj-$(CONFIG_PROCLOCAL_TEST)	+= proclocal-test.o
-> diff --git a/tools/testing/selftests/proclocal/Makefile b/tools/testing/selftests/proclocal/Makefile
-> new file mode 100644
-> index 000000000000..b93baecee762
-> --- /dev/null
-> +++ b/tools/testing/selftests/proclocal/Makefile
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +TEST_GEN_PROGS := proclocal-test
-> +CFLAGS += -O2 -g -Wall $(KHDR_INCLUDES)
-> +
-> +include ../lib.mk
-> diff --git a/drivers/misc/proclocal-test.c b/drivers/misc/proclocal-test.c
-> new file mode 100644
-> index 000000000000..9b3d0ed9b2f9
-> --- /dev/null
-> +++ b/drivers/misc/proclocal-test.c
-> @@ -0,0 +1,200 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (C) 2024 Amazon.com, Inc. or its affiliates. All rights reserved.
-> + * Author: Roman Kagan <rkagan@amazon.de>
-> + *
-> + * test driver for proclocal memory allocator
-> + */
-> +
-> +#include <linux/compat.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/module.h>
-> +#include <linux/workqueue.h>
-> +#include <linux/file.h>
-> +#include <linux/secretmem.h>
-> +
-> +struct proclocal_test_alloc {
-> +	u64 size;
-> +	u64 ptr;
+> So this test no longer runs forever?
+>
 
-This structure is not defined properly to cross the user/kernel boundry :(
+That's correct, with this patch applied the test no longer runs forever. 
+I understand you prefer the current behavior - how about keeping the
+keep_alive() loop infinite by default and only making it finite when the 
+-c argument is passed? Would that be reasonable?
 
-> +};
-> +
-> +#define PROCLOCAL_TEST_ALLOC _IOWR('A', 0x10, struct proclocal_test_alloc)
+Thanks for your feedback!
 
-ioctl definitions belong in a .h file for userspace to be able to see
-them.
-
-> +
-> +#define BOUNCE_BUF_SIZE PAGE_SIZE
-
-Then why not just use PAGE_SIZE everywhere?  Less characters and we all
-know what that is.
-
-Stopped reviewing here, sorry.
-
-greg k-h
+Laura
 
