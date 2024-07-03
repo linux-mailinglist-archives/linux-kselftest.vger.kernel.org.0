@@ -1,149 +1,187 @@
-Return-Path: <linux-kselftest+bounces-13148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62961926B0E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 23:59:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD0C6926C55
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 01:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 182EC287805
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 21:59:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38A461F20FDF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 23:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3B2190694;
-	Wed,  3 Jul 2024 21:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24C41849D7;
+	Wed,  3 Jul 2024 23:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WENO2WB/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hqHMl/tq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADAE191F83
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jul 2024 21:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5E24964E
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jul 2024 23:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720043945; cv=none; b=h5P0fcSClJLBiTatnGG+W8LAIN6fYyWNpP9+sTxj234HVpYjodahubLUq8yit58Gt/Itxb8dsLwpJ5aYNLDLX0R4MRDbGKyR4LIfdMP1bjTq26a7sOGgB64wE/+0kC6EGethYB1Yi6zzEt2lOjER9WnUv+r3uimM+JT5Nn3otWU=
+	t=1720048262; cv=none; b=BnWecBy3vWyU6kh1X/2hHr44xC6vuvKyIJomNfWLFyjGC3lGGYTAO+5MnjP9lc2xRyqiuRlVgH8Yxwq/dEl/SzovSlmNt635VTLPJxwkpJmBWprx475KMsuLO38R0K4BUs2qUsBy64ptrM5fvkwTGSfncI4l5sbdkE+BrstDgu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720043945; c=relaxed/simple;
-	bh=jTceZ6tcMFtSLFYUf7A45plpGk9lmqX7LBCs/KBdXMY=;
+	s=arc-20240116; t=1720048262; c=relaxed/simple;
+	bh=r0uAG+k85KUhnmC0RU/sPMM+jlY/KvzKUPnko0MwoA4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jk8FuMbUZwEqxphpp3AJA4JyM/Tj9/60FpXIHyoT8xTo+Zcycr6vu8FId7Xy5uvHCoKYPCJfpMkH/e6KdJlQ/U7tbvGbTxSLFxzDU6PvKWkRLvrLSFBhvUyFQKstxeFz2VREMGJdTx8EsWS0bA2ihY+SezEzdhSk+635474ruf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WENO2WB/; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: geliang@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720043941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+fen3yivM0mQuV5qiw5nLhixaTvtW1b4Tkj9KwU5CqI=;
-	b=WENO2WB/coqXpb4NZTAWc7p17euc8VAG1uOSHKlbGhmiYS5Gh9T7aUY1cxki1vVMl4DWgf
-	Rd//tMySf1BczcWGn3II/wfvOc0ioMWj2JrfJCFL4KB0gi/MsLsxOGGl/KPqSklJMy5upb
-	vPWEkG8E1w+xMz2FeYguZxDGMIhRuE0=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: sdf@google.com
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Message-ID: <b4c79f80-577a-4372-b32d-33587077d6b5@linux.dev>
-Date: Wed, 3 Jul 2024 14:58:56 -0700
+	 In-Reply-To:Content-Type; b=Wt/ytTcyjtbUPAL4ANZE7iNbblZgAFBgD0O2jzreNLADq7zutSVLLaS1N7tVnuQ78+7r0tHLTvGn953DKHfw4nUSV5/mwANiCyLKZ2t44+Xk+3u5g+IWsQM3AeO7u9QTRvK7716LFrc276pB8L8qpJnAVBA4f626TlKDAOG1Yzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hqHMl/tq; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7f653005b54so163039f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jul 2024 16:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720048260; x=1720653060; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OMhBfo2AqOtt3z+XF5sqTNNiKJEZsUksgQMqNwJunyk=;
+        b=hqHMl/tqGCSeepVnEPVjW4Topdg6qeJkbrXcLs5KHPtJJmf+RWvBH+b89Qw8Skorpf
+         RoDlmU/QSzf6guikqhveHqwjjH8U3yDVsBZAprIYsdOP/wsWStwAKpkMm4CwBsXnSBty
+         nZziRgAG5Wb6V4mPhU0O4g/O8J7+JgmUeqy3s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720048260; x=1720653060;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMhBfo2AqOtt3z+XF5sqTNNiKJEZsUksgQMqNwJunyk=;
+        b=J8vX/h7cOaNjzjG+LJ2NphStaq6znxQZsDwzvv85j4Y+7ULcGil7ktQSjMyojcNrYB
+         EKVegwkZcD6FABD/SMrJi892kUxBfQu0wHDAfwA+3nalUAEj1tzR2J4iuPyue99TLi6D
+         pIpiGMatLe9+uQLtfRSEYvMLWInDpBYkOQ6YYDGYHFpAxoLFwpx1ayHJcGOdEeiMDcF7
+         EATXk65pgF4hNczTaa7Ym5NJ0AHOXo1E7hzBPIJOxeLJyMnq9VAoQ9iXx96HpPQPeAvk
+         7H+5pWnmy7GYPZCO827TS/gC7p81FX8BP/DNVchaVoFOhx44dff1XrRGuyxd+llb8QL9
+         pqPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/Z/JdE8bN9s2FEv22PBcIil2sC0yzwA//7NB0PFnEXfVzfRy+CnAqzFlpmEs4f1HRCkzUPY59ZFCvf8Dgf/4jodgcZA6MhOto5khrnJP5
+X-Gm-Message-State: AOJu0YxetnYqeiDL5jRNC7WNs6LYLp/WJwWBqfR/br9SEes3neRlERf/
+	IIu1Ez8WoXl8ejypx+wG16KhnJDDVgQN6iyeB+xH0nTjhNOzHSdQRBM35Ilg5Fw=
+X-Google-Smtp-Source: AGHT+IHcxNy4vvenn7jpiCsub8VWCATTgFQTQRQ7tQQa38oCzlQJbrAUv/99P7AbqgB/f4Iku057YA==
+X-Received: by 2002:a6b:fe05:0:b0:7f3:ccee:7436 with SMTP id ca18e2360f4ac-7f66dee0b66mr12164939f.2.1720048260238;
+        Wed, 03 Jul 2024 16:11:00 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4beeea701e4sm142588173.2.2024.07.03.16.10.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jul 2024 16:10:59 -0700 (PDT)
+Message-ID: <6b2bca6d-61e8-40f6-b3b1-3a81dfb2b397@linuxfoundation.org>
+Date: Wed, 3 Jul 2024 17:10:59 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 8/9] selftests/bpf: Use connect_to_addr in
- sk_lookup
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1719623708.git.tanggeliang@kylinos.cn>
- <d5caa0c6f5912a67876c250214a84b0dcd4f74e0.1719623708.git.tanggeliang@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/watchdog: limit ping loop and allow
+ configuring the number of pings
+To: Laura Nao <laura.nao@collabora.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <818d06c2-c5d6-4559-a8c9-9bf9e21c30f6@linuxfoundation.org>
+ <20240703144855.89747-1-laura.nao@collabora.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <d5caa0c6f5912a67876c250214a84b0dcd4f74e0.1719623708.git.tanggeliang@kylinos.cn>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240703144855.89747-1-laura.nao@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 6/28/24 6:20 PM, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
+On 7/3/24 08:48, Laura Nao wrote:
+> On 6/27/24 20:48, Shuah Khan wrote:
+>> On 5/6/24 05:13, Laura Nao wrote:
+>>> In order to run the watchdog selftest with the kselftest runner, the
+>>> loop responsible for pinging the watchdog should be finite. This
+>>> change limits the loop to 5 iterations by default and introduces a new
+>>> '-c' option to adjust the number of pings as needed.
+>>
+>> This patch makes the test run finite in all cases changing the bevavior
+>> to run it forever?
 > 
-> Use public network helpers make_sockaddr() and connect_to_addr() instead
-> of using the local defined function make_socket() and connect().
+> Correct.
 > 
-> This make_socket() can be dropped latter.
+>>>
+>>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>>> ---
+>>>    tools/testing/selftests/watchdog/watchdog-test.c | 16 ++++++++++++++--
+>>>    1 file changed, 14 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c
+>>> b/tools/testing/selftests/watchdog/watchdog-test.c
+>>> index bc71cbca0dde..786cc5a26206 100644
+>>> --- a/tools/testing/selftests/watchdog/watchdog-test.c
+>>> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
+>>> @@ -24,16 +24,18 @@
+>>>    #include <linux/watchdog.h>
+>>>    #define DEFAULT_PING_RATE    1
+>>> +#define DEFAULT_PING_COUNT    5
+>>>    int fd;
+>>>    const char v = 'V';
+>>> -static const char sopts[] = "bdehp:st:Tn:NLf:i";
+>>> +static const char sopts[] = "bdehp:c:st:Tn:NLf:i";
+>>>    static const struct option lopts[] = {
+>>>        {"bootstatus",          no_argument, NULL, 'b'},
+>>>        {"disable",             no_argument, NULL, 'd'},
+>>>        {"enable",              no_argument, NULL, 'e'},
+>>>        {"help",                no_argument, NULL, 'h'},
+>>>        {"pingrate",      required_argument, NULL, 'p'},
+>>> +    {"pingcount",     required_argument, NULL, 'c'},
+>>>        {"status",              no_argument, NULL, 's'},
+>>>        {"timeout",       required_argument, NULL, 't'},
+>>>        {"gettimeout",          no_argument, NULL, 'T'},
+>>> @@ -90,6 +92,8 @@ static void usage(char *progname)
+>>>        printf(" -h, --help\t\tPrint the help message\n");
+>>>        printf(" -p, --pingrate=P\tSet ping rate to P seconds (default
+>>> %d)\n",
+>>>               DEFAULT_PING_RATE);
+>>> +    printf(" -c, --pingcount=C\tSet number of pings to C (default
+>>> %d)\n",
+>>> +           DEFAULT_PING_COUNT);
+>>>        printf(" -t, --timeout=T\tSet timeout to T seconds\n");
+>>>        printf(" -T, --gettimeout\tGet the timeout\n");
+>>>        printf(" -n, --pretimeout=T\tSet the pretimeout to T seconds\n");
+>>> @@ -172,6 +176,7 @@ int main(int argc, char *argv[])
+>>>    {
+>>>        int flags;
+>>>        unsigned int ping_rate = DEFAULT_PING_RATE;
+>>> +    unsigned int ping_count = DEFAULT_PING_COUNT;
+>>>        int ret;
+>>>        int c;
+>>>        int oneshot = 0;
+>>> @@ -248,6 +253,12 @@ int main(int argc, char *argv[])
+>>>                    ping_rate = DEFAULT_PING_RATE;
+>>>                printf("Watchdog ping rate set to %u seconds.\n",
+>>> ping_rate);
+>>>                break;
+>>> +        case 'c':
+>>> +            ping_count = strtoul(optarg, NULL, 0);
+>>> +            if (!ping_count)
+>>> +                ping_count = DEFAULT_PING_COUNT;
+>>> +            printf("Number of pings set to %u.\n", ping_count);
+>>> +            break;
+>>>            case 's':
+>>>                flags = 0;
+>>>                oneshot = 1;
+>>> @@ -336,9 +347,10 @@ int main(int argc, char *argv[])
+>>>        signal(SIGINT, term);
+>>> -    while (1) {
+>>> +    while (ping_count > 0) {
+>>>            keep_alive();
+>>>            sleep(ping_rate);
+>>> +        ping_count--;
+>>
+>> So this test no longer runs forever?
+>>
 > 
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->   .../selftests/bpf/prog_tests/sk_lookup.c      | 20 +++++++------------
->   1 file changed, 7 insertions(+), 13 deletions(-)
+> That's correct, with this patch applied the test no longer runs forever.
+> I understand you prefer the current behavior - how about keeping the
+> keep_alive() loop infinite by default and only making it finite when the
+> -c argument is passed? Would that be reasonable?
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-> index 38382dffe997..005776f5964e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-> @@ -231,23 +231,17 @@ static int make_server(int sotype, const char *ip, int port,
->   
->   static int make_client(int sotype, const char *ip, int port)
->   {
-> +	int family = is_ipv6(ip) ? AF_INET6 : AF_INET;
-> +	struct network_helper_opts opts = {
-> +		.timeout_ms = IO_TIMEOUT_SEC,
-> +	};
->   	struct sockaddr_storage addr = {0};
-> -	int err, fd;
-> +	socklen_t len;
->   
-> -	fd = make_socket(sotype, ip, port, &addr);
-> -	if (fd < 0)
-> +	if (make_sockaddr(family, ip, port, &addr, &len))
 
-Depending on the callers of make_client ASSERT or not,
-I suspect it is easier to ASSERT here to signal the error in make_sockaddr.
+Yes. I am open to taking the patch if the default behavior doesn't change.
 
->   		return -1;
->   
-> -	err = connect(fd, (void *)&addr, inetaddr_len(&addr));
-> -	if (CHECK(err, "make_client", "connect")) {
-> -		log_err("failed to connect client socket");
-> -		goto fail;
-> -	}
-> -
-> -	return fd;
-> -fail:
-> -	close(fd);
-> -	return -1;
-> +	return connect_to_addr(sotype, &addr, len, &opts);
-
-same here for the connect_to_addr().
-
-pw-bot: cr
-
->   }
->   
->   static __u64 socket_cookie(int fd)
+thanks,
+-- Shuah
 
 
