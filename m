@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 252D89252FE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 07:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D46F925300
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 07:33:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C434F1F22F2F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 05:33:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB8651F26FEF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2024 05:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69AD749655;
-	Wed,  3 Jul 2024 05:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490905027F;
+	Wed,  3 Jul 2024 05:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgBCHXuj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmN8nv6G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE16383B1;
-	Wed,  3 Jul 2024 05:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8B561FD4;
+	Wed,  3 Jul 2024 05:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719984775; cv=none; b=VDscg7ntUonNNwaQ0BuO7sAsZRQJ7X2hny2ln8z+5uCgy4XcIUW+ZJ1dTxrkMpKlny5YHYgKUFCG6nMpC8c/9bMrsjBKFdMVkPvizrVOYOP/Apur2hnhfNkrV+on8d3lA3hqEhWhWsF7G5NGRgwn5dhgb2Qw1h+PxWdV1MGDdf0=
+	t=1719984784; cv=none; b=uRTzLcCRtS/UUXPWRmWZcGa/zf+6bwMpZKWF7q2IpqoBuy1y44WgquXpLlxGWc6K2dOxGcDqyzHGXiw02XRodPVHXt2rsSrYXbcDkxUiDB0eiq8DmEEs9Ajdfm1a5qHjJXmusjG4DlTSCeHhgEiGltDVgjsiFScJmKXCjhsWmEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719984775; c=relaxed/simple;
-	bh=WULNwgwERPKbPxbI+UaCGX2Ay60pymtdMlPiYvx3DeU=;
+	s=arc-20240116; t=1719984784; c=relaxed/simple;
+	bh=qMUrvkxecOx/v3yAVcd4bfohhjch6A/wjtM7rqSvV/g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F6tahv5nYKzAFA1r1/on/u3nJ7wEEn8AoEV+tzqVvoZ4o2+FmlLpYFv9T/jEEaY4Laqmt0KAmxMQkXfhDeQ2lUnOol3T9361v8bAI31Q3VXM7NbRS+s/RM7D0hQNqmp9FnHlnEmeWRPjvWhpEuqLjY+J29u/JWkYA+w2YIeyb30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgBCHXuj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A7EC32781;
-	Wed,  3 Jul 2024 05:32:52 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Q72NAyPYEEn3k/18kOMniJU9vEB7SU4g2Dt+WpFtjlFOGochgLdonzx1ja9B1CIPDobZAj2NH/poeXLFOztIbQVV28qI+9KG21N/cTpPWGKAWXJy9Us0nAzmJ6qG184qjrLU2zZy3l/WPo/3e+3xOf4fpDxybon1O+1u8gyznDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmN8nv6G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17BEC32781;
+	Wed,  3 Jul 2024 05:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719984774;
-	bh=WULNwgwERPKbPxbI+UaCGX2Ay60pymtdMlPiYvx3DeU=;
+	s=k20201202; t=1719984783;
+	bh=qMUrvkxecOx/v3yAVcd4bfohhjch6A/wjtM7rqSvV/g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KgBCHXujA8Q/s4vtuumqlicoQBkopCAtrz5CpZ0yBW24UnSaDLxOShYhHtzRqOxuD
-	 sMrcY4VgIFXLbaKsYbtDsYiADzEARwwJ078znf8hetQmk/hndmmc6Jfaa/Qmpx6kTd
-	 YLYlG3Aj63SB7h7gKbIqiPAL5kZj+G++I4MHzN6Mc/eId4BaMea1OoNFBnhA8lDdsg
-	 allkCMwqOv4J6ZVb98vjoyKVXCcCDPEjH4cSU+5fIQwzGHPj2t80gAP6XB2zQNNcGG
-	 H7QXZO8tnCKRpPx/vwdoUjArow/OocsUQP2Pl2EzZs3bnVWLRBhYZB4LoLFFRK7pd2
-	 3zLZj8+RqLr1w==
+	b=PmN8nv6GXyGbXfjwXwc48AHyl38EgSsWzC9dgCS9wYpXax6U4pS5QDd6lUd22jRTV
+	 hJgOaGyrvV2f9AZFzd2reezTb00n5gEdwSx+8zwRJeEeQu+bkDDZtH/j0WMEM3udzN
+	 k7ojdCv4DQPEzb7Pk3utvYNPmvCDLyn1zPDbaI+NF/AJoVvT51WNTK3BKF4brWdZg+
+	 cEEOvKfQPDxWCYNbTwxaWMZ2/lY5kaErdr0Pav2ECGIkYChEvLw1aZbzYmV7zCKtna
+	 4/0u8XFLoaRLUUafh/3liWYctMoE773XA4t3bEKq9Hdl/e4wQemBUJiXAOYdXpp7kv
+	 kGqVH/Tbnk2Mw==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -50,9 +50,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/3] tracing/hist: Support POLLPRI event for poll on histogram
-Date: Wed,  3 Jul 2024 14:32:50 +0900
-Message-Id: <171998477066.54594.13188592197265452865.stgit@devnote2>
+Subject: [PATCH v2 3/3] selftests/tracing: Add hist poll() support test
+Date: Wed,  3 Jul 2024 14:33:00 +0900
+Message-Id: <171998477999.54594.16011632695593086016.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <171998475175.54594.7244942110355338359.stgit@devnote2>
 References: <171998475175.54594.7244942110355338359.stgit@devnote2>
@@ -68,102 +68,182 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Since POLLIN will not be flashed until read the hist file, user needs
-to repeat read() and poll() on hist for monitoring the event
-continuously. But the read() is somewhat redundant only for monitoring
-events.
-
-This add POLLPRI poll event on hist, this event returns when a histogram
-is updated after open(), poll() or read(). Thus it is possible to wait
-next event without read().
+Add a testcase for poll() on hist file. This introduces a helper binary
+to the ftracetest, because there is no good way to reliably execute
+poll() on hist file.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
 ---
- kernel/trace/trace_events_hist.c |   29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ Changes in v2:
+  - Update poll command to support both of POLLIN and POLLPRI, and timeout.
+  - Identify unsupported stable kernel if poll-in returns soon.
+  - Test both of POLLIN and POLLPRI.
+---
+ tools/testing/selftests/ftrace/Makefile            |    2 +
+ tools/testing/selftests/ftrace/poll.c              |   62 +++++++++++++++++
+ .../ftrace/test.d/trigger/trigger-hist-poll.tc     |   74 ++++++++++++++++++++
+ 3 files changed, 138 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/poll.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 136d91139949..a22454ad36d8 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -5599,6 +5599,7 @@ static void hist_trigger_show(struct seq_file *m,
- struct hist_file_data {
- 	struct file *file;
- 	u64 last_read;
-+	u64 last_act;
- };
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index a1e955d2de4c..49d96bb16355 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -6,4 +6,6 @@ TEST_PROGS := ftracetest-ktap
+ TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
  
- static u64 get_hist_hit_count(struct trace_event_file *event_file)
-@@ -5636,6 +5637,11 @@ static int hist_show(struct seq_file *m, void *v)
- 			hist_trigger_show(m, data, n++);
- 	}
- 	hist_file->last_read = get_hist_hit_count(event_file);
-+	/*
-+	 * Update last_act too so that poll()/POLLPRI can wait for the next
-+	 * event after any syscall on hist file.
-+	 */
-+	hist_file->last_act = hist_file->last_read;
- 
-  out_unlock:
- 	mutex_unlock(&event_mutex);
-@@ -5649,6 +5655,7 @@ static __poll_t event_hist_poll(struct file *file, struct poll_table_struct *wai
- 	struct seq_file *m = file->private_data;
- 	struct hist_file_data *hist_file = m->private;
- 	__poll_t ret = 0;
-+	u64 cnt;
- 
- 	mutex_lock(&event_mutex);
- 
-@@ -5660,8 +5667,13 @@ static __poll_t event_hist_poll(struct file *file, struct poll_table_struct *wai
- 
- 	poll_wait(file, &event_file->hist_wq, wait);
- 
--	if (hist_file->last_read != get_hist_hit_count(event_file))
--		ret = EPOLLIN | EPOLLRDNORM;
-+	cnt = get_hist_hit_count(event_file);
-+	if (hist_file->last_read != cnt)
-+		ret |= EPOLLIN | EPOLLRDNORM;
-+	if (hist_file->last_act != cnt) {
-+		hist_file->last_act = cnt;
-+		ret |= EPOLLPRI;
-+	}
- 
- out_unlock:
- 	mutex_unlock(&event_mutex);
-@@ -5680,6 +5692,7 @@ static int event_hist_release(struct inode *inode, struct file *file)
- 
- static int event_hist_open(struct inode *inode, struct file *file)
- {
-+	struct trace_event_file *event_file;
- 	struct hist_file_data *hist_file;
- 	int ret;
- 
-@@ -5690,13 +5703,25 @@ static int event_hist_open(struct inode *inode, struct file *file)
- 	hist_file = kzalloc(sizeof(*hist_file), GFP_KERNEL);
- 	if (!hist_file)
- 		return -ENOMEM;
++TEST_GEN_PROGS = poll
 +
-+	mutex_lock(&event_mutex);
-+	event_file = event_file_data(file);
-+	if (!event_file) {
-+		ret = -ENODEV;
-+		goto out_unlock;
+ include ../lib.mk
+diff --git a/tools/testing/selftests/ftrace/poll.c b/tools/testing/selftests/ftrace/poll.c
+new file mode 100644
+index 000000000000..8003a59fe042
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/poll.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Simple poll on a file.
++ *
++ * Copyright (c) 2024 Google LLC.
++ */
++
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#define BUFSIZE 4096
++
++/*
++ * Usage:
++ *  poll <in|pri> <FILE> [timeout]
++ */
++int main(int argc, char *argv[])
++{
++	struct pollfd pfd;
++	char buf[BUFSIZE];
++	int timeout = -1;
++	int ret;
++
++	if (argc < 3)
++		return -1;
++
++	if (!strcmp(argv[1], "in"))
++		pfd.events = POLLIN;
++	else if (!strcmp(argv[1], "pri"))
++		pfd.events = POLLPRI;
++
++	pfd.fd = open(argv[2], O_RDONLY);
++	if (pfd.fd < 0) {
++		perror("open");
++		return -1;
 +	}
 +
- 	hist_file->file = file;
-+	hist_file->last_act = get_hist_hit_count(event_file);
- 
- 	/* Clear private_data to avoid warning in single_open() */
- 	file->private_data = NULL;
- 	ret = single_open(file, hist_show, hist_file);
++	if (argc == 4)
++		timeout = atoi(argv[3]);
 +
-+out_unlock:
- 	if (ret)
- 		kfree(hist_file);
-+	mutex_unlock(&event_mutex);
- 	return ret;
- }
- 
++	/* Reset poll by read if POLLIN is specified. */
++	if (pfd.events & POLLIN)
++		do {} while (read(pfd.fd, buf, BUFSIZE) == BUFSIZE);
++
++	ret = poll(&pfd, 1, timeout);
++	if (ret < 0 && errno != EINTR) {
++		perror("poll");
++		return -1;
++	}
++	close(pfd.fd);
++
++	/* If timeout happned, return code is 0 */
++	if (ret == 0)
++		return 1;
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+new file mode 100644
+index 000000000000..53bea74e2234
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+@@ -0,0 +1,74 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: event trigger - test poll wait on histogram
++# requires: set_event events/sched/sched_process_free/trigger events/sched/sched_process_free/hist
++# flags: instance
++
++POLL=${FTRACETEST_ROOT}/poll
++
++if [ ! -x ${POLL} ]; then
++  echo "poll program is not compiled!"
++  exit_unresolved
++fi
++
++EVENT=events/sched/sched_process_free/
++
++# Check poll ops is supported. Before implementing poll on hist file, it
++# returns soon with POLLIN | POLLOUT, but not POLLPRI.
++
++# This must wait >1 sec and return 1 (timeout).
++set +e
++${POLL} in ${EVENT}/hist 1000
++ret=$?
++set -e
++if [ ${ret} != 1 ]; then
++  echo "poll on hist file is not supported"
++  exit_unsupported
++fi
++
++# Test POLLIN
++echo > trace
++echo "hist:key=comm" > ${EVENT}/trigger
++echo 1 > ${EVENT}/enable
++
++# This sleep command will exit after 2 seconds.
++sleep 2 &
++BGPID=$!
++# if timeout happens, poll returns 1.
++${POLL} in ${EVENT}/hist 4000
++echo 0 > tracing_on
++
++if [ -d /proc/${BGPID} ]; then
++  echo "poll exits too soon"
++  kill -KILL ${BGPID} ||:
++  exit_fail
++fi
++
++if ! grep -qw "sleep" trace; then
++  echo "poll exits before event happens"
++  exit_fail
++fi
++
++# Test POLLPRI
++echo > trace
++echo 1 > tracing_on
++
++# This sleep command will exit after 2 seconds.
++sleep 2 &
++BGPID=$!
++# if timeout happens, poll returns 1.
++${POLL} pri ${EVENT}/hist 4000
++echo 0 > tracing_on
++
++if [ -d /proc/${BGPID} ]; then
++  echo "poll exits too soon"
++  kill -KILL ${BGPID} ||:
++  exit_fail
++fi
++
++if ! grep -qw "sleep" trace; then
++  echo "poll exits before event happens"
++  exit_fail
++fi
++
++exit_pass
 
 
