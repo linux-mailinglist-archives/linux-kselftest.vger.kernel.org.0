@@ -1,162 +1,217 @@
-Return-Path: <linux-kselftest+bounces-13196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8A492729F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 11:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6D1D927316
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 11:31:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35A4C28DA11
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 09:02:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C86228CC57
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 09:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5851AB915;
-	Thu,  4 Jul 2024 09:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPvq6cc2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8561A4F2D;
+	Thu,  4 Jul 2024 09:31:38 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B5B1A38DD;
-	Thu,  4 Jul 2024 09:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1332A171A7;
+	Thu,  4 Jul 2024 09:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720083665; cv=none; b=YodQ61Wme7j3wKYBigWZvsUDFlQn3hNVDUlLd0a421QQWuUMlfudkWvWhTzU9YBvgPFV8QT0NJB1XsY4JogqQZhGIj9Lui67mfhkKk6vSNgLx/KbrUDd4XUr9zYn25RLxXHAReewJIPlznMiYFC5sQJSarEhHoC1+tMATS9xpzU=
+	t=1720085497; cv=none; b=AReX6EEZRkrpfmtWqk4/pYWJ2cWrzi02ZY7hisxfwptCKJTJEu6c5EaRSC2FcXUpTrXDX8pscJEp6vS2IzUBMu0YJFwk2EqA/FpZBa0/Meq+77ZgOo/UL9QfkHqjO3K7JsLCkG9vGCYvj2pZr5PiPBdXq5+RIShuYCHft1HfGEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720083665; c=relaxed/simple;
-	bh=s76YQ0SKgyu159tTZF5FTGtD2Bn4gBeXuU8Ve31f3Fs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IkTfOuICKR957/nWriSle6yQVQVrrTB1zwiH6QsIsHpsv28UKK+3kL0Ss2KwMJmzUn66tUSykz+kWOIPtmvZ7Np0/3WKUioql+dpPYsGycivrTxP1cjrHEpH5b3Hogf+tBd/AZt+mlt5Gclv2SUFW8Iyg1/70ugoSNQ6ZPKimYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPvq6cc2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3ABDC3277B;
-	Thu,  4 Jul 2024 09:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720083664;
-	bh=s76YQ0SKgyu159tTZF5FTGtD2Bn4gBeXuU8Ve31f3Fs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CPvq6cc2jxEtbwcVGdYUpJWpaHFbk9x6ZE91olKxYtMSpd4NBDBlPfTVkwbKYe/P7
-	 KNoecNb2WhicOb+JC/YaLjDym1zDlewc9WCUw5XkYu2ZXcb2DmqePQ23P8DGeHfhIi
-	 RxenMKASIkUX87l/Nx2zNuyvKtVjCnC11/qqUZ1YqoBmk5BdmdDp1H66RrLkTabbic
-	 gdNmjybMHp+cHHRLrHxLl/3SuekdGkIEzccSX1dkAPnYi2YntHsjV0AhT6nAWNkkyB
-	 0EjfFGnjrvX5lFyiODaFDmaBbiIyysfkzislQMFZKXF2S17qSxmXGBRUMkaDsBaGh6
-	 99CpDyx+UhLYQ==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v7 9/9] selftests/bpf: Drop make_socket in sk_lookup
-Date: Thu,  4 Jul 2024 16:59:46 +0800
-Message-ID: <3948df0b9ab7c77c1a59c6156e0e7be1bfe29e65.1720083019.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1720083019.git.tanggeliang@kylinos.cn>
-References: <cover.1720083019.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1720085497; c=relaxed/simple;
+	bh=6JvIoGeJYxTilGdyGLvutd4vO5hzpifvREfdh9Tlzy4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oRiB/L0TpxZzasuYemmdU3b8VZfaU2P4PmxAemcRoUw/iTtJn6TcH5WtCazGYNMqenSBULC7jqZartGPrBPe3/ozp9ljFZ3p87oVudSLX4byDkZvkjlQOgbZsk7LqUqaK5NGEY+i+H7xRJTk9wSRiYxgLehqjLIckVKJ3irJubE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74E3ADA7;
+	Thu,  4 Jul 2024 02:32:00 -0700 (PDT)
+Received: from [10.1.29.168] (XHFQ2J9959.cambridge.arm.com [10.1.29.168])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF323F766;
+	Thu,  4 Jul 2024 02:31:34 -0700 (PDT)
+Message-ID: <92b7375f-7239-4fbd-bedd-b3b8d55bf7a1@arm.com>
+Date: Thu, 4 Jul 2024 10:31:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] selftests: introduce and use SELFTESTS_CC_IS_CLANG
+ instead of LLVM
+Content-Language: en-GB
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20240704030452.88793-1-jhubbard@nvidia.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240704030452.88793-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 04/07/2024 04:04, John Hubbard wrote:
+> Current practice in the selftests Makefiles is to use $(LLVM) as a way
+> to decide if clang is being used as the compiler (and/or the linker
+> front end). Unfortunately, this does not cover all of the use cases:
+> 
+> 1) CC could have been set within selftests/lib.mk, by inferring it from
+> LLVM==1, or
+> 
+> 2) CC could have been set externally, such as when cross compiling.
+> 
+> Solution: In order to allow subsystem selftests to more accurately
+> control clang-specific behavior, such as compiler options, provide a new
+> Makefile variable: SELFTESTS_CC_IS_CLANG. If $(CC) contains an
+> invocation of clang in any form, then SELFTESTS_CC_IS_CLANG will be
+> non-empty.
+> 
+> SELFTESTS_CC_IS_CLANG does not specify which linker is being used.
+> However, it can still help with linker options, because $(CC) is often
+> used to do both the compile and link steps (often in the same step).
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+> 
+> Hi,
+> 
+> If this looks reasonable, I'll break it up into separate patches and
+> post it as a non-RFC.
 
-Use local helper make_client() instead of using make_socket() and
-connect(). Then make_socket() and inetaddr_len() can be dropped now.
+I'm makefile-illiterate so not really qualified to review. But the concept
+certainly looks fine to me.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- .../selftests/bpf/prog_tests/sk_lookup.c      | 45 +------------------
- 1 file changed, 2 insertions(+), 43 deletions(-)
+Thanks,
+Ryan
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index 7c42ebff80a4..c359dc988de3 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -108,46 +108,6 @@ static int attach_reuseport(int sock_fd, struct bpf_program *reuseport_prog)
- 	return 0;
- }
- 
--static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
--{
--	return (addr->ss_family == AF_INET ? sizeof(struct sockaddr_in) :
--		addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) : 0);
--}
--
--static int make_socket(int sotype, const char *ip, int port,
--		       struct sockaddr_storage *addr)
--{
--	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
--	int err, family, fd;
--
--	family = is_ipv6(ip) ? AF_INET6 : AF_INET;
--	err = make_sockaddr(family, ip, port, addr, NULL);
--	if (CHECK(err, "make_address", "failed\n"))
--		return -1;
--
--	fd = socket(addr->ss_family, sotype, 0);
--	if (CHECK(fd < 0, "socket", "failed\n")) {
--		log_err("failed to make socket");
--		return -1;
--	}
--
--	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
--	if (CHECK(err, "setsockopt(SO_SNDTIMEO)", "failed\n")) {
--		log_err("failed to set SNDTIMEO");
--		close(fd);
--		return -1;
--	}
--
--	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
--	if (CHECK(err, "setsockopt(SO_RCVTIMEO)", "failed\n")) {
--		log_err("failed to set RCVTIMEO");
--		close(fd);
--		return -1;
--	}
--
--	return fd;
--}
--
- static int setsockopts(int fd, void *opts)
- {
- 	struct cb_opts *co = (struct cb_opts *)opts;
-@@ -1232,7 +1192,6 @@ struct test_multi_prog {
- 
- static void run_multi_prog_lookup(const struct test_multi_prog *t)
- {
--	struct sockaddr_storage dst = {};
- 	int map_fd, server_fd, client_fd;
- 	struct bpf_link *link1, *link2;
- 	int prog_idx, done, err;
-@@ -1265,11 +1224,11 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
- 	if (err)
- 		goto out_close_server;
- 
--	client_fd = make_socket(SOCK_STREAM, EXT_IP4, EXT_PORT, &dst);
-+	client_fd = make_client(SOCK_STREAM, EXT_IP4, EXT_PORT);
- 	if (client_fd < 0)
- 		goto out_close_server;
- 
--	err = connect(client_fd, (void *)&dst, inetaddr_len(&dst));
-+	err = 0;
- 	if (CHECK(err && !t->expect_errno, "connect",
- 		  "unexpected error %d\n", errno))
- 		goto out_close_client;
--- 
-2.43.0
+> 
+> thanks,
+> John Hubbard
+> 
+>  tools/testing/selftests/bpf/Makefile       |  2 +-
+>  tools/testing/selftests/fchmodat2/Makefile | 12 +++++++-----
+>  tools/testing/selftests/hid/Makefile       |  2 +-
+>  tools/testing/selftests/lib.mk             | 15 +++++++++++++++
+>  tools/testing/selftests/openat2/Makefile   | 16 +++++++++-------
+>  5 files changed, 33 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index dd49c1d23a60..6b924297ab71 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -55,7 +55,7 @@ progs/test_sk_lookup.c-CFLAGS := -fno-strict-aliasing
+>  progs/timer_crash.c-CFLAGS := -fno-strict-aliasing
+>  progs/test_global_func9.c-CFLAGS := -fno-strict-aliasing
+>  
+> -ifneq ($(LLVM),)
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>  # Silence some warnings when compiled with clang
+>  CFLAGS += -Wno-unused-command-line-argument
+>  endif
+> diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
+> index 4373cea79b79..d00b01be5d96 100644
+> --- a/tools/testing/selftests/fchmodat2/Makefile
+> +++ b/tools/testing/selftests/fchmodat2/Makefile
+> @@ -2,14 +2,16 @@
+>  
+>  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
+>  
+> +TEST_GEN_PROGS := fchmodat2_test
+> +
+> +include ../lib.mk
+> +
+>  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+>  # library is the first one loaded. However, clang already statically links the
+>  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+>  # -static-libasan for clang builds.
+> -ifeq ($(LLVM),)
+> +# This check must be done after including ../lib.mk, in order to pick up the
+> +# correct value of SELFTESTS_CC_IS_CLANG.
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>      CFLAGS += -static-libasan
+>  endif
+> -
+> -TEST_GEN_PROGS := fchmodat2_test
+> -
+> -include ../lib.mk
+> diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+> index 2b5ea18bde38..734a53dc8ad9 100644
+> --- a/tools/testing/selftests/hid/Makefile
+> +++ b/tools/testing/selftests/hid/Makefile
+> @@ -27,7 +27,7 @@ CFLAGS += -I$(OUTPUT)/tools/include
+>  LDLIBS += -lelf -lz -lrt -lpthread
+>  
+>  # Silence some warnings when compiled with clang
+> -ifneq ($(LLVM),)
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>  CFLAGS += -Wno-unused-command-line-argument
+>  endif
+>  
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 429535816dbd..f321ad5a1d0c 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -43,6 +43,21 @@ else
+>  CC := $(CROSS_COMPILE)gcc
+>  endif # LLVM
+>  
+> +# SELFTESTS_CC_IS_CLANG allows subsystem selftests to more accurately control
+> +# clang-specific behavior, such as compiler options. If CC is an invocation of
+> +# clang in any form, then SELFTESTS_CC_IS_CLANG will be non-empty. Notes:
+> +#
+> +# 1) CC could have been set above, by inferring it from LLVM==1, or externally,
+> +# from the CC shell environment variable.
+> +#
+> +# 2) SELFTESTS_CC_IS_CLANG does not specify which linker is being used. However,
+> +#    it can still help with linker options, if clang or gcc is used for the
+> +#    linker front end.
+> +SELFTESTS_CC_IS_CLANG :=
+> +ifeq ($(findstring clang,$(CC)),clang)
+> +    SELFTESTS_CC_IS_CLANG := 1
+> +endif
+> +
+>  ifeq (0,$(MAKELEVEL))
+>      ifeq ($(OUTPUT),)
+>  	OUTPUT := $(shell pwd)
+> diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
+> index 185dc76ebb5f..7acb85a8f2ac 100644
+> --- a/tools/testing/selftests/openat2/Makefile
+> +++ b/tools/testing/selftests/openat2/Makefile
+> @@ -3,16 +3,18 @@
+>  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
+>  TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+>  
+> +LOCAL_HDRS += helpers.h
+> +
+> +include ../lib.mk
+> +
+> +$(TEST_GEN_PROGS): helpers.c
+> +
+>  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+>  # library is the first one loaded. However, clang already statically links the
+>  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+>  # -static-libasan for clang builds.
+> -ifeq ($(LLVM),)
+> +# This check must be done after including ../lib.mk, in order to pick up the
+> +# correct value of SELFTESTS_CC_IS_CLANG.
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>      CFLAGS += -static-libasan
+>  endif
+> -
+> -LOCAL_HDRS += helpers.h
+> -
+> -include ../lib.mk
+> -
+> -$(TEST_GEN_PROGS): helpers.c
+> 
+> base-commit: 9a5cd459be8a425d70cda1fa1c89af7875a35d17
 
 
