@@ -1,75 +1,98 @@
-Return-Path: <linux-kselftest+bounces-13154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C645926D80
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 04:35:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24D54926D8A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 04:40:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDC10281CA2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 02:35:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D37242827EB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 02:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E191812B82;
-	Thu,  4 Jul 2024 02:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F5214A8B;
+	Thu,  4 Jul 2024 02:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqBsuwD5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7t0F+Dn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B636F107A0;
-	Thu,  4 Jul 2024 02:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A377617557;
+	Thu,  4 Jul 2024 02:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720060520; cv=none; b=tRZZ/pIdIImXYPSJL5EiwILYFx+75AYH56bnKjYoE9ZAGImhTv4o5kXstLwfS9JgIlpGTjFdETnyfitHnMigK0aI796+Rk/pGpDujtnFGvnooSNCClVIUjbOoNCDEY6bzASrdENND9MF+La8gVISwB4tnPQovwM/QMwLFLISTBQ=
+	t=1720060829; cv=none; b=bLQwqfYIh92zKB6G6J9422JY93k6tVIfAOiJiJaO5zMUnQkWeVFg7Sou9h4U9/yDCRTTp1PDt08lTYGKg0O3y0OgVCnjDRXjUvQN6feYheXH9+N1+RktUDzhhPHUhspM4dimT7ldcKBByu45EPDbvjRsnWamg9UKzWwnfbNIkn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720060520; c=relaxed/simple;
-	bh=8Fv71y8ApjSv7SwqKUCznU/B66WZ3an2HyT3ky5LgwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bioOZCKcF4aPN5dYKM5l0aRtrhi/wkh28GbapW3F/BAhVqvtaKMP7DoKgXkeWadtoJ0KtWGDG7974T9hUBZ+43wQvwfn70Q90YtOGfK27bJvV6ODRJQOtLykxvIpmLHB70Q7i4ByAkxusft6WCHtE83jJs01tas2PvhXpyGADuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqBsuwD5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E3AC2BD10;
-	Thu,  4 Jul 2024 02:35:20 +0000 (UTC)
+	s=arc-20240116; t=1720060829; c=relaxed/simple;
+	bh=2/wkO/DKiCzJSgP4LgFRca8mDh4nH/zUhrKYzOFIZew=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=NUSOuZMFbuT+CMIWxjRuVWJoDOYHCv9qEoE6ovfnrabaJNyCpgig7v9LbDBYTQtEPvsehb6xq5Ky+Ce0QRYFcByMROxulqh75RaQxBaNkD9m53kkixYnv6A/xC0X6f7WAImj15tX/ht6jbxFJ5JxGPRkh0rfZHucxl5cl/ep0LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7t0F+Dn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13391C32781;
+	Thu,  4 Jul 2024 02:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720060520;
-	bh=8Fv71y8ApjSv7SwqKUCznU/B66WZ3an2HyT3ky5LgwU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TqBsuwD5F2boX1wyYMNICbW/7CBb5d8+TfRU1bdFhb43NhUciugDHR2fGm70DhYHi
-	 xNanMn8sJwIL5yskyH+J55JwmNaGiEGWEmMumWyl6MeBMR7zLGVcwrCjeuyjj0ZzMn
-	 B5k91VkxRWt/s9qmFWSplki8VDlbiAjVuvta5BgCzU5qOJ8G3PuaOfpjB4Zs/Rd9BV
-	 zFMHdcHk6dp0pk1ndgB9yaM9OMNti7ViUMSjvOiODAG3KcgA34k/D6qeBW3UgqI9w2
-	 Sadc8lf5/jF4h9R8B1TV5OJn16xVwCASTpD2Ezu8ElfFQK6XA8Vnnw3IJJSW6XJIwp
-	 4uC8xtMvGbOew==
-Date: Wed, 3 Jul 2024 19:35:19 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Adrian Moreno <amorenoz@redhat.com>
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
- horms@kernel.org, i.maximets@ovn.org, dev@openvswitch.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v8 00/10] net: openvswitch: Add sample
- multicasting.
-Message-ID: <20240703193519.16305196@kernel.org>
-In-Reply-To: <20240702095336.596506-1-amorenoz@redhat.com>
-References: <20240702095336.596506-1-amorenoz@redhat.com>
+	s=k20201202; t=1720060829;
+	bh=2/wkO/DKiCzJSgP4LgFRca8mDh4nH/zUhrKYzOFIZew=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=g7t0F+DnYiwuzwWK+rZhDf9d8eBcof/YJc5HmWQLJDfcZi4xrl+XvY2Z532uf2tyX
+	 rCchU4DHwZqrolp4gzzF4NlG2ePt52A2oqQUeDP/iw495qNqQukPvbA8OYr5Hr9yjK
+	 GniSDrFJooW6vc1MC3+Clgd8es5IawXG1feoxnXoK2DNFMbt2bFHju/YiOdB82txFu
+	 GQV74EnQPq9NV+kU1RENfQaKFPAPnzHM8tGL5JZdcE9Ig8C7HpxlClH5OYBN2mCb9b
+	 5jw2R4uTo5NFLZ7nPNhZfUiJfGWlzrjztVjQblBjg/tVywd4R39qW6u3ERYTMcW75k
+	 zhDF4NMq8STaQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0245CC43612;
+	Thu,  4 Jul 2024 02:40:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/3] selftests: openvswitch: Address some flakes in
+ the CI environment
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172006082900.10999.9026063323208803275.git-patchwork-notify@kernel.org>
+Date: Thu, 04 Jul 2024 02:40:29 +0000
+References: <20240702132830.213384-1-aconole@redhat.com>
+In-Reply-To: <20240702132830.213384-1-aconole@redhat.com>
+To: Aaron Conole <aconole@redhat.com>
+Cc: netdev@vger.kernel.org, dev@openvswitch.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ pshelar@ovn.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, amorenoz@redhat.com, horms@kernel.org
 
-On Tue,  2 Jul 2024 11:53:17 +0200 Adrian Moreno wrote:
->   selftests: openvswitch: add psample action
->   selftests: openvswitch: add userspace parsing
->   selftests: openvswitch: parse trunc action
->   selftests: openvswitch: add psample test
+Hello:
 
-Sorry for applying things slightly out of order but without Aaron's
-patches we can't check if these work in our CI. Unfortunately, they
-conflict, could you respin one more time?
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  2 Jul 2024 09:28:27 -0400 you wrote:
+> These patches aim to make using the openvswitch testsuite more reliable.
+> These should address the major sources of flakiness in the openvswitch
+> test suite allowing the CI infrastructure to exercise the openvswitch
+> module for patch series.  There should be no change for users who simply
+> run the tests (except that patch 3/3 does make some of the debugging a bit
+> easier by making some output more verbose).
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/3] selftests: openvswitch: Bump timeout to 15 minutes.
+    https://git.kernel.org/netdev/net-next/c/ff015706fc73
+  - [net-next,2/3] selftests: openvswitch: Attempt to autoload module.
+    https://git.kernel.org/netdev/net-next/c/818481db3df4
+  - [net-next,3/3] selftests: openvswitch: Be more verbose with selftest debugging.
+    https://git.kernel.org/netdev/net-next/c/7abfd8ecb785
+
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
