@@ -1,310 +1,192 @@
-Return-Path: <linux-kselftest+bounces-13158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F1B926DE0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 05:05:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22654926DEA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 05:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE9491F262F1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 03:05:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9CE1283919
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 03:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5758617C67;
-	Thu,  4 Jul 2024 03:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A2018637;
+	Thu,  4 Jul 2024 03:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Dh/aJWs7"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DqcV0VZb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E88175B1;
-	Thu,  4 Jul 2024 03:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADCC1755B;
+	Thu,  4 Jul 2024 03:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720062302; cv=fail; b=SKCu/8759HqnmGJk10jZqHc36XHgSTrkdZNaleUaby/1iQ2itopIknHIE+A/80ZGrrPLjjvipDzyXzv5pKQDv2jojI8ZOFvAp0AVHdG16T7Pcb50OYj5cmnBEmHDNxYcB5bnLX6eD45Ok2vKF09qoGKiC5w4sj40qgnXbE572MM=
+	t=1720062537; cv=fail; b=qcSWfwJ2P2xDG5H3ssaFxwDXXsxGUc8MiC71ehovSM/9pVpJTFUUhTRX5Yd7P14tzOYg3ThgY+Osg9FczWsznc5UAOuj9bW5y1BRofZpw7Xzc/YaP9ilFGa5Oi1hRPx4LBJL0+dWyk7p9Asbk8bEMOx6xqCkCaFCuf4gpAXn+wU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720062302; c=relaxed/simple;
-	bh=Y27pLsL95pF5m2g2dnAabz/YovuOmtTZu8puMSd2kuo=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Grcvoi7ob1lPsN33U34hBWmyAl+7PFEDTR51Kju1XVnrx0/2jkah+xecjCp4ywv6sXZPexKQXTJscqoVQTRW4ek08Gc8VmBjThUMfmwFVbLs+fgpwj+JEm0PULqqvnVeyScdaNgC7GDvZjcwnddtaOmxrb7V6lNtG/gvJCXJJtg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Dh/aJWs7; arc=fail smtp.client-ip=40.107.243.50
+	s=arc-20240116; t=1720062537; c=relaxed/simple;
+	bh=UUXEV1Mg1xQoZuz4l3z9VMjJ+z5z5Hkg40ZqRQMMsYY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F6OUbzW1Mb3Eel6VMAsfcAXTzZQJaNoTukXldslwIsFlvYygRI6hJGAKpnLNlKwbzK3HY1ScoSraTn9DFwz2gd0BnogVdcXusDIn7YmTUTku2DoGByLnOlV9trbzkvgP5XbjJNBM5ZMg00OATVIcgZuMnC67skoGkr4gw0WiHRM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DqcV0VZb; arc=fail smtp.client-ip=40.107.94.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iOJG2WZOzu5PMnkuBOBj6qJpmMxHet72dwd6q/GOHzxihEB1ryEj0p8ucNEUBtrn+t0ArY5Zp7mfh7XDPEnQ/CVArVeIcGq1ZU4lQ2LfxJqWzjPt+5lj+jNcRNVL5nHnzWhCMSWG9L+lK9x27W80F55s70+pTXmWik9o01kFvB4OOPGbQCBt/BoCNmtpp2F+/lK60NJ6HSfPMFmUSeVLLP6334nvIk13+a/oMAJvXrMz8yJIj82zZwgnZyr4+sNGJUrrF6pGnKPZ7rMNrRZK/nY4OhF4zIBeIQhjNMsQitXWQjZ3ryx8LFyhmRGXjeZANVtaC2t322I92DUZEoYvnA==
+ b=aqIlTSLkRELk9OYuv4wTId87M8OxriD0KyZkAmT6c1rd1YiQXaIVJHsvWCy8fHhTk1EDUQZOyUjhcr/B9fe4gHD5Io6O7EweWokTyXm1t1kP14bh1ciUMZ/C+Fh3PqsHjrMnYBy06yzUeI4n/pH1GXROQBDUXSa7gBZZSGFmiBIG2uaUSs/BOkjCUNEdVgmPendhFhpy0J7JzlgiDr6sNBudj/W1lesJdvEFbsciWWUDv4+ni/dirll6S86A4Qf5cKyX2S7XdYMrKn53nUSm0joLp868HcFdVe2BS8/QkHQHPYuxBmBQHka6S7PZiU3N6+RBql+e6B9HArXRmZPHJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oFHbl9D8qMr45+ALzdp7g4/7E5Z5bh9wmzW8XnZrKDM=;
- b=O9x8buH2u3EKYJYCZyp6xjABC57FjSMW26EPWQwMkNzkU7nsdB2q73gzSiQRSc3kpy/pe0Dp3bM+R6t0JcaFayl164Gv7c9TzbXDUeaDmicejANrbmGcsuG13qbQMq+tPoXcImTkOU1x0JjT9+a0dAK9SDRvkz9foStGIjaa1cXvpDeW9ir3A5yDv7o1K9KqWD4lAIgG6rY6rRuty/m1G0XvGwU5n2uXPlUB19WjyPLgzu/PHWCeah5Lszmr4TVslE4gNg74A0bn8jQmLs4RjlKQ2MBZZtzCS2ZkGccZuVbgpG25S4eB0EdccHUZu3p1eHnLvW/vvECBwxY1eT7SBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=yHr88iMOe+ZD+NDbUDNMx8Q6+TOJv1EmKWL96aKaiwc=;
+ b=J9xyRlF+J7pYj9HB1ip7QdQ37pr5jrO1IMGC8lPt5Z47eP3xyK+ZeIj+t2pxNtj9eSBz9cAg93xdZjPPaQSgIU5zyWWV1uSQDv1Gsq6vTgJCDUwAneONrtVFYGOrZUVT74QRsiib2rGBeQcZUHq274jisb1wbTo2RfX29JMW0w2pNrRied7gF9sjgoNZ/aztG0Yz9oy142TGr3IQPy7sKUXAjx56A+sgNWt2EEl1if9TSmEH0t6KBc7d7e0z2XyCRq32sELet65h0lM72iV9KNqWHOLrTiksYNajm4adVF6SyXm7NrXxaL1RGOFewqwUh9qr/bwoEnyFkQN92wIlwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=collabora.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oFHbl9D8qMr45+ALzdp7g4/7E5Z5bh9wmzW8XnZrKDM=;
- b=Dh/aJWs7EjUr0OHegp1/71W7HXKCKQvCL2ciu8N0bFVzT7OOymxO5sFw04nuTqCa99/+yhmOZIJpDn8hTf8pKMjp0Hc3LDC4TmXe5+xkqXhKhNTebrnb+x/US5hnrfISB2PoK6xGojBR6Q50quR8tGfeeybLEkkS96E8OFTsYxQDgWt1IlCkxLLb3sahqrRaFW6opcORAyRAu4AhQ0CpDOLuNTslLjM75gGK6/5bZdKnA24PT/fERi5I04BZm5JXrXLI1bdEiaKkVuWGqbvwkeAXKtEfGAam4xiBLshL9TPvpYJXL89qWsjLZcEYYeoGvNEp/jWs8gEC2mT0yV/t/Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by CY5PR12MB6228.namprd12.prod.outlook.com (2603:10b6:930:20::6) with
+ bh=yHr88iMOe+ZD+NDbUDNMx8Q6+TOJv1EmKWL96aKaiwc=;
+ b=DqcV0VZbF9+aI9KyPwLXpKk7E/QfYZYPVsv7WHfmO2boABl+Vmc0je6gGMYo59PsSsj3GCiWDcjS6T0MOYO0aZJ0DMNevGAZUddCBkA9NYsjFg11LDu8IVHDG272xwPQPiQxRtE6k6z7wdZJSXbLV+mjtTDagUu1A9gXZvNZcn0SVWbgArppahKNWL9k9M1e6M1ievtq14FtwFToM2hr+org3EA0pbAf/VZf/AkCdB0ysDoneDOHwF7Vp7JbPIgTVaB9v47KKxb/QR3G59pbrXIQFuCKRZXFy9QQD3FpynOe2FPG9oPVWS2PLvNSHeXqgzwsz8UwAHa17mujbYr0hg==
+Received: from SJ0PR13CA0152.namprd13.prod.outlook.com (2603:10b6:a03:2c7::7)
+ by DM4PR12MB6064.namprd12.prod.outlook.com (2603:10b6:8:af::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.32; Thu, 4 Jul
- 2024 03:04:56 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%6]) with mapi id 15.20.7741.017; Thu, 4 Jul 2024
- 03:04:54 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [RFC PATCH] selftests: introduce and use SELFTESTS_CC_IS_CLANG instead of LLVM
-Date: Wed,  3 Jul 2024 20:04:52 -0700
-Message-ID: <20240704030452.88793-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.45.2
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::12) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.26; Thu, 4 Jul
+ 2024 03:08:53 +0000
+Received: from SJ5PEPF000001D6.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c7:cafe::c9) by SJ0PR13CA0152.outlook.office365.com
+ (2603:10b6:a03:2c7::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.23 via Frontend
+ Transport; Thu, 4 Jul 2024 03:08:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ5PEPF000001D6.mail.protection.outlook.com (10.167.242.58) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7741.18 via Frontend Transport; Thu, 4 Jul 2024 03:08:52 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 3 Jul 2024
+ 20:08:40 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 3 Jul 2024
+ 20:08:39 -0700
+Message-ID: <17675d27-6a9c-4f1d-a771-4830393465d3@nvidia.com>
+Date: Wed, 3 Jul 2024 20:08:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/7] selftests/x86: fix build errors and warnings found
+ via clang
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>, Shuah Khan
+	<shuah@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>
+CC: angquan yu <angquan21@gmail.com>, "Kirill A . Shutemov"
+	<kirill.shutemov@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, Binbin Wu
+	<binbin.wu@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, "Rick
+ Edgecombe" <rick.p.edgecombe@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>, Valentin Obst <kernel@valentinobst.de>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <x86@kernel.org>
+References: <20240531193838.108454-1-jhubbard@nvidia.com>
+ <d9c56b70-6120-4de7-920b-9ece52905c00@nvidia.com>
+ <64f44840-823a-4b82-8187-c94c6e021c15@collabora.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <64f44840-823a-4b82-8187-c94c6e021c15@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CY5PR12MB6228:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6de357b5-0bb1-45eb-4586-08dc9bd61447
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D6:EE_|DM4PR12MB6064:EE_
+X-MS-Office365-Filtering-Correlation-Id: 246fabb9-92ab-437b-396d-08dc9bd6a225
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|7416014|376014|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?0QQdzPrVCWDtAmi/v63eQbP7Hc3G6qLWjo0IiZxnwCg+kNw6YUdY1CJiEl7W?=
- =?us-ascii?Q?vcIG0Y77id/is8hnTh6ALZ25wb/7cpAMG4dNHXQt1La8th22W5Vfqfsx3CvO?=
- =?us-ascii?Q?j6nJbqp+8VYLnmxuF3cz5ez85GRUNnFXCfSHplanskwDRsXXjYpb34u/gXPr?=
- =?us-ascii?Q?mE1BsTRbZXc4Ak64+C5wf7HFvs8+EG2M2KoiKl4W23MVkWFXhY+M/mCOf93f?=
- =?us-ascii?Q?VR8ogh2DBtZK+BD/zmmb6cguTaKWtctlufb3B11sGiCBA0ND67kQ1JPWbPm0?=
- =?us-ascii?Q?VkYx/ar3dlgAqD96mOne8PBZyuysU4qKYHeuQMmqfylQ8zhp4HZ0GmmgUk7i?=
- =?us-ascii?Q?wA1f1AjN5gjvxxIhJCzXytbsOV15ov8NbV0orEzhxGW3o8okIR2Ae9j2RXpi?=
- =?us-ascii?Q?6XzQaHpm0YR+jMl1Xfv9376EJXoIU8dAtXpYoauFRjGBr63WcQqc2/CGYVvG?=
- =?us-ascii?Q?CnoXNrx0r8aIEqE4gjaR6asmqfcfWmnhajJ6pin6M4mEGkfN05zdmmMEjA3x?=
- =?us-ascii?Q?ZIjNLfGklrQPn3HRNcD5FMr+9vzfbEfx/LsZNL/DJN5c7kPQWRCPB//tMfH6?=
- =?us-ascii?Q?lzvMBWwVoH+I1Xym2tVMEZ/qB7l5ZqOvc+JAOIa0TaLuf2lAMFn2uulKYZKX?=
- =?us-ascii?Q?CrwXdXxD4lQAwEpae/w7V4igBuSiSTXbfUvZAIWbjumksOfeN9HpPTUjKwr3?=
- =?us-ascii?Q?LqZg8OSj+UKXp7SpfSePLuYmRjPI1ea0zWVvsgRv7IKYn5r7wh5rGwZG4kOU?=
- =?us-ascii?Q?vE0M/YmVrxpDXvGd8xRjw0Jn8YHsJ3HefJjnSu5648+zvqQPo8u6Ft0FBMZc?=
- =?us-ascii?Q?kDtSYXvBLwXIVTaKE66EuGfcGfM5mi69pW70nEpCN22l5gdVyNxQEsACg8KJ?=
- =?us-ascii?Q?iTK/RAjwd1IwNsewY95I/cxlpHmEcJxCP9c2CIpp72vzJKiN41CQytXqg9fb?=
- =?us-ascii?Q?Id7oNXN/Ynthhx0QCTD3QnD52AU5cHC00GfmXCj3RgvSPqnIdXzuuAZ2iv0O?=
- =?us-ascii?Q?wbRYmDJSni8Lxwh1IMFUny2XwkN1GnkJqES746/Q54Kgue/kl2Gub5j5W3V7?=
- =?us-ascii?Q?54VZGOOJhIe1dDjI3MJhgb4fAkdNQ9/sLVuSaJ5L/PtoKbdJsU+yKz3oHEJ1?=
- =?us-ascii?Q?i0zuaQ5G+QyWozGStBwC6hyotDspNr8Ev/Bd/b7ZiwX8XcoIA5c2QRAjDRmk?=
- =?us-ascii?Q?FB/2V0nAdIt2Pe7Hes8UuHpb1UG4hl6GOA/R2ytBbpKGnJ8ujPM4ksV2j/Sg?=
- =?us-ascii?Q?iN7JT3AFNOpeys3R34aswkbMwnFGlwKwladiF8nFR8MIDkOrxHITuly9ikFa?=
- =?us-ascii?Q?uJViz/7LVj2p4O/BGG/6WqlgW54cMsr9Vhuvoi+HrvHn3A=3D=3D?=
+	=?utf-8?B?U0EybEFZbzEzTGlpdUZJblJPQlhuRWJaVlhKdllsSWZJZTd4NkhoU3ZXd21G?=
+ =?utf-8?B?S1dMakROWVNCbG1pejRQNEF6Zk1BOGcwcnlMV1Nkc3U3TUl2ZFdtck9FcHQ2?=
+ =?utf-8?B?ZTl1TG91QXYzcnRMSVo1OU9SWE1BdTRoWTdOSDRXaUdFZllMSzdmOGFaZThh?=
+ =?utf-8?B?NHIwNGhKNGcyZ0ZDSHhmc0VVNDd2SExLSFBoYjVEZ3Vad2JMNmdSVDBwMTFV?=
+ =?utf-8?B?bVAyZTNNUFhHZ2x3VTFvUFNkN3Z3ZitxWFVhTk4rMFd2dTBTMUZOMEFCcTVk?=
+ =?utf-8?B?MnpPOWpXVXBtUVVxWkFXLzlNajJnTWx4ejVBQzdGb2RXSVFGckdidDlGem1a?=
+ =?utf-8?B?elVJNVVtRDNWeTBjdVFRRUxSbkdIN3NESnFkdlFWMTU0SWdxOExJaVRXS1VJ?=
+ =?utf-8?B?aXV0WlJzbmo3K0VmOThkUFlYMXE5WDhFUlQzbUNuSGgrd0Z5ZWR0ekFKYlph?=
+ =?utf-8?B?ZmlvQVJEbitZQUl2ejRDWEZScHNPclMxblMxYXFNcmRoTDNaMUxMOWk4U2po?=
+ =?utf-8?B?c2o2UkVLOXJEOFk4U1JpUlNyMGZzTk5TcGF0Q2pwSUQxSk1BdElMSWNIOUpu?=
+ =?utf-8?B?UDNOaHJyQjlqdmlvVTBwalZVWEQ0ajl2TXg0TjRPamlQQXR1UTlDUkVKUXZj?=
+ =?utf-8?B?RlFWcGdBcVFJOXgya1dxbjFRWWFNQkQ4MkZhbDlYZW5WalU5Mzh1VzUvMkwr?=
+ =?utf-8?B?Z1d4bE9FcDhXdEM4TEF6eWtLV085OHlCK0N1M2V5bjQvRjdEUWdyRFprMkpu?=
+ =?utf-8?B?T3JMbEZyelg4S1NJZDRlUlNlRUhVbkFrOFlSdTlXTnlOa0tGUjZWOUg3cDJQ?=
+ =?utf-8?B?Q1lpcnZIZXJRTEdUSzRJQjFvOXYwcm93cVJIalhTWElXRktrQjVJYStXMDEv?=
+ =?utf-8?B?U0FsbnJiZklQc0t6NjJiU29pVTZ6UHRBa2pvK1NWWE43bktWZzdSYUFnRDJN?=
+ =?utf-8?B?eThOODEyY1lNc2IxcDBZMW9WdklhYzdGMFZaMHZ6MnBPRCs5c3hoQnlrWnox?=
+ =?utf-8?B?eWVxcmJEWjREam9NT0FSU1dvYS9uM1hrb2dPZFRIZHh3VVlINk5raWIyaWcx?=
+ =?utf-8?B?d1Q2MERPSjB1bTdISHZUb0tmdnZia0tYemkwSjJGdU1YbVRkZjR4RDRFcndN?=
+ =?utf-8?B?bmJyeEYwR3lSdTloWUhHUWZhaHQxK1R1ZW1LcEhsbGhsM1RkSWpHTG50QnRp?=
+ =?utf-8?B?L1owa1Q2bDdrMDVFY0xtZFFnQjFNd3JEU2g5dVdkOUYzMnJIS1dTRVpWeU9D?=
+ =?utf-8?B?T1NLM0YvNWlvakxxWTdhbHVZVW5VTVdVQXdDVXc0SUNIWjBaWWlZMkZHL3dF?=
+ =?utf-8?B?WTZub2traVVKNlMxRHNVcE1nL2syRHB3SDU0M2t2VEp6MVRjUlhSWlF4SEVj?=
+ =?utf-8?B?d0xWNG9pWjhrZVBnWFpMMjZoc05XUEh0bFkrbFE4dEpRVlBLVUVmZk9lV2RZ?=
+ =?utf-8?B?dGxMU3B6K3J2QmtMaG15dHJPMHEyOFhJOEY0MVh2TnNJZkcrZllTcVhScW56?=
+ =?utf-8?B?WkszK09rYWlXWFBaMGV6a0wreU5RWlVxRXNQQnh5cEJrcnpVT1RFbjY1NFBK?=
+ =?utf-8?B?a3ZxekppbGpnQWxnYS95dDZ5a2k4YzBIWGFRSTdqd20wSC85aWRJTkc4Wjhh?=
+ =?utf-8?B?ckFaV3RBVkRJSmEreXI4V0tlNUlDeXRBcEZ6RXhKODNZTWVOblYvaDlzaFFI?=
+ =?utf-8?B?bEhMSFl6c0NUWE5YcU5ia3ZBVzYvVkdKUmF6RCtWZ1ZGemQ2ME1ZOFhLQ3ZN?=
+ =?utf-8?B?SmFqdm9LZmxEYUxhYVl3UnFRZEJKZHlFYXRoNnFBM3FQcmFSKzdYd1dLNVJy?=
+ =?utf-8?B?elJ2blB5SnQzNHFyKzVtZ0RBOFBmMEdQVmxTVCtsYmVqRisxU2hZREdTZyt3?=
+ =?utf-8?B?OU0wMDZabW1QdUtVR2FwbDQyVlpCRjlNN1BuWS9yZFlkVFpuRGlSTm02M0ty?=
+ =?utf-8?Q?rIionG9fVWYHAgEUuxnCQgNn9p/bsgrn?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QTVQviBEdXx0tkepIQzSvmnTqOw7FmGWHK1lN3dMSwCUqACo+FcBcobR8WT2?=
- =?us-ascii?Q?9PDogRNMgsDC2VtZxYd+1QeHrD5qk8ts7Gh2uMEbjHhq9R6YGYbaavI4wyfu?=
- =?us-ascii?Q?ieEgrYViS9bngUXhy+Xup0ipINEGvvriLr9sEUBnXyNKiSbFhlJVHPA264n2?=
- =?us-ascii?Q?G7bQUIUk9f853Y2nXp9bVxwJ5+k7W+5GbOz3kEGQsIH49DexZ30y5ffa9Vri?=
- =?us-ascii?Q?hKUSaU+Q7kW6haWaUQgL6l4pzkPTA8jo1l7XOv5CQyyaUBKGnz05cENLRevi?=
- =?us-ascii?Q?O5xC2zUQXMWf7kiNfi50neAkybkrCberzRi0+5sOujrPl9Ckb5xVrKfTA4dz?=
- =?us-ascii?Q?Gcr2yTOsBL/b6rjaoAjVlrpI1z4bWT/uxbhFA/Bhh31kTwFC+RighsgKwuy8?=
- =?us-ascii?Q?o2JLYPAvm/fdraW1DHaiW673cMEf+2YR/fDau8qUA2nkCfGfEwi6MvUuzWvU?=
- =?us-ascii?Q?UXB5YmPeB7rco0FVoso70A4bsHKlpNY92ZcbXLfpUZ066F9kgxTo3gH5fW85?=
- =?us-ascii?Q?4lC9kPMfVkJvbUWCKbQSkcoju8GlVqSyYgGhxPkq9+NQ+Q4Y/vtybFeiZaU7?=
- =?us-ascii?Q?Qr94ecIbXRUy4fvZ3VK/4acSUYil2soiAUYkzJfs0e668+WDVkZ47US7Fema?=
- =?us-ascii?Q?mWRYoIzXvAtr39wIAn8vZFV8cNIAJq2fuGsi4N3U74eI8tfU6xSffg8zysXW?=
- =?us-ascii?Q?goe5EV8S0VMK4tdKkaARO9/uo4B7TNaLiwTpAMjVQeCUY5Vj86bhju0a1e7w?=
- =?us-ascii?Q?/HUO4jaoWf92foN2nmO51uM+1645TRbrzDnnSxYmJw/LCOug9DG2mfyZA3JP?=
- =?us-ascii?Q?czbokVVrtqNEclgos0gpQAQpdszCSUd4+42DM5jsPCeKqUgKl0X4Xe1ZbKt2?=
- =?us-ascii?Q?Suz8lVVHhyLYcwP7LfLk9HQkiD5LI3PTJdJzxIRP/dXHOo5uzz3cz44ep2Ba?=
- =?us-ascii?Q?WTuuxz44W0b4rS1985ZQuvJrQOcLvxrOqworspyZbQjCR9qEtWYvbn4ZOeOd?=
- =?us-ascii?Q?IyiRcSeX2Utun4S18arIYaALv0rEvwvNIJ2kfdAdtZ49YlzD0mW3jUWPBEcI?=
- =?us-ascii?Q?0EyWC31viEf8WGhWvZuVid4Kxce9QcTdeCjDl8ZFowHdh5zReej301vDzv9R?=
- =?us-ascii?Q?tYwJa+y3cbBUcxL5J/B90iEUKZIV2PRPEP+aF+jDrzz3w8aFU5FhWSYFIqKo?=
- =?us-ascii?Q?/KjQFIJvepus99NxPWwntBtqyHlnsTJ2G7JlmOyUf592mQasZxPg+VbA8RAc?=
- =?us-ascii?Q?WTSCcAhMkz8PXyQPzvYDpd8UU255C96h6trzB2D1OIwbAJBXUoxEclOG6tGU?=
- =?us-ascii?Q?57dhuiaXn6eoPHJ8EAw4xIZ8Ll6x5QcIVX+VsR1hN3JKjBuUA0lj+5PAwayR?=
- =?us-ascii?Q?z72+h0C4wF1qe78MKlsGlYOolQ1bVyoLoQE5d9zW5JUJvAoNJIRkgNLONHif?=
- =?us-ascii?Q?exR7Jo9ynaWQ0ZK9QyQS2vYAr+jDhxd9mtUh9+MDL7uDvFAUK3Ou4bLnNuUd?=
- =?us-ascii?Q?lE+tcO93Bm0aEJD7O3GfFNYlz+KYGuJ+IfA68noGuZU3V2Fske1L1rjUA3+c?=
- =?us-ascii?Q?Ovmtx8sokngIUDajPB+ja2rKmQLTRz+TJ2/BBxna?=
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6de357b5-0bb1-45eb-4586-08dc9bd61447
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 03:04:54.6073
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 03:08:52.5110
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 246fabb9-92ab-437b-396d-08dc9bd6a225
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P7m8pOUazEg049CzYtlLomiE07UEU0k2tuwPAgN+1clXFR37Ak3eqGNAEfwdeQPHgfuKR3uaBMKlgxZaU1/zAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6228
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001D6.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6064
 
-Current practice in the selftests Makefiles is to use $(LLVM) as a way
-to decide if clang is being used as the compiler (and/or the linker
-front end). Unfortunately, this does not cover all of the use cases:
+On 7/2/24 3:28 AM, Muhammad Usama Anjum wrote:
+> On 6/29/24 1:06 AM, John Hubbard wrote:
+>> On 5/31/24 12:38 PM, John Hubbard wrote:
+>>> Hi,
+>>>
+>>> Dave Hansen, Muhammad Usama Anjum, here is the combined series that we
+>>> discussed yesterday [1].
+>>
+>> Hi Dave, Shuah,
+>>
+>> Are either of you planning to take this series? I ask because I have a
+>> very slightly overlapping series that enhances the LLVM/clang checks,
+>> that I'm about to post. And I'm not sure if I should try to include
+>> a small fix that would apply to patch 5/7 here.
+> This series is important. Please accept it.
+> 
 
-1) CC could have been set within selftests/lib.mk, by inferring it from
-LLVM==1, or
+Hi Muhammad,
 
-2) CC could have been set externally, such as when cross compiling.
-
-Solution: In order to allow subsystem selftests to more accurately
-control clang-specific behavior, such as compiler options, provide a new
-Makefile variable: SELFTESTS_CC_IS_CLANG. If $(CC) contains an
-invocation of clang in any form, then SELFTESTS_CC_IS_CLANG will be
-non-empty.
-
-SELFTESTS_CC_IS_CLANG does not specify which linker is being used.
-However, it can still help with linker options, because $(CC) is often
-used to do both the compile and link steps (often in the same step).
-
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
-
-Hi,
-
-If this looks reasonable, I'll break it up into separate patches and
-post it as a non-RFC.
+May I add your acked by to the series? I can use that as a weak excuse to
+resend this, rebased onto the latest, and keep trying to get attention on
+it.
 
 thanks,
-John Hubbard
-
- tools/testing/selftests/bpf/Makefile       |  2 +-
- tools/testing/selftests/fchmodat2/Makefile | 12 +++++++-----
- tools/testing/selftests/hid/Makefile       |  2 +-
- tools/testing/selftests/lib.mk             | 15 +++++++++++++++
- tools/testing/selftests/openat2/Makefile   | 16 +++++++++-------
- 5 files changed, 33 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index dd49c1d23a60..6b924297ab71 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -55,7 +55,7 @@ progs/test_sk_lookup.c-CFLAGS := -fno-strict-aliasing
- progs/timer_crash.c-CFLAGS := -fno-strict-aliasing
- progs/test_global_func9.c-CFLAGS := -fno-strict-aliasing
- 
--ifneq ($(LLVM),)
-+ifeq ($(SELFTESTS_CC_IS_CLANG),)
- # Silence some warnings when compiled with clang
- CFLAGS += -Wno-unused-command-line-argument
- endif
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 4373cea79b79..d00b01be5d96 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -2,14 +2,16 @@
- 
- CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
- 
-+TEST_GEN_PROGS := fchmodat2_test
-+
-+include ../lib.mk
-+
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
- # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
- # -static-libasan for clang builds.
--ifeq ($(LLVM),)
-+# This check must be done after including ../lib.mk, in order to pick up the
-+# correct value of SELFTESTS_CC_IS_CLANG.
-+ifeq ($(SELFTESTS_CC_IS_CLANG),)
-     CFLAGS += -static-libasan
- endif
--
--TEST_GEN_PROGS := fchmodat2_test
--
--include ../lib.mk
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 2b5ea18bde38..734a53dc8ad9 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -27,7 +27,7 @@ CFLAGS += -I$(OUTPUT)/tools/include
- LDLIBS += -lelf -lz -lrt -lpthread
- 
- # Silence some warnings when compiled with clang
--ifneq ($(LLVM),)
-+ifeq ($(SELFTESTS_CC_IS_CLANG),)
- CFLAGS += -Wno-unused-command-line-argument
- endif
- 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 429535816dbd..f321ad5a1d0c 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -43,6 +43,21 @@ else
- CC := $(CROSS_COMPILE)gcc
- endif # LLVM
- 
-+# SELFTESTS_CC_IS_CLANG allows subsystem selftests to more accurately control
-+# clang-specific behavior, such as compiler options. If CC is an invocation of
-+# clang in any form, then SELFTESTS_CC_IS_CLANG will be non-empty. Notes:
-+#
-+# 1) CC could have been set above, by inferring it from LLVM==1, or externally,
-+# from the CC shell environment variable.
-+#
-+# 2) SELFTESTS_CC_IS_CLANG does not specify which linker is being used. However,
-+#    it can still help with linker options, if clang or gcc is used for the
-+#    linker front end.
-+SELFTESTS_CC_IS_CLANG :=
-+ifeq ($(findstring clang,$(CC)),clang)
-+    SELFTESTS_CC_IS_CLANG := 1
-+endif
-+
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
- 	OUTPUT := $(shell pwd)
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 185dc76ebb5f..7acb85a8f2ac 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -3,16 +3,18 @@
- CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
- 
-+LOCAL_HDRS += helpers.h
-+
-+include ../lib.mk
-+
-+$(TEST_GEN_PROGS): helpers.c
-+
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
- # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
- # -static-libasan for clang builds.
--ifeq ($(LLVM),)
-+# This check must be done after including ../lib.mk, in order to pick up the
-+# correct value of SELFTESTS_CC_IS_CLANG.
-+ifeq ($(SELFTESTS_CC_IS_CLANG),)
-     CFLAGS += -static-libasan
- endif
--
--LOCAL_HDRS += helpers.h
--
--include ../lib.mk
--
--$(TEST_GEN_PROGS): helpers.c
-
-base-commit: 9a5cd459be8a425d70cda1fa1c89af7875a35d17
 -- 
-2.45.2
+John Hubbard
+NVIDIA
 
 
