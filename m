@@ -1,120 +1,89 @@
-Return-Path: <linux-kselftest+bounces-13171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA3C392706D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 09:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A692927074
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 09:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC7941C2165E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 07:24:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D9891C20C05
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 07:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4981A08DF;
-	Thu,  4 Jul 2024 07:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97F61A0AF2;
+	Thu,  4 Jul 2024 07:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FBqvIV5N"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="T+ZLXUYn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9917FBF6;
-	Thu,  4 Jul 2024 07:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DB3FBF6;
+	Thu,  4 Jul 2024 07:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720077840; cv=fail; b=HTnKwYkk0zLEtRNoDAnYMbC803FQ/WmfyCZTpFIbHCmCBFpuuQ9RZ4ki8VuVRqspO7s8M36+Yw2S9TM4HsIdqMkSuy+irGa2tF0fe+Kw2dcgVc+6z24j+JZCQTIEv3CW85I8/SqMMoOqPSz6lAC4HbgoYly7ai73o+rZG94iUSA=
+	t=1720077925; cv=fail; b=owN5pyGFH86K+/PNmnI8YNmT2DSCZ5joJQGvRlIYx4zgpYaD+qvroT8Xua+uhAXW5ht4jiZ7UEpwyzqaM/JDaoSRn06eUULAyZUr8eOyJoCWnRazDBciRdrwCqNNFfmXj8lDZRKx/8xlSlqkfiVEx4TFy3mK84A+9lJRV45mKTQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720077840; c=relaxed/simple;
-	bh=tzvlrFPfdgqTyoyR2bKEdrHPj6Q6YpK8wc0y355jNF4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=aPwaVv43H3NEjImhB2xQexf7FzBYZfkfT/36jmpjcWBVck+lT3lC0UVIqU/xTk1+xWkjTd/8h2h2wwKWWYsVDF2IaJDfBBALPVPROl4hf+buTezPQcWutV0Q0bjahoqiSED6vMmCGqbvkuXUEEqsDOAcL0bXPM/+8G/9Qtkuqvg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FBqvIV5N; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720077838; x=1751613838;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=tzvlrFPfdgqTyoyR2bKEdrHPj6Q6YpK8wc0y355jNF4=;
-  b=FBqvIV5NZ1FH2oNT/BYgbsnAMVHxu9P/XttNDlKewgJUaY7xC2X7UOMJ
-   jc6OLxNbUZ/d76HP4O07jhVFUBBKrOqZTDko5TP35/R1YYjdSkrvf7BTK
-   mCooNi/qPo/IjZQngmD/2HgjpTnymvpeuSpJ3mmO41No+rdWy71q0mX15
-   lbYeQFgvBBwxjzAYovm5eGzlgmc7YnMBfLR/5DyU5YVbjMPfx/7zTbttY
-   ei3KkuVfmTR7QUpxBHmGhT0K44KvSccwX782cN4SMpAYZZuuO9gQuIAaX
-   MDQL2bFDhKKimi/JTvGVXQVQ7yeFsQ2ta+6IwMi29+PBicsSZZZHiDUr0
-   w==;
-X-CSE-ConnectionGUID: ZWn4KgRfRl6utcKtL55yVw==
-X-CSE-MsgGUID: YwE6iJxiQj6O+RLFOTP2TQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="17289588"
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="17289588"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 00:23:58 -0700
-X-CSE-ConnectionGUID: iGMvQLWwSvCaBJnc8ax3Ug==
-X-CSE-MsgGUID: 3H8WAyVgSZeQ9XdUTb1TeQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="46450114"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Jul 2024 00:23:58 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 4 Jul 2024 00:23:57 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 4 Jul 2024 00:23:57 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 4 Jul 2024 00:23:57 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 4 Jul 2024 00:23:57 -0700
+	s=arc-20240116; t=1720077925; c=relaxed/simple;
+	bh=+r/caTVU7+hmaksrRkNzg6jg4B6JenlwNMrz4SAi5ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dfMYwiZPnS5p3me6qkf9NVadBm+w2tV29lJ3fY6L9n9bxBiHz/4Z7NfrXJzE/Zve9fFoj+6wwgAXCWyugkIckbEzt1Z5rSVgLz9n+Dv+5Uo5sfl9lLOI3xHuERYleN8I5GKTK/R9elyUSaWHUO66rpyQDLcibUWXsFWquXlYsVs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=T+ZLXUYn; arc=fail smtp.client-ip=40.107.94.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sb0/yl+PfpN7QGEwr8Lf4HO4drr7obIHU0nwsE3qa6N+tQ7LXRViYlMf8JcIldu6+7USarTZxy47hdu3S3MIpHGrxWqxGPUFooSQzmqIEjGIu0dFZqRTCteihQ6o73U76Nz++AoPAVSWk76FFrn2bOmj+sqHcElsDhrcqLzecrGWh4M6LiwqSdSKMzt3KLS6YowX3rV2/Ls6PQoM3l6xsM0pGNktmB7qB0LfmTTS9hA5cMv/arQCHasekVTUnSwxdTXB+h9r8mPxSfUqCyMH90moCfnkwEWOWwSCCIFXmCaI9NUglj+k8bSUdSaSCtt/eaq1AsH1rPUwZm9oFGVIkg==
+ b=G+iL0BCV1/FbL7tasQUwLg0iI+OixEKQGNnpt6FDMxw/TcVyaIibJSOfLXfY9uID8x2rXevwwN9trRfd/KrPY1gJu24gwfmkBVkTmQdt6YqfuvkeEQjWvKHMqJlZLCeTveqJiz0cBXCu5iVwB4X/D32TgREJAQMP03Z+ZTXDHAkFc4T6xQHysCIWnLk47MtgPuCU0TqOoNC9chcBvRPreb9v9C0SlcLwSHOJHQBeYIiXbuiPkGl18N2A1lPY6Ou2AMrAxzE9OM42rcn8Xeh8pKUbJ9j3c1hjaPuZdVS4Fkexy1jCPJtRgfjU4/XBFIvx53Qqmi6FVYtbgKEfPLTKHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RA4vjEttalHfvm5EUB6AMqfR4wZYkO9SIlf4c75zTBM=;
- b=PkIOkyPsxApNAlkSaAynZ0pUXBE5V3KXMWAoJM8uE0YfLnJ4oHnIhcZ3dvflmRvNTxJwGBzYL55QT239/juX61X2HOj3Zp+BBF0Jl+FCOj/NRlSP2ILuPbBB8mZUZLhhqW0XFOUFUnn8alVhWVPRZtXWZQpkKdmZkKowFmlkW270RkJltT9XKEUF3HdJBDEw/rbyEWDKYZWB3nuRSQsq1vAt+1doCsQqk/pCWhSlt+cI0Gicg/Z12pW/osvbdoB5jKDuuCPjuEiVFaHduv23GqPrP6Cmup4Gun9PpXSt5fCokksUpC71uLaRUk7oxGD4Mv7pY4k+lhNpZcKo9eq0yA==
+ bh=Ua2cKYpBDMgb70zC/Qyj7u5icbVdIQutbiR5ekthnQ0=;
+ b=RNeJ5wqLLtxym+FU139fncEScLNzgRzFN894SWzJpa8gNQ809zhVl/3XMqOaxv0CZah4qiB4TnaPZk6r8vDWN/uf9HBGdMXS8q0xvyF9hpfoMy88BiDvH4BNSIvDwHAsAgBydgjyERb7zFAWxYJzPH6WD4LKktR/6qiTGLX9HQyrQuzYUilqu+fQU8DVsuzgXOrpNJ8YiUWbsI0wzdaAx5fDd+o6g36RT1Xl2v1XVA8f3fIye+ryuqXgVquMJhmHUETeQ7Chp4vyB7iCGb6Y3aMn0APKDJ5Ua8gzmG9mP9JQcbdKV8QiqF+Zr3sfTpbhl+8DC1XNsVouTPdD/9eDnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ua2cKYpBDMgb70zC/Qyj7u5icbVdIQutbiR5ekthnQ0=;
+ b=T+ZLXUYnqrfS4ApWBfqbbtNzOofJcvJbURkVAACYwMJ7XstHn0Ofqp5vELZLpu2GDif5tlqhW84FW6XI2gOKn65qEcjaQCP5NaajPfsOGfBDSak6LHXG2YlJFvVlikyKZQy9QFg5z/HMU+ecBOSDxGra9DnWlTGLCopnCERroQUCBGdJGvOt1uWN3cvIADN380RSdIw5q6CZOOUwoI60xNM69WOmTVYCneA8+cyeKdYEUkDn5iaWbpDgUKNIk8wXVxfu5J81x82pISra1GWUiC3lQSwqFvEz3wGyOTlKpmealA2kjabSea8de4WIIn9+NOWqBXZ+dpxKMfu7EIvEYQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by PH7PR12MB6610.namprd12.prod.outlook.com (2603:10b6:510:212::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Thu, 4 Jul
- 2024 07:23:54 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4%3]) with mapi id 15.20.7741.017; Thu, 4 Jul 2024
- 07:23:54 +0000
-Date: Thu, 4 Jul 2024 09:23:37 +0200
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Reinette Chatre <reinette.chatre@intel.com>
-CC: <shuah@kernel.org>, <fenghua.yu@intel.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<ilpo.jarvinen@linux.intel.com>, <tony.luck@intel.com>
-Subject: Re: [PATCH v3 2/2] selftests/resctrl: Adjust SNC support messages
-Message-ID: <xfhv744t2ol274w6lddon77rn5dkf7dzbwqcoknok4kk4guehz@hwjsusvhoerb>
-References: <cover.1719842207.git.maciej.wieczor-retman@intel.com>
- <484aef5f10e2a13a7c4f575f4a0b3eb726271277.1719842207.git.maciej.wieczor-retman@intel.com>
- <c1ec4e04-20cd-4717-83ed-da6a55c91889@intel.com>
- <0b9210d3-2e47-4ff3-ac06-f6347627b0d3@intel.com>
- <d5bd6275-ab86-439a-887f-17c04a586716@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.33; Thu, 4 Jul
+ 2024 07:25:20 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::2cf4:5198:354a:cd07%6]) with mapi id 15.20.7741.017; Thu, 4 Jul 2024
+ 07:25:20 +0000
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev,
+	x86@kernel.org,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v4 0/7] selftests/x86: fix build errors and warnings found via clang
+Date: Thu,  4 Jul 2024 00:24:24 -0700
+Message-ID: <20240704072431.111640-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.45.2
+X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d5bd6275-ab86-439a-887f-17c04a586716@intel.com>
-X-ClientProxiedBy: DU7P194CA0027.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:10:553::7) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0074.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::19) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -122,248 +91,158 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|SA1PR11MB6734:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e87a433-0350-4e02-b989-08dc9bfa4265
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH7PR12MB6610:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c5a47c7-3c1a-43af-9d5e-08dc9bfa762b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|27256017;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?mpXsRPX8OanhXgik3IzROOwSRsZteeuXnJ2joeQT1hUgQmHGzeb6UCmVkc?=
- =?iso-8859-1?Q?VI38ySnvSgIeeIfDUHiHPZNODl8f7cqCpm8DeeG3+TLPS/qzSaTte8XOEg?=
- =?iso-8859-1?Q?vOMEpM8MobJpG3QL2B0Kq33sgvHNrOjgC2cziDU/xOcT3rxx5fwLn8fDip?=
- =?iso-8859-1?Q?rICjbTHQivC+aaaIQ/u2XIjaGyQsNA6cATOsERrBpheyqXF/hc4hsWogu0?=
- =?iso-8859-1?Q?DvSnVL0OCWfgghFeudaNkMua29/D9pk/ZgYv0u8G3WZMl+4cZQ+UJMep5c?=
- =?iso-8859-1?Q?1bQ2HDwbKBvqK5/vo6UG5eEv5JtJtF26zXH0PaJD3PVloQSF+vqG4h+uPU?=
- =?iso-8859-1?Q?UGARIzb3hhm6tbO4NzU3NZzR+T5RaDSR1WbKZGPELKx0aVRn03UJXUGwHI?=
- =?iso-8859-1?Q?PBqCQM7Z7phB1l8D8pge5W1kHLY7IJJHXFuRGzpKreCigOo2JOzhm6tWER?=
- =?iso-8859-1?Q?z3maeIUuh4XqtkI34HTZFouNK05orTB7abhg5kbwgF2ucwkSLVvg0qGCoT?=
- =?iso-8859-1?Q?+Wzk/9zS1uWg/R3T5AOKg0JdStY2NSQKdvnvZpLtBzZfOYI3i4qfD3CNE9?=
- =?iso-8859-1?Q?QhXeMWYg2T7iO+71Fhle7SUthZIQ3x3UELyHkDdjNC0T3X5yAMiGOPfC54?=
- =?iso-8859-1?Q?pyf+icGiWpl2IRSy968vP+4IpC9HjSGEFYGoDV0se6HgKTnOwVF51ccBjq?=
- =?iso-8859-1?Q?3KAITNe57x2K/+tw8Xd4f0nwdc6YSMCgfaSRVn6zYd3HSt2/2K7QqND2Wx?=
- =?iso-8859-1?Q?4h/3Wd0ycKcADWSO1MzHp47lVUqJL2G9mYuMvniqxW5ag8ygCRgbU6PI6A?=
- =?iso-8859-1?Q?cmlQHl8cbyHxh3zxbx6Mdgw5YU2OEdYpY3+5YYFBwsiaK9buTSRdx4D2rO?=
- =?iso-8859-1?Q?m3pI5ff9NZlP8gVr+Nv7+znnOb3keVkvPmjiMnWk61vqS2bDGYOC6FzKHL?=
- =?iso-8859-1?Q?hGX50fXc+f3IVlNFBMmB2/pnuRaDM8C6fZndgBa+2ge5ooPS0/X+XfiXB4?=
- =?iso-8859-1?Q?VGeVL7wWAFTkV/BjWWjvr/PLYagxB/D5FRq7jIEBgqZ8d+Nf27fA8yn6Cs?=
- =?iso-8859-1?Q?k/CwxM0JIfqhUEMX8PMI83f0o71OhD0pqP1GwYkwJwyVy+8cS7wE44edSF?=
- =?iso-8859-1?Q?ed2hh/S9ZTd5F3uhcfsPoSge3/x7XoyoNY8aTe6sMUMFWPCGqTbiB6MAm6?=
- =?iso-8859-1?Q?tJ494quCGFQI9M0HRPqxJHt4DWRKpf02RAvD10dRm4WYUU6t9x+J67HFdF?=
- =?iso-8859-1?Q?XmzDqzj3EvfCJ8MDWXJ1v00q0QE7qaAGwby5Y6egDx/2EG7VQYOpyK1TJQ?=
- =?iso-8859-1?Q?4pFh75gb863atVhgcGyxGZ+xz+IGysG3rnPRqcIcqmHlpAEuHYEkRBAjhP?=
- =?iso-8859-1?Q?KecCvEtmi/j57jKYWJIsCARnhaqHm6lixOhBuTPwDTBGeAYF7SxC3Z5r1n?=
- =?iso-8859-1?Q?SHSkCXZ69Bj9edvjNir3KCzwg84L3Det8sgXmQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(27256017);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?OzJnyIq1QL2BhAEn0ylMiXU7eX/VeDptvcFOiPkuJ/T5BbWU8PNbiWtTlLcr?=
+ =?us-ascii?Q?jIhocWIztSVpJ6w/JLx3yIsemFcBj2JvAC0+zJTXeQKKApAT+T/gybcbw/4N?=
+ =?us-ascii?Q?Byj4pFTKd+QyVXaZ+Arbuwp+g7oBUXaWBiOzF5+rfBtndkNGDi7impJMludf?=
+ =?us-ascii?Q?Bm0vKAiMcoEoCEdJIuhJoALbkgLre8psJP6kJxj3RhWGRQYdkbdbu8KV1vJH?=
+ =?us-ascii?Q?69ejUYG4XCiBL9dAyiVcdB63hptbqq2nsnrBjLsf43J9IcfqkIRi5VetRs5p?=
+ =?us-ascii?Q?nH/7Ft0ly4n+AHEFd6d5bht3uNKUx9Uh1J8VMYRsMJ5e1S7CDiz8YE1OH+q3?=
+ =?us-ascii?Q?nn+P0/EJU1koQPd5UmjsMPWnDYFNQAJDtJ6YM7R+0MMIMRvpzSE+/Ln8C65G?=
+ =?us-ascii?Q?2FDVc+eDHygN1kCBC2CWQU5vim40z//C+lFbNle563HvPBxIVvq1zmaLuJgO?=
+ =?us-ascii?Q?zI1+4PW8ervsBfPO5eA/d10/teg95fHFEK+cpTPQK8UzP39KXIA9TZim0+Hq?=
+ =?us-ascii?Q?CDQ5ZzDgUWl/ttQT3MWknA1CJlX3QqQIiRcgmas6fnfR8f+SuHL6xzA9aYvc?=
+ =?us-ascii?Q?icP+08IgMEKoZVyP8U2FokvTEsySm6F7pjcfXMEO2PLDvHws2EtDE43h6217?=
+ =?us-ascii?Q?Ync7zQ3G5ICVrCdDqD6Z4Ash87dNV/Sjc5pTNvsESynwngql0qiOGgmxnXSB?=
+ =?us-ascii?Q?3nmw6UcIbrbPQodVbKGcQyqr3jWQIJS/a7A/UPxwPCpYebVhg8ooqT+KQelD?=
+ =?us-ascii?Q?46M1YaVodElF9OU1JsQiEjz4VwrEbvDchoEb5iFI2RJGHNzI9KyTDrA+Dl0k?=
+ =?us-ascii?Q?q5mvBItFBCfn26zaQXyPHtumKQW+tI4XO8wxtG2ZpQB1PPb5qpwQkklZO5q+?=
+ =?us-ascii?Q?KjP8t738BEz8ifeDNn7KGxkAH2XdJ0LETrBsoptrDOp7jQG4rXL8zTsWnyoL?=
+ =?us-ascii?Q?s/sSez4B0OACxrfvq7cCqvH1Wj+mfRPJJJ1PNWUubd98qxVbERr2CZMAYnG/?=
+ =?us-ascii?Q?kn8Sr5OXutTYMAy5FtUMFg2fO6xUWXOpeW1kwFPZFe/u2ZGh7RKw5Pck26la?=
+ =?us-ascii?Q?PbHGERAhX4AcPQtRl19nldLML8Yh4knLgeE2yK8CSwk1IceUEvCt/1XrFe7s?=
+ =?us-ascii?Q?BfLhdzIfp3t+X6lCPFcX96npgDWydvZOHZKE2S9W62lG63vWl5VhAYtCZ5bx?=
+ =?us-ascii?Q?elAYfhehUOCqbMMOxqhMBIFj5bnjeTNe5BfWo4/sN6YciBYdYSEvVfHNLX5n?=
+ =?us-ascii?Q?7+j+fQ2+9b1vgqg8zTzJW0chlB24ZuqyffCtqh/vFFFsisx92wBMTbYUZR//?=
+ =?us-ascii?Q?ve1/3xTr/U0/yyyoj687WMK8wqKlFj5nxr970ZtJPCqfyuoHaQUATf7V1bLA?=
+ =?us-ascii?Q?tDJ+tHI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?KW7WTuFJ1eLywjuKUsSzpAY8CuY2r81V3z2LYPDA4qQzbjnCGg6UNs/gxN?=
- =?iso-8859-1?Q?55zjbFos8GR9+S45qgQ5X0klUtyf0Jkbw3WoOAsL05KuC4+sFOH7/M/m6h?=
- =?iso-8859-1?Q?AvTbPhNKwI9i8kBKrxHtdIJzn+wtsf8t62xh2MatjOe0iG8S7C7vFRFmps?=
- =?iso-8859-1?Q?RuHz57EMvXNunjpm1gQdiNfwle3sGRD3qmQjZzlWNjpaPEOCNryWKXVq70?=
- =?iso-8859-1?Q?0a0iUEqEYVAZ6CDbR6mVuu70pxk61oacCghENQRmZFrQJsOP+3I6DCNiSg?=
- =?iso-8859-1?Q?7r+mwP6n/nvu06cs2YzFe43v169rA2HwLt/sCuxU5TwH9oeXfmrJk+xXW0?=
- =?iso-8859-1?Q?L0K3/HAbTnQhbBa0QFsr/wqUDbHPA+0Uwq1RP70ElcCj/BESbIKaDVew67?=
- =?iso-8859-1?Q?TR+E3+giU3UmcwcmjGCp73+5ar2X+0J/56ZnhYgKmDdEHlEU4pLOd4Lqiv?=
- =?iso-8859-1?Q?pmaiBxOVxiQ55wW7vbEB8SCrBGwU1ZR5/vBfamsBJmBk5J15aFyfCDhAcF?=
- =?iso-8859-1?Q?wanWth/8wFGf0ZM7WhHUbZP9AUdHCV056G1y79tWaNuW4KtQBw+nhDJHov?=
- =?iso-8859-1?Q?+RTN3oeyqIN2z3DI7D97Ox8TCqKnCEoMowNlhIUS8tYwBhRTPqYcCvrPjO?=
- =?iso-8859-1?Q?zNvXBHVE3YuwsSDyIJ94q30ha2+PsRcupr7zDjmcwCCq2K/LFJTl87Ilu4?=
- =?iso-8859-1?Q?9QzcH5h7sv+E2aeK4BmHtmstQ24GE91haP2Q8tZ4blShOgESGdRNS/KO/h?=
- =?iso-8859-1?Q?dhfqDlxVIW68N8IFfLrKzLPe/7wUtKZKDP24tF3lQ7pyahI5OO3ytbxtXA?=
- =?iso-8859-1?Q?mXutFsB0JiMnudOiLaFc3nF8sF8APP8ZwpwStgU7tzSfFEI5yYXDqEwAAn?=
- =?iso-8859-1?Q?jCdA7VuUY7b+2v1Jwm+GTOkIYoB2iAE7tKNqd29YQybM0rZq6snt3k4INm?=
- =?iso-8859-1?Q?CaKq6Uj154ftETCv144ul09fHTEaQiQcvKf46Zer0T2TFgxlolpfGHX2WD?=
- =?iso-8859-1?Q?Jktvyxsy8WXwF0g6h5CxzDBr7ZIHG5R/0Y4IfoUuK64C2DcOrVoqpJdKF4?=
- =?iso-8859-1?Q?DdyY8+DzAc/KOsBqTw0NkCasKFNLGMeZx8G0Y9+f7wShEtdFw/xl4wg1MD?=
- =?iso-8859-1?Q?Oo8Oiws8u1VNb6ITLivbyLI2Cu751y8cDSmKhdmuZsdKmLJOXIEypnbBVm?=
- =?iso-8859-1?Q?08vFMPHYeEegQrgSFl1OVCHDJsu2DKIAThLKCy0JF5qe4M/UMYg2D5PUrF?=
- =?iso-8859-1?Q?Mdo1Df7pSia5QkuHeBfpq6iQ0AMt2WMENSvK9uEKJxsrZYZnM+ZQmf1pYZ?=
- =?iso-8859-1?Q?DSCrj/lF/9m6upc73jB8llB4DD3BPQ6wEsQzrlioD8lgpARmrR+8ECBiTu?=
- =?iso-8859-1?Q?emEYvn563BUwdtWVqxAvlVieXzHsRqt47CUriCUmaefbdsNkEAKXhAJhEU?=
- =?iso-8859-1?Q?8s+s6RemzGIh9GbdJeb6Je/h0zRj9oaN3cpKTgNqYdmB7DsRDia30eQ1GM?=
- =?iso-8859-1?Q?pokG6k7SIxBqkrmAw1E5GQoX+2m4EcKVbCb02tF16NV2P6GjVkFxo5O+J7?=
- =?iso-8859-1?Q?r/j3m9/WaVXBRtG33Uob4NhEQRIvX59OjwwOxDaCO2W6BFhGaPtJft252z?=
- =?iso-8859-1?Q?31sAwqgrqAsOsGfvb101keN8jeSHR3SUKL7dLOmu7TpAmmz+wMomtXPyXA?=
- =?iso-8859-1?Q?X9iamSdfjZjsHtQ6Dk8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e87a433-0350-4e02-b989-08dc9bfa4265
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?hAQAQ01TsQf8m/DXaSxEb/l7MgaQgH5okrOzeMVUXRLfK/5wyIR9qVVfACtw?=
+ =?us-ascii?Q?7UOKutJii1PPy1aN3H+ZEuKhNhmWAd36qTNQj5Ek2cjx0pYoELIaHP6C5/gl?=
+ =?us-ascii?Q?u+os2x8pLkP1yv+3objAlIV55Z3zu/f3Cdo7poqIw7Ig/Wq7eQVq4A6Cb6eH?=
+ =?us-ascii?Q?PE2XBEliblI5kyCPNrEFQhHZ/EXInjmuFTkD9dCDxH/E5mFufMG1Hq0DISLH?=
+ =?us-ascii?Q?STNJvlP20L6PQA3war0VMev/RVxWbzKFskeYKefR5lQyGZmBduKgPJcxlihk?=
+ =?us-ascii?Q?AlHIGWtB3FYBaU7DM0EVSkgjhN1WDhwEieqXpYV5H5frBqxOIZGC8SV0JXI1?=
+ =?us-ascii?Q?WRZ8OdmvILZNLNJG04C4zQ6t0Tu1gRTMD3R9G7he6W5Kl4dMZcmj2b/1Weee?=
+ =?us-ascii?Q?oyNUHbAPBk9f8XvU7P77N22ERiLKXRL2Rj3eKg7oDO+xex6hJmBPgGFg8ByB?=
+ =?us-ascii?Q?YnGEe9zXZGseeGl3EoaQ7XjW5GEnjg08g/5/GxiXojPBogTyEeShFtSNeM/n?=
+ =?us-ascii?Q?O6F0ARMRI62XbbkyEEvfhJEpcSjT3K3YQcn1pljEkL4VbWBjbPG/QXVLP4A8?=
+ =?us-ascii?Q?yFj0I0l8Knb4tCnpzuKUQnFaOsM27m5+gNwP9qMA43LQBYKEIE47K1gsr2nC?=
+ =?us-ascii?Q?wntmUkL/tyjL+YT7sQBhGY8D3tCyIBREFS5bYMRF4iW7+zxn84SSLAj6gDhv?=
+ =?us-ascii?Q?YRZHTVnPmEP1MT9s6obSVKUP9dcCw3bTP5axOZ9KGBgYEXatZDcBJlm2hA+3?=
+ =?us-ascii?Q?1IcRFLtNYj082UMR9GwR0c+UxwO5Qvgghx+2N23X92zL1OStBKh07DiKx+Ei?=
+ =?us-ascii?Q?ESO0mDIKVyv+kDY+E43OvFMnl4XrO4yV6A1woK6Pu9vwqK4XSkZUg2uXjFC+?=
+ =?us-ascii?Q?hHQd9klLfWbwqkeuSsos6sjVbcNQo18qr45944uOAHMJvDvGNaumAI3LzMMX?=
+ =?us-ascii?Q?K2taIG6KoucPXiakxgmnkO8umiCRk/NKCQaYOdh61uCrs67gBDNJfjzL4bak?=
+ =?us-ascii?Q?QYADngRN28kJr/uXwa/vYSWb6GrLNlfu8LG6cGPM9SobP5447od/6iesVh2m?=
+ =?us-ascii?Q?BAWc3345kKh5Wcz3XrQLAnJQp/J3eEWJWRWHWEhIG29ayid0555fGiOS3ZJ9?=
+ =?us-ascii?Q?uAMipzQr3Rol/o8NRdweWsrwrTyScFB48L5+bnecT2fwwJPaSzud813nStPJ?=
+ =?us-ascii?Q?tDTwP22l4+vVGsnhGuMzKQ7BlpgiF/r7M6hBQT5xdk/loS4oTFVb4l5a7aEY?=
+ =?us-ascii?Q?WHiymPOQIziwZG+Kv4zcFSG+GbueyJDudstfJWtb4WpQJpmrqJvyyFNf8JJO?=
+ =?us-ascii?Q?yC2RuBNz3LDlU375BdRsCGR1mEVocJBF8wBmfISOUUREl42LcN76pNHxwruu?=
+ =?us-ascii?Q?sZjzAy653dfxAjGb5pEKwpl67A6Y/+SiB6ahFliJzqFXYCTkQ28ScJusXmTY?=
+ =?us-ascii?Q?J7rKdLSGiduG4Ic+vXNcXKm5KmkLVHvVHY/LNGqUVyVNiFRw8NMuzeQTUklE?=
+ =?us-ascii?Q?s89f/rO1vv1PNYMWVK9FDYz17gOo6ehwApYMphadH3bPoVKqOu+wREnj0iYy?=
+ =?us-ascii?Q?TfB8mQbB43Ikh2gPppzt3oa2D4ud0e6ul9ef2dH0c3htl9h6g6kH3yoVCfSz?=
+ =?us-ascii?Q?BA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c5a47c7-3c1a-43af-9d5e-08dc9bfa762b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 07:23:54.0453
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 07:25:20.7290
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZVP+rDuoT+YZzVB6X+dLu7nD2hLyfbphpotI5UU6xcnNCZNM984d7EonRGt21MgPac8WrsRTnzr4FLKvUIrdIo7ByVCvQfGLxUEfBvpymvA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6734
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: pH+Jc95Do/uNQsyYEojiXw6jV8mpVf7cZ1a2NyBd16l8q4m+Fx5yDo88vRQch8uHJyAnhYkbcDz67bZHoXeeKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6610
 
-Hi Reinette,
+Changes since v3:
 
-On 2024-07-03 at 13:51:03 -0700, Reinette Chatre wrote:
->Hi Maciej,
->
->On 7/3/24 12:43 AM, Maciej Wieczór-Retman wrote:
->> On 3.07.2024 00:21, Reinette Chatre wrote:
->> > On 7/1/24 7:18 AM, Maciej Wieczor-Retman wrote:
->
->> > > diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
->> > > index 1ff1104e6575..9885d64b8a21 100644
->> > > --- a/tools/testing/selftests/resctrl/cache.c
->> > > +++ b/tools/testing/selftests/resctrl/cache.c
->> > > @@ -186,4 +186,7 @@ void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool
->> > >        ksft_print_msg("Average LLC val: %llu\n", avg_llc_val);
->> > >        ksft_print_msg("Cache span (%s): %zu\n", lines ? "lines" : "bytes",
->> > >                   cache_span);
->> > > +    if (snc_unreliable)
->> > > +        ksft_print_msg("SNC detection unreliable due to offline CPUs!\n");
->> > 
->> > The message abour SNC detection being unreliable is already printed at beginning of every
->> > test so I do not think it is necessary to print it again at this point.
->> > 
->> 
->> The "SNC detection was unreliable" only gets printed on the first execution of run_single_test().
->
->There is more about this later, but this can be printed at start of each test.
+1) Rebased onto Linux 6.10-rc6+.
 
-Okay, thanks.
+2) Added Muhammad's acks for the series.
 
->
->> That's what the global snc_mode was for mostly, it starts initialized to 0, and then on the first
->> run of run_single_test() it is set so other tests don't call get_snc_mode(). And then the local static
->> variable inside get_snc_mode() prevents the detection from running more than once when other places
->> call get_snc_mode() (like when the cache size is adjusted).
->
->The shadowing of variables can get confusing. I think the global snc_mode is not necessary, having the
->local static variable within snc_nodes_per_l3_cache() should be sufficient and run_single_test()
->can just do a:
->
->	int snc_mode; /* new name welcome */
->
->	snc_mode = snc_nodes_per_l3_cache();
->	if (snc_mode > 1)
->		ksft_print_msg("SNC-%d mode discovered\n", snc_mode);
->	else if (snc_unreliable)
->		ksft_print_msg("SNC detection unreliable due to offline CPUs. Test results may not be accurate if SNC enabled.\n");
+Cover letter for v3:
 
-This sounds good, thanks.
+Hi,
 
->
->> 
->> And as we discussed last time it's beneficial to put error messages at the end of the test in case the
->> user misses the initial warning at the very beginning.
->
->Right. What I found unexpected was that it is done "at the end" but from two places, from the show*info()
->as well as from run*test(). I expect "the end" to be a single place.
+Dave Hansen, Muhammad Usama Anjum, here is the combined series that we
+discussed yesterday [1].
 
-Okay, I'll remove messages from show*info().
+As I mentioned then, this is a bit intrusive--but no more than
+necessary, IMHO. Specifically, it moves some clang-un-inlineable things
+out to "pure" assembly code files.
 
->
->> > >    }
->> > > diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
->> > > index 0c045080d808..588543ae2654 100644
->> > > --- a/tools/testing/selftests/resctrl/cmt_test.c
->> > > +++ b/tools/testing/selftests/resctrl/cmt_test.c
->> > > @@ -175,8 +175,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
->> > >            goto out;
->> > >          ret = check_results(&param, span, n);
->> > > -    if (ret && (get_vendor() == ARCH_INTEL))
->> > > -        ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
->> > 
->> > This message does seem to still be applicable if snc_unreliable == 1.
->> 
->> I was going for this one error message to specifically catch the kernel
->> not having snc support for resctrl while snc is enabled. While the
->> above message could be true when snc_unreliable == 1, it doesn't have to.
->
->If a test fails when snc_unreliable == 1 then nothing is certain and some generic message
->is needed.
+I've tested this by building with clang, then running each binary on my
+x86_64 test system with today's 6.10-rc1, and comparing the console and
+dmesg output to a gcc-based build without these patches applied. Aside
+from timestamps and virtual addresses, it looks identical.
 
-Right
+Earlier cover letter:
 
->
->> SNC might not be enabled at all so there would be no reason to send the user
->> to check their BIOS - instead they can learn they have offline CPUs and they can
->> work on fixing that. In my opinion it could be beneficial to have more specialized
->> messages in the selftests to help users diagnose problems quicker.
->
->My goal is indeed to have specialized messages. There cannot be a specialized message
->if snc_reliable == 1. In this case it needs to be generic since SNC may or may not be
->enabled and it is up to the user to investigate further.
+Just a bunch of build and warnings fixes that show up when building with
+clang. Some of these depend on each other, so I'm sending them as a
+series.
 
-How about this in cmt_run_test() for example:
+Changes since v2:
 
-	if (snc_unreliable)
-		ksft_print_msg("Intel CMT may be inaccurate or inefficient when Sub-NUMA Clustering is enabled and not properly detected.\n");
-	else if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
-		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled. Check BIOS configuration.\n");
+1) Dropped my test_FISTTP.c patch, and picked up Muhammad's fix instead,
+   seeing as how that was posted first.
 
-This way there is a generic message when snc_unreliable == 1.
+2) Updated patch descriptions to reflect that Valentin Obst's build fix
+   for LLVM [1] has already been merged into Linux main.
 
-And as you mentioned at the end of this email, the user can be expected to
-backtrack to the beginning of the test if there are any problems so they can
-discover the exact source of the issue - offline cpus.
+3) Minor wording and typo corrections in the commit logs throughout.
 
->
->> 
->> Having only this one message wihtout the "if snc unreliable" messages would
->> mean nothing would get printed at the end on success with unreliable SNC detection.
->
->Having a pass/fail is what user will focus on. If the test passes then SNC detection
->should not matter. The messages are just there to help user root cause where a failure
->may be.
+Changes since the first version:
+1) Rebased onto Linux 6.10-rc1
 
-My train of thought was that if test passes with broken SNC detection it means
-SNC was used inefficiently right? (either the portion of L3 used was bigger or
-smaller than that allocated for one cluster)
+Enjoy!
 
-It's not exactly a failure but I thought it deserves a warning at the very end
-to alert the user.
+[1] https://lore.kernel.org/44428518-4d21-4de7-8587-04eceefb330d@nvidia.com
 
-If you don't think the warning should be printed on success I guess the
-condition can be:
-	if (ret && snc_unreliable)
-and the user can look at the start of the test if they care about more
-information. And the message can lose the "inefficient" word since it would only
-happen on error.
+thanks,
+John Hubbard
 
->
->...
->> > 
->> > >    volatile int *value_sink = &sink_target;
->> > >      static struct resctrl_test *resctrl_tests[] = {
->> > > @@ -123,6 +124,12 @@ static void run_single_test(const struct resctrl_test *test, const struct user_p
->> > >        if (test->disabled)
->> > >            return;
->> > >    +    if (!snc_mode) {
->> > > +        snc_mode = get_snc_mode();
->> > > +        if (snc_mode > 1)
->> > 
->> > 
->> >  From what I can tell this is the only place the global is used and this can just be:
->> >          if (get_snc_mode() > 1)
->> 
->> I wanted to print the message below only on the first call to run_single_test() and then
->> print relevant warnings at the very end of each test. I thought that was your intention
->> when we discussed what messages are supposed to be printed and when in v2 of this series.
->> 
->> Do you think it would be better to just print this message at the start of each test?
->
->Yes. If there is a problem with a test the user could be expected to start tracing back
->messages printed from beginning of failing test.
+John Hubbard (6):
+  selftests/x86: fix Makefile dependencies to work with clang
+  selftests/x86: build fsgsbase_restore.c with clang
+  selftests/x86: build sysret_rip.c with clang
+  selftests/x86: avoid -no-pie warnings from clang during compilation
+  selftests/x86: remove (or use) unused variables and functions
+  selftests/x86: fix printk warnings reported by clang
 
-I tried to reply to this comment with the suggestion above.
+Muhammad Usama Anjum (1):
+  selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
 
->
->> Or should I make "snc_mode" into local static inside run_single_test()? Or maybe add
->> a second local static variable into get_snc_mode() that would control whether or not
->> the message should be printed?
->
->I do not see where more local static variables may be needed.
+ tools/testing/selftests/x86/Makefile          | 31 +++++++++++++++----
+ tools/testing/selftests/x86/amx.c             | 16 ----------
+ .../testing/selftests/x86/clang_helpers_32.S  | 11 +++++++
+ .../testing/selftests/x86/clang_helpers_64.S  | 28 +++++++++++++++++
+ tools/testing/selftests/x86/fsgsbase.c        |  6 ----
+ .../testing/selftests/x86/fsgsbase_restore.c  | 11 +++----
+ tools/testing/selftests/x86/sigreturn.c       |  2 +-
+ .../testing/selftests/x86/syscall_arg_fault.c |  1 -
+ tools/testing/selftests/x86/sysret_rip.c      | 20 ++++--------
+ tools/testing/selftests/x86/test_FISTTP.c     |  8 ++---
+ tools/testing/selftests/x86/test_vsyscall.c   | 15 +++------
+ tools/testing/selftests/x86/vdso_restorer.c   |  2 ++
+ 12 files changed, 87 insertions(+), 64 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/clang_helpers_32.S
+ create mode 100644 tools/testing/selftests/x86/clang_helpers_64.S
 
-Since you agreed with the previous paragraph this one doesn't matter.
 
->
->Reinette
-
+base-commit: 795c58e4c7fc6163d8fb9f2baa86cfe898fa4b19
 -- 
-Kind regards
-Maciej Wieczór-Retman
+2.45.2
+
 
