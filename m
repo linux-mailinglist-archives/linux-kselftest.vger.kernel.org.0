@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-13150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B60C926D78
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 04:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 180B4926D7C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 04:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EEFC1C2121D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 02:33:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BBF71C213E1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2024 02:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3F6B101EE;
-	Thu,  4 Jul 2024 02:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A31617C6C;
+	Thu,  4 Jul 2024 02:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Q0utNq4F"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OSJijCtK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062.outbound.protection.outlook.com [40.107.244.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A597B17BA0;
-	Thu,  4 Jul 2024 02:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96846171AA;
+	Thu,  4 Jul 2024 02:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720060413; cv=fail; b=mY5G669sofTlp6H4qdMQR5zR3tYeLTopKm0eKhuTxi8QNcYK9PT5J5NRGJTHpPNZefNlJkGQGF+Fvw1w8qm08ig1Pya4zMzmdbKZ2RS0FPl9yOkRlkxUR05zncLB+WwKjG2q44zMtn2Wl0lB6eVEVYNv+aKixR4O3rQA6VdYGo0=
+	t=1720060417; cv=fail; b=H2qMNB9JrckPR0kYpR7Pwrcz3YZ4kFOEQ9JCt9jiybaa57Uo99zYD2jVVEkzNHttl8Iquqg/CHjsL3uSqfhKX9XJaj4V9N7vQmxNXLOYtc7eguNP3wYMiQ999xq1C24SvEACRFKoKYGBSu1JLpoPhJ71EqLbS6YdgFfSztwDHvI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720060413; c=relaxed/simple;
-	bh=fS0h2uo0gjsvRvhFJVYjz4AkAkxlJjbzDCaNBlB9SjM=;
+	s=arc-20240116; t=1720060417; c=relaxed/simple;
+	bh=xz+IbFEVQi1i2+B3MIak2OoiRYbFH6kWotXqPDhvOEg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oT94l/4uJjjx0DBKhmy9h0ZBnWQBSEEEl5g/SDjMnuptnOpJ7bL4KhtF5LeWJuN2Oz91+O+HhghCWgbvQshe+tuXLZyX6YJ5OhP1KDocr/dgrwui0uiW+rmF62ZwDjZ2keGoYrbNEH4nlr7tMiDlEKf4OpPe1tKVePio4cbya0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Q0utNq4F; arc=fail smtp.client-ip=40.107.244.62
+	 Content-Type:MIME-Version; b=mTwTmv5p+K0GeAWoXTGInzFMFtFHJzY0Zgu65hSMPm3UWNGzGFplsvmvwVlzJBVKyr1vIEuPuEu+wNLyl5xCEKqhwAaIkHFYhsHeGcWmEUadThNhbJxXnIg0MgiSdtuC0o5iOcImBiG0BzAWwVR08lOUq80vghIjbtfRpGU1A50=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OSJijCtK; arc=fail smtp.client-ip=40.107.244.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dDKziM2hRVpQ6y2UelJfC1inikpBlz9U2Nv6Q6AMDi3xEOKrD+ARnzTmMGj2zoef9WErY7cSnJII7TZW3KGR/398wfHYQYQ/aAst8aHYdjOEp2XRaRU7NSSRcyFUzWfeI6SM/K5BA4VLTyy18GW8X5pjexEVfzEIWuObt/MorxFjid5BLOVFzpsqJV4W7nRWhRbODnIz7DKKFbMtVqt6ytiTzWYWHDlhwO0QlyH0ZC9RELUhRsw/K2PNw6LNm6KwUDIs+E4HioAVqQE/CEgMGgJRcNxpBsYLJDVYWbFI6uHf1rNazgJKQ2941myJJFIFVaOcKi49teq15foulw41fA==
+ b=YAGWy4SS9/EfRrtZctzlbpD8jwsG0KDJ8tXrh3+BKycLgNuN4w3nURym2zlgKVEwgcd11JIForzGVBM9O/PdnuXpaxuv8xsMt6E6hVUqoatUp6HuRzFBSQ5anSLyZi3zMGMO+17NbVARLGXI+t2i68PDuuVz/DD0hrmKrt7bG91xNQbzqXUGjFrFGT8mWQJs/C3xL+UvS8qM5DYgdEhRNibj44mQKLBkFQ95WcaVNR4kPAhMSrGEn3GR4IIk153PkJrU4G7Pf43flP4sYTAVCxt6krzvCrq5oLW2BgsqT/seFRFOv+E1HeqErpcbHlauFntYXaBqYQgJxVD1YnXT9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qcsnsD1pNMQuFrOynC4BFElE2hN2iFDFASMwNJ9NSK4=;
- b=d/fcMnbOUupiYarFbiM74zwSTfxHeWVGxRpYM4Q5fOQLHeWrvx14V+SWe+0sffWcM98/FMafO79UxGfB0ZMJJRnL3K2ftVaIYrebs4Dkpfdf/f6vECiR1dUqI3n8oCmln75P+KHjmnl+JiKec1lLXmm2+SL1zDq7T9wLPEqVxwg1GOl+sLcHUE1bdHc1u7PNODmZbKmqIc4ui9zOn0N6hrrIPh93bECHPiWYDfLK2KFYnkhe0Tvpl91r7RhR4xMXWU/j4I/xNz2A62LSFc3/gSyTNWgiwc137XQo2a7Z+ol7TaGPrrjHb/euScbEv8JloU/gr/f924y+wd5nkBBQqg==
+ bh=4L7Mdw7LkQKm8VHtcpcip7zoUkVQc9BeISjiGBJ6DUM=;
+ b=OxRvmN7/6KBnS5Iifm4/PaDd/SLBrobEGKFYrzvKMKT2oYZVQ7Bj4Tdx5BvxlruP/hN237sFD8nC6iUlT25kZxaUWsQj20p7JOmz6AFlTWroXTM+G6BTnx0/QRvhCOqGP3H4u93TZzx9A0LY/y+mBAQXr4oIROuy0cxiImbYJBPSrxU3CSuCziksVfXUl5iR5OB7WZyc0RXvqL6Cs9iNhEcDRYgscxvYytDEMp9w831NQGFm72MChtbKvNDT3LslNugNTTsSla9AlOLeGmjLRSeVYEw1IzpwprFEFsYOnTEI7rYPJSXe7g3zIBalQrRjDDHpLgUjBMelGiHj3O285w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qcsnsD1pNMQuFrOynC4BFElE2hN2iFDFASMwNJ9NSK4=;
- b=Q0utNq4FpmxhXQHYzRnM3E1xt5mwJziMaCbkAoNRelgSFC3/pNZzo/WXvKcQdwn6BqPbFcZrRw8jnVervJIXxMj36w7TMbrhtF1kucixQl98kQxb6953XEpoZQd0HSpl48xNwuIQvGkthZB18TUqETm7xLfExTmeMRSQ72a/uK6QzAfs6nDaXZB4t2f592p/RSKHwJk/BCCfb738Z04PqRdqrTx6xFYU2B2j27OolR1JoycXuBjNOwBLktPwpU0Bf4zfgVrRwW2mUKcuXLF2uAeZrljkAzq4Y60mOayKrRutoBL9FKkCIJam2KyTAYBgbtGIax+U3Qr2i2g+1wCIrA==
+ bh=4L7Mdw7LkQKm8VHtcpcip7zoUkVQc9BeISjiGBJ6DUM=;
+ b=OSJijCtKvWsF2mI7b87LE09bEFmSuySx2RSErzWzFacn9kfGBGdm573KTUl0Uiil2wPs5QTBD4MSVZE2BIFo9BJlKvBS15Pro6oKjPrzEFVFiLbJ5ZzKbIaX5mxahNu/uV4JCJ/R2DEgocYrxkRZpNhUViPiL+Vuu8Skp4kA8fAH+hCsuSwdEt7y/3IivluajSMntrqSbuFCrdis5AYwmg0Kje5xVD6EsR7Taq9+ROx4HVjT+xOkO7sMbnVWxZMkGry1SYxgv7jgaarIDEtHvujdiluueGK31gL/TgoSoR5c6h1H3AFQf2+sccRttbAldEao6ROMUpWgyOjm8FRAsA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
  by IA0PR12MB7775.namprd12.prod.outlook.com (2603:10b6:208:431::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.33; Thu, 4 Jul
- 2024 02:33:26 +0000
+ 2024 02:33:27 +0000
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07%6]) with mapi id 15.20.7741.017; Thu, 4 Jul 2024
- 02:33:26 +0000
+ 02:33:27 +0000
 From: John Hubbard <jhubbard@nvidia.com>
 To: Shuah Khan <shuah@kernel.org>
 Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
@@ -69,21 +69,18 @@ Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
 	linux-kselftest@vger.kernel.org,
 	LKML <linux-kernel@vger.kernel.org>,
 	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>,
-	Carlos Llamas <cmllamas@google.com>,
-	Edward Liaw <edliaw@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v4 1/3] selftests/vDSO: fix clang build errors and warnings
-Date: Wed,  3 Jul 2024 19:33:22 -0700
-Message-ID: <20240704023324.83564-2-jhubbard@nvidia.com>
+	John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v4 2/3] selftests/mm: remove partially duplicated "all:" target in Makefile
+Date: Wed,  3 Jul 2024 19:33:23 -0700
+Message-ID: <20240704023324.83564-3-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240704023324.83564-1-jhubbard@nvidia.com>
 References: <20240704023324.83564-1-jhubbard@nvidia.com>
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BYAPR03CA0030.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::43) To BY5PR12MB4130.namprd12.prod.outlook.com
+X-ClientProxiedBy: BYAPR21CA0008.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::18) To BY5PR12MB4130.namprd12.prod.outlook.com
  (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -93,186 +90,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|IA0PR12MB7775:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffb0a3bf-5152-4e02-a00b-08dc9bd1aee0
+X-MS-Office365-Filtering-Correlation-Id: 4be302a2-f947-430e-ebae-08dc9bd1af4e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PHG1pf1LCPQH3PT11kAMebEgOQcZc5rVm+sVAVrHNzFOc3un7kPARAwv38aT?=
- =?us-ascii?Q?pJ82ZOmHHpyVLQS4MZ2Rztr3ujiLwZilNsS3m9F/7wJFCfaoWuGRDF9IcR5T?=
- =?us-ascii?Q?l9bjmNxYtpc94TkmiCiLd6b+86PB+e/C6b6q8TpahAxQNNCwtMRR0ewHo9Y6?=
- =?us-ascii?Q?otmx5/HXmWeAoiZIoq+rHzM36GjXs0w3m54+xK/BZ40k5CtyStTjRGqS1z5I?=
- =?us-ascii?Q?yYcpNUE5cBWaOreN08cp8iIheGP6kfUwjDBMUg6ji/4aZy8B77FKJDiXLELZ?=
- =?us-ascii?Q?+SNh055KW5LP8H03bhopv8bIDM2QISiSELMc8kYYmOoG/fOd0uOJmZwBUMVn?=
- =?us-ascii?Q?VhvSfradQ/v9RPKGhq3NBYk4Imca19qFpLQppfH6IWXt/MCNH7Nsl8Q0EgrK?=
- =?us-ascii?Q?oGHwYPCPyUBkoZbBeBm9uecFfFXzKUU01aEmroGgJ0WMybxbKQN5He+ehBB6?=
- =?us-ascii?Q?mRKsXSy9IVQcpUhb7OxULJ5g6sKrIAvBfxNKimN4vId1eaFzzWfgKI0Zv2jj?=
- =?us-ascii?Q?uN3imma+t9XJGe9cd9wx9ufiNOE0kFJJW+BZVJozELy72xkceYSrdQBVZRQQ?=
- =?us-ascii?Q?fCEvcw7ktkJWwnkvNSrC7fI45boBn7cLX61FiWkBaCrmW9TK0ldznCiV6msV?=
- =?us-ascii?Q?DsGV7rfXL8GHeb69872oVLwAbKPyhHiEagIgsF4+BUmqyyHwMIhsn4bxCgns?=
- =?us-ascii?Q?6A/aflLs5Dyo4UoZiTzK6Sp9acmNRNc6FhgvG5CNGclfyMr/kLmb2/yKJNeD?=
- =?us-ascii?Q?T2L47VUDO3RD3VtWxvuHrpGCunMoL8b05vZ+xpwVZ1LFUPs6ntpINv+wqmWt?=
- =?us-ascii?Q?qjotpnUaNYcXtxaLxsaBJWPthPqOnrtdswL3zh+3j63iD5mPFOuuP5Br6ZF+?=
- =?us-ascii?Q?jmvgH9V9e6LslS+O0IfuOODAn45AILoxn95o3UuDKbusOzaJhsxPJVmeMYSb?=
- =?us-ascii?Q?Lu+M83bDbPhZDns2vPWUJJb3XtZnLuC60Ns4T3Vz4B+YNbgKNdge6M4QhrK1?=
- =?us-ascii?Q?zAmdUbxFSq6+RaDfmUfc4i2ITHhG8SIWf47KeuO8y5iMpesWkVsRK0KYbo/P?=
- =?us-ascii?Q?leHj9n662Z6gXwfH6RzxwQ7v7wXboZ5ytz5UVeMgNnJqIH6BQzS5KXzYJlSd?=
- =?us-ascii?Q?R6MHnaPAoNPACRxZiPNjG0MnF178PRVnJ5dyLP7YOa9CIQgo+/f36DJ1N+Sa?=
- =?us-ascii?Q?eGDWN0H3a7JWIPpKYL8W5VwRL7dEK+CYORLsWetDG06tX/Jc52nlhR3WEmtX?=
- =?us-ascii?Q?WM7G+4oeITEXR2qlZyXySz3WxVrTL0F667pAFHWeWk2iMzcHodHk6b5GYL8A?=
- =?us-ascii?Q?Tk3cLRMpKAFkYUuHud8aemB/sR1svFnDke71O5ayM6OWug=3D=3D?=
+	=?us-ascii?Q?LVhFB6kvDBQ51brxZezidwsYWviLmz2SWjG1XE+f+vzo0qRbfPhrJ/FnKi/H?=
+ =?us-ascii?Q?fN0a4qDM4DfNMZUPgokEUTSIRjEwggCbQ2t59oktQ1YrS4KgZbWKJBF9LF7f?=
+ =?us-ascii?Q?alPlli5qFYXW1b2phfWX0MaYt9L4Y8nlHQz5vDuPZMLhdi6X27BzQUJHQMTh?=
+ =?us-ascii?Q?2H9cIaJQxur/c4/iAVnBGILjlnLtFV4K0nE0DybI06G4rqNL3Kjo6aCJnQHH?=
+ =?us-ascii?Q?pxTyCvU1hrQHIPXydEMEpr7kHr9CJglGLZJ2mHiguDAwl01PwpF6qCWfFM8M?=
+ =?us-ascii?Q?wiN+1NspQ6YqWrwoAanF/qlwtsMsx6GDWdYxaZxRNAeXD1bbbaigCnFS4DYB?=
+ =?us-ascii?Q?/Untb4FK11IwA+DGxXO3gVd5MDTWYFd3eLmo3uvQQfLYSF+GRgtAcGJN0UJr?=
+ =?us-ascii?Q?KVeO0pFDqHcx+iwDV8hvO/C3mudlNC6pjhlqfWK64iHbDDzkGNuo/jVERVFb?=
+ =?us-ascii?Q?9ZziWLWk9BlvH8lZ2j91QSdqA6a4BdUXpvHvsQqiFuciL/XIssE5Wv1/U9MT?=
+ =?us-ascii?Q?4hvLI0eMFD7Z80D4QB84Uv9Ie50q+upyTmvYCJi1dDcKAxPXKde+2ERoDILZ?=
+ =?us-ascii?Q?qrIZQ6S5gDVvtSapc6X4fIbc8m14OIlH7f5WnRQm7aFd1kEyset+1FbRcV2/?=
+ =?us-ascii?Q?4v5t9I2aCL0VPDWO5hLOSRXnWWJQ3qhcWXVXKbjFtXuDhSr4p0SZ9d1Tm/wH?=
+ =?us-ascii?Q?6M7QU4H/0Fbs+hn0N4Yn59c6VJPTJ12H97VhzWUCkmkA9v7+qzFW56gCvatX?=
+ =?us-ascii?Q?ZqMpPkDZCwckkJ4mkrYQizWnjIKR92mo3epWn9yfdboQq1OeWpGiGVw/jnXh?=
+ =?us-ascii?Q?34fe8FaiWcStLdLVtRSzVU853oVFrmlklrVMDIogEEDYEUJElrrcTjQyQjz6?=
+ =?us-ascii?Q?Z9hUX2isrj7ojS5FnNh2vmjUTuKFPgwxH1KHy1F2ld38LuY+ahHZmiFmya0L?=
+ =?us-ascii?Q?7f/4kng4oAONYTYEky9UrdsmYEkQu1WkdWq+uGs6/1rHWSj73oPEd/puAwnR?=
+ =?us-ascii?Q?o+smfe05Q9SyGP9SO7oyQ9JQij4+Mw4oEWVksv8qp5eLm+qOIYP7dVsezsZh?=
+ =?us-ascii?Q?ncMyeYKdM7wHMUb/7t8ayxbHyQzvqK540WocsRJUb8auGL6stqrAuM+w+gCc?=
+ =?us-ascii?Q?2VyLdAZj7WdajsXWXitsNQa88yUA2lBKVM4gK8tK7g17ZzZ3UmmlhO8iqzMc?=
+ =?us-ascii?Q?w3+SetWyIytwwdR9GOpkirytzTJFrzVyG57J1TdbkEFK84gs8p/2kAiqbh+q?=
+ =?us-ascii?Q?Tyo4AH8SRvc/PjYQP5A9mATkS12OPt0WmmRdjKj6GITW0BPe5CL47ERv12qO?=
+ =?us-ascii?Q?8h2k+ZLkMfBF8y3SaZ6gxyz8FpDh+WMW/Mc/egWsfTQeww=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gba02cOb1X+XCYn5zE8eZ+HinO0G3y2ZV/NQhmutrJ6ni2kDuAYJU3E8EvI3?=
- =?us-ascii?Q?7xTWIuPTBmzzIyltZ9KpKXy4WTGPFHXZqBhvcj4nwucdI8SKt64mtNfLV2g/?=
- =?us-ascii?Q?3Pa3jkWCaohuHybvixqIoADx+2126bFX92bE1hBv0tMS4ZdKG6UDAp6ZPxJj?=
- =?us-ascii?Q?uDSK2H3fFDxzi1t5tBDTlocalHG4MfSq3s3+8/bkw805uYGVyIIwlrfPVk0R?=
- =?us-ascii?Q?GltOaeoD7MRRl7iTgn+EBvlGxWqrXni29+cmD57E2/F0wYaoYj7t/DfIwzgv?=
- =?us-ascii?Q?wd3xQNr2ctdmWckBuX939OYQ26vz/+5sX1zeGhmyEaiPv6bYDUbXZCg2bYWH?=
- =?us-ascii?Q?gXzB1UYC5FU3f6CcAgeaWSSfyYchjIxA8TO3uVNNi6B/pP6H+uu/ht9c+Lbx?=
- =?us-ascii?Q?h2MbG22d6G+TI+/LsKaW+L/+Mrhm/BjxQuDdc5Xqu+UtyaKtUf1hJyhrMATz?=
- =?us-ascii?Q?+DRdS3kJxM2Kzh/urNlsbKG5YYLFqkr0vHfkBvRMPzbvJGIxN+CINjHOmTgJ?=
- =?us-ascii?Q?AqEY+L3UAxQPFN4ItJMW4zotQj1qQANj9DYDjcH/MObzI1j2pKoc8wqmc/tm?=
- =?us-ascii?Q?RTe7d9ohzC6vNwfhdoVa5qvkB98pwDUtS1SX8VM8U7ylM0LX5kuSGeM2wZ9e?=
- =?us-ascii?Q?mXqo23uAIn72o7J4FjzGeDdo/2JgtEosu0l/sa+vLbwbehPF+oOl84Uglbo1?=
- =?us-ascii?Q?LAiM+hDJnV9bOuwVeX1iBHmk3z+GQH9j8f3ow9C9etypx327LhD8S4qZWbe2?=
- =?us-ascii?Q?JOBVRAiG0TGFoOz/aEs5Xst+0A1MBAA9Nl1OsYfcO+BANkNPCFVKUMTGPBRd?=
- =?us-ascii?Q?j6KfO1/1DM1/q1//MMHflzd9r79FbmhGGU2YOtwaLCBVVb7OITcoe4wBrecU?=
- =?us-ascii?Q?or49rh+iWbcp66T9SWvvGDlvrRI8gDGVOrjtU/rTHkQ4jZWSUS0+HMIGk9u3?=
- =?us-ascii?Q?7I2JHccE5wPY1t6ysJTSY2NMSfA3gZFYkum8c8rK/6f1TCCjluUlOh5PEJRJ?=
- =?us-ascii?Q?mI+0TXvIOOIaVd27mqQIupfdcvXGOUpf2BAYUPHz1sIB0begI2JP3tg6rkHB?=
- =?us-ascii?Q?JJV4lAvDwm+1R+q6XgwfBizKH9BMzHJijvhkAglv4ozyAs1zvohCmyUYFwgZ?=
- =?us-ascii?Q?3NP16czxc/bZCYtg7YmoAeH9zT6VCOtVp+EJxR5BqA14fjbsqycFfJhPG13p?=
- =?us-ascii?Q?xb5ICGMr3UOooAssKO9qMGbLEkp9fs+3/jI+WP5m6Hjaq0OPWElQSLTX6iqp?=
- =?us-ascii?Q?C7dJoNjwv44HRpZSmtPkOPMt4oYV/KFbiiadDQnFgPNiI3GLNFXolgL0gSgc?=
- =?us-ascii?Q?a1Q4N1HEbOvCb7lTzNCxCbhJsHzm5vS2txoNYZGk/Xv1Ow6HVVmF/z8Sw/nH?=
- =?us-ascii?Q?oUH/K+cXLX86W3rkUOt7lbhiC9Ca/tgQTAGs6IVK69DyQMKxY8PTxYP3xJm8?=
- =?us-ascii?Q?nzu/Yzr4WPnIUaaXduFjkCwokrj6y/+Vq6UEK3aIk3mMNAmSpYY48SKr3TQk?=
- =?us-ascii?Q?/qhEFbiOelbwbTn0KfaOpNiIiInD6S0D22qYDtfMechYaVeLXc/jiJuU/IQB?=
- =?us-ascii?Q?QdYYTazIqbhsvuQq4or9BLzAtwc47Kz2+/ILTqW+?=
+	=?us-ascii?Q?O28h3ASWVR7X8YVCOu8kmYNC/F0NBgmnrP/atHP+l4JTa1i634ggCKjewXoH?=
+ =?us-ascii?Q?tfWo+A0TCk37t5Atog72/USt4oe/CO0yFvVuEPNToN9w8cNqvPscgnMZzRM0?=
+ =?us-ascii?Q?7Fz/uIj66j93I0NvDYNz9y0If+Nf9y4eNXmONgEW8HLv/e2K0e9u8VqEkK+7?=
+ =?us-ascii?Q?nxGQIH2re9sIVsr8a/lqAtQXbA3EhXjrgpHthvVcKtEA+whEV2D069HmYidl?=
+ =?us-ascii?Q?ymKKD6nxmkSvAod3BCC4C2os3q5tDVlESMeDKgkRV2QFFV0PuvUYon96k8Rh?=
+ =?us-ascii?Q?Gwv9ru68CjXCrlwR2CJpe/GQTo4/8xSeEUW+y6C7B960yngQ5TkzI1wNAOoR?=
+ =?us-ascii?Q?NNgRj51tjnQecgkNG9xN6GOp+ZHVKl5Cf9IPw4OqBXO8vRMd6VBxjC1KsvV/?=
+ =?us-ascii?Q?YXDrH4bx0X3Q61gtZz0aWH9jikufPWr4L+VTZPvtKy49GyGK3hsS1cNQI0eV?=
+ =?us-ascii?Q?AjMVRSh4QOd+GKJ9oEYz+zxOm3KhM4qWpXJpWx4AWxImTIi2IZH67bT5Oald?=
+ =?us-ascii?Q?ter2Jw4hT14rnrZlrM0j3OV1o4vchGi4qmuDHls6YT7eVauSeuF7j7JnWhvf?=
+ =?us-ascii?Q?C2oWVB6cE2gIvMLbmOaPeo1KN/1hP5N8M4/F2O0aP451CfaNAUhm/jhmWb69?=
+ =?us-ascii?Q?YBYCNhHzhqOXfNATxQXQoO0VgsOCIcLzclwypZobAFb27PWwCxl+3ygp/7Y3?=
+ =?us-ascii?Q?wcqOgLpJVs12K6AowhI5LrS5wPLA08XQpyFrfMPqZPAIfVxu4by1S8+4rK//?=
+ =?us-ascii?Q?ks4/NNJJvllj6zloBLmQaEUE93SIwJke9Bg299M7F5+Wh1fJrZwIG6L2WMt/?=
+ =?us-ascii?Q?rynKqxUyCA1YbMYyCXMwSQNZ4PrjT8Dveam+zqRUEr8n/+AIHV7VMtZHLQ14?=
+ =?us-ascii?Q?iKFU8DStK2aWLLGLMgWCnKCZPQFrSO9WtX/p+dJY9WOHYMKXNt8x2s6T+o86?=
+ =?us-ascii?Q?te9oX6zG0Qz8cKXVG1GugZuC8Qq7GSgut4bI9GQy8Mm912g6bkrfuruzL8cb?=
+ =?us-ascii?Q?TEjUccvwdeq6IKg2hV/LHOtg7GFgdkgbzCNgOCUkczSJmrnRTMpehSrw8TV6?=
+ =?us-ascii?Q?Nm9q1ufE1MpJ7KbEKCfaiayHDZestsaWecYfbHyPp4Knj6g9uUCN/cqDCNfO?=
+ =?us-ascii?Q?ZiIE4AmUaYJhmRk3suk47xRVHPwFxqckpmcElJar3fbra9CEahaztccU15V3?=
+ =?us-ascii?Q?Q4KyLdke2Rm1xgKWUulhd8fKGAwSL4IYYz0d1HKaJB6unw4h828LmZQA1EE6?=
+ =?us-ascii?Q?w25amFXryaP8MRUD7aomE/+FyfvocevtSpZXTkUZYpniHo6PNBg6pz9SAvC9?=
+ =?us-ascii?Q?VAzrFSTmAXSaU1ZGaJbVyyi7S7U6olm538RtKGBDr2AfNTC+GKmwu4tJ4mxu?=
+ =?us-ascii?Q?1eJU2bWmXf+veG23lhpNh9JCF6MeSWP6vdoduY8+1AB54xSu1pbx5cgGTLNb?=
+ =?us-ascii?Q?O7FoG4SwjctbdXSGmyJ0jXRFIy8QubarHMbCuhnMKPdMnb4R2wi73QKiNm4+?=
+ =?us-ascii?Q?V8sjAD2gwdubIOjXtk5Ns4W7TzmoAeWZrk3xPDmoL2nKu9mKUxkWXybJ3lrH?=
+ =?us-ascii?Q?K+Vu6sp0YF/P37IXqSxeyxOHm4SJ1ukKbXCGA7I1?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffb0a3bf-5152-4e02-a00b-08dc9bd1aee0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4be302a2-f947-430e-ebae-08dc9bd1af4e
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 02:33:26.4867
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 02:33:27.2304
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qgzsqicaIXAdgIsx/q2TrsitpdyIUtBICJPJkdMMjGWOa0yqBOLakTKkyBLaAszWr1OLKOKCSflqHie8fyO31w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: //NpkWfgrE2g+p5TuKFh1Hr1AHwQeG3PsTUHy38nMcVwhueB8Y+6NxNOnTWiFUGMP3CsvFfddzsHWWcKiL0TrA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7775
 
-When building with clang, via:
+There were a couple of errors here:
 
-    make LLVM=1 -C tools/testing/selftests
+1. TEST_GEN_PROGS was incorrectly prepending $(OUTPUT) to each program
+to be built. However, lib.mk already does that because it assumes "bare"
+program names are passed in, so this ended up creating
+$(OUTPUT)/$(OUTPUT)/file.c, which of course won't work as intended.
 
-...there are several warnings, and an error. This fixes all of those and
-allows these tests to run and pass.
+2. lib.mk was included before TEST_GEN_PROGS was set, which led to
+lib.mk's "all:" target not seeing anything to rebuild.
 
-1. Fix linker error (undefined reference to memcpy) by providing a local
-   version of memcpy.
+So nothing worked, which caused the author to force things by creating
+an "all:" target locally--while still including ../lib.mk.
 
-2. clang complains about using this form:
+Fix all of this by including ../lib.mk at the right place, and removing
+the $(OUTPUT) prefix to the programs to be built, and removing the
+duplicate "all:" target.
 
-    if (g = h & 0xf0000000)
-
-...so factor out the assignment into a separate step.
-
-3. The code is passing a signed const char* to elf_hash(), which expects
-   a const unsigned char *. There are several callers, so fix this at
-   the source by allowing the function to accept a signed argument, and
-   then converting to unsigned operations, once inside the function.
-
-4. clang doesn't have __attribute__((externally_visible)) and generates
-   a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
-   to require that attribute in order to build, run and pass tests here,
-   so remove it.
-
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
- .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
- 2 files changed, 27 insertions(+), 7 deletions(-)
+ tools/testing/selftests/vDSO/Makefile | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..4ae417372e9e 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -55,14 +55,20 @@ static struct vdso_info
- 	ELF(Verdef) *verdef;
- } vdso_info;
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index d53a4d8008f9..209ede5de208 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -1,16 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+-include ../lib.mk
+-
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
  
--/* Straight from the ELF specification. */
--static unsigned long elf_hash(const unsigned char *name)
-+/*
-+ * Straight from the ELF specification...and then tweaked slightly, in order to
-+ * avoid a few clang warnings.
-+ */
-+static unsigned long elf_hash(const char *name)
- {
- 	unsigned long h = 0, g;
--	while (*name)
-+	const unsigned char *uch_name = (const unsigned char *)name;
-+
-+	while (*uch_name)
- 	{
--		h = (h << 4) + *name++;
--		if (g = h & 0xf0000000)
-+		h = (h << 4) + *uch_name++;
-+		g = h & 0xf0000000;
-+		if (g)
- 			h ^= g >> 24;
- 		h &= ~g;
- 	}
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-index 8a44ff973ee1..27f6fdf11969 100644
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -18,7 +18,7 @@
+-TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
+-TEST_GEN_PROGS += $(OUTPUT)/vdso_test_abi
+-TEST_GEN_PROGS += $(OUTPUT)/vdso_test_clock_getres
++TEST_GEN_PROGS := vdso_test_gettimeofday
++TEST_GEN_PROGS += vdso_test_getcpu
++TEST_GEN_PROGS += vdso_test_abi
++TEST_GEN_PROGS += vdso_test_clock_getres
+ ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
+-TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
++TEST_GEN_PROGS += vdso_standalone_test_x86
+ endif
+-TEST_GEN_PROGS += $(OUTPUT)/vdso_test_correctness
++TEST_GEN_PROGS += vdso_test_correctness
  
- #include "parse_vdso.h"
+ CFLAGS := -std=gnu99
+ CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
+@@ -19,7 +18,7 @@ ifeq ($(CONFIG_X86_32),y)
+ LDLIBS += -lgcc_s
+ endif
  
--/* We need a libc functions... */
-+/* We need some libc functions... */
- int strcmp(const char *a, const char *b)
- {
- 	/* This implementation is buggy: it never returns -1. */
-@@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
- 	return 0;
- }
- 
-+/*
-+ * The clang build needs this, although gcc does not.
-+ * Stolen from lib/string.c.
-+ */
-+void *memcpy(void *dest, const void *src, size_t count)
-+{
-+	char *tmp = dest;
-+	const char *s = src;
-+
-+	while (count--)
-+		*tmp++ = *s++;
-+	return dest;
-+}
-+
- /* ...and two syscalls.  This is x86-specific. */
- static inline long x86_syscall3(long nr, long a0, long a1, long a2)
- {
-@@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
- 	}
- }
- 
--__attribute__((externally_visible)) void c_main(void **stack)
-+void c_main(void **stack)
- {
- 	/* Parse the stack */
- 	long argc = (long)*stack;
+-all: $(TEST_GEN_PROGS)
++include ../lib.mk
+ $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
+ $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
+ $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
 -- 
 2.45.2
 
