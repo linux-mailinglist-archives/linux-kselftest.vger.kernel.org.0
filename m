@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFF50928086
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:39:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07EF9928088
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67A841F2308E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:39:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8917282C91
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B401D2BB10;
-	Fri,  5 Jul 2024 02:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882031C2AF;
+	Fri,  5 Jul 2024 02:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcHtFyiD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sqyjCll+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9C612B87;
-	Fri,  5 Jul 2024 02:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616581B806;
+	Fri,  5 Jul 2024 02:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720147137; cv=none; b=FvqPzYflMHC2TVggwCeK+pG4bUB9QWoCA/B0Hc5DeuBqtT8SqTeVFkg9vEGkSoBAvgMhc9AHljWPKGUpmm3nKG5A0SC37YPgKBeHaws9nExIa3/JOCM5dX90ig7Pp8iX9QgXplYMHlnqFXLfo38ASn9iSDE2NCdXr5bh2XwmkK4=
+	t=1720147142; cv=none; b=MQzjHxjlmGWc3Ls7KouhmN115knkC/8vQdtVbGoEesK0pvYTWC4F0K8kWsA7WTyQPfU6I+CeWpMZuhCOqa6Q5/3aVazx3SP60TnNnkIA4xbyYfyXpwGncIWna+7qKdyzXz528Oiwg0cy4b6M0/chWaEaXF/YBnpLpjqQmMb3Tk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720147137; c=relaxed/simple;
-	bh=dKjXYrjBHTYDa4TZU2xrDDcJ7V8V4cU0S61NnuA1hYU=;
+	s=arc-20240116; t=1720147142; c=relaxed/simple;
+	bh=1q0Y6eR9fPAn25xOW5l3zjA07KMqKEtZTGbvv/DMTLQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lVjkOBtowa5R3ZZynsHP7b0heeapNiFD1nCHbLU3v9c6XxWf0zNRLYXOMw/D1jVsE6zoRdvtoDgUlaNQsx21fFAhqx+AZxWpQLoH3UkMfh39YREJfKpYZK5H2FznqxyppR+6iHwstTEEb+f2+58z1C9uFfNIbdC+wFG/4RJMRK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcHtFyiD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C0AC4AF0A;
-	Fri,  5 Jul 2024 02:38:53 +0000 (UTC)
+	 MIME-Version; b=N5UiWl3+odHS2/i8/eVIoetPQTeNTemDkzt5ruj5m+uXm1kjwc6DRjqZXkv7si9h4wcmyTHRUUlA2RHGyT87b5k0suV8Hwgo8HQmJ1kVTnFZptZGJEXCCodw0lXI3EgBHwO24b96GerT2jtFmpP1VIpK7ZckanyiZDNFHVoafk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sqyjCll+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D38C32781;
+	Fri,  5 Jul 2024 02:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720147137;
-	bh=dKjXYrjBHTYDa4TZU2xrDDcJ7V8V4cU0S61NnuA1hYU=;
+	s=k20201202; t=1720147142;
+	bh=1q0Y6eR9fPAn25xOW5l3zjA07KMqKEtZTGbvv/DMTLQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DcHtFyiDwv3qp7YyYVyQjvhuzVxG2C3plv/TRqgKYUML6cU3dG9Eg+RcDwGLsiGSD
-	 RG7C/qDPeHC/z0QASnwshXvJMpkvvCJAwwTbPmdopKGVoxZGEXAIDNJNes9VLlYo93
-	 UFTspDU95rWHLnwoJhIb78sPTHqpQi1is7qlhiDqn3TI+m8Ic+AFTJ2+/VB/n16hrT
-	 ZFduEkI5KpPntTZ7DDocHQw75AmA94FYTM2ELcrjkDyi2KpIYJOcXPXOZtGEC5W/xB
-	 5mjaEDVwxlF5am0CweTMOf2SqHfqeYUrF5/4wuRKnQ9VFLDAj+zHC4iukvYna4yNLh
-	 aa14nW+dO1d1w==
+	b=sqyjCll+WaAHyuoder70ker4LSeYfwC83eraeoJTdAz0oyQjcvHqiXMtT1FsAi/9/
+	 2LS7FUS0ljiD78uqFgpF5zJlnc/4Ig3xGyj1xXvZcgDOQNKtiRKNUN+kRa05d9XdHu
+	 SH6VCAq6nI8+MeM+Tap9GYOD8dspml1Yu3In7woo0o4vrAm1iNFz4TNYmAfcjX2p8t
+	 15TJRyYTXkYT09zoPnPQ8ytEPn3FypYJQsSg7xUaLekDYPv8W+yzJZ81jo4hTojGxT
+	 Bu8p/Mz7790kP+gcAUMdiIBVwqIYJgrp+yOcIkmgJK6MMGkiIYY+tGWg2MlSSswRxR
+	 YKrc7L0Crb9jQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Skip ENOTSUPP in ASSERT_OK_PTR
-Date: Fri,  5 Jul 2024 10:38:23 +0800
-Message-ID: <786005b19c3700f531bf998cdd75dd8a3a3f2aa7.1720146231.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Skip ENOTSUPP in ASSERT_GE
+Date: Fri,  5 Jul 2024 10:38:24 +0800
+Message-ID: <6c02ba53501c3a9b6b160da49c62a0a1bbf25c8a.1720146231.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720146231.git.tanggeliang@kylinos.cn>
 References: <cover.1720146231.git.tanggeliang@kylinos.cn>
@@ -75,94 +75,82 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Although the "Segmentation fault" errors are fixed in the last commit,
-run bpf_tcp_ca selftests (./test_progs -t bpf_tcp_ca) on a Loongarch
-platform, still some other "ENOTSUPP" (-524) errors left since lacking
-BPF trampoline on Loongarch:
+There are still some "ENOTSUPP" (-524) errors left when running BPF
+selftests on a Loongarch platform since ASSERT_GE() are used there to
+check the return values, not ASSERT_OK():
 
 '''
- test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
- test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/1    bpf_tcp_ca/dctcp:FAIL
- test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
- test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/2    bpf_tcp_ca/cubic:FAIL
- #29/3    bpf_tcp_ca/invalid_license:OK
- test_dctcp_fallback:PASS:dctcp_skel 0 nsec
- test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
- test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
- #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
- #29/5    bpf_tcp_ca/rel_setsockopt:OK
- test_write_sk_pacing:PASS:open_and_load 0 nsec
- test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
- #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
- #29/7    bpf_tcp_ca/incompl_cong_ops:OK
- #29/8    bpf_tcp_ca/unsupp_cong_op:OK
- test_update_ca:PASS:open 0 nsec
- test_update_ca:FAIL:attach_struct_ops unexpected error: -524
- #29/9    bpf_tcp_ca/update_ca:FAIL
- test_update_wrong:PASS:open 0 nsec
- test_update_wrong:FAIL:attach_struct_ops unexpected error: -524
- #29/10   bpf_tcp_ca/update_wrong:FAIL
- test_mixed_links:PASS:open 0 nsec
- test_mixed_links:FAIL:attach_struct_ops_nl unexpected error: -524
- test_mixed_links:FAIL:attach_struct_ops unexpected error: -524
- #29/11   bpf_tcp_ca/mixed_links:FAIL
- test_multi_links:PASS:open 0 nsec
- test_multi_links:FAIL:attach_struct_ops_1st unexpected error: -524
- test_multi_links:FAIL:attach_struct_ops_2nd unexpected error: -524
- #29/12   bpf_tcp_ca/multi_links:FAIL
- test_link_replace:PASS:open 0 nsec
- test_link_replace:FAIL:attach_struct_ops_1st unexpected error: -524
- test_link_replace:FAIL:attach_struct_ops_2nd unexpected error: -524
- #29/13   bpf_tcp_ca/link_replace:FAIL
- #29/14   bpf_tcp_ca/tcp_ca_kfunc:OK
- test_cc_cubic:PASS:bpf_cc_cubic__open_and_load 0 nsec
- test_cc_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/15   bpf_tcp_ca/cc_cubic:FAIL
- #29      bpf_tcp_ca:FAIL
+ test_bpf_cookie:PASS:skel_open 0 nsec
+ #17/1    bpf_cookie/kprobe:OK
+ #17/2    bpf_cookie/multi_kprobe_link_api:OK
+ #17/3    bpf_cookie/multi_kprobe_attach_api:OK
+ #17/4    bpf_cookie/uprobe:OK
+ #17/5    bpf_cookie/multi_uprobe_attach_api:OK
+ #17/6    bpf_cookie/tracepoint:OK
+ #17/7    bpf_cookie/perf_event:OK
+ tracing_subtest:FAIL:fentry.link_create unexpected fentry.link_create: \
+						actual -524 < expected 0
+ #17/8    bpf_cookie/trampoline:FAIL
+ lsm_subtest:FAIL:lsm.link_create unexpected lsm.link_create: \
+						actual -524 < expected 0
+ #17/9    bpf_cookie/lsm:FAIL
+ #17/10   bpf_cookie/tp_btf:OK
+ #17/11   bpf_cookie/raw_tp:OK
+ #17      bpf_cookie:FAIL
+ ... ...
+ test_module_fentry_shadow:PASS:load_vmlinux_btf 0 nsec
+ test_module_fentry_shadow:PASS:get_bpf_testmod_btf_fd 0 nsec
+ test_module_fentry_shadow:PASS:btf_get_from_fd 0 nsec
+ test_module_fentry_shadow:PASS:btf_find_by_name 0 nsec
+ test_module_fentry_shadow:PASS:btf_find_by_name 0 nsec
+ test_module_fentry_shadow:PASS:bpf_prog_load 0 nsec
+ test_module_fentry_shadow:FAIL:bpf_link_create unexpected \
+				bpf_link_create: actual -524 < expected 0
+ #168     module_fentry_shadow:FAIL
 '''
 
 Just like in ASSERT_OK(), this patch uses test_progs_get_error() helper
-to skip ENOTSUPP (524) and ENOTSUP (95) in ASSERT_OK_PTR() too.
+to skip ENOTSUPP (524) and ENOTSUP (95) in ASSERT_GT() too.
 
-With this change, the new output of bpf_tcp_ca selftests look like:
+With this change, the new output of these selftests look like:
 
 '''
- #29/1    bpf_tcp_ca/dctcp:SKIP
- #29/2    bpf_tcp_ca/cubic:SKIP
- #29/3    bpf_tcp_ca/invalid_license:OK
- #29/4    bpf_tcp_ca/dctcp_fallback:SKIP
- #29/5    bpf_tcp_ca/rel_setsockopt:OK
- #29/6    bpf_tcp_ca/write_sk_pacing:SKIP
- #29/7    bpf_tcp_ca/incompl_cong_ops:OK
- #29/8    bpf_tcp_ca/unsupp_cong_op:OK
- #29/9    bpf_tcp_ca/update_ca:SKIP
- #29/10   bpf_tcp_ca/update_wrong:SKIP
- #29/11   bpf_tcp_ca/mixed_links:SKIP
- #29/12   bpf_tcp_ca/multi_links:SKIP
- #29/13   bpf_tcp_ca/link_replace:SKIP
- #29/14   bpf_tcp_ca/tcp_ca_kfunc:OK
- #29/15   bpf_tcp_ca/cc_cubic:SKIP
- #29      bpf_tcp_ca:OK (SKIP: 10/15)
+ #17/1    bpf_cookie/kprobe:OK
+ #17/2    bpf_cookie/multi_kprobe_link_api:OK
+ #17/3    bpf_cookie/multi_kprobe_attach_api:OK
+ #17/4    bpf_cookie/uprobe:OK
+ #17/5    bpf_cookie/multi_uprobe_attach_api:OK
+ #17/6    bpf_cookie/tracepoint:OK
+ #17/7    bpf_cookie/perf_event:OK
+ #17/8    bpf_cookie/trampoline:SKIP
+ #17/9    bpf_cookie/lsm:SKIP
+ #17/10   bpf_cookie/tp_btf:SKIP
+ #17/11   bpf_cookie/raw_tp:SKIP
+ #17      bpf_cookie:OK (SKIP: 4/11)
+ ... ...
+ #168     module_fentry_shadow:SKIP
 '''
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/test_progs.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index d1d77785b165..8ca6cd970676 100644
+index 8ca6cd970676..fe6e20df97d2 100644
 --- a/tools/testing/selftests/bpf/test_progs.h
 +++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -383,7 +383,8 @@ static inline int test_progs_get_error(int error)
- 	const void *___res = (ptr);					\
- 	int ___err = libbpf_get_error(___res);				\
- 	bool ___ok = ___err == 0;					\
--	CHECK(!___ok, (name), "unexpected error: %d\n", ___err);	\
-+	if (test_progs_get_error(___err))				\
-+		CHECK(!___ok, (name), "unexpected error: %d\n", ___err);\
+@@ -311,9 +311,10 @@ static inline int test_progs_get_error(int error)
+ 	typeof(actual) ___act = (actual);				\
+ 	typeof(expected) ___exp = (expected);				\
+ 	bool ___ok = ___act >= ___exp;					\
+-	CHECK(!___ok, (name),						\
+-	      "unexpected %s: actual %lld < expected %lld\n",		\
+-	      (name), (long long)(___act), (long long)(___exp));	\
++	if (test_progs_get_error(___act))				\
++		CHECK(!___ok, (name),					\
++		      "unexpected %s: actual %lld < expected %lld\n",	\
++		      (name), (long long)(___act), (long long)(___exp));\
  	___ok;								\
  })
  
