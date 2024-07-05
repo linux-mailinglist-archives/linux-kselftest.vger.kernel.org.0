@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-13255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6084F928E5D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 22:54:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA89928E64
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 22:58:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 144D81F25807
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 20:54:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D21B71C22C21
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 20:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6E51448C5;
-	Fri,  5 Jul 2024 20:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF44C144D25;
+	Fri,  5 Jul 2024 20:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEcFcFI6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1Vo/81m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E255208A7;
-	Fri,  5 Jul 2024 20:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F28B143C6A;
+	Fri,  5 Jul 2024 20:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720212875; cv=none; b=mtVilQUnQFT31gXenEuTep2dR6AfvIqbIK4GdEYX6ABsmEpk8cmCSE0JIot8frSbbWbzUgta9byHMM6iGi2Gai7/0mQBiVNdbV7Nnf98j+j7P4C0wZYUAQWN1I0GoCxccOiNCdJDGwzU4F+XGnOkXCB8GQxLoQeer/v7UFNcx0o=
+	t=1720213097; cv=none; b=dkq0Cjyoqwn+9fEioNK1qZ7mPNBplVGjcilxZz+t8n5WX/t0cA5rrQhmfZLgrmEpnHpLNIvc44NiyFCslSXorrAtQHouyc9hi3/ayI6lsNCO6NrYas4ZzmNWbpppDalpNLJhQC519R52YRJRpSAkDnWUJZxrPD0nZuHLYNsbszo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720212875; c=relaxed/simple;
-	bh=2I6tlGLYky5rxRRydJ1VhSeXacy67dc3oRDvst05vCA=;
+	s=arc-20240116; t=1720213097; c=relaxed/simple;
+	bh=oNImnp1rD635YLZFlLT6bKdncx0muCBxFA6JOCvAK1s=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oD/FS6541AuSPtthLw/YEbvQxMHLXll323nexx4JIkxHT8qes4lbYQTV1daBr2PZr7Nap7GLm3thO5aQa9T2makYrZvkB+tmXilFGRKtNKHWC1ejxL9EcjUMvKbmj/KCqBQBxVpw+FL1REbpSeOBzkKetiCIuJbQC9HJEnyw4fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEcFcFI6; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:MIME-Version; b=k8Jcv7A4GrkFgWcYjecGTCn4nQfMjGeUVs9Agp5DJCmfc3aalnieKZlAtYbDt/CCuSYT390jaAYnMI9PaMH1+ES+0ellloZAn/t0nQ3we5TIHnzA/Mg5C6cG740ekz5kA7BfXfz/iGuGySs1Al+gNToGQYBdw5D3KoOa49GOdmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X1Vo/81m; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-701b0b0be38so1569866b3a.0;
-        Fri, 05 Jul 2024 13:54:34 -0700 (PDT)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-75cda3719efso1186549a12.3;
+        Fri, 05 Jul 2024 13:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720212874; x=1720817674; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720213096; x=1720817896; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Hd8PCDgMueMORbsxMdk25xl5YXQAP04XADlFMfIBmTg=;
-        b=CEcFcFI6iAWwc2wRvbKWo1CJ4fLoaMX8DeSolpeFTykliNA/3Iu6j2v+K+nZSc/jPJ
-         aE3p3rVf+C72ypccPnB7qSCymm3Ruk3RhFInogXIVQvsOj1jLBHf7n3qUMWgfT2maHvM
-         yKPGHrpfQvO+RI2+W9AHEdgyGMEqQWD7/FFyPFJUmy+wNngbzk0Bg0JJxIgwXWTdaUKD
-         7NWDBui4Y7aO4ZNDbpzUOdoXtKnJy1NPMVkTfZHjpRMlOLl8VWazegeKHKZ455HaTRau
-         VfDIb49MrTx8JhUithphwfXrIHyNeX9dGHkJyHKYDaGnItUR72Ps9bBzkhGZQ+aeMmJl
-         alKA==
+        bh=oNImnp1rD635YLZFlLT6bKdncx0muCBxFA6JOCvAK1s=;
+        b=X1Vo/81mK1ZkFbnVzyQITjV5sXYrMUJXGaVmU0FfBQAKzQvRJR0OA7BleWrG4UaEVi
+         XFQMSFLBgczPSKBLmObgh2j/g8n/cAtBQ033Pz1STV61QX1lcMxsf3vMDLKk1w7KhrJ2
+         Vs1EZ85zuf0QPuQkhb59HclsS9whxazPsEFLLlWlxiOBZuFzFZQ3iKSnCNhNGykN2D3n
+         BdLK558uUI8SqqS0jQL3ow6TvofDt1RCSPikxs3PYhEGG1CcRE1T7dGuRziD1Y89VOJ2
+         dK3Y0tpoWhwFVZkHLWqXoKoic24mlwGorrzyuhb/POYJQIrRusQk/V44VLjt9Urwl8eA
+         T5rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720212874; x=1720817674;
+        d=1e100.net; s=20230601; t=1720213096; x=1720817896;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hd8PCDgMueMORbsxMdk25xl5YXQAP04XADlFMfIBmTg=;
-        b=MaAvJUnVfiAfQteoTpqg/yz7c50nsZRj90CD1W4N1kB6vuKo3duCDg2JDMYNj/az65
-         14SQMjl1La9kmIqsWG51/nYFYipSJ8Q2F1LHEjAn4Ur0RN6ERIHoDSXkBbRsrF/CAp5A
-         yyu4ZCRMYcnZdobmkFSGXfXMjm18GfRKsEYaUBgggLxI6QZWKPt2iF7IQEsHjYPwGEpA
-         hFtbTG/WaxojX+1Wc4ZJF1n3pRkHA1L6yMtA7xR/vOR/ojdG3ulTB5Kej4vVKvQijUGu
-         UxutcTkvVciC6JPwv1e2csp6cKBqCGyNpt6h6JgE0cPdsTcmb9qiY6Fbu7xs/+H9roP4
-         y2tw==
-X-Forwarded-Encrypted: i=1; AJvYcCW1EF/t1iVB35x7pBMTqFVIn0Zfr0F/rHs4cLRhIRggWhLnRnV9hZzizSmoYiXy1xD6N9cQfDwJrU+nWsJDta3IbTvohBe+dj3knoxQOhZpfXGOSWugva2aeLWo9EA9FbSY9UHSpe5Eh9LSGI0J
-X-Gm-Message-State: AOJu0YycRrdWh37V621+1a36ShrKLImKZ/wV+wxDCqa0ALHNuhnJm5WT
-	qMOMnvQ+TfqkMun0j8KvR2W64y/dpaJ9PsK7JibN9KG42/iVsqFc
-X-Google-Smtp-Source: AGHT+IEPXB6ygUd16BDckadJNd0JfyBudXpraNukf45fIl/vUH5puKR2pY77kOTf66iIQ+8369EMpg==
-X-Received: by 2002:a05:6a00:882:b0:70a:f3de:3ff with SMTP id d2e1a72fcca58-70b00951416mr6010816b3a.14.1720212873706;
-        Fri, 05 Jul 2024 13:54:33 -0700 (PDT)
+        bh=oNImnp1rD635YLZFlLT6bKdncx0muCBxFA6JOCvAK1s=;
+        b=nZwYQNIf+GDkqdVeiEtG0GP46na3XpH+2W6nyz3jh+Y2qNOMDOJSTQRDeCxtH+DV+l
+         a41wxITEwY4KU+/2PMWHS+5Cr3HZ5aA4P2fuqtYBYyPoeFl1XKSaHeNaMO9thBPaT9wE
+         DeiOqAmI0/zHZmLbkoq1yu2F3RadHEZ9LH8wTOyCiPq3wmGjSC83e2Zw2nR/sST2VdLU
+         Mz0e/4tjOYCy8fELqxJoKyTBu+pFYvvMffXc+CDwtPWNJ7D0wNRC2wm5mpxlw/zlhkbC
+         MpuQhbs5f0U4QB+naBYpFOZWs3qOUnR3v9U2/U2blq9RgZrLgNNamlv0+KGTRDInefN7
+         GkQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWeMDeTf/9z97zzaM1XLKjeYTjetTIuUAqydORvUzRAc5yJZK1DCZveRKhtmsDHj7L1jEzn8mn9HZZBp6rCXkNx/NZyvErvHHzZuMPYHfPmYsEJ6leMloonZfIBe3jqtS+6hKOEPES7YKgCkn24
+X-Gm-Message-State: AOJu0Yzep1G1A+jLs9sF61RtQSyepnthHwEruL0fAMAft87BeKeqSxvO
+	jzhUR+grmYSkQKeM6w1SJV9M1xbGaJM1IqaIJvfV1syOfB/wJNT+
+X-Google-Smtp-Source: AGHT+IGOiGp4poAr4RiUJZfT+xIteErM7zNhsVYCFAcGZxncPPbWDlXQdtEf7PHabf/S88V29W7xQA==
+X-Received: by 2002:a05:6a21:3299:b0:1bd:1aca:2b38 with SMTP id adf61e73a8af0-1c0cc8de327mr5681370637.51.1720213095851;
+        Fri, 05 Jul 2024 13:58:15 -0700 (PDT)
 Received: from [192.168.0.31] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b135ee722sm1172899b3a.11.2024.07.05.13.54.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac15b890asm144740855ad.301.2024.07.05.13.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 13:54:33 -0700 (PDT)
-Message-ID: <9742abda93ae2d90148f54b585adc825e55a1a38.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: amend for wrong
- bpf_wq_set_callback_impl signature
+        Fri, 05 Jul 2024 13:58:15 -0700 (PDT)
+Message-ID: <23da6ae19d3cc17b445b77e18e2ac98c490f9b7b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: helpers: fix bpf_wq_set_callback_impl
+ signature
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
  <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
@@ -81,10 +81,10 @@ To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
  <shuah@kernel.org>
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Date: Fri, 05 Jul 2024 13:54:27 -0700
-In-Reply-To: <20240705-fix-wq-v1-2-91b4d82cd825@kernel.org>
+Date: Fri, 05 Jul 2024 13:58:05 -0700
+In-Reply-To: <20240705-fix-wq-v1-1-91b4d82cd825@kernel.org>
 References: <20240705-fix-wq-v1-0-91b4d82cd825@kernel.org>
-	 <20240705-fix-wq-v1-2-91b4d82cd825@kernel.org>
+	 <20240705-fix-wq-v1-1-91b4d82cd825@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2 
@@ -96,22 +96,21 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Fri, 2024-07-05 at 15:44 +0200, Benjamin Tissoires wrote:
-> See the previous patch: the API was wrong, we were provided the pointer
-> to the value, not the actual struct bpf_wq *.
+> I realized this while having a map containing both a struct bpf_timer and
+> a struct bpf_wq: the third argument provided to the bpf_wq callback is
+> not the struct bpf_wq pointer itself, but the pointer to the value in
+> the map.
 >=20
+> Which means that the users need to double cast the provided "value" as
+> this is not a struct bpf_wq *.
+>=20
+> This is a change of API, but there doesn't seem to be much users of bpf_w=
+q
+> right now, so we should be able to go with this right now.
+>=20
+> Fixes: 81f1d7a583fa ("bpf: wq: add bpf_wq_set_callback_impl")
 > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 > ---
 
-Would it make sense to update one of the tests, so that it checks the
-specific value put in the map?
-E.g. extend struct elem:
-
-struct elem {
-	int answer_to_the_ultimate_question;
-	struct bpf_wq w;
-};
-
-And put something in there?
-
-[...]
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
