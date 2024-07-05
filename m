@@ -1,174 +1,152 @@
-Return-Path: <linux-kselftest+bounces-13258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E243C928F78
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 01:10:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BD6A928F8C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 01:30:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708CC2846D4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 23:10:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D5E71C21287
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 23:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BA0146593;
-	Fri,  5 Jul 2024 23:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D7F1494BF;
+	Fri,  5 Jul 2024 23:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="me8hNNEe"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="27T/u9DY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E4513D608
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 23:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0BA148FF2;
+	Fri,  5 Jul 2024 23:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720221044; cv=none; b=e3yFi8EpIUFj4KeAGykrK9nDEb+R2XJ0xDEMcQhuLV8wisFE5fMwbvvI8nwlE9l+Ic9P+z5KPDtzC2vjHrfzFGH5GZrO8LrwigLGX+BIOczCc8cpwpH1EJ/hZNsBSr7AnpZ/EDfxsNpkNo8MQcVOgpjIndlSvG9KF2uZM5y8TJQ=
+	t=1720222211; cv=none; b=XaEZPoDM57TCj+a1zKwOTVlf0LYCuhmbWu9RYTyEwusMknkNrhRAqqKN2sCkJAcCR5iR1a/PJgKCs42W1YBEsLnrbk9PsYeqi/djj+hN27kwdMihTPJffMD86AOGoThHaz1TXMxHMgIgm8J8BlUmc8BFAw3QAM7OtFIzXW5tzn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720221044; c=relaxed/simple;
-	bh=4CEqD7VmRndX/qN6v0TFl5xl7rdwJo23W+D2nNPbChY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CwrgEAMGcf0eEW0/v93JuyLBv29mtSZ96iFWgs0BlYzlq8Hj0sXmzHRtl5X1gEs5F1BMj9Tfdtvuh72Zgjr5ot0RGBnOesGZdnuilrtJVHzagtdlDacHcaHeqtDzrf+J99SePBO/8AX6ZM4CW24clRBCo9xpvbv0J5MXsZgyr7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=me8hNNEe; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: matttbe@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720221040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EYSTaBvET+7Y92pC4W26UTSlgkepbfTnQLMrMemfNbQ=;
-	b=me8hNNEesaK3JInhevdUm0hR3gV8oybY6jYc26r6lfTHDKE9vrBfNkSMKvP4W2oU+nvRZ6
-	BHj5L+4KLS/ywY4cbb88o1ZyRNGsZs2ILYOGuQBH8bPxktRYXPvxBHj5c5j81IOSQLgSPI
-	+97Vo9G+TKKCxFWTGjHImfVxTcQ+rQQ=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: sdf@google.com
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: davem@davemloft.net
-X-Envelope-To: kuba@kernel.org
-X-Envelope-To: hawk@kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: netdev@vger.kernel.org
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: mptcp@lists.linux.dev
-X-Envelope-To: martineau@kernel.org
-X-Envelope-To: geliang@kernel.org
-X-Envelope-To: shuah@kernel.org
-Message-ID: <90e916e8-ec4e-447b-8ee6-eb247f3a72ad@linux.dev>
-Date: Fri, 5 Jul 2024 16:10:27 -0700
+	s=arc-20240116; t=1720222211; c=relaxed/simple;
+	bh=hEAYBzWA0a0y+dYKFS2DJxhMUVWhROyH3K3JrHLkUkE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=czdJrnI5lOm/ny8ZmuGNqKJ0XuvuUIuqLJt3vNDKQoO7XA/+fZwkiCnDx3sJXAt2XhtbhkpECoVMQKRpyby8FO5ij1aiskIoCA2iSu5G7wZ1+PQpV3HiSFD3URpRTc1X5akJfSWP2TATDBkPyjw/QTyU9Cl354RLn5P+wAXeOBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=27T/u9DY; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1720222207;
+	bh=hEAYBzWA0a0y+dYKFS2DJxhMUVWhROyH3K3JrHLkUkE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=27T/u9DYfK0YwmBN1J13WMc/2Jg0yeXBDGXeFWWf7RhQQGz+Jt5pyzAqId/xdvVb/
+	 h5rJqbOocNvgES8PO7eVKQmPNzcy0zO2gixJJu7yXNnaTSjQ70gHxbVlEuWgvqJBWX
+	 BM1SAMVtMlmH92LSEB4Dl0y5wlvm1gxXVUcqyxJh96x4WEd9q3KhnvUf3HnslmE8qd
+	 V709B9A7626OsTy/f/NWxWKj6YoiyyR3qWUkyB8plA4aGmU3yWE0ohrSjwGs6sT0nI
+	 No8Mv66AuCFXdUj8wmaACpGIdjWuaDbqRwinFjLp/xf8K/WXYwl0OmuC7ldjwdcLUX
+	 lNeRRoQ95N2Fg==
+Received: from [192.168.1.238] (tango.collaboradmins.com [167.235.144.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C80363780BDB;
+	Fri,  5 Jul 2024 23:30:06 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH v2 0/3] kselftest: Add test to report device log errors
+Date: Fri, 05 Jul 2024 19:29:53 -0400
+Message-Id: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Add mptcp pm_nl_ctl link
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Geliang Tang <tanggeliang@kylinos.cn>,
- mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Shuah Khan <shuah@kernel.org>
-References: <20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-0-ebdc2d494049@kernel.org>
- <20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-2-ebdc2d494049@kernel.org>
- <08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPGBiGYC/22NQQ6CMBBFr0Jm7Zi2IqAr72FYQDuFJpWaKWk0p
+ He3krhz+V7y398gEjuKcK02YEouurAUUIcK9DwsE6EzhUEJVYtaSTSUkJjRhwkjebtSXFF19jx
+ 2VrfaCCjTJ5N1rz177wvPLq6B3/tLkl/7C57+B5NEgc1FaNnW0jTdeNPB+2EMPBx1eECfc/4Aw
+ ueGqrwAAAA=
+To: Shuah Khan <shuah@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernelci@lists.linux.dev, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.14.0
 
-On 7/4/24 3:48 AM, Matthieu Baerts wrote:
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index e0b3887b3d2d..204269d0b5b8 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -144,7 +144,7 @@ TEST_GEN_PROGS_EXTENDED = test_skb_cgroup_id_user \
->>   	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
->>   	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
->>   	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
->> -	xdp_features bpf_test_no_cfi.ko
->> +	xdp_features bpf_test_no_cfi.ko mptcp_pm_nl_ctl
-> On the BPF CI, we have such errors:
-> 
->     mptcp_pm_nl_ctl.c:20:10: fatal error: 'linux/mptcp.h' file not found
->       20 | #include "linux/mptcp.h"
->          |          ^~~~~~~~~~~~~~~
-> 
-> On my side, I don't have any issue, because the compiler uses the
-> mptcp.h file from the system: /usr/include/linux/mptcp.h
-> 
-> I suppose that's not OK on the BPF CI, as it looks like it doesn't have
-> this file there, probably because it still uses Ubuntu 20.04 as base,
-> which doesn't include this file in the linux-libc-dev package.
-> 
-> When I look at how this 'mptcp_pm_nl_ctl' tool -- and all the other
-> programs from that list -- is compiled (V=1), I see that the following
-> "-I" options are given:
-> 
->    -I${PWD}/tools/testing/selftests/bpf
->    -I${BUILD}//tools/include
->    -I${BUILD}/include/generated
->    -I${PWD}/tools/lib
->    -I${PWD}/tools/include
->    -I${PWD}/tools/include/uapi
->    -I${BUILD}/
-> 
-> It will then not look at -I${PWD}/usr/include or the directory generated
-> with:
-> 
->    make headers_install INSTALL_HDR_PATH=(...)
+Log errors are the most widely used mechanism for reporting issues in
+the kernel. When an error is logged using the device helpers, eg
+dev_err(), it gets metadata attached that identifies the subsystem and
+device where the message is coming from. This series makes use of that
+metadata in a new test to report which devices logged errors.
 
-It sounds like the tools/testing/selftests/net/mptcp/Makefile is looking at this 
-include path, so it works?
+The first two patches move a test and a helper script to keep things
+organized before this new test is added in the third patch.
 
-iiu the bpf/Makefile correctly, it has the bpftool "make" compiled and installed 
-at tools/testing/selftests/bpf/tools/sbin/. May be directly compile the 
-pm_nl_ctl by "make tools/testing/selftests/net/mptcp/"?
+It is expected that there might be many false-positive error messages
+throughout the drivers code which will be reported by this test. By
+having this test in the first place and working through the results we
+can address those occurrences by adjusting the loglevel of the messages
+that turn out to not be real errors that require the user's attention.
+It will also motivate additional error messages to be introduced in the
+code to detect real errors where they turn out to be missing, since
+it will be possible to detect said issues automatically.
 
-> 
-> I guess that's why people have duplicated files in 'tools/include/uapi',
-> but I also understood from Jakub that it is not a good idea to continue
-> to do so.
-> 
-> What would be the best solution to avoid a copy? A symlink still looks
-> like a workaround.
-> 
-> In the other selftests, KHDR_INCLUDES is used to be able to include the
-> path containing the UAPI headers. So if someone built the headers in a
+As an example, below you can see the test result for
+mt8192-asurada-spherion. The single standing issue has been investigated
+and will be addressed in an EC firmware update [1]:
 
-Meaning KHDR_INCLUDES should be used and -I${PWD}/tools/include/uapi can be 
-retired? I haven't looked into the details. I quickly tried but it fails in my 
-environment.
+TAP version 13
+1..1
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `model_name' property: -6
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `energy_full_design' property: -6
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+ power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+not ok 1 +power_supply:sbs-8-000b
+ Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-> seperated directory -- INSTALL_HDR_PATH=(...) -- KHDR_INCLUDES can be
-> overridden to look there, instead of ${KERNEL_SRC}/usr/include. Would it
-> be OK to do that? Would it work for the CI without extra changes? Or do
-> you still prefer a copy/symlink to 'tools/include/uapi' instead?
+[1] https://lore.kernel.org/all/cf4d8131-4b63-4c7a-9f27-5a0847c656c4@notapiano
 
-> 
-> Cheers,
-> Matt
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Changes in v2:
+- Rebased onto next-20240703
+- Link to v1: https://lore.kernel.org/r/20240423-dev-err-log-selftest-v1-0-690c1741d68b@collabora.com
+
+---
+Nícolas F. R. A. Prado (3):
+      kselftest: devices: Move discoverable devices test to subdirectory
+      kselftest: Move ksft helper module to common directory
+      kselftest: devices: Add test to detect device error logs
+
+ tools/testing/selftests/Makefile                   |  4 +-
+ tools/testing/selftests/devices/Makefile           |  4 -
+ .../testing/selftests/devices/error_logs/Makefile  |  3 +
+ .../devices/error_logs/test_device_error_logs.py   | 85 ++++++++++++++++++++++
+ tools/testing/selftests/devices/probe/Makefile     |  4 +
+ .../{ => probe}/boards/Dell Inc.,XPS 13 9300.yaml  |  0
+ .../{ => probe}/boards/google,spherion.yaml        |  0
+ .../{ => probe}/test_discoverable_devices.py       |  7 +-
+ .../selftests/{devices => kselftest}/ksft.py       |  0
+ 9 files changed, 101 insertions(+), 6 deletions(-)
+---
+base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+change-id: 20240421-dev-err-log-selftest-28f5b8fc7cd0
+
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
