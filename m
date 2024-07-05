@@ -1,96 +1,115 @@
-Return-Path: <linux-kselftest+bounces-13243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC3AF928ADE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 16:50:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 575A2928C85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 18:53:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 599EDB23FEC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 14:50:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABFD6B25E8E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 16:53:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E82154C12;
-	Fri,  5 Jul 2024 14:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001C216D9DA;
+	Fri,  5 Jul 2024 16:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5lor6aD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QmbBcDhK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BF41BC43;
-	Fri,  5 Jul 2024 14:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B06116CD00
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 16:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720191024; cv=none; b=ifXV7xT6AxImerSZbLcdujgatuWDVikKrLGzaEvBPCCpkC0+jN3V2G3cpbrgZe/cTeWfXBXRadbEUR12vH1edDvuzmNEF95ehw3x0766V/VL+Ms5Rfhl26d4Ba5T4vVzMV1V+3H/ze+9f4YIi9hbgPpqvqeP3HsSAPPW2OdnJFQ=
+	t=1720198393; cv=none; b=kinH/ZIVD+Hj+5CiUOPolVyFjNYli34Xvq4xQYXYaSt0k4YhlDFimVUO2j0L09Qs5aHiQg7BLMS94op89PiNV9hUCzgVn9zO3vG0ZNebvUQkgghL8x6iAWxci+Z7PN1i6x+Doj5fAoKwkQihLSYk0sjw+AvSlzqMoWsjIaLGuU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720191024; c=relaxed/simple;
-	bh=1sW3ARW4FehAFUh4r3PgasmMUHkKJr5S+XqwNiRcCVM=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=UGD+GJ9f+IUSp2hRiaUUsRssgoSNGXOH3qpk78W/UAGcWXRTDtCx+vZtrNBXg86Sd7TV2zLW4XGKXVT40HxlKYph57baYUnmUM6MphENGjvgICMvz05vKNerUQmWpVlnWo+AsBdy4OnvDCTNuo7n8Y50IY3qv1qagbFmlPBPrjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5lor6aD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1721BC116B1;
-	Fri,  5 Jul 2024 14:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720191023;
-	bh=1sW3ARW4FehAFUh4r3PgasmMUHkKJr5S+XqwNiRcCVM=;
-	h=From:To:Subject:Date:From;
-	b=J5lor6aDk1eKDktFyvnbwfi8eB1Xn15wUbnl9qq/uqWApgNrmUEV6xubp9FfoDfHq
-	 2pdZ+Ym2WcFSPS5QXh4KLrYLWc3XokGZ6idIdPPJ+RdQZQVjEJ45wn8ah7hGufUWrl
-	 Ni3juLIiX/ChVgcIBYM5UQggVCRiXBGNlia4ZvfqTnMzmu6CK6+XzgXwezrzEX7Gw9
-	 LOtnH9mY9VDzZyzOaYe5z+0o8uG+/xabhS+IxAeEltwbF8TseG2b9Gmd0tooKRIODX
-	 AdHe8m8egpsvyQA1QdidrS7wT7jF9yNFK0PtOHZ1Suww00Zk5ggetU8cQ+l8eMPqki
-	 Wblb2F3+PY93w==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	puranjay12@gmail.com
-Subject: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
-Date: Fri,  5 Jul 2024 14:50:09 +0000
-Message-Id: <20240705145009.32340-1-puranjay@kernel.org>
-X-Mailer: git-send-email 2.40.1
+	s=arc-20240116; t=1720198393; c=relaxed/simple;
+	bh=RncQKJYbfy5H0b3XrKMgUXVHO/dixUXWg65oa+C6FdQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=blZziBEpxOWFdG34J7cG+1FzvT+601FpGyFUVW6bZI1pvigSArQzJu+wlqr+aJvm9weVDEaCJetCgKGlOwW8HpR0GXqn2qqYcqalGc3DXVLghjRMWN61RDvvw3/81Q07/Nramca/i1l1ncOzasreRCqia05DSzD88Y/R4ajgcgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QmbBcDhK; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-380cdc44559so971755ab.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jul 2024 09:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720198391; x=1720803191; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DLrD/RGWBG3HDOWPiY9D8ry94UHKUAljIHl+MpL5ZcQ=;
+        b=QmbBcDhKkK8AltFpBseMvUMyqT2le+vYC98EHNWS9rv6RXbVgILHHR8RYwnAhnjPJv
+         vmpe1YRREbMgISedCeSfFhNAWvCQx2sQiEKv7ICu9vWZfsJQBDZVYN27KtLY5rP6NOkl
+         X2rFmt3leO/XFstN8TP4/c6v3QM3xLfGXvtyo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720198391; x=1720803191;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLrD/RGWBG3HDOWPiY9D8ry94UHKUAljIHl+MpL5ZcQ=;
+        b=MansOY0qw1VCYvuID+QtisRvW6tmlxQAjS9YsQ4neCySHYuicyIn/TJQflWyFtmBzm
+         JNoCtzoU0JpPM+WE1Q4LXk7gToD7qvPuEbmZ8iSP/WgVzRwjJuR+Iz4YQgLAXyAfYuwD
+         VdhwFW93Nr7N3JFBQwhT5ASnuCxMlHpbSxpl0zc2x1a0SUDCTnQfQ/jET03elQ3gXwfV
+         OLQUKYHbwUUD3qfOmSZVK8hNN3Kgx4j2shft0XTCfwJUln1bUWys0UoptOxGvCgl9EWa
+         D49A4CHMhCYzCQJobkR+iI9P/VuwQuzzxJEipI8euXDoHABmxJt8EjBvm9Wt2z421IZF
+         YUMw==
+X-Forwarded-Encrypted: i=1; AJvYcCWjovwmOsEab12TxqZhgjbwpqMCYhcEjeUglL4TQ7eR750XSTwwoOPXiRx5RYjxLEixnRQRtng8n5ycWzBjRnUbwe5QVTDKUzqwWsAbTNe5
+X-Gm-Message-State: AOJu0Yywkj3CGunJN+tqqj1EfgywQnXXZMw9ilPxrb6q+hjJmcfQyFq/
+	85KyyaBC4D13c/VPcKIxEUmPU5lko/jrVkp4EIkrTbepQ4SnoCD+dLkaDWg3+1M=
+X-Google-Smtp-Source: AGHT+IFnMHVSBiih/3sZgpAFXUvJl8b4JDQIC1sGK7IOw0ZIUebUnheLQu/ZKBtQd2s/VP+yFXOJbA==
+X-Received: by 2002:a05:6602:6398:b0:7f3:9dd3:15b2 with SMTP id ca18e2360f4ac-7f66db3caeemr477668639f.0.1720198391430;
+        Fri, 05 Jul 2024 09:53:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73fa17cdsm4449380173.119.2024.07.05.09.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jul 2024 09:53:11 -0700 (PDT)
+Message-ID: <5a3a3c0b-2c72-45bf-91c5-0d5808e3bd14@linuxfoundation.org>
+Date: Fri, 5 Jul 2024 10:53:10 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests/timers: remove unused irqcount variable
+To: John Stultz <jstultz@google.com>, John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240704024202.84726-1-jhubbard@nvidia.com>
+ <CANDhNCpEvPL+b1mve-YJp4+yzQU-BAaAQLr1-G6Br7i83zaQaw@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CANDhNCpEvPL+b1mve-YJp4+yzQU-BAaAQLr1-G6Br7i83zaQaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-fexit_sleep test runs successfully now on the CI so remove it from the
-deny list.
+On 7/3/24 21:11, John Stultz wrote:
+> On Wed, Jul 3, 2024 at 7:42 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>>
+>> When building with clang, via:
+>>
+>>      make LLVM=1 -C tools/testing/selftest
+>>
+>> ...clang warns about an unused irqcount variable. clang is correct: the
+>> variable is incremented and then ignored.
+>>
+>> Fix this by deleting the irqcount variable.
+>>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> 
+> Acked-by: John Stultz <jstultz@google.com>
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- tools/testing/selftests/bpf/DENYLIST.aarch64 | 1 -
- 1 file changed, 1 deletion(-)
+Thank you all.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-index e865451e90d2..2bf981c80180 100644
---- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-+++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-@@ -1,6 +1,5 @@
- bpf_cookie/multi_kprobe_attach_api               # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
- bpf_cookie/multi_kprobe_link_api                 # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
--fexit_sleep                                      # The test never returns. The remaining tests cannot start.
- kprobe_multi_bench_attach                        # needs CONFIG_FPROBE
- kprobe_multi_test                                # needs CONFIG_FPROBE
- module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
--- 
-2.40.1
+Applied to linux_kselftest next for Linux 6.11-rc1.
 
+thanks,
+-- Shuah
 
