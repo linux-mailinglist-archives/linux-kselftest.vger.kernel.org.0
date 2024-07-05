@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 902AD92807B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:38:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35D89928080
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A276C1C22C6A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:38:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1CD11F22B33
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:38:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C25A1C2AF;
-	Fri,  5 Jul 2024 02:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380CE1B806;
+	Fri,  5 Jul 2024 02:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kx5A9zGt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9ciZBWS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BD51BF2B;
-	Fri,  5 Jul 2024 02:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102953B1A1;
+	Fri,  5 Jul 2024 02:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720147119; cv=none; b=WEsMEKCA2V3oNpGEDMwLtIua4stO3cmvgYvjvUQhdM/dgOIm6Uw7kO3+C5r1elRCXIFceCmRENX31KLu4diGLAbc3a/it4rLusV26CiVv6HiY+5hl5FOnlB8sU3qFd7oWHKJ46vbafAQ74fcDkRE/m7/Bcs3SPENnq4UFj54CJc=
+	t=1720147124; cv=none; b=WhVlcn9EoxhbNB/+P373bQPsOS+cprX/69Jul4hokIZTM3f5nHell2FWdYlByqMH4vGkn/pJnE4MtkZ9bowAoAXfZ867Uf+bkB73ZzEnFbnAcq3rn4YsWysb4lDEQ5ZdcsIna2y157sr6tSwRErBe6dfQ3eB6dq1tz8qOGGqPcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720147119; c=relaxed/simple;
-	bh=WTtsuCyhVjMMA3j1vPlbZhOgVRMnWYpiCHKyBtGOYPw=;
+	s=arc-20240116; t=1720147124; c=relaxed/simple;
+	bh=BSu0sthLEzqVrgWAVpw1r7LFUemnpAfQLRLMaHz4GtQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e0JMkEm7EQyuw1tovlf58g+usYfQxZtC502Y9alwjAjUvuHIBbpyUs6kR6Oo9NQL+yumqut17slpPGAp/mL6gPW2Hf9lQwU6A3x5FZal1Nb1S7QgFjCD0YpcXcCUzw/RODTq99fWsgasxCaotU0vXLD2EltH4xpWw6EUVBOGVno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kx5A9zGt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7A2C4AF0B;
-	Fri,  5 Jul 2024 02:38:34 +0000 (UTC)
+	 MIME-Version; b=iJtuioNZxQpyAwDnwfmljweAkmxZuAKGO2aCjnjQlLjtDe4WOrJg7Rgsco1jNOA9bXVzCmEe2WSA3ssNxK0bJ7EVayhZjko9pMvVNLgxjowg3KC4da8DC3QveRauM02eEz9kKYkq5z9Vnym8KfUrqKccQSatLSfa3aWS+7pBK10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9ciZBWS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883A6C32781;
+	Fri,  5 Jul 2024 02:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720147119;
-	bh=WTtsuCyhVjMMA3j1vPlbZhOgVRMnWYpiCHKyBtGOYPw=;
+	s=k20201202; t=1720147123;
+	bh=BSu0sthLEzqVrgWAVpw1r7LFUemnpAfQLRLMaHz4GtQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kx5A9zGtg4PHtmvZjM9bU2D3XIUTiJlGjLUFj7IGVLdIUM/A5YPmV9ZoCeiWwGV6e
-	 nkjstwpA1Ih/5aqTFAfDOkXnZYvho7Q8tdZq6mdyarEOiSfo8Sgo4+HCpZnMinETrM
-	 4r9UXCNT3xMmdrrISbr6/wrrEkNbNkbLnRDkBllnfJV2//xP1BfGwHX9OAnnPX0H6b
-	 QeQEGdR8hKmqrNlTZFQnH1F8ElBSPjyt42EdwzCB4zqT3ChbVuCaRRREfTb0hcdvLh
-	 LPtiQKKlUkbcDX4vwUTaaRJIrykYArbrrBw8NX7lyV9IM7GC5eRCCIWvRy1wWXNyjY
-	 zkakKRPcxgYqQ==
+	b=g9ciZBWSTX0ex2kb34IZOt2Ue2hgxARjhNALcdXVQ2bdyPJ+TZer/iJbHpj902W0b
+	 ts4xjMh+M1GQUsC30Bt9r9+16w8/d+KU3OE8TiluUwIOOHnNjYNCJIWehu+TnizrXm
+	 w+wVIKoK8gYJ+b1G0P/KB/ELVdTLeRxPFeE1mRJUBnaHDS2Pqw5AI4wFgLM1S4Lc7K
+	 jGIYUv0+S8vK25bme583OQ/e3P3VZH8qjTuaF1uq0di2vjQI1cWdhIe/yP9p/GNecE
+	 9c3UzJ9Kp5UxamiWE3xJr+sWI59VzRCxmwt128BcTvYTpB/V2vIncBLP3G9DlefsK1
+	 WWn/vsoLeP9OA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/6] selftests/bpf: Define ENOTSUPP in testing_helpers.h
-Date: Fri,  5 Jul 2024 10:38:19 +0800
-Message-ID: <f5a16c06c2a7188d3644652f8ec1bd6eab8fbe44.1720146231.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 2/6] selftests/bpf: Skip ENOTSUPP in ASSERT_OK
+Date: Fri,  5 Jul 2024 10:38:20 +0800
+Message-ID: <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720146231.git.tanggeliang@kylinos.cn>
 References: <cover.1720146231.git.tanggeliang@kylinos.cn>
@@ -75,109 +75,77 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-ENOTSUPP are defined in so many places in bpf selftests, this patch
-moves this definition into testing_helpers.h, which is almost included
-by each tests. And drop all other duplicate definitions.
+Just like handling ENOTSUPP in test_lsm_cgroup_functional(), this patch
+adds a new helper test_progs_get_error() to check whether the input error
+is ENOTSUPP (524) or ENOTSUP (95). If it is, invoke test__skip() to skip
+the test instead of using test__fail().
+
+Use this helper in ASSERT_OK() before invoking CHECK() macro.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 4 ----
- tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c | 4 ----
- tools/testing/selftests/bpf/prog_tests/sock_addr.c  | 4 ----
- tools/testing/selftests/bpf/test_maps.c             | 4 ----
- tools/testing/selftests/bpf/test_verifier.c         | 4 ----
- tools/testing/selftests/bpf/testing_helpers.h       | 4 ++++
- 6 files changed, 4 insertions(+), 20 deletions(-)
+ .../selftests/bpf/prog_tests/lsm_cgroup.c     |  6 +----
+ tools/testing/selftests/bpf/test_progs.h      | 23 +++++++++++++++++--
+ 2 files changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 4b0169e6a708..5909c1f82f3b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -16,10 +16,6 @@
- #include "tcp_ca_kfunc.skel.h"
- #include "bpf_cc_cubic.skel.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- static const unsigned int total_bytes = 10 * 1024 * 1024;
- static int expected_stg = 0xeB9F;
- 
 diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index 130a3b21e467..6df25de8f080 100644
+index 6df25de8f080..6511f5f4a00f 100644
 --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
 +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -10,10 +10,6 @@
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
+@@ -102,12 +102,8 @@ static void test_lsm_cgroup_functional(void)
+ 	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"), 0, "prog count");
+ 	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 0, "total prog count");
+ 	err = bpf_prog_attach(alloc_prog_fd, cgroup_fd, BPF_LSM_CGROUP, 0);
+-	if (err == -ENOTSUPP) {
+-		test__skip();
+-		goto close_cgroup;
+-	}
+ 	if (!ASSERT_OK(err, "attach alloc_prog_fd"))
+-		goto detach_cgroup;
++		goto close_cgroup;
+ 	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"), 1, "prog count");
+ 	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 1, "total prog count");
  
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- static struct btf *btf;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 930a4181dbd9..d1d77785b165 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -176,6 +176,23 @@ void test__skip(void);
+ void test__fail(void);
+ int test__join_cgroup(const char *path);
  
- static __u32 query_prog_cnt(int cgroup_fd, const char *attach_func)
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-index b880c564a204..68d9255d2bb7 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-@@ -23,10 +23,6 @@
- #include "getpeername_unix_prog.skel.h"
- #include "network_helpers.h"
- 
--#ifndef ENOTSUPP
--# define ENOTSUPP 524
--#endif
--
- #define TEST_NS                 "sock_addr"
- #define TEST_IF_PREFIX          "test_sock_addr"
- #define TEST_IPV4               "127.0.0.4"
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index dfbab214f4d1..227d7d6eaf8e 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -26,10 +26,6 @@
- #include "test_maps.h"
- #include "testing_helpers.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- int skips;
- 
- static struct bpf_map_create_opts map_opts = { .sz = sizeof(map_opts) };
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 610392dfc4fb..447b68509d76 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -42,10 +42,6 @@
- #include "../../../include/linux/filter.h"
- #include "testing_helpers.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_EXPECTED_INSNS	32
- #define MAX_UNEXPECTED_INSNS	32
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index d55f6ab12433..bad21e72dafc 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -9,6 +9,10 @@
- #include <bpf/libbpf.h>
- #include <time.h>
- 
-+#ifndef ENOTSUPP
-+#define ENOTSUPP 524
-+#endif
++static inline bool test_progs_check_errno(int error, int check)
++{
++	return error == -check ||
++	       (error && errno == check);
++}
 +
- #define __TO_STR(x) #x
- #define TO_STR(x) __TO_STR(x)
++static inline int test_progs_get_error(int error)
++{
++	if (test_progs_check_errno(error, ENOTSUP) ||
++	    test_progs_check_errno(error, ENOTSUPP)) {
++		test__skip();
++		return 0;
++	} else {
++		return error;
++	}
++}
++
+ #define PRINT_FAIL(format...)                                                  \
+ 	({                                                                     \
+ 		test__fail();                                                  \
+@@ -338,8 +355,10 @@ int test__join_cgroup(const char *path);
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
+ 	bool ___ok = ___res == 0;					\
+-	CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",	\
+-	      ___res, errno);						\
++	if (test_progs_get_error(___res))				\
++		CHECK(!___ok, (name),					\
++		      "unexpected error: %lld (errno %d)\n",		\
++		      ___res, errno);					\
+ 	___ok;								\
+ })
  
 -- 
 2.43.0
