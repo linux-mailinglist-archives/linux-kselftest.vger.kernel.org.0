@@ -1,111 +1,117 @@
-Return-Path: <linux-kselftest+bounces-13254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C27928E13
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 22:16:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6084F928E5D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 22:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF94F1C21BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 20:16:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 144D81F25807
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 20:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857AD16D9D7;
-	Fri,  5 Jul 2024 20:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6E51448C5;
+	Fri,  5 Jul 2024 20:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RJo0o3xA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEcFcFI6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1548A13E3EA
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 20:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E255208A7;
+	Fri,  5 Jul 2024 20:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720210602; cv=none; b=AJDdJQ9HAFVnBUgvqwrJZlrKAzF/j33qP4Y5miJM1ef1Ruh3sfMyXrDYE4bkwG+0ZzDnWQ3zIvNqjMWduNxW0w1MTBHwuAmO6Nb7NhZIwQdm1wO+0remT1Cn8fI2pDuQljv/BK2FimvEFoC7QB8yE4ItoDRyBuNpJyqdFPrY65A=
+	t=1720212875; cv=none; b=mtVilQUnQFT31gXenEuTep2dR6AfvIqbIK4GdEYX6ABsmEpk8cmCSE0JIot8frSbbWbzUgta9byHMM6iGi2Gai7/0mQBiVNdbV7Nnf98j+j7P4C0wZYUAQWN1I0GoCxccOiNCdJDGwzU4F+XGnOkXCB8GQxLoQeer/v7UFNcx0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720210602; c=relaxed/simple;
-	bh=T0Yezoe/XJwes714mKbKM0egw+ZynvAnNMtDEZXPuzs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SyIiHE6AE4bNr1nPI8sAQO4V0odkxIHvz2N4/nRLg2eHR1gqUMttX0DKvGWXT8upBJG+PUgOkLjtnlzP3kQ8YuKYaYMPHkRMV0IVnVmCW77GyNgsT7j3xJGay97DmftZ2+10USvV5jtYzDGyBVWHTDjyd7in0GuT59/lG3e0FTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RJo0o3xA; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-380d8ba4548so1327805ab.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jul 2024 13:16:40 -0700 (PDT)
+	s=arc-20240116; t=1720212875; c=relaxed/simple;
+	bh=2I6tlGLYky5rxRRydJ1VhSeXacy67dc3oRDvst05vCA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oD/FS6541AuSPtthLw/YEbvQxMHLXll323nexx4JIkxHT8qes4lbYQTV1daBr2PZr7Nap7GLm3thO5aQa9T2makYrZvkB+tmXilFGRKtNKHWC1ejxL9EcjUMvKbmj/KCqBQBxVpw+FL1REbpSeOBzkKetiCIuJbQC9HJEnyw4fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEcFcFI6; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-701b0b0be38so1569866b3a.0;
+        Fri, 05 Jul 2024 13:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720210600; x=1720815400; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hICKxoDUywMdQbtGCI28pRH9+4hLvJaqbu+wfwSzwBU=;
-        b=RJo0o3xAfO3V80L/4O1LzcmbaqVQffRTJr122T5a/pRCo3AcPOL/4Hafaz7EXskuUV
-         4GuzzIM4FoTQo0zOw/IlrN6kq2VLfkuf/1Qn7HYOTXsTywHhfMU2T91wrWPM5xIRcZ1n
-         xKCuEuqzq9/X9r6TZJOYYubPdqkyTLRPwdVmA=
+        d=gmail.com; s=20230601; t=1720212874; x=1720817674; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Hd8PCDgMueMORbsxMdk25xl5YXQAP04XADlFMfIBmTg=;
+        b=CEcFcFI6iAWwc2wRvbKWo1CJ4fLoaMX8DeSolpeFTykliNA/3Iu6j2v+K+nZSc/jPJ
+         aE3p3rVf+C72ypccPnB7qSCymm3Ruk3RhFInogXIVQvsOj1jLBHf7n3qUMWgfT2maHvM
+         yKPGHrpfQvO+RI2+W9AHEdgyGMEqQWD7/FFyPFJUmy+wNngbzk0Bg0JJxIgwXWTdaUKD
+         7NWDBui4Y7aO4ZNDbpzUOdoXtKnJy1NPMVkTfZHjpRMlOLl8VWazegeKHKZ455HaTRau
+         VfDIb49MrTx8JhUithphwfXrIHyNeX9dGHkJyHKYDaGnItUR72Ps9bBzkhGZQ+aeMmJl
+         alKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720210600; x=1720815400;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hICKxoDUywMdQbtGCI28pRH9+4hLvJaqbu+wfwSzwBU=;
-        b=O5AgNnbL3Eidq/XLit7JphJdPGEvaF2k2ZNXUoX8j3/bOsEs7f17fJSYS/W//kDtoO
-         BA59O5f7n03Wu6yRJ3fdhPdrsnbIRkT0qy0qkUnhyNzU4a2izycZDAzxOvzZGcReBwuR
-         jbxk0Mq9MwvAjJxVIhalyWu3HsYxMv2s+Z/yKCbpiTWlORD/by0KV/EKLodiOGWzZ1f4
-         NO/a0jynpQhNDu+mbdVqktum/lIeGfOeGf6YHA9JP2+AhTgn3cYOmkIWtf8zTRpnPmF7
-         aVUC4zyGNtJU0DXqX+Qa6mXTdVXt0JP5EyrTTXf0i/kEG9//aoeZCpdwlihBdG0udOzi
-         b1XA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbMejrhY6fXcX3ch8WMOoE+CDJrlcsr1/wvw6uHVJGl40Y+ao6/3WsHrngmi1mgdG4gKtnobwpr1XOrJRBWRWUMJD9CFY+uNcrR9x+hIX2
-X-Gm-Message-State: AOJu0YxoB6T4TlOm2664hX/KzNFy6fqzvvp5+Osnu13tahs+gwcm2B3B
-	4iPLwep3lvvGTMxGvbBnUaeQzNBQz6OhQD4TaxldK2lVmgz26kIko5S7YCZv01g=
-X-Google-Smtp-Source: AGHT+IFxJeifz5EcUyoQ7zGXVAt/YfV1u/9+SuLU0gHe+drTSap9H+MC4G0IQtB9rf9SBDEaRTKPgA==
-X-Received: by 2002:a05:6e02:128c:b0:382:56bd:dfb8 with SMTP id e9e14a558f8ab-38398710577mr53428745ab.1.1720210600102;
-        Fri, 05 Jul 2024 13:16:40 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad22cb6b2sm40055505ab.14.2024.07.05.13.16.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 13:16:39 -0700 (PDT)
-Message-ID: <d99a1e3b-1893-4fac-bf05-bcb60ca7f89c@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 14:16:39 -0600
+        d=1e100.net; s=20230601; t=1720212874; x=1720817674;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hd8PCDgMueMORbsxMdk25xl5YXQAP04XADlFMfIBmTg=;
+        b=MaAvJUnVfiAfQteoTpqg/yz7c50nsZRj90CD1W4N1kB6vuKo3duCDg2JDMYNj/az65
+         14SQMjl1La9kmIqsWG51/nYFYipSJ8Q2F1LHEjAn4Ur0RN6ERIHoDSXkBbRsrF/CAp5A
+         yyu4ZCRMYcnZdobmkFSGXfXMjm18GfRKsEYaUBgggLxI6QZWKPt2iF7IQEsHjYPwGEpA
+         hFtbTG/WaxojX+1Wc4ZJF1n3pRkHA1L6yMtA7xR/vOR/ojdG3ulTB5Kej4vVKvQijUGu
+         UxutcTkvVciC6JPwv1e2csp6cKBqCGyNpt6h6JgE0cPdsTcmb9qiY6Fbu7xs/+H9roP4
+         y2tw==
+X-Forwarded-Encrypted: i=1; AJvYcCW1EF/t1iVB35x7pBMTqFVIn0Zfr0F/rHs4cLRhIRggWhLnRnV9hZzizSmoYiXy1xD6N9cQfDwJrU+nWsJDta3IbTvohBe+dj3knoxQOhZpfXGOSWugva2aeLWo9EA9FbSY9UHSpe5Eh9LSGI0J
+X-Gm-Message-State: AOJu0YycRrdWh37V621+1a36ShrKLImKZ/wV+wxDCqa0ALHNuhnJm5WT
+	qMOMnvQ+TfqkMun0j8KvR2W64y/dpaJ9PsK7JibN9KG42/iVsqFc
+X-Google-Smtp-Source: AGHT+IEPXB6ygUd16BDckadJNd0JfyBudXpraNukf45fIl/vUH5puKR2pY77kOTf66iIQ+8369EMpg==
+X-Received: by 2002:a05:6a00:882:b0:70a:f3de:3ff with SMTP id d2e1a72fcca58-70b00951416mr6010816b3a.14.1720212873706;
+        Fri, 05 Jul 2024 13:54:33 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b135ee722sm1172899b3a.11.2024.07.05.13.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jul 2024 13:54:33 -0700 (PDT)
+Message-ID: <9742abda93ae2d90148f54b585adc825e55a1a38.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: amend for wrong
+ bpf_wq_set_callback_impl signature
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Fri, 05 Jul 2024 13:54:27 -0700
+In-Reply-To: <20240705-fix-wq-v1-2-91b4d82cd825@kernel.org>
+References: <20240705-fix-wq-v1-0-91b4d82cd825@kernel.org>
+	 <20240705-fix-wq-v1-2-91b4d82cd825@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] selftests/vDSO: fix clang build errors, and
- Makefile cleanup
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski
- <luto@kernel.org>, Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240705195736.34039-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240705195736.34039-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 7/5/24 13:57, John Hubbard wrote:
-> Hi Shuah,
-> 
-> These are for 6.10, as we just discussed.
-> 
-> Changes since v4:
-> 
-> 1) Subject line on patch #2/3: s/mm/vDSO/
-> 
-> 2) Added Muhammad's review tag.
-> 
+On Fri, 2024-07-05 at 15:44 +0200, Benjamin Tissoires wrote:
+> See the previous patch: the API was wrong, we were provided the pointer
+> to the value, not the actual struct bpf_wq *.
+>=20
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
 
-Applied to
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=fixes
-for Linux 6.10
+Would it make sense to update one of the tests, so that it checks the
+specific value put in the map?
+E.g. extend struct elem:
 
-thanks,
--- Shuah
+struct elem {
+	int answer_to_the_ultimate_question;
+	struct bpf_wq w;
+};
+
+And put something in there?
+
+[...]
 
