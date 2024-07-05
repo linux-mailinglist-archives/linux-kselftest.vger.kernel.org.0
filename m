@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-13245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E601928C88
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 18:55:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AF7E928D1E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 19:40:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAD49B221EE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 16:55:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFEFD1F23996
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 17:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8393D16D30D;
-	Fri,  5 Jul 2024 16:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E29E16D339;
+	Fri,  5 Jul 2024 17:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NROOo9Kp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YuxOAW3l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015642B9B9
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 16:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B9016EB4A
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 17:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720198502; cv=none; b=s+hkpDNbQuqsiIb+F3Mgj22QdwnFALTL63NUvEPztbWB1UojnIO0CvPvX+K2Tb6PI1aKSqVavcRyxpx7IgxTMBq0HQX6g5NgyvE6iUQUXw5MXWeGNmJ83GFEP9GB+zHJfO8Odpr807OBoWAp9LGZH6x/LVwU/sXGGuRshe2vRas=
+	t=1720201198; cv=none; b=HnKoWsqS85/Zj7wo+HWVtbEPuHp7qjsWlmaomdu/iIG4QZNG1O5YB997lBRnwNSlG7K+tNByGqbyQW57PKuddoadP7JFjPhmDtf8rv9jbtqWUNztGJ9FxlMJQp238mMXMs7y18RN/Wp7xETHAEKhfNW9tEEaKldLoJScUTkb3Ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720198502; c=relaxed/simple;
-	bh=JbpMAAp767cJMVvvsfmlKOVKEDBe1tv8WSltj4UH6v4=;
+	s=arc-20240116; t=1720201198; c=relaxed/simple;
+	bh=30Nh8qTVUoUkcFJjX80VwecXmqFO1XJsfJhv0NzYxKc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T8sar6MAm/PxNOfS6nrKFxx5rC3dJW2EHYRmgoTqp+JlqTiP0weolq3xHdZwZtQgtgIhh3qTZJ1iqLOoI9USSe4R1dkKTqlpSW6fmoj8T5MlNFe84dhDIaBI3l9GWXCGLvTqpYtP0aCBy22e8C9C3ZYcnaDCuA8af6tUwo25HBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NROOo9Kp; arc=none smtp.client-ip=209.85.166.50
+	 In-Reply-To:Content-Type; b=tQlpDWFaz1joM25r6BkCUhMwxCWBFW2jcDL0bQFuZwbR+NJCsduI4wDWjZl4YJ3zHjGwFZpMMFUFgTSfQwVKBHZemhH4AsFPsmUVQTefw2pz25dh5tok5Fmu0EUSykgfZebN83ALoQvb2YrKxcPo9YHvdZn2fUo28uOQgDivDhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YuxOAW3l; arc=none smtp.client-ip=209.85.166.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7eeecebb313so7841639f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7f3d395dcf9so10033039f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jul 2024 10:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720198500; x=1720803300; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1720201194; x=1720805994; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
-        b=NROOo9KpWSPZfPUGqznxS507ekb+9dNphmCi46NCzAbVkDaYaca8H8Pfkgq52smB1H
-         ccJE27E49j1KUMmx/kzc9MrLrzm87a58Kd1gNtjNPAOmLNwjxD0PQySmxqNbcsJqoV2S
-         wtM2BWQ+WpeF1AmKE+R7FTfdlyf6BSwDe6bWc=
+        bh=unIf05UCU5IyJnCAhTNm6VO5/me2/U4T6hsWUv5BnOM=;
+        b=YuxOAW3lcv5ib49BQwunRhmp1s3AVy+C0uSrjWVvDUnW5ENgNEVZxORe/LZvUWseBn
+         ZFR4jZCt3buOJzp6oSUBgyIdsViTWQ/ypwhUIcN5USt0ekZElUFYq/NJUFpOXI6Mh6BP
+         hhVZQ6jrOkGeycJTLAHhgpXk7xcaf+tGAwAW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720198500; x=1720803300;
+        d=1e100.net; s=20230601; t=1720201194; x=1720805994;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
-        b=HbpbWFYyzIsJsjEuuDpiugN6O52TXLezICgq0umoEI+hkUKbO4B5v8iyfGYy3quzNc
-         DcbKCZ5fQ6EZDCNVrDlhIOQnvzYJ+BPRkRm5wHDYMAMRq9eNrJnFQY+zuvs4/zdy0tsQ
-         +lPoxn9+XwRA/acDBsAipbr7NOoFEee91fPbND1X41JSN5ooiiOAtlluvjiulhkiv++o
-         Fc+5sSZZOBV+b4Xg6i/OB6JN97wOfWZHicOGGTWQUkacbTYZxOIQm4bfU2tQG1I+iqsj
-         tU632Fvbo0olUajnzEK0tW+NNTU5o0TJMJcp5UbwHdWo2IutJAtEZb01K8hXdSleB+v/
-         u3Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCX1hRJRT2JGVOM4kjz2aYgPtbFK/ObMMP/SJj1BHKLDuTDWu6S2DCodjpN4BRz62hw6ZBp7QqETVDGNdFF0JGbivMlFr72+osNszvYf5FV6
-X-Gm-Message-State: AOJu0YydDR6nNDT8gjxUGXFOPP66Q6Hulhdnq4/4IZLJUXwNpu7TgM6G
-	Cqqh++LHzW6CGKQSr2CG/jnRl5EAFvSKqP++nyReJCjjAcaBDm+P9adnF1MaKts=
-X-Google-Smtp-Source: AGHT+IHY3in/e9Yxt3K+EtGGW2Ojce03GKiDSgxyEYqs6zBH6DryDUXwKCb6gpUav66FAfp/eAhNgg==
-X-Received: by 2002:a05:6602:6211:b0:7f6:5178:8607 with SMTP id ca18e2360f4ac-7f66df05100mr601855839f.2.1720198500122;
-        Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
+        bh=unIf05UCU5IyJnCAhTNm6VO5/me2/U4T6hsWUv5BnOM=;
+        b=OaoVRtb5V31AfWhoXdaIeRs1l7TsgLzaDvieR/x/sb+yEpmFdqEoT8Oxrzk8k4iHML
+         JMJj3zrbYv8D8DKcqcH5R24ifqEIxfijaK5bbm9mcT2Ir8fKQtnFu8N6C8fdrKzElr62
+         vZa7e5tR3OIRfhtai5hkPj7WS3TBeDQmGPsCekVGm1LGP0Nv82VKl4mRvdSl2r2EDsPv
+         bNDrs4KQ0jodlEtPDIry2j0TMVP2bACQlDlD1qrmy6ZHcnfBbOm7b5YjtQ6oIWStkN12
+         sN/qKrv2USBIrI1S7/IN7X3jmhlBG/o07rXP/7OZ2gxpi2jjIPKjyPUwbqEseM1Dmm2i
+         1bsA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5dmL1tazjoVm4sWiDhN8C14P/wEatj6vyygfycrvaOZz9rN78QN7bvyymTczlbheHZbsrz+OB3clTEDCHBMSabSSYN2lJVhi8njPxqbwo
+X-Gm-Message-State: AOJu0YxdUfQmvuDrmvPyxh+FNuPr+Is8daz/OxPQdMVi2znlPFmgK3tW
+	DU6DKlK+frJ7TaGhWevMlWnJnhHeL9HD4VHLMc35wIy8BmZYZVsjCSOgaidw+f4=
+X-Google-Smtp-Source: AGHT+IEM4SS6hOlhpK8tPtz1YFddZheyjJwcf695tdvlnP1W0P9Zvopi9NDI6WLp+A8FUY/8ggO8Xw==
+X-Received: by 2002:a5d:8616:0:b0:7eb:2c45:4688 with SMTP id ca18e2360f4ac-7f66def7059mr523886739f.2.1720201194254;
+        Fri, 05 Jul 2024 10:39:54 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73f910fdsm4521403173.91.2024.07.05.09.54.59
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73dd4dfbsm4565041173.49.2024.07.05.10.39.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 09:54:59 -0700 (PDT)
-Message-ID: <9262c7ff-41e6-4df2-a335-e81897381ed0@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 10:54:59 -0600
+        Fri, 05 Jul 2024 10:39:53 -0700 (PDT)
+Message-ID: <85ce18a6-9783-427b-bfb4-64b82c0081cb@linuxfoundation.org>
+Date: Fri, 5 Jul 2024 11:39:53 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,68 +73,201 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] selftests/vDSO: fix clang build errors, and
- Makefile cleanup
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704023324.83564-1-jhubbard@nvidia.com>
+Subject: Re: [PATCH v2] selftest: acct: Add selftest for the acct() syscall
+To: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: javiercarrascocruz@gmail.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240630-kselftest-acct-syscall-v2-1-b30bbe2a69cd@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240704023324.83564-1-jhubbard@nvidia.com>
+In-Reply-To: <20240630-kselftest-acct-syscall-v2-1-b30bbe2a69cd@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/3/24 20:33, John Hubbard wrote:
-> Hi,
+On 6/30/24 13:22, Abdulrasaq Lawani wrote:
+> Noticed that there was no selftest for the acct() syscall
+> which enables the kernel to record terminated processes
+> into a specified file.
 > 
-> This is basically a resend, with a rebase onto today's latest Linux
-> main, in order to show that the patches are still relevant and correct.
+> The acct() system call enables or disables process accounting.
+> If accounting is turned on, records for each terminating process
+> are appended to a specified filename as it terminates. An argument of NULL
+> causes accounting to be turned off.
 > 
-> Changes since v3:
+> This patch provides a test for the acct() syscall.
 > 
-> 1. Rebased onto Linux 6.10-rc6+.
+> References:
+> https://man7.org/linux/man-pages/man2/acct.2.html
 > 
-> Cover letter for v3:
-> 
-> Jason A. Donenfeld, I've added you because I ended up looking through
-> your latest "implement getrandom() in vDSO" series [1], which also
-> touches this Makefile, so just a heads up about upcoming (minor) merge
-> conflicts.
-> 
-> Changes since v2:
-> 
-> 1. Added two patches, both of which apply solely to the Makefile.
-> These provide a smaller, cleaner, and more accurate Makefile.
-> 
-> 2. Added Reviewed-by and Tested-by tags for the original patch, which
-> fixes all of the clang errors and warnings for this selftest.
-> 
-> 3. Removed an obsolete blurb from the commit description of the original
-> patch, now that Valentin Obst LLVM build fix has been merged.
-> 
-> John Hubbard (3):
->    selftests/vDSO: fix clang build errors and warnings
->    selftests/mm: remove partially duplicated "all:" target in Makefile
->    selftests/vDSO: remove duplicate compiler invocations from Makefile
-> 
->   tools/testing/selftests/vDSO/Makefile         | 29 ++++++++-----------
->   tools/testing/selftests/vDSO/parse_vdso.c     | 16 ++++++----
->   .../selftests/vDSO/vdso_standalone_test_x86.c | 18 ++++++++++--
->   3 files changed, 39 insertions(+), 24 deletions(-)
-> 
-> 
-> base-commit: 8a9c6c40432e265600232b864f97d7c675e8be52
+> Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
 
-Applied all 3 patches to linux_kselftest next for Linux 6.11-rc1.
+What does the test output look like?
 
-thanks,
--- Shuah
+> ---
+> Changes in v2:
+> Add testcases to test error conditions.
+> Add kselftest function for reporting results.
+> 
+> - Link to v1: https://lore.kernel.org/r/20240622-kselftest-acct-syscall-v1-1-d270b5be8d37@gmail.com
+> ---
+>   tools/testing/selftests/Makefile            |  1 +
+>   tools/testing/selftests/acct/.gitignore     |  2 +
+>   tools/testing/selftests/acct/Makefile       |  4 ++
+>   tools/testing/selftests/acct/acct_syscall.c | 89 +++++++++++++++++++++++++++++
+>   4 files changed, 96 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 9039f3709aff..45a58ef5ad92 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -1,4 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0
+> +TARGETS += acct
+>   TARGETS += alsa
+>   TARGETS += amd-pstate
+>   TARGETS += arm64
+> diff --git a/tools/testing/selftests/acct/.gitignore b/tools/testing/selftests/acct/.gitignore
+> new file mode 100644
+> index 000000000000..8ab358d81bd2
+> --- /dev/null
+> +++ b/tools/testing/selftests/acct/.gitignore
+> @@ -0,0 +1,2 @@
+> +acct_syscall
+> +config
+> \ No newline at end of file
+
+What is this?
+
+> diff --git a/tools/testing/selftests/acct/Makefile b/tools/testing/selftests/acct/Makefile
+> new file mode 100644
+> index 000000000000..ff3e238c5634
+> --- /dev/null
+> +++ b/tools/testing/selftests/acct/Makefile
+> @@ -0,0 +1,4 @@
+> +TEST_GEN_PROGS := acct_syscall
+> +CFLAGS += -Wall
+> +
+> +include ../lib.mk
+> \ No newline at end of file
+> diff --git a/tools/testing/selftests/acct/acct_syscall.c b/tools/testing/selftests/acct/acct_syscall.c
+> new file mode 100644
+> index 000000000000..4fa00a88a1bd
+> --- /dev/null
+> +++ b/tools/testing/selftests/acct/acct_syscall.c
+> @@ -0,0 +1,89 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/* kselftest for acct() system call
+> + *  The acct() system call enables or disables process accounting.
+> + */
+> +
+> +#include <stdio.h>
+> +#include <errno.h>
+> +#include <string.h>
+> +#include <sys/wait.h>
+> +
+> +#include "../kselftest.h"
+> +
+> +int main(void)
+> +{
+> +	// Setting up kselftest framework
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+> +	// Create file to log closed processes
+> +	char filename[] = "process_log";
+
+Where does this file created?
+
+> +	FILE *fp;
+> +
+> +	fp = fopen(filename, "w");
+
+What happens if file creation fails?
+
+> +
+> +	int i = acct(filename);
+
+Chose a descriptive name for the variable e.g: ret
+
+> +
+> +	// Handle error conditions
+> +	if (i) {
+
+Is this the failure case - ret < 0 case - complete conditional.
+
+> +		switch (errno) {
+> +		case EPERM:
+> +			ksft_test_result_error("%s. Please run the test as root.\n",
+> +				strerror(errno));
+> +			break;
+> +
+> +		case EACCES:
+> +			ksft_test_result_error("Insufficient privilege.\n");
+> +			break;
+> +
+> +		case EIO:
+> +			ksft_test_result_error("Error writing to the file: %s.\n", filename);
+> +			break;
+> +
+> +		default:
+> +			ksft_test_result_error("%s.\n", strerror(errno));
+> +			break;
+> +		}
+> +
+> +		remove(filename);
+> +		fclose(fp);
+> +		ksft_finished();
+> +		return 1;
+> +	}
+> +
+> +	// Create child process and wait for it to terminate.
+> +	pid_t child_pid;
+> +
+> +	child_pid = fork();
+> +
+> +	if (child_pid < 0) {
+> +		ksft_test_result_error("Process failed\n");
+> +		ksft_finished();
+> +		return 1;
+> +	} else if (child_pid == 0) {
+> +		ksft_print_msg("Child process successfully created!\n");
+
+You don't need braces here since it it a single statement after the
+conditional.
+
+> +	} else {
+> +		wait(NULL);
+> +		fseek(fp, 0L, SEEK_END);
+> +		int sz = ftell(fp);
+> +
+> +		ksft_print_msg("Parent process successfully created!\n");
+> +
+> +		i = acct(NULL);
+> +
+> +		if (sz <= 0) {
+> +			ksft_test_result_fail("Terminated child process not logged");
+> +			ksft_exit_fail();
+> +			return 1;
+> +		}
+> +
+> +		ksft_test_result_pass("Successfully logged terminated process.\n");
+> +		remove(filename);
+> +		fclose(fp);
+> +		ksft_exit_pass();
+> +		return 0;
+> +	}
+> +
+> +	return 1;
+> +}
+> 
+> ---
+> base-commit: 50736169ecc8387247fe6a00932852ce7b057083
+> change-id: 20240622-kselftest-acct-syscall-2d90f7666b1e
+> 
+> Best regards,
+
+Please check coding guidelines and ruun checkpatch on this.
 
 
