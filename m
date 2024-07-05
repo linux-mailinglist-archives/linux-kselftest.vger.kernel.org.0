@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C2239280BE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 05:00:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD03A9280C0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 05:00:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EF561F25013
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 03:00:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77267286C1A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 03:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC751219ED;
-	Fri,  5 Jul 2024 02:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451D271750;
+	Fri,  5 Jul 2024 02:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OE/FHDCJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="us8zZ8TL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17681BC4B;
-	Fri,  5 Jul 2024 02:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDE81C693;
+	Fri,  5 Jul 2024 02:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720148326; cv=none; b=alP5tqjm6GLkszSJMTNjd6EYkKHBNQB5gRsfBAMza581wv1OdtV3vBamVR7yIcvCHWcN2CnargZjG/9PGx+Wr6gWPiAr5II2s793d3vbjIWOwLu9hbUrAaYTG3lJZGivA8kkl5zuVEeTO8jZAtDctf19BMbkSAn34i9d6LZOzmA=
+	t=1720148331; cv=none; b=MJtceDrQxAIDna02ANxIC33FflzSqonX4ceBJjh5XzBheFS+Aq/r6K6Y03mptObxp3nalzYIKbAKLI0A3na0yws8wyW6wzJlAzMkSXJUKEUq9uESrPwYukmTOWOOORzIwNCiLoniQQ4FeCuOsRmfEZyx+wi9cByJot3tFSoCE5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720148326; c=relaxed/simple;
-	bh=89eMq5ZQcrcGurIA8RdxDHuaLm5+nRGhgftIxO8Zca4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tyZz9LjPuT3z/LO5HvLl/VdUTYGYCVnu3WeaJvWY1aeeilM2UcnlSKisU0CeiOPeZU83ruYSDhhJtglOFN2NZeVeYRurDJReb2RD1ILA/Wya91XSldPRnttr+VZbBnQ5N8SSZeLSenpDG0b736MpEQrLgWtsGivv1/KXwp2c8uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OE/FHDCJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44632C3277B;
-	Fri,  5 Jul 2024 02:58:42 +0000 (UTC)
+	s=arc-20240116; t=1720148331; c=relaxed/simple;
+	bh=bAX1OLxg4DkksZvjRAzn/L1GhmwINGXrUi0DgLiNpt4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kGUTo69HOz0eAprp87Db4P9lsrmsuz9kBuEGtMC297QX3duMZWhOzeLopDH/XCFIAic2v4GcGb3kQgNbr12DCLETYP/8mJU2+DuEDuSg2FGp8rPjcYQermhUC929yjUo+XI6QTG3zcoVzCesCxGjxQXhpOotgtUFK7CAt11w8dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=us8zZ8TL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE90C4AF0D;
+	Fri,  5 Jul 2024 02:58:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720148326;
-	bh=89eMq5ZQcrcGurIA8RdxDHuaLm5+nRGhgftIxO8Zca4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OE/FHDCJiYjKyxnZIdNHPDgMUvKlNuErAZLx0Uks9/L9Q1em+u8mfODB6zIr+/IYd
-	 AVOEQVecF5aSrxdUmjl1cuMTRuIYppdrLjV+WBCvAJ/ICpeoDI6+WF9KKKXdgUMQmY
-	 N0r3sjJJgXRD30/0z85EoLWh2fHNkM5gYwaC7mhWox2heWi5Dj/DotPnf3ySOuzBPS
-	 OWaxsfmIHV/5yZtYOIc9mRW4/bEpg/63OVCXgg20xW8JFUy2SW9rYxi2INiPjihPO5
-	 07W7wHr+ofpUat87Fzt6jmI0MHJZQNZ/11Cz4luAmE4plez4/6zbmzbrxOoBiZXcYE
-	 UTKKCPqQ2MC9A==
+	s=k20201202; t=1720148330;
+	bh=bAX1OLxg4DkksZvjRAzn/L1GhmwINGXrUi0DgLiNpt4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=us8zZ8TL6HY58PbFV2b4kKvqeofS9BDLqTUALIpmnkmDJ8IAbUjUDIg0xjQlbayZI
+	 xGTQ2Fm6BIOHs6Zk/lznk7jhMBhOFkW7fJzUHOiSfBGzHDhes8+v1k9spoRSHubUOL
+	 r6f/C44JWHVetoAeMVaPyqLS2kpbU9HL1V8gOc9LZejxeKEcXMAglNhk0wX1PxhLHm
+	 B1YOCChqfCk57nc4eBKWkn5U/7EafGlfWJZ1WSisl4zmo244f7gfWADbw1aAORLwgn
+	 6nblum7YtWyDC+Pj2F2WrLX77DnZIayK5e4y7ADOtPKmKIhtRR7/ElzTuVmrVmdlh5
+	 dQk4ShznAb6og==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -58,10 +59,12 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v8 0/9] use network helpers, part 8
-Date: Fri,  5 Jul 2024 10:58:22 +0800
-Message-ID: <cover.1720147952.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v8 1/9] selftests/bpf: Add backlog for network_helper_opts
+Date: Fri,  5 Jul 2024 10:58:23 +0800
+Message-ID: <e8726f4ec0740c78416eb3a5a02921071f2f1d3a.1720147953.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1720147952.git.tanggeliang@kylinos.cn>
+References: <cover.1720147952.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,56 +75,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-v8:
- - only patch 8 updated, to fix errors reported by CI.
+Some callers expect __start_server() helper to pass their own "backlog"
+value to listen() instead of the default of 1. So this patch adds struct
+member "backlog" for network_helper_opts to allow callers to set "backlog"
+value via start_server_str() helper.
 
-v7:
- - address Martin's comments in v6. (thanks)
- - use MAX(opts->backlog, 0) instead of opts->backlog.
- - use connect_to_fd_opts instead connect_to_fd.
- - more ASSERT_* to check errors.
+listen(fd, 0 /* backlog */) can be used to enforce syncookie. Meaning
+backlog 0 is a legit value.
 
-v6:
- - update patch 6 as Daniel suggested. (thanks)
+Using 0 as a default and changing it to 1 here is fine. It makes the test
+program easier to write for the common case. Enforcing syncookie mode by
+using backlog 0 is a niche use case but it should at least have a way for
+the caller to do that.
 
-v5:
- - keep make_server and make_client as Eduard suggested.
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 2 +-
+ tools/testing/selftests/bpf/network_helpers.h | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-v4:
- - a new patch to use make_sockaddr in sockmap_ktls.
- - a new patch to close fd in error path in drop_on_reuseport.
- - drop make_server() in patch 7.
- - drop make_client() too in patch 9.
-
-v3:
- - a new patch to add backlog for network_helper_opts.
- - use start_server_str in sockmap_ktls now, not start_server.
-
-v2:
- - address Eduard's comments in v1. (thanks)
- - fix errors reported by CI.
-
-This patch set uses network helpers in sockmap_ktls and sk_lookup, and
-drop three local helpers tcp_server(), inetaddr_len() and make_socket()
-in them.
-
-Geliang Tang (9):
-  selftests/bpf: Add backlog for network_helper_opts
-  selftests/bpf: Use start_server_str in sockmap_ktls
-  selftests/bpf: Use connect_to_fd_opts in sockmap_ktls
-  selftests/bpf: Use make_sockaddr in sockmap_ktls
-  selftests/bpf: Close fd in error path in drop_on_reuseport
-  selftests/bpf: Use start_server_str in sk_lookup
-  selftests/bpf: Use connect_to_fd_opts in sk_lookup
-  selftests/bpf: Use connect_to_addr in sk_lookup
-  selftests/bpf: Drop make_socket in sk_lookup
-
- tools/testing/selftests/bpf/network_helpers.c |   2 +-
- tools/testing/selftests/bpf/network_helpers.h |   4 +
- .../selftests/bpf/prog_tests/sk_lookup.c      | 152 +++++++-----------
- .../selftests/bpf/prog_tests/sockmap_ktls.c   |  53 ++----
- 4 files changed, 76 insertions(+), 135 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 44c2c8fa542a..e0cba4178e41 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -106,7 +106,7 @@ static int __start_server(int type, const struct sockaddr *addr, socklen_t addrl
+ 	}
+ 
+ 	if (type == SOCK_STREAM) {
+-		if (listen(fd, 1) < 0) {
++		if (listen(fd, opts->backlog ? MAX(opts->backlog, 0) : 1) < 0) {
+ 			log_err("Failed to listed on socket");
+ 			goto error_close;
+ 		}
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 9ea36524b9db..4f26bfc2dbf5 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -25,6 +25,10 @@ struct network_helper_opts {
+ 	int timeout_ms;
+ 	bool must_fail;
+ 	int proto;
++	/* The backlog argument for listen(), defines the maximum length to which
++	 * the queue of pending connections for sockfd may grow.
++	 */
++	int backlog;
+ 	int (*post_socket_cb)(int fd, void *opts);
+ 	void *cb_opts;
+ };
 -- 
 2.43.0
 
