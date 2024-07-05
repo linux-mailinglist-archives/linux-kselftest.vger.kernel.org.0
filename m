@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22976928082
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:39:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FB1A928083
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCE0E284259
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:39:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 532371C22ADB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E704C1CD02;
-	Fri,  5 Jul 2024 02:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63067219ED;
+	Fri,  5 Jul 2024 02:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRWmV/DR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiyhMWjd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DA739FFB;
-	Fri,  5 Jul 2024 02:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FE7219EB;
+	Fri,  5 Jul 2024 02:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720147128; cv=none; b=XV5BbNbWBPVUeeZoIcFKYOm7ZCyrNDJdfUqdW3X8lvsGQxZ70apKzHuY+H7RP40Ib5X+c24sbOnITmMzYTj5BdnATWdONm2xSHh7EbE6IYk51Y+yNI1AmYOfqQVRdaKQEh6woJk7/RYobC7AwSxp0TsAOTHZ1z8nOmErGctubjk=
+	t=1720147133; cv=none; b=NYGtzAl+/l2Z4ekUTb97CK99e6817w6xnGcy200UExT4whx1rFjtABmsdmYO8QypYEUu5k4HKqFOkUYcCCxxPBBmeGlm4EC/5gJS9XD5iruSQ2cQkc2BHyktnDcHX5uxgpi+4EUujHbUyJ+20rAofSLvzlFJAkWyUh25S3UusNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720147128; c=relaxed/simple;
-	bh=i1hi7joj/cR8gtdNdPAzFDk5iX3Vay2ss48OzQh+0WM=;
+	s=arc-20240116; t=1720147133; c=relaxed/simple;
+	bh=n1NyZ6eGDBxEo2vY6L1+foPngaXNx5u6a5ZIUTsKSmY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WSKUvHmDWy/ZNuZgaRmvrlhLJ3KILDgRiogPtTcnJPD8Ozw40gfr9xxPj98sUHN/dj2fctt6bQKoIp+vjCqhu97XwwvMyUypcnUMeH7SpQHfIESw8JcmpeKhCIQ/s+vuFArEEgotIfn15zB17xLwGBFUOqKDi3jwFZBIAgCA+kM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRWmV/DR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2717AC4AF0D;
-	Fri,  5 Jul 2024 02:38:43 +0000 (UTC)
+	 MIME-Version; b=Fz4Ur5y4LamNWXagA/6k34rQHEyfqXii1RiN0htLR1IaGhdib3e9bvFNfkew76J8JzuhgeJsdajn96RScNe+Vi2w+WopDuyAHUD8kf149xS4LNPqDfRKB8iXcpC7XH+L9YRiUGUF7KGueyIuUyGp2LpBtkwQzTlGdErrppqzhKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiyhMWjd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F1DC3277B;
+	Fri,  5 Jul 2024 02:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720147128;
-	bh=i1hi7joj/cR8gtdNdPAzFDk5iX3Vay2ss48OzQh+0WM=;
+	s=k20201202; t=1720147132;
+	bh=n1NyZ6eGDBxEo2vY6L1+foPngaXNx5u6a5ZIUTsKSmY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CRWmV/DR7lRKSEqExhEE64MR4x3Juy7faXeObKO/qsJNxxAOyYidzBzoJJfffcJs9
-	 fx9vTi52T38CByh6PGuqN+FwXeQtvfFcFLt858u1XRVDnyfgeHo5HQRLL04FtLZbIb
-	 5IajfrbwZ+cMlmrW6pmxTTf1eRbqkfLhIdB6mB0/kxTjAS9Pn4mqX78/OjAXVhmlit
-	 R/iWO0t2SLueSMb7ZYHJ5GActUsNKkh9WfVYzPDS2GKX66qdx4p52vtpWdFepuhU52
-	 q6elcprPPhRADqxWPkjzP4h6XbtEJZYCR5uLUbLENWzN3gBjmtmMIZ0KFaxnREo7Xc
-	 FndQcjmpQOnmA==
+	b=aiyhMWjdh26ChbNIhf1HdQYQaQev8wZvcQ2hze56wHrY0EyE9odXrFkgxSr8jPPLk
+	 uGf3DMcY4wSR83cS2vPK/qPCyrnco1LHNmY+l5Di9RF1tFOUjBsQuRo3OoJpUhEsr3
+	 oCv+Mlxk9Ja2XoVhpzJM6PB5yu5ZMRPC2BdLjhJ4fOCLhyIS+YWk+u4zV14PTgIul3
+	 YwQQi/wYKRj15s7bYX4osAdJvVsvE14KZnCihyKUmeFfYgqIuaNbmvWzuXRUouPQXU
+	 1FN9nXXqzLz5+XDf1Hogyn+PD9xatQUdqfb5a5UaM4I9CJH/jgQ5AlgSO6PFruVpmM
+	 OeOqlr9ObJbdQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/6] selftests/bpf: Use ASSERT_OK to skip ENOTSUPP
-Date: Fri,  5 Jul 2024 10:38:21 +0800
-Message-ID: <7206d2c0781535981c4ab9c7ec046da97a6d778c.1720146231.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 4/6] selftests/bpf: Null checks for link in bpf_tcp_ca
+Date: Fri,  5 Jul 2024 10:38:22 +0800
+Message-ID: <06755f462ddb7bc9f734f105e18c1d77c03811cb.1720146231.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720146231.git.tanggeliang@kylinos.cn>
 References: <cover.1720146231.git.tanggeliang@kylinos.cn>
@@ -75,193 +75,140 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-There are so many "ENOTSUPP" (-524) errors when running BPF selftests
-on a Loongarch platform since lacking BPF trampoline on Loongarch:
+Run bpf_tcp_ca selftests (./test_progs -t bpf_tcp_ca) on a Loongarch
+platform, some "Segmentation fault" errors occur:
 
 '''
- test_d_path_basic:PASS:setup 0 nsec
- libbpf: prog 'prog_stat': failed to attach: unknown error (-524)
- libbpf: prog 'prog_stat': failed to auto-attach: -524
- test_d_path_basic:FAIL:setup attach failed: -524
- #77/1    d_path/basic:FAIL
- #77/2    d_path/check_rdonly_mem:OK
- #77/3    d_path/check_alloc_mem:OK
- #77      d_path:FAIL
- ... ...
- test_module_attach:PASS:skel_open 0 nsec
- test_module_attach:PASS:set_attach_target 0 nsec
- test_module_attach:PASS:set_attach_target_explicit 0 nsec
- test_module_attach:PASS:skel_load 0 nsec
- libbpf: prog 'handle_fentry': failed to attach: unknown error (-524)
- libbpf: prog 'handle_fentry': failed to auto-attach: -524
- test_module_attach:FAIL:skel_attach skeleton attach failed: -524
- #167     module_attach:FAIL
- ... ...
- ringbuf_subtest:PASS:skel_open 0 nsec
- ringbuf_subtest:PASS:skel_load 0 nsec
- ringbuf_subtest:PASS:rw_cons_pos 0 nsec
- ringbuf_subtest:PASS:rw_extend 0 nsec
- ringbuf_subtest:PASS:exec_cons_pos_protect 0 nsec
- ringbuf_subtest:PASS:unmap_rw 0 nsec
- ringbuf_subtest:PASS:wr_prod_pos 0 nsec
- ringbuf_subtest:PASS:wr_prod_pos_err 0 nsec
- ringbuf_subtest:PASS:wr_data_page_one 0 nsec
- ringbuf_subtest:PASS:wr_data_page_one_err 0 nsec
- ringbuf_subtest:PASS:wr_data_page_two 0 nsec
- ringbuf_subtest:PASS:wr_data_page_all 0 nsec
- ringbuf_subtest:PASS:ro_prod_pos 0 nsec
- ringbuf_subtest:PASS:write_protect 0 nsec
- ringbuf_subtest:PASS:exec_protect 0 nsec
- ringbuf_subtest:PASS:ro_remap 0 nsec
- ringbuf_subtest:PASS:unmap_ro 0 nsec
- ringbuf_subtest:PASS:ro_prod_pos 0 nsec
- ringbuf_subtest:PASS:write_protect 0 nsec
- ringbuf_subtest:PASS:exec_protect 0 nsec
- ringbuf_subtest:PASS:ro_remap 0 nsec
- ringbuf_subtest:PASS:unmap_ro 0 nsec
- ringbuf_subtest:PASS:ringbuf_create 0 nsec
- ringbuf_subtest:FAIL:skel_attach skeleton attachment failed: -1
- #277/1   ringbuf/ringbuf:FAIL
- #277/2   ringbuf/ringbuf_n:SKIP
- #277/3   ringbuf/ringbuf_map_key:SKIP
- #277     ringbuf:FAIL
- ... ...
- test_test_bprm_opts:PASS:skel_load 0 nsec
- libbpf: prog 'secure_exec': failed to attach: unknown error (-524)
- libbpf: prog 'secure_exec': failed to auto-attach: -524
- test_test_bprm_opts:FAIL:attach attach failed: -524
- #382     test_bprm_opts:FAIL
- ... ...
- test_test_ima:PASS:skel_load 0 nsec
- test_test_ima:PASS:ringbuf 0 nsec
- libbpf: prog 'bprm_committed_creds': failed to attach: \
-					unknown error (-524)
- libbpf: prog 'bprm_committed_creds': failed to auto-attach: -524
- test_test_ima:FAIL:attach attach failed: -524
- #384     test_ima:FAIL
- ... ...
- test_trace_ext:PASS:setup 0 nsec
- test_trace_ext:PASS:setup 0 nsec
- test_trace_ext:PASS:setup 0 nsec
- test_trace_ext:PASS:setup 0 nsec
- libbpf: prog 'test_pkt_md_access_new': failed to attach: \
-					unknown error (-524)
- libbpf: prog 'test_pkt_md_access_new': failed to auto-attach: -524
- test_trace_ext:FAIL:setup freplace/test_pkt_md_access attach failed: -524
- #397     trace_ext:FAIL
+ test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
+ test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
+ #29/1    bpf_tcp_ca/dctcp:FAIL
+ test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
+ test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
+ #29/2    bpf_tcp_ca/cubic:FAIL
+ test_dctcp_fallback:PASS:dctcp_skel 0 nsec
+ test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
+ test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
+ #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
+ test_write_sk_pacing:PASS:open_and_load 0 nsec
+ test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
+ #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
+ test_update_ca:PASS:open 0 nsec
+ test_update_ca:FAIL:attach_struct_ops unexpected error: -524
+ settcpca:FAIL:setsockopt unexpected setsockopt: \
+					actual -1 == expected -1
+ (network_helpers.c:99: errno: No such file or directory) \
+					Failed to call post_socket_cb
+ start_test:FAIL:start_server_str unexpected start_server_str: \
+					actual -1 == expected -1
+ test_update_ca:FAIL:ca1_ca1_cnt unexpected ca1_ca1_cnt: \
+					actual 0 <= expected 0
+ #29/9    bpf_tcp_ca/update_ca:FAIL
+ #29      bpf_tcp_ca:FAIL
+ Caught signal #11!
+ Stack trace:
+ ./test_progs(crash_handler+0x28)[0x5555567ed91c]
+ linux-vdso.so.1(__vdso_rt_sigreturn+0x0)[0x7ffffee408b0]
+ ./test_progs(bpf_link__update_map+0x80)[0x555556824a78]
+ ./test_progs(+0x94d68)[0x5555564c4d68]
+ ./test_progs(test_bpf_tcp_ca+0xe8)[0x5555564c6a88]
+ ./test_progs(+0x3bde54)[0x5555567ede54]
+ ./test_progs(main+0x61c)[0x5555567efd54]
+ /usr/lib64/libc.so.6(+0x22208)[0x7ffff2aaa208]
+ /usr/lib64/libc.so.6(__libc_start_main+0xac)[0x7ffff2aaa30c]
+ ./test_progs(_start+0x48)[0x55555646bca8]
+ Segmentation fault
 '''
 
-This patch uses ASSERT_OK() instead of CHECK() to skip these "ENOTSUPP"
-errors. With this change, the new output of these selftests look like:
+This is because "link" returned by bpf_map__attach_struct_ops() is
+NULL in this case. test_progs crashs when this NULL link passes to
+bpf_link__update_map(). This patch adds NULL checks for all links
+in bpf_tcp_ca to fix these errors. If "link" is NULL, goto the newly
+added label "err" to destroy the skel.
 
-'''
- #77/1    d_path/basic:SKIP
- #77/2    d_path/check_rdonly_mem:OK
- #77/3    d_path/check_alloc_mem:OK
- #77      d_path:OK (SKIP: 1/3)
- ... ...
- #167     module_attach:SKIP
- ... ...
- #277/1   ringbuf/ringbuf:SKIP
- #277/2   ringbuf/ringbuf_n:SKIP
- #277/3   ringbuf/ringbuf_map_key:SKIP
- #277     ringbuf:SKIP
- ... ...
- #382     test_bprm_opts:SKIP
- ... ...
- #384     test_ima:SKIP
- ... ...
- #397     trace_ext:SKIP
-'''
+v2:
+ - use "goto err" instead of "return" as Eduard suggested.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/d_path.c         | 2 +-
- tools/testing/selftests/bpf/prog_tests/module_attach.c  | 2 +-
- tools/testing/selftests/bpf/prog_tests/ringbuf.c        | 2 +-
- tools/testing/selftests/bpf/prog_tests/test_bprm_opts.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/test_ima.c       | 2 +-
- tools/testing/selftests/bpf/prog_tests/trace_ext.c      | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c        | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index ccc768592e66..78110075b485 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -129,7 +129,7 @@ static void test_d_path_basic(void)
- 		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index 5909c1f82f3b..9effdfb1a5ce 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -407,7 +407,8 @@ static void test_update_ca(void)
+ 		return;
  
- 	err = test_d_path__attach(skel);
--	if (CHECK(err, "setup", "attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "setup"))
- 		goto cleanup;
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto err;
  
- 	bss = skel->bss;
-diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-index 6d391d95f96e..4aab747ad202 100644
---- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-@@ -62,7 +62,7 @@ void test_module_attach(void)
- 	bss = skel->bss;
+ 	do_test(&opts);
+ 	saved_ca1_cnt = skel->bss->ca1_cnt;
+@@ -421,6 +422,7 @@ static void test_update_ca(void)
+ 	ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
  
- 	err = test_module_attach__attach(skel);
--	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "skel_attach"))
- 		goto cleanup;
+ 	bpf_link__destroy(link);
++err:
+ 	tcp_ca_update__destroy(skel);
+ }
  
- 	/* trigger tracepoint */
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index 4c6f42dae409..ee7deb76b60a 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -161,7 +161,7 @@ static void ringbuf_subtest(void)
- 		goto cleanup;
+@@ -443,7 +445,8 @@ static void test_update_wrong(void)
+ 		return;
  
- 	err = test_ringbuf_lskel__attach(skel);
--	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+	if (!ASSERT_OK(err, "skel_attach"))
- 		goto cleanup;
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto err;
  
- 	trigger_samples();
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_bprm_opts.c b/tools/testing/selftests/bpf/prog_tests/test_bprm_opts.c
-index a0054019e677..40a86a303c1a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_bprm_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_bprm_opts.c
-@@ -88,7 +88,7 @@ void test_test_bprm_opts(void)
- 		goto close_prog;
+ 	do_test(&opts);
+ 	saved_ca1_cnt = skel->bss->ca1_cnt;
+@@ -456,6 +459,7 @@ static void test_update_wrong(void)
+ 	ASSERT_GT(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
  
- 	err = bprm_opts__attach(skel);
--	if (CHECK(err, "attach", "attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "attach"))
- 		goto close_prog;
+ 	bpf_link__destroy(link);
++err:
+ 	tcp_ca_update__destroy(skel);
+ }
  
- 	/* Run the test with the secureexec bit unset */
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-index 810b14981c2e..2a6c388fe29d 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-@@ -83,7 +83,7 @@ void test_test_ima(void)
- 		goto close_prog;
+@@ -480,7 +484,8 @@ static void test_mixed_links(void)
+ 	ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl");
  
- 	err = ima__attach(skel);
--	if (CHECK(err, "attach", "attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "attach"))
- 		goto close_prog;
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+-	ASSERT_OK_PTR(link, "attach_struct_ops");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto err;
  
- 	measured_dir = mkdtemp(measured_dir_template);
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_ext.c b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-index aabdff7bea3e..d006c0b91178 100644
---- a/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-@@ -60,7 +60,7 @@ void test_trace_ext(void)
- 	}
+ 	do_test(&opts);
+ 	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
+@@ -489,6 +494,7 @@ static void test_mixed_links(void)
+ 	ASSERT_ERR(err, "update_map");
  
- 	err = test_trace_ext__attach(skel_ext);
--	if (CHECK(err, "setup", "freplace/test_pkt_md_access attach failed: %d\n", err))
-+	if (!ASSERT_OK(err, "setup replace/test_pkt_md_access attach"))
- 		goto cleanup;
+ 	bpf_link__destroy(link);
++err:
+ 	bpf_link__destroy(link_nl);
+ 	tcp_ca_update__destroy(skel);
+ }
+@@ -532,7 +538,8 @@ static void test_link_replace(void)
+ 	bpf_link__destroy(link);
  
- 	prog = skel_ext->progs.test_pkt_md_access_new;
+ 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_2);
+-	ASSERT_OK_PTR(link, "attach_struct_ops_2nd");
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops_2nd"))
++		goto err;
+ 
+ 	/* BPF_F_REPLACE with a wrong old map Fd. It should fail!
+ 	 *
+@@ -555,6 +562,7 @@ static void test_link_replace(void)
+ 
+ 	bpf_link__destroy(link);
+ 
++err:
+ 	tcp_ca_update__destroy(skel);
+ }
+ 
 -- 
 2.43.0
 
