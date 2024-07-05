@@ -1,56 +1,57 @@
-Return-Path: <linux-kselftest+bounces-13259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BD6A928F8C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 01:30:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F346928F8E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 01:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D5E71C21287
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 23:30:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E5EBB2187B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 23:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D7F1494BF;
-	Fri,  5 Jul 2024 23:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4944715FA6B;
+	Fri,  5 Jul 2024 23:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="27T/u9DY"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DwDUZBuk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0BA148FF2;
-	Fri,  5 Jul 2024 23:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17D51494CD;
+	Fri,  5 Jul 2024 23:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720222211; cv=none; b=XaEZPoDM57TCj+a1zKwOTVlf0LYCuhmbWu9RYTyEwusMknkNrhRAqqKN2sCkJAcCR5iR1a/PJgKCs42W1YBEsLnrbk9PsYeqi/djj+hN27kwdMihTPJffMD86AOGoThHaz1TXMxHMgIgm8J8BlUmc8BFAw3QAM7OtFIzXW5tzn0=
+	t=1720222213; cv=none; b=VAmu1AOoCHxpMpD2vNWKtEkw4B5B3bZ9/oM3anCoSmSNaoeo//TX51YaCBY/1NTBBoIUUtHxVZfoTvKsg2ogjMQk7fBRvvBQDNu4XHyqMWoqeBJtkUTeq0L82xzYHHQQhs7Z4nrVkgrq99zIPuPmxjmrLMjrTO7uLynH9a0+Lrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720222211; c=relaxed/simple;
-	bh=hEAYBzWA0a0y+dYKFS2DJxhMUVWhROyH3K3JrHLkUkE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=czdJrnI5lOm/ny8ZmuGNqKJ0XuvuUIuqLJt3vNDKQoO7XA/+fZwkiCnDx3sJXAt2XhtbhkpECoVMQKRpyby8FO5ij1aiskIoCA2iSu5G7wZ1+PQpV3HiSFD3URpRTc1X5akJfSWP2TATDBkPyjw/QTyU9Cl354RLn5P+wAXeOBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=27T/u9DY; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1720222213; c=relaxed/simple;
+	bh=+5Axi8pUbv9XBWCm5KmHeoSVyq6vEZaUSVZeT+DQHF4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iZO/UTFRvEasOD7wHDZ+Ovp32hSrvWlJQtoTMRyeOm+5YF1/RH1zB4HttNoEdJoDcqDR18pDRBU4CCf33yJL1UrSLf1hsI+21ImiBYtEn0yWqGmHiP5crTNfxADi2JJOpODUtkPpaGDK+po4Ksj/WUXTIISTCUIATDhiwE0aiB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DwDUZBuk; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720222207;
-	bh=hEAYBzWA0a0y+dYKFS2DJxhMUVWhROyH3K3JrHLkUkE=;
-	h=From:Subject:Date:To:Cc:From;
-	b=27T/u9DYfK0YwmBN1J13WMc/2Jg0yeXBDGXeFWWf7RhQQGz+Jt5pyzAqId/xdvVb/
-	 h5rJqbOocNvgES8PO7eVKQmPNzcy0zO2gixJJu7yXNnaTSjQ70gHxbVlEuWgvqJBWX
-	 BM1SAMVtMlmH92LSEB4Dl0y5wlvm1gxXVUcqyxJh96x4WEd9q3KhnvUf3HnslmE8qd
-	 V709B9A7626OsTy/f/NWxWKj6YoiyyR3qWUkyB8plA4aGmU3yWE0ohrSjwGs6sT0nI
-	 No8Mv66AuCFXdUj8wmaACpGIdjWuaDbqRwinFjLp/xf8K/WXYwl0OmuC7ldjwdcLUX
-	 lNeRRoQ95N2Fg==
+	s=mail; t=1720222209;
+	bh=+5Axi8pUbv9XBWCm5KmHeoSVyq6vEZaUSVZeT+DQHF4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=DwDUZBuk9A2BOBe7ytpzgBGEI20Teo6NW1BWxXTV+sdQoTMdPCGjpbOks/Gw7CIyq
+	 SCV0YMpVcrvFUSUHmPMnzKTQAd5yC9eb0WWNUI46zT40rPrt+Bsglbp54T63z7jpwN
+	 8+hNlAj0NyNEvC3bXEl8NmImBoZA3r8bQUVtTPj8U9dJGckWFuGyCkNeSX8pzoabaO
+	 Wt4D2pFeXYPTuL1Cxw708waV2K2yPacL7Z6olq53UjjWXAZU3Uqdoaek5LQHfCVtiQ
+	 CTkTvmuVWmzmJ3/zsqzFxchnH8N14qHr2IdqmZz7qivvXsAKplhFVoKKlWFb20mSu+
+	 M9vdGnbz4bfoA==
 Received: from [192.168.1.238] (tango.collaboradmins.com [167.235.144.72])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C80363780BDB;
-	Fri,  5 Jul 2024 23:30:06 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 23EAE378206B;
+	Fri,  5 Jul 2024 23:30:08 +0000 (UTC)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Subject: [PATCH v2 0/3] kselftest: Add test to report device log errors
-Date: Fri, 05 Jul 2024 19:29:53 -0400
-Message-Id: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
+Date: Fri, 05 Jul 2024 19:29:54 -0400
+Subject: [PATCH v2 1/3] kselftest: devices: Move discoverable devices test
+ to subdirectory
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,10 +60,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPGBiGYC/22NQQ6CMBBFr0Jm7Zi2IqAr72FYQDuFJpWaKWk0p
- He3krhz+V7y398gEjuKcK02YEouurAUUIcK9DwsE6EzhUEJVYtaSTSUkJjRhwkjebtSXFF19jx
- 2VrfaCCjTJ5N1rz177wvPLq6B3/tLkl/7C57+B5NEgc1FaNnW0jTdeNPB+2EMPBx1eECfc/4Aw
- ueGqrwAAAA=
+Message-Id: <20240705-dev-err-log-selftest-v2-1-163b9cd7b3c1@collabora.com>
+References: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
+In-Reply-To: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
 To: Shuah Khan <shuah@kernel.org>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org, 
@@ -70,83 +70,63 @@ Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.0
 
-Log errors are the most widely used mechanism for reporting issues in
-the kernel. When an error is logged using the device helpers, eg
-dev_err(), it gets metadata attached that identifies the subsystem and
-device where the message is coming from. This series makes use of that
-metadata in a new test to report which devices logged errors.
-
-The first two patches move a test and a helper script to keep things
-organized before this new test is added in the third patch.
-
-It is expected that there might be many false-positive error messages
-throughout the drivers code which will be reported by this test. By
-having this test in the first place and working through the results we
-can address those occurrences by adjusting the loglevel of the messages
-that turn out to not be real errors that require the user's attention.
-It will also motivate additional error messages to be introduced in the
-code to detect real errors where they turn out to be missing, since
-it will be possible to detect said issues automatically.
-
-As an example, below you can see the test result for
-mt8192-asurada-spherion. The single standing issue has been investigated
-and will be addressed in an EC firmware update [1]:
-
-TAP version 13
-1..1
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `model_name' property: -6
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `energy_full_design' property: -6
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
- power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
-not ok 1 +power_supply:sbs-8-000b
- Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
-
-[1] https://lore.kernel.org/all/cf4d8131-4b63-4c7a-9f27-5a0847c656c4@notapiano
+Move the discoverable devices test to a subdirectory to allow other
+related tests to be added to the devices directory.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
-Changes in v2:
-- Rebased onto next-20240703
-- Link to v1: https://lore.kernel.org/r/20240423-dev-err-log-selftest-v1-0-690c1741d68b@collabora.com
+ tools/testing/selftests/Makefile                                        | 2 +-
+ tools/testing/selftests/devices/{ => probe}/Makefile                    | 2 +-
+ .../selftests/devices/{ => probe}/boards/Dell Inc.,XPS 13 9300.yaml     | 0
+ tools/testing/selftests/devices/{ => probe}/boards/google,spherion.yaml | 0
+ tools/testing/selftests/devices/{ => probe}/ksft.py                     | 0
+ .../testing/selftests/devices/{ => probe}/test_discoverable_devices.py  | 0
+ 6 files changed, 2 insertions(+), 2 deletions(-)
 
----
-Nícolas F. R. A. Prado (3):
-      kselftest: devices: Move discoverable devices test to subdirectory
-      kselftest: Move ksft helper module to common directory
-      kselftest: devices: Add test to detect device error logs
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 9039f3709aff..37214201d974 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -13,7 +13,7 @@ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += damon
+-TARGETS += devices
++TARGETS += devices/probe
+ TARGETS += dmabuf-heaps
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
+diff --git a/tools/testing/selftests/devices/Makefile b/tools/testing/selftests/devices/probe/Makefile
+similarity index 77%
+rename from tools/testing/selftests/devices/Makefile
+rename to tools/testing/selftests/devices/probe/Makefile
+index ca29249b30c3..7a6eaa031cfe 100644
+--- a/tools/testing/selftests/devices/Makefile
++++ b/tools/testing/selftests/devices/probe/Makefile
+@@ -1,4 +1,4 @@
+ TEST_PROGS := test_discoverable_devices.py
+ TEST_FILES := boards ksft.py
+ 
+-include ../lib.mk
++include ../../lib.mk
+diff --git a/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml b/tools/testing/selftests/devices/probe/boards/Dell Inc.,XPS 13 9300.yaml
+similarity index 100%
+rename from tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
+rename to tools/testing/selftests/devices/probe/boards/Dell Inc.,XPS 13 9300.yaml
+diff --git a/tools/testing/selftests/devices/boards/google,spherion.yaml b/tools/testing/selftests/devices/probe/boards/google,spherion.yaml
+similarity index 100%
+rename from tools/testing/selftests/devices/boards/google,spherion.yaml
+rename to tools/testing/selftests/devices/probe/boards/google,spherion.yaml
+diff --git a/tools/testing/selftests/devices/ksft.py b/tools/testing/selftests/devices/probe/ksft.py
+similarity index 100%
+rename from tools/testing/selftests/devices/ksft.py
+rename to tools/testing/selftests/devices/probe/ksft.py
+diff --git a/tools/testing/selftests/devices/test_discoverable_devices.py b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+similarity index 100%
+rename from tools/testing/selftests/devices/test_discoverable_devices.py
+rename to tools/testing/selftests/devices/probe/test_discoverable_devices.py
 
- tools/testing/selftests/Makefile                   |  4 +-
- tools/testing/selftests/devices/Makefile           |  4 -
- .../testing/selftests/devices/error_logs/Makefile  |  3 +
- .../devices/error_logs/test_device_error_logs.py   | 85 ++++++++++++++++++++++
- tools/testing/selftests/devices/probe/Makefile     |  4 +
- .../{ => probe}/boards/Dell Inc.,XPS 13 9300.yaml  |  0
- .../{ => probe}/boards/google,spherion.yaml        |  0
- .../{ => probe}/test_discoverable_devices.py       |  7 +-
- .../selftests/{devices => kselftest}/ksft.py       |  0
- 9 files changed, 101 insertions(+), 6 deletions(-)
----
-base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
-change-id: 20240421-dev-err-log-selftest-28f5b8fc7cd0
-
-Best regards,
 -- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+2.45.2
 
 
