@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED3999280C8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 05:00:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08CDA9280CB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 05:00:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9431286D09
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 03:00:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BF68B229BB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 03:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D26C136995;
-	Fri,  5 Jul 2024 02:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD130139D05;
+	Fri,  5 Jul 2024 02:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlLZixcQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jY8unmBp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A4A132139;
-	Fri,  5 Jul 2024 02:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37B5136E3E;
+	Fri,  5 Jul 2024 02:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720148350; cv=none; b=OQGQ2DVzNUOCPbakpOlEK3gsbSNgz+44hBPt9RlvSfW5yweyfSxH9qbvwrAFSEnMI/s4WUxJRWUkmqUxfCD3AGfaiBiv/Eekc4Dpcoy6GXN5dolNYlJHFrlrACxpd1eBLR2rPrJ4683ZNKVUPJfoPOOd/20XncSlotsvg3Sf3ZY=
+	t=1720148353; cv=none; b=mrcdKkIRcrSvyJU/LaozT5aib6mrN0DhTy9Pce61dtRHaWBt6ahSaPXhE9KEz0vOl1KM29D9QMeWbmIVHNSVV61OG2+MiEmXHEnuSz84ZkCBJ1AaBYQWb5ct7zZIu2ZjEVBVURiJN9hUkyIVP5c5YkxIWDp7v1wrSgBqOEKAUwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720148350; c=relaxed/simple;
-	bh=JAWAcKR7zBXRC50szWd1XFpZsq7hHNsF3ZdFSJ3411U=;
+	s=arc-20240116; t=1720148353; c=relaxed/simple;
+	bh=3p/deRrkgPGTdGxSapLPunN1pNLrCJ3NVhjsTWR8QBc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UZ7TSi6LIlBaN+4UJnA+vivYMgWXl+uU2gIBRSi5HuLplVey3EUc5MWUalU5xSOBSSeppAc1cg9gVETy8lgK9vAEpKhGgNogNcwqEkPng8O2hOrjT54pK2ZN2JQb+aZjVjwdrlezw70wehgx6TkhL3vZTFDkGKNxIAKCBg3MYxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlLZixcQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE136C32781;
-	Fri,  5 Jul 2024 02:59:04 +0000 (UTC)
+	 MIME-Version; b=LRWFCDI6F+S0dplG8Q/mgf9ThhPF92baMQY8KEJo+j3+3tqrLRbTLfBCc7W1SFsRKzcG0ZnPqxLff+8gwnoqHdnbaXW/3kdBR9aNEtjxWvwUGrc8Rh4ZJJQPkR6Qc8m3B0I9ydabE2Of+LBDUiU1aPVhKyWDZAiivHzzt5nUynY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jY8unmBp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B09C3277B;
+	Fri,  5 Jul 2024 02:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720148348;
-	bh=JAWAcKR7zBXRC50szWd1XFpZsq7hHNsF3ZdFSJ3411U=;
+	s=k20201202; t=1720148353;
+	bh=3p/deRrkgPGTdGxSapLPunN1pNLrCJ3NVhjsTWR8QBc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NlLZixcQhR6BN7yQaXc142HrOusxN2+SP9SGUJOWBkoITjBuOQHWyDL0ZolQ381SR
-	 6vxh3PS5ze06baC7N6SJK/8qeb3aJc7mVNZ2tZw1r239Wq51dcSgDEEsj/UYRQa9ZN
-	 TZ5O0CT6llFyRhXouIILvwwKHZPddvt1/Os2wt0bdo08327cmYQHfE4lfhX40dV7Wy
-	 uY0OBDKRyPYSDOS783VNGWEAtlkfUNVXkbM/j0ob82AcAIKE82x65q/6++3w3YGk3t
-	 xE/ALICJDwlYEBdzc8iK7pgNy0gETedPa3d/uyAlvzzTKJYFSHfQBy8ijaC+lrw4zM
-	 6FP+Ztw+KI/zA==
+	b=jY8unmBpwohzTvg7kjNRtbVXHK4+l+IDiuFCSnJZSv5O/Hk1LRgRZp/nQ0sEJv4tt
+	 QR91YxbEdf5UZFZ3xzVZtF8HqVO3DcmPh0YcT2ankDmeGO8N6vdWTxFYWqb6GoP1Vy
+	 4jHCK48K3BWAU8cMlxGPTmiyx93wbrUc5d3AlyHI/fatzQuMPcjv2ie80hsSNto5SQ
+	 fRDQz+BhpiUKJf7Jbu848cPYYWyKwqzFSctY5+WX6viYuuWG0Y1a4STViCt/IIM5iu
+	 T8i3Lh+fsjk7cD81ubaYv5fJTxaRLm3BGv727HCnhZIGxXb1fwjxPpY6aYsvbZ02MX
+	 h9g1ZuZxT3D+w==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v8 5/9] selftests/bpf: Close fd in error path in drop_on_reuseport
-Date: Fri,  5 Jul 2024 10:58:27 +0800
-Message-ID: <5104fcc71dd7a7e18716bf468dcbe82d8571af94.1720147953.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v8 6/9] selftests/bpf: Use start_server_str in sk_lookup
+Date: Fri,  5 Jul 2024 10:58:28 +0800
+Message-ID: <243103c6240fcc1303638ef5f6aad3bef9dc4078.1720147953.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720147952.git.tanggeliang@kylinos.cn>
 References: <cover.1720147952.git.tanggeliang@kylinos.cn>
@@ -75,29 +75,129 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Server 1 fd should be closed in the error path when update_lookup_map()
-fails. This patch fixes it by goto "close_srv1" instead of "detach"
-lable in that case.
+This patch uses public helper start_server_addr() instead of local
+defined function make_server() in prog_tests/sk_lookup.c to avoid
+duplicate code.
+
+Add a helper setsockopts() to set SOL_CUSTOM sockopt looply, set
+it to setsockopt pointer of struct network_helper_opts, and pass it
+to start_server_addr().
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/sk_lookup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/sk_lookup.c      | 58 +++++++++++--------
+ 1 file changed, 34 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index 597d0467a926..de2466547efe 100644
+index de2466547efe..d03ea3e64a2e 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -994,7 +994,7 @@ static void drop_on_reuseport(const struct test *t)
+@@ -77,6 +77,12 @@ struct test {
+ 	bool reuseport_has_conns; /* Add a connected socket to reuseport group */
+ };
  
- 	err = update_lookup_map(t->sock_map, SERVER_A, server1);
- 	if (err)
--		goto detach;
-+		goto close_srv1;
++struct cb_opts {
++	int family;
++	int sotype;
++	bool reuseport;
++};
++
+ static __u32 duration;		/* for CHECK macro */
  
- 	/* second server on destination address we should never reach */
- 	server2 = make_server(t->sotype, t->connect_to.ip, t->connect_to.port,
+ static bool is_ipv6(const char *ip)
+@@ -142,19 +148,14 @@ static int make_socket(int sotype, const char *ip, int port,
+ 	return fd;
+ }
+ 
+-static int make_server(int sotype, const char *ip, int port,
+-		       struct bpf_program *reuseport_prog)
++static int setsockopts(int fd, void *opts)
+ {
+-	struct sockaddr_storage addr = {0};
++	struct cb_opts *co = (struct cb_opts *)opts;
+ 	const int one = 1;
+-	int err, fd = -1;
+-
+-	fd = make_socket(sotype, ip, port, &addr);
+-	if (fd < 0)
+-		return -1;
++	int err = 0;
+ 
+ 	/* Enabled for UDPv6 sockets for IPv4-mapped IPv6 to work. */
+-	if (sotype == SOCK_DGRAM) {
++	if (co->sotype == SOCK_DGRAM) {
+ 		err = setsockopt(fd, SOL_IP, IP_RECVORIGDSTADDR, &one,
+ 				 sizeof(one));
+ 		if (CHECK(err, "setsockopt(IP_RECVORIGDSTADDR)", "failed\n")) {
+@@ -163,7 +164,7 @@ static int make_server(int sotype, const char *ip, int port,
+ 		}
+ 	}
+ 
+-	if (sotype == SOCK_DGRAM && addr.ss_family == AF_INET6) {
++	if (co->sotype == SOCK_DGRAM && co->family == AF_INET6) {
+ 		err = setsockopt(fd, SOL_IPV6, IPV6_RECVORIGDSTADDR, &one,
+ 				 sizeof(one));
+ 		if (CHECK(err, "setsockopt(IPV6_RECVORIGDSTADDR)", "failed\n")) {
+@@ -172,7 +173,7 @@ static int make_server(int sotype, const char *ip, int port,
+ 		}
+ 	}
+ 
+-	if (sotype == SOCK_STREAM) {
++	if (co->sotype == SOCK_STREAM) {
+ 		err = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
+ 				 sizeof(one));
+ 		if (CHECK(err, "setsockopt(SO_REUSEADDR)", "failed\n")) {
+@@ -181,7 +182,7 @@ static int make_server(int sotype, const char *ip, int port,
+ 		}
+ 	}
+ 
+-	if (reuseport_prog) {
++	if (co->reuseport) {
+ 		err = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one,
+ 				 sizeof(one));
+ 		if (CHECK(err, "setsockopt(SO_REUSEPORT)", "failed\n")) {
+@@ -190,19 +191,28 @@ static int make_server(int sotype, const char *ip, int port,
+ 		}
+ 	}
+ 
+-	err = bind(fd, (void *)&addr, inetaddr_len(&addr));
+-	if (CHECK(err, "bind", "failed\n")) {
+-		log_err("failed to bind listen socket");
+-		goto fail;
+-	}
++fail:
++	return err;
++}
+ 
+-	if (sotype == SOCK_STREAM) {
+-		err = listen(fd, SOMAXCONN);
+-		if (CHECK(err, "make_server", "listen")) {
+-			log_err("failed to listen on port %d", port);
+-			goto fail;
+-		}
+-	}
++static int make_server(int sotype, const char *ip, int port,
++		       struct bpf_program *reuseport_prog)
++{
++	struct cb_opts cb_opts = {
++		.family = is_ipv6(ip) ? AF_INET6 : AF_INET,
++		.sotype = sotype,
++		.reuseport = reuseport_prog,
++	};
++	struct network_helper_opts opts = {
++		.backlog	= SOMAXCONN,
++		.post_socket_cb = setsockopts,
++		.cb_opts	= &cb_opts,
++	};
++	int err, fd;
++
++	fd = start_server_str(cb_opts.family, sotype, ip, port, &opts);
++	if (!ASSERT_GE(fd, 0, "start_server_str"))
++		return -1;
+ 
+ 	/* Late attach reuseport prog so we can have one init path */
+ 	if (reuseport_prog) {
 -- 
 2.43.0
 
