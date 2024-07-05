@@ -1,169 +1,221 @@
-Return-Path: <linux-kselftest+bounces-13216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5600E92808C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:41:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5655F928094
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 04:48:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECA18B24811
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:41:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 077C428492A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2024 02:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FEA17BAF;
-	Fri,  5 Jul 2024 02:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D1F39FFB;
+	Fri,  5 Jul 2024 02:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TCQILpyW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NTXee3V1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6BF1862;
-	Fri,  5 Jul 2024 02:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FA11D559
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jul 2024 02:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720147266; cv=none; b=XK3gFW8+7V0QYqYdgAgWE8BG1cAXPR84OZR8ouh5ZMl35QaTfuebopB1j09vTESS4nbkneHyYCeeTLAKRbGQRqC0UrjXusO3iedgLUxw9PtoClVyWMMlaKFGQbiE2h1uHFmhZSvZp3gvkn3ghV/3KTaijemDDj2XW4shsi4IglM=
+	t=1720147715; cv=none; b=C4kHjUuY8014HDcAypsCz730BSzd++IxA7Wpom+lLbX0h/3hyBvU9F0IIY3/Ee4sllCELfagmbDSASQLh4EDVhjxkMSoCpmOrRW09gScSNf6bhN74msgv9/s2InKGN9D35JlSB+PWdLt15Zcy0KupXXuoVPvEZGoMxQBOoj+Hrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720147266; c=relaxed/simple;
-	bh=YkL5qF8gNbvKtApT0g4NApXUaqn/Gzuho/pDs4LbPOY=;
+	s=arc-20240116; t=1720147715; c=relaxed/simple;
+	bh=3l/nDkTEuLQCAmReuSFbK+H5QoQlegddQFe774aFXiA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=egkPR+MSGI4Ysnig6UoDIN7ItiCcR1QQBdForig+M/O2j4nxUdvq3lC2WuXHiJBpCJwL/+nGUsjbw/YqKU/V3X13Ry9/WR8JqSkzFb7dnJjbn5a6CfQw9z703QpdbXDjEN7JYXzgIASupuQDsW9G64DhC8fcp6PkXYgTt3Dbdgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TCQILpyW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D96C3277B;
-	Fri,  5 Jul 2024 02:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720147266;
-	bh=YkL5qF8gNbvKtApT0g4NApXUaqn/Gzuho/pDs4LbPOY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=TCQILpyWnYtV3+nQ8XVc104D3GAIztXhn9Bsidg8C/YNys+INRLibS9VvJSNlkk8U
-	 VVXshVpwrx5h41Lw01hkvIOXmqYb6OkHFUXrrdwJJtxRmbfw4v8jf2y3zU8AFW2aub
-	 ZBRQe5Ij0bdslut25Za1aRTNNd0g7WwlNNBR4pm6dGYAxj6W6uFs8VI1PTTlKxAcPl
-	 zbt4EgRpJdn/hMadwEGMPoe/ntCM89/661rIIETEz+++oO8pnjELw+wRLxxcHl46aH
-	 wYQ4QHipaDWcaWqFSEtWbVIPuYpwT9DVgNtzGjttV91IzMIw3yiiaMSmderLSimAru
-	 cbhnjl7JjIvSQ==
-Message-ID: <cd2a5ee33b5c4168ef74069527063daa8f05b733.camel@kernel.org>
-Subject: Re: [PATCH 0/6] skip ENOTSUPP for BPF selftests
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Fri, 05 Jul 2024 10:40:57 +0800
-In-Reply-To: <cover.1720075006.git.tanggeliang@kylinos.cn>
-References: <cover.1720075006.git.tanggeliang@kylinos.cn>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- TO0tfEdfAX7IENcV87h2yAFBZkaA==
+	 Content-Type:MIME-Version; b=M9I/FFVmpi1pdwBmz0NCOv8G3alG8sOiqdTHDG2MIEQHhO/llTrix4KoQPFJAeLE4zOz13ogdWEBQwFi17MEdglpHKMvc3CQ+QP39DCW6n98S0VY7w/Q3CJeqC70bFywxEHBB7jwDQVFcNw+Q5EprwlI/U7h12ERKqKnOSfQYVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NTXee3V1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720147712;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2PIztTC41X3SqpITk7EO4e8WG4gHXfiYx/21IOkrtDk=;
+	b=NTXee3V1xjZRrGNBtwQ4TlZoZuUgt0mUemSIZIRgG49O4FpIOldit0rkP/CxBjoVhtaO6f
+	dHGqXTv29FXUzLWWFOhKfmoRY6AgVV5eq0LdnNOBWN5HCaLmsHjTSFzrbFaN/HAzJJQmcF
+	OlaPxO5jH3o0yPf0sV+Ewyjnhg2XzrY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-332-g8O8ZabqOPiI0MQO10pJZA-1; Thu, 04 Jul 2024 22:48:28 -0400
+X-MC-Unique: g8O8ZabqOPiI0MQO10pJZA-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6b22e2dfa6cso17582536d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jul 2024 19:48:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720147708; x=1720752508;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2PIztTC41X3SqpITk7EO4e8WG4gHXfiYx/21IOkrtDk=;
+        b=b9sYf9cIQ93Ih7RE2U3o9qi2I8QTTY2ynhX/KGfN/46+f2UTR5+68eeeaz4tilBnD1
+         VGLey6TIRRsfsMmto3v8tIH3dRfHj5++iNpa/mAF9wUpLOjNM2vSx2+UiSCSyrGmoXL8
+         4hh3Ad/1klDQqBjvYPlggrxxyeJ1kzPOTvflJ1sLZKc/XUMTMyfcIp/K4PWdv4fziuXD
+         LIa7cQ66tUPjbCo+vtywWDt3NdDbornLVgd7nBjF1rappFK4RF8S4I/l6+NtbUiopu+D
+         ZBCUnTVJpWr/2fOzV7c07TtyHujNdlJJhcD7/YD3MCJNKf7CH3Pxbvw85u4704KJtV3n
+         rU/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVifrQCyn+IcDLQVgW10gtZY41bNwlIeVgYlVNYK/+Y7I/Ds0DafOuh1MTv3CdfZudgKuN3iBJyJXp5TG+dezvD8/IltvjYqnqeD5ncx1o4
+X-Gm-Message-State: AOJu0Yy6RPJfGp8eyq2+XeHPDwgZHNdThd9Z2oNQg2fBtt4Q/eWqBSCh
+	zIRL3u8BWyTY0fQN3KegScIp+kyk8zOTJ1vgUYlmOoUsoliKqT4e1Zd2HEr6RnjpmmBNnHzi8r2
+	jpaLzdJJxBFQzDUcQh41R3sygH8KxzehGo2Fw4W+em4MQx2AR4S+RmieV2C6g+VLElg==
+X-Received: by 2002:a05:6214:1bc7:b0:6b5:9439:f048 with SMTP id 6a1803df08f44-6b5ecf8ac28mr37106676d6.19.1720147708001;
+        Thu, 04 Jul 2024 19:48:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFQ/S6tPBwjVySOrVqy0W45xFpjJZKhw/JesQX4ihyGag/zigRZaDY6AUleexB2pxZ5dZtR5A==
+X-Received: by 2002:a05:6214:1bc7:b0:6b5:9439:f048 with SMTP id 6a1803df08f44-6b5ecf8ac28mr37106526d6.19.1720147707696;
+        Thu, 04 Jul 2024 19:48:27 -0700 (PDT)
+Received: from starship ([2607:fea8:fc01:7b7f:6adb:55ff:feaa:b156])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b5f9d42de5sm705516d6.15.2024.07.04.19.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jul 2024 19:48:27 -0700 (PDT)
+Message-ID: <73ab1d49f1dfffe42ab2a8625ca6c2de0f06d3ad.camel@redhat.com>
+Subject: Re: [PATCH 1/1] KVM: selftests: pmu_counters_test: increase
+ robustness of LLC cache misses
+From: Maxim Levitsky <mlevitsk@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org
+Date: Thu, 04 Jul 2024 22:48:26 -0400
+In-Reply-To: <Zn2ker_KZ7Fk-7W1@google.com>
+References: <20240621204305.1730677-1-mlevitsk@redhat.com>
+	 <20240621204305.1730677-2-mlevitsk@redhat.com>
+	 <Zn2ker_KZ7Fk-7W1@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0-1build2 
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2024-07-04 at 14:48 +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
+On Thu, 2024-06-27 at 10:42 -0700, Sean Christopherson wrote:
+> On Fri, Jun 21, 2024, Maxim Levitsky wrote:
+> > Currently this test does a single CLFLUSH on its memory location
+> > but due to speculative execution this might not cause LLC misses.
+> > 
+> > Instead, do a cache flush on each loop iteration to confuse the prediction
+> > and make sure that cache misses always occur.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  .../selftests/kvm/x86_64/pmu_counters_test.c  | 20 +++++++++----------
+> >  1 file changed, 9 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> > index 96446134c00b7..ddc0b7e4a888e 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+> > @@ -14,8 +14,8 @@
+> >   * instructions that are needed to set up the loop and then disabled the
+> >   * counter.  1 CLFLUSH/CLFLUSHOPT/NOP, 1 MFENCE, 2 MOV, 2 XOR, 1 WRMSR.
+> >   */
+> > -#define NUM_EXTRA_INSNS		7
+> > -#define NUM_INSNS_RETIRED	(NUM_BRANCHES + NUM_EXTRA_INSNS)
+> > +#define NUM_EXTRA_INSNS		5
+> > +#define NUM_INSNS_RETIRED	(NUM_BRANCHES * 2 + NUM_EXTRA_INSNS)
 > 
-> BPF selftests seem to have not been fully tested on Loongarch
-> platforms.
-> There are so many "ENOTSUPP" (-524) errors when running BPF selftests
-> on
-> them since lacking BPF trampoline on Loongarch.
-> 
-> For these "ENOTSUPP" tests, it's better to skip them, instead of
-> reporting
-> some "ENOTSUPP" errors. This patchset skips ENOTSUPP in ASSERT_OK/
-> ASSERT_OK_PTR/ASSERT_GE helpers to fix them. This is useful for
-> running BPF
-> selftests for other architectures too.
+> The comment above is stale.  I also think it's worth adding a macro to capture
+> that the '2' comes from having two instructions in the loop body (three, if we
+> keep the MFENCE).
 
-Superseded. v2 is just sent out.
-
-Thanks,
--Geliang
+True, my mistake.
 
 > 
-> Geliang Tang (6):
->   selftests/bpf: Define ENOTSUPP in testing_helpers.h
->   selftests/bpf: Skip ENOTSUPP in ASSERT_OK
->   selftests/bpf: Use ASSERT_OK to skip ENOTSUPP
->   selftests/bpf: Null checks for link in bpf_tcp_ca
->   selftests/bpf: Skip ENOTSUPP in ASSERT_OK_PTR
->   selftests/bpf: Skip ENOTSUPP in ASSERT_GE
+> >  static uint8_t kvm_pmu_version;
+> >  static bool kvm_has_perf_caps;
+> > @@ -133,9 +133,8 @@ static void guest_assert_event_count(uint8_t idx,
+> >   * doesn't need to be clobbered as the input value, @pmc_msr, is restored
+> >   * before the end of the sequence.
+> >   *
+> > - * If CLFUSH{,OPT} is supported, flush the cacheline containing (at least) the
+> > - * start of the loop to force LLC references and misses, i.e. to allow testing
+> > - * that those events actually count.
+> > + * If CLFUSH{,OPT} is supported, flush the cacheline containing the CLFUSH{,OPT}
+> > + * instruction on each loop iteration to ensure that LLC cache misses happen.
+> >   *
+> >   * If forced emulation is enabled (and specified), force emulation on a subset
+> >   * of the measured code to verify that KVM correctly emulates instructions and
+> > @@ -145,10 +144,9 @@ static void guest_assert_event_count(uint8_t idx,
+> >  #define GUEST_MEASURE_EVENT(_msr, _value, clflush, FEP)				\
+> >  do {										\
+> >  	__asm__ __volatile__("wrmsr\n\t"					\
+> > -			     clflush "\n\t"					\
+> > -			     "mfence\n\t"					\
 > 
->  .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 20 +++++++++-------
->  .../testing/selftests/bpf/prog_tests/d_path.c |  2 +-
->  .../selftests/bpf/prog_tests/lsm_cgroup.c     | 10 +-------
->  .../selftests/bpf/prog_tests/module_attach.c  |  2 +-
->  .../selftests/bpf/prog_tests/ringbuf.c        |  2 +-
->  .../selftests/bpf/prog_tests/sock_addr.c      |  4 ----
->  .../selftests/bpf/prog_tests/test_bprm_opts.c |  2 +-
->  .../selftests/bpf/prog_tests/test_ima.c       |  2 +-
->  .../selftests/bpf/prog_tests/trace_ext.c      |  2 +-
->  tools/testing/selftests/bpf/test_maps.c       |  4 ----
->  tools/testing/selftests/bpf/test_progs.h      | 24 ++++++++++++++---
-> --
->  tools/testing/selftests/bpf/test_verifier.c   |  4 ----
->  tools/testing/selftests/bpf/testing_helpers.h |  4 ++++
->  13 files changed, 41 insertions(+), 41 deletions(-)
+> Based on your testing, it's probably ok to drop the mfence, but I don't see any
+> reason to do so.  It's not like that mfence meaningfully affects the runtime, and
+> anything easy/free we can do to avoid flaky tests is worth doing.
+
+Hi,
+
+I just didn't want to add another instruction to the loop, since in theory
+that will slow the test down.
+
+
+From PRM:
+
+"Executions of the CLFLUSH instruction are ordered with respect to each other and with respect to writes, locked
+read-modify-write instructions, and fence instructions. 1 They are not ordered with respect to executions of
+CLFLUSHOPT and CLWB. Software can use the SFENCE instruction to order an execution of CLFLUSH relative to one
+of those operations."
+
+Plus there is note that:
+
+"Earlier versions of this manual specified that executions of the CLFLUSH instruction were ordered only by the MFENCE instruction.
+All processors implementing the CLFLUSH instruction also order it relative to the other operations enumerated above."
+
+Here we have an instruction fetch and cache flush, and it is not clear if MFENCE orders two operations.
+Thus it is not clear if MFENCE helps or not.
+
+I honestly would have preferred a cache flush on data memory, followed by a read from it, except
+that this also sometimes doesn't work (maybe I made some mistake, maybe it is possible to make it work, don't know)
+
+But overall I don't object keeping it.
+
+
 > 
+> I'll post and apply a v2, with a prep patch to add a NUM_INSNS_PER_LOOP macro and
+> keep the MFENCE (I'll be offline all of next week, and don't want to push anything
+> to -next tomorrow, even though the risk of breaking anything is minimal).
+
+Sounds good.
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> > -			     "1: mov $" __stringify(NUM_BRANCHES) ", %%ecx\n\t"	\
+> > -			     FEP "loop .\n\t"					\
+> > +			     " mov $" __stringify(NUM_BRANCHES) ", %%ecx\n\t"	\
+> > +			     "1: " clflush "\n\t"				\
+> > +			     FEP "loop 1b\n\t"					\
+> >  			     FEP "mov %%edi, %%ecx\n\t"				\
+> >  			     FEP "xor %%eax, %%eax\n\t"				\
+> >  			     FEP "xor %%edx, %%edx\n\t"				\
+> > @@ -163,9 +161,9 @@ do {										\
+> >  	wrmsr(pmc_msr, 0);							\
+> >  										\
+> >  	if (this_cpu_has(X86_FEATURE_CLFLUSHOPT))				\
+> > -		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflushopt 1f", FEP);	\
+> > +		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflushopt .", FEP);	\
+> >  	else if (this_cpu_has(X86_FEATURE_CLFLUSH))				\
+> > -		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflush 1f", FEP);	\
+> > +		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "clflush .", FEP);	\
+> >  	else									\
+> >  		GUEST_MEASURE_EVENT(_ctrl_msr, _value, "nop", FEP);		\
+> >  										\
+> > -- 
+> > 2.26.3
+> > 
+
 
 
