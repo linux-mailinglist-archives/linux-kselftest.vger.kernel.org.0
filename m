@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A83409290E2
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 06:56:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 901D99290E6
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 06:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 337E21F2268F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 04:56:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B29B71C21509
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 04:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659BD3D579;
-	Sat,  6 Jul 2024 04:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFEA34317C;
+	Sat,  6 Jul 2024 04:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITs29VMD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dulk1Y1r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313F03B295;
-	Sat,  6 Jul 2024 04:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4BF42A9A;
+	Sat,  6 Jul 2024 04:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720241704; cv=none; b=Wx8WGIWbr5JGRAGyJJXHaHQ1Xua1iXYL++nnEACis+c6Xfk6eLfEtM9MOvFBAnvZLw4lgQknKx8aZEqnpUt3kfwdfldXmKbnJTFut+bpulIvsqRkYQuMQjX+OwiqyNFwTJ9jlV/MZqoW1cN/Lzi+HAd9ZhMy0vyxFYYcI1I70jE=
+	t=1720241705; cv=none; b=Z1u58oD7mqdGR/rVtg9IS/qvhPTZXSsaLKy23J2swzGYRUpp7Uv1XM2fFf0g3KX8VQXTb5ZB6nXxFU+PnSzWjWhAJ8OMQp4cviu02FDCBjwCbMfC4Fr9JvkueQ3oZj1Tsud9UTcy6QKxI1Mtrd3vo2mPif+Asu9yZTvzAsj+BJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720241704; c=relaxed/simple;
-	bh=IY1MCSGnio1QRARTHlqurDfwgViRz5HwdECQI/aB9eg=;
+	s=arc-20240116; t=1720241705; c=relaxed/simple;
+	bh=st2Ms1bN8sE6Z5ywlsCGwxuICLUADsDh8X61EAH47dA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tl6ZnJroD70ZQ26LjSlIDdkVjthzLXfrE+rxWcQaJhFFb6UoewxqDhdQoi3ygYlsc0VZBr9MrNhM3Tn+DXWYfrUBTkw95HIyWDHsw8rfuDX1mrppqnVI/JrfU2XlZRYTnEoq754koWfFji3slHhDUAnGLXFP9teGT8mPxG7BnJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITs29VMD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DEEC32786;
-	Sat,  6 Jul 2024 04:55:03 +0000 (UTC)
+	 MIME-Version; b=sUsZKuX8r7/dG4CFDV8rVRpKHl9s7vJDGWTun3CzpqFXXvhcit17pSThsr/z7imBAsrGceG/xt/gtSEFP/YU6bllwry0orduNSs0RzgtAd82XN5bjdHXtlNT7YyHLX+J/a/fWEyzruLq3j1DCQh8P1aU23Y4aYLNyE4u3V6axPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dulk1Y1r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C31C4AF1A;
+	Sat,  6 Jul 2024 04:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720241704;
-	bh=IY1MCSGnio1QRARTHlqurDfwgViRz5HwdECQI/aB9eg=;
+	s=k20201202; t=1720241705;
+	bh=st2Ms1bN8sE6Z5ywlsCGwxuICLUADsDh8X61EAH47dA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ITs29VMDRTpt5jVscrRQ5Sp9WM/QvYFYMm9aCl1PH11za+VENL0ZdBiqQ6I28t2zf
-	 OHtthrHrBzkf3FYSYxsoXFFy/XwVjLC0TTXgrW10lQnB43fXOL6WWO1il3xc7L/KZn
-	 Ooxoy5E2w4Ro6tFOBRyFXU4171f58aO3IJetM+Bd4N5VaGnrImjtTW+XwDmz0Z9wLC
-	 W3SphUCa/Z3wKRmNexae0ksH4uBhKDVEddMrb2P7mTgwESEPN3rx6EKzdQSP8krlB2
-	 CLc9hq3gV6ZAskf9i4LcHXDmxkirg1VRAUSP/7IiuQZyTdH3xCK8yyyOMa5nfF6bhg
-	 83KD2nHWO65DQ==
+	b=Dulk1Y1rM8gDLSN7lBzhfMybwzWFpC6mIWLV48Qm2XH6eaClJo4y7XXXdp2SEIwQE
+	 DOx4BE+4Cw9Jwrs7EMth8PlbqDOZXhTtvGWl6TAk7h5yjY3fqp/I3ClgL1M6ladCxd
+	 +rRDZ/Y5fFLZWnHz5+h0bXTXDa46UBsJQjMnMahza+BMvbd+FRtv2JjNLatr+QeqrR
+	 g0zIJdCMGyB38bRAXQXWoil1cAcJ0SdnNyNX4+kWL9OZ0BtIyl/L2S8Ai2oz+RXmYu
+	 d+9Net3mDrKUDxUgXIf4KtX1dW6SKPapoLIO6wROffxZRvrKGjYyYMhs7NOeJ2SSud
+	 TT0yvpySvaCyg==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v6 7/8] clk: Add KUnit tests for clk fixed rate basic type
-Date: Fri,  5 Jul 2024 21:54:52 -0700
-Message-ID: <20240706045454.215701-8-sboyd@kernel.org>
+Subject: [PATCH v6 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
+Date: Fri,  5 Jul 2024 21:54:53 -0700
+Message-ID: <20240706045454.215701-9-sboyd@kernel.org>
 X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
 In-Reply-To: <20240706045454.215701-1-sboyd@kernel.org>
 References: <20240706045454.215701-1-sboyd@kernel.org>
@@ -76,491 +76,583 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Test that the fixed rate basic type clk works as intended.
+Test that clks registered with 'struct clk_parent_data' work as
+intended and can find their parents.
 
+Cc: Christian Marangi <ansuelsmth@gmail.com>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 Cc: Rae Moar <rmoar@google.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- drivers/clk/.kunitconfig                   |   2 +
- drivers/clk/Kconfig                        |   9 +
- drivers/clk/Makefile                       |   1 +
- drivers/clk/clk-fixed-rate_test.c          | 379 +++++++++++++++++++++
- drivers/clk/clk-fixed-rate_test.h          |   8 +
- drivers/clk/kunit_clk_fixed_rate_test.dtso |  19 ++
- 6 files changed, 418 insertions(+)
- create mode 100644 drivers/clk/clk-fixed-rate_test.c
- create mode 100644 drivers/clk/clk-fixed-rate_test.h
- create mode 100644 drivers/clk/kunit_clk_fixed_rate_test.dtso
+ drivers/clk/Kconfig                         |   2 +
+ drivers/clk/Makefile                        |   3 +-
+ drivers/clk/clk_parent_data_test.h          |  10 +
+ drivers/clk/clk_test.c                      | 453 +++++++++++++++++++-
+ drivers/clk/kunit_clk_parent_data_test.dtso |  28 ++
+ 5 files changed, 494 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/clk_parent_data_test.h
+ create mode 100644 drivers/clk/kunit_clk_parent_data_test.dtso
 
-diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
-index efa12ac2b3f2..54ece9207055 100644
---- a/drivers/clk/.kunitconfig
-+++ b/drivers/clk/.kunitconfig
-@@ -1,6 +1,8 @@
- CONFIG_KUNIT=y
-+CONFIG_OF=y
- CONFIG_COMMON_CLK=y
- CONFIG_CLK_KUNIT_TEST=y
-+CONFIG_CLK_FIXED_RATE_KUNIT_TEST=y
- CONFIG_CLK_GATE_KUNIT_TEST=y
- CONFIG_CLK_FD_KUNIT_TEST=y
- CONFIG_UML_PCI_OVER_VIRTIO=n
 diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3e9099504fad..d8482e015c49 100644
+index d8482e015c49..0e4819c1cfd2 100644
 --- a/drivers/clk/Kconfig
 +++ b/drivers/clk/Kconfig
-@@ -511,6 +511,15 @@ config CLK_KUNIT_TEST
+@@ -508,6 +508,8 @@ config CLK_KUNIT_TEST
+ 	tristate "Basic Clock Framework Kunit Tests" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	default KUNIT_ALL_TESTS
++	select OF_OVERLAY if OF
++	select DTC
  	help
  	  Kunit tests for the common clock framework.
  
-+config CLK_FIXED_RATE_KUNIT_TEST
-+	tristate "Basic fixed rate clk type KUnit test" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	select OF_OVERLAY if OF
-+	select DTC
-+	help
-+	  KUnit tests for the basic fixed rate clk type.
-+
- config CLK_GATE_KUNIT_TEST
- 	tristate "Basic gate type Kunit test" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
 diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 8bb63f1ddd98..7b57e3d22cee 100644
+index 7b57e3d22cee..ed4e1a0e6943 100644
 --- a/drivers/clk/Makefile
 +++ b/drivers/clk/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_CLK_KUNIT_TEST)	+= clk_test.o
+@@ -2,7 +2,8 @@
+ # common clock types
+ obj-$(CONFIG_HAVE_CLK)		+= clk-devres.o clk-bulk.o clkdev.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk.o
+-obj-$(CONFIG_CLK_KUNIT_TEST)	+= clk_test.o
++obj-$(CONFIG_CLK_KUNIT_TEST)	+= clk_test.o \
++				   kunit_clk_parent_data_test.dtbo.o
  obj-$(CONFIG_COMMON_CLK)	+= clk-divider.o
  obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-factor.o
  obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-rate.o
-+obj-$(CONFIG_CLK_FIXED_RATE_KUNIT_TEST)	+= clk-fixed-rate_test.o kunit_clk_fixed_rate_test.dtbo.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-gate.o
- obj-$(CONFIG_CLK_GATE_KUNIT_TEST) += clk-gate_test.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-multiplier.o
-diff --git a/drivers/clk/clk-fixed-rate_test.c b/drivers/clk/clk-fixed-rate_test.c
+diff --git a/drivers/clk/clk_parent_data_test.h b/drivers/clk/clk_parent_data_test.h
 new file mode 100644
-index 000000000000..799be9f2d1de
+index 000000000000..eedd53ae910d
 --- /dev/null
-+++ b/drivers/clk/clk-fixed-rate_test.c
-@@ -0,0 +1,379 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for clk fixed rate basic type
-+ */
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/completion.h>
++++ b/drivers/clk/clk_parent_data_test.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _CLK_PARENT_DATA_TEST_H
++#define _CLK_PARENT_DATA_TEST_H
++
++#define CLK_PARENT_DATA_1MHZ_NAME	"1mhz_fixed_legacy"
++#define CLK_PARENT_DATA_PARENT1		"parent_fwname"
++#define CLK_PARENT_DATA_PARENT2		"50"
++#define CLK_PARENT_DATA_50MHZ_NAME	"50_clk"
++
++#endif
+diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+index 39e2b5ff4f51..c2127f46fb93 100644
+--- a/drivers/clk/clk_test.c
++++ b/drivers/clk/clk_test.c
+@@ -4,12 +4,19 @@
+  */
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
-+
+ 
+ /* Needed for clk_hw_get_clk() */
+ #include "clk.h"
+ 
 +#include <kunit/clk.h>
 +#include <kunit/of.h>
 +#include <kunit/platform_device.h>
-+#include <kunit/resource.h>
-+#include <kunit/test.h>
+ #include <kunit/test.h>
+ 
++#include "clk_parent_data_test.h"
 +
-+#include "clk-fixed-rate_test.h"
+ static const struct clk_ops empty_clk_ops = { };
+ 
+ #define DUMMY_CLOCK_INIT_RATE	(42 * 1000 * 1000)
+@@ -2659,6 +2666,448 @@ static struct kunit_suite clk_mux_no_reparent_test_suite = {
+ 	.test_cases = clk_mux_no_reparent_test_cases,
+ };
+ 
++struct clk_register_clk_parent_data_test_case {
++	const char *desc;
++	struct clk_parent_data pdata;
++};
++
++static void
++clk_register_clk_parent_data_test_case_to_desc(
++		const struct clk_register_clk_parent_data_test_case *t, char *desc)
++{
++	strcpy(desc, t->desc);
++}
++
++static const struct clk_register_clk_parent_data_test_case
++clk_register_clk_parent_data_of_cases[] = {
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct clk_parent_data::index.
++		 */
++		.desc = "clk_parent_data_of_index_test",
++		.pdata.index = 0,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct clk_parent_data::fwname.
++		 */
++		.desc = "clk_parent_data_of_fwname_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT1,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct clk_parent_data::name.
++		 */
++		.desc = "clk_parent_data_of_name_test",
++		/* The index must be negative to indicate firmware not used */
++		.pdata.index = -1,
++		.pdata.name = CLK_PARENT_DATA_1MHZ_NAME,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct
++		 * clk_parent_data::{fw_name,name}.
++		 */
++		.desc = "clk_parent_data_of_fwname_name_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT1,
++		.pdata.name = "not_matching",
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct clk_parent_data::{index,name}.
++		 * Index takes priority.
++		 */
++		.desc = "clk_parent_data_of_index_name_priority_test",
++		.pdata.index = 0,
++		.pdata.name = "not_matching",
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device_node can
++		 * find a parent based on struct
++		 * clk_parent_data::{index,fwname,name}. The fw_name takes
++		 * priority over index and name.
++		 */
++		.desc = "clk_parent_data_of_index_fwname_name_priority_test",
++		.pdata.index = 1,
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT1,
++		.pdata.name = "not_matching",
++	},
++};
++
++KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_of_test, clk_register_clk_parent_data_of_cases,
++		  clk_register_clk_parent_data_test_case_to_desc)
 +
 +/**
-+ * struct clk_hw_fixed_rate_kunit_params - Parameters to pass to __clk_hw_register_fixed_rate()
-+ * @dev: device registering clk
-+ * @np: device_node of device registering clk
-+ * @name: name of clk
-+ * @parent_name: parent name of clk
-+ * @parent_hw: clk_hw pointer to parent of clk
-+ * @parent_data: parent_data describing parent of clk
-+ * @flags: clk framework flags
-+ * @fixed_rate: frequency of clk
-+ * @fixed_accuracy: accuracy of clk
-+ * @clk_fixed_flags: fixed rate specific clk flags
++ * struct clk_register_clk_parent_data_of_ctx - Context for clk_parent_data OF tests
++ * @np: device node of clk under test
++ * @hw: clk_hw for clk under test
 + */
-+struct clk_hw_fixed_rate_kunit_params {
-+	struct device *dev;
++struct clk_register_clk_parent_data_of_ctx {
 +	struct device_node *np;
-+	const char *name;
-+	const char *parent_name;
-+	const struct clk_hw *parent_hw;
-+	const struct clk_parent_data *parent_data;
-+	unsigned long flags;
-+	unsigned long fixed_rate;
-+	unsigned long fixed_accuracy;
-+	unsigned long clk_fixed_flags;
++	struct clk_hw hw;
 +};
 +
-+static int
-+clk_hw_register_fixed_rate_kunit_init(struct kunit_resource *res, void *context)
++static int clk_register_clk_parent_data_of_test_init(struct kunit *test)
 +{
-+	struct clk_hw_fixed_rate_kunit_params *params = context;
-+	struct clk_hw *hw;
++	struct clk_register_clk_parent_data_of_ctx *ctx;
 +
-+	hw = __clk_hw_register_fixed_rate(params->dev, params->np,
-+					  params->name,
-+					  params->parent_name,
-+					  params->parent_hw,
-+					  params->parent_data,
-+					  params->flags,
-+					  params->fixed_rate,
-+					  params->fixed_accuracy,
-+					  params->clk_fixed_flags,
-+					  false);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
++	KUNIT_ASSERT_EQ(test, 0,
++			of_overlay_apply_kunit(test, kunit_clk_parent_data_test));
 +
-+	res->data = hw;
-+
-+	return 0;
-+}
-+
-+static void clk_hw_register_fixed_rate_kunit_exit(struct kunit_resource *res)
-+{
-+	struct clk_hw *hw = res->data;
-+
-+	clk_hw_unregister_fixed_rate(hw);
-+}
-+
-+/**
-+ * clk_hw_register_fixed_rate_kunit() - Test managed __clk_hw_register_fixed_rate()
-+ * @test: The test context
-+ * @params: Arguments to __clk_hw_register_fixed_rate()
-+ *
-+ * Return: Registered fixed rate clk_hw or ERR_PTR on failure
-+ */
-+static struct clk_hw *
-+clk_hw_register_fixed_rate_kunit(struct kunit *test,
-+				 struct clk_hw_fixed_rate_kunit_params *params)
-+{
-+	struct clk_hw *hw;
-+
-+	hw = kunit_alloc_resource(test,
-+				  clk_hw_register_fixed_rate_kunit_init,
-+				  clk_hw_register_fixed_rate_kunit_exit,
-+				  GFP_KERNEL, params);
-+	if (!hw)
-+		return ERR_PTR(-EINVAL);
-+
-+	return hw;
-+}
-+
-+/**
-+ * clk_hw_unregister_fixed_rate_kunit() - Test managed clk_hw_unregister_fixed_rate()
-+ * @test: The test context
-+ * @hw: fixed rate clk to unregister upon test completion
-+ *
-+ * Automatically unregister @hw when @test is complete via
-+ * clk_hw_unregister_fixed_rate().
-+ *
-+ * Return: 0 on success or negative errno on failure
-+ */
-+static int clk_hw_unregister_fixed_rate_kunit(struct kunit *test, struct clk_hw *hw)
-+{
-+	if (!kunit_alloc_resource(test, NULL,
-+				  clk_hw_register_fixed_rate_kunit_exit,
-+				  GFP_KERNEL, hw))
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
 +		return -ENOMEM;
++	test->priv = ctx;
++
++	ctx->np = of_find_compatible_node(NULL, NULL, "test,clk-parent-data");
++	if (!ctx->np)
++		return -ENODEV;
++
++	of_node_put_kunit(test, ctx->np);
 +
 +	return 0;
 +}
 +
 +/*
-+ * Test that clk_get_rate() on a fixed rate clk registered with
-+ * clk_hw_register_fixed_rate() gets the proper frequency.
++ * Test that a clk registered with a struct device_node can find a parent based on
++ * struct clk_parent_data when the hw member isn't set.
 + */
-+static void clk_fixed_rate_rate_test(struct kunit *test)
++static void clk_register_clk_parent_data_of_test(struct kunit *test)
 +{
-+	struct clk_hw *hw;
-+	struct clk *clk;
-+	const unsigned long fixed_rate = 230000;
-+
-+	hw = clk_hw_register_fixed_rate(NULL, "test-fixed-rate", NULL, 0, fixed_rate);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_EQ(test, 0, clk_hw_unregister_fixed_rate_kunit(test, hw));
-+
-+	clk = clk_hw_get_clk_prepared_enabled_kunit(test, hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_EXPECT_EQ(test, fixed_rate, clk_get_rate(clk));
-+}
-+
-+/*
-+ * Test that clk_get_accuracy() on a fixed rate clk registered via
-+ * clk_hw_register_fixed_rate_with_accuracy() gets the proper accuracy.
-+ */
-+static void clk_fixed_rate_accuracy_test(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+	struct clk *clk;
-+	const unsigned long fixed_accuracy = 5000;
-+
-+	hw = clk_hw_register_fixed_rate_with_accuracy(NULL, "test-fixed-rate",
-+						      NULL, 0, 0,
-+						      fixed_accuracy);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_EQ(test, 0, clk_hw_unregister_fixed_rate_kunit(test, hw));
-+
-+	clk = clk_hw_get_clk_kunit(test, hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_EXPECT_EQ(test, fixed_accuracy, clk_get_accuracy(clk));
-+}
-+
-+/* Test suite for a fixed rate clk without any parent */
-+static struct kunit_case clk_fixed_rate_test_cases[] = {
-+	KUNIT_CASE(clk_fixed_rate_rate_test),
-+	KUNIT_CASE(clk_fixed_rate_accuracy_test),
-+	{}
-+};
-+
-+static struct kunit_suite clk_fixed_rate_suite = {
-+	.name = "clk_fixed_rate",
-+	.test_cases = clk_fixed_rate_test_cases,
-+};
-+
-+/*
-+ * Test that clk_get_parent() on a fixed rate clk gets the proper parent.
-+ */
-+static void clk_fixed_rate_parent_test(struct kunit *test)
-+{
-+	struct clk_hw *hw, *parent_hw;
++	struct clk_register_clk_parent_data_of_ctx *ctx = test->priv;
++	struct clk_hw *parent_hw;
++	const struct clk_register_clk_parent_data_test_case *test_param;
++	struct clk_init_data init = { };
 +	struct clk *expected_parent, *actual_parent;
-+	struct clk *clk;
-+	const char *parent_name = "test-fixed-rate-parent";
-+	struct clk_hw_fixed_rate_kunit_params parent_params = {
-+		.name = parent_name,
-+	};
 +
-+	parent_hw = clk_hw_register_fixed_rate_kunit(test, &parent_params);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
-+	KUNIT_ASSERT_STREQ(test, parent_name, clk_hw_get_name(parent_hw));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->np);
 +
-+	expected_parent = clk_hw_get_clk_kunit(test, parent_hw, __func__);
++	expected_parent = of_clk_get_kunit(test, ctx->np, 0);
 +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_parent);
 +
-+	hw = clk_hw_register_fixed_rate(NULL, "test-fixed-rate", parent_name, 0, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_EQ(test, 0, clk_hw_unregister_fixed_rate_kunit(test, hw));
++	test_param = test->param_value;
++	init.parent_data = &test_param->pdata;
++	init.num_parents = 1;
++	init.name = "parent_data_of_test_clk";
++	init.ops = &clk_dummy_single_parent_ops;
++	ctx->hw.init = &init;
++	KUNIT_ASSERT_EQ(test, 0, of_clk_hw_register_kunit(test, ctx->np, &ctx->hw));
 +
-+	clk = clk_hw_get_clk_kunit(test, hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
++	parent_hw = clk_hw_get_parent(&ctx->hw);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
 +
-+	actual_parent = clk_get_parent(clk);
++	actual_parent = clk_hw_get_clk_kunit(test, parent_hw, __func__);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, actual_parent);
++
 +	KUNIT_EXPECT_TRUE(test, clk_is_match(expected_parent, actual_parent));
 +}
 +
-+/*
-+ * Test that clk_get_rate() on a fixed rate clk ignores the parent rate.
-+ */
-+static void clk_fixed_rate_parent_rate_test(struct kunit *test)
-+{
-+	struct clk_hw *hw, *parent_hw;
-+	struct clk *clk;
-+	const unsigned long expected_rate = 1405;
-+	const unsigned long parent_rate = 90402;
-+	const char *parent_name = "test-fixed-rate-parent";
-+	struct clk_hw_fixed_rate_kunit_params parent_params = {
-+		.name = parent_name,
-+		.fixed_rate = parent_rate,
-+	};
-+
-+	parent_hw = clk_hw_register_fixed_rate_kunit(test, &parent_params);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
-+	KUNIT_ASSERT_STREQ(test, parent_name, clk_hw_get_name(parent_hw));
-+
-+	hw = clk_hw_register_fixed_rate(NULL, "test-fixed-rate", parent_name, 0,
-+					expected_rate);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_EQ(test, 0, clk_hw_unregister_fixed_rate_kunit(test, hw));
-+
-+	clk = clk_hw_get_clk_prepared_enabled_kunit(test, hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_EXPECT_EQ(test, expected_rate, clk_get_rate(clk));
-+}
-+
-+/*
-+ * Test that clk_get_accuracy() on a fixed rate clk ignores the parent accuracy.
-+ */
-+static void clk_fixed_rate_parent_accuracy_test(struct kunit *test)
-+{
-+	struct clk_hw *hw, *parent_hw;
-+	struct clk *clk;
-+	const unsigned long expected_accuracy = 900;
-+	const unsigned long parent_accuracy = 24000;
-+	const char *parent_name = "test-fixed-rate-parent";
-+	struct clk_hw_fixed_rate_kunit_params parent_params = {
-+		.name = parent_name,
-+		.fixed_accuracy = parent_accuracy,
-+	};
-+
-+	parent_hw = clk_hw_register_fixed_rate_kunit(test, &parent_params);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
-+	KUNIT_ASSERT_STREQ(test, parent_name, clk_hw_get_name(parent_hw));
-+
-+	hw = clk_hw_register_fixed_rate_with_accuracy(NULL, "test-fixed-rate",
-+						      parent_name, 0, 0,
-+						      expected_accuracy);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw);
-+	KUNIT_ASSERT_EQ(test, 0, clk_hw_unregister_fixed_rate_kunit(test, hw));
-+
-+	clk = clk_hw_get_clk_kunit(test, hw, __func__);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_EXPECT_EQ(test, expected_accuracy, clk_get_accuracy(clk));
-+}
-+
-+/* Test suite for a fixed rate clk with a parent */
-+static struct kunit_case clk_fixed_rate_parent_test_cases[] = {
-+	KUNIT_CASE(clk_fixed_rate_parent_test),
-+	KUNIT_CASE(clk_fixed_rate_parent_rate_test),
-+	KUNIT_CASE(clk_fixed_rate_parent_accuracy_test),
++static struct kunit_case clk_register_clk_parent_data_of_test_cases[] = {
++	KUNIT_CASE_PARAM(clk_register_clk_parent_data_of_test,
++			 clk_register_clk_parent_data_of_test_gen_params),
 +	{}
 +};
 +
-+static struct kunit_suite clk_fixed_rate_parent_suite = {
-+	.name = "clk_fixed_rate_parent",
-+	.test_cases = clk_fixed_rate_parent_test_cases,
++/*
++ * Test suite for registering clks with struct clk_parent_data and a struct
++ * device_node.
++ */
++static struct kunit_suite clk_register_clk_parent_data_of_suite = {
++	.name = "clk_register_clk_parent_data_of",
++	.init = clk_register_clk_parent_data_of_test_init,
++	.test_cases = clk_register_clk_parent_data_of_test_cases,
 +};
 +
-+struct clk_fixed_rate_of_test_context {
++/**
++ * struct clk_register_clk_parent_data_device_ctx - Context for clk_parent_data device tests
++ * @dev: device of clk under test
++ * @hw: clk_hw for clk under test
++ * @pdrv: driver to attach to find @dev
++ */
++struct clk_register_clk_parent_data_device_ctx {
 +	struct device *dev;
++	struct clk_hw hw;
 +	struct platform_driver pdrv;
-+	struct completion probed;
 +};
 +
-+static inline struct clk_fixed_rate_of_test_context *
-+pdev_to_clk_fixed_rate_of_test_context(struct platform_device *pdev)
++static inline struct clk_register_clk_parent_data_device_ctx *
++clk_register_clk_parent_data_driver_to_test_context(struct platform_device *pdev)
 +{
 +	return container_of(to_platform_driver(pdev->dev.driver),
-+			    struct clk_fixed_rate_of_test_context,
-+			    pdrv);
++			    struct clk_register_clk_parent_data_device_ctx, pdrv);
 +}
 +
-+/*
-+ * Test that of_fixed_clk_setup() registers a fixed rate clk with the proper
-+ * rate.
-+ */
-+static void clk_fixed_rate_of_probe_test(struct kunit *test)
++static int clk_register_clk_parent_data_device_probe(struct platform_device *pdev)
 +{
-+	struct clk_fixed_rate_of_test_context *ctx = test->priv;
-+	struct device *dev = ctx->dev;
-+	struct clk *clk;
++	struct clk_register_clk_parent_data_device_ctx *ctx;
 +
-+	clk = clk_get_kunit(test, dev, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_ASSERT_EQ(test, 0, clk_prepare_enable_kunit(test, clk));
-+	KUNIT_EXPECT_EQ(test, TEST_FIXED_FREQUENCY, clk_get_rate(clk));
-+}
-+
-+/*
-+ * Test that of_fixed_clk_setup() registers a fixed rate clk with the proper
-+ * accuracy.
-+ */
-+static void clk_fixed_rate_of_accuracy_test(struct kunit *test)
-+{
-+	struct clk_fixed_rate_of_test_context *ctx = test->priv;
-+	struct device *dev = ctx->dev;
-+	struct clk *clk;
-+
-+	clk = clk_get_kunit(test, dev, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, clk);
-+
-+	KUNIT_EXPECT_EQ(test, TEST_FIXED_ACCURACY, clk_get_accuracy(clk));
-+}
-+
-+static struct kunit_case clk_fixed_rate_of_cases[] = {
-+	KUNIT_CASE(clk_fixed_rate_of_probe_test),
-+	KUNIT_CASE(clk_fixed_rate_of_accuracy_test),
-+	{}
-+};
-+
-+static int clk_fixed_rate_of_test_probe(struct platform_device *pdev)
-+{
-+	struct clk_fixed_rate_of_test_context *ctx;
-+
-+	ctx = pdev_to_clk_fixed_rate_of_test_context(pdev);
++	ctx = clk_register_clk_parent_data_driver_to_test_context(pdev);
 +	ctx->dev = &pdev->dev;
-+	complete(&ctx->probed);
 +
 +	return 0;
 +}
 +
-+static int clk_fixed_rate_of_init(struct kunit *test)
++static void clk_register_clk_parent_data_device_driver(struct kunit *test)
 +{
-+	struct clk_fixed_rate_of_test_context *ctx;
++	struct clk_register_clk_parent_data_device_ctx *ctx = test->priv;
 +	static const struct of_device_id match_table[] = {
-+		{ .compatible = "test,single-clk-consumer" },
++		{ .compatible = "test,clk-parent-data" },
 +		{ }
 +	};
 +
-+	KUNIT_ASSERT_EQ(test, 0, of_overlay_apply_kunit(test, kunit_clk_fixed_rate_test));
++	ctx->pdrv.probe = clk_register_clk_parent_data_device_probe;
++	ctx->pdrv.driver.of_match_table = match_table;
++	ctx->pdrv.driver.name = __func__;
++	ctx->pdrv.driver.owner = THIS_MODULE;
++
++	KUNIT_ASSERT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->dev);
++}
++
++static const struct clk_register_clk_parent_data_test_case
++clk_register_clk_parent_data_device_cases[] = {
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::index.
++		 */
++		.desc = "clk_parent_data_device_index_test",
++		.pdata.index = 1,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::fwname.
++		 */
++		.desc = "clk_parent_data_device_fwname_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::name.
++		 */
++		.desc = "clk_parent_data_device_name_test",
++		/* The index must be negative to indicate firmware not used */
++		.pdata.index = -1,
++		.pdata.name = CLK_PARENT_DATA_50MHZ_NAME,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::{fw_name,name}.
++		 */
++		.desc = "clk_parent_data_device_fwname_name_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++		.pdata.name = "not_matching",
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::{index,name}. Index
++		 * takes priority.
++		 */
++		.desc = "clk_parent_data_device_index_name_priority_test",
++		.pdata.index = 1,
++		.pdata.name = "not_matching",
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::{index,fwname,name}.
++		 * The fw_name takes priority over index and name.
++		 */
++		.desc = "clk_parent_data_device_index_fwname_name_priority_test",
++		.pdata.index = 0,
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++		.pdata.name = "not_matching",
++	},
++};
++
++KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_device_test,
++		  clk_register_clk_parent_data_device_cases,
++		  clk_register_clk_parent_data_test_case_to_desc)
++
++/*
++ * Test that a clk registered with a struct device can find a parent based on
++ * struct clk_parent_data when the hw member isn't set.
++ */
++static void clk_register_clk_parent_data_device_test(struct kunit *test)
++{
++	struct clk_register_clk_parent_data_device_ctx *ctx;
++	const struct clk_register_clk_parent_data_test_case *test_param;
++	struct clk_hw *parent_hw;
++	struct clk_init_data init = { };
++	struct clk *expected_parent, *actual_parent;
 +
 +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
 +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
 +	test->priv = ctx;
 +
-+	ctx->pdrv.probe = clk_fixed_rate_of_test_probe;
-+	ctx->pdrv.driver.of_match_table = match_table;
-+	ctx->pdrv.driver.name = __func__;
-+	ctx->pdrv.driver.owner = THIS_MODULE;
-+	init_completion(&ctx->probed);
++	clk_register_clk_parent_data_device_driver(test);
 +
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
-+	KUNIT_ASSERT_NE(test, 0, wait_for_completion_timeout(&ctx->probed, HZ));
++	expected_parent = clk_get_kunit(test, ctx->dev, "50");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected_parent);
++
++	test_param = test->param_value;
++	init.parent_data = &test_param->pdata;
++	init.num_parents = 1;
++	init.name = "parent_data_device_test_clk";
++	init.ops = &clk_dummy_single_parent_ops;
++	ctx->hw.init = &init;
++	KUNIT_ASSERT_EQ(test, 0, clk_hw_register_kunit(test, ctx->dev, &ctx->hw));
++
++	parent_hw = clk_hw_get_parent(&ctx->hw);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent_hw);
++
++	actual_parent = clk_hw_get_clk_kunit(test, parent_hw, __func__);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, actual_parent);
++
++	KUNIT_EXPECT_TRUE(test, clk_is_match(expected_parent, actual_parent));
++}
++
++static const struct clk_register_clk_parent_data_test_case
++clk_register_clk_parent_data_device_hw_cases[] = {
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw.
++		 */
++		.desc = "clk_parent_data_device_hw_index_test",
++		/* The index must be negative to indicate firmware not used */
++		.pdata.index = -1,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw when
++		 * struct clk_parent_data::fw_name is set.
++		 */
++		.desc = "clk_parent_data_device_hw_fwname_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw when struct
++		 * clk_parent_data::name is set.
++		 */
++		.desc = "clk_parent_data_device_hw_name_test",
++		/* The index must be negative to indicate firmware not used */
++		.pdata.index = -1,
++		.pdata.name = CLK_PARENT_DATA_50MHZ_NAME,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw when struct
++		 * clk_parent_data::{fw_name,name} are set.
++		 */
++		.desc = "clk_parent_data_device_hw_fwname_name_test",
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++		.pdata.name = "not_matching",
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw when struct
++		 * clk_parent_data::index is set. The hw pointer takes
++		 * priority.
++		 */
++		.desc = "clk_parent_data_device_hw_index_priority_test",
++		.pdata.index = 0,
++	},
++	{
++		/*
++		 * Test that a clk registered with a struct device can find a
++		 * parent based on struct clk_parent_data::hw when
++		 * struct clk_parent_data::{index,fwname,name} are set.
++		 * The hw pointer takes priority over everything else.
++		 */
++		.desc = "clk_parent_data_device_hw_index_fwname_name_priority_test",
++		.pdata.index = 0,
++		.pdata.fw_name = CLK_PARENT_DATA_PARENT2,
++		.pdata.name = "not_matching",
++	},
++};
++
++KUNIT_ARRAY_PARAM(clk_register_clk_parent_data_device_hw_test,
++		  clk_register_clk_parent_data_device_hw_cases,
++		  clk_register_clk_parent_data_test_case_to_desc)
++
++/*
++ * Test that a clk registered with a struct device can find a
++ * parent based on struct clk_parent_data::hw.
++ */
++static void clk_register_clk_parent_data_device_hw_test(struct kunit *test)
++{
++	struct clk_register_clk_parent_data_device_ctx *ctx;
++	const struct clk_register_clk_parent_data_test_case *test_param;
++	struct clk_dummy_context *parent;
++	struct clk_hw *parent_hw;
++	struct clk_parent_data pdata = { };
++	struct clk_init_data init = { };
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++	test->priv = ctx;
++
++	clk_register_clk_parent_data_device_driver(test);
++
++	parent = kunit_kzalloc(test, sizeof(*parent), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
++
++	parent_hw = &parent->hw;
++	parent_hw->init = CLK_HW_INIT_NO_PARENT("parent-clk",
++						&clk_dummy_rate_ops, 0);
++
++	KUNIT_ASSERT_EQ(test, 0, clk_hw_register_kunit(test, ctx->dev, parent_hw));
++
++	test_param = test->param_value;
++	memcpy(&pdata, &test_param->pdata, sizeof(pdata));
++	pdata.hw = parent_hw;
++	init.parent_data = &pdata;
++	init.num_parents = 1;
++	init.ops = &clk_dummy_single_parent_ops;
++	init.name = "parent_data_device_hw_test_clk";
++	ctx->hw.init = &init;
++	KUNIT_ASSERT_EQ(test, 0, clk_hw_register_kunit(test, ctx->dev, &ctx->hw));
++
++	KUNIT_EXPECT_PTR_EQ(test, parent_hw, clk_hw_get_parent(&ctx->hw));
++}
++
++static struct kunit_case clk_register_clk_parent_data_device_test_cases[] = {
++	KUNIT_CASE_PARAM(clk_register_clk_parent_data_device_test,
++			 clk_register_clk_parent_data_device_test_gen_params),
++	KUNIT_CASE_PARAM(clk_register_clk_parent_data_device_hw_test,
++			 clk_register_clk_parent_data_device_hw_test_gen_params),
++	{}
++};
++
++static int clk_register_clk_parent_data_device_init(struct kunit *test)
++{
++	KUNIT_ASSERT_EQ(test, 0,
++			of_overlay_apply_kunit(test, kunit_clk_parent_data_test));
 +
 +	return 0;
 +}
 +
-+static struct kunit_suite clk_fixed_rate_of_suite = {
-+	.name = "clk_fixed_rate_of",
-+	.init = clk_fixed_rate_of_init,
-+	.test_cases = clk_fixed_rate_of_cases,
++/*
++ * Test suite for registering clks with struct clk_parent_data and a struct
++ * device.
++ */
++static struct kunit_suite clk_register_clk_parent_data_device_suite = {
++	.name = "clk_register_clk_parent_data_device",
++	.init = clk_register_clk_parent_data_device_init,
++	.test_cases = clk_register_clk_parent_data_device_test_cases,
 +};
 +
-+kunit_test_suites(
-+	&clk_fixed_rate_suite,
-+	&clk_fixed_rate_of_suite,
-+	&clk_fixed_rate_parent_suite,
-+);
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/clk/clk-fixed-rate_test.h b/drivers/clk/clk-fixed-rate_test.h
+ kunit_test_suites(
+ 	&clk_leaf_mux_set_rate_parent_test_suite,
+ 	&clk_test_suite,
+@@ -2671,7 +3120,9 @@ kunit_test_suites(
+ 	&clk_range_test_suite,
+ 	&clk_range_maximize_test_suite,
+ 	&clk_range_minimize_test_suite,
++	&clk_register_clk_parent_data_of_suite,
++	&clk_register_clk_parent_data_device_suite,
+ 	&clk_single_parent_mux_test_suite,
+-	&clk_uncached_test_suite
++	&clk_uncached_test_suite,
+ );
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/clk/kunit_clk_parent_data_test.dtso b/drivers/clk/kunit_clk_parent_data_test.dtso
 new file mode 100644
-index 000000000000..e0d28e5b6081
+index 000000000000..7d3ed9a5a2e8
 --- /dev/null
-+++ b/drivers/clk/clk-fixed-rate_test.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _CLK_FIXED_RATE_TEST_H
-+#define _CLK_FIXED_RATE_TEST_H
-+
-+#define TEST_FIXED_FREQUENCY	50000000
-+#define TEST_FIXED_ACCURACY	300
-+
-+#endif
-diff --git a/drivers/clk/kunit_clk_fixed_rate_test.dtso b/drivers/clk/kunit_clk_fixed_rate_test.dtso
-new file mode 100644
-index 000000000000..d838ce766fa2
---- /dev/null
-+++ b/drivers/clk/kunit_clk_fixed_rate_test.dtso
-@@ -0,0 +1,19 @@
++++ b/drivers/clk/kunit_clk_parent_data_test.dtso
+@@ -0,0 +1,28 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/dts-v1/;
 +/plugin/;
 +
-+#include "clk-fixed-rate_test.h"
++#include "clk_parent_data_test.h"
 +
 +&{/} {
-+	fixed_50MHz: kunit-clock {
++	fixed_50: kunit-clock-50MHz {
 +		compatible = "fixed-clock";
 +		#clock-cells = <0>;
-+		clock-frequency = <TEST_FIXED_FREQUENCY>;
-+		clock-accuracy = <TEST_FIXED_ACCURACY>;
++		clock-frequency = <50000000>;
++		clock-output-names = CLK_PARENT_DATA_50MHZ_NAME;
 +	};
 +
-+	kunit-clock-consumer {
-+		compatible = "test,single-clk-consumer";
-+		clocks = <&fixed_50MHz>;
++	fixed_parent: kunit-clock-1MHz {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <1000000>;
++		clock-output-names = CLK_PARENT_DATA_1MHZ_NAME;
++	};
++
++	kunit-clock-controller {
++		compatible = "test,clk-parent-data";
++		clocks = <&fixed_parent>, <&fixed_50>;
++		clock-names = CLK_PARENT_DATA_PARENT1, CLK_PARENT_DATA_PARENT2;
++		#clock-cells = <1>;
 +	};
 +};
 -- 
