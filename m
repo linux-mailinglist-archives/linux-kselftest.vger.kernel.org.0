@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15AC692942C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 16:47:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C74192942E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 16:47:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3A121F21F7D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 14:47:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 063D6282DAE
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 14:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2517213A416;
-	Sat,  6 Jul 2024 14:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2DB13A41D;
+	Sat,  6 Jul 2024 14:47:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmoQHncS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6WLIpLE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A33811E0;
-	Sat,  6 Jul 2024 14:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C4729CA;
+	Sat,  6 Jul 2024 14:47:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720277249; cv=none; b=tWuMnyVMdHamax4k0kd4RiiXWKuI/HH0B5jttA7T2Zn2szodCoXsFPo/0OhjwIbdrZLczWyd9sqQOJHqCKWpdKxcWcakrDpM+ZajjbWegoomgLwTt0O1ntbHovIr1r1Ll2Z8u1ORd1fTulLMvjTSwyRSOrOky1qarC573U1ZT/Q=
+	t=1720277255; cv=none; b=RxCf9BAX1XwjlOOvjv643VmLpg3UZ3VmkLAVluCHrBfMAqVwRPAZagXXu0N/C0L97idLMdvg/AW7hZuXF0F+q/Dq8PT1MjRlympoCir2/e4nku3N7cBVQBR2no+TCf93jUDiRNTT6O/A8SYvtHuFOdyZo7G+uP53P6PmefgT6pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720277249; c=relaxed/simple;
-	bh=p/sQSZ6Ry7HCVEED0GCWFAhT5N2x1Y0pWGbUjY6YoeY=;
+	s=arc-20240116; t=1720277255; c=relaxed/simple;
+	bh=JAWAcKR7zBXRC50szWd1XFpZsq7hHNsF3ZdFSJ3411U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mmNhEkIWEdctOx3GSS1gXEbFdVTY5hF06I/Vpi1FzcqyOc+UuutRWrNWXgpdjA7Ah0dtZhhGtFzuxf/ydlfAtEkTSjzihHaGpRS8JReMxhYd5riM1i1OHDWFtYV10Y6LcccfzyWRzkMghgOJv6ie5g6qutGux1gz8rhbbo22qFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmoQHncS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E193BC4AF0E;
-	Sat,  6 Jul 2024 14:47:21 +0000 (UTC)
+	 MIME-Version; b=Iq57szo1vC3ta2J6NhEt/Xf+6zjZ2sPoqDQ4NrMhzfL6wUzCBNYcsOPWGNgy3MnYX8Nqb5ESjqO71wKoOMlYL6wNUjqyBrn3dxMT0biSYooaVZ7OkMBF8ZV3yK/zWA5althWpeQDqgS/bQiDQyUwPImXO6OLieIJj2P5nSawRJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6WLIpLE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9C8C3277B;
+	Sat,  6 Jul 2024 14:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720277248;
-	bh=p/sQSZ6Ry7HCVEED0GCWFAhT5N2x1Y0pWGbUjY6YoeY=;
+	s=k20201202; t=1720277255;
+	bh=JAWAcKR7zBXRC50szWd1XFpZsq7hHNsF3ZdFSJ3411U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BmoQHncS3G6eOOs6kMq9Qt3P9feoahzE27ebgcvyAEjzWctestQm1O8XdNbi5KW5M
-	 rBZxTn79+GluBXZZ//W1vcea7P8MPYJVfuWlgGRorZDbXFl0rlH0RMQvvInH7dd+SZ
-	 ZbljCkd0urBeUdfO7uZ+wSjM9D0CucMpGbY6hidsd3P6F/P3imN623lZK6JSrdzClL
-	 eTri2gAQJbagLhh/nTedkxIdhrlmF1QTx1drDzhhBusZ6gIEWDbyLcJptyWfNFdK+Y
-	 GVmBOTqJnTtKwaxys3r3TmiHnamDqMY4Jy/Q1Zuu2mOhJTvC/MOOoByn9HnkBVxvme
-	 FdY4zC2VSabmQ==
+	b=s6WLIpLEf1my4HtXFesxjp42Am/DT/2k1aB46ArhgtyX5SwPIFbUrHJw9rFUVkaGf
+	 G2NJJZbZf1LcahfO53A2bJ62qk9/Jnp1kenBHiRil8qV7UW4G9agj3pejgLp/318FR
+	 bDU2cygtr9UyWgk9Yfrw74p8uy9tEr9I6oc0lgusnAsZR0lkdOkiMolty41alkHbWQ
+	 d17inRbZn4Bjy+tZi+1W1JAzrPB9YnxOEbEkWGtVT3gdhM1qAZYy9pGt7p81m6TEzk
+	 HEEDe5LEiR9SP/VSv+bKQtZgtsOU07xU0vcHWZOzoGISJuPehsoqyEtrnUjDR145bb
+	 J4/7U2zZSJFfQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v9 07/11] selftests/bpf: Set expect_errno for cgroup_skb_sk_lookup
-Date: Sat,  6 Jul 2024 22:45:52 +0800
-Message-ID: <739486ce0d05a999c317ad6b21d3ef02cdca2a5f.1720276189.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v9 08/11] selftests/bpf: Close fd in error path in drop_on_reuseport
+Date: Sat,  6 Jul 2024 22:45:53 +0800
+Message-ID: <f8dd478f3d64ba1eea5a17573fc518a8cf83adbb.1720276189.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720276189.git.tanggeliang@kylinos.cn>
 References: <cover.1720276189.git.tanggeliang@kylinos.cn>
@@ -75,67 +75,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-EINPROGRESS is skipped in run_lookup_test() in cgroup_skb_sk_lookup
-tests, but it is still showed in the log:
+Server 1 fd should be closed in the error path when update_lookup_map()
+fails. This patch fixes it by goto "close_srv1" instead of "detach"
+lable in that case.
 
- ./test_progs -t cgroup_skb_sk_lookup -v
-
- run_cgroup_bpf_test:PASS:skel_open_load 0 nsec
- run_cgroup_bpf_test:PASS:cgroup_join 0 nsec
- run_cgroup_bpf_test:PASS:cgroup_attach 0 nsec
- run_lookup_test:PASS:start_server 0 nsec
- run_lookup_test:PASS:getsockname 0 nsec
- (network_helpers.c:300: errno: Operation now in progress) Failed to \
-                                                connect to server
- run_lookup_test:PASS:connect_fd_to_fd 0 nsec
- run_lookup_test:PASS:connect_to_fd 0 nsec
- run_lookup_test:PASS:accept 0 nsec
- #51      cgroup_skb_sk_lookup:OK
-
-To fix this, set EINPROGRESS as the expect_errno of network_helper_opts and
-pass it to connect_fd_to_fd(). Skip this expect_errno when must_fail is
-false too in connect_fd_to_addr().
-
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c                 | 2 +-
- tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/sk_lookup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 062170d6be1c..1403487c5921 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -296,7 +296,7 @@ static int connect_fd_to_addr(int fd,
- 			return -1;
- 		}
- 	} else {
--		if (ret) {
-+		if (ret && errno != expect_errno) {
- 			log_err("Failed to connect to server");
- 			return -1;
- 		}
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
-index bcf142779cc6..0ef2e9a6f47c 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
-@@ -10,6 +10,7 @@ static void run_lookup_test(__u16 *g_serv_port, int out_sk)
- {
- 	struct network_helper_opts opts = {
- 		.timeout_ms	= 1000,
-+		.expect_errno	= EINPROGRESS,
- 	};
- 	int serv_sk = -1, in_sk = -1, serv_in_sk = -1, err;
- 	struct sockaddr_in6 addr = {};
-@@ -28,7 +29,7 @@ static void run_lookup_test(__u16 *g_serv_port, int out_sk)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
+index 597d0467a926..de2466547efe 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
+@@ -994,7 +994,7 @@ static void drop_on_reuseport(const struct test *t)
  
- 	/* Client outside of test cgroup should fail to connect by timeout. */
- 	err = connect_fd_to_fd(out_sk, serv_sk, &opts);
--	if (CHECK(!err || errno != EINPROGRESS, "connect_fd_to_fd",
-+	if (CHECK(err || errno != EINPROGRESS, "connect_fd_to_fd",
- 		  "unexpected result err %d errno %d\n", err, errno))
- 		goto cleanup;
+ 	err = update_lookup_map(t->sock_map, SERVER_A, server1);
+ 	if (err)
+-		goto detach;
++		goto close_srv1;
  
+ 	/* second server on destination address we should never reach */
+ 	server2 = make_server(t->sotype, t->connect_to.ip, t->connect_to.port,
 -- 
 2.43.0
 
