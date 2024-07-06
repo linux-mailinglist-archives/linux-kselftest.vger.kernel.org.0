@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C996F92942A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 16:47:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AC692942C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 16:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8551B282D6B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 14:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3A121F21F7D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2024 14:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D9D13A40F;
-	Sat,  6 Jul 2024 14:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2517213A416;
+	Sat,  6 Jul 2024 14:47:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTtRr0oJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BmoQHncS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487CE811E0;
-	Sat,  6 Jul 2024 14:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A33811E0;
+	Sat,  6 Jul 2024 14:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720277241; cv=none; b=QVZmekMfkD1TEZ2zcVXTDFBj1+Owpway2QkNseZqu2FrMeFH6C6uxbMn8bFh6cBKPmx/xjiSzkBHDk+ARImprwxISEQoISIe102AU3FMcde7oI/xy0+SUtGwtqpowLi8LMGg3Ev2ch0hiabxn+I+WPdyHO4w8XaX3trlfyyyo00=
+	t=1720277249; cv=none; b=tWuMnyVMdHamax4k0kd4RiiXWKuI/HH0B5jttA7T2Zn2szodCoXsFPo/0OhjwIbdrZLczWyd9sqQOJHqCKWpdKxcWcakrDpM+ZajjbWegoomgLwTt0O1ntbHovIr1r1Ll2Z8u1ORd1fTulLMvjTSwyRSOrOky1qarC573U1ZT/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720277241; c=relaxed/simple;
-	bh=Dpr4rRsmbyid4BnC85GpsbxEUjgT4+s7MlZSkdOun7o=;
+	s=arc-20240116; t=1720277249; c=relaxed/simple;
+	bh=p/sQSZ6Ry7HCVEED0GCWFAhT5N2x1Y0pWGbUjY6YoeY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cY55u+aPgeAOEGy6esXnqwYqBfLI1KEkifHW0XTGjEvxbThRcTODL10BC7ZwAE5W1HFCtVQXUyqxJfsq4S4LvGCmmK+zgmuIj+7U2+jdrNf1+Q8o5s8oBl/ZO7Wl5CVPv0xdHiCeDf22FC1gLnslvovH78/r8L25YrDjW+5S0F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTtRr0oJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B9FC2BD10;
-	Sat,  6 Jul 2024 14:47:13 +0000 (UTC)
+	 MIME-Version; b=mmNhEkIWEdctOx3GSS1gXEbFdVTY5hF06I/Vpi1FzcqyOc+UuutRWrNWXgpdjA7Ah0dtZhhGtFzuxf/ydlfAtEkTSjzihHaGpRS8JReMxhYd5riM1i1OHDWFtYV10Y6LcccfzyWRzkMghgOJv6ie5g6qutGux1gz8rhbbo22qFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BmoQHncS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E193BC4AF0E;
+	Sat,  6 Jul 2024 14:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720277241;
-	bh=Dpr4rRsmbyid4BnC85GpsbxEUjgT4+s7MlZSkdOun7o=;
+	s=k20201202; t=1720277248;
+	bh=p/sQSZ6Ry7HCVEED0GCWFAhT5N2x1Y0pWGbUjY6YoeY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FTtRr0oJ0e/FnYX5P6T6obOUjdz6cRucw3YEE0W5676c9l493BGEfD5lcI+vRCX1w
-	 jdYgPan9QUnelZr3quraw9GV7mpHhoGbeU+8MOyzGzRlXq5JTMjqoRKsU1D5NZRZyA
-	 M7SDNlMPPqHjHa9fQcQQs/DAEK40fQDWFmvh3AbC94pChGLAFxJzJrmccLK/nhw517
-	 Y0oKTefYOmj/jV/tiTRijQxoB/FYQt9vdLt3T44szOeeI8Br3nBBE+6TCBG0DhQBzt
-	 kA6cht9l86isspHI4X48hBhvjhOpRbx6zzZeDz9V+uy6/21IWyl8ueKOzKGwp1nX0m
-	 e7f/7CnZi1RRg==
+	b=BmoQHncS3G6eOOs6kMq9Qt3P9feoahzE27ebgcvyAEjzWctestQm1O8XdNbi5KW5M
+	 rBZxTn79+GluBXZZ//W1vcea7P8MPYJVfuWlgGRorZDbXFl0rlH0RMQvvInH7dd+SZ
+	 ZbljCkd0urBeUdfO7uZ+wSjM9D0CucMpGbY6hidsd3P6F/P3imN623lZK6JSrdzClL
+	 eTri2gAQJbagLhh/nTedkxIdhrlmF1QTx1drDzhhBusZ6gIEWDbyLcJptyWfNFdK+Y
+	 GVmBOTqJnTtKwaxys3r3TmiHnamDqMY4Jy/Q1Zuu2mOhJTvC/MOOoByn9HnkBVxvme
+	 FdY4zC2VSabmQ==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v9 06/11] selftests/bpf: Add expect_errno for network_helper_opts
-Date: Sat,  6 Jul 2024 22:45:51 +0800
-Message-ID: <263fb97117e3bb62df8bef34c35b6501d1b10e9a.1720276189.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v9 07/11] selftests/bpf: Set expect_errno for cgroup_skb_sk_lookup
+Date: Sat,  6 Jul 2024 22:45:52 +0800
+Message-ID: <739486ce0d05a999c317ad6b21d3ef02cdca2a5f.1720276189.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720276189.git.tanggeliang@kylinos.cn>
 References: <cover.1720276189.git.tanggeliang@kylinos.cn>
@@ -75,84 +75,67 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The errno EPERM is skipped in connect_fd_to_addr() by cgroup_v1v2 tests.
-More generally, it makes sense to add a "expect_errno" struct member for
-network_helper_opts to identify the expect errno to be skipped.
+EINPROGRESS is skipped in run_lookup_test() in cgroup_skb_sk_lookup
+tests, but it is still showed in the log:
+
+ ./test_progs -t cgroup_skb_sk_lookup -v
+
+ run_cgroup_bpf_test:PASS:skel_open_load 0 nsec
+ run_cgroup_bpf_test:PASS:cgroup_join 0 nsec
+ run_cgroup_bpf_test:PASS:cgroup_attach 0 nsec
+ run_lookup_test:PASS:start_server 0 nsec
+ run_lookup_test:PASS:getsockname 0 nsec
+ (network_helpers.c:300: errno: Operation now in progress) Failed to \
+                                                connect to server
+ run_lookup_test:PASS:connect_fd_to_fd 0 nsec
+ run_lookup_test:PASS:connect_to_fd 0 nsec
+ run_lookup_test:PASS:accept 0 nsec
+ #51      cgroup_skb_sk_lookup:OK
+
+To fix this, set EINPROGRESS as the expect_errno of network_helper_opts and
+pass it to connect_fd_to_fd(). Skip this expect_errno when must_fail is
+false too in connect_fd_to_addr().
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/network_helpers.c        | 11 +++++++----
- tools/testing/selftests/bpf/network_helpers.h        |  1 +
- tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c |  1 +
- 3 files changed, 9 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c                 | 2 +-
+ tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 475a5a04e61e..062170d6be1c 100644
+index 062170d6be1c..1403487c5921 100644
 --- a/tools/testing/selftests/bpf/network_helpers.c
 +++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -279,7 +279,8 @@ int client_socket(int family, int type,
- 
- static int connect_fd_to_addr(int fd,
- 			      const struct sockaddr_storage *addr,
--			      socklen_t addrlen, const bool must_fail)
-+			      socklen_t addrlen, const bool must_fail,
-+			      const int expect_errno)
- {
- 	int ret;
- 
-@@ -290,7 +291,7 @@ static int connect_fd_to_addr(int fd,
- 			log_err("Unexpected success to connect to server");
+@@ -296,7 +296,7 @@ static int connect_fd_to_addr(int fd,
  			return -1;
  		}
--		if (errno != EPERM) {
-+		if (errno != expect_errno) {
- 			log_err("Unexpected error from connect to server");
+ 	} else {
+-		if (ret) {
++		if (ret && errno != expect_errno) {
+ 			log_err("Failed to connect to server");
  			return -1;
  		}
-@@ -318,7 +319,8 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
- 		return -1;
- 	}
- 
--	if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
-+	if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail,
-+			       opts->expect_errno))
- 		goto error_close;
- 
- 	return fd;
-@@ -386,7 +388,8 @@ int connect_fd_to_fd(int client_fd, int server_fd,
- 		return -1;
- 	}
- 
--	if (connect_fd_to_addr(client_fd, &addr, len, opts->must_fail))
-+	if (connect_fd_to_addr(client_fd, &addr, len, opts->must_fail,
-+			       opts->expect_errno))
- 		return -1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index fcda6b2333ad..14d161d35248 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -24,6 +24,7 @@ typedef __u16 __sum16;
- struct network_helper_opts {
- 	int timeout_ms;
- 	bool must_fail;
-+	int expect_errno;
- 	int proto;
- 	/* The backlog argument for listen(), defines the maximum length to which
- 	 * the queue of pending connections for sockfd may grow.
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-index 9709c8db7275..ff477163f0ea 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-@@ -11,6 +11,7 @@ static int run_test(int cgroup_fd, int server_fd, bool classid)
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
+index bcf142779cc6..0ef2e9a6f47c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_lookup.c
+@@ -10,6 +10,7 @@ static void run_lookup_test(__u16 *g_serv_port, int out_sk)
  {
  	struct network_helper_opts opts = {
- 		.must_fail = true,
-+		.expect_errno = EPERM,
+ 		.timeout_ms	= 1000,
++		.expect_errno	= EINPROGRESS,
  	};
- 	struct connect4_dropper *skel;
- 	int fd, err = 0;
+ 	int serv_sk = -1, in_sk = -1, serv_in_sk = -1, err;
+ 	struct sockaddr_in6 addr = {};
+@@ -28,7 +29,7 @@ static void run_lookup_test(__u16 *g_serv_port, int out_sk)
+ 
+ 	/* Client outside of test cgroup should fail to connect by timeout. */
+ 	err = connect_fd_to_fd(out_sk, serv_sk, &opts);
+-	if (CHECK(!err || errno != EINPROGRESS, "connect_fd_to_fd",
++	if (CHECK(err || errno != EINPROGRESS, "connect_fd_to_fd",
+ 		  "unexpected result err %d errno %d\n", err, errno))
+ 		goto cleanup;
+ 
 -- 
 2.43.0
 
