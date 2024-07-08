@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-13311-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A22929F96
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 11:53:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6B26929FAE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 11:57:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CFA32834BE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 09:53:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D77BB29B6C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 09:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A7C768EE;
-	Mon,  8 Jul 2024 09:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69B878C6B;
+	Mon,  8 Jul 2024 09:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RqvnYt0g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TAnVfzvq"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FE041C69;
-	Mon,  8 Jul 2024 09:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3D178B4C;
+	Mon,  8 Jul 2024 09:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720432392; cv=none; b=lzTlIdl8oVh9Pe08L2BIklTVHiz/C9U7CvtcsjNYm3NhNqvIxnbvS8Gq2Nj+0pcYenr5RvKm1rkoG6HQpUYcg4VRmFjjFzzo3ro3Fd2ml609riBYUk5ec56ozkAtMjkdNj1/RJnTRgFG5F0A9/e64fEVY3QwBbMu9/gXrrvjdXA=
+	t=1720432396; cv=none; b=iJf/E/3nRRNwPlYAfY31/CHBLsGcSwvYurPtwSedOEauuv5S2MAMNKwx3/xJDa9lGXMUMeSjpEMZFK25JQdaaBZty+2NmLQAl0oYlHR/n6QQrjHvnQuHlb5fCJQg45xv5Roo7SWnsBf23+NT4ghP+dD1tuRJz6iNnfg1Fn2ipFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720432392; c=relaxed/simple;
-	bh=tmlkinceJ217REpu6WVDDhCLWZe8vaBSsNuNDlMyUz4=;
+	s=arc-20240116; t=1720432396; c=relaxed/simple;
+	bh=Hc+wCGdfuoRlwbB3DucDaka6bSZJEuGgzM8L4Qcwlv8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fFVRIIeL/Jo3kLTMl826zqrFdcTOtlzkvpQCUNRCVG9smdUJA+I1Z9vvMcbJccOMen6u+7Wv7o1c6KXcvCZvoUl8cGN2I5gA6ogiFROJGAB2T+CT1uq29zHaHpFEFGleeXob6+XEgoh5tIics6DUwBnC/1AX1V/jy4UYyw29uUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RqvnYt0g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4244C4AF0B;
-	Mon,  8 Jul 2024 09:53:08 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=YpKkNVPBqDLcdsfz60inrDZ0EmZQvfFnotdYkSCp50nNrRvoO9KqCd8chCaqBwuGxg26z9UZX2RuL/g1HHXpBjUn09MHjIJAGrUQlv83hB5daHuv0Kp/5nItzuoa3I/rwSQQ6UU8h/d2qNlpesv1XR2WKmlTJywNRpttV7it7EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TAnVfzvq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9869C4AF11;
+	Mon,  8 Jul 2024 09:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720432392;
-	bh=tmlkinceJ217REpu6WVDDhCLWZe8vaBSsNuNDlMyUz4=;
+	s=k20201202; t=1720432396;
+	bh=Hc+wCGdfuoRlwbB3DucDaka6bSZJEuGgzM8L4Qcwlv8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RqvnYt0gUOflVbMqsbjq/J1QSfkqhutdrFN+GxErg+PHVx0DNmB5X28Rw5q4aUWXW
-	 /QS3WACw8PW79vR02pMwxiPUIgkIKL/g0fHonzc5Kfl82TkO+LoNqM+D3PdSj7TJ0a
-	 e9xl5GQD+uTTOwxXID7FJvgDrwHAbW/GF/C1vSSsiaQSYS7lJcf13EgNcxbY9BFcRr
-	 RCcR1aTTsv5GdmSTKjAgBVdYHtwtD6Z1iSBVBzcXF49ROQy2E3fXL5fKFZ1v+G1zDE
-	 K+4zAAmB3WXKOx0zN1a000AFFFnrS+CMGmzzlpWE2dseuUhqmj1yiOMJn5tZ9uR9gg
-	 E2GbWGBGXZKIA==
+	b=TAnVfzvqNg/T75RwhNUorfBLlcl7ygOwaGjkmoxb6826qusb0M0XqP0oWqC8vbSk2
+	 rckCU6pvoCweyTASFKvGaSLXmEa4dPJsPb0RvmT+9sga6GiXoK1V9ko0ofTvD2gNQN
+	 XtGEyqKqaHQc4HJLXHlirJrItdKmzYD+JTJa3hot/64giM9bOMi5mV2Tq2xrYEE8Ig
+	 0sTrIITuDSgu170kEZ7v+2bZXSrQUgGcD6aqgxbSvxGZc9JpgfkVkd7jTfzy4zTCbP
+	 nG9HIwFYvxSS+xXfiASPOdcv0/NPTMdCOK2QJDfkFEt1Z5VhdePykTDusnE4bGigJt
+	 lL6UckQ2XZPnQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Mon, 08 Jul 2024 11:52:57 +0200
-Subject: [PATCH bpf-next v2 1/2] bpf: helpers: fix bpf_wq_set_callback_impl
- signature
+Date: Mon, 08 Jul 2024 11:52:58 +0200
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: amend for wrong
+ bpf_wq_set_callback_impl signature
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240708-fix-wq-v2-1-667e5c9fbd99@kernel.org>
+Message-Id: <20240708-fix-wq-v2-2-667e5c9fbd99@kernel.org>
 References: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
 In-Reply-To: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -68,44 +68,130 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720432384; l=1192;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720432384; l=4146;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=tmlkinceJ217REpu6WVDDhCLWZe8vaBSsNuNDlMyUz4=;
- b=8EZU9HCeLG0gJfz3EK7kDGScbSgfQfmWRA40L/PAQO4G7Gx0gyUQ5m4FDoBDsDwXHiXseNti2
- 30iBuaJlZ5eCGIcezGJloMEqMRIFTGo6uQUaMDQbSE1Vhr25P3/Zoh+
+ bh=Hc+wCGdfuoRlwbB3DucDaka6bSZJEuGgzM8L4Qcwlv8=;
+ b=Y8m9/a5ocBeDa+NmLXIIU+COidOvwwjZdwTSS8F4IfgEyToR5gAv/vbRyM4Ccw4VlWUBmp5GJ
+ M7vHLH2/MOwA9rWLDJUlyohFwA3+JO4ZPDpBTZVjQo+fXyP+sKW/iF9
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-I realized this while having a map containing both a struct bpf_timer and
-a struct bpf_wq: the third argument provided to the bpf_wq callback is
-not the struct bpf_wq pointer itself, but the pointer to the value in
-the map.
+See the previous patch: the API was wrong, we were provided the pointer
+to the value, not the actual struct bpf_wq *.
 
-Which means that the users need to double cast the provided "value" as
-this is not a struct bpf_wq *.
-
-This is a change of API, but there doesn't seem to be much users of bpf_wq
-right now, so we should be able to go with this right now.
-
-Fixes: 81f1d7a583fa ("bpf: wq: add bpf_wq_set_callback_impl")
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- kernel/bpf/helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 229396172026..5241ba671c5a 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2734,7 +2734,7 @@ __bpf_kfunc int bpf_wq_start(struct bpf_wq *wq, unsigned int flags)
+---
+
+changes in v2:
+- amended to retrieve something from the third argument of the callback
+---
+ tools/testing/selftests/bpf/bpf_experimental.h  |  2 +-
+ tools/testing/selftests/bpf/progs/wq.c          | 19 ++++++++++++++-----
+ tools/testing/selftests/bpf/progs/wq_failures.c |  4 ++--
+ 3 files changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index eede6fc2ccb4..828556cdc2f0 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -552,7 +552,7 @@ extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+-		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
++		int (callback_fn)(void *map, int *key, void *value),
+ 		unsigned int flags__k, void *aux__ign) __ksym;
+ #define bpf_wq_set_callback(timer, cb, flags) \
+ 	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
+diff --git a/tools/testing/selftests/bpf/progs/wq.c b/tools/testing/selftests/bpf/progs/wq.c
+index 49e712acbf60..f8d3ae0c29ae 100644
+--- a/tools/testing/selftests/bpf/progs/wq.c
++++ b/tools/testing/selftests/bpf/progs/wq.c
+@@ -32,6 +32,7 @@ struct {
+ } hmap_malloc SEC(".maps");
+ 
+ struct elem {
++	int ok_offset;
+ 	struct bpf_wq w;
+ };
+ 
+@@ -53,7 +54,7 @@ __u32 ok;
+ __u32 ok_sleepable;
+ 
+ static int test_elem_callback(void *map, int *key,
+-		int (callback_fn)(void *map, int *key, struct bpf_wq *wq))
++		int (callback_fn)(void *map, int *key, void *value))
+ {
+ 	struct elem init = {}, *val;
+ 	struct bpf_wq *wq;
+@@ -70,6 +71,8 @@ static int test_elem_callback(void *map, int *key,
+ 	if (!val)
+ 		return -2;
+ 
++	val->ok_offset = *key;
++
+ 	wq = &val->w;
+ 	if (bpf_wq_init(wq, map, 0) != 0)
+ 		return -3;
+@@ -84,7 +87,7 @@ static int test_elem_callback(void *map, int *key,
  }
  
- __bpf_kfunc int bpf_wq_set_callback_impl(struct bpf_wq *wq,
--					 int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
-+					 int (callback_fn)(void *map, int *key, void *value),
- 					 unsigned int flags,
- 					 void *aux__ign)
+ static int test_hmap_elem_callback(void *map, int *key,
+-		int (callback_fn)(void *map, int *key, struct bpf_wq *wq))
++		int (callback_fn)(void *map, int *key, void *value))
  {
+ 	struct hmap_elem init = {}, *val;
+ 	struct bpf_wq *wq;
+@@ -114,7 +117,7 @@ static int test_hmap_elem_callback(void *map, int *key,
+ }
+ 
+ /* callback for non sleepable workqueue */
+-static int wq_callback(void *map, int *key, struct bpf_wq *work)
++static int wq_callback(void *map, int *key, void *value)
+ {
+ 	bpf_kfunc_common_test();
+ 	ok |= (1 << *key);
+@@ -122,10 +125,16 @@ static int wq_callback(void *map, int *key, struct bpf_wq *work)
+ }
+ 
+ /* callback for sleepable workqueue */
+-static int wq_cb_sleepable(void *map, int *key, struct bpf_wq *work)
++static int wq_cb_sleepable(void *map, int *key, void *value)
+ {
++	struct elem *data = (struct elem *)value;
++	int offset = data->ok_offset;
++
++	if (*key != offset)
++		return 0;
++
+ 	bpf_kfunc_call_test_sleepable();
+-	ok_sleepable |= (1 << *key);
++	ok_sleepable |= (1 << offset);
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/wq_failures.c b/tools/testing/selftests/bpf/progs/wq_failures.c
+index 4cbdb425f223..25b51a72fe0f 100644
+--- a/tools/testing/selftests/bpf/progs/wq_failures.c
++++ b/tools/testing/selftests/bpf/progs/wq_failures.c
+@@ -28,14 +28,14 @@ struct {
+ } lru SEC(".maps");
+ 
+ /* callback for non sleepable workqueue */
+-static int wq_callback(void *map, int *key, struct bpf_wq *work)
++static int wq_callback(void *map, int *key, void *value)
+ {
+ 	bpf_kfunc_common_test();
+ 	return 0;
+ }
+ 
+ /* callback for sleepable workqueue */
+-static int wq_cb_sleepable(void *map, int *key, struct bpf_wq *work)
++static int wq_cb_sleepable(void *map, int *key, void *value)
+ {
+ 	bpf_kfunc_call_test_sleepable();
+ 	return 0;
 
 -- 
 2.44.0
