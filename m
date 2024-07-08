@@ -1,114 +1,189 @@
-Return-Path: <linux-kselftest+bounces-13325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E304892A8F1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 20:28:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C577792A953
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 20:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 165561C215D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 18:28:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 463491F223E8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 18:54:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C92B14A4E0;
-	Mon,  8 Jul 2024 18:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9954E14BF8A;
+	Mon,  8 Jul 2024 18:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GbhuJb+l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKRN0+rE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14994149C6A
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 18:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F3714A4F0;
+	Mon,  8 Jul 2024 18:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720463279; cv=none; b=pAsr5xeupO4QeqS1E+WGCkm46/sCz2fwxBi+GRWqHAoRQFpU4T6pUeiVgJrJOFnptMrJ+yRH3kzcTIn9hg0rHayZv3Qyem2U6LEUIXPYfl7vdIDfAYoDvZWvldW9TTxOBl5BRyuBkQ2gjC7SQbkuaJUt7VkXAK19nlqSKXOQdbI=
+	t=1720464881; cv=none; b=E8mfdTzv+XYGAQ3sKFtQe/iW/N6iEd+MDD4ISttu49wdAhZ42fcq4vBJiuMvUeBpnD4zqsrbfAypBmjI0Ncm8hRC7ILlNpNoXEE7pxK4t4huu0VMt+SMDRfbmymO4R03CWqZ/UrLcDA62ti0NrneyZ7uYdEynYZ0JDCk3ZxdfxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720463279; c=relaxed/simple;
-	bh=ilPn+u949EiekXc1fNlL1FFhQXdzr142oQcIyOq1/8E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=U0uL+CNK29awTkO5MwmGub3dqRkQOXhn/jQOkR0JYH6+mNNlOJ1LqHMi9Apv/fGAtxTE8FdhGZNa7eDx1G1nNryuwQRBwn9gvpZ5h0iKN+xhmu089kA2SZjecY8ofV2UoznEx3O7vadmJ5NT5tsbb3/Q/5iedvPLsvfC/EVQkTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GbhuJb+l; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720463277;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aFsqwavuUe9u0s443Cn3sa3uIqOnS2CpWueQCZ5/X/E=;
-	b=GbhuJb+lMDipIK7ipH6c+w5fb2ORCfS+hvtJK5rgR2iCZTN/kT7v0jN5YTbPbzYdZI4N8d
-	SM5B9dKNCUKRZ6SBRh/17V5CTSfzu+/eUPBminfK2wrNXDTCWF/c3yoOl/zcrsbB+W4gRQ
-	7HIwPsP5ocxiZvWsjOapNCB/sf/ILBA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-98-60_gX4xZOkidNDF89tLsgA-1; Mon,
- 08 Jul 2024 14:27:53 -0400
-X-MC-Unique: 60_gX4xZOkidNDF89tLsgA-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DB174195609F;
-	Mon,  8 Jul 2024 18:27:51 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.8.34])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BC8B619560AE;
-	Mon,  8 Jul 2024 18:27:47 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Adrian Moreno <amorenoz@redhat.com>
-Cc: netdev@vger.kernel.org,  Pravin B Shelar <pshelar@ovn.org>,  "David S.
- Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] selftests: openvswitch: retry instead of sleep
-In-Reply-To: <20240708134451.3489802-1-amorenoz@redhat.com> (Adrian Moreno's
-	message of "Mon, 8 Jul 2024 15:44:49 +0200")
-References: <20240708134451.3489802-1-amorenoz@redhat.com>
-Date: Mon, 08 Jul 2024 14:27:45 -0400
-Message-ID: <f7tzfqrn3ha.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1720464881; c=relaxed/simple;
+	bh=Xx51mPWZcvEBBTllJzV009BtwFSB9kOfHDyQY9GFL3s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tj1Lr0IY7JHRkBN3t2EhYxi6pmZ9CnoIpKbkaaqzw3NQFodmBeMYuuKGNKIGi8nSZKJuiNttJsPKIxB3lLSGIMBISgJZgLlYhOzRo5Y77fk13OV/UG7PCA0mMWskwJfHWdp9R3xuL390EMEL0l531FVnaPxcrehHIYhCCtcqQUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKRN0+rE; arc=none smtp.client-ip=209.85.160.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-25d6dd59170so1949805fac.0;
+        Mon, 08 Jul 2024 11:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720464879; x=1721069679; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DrwrSZNvMGAoriYueRi/WdIWR5G3OphAy9AZ4DSwL1g=;
+        b=OKRN0+rEzuVPKREAU++/jgm7YhfX1WzkwX9X0VGJ+A2CW+Qy+98cumf7wOoTufYAfy
+         m8zCG+f0QuHe0Q+BM1uNRaljWYiU4s1qX6WvAIO9EFGgMVbzt469gFz1B2UNku0S7Tef
+         7zbUzSam7icDPqH9Bd92h+nfao46jWmcGoRChqP0QLLNvRMuYt6cGdvIf01BbTB7/8bF
+         Ao2gpLIM4q0cSeCb/RH62wN9Td/GOLNYBsXjUKlOjtTUSr+3yZtE7/32XdTChGPaCQVo
+         r/wzNCB/NLBqzbSFYcvb3cDFFsHby03Kdlz87PzpkrF5QNHcxam8LW6ZvcpKHH1YATt6
+         F4aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720464879; x=1721069679;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DrwrSZNvMGAoriYueRi/WdIWR5G3OphAy9AZ4DSwL1g=;
+        b=EPrxJuBHOzM7HH6I3MgaVjTQEe7EwReCEAAUk6x4orYZWEl8rxVS6sNKPHGDA9AZFJ
+         P51y1zCoM0HM1+wTV/6VvD4EWQKF5oWMnbLNCZDjWt+4R5PYNCqnfV+EPK0whOs2dOLd
+         ynEDG7lt0DTOuUQPQ70ejS0NIS8kgoPKF4ksXR46FwnL/U/BBXRtHjhlVNa8bzDdyyLB
+         AH6CW9pCJHxAkQmo6yY6D1QbyIEAfAZU3Nz1BETvlOCiXtWM0TJaqrusbpTm2Fdj9LRL
+         weIjAHSGaLwTEqGkOmhB1F9dHt1Uo0OgHPwQwCwFCdfAUJPaJMm9aJwnnta0lhv+Cplt
+         slNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmDAuqL/WO+3EjblXWhzloCxEwFgT0dk3YQOdZ6Tv4qN0cZAOcddneO2NZNqYdm3FmD4GQqs5rXvgpoefQFDLBzS/fu3usjVdrA5MIUlB8DdD0Asd6k/e/D3rcxiRJiZl3r0k7
+X-Gm-Message-State: AOJu0YwqZdNfSMwBAU/7AKPnl4itkKEqzdcFjJeyI5t/N6TU312sBs8l
+	rNsibO8rKtXu9QvujI55hdLGHSXQmL8ML8O0fM54Yj3X195jDTQpBIrQkdClCz9C5lbXFziSuuz
+	5KWllWjzLuTnBwK2OVyFqOHlKf4g=
+X-Google-Smtp-Source: AGHT+IEgL46EF2dn+FdA01ybKVdNaS0i4+uzOs1JMWI/WcEC03yLfOeL6S3+rwEfWqBfebzSi6vfvhZ6pMRwViqGcEo=
+X-Received: by 2002:a05:6871:294:b0:254:94a4:35e2 with SMTP id
+ 586e51a60fabf-25eaec980d0mr175364fac.59.1720464878633; Mon, 08 Jul 2024
+ 11:54:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <cover.1720146231.git.tanggeliang@kylinos.cn> <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
+In-Reply-To: <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 8 Jul 2024 11:54:26 -0700
+Message-ID: <CAEf4BzZ=df1LZrNh90UXURm0DOm1D12MkWKF+D6uTsiQG4rsDg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/6] selftests/bpf: Skip ENOTSUPP in ASSERT_OK
+To: Geliang Tang <geliang@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Adrian Moreno <amorenoz@redhat.com> writes:
-
-> There are a couple of places where the test script "sleep"s to wait for
-> some external condition to be met.
+On Thu, Jul 4, 2024 at 7:38=E2=80=AFPM Geliang Tang <geliang@kernel.org> wr=
+ote:
 >
-> This is error prone, specially in slow systems (identified in CI by
-> "KSFT_MACHINE_SLOW=yes").
+> From: Geliang Tang <tanggeliang@kylinos.cn>
 >
-> To fix this, add a "ovs_wait" function that tries to execute a command
-> a few times until it succeeds. The timeout used is set to 5s for
-> "normal" systems and doubled if a slow CI machine is detected.
+> Just like handling ENOTSUPP in test_lsm_cgroup_functional(), this patch
+> adds a new helper test_progs_get_error() to check whether the input error
+> is ENOTSUPP (524) or ENOTSUP (95). If it is, invoke test__skip() to skip
+> the test instead of using test__fail().
 >
-> This should make the following work:
+> Use this helper in ASSERT_OK() before invoking CHECK() macro.
 >
-> $ vng --build  \
->     --config tools/testing/selftests/net/config \
->     --config kernel/configs/debug.config
->
-> $ vng --run . --user root -- "make -C tools/testing/selftests/ \
->     KSFT_MACHINE_SLOW=yes TARGETS=net/openvswitch run_tests"
->
-> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
+>  .../selftests/bpf/prog_tests/lsm_cgroup.c     |  6 +----
+>  tools/testing/selftests/bpf/test_progs.h      | 23 +++++++++++++++++--
+>  2 files changed, 22 insertions(+), 7 deletions(-)
+>
 
-Looks like this does resolve the issue in question on the -dbg
-environment:
+I haven't followed these patch sets, but no, let's not add magical
+special error codes handling into ASSERT_xxx() macros.
 
-https://netdev.bots.linux.dev/contest.html?executor=vmksft-net-dbg&test=openvswitch-sh
-
-Thanks Adrian!  Also, thanks for including the fractional sleep.
-
-Reviewed-by: Aaron Conole <aconole@redhat.com>
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/=
+testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> index 6df25de8f080..6511f5f4a00f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> @@ -102,12 +102,8 @@ static void test_lsm_cgroup_functional(void)
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"),=
+ 0, "prog count");
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 0, "total prog count")=
+;
+>         err =3D bpf_prog_attach(alloc_prog_fd, cgroup_fd, BPF_LSM_CGROUP,=
+ 0);
+> -       if (err =3D=3D -ENOTSUPP) {
+> -               test__skip();
+> -               goto close_cgroup;
+> -       }
+>         if (!ASSERT_OK(err, "attach alloc_prog_fd"))
+> -               goto detach_cgroup;
+> +               goto close_cgroup;
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"),=
+ 1, "prog count");
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 1, "total prog count")=
+;
+>
+> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
+ftests/bpf/test_progs.h
+> index 930a4181dbd9..d1d77785b165 100644
+> --- a/tools/testing/selftests/bpf/test_progs.h
+> +++ b/tools/testing/selftests/bpf/test_progs.h
+> @@ -176,6 +176,23 @@ void test__skip(void);
+>  void test__fail(void);
+>  int test__join_cgroup(const char *path);
+>
+> +static inline bool test_progs_check_errno(int error, int check)
+> +{
+> +       return error =3D=3D -check ||
+> +              (error && errno =3D=3D check);
+> +}
+> +
+> +static inline int test_progs_get_error(int error)
+> +{
+> +       if (test_progs_check_errno(error, ENOTSUP) ||
+> +           test_progs_check_errno(error, ENOTSUPP)) {
+> +               test__skip();
+> +               return 0;
+> +       } else {
+> +               return error;
+> +       }
+> +}
+> +
+>  #define PRINT_FAIL(format...)                                           =
+       \
+>         ({                                                               =
+      \
+>                 test__fail();                                            =
+      \
+> @@ -338,8 +355,10 @@ int test__join_cgroup(const char *path);
+>         static int duration =3D 0;                                       =
+ \
+>         long long ___res =3D (res);                                      =
+ \
+>         bool ___ok =3D ___res =3D=3D 0;                                  =
+     \
+> -       CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",    \
+> -             ___res, errno);                                           \
+> +       if (test_progs_get_error(___res))                               \
+> +               CHECK(!___ok, (name),                                   \
+> +                     "unexpected error: %lld (errno %d)\n",            \
+> +                     ___res, errno);                                   \
+>         ___ok;                                                          \
+>  })
+>
+> --
+> 2.43.0
+>
 
