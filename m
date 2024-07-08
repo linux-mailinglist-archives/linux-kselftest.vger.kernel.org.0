@@ -1,99 +1,111 @@
-Return-Path: <linux-kselftest+bounces-13314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13315-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8512292A3FA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 15:47:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8824892A529
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 16:52:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 184E3B2157A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 13:47:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41F97280DCE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 14:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC7F2746D;
-	Mon,  8 Jul 2024 13:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8A31420DF;
+	Mon,  8 Jul 2024 14:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mpE2C+6C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B59413C674;
-	Mon,  8 Jul 2024 13:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55497140363;
+	Mon,  8 Jul 2024 14:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720446430; cv=none; b=leJgItZ7GbJi7Nk5zc5SGun3K5ZQxqkVV9Ctuvvt/kmyAWB+iI/107HTJE1EJk6pJOIMoN4fjfOmgquEynFd2/hkZGwahjdqkb0kXRTppDYCg7jlic6MiW7IYIkVctFEvaXqS0qhTXPZQYNKAp7DfJlkLrYovA6VCeu1Wjho4is=
+	t=1720450362; cv=none; b=XKj9KairqyVReo59Tyu0Kcht7f2lUHWSmyNrog8MGSrIhL4z+x/o1ifNssM1k7s38ViGALVzY5O/e54spfyz5xSc+AbRktvu8Ywcd8vmO9L1T6/Erl4O2YJjTiLrNyhRg/i3TAdns7w5ZNfrBsak1/sFPdr5Z5fTMdB1yYz7FXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720446430; c=relaxed/simple;
-	bh=Z2ybd0Usyw2/wpk/t/F+xiGAID0UDg1H3MGfl9My+tM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ULwpH/46JRE8r5l6HumMHHZPWIMYDW8UUHkSe5+r96e5ZuWzyRTgPmaCLR485JKL5sKB6e+Gi1bxOFlnC8QZP0q8SfQlJIteUvuapvFaxXggKWxP98SVFpMEJGbUas7b/aXHtiR86GXo3TFJbzOFEbRvFfA0mHpfYHf2volwu0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WHlfw48V3zxVbW;
-	Mon,  8 Jul 2024 21:42:32 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
-	by mail.maildlp.com (Postfix) with ESMTPS id AF0F6180AA6;
-	Mon,  8 Jul 2024 21:47:05 +0800 (CST)
-Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 8 Jul 2024 21:47:04 +0800
-From: Zenghui Yu <yuzenghui@huawei.com>
-To: <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <sumit.semwal@linaro.org>, <benjamin.gaignard@collabora.com>,
-	<Brian.Starkey@arm.com>, <jstultz@google.com>, <tjmercier@google.com>,
-	<shuah@kernel.org>, <wanghaibin.wang@huawei.com>, Zenghui Yu
-	<yuzenghui@huawei.com>
-Subject: [PATCH] kselftests: dmabuf-heaps: Ensure the driver name is null-terminated
-Date: Mon, 8 Jul 2024 21:46:54 +0800
-Message-ID: <20240708134654.1725-1-yuzenghui@huawei.com>
-X-Mailer: git-send-email 2.23.0.windows.1
+	s=arc-20240116; t=1720450362; c=relaxed/simple;
+	bh=SWfxqNvEQHUIRLFcSx1RPYodXo0um4YMYeD8T3xN4q4=;
+	h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=HARGEtGhp3QEBg0HnjmvEJJlxCuzbVuhaIAv4G7DsydzADFHpfBsuv006JrIpjM+XIPdtwWYZv+7V4F6K6MHT83hVZ1u6D/QfMvCRJOJWGlm1zunT4GbDG+4G8TJekZkA1PTywyH+acQhpXk1NSHAZRzLz2t74w0IFpBi4Jav8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mpE2C+6C; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Gr9nzYTnjLIvdAktR9C6XyzRXUeRKDF2h70qQ3BO/nM=; b=mpE2C+6C9pLKrTktJ69VTKHbs2
+	jZioccEXrQFzU7I29QZ21iv0aM+0OjXpQb2y8AFA5qt3woXNvpzjKV3cIkxPImCrzvuQEZi2/wRqc
+	kZ45W371v028sO/97RVBdJLX5Cccb74Gx5h9cPSjuxV+eoUTlPzL+k3K0lMvQ0CTTzBAa2pip1U8z
+	0CjxUsmsWXPQKYP3JyeeKucare0Ui+Lkj9RvVV749jxJaN0Z6lmzlRNu+mZO618pbzs8rcnYaH7Ov
+	nDGgLLZRHZL3899HEvR/md53H+gIF07zc+FG1JUlJVJiZWI3lNEdbkvAtR/tAEmvdqwaNPszdQQKB
+	BRglPnfg==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sQpjE-0008Bk-R6; Mon, 08 Jul 2024 16:52:32 +0200
+Received: from [178.197.248.35] (helo=linux.home)
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sQpjD-000Mue-0M;
+	Mon, 08 Jul 2024 16:52:31 +0200
+Subject: Re: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
+To: Puranjay Mohan <puranjay@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, puranjay12@gmail.com
+References: <20240705145009.32340-1-puranjay@kernel.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c0ef7ecf-595b-375a-7785-d7bf50040c6b@iogearbox.net>
+Date: Mon, 8 Jul 2024 16:52:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600007.china.huawei.com (7.193.23.208)
+In-Reply-To: <20240705145009.32340-1-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27330/Mon Jul  8 10:36:43 2024)
 
-Even if a vgem device is configured in, we will skip the import_vgem_fd()
-test almost every time.
+On 7/5/24 4:50 PM, Puranjay Mohan wrote:
+> fexit_sleep test runs successfully now on the CI so remove it from the
+> deny list.
 
-  TAP version 13
-  1..11
-  # Testing heap: system
-  # =======================================
-  # Testing allocation and importing:
-  ok 1 # SKIP Could not open vgem -1
+Do you happen to know which commit fixed it? If yes, might be nice to have it
+documented in the commit message.
 
-The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
-version information but leave the name field a non-null-terminated string.
-Terminate it properly to actually test against the vgem device.
-
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
----
- tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index 5f541522364f..2fcc74998fa9 100644
---- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-+++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -32,6 +32,8 @@ static int check_vgem(int fd)
- 	if (ret)
- 		return 0;
- 
-+	name[4] = '\0';
-+
- 	return !strcmp(name, "vgem");
- }
- 
--- 
-2.33.0
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>   tools/testing/selftests/bpf/DENYLIST.aarch64 | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> index e865451e90d2..2bf981c80180 100644
+> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
+> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+> @@ -1,6 +1,5 @@
+>   bpf_cookie/multi_kprobe_attach_api               # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
+>   bpf_cookie/multi_kprobe_link_api                 # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
+> -fexit_sleep                                      # The test never returns. The remaining tests cannot start.
+>   kprobe_multi_bench_attach                        # needs CONFIG_FPROBE
+>   kprobe_multi_test                                # needs CONFIG_FPROBE
+>   module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
+> 
 
 
