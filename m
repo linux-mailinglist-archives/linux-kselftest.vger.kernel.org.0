@@ -1,98 +1,130 @@
-Return-Path: <linux-kselftest+bounces-13331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13333-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53FA492A9FE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 21:42:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8CEF92AA0A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 21:47:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10524284D13
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 19:42:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F9C21F2162A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 19:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E7714C58E;
-	Mon,  8 Jul 2024 19:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698BB14A60C;
+	Mon,  8 Jul 2024 19:47:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMTv13EM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gylCo7ed"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D8214B95B;
-	Mon,  8 Jul 2024 19:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E93146016;
+	Mon,  8 Jul 2024 19:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720467746; cv=none; b=rUMIRL1RG+AO3QBja9c0PY2Xv4KU3Zz97/j9M2leKWIjpMnp0xm4Jac5TYz07kKTMjwQO8Ro04koeMFOXIKBLCLmihXfEAA4uLzkabSIQx97/wXXuGC5iETuQZg6UKD7V08ravMc7wtqiPYQr9HUsAeAxbc5MEyO1yfDi3bvXiE=
+	t=1720468070; cv=none; b=lB+cIE0T3x2lyHBFnOnODrFIaz58WLzdpKxKnj61SYLhW+q2BThNDV4zDHtMujkYLCR/OKGLVZZDR8NzWBLNdosL/nUVKBsaPWiNZ821s3lVQ7nhfezQjPn2L0erCoBVzmImNd3mBdW9xiUhOKF5+IJTP0X5mIW8T2dvXmfhj2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720467746; c=relaxed/simple;
-	bh=UYEkDikTrK4yUGHNdvG5X7alA+OBfYc03Q1rcRBDxok=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=RHpep7a6+IX/HndLt5DCuu87HXA4WeFQrEvtF+YzeGjs2dN90gTtI2xQtVAOpYivr4N0wdkS9NGXSN58LluEOFd/xFrUl70ekGgLpJC6OvP+wP5IJjeTGZi/IAItMqgWqwKVbotTyDBK5fc4kVg8fNL9adov2/4dIGCGH/+N1rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMTv13EM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7924C3277B;
-	Mon,  8 Jul 2024 19:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720467746;
-	bh=UYEkDikTrK4yUGHNdvG5X7alA+OBfYc03Q1rcRBDxok=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bMTv13EMbkIVJRwr7CSLXUVzWa2fnxM1psAVIok12DIc+BoO+bqy5qhjS52mkK3TV
-	 wr0gDxVdbpcZmiYpWGPSys0n0bQZtOhPdLBf50hfjWMGufeMzfFrCZ9RAO3KlpDHw1
-	 NLyIdD2EmH6N2g6kgHL805hRjJO0+/CX64rKO2ELYRqtUJmOKIei/bdWiu6py5QNr/
-	 760c/u28g+h59M49Z5bNa+5IeRWZyDGZ5lHrqluZYPtZu5ETI9NzJXETTI6Slh57Iq
-	 6MOBwY2spaUDI6eCYLKTXmuNVb6lVV6LkE9H8Q7Zv668Fth7yEqBNKQWxytQ+fJuKN
-	 art3T7LQEkXfA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2038DF3713;
-	Mon,  8 Jul 2024 19:42:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1720468070; c=relaxed/simple;
+	bh=+idKtDjFWW5fqejAcGY81KlXjU0hAWtBznBLhDe2Yfg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=em1F0A7GXU/YhqwhneOZjfOFdpFfCkahrOolF30m9FqKIJ5o8WJMQwQCDq4VBzmpd4YcEqaE6LWoGTNiwisPcZEQu4WUukrQ+wGqQ8U88U+HO2F9JCSGZzdyo/8RIX8geu/Ip9MOP97KBKvotG+fCILiXVLRVq6O7TedOvMN3ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gylCo7ed; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70b0d0fefe3so2054668b3a.2;
+        Mon, 08 Jul 2024 12:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720468068; x=1721072868; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NgbXhf3pDi2we/WS/SNjA0Rotql0/JZdyvgd0kN5iZ4=;
+        b=gylCo7edTkix0lVhMmipllZzaXdau40BGor4JzTyS0cwu3cxOlODmMiLhjtlAgNEH4
+         yfaHBE//ra0Y7NRiNSZ5+PptCxsBv1DzpChfAEYaEkxKkdh2KyRwJIkJysGpN3aY2iw7
+         4sC/3AWaAQfwNDN2rp8S3QQczYyLkKwmwUbBc/QW4hLJz5DIFc1QHR87GFP/1WpddIyG
+         RKGOWqOlpE1hcDAG+qQY7ZY9qoH2Q09Gi27qeAeW7umAs33PukJHe1fJ2NswC84JJWiJ
+         PJ5tcQYBtahzVOpoK2AeHloefsYpCYNE5pCWINCxp91R6xHfGcTfqZ3afRcYoxZBeQxH
+         tsRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720468068; x=1721072868;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NgbXhf3pDi2we/WS/SNjA0Rotql0/JZdyvgd0kN5iZ4=;
+        b=InJIWamgt6wUVMoRRrye1boG1abskoSFhp7CMeRT08IqBt3GroHDbBslCi7Z2hPEoV
+         Z706t9aIWrPA4yjKuzcZkcYKlAe/rkSd4JqIx7YCBZ1x5gBv5Yvr2x63SMwide7yqcP3
+         IL9vVKCeLiGyhhC1hJodJo1PRjQdviafqNHtWqt6hgKEkIKdF2ZLc4NM3u3S+UTFy1DW
+         RvVTKQ7cpcrhPe7MxVCTThAcSUXczQgy5v1jMhZocUBe9CQkDvWNAjmLPksSqrYHkWhr
+         fgt/bVi9hFhOeLRd2Sp+I2NY5+/zYCdujESENoy9vsVoGjUMN11naaOSNNcMesS5cAiS
+         nGaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHHhlJa1C8VtQNDujgacZz8erFaZalCVb3iQG7+nelDbfc8J/vVUkYY9zLgYXGNZmvRdbM1APPQFnWcE6QqZdJ4PvjE1tmfHpH1BYKWoNFerN6lnkWXUFSEmx5MDp2M4N0qV4C
+X-Gm-Message-State: AOJu0YxlFeMd9YvXcXja6yYQkWQc3MLRO8TbO4y3N39WNZHpgYLuPj58
+	Je/OBDFHVu6mYHoRBH3+rs/LT6l3OEu6gzFL7VHwkBVtpx/xqtOc
+X-Google-Smtp-Source: AGHT+IHVT7OrbB0hyz5rmkWRD3dhD4RlTNxveGyU4FVfdNioybYv9YBO2Cfl0mzytcb96GLGa70Iyw==
+X-Received: by 2002:a05:6a21:3393:b0:1be:ce69:ca5f with SMTP id adf61e73a8af0-1c29820b7dbmr525967637.1.1720468067874;
+        Mon, 08 Jul 2024 12:47:47 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a951825sm8597239a91.14.2024.07.08.12.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 12:47:47 -0700 (PDT)
+Message-ID: <57342e8b8ca1c82d57d78335a73d465f16a41811.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/6] selftests/bpf: Skip ENOTSUPP in
+ ASSERT_OK
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Geliang Tang
+	 <geliang@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  Geliang Tang
+ <tanggeliang@kylinos.cn>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Mon, 08 Jul 2024 12:47:41 -0700
+In-Reply-To: <CAEf4BzZ=df1LZrNh90UXURm0DOm1D12MkWKF+D6uTsiQG4rsDg@mail.gmail.com>
+References: <cover.1720146231.git.tanggeliang@kylinos.cn>
+	 <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
+	 <CAEf4BzZ=df1LZrNh90UXURm0DOm1D12MkWKF+D6uTsiQG4rsDg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Small API fix for bpf_wq
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172046774585.17805.5648980759770927798.git-patchwork-notify@kernel.org>
-Date: Mon, 08 Jul 2024 19:42:25 +0000
-References: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
-In-Reply-To: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
 
-Hello:
+On Mon, 2024-07-08 at 11:54 -0700, Andrii Nakryiko wrote:
+> On Thu, Jul 4, 2024 at 7:38=E2=80=AFPM Geliang Tang <geliang@kernel.org> =
+wrote:
+> >=20
+> > From: Geliang Tang <tanggeliang@kylinos.cn>
+> >=20
+> > Just like handling ENOTSUPP in test_lsm_cgroup_functional(), this patch
+> > adds a new helper test_progs_get_error() to check whether the input err=
+or
+> > is ENOTSUPP (524) or ENOTSUP (95). If it is, invoke test__skip() to ski=
+p
+> > the test instead of using test__fail().
+> >=20
+> > Use this helper in ASSERT_OK() before invoking CHECK() macro.
+> >=20
+> > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> > ---
+> >  .../selftests/bpf/prog_tests/lsm_cgroup.c     |  6 +----
+> >  tools/testing/selftests/bpf/test_progs.h      | 23 +++++++++++++++++--
+> >  2 files changed, 22 insertions(+), 7 deletions(-)
+> >=20
+>=20
+> I haven't followed these patch sets, but no, let's not add magical
+> special error codes handling into ASSERT_xxx() macros.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I agree with Andrii here.
+You might use -d (denylist) option for test_progs to filter out test
+cases you know are not supported.
 
-On Mon, 08 Jul 2024 11:52:56 +0200 you wrote:
-> I realized this while having a map containing both a struct bpf_timer and
-> a struct bpf_wq: the third argument provided to the bpf_wq callback is
-> not the struct bpf_wq pointer itself, but the pointer to the value in
-> the map.
-> 
-> Which means that the users need to double cast the provided "value" as
-> this is not a struct bpf_wq *.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: helpers: fix bpf_wq_set_callback_impl signature
-    https://git.kernel.org/bpf/bpf-next/c/f56f4d541eab
-  - [bpf-next,v2,2/2] selftests/bpf: amend for wrong bpf_wq_set_callback_impl signature
-    https://git.kernel.org/bpf/bpf-next/c/16e86f2e8199
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+[...]
 
