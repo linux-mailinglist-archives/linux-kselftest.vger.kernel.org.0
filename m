@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6CD0929ACD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 04:30:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA479929AD1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 04:30:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7A451C2096B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 02:30:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EC451F211FE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 02:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED311C17;
-	Mon,  8 Jul 2024 02:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A751524F;
+	Mon,  8 Jul 2024 02:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvBMcH6s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6JuFKcK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03931184F;
-	Mon,  8 Jul 2024 02:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40183538A;
+	Mon,  8 Jul 2024 02:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720405826; cv=none; b=db4sdJ2xojLqWgpOD8K5LclRuh2RXLJtCR07bUMkbNaO1rKSjuUpmMYa+XLOtRpqfiwfSiErHqAvXRe2JlRXBDpb2gP8PC+8p+uP0zPNwd8h+Cl4nY/qydzKymISoHCqdSyvOVhcs0kC8zNsgCoe95wlo+H749VRsDlpVr1Z76M=
+	t=1720405832; cv=none; b=j3uP8wZJXbmh6vGx7Yi/x45RgWh9kqcJSib8hRO6mTA6PQn+LA+S5/KQDRW810stiBQh9wje5rfQmEdmr/SYrsRbKHbPohTA/BuZkXVCWtx/30XDIyFnabuhKT2j5fUq0CwbUPILAsPDsIINXK3t5jcNQzIK75/kYg5c9hWl4Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720405826; c=relaxed/simple;
-	bh=Qq9hn27IvadosGSaFEY1IhNuXDt86aHiR/dUXu2AMTk=;
+	s=arc-20240116; t=1720405832; c=relaxed/simple;
+	bh=rRP0ZiPRY0W17MVOWxZwWV5aU8LBd+K/G2ydWK7Wq+o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SViJaJO2rWLNxFHDMgCxGxbANiWpssWDReU9EEA/He2+Gp0gJDjn04raardrS8AezXjJfrxUW/rro5sp5a3bTgEY3W34dWuBvjkNycC4KMuOh4Mjzl/RBRLwUROaRRtbbUUxp4e+5RDT8HRg60qiBmwGySayFTHaheiDXWUyf+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvBMcH6s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C39EC4AF0E;
-	Mon,  8 Jul 2024 02:30:19 +0000 (UTC)
+	 MIME-Version; b=HEpDpxrBi88j2Wbg88oE0cYeLvXdPDfj3+o2g7VAIQxhxpTjxgh8p5LJRvL0qIBBzA+YXQl+CoX7sBIkUEHEeuOI5kFl+kVph7S05SupwVrTVOdWekvnQk5HTCfXaZP90pdSDn5O4VbOCmc9AFEexQnPHrigdb8i6OYZFWClVUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6JuFKcK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB85C3277B;
+	Mon,  8 Jul 2024 02:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720405825;
-	bh=Qq9hn27IvadosGSaFEY1IhNuXDt86aHiR/dUXu2AMTk=;
+	s=k20201202; t=1720405831;
+	bh=rRP0ZiPRY0W17MVOWxZwWV5aU8LBd+K/G2ydWK7Wq+o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DvBMcH6snhujarZnl0iZUu1eGJ8IsjBTrEOAtl5knifC55cEMg1520ZqBzH8nJxJI
-	 k9JyPHPsYW34c0MFQDsFJfIVgm6OiktDVXg55UGsQCEgZh3ANDQuUOYCzhKe4YYjpw
-	 Qksm+5jyahozfAUV9+vSPS71kjK+FZ9eBku4pDBJ7/u8ltsWrsnOuaVwyg5MeHhLtI
-	 lzPoQTVtYr9ISZEoAGEbjnrAkIoEeYx+jpugCXlEW/qoGceyl5HPupuCvZOnGN53t+
-	 FzRO0FMTOAHFKvY2PEeE+mOydqz+DXA3ZYmNqU0XO0z4cViaPM6iyh0hVbPRVXONch
-	 yR+1R1ZPNlEAQ==
+	b=f6JuFKcKg1FWqh2nKb4KSB6piD37DM6ouwUy8vi29FPd2TrxbRwW3qYw0KeYqM2YQ
+	 N7dbiS2lFbCDaVQcY+NIHmkRXzqRHX57VswimH7UT7YarTraF/Q3t4qBDjQCF1M6IK
+	 axrFsCeKBZ11WRsuh0XjHbGmKBAtqfzHVhkWzdxUIo91CnXUhRUMX3DT0d80lfZFxD
+	 8y08DBBgHhvrhXXYccUXzyDFSiwm47q7HSg7arwllA15gd8yxWEtgWJH/cN00UOffU
+	 Cb3zlxbAKYZUnZRa5M+Ng1BHMGG4t0ilW80wrRCcdU2XOjaYIJDhAYQauKe9h70wN4
+	 y+yhRK044UEOA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v10 03/12] selftests/bpf: Use connect_to_fd_opts in sockmap_ktls
-Date: Mon,  8 Jul 2024 10:29:41 +0800
-Message-ID: <20077624db9fbde04addd639f36ccfffbda5e033.1720405046.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v10 04/12] selftests/bpf: Use make_sockaddr in sockmap_ktls
+Date: Mon,  8 Jul 2024 10:29:42 +0800
+Message-ID: <8de45e7b849e086e4b91ee30c2896087f4e73a27.1720405046.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720405046.git.tanggeliang@kylinos.cn>
 References: <cover.1720405046.git.tanggeliang@kylinos.cn>
@@ -75,48 +75,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Use public network helper connect_to_fd_opts() instead of open-coding it
-in prog_tests/sockmap_ktls.c. This can avoid duplicate code.
+This patch uses public helper make_sockaddr() exported in network_helpers.h
+instead of open-coding in sockmap_ktls.c. This can avoid duplicate code.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/sockmap_ktls.c        | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_ktls.c      | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-index 32be112967a5..a794aa688ab5 100644
+index a794aa688ab5..3c223601e8b6 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-@@ -24,26 +24,16 @@ static void test_sockmap_ktls_disconnect_after_delete(int family, int map)
- 	struct network_helper_opts opts = {
- 		.backlog = SOMAXCONN,
- 	};
--	struct sockaddr_storage addr = {0};
--	socklen_t len = sizeof(addr);
- 	int err, cli, srv, zero = 0;
+@@ -59,23 +59,11 @@ static void test_sockmap_ktls_update_fails_when_sock_has_ulp(int family, int map
+ {
+ 	struct sockaddr_storage addr = {};
+ 	socklen_t len = sizeof(addr);
+-	struct sockaddr_in6 *v6;
+-	struct sockaddr_in *v4;
+ 	int err, s, zero = 0;
  
- 	srv = start_server_str(family, SOCK_STREAM, NULL, 0, &opts);
- 	if (!ASSERT_GE(srv, 0, "start_server_str"))
+-	switch (family) {
+-	case AF_INET:
+-		v4 = (struct sockaddr_in *)&addr;
+-		v4->sin_family = AF_INET;
+-		break;
+-	case AF_INET6:
+-		v6 = (struct sockaddr_in6 *)&addr;
+-		v6->sin6_family = AF_INET6;
+-		break;
+-	default:
+-		PRINT_FAIL("unsupported socket family %d", family);
++	err = make_sockaddr(family, NULL, 0, &addr, &len);
++	if (!ASSERT_OK(err, "make_sockaddr"))
  		return;
+-	}
  
--	err = getsockname(srv, (struct sockaddr *)&addr, &len);
--	if (!ASSERT_OK(err, "getsockopt"))
--		goto close_srv;
--
--	cli = socket(family, SOCK_STREAM, 0);
--	if (!ASSERT_GE(cli, 0, "socket"))
-+	cli = connect_to_fd_opts(srv, SOCK_STREAM, NULL);
-+	if (!ASSERT_GE(cli, 0, "connect_to_fd_opts"))
- 		goto close_srv;
- 
--	err = connect(cli, (struct sockaddr *)&addr, len);
--	if (!ASSERT_OK(err, "connect"))
--		goto close_cli;
--
- 	err = bpf_map_update_elem(map, &zero, &cli, 0);
- 	if (!ASSERT_OK(err, "bpf_map_update_elem"))
- 		goto close_cli;
+ 	s = socket(family, SOCK_STREAM, 0);
+ 	if (!ASSERT_GE(s, 0, "socket"))
 -- 
 2.43.0
 
