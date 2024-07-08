@@ -1,143 +1,268 @@
-Return-Path: <linux-kselftest+bounces-13329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 447D892A9C0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 21:24:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C7F492A9D6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 21:32:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E98B91F227DC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 19:24:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C02A21F2279B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 19:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B6014BFB4;
-	Mon,  8 Jul 2024 19:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SvqFVjo/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A3D1CD1F;
+	Mon,  8 Jul 2024 19:32:16 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A635E146D74
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 19:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7276C79FD;
+	Mon,  8 Jul 2024 19:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720466685; cv=none; b=HNyDC9p6m4legu6nWXTDY+p3UGmB4b15gnwpk4qCl7XT0D6hhju9LgGA3F7V7HnG4/lGzzbZfaR/Ekrq+Lczfvn3SNvQQdajsj32YJ3UOI12nMyXpRT7hzHyQtTL69jGGZ0APd0ToBxB5B6AABH8oZUZcVeuZnj4a16DLQNpCnE=
+	t=1720467136; cv=none; b=C1TELwx4ZA67IXIFLy/pyBih3zORZMNLmhQIDeXohRp7fQD5I5tLcXkdoyy3FzUx2S9Wt8ErcaSJCdgSNygx+c2oeOIC/iWJNH9Zloz1JJWvTxtqReaC1inIzdV7c1p2yK9WwYWeCB5Hod4C9DxcdIp2bpvynnzBN+b6Ie+oovM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720466685; c=relaxed/simple;
-	bh=esUHA7YqelnRIjhjJNwGHNiw6iHbBK0FPgjKF0ZFwLg=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B1mW1KlNClBpCn9lKC2efEUjuvAZi7NcdikFYA2B8+7AxpTKLlDnbJwfKHSVOx4wfl+n5HMPwNX2zNqbypknX/5WBwT5cEvlvBWxsmrs456X38wOkh+Ruus9XOLQ9odcTb8AaYVZLybG6Y8HZ8s4fulaD5BivgRd1SPWn5HdbYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SvqFVjo/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720466682;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LuYwWDyVZ0vRCoqz1m7vBYFnvowimcuILsFlMzl9hOU=;
-	b=SvqFVjo/APlHyxqoK64CPqFX4ogIM7pYa9H1bW0CwdSpKQ2yhcQkTRMQVM4aqaEnDQbY6l
-	gHfmWtM+2AhG6VrgK6gdUXakk0QXSs+PVsAvxwSaGJ2rlnU1XbVDSA52t2kUZLfx9t23hQ
-	+rX4rRIYVUzPYmYrp/MdACuxRONy2fE=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-495-ntSEyLBVN5q0K4tlN9Wf7w-1; Mon, 08 Jul 2024 15:24:41 -0400
-X-MC-Unique: ntSEyLBVN5q0K4tlN9Wf7w-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6b5d97b7431so52765546d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2024 12:24:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720466680; x=1721071480;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
-         :mime-version:references:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LuYwWDyVZ0vRCoqz1m7vBYFnvowimcuILsFlMzl9hOU=;
-        b=VQfVOTPHeeysv2+ec5SmzK5F57t0ilauy344QJalePqcIg1PKj8gpSK+p+adRd/3Ye
-         +O8421cbMlgzTzdUw2jjmAL+rNzZGy9cNKg9eWCjZop22FR+rXimFyNKwKCvM+IolxGV
-         jJZptXpAx9qPDRHqieH5Ej7D82RJZ5b+3S7nPCFXC70BLcQJyCIRkoYasPzarnWQ0nc4
-         KzPURMJ+ygS9ZNi7EWAZsCuIVzqfHM7pQVrF2/BcBI702PPeuCctoHWMaWRH/2CCgFL1
-         IPaFx7SGy2K9Cza2u0BpppUKmISoIAbUUJFGRSz20LnkXkjQmp/beNn1sm5GLlGO+W5m
-         eApg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8Pa2JWLqsagXNpdKGscFuDiECpnFj1DzwJcxrKZbCyf68HHN/3WwqgwSVuLpvMFFyArckOwbAkIGxwpVclnoQO/8nBGZykj/nHcnSR8h5
-X-Gm-Message-State: AOJu0Yw8PWZWtcrUYzwhSkYEcS9zdlfqAcxmCckrEo3g0XK0nmtwqene
-	yYgTH9nt+o8raSNP6P04H+0qk6Z94mKJwwvN4SqeoQpuHSw1UbMQaO//nks23WYlANWyh3dzxXn
-	j8z6oOgFrjB2ci4XOSSG+ph1m0GlxgOFL005q+Et6J1Qlx9WFaZ902Rvmf2eyNIgJXvB1T9V81T
-	1UXRNmgGqRK9tJbAjAR4ACjvHpu6AuTxfr/CkfbkKQ
-X-Received: by 2002:a05:6214:48e:b0:6b5:e2fc:d5c6 with SMTP id 6a1803df08f44-6b61c22cc31mr8614196d6.61.1720466680562;
-        Mon, 08 Jul 2024 12:24:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFjBC9F3BNRZrjv2Kz64U1umj4qHEyyN/HuOLhjIbvplQlAP5m5LIbBFIXsZHKpSPpXldXTReEQ+spKQIXsCo0=
-X-Received: by 2002:a05:6214:48e:b0:6b5:e2fc:d5c6 with SMTP id
- 6a1803df08f44-6b61c22cc31mr8613946d6.61.1720466680196; Mon, 08 Jul 2024
- 12:24:40 -0700 (PDT)
-Received: from 311643009450 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 8 Jul 2024 19:24:39 +0000
-From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
-References: <20240708134451.3489802-1-amorenoz@redhat.com> <f7tzfqrn3ha.fsf@redhat.com>
+	s=arc-20240116; t=1720467136; c=relaxed/simple;
+	bh=f8U5dwa1tcDAE9u6GF0FKU/4zaD9eRSS/JNLzhMMRfM=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=s7QnTTPSuRrDq9ZOXUl83nS0k9rErDANshNHR0Zy20jMj2YjKjxGjO7qaYD7hFnfeWVWL9d75hTGmDB/WCIKlFsmEecSmI7UCeVlD9xmOJ+236nHXdqrIKmJmntlFR7iF57WiiG/7XKCFFskXHzOazWAPYbqpu0rPJ7ffLrGq7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=ovn.org; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ovn.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D5BD420002;
+	Mon,  8 Jul 2024 19:31:59 +0000 (UTC)
+Message-ID: <0fd40aed-04d1-43a3-ab3d-c7459a63f753@ovn.org>
+Date: Mon, 8 Jul 2024 21:31:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <f7tzfqrn3ha.fsf@redhat.com>
-Date: Mon, 8 Jul 2024 19:24:39 +0000
-Message-ID: <CAG=2xmOMHZf74NqRtS1zhPpNNcWKdgqns3ivW2kqX0pq0Y31XQ@mail.gmail.com>
-Subject: Re: [PATCH v1] selftests: openvswitch: retry instead of sleep
-To: Aaron Conole <aconole@redhat.com>
-Cc: netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	dev@openvswitch.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Cc: dev@openvswitch.org, Paolo Abeni <pabeni@redhat.com>,
+ linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ i.maximets@ovn.org, Aaron Conole <aconole@redhat.com>
+Subject: Re: [ovs-dev] [PATCH v1] selftests: openvswitch: retry instead of
+ sleep
+To: Adrian Moreno <amorenoz@redhat.com>, netdev@vger.kernel.org
+References: <20240708134451.3489802-1-amorenoz@redhat.com>
+Content-Language: en-US
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <20240708134451.3489802-1-amorenoz@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: i.maximets@ovn.org
 
-On Mon, Jul 08, 2024 at 02:27:45PM GMT, Aaron Conole wrote:
-> Adrian Moreno <amorenoz@redhat.com> writes:
->
-> > There are a couple of places where the test script "sleep"s to wait for
-> > some external condition to be met.
-> >
-> > This is error prone, specially in slow systems (identified in CI by
-> > "KSFT_MACHINE_SLOW=3Dyes").
-> >
-> > To fix this, add a "ovs_wait" function that tries to execute a command
-> > a few times until it succeeds. The timeout used is set to 5s for
-> > "normal" systems and doubled if a slow CI machine is detected.
-> >
-> > This should make the following work:
-> >
-> > $ vng --build  \
-> >     --config tools/testing/selftests/net/config \
-> >     --config kernel/configs/debug.config
-> >
-> > $ vng --run . --user root -- "make -C tools/testing/selftests/ \
-> >     KSFT_MACHINE_SLOW=3Dyes TARGETS=3Dnet/openvswitch run_tests"
-> >
-> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
-> > ---
->
-> Looks like this does resolve the issue in question on the -dbg
-> environment:
->
-> https://netdev.bots.linux.dev/contest.html?executor=3Dvmksft-net-dbg&test=
-=3Dopenvswitch-sh
+On 7/8/24 15:44, Adrian Moreno wrote:
+> There are a couple of places where the test script "sleep"s to wait for
+> some external condition to be met.
+> 
+> This is error prone, specially in slow systems (identified in CI by
+> "KSFT_MACHINE_SLOW=yes").
+> 
+> To fix this, add a "ovs_wait" function that tries to execute a command
+> a few times until it succeeds. The timeout used is set to 5s for
+> "normal" systems and doubled if a slow CI machine is detected.
+> 
+> This should make the following work:
+> 
+> $ vng --build  \
+>     --config tools/testing/selftests/net/config \
+>     --config kernel/configs/debug.config
+> 
+> $ vng --run . --user root -- "make -C tools/testing/selftests/ \
+>     KSFT_MACHINE_SLOW=yes TARGETS=net/openvswitch run_tests"
+> 
+> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+> ---
+>  .../selftests/net/openvswitch/openvswitch.sh  | 49 ++++++++++++++++---
+>  .../selftests/net/openvswitch/ovs-dpctl.py    |  1 +
+>  2 files changed, 42 insertions(+), 8 deletions(-)
+> 
 
-Nice! I guess the 10s global timeout is enough for now.
+Hi, Adrian.  See a small pile of nitpicks below.
 
->
-> Thanks Adrian!  Also, thanks for including the fractional sleep.
->
-> Reviewed-by: Aaron Conole <aconole@redhat.com>
->
+None of them are blocking from my perspective, except for a typo.
+Just listed them since there is a typo anyway.
 
-Thanks.
+> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> index bc71dbc18b21..83407b42073a 100755
+> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> @@ -11,6 +11,7 @@ ksft_skip=4
+>  PAUSE_ON_FAIL=no
+>  VERBOSE=0
+>  TRACING=0
+> +WAIT_TIMEOUT=5
+>  
+>  tests="
+>  	arp_ping				eth-arp: Basic arp ping between two NS
+> @@ -29,6 +30,32 @@ info() {
+>  	[ $VERBOSE = 0 ] || echo $*
+>  }
+>  
+> +ovs_wait() {
+> +	info "waiting $WAIT_TIMEOUT s for: $@"
+> +
+> +	"$@"
+> +	if [[ $? -eq 0 ]]; then
 
-I just realized that I've missed the target branch ("net-next") in the
-subject. I'll wait a bit and respin to fix that.
+Maybe just 'if "$@"; then' ?
 
-Adri=C3=A1n
+> +		info "wait succeeded inmediately"
+
+* immediately
+
+> +		return 0
+> +	fi
+> +
+> +	# A quick re-check helps speed up small races in fast systems.
+> +	# However, fractional sleeps might not necessarily work.
+> +	local start=0
+> +	sleep 0.1 || { sleep 1; start=1; }
+> +
+> +	for (( i=start; i<WAIT_TIMEOUT; i++ )); do
+
+for i in $(seq ${start} ${WAIT_TIMEOUT}); do
+
+Will need to initialize start to 1 and 2.
+
+It works, but seems like an unnecessary use of non-POSIX constructs.
+
+> +		"$@"
+> +		if [[ $? -eq 0 ]]; then
+
+if "$@"; then
+
+> +			info "wait succeeded after $i seconds"
+> +			return 0
+> +		fi
+> +		sleep 1
+> +	done
+> +	info "wait failed after $i seconds"
+> +	return 1
+> +}
+> +
+>  ovs_base=`pwd`
+>  sbxs=
+>  sbx_add () {
+> @@ -278,20 +305,21 @@ test_psample() {
+>  
+>  	# Record psample data.
+>  	ovs_spawn_daemon "test_psample" python3 $ovs_base/ovs-dpctl.py psample-events
+> +	ovs_wait grep -q "listening for psample events" ${ovs_dir}/stdout
+>  
+>  	# Send a single ping.
+> -	sleep 1
+>  	ovs_sbx "test_psample" ip netns exec client ping -I c1 172.31.110.20 -c 1 || return 1
+> -	sleep 1
+>  
+>  	# We should have received one userspace action upcall and 2 psample packets.
+> -	grep -E "userspace action command" $ovs_dir/s0.out >/dev/null 2>&1 || return 1
+> +	ovs_wait grep -q "userspace action command" $ovs_dir/s0.out
+> +	[[ $? -eq 0 ]] || return 1
+
+Why checking separately and not one the same line with || return 1 ?
+Also double brackets seem unnecessary.
+
+>  
+>  	# client -> server samples should only contain the first 14 bytes of the packet.
+> -	grep -E "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" \
+> -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
+> -	grep -E "rate:4294967295,group:2,cookie:eeff0c" \
+> -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
+> +	ovs_wait grep -qE "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" $ovs_dir/stdout
+> +	[[ $? -eq 0 ]] || return 1
+> +
+> +	ovs_wait grep -q "rate:4294967295,group:2,cookie:eeff0c" $ovs_dir/stdout
+> +	[[ $? -eq 0 ]] || return 1
+
+Same for above two.
+
+>  
+>  	return 0
+>  }
+> @@ -711,7 +739,8 @@ test_upcall_interfaces() {
+>  	ovs_add_netns_and_veths "test_upcall_interfaces" ui0 upc left0 l0 \
+>  	    172.31.110.1/24 -u || return 1
+>  
+> -	sleep 1
+> +	ovs_wait grep -q "listening on upcall packet handler" ${ovs_dir}/left0.out
+> +
+>  	info "sending arping"
+>  	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
+>  	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
+> @@ -811,6 +840,10 @@ shift $(($OPTIND-1))
+>  IFS="	
+>  "
+>  
+> +if test "X$KSFT_MACHINE_SLOW" == "Xyes"; then
+> +	WAIT_TIMEOUT=10
+> +fi
+
+Should this be done closer to the first initialization of WAIT_TIMEOUT ?
+
+> +
+>  for arg do
+>  	# Check first that all requested tests are available before running any
+>  	command -v > /dev/null "test_${arg}" || { echo "=== Test ${arg} not found"; usage; }
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index 1e15b0818074..8a0396bfaf99 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -2520,6 +2520,7 @@ class PsampleEvent(EventSocket):
+>      marshal_class = psample_msg
+>  
+>      def read_samples(self):
+> +        print("listening for psample events", flush=True)
+>          while True:
+>              try:
+>                  for msg in self.get():
 
 
