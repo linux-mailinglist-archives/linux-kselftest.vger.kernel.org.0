@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-13326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C577792A953
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 20:54:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7937692A95A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 20:56:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 463491F223E8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 18:54:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E97431F22653
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 18:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9954E14BF8A;
-	Mon,  8 Jul 2024 18:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE5714B975;
+	Mon,  8 Jul 2024 18:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKRN0+rE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzIZ+NVQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F3714A4F0;
-	Mon,  8 Jul 2024 18:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F091DFEB;
+	Mon,  8 Jul 2024 18:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720464881; cv=none; b=E8mfdTzv+XYGAQ3sKFtQe/iW/N6iEd+MDD4ISttu49wdAhZ42fcq4vBJiuMvUeBpnD4zqsrbfAypBmjI0Ncm8hRC7ILlNpNoXEE7pxK4t4huu0VMt+SMDRfbmymO4R03CWqZ/UrLcDA62ti0NrneyZ7uYdEynYZ0JDCk3ZxdfxM=
+	t=1720464993; cv=none; b=JTn+C2SRgrQSfjHzqheNpvJxET92jIVoQ3dNTBE3S6Z9z690xelCAuMepwWZNoHUOMteR1aRBjaCELCfpkhptX73YhBaPx6eUYcZckBeRufrq6kFChzcIuxaT7/fAQgk7j0fMCZYbd/EZIJbKcBXkvJyu0+rw5/d5kOO64Y8p0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720464881; c=relaxed/simple;
-	bh=Xx51mPWZcvEBBTllJzV009BtwFSB9kOfHDyQY9GFL3s=;
+	s=arc-20240116; t=1720464993; c=relaxed/simple;
+	bh=vz38mGqIA29q9GiA30HaH0rdSyRlUPWZ55JRA/7mC3Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tj1Lr0IY7JHRkBN3t2EhYxi6pmZ9CnoIpKbkaaqzw3NQFodmBeMYuuKGNKIGi8nSZKJuiNttJsPKIxB3lLSGIMBISgJZgLlYhOzRo5Y77fk13OV/UG7PCA0mMWskwJfHWdp9R3xuL390EMEL0l531FVnaPxcrehHIYhCCtcqQUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKRN0+rE; arc=none smtp.client-ip=209.85.160.51
+	 To:Cc:Content-Type; b=tMGS11l7uphhrPXWgElr5gQuJiPb7JgBPQKpwxLublzOOngXM49hK68t6i8BWpKteZh7zmxWnH6MvqjAg/D9NZv0VOYWA+rSayoN2z5kd8vFzB80Pd5Bkd+BIoF2/QNuAdO6+BLmhcVi3/glM+tf+1OtgM1yHDVXU6yvldoc7uA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzIZ+NVQ; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-25d6dd59170so1949805fac.0;
-        Mon, 08 Jul 2024 11:54:39 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70b0013cf33so2858140b3a.2;
+        Mon, 08 Jul 2024 11:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720464879; x=1721069679; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720464991; x=1721069791; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DrwrSZNvMGAoriYueRi/WdIWR5G3OphAy9AZ4DSwL1g=;
-        b=OKRN0+rEzuVPKREAU++/jgm7YhfX1WzkwX9X0VGJ+A2CW+Qy+98cumf7wOoTufYAfy
-         m8zCG+f0QuHe0Q+BM1uNRaljWYiU4s1qX6WvAIO9EFGgMVbzt469gFz1B2UNku0S7Tef
-         7zbUzSam7icDPqH9Bd92h+nfao46jWmcGoRChqP0QLLNvRMuYt6cGdvIf01BbTB7/8bF
-         Ao2gpLIM4q0cSeCb/RH62wN9Td/GOLNYBsXjUKlOjtTUSr+3yZtE7/32XdTChGPaCQVo
-         r/wzNCB/NLBqzbSFYcvb3cDFFsHby03Kdlz87PzpkrF5QNHcxam8LW6ZvcpKHH1YATt6
-         F4aw==
+        bh=JjT5Q6oK0mVLOBCrAOVlZjz7hxr/1Kaj+JdCup4jRzE=;
+        b=KzIZ+NVQfCi3NevzHKm6+fa7kl7hPNV7pRy0+zBzIJuw319YHqUXPtPILISalUdsU/
+         0GFM6p5d5X6ec07uRPJn71mP8fVpbxiQsqnAJ9CCkht4bZYJ7Uww19L03EgrxSmR8kQY
+         FyC4HtPkbJKS+76JwH+UoZie8ixJ/eiy96vLzgCPwfnr7K2g0WNwlPNqV6mRoTX7uXx6
+         Zj0kWOMeHDem3IJrEvi1ufINjPS/eC8dzf/eC2N7bdG/nO6OVrzvEWR/dEEVO4qqbXaO
+         M70I1/PYDkRNk7WUm6Qp3m5WHbgX1Z07rkyEGU2eSXcMgXRw4DyA3lLyNHgqr3/8eu+e
+         k10w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720464879; x=1721069679;
+        d=1e100.net; s=20230601; t=1720464991; x=1721069791;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DrwrSZNvMGAoriYueRi/WdIWR5G3OphAy9AZ4DSwL1g=;
-        b=EPrxJuBHOzM7HH6I3MgaVjTQEe7EwReCEAAUk6x4orYZWEl8rxVS6sNKPHGDA9AZFJ
-         P51y1zCoM0HM1+wTV/6VvD4EWQKF5oWMnbLNCZDjWt+4R5PYNCqnfV+EPK0whOs2dOLd
-         ynEDG7lt0DTOuUQPQ70ejS0NIS8kgoPKF4ksXR46FwnL/U/BBXRtHjhlVNa8bzDdyyLB
-         AH6CW9pCJHxAkQmo6yY6D1QbyIEAfAZU3Nz1BETvlOCiXtWM0TJaqrusbpTm2Fdj9LRL
-         weIjAHSGaLwTEqGkOmhB1F9dHt1Uo0OgHPwQwCwFCdfAUJPaJMm9aJwnnta0lhv+Cplt
-         slNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmDAuqL/WO+3EjblXWhzloCxEwFgT0dk3YQOdZ6Tv4qN0cZAOcddneO2NZNqYdm3FmD4GQqs5rXvgpoefQFDLBzS/fu3usjVdrA5MIUlB8DdD0Asd6k/e/D3rcxiRJiZl3r0k7
-X-Gm-Message-State: AOJu0YwqZdNfSMwBAU/7AKPnl4itkKEqzdcFjJeyI5t/N6TU312sBs8l
-	rNsibO8rKtXu9QvujI55hdLGHSXQmL8ML8O0fM54Yj3X195jDTQpBIrQkdClCz9C5lbXFziSuuz
-	5KWllWjzLuTnBwK2OVyFqOHlKf4g=
-X-Google-Smtp-Source: AGHT+IEgL46EF2dn+FdA01ybKVdNaS0i4+uzOs1JMWI/WcEC03yLfOeL6S3+rwEfWqBfebzSi6vfvhZ6pMRwViqGcEo=
-X-Received: by 2002:a05:6871:294:b0:254:94a4:35e2 with SMTP id
- 586e51a60fabf-25eaec980d0mr175364fac.59.1720464878633; Mon, 08 Jul 2024
- 11:54:38 -0700 (PDT)
+        bh=JjT5Q6oK0mVLOBCrAOVlZjz7hxr/1Kaj+JdCup4jRzE=;
+        b=xPlSa2MLN072BKCIn4/HPnlxzRhtlqhddMiZ907qT4Y4LqTk9kCeVq59dpmWTgh1Nq
+         zLTmpgkCVhN3bCH7jryUxr4jwo1M3pCsxOelM2jmaFSngRWqikv7jN4tphS/x5mdbykq
+         SGy3NfHcS0iIdhH5dLeNSMZ5Hx2DIoOz56AuW39fjrqpVcuMBr/H+CDjutmcwf7rn240
+         iVdlZwqcvi6hwifu/tIplwQv4RskBBIVuGT5YWtYf6DXeEQuQzMeBTLYfF9VPQEylffo
+         sM4LYC8Fkc/mauM1wKeC0bIzYOp4/pnXK1R4HxDbaYlVLwHJ0u8UPnFN2snnAvQ0zJNu
+         G1IA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAenjBdHcuXEcnJUqgKm0l0GJXwKpVQnRQYNKhQu/gAoqGCYnrjnjf88zg9sWbt4hyYweCxKoDhn9COCvS3LOIkhW8jbIjSFZqcVlfugAQ7Stejxo3iZOTGqRwOPHnK0TGgh9Y
+X-Gm-Message-State: AOJu0YyPlt31KLCkfPweFygG96GZyHRbdFfxoTDrEYyy6z68NCTWHNOB
+	s5Q/mgRawh/36D31nCMZut0CT6EO7TENN/fucwR5G1rKEZBkgXA/DzwnkoSBywOD5ukGvQDtGNH
+	cC/rdHPWH1uTlw5NK5bvrz0jy8Xk=
+X-Google-Smtp-Source: AGHT+IFHrUUI7k/upOCoOOUnnFbOIJROKAbdNQFhJGqyFVEyVoX8dll+V41aXxvZuT3JyfIBrkzmoEzEjsrYLJFoq28=
+X-Received: by 2002:a05:6a20:2455:b0:1c0:e42e:8508 with SMTP id
+ adf61e73a8af0-1c298220a50mr329636637.23.1720464990763; Mon, 08 Jul 2024
+ 11:56:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1720146231.git.tanggeliang@kylinos.cn> <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
-In-Reply-To: <f6773559686a553269d84870eb23142e2dc1dc8c.1720146231.git.tanggeliang@kylinos.cn>
+References: <cover.1720075006.git.tanggeliang@kylinos.cn> <a4e9f830d9e10de3ce5c56d0e15fcc0f209aa089.1720075006.git.tanggeliang@kylinos.cn>
+In-Reply-To: <a4e9f830d9e10de3ce5c56d0e15fcc0f209aa089.1720075006.git.tanggeliang@kylinos.cn>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 8 Jul 2024 11:54:26 -0700
-Message-ID: <CAEf4BzZ=df1LZrNh90UXURm0DOm1D12MkWKF+D6uTsiQG4rsDg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/6] selftests/bpf: Skip ENOTSUPP in ASSERT_OK
+Date: Mon, 8 Jul 2024 11:56:19 -0700
+Message-ID: <CAEf4BzbfFD6knXG+oV3wqx_qJcJ=gGOOmpOZur79J13zoRbmkA@mail.gmail.com>
+Subject: Re: [PATCH 6/6] selftests/bpf: Skip ENOTSUPP in ASSERT_GE
 To: Geliang Tang <geliang@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -89,97 +89,101 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 4, 2024 at 7:38=E2=80=AFPM Geliang Tang <geliang@kernel.org> wr=
-ote:
+On Wed, Jul 3, 2024 at 11:48=E2=80=AFPM Geliang Tang <geliang@kernel.org> w=
+rote:
 >
 > From: Geliang Tang <tanggeliang@kylinos.cn>
 >
-> Just like handling ENOTSUPP in test_lsm_cgroup_functional(), this patch
-> adds a new helper test_progs_get_error() to check whether the input error
-> is ENOTSUPP (524) or ENOTSUP (95). If it is, invoke test__skip() to skip
-> the test instead of using test__fail().
+> There are still some "ENOTSUPP" (-524) errors left when running BPF
+> selftests on a Loongarch platform since ASSERT_GE() are used there to
+> check the return values, not ASSERT_OK():
 >
-> Use this helper in ASSERT_OK() before invoking CHECK() macro.
+> '''
+>  test_bpf_cookie:PASS:skel_open 0 nsec
+>  #17/1    bpf_cookie/kprobe:OK
+>  #17/2    bpf_cookie/multi_kprobe_link_api:OK
+>  #17/3    bpf_cookie/multi_kprobe_attach_api:OK
+>  #17/4    bpf_cookie/uprobe:OK
+>  #17/5    bpf_cookie/multi_uprobe_attach_api:OK
+>  #17/6    bpf_cookie/tracepoint:OK
+>  #17/7    bpf_cookie/perf_event:OK
+>  tracing_subtest:FAIL:fentry.link_create unexpected fentry.link_create: \
+>                                                 actual -524 < expected 0
+>  #17/8    bpf_cookie/trampoline:FAIL
+>  lsm_subtest:FAIL:lsm.link_create unexpected lsm.link_create: \
+>                                                 actual -524 < expected 0
+>  #17/9    bpf_cookie/lsm:FAIL
+>  #17/10   bpf_cookie/tp_btf:OK
+>  #17/11   bpf_cookie/raw_tp:OK
+>  #17      bpf_cookie:FAIL
+>  ... ...
+>  test_module_fentry_shadow:PASS:load_vmlinux_btf 0 nsec
+>  test_module_fentry_shadow:PASS:get_bpf_testmod_btf_fd 0 nsec
+>  test_module_fentry_shadow:PASS:btf_get_from_fd 0 nsec
+>  test_module_fentry_shadow:PASS:btf_find_by_name 0 nsec
+>  test_module_fentry_shadow:PASS:btf_find_by_name 0 nsec
+>  test_module_fentry_shadow:PASS:bpf_prog_load 0 nsec
+>  test_module_fentry_shadow:FAIL:bpf_link_create unexpected \
+>                                 bpf_link_create: actual -524 < expected 0
+>  #168     module_fentry_shadow:FAIL
+> '''
+>
+> Just like in ASSERT_OK(), this patch skips ENOTSUPP (524) and ENOTSUP (95=
+)
+> in ASSERT_GT() too. With this change, the new output of these selftests
+> look like:
+>
+> '''
+>  #17/1    bpf_cookie/kprobe:OK
+>  #17/2    bpf_cookie/multi_kprobe_link_api:OK
+>  #17/3    bpf_cookie/multi_kprobe_attach_api:OK
+>  #17/4    bpf_cookie/uprobe:OK
+>  #17/5    bpf_cookie/multi_uprobe_attach_api:OK
+>  #17/6    bpf_cookie/tracepoint:OK
+>  #17/7    bpf_cookie/perf_event:OK
+>  #17/8    bpf_cookie/trampoline:SKIP
+>  #17/9    bpf_cookie/lsm:SKIP
+>  #17/10   bpf_cookie/tp_btf:SKIP
+>  #17/11   bpf_cookie/raw_tp:SKIP
+>  #17      bpf_cookie:OK (SKIP: 4/11)
+>  ... ...
+>  #168     module_fentry_shadow:SKIP
+> '''
 >
 > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 > ---
->  .../selftests/bpf/prog_tests/lsm_cgroup.c     |  6 +----
->  tools/testing/selftests/bpf/test_progs.h      | 23 +++++++++++++++++--
->  2 files changed, 22 insertions(+), 7 deletions(-)
->
-
-I haven't followed these patch sets, but no, let's not add magical
-special error codes handling into ASSERT_xxx() macros.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/=
-testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> index 6df25de8f080..6511f5f4a00f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> @@ -102,12 +102,8 @@ static void test_lsm_cgroup_functional(void)
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"),=
- 0, "prog count");
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 0, "total prog count")=
-;
->         err =3D bpf_prog_attach(alloc_prog_fd, cgroup_fd, BPF_LSM_CGROUP,=
- 0);
-> -       if (err =3D=3D -ENOTSUPP) {
-> -               test__skip();
-> -               goto close_cgroup;
-> -       }
->         if (!ASSERT_OK(err, "attach alloc_prog_fd"))
-> -               goto detach_cgroup;
-> +               goto close_cgroup;
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_sk_alloc_security"),=
- 1, "prog count");
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 1, "total prog count")=
-;
+>  tools/testing/selftests/bpf/test_progs.h | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 >
 > diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
 ftests/bpf/test_progs.h
-> index 930a4181dbd9..d1d77785b165 100644
+> index 464aa12feada..8a5ce360aa1c 100644
 > --- a/tools/testing/selftests/bpf/test_progs.h
 > +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -176,6 +176,23 @@ void test__skip(void);
->  void test__fail(void);
->  int test__join_cgroup(const char *path);
->
-> +static inline bool test_progs_check_errno(int error, int check)
-> +{
-> +       return error =3D=3D -check ||
-> +              (error && errno =3D=3D check);
-> +}
-> +
-> +static inline int test_progs_get_error(int error)
-> +{
-> +       if (test_progs_check_errno(error, ENOTSUP) ||
-> +           test_progs_check_errno(error, ENOTSUPP)) {
-> +               test__skip();
-> +               return 0;
-> +       } else {
-> +               return error;
-> +       }
-> +}
-> +
->  #define PRINT_FAIL(format...)                                           =
+> @@ -294,9 +294,13 @@ int test__join_cgroup(const char *path);
+>         typeof(actual) ___act =3D (actual);                              =
+ \
+>         typeof(expected) ___exp =3D (expected);                          =
+ \
+>         bool ___ok =3D ___act >=3D ___exp;                               =
+   \
+> -       CHECK(!___ok, (name),                                           \
+> -             "unexpected %s: actual %lld < expected %lld\n",           \
+> -             (name), (long long)(___act), (long long)(___exp));        \
+> +       if (___act =3D=3D -ENOTSUPP || ___act =3D=3D -ENOTSUP ||         =
        \
->         ({                                                               =
-      \
->                 test__fail();                                            =
-      \
-> @@ -338,8 +355,10 @@ int test__join_cgroup(const char *path);
->         static int duration =3D 0;                                       =
- \
->         long long ___res =3D (res);                                      =
- \
->         bool ___ok =3D ___res =3D=3D 0;                                  =
-     \
-> -       CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",    \
-> -             ___res, errno);                                           \
-> +       if (test_progs_get_error(___res))                               \
+> +           errno =3D=3D ENOTSUPP || errno =3D=3D ENOTSUP)               =
+       \
+> +               test__skip();                                           \
+
+absolutely not, if ENOTSUP or ENOTSUPP is special for some tests, that
+should be handled explicitly. This is not correct in general and we
+should not just silently skip some test on such errors.
+
+> +       else                                                            \
 > +               CHECK(!___ok, (name),                                   \
-> +                     "unexpected error: %lld (errno %d)\n",            \
-> +                     ___res, errno);                                   \
+> +                     "unexpected %s: actual %lld < expected %lld\n",   \
+> +                     (name), (long long)(___act), (long long)(___exp));\
 >         ___ok;                                                          \
 >  })
 >
