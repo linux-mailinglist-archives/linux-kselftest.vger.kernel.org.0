@@ -1,310 +1,280 @@
-Return-Path: <linux-kselftest+bounces-13338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7854C92AB5E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 23:40:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9174992AC34
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 00:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 076E21F22A77
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 21:40:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4897D28319D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 22:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE0A14EC53;
-	Mon,  8 Jul 2024 21:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432CB1514CC;
+	Mon,  8 Jul 2024 22:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SLWHmPh9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wb+6dTgb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9123D149C6A
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 21:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998B514F9EB
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 22:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720474811; cv=none; b=EVe0Q71sVzKFYRC2Ob4YAskB2VeVshz5bg5s93hJkYVKf9imtIShhoAj6RkA08YvIhCtlBd9Ajedb4kCJXaLeXwaKw9FNDS0j0iR3ZBLCo9MenwgV4pADRL9A7X4TcoeeMvCLG4+GvXg0ezUd500dQBe6CFbnZocnbgd8afJnIA=
+	t=1720478538; cv=none; b=uv4bFF0oqKcx1mvEa9OiigXz+3fsrJ0w9qUrlbyp82S7p38dbKpRpigPx4JJjpxHsl773QgVdRN869Y2YJZSKrm+CF6x2LUYh1/jVDi+0FMFax1tEV6PKmrh/NVUeCjMvFoPnpbpgrxSDRfzqjt/SbxR6jWz2dQ2a6fuK1DvPE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720474811; c=relaxed/simple;
-	bh=ksWUl+7oU5im94h1dU1dhvwd56cmIXpc/qZXAFf5Rs4=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CdXuHzFU4Ijnq2F+B9l3ElGP3CWEz4AiSMNGZr/FZ8NLJuJZSTJAF7kfcmrXoukByiza0+X/qyrLAWo6pEo5d8n3ZKB19hS0UOYDfrSV9deS7PAOOyEjJ9UTem/TgL+hVcExOgRj1lDLVMTvzfKVUvyKh46A4R9HE0hjVJ6V8x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SLWHmPh9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720474808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xrmMfuh6zl+J0VMmb+jXkVGZeQnzPMh5oQVddVrOdbk=;
-	b=SLWHmPh93gTaXfRS39V4mac1zkGdMRp1q1MzkgFbhXpsU7JkY6Gc2/8ftflDQIfnDv+TKM
-	gUXRHmZm+ssJIZLNgg2L36ivr5kO6l5Xx5fljVr5CdHxe/hBGCZadMGso5ZwgEJWfAkjMG
-	XVeACqD4KSYKerGoC6nQUJ7E272wkE8=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-41-VIhUHfUqOrioxtuT9zZfhQ-1; Mon, 08 Jul 2024 17:40:07 -0400
-X-MC-Unique: VIhUHfUqOrioxtuT9zZfhQ-1
-Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-e039b77a040so7297258276.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2024 14:40:07 -0700 (PDT)
+	s=arc-20240116; t=1720478538; c=relaxed/simple;
+	bh=/Csvsngo9An8lKU/uqQ4PwREsIrRpApsjXkFtThY7r8=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=RCQpfbtwwaXPmMtXkmir+ha0TnLdmij/ch1SuBWYW6cEyhJ+X8lFxAagFBoeIr2adKNqQczy3kuFMr0v/YmnlrO6mb1a7LDww/X+H3C0kgrgfg5Iq9nw54qShPaHBv5ssCCYruWLzS89wqzyM5R1Z9PFUeb2xg1uZrtuXISUvIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Wb+6dTgb; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7f906800b4cso6712139f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2024 15:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720478535; x=1721083335; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zovC7QVd34p3m3CAUQtKD0SY4AbJLTNsaDdpwwBJTts=;
+        b=Wb+6dTgbdGvPtSRwmyyhj0vR1ykqLi7imYM2vRbuYaVP+b6N2D/h1/1kXOfhKh42AB
+         mCxjAfU/1V3lyD1E8aksj8eLveOcdx9UeTGMdJhaxpKDkosp36IQgSbO9vkz8/ZEbQKK
+         jrPWF234xMwNe2rTAtpNpkl90qLU8NrOTkSVw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720474806; x=1721079606;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
-         :mime-version:references:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xrmMfuh6zl+J0VMmb+jXkVGZeQnzPMh5oQVddVrOdbk=;
-        b=S+7vg28+UJZfn3ZN1FZkkoqn08kZ7zIRmRyy3qiMak69UjAtVJx6Ae1xOxDxpyIEHP
-         uwfqMLFFKN48indEbp0pnZgYN7sqG32GipfZAM9SunGrBm6H7y5IeP7qE+HF+O1PK8ot
-         FDJy35+oFYkHRU2y2zEEmKq8PuCJTppLVnUqHKDA5gpBqcxqa/EJsHU1GKGCs0ySU5TO
-         9t2BffONnaEgeF+zzOFI5RUeoigvfbZLdMlwVoI/xKwvOugeirm7NDntRgY1TDTonLzu
-         UJ45HRllK8VpvygKXt7POAyZgzZA3EZ/bR+dDNqR3P+NPFQiKYJXDs8A0dI1fykeek+/
-         MeHA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1+BEk2Gizxvt3gq3y4va18ISEsj+UM3SKb9ui3po7sihreMxPWxz4iXUEsqPmTabI+0WajM1WyF72Dz+0S8IzqvsM0VDUyFJsA80SQqKs
-X-Gm-Message-State: AOJu0Yx4a9jnzxMPJ30DzNmDWdRIZQPx4h6HRy3haf/xgZ9v3kwoc7Rw
-	z5fZfx8f1YED2j5iCVenis/OcA8izUVvNkJMpqNNLHNFWlFASD77nJ9Z/tTYopFRNf7Lo3AFQSg
-	h0+ehJgcaK7wuEGJRTfTG1FHGvpMqTEtQNndZyrBQy0j3FDPvsV1MlLnpz4WCmw7CPLO/+tXfcs
-	T+KpveueMOwZGgqV1LX7V+37V6Ar1TUFFQqYM/EiRKAaARA6PO
-X-Received: by 2002:a25:dc91:0:b0:e03:4e3b:2a49 with SMTP id 3f1490d57ef6-e041b15b11amr1075169276.60.1720474806279;
-        Mon, 08 Jul 2024 14:40:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHhcBFn0ofqIUHCwGg3OYl0O2Ng3lLsFfo+cuSb6XyWrWH/AvKTaMcedW1YcTsjxqISDHxVyzi9sPAVrwvwT+A=
-X-Received: by 2002:a25:dc91:0:b0:e03:4e3b:2a49 with SMTP id
- 3f1490d57ef6-e041b15b11amr1075148276.60.1720474805979; Mon, 08 Jul 2024
- 14:40:05 -0700 (PDT)
-Received: from 311643009450 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 8 Jul 2024 14:40:05 -0700
-From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
-References: <20240708134451.3489802-1-amorenoz@redhat.com> <0fd40aed-04d1-43a3-ab3d-c7459a63f753@ovn.org>
+        d=1e100.net; s=20230601; t=1720478535; x=1721083335;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zovC7QVd34p3m3CAUQtKD0SY4AbJLTNsaDdpwwBJTts=;
+        b=vizNBo/0W9+q7/PshijL4XSkhg2UT3BOvFRsHV94Vy050P4nyEY1HthhFt4HHcxo9U
+         6tT8t8vaxYYymNNoLdrpu5Cw3v5hvuAr7daUOvgDyQzzveHPWAEJBEdsV8sUJKT50fxS
+         YvLr32Wx7craeeUwZj5F8OG5ZXnfZZqYVxwnJ2AfSDedca2NtKQQm/o4y6JMXeXJKSiX
+         RkG4TUIRZT0i9g9rGn9BfIiO0HulxkekZ0uyMPKrwywU/NMs4OwgZnny3j8P+nnZOUND
+         YE3+cL8hUyM3q/ZPgkA89Gl3HXxiK91rcFqYbWKxeIEt3SL0GiOnKu9Hpu2uQm45+khp
+         /jqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwuZ43VGTuHhedsuY4FT//w6fgS/Quhyt/zXIY0ifFL+eqiTYie3xv3FEFsb6iRjb3U7lLVTinrihig1lg2SCYFx9uI+pYJOqk09x4APFj
+X-Gm-Message-State: AOJu0YyDK9tYRFsmAXAiJ1FDc0GUqHKM8XGS1ijJyzPqn61yohCkFI61
+	Y/haCX3f7/V34QPjxrw4NZxKLnVB0FcSbQ3txOQwoS+u0r/vdOucc/BUojWXFAU=
+X-Google-Smtp-Source: AGHT+IHTLYyh+Jcy22XXxAXWdWcQhiGYB2223bdTg2DFGSeQOJUGmgTMYU8u4DP+IJaVFlGDvso5HA==
+X-Received: by 2002:a05:6602:6199:b0:7f3:d3ed:1ca3 with SMTP id ca18e2360f4ac-80001930275mr119437339f.1.1720478534710;
+        Mon, 08 Jul 2024 15:42:14 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1bf65f0sm182528173.93.2024.07.08.15.42.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jul 2024 15:42:14 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------zvEHuaPS38NLDGr1NkzGpYeN"
+Message-ID: <7007e67e-0af4-4b01-a708-ba108208b217@linuxfoundation.org>
+Date: Mon, 8 Jul 2024 16:42:13 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <0fd40aed-04d1-43a3-ab3d-c7459a63f753@ovn.org>
-Date: Mon, 8 Jul 2024 14:40:05 -0700
-Message-ID: <CAG=2xmO3Je7W0pstvN_ALFcNFRqTLCaRhaCV=O+2VEu5_e+g-A@mail.gmail.com>
-Subject: Re: [ovs-dev] [PATCH v1] selftests: openvswitch: retry instead of sleep
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, dev@openvswitch.org, 
-	Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org, 
-	Eric Dumazet <edumazet@google.com>, linux-kselftest@vger.kernel.org, 
-	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Aaron Conole <aconole@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes for Linux 6.10
 
-On Mon, Jul 08, 2024 at 09:31:58PM GMT, Ilya Maximets wrote:
-> On 7/8/24 15:44, Adrian Moreno wrote:
-> > There are a couple of places where the test script "sleep"s to wait for
-> > some external condition to be met.
-> >
-> > This is error prone, specially in slow systems (identified in CI by
-> > "KSFT_MACHINE_SLOW=3Dyes").
-> >
-> > To fix this, add a "ovs_wait" function that tries to execute a command
-> > a few times until it succeeds. The timeout used is set to 5s for
-> > "normal" systems and doubled if a slow CI machine is detected.
-> >
-> > This should make the following work:
-> >
-> > $ vng --build  \
-> >     --config tools/testing/selftests/net/config \
-> >     --config kernel/configs/debug.config
-> >
-> > $ vng --run . --user root -- "make -C tools/testing/selftests/ \
-> >     KSFT_MACHINE_SLOW=3Dyes TARGETS=3Dnet/openvswitch run_tests"
-> >
-> > Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
-> > ---
-> >  .../selftests/net/openvswitch/openvswitch.sh  | 49 ++++++++++++++++---
-> >  .../selftests/net/openvswitch/ovs-dpctl.py    |  1 +
-> >  2 files changed, 42 insertions(+), 8 deletions(-)
-> >
->
-> Hi, Adrian.  See a small pile of nitpicks below.
->
-> None of them are blocking from my perspective, except for a typo.
-> Just listed them since there is a typo anyway.
->
-> > diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/t=
-ools/testing/selftests/net/openvswitch/openvswitch.sh
-> > index bc71dbc18b21..83407b42073a 100755
-> > --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> > +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> > @@ -11,6 +11,7 @@ ksft_skip=3D4
-> >  PAUSE_ON_FAIL=3Dno
-> >  VERBOSE=3D0
-> >  TRACING=3D0
-> > +WAIT_TIMEOUT=3D5
-> >
-> >  tests=3D"
-> >  	arp_ping				eth-arp: Basic arp ping between two NS
-> > @@ -29,6 +30,32 @@ info() {
-> >  	[ $VERBOSE =3D 0 ] || echo $*
-> >  }
-> >
-> > +ovs_wait() {
-> > +	info "waiting $WAIT_TIMEOUT s for: $@"
-> > +
-> > +	"$@"
-> > +	if [[ $? -eq 0 ]]; then
->
-> Maybe just 'if "$@"; then' ?
->
+This is a multi-part message in MIME format.
+--------------zvEHuaPS38NLDGr1NkzGpYeN
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In my head this is a bit less clean but I don't mind.
+Hi Linus,
 
-> > +		info "wait succeeded inmediately"
->
-> * immediately
+Please pull this kselftest fixes update for Linux 6.10.
 
-Thanks. Will fix the typo.
+This kselftest fixes update for Linux 6.10 consists of fixes to clang
+build failures to timerns, vDSO tests and fixes to vDSO makefile.
 
->
-> > +		return 0
-> > +	fi
-> > +
-> > +	# A quick re-check helps speed up small races in fast systems.
-> > +	# However, fractional sleeps might not necessarily work.
-> > +	local start=3D0
-> > +	sleep 0.1 || { sleep 1; start=3D1; }
-> > +
-> > +	for (( i=3Dstart; i<WAIT_TIMEOUT; i++ )); do
->
-> for i in $(seq ${start} ${WAIT_TIMEOUT}); do
->
-> Will need to initialize start to 1 and 2.
->
-> It works, but seems like an unnecessary use of non-POSIX constructs.
+Note: makefile fixes are included to avoid conflicts during 6.11 merge
+window.
 
-The reason why I chose this form is that I find it more robust on a
-script that changes IFS. If this function is called within a block that
-has changed IFS, "i" will take the entire sequence as the value for the
-first iteration.
+diff is attached.
 
->
-> > +		"$@"
-> > +		if [[ $? -eq 0 ]]; then
->
-> if "$@"; then
->
-> > +			info "wait succeeded after $i seconds"
-> > +			return 0
-> > +		fi
-> > +		sleep 1
-> > +	done
-> > +	info "wait failed after $i seconds"
-> > +	return 1
-> > +}
-> > +
-> >  ovs_base=3D`pwd`
-> >  sbxs=3D
-> >  sbx_add () {
-> > @@ -278,20 +305,21 @@ test_psample() {
-> >
-> >  	# Record psample data.
-> >  	ovs_spawn_daemon "test_psample" python3 $ovs_base/ovs-dpctl.py psampl=
-e-events
-> > +	ovs_wait grep -q "listening for psample events" ${ovs_dir}/stdout
-> >
-> >  	# Send a single ping.
-> > -	sleep 1
-> >  	ovs_sbx "test_psample" ip netns exec client ping -I c1 172.31.110.20 =
--c 1 || return 1
-> > -	sleep 1
-> >
-> >  	# We should have received one userspace action upcall and 2 psample p=
-ackets.
-> > -	grep -E "userspace action command" $ovs_dir/s0.out >/dev/null 2>&1 ||=
- return 1
-> > +	ovs_wait grep -q "userspace action command" $ovs_dir/s0.out
-> > +	[[ $? -eq 0 ]] || return 1
->
-> Why checking separately and not one the same line with || return 1 ?
+thanks,
+-- Shuah
 
-IMHO, passing complex commands to a function in bash can easily get very
-problematic. That's why I try to remove all pipes, redirections or
-logical operators like && and ||. At least for me it removes one extra
-cycle that my brain has to spend looking at quotes and figuring out if
-the operand will be interpreted inside the function or outside.
+----------------------------------------------------------------
+The following changes since commit 48236960c06d32370bfa6f2cc408e786873262c8:
 
-> Also double brackets seem unnecessary.
+   selftests/resctrl: Fix non-contiguous CBM for AMD (2024-06-26 13:22:34 -0600)
 
-That's true.
+are available in the Git repository at:
 
->
-> >
-> >  	# client -> server samples should only contain the first 14 bytes of =
-the packet.
-> > -	grep -E "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" \
-> > -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
-> > -	grep -E "rate:4294967295,group:2,cookie:eeff0c" \
-> > -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
-> > +	ovs_wait grep -qE "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f=
-]{28}$" $ovs_dir/stdout
-> > +	[[ $? -eq 0 ]] || return 1
-> > +
-> > +	ovs_wait grep -q "rate:4294967295,group:2,cookie:eeff0c" $ovs_dir/std=
-out
-> > +	[[ $? -eq 0 ]] || return 1
->
-> Same for above two.
->
-> >
-> >  	return 0
-> >  }
-> > @@ -711,7 +739,8 @@ test_upcall_interfaces() {
-> >  	ovs_add_netns_and_veths "test_upcall_interfaces" ui0 upc left0 l0 \
-> >  	    172.31.110.1/24 -u || return 1
-> >
-> > -	sleep 1
-> > +	ovs_wait grep -q "listening on upcall packet handler" ${ovs_dir}/left=
-0.out
-> > +
-> >  	info "sending arping"
-> >  	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
-> >  	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
-> > @@ -811,6 +840,10 @@ shift $(($OPTIND-1))
-> >  IFS=3D"=09
-> >  "
-> >
-> > +if test "X$KSFT_MACHINE_SLOW" =3D=3D "Xyes"; then
-> > +	WAIT_TIMEOUT=3D10
-> > +fi
->
-> Should this be done closer to the first initialization of WAIT_TIMEOUT ?
->
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.10
 
-My rationale was splitting "variable declaration" and "code". Sure
-we're not adding an explicit cli argument for this (as with TRACING or
-VERBOSE) but we kind-of are using KSFT_MACHINE_SLOW as an input so for
-me grouping input processing all together made some sense. Having said
-that, I don't have a very strong opinion. I guess we can move it up as
-well.
+for you to fetch changes up to 66cde337fa1b7c6cf31f856fa015bd91a4d383e7:
 
-> > +
-> >  for arg do
-> >  	# Check first that all requested tests are available before running a=
-ny
-> >  	command -v > /dev/null "test_${arg}" || { echo "=3D=3D=3D Test ${arg}=
- not found"; usage; }
-> > diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/too=
-ls/testing/selftests/net/openvswitch/ovs-dpctl.py
-> > index 1e15b0818074..8a0396bfaf99 100644
-> > --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> > +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> > @@ -2520,6 +2520,7 @@ class PsampleEvent(EventSocket):
-> >      marshal_class =3D psample_msg
-> >
-> >      def read_samples(self):
-> > +        print("listening for psample events", flush=3DTrue)
-> >          while True:
-> >              try:
-> >                  for msg in self.get():
->
+   selftests/vDSO: remove duplicate compiler invocations from Makefile (2024-07-05 14:12:34 -0600)
 
-Thanks.
-Adri=C3=A1n
+----------------------------------------------------------------
+linux_kselftest-fixes-6.10
 
+This kselftest fixes update for Linux 6.10 consists of fixes to clang
+build failures to timerns, vDSO tests and fixes to vDSO makefile.
+
+----------------------------------------------------------------
+John Hubbard (4):
+       selftest/timerns: fix clang build failures for abs() calls
+       selftests/vDSO: fix clang build errors and warnings
+       selftests/vDSO: remove partially duplicated "all:" target in Makefile
+       selftests/vDSO: remove duplicate compiler invocations from Makefile
+
+  tools/testing/selftests/timens/exec.c              |  6 ++---
+  tools/testing/selftests/timens/timer.c             |  2 +-
+  tools/testing/selftests/timens/timerfd.c           |  2 +-
+  tools/testing/selftests/timens/vfork_exec.c        |  4 +--
+  tools/testing/selftests/vDSO/Makefile              | 29 +++++++++-------------
+  tools/testing/selftests/vDSO/parse_vdso.c          | 16 ++++++++----
+  .../selftests/vDSO/vdso_standalone_test_x86.c      | 18 ++++++++++++--
+  7 files changed, 46 insertions(+), 31 deletions(-)
+----------------------------------------------------------------
+--------------zvEHuaPS38NLDGr1NkzGpYeN
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-fixes-6.10.diff"
+Content-Disposition: attachment; filename="linux_kselftest-fixes-6.10.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RpbWVucy9leGVjLmMgYi90
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90aW1lbnMvZXhlYy5jCmluZGV4IGU0MGRjNWJlMmY2
+Ni4uZDEyZmY5NTVkZTBkIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90
+aW1lbnMvZXhlYy5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RpbWVucy9leGVj
+LmMKQEAgLTMwLDcgKzMwLDcgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkK
+IAogCQlmb3IgKGkgPSAwOyBpIDwgMjsgaSsrKSB7CiAJCQlfZ2V0dGltZShDTE9DS19NT05P
+VE9OSUMsICZ0c3QsIGkpOwotCQkJaWYgKGFicyh0c3QudHZfc2VjIC0gbm93LnR2X3NlYykg
+PiA1KQorCQkJaWYgKGxhYnModHN0LnR2X3NlYyAtIG5vdy50dl9zZWMpID4gNSkKIAkJCQly
+ZXR1cm4gcHJfZmFpbCgiJWxkICVsZFxuIiwgbm93LnR2X3NlYywgdHN0LnR2X3NlYyk7CiAJ
+CX0KIAkJcmV0dXJuIDA7CkBAIC01MCw3ICs1MCw3IEBAIGludCBtYWluKGludCBhcmdjLCBj
+aGFyICphcmd2W10pCiAKIAlmb3IgKGkgPSAwOyBpIDwgMjsgaSsrKSB7CiAJCV9nZXR0aW1l
+KENMT0NLX01PTk9UT05JQywgJnRzdCwgaSk7Ci0JCWlmIChhYnModHN0LnR2X3NlYyAtIG5v
+dy50dl9zZWMpID4gNSkKKwkJaWYgKGxhYnModHN0LnR2X3NlYyAtIG5vdy50dl9zZWMpID4g
+NSkKIAkJCXJldHVybiBwcl9mYWlsKCIlbGQgJWxkXG4iLAogCQkJCQlub3cudHZfc2VjLCB0
+c3QudHZfc2VjKTsKIAl9CkBAIC03MCw3ICs3MCw3IEBAIGludCBtYWluKGludCBhcmdjLCBj
+aGFyICphcmd2W10pCiAJCS8qIENoZWNrIHRoYXQgYSBjaGlsZCBwcm9jZXNzIGlzIGluIHRo
+ZSBuZXcgdGltZW5zLiAqLwogCQlmb3IgKGkgPSAwOyBpIDwgMjsgaSsrKSB7CiAJCQlfZ2V0
+dGltZShDTE9DS19NT05PVE9OSUMsICZ0c3QsIGkpOwotCQkJaWYgKGFicyh0c3QudHZfc2Vj
+IC0gbm93LnR2X3NlYyAtIE9GRlNFVCkgPiA1KQorCQkJaWYgKGxhYnModHN0LnR2X3NlYyAt
+IG5vdy50dl9zZWMgLSBPRkZTRVQpID4gNSkKIAkJCQlyZXR1cm4gcHJfZmFpbCgiJWxkICVs
+ZFxuIiwKIAkJCQkJCW5vdy50dl9zZWMgKyBPRkZTRVQsIHRzdC50dl9zZWMpOwogCQl9CmRp
+ZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90aW1lbnMvdGltZXIuYyBiL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RpbWVucy90aW1lci5jCmluZGV4IDVlN2YwMDUxYmQ3
+Yi4uNWI5MzlmNTlkZmE0IDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90
+aW1lbnMvdGltZXIuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90aW1lbnMvdGlt
+ZXIuYwpAQCAtNTYsNyArNTYsNyBAQCBpbnQgcnVuX3Rlc3QoaW50IGNsb2NraWQsIHN0cnVj
+dCB0aW1lc3BlYyBub3cpCiAJCQlyZXR1cm4gcHJfcGVycm9yKCJ0aW1lcmZkX2dldHRpbWUi
+KTsKIAogCQllbGFwc2VkID0gbmV3X3ZhbHVlLml0X3ZhbHVlLnR2X3NlYzsKLQkJaWYgKGFi
+cyhlbGFwc2VkIC0gMzYwMCkgPiA2MCkgeworCQlpZiAobGxhYnMoZWxhcHNlZCAtIDM2MDAp
+ID4gNjApIHsKIAkJCWtzZnRfdGVzdF9yZXN1bHRfZmFpbCgiY2xvY2tpZDogJWQgZWxhcHNl
+ZDogJWxsZFxuIiwKIAkJCQkJICAgICAgY2xvY2tpZCwgZWxhcHNlZCk7CiAJCQlyZXR1cm4g
+MTsKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RpbWVucy90aW1lcmZk
+LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy90aW1lbnMvdGltZXJmZC5jCmluZGV4IDll
+ZGQ0M2Q2YjJjMS4uYTQxOTZiYmQ2ZTMzIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3Nl
+bGZ0ZXN0cy90aW1lbnMvdGltZXJmZC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3RpbWVucy90aW1lcmZkLmMKQEAgLTYxLDcgKzYxLDcgQEAgaW50IHJ1bl90ZXN0KGludCBj
+bG9ja2lkLCBzdHJ1Y3QgdGltZXNwZWMgbm93KQogCQkJcmV0dXJuIHByX3BlcnJvcigidGlt
+ZXJmZF9nZXR0aW1lKCVkKSIsIGNsb2NraWQpOwogCiAJCWVsYXBzZWQgPSBuZXdfdmFsdWUu
+aXRfdmFsdWUudHZfc2VjOwotCQlpZiAoYWJzKGVsYXBzZWQgLSAzNjAwKSA+IDYwKSB7CisJ
+CWlmIChsbGFicyhlbGFwc2VkIC0gMzYwMCkgPiA2MCkgewogCQkJa3NmdF90ZXN0X3Jlc3Vs
+dF9mYWlsKCJjbG9ja2lkOiAlZCBlbGFwc2VkOiAlbGxkXG4iLAogCQkJCQkgICAgICBjbG9j
+a2lkLCBlbGFwc2VkKTsKIAkJCXJldHVybiAxOwpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvdGltZW5zL3Zmb3JrX2V4ZWMuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL3RpbWVucy92Zm9ya19leGVjLmMKaW5kZXggYmViNzYxNDk0MWZiLi41Yjg5MDdiZjQ1
+MWQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RpbWVucy92Zm9ya19l
+eGVjLmMKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdGltZW5zL3Zmb3JrX2V4ZWMu
+YwpAQCAtMzIsNyArMzIsNyBAQCBzdGF0aWMgdm9pZCAqdGNoZWNrKHZvaWQgKl9hcmdzKQog
+CiAJZm9yIChpID0gMDsgaSA8IDI7IGkrKykgewogCQlfZ2V0dGltZShDTE9DS19NT05PVE9O
+SUMsICZ0c3QsIGkpOwotCQlpZiAoYWJzKHRzdC50dl9zZWMgLSBub3ctPnR2X3NlYykgPiA1
+KSB7CisJCWlmIChsYWJzKHRzdC50dl9zZWMgLSBub3ctPnR2X3NlYykgPiA1KSB7CiAJCQlw
+cl9mYWlsKCIlczogaW4tdGhyZWFkOiB1bmV4cGVjdGVkIHZhbHVlOiAlbGQgKCVsZClcbiIs
+CiAJCQkJYXJncy0+dHN0X25hbWUsIHRzdC50dl9zZWMsIG5vdy0+dHZfc2VjKTsKIAkJCXJl
+dHVybiAodm9pZCAqKTFVTDsKQEAgLTY0LDcgKzY0LDcgQEAgc3RhdGljIGludCBjaGVjayhj
+aGFyICp0c3RfbmFtZSwgc3RydWN0IHRpbWVzcGVjICpub3cpCiAKIAlmb3IgKGkgPSAwOyBp
+IDwgMjsgaSsrKSB7CiAJCV9nZXR0aW1lKENMT0NLX01PTk9UT05JQywgJnRzdCwgaSk7Ci0J
+CWlmIChhYnModHN0LnR2X3NlYyAtIG5vdy0+dHZfc2VjKSA+IDUpCisJCWlmIChsYWJzKHRz
+dC50dl9zZWMgLSBub3ctPnR2X3NlYykgPiA1KQogCQkJcmV0dXJuIHByX2ZhaWwoIiVzOiB1
+bmV4cGVjdGVkIHZhbHVlOiAlbGQgKCVsZClcbiIsCiAJCQkJCXRzdF9uYW1lLCB0c3QudHZf
+c2VjLCBub3ctPnR2X3NlYyk7CiAJfQpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvdkRTTy9NYWtlZmlsZSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZEU08vTWFr
+ZWZpbGUKaW5kZXggZDUzYTRkODAwOGY5Li45OGQ4YmEyYWZhMDAgMTAwNjQ0Ci0tLSBhL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZEU08vTWFrZWZpbGUKKysrIGIvdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvdkRTTy9NYWtlZmlsZQpAQCAtMSwzNSArMSwzMCBAQAogIyBTUERYLUxp
+Y2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAotaW5jbHVkZSAuLi9saWIubWsKLQogdW5hbWVf
+TSA6PSAkKHNoZWxsIHVuYW1lIC1tIDI+L2Rldi9udWxsIHx8IGVjaG8gbm90KQogQVJDSCA/
+PSAkKHNoZWxsIGVjaG8gJCh1bmFtZV9NKSB8IHNlZCAtZSBzL2kuODYveDg2LyAtZSBzL3g4
+Nl82NC94ODYvKQogCi1URVNUX0dFTl9QUk9HUyA6PSAkKE9VVFBVVCkvdmRzb190ZXN0X2dl
+dHRpbWVvZmRheSAkKE9VVFBVVCkvdmRzb190ZXN0X2dldGNwdQotVEVTVF9HRU5fUFJPR1Mg
+Kz0gJChPVVRQVVQpL3Zkc29fdGVzdF9hYmkKLVRFU1RfR0VOX1BST0dTICs9ICQoT1VUUFVU
+KS92ZHNvX3Rlc3RfY2xvY2tfZ2V0cmVzCitURVNUX0dFTl9QUk9HUyA6PSB2ZHNvX3Rlc3Rf
+Z2V0dGltZW9mZGF5CitURVNUX0dFTl9QUk9HUyArPSB2ZHNvX3Rlc3RfZ2V0Y3B1CitURVNU
+X0dFTl9QUk9HUyArPSB2ZHNvX3Rlc3RfYWJpCitURVNUX0dFTl9QUk9HUyArPSB2ZHNvX3Rl
+c3RfY2xvY2tfZ2V0cmVzCiBpZmVxICgkKEFSQ0gpLCQoZmlsdGVyICQoQVJDSCkseDg2IHg4
+Nl82NCkpCi1URVNUX0dFTl9QUk9HUyArPSAkKE9VVFBVVCkvdmRzb19zdGFuZGFsb25lX3Rl
+c3RfeDg2CitURVNUX0dFTl9QUk9HUyArPSB2ZHNvX3N0YW5kYWxvbmVfdGVzdF94ODYKIGVu
+ZGlmCi1URVNUX0dFTl9QUk9HUyArPSAkKE9VVFBVVCkvdmRzb190ZXN0X2NvcnJlY3RuZXNz
+CitURVNUX0dFTl9QUk9HUyArPSB2ZHNvX3Rlc3RfY29ycmVjdG5lc3MKIAogQ0ZMQUdTIDo9
+IC1zdGQ9Z251OTkKLUNGTEFHU192ZHNvX3N0YW5kYWxvbmVfdGVzdF94ODYgOj0gLW5vc3Rk
+bGliIC1mbm8tYXN5bmNocm9ub3VzLXVud2luZC10YWJsZXMgLWZuby1zdGFjay1wcm90ZWN0
+b3IKLUxERkxBR1NfdmRzb190ZXN0X2NvcnJlY3RuZXNzIDo9IC1sZGwKKwogaWZlcSAoJChD
+T05GSUdfWDg2XzMyKSx5KQogTERMSUJTICs9IC1sZ2NjX3MKIGVuZGlmCiAKLWFsbDogJChU
+RVNUX0dFTl9QUk9HUykKK2luY2x1ZGUgLi4vbGliLm1rCiAkKE9VVFBVVCkvdmRzb190ZXN0
+X2dldHRpbWVvZmRheTogcGFyc2VfdmRzby5jIHZkc29fdGVzdF9nZXR0aW1lb2ZkYXkuYwog
+JChPVVRQVVQpL3Zkc29fdGVzdF9nZXRjcHU6IHBhcnNlX3Zkc28uYyB2ZHNvX3Rlc3RfZ2V0
+Y3B1LmMKICQoT1VUUFVUKS92ZHNvX3Rlc3RfYWJpOiBwYXJzZV92ZHNvLmMgdmRzb190ZXN0
+X2FiaS5jCiAkKE9VVFBVVCkvdmRzb190ZXN0X2Nsb2NrX2dldHJlczogdmRzb190ZXN0X2Ns
+b2NrX2dldHJlcy5jCisKICQoT1VUUFVUKS92ZHNvX3N0YW5kYWxvbmVfdGVzdF94ODY6IHZk
+c29fc3RhbmRhbG9uZV90ZXN0X3g4Ni5jIHBhcnNlX3Zkc28uYwotCSQoQ0MpICQoQ0ZMQUdT
+KSAkKENGTEFHU192ZHNvX3N0YW5kYWxvbmVfdGVzdF94ODYpIFwKLQkJdmRzb19zdGFuZGFs
+b25lX3Rlc3RfeDg2LmMgcGFyc2VfdmRzby5jIFwKLQkJLW8gJEAKKyQoT1VUUFVUKS92ZHNv
+X3N0YW5kYWxvbmVfdGVzdF94ODY6IENGTEFHUyArPS1ub3N0ZGxpYiAtZm5vLWFzeW5jaHJv
+bm91cy11bndpbmQtdGFibGVzIC1mbm8tc3RhY2stcHJvdGVjdG9yCisKICQoT1VUUFVUKS92
+ZHNvX3Rlc3RfY29ycmVjdG5lc3M6IHZkc29fdGVzdF9jb3JyZWN0bmVzcy5jCi0JJChDQykg
+JChDRkxBR1MpIFwKLQkJdmRzb190ZXN0X2NvcnJlY3RuZXNzLmMgXAotCQktbyAkQCBcCi0J
+CSQoTERGTEFHU192ZHNvX3Rlc3RfY29ycmVjdG5lc3MpCiskKE9VVFBVVCkvdmRzb190ZXN0
+X2NvcnJlY3RuZXNzOiBMREZMQUdTICs9IC1sZGwKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL3ZEU08vcGFyc2VfdmRzby5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvdkRTTy9wYXJzZV92ZHNvLmMKaW5kZXggNDEzZjc1NjIwYTM1Li40YWU0MTczNzJlOWUg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZEU08vcGFyc2VfdmRzby5j
+CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZEU08vcGFyc2VfdmRzby5jCkBAIC01
+NSwxNCArNTUsMjAgQEAgc3RhdGljIHN0cnVjdCB2ZHNvX2luZm8KIAlFTEYoVmVyZGVmKSAq
+dmVyZGVmOwogfSB2ZHNvX2luZm87CiAKLS8qIFN0cmFpZ2h0IGZyb20gdGhlIEVMRiBzcGVj
+aWZpY2F0aW9uLiAqLwotc3RhdGljIHVuc2lnbmVkIGxvbmcgZWxmX2hhc2goY29uc3QgdW5z
+aWduZWQgY2hhciAqbmFtZSkKKy8qCisgKiBTdHJhaWdodCBmcm9tIHRoZSBFTEYgc3BlY2lm
+aWNhdGlvbi4uLmFuZCB0aGVuIHR3ZWFrZWQgc2xpZ2h0bHksIGluIG9yZGVyIHRvCisgKiBh
+dm9pZCBhIGZldyBjbGFuZyB3YXJuaW5ncy4KKyAqLworc3RhdGljIHVuc2lnbmVkIGxvbmcg
+ZWxmX2hhc2goY29uc3QgY2hhciAqbmFtZSkKIHsKIAl1bnNpZ25lZCBsb25nIGggPSAwLCBn
+OwotCXdoaWxlICgqbmFtZSkKKwljb25zdCB1bnNpZ25lZCBjaGFyICp1Y2hfbmFtZSA9IChj
+b25zdCB1bnNpZ25lZCBjaGFyICopbmFtZTsKKworCXdoaWxlICgqdWNoX25hbWUpCiAJewot
+CQloID0gKGggPDwgNCkgKyAqbmFtZSsrOwotCQlpZiAoZyA9IGggJiAweGYwMDAwMDAwKQor
+CQloID0gKGggPDwgNCkgKyAqdWNoX25hbWUrKzsKKwkJZyA9IGggJiAweGYwMDAwMDAwOwor
+CQlpZiAoZykKIAkJCWggXj0gZyA+PiAyNDsKIAkJaCAmPSB+ZzsKIAl9CmRpZmYgLS1naXQg
+YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92RFNPL3Zkc29fc3RhbmRhbG9uZV90ZXN0X3g4
+Ni5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdkRTTy92ZHNvX3N0YW5kYWxvbmVfdGVz
+dF94ODYuYwppbmRleCA4YTQ0ZmY5NzNlZTEuLjI3ZjZmZGYxMTk2OSAxMDA2NDQKLS0tIGEv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdkRTTy92ZHNvX3N0YW5kYWxvbmVfdGVzdF94ODYu
+YworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92RFNPL3Zkc29fc3RhbmRhbG9uZV90
+ZXN0X3g4Ni5jCkBAIC0xOCw3ICsxOCw3IEBACiAKICNpbmNsdWRlICJwYXJzZV92ZHNvLmgi
+CiAKLS8qIFdlIG5lZWQgYSBsaWJjIGZ1bmN0aW9ucy4uLiAqLworLyogV2UgbmVlZCBzb21l
+IGxpYmMgZnVuY3Rpb25zLi4uICovCiBpbnQgc3RyY21wKGNvbnN0IGNoYXIgKmEsIGNvbnN0
+IGNoYXIgKmIpCiB7CiAJLyogVGhpcyBpbXBsZW1lbnRhdGlvbiBpcyBidWdneTogaXQgbmV2
+ZXIgcmV0dXJucyAtMS4gKi8KQEAgLTM0LDYgKzM0LDIwIEBAIGludCBzdHJjbXAoY29uc3Qg
+Y2hhciAqYSwgY29uc3QgY2hhciAqYikKIAlyZXR1cm4gMDsKIH0KIAorLyoKKyAqIFRoZSBj
+bGFuZyBidWlsZCBuZWVkcyB0aGlzLCBhbHRob3VnaCBnY2MgZG9lcyBub3QuCisgKiBTdG9s
+ZW4gZnJvbSBsaWIvc3RyaW5nLmMuCisgKi8KK3ZvaWQgKm1lbWNweSh2b2lkICpkZXN0LCBj
+b25zdCB2b2lkICpzcmMsIHNpemVfdCBjb3VudCkKK3sKKwljaGFyICp0bXAgPSBkZXN0Owor
+CWNvbnN0IGNoYXIgKnMgPSBzcmM7CisKKwl3aGlsZSAoY291bnQtLSkKKwkJKnRtcCsrID0g
+KnMrKzsKKwlyZXR1cm4gZGVzdDsKK30KKwogLyogLi4uYW5kIHR3byBzeXNjYWxscy4gIFRo
+aXMgaXMgeDg2LXNwZWNpZmljLiAqLwogc3RhdGljIGlubGluZSBsb25nIHg4Nl9zeXNjYWxs
+Myhsb25nIG5yLCBsb25nIGEwLCBsb25nIGExLCBsb25nIGEyKQogewpAQCAtNzAsNyArODQs
+NyBAQCB2b2lkIHRvX2Jhc2UxMChjaGFyICpsYXN0ZGlnLCB0aW1lX3QgbikKIAl9CiB9CiAK
+LV9fYXR0cmlidXRlX18oKGV4dGVybmFsbHlfdmlzaWJsZSkpIHZvaWQgY19tYWluKHZvaWQg
+KipzdGFjaykKK3ZvaWQgY19tYWluKHZvaWQgKipzdGFjaykKIHsKIAkvKiBQYXJzZSB0aGUg
+c3RhY2sgKi8KIAlsb25nIGFyZ2MgPSAobG9uZykqc3RhY2s7Cg==
+
+--------------zvEHuaPS38NLDGr1NkzGpYeN--
 
