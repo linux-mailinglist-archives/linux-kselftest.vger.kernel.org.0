@@ -1,137 +1,114 @@
-Return-Path: <linux-kselftest+bounces-13324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D812C92A86A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 19:50:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E304892A8F1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 20:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 669E2281EBD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 17:50:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 165561C215D5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2024 18:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B09149C43;
-	Mon,  8 Jul 2024 17:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C92B14A4E0;
+	Mon,  8 Jul 2024 18:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kxMjx8y8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GbhuJb+l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82531146A85
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 17:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14994149C6A
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jul 2024 18:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720461013; cv=none; b=mv3Dz9xoutWp/2h8W93DdomYo5ZuDRgihHS+GgIzAnRq9M4Zyz2mZ5REv2EpXERs4knj5QavKHmY2OVt2/LMI078/BlPYapdykDWkNfoQ/r5NHe0nhzNA4fyh7m9HKfwAQPo9+KVTwkw45FEGPIKFo/HleiCIy4GXGmtrmqOFqY=
+	t=1720463279; cv=none; b=pAsr5xeupO4QeqS1E+WGCkm46/sCz2fwxBi+GRWqHAoRQFpU4T6pUeiVgJrJOFnptMrJ+yRH3kzcTIn9hg0rHayZv3Qyem2U6LEUIXPYfl7vdIDfAYoDvZWvldW9TTxOBl5BRyuBkQ2gjC7SQbkuaJUt7VkXAK19nlqSKXOQdbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720461013; c=relaxed/simple;
-	bh=Cgeu270hOmX3S5GZTXTxjnZltMxA5nAub89Ban01DjU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tg3r8f0U9dovVgDJ+9vgNowo5njdpOMOhuGIgA2CUYo7d4QBgUVGLqOI4JCe2zMK2QMklvSdt4APDwRpmyGcIArTjAk3w2IK2m9o3dwHUvzkOqo+rzxg1GZwCXgcmJjTe5F1MJmMhnzTwmJZTPq0jSFOvt084aMcWlfJYo7pmsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kxMjx8y8; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-df4d5d0b8d0so4109640276.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2024 10:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720461009; x=1721065809; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nESyMzGZXBtAqIeO/AYycg3VVtY82ta3I2iF0FVP4cE=;
-        b=kxMjx8y8+f//+s7hEupd9DKh37DXdEahAVb2tjOhRg3I+KR8cBC+wrlTsZAnearr09
-         poj2fR+HiezIpXAOvx/+j4SXmv+jxd0LUv5DwTlvGskBUXBE8x75i0fSPlD85ZY0TpUf
-         ljmRpZu75n+UXw9PVSFuH4+fI/ctN49/YzKmtyLM7aLkkeiPp92sAzp5BEO3nZ2O7Zov
-         Anr+kyAuj3iiTQB4BwPToWM9CnelVdJ+vWj3uZclatMRnAU5+NEzocQ5+gY6rptYn5U4
-         5SfYoxdr3MyxJSy59iWeIaFI31lEwYk7Hdi9y6LrbijHXCaf9kewubcp5GHXvOL186U2
-         exzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720461009; x=1721065809;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nESyMzGZXBtAqIeO/AYycg3VVtY82ta3I2iF0FVP4cE=;
-        b=GxfCmlfAhX7t4a/FAif09iqI/6hfHlflEDdMTgraH2Oh5eEkvRtzTB7O6Q23H1USJM
-         WZy0zLVKpNIk37xmvqojzQf1wiWccWLe7xQqRD7v1xhkBV62jyjsmsEoLZzUoT6LLn9o
-         6AtyiuHj9zw9D8n+96kCvBPuyCz59hXWi7+3nPBsrjyYoSUHXUzU4rwBW0kvKb/VwSxq
-         62E8TEZJQ3SFRO/fc8+j0Yi9HIZRL92U7/e6JIwK/1jevtUx6nWUjJXMnGYe2zFvqdLz
-         3h/u1IxY/f2gU6WmtwWT/CGsbZMd2AXnSHwZq1K5m/IXM4OibLfNWTQHRKPX88RoOff2
-         rJRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAcpBN0egJ9pQRMO8zqKMx+7XAXkH8Qp6E2gjq8JzOlYPbt9RpU5MZgTvV9ZMKWvBI4iXU6fXJSHAvBh2oZ+KFg1vknLbgsCPAVt0UdOid
-X-Gm-Message-State: AOJu0Ywcrnf13PZPX/XrC7Y/zeH66QmmMD6f/b23j1hG5/9rEvKyquW9
-	eFb+HmSld3p+3xEqjzaqONgIivZQnSzNRbM/h3HiwszYFh+ovdMK4F98wSsbYOa1oYhylqSyKd9
-	FMmZhvi0Rh9nQMQ5pXwsME0D1ay7HbtMRxkiI
-X-Google-Smtp-Source: AGHT+IHcxq/i9rzCxsEN5hnVo4LPbu8O3jBlhcP+IANI38Pst6MQnmRwrHXpKPTOw9a59dfbicjTNMHGzlIpXAxgcP4=
-X-Received: by 2002:a05:6902:1361:b0:e03:4e08:c93c with SMTP id
- 3f1490d57ef6-e041b03995dmr571404276.13.1720461009288; Mon, 08 Jul 2024
- 10:50:09 -0700 (PDT)
+	s=arc-20240116; t=1720463279; c=relaxed/simple;
+	bh=ilPn+u949EiekXc1fNlL1FFhQXdzr142oQcIyOq1/8E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=U0uL+CNK29awTkO5MwmGub3dqRkQOXhn/jQOkR0JYH6+mNNlOJ1LqHMi9Apv/fGAtxTE8FdhGZNa7eDx1G1nNryuwQRBwn9gvpZ5h0iKN+xhmu089kA2SZjecY8ofV2UoznEx3O7vadmJ5NT5tsbb3/Q/5iedvPLsvfC/EVQkTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GbhuJb+l; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720463277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aFsqwavuUe9u0s443Cn3sa3uIqOnS2CpWueQCZ5/X/E=;
+	b=GbhuJb+lMDipIK7ipH6c+w5fb2ORCfS+hvtJK5rgR2iCZTN/kT7v0jN5YTbPbzYdZI4N8d
+	SM5B9dKNCUKRZ6SBRh/17V5CTSfzu+/eUPBminfK2wrNXDTCWF/c3yoOl/zcrsbB+W4gRQ
+	7HIwPsP5ocxiZvWsjOapNCB/sf/ILBA=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-98-60_gX4xZOkidNDF89tLsgA-1; Mon,
+ 08 Jul 2024 14:27:53 -0400
+X-MC-Unique: 60_gX4xZOkidNDF89tLsgA-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DB174195609F;
+	Mon,  8 Jul 2024 18:27:51 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.8.34])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BC8B619560AE;
+	Mon,  8 Jul 2024 18:27:47 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Adrian Moreno <amorenoz@redhat.com>
+Cc: netdev@vger.kernel.org,  Pravin B Shelar <pshelar@ovn.org>,  "David S.
+ Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
+ Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Shuah Khan
+ <shuah@kernel.org>,  dev@openvswitch.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] selftests: openvswitch: retry instead of sleep
+In-Reply-To: <20240708134451.3489802-1-amorenoz@redhat.com> (Adrian Moreno's
+	message of "Mon, 8 Jul 2024 15:44:49 +0200")
+References: <20240708134451.3489802-1-amorenoz@redhat.com>
+Date: Mon, 08 Jul 2024 14:27:45 -0400
+Message-ID: <f7tzfqrn3ha.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240708134654.1725-1-yuzenghui@huawei.com>
-In-Reply-To: <20240708134654.1725-1-yuzenghui@huawei.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 8 Jul 2024 10:49:57 -0700
-Message-ID: <CABdmKX1CXWuw0-gRukZeSoF=SZFi3eRPELe=EU_-q3OVKQHZzw@mail.gmail.com>
-Subject: Re: [PATCH] kselftests: dmabuf-heaps: Ensure the driver name is null-terminated
-To: Zenghui Yu <yuzenghui@huawei.com>
-Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, sumit.semwal@linaro.org, 
-	benjamin.gaignard@collabora.com, Brian.Starkey@arm.com, jstultz@google.com, 
-	shuah@kernel.org, wanghaibin.wang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Jul 8, 2024 at 6:47=E2=80=AFAM Zenghui Yu <yuzenghui@huawei.com> wr=
-ote:
->
-> Even if a vgem device is configured in, we will skip the import_vgem_fd()
-> test almost every time.
->
->   TAP version 13
->   1..11
->   # Testing heap: system
->   # =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->   # Testing allocation and importing:
->   ok 1 # SKIP Could not open vgem -1
->
-> The problem is that we use the DRM_IOCTL_VERSION ioctl to query the drive=
-r
-> version information but leave the name field a non-null-terminated string=
-.
-> Terminate it properly to actually test against the vgem device.
+Adrian Moreno <amorenoz@redhat.com> writes:
 
-Hm yeah. Looks like drm_copy_field resets version.name to the actual
-size of the name in the case of truncation, so maybe worth checking
-that too in case there is a name like "vgemfoo" that gets converted to
-"vgem\0" by this?
-
+> There are a couple of places where the test script "sleep"s to wait for
+> some external condition to be met.
 >
-> Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+> This is error prone, specially in slow systems (identified in CI by
+> "KSFT_MACHINE_SLOW=yes").
+>
+> To fix this, add a "ovs_wait" function that tries to execute a command
+> a few times until it succeeds. The timeout used is set to 5s for
+> "normal" systems and doubled if a slow CI machine is detected.
+>
+> This should make the following work:
+>
+> $ vng --build  \
+>     --config tools/testing/selftests/net/config \
+>     --config kernel/configs/debug.config
+>
+> $ vng --run . --user root -- "make -C tools/testing/selftests/ \
+>     KSFT_MACHINE_SLOW=yes TARGETS=net/openvswitch run_tests"
+>
+> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
 > ---
->  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/t=
-esting/selftests/dmabuf-heaps/dmabuf-heap.c
-> index 5f541522364f..2fcc74998fa9 100644
-> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> @@ -32,6 +32,8 @@ static int check_vgem(int fd)
->         if (ret)
->                 return 0;
->
-> +       name[4] =3D '\0';
-> +
->         return !strcmp(name, "vgem");
->  }
->
-> --
-> 2.33.0
->
+
+Looks like this does resolve the issue in question on the -dbg
+environment:
+
+https://netdev.bots.linux.dev/contest.html?executor=vmksft-net-dbg&test=openvswitch-sh
+
+Thanks Adrian!  Also, thanks for including the fractional sleep.
+
+Reviewed-by: Aaron Conole <aconole@redhat.com>
+
 
