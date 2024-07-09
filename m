@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-13344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA6F92AD7C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 03:00:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0B4A92AD76
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 03:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23342282C3D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 01:00:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06C5E282A0E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 01:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1136242052;
-	Tue,  9 Jul 2024 01:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D792746F;
+	Tue,  9 Jul 2024 01:00:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA3D39856;
-	Tue,  9 Jul 2024 01:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB84924B4A;
+	Tue,  9 Jul 2024 01:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720486819; cv=none; b=VgOYvXv0nbAspZXakaPCVwCpHjlumruJpXkZKMpMX87GjPvFuhG0+hQBeVqqXa5R6nCxQsugf4yOIC/0+GGts8ecfcP5XKd93uUr/cWQdId2dK/R518z8trEdtE1/Vkfv+y0TsjCcGOHaCiafV9RiK07hSy78Hc0WoMI4R2x4Qc=
+	t=1720486814; cv=none; b=ZIYyVTlw2zxTxrXr6BXN5pjPcQUuW6MZL8N5rFyXLPWRtj6qaZUwz/UgZuIY3NqTFQOMcHBT+4GXuhWTCGRi6dUFcYPiOh7OjQuVP7V9F8XIdGxjBooBtweTj7evIZmqGVv+OoMn0N6xxeLRV2J9yqd7JI3eLv7BQIyMgT+P7C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720486819; c=relaxed/simple;
-	bh=xLqdOSI1eEn13oz6ComTmDYh9EQN8Mh9yt72JKOjUs8=;
+	s=arc-20240116; t=1720486814; c=relaxed/simple;
+	bh=f8u+3jaw5EtE3CvyeAy6cdqI83Y22LA9WRWr9WpaZis=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ErzsRSeDMwk2/N67v0LfFb4d5lkqT+7GI7PvvKjBx1RAqGLCz+K2V62jdgmvXqEFG9mXUvcyiZ21o1X0J+qcvrZ3eC7n3UcOUe3xLxVNwWuO0XfjVtEj6WWfjE9OUmJZ1UIYy1K8hYqL/WynFQYB6UeUAzeOqdTq8uKlsjpi8/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+	 MIME-Version:Content-Type; b=CA2L/oodORMgUKlyd1rq6VrBn5ZxwVtWMIoHxvDOyNbjUqj9CrHu6HSJUyEZv3f0pleIKZgJ8iX4GEc6IUnSRr+8r8K/TOpH6z1riNr2X08xwahXjNOD3MPmgebpkQ9sAebKsyqeiKjBQKzJ1Zpw5K5Ct6Re4WJU8ujKYxxLqVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WJ2dz1gqSz1HF7Y;
-	Tue,  9 Jul 2024 08:57:43 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WJ2bM4G4yz1T5q7;
+	Tue,  9 Jul 2024 08:55:27 +0800 (CST)
 Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id 71A72180028;
-	Tue,  9 Jul 2024 09:00:07 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 4173F1402E1;
+	Tue,  9 Jul 2024 09:00:08 +0800 (CST)
 Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
  (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Tue, 9 Jul
- 2024 09:00:06 +0800
+ 2024 09:00:07 +0800
 From: Liao Chang <liaochang1@huawei.com>
 To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 	<namhyung@kernel.org>, <mark.rutland@arm.com>,
@@ -51,9 +51,9 @@ To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
 	<liaochang1@huawei.com>
 CC: <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
 	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH 1/2] uprobes: Optimize the return_instance related routines
-Date: Tue, 9 Jul 2024 00:51:41 +0000
-Message-ID: <20240709005142.4044530-2-liaochang1@huawei.com>
+Subject: [PATCH 2/2] selftests/bpf: Add uretprobe test for return_instance management
+Date: Tue, 9 Jul 2024 00:51:42 +0000
+Message-ID: <20240709005142.4044530-3-liaochang1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240709005142.4044530-1-liaochang1@huawei.com>
 References: <20240709005142.4044530-1-liaochang1@huawei.com>
@@ -68,358 +68,210 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  kwepemd200013.china.huawei.com (7.221.188.133)
 
-Reduce the runtime overhead for struct return_instance data managed by
-uretprobe. This patch replaces the dynamic allocation with statically
-allocated array, leverage two facts that are limited nesting depth of
-uretprobe (max 64) and the function call style of return_instance usage
-(create at entry, free at exit).
+This patch add three testcases to verify the proper management of
+return_instance data by uretprobes:
 
-This patch has been tested on Kunpeng916 (Hi1616), 4 NUMA nodes, 64
-cores @ 2.4GHz. Redis benchmarks show a throughput gain by 2% for Redis
-GET and SET commands:
+- uretprobe_longjmp() verifies that longjmp() bypasses the uretprobe BPF
+  program attached to the exit of instrumented function.
 
-------------------------------------------------------------------
-Test case       | No uretprobes | uretprobes     | uretprobes
-                |               | (current)      | (optimized)
-==================================================================
-Redis SET (RPS) | 47025         | 40619 (-13.6%) | 41529 (-11.6%)
-------------------------------------------------------------------
-Redis GET (RPS) | 46715         | 41426 (-11.3%) | 42306 (-9.4%)
-------------------------------------------------------------------
+- uretprobe_cleanup_return_instance() verifies that uretprobe reclaim
+  the return_instances data created before a longjmp(), which leads to
+  kernel recount the nested depth of instrumented function.
+
+- uretprobe_reach_nestedness_limit() confirms that the uretprobe doesn't
+  reclaim the return_instances data created before longjmp() and hijack
+  the return address of instrumented function upon the nestedness depth
+  reache the limits (64).
 
 Signed-off-by: Liao Chang <liaochang1@huawei.com>
 ---
- include/linux/uprobes.h |  10 ++-
- kernel/events/uprobes.c | 162 ++++++++++++++++++++++++----------------
- 2 files changed, 105 insertions(+), 67 deletions(-)
+ .../bpf/prog_tests/uretprobe_depth.c          | 150 ++++++++++++++++++
+ .../selftests/bpf/progs/uretprobe_depth.c     |  19 +++
+ 2 files changed, 169 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uretprobe_depth.c
 
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f46e0ca0169c..ec50ff010b1d 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -55,6 +55,12 @@ enum uprobe_task_state {
- 	UTASK_SSTEP_TRAPPED,
- };
- 
-+struct return_frame {
-+	/* the frames of return instances */
-+	struct return_instance	*return_instance;
-+	struct return_instance	*vaddr;
-+};
+diff --git a/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+new file mode 100644
+index 000000000000..ba03b1868e37
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- /*
-  * uprobe_task: Metadata of a task while it singlesteps.
-  */
-@@ -76,7 +82,7 @@ struct uprobe_task {
- 	struct uprobe			*active_uprobe;
- 	unsigned long			xol_vaddr;
- 
--	struct return_instance		*return_instances;
-+	struct return_frame		frame;
- 	unsigned int			depth;
- };
- 
-@@ -86,8 +92,6 @@ struct return_instance {
- 	unsigned long		stack;		/* stack pointer */
- 	unsigned long		orig_ret_vaddr; /* original return address */
- 	bool			chained;	/* true, if instance is nested */
--
--	struct return_instance	*next;		/* keep as stack */
- };
- 
- enum rp_check {
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 2c83ba776fc7..81c56fd2811c 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1697,12 +1697,89 @@ unsigned long uprobe_get_trap_addr(struct pt_regs *regs)
- 	return instruction_pointer(regs);
- }
- 
--static struct return_instance *free_ret_instance(struct return_instance *ri)
-+static inline
-+struct return_instance *next_ret_instance(struct return_frame *frame,
-+					  struct return_instance *ri)
++#include <test_progs.h>
++
++#include <unistd.h>
++#include <setjmp.h>
++#include <asm/ptrace.h>
++#include <linux/compiler.h>
++#include <linux/stringify.h>
++#include "uretprobe_depth.skel.h"
++
++#define RETVAL			0xFFFF
++#define JMPVAL			0x4B1D
++#define MAX_URETPROBE_DEPTH	64 // See include/linux/uprobes.h
++#define NR_OMITTED_URETPROBE	16
++static jmp_buf jmp;
++
++unsigned long __uretprobe_longjmp(int nest, int jmpval, int retval)
 +{
-+	return ri == frame->vaddr ? NULL : ri - 1;
-+}
-+
-+static inline
-+struct return_instance *curr_ret_instance(struct uprobe_task *task)
-+{
-+	return task->frame.return_instance;
-+}
-+
-+static struct return_instance *find_next_ret_chain(struct uprobe_task *utask,
-+						   struct return_instance *ri)
-+{
-+	bool chained;
-+
-+	do {
-+		chained = ri->chained;
-+		ri = next_ret_instance(&utask->frame, ri);
-+	} while (chained);
-+
-+	return ri;
-+}
-+
-+static inline
-+struct return_instance *free_ret_instance(struct uprobe_task *utask,
-+					  struct return_instance *ri)
- {
--	struct return_instance *next = ri->next;
- 	put_uprobe(ri->uprobe);
--	kfree(ri);
--	return next;
-+	return next_ret_instance(&utask->frame, ri);
-+}
-+
-+static void free_return_instances(struct uprobe_task *task)
-+{
-+	struct return_frame *frame = &task->frame;
-+	struct return_instance *ri = frame->return_instance;
-+
-+	while (ri) {
-+		put_uprobe(ri->uprobe);
-+		ri = next_ret_instance(frame, ri);
++	if (nest) {
++		nest = ++retval < MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE;
++		return __uretprobe_longjmp(nest, jmpval, retval);
 +	}
 +
-+	kfree(frame->vaddr);
++	if (jmpval == JMPVAL) {
++		longjmp(jmp, jmpval);
++		return 0;
++	} else
++		return retval;
 +}
 +
-+static void cleanup_return_instances(struct uprobe_task *utask, bool chained,
-+				     struct pt_regs *regs)
++static void uretprobe_longjmp(void)
 +{
-+	struct return_frame *frame = &utask->frame;
-+	struct return_instance *ri = frame->return_instance;
-+	enum rp_check ctx = chained ? RP_CHECK_CHAIN_CALL : RP_CHECK_CALL;
-+
-+	while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
-+		ri = next_ret_instance(frame, ri);
-+		utask->depth--;
++	if (setjmp(jmp) == JMPVAL) {
++		__uretprobe_longjmp(0, 0, JMPVAL);
++		return;
 +	}
-+	frame->return_instance = ri;
++
++	__uretprobe_longjmp(0, JMPVAL, RETVAL);
 +}
 +
-+static struct return_instance *alloc_return_instance(struct uprobe_task *task)
++static void uretprobe_cleanup_return_instances(void)
 +{
-+	struct return_frame *frame = &task->frame;
-+
-+	if (!frame->vaddr) {
-+		frame->vaddr = kcalloc(MAX_URETPROBE_DEPTH,
-+				sizeof(struct return_instance), GFP_KERNEL);
-+		if (!frame->vaddr)
-+			return NULL;
++	if (setjmp(jmp) == JMPVAL) {
++		/*
++		 * Cleanup these return instance data created before longjmp
++		 * firstly. Then create 16 new return_instance data from here.
++		 */
++		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
++		return;
 +	}
 +
-+	if (!frame->return_instance) {
-+		frame->return_instance = frame->vaddr;
-+		return frame->return_instance;
-+	}
-+
-+	return ++frame->return_instance;
++	/* Create 8 return_instance data from here. */
++	__uretprobe_longjmp(1, JMPVAL,
++			    MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE / 2);
 +}
 +
-+static inline bool return_frame_empty(struct uprobe_task *task)
++static void uretprobe_reach_nestedness_limit(void)
 +{
-+	return !task->frame.return_instance;
- }
- 
- /*
-@@ -1712,7 +1789,6 @@ static struct return_instance *free_ret_instance(struct return_instance *ri)
- void uprobe_free_utask(struct task_struct *t)
- {
- 	struct uprobe_task *utask = t->utask;
--	struct return_instance *ri;
- 
- 	if (!utask)
- 		return;
-@@ -1720,10 +1796,7 @@ void uprobe_free_utask(struct task_struct *t)
- 	if (utask->active_uprobe)
- 		put_uprobe(utask->active_uprobe);
- 
--	ri = utask->return_instances;
--	while (ri)
--		ri = free_ret_instance(ri);
--
-+	free_return_instances(utask);
- 	xol_free_insn_slot(t);
- 	kfree(utask);
- 	t->utask = NULL;
-@@ -1747,26 +1820,20 @@ static struct uprobe_task *get_utask(void)
- static int dup_utask(struct task_struct *t, struct uprobe_task *o_utask)
- {
- 	struct uprobe_task *n_utask;
--	struct return_instance **p, *o, *n;
-+	struct return_instance *o, *n;
- 
- 	n_utask = kzalloc(sizeof(struct uprobe_task), GFP_KERNEL);
- 	if (!n_utask)
- 		return -ENOMEM;
- 	t->utask = n_utask;
- 
--	p = &n_utask->return_instances;
--	for (o = o_utask->return_instances; o; o = o->next) {
--		n = kmalloc(sizeof(struct return_instance), GFP_KERNEL);
--		if (!n)
--			return -ENOMEM;
--
-+	o = curr_ret_instance(o_utask);
-+	while (o) {
-+		n = alloc_return_instance(n_utask);
-+		n_utask->depth++;
- 		*n = *o;
- 		get_uprobe(n->uprobe);
--		n->next = NULL;
--
--		*p = n;
--		p = &n->next;
--		n_utask->depth++;
-+		o = next_ret_instance(&o_utask->frame, o);
- 	}
- 
- 	return 0;
-@@ -1799,7 +1866,7 @@ void uprobe_copy_process(struct task_struct *t, unsigned long flags)
- 
- 	t->utask = NULL;
- 
--	if (!utask || !utask->return_instances)
-+	if (!utask || return_frame_empty(utask))
- 		return;
- 
- 	if (mm == t->mm && !(flags & CLONE_VFORK))
-@@ -1840,19 +1907,6 @@ static unsigned long get_trampoline_vaddr(void)
- 	return trampoline_vaddr;
- }
- 
--static void cleanup_return_instances(struct uprobe_task *utask, bool chained,
--					struct pt_regs *regs)
--{
--	struct return_instance *ri = utask->return_instances;
--	enum rp_check ctx = chained ? RP_CHECK_CHAIN_CALL : RP_CHECK_CALL;
--
--	while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
--		ri = free_ret_instance(ri);
--		utask->depth--;
--	}
--	utask->return_instances = ri;
--}
--
- static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- {
- 	struct return_instance *ri;
-@@ -1874,10 +1928,6 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 		return;
- 	}
- 
--	ri = kmalloc(sizeof(struct return_instance), GFP_KERNEL);
--	if (!ri)
--		return;
--
- 	trampoline_vaddr = get_trampoline_vaddr();
- 	orig_ret_vaddr = arch_uretprobe_hijack_return_addr(trampoline_vaddr, regs);
- 	if (orig_ret_vaddr == -1)
-@@ -1893,7 +1943,7 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 	 * instances. This also makes breakpoint unwrapping easier.
- 	 */
- 	if (chained) {
--		if (!utask->return_instances) {
-+		if (return_frame_empty(utask)) {
- 			/*
- 			 * This situation is not possible. Likely we have an
- 			 * attack from user-space.
-@@ -1901,22 +1951,19 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 			uprobe_warn(current, "handle tail call");
- 			goto fail;
- 		}
--		orig_ret_vaddr = utask->return_instances->orig_ret_vaddr;
-+		orig_ret_vaddr = curr_ret_instance(utask)->orig_ret_vaddr;
- 	}
- 
-+	ri = alloc_return_instance(utask);
- 	ri->uprobe = get_uprobe(uprobe);
- 	ri->func = instruction_pointer(regs);
- 	ri->stack = user_stack_pointer(regs);
- 	ri->orig_ret_vaddr = orig_ret_vaddr;
- 	ri->chained = chained;
--
- 	utask->depth++;
--	ri->next = utask->return_instances;
--	utask->return_instances = ri;
- 
--	return;
-  fail:
--	kfree(ri);
-+	return;
- }
- 
- /* Prepare to single-step probed instruction out of line. */
-@@ -2111,18 +2158,6 @@ handle_uretprobe_chain(struct return_instance *ri, struct pt_regs *regs)
- 	up_read(&uprobe->register_rwsem);
- }
- 
--static struct return_instance *find_next_ret_chain(struct return_instance *ri)
--{
--	bool chained;
--
--	do {
--		chained = ri->chained;
--		ri = ri->next;	/* can't be NULL if chained */
--	} while (chained);
--
--	return ri;
--}
--
- static void handle_trampoline(struct pt_regs *regs)
- {
- 	struct uprobe_task *utask;
-@@ -2133,7 +2168,7 @@ static void handle_trampoline(struct pt_regs *regs)
- 	if (!utask)
- 		goto sigill;
- 
--	ri = utask->return_instances;
-+	ri = curr_ret_instance(utask);
- 	if (!ri)
- 		goto sigill;
- 
-@@ -2144,25 +2179,24 @@ static void handle_trampoline(struct pt_regs *regs)
- 		 * or NULL; the latter case means that nobody but ri->func
- 		 * could hit this trampoline on return. TODO: sigaltstack().
- 		 */
--		next = find_next_ret_chain(ri);
-+		next = find_next_ret_chain(utask, ri);
- 		valid = !next || arch_uretprobe_is_alive(next, RP_CHECK_RET, regs);
- 
- 		instruction_pointer_set(regs, ri->orig_ret_vaddr);
- 		do {
- 			if (valid)
- 				handle_uretprobe_chain(ri, regs);
--			ri = free_ret_instance(ri);
-+			ri = free_ret_instance(utask, ri);
- 			utask->depth--;
- 		} while (ri != next);
- 	} while (!valid);
- 
--	utask->return_instances = ri;
-+	utask->frame.return_instance = ri;
- 	return;
- 
-  sigill:
- 	uprobe_warn(current, "handle uretprobe, sending SIGILL.");
- 	force_sig(SIGILL);
--
- }
- 
- bool __weak arch_uprobe_ignore(struct arch_uprobe *aup, struct pt_regs *regs)
-@@ -2315,7 +2349,7 @@ int uprobe_pre_sstep_notifier(struct pt_regs *regs)
- 		return 0;
- 
- 	if (!test_bit(MMF_HAS_UPROBES, &current->mm->flags) &&
--	    (!current->utask || !current->utask->return_instances))
-+	    (!current->utask || return_frame_empty(current->utask)))
- 		return 0;
- 
- 	set_thread_flag(TIF_UPROBE);
++	if (setjmp(jmp) == JMPVAL) {
++		/*
++		 * Due to uretprobe reach to the nestedness limit, it doesn't
++		 * cleanup the return instance created before longjmp.
++		 */
++		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
++		return;
++	}
++
++	/* Create 64 return_instance from here. */
++	__uretprobe_longjmp(1, JMPVAL, 0);
++}
++
++static void test_uretprobe_longjmp(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->retval = -1;
++
++	uretprobe_longjmp();
++
++	ASSERT_EQ(skel->bss->retval, JMPVAL, "return value");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++static void test_uretprobe_reach_nestedness_limit(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->depth = 0;
++
++	uretprobe_reach_nestedness_limit();
++
++	ASSERT_EQ(skel->bss->depth, 0, "nest depth");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++static void test_uretprobe_cleanup_return_instances(void)
++{
++	struct uretprobe_depth *skel = NULL;
++	int err;
++
++	skel = uretprobe_depth__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
++		goto cleanup;
++
++	err = uretprobe_depth__attach(skel);
++	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
++		goto cleanup;
++
++	skel->bss->depth = 0;
++
++	uretprobe_cleanup_return_instances();
++
++	ASSERT_EQ(skel->bss->depth, NR_OMITTED_URETPROBE + 1, "nest depth");
++
++cleanup:
++	uretprobe_depth__destroy(skel);
++}
++
++void test_uretprobe_return_instance(void)
++{
++	if (test__start_subtest("uretprobe_longjmp"))
++		test_uretprobe_longjmp();
++	if (test__start_subtest("uretprobe_cleanup_return_instances"))
++		test_uretprobe_cleanup_return_instances();
++	if (test__start_subtest("uretprobe_reach_nestedness_limit"))
++		test_uretprobe_reach_nestedness_limit();
++}
+diff --git a/tools/testing/selftests/bpf/progs/uretprobe_depth.c b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
+new file mode 100644
+index 000000000000..b71f2de52b5e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <string.h>
++
++int depth;
++unsigned long retval;
++
++char _license[] SEC("license") = "GPL";
++
++SEC("uretprobe//proc/self/exe:__uretprobe_longjmp")
++int uretprobe(struct pt_regs *ctx)
++{
++	depth++;
++#if defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
++	retval = ctx->regs[0];
++#endif
++	return 0;
++}
 -- 
 2.34.1
 
