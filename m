@@ -1,278 +1,114 @@
-Return-Path: <linux-kselftest+bounces-13342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0B4A92AD76
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 03:00:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA27D92B071
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 08:43:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06C5E282A0E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 01:00:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF9371C20D5E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 06:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D792746F;
-	Tue,  9 Jul 2024 01:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C9313BC30;
+	Tue,  9 Jul 2024 06:43:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB84924B4A;
-	Tue,  9 Jul 2024 01:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626862BD05;
+	Tue,  9 Jul 2024 06:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720486814; cv=none; b=ZIYyVTlw2zxTxrXr6BXN5pjPcQUuW6MZL8N5rFyXLPWRtj6qaZUwz/UgZuIY3NqTFQOMcHBT+4GXuhWTCGRi6dUFcYPiOh7OjQuVP7V9F8XIdGxjBooBtweTj7evIZmqGVv+OoMn0N6xxeLRV2J9yqd7JI3eLv7BQIyMgT+P7C8=
+	t=1720507389; cv=none; b=DDlndROUO8WFV/d5cLofYFnHfa0SPFqJbMh6ciKqJn1PHBSHXcocCPoSFerS8FFw35oiI/rS9tR7VEmRcIIFsC9grKlqWg7zQx1JEWEDtB76qxZup6cRzchcnzNtuAXFLgI3QilMoayTdXnn6Q8TDoVw4Gw05vbp28rHDJBtIyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720486814; c=relaxed/simple;
-	bh=f8u+3jaw5EtE3CvyeAy6cdqI83Y22LA9WRWr9WpaZis=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CA2L/oodORMgUKlyd1rq6VrBn5ZxwVtWMIoHxvDOyNbjUqj9CrHu6HSJUyEZv3f0pleIKZgJ8iX4GEc6IUnSRr+8r8K/TOpH6z1riNr2X08xwahXjNOD3MPmgebpkQ9sAebKsyqeiKjBQKzJ1Zpw5K5Ct6Re4WJU8ujKYxxLqVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+	s=arc-20240116; t=1720507389; c=relaxed/simple;
+	bh=PgSoz+tBPUQUxghgyLC35M99pDZPLRm/MdTFAJNbHow=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=J7sxM6TIAMadsh1Ds7AMaWwBUxbFlkuc769QIUbsDaqSAqcUuL8Zj9VpHud6roV8rV9/5yhbB5XH1hk/SvpJPeum1PBOVtVpZa0egtJQMD+R9ZJJ3rHEsbipDPmd7/WYVWpVmoB4K3x2scDiIqwssXzp6pSa7XRYlZ51iZMJC2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WJ2bM4G4yz1T5q7;
-	Tue,  9 Jul 2024 08:55:27 +0800 (CST)
-Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4173F1402E1;
-	Tue,  9 Jul 2024 09:00:08 +0800 (CST)
-Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
- (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Tue, 9 Jul
- 2024 09:00:07 +0800
-From: Liao Chang <liaochang1@huawei.com>
-To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-	<namhyung@kernel.org>, <mark.rutland@arm.com>,
-	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-	<irogers@google.com>, <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-	<sdf@fomichev.me>, <haoluo@google.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-	<liaochang1@huawei.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH 2/2] selftests/bpf: Add uretprobe test for return_instance management
-Date: Tue, 9 Jul 2024 00:51:42 +0000
-Message-ID: <20240709005142.4044530-3-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240709005142.4044530-1-liaochang1@huawei.com>
-References: <20240709005142.4044530-1-liaochang1@huawei.com>
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4WJBCc03Mmz1X4h0;
+	Tue,  9 Jul 2024 14:38:52 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
+	by mail.maildlp.com (Postfix) with ESMTPS id B30CD180018;
+	Tue,  9 Jul 2024 14:43:03 +0800 (CST)
+Received: from [10.174.185.179] (10.174.185.179) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 9 Jul 2024 14:43:02 +0800
+Subject: Re: [PATCH] kselftests: dmabuf-heaps: Ensure the driver name is
+ null-terminated
+To: "T.J. Mercier" <tjmercier@google.com>
+CC: <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <sumit.semwal@linaro.org>,
+	<benjamin.gaignard@collabora.com>, <Brian.Starkey@arm.com>,
+	<jstultz@google.com>, <shuah@kernel.org>, <wanghaibin.wang@huawei.com>
+References: <20240708134654.1725-1-yuzenghui@huawei.com>
+ <CABdmKX1CXWuw0-gRukZeSoF=SZFi3eRPELe=EU_-q3OVKQHZzw@mail.gmail.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <97cdc2d8-75ae-9fa2-6dc0-678867040eea@huawei.com>
+Date: Tue, 9 Jul 2024 14:43:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CABdmKX1CXWuw0-gRukZeSoF=SZFi3eRPELe=EU_-q3OVKQHZzw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd200013.china.huawei.com (7.221.188.133)
+ kwepemm600007.china.huawei.com (7.193.23.208)
 
-This patch add three testcases to verify the proper management of
-return_instance data by uretprobes:
+On 2024/7/9 1:49, T.J. Mercier wrote:
+> On Mon, Jul 8, 2024 at 6:47 AM Zenghui Yu <yuzenghui@huawei.com> wrote:
+> >
+> > Even if a vgem device is configured in, we will skip the import_vgem_fd()
+> > test almost every time.
+> >
+> >   TAP version 13
+> >   1..11
+> >   # Testing heap: system
+> >   # =======================================
+> >   # Testing allocation and importing:
+> >   ok 1 # SKIP Could not open vgem -1
+> >
+> > The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
+> > version information but leave the name field a non-null-terminated string.
+> > Terminate it properly to actually test against the vgem device.
+> 
+> Hm yeah. Looks like drm_copy_field resets version.name to the actual
+> size of the name in the case of truncation, so maybe worth checking
+> that too in case there is a name like "vgemfoo" that gets converted to
+> "vgem\0" by this?
 
-- uretprobe_longjmp() verifies that longjmp() bypasses the uretprobe BPF
-  program attached to the exit of instrumented function.
+Given that drm_copy_field() would set version.name_len to the exact
+length of the driver name, this can be addressed by
 
-- uretprobe_cleanup_return_instance() verifies that uretprobe reclaim
-  the return_instances data created before a longjmp(), which leads to
-  kernel recount the nested depth of instrumented function.
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c 
+b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index 2fcc74998fa9..5d0a809dc2df 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -29,7 +29,7 @@ static int check_vgem(int fd)
+  	version.name = name;
 
-- uretprobe_reach_nestedness_limit() confirms that the uretprobe doesn't
-  reclaim the return_instances data created before longjmp() and hijack
-  the return address of instrumented function upon the nestedness depth
-  reache the limits (64).
+  	ret = ioctl(fd, DRM_IOCTL_VERSION, &version);
+-	if (ret)
++	if (ret || version.name_len != 4)
+  		return 0;
 
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- .../bpf/prog_tests/uretprobe_depth.c          | 150 ++++++++++++++++++
- .../selftests/bpf/progs/uretprobe_depth.c     |  19 +++
- 2 files changed, 169 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
- create mode 100644 tools/testing/selftests/bpf/progs/uretprobe_depth.c
+  	name[4] = '\0';
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
-new file mode 100644
-index 000000000000..ba03b1868e37
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/uretprobe_depth.c
-@@ -0,0 +1,150 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+
-+#include <unistd.h>
-+#include <setjmp.h>
-+#include <asm/ptrace.h>
-+#include <linux/compiler.h>
-+#include <linux/stringify.h>
-+#include "uretprobe_depth.skel.h"
-+
-+#define RETVAL			0xFFFF
-+#define JMPVAL			0x4B1D
-+#define MAX_URETPROBE_DEPTH	64 // See include/linux/uprobes.h
-+#define NR_OMITTED_URETPROBE	16
-+static jmp_buf jmp;
-+
-+unsigned long __uretprobe_longjmp(int nest, int jmpval, int retval)
-+{
-+	if (nest) {
-+		nest = ++retval < MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE;
-+		return __uretprobe_longjmp(nest, jmpval, retval);
-+	}
-+
-+	if (jmpval == JMPVAL) {
-+		longjmp(jmp, jmpval);
-+		return 0;
-+	} else
-+		return retval;
-+}
-+
-+static void uretprobe_longjmp(void)
-+{
-+	if (setjmp(jmp) == JMPVAL) {
-+		__uretprobe_longjmp(0, 0, JMPVAL);
-+		return;
-+	}
-+
-+	__uretprobe_longjmp(0, JMPVAL, RETVAL);
-+}
-+
-+static void uretprobe_cleanup_return_instances(void)
-+{
-+	if (setjmp(jmp) == JMPVAL) {
-+		/*
-+		 * Cleanup these return instance data created before longjmp
-+		 * firstly. Then create 16 new return_instance data from here.
-+		 */
-+		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
-+		return;
-+	}
-+
-+	/* Create 8 return_instance data from here. */
-+	__uretprobe_longjmp(1, JMPVAL,
-+			    MAX_URETPROBE_DEPTH + NR_OMITTED_URETPROBE / 2);
-+}
-+
-+static void uretprobe_reach_nestedness_limit(void)
-+{
-+	if (setjmp(jmp) == JMPVAL) {
-+		/*
-+		 * Due to uretprobe reach to the nestedness limit, it doesn't
-+		 * cleanup the return instance created before longjmp.
-+		 */
-+		__uretprobe_longjmp(1, 0, MAX_URETPROBE_DEPTH);
-+		return;
-+	}
-+
-+	/* Create 64 return_instance from here. */
-+	__uretprobe_longjmp(1, JMPVAL, 0);
-+}
-+
-+static void test_uretprobe_longjmp(void)
-+{
-+	struct uretprobe_depth *skel = NULL;
-+	int err;
-+
-+	skel = uretprobe_depth__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
-+		goto cleanup;
-+
-+	err = uretprobe_depth__attach(skel);
-+	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
-+		goto cleanup;
-+
-+	skel->bss->retval = -1;
-+
-+	uretprobe_longjmp();
-+
-+	ASSERT_EQ(skel->bss->retval, JMPVAL, "return value");
-+
-+cleanup:
-+	uretprobe_depth__destroy(skel);
-+}
-+
-+static void test_uretprobe_reach_nestedness_limit(void)
-+{
-+	struct uretprobe_depth *skel = NULL;
-+	int err;
-+
-+	skel = uretprobe_depth__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
-+		goto cleanup;
-+
-+	err = uretprobe_depth__attach(skel);
-+	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
-+		goto cleanup;
-+
-+	skel->bss->depth = 0;
-+
-+	uretprobe_reach_nestedness_limit();
-+
-+	ASSERT_EQ(skel->bss->depth, 0, "nest depth");
-+
-+cleanup:
-+	uretprobe_depth__destroy(skel);
-+}
-+
-+static void test_uretprobe_cleanup_return_instances(void)
-+{
-+	struct uretprobe_depth *skel = NULL;
-+	int err;
-+
-+	skel = uretprobe_depth__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "uretprobe_depth__open_and_load"))
-+		goto cleanup;
-+
-+	err = uretprobe_depth__attach(skel);
-+	if (!ASSERT_OK(err, "uretprobe_depth__attach"))
-+		goto cleanup;
-+
-+	skel->bss->depth = 0;
-+
-+	uretprobe_cleanup_return_instances();
-+
-+	ASSERT_EQ(skel->bss->depth, NR_OMITTED_URETPROBE + 1, "nest depth");
-+
-+cleanup:
-+	uretprobe_depth__destroy(skel);
-+}
-+
-+void test_uretprobe_return_instance(void)
-+{
-+	if (test__start_subtest("uretprobe_longjmp"))
-+		test_uretprobe_longjmp();
-+	if (test__start_subtest("uretprobe_cleanup_return_instances"))
-+		test_uretprobe_cleanup_return_instances();
-+	if (test__start_subtest("uretprobe_reach_nestedness_limit"))
-+		test_uretprobe_reach_nestedness_limit();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/uretprobe_depth.c b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
-new file mode 100644
-index 000000000000..b71f2de52b5e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/uretprobe_depth.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <string.h>
-+
-+int depth;
-+unsigned long retval;
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("uretprobe//proc/self/exe:__uretprobe_longjmp")
-+int uretprobe(struct pt_regs *ctx)
-+{
-+	depth++;
-+#if defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
-+	retval = ctx->regs[0];
-+#endif
-+	return 0;
-+}
--- 
-2.34.1
+on top of this patch. What do you think?
 
+Thanks,
+Zenghui
 
