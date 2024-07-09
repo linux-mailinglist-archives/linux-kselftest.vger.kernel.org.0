@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28E9F92B5AE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 12:46:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 971DB92B5B7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 12:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D17C6283DF1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 10:46:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EA31C21C2B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 10:46:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A4CF15821A;
-	Tue,  9 Jul 2024 10:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAF5156F41;
+	Tue,  9 Jul 2024 10:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u89TQQcF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BukPSD85"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAF01581FF;
-	Tue,  9 Jul 2024 10:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9871F156C52;
+	Tue,  9 Jul 2024 10:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720521939; cv=none; b=oFFdhPsbg41S1KQNYh4wXdY5jwToACEtBbXLfWfO5IwLF0mtlWD9TFoqXaGbw7yIdniEF44c0TfsXDqJZBATnzW5tnIqUIdcS4dn2chItyXKf30QnozbzxzC/tuyrTts+U5emkPW/tylLrarQzqImFkxzNCWX85SJU6zwytogSw=
+	t=1720521945; cv=none; b=EwvyPW5mpmJ+0Z3F+mbJxNnm8XDSMxF8ursk9HcSIIaVev8TGlx3s+GRawvo3iDN/DNvVmFpUdfsHT6qqET7UYvRxfDL7h89zhHLP1V3TmoDFpC0E3n3Yu1DB6HvSFd81gFWoXUSxyXjhtfePpE4eU79EqTXRRg4UxWI7vN1F/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720521939; c=relaxed/simple;
-	bh=zWDobaG8+4Fp9/magr7yNxdMa1X/mKRHFTpGE9mDP2I=;
+	s=arc-20240116; t=1720521945; c=relaxed/simple;
+	bh=hmjwmTe8b1GB+C1d/4hMo/lqfZJ/M0EEE8YnVa0/e5k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cIaolhKWYg5JHEXfc53s+tR3lJ02ecnkyBvTgLZWZC/0IVfZ8RiieXDUwKJADvynN3+KvIPN7N2+PO1wqhIinme8MBX94jJm8tsxMbx9ZUTI/A+RDc0O0j3jFUdHXdhZpFvrV9I1TIGMBp1V8eYrUuKOFWHChX0/jD3Vb2OWJ2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u89TQQcF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1022C4AF0C;
-	Tue,  9 Jul 2024 10:45:32 +0000 (UTC)
+	 MIME-Version; b=sQh0jH/9PlMx3TMtYpBAh7vYcbotScofBT017IUtlon/wG7lut+/ql6CZSTfgkTh9/bFL1AKqCy8/PzlZe1l0tfdpVHDix9X+/u+/QqFVxofYiye2hBqVaw1wNhi45vogkmlUtzp8W2zPL4vkBIZD881jy0BZaQczRLelMewKCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BukPSD85; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641D3C4AF0A;
+	Tue,  9 Jul 2024 10:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720521938;
-	bh=zWDobaG8+4Fp9/magr7yNxdMa1X/mKRHFTpGE9mDP2I=;
+	s=k20201202; t=1720521945;
+	bh=hmjwmTe8b1GB+C1d/4hMo/lqfZJ/M0EEE8YnVa0/e5k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u89TQQcFek8y/8h/614eArzcNyIaagStnvaN9Sk8/jPwdLdkoliglDzbfdmsDMbH2
-	 q/kdFrjEZjP9sHEEhVD55QGe0RBIST0Akm11JxOoFTGxRcDMHhirWEeYimm859+R3u
-	 AuOerM5TD2f5NkPIPd5kPjS7+EbbyFFA1ogBaUbob9OmV/6se4bCGUNIWMsfei4tx/
-	 nOSF/DVh7Dct6yzzwKHknZeTmpI+sznhCAo5ueILijYkgabRNi46fzeNbZMV8MvvdJ
-	 C+amNvIdf/xxofdSXvNtZit3NKrveXz3JMggLwfXxnwrD0Tp+u/+yQS03uIF48U5nj
-	 fr1v6ycgCUn9Q==
+	b=BukPSD854xBfKLSX6uCP3ZDbOfxQP6dZ7lcUBgfBR4+56CpW1C37G+FlIKHn8Yjm0
+	 0Qt6xX9pwHIHdxm4jrqJCkgb1jFy6dr00FmHNuaqZ6y6b82ocmWWJK6ovmLiP8n6H/
+	 9OZh3P2DOceU9ZorqsGc0OIFUAhXZ8s5qafrFcUS9LVyJccpalzaYpTmMbqVhk4oNZ
+	 9pmkHAP2fYyrpRnZWHae6e8QlBrnAvR/VxF4M0ZPFcwyG4tykOjgzIfBbILvdKJeS+
+	 n4nrimdXGNIHyixqckZzdz/5inzsDuJN2OacCZUc0Wc2rid14A0amrQ2kQdl+a/sWp
+	 3MRy6q/qVYT8g==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Null checks for links in bpf_tcp_ca
-Date: Tue,  9 Jul 2024 18:45:06 +0800
-Message-ID: <3ac5d24825bdf666eae4089a8c69d8e97a6194d2.1720521482.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Check ASSERT_OK(err) in dummy_st_ops
+Date: Tue,  9 Jul 2024 18:45:07 +0800
+Message-ID: <21fbc0db764656805340085ef2a77c8a770ef1d0.1720521482.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720521482.git.tanggeliang@kylinos.cn>
 References: <cover.1720521482.git.tanggeliang@kylinos.cn>
@@ -75,157 +75,76 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Run bpf_tcp_ca selftests (./test_progs -t bpf_tcp_ca) on a Loongarch
-platform, some "Segmentation fault" errors occur:
+Run dummy_st_ops selftests (./test_progs -t dummy_st_ops) on a Loongarch
+platform, some "unexpected arg" errors occur:
 
 '''
- test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
- test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/1    bpf_tcp_ca/dctcp:FAIL
- test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
- test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/2    bpf_tcp_ca/cubic:FAIL
- test_dctcp_fallback:PASS:dctcp_skel 0 nsec
- test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
- test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
- #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
- test_write_sk_pacing:PASS:open_and_load 0 nsec
- test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
- #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
- test_update_ca:PASS:open 0 nsec
- test_update_ca:FAIL:attach_struct_ops unexpected error: -524
- settcpca:FAIL:setsockopt unexpected setsockopt: \
-					actual -1 == expected -1
- (network_helpers.c:99: errno: No such file or directory) \
-					Failed to call post_socket_cb
- start_test:FAIL:start_server_str unexpected start_server_str: \
-					actual -1 == expected -1
- test_update_ca:FAIL:ca1_ca1_cnt unexpected ca1_ca1_cnt: \
-					actual 0 <= expected 0
- #29/9    bpf_tcp_ca/update_ca:FAIL
- #29      bpf_tcp_ca:FAIL
- Caught signal #11!
- Stack trace:
- ./test_progs(crash_handler+0x28)[0x5555567ed91c]
- linux-vdso.so.1(__vdso_rt_sigreturn+0x0)[0x7ffffee408b0]
- ./test_progs(bpf_link__update_map+0x80)[0x555556824a78]
- ./test_progs(+0x94d68)[0x5555564c4d68]
- ./test_progs(test_bpf_tcp_ca+0xe8)[0x5555564c6a88]
- ./test_progs(+0x3bde54)[0x5555567ede54]
- ./test_progs(main+0x61c)[0x5555567efd54]
- /usr/lib64/libc.so.6(+0x22208)[0x7ffff2aaa208]
- /usr/lib64/libc.so.6(__libc_start_main+0xac)[0x7ffff2aaa30c]
- ./test_progs(_start+0x48)[0x55555646bca8]
- Segmentation fault
+ #78/1    dummy_st_ops/dummy_st_ops_attach:OK
+ test_dummy_init_ret_value:FAIL:test_ret unexpected test_ret: \
+				actual 0 != expected 4076074229
+ #78/2    dummy_st_ops/dummy_init_ret_value:FAIL
+ #78/3    dummy_st_ops/dummy_init_ptr_arg:SKIP
+ test_dummy_multiple_args:FAIL:arg 0 unexpected arg 0: \
+				actual 0 != expected 7
+ test_dummy_multiple_args:FAIL:arg 1 unexpected arg 1: \
+				actual 0 != expected -100
+ test_dummy_multiple_args:FAIL:arg 2 unexpected arg 2: \
+				actual 0 != expected 35423
+ test_dummy_multiple_args:FAIL:arg 3 unexpected arg 3: \
+				actual 0 != expected 99
+ test_dummy_multiple_args:FAIL:arg 4 unexpected arg 4: \
+				actual 0 != expected 1311768467139281697
+ #78/4    dummy_st_ops/dummy_multiple_args:FAIL
+ #78/5    dummy_st_ops/dummy_sleepable:SKIP
+ #78/6    dummy_st_ops/dummy_sleepable_reject_null:OK
+ #78/7    dummy_st_ops/test_unsupported_field_sleepable:OK
+ #78      dummy_st_ops:FAIL
 '''
 
 This is because BPF trampoline is not implemented on Loongarch yet,
-"link" returned by bpf_map__attach_struct_ops() is NULL. test_progs
-crashs when this NULL link passes to bpf_link__update_map(). This
-patch adds NULL checks for all links in bpf_tcp_ca to fix these errors.
-If "link" is NULL, goto the newly added label "out" to destroy the skel.
+bpf_prog_test_run_opts() returns ENOTSUPP.
 
-v2:
- - use "goto out" instead of "return" as Eduard suggested.
+This patch checks the return values of bpf_prog_test_run_opts() in
+dummy_st_ops to fix these errors. If error returned, goto the newly
+added label "out" to destroy the skel.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 21 +++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index d842ff64bc2a..efc1bf2ff7de 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -411,7 +411,8 @@ static void test_update_ca(void)
- 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+index d3d94596ab79..a208801f524f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
++++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+@@ -41,9 +41,11 @@ static void test_dummy_init_ret_value(void)
  
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
+ 	fd = bpf_program__fd(skel->progs.test_1);
+ 	err = bpf_prog_test_run_opts(fd, &attr);
+-	ASSERT_OK(err, "test_run");
++	if (!ASSERT_OK(err, "test_run"))
 +		goto out;
+ 	ASSERT_EQ(attr.retval, 0xf2f3f4f5, "test_ret");
  
- 	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
-@@ -425,6 +426,7 @@ static void test_update_ca(void)
- 	ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
- 
- 	bpf_link__destroy(link);
 +out:
- 	tcp_ca_update__destroy(skel);
+ 	dummy_st_ops_success__destroy(skel);
  }
  
-@@ -447,7 +449,8 @@ static void test_update_wrong(void)
- 		return;
+@@ -115,13 +117,15 @@ static void test_dummy_multiple_args(void)
  
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
+ 	fd = bpf_program__fd(skel->progs.test_2);
+ 	err = bpf_prog_test_run_opts(fd, &attr);
+-	ASSERT_OK(err, "test_run");
++	if (!ASSERT_OK(err, "test_run"))
 +		goto out;
- 
- 	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
-@@ -460,11 +463,13 @@ static void test_update_wrong(void)
- 	ASSERT_GT(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
- 
- 	bpf_link__destroy(link);
-+out:
- 	tcp_ca_update__destroy(skel);
- }
- 
- static void test_mixed_links(void)
- {
-+	struct bpf_link *link = NULL, *link_nl = NULL;
- 	struct cb_opts cb_opts = {
- 		.cc = "tcp_ca_update",
- 	};
-@@ -473,7 +478,6 @@ static void test_mixed_links(void)
- 		.cb_opts	= &cb_opts,
- 	};
- 	struct tcp_ca_update *skel;
--	struct bpf_link *link, *link_nl;
- 	int err;
- 
- 	skel = tcp_ca_update__open_and_load();
-@@ -481,10 +485,12 @@ static void test_mixed_links(void)
- 		return;
- 
- 	link_nl = bpf_map__attach_struct_ops(skel->maps.ca_no_link);
--	ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl");
-+	if (!ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl"))
-+		goto out;
- 
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		goto out;
- 
- 	do_test(&opts);
- 	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
-@@ -492,6 +498,7 @@ static void test_mixed_links(void)
- 	err = bpf_link__update_map(link, skel->maps.ca_no_link);
- 	ASSERT_ERR(err, "update_map");
+ 	args[0] = 7;
+ 	for (i = 0; i < ARRAY_SIZE(args); i++) {
+ 		snprintf(name, sizeof(name), "arg %zu", i);
+ 		ASSERT_EQ(skel->bss->test_2_args[i], args[i], name);
+ 	}
  
 +out:
- 	bpf_link__destroy(link);
- 	bpf_link__destroy(link_nl);
- 	tcp_ca_update__destroy(skel);
-@@ -536,7 +543,8 @@ static void test_link_replace(void)
- 	bpf_link__destroy(link);
- 
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_2);
--	ASSERT_OK_PTR(link, "attach_struct_ops_2nd");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops_2nd"))
-+		goto out;
- 
- 	/* BPF_F_REPLACE with a wrong old map Fd. It should fail!
- 	 *
-@@ -559,6 +567,7 @@ static void test_link_replace(void)
- 
- 	bpf_link__destroy(link);
- 
-+out:
- 	tcp_ca_update__destroy(skel);
+ 	dummy_st_ops_success__destroy(skel);
  }
  
 -- 
