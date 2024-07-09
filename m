@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 971DB92B5B7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 12:46:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34DE092B5B9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 12:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EA31C21C2B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 10:46:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E48B0282C60
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 10:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAF5156F41;
-	Tue,  9 Jul 2024 10:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447C2157461;
+	Tue,  9 Jul 2024 10:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BukPSD85"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BOF41gxn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9871F156C52;
-	Tue,  9 Jul 2024 10:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E99815699E;
+	Tue,  9 Jul 2024 10:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720521945; cv=none; b=EwvyPW5mpmJ+0Z3F+mbJxNnm8XDSMxF8ursk9HcSIIaVev8TGlx3s+GRawvo3iDN/DNvVmFpUdfsHT6qqET7UYvRxfDL7h89zhHLP1V3TmoDFpC0E3n3Yu1DB6HvSFd81gFWoXUSxyXjhtfePpE4eU79EqTXRRg4UxWI7vN1F/I=
+	t=1720521952; cv=none; b=imzwn/LqXjjtDWgctrZbyiUocic9tN4kHyYqaoAuBku0VAPbXNYUhrR9One+07QRQhyuXbKkmiQ7B4CXyIo9/B5HksSL2FexBYX2AOojd2oi/aKraUUgmCGW/ayKH9Ti3V8ImWl/1mKkqAbjg5tAsPMKTQw/Jo8PIlXZUeo7QoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720521945; c=relaxed/simple;
-	bh=hmjwmTe8b1GB+C1d/4hMo/lqfZJ/M0EEE8YnVa0/e5k=;
+	s=arc-20240116; t=1720521952; c=relaxed/simple;
+	bh=w6ec2huPARUWSaFkMfBkaPiPU+YqLo6r7sO4dLoGjRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sQh0jH/9PlMx3TMtYpBAh7vYcbotScofBT017IUtlon/wG7lut+/ql6CZSTfgkTh9/bFL1AKqCy8/PzlZe1l0tfdpVHDix9X+/u+/QqFVxofYiye2hBqVaw1wNhi45vogkmlUtzp8W2zPL4vkBIZD881jy0BZaQczRLelMewKCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BukPSD85; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641D3C4AF0A;
-	Tue,  9 Jul 2024 10:45:39 +0000 (UTC)
+	 MIME-Version; b=I2r2Oifwn9EYmvMAcWIc5L75oNjjKGGo3F+Ur3Vpt9st7yPZWlDrHMOq+9+owU2zSpaHFs4OL9c+fDRmFRKQnUCGHzevdx8QIaAaYnqP3H+OLP+iQjWJGsKv4TBGLYTuxWoNJJQMKUarm38W2khNNcdmAak79ZrZPQ5IWEKdSek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BOF41gxn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38CBC4AF0A;
+	Tue,  9 Jul 2024 10:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720521945;
-	bh=hmjwmTe8b1GB+C1d/4hMo/lqfZJ/M0EEE8YnVa0/e5k=;
+	s=k20201202; t=1720521951;
+	bh=w6ec2huPARUWSaFkMfBkaPiPU+YqLo6r7sO4dLoGjRM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BukPSD854xBfKLSX6uCP3ZDbOfxQP6dZ7lcUBgfBR4+56CpW1C37G+FlIKHn8Yjm0
-	 0Qt6xX9pwHIHdxm4jrqJCkgb1jFy6dr00FmHNuaqZ6y6b82ocmWWJK6ovmLiP8n6H/
-	 9OZh3P2DOceU9ZorqsGc0OIFUAhXZ8s5qafrFcUS9LVyJccpalzaYpTmMbqVhk4oNZ
-	 9pmkHAP2fYyrpRnZWHae6e8QlBrnAvR/VxF4M0ZPFcwyG4tykOjgzIfBbILvdKJeS+
-	 n4nrimdXGNIHyixqckZzdz/5inzsDuJN2OacCZUc0Wc2rid14A0amrQ2kQdl+a/sWp
-	 3MRy6q/qVYT8g==
+	b=BOF41gxnjgDHMXhHkN7b2GqHPlatafR5kwojlj5+1XBoEC/ceBYtOtBJoU9cB7Tqk
+	 Z5rCkzIq/GthiMu+hP3Rcym6EFHzKE3gwTXccbPdz8Kdq5WTwOF67XxP+vPiPua+cF
+	 7Ix1WM0C1vM5cdfsKH17Tcr0OS5Df/OeROkSEWuMmiQtxZ7OKovB9Lw64VJHTDzOB7
+	 l2Xc3rV6jb6k+zWX3nNZHArAOL8XPMx6tbLKcB6Zpxk2Wig0zOhO/HgbZZD6Tk42BZ
+	 9yUpHrEBPXC6rU6OqZgtsjAAFtFinasQ4UoBFb6QEn8eJRwKci03EOU4bpChh6Bz6t
+	 sMSBYGwkS72Tg==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -59,9 +59,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/3] selftests/bpf: Check ASSERT_OK(err) in dummy_st_ops
-Date: Tue,  9 Jul 2024 18:45:07 +0800
-Message-ID: <21fbc0db764656805340085ef2a77c8a770ef1d0.1720521482.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Close obj in error paths in xdp_adjust_tail
+Date: Tue,  9 Jul 2024 18:45:08 +0800
+Message-ID: <3e55e7dc99f0331566cc3bb140fc189a0f8943e9.1720521482.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720521482.git.tanggeliang@kylinos.cn>
 References: <cover.1720521482.git.tanggeliang@kylinos.cn>
@@ -75,77 +75,27 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Run dummy_st_ops selftests (./test_progs -t dummy_st_ops) on a Loongarch
-platform, some "unexpected arg" errors occur:
-
-'''
- #78/1    dummy_st_ops/dummy_st_ops_attach:OK
- test_dummy_init_ret_value:FAIL:test_ret unexpected test_ret: \
-				actual 0 != expected 4076074229
- #78/2    dummy_st_ops/dummy_init_ret_value:FAIL
- #78/3    dummy_st_ops/dummy_init_ptr_arg:SKIP
- test_dummy_multiple_args:FAIL:arg 0 unexpected arg 0: \
-				actual 0 != expected 7
- test_dummy_multiple_args:FAIL:arg 1 unexpected arg 1: \
-				actual 0 != expected -100
- test_dummy_multiple_args:FAIL:arg 2 unexpected arg 2: \
-				actual 0 != expected 35423
- test_dummy_multiple_args:FAIL:arg 3 unexpected arg 3: \
-				actual 0 != expected 99
- test_dummy_multiple_args:FAIL:arg 4 unexpected arg 4: \
-				actual 0 != expected 1311768467139281697
- #78/4    dummy_st_ops/dummy_multiple_args:FAIL
- #78/5    dummy_st_ops/dummy_sleepable:SKIP
- #78/6    dummy_st_ops/dummy_sleepable_reject_null:OK
- #78/7    dummy_st_ops/test_unsupported_field_sleepable:OK
- #78      dummy_st_ops:FAIL
-'''
-
-This is because BPF trampoline is not implemented on Loongarch yet,
-bpf_prog_test_run_opts() returns ENOTSUPP.
-
-This patch checks the return values of bpf_prog_test_run_opts() in
-dummy_st_ops to fix these errors. If error returned, goto the newly
-added label "out" to destroy the skel.
+If bpf_object__load() fails in test_xdp_adjust_frags_tail_grow(), "obj"
+opened before this should be closed. So use "goto out" to close it instead
+of using "return" here.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
-index d3d94596ab79..a208801f524f 100644
---- a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
-@@ -41,9 +41,11 @@ static void test_dummy_init_ret_value(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index f09505f8b038..53d6ad8c2257 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -222,7 +222,7 @@ static void test_xdp_adjust_frags_tail_grow(void)
  
- 	fd = bpf_program__fd(skel->progs.test_1);
- 	err = bpf_prog_test_run_opts(fd, &attr);
--	ASSERT_OK(err, "test_run");
-+	if (!ASSERT_OK(err, "test_run"))
+ 	prog = bpf_object__next_program(obj, NULL);
+ 	if (bpf_object__load(obj))
+-		return;
 +		goto out;
- 	ASSERT_EQ(attr.retval, 0xf2f3f4f5, "test_ret");
  
-+out:
- 	dummy_st_ops_success__destroy(skel);
- }
- 
-@@ -115,13 +117,15 @@ static void test_dummy_multiple_args(void)
- 
- 	fd = bpf_program__fd(skel->progs.test_2);
- 	err = bpf_prog_test_run_opts(fd, &attr);
--	ASSERT_OK(err, "test_run");
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto out;
- 	args[0] = 7;
- 	for (i = 0; i < ARRAY_SIZE(args); i++) {
- 		snprintf(name, sizeof(name), "arg %zu", i);
- 		ASSERT_EQ(skel->bss->test_2_args[i], args[i], name);
- 	}
- 
-+out:
- 	dummy_st_ops_success__destroy(skel);
- }
+ 	prog_fd = bpf_program__fd(prog);
  
 -- 
 2.43.0
