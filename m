@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-13409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CE692C504
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 22:55:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5701492C67D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 01:15:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF3461F23360
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 20:55:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9EBBB21372
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 23:15:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567AC152E1D;
-	Tue,  9 Jul 2024 20:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F006B18005C;
+	Tue,  9 Jul 2024 23:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bNiLcKjE"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GKgVVo53"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C771913EFF3
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jul 2024 20:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514C113DB92
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jul 2024 23:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720558514; cv=none; b=MlqZBhL3Nc+MwMyOVybyjrXPcyxtK0k5fRYsIOL4ZLaII9sY69LOR5lQy4gVEPuAAlJZ2/8klFsz6B42kF2htY0iZFOH1sRULQoXDpUo28ZgavcF8Fsz+P9rGnDtc8/iJR6xHsrE+2+mKvnXmo3x3jJBn8VyLchGrbsYCspLiik=
+	t=1720566922; cv=none; b=lB9egS4QH/juIgb8nEv/tCx1QpfmlKQtPhvKpGtbEI6ldaF4nyaWAkwZHAfvG/1rVg44ykfHW8PHnu2tjcVqAt6+pVt0sNd503fyOO1Hnnw0Djz31fkjUDXWhTxbnZoi8LMKHpjTWJaDsMy1pp6v5/ZYQcd3dtjue3OETNEdxDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720558514; c=relaxed/simple;
-	bh=o+kjmggQJg9k2C51wKggJKaDqzA0Rap7ZoYOuaO1xOo=;
+	s=arc-20240116; t=1720566922; c=relaxed/simple;
+	bh=xdCnr56OuqPlvWKQlDFwlk443RCYNdLU+1M4K1ccl6Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDS95/Jmp+3ZmtujUiHvGv4mOxHrEmovg0nJDeilvVnyc0r6yfDTIGi0AIR1xr7nwImIhecTOCw/Gi/PddG0vpWedfsvmDa6EeHjgO593GiO5vA7BiYa7JEXDvUGbh+3/Tq0f7qGEUPyUFoOFG7ZjK/eKHuBRtN5Cyiuc+vqlcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bNiLcKjE; arc=none smtp.client-ip=209.85.166.51
+	 In-Reply-To:Content-Type; b=jvR9/jNyKOJdnS0F9B6JZFb8AQBN/T6diXrRErpo2XGwsMa5NndVHKZqsAukspgs3U6QjB4ZLvHGjIq7wkCtOq4JslsbwJKdCAEQa/Mb/jHjMSlUtHJM73p5PplrWNUK34XO1YLUxYFXIz26aQmgaDRQ4klDbhQRJyVq4yWUmog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GKgVVo53; arc=none smtp.client-ip=209.85.166.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-7f95c28f2a7so9848939f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jul 2024 13:55:12 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-38b4276d643so282295ab.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jul 2024 16:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720558512; x=1721163312; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1720566920; x=1721171720; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ojllmUSpZm6yrskg60MuCouRkTNtpmyHnalLRc4XlN0=;
-        b=bNiLcKjEiUicPQpwDjybJj6Lon+olKxM1ydDuvjC7guaewUnyn5aZUS05xgkjKczZN
-         Ej6O5Xona0klOgQ+NW6G47+pdn45/caQt8deL0U6PXNPKwuIKTp5g+lcNkZP8mRu9r9H
-         5b6XikVbGlz8OYIhyObqanUOlMIcEbNdjq/gY=
+        bh=KlgU1fdu7thu5cfqXl2G2BTvQ4EnATZJ3QFE+8p9PZw=;
+        b=GKgVVo53i9NPRUXUAteKBqPCLAQF7oSqI9h8ACc5MDNZe6JnGafKW2ZJysdhKUBr+R
+         qvQj1hn0oSPKqGXsSTUAJNV0qQsB4ePFClkZkx81G1hcdA27yKBSr1ngmADWsxKyRrD+
+         TTa7ciqeCjVvr+hoywbXeyMFJd7Xp2f+QHih4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720558512; x=1721163312;
+        d=1e100.net; s=20230601; t=1720566920; x=1721171720;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojllmUSpZm6yrskg60MuCouRkTNtpmyHnalLRc4XlN0=;
-        b=U6WpA5OxcE+Orje/ZXquprrGI9eTcBnnKnVw9Gq9gRK2WtUFu6n98jNwSA/a/CnVQY
-         rURLY56LZxANED2dsmKSSkQEdFYUmXZANc5NqGtIU+7FWzCeBxLt9+gzD7anLEPmKUi9
-         HrjabJTpohdcVTZb5J5Pn5lTToAv1QOtJhHv7uCf2Zzr0bful/c5vN5/Iecizha4HTY0
-         BLAQG3250sl4PNEPI1g+0mLIj2aNS7xpSb46ZPjuIFm26Xth6zEGl7N8V0IaO4MvRkVO
-         SBwn2e4qHCX5ztNhpYWX9gicC1xeV+gV8vUpGmed+cm/YDJcmmHQmz4d0Lsm7HMaRrm7
-         L/1w==
-X-Forwarded-Encrypted: i=1; AJvYcCVg6XB1nw0sGgS26Ln23IEKkQvOrJhiGPKZNH5f1kBIFrAREXyR1Lv2psvTEXt57fLXRKPjPBjFxf8Geo5BV+U9hy6vXcz5DXBGF5uObAdb
-X-Gm-Message-State: AOJu0Yx8sOhJwC/KR1+F4mRPKQ9U+y/2Zn63pEHC4xdWFquJ8JbLQEZX
-	HSYAHMz6LW84i0eM8hjRoBm61ZEXAonZ/29knLGfBmN0kPva5GuSAhuBfteqIx0=
-X-Google-Smtp-Source: AGHT+IGsTMwpROjo3tzdIGl+v6KmheqJ1Zkqq2lQFdbmodzrdfcJ5ZovcBQXKo9Hg/rrSAQ8WBlnZg==
-X-Received: by 2002:a05:6602:6103:b0:7f6:85d1:f81a with SMTP id ca18e2360f4ac-80004dea088mr421983139f.2.1720558511891;
-        Tue, 09 Jul 2024 13:55:11 -0700 (PDT)
+        bh=KlgU1fdu7thu5cfqXl2G2BTvQ4EnATZJ3QFE+8p9PZw=;
+        b=RCAA0NM6WqTewxkQl3yfF4O2l1hTyygx8QU9M8uZwWjsg8rjTSAbd5ksUxYrI64J79
+         etczzTjVC3X076BHSzEUUkhHPLK13pOAGEXutVjNn7WC2VylJYwIUPS3XKjZPl4reTma
+         +JwnPfIBN3Yq+1naR1F6FUSXQCzkHmI3B/RnnzUzt9dRqBYGNsKfWBNAy7JaLumJq6Zv
+         yDSW9Z1W4vWkdd7M/wtC0mzSnVojU4CB8iofLswe1c8f8T4wZBECjGbONZFxjH4wvYor
+         II7sZEnL1CmAMDb0NC6VeoNVVoCPsiHlrutP7AfzYTc7T/fe0AlNKS8yaGre36Gj6EwT
+         wO9w==
+X-Forwarded-Encrypted: i=1; AJvYcCXK9gpG6LYzcGCDwRRlVzdkboJNBuD0RpVANvVGzC7kA7tfGvJgSLXxDRr2chavtfQSqohPXw5F5KZShuiZ1AjOzhPB3goYzS1dGP77wkGB
+X-Gm-Message-State: AOJu0YzTZ3zDx5iU6Nql7uowB0z+771AvrU2HJzI4d4UuCHr2e+Mx5u0
+	bEp2bT8S1YBoTvoCOmSwlqLtgScFMwG6qp1LiKfdBPsAmQijhbLGeK/agfxqmvM=
+X-Google-Smtp-Source: AGHT+IFVDdAds7MWO8IlspwtWaVh7rNNP2ClDNoot6td8R2fz9nyj/+vsj68PO2yV6pnSbmjFiF+mA==
+X-Received: by 2002:a92:cdac:0:b0:38b:3d5c:bcb0 with SMTP id e9e14a558f8ab-38b3d5ccb9amr28429655ab.0.1720566920286;
+        Tue, 09 Jul 2024 16:15:20 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1b5c55fsm687026173.77.2024.07.09.13.55.11
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-38a4be43493sm6384255ab.71.2024.07.09.16.15.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 13:55:11 -0700 (PDT)
-Message-ID: <0ce444f4-8d49-472f-a687-34804347296e@linuxfoundation.org>
-Date: Tue, 9 Jul 2024 14:55:10 -0600
+        Tue, 09 Jul 2024 16:15:19 -0700 (PDT)
+Message-ID: <4bc3373a-6afc-497d-aed8-c6cd138df46d@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 17:15:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,54 +73,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/7] selftests/x86: fix build errors and warnings found
- via clang
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: angquan yu <angquan21@gmail.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
- Alexey Dobriyan <adobriyan@gmail.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704072431.111640-1-jhubbard@nvidia.com>
- <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
- <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
- <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
+Subject: Re: [PATCH v2 1/4] kselftests: vdso: vdso_test_clock_getres: conform
+ test to TAP output
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240610054129.1527389-1-usama.anjum@collabora.com>
+ <20240610054129.1527389-2-usama.anjum@collabora.com>
+ <7b020209-3b20-48f4-92fb-099d80aee625@linuxfoundation.org>
+ <87e6beea-4618-4a5c-a883-42ef64a2d584@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
+In-Reply-To: <87e6beea-4618-4a5c-a883-42ef64a2d584@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/9/24 14:51, Shuah Khan wrote:
-> On 7/9/24 14:40, John Hubbard wrote:
->> On 7/9/24 1:34 PM, Shuah Khan wrote:
->>> On 7/4/24 01:24, John Hubbard wrote:
->> ...>> Muhammad Usama Anjum (1):
->>>>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
->>>
->>>
->>> Usama and John,
->>>
->>> I am seeing checkpatch warnings in this series.
->>>
->>> v4-3-7
->>> WARNING: externs should be avoided in .c files
->>> #210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
->>> +unsigned int dereference_seg_base(void);
+On 6/12/24 02:17, Muhammad Usama Anjum wrote:
+> On 6/12/24 1:32 AM, Shuah Khan wrote:
+>> On 6/9/24 23:41, Muhammad Usama Anjum wrote:
+>>> Conform the layout, informational and status messages to TAP. No
+>>> functional change is intended other than the layout of output messages.
+>>> Use kselftest_harness.h to conform to TAP as the number of tests depend
+>>> on the available options at build time. The kselftest_harness makes the
+>>
+>>
+>> How does converting to kselftest_harness help with available options ay
+>> build time? Can you explain?
+>>
+>> I am not seeing any value in converting this test to the harness? I want
+>> to see a better justification.
 > 
-> This one looked new though.
+> Before:
+> ./vdso_test_clock_getres
+> clock_id: CLOCK_REALTIME [PASS]
+> clock_id: CLOCK_BOOTTIME [PASS]
+> clock_id: CLOCK_TAI [PASS]
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> clock_id: CLOCK_MONOTONIC [PASS]
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
 > 
+> Here is the output of the test before this patch. The test output test
+> names and if they are passed or failed. It doesn't output information
+> related to error when it occurs. I wanted to convert it to standard format
+> by using kselftest.h where we can get the error related information as
+> well. But as the number of tests depend on how many of CLOCK_BOOTTIME,
+> CLOCK_TAI etc are defined, static counting is difficult. Test harness is
+> best suited for this. Output:
+> 
+> ./vdso_test_clock_getres
 
-Never mind. Looks like there are a few existing warns - pulling
-these now for Linux 6.11-rc1.
+The reason I don't want to take this patch is if you run the test
+using the recommended method:
 
-Thank you both for fixing these.
+make -C tools/testing/selftests/vDSO/ run_tests you will get the
+TAP output because lib.mk runtests framework takes care of this.
+
+or
+
+make kselftest TARGETS=vDSO will do the same.
+
+Please don't send TAP conversions for individual runs. You will
+start seeing duplicate TAP output which will make it unreadable.
+
+Run the test using make -C or make kselftest TARGETS before
+investing time to concert to TAP. I am not going to take TAP
+conversions patches if make -C or make kselftest TARGETS
+shows TAP.
 
 thanks,
 -- Shuah
