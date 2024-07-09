@@ -1,90 +1,91 @@
-Return-Path: <linux-kselftest+bounces-13361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3559F92B463
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 11:51:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7472592B599
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 12:45:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C961FB20B4A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 09:51:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E6271F23CA6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 10:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83196155382;
-	Tue,  9 Jul 2024 09:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D647F153567;
+	Tue,  9 Jul 2024 10:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qZ6+OLBK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D56152E03;
-	Tue,  9 Jul 2024 09:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAF3B66F;
+	Tue,  9 Jul 2024 10:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720518684; cv=none; b=llco2YAUZMyShIUprJqrVwm+ynbV3hwh4lByKkERwB4bB7WbNIgwjc20dccip68FGf0mphFWnCvoWR8g4kSsEt0ha6xCwJQ5oEibhss0cE8yjzS7ou5Moru9xo4LVYUZz17VmdA6ELXgF7XzDxhymjTr1UufZsDr72xne2rALIM=
+	t=1720521932; cv=none; b=q9ZaNgOL84xDG76D5VgS+M/3NS+NAd+3oWPEruMBC41fJwtVqTHUBp4zVdfzIJgszIjqk/TB0qtU3+zRbx5eN7hjWr4XBWTdHlYNeJX3kZU+W0+i+Uh+lHhf3a5LogwyI2rpzzYTtNcwyZOqkiqQS1pxsKD5yEAXK3ekObqI9Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720518684; c=relaxed/simple;
-	bh=Hye5J18cFPxbULhNfrDen6a3cJSNxq4a7d9K9n+vwVs=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=k89IN4dXAizQNFt6+EgdUWVZ2nZ2OCqfRLglJDABvo2E7Ke85g4dCqYKVFw15WKBCGC8NbAIvU/+wvrefT3m9wXDNKAti4WvOWC835xz0SA0gy2unONENxi5rgD3wDoMiZwUUm+E5HZrVLKTaajTbmmfJtiz+vfUOYPqxxKo0x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee4668d080f609-f3ef8;
-	Tue, 09 Jul 2024 17:51:11 +0800 (CST)
-X-RM-TRANSID:2ee4668d080f609-f3ef8
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.54.5.255])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3668d080e739-b5009;
-	Tue, 09 Jul 2024 17:51:11 +0800 (CST)
-X-RM-TRANSID:2ee3668d080e739-b5009
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: shuah@kernel.org
-Cc: angquan21@gmail.com,
-	zhujun2@cmss.chinamobile.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RESEND] selftests/breakpoints:Add return value in main function
-Date: Tue,  9 Jul 2024 02:51:09 -0700
-Message-Id: <20240709095109.3813-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1720521932; c=relaxed/simple;
+	bh=GbLkdRWJ7v7Fl0b9H+I+JVXnJoW8GhcNGH7w5g7HMDk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QGrvdpPyDrnPjB6FJTnnrMz6ZHXOufZYIQFMNeIZVvGpK9Wtg++n++0CT4DP/nmDZHRkSBmKUy7Vtkhtf/dQrAx9f7uMgj5fQCQ5zIsjs7QlDI/gDUrKGX5RAactFnilMBYs1vHYbuZau6I0CZ+LDbIseUJU2NhNSU0TrrE7eoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qZ6+OLBK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9F0C3277B;
+	Tue,  9 Jul 2024 10:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720521932;
+	bh=GbLkdRWJ7v7Fl0b9H+I+JVXnJoW8GhcNGH7w5g7HMDk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qZ6+OLBKktuKBovnrt+ryIGAyr5Kn710PBAAylAZDENVOxwdBRXqXy9aj79aT5Dxc
+	 CyWMmcX6PI+JoED/B7mMk9ZgPjYoB2jwuAVv3nWHweCYlSB9itYjboJvrLHnDIA/bu
+	 p4btPqEUgh95jtXfo+iyoWNFP60RCigS271/piRmB2oxylqWG5H5fcbjMaSb95T2w1
+	 ao3BMJdWADrqRGsW8AmU9ANFOLs7DuiUzxXKMtdkjdXhvjiidskMARObdTTqCf6fL8
+	 7RJ/2m5oVsqePvypKMYimrzRSF9/Ry0v4B8M4OsTIvthGdCHglTMYGulXzl2qlboid
+	 zFMDD/kCSMHxg==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 0/3] BPF selftests misc fixes
+Date: Tue,  9 Jul 2024 18:45:05 +0800
+Message-ID: <cover.1720521482.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Main function return value is int type, so add return
-value in the end
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
----
- tools/testing/selftests/breakpoints/step_after_suspend_test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Resend patch 1 out of "skip ENOTSUPP BPF selftests" set as Eduard
+suggested. Together with two other cleanups.
 
-diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-index dfec31fb9b30..b473131fce3e 100644
---- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-+++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
-@@ -166,7 +166,7 @@ int main(int argc, char **argv)
- 	bool succeeded = true;
- 	unsigned int tests = 0;
- 	cpu_set_t available_cpus;
--	int err;
-+	int err = 0;
- 	int cpu;
- 
- 	ksft_print_header();
-@@ -222,4 +222,6 @@ int main(int argc, char **argv)
- 		ksft_exit_pass();
- 	else
- 		ksft_exit_fail();
-+
-+	return err;
- }
+Geliang Tang (3):
+  selftests/bpf: Null checks for links in bpf_tcp_ca
+  selftests/bpf: Check ASSERT_OK(err) in dummy_st_ops
+  selftests/bpf: Close obj in error paths in xdp_adjust_tail
+
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 21 +++++++++++++------
+ .../selftests/bpf/prog_tests/dummy_st_ops.c   |  8 +++++--
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  2 +-
+ 3 files changed, 22 insertions(+), 9 deletions(-)
+
 -- 
-2.17.1
-
-
+2.43.0
 
 
