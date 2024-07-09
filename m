@@ -1,123 +1,181 @@
-Return-Path: <linux-kselftest+bounces-13414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990EB92C6B2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 01:40:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4791F92C6CF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 01:55:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAA661C220F2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 23:40:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB1F6282346
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2024 23:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F061189F32;
-	Tue,  9 Jul 2024 23:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779A7189F4E;
+	Tue,  9 Jul 2024 23:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DGa7kQWO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AupPn7Sw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29E1156C74
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jul 2024 23:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE0F1474BE;
+	Tue,  9 Jul 2024 23:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720568398; cv=none; b=MXJRVYxJeQMJD8KQ9X7eOm5eQkcYcNvO2VVgUdxLHEW4Eujv4M5PWa17a29CoMV2jTy9bCsugqe/W+UNFblWJ/dbKxQosSZzGjQp25P8v+9p74NeO3Lvh7xy1OvgdMY4XYLmqkmsCwQ9l9Elm9QTXqbWtZ7xx5x2JjXZxpGuTMo=
+	t=1720569345; cv=none; b=bBHyYh1HKiVHNpIVxIgo8P16LI0pRAo0JFK9jBZfKhNjtOR2EE/+HBMuNt0V3m/CJluLwKg89xjX0vpm9sgC7q6Y9+nWi6jZShwwNPsbhBjZJtBAyNZk6xfX8MdMOFgB6Pk1sFoplWHIob3lDRhl8mYcEN/nQSMAIjVYjruYmGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720568398; c=relaxed/simple;
-	bh=xoYWGcz96RHvOP5RMCIKUt/z0q5VtjNbJQcwewVakP8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bMIM0DfyyyqZL/QowDG4qy40Cf5q0ImKZ07UFJ1DSxSufqHG/AE1nQAFMjEEeSGdPu8UTKIe+w+3dfz95/OVLrYF/ge5nGNRYHexzrZwSuVKwMZNx9jeaHBbAxcj4wzXXo4lZN07Lajs9OfoGFpceuBVmU3g8Pe8AQqeYgsEEYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DGa7kQWO; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7f70a7470d3so12810739f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jul 2024 16:39:56 -0700 (PDT)
+	s=arc-20240116; t=1720569345; c=relaxed/simple;
+	bh=/dIqGJHEmP9PlKvKZMoDzFDoLSE4bSZOgbfmkLTxb9E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=meVTcZ73v10aEEpoeC5HcFY5AhI7gVdjMYa3fjFSy6TeDA6HMUzkVXjCwKN06Ym6seZtFbb6sHlXy2LusTqrT3O5C1PMXkPfgyNxjCRKqikI7M3fC3ZsP5htuDiA4isYqFX65DUNRo8e6EF+mkaENy1xSMug0ehHKEUoJ/ZvARw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AupPn7Sw; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2c7fa0c9a8cso3424987a91.1;
+        Tue, 09 Jul 2024 16:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720568396; x=1721173196; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7wZJcxOUMzqnMjEFIAKREA8lwePmg9X2G0N/hJmIdK4=;
-        b=DGa7kQWO46elYeTVvToRXV1Fg/seMbDlLy2mC5XTyAgpiaY4RKlGxmzy3sO0VNGpr4
-         9JmsoQKLIsZSRjsHpfBd6YdCSEBAkNpIcWayhcq/my7kq2kJ0Qb1UsUTzMhvQlSt5hqz
-         SDTOiDxkfXRDdBBgxbcVF8EzLKh30Udo11Muo=
+        d=gmail.com; s=20230601; t=1720569343; x=1721174143; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8fZNeIHzdmh4+7HMyMU6YPTZUzH6nI9xv/tzO/kNJwE=;
+        b=AupPn7SwhgQbttJI5rdT2qsRlZLp1iDihHJ7v3J+osaGsnC3bR84RYACTqv897Yk/r
+         eKXrpk3CZoRcHkpVjUkffu/JrbYarO7Nufsaq9if2lhuUFPC17e4arbf06U78vyTFlnq
+         Pzwor2bMdNEbLGyltYveWJ1Eq+MKo3AbxMOZV6YK5tleelHl/RV01ZdgcYFDnR+ivAHm
+         kC9As2Es+1vrhOt82ynrCOCFANxYlIEeby0mrrVNepgaLd+Xte2pBH2dpecOER/FcUBg
+         cazo326ytsR2cNhAKDN69mokfIBIxcFaSH+mIn/kx4ntVQqqHIpCgrXBCO0if7apNHof
+         05qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720568396; x=1721173196;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7wZJcxOUMzqnMjEFIAKREA8lwePmg9X2G0N/hJmIdK4=;
-        b=OkBD6A0rcG6kD00SMJm5U9kPnZFo7Pxm9ZQuJW07K10g4npb0/9dkHxbds2vh/vGWQ
-         myJFNQDcEV5zUOAsfNMUaFNoHSzD41ej0NFhxU5esCOL15EGlu0VLNPOAj/4VpI/fZdA
-         fnBfgIwRIkNMsHWu81OZOAzXcmG5R5B/ynhcIUqI5VvaL/GA1QXraprRFAjqrfvOqU10
-         aVnUWmET919xA3zGcq6IOnpiCk/bRL5RuDve6/8jlXVZWBTbgCAlZqu92DVWTetUhfNT
-         78ezyC4r4DE8kn9vXCB8KU0OST7xcqr1pn4b8S8se4aMplWALKWImdn/JH7UX07g0itc
-         QuJw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9mTauD9r8/lIQv2WnddPCY/DkfDz1VnZZkeGUJHmitQ38nRFvV55oic5fuEy7WmOmGQniR29u8Dvde6+yWgzseS0p4sv6v3kqnHvp/5tS
-X-Gm-Message-State: AOJu0Yy1uV+EOObkH7PDhcvvUqPVsqPYfxmWQtdsycwJtl5KYIATPqqW
-	VePlZUUY++dUqejdK8wxiY4JMRJXvn8ov04f6+F4u83WrXBJzN8GKVu1UYoiPdc=
-X-Google-Smtp-Source: AGHT+IEuCuhYJkAvAQQcqS5jynk6i+qDZXnB+nhM8B70PkkseKAaNX6qU33nF7oZrixRnw8aPfQ1ng==
-X-Received: by 2002:a05:6602:160f:b0:7f9:444e:4918 with SMTP id ca18e2360f4ac-80003120d96mr488234339f.2.1720568395838;
-        Tue, 09 Jul 2024 16:39:55 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1af8229sm767555173.7.2024.07.09.16.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 16:39:55 -0700 (PDT)
-Message-ID: <fb305513-580a-4bac-a078-fe0170a6ffa2@linuxfoundation.org>
-Date: Tue, 9 Jul 2024 17:39:54 -0600
+        d=1e100.net; s=20230601; t=1720569343; x=1721174143;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8fZNeIHzdmh4+7HMyMU6YPTZUzH6nI9xv/tzO/kNJwE=;
+        b=B4tPFYnQdrWKeEoAnP9awYNzriusquoRIHuZYAiMd+RES4t/qlfBKm8cws0P+lJege
+         tnYGlu5/jFqjHqXAXnVIKAqkCkeh1/7jpOXVNwnq7YNI0ePCOQLSecuxxm3NG/vTFd8O
+         Ina5vryrrgTdv4YCQIprcu4okHeADwWQa3CyepJJ9JtMmiBd8vdgaEryL2woIUhzv6M3
+         HoAro/9UU2sUg6FXztOLG6JZr38KthzKjvTd03KlhJsV/dZd7KYAwfF1asHyU/FM4hFq
+         hflVxtNtPWEhTTF/InpabdVr/8HCXgzp1IbgbXLf7NlEVSNYfvS0aAhUV3Jvc/P/UBN5
+         BJPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgo90JjdkuPTJ+ABxTqlkN5EUX5zdMQjLyYcmQz8kQDONPnXli2pEkP8ovlB+mxNGiXNbOi25XugPOXucO3C8ix1/JoDH5CwwkHx7o9tKjhQDvKQWQxKdiLytWVPW3Xrv82ShXx8++F9ZXY+rCJK9ByE7CAzK28WV8lSI1+5yFALZAgl2jAHySwfrizTnFvl1fkzuWklkJtjCrS+Af6aKiDRxhJA==
+X-Gm-Message-State: AOJu0Yz/XaQvcGY4O6ynYNeR4QlhIAMp2CISCAWv30Mvv+vRjLz9yqGf
+	8qfa0fgJlWyoRc/ynMGBeGgJ4UwaNCpIHR/o6S95Fhb2hUrDsvkHBQ4nST0CoAE5GdEYBj0DVpd
+	Khr7b071HvniG2478CAFeNxz4BNoSbSti
+X-Google-Smtp-Source: AGHT+IFgnerXF1rpKy3OWibi3DTuoiRwqzNxvbuHariwFHiHe/NkICs34kLZl5BrQEUA9GjjlMF/qCNX2tVUb8pBojo=
+X-Received: by 2002:a17:90a:7e18:b0:2c9:888a:7a7b with SMTP id
+ 98e67ed59e1d1-2ca35c735d4mr3150623a91.25.1720569343014; Tue, 09 Jul 2024
+ 16:55:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] selftest: x86: conform tests to TAP format output
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240414131807.2253344-1-usama.anjum@collabora.com>
- <dd277b6b-b28e-4860-b285-e89fd5fd3d41@collabora.com>
- <90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org>
- <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
- <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240709005142.4044530-1-liaochang1@huawei.com> <20240709005142.4044530-2-liaochang1@huawei.com>
+In-Reply-To: <20240709005142.4044530-2-liaochang1@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 9 Jul 2024 16:55:31 -0700
+Message-ID: <CAEf4BzYDrVJXnAruko-h5-oXCGuZ92x4KnY-2cD=XXBp1U_kBg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] uprobes: Optimize the return_instance related routines
+To: Liao Chang <liaochang1@huawei.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, mykolal@fb.com, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/2/24 04:17, Muhammad Usama Anjum wrote:
-> On 6/10/24 10:19 AM, Muhammad Usama Anjum wrote:
->> Adding Borislav, Dave and x86 mailing list:
->> 	Please review the series.
-> Kind reminder
-> 
+On Mon, Jul 8, 2024 at 6:00=E2=80=AFPM Liao Chang <liaochang1@huawei.com> w=
+rote:
+>
+> Reduce the runtime overhead for struct return_instance data managed by
+> uretprobe. This patch replaces the dynamic allocation with statically
+> allocated array, leverage two facts that are limited nesting depth of
+> uretprobe (max 64) and the function call style of return_instance usage
+> (create at entry, free at exit).
+>
+> This patch has been tested on Kunpeng916 (Hi1616), 4 NUMA nodes, 64
+> cores @ 2.4GHz. Redis benchmarks show a throughput gain by 2% for Redis
+> GET and SET commands:
+>
+> ------------------------------------------------------------------
+> Test case       | No uretprobes | uretprobes     | uretprobes
+>                 |               | (current)      | (optimized)
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Redis SET (RPS) | 47025         | 40619 (-13.6%) | 41529 (-11.6%)
+> ------------------------------------------------------------------
+> Redis GET (RPS) | 46715         | 41426 (-11.3%) | 42306 (-9.4%)
+> ------------------------------------------------------------------
+>
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
+>  include/linux/uprobes.h |  10 ++-
+>  kernel/events/uprobes.c | 162 ++++++++++++++++++++++++----------------
+>  2 files changed, 105 insertions(+), 67 deletions(-)
+>
 
-Usama,
+[...]
 
-As I mentioned another TAP conversion patch from you  patch if the
-following command gives you TAP, there is  no need to convert.
+> +static void cleanup_return_instances(struct uprobe_task *utask, bool cha=
+ined,
+> +                                    struct pt_regs *regs)
+> +{
+> +       struct return_frame *frame =3D &utask->frame;
+> +       struct return_instance *ri =3D frame->return_instance;
+> +       enum rp_check ctx =3D chained ? RP_CHECK_CHAIN_CALL : RP_CHECK_CA=
+LL;
+> +
+> +       while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
+> +               ri =3D next_ret_instance(frame, ri);
+> +               utask->depth--;
+> +       }
+> +       frame->return_instance =3D ri;
+> +}
+> +
+> +static struct return_instance *alloc_return_instance(struct uprobe_task =
+*task)
+> +{
+> +       struct return_frame *frame =3D &task->frame;
+> +
+> +       if (!frame->vaddr) {
+> +               frame->vaddr =3D kcalloc(MAX_URETPROBE_DEPTH,
+> +                               sizeof(struct return_instance), GFP_KERNE=
+L);
 
-make -C tools/testing/tmp2 run_tests
-make kselftest TARGETS=tmp2
+Are you just pre-allocating MAX_URETPROBE_DEPTH instances always?
+I.e., even if we need just one (because there is no recursion), you'd
+still waste memory for all 64 ones?
 
-kselftest framework lib.mk and runtests wrappers take care for
-TAP. The reason to take care of this at framework level is to
-avoid changes to individual tests. The wrapper keys off of
-KSFT_* codes returned from tests.
+That seems rather wasteful.
 
-Please don't send TAP conversion patches like this one. The output
-from the commands will have duplicate messages. The reason tests
-return
+Have you considered using objpool for fast reuse across multiple CPUs?
+Check lib/objpool.c.
 
-make -C tools/testing/tmp2 run_tests
-make kselftest TARGETS=tmp2
+> +               if (!frame->vaddr)
+> +                       return NULL;
+> +       }
+> +
+> +       if (!frame->return_instance) {
+> +               frame->return_instance =3D frame->vaddr;
+> +               return frame->return_instance;
+> +       }
+> +
+> +       return ++frame->return_instance;
+> +}
+> +
+> +static inline bool return_frame_empty(struct uprobe_task *task)
+> +{
+> +       return !task->frame.return_instance;
+>  }
+>
+>  /*
 
-thanks,
--- Shuah
+[...]
 
