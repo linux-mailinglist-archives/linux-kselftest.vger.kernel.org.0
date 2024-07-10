@@ -1,118 +1,223 @@
-Return-Path: <linux-kselftest+bounces-13515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8599F92DA7E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 23:01:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 778D892DAA2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 23:22:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 418D8285C68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:01:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97298B20DE0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044FF84047;
-	Wed, 10 Jul 2024 21:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7118512D1F1;
+	Wed, 10 Jul 2024 21:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="K7GuTBHk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="djnjfIW1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F372B9DD
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 21:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C638120F;
+	Wed, 10 Jul 2024 21:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720645282; cv=none; b=H+1nBBct8+Et+OAJxtxRqJsJ0ZGd2+RDtyJ7/FA0DXtGfvl2CR9ApikCZ6NcVr+cSGOMuOX+tLemxdDz0vAUV4tdYaEDUBHuh6GJO4J9sVeLnutqMfX00+9lpiJGMwsltSt93JMNKlbJWU0xl5/zJyiYZeD3OFjXsFuRxDqyIrY=
+	t=1720646515; cv=none; b=K5kHlyJPQcCGt6LywUiFc9NwkhfMj5o0OCo22FimnyT3oFxlDDB0enKEJXNhb9AdnnGjBlhItFsoYrGhuQx5tuITLcXMgFp+Mk/oqyHmOLT5Hz/QnmJFSu5boImlvVfJiO31eH4WvimQqOd4EhFygv6AUpI67wPqNVJJk63yReM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720645282; c=relaxed/simple;
-	bh=YPDmmNoAUyXwZHXSht6VtzUcGLW+qpswXPd+aTbq5ZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jF5vUHTz7V3QypB+2QXo/RBGAnlCzdGD0ywVH4VpEN/CKdaHE/i0KbxfEKwsH4gxU6d5IdHNFmM1UCwK9FBI+6lFCf2xQ6I7H9Y+z2xgWJ+++ScYNqC9qoWneBChUY8rtFiMS4bByR6qTC7OhftyWYSJM0+S6Lplgr6u3BfxmmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=K7GuTBHk; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-375df7da74cso104875ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 14:01:20 -0700 (PDT)
+	s=arc-20240116; t=1720646515; c=relaxed/simple;
+	bh=6Wnz5eF60ejRW26DHlhxGE1i9g2UxFb7NDrkpGayFEo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RsobGU/iIntK9aYz4J743nG0aK2LdlE8GgAZYJj9vhkBYBdYKz7Yx5Bkm2PLRbb2GfYXgqWSi0ObbatHolY8sHQKi97nhFVpX+BvhtiqSII8rCAhdNMSx1H7MzwEozV1FROMkklxjXJx2gAJyJAzF0YvY72jcnDolP6CxsEtfrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=djnjfIW1; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a77e2f51496so39318166b.0;
+        Wed, 10 Jul 2024 14:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720645280; x=1721250080; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FkmU4c0f3mtYkwmFpfIN45QWoWLCvMlQ38MMmzJf92U=;
-        b=K7GuTBHkVCeQUSh0C2a/WqJGBRY4cK9DW15NyX7HvqZQJ7mvQ40+cXtS7ULDrsQaux
-         61tZI6u98GGLay+7exNS7K3ecckPywvxZoQiC3WiGVQNf60XZI/aLEtPnyL/IwIrPyfK
-         D8uOhxlEzKJVLkyyb013m3lu83GmW2ZAPAYco=
+        d=gmail.com; s=20230601; t=1720646512; x=1721251312; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a7dfLXmdXQpbgbVC6DUm3K+U3MfZya3nfYifoRkydI4=;
+        b=djnjfIW1MWXELvAvOIhmEHIDtT0ugKWIRHV6dDTwBPIaGE5FVBdfRH0dtc3esQ1y5u
+         krN5kgYI6Ry0UA87PfDmlN1wthitQl9tWOv5aYi8Yn5BLURG3yeeM1Takfeu4NhkDjgg
+         HtYGaC53kLFTSfiC5DtYsHHjGVuBDBSZUZxquOruDlXk3YA2y+1+mNn/25iLPvJHu+ZM
+         XBMb3wfEsGq9NCCOPRTcAlIW3Jd9lhoB7XfHOEa9QplgDdmWdgE+ul9yTEhnyVpGGhHK
+         aqeftaxJ63OarpsQmMUe36vkDo2zHjQgIbaJ9HfjSmDmAxIQMPh8004BRs7fl5vSEOl1
+         zcQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720645280; x=1721250080;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FkmU4c0f3mtYkwmFpfIN45QWoWLCvMlQ38MMmzJf92U=;
-        b=PVl5SCIdBjkCD9Gx5BA7BtolpHEvM0xpMEcmeXBLarcTGWKdN7mxS4jbOzeqSdoXwI
-         KmCY6zTIH2bPRZte9hRde8NYNvgICV2S4wLnW+WPeFHggL+ycSM531dg+lMlh3A9xfJz
-         kcMv3SuPai1SRHMFVGT+TNSFqlJt9PGSCfn2Oxqw6ovjtxYbVXFc0M6DHZvCftAkHUKm
-         DZqnxd9zNwkQxGz5oi+Ukpw789TTmD0/IX8XBMfKseE7N3wYnDz7ekk6lrzi5HtNi6DX
-         WxRA45fB5UebwgrodcRu1nyRZFl4vhMZAskUVGrBj/cpIAhaGj8kYVP3UtXoyujg9p6A
-         +yjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgYSz+wk6EQL6ORNuozmYvgZWmMiIp1kdU6AoaA77jTbt+wGMKAH23X8ia2tacgI8LSPNrEWwr1bOdRZOIioJNnJVR1jk5pX7URnRPkM7z
-X-Gm-Message-State: AOJu0YxJ4Ydjc25+7l8oK+5QrpstAWNjbn8toQUOeo3idVU4d4kgBEXO
-	rlz9ejZsvehqX+/5C4Khj5y+mItWS3mXdQ5B5YgOxnmNOQRIRqK/0yldY4CSde5iypCXOqDL77b
-	Q
-X-Google-Smtp-Source: AGHT+IEMIw9ChT8Chrl80uN4BKJnJvv472LLG6KXSZMG/KiVRYehpKZ3nU8JHUAAO4irZmzBbux4MA==
-X-Received: by 2002:a05:6602:6199:b0:7f3:d3ed:1ca3 with SMTP id ca18e2360f4ac-80001930275mr817986139f.1.1720645279844;
-        Wed, 10 Jul 2024 14:01:19 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c1385esm1388311173.150.2024.07.10.14.01.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jul 2024 14:01:19 -0700 (PDT)
-Message-ID: <561a35cc-4b66-4755-8662-805f870471e4@linuxfoundation.org>
-Date: Wed, 10 Jul 2024 15:01:18 -0600
+        d=1e100.net; s=20230601; t=1720646512; x=1721251312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a7dfLXmdXQpbgbVC6DUm3K+U3MfZya3nfYifoRkydI4=;
+        b=uK4JUiHg2gFeZerWy9T64BtFXHYuz+7j+JIzEPQwZEfI/ws2J70C7XAiT753yIqOcl
+         aPlpwGsoS9jEaGyLoTjaF/dN/c2npHjadvNZoN43Tmz6if6RkfE6jfEmPWdiJalJ6lFv
+         5/c12lhpad1P+HFQWZgPWRAyQPc/O/gmBzJ5ID0Z6+qH7bZWEfInI6JiQN5xP7gisWJ+
+         Qfp4tHAmi2gNtR4oqfplenisuKHCulE4WCgU6fMP+VzaopY37sYxf4P5hl+NFLERBwWw
+         dczdxmniQnKA4f4FSGp2gGEASKmBJoIVVm+F9Tv0JOj54Gl0JdtIEG8WQ4xgMJbNNQAv
+         4VbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqLxfPag4dRGkTRDFBO1QdRTW7KIjs/+PhLLHmuJ197fbymxZXACmTB1YfTrgK8MqPRsc02XMIYg7nDO25rxsrdrqwduOpYB13KoxNMKO0lKr7kj1HeMlEwmBvden+UJaw7jUbzuPV2wDT39oLi3XzM9eBJCwMl2RZRFAT20s52pY89Tm7RvPinmhzZjDEv8DXqdg56nuB5FCeuXBvZpZv5uiwPg==
+X-Gm-Message-State: AOJu0YwWrTxhIf7L2+Hmt6MoRNgsBk6WsgcPl1wu0IBCkWNP1FR1fKNI
+	XJ8T9wKdzYqESJ2hipdrvLqcxoAt4lRtlcBwP9oQsSwRQTOfTVHL1Eh/o6ZU6DCLlfPAZzW7e7Z
+	0F97YbyMNbpTy+5Jk4ItUTFtW72s=
+X-Google-Smtp-Source: AGHT+IFNlED4hD9ltutwLd15CEICSWnXQJdFn624pZNHo6QN6KygEMoGeZGSgSPGHD4DOEam2/T9znfKW3OUUCihAKA=
+X-Received: by 2002:a17:906:dc93:b0:a77:e1fb:7de9 with SMTP id
+ a640c23a62f3a-a780b68aabfmr471046866b.5.1720646511764; Wed, 10 Jul 2024
+ 14:21:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests:Fix printf format string in kselftest_harness.h
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
-Cc: kees@kernel.org, luto@amacapital.net, wad@chromium.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240710032813.3782-1-zhujun2@cmss.chinamobile.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240710032813.3782-1-zhujun2@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240709005142.4044530-1-liaochang1@huawei.com>
+ <20240709005142.4044530-2-liaochang1@huawei.com> <CAEf4BzYDrVJXnAruko-h5-oXCGuZ92x4KnY-2cD=XXBp1U_kBg@mail.gmail.com>
+ <2336576e-1ed4-cd5e-5535-2d9b88218dae@huawei.com>
+In-Reply-To: <2336576e-1ed4-cd5e-5535-2d9b88218dae@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 10 Jul 2024 14:21:36 -0700
+Message-ID: <CAEf4BzYDvh2Ynrttk4NLyCGB8AVM2d-2tKSzRZF_cXVA80qucw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] uprobes: Optimize the return_instance related routines
+To: "Liao, Chang" <liaochang1@huawei.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, mykolal@fb.com, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/9/24 21:28, Zhu Jun wrote:
-> '%u' in format string requires 'unsigned int' in __wait_for_test()
-> but the argument type is 'signed int'.
-> 
-> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
-> ---
->   tools/testing/selftests/kselftest_harness.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index b634969cbb6f..dbbbcc6c04ee 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -1084,7 +1084,7 @@ void __wait_for_test(struct __test_metadata *t)
->   		}
->   	} else {
->   		fprintf(TH_LOG_STREAM,
-> -			"# %s: Test ended in some other way [%u]\n",
-> +			"# %s: Test ended in some other way [%d]\n",
->   			t->name,
->   			status);
->   	}
+On Wed, Jul 10, 2024 at 1:19=E2=80=AFAM Liao, Chang <liaochang1@huawei.com>=
+ wrote:
+>
+>
+>
+> =E5=9C=A8 2024/7/10 7:55, Andrii Nakryiko =E5=86=99=E9=81=93:
+> > On Mon, Jul 8, 2024 at 6:00=E2=80=AFPM Liao Chang <liaochang1@huawei.co=
+m> wrote:
+> >>
+> >> Reduce the runtime overhead for struct return_instance data managed by
+> >> uretprobe. This patch replaces the dynamic allocation with statically
+> >> allocated array, leverage two facts that are limited nesting depth of
+> >> uretprobe (max 64) and the function call style of return_instance usag=
+e
+> >> (create at entry, free at exit).
+> >>
+> >> This patch has been tested on Kunpeng916 (Hi1616), 4 NUMA nodes, 64
+> >> cores @ 2.4GHz. Redis benchmarks show a throughput gain by 2% for Redi=
+s
+> >> GET and SET commands:
+> >>
+> >> ------------------------------------------------------------------
+> >> Test case       | No uretprobes | uretprobes     | uretprobes
+> >>                 |               | (current)      | (optimized)
+> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> Redis SET (RPS) | 47025         | 40619 (-13.6%) | 41529 (-11.6%)
+> >> ------------------------------------------------------------------
+> >> Redis GET (RPS) | 46715         | 41426 (-11.3%) | 42306 (-9.4%)
+> >> ------------------------------------------------------------------
+> >>
+> >> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> >> ---
+> >>  include/linux/uprobes.h |  10 ++-
+> >>  kernel/events/uprobes.c | 162 ++++++++++++++++++++++++---------------=
+-
+> >>  2 files changed, 105 insertions(+), 67 deletions(-)
+> >>
+> >
+> > [...]
+> >
+> >> +static void cleanup_return_instances(struct uprobe_task *utask, bool =
+chained,
+> >> +                                    struct pt_regs *regs)
+> >> +{
+> >> +       struct return_frame *frame =3D &utask->frame;
+> >> +       struct return_instance *ri =3D frame->return_instance;
+> >> +       enum rp_check ctx =3D chained ? RP_CHECK_CHAIN_CALL : RP_CHECK=
+_CALL;
+> >> +
+> >> +       while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
+> >> +               ri =3D next_ret_instance(frame, ri);
+> >> +               utask->depth--;
+> >> +       }
+> >> +       frame->return_instance =3D ri;
+> >> +}
+> >> +
+> >> +static struct return_instance *alloc_return_instance(struct uprobe_ta=
+sk *task)
+> >> +{
+> >> +       struct return_frame *frame =3D &task->frame;
+> >> +
+> >> +       if (!frame->vaddr) {
+> >> +               frame->vaddr =3D kcalloc(MAX_URETPROBE_DEPTH,
+> >> +                               sizeof(struct return_instance), GFP_KE=
+RNEL);
+> >
+> > Are you just pre-allocating MAX_URETPROBE_DEPTH instances always?
+> > I.e., even if we need just one (because there is no recursion), you'd
+> > still waste memory for all 64 ones?
+>
+> This is the truth. On my testing machines, each struct return_instance da=
+ta
+> is 28 bytes, resulting in a total pre-allocated 1792 bytes when the first
+> instrumented function is hit.
+>
+> >
+> > That seems rather wasteful.
+> >
+> > Have you considered using objpool for fast reuse across multiple CPUs?
+> > Check lib/objpool.c.
+>
+> After studying how kretprobe uses objpool, I'm convinced it is a right so=
+lution for
+> managing return_instance in uretporbe. While I need some time to fully un=
+derstand
+> the objpool code itself and run some benchmark to verify its performance.
+>
+> Thanks for the suggestion.
 
-The change is fine. I do want to see you find the problem in the
-changelog.
+Keep in mind that there are two patch sets under development/review,
+both of which touch this code. [0] will make return_instance
+variable-sized, so think how to accommodate that. And [1] in general
+touches a bunch of this code. So I'd let those two settle and land
+before optimizing return_instance allocations further.
 
-thanks,
--- Shuah
+  [0] https://lore.kernel.org/linux-trace-kernel/20240701164115.723677-1-jo=
+lsa@kernel.org/
+  [1] https://lore.kernel.org/linux-kernel/20240708091241.544262971@infrade=
+ad.org/
 
+>
+> >
+> >> +               if (!frame->vaddr)
+> >> +                       return NULL;
+> >> +       }
+> >> +
+> >> +       if (!frame->return_instance) {
+> >> +               frame->return_instance =3D frame->vaddr;
+> >> +               return frame->return_instance;
+> >> +       }
+> >> +
+> >> +       return ++frame->return_instance;
+> >> +}
+> >> +
+> >> +static inline bool return_frame_empty(struct uprobe_task *task)
+> >> +{
+> >> +       return !task->frame.return_instance;
+> >>  }
+> >>
+> >>  /*
+> >
+> > [...]
+>
+> --
+> BR
+> Liao, Chang
 
