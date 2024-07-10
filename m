@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2D592D9D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 22:13:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBF3D92D9DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 22:14:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B29711C20F4D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 20:13:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9229E281328
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 20:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA391991AB;
-	Wed, 10 Jul 2024 20:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9C81991D5;
+	Wed, 10 Jul 2024 20:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UGpZAZCb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfB73g2c"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FBF1991A0;
-	Wed, 10 Jul 2024 20:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F80A1991C9;
+	Wed, 10 Jul 2024 20:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720642373; cv=none; b=SYrzRLQq5yzN9bbmts2V3p2jOKlcntBOsqc93UnX+vofuWWJEquBlGrmOdIkbgPVu+5f7mc1a8Dub81/hmHjovpHkLZV45bz/ZEtPfJYpB+hK7JFGTOQ3Kv347uQI5cHLKCcclifUKQdMaItnUMPfDYuOR59r/e8uN4pTyZc95I=
+	t=1720642374; cv=none; b=M3vT37jp3TnnEwJVfWIaIQj3oMamPTK+k1b+w8G6s2R5MWNZ3mtV9PBRjUcuwXvcQ8/XVpsNtyme7536KeZnFeFfU65tEnkSeinaXxkWdmkk8Nx5hArnQErzL4PS4REdB/iWXCtiy4d7PW6a7vyq8uorlG9SMGnhBGgiCw8PqbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720642373; c=relaxed/simple;
-	bh=n1S/kZHXlE8AgYjLTZvPqoFMaf/kirIHM9CTO0L4VoE=;
+	s=arc-20240116; t=1720642374; c=relaxed/simple;
+	bh=KwV2WIt8G9niEYFmK0i6SRUe2WfayHMVr7uhmSgiDTo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y/nhPDVsbNfohObUNxI4DAPcJCIVB2ivKCCj4vIbreSXF1+WFfi1PoygxANW5kTehAf/8wV77SFERFtpWJfzQMwXERm21XFcqC+nf7VKvHIUo3ox2ZU6r/RUoPoU0C3ejDdCoFl7zbCgIEWiOqvWEPzVEcyHD2IWIOs2LwG6Q/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UGpZAZCb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AB3C32782;
-	Wed, 10 Jul 2024 20:12:52 +0000 (UTC)
+	 MIME-Version; b=LHZUL0iGdjA4ccnr7xkBv0OrK8SENjup+tGs9HNfLe2jochek40uvRBxdiXabx6K2NcCoJmSCabmnkSYpaJWsw8dF2pw4YGajSqyWt//loaC0DyTIn2af7Usz6pjbiuKZ+SdqPgC+qi/ClNThayfzlKewlrsWk6BUhv9jWW4snM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfB73g2c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E99C4AF10;
+	Wed, 10 Jul 2024 20:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720642373;
-	bh=n1S/kZHXlE8AgYjLTZvPqoFMaf/kirIHM9CTO0L4VoE=;
+	s=k20201202; t=1720642374;
+	bh=KwV2WIt8G9niEYFmK0i6SRUe2WfayHMVr7uhmSgiDTo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UGpZAZCbHGJsPG0VzxC11QTkb6laX2XXkwTcQpnU86mHppXnw8qOjW631TcffrzYl
-	 CXOuVf8qp3gAM2vVz6LWx89tUfEFK3wngcDDD4c3rAxc2PAi3GTKKbXvBCPZWsawJh
-	 HKIpe5S4cGOBzKou7uB0UMgFWJJBV0/vySCQJgBShHeDLaDJ8zlsSsQNMs0GmRXKLx
-	 XQkiyt+0rYcsegtjBpua3WajQmbSuld/KsCS1zkBTkbrC06MrzdDcTmuBVdZL09fOk
-	 p/xa3HaBOfNjoRJUwEOaDhI8OYWgmOFhjNICiiY3ba18tEfHB8ZU6d6naSPn92Ay5z
-	 VR48MmfUTh1xQ==
+	b=VfB73g2cHrTRQf5F8xA+zEerbdlcc1PuJzDal8WsreFKficbdU+zHX9UUV9/uKby9
+	 AqIseRWflNX54ZgmbMemtJWYrrXYf0X6/Jl9e59Fk6eQ1bAS5wgHrLJYJYUti1yOHF
+	 z/zcrvbj2vAVFeGACC0HoXoBeSOd48Enc/tqY1TOCrUARsu1lQXPqJfOxC8ATPUG2S
+	 NGFW1JV8zbyZNB9Ng9OLWkTtH9w58pGsclJ+aA6WkO4my2yIajV77Aod1E+Tsp5xKL
+	 xKfHLKjEOgoSRlY6KQTTuCGioUn9fs1AFTIRBBcioLKAekxE20ryZQLw8BTpZsibnQ
+	 GiD2zN8a/Miwg==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>
@@ -62,9 +62,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v7 5/8] platform: Add test managed platform_device/driver APIs
-Date: Wed, 10 Jul 2024 13:12:41 -0700
-Message-ID: <20240710201246.1802189-6-sboyd@kernel.org>
+Subject: [PATCH v7 6/8] clk: Add test managed clk provider/consumer APIs
+Date: Wed, 10 Jul 2024 13:12:42 -0700
+Message-ID: <20240710201246.1802189-7-sboyd@kernel.org>
 X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
 In-Reply-To: <20240710201246.1802189-1-sboyd@kernel.org>
 References: <20240710201246.1802189-1-sboyd@kernel.org>
@@ -76,656 +76,329 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce KUnit resource wrappers around platform_driver_register(),
-platform_device_alloc(), and platform_device_add() so that test authors
-can register platform drivers/devices from their tests and have the
-drivers/devices automatically be unregistered when the test is done.
+Unit tests are more ergonomic and simpler to understand if they don't
+have to hoist a bunch of code into the test harness init and exit
+functions. Add some test managed wrappers for the clk APIs so that clk
+unit tests can write more code in the actual test and less code in the
+harness.
 
-This makes test setup code simpler when a platform driver or platform
-device is needed. Add a few test cases at the same time to make sure the
-APIs work as intended.
+Only add APIs that are used for now. More wrappers can be added in the
+future as necessary.
 
 Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Reviewed-by: David Gow <davidgow@google.com>
+Cc: David Gow <davidgow@google.com>
 Cc: Rae Moar <rmoar@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- Documentation/dev-tools/kunit/api/index.rst   |   5 +
- .../dev-tools/kunit/api/platformdevice.rst    |  10 +
- include/kunit/platform_device.h               |  20 ++
- lib/kunit/Makefile                            |   4 +-
- lib/kunit/platform-test.c                     | 224 +++++++++++++
- lib/kunit/platform.c                          | 302 ++++++++++++++++++
- 6 files changed, 564 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/dev-tools/kunit/api/platformdevice.rst
- create mode 100644 include/kunit/platform_device.h
- create mode 100644 lib/kunit/platform-test.c
- create mode 100644 lib/kunit/platform.c
+ Documentation/dev-tools/kunit/api/clk.rst   |  10 +
+ Documentation/dev-tools/kunit/api/index.rst |   5 +
+ drivers/clk/Makefile                        |   5 +
+ drivers/clk/clk_kunit_helpers.c             | 204 ++++++++++++++++++++
+ include/kunit/clk.h                         |  28 +++
+ 5 files changed, 252 insertions(+)
+ create mode 100644 Documentation/dev-tools/kunit/api/clk.rst
+ create mode 100644 drivers/clk/clk_kunit_helpers.c
+ create mode 100644 include/kunit/clk.h
 
-diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-index 282befa17edf..02b26f5e8750 100644
---- a/Documentation/dev-tools/kunit/api/index.rst
-+++ b/Documentation/dev-tools/kunit/api/index.rst
-@@ -10,6 +10,7 @@ API Reference
- 	resource
- 	functionredirection
- 	of
-+	platformdevice
- 
- 
- This page documents the KUnit kernel testing API. It is divided into the
-@@ -36,3 +37,7 @@ Driver KUnit API
- Documentation/dev-tools/kunit/api/of.rst
- 
-  - Documents the KUnit device tree (OF) API
-+
-+Documentation/dev-tools/kunit/api/platformdevice.rst
-+
-+ - Documents the KUnit platform device API
-diff --git a/Documentation/dev-tools/kunit/api/platformdevice.rst b/Documentation/dev-tools/kunit/api/platformdevice.rst
+diff --git a/Documentation/dev-tools/kunit/api/clk.rst b/Documentation/dev-tools/kunit/api/clk.rst
 new file mode 100644
-index 000000000000..49ddd5729003
+index 000000000000..eeaa50089453
 --- /dev/null
-+++ b/Documentation/dev-tools/kunit/api/platformdevice.rst
++++ b/Documentation/dev-tools/kunit/api/clk.rst
 @@ -0,0 +1,10 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+===================
-+Platform Device API
-+===================
++========
++Clk API
++========
 +
-+The KUnit platform device API is used to test platform devices.
++The KUnit clk API is used to test clk providers and clk consumers.
 +
-+.. kernel-doc:: lib/kunit/platform.c
++.. kernel-doc:: drivers/clk/clk_kunit_helpers.c
 +   :export:
-diff --git a/include/kunit/platform_device.h b/include/kunit/platform_device.h
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index 02b26f5e8750..5cdb552a0808 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -9,6 +9,7 @@ API Reference
+ 	test
+ 	resource
+ 	functionredirection
++	clk
+ 	of
+ 	platformdevice
+ 
+@@ -34,6 +35,10 @@ Documentation/dev-tools/kunit/api/functionredirection.rst
+ Driver KUnit API
+ ================
+ 
++Documentation/dev-tools/kunit/api/clk.rst
++
++ - Documents the KUnit clk API
++
+ Documentation/dev-tools/kunit/api/of.rst
+ 
+  - Documents the KUnit device tree (OF) API
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index 4abe16c8ccdf..8bb63f1ddd98 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -18,6 +18,11 @@ ifeq ($(CONFIG_OF), y)
+ obj-$(CONFIG_COMMON_CLK)	+= clk-conf.o
+ endif
+ 
++# KUnit specific helpers
++ifeq ($(CONFIG_COMMON_CLK), y)
++obj-$(CONFIG_KUNIT)		+= clk_kunit_helpers.o
++endif
++
+ # hardware specific clock types
+ # please keep this section sorted lexicographically by file path name
+ obj-$(CONFIG_COMMON_CLK_APPLE_NCO)  	+= clk-apple-nco.o
+diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_helpers.c
 new file mode 100644
-index 000000000000..0fc0999d2420
+index 000000000000..c4287d20214c
 --- /dev/null
-+++ b/include/kunit/platform_device.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _KUNIT_PLATFORM_DRIVER_H
-+#define _KUNIT_PLATFORM_DRIVER_H
-+
-+struct kunit;
-+struct platform_device;
-+struct platform_driver;
-+
-+struct platform_device *
-+kunit_platform_device_alloc(struct kunit *test, const char *name, int id);
-+int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev);
-+
-+int kunit_platform_device_prepare_wait_for_probe(struct kunit *test,
-+						 struct platform_device *pdev,
-+						 struct completion *x);
-+
-+int kunit_platform_driver_register(struct kunit *test,
-+				   struct platform_driver *drv);
-+
-+#endif
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 309659a32a78..a980ae62eff6 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -8,7 +8,8 @@ kunit-objs +=				test.o \
- 					try-catch.o \
- 					executor.o \
- 					attributes.o \
--					device.o
-+					device.o \
-+					platform.o
- 
- ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
-@@ -18,6 +19,7 @@ endif
- obj-y +=				hooks.o
- 
- obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
-+obj-$(CONFIG_KUNIT_TEST) +=		platform-test.o
- 
- # string-stream-test compiles built-in only.
- ifeq ($(CONFIG_KUNIT_TEST),y)
-diff --git a/lib/kunit/platform-test.c b/lib/kunit/platform-test.c
-new file mode 100644
-index 000000000000..e3debb8fbcef
---- /dev/null
-+++ b/lib/kunit/platform-test.c
-@@ -0,0 +1,224 @@
++++ b/drivers/clk/clk_kunit_helpers.c
+@@ -0,0 +1,204 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * KUnit test for KUnit platform driver infrastructure.
++ * KUnit helpers for clk providers and consumers
 + */
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
++#include <linux/slab.h>
 +
-+#include <linux/platform_device.h>
-+
-+#include <kunit/platform_device.h>
-+#include <kunit/test.h>
-+
-+/*
-+ * Test that kunit_platform_device_alloc() creates a platform device.
-+ */
-+static void kunit_platform_device_alloc_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+			kunit_platform_device_alloc(test, "kunit-platform", 1));
-+}
-+
-+/*
-+ * Test that kunit_platform_device_add() registers a platform device on the
-+ * platform bus with the proper name and id.
-+ */
-+static void kunit_platform_device_add_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	const char *name = "kunit-platform-add";
-+	const int id = -1;
-+
-+	pdev = kunit_platform_device_alloc(test, name, id);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	KUNIT_EXPECT_EQ(test, 0, kunit_platform_device_add(test, pdev));
-+	KUNIT_EXPECT_TRUE(test, dev_is_platform(&pdev->dev));
-+	KUNIT_EXPECT_STREQ(test, pdev->name, name);
-+	KUNIT_EXPECT_EQ(test, pdev->id, id);
-+}
-+
-+/*
-+ * Test that kunit_platform_device_add() called twice with the same device name
-+ * and id fails the second time and properly cleans up.
-+ */
-+static void kunit_platform_device_add_twice_fails_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	const char *name = "kunit-platform-add-2";
-+	const int id = -1;
-+
-+	pdev = kunit_platform_device_alloc(test, name, id);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(test, pdev));
-+
-+	pdev = kunit_platform_device_alloc(test, name, id);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	KUNIT_EXPECT_NE(test, 0, kunit_platform_device_add(test, pdev));
-+}
-+
-+static int kunit_platform_device_find_by_name(struct device *dev, const void *data)
-+{
-+	return strcmp(dev_name(dev), data) == 0;
-+}
-+
-+/*
-+ * Test that kunit_platform_device_add() cleans up by removing the platform
-+ * device when the test finishes. */
-+static void kunit_platform_device_add_cleans_up(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	const char *name = "kunit-platform-clean";
-+	const int id = -1;
-+	struct kunit fake;
-+	struct device *dev;
-+
-+	kunit_init_test(&fake, "kunit_platform_device_add_fake_test", NULL);
-+	KUNIT_ASSERT_EQ(test, fake.status, KUNIT_SUCCESS);
-+
-+	pdev = kunit_platform_device_alloc(&fake, name, id);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(&fake, pdev));
-+	dev = bus_find_device(&platform_bus_type, NULL, name,
-+			      kunit_platform_device_find_by_name);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-+	put_device(dev);
-+
-+	/* Remove pdev */
-+	kunit_cleanup(&fake);
-+
-+	/*
-+	 * Failing to migrate the kunit_resource would lead to an extra
-+	 * put_device() call on the platform device. The best we can do here is
-+	 * make sure the device no longer exists on the bus, but if something
-+	 * is wrong we'll see a refcount underflow here. We can't test for a
-+	 * refcount underflow because the kref matches the lifetime of the
-+	 * device which should already be freed and could be used by something
-+	 * else.
-+	 */
-+	dev = bus_find_device(&platform_bus_type, NULL, name,
-+			      kunit_platform_device_find_by_name);
-+	KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
-+	put_device(dev);
-+}
-+
-+/*
-+ * Test suite for struct platform_device kunit APIs
-+ */
-+static struct kunit_case kunit_platform_device_test_cases[] = {
-+	KUNIT_CASE(kunit_platform_device_alloc_test),
-+	KUNIT_CASE(kunit_platform_device_add_test),
-+	KUNIT_CASE(kunit_platform_device_add_twice_fails_test),
-+	KUNIT_CASE(kunit_platform_device_add_cleans_up),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_platform_device_suite = {
-+	.name = "kunit_platform_device",
-+	.test_cases = kunit_platform_device_test_cases,
-+};
-+
-+struct kunit_platform_driver_test_context {
-+	struct platform_driver pdrv;
-+	const char *data;
-+};
-+
-+static const char * const test_data = "test data";
-+
-+static inline struct kunit_platform_driver_test_context *
-+to_test_context(struct platform_device *pdev)
-+{
-+	return container_of(to_platform_driver(pdev->dev.driver),
-+			    struct kunit_platform_driver_test_context,
-+			    pdrv);
-+}
-+
-+static int kunit_platform_driver_probe(struct platform_device *pdev)
-+{
-+	struct kunit_platform_driver_test_context *ctx;
-+
-+	ctx = to_test_context(pdev);
-+	ctx->data = test_data;
-+
-+	return 0;
-+}
-+
-+/* Test that kunit_platform_driver_register() registers a driver that probes. */
-+static void kunit_platform_driver_register_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct kunit_platform_driver_test_context *ctx;
-+	DECLARE_COMPLETION_ONSTACK(comp);
-+	const char *name = "kunit-platform-register";
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+
-+	pdev = kunit_platform_device_alloc(test, name, -1);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(test, pdev));
-+
-+	ctx->pdrv.probe = kunit_platform_driver_probe;
-+	ctx->pdrv.driver.name = name;
-+	ctx->pdrv.driver.owner = THIS_MODULE;
-+
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_prepare_wait_for_probe(test, pdev, &comp));
-+
-+	KUNIT_EXPECT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
-+	KUNIT_EXPECT_NE(test, 0, wait_for_completion_timeout(&comp, 3 * HZ));
-+	KUNIT_EXPECT_STREQ(test, ctx->data, test_data);
-+}
-+
-+/*
-+ * Test that kunit_platform_device_prepare_wait_for_probe() completes the completion
-+ * when the device is already probed.
-+ */
-+static void kunit_platform_device_prepare_wait_for_probe_completes_when_already_probed(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct kunit_platform_driver_test_context *ctx;
-+	DECLARE_COMPLETION_ONSTACK(comp);
-+	const char *name = "kunit-platform-wait";
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+
-+	pdev = kunit_platform_device_alloc(test, name, -1);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(test, pdev));
-+
-+	ctx->pdrv.probe = kunit_platform_driver_probe;
-+	ctx->pdrv.driver.name = name;
-+	ctx->pdrv.driver.owner = THIS_MODULE;
-+
-+	/* Make sure driver has actually probed */
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_prepare_wait_for_probe(test, pdev, &comp));
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
-+	KUNIT_ASSERT_NE(test, 0, wait_for_completion_timeout(&comp, 3 * HZ));
-+
-+	reinit_completion(&comp);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_prepare_wait_for_probe(test, pdev, &comp));
-+
-+	KUNIT_EXPECT_NE(test, 0, wait_for_completion_timeout(&comp, HZ));
-+}
-+
-+static struct kunit_case kunit_platform_driver_test_cases[] = {
-+	KUNIT_CASE(kunit_platform_driver_register_test),
-+	KUNIT_CASE(kunit_platform_device_prepare_wait_for_probe_completes_when_already_probed),
-+	{}
-+};
-+
-+/*
-+ * Test suite for struct platform_driver kunit APIs
-+ */
-+static struct kunit_suite kunit_platform_driver_suite = {
-+	.name = "kunit_platform_driver",
-+	.test_cases = kunit_platform_driver_test_cases,
-+};
-+
-+kunit_test_suites(
-+	&kunit_platform_device_suite,
-+	&kunit_platform_driver_suite,
-+);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("KUnit test for KUnit platform driver infrastructure");
-diff --git a/lib/kunit/platform.c b/lib/kunit/platform.c
-new file mode 100644
-index 000000000000..0b518de26065
---- /dev/null
-+++ b/lib/kunit/platform.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test managed platform driver
-+ */
-+
-+#include <linux/completion.h>
-+#include <linux/device/bus.h>
-+#include <linux/device/driver.h>
-+#include <linux/platform_device.h>
-+
-+#include <kunit/platform_device.h>
++#include <kunit/clk.h>
 +#include <kunit/resource.h>
 +
-+struct kunit_platform_device_alloc_params {
-+	const char *name;
-+	int id;
-+};
-+
-+static int kunit_platform_device_alloc_init(struct kunit_resource *res, void *context)
-+{
-+	struct kunit_platform_device_alloc_params *params = context;
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_alloc(params->name, params->id);
-+	if (!pdev)
-+		return -ENOMEM;
-+
-+	res->data = pdev;
-+
-+	return 0;
-+}
-+
-+static void kunit_platform_device_alloc_exit(struct kunit_resource *res)
-+{
-+	struct platform_device *pdev = res->data;
-+
-+	platform_device_put(pdev);
-+}
-+
++KUNIT_DEFINE_ACTION_WRAPPER(clk_disable_unprepare_wrapper,
++			    clk_disable_unprepare, struct clk *);
 +/**
-+ * kunit_platform_device_alloc() - Allocate a KUnit test managed platform device
-+ * @test: test context
-+ * @name: device name of platform device to alloc
-+ * @id: identifier of platform device to alloc.
++ * clk_prepare_enable_kunit() - Test managed clk_prepare_enable()
++ * @test: The test context
++ * @clk: clk to prepare and enable
 + *
-+ * Allocate a test managed platform device. The device is put when the test completes.
-+ *
-+ * Return: Allocated platform device on success, NULL on failure.
++ * Return: 0 on success, or negative errno on failure.
 + */
-+struct platform_device *
-+kunit_platform_device_alloc(struct kunit *test, const char *name, int id)
-+{
-+	struct kunit_platform_device_alloc_params params = {
-+		.name = name,
-+		.id = id,
-+	};
-+
-+	return kunit_alloc_resource(test,
-+				    kunit_platform_device_alloc_init,
-+				    kunit_platform_device_alloc_exit,
-+				    GFP_KERNEL, &params);
-+}
-+EXPORT_SYMBOL_GPL(kunit_platform_device_alloc);
-+
-+static void kunit_platform_device_add_exit(struct kunit_resource *res)
-+{
-+	struct platform_device *pdev = res->data;
-+
-+	platform_device_unregister(pdev);
-+}
-+
-+static bool
-+kunit_platform_device_alloc_match(struct kunit *test,
-+				  struct kunit_resource *res, void *match_data)
-+{
-+	struct platform_device *pdev = match_data;
-+
-+	return res->data == pdev && res->free == kunit_platform_device_alloc_exit;
-+}
-+
-+KUNIT_DEFINE_ACTION_WRAPPER(platform_device_unregister_wrapper,
-+			    platform_device_unregister, struct platform_device *);
-+/**
-+ * kunit_platform_device_add() - Register a KUnit test managed platform device
-+ * @test: test context
-+ * @pdev: platform device to add
-+ *
-+ * Register a test managed platform device. The device is unregistered when the
-+ * test completes.
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev)
-+{
-+	struct kunit_resource *res;
-+	int ret;
-+
-+	ret = platform_device_add(pdev);
-+	if (ret)
-+		return ret;
-+
-+	res = kunit_find_resource(test, kunit_platform_device_alloc_match, pdev);
-+	if (res) {
-+		/*
-+		 * Transfer the reference count of the platform device if it
-+		 * was allocated with kunit_platform_device_alloc(). In this
-+		 * case, calling platform_device_put() when the test exits from
-+		 * kunit_platform_device_alloc_exit() would lead to reference
-+		 * count underflow because platform_device_unregister_wrapper()
-+		 * calls platform_device_unregister() which also calls
-+		 * platform_device_put().
-+		 *
-+		 * Usually callers transfer the refcount initialized in
-+		 * platform_device_alloc() to platform_device_add() by calling
-+		 * platform_device_unregister() when platform_device_add()
-+		 * succeeds or platform_device_put() when it fails. KUnit has to
-+		 * keep this straight by redirecting the free routine for the
-+		 * resource to the right function. Luckily this only has to
-+		 * account for the success scenario.
-+		 */
-+		res->free = kunit_platform_device_add_exit;
-+		kunit_put_resource(res);
-+	} else {
-+		ret = kunit_add_action_or_reset(test, platform_device_unregister_wrapper, pdev);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(kunit_platform_device_add);
-+
-+struct kunit_platform_device_probe_nb {
-+	struct completion *x;
-+	struct device *dev;
-+	struct notifier_block nb;
-+};
-+
-+static int kunit_platform_device_probe_notify(struct notifier_block *nb,
-+					      unsigned long event, void *data)
-+{
-+	struct kunit_platform_device_probe_nb *knb;
-+	struct device *dev = data;
-+
-+	knb = container_of(nb, struct kunit_platform_device_probe_nb, nb);
-+	if (event != BUS_NOTIFY_BOUND_DRIVER || knb->dev != dev)
-+		return NOTIFY_DONE;
-+
-+	complete(knb->x);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static void kunit_platform_device_probe_nb_remove(void *nb)
-+{
-+	bus_unregister_notifier(&platform_bus_type, nb);
-+}
-+
-+/**
-+ * kunit_platform_device_prepare_wait_for_probe() - Prepare a completion
-+ * variable to wait for a platform device to probe
-+ * @test: test context
-+ * @pdev: platform device to prepare to wait for probe of
-+ * @x: completion variable completed when @dev has probed
-+ *
-+ * Prepare a completion variable @x to wait for @pdev to probe. Waiting on the
-+ * completion forces a preemption, allowing the platform driver to probe.
-+ *
-+ * Example
-+ *
-+ * .. code-block:: c
-+ *
-+ *	static int kunit_platform_driver_probe(struct platform_device *pdev)
-+ *	{
-+ *		return 0;
-+ *	}
-+ *
-+ *	static void kunit_platform_driver_test(struct kunit *test)
-+ *	{
-+ *		struct platform_device *pdev;
-+ *		struct platform_driver *pdrv;
-+ *		DECLARE_COMPLETION_ONSTACK(comp);
-+ *
-+ *		pdev = kunit_platform_device_alloc(test, "kunit-platform", -1);
-+ *		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+ *		KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(test, pdev));
-+ *
-+ *		pdrv = kunit_kzalloc(test, sizeof(*pdrv), GFP_KERNEL);
-+ *		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdrv);
-+ *
-+ *		pdrv->probe = kunit_platform_driver_probe;
-+ *		pdrv->driver.name = "kunit-platform";
-+ *		pdrv->driver.owner = THIS_MODULE;
-+ *
-+ *		KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_prepare_wait_for_probe(test, pdev, &comp));
-+ *		KUNIT_ASSERT_EQ(test, 0, kunit_platform_driver_register(test, pdrv));
-+ *
-+ *		KUNIT_EXPECT_NE(test, 0, wait_for_completion_timeout(&comp, 3 * HZ));
-+ *	}
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int kunit_platform_device_prepare_wait_for_probe(struct kunit *test,
-+						 struct platform_device *pdev,
-+						 struct completion *x)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct kunit_platform_device_probe_nb *knb;
-+	bool bound;
-+
-+	knb = kunit_kzalloc(test, sizeof(*knb), GFP_KERNEL);
-+	if (!knb)
-+		return -ENOMEM;
-+
-+	knb->nb.notifier_call = kunit_platform_device_probe_notify;
-+	knb->dev = dev;
-+	knb->x = x;
-+
-+	device_lock(dev);
-+	bound = device_is_bound(dev);
-+	if (bound) {
-+		device_unlock(dev);
-+		complete(x);
-+		kunit_kfree(test, knb);
-+		return 0;
-+	}
-+
-+	bus_register_notifier(&platform_bus_type, &knb->nb);
-+	device_unlock(&pdev->dev);
-+
-+	return kunit_add_action_or_reset(test, kunit_platform_device_probe_nb_remove, &knb->nb);
-+}
-+EXPORT_SYMBOL_GPL(kunit_platform_device_prepare_wait_for_probe);
-+
-+KUNIT_DEFINE_ACTION_WRAPPER(platform_driver_unregister_wrapper,
-+			    platform_driver_unregister, struct platform_driver *);
-+/**
-+ * kunit_platform_driver_register() - Register a KUnit test managed platform driver
-+ * @test: test context
-+ * @drv: platform driver to register
-+ *
-+ * Register a test managed platform driver. This allows callers to embed the
-+ * @drv in a container structure and use container_of() in the probe function
-+ * to pass information to KUnit tests.
-+ *
-+ * Example
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct kunit_test_context {
-+ *		struct platform_driver pdrv;
-+ *		const char *data;
-+ *	};
-+ *
-+ *	static inline struct kunit_test_context *
-+ *	to_test_context(struct platform_device *pdev)
-+ *	{
-+ *		return container_of(to_platform_driver(pdev->dev.driver),
-+ *				    struct kunit_test_context,
-+ *				    pdrv);
-+ *	}
-+ *
-+ *	static int kunit_platform_driver_probe(struct platform_device *pdev)
-+ *	{
-+ *		struct kunit_test_context *ctx;
-+ *
-+ *		ctx = to_test_context(pdev);
-+ *		ctx->data = "test data";
-+ *
-+ *		return 0;
-+ *	}
-+ *
-+ *	static void kunit_platform_driver_test(struct kunit *test)
-+ *	{
-+ *		struct kunit_test_context *ctx;
-+ *
-+ *		ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+ *		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+ *
-+ *		ctx->pdrv.probe = kunit_platform_driver_probe;
-+ *		ctx->pdrv.driver.name = "kunit-platform";
-+ *		ctx->pdrv.driver.owner = THIS_MODULE;
-+ *
-+ *		KUNIT_EXPECT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
-+ *		<... wait for driver to probe ...>
-+ *		KUNIT_EXPECT_STREQ(test, ctx->data, "test data");
-+ *	}
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int kunit_platform_driver_register(struct kunit *test,
-+				   struct platform_driver *drv)
++int clk_prepare_enable_kunit(struct kunit *test, struct clk *clk)
 +{
 +	int ret;
 +
-+	ret = platform_driver_register(drv);
++	ret = clk_prepare_enable(clk);
 +	if (ret)
 +		return ret;
 +
-+	return kunit_add_action_or_reset(test, platform_driver_unregister_wrapper, drv);
++	return kunit_add_action_or_reset(test, clk_disable_unprepare_wrapper,
++					 clk);
 +}
-+EXPORT_SYMBOL_GPL(kunit_platform_driver_register);
++EXPORT_SYMBOL_GPL(clk_prepare_enable_kunit);
++
++KUNIT_DEFINE_ACTION_WRAPPER(clk_put_wrapper, clk_put, struct clk *);
++
++static struct clk *__clk_get_kunit(struct kunit *test, struct clk *clk)
++{
++	int ret;
++
++	if (IS_ERR(clk))
++		return clk;
++
++	ret = kunit_add_action_or_reset(test, clk_put_wrapper, clk);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return clk;
++}
++
++/**
++ * clk_get_kunit() - Test managed clk_get()
++ * @test: The test context
++ * @dev: device for clock "consumer"
++ * @con_id: clock consumer ID
++ *
++ * Just like clk_get(), except the clk is managed by the test case and is
++ * automatically put with clk_put() after the test case concludes.
++ *
++ * Return: new clk consumer or ERR_PTR on failure.
++ */
++struct clk *
++clk_get_kunit(struct kunit *test, struct device *dev, const char *con_id)
++{
++	struct clk *clk;
++
++	clk = clk_get(dev, con_id);
++
++	return __clk_get_kunit(test, clk);
++}
++EXPORT_SYMBOL_GPL(clk_get_kunit);
++
++/**
++ * of_clk_get_kunit() - Test managed of_clk_get()
++ * @test: The test context
++ * @np: device_node for clock "consumer"
++ * @index: index in 'clocks' property of @np
++ *
++ * Just like of_clk_get(), except the clk is managed by the test case and is
++ * automatically put with clk_put() after the test case concludes.
++ *
++ * Return: new clk consumer or ERR_PTR on failure.
++ */
++struct clk *
++of_clk_get_kunit(struct kunit *test, struct device_node *np, int index)
++{
++	struct clk *clk;
++
++	clk = of_clk_get(np, index);
++
++	return __clk_get_kunit(test, clk);
++}
++EXPORT_SYMBOL_GPL(of_clk_get_kunit);
++
++/**
++ * clk_hw_get_clk_kunit() - Test managed clk_hw_get_clk()
++ * @test: The test context
++ * @hw: clk_hw associated with the clk being consumed
++ * @con_id: connection ID string on device
++ *
++ * Just like clk_hw_get_clk(), except the clk is managed by the test case and
++ * is automatically put with clk_put() after the test case concludes.
++ *
++ * Return: new clk consumer or ERR_PTR on failure.
++ */
++struct clk *
++clk_hw_get_clk_kunit(struct kunit *test, struct clk_hw *hw, const char *con_id)
++{
++	struct clk *clk;
++
++	clk = clk_hw_get_clk(hw, con_id);
++
++	return __clk_get_kunit(test, clk);
++}
++EXPORT_SYMBOL_GPL(clk_hw_get_clk_kunit);
++
++/**
++ * clk_hw_get_clk_prepared_enabled_kunit() - Test managed clk_hw_get_clk() + clk_prepare_enable()
++ * @test: The test context
++ * @hw: clk_hw associated with the clk being consumed
++ * @con_id: connection ID string on device
++ *
++ * Just like
++ *
++ * .. code-block:: c
++ *
++ *	struct clk *clk = clk_hw_get_clk(...);
++ *	clk_prepare_enable(clk);
++ *
++ * except the clk is managed by the test case and is automatically disabled and
++ * unprepared with clk_disable_unprepare() and put with clk_put() after the
++ * test case concludes.
++ *
++ * Return: new clk consumer that is prepared and enabled or ERR_PTR on failure.
++ */
++struct clk *
++clk_hw_get_clk_prepared_enabled_kunit(struct kunit *test, struct clk_hw *hw,
++				      const char *con_id)
++{
++	int ret;
++	struct clk *clk;
++
++	clk = clk_hw_get_clk_kunit(test, hw, con_id);
++	if (IS_ERR(clk))
++		return clk;
++
++	ret = clk_prepare_enable_kunit(test, clk);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return clk;
++}
++EXPORT_SYMBOL_GPL(clk_hw_get_clk_prepared_enabled_kunit);
++
++KUNIT_DEFINE_ACTION_WRAPPER(clk_hw_unregister_wrapper,
++			    clk_hw_unregister, struct clk_hw *);
++
++/**
++ * clk_hw_register_kunit() - Test managed clk_hw_register()
++ * @test: The test context
++ * @dev: device that is registering this clock
++ * @hw: link to hardware-specific clock data
++ *
++ * Just like clk_hw_register(), except the clk registration is managed by the
++ * test case and is automatically unregistered after the test case concludes.
++ *
++ * Return: 0 on success or a negative errno value on failure.
++ */
++int clk_hw_register_kunit(struct kunit *test, struct device *dev, struct clk_hw *hw)
++{
++	int ret;
++
++	ret = clk_hw_register(dev, hw);
++	if (ret)
++		return ret;
++
++	return kunit_add_action_or_reset(test, clk_hw_unregister_wrapper, hw);
++}
++EXPORT_SYMBOL_GPL(clk_hw_register_kunit);
++
++/**
++ * of_clk_hw_register_kunit() - Test managed of_clk_hw_register()
++ * @test: The test context
++ * @node: device_node of device that is registering this clock
++ * @hw: link to hardware-specific clock data
++ *
++ * Just like of_clk_hw_register(), except the clk registration is managed by
++ * the test case and is automatically unregistered after the test case
++ * concludes.
++ *
++ * Return: 0 on success or a negative errno value on failure.
++ */
++int of_clk_hw_register_kunit(struct kunit *test, struct device_node *node, struct clk_hw *hw)
++{
++	int ret;
++
++	ret = of_clk_hw_register(node, hw);
++	if (ret)
++		return ret;
++
++	return kunit_add_action_or_reset(test, clk_hw_unregister_wrapper, hw);
++}
++EXPORT_SYMBOL_GPL(of_clk_hw_register_kunit);
+diff --git a/include/kunit/clk.h b/include/kunit/clk.h
+new file mode 100644
+index 000000000000..73bc99cefe7b
+--- /dev/null
++++ b/include/kunit/clk.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _CLK_KUNIT_H
++#define _CLK_KUNIT_H
++
++struct clk;
++struct clk_hw;
++struct device;
++struct device_node;
++struct kunit;
++
++struct clk *
++clk_get_kunit(struct kunit *test, struct device *dev, const char *con_id);
++struct clk *
++of_clk_get_kunit(struct kunit *test, struct device_node *np, int index);
++
++struct clk *
++clk_hw_get_clk_kunit(struct kunit *test, struct clk_hw *hw, const char *con_id);
++struct clk *
++clk_hw_get_clk_prepared_enabled_kunit(struct kunit *test, struct clk_hw *hw,
++				      const char *con_id);
++
++int clk_prepare_enable_kunit(struct kunit *test, struct clk *clk);
++
++int clk_hw_register_kunit(struct kunit *test, struct device *dev, struct clk_hw *hw);
++int of_clk_hw_register_kunit(struct kunit *test, struct device_node *node,
++			     struct clk_hw *hw);
++
++#endif
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
