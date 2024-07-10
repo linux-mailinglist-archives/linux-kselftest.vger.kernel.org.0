@@ -1,130 +1,154 @@
-Return-Path: <linux-kselftest+bounces-13492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13493-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B34192D822
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 20:15:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 554A692D838
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 20:27:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABB241C21047
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 18:15:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E2E1F21F80
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 18:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFB319346B;
-	Wed, 10 Jul 2024 18:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4CC195FD5;
+	Wed, 10 Jul 2024 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZHiFDq33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBignoqF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D12C18FC93
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 18:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0B31922E3;
+	Wed, 10 Jul 2024 18:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720635316; cv=none; b=qgkk2GlcjdewdyPJAcbAEmO9fqCuJ+mYHxPGloKyOP8LoB2MyFhCIJrEZuMVCCxmtlkcGxulp34r35A5uaOzO0S1tlzYwrw1OhcWv4BBV/PqO4zKDQ6lCSu3TGYLol800IKStE9wKm7/G5+hlYsZ0GMsXTr1ZB461YFUXVgw9Ck=
+	t=1720636024; cv=none; b=Ws2UaXNSHwuHpw55JdI6RSS7PQ8+MMaCALHCSqtq/K7SV5oVZ40wGwTg76NEBMmZF9kHkbZ+eMaNnfbPESo2B8hipw0k0W9dYiYCMklBCENCOvv6S0EL68o16TZX5ZtlRO4nnctwiTiEryJtWX1d5VjaHwXQDxGQL6N0eVbz8UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720635316; c=relaxed/simple;
-	bh=fi0BW+/k8VQydo/kennAewSTGcXiLJiRcnEfWWAowLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gihOBZ+svEP67JGXlzxgS5bxZy57L/gRTnGYxaXvgwkH1b1prpEYZr45NQ7EpaqWB2jIH2vU7b2iR25NIkl1hSpFJW8GYjuonyPGJ7cWr2bPP5HxmlvuzChwYVXXkrGbOG4IN8sLFDMfPoOtMIcwNk2Z5hh3o3zLYK8ZYs/we+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZHiFDq33; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-38252b3a90eso48565ab.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 11:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720635314; x=1721240114; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fi0BW+/k8VQydo/kennAewSTGcXiLJiRcnEfWWAowLQ=;
-        b=ZHiFDq33pmdMcxOcOWPt0u7b8VF/mv3Js/7+nzeRqfsiTQAOHhdapUST31w/EfQkZ/
-         eMOL6DVO7amjwB+aDtLWuKDX0t+Fv4r11wNBOtm8RMuDCQe64FEZCi15d9PZ5xljA9GW
-         ML/YGxcFYm7BAFBsYXYp+af4ArvRE1RbzhCRc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720635314; x=1721240114;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fi0BW+/k8VQydo/kennAewSTGcXiLJiRcnEfWWAowLQ=;
-        b=Irz/vQjtwysdBA8oKNpr037RgF8W/foazHPTUPsi4LVYavmbOgj5qsY0AU/bEk1VIS
-         xfFegOawpcGqgN9zVyYEzvOqOmrbDs1yXCx8Hm16lK+9S4RTSS3mxC4t8Imve1l68w1Q
-         A656XzTJwE6cM6JDtl/BDLGCkkslPgoxefjdbShWtUIeH7g8oDH7mnPdhCqWzhD18L2e
-         kvIDA8NG6GWKetBsonap+IWVGtc+Uc8bu6xYGygpVX6rJiaQRXIN+xV0A1waM3Ycgp0l
-         pgSI4tn4wVSfoOLscetNyxaECoFjFFqqlDEtlxTq7a3k/JxWHuf9d3bqRFh+JlUCNql2
-         dQQw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0yQabki2L2GU/YVXQ6NcSQ5RQalLe3bMIlVrexSAIcPedCghjZ3wkzwwl+C3DusnJ1v8u6XqfY9NXtXAxlllKB9lSzvn78Drq2xN3hBxT
-X-Gm-Message-State: AOJu0YyMHrSli24VKVlXN6+sFXEdjWyWDk6zxmlqvrzfg6X8hknm4JUN
-	6Et/5Ks+T6oAUYeuX16Apn6ka9PayM96RrRlQSrnJxliWoYOvM5vdvWsnTU9Y3o=
-X-Google-Smtp-Source: AGHT+IEzdvyoCYqDNqyo/iN7U0xS3TaWnI9DWR7yzrDPdcmXeGnd4nNRI+1ytQfug5kfdYbTFC9Bxg==
-X-Received: by 2002:a5e:da41:0:b0:803:f97f:59e1 with SMTP id ca18e2360f4ac-806d91a2a7emr38799939f.0.1720635313687;
-        Wed, 10 Jul 2024 11:15:13 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-7ffed680f8esm133773339f.49.2024.07.10.11.15.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jul 2024 11:15:13 -0700 (PDT)
-Message-ID: <415baa3e-1bbe-4da0-8f69-d4e818f45925@linuxfoundation.org>
-Date: Wed, 10 Jul 2024 12:15:12 -0600
+	s=arc-20240116; t=1720636024; c=relaxed/simple;
+	bh=eRrtqZRqKI+Vs713ksZJJnhpC7362rwfU+pQUCdgXy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aPeosFbvqjlyQYn1QY7GP5ha88SL7uqkhqj/oPwD8LsWatiSlC2EXsBnCkSq9yY9tpaRjrCuFH39gYyjskTz6WdSD1N+Os45fHKoGF/Y8Cdgmw6v0/yaK9kVBytpHWZDY5TX7Hm9eqCEeMEJH2YhttFQlFx9+k1gwwxxklLVaOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBignoqF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5056C32781;
+	Wed, 10 Jul 2024 18:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720636023;
+	bh=eRrtqZRqKI+Vs713ksZJJnhpC7362rwfU+pQUCdgXy0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kBignoqFgMiQnAofIwr6TpBgYH9jPjzRaSC842ug8+rx6x5ll0CjTdOuNwKz+XNaU
+	 NDvkrwV2QNWMtc2QwoU1ijOz5da9rUzzZ4Zm4X9y1ohMBoG7CVKn0v8dUDWTmbo5kp
+	 qCrq3abaj3XVJlXugg7JTU4S4r1FduVMcT4Z37pYvXrQ+HC5Pfyh6axADebI74bLMd
+	 mL+FCPzGJMJSDDh/UgJFPTRSJhQcGB2O3dEluBrE8THwZhBROKgdbzxw1XeKE8fCoR
+	 WqmFYL3/Bn0OvLOJQI+kNsc03yBZkhbSjm+4JlasoCc+ZLBwTbq5WG/vpdgUXOB+/4
+	 KqrO9fqPgf3Gw==
+Date: Wed, 10 Jul 2024 19:27:00 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	"Schimpe, Christina" <christina.schimpe@intel.com>,
+	"Pandey, Sunil K" <sunil.k.pandey@intel.com>
+Subject: Re: [PATCH v9 05/39] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <Zo7SdDT_cBp6uXgT@finisterre.sirena.org.uk>
+References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
+ <20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org>
+ <87a5iph6u2.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftests/thermel/intel: conform the test to TAP
- output
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240522170655.2879712-1-usama.anjum@collabora.com>
- <175ac98f-481f-46e2-a3f7-206b64d8b0e9@collabora.com>
- <7e3b3870a68f4e98f2e33d748a2740d3d430bad1.camel@linux.intel.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <7e3b3870a68f4e98f2e33d748a2740d3d430bad1.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 7/1/24 03:38, srinivas pandruvada wrote:
-> On Mon, 2024-07-01 at 13:36 +0500, Muhammad Usama Anjum wrote:
->> Soft reminder
->>
->> On 5/22/24 10:06 PM, Muhammad Usama Anjum wrote:
->>> Conform the layout, informational and status messages to TAP. No
->>> functional change is intended other than the layout of output
->>> messages.
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="GNMZNZkOBV+voqRu"
+Content-Disposition: inline
+In-Reply-To: <87a5iph6u2.fsf@oldenburg.str.redhat.com>
+X-Cookie: Your love life will be... interesting.
 
 
-Okay. I think I responded to your other patches that are adding TAP
-to individual tests when kselftest wrapped does it for you based on
-return values.
+--GNMZNZkOBV+voqRu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The reason I don't want to take this patch is if you run the test
-using the recommended method:
+On Wed, Jul 10, 2024 at 12:36:21PM +0200, Florian Weimer wrote:
+> * Mark Brown:
 
-make -C tools/testing/selftests/vDSO/ run_tests you will get the
-TAP output because lib.mk runtests framework takes care of this.
+> > +* When GCS is enabled for the interrupted thread a signal handling specific
+> > +  GCS cap token will be written to the GCS, this is an architectural GCS cap
+> > +  token with bit 63 set and the token type (bits 0..11) all clear.  The
+> > +  GCSPR_EL0 reported in the signal frame will point to this cap token.
 
-or
+> How does this marker interfere with Top Byte Ignore (TBI; I hope I got
+> the name right)?  The specification currently does not say that only
+> addresses pushed to the shadow stack with the top byte cleared, which
+> potentially makes the markup ambiguous.  On x86-64, the same issue may
 
-make kselftest TARGETS=vDSO will do the same.
+Indeed...  Given that we use the address on the GCS as part of the token
+on first pass I think we could get away with just using the address and
+not setting the top bit, we'd have an invalid cap pointing into a GCS
+page which shouldn't otherwise be on the GCS.  I'll give that some more
+thought.
 
-Please don't send TAP conversions for individual runs. You will
-start seeing duplicate TAP output which will make it unreadable.
+> exist with LAM.  I have not tested yet what happens there.  On AArch64
+> and RISC-V, it may be more natural to use the LSB instead of the LSB for
+> the mark bit because of its instruction alignment.
 
-Run the test using make -C or make kselftest TARGETS before
-investing time to concert to TAP. I am not going to take TAP
-conversions patches if make -C or make kselftest TARGETS
-shows TAP.
+The LSB is already taken by the architecture on aarch64, the bottom bits
+of the value are used for the token type field with no values/bits
+reserved for software use.
 
-thanks,
--- Shuah
+> We also have a gap on x86-64 for backtrace generation because the
+> interrupted instruction address does not end up on the shadow stack.
+> This address is potentially quite interesting for backtrace generation.
+> I assume it's currently missing because the kernel does not resume
+> execution using a regular return instruction.  It would be really useful
+> if it could be pushed to the shadow stack, or recoverable from the
+> shadow stack in some other way (e.g., the address of the signal context
+> could be pushed instead).  That would need some form of marker as well.
+
+Right, we'd have to manually consume any extra address we put on the
+GCS.  I'm not seeing any gagetisation issues with writing an extra value
+there that isn't a valid stack cap at the minute but I'll need to think
+it through properly - don't know if anyone else has thoughts here?
+
+--GNMZNZkOBV+voqRu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaO0nMACgkQJNaLcl1U
+h9CYNwf9FL92M924ZTMgdzdOGnvfj92Q8ImGFAmDoUP3IjVPivJTPYhDuY+GaQaY
+hojzU0+/ygci8GNBa3kaJGdT2kzo4J6aMfzV8Lw5OFhjfZvg98gQbw+HeRVou0BB
+trtAQLx/+CWEYHy1qXMPQ3jRHuINOT80L4T321NSPyd7rlSksPpZU/NqHmUI9iW9
+MpODGOLfCOg2W3CrQMA8AT1F09NeC4fBr+XRq1f3PwskzNRz/DR89M1amdCG7bky
+oOk/WAsSGY8RWuY7/GurREwf7vUc1akIFax3lqDscpCbSuZ89FcFfs6YEAUqgq86
+qV5kGewLUdqaGwutNJRSCAV+QkJXjw==
+=dJd9
+-----END PGP SIGNATURE-----
+
+--GNMZNZkOBV+voqRu--
 
