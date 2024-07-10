@@ -1,128 +1,112 @@
-Return-Path: <linux-kselftest+bounces-13496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF1492D8A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:00:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54B292D8A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC94A1F248E0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:00:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 606BB283A8D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93C5194C92;
-	Wed, 10 Jul 2024 19:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78418195FE6;
+	Wed, 10 Jul 2024 19:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dz8MlVv3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vs65YbH8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919725028C
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 19:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2E5194C64;
+	Wed, 10 Jul 2024 19:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720638014; cv=none; b=U2l7V+XhfYnoaYK4tbCh2RTs/ISsKsqrwVg4spu4cVB/vIaD3t3nF9Tk3yy8J588HubKWsbDH1SGojihHB17NDXFoKj0+wzLkXeXSZifBcmddCqA/D1nserHInSJMqrklKzwIBKIkazvtiSZq1SEKWk75igZWnnU2OKXLGMUrGk=
+	t=1720638039; cv=none; b=Czf5pnzzuTHkPCwrCcnweEBI8b2QKm7b4kL/jvFywH4LgXw9DH1vMqvIbI/uv0/pzGhXmURTs9731i37ta3MgfVl23g1vbgDPk1iF1pA0//d+tUVN2LQge3Fg0ZIoWqRli/DFvsX1+AZUMvbw2YeRpr27qz8iNeSYE+vaehOigE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720638014; c=relaxed/simple;
-	bh=p+ZkMcqKWbzkh9thPGaFNC8WavSCVQ3ab9T+H8HfwNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BpPuYpeI5oKlGeUpG414oq/eFolvF0Cg7tMPPRGYJ8cY/pN9k22T/N82pLDfJcJZJ3e+PkygBqGtHEOruta/OJ5Q9JZZNuCb4qjsWmKJbWkSFLELcryHQW689G41apJSqtyi6f6vleacqdHEiRr+QnVF0DNqQ1K87ZlRsIS0B2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dz8MlVv3; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: geliang@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720638010;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wmskPw26zRkr4mOkmnTBZRznoZHa4/dEE3tbclocXx8=;
-	b=dz8MlVv3PChUs0Xj2nGCPQ1qxexBHLEDdoBsiQvdP/wjGGZ5ass9UhFj6gKwIZacsC9BOa
-	kCC1t2F/nMKeQcHfA3+sYBE/wNZHsj0br7zt6KjMl/tcadaVpl5SmhOb1WtGqN1jmPN1OR
-	7ndcdvDSIZJ6n8YEGZ9eB/dSIy8YqVU=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: martin.lau@kernel.org
-X-Envelope-To: sdf@fomichev.me
-Message-ID: <905c79ee-bad1-491d-b10b-12fa97ac00d7@linux.dev>
-Date: Wed, 10 Jul 2024 12:00:00 -0700
+	s=arc-20240116; t=1720638039; c=relaxed/simple;
+	bh=Z5F4OCP3L1vLRXRXUv9k4MCjSQFcUbqWAtRby/3MMgI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JWBxRx/FyCc3PJmvSoig+rYpRk9b2pRNCOnms6nXwro9dbodlsrRl7SgkICDunAv5oWC0rmUF7k4d/929ciePLjLUydIHOx4e6C8Je+ZDgA2tfkjrk5TZgYiWJsnAE0uWMsv152KAT5d7QJ9+RHwTPOWSSa4cXMaharlrIyIm5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vs65YbH8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3B9BC32786;
+	Wed, 10 Jul 2024 19:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720638038;
+	bh=Z5F4OCP3L1vLRXRXUv9k4MCjSQFcUbqWAtRby/3MMgI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Vs65YbH8wwGat+eGC+hVHb9rIUv+nlom1QdRD1eFaSVom1wzenQiTchKqBMEm1vtg
+	 B9lwXoo/eS0HhrG8WS7IgGb0xeuhlLHljwvh5cHeOnqVY9Q2yM6up1/qQKEBgi6a56
+	 L20hm+B27oETg/ZNK2lGequrdgM3WWPoCZYgdCpvgdkPIj2t0cyoNced/AGU821tel
+	 /C6O1wWFYe65XZAGfQczIBE8nsOTjZbscRaSWUIq1fLtkfdhTzqvyjFdxffgAmFeTb
+	 r3ESPQkvxC/Bgtkhs4XNLeMcSuKshHD5/qwk/itlFz8YTVTuEQHGXb/DfX4edctBic
+	 Yee1D8BB1YHcg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC719C4332E;
+	Wed, 10 Jul 2024 19:00:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v11 2/9] selftests/bpf: Add ASSERT_OK_FD macro
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v11 0/9] use network helpers, part 8
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172063803876.15275.14385138929518529684.git-patchwork-notify@kernel.org>
+Date: Wed, 10 Jul 2024 19:00:38 +0000
 References: <cover.1720515893.git.tanggeliang@kylinos.cn>
- <ded75be86ac630a3a5099739431854c1ec33f0ea.1720515893.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <ded75be86ac630a3a5099739431854c1ec33f0ea.1720515893.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <cover.1720515893.git.tanggeliang@kylinos.cn>
+To: Geliang Tang <geliang@kernel.org>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ tanggeliang@kylinos.cn, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On 7/9/24 2:16 AM, Geliang Tang wrote:
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Tue,  9 Jul 2024 17:16:16 +0800 you wrote:
 > From: Geliang Tang <tanggeliang@kylinos.cn>
 > 
-> Add a new dedicated ASSERT macro ASSERT_OK_FD to test whether a socket
-> FD is valid or not. It can be used to replace macros ASSERT_GT(fd, 0, ""),
-> ASSERT_NEQ(fd, -1, "") or statements (fd < 0), (fd != -1).
+> v11:
+>  - new patches 2, 4, 6.
+>  - drop expect_errno from network_helper_opts as Eduard and Martin
+>    suggested.
+>  - drop sockmap_ktls patches from this set.
+>  - add a new helper connect_fd_to_addr_str.
 > 
-> Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->   tools/testing/selftests/bpf/test_progs.h | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> index 0ba5a20b19ba..4f7b91c25b1e 100644
-> --- a/tools/testing/selftests/bpf/test_progs.h
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -377,6 +377,14 @@ int test__join_cgroup(const char *path);
->   	___ok;								\
->   })
->   
-> +#define ASSERT_OK_FD(fd, name) ({					\
-> +	static int duration = 0;					\
-> +	int ___fd = (fd);						\
-> +	bool ___ok = ___fd >= 0;					\
-> +	CHECK(!___ok, (name), "unexpected fd: %d\n", ___fd);		\
+> [...]
 
-printing errno should be useful.
+Here is the summary with links:
+  - [bpf-next,v11,1/9] selftests/bpf: Add backlog for network_helper_opts
+    https://git.kernel.org/bpf/bpf-next/c/a3016a27cea8
+  - [bpf-next,v11,2/9] selftests/bpf: Add ASSERT_OK_FD macro
+    https://git.kernel.org/bpf/bpf-next/c/7046345d48ad
+  - [bpf-next,v11,3/9] selftests/bpf: Close fd in error path in drop_on_reuseport
+    https://git.kernel.org/bpf/bpf-next/c/adae187ebedc
+  - [bpf-next,v11,4/9] selftests/bpf: Use start_server_str in sk_lookup
+    https://git.kernel.org/bpf/bpf-next/c/14fc6fcd35e7
+  - [bpf-next,v11,5/9] selftests/bpf: Use start_server_addr in sk_lookup
+    https://git.kernel.org/bpf/bpf-next/c/d9810c43f660
+  - [bpf-next,v11,6/9] selftests/bpf: Use connect_fd_to_fd in sk_lookup
+    https://git.kernel.org/bpf/bpf-next/c/9004054b1629
+  - [bpf-next,v11,7/9] selftests/bpf: Add connect_fd_to_addr_str helper
+    (no matching commit)
+  - [bpf-next,v11,8/9] selftests/bpf: Use connect_fd_to_addr_str in sk_lookup
+    (no matching commit)
+  - [bpf-next,v11,9/9] selftests/bpf: Drop make_socket in sk_lookup
+    (no matching commit)
 
-> +	___ok;								\
-> +})
-> +
->   #define SYS(goto_label, fmt, ...)					\
->   	({								\
->   		char cmd[1024];						\
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
