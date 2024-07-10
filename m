@@ -1,199 +1,185 @@
-Return-Path: <linux-kselftest+bounces-13524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0704C92DB9B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 00:08:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5226792DC0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 00:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AB151F26866
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 22:08:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1DC01F26103
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 22:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE4614AD25;
-	Wed, 10 Jul 2024 22:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E116E14E2F4;
+	Wed, 10 Jul 2024 22:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5sSJaeGI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tdjJ17+5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2058.outbound.protection.outlook.com [40.107.244.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FF61487C1;
-	Wed, 10 Jul 2024 22:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720649213; cv=fail; b=tHLDUGGKwGdPQpvW4tnhOIaFc5TXqTwCm2oXLShMrkU0IdijN3dXdUf9LLQZYSWg2HEKQgEA490I4Mj0/Ep4xheYcV4o//oYrP/qvNA/I0B2vVjP31Dp47QiMVYe2UgJVhoWBAxAntEMKqAG9dn7acmlk9wvPV1o5ff7j4WQY20=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720649213; c=relaxed/simple;
-	bh=gtU3qBaKPv6wF4qhoj2ugfNotsBVcQOyA6Q12B94lb4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fiENKdHpSmbELqZsaaq1bQejRJNQMe4pXAQvmQsuXeNY+S3k25T35kxMEleNPQw6Kee22IMRwQRAdKCA0IYbwtdU8T+D+Vua6vgBMVs+joTKgj0Y3HYTrwvcOxw2gbpORX1gEOH6x+pFGyw+FGx/TgPLh3nGfQrBJZrQi12oYzA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5sSJaeGI; arc=fail smtp.client-ip=40.107.244.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B073m3GaT45BVrvqJyJ4i5BrNxCbjq0x/0ax9BwQ06n9Pn8XNnlAMxPByZrRe7s0WP0onkEIk/JOW3GqA58qObsaWYwXXIoTQeVNLoKiJ5348zPyTM5cxSpofcVvjMRY42Tss9UOkfDTgSramUQ8E5U2Q1afILzEk88lgRo/k8zU7tHFpj04nQDBv0Q4g0XTXc+EVpc1tYFr9PVg8rEPfWoL/NUDyNRXXk7/lpu/Q+lgI2bBG4NDsgEgylQ67CGyV6PXrcn/vydZHJZgaqo1lJmusjaayZm8UlcZGM12UDjU3d67pq6E5/oHmBJY5R8khVK7LPSIbsgJ5jamakHJvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZDImZNTo8FDvD6FNJzBeJ6/QJZ0FGLwssETrXbipEDY=;
- b=mUH+Q4cHqp13ssyMkANYPwRwRma8A0zTM55X080m3+cZ6GngP4OM1L6ZmySLPK6vKzpQK4aD3pmj2smnYgPCeJPKYAWPjdmkJX9X/ycKYfIfu077l3oXxrvN0Wo6y7bh4Kdiv5C8cxSuIH1wkDcl3kQpx9T+f15OA/pTzFmi9+Uy//xq8IFvi7HH9DjP6cu6bJd3LyliR6d4adM7rl1/6tU97ntrwS4+/FHgoTSxT2PCr5Xql9bYq3MMSR5iXNyW+rshPnAGYahpXCZzryXoipn8Iy1/ROLE07wZsLObVwmCWqKzF9rF6KMdxPufaVmwMVASYTYyAQaO0f3DSEXuig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZDImZNTo8FDvD6FNJzBeJ6/QJZ0FGLwssETrXbipEDY=;
- b=5sSJaeGIheyk2NkGNtlBeVM+MkvrMC0l+JIES3k1mCCFe9SHWsSayBGc9XrUZdglTlP7dbxPiPep7LLLIgi6IGmJHwoTu0L6yd5vNWRSLgf3jWLc+CSf5Xs0ecy348e/feZUE2r6oUAPF7AYE4MgltpVaHN726NMJNM9CfgWYNc=
-Received: from MN2PR05CA0021.namprd05.prod.outlook.com (2603:10b6:208:c0::34)
- by SN7PR12MB7935.namprd12.prod.outlook.com (2603:10b6:806:349::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Wed, 10 Jul
- 2024 22:06:49 +0000
-Received: from BL6PEPF0001AB4A.namprd04.prod.outlook.com
- (2603:10b6:208:c0:cafe::b0) by MN2PR05CA0021.outlook.office365.com
- (2603:10b6:208:c0::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.20 via Frontend
- Transport; Wed, 10 Jul 2024 22:06:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF0001AB4A.mail.protection.outlook.com (10.167.242.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7762.17 via Frontend Transport; Wed, 10 Jul 2024 22:06:48 +0000
-Received: from AUSPRSAMPAT.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 10 Jul
- 2024 17:06:46 -0500
-From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-To: <kvm@vger.kernel.org>
-CC: <shuah@kernel.org>, <thomas.lendacky@amd.com>, <michael.roth@amd.com>,
-	<seanjc@google.com>, <pbonzini@redhat.com>, <pgonda@google.com>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [RFC 5/5] selftests: KVM: SEV-SNP test for KVM_SEV_INIT2
-Date: Wed, 10 Jul 2024 17:05:40 -0500
-Message-ID: <20240710220540.188239-6-pratikrajesh.sampat@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240710220540.188239-1-pratikrajesh.sampat@amd.com>
-References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44AC14AD3D
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 22:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720651538; cv=none; b=GUQtlqGsAxMIpoMK5sfecgBUhpJ8B1/jmCOrb/FPFu1eEt4V7NFEwl73Yq9rp7na7t9LiEahHGUxzbLiqUnEOmwsCxQFA3vU9ythf6gGKmdv05whT4ysvy5Iel9rBg2Ib7y7HYeg+oBmSFhUAZnDsxySxVbJ6fBzEPstxEJDosQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720651538; c=relaxed/simple;
+	bh=zEZ4qa1KY5W/ArZqfvSqtxOP5I0qkz6xjUA5gKFEtjE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PjjV0e1/nOwOzlNlCCyIPTF4QFBbIwJa7yV/y4IMmNzn0BdoCEZAoHzrTgIfPWw2nNL/vBMqxubX80VK6dYFqKAQdnmp4EfB8x4LRObELATubZPIoJZq8J8fa7dGWjJocweodBxnbirMrfInydCfmtsZa7tvltVnD6j8qfyKEGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tdjJ17+5; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6b5f128b18bso1944876d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 15:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720651535; x=1721256335; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ewitibS3zX+WzUTqst3po2B/GkvecNeXUFCMiBjweyg=;
+        b=tdjJ17+5BiKAbEvFm/bTZZzzeiiuS2bzDiid0gXaBYsG5QBdfjBTyZ10S1L+z9OmfJ
+         i2b8kliyvcF2mUD5KyQmAplFOedGO69LhmT6jJWy0JP68Z7LqfmLCFJojtm7G1D6xahE
+         BGELmK27tCIRvjRszqt74+slO+hb0WcuzSCNTbmccmZrVUxtZ8NzK7VoL7+HjIQ6V1ws
+         9maAlusmQ8tdmc4g2j152mq/GNfVm37aQb4hCFbmvL6lnexAPE1M4CtbZry8Xy9j+Gg8
+         9kNGJvyZ6yZsJV9OfllYLEj+k3aADj7IaE3Fs50CuDe6z1ztPvz33gASo+aPVafropCy
+         jrxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720651535; x=1721256335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ewitibS3zX+WzUTqst3po2B/GkvecNeXUFCMiBjweyg=;
+        b=aI8TAH7cu6fXMrFTqEKIDnvWHoIw0jERdPkDJXoSqs8fNVlTlxw2Y8CldNFJFFz9e6
+         0drhAr0wrn4D3+RRsv7ss6ehDvue3hnYBy8kTgpY86D6fjd6oZOTxTph0lcc9WOxJBJg
+         wx2aCV3RELWEXmCzVTS3PVBvsCYrCkzqp5AbKSFBFRCcuy9xOFy+YMne441R7ixCae4/
+         7/4OEfX/9teZx+0bI/ilO35sWpKADgZplC4frOfIvsx+JrVHxup1sxJCuKqEz9St2LlZ
+         Qd1Qmg/l6AFo5tUs8rTNbSH14ipAfqfeen2od8DpS1ZpBM/uH+K3cehhAhscKzgF1wHU
+         SyYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUi7CgbXhoZQ+vczGrkNJyyEihG0pHzY+/7lMKBlC2YF+OnjRDBcwV395RF4zu6trO1UHmsh+T+rNsWHzMqmv+8igdk8WM/bnYLRWLe2ss+
+X-Gm-Message-State: AOJu0Yw1FAbGUxQ2yBSpFjBxsAGjiG/WXKvK1ZDt+uuPKRMTS8tYXqVq
+	le18JZu/M/HGimQabgFe+PVv9mjmhb8TohJCfuQrKiOO7c9nEblM4tjwLy8qaCE65jVKtV9j3Zv
+	C1Ixy+j5SBXD8WeDSq36d5XFn6sqEN5Mav2Pi
+X-Google-Smtp-Source: AGHT+IF5eUrWI3iGBloyaIenGjn6niXEyyaOV4S/5O4aymX7e6kogYU+UbBk/KI5YYE/pmMB4biArqXH6clq6XINtH0=
+X-Received: by 2002:ad4:5c68:0:b0:6b5:d9ef:d576 with SMTP id
+ 6a1803df08f44-6b61bc80440mr73134066d6.12.1720651534418; Wed, 10 Jul 2024
+ 15:45:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4A:EE_|SN7PR12MB7935:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86c4b485-eb53-4f86-a22a-08dca12c9872
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?r4hWDWniwoGwCec+oA8VHNSwx4zjmNXud34RXMmpp1rqwVbeJ6eCKjxmhwR4?=
- =?us-ascii?Q?tKyIC27YQD8N4+NnDA+267qkqkv80dlw6yI22l/AdXiZor8yfKAd3v0Ds/90?=
- =?us-ascii?Q?MYe5lGqNxNSRcJ+KfJjbMXC6aOYUsydlOiDURR6APYdiSZj6ylC6CVa7MT8l?=
- =?us-ascii?Q?Eq4AoPrRGMGLRpZaRFQz1bS+V0/LN90SLDOsQYY9cyW58FNj5ENWtXLtU4iT?=
- =?us-ascii?Q?IFPQ0dgNtS7y2t6zyVzV+VhfEoDJhyUMnXZHdX0DSsAWNPCkIHg4QOrktAkx?=
- =?us-ascii?Q?EKm8BAHnpiNujFSiQPH5fMXHKuwedFa9X9dhHiq88spp5q2t8RWz766Os03r?=
- =?us-ascii?Q?SEa+/w25GI51Im9XP6fTmo5QRjK4G6IZtuD4Rx1gtP33mWRW49c69yoUCFDH?=
- =?us-ascii?Q?cnkKGYOsNKbypCeshKU3KJi48+/xwCVBiG19b3iWRaKjiLrzxFNNYW3TdiC4?=
- =?us-ascii?Q?DkDfGVTiNu4+A7BxmHOnPDAQukZaAM7i8TpdMW9thrTy9XOMQdXny1CghKlw?=
- =?us-ascii?Q?dv/yTAaQKn4kHplDaRMz5xFQdsPdI7hpRxlFATsq4PU0myZsYJOaGCb+e1mM?=
- =?us-ascii?Q?aCsxdIn+BwzCfaMkx0sXWI/svl9z+WU90iP+mqjcRs/uKPgX/CUzQMB59GY8?=
- =?us-ascii?Q?wLHwvh5BNJYHTBjKG37PMrvOsLoxp8KH/nHQ5FuNUO13NQfk2SX2OHA0akpD?=
- =?us-ascii?Q?i17YCakCDwTRFTZgv5qogU6ouUUdm8fSFE+4JUjJkI8te2thq/UEicctlx0v?=
- =?us-ascii?Q?CINqBaKhZMOo5ZL/BziEjcZLb+g1cdItMJ2YtBuv4HFVMlt3DWE9hW7ZgPmn?=
- =?us-ascii?Q?6YRAwK1VQaA+k4k4mqu9HxNitRFcpiZdptEvj7GOMouc0P3t7j55rxHaQMDi?=
- =?us-ascii?Q?1OojSZ6coOQH/3ouW8FLZ+DmqJCt3JLdeBrCAQsifhnJNzZk3m9iAQtasWKC?=
- =?us-ascii?Q?aiuYTrmdpeyhH5OlFI1o4tqSUYCi5/EW9C+irRmBVcfk4ChgDiYoUKi9bLBF?=
- =?us-ascii?Q?9rgu3LbCPFZhyfxXCV5XeUDLdGhdml+FWItSma9d5AtYdEvTrQPVRRlmSZMl?=
- =?us-ascii?Q?59agTpj7Z+ewO8FG0MIjJbBdD64+mGbQAprhBPbOE4lt44lKuFM6iN/XKPkZ?=
- =?us-ascii?Q?p01gxTu/puY00xukGSpMqcyvaW1qizo1Rh/EYPTAqEHFwtDTEN7YEJuSqSxB?=
- =?us-ascii?Q?4Q64Nj+TrkHqtjlPGnRunpA+QhpLukiS2imxxmOLtsDmQhIBOvZdCOQEf/oO?=
- =?us-ascii?Q?RG1h9hg7EP7T20nVRwidCKqzofwThTiChAF1baJRFJUoFjOrCeVBS0LXu2b0?=
- =?us-ascii?Q?NAdBpVLg8u77vR8WXAMgxhkUCOLycFmjSmrjx1+762tPWwi95RTGJeoLQr6V?=
- =?us-ascii?Q?HjOHhqP3QKrbZTLcKaSokML+SatjHb50+SKT7h9EG2M6UhcnNrYcA0KsV8Yk?=
- =?us-ascii?Q?72FScAwRayavnEbUeklfSlfnOycXmIFa?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2024 22:06:48.4456
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86c4b485-eb53-4f86-a22a-08dca12c9872
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB4A.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7935
+References: <20240710001749.1388631-1-almasrymina@google.com>
+ <20240710001749.1388631-5-almasrymina@google.com> <20240710093624.26d22f02@kernel.org>
+ <CAHS8izOoM3YfcQorLJXL4H+t2OL+oJ4fPP5ZBJRhnH5AxsUqfQ@mail.gmail.com> <20240710125533.7a14bbe7@kernel.org>
+In-Reply-To: <20240710125533.7a14bbe7@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 10 Jul 2024 15:45:19 -0700
+Message-ID: <CAHS8izMhTKndLEYrCyNK5WcUHQB6iXefr1=TcxKNxd+ghJGp0w@mail.gmail.com>
+Subject: Re: [PATCH net-next v16 04/13] netdev: netdevice devmem allocator
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add SEV-SNP VM type to exercise the KVM_SEV_INIT2 call.
+On Wed, Jul 10, 2024 at 12:55=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+>
+> On Wed, 10 Jul 2024 12:29:58 -0700 Mina Almasry wrote:
+> > On Wed, Jul 10, 2024 at 9:37=E2=80=AFAM Jakub Kicinski <kuba@kernel.org=
+> wrote:
+> > > On Wed, 10 Jul 2024 00:17:37 +0000 Mina Almasry wrote:
+> > > > +     net_devmem_dmabuf_binding_get(binding);
+> > >
+> > > Why does every iov need to hold a ref? pp holds a ref and does its ow=
+n
+> > > accounting, so it won't disappear unless all the pages are returned.
+> >
+> > I guess it doesn't really need to, but this is the design/approach I
+> > went with, and I actually prefer it a bit. The design is borrowed from
+> > how struct dev_pagemap does this, IIRC. Every page allocated from the
+> > pgmap holds a reference to the pgmap to ensure the pgmap doesn't go
+> > away while some page that originated from it is out in the wild, and
+> > similarly I did so in the binding here.
+>
+> Oh, you napi_pp_put_page() on the other end! I can see how that could
+> be fine.
+>
+> > We could assume that the page_pool is accounting iovs for us, but that
+> > is not always true, right? page_pool_return_page() disconnects a
+> > netmem from the page_pool and AFAIU the page_pool can go away while
+> > there is such a netmem still in use in the net stack. Currently this
+> > can't happen with iovs because I currently don't support non-pp
+> > refcounting for iovs (so they're always recyclable), but you have a
+> > comment on the other patch asking why that works; depending on how we
+> > converge on that conversation, the details of how the pp refcounting
+> > could change.
+>
+> Even then - we could take the ref as the page "leaks" out of the pool,
+> rather than doing it on the fast path, right? Or just BUG_ON() 'cause
+> that reference ain't coming back ;)
+>
 
-Signed-off-by: Pratik R. Sampat <pratikrajesh.sampat@amd.com>
----
- .../testing/selftests/kvm/x86_64/sev_init2_tests.c  | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+OK, I'll see how the conversation on the other thread converges
+vis-a-vis net_iov refcounting happens, and then look at if I can avoid
+the binding_get/put per page in that framework.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-index 7a4a61be119b..68f7edaa5526 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
-@@ -28,6 +28,7 @@
- int kvm_fd;
- u64 supported_vmsa_features;
- bool have_sev_es;
-+bool have_snp;
- 
- static int __sev_ioctl(int vm_fd, int cmd_id, void *data)
- {
-@@ -83,6 +84,9 @@ void test_vm_types(void)
- 	if (have_sev_es)
- 		test_init2(KVM_X86_SEV_ES_VM, &(struct kvm_sev_init){});
- 
-+	if (have_snp)
-+		test_init2(KVM_X86_SNP_VM, &(struct kvm_sev_init){});
-+
- 	test_init2_invalid(0, &(struct kvm_sev_init){},
- 			   "VM type is KVM_X86_DEFAULT_VM");
- 	if (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))
-@@ -138,15 +142,24 @@ int main(int argc, char *argv[])
- 		    "sev-es: KVM_CAP_VM_TYPES (%x) does not match cpuid (checking %x)",
- 		    kvm_check_cap(KVM_CAP_VM_TYPES), 1 << KVM_X86_SEV_ES_VM);
- 
-+	have_snp = kvm_cpu_has(X86_FEATURE_SNP);
-+	TEST_ASSERT(have_snp == !!(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SNP_VM)),
-+		    "sev-snp: KVM_CAP_VM_TYPES (%x) does not match cpuid (checking %x)",
-+		    kvm_check_cap(KVM_CAP_VM_TYPES), 1 << KVM_X86_SNP_VM);
-+
- 	test_vm_types();
- 
- 	test_flags(KVM_X86_SEV_VM);
- 	if (have_sev_es)
- 		test_flags(KVM_X86_SEV_ES_VM);
-+	if (have_snp)
-+		test_flags(KVM_X86_SNP_VM);
- 
- 	test_features(KVM_X86_SEV_VM, 0);
- 	if (have_sev_es)
- 		test_features(KVM_X86_SEV_ES_VM, supported_vmsa_features);
-+	if (have_snp)
-+		test_features(KVM_X86_SNP_VM, supported_vmsa_features);
- 
- 	return 0;
- }
--- 
-2.34.1
+> > It's nice to know that the binding refcounting will work regardless of
+> > the details of how the pp refcounting works. IMHO having the binding
+> > rely on the pp refcounting to ensure all the iovs are freed introduces
+> > some fragility.
+> >
+> > Additionally IMO the net_devmem_dmabuf_binding_get/put aren't so
+> > expensive to want to optimize out, right? The allocation is a slow
+> > path anyway and the fast path recycles netmem.
+>
+> Yes, I should have read patch 10. I think it's avoidable :) but with
+> recycling it can indeed perform just fine (do you happen to have
+> recycling rate stats from prod runs?)
 
+I don't to be honest. For a couple of reasons, one is that gcloud VMs
+where we mainly use this, these stats are private to the VM and is not
+something I can query widly. I only get access to the data when shared
+with bug reports on specific issues.
+
+In our internal test runs, I do not monitor the recycling rate to be
+honest, as that is fine as long as the recycling is fast enough to
+find available memory for incoming data. What I do look at very
+closely is the allocation failure rate. That is when GVE tries to
+alloc a new devmem but it's out of devmem (which would likely be due
+to recycling not happening fast enough). The stat is `page_alloc_fail`
+in ethtool -S for us and it's one of the first things I check when
+things go wrong. It hasn't been the root cause for any of our issues
+in reality.
+
+--
+Thanks,
+Mina
 
