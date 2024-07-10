@@ -1,188 +1,158 @@
-Return-Path: <linux-kselftest+bounces-13488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7738592D74E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:16:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C16F692D752
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD615B221A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 17:16:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CA451F21DDA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 17:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC58194A7C;
-	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F56D194A7C;
+	Wed, 10 Jul 2024 17:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj3wTGeG"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="QAO1UYN8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE4034545;
-	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979CD194128
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 17:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720631810; cv=none; b=VuVwc6igdi9i+bvt3kv1ciM0o0aAZQ/OZ16V7u8PUfYyNGFKqxpFhvZHKsorQsbQZ3YnqDziJuFugDiydgk1cqZP+2L1wI0K5fFfR8T9YmSuaM3bJHjU9QDOS6uk3BH4BT8dpIqiynzzXGG64QqlACvgvH8L+I7sNGa3IIi/J9I=
+	t=1720631840; cv=none; b=Nx9cBfE9mRI4PbL3zCXQc9bvQkCh5+lmo0W9JmhDnAy3G7cqYkH+2JSz8lKLgiHHDuMvP5hILyh2PeZoieYB7qdFc/ckM90IKRv2CmQTX5esrekKthfWKi4iFrioQKzv7oE9Y9CkfHDGWOdfC1k4sUQHe7SXb8Rz13PjBuVe5wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720631810; c=relaxed/simple;
-	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g3ylZxPg4GPLoSzOw7X9M18OOsyb6YINupmHzIyb2sE0rspVZfMKhrMRgQUSnjkh1+48pobcTUiQ6yFsPWAp/Aq/9YXCsfR8dfLeVzNRRaej9ZBgVed2ruPPztG7O4RASCCeyfDOtSJAeLJXCYYBFOUteWlwpW7e4j7CmkiS6g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj3wTGeG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AEFC32781;
-	Wed, 10 Jul 2024 17:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720631810;
-	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gj3wTGeGvkQA66hJtscYz2CdurW/XaWmXT1LUad7xHcQlV6bJlMPYB6BYkarkGJzM
-	 qb1fJH/GWYe++EsAN1YPqxKxmTx70mi2pArTryxpc+tBbCuVT8RugoF5J51N45APGN
-	 x+ezB+0+cMxlPHdLjUWzayfTJu8mxxY70OY7vRayQ0pqy+eEScxUw5lPNBlw9PM4pl
-	 gHRJ2FF3NJhmef1/MM9944Z03bUSEMfjwNa8lSQVOBXi6SLTpzX79Nj4r2tZ5j+E5e
-	 PNrecmTOcerZ2rr+jDaPAfXGPZUcWnJiE7MQ+AaJcdd8y8iMm1ukZWkjVH5FmwuAtd
-	 4eGDODAKNmXiA==
-Date: Wed, 10 Jul 2024 18:16:46 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 13/39] KVM: arm64: Manage GCS registers for guests
-Message-ID: <Zo7B_sRyUyxv7xmO@finisterre.sirena.org.uk>
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
- <20240625-arm64-gcs-v9-13-0f634469b8f0@kernel.org>
- <86v81d2s5t.wl-maz@kernel.org>
+	s=arc-20240116; t=1720631840; c=relaxed/simple;
+	bh=xDSkAKf0ke0MBhGMque2vJpaE0tJ5kza1+Cmcqzs8h0=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=cNKZ1Hld7NflbV8V9Y/TGWFlZdOamByv8JboWWjTFQY2Mjd5e3puGmvNvxuBTnuA1ddiX0xOwEaRploauk9NFULQ8FbmJzWN3ovs+FP09eRl448INZWUU3fDAifdVX/QZBW7aMXKUttKvQGSjXsfw6oIDM4RyYPz62PiTLcEi5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=QAO1UYN8; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-24c0dbd2866so29745fac.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 10:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1720631837; x=1721236637; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=L/n1WNi1ZnmVyi1SARi9HsjxC7/soaknDFE8laGrTBQ=;
+        b=QAO1UYN8vQ7UicY9j5G0P48ue8958JJ8l6PzKLM/1ucSukNhqNK55Gh+qnXBM+UEze
+         Dt8O210Al5eYEMydhvQ/I2ryQM2liiq9iS63mGl9iZxCqcXywNM2nKqddiSQ/VLCdnKW
+         AfTYwGyiC/sPiQSGsBYv5JqAZgpxFgfJ+BN2JhhkFvvnd0udTZabcqwKJ3dU1OOFo+u4
+         hOqm19ZE0Ck+bG4zVp6VmF/g/k/+H1A3Qb9zdqupHe6uYWvPOpSO3Zy62uTdBS1kdCNV
+         BDzdpu77SgTs3TwALkDUOzk5kz5f7/YjaLT9f2tl9gu0YSb5FtWjvTuvOYjsrfCz3YHt
+         eYJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720631837; x=1721236637;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L/n1WNi1ZnmVyi1SARi9HsjxC7/soaknDFE8laGrTBQ=;
+        b=aDAr1jXz87Mav6GMgS/VPcPUp0l14+/Cb0GuaE+IH91cdPktyTw6EBletSulvT1gZF
+         Ys/RD2rkv+fwQ4/DsFQ1f86jfYRrrw72mJ/SszgkKGjuPRBt2JWfAr5Gham5Yreuhtpc
+         tfBHCQb0okMFqcPIRzEPylahCJt5zIWQtSlgpg4niMisTuEi9IEunHlklUgvMry+b8tN
+         CY+03c51DhqlukU/b5+SJRNxdE7YDa6U6qbna3qU5yht+weV09CoHIIjCPyQ7U6eDiHh
+         soUrrwO9aqDKdgnUAvQXw/3coV7Kvl1omcTwHFe5ndXHUlSqKUR14peoeiVgV1Cm/L02
+         /PZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWFOsVl5MpEu7QZoWQON9AClEtPy/b/rxSuXwSD8e4iRwtYNDRvPgoMiSajnZRg35J+4c/S735OOpDdHtYxg0g4ZuI6uCRHqBkopSOhsGIL
+X-Gm-Message-State: AOJu0YzSqU9TBruWbPa7hej5+S2b2CbnoCtGFTk4iOc46xof64mduozX
+	wEMuzN25e1TDFwZTuVdGDv1sutT2P5OzxT8D4H8LBAuCK1y1l5nGf5GCqge+1aMwjryiGopKxF0
+	3
+X-Google-Smtp-Source: AGHT+IHbUYhdSmq2xvEUZFUYa9IjAssQSqqaNsge7PGgn+qU7MAPYzx8ErW8W5lA4hh8AU6IgLiVpg==
+X-Received: by 2002:a05:6871:70c:b0:25e:fb:af8c with SMTP id 586e51a60fabf-25eae7f52e9mr4886747fac.18.1720631837490;
+        Wed, 10 Jul 2024 10:17:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c0a1csm4062075b3a.63.2024.07.10.10.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 10:17:17 -0700 (PDT)
+Message-ID: <668ec21d.050a0220.83332.2a48@mx.google.com>
+Date: Wed, 10 Jul 2024 10:17:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tsBiN+tG2JsDrdFj"
-Content-Disposition: inline
-In-Reply-To: <86v81d2s5t.wl-maz@kernel.org>
-X-Cookie: Your love life will be... interesting.
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc1-29-g2b2ea9f19da1
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 5 builds: 0 failed, 5 passed,
+ 1 warning (v6.10-rc1-29-g2b2ea9f19da1)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
+
+kselftest/next build: 5 builds: 0 failed, 5 passed, 1 warning (v6.10-rc1-29=
+-g2b2ea9f19da1)
+
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.10-rc1-29-g2b2ea9f19da1/
+
+Tree: kselftest
+Branch: next
+Git Describe: v6.10-rc1-29-g2b2ea9f19da1
+Git Commit: 2b2ea9f19da15dc96b7fbdf583de71f5f41331fc
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
 
 
---tsBiN+tG2JsDrdFj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Warnings summary:
 
-On Wed, Jul 10, 2024 at 04:17:02PM +0100, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14cf94
 
-> > +	if (ctxt_has_gcs(ctxt)) {
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-> Since this is conditioned on S1PIE, it should be only be evaluated
-> when PIE is enabled in the guest.
+Detailed per-defconfig build reports:
 
-So make ctxt_has_gcs() embed a check of ctxt_has_s1pie()?
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
-> > +		ctxt_sys_reg(ctxt, GCSPR_EL1)	= read_sysreg_el1(SYS_GCSPR);
-> > +		ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
-> > +		ctxt_sys_reg(ctxt, GCSCRE0_EL1)	= read_sysreg_s(SYS_GCSCRE0_EL1);
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
-> Why is this part of the EL1 context? It clearly only matters to EL0
-> execution, so it could be switched in load/put on nVHE as well. And
-> actually, given that the whole thing is strictly for userspace, why do
-> we switch *anything* eagerly at all?
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
-GCS can also be used independently at EL1 (and EL2 for that matter),
-it's not purely for userspace even though this series only implements
-use in userspace.  GCSPR_EL1 and GCSCR_EL1 control the use of GCS at
-EL1, not EL0, and the guest might be using GCS at EL1 even if the host
-doesn't.
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
 
-GCSCRE0_EL1 is for EL0 though, it ended up here mainly because it's an
-_EL1 register and we are already context switching PIRE0_EL1 in the EL1
-functions so it seemed consistent to follow the same approach for GCS.
-The _el1 and _user save/restore functions are called from the same place
-for both VHE and nVHE so the practical impact of the placement should be
-minimal AFAICT.  Unlike PIRE0_EL1 GCSCRE0_EL1 only has an impact for
-code runnning at EL0 so I can move it to the _user functions.
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
 
-TBH I'm not following your comments about switching eagerly too here at
-all, where would you expect to see the switching done?  You've said
-something along these lines before which prompted me to send a patch to
-only save the S1PIE registers if they'd been written to which you were
-quite reasonably not happy with given the extra traps it would cause:
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14cf94
 
-   https://lore.kernel.org/r/20240301-kvm-arm64-defer-regs-v1-1-401e3de92e97@kernel.org
-
-but I'm at a loss as to how to make things less eager otherwise.
-
-> > @@ -2306,7 +2323,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
-> >  		   ID_AA64PFR0_EL1_GIC |
-> >  		   ID_AA64PFR0_EL1_AdvSIMD |
-> >  		   ID_AA64PFR0_EL1_FP), },
-> > -	ID_SANITISED(ID_AA64PFR1_EL1),
-> > +	ID_WRITABLE(ID_AA64PFR1_EL1, ~(ID_AA64PFR1_EL1_RES0 |
-> > +				       ID_AA64PFR1_EL1_BT)),
-
-> I don't know what you're trying to do here, but that's not right. If
-> you want to make this register writable, here's the shopping list:
-
-> https://lore.kernel.org/all/87ikxsi0v9.wl-maz@kernel.org/
-
-Yes, trying to make things writable.  I do see we need to exclude more
-bits there and I'm not clear why I excluded BTI, looks like I forgot to
-add a TODO comment at some point and finish that off.  Sorry about that.
-
-In the linked mail you say you want to see all fields explicitly
-handled, could you be more direct about what such explicit handling
-would look like?  I see a number of examples in the existing code like:
-
-	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
-
-	ID_WRITABLE(ID_AA64ISAR0_EL1, ~ID_AA64ISAR0_EL1_RES0),
-	ID_WRITABLE(ID_AA64ISAR1_EL1, ~(ID_AA64ISAR1_EL1_GPI |
-					ID_AA64ISAR1_EL1_GPA |
-					ID_AA64ISAR1_EL1_API |
-					ID_AA64ISAR1_EL1_APA)),
-
-which look to my eye very similar to the above, they do not visibliy
-explictly enumerate every field in the registers and given that there's
-a single mask specified it's not clear how that would look.  If
-ID_WRITABLE() took separate read/write masks and combined them it'd be
-more obvious but it's just not written that way.
-
---tsBiN+tG2JsDrdFj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaOwf0ACgkQJNaLcl1U
-h9BiTwgAhG9qd8c+aLOWRDYY+jgC3wxTF25VtO52AztM2Y4fyGfPMHg+GgALH/zW
-kZPNqJcbu5fDOfkUg3obwE/dUqdlZDlbmmJBnaP1E9p3sXWuQ9sedlO17lyf3w8h
-mzzFxLDCS0j01M5YNj4ql9LmC4sTOWyuzvzKDzDnLfM93Jdj6nhT4S0si+iQdBB8
-PFhjdtH6qVUmQNG3ik40q/IPe+nA4u0mgs7XpKj8PuPtVDxe4SNhB8cZ8R+pEJBZ
-f3EHvbndiotEBkFARu84AC/F3XfNhGNYlaZg/fwr2yfpfpFV/1Cz0LABhH9WojA0
-z7VzLkWe/+pqYeMUNAJY6H+YDudaLA==
-=InCr
------END PGP SIGNATURE-----
-
---tsBiN+tG2JsDrdFj--
+---
+For more info write to <info@kernelci.org>
 
