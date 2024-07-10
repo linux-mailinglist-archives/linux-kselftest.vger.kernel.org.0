@@ -1,105 +1,138 @@
-Return-Path: <linux-kselftest+bounces-13503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2254A92D98C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:51:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB83F92D996
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 21:55:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0FAF1F22247
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:51:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6D74282717
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 19:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4420219645D;
-	Wed, 10 Jul 2024 19:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFB63198857;
+	Wed, 10 Jul 2024 19:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hO2jQfaT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pi53vr1z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9611B15E88
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 19:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC9119883B;
+	Wed, 10 Jul 2024 19:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720641068; cv=none; b=gvXWErI1oPieEgvaM6qRdrv+2C0ColX5oSLDeYRazmA1gE2nmMBVDaqLpGaP2I2kwWwDmd5sjLH7lBnkgolW4Uo00Qr2T+dxyeZFHZaC4b+Kd+eMdIHEMY1DTwStmLWk1NV0Htl60vn7tdPh9wbSF3VoOKp2dTcrp6L0dlgVe7U=
+	t=1720641336; cv=none; b=YuIqkJ8P3ippsRKB6QKUbN1Fu5NyVpso04Z1TvEyyyhXlepZ2Uzippq/2ye+KloZdo7ZYzF+ovbSn2yHxfDEAdvwriNLQmyRvQ4/C+JaBdgLMzx0kqnpBhSQCJZoApxs5vUChcb3OfaXqVAn9RUkJmHdttMtBoblFVmP3Zi+WXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720641068; c=relaxed/simple;
-	bh=k8/IRfHCMIglTM9FKE6eELzQuWgMFFPURP5KTYESLQM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QCHnG9CxymGsJjTKCGcYDz17AwM9n5puvEVVjAb3Z61/R9VAQZJ0Pyd0+wWWRjyr6YH/WOnYEuYKsveMfTKtP9nT8NmJXNbGqBlHXpkV7AGD3/v2Hvhe9QoCvcFcTyEVmXyeP6Y8+zMlhZfty+czqBhONYMBnh6IohaFfmZoV5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hO2jQfaT; arc=none smtp.client-ip=95.215.58.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: geliang@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720641062;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xTNmdRjunnfj3vk0Cn2ImvCJZjGorcb2qD/C3cIdM1c=;
-	b=hO2jQfaTArggx/L8iXW53F+Wl6nQyLUxYOqF/5D3zMY3vdfzliKB4sqasiUoXBUiCc0HVw
-	+EM4iqNulsFmkTs7MSE8yQ7gfe1IX1lfg6KBmO7rrS1Y1mMuWmld8x1yzXzRZDcSR/PnYt
-	bWN2UzxI1BRiS4BQQLtLJnlUIxCsCyc=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Message-ID: <31f82582-2eca-475c-a06f-d10615254fb9@linux.dev>
-Date: Wed, 10 Jul 2024 12:50:56 -0700
+	s=arc-20240116; t=1720641336; c=relaxed/simple;
+	bh=m6YJRUhJFp+I/9POpuBvwDiHuMwf1S6qPgk80cnGhLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TwHcKb6n7xNLqXuMPof8E/vnNXqLyOA5h3Yw3UxUmuq73IPNGWWnwWoVHe12xQ8xFI65YscoYqFnzK19zwnO0C4zN093w0b510PAcnTIdS9R7Dz8ic3plSRHR4STVK1olk2LkU/kzBDIigPf+u1maD9Mq8FD8SPPdgMAnelogI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pi53vr1z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C4CC32781;
+	Wed, 10 Jul 2024 19:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720641335;
+	bh=m6YJRUhJFp+I/9POpuBvwDiHuMwf1S6qPgk80cnGhLU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Pi53vr1zI4Wks/2eTESosaaytYbnJD9ORg+iZn3xswrdEGtuLTa1eAmpA+XoMUmPE
+	 OIKdzsnskRaE5w/dUcmpuj19h5wUm5soO6dasphhXnMnpjSqDUcBTaNrFDfULJxAB4
+	 jTPMPee1sVnBxa6eE6wKPUMKGq8+OxITZmOBS8X9x3YNIxdrvhTwbGkZm5DEGK0EBZ
+	 gpYTsiZPbYeJ3QT4F+0bIjGIuNg8MesGlFQ507Ea6945SYDMBHjd84paGHbGJfJWjB
+	 k24VeKBn503ebkMeNYRgOL/8Oe3Igt3C7wga7w7aJbRCdrntWHnBTyydgKU3lK4l56
+	 qew0lqYdiLNuQ==
+Date: Wed, 10 Jul 2024 12:55:33 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v16 04/13] netdev: netdevice devmem allocator
+Message-ID: <20240710125533.7a14bbe7@kernel.org>
+In-Reply-To: <CAHS8izOoM3YfcQorLJXL4H+t2OL+oJ4fPP5ZBJRhnH5AxsUqfQ@mail.gmail.com>
+References: <20240710001749.1388631-1-almasrymina@google.com>
+	<20240710001749.1388631-5-almasrymina@google.com>
+	<20240710093624.26d22f02@kernel.org>
+	<CAHS8izOoM3YfcQorLJXL4H+t2OL+oJ4fPP5ZBJRhnH5AxsUqfQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 0/2] BPF selftests misc fixes
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1720615848.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <cover.1720615848.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 7/10/24 6:10 AM, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> v2:
->   - only check the first "link" (link_nl) in test_mixed_links().
->   - Drop patch 2 in v1.
-> 
-> Resend patch 1 out of "skip ENOTSUPP BPF selftests" set as Eduard
-> suggested. Together with another fix for xdp_adjust_tail.
+On Wed, 10 Jul 2024 12:29:58 -0700 Mina Almasry wrote:
+> On Wed, Jul 10, 2024 at 9:37=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> > On Wed, 10 Jul 2024 00:17:37 +0000 Mina Almasry wrote: =20
+> > > +     net_devmem_dmabuf_binding_get(binding); =20
+> >
+> > Why does every iov need to hold a ref? pp holds a ref and does its own
+> > accounting, so it won't disappear unless all the pages are returned. =20
+>=20
+> I guess it doesn't really need to, but this is the design/approach I
+> went with, and I actually prefer it a bit. The design is borrowed from
+> how struct dev_pagemap does this, IIRC. Every page allocated from the
+> pgmap holds a reference to the pgmap to ensure the pgmap doesn't go
+> away while some page that originated from it is out in the wild, and
+> similarly I did so in the binding here.
 
-This is not very useful as a cover letter to summarize what has been fixed. I 
-need to go back to the "skip ENOTSUPP BPF selftests". I beefed it up a little.
+Oh, you napi_pp_put_page() on the other end! I can see how that could
+be fine.
 
-I also added the Fixes tag before applying. Please remember to add Fixes tag 
-next time for bug fixing.
+> We could assume that the page_pool is accounting iovs for us, but that
+> is not always true, right? page_pool_return_page() disconnects a
+> netmem from the page_pool and AFAIU the page_pool can go away while
+> there is such a netmem still in use in the net stack. Currently this
+> can't happen with iovs because I currently don't support non-pp
+> refcounting for iovs (so they're always recyclable), but you have a
+> comment on the other patch asking why that works; depending on how we
+> converge on that conversation, the details of how the pp refcounting
+> could change.
 
-Thanks for the fixes.
+Even then - we could take the ref as the page "leaks" out of the pool,
+rather than doing it on the fast path, right? Or just BUG_ON() 'cause
+that reference ain't coming back ;)
 
+> It's nice to know that the binding refcounting will work regardless of
+> the details of how the pp refcounting works. IMHO having the binding
+> rely on the pp refcounting to ensure all the iovs are freed introduces
+> some fragility.
+>=20
+> Additionally IMO the net_devmem_dmabuf_binding_get/put aren't so
+> expensive to want to optimize out, right? The allocation is a slow
+> path anyway and the fast path recycles netmem.
+
+Yes, I should have read patch 10. I think it's avoidable :) but with
+recycling it can indeed perform just fine (do you happen to have
+recycling rate stats from prod runs?)
 
