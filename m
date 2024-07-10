@@ -1,145 +1,205 @@
-Return-Path: <linux-kselftest+bounces-13449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5148692CDC2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 11:00:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC8592CDDE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 11:05:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09FBF287596
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 09:00:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 213972830B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 09:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECF516DEA5;
-	Wed, 10 Jul 2024 08:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62B518EFF6;
+	Wed, 10 Jul 2024 09:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="mRj61KBa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z/hcbbEj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39A416F286;
-	Wed, 10 Jul 2024 08:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7F07CF34
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 09:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720601905; cv=none; b=o8JMEYyvw2SMiafqRQ0/m86S7PySllh1qfYRqkRDjwIYs9sGY86p8HfNLqsuttt8AUTRYssI442VfbWouYiC9WTw5m7osE4g1JTWc0vXKEWlcsiWOuOO096N+zYJpIqmHQTRvR7nZcSN+ejjTVpdusm1JCMNGrXwwdeQ3wFVLoI=
+	t=1720602312; cv=none; b=aYsnyFwi/BTYHKeBB9dBKvVJtIBcuOE7VH3+3LsHppKguQZBeXhCr8zrmSxgliKc8kydnAPaxTYx9b0Myd7ro1MUtNi/mJqTT4D7xnzU0zqi8QWiADP74/VaGbS+lyNQ2UEh4gJOrYjV/TsUCSE/YR69vuY2txNzLfqW1kmKP9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720601905; c=relaxed/simple;
-	bh=+2PhsalpeHjx95bJHVCZoOhKs2TmU+L1mxe2M1LJ2J0=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=KtdXd/ZMlw2ImsM1DLUOWMVHBiNyYU3TftCEIFtcZimUmRaLCFHqSu/Hre1bvvDisS63v2hYiMUNpydHMoIs48NsaZ3kf+udCBrj2YRYU0+K3fhYTqnR/O9NLr2Wx7PjgtjYE4s+i7+tVIDeux3blaMvp4FCjFxAApZBo7OAGTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=mRj61KBa; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720601902;
-	bh=+2PhsalpeHjx95bJHVCZoOhKs2TmU+L1mxe2M1LJ2J0=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=mRj61KBaYwqrWhOvdqQ8xwGYSPDB8s96ZnteWDEHusr5qyAEfaH5kySQxwYOEwvDb
-	 /HahlocHXVWgOh9M9OGwsXkHV7SxoyXsj0eAwED6Z8d98BSTd/FG494bpcOS9JFl22
-	 3adxMpWdtDw3k/LHpYqQk6iypCfrrH9axcCG0TVtwbcbkGU0qzIKoLksX7rpZsz2Qy
-	 nLzEDka+B3AV3lONZOuVa/zKpPKZd9uTyeQooeQf7soisbpS68SXyxbiniljy3BSMr
-	 p9xuvQH8tSiJhaiFENoR/ICjNiYKEr/lHCrusoOstclcdbjd9pFW7eVtEnKDKu9mIc
-	 ZeTpdUCOxAwpA==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1720602312; c=relaxed/simple;
+	bh=PBIpta0YjOKEnNozLsSWGsjK6vJDUcH8zexdl5Nhcxw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wtwt99mGLoNpCULqINKc9MKrBbrUz8LasJ4J7u3wz+aKIr34+vN5dmcPugks04VJjisQ9CSbqUY643p/W9hUGmag4S96WNGe79GvieiPr2ibJCuw25+xUcKfcLfXif4S6HlSmiYaVeeqcRQdf6l9v3MpK6fkR8TuoXOqtx5Ycy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z/hcbbEj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720602309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Lo9HjTqXg+zsuHsAZC/cmPCTHvmkkLcTQoYiizXM1HQ=;
+	b=Z/hcbbEjXANyw+kUUHy5fN6HA4fsUN9FcZiYqndnKpXRUyHdgA1Cx7JVKi53Tq08ajQbwF
+	Wvq/gQMLIZOcGhBP3IxGsdkIUhlK//V8n8PblnOFrbsac3KLTKV/PWXxd/b+sGmddAk2QS
+	58NVskoUT9YpmRNDGSuETw+nPtMEILs=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-511-zbX3YZPhOjaKYtuR5Kmb6g-1; Wed,
+ 10 Jul 2024 05:05:08 -0400
+X-MC-Unique: zbX3YZPhOjaKYtuR5Kmb6g-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C7D3637813C0;
-	Wed, 10 Jul 2024 08:58:18 +0000 (UTC)
-Message-ID: <f7eb356d-6fe7-4e36-9fd2-1518addc7bdb@collabora.com>
-Date: Wed, 10 Jul 2024 13:58:13 +0500
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 75FAC19560AA;
+	Wed, 10 Jul 2024 09:05:06 +0000 (UTC)
+Received: from antares.redhat.com (unknown [10.39.192.91])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DCE313000181;
+	Wed, 10 Jul 2024 09:05:02 +0000 (UTC)
+From: Adrian Moreno <amorenoz@redhat.com>
+To: netdev@vger.kernel.org
+Cc: Adrian Moreno <amorenoz@redhat.com>,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] selftests: openvswitch: retry instead of sleep
+Date: Wed, 10 Jul 2024 11:04:59 +0200
+Message-ID: <20240710090500.1655212-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/4] selftest: x86: conform tests to TAP format output
-To: Shuah Khan <skhan@linuxfoundation.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20240414131807.2253344-1-usama.anjum@collabora.com>
- <dd277b6b-b28e-4860-b285-e89fd5fd3d41@collabora.com>
- <90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org>
- <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
- <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
- <fb305513-580a-4bac-a078-fe0170a6ffa2@linuxfoundation.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <fb305513-580a-4bac-a078-fe0170a6ffa2@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hi Shuah,
+There are a couple of places where the test script "sleep"s to wait for
+some external condition to be met.
 
-Thank you for replying.
+This is error prone, specially in slow systems (identified in CI by
+"KSFT_MACHINE_SLOW=yes").
 
-On 7/10/24 4:39 AM, Shuah Khan wrote:
-> On 7/2/24 04:17, Muhammad Usama Anjum wrote:
->> On 6/10/24 10:19 AM, Muhammad Usama Anjum wrote:
->>> Adding Borislav, Dave and x86 mailing list:
->>>     Please review the series.
->> Kind reminder
->>
-> 
-> Usama,
-> 
-> As I mentioned another TAP conversion patch from you  patch if the
-> following command gives you TAP, there is  no need to convert.
-> 
-> make -C tools/testing/tmp2 run_tests
-> make kselftest TARGETS=tmp2
-> 
-> kselftest framework lib.mk and runtests wrappers take care for
-> TAP. The reason to take care of this at framework level is to
-> avoid changes to individual tests. The wrapper keys off of
-> KSFT_* codes returned from tests.
-> 
-> Please don't send TAP conversion patches like this one. The output
-> from the commands will have duplicate messages. The reason tests
-> return
-> 
-> make -C tools/testing/tmp2 run_tests
-> make kselftest TARGETS=tmp2
-The current series have several improvements which are beneficial in
-several ways. I think these improvements should be included. While
-conforming for TAP following improvements have been made:
+To fix this, add a "ovs_wait" function that tries to execute a command
+a few times until it succeeds. The timeout used is set to 5s for
+"normal" systems and doubled if a slow CI machine is detected.
 
-*[PATCH 1/4] check_initial_reg_state*
-Removes manual counting of pass and fail tests
-Increase readability and maintainability of tests
-Print logs in standard format (without [RUN], [OK] tags)
+This should make the following work:
 
-*[PATCH 2/4] corrupt_xstate_header*
-Correct the skip, pass and fail return codes. Otherwise the test always
-return 0
-Returns correct number of stats about passed/failed tests
-Print logs in standard format
+$ vng --build  \
+    --config tools/testing/selftests/net/config \
+    --config kernel/configs/debug.config
 
-*[PATCH 3/4] fsgsbase_restore*
-Add test skip support instead of returning success at skip time for the
-kselftest script to understand correct exit status
-Print details about errno if error occurs
-Increase readability and maintainability
-Print logs in standard format
+$ vng --run . --user root -- "make -C tools/testing/selftests/ \
+    KSFT_MACHINE_SLOW=yes TARGETS=net/openvswitch run_tests"
 
-*[PATCH 4/4 entry_from_vm86*
-Remove manual pass/fail tests counting
-Increase readability
-Print details about errno if error occurs
-Print logs in standard format
+Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+---
+ .../selftests/net/openvswitch/openvswitch.sh  | 45 +++++++++++++++----
+ .../selftests/net/openvswitch/ovs-dpctl.py    |  1 +
+ 2 files changed, 38 insertions(+), 8 deletions(-)
 
-
-These improvements aren't evident from the description of patches as I
-thought converting to TAP achieves all this by default. But I can improve
-the patches description and send patch revision. Thoughts?
-
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index bc71dbc18b21..cc0bfae2bafa 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -11,6 +11,11 @@ ksft_skip=4
+ PAUSE_ON_FAIL=no
+ VERBOSE=0
+ TRACING=0
++WAIT_TIMEOUT=5
++
++if test "X$KSFT_MACHINE_SLOW" == "Xyes"; then
++	WAIT_TIMEOUT=10
++fi
+ 
+ tests="
+ 	arp_ping				eth-arp: Basic arp ping between two NS
+@@ -29,6 +34,30 @@ info() {
+ 	[ $VERBOSE = 0 ] || echo $*
+ }
+ 
++ovs_wait() {
++	info "waiting $WAIT_TIMEOUT s for: $@"
++
++	if "$@" ; then
++		info "wait succeeded immediately"
++		return 0
++	fi
++
++	# A quick re-check helps speed up small races in fast systems.
++	# However, fractional sleeps might not necessarily work.
++	local start=0
++	sleep 0.1 || { sleep 1; start=1; }
++
++	for (( i=start; i<WAIT_TIMEOUT; i++ )); do
++		if "$@" ; then
++			info "wait succeeded after $i seconds"
++			return 0
++		fi
++		sleep 1
++	done
++	info "wait failed after $i seconds"
++	return 1
++}
++
+ ovs_base=`pwd`
+ sbxs=
+ sbx_add () {
+@@ -278,20 +307,19 @@ test_psample() {
+ 
+ 	# Record psample data.
+ 	ovs_spawn_daemon "test_psample" python3 $ovs_base/ovs-dpctl.py psample-events
++	ovs_wait grep -q "listening for psample events" ${ovs_dir}/stdout
+ 
+ 	# Send a single ping.
+-	sleep 1
+ 	ovs_sbx "test_psample" ip netns exec client ping -I c1 172.31.110.20 -c 1 || return 1
+-	sleep 1
+ 
+ 	# We should have received one userspace action upcall and 2 psample packets.
+-	grep -E "userspace action command" $ovs_dir/s0.out >/dev/null 2>&1 || return 1
++	ovs_wait grep -q "userspace action command" $ovs_dir/s0.out || return 1
+ 
+ 	# client -> server samples should only contain the first 14 bytes of the packet.
+-	grep -E "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" \
+-			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
+-	grep -E "rate:4294967295,group:2,cookie:eeff0c" \
+-			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
++	ovs_wait grep -qE "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" \
++		$ovs_dir/stdout || return 1
++
++	ovs_wait grep -q "rate:4294967295,group:2,cookie:eeff0c" $ovs_dir/stdout || return 1
+ 
+ 	return 0
+ }
+@@ -711,7 +739,8 @@ test_upcall_interfaces() {
+ 	ovs_add_netns_and_veths "test_upcall_interfaces" ui0 upc left0 l0 \
+ 	    172.31.110.1/24 -u || return 1
+ 
+-	sleep 1
++	ovs_wait grep -q "listening on upcall packet handler" ${ovs_dir}/left0.out
++
+ 	info "sending arping"
+ 	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
+ 	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 1e15b0818074..8a0396bfaf99 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -2520,6 +2520,7 @@ class PsampleEvent(EventSocket):
+     marshal_class = psample_msg
+ 
+     def read_samples(self):
++        print("listening for psample events", flush=True)
+         while True:
+             try:
+                 for msg in self.get():
 -- 
-BR,
-Muhammad Usama Anjum
+2.45.2
+
 
