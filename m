@@ -1,137 +1,93 @@
-Return-Path: <linux-kselftest+bounces-13460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F89592D258
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 15:08:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2993892D25B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 15:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE2411F24D18
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 13:08:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3606282097
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2024 13:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9995F19248C;
-	Wed, 10 Jul 2024 13:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD20619246D;
+	Wed, 10 Jul 2024 13:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9hM2atZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vIFfgaFa"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5591619246A;
-	Wed, 10 Jul 2024 13:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ACC18FDDB;
+	Wed, 10 Jul 2024 13:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720616905; cv=none; b=eWCSlnyMa0SurAsX9MECYuiZBj8c971ZlxUT90K0AGJGfZD8RHGiobKLoze2GLZ2mjlbmVikCC9nPNdd+GTHDHq0QRp0SIlDno69SxmtKDeCigDYskWOHrxMHbAEVJbmtlfpBFyL5eQFOm3jIGn8ebIbpUcTCUs99JSMk80gT7M=
+	t=1720617031; cv=none; b=QGp3fkSVUkB4vcS0Qewyuh5BkFUuM4xPilcl0KcT5p9mkVMNjyhloo7n2WtIxewBn+pZPItjOLCnrfJQBCn67S23dG74Pjs3f1nVUsu5CVqTS4NFSRPo4/0x9khnO4kZg4ah8He2J0rfX0EVy7cMwMAu3v/G1ntU6BQ+KX1or2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720616905; c=relaxed/simple;
-	bh=20hAmUQJ5H0dqXfMYq7iNS/LgEwVNBfRSwX6Fbv7Rx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dF/l9j3q0AMiFLIr1MaYby7PsDj7jYFOk2tNhvDQPb8Kg6YBvJr9XrXsBlNYqARIDyJA5rv7RyfZ6+VIYrUQVMgAchHO2cejXS0Kdycm4CdwQ5dL5DvGXk57urfYEiMRUj6in7PIJ6lYGYL23nImY/ItBlzlag624bYDStWRwJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9hM2atZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6311EC32782;
-	Wed, 10 Jul 2024 13:08:24 +0000 (UTC)
+	s=arc-20240116; t=1720617031; c=relaxed/simple;
+	bh=5nIX8f+03OJ3l1bZ4QCcTPI/Cm1v27scAFX7mg85uQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZCS3qvlh1CTY1MCF7uwOeOu64hm+MJeiD36S8Z/aUgPZWlPB6BRZkXRYqW8xUCS5b5HcXxaa7oqXL4weqDA6ZlG6FA/cLlHVl4HIsvGgfpJSTjue+90ZnQY6b2nBdk1sHKy0JWfLM0f6hTQgbOge0sYTGY62vOcKQ3RaQy2B6Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vIFfgaFa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB902C32781;
+	Wed, 10 Jul 2024 13:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720616905;
-	bh=20hAmUQJ5H0dqXfMYq7iNS/LgEwVNBfRSwX6Fbv7Rx0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S9hM2atZ5ZFhaUOVjx6PR2HXOtRcW2QNjebxTAoB2FvvbNZ4PvOIsIwpDlPboosKj
-	 aUtUzXLMfzd0O5DHyr4sCCAr1JRNez2zaVxXGyiPdJVbKNb37V2ly+VVxzpMDXgG/0
-	 yLekhO+MGKNgwADbhYOjSo5b4rpMXYgWwoL2bNSCBQKmOvzvqtC3rwJbQrGVvORCEw
-	 J4pHDoVTPveEEH9d10qvcPrL+POj3GC5r8YQvSmPXeVF0PMmlfQ/MZUMEctcHXW0qy
-	 0yxxDbGN2tLa8mdEVPGQM3LjZRro94QHKN4+ZoTczDbhEko0b/JGYs5RGeGNJyt6+s
-	 scOo6mzmOh59Q==
-Date: Wed, 10 Jul 2024 14:08:15 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen <dinguyen@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	"linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-	linux-riscv@lists.infradead.org,
-	Aishwarya TCV <Aishwarya.TCV@arm.com>, shuah <shuah@kernel.org>,
+	s=k20201202; t=1720617031;
+	bh=5nIX8f+03OJ3l1bZ4QCcTPI/Cm1v27scAFX7mg85uQQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vIFfgaFal6QpGa2NkGMfqeNMLu7CTYpr4nmEo1ADTtbh17A6LEAnRhrCvfjYko9En
+	 cuEMMoScjh/iIOkXl2oiyikMR9UQuAMLWQWwkfxKwaNe1M+86VaMwEMDQz5uKiRmm0
+	 QQIInmcT4dMaBtaax0+SxNhtMiGcN+XNIG8x+kDfrlXENrmSqLYgOXPrHkdJ/v2Mg7
+	 wwv6A1fLfw+HxfjjNGMXnvAuRmiJbjAq/MFVUBPxuq3QrHAP88MUTBZO5O6C/3kXYQ
+	 5xScEpZvYjpsxkawtfhm8MOHBXKnIdw5lLuzYduSSMfkaeHQm0Xh/JSo5NSiBNUqgS
+	 zMJKRw81GVtxA==
+From: Geliang Tang <geliang@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 10/17] arm64: generate 64-bit syscall.tbl
-Message-ID: <Zo6Hv18S35K0hH_7@finisterre.sirena.org.uk>
-References: <20240704143611.2979589-1-arnd@kernel.org>
- <20240704143611.2979589-11-arnd@kernel.org>
- <c8c882ad-d508-40b7-9af5-b2a2ddf777c1@sirena.org.uk>
- <93c84e97-b307-4486-8dfb-e966c96751a1@app.fastmail.com>
+Subject: [PATCH bpf-next v2 0/2] BPF selftests misc fixes
+Date: Wed, 10 Jul 2024 21:10:15 +0800
+Message-ID: <cover.1720615848.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LdSnlI4UojlRSCq3"
-Content-Disposition: inline
-In-Reply-To: <93c84e97-b307-4486-8dfb-e966c96751a1@app.fastmail.com>
-X-Cookie: Your love life will be... interesting.
+Content-Transfer-Encoding: 8bit
 
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
---LdSnlI4UojlRSCq3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+v2:
+ - only check the first "link" (link_nl) in test_mixed_links().
+ - Drop patch 2 in v1.
 
-On Wed, Jul 10, 2024 at 10:57:25AM +0200, Arnd Bergmann wrote:
+Resend patch 1 out of "skip ENOTSUPP BPF selftests" set as Eduard
+suggested. Together with another fix for xdp_adjust_tail.
 
-> Thanks for the report! I just panicked a bit and thought I had
-> done something entirely wrong here, but after having a closer
-> look it turned out to be a silly typo:
+Geliang Tang (2):
+  selftests/bpf: Null checks for links in bpf_tcp_ca
+  selftests/bpf: Close obj in error path in xdp_adjust_tail
 
-> -#include <unistd_64.h>
-> +#include <asm/unistd_64.h>
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c        | 16 ++++++++++++----
+ .../selftests/bpf/prog_tests/xdp_adjust_tail.c   |  2 +-
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-Doh, I should've spotted that even from the very quick look I gave it!
-Thanks for the quick fix.
+-- 
+2.43.0
 
-> I checked that arm64 is the only architecture that has this
-> particular bug, and I tried building kselftest now, which seems
-> to work better. There are still a few warnings and errors
-> I get doing that, but I suspect those are all preexisting
-> issues.
-
-Yeah, not everything there builds cleanly (and there's a bunch of
-external deps you need for many of the suites).
-
---LdSnlI4UojlRSCq3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaOh74ACgkQJNaLcl1U
-h9CcQgf+N85DM6dZVHX8s5b4IoK8zBscjfKv6tCiwPcVRTNMH1dJqkR5LYNpb1am
-KnuwKdCAcqascCbdmTx6ZzWDw52YDXohUbXSLkof3qyp5Js5aEyrs51UQTogwoi4
-kW2K0EYgg4Wk0OF5Fe2Iq2ITXeoZ9O++joUeRHwXE9hSesKKiM+kZoHBaKHFQf8G
-KDEhNvrFyrB2F9RDVIHcqt7IlySirRkKj8aWx9Dytd3Z8QtLv8rI6mbWZQ17ym4y
-zDuDf4710dlhVUmR8eYF+JeHyJGcKQMF1BZAqwIkxQHuuP8uaNfhIR/rSOL1okjv
-4LFBmMQqolC9ttdMprhk/DBLuxJAwA==
-=NATo
------END PGP SIGNATURE-----
-
---LdSnlI4UojlRSCq3--
 
