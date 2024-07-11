@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-13543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F6192DFE7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 08:14:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9761492E042
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 08:39:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 462FB1F23375
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 06:14:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28425B20C1C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 06:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCBF4824AD;
-	Thu, 11 Jul 2024 06:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A0112C54A;
+	Thu, 11 Jul 2024 06:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ObQI8iew"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ue6IkGUh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146362904;
-	Thu, 11 Jul 2024 06:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E8284DE9;
+	Thu, 11 Jul 2024 06:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720678444; cv=none; b=eNB4FocezdxVkh3tZU53a283JyIqb14IbbgNWUOD3KZyW+KJ7IGNwkvfdGxtfmT5lYQMLzkt9WbpImh9lbh8gWvsuYBhpAP98ldV3Rl5WpTg6M6b7Vb3PnFOmxsOV4czt0bSKGG/mURqzwQ4CsSs7gq7/ExLiRHYv/w0OAnY8fM=
+	t=1720679972; cv=none; b=UrVznhDHnNnCQ8x5+AzLKmefswTB1xnNTIA7NlT9WCnq/58d+0f3zCwJYmBV3YTRdRwCpn7pbUjFxVOmjz7+42sYvKxzst8AmFc1eGC/Q89z/P37znmFTtKMBwP6PDTrxg+LDDwmB3t8l3a/N3/wciV3g0xz2aHwT2+zQYo9a+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720678444; c=relaxed/simple;
-	bh=8xOtfjRCFwwGZhvnaP6AiSa3qARQWMU1DF/LrcXXNb8=;
+	s=arc-20240116; t=1720679972; c=relaxed/simple;
+	bh=5o6GS9CFJ3XzY5WS3VjXQZyHGmQWekxQIXP5NidKh0Q=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Caa1fDev+Kf6sfVokwJjmDmJ8fN6W4iz7NYpjCKMPdht0itSF0LrZQ/ckXB11jnBzT9tIEVXcCufyLgF0T0OE8KN7Iz/I5ozpIt/xxNcCQqeny4tVHqodnRhbsGumNg8Ox3t/drKGcCQfHE2K5Mb/oyQWX5klxjAWrsoUoWlhKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ObQI8iew; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=JR3w7oUgvnul8Wbe5vLnQEVaJdPsMnpFvaWVytE+7Lq2ki06vNRcLDkbw2yPHbubBYHbf2S9IHDchZa6k8ceD+yNswXslXIAYjpSy834Q5LNYhAvkrcVuNkw1+ASl0tSAnDylWO9glMsE29j4ISUAm/d4Le8fMbrWrsoy8eov74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ue6IkGUh; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720678441;
-	bh=8xOtfjRCFwwGZhvnaP6AiSa3qARQWMU1DF/LrcXXNb8=;
+	s=mail; t=1720679968;
+	bh=5o6GS9CFJ3XzY5WS3VjXQZyHGmQWekxQIXP5NidKh0Q=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=ObQI8iewCADPzrhA10Qv1xzWJ0KXCVDEm/sRnWgyTipZXXZo4UN7jtD5oajZEHZDU
-	 BR7DHkgA1LLqCdn66iN3lK0WVNhtu+CoU6G4Sov9RmpGwV47QWutVuqsJmZLY5ghuU
-	 ntpft6dFqmtc8nuE0mnrcSKsb3dsfMkJmJeKiIVZasSWSnKDbHui6B/RnQPSStaDOo
-	 qf5GwYA7yb7YiZPCbiANURBBoyyURzLx8amy9WZ67C9IEpEtd+Hu175ORz7BRx1Htt
-	 Ei18khgpvhhfmDGinB4ryoc3gZC36D+VT4Gl85fJlACmiBy7rEB7QeDwgoUwKhT644
-	 w6FwkcfnnTe7w==
+	b=Ue6IkGUhsXxaKwC0b3SYMDQmDxY1ADssBHd2Hquwfn2sz2KSsRua1Y+Qol4Y9xn3M
+	 BcA+9/JRkFTvisGXBe6WPOcLKfd4HuI0FLrx8vOiIIDKCkkco5Rm/hrwYvz0A8WE4A
+	 z1BizDPXdu8R2e2VO1hR4+FvCsmBB2sWcAYvuAIkWIBs7mdhT5zZJurou4o4KH9knf
+	 Q//skXCy/D5UB/DKFoGLUV3T/eLPVmtehgGHhmcjFdv5614XCP4zTRebGwxdhMukLY
+	 4sSMzuiLSzTwXKQQebo3G0ThFUksNONG6HSQvkFME/W1HkrUgk/PVhuoT45Neaix0R
+	 QZA4CFcmM74TQ==
 Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0242137821E5;
-	Thu, 11 Jul 2024 06:13:56 +0000 (UTC)
-Message-ID: <f052afb8-abca-4279-8186-05df35044bdd@collabora.com>
-Date: Thu, 11 Jul 2024 11:13:54 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D4423780627;
+	Thu, 11 Jul 2024 06:39:25 +0000 (UTC)
+Message-ID: <bab6401b-56e0-4fb7-8ae7-90607c52c58d@collabora.com>
+Date: Thu, 11 Jul 2024 11:39:23 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,76 +58,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Kunwu Chan <chentao@kylinos.cn>, kernel@collabora.com,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 1/2] selftests: arm64: tags_test: conform test to TAP
- output
-To: Catalin Marinas <catalin.marinas@arm.com>
-References: <20240602132502.4186771-1-usama.anjum@collabora.com>
- <Zo5xCW9GJqFeTZUi@arm.com>
+ Al Viro <viro@zeniv.linux.org.uk>, kernel@collabora.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: openat2: don't print total number of tests and
+ then skip
+To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
+ Aleksa Sarai <cyphar@cyphar.com>
+References: <20240522214647.3568788-1-usama.anjum@collabora.com>
+ <1fc06a15-f06e-4db1-ace5-b9d52250d0df@collabora.com>
+ <20240701.085146-junky.rubs.mossy.crews-uyuNIdHgWxb@cyphar.com>
+ <148d4c61-b60a-401f-96ee-b0291bcf87b3@collabora.com>
+ <c0007f80-d44b-42fa-afd4-fdaeb3b89f70@collabora.com>
+ <6d82fa16-ed2e-41f1-a466-c752032b6f68@linuxfoundation.org>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Zo5xCW9GJqFeTZUi@arm.com>
+In-Reply-To: <6d82fa16-ed2e-41f1-a466-c752032b6f68@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/10/24 4:31 PM, Catalin Marinas wrote:
-> On Sun, Jun 02, 2024 at 06:24:59PM +0500, Muhammad Usama Anjum wrote:
->> Conform the layout, informational and status messages to TAP. No
->> functional change is intended other than the layout of output messages.
+On 7/10/24 9:18 PM, Shuah Khan wrote:
+> On 7/10/24 03:33, Muhammad Usama Anjum wrote:
+>> Hi Shuah,
 >>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  tools/testing/selftests/arm64/tags/tags_test.c | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
+>> Can you take the patch as is or by removing following from this patch:
 >>
->> diff --git a/tools/testing/selftests/arm64/tags/tags_test.c b/tools/testing/selftests/arm64/tags/tags_test.c
->> index 955f87c1170d7..8ae26e496c89c 100644
->> --- a/tools/testing/selftests/arm64/tags/tags_test.c
->> +++ b/tools/testing/selftests/arm64/tags/tags_test.c
->> @@ -17,19 +17,21 @@ int main(void)
->>  	static int tbi_enabled = 0;
->>  	unsigned long tag = 0;
->>  	struct utsname *ptr;
->> -	int err;
->> +
->> +	ksft_print_header();
->> +	ksft_set_plan(1);
->>  
->>  	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
->>  		tbi_enabled = 1;
->>  	ptr = (struct utsname *)malloc(sizeof(*ptr));
->>  	if (!ptr)
->> -		ksft_exit_fail_msg("Failed to allocate utsname buffer\n");
->> +		ksft_exit_fail_perror("Failed to allocate utsname buffer");
->>  
->>  	if (tbi_enabled)
->>  		tag = 0x42;
->>  	ptr = (struct utsname *)SET_TAG(ptr, tag);
->> -	err = uname(ptr);
->> +	ksft_test_result(!uname(ptr), "Syscall successful with tagged address\n");
->>  	free(ptr);
->>  
->> -	return err;
->> +	ksft_finished();
->>  }
+>> -    if (geteuid() != 0)
+>> +    if (geteuid())
 > 
-> Sorry, these patches slipped through the cracks. We seem to be pretty
-> inconsistent with using ksft_exit_fail_perror() and ksft_finished(). Is
-> there some plan to update the rest or is it only this location that you
-> came across?
-Ideally we would want that all the test are updated to output better logs
-than what they have currently. We may update some more tests. This is
-something we want the maintainers to get aware of that kselftest.h wrapper
-provide helper function to better write the tests and then all contributors
-start using it in new tests and older tests may also get updated in the
-process.
+> As Aleksa mentioned, geteuid() != 0 is preferred.
+I can make the change after concluding the following discussion.
 
 > 
-> Adding Mark Brown as well to this thread, he's been contributing quite a
-> lot recently to the arm64 kselftests.
+>>
+>> On 7/2/24 12:02 PM, Muhammad Usama Anjum wrote:
+>>> On 7/1/24 2:14 PM, Aleksa Sarai wrote:
+>>>> On 2024-07-01, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+>>>>> Adding more people for review
+>>>>>
+>>>>> On 5/23/24 2:46 AM, Muhammad Usama Anjum wrote:
+>>>>>> Don't print that 88 sub-tests are going to be executed. But then skip.
+>>>>>> The error is printed that executed test was only 1 while 88 should have
+>>>>>> run:
+>>>>>>
+>>>>>> Old output:
+>>>>>>    TAP version 13
+>>>>>>    1..88
+>>>>>>    ok 2 # SKIP all tests require euid == 0
+>>>>>>    # Planned tests != run tests (88 != 1)
+>>>>>>    # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+This would return FAIL exit code to kselftest executor as the planned tests
+were 88 while executed tests are only 1. Hence FAIL error code would be
+returned. This is completely wrong.
+
+>>>>>>
+>>>>>> New and correct output:
+>>>>>>    TAP version 13
+>>>>>>    1..0 # SKIP all tests require euid == 0
+This would return SKIP exit code which is correct.
+
+
+> 
+> I think having total number tell you how many tests are there.
+> I don't this this is good change.
+Having "1..88" misrepresents the number of executed tests. This is against
+the TAP specs. The total number of tests must be printed after finding out
+that initial conditions are fulfilled. From specs: [1]
+
+> A plan line of 1..0 indicates that the test set was completely skipped;
+> no tests are expected to follow, and none should have come before.
+> Harnesses should report on 1..0 test runs similarly to their handling of
+> SKIP Test Points, treating any comment in the Plan as the reason for
+> skipping.
+>
+> 1..0 # WWW::Mechanize not installed
+
+[1] https://testanything.org/tap-version-14-specification.html
+
+> 
+> thanks,
+> -- Shuah
 > 
 
 -- 
