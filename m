@@ -1,135 +1,181 @@
-Return-Path: <linux-kselftest+bounces-13539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D167592DEE4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 05:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 168AD92DEE6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 05:49:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9095C283E51
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 03:49:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C21E9283E82
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 03:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04CC1A291;
-	Thu, 11 Jul 2024 03:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E8920332;
+	Thu, 11 Jul 2024 03:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VDBcCtBm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B+cIlAI0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1380E8F72
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 03:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154781A291
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 03:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720669752; cv=none; b=ZGk8NhRxWAucsqBLrvgy5sfz2sp6RWUHWE2s5Nh3/3EYqGjuQR0t/c+X9MFXSoJmNglyG3et348l8RjEcZTbftgg9sHdc4/rndhXf3BXpXGK2uNX+6GLjm/ZZaiAQkPjRmN3sKpImT9zuyeAEAEEWZsRpqk1Jtuj9FNJ5jRELOw=
+	t=1720669787; cv=none; b=BRjiMl1YTqT42Uy+HMkt9DcZK/dA+PtlK8JfRtetu6miaOvEF8nyGVZqkUm+Mj9dD8+vUhorGJpjy9qC/Mn4VAP9KvH/KdvtUjJ5jRQr0O/rkdMijL/nkukO3hIx7YwZFnjYwbopezU5j8IaePPhyPNT5g+w3NDr45lOIl0lO0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720669752; c=relaxed/simple;
-	bh=JY3r+pwG4p9idx4cPN8RBmbhFHbSVrH1g+1YjToj6CA=;
+	s=arc-20240116; t=1720669787; c=relaxed/simple;
+	bh=T6bKjiC8yaQMk4Ql54wUejnzkroYY6Lth1rXommJvRw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bblefGdkrmRtVtRxw+tU8EF2nQlMrlcq8x+cZ1LJC/fGN5MoZCW+ABduaSXlkFlwOpPTtiaLXizCuV0d4XgH90T7hwQnUljvA89X5NDhUCpK+YgJzPN60u5XMLdxuDhuyq6Cjt2p+GVZZXVFmP9y+nk4RF2zAxzDV3AnhfJdRKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VDBcCtBm; arc=none smtp.client-ip=209.85.160.173
+	 To:Cc:Content-Type; b=UvPuwjcHuixy1gbAyozXWmkDc/dJAUdCD89/Oo+57bmlEoRCS4lzvcU4oPXJzj9r5i8/FcBGbCTtB+ayfMDUdRTyVTkbgr4z5JVMiQcfkYFWSOqyvj/+ae23xnvYSa+Rd/8b+cLMopgAPU7Xvrul39Hy5/JvNeQRPOI4u/kFEoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B+cIlAI0; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-447f8aa87bfso225991cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 20:49:10 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-44664ad946eso96901cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2024 20:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720669750; x=1721274550; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1720669785; x=1721274585; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=88VM0JL98x+H7ghCdrvJ4HyhcWnYFabX4LchSfHrDig=;
-        b=VDBcCtBmtg+SuZ9J2wFMfpAHr5C0EIz9+wAcE8crJuUCrzzI+dIK3U2GOtU12GbRgQ
-         xXlflejLTSHO1HEeMzo1fxj4CtFEBWvW8CVd47EYmSbv5oV8mSOpu6IGyPDec1RktTDJ
-         pwHVtMVtzrfOwU+kP7hQksbjvoekdLy1eggJ4xOBfuGcuPuW4Qvjn0ayegAoe6Bpx6eZ
-         yLNm1jI6huwkGf9lk4Oi5m76GyzcU3uy24hapIDxWg/TJXI+l88Lnx0I9Nh80SiO6KnS
-         WIeK/9MzFDqc1qMKHnL4+qvUN8+KqyUdrk5RxwaJzU2lFNu2+6gqFDNkgjV7Il8vAlDF
-         WZRg==
+        bh=FoGKVDpEOijzRvpciPbi6L9kwP8TfsdQ1Y0kZOrtJOY=;
+        b=B+cIlAI0kLM8ooB+eNq0uhxMOrXMFUeZvtEYh5YCil5GkvO55M2kpZi7J+BUjXI0QS
+         cIapQQ+tTajWveDRwgMvWIAbRYjfDpOsyugRVeWpVMzfWjCjFHuIrzDsLyNH65gGRKR/
+         ghJLutmA7Z5JrAghE1KgrJlToddQLpTiuBa5HZV5pBcElBuhksEztzsDVuYQgOGb50jB
+         qSoxuA8RbydCk5ROtsnxdMMXRZM9XD5/e7OoKXdOa+qA2krZUEeeaybDncjkdFC1nGlJ
+         7cd2t9qporr0J1X6PKEHOBFLvVQTHwkxrqZoINwnF+mDpY/lHYRhq5qchsnATh73PBrn
+         s1bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720669750; x=1721274550;
+        d=1e100.net; s=20230601; t=1720669785; x=1721274585;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=88VM0JL98x+H7ghCdrvJ4HyhcWnYFabX4LchSfHrDig=;
-        b=lyq462CcF/cmjqpxNknzJnxJavqR228QGMngR2mLgydqudD2CMwEFgPFKyK/GTyknL
-         qJJjNzXgMB/jYblAkaZtOH1MSZEyMaiW6OKFvxoSS1YIzrRF+R+mi97Y20f6nE4Lr16q
-         b1Mcl7mgj3zudtWo1rBanRfNgSP83YvnHUbONzAaJ7FdFYqsXycxpRkPjT2c+gZAAFA8
-         yNocuCodMGqfgbgGCTPMz3uJiXnrT2RRUxxv4uBAduaxN8HnRmvDjuidqj8ScCregw6i
-         949T0m/7nmQtsJnwjWDvjHSXEj+F9Gy7L0DnDuzTr4jd+Dz3tlPD8fydPst4r4cqwVGA
-         o3+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUS748D4ikF37bm5I2jDwMOYETAy6W27Mq40lZ+g8glFtBcgz324KTLIM5eCvbV7QqbRCyydhk1l9U/mODNiG6OkMiFOtzQhIK4lwr/AyjP
-X-Gm-Message-State: AOJu0YzA0dHwQjWpV4flC1yBQdiyy0Xg2vJzaSWZRmd4p3c8bFZg7SXA
-	PM8Gc/rnzN1RIsv0UCYN8o7daHgjTXwvsfxLvbQ8FE331LTnzhjWIvwcR31qdJF9xLH9TRrNWJf
-	MCxiPnHRBSUmhsY0L99NG/NlZWdCUDPj0ymAQ
-X-Google-Smtp-Source: AGHT+IEKVUKYb9pPK5Ipagk20mplMUADJdr9kdqImKsxzlW8QBUxWV83kXFBGju5eUOEzIySL5zYG4wmcoC+SKphKKI=
-X-Received: by 2002:a05:622a:601d:b0:447:daca:4b25 with SMTP id
- d75a77b69052e-44d0ca65cc3mr1891601cf.28.1720669749986; Wed, 10 Jul 2024
- 20:49:09 -0700 (PDT)
+        bh=FoGKVDpEOijzRvpciPbi6L9kwP8TfsdQ1Y0kZOrtJOY=;
+        b=h7Xea4+k6kuahRWvi+/dJTduMVUEpMCeyO0YSIFbtLtg6XGxY/6amSARCKwU1gY8UY
+         Ij+hqwdsvC6LwxY9XkE7K79MpXmy/mr4RFfScg0m1s0+DLROkDnMSjrIM8cQod1neUh2
+         UBmr3pRAnVyAfDzrRLfIzchd57NKb3mCHJcOEz7Gbs7GICEOy1AuhnZIXzgoAoxO3tXp
+         3XE5y5oDYf2Ngi8LA+Yg+GEeVKYAfVVZ/aZI0Tkf8RoSIc3YUUh8vIpXkgz5IgKgqcoR
+         Ys+NhmA5blw3uOJc9aJ5fKd6nE2DVT3oqioB7PtCfQG/0Xi38avs5V7bsc2bj+3ygZ4s
+         oRJw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/6XJlTSzfEWMlgCOrVrJIRF8WGXwsGaSPTRSVoJ4bTO5fk0r5KaSUHxnqLZoJSeNuLNSCGr+MjFI9XziYDLJYVtpSnZcF8XvXPbF0DQAV
+X-Gm-Message-State: AOJu0YyQxUaAuVDlfZzkiaMOBZD/9DjDB1PmQqRa8Pe9CHi7HESmMS/z
+	dhjbdMcLmzv1yEvu1Y9xO05c/cs6varimRc4MBAz+t+ezSdmFWoqkzUL6/IHjVBnU97SQJNM/A7
+	wTQ/fIFQJ9zzyoQfeuID8lClgNSRC9nCUd9Hk
+X-Google-Smtp-Source: AGHT+IFbzQv8Oi/RPOj69gFpNM/l0dRuKZ5AUI3WBFAG/a7eymg6kcl0kazNC7bIAXbhyFPXVCzOY8Fh7XAiZUq2ZPI=
+X-Received: by 2002:ac8:5650:0:b0:447:d7fd:63f with SMTP id
+ d75a77b69052e-44d35b2b4abmr1081231cf.19.1720669784825; Wed, 10 Jul 2024
+ 20:49:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240710170448.1399967-1-ericchancf@google.com> <20240710170625.1400724-1-ericchancf@google.com>
-In-Reply-To: <20240710170625.1400724-1-ericchancf@google.com>
+References: <20240710170448.1399967-1-ericchancf@google.com> <20240710170643.1401358-1-ericchancf@google.com>
+In-Reply-To: <20240710170643.1401358-1-ericchancf@google.com>
 From: David Gow <davidgow@google.com>
-Date: Thu, 11 Jul 2024 11:48:57 +0800
-Message-ID: <CABVgOS=4N3GMjBsTnW=jbzkZbqo4Wwh5wpLod0_r+A2q_vxnGw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kunit: Fix the comment of KUNIT_ASSERT_STRNEQ as assertion
+Date: Thu, 11 Jul 2024 11:49:33 +0800
+Message-ID: <CABVgOSkJOyLDZmPk5vj+o7aRbEZFDJvynWRacNJZ_M_gn9x1XQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: Rename KUNIT_ASSERT_FAILURE to KUNIT_ASSERT
+ for readability
 To: Eric Chan <ericchancf@google.com>
 Cc: brendan.higgins@linux.dev, rmoar@google.com, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000003f6a63061cf0a5a0"
+	boundary="00000000000054966d061cf0a7eb"
 
---0000000000003f6a63061cf0a5a0
+--00000000000054966d061cf0a7eb
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 11 Jul 2024 at 01:06, Eric Chan <ericchancf@google.com> wrote:
 >
-> The current comment for KUNIT_ASSERT_STRNEQ incorrectly describes it as
-> an expectation. Since KUNIT_ASSERT_STRNEQ is an assertion, updates the
-> comment to correctly refer to it as such.
+> Both KUNIT_FAIL and KUNIT_ASSERT_FAILURE defined to KUNIT_FAIL_ASSERTION
+> with different tpye of kunit_assert_type. The current naming of
+> KUNIT_ASSERT_FAILURE and KUNIT_FAIL_ASSERTION is confusing due to their
+> similarities. To improve readability and symmetry, renames
+> KUNIT_ASSERT_FAILURE to KUNIT_ASSERT. Makes the naming consistent,
+> with KUNIT_FAIL and KUNIT_ASSERT being symmetrical.
+> Additionally, an explanation for KUNIT_ASSERT has been added to clarify
+> its usage.
 >
 > Signed-off-by: Eric Chan <ericchancf@google.com>
 > ---
 
-Nice catch -- copy-and-paste strikes again!
+I personally am not a fan of KUNIT_ASSERT() as a name here: to me it
+implies that we're checking a boolean (like KUNIT_ASSERT_TRUE()).
 
-Reviewed-by: David Gow <davidgow@google.com>
+Does making this 'KUNIT_FAIL_AND_EXIT()' / 'KUNIT_FAIL_AND_ABORT()' or
+similar seem clearer to you?
 
-Cheers,
+(Or possibly we could make this KUNIT_FAIL(), and make the existing
+KUNIT_FAIL() become KUNIT_MARK_FAILED(), though I think it's not worth
+the churn personally.)
+
 -- David
 
 
->  include/kunit/test.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+
+
+>  drivers/input/tests/input_test.c |  2 +-
+>  include/kunit/assert.h           |  2 +-
+>  include/kunit/test.h             | 13 ++++++++++++-
+>  3 files changed, 14 insertions(+), 3 deletions(-)
 >
+> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+> index 2fa5b725ae0a..cbab24a265fa 100644
+> --- a/drivers/input/tests/input_test.c
+> +++ b/drivers/input/tests/input_test.c
+> @@ -31,7 +31,7 @@ static int input_test_init(struct kunit *test)
+>         ret = input_register_device(input_dev);
+>         if (ret) {
+>                 input_free_device(input_dev);
+> -               KUNIT_ASSERT_FAILURE(test, "Register device failed: %d", ret);
+> +               KUNIT_ASSERT(test, "Register device failed: %d", ret);
+>         }
+>
+>         test->priv = input_dev;
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 24c2b9fa61e8..02c6f7bb1d26 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -60,7 +60,7 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
+>   * struct kunit_fail_assert - Represents a plain fail expectation/assertion.
+>   * @assert: The parent of this type.
+>   *
+> - * Represents a simple KUNIT_FAIL/KUNIT_ASSERT_FAILURE that always fails.
+> + * Represents a simple KUNIT_FAIL/KUNIT_ASSERT that always fails.
+>   */
+>  struct kunit_fail_assert {
+>         struct kunit_assert assert;
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 61637ef32302..87a232421089 100644
+> index 87a232421089..d1b085fd5dc3 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -1420,12 +1420,12 @@ do {                                                                           \
->                                    ##__VA_ARGS__)
+> @@ -1193,7 +1193,18 @@ do {                                                                            \
+>                                                 fmt,                           \
+>                                                 ##__VA_ARGS__)
+>
+> -#define KUNIT_ASSERT_FAILURE(test, fmt, ...) \
+> +/**
+> + * KUNIT_ASSERT() - Always causes a test to assert when evaluated.
+> + * @test: The test context object.
+> + * @fmt: an informational message to be printed when the assertion is made.
+> + * @...: string format arguments.
+> + *
+> + * The opposite of KUNIT_SUCCEED(), it is an assertion that always fails. In
+> + * other words, it always results in a failed assertion, and consequently
+> + * always causes the test case to assert when evaluated. See KUNIT_ASSERT_TRUE()
+> + * for more information.
+> + */
+> +#define KUNIT_ASSERT(test, fmt, ...) \
+>         KUNIT_FAIL_ASSERTION(test, KUNIT_ASSERTION, fmt, ##__VA_ARGS__)
 >
 >  /**
-> - * KUNIT_ASSERT_STRNEQ() - Expects that strings @left and @right are not equal.
-> + * KUNIT_ASSERT_STRNEQ() - An assertion that strings @left and @right are not equal.
->   * @test: The test context object.
->   * @left: an arbitrary expression that evaluates to a null terminated string.
->   * @right: an arbitrary expression that evaluates to a null terminated string.
->   *
-> - * Sets an expectation that the values that @left and @right evaluate to are
-> + * Sets an assertion that the values that @left and @right evaluate to are
->   * not equal. This is semantically equivalent to
->   * KUNIT_ASSERT_TRUE(@test, strcmp((@left), (@right))). See KUNIT_ASSERT_TRUE()
->   * for more information.
 > --
 > 2.45.2.803.g4e1b14247a-goog
 >
 
---0000000000003f6a63061cf0a5a0
+--00000000000054966d061cf0a7eb
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -197,14 +243,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIJRybzE66oeq/89q1LarO9U8GQqRAA5o8K+vM8orkZ1AMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDcxMTAzNDkxMFowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIN14yK9IsT8m2SWZBhhrGAQPFRfS4X46inHaWvdM4vLbMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDcxMTAzNDk0NVowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAGnsXq
-De9EQJ5lbigGRe2jNr1noRmygzmTLHZG5slXVOdmy56HvD5j8JsXHPP9tNgRxT1qPhZJlbinrmtd
-N015u3oDdAXQANo1f356s5Ct8ZKB1rb+o9MscbEe/JEhn4DTzfuQTFBZzEgSZsmJyFHLzHSWw/2y
-NWmFJuP9esg6R5N6Y6HDewE5fv1Evdp2jGnvP3xtx3tGVGGsG6kS/nl7ONA01NNt3K685y4UnHKU
-Lt7GNwfy/ELFoviZIo6844v8XT9jmxGv1Ldjwzq++ARebjGPe9XMP8SpvC7kjJxDVQklLOotzfbj
-wqTo3FzwhLZjWjwl7kod6inuqs32OXlz
---0000000000003f6a63061cf0a5a0--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCEcrkD
+QAat388wrN1S1OSALx9Ca93Ieod0DBTAZLm09hu2ErX0h6iVbfyyI7T7l0RDnvtq2LcOiFwHKsYX
+yBSlJV6Qh7k6rKF2QvYVCGkC72SRUIPeN4BhhhyvbzkxiBOwPC46dfaYml0oaWpffinhlt4u9i/H
+f1tpvzMbQbRUs8iSJ53Lp8ngkW39siPNEsrk5xCJ2o1IqkN0J61tylba5qKVKVKyqqiRdXvuSVyN
+fXyjGVs6EI6hGvaFbg/0PvZL7juowDY/Y3rQDFKHpcwpLe4xDpGmNd4FLsYwuNIbp+JPkBJ/zfZ2
+y4nzMknNWGviQ99Gh6G/INjGYo9zj5/d
+--00000000000054966d061cf0a7eb--
 
