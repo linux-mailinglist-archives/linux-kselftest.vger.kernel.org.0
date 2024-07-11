@@ -1,117 +1,141 @@
-Return-Path: <linux-kselftest+bounces-13610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CD3692ECEC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:39:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26FF392ED1E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AD71B2258F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:39:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A02EB21787
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:54:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E2916D334;
-	Thu, 11 Jul 2024 16:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9169216D4EE;
+	Thu, 11 Jul 2024 16:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JN6xzLMr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQjXmNL+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C9416D326
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 16:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634A716CD39;
+	Thu, 11 Jul 2024 16:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720715970; cv=none; b=ZvIOoG88z9gvuktaXxynJtZFzqjmhHSKh6iTNbaV0CB/tTFRd+VIk5bEFBpZ8c7rfHecFAUSlIHtHMVFUwcyS3NzeyzEI0qVLDOcp9RrdQzCxoMYIs0u7G6WtdMHO0IkmKmZO336y2spedQpjrO7sFcRUbn0I+vbqAyfRBF14D8=
+	t=1720716878; cv=none; b=NU37QwA+3VG43Q7pMG59AHif9F+tsG4dQA5v9VmvG3HFboXgYb3OKZOZ4XCx5XDgXQgoc1rdeFHWaGuHL1dc1JIoUzLsERgiis4pbv63LYpkeMVtnAC+R3vGd02JDSlDzQ/O+mE/AcqSPVXIe2BkyL1wZKX6AB0dOd+gQy7tQfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720715970; c=relaxed/simple;
-	bh=e5C+mBjqB8nH1NxFpCc1+REgaVsgeWQdh56jyItZEik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r4MpJQnBLW0pdzWl4wgpjDMs1mBkPnmqedCofM7vVBiP2JAZ70vtwQoeze76Xuo8jg/M7gGZqRVaHRtCQReZkcq3dL9jY++zGY9pramso1ZauXi7TzaEVWOYesXgAdw4ThqHPsO1ufKDmyB/Un1LFjVJCUg9tqPOa5P5+3hei3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JN6xzLMr; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36dd6cbad62so562325ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720715968; x=1721320768; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e5C+mBjqB8nH1NxFpCc1+REgaVsgeWQdh56jyItZEik=;
-        b=JN6xzLMr2kFJcWlYbA9ZkaNrC0UcVxqb4XEQ6SoznaHJeC2JV4d+zc0B0mz636aHRE
-         1ulycWNjN8CE/lANcKq4Iue+qKay8HzAEn7bD0LYKYb9IzoGOJR3EI9rkuOz0o3Z6x9R
-         qt4a2xaCNZzhQvn5JY8BxBCNJs1KfneCSCj1w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720715968; x=1721320768;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e5C+mBjqB8nH1NxFpCc1+REgaVsgeWQdh56jyItZEik=;
-        b=PlTqpIVzOkNvF9HYg5jHZA9RORMJ8PYI0a31bTdcEoE3+vHxrclnLESgO7vFdGwIm8
-         rAeoGQ8zD2xJWShWjv3DJdn7JVZF42Xh7+vdfRQEoGE+QK05ztQ2MRAk4A4b5DBItjqM
-         FIkW6EuEQfu94ArM/uAj+TE/iRdx3+OMYQIISflIScdkf/wdz+KZ9VdSo360osk8F8xJ
-         vk8CUkgRU2q5DsaI6x1gauIgXz6zOP2gbzspAecIq4vwzdH+16p4qaVHy4ThGuVVIaZr
-         1qIpr59gkY9HOR9bWnrUvLo+NJhJz5s1D6pV8Bg00QT75pb4HsWh2Y/FhwU+U7Hp84B/
-         N80Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXAVu3AhVMGnGcqJOOsHJc98F3tEE0HMUMVOamNFNXyjJwqdlZ0jN9kEgFds4ak0UTpITqO0om3owlZmc3WbVn2ggMKuuPvySk6kBymEF5b
-X-Gm-Message-State: AOJu0YypJ65iHL5I53uw7XlMmgwjL+POkzWx2T8gC0+15R13JaXp3swr
-	tUwojZ3T3hwczrXRVld6/7u7ZNR5R9RprGfBmYnYNESj2ALDcq++Kw4p4cCFOI4=
-X-Google-Smtp-Source: AGHT+IEcVXOWjzyyxDKz9J9qAwm6coQfMOzLMPdETUPQ+DFRggTMe1LEOGI457+OLkIquTJysLumyQ==
-X-Received: by 2002:a92:640e:0:b0:383:17f9:6223 with SMTP id e9e14a558f8ab-38d1946e3b9mr29768555ab.2.1720715967995;
-        Thu, 11 Jul 2024 09:39:27 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-38a4a00665dsm15392495ab.52.2024.07.11.09.39.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jul 2024 09:39:27 -0700 (PDT)
-Message-ID: <390d33da-1676-4b01-a7d5-8b5c2cc6a3a9@linuxfoundation.org>
-Date: Thu, 11 Jul 2024 10:39:26 -0600
+	s=arc-20240116; t=1720716878; c=relaxed/simple;
+	bh=YhiyGaiuRRSfHnjOqc3BEsL5YLjUMQ8IUktkjyA/ApU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IHt70+VoO3/M+p6r10siu37XSYLEtqN2LOE5m4mvmGA0g8FQvFbBBC3IfSqJ+k7CpUA/UNwz4XiFN1Mwdk9RH3DNFtAFt56gueCTtNyL5yTqnOWKWN/cZGaa/lHfXIstrN2dxbJRWTOuFx5eq/eTKJThbrNdva2iSugaRcqaD8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQjXmNL+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3033C32786;
+	Thu, 11 Jul 2024 16:54:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720716877;
+	bh=YhiyGaiuRRSfHnjOqc3BEsL5YLjUMQ8IUktkjyA/ApU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MQjXmNL+3yXKgd+NtY095FUXMn8NiTd7S8AQkjb/t29nn2AVOmtFiyRiqb0Y4gJiH
+	 3ogQIC0RG96++F8RFVAwxFO7JVj05EGZcB46TNm5nOEnEjmj3JIqJ7Wey9naLG3s9v
+	 QMFXgGXjnImvUSxG2I7/38VwLp/gScCUQFppOLV6rwS3lvdygnxoFbBhCC1mo/4NDd
+	 12oE9OMp0Wn17xJgUmbQUeP26gsjvw25q0hkNxJaYHU3Ti71djA8ENZigyDYyN7zpm
+	 DaUcNPh7DZ3kUQEQgrbK4pjCIFCwPZddN/QLGcJWQxXYUZDduZpby//0AZOe1qqGf4
+	 ny4k282B+diuw==
+From: Kees Cook <kees@kernel.org>
+To: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Kees Cook <kees@kernel.org>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2] kunit: executor: Simplify string allocation handling
+Date: Thu, 11 Jul 2024 09:54:32 -0700
+Message-Id: <20240711165428.it.345-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: x86: conform test to TAP format output
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- "Chang S. Bae" <chang.seok.bae@intel.com>,
- Binbin Wu <binbin.wu@linux.intel.com>, Ingo Molnar <mingo@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240426101824.2894574-1-usama.anjum@collabora.com>
- <da0f535d-b970-4de5-9dfb-e2cbf62c816b@collabora.com>
- <890460a3-fd09-4f59-ab21-4f5b16256175@collabora.com>
- <f929b8c4-fb66-4724-b2ee-d012a5c20324@collabora.com>
- <0333bafc-295a-4fd8-8099-8fa8c6b0ae23@linuxfoundation.org>
- <0b731ef9-3110-44d8-b768-ccbf7585a08d@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <0b731ef9-3110-44d8-b768-ccbf7585a08d@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2584; i=kees@kernel.org; h=from:subject:message-id; bh=YhiyGaiuRRSfHnjOqc3BEsL5YLjUMQ8IUktkjyA/ApU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmkA5IYYbjf2+UDJNgaLFC2B6iPUrmI21ygPUrL YH9kE40FwCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZpAOSAAKCRCJcvTf3G3A JpNwEACFEm4kfWxNFsNucbzTW5bNVxWSDSwx6Jg5wqG8ATXHyXz/WfyZQ2EhJYFd1nY0Zdvpbbg FTKAD/8hYHpy5Ci73htvaRe9QTl8LhTrR4QOs660Bd3wPh1ebm11IoDCadR6RF4nHzg1linuIw2 ZkrdfLOvq9AAu/9c+Xtl2zAprzYvLVRmxEZ+pNuVsAcLGBCZ6BIONR4F5fF7W2HVOtP4iuuxe5i qN9E6/okxDIN6Z29J0/1Ya8uR0jRI98376WOFYmvmV0/PYiwMrxIiaxbsoiO+nhqyjynW1DJoCh Ns6E/qJnGMs41e1FiI/m5sTgHlYX2Eqez+/Ge4VsQwz+vM+dT37R1h7wCgor8/+x+FV7c2vZgEz 3JzAP+2slipGc1wrCfUZ+H0eTjyizNv0POu8GZGQkrFB8+bCQGGceZ3SxbV8MWcWaKOz00hjV/e JOE3rCzsZkcAeBeRuQD2uVZkFPOK8hn9x4cwaPjx5CFq7cJTvA5w6ffYXKNhTTATEwsyhNM5ZEu PBicdrEvumhwSyCc80owOOJ2rB8DH19TKQufibxV7erwxrHKV0ilEwwsYeK7EdzjXqK0mLSCIMu /gPPWXnQTm6p1FVf3PkPpMihUkkJnp4C51hkZBp+LUIsVyjOw1oAbLJovTBuu9TfkWWJ0+BYibh t4/KHuUJzAWEJ
+ 0g==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On 7/11/24 00:52, Muhammad Usama Anjum wrote:
-> On 7/10/24 9:16 PM, Shuah Khan wrote:
->> On 7/10/24 03:37, Muhammad Usama Anjum wrote:
->>> This patch brings just readability implements by using kselftests wrappers
->>> instead of manual pass/fail test cases counting. It has been on mailing
->>> list from several months now. Please can someone ack or nack?
->>>
->>
->> Okay. I think I responded to your other patches that are adding TAP
->> to individual tests when kselftest wrapped does it for you based on
->> return values.
-> The current test doesn't return any exit value (hence implicitly always 0
-> is returned). The return value in addition to some other changes is getting
-> fixed in this patch.
+The alloc/copy code pattern is better consolidated to single kstrdup (and
+kstrndup) calls instead. This gets rid of deprecated[1] strncpy() uses as
+well. Replace one other strncpy() use with the more idiomatic strscpy().
 
-Yes. Fixing the return the problems. Please send patches to do that
-and I will take them.
+Link: https://github.com/KSPP/linux/issues/90 [1]
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+---
+ lib/kunit/executor.c      | 12 +++---------
+ lib/kunit/executor_test.c |  2 +-
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 70b9a43cd257..34b7b6833df3 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -70,32 +70,26 @@ struct kunit_glob_filter {
+ static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
+ 				    const char *filter_glob)
+ {
+-	const int len = strlen(filter_glob);
+ 	const char *period = strchr(filter_glob, '.');
+ 
+ 	if (!period) {
+-		parsed->suite_glob = kzalloc(len + 1, GFP_KERNEL);
++		parsed->suite_glob = kstrdup(filter_glob, GFP_KERNEL);
+ 		if (!parsed->suite_glob)
+ 			return -ENOMEM;
+-
+ 		parsed->test_glob = NULL;
+-		strcpy(parsed->suite_glob, filter_glob);
+ 		return 0;
+ 	}
+ 
+-	parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
++	parsed->suite_glob = kstrndup(filter_glob, period - filter_glob, GFP_KERNEL);
+ 	if (!parsed->suite_glob)
+ 		return -ENOMEM;
+ 
+-	parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
++	parsed->test_glob = kstrdup(period + 1, GFP_KERNEL);
+ 	if (!parsed->test_glob) {
+ 		kfree(parsed->suite_glob);
+ 		return -ENOMEM;
+ 	}
+ 
+-	strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
+-	strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
+-
+ 	return 0;
+ }
+ 
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+index 3f7f967e3688..f0090c2729cd 100644
+--- a/lib/kunit/executor_test.c
++++ b/lib/kunit/executor_test.c
+@@ -286,7 +286,7 @@ static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+ 
+ 	/* We normally never expect to allocate suites, hence the non-const cast. */
+ 	suite = kunit_kzalloc(test, sizeof(*suite), GFP_KERNEL);
+-	strncpy((char *)suite->name, suite_name, sizeof(suite->name) - 1);
++	strscpy((char *)suite->name, suite_name, sizeof(suite->name));
+ 	suite->test_cases = test_cases;
+ 
+ 	return suite;
+-- 
+2.34.1
 
 
