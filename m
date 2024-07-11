@@ -1,166 +1,106 @@
-Return-Path: <linux-kselftest+bounces-13601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B707492EC6C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:14:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 862E192EC7D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:19:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7AF1F2315B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:14:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19FE3B2496C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C5216C87F;
-	Thu, 11 Jul 2024 16:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2844D16CD12;
+	Thu, 11 Jul 2024 16:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qz5aLucv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0G4skA8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D7C16B38E
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 16:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7EC8BFD;
+	Thu, 11 Jul 2024 16:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720714478; cv=none; b=hMOSElVyuMayrCG8W9WQXqeP0hlYD/FBdS/ULhIpUoazDm5WxRDn7vXXhs9kNlxLRLhL/GXJpw11r3t8HoLZR6xj+NmwKBTUEY1fq3MWFS7u/aKpf9KZ/rICXQBzoI58l5pLA4fNXJQwO3gJrtco+3igPJPpCfrxBkz66Wn6akY=
+	t=1720714770; cv=none; b=aNZ51zrgVVgaQRyn/1wb6jcB5zzrCcRnC8MkbufzKx0d8XT8s3TDeATJMhSjva1/ZlCbyMQ7INw+q4XIjkHE5ScbpjyB4Zs3utdvB4g/uMukav/I5hxNUtljiCtQuOeuQSxBjfTFsH7+hZ2wl2C2XQqeM65KMxwDDV7kvG73u8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720714478; c=relaxed/simple;
-	bh=p0Fd5kqP/qELdWU/vCSn4X7+8f2/BPDr6C4O+78HNvI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T7s5iiLBg00s2Ziq9njZb51Ay3VPxZzn8LwjRvn7MEa5aSkcxUuBo+yawqG2juTCRk1sRbom+Ll7ED7YWBwUeQBgWdI9rVvQF/t6Tl3GVTKh7cG1NKyxq4XgoAaaovnv3zbRTGeaOYo7RZz477KKXlAVbvto48q78j/8UcIAkqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qz5aLucv; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-38713ffc5f7so556005ab.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720714476; x=1721319276; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fiasLvVkTXNMoP1/ktol3zYB4Lu4so/sXSPfIuMBjOQ=;
-        b=Qz5aLucvlf/bSSgVdKS+FXDEHc2cJHKFBytwnBaEBmh21lQCO6AhWfblRILnoQArLF
-         yhe2ENCRxCVNbO0oNb+0x3J5iXTLT0EocEdrGkl7okWzpGvVrcWc9wrcYiI5WbKa9fid
-         pmgDJfPk2HipTl9bIwN6G9qfxfZ767W43Q4+Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720714476; x=1721319276;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fiasLvVkTXNMoP1/ktol3zYB4Lu4so/sXSPfIuMBjOQ=;
-        b=KLUyxEi3P3r6taaZousRfguS48Jzliqh8VKq33Kz8L4g8zaiaob7N9TcXsptcJ/hxM
-         b7imOeRldK2l529aSEeO2xZOZl5PKZySaGErcnU32FNkhj2mSvEGIxwBa8qxo280pj6q
-         FPE/nE5cfvdO3gxmNJsWoPqmU3fW1rOnMYgx32On3zBc/insuwtr6HDhT3jRqXHSephf
-         /WqKq4ujN5ik2ue1M1xXzQ528AsMzXrfHH/bhwWUUEt/pVYQxjW4q0YN7oKvmfmmw2xV
-         qSNsJJbdSLU7q7xpI133EYPwDY4rN1fLe3mc7tpmdnehxszfhf5fa3p+aoZftpxDCt5g
-         oS7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVsBB839Mrk4hrHAZ7RbE312oIGAnEC2sp3sDow6VCJRd5h8nKvuvovtfgBlLyhGIeJB7mqZ6nWitMTrcOasa6ZkmmCne3oHVks0p2+cZ9d
-X-Gm-Message-State: AOJu0YyItpaxFetEnvALwBLXNc1Yoe4dx0ZE19zeO2jammCjCmUVABsN
-	v7zerQA+k5yg5u2014fnA4F5xP3WWXA7Tgw4WLitmJAY1ObJXxOMX+6dNqGViNE=
-X-Google-Smtp-Source: AGHT+IGmK81I/5GXFu3J42YAbYO3XZVPUmrRPMyz4POXr/27hNbZoYV8FRFcwColnWFsAKPbFW7I8w==
-X-Received: by 2002:a5e:de42:0:b0:7f9:3fd9:cbb with SMTP id ca18e2360f4ac-806e171b3a5mr298153439f.1.1720714475739;
-        Thu, 11 Jul 2024 09:14:35 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c12750sm1895166173.125.2024.07.11.09.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jul 2024 09:14:35 -0700 (PDT)
-Message-ID: <c5981eeb-4f6b-41d4-b630-5b17a1e2a00a@linuxfoundation.org>
-Date: Thu, 11 Jul 2024 10:14:34 -0600
+	s=arc-20240116; t=1720714770; c=relaxed/simple;
+	bh=SwRdtjhihPCHAVs2FVYLRfxFyvmKTZPzi6KmiCgoTww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p/CRDdm355AOdS7ft6a8t52NfJIeoJ9j3KjzcPt6NypBaiuYNQcbOzMyDuRcZo2wVHgpUBsjrKOt7DvBMDsgqXSyqoSq1NGOf3Tia/fSXuD1wX3IhdhnBag9ohRqrpMDreWB6gL5S+gZv8GSLzMYUTp/nnXFPo+TR3T1jJ0V1Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0G4skA8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FFDC116B1;
+	Thu, 11 Jul 2024 16:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720714769;
+	bh=SwRdtjhihPCHAVs2FVYLRfxFyvmKTZPzi6KmiCgoTww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D0G4skA8Tn5yxLL2Iaq9ZS0WXdlQKCg5WwzDGl/T2ajNdOEBgGJ4uJpz0EbQoxDjk
+	 9zIDZ8CqL9PcOvxqxeekNgUhGNeDkpOBi7o3crtkwI6K8+lifHEeougZ+C4783p9di
+	 mLyfWCqF3C059TJvW3Mu6K+/zZUvTsIiQ/kkc+8qupeq8UArkFTp6idDFEMLxEu9za
+	 mraOmK2Fll5kJOfttZFOfRRsoj/PW20vLXI3crL2CJoW96kFgMmHdrF7FdL16/p4eK
+	 32wGFuhP9R1G+9KQfU6C+OFvtqJ3X1WvvmcjQogRYuLZi/jkj2PFrsK1gWDnVi0Cx1
+	 2Lu4g/lWDFx2A==
+Date: Thu, 11 Jul 2024 17:19:25 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
+ names
+Message-ID: <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
+References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
+ <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] selftest: x86: conform tests to TAP format output
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240414131807.2253344-1-usama.anjum@collabora.com>
- <dd277b6b-b28e-4860-b285-e89fd5fd3d41@collabora.com>
- <90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org>
- <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
- <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
- <fb305513-580a-4bac-a078-fe0170a6ffa2@linuxfoundation.org>
- <f7eb356d-6fe7-4e36-9fd2-1518addc7bdb@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <f7eb356d-6fe7-4e36-9fd2-1518addc7bdb@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HzrO27/Ki/7DpdHj"
+Content-Disposition: inline
+In-Reply-To: <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
+X-Cookie: Individualists unite!
 
-On 7/10/24 02:58, Muhammad Usama Anjum wrote:
-> Hi Shuah,
-> 
-> Thank you for replying.
-> 
-> On 7/10/24 4:39 AM, Shuah Khan wrote:
->> On 7/2/24 04:17, Muhammad Usama Anjum wrote:
->>> On 6/10/24 10:19 AM, Muhammad Usama Anjum wrote:
->>>> Adding Borislav, Dave and x86 mailing list:
->>>>      Please review the series.
->>> Kind reminder
->>>
->>
->> Usama,
->>
->> As I mentioned another TAP conversion patch from you  patch if the
->> following command gives you TAP, there is  no need to convert.
->>
->> make -C tools/testing/tmp2 run_tests
->> make kselftest TARGETS=tmp2
->>
->> kselftest framework lib.mk and runtests wrappers take care for
->> TAP. The reason to take care of this at framework level is to
->> avoid changes to individual tests. The wrapper keys off of
->> KSFT_* codes returned from tests.
->>
->> Please don't send TAP conversion patches like this one. The output
->> from the commands will have duplicate messages. The reason tests
->> return
->>
->> make -C tools/testing/tmp2 run_tests
->> make kselftest TARGETS=tmp2
-> The current series have several improvements which are beneficial in
-> several ways. I think these improvements should be included. While
-> conforming for TAP following improvements have been made:
-> 
-> *[PATCH 1/4] check_initial_reg_state*
-> Removes manual counting of pass and fail tests
-> Increase readability and maintainability of tests
-> Print logs in standard format (without [RUN], [OK] tags)
-> 
-> *[PATCH 2/4] corrupt_xstate_header*
-> Correct the skip, pass and fail return codes. Otherwise the test always
-> return 0
-> Returns correct number of stats about passed/failed tests
-> Print logs in standard format
-> 
-> *[PATCH 3/4] fsgsbase_restore*
-> Add test skip support instead of returning success at skip time for the
-> kselftest script to understand correct exit status
-> Print details about errno if error occurs
-> Increase readability and maintainability
-> Print logs in standard format
-> 
-> *[PATCH 4/4 entry_from_vm86*
-> Remove manual pass/fail tests counting
-> Increase readability
-> Print details about errno if error occurs
-> Print logs in standard format
-> 
-> 
-> These improvements aren't evident from the description of patches as I
-> thought converting to TAP achieves all this by default. But I can improve
-> the patches description and send patch revision. Thoughts?
-> 
 
-Please drop the TAP conversion and make the other changes in your v2.
+--HzrO27/Ki/7DpdHj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-thanks,
--- Shuah
+On Thu, Jul 11, 2024 at 06:08:38PM +0200, Jaroslav Kysela wrote:
+> On 11. 07. 24 16:33, Mark Brown wrote:
+
+> > Address this by replacing our use of card numbers with card names which are
+> > more likely to be stable across runs. We use the long name since in the
+
+> I think that a combination of card number and card ID may be sufficient (and
+> a compromise). It's shorter and user-friendly. Additionally, a table may be
+> printed at the beginning of report with card number, card ID and long card
+> name for further processing and identification.
+
+These don't help, the problem is that anything which includes the card
+number in the test name result is going to result in unstable test names
+depending on race conditions at boot.  There are automated systems that
+parse kselftest output generically, I'm not sure there's a great deal of
+enthusiasm for writing a custom parser for the ALSA selftests
+specifically.
+
+--HzrO27/Ki/7DpdHj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaQBgwACgkQJNaLcl1U
+h9AYagf/WW+148pc/VOKJhcllAIu66wbfTEChyp2qGQ25wJbxQFCtKMc7cyKhBkG
+qSRReaPNpIZtA+eaWhvAknMVqz+VDpTEw9eV+MDIZOATK5PJ1s7DT7i7VnYgQ9+Y
+aE4XDnR0iw3W4GVp/+dQUAyF/DoD6dyolbhtM2aKaEQunh+pUem6flREdxw4B6nY
+vex/pMtsB6y/4FX1nrhMOsTKs8Pwh76u95ntLSDwgKxU1D3dgD5dbyWwaNSV2JF7
+Z+MdgaIqhb37o9aG50CKy3Tvi+i5/JB1zd7ZClE98LZyr5LMz29iL2Mw/Gl7cWCl
+2CVW2+D1vl/BUhkYjwveXMyjbwZ5Ag==
+=3ekl
+-----END PGP SIGNATURE-----
+
+--HzrO27/Ki/7DpdHj--
 
