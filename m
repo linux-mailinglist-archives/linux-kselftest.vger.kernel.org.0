@@ -1,146 +1,101 @@
-Return-Path: <linux-kselftest+bounces-13599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4E092EC50
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:09:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E59A92EC5D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D53F1C22589
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:09:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 340231F23FC5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B35C16C876;
-	Thu, 11 Jul 2024 16:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC2816C87B;
+	Thu, 11 Jul 2024 16:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="NqLOPntA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y3v87nGQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2420616C6B8;
-	Thu, 11 Jul 2024 16:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9709B16C6B8
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 16:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720714140; cv=none; b=CNTXtGBNF2PGfvOeX6TgaSC9COtAmtIYK0OsNUpYu4+1l0QuMCFdAGLLmu+qlse4LAlKHugHupt5kQ/0lGKCGbwOuSsfAMirku1fICWhxnG8vHvkELnrHV0We0h2DPAA2g2WWPs9AIkTlMEtI9Yr49TGYpHV7aQmjA6+ceUOlPc=
+	t=1720714288; cv=none; b=pL++PMRlmAM9+eOmqQE1psaz3q9Gb60JXgLqauH5yL8RqcbyBuk+6IJnR1S+3D7AvnKURGprQaW1X1uEl8qE6u5UFFbq0d5PRZRYU58FjjrAUoOJ8WFkcIqZJxymWQ/LYetH7waeqF/fK614cUtdVwNROJgUpeI0nod48MRvKv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720714140; c=relaxed/simple;
-	bh=oX+K2yThKj1fpxmvO/QHbTJFPFoB9n4jUVb2mQWaoi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ji6VeieaKW7f7p4JyDDryARGdvd2Lorc71/2wqZJfN0KWHdoX1r5PJSzNdBRLDstAa0s+TlWG1s4pmgar3eouZor5yITFwOuRcw9ZG3+Fote5pULN/Ky4Zz/VRQn0oTkJGKdO5R2IAa3whw9X4b+oZJyteEhtpq8a1CHvYWdVTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=NqLOPntA; arc=none smtp.client-ip=77.48.224.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 5B5EC36227;
-	Thu, 11 Jul 2024 18:08:45 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 5B5EC36227
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1720714125; bh=fTcJ9/vtYBlarMoe3RydLfqA2i+be4xSI0gMLNmSGWw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NqLOPntA/yjhSRbBVO3+kE75rwpmpbg19YrqYXjX50rjErkKDHv4ZuRIETqeX4uK/
-	 iu1LH2MK4ZkNpaXSv/EOmMo/df3PoDYBzlzAQHHHrfCgmj07ZlSngv+/BtZPHf0/gU
-	 DPQ/9KzZMYRs657y7tsEXb6O7mptulctn7qgsGmI=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: perex)
-	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Thu, 11 Jul 2024 18:08:39 +0200 (CEST)
-Message-ID: <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
-Date: Thu, 11 Jul 2024 18:08:38 +0200
+	s=arc-20240116; t=1720714288; c=relaxed/simple;
+	bh=v/Q/FkYQWlP5mhjRIjT1FY0WOityzEUvvrsfXcoTSMM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ke8SxGrsqzJ4xqbk/D9F9nBMSiaAZrPvd+gcBh/ubd+A++zT0mF9aVWmrDkzxAFAGqJJt91oGudSkDcxI+blzd+TTeUN1k/8XX7KtJ6lPCL+0MW8oUjWUaYtVB68pshI+11p0gwU5uNO0Djoa22XsWU8Ro8ubvaobb7lQxrtVpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y3v87nGQ; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a16f4b8bfso18363a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720714285; x=1721319085; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s55DGZEOMg9QZyntspE5hZ/WZzvStwyhAiZPOpnNBOw=;
+        b=y3v87nGQ8GNXpOfw3nPsFkObYSPF3YmtCfdX3ng07LOkc63BtvoZK6RI9l3jKTjoW1
+         LjnR2QPCODB6tVUsLzV2XsvsTNbbo03XnNf2L0MjWWQGcnLE6s75J4cNn5bt1sYVeuQ4
+         CJ3csHfajMLkqHjLtg0Ncy3+nCeMQ7Ty+UlhPE5sHyNtIqEvm971xaLiaCjd19r3YolY
+         Zij2fIu5soRQWUC3UZYkPL4ZOkTEZzThjfGIFGepmywfQJ53ONKajc8UMiEoYr+XH/sA
+         MPwnLfyQY3MU1s2MdEmrLCKrcas9Rgk9zvJu6mERC0+SS4O/RwocUpakd6KQt7WsK5KH
+         AZYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720714285; x=1721319085;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s55DGZEOMg9QZyntspE5hZ/WZzvStwyhAiZPOpnNBOw=;
+        b=CeeQ7TNFFs2wdwrg4cFJxomHHQEI4wSofk/Ay7v6H2nZyam8tU2mfZqR+54fLBTS9V
+         0QTm/4fPEdmsjG5mKqW+HXc3G20mHiKGN6axmAz1+Q4H10OSLqLT4tE84o3UaPpRIUIq
+         cFwb6nfuk27UHWtK2+U5mHIXVF1HrPoe9yNa65d0gw7mEz3vLm0AjVuu75Scrqj672z1
+         YiSyfLs/6fHndxnLIblmf04agtQj7JFe/5RddjD34ZEIzQfmu4RnRWEBoCiP8ZwmX+hV
+         4S/V+mccOzEFkJFxwrd6xwdO2QLQyD3YVt8nic2P1SJXE+V8lKYOte2k86wXdTEK3R/5
+         YGfA==
+X-Forwarded-Encrypted: i=1; AJvYcCV01QseklfCZcRdSzVDj7pP4XHMm7GS1nczemVDPDvA40NThgiVlMrChDZgiPSjuAv2qBbN0tV3OOj60xkmBEU04pu4Qo6TuozZLVLQLAA+
+X-Gm-Message-State: AOJu0YwAF7JiGIsUGBk6ljwyNvBV9EhNpw4o9vGSLxNCI8Qn4rXQFBMC
+	5ys7ubauoLQNA114/oZ8y6K9PdplVUPNpRj4GrzlFWUhuM+/CRMlpLMX+ddaCeqvru+ZXsQyvPK
+	M2Cx2KM9vqGxJ7wCugQ7/d2lvUc1+tnlmQsj9
+X-Google-Smtp-Source: AGHT+IFRIy72DxyOnaKptYGPfmSI7TYhaeEIrTEN9HpfourjbZj/0m6vpze7o2/iiPAowVfOKX+Zg9a5/Y2TvKMPASg=
+X-Received: by 2002:a50:aa8d:0:b0:58b:b1a0:4a2d with SMTP id
+ 4fb4d7f45d1cf-5984e32241fmr231681a12.1.1720714284727; Thu, 11 Jul 2024
+ 09:11:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
- names
-To: Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
-Content-Language: en-US
-From: Jaroslav Kysela <perex@perex.cz>
-Autocrypt: addr=perex@perex.cz; keydata=
- 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
-In-Reply-To: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com> <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
+In-Reply-To: <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
+From: Peter Gonda <pgonda@google.com>
+Date: Thu, 11 Jul 2024 10:11:11 -0600
+Message-ID: <CAMkAt6pYAKzEVkKV1iriQei3opD9j3M4bM3-0yB4sX1wss+jsQ@mail.gmail.com>
+Subject: Re: [RFC 2/5] selftests: KVM: Decouple SEV ioctls from asserts
+To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
+Cc: kvm@vger.kernel.org, shuah@kernel.org, thomas.lendacky@amd.com, 
+	michael.roth@amd.com, seanjc@google.com, pbonzini@redhat.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11. 07. 24 16:33, Mark Brown wrote:
-> Currently for the PCM and mixer tests we report test names which identify
-> the card being tested with the card number. This ensures we have unique
-> names but since card numbers are dynamically assigned at runtime the names
-> we end up with will often not be stable on systems with multiple cards
-> especially where those cards are provided by separate modules loeaded at
-> runtime. This makes it difficult for automated systems and UIs to relate
-> test results between runs on affected platforms.
-> 
-> Address this by replacing our use of card numbers with card names which are
-> more likely to be stable across runs. We use the long name since in the
-> case where we have two of the same card it is more likely to include
-> deduplication information (eg, HDA cards include the address/IRQ). The
-> resulting information is not the most beautiful for human readers but the
-> majority of kselftest output consumption is automated systems and it wasn't
-> that great anyway.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> +int sev_vm_launch_update(struct kvm_vm *vm, uint32_t policy)
+> +{
+> +       struct userspace_mem_region *region;
+> +       int ctr, ret;
+>
+> +       hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
+> +               ret = encrypt_region(vm, region, 0);
+> +               if (ret)
+> +                       return ret;
+> +       }
+>         if (policy & SEV_POLICY_ES)
+>                 vm_sev_ioctl(vm, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
 
-I think that a combination of card number and card ID may be sufficient (and a 
-compromise). It's shorter and user-friendly. Additionally, a table may be 
-printed at the beginning of report with card number, card ID and long card 
-name for further processing and identification.
-
-					Jaroslav
-
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
-
+Adding the sev-es policy bit for negative testing is a bit confusing,
+but I guess it works. For negative testing should we be more explicit?
+Ditto for other usages of `policy` simply to toggle sev-es features.
 
