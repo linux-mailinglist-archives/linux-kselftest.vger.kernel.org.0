@@ -1,124 +1,162 @@
-Return-Path: <linux-kselftest+bounces-13628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13629-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2226592F13F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 23:41:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69E8492F148
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 23:44:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54B3C1C2215F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 21:41:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABBF1B217A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 21:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0692219FA96;
-	Thu, 11 Jul 2024 21:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4C119FA96;
+	Thu, 11 Jul 2024 21:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zp1w1M0V"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YBsNl+zK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F4742042;
-	Thu, 11 Jul 2024 21:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35BB42042;
+	Thu, 11 Jul 2024 21:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720734070; cv=none; b=NkAdIyl/ln7Yr9JDS83PO99lR8Yp/7Facpdt66a3fQVW+qftYUjHw1NU5xf+ESTm44cdM1sdHUNtScHyAJZZlSLFwmLrBvkag7ZO3KFc72YprsGK35YNW7+OZsIPCramfyorf+B0r/czICMkSzskEBn6uoZbkVAEzL4O4XN7HT8=
+	t=1720734266; cv=none; b=ViOysgV7PCZmc5e80XPhcwEhYcuexLATb5HiFjhYyy/Ej4NcQ+QM53CJCiJSNZ4n/lpdJdyQ/OOgHkw+wAtYsfGVoH1GRWhfs+naQIgIEmueKl3Ghz1DLH5sImU0NiG1EmwxKNIRZSvgZ3vPy/ZrwkDdnjC4fqDA/nVshlgTbeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720734070; c=relaxed/simple;
-	bh=g1fNHOiGZm5mn96BaOhihxmzcRcyf74Q/bsZs8K17xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mS15uyU7uEN/YBA8rcw3899mmQM+1tliJ4Cub2R+B+zltPaz2nWpw5G52i1Fqg4sJGKX3MBekcmWIe9eVF7u941w7JWggt4VU0hJvEymXdJv+3wrpt/9TjbfxkbYMpKqaVgjOrpIdyFyRZRxt82dmSZLZg4yWwVEH+DsJXtbsAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zp1w1M0V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45582C116B1;
-	Thu, 11 Jul 2024 21:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720734070;
-	bh=g1fNHOiGZm5mn96BaOhihxmzcRcyf74Q/bsZs8K17xc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Zp1w1M0VOLmBNoOKjAT5CTE8BYrya+H1UwJrflrWESuo7uZue7iRKRZ4zpVGBcO2r
-	 JfHDmhOh1K91cHcdNCjHshXjwawtPn6kxyHX3Y6rlLk3zHEnjhuBZX277+OqLX05+W
-	 +wUPVw/el9mcJ7uNpa3f0WEVqpMx9whj46qVyNBYA1YxFt6Gc+Aap+0IpsZsYS6b6x
-	 99LfRRVFyVT/9XwfcLz99b+8pOGsjni6NXPXPe6e3QNwec5LKy0mZnyaCTJLepsVDG
-	 wYu/+B5BdVB3cVS+n3GFpmp+4R/sbXU58e8C1Y6LSMHLZtG/aJJGaGXSa+fE4rRz4E
-	 M3SWkeRQ1GlnA==
-Date: Thu, 11 Jul 2024 14:41:07 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, linux-mm@kvack.org, Matthew Wilcox
- <willy@infradead.org>
-Subject: Re: [PATCH net-next v16 05/13] page_pool: devmem support
-Message-ID: <20240711144107.0086e0e1@kernel.org>
-In-Reply-To: <CAHS8izNMsCHhJM4hf7pf2p98sp9-3gxL6o7sC6JQnqThxiWjYw@mail.gmail.com>
-References: <20240710001749.1388631-1-almasrymina@google.com>
-	<20240710001749.1388631-6-almasrymina@google.com>
-	<20240710094900.0f808684@kernel.org>
-	<CAHS8izPTqsNQnQWKpDPTxULTFL4vr4k6j9Zw8TQzJVDBMXWMaA@mail.gmail.com>
-	<20240710182322.667f0108@kernel.org>
-	<CAHS8izNMsCHhJM4hf7pf2p98sp9-3gxL6o7sC6JQnqThxiWjYw@mail.gmail.com>
+	s=arc-20240116; t=1720734266; c=relaxed/simple;
+	bh=der/eetOhoSXCm/h5jMDIUGHsFbHn807aMRuYndxSG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YaNBVV4QpPLX1Du+OEDc76ZucIS1lXImub+G5A/syW3Eb0jjGsZFQThEemjou8x1Hz6i32uh2fGFKqDgRROTpbfC1L9xXIrSu3xUvwr51Z3dErF0K8+SXd57pcuQxFT4NeFPXIjiS0hVsOzra/bhBeyIMPnfAMU/SNbwSKEXw2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YBsNl+zK; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1720734255;
+	bh=der/eetOhoSXCm/h5jMDIUGHsFbHn807aMRuYndxSG0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YBsNl+zK4JS6w+FbgkNHx1hD3GS1wTaTl/CKMUvqTcGPPBksjqGAe2nu1lNCL7XAR
+	 pvBzMKmRNgjGLr7oGcylW0NDMuz3sZG7zVQ+qM9x3X1Jd3P/UeI1p9PRQhVVKnkHW9
+	 d0aHDyJ36lW9BC5IHChnUTDo9MelK3tnxp326VgnDzcunl0nE6XncTHmZfTBpf9Qv4
+	 sONVSLXPPmItpalyWqqrCPyvGvEEztVbIdxh/GPRm4jkFwf0GzK1lrdCXN7d8Cyw8k
+	 iSio2Pj/ZjtY9Tmke+s7NxA7V9SwD3ir92YQQ3Y+wBCqAF52y1KvDUlKtF6cKBPOBv
+	 z9GXauStGrSHQ==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 7B92E3782209;
+	Thu, 11 Jul 2024 21:44:14 +0000 (UTC)
+Date: Thu, 11 Jul 2024 17:44:12 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernelci@lists.linux.dev
+Subject: Re: [PATCH v2 0/3] kselftest: Add test to report device log errors
+Message-ID: <1417b57a-ac0b-4e8c-b157-bbe9ebb14e57@notapiano>
+References: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
+ <2024071003-islamist-expediter-a22c@gregkh>
+ <71c479fb-cd25-45ec-8dd3-0521ef951f58@linuxfoundation.org>
+ <e1e32c72-6bd3-4c15-b301-c5670690ba99@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e1e32c72-6bd3-4c15-b301-c5670690ba99@linuxfoundation.org>
 
-On Thu, 11 Jul 2024 13:57:01 -0700 Mina Almasry wrote:
-> > > Sorry none of those are only used by net/core/*. Pretty much all of
-> > > these are used by include/net/page_pool/helpers.h, and some have
-> > > callers in net/core/devmem.c or net/core/skbuff.c
-> > >
-> > > Would you like me to move these pp specific looking ones to
-> > > include/net/page_pool/netmem.h or something similar?  
-> >
-> > That's because some things already in helpers have no real business
-> > being there either. Why is page_pool_set_pp_info() in helpers.h?  
+On Thu, Jul 11, 2024 at 01:53:37PM -0600, Shuah Khan wrote:
+> On 7/10/24 15:49, Shuah Khan wrote:
+> > On 7/10/24 07:11, Greg Kroah-Hartman wrote:
+> > > On Fri, Jul 05, 2024 at 07:29:53PM -0400, Nícolas F. R. A. Prado wrote:
+> > > > Log errors are the most widely used mechanism for reporting issues in
+> > > > the kernel. When an error is logged using the device helpers, eg
+> > > > dev_err(), it gets metadata attached that identifies the subsystem and
+> > > > device where the message is coming from. This series makes use of that
+> > > > metadata in a new test to report which devices logged errors.
+> > > > 
+> > > > The first two patches move a test and a helper script to keep things
+> > > > organized before this new test is added in the third patch.
+> > > > 
+> > > > It is expected that there might be many false-positive error messages
+> > > > throughout the drivers code which will be reported by this test. By
+> > > > having this test in the first place and working through the results we
+> > > > can address those occurrences by adjusting the loglevel of the messages
+> > > > that turn out to not be real errors that require the user's attention.
+> > > > It will also motivate additional error messages to be introduced in the
+> > > > code to detect real errors where they turn out to be missing, since
+> > > > it will be possible to detect said issues automatically.
+> > > > 
+> > > > As an example, below you can see the test result for
+> > > > mt8192-asurada-spherion. The single standing issue has been investigated
+> > > > and will be addressed in an EC firmware update [1]:
+> > > > 
+> > > > TAP version 13
+> > > > 1..1
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `model_name' property: -6
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `energy_full_design' property: -6
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > >   power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > not ok 1 +power_supply:sbs-8-000b
+> > > >   Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> > > > 
+> > > > [1] https://lore.kernel.org/all/cf4d8131-4b63-4c7a-9f27-5a0847c656c4@notapiano
+> > > > 
+> > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > 
+> > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > Is this dependent on a linux-next?
+> > 
+> > Didn't apply to linux-kselftest next.
+> > 
 > 
-> OK, I looked into this a bit. It looks like I can trivially move
-> page_pool_set/clear_pp_info() to page_pool_priv.h, and that lets me
-> move out a few of these netmem helpers to a header under net/core.
+> I tried applying these on top of linux-kselftest next which is at
+> Linux 6.10-rc7 + other patches.
 > 
-> However, to move more of these netmem helpers to a private header, I
-> think I need to move all the page pool dma helpers and reffing helpers
-> to a private header or the .c file, which I think will uninline them
-> as they're eventually called from drivers.
+> I am not sure what is wrong - first patch applies and the second
+> and third don't.
 > 
-> I had guessed the previous authors put those dma and ref helpers in
-> the .h file to inline them as they're used in fast paths. Do you think
-> the refactor and the uninling is desirable? Or should I just do with
-> the trivial moving of the page_pool_set/clear_pp_info() to the private
-> file?
+> git am fails and manual patch application worked for 2/3, same thing
+> with 3.3 - these should apply cleanly since they don't have obvious
+> conflicts.
+> 
+> Please clean this up and send me updated series adding Greg's ack.
 
-The helpers which modify pp_magic and dma_addr should go. I don't see
-anything else on a quick look, but in general the public header
-shouldn't contain helpers which are meant for setup / init of a buffer.
+Oh, now I see what happened. I recently sent another series that touches the
+same file (tools/testing/selftests/devices/test_discoverable_devices.py):
+"kselftest: devices: Allow running test on more platforms"
+https://lore.kernel.org/all/20240613-kselftest-discoverable-probe-mt8195-kci-v1-1-7b396a9b032d@collabora.com/
+
+That was already merged through the usb tree, and is present on next (on which I
+based this series).
+
+In this case I imagine it's best if this series gets picked through the usb
+tree, right? Even if I rebase on kselftest's next, there will be conflicts.
+
+Thanks,
+Nícolas
 
