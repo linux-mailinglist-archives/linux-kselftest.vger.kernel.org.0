@@ -1,101 +1,166 @@
-Return-Path: <linux-kselftest+bounces-13600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E59A92EC5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:11:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B707492EC6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 18:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 340231F23FC5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:11:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7AF1F2315B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC2816C87B;
-	Thu, 11 Jul 2024 16:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C5216C87F;
+	Thu, 11 Jul 2024 16:14:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y3v87nGQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qz5aLucv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9709B16C6B8
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 16:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D7C16B38E
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 16:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720714288; cv=none; b=pL++PMRlmAM9+eOmqQE1psaz3q9Gb60JXgLqauH5yL8RqcbyBuk+6IJnR1S+3D7AvnKURGprQaW1X1uEl8qE6u5UFFbq0d5PRZRYU58FjjrAUoOJ8WFkcIqZJxymWQ/LYetH7waeqF/fK614cUtdVwNROJgUpeI0nod48MRvKv4=
+	t=1720714478; cv=none; b=hMOSElVyuMayrCG8W9WQXqeP0hlYD/FBdS/ULhIpUoazDm5WxRDn7vXXhs9kNlxLRLhL/GXJpw11r3t8HoLZR6xj+NmwKBTUEY1fq3MWFS7u/aKpf9KZ/rICXQBzoI58l5pLA4fNXJQwO3gJrtco+3igPJPpCfrxBkz66Wn6akY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720714288; c=relaxed/simple;
-	bh=v/Q/FkYQWlP5mhjRIjT1FY0WOityzEUvvrsfXcoTSMM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ke8SxGrsqzJ4xqbk/D9F9nBMSiaAZrPvd+gcBh/ubd+A++zT0mF9aVWmrDkzxAFAGqJJt91oGudSkDcxI+blzd+TTeUN1k/8XX7KtJ6lPCL+0MW8oUjWUaYtVB68pshI+11p0gwU5uNO0Djoa22XsWU8Ro8ubvaobb7lQxrtVpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y3v87nGQ; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a16f4b8bfso18363a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:11:26 -0700 (PDT)
+	s=arc-20240116; t=1720714478; c=relaxed/simple;
+	bh=p0Fd5kqP/qELdWU/vCSn4X7+8f2/BPDr6C4O+78HNvI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T7s5iiLBg00s2Ziq9njZb51Ay3VPxZzn8LwjRvn7MEa5aSkcxUuBo+yawqG2juTCRk1sRbom+Ll7ED7YWBwUeQBgWdI9rVvQF/t6Tl3GVTKh7cG1NKyxq4XgoAaaovnv3zbRTGeaOYo7RZz477KKXlAVbvto48q78j/8UcIAkqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qz5aLucv; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-38713ffc5f7so556005ab.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720714285; x=1721319085; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s55DGZEOMg9QZyntspE5hZ/WZzvStwyhAiZPOpnNBOw=;
-        b=y3v87nGQ8GNXpOfw3nPsFkObYSPF3YmtCfdX3ng07LOkc63BtvoZK6RI9l3jKTjoW1
-         LjnR2QPCODB6tVUsLzV2XsvsTNbbo03XnNf2L0MjWWQGcnLE6s75J4cNn5bt1sYVeuQ4
-         CJ3csHfajMLkqHjLtg0Ncy3+nCeMQ7Ty+UlhPE5sHyNtIqEvm971xaLiaCjd19r3YolY
-         Zij2fIu5soRQWUC3UZYkPL4ZOkTEZzThjfGIFGepmywfQJ53ONKajc8UMiEoYr+XH/sA
-         MPwnLfyQY3MU1s2MdEmrLCKrcas9Rgk9zvJu6mERC0+SS4O/RwocUpakd6KQt7WsK5KH
-         AZYw==
+        d=linuxfoundation.org; s=google; t=1720714476; x=1721319276; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fiasLvVkTXNMoP1/ktol3zYB4Lu4so/sXSPfIuMBjOQ=;
+        b=Qz5aLucvlf/bSSgVdKS+FXDEHc2cJHKFBytwnBaEBmh21lQCO6AhWfblRILnoQArLF
+         yhe2ENCRxCVNbO0oNb+0x3J5iXTLT0EocEdrGkl7okWzpGvVrcWc9wrcYiI5WbKa9fid
+         pmgDJfPk2HipTl9bIwN6G9qfxfZ767W43Q4+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720714285; x=1721319085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s55DGZEOMg9QZyntspE5hZ/WZzvStwyhAiZPOpnNBOw=;
-        b=CeeQ7TNFFs2wdwrg4cFJxomHHQEI4wSofk/Ay7v6H2nZyam8tU2mfZqR+54fLBTS9V
-         0QTm/4fPEdmsjG5mKqW+HXc3G20mHiKGN6axmAz1+Q4H10OSLqLT4tE84o3UaPpRIUIq
-         cFwb6nfuk27UHWtK2+U5mHIXVF1HrPoe9yNa65d0gw7mEz3vLm0AjVuu75Scrqj672z1
-         YiSyfLs/6fHndxnLIblmf04agtQj7JFe/5RddjD34ZEIzQfmu4RnRWEBoCiP8ZwmX+hV
-         4S/V+mccOzEFkJFxwrd6xwdO2QLQyD3YVt8nic2P1SJXE+V8lKYOte2k86wXdTEK3R/5
-         YGfA==
-X-Forwarded-Encrypted: i=1; AJvYcCV01QseklfCZcRdSzVDj7pP4XHMm7GS1nczemVDPDvA40NThgiVlMrChDZgiPSjuAv2qBbN0tV3OOj60xkmBEU04pu4Qo6TuozZLVLQLAA+
-X-Gm-Message-State: AOJu0YwAF7JiGIsUGBk6ljwyNvBV9EhNpw4o9vGSLxNCI8Qn4rXQFBMC
-	5ys7ubauoLQNA114/oZ8y6K9PdplVUPNpRj4GrzlFWUhuM+/CRMlpLMX+ddaCeqvru+ZXsQyvPK
-	M2Cx2KM9vqGxJ7wCugQ7/d2lvUc1+tnlmQsj9
-X-Google-Smtp-Source: AGHT+IFRIy72DxyOnaKptYGPfmSI7TYhaeEIrTEN9HpfourjbZj/0m6vpze7o2/iiPAowVfOKX+Zg9a5/Y2TvKMPASg=
-X-Received: by 2002:a50:aa8d:0:b0:58b:b1a0:4a2d with SMTP id
- 4fb4d7f45d1cf-5984e32241fmr231681a12.1.1720714284727; Thu, 11 Jul 2024
- 09:11:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720714476; x=1721319276;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fiasLvVkTXNMoP1/ktol3zYB4Lu4so/sXSPfIuMBjOQ=;
+        b=KLUyxEi3P3r6taaZousRfguS48Jzliqh8VKq33Kz8L4g8zaiaob7N9TcXsptcJ/hxM
+         b7imOeRldK2l529aSEeO2xZOZl5PKZySaGErcnU32FNkhj2mSvEGIxwBa8qxo280pj6q
+         FPE/nE5cfvdO3gxmNJsWoPqmU3fW1rOnMYgx32On3zBc/insuwtr6HDhT3jRqXHSephf
+         /WqKq4ujN5ik2ue1M1xXzQ528AsMzXrfHH/bhwWUUEt/pVYQxjW4q0YN7oKvmfmmw2xV
+         qSNsJJbdSLU7q7xpI133EYPwDY4rN1fLe3mc7tpmdnehxszfhf5fa3p+aoZftpxDCt5g
+         oS7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVsBB839Mrk4hrHAZ7RbE312oIGAnEC2sp3sDow6VCJRd5h8nKvuvovtfgBlLyhGIeJB7mqZ6nWitMTrcOasa6ZkmmCne3oHVks0p2+cZ9d
+X-Gm-Message-State: AOJu0YyItpaxFetEnvALwBLXNc1Yoe4dx0ZE19zeO2jammCjCmUVABsN
+	v7zerQA+k5yg5u2014fnA4F5xP3WWXA7Tgw4WLitmJAY1ObJXxOMX+6dNqGViNE=
+X-Google-Smtp-Source: AGHT+IGmK81I/5GXFu3J42YAbYO3XZVPUmrRPMyz4POXr/27hNbZoYV8FRFcwColnWFsAKPbFW7I8w==
+X-Received: by 2002:a5e:de42:0:b0:7f9:3fd9:cbb with SMTP id ca18e2360f4ac-806e171b3a5mr298153439f.1.1720714475739;
+        Thu, 11 Jul 2024 09:14:35 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c12750sm1895166173.125.2024.07.11.09.14.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jul 2024 09:14:35 -0700 (PDT)
+Message-ID: <c5981eeb-4f6b-41d4-b630-5b17a1e2a00a@linuxfoundation.org>
+Date: Thu, 11 Jul 2024 10:14:34 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com> <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
-In-Reply-To: <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
-From: Peter Gonda <pgonda@google.com>
-Date: Thu, 11 Jul 2024 10:11:11 -0600
-Message-ID: <CAMkAt6pYAKzEVkKV1iriQei3opD9j3M4bM3-0yB4sX1wss+jsQ@mail.gmail.com>
-Subject: Re: [RFC 2/5] selftests: KVM: Decouple SEV ioctls from asserts
-To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-Cc: kvm@vger.kernel.org, shuah@kernel.org, thomas.lendacky@amd.com, 
-	michael.roth@amd.com, seanjc@google.com, pbonzini@redhat.com, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] selftest: x86: conform tests to TAP format output
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org
+Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240414131807.2253344-1-usama.anjum@collabora.com>
+ <dd277b6b-b28e-4860-b285-e89fd5fd3d41@collabora.com>
+ <90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org>
+ <386da8e3-1559-4ec2-9a66-f5f3f6405a2b@collabora.com>
+ <23db41bb-1f3b-4b7b-95ac-960b8775a062@collabora.com>
+ <fb305513-580a-4bac-a078-fe0170a6ffa2@linuxfoundation.org>
+ <f7eb356d-6fe7-4e36-9fd2-1518addc7bdb@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <f7eb356d-6fe7-4e36-9fd2-1518addc7bdb@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> +int sev_vm_launch_update(struct kvm_vm *vm, uint32_t policy)
-> +{
-> +       struct userspace_mem_region *region;
-> +       int ctr, ret;
->
-> +       hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
-> +               ret = encrypt_region(vm, region, 0);
-> +               if (ret)
-> +                       return ret;
-> +       }
->         if (policy & SEV_POLICY_ES)
->                 vm_sev_ioctl(vm, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
+On 7/10/24 02:58, Muhammad Usama Anjum wrote:
+> Hi Shuah,
+> 
+> Thank you for replying.
+> 
+> On 7/10/24 4:39 AM, Shuah Khan wrote:
+>> On 7/2/24 04:17, Muhammad Usama Anjum wrote:
+>>> On 6/10/24 10:19 AM, Muhammad Usama Anjum wrote:
+>>>> Adding Borislav, Dave and x86 mailing list:
+>>>>      Please review the series.
+>>> Kind reminder
+>>>
+>>
+>> Usama,
+>>
+>> As I mentioned another TAP conversion patch from you  patch if the
+>> following command gives you TAP, there is  no need to convert.
+>>
+>> make -C tools/testing/tmp2 run_tests
+>> make kselftest TARGETS=tmp2
+>>
+>> kselftest framework lib.mk and runtests wrappers take care for
+>> TAP. The reason to take care of this at framework level is to
+>> avoid changes to individual tests. The wrapper keys off of
+>> KSFT_* codes returned from tests.
+>>
+>> Please don't send TAP conversion patches like this one. The output
+>> from the commands will have duplicate messages. The reason tests
+>> return
+>>
+>> make -C tools/testing/tmp2 run_tests
+>> make kselftest TARGETS=tmp2
+> The current series have several improvements which are beneficial in
+> several ways. I think these improvements should be included. While
+> conforming for TAP following improvements have been made:
+> 
+> *[PATCH 1/4] check_initial_reg_state*
+> Removes manual counting of pass and fail tests
+> Increase readability and maintainability of tests
+> Print logs in standard format (without [RUN], [OK] tags)
+> 
+> *[PATCH 2/4] corrupt_xstate_header*
+> Correct the skip, pass and fail return codes. Otherwise the test always
+> return 0
+> Returns correct number of stats about passed/failed tests
+> Print logs in standard format
+> 
+> *[PATCH 3/4] fsgsbase_restore*
+> Add test skip support instead of returning success at skip time for the
+> kselftest script to understand correct exit status
+> Print details about errno if error occurs
+> Increase readability and maintainability
+> Print logs in standard format
+> 
+> *[PATCH 4/4 entry_from_vm86*
+> Remove manual pass/fail tests counting
+> Increase readability
+> Print details about errno if error occurs
+> Print logs in standard format
+> 
+> 
+> These improvements aren't evident from the description of patches as I
+> thought converting to TAP achieves all this by default. But I can improve
+> the patches description and send patch revision. Thoughts?
+> 
 
-Adding the sev-es policy bit for negative testing is a bit confusing,
-but I guess it works. For negative testing should we be more explicit?
-Ditto for other usages of `policy` simply to toggle sev-es features.
+Please drop the TAP conversion and make the other changes in your v2.
+
+thanks,
+-- Shuah
 
