@@ -1,165 +1,192 @@
-Return-Path: <linux-kselftest+bounces-13621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D14992EFD8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 21:39:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E244C92EFEF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 21:48:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C4861F243F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 19:39:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93E5E28290C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 19:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43DA018755E;
-	Thu, 11 Jul 2024 19:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D3319E811;
+	Thu, 11 Jul 2024 19:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fg5YMIR3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LjLdM4x3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A36918732C
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 19:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8F355C1A
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 19:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720726794; cv=none; b=GVbiIJQQoWovRXW8BLDRVjSXFYBHDyC0A4g0iEDmuIYHZDFRvkAshMotY1kj68y9kkWMKqBywThr4+6mSbP32p0U9wSI74DMpoNZ38E2INLdjGkozlvV1KKXQwe7omFoc5Dm9xuH1pq7lxO73xoind4Mdx+KFrhRamaEkk8bwww=
+	t=1720727329; cv=none; b=VfoOsMH2ifJoQGX7dUVFngiv2sPYBPbjetFiz3UTtQeUrP3pCHyALY6L+5nP9hnu03tYgx7tMNSAl2LBsGxmbrC3NiVPk2vyQxnLnlwGEZQlqDuQqdGTxsw4VK2+16SKzEeOb5ytS16i/w5DPoWG1N1KpYVKQyiPbyOC5yes4OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720726794; c=relaxed/simple;
-	bh=6c9enNd5xXF7GHrH/1e8o7hHuPbsJhlGShC4QQsotxc=;
+	s=arc-20240116; t=1720727329; c=relaxed/simple;
+	bh=tb58gEoHRf00usq4YrS77k7tSz89sKAGoUyIQBAoONg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E77bmgQo6hFC8hWvBOeA2VKA8l80tNaQCVydlrVSHy3+pplznkxWNgMTLkmYd1yQ8lIlKpWzJubtt6OuYsXqKGLqZ8ftaZfPFqiCuBmnPPOE2LnHvgndbAiJKLxbmE320q7ILZ5g6EewYM2AWUQQeMtTudFGgLfDvv/qd3n5UGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ericchancf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fg5YMIR3; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=ecN92vXuL3Y2M3s3s6Myb/U3s/r91hbBuiJ1YYtySgD0INQBS5FgA51Yvb9wI3FCO6B/zkcIL69lX0Oq/vvhWyGR/xv4UvZsqqTXTio1Z/4ntxfDVcg46o1XqJLK5A1jTU3MtK0uPXdaHOFP0000FDhT7GY0pSGmhJ6Ui+dj/cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ericchancf.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LjLdM4x3; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ericchancf.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e03a5534d58so1851619276.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 12:39:51 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0561513c21so2508964276.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 12:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720726791; x=1721331591; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1720727326; x=1721332126; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGX/U2MB6y0a+maZqAk3LokToAOteYrURf5ZQXwr7AQ=;
-        b=Fg5YMIR3GvpHP4P6Lt0HMN9UZC3r7a5H0HJxlnaFY3V4fdXnehM/MrSyvTzermS98z
-         /skwh3mZCEVMPk4+IU9fVmbD5uxxG5yLr1nndkxHf8ouRGgg973sSRIfOKwtOD/eAM20
-         KLv8lCG0mXCzZ4bwinxqkfIhP84iUk69hCR3qHv6sdYFXEXyimPQnIKYM0uqdPfFcF1a
-         xykB4i7LaQnti8aDzbBb7dE8jAU0j+2YZbfljlwVMrLF2XrJBIkLjhiOegYHkC3CG537
-         AfZ9ly8pxMf1h7rLnZ693n5Mo3B+gqs0ahKM2Yg0FWvjxAbBsqRW6KumW00tACmIuZZn
-         CP3A==
+        bh=7aElB1fegglFT2D3JN2CLPcQ6qQqO2qosToZ4jk6yCY=;
+        b=LjLdM4x3TA62czES2Km2g3UH7qQJLQJL1GMIDsQYMHQrh64iYJ5XsUkKydx2KHja9A
+         lvJd5r1Sdw3+ZfQAl0h/0hG1FadMwSaB0BSN8M8pnttTUwi+fFFjrlCHe7HkfuGqR62n
+         gVND+o7RSqop7Ipc6jemn/lZsBGoY0lfFLQPgLwvoUHvqGnWpDHz3aWgO8E2k9VwNsPP
+         PZgCD0DMuF0ND3jMQpXyw+Xb1rT2ydUZe+EsiMSU6ANkrpHv7x1VwZcvdEfPuGx002Rx
+         fGBwFporDmjvz1BBv7hxuzP/O/EOGYSrlhSiIY8jpk+VuaEmssKGGtWY0WJWfc5SZQ72
+         v8jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720726791; x=1721331591;
+        d=1e100.net; s=20230601; t=1720727326; x=1721332126;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGX/U2MB6y0a+maZqAk3LokToAOteYrURf5ZQXwr7AQ=;
-        b=vXSM2FL51ZT9LP2Pf9Faevs+7v4+9adHxogX/nn00YLsLu/SX59ej7R3X8VgfY5GRX
-         sTNPAHkaaenUo+L0ZG+y1sk9hVuKk6H2Nq6D8XQ0SUKhwC8v7AqsSrUZMVlJEpM95H1g
-         sqzY9F0ThWZpbNhi7LlgJDj2Jaj5cMGklk7TYcY3dVPWp/jotkFDBSbEkJPQNupgBKNz
-         i+g5tbw7PGLlyTO/v018vsmPFsNz5i5u6FiLOwTJhMRS7TbuxMULxcZLL9LbkAzrIHSf
-         4fs5lZ3sSZTVj2TO7qT4PZd3QD4ny3k5PodiZoU+EXWfnHp8My0JCERVAqkZuFX7d3LB
-         q1jg==
-X-Gm-Message-State: AOJu0Yzl1PorQBQBQr5bodqBvCbBss79K8CCID55koLxO5FyeZKJD6Q2
-	TGxNYu+w9BOV4oOJX+AUWRtjtoXo3jjKcDaa5IAAiRmt3c2vsKuMiZnIO+RjNc0ahOazw60pB/Z
-	HQ0+BQkwkzFg3iASuhA==
-X-Google-Smtp-Source: AGHT+IFQhBj+gG4iTlqi9n6jzYom//iTBl4rGE2Zd1V1Jd14gBb2JQb/Ng5vfq+MIw6tBclm4kGizOa0PjvJNpJl
+        bh=7aElB1fegglFT2D3JN2CLPcQ6qQqO2qosToZ4jk6yCY=;
+        b=oJmg8pRzTbPaE3R3TPIQfyZnmyUaBceBOeXmoXGH2pVNQj9wSi39HtZr7ZQV697nEw
+         H/kNETKwsfI2xcjEgD4HtMBTPKpNo453nRHJK5Cw522H6BPaXf6SO6dQml7Knmk1j9aG
+         qzDSaKlEcOvF92YwhCTibghoH/FfurMVp9EwKEo7FCyGLsb5OzC2tbxQYEXnruDEy4P1
+         lcwrDyLKEcnhyluqPkhRG1z80aMHQj79ADqMhUNPvWV1uVy8UNnybVVxj+qQzF/8Jn7s
+         tJoKeYh+5ZH0kDU2a/Kc+ocWyZwS/F9wJTqzpVG5auVGpeQojJshcJU6WX0MwM2Pcq3E
+         a6Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUhZJyVwXb+9wnBO8c+KaKNZ0OJ20rG0coH298DW8ud9vWu4DxIR/q3MLXtRk0rDhP+sH0/V+PHr5LrFD4nW9+UFCWYXAriLBemcrPzEbho
+X-Gm-Message-State: AOJu0YyHyeEtwijwrAWffneVpmrCz09vet1nXRKO+x0LN7W5tuXJG2y+
+	DoMJ2BpdIUzISipXqV80pNedLHAUWNMkMLKhbeNdWvp6gr5SWkxVMOqApiNFeBLQue6KLEBjx4r
+	8WFLe4BZQQmzR6yIaKw==
+X-Google-Smtp-Source: AGHT+IHnnxoOarI7jzIaWtWcX2Acp5MLnm56F5CDC46aUMGpIq0booqF5aFvVLZgeP6B7QwA3ZvVN3nNWTsG0DMV
 X-Received: from ericchancf.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:4139])
- (user=ericchancf job=sendgmr) by 2002:a05:6902:722:b0:e02:8473:82c4 with SMTP
- id 3f1490d57ef6-e041b17715amr17667276.11.1720726791048; Thu, 11 Jul 2024
- 12:39:51 -0700 (PDT)
-Date: Thu, 11 Jul 2024 19:39:45 +0000
-In-Reply-To: <20240711193729.108720-1-ericchancf@google.com>
+ (user=ericchancf job=sendgmr) by 2002:a05:6902:1508:b0:dfa:ff27:db9 with SMTP
+ id 3f1490d57ef6-e058a92c5e8mr4355276.5.1720727325988; Thu, 11 Jul 2024
+ 12:48:45 -0700 (PDT)
+Date: Thu, 11 Jul 2024 19:48:39 +0000
+In-Reply-To: <CABVgOSkJOyLDZmPk5vj+o7aRbEZFDJvynWRacNJZ_M_gn9x1XQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240711193729.108720-1-ericchancf@google.com>
+References: <CABVgOSkJOyLDZmPk5vj+o7aRbEZFDJvynWRacNJZ_M_gn9x1XQ@mail.gmail.com>
 X-Mailer: git-send-email 2.45.2.993.g49e7a77208-goog
-Message-ID: <20240711193945.110170-1-ericchancf@google.com>
-Subject: [PATCH v2 3/3] kunit: Introduce KUNIT_ASSERT_MEMEQ and
- KUNIT_ASSERT_MEMNEQ macros
+Message-ID: <20240711194839.116575-1-ericchancf@google.com>
+Subject: Re: [PATCH 2/3] kunit: Rename KUNIT_ASSERT_FAILURE to KUNIT_ASSERT
+ for readability
 From: Eric Chan <ericchancf@google.com>
-To: brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, ericchancf@google.com
+To: davidgow@google.com
+Cc: brendan.higgins@linux.dev, ericchancf@google.com, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, rmoar@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Introduces KUNIT_ASSERT_MEMEQ and KUNIT_ASSERT_MEMNEQ macros
-to provide assert-type equivalents for memory comparison.
-While KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ are available for
-expectations, the addition of these new macros ensures that assertions
-can also be used for memory comparisons, enhancing the consistency and
-completeness of the kunit framework.
+On Thu, Jul 11, 2024 at 11:49 AM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, 11 Jul 2024 at 01:06, Eric Chan <ericchancf@google.com> wrote:
+> >
+> > Both KUNIT_FAIL and KUNIT_ASSERT_FAILURE defined to KUNIT_FAIL_ASSERTION
+> > with different tpye of kunit_assert_type. The current naming of
+> > KUNIT_ASSERT_FAILURE and KUNIT_FAIL_ASSERTION is confusing due to their
+> > similarities. To improve readability and symmetry, renames
+> > KUNIT_ASSERT_FAILURE to KUNIT_ASSERT. Makes the naming consistent,
+> > with KUNIT_FAIL and KUNIT_ASSERT being symmetrical.
+> > Additionally, an explanation for KUNIT_ASSERT has been added to clarify
+> > its usage.
+> >
+> > Signed-off-by: Eric Chan <ericchancf@google.com>
+> > ---
+>
+> I personally am not a fan of KUNIT_ASSERT() as a name here: to me it
+> implies that we're checking a boolean (like KUNIT_ASSERT_TRUE()).
+>
+> Does making this 'KUNIT_FAIL_AND_EXIT()' / 'KUNIT_FAIL_AND_ABORT()' or
+> similar seem clearer to you?
+>
+> (Or possibly we could make this KUNIT_FAIL(), and make the existing
+> KUNIT_FAIL() become KUNIT_MARK_FAILED(), though I think it's not worth
+> the churn personally.)
+>
+> -- David
 
-Signed-off-by: Eric Chan <ericchancf@google.com>
----
- include/kunit/test.h | 54 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Hi David, 
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 774c42721412..67ad0e026bbf 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -1451,6 +1451,60 @@ do {									       \
- 				   fmt,					       \
- 				   ##__VA_ARGS__)
- 
-+/**
-+ * KUNIT_ASSERT_MEMEQ() - Asserts that the first @size bytes of @left and @right are equal.
-+ * @test: The test context object.
-+ * @left: An arbitrary expression that evaluates to the specified size.
-+ * @right: An arbitrary expression that evaluates to the specified size.
-+ * @size: Number of bytes compared.
-+ *
-+ * Sets an assertion that the values that @left and @right evaluate to are
-+ * equal. This is semantically equivalent to
-+ * KUNIT_ASSERT_TRUE(@test, !memcmp((@left), (@right), (@size))). See
-+ * KUNIT_ASSERT_TRUE() for more information.
-+ *
-+ * Although this assertion works for any memory block, it is not recommended
-+ * for comparing more structured data, such as structs. This assertion is
-+ * recommended for comparing, for example, data arrays.
-+ */
-+#define KUNIT_ASSERT_MEMEQ(test, left, right, size) \
-+	KUNIT_ASSERT_MEMEQ_MSG(test, left, right, size, NULL)
-+
-+#define KUNIT_ASSERT_MEMEQ_MSG(test, left, right, size, fmt, ...)	       \
-+	KUNIT_MEM_ASSERTION(test,					       \
-+			    KUNIT_ASSERTION,				       \
-+			    left, ==, right,				       \
-+			    size,					       \
-+			    fmt,					       \
-+			    ##__VA_ARGS__)
-+
-+/**
-+ * KUNIT_ASSERT_MEMNEQ() - Asserts that the first @size bytes of @left and @right are not equal.
-+ * @test: The test context object.
-+ * @left: An arbitrary expression that evaluates to the specified size.
-+ * @right: An arbitrary expression that evaluates to the specified size.
-+ * @size: Number of bytes compared.
-+ *
-+ * Sets an assertion that the values that @left and @right evaluate to are
-+ * not equal. This is semantically equivalent to
-+ * KUNIT_ASSERT_TRUE(@test, memcmp((@left), (@right), (@size))). See
-+ * KUNIT_ASSERT_TRUE() for more information.
-+ *
-+ * Although this assertion works for any memory block, it is not recommended
-+ * for comparing more structured data, such as structs. This assertion is
-+ * recommended for comparing, for example, data arrays.
-+ */
-+#define KUNIT_ASSERT_MEMNEQ(test, left, right, size) \
-+	KUNIT_ASSERT_MEMNEQ_MSG(test, left, right, size, NULL)
-+
-+#define KUNIT_ASSERT_MEMNEQ_MSG(test, left, right, size, fmt, ...)	       \
-+	KUNIT_MEM_ASSERTION(test,					       \
-+			    KUNIT_ASSERTION,				       \
-+			    left, !=, right,				       \
-+			    size,					       \
-+			    fmt,					       \
-+			    ##__VA_ARGS__)
-+
- /**
-  * KUNIT_ASSERT_NULL() - Asserts that pointers @ptr is null.
-  * @test: The test context object.
--- 
-2.45.2.993.g49e7a77208-goog
+Thank you very much for patiently reviewing.
+I understand your suggestion, indeed KUNIT_ASSERT will be misunderstood as still an assert behavior.
+But in fact, this macro has one extra abort behavior than KUNIT_FAIL.
+I think KUNIT_FAIL_AND_ABORT is a pretty good name to understand itself.
 
+I've updated patch v2 at [0].
+Thanks for the reviewing and suggestions.
+
+[0] https://lore.kernel.org/lkml/20240711193729.108720-1-ericchancf@google.com/
+
+Sincerely,
+  Eric Chan
+
+>
+>
+>
+>
+> >  drivers/input/tests/input_test.c |  2 +-
+> >  include/kunit/assert.h           |  2 +-
+> >  include/kunit/test.h             | 13 ++++++++++++-
+> >  3 files changed, 14 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+> > index 2fa5b725ae0a..cbab24a265fa 100644
+> > --- a/drivers/input/tests/input_test.c
+> > +++ b/drivers/input/tests/input_test.c
+> > @@ -31,7 +31,7 @@ static int input_test_init(struct kunit *test)
+> >         ret = input_register_device(input_dev);
+> >         if (ret) {
+> >                 input_free_device(input_dev);
+> > -               KUNIT_ASSERT_FAILURE(test, "Register device failed: %d", ret);
+> > +               KUNIT_ASSERT(test, "Register device failed: %d", ret);
+> >         }
+> >
+> >         test->priv = input_dev;
+> > diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> > index 24c2b9fa61e8..02c6f7bb1d26 100644
+> > --- a/include/kunit/assert.h
+> > +++ b/include/kunit/assert.h
+> > @@ -60,7 +60,7 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
+> >   * struct kunit_fail_assert - Represents a plain fail expectation/assertion.
+> >   * @assert: The parent of this type.
+> >   *
+> > - * Represents a simple KUNIT_FAIL/KUNIT_ASSERT_FAILURE that always fails.
+> > + * Represents a simple KUNIT_FAIL/KUNIT_ASSERT that always fails.
+> >   */
+> >  struct kunit_fail_assert {
+> >         struct kunit_assert assert;
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 87a232421089..d1b085fd5dc3 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -1193,7 +1193,18 @@ do {                                                                            \
+> >                                                 fmt,                           \
+> >                                                 ##__VA_ARGS__)
+> >
+> > -#define KUNIT_ASSERT_FAILURE(test, fmt, ...) \
+> > +/**
+> > + * KUNIT_ASSERT() - Always causes a test to assert when evaluated.
+> > + * @test: The test context object.
+> > + * @fmt: an informational message to be printed when the assertion is made.
+> > + * @...: string format arguments.
+> > + *
+> > + * The opposite of KUNIT_SUCCEED(), it is an assertion that always fails. In
+> > + * other words, it always results in a failed assertion, and consequently
+> > + * always causes the test case to assert when evaluated. See KUNIT_ASSERT_TRUE()
+> > + * for more information.
+> > + */
+> > +#define KUNIT_ASSERT(test, fmt, ...) \
+> >         KUNIT_FAIL_ASSERTION(test, KUNIT_ASSERTION, fmt, ##__VA_ARGS__)
+> >
+> >  /**
+> > --
+> > 2.45.2.803.g4e1b14247a-goog
+> >
 
