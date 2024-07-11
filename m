@@ -1,42 +1,42 @@
-Return-Path: <linux-kselftest+bounces-13559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77C8B92E5FD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 087C492E625
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:20:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BCDA1C20CD3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:19:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D03C1C23451
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900BE15D5C7;
-	Thu, 11 Jul 2024 11:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C6BD16B739;
+	Thu, 11 Jul 2024 11:14:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40AA415CD61;
-	Thu, 11 Jul 2024 11:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1E116B38F;
+	Thu, 11 Jul 2024 11:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720696442; cv=none; b=G88jRs4+rb9jeqcGiYBB9mo8hRzeAutvXE0HFDXfp1Wi/VBOTnycuT55eOQs+sAvXxagjRw+g3ajDBLAj8ffrTEZ+RuDfMPSLR5FxrT47plL5aO2ApoYb/p+iBKaUM8Z0dSaUo+A4w2xTrLXiRzcqvwNv718ELBhMDimyEI6/Og=
+	t=1720696447; cv=none; b=IG9LHpgeZ1ZhzCUiFp/i/kj6YZPXpy5dGc575JBOrNWqRIjg1BbanQKv4Q+PwDjiWGIHfssy3sH0/UKOtMaWY1wrP2Jm0UR3urh2PahmseY4wJn17srAe5Pe6QVXngTFj4bL0DhiooAhFGJmSGZu/AZpIxP3lOza9ZkS9qAhkp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720696442; c=relaxed/simple;
-	bh=Hg9ese+3RioISfNTgvRm6HlDHVGrAICdXCleHqiZp3o=;
+	s=arc-20240116; t=1720696447; c=relaxed/simple;
+	bh=PM8AFPWlS6LkP5AL3p5RSlFkj5rPkUtAUSQ60pJZkWo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dOJCi2z6Za/FQgW/GlftM/LQjonui5CnOdYy1muaDE7uNY0XkCUrERhDU8DQ+CkVq5LZizjZNHVgksvCGyZktMkD2k/8C34OuBoQnkXlWx//5UriXmyfQty2PtAQyY+J69jfFCqbJbXScJZUXWnM8cok0H6N9a1yJnimpeN9JbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=PrlSZE8nYwUo5q+C+Xla3cIFFdXmcLhAZHW/FB/zmJEspSJVa6d/701Tkd8x+SbRFDCEGujHSxD+zjeOy9w6IwQBy8ATBq3iS66L2uolTNi9JW9EVRC+oB3oQ4/SG0mYvdaIyIZtVOg2BRibLled4DUfdqZ9wC9DcJfz1iiI9mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WKXCq6g8rz4f3m6w;
-	Thu, 11 Jul 2024 19:13:43 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WKXCs2JkNz4f3jsL;
+	Thu, 11 Jul 2024 19:13:45 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id CA1321A0572;
+	by mail.maildlp.com (Postfix) with ESMTP id 011CB1A0170;
 	Thu, 11 Jul 2024 19:13:56 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S4;
+	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S5;
 	Thu, 11 Jul 2024 19:13:56 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -80,9 +80,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH bpf-next v4 02/20] lsm: Refactor return value of LSM hook inode_need_killpriv
-Date: Thu, 11 Jul 2024 19:18:50 +0800
-Message-Id: <20240711111908.3817636-3-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v4 03/20] lsm: Refactor return value of LSM hook inode_getsecurity
+Date: Thu, 11 Jul 2024 19:18:51 +0800
+Message-Id: <20240711111908.3817636-4-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
 References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
@@ -93,12 +93,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3AFWfGw4xWFW5Ary7Gr4xXrb_yoW3XFy7pF
-	4UKF13Gws5XFy7Wrn7tFsru34SvFWfWrW7JFZ09w12yFnrJr1xKr4ak3yUCryrCr1j9rnI
-	v3ZFkw4rCr15JrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxtry5AryUJF1fKF1xXryrZwb_yoWfuF4kpF
+	45KanxGr4fXFyUWrn2yF17u3WSvFWfGrWUCrWq9wnxAFnFvr10qF12kF17CF1rGrW8Cr12
+	q3ZF9wsxCw4UJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
 	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
@@ -109,212 +109,289 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3AFWfGw4xWFW5Ary7Gr4xXrb_yoW3XFy7pF
 	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6x
 	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
 	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
+	kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
 To be consistent with most LSM hooks, convert the return value of
-hook inode_need_killpriv to 0 or a negative error code.
+hook inode_getsecurity to 0 or a negative error code.
 
 Before:
-- Both hook inode_need_killpriv and func security_inode_need_killpriv
-  return > 0 if security_inode_killpriv is required, 0 if not, and < 0
-  to abort the operation.
+- Hook inode_getsecurity returns size of buffer on success or a
+  negative error code on failure.
 
 After:
-- Both hook inode_need_killpriv and func security_inode_need_killpriv
-  return 0 on success and a negative error code on failure.
-  On success, hook inode_need_killpriv sets output param @need to true
-  if security_inode_killpriv is required, and false if not. When @need
-  is true, func security_inode_need_killpriv sets ATTR_KILL_PRIV flag
-  in @attr; when false, it clears the flag.
-  On failure, @need and @attr remains unchanged.
+- Hook inode_getsecurity returns 0 on success or a negative error
+  code on failure. An output parameter @len is introduced to hold
+  the buffer size on success.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- fs/attr.c                     |  5 ++---
- fs/inode.c                    |  4 +---
- include/linux/lsm_hook_defs.h |  2 +-
- include/linux/security.h      | 20 ++++++++++++++++----
- security/commoncap.c          | 12 ++++++++----
- security/security.c           | 29 ++++++++++++++++++++++++-----
- 6 files changed, 52 insertions(+), 20 deletions(-)
+ fs/xattr.c                    | 19 ++++++++++---------
+ include/linux/lsm_hook_defs.h |  3 ++-
+ include/linux/security.h      | 12 ++++++------
+ security/commoncap.c          |  9 ++++++---
+ security/security.c           | 11 ++++++-----
+ security/selinux/hooks.c      | 16 ++++++----------
+ security/smack/smack_lsm.c    | 14 +++++++-------
+ 7 files changed, 43 insertions(+), 41 deletions(-)
 
-diff --git a/fs/attr.c b/fs/attr.c
-index 960a310581eb..aaadc721c982 100644
---- a/fs/attr.c
-+++ b/fs/attr.c
-@@ -427,11 +427,10 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
- 		attr->ia_mtime = timestamp_truncate(attr->ia_mtime, inode);
+diff --git a/fs/xattr.c b/fs/xattr.c
+index f8b643f91a98..f4e3bedf7272 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -339,27 +339,28 @@ xattr_getsecurity(struct mnt_idmap *idmap, struct inode *inode,
+ 		  const char *name, void *value, size_t size)
+ {
+ 	void *buffer = NULL;
+-	ssize_t len;
++	int error;
++	u32 len;
  
- 	if (ia_valid & ATTR_KILL_PRIV) {
--		error = security_inode_need_killpriv(dentry);
-+		error = security_inode_need_killpriv(dentry, &ia_valid);
- 		if (error < 0)
- 			return error;
--		if (error == 0)
--			ia_valid = attr->ia_valid &= ~ATTR_KILL_PRIV;
-+		attr->ia_valid = ia_valid;
+ 	if (!value || !size) {
+-		len = security_inode_getsecurity(idmap, inode, name,
+-						 &buffer, false);
++		error = security_inode_getsecurity(idmap, inode, name,
++						   false, &buffer, &len);
+ 		goto out_noalloc;
  	}
  
- 	/*
-diff --git a/fs/inode.c b/fs/inode.c
-index 3a41f83a4ba5..cd335dc3a3bc 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -2012,11 +2012,9 @@ int dentry_needs_remove_privs(struct mnt_idmap *idmap,
- 		return 0;
- 
- 	mask = setattr_should_drop_suidgid(idmap, inode);
--	ret = security_inode_need_killpriv(dentry);
-+	ret = security_inode_need_killpriv(dentry, &mask);
- 	if (ret < 0)
- 		return ret;
--	if (ret)
--		mask |= ATTR_KILL_PRIV;
- 	return mask;
+-	len = security_inode_getsecurity(idmap, inode, name, &buffer,
+-					 true);
+-	if (len < 0)
+-		return len;
++	error = security_inode_getsecurity(idmap, inode, name, true,
++					   &buffer, &len);
++	if (error)
++		return error;
+ 	if (size < len) {
+-		len = -ERANGE;
++		error = -ERANGE;
+ 		goto out;
+ 	}
+ 	memcpy(value, buffer, len);
+ out:
+ 	kfree(buffer);
+ out_noalloc:
+-	return len;
++	return error < 0 ? error : len;
  }
  
+ /*
 diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index e6e6f8473955..964849de424b 100644
+index 964849de424b..4f056f2613af 100644
 --- a/include/linux/lsm_hook_defs.h
 +++ b/include/linux/lsm_hook_defs.h
-@@ -165,7 +165,7 @@ LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *idmap,
- 	 struct dentry *dentry, const char *acl_name)
- LSM_HOOK(void, LSM_RET_VOID, inode_post_remove_acl, struct mnt_idmap *idmap,
- 	 struct dentry *dentry, const char *acl_name)
--LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry)
-+LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry, bool *need)
+@@ -169,7 +169,8 @@ LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry, bool *need)
  LSM_HOOK(int, 0, inode_killpriv, struct mnt_idmap *idmap,
  	 struct dentry *dentry)
  LSM_HOOK(int, -EOPNOTSUPP, inode_getsecurity, struct mnt_idmap *idmap,
+-	 struct inode *inode, const char *name, void **buffer, bool alloc)
++	 struct inode *inode, const char *name, bool alloc, void **buffer,
++	 u32 *len)
+ LSM_HOOK(int, -EOPNOTSUPP, inode_setsecurity, struct inode *inode,
+ 	 const char *name, const void *value, size_t size, int flags)
+ LSM_HOOK(int, 0, inode_listsecurity, struct inode *inode, char *buffer,
 diff --git a/include/linux/security.h b/include/linux/security.h
-index 454f96307cb9..1614ef5b2dd2 100644
+index 1614ef5b2dd2..b6d296d21438 100644
 --- a/include/linux/security.h
 +++ b/include/linux/security.h
-@@ -161,7 +161,7 @@ int cap_inode_setxattr(struct dentry *dentry, const char *name,
- 		       const void *value, size_t size, int flags);
- int cap_inode_removexattr(struct mnt_idmap *idmap,
- 			  struct dentry *dentry, const char *name);
--int cap_inode_need_killpriv(struct dentry *dentry);
-+int cap_inode_need_killpriv(struct dentry *dentry, bool *need);
+@@ -164,8 +164,8 @@ int cap_inode_removexattr(struct mnt_idmap *idmap,
+ int cap_inode_need_killpriv(struct dentry *dentry, bool *need);
  int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
  int cap_inode_getsecurity(struct mnt_idmap *idmap,
- 			  struct inode *inode, const char *name, void **buffer,
-@@ -389,7 +389,7 @@ int security_inode_listxattr(struct dentry *dentry);
- int security_inode_removexattr(struct mnt_idmap *idmap,
- 			       struct dentry *dentry, const char *name);
- void security_inode_post_removexattr(struct dentry *dentry, const char *name);
--int security_inode_need_killpriv(struct dentry *dentry);
-+int security_inode_need_killpriv(struct dentry *dentry, int *attr);
+-			  struct inode *inode, const char *name, void **buffer,
+-			  bool alloc);
++			  struct inode *inode, const char *name, bool alloc,
++			  void **buffer, u32 *len);
+ extern int cap_mmap_addr(unsigned long addr);
+ extern int cap_mmap_file(struct file *file, unsigned long reqprot,
+ 			 unsigned long prot, unsigned long flags);
+@@ -393,7 +393,7 @@ int security_inode_need_killpriv(struct dentry *dentry, int *attr);
  int security_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
  int security_inode_getsecurity(struct mnt_idmap *idmap,
  			       struct inode *inode, const char *name,
-@@ -971,9 +971,21 @@ static inline void security_inode_post_removexattr(struct dentry *dentry,
- 						   const char *name)
- { }
+-			       void **buffer, bool alloc);
++			       bool alloc, void **buffer, u32 *len);
+ int security_inode_setsecurity(struct inode *inode, const char *name, const void *value, size_t size, int flags);
+ int security_inode_listsecurity(struct inode *inode, char *buffer, size_t buffer_size);
+ void security_inode_getsecid(struct inode *inode, u32 *secid);
+@@ -996,10 +996,10 @@ static inline int security_inode_killpriv(struct mnt_idmap *idmap,
  
--static inline int security_inode_need_killpriv(struct dentry *dentry)
-+static inline int security_inode_need_killpriv(struct dentry *dentry, int *attr)
+ static inline int security_inode_getsecurity(struct mnt_idmap *idmap,
+ 					     struct inode *inode,
+-					     const char *name, void **buffer,
+-					     bool alloc)
++					     const char *name, bool alloc,
++					     void **buffer, u32 *len)
  {
--	return cap_inode_need_killpriv(dentry);
-+	int rc;
-+	bool need = false;
-+
-+	rc = cap_inode_need_killpriv(dentry, &need);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (need)
-+		*attr |= ATTR_KILL_PRIV;
-+	else
-+		*attr &= ~ATTR_KILL_PRIV;
-+
-+	return 0;
+-	return cap_inode_getsecurity(idmap, inode, name, buffer, alloc);
++	return cap_inode_getsecurity(idmap, inode, name, alloc, buffer, len);
  }
  
- static inline int security_inode_killpriv(struct mnt_idmap *idmap,
+ static inline int security_inode_setsecurity(struct inode *inode, const char *name, const void *value, size_t size, int flags)
 diff --git a/security/commoncap.c b/security/commoncap.c
-index cefad323a0b1..17d6188d22cf 100644
+index 17d6188d22cf..ff82e2ab6f8f 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
-@@ -286,21 +286,25 @@ int cap_capset(struct cred *new,
- /**
-  * cap_inode_need_killpriv - Determine if inode change affects privileges
-  * @dentry: The inode/dentry in being changed with change marked ATTR_KILL_PRIV
-+ * @need: If inode_killpriv() is needed
-  *
-  * Determine if an inode having a change applied that's marked ATTR_KILL_PRIV
-  * affects the security markings on that inode, and if it is, should
-  * inode_killpriv() be invoked or the change rejected.
-  *
-- * Return: 1 if security.capability has a value, meaning inode_killpriv()
-- * is required, 0 otherwise, meaning inode_killpriv() is not required.
-+ * Return: Always returns 0. If security.capability has a value, meaning
-+ * inode_killpriv() is required, @need is set to true.
+@@ -383,8 +383,8 @@ static bool is_v3header(int size, const struct vfs_cap_data *cap)
+  * so that's good.
   */
--int cap_inode_need_killpriv(struct dentry *dentry)
-+int cap_inode_need_killpriv(struct dentry *dentry, bool *need)
+ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+-			  struct inode *inode, const char *name, void **buffer,
+-			  bool alloc)
++			  struct inode *inode, const char *name,
++			  bool alloc, void **buffer, u32 *len)
  {
- 	struct inode *inode = d_backing_inode(dentry);
- 	int error;
- 
- 	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
--	return error > 0;
-+	if (error > 0)
-+		*need = true;
-+
+ 	int size;
+ 	kuid_t kroot;
+@@ -485,7 +485,10 @@ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+ 	}
+ out_free:
+ 	kfree(tmpbuf);
+-	return size;
++	if (size < 0)
++		return size;
++	*len = size;
 +	return 0;
  }
  
  /**
 diff --git a/security/security.c b/security/security.c
-index 3475f0cab3da..a4abcd86eb36 100644
+index a4abcd86eb36..614f14cbfff7 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -2490,17 +2490,36 @@ void security_inode_post_removexattr(struct dentry *dentry, const char *name)
- /**
-  * security_inode_need_killpriv() - Check if security_inode_killpriv() required
-  * @dentry: associated dentry
-+ * @attr: attribute flags
+@@ -2544,8 +2544,9 @@ int security_inode_killpriv(struct mnt_idmap *idmap,
+  * @idmap: idmap of the mount
+  * @inode: inode
+  * @name: xattr name
+- * @buffer: security label buffer
+  * @alloc: allocation flag
++ * @buffer: security label buffer
++ * @len: security label length
   *
-  * Called when an inode has been changed to determine if
-  * security_inode_killpriv() should be called.
+  * Retrieve a copy of the extended attribute representation of the security
+  * label associated with @name for @inode via @buffer.  Note that @name is the
+@@ -2553,17 +2554,17 @@ int security_inode_killpriv(struct mnt_idmap *idmap,
+  * @alloc is used to specify if the call should return a value via the buffer
+  * or just the value length.
   *
-- * Return: Return <0 on error to abort the inode change operation, return 0 if
-- *         security_inode_killpriv() does not need to be called, return >0 if
-- *         security_inode_killpriv() does need to be called.
-+ * Return: Return 0 on success, negative error code on failure.
-+ *         On success, set ATTR_KILL_PRIV flag in @attr when @need is true,
-+ *         clears it when false.
+- * Return: Returns size of buffer on success.
++ * Return: Returns 0 on success or a negative error code on failure.
   */
--int security_inode_need_killpriv(struct dentry *dentry)
-+int security_inode_need_killpriv(struct dentry *dentry, int *attr)
+ int security_inode_getsecurity(struct mnt_idmap *idmap,
+ 			       struct inode *inode, const char *name,
+-			       void **buffer, bool alloc)
++			       bool alloc, void **buffer, u32 *len)
  {
--	return call_int_hook(inode_need_killpriv, dentry);
-+	int rc;
-+	bool need = false;
-+	struct security_hook_list *hp;
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.inode_need_killpriv,
-+			     list) {
-+		rc = hp->hook.inode_need_killpriv(dentry, &need);
-+		if (rc < 0)
-+			return rc;
-+		if (need)
-+			break;
-+	}
-+
-+	if (need)
-+		*attr |= ATTR_KILL_PRIV;
-+	else
-+		*attr &= ~ATTR_KILL_PRIV;
+ 	if (unlikely(IS_PRIVATE(inode)))
+ 		return LSM_RET_DEFAULT(inode_getsecurity);
+ 
+-	return call_int_hook(inode_getsecurity, idmap, inode, name, buffer,
+-			     alloc);
++	return call_int_hook(inode_getsecurity, idmap, inode, name, alloc,
++			     buffer, len);
+ }
+ 
+ /**
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 9cd5a8f1f6a3..70792bba24d9 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3407,7 +3407,7 @@ static int selinux_path_notify(const struct path *path, u64 mask,
+  */
+ static int selinux_inode_getsecurity(struct mnt_idmap *idmap,
+ 				     struct inode *inode, const char *name,
+-				     void **buffer, bool alloc)
++				     bool alloc, void **buffer, u32 *len)
+ {
+ 	u32 size;
+ 	int error;
+@@ -3440,14 +3440,14 @@ static int selinux_inode_getsecurity(struct mnt_idmap *idmap,
+ 						&context, &size);
+ 	if (error)
+ 		return error;
+-	error = size;
++	*len = size;
+ 	if (alloc) {
+ 		*buffer = context;
+ 		goto out_nofree;
+ 	}
+ 	kfree(context);
+ out_nofree:
+-	return error;
++	return 0;
+ }
+ 
+ static int selinux_inode_setsecurity(struct inode *inode, const char *name,
+@@ -6644,13 +6644,9 @@ static int selinux_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen)
+ 
+ static int selinux_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
+ {
+-	int len = 0;
+-	len = selinux_inode_getsecurity(&nop_mnt_idmap, inode,
+-					XATTR_SELINUX_SUFFIX, ctx, true);
+-	if (len < 0)
+-		return len;
+-	*ctxlen = len;
+-	return 0;
++	return selinux_inode_getsecurity(&nop_mnt_idmap, inode,
++					 XATTR_SELINUX_SUFFIX,
++					 true, ctx, ctxlen);
+ }
+ #ifdef CONFIG_KEYS
+ 
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index f5cbec1e6a92..e7a5f6fd9a2d 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -1543,14 +1543,15 @@ static int smack_inode_remove_acl(struct mnt_idmap *idmap,
+  * @idmap: idmap of the mount
+  * @inode: the object
+  * @name: attribute name
+- * @buffer: where to put the result
+  * @alloc: duplicate memory
++ * @buffer: where to put the result
++ * @len: where to put the result length
+  *
+- * Returns the size of the attribute or an error code
++ * Returns 0 on success or a negative error code on failure
+  */
+ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 				   struct inode *inode, const char *name,
+-				   void **buffer, bool alloc)
++				   bool alloc, void **buffer, u32 *len)
+ {
+ 	struct socket_smack *ssp;
+ 	struct socket *sock;
+@@ -1558,7 +1559,6 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 	struct inode *ip = inode;
+ 	struct smack_known *isp;
+ 	struct inode_smack *ispp;
+-	size_t label_len;
+ 	char *label = NULL;
+ 
+ 	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0) {
+@@ -1594,15 +1594,15 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 	if (!label)
+ 		label = isp->smk_known;
+ 
+-	label_len = strlen(label);
+-
+ 	if (alloc) {
+ 		*buffer = kstrdup(label, GFP_KERNEL);
+ 		if (*buffer == NULL)
+ 			return -ENOMEM;
+ 	}
+ 
+-	return label_len;
++	*len = strlen(label);
 +
 +	return 0;
  }
  
- /**
+ 
 -- 
 2.30.2
 
