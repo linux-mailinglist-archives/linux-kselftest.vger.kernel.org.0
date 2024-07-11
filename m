@@ -1,247 +1,99 @@
-Return-Path: <linux-kselftest+bounces-13557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 147FC92E39E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:41:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5111792E5F1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 852531F21BD6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 09:41:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 823621C22D15
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 110B1156F39;
-	Thu, 11 Jul 2024 09:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UPPwTj57"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362981607B4;
+	Thu, 11 Jul 2024 11:11:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7271509B1
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 09:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A135115A86E
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 11:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720690876; cv=none; b=h/8kUVR4LcSQMJTQahftQPgBzKiq3uAzQ15JRieW3GbugqVXLjKrqTUF+rLJLULEGTZHG/cbQn+qwzKPcO94VyP7Nb8nqtW5AjT/LSgDlcHLf/2d7SFgqgq67qCDLsLyD9cwET5LD5Gtooxjx/lQAxX+RvOGRT6joUyutG0OMak=
+	t=1720696265; cv=none; b=YZEek+nLPBTUbEnvkQjl1IayMMsbbSr+wNn/rIP3+dZ58odfwipUcZVlLzp0/H68qTeosp9TXxFfnRtN904MaKn+U3g6C6mg36RkBo1OiqhEudAp7CiVej3fYHlMlAmGCVmFlm/ckfHnHuk8tsdcPh9CLdN95IpRwF3UaWvcn/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720690876; c=relaxed/simple;
-	bh=8RUZWpSSsIgoH4i40p6vT8jM5LG/7OmypIyPi6a/9F0=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MwEq9zfAE2zHJeBL59pHiPhdp45M5YuLlwDfmABPc+/AZNGvao6Oq/4GzQSXQZW1ioAR2kyqdzgCS1bejrZMm15dNL9VsNIVZYZqjTpAoqQCr/bXxob6TF1H09+TG2Hk1BB/6ZN4P8NzUDAldAyxioSvaXGZly/Q7+JracfWEjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UPPwTj57; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720690871;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=roMHuw+PALuns3vCWcdFi8XZN8Qqy8eFcMii4s+wTJk=;
-	b=UPPwTj57L7e/oP4KdQQK19B94WuND8+mppKuEzcSv71CFhP/WPj6z0GPiznBGLki3jTDt0
-	//LJSbutLiiT+KBRf6+2NvuS+wPNtJeferJR6mBSQzOXwgn2VN0xNpZKrC8tkpBvX+N4zI
-	Xv/ti7tfrYqfWwf1XY9h2t7M///fP5g=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-88-SC30rRj4OKeSgdr9hrB0VA-1; Thu, 11 Jul 2024 05:41:10 -0400
-X-MC-Unique: SC30rRj4OKeSgdr9hrB0VA-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6b603f67501so9822606d6.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 02:41:10 -0700 (PDT)
+	s=arc-20240116; t=1720696265; c=relaxed/simple;
+	bh=0ZwX0N6cmTcPU6cUOhbMilU6Yelh76r3rbVgmSzYq0s=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=h5zUySlR6wZVgrdepv/dDFxw61QjWAy984keNusBgKZVumYw4/BLb2kfryzV3S6ZyQ7GjdUhofzfGKA5rFjyw6C77AmbTJcvfUJFf04oU33NXBGInp/DnXUW/5IcwX4caq3pcIvX91kNwgZkEMaOHtzAwyN7uwWIGe8yW1oU728=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7ebd11f77d8so82598239f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 04:11:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720690870; x=1721295670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
-         :mime-version:references:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=roMHuw+PALuns3vCWcdFi8XZN8Qqy8eFcMii4s+wTJk=;
-        b=pFUQT4hJb0de7F1f1KK0xSUhmpwR90Clgy4OkXVABRS0BfriyJUY2+ycApbu2tmmKB
-         baYrMlNePNDKmw0bi2a/sUA7QVr5fq+17xxdMDdA+EhQ4a2W8RcMFekmCXi3EE0yNgTJ
-         Zif4c3B43fSIP3RC9ueEiZvgaY9J4TcrVQNAov+BuHtxh5zhMbQj3ucoc/2qgfA9NOV8
-         Kj9RN4hSwrH+mhBIbpa8hxQTQykQp9sJ+KzCJQ9DM8qebry/tIRoNpJ+l+qXOIKStOWo
-         rqG+xYP72tBP90qKnngfLNFTGBeEvjIICwz1tdmav/RFmSUXUBlofyO+spGBXn7QTgDq
-         mrdA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsBO8QyMS4LgOmChGxjMcMuOr68uanWDVReIetDTaTUvDfxC7YTiFCu0XFz3/jwQ18xbuH4ATH8gYwIWMDMk7nC8XAfjCjuToWRfWNRfxG
-X-Gm-Message-State: AOJu0YyvU7tP/2z1CApuok1D9jAu+iH17gREATF2/VVzNVapk7ESgk1/
-	5ab92XAEinH1Atog3Pt65eTSq2LYivO83/kk+gD6tsSDZdl7MmHuyqRfuNmxNkvfskAQMWn/8g8
-	h4Bd9iNShpW7ECYEiD1nFHL17wHvuMY3FpzlDZQJOg5MQJPLZnsPdqFGBxAFnLgtydP0diE5tNk
-	B9PMVgXkXeIhcq5FDTEdLkFajEvoAfOyrImNunFq1MDn+D/6EM
-X-Received: by 2002:ad4:4ea6:0:b0:6b5:e006:11b0 with SMTP id 6a1803df08f44-6b61bca384fmr99044746d6.20.1720690869708;
-        Thu, 11 Jul 2024 02:41:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGSRxmewcxMQ/3BL81YZjQF3O+LHKdXdzsEe8HRIH22wz9sWJC8rn/QEPgJD7oQUldO/x36Y6ZPMZhiH0ZPSGE=
-X-Received: by 2002:ad4:4ea6:0:b0:6b5:e006:11b0 with SMTP id
- 6a1803df08f44-6b61bca384fmr99044606d6.20.1720690869382; Thu, 11 Jul 2024
- 02:41:09 -0700 (PDT)
-Received: from 311643009450 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 11 Jul 2024 09:41:08 +0000
-From: =?UTF-8?Q?Adri=C3=A1n_Moreno?= <amorenoz@redhat.com>
-References: <20240710090500.1655212-1-amorenoz@redhat.com>
+        d=1e100.net; s=20230601; t=1720696263; x=1721301063;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hxg3UJPkzx7M07gbZ9SOx2eod/ecUaN/p77xgE8W3KQ=;
+        b=u9cO1F2c0HoIe04DXTVLluiqSbblWQyrrPEPVvSPRSKD5UCkveMB3d3cl7izNxk3FT
+         NI2oQXw6zpftlv6S1uqgbTiSG2ciobreMly3YXYY6dTrXYNNs19CjPXrev5hdlHJuvEu
+         Ii0fmn4XKas8HsjTi42pB9hVMb6fRYA5qUdmG4RFjDGeqJNyHLLx96ng4c5NTJj0jP6y
+         a3a6j3daL/jjiGvjn8Y6X5VbunwwYWAz80+VPxvd5geN/dGkNEHZ1K/Dz+++RXSxVS7t
+         CtuRdlMNZ4NrU3/PGEstCO033ZXkebZ50GxVIeBono7UzpfPxwGpLDaiuO51iZyt4DFN
+         psDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpkqW/a4dsGHWbhYcGK4t27WbdExq/gKyZSiu67I7eOWUkHME979dP8owWZ4ztysBDN9eeo7pbvN7f6Sqm3vCrQa3nGBDjdcH9WG2RGIqe
+X-Gm-Message-State: AOJu0YxKnSRRl8GN4dbm7HcEKMIkpEbsG6FUzjXL4ukskixPUNcx0uTG
+	ti+Yt7BQzLTYfCvMOdYiAqT4gdfCSIL5bVsvQtVjhSVgNhi9EXrs3oLVw5hWURJBC+pl+VNsZTL
+	boFtQAt3fLwLSVvaL4HSbgunnRSY4vbFmia2OrxbXL3JA369yweBo37w=
+X-Google-Smtp-Source: AGHT+IGBjGi2u0vQwkoJ9T1yTRI18dBxcqWGmgtHOfjU9ZTmOOpU364A1mpSXTEejum4DWNhNasVTJ0VRDyOX29dVNI3xFSozQ7R
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240710090500.1655212-1-amorenoz@redhat.com>
-Date: Thu, 11 Jul 2024 09:41:08 +0000
-Message-ID: <CAG=2xmMsgmZosNvuVC-uGjkKGQfSq0kjwpMSgS46jpd5Zbpp7A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] selftests: openvswitch: retry instead of sleep
-To: netdev@vger.kernel.org
-Cc: Pravin B Shelar <pshelar@ovn.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, dev@openvswitch.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, horms@kernel.org
+X-Received: by 2002:a05:6638:8601:b0:4c0:9a05:44c4 with SMTP id
+ 8926c6da1cb9f-4c0b24e9f62mr482571173.0.1720696262760; Thu, 11 Jul 2024
+ 04:11:02 -0700 (PDT)
+Date: Thu, 11 Jul 2024 04:11:02 -0700
+In-Reply-To: <0000000000008ac77c0615d60760@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000822b8b061cf6d171@google.com>
+Subject: Re: [syzbot] [mm?] INFO: rcu detected stall in sys_wait4 (4)
+From: syzbot <syzbot+6969434de600a6ba9f07@syzkaller.appspotmail.com>
+To: alsa-devel-bounces@alsa-project.org, alsa-devel@alsa-project.org, 
+	broonie@kernel.org, davem@davemloft.net, dcaratti@redhat.com, 
+	edumazet@google.com, jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org, 
+	lenb@kernel.org, lgirdwood@gmail.com, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, netdev@vger.kernel.org, oder_chiou@realtek.com, 
+	pabeni@redhat.com, pctammela@mojatatu.com, perex@perex.cz, rafael@kernel.org, 
+	shuah@kernel.org, shumingf@realtek.com, syzkaller-bugs@googlegroups.com, 
+	tiwai@suse.com, vinicius.gomes@intel.com, vladimir.oltean@nxp.com, 
+	xiyou.wangcong@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 11:04:59AM GMT, Adrian Moreno wrote:
-> There are a couple of places where the test script "sleep"s to wait for
-> some external condition to be met.
->
-> This is error prone, specially in slow systems (identified in CI by
-> "KSFT_MACHINE_SLOW=3Dyes").
->
-> To fix this, add a "ovs_wait" function that tries to execute a command
-> a few times until it succeeds. The timeout used is set to 5s for
-> "normal" systems and doubled if a slow CI machine is detected.
->
-> This should make the following work:
->
-> $ vng --build  \
->     --config tools/testing/selftests/net/config \
->     --config kernel/configs/debug.config
->
-> $ vng --run . --user root -- "make -C tools/testing/selftests/ \
->     KSFT_MACHINE_SLOW=3Dyes TARGETS=3Dnet/openvswitch run_tests"
->
-> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
-> ---
->  .../selftests/net/openvswitch/openvswitch.sh  | 45 +++++++++++++++----
->  .../selftests/net/openvswitch/ovs-dpctl.py    |  1 +
->  2 files changed, 38 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/too=
-ls/testing/selftests/net/openvswitch/openvswitch.sh
-> index bc71dbc18b21..cc0bfae2bafa 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -11,6 +11,11 @@ ksft_skip=3D4
->  PAUSE_ON_FAIL=3Dno
->  VERBOSE=3D0
->  TRACING=3D0
-> +WAIT_TIMEOUT=3D5
-> +
-> +if test "X$KSFT_MACHINE_SLOW" =3D=3D "Xyes"; then
-> +	WAIT_TIMEOUT=3D10
-> +fi
->
->  tests=3D"
->  	arp_ping				eth-arp: Basic arp ping between two NS
-> @@ -29,6 +34,30 @@ info() {
->  	[ $VERBOSE =3D 0 ] || echo $*
->  }
->
-> +ovs_wait() {
-> +	info "waiting $WAIT_TIMEOUT s for: $@"
-> +
-> +	if "$@" ; then
-> +		info "wait succeeded immediately"
-> +		return 0
-> +	fi
-> +
-> +	# A quick re-check helps speed up small races in fast systems.
-> +	# However, fractional sleeps might not necessarily work.
-> +	local start=3D0
-> +	sleep 0.1 || { sleep 1; start=3D1; }
-> +
-> +	for (( i=3Dstart; i<WAIT_TIMEOUT; i++ )); do
-> +		if "$@" ; then
-> +			info "wait succeeded after $i seconds"
-> +			return 0
-> +		fi
-> +		sleep 1
-> +	done
-> +	info "wait failed after $i seconds"
-> +	return 1
-> +}
-> +
->  ovs_base=3D`pwd`
->  sbxs=3D
->  sbx_add () {
-> @@ -278,20 +307,19 @@ test_psample() {
->
->  	# Record psample data.
->  	ovs_spawn_daemon "test_psample" python3 $ovs_base/ovs-dpctl.py psample-=
-events
-> +	ovs_wait grep -q "listening for psample events" ${ovs_dir}/stdout
->
->  	# Send a single ping.
-> -	sleep 1
->  	ovs_sbx "test_psample" ip netns exec client ping -I c1 172.31.110.20 -c=
- 1 || return 1
-> -	sleep 1
->
->  	# We should have received one userspace action upcall and 2 psample pac=
-kets.
-> -	grep -E "userspace action command" $ovs_dir/s0.out >/dev/null 2>&1 || r=
-eturn 1
-> +	ovs_wait grep -q "userspace action command" $ovs_dir/s0.out || return 1
->
->  	# client -> server samples should only contain the first 14 bytes of th=
-e packet.
-> -	grep -E "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{28}$" \
-> -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
-> -	grep -E "rate:4294967295,group:2,cookie:eeff0c" \
-> -			 $ovs_dir/stdout >/dev/null 2>&1 || return 1
-> +	ovs_wait grep -qE "rate:4294967295,group:1,cookie:c0ffee data:[0-9a-f]{=
-28}$" \
-> +		$ovs_dir/stdout || return 1
-> +
-> +	ovs_wait grep -q "rate:4294967295,group:2,cookie:eeff0c" $ovs_dir/stdou=
-t || return 1
->
->  	return 0
->  }
-> @@ -711,7 +739,8 @@ test_upcall_interfaces() {
->  	ovs_add_netns_and_veths "test_upcall_interfaces" ui0 upc left0 l0 \
->  	    172.31.110.1/24 -u || return 1
->
-> -	sleep 1
-> +	ovs_wait grep -q "listening on upcall packet handler" ${ovs_dir}/left0.=
-out
-> +
->  	info "sending arping"
->  	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
->  	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools=
-/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index 1e15b0818074..8a0396bfaf99 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -2520,6 +2520,7 @@ class PsampleEvent(EventSocket):
->      marshal_class =3D psample_msg
->
->      def read_samples(self):
-> +        print("listening for psample events", flush=3DTrue)
->          while True:
->              try:
->                  for msg in self.get():
-> --
-> 2.45.2
->
+syzbot suspects this issue was fixed by commit:
 
+commit fb66df20a7201e60f2b13d7f95d031b31a8831d3
+Author: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date:   Mon May 27 15:39:55 2024 +0000
 
-This patch is supposed to fix openvswitch selftests on "-dbg" machines.
-However, as Simon points out, all recent rounds are failing [1]. I don't
-see this patch being included in the batches and I was wondering why.
+    net/sched: taprio: extend minimum interval restriction to entire cycle too
 
-Also I see a (presumably unrelated) build error netdev/build_32bit.
-Is there anything I can do?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10593441980000
+start commit:   fe46a7dd189e Merge tag 'sound-6.9-rc1' of git://git.kernel..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fe78468a74fdc3b7
+dashboard link: https://syzkaller.appspot.com/bug?extid=6969434de600a6ba9f07
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1091a5f6180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a22c13180000
 
-[1]
-https://netdev.bots.linux.dev/contest.html?executor=3Dvmksft-net-dbg&test=
-=3Dopenvswitch-sh
+If the result looks correct, please mark the issue as fixed by replying with:
 
-Thanks.
-Adri=C3=A1n
+#syz fix: net/sched: taprio: extend minimum interval restriction to entire cycle too
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
