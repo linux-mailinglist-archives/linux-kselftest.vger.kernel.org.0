@@ -1,42 +1,42 @@
-Return-Path: <linux-kselftest+bounces-13566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 537C292E62D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:20:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C8B92E5FD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D90C2841EA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:20:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BCDA1C20CD3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89DE16C6A2;
-	Thu, 11 Jul 2024 11:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900BE15D5C7;
+	Thu, 11 Jul 2024 11:14:02 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A22916B392;
-	Thu, 11 Jul 2024 11:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40AA415CD61;
+	Thu, 11 Jul 2024 11:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720696447; cv=none; b=n7AtKVriJHJ8Z3c3Qf9YFQAfPVzLMuwUusYZBNVA53sj9UWPIpNXMxpRp7bBiAPgHzYos6OSRLq7JOUDlM/s9F3usKv3YozSYx1A6iCgJF5sJuJ3IpuC2f7K/3zd9hkm5wZ+CVChFC00TUaqVAJjLltQg2k0e9Pakr7OffKe+ik=
+	t=1720696442; cv=none; b=G88jRs4+rb9jeqcGiYBB9mo8hRzeAutvXE0HFDXfp1Wi/VBOTnycuT55eOQs+sAvXxagjRw+g3ajDBLAj8ffrTEZ+RuDfMPSLR5FxrT47plL5aO2ApoYb/p+iBKaUM8Z0dSaUo+A4w2xTrLXiRzcqvwNv718ELBhMDimyEI6/Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720696447; c=relaxed/simple;
-	bh=F2DBOYAey1NBHWQhzeFhHSb9csczr8YPT8WbPlwEQb8=;
+	s=arc-20240116; t=1720696442; c=relaxed/simple;
+	bh=Hg9ese+3RioISfNTgvRm6HlDHVGrAICdXCleHqiZp3o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q9qXJ8nuAWzDi1gG86V1vEtBhUpiB1e2CaoIn/ywzpq5K+I3e4ofbX3ZCUUeDJlKFgPL2BLDUgU94IG8XxtUCi0h05pQ4IGgin8ReBLQCxPGHGVGlG2Fg/yoAza3RtSSD/sjEZXFPmsGG00R3XItd4znS7mDRmgFxDEm5UHxmUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=dOJCi2z6Za/FQgW/GlftM/LQjonui5CnOdYy1muaDE7uNY0XkCUrERhDU8DQ+CkVq5LZizjZNHVgksvCGyZktMkD2k/8C34OuBoQnkXlWx//5UriXmyfQty2PtAQyY+J69jfFCqbJbXScJZUXWnM8cok0H6N9a1yJnimpeN9JbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WKXCr713pz4f3jrw;
-	Thu, 11 Jul 2024 19:13:44 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WKXCq6g8rz4f3m6w;
+	Thu, 11 Jul 2024 19:13:43 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 9C8D41A0187;
+	by mail.maildlp.com (Postfix) with ESMTP id CA1321A0572;
 	Thu, 11 Jul 2024 19:13:56 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S3;
+	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S4;
 	Thu, 11 Jul 2024 19:13:56 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -80,9 +80,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH bpf-next v4 01/20] lsm: Refactor return value of LSM hook vm_enough_memory
-Date: Thu, 11 Jul 2024 19:18:49 +0800
-Message-Id: <20240711111908.3817636-2-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v4 02/20] lsm: Refactor return value of LSM hook inode_need_killpriv
+Date: Thu, 11 Jul 2024 19:18:50 +0800
+Message-Id: <20240711111908.3817636-3-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
 References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
@@ -93,12 +93,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxur48GF1DAw17Kr47ur1rWFg_yoW7Gr4kpF
-	s5Ka13KrWvkFyxZrs7GanxC3W3t34fWF4UGrWUu34Fk3ZFvr17KF4UAw1Y9r1UtrW8tasF
-	qFW29rs3Ca1qq37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFWfGw4xWFW5Ary7Gr4xXrb_yoW3XFy7pF
+	4UKF13Gws5XFy7Wrn7tFsru34SvFWfWrW7JFZ09w12yFnrJr1xKr4ak3yUCryrCr1j9rnI
+	v3ZFkw4rCr15JrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
 	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
@@ -107,142 +107,214 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxur48GF1DAw17Kr47ur1rWFg_yoW7Gr4kpF
 	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
 	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
 	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAHUDUUUUU=
+	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
 To be consistent with most LSM hooks, convert the return value of
-hook vm_enough_memory to 0 or a negative error code.
+hook inode_need_killpriv to 0 or a negative error code.
 
 Before:
-- Hook vm_enough_memory returns 1 if permission is granted, 0 if not.
-- LSM_RET_DEFAULT(vm_enough_memory_mm) is 1.
+- Both hook inode_need_killpriv and func security_inode_need_killpriv
+  return > 0 if security_inode_killpriv is required, 0 if not, and < 0
+  to abort the operation.
 
 After:
-- Hook vm_enough_memory reutrns 0 if permission is granted, negative
-  error code if not.
-- LSM_RET_DEFAULT(vm_enough_memory_mm) is 0.
+- Both hook inode_need_killpriv and func security_inode_need_killpriv
+  return 0 on success and a negative error code on failure.
+  On success, hook inode_need_killpriv sets output param @need to true
+  if security_inode_killpriv is required, and false if not. When @need
+  is true, func security_inode_need_killpriv sets ATTR_KILL_PRIV flag
+  in @attr; when false, it clears the flag.
+  On failure, @need and @attr remains unchanged.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
+ fs/attr.c                     |  5 ++---
+ fs/inode.c                    |  4 +---
  include/linux/lsm_hook_defs.h |  2 +-
- include/linux/security.h      |  2 +-
- security/commoncap.c          | 11 +++--------
- security/security.c           | 11 +++++------
- security/selinux/hooks.c      | 15 ++++-----------
- 5 files changed, 14 insertions(+), 27 deletions(-)
+ include/linux/security.h      | 20 ++++++++++++++++----
+ security/commoncap.c          | 12 ++++++++----
+ security/security.c           | 29 ++++++++++++++++++++++++-----
+ 6 files changed, 52 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 44488b1ab9a9..e6e6f8473955 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -48,7 +48,7 @@ LSM_HOOK(int, 0, quota_on, struct dentry *dentry)
- LSM_HOOK(int, 0, syslog, int type)
- LSM_HOOK(int, 0, settime, const struct timespec64 *ts,
- 	 const struct timezone *tz)
--LSM_HOOK(int, 1, vm_enough_memory, struct mm_struct *mm, long pages)
-+LSM_HOOK(int, 0, vm_enough_memory, struct mm_struct *mm, long pages)
- LSM_HOOK(int, 0, bprm_creds_for_exec, struct linux_binprm *bprm)
- LSM_HOOK(int, 0, bprm_creds_from_file, struct linux_binprm *bprm, const struct file *file)
- LSM_HOOK(int, 0, bprm_check_security, struct linux_binprm *bprm)
-diff --git a/include/linux/security.h b/include/linux/security.h
-index de3af33e6ff5..454f96307cb9 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -634,7 +634,7 @@ static inline int security_settime64(const struct timespec64 *ts,
+diff --git a/fs/attr.c b/fs/attr.c
+index 960a310581eb..aaadc721c982 100644
+--- a/fs/attr.c
++++ b/fs/attr.c
+@@ -427,11 +427,10 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+ 		attr->ia_mtime = timestamp_truncate(attr->ia_mtime, inode);
  
- static inline int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
- {
--	return __vm_enough_memory(mm, pages, cap_vm_enough_memory(mm, pages));
-+	return __vm_enough_memory(mm, pages, !cap_vm_enough_memory(mm, pages));
+ 	if (ia_valid & ATTR_KILL_PRIV) {
+-		error = security_inode_need_killpriv(dentry);
++		error = security_inode_need_killpriv(dentry, &ia_valid);
+ 		if (error < 0)
+ 			return error;
+-		if (error == 0)
+-			ia_valid = attr->ia_valid &= ~ATTR_KILL_PRIV;
++		attr->ia_valid = ia_valid;
+ 	}
+ 
+ 	/*
+diff --git a/fs/inode.c b/fs/inode.c
+index 3a41f83a4ba5..cd335dc3a3bc 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -2012,11 +2012,9 @@ int dentry_needs_remove_privs(struct mnt_idmap *idmap,
+ 		return 0;
+ 
+ 	mask = setattr_should_drop_suidgid(idmap, inode);
+-	ret = security_inode_need_killpriv(dentry);
++	ret = security_inode_need_killpriv(dentry, &mask);
+ 	if (ret < 0)
+ 		return ret;
+-	if (ret)
+-		mask |= ATTR_KILL_PRIV;
+ 	return mask;
  }
  
- static inline int security_bprm_creds_for_exec(struct linux_binprm *bprm)
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index e6e6f8473955..964849de424b 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -165,7 +165,7 @@ LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name)
+ LSM_HOOK(void, LSM_RET_VOID, inode_post_remove_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name)
+-LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry)
++LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry, bool *need)
+ LSM_HOOK(int, 0, inode_killpriv, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry)
+ LSM_HOOK(int, -EOPNOTSUPP, inode_getsecurity, struct mnt_idmap *idmap,
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 454f96307cb9..1614ef5b2dd2 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -161,7 +161,7 @@ int cap_inode_setxattr(struct dentry *dentry, const char *name,
+ 		       const void *value, size_t size, int flags);
+ int cap_inode_removexattr(struct mnt_idmap *idmap,
+ 			  struct dentry *dentry, const char *name);
+-int cap_inode_need_killpriv(struct dentry *dentry);
++int cap_inode_need_killpriv(struct dentry *dentry, bool *need);
+ int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
+ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+ 			  struct inode *inode, const char *name, void **buffer,
+@@ -389,7 +389,7 @@ int security_inode_listxattr(struct dentry *dentry);
+ int security_inode_removexattr(struct mnt_idmap *idmap,
+ 			       struct dentry *dentry, const char *name);
+ void security_inode_post_removexattr(struct dentry *dentry, const char *name);
+-int security_inode_need_killpriv(struct dentry *dentry);
++int security_inode_need_killpriv(struct dentry *dentry, int *attr);
+ int security_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
+ int security_inode_getsecurity(struct mnt_idmap *idmap,
+ 			       struct inode *inode, const char *name,
+@@ -971,9 +971,21 @@ static inline void security_inode_post_removexattr(struct dentry *dentry,
+ 						   const char *name)
+ { }
+ 
+-static inline int security_inode_need_killpriv(struct dentry *dentry)
++static inline int security_inode_need_killpriv(struct dentry *dentry, int *attr)
+ {
+-	return cap_inode_need_killpriv(dentry);
++	int rc;
++	bool need = false;
++
++	rc = cap_inode_need_killpriv(dentry, &need);
++	if (rc < 0)
++		return rc;
++
++	if (need)
++		*attr |= ATTR_KILL_PRIV;
++	else
++		*attr &= ~ATTR_KILL_PRIV;
++
++	return 0;
+ }
+ 
+ static inline int security_inode_killpriv(struct mnt_idmap *idmap,
 diff --git a/security/commoncap.c b/security/commoncap.c
-index 162d96b3a676..cefad323a0b1 100644
+index cefad323a0b1..17d6188d22cf 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
-@@ -1396,17 +1396,12 @@ int cap_task_prctl(int option, unsigned long arg2, unsigned long arg3,
-  * Determine whether the allocation of a new virtual mapping by the current
-  * task is permitted.
+@@ -286,21 +286,25 @@ int cap_capset(struct cred *new,
+ /**
+  * cap_inode_need_killpriv - Determine if inode change affects privileges
+  * @dentry: The inode/dentry in being changed with change marked ATTR_KILL_PRIV
++ * @need: If inode_killpriv() is needed
   *
-- * Return: 1 if permission is granted, 0 if not.
-+ * Return: 0 if permission granted, negative error code if not.
+  * Determine if an inode having a change applied that's marked ATTR_KILL_PRIV
+  * affects the security markings on that inode, and if it is, should
+  * inode_killpriv() be invoked or the change rejected.
+  *
+- * Return: 1 if security.capability has a value, meaning inode_killpriv()
+- * is required, 0 otherwise, meaning inode_killpriv() is not required.
++ * Return: Always returns 0. If security.capability has a value, meaning
++ * inode_killpriv() is required, @need is set to true.
   */
- int cap_vm_enough_memory(struct mm_struct *mm, long pages)
+-int cap_inode_need_killpriv(struct dentry *dentry)
++int cap_inode_need_killpriv(struct dentry *dentry, bool *need)
  {
--	int cap_sys_admin = 0;
--
--	if (cap_capable(current_cred(), &init_user_ns,
--				CAP_SYS_ADMIN, CAP_OPT_NOAUDIT) == 0)
--		cap_sys_admin = 1;
--
--	return cap_sys_admin;
-+	return cap_capable(current_cred(), &init_user_ns, CAP_SYS_ADMIN,
-+			   CAP_OPT_NOAUDIT);
+ 	struct inode *inode = d_backing_inode(dentry);
+ 	int error;
+ 
+ 	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
+-	return error > 0;
++	if (error > 0)
++		*need = true;
++
++	return 0;
  }
  
  /**
 diff --git a/security/security.c b/security/security.c
-index e5ca08789f74..3475f0cab3da 100644
+index 3475f0cab3da..a4abcd86eb36 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -1115,15 +1115,14 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
- 	int rc;
- 
- 	/*
--	 * The module will respond with a positive value if
--	 * it thinks the __vm_enough_memory() call should be
--	 * made with the cap_sys_admin set. If all of the modules
--	 * agree that it should be set it will. If any module
--	 * thinks it should not be set it won't.
-+	 * The module will respond with 0 if it thinks the __vm_enough_memory()
-+	 * call should be made with the cap_sys_admin set. If all of the modules
-+	 * agree that it should be set it will. If any module thinks it should
-+	 * not be set it won't.
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.vm_enough_memory, list) {
- 		rc = hp->hook.vm_enough_memory(mm, pages);
--		if (rc <= 0) {
-+		if (rc < 0) {
- 			cap_sys_admin = 0;
- 			break;
- 		}
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 7eed331e90f0..9cd5a8f1f6a3 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2202,23 +2202,16 @@ static int selinux_syslog(int type)
- }
- 
- /*
-- * Check that a process has enough memory to allocate a new virtual
-- * mapping. 0 means there is enough memory for the allocation to
-- * succeed and -ENOMEM implies there is not.
-+ * Check permission for allocating a new virtual mapping. Returns
-+ * 0 if permission is granted, negative error code if not.
+@@ -2490,17 +2490,36 @@ void security_inode_post_removexattr(struct dentry *dentry, const char *name)
+ /**
+  * security_inode_need_killpriv() - Check if security_inode_killpriv() required
+  * @dentry: associated dentry
++ * @attr: attribute flags
   *
-  * Do not audit the selinux permission check, as this is applied to all
-  * processes that allocate mappings.
+  * Called when an inode has been changed to determine if
+  * security_inode_killpriv() should be called.
+  *
+- * Return: Return <0 on error to abort the inode change operation, return 0 if
+- *         security_inode_killpriv() does not need to be called, return >0 if
+- *         security_inode_killpriv() does need to be called.
++ * Return: Return 0 on success, negative error code on failure.
++ *         On success, set ATTR_KILL_PRIV flag in @attr when @need is true,
++ *         clears it when false.
   */
- static int selinux_vm_enough_memory(struct mm_struct *mm, long pages)
+-int security_inode_need_killpriv(struct dentry *dentry)
++int security_inode_need_killpriv(struct dentry *dentry, int *attr)
  {
--	int rc, cap_sys_admin = 0;
--
--	rc = cred_has_capability(current_cred(), CAP_SYS_ADMIN,
--				 CAP_OPT_NOAUDIT, true);
--	if (rc == 0)
--		cap_sys_admin = 1;
--
--	return cap_sys_admin;
-+	return cred_has_capability(current_cred(), CAP_SYS_ADMIN,
-+				   CAP_OPT_NOAUDIT, true);
+-	return call_int_hook(inode_need_killpriv, dentry);
++	int rc;
++	bool need = false;
++	struct security_hook_list *hp;
++
++	hlist_for_each_entry(hp, &security_hook_heads.inode_need_killpriv,
++			     list) {
++		rc = hp->hook.inode_need_killpriv(dentry, &need);
++		if (rc < 0)
++			return rc;
++		if (need)
++			break;
++	}
++
++	if (need)
++		*attr |= ATTR_KILL_PRIV;
++	else
++		*attr &= ~ATTR_KILL_PRIV;
++
++	return 0;
  }
  
- /* binprm security operations */
+ /**
 -- 
 2.30.2
 
