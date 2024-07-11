@@ -1,350 +1,433 @@
-Return-Path: <linux-kselftest+bounces-13587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97A192EA73
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:16:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53A492EAD6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 16:34:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B616281C68
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 14:16:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D92D91C22C9B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 14:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D9915FD01;
-	Thu, 11 Jul 2024 14:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF01E1662FE;
+	Thu, 11 Jul 2024 14:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9A1ZWus"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CDD80BF8;
-	Thu, 11 Jul 2024 14:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BAC167DA8;
+	Thu, 11 Jul 2024 14:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720707386; cv=none; b=S1Ol4vtW4U5CNKtAHZcrnQ9j9704KLuuMa0pT3SFPiNRjkouXFde9TdFtjNHdEC0YHhnqyDdNWvyjOPYWB1CBHEtvwIKw+NgisEMd6U9sVHUSVxHmSJ7mBU2rVC5SPt3PBLxpBrXINdauIoNG1uWb+tGZCPdbWeLe9J+h5GhL+4=
+	t=1720708487; cv=none; b=S6FAM1IoBDnZrlV6T7duDpu+/mvXotImeVqMnCLqkuWEilONF7MUHalIqKIL/b5XcyqeP9qvLhdrHAE13pqAL1dA0nhFhDRxAxaEV1bzzoJSKGJaHsSJjyxdvsfHkEyKX5AHUNs5X1oM4iGshPNj810r6Ksn0kBFDigy8kYyj7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720707386; c=relaxed/simple;
-	bh=u9ZPGa/Rq/UUrmz2WagOFmzqjUL+DHKleZd8UGjFxGw=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=Hzfd8yI2TmJvtYhTws3z+Cg1xQUMonTU+nVTlbFoCsWk4nyaynGNL66HSdeJUYjsGPyVFU3xMrk00Hts8EUEhdsIq54hLldZw3DTWF8BWBgG63c4G1Cz5Reb7PM144gWngtxxud7d3BGKcx5arYTrKSeeIFOCeyOBQQ3q0iNEkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
-Received: from dummy.faircode.eu (unknown [172.56.89.160])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: serge)
-	by mail.hallyn.com (Postfix) with ESMTPSA id DD57227C;
-	Thu, 11 Jul 2024 09:16:13 -0500 (CDT)
-Date: Thu, 11 Jul 2024 09:15:59 -0500 (CDT)
-From: Serge Hallyn <serge@hallyn.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
-	apparmor@lists.ubuntu.com, selinux@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Brendan Jackman <jackmanb@chromium.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	Khadija Kamran <kamrankhadijadj@gmail.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Edward Cree <ecree.xilinx@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>
-Message-ID: <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
-In-Reply-To: <20240711111908.3817636-3-xukuohai@huaweicloud.com>
-References: <20240711111908.3817636-1-xukuohai@huaweicloud.com> <20240711111908.3817636-3-xukuohai@huaweicloud.com>
-Subject: Re: [PATCH bpf-next v4 02/20] lsm: Refactor return value of LSM
- hook inode_need_killpriv
+	s=arc-20240116; t=1720708487; c=relaxed/simple;
+	bh=u+JLQpY2OGFSvyqiP0oNI4X+ySZWmc0hNBY3OoLpvTw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BmydqMBce4r4LbHdnaF7aW6Ks8Ku7UZk+v05VFR7iJrXwm7Y/J8Zrp/Jw8NTCalSeOxctuaH9otSlOnpUOOKJgRiHY1kdZqOxzVIk0SBKgYZOVRr/e1bVHAvrGRcHVhevbz0f151LYWLS1TkMXeyi+Pipc1Qj9M/S6yNUaCm1L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9A1ZWus; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8490BC116B1;
+	Thu, 11 Jul 2024 14:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720708487;
+	bh=u+JLQpY2OGFSvyqiP0oNI4X+ySZWmc0hNBY3OoLpvTw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=s9A1ZWus2u/s3VdNqvfq5TnQkOHcQ+E+yMcB8FG3yojvKvocStUsBpAEJnqkpVVnI
+	 NEcpIyKsKgGNll95XbRT2sH6pt1BcuJjprDmYrPGONiyNQKLs59mnBJ6y3GmaqzLBd
+	 i+feY7H7u5fNayN8vpmU+KeoaJzq3fPVQ+8Sgi7Jjcv27qHYHi+a1rID+K1r6DuMxa
+	 YuBUwV6/WlRDvup3E3H1o8B2lcf8ksTWmi8TZoFqGNQ94tzwnD6H0cASHk94zbdMGQ
+	 /XOTVo+jBrxPwEPvesKCp0AEUN8P3hNPYywJF5lDahq6XIjg0du9ElidpX2TtPAfxA
+	 GwwLEcYftnBog==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 11 Jul 2024 15:33:28 +0100
+Subject: [PATCH] kselftest/alsa: Use card name rather than number in test
+ names
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADftj2YC/x3MQQqDMBBG4avIrB1IJCB4ldLF1PzRoTaWjIgg3
+ t3g8lu8d5KhKIyG5qSCXU3XXOHbhsZZ8gTWWE2d64LrvWdZTPhrWNIG2/izSomc5QdGEC8xhjG
+ Jo9r/C5Iez/v1vq4bQlO3K2sAAAA=
+To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.14-dev-d4707
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13170; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=u+JLQpY2OGFSvyqiP0oNI4X+ySZWmc0hNBY3OoLpvTw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmj+2Ekf3wRYUeio+n3/rUkalFzeUoYxJ/Da2Erwhc
+ MbQDjA+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZo/thAAKCRAk1otyXVSH0EB5B/
+ sGj1T4OaXaWh/RtRN5F+4/hqe4v9bV9sFApvnwk0NpdGrvCsVzCh98D1chMighLDbtCdBX9Wbcjw09
+ TFjbudmgyVi+2dMH5lObbEWMeuCYGevyOFvUkorT1OE+nE0FNZFJNgm/i8E8EJHdcNSBDsJ6cjsdbV
+ NpPB/ejUDKZcISa+osgM/2mxTSwdGnXHgsB7dcGg4ip3wakezG7ZIwS6gRokJF8inAuv//1EY3ffWy
+ lrAFXaBkn1CLX4e7VSlEn8RQUHdHSwt6m7lL4DltSo7HAdxdTtzf+csdxJhJ7TAKQEQYs7N6uenuLG
+ DfmGpFdmHRY8dza9h2hQO9gJ7gcpAr
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Jul 11, 2024 06:14:09 Xu Kuohai <xukuohai@huaweicloud.com>:
+Currently for the PCM and mixer tests we report test names which identify
+the card being tested with the card number. This ensures we have unique
+names but since card numbers are dynamically assigned at runtime the names
+we end up with will often not be stable on systems with multiple cards
+especially where those cards are provided by separate modules loeaded at
+runtime. This makes it difficult for automated systems and UIs to relate
+test results between runs on affected platforms.
 
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> To be consistent with most LSM hooks, convert the return value of
-> hook inode_need_killpriv to 0 or a negative error code.
->
-> Before:
-> - Both hook inode_need_killpriv and func security_inode_need_killpriv
-> =C2=A0 return > 0 if security_inode_killpriv is required, 0 if not, and <=
- 0
-> =C2=A0 to abort the operation.
->
-> After:
-> - Both hook inode_need_killpriv and func security_inode_need_killpriv
-> =C2=A0 return 0 on success and a negative error code on failure.
-> =C2=A0 On success, hook inode_need_killpriv sets output param @need to tr=
-ue
-> =C2=A0 if security_inode_killpriv is required, and false if not. When @ne=
-ed
-> =C2=A0 is true, func security_inode_need_killpriv sets ATTR_KILL_PRIV fla=
-g
-> =C2=A0 in @attr; when false, it clears the flag.
-> =C2=A0 On failure, @need and @attr remains unchanged.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Address this by replacing our use of card numbers with card names which are
+more likely to be stable across runs. We use the long name since in the
+case where we have two of the same card it is more likely to include
+deduplication information (eg, HDA cards include the address/IRQ). The
+resulting information is not the most beautiful for human readers but the
+majority of kselftest output consumption is automated systems and it wasn't
+that great anyway.
 
-It looks ok - though unnecessary (I'm assuming a later patch works better w=
-ith this) - , but I'd be more comfortable if it was documented that any cal=
-lers of the need_killpriv hook must set need to false before calling. Or if=
- the hooks set need to false at start.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/alsa/mixer-test.c | 76 ++++++++++++++++---------------
+ tools/testing/selftests/alsa/pcm-test.c   | 35 ++++++++------
+ 2 files changed, 60 insertions(+), 51 deletions(-)
 
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index 1c04e5f638a0..df9ae3b4e2df 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -33,6 +33,7 @@
+ struct card_data {
+ 	snd_ctl_t *handle;
+ 	int card;
++	const char *card_name;
+ 	struct pollfd pollfd;
+ 	int num_ctls;
+ 	snd_ctl_elem_list_t *ctls;
+@@ -91,6 +92,7 @@ static void find_controls(void)
+ 		err = snd_card_get_longname(card, &card_longname);
+ 		if (err != 0)
+ 			card_longname = "Unknown";
++		card_data->card_name = card_longname;
+ 		ksft_print_msg("Card %d - %s (%s)\n", card,
+ 			       card_name, card_longname);
+ 
+@@ -389,16 +391,16 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+ 	/* If the control is turned off let's be polite */
+ 	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+ 		ksft_print_msg("%s is inactive\n", ctl->name);
+-		ksft_test_result_skip("get_value.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("get_value.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	/* Can't test reading on an unreadable control */
+ 	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+ 		ksft_print_msg("%s is not readable\n", ctl->name);
+-		ksft_test_result_skip("get_value.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("get_value.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+@@ -413,8 +415,8 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+ 		err = -EINVAL;
+ 
+ out:
+-	ksft_test_result(err >= 0, "get_value.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(err >= 0, "get_value.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static bool strend(const char *haystack, const char *needle)
+@@ -431,7 +433,7 @@ static void test_ctl_name(struct ctl_data *ctl)
+ {
+ 	bool name_ok = true;
+ 
+-	ksft_print_msg("%d.%d %s\n", ctl->card->card, ctl->elem,
++	ksft_print_msg("%s.%d %s\n", ctl->card->card_name, ctl->elem,
+ 		       ctl->name);
+ 
+ 	/* Only boolean controls should end in Switch */
+@@ -453,8 +455,8 @@ static void test_ctl_name(struct ctl_data *ctl)
+ 		}
+ 	}
+ 
+-	ksft_test_result(name_ok, "name.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(name_ok, "name.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static void show_values(struct ctl_data *ctl, snd_ctl_elem_value_t *orig_val,
+@@ -682,30 +684,30 @@ static void test_ctl_write_default(struct ctl_data *ctl)
+ 	/* If the control is turned off let's be polite */
+ 	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+ 		ksft_print_msg("%s is inactive\n", ctl->name);
+-		ksft_test_result_skip("write_default.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_default.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+ 		ksft_print_msg("%s is not writeable\n", ctl->name);
+-		ksft_test_result_skip("write_default.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_default.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	/* No idea what the default was for unreadable controls */
+ 	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+ 		ksft_print_msg("%s couldn't read default\n", ctl->name);
+-		ksft_test_result_skip("write_default.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_default.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	err = write_and_verify(ctl, ctl->def_val, NULL);
+ 
+-	ksft_test_result(err >= 0, "write_default.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(err >= 0, "write_default.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
+@@ -815,15 +817,15 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
+ 	/* If the control is turned off let's be polite */
+ 	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+ 		ksft_print_msg("%s is inactive\n", ctl->name);
+-		ksft_test_result_skip("write_valid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_valid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+ 		ksft_print_msg("%s is not writeable\n", ctl->name);
+-		ksft_test_result_skip("write_valid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_valid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+@@ -846,16 +848,16 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
+ 
+ 	default:
+ 		/* No tests for this yet */
+-		ksft_test_result_skip("write_valid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_valid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	/* Restore the default value to minimise disruption */
+ 	write_and_verify(ctl, ctl->def_val, NULL);
+ 
+-	ksft_test_result(pass, "write_valid.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(pass, "write_valid.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static bool test_ctl_write_invalid_value(struct ctl_data *ctl,
+@@ -1027,15 +1029,15 @@ static void test_ctl_write_invalid(struct ctl_data *ctl)
+ 	/* If the control is turned off let's be polite */
+ 	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+ 		ksft_print_msg("%s is inactive\n", ctl->name);
+-		ksft_test_result_skip("write_invalid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_invalid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+ 		ksft_print_msg("%s is not writeable\n", ctl->name);
+-		ksft_test_result_skip("write_invalid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_invalid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+@@ -1058,28 +1060,28 @@ static void test_ctl_write_invalid(struct ctl_data *ctl)
+ 
+ 	default:
+ 		/* No tests for this yet */
+-		ksft_test_result_skip("write_invalid.%d.%d\n",
+-				      ctl->card->card, ctl->elem);
++		ksft_test_result_skip("write_invalid.%s.%d\n",
++				      ctl->card->card_name, ctl->elem);
+ 		return;
+ 	}
+ 
+ 	/* Restore the default value to minimise disruption */
+ 	write_and_verify(ctl, ctl->def_val, NULL);
+ 
+-	ksft_test_result(pass, "write_invalid.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(pass, "write_invalid.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static void test_ctl_event_missing(struct ctl_data *ctl)
+ {
+-	ksft_test_result(!ctl->event_missing, "event_missing.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(!ctl->event_missing, "event_missing.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ static void test_ctl_event_spurious(struct ctl_data *ctl)
+ {
+-	ksft_test_result(!ctl->event_spurious, "event_spurious.%d.%d\n",
+-			 ctl->card->card, ctl->elem);
++	ksft_test_result(!ctl->event_spurious, "event_spurious.%s.%d\n",
++			 ctl->card->card_name, ctl->elem);
+ }
+ 
+ int main(void)
+diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
+index de664dedb541..a7b1e6e876c5 100644
+--- a/tools/testing/selftests/alsa/pcm-test.c
++++ b/tools/testing/selftests/alsa/pcm-test.c
+@@ -24,6 +24,7 @@ typedef struct timespec timestamp_t;
+ 
+ struct card_data {
+ 	int card;
++	const char *name;
+ 	pthread_t thread;
+ 	struct card_data *next;
+ };
+@@ -35,6 +36,7 @@ struct pcm_data {
+ 	int card;
+ 	int device;
+ 	int subdevice;
++	const char *card_name;
+ 	snd_pcm_stream_t stream;
+ 	snd_config_t *pcm_config;
+ 	struct pcm_data *next;
+@@ -191,6 +193,7 @@ static void find_pcms(void)
+ 		if (!card_data)
+ 			ksft_exit_fail_msg("Out of memory\n");
+ 		card_data->card = card;
++		card_data->name = card_longname;
+ 		card_data->next = card_list;
+ 		card_list = card_data;
+ 
+@@ -232,6 +235,7 @@ static void find_pcms(void)
+ 					pcm_data->card = card;
+ 					pcm_data->device = dev;
+ 					pcm_data->subdevice = subdev;
++					pcm_data->card_name = card_name;
+ 					pcm_data->stream = stream;
+ 					pcm_data->pcm_config = conf_get_subtree(card_config, key, NULL);
+ 					pcm_data->next = pcm_list;
+@@ -294,9 +298,9 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
+ 
+ 	desc = conf_get_string(pcm_cfg, "description", NULL, NULL);
+ 	if (desc)
+-		ksft_print_msg("%s.%s.%d.%d.%d.%s - %s\n",
++		ksft_print_msg("%s.%s.%s.%d.%d.%s - %s\n",
+ 			       test_class_name, test_name,
+-			       data->card, data->device, data->subdevice,
++			       data->card_name, data->device, data->subdevice,
+ 			       snd_pcm_stream_name(data->stream),
+ 			       desc);
+ 
+@@ -352,9 +356,9 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
+ 			old_format = format;
+ 			format = snd_pcm_format_value(alt_formats[i]);
+ 			if (format != SND_PCM_FORMAT_UNKNOWN) {
+-				ksft_print_msg("%s.%d.%d.%d.%s.%s format %s -> %s\n",
++				ksft_print_msg("%s.%s.%d.%d.%s.%s format %s -> %s\n",
+ 						 test_name,
+-						 data->card, data->device, data->subdevice,
++						 data->card_name, data->device, data->subdevice,
+ 						 snd_pcm_stream_name(data->stream),
+ 						 snd_pcm_access_name(access),
+ 						 snd_pcm_format_name(old_format),
+@@ -430,9 +434,9 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
+ 		goto __close;
+ 	}
+ 
+-	ksft_print_msg("%s.%s.%d.%d.%d.%s hw_params.%s.%s.%ld.%ld.%ld.%ld sw_params.%ld\n",
++	ksft_print_msg("%s.%s.%s.%d.%d.%s hw_params.%s.%s.%ld.%ld.%ld.%ld sw_params.%ld\n",
+ 		         test_class_name, test_name,
+-			 data->card, data->device, data->subdevice,
++			 data->card_name, data->device, data->subdevice,
+ 			 snd_pcm_stream_name(data->stream),
+ 			 snd_pcm_access_name(access),
+ 			 snd_pcm_format_name(format),
+@@ -491,9 +495,10 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
+ 		 * Anything specified as specific to this system
+ 		 * should always be supported.
+ 		 */
+-		ksft_test_result(!skip, "%s.%s.%d.%d.%d.%s.params\n",
++		ksft_test_result(!skip, "%s.%s.%s.%d.%d.%s.params\n",
+ 				 test_class_name, test_name,
+-				 data->card, data->device, data->subdevice,
++				 data->card_name, data->device,
++				 data->subdevice,
+ 				 snd_pcm_stream_name(data->stream));
+ 		break;
+ 	default:
+@@ -501,14 +506,16 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
+ 	}
+ 
+ 	if (!skip)
+-		ksft_test_result(pass, "%s.%s.%d.%d.%d.%s\n",
++		ksft_test_result(pass, "%s.%s.%s.%d.%d.%s\n",
+ 				 test_class_name, test_name,
+-				 data->card, data->device, data->subdevice,
++				 data->card_name, data->device,
++				 data->subdevice,
+ 				 snd_pcm_stream_name(data->stream));
+ 	else
+-		ksft_test_result_skip("%s.%s.%d.%d.%d.%s\n",
++		ksft_test_result_skip("%s.%s.%s.%d.%d.%s\n",
+ 				 test_class_name, test_name,
+-				 data->card, data->device, data->subdevice,
++				 data->card_name, data->device,
++				 data->subdevice,
+ 				 snd_pcm_stream_name(data->stream));
+ 
+ 	if (msg[0])
+@@ -609,8 +616,8 @@ int main(void)
+ 					      conf->filename, conf->config_id);
+ 
+ 	for (pcm = pcm_missing; pcm != NULL; pcm = pcm->next) {
+-		ksft_test_result(false, "test.missing.%d.%d.%d.%s\n",
+-				 pcm->card, pcm->device, pcm->subdevice,
++		ksft_test_result(false, "test.missing.%s.%d.%d.%s\n",
++				 pcm->card_name, pcm->device, pcm->subdevice,
+ 				 snd_pcm_stream_name(pcm->stream));
+ 	}
+ 
 
-> ---
-> fs/attr.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 5 ++---
-> fs/inode.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 +---
-> include/linux/lsm_hook_defs.h |=C2=A0 2 +-
-> include/linux/security.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 20 +++++++++++++=
-+++----
-> security/commoncap.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 12 ++++++++----
-> security/security.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 29 ++++++++++++++++++++++++-----
-> 6 files changed, 52 insertions(+), 20 deletions(-)
->
-> diff --git a/fs/attr.c b/fs/attr.c
-> index 960a310581eb..aaadc721c982 100644
-> --- a/fs/attr.c
-> +++ b/fs/attr.c
-> @@ -427,11 +427,10 @@ int notify_change(struct mnt_idmap *idmap, struct d=
-entry *dentry,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 attr->ia_mtime =3D timestamp_t=
-runcate(attr->ia_mtime, inode);
->
-> =C2=A0=C2=A0=C2=A0 if (ia_valid & ATTR_KILL_PRIV) {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 error =3D security_inode_need_killp=
-riv(dentry);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 error =3D security_inode_need_killp=
-riv(dentry, &ia_valid);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (error < 0)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return=
- error;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (error =3D=3D 0)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ia_valid =
-=3D attr->ia_valid &=3D ~ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 attr->ia_valid =3D ia_valid;
-> =C2=A0=C2=A0=C2=A0 }
->
-> =C2=A0=C2=A0=C2=A0 /*
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 3a41f83a4ba5..cd335dc3a3bc 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -2012,11 +2012,9 @@ int dentry_needs_remove_privs(struct mnt_idmap *id=
-map,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->
-> =C2=A0=C2=A0=C2=A0 mask =3D setattr_should_drop_suidgid(idmap, inode);
-> -=C2=A0=C2=A0 ret =3D security_inode_need_killpriv(dentry);
-> +=C2=A0=C2=A0 ret =3D security_inode_need_killpriv(dentry, &mask);
-> =C2=A0=C2=A0=C2=A0 if (ret < 0)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
-> -=C2=A0=C2=A0 if (ret)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mask |=3D ATTR_KILL_PRIV;
-> =C2=A0=C2=A0=C2=A0 return mask;
-> }
->
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
-h
-> index e6e6f8473955..964849de424b 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -165,7 +165,7 @@ LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *=
-idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *acl_name)
-> LSM_HOOK(void, LSM_RET_VOID, inode_post_remove_acl, struct mnt_idmap *idm=
-ap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *acl_name)
-> -LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry)
-> +LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry, bool *need)
-> LSM_HOOK(int, 0, inode_killpriv, struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry)
-> LSM_HOOK(int, -EOPNOTSUPP, inode_getsecurity, struct mnt_idmap *idmap,
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 454f96307cb9..1614ef5b2dd2 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -161,7 +161,7 @@ int cap_inode_setxattr(struct dentry *dentry, const c=
-har *name,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 const void *value, size_t size, int flags);
-> int cap_inode_removexattr(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 struct dentry *dentry, const char *name);
-> -int cap_inode_need_killpriv(struct dentry *dentry);
-> +int cap_inode_need_killpriv(struct dentry *dentry, bool *need);
-> int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
-> int cap_inode_getsecurity(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 struct inode *inode, const char *name, void **buffer,
-> @@ -389,7 +389,7 @@ int security_inode_listxattr(struct dentry *dentry);
-> int security_inode_removexattr(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *nam=
-e);
-> void security_inode_post_removexattr(struct dentry *dentry, const char *n=
-ame);
-> -int security_inode_need_killpriv(struct dentry *dentry);
-> +int security_inode_need_killpriv(struct dentry *dentry, int *attr);
-> int security_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentr=
-y);
-> int security_inode_getsecurity(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct inode *inode, const char *name,
-> @@ -971,9 +971,21 @@ static inline void security_inode_post_removexattr(s=
-truct dentry *dentry,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 const char *name)
-> { }
->
-> -static inline int security_inode_need_killpriv(struct dentry *dentry)
-> +static inline int security_inode_need_killpriv(struct dentry *dentry, in=
-t *attr)
-> {
-> -=C2=A0=C2=A0 return cap_inode_need_killpriv(dentry);
-> +=C2=A0=C2=A0 int rc;
-> +=C2=A0=C2=A0 bool need =3D false;
-> +
-> +=C2=A0=C2=A0 rc =3D cap_inode_need_killpriv(dentry, &need);
-> +=C2=A0=C2=A0 if (rc < 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
-> +
-> +=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr |=3D ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0 else
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr &=3D ~ATTR_KILL_PRIV;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> static inline int security_inode_killpriv(struct mnt_idmap *idmap,
-> diff --git a/security/commoncap.c b/security/commoncap.c
-> index cefad323a0b1..17d6188d22cf 100644
-> --- a/security/commoncap.c
-> +++ b/security/commoncap.c
-> @@ -286,21 +286,25 @@ int cap_capset(struct cred *new,
-> /**
-> =C2=A0 * cap_inode_need_killpriv - Determine if inode change affects priv=
-ileges
-> =C2=A0 * @dentry: The inode/dentry in being changed with change marked AT=
-TR_KILL_PRIV
-> + * @need: If inode_killpriv() is needed
-> =C2=A0 *
-> =C2=A0 * Determine if an inode having a change applied that's marked ATTR=
-_KILL_PRIV
-> =C2=A0 * affects the security markings on that inode, and if it is, shoul=
-d
-> =C2=A0 * inode_killpriv() be invoked or the change rejected.
-> =C2=A0 *
-> - * Return: 1 if security.capability has a value, meaning inode_killpriv(=
-)
-> - * is required, 0 otherwise, meaning inode_killpriv() is not required.
-> + * Return: Always returns 0. If security.capability has a value, meaning
-> + * inode_killpriv() is required, @need is set to true.
-> =C2=A0 */
-> -int cap_inode_need_killpriv(struct dentry *dentry)
-> +int cap_inode_need_killpriv(struct dentry *dentry, bool *need)
-> {
-> =C2=A0=C2=A0=C2=A0 struct inode *inode =3D d_backing_inode(dentry);
-> =C2=A0=C2=A0=C2=A0 int error;
->
-> =C2=A0=C2=A0=C2=A0 error =3D __vfs_getxattr(dentry, inode, XATTR_NAME_CAP=
-S, NULL, 0);
-> -=C2=A0=C2=A0 return error > 0;
-> +=C2=A0=C2=A0 if (error > 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *need =3D true;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> /**
-> diff --git a/security/security.c b/security/security.c
-> index 3475f0cab3da..a4abcd86eb36 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -2490,17 +2490,36 @@ void security_inode_post_removexattr(struct dentr=
-y *dentry, const char *name)
-> /**
-> =C2=A0 * security_inode_need_killpriv() - Check if security_inode_killpri=
-v() required
-> =C2=A0 * @dentry: associated dentry
-> + * @attr: attribute flags
-> =C2=A0 *
-> =C2=A0 * Called when an inode has been changed to determine if
-> =C2=A0 * security_inode_killpriv() should be called.
-> =C2=A0 *
-> - * Return: Return <0 on error to abort the inode change operation, retur=
-n 0 if
-> - *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 security_inode_killpr=
-iv() does not need to be called, return >0 if
-> - *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 security_inode_killpr=
-iv() does need to be called.
-> + * Return: Return 0 on success, negative error code on failure.
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 On success, set ATTR_=
-KILL_PRIV flag in @attr when @need is true,
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clears it when false.
-> =C2=A0 */
-> -int security_inode_need_killpriv(struct dentry *dentry)
-> +int security_inode_need_killpriv(struct dentry *dentry, int *attr)
-> {
-> -=C2=A0=C2=A0 return call_int_hook(inode_need_killpriv, dentry);
-> +=C2=A0=C2=A0 int rc;
-> +=C2=A0=C2=A0 bool need =3D false;
-> +=C2=A0=C2=A0 struct security_hook_list *hp;
-> +
-> +=C2=A0=C2=A0 hlist_for_each_entry(hp, &security_hook_heads.inode_need_ki=
-llpriv,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 list) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D hp->hook.inode_need_killpriv=
-(dentry, &need);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc < 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> +=C2=A0=C2=A0 }
-> +
-> +=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr |=3D ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0 else
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr &=3D ~ATTR_KILL_PRIV;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> /**
-> --
-> 2.30.2
+---
+base-commit: f2661062f16b2de5d7b6a5c42a9a5c96326b8454
+change-id: 20240711-alsa-kselftest-board-name-e4a1add4cfa0
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
 
