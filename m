@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-13560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28B3B92E601
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C15D492E636
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 13:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7B13287391
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:19:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C78281419
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2024 11:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9919915DBB3;
-	Thu, 11 Jul 2024 11:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7040316C862;
+	Thu, 11 Jul 2024 11:14:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635D415CD60;
-	Thu, 11 Jul 2024 11:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E8C166315;
+	Thu, 11 Jul 2024 11:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720696442; cv=none; b=CoxrBPdtlHZ1fs1K8TdigvkdVAJ3y/aqjAPdSYP5lLKJlQPWC2QlQCmCTJlW+7pblTqDst+9ksHDBsoX074sQRQeaig8tSai3ri+T2IYaCjjM2cOzhWY3NXUp2esBziyG4j4J38rMIbDCGhM6GxE6y/dkeBKXKDmzGqIbn4w+44=
+	t=1720696448; cv=none; b=RlMXBmJmcD5MAztyoMctPrej/MsQ3Flb75rkbWN09cOgxPAkJ/ORgF961tc/9tDE3G1bWDoJWAGBkH/MkhfVNB5zZevINEfcGcDfTWC8XPJdmRbRip+FKn+pQrkdNktl9kQESP7bfb3B1l3xplBN4py6jLvlP6/GL8OQvvgUDoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720696442; c=relaxed/simple;
-	bh=4bixJwGuTWgSqOvL6zwccNF+B7ZssgQCR776AYlaV+M=;
+	s=arc-20240116; t=1720696448; c=relaxed/simple;
+	bh=sPPRJbcKUJ4f+xzo34ctXcJ2De278zOWocfbBBnM/nU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qsi8POpOA004fBnWVw3B93FheoRkkXHq9njUEyjYtTq1fhcCsJT5B5g9t8pAlVAc9jhjUtskP/cYcmifBAGkC7AGtE16hiYycKnqgPuhvwTtYVTP0/L+P/GVxd7iHFTe4CY4VQSZiHPYCF82urM8qkXFbTZfrZTZ4zYyHmWRjIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=DYUB+EgDkb9713tbN3zsq3kwS4SW6iY2N/HhX0KB274qsBBzg+k6MpYVEqobX0LhiGw6hHo9kO+1clVp964hK+4EBYlFkTzMZjCWVJSnqxsF62OLNMBPtfH95EgYkCrgZgjsBGTYM1oQ80fpcZax1RqJi4vfYmPP+OtuwuSmK3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WKXCx55ZQz4f3kK5;
-	Thu, 11 Jul 2024 19:13:49 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WKXCs67JWz4f3jY1;
+	Thu, 11 Jul 2024 19:13:45 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 59B001A0170;
+	by mail.maildlp.com (Postfix) with ESMTP id 82EF91A0170;
 	Thu, 11 Jul 2024 19:13:57 +0800 (CST)
 Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S7;
-	Thu, 11 Jul 2024 19:13:56 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgCHjPVxvo9mulQgBw--.25300S8;
+	Thu, 11 Jul 2024 19:13:57 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -80,9 +80,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH bpf-next v4 05/20] lsm: Refactor return value of LSM hook inode_copy_up_xattr
-Date: Thu, 11 Jul 2024 19:18:53 +0800
-Message-Id: <20240711111908.3817636-6-xukuohai@huaweicloud.com>
+Subject: [PATCH bpf-next v4 06/20] lsm: Refactor return value of LSM hook getselfattr
+Date: Thu, 11 Jul 2024 19:18:54 +0800
+Message-Id: <20240711111908.3817636-7-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
 References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
@@ -93,10 +93,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1kXF4DJFWkXFWrJF1fJFb_yoWruw4fpa
-	1Dtan2qr1rJFy7ZFykJF47ua1F93yfGFWUCa9xuw12yFZ3Xrn3Wryayr12gr45Wry8JF4k
-	tanFvrs8C3WYy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgCHjPVxvo9mulQgBw--.25300S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFWxXFW5tr4fKrWxJFWUurg_yoWfJw4UpF
+	n5K3Zrtr40yF97WFWkAF47Ca1a9rySgry7J39xGw4SyFy5tr1xWFy3Ja4jkrWUGw1DCF4F
+	yanF9r45CrsrC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -115,122 +115,241 @@ X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 From: Xu Kuohai <xukuohai@huawei.com>
 
 To be consistent with most LSM hooks, convert the return value of
-hook inode_copy_up_xattr to 0 or a negative error code.
+hook getselfattr to 0 or a negative error code.
 
 Before:
-- Hook inode_copy_up_xattr returns 0 when accepting xattr, 1 when
-  discarding xattr, -EOPNOTSUPP if it does not know xattr, or any
-  other negative error code otherwise.
+- Hook getselfattr returns number of attributes found on success
+  or a negative error code on failure.
 
 After:
-- Hook inode_copy_up_xattr returns 0 when accepting xattr, *-ECANCELED*
-  when discarding xattr, -EOPNOTSUPP if it does not know xattr, or
-  any other negative error code otherwise.
+- Hook getselfattr returns 0 on success or a negative error code
+  on failure. An output parameter @nattr is introduced to hold
+  the number of attributes found on success.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- fs/overlayfs/copy_up.c            |  6 +++---
- security/integrity/evm/evm_main.c |  2 +-
- security/security.c               | 12 ++++++------
- security/selinux/hooks.c          |  4 ++--
- security/smack/smack_lsm.c        |  6 +++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+ include/linux/lsm_hook_defs.h |  2 +-
+ include/linux/security.h      |  5 +++--
+ security/apparmor/lsm.c       |  5 +++--
+ security/lsm_syscalls.c       |  6 +++++-
+ security/security.c           | 18 +++++++++++-------
+ security/selinux/hooks.c      | 13 +++++++++----
+ security/smack/smack_lsm.c    | 13 +++++++++----
+ 7 files changed, 41 insertions(+), 21 deletions(-)
 
-diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-index a5ef2005a2cc..337a5be99ac9 100644
---- a/fs/overlayfs/copy_up.c
-+++ b/fs/overlayfs/copy_up.c
-@@ -115,12 +115,12 @@ int ovl_copy_xattr(struct super_block *sb, const struct path *oldpath, struct de
- 			continue;
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 1b7761ae2777..dbc16f14f42f 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -282,7 +282,7 @@ LSM_HOOK(int, 0, netlink_send, struct sock *sk, struct sk_buff *skb)
+ LSM_HOOK(void, LSM_RET_VOID, d_instantiate, struct dentry *dentry,
+ 	 struct inode *inode)
+ LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int attr,
+-	 struct lsm_ctx __user *ctx, u32 *size, u32 flags)
++	 struct lsm_ctx __user *ctx, u32 *size, u32 flags, u32 *nattr)
+ LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
+ 	 struct lsm_ctx *ctx, u32 size, u32 flags)
+ LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 0ed53e232c4d..96a63e132abf 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -491,7 +491,7 @@ int security_sem_semop(struct kern_ipc_perm *sma, struct sembuf *sops,
+ 			unsigned nsops, int alter);
+ void security_d_instantiate(struct dentry *dentry, struct inode *inode);
+ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+-			 u32 __user *size, u32 flags);
++			 u32 __user *size, u32 flags, u32 *nattr);
+ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+ 			 u32 size, u32 flags);
+ int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+@@ -1420,7 +1420,8 @@ static inline void security_d_instantiate(struct dentry *dentry,
  
- 		error = security_inode_copy_up_xattr(old, name);
--		if (error < 0 && error != -EOPNOTSUPP)
--			break;
--		if (error == 1) {
-+		if (error == -ECANCELED) {
- 			error = 0;
- 			continue; /* Discard */
- 		}
-+		if (error < 0 && error != -EOPNOTSUPP)
-+			break;
- 
- 		if (is_posix_acl_xattr(name)) {
- 			error = ovl_copy_acl(OVL_FS(sb), oldpath, new, name);
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 62fe66dd53ce..6924ed508ebd 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -1000,7 +1000,7 @@ static int evm_inode_copy_up_xattr(struct dentry *src, const char *name)
- 	case EVM_XATTR_HMAC:
- 	case EVM_IMA_XATTR_DIGSIG:
- 	default:
--		rc = 1; /* discard */
-+		rc = -ECANCELED; /* discard */
- 	}
- 
- 	kfree(xattr_data);
-diff --git a/security/security.c b/security/security.c
-index 26eea8f4cd74..12215ca286af 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2675,18 +2675,18 @@ EXPORT_SYMBOL(security_inode_copy_up);
-  * lower layer to the union/overlay layer.   The caller is responsible for
-  * reading and writing the xattrs, this hook is merely a filter.
-  *
-- * Return: Returns 0 to accept the xattr, 1 to discard the xattr, -EOPNOTSUPP
-- *         if the security module does not know about attribute, or a negative
-- *         error code to abort the copy up.
-+ * Return: Returns 0 to accept the xattr, -ECANCELED to discard the xattr,
-+ *         -EOPNOTSUPP if the security module does not know about attribute,
-+ *         or a negative error code to abort the copy up.
-  */
- int security_inode_copy_up_xattr(struct dentry *src, const char *name)
+ static inline int security_getselfattr(unsigned int attr,
+ 				       struct lsm_ctx __user *ctx,
+-				       size_t __user *size, u32 flags)
++				       size_t __user *size, u32 flags,
++				       u32 *nattr)
  {
- 	int rc;
- 
- 	/*
--	 * The implementation can return 0 (accept the xattr), 1 (discard the
--	 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
--	 * any other error code in case of an error.
-+	 * The implementation can return 0 (accept the xattr), -ECANCELED
-+	 * (discard the xattr), -EOPNOTSUPP if it does not know anything
-+	 *  about the xattr or any other error code in case of an error.
- 	 */
- 	rc = call_int_hook(inode_copy_up_xattr, src, name);
- 	if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5dedd3917d57..f9a6637dfd78 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3528,8 +3528,8 @@ static int selinux_inode_copy_up_xattr(struct dentry *dentry, const char *name)
- 	 * xattrs up.  Instead, filter out SELinux-related xattrs following
- 	 * policy load.
- 	 */
--	if (selinux_initialized() && strcmp(name, XATTR_NAME_SELINUX) == 0)
--		return 1; /* Discard */
-+	if (selinux_initialized() && !strcmp(name, XATTR_NAME_SELINUX))
-+		return -ECANCELED; /* Discard */
- 	/*
- 	 * Any other attribute apart from SELINUX is not claimed, supported
- 	 * by selinux.
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 6f73906bf7ea..ae8f1c2d0ca6 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4893,10 +4893,10 @@ static int smack_inode_copy_up(struct dentry *dentry, struct cred **new)
- static int smack_inode_copy_up_xattr(struct dentry *src, const char *name)
- {
- 	/*
--	 * Return 1 if this is the smack access Smack attribute.
-+	 * Return -ECANCELED if this is the smack access Smack attribute.
- 	 */
--	if (strcmp(name, XATTR_NAME_SMACK) == 0)
--		return 1;
-+	if (!strcmp(name, XATTR_NAME_SMACK))
-+		return -ECANCELED;
- 
  	return -EOPNOTSUPP;
  }
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 6239777090c4..72dd09993f28 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -779,7 +779,7 @@ static int apparmor_sb_pivotroot(const struct path *old_path,
+ }
+ 
+ static int apparmor_getselfattr(unsigned int attr, struct lsm_ctx __user *lx,
+-				u32 *size, u32 flags)
++				u32 *size, u32 flags, u32 *nattr)
+ {
+ 	int error = -ENOENT;
+ 	struct aa_task_ctx *ctx = task_ctx(current);
+@@ -815,7 +815,8 @@ static int apparmor_getselfattr(unsigned int attr, struct lsm_ctx __user *lx,
+ 
+ 	if (error < 0)
+ 		return error;
+-	return 1;
++	*nattr = 1;
++	return 0;
+ }
+ 
+ static int apparmor_getprocattr(struct task_struct *task, const char *name,
+diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+index 8440948a690c..845866f94b03 100644
+--- a/security/lsm_syscalls.c
++++ b/security/lsm_syscalls.c
+@@ -77,7 +77,11 @@ SYSCALL_DEFINE4(lsm_set_self_attr, unsigned int, attr, struct lsm_ctx __user *,
+ SYSCALL_DEFINE4(lsm_get_self_attr, unsigned int, attr, struct lsm_ctx __user *,
+ 		ctx, u32 __user *, size, u32, flags)
+ {
+-	return security_getselfattr(attr, ctx, size, flags);
++	int rc;
++	u32 nattr;
++
++	rc = security_getselfattr(attr, ctx, size, flags, &nattr);
++	return rc < 0 ? rc : nattr;
+ }
+ 
+ /**
+diff --git a/security/security.c b/security/security.c
+index 12215ca286af..095e78efcb32 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -3969,21 +3969,23 @@ EXPORT_SYMBOL(security_d_instantiate);
+  * @flags: special handling options. LSM_FLAG_SINGLE indicates that only
+  * attributes associated with the LSM identified in the passed @ctx be
+  * reported.
++ * @nattr: number of attributes found on success
+  *
+  * A NULL value for @uctx can be used to get both the number of attributes
+  * and the size of the data.
+  *
+- * Returns the number of attributes found on success, negative value
+- * on error. @size is reset to the total size of the data.
+- * If @size is insufficient to contain the data -E2BIG is returned.
++ * Returns 0 on success, a negative error code on failure. @size is reset
++ * to the total size of the data. If @size is insufficient to contain the
++ * data -E2BIG is returned.
+  */
+ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+-			 u32 __user *size, u32 flags)
++			 u32 __user *size, u32 flags, u32 *nattr)
+ {
+ 	struct security_hook_list *hp;
+ 	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
+ 	u8 __user *base = (u8 __user *)uctx;
+ 	u32 entrysize;
++	u32 entrycount;
+ 	u32 total = 0;
+ 	u32 left;
+ 	bool toobig = false;
+@@ -4024,7 +4026,8 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+ 		entrysize = left;
+ 		if (base)
+ 			uctx = (struct lsm_ctx __user *)(base + total);
+-		rc = hp->hook.getselfattr(attr, uctx, &entrysize, flags);
++		rc = hp->hook.getselfattr(attr, uctx, &entrysize, flags,
++					  &entrycount);
+ 		if (rc == -EOPNOTSUPP) {
+ 			rc = 0;
+ 			continue;
+@@ -4039,7 +4042,7 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+ 			left -= entrysize;
+ 
+ 		total += entrysize;
+-		count += rc;
++		count += entrycount;
+ 		if (single)
+ 			break;
+ 	}
+@@ -4047,9 +4050,10 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+ 		return -EFAULT;
+ 	if (toobig)
+ 		return -E2BIG;
++	*nattr = count;
+ 	if (count == 0)
+ 		return LSM_RET_DEFAULT(getselfattr);
+-	return count;
++	return 0;
+ }
+ 
+ /*
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index f9a6637dfd78..0d35bb93baca 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6536,15 +6536,17 @@ static int selinux_lsm_setattr(u64 attr, void *value, size_t size)
+  * @ctx: buffer to receive the result
+  * @size: buffer size (input), buffer size used (output)
+  * @flags: unused
++ * @nattr: number of attributes found on success.
+  *
+  * Fill the passed user space @ctx with the details of the requested
+  * attribute.
+  *
+- * Returns the number of attributes on success, an error code otherwise.
+- * There will only ever be one attribute.
++ * Returns 0 on success or a negative error code on failure.
++ * There will only ever be one attribute, so @nattr is set to
++ * 1 on success.
+  */
+ static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+-			       u32 *size, u32 flags)
++			       u32 *size, u32 flags, u32 *nattr)
+ {
+ 	int rc;
+ 	char *val = NULL;
+@@ -6555,7 +6557,10 @@ static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+ 		return val_len;
+ 	rc = lsm_fill_user_ctx(ctx, size, val, val_len, LSM_ID_SELINUX, 0);
+ 	kfree(val);
+-	return (!rc ? 1 : rc);
++	if (rc < 0)
++		return rc;
++	*nattr = 1;
++	return 0;
+ }
+ 
+ static int selinux_setselfattr(unsigned int attr, struct lsm_ctx *ctx,
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index ae8f1c2d0ca6..63d9c5f456c1 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -3648,15 +3648,17 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+  * @ctx: buffer to receive the result
+  * @size: available size in, actual size out
+  * @flags: unused
++ * @nattr: number of attributes found on success
+  *
+  * Fill the passed user space @ctx with the details of the requested
+  * attribute.
+  *
+- * Returns the number of attributes on success, an error code otherwise.
+- * There will only ever be one attribute.
++ * Returns 0 on success or a ngetaive error code on failure.
++ * There will only ever be one attribute, so @nattr is set to
++ * 1 on success.
+  */
+ static int smack_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+-			     u32 *size, u32 flags)
++			     u32 *size, u32 flags, u32 *nattr)
+ {
+ 	int rc;
+ 	struct smack_known *skp;
+@@ -3668,7 +3670,10 @@ static int smack_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+ 	rc = lsm_fill_user_ctx(ctx, size,
+ 			       skp->smk_known, strlen(skp->smk_known) + 1,
+ 			       LSM_ID_SMACK, 0);
+-	return (!rc ? 1 : rc);
++	if (rc < 0)
++		return rc;
++	*nattr = 1;
++	return 0;
+ }
+ 
+ /**
 -- 
 2.30.2
 
