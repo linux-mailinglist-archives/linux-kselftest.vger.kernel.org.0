@@ -1,116 +1,183 @@
-Return-Path: <linux-kselftest+bounces-13699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4DB8930255
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 01:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 657BF93025D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 01:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63918B216FA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 23:17:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3161B2214C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 23:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D26130A49;
-	Fri, 12 Jul 2024 23:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE8E130A54;
+	Fri, 12 Jul 2024 23:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=uci.edu header.i=@uci.edu header.b="P6bR8M6o"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IPfM0js4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82E54594A
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 23:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFE113049E
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 23:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720826265; cv=none; b=IcaSvxBxYCgPBn0sbHeq2i7h1/Ful5vC3QWb7n70rZv+24CVdhx1+h3dOPaOSC9jHsWAah/6r4D1WqB1t3JXlUkRpsp+K3y0suVvXy7z6SkGqw7nPXYsgkx81P0wlufVG2mnxjq8CMu0vFsUvHXHBkxi+hVd2vaSO5p9pxQ525E=
+	t=1720826981; cv=none; b=jI3GRdeGh04Eu0rdzhnEG5BgqJjq7rpXgiSf/653gQpiRqK350cB9Y0h74j+ra1oRSRm6Zj+AMIPRw1Ceh6zMlUb2mmu28t5pXzj3DiF2mrx77zsZuKsObykWO9JQbJ3SbY9G77Xp7UYUOjtnJwPctAMI7G/b7ZJ4nJVjmzlqIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720826265; c=relaxed/simple;
-	bh=QYgVRyzH8PcMNACMLIrauxK296Rh5jioM9J1lSlVUyk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BvlranByWeHY07JqDSAIIpp0L90SgYF8RdxTX7LGYg6l2sXDA7EIUvCvQKbJYUmKYbyevuP0xuChko9c9UM2vOFgGZ6UwP0AN6wD2NQGxVsuvR3uuRH1ZKfymGEMlpQr0XpMa8pzYZeiE/o5m8fB6tCRGpwF8wUAWLoZntZJmbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uci.edu; spf=pass smtp.mailfrom=uci.edu; dkim=pass (2048-bit key) header.d=uci.edu header.i=@uci.edu header.b=P6bR8M6o; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uci.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uci.edu
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70b12572bd8so2122891b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 16:17:42 -0700 (PDT)
+	s=arc-20240116; t=1720826981; c=relaxed/simple;
+	bh=HKSa+I+v6n4xxFPIipr5CjiQVuzATXIb8SNaZMvPPFw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=qXe0my0L1a+hwv2ZaIVZ+N82c98C4r+XgRQJtRT0ERYAzs+Q9k++Jz5VAI4AYEs+UIToa/yTWlf6AsxyvzgQm9ksIv8so8n+f2N0FzJ1bxfeD3hQIYJlXl4qD4ARZMMpB1JTKu+n9of+YnC7ZtAVmvxa5ZWlGXKrR9gfKWbqUBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IPfM0js4; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1fb90d7a4c3so20172135ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 16:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=uci.edu; s=google; t=1720826262; x=1721431062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UZ/x0PvWt6cH5OnfaR+19VuRmz9ObiIe9IQ/Uhq9F24=;
-        b=P6bR8M6of7AP2f1RHPwHJDWbjumG3sqdwQGNonMdF7BdNDWfC/Wbt2hXC4WaUWhQ49
-         0qpK/k3Um6qlOuBFjB16hPu17XShjVpIteW/77o+aDfBKZC6/wGFT+5NkhmoyRomTmNv
-         3Z4sOnTdET1yiaKZMyn2E4Q1C4Qz5VHJAfV5eYQinISOzXRp0HK/MbMV9cSUQn7gC5H3
-         jxaT+T0uHaeQsfcB9pYiJZ2JSl9cxB8uLUVOhOw0wBlb5edtr72x7uqT0ruxr6RtIqEN
-         71jOhjj/3IboJzebEWJl6caD51AullwwXV84bsfL1KFgZ88zCLeFF9avsfEpIOUM4Dmm
-         iheQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720826262; x=1721431062;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=google.com; s=20230601; t=1720826979; x=1721431779; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UZ/x0PvWt6cH5OnfaR+19VuRmz9ObiIe9IQ/Uhq9F24=;
-        b=CGpAyqhmY2OFQhJ0I/WP+06mSNc9aQjNlEV+sJLR1qNZtVCxY+CbYXpCgMK2ltqySH
-         Pksg7htXcVJrxQu6CCompLCv2PSuaGSbQjWG58pw0jnjDvdd+bDVycgyBwQZjLafOYN3
-         NndeGmSU0UJdlCD4/bAQEuCryX5QuDBQfKhjCBJRnep7vFuGH78szVwR8pCtnRfk81l4
-         hOQWW25ayneTHpe5b7p702gRLdzIskYQunNxZSmV1XxT2nHoNRbwDXnX3lweAq0NTwaw
-         emBpSHDCP/n/4u2fWNVz1A9KZwTNIa/B190Rz16TO2BXbvJh/4gDTlNhngQdg9gg6X9y
-         ArMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnNijwXalFjW1f5+G14Gc+EKIJsH9Xf2+yUXuPB9f4jf0iTOvOLdlD7aJcG8wb9voeh8tbRuxr8CGRDNWnO/YilKthSphqp0raFS/vOURD
-X-Gm-Message-State: AOJu0Yyz7jDZmRm0ZhLFs74L/WosT5TL7YE9Lldb/g/AvkIkcv/cJpWx
-	1esFqkYjZ9OVFOPhAToNmJQ5DYNj8ytizuUXk+Bg+QW9fCqyeTGXgYL/4e342/NRrVYCW3RkaSd
-	IeEw=
-X-Google-Smtp-Source: AGHT+IHLHwjE5E7P2KMkGKIVL/NKhjh2eaHWxkdiky4ouJUHcC8YM7Sv7rhWy/oTO/b5bjM+LvWERQ==
-X-Received: by 2002:a05:6a00:3d08:b0:706:5dab:83c4 with SMTP id d2e1a72fcca58-70b43576a80mr13644912b3a.14.1720826262020;
-        Fri, 12 Jul 2024 16:17:42 -0700 (PDT)
-Received: from alpha.mshome.net (ip68-4-168-191.oc.oc.cox.net. [68.4.168.191])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-77d5f0ab0d8sm6292960a12.19.2024.07.12.16.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 16:17:41 -0700 (PDT)
-From: Remington Brasga <rbrasga@uci.edu>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Remington Brasga <rbrasga@uci.edu>
-Subject: [PATCH] kselftest: missing arg in ptrace.c
-Date: Fri, 12 Jul 2024 23:17:30 +0000
-Message-Id: <20240712231730.2794-1-rbrasga@uci.edu>
-X-Mailer: git-send-email 2.34.1
+        bh=3ZzMQzTcLNpWOotcGFmeiz3+1hsAd4h/kpmJZcUSiZY=;
+        b=IPfM0js4s7fPTGbccQn11d5v9vxOECC6K+AtHve/uWYw25RlCGdCfsAK2ksc2uAD/c
+         G/6RkUAYXNlJruSSgXGxJQs/bIPzhEkHqzuZtTxLGTv4v86dHOCdaLwCpB2vTIzaQyl2
+         SauMlRXU0FLmVgFt/IEmzVmTEKVUs0hjTF8NBrBdsWDFLrWcRof1RCJYhZc9D0TVEYk+
+         Xp+gv1CyR+8k7Eq8n4vWjoNp/T7K4HgWw1C7sOaTJTC+BMCKXNArS1bVTFUpKhJVbB+A
+         bbVS07YuEPiaSW0Rk/eFpDDE9YYOvYYinxhbYZl4izNcgHacHt/mnuf9PcJLkMRgMhyb
+         6ORw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720826979; x=1721431779;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3ZzMQzTcLNpWOotcGFmeiz3+1hsAd4h/kpmJZcUSiZY=;
+        b=E9CqEg8Pi6xVjCnFHtdrKYONBG4dqnxPqxgMrdSMG/vR9P0JPBTzdWci6ttEonriM6
+         447oCX2HdmXGSOQI5GspF2MR+G6ZE5O6Rysvm+6j57KB5boTonwsbTZg53jvxlQvSFT9
+         Go5DlSwlZTAmx1WLegoNXK50Ct9hhAAri7t8CmtDmo+4lsqC2JdGycnJ38JH9k9hi2Pg
+         c5m06O18FSlcjKHW9a4jrIBTi2DA27X07mV0QzTJ53roNYOQCINmoeJVDAFhYuG/hDHA
+         JV1GenKVtGgQiyUdSPtX+0Zuje0X+ot6T/t/aTkYhB24T3J5PVA8VliJxY6llJuCxF9Y
+         YM1A==
+X-Forwarded-Encrypted: i=1; AJvYcCXhhzLZ8CWPYmTW3SAziqz4nzbojGwgOKNWKU6lJAeebDjsSunr5ilu9i6SRe2rWvjCvA48tIkIr6fcPeS9IhYrDNLXpAnp9s5GJrWKm7tQ
+X-Gm-Message-State: AOJu0YxmixB8HZEbspOfTdEmnAF3cK+SUDqZdvjFbdOa7Dai13o3152+
+	HDW6BJ/z8xXoPjvGoDezfb61N6Jv6rQoszY5QLhpGUC6p4lKnWHQkHIOlB/R1nWElW5ya04eW7E
+	tRIDkuUmQ8xYao2A8tvy/KQ==
+X-Google-Smtp-Source: AGHT+IFQY3bFW+Ec1W/jbxkBChGtxIDhrDnXJSKahhJ1TSz9fMywWTZ933D5uxR+un98Rl9u18eV+KxVPn9D87FWqw==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a17:902:c405:b0:1f7:3763:5ff0 with
+ SMTP id d9443c01a7336-1fbb6cd4279mr6343705ad.1.1720826979113; Fri, 12 Jul
+ 2024 16:29:39 -0700 (PDT)
+Date: Fri, 12 Jul 2024 23:29:37 +0000
+In-Reply-To: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
+X-Mailer: git-send-email 2.45.2.993.g49e7a77208-goog
+Message-ID: <20240712232937.2861788-1-ackerleytng@google.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+From: Ackerley Tng <ackerleytng@google.com>
+To: quic_eberman@quicinc.com
+Cc: akpm@linux-foundation.org, david@redhat.com, kvm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, maz@kernel.org, 
+	pbonzini@redhat.com, shuah@kernel.org, tabba@google.com, willy@infradead.org, 
+	vannapurve@google.com, hch@infradead.org, jgg@nvidia.com, rientjes@google.com, 
+	seanjc@google.com, jhubbard@nvidia.com, qperret@google.com, 
+	smostafa@google.com, fvdl@google.com, hughd@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The string passed to ksft_test_result_skip is missing the `type_name`
+Here=E2=80=99s an update from the Linux MM Alignment Session on July 10 202=
+4, 9-10am
+PDT:
 
-Signed-off-by: Remington Brasga <rbrasga@uci.edu>
----
-clang-tidy reported clang-diagnostic-format-insufficient-args warning
-on this line, so I am fixing it.
+The current direction is:
 
- tools/testing/selftests/arm64/abi/ptrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
++ Allow mmap() of ranges that cover both shared and private memory, but dis=
+allow
+  faulting in of private pages
+  + On access to private pages, userspace will get some error, perhaps SIGB=
+US
+  + On shared to private conversions, unmap the page and decrease refcounts
 
-diff --git a/tools/testing/selftests/arm64/abi/ptrace.c b/tools/testing/selftests/arm64/abi/ptrace.c
-index abe4d58d731d..6144f83f8ab4 100644
---- a/tools/testing/selftests/arm64/abi/ptrace.c
-+++ b/tools/testing/selftests/arm64/abi/ptrace.c
-@@ -156,7 +156,7 @@ static void test_hw_debug(pid_t child, int type, const char *type_name)
- 		/* Zero is not currently architecturally valid */
- 		ksft_test_result(arch, "%s_arch_set\n", type_name);
- 	} else {
--		ksft_test_result_skip("%s_arch_set\n");
-+		ksft_test_result_skip("%s_arch_set\n", type_name);
- 	}
- }
- 
--- 
-2.34.1
++ To support huge pages, guest_memfd will take ownership of the hugepages, =
+and
+  provide interested parties (userspace, KVM, iommu) with pages to be used.
+  + guest_memfd will track usage of (sub)pages, for both private and shared
+    memory
+  + Pages will be broken into smaller (probably 4K) chunks at creation time=
+ to
+    simplify implementation (as opposed to splitting at runtime when privat=
+e to
+    shared conversion is requested by the guest)
+    + Core MM infrastructure will still be used to track page table mapping=
+s in
+      mapcounts and other references (refcounts) per subpage
+    + HugeTLB vmemmap Optimization (HVO) is lost when pages are broken up -=
+ to
+      be optimized later. Suggestions:
+      + Use a tracking data structure other than struct page
+      + Remove the memory for struct pages backing private memory from the
+        vmemmap, and re-populate the vmemmap on conversion from private to
+        shared
+  + Implementation pointers for huge page support
+    + Consensus was that getting core MM to do tracking seems wrong
+    + Maintaining special page refcounts for guest_memfd pages is difficult=
+ to
+      get working and requires weird special casing in many places. This wa=
+s
+      tried for FS DAX pages and did not work out: [1]
 
++ Implementation suggestion: use infrastructure similar to what ZONE_DEVICE
+  uses, to provide the huge page to interested parties
+  + TBD: how to actually get huge pages into guest_memfd
+  + TBD: how to provide/convert the huge pages to ZONE_DEVICE
+    + Perhaps reserve them at boot time like in HugeTLB
+
++ Line of sight to compaction/migration:
+  + Compaction here means making memory contiguous
+  + Compaction/migration scope:
+    + In scope for 4K pages
+    + Out of scope for 1G pages and anything managed through ZONE_DEVICE
+    + Out of scope for an initial implementation
+  + Ideas for future implementations
+    + Reuse the non-LRU page migration framework as used by memory ballonin=
+g
+    + Have userspace drive compaction/migration via ioctls
+      + Having line of sight to optimizing lost HVO means avoiding being lo=
+cked
+        in to any implementation requiring struct pages
+        + Without struct pages, it is hard to reuse core MM=E2=80=99s
+          compaction/migration infrastructure
+
++ Discuss more details at LPC in Sep 2024, such as how to use huge pages,
+  shared/private conversion, huge page splitting
+
+This addresses the prerequisites set out by Fuad and Elliott at the beginni=
+ng of
+the session, which were:
+
+1. Non-destructive shared/private conversion
+  + Through having guest_memfd manage and track both shared/private memory
+2. Huge page support with the option of converting individual subpages
+  + Splitting of pages will be managed by guest_memfd
+3. Line of sight to compaction/migration of private memory
+  + Possibly driven by userspace using guest_memfd ioctls
+4. Loading binaries into guest (private) memory before VM starts
+  + This was identified as a special case of (1.) above
+5. Non-protected guests in pKVM
+  + Not discussed during session, but this is a goal of guest_memfd, for al=
+l VM
+    types [2]
+
+David Hildenbrand summarized this during the meeting at t=3D47m25s [3].
+
+[1]: https://lore.kernel.org/linux-mm/cover.66009f59a7fe77320d413011386c3ae=
+5c2ee82eb.1719386613.git-series.apopple@nvidia.com/
+[2]: https://lore.kernel.org/lkml/ZnRMn1ObU8TFrms3@google.com/
+[3]: https://drive.google.com/file/d/17lruFrde2XWs6B1jaTrAy9gjv08FnJ45/view=
+?t=3D47m25s&resourcekey=3D0-LiteoxLd5f4fKoPRMjMTOw
 
