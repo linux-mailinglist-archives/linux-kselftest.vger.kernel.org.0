@@ -1,183 +1,118 @@
-Return-Path: <linux-kselftest+bounces-13677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8343392FC73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 16:24:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D11C892FD46
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 17:13:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E8661F227E8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 14:24:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61C5D1F210FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 15:13:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9079617166E;
-	Fri, 12 Jul 2024 14:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A662417332A;
+	Fri, 12 Jul 2024 15:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhHJr2fY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="blOvoGIz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691BC13F439;
-	Fri, 12 Jul 2024 14:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B58172BD9
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 15:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720794284; cv=none; b=gHb3hzRu0luoyrJlo/Ka+9qS89GwaHMmoxVmUnBtPA34aN8rVkZgDwxUllXb7in7GSEXYxLB8WAroeKU/I5c7lCVulPUci1nXb5OAuXGOx5WUP1FbstRNnX/h07s5zcX3GXoSBpVHVbYeT9pteAt3ASUBWRyY2K/D/buIkNZlY4=
+	t=1720797174; cv=none; b=MSxOzji449DzuSk8rNtF7EZz3nyJXx6abcPeiueDTbHir8hWBgdH/mS2Nn+gsixwqpCQp4b0FrWeY2IqYO51OzGL1qlHLsHsp1mcUxBOnSLCLpfx/iLSYrmnkkCpQDQbpiTy2PVw3+YJwYXQ0FkG9wUfSBvFvXeXPpzy4M9oPm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720794284; c=relaxed/simple;
-	bh=06ifw7SQRypt3Wn5ttQJBek4EMBqirRgHFBshtecyKk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZP+213lyOYANDTda21VFioz7s6Enk/pZjwh17br384jqIDhJAMJ7YhQT3bLND6jZvha2YsQUdJ9Zc9i5m+VwE5x3Iyeak/YQleyaaNiWht62t7w+V+XQNXZih+aA2pWDUt+lSMf8i4T8Nm4Wuo+f6CQcX+IAsVFAG5NN5b4WcyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhHJr2fY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A27C32782;
-	Fri, 12 Jul 2024 14:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720794283;
-	bh=06ifw7SQRypt3Wn5ttQJBek4EMBqirRgHFBshtecyKk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uhHJr2fY6WOYsyx66VG68oOKlorW0Z5Lz70FTz6zXSrfwBJF3n9vMCgLXgTSgcibU
-	 Xw3sgRdLd8E0DLfc7d6v6fHr7WA0bCShejU9spKpdjsoBnePEbyQ+Gm9B9lhxseBdh
-	 Uw162BaGqb6fDKOk5JcktcVo/DdCWI6Gla5OdOFomzjZEpLJa6sepOTJQx/VlM0Ow9
-	 ZZYEvh2l4kI1u4VBjYVM9ikDzriWU9Xne6/l28bBcp0h1n9uIHWhCChTeeKfjZY8KT
-	 hlTZU3EShSfuqRklZ6jO7Tjo+GLMnKvNXBL0PwXqXC/IJ9TJaFCj3Gbhki7p5HdDb9
-	 V//w49rnGIfsA==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Drop duplicate ENOTSUPP definitions
-Date: Fri, 12 Jul 2024 22:24:18 +0800
-Message-ID: <e954fa2f0de2d2460f7265bb26cbe0a3edb9108c.1720791489.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1720791488.git.tanggeliang@kylinos.cn>
-References: <cover.1720791488.git.tanggeliang@kylinos.cn>
+	s=arc-20240116; t=1720797174; c=relaxed/simple;
+	bh=9BeUzXJjHysaSyowS0b6W+lvKasnTxqlLnwfpZRUPQg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Vd+jPsf7xN4/Tb+CNR12wwsuc4cTLu3UtKViUEZoirundPLNWHvNadc1WTbLuTpQoNXQ5Cafdjmm4zMDHhTQIM//t5rmeOS4hXuwsdPSESalWgVgGAOmb9MUu3wOBakvl0qM4Yid11li3lLKj/XKY1t4uiTvFxZJYYtr6jvoDbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=blOvoGIz; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1fb01a05428so12140095ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 08:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720797172; x=1721401972; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hUu8mGS1OQxBMeoqKcwdn/WJeVzZBowT4FUswTBpL4Q=;
+        b=blOvoGIzxsHDi8Y+0Vgl4RtYLBGA1dDa4UPElgJ6nVS4ncmkyaVTsCu45OuAuk6x+/
+         V9x0E7pARXOdGeG/yQvjX08uSWIjb7OKPmH84CabpJi7rD1Cbc7JE//048fnX9D4Fdfx
+         n16Ma+ZRJVK4A/VLSNHgvpZ/4lON+jxijAQ+3Uw5Oc692EI2/DT1dokIIv2yMd3FsvDW
+         jJsQ4cynRYWtvhu3kxI1Y1iDz3VW15fpzzx0C8jaJk8vpVoJeo6BZJ0mRcOaFdER8hFp
+         6PO7nBlKE3WGO+UIAYYdc3oTW1YfZ7DXyFs4qNq/KBR4HZfCTazrbCl+JeLpA5uciKWZ
+         3awg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720797172; x=1721401972;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hUu8mGS1OQxBMeoqKcwdn/WJeVzZBowT4FUswTBpL4Q=;
+        b=R5XjGbivS4YmdMVn81K4Nm7+8rAPd0+FzXmKWa6xSZSTb/sm5EWQfqG6c/r8pNDP6+
+         MAdXSVCoBj0Sqn/zPY7knG4z3/DF60+Kxl4jIKIFuzcJhmRbmWbJ05mRVwrCSkZlAPnf
+         cbZhwv5G26iJoHpRySzHn1rKpaW+KUUBvSBKQPeFIbpuPiof71bebrlcR8tP9KTxLQJo
+         L+zecLAgIXx0GQKzJZcLlfBY8e+edFOHVAfC4Q8VBWeq+3jPj+hXl+jsZ5Z7A9OXyYGc
+         bzqfCbvvhmLRqrIYbgd94PRvCTM6qItsATa/W60ZrUC5rIvmMolKDDFORxNOoy1yH3Jw
+         ntCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrZ53pqkCotcvFW4ft+53Eh8KULXnCmAnbUN47CBoK3obVj6zz5v4skwh0aF8hqFGyyTapa/I6ed3BpDqAzURrobry6lm2nM+BjhLSfX20
+X-Gm-Message-State: AOJu0YyNGu6wMrITz9Izaw3gkbU7PRbyL5dCxQ2AXg6gtUL9HNkMEd1R
+	KQZ9EbabtnWb4m6905QzjJ96Y5jIeK3pA/zKJuvCcMIpKI/DQN6oHUTlsS6D5NzSIJVc24TivHr
+	mKA==
+X-Google-Smtp-Source: AGHT+IEUE3RwZfydvmvGzSOcHXyGrTF07p1ZkjrHKehYizMX0HteiU6qGOi9myjkfJZgQKr0WaGhxCPzpHg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2bcb:b0:1f7:1d6a:786c with SMTP id
+ d9443c01a7336-1fbb6edea46mr234215ad.11.1720797172460; Fri, 12 Jul 2024
+ 08:12:52 -0700 (PDT)
+Date: Fri, 12 Jul 2024 08:12:51 -0700
+In-Reply-To: <SA1PR11MB67348BD07CCCF8D52FCAC8FEA8A42@SA1PR11MB6734.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-10-xin3.li@intel.com>
+ <ZmoYvcbFBPJ5ARma@google.com> <SA1PR11MB67348BD07CCCF8D52FCAC8FEA8A42@SA1PR11MB6734.namprd11.prod.outlook.com>
+Message-ID: <ZpFH86n_YY5ModwK@google.com>
+Subject: Re: [PATCH v2 09/25] KVM: VMX: Switch FRED RSP0 between host and guest
+From: Sean Christopherson <seanjc@google.com>
+To: Xin3 Li <xin3.li@intel.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "peterz@infradead.org" <peterz@infradead.org>, 
+	Ravi V Shankar <ravi.v.shankar@intel.com>, "xin@zytor.com" <xin@zytor.com>
+Content-Type: text/plain; charset="us-ascii"
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Wed, Jul 10, 2024, Xin3 Li wrote:
+> > On Wed, Feb 07, 2024, Xin Li wrote:
+> > > Switch MSR_IA32_FRED_RSP0 between host and guest in
+> > > vmx_prepare_switch_to_{host,guest}().
+> > >
+> > > MSR_IA32_FRED_RSP0 is used during ring 3 event delivery only, thus
+> > > KVM, running on ring 0, can run safely with guest FRED RSP0, i.e., no
+> > > need to switch between host/guest FRED RSP0 during VM entry and exit.
+> > >
+> > > KVM should switch to host FRED RSP0 before returning to user level,
+> > > and switch to guest FRED RSP0 before entering guest mode.
+> > 
+> > Heh, if only KVM had a framework that was specifically designed for context
+> > switching MSRs on return to userspace.  Translation: please use the
+> > user_return_msr() APIs.
+> 
+> IIUC the user return MSR framework works for MSRs that are per CPU
+> constants, but like MSR_KERNEL_GS_BASE, MSR_IA32_FRED_RSP0 is a per
+> *task* constant, thus we can't use it.
 
-ENOTSUPP is defined in bpf/str_error.h now, so no need to redefine it
-in so many places in bpf selftests.
-
-This patch includes <bpf/str_error.h> in testing_helpers.h, which is
-almost included by each tests. And drop all duplicate definitions.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 4 ----
- tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c | 4 ----
- tools/testing/selftests/bpf/prog_tests/sock_addr.c  | 4 ----
- tools/testing/selftests/bpf/test_maps.c             | 4 ----
- tools/testing/selftests/bpf/test_verifier.c         | 4 ----
- tools/testing/selftests/bpf/testing_helpers.h       | 1 +
- 6 files changed, 1 insertion(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 1d494b4453f4..676eb7cd7fb0 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -16,10 +16,6 @@
- #include "tcp_ca_kfunc.skel.h"
- #include "bpf_cc_cubic.skel.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- static const unsigned int total_bytes = 10 * 1024 * 1024;
- static int expected_stg = 0xeB9F;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index 130a3b21e467..6df25de8f080 100644
---- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -10,10 +10,6 @@
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- static struct btf *btf;
- 
- static __u32 query_prog_cnt(int cgroup_fd, const char *attach_func)
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-index b880c564a204..68d9255d2bb7 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
-@@ -23,10 +23,6 @@
- #include "getpeername_unix_prog.skel.h"
- #include "network_helpers.h"
- 
--#ifndef ENOTSUPP
--# define ENOTSUPP 524
--#endif
--
- #define TEST_NS                 "sock_addr"
- #define TEST_IF_PREFIX          "test_sock_addr"
- #define TEST_IPV4               "127.0.0.4"
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index dfbab214f4d1..227d7d6eaf8e 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -26,10 +26,6 @@
- #include "test_maps.h"
- #include "testing_helpers.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- int skips;
- 
- static struct bpf_map_create_opts map_opts = { .sz = sizeof(map_opts) };
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 610392dfc4fb..447b68509d76 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -42,10 +42,6 @@
- #include "../../../include/linux/filter.h"
- #include "testing_helpers.h"
- 
--#ifndef ENOTSUPP
--#define ENOTSUPP 524
--#endif
--
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_EXPECTED_INSNS	32
- #define MAX_UNEXPECTED_INSNS	32
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index d55f6ab12433..1e882f408596 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -7,6 +7,7 @@
- #include <stdbool.h>
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
-+#include <bpf/str_error.h>
- #include <time.h>
- 
- #define __TO_STR(x) #x
--- 
-2.43.0
-
+Ah, in that case, the changelog is very misleading and needs to be fixed.
+Alternatively, is the desired RSP0 value tracked anywhere other than the MSR?
+E.g. if it's somewhere in task_struct, then kvm_on_user_return() would restore
+the current task's desired RSP0.  Even if we don't get fancy, avoiding the RDMSR
+to get the current task's value would be nice.
 
