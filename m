@@ -1,124 +1,129 @@
-Return-Path: <linux-kselftest+bounces-13650-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13651-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E3FE92F641
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 09:31:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D098E92F6AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0205B22F1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 07:31:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 864CB1F22B37
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8075B13E3F3;
-	Fri, 12 Jul 2024 07:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D2213D62F;
+	Fri, 12 Jul 2024 08:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DpTqH1Hy"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="AIEO+UKk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A2E13DDB8;
-	Fri, 12 Jul 2024 07:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DCD12F37B;
+	Fri, 12 Jul 2024 08:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720769473; cv=none; b=Pg0sGH42TXn1E5RqPmqiRQ1Fiodfu8xxkDrgiRbghCodjpk8YV8osHPLFHJs5cszxv5yjjvh9IAW+vURTi8sFzMPHhPAyzldj7W7c+7g1BR5PiL6LvVK6MDS/HOtsAEmBflOxrr1R+2BT9oS/SHu3BO55ukgdICCB4Mh5S5hkF4=
+	t=1720771607; cv=none; b=fXmjToat/7PaGClFxmKwtX48XEXoP5RdvEw05kbDPMfuz5MbauUNEutFixDxhSbA7P4qsK2Ewc0Ay6+V1TLxJ6NC5CrgQX3qAWIsyP3EQMXT8nd0oXmvXvE8Ot3vmFxWdN3VfUZd3BHQAx/nPwJb4Ltli/Hmi1ZRoy9k+5GZ2+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720769473; c=relaxed/simple;
-	bh=pMIJq6XzjEqCqqiGFtz3aDAVbL3U30hnnFJZLgD2If4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cxt184YoucM2Nau1OWc2/NetaIE2XDEFjtSDlEJoD0IsBc4mn1nO4SJUIVBWNnbgM57u63aF1YxRnmbkoZGa5g9KJm4Bhf5VuRf1QxQoYQGmezKGFH4AMefqsycZy8neK9jKOQxhsCfg6v6CBYhGvrI+O3DHPPNGCKjYPTkRv/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DpTqH1Hy; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720769470;
-	bh=pMIJq6XzjEqCqqiGFtz3aDAVbL3U30hnnFJZLgD2If4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DpTqH1HyGaaKETYA4WNTHM/EuiASMH+yfpaZTqzzHT0AjKbYyjwbCdQmPou0ydHt1
-	 KM4Z5f3usNuOjnd9M6HGOLn0TBaiIC0CU2KGKlGkz6HiKuoGHkcpN6zWqb4tKVpp9N
-	 SC++HGTY13p53OJsHiL3r/MteuraxnoHRjlQBUvM5hCqPFG+6UfH4LcUwo4MYVCS8q
-	 ta1o5zCws8xKj68G4PqTfpEH45cJO4cMnzilObf5SrnSZFlCRLZqNah7u+kj5yT7KV
-	 1z0c7bAtCwj63tnLwf+gAb49TGNXtYPNcCkMlIYaMwmEx8aCJQuHtbz2KeCsUmFw5k
-	 PoTT2eFpH/CTA==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E641C3782212;
-	Fri, 12 Jul 2024 07:31:07 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: kernel@collabora.com,
-	"Chang S . Bae" <chang.seok.bae@intel.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: x86: vdso_restorer: Return correct exit statuses
-Date: Fri, 12 Jul 2024 12:30:43 +0500
-Message-Id: <20240712073045.110014-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240712073045.110014-1-usama.anjum@collabora.com>
-References: <20240712073045.110014-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1720771607; c=relaxed/simple;
+	bh=0/rwx0Bqtb+ua3ORpNZKSGNN0rqbdcUeTrf3gRq5VMc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=EON1YS5u1kD92iwUqT23X19ihGy0mfJLJgPtWLwrU6s1SZ2wN799jnbnNzwmW/masipXcOZQ1eq+HuCiEkO9GJWLebmGUSc9pN7nlptAe7+Y1Atk8XOFHGUUwjhasuSxPuwE8bVsdnIN1TD5Tg2lRwAWhEQzwLdRfmZE57G9eYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=AIEO+UKk; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1720771551; x=1721376351; i=markus.elfring@web.de;
+	bh=0/rwx0Bqtb+ua3ORpNZKSGNN0rqbdcUeTrf3gRq5VMc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=AIEO+UKkNGIYT2eD2jM807IZeCZUQRpKVRFxlNOsFwbs/faaedvj/OKLCqQKnGsM
+	 /eTa1zc5XF4OiKmU9+Wv/6IovOfTh8lVWFaV41InITw7TV4uLIiI9lKTGsNTgHnyN
+	 XKvwTx91DTUAeTlp+Fh7uzlHK+P6Ec7AgIpWy0R/rmqzBNH8X5tFH6WiqFtCBWpV2
+	 XC6xXBfZP1K8cyrOXV/pl+MBlY1LQJrTk2Wk4uMaqntK2NZRYQC/+DOZRgZIBVZ0c
+	 85cOcGYPD0TnoKFlDmV7AcOiRwBhfy8BRA9epl6bu7yFbTY+8eGIHF77qlcZlGpBh
+	 AN9tG0Kw+On2mYXglg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M4KJX-1sSSGl35Kj-004Dzo; Fri, 12
+ Jul 2024 10:05:50 +0200
+Message-ID: <c341e275-4fac-4aaa-8117-55b654c5c006@web.de>
+Date: Fri, 12 Jul 2024 10:05:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: make24@iscas.ac.cn, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
+ Sowmini Varadhan <sowmini.varadhan@oracle.com>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20240711071018.2197252-1-make24@iscas.ac.cn>
+Subject: Re: [PATCH] selftests/bpf:fix a resource leak in main()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240711071018.2197252-1-make24@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:oUKZu+vu7nh0tSLh70wUSTHqD7mlZPuZbblnC97isWPywN3CTY6
+ MPLrEhxWiR67ygcNJpTwqVGA3labNhi1dKl5KFpKV+GSKPatdSX9jQu5BU7Yw41pl9L0khE
+ BS8SItbfWWC0KLCxFfKS52Qz0qoPRs0CPBeHY9tijMnQiK2oPcUKDdvr6SCBBBCkMik3Dcq
+ WJFX2Hct0JyLaHPWty/rw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:HgQa9a9Ceu0=;kI7GpdLvjL6wxQl9enFajHXsUOX
+ U2EUwR5u25ajvlySVYPhKLvZ9BGjkGkLfMWmUkNjRc/sP+IElmi9GqFV9Hwe7GHLvbKD2ce2D
+ edhrCbrU0iyImnQp1Bneb3mO4GeuNEg/xpHyqp2fvroX26ktj6WDyvZPwV0s1JUjjlxNah1Lq
+ em9Uj7sCDdcUFp+Zx5b3N5fOC8e6M4qwnupF/LNd8mc1dbZOvvFqPcd7IsZ2pZjVw7yIW6gsx
+ 6RNRV9TuZwiKRlDHsUnjGoHaSi+t0EJ0DkJiv1yanVyGm2ukO2Hs+sJwqCN4AVL2XodilUdOZ
+ nHs/kOvBbLwBS48eGGT/ajp277hvAYh+Lxji+7m9Up22FcOHyP1uvdzrOZhrlkNkMIodvOwzs
+ ZRAbmfCsT7siMvnj+CNexjmUY7dN7fFMCnG/sTo3W4/XD/XR8G3qAwREp4rVcpJiCwL7LFEgO
+ cT2sO7po4wdlXPcBTKP6SUY23FSsVnnGIc93TbLl+JXCjfAOyj6tQRjwSwmFSctPrHdbMdfkX
+ v4qOUeH6pJbZk0QAPn4LTd5kPyAGSHHlelzdbyNBY92AAeLzxPus4wgg1ubHR971HbLTH0I+d
+ gmyGP58sM5lSz8Pxe67v7JnBUY+5JDD41O5wgJtuVCqr/axGDSqRIm0akxQ020dpJfUNLuyv+
+ rceBz64i/G9Bf16NHpMM9e2+qAxadgM/eSpxAlNMuF2yzh8vzTI0PQF+QBXXvZi+yQuDmHFo0
+ gKC74Wjk4xktcIJVw6dWZ3xvOUHF6sB0EZzjxXQ7rwsQXj1A0JnouVEV8ZkHsVKHc+szmZnV4
+ JuvYPkmGF+VuI+aycuuEkngA==
 
-Return correct exit status, KSFT_SKIP if the pre-conditions aren't met.
-Return KSFT_FAIL if error occurs. Use ksft_finished() which will
-compmare the total planned tests with passed tests to return the exit
-value.
+> The requested resources should be closed before return in main(), otherw=
+ise
+> resource leak will occur. Add a check of cg_fd before close().
+>
+> Fixes: 435f90a338ae ("selftests/bpf: add a test case for sock_ops perf-e=
+vent notification")
+> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/x86/vdso_restorer.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Please reconsider such information once more.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.10-rc7#n398
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/researcher-guidelines.rst?h=3Dv6.10-rc7#n5
 
-diff --git a/tools/testing/selftests/x86/vdso_restorer.c b/tools/testing/selftests/x86/vdso_restorer.c
-index 8e173d71291f6..54f33e8cda5cc 100644
---- a/tools/testing/selftests/x86/vdso_restorer.c
-+++ b/tools/testing/selftests/x86/vdso_restorer.c
-@@ -56,7 +56,7 @@ int main()
- 			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
- 	if (!vdso) {
- 		printf("[SKIP]\tFailed to find vDSO.  Tests are not expected to work.\n");
--		return 0;
-+		return KSFT_SKIP;
- 	}
- 
- 	ksft_set_plan(2);
-@@ -69,7 +69,7 @@ int main()
- 	printf("[RUN]\tRaise a signal, SA_SIGINFO, sa.restorer == NULL\n");
- 
- 	if (syscall(SYS_rt_sigaction, SIGUSR1, &sa, NULL, 8) != 0)
--		err(1, "raw rt_sigaction syscall");
-+		err(KSFT_FAIL, "raw rt_sigaction syscall");
- 
- 	raise(SIGUSR1);
- 
-@@ -80,10 +80,12 @@ int main()
- 	sa.flags = 0;
- 	sa.handler = handler_without_siginfo;
- 	if (syscall(SYS_sigaction, SIGUSR1, &sa, 0) != 0)
--		err(1, "raw sigaction syscall");
-+		err(KSFT_FAIL, "raw sigaction syscall");
- 	handler_called = 0;
- 
- 	raise(SIGUSR1);
- 
- 	ksft_test_result(handler_called, "SA_SIGINFO handler returned\n");
-+
-+	ksft_finished();
- }
--- 
-2.39.2
 
+How many source code analysis tools should be able to point out that the r=
+eturn value
+from the call of a function like pthread_create() should get more developm=
+ent attention
+(also for discussed test functions)?
+https://elixir.bootlin.com/linux/v6.10-rc7/source/tools/testing/selftests/=
+bpf/test_tcpnotify_user.c#L122
+
+See also:
+* https://cwe.mitre.org/data/definitions/252.html
+
+* https://wiki.sei.cmu.edu/confluence/display/c/POS54-C.+Detect+and+handle=
++POSIX+library+errors
+
+
+Regards,
+Markus
 
