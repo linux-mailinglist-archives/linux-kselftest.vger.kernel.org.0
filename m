@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-13666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A0F92F781
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 11:04:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0BEB92F785
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 11:04:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93C2AB231A8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 09:04:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76952284A19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 09:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2721143732;
-	Fri, 12 Jul 2024 09:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF93143732;
+	Fri, 12 Jul 2024 09:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FlrrhI6a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PLJSCWoP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F7B142904;
-	Fri, 12 Jul 2024 09:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4F3143C5C;
+	Fri, 12 Jul 2024 09:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720775081; cv=none; b=nsDzoCLr7fJxEp0b78h9frZ5usvq1c6iVbMsrjBt7O8AkqGEeqTeR/V102x4wpbGT5MbOLUINvtByJQeKqMfaclZ+jkmhlg5toHjWefkmZIsqgKovzTQu+NVqRrbFJPFz830EgPzGCSdHWvhaUQPiKuaYdu1EayXwrJVp2zeagE=
+	t=1720775093; cv=none; b=OyUZwRBeXwiXt/3sTuNhAga4N5NYGadfI1K6LGzL9yEDSAj43Z4OTbmHCfGGSS+I1NTK6BnISBd/JctuCAAKzj14lr5zLNMrdBch8UM/qLAuobAJ7a83RX6v/QIVA1TbsB5h4tGunmFn2aNqahzgWLhtP5YIo/6rV225JnH9gDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720775081; c=relaxed/simple;
-	bh=n8wDLhA4ejEdHfETshwOXBqVJq9jOZ8GWwLER67r1y0=;
+	s=arc-20240116; t=1720775093; c=relaxed/simple;
+	bh=0+fgMifr0gmoYZFNccD7HXPgEjE1eR0vEQY840VBkrA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dGtOBbuasAelIBd5DPvYjuJ2i9q8mFtZUwlHBVRV8XtWRJBucESAw6fjgtby9LrZcFNAu1jkhMP/9t0+YLKQRMuhfpmdp5Eqq5qAuCrZk5Cvw7Y7fNqnGMPKVAqWGZ+M2QXapBBQDrPeRlPZFK4lUGFPSO+wPMSE4pb+pDgqoNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FlrrhI6a; arc=none smtp.client-ip=192.198.163.17
+	 MIME-Version; b=FxxIvSKj3KmGmlWv2H3zClLHjWDSQtHTtr4bsvIEafbZvgbeIDX7lckPj8P+HE8/GzeuQiuRauNHGpEJ9VPflgt0M9PoEYrHKihzU/3RW8iljXuxfApZGwF9xpkdBdegAS7v/nFDEB8eEEtsIye7hf2wdSG7bMbjvek1qn8msMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PLJSCWoP; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720775080; x=1752311080;
+  t=1720775092; x=1752311092;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n8wDLhA4ejEdHfETshwOXBqVJq9jOZ8GWwLER67r1y0=;
-  b=FlrrhI6aVok8hMg5SEJRB5rVS+i43k9ALHuYLpVUiunTDSnBTGVvqPw6
-   KVXwS6ldVrQUzgnbTy54OY+ejtZmnYfujB77/vn37mqvV8akgT0dfda0v
-   Dsn81o/JHGus2H2f7+nJZGw3smhrnunnyGA7fMxfwJ0Y3vk2j0ID6R4M0
-   295kt7z5UvFK5SJc47w61buLMa+3VD8oDU5ZE/NPBXYSLyCK81MwxwWlo
-   9n9+Ml/CT2PW9pr2GBW+g8Wm4Zx0KVQJzhEa/8u84kIv5Hl+S7IXgVYuE
-   yp8u1HvaexDcWzSDuj610+XE3jgBO9fq/0phUoREk47eiCnkfKiFrKmX7
-   g==;
-X-CSE-ConnectionGUID: hbPph7roRwmfZrmQbZW/Ug==
-X-CSE-MsgGUID: N5sauocGThqHrsfoJB03lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="18072582"
+  bh=0+fgMifr0gmoYZFNccD7HXPgEjE1eR0vEQY840VBkrA=;
+  b=PLJSCWoPgjLMRIUnhSxl/Zc7V9lQXSFP1/4+ZKhA/yKkC6ktxXP+ApOK
+   l1j+BqZWGFL0LWjnd3G5Ch7KBaVOL5NfdMIxxX5UnEJoBndUuawmkyYzE
+   JPjbtqy1BoR6kJrLofwA5oHuZfwNHLpTxhFDXHoAy5M9BLgkJB1dTe1r4
+   SHSrYksTQ6+hOWkFdWfhNf8S71Qr6DitlxdNLXQRbZUEJ9aD7H6B3DP/p
+   +oEppNLNMsupb6SqnM3FjlWk+1d9NvHalNZLD9JhPGJfP3YWxYZ38YPH+
+   pqdjrFM1fwOrMzmKt5xrznF7AqK7IK9aZSG36et1AEQcgYCtFbQ6bJ5K1
+   A==;
+X-CSE-ConnectionGUID: zw7aEuPbTPa3HIcmHrGQ1Q==
+X-CSE-MsgGUID: W2R9rlrKRWeCuQOqD/z1wQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="40731109"
 X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="18072582"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 02:04:39 -0700
-X-CSE-ConnectionGUID: w+inbRseT6aJZ2ofBuzQIA==
-X-CSE-MsgGUID: AxgRcOJpSsWiWkTxV4Q/yw==
+   d="scan'208";a="40731109"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 02:04:51 -0700
+X-CSE-ConnectionGUID: RzlN50l+TNOLzcz41glhxQ==
+X-CSE-MsgGUID: GNFnqbqlRH+ndREu5422Hw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="48922688"
+   d="scan'208";a="53686650"
 Received: from dalessan-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.74])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 02:04:37 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 02:04:49 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: fenghua.yu@intel.com,
 	reinette.chatre@intel.com,
@@ -66,9 +66,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	ilpo.jarvinen@linux.intel.com,
 	tony.luck@intel.com
-Subject: [PATCH v4 1/2] selftests/resctrl: Adjust effective L3 cache size with SNC enabled
-Date: Fri, 12 Jul 2024 11:04:23 +0200
-Message-ID: <e5f2fbe4f492d37569c389aebcb91168f98783ba.1720774981.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v4 2/2] selftests/resctrl: Adjust SNC support messages
+Date: Fri, 12 Jul 2024 11:04:39 +0200
+Message-ID: <1fb2703ee27a0dfa13a7aa501b81439c433521ea.1720774981.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <cover.1720774981.git.maciej.wieczor-retman@intel.com>
 References: <cover.1720774981.git.maciej.wieczor-retman@intel.com>
@@ -80,156 +80,281 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sub-NUMA Cluster divides CPUs sharing an L3 cache into separate NUMA
-nodes. Systems may support splitting into either two, three or four
-nodes.
+Resctrl selftest prints a message on test failure that Sub-Numa
+Clustering (SNC) could be enabled and points the user to check their BIOS
+settings. No actual check is performed before printing that message so
+it is not very accurate in pinpointing a problem.
 
-When SNC mode is enabled the effective amount of L3 cache available
-for allocation is divided by the number of nodes per L3.
+Figuring out if SNC is enabled is only one part of the problem, the
+others being whether the detected SNC mode is reliable and whether the
+kernel supports SNC in resctrl.
 
-Detect which SNC mode is active by comparing the number of CPUs
-that share a cache with CPU0, with the number of CPUs on node0.
+When there is SNC support for kernel's resctrl subsystem and SNC is
+enabled then sub node files are created for each node in the resctrlfs.
+The sub node files exist in each regular node's L3 monitoring directory.
+The reliable path to check for existence of sub node files is
+/sys/fs/resctrl/mon_data/mon_L3_00/mon_sub_L3_00.
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Co-developed-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To check if SNC detection is reliable one can check the
+/sys/devices/system/cpu/offline file. If it's empty, it means all cores
+are operational and the ratio should be calculated correctly. If it has
+any contents, it means the detected SNC mode can't be trusted and should
+be disabled.
+
+Add helpers for all operations mentioned above.
+
+Detect SNC mode once and let other tests inherit that information.
+
+Add messages to alert the user when SNC detection could return incorrect
+results. Correct old messages to account for kernel support of SNC in
+resctrl.
+
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
 Changelog v4:
-- Make returned value a static local variable so the function only runs
-  the logic once. (Reinette)
+- Change messages at the end of tests and at the start of
+  run_single_test. (Reinette)
+- Add messages at the end of CAT since it can also fail due to enabled
+  SNC + lack of kernel support.
+- Remove snc_mode global variable. (Reinette)
+- Fix wrong description of snc_kernel_support(). (Reinette)
+- Move call to cpus_offline_empty() into snc_nodes_per_l3_cache() so the
+  whole detection flow is in one place as discussed. (Reinette)
 
 Changelog v3:
-- Add comparison between present and online cpus to test if the
-  calculated SNC mode is credible. (Reinette)
-- Added comment to cache size modification to better explain why it is
-  needed there. (Reinette)
-- Fix facts in patch message. (Reinette)
 - Change snc_ways() to snc_nodes_per_l3_cache(). (Reinette)
+- Add printing the discovered SNC mode. (Reinette)
+- Change method of kernel support discovery from cache sizes to
+  existance of sub node files.
+- Check if SNC detection is unreliable.
+- Move SNC detection to only the first run_single_test() instead on
+  error at the end of test runs.
+- Add global value to remind user at the end of relevant tests if SNC
+  detection was found to be unreliable.
+- Redo the patch message after the changes.
 
- tools/testing/selftests/resctrl/resctrl.h   |  4 ++
- tools/testing/selftests/resctrl/resctrlfs.c | 73 +++++++++++++++++++++
- 2 files changed, 77 insertions(+)
+Changelog v2:
+- Move snc_ways() checks from individual tests into
+  snc_kernel_support().
+- Write better comment for snc_kernel_support().
 
+ tools/testing/selftests/resctrl/cat_test.c    |  8 +++
+ tools/testing/selftests/resctrl/cmt_test.c    | 10 +++-
+ tools/testing/selftests/resctrl/mba_test.c    |  7 +++
+ tools/testing/selftests/resctrl/mbm_test.c    |  9 ++-
+ tools/testing/selftests/resctrl/resctrl.h     |  3 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  8 ++-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 57 +++++++++++++++++++
+ 7 files changed, 97 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index d4dffc934bc3..a8bb49f56755 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -285,6 +285,14 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 
+ 	ret = check_results(&param, test->resource,
+ 			    cache_total_size, full_cache_mask, start_mask);
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
++
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable) {
++		ksft_print_msg("Sub-NUMA Clustering could not be detected properly (see earlier messages for details).\n");
++		ksft_print_msg("Intel CAT may be inaccurate.\n");
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 0c045080d808..471e134face0 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -175,8 +175,14 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
+ 		goto out;
+ 
+ 	ret = check_results(&param, span, n);
+-	if (ret && (get_vendor() == ARCH_INTEL))
+-		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
++
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable) {
++		ksft_print_msg("Sub-NUMA Clustering could not be detected properly (see earlier messages for details).\n");
++		ksft_print_msg("Intel CMT may be inaccurate.\n");
++	}
++
+ 
+ out:
+ 	free(span_str);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index ab8496a4925b..a805c14fe04b 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -179,6 +179,13 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ 		return ret;
+ 
+ 	ret = check_results();
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
++
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable) {
++		ksft_print_msg("Sub-NUMA Clustering could not be detected properly (see earlier messages for details).\n");
++		ksft_print_msg("Intel MBA may be inaccurate.\n");
++	}
+ 
+ 	return ret;
+ }
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 6b5a3b52d861..ce3c86989f8b 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -147,8 +147,13 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+ 		return ret;
+ 
+ 	ret = check_results(DEFAULT_SPAN);
+-	if (ret && (get_vendor() == ARCH_INTEL))
+-		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
++	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
++		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
++
++	if ((get_vendor() == ARCH_INTEL) && snc_unreliable) {
++		ksft_print_msg("Sub-NUMA Clustering could not be detected properly (see earlier messages for details).\n");
++		ksft_print_msg("Intel MBM may be inaccurate.\n");
++	}
+ 
+ 	return ret;
+ }
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 2dda56084588..851b37c9c38a 100644
+index 851b37c9c38a..488bdca01e4f 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -11,6 +11,7 @@
- #include <signal.h>
- #include <dirent.h>
- #include <stdbool.h>
-+#include <ctype.h>
- #include <sys/stat.h>
- #include <sys/ioctl.h>
- #include <sys/mount.h>
-@@ -43,6 +44,8 @@
+@@ -121,6 +121,8 @@ struct perf_event_read {
+  */
+ extern volatile int *value_sink;
  
- #define DEFAULT_SPAN		(250 * MB)
- 
-+#define MAX_SNC		4
++extern int snc_unreliable;
 +
- /*
-  * user_params:		User supplied parameters
-  * @cpu:		CPU number to which the benchmark will be bound to
-@@ -120,6 +123,7 @@ extern volatile int *value_sink;
- 
  extern char llc_occup_path[1024];
  
-+int snc_nodes_per_l3_cache(void);
- int get_vendor(void);
- bool check_resctrlfs_support(void);
- int filter_dmesg(void);
+ int snc_nodes_per_l3_cache(void);
+@@ -167,6 +169,7 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int signal_handler_register(const struct resctrl_test *test);
+ void signal_handler_unregister(void);
+ unsigned int count_bits(unsigned long n);
++int snc_kernel_support(void);
+ 
+ void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
+ void perf_event_initialize_read_format(struct perf_event_read *pe_read);
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index ecbb7605a981..4b84d6199a36 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -118,11 +118,17 @@ static bool test_vendor_specific_check(const struct resctrl_test *test)
+ 
+ static void run_single_test(const struct resctrl_test *test, const struct user_params *uparams)
+ {
+-	int ret;
++	int ret, snc_mode;
+ 
+ 	if (test->disabled)
+ 		return;
+ 
++	snc_mode = snc_nodes_per_l3_cache();
++	if (snc_mode > 1)
++		ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
++	else if (snc_unreliable)
++		ksft_print_msg("SNC detection unreliable due to offline CPUs. Test results may not be accurate if SNC enabled.\n");
++
+ 	if (!test_vendor_specific_check(test)) {
+ 		ksft_test_result_skip("Hardware does not support %s\n", test->name);
+ 		return;
 diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 250c320349a7..803dd415984c 100644
+index 803dd415984c..4d0dbb332b8f 100644
 --- a/tools/testing/selftests/resctrl/resctrlfs.c
 +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -156,6 +156,68 @@ int get_domain_id(const char *resource, int cpu_no, int *domain_id)
- 	return 0;
+@@ -13,6 +13,8 @@
+ 
+ #include "resctrl.h"
+ 
++int snc_unreliable;
++
+ static int find_resctrl_mount(char *buffer)
+ {
+ 	FILE *mounts;
+@@ -186,6 +188,25 @@ static unsigned int count_sys_bitmap_bits(char *name)
+ 	return count;
  }
  
-+/*
-+ * Count number of CPUs in a /sys bit map
-+ */
-+static unsigned int count_sys_bitmap_bits(char *name)
++static bool cpus_offline_empty(void)
 +{
-+	FILE *fp = fopen(name, "r");
-+	int count = 0, c;
++	char offline_cpus_str[64];
++	FILE *fp;
 +
-+	if (!fp)
-+		return 0;
-+
-+	while ((c = fgetc(fp)) != EOF) {
-+		if (!isxdigit(c))
-+			continue;
-+		switch (c) {
-+		case 'f':
-+			count++;
-+		case '7': case 'b': case 'd': case 'e':
-+			count++;
-+		case '3': case '5': case '6': case '9': case 'a': case 'c':
-+			count++;
-+		case '1': case '2': case '4': case '8':
-+			count++;
-+		}
-+	}
-+	fclose(fp);
-+
-+	return count;
-+}
-+
-+/*
-+ * Detect SNC by comparing #CPUs in node0 with #CPUs sharing LLC with CPU0.
-+ * If some CPUs are offline the numbers may not be exact multiples of each
-+ * other. Any offline CPUs on node0 will be also gone from shared_cpu_map of
-+ * CPU0 but offline CPUs from other nodes will only make the cache_cpus value
-+ * lower. Still try to get the ratio right by preventing the second possibility.
-+ */
-+int snc_nodes_per_l3_cache(void)
-+{
-+	int node_cpus, cache_cpus, i;
-+	static int snc_mode;
-+
-+	if (!snc_mode) {
-+		node_cpus = count_sys_bitmap_bits("/sys/devices/system/node/node0/cpumap");
-+		cache_cpus = count_sys_bitmap_bits("/sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_map");
-+
-+		if (!node_cpus || !cache_cpus) {
-+			ksft_print_msg("Could not determine Sub-NUMA Cluster mode.\n");
++	fp = fopen("/sys/devices/system/cpu/offline", "r");
++	if (fscanf(fp, "%s", offline_cpus_str) < 0) {
++		if (!errno) {
++			fclose(fp);
 +			return 1;
 +		}
-+
-+		for (i = 1; i <= MAX_SNC ; i++) {
-+			if (i * node_cpus >= cache_cpus) {
-+				snc_mode = i;
-+				break;
-+			}
-+		}
++		ksft_perror("Could not read offline CPUs file!");
 +	}
 +
-+	return snc_mode;
++	fclose(fp);
++
++	return 0;
 +}
 +
  /*
-  * get_cache_size - Get cache size for a specified CPU
-  * @cpu_no:	CPU number
-@@ -211,6 +273,17 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
- 			break;
- 	}
+  * Detect SNC by comparing #CPUs in node0 with #CPUs sharing LLC with CPU0.
+  * If some CPUs are offline the numbers may not be exact multiples of each
+@@ -199,6 +220,13 @@ int snc_nodes_per_l3_cache(void)
+ 	static int snc_mode;
  
-+	/*
-+	 * The amount of cache represented by each bit in the masks
-+	 * in the schemata file is reduced by a factor equal to SNC
-+	 * nodes per L3 cache.
-+	 * E.g. on a SNC-2 system with a 100MB L3 cache a test that
-+	 * allocates memory from its local SNC node (default behavior
-+	 * without using libnuma) will only see 50 MB llc_occupancy
-+	 * with a fully populated L3 mask in the schemata file.
-+	 */
-+	if (cache_num == 3)
-+		*cache_size /= snc_nodes_per_l3_cache();
- 	return 0;
+ 	if (!snc_mode) {
++		if (!cpus_offline_empty()) {
++			ksft_print_msg("Runtime SNC detection unreliable due to offline CPUs.\n");
++			ksft_print_msg("Setting SNC mode to disabled.\n");
++			snc_mode = 1;
++			snc_unreliable = 1;
++			return snc_mode;
++		}
+ 		node_cpus = count_sys_bitmap_bits("/sys/devices/system/node/node0/cpumap");
+ 		cache_cpus = count_sys_bitmap_bits("/sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_map");
+ 
+@@ -942,3 +970,32 @@ unsigned int count_bits(unsigned long n)
+ 
+ 	return count;
  }
- 
++
++/**
++ * snc_kernel_support - Check for existence of mon_sub_L3_00 file that indicates
++ * SNC resctrl support on the kernel side.
++ *
++ * Return: 0 if not supported, 1 if SNC is disabled or SNC is both enabled and
++ * supported.
++ */
++int snc_kernel_support(void)
++{
++	char node_path[PATH_MAX];
++	struct stat statbuf;
++	int ret;
++
++	ret = snc_nodes_per_l3_cache();
++	/*
++	 * If SNC is disabled then its kernel support isn't important.
++	 */
++	if (ret == 1)
++		return ret;
++
++	snprintf(node_path, sizeof(node_path), "%s/%s/%s", RESCTRL_PATH, "mon_data",
++		 "mon_L3_00/mon_sub_L3_00");
++
++	if (!stat(node_path, &statbuf))
++		return 1;
++
++	return 0;
++}
 -- 
 2.45.2
 
