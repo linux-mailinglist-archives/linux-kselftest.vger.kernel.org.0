@@ -1,174 +1,147 @@
-Return-Path: <linux-kselftest+bounces-13652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DCD392F6D2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:21:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D6992F719
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:40:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 155E5283038
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:21:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D56DB1C22A1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE058142E97;
-	Fri, 12 Jul 2024 08:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DFE14E2C1;
+	Fri, 12 Jul 2024 08:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VTxBamhV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="a3qo/WpF";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uk9jn/w7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Gvn1FByN"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="f2URke/+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97F8142648;
-	Fri, 12 Jul 2024 08:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B7814D70B
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 08:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720772475; cv=none; b=GVmgkdgSahEQBG1/8RWRvS8N53n6Z2ttRoLgNb4YgRsjBFDsO62R43Rqs+sIjcHhnvWbisBEbIy/Ij7rkvu+RWBadVjw24jtcgD2oDosMU7jaFpx1PS4UvWGHK/Jf5hn5/Ffod5t7C5MYmhPwsBD+9AUrj31dtYfVH6AmDD3aNA=
+	t=1720773562; cv=none; b=tSPyBF4V7Nol/trnXBUIkNIrzpSb76aVIaeN5jkgjaDQw+f4zjciUDJLTHa78kx+a+OHIKzBrAkOxdyb+1ZFOswfez8C5+lVaU7rmKlmVYR8pVPAgHKtLeaTjhRjJ+WDCeE4HpkEOAXMdVVapJYCxpHF1w8l0xP/NjdZr2pJ8No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720772475; c=relaxed/simple;
-	bh=p9/qiAKcZbyP9wlf3L0QQhEm0oQL1Tnf2wENYdgqhS0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p/HED1n9vinnGCU5gsW0dSTz6bWf+7vj3q4u/lsx5/eqvGCxmyY2Lroc8taAp/YOcnbfwqquEh4PNVVxGEtxMFmVt/JlX4BStCTYY5RxPFb238pkUsm8NcfIJgsIqwSoWP5yjl12URsCAV7n3zjrzztzKOO9SA9FGak2hWZ7wzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VTxBamhV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=a3qo/WpF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uk9jn/w7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Gvn1FByN; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id CCE771FB71;
-	Fri, 12 Jul 2024 08:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720772472; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=myQxO7WO5T9CFH3oPmFlxpq8hqCNcsmKBXpMHwzA1KY=;
-	b=VTxBamhVjolVsWvKHm7HtZyoFt84+LN9ENnOV49NlJ7mcUpePrPaTN12J3ln6+AOLHwtw+
-	iO92OBxp+dNOJxcYcSOh91N4433iFF+dio9Akk9mpQBq0NXaGxOvSp+ppTzvCNqaTa/pnt
-	8i6P+O5wsQy/vW6f//flMhZhrYCjzDU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720772472;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=myQxO7WO5T9CFH3oPmFlxpq8hqCNcsmKBXpMHwzA1KY=;
-	b=a3qo/WpFwlagMk221vR2zJQva+WvLdRyQ1/N09tQudIX7F2t5bbt/DRAg8k8y7a52nsFv6
-	6d37pq/Kpfm+v8AQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="uk9jn/w7";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Gvn1FByN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720772471; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=myQxO7WO5T9CFH3oPmFlxpq8hqCNcsmKBXpMHwzA1KY=;
-	b=uk9jn/w7SYRzB2NvPAuLvE03/OEBrj50rxjOliVZiZtHGiMDDF1sbJCIDN2zowMrmhmH8w
-	pKEsvE4xB/mm26VsIuwenOMgmsZdV8zA8jQ1W10NTgLbUWOR75vAe8bA3mwbbI4yBLu7Qf
-	ZyDgWhAA0W6t+MPsGdRRPaiYztdZVok=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720772471;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=myQxO7WO5T9CFH3oPmFlxpq8hqCNcsmKBXpMHwzA1KY=;
-	b=Gvn1FByNPh6gzNnatLD3LAeNjoUWYQ2PWaLT0YDP6p4tVj6j55QVU7O2B9jpo1+Nb9SLTu
-	r76yKq1E6aK0bNAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 76DB21373E;
-	Fri, 12 Jul 2024 08:21:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id CqRsG3fnkGZTAgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 12 Jul 2024 08:21:11 +0000
-Date: Fri, 12 Jul 2024 10:21:43 +0200
-Message-ID: <877cdrt3zc.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
+	s=arc-20240116; t=1720773562; c=relaxed/simple;
+	bh=rAYKbcFrJvZXsWHsMuE+Qgzs7qeLTNluD8iqVeBQttI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=CYwGbQeycLFqqBP9O1hDX8bRP+2ZXL8IE8VekBcQajbZRBB7O3lwwxObaSXRORFPJPeqFjx3VJOshRgZeuqfi1c8VCrwdkJnqEd0tiW0hK+Rw4Jh2d/1aldqE8dOX3iLHcou9OabrbpUNziCh652Cnh9GXiC+sApT2l1dfnmDB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=f2URke/+; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3d96365dc34so1331226b6e.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 01:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1720773560; x=1721378360; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PpDCA7CnSWtIO6seFJ4J0hDKtH06inwXMPU5CaySLhw=;
+        b=f2URke/+ts/fgwVmW9dtm6CzYNesfhTBx6FwJbxGNxc+u8sZOT5eycV3B4/C5Yof8j
+         2oVsI8/o23/nyda5EheN/KAeqmlb7P31UpbLNllvWIWlwEki3ID+QbLSCnZChssPV7Be
+         wglntLrfUUsM1+/DHGVnceBtA6rTL62iBXZEdJ53nlT+q2utrj0yHzp1jZfEzfMnstwn
+         4+8PfprMQO9irs0QaU4XV9S6/e6BKOIqKsYY6srjM5yV6Wl+o0Esp6vrXyJCgMJthBKW
+         nDpGPARXfwhP8Zy6TbGSQkgrSf1hZCZBrBfGU95eIh69yvliAB+3eMgVxzL/2OyTN6LD
+         jzYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720773560; x=1721378360;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PpDCA7CnSWtIO6seFJ4J0hDKtH06inwXMPU5CaySLhw=;
+        b=F52pULFD4YhtnJ4orgHLkp+amssAyAmzgbjZMWEx8TgHlK1+cTjku+VElPSd1K3Lup
+         9RuZWSVmARILHtywocLH+AoTChD18RX4LTdXVqFIfyxd/AfNOi8H3LFZE1Z7yARC8R0/
+         ikMO0ABJcXbF82c+jsTUCQ8OjQ6VO30ZOIqV2vRb74Q/U0WVreLF9tRl1VJ4bhgu0HeL
+         FUiVkea9/EyVtyn1oHIkL9fyvCkGH3iVlKx45/P4ampNv/PLy5etV1oS0t50p2hm9QSf
+         4Xv85WNzjSqHMKSbgFuRWLR3gwE/J7pQmpM7rnJ9UgoeOFuFEhm/O+7aiFYjy/tkocx0
+         x6VA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsmvxQpQCOULE/ujiQQakmD2HQypuop1jsw9zIR8S2tgPH3daYfHkNY0XQ5HOw0prsEC6mNJjy28GShqPI/9eVJbffPrkNRTSTpNsBKuZ7
+X-Gm-Message-State: AOJu0Yx/kC9zGRn9N+tb6oFhGlofpDmasUG07F/xdwV4MdQBpZPTj3Ov
+	YTm7cuNFZUHuomhlj+Fwia9Fp7aWhPSCW0fIuhXyXERQINMnuUz2Qqg/f/LRK2E=
+X-Google-Smtp-Source: AGHT+IHmBxrEAG3WPd6oj+/586lglgYzxY+9BouYb6jIFT5EHBZDlB4+cb5Y4B3ynyNiUyxupNCiwQ==
+X-Received: by 2002:a05:6808:1982:b0:3da:a6ce:f017 with SMTP id 5614622812f47-3daa6cef5a9mr3909532b6e.46.1720773560484;
+        Fri, 12 Jul 2024 01:39:20 -0700 (PDT)
+Received: from hsinchu26.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c7099sm6894194b3a.84.2024.07.12.01.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 01:39:20 -0700 (PDT)
+From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+To: linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	kvm-riscv@lists.infradead.org,
+	kvm@vger.kernel.org
+Cc: greentime.hu@sifive.com,
+	vincent.chen@sifive.com,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test names
-In-Reply-To: <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
-References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
-	<7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
-	<b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v7 4/4] KVM: riscv: selftests: Add Svade and Svadu Extension to get-reg-list test
+Date: Fri, 12 Jul 2024 16:38:48 +0800
+Message-Id: <20240712083850.4242-5-yongxuan.wang@sifive.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240712083850.4242-1-yongxuan.wang@sifive.com>
+References: <20240712083850.4242-1-yongxuan.wang@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_LOW(-1.00)[suse.de:dkim];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -4.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: CCE771FB71
 
-On Thu, 11 Jul 2024 18:19:25 +0200,
-Mark Brown wrote:
-> 
-> On Thu, Jul 11, 2024 at 06:08:38PM +0200, Jaroslav Kysela wrote:
-> > On 11. 07. 24 16:33, Mark Brown wrote:
-> 
-> > > Address this by replacing our use of card numbers with card names which are
-> > > more likely to be stable across runs. We use the long name since in the
-> 
-> > I think that a combination of card number and card ID may be sufficient (and
-> > a compromise). It's shorter and user-friendly. Additionally, a table may be
-> > printed at the beginning of report with card number, card ID and long card
-> > name for further processing and identification.
-> 
-> These don't help, the problem is that anything which includes the card
-> number in the test name result is going to result in unstable test names
-> depending on race conditions at boot.  There are automated systems that
-> parse kselftest output generically, I'm not sure there's a great deal of
-> enthusiasm for writing a custom parser for the ALSA selftests
-> specifically.
+Update the get-reg-list test to test the Svade and Svadu Extensions are
+available for guest OS.
 
-OTOH, longname can be really ugly to read, and it can vary because it
-often embeds address or irq numbers in the string.
+Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-If a general name is the goal, how about using shortname instead?
+diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+index 222198dd6d04..1d32351ad55e 100644
+--- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
++++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+@@ -45,6 +45,8 @@ bool filter_reg(__u64 reg)
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSAIA:
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSCOFPMF:
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSTC:
++	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVADE:
++	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVADU:
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVINVAL:
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVNAPOT:
+ 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVPBMT:
+@@ -411,6 +413,8 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
+ 		KVM_ISA_EXT_ARR(SSAIA),
+ 		KVM_ISA_EXT_ARR(SSCOFPMF),
+ 		KVM_ISA_EXT_ARR(SSTC),
++		KVM_ISA_EXT_ARR(SVADE),
++		KVM_ISA_EXT_ARR(SVADU),
+ 		KVM_ISA_EXT_ARR(SVINVAL),
+ 		KVM_ISA_EXT_ARR(SVNAPOT),
+ 		KVM_ISA_EXT_ARR(SVPBMT),
+@@ -935,6 +939,8 @@ KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
+ KVM_ISA_EXT_SUBLIST_CONFIG(smstateen, SMSTATEEN);
+ KVM_ISA_EXT_SIMPLE_CONFIG(sscofpmf, SSCOFPMF);
+ KVM_ISA_EXT_SIMPLE_CONFIG(sstc, SSTC);
++KVM_ISA_EXT_SIMPLE_CONFIG(svade, SVADE);
++KVM_ISA_EXT_SIMPLE_CONFIG(svadu, SVADU);
+ KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
+ KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
+ KVM_ISA_EXT_SIMPLE_CONFIG(svpbmt, SVPBMT);
+@@ -991,6 +997,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
+ 	&config_smstateen,
+ 	&config_sscofpmf,
+ 	&config_sstc,
++	&config_svade,
++	&config_svadu,
+ 	&config_svinval,
+ 	&config_svnapot,
+ 	&config_svpbmt,
+-- 
+2.17.1
 
-Or use id field, as Jaroslav suggested, but without the card number
-suffix; then it's unique among multiple cards.
-
-
-thanks,
-
-Takashi
 
