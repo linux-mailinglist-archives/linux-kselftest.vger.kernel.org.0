@@ -1,215 +1,121 @@
-Return-Path: <linux-kselftest+bounces-13688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4676792FFDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 19:36:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC26B93001D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 19:59:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11DA283DC0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 17:36:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 428CB1F2482F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 17:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD8B176AC0;
-	Fri, 12 Jul 2024 17:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462F8177982;
+	Fri, 12 Jul 2024 17:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OGqgTV08"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ipzjd/X7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99BE170826
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 17:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3B6176FD6;
+	Fri, 12 Jul 2024 17:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720805811; cv=none; b=R/23bOT3ls8nkmuE/7JXX5FgTCAJX2OE2ygziRGH4qcFI9cqTWi9tYMif0TtXOM/XHIouQ/cogFrpBzlVrawAG4sTx5T4v58LMHbz97bGafOIonGw3s+F+zni7xfZK9cfSihp3+jrdthjn4InpM7OK0f8np9uZOIYa3Cbo/LJWU=
+	t=1720807009; cv=none; b=NHmZSteqZNuzr36fw//9U1PP2EJ4f7kzPM6hyh3FEg1IaSyA7Rj/hGwgrTAnC0aTEmtTaJ43z6KKbgvNjLG996E7ADBu3H2/3a64pWO8ZKjeODuEjIxUE9LWtB5AAOCYQjtbPXclKQViKhDQyYc6SHe1/+LA5/i33UyUhVCXPMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720805811; c=relaxed/simple;
-	bh=VePdywuy5lsuUuTxhhxWcFfpQ3SG0ffx3WCatwsteW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hH4ddozYvbveJKrKzG2hB4POxV46qbGHvF+mnr3d8J893E9KFSmeqUoN/DjiADMCy8SoLOLK8u8JuGMSn8cZUO5JgPyBztJy5i8/AXpUIR75paXIKw3qdm50wKcFKICkLxepuLYrc2IJsw1g131jrwqDH8DiQpfHhVo//7onsbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OGqgTV08; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: geliang@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720805807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ojao2ZbHzJY9vHnNyvekVQMfatU7qAIpTciZ1GoQdN8=;
-	b=OGqgTV08FRo5+bRKUH1sJ4g98+XEwckaP9YFmjrspnh/UVYz7UFn0xChfZ3v0Sdh0uKg+B
-	jQUF74lNIg/eqw8F+q3SHdIQ9HtPQHMpBcxcgCGIc+T5LiRhNqNUIDltKc4fk3UAd6AIVD
-	ksqKbNVWrvPSK4ELdUzUVFVY0t01qrU=
-X-Envelope-To: andrii@kernel.org
-X-Envelope-To: eddyz87@gmail.com
-X-Envelope-To: mykolal@fb.com
-X-Envelope-To: ast@kernel.org
-X-Envelope-To: daniel@iogearbox.net
-X-Envelope-To: song@kernel.org
-X-Envelope-To: yonghong.song@linux.dev
-X-Envelope-To: john.fastabend@gmail.com
-X-Envelope-To: kpsingh@kernel.org
-X-Envelope-To: haoluo@google.com
-X-Envelope-To: jolsa@kernel.org
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: tanggeliang@kylinos.cn
-X-Envelope-To: bpf@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: martin.lau@kernel.org
-Message-ID: <2cf71a18-b2f2-477b-85fb-25a907b8dd73@linux.dev>
-Date: Fri, 12 Jul 2024 10:36:36 -0700
+	s=arc-20240116; t=1720807009; c=relaxed/simple;
+	bh=3eIayu+1UjuqYkXeZHl62aeqtdNVS59QixTFOllGIwE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UPb9oW8DRC4yTIH9kur0BJ8cbqN1u1kJuKriInQDif4U9slN4OgtWgTqmR3lzJIdIlQ70BaAXl7scX/jW3Q5c/blHJVIdY7AnQc96SEB1L4R4J4JKlXNzoQkZZmswo+KWLciTcMYhczzEOLjAQBsE2WNrZN492qWbogHKKLm1f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ipzjd/X7; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70af8062039so1862411b3a.0;
+        Fri, 12 Jul 2024 10:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720807007; x=1721411807; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hvJqMz2g+QWTR/26uvM7LO7+R0enQZRj5mYnnkzzRMo=;
+        b=Ipzjd/X7JjVHinD/8km7XAfv0EgGSbe1cfVeFl4jjNxx4wT+agHmBw851TnH+xVoPz
+         o4eNr4NTuZjv0wJtMD0RE9KHuCwue3aQ5Ys+P9OgpIL4JGDDzlQRNS33E7KToyNDYXuW
+         q3WbOGFnL76MDba8lKKR5uW3IE4++jKe+CVu9KQXcZMny0RduamUFeh6t3DvB32+gj9L
+         gXSNSXU41qRSyU81QUb2I1EEyKTCW7ySFnAwpfudd3Er/EISxf5MvPapZ+svYkaMNFMi
+         iCWiY8Ru/jivVs6fWPEQBQDDujUBj8pUVJX/jV8T0Q1+78ZJnokiTFQtS39XIjPkeZxM
+         Y/zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720807007; x=1721411807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hvJqMz2g+QWTR/26uvM7LO7+R0enQZRj5mYnnkzzRMo=;
+        b=Ywg6dcK/AsWSV1jeHGJ8A67EuC4EOebfvISZB3AaMRlTHQtTPv/wtltuEyTkxWiz/J
+         zXSZsNykXBh6eRqehjoXprC6CHBZLMdRwXHgcQDrNaEdDU1VYWIQyIRxFPCVVQGlX+bb
+         rUuZVAhvTDGkEiy5E6jD9r3mVOajhFaLVXEYtZ1UE5KxGuRzCiYYnuSHpPHUkT3hIfp6
+         60UA7VTSZzaMaCT/i9gEQiy9eNL9h8SZwyCC2L23HobD0GNgnLLSje53Pvv+uI1cqmHV
+         wcPT3K2p30QRw2JyY6XuVcSQjDJ19oyU0OZl94vVohUcR3srSoRdHAOps2QFuGz7rLOi
+         4IDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVR/keXp1KMeOZijsQFg1SOyAkD6qjLb1ClPCugZprjyZvKsZI8I0DyN4bgsWy+OwiZ8hKo0S74XfYpO7jKYogaCXg/rTfWaQ2E4EuerP3OQ9Mny/vl1J9SNqw8razbvit1CDNZHUjOFhfjrevcS1iCQ2Im7OGe6bJcXlVBGQmuoIcYDtHmTUaXZeh+7nGFQZzj2Gb9Zf/QfMrGTjGCns8EmS4lAWmBiKBxeDBhvgc1CxnRH/qZgJ6P7qdrAgdGNnwoy6+PRafrkA==
+X-Gm-Message-State: AOJu0Yw0XEvYXRXp4aghGx8rm9p6kn2OmbF21k4vmlklqwxK/ztjUFI9
+	+q+8yE5iQyfIIkdAXdYNR/SfDC6phvbB4ebzEIU9199VO3wHquoL8fUuNg==
+X-Google-Smtp-Source: AGHT+IEQhOEcyJo9nymze7EJcWUmb0pa0RPK5Sh5riMCUcRm7lnBoF6POikeGeyiWKlGRHtmtiu3qw==
+X-Received: by 2002:a05:6a21:6704:b0:1c0:f080:ed5b with SMTP id adf61e73a8af0-1c2984ce612mr12926893637.54.1720807006607;
+        Fri, 12 Jul 2024 10:56:46 -0700 (PDT)
+Received: from MacBook-Pro-49.local ([2620:10d:c090:500::7:44ce])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6ab8041sm69662725ad.135.2024.07.12.10.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 10:56:46 -0700 (PDT)
+Date: Fri, 12 Jul 2024 10:56:41 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	apparmor@lists.ubuntu.com, selinux@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Brendan Jackman <jackmanb@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Khadija Kamran <kamrankhadijadj@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>, 
+	John Johansen <john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Edward Cree <ecree.xilinx@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Trond Myklebust <trond.myklebust@hammerspace.com>, 
+	Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH bpf-next v4 11/20] bpf, lsm: Add disabled BPF LSM hook
+ list
+Message-ID: <qjrf5c6f24b6ef5tpvpz75uxp6ro6mhos34ovssinv4yxjwyz3@nvs75o5sywgx>
+References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
+ <20240711111908.3817636-12-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Drop must_fail from
- network_helper_opts
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <cover.1720767414.git.tanggeliang@kylinos.cn>
- <5730eabdd6e90d1534d4f5df47e55a76f04197ca.1720767414.git.tanggeliang@kylinos.cn>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <5730eabdd6e90d1534d4f5df47e55a76f04197ca.1720767414.git.tanggeliang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711111908.3817636-12-xukuohai@huaweicloud.com>
 
-On 7/12/24 12:04 AM, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
+On Thu, Jul 11, 2024 at 07:18:59PM +0800, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
 > 
-> The struct member "must_fail" of network_helper_opts() is only used in
-> cgroup_v1v2 tests, it makes sense to drop it from network_helper_opts.
+> Add a disabled hooks list for BPF LSM. progs being attached to the
+> listed hooks will be rejected by the verifier.
 > 
-> Return value (fd) of connect_to_fd_opts() and the expect errno (EPERM)
-> can be checked in cgroup_v1v2.c directly, no need to check them in
-> connect_fd_to_addr() in network_helpers.c.
-> 
-> This also makes connect_fd_to_addr() function useless. It can be replaced
-> by connect().
-> 
-> Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->   tools/testing/selftests/bpf/network_helpers.c | 31 ++-----------------
->   tools/testing/selftests/bpf/network_helpers.h |  1 -
->   .../selftests/bpf/prog_tests/cgroup_v1v2.c    | 10 ++----
->   3 files changed, 5 insertions(+), 37 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index 15e0e0bb7553..48c27c810db7 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -277,33 +277,6 @@ int client_socket(int family, int type,
->   	return -1;
->   }
->   
-> -static int connect_fd_to_addr(int fd,
-> -			      const struct sockaddr_storage *addr,
-> -			      socklen_t addrlen, const bool must_fail)
-> -{
-> -	int ret;
-> -
-> -	errno = 0;
-> -	ret = connect(fd, (const struct sockaddr *)addr, addrlen);
-> -	if (must_fail) {
-> -		if (!ret) {
-> -			log_err("Unexpected success to connect to server");
-> -			return -1;
-> -		}
-> -		if (errno != EPERM) {
-> -			log_err("Unexpected error from connect to server");
-> -			return -1;
-> -		}
-> -	} else {
-> -		if (ret) {
-> -			log_err("Failed to connect to server");
-> -			return -1;
-> -		}
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->   int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
->   		    const struct network_helper_opts *opts)
->   {
-> @@ -318,7 +291,7 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
->   		return -1;
->   	}
->   
-> -	if (connect_fd_to_addr(fd, addr, addrlen, opts->must_fail))
-> +	if (connect(fd, (const struct sockaddr *)addr, addrlen))
->   		goto error_close;
->   
->   	return fd;
-> @@ -383,7 +356,7 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
->   		return -1;
->   	}
->   
-> -	if (connect_fd_to_addr(client_fd, &addr, len, false))
-> +	if (connect(client_fd, (const struct sockaddr *)&addr, len))
->   		return -1;
->   
->   	return 0;
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index 5b548c0c60de..f39eeb5a4594 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -23,7 +23,6 @@ typedef __u16 __sum16;
->   
->   struct network_helper_opts {
->   	int timeout_ms;
-> -	bool must_fail;
->   	int proto;
->   	/* +ve: Passed to listen() as-is.
->   	 *   0: Default when the test does not set
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-> index addf720428f7..04e82a486102 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-> @@ -9,9 +9,6 @@
->   
->   static int run_test(int cgroup_fd, int server_fd, bool classid)
->   {
-> -	struct network_helper_opts opts = {
-> -		.must_fail = true,
-> -	};
->   	struct connect4_dropper *skel;
->   	int fd, err = 0;
->   
-> @@ -32,11 +29,10 @@ static int run_test(int cgroup_fd, int server_fd, bool classid)
->   		goto out;
->   	}
->   
-> -	fd = connect_to_fd_opts(server_fd, &opts);
-> -	if (fd < 0)
-> -		err = -1;
-> -	else
-> +	fd = connect_to_fd_opts(server_fd, NULL);
-> +	if (fd >= 0)
->   		close(fd);
-> +	err = errno != EPERM ? -1 : 0;
+> Suggested-by: KP Singh <kpsingh@kernel.org>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 
-Still not right. Can errno be used when fd >= 0? That makes the fd >= 0 case 
-flaky. fd >= 0 should always be treated as error here (i.e. err = -1). just 
-always set err = -1 in the fd >= 0 case. No need to be smart here to save a few 
-lines.
+Xu,
 
-Please take time to review the patches before posting to the list.
-
-pw-bot: cr
+The patches 11 and higher are mostly independent from lsm refactoring.
+Please send them as a separate patchset for bpf-next.
+While lsm cleanups are being reviewed this lsm_disabled list can be
+a bit larger temporarily.
 
