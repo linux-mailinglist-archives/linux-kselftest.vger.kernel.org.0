@@ -1,173 +1,182 @@
-Return-Path: <linux-kselftest+bounces-13640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6F492F594
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:31:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF8B392F597
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:32:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D533B2062B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 06:31:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02DD4283447
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 06:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1480339AB;
-	Fri, 12 Jul 2024 06:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C0A219E2;
+	Fri, 12 Jul 2024 06:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FMRvRO5z"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aKmwdQ/E"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CD6219E2
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 06:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F3313D889
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2024 06:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720765900; cv=none; b=euTZ6+XBx+vCeI0kAj9dOwOERWkn5rABWMPjw3BGVvX/qc+eLPyKT3h+fR08dTzhaT2JgPdfhObrhPlOp2MDtyamchBSiciyrWKbzMpmG7Bi3Xpprm+C+yY7It3EvXww/VAbvgViHqB2I3H1SBydS2xln100yBIKFtGuj0crS/k=
+	t=1720765933; cv=none; b=CAEwlSfEKKbePaOy1mzU8Zm4fz+18BNmLW3b7BN2QOYgBKh2BodEcxQMET9Zlxr9+PxCrJJzb8/xcfz2clixjgalxNb1nYdKMiBgsAKBDOtOTB3sGC6Pd8bCyW2+zta21x8uib3TzZJMpnFHbnC7YkGu4POsyaUzpxJgDIcFYJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720765900; c=relaxed/simple;
-	bh=vyjlqo9+xj/AFcwSZAjdeKrRN4lUK1eT/gWDf8+dyBQ=;
+	s=arc-20240116; t=1720765933; c=relaxed/simple;
+	bh=j3WoYsVmpnqRdAu9kAi8ctnHT/Q08ksnAh2lHV3riG8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pEMCOzsw4QyodrphXm6FeKEtBuYl9JruvW683UoJT0j9cv0wFjrq64nQXhSyZQ6ann/FiLKS+kOPQCCWb71imeLl5/ekvixo/iEHhnsFb1kiNB+oss4Tm8UAKkanQ14S5UY8dICtYANnqLr43Zn5r5RC+2KWX/8dQNuTBx8Sges=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FMRvRO5z; arc=none smtp.client-ip=209.85.160.171
+	 To:Cc:Content-Type; b=aa+lbBCOBk5t7flRhtY9cy/cZhSrzjupBnblIx5Mf+ff7oJ+n+pEiTD7jmwBB6KPHP96oRfff8vQpcoi1yngSXcoShBZLksvVEwXNpUp2Gx4iaiBrhGi+ife0paruqdzgLzkBr1g8ON26a9JIadHz0M5XkULE2CUFQCM/na3TTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aKmwdQ/E; arc=none smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-44e534a1fbeso119061cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 23:31:39 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-447df43324fso124091cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2024 23:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720765898; x=1721370698; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1720765931; x=1721370731; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZmnlIFNOobK2LZamXbZrkIvyxFoge2tXN0IQI1fDrE=;
-        b=FMRvRO5zLoNxCxj/kDjWWLVp/70IupEs4QwfkJtbi+hGSqFu5Oz5j9kd3VU3WFTkNi
-         jmmiFOpoKvNzjC83wA96zMFkvgoHXZgsByc+UEM0dfXxDV0vtdORc8hz1FT30WxWfOCA
-         icH0eseVvpn2PEzimAM68PWzex4l6kUk5w9ENR0lO9pgn266G0xMktsB34/boH+MeBem
-         uRq/urujt7e8BD6KinhLZU2LcCiJJjQvglfmTHfH14jODssfZbOORl0fzwGzPaoXCnJQ
-         i7cXT1bC74opLVIPLlJOq56LNw3pVxTNanj11Y1Mlu1y28NzFlxFM6zoOEBXJBTWMcl4
-         2kBQ==
+        bh=KkrwlDFnK6kmweodUceyT+o/OMq25YxRhtYLdYup1Pw=;
+        b=aKmwdQ/EjNXYFzgNdr/3ArRyGRaPivxN6EGRKHZsXwRR6I+E0B9NJ1XgiipJHLAqoH
+         M9/bTE1w17iEZVLOqlT4I04+8AyVO0wsQZgzF0+NpMTn81mtoYRXLvrw5qJPAl0/G+ib
+         rwEX/1xcWydvJyUJuGANejjhTcZBJBvpHASI69S1PuIdaWvFO0mOe9VKiBYnGcLgYPzc
+         gAjuFYqP6pT3IhMEboN9ARqy10fjefljByajtQI2JJUVpvWdIxV+10WvKzXkXURlraWN
+         glCd3XPX5uh/mRmBmZxV8x3bsr33SeIzpWuyc25E/tIMXFYzaFbDL6cH7T3qpRMAt1nE
+         MWQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720765898; x=1721370698;
+        d=1e100.net; s=20230601; t=1720765931; x=1721370731;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eZmnlIFNOobK2LZamXbZrkIvyxFoge2tXN0IQI1fDrE=;
-        b=GgFDs61um7uNFnufRg99FhqA6Z+R6r6qzjTtqGsEq1V8bOkqOv+4/feEYupm72Shi3
-         OICA8mAcwV6c6ysWQ9q1y8y9dY3vCQ4Ftb4ME1pKUNB4Q7oNM/qoUhO3Z8/REBybAw+M
-         GkS5cVeyX2B6wEr4jaX/NMGnkNYEero/eRKnawfJCqz4cqsedPEyKVQ+XHdlkrbYFw5/
-         XxBRvYGzfXbhmp80HbPZQ6eNxbjFITanI1DhZeaKt7YnZahPZZX3rPLBZ6960PrWbMbR
-         bfTd7vSTFpSZSlCvg929IalmvOPHY8ebtOp8MrSrRF9qOZxvojbzk1wuoc2YC59ukGtr
-         SHoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmgMqk3BBwZg8yvFA0RHJFAq0TKNQ/rQ1I48A+uL9w/reKEODCUVt6K2FmMj7j0u7W5o3gw6mgyw9DZ+ZMa+NJvh9zcXMO2hmRoec7weOm
-X-Gm-Message-State: AOJu0YzQ/kUDZwaJJ9Y0nR3z4MKcKiVRBwTZJBWu7yg/GWfztOpm3NQV
-	t+VJcuVUczPlDG2ytkdSVQJzK9F9odYWqcAa3GEr/FiYtHkrIOLWsuMJoJ1RVRBG4t28My33k8v
-	li9c3Z1VovKfrAFcZ+MjY2lhquiygLiH9U+8U
-X-Google-Smtp-Source: AGHT+IHudazI3OhmszQv7TNeQIwVmUchUQWwuWIwQfbE7Bg6jPVm8CjypSd+eY8i7HoxtMndWrJN8df+YumquTraajg=
-X-Received: by 2002:ac8:6bd5:0:b0:447:d81a:9320 with SMTP id
- d75a77b69052e-44e758fbba9mr2016931cf.20.1720765898093; Thu, 11 Jul 2024
- 23:31:38 -0700 (PDT)
+        bh=KkrwlDFnK6kmweodUceyT+o/OMq25YxRhtYLdYup1Pw=;
+        b=Ar8kJKTVQO019w5A/sMm+pSYyWfE+tYwHvV5x34e0mfv94vWYjHqAKjLII6OYsMmD/
+         iuFtXLB2yT6fxMhXD+A6T7vuSEUOEpubhTVWqNM05ZMrR2KJzX+g2WrriARa+HEu/UtC
+         DX1Z/sYpVWzyk+LXauuSrYg/lpd9HbbGu5t9lQB+nVFvtDeHJloOchTplhsVh+j3kZRN
+         rDvXj+qJZSwuiDpUQzqOFguvqpYCDEFx9Py+/ohSQj/KT4Gy0f7hYJ9yr/I1hqTUkpY5
+         yU8JNU5SD+OgvevD7vBGhU0Mm2Yu6CRY21k8gFFWzlIjVvF0eLfUcTn9803zxs5kiJVk
+         ITWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHmEm4d94vg+rmCDk9HY6gpAeLdotmCswS84eIAaORumGddKgJq6+l6Do829W5bCGRKyfXerfePUtLf59hQA1ngIH/rcMYUBchNuH4Nkz5
+X-Gm-Message-State: AOJu0YzdPUapQBXip2J/9gobkFqtVw9dt9drlg7IcYl2pxQMa1BKksMG
+	zGB95YCZf+HBh/po08CQba/rKtI6Af4xDl6XUID5BWGhqqOY/Me7zgPirZmr2UqhC4UNFHdWuP5
+	cBe9/P/caaRcTHVMD27MytDZb3tRgb+7bmfnL
+X-Google-Smtp-Source: AGHT+IFlhUoWhKvbw9Lw7EdmY9oxuz/3DlRh20G7yP7XubMWcMybNfriE+QzewI7Kp+uf4uyLnJmRtu3P1dvozUcFj4=
+X-Received: by 2002:a05:622a:1aa1:b0:447:fad8:ccc1 with SMTP id
+ d75a77b69052e-44e7522c65cmr2275061cf.22.1720765931261; Thu, 11 Jul 2024
+ 23:32:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240711193729.108720-1-ericchancf@google.com> <20240711193931.109771-1-ericchancf@google.com>
-In-Reply-To: <20240711193931.109771-1-ericchancf@google.com>
+References: <20240711193729.108720-1-ericchancf@google.com> <20240711193945.110170-1-ericchancf@google.com>
+In-Reply-To: <20240711193945.110170-1-ericchancf@google.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 12 Jul 2024 14:31:27 +0800
-Message-ID: <CABVgOS=bcvRoDfGxv6dvEirGAGpXPs921iH12w9x9TEob6NDbg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kunit: Rename KUNIT_ASSERT_FAILURE to
- KUNIT_FAIL_AND_ABORT for readability
+Date: Fri, 12 Jul 2024 14:31:59 +0800
+Message-ID: <CABVgOSmvAWcXqO4nLQqCw=rf+7SXjD+xw3Uw7sc5vkAc=Lp37A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kunit: Introduce KUNIT_ASSERT_MEMEQ and
+ KUNIT_ASSERT_MEMNEQ macros
 To: Eric Chan <ericchancf@google.com>
 Cc: brendan.higgins@linux.dev, rmoar@google.com, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000001fd15a061d070880"
+	boundary="0000000000001a8f3e061d070a09"
 
---0000000000001fd15a061d070880
+--0000000000001a8f3e061d070a09
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 12 Jul 2024 at 03:39, Eric Chan <ericchancf@google.com> wrote:
 >
-> Both KUNIT_FAIL and KUNIT_ASSERT_FAILURE defined to KUNIT_FAIL_ASSERTION
-> with different tpye of kunit_assert_type. The current naming of
-> KUNIT_ASSERT_FAILURE and KUNIT_FAIL_ASSERTION is confusing due to their
-> similarities. To improve readability and symmetry, renames
-> KUNIT_ASSERT_FAILURE to KUNIT_FAIL_AND_ABORT. Makes the naming
-> consistent, with KUNIT_FAIL and KUNIT_FAIL_AND_ABORT being symmetrical.
-> Additionally, an explanation for KUNIT_FAIL_AND_ABORT has been added to
-> clarify its usage.
+> Introduces KUNIT_ASSERT_MEMEQ and KUNIT_ASSERT_MEMNEQ macros
+> to provide assert-type equivalents for memory comparison.
+> While KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ are available for
+> expectations, the addition of these new macros ensures that assertions
+> can also be used for memory comparisons, enhancing the consistency and
+> completeness of the kunit framework.
 >
 > Signed-off-by: Eric Chan <ericchancf@google.com>
 > ---
-
-I like this much better, thanks.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  drivers/input/tests/input_test.c |  2 +-
->  include/kunit/assert.h           |  2 +-
->  include/kunit/test.h             | 13 ++++++++++++-
->  3 files changed, 14 insertions(+), 3 deletions(-)
+>  include/kunit/test.h | 54 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 >
-> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
-> index 2fa5b725ae0a..9711ced180b8 100644
-> --- a/drivers/input/tests/input_test.c
-> +++ b/drivers/input/tests/input_test.c
-> @@ -31,7 +31,7 @@ static int input_test_init(struct kunit *test)
->         ret = input_register_device(input_dev);
->         if (ret) {
->                 input_free_device(input_dev);
-> -               KUNIT_ASSERT_FAILURE(test, "Register device failed: %d", ret);
-> +               KUNIT_FAIL_AND_ABORT(test, "Register device failed: %d", ret);
->         }
->
->         test->priv = input_dev;
-> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-> index 24c2b9fa61e8..9cc86a402c34 100644
-> --- a/include/kunit/assert.h
-> +++ b/include/kunit/assert.h
-> @@ -60,7 +60,7 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
->   * struct kunit_fail_assert - Represents a plain fail expectation/assertion.
->   * @assert: The parent of this type.
->   *
-> - * Represents a simple KUNIT_FAIL/KUNIT_ASSERT_FAILURE that always fails.
-> + * Represents a simple KUNIT_FAIL/KUNIT_FAIL_AND_ABORT that always fails.
->   */
->  struct kunit_fail_assert {
->         struct kunit_assert assert;
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 87a232421089..774c42721412 100644
+> index 774c42721412..67ad0e026bbf 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -1193,7 +1193,18 @@ do {                                                                            \
->                                                 fmt,                           \
->                                                 ##__VA_ARGS__)
+> @@ -1451,6 +1451,60 @@ do {                                                                            \
+>                                    fmt,                                        \
+>                                    ##__VA_ARGS__)
 >
-> -#define KUNIT_ASSERT_FAILURE(test, fmt, ...) \
 > +/**
-> + * KUNIT_FAIL_AND_ABORT() - Always causes a test to fail and abort when evaluated.
+> + * KUNIT_ASSERT_MEMEQ() - Asserts that the first @size bytes of @left and @right are equal.
 > + * @test: The test context object.
-> + * @fmt: an informational message to be printed when the assertion is made.
-> + * @...: string format arguments.
+> + * @left: An arbitrary expression that evaluates to the specified size.
+> + * @right: An arbitrary expression that evaluates to the specified size.
+> + * @size: Number of bytes compared.
 > + *
-> + * The opposite of KUNIT_SUCCEED(), it is an assertion that always fails. In
-> + * other words, it always results in a failed assertion, and consequently
-> + * always causes the test case to fail and abort when evaluated.
-> + * See KUNIT_ASSERT_TRUE() for more information.
+> + * Sets an assertion that the values that @left and @right evaluate to are
+> + * equal. This is semantically equivalent to
+> + * KUNIT_ASSERT_TRUE(@test, !memcmp((@left), (@right), (@size))). See
+> + * KUNIT_ASSERT_TRUE() for more information.
+> + *
+> + * Although this assertion works for any memory block, it is not recommended
+> + * for comparing more structured data, such as structs. This assertion is
+> + * recommended for comparing, for example, data arrays.
 > + */
-> +#define KUNIT_FAIL_AND_ABORT(test, fmt, ...) \
->         KUNIT_FAIL_ASSERTION(test, KUNIT_ASSERTION, fmt, ##__VA_ARGS__)
->
+> +#define KUNIT_ASSERT_MEMEQ(test, left, right, size) \
+> +       KUNIT_ASSERT_MEMEQ_MSG(test, left, right, size, NULL)
+> +
+> +#define KUNIT_ASSERT_MEMEQ_MSG(test, left, right, size, fmt, ...)             \
+> +       KUNIT_MEM_ASSERTION(test,                                              \
+> +                           KUNIT_ASSERTION,                                   \
+> +                           left, ==, right,                                   \
+> +                           size,                                              \
+> +                           fmt,                                               \
+> +                           ##__VA_ARGS__)
+> +
+> +/**
+> + * KUNIT_ASSERT_MEMNEQ() - Asserts that the first @size bytes of @left and @right are not equal.
+> + * @test: The test context object.
+> + * @left: An arbitrary expression that evaluates to the specified size.
+> + * @right: An arbitrary expression that evaluates to the specified size.
+> + * @size: Number of bytes compared.
+> + *
+> + * Sets an assertion that the values that @left and @right evaluate to are
+> + * not equal. This is semantically equivalent to
+> + * KUNIT_ASSERT_TRUE(@test, memcmp((@left), (@right), (@size))). See
+> + * KUNIT_ASSERT_TRUE() for more information.
+> + *
+> + * Although this assertion works for any memory block, it is not recommended
+> + * for comparing more structured data, such as structs. This assertion is
+> + * recommended for comparing, for example, data arrays.
+> + */
+> +#define KUNIT_ASSERT_MEMNEQ(test, left, right, size) \
+> +       KUNIT_ASSERT_MEMNEQ_MSG(test, left, right, size, NULL)
+> +
+> +#define KUNIT_ASSERT_MEMNEQ_MSG(test, left, right, size, fmt, ...)            \
+> +       KUNIT_MEM_ASSERTION(test,                                              \
+> +                           KUNIT_ASSERTION,                                   \
+> +                           left, !=, right,                                   \
+> +                           size,                                              \
+> +                           fmt,                                               \
+> +                           ##__VA_ARGS__)
+> +
 >  /**
+>   * KUNIT_ASSERT_NULL() - Asserts that pointers @ptr is null.
+>   * @test: The test context object.
 > --
 > 2.45.2.993.g49e7a77208-goog
 >
 
---0000000000001fd15a061d070880
+--0000000000001a8f3e061d070a09
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -235,14 +244,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIEo4wi5EcC95LDeHxSSJuTeI1csD/t8IG5mlBu8Q0/riMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDcxMjA2MzEzOFowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIF5/Vq8IWKoYpIhYlY6jG005IfaZYE7R8dcfONzCX013MBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDcxMjA2MzIxMVowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCKiSLv
-0KaWDRtHBFC6f8VgKvcx6uhJ/yng9Ri8fx95Bta2qupwcc22VYkGimEVzTiQV0S5RCmSsZ/EBB0O
-Xw1lny5UEzCzPCJQIq5Dwzo8JNLXPhvHRwRmsrHgXtMb6qvZucaW+YSc8SbDu1XGU8QhWwp6KqfZ
-kRGChV1UlnwJT9KFfgLyijU0ilNHxFLmp3JIY/FkOeipJ56u6iV7sciY5LXp9+RII9o0Ch8R0+sU
-HoWagc6SlTZH3B07DtDUH5XO/FLR/HgZ8w2srpPu3EFz4yb9o4bM2PdFX8iRWr3CI42szEBVlNyH
-3TGbuk5nuB6XxhoM5EKGYmtRNKmrxw3p
---0000000000001fd15a061d070880--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQB5Rzl6
+QEYYnQQN+yQCTszrq9+0/0JzylirlydBgcGBDc8id6mY2l/RPDaLUbBrB0ex+tGnBOL6VhPGqwXz
+BsmAI9hnC1NgvlKzkuCxhApmLv6JRCTJE1h/qZLHL558DM/R0+vVFIS8xaRYCFijKXXILz7u4oej
+p8MA1/Mgl08DT9WKGsKwpa16aa1ofGOcCLQg6UAY1i3FBi26PrSDmg6+sOAd6QxPJj6HkCztGdN9
+RQ49btetQTw366jbltwmc4+TJExJ0W2SNgLpwWmdaoC0RP0RnEyVoo0t2TgpnCW9diYX2tKRFBAc
+iTr4PiEslb/IUPQR3LO85HAmzZrVVshr
+--0000000000001a8f3e061d070a09--
 
