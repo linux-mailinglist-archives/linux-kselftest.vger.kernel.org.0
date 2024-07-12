@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1488792FC72
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 16:24:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8343392FC73
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 16:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 467361C22502
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 14:24:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E8661F227E8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 14:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660B317166F;
-	Fri, 12 Jul 2024 14:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9079617166E;
+	Fri, 12 Jul 2024 14:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kr26z2e0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhHJr2fY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4EE13F439;
-	Fri, 12 Jul 2024 14:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691BC13F439;
+	Fri, 12 Jul 2024 14:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720794279; cv=none; b=UrCtofbyMYqFGvNVjqDc9wUrFTH9NL1lTk4p6B8UFlEz0Y8j9oMrqClXhpJ50mDnS80PGfoq3iBiisnDu3E5RPVqY32LeexF+RrcBfAga12+qvZPMIviM1lt89M6zgSQO+LYsqGRCI0gHgLdRk8LJA9OTfAvh2nxTHxSZLN4naU=
+	t=1720794284; cv=none; b=gHb3hzRu0luoyrJlo/Ka+9qS89GwaHMmoxVmUnBtPA34aN8rVkZgDwxUllXb7in7GSEXYxLB8WAroeKU/I5c7lCVulPUci1nXb5OAuXGOx5WUP1FbstRNnX/h07s5zcX3GXoSBpVHVbYeT9pteAt3ASUBWRyY2K/D/buIkNZlY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720794279; c=relaxed/simple;
-	bh=FOFEopIEgkSl/GAHe6VBDmsgPaR+r2/zBmzqcK309pA=;
+	s=arc-20240116; t=1720794284; c=relaxed/simple;
+	bh=06ifw7SQRypt3Wn5ttQJBek4EMBqirRgHFBshtecyKk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sC+vtitIG9AUdxPE+YeLIlZmH1fEvrBpc+hD7LxaeIaYh539qpwqJtix7UgP6lVYpYXX7wb8DPqsSeoSj5EsCIfs2cWs8c49PWsLiLjAJ9khqEk6mK/NYU6Xttwe66ttlVVR6kc3dmVZgFdp+QK9Qk8u9+zch4lhiNsHYmEXCXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kr26z2e0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9568C4AF0B;
-	Fri, 12 Jul 2024 14:24:34 +0000 (UTC)
+	 MIME-Version; b=ZP+213lyOYANDTda21VFioz7s6Enk/pZjwh17br384jqIDhJAMJ7YhQT3bLND6jZvha2YsQUdJ9Zc9i5m+VwE5x3Iyeak/YQleyaaNiWht62t7w+V+XQNXZih+aA2pWDUt+lSMf8i4T8Nm4Wuo+f6CQcX+IAsVFAG5NN5b4WcyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhHJr2fY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A27C32782;
+	Fri, 12 Jul 2024 14:24:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720794278;
-	bh=FOFEopIEgkSl/GAHe6VBDmsgPaR+r2/zBmzqcK309pA=;
+	s=k20201202; t=1720794283;
+	bh=06ifw7SQRypt3Wn5ttQJBek4EMBqirRgHFBshtecyKk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kr26z2e0m4McpCRzPEx2PPfRdB7CVF4l5N6G9uSZ/iSn7J4e/duC3z5FAIbkXhfv9
-	 a0LgrnMRKnhcJbOluYi4bxja/6fZiuehjZceM2vY4oiiDVaRO3BaU8p04WqUKJ3tAZ
-	 v0YYPLszNOlHMZ2I9IA8BA3YXdkADgQJR2o2ORTuAG2CoHWQV3Ry79+z2EKkAWAaY7
-	 w8jix5agqUbEOKJE2DizuKF7FdVNIKIeWQLbA2xCG1dUYsSXt9Y56trqFZoMJ9gGPR
-	 cQ5VyWukTU4hLRjapPva7O+Tnw8OfRVsErqgkDd++gaB0tVJRJ8EpTShJLY7CZVA4s
-	 nyaNA9sf6tqNw==
+	b=uhHJr2fY6WOYsyx66VG68oOKlorW0Z5Lz70FTz6zXSrfwBJF3n9vMCgLXgTSgcibU
+	 Xw3sgRdLd8E0DLfc7d6v6fHr7WA0bCShejU9spKpdjsoBnePEbyQ+Gm9B9lhxseBdh
+	 Uw162BaGqb6fDKOk5JcktcVo/DdCWI6Gla5OdOFomzjZEpLJa6sepOTJQx/VlM0Ow9
+	 ZZYEvh2l4kI1u4VBjYVM9ikDzriWU9Xne6/l28bBcp0h1n9uIHWhCChTeeKfjZY8KT
+	 hlTZU3EShSfuqRklZ6jO7Tjo+GLMnKvNXBL0PwXqXC/IJ9TJaFCj3Gbhki7p5HdDb9
+	 V//w49rnGIfsA==
 From: Geliang Tang <geliang@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -58,9 +58,9 @@ To: Andrii Nakryiko <andrii@kernel.org>,
 Cc: Geliang Tang <tanggeliang@kylinos.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/3] libbpf: handle ENOTSUPP in libbpf_strerror_r
-Date: Fri, 12 Jul 2024 22:24:17 +0800
-Message-ID: <f44699a1dc14a5c93ee7bba7e5178530f082f813.1720791489.git.tanggeliang@kylinos.cn>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Drop duplicate ENOTSUPP definitions
+Date: Fri, 12 Jul 2024 22:24:18 +0800
+Message-ID: <e954fa2f0de2d2460f7265bb26cbe0a3edb9108c.1720791489.git.tanggeliang@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1720791488.git.tanggeliang@kylinos.cn>
 References: <cover.1720791488.git.tanggeliang@kylinos.cn>
@@ -74,83 +74,109 @@ Content-Transfer-Encoding: 8bit
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Errno 95 (ENOTSUP or EOPNOTSUPP) can be recognized by libbpf_strerror_r(),
-but 524 (ENOTSUPP) can't:
+ENOTSUPP is defined in bpf/str_error.h now, so no need to redefine it
+in so many places in bpf selftests.
 
- prog 'basic_alloc3': BPF program load failed: Operation not supported
- prog 'basic_alloc3': failed to load: -95
- failed to load object 'verifier_arena'
- FAIL:unexpected_load_failure unexpected error: -95 (errno 95)
-
- prog 'inner_map': BPF program load failed: unknown error (-524)
- prog 'inner_map': failed to load: -524
- failed to load object 'bloom_filter_map'
- failed to load BPF skeleton 'bloom_filter_map': -524
- FAIL:bloom_filter_map__open_and_load unexpected error: -524
-
-This patch fixes this by handling ENOTSUPP in libbpf_strerror_r(). With
-this change, the new error string looks like:
-
- prog 'inner_map': BPF program load failed: Operation not supported
+This patch includes <bpf/str_error.h> in testing_helpers.h, which is
+almost included by each tests. And drop all duplicate definitions.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/lib/bpf/str_error.c | 18 +++++++++++++-----
- tools/lib/bpf/str_error.h |  4 ++++
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 4 ----
+ tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c | 4 ----
+ tools/testing/selftests/bpf/prog_tests/sock_addr.c  | 4 ----
+ tools/testing/selftests/bpf/test_maps.c             | 4 ----
+ tools/testing/selftests/bpf/test_verifier.c         | 4 ----
+ tools/testing/selftests/bpf/testing_helpers.h       | 1 +
+ 6 files changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/tools/lib/bpf/str_error.c b/tools/lib/bpf/str_error.c
-index 5e6a1e27ddf9..5eef2bc7fac5 100644
---- a/tools/lib/bpf/str_error.c
-+++ b/tools/lib/bpf/str_error.c
-@@ -15,7 +15,8 @@
-  */
- char *libbpf_strerror_r(int err, char *dst, int len)
- {
--	int ret = strerror_r(err < 0 ? -err : err, dst, len);
-+	unsigned int no = err < 0 ? -err : err;
-+	int ret = strerror_r(no, dst, len);
- 	/* on glibc <2.13, ret == -1 and errno is set, if strerror_r() can't
- 	 * handle the error, on glibc >=2.13 *positive* (errno-like) error
- 	 * code is returned directly
-@@ -23,11 +24,18 @@ char *libbpf_strerror_r(int err, char *dst, int len)
- 	if (ret == -1)
- 		ret = errno;
- 	if (ret) {
--		if (ret == EINVAL)
--			/* strerror_r() doesn't recognize this specific error */
--			snprintf(dst, len, "unknown error (%d)", err < 0 ? err : -err);
--		else
-+		if (ret == EINVAL) {
-+			switch (no) {
-+			case ENOTSUPP:
-+				snprintf(dst, len, "Operation not supported");
-+				break;
-+			default:
-+				/* strerror_r() doesn't recognize this specific error */
-+				snprintf(dst, len, "unknown error (-%u)", no);
-+			}
-+		} else {
- 			snprintf(dst, len, "ERROR: strerror_r(%d)=%d", err, ret);
-+		}
- 	}
- 	return dst;
- }
-diff --git a/tools/lib/bpf/str_error.h b/tools/lib/bpf/str_error.h
-index 626d7ffb03d6..c41f6ba133cf 100644
---- a/tools/lib/bpf/str_error.h
-+++ b/tools/lib/bpf/str_error.h
-@@ -4,6 +4,10 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index 1d494b4453f4..676eb7cd7fb0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -16,10 +16,6 @@
+ #include "tcp_ca_kfunc.skel.h"
+ #include "bpf_cc_cubic.skel.h"
  
- #define STRERR_BUFSIZE  128
+-#ifndef ENOTSUPP
+-#define ENOTSUPP 524
+-#endif
+-
+ static const unsigned int total_bytes = 10 * 1024 * 1024;
+ static int expected_stg = 0xeB9F;
  
-+#ifndef ENOTSUPP
-+#define ENOTSUPP 524
-+#endif
-+
- char *libbpf_strerror_r(int err, char *dst, int len);
+diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+index 130a3b21e467..6df25de8f080 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
++++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+@@ -10,10 +10,6 @@
+ #include "cgroup_helpers.h"
+ #include "network_helpers.h"
  
- #endif /* __LIBBPF_STR_ERROR_H */
+-#ifndef ENOTSUPP
+-#define ENOTSUPP 524
+-#endif
+-
+ static struct btf *btf;
+ 
+ static __u32 query_prog_cnt(int cgroup_fd, const char *attach_func)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
+index b880c564a204..68d9255d2bb7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sock_addr.c
++++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
+@@ -23,10 +23,6 @@
+ #include "getpeername_unix_prog.skel.h"
+ #include "network_helpers.h"
+ 
+-#ifndef ENOTSUPP
+-# define ENOTSUPP 524
+-#endif
+-
+ #define TEST_NS                 "sock_addr"
+ #define TEST_IF_PREFIX          "test_sock_addr"
+ #define TEST_IPV4               "127.0.0.4"
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index dfbab214f4d1..227d7d6eaf8e 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -26,10 +26,6 @@
+ #include "test_maps.h"
+ #include "testing_helpers.h"
+ 
+-#ifndef ENOTSUPP
+-#define ENOTSUPP 524
+-#endif
+-
+ int skips;
+ 
+ static struct bpf_map_create_opts map_opts = { .sz = sizeof(map_opts) };
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 610392dfc4fb..447b68509d76 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -42,10 +42,6 @@
+ #include "../../../include/linux/filter.h"
+ #include "testing_helpers.h"
+ 
+-#ifndef ENOTSUPP
+-#define ENOTSUPP 524
+-#endif
+-
+ #define MAX_INSNS	BPF_MAXINSNS
+ #define MAX_EXPECTED_INSNS	32
+ #define MAX_UNEXPECTED_INSNS	32
+diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
+index d55f6ab12433..1e882f408596 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.h
++++ b/tools/testing/selftests/bpf/testing_helpers.h
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
++#include <bpf/str_error.h>
+ #include <time.h>
+ 
+ #define __TO_STR(x) #x
 -- 
 2.43.0
 
