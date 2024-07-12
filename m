@@ -1,300 +1,162 @@
-Return-Path: <linux-kselftest+bounces-13663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A32F892F748
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:54:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2AD392F76F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:59:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 227AB1F21F3A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:54:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74506281741
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C891428EA;
-	Fri, 12 Jul 2024 08:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5931428F0;
+	Fri, 12 Jul 2024 08:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HP8LQr0x"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0uZRHqb8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C60143747;
-	Fri, 12 Jul 2024 08:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF2D13D8A4;
+	Fri, 12 Jul 2024 08:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720774427; cv=none; b=dseRLdfp22hp/QCeCx4l+FVCLx+se0zWliC5h3s5+ZmRkJzWen/RslPrz4rOLyVzGLG0pboRgE/wucDisfk/8pnkQerh4Rwp76JY/2hS7BCcd3HE94f2LFP67zNDNKYe16gq3Zeo3gMoxjGkYFWYo8oMZ/3RKWFxSt1t2Cn+IGk=
+	t=1720774785; cv=none; b=sVsdxjc7sP0YfxNtP69w9dB3JD/7DHkR/BR2L6oi9wCtJpl3zhhp8enoOb9+KQdOQZtbuKQImLFTzCP3WZ60AYsZLljJaAQExa1WjXjxo7q0wdfnSmYY6i1SKQthp+INp7+tKh+m9BHqgvUsXnHDIPihjD4Va6YakpqdcuSILWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720774427; c=relaxed/simple;
-	bh=JBnSgEtjvbqAYAYT7HqqfFOQJ7n55CtQ798gF9GpfEc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Y72+hWXimTDC1H2puXRWA4+gljlKAGmULn5dGIVjA7QgTmt+cD+ibYmjUPgRnqnq9tTVQY3A11qTuK0L1QkTOR2pSdo4UxnOL7cGUvXpHb1KRmPXohLgFxJBH+u1JVUl3d7SyHx8lXU6SNyp9ONPJ74G0+AdHGBguWVUhE0hTZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HP8LQr0x; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720774424;
-	bh=JBnSgEtjvbqAYAYT7HqqfFOQJ7n55CtQ798gF9GpfEc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HP8LQr0xbn5OVB4xnxVhRkAojlaRqUS5YYYrVYvxrwwSG9O5BL2BTEl80Uqbd713N
-	 D/D854+esgQfQCR2Zo9/msnU5sOqZj7qPoQyKMGb4FzSwa9DG/wyCTOuoY/LaWQPb7
-	 TLameHd34lvJTUcGz9gr9E5I2HTvVerDn35WTIGNAKiPh+w3mdiODqivEvQI8QfmAb
-	 epQ/d7RRxovLUOuFFgPHSb0F9I5VDCFMXtFlAPjqQnzjl/MlFEIE3lQ+hUdvCVEljj
-	 spNyBNOxNNWHfnWhg3hgv1J6VV46UWoQXI9pgLKYq9jYUxdNxEowN7ScH5ff5bODa8
-	 oCnyX5zvFXECA==
-Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 313D33782211;
-	Fri, 12 Jul 2024 08:53:41 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: kernel@collabora.com,
-	"Chang S . Bae" <chang.seok.bae@intel.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v3 4/4] selftests: x86: entry_from_vm86: remove manual counting and increase maintainability
-Date: Fri, 12 Jul 2024 13:53:17 +0500
-Message-Id: <20240712085318.315386-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240712085318.315386-1-usama.anjum@collabora.com>
-References: <20240712085318.315386-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1720774785; c=relaxed/simple;
+	bh=0V/UzY4npvWb0NaKofMtzEIjIcMV1S6JXCcxXoOhmAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XxyEb+bfRk3lM0zWs7i+dyUm2duGmkodnfC7ZV0TnBAJeMo5hRtK9G7FOSKhKVXfcLHsLf2MFT7bgee5iTOZITpRMgAvhIjP2GC1MFVkhiDi6eiXVGyh3Tc8yZ552CpKaHug+fDT67If+8R4gvNOAqNw5/4XobzmOmgzHTDwOXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0uZRHqb8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6C7C4AF09;
+	Fri, 12 Jul 2024 08:59:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720774785;
+	bh=0V/UzY4npvWb0NaKofMtzEIjIcMV1S6JXCcxXoOhmAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0uZRHqb8dHBx8mMiPKcNvtKUcyAm7Cy16eIBzT5By5WMu5eeZLy4g4qdQ0mhxReyV
+	 cGziAOHNRlcp/CnP2wrGfkC5aOWUDFQwHuVMrBEwrleD1tiBRN2fdLZhXNPG8tl+W2
+	 XS4IOOrGjFuLkiBnkLIAreFUdyQ5WGruOvpxWyog=
+Date: Fri, 12 Jul 2024 10:59:37 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernelci@lists.linux.dev
+Subject: Re: [PATCH v2 0/3] kselftest: Add test to report device log errors
+Message-ID: <2024071229-mule-statistic-dc17@gregkh>
+References: <20240705-dev-err-log-selftest-v2-0-163b9cd7b3c1@collabora.com>
+ <2024071003-islamist-expediter-a22c@gregkh>
+ <71c479fb-cd25-45ec-8dd3-0521ef951f58@linuxfoundation.org>
+ <e1e32c72-6bd3-4c15-b301-c5670690ba99@linuxfoundation.org>
+ <1417b57a-ac0b-4e8c-b157-bbe9ebb14e57@notapiano>
+ <e73c745a-5e2f-46f3-806a-739cfde72e8d@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <e73c745a-5e2f-46f3-806a-739cfde72e8d@linuxfoundation.org>
 
-- Remove manual pass/fail tests counting
-- Increase readability
-- Print details about errno if error occurs
-- Print logs in standard format
+On Thu, Jul 11, 2024 at 03:56:25PM -0600, Shuah Khan wrote:
+> On 7/11/24 15:44, Nícolas F. R. A. Prado wrote:
+> > On Thu, Jul 11, 2024 at 01:53:37PM -0600, Shuah Khan wrote:
+> > > On 7/10/24 15:49, Shuah Khan wrote:
+> > > > On 7/10/24 07:11, Greg Kroah-Hartman wrote:
+> > > > > On Fri, Jul 05, 2024 at 07:29:53PM -0400, Nícolas F. R. A. Prado wrote:
+> > > > > > Log errors are the most widely used mechanism for reporting issues in
+> > > > > > the kernel. When an error is logged using the device helpers, eg
+> > > > > > dev_err(), it gets metadata attached that identifies the subsystem and
+> > > > > > device where the message is coming from. This series makes use of that
+> > > > > > metadata in a new test to report which devices logged errors.
+> > > > > > 
+> > > > > > The first two patches move a test and a helper script to keep things
+> > > > > > organized before this new test is added in the third patch.
+> > > > > > 
+> > > > > > It is expected that there might be many false-positive error messages
+> > > > > > throughout the drivers code which will be reported by this test. By
+> > > > > > having this test in the first place and working through the results we
+> > > > > > can address those occurrences by adjusting the loglevel of the messages
+> > > > > > that turn out to not be real errors that require the user's attention.
+> > > > > > It will also motivate additional error messages to be introduced in the
+> > > > > > code to detect real errors where they turn out to be missing, since
+> > > > > > it will be possible to detect said issues automatically.
+> > > > > > 
+> > > > > > As an example, below you can see the test result for
+> > > > > > mt8192-asurada-spherion. The single standing issue has been investigated
+> > > > > > and will be addressed in an EC firmware update [1]:
+> > > > > > 
+> > > > > > TAP version 13
+> > > > > > 1..1
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `model_name' property: -6
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `energy_full_design' property: -6
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > >    power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> > > > > > not ok 1 +power_supply:sbs-8-000b
+> > > > > >    Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> > > > > > 
+> > > > > > [1] https://lore.kernel.org/all/cf4d8131-4b63-4c7a-9f27-5a0847c656c4@notapiano
+> > > > > > 
+> > > > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > > 
+> > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > 
+> > > > Is this dependent on a linux-next?
+> > > > 
+> > > > Didn't apply to linux-kselftest next.
+> > > > 
+> > > 
+> > > I tried applying these on top of linux-kselftest next which is at
+> > > Linux 6.10-rc7 + other patches.
+> > > 
+> > > I am not sure what is wrong - first patch applies and the second
+> > > and third don't.
+> > > 
+> > > git am fails and manual patch application worked for 2/3, same thing
+> > > with 3.3 - these should apply cleanly since they don't have obvious
+> > > conflicts.
+> > > 
+> > > Please clean this up and send me updated series adding Greg's ack.
+> > 
+> > Oh, now I see what happened. I recently sent another series that touches the
+> > same file (tools/testing/selftests/devices/test_discoverable_devices.py):
+> > "kselftest: devices: Allow running test on more platforms"
+> > https://lore.kernel.org/all/20240613-kselftest-discoverable-probe-mt8195-kci-v1-1-7b396a9b032d@collabora.com/
+> > 
+> > That was already merged through the usb tree, and is present on next (on which I
+> > based this series).
+> > 
+> > In this case I imagine it's best if this series gets picked through the usb
+> > tree, right? Even if I rebase on kselftest's next, there will be conflicts.
+> > 
+> 
+> I see. No problem. It can go through usb tree
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/x86/entry_from_vm86.c | 109 +++++++++---------
- 1 file changed, 53 insertions(+), 56 deletions(-)
+Ok, taken through the usb tree now, thanks.
 
-diff --git a/tools/testing/selftests/x86/entry_from_vm86.c b/tools/testing/selftests/x86/entry_from_vm86.c
-index d1e919b0c1dc8..a4efa4588e6f8 100644
---- a/tools/testing/selftests/x86/entry_from_vm86.c
-+++ b/tools/testing/selftests/x86/entry_from_vm86.c
-@@ -23,9 +23,9 @@
- #include <stdbool.h>
- #include <errno.h>
- #include <sys/vm86.h>
-+#include "../kselftest.h"
- 
- static unsigned long load_addr = 0x10000;
--static int nerrs = 0;
- 
- static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 		       int flags)
-@@ -36,7 +36,7 @@ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 	sa.sa_flags = SA_SIGINFO | flags;
- 	sigemptyset(&sa.sa_mask);
- 	if (sigaction(sig, &sa, 0))
--		err(1, "sigaction");
-+		ksft_exit_fail_perror("sigaction");
- }
- 
- static void clearhandler(int sig)
-@@ -46,7 +46,7 @@ static void clearhandler(int sig)
- 	sa.sa_handler = SIG_DFL;
- 	sigemptyset(&sa.sa_mask);
- 	if (sigaction(sig, &sa, 0))
--		err(1, "sigaction");
-+		ksft_exit_fail_perror("sigaction");
- }
- 
- static sig_atomic_t got_signal;
-@@ -56,10 +56,8 @@ static void sighandler(int sig, siginfo_t *info, void *ctx_void)
- 	ucontext_t *ctx = (ucontext_t*)ctx_void;
- 
- 	if (ctx->uc_mcontext.gregs[REG_EFL] & X86_EFLAGS_VM ||
--	    (ctx->uc_mcontext.gregs[REG_CS] & 3) != 3) {
--		printf("[FAIL]\tSignal frame should not reflect vm86 mode\n");
--		nerrs++;
--	}
-+	    (ctx->uc_mcontext.gregs[REG_CS] & 3) != 3)
-+		ksft_test_result_fail("Signal frame should not reflect vm86 mode\n");
- 
- 	const char *signame;
- 	if (sig == SIGSEGV)
-@@ -69,9 +67,9 @@ static void sighandler(int sig, siginfo_t *info, void *ctx_void)
- 	else
- 		signame = "unexpected signal";
- 
--	printf("[INFO]\t%s: FLAGS = 0x%lx, CS = 0x%hx\n", signame,
--	       (unsigned long)ctx->uc_mcontext.gregs[REG_EFL],
--	       (unsigned short)ctx->uc_mcontext.gregs[REG_CS]);
-+	ksft_test_result_pass("%s: FLAGS = 0x%lx, CS = 0x%hx\n", signame,
-+			      (unsigned long)ctx->uc_mcontext.gregs[REG_EFL],
-+			      (unsigned short)ctx->uc_mcontext.gregs[REG_CS]);
- 
- 	got_signal = 1;
- }
-@@ -137,13 +135,13 @@ static bool do_test(struct vm86plus_struct *v86, unsigned long eip,
- {
- 	long ret;
- 
--	printf("[RUN]\t%s from vm86 mode\n", text);
-+	ksft_print_msg("%s from vm86 mode\n", text);
- 	v86->regs.eip = eip;
- 	ret = vm86(VM86_ENTER, v86);
- 
- 	if (ret == -1 && (errno == ENOSYS || errno == EPERM)) {
--		printf("[SKIP]\tvm86 %s\n",
--		       errno == ENOSYS ? "not supported" : "not allowed");
-+		ksft_test_result_skip("vm86 %s\n",
-+				      errno == ENOSYS ? "not supported" : "not allowed");
- 		return false;
- 	}
- 
-@@ -159,29 +157,27 @@ static bool do_test(struct vm86plus_struct *v86, unsigned long eip,
- 		else
- 			sprintf(trapname, "%d", trapno);
- 
--		printf("[INFO]\tExited vm86 mode due to #%s\n", trapname);
-+		ksft_print_msg("Exited vm86 mode due to #%s\n", trapname);
- 	} else if (VM86_TYPE(ret) == VM86_UNKNOWN) {
--		printf("[INFO]\tExited vm86 mode due to unhandled GP fault\n");
-+		ksft_print_msg("Exited vm86 mode due to unhandled GP fault\n");
- 	} else if (VM86_TYPE(ret) == VM86_TRAP) {
--		printf("[INFO]\tExited vm86 mode due to a trap (arg=%ld)\n",
--		       VM86_ARG(ret));
-+		ksft_print_msg("Exited vm86 mode due to a trap (arg=%ld)\n",
-+			       VM86_ARG(ret));
- 	} else if (VM86_TYPE(ret) == VM86_SIGNAL) {
--		printf("[INFO]\tExited vm86 mode due to a signal\n");
-+		ksft_print_msg("Exited vm86 mode due to a signal\n");
- 	} else if (VM86_TYPE(ret) == VM86_STI) {
--		printf("[INFO]\tExited vm86 mode due to STI\n");
-+		ksft_print_msg("Exited vm86 mode due to STI\n");
- 	} else {
--		printf("[INFO]\tExited vm86 mode due to type %ld, arg %ld\n",
--		       VM86_TYPE(ret), VM86_ARG(ret));
-+		ksft_print_msg("Exited vm86 mode due to type %ld, arg %ld\n",
-+			       VM86_TYPE(ret), VM86_ARG(ret));
- 	}
- 
- 	if (rettype == -1 ||
--	    (VM86_TYPE(ret) == rettype && VM86_ARG(ret) == retarg)) {
--		printf("[OK]\tReturned correctly\n");
--	} else {
--		printf("[FAIL]\tIncorrect return reason (started at eip = 0x%lx, ended at eip = 0x%lx)\n", eip, v86->regs.eip);
--		nerrs++;
--	}
--
-+	    (VM86_TYPE(ret) == rettype && VM86_ARG(ret) == retarg))
-+		ksft_test_result_pass("Returned correctly\n");
-+	else
-+		ksft_test_result_fail("Incorrect return reason (started at eip = 0x%lx, ended at eip = 0x%lx)\n",
-+				      eip, v86->regs.eip);
- 	return true;
- }
- 
-@@ -215,26 +211,20 @@ void do_umip_tests(struct vm86plus_struct *vm86, unsigned char *test_mem)
- 	/* Results when using register operands */
- 	msw3 = *(unsigned short *)(test_mem + 2080);
- 
--	printf("[INFO]\tResult from SMSW:[0x%04x]\n", msw1);
--	printf("[INFO]\tResult from SIDT: limit[0x%04x]base[0x%08lx]\n",
--	       idt1.limit, idt1.base);
--	printf("[INFO]\tResult from SGDT: limit[0x%04x]base[0x%08lx]\n",
--	       gdt1.limit, gdt1.base);
-+	ksft_print_msg("Result from SMSW:[0x%04x]\n", msw1);
-+	ksft_print_msg("Result from SIDT: limit[0x%04x]base[0x%08lx]\n",
-+		       idt1.limit, idt1.base);
-+	ksft_print_msg("Result from SGDT: limit[0x%04x]base[0x%08lx]\n",
-+		       gdt1.limit, gdt1.base);
- 
--	if (msw1 != msw2 || msw1 != msw3)
--		printf("[FAIL]\tAll the results of SMSW should be the same.\n");
--	else
--		printf("[PASS]\tAll the results from SMSW are identical.\n");
-+	ksft_test_result((msw1 == msw2 && msw1 == msw3),
-+			 "All the results from SMSW are identical.\n");
- 
--	if (memcmp(&gdt1, &gdt2, sizeof(gdt1)))
--		printf("[FAIL]\tAll the results of SGDT should be the same.\n");
--	else
--		printf("[PASS]\tAll the results from SGDT are identical.\n");
-+	ksft_test_result(!memcmp(&gdt1, &gdt2, sizeof(gdt1)),
-+			 "All the results from SGDT are identical.\n");
- 
--	if (memcmp(&idt1, &idt2, sizeof(idt1)))
--		printf("[FAIL]\tAll the results of SIDT should be the same.\n");
--	else
--		printf("[PASS]\tAll the results from SIDT are identical.\n");
-+	ksft_test_result(!memcmp(&idt1, &idt2, sizeof(idt1)),
-+			 "All the results from SIDT are identical.\n");
- 
- 	sethandler(SIGILL, sighandler, 0);
- 	do_test(vm86, vmcode_umip_str - vmcode, VM86_SIGNAL, 0,
-@@ -250,11 +240,15 @@ void do_umip_tests(struct vm86plus_struct *vm86, unsigned char *test_mem)
- int main(void)
- {
- 	struct vm86plus_struct v86;
--	unsigned char *addr = mmap((void *)load_addr, 4096,
--				   PROT_READ | PROT_WRITE | PROT_EXEC,
--				   MAP_ANONYMOUS | MAP_PRIVATE, -1,0);
-+	unsigned char *addr;
-+
-+	ksft_print_header();
-+	ksft_set_plan(18);
-+
-+	addr = mmap((void *)load_addr, 4096, PROT_READ | PROT_WRITE | PROT_EXEC,
-+		    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	if (addr != (unsigned char *)load_addr)
--		err(1, "mmap");
-+		ksft_exit_fail_perror("mmap");
- 
- 	memcpy(addr, vmcode, end_vmcode - vmcode);
- 	addr[2048] = 2;
-@@ -270,7 +264,8 @@ int main(void)
- 	/* Use the end of the page as our stack. */
- 	v86.regs.esp = 4096;
- 
--	assert((v86.regs.cs & 3) == 0);	/* Looks like RPL = 0 */
-+	if (v86.regs.cs & 3)
-+		ksft_exit_fail_msg("Looks like RPL = 0\n");
- 
- 	/* #BR -- should deliver SIG??? */
- 	do_test(&v86, vmcode_bound - vmcode, VM86_INTx, 5, "#BR");
-@@ -333,16 +328,18 @@ int main(void)
- 	v86.regs.ss = 0;
- 	sethandler(SIGSEGV, sighandler, 0);
- 	got_signal = 0;
--	if (do_test(&v86, 0, VM86_SIGNAL, 0, "Execute null pointer") &&
--	    !got_signal) {
--		printf("[FAIL]\tDid not receive SIGSEGV\n");
--		nerrs++;
--	}
-+	if (do_test(&v86, 0, VM86_SIGNAL, 0, "Execute null pointer"))
-+		ksft_test_result(got_signal, "Received SIGSEGV\n");
-+	else
-+		ksft_test_result_skip("Received SIGSEGV\n");
-+
- 	clearhandler(SIGSEGV);
- 
- 	/* Make sure nothing explodes if we fork. */
- 	if (fork() == 0)
- 		return 0;
- 
--	return (nerrs == 0 ? 0 : 1);
-+	ksft_test_result_pass("fork succeeded\n");
-+
-+	ksft_finished();
- }
--- 
-2.39.2
-
+greg k-h
 
