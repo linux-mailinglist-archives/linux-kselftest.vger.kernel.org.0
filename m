@@ -1,114 +1,175 @@
-Return-Path: <linux-kselftest+bounces-13671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 729D392FAD0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 15:00:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7FC92FB6E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 15:32:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DCCB28433B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 13:00:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C0C71C22371
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 13:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BFD16FF2A;
-	Fri, 12 Jul 2024 13:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FDC16DEC3;
+	Fri, 12 Jul 2024 13:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrQGy8xf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e32V4pQ2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895DE16F8EF;
-	Fri, 12 Jul 2024 13:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA0815B13D;
+	Fri, 12 Jul 2024 13:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720789209; cv=none; b=A3sThCHyOqia7xuMpVwj0Z3nRVnTBxB7+UQiNYrWZIBSo3E0SofjkK6V3dsDYRHTYUjcs8lPq65o/olB5W9QbtWGj6AaK7K1VlDVJUbc1QeA+3LH8O6hYaq/bk87G/8KvZ/6K5glZ9KjDR2uAofgu4p1LRIYjIyHlOniFwEPvu0=
+	t=1720791110; cv=none; b=QjrWLcTauD03MiOItYBNH+ajSVi3JI6hEKFN0leI6Hd1nkBY8bfgKlM0O9iO0HScLPBFUXg9ih0zlo4coH7Uyi400EhyqwrXyOJllfY99GlNd88o6/hAou1U6uqNYSzI9L0GY15XQxZOmbXOez5+X54+X9YssYMxpeyXPJJyEtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720789209; c=relaxed/simple;
-	bh=jSLWfMXDwjEp+gRw22pYaQy0XJ5CPA338Dsd4mGvswk=;
+	s=arc-20240116; t=1720791110; c=relaxed/simple;
+	bh=D90FayrMuFi+Snmtl8k2Ar9LAGpxPsM22fxKDhzoZTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=efMYdfWk2+PybVmAM2uu96FmaArYRdbxBFJhYCGFLGu2wcFOFHQFg0J0yhxn4lY3v70Bd4lmnUPCOAJEBAKHWjad06AP9A2CcuBsQYBv644aHgnjc1efes3g/3WZeIMEV0/EiJg6MOM4CKMw6tBP0kCQ+BpnF4+qnxDhB/8C4rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrQGy8xf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6FBCC32782;
-	Fri, 12 Jul 2024 13:00:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYmLJEylpQYCOjg+fTsg5f7SzSlAtTXKGD1oj7N1rAw8MsdsU1u/JIgK/KGE/nGviUqB90fVbEXpKZqIsSg+MpPd7QvbFU/NFVADphCq/ypSkoNVRIR1AzG3CjthNey3E8IXbKGoHjHG/MBdYu1TKahOEu6xHFfxj8M5aCOvbS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e32V4pQ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D23C32786;
+	Fri, 12 Jul 2024 13:31:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720789209;
-	bh=jSLWfMXDwjEp+gRw22pYaQy0XJ5CPA338Dsd4mGvswk=;
+	s=k20201202; t=1720791110;
+	bh=D90FayrMuFi+Snmtl8k2Ar9LAGpxPsM22fxKDhzoZTM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hrQGy8xfk/Rwc1Tid+q0DBz6FZJclmQYV/Ghxt2tjMABTmSZqHJawUMgJpOa7SM8v
-	 XETVI9aJobWAZEB0WTWDtn8A+aQpthcxVpFdEDQdL1LUVHRlUPMWNo6P9a2McysXqg
-	 Z1K6Dl5YduRNSChPnLqLs2nhr7Pux8Qdm110W4YibqOS/40JrFdk2qaZ9H3lzKw1ol
-	 CL2HMhtjEiGDirS7Ji/4baVV4JMPhOYgDikBcqJw67noNhdV24igulxyGoi7sVv99Y
-	 6HVSwL5KsE8nas730o7VCqgv2+5lHYN9+R71xC3HIM7nJURolrNT4SIxMWt9C6vA5/
-	 1HekyagRuCgQg==
-Date: Fri, 12 Jul 2024 14:00:03 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.de>, Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
- names
-Message-ID: <bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
-References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
- <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
- <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
- <877cdrt3zc.wl-tiwai@suse.de>
- <e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
+	b=e32V4pQ2ih0Q0X18A50u8zXTdfXWPYCAqTYgi4ddBi7UnDNW9o+MM/qa/KsgMrnkz
+	 vUYknoxNmihdjQa2IfK0rIzb1FJ3iV/XS/++9ZpG0D/zcBqH2nZXSbARpg3PBCbb56
+	 xl2GDHpqvzS/qJ6cMrhhqEhkRa/SLW3hLK9g4EpWdbSTXq6hAalDLo01KmED/v0LH7
+	 GPy+AUtXKtPrV+fTgbyhV9KB2XIrCwg71ZQiyHIuS25MlWZUtNDPB2NP7igK3EYHxz
+	 HacvcYblqG8FYsJxRy1Ng4YZz4BaESZHql7Y0tvrDjklmAt4LfVYGQRyqjMKT1gG39
+	 FhVR0Rt0IB+1g==
+Date: Fri, 12 Jul 2024 14:31:41 +0100
+From: Simon Horman <horms@kernel.org>
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+	apparmor@lists.ubuntu.com, selinux@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Brendan Jackman <jackmanb@chromium.org>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Khadija Kamran <kamrankhadijadj@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/20] lsm: Refactor return value of LSM hook
+ inode_getsecurity
+Message-ID: <20240712133141.GB120802@kernel.org>
+References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
+ <20240711111908.3817636-4-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tSYM6AG5MREuAaH3"
-Content-Disposition: inline
-In-Reply-To: <e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
-X-Cookie: Individualists unite!
-
-
---tSYM6AG5MREuAaH3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240711111908.3817636-4-xukuohai@huaweicloud.com>
 
-On Fri, Jul 12, 2024 at 11:20:05AM +0200, Jaroslav Kysela wrote:
-> On 12. 07. 24 10:21, Takashi Iwai wrote:
+On Thu, Jul 11, 2024 at 07:18:51PM +0800, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> To be consistent with most LSM hooks, convert the return value of
+> hook inode_getsecurity to 0 or a negative error code.
+> 
+> Before:
+> - Hook inode_getsecurity returns size of buffer on success or a
+>   negative error code on failure.
+> 
+> After:
+> - Hook inode_getsecurity returns 0 on success or a negative error
+>   code on failure. An output parameter @len is introduced to hold
+>   the buffer size on success.
+> 
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  fs/xattr.c                    | 19 ++++++++++---------
+>  include/linux/lsm_hook_defs.h |  3 ++-
+>  include/linux/security.h      | 12 ++++++------
+>  security/commoncap.c          |  9 ++++++---
+>  security/security.c           | 11 ++++++-----
+>  security/selinux/hooks.c      | 16 ++++++----------
+>  security/smack/smack_lsm.c    | 14 +++++++-------
+>  7 files changed, 43 insertions(+), 41 deletions(-)
+> 
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index f8b643f91a98..f4e3bedf7272 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -339,27 +339,28 @@ xattr_getsecurity(struct mnt_idmap *idmap, struct inode *inode,
+>  		  const char *name, void *value, size_t size)
+>  {
+>  	void *buffer = NULL;
+> -	ssize_t len;
+> +	int error;
+> +	u32 len;
+>  
+>  	if (!value || !size) {
+> -		len = security_inode_getsecurity(idmap, inode, name,
+> -						 &buffer, false);
+> +		error = security_inode_getsecurity(idmap, inode, name,
+> +						   false, &buffer, &len);
+>  		goto out_noalloc;
+>  	}
+>  
+> -	len = security_inode_getsecurity(idmap, inode, name, &buffer,
+> -					 true);
+> -	if (len < 0)
+> -		return len;
+> +	error = security_inode_getsecurity(idmap, inode, name, true,
+> +					   &buffer, &len);
+> +	if (error)
+> +		return error;
+>  	if (size < len) {
+> -		len = -ERANGE;
+> +		error = -ERANGE;
+>  		goto out;
+>  	}
+>  	memcpy(value, buffer, len);
+>  out:
+>  	kfree(buffer);
+>  out_noalloc:
+> -	return len;
+> +	return error < 0 ? error : len;
 
-> > OTOH, longname can be really ugly to read, and it can vary because it
-> > often embeds address or irq numbers in the string.
+Hi Xu Kuohai,
 
-Capturing that variation is one of the goals - it should mostly be
-stable between runs.
+len is an unsigned 32-bit entity, but the return type of this function
+is an unsigned value (ssize_t). So in theory, if len is very large,
+a negative error value error will be returned.
 
-> > If a general name is the goal, how about using shortname instead?
+>  }
 
-> > Or use id field, as Jaroslav suggested, but without the card number
-> > suffix; then it's unique among multiple cards.
+Similarly for the handling of nattr in lsm_get_self_attr in
+lsm_syscalls.c in a subsequent patch.
 
-> I prefer this (use only ID field). This string can be also set in the user
-> space using sysfs/udev, so the administrator may change it if the default is
-> not ideal.
+Flagged by Smatch.
 
-The trouble with the ID field is that it's too short and seems likely to
-create collisions, for example HDA stuff just seems to default to NVidia
-for nVidia cards which seems very likely to create collisions if someone
-has two graphics cards in their system.
-
---tSYM6AG5MREuAaH3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaRKNIACgkQJNaLcl1U
-h9BjbQf/XNo2rNpuzL+vTJldIG6ZmLJnvm/MnskfeadVXHiWUvTMs7p16ZX2FXn8
-C0curxs+gWgr84gD/0VW0/1Ff7BTh5zzgfc3PnxNB7yfvHmookWwqCUcdtunFqL9
-3kfhDjX8DZHRUq5AW+S5DxybGNbsB6sMY4e0sHZI3xfYv40ZAptB/iptDBJ/Q6rs
-PuFneE4kD/1EOtLV0SQ9tt5BVMff7aS50pN83e4IkNvvOb2RQw49kcf2fP+muRf4
-8qqOotyA7swHp/Zxx7Aj9spvF0mW82w5YN5wtFS5AC9WP3IVJkuuMT2piXJX/lrE
-yg05nHobsyVhNlUQHpok51BjUJCZog==
-=x3Qu
------END PGP SIGNATURE-----
-
---tSYM6AG5MREuAaH3--
+...
 
