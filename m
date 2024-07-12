@@ -1,153 +1,154 @@
-Return-Path: <linux-kselftest+bounces-13683-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E63792FE5A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 18:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63DD792FE74
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 18:26:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B13E1F239EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 16:19:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D17871F23A3B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 16:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D101175545;
-	Fri, 12 Jul 2024 16:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB28176AA4;
+	Fri, 12 Jul 2024 16:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="m4vydiEH"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="GhgfAKxw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB0816F8F5;
-	Fri, 12 Jul 2024 16:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE0017622F;
+	Fri, 12 Jul 2024 16:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720801188; cv=none; b=Y31Z2uJmEpIskd4iAGZHhzSd5efb1W+ZIRhyGAT9DE7UJrcU3ozugTax6tuRbhuAFc9XDxytUsFUi3+Ih1qVUcjxkdF3HLxiMmMHzTdVWWSL8hGfrKjGrJDmUhGiRiuXJsNeUljE/4mSGWOgCFWBwffv3lLCmOPBxPGFPSqadEE=
+	t=1720801541; cv=none; b=Jv6dCOvwmXhPfvNgiEgTCQHiA9SXK1pVf56J2psOZerVhWIUKcAXhcoxDjyhQqrv81hqjcjBOTo75ThX8ilQ8vHIyqgy6VWgbYN1JmntTMC1BmuBmrj8yyT2KVyAKhm3OtCVJV0C3vOXqrTBMc96xruac0RV9qs96nRxEz+zS2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720801188; c=relaxed/simple;
-	bh=spTcCUAvIKeRiZqhNrAtZXqPPUtuzdfi0TREE6gKYyA=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=F93M9vm1LqlM63Q07+S9RN7EdXaIWdo/eQFuqGFGOxTmTS5hMPTWmu77As3nI8UHs4uM3ekZuU4mDfpmV+07/hpi/f3AzSrqXn68/dv1f7afmAph8wQkR7uR8zyy9t8mYTUqR4Ky+BTn6DWTOJEOFYqCQwRgupZv5iPN+gEwK0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=m4vydiEH; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fnfBwcbL3Qe8863nzBkCMy1pP5U04LNp3AM575Iq/Ys=; b=m4vydiEHqcGM57I27dW0pq2LMN
-	mJxl3/wDSZ/XwciUK9IeeSgA1RP463FcySbP6SYAG7luhN020GBbc4d0JwSsYNo5mqfINp6GzkE+n
-	lfAsOeJNx10Bzyx8XiWeNCvO8j3gfTd5Zl6I2jfE2zj7G7A6m6RQD0sRuXpjAAl2wRzazslN79xUy
-	e+af9LUvwEal2OezBb8vbcs92ukgFWewM9cpjPPI5mJwH/vEhHZbderWWjdfsKtPynH4bIUnLlEos
-	x1bcEbAzvI2ipaSDjTusPu0RwantiAZpKE65HlONKqO9w4WtYCL6JFm9E+OkL22BxKMlVP3bDpeXk
-	8nt+e7Aw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sSIzb-000KYz-6O; Fri, 12 Jul 2024 18:19:31 +0200
-Received: from [178.197.248.35] (helo=linux.home)
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sSIza-000C6s-0O;
-	Fri, 12 Jul 2024 18:19:30 +0200
-Subject: Re: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>, Manu Bretelle <chantra@meta.com>,
- KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@meta.com>,
- Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Florent Revest <revest@google.com>
-References: <20240705145009.32340-1-puranjay@kernel.org>
- <c0ef7ecf-595b-375a-7785-d7bf50040c6b@iogearbox.net>
- <mb61pjzhwvshc.fsf@kernel.org>
- <CACYkzJ7d_u=aRzbubBypSVhnUSjBQnbZjPuGXhqnMzbp0tJm_g@mail.gmail.com>
- <224eeadb-fc5f-baeb-0808-a4f9916afa3c@iogearbox.net>
- <mb61ped836gn7.fsf@kernel.org>
- <d36b0c2e-fdf2-d3b0-46a8-7936e0eda5a8@iogearbox.net>
- <CACYkzJ5E+3xYkNsH7JoVkjabzSwnZZCzzTz5B50qDB7bLYkmMA@mail.gmail.com>
- <890d23f2-636e-12d1-31cc-eb6469f2a9ac@iogearbox.net>
- <SJ0PR15MB461564D3F7E7A763498CA6A8CBDB2@SJ0PR15MB4615.namprd15.prod.outlook.com>
- <mb61p5xtcyqo5.fsf@kernel.org>
- <978e127b-4967-950d-ccca-8575d1a885ae@iogearbox.net>
- <CAADnVQJXcGB69o1s5GcLYV=OYS+hmqxGJVvtDH3YrVQc1o_=Tg@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e35b2a2b-aa5e-b107-1fb9-927e43e06d88@iogearbox.net>
-Date: Fri, 12 Jul 2024 18:19:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	s=arc-20240116; t=1720801541; c=relaxed/simple;
+	bh=Z5kmgF9LvYBeJxCKb81WkdtZxSg4mhdw/2J4+GixorM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ea0Ayz+bRQDy7ZhS9DLVkP5C4XfBvWtUI4d4nwOAfkhSLlZXhssVVoISLpAzTeRwukt38MVQm8shnPT+H3+kvkHccwZMLb8WcWpX1pQ+NW2XO7big1daSmT36jfd9JFHCD+R9LfDlEKBtD33xvCaeApuWlXqoJLBBxA9LvYJThs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=GhgfAKxw; arc=none smtp.client-ip=77.48.224.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id E04A33622B;
+	Fri, 12 Jul 2024 18:25:28 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz E04A33622B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+	t=1720801528; bh=5yaBTIvXUpa60kxJ7bIM2RSzaH80TJaXXzx7FGpu3zQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GhgfAKxwA51q91q4Kj4kCDThva9oo67LRJiv23szUaLjiMpN2dJ6/cvkfFlINwZFT
+	 WClrR2eGx1t+Ea6pw9A7BkQGy4BbCkx5seMK0LsGyaEnpMiP6qmZgvjYBuugx5gB8g
+	 WKrmBp4cVIZHd7OA8dfUk1NHk9LYyVTgQHc5pbXE=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: perex)
+	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+	Fri, 12 Jul 2024 18:25:21 +0200 (CEST)
+Message-ID: <c1be6bec-90f5-4bb3-b6b0-8524095fc490@perex.cz>
+Date: Fri, 12 Jul 2024 18:25:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJXcGB69o1s5GcLYV=OYS+hmqxGJVvtDH3YrVQc1o_=Tg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
+ names
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>, Takashi Iwai <tiwai@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-sound@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
+ <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
+ <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
+ <877cdrt3zc.wl-tiwai@suse.de> <e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
+ <bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
+From: Jaroslav Kysela <perex@perex.cz>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27334/Fri Jul 12 10:35:53 2024)
+Autocrypt: addr=perex@perex.cz; keydata=
+ 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
+In-Reply-To: <bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 7/12/24 6:07 PM, Alexei Starovoitov wrote:
-> On Fri, Jul 12, 2024 at 6:50 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 7/11/24 4:00 PM, Puranjay Mohan wrote:
->> [...]
->>> I was able find the root cause of this bug and will send a fix soon!
->>>
->>>> Unable to handle kernel paging request at virtual address ffff0000c2a80e68
->>>
->>> We are running this test on Qemu with '-cpu max', this means 52-bit
->>> virtual addresses are being used.
->>>
->>> The trampolines generation code has the following two lines:
->>>
->>>                emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
->>>                emit_call((const u64)__bpf_tramp_enter, ctx);
->>>
->>> here the address of struct bpf_tramp_image is moved to R0 and passed as
->>> an argument to __bpf_tramp_enter().
->>>
->>> emit_addr_mov_i64() assumes that the address passed to it is in the
->>> vmalloc space and uses at most 48 bits. It sets all the remaining bits
->>> to 1.
->>>
->>> but struct bpf_tramp_image is allocated using kzalloc() and when 52-bit
->>> VAs are used, its address is not guaranteed to be 48-bit, therefore we
->>> see this bug, where  0xfff[0]0000c2a80e68 is converted to
->>> 0xfff[f]0000c2a80e68 when the trampoline is generated.
->>>
->>> The fix would be use emit_a64_mov_i64() for moving this address into R0.
->>
->> It looks like there is still an issue left. A recent CI run on bpf-next is
->> still hitting the same on arm64:
->>
->> Base:
->>
->>     https://github.com/kernel-patches/bpf/commits/series/870746%3D%3Ebpf-next/
->>
->> CI:
->>
->>     https://github.com/kernel-patches/bpf/actions/runs/9905842936/job/27366435436
->>
->>     [...]
->>     #89/11   fexit_bpf2bpf/func_replace_global_func:OK
->>     #89/12   fexit_bpf2bpf/fentry_to_cgroup_bpf:OK
->>     #89/13   fexit_bpf2bpf/func_replace_progmap:OK
->>     #89      fexit_bpf2bpf:OK
->>     Error: The operation was canceled.
+On 12. 07. 24 15:00, Mark Brown wrote:
+> On Fri, Jul 12, 2024 at 11:20:05AM +0200, Jaroslav Kysela wrote:
+>> On 12. 07. 24 10:21, Takashi Iwai wrote:
 > 
-> Let's denylist that test again for now?
+>>> OTOH, longname can be really ugly to read, and it can vary because it
+>>> often embeds address or irq numbers in the string.
+> 
+> Capturing that variation is one of the goals - it should mostly be
+> stable between runs.
+> 
+>>> If a general name is the goal, how about using shortname instead?
+> 
+>>> Or use id field, as Jaroslav suggested, but without the card number
+>>> suffix; then it's unique among multiple cards.
+> 
+>> I prefer this (use only ID field). This string can be also set in the user
+>> space using sysfs/udev, so the administrator may change it if the default is
+>> not ideal.
+> 
+> The trouble with the ID field is that it's too short and seems likely to
+> create collisions, for example HDA stuff just seems to default to NVidia
+> for nVidia cards which seems very likely to create collisions if someone
+> has two graphics cards in their system.
 
-Agree, done/pushed now.
+The default IDs are always unique - see snd_card_set_id_no_lock() in 
+sound/core/init.c . Basically, the suffix will follow the device probe order 
+in this case.
+
+				Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
 
