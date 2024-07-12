@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-13660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07CF692F742
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:53:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A877392F744
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 10:53:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86874283894
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:53:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9E6E1C2268A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2024 08:53:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5088E14290C;
-	Fri, 12 Jul 2024 08:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479F61428F0;
+	Fri, 12 Jul 2024 08:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="vfU8HLDG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="frFJaAlE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31D31428E7;
-	Fri, 12 Jul 2024 08:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B051428EA;
+	Fri, 12 Jul 2024 08:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720774413; cv=none; b=YsMzLUD2ShF6lCsf9qTwtCVPHkf6VhbZ+hj0sW+L1XKtjREzfWM47kQP6Qb66MGbKwYh5Au3HSKyDyAgB+YYz6ZZMA/69IhanhJshOpK1832dQGAN7cTXxTvzz3QWD4VPtdoEsdg2jSdv2KC9ciU2xrJ+jsZgTBk1jO6WwQP4Jo=
+	t=1720774417; cv=none; b=h/rm20W0MAGFB01VO1E7mb83dYybml149VTOg8tVa3W7dblGxeDyLzJ9PMIl24qjssWIALiAgG4H55Evyjm6RYQ4rqkNZOZoZ2udF3ZAuOIoZtB5wDc8qj/VlkqZ/yAwO7w8MJAXNbB7/hrlX1+OQGWN5YdSF4TD4BjUDgT8s1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720774413; c=relaxed/simple;
-	bh=newjgmZ8NVY0WI0RWTkosD/XDmBr5O5rKuL1X4AnNXE=;
+	s=arc-20240116; t=1720774417; c=relaxed/simple;
+	bh=RLfXVBOBZZZ+0wOWembK7DR9NrstP766ajYT0vmw47Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FUzb6+NrSgsTs+uSr0XF+z0H7MbrjojBuzPPy09CXOPthkT9YWDZZT4pTUhO/K5LfuRlhRVGIYngXrL16gH4bMqwscJI8pmxFzpmcAzujVmjmAcgYKmi6bpEQemyNWP09vD+LyOwX2SCsH9DTqPRqc1M74AmdvmlJfZyJTNtwjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=vfU8HLDG; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=rTb7d+uzQEEjXtKBp1KihC8QA1a62iEBBwjCQgxBjAjX5sQp/lQ0bZqR1xmgtVjTYG+cjTuhzavaOB9TApp8TprRYTUopsk+x7/lfyWl/BxQZ1GJEVT1h73ThB2riltE1OLFPu7jzjSdCGnNpF8n5mRrAkSIdNiTCxSQLrl1h0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=frFJaAlE; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720774409;
-	bh=newjgmZ8NVY0WI0RWTkosD/XDmBr5O5rKuL1X4AnNXE=;
+	s=mail; t=1720774414;
+	bh=RLfXVBOBZZZ+0wOWembK7DR9NrstP766ajYT0vmw47Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vfU8HLDGV6WAgWgFzDAPD6TJTW34FLpE+t/vQJOS2F/+M95lGSlnkKpsL0tOzbYx2
-	 yzJr+eLVJewz09ZBIrJEmITFJ37wQco0UlLOkYBJftoOstKyCSMGV/SJnskYK30tFm
-	 NmsuqyHbk0F4JWGSvVX+0S6wEDbS/WqkOSIMjNM4jeCWnB2MgJRT1g288ApPilcw9l
-	 27JardrtR+SuMnIVhbm0k1suYZBLbqKucl8ieZp8p7xr6aJN8SlHOejqixqWgDwxcz
-	 nF+Jmh7ghfRTmWSHLGSUmFFl+Eryzk9lip9HFYrfnQ9rxNKYWi9TdV6MoLObedunyu
-	 ZHE16P7ejfz6w==
+	b=frFJaAlEgNesFmfYI+qxxKRn8oZtIfNLOwXeEyv3qRXEjiAReUdwPTHQsGS6QSB4A
+	 G2FW0LGzpXl6gB1RoJAewOk2aG4TqdReRSZJjMZJn2VjubXDOt49YkyUWZ7l3RHMlF
+	 /whD8dIJtCrYkqXttSLcwAY+io2/sZAr+956I3y+ngapcQbdGJ//ztS23RxvIPQQvn
+	 CH1PzImuxM2HvdBjcz4wdGO0Sm2iMxwe9oSRIE2Qq41vNK2uUDHw3zSWmPySAKnzpI
+	 JEQ5FyMKg20SZlJv+ZKPm9B1eXE+RYWugbcpDSvl9piwnHAcNQgRVWFpazve/Wx6D8
+	 s8JozHGn2WRxw==
 Received: from localhost.localdomain (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CDAD63782212;
-	Fri, 12 Jul 2024 08:53:26 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BF6C33782211;
+	Fri, 12 Jul 2024 08:53:31 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
@@ -58,9 +58,9 @@ Cc: kernel@collabora.com,
 	Binbin Wu <binbin.wu@linux.intel.com>,
 	Ingo Molnar <mingo@kernel.org>,
 	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v3 1/4] selftests: x86: check_initial_reg_state: remove manual counting and increase maintainability
-Date: Fri, 12 Jul 2024 13:53:14 +0500
-Message-Id: <20240712085318.315386-2-usama.anjum@collabora.com>
+Subject: [PATCH v3 2/4] selftests: x86: corrupt_xstate_header: remove manual counting and increase maintainability
+Date: Fri, 12 Jul 2024 13:53:15 +0500
+Message-Id: <20240712085318.315386-3-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240712085318.315386-1-usama.anjum@collabora.com>
 References: <20240712085318.315386-1-usama.anjum@collabora.com>
@@ -72,74 +72,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-- Removes manual counting of pass and fail tests
-- Increase readability and maintainability of tests
-- Print logs in standard format (without [RUN], [OK] tags)
+- Correct the skip, pass and fail return codes. Otherwise the test
+  always return 0
+- Returns correct number of stats about passed/failed tests
+- Print logs in standard format
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- .../selftests/x86/check_initial_reg_state.c   | 24 +++++++++----------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ .../selftests/x86/corrupt_xstate_header.c     | 30 +++++++++++--------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/check_initial_reg_state.c b/tools/testing/selftests/x86/check_initial_reg_state.c
-index 3bc95f3ed5859..b91c2b06b9881 100644
---- a/tools/testing/selftests/x86/check_initial_reg_state.c
-+++ b/tools/testing/selftests/x86/check_initial_reg_state.c
-@@ -7,6 +7,7 @@
- #define _GNU_SOURCE
+diff --git a/tools/testing/selftests/x86/corrupt_xstate_header.c b/tools/testing/selftests/x86/corrupt_xstate_header.c
+index cf9ce8fbb656c..119ff74763c6d 100644
+--- a/tools/testing/selftests/x86/corrupt_xstate_header.c
++++ b/tools/testing/selftests/x86/corrupt_xstate_header.c
+@@ -39,7 +39,7 @@ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
+ 	sa.sa_flags = SA_SIGINFO | flags;
+ 	sigemptyset(&sa.sa_mask);
+ 	if (sigaction(sig, &sa, 0))
+-		err(1, "sigaction");
++		ksft_exit_fail_perror("sigaction");
+ }
  
- #include <stdio.h>
-+#include "../kselftest.h"
+ static void sigusr1(int sig, siginfo_t *info, void *uc_void)
+@@ -48,26 +48,29 @@ static void sigusr1(int sig, siginfo_t *info, void *uc_void)
+ 	uint8_t *fpstate = (uint8_t *)uc->uc_mcontext.fpregs;
+ 	uint64_t *xfeatures = (uint64_t *)(fpstate + 512);
  
- unsigned long ax, bx, cx, dx, si, di, bp, sp, flags;
- unsigned long r8, r9, r10, r11, r12, r13, r14, r15;
-@@ -53,20 +54,19 @@ asm (
+-	printf("\tWreck XSTATE header\n");
++	ksft_print_msg("Wreck XSTATE header\n");
+ 	/* Wreck the first reserved bytes in the header */
+ 	*(xfeatures + 2) = 0xfffffff;
+ }
  
- int main()
+ static void sigsegv(int sig, siginfo_t *info, void *uc_void)
  {
--	int nerrs = 0;
+-	printf("\tGot SIGSEGV\n");
++	ksft_print_msg("Got SIGSEGV\n");
+ }
+ 
+ int main(void)
+ {
+ 	cpu_set_t set;
+ 
 +	ksft_print_header();
 +	ksft_set_plan(2);
++
+ 	sethandler(SIGUSR1, sigusr1, 0);
+ 	sethandler(SIGSEGV, sigsegv, 0);
  
--	if (sp == 0) {
--		printf("[FAIL]\tTest was built incorrectly\n");
--		return 1;
--	}
-+	if (sp == 0)
-+		ksft_exit_fail_msg("Test was built incorrectly\n");
- 
- 	if (ax || bx || cx || dx || si || di || bp
- #ifdef __x86_64__
- 	    || r8 || r9 || r10 || r11 || r12 || r13 || r14 || r15
- #endif
- 		) {
--		printf("[FAIL]\tAll GPRs except SP should be 0\n");
--#define SHOW(x) printf("\t" #x " = 0x%lx\n", x);
-+		ksft_test_result_fail("All GPRs except SP should be 0\n");
-+#define SHOW(x) ksft_print_msg("\t" #x " = 0x%lx\n", x)
- 		SHOW(ax);
- 		SHOW(bx);
- 		SHOW(cx);
-@@ -85,17 +85,15 @@ int main()
- 		SHOW(r14);
- 		SHOW(r15);
- #endif
--		nerrs++;
- 	} else {
--		printf("[OK]\tAll GPRs except SP are 0\n");
-+		ksft_test_result_pass("All GPRs except SP are 0\n");
+ 	if (!xsave_enabled()) {
+-		printf("[SKIP] CR4.OSXSAVE disabled.\n");
+-		return 0;
++		ksft_print_msg("CR4.OSXSAVE disabled.\n");
++		return KSFT_SKIP;
  	}
  
- 	if (flags != 0x202) {
--		printf("[FAIL]\tFLAGS is 0x%lx, but it should be 0x202\n", flags);
--		nerrs++;
-+		ksft_test_result_fail("FLAGS is 0x%lx, but it should be 0x202\n", flags);
- 	} else {
--		printf("[OK]\tFLAGS is 0x202\n");
-+		ksft_test_result_pass("FLAGS is 0x202\n");
- 	}
+ 	CPU_ZERO(&set);
+@@ -79,18 +82,21 @@ int main(void)
+ 	 */
+ 	sched_setaffinity(getpid(), sizeof(set), &set);
  
--	return nerrs ? 1 : 0;
+-	printf("[RUN]\tSend ourselves a signal\n");
++	ksft_print_msg("Send ourselves a signal\n");
+ 	raise(SIGUSR1);
+ 
+-	printf("[OK]\tBack from the signal.  Now schedule.\n");
++	ksft_test_result_pass("Back from the signal. Now schedule.\n");
++
+ 	pid_t child = fork();
+-	if (child < 0)
+-		err(1, "fork");
+ 	if (child == 0)
+ 		return 0;
+-	if (child)
++
++	if (child < 0) {
++		ksft_test_result_fail("fork: %s\n", strerror(errno));
++	} else if (child) {
+ 		waitpid(child, NULL, 0);
+-	printf("[OK]\tBack in the main thread.\n");
++		ksft_test_result_pass("Back in the main thread.\n");
++	}
+ 
+ 	/*
+ 	 * We could try to confirm that extended state is still preserved
+@@ -98,5 +104,5 @@ int main(void)
+ 	 * a warning in the kernel logs.
+ 	 */
+ 
+-	return 0;
 +	ksft_finished();
  }
 -- 
