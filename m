@@ -1,113 +1,183 @@
-Return-Path: <linux-kselftest+bounces-13703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5339302E0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 02:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F7CF93041D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 08:46:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A3421F22509
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 00:59:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB8F01F22355
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 06:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A7B79DC;
-	Sat, 13 Jul 2024 00:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9882C1BDE6;
+	Sat, 13 Jul 2024 06:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JLivPKX4";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RD+xW6hL";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JLivPKX4";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RD+xW6hL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CFB4C8E;
-	Sat, 13 Jul 2024 00:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE43BF9EC;
+	Sat, 13 Jul 2024 06:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720832349; cv=none; b=mZXZH+pZ+HzEsfoHtVwK75BkRGyFhLfa52JuVg9OdDJTC7Rs6itLwrHTT8AGsGrhXIDbaDCJu8jWAQrrW3YYt1F6B9cO7v/JOCDr4yMGTcbaSpgSAwU5BfhaLdIwp7GlpALiK7lfn37c/v1tRFMr3NYLJNxUaBKtzAVOQsLLPeo=
+	t=1720853175; cv=none; b=e07ROU5WIm17D5DSxT2TLCBJMxkpXLmRszYP+5mDefaQI9xUdyLrUwXRPslnzqWpRM/odaNlKN2kvXMHZaUSfHo8PG+YwKQ41k0GSjv2X1FQUBpDf+gYjmCIdv3vbf4K7bW2fzAYzK4NL4mWCdumscqWeYzZKTKXaZBRcflc/r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720832349; c=relaxed/simple;
-	bh=DtrdLYqQvUWp1rATRcfHif/KLyAI+NavdKK3cI0d2b0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j0d68sBwPaLOh0jtZ+BTpxSS8LZahoiGPDp69jEIT+Mniafa6qOY32Gq87wetXlenBLxDdvusp+52CvflEVgiZb7iMWw8RmlTCabaI+PqIUplLsQldd6nk5NRscAQ+Dj6QAyX+k2H0X3xrw+1IMYl8OuPs/zN2TPDe9eiV+CwrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fb70169c23so23734205ad.1;
-        Fri, 12 Jul 2024 17:59:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720832346; x=1721437146;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fObagCVLV5QOrGNzDLRDEtxOlEZx/xK9uTPhQmSYFR4=;
-        b=QqIW7+1IRVmXr3x7vvGI0WfGusEeQuVPmJNuBDASTR3nA/rE71lJKZXX/TqG79lbJA
-         ZveFE9dqbhSfWBNsehrZz00N3oLVKWOrIsXr5DHWwpu2PALoRkva0D4fLyhHn7yToX77
-         n1hqqYhAbxx+EX6mLuRh8u9l/Pp75wv1INmz/ETkgxGQ02MmGd1jknO0dP3rT9DseOgW
-         0wxSE6qtsQ6AO0lz7JOByoJe31Gh8+jeDycV4VlC48IoeK+7EJIL6S7nrY+s5rvftRTV
-         TNwF3iipZojmOpfHzNqcOAr1WLDqtfF7AgNjrKCv+tSLYp9/QAmsuHM710wj/+Vl18Uf
-         TeMA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHMcpHERhAJfaWGRPh4ijdu1ukSRgkbr8XdMYSCaeiqPh3Uvf13P8i8Hl+3RayTtgNatkQ+gvL6N+XRuhk2A5U+x/pzapQP7zRoxlu/cDUQWscnN3+uHQNTiVVsmullGFVLJGWFDYJAQoeIjUkn5ynNf8BxnXbvQ3Qy2tRWjHFFTpp+KgkBcx3oFgC4TTUa0xzVoob0u3UTrT/isrcugBKmXM0
-X-Gm-Message-State: AOJu0Ywmij0ppMrpxojtvR7j79GvGxo4ceLKGG2KjY0BWB/ANfmCERyr
-	x+LVvvAhhTTjI/rwgtCDfbQVOI/dJsbDsMzoklviNml2jTb8NoE=
-X-Google-Smtp-Source: AGHT+IHpMYHwlurRaTSXBZOLGL6393z+3iM2RhBoT8I/MqjietVUrz25qYNqvkz4lN15p4xWujmI4A==
-X-Received: by 2002:a17:902:e9cd:b0:1fb:9e80:b4fe with SMTP id d9443c01a7336-1fbb6d35ecfmr82888385ad.39.1720832346401;
-        Fri, 12 Jul 2024 17:59:06 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb6ffc8sm522855ad.35.2024.07.12.17.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 17:59:05 -0700 (PDT)
-Date: Fri, 12 Jul 2024 17:59:05 -0700
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: make24@iscas.ac.cn, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Sowmini Varadhan <sowmini.varadhan@oracle.com>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH] selftests/bpf:fix a resource leak in main()
-Message-ID: <ZpHRWRWXGewydZfe@mini-arch>
-References: <20240711071018.2197252-1-make24@iscas.ac.cn>
- <c341e275-4fac-4aaa-8117-55b654c5c006@web.de>
+	s=arc-20240116; t=1720853175; c=relaxed/simple;
+	bh=yY33+5APyjEzae2iAwViq+yRRVuxE+Rb8qhIWwuuLeo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KGPAr8iwDTzk2ev9CTzLsk2mtg63z3TW8CYT84Oai3rqCbTfARTP/vnuq9E6VqfXacLv7mDqZ5lzcnwjGBj4Vk21qOHDxXeEntMABcVBZi68dBEqWJQeq03KLj3NUGVsG0qoIq7/l9rNG43HyhIAQd4Q87kkXBs3G18HEtpumko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JLivPKX4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RD+xW6hL; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JLivPKX4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RD+xW6hL; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B27481FBCD;
+	Sat, 13 Jul 2024 06:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1720853171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
+	b=JLivPKX4psON5JyiZ6nk6I/Y0uzb16X5RMTp9hp+esYWTKf4LWh1znvgQ7cp6ti5Oc7YCb
+	27kcw+BlR2ucIAGcj5GyQQdosU6TsEFSA/spL3sDJMxpIz0D827hRAnzkKs8zKn9sIaz7L
+	v4CnylJJXlc1axLVZ1F9zcRYurdkfpM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1720853171;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
+	b=RD+xW6hLqdCYbQquS1M2tEQuyoiTjocmCo8stvc6uIdiU0RE6cbg+F+15zXxZK9Y1dAF1O
+	3/NwQmOyvv4sYlDA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=JLivPKX4;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=RD+xW6hL
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1720853171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
+	b=JLivPKX4psON5JyiZ6nk6I/Y0uzb16X5RMTp9hp+esYWTKf4LWh1znvgQ7cp6ti5Oc7YCb
+	27kcw+BlR2ucIAGcj5GyQQdosU6TsEFSA/spL3sDJMxpIz0D827hRAnzkKs8zKn9sIaz7L
+	v4CnylJJXlc1axLVZ1F9zcRYurdkfpM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1720853171;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
+	b=RD+xW6hLqdCYbQquS1M2tEQuyoiTjocmCo8stvc6uIdiU0RE6cbg+F+15zXxZK9Y1dAF1O
+	3/NwQmOyvv4sYlDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 75D2D134AB;
+	Sat, 13 Jul 2024 06:46:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 8ZY8G7MikmYhYwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sat, 13 Jul 2024 06:46:11 +0000
+Date: Sat, 13 Jul 2024 08:46:43 +0200
+Message-ID: <87plrhssa4.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.de>,
+	Takashi Iwai <tiwai@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test names
+In-Reply-To: <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
+References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
+	<7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
+	<b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
+	<877cdrt3zc.wl-tiwai@suse.de>
+	<e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
+	<bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
+	<c1be6bec-90f5-4bb3-b6b0-8524095fc490@perex.cz>
+	<31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c341e275-4fac-4aaa-8117-55b654c5c006@web.de>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: B27481FBCD
 
-On 07/12, Markus Elfring wrote:
-> > The requested resources should be closed before return in main(), otherwise
-> > resource leak will occur. Add a check of cg_fd before close().
-> >
-> > Fixes: 435f90a338ae ("selftests/bpf: add a test case for sock_ops perf-event notification")
-> > Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+On Fri, 12 Jul 2024 20:19:33 +0200,
+Mark Brown wrote:
 > 
-> Please reconsider such information once more.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.10-rc7#n398
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/researcher-guidelines.rst?h=v6.10-rc7#n5
+> On Fri, Jul 12, 2024 at 06:25:21PM +0200, Jaroslav Kysela wrote:
+> > On 12. 07. 24 15:00, Mark Brown wrote:
 > 
+> > > The trouble with the ID field is that it's too short and seems likely to
+> > > create collisions, for example HDA stuff just seems to default to NVidia
+> > > for nVidia cards which seems very likely to create collisions if someone
+> > > has two graphics cards in their system.
 > 
-> How many source code analysis tools should be able to point out that the return value
-> from the call of a function like pthread_create() should get more development attention
-> (also for discussed test functions)?
-> https://elixir.bootlin.com/linux/v6.10-rc7/source/tools/testing/selftests/bpf/test_tcpnotify_user.c#L122
+> > The default IDs are always unique - see snd_card_set_id_no_lock() in
+> > sound/core/init.c . Basically, the suffix will follow the device probe order
+> > in this case.
 > 
-> See also:
-> * https://cwe.mitre.org/data/definitions/252.html
-> 
-> * https://wiki.sei.cmu.edu/confluence/display/c/POS54-C.+Detect+and+handle+POSIX+library+errors
+> Sure, but the genesis of this patch is that probe order isn't
+> sufficiently stable and we want to avoid names based on it...  using the
+> ID will be more likely to work out stable than just pure probe order but
+> it's still got the same issue.
 
-We are talking about testing binaries here. We don't have infinite
-amount of time to polish them. If you really want to help, look at
-the flakes on the bpf dashboard and help us weed them out.
+Are you trying to solve the issue with two cards of the same driver,
+which are swapped sometimes at the probe time?  Or the mixture of
+different cards that are swapped?
+
+In the latter case, id should work well.  The id is primarily created
+from the (short)name string, and the suffix is added only when
+conflicting.
+
+OTOH, if the former is the problem, using longname won't help,
+either, rather it can be confusing.  I noticed that the test output
+truncates the name string, hence both cards look identical in the
+actual output (except for the card listing at the beginning).
+
+
+Takashi
 
