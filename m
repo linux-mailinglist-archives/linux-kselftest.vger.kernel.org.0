@@ -1,55 +1,45 @@
-Return-Path: <linux-kselftest+bounces-13705-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9219C930447
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 09:35:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B5C930471
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 10:07:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 456012842E3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 07:35:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B4A1B21C5E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 08:07:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60923A1B6;
-	Sat, 13 Jul 2024 07:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="orDonY4r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FBB3210EE;
+	Sat, 13 Jul 2024 08:07:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E172E639;
-	Sat, 13 Jul 2024 07:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2985628370;
+	Sat, 13 Jul 2024 08:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720856151; cv=none; b=P6sg1al4Be4xbWsiy9Sx268XOKr7jq2sIok+jcrHHv97WwPxN7nj1lshPchZwp50MiMiwzsLY11FNLWEQ/3XFK95rpffwmDit4hffH9Fet2eWHh4HXlnRtA/PlJIonl9e3aoCZODihmCP2qCVpZ9E6StrVwCT4mTdTJclKX4L1k=
+	t=1720858034; cv=none; b=MfG8WkecSMidPvm3UBsCkt1Nq5SKKoMcTWeM916yNvt9EXblX2hEj1DlHzKRn56Q03jLlGCiQmxFQt48TcbsydObtPWzIk4vM73/rCJLWF27ZwaYuqrwCYkBvBBeRldV+Sz/YUijV148ueHmtxis4NTMcE/q7B/jTmdQMGrsMXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720856151; c=relaxed/simple;
-	bh=Nt7DtbUghfpmiuJNfl+S79BWrhGMTIA8LkYgRQ5kn8w=;
+	s=arc-20240116; t=1720858034; c=relaxed/simple;
+	bh=iAETAaKYSnikmgwmBFLVgRXqBhoCeHf62VduM6i8Zb4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lt1Kaj09YQc0VyOkIJaJO6D1+rnnQDKIR0ux4WXjH2tth+4dNTOy7FF0OobtEaxrqTqtFLpr5ImOlebTzxBXYFWyu7uSojp3ToctmdUUoDAV4BPETrpq6cCgeCDjsrC5uExiZxyGctSXYzZPxYluMaSB3r0F6M9huYoLNq1r45U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=orDonY4r; arc=none smtp.client-ip=77.48.224.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 079BF2AAF;
-	Sat, 13 Jul 2024 09:35:44 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 079BF2AAF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1720856144; bh=M0ImlIemWktuYYVMCsVISiontf3W9IWAMTjkj89Afj0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=orDonY4r81zyZwFIUwE18q1vHhCHqRNo5acA0T5SJsePLuizr7h+ndyKRYfev+e3W
-	 x8btkhvdi7oPlbulmbnUJigBlRTeVCg8MpcI/a5OkUQ4H1aQ4Xnm7PVqYVBeJSQkF9
-	 8CqLQSgwrL0fWABQYMrP8irL0dtm6pvo7HtgYEnk=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: perex)
-	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Sat, 13 Jul 2024 09:35:36 +0200 (CEST)
-Message-ID: <e52a5a7e-5358-40d4-8f3d-2adb03018c41@perex.cz>
-Date: Sat, 13 Jul 2024 09:35:36 +0200
+	 In-Reply-To:Content-Type; b=so4N65Nw8LwxcQp7/yaI8sJXHX7v4C41ngM2Uz1Q4Xxj+wvfxBRGld74R81YR42/fguKJiqVbU78JsLjTGlem2pBHwOXv0kxGftCm7XRwYDamTE1y79HSpGNcIBFvd/2soGpw10HgDHvwRC0Bgjfi/88BretAJwuLQEj7YDLsQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WLgzF56GCz4f3jcj;
+	Sat, 13 Jul 2024 16:06:49 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 78E751A0568;
+	Sat, 13 Jul 2024 16:07:01 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP3 (Coremail) with SMTP id _Ch0CgAnNF6jNZJmxmuLBw--.4019S2;
+	Sat, 13 Jul 2024 16:07:00 +0800 (CST)
+Message-ID: <4165f531-9d8a-4378-812f-41baa5665097@huaweicloud.com>
+Date: Sat, 13 Jul 2024 16:06:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,98 +47,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
- names
-To: Mark Brown <broonie@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.de>, Takashi Iwai <tiwai@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-sound@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
- <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
- <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
- <877cdrt3zc.wl-tiwai@suse.de> <e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
- <bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
- <c1be6bec-90f5-4bb3-b6b0-8524095fc490@perex.cz>
- <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
-From: Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH bpf-next v4 02/20] lsm: Refactor return value of LSM hook
+ inode_need_killpriv
+To: Serge Hallyn <serge@hallyn.com>, Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-integrity@vger.kernel.org, apparmor@lists.ubuntu.com,
+ selinux@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Brendan Jackman <jackmanb@chromium.org>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, Khadija Kamran
+ <kamrankhadijadj@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>,
+ John Johansen <john.johansen@canonical.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Shung-Hsi Yu <shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Trond Myklebust <trond.myklebust@hammerspace.com>,
+ Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>
+References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
+ <20240711111908.3817636-3-xukuohai@huaweicloud.com>
+ <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
 Content-Language: en-US
-Autocrypt: addr=perex@perex.cz; keydata=
- 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
-In-Reply-To: <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgAnNF6jNZJmxmuLBw--.4019S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1rtF1rJryUWFyxCF45ZFb_yoW8Gw18pF
+	yakayY9w1kC34kua97KF17X3yvyrW3GrW5tFnYyrWjvF9xAr10kr4Sy3y7Kr1xWr109w1Y
+	vr1vv3WfC3WUX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+	0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCI
+	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoj
+	jgUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 12. 07. 24 20:19, Mark Brown wrote:
-> On Fri, Jul 12, 2024 at 06:25:21PM +0200, Jaroslav Kysela wrote:
->> On 12. 07. 24 15:00, Mark Brown wrote:
+On 7/11/2024 10:15 PM, Serge Hallyn wrote:
+> Jul 11, 2024 06:14:09 Xu Kuohai <xukuohai@huaweicloud.com>:
 > 
->>> The trouble with the ID field is that it's too short and seems likely to
->>> create collisions, for example HDA stuff just seems to default to NVidia
->>> for nVidia cards which seems very likely to create collisions if someone
->>> has two graphics cards in their system.
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> To be consistent with most LSM hooks, convert the return value of
+>> hook inode_need_killpriv to 0 or a negative error code.
+>>
+>> Before:
+>> - Both hook inode_need_killpriv and func security_inode_need_killpriv
+>>    return > 0 if security_inode_killpriv is required, 0 if not, and < 0
+>>    to abort the operation.
+>>
+>> After:
+>> - Both hook inode_need_killpriv and func security_inode_need_killpriv
+>>    return 0 on success and a negative error code on failure.
+>>    On success, hook inode_need_killpriv sets output param @need to true
+>>    if security_inode_killpriv is required, and false if not. When @need
+>>    is true, func security_inode_need_killpriv sets ATTR_KILL_PRIV flag
+>>    in @attr; when false, it clears the flag.
+>>    On failure, @need and @attr remains unchanged.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > 
->> The default IDs are always unique - see snd_card_set_id_no_lock() in
->> sound/core/init.c . Basically, the suffix will follow the device probe order
->> in this case.
+> It looks ok - though unnecessary (I'm assuming a later patch works better with this) - , but I'd be more comfortable if it was documented that any callers of the need_killpriv hook must set need to false before calling. Or if the hooks set need to false at start.
 > 
-> Sure, but the genesis of this patch is that probe order isn't
-> sufficiently stable and we want to avoid names based on it...  using the
-> ID will be more likely to work out stable than just pure probe order but
-> it's still got the same issue.
+>
 
-The probe order is almost stable for the drivers with the non-deferred probe. 
-Also, administrators may set persistent ID for complex hardware configuration 
-cases based on other keys like serial number or so (sysfs/udev).
-
-For long name - the device path may change (USB moved to different port, PCI 
-card moved to different slot), so the stability of this string is also 
-questionable.
-
-					Jaroslav
-
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+I believe this is the only patch in the set that modifies 'inode_need_killpriv'.
+I'll add an explanation for the initial value of '@need'.
+Thanks.
 
 
