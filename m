@@ -1,183 +1,154 @@
-Return-Path: <linux-kselftest+bounces-13704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13705-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F7CF93041D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 08:46:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9219C930447
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 09:35:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB8F01F22355
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 06:46:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 456012842E3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jul 2024 07:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9882C1BDE6;
-	Sat, 13 Jul 2024 06:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60923A1B6;
+	Sat, 13 Jul 2024 07:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JLivPKX4";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RD+xW6hL";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JLivPKX4";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RD+xW6hL"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="orDonY4r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE43BF9EC;
-	Sat, 13 Jul 2024 06:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E172E639;
+	Sat, 13 Jul 2024 07:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720853175; cv=none; b=e07ROU5WIm17D5DSxT2TLCBJMxkpXLmRszYP+5mDefaQI9xUdyLrUwXRPslnzqWpRM/odaNlKN2kvXMHZaUSfHo8PG+YwKQ41k0GSjv2X1FQUBpDf+gYjmCIdv3vbf4K7bW2fzAYzK4NL4mWCdumscqWeYzZKTKXaZBRcflc/r8=
+	t=1720856151; cv=none; b=P6sg1al4Be4xbWsiy9Sx268XOKr7jq2sIok+jcrHHv97WwPxN7nj1lshPchZwp50MiMiwzsLY11FNLWEQ/3XFK95rpffwmDit4hffH9Fet2eWHh4HXlnRtA/PlJIonl9e3aoCZODihmCP2qCVpZ9E6StrVwCT4mTdTJclKX4L1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720853175; c=relaxed/simple;
-	bh=yY33+5APyjEzae2iAwViq+yRRVuxE+Rb8qhIWwuuLeo=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KGPAr8iwDTzk2ev9CTzLsk2mtg63z3TW8CYT84Oai3rqCbTfARTP/vnuq9E6VqfXacLv7mDqZ5lzcnwjGBj4Vk21qOHDxXeEntMABcVBZi68dBEqWJQeq03KLj3NUGVsG0qoIq7/l9rNG43HyhIAQd4Q87kkXBs3G18HEtpumko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JLivPKX4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RD+xW6hL; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JLivPKX4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RD+xW6hL; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=arc-20240116; t=1720856151; c=relaxed/simple;
+	bh=Nt7DtbUghfpmiuJNfl+S79BWrhGMTIA8LkYgRQ5kn8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lt1Kaj09YQc0VyOkIJaJO6D1+rnnQDKIR0ux4WXjH2tth+4dNTOy7FF0OobtEaxrqTqtFLpr5ImOlebTzxBXYFWyu7uSojp3ToctmdUUoDAV4BPETrpq6cCgeCDjsrC5uExiZxyGctSXYzZPxYluMaSB3r0F6M9huYoLNq1r45U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=orDonY4r; arc=none smtp.client-ip=77.48.224.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 079BF2AAF;
+	Sat, 13 Jul 2024 09:35:44 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 079BF2AAF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+	t=1720856144; bh=M0ImlIemWktuYYVMCsVISiontf3W9IWAMTjkj89Afj0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=orDonY4r81zyZwFIUwE18q1vHhCHqRNo5acA0T5SJsePLuizr7h+ndyKRYfev+e3W
+	 x8btkhvdi7oPlbulmbnUJigBlRTeVCg8MpcI/a5OkUQ4H1aQ4Xnm7PVqYVBeJSQkF9
+	 8CqLQSgwrL0fWABQYMrP8irL0dtm6pvo7HtgYEnk=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B27481FBCD;
-	Sat, 13 Jul 2024 06:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720853171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
-	b=JLivPKX4psON5JyiZ6nk6I/Y0uzb16X5RMTp9hp+esYWTKf4LWh1znvgQ7cp6ti5Oc7YCb
-	27kcw+BlR2ucIAGcj5GyQQdosU6TsEFSA/spL3sDJMxpIz0D827hRAnzkKs8zKn9sIaz7L
-	v4CnylJJXlc1axLVZ1F9zcRYurdkfpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720853171;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
-	b=RD+xW6hLqdCYbQquS1M2tEQuyoiTjocmCo8stvc6uIdiU0RE6cbg+F+15zXxZK9Y1dAF1O
-	3/NwQmOyvv4sYlDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=JLivPKX4;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=RD+xW6hL
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1720853171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
-	b=JLivPKX4psON5JyiZ6nk6I/Y0uzb16X5RMTp9hp+esYWTKf4LWh1znvgQ7cp6ti5Oc7YCb
-	27kcw+BlR2ucIAGcj5GyQQdosU6TsEFSA/spL3sDJMxpIz0D827hRAnzkKs8zKn9sIaz7L
-	v4CnylJJXlc1axLVZ1F9zcRYurdkfpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1720853171;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bYtwHX31WJYVhnvwXw7XNIn9nZhkjNRMDGCTQUdLam4=;
-	b=RD+xW6hLqdCYbQquS1M2tEQuyoiTjocmCo8stvc6uIdiU0RE6cbg+F+15zXxZK9Y1dAF1O
-	3/NwQmOyvv4sYlDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 75D2D134AB;
-	Sat, 13 Jul 2024 06:46:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 8ZY8G7MikmYhYwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sat, 13 Jul 2024 06:46:11 +0000
-Date: Sat, 13 Jul 2024 08:46:43 +0200
-Message-ID: <87plrhssa4.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.de>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test names
-In-Reply-To: <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
-References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
-	<7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
-	<b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
-	<877cdrt3zc.wl-tiwai@suse.de>
-	<e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
-	<bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
-	<c1be6bec-90f5-4bb3-b6b0-8524095fc490@perex.cz>
-	<31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	(Authenticated sender: perex)
+	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+	Sat, 13 Jul 2024 09:35:36 +0200 (CEST)
+Message-ID: <e52a5a7e-5358-40d4-8f3d-2adb03018c41@perex.cz>
+Date: Sat, 13 Jul 2024 09:35:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: B27481FBCD
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest/alsa: Use card name rather than number in test
+ names
+To: Mark Brown <broonie@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>, Takashi Iwai <tiwai@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-sound@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240711-alsa-kselftest-board-name-v1-1-ab5cf2dbbea6@kernel.org>
+ <7cd921b3-fed9-4b0c-9ba8-381e45ef4218@perex.cz>
+ <b3fdbb63-067b-4ff4-8fd8-1c2455a553a5@sirena.org.uk>
+ <877cdrt3zc.wl-tiwai@suse.de> <e4962ea0-3f03-43b5-b773-68abe1d73cc9@perex.cz>
+ <bb42afb8-48a7-4daf-b28b-b82bd5c77d57@sirena.org.uk>
+ <c1be6bec-90f5-4bb3-b6b0-8524095fc490@perex.cz>
+ <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
+From: Jaroslav Kysela <perex@perex.cz>
+Content-Language: en-US
+Autocrypt: addr=perex@perex.cz; keydata=
+ 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
+In-Reply-To: <31e73e81-e60f-4d0b-b0ac-118f1dc72610@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 12 Jul 2024 20:19:33 +0200,
-Mark Brown wrote:
-> 
+On 12. 07. 24 20:19, Mark Brown wrote:
 > On Fri, Jul 12, 2024 at 06:25:21PM +0200, Jaroslav Kysela wrote:
-> > On 12. 07. 24 15:00, Mark Brown wrote:
+>> On 12. 07. 24 15:00, Mark Brown wrote:
 > 
-> > > The trouble with the ID field is that it's too short and seems likely to
-> > > create collisions, for example HDA stuff just seems to default to NVidia
-> > > for nVidia cards which seems very likely to create collisions if someone
-> > > has two graphics cards in their system.
+>>> The trouble with the ID field is that it's too short and seems likely to
+>>> create collisions, for example HDA stuff just seems to default to NVidia
+>>> for nVidia cards which seems very likely to create collisions if someone
+>>> has two graphics cards in their system.
 > 
-> > The default IDs are always unique - see snd_card_set_id_no_lock() in
-> > sound/core/init.c . Basically, the suffix will follow the device probe order
-> > in this case.
+>> The default IDs are always unique - see snd_card_set_id_no_lock() in
+>> sound/core/init.c . Basically, the suffix will follow the device probe order
+>> in this case.
 > 
 > Sure, but the genesis of this patch is that probe order isn't
 > sufficiently stable and we want to avoid names based on it...  using the
 > ID will be more likely to work out stable than just pure probe order but
 > it's still got the same issue.
 
-Are you trying to solve the issue with two cards of the same driver,
-which are swapped sometimes at the probe time?  Or the mixture of
-different cards that are swapped?
+The probe order is almost stable for the drivers with the non-deferred probe. 
+Also, administrators may set persistent ID for complex hardware configuration 
+cases based on other keys like serial number or so (sysfs/udev).
 
-In the latter case, id should work well.  The id is primarily created
-from the (short)name string, and the suffix is added only when
-conflicting.
+For long name - the device path may change (USB moved to different port, PCI 
+card moved to different slot), so the stability of this string is also 
+questionable.
 
-OTOH, if the former is the problem, using longname won't help,
-either, rather it can be confusing.  I noticed that the test output
-truncates the name string, hence both cards look identical in the
-actual output (except for the card listing at the beginning).
+					Jaroslav
 
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
 
-Takashi
 
