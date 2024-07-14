@@ -1,168 +1,165 @@
-Return-Path: <linux-kselftest+bounces-13712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 219CE930AE3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2024 19:02:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35B1C930AF5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2024 19:30:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66BC0B20D92
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2024 17:02:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5C9281674
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2024 17:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E954613BC39;
-	Sun, 14 Jul 2024 17:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B406413B580;
+	Sun, 14 Jul 2024 17:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="e5hZo/k+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RSk3/g3x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A61282FA;
-	Sun, 14 Jul 2024 17:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.77.79.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C87335C0;
+	Sun, 14 Jul 2024 17:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720976514; cv=none; b=oPfoH4Sh3IryaW8IPE/JWq+gnFbGSRyees830tNFBKr0p8YDaxNQf2g5h0jU6EqHqwc6Kz2c9TmorqZQxlAxypcJUp/lzmzNiGvHA6eNZXjmpS50I5/h6UdHC229fNPnd0X9BgQ/6CCRnNv1NNXVnlawfpHzpK/C0D0u2GU12ok=
+	t=1720978230; cv=none; b=XGl7f6FiWK0pp4P3ykulmL9W+P4DTRncURsgPRV4m1TfZ+Szq8uswqQTCqVanXKCG+9Fk7rNhJ3kLAdhQsY6T4JUGPRanQozzXTUioTsvNns4PZSauxeRMjSMFxMljot/X0x1yCIPWlR4tkspEEmoRcmwKSNArHSjrYbsnwnmwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720976514; c=relaxed/simple;
-	bh=LAQlCeDfq8fHbPbDCTefVFiVRYB03v2eA4XZNZOWH64=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hXE5vuf4mF92g9OSGZ1BZ3kv0d634dAuXPWFtADBH60oDmzh47LZMBZN/eZSCXKTR+o+v/45HqoQHM7FjHsmO9RSBNlwL8+XrPVj7d4uYfR8Z3VU2yZtdJNEvV/X62vh/RVC9QWRQUfNWCl66O1oGdYjwY24s6C1SiPsPBRjOBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=e5hZo/k+; arc=none smtp.client-ip=51.77.79.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1720976495; x=1721235695;
-	bh=Iy7LxC4ozvfJJ8MZmtX1zf1q9Arp2F+7CEBViIXko/E=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=e5hZo/k+bJPuqT8dy6uiFqPLbhlIUZS3Vafg2quwPgozdb5lHjtTgbvDxPCKqtlg5
-	 RSHkFI8YeiSqvT0Zhh10L0iYLe+X5s1BR4vXmfw3woAMpO1sp6RdIo/pg/V++LpW2B
-	 g2EOdsRJlRabvVUo+axtxvuA6NmCI/6YNnK8rVwR9+CwWK/lWkN9czAiRSVKiDBWal
-	 AiAUY8I/Lq1fJjh2RWtCAdvUmCEuUtgy6m6eFctnnqVl2lkBpP1X8awHlCeRksrb3U
-	 FSj+FDMP4WVBbNaaS/pMYmwTHR4oj/ukoiV2Z7HMCrAJx2SEVloTYqbmDPdiuUtMrz
-	 wMZPmj1w/d7Sg==
-Date: Sun, 14 Jul 2024 17:01:28 +0000
-To: Michal Rostecki <vadorovsky@gmail.com>
-From: =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>,
-	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-Message-ID: <S-L4QE4MFYzY1ba0fdkJYuAVIkZHxxYB6Jk9XPFuo3ZdbvNxtfN_mCFc5oNPfTu2X17vvyPUStAviAUAzeKlCGxwRM-VbC4aPUGBGtDQCcU=@protonmail.com>
-In-Reply-To: <20240714160238.238708-1-vadorovsky@gmail.com>
-References: <20240714160238.238708-1-vadorovsky@gmail.com>
-Feedback-ID: 27884398:user:proton
-X-Pm-Message-ID: 2f0b1ce70e6ee1f5615738c7436ca0ce654d0f72
+	s=arc-20240116; t=1720978230; c=relaxed/simple;
+	bh=eoz4ISS7d2sH2hTa7QRiAuGG1rWHxXjixXnT2ssYqnM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AO3Fj0XMJKh90T00COq5XQ16IqaOB66SioCeLGAnkpqzmySy2je2+ttMsFf35wmO89Wu5QQtaXKKxnZbLHguo/VA+DIYjEzL9EiS9qx1UrU2c4RvjFp1K/yAkHqFAR7mU3sApNpOTx1syAqYeRTwgaS4sSKRVeAsSWWHV04YVHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RSk3/g3x; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5ce739c2650so744199eaf.1;
+        Sun, 14 Jul 2024 10:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720978228; x=1721583028; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/cLW4DNVGNshBrBTsdLmOTS96GV7TP/xD70TwT5VJ2s=;
+        b=RSk3/g3x+KC5pdCWdnNBf61NEFFzqwP+LIhKpoLUseg+/U8g/MimyGrBobCcujxVtC
+         FusL/wAghTCez1/FpUASI4SSwf2QMQs0xPuoZvXvtj1DwlJhtUiOBmI3PGWYCqPMa9KR
+         GF207AvA96ovz0b3zSl1Tz+cbWhb1+UhH6q/Jke5iCMe0BalRxMLByn+7YcAxzVL493F
+         +LmSRFQ5syd+qmch8wmrQRfS21YAJeVHGo6fD5V15X3jUbIz55bx3ZtIlcng7Jdsmq82
+         nPVUSvNTxvKStLCMfsNFytxZNf4jAxTzF0QaaOkBfdGnUKYjm0bCn03yB685UmgKv7nA
+         5aAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720978228; x=1721583028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/cLW4DNVGNshBrBTsdLmOTS96GV7TP/xD70TwT5VJ2s=;
+        b=wjx0HrmDplV9eMQmGvcQTJAxH2zPwf8q9Harnprj3WqsTJ4IT37O/HC/GmAb1D9Bz9
+         Gxi7FKsIzlRMuT+yRCfQFr+sIkxeU6ZkE11B80Enhu3KymlVTgP8DMuEZYbB/EUvURdF
+         hqkFclBCYYUFJ8YA9ANkXdZ+1k6v3QtO/TkLxqvOZD62JqbY6cDZRdb9Rr9SypmM1qg8
+         IL6PAiO/yacFdxJio7HH9pE9hQTDSjJtyFTWzm7kualU6nVI/0d/zsTFtKtBXyWzHjkk
+         TH1Wq5lYiJ/9xBVNXd/JQq8/w8zBaJwhmOP5HwIcfy+yPGJWYSNXsdt0AOryNDz5hTkv
+         DGTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWehTQFvXvR2MLELndXl093ysXio5C5xfHrjuXWiCCghw56V2Yit9cO2X7UWG3oHxGDNsFiZoon9vqq9021Hz0RPHTBSyKm1qrQzY0DDZCDHw3RLmJRXOhKmddozOsRYrjyURijJSxXqX8px/w9G0hx0EsSS/inOBL5A96C1wtenPUZMXb7tpZwyYN9kI4IS7i9ZJkc/Lcxt6lRZOui56TjB9MvRng=
+X-Gm-Message-State: AOJu0Yz664Uvb7nWdYx1idFtE8p6jVfa6rmigLXsIkryaAxQ7l7M1Mrg
+	BDWQSNrRwehQIHj3uppBs0OneXgWVhzfR5Q3V9ezhRhtzj8hqcnoiexqKiaBK7b+LhtrqkEWrh6
+	zaEZQfxSmzBXoPsr0vQd1jAr1EUE=
+X-Google-Smtp-Source: AGHT+IEl8QKe4NvFcBM4q9JGhb2MwGeuTO3IyYzcItTz+lIQYAUJkOIhJojhagfWcGc8DwiST3dj+mLBvjJ/MoDWQBw=
+X-Received: by 2002:a05:6358:70b:b0:1ac:6234:faaf with SMTP id
+ e5c5f4694b2df-1ac6234fdc4mr496748155d.17.1720978227984; Sun, 14 Jul 2024
+ 10:30:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20240714160238.238708-1-vadorovsky@gmail.com>
+In-Reply-To: <20240714160238.238708-1-vadorovsky@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 14 Jul 2024 19:30:15 +0200
+Message-ID: <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
+Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
+To: Michal Rostecki <vadorovsky@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross <tmgross@umich.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
+	Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, 
+	Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
+	Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>, 
+	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sunday, July 14th, 2024 at 18:02, Michal Rostecki <vadorovsky@gmail.com>=
- wrote:
+Hi Michal,
 
+Thanks for the patch! Some notes below...
+
+On Sun, Jul 14, 2024 at 6:02=E2=80=AFPM Michal Rostecki <vadorovsky@gmail.c=
+om> wrote:
+>
 > `CStr` became a part of `core` library in Rust 1.75, therefore there is
 > no need to keep the custom implementation.
->=20
-> `core::CStr` behaves generally the same as the removed implementation,
-> with the following differences:
->=20
+
+It would depend on the differences, right? i.e. for a reader, is this
+meant to imply there is no meaningful difference in what you point out
+below?
+
 > - It does not implement `Display` (but implements `Debug`).
-> - It does not provide `from_bytes_with_nul_unchecked_mut` method.
->   - It was used only in `DerefMut` implementation for `CString`. This
->     change replaces it with a manual cast to `&mut CStr`.
+
+One question that comes up when reading this is: are we losing
+`Display`'s output form?
+
+Also, for clarity, please mention if there is a difference in the
+output of the `Debug` ones.
+
 >   - Otherwise, having such a method is not really desirable. `CStr` is
 >     a reference type
 >     or `str` are usually not supposed to be modified.
-> - It has `as_ptr()` method instead of `as_char_ptr()`, which also returns
->   `*const c_char`.
->=20
-> Rust also introduces C literals (`c""`), so the `c_str` macro is removed
-> here as well.
->=20
-> Signed-off-by: Michal Rostecki <vadorovsky@gmail.com>
-> ---
->  rust/kernel/error.rs        |   7 +-
->  rust/kernel/init.rs         |   8 +-
->  rust/kernel/kunit.rs        |  16 +-
->  rust/kernel/net/phy.rs      |   2 +-
->  rust/kernel/prelude.rs      |   4 +-
->  rust/kernel/str.rs          | 490 +-----------------------------------
->  rust/kernel/sync.rs         |  13 +-
->  rust/kernel/sync/condvar.rs |   5 +-
->  rust/kernel/sync/lock.rs    |   6 +-
->  rust/kernel/workqueue.rs    |  10 +-
->  scripts/rustdoc_test_gen.rs |   4 +-
->  11 files changed, 57 insertions(+), 508 deletions(-)
->=20
 
-[snip]
+The sentence seems to be cut, and it should probably try to explain
+better why it is undesirable, i.e. if it is needed for something like
+`DerefMut`, then it seems better to have a method.
 
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 68605b633e73..af0017e56c0e 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -46,7 +46,7 @@
->  //! }
->  //!
->  //! let foo =3D pin_init!(Foo {
-> -//!     a <- new_mutex!(42, "Foo::a"),
-> +//!     a <- new_mutex!(42, c"Foo::a"),
+> -            static CONDITION: &'static $crate::str::CStr =3D $crate::c_s=
+tr!(stringify!($condition));
+> +            static CONDITION: &'static core::ffi::CStr =3D unsafe {
+> +                core::ffi::CStr::from_bytes_with_nul_unchecked(
+> +                    core::concat!(stringify!($condition), "\0").as_bytes=
+()
+> +                )
+> +            };
 
-That we need a CStr here seems a bit of an internal implementation detail. =
-Maybe
-keep accepting a regular string literal and converting it to a CStr interna=
-lly?
-If others think what you have here is fine, I don't it mind all that much t=
-hough.
+This looks worse after the change and requires `unsafe`. Can we do
+something to improve it?
 
->  //!     b: 24,
->  //! });
->  //! ```
-
-[snip]
-
-> @@ -840,9 +375,10 @@ fn deref(&self) -> &Self::Target {
->=20
->  impl DerefMut for CString {
->      fn deref_mut(&mut self) -> &mut Self::Target {
-> -        // SAFETY: A `CString` is always NUL-terminated and contains no =
-other
-> -        // NUL bytes.
-> -        unsafe { CStr::from_bytes_with_nul_unchecked_mut(self.buf.as_mut=
-_slice()) }
-> +        debug_assert!(!self.buf.is_empty() && self.buf[self.buf.len() - =
-1] =3D=3D 0);
 > +        // SAFETY: Casting to CStr is safe because its internal represen=
 tation
 > +        // is a [u8] too.
 > +        unsafe { &mut *(self.buf.as_mut_slice() as *mut [u8] as *mut CSt=
 r) }
 
-The documentation of CStr [1] is very clear that the layout of CStr is not =
-guaranteed.
+I see Bj=C3=B6rn commented on this already -- `CStr`'s layout is not
+guaranteed (and is a `[c_char]` instead).
 
-> Note that this structure does not have a guaranteed layout (the repr(tran=
-sparent)
-> notwithstanding) and is not recommended to be placed in the signatures of=
- FFI
-> functions. Instead, safe wrappers of FFI functions may leverage the unsaf=
-e
-> CStr::from_ptr constructor to provide a safe interface to other consumers=
-.
+Also, the casting is not what is unsafe, so perhaps it may be clearer
+to reword the comment.
 
-Is there any place where this DerefMut impl is actually used? If not it sho=
-uld probably
-be removed. The liballoc version of CString doesn't have this impl either. =
-(Can we use
-the liballoc version of CString too just like this patch does for CStr?)
+In addition, please format comments as Markdown.
 
-[snip]
+> -//!             work <- new_work!("MyStruct::work"),
+> +//!             work <- new_work!(c"MyStruct::work"),
 
-Link: https://doc.rust-lang.org/stable/std/ffi/struct.CStr.html [1]
+I agree as well that it may make sense to simplify the callers as much
+as possible, unless there is a need to have that flexibility.
+
+Cheers,
+Miguel
 
