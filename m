@@ -1,283 +1,263 @@
-Return-Path: <linux-kselftest+bounces-13732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79CC39317F1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 17:57:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70926931844
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 18:13:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8B88B21C23
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 15:57:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E67FE1F2237F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 16:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CAC2D53C;
-	Mon, 15 Jul 2024 15:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF72262A8;
+	Mon, 15 Jul 2024 16:12:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=malat-biz.20230601.gappssmtp.com header.i=@malat-biz.20230601.gappssmtp.com header.b="Dmx8UYpw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZmJXSBl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+Received: from mail-yb1-f193.google.com (mail-yb1-f193.google.com [209.85.219.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D97B17588
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jul 2024 15:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB8781AC4;
+	Mon, 15 Jul 2024 16:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721059020; cv=none; b=sRGkAQ5t6JGtfShUWxBpWDFdWpxIo/d+KuJkTdCY0N80r08XAdJn2xLSr+DN5wy+q2Y3BRX67T8DdvmLfIuaN/rcpjMT17PPO5zcyNCKrgSubwyb7LHrHEQzvg9vHg31uXiodS342Z4YTydmVy0YVrQb9QXWrrVPjVOvUzrWZQU=
+	t=1721059930; cv=none; b=RE3s1RV6AodELpjD1EF1AywDb36Ga9uXl+kzs8/sV+7Aod5sp2wkr5a5RfC89us+YbFS5dOV4UOSRLqmjuaNHFqHKFovbbOsqbDc6Xqd3nsCevnGfXQYTr2vpnE/fGDIblWXSXVYPUN9DVnfowfSXGmtZV74jMygBCvncvE5cw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721059020; c=relaxed/simple;
-	bh=ZBtcNEWCuxhE/P0iBIIXs/8CPUxtsXT1UYTc2Z9/CtU=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lc5tK8gJ6Wecsf4kSED0xJNpf4NHlOPwSqoQhdGKv5OOgeIy4F6x8h7lV9YKAzAhfgHEvHL2xZestQRQsI2Kud/Z+5TBhNaUylITeSfRwTxPuedGBStADh9tGZjWHT2nQXJ13a5dySfOWjkmNU3Ww4PwfLUWImKq7e2frMZBQrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=malat.biz; spf=none smtp.mailfrom=malat.biz; dkim=pass (2048-bit key) header.d=malat-biz.20230601.gappssmtp.com header.i=@malat-biz.20230601.gappssmtp.com header.b=Dmx8UYpw; arc=none smtp.client-ip=209.85.222.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=malat.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=malat.biz
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-81014df3028so1586635241.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jul 2024 08:56:57 -0700 (PDT)
+	s=arc-20240116; t=1721059930; c=relaxed/simple;
+	bh=VeGWgs5qYtNLeJW++1CFVrRa2v+g8OjQ7awCLmUdmAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YCZM/HudLOida3Xt3T8M9JH++i/P0DMgbb5ztc2oOdUWq9zywshFjfTmqYI4DiEKnzYIl14RCthDbhRCaBaIlKsctvLsadKAKEjVGPe70+mj3V4rbajcV14oNW/M5fHSXDslfXt6MayQsSx2yuan4EIKfjIec9u8d48UiY5Mccw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZmJXSBl; arc=none smtp.client-ip=209.85.219.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f193.google.com with SMTP id 3f1490d57ef6-dfef5980a69so4635750276.3;
+        Mon, 15 Jul 2024 09:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=malat-biz.20230601.gappssmtp.com; s=20230601; t=1721059017; x=1721663817; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NIlhy0lO57++coqHRC76uJUG9zQeSE560AUgvjRiuDo=;
-        b=Dmx8UYpwDkTjJ6GOwgwX9IUhKZpTKd5vNjM38Q1pR9YSeAloZS/Z0MTOXpNHoQXq6Q
-         TgL8dPL3izZAJHActixyBz5zCCDKnw9JsRX/dLoMbgSuP0YhPkb9/682Dc17UAaubhtA
-         9/BbIzR+EAf3LP3yc7U6CugJQ1WOJ/PK5gYy8GIoA7L5VgQpjQ6hQJZHoIToU/BOl7o8
-         53i5EPEvbqj42UD31scJlPob84vLJkGOxniItSC5I5RO+qY7WRdJ1NiBJ4Y9BFqhU/3i
-         ZGcUNw6HwP1vh6SZ1XGeAgcqIKYRRY+UmR7oDO58NWdqn7iWsmAHv+Yiyi87eKVCmDAT
-         7QjA==
+        d=gmail.com; s=20230601; t=1721059928; x=1721664728; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CXkzYwfI+Ccb9Zhn7YIC8xVe7PeMwRt7TpoRUvrX0qY=;
+        b=jZmJXSBlq6YtJSRXMAtetJQjXc1p7IgoybCIolx3FzHbL+4TeM4M4qtcnERBVT8FjD
+         4w7/AgAMPk2jBZ94q9M8O/AuY53uei1lMkqyPDu+7TEYdBmn+mfU7fx7YhL9kLXL7USx
+         +k3bQlQ0eGaVPW/3bBz2fLXHXWspiCQmOoWglBM6g1Yt8g2YbkJ4jiHvtvuO+jTESiPW
+         BcCbXYhMbLsk+s30I1BtnNYcn18BnyYKCnMceVwLHsROpBZsl1Km8EyOCwDSmeZzdHgT
+         QzjvW1Lzy6YhBaKwSvWnTddhm1WbdBH745rAlfETRla/xSLEHpazCvYyQwZxLgCv90lO
+         h1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721059017; x=1721663817;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NIlhy0lO57++coqHRC76uJUG9zQeSE560AUgvjRiuDo=;
-        b=KpVzMGptzEJ3lb0jFsFSmFuL46QSvrvmBMEG44bil8WivvDQl/VSv0Wt9n0fKFYHUP
-         3VN/fIm7xyQ75vG/OVAA//WhHsRu9jtDcjs2dKP+4oYKBzj29vS6QKXxTiEIV9uiR3om
-         Bojx1kdHR6yGToPt0Hi/jcScEWlU8F5q7C4hJ6Ww4v4Hn7q9A0l0ozIpEVRW2RQpSgyr
-         1Fm31p5PhDGwf1qkduh9L5v43UdlvHZsDFmTQ2/smyXCzDFLVvyarDLLMWTyAx44wGNy
-         TiXdpGxXJgHfROJfQegLozBG19BMLMNuF0rXK4E5F1siW/hT/bALQd/LTbQr0jxA6+i8
-         bQxw==
-X-Forwarded-Encrypted: i=1; AJvYcCURU5YglKwzMX2KV/SqBPGaXeIJM387ZZmj3JyrnNtxThfvH9bHXUNXoBNNTXAlImqSJmES0l9K2k7sBAqVz9vJvb7/xUpkTzKy5+cgaHqq
-X-Gm-Message-State: AOJu0Yw3LE5A6kJ6IBbbtTsbq4LFN6Pv+PuN6G5ftcDLCKyu8OFZqmZP
-	Vze0O0vWNqYo+Qxl3mwWxqn4ge2eIjFzLqpb/8M7j8pIzQErttfs15RI8tijYZLw4Y74PN7kfbK
-	NohxBY3tWrVBd5TZpMoUZMEhYFVOm0TWqzAJJ
-X-Google-Smtp-Source: AGHT+IEmzZqImG52QCCrXwn9JJsfJfxkA/GrxQgE9tQ6QY334XrPRQCbcN4FcvO2F6j15dGqOU5nJSRvlsuk4rTZEuU=
-X-Received: by 2002:a05:6122:d8f:b0:4ef:5744:483 with SMTP id
- 71dfb90a1353d-4f4cd2b16aemr416439e0c.6.1721059015976; Mon, 15 Jul 2024
- 08:56:55 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 15 Jul 2024 08:56:55 -0700
-From: Petr Malat <oss@malat.biz>
-References: <20240617143945.454888-1-longman@redhat.com> <20240617143945.454888-5-longman@redhat.com>
+        d=1e100.net; s=20230601; t=1721059928; x=1721664728;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CXkzYwfI+Ccb9Zhn7YIC8xVe7PeMwRt7TpoRUvrX0qY=;
+        b=jxfNki19XublVrBGBtJoOLzFBpm/BqQStYsJPBInZcW6WGLXcmtON7C8Fyp+68o7BY
+         7tl7rSxEzmbK6KTUszESwp5fsjSlTb3tCitqdgL0JSRCPa8cQoYEFiNLLZZ+v4awa0aH
+         SbS1SlJOgXNCleoRbpn1I79096fLkQpYiP8VpFbx8QboCn6ti2+/X9b2PLHXUE5ujYJ1
+         1uK4IIDnAX0uhplYt+oa+A33odt3TTBKbGPIz6QKQucb7lvBMjv2CLJ/aUfrsW5qzxTB
+         owFBmw8+5kOj93pKSSOfIFnCfifhRCmkOK5i4VhFRA/6t4qwk5mYsnb/zblY7ec1O9he
+         /JDA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1MbgG0hx8VBKrvDPAlF2tFdtVeGBVdMUF7Ci0VWB7xZAFUpYdmtVD8xCxLSoaGBjYvIVZBa/z3rz/f/AS9xu7cG710/FGF9pH/ALtOax/hAteMR522KRFY/2X9NBRblbKpqzMv7b/vbeyxWGma1FnteogiD04wN6dcLx4U98iWLSxTlBSiIiyipmAwqEZ6ds6DkZfVnwRnOVV7vmXo/RPFz6zoJA=
+X-Gm-Message-State: AOJu0YxSa9/8DwFPlq+KjSVIpq91fiL/jrXWNsizzntyQMyJXTx/4Yix
+	FjKC15aASmDFKN85Dd7Q0HKF9Y3jyU2jh5pxF8zvqanqsOM+j0gq
+X-Google-Smtp-Source: AGHT+IEdxk1miMqbRW7Ci7uoCQR8F8T+oixSF87KSPrtc8Puu4mB1k7M3RQfsgulRdZtBjWbxnpI4Q==
+X-Received: by 2002:a05:6902:114d:b0:e03:52c6:b338 with SMTP id 3f1490d57ef6-e05d3abf453mr47093276.19.1721059927698;
+        Mon, 15 Jul 2024 09:12:07 -0700 (PDT)
+Received: from [192.168.158.7] ([207.35.255.94])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b761a0f802sm22574616d6.82.2024.07.15.09.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jul 2024 09:12:07 -0700 (PDT)
+Message-ID: <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
+Date: Mon, 15 Jul 2024 18:12:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240617143945.454888-5-longman@redhat.com>
-Date: Mon, 15 Jul 2024 08:56:55 -0700
-Message-ID: <CANMuvJkDjuPpcqMBM+zzNL3wA-1zVrshrMuy22kQKmLDxbsB7Q@mail.gmail.com>
-Subject: Re: [PATCH-cgroup v2 4/5] cgroup/cpuset: Make cpuset.cpus.exclusive
- independent of cpuset.cpus
-To: Waiman Long <longman@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Xavier <ghostxavier@sina.com>, Peter Hunt <pehunt@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr`
+ implementation
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
+ <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross
+ <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens
+ <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>,
+ Valentin Obst <kernel@valentinobst.de>,
+ Laine Taffin Altman <alexanderaltman@me.com>,
+ Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>,
+ Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas
+ <charmitro@posteo.net>, Ben Gooding <ben.gooding.dev@gmail.com>,
+ Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <20240714160238.238708-1-vadorovsky@gmail.com>
+ <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
+Content-Language: en-US
+From: Michal Rostecki <vadorovsky@gmail.com>
+Autocrypt: addr=vadorovsky@gmail.com; keydata=
+ xsBNBGYJcUEBCAD3ciAzHQ8NElYQtsiPZ9NjsR7ttfihe0FM+PDT+6cChjFLQ8qO/1zEL5mh
+ YaLbkjitrIYARhmo3lRDq3+G4L5+gRVExm9Rd98PcQy2P9F8shxI/msC50i1Fb9N4D0pP8Hx
+ hhZ/or+2mbokZh8Qc9RdjynXRXAezhOFN4+0L2jkN7fjTO1IArl+TirXx+cvhQUbwKyyJlGL
+ Kldvue2EqU4maZ+KIUs5di3kZgDPLILzvBqX9TLtwEMAkNY1uMCKK+C2aihap19OjoK0qOYj
+ IahVHjqGL+Mb/Ga7jxMGr2TFeQEcwIgvdRiVVLtu+uiaRKqULGokBL3l9gprtBZWdLq7ABEB
+ AAHNJk1pY2hhbCBSb3N0ZWNraSA8dmFkb3JvdnNreUBnbWFpbC5jb20+wsCXBBMBCABBFiEE
+ 3RZt3oLrB5kpFLy14qU49yah1xEFAmYJdCQCGwMFCQHhM4AFCwkIBwICIgIGFQoJCAsCBBYC
+ AwECHgcCF4AACgkQ4qU49yah1xFuDQf+NE2Oy6zF+uVh3vtidkfacCSMnu1QxojJHB8C1/Ep
+ g4JU5hPcG9hC+HrMs5/Hqs7DOike9bZjhpEmnW4DIeI7Wy3t1Qf7A8EOzS0nrMgbX8TnkEon
+ zMBBqiNp3VVVcltRJtc58xMP8K3yu6Ty2Q8e6GWdL5bqDr9gshb+vWu8inh5CullsGRJFJl0
+ BfSdDKAbpH3NdEoWnL4JvFphpouh2vhd/ScvfNAQcuyBn3cbCyQdjNTgRVBkBNDEYCaWLVqP
+ r4IU0JNjgk+cTLbyFmgn2++bWoIICGrAeWGruSpl7UGJ2PdJokWI9zp5UqSCezejDS53yhkU
+ GsCrF7LrTceB6c7ATQRmCXFBAQgA2yrqjTKvL7VJKi/NNcpQ7EvAEm6omO+O4wQltdpybaxe
+ mbLT0vZTH6rjZba28ixZmFHtwOjzNNtabmb4uK+nxs0BkVBpRvJNJ0LM1ydGYZQ46Sbvr1dE
+ 7yWDkkG1CjmXYGd5I2iqx+ATbdrtzDGWLsvDXd/yEaO9dxAR+LqGOg1HdgE9Hhmuv8BRYSCL
+ vnXaMA7Orq9oAmu+Q5q9TT3aZGMdBFdcoUNSVPX82uIYXjDaXj0Del8tluAHLf3oV7ZXEgOx
+ c6OpRY3+8Pr9//UtfoaHNOjoKFNyPaIUf5U1+E9J0UoDm8m1usrwnghg6yRyPhczhCOvbYNL
+ hQ6TiImvowARAQABwsB8BBgBCAAmFiEE3RZt3oLrB5kpFLy14qU49yah1xEFAmYJcUECGwwF
+ CQHhM4AACgkQ4qU49yah1xHetgf9FpI4Y+okwFRIqRa6WJ8jhz6us+oYKedftr313NwerUB5
+ 8nnhK0YWkZWZMuu5B4LCMiv71Ugqlc7ahBy5sQx/acRPe+NiYpwiN/pWrv7njaA6evDieXL8
+ jc3j+xy4fsi861BWJXaurWQtLMXyHBUmdJ+StU7tscYTPe4fN1fdkBh0SreZxLfvp/+SMRQk
+ g9PmXb1BMZdw8gWghPAbYg5bfCzXF9iZp4bmjuCENfwG4zmnYJzR6uTI0reqECo6Ee7NjOQ7
+ qKy29wW+kVnEjX481iCEUmqKHEaQB08Ueb45If09fThw1baHLAk6bFk5cabMtD3JbWEifa6M
+ RS+eXZNwwQ==
+In-Reply-To: <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
-I finally got some time to test this and it works exactly as we needed it to.
-Thanks a lot,
-  Petr
+On 14.07.24 19:30, Miguel Ojeda wrote:
+> Hi Michal,
+> 
+> Thanks for the patch! Some notes below...
+> 
+> On Sun, Jul 14, 2024 at 6:02 PM Michal Rostecki <vadorovsky@gmail.com> wrote:
+>>
+>> `CStr` became a part of `core` library in Rust 1.75, therefore there is
+>> no need to keep the custom implementation.
+> 
+> It would depend on the differences, right? i.e. for a reader, is this
+> meant to imply there is no meaningful difference in what you point out
+> below?
+> 
 
-On Mon, Jun 17, 2024 at 10:39:44AM -0400, Waiman Long wrote:
-> The "cpuset.cpus.exclusive.effective" value is currently limited to a
-> subset of its "cpuset.cpus". This makes the exclusive CPUs distribution
-> hierarchy subsumed within the larger "cpuset.cpus" hierarchy. We have to
-> decide on what CPUs are used locally and what CPUs can be passed down as
-> exclusive CPUs down the hierarchy and combine them into "cpuset.cpus".
->
-> The advantage of the current scheme is to have only one hierarchy to
-> worry about. However, it make it harder to use as all the "cpuset.cpus"
-> values have to be properly set along the way down to the designated remote
-> partition root. It also makes it more cumbersome to find out what CPUs
-> can be used locally.
->
-> Make creation of remote partition simpler by breaking the
-> dependency of "cpuset.cpus.exclusive" on "cpuset.cpus" and make
-> them independent entities. Now we have two separate hierarchies -
-> one for setting "cpuset.cpus.effective" and the other one for setting
-> "cpuset.cpus.exclusive.effective". We may not need to set "cpuset.cpus"
-> when we activate a partition root anymore.
->
-> Also update Documentation/admin-guide/cgroup-v2.rst and cpuset.c comment
-> to document this change.
->
-> Suggested-by: Petr Malat <oss@malat.biz>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst |  4 +-
->  kernel/cgroup/cpuset.c                  | 67 +++++++++++++++++--------
->  2 files changed, 49 insertions(+), 22 deletions(-)
->
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 722e4762c4e0..2e4e74bea6ef 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2380,8 +2380,8 @@ Cpuset Interface Files
->  	cpuset-enabled cgroups.
->
->  	This file shows the effective set of exclusive CPUs that
-> -	can be used to create a partition root.  The content of this
-> -	file will always be a subset of "cpuset.cpus" and its parent's
-> +	can be used to create a partition root.  The content
-> +	of this file will always be a subset of its parent's
->  	"cpuset.cpus.exclusive.effective" if its parent is not the root
->  	cgroup.  It will also be a subset of "cpuset.cpus.exclusive"
->  	if it is set.  If "cpuset.cpus.exclusive" is not set, it is
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 144bfc319809..fe76045aa528 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -87,7 +87,7 @@ static const char * const perr_strings[] = {
->  	[PERR_NOTEXCL]   = "Cpu list in cpuset.cpus not exclusive",
->  	[PERR_NOCPUS]    = "Parent unable to distribute cpu downstream",
->  	[PERR_HOTPLUG]   = "No cpu available due to hotplug",
-> -	[PERR_CPUSEMPTY] = "cpuset.cpus is empty",
-> +	[PERR_CPUSEMPTY] = "cpuset.cpus and cpuset.cpus.exclusive are empty",
->  	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
->  };
->
-> @@ -127,19 +127,28 @@ struct cpuset {
->  	/*
->  	 * Exclusive CPUs dedicated to current cgroup (default hierarchy only)
->  	 *
-> -	 * This exclusive CPUs must be a subset of cpus_allowed. A parent
-> -	 * cgroup can only grant exclusive CPUs to one of its children.
-> +	 * The effective_cpus of a valid partition root comes solely from its
-> +	 * effective_xcpus and some of the effective_xcpus may be distributed
-> +	 * to sub-partitions below & hence excluded from its effective_cpus.
-> +	 * For a valid partition root, its effective_cpus have no relationship
-> +	 * with cpus_allowed unless its exclusive_cpus isn't set.
->  	 *
-> -	 * When the cgroup becomes a valid partition root, effective_xcpus
-> -	 * defaults to cpus_allowed if not set. The effective_cpus of a valid
-> -	 * partition root comes solely from its effective_xcpus and some of the
-> -	 * effective_xcpus may be distributed to sub-partitions below & hence
-> -	 * excluded from its effective_cpus.
-> +	 * This value will only be set if either exclusive_cpus is set or
-> +	 * when this cpuset becomes a local partition root.
->  	 */
->  	cpumask_var_t effective_xcpus;
->
->  	/*
->  	 * Exclusive CPUs as requested by the user (default hierarchy only)
-> +	 *
-> +	 * Its value is independent of cpus_allowed and designates the set of
-> +	 * CPUs that can be granted to the current cpuset or its children when
-> +	 * it becomes a valid partition root. The effective set of exclusive
-> +	 * CPUs granted (effective_xcpus) depends on whether those exclusive
-> +	 * CPUs are passed down by its ancestors and not yet taken up by
-> +	 * another sibling partition root along the way.
-> +	 *
-> +	 * If its value isn't set, it defaults to cpus_allowed.
->  	 */
->  	cpumask_var_t exclusive_cpus;
->
-> @@ -230,6 +239,17 @@ static struct list_head remote_children;
->   *   2 - partition root without load balancing (isolated)
->   *  -1 - invalid partition root
->   *  -2 - invalid isolated partition root
-> + *
-> + *  There are 2 types of partitions - local or remote. Local partitions are
-> + *  those whose parents are partition root themselves. Setting of
-> + *  cpuset.cpus.exclusive are optional in setting up local partitions.
-> + *  Remote partitions are those whose parents are not partition roots. Passing
-> + *  down exclusive CPUs by setting cpuset.cpus.exclusive along its ancestor
-> + *  nodes are mandatory in creating a remote partition.
-> + *
-> + *  For simplicity, a local partition can be created under a local or remote
-> + *  partition but a remote partition cannot have any partition root in its
-> + *  ancestor chain except the cgroup root.
->   */
->  #define PRS_MEMBER		0
->  #define PRS_ROOT		1
-> @@ -709,6 +729,19 @@ static inline void free_cpuset(struct cpuset *cs)
->  	kfree(cs);
->  }
->
-> +/* Return user specified exclusive CPUs */
-> +static inline struct cpumask *user_xcpus(struct cpuset *cs)
-> +{
-> +	return cpumask_empty(cs->exclusive_cpus) ? cs->cpus_allowed
-> +						 : cs->exclusive_cpus;
-> +}
-> +
-> +static inline bool xcpus_empty(struct cpuset *cs)
-> +{
-> +	return cpumask_empty(cs->cpus_allowed) &&
-> +	       cpumask_empty(cs->exclusive_cpus);
-> +}
-> +
->  static inline struct cpumask *fetch_xcpus(struct cpuset *cs)
->  {
->  	return !cpumask_empty(cs->exclusive_cpus) ? cs->exclusive_cpus :
-> @@ -1593,7 +1626,7 @@ EXPORT_SYMBOL_GPL(cpuset_cpu_is_isolated);
->   * Return: true if xcpus is not empty, false otherwise.
->   *
->   * Starting with exclusive_cpus (cpus_allowed if exclusive_cpus is not set),
-> - * it must be a subset of cpus_allowed and parent's effective_xcpus.
-> + * it must be a subset of parent's effective_xcpus.
->   */
->  static bool compute_effective_exclusive_cpumask(struct cpuset *cs,
->  						struct cpumask *xcpus)
-> @@ -1603,12 +1636,7 @@ static bool compute_effective_exclusive_cpumask(struct cpuset *cs,
->  	if (!xcpus)
->  		xcpus = cs->effective_xcpus;
->
-> -	if (!cpumask_empty(cs->exclusive_cpus))
-> -		cpumask_and(xcpus, cs->exclusive_cpus, cs->cpus_allowed);
-> -	else
-> -		cpumask_copy(xcpus, cs->cpus_allowed);
-> -
-> -	return cpumask_and(xcpus, xcpus, parent->effective_xcpus);
-> +	return cpumask_and(xcpus, user_xcpus(cs), parent->effective_xcpus);
->  }
->
->  static inline bool is_remote_partition(struct cpuset *cs)
-> @@ -1887,8 +1915,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  	 */
->  	adding = deleting = false;
->  	old_prs = new_prs = cs->partition_root_state;
-> -	xcpus = !cpumask_empty(cs->exclusive_cpus)
-> -		? cs->effective_xcpus : cs->cpus_allowed;
-> +	xcpus = user_xcpus(cs);
->
->  	if (cmd == partcmd_invalidate) {
->  		if (is_prs_invalid(old_prs))
-> @@ -1916,7 +1943,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->  		return is_partition_invalid(parent)
->  		       ? PERR_INVPARENT : PERR_NOTPART;
->  	}
-> -	if (!newmask && cpumask_empty(cs->cpus_allowed))
-> +	if (!newmask && xcpus_empty(cs))
->  		return PERR_CPUSEMPTY;
->
->  	nocpu = tasks_nocpu_error(parent, cs, xcpus);
-> @@ -3130,9 +3157,9 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->  				       ? partcmd_enable : partcmd_enablei;
->
->  		/*
-> -		 * cpus_allowed cannot be empty.
-> +		 * cpus_allowed and exclusive_cpus cannot be both empty.
->  		 */
-> -		if (cpumask_empty(cs->cpus_allowed)) {
-> +		if (xcpus_empty(cs)) {
->  			err = PERR_CPUSEMPTY;
->  			goto out;
->  		}
-> --
-> 2.39.3
->
+Alright, I will remove the second part of the sentence.
+
+>> - It does not implement `Display` (but implements `Debug`).
+> 
+> One question that comes up when reading this is: are we losing
+> `Display`'s output form?
+> 
+
+Yes, we are losing the `Display` trait implementation by switching to 
+`core::ffi::CStr`.
+
+I was thinking whether I should keep `kernel::str::CStr` as a wrapper, 
+just to keep the `Display` implementation. I could still do that if you 
+want. I'm also open for other solutions.
+
+The reason why I decided to not do that and go ahead without `Display` 
+is that it was used only in rust/kernel/kunit.rs inside `kunit_assert`, 
+for formatting the file and path the error message. This diff:
+
+@@ -71,11 +75,11 @@ macro_rules! kunit_assert {
+                  //
+                  // This mimics KUnit's failed assertion format.
+                  $crate::kunit::err(format_args!(
+-                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
++                    "    # {:?}: ASSERTION FAILED at {FILE:?}:{LINE:?}\n",
+                      $name
+                  ));
+                  $crate::kunit::err(format_args!(
+-                    "    Expected {CONDITION} to be true, but is false\n"
++                    "    Expected {CONDITION:?} to be true, but is false\n"
+                  ));
+
+The only practical difference in switching from `Display` to `Debug` 
+here is that the fallback kunit error messages are going to include 
+quotation marks around conditions, files and lines.
+
+> Also, for clarity, please mention if there is a difference in the
+> output of the `Debug` ones.
+> 
+
+There isn't any difference, I will mention that.
+
+>>    - Otherwise, having such a method is not really desirable. `CStr` is
+>>      a reference type
+>>      or `str` are usually not supposed to be modified.
+> 
+> The sentence seems to be cut, and it should probably try to explain
+> better why it is undesirable, i.e. if it is needed for something like
+> `DerefMut`, then it seems better to have a method.
+> 
+
+Regarding `DerefMut` implementation for `CString` - we don't need it. Or 
+at least - removing it (after my CStr patch), does not break anything. 
+If that's fine for you, I'm going to remove it in v2 all together.
+
+About why having `&mut CStr` is undesirable - I will try to find better 
+wording. My general point is that I've never seen `&mut str` being 
+exposed in any core/std API to the external user, mutation usually 
+implies usage of an owned String.
+
+>> -            static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+>> +            static CONDITION: &'static core::ffi::CStr = unsafe {
+>> +                core::ffi::CStr::from_bytes_with_nul_unchecked(
+>> +                    core::concat!(stringify!($condition), "\0").as_bytes()
+>> +                )
+>> +            };
+> 
+> This looks worse after the change and requires `unsafe`. Can we do
+> something to improve it?
+> 
+
+I think the best solution would be leaving `c_str` macro for that. The 
+reason why I removed it is that the GitHub issue[0] mentions its 
+removal. But for that case, I think it makes sense to leave it. What do 
+you think?
+
+[0] https://github.com/Rust-for-Linux/linux/issues/1075
+
+>> +        // SAFETY: Casting to CStr is safe because its internal representation
+>> +        // is a [u8] too.
+>> +        unsafe { &mut *(self.buf.as_mut_slice() as *mut [u8] as *mut CStr) }
+> 
+> I see Björn commented on this already -- `CStr`'s layout is not
+> guaranteed (and is a `[c_char]` instead).
+> 
+> Also, the casting is not what is unsafe, so perhaps it may be clearer
+> to reword the comment.
+> 
+> In addition, please format comments as Markdown.
+> 
+
+Good point, I will fix the comment.
+
+>> -//!             work <- new_work!("MyStruct::work"),
+>> +//!             work <- new_work!(c"MyStruct::work"),
+> 
+> I agree as well that it may make sense to simplify the callers as much
+> as possible, unless there is a need to have that flexibility.
+> 
+
+I already replied to Björn - names passed to `new_work!`, `new_mutex!` 
+are immediatelly passed to FFI calls and are not used in the Rust code 
+internally, so I prefer to keep them as C strings rather than Rust strings.
+
+> Cheers,
+> Miguel
+
+
+Cheers,
+Michal
 
