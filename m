@@ -1,89 +1,139 @@
-Return-Path: <linux-kselftest+bounces-13737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 372BA9318AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 18:44:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 782009318F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 19:07:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640431C20F1D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 16:44:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0059FB2199F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 17:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5171CAB8;
-	Mon, 15 Jul 2024 16:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB243B295;
+	Mon, 15 Jul 2024 17:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rh5GkW1B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FUhr4Qup"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9121CAA1;
-	Mon, 15 Jul 2024 16:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6864436C;
+	Mon, 15 Jul 2024 17:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721061867; cv=none; b=gWAIO9FFwKaX8d0dYEvoEsxDRwBhZ27t9aG7SslYaOQzv759TqUzdqZQpIBI1Fyh05U64McbHOfn587J1trTeqaLUJq6qGkG/HQmHtm0Riz4amrK9oEcCHrLKJbySgGe+NNRA+HitiB9B94Pbes3zKCIqinIeNyI9JpnGz0M8lQ=
+	t=1721063255; cv=none; b=acz3C8jeAZrIEq0hdkj7S6XEzE6qrwfY/eoPJXVT16HcdL9Oi3qeCt4CJFno7DQpC4fC3qpP4KIl60h9XZnNlhralrzLqxsXNAv8+T5O0OfI3j0KugG+6MEaouO7wjdw7eGFBgwrUlZzx4FhK35qBPqq54pmJs6GYMOEsZO/p1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721061867; c=relaxed/simple;
-	bh=N2yjfoVVb62B5YRNRRgSE+eSyRPzWjGNcXyKTqao2k8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dXVoflXF6SHX/pzYewlr8tqB/M3MDTHAR9WvZ6P6X9zZcXJP6GoxaDSnrk96ucNPXtLxc9RBrza/gTQ5NA2b0hy1xxJo+TUGGQ0gLGrSMoLCTBKLElYDfuQjXCeqz3nXe7y11B3WpAHWUuMe98i/8/+nTAFNHdPLKgQeoxcvvsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rh5GkW1B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0D7C32782;
-	Mon, 15 Jul 2024 16:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721061867;
-	bh=N2yjfoVVb62B5YRNRRgSE+eSyRPzWjGNcXyKTqao2k8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Rh5GkW1BZoh2ss+IFJ49QjqjRtf+ebEO5f23Veo6G1DfLHD3/6HyYMAM4Bt7Ffxt1
-	 SSGgJt8hDW2Gn0sIFnfSUv8ue+uKNgHx1ZD1MiXL2chwDyI5Wq00v67f5YqJ/xObS2
-	 YbY82b7f4ETwGfGaeNBy2bwOSRWz73jI+tEvsNP3fPHUjOQFJQkTzCwF2RUSxSzCm7
-	 fbemzLiUzicOWj3qCPmnRPkhgJzqHbiBLN+/6jvxPyyH6SH7B3AkxtAaKN9h99rZbX
-	 nyRABrToW6OVrc6XZvHZUPZ8v1Q/kDAtA4sric+NyBxV9AynO/zAOJymdVO1Bhj7Gr
-	 xGdftpOLJ1/XQ==
-Date: Mon, 15 Jul 2024 09:44:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Geliang
- Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: mptcp: lib: fix shellcheck errors
-Message-ID: <20240715094425.73738ca0@kernel.org>
-In-Reply-To: <7a1fea0c-1389-4867-aaec-0c0db01cb6c0@kernel.org>
-References: <20240712-upstream-net-next-20240712-selftests-mptcp-fix-shellcheck-v1-1-1cb7180db40a@kernel.org>
-	<20240713154614.653f30ce@kernel.org>
-	<7a1fea0c-1389-4867-aaec-0c0db01cb6c0@kernel.org>
+	s=arc-20240116; t=1721063255; c=relaxed/simple;
+	bh=cV6nYCDPERcjQil4VY7qd3hII69biOdj97NBN1DyKBk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UCQ9ZxV8Pkgllye4WUMgXPYVUrOIdwXo7V3VxeNlOB6aKrY/O/JSEQW6oJ4rJviuTAc53Q8Y5PUf9Tj86mtWTIUp44RsI586+cBRGH0AYlfF/4QsLj2p1WMuIJFEH7QfEQOk8zf3pKTN6NV+bHO0FRgIDTtpSbEoxxV1cY2Mjqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FUhr4Qup; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-367940c57ddso2839666f8f.3;
+        Mon, 15 Jul 2024 10:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721063252; x=1721668052; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Hndb84RjEoqp6niubDf9B3jnars0AtaO/eF2opWOHQ=;
+        b=FUhr4Qup2lHqSpENcr8wLUGLUV7Ii14ruyBJVx9Z1nKX3HmN9fKoOn9S9sfZBr5q8D
+         7qmglpA+8Y7wG5EK4pWV4In4JWQZMFJO8sXBWDGGgOZfKwu4fmu/Hesm3OfdMHpJ56dc
+         cAERRDNET/XI/o/DQPDNBcWNDg5/epRj4Ax7HwWmU7lVzHet8E1i6NTDNc6LFUAzf21b
+         NQHJltekCyYNwgX+RebDP4B+2gcut27W9NjLa5VGBYQG6LD5OW0sxv9Kzpy1l9D+n9N/
+         yZPxi6KtLVmH63SC9qpOk4CLZFEN2bOaGfvW/xtvARNGbaFzd3p4Efiwk/OLBFGRfAjz
+         1a3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721063252; x=1721668052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Hndb84RjEoqp6niubDf9B3jnars0AtaO/eF2opWOHQ=;
+        b=ZOT6pff7HYTkgKdIqGsd71trUzKqt9Di0FenKnKqFzgwVTql7G9FvV50WBN+XlWXtw
+         gGdvg4i5q3mnPUlOhlfQ6zIwBg0Y3Zv4XcSQstOkoOJsvUaC0bW8YVO5hsz5ESllFh+e
+         SXRO1+291nkd4AuJ+7PUMJxoNct0uJcAo0Fol/8NrTXb1OlkdqPjgfdmjxIO03yZulNo
+         885LZ9qIbD0p8Od+rVKo0dUgMgMl3/N6lupnuy1imRoJDgwIpqCHknYWMnZzrBvFZrhu
+         Oj8aWAQRn1TxmZ1ZRhOVlP5GM9hhmxSAVa11if1+FZilt2wfopbx0wDSUwiK8Ru78i7m
+         f4uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXUrnb2Z7KAps5szrBtB7iUWhMLgD/icd5mvbdTJVtBt6LKy+wLuoIMsh9WGHVsM3JRa5Wrm7GL8Iu4X2bqWfgyUaUMBtk9OhMl8Y6Bg/gqnQH2LlPPT85FyeE4H/fwWmYgQ4tRGkUXKmWuLhCL6+tNH0YZJtBRZyz9On/5j6peSnB/
+X-Gm-Message-State: AOJu0YwB38vMazjLD0Z3G3WJTQG8myvt/3bm226ZjHJxHm3DhMEF8zrI
+	E+i/YIXuDubd9/wkl6OaMBfKHaGLoVaSCLVKrJdMWSk6AOmwWg8naJJobA3RZtfbYCdRkR8opuQ
+	eArw6PqRXnndU9uXsA0DlHLyn0Ss=
+X-Google-Smtp-Source: AGHT+IHeHo5pgkGXfnzJH25rZ5dZHIvexG5hU7mo5vnh/IuZrgaN7onmdQHuAnMrQZYM7Bf+Q3p9KLRZq8hTBBZWVv0=
+X-Received: by 2002:adf:e401:0:b0:363:92e7:bb3 with SMTP id
+ ffacd0b85a97d-36824087332mr272768f8f.23.1721063251592; Mon, 15 Jul 2024
+ 10:07:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240705145009.32340-1-puranjay@kernel.org> <c0ef7ecf-595b-375a-7785-d7bf50040c6b@iogearbox.net>
+ <mb61pjzhwvshc.fsf@kernel.org> <CACYkzJ7d_u=aRzbubBypSVhnUSjBQnbZjPuGXhqnMzbp0tJm_g@mail.gmail.com>
+ <224eeadb-fc5f-baeb-0808-a4f9916afa3c@iogearbox.net> <mb61ped836gn7.fsf@kernel.org>
+ <d36b0c2e-fdf2-d3b0-46a8-7936e0eda5a8@iogearbox.net> <CACYkzJ5E+3xYkNsH7JoVkjabzSwnZZCzzTz5B50qDB7bLYkmMA@mail.gmail.com>
+ <890d23f2-636e-12d1-31cc-eb6469f2a9ac@iogearbox.net> <SJ0PR15MB461564D3F7E7A763498CA6A8CBDB2@SJ0PR15MB4615.namprd15.prod.outlook.com>
+ <mb61p5xtcyqo5.fsf@kernel.org> <978e127b-4967-950d-ccca-8575d1a885ae@iogearbox.net>
+ <mb61pjzhmpqff.fsf@kernel.org>
+In-Reply-To: <mb61pjzhmpqff.fsf@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 15 Jul 2024 10:07:20 -0700
+Message-ID: <CAADnVQKXEM5LaGktduyG=EH+2udkH-ZJpo4u57BUchregJy8NQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Manu Bretelle <chantra@meta.com>, 
+	KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@meta.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Florent Revest <revest@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 15 Jul 2024 11:07:26 +0200 Matthieu Baerts wrote:
-> > Speaking of MPTCP tests - I added the connect test to ignored today.
-> > Too many failures :(  
-> 
-> Sorry for that, and thank you for having ignore it for the 'dbg' runner.
-> 
-> This sudden regression looks strange. Our CI didn't catch this issue so
-> far. It is only happening with the debug kernel config.
-> 
-> Do you know if anything has changed recently -- around the 11th of July
-> -- on NIPA's config side that is not documented? e.g. more jobs in
-> parallel, new kernel config? I didn't see anything that could cause the
-> new issues when looking at NIPA's git log and the CI change log sheet.
+On Mon, Jul 15, 2024 at 9:32=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+>
+> Hi Daniel, Manu
+> I was able to reproduce this issue on KVM and found the root cause for
+> this hang! The other issue that we fixed is unrelated to this hang and
+> doesn't occur on self hosted github runners as they use 48-bit VAs.
+>
+> The userspace test code has:
+>
+>     #define STACK_SIZE (1024 * 1024)
+>     static char child_stack[STACK_SIZE];
+>
+>     cpid =3D clone(do_sleep, child_stack + STACK_SIZE, CLONE_FILES | SIGC=
+HLD, fexit_skel);
+>
+> arm64 requires the stack pointer to be 16 byte aligned otherwise
+> SPAlignmentFault occurs, this appears as Bus error in the userspace.
+>
+> The stack provided to the clone system call is not guaranteed to be
+> aligned properly in this selftest.
+>
+> The test hangs on the following line:
+>     while (READ_ONCE(fexit_skel->bss->fentry_cnt) !=3D 2);
+>
+> Because the child process is killed due to SPAlignmentFault, the
+> fentry_cnt remains at 0!
+>
+> Reading the man page of clone system call, the correct way to allocate
+> stack for this call is using mmap like this:
+>
+> stack =3D mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MA=
+P_ANONYMOUS | MAP_STACK, -1, 0);
+>
+> This fixes the issue, I will send a patch to use this and once again
+> remove this test from DENYLIST and I hope this time it fixes it for good.
 
-The usual suspect on Thursdays is that we pull in changes from Linus,
-it'd be surprising if there were major changes there the week of the
-release but maybe..
-
-> I will try to reproduce the issue locally, maybe it is caused by a patch
-> that is in patchwork, but not in net or net-next yet.
-
-I was going to mention Kuniyuki's patch but you discovered it already :)
+Wow. Great find. Good to know.
+prog_tests/ns_current_pid_tgid.c has the same issue probably.
 
