@@ -1,229 +1,150 @@
-Return-Path: <linux-kselftest+bounces-13734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF19931851
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 18:15:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008EE93187B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 18:32:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D6F11F21B7A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 16:15:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B96AB228F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 16:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0D51B813;
-	Mon, 15 Jul 2024 16:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EEE1BC41;
+	Mon, 15 Jul 2024 16:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eL3c5aee"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHWSKDeR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f65.google.com (mail-qv1-f65.google.com [209.85.219.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04721CD3F;
-	Mon, 15 Jul 2024 16:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ABA17BB5;
+	Mon, 15 Jul 2024 16:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721060134; cv=none; b=iFPZHZP9CMqcxysObzatxvMi6uRbzLL+BlmWxdIAzbO3v3ZeWtEtBzbpmoO1OcXC7angdk0iddVPS6PnL49cvml0RJT3RMXx0YsjBq3wJazTkVqzUKn9awT3r9BKL4SRtMDNOVrRxtL6qjC4yyKBQVAeACmD9hucVjBXCNA8fJI=
+	t=1721061123; cv=none; b=OpFWyZ/RYGAcbu+psKeMu57j+ou/p74XvgJMV8ejzslbId2zwi1E/JmdlOngpbYb14aZj1X1ngktw1JmtfodBnpFoYOnOEbQaqF1fb3FPNv3/t1mB/4AS/y5RC9KqocKG7sc/K6wK0BKSZJjL/jgGF6u2HmotbnR/T8xGebbyv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721060134; c=relaxed/simple;
-	bh=MNcH4FQYV6xUFbte1qhFhl/P8o5Nh+WNSfGIeuyORq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pkj3fEtoGexUhVKPtggR5WPM5wKPq68MhGVPgXFOOtC4OzfaU4vIKuacnR1jtnT6hsl4cY+i31PJeaTh1xmUyqWmKFtK6yDGJMgAr77lIaybCxBbV3Y65eC7VtQH4ibtjye+EBNIugHSvuyUGixPuCrDsS6VPq8dGppLuPqAr5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eL3c5aee; arc=none smtp.client-ip=209.85.219.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f65.google.com with SMTP id 6a1803df08f44-6b5def3916bso26929446d6.3;
-        Mon, 15 Jul 2024 09:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721060131; x=1721664931; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=B86oylWeQ/+rBCNttrbAo/LkztHTkh3FQpXO6sNcI50=;
-        b=eL3c5aeeoIMeXrahv3kWnG6Naa8F53YPMXaZklAhS7Dxmh1vYGvGsvBLdho8SotvTx
-         ytFPDiFmedUGmFx7ijTbg15GVvXKK5UgkQi6AOjdiga6DCZ5kfkCkK1QgawNqjBhPTo9
-         b+y+USuQNp/tRs6Mxu7wvnq77Nby3az1zg3mlARdfr9vi2UGSm43QCfxG4zbkbeklSqB
-         /zqBDlqA4oNJiakSTs2YGdSoGVZ19CAnCgtBxA2pYUICOrK1of7wxgXmXJGmTWHSDnpy
-         zP8Y+Se3ovU42xB+UIHwU1jfIGTN5PB2hMF7EUFX1K3Oaw3jwvSfHeaG2vTDRUC3YfcR
-         f1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721060131; x=1721664931;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B86oylWeQ/+rBCNttrbAo/LkztHTkh3FQpXO6sNcI50=;
-        b=Qmz6V/bY88mzgnrGEkwyF5H3BtSoA0LRaX7Q0KQ3kQUfrXijIN/PoXEVqzTBlmc1c3
-         cjU/F68y7ud5xOCgdJTkwNJ2FBydjfg2Md/wJDhhIsEwmd12srz7vYiFcBsYGowilBmm
-         +hu4XERHoRlx/AffFXzHP593EWkROxZb9ZZ3/YcvPc6AgaZz3v39K+ecPi/oChSjz+GV
-         jwBpSCeYurDDiO4qXTBG8ghZmxazYiewOjF0ebnrpsboVDhSWX0bBTp39sRHtnVo8x8/
-         gNzwVbMXzJzVvFNIjSMWPGdhrwa/H/Sn2s1h8DL5l8YtcWwoZQw5ea4Vw10KeiCeoqkb
-         BZog==
-X-Forwarded-Encrypted: i=1; AJvYcCVc31DpVziF1UWUtchpj0f2ADw9GyqBB6xgeuzZ+hpKdVEOJYj7z/fV//Pbc76bndVUN/zWOd/8T1U3y+mXi9tVjg2hrG0LFiV8P1mf/38k+ximde+RKixgDemQsjZN4TgXEKQat+062ZwzEGwwZPKrFD7spBu3tJ13EhddIdw4yzn256/CcYvxClb/PKe+EBggnkxm9Kw2jyLuCw5KxLKlGGXWSOM=
-X-Gm-Message-State: AOJu0YyRBU2F+1j8LM9WPtrvTZrtUBixPrVUEyfKKUUq8aW+xEvQZnzs
-	CbLuEApH3qXaLQQ5vZUKiJsN20ZPXuKeMXwfne9/NVto2UOyck8w
-X-Google-Smtp-Source: AGHT+IHT78LgI19wps2RLAxgCax2XEyj6SW9H06cyh7CoTL43upSi0hM42iNIXeFEbo/SBCPg4jFxg==
-X-Received: by 2002:a05:6214:29e1:b0:6b0:8e1d:f720 with SMTP id 6a1803df08f44-6b77df2b7ddmr1305126d6.59.1721060130683;
-        Mon, 15 Jul 2024 09:15:30 -0700 (PDT)
-Received: from [192.168.158.7] ([207.35.255.94])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7733ee169sm11594636d6.26.2024.07.15.09.15.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jul 2024 09:15:30 -0700 (PDT)
-Message-ID: <be2586e2-8d85-426e-975d-6f57da4ccf75@gmail.com>
-Date: Mon, 15 Jul 2024 18:15:28 +0200
+	s=arc-20240116; t=1721061123; c=relaxed/simple;
+	bh=QZ3Wmdv3G3ky6kIqGg3OLlwTgVdK1xs399MU5UVji1Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=liOjafEy1irXc5+Epzb/nM1BUyOlbah24Y0/aJOpItoqF4mb9kfLw8fWQS5izuqxbi1X7zzw4dqkGd2lfquuOzz7Yk3635nBRw4NNdNiaKl/xdzJFL/hh4rSVsDgG1k48YqJQeoA5mP5u72QiwnAcy7aTfj10Fvn59pkTfxvask=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHWSKDeR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA2FC32782;
+	Mon, 15 Jul 2024 16:32:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721061123;
+	bh=QZ3Wmdv3G3ky6kIqGg3OLlwTgVdK1xs399MU5UVji1Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=NHWSKDeRhZvip2iN9c4hYBO03UuD90bYHDHVFiwHVO2dSgwKIyywUHubpSvEZENl1
+	 yLZRkMwFjBzk/fIxG8atKkpbQlzErXoB7T7xz7M/xdUkD4NNOZga3/OjH0zEDcTTMh
+	 yvtD/47Um/2+SrmrVvfRVj/2vMav+eZprEdtxMHen7ZhIgugxKFHKQqY8LCjqPTBKe
+	 nsfYt5QTqpcXLK9RVkp0Wo1DTu6MZ5krOPOSaaxv94SpS48cm7SX7WpXJS2LLApsNn
+	 INT0ZV76Q+J4x1cUnNDUN9wqX0u/6ifgdR4pAvq3oyWMHHYmEezQADxZGpYg5+7Bj1
+	 L9sgPAehWComQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>, Manu Bretelle
+ <chantra@meta.com>, KP Singh <kpsingh@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@meta.com>, Alexei Starovoitov
+ <ast@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Florent
+ Revest <revest@google.com>
+Subject: Re: [PATCH bpf] selftests/bpf: DENYLIST.aarch64: Remove fexit_sleep
+In-Reply-To: <978e127b-4967-950d-ccca-8575d1a885ae@iogearbox.net>
+References: <20240705145009.32340-1-puranjay@kernel.org>
+ <c0ef7ecf-595b-375a-7785-d7bf50040c6b@iogearbox.net>
+ <mb61pjzhwvshc.fsf@kernel.org>
+ <CACYkzJ7d_u=aRzbubBypSVhnUSjBQnbZjPuGXhqnMzbp0tJm_g@mail.gmail.com>
+ <224eeadb-fc5f-baeb-0808-a4f9916afa3c@iogearbox.net>
+ <mb61ped836gn7.fsf@kernel.org>
+ <d36b0c2e-fdf2-d3b0-46a8-7936e0eda5a8@iogearbox.net>
+ <CACYkzJ5E+3xYkNsH7JoVkjabzSwnZZCzzTz5B50qDB7bLYkmMA@mail.gmail.com>
+ <890d23f2-636e-12d1-31cc-eb6469f2a9ac@iogearbox.net>
+ <SJ0PR15MB461564D3F7E7A763498CA6A8CBDB2@SJ0PR15MB4615.namprd15.prod.outlook.com>
+ <mb61p5xtcyqo5.fsf@kernel.org>
+ <978e127b-4967-950d-ccca-8575d1a885ae@iogearbox.net>
+Date: Mon, 15 Jul 2024 16:31:48 +0000
+Message-ID: <mb61pjzhmpqff.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr`
- implementation
-To: =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
- <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross
- <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens
- <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>,
- Laine Taffin Altman <alexanderaltman@me.com>,
- Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>,
- Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas
- <charmitro@posteo.net>, Ben Gooding <ben.gooding.dev@gmail.com>,
- Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <20240714160238.238708-1-vadorovsky@gmail.com>
- <S-L4QE4MFYzY1ba0fdkJYuAVIkZHxxYB6Jk9XPFuo3ZdbvNxtfN_mCFc5oNPfTu2X17vvyPUStAviAUAzeKlCGxwRM-VbC4aPUGBGtDQCcU=@protonmail.com>
- <df092baf-03a5-4b4a-ab8b-ee7a5677c172@gmail.com>
- <T4cW5BFYytkMlTR5e2C2FfFJ5Z8P5XPw5dEsTQ2V-hoAo5yZkeYLSU3GvVCTH1Ga3f-mbPvEKZxOEWT7E1-xWu4EDE6-jCoQj3If-qCKCHA=@protonmail.com>
-Content-Language: en-US
-From: Michal Rostecki <vadorovsky@gmail.com>
-Autocrypt: addr=vadorovsky@gmail.com; keydata=
- xsBNBGYJcUEBCAD3ciAzHQ8NElYQtsiPZ9NjsR7ttfihe0FM+PDT+6cChjFLQ8qO/1zEL5mh
- YaLbkjitrIYARhmo3lRDq3+G4L5+gRVExm9Rd98PcQy2P9F8shxI/msC50i1Fb9N4D0pP8Hx
- hhZ/or+2mbokZh8Qc9RdjynXRXAezhOFN4+0L2jkN7fjTO1IArl+TirXx+cvhQUbwKyyJlGL
- Kldvue2EqU4maZ+KIUs5di3kZgDPLILzvBqX9TLtwEMAkNY1uMCKK+C2aihap19OjoK0qOYj
- IahVHjqGL+Mb/Ga7jxMGr2TFeQEcwIgvdRiVVLtu+uiaRKqULGokBL3l9gprtBZWdLq7ABEB
- AAHNJk1pY2hhbCBSb3N0ZWNraSA8dmFkb3JvdnNreUBnbWFpbC5jb20+wsCXBBMBCABBFiEE
- 3RZt3oLrB5kpFLy14qU49yah1xEFAmYJdCQCGwMFCQHhM4AFCwkIBwICIgIGFQoJCAsCBBYC
- AwECHgcCF4AACgkQ4qU49yah1xFuDQf+NE2Oy6zF+uVh3vtidkfacCSMnu1QxojJHB8C1/Ep
- g4JU5hPcG9hC+HrMs5/Hqs7DOike9bZjhpEmnW4DIeI7Wy3t1Qf7A8EOzS0nrMgbX8TnkEon
- zMBBqiNp3VVVcltRJtc58xMP8K3yu6Ty2Q8e6GWdL5bqDr9gshb+vWu8inh5CullsGRJFJl0
- BfSdDKAbpH3NdEoWnL4JvFphpouh2vhd/ScvfNAQcuyBn3cbCyQdjNTgRVBkBNDEYCaWLVqP
- r4IU0JNjgk+cTLbyFmgn2++bWoIICGrAeWGruSpl7UGJ2PdJokWI9zp5UqSCezejDS53yhkU
- GsCrF7LrTceB6c7ATQRmCXFBAQgA2yrqjTKvL7VJKi/NNcpQ7EvAEm6omO+O4wQltdpybaxe
- mbLT0vZTH6rjZba28ixZmFHtwOjzNNtabmb4uK+nxs0BkVBpRvJNJ0LM1ydGYZQ46Sbvr1dE
- 7yWDkkG1CjmXYGd5I2iqx+ATbdrtzDGWLsvDXd/yEaO9dxAR+LqGOg1HdgE9Hhmuv8BRYSCL
- vnXaMA7Orq9oAmu+Q5q9TT3aZGMdBFdcoUNSVPX82uIYXjDaXj0Del8tluAHLf3oV7ZXEgOx
- c6OpRY3+8Pr9//UtfoaHNOjoKFNyPaIUf5U1+E9J0UoDm8m1usrwnghg6yRyPhczhCOvbYNL
- hQ6TiImvowARAQABwsB8BBgBCAAmFiEE3RZt3oLrB5kpFLy14qU49yah1xEFAmYJcUECGwwF
- CQHhM4AACgkQ4qU49yah1xHetgf9FpI4Y+okwFRIqRa6WJ8jhz6us+oYKedftr313NwerUB5
- 8nnhK0YWkZWZMuu5B4LCMiv71Ugqlc7ahBy5sQx/acRPe+NiYpwiN/pWrv7njaA6evDieXL8
- jc3j+xy4fsi861BWJXaurWQtLMXyHBUmdJ+StU7tscYTPe4fN1fdkBh0SreZxLfvp/+SMRQk
- g9PmXb1BMZdw8gWghPAbYg5bfCzXF9iZp4bmjuCENfwG4zmnYJzR6uTI0reqECo6Ee7NjOQ7
- qKy29wW+kVnEjX481iCEUmqKHEaQB08Ueb45If09fThw1baHLAk6bFk5cabMtD3JbWEifa6M
- RS+eXZNwwQ==
-In-Reply-To: <T4cW5BFYytkMlTR5e2C2FfFJ5Z8P5XPw5dEsTQ2V-hoAo5yZkeYLSU3GvVCTH1Ga3f-mbPvEKZxOEWT7E1-xWu4EDE6-jCoQj3If-qCKCHA=@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
 
-On 15.07.24 17:56, Björn Roy Baron wrote:
-> On Monday, July 15th, 2024 at 17:46, Michal Rostecki <vadorovsky@gmail.com> wrote:
-> 
->> On 14.07.24 19:01, Björn Roy Baron wrote:
->>> On Sunday, July 14th, 2024 at 18:02, Michal Rostecki <vadorovsky@gmail.com> wrote:
->>>
->>>> `CStr` became a part of `core` library in Rust 1.75, therefore there is
->>>> no need to keep the custom implementation.
->>>>
->>>> `core::CStr` behaves generally the same as the removed implementation,
->>>> with the following differences:
->>>>
->>>> - It does not implement `Display` (but implements `Debug`).
->>>> - It does not provide `from_bytes_with_nul_unchecked_mut` method.
->>>>     - It was used only in `DerefMut` implementation for `CString`. This
->>>>       change replaces it with a manual cast to `&mut CStr`.
->>>>     - Otherwise, having such a method is not really desirable. `CStr` is
->>>>       a reference type
->>>>       or `str` are usually not supposed to be modified.
->>>> - It has `as_ptr()` method instead of `as_char_ptr()`, which also returns
->>>>     `*const c_char`.
->>>>
->>>> Rust also introduces C literals (`c""`), so the `c_str` macro is removed
->>>> here as well.
->>>>
->>>> Signed-off-by: Michal Rostecki <vadorovsky@gmail.com>
->>>> ---
->>>>    rust/kernel/error.rs        |   7 +-
->>>>    rust/kernel/init.rs         |   8 +-
->>>>    rust/kernel/kunit.rs        |  16 +-
->>>>    rust/kernel/net/phy.rs      |   2 +-
->>>>    rust/kernel/prelude.rs      |   4 +-
->>>>    rust/kernel/str.rs          | 490 +-----------------------------------
->>>>    rust/kernel/sync.rs         |  13 +-
->>>>    rust/kernel/sync/condvar.rs |   5 +-
->>>>    rust/kernel/sync/lock.rs    |   6 +-
->>>>    rust/kernel/workqueue.rs    |  10 +-
->>>>    scripts/rustdoc_test_gen.rs |   4 +-
->>>>    11 files changed, 57 insertions(+), 508 deletions(-)
->>>>
->>>
->>> [snip]
->>>
->>>> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
->>>> index 68605b633e73..af0017e56c0e 100644
->>>> --- a/rust/kernel/init.rs
->>>> +++ b/rust/kernel/init.rs
->>>> @@ -46,7 +46,7 @@
->>>>    //! }
->>>>    //!
->>>>    //! let foo = pin_init!(Foo {
->>>> -//!     a <- new_mutex!(42, "Foo::a"),
->>>> +//!     a <- new_mutex!(42, c"Foo::a"),
->>>
->>> That we need a CStr here seems a bit of an internal implementation detail. Maybe
->>> keep accepting a regular string literal and converting it to a CStr internally?
->>> If others think what you have here is fine, I don't it mind all that much though.
->>>
->>
->> The names passed to `new_mutex`, `new_condvar`, `new_spinlock` etc. are
->> immediately passed in the FFI calls (`__mutex_init`,
->> `__init_waitqueue_head`, `__spin_lock_init`) [0][1][2]. In fact, I don't
->> see any internal usage, where using Rust &str would be beneficial. Am I
->> missing something?
->>
->> Converting a &str to &CStr inside `Mutex::new` or `CondVar::new` would
->> require allocating a new buffer, larger by 1, to include the nul byte.
->> Doing that for every new mutex or condvar seems a bit wasteful to me.
-> 
-> The names passed to `new_mutex!` and such are literals known at
-> compile time. This means we can keep adding the nul terminator at
-> compile time without allocating any extra buffer. Basically just
-> adapting the current implementation of `optional_name!` to produce an
-> `core::ffi::&CStr` rather than a `kernel::str::CStr` from a regular
-> string literal is enough to avoid having to explicitly use C string
-> literals in those macro invocations. This way users don't need to
-> know that internally an `&CStr` is used.
-> 
+--=-=-=
+Content-Type: text/plain
 
-OK, good point, I can indeed handle that in `optional_name!`.
 
->>
->> [0]
->> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af728728591465becb45b0/rust/kernel/sync/lock/mutex.rs#L104
->> [1]
->> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af728728591465becb45b0/rust/kernel/sync/condvar.rs#L111
->> [2]
->> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af728728591465becb45b0/rust/kernel/sync/lock/spinlock.rs#L103
-> 
-> [snip]
+Hi Daniel, Manu
+I was able to reproduce this issue on KVM and found the root cause for
+this hang! The other issue that we fixed is unrelated to this hang and
+doesn't occur on self hosted github runners as they use 48-bit VAs.
+
+The userspace test code has:
+
+    #define STACK_SIZE (1024 * 1024)
+    static char child_stack[STACK_SIZE];
+
+    cpid = clone(do_sleep, child_stack + STACK_SIZE, CLONE_FILES | SIGCHLD, fexit_skel);
+
+arm64 requires the stack pointer to be 16 byte aligned otherwise
+SPAlignmentFault occurs, this appears as Bus error in the userspace.
+
+The stack provided to the clone system call is not guaranteed to be
+aligned properly in this selftest.
+
+The test hangs on the following line:
+    while (READ_ONCE(fexit_skel->bss->fentry_cnt) != 2);
+
+Because the child process is killed due to SPAlignmentFault, the
+fentry_cnt remains at 0!
+
+Reading the man page of clone system call, the correct way to allocate
+stack for this call is using mmap like this:
+
+stack = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+
+This fixes the issue, I will send a patch to use this and once again
+remove this test from DENYLIST and I hope this time it fixes it for good.
+
+> It looks like there is still an issue left. A recent CI run on bpf-next is
+> still hitting the same on arm64:
+>
+> Base:
+>
+>    https://github.com/kernel-patches/bpf/commits/series/870746%3D%3Ebpf-next/
+>
+> CI:
+>
+>    https://github.com/kernel-patches/bpf/actions/runs/9905842936/job/27366435436
+>
+>    [...]
+>    #89/11   fexit_bpf2bpf/func_replace_global_func:OK
+>    #89/12   fexit_bpf2bpf/fentry_to_cgroup_bpf:OK
+>    #89/13   fexit_bpf2bpf/func_replace_progmap:OK
+>    #89      fexit_bpf2bpf:OK
+>    Error: The operation was canceled.
+
+Thanks,
+Puranjay
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iIoEARYKADIWIQQ3wHGvVs/5bdl78BKwwPkjG3B2nQUCZpVO9RQccHVyYW5qYXlA
+a2VybmVsLm9yZwAKCRCwwPkjG3B2ndCwAP426bH2FCxvf7CjZ7hpQC8VBiIhqBjX
+2TGu3R6J0jdmxAEA6SBP35Ixr7WsBoeK/1CFP5Rzkfi9ASb9QBiz10Qqcw4=
+=rXzp
+-----END PGP SIGNATURE-----
+--=-=-=--
 
