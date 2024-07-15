@@ -1,189 +1,149 @@
-Return-Path: <linux-kselftest+bounces-13716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D567E930EFA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 09:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3149D9310D3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 11:07:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95EF22812EA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 07:42:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E57AB28318A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 09:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809F9143878;
-	Mon, 15 Jul 2024 07:42:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808C0185E73;
+	Mon, 15 Jul 2024 09:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ptRic9PV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EelWWvlC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B9E33C5;
-	Mon, 15 Jul 2024 07:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0D0185E57;
+	Mon, 15 Jul 2024 09:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721029353; cv=none; b=tmUXzX9WRqfr7Hx9qOC8Y1h89ozO4IDqqSLsfAooo7cyMvsr/GxyYTp3QZKbx/UzpyHerLe090IoSCswZruEF+foox+3cSvr9Yt1XEydBgSj/HoyyTAZYtEa7NUPh+j3FnsYQjCh2hi4yQSAiTZPsnqDN7VEG6JC1IsGiPayNEE=
+	t=1721034452; cv=none; b=rblRkc3zFzyCt9BwudQR1OT+697kaNTAOzEmUHVrKzXD/M88ZIFH1R/ayPSgRp/W1exho7PWkyq2ExRgpuiQ4yZqphoM97V4pwYVgM/xBjmr9qQQkZB2ktXp1yzYeSMFnQcgBrywASw8CADubCtsrPV2RIUmvYeAfRms+E2mgq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721029353; c=relaxed/simple;
-	bh=EL/EnjA7Q6yLjOznAJXHadHPSivUgS3vUfItbwORD3A=;
+	s=arc-20240116; t=1721034452; c=relaxed/simple;
+	bh=0HFCwZt7C8k2qyxkILy1fA1A4/qXLb8dyXMJYP/qx8A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=faUGcn0E00ZdULPU0RqbuCCci0N8iq4mqZvdVSuuAjlwJXe0O9dkZ5Zo9TZNl9rO+H7YD1v35Mju7zdorttZLzZKht022iSU3i9zb1b9WHlLsL1l6c/uC0WaJsJCTbp+LcFU71pxVeCE7PrZtaiad2fcCzjIJ82UFX4UnKoc7UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ptRic9PV; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 82D8F1C0004;
-	Mon, 15 Jul 2024 07:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1721029341;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8vzX8nU5lrzqIX2SRywegQj7ulo3keq7VTkALYgs36g=;
-	b=ptRic9PVeSGiN1Wq5nBAKXah+dKKzS5wmI5MqC+liP2YQhlbllNIOUL7W6JEtm4s+8/55J
-	xIwY3k/jpnfH80GoWePLk4qCxMTSc75oIhpDYeF/VQeKz680bRTRIwq3ntKC3BP3P5jC3g
-	W6jv9RFLa9ojhOJgAOcNZ5kA0unpiH4hcz9om0gnKQD5j2Mamg+Loup1K1puEfs53pVjQn
-	M03QSpP9+0+TzC7Wex/V4np2P811PUT5sbW4xJXq/qtvwNo8XGS/z3u33oLfijsKno6EH+
-	R4sFJjsM7cRcaUgRxR0b+nbK9MHTceD4Za80/ILNNJuRFHw42kIjyDSy7AjSjA==
-Message-ID: <48581ce1-f141-46ec-86ac-88092e00b967@bootlin.com>
-Date: Mon, 15 Jul 2024 09:42:20 +0200
+	 In-Reply-To:Content-Type; b=ovKs0pBQYzP31HHm8oZFupVIxJ4eUp2N5dLVlCDoRihLurtxXqk/SwKLyAsJiynWJsVkVjABmpDyXhyaY6Mx//AwbEobbkNSs4uA1dOza0M2U2+E7arU/FyOSL/xTbafeL3Ng3xY5TwaCNhMAKKZ3lsfeBQS8nUaBUpasq4ghqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EelWWvlC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B069C4AF0A;
+	Mon, 15 Jul 2024 09:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721034451;
+	bh=0HFCwZt7C8k2qyxkILy1fA1A4/qXLb8dyXMJYP/qx8A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EelWWvlC+Rg0xnY/NNWoHkOnZEauXQJqxXHwsAuxz/EkouLVOxwO+wGwMnrr4bWHV
+	 PmMgtpKWPE1Ve6APJwUABp8P9VbHni8hmDQL5oaayjB/ntGjbBs1ViVtsq3EKZAI+5
+	 VMXaI+lIh2IfUEqNu2Kk5TmR1w0pGG5wS8Ooaeff2UZvsz11cEgb2efxo4QT2I4jAC
+	 4miT40bh61ID+WSNR/LOCIlL7gZuL05OPJxdLubHIyeMM8VYajs7P+SGQLy4ZtYcOu
+	 NZMAVqpV7ba6iIwi3qoblKwiK1s9/pcl2yWWZVSbgvvedmcbHpa98qE1DLlWnd4359
+	 pFS/8c/ErfzVQ==
+Message-ID: <7a1fea0c-1389-4867-aaec-0c0db01cb6c0@kernel.org>
+Date: Mon, 15 Jul 2024 11:07:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] selftests/bpf: integrate test_xdp_veth into
- test_progs
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240711-convert_test_xdp_veth-v1-0-868accb0a727@bootlin.com>
- <20240711-convert_test_xdp_veth-v1-2-868accb0a727@bootlin.com>
- <ZpCCjQP3XQeJPpwH@mini-arch>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <ZpCCjQP3XQeJPpwH@mini-arch>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next] selftests: mptcp: lib: fix shellcheck errors
+Content-Language: en-GB
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240712-upstream-net-next-20240712-selftests-mptcp-fix-shellcheck-v1-1-1cb7180db40a@kernel.org>
+ <20240713154614.653f30ce@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
+ YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
+ c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
+ WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
+ CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
+ nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
+ TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
+ nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
+ VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
+ 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
+ YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
+ AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
+ EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
+ /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
+ MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
+ cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
+ iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
+ jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
+ 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
+ VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
+ BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
+ ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
+ 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
+ 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
+ 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
+ mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
+ Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
+ Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
+ Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
+ x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
+ V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
+ Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
+ HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
+ 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
+ Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
+ voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
+ KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
+ UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
+ vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
+ mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
+ JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20240713154614.653f30ce@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Transfer-Encoding: 7bit
 
-Hello Stanislas, thanks for the review
+Hi Jakub,
 
-On 7/12/24 03:10, Stanislav Fomichev wrote:
-> On 07/11, Alexis Lothoré (eBPF Foundation) wrote:
->> test_xdp_veth.sh tests that XDP return codes work as expected, by bringing
->> up multiple veth pairs isolated in different namespaces, attaching specific
->> xdp programs to each interface, and ensuring that the whole chain allows to
->> ping one end interface from the first one. The test runs well but is
->> currently not integrated in test_progs, which prevents it from being run
->> automatically in the CI infrastructure.
+On 14/07/2024 00:46, Jakub Kicinski wrote:
+> On Fri, 12 Jul 2024 12:00:15 +0200 Matthieu Baerts (NGI0) wrote:
+>> It looks like we missed these two errors recently:
 >>
->> Rewrite it as a C test relying on libbpf to allow running it in the CI
->> infrastructure. The new code brings up the same network infrastructure and
->> reuses the same eBPF programs as test_xdp_veth.sh, for which skeletons are
->> already generated by the bpf tests makefile.
+>>   - SC2068: Double quote array expansions to avoid re-splitting elements.
+>>   - SC2145: Argument mixes string and array. Use * or separate argument.
 >>
->> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-
-[...]
-
->> +static void generate_random_ns_name(int index, char *out)
->> +{
->> +	int random, count, i;
->> +
->> +	count = snprintf(out, NS_NAME_MAX_LEN, "ns%d-", index);
->> +	for(i=0; i<NS_SUFFIX_LEN; i++) {
->> +		random=rand() % 2;
->> +		out[count++]= random ? 'a' + rand() % 26 : 'A' + rand() % 26;
->> +	}
->> +	out[count] = 0;
->> +}
+>> Two simple fixes, it is not supposed to change the behaviour as the
+>> variable names should not have any spaces in their names. Still, better
+>> to fix them to easily spot new issues.
+>>
+>> Fixes: f265d3119a29 ("selftests: mptcp: lib: use setup/cleanup_ns helpers")
+>> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 > 
-> It's been customary to hard-code netns names for all the tests we have, so
-> maybe it's ok here as well?
+> Speaking of MPTCP tests - I added the connect test to ignored today.
+> Too many failures :(
 
-I indeed wondered if it was really useful to bring this random ns name mechanism
-from the shell script, but I saw that it has been brought by the dedicated
-commit 9d66c9ddc9fc ("selftests/bpf/test_xdp_veth: use temp netns for testing"),
-so I assumed that some real issues about static ns names were encountered and
-led to this fix. Maybe it is indeed enough if I hardcode ns names but not with a
-too generic prefix ?
+Sorry for that, and thank you for having ignore it for the 'dbg' runner.
 
-> 
->> +static int attach_programs_to_veth_pair(struct skeletons *skeletons, int index)
->> +{
->> +	struct bpf_program *local_prog, *remote_prog;
->> +	struct bpf_link **local_link, **remote_link;
->> +	struct nstoken *nstoken;
->> +	struct bpf_link *link;
->> +	int interface;
->> +
-> 
-> [..]
-> 
->> +	switch(index) {
-> 
-> Can you pls run the patch through the checkpatch.pl? The formatting
-> looks wrong, should be 'switch (index)'. Applies to 'if()' elsewhere as
-> well.
+This sudden regression looks strange. Our CI didn't catch this issue so
+far. It is only happening with the debug kernel config.
 
-Crap, I forgot this very basic part, my bad, I'll fix all those small issues.
+Do you know if anything has changed recently -- around the 11th of July
+-- on NIPA's config side that is not documented? e.g. more jobs in
+parallel, new kernel config? I didn't see anything that could cause the
+new issues when looking at NIPA's git log and the CI change log sheet.
 
+I will try to reproduce the issue locally, maybe it is caused by a patch
+that is in patchwork, but not in net or net-next yet.
 
-> [..]
-> 
->> +		snprintf(cmd, IP_CMD_MAX_LEN, "ip netns del %s", config[i].namespace);
->> +		system(cmd);
-> 
-> SYS_NOFAIL to avoid separate snprintf?
-
-[...]
-
->> +static int check_ping(struct skeletons *skeletons)
->> +{
->> +	char cmd[IP_CMD_MAX_LEN];
->> +
->> +	/* Test: if all interfaces are properly configured, we must be able to ping
->> +	 * veth33 from veth11
->> +	 */
->> +	snprintf(cmd, IP_CMD_MAX_LEN,
->> +			 "ip netns exec %s ping -c 1 -W 1 %s > /dev/null",
->> +			 config[0].namespace, IP_DST);
->> +	return system(cmd);
-> 
-> SYS_NOFAL here as well?
-
-Thanks for the tip, I'll use this macro.
-> 
-> Btw, not sure it makes sense to split that work into 3 patches. After
-> you first patch the test is broken anyway, so might as well just delete
-> the script at that point...
-
-I have made sure that the sh script still runs correctly even after renaming the
-sections in the xdp program. But indeed, maybe I can squash the new test patch
-and the shell scrip deletion patch.
-
-Thanks,
-
-Alexis
-
+Cheers,
+Matt
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Sponsored by the NGI0 Core fund.
 
 
