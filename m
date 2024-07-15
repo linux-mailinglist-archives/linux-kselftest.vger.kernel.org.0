@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-13759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A0DA931CF7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 00:03:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EAB0931D06
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 00:14:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F5EDB2099E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 22:03:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDE8C1F21C7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 22:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C2813CA93;
-	Mon, 15 Jul 2024 22:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6214513CFAD;
+	Mon, 15 Jul 2024 22:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WszfR+Zu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtS4V7gO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f66.google.com (mail-qv1-f66.google.com [209.85.219.66])
+Received: from mail-yw1-f194.google.com (mail-yw1-f194.google.com [209.85.128.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790667A13A;
-	Mon, 15 Jul 2024 22:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99CD3BBC2;
+	Mon, 15 Jul 2024 22:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721081008; cv=none; b=IgW63Qp9wJWQ7/JBu0uNZ2hTyE/HrK2snmyAXkrUGBZOVf6+HucxnW+he/mhFBArHWurUliD6V/S24EmAxyKUTuDk2OGa6CGiZjGTTObUTy1fw1EKYQtL9Wmey3Jm7/KIENrgB1hrSKmZCd3emLXklmsjPidxIxrxsMPsLCwVWo=
+	t=1721081637; cv=none; b=ZG4y5GYjjcpsk5T9kIAiwBubTmOHwqGl6Fsa4nTOkS/eEcYULHDF79s1MTtgis21Bo2SiGZLzMWCxuyx8r26lO0WPMo64Fz6LkyR6dMhY+4qAQxZBpPqHqO3PMfxuuIWsYfDO+EUUWVNJAvjFHeqMzGcrrqtwZjSM5I/GmqL8DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721081008; c=relaxed/simple;
-	bh=/Dvy4oE+Y8WIl3MAp+SvReyubXBjxUrXhquUtvCJAKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LCWuCVn3fNjXEqFXvvxlY8rx9MZox19Fn7UVE84NFiLAl+XEzIES4eGUONl62N1TrlX6l8mBkCZLJ89Ts/UQ4bDluEdH9IEJYEknXQWVpN+89P/gxoX2Ukp/spwIBFetycYjFXC4nl9RUb6sIY5JgK+nwahO4mUXmLUU2AxbHp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WszfR+Zu; arc=none smtp.client-ip=209.85.219.66
+	s=arc-20240116; t=1721081637; c=relaxed/simple;
+	bh=0X8qLlzJqvWrNsyR7jCFaWTqWs6pVx5QNQA8xKeAS2c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TgH3ZvMdoGldZeDYPEa75nJpIFKUryVxwC4GmtrjReS2/XvPTO1J9X8zIwa1qn3b/XZBoNVhjiUIbMk32g+QXlPvxE517H/0/CepdElPSyULRUoTRAZb1LLeNMfYHH/ACG15PnH5Kx1b6DxuE1COK95CTHf7/2mIXRJAYtcxRoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtS4V7gO; arc=none smtp.client-ip=209.85.128.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f66.google.com with SMTP id 6a1803df08f44-6b5e0d881a1so43764156d6.1;
-        Mon, 15 Jul 2024 15:03:25 -0700 (PDT)
+Received: by mail-yw1-f194.google.com with SMTP id 00721157ae682-65f771485f2so23927707b3.0;
+        Mon, 15 Jul 2024 15:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721081004; x=1721685804; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721081633; x=1721686433; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rA+i02ojNphWYTbFc4Klz4RzPhtEfgz33S5RLXVLUSo=;
-        b=WszfR+ZuMAt2/MsKvXeGxNOkmu7jF7yOSOjdedmyyrRGijmCgzjSdJPGZB8Mpb0vht
-         BpZ2R0Tz8B5XDwW0JmtfTe/yVfYu5FF+KTDEAd+kcs5CPoYbmrw3eDcTuDDMdi2mq3Ij
-         7JJZssJGmG7kiG3QuBnly86H0BeEwnHJ7SAgMGQeH8u4VcfZFXkKk7uRBCK8CMkkwSrJ
-         B2N58pDhoWpscPDbOhffQ/NrWmRo9ysFTVtAft8DbN41NUkcAWX0bEgq9dZiFKlPkiJ2
-         YMlExYoB9TytMjBOvuzZDmBo4lQJAdg38Jf2FbNSaExs2Dffl6iO0YkkTNmDXCn6qWxL
-         eolg==
+        bh=rZHCUKK+K8WgRFJdrgu4HuGCZsPE6lpsyCAqXnnCQ6s=;
+        b=jtS4V7gOsVSXMk1VSn14IHxyZKBu6zybsn3sCnwmDYKSfMhptErYEAqT92OjxOnnm9
+         Q4GvWMxe0UN9PCwtVQQJYu6Hpb7xcECqgyq3x794OsKVmKGAI6y0zYsgNRxUWy8Hrgsv
+         qUBl582lb0Pa8nEneBUpJTBAQXf3FEk7QqyyhR7/d/FkW2mYMtvkNxnWOOh802km1pvQ
+         WGIj76vnXpOAgOE/9Gwpbrg71Ke/bBTU2lXFIw9+yjtzCk06buIXy/clRJYEVs91qPCA
+         hJmb/UCMsdgFS/m3u7mNWneMtnpd1HBDPUwfC5kW7zer1dupYEQ3irLKwjcyGS+z7J0r
+         X3qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721081004; x=1721685804;
+        d=1e100.net; s=20230601; t=1721081633; x=1721686433;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rA+i02ojNphWYTbFc4Klz4RzPhtEfgz33S5RLXVLUSo=;
-        b=IJWckpu9tNEceW777Oe7qVotOMtxswU0LHB70lRnzvi91Yo9JJHBJbfOQS5qiYx0r7
-         hd8isnIRKVtJSTV0HxFU032G6QWAZ2vI0WSkKGj5ClTegTvnvPJvBi4Gwhh2B63Yp3QH
-         o656g2LX6wndeZa3dhE6DIBQ3ZdfUYSB4+d1gAO1Slqd5/Wx3hFwhDxV0fDfDEZug0pW
-         QcZS2ikin+so0x1d1e6AKhVxN1ka9BJTGcvmiz1hS+fR7FaUfoXLfU6ZmpJux9VSw5jl
-         3pe3buguvjdxH5xxk4nasb9SL9j3v+8Gc0mEcD5oDP4hBp1Cp9EO6i1WuGgBr++mZ1tf
-         Wqcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHco2Zqcxb/317lp99A/Wdp5USL6qX2I5ITibSWI4PeHZnR8zsRCpJtFvt8MJXDW/DvLkcXSsCpS/ceD0jRHJOD2QmfmKohxVU8lUZeBfhbZ/a4qk4lP3cGXPvJj3xj32WTThjshbzQRTek/X7WMOWlhzllAjA6VIKbf7U7UJSYQZlwk5GOI+7V7+hkoeE5n/RTEkwgVwc9/RBm5oc4krxXS56xj4=
-X-Gm-Message-State: AOJu0Yz8vWGeyTtG0oO85zMNRFXWQK/4kbbqbZyeVPcAdci4xuCvIkvu
-	ODsDkLBmWqTPnaykpvR1jKeHN46G71kJihygIVFtzj2Qu9jYsZfp
-X-Google-Smtp-Source: AGHT+IHAZkKtbRV6xgYkSDBHXku4RNgtMO2gaznfHqz60WvcBvo+PqaP04VyWr43KrU4wKeTR2vSwA==
-X-Received: by 2002:a05:6214:29c1:b0:6b4:f979:1e03 with SMTP id 6a1803df08f44-6b7800d1fcfmr4570596d6.25.1721081003971;
-        Mon, 15 Jul 2024 15:03:23 -0700 (PDT)
+        bh=rZHCUKK+K8WgRFJdrgu4HuGCZsPE6lpsyCAqXnnCQ6s=;
+        b=xFCtfUVDmR2SzHuS9SFaM06AYFvYC5drM6PTVnT//h7pCNqbMoSRf8j4yp/FMtBU4y
+         XDJ2VFsOC85+OgRM4vNxDLJLwE1BjkeS2PSBvqFmhMv0tzJMcEh2R4Oq4tVETdOeLwMY
+         rVN41bKApWWJJ47vWOAdXSBI7toal6vD7KlecOGJTGhMICWTxecnKzp2CwEDfhnYfTn/
+         2vztIn1qdAMy6BVNNB13gOfpnDgpx7jbdNJEtfS6SHSIJyccrZX00zXIrtBMr/kGk4Oj
+         DAnDcxTAtwwcqLywrSsuNaLv5tyPare7TlLArx4fhV7vFyW86d3byy8MRxW4LBwOPbuU
+         DQ/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVCkXKjjtwNAEa+ScTu058Qr/AYm6qmes2jhgu7hDtJJ0uMYLV80HGLZbP+fpSNSSwZzRLv/PGuSMq16yVITDZ6Xcthy/f+s4o6FJTvihZ/be1DKZGeaOM3QYY0sOgsy7/s/ZSKSdwv80ZmLXndiWSTxkmLJTR+Tmqz2LlMB+zgMiMmYU8c2QrbIO3O01xSjpTLOLwlZLBJ8eVnWLJiZSY+iYgi1/I=
+X-Gm-Message-State: AOJu0Yy113EX2GzyfohiuPX98oI3GhTEuhfn1J4MJa5mcSQTcsxnMFWk
+	IAVTkbZCMk0jPIr88BzJE/kAnoQGQZJKhAB+GA3bTN+BP5NLgSIn
+X-Google-Smtp-Source: AGHT+IFfMoSL3JKzCfH6N3ijgOQL6jOmuyD9r8Z1djFwSF9KCWmY7LxayhqVkeXBBcr0+r9V9rWdoQ==
+X-Received: by 2002:a0d:c747:0:b0:65f:9f0f:7912 with SMTP id 00721157ae682-6637f69c852mr4601007b3.20.1721081633271;
+        Mon, 15 Jul 2024 15:13:53 -0700 (PDT)
 Received: from vadorovsky-macbookpro.fritz.box ([2607:fea8:fd50:8247::f272])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b76199f12asm25028446d6.62.2024.07.15.15.03.22
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b761aa050csm25506086d6.138.2024.07.15.15.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 15:03:23 -0700 (PDT)
+        Mon, 15 Jul 2024 15:13:52 -0700 (PDT)
 From: Michal Rostecki <vadorovsky@gmail.com>
 To: 
 Cc: Michal Rostecki <vadorovsky@gmail.com>,
@@ -87,13 +87,11 @@ Cc: Michal Rostecki <vadorovsky@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Finn Behrens <me@kloenk.dev>,
 	Manmohan Shukla <manmshuk@gmail.com>,
 	Valentin Obst <kernel@valentinobst.de>,
 	Asahi Lina <lina@asahilina.net>,
 	Yutaro Ohno <yutaro.ono.418@gmail.com>,
 	Danilo Krummrich <dakr@redhat.com>,
-	Tiago Lam <tiagolam@gmail.com>,
 	Charalampos Mitrodimas <charmitro@posteo.net>,
 	Ben Gooding <ben.gooding.dev@gmail.com>,
 	Tejun Heo <tj@kernel.org>,
@@ -104,9 +102,9 @@ Cc: Michal Rostecki <vadorovsky@gmail.com>,
 	kunit-dev@googlegroups.com,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-Date: Mon, 15 Jul 2024 23:49:44 +0200
-Message-ID: <20240715214956.401687-2-vadorovsky@gmail.com>
+Subject: [PATCH v3] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
+Date: Tue, 16 Jul 2024 00:11:10 +0200
+Message-ID: <20240715221126.487345-2-vadorovsky@gmail.com>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -119,7 +117,6 @@ Content-Transfer-Encoding: 8bit
 
 `CStr` became a part of `core` library in Rust 1.75. This change replaces
 the custom `CStr` implementation with the one from `core`.
-no need to keep the custom implementation.
 
 `core::CStr` behaves generally the same as the removed implementation,
 with the following differences:
@@ -158,6 +155,10 @@ v1 -> v2:
 - Use `c_str` in kunit.rs for converting the output of `stringify!` to a
   `CStr`.
 - Remove `DerefMut` implementation for `CString`.
+
+v2 -> v3:
+- Fix the commit message.
+- Remove redundant braces in `use`, when only one item is imported.
 
  rust/kernel/error.rs        |   7 +-
  rust/kernel/kunit.rs        |  12 +-
@@ -264,7 +265,7 @@ index fd40b703d224..19f45922ec42 100644
          phy_id: T::PHY_DEVICE_ID.id,
          phy_id_mask: T::PHY_DEVICE_ID.mask_as_int(),
 diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index b37a0b3180fb..5efabfaa5804 100644
+index b37a0b3180fb..b0969ca78f10 100644
 --- a/rust/kernel/prelude.rs
 +++ b/rust/kernel/prelude.rs
 @@ -12,7 +12,7 @@
@@ -281,7 +282,7 @@ index b37a0b3180fb..5efabfaa5804 100644
  pub use super::error::{code::*, Error, Result};
  
 -pub use super::{str::CStr, ThisModule};
-+pub use super::{ThisModule};
++pub use super::ThisModule;
  
  pub use super::init::{InPlaceInit, Init, PinInit};
  
