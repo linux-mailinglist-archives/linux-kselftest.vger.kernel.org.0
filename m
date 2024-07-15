@@ -1,165 +1,283 @@
-Return-Path: <linux-kselftest+bounces-13731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B88B59317EC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 17:57:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79CC39317F1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 17:57:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19A87B21861
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 15:57:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8B88B21C23
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2024 15:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E966E556;
-	Mon, 15 Jul 2024 15:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CAC2D53C;
+	Mon, 15 Jul 2024 15:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="MP3Pulc3"
+	dkim=pass (2048-bit key) header.d=malat-biz.20230601.gappssmtp.com header.i=@malat-biz.20230601.gappssmtp.com header.b="Dmx8UYpw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756E4D53C;
-	Mon, 15 Jul 2024 15:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D97B17588
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jul 2024 15:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721059015; cv=none; b=ufds+YyEikJxOZ88IIaUBmrh3E/Zxc06M6HSW+18e89lCSun4LLT1WqENbSAC5YLTlaKnluO9T4dcfyv53Wxp51ckXcv6kT1zyVilpPPgDN5wmGtCX4N54hNQW0PscD77GPoEO9moo3K33aSVNnxd3T21C1G4EZj4QSaZblBVpc=
+	t=1721059020; cv=none; b=sRGkAQ5t6JGtfShUWxBpWDFdWpxIo/d+KuJkTdCY0N80r08XAdJn2xLSr+DN5wy+q2Y3BRX67T8DdvmLfIuaN/rcpjMT17PPO5zcyNCKrgSubwyb7LHrHEQzvg9vHg31uXiodS342Z4YTydmVy0YVrQb9QXWrrVPjVOvUzrWZQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721059015; c=relaxed/simple;
-	bh=n2yLQUwt6s0OAtUfcYSQI9h6EpwTHBoPl8UvFbLKLxU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oiREFRicBihvOkOK31lHf3kmQz2Ri1bVbW19qg1mvGwQBy/VXsFKhZmoLTUEroRhHqWtytlCveS/h4FD3vXbEGmaCiXRngpgjQ3oKbIDFAf63IAAEj1yMivTcODhKxoitBK0sB0O0JGX/+i06qYbSV+4vhUuA4MaXUJLLlPFvs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=MP3Pulc3; arc=none smtp.client-ip=185.70.43.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1721059006; x=1721318206;
-	bh=0X2OwfENCQ/M/pnkr0i+ZvgaNKd3AS7YhCHGsueDZJI=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=MP3Pulc3tWE2RK/Y87KVMcpoTd9k7A88xsAzdxuFvwuLeDiwocQczv0thIwsZM9wM
-	 8zSNMEQhHqkLT40Vd60mnEKaOc8sMme8VhVij/mFXsPDC6hP8JcA/HGM2MLasZxCsB
-	 4QjAOb00/s6eh/F2VAKhO0NtmRfavb1gOuW7wsAffebM65/otAVnP6jcTnSgLEFPGD
-	 9CaBur2unZZerj3XJYcCSocz/m1qIodCuIECaqgB+9k7iEQYRL3OXbfhORj/jFKcUN
-	 cfD7DvRd/9vioU+aMXTwT8Nhro6WcehXBLhe6UPuLkUqCy2TMlxlICKah6954wX/6S
-	 5KdXrbY3O0zaA==
-Date: Mon, 15 Jul 2024 15:56:39 +0000
-To: Michal Rostecki <vadorovsky@gmail.com>
-From: =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>,
-	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-Message-ID: <T4cW5BFYytkMlTR5e2C2FfFJ5Z8P5XPw5dEsTQ2V-hoAo5yZkeYLSU3GvVCTH1Ga3f-mbPvEKZxOEWT7E1-xWu4EDE6-jCoQj3If-qCKCHA=@protonmail.com>
-In-Reply-To: <df092baf-03a5-4b4a-ab8b-ee7a5677c172@gmail.com>
-References: <20240714160238.238708-1-vadorovsky@gmail.com> <S-L4QE4MFYzY1ba0fdkJYuAVIkZHxxYB6Jk9XPFuo3ZdbvNxtfN_mCFc5oNPfTu2X17vvyPUStAviAUAzeKlCGxwRM-VbC4aPUGBGtDQCcU=@protonmail.com> <df092baf-03a5-4b4a-ab8b-ee7a5677c172@gmail.com>
-Feedback-ID: 27884398:user:proton
-X-Pm-Message-ID: 95e82dd63daf75c00a972e8d3703e1d61f419209
+	s=arc-20240116; t=1721059020; c=relaxed/simple;
+	bh=ZBtcNEWCuxhE/P0iBIIXs/8CPUxtsXT1UYTc2Z9/CtU=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Lc5tK8gJ6Wecsf4kSED0xJNpf4NHlOPwSqoQhdGKv5OOgeIy4F6x8h7lV9YKAzAhfgHEvHL2xZestQRQsI2Kud/Z+5TBhNaUylITeSfRwTxPuedGBStADh9tGZjWHT2nQXJ13a5dySfOWjkmNU3Ww4PwfLUWImKq7e2frMZBQrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=malat.biz; spf=none smtp.mailfrom=malat.biz; dkim=pass (2048-bit key) header.d=malat-biz.20230601.gappssmtp.com header.i=@malat-biz.20230601.gappssmtp.com header.b=Dmx8UYpw; arc=none smtp.client-ip=209.85.222.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=malat.biz
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=malat.biz
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-81014df3028so1586635241.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jul 2024 08:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=malat-biz.20230601.gappssmtp.com; s=20230601; t=1721059017; x=1721663817; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NIlhy0lO57++coqHRC76uJUG9zQeSE560AUgvjRiuDo=;
+        b=Dmx8UYpwDkTjJ6GOwgwX9IUhKZpTKd5vNjM38Q1pR9YSeAloZS/Z0MTOXpNHoQXq6Q
+         TgL8dPL3izZAJHActixyBz5zCCDKnw9JsRX/dLoMbgSuP0YhPkb9/682Dc17UAaubhtA
+         9/BbIzR+EAf3LP3yc7U6CugJQ1WOJ/PK5gYy8GIoA7L5VgQpjQ6hQJZHoIToU/BOl7o8
+         53i5EPEvbqj42UD31scJlPob84vLJkGOxniItSC5I5RO+qY7WRdJ1NiBJ4Y9BFqhU/3i
+         ZGcUNw6HwP1vh6SZ1XGeAgcqIKYRRY+UmR7oDO58NWdqn7iWsmAHv+Yiyi87eKVCmDAT
+         7QjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721059017; x=1721663817;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NIlhy0lO57++coqHRC76uJUG9zQeSE560AUgvjRiuDo=;
+        b=KpVzMGptzEJ3lb0jFsFSmFuL46QSvrvmBMEG44bil8WivvDQl/VSv0Wt9n0fKFYHUP
+         3VN/fIm7xyQ75vG/OVAA//WhHsRu9jtDcjs2dKP+4oYKBzj29vS6QKXxTiEIV9uiR3om
+         Bojx1kdHR6yGToPt0Hi/jcScEWlU8F5q7C4hJ6Ww4v4Hn7q9A0l0ozIpEVRW2RQpSgyr
+         1Fm31p5PhDGwf1qkduh9L5v43UdlvHZsDFmTQ2/smyXCzDFLVvyarDLLMWTyAx44wGNy
+         TiXdpGxXJgHfROJfQegLozBG19BMLMNuF0rXK4E5F1siW/hT/bALQd/LTbQr0jxA6+i8
+         bQxw==
+X-Forwarded-Encrypted: i=1; AJvYcCURU5YglKwzMX2KV/SqBPGaXeIJM387ZZmj3JyrnNtxThfvH9bHXUNXoBNNTXAlImqSJmES0l9K2k7sBAqVz9vJvb7/xUpkTzKy5+cgaHqq
+X-Gm-Message-State: AOJu0Yw3LE5A6kJ6IBbbtTsbq4LFN6Pv+PuN6G5ftcDLCKyu8OFZqmZP
+	Vze0O0vWNqYo+Qxl3mwWxqn4ge2eIjFzLqpb/8M7j8pIzQErttfs15RI8tijYZLw4Y74PN7kfbK
+	NohxBY3tWrVBd5TZpMoUZMEhYFVOm0TWqzAJJ
+X-Google-Smtp-Source: AGHT+IEmzZqImG52QCCrXwn9JJsfJfxkA/GrxQgE9tQ6QY334XrPRQCbcN4FcvO2F6j15dGqOU5nJSRvlsuk4rTZEuU=
+X-Received: by 2002:a05:6122:d8f:b0:4ef:5744:483 with SMTP id
+ 71dfb90a1353d-4f4cd2b16aemr416439e0c.6.1721059015976; Mon, 15 Jul 2024
+ 08:56:55 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 15 Jul 2024 08:56:55 -0700
+From: Petr Malat <oss@malat.biz>
+References: <20240617143945.454888-1-longman@redhat.com> <20240617143945.454888-5-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240617143945.454888-5-longman@redhat.com>
+Date: Mon, 15 Jul 2024 08:56:55 -0700
+Message-ID: <CANMuvJkDjuPpcqMBM+zzNL3wA-1zVrshrMuy22kQKmLDxbsB7Q@mail.gmail.com>
+Subject: Re: [PATCH-cgroup v2 4/5] cgroup/cpuset: Make cpuset.cpus.exclusive
+ independent of cpuset.cpus
+To: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Xavier <ghostxavier@sina.com>, Peter Hunt <pehunt@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Monday, July 15th, 2024 at 17:46, Michal Rostecki <vadorovsky@gmail.com>=
- wrote:
+Hi,
+I finally got some time to test this and it works exactly as we needed it to.
+Thanks a lot,
+  Petr
 
-> On 14.07.24 19:01, Bj=C3=B6rn Roy Baron wrote:
-> > On Sunday, July 14th, 2024 at 18:02, Michal Rostecki <vadorovsky@gmail.=
-com> wrote:
-> >
-> >> `CStr` became a part of `core` library in Rust 1.75, therefore there i=
-s
-> >> no need to keep the custom implementation.
-> >>
-> >> `core::CStr` behaves generally the same as the removed implementation,
-> >> with the following differences:
-> >>
-> >> - It does not implement `Display` (but implements `Debug`).
-> >> - It does not provide `from_bytes_with_nul_unchecked_mut` method.
-> >>    - It was used only in `DerefMut` implementation for `CString`. This
-> >>      change replaces it with a manual cast to `&mut CStr`.
-> >>    - Otherwise, having such a method is not really desirable. `CStr` i=
-s
-> >>      a reference type
-> >>      or `str` are usually not supposed to be modified.
-> >> - It has `as_ptr()` method instead of `as_char_ptr()`, which also retu=
-rns
-> >>    `*const c_char`.
-> >>
-> >> Rust also introduces C literals (`c""`), so the `c_str` macro is remov=
-ed
-> >> here as well.
-> >>
-> >> Signed-off-by: Michal Rostecki <vadorovsky@gmail.com>
-> >> ---
-> >>   rust/kernel/error.rs        |   7 +-
-> >>   rust/kernel/init.rs         |   8 +-
-> >>   rust/kernel/kunit.rs        |  16 +-
-> >>   rust/kernel/net/phy.rs      |   2 +-
-> >>   rust/kernel/prelude.rs      |   4 +-
-> >>   rust/kernel/str.rs          | 490 +---------------------------------=
---
-> >>   rust/kernel/sync.rs         |  13 +-
-> >>   rust/kernel/sync/condvar.rs |   5 +-
-> >>   rust/kernel/sync/lock.rs    |   6 +-
-> >>   rust/kernel/workqueue.rs    |  10 +-
-> >>   scripts/rustdoc_test_gen.rs |   4 +-
-> >>   11 files changed, 57 insertions(+), 508 deletions(-)
-> >>
-> >
-> > [snip]
-> >
-> >> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> >> index 68605b633e73..af0017e56c0e 100644
-> >> --- a/rust/kernel/init.rs
-> >> +++ b/rust/kernel/init.rs
-> >> @@ -46,7 +46,7 @@
-> >>   //! }
-> >>   //!
-> >>   //! let foo =3D pin_init!(Foo {
-> >> -//!     a <- new_mutex!(42, "Foo::a"),
-> >> +//!     a <- new_mutex!(42, c"Foo::a"),
-> >
-> > That we need a CStr here seems a bit of an internal implementation deta=
-il. Maybe
-> > keep accepting a regular string literal and converting it to a CStr int=
-ernally?
-> > If others think what you have here is fine, I don't it mind all that mu=
-ch though.
-> >
->=20
-> The names passed to `new_mutex`, `new_condvar`, `new_spinlock` etc. are
-> immediately passed in the FFI calls (`__mutex_init`,
-> `__init_waitqueue_head`, `__spin_lock_init`) [0][1][2]. In fact, I don't
-> see any internal usage, where using Rust &str would be beneficial. Am I
-> missing something?
->=20
-> Converting a &str to &CStr inside `Mutex::new` or `CondVar::new` would
-> require allocating a new buffer, larger by 1, to include the nul byte.
-> Doing that for every new mutex or condvar seems a bit wasteful to me.
-
-The names passed to `new_mutex!` and such are literals known at
-compile time. This means we can keep adding the nul terminator at
-compile time without allocating any extra buffer. Basically just
-adapting the current implementation of `optional_name!` to produce an
-`core::ffi::&CStr` rather than a `kernel::str::CStr` from a regular
-string literal is enough to avoid having to explicitly use C string
-literals in those macro invocations. This way users don't need to
-know that internally an `&CStr` is used.
-
->=20
-> [0]
-> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af72872859=
-1465becb45b0/rust/kernel/sync/lock/mutex.rs#L104
-> [1]
-> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af72872859=
-1465becb45b0/rust/kernel/sync/condvar.rs#L111
-> [2]
-> https://github.com/Rust-for-Linux/linux/blob/b1263411112305acf2af72872859=
-1465becb45b0/rust/kernel/sync/lock/spinlock.rs#L103
-
-[snip]
+On Mon, Jun 17, 2024 at 10:39:44AM -0400, Waiman Long wrote:
+> The "cpuset.cpus.exclusive.effective" value is currently limited to a
+> subset of its "cpuset.cpus". This makes the exclusive CPUs distribution
+> hierarchy subsumed within the larger "cpuset.cpus" hierarchy. We have to
+> decide on what CPUs are used locally and what CPUs can be passed down as
+> exclusive CPUs down the hierarchy and combine them into "cpuset.cpus".
+>
+> The advantage of the current scheme is to have only one hierarchy to
+> worry about. However, it make it harder to use as all the "cpuset.cpus"
+> values have to be properly set along the way down to the designated remote
+> partition root. It also makes it more cumbersome to find out what CPUs
+> can be used locally.
+>
+> Make creation of remote partition simpler by breaking the
+> dependency of "cpuset.cpus.exclusive" on "cpuset.cpus" and make
+> them independent entities. Now we have two separate hierarchies -
+> one for setting "cpuset.cpus.effective" and the other one for setting
+> "cpuset.cpus.exclusive.effective". We may not need to set "cpuset.cpus"
+> when we activate a partition root anymore.
+>
+> Also update Documentation/admin-guide/cgroup-v2.rst and cpuset.c comment
+> to document this change.
+>
+> Suggested-by: Petr Malat <oss@malat.biz>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst |  4 +-
+>  kernel/cgroup/cpuset.c                  | 67 +++++++++++++++++--------
+>  2 files changed, 49 insertions(+), 22 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 722e4762c4e0..2e4e74bea6ef 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2380,8 +2380,8 @@ Cpuset Interface Files
+>  	cpuset-enabled cgroups.
+>
+>  	This file shows the effective set of exclusive CPUs that
+> -	can be used to create a partition root.  The content of this
+> -	file will always be a subset of "cpuset.cpus" and its parent's
+> +	can be used to create a partition root.  The content
+> +	of this file will always be a subset of its parent's
+>  	"cpuset.cpus.exclusive.effective" if its parent is not the root
+>  	cgroup.  It will also be a subset of "cpuset.cpus.exclusive"
+>  	if it is set.  If "cpuset.cpus.exclusive" is not set, it is
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 144bfc319809..fe76045aa528 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -87,7 +87,7 @@ static const char * const perr_strings[] = {
+>  	[PERR_NOTEXCL]   = "Cpu list in cpuset.cpus not exclusive",
+>  	[PERR_NOCPUS]    = "Parent unable to distribute cpu downstream",
+>  	[PERR_HOTPLUG]   = "No cpu available due to hotplug",
+> -	[PERR_CPUSEMPTY] = "cpuset.cpus is empty",
+> +	[PERR_CPUSEMPTY] = "cpuset.cpus and cpuset.cpus.exclusive are empty",
+>  	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
+>  };
+>
+> @@ -127,19 +127,28 @@ struct cpuset {
+>  	/*
+>  	 * Exclusive CPUs dedicated to current cgroup (default hierarchy only)
+>  	 *
+> -	 * This exclusive CPUs must be a subset of cpus_allowed. A parent
+> -	 * cgroup can only grant exclusive CPUs to one of its children.
+> +	 * The effective_cpus of a valid partition root comes solely from its
+> +	 * effective_xcpus and some of the effective_xcpus may be distributed
+> +	 * to sub-partitions below & hence excluded from its effective_cpus.
+> +	 * For a valid partition root, its effective_cpus have no relationship
+> +	 * with cpus_allowed unless its exclusive_cpus isn't set.
+>  	 *
+> -	 * When the cgroup becomes a valid partition root, effective_xcpus
+> -	 * defaults to cpus_allowed if not set. The effective_cpus of a valid
+> -	 * partition root comes solely from its effective_xcpus and some of the
+> -	 * effective_xcpus may be distributed to sub-partitions below & hence
+> -	 * excluded from its effective_cpus.
+> +	 * This value will only be set if either exclusive_cpus is set or
+> +	 * when this cpuset becomes a local partition root.
+>  	 */
+>  	cpumask_var_t effective_xcpus;
+>
+>  	/*
+>  	 * Exclusive CPUs as requested by the user (default hierarchy only)
+> +	 *
+> +	 * Its value is independent of cpus_allowed and designates the set of
+> +	 * CPUs that can be granted to the current cpuset or its children when
+> +	 * it becomes a valid partition root. The effective set of exclusive
+> +	 * CPUs granted (effective_xcpus) depends on whether those exclusive
+> +	 * CPUs are passed down by its ancestors and not yet taken up by
+> +	 * another sibling partition root along the way.
+> +	 *
+> +	 * If its value isn't set, it defaults to cpus_allowed.
+>  	 */
+>  	cpumask_var_t exclusive_cpus;
+>
+> @@ -230,6 +239,17 @@ static struct list_head remote_children;
+>   *   2 - partition root without load balancing (isolated)
+>   *  -1 - invalid partition root
+>   *  -2 - invalid isolated partition root
+> + *
+> + *  There are 2 types of partitions - local or remote. Local partitions are
+> + *  those whose parents are partition root themselves. Setting of
+> + *  cpuset.cpus.exclusive are optional in setting up local partitions.
+> + *  Remote partitions are those whose parents are not partition roots. Passing
+> + *  down exclusive CPUs by setting cpuset.cpus.exclusive along its ancestor
+> + *  nodes are mandatory in creating a remote partition.
+> + *
+> + *  For simplicity, a local partition can be created under a local or remote
+> + *  partition but a remote partition cannot have any partition root in its
+> + *  ancestor chain except the cgroup root.
+>   */
+>  #define PRS_MEMBER		0
+>  #define PRS_ROOT		1
+> @@ -709,6 +729,19 @@ static inline void free_cpuset(struct cpuset *cs)
+>  	kfree(cs);
+>  }
+>
+> +/* Return user specified exclusive CPUs */
+> +static inline struct cpumask *user_xcpus(struct cpuset *cs)
+> +{
+> +	return cpumask_empty(cs->exclusive_cpus) ? cs->cpus_allowed
+> +						 : cs->exclusive_cpus;
+> +}
+> +
+> +static inline bool xcpus_empty(struct cpuset *cs)
+> +{
+> +	return cpumask_empty(cs->cpus_allowed) &&
+> +	       cpumask_empty(cs->exclusive_cpus);
+> +}
+> +
+>  static inline struct cpumask *fetch_xcpus(struct cpuset *cs)
+>  {
+>  	return !cpumask_empty(cs->exclusive_cpus) ? cs->exclusive_cpus :
+> @@ -1593,7 +1626,7 @@ EXPORT_SYMBOL_GPL(cpuset_cpu_is_isolated);
+>   * Return: true if xcpus is not empty, false otherwise.
+>   *
+>   * Starting with exclusive_cpus (cpus_allowed if exclusive_cpus is not set),
+> - * it must be a subset of cpus_allowed and parent's effective_xcpus.
+> + * it must be a subset of parent's effective_xcpus.
+>   */
+>  static bool compute_effective_exclusive_cpumask(struct cpuset *cs,
+>  						struct cpumask *xcpus)
+> @@ -1603,12 +1636,7 @@ static bool compute_effective_exclusive_cpumask(struct cpuset *cs,
+>  	if (!xcpus)
+>  		xcpus = cs->effective_xcpus;
+>
+> -	if (!cpumask_empty(cs->exclusive_cpus))
+> -		cpumask_and(xcpus, cs->exclusive_cpus, cs->cpus_allowed);
+> -	else
+> -		cpumask_copy(xcpus, cs->cpus_allowed);
+> -
+> -	return cpumask_and(xcpus, xcpus, parent->effective_xcpus);
+> +	return cpumask_and(xcpus, user_xcpus(cs), parent->effective_xcpus);
+>  }
+>
+>  static inline bool is_remote_partition(struct cpuset *cs)
+> @@ -1887,8 +1915,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  	 */
+>  	adding = deleting = false;
+>  	old_prs = new_prs = cs->partition_root_state;
+> -	xcpus = !cpumask_empty(cs->exclusive_cpus)
+> -		? cs->effective_xcpus : cs->cpus_allowed;
+> +	xcpus = user_xcpus(cs);
+>
+>  	if (cmd == partcmd_invalidate) {
+>  		if (is_prs_invalid(old_prs))
+> @@ -1916,7 +1943,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  		return is_partition_invalid(parent)
+>  		       ? PERR_INVPARENT : PERR_NOTPART;
+>  	}
+> -	if (!newmask && cpumask_empty(cs->cpus_allowed))
+> +	if (!newmask && xcpus_empty(cs))
+>  		return PERR_CPUSEMPTY;
+>
+>  	nocpu = tasks_nocpu_error(parent, cs, xcpus);
+> @@ -3130,9 +3157,9 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>  				       ? partcmd_enable : partcmd_enablei;
+>
+>  		/*
+> -		 * cpus_allowed cannot be empty.
+> +		 * cpus_allowed and exclusive_cpus cannot be both empty.
+>  		 */
+> -		if (cpumask_empty(cs->cpus_allowed)) {
+> +		if (xcpus_empty(cs)) {
+>  			err = PERR_CPUSEMPTY;
+>  			goto out;
+>  		}
+> --
+> 2.39.3
+>
 
