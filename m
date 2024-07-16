@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46777933071
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 20:41:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6618893307F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 20:42:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCDF91F20F9C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 18:41:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88671F2325F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 18:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78721AB8FF;
-	Tue, 16 Jul 2024 18:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3941ABCCE;
+	Tue, 16 Jul 2024 18:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWIw/dCk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMxRaJJe"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987B01A0AE1;
-	Tue, 16 Jul 2024 18:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A7E1A0AF2;
+	Tue, 16 Jul 2024 18:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721154906; cv=none; b=EOV4cdoVcJqoKT8/6jUUx3oWtiW5BPW1bGnx2zSMOE63DIIh0KL8beJX8Zpe+Aa+v3Ns2Ig5qOQmeG3dXbrL8FWl+t68Hp8OEfmfk//zMeCP6QYk2Fq4xTyZyhyEs8CJ1Mms9mOX1BKdp2c4BWRrXO8jthbqPus0iuv6KpuSXT4=
+	t=1721154920; cv=none; b=jviCURXfLLVHhuhPNKtU//MuFOIkq1dAAvKuJrXl7fu1P8b5FEkf8fh3pe4MhVWs4iAQCm1Di8Naa8duA2X4Od1BcPLasOS8cNAR6oKrmqbcugr5fIgRU+0r9ZO53pLmeKSW1kZitx/iOjL0SugQah97VSJXwJInGBbwv/BMZE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721154906; c=relaxed/simple;
-	bh=8Q2j5GBudZ/uD8o/x/kgZDTzHrDZoU+b4cjGypcYX48=;
+	s=arc-20240116; t=1721154920; c=relaxed/simple;
+	bh=4cr3frS2fJLcGXPWeACtPtdj2rQhQgAAGq2J8rr+Mbs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qsbFpeL3GwXJLrt+74eOiJbbRepNga8eNBL1akASEuv6pdeuqqi2JD7N4rd3SemZLbKYVbBg24vcM5LJyvoPfxGvLSGEI1J9GZ7tig4cYVMPQaYpKi3YYh9gcKIH/oB5ApLoxmbXaSXfZ7PCAXGddRs1vdyM/MD+fTFqQz09M04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWIw/dCk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF63EC4AF0D;
-	Tue, 16 Jul 2024 18:35:04 +0000 (UTC)
+	 MIME-Version; b=lqHxUfA41PM0MQ2hb/OZiBEA/n7AMSGW7kMECtIZHdEHx98FwQ/rT0AbSvHez7ouJujZl8EqifZ2aRec2KIgijgsKwnOH5SM9r/hOt6BwEqG4S5uo0WO3b7nwUQOX/CoamRWfv8LD5OguLol76Cg+HL+05ugMQBZUKF2GiY2yq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMxRaJJe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F22BC116B1;
+	Tue, 16 Jul 2024 18:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721154906;
-	bh=8Q2j5GBudZ/uD8o/x/kgZDTzHrDZoU+b4cjGypcYX48=;
+	s=k20201202; t=1721154919;
+	bh=4cr3frS2fJLcGXPWeACtPtdj2rQhQgAAGq2J8rr+Mbs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZWIw/dCkEJ+9wW0379G/p1RAWX9aNrqMbuvXd+JL4/S7TrIGGnP7OzulcYNgCoQyp
-	 VKFgBbufoOJ9KErcicQ0PyAhl2JCRQZu77KWGuZsXptTVpXiYPm6iTyPDHkN/Tox6v
-	 qe8f40zPiY6tg36/QrBx/bxWatqfyVTWNK/CAJIzF/suYjUZrgaZNVj3t0P6PUsKbW
-	 wNtPq14ONCdGEtGOSl4XlDyyYgWVfpfmDqmsOf7nfqEhFe2hGYTcUritpkyrHFILr4
-	 p8Qyqdjgutu/CkA3AJMzL6TRo/oufxsspqOI8GXSPmoYcWSL9MIRqiN6UabZVymL4v
-	 hGWw7X5lePz7Q==
+	b=HMxRaJJe3HoBWe2fQV48iZpDORuO1eZT2LAbPUGYs+9Mv0pBT+JuGwq+znaGOm/sZ
+	 4Lr0vRQ7wlb/7JYWY8qSwS9d/1sIC9wPoPGXRIEt3R80VInk3DPB9UPbqQ3ntcaNGP
+	 rsd/vrizvUd+u8lOpZh5HUiwDiguuGoXgL5EOeBFnCIAFft8TfyK0qKJDbt/FUSs+G
+	 T6AZQ071qMSOn61ypl9MyxEIVx+0HwIFpvUEKp52750wYS8fz4tE3qGUOAyg8Yx69U
+	 kAFpbxnFVI/MyPhVpMKjVgcdBapVPg3kwzTakSsl23AuGhsP1PZTOr6aM49C/4Ae3j
+	 k0PgXyU1idY2g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: John Hubbard <jhubbard@nvidia.com>,
 	nathan@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 2/3] selftests/vDSO: fix clang build errors and warnings
-Date: Tue, 16 Jul 2024 14:34:54 -0400
-Message-ID: <20240716183459.2814875-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 2/3] selftests/vDSO: fix clang build errors and warnings
+Date: Tue, 16 Jul 2024 14:35:08 -0400
+Message-ID: <20240716183513.2814965-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240716183459.2814875-1-sashal@kernel.org>
-References: <20240716183459.2814875-1-sashal@kernel.org>
+In-Reply-To: <20240716183513.2814965-1-sashal@kernel.org>
+References: <20240716183513.2814965-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.279
+X-stable-base: Linux 4.19.317
 Content-Transfer-Encoding: 8bit
 
 From: John Hubbard <jhubbard@nvidia.com>
@@ -144,7 +144,7 @@ index 1dbb4b87268fa..9ef3ad3789c17 100644
  		h &= ~g;
  	}
 diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-index 5ac4b00acfbcd..64c369fa43893 100644
+index 93b0ebf8cc38d..805e8c1892764 100644
 --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
 +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
 @@ -20,7 +20,7 @@ extern void *vdso_sym(const char *version, const char *name);
