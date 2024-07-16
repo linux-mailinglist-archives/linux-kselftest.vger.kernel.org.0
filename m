@@ -1,199 +1,125 @@
-Return-Path: <linux-kselftest+bounces-13771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E90393235A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 11:49:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE26D9323A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 12:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C258AB23647
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 09:49:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E2A0284BF9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 10:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0CC198A0A;
-	Tue, 16 Jul 2024 09:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EF0A198A36;
+	Tue, 16 Jul 2024 10:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Pr/LHb61"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B0715EA6;
-	Tue, 16 Jul 2024 09:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FBD44369;
+	Tue, 16 Jul 2024 10:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721123349; cv=none; b=TDMeeOtQFKGy3K+TWY4R2XtpJkK9x9M/yVEhY269Tv17tm4jRm3XcedpRqeJnf9tN4JKLYbC16PX+etBT7Rrt8pP6z4nzsv0S9cKfeE+8F/0z90/N3CsqaVwM+UGHWJGopDofnkSvPQ2RB00zZWeAzVj9dg55SWRXjKOOLcYz+c=
+	t=1721124828; cv=none; b=Hwb49tl1DA1fNKMeaq25i4p4l2YZrjz0kUc/32AQ36cxryX13W7uJ5KcC/s3STWfwyfUqQtMSsgk/EaI4CHHlhefEnlM8hZR9eVDAk0nQpJsBbxThfSrxXKv1U43EmU8PveFFkuzQrTl/OfAj0g3nZTO0GYmoj++memTKsBEK9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721123349; c=relaxed/simple;
-	bh=8UvQU7I9knuWhkpzd9TO9Fs/k8V16zg/peOwYTNUXUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QgKtUNrQkAIttaPf4CLx9xeMyBzEp3hDIy+Re/5bhz3wCnaMozLSB9j5z5blrCaVutbkryl6V967eQIYMXPy0n6VwrhzNePIaKVQtZOjz/7wA31OelixlrAq9gAyJB48IFlimke2+RKqUY1Ersnq9Tnmhc9sy4hzgQyNmpWGR7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e057bdc936fso5240665276.1;
-        Tue, 16 Jul 2024 02:49:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721123345; x=1721728145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pRQTvYVjx0Y6w3qpoyzLPKWPbAyGp8ArajcCwsaEB18=;
-        b=vvxaKZ692zESgqP/WvRtkSb4pea3vkbR134MeYOFaxvD1pHKdE5d0n1zBuK1wUFk1d
-         SOEeIyvUfC1l5MdMOA7h4C6jau9yxt0Tw2zpLDMxh8TytP3FHGVvfGQsAdExIvt6dZic
-         9SNHiBjzQc3LdWm8ME2tVL7FeU8/L9fE9gBpmQH0nYlOqBe0TC1/Oslk77CUvO1zHY3E
-         OliidOAORXzeHiHD4HBCy8S7n9h0eefMj8c4CsXTZtQf1tCTuWaSAzLqvrUkOmhidCon
-         aKr8q25hL0eCw4eWjMD+ytKIsoGQBUN/e6pt5nFXzfe+yzFtFOy3t7Ea2tFk5LTRMWqZ
-         pIcg==
-X-Forwarded-Encrypted: i=1; AJvYcCXd7wVgKxW2I36bxri0IaAadBU16HAjtZcV3Exeunj4vPQwkvueCnDZ3q7UgWi7jmp2AY0bYi3m2XU22hHXeKIXd4IAAfSFZETH3kAQ6/jV+7wLNhbenaABxwe5Ha0jVW2+21jaE/v0QspZJTwbuZMRH4TcIOv/WeP+G5KUNHf8Hi++YUjUz8rgBAS43BVTdkIQTAQYXLZGtS0UW2nG173D+UB4sGhH9VqOwoW/O2zcnSNdBrbYf3orO14z2WY04Q==
-X-Gm-Message-State: AOJu0Yz9bUvCziP77YdPGk0nJ6V6DqXRwO2Iihjb3r8cTbsgUm2CKiOM
-	Ol7/BE4uPOYJNi/ONlku8LDGTf9KQMf/mYm1CTKqYwnRRfy+0eefXEWIYgBM
-X-Google-Smtp-Source: AGHT+IHDOwQCXxlWls2E2WxUggo4e7W62NofTFzO/4waHMBDxD1Zf7wxldMc/f+Fl559sgNJpfnelg==
-X-Received: by 2002:a25:84c6:0:b0:dff:4a3:2df4 with SMTP id 3f1490d57ef6-e05d56e718dmr1732478276.31.1721123344902;
-        Tue, 16 Jul 2024 02:49:04 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e05a4695bc9sm1175809276.36.2024.07.16.02.49.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jul 2024 02:49:04 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e057bdc936fso5240607276.1;
-        Tue, 16 Jul 2024 02:49:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXgDyR8h2fuF4Bem3aMKDcoht3tPwUfIDktipVKZT16ilBXlxTqMOBwzJ/pEV6KpHQKrfz21fzGuM9fLLUPt69g2xJpOTkw/chjkTRGOs25MgFH+EL/3R6F0SDV7oTq8IYxBAUi0dim5ICHZy+YXoyFDXMfKTGDdxXVyX5KGw2nXDLVSyQBtZNfovbmdUc4Idw7+lktHg2UcSel+VLB0s5DZTDv6XsJPlStgej5l6zLyBdESnqSGI2agW5PSX+PLw==
-X-Received: by 2002:a0d:de04:0:b0:63b:f8cb:9281 with SMTP id
- 00721157ae682-663817d8a34mr15909167b3.41.1721123342440; Tue, 16 Jul 2024
- 02:49:02 -0700 (PDT)
+	s=arc-20240116; t=1721124828; c=relaxed/simple;
+	bh=QkKZPvqT0eyR2OvLR46yzphiuja6KmQG5tGOto8GD08=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hKff6x/39NVIeKhD/uJBKN+hgqgs5sWNR1VgONCcAcl+oqP1lCiVc/7OTs64n/VAzHsjrTpjA+833ETlyHE57Y9fVqqcEPh4ZRBQVZt3MC6HT8B4aD9hLECulIwv8YAMjupSkRQrI0OvNoAaU1haQtJbSEeA/PU1jP4b9gZcLPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Pr/LHb61; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 20AE1FF802;
+	Tue, 16 Jul 2024 10:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1721124823;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ONom7AaKA2Oa3vVjyFp69etExX2LlCp4bGg9AjwYrzY=;
+	b=Pr/LHb61i9qFWOaDU5ceIEmmNNdY/ctzjE0jJQr6Icrc20uMqAT33hExPnXfMQXSL5Bvn9
+	3bErNmTK0OpSvVakg05XvCGzfu+Dcm8Dj9dtwTiMu5ClxwktRq53YfpOd8z+6d2a0D7yZ4
+	ondVsGjNr7WIcpzqySKsCo1kocTeK6Phxn/WiH/f39rElwHPHWf9sQ9qTX+wzE1rV+J96Z
+	Ccmt6H/dlbYYAp/XEV2QSYfJOqkM6Z/YpgVOZPNkDEz6PHTzxGSLi3j9BpSconDqlTl+W/
+	5RAgLXigGAtSmSaMQ/JgqccH7hwlkDbhSg1zdNAmmNr9J4HEL+e8g3jzTCZ+aw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH v3 0/2] selftests/bpf: convert test_xdp_veth to test_progs
+ framework
+Date: Tue, 16 Jul 2024 12:13:27 +0200
+Message-Id: <20240716-convert_test_xdp_veth-v3-0-7b01389e3cb3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240710201246.1802189-1-sboyd@kernel.org> <20240710201246.1802189-2-sboyd@kernel.org>
-In-Reply-To: <20240710201246.1802189-2-sboyd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 16 Jul 2024 11:48:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV56nezM9cj1bVo4+gqi0OPvKjktu7i4Ov9ZKeyNkoiOg@mail.gmail.com>
-Message-ID: <CAMuHMdV56nezM9cj1bVo4+gqi0OPvKjktu7i4Ov9ZKeyNkoiOg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/8] of/platform: Allow overlays to create platform
- devices from the root node
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, patches@lists.linux.dev, 
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Maxime Ripard <maxime@cerno.tech>, Peter Rosin <peda@axentia.se>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMdHlmYC/3XN0QqDIBTG8VcJr+c4usy2q73HGFF6WsKmoSKN6
+ N1nwWC76PL/wfmdmQT0BgO5FDPxmEwwzuY4HQqihtY+kBqdm3DgJUgGVDmb0McmYojNpMcmYRw
+ olEqB6IUQUpN8O3rszbS5t3vuwYTo/Ht7k9i6fkW2IyZGgdZV3SrVQSu5vHbOxaexR+VeZDUT/
+ 3XEnsOzU1b8DF3N+0rzf2dZlg9/aHPVBAEAAA==
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: ebpf@linuxfoundation.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hi Stephen,
+Hello everyone,
 
-On Wed, Jul 10, 2024 at 10:14=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wr=
-ote:
-> We'd like to apply overlays to the root node in KUnit so we can test
-> platform devices created as children of the root node.
->
-> On some architectures (powerpc), the root node isn't marked with
-> OF_POPULATED_BUS. If an overlay tries to modify the root node on these
-> platforms it will fail, while on other platforms, such as ARM, it will
-> succeed. This is because the root node is marked with OF_POPULATED_BUS
-> by of_platform_default_populate_init() calling
-> of_platform_default_populate() with NULL as the first argument.
->
-> Loosen the requirement here so that platform devices can be created for
-> nodes created as children of the root node via DT overlays even if the
-> platform bus wasn't populated for the root node.
->
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+this small series is a first step in a larger effort aiming to help improve
+eBPF selftests and the testing coverage in CI. It focuses for now on
+test_xdp_veth.sh, a small test which is not integrated yet in test_progs.
+The series is mostly about a rewrite of test_xdp_veth.sh to make it able to
+run under test_progs, relying on libbpf to manipulate bpf programs involved
+in the test.
 
-Thanks for your patch, which is now commit 98290f295fbcf18f
-("of/platform: Allow overlays to create platform devices from the
-root node") in clk/clk-next.
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- Fix doc style in the new test
+- Collect acked-by tags
+- Link to v2: https://lore.kernel.org/r/20240715-convert_test_xdp_veth-v2-0-46290b82f6d2@bootlin.com
 
-This causes i2c-demux-pinctrl to fail on the Koelsch development board:
+Changes in v2:
+- fix many formatting issues raised by checkpatch
+- use static namespaces instead of random ones
+- use SYS_NOFAIL instead of snprintf() + system ()
+- squashed the new test addition patch and the old test removal patch
+- Link to v1: https://lore.kernel.org/r/20240711-convert_test_xdp_veth-v1-0-868accb0a727@bootlin.com
 
-        i2c-demux-pinctrl i2c-mux1: failed to setup demux-adapter 0 (-19)
-        i2c-demux-pinctrl i2c-mux2: failed to setup demux-adapter 0 (-19)
-        i2c-demux-pinctrl i2c-mux3: failed to setup demux-adapter 0 (-19)
-        i2c-demux-pinctrl i2c-mux2: Failed to create device link
-(0x180) with e6ef0000.video
-        i2c-demux-pinctrl i2c-mux2: Failed to create device link
-(0x180) with e6ef1000.video
-        i2c-demux-pinctrl i2c-mux2: Failed to create device link
-(0x180) with hdmi-in
-        i2c-demux-pinctrl i2c-mux2: Failed to create device link
-(0x180) with hdmi-out
+---
+Alexis Lothoré (eBPF Foundation) (2):
+      selftests/bpf: update xdp_redirect_map prog sections for libbpf
+      selftests/bpf: integrate test_xdp_veth into test_progs
 
-and anything relying on I2C connected to these muxes fails, too.
+ tools/testing/selftests/bpf/Makefile               |   1 -
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 211 +++++++++++++++++++++
+ .../testing/selftests/bpf/progs/xdp_redirect_map.c |   6 +-
+ tools/testing/selftests/bpf/test_xdp_veth.sh       | 121 ------------
+ 4 files changed, 214 insertions(+), 125 deletions(-)
+---
+base-commit: 4837cbaa1365cdb213b58577197c5b10f6e2aa81
+change-id: 20240710-convert_test_xdp_veth-04cc05f5557d
 
-Also, loading the 25LC040 DT overlay[1] on Ebisu using the out-of-tree
-of-configfs now fails, too.
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -732,11 +732,14 @@ static int of_platform_notify(struct notifier_block=
- *nb,
->         struct of_reconfig_data *rd =3D arg;
->         struct platform_device *pdev_parent, *pdev;
->         bool children_left;
-> +       struct device_node *parent;
->
->         switch (of_reconfig_get_state_change(action, rd)) {
->         case OF_RECONFIG_CHANGE_ADD:
-> -               /* verify that the parent is a bus */
-> -               if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS)=
-)
-> +               parent =3D rd->dn->parent;
-> +               /* verify that the parent is a bus (or the root node) */
-> +               if (!of_node_is_root(parent) &&
-
-Parent =3D /soc, so this returns early. Hence of_changeset_apply() [2]
-didn't add the I2C mux bus, causing of_get_i2c_adapter_by_node() [3]
-to fail.
-
-> +                   of_node_check_flag(parent, OF_POPULATED_BUS))
-
-Oh, you inverted the check for of_node_check_flag(); was that
-intentional?  Re-adding the "!" fixes all issues for me.
-
->                         return NOTIFY_OK;       /* not for us */
->
->                 /* already populated? (driver using of_populate manually)=
- */
-> @@ -749,7 +752,7 @@ static int of_platform_notify(struct notifier_block *=
-nb,
->                  */
->                 rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
->                 /* pdev_parent may be NULL when no bus platform device */
-> -               pdev_parent =3D of_find_device_by_node(rd->dn->parent);
-> +               pdev_parent =3D of_find_device_by_node(parent);
->                 pdev =3D of_platform_device_create(rd->dn, NULL,
->                                 pdev_parent ? &pdev_parent->dev : NULL);
->                 platform_device_put(pdev_parent);
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.g=
-it/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.dtso=
-?h=3Dtopic/renesas-overlays
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/i2c/muxes/i2c-de=
-mux-pinctrl.c#L60
-[3] https://elixir.bootlin.com/linux/latest/source/drivers/i2c/muxes/i2c-de=
-mux-pinctrl.c#L64
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
