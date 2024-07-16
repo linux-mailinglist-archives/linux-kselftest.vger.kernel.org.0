@@ -1,205 +1,374 @@
-Return-Path: <linux-kselftest+bounces-13815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42229332D6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 22:18:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD274933387
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 23:25:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 214F71C22223
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 20:18:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 888C72834A2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 21:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF571448ED;
-	Tue, 16 Jul 2024 20:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589AD139D00;
+	Tue, 16 Jul 2024 21:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b="YnX1VKh5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QWxQ+ofT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFA5182B9
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 20:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C313CF4F
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 21:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721161116; cv=none; b=BHG4I7fODpzPygFT+OppRJQOTRPwaxMdZfBIXrIR5svFcZSKdSstWH4gu9I7hXCYY1//J5/i+MIEwu0tsxk32XMLbbLs8naVmVbURzdRM5WEfsCZSWr4RMXWxAnBQ4B8V2WHwI2h0PkfVI90ctgqpreemCER9ywqdPbzGo+zkgI=
+	t=1721165146; cv=none; b=cGfzpjqYzZFq1oqxuponhw1QJ8eFrY/AZ8wx38z8lUBm88UDkqm5N9ybkxqo0dU5S9KSZR50rgd7zib4f4+h9nJyaaiMumfYXkQfdGhcHT9TS5wabteDhhlLg/z7nYXE8a2NQzat/LchCXf3FelE13VvruPwHQEE5sZaFODdwF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721161116; c=relaxed/simple;
-	bh=FyC5BZh6YjG7u8zcZ2c65+wWIIwNIpHTlJEujslh7io=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uf0HzPZiLcbXv5kYyg37PnbefmI3FHNrfSHvNYBBlXMFsmXhqspKtKndvOhhVcSZ8LiVjk77LSj3BtUjERdf5IAr/J9DQY1AAKOk3CC9oGjXE6GJFy7Nfih/M8NFH+szI3+NSy7durxWLAuQMisOwOuW+w11L+T1HHiYyrX2DY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=fail smtp.mailfrom=vimeo.com; dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b=YnX1VKh5; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=vimeo.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-70af4868d3dso4569198b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 13:18:34 -0700 (PDT)
+	s=arc-20240116; t=1721165146; c=relaxed/simple;
+	bh=dxKUl0LE8GC6ln6r73zcd+n7L3K8PYBZj3/wJG+sflU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Xy9ii1RpJE4UdbKJmDO9FhOLdkOv2vWxdV0iWTzcpcbW222tF1PmaL5bu7ki9XHiWa0HP1L9qqh0C0tNwqEuhmuXHanHzSA9y0jlCrPoZi1kvFmdU2YKsObfpBOifbmt2x6ESKTiwW47VmsAAUndv76yw3lbWV0WQHpX0NVloCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QWxQ+ofT; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0335450936so11570598276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 14:25:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vimeo.com; s=google; t=1721161114; x=1721765914; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FyC5BZh6YjG7u8zcZ2c65+wWIIwNIpHTlJEujslh7io=;
-        b=YnX1VKh5XW5EboJ4GQIWXyXWyCxnZh1UkXSIxYaZEChmU/Mz/epz1v3t32+Toido5N
-         5UJCaREKfzelTtZO/Fvn01A3zLAyGSPQHW8srIYwKa0byygpww3sKTj2csnxjW1WgEoV
-         mIKTNvzsYOcRbaxULhi1blI9eTkwCTqjdnNpQ=
+        d=google.com; s=20230601; t=1721165142; x=1721769942; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hW7r7fMrBo0Bh6v0NShpaVL56BDK32NHibV5Yy51e2A=;
+        b=QWxQ+ofTbL0E8cMNEgF3QVzxVQfxcVywyTQx08OVRlMkIvmPHhO/6x0/mnj+7XvbCO
+         AU2030MDZa5oe4nQcD180pY5VrISwEVLcaInZ9aqMZuUacLGOyGW5vNuvqkPBzM7wVa/
+         +lGYNe29ttw3Z3wTaK7pcSW8JyaJY66Svc0MpIdb7j5+y0cymAuQpSO099GT0ufZ6gc5
+         26gKzZFBYbBuKx6RVUuv+Aho8QWopTn3ltn8MTVuLwhyS3OfpF/qWfIXomGx7iCSsFH9
+         /durh4pIV0+tAB00rOTreYH9whcWtKckq2sGNJubWhwjnI8YwKa5AbYVYSxH9Q62nolp
+         L4mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721161114; x=1721765914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FyC5BZh6YjG7u8zcZ2c65+wWIIwNIpHTlJEujslh7io=;
-        b=MiZzCt8xiKhcmNSpXFhkWzu0RB8nZeXjygsSNMqoE8XRe6zDwS9qLzpapXNheo7zbb
-         aj2EtSwp19NwZIMWPxLh++rp6Z4ZeSz00FK6Q48/c9dlNrR/7IK5K0QAowP4sbINpBxD
-         9U0brIZGTPyuADZfL0/jauqgh5cqFtRtWYYMIKs+1AZgqKzrj4KzggCSIvWpc0Ve7u3H
-         fwaR1MDCNuemYa5zX0MQMoMjp77AWnuTxf6SGTZ2NNToKRmoqLG7GkaRyOBBWxx7tyfz
-         cisgbqO3iJatO3Elv1fRXlu7FfIm7MZPNYtgHxnfN5x0vrX3TB8ALNQJIHgrDYIjBt/W
-         UgNA==
-X-Forwarded-Encrypted: i=1; AJvYcCUbKqme6Mlsa6Cb3XcNWTRqJRB8RylGKC61Ubedb8jz4lIQddgKbjJ19Z7vJPowJx7U2P6PGE/K1Iy/MhZ/HeyUBldhxEbeMSlmRN4Kj0VG
-X-Gm-Message-State: AOJu0YxQsDwp0/ydYepplI0Kyi5uahTQ6sfJoBrBoXshluxFwP3xsMcP
-	qwypcySMGVSlbWH4cOFxKB4vmGxIO/fbwM0tH6IgffTYFTtvWtxXDBecrXpZJuc3MnOOdC/vrJh
-	hfJwX/zdbAyGnab7fVGCjQdMd5XUKmgEEY1qzwg==
-X-Google-Smtp-Source: AGHT+IEFgQRryyYjffP1tMyu+yRGi+Lu74CsJaCnG4LnNTpPp6GXalOUh/HXJ0e/K/ocxUbYqr7+Or8rdlcaOJ96Yo4=
-X-Received: by 2002:a05:6a00:1491:b0:70b:23d9:98ae with SMTP id
- d2e1a72fcca58-70c2e9d2173mr3909520b3a.28.1721161114136; Tue, 16 Jul 2024
- 13:18:34 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721165142; x=1721769942;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hW7r7fMrBo0Bh6v0NShpaVL56BDK32NHibV5Yy51e2A=;
+        b=KmxTuZsBFp+CWS6aVIE0OPyGuRAj71UetmGOCpijCKaqRZn8m4qG9Pr1ThGPm++ekn
+         XdnpNXDjaHHV9uDyFY/+SAKj+Di+W/RMnp3gNlqwapvxc2UEHEv7xz+Xv6fpBNhp1wbM
+         cup6aLTUYFHSe8k/+112KONA89dbZuvThQmdWyiM7F/eQWN5aOvaA+xuCn+PIXMi3wt9
+         lg3WZR0piHHgcFc9tXCb/sA/9ylJDxCKjYcx7Nl/26HLdctTjm3bvWWwQV6pnI1rJB70
+         Z65lt6Bkt+RPbM68++j8YMEfB1v5R+TczrTEGSDkZhbyfoHmyJknpuc7NPSUtfjqses6
+         Nstw==
+X-Gm-Message-State: AOJu0Yw+R8TY1g7dnvjOGtlQE8dONFFYKDFnFxTlP/PORBF8ECKKBtjP
+	1r5ti1u22o2Cj3oUNJGuByiZ5Ph1GF+Qi7rCR6GhRLl6ZpyCz+r2G9bi4VTzDhinjZzTcovH1g=
+	=
+X-Google-Smtp-Source: AGHT+IE3+EORzqa1AKq4gwHc5gW8KHxrlRPiRlpcdmONZNfxCwqZxpIpSt2aw+tA+p/cpIRu4uKaXbIc/w==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:2492:b0:dfb:fb2:ebd with SMTP id
+ 3f1490d57ef6-e05d57b536cmr5647276.8.1721165142154; Tue, 16 Jul 2024 14:25:42
+ -0700 (PDT)
+Date: Tue, 16 Jul 2024 21:25:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240715203625.1462309-1-davidf@vimeo.com> <20240715203625.1462309-2-davidf@vimeo.com>
- <ZpZ6IZL482XZT1fU@tiehlicka> <ZpajW9BKCFcCCTr-@slm.duckdns.org>
- <CAFUnj5M9CTYPcEM3=4i4rTfiU4sY4Qq8V1DXHJ00YYD2xFBvew@mail.gmail.com> <ZpbOezMVYkYdQV_s@slm.duckdns.org>
-In-Reply-To: <ZpbOezMVYkYdQV_s@slm.duckdns.org>
-From: David Finkel <davidf@vimeo.com>
-Date: Tue, 16 Jul 2024 16:18:23 -0400
-Message-ID: <CAFUnj5NLTz4yQHpucvwgWqKgC2oeotHMC3h6QyS_XHD2O7wJTA@mail.gmail.com>
-Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: Tejun Heo <tj@kernel.org>
-Cc: Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com, 
-	Jonathan Corbet <corbet@lwn.net>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeelb@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.993.g49e7a77208-goog
+Message-ID: <20240716212530.603924-1-rmoar@google.com>
+Subject: [PATCH] kunit: add test duration attribute
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com, dlatypov@google.com, 
+	brendan.higgins@linux.dev
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 16, 2024 at 3:48=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Tue, Jul 16, 2024 at 01:10:14PM -0400, David Finkel wrote:
-> > > Swap still has bad reps but there's nothing drastically worse about i=
-t than
-> > > page cache. ie. If you're under memory pressure, you get thrashing on=
-e way
-> > > or another. If there's no swap, the system is just memlocking anon me=
-mory
-> > > even when they are a lot colder than page cache, so I'm skeptical tha=
-t no
-> > > swap + mostly anon + kernel OOM kills is a good strategy in general
-> > > especially given that the system behavior is not very predictable und=
-er OOM
-> > > conditions.
-> >
-> > The reason we need peak memory information is to let us schedule work i=
-n a
-> > way that we generally avoid OOM conditions. For the workloads I work on=
-,
-> > we generally have very little in the page-cache, since the data isn't
-> > stored locally most of the time, but streamed from other storage/databa=
-se
-> > systems. For those cases, demand-paging will cause large variations in
-> > servicing time, and we'd rather restart the process than have
-> > unpredictable latency. The same is true for the batch/queue-work system=
- I
-> > wrote this patch to support. We keep very little data on the local disk=
-,
-> > so the page cache is relatively small.
->
-> You can detect these conditions more reliably and *earlier* using PSI
-> triggers with swap enabled than hard allocations and OOM kills. Then, you
-> can take whatever decision you want to take including killing the job
-> without worrying about the whole system severely suffering. You can even =
-do
-> things like freezing the cgroup and taking backtraces and collecting othe=
-r
-> debug info to better understand why the memory usage is blowing up.
->
-> There are of course multiple ways to go about things but I think it's use=
-ful
-> to note that hard alloc based on peak usage + OOM kills likely isn't the
-> best way here.
+Add a new test duration attribute to print the duration of a test run.
 
-To be clear, my goal with peak memory tracking is to bin-pack in a way
-that I don't encounter OOMs. I'd prefer to have a bit of headroom and
-avoid OOMs if I can.
+Example:
+ KTAP version 1
+    # Subtest: memcpy
+    # module: memcpy_kunit
+    1..4
+    # memcpy_large_test.speed: slow
+    # memcpy_large_test.duration: 1.134787584s
+    ok 1 memcpy_large_test
+    ...
 
-PSI does seem like a wonderful tool, and I do intend to use it, but
-since it's a reactive
-signal and doesn't provide absolute values for the total memory usage
-that we'd need to
-figure out in our central scheduler which work can cohabitate (and how
-many instances),
-it complements memory.peak rather than replacing my need for it.
+This attribute is printed for each test (excluding parameterized tests).
 
-FWIW, at the moment, we have some (partially broken) OOM-detection,
-which does make
-sense to swap out for PSI tracking/trigger-watching that takes care of
-scaling down workers
-when there's resource-pressure.
-(Thanks for pointing out that PSI is generally a better signal than
-OOMs for memory pressure)
+Add documentation for this new attribute to KUnit docs.
 
+In order to save the timespec64 object, add the ability to save a memory
+allocated object to the attributes framework.
 
-Thanks again,
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ .../dev-tools/kunit/running_tips.rst          |  7 +++
+ include/kunit/attributes.h                    |  5 ++
+ include/kunit/test.h                          |  1 +
+ lib/kunit/attributes.c                        | 61 ++++++++++++++++++-
+ lib/kunit/test.c                              | 25 ++++++--
+ 5 files changed, 93 insertions(+), 6 deletions(-)
 
->
-> ...
-> > I appreciate the ownership issues with the current resetting interface =
-in
-> > the other locations. However, this peak RSS data is not used by all tha=
-t
-> > many applications (as evidenced by the fact that the memory.peak file w=
-as
-> > only added a bit over a year ago). I think there are enough cases where
-> > ownership is enforced externally that mirroring the existing interface =
-to
-> > cgroup2 is sufficient.
->
-> It's fairly new addition and its utility is limited, so it's not that wid=
-ely
-> used. Adding reset makes it more useful but in a way which can be
-> deterimental in the long term.
->
-> > I do think a more stateful interface would be nice, but I don't know
-> > whether I have enough knowledge of memcg to implement that in a reasona=
-ble
-> > amount of time.
->
-> Right, this probably isn't trivial.
->
-> > Ownership aside, I think being able to reset the high watermark of a
-> > process makes it significantly more useful. Creating new cgroups and
-> > moving processes around is significantly heavier-weight.
->
-> Yeah, the setup / teardown cost can be non-trivial for short lived cgroup=
-s.
-> I agree that having some way of measuring peak in different time interval=
-s
-> can be useful.
->
-> Thanks.
->
-> --
-> tejun
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+index bd689db6fdd2..a528d92e5d8f 100644
+--- a/Documentation/dev-tools/kunit/running_tips.rst
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -446,3 +446,10 @@ This attribute indicates whether the test uses init data or functions.
+ 
+ This attribute is automatically saved as a boolean and tests can also be
+ filtered using this attribute.
++
++``duration``
++
++This attribute indicates the length of time in seconds of the test execution.
++
++This attribute is automatically saved as a timespec64 and printed for each test
++(excluding parameterized tests).
+diff --git a/include/kunit/attributes.h b/include/kunit/attributes.h
+index bc76a0b786d2..89ca54ef380d 100644
+--- a/include/kunit/attributes.h
++++ b/include/kunit/attributes.h
+@@ -18,6 +18,11 @@ struct kunit_attr_filter {
+ 	char *input;
+ };
+ 
++/*
++ * Frees all of a test's allocated attributes.
++ */
++void kunit_free_attr(void *test_or_suite, bool is_test);
++
+ /*
+  * Returns the name of the filter's attribute.
+  */
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index ec61cad6b71d..dca78d9bd3f6 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -82,6 +82,7 @@ enum kunit_speed {
+ /* Holds attributes for each test case and suite */
+ struct kunit_attributes {
+ 	enum kunit_speed speed;
++	struct timespec64 *duration;
+ };
+ 
+ /**
+diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+index 2cf04cc09372..b9fd6c686d65 100644
+--- a/lib/kunit/attributes.c
++++ b/lib/kunit/attributes.c
+@@ -40,6 +40,7 @@ struct kunit_attr {
+ 	int (*filter)(void *attr, const char *input, int *err);
+ 	void *attr_default;
+ 	enum print_ops print;
++	bool to_free;
+ };
+ 
+ /* String Lists for enum Attributes */
+@@ -79,8 +80,29 @@ static const char *attr_string_to_string(void *attr, bool *to_free)
+ 	return (char *) attr;
+ }
+ 
++static const char *attr_duration_to_string(void *attr, bool *to_free)
++{
++	int string_max_len = 20;
++	char *str = kmalloc(string_max_len, GFP_KERNEL);
++	struct timespec64 *val = (struct timespec64 *)attr;
++
++	*to_free = true;
++
++	/* Check if duration will overflow string */
++	if (val->tv_sec >= 1000000)
++		str = "Greater than or equal to 1000000s";
++	else
++		sprintf(str, "%lld.%09lds", val->tv_sec, val->tv_nsec);
++	return str;
++}
++
+ /* Filter Methods */
+ 
++static int attr_default_filter(void *attr, const char *input, int *err)
++{
++	return false;
++}
++
+ static const char op_list[] = "<>!=";
+ 
+ /*
+@@ -246,8 +268,20 @@ static void *attr_is_init_get(void *test_or_suite, bool is_test)
+ 		return ((void *) suite->is_init);
+ }
+ 
++static void *attr_duration_get(void *test_or_suite, bool is_test)
++{
++	struct kunit_case *test = is_test ? test_or_suite : NULL;
++
++	if (test && !test->generate_params)
++		return ((void *) test->attr.duration);
++	else
++		return ((void *) NULL);
++}
++
+ /* List of all Test Attributes */
+ 
++static struct timespec64 duration_default = {0, 0};
++
+ static struct kunit_attr kunit_attr_list[] = {
+ 	{
+ 		.name = "speed",
+@@ -256,6 +290,7 @@ static struct kunit_attr kunit_attr_list[] = {
+ 		.filter = attr_speed_filter,
+ 		.attr_default = (void *)KUNIT_SPEED_NORMAL,
+ 		.print = PRINT_ALWAYS,
++		.to_free = false,
+ 	},
+ 	{
+ 		.name = "module",
+@@ -264,6 +299,7 @@ static struct kunit_attr kunit_attr_list[] = {
+ 		.filter = attr_string_filter,
+ 		.attr_default = (void *)"",
+ 		.print = PRINT_SUITE,
++		.to_free = false,
+ 	},
+ 	{
+ 		.name = "is_init",
+@@ -272,10 +308,33 @@ static struct kunit_attr kunit_attr_list[] = {
+ 		.filter = attr_bool_filter,
+ 		.attr_default = (void *)false,
+ 		.print = PRINT_SUITE,
++		.to_free = false,
++	},
++	{
++		.name = "duration",
++		.get_attr = attr_duration_get,
++		.to_string = attr_duration_to_string,
++		.filter = attr_default_filter,
++		.attr_default = (void *)(&duration_default),
++		.print = PRINT_ALWAYS,
++		.to_free = true,
+ 	}
+ };
+ 
+-/* Helper Functions to Access Attributes */
++/* Helper Functions to Access/Free Attributes */
++
++void kunit_free_attr(void *test_or_suite, bool is_test)
++{
++	int i;
++	void *attr;
++
++	for (i = 0; i < ARRAY_SIZE(kunit_attr_list); i++) {
++		if (kunit_attr_list[i].to_free) {
++			attr = kunit_attr_list[i].get_attr(test_or_suite, is_test);
++			kfree(attr);
++		}
++	}
++}
+ 
+ const char *kunit_attr_filter_name(struct kunit_attr_filter filter)
+ {
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index e8b1b52a19ab..0d18e4969015 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -376,11 +376,11 @@ static void kunit_run_case_check_speed(struct kunit *test,
+ /*
+  * Initializes and runs test case. Does not clean up or do post validations.
+  */
+-static void kunit_run_case_internal(struct kunit *test,
++static struct timespec64 kunit_run_case_internal(struct kunit *test,
+ 				    struct kunit_suite *suite,
+ 				    struct kunit_case *test_case)
+ {
+-	struct timespec64 start, end;
++	struct timespec64 start, end, duration;
+ 
+ 	if (suite->init) {
+ 		int ret;
+@@ -389,7 +389,9 @@ static void kunit_run_case_internal(struct kunit *test,
+ 		if (ret) {
+ 			kunit_err(test, "failed to initialize: %d\n", ret);
+ 			kunit_set_failure(test);
+-			return;
++			duration.tv_sec = 0;
++			duration.tv_nsec = 0;
++			return duration;
+ 		}
+ 	}
+ 
+@@ -399,7 +401,11 @@ static void kunit_run_case_internal(struct kunit *test,
+ 
+ 	ktime_get_ts64(&end);
+ 
+-	kunit_run_case_check_speed(test, test_case, timespec64_sub(end, start));
++	duration = timespec64_sub(end, start);
++
++	kunit_run_case_check_speed(test, test_case, duration);
++
++	return duration;
+ }
+ 
+ static void kunit_case_internal_cleanup(struct kunit *test)
+@@ -424,6 +430,7 @@ struct kunit_try_catch_context {
+ 	struct kunit *test;
+ 	struct kunit_suite *suite;
+ 	struct kunit_case *test_case;
++	struct timespec64 duration;
+ };
+ 
+ static void kunit_try_run_case(void *data)
+@@ -440,7 +447,7 @@ static void kunit_try_run_case(void *data)
+ 	 * abort will be called, this thread will exit, and finally the parent
+ 	 * thread will resume control and handle any necessary clean up.
+ 	 */
+-	kunit_run_case_internal(test, suite, test_case);
++	ctx->duration = kunit_run_case_internal(test, suite, test_case);
+ }
+ 
+ static void kunit_try_run_case_cleanup(void *data)
+@@ -521,6 +528,7 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ {
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
++	struct timespec64 *duration = kmalloc(sizeof(struct timespec64), GFP_KERNEL);
+ 
+ 	try_catch = &test->try_catch;
+ 
+@@ -533,6 +541,10 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	context.test_case = test_case;
+ 	kunit_try_catch_run(try_catch, &context);
+ 
++	duration->tv_sec = context.duration.tv_sec;
++	duration->tv_nsec = context.duration.tv_nsec;
++	test_case->attr.duration = duration;
++
+ 	/* Now run the cleanup */
+ 	kunit_try_catch_init(try_catch,
+ 			     test,
+@@ -670,6 +682,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		}
+ 
+ 		kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_CASE);
++		kunit_free_attr((void *)test_case, true);
+ 
+ 		kunit_print_test_stats(&test, param_stats);
+ 
+@@ -680,6 +693,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 		kunit_update_stats(&suite_stats, test_case->status);
+ 		kunit_accumulate_stats(&total_stats, param_stats);
++
+ 	}
+ 
+ 	if (suite->suite_exit)
+@@ -688,6 +702,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	kunit_print_suite_stats(suite, suite_stats, total_stats);
+ suite_end:
+ 	kunit_print_suite_end(suite);
++	kunit_free_attr((void *)suite, false);
+ 
+ 	return 0;
+ }
 
+base-commit: 67c9971cd6d309ecbcb87b942e22ffc194d7a376
+-- 
+2.45.2.993.g49e7a77208-goog
 
-
---=20
-David Finkel
-Senior Principal Software Engineer, Core Services
 
