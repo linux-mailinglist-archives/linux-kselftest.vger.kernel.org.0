@@ -1,149 +1,124 @@
-Return-Path: <linux-kselftest+bounces-13791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A502932EFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 19:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A070B932F25
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 19:35:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB6BC280DAC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 17:21:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C00428345F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 17:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6891219AA78;
-	Tue, 16 Jul 2024 17:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD65819FA85;
+	Tue, 16 Jul 2024 17:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b="PPx/N/dl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Eb/zTCU5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCDFFC19
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 17:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E4019DF87
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 17:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721150462; cv=none; b=QRs2lb/L2aTKtAAVBYpmrcF3IxcQCPMOEWy3gxYqmaIIsjqMlLgegCgRu1mvbNOqOAptd/jOoeC3auCu4Fq0r2cVRapriyOqvyTADyWuCH46qy68PGyO/g5a/Tdlq1WdsfAm8abicMDj/dLuwJf1c4a/arg5lVqTtMBtrgHSGu8=
+	t=1721151299; cv=none; b=gOCn31blMUf7K/x0qJWTt5DSdIMA6vAXnNg1oTKjQVwjyGX54LBDCGGUqiVeeolSBISB4q+NcvVZIS4AcZ3gTFKYmlgwTGbyivs6FFmG2/IZenqc6zLtaHh25+xpT2WuwZPu/CCm8ZhyMhILy2eJS9a7NoBDrXxTt+qPw+L+RJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721150462; c=relaxed/simple;
-	bh=1sv+QNc/DGMhPMVsZ2FxSdhckTqknm0RzzQv130owTc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F+sigpksnGV6xV7moosC8u7ySyPTXHVqAerq+oZUBBqfziISCIBYoDN83C47nlCxka3+dKdk4zI7uq6ud930JPywDKd+yErwUJRkhXLZHWr4HKQggaMxjjLwpiYFC0CI9IS/Fpr9cyi24XPSTLLORHW2YOHDmxNqSMTzgQdAZec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=fail smtp.mailfrom=vimeo.com; dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b=PPx/N/dl; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=vimeo.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-71871d5e087so4283268a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 10:21:00 -0700 (PDT)
+	s=arc-20240116; t=1721151299; c=relaxed/simple;
+	bh=3M0QByp5nIuBwkxRifE56E0QWbZdgARiPYYVK/zs0M4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=qHVCgpKI7tLjxEQ+SWG9vml2RxLFdJHm+eLhcaGiTDT3TshPqwXOsDURrGbM6cIgrEFd5v1j6aozSrpA/bfMv+uegaI/YNFXyNUkVsNnBmo052VVibjqzo6Ccs+BGcghu8nGTURAxn92FksCwTAfjOQ/4Yc4HD/V2CVFjkAOibs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Eb/zTCU5; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2c972018f0fso5087815a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 10:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vimeo.com; s=google; t=1721150460; x=1721755260; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1sv+QNc/DGMhPMVsZ2FxSdhckTqknm0RzzQv130owTc=;
-        b=PPx/N/dl4nc/iPKwhzJnMr8F7jmHQU2IeCfojlCZ4plhnHeqePoMjId55lRYLL8+AK
-         fFcmA++DEiWyXhXpVV4EL3gRhVwRO5RnmO1FfTPd5YV/0yOM5/HZLRt/F2pkPGMDld8B
-         ex6YqAVPEdFBiz84S83pNu0GAQM66dXD2THG8=
+        d=google.com; s=20230601; t=1721151297; x=1721756097; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bzncl9L3e27llWjrAt0uSGnBBcBzotmsp09OvMIhHpc=;
+        b=Eb/zTCU5kPhzS0/bk11Payd+5kyJ5P2aPcU0yqX7V8Y4LtmgT0sDl/yHktUTM0Mb7e
+         z5CaMMry8WZjMr5ZtlxQ87ORckr2HKdH4DQNITPpw9aS71YoA9TgD07EukwUOenFSQpo
+         7sE/rSzawBqGFpZSZo33IEuluLPX35cCdKe/yMWDsQypYBEBvgsBkxJB62ksxnOWSts9
+         9mv2eGtomZymF8HSMD+UFj7wZifkS1l1Fc0HLYVkEQlqKTJsMosmVePzRZhL8EqitXyK
+         tTYiarBJJM/8pKKq28QrQMz57hDBMA2kBG28/SP+ikuUyjJw6ZV/0skeTvjYY9C/Unpv
+         u+ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721150460; x=1721755260;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1sv+QNc/DGMhPMVsZ2FxSdhckTqknm0RzzQv130owTc=;
-        b=XlSbr/0Nvf/EYnXLfLQ72yDsNWUYdavkceAJVZfRRLIN47MQQPdnBlgaHlOi2YmoPE
-         8ixGUpddkBOXhm9Eu0a49fupXOqi6lNzh0T8FrOxSPAAduGr0E0EvsswcRpVcRW3VNUx
-         2o5spUNoXeuRfVaRN2aVyhglgjsUatDl88EHjbeCsvIr6ontyzyXcs52/xChUukszR0s
-         IoatRvAYil7ixVIHP83+DFT+T0te5xupUvce+b0fprv/EaU64EY0jyngFah6oE4u8rlw
-         5/r3Ap4XfVzEuyoaPqz6A1tyDZZlb9BKGn3Iu+Gz7oEM73nbvc/4Ixdk8MyLzV3eP+TC
-         pPSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQvafc0dk5Jbkm2aAL437udC91vVRY2jzZ823ITb8arGFgVr/XNBBQRWJ/F81ymnp2/CaL4oFNr/X2dsWAanT5A4eZdJWmtd5/VsNbz1xU
-X-Gm-Message-State: AOJu0YyfheD93BldKbK5lksvgvDA8G9l/pFHYc9E1ememMQ7ApXv92SQ
-	5pdqJRVk6w9i+G/M0kEl81e2jdN4LugpoF/vqhdRKIjudG1hDmFefOtIdJPOpmwJbS9pPfG1g5H
-	lG8axPTbizgrb2zKbLAj8BO/bSh71BOYUZ52uwg==
-X-Google-Smtp-Source: AGHT+IE0jogasMR5Vo1zc09nO8WrQEH9BAm8Vis6rzWXoOwDzxBtbsrDWTNwvTcelBY4lZmxg6D9GIcINCHKQHMTUNA=
-X-Received: by 2002:a05:6a20:430b:b0:1c0:f594:198c with SMTP id
- adf61e73a8af0-1c3f11f7552mr3997701637.11.1721150460103; Tue, 16 Jul 2024
- 10:21:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721151297; x=1721756097;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bzncl9L3e27llWjrAt0uSGnBBcBzotmsp09OvMIhHpc=;
+        b=a4wBaZcJBF4LXOtKKaBjAdUlHUhOjvMp1iAUtD3vmDJ6I2tDpTL4jlnYkaIDZ4n9MV
+         IaoGJOV7RzYkHMPyLF3L7/5qg/Hie41BXtHJwvCLxG+K9F2rmKkhDitrgjzh1UOJRmrr
+         bgDRbdudB/5DC8xCqntUhii8iEcCyC3/BC/nJth6qdd16GTnEJS4niBbM6awazPOox2X
+         a2VmkdldnrXptJfzqoHsYnpVnfR9ilQfTJg6D87dTZozsySv9ylvNWa/QteAOKZv82gH
+         4624adzZCrsJYzI1C/ve+LwkbRYtHTWApJ1LsZg0g3ykC4vHra8KW58/l2fyXwWJ1IMh
+         h+Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCx6/AUZ/zWPrpTRRKn3t500J4V56T2GEhfNk/y1LpVP7Fx9JMjEE7QS/XKUp4XxN9nVZJ0oYGf6Nh+5UEKrZD2dmanVlz5tLGcl8Nmnbv
+X-Gm-Message-State: AOJu0Yx8dS0XxGapaabwawMzvJcM7bNFSddLxzuN5/WJVbiuUJPd3EUG
+	6JxISN7B/sQMZqoRWhccC0Cd5S9bLprPmwrfbchexoFyucjySgVsUjWP7qsQfHv9GBaDAnReLpC
+	9Fg==
+X-Google-Smtp-Source: AGHT+IG32VHtdxdaUsDDPJunrvckiTWNO91gPhz+tHm9yc4gkYSQ85JHqlVjFo5Nvdj8OgpwD3v6pjKH7w4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:b96:b0:2c9:ba2b:42ac with SMTP id
+ 98e67ed59e1d1-2cb36d483c4mr6722a91.4.1721151297229; Tue, 16 Jul 2024 10:34:57
+ -0700 (PDT)
+Date: Tue, 16 Jul 2024 10:34:55 -0700
+In-Reply-To: <20240716160842.GD1482543@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240715203625.1462309-1-davidf@vimeo.com> <20240715203625.1462309-2-davidf@vimeo.com>
- <ZpZ6IZL482XZT1fU@tiehlicka> <ZpajW9BKCFcCCTr-@slm.duckdns.org> <ZpanW41dQ8DimbA3@google.com>
-In-Reply-To: <ZpanW41dQ8DimbA3@google.com>
-From: David Finkel <davidf@vimeo.com>
-Date: Tue, 16 Jul 2024 13:20:48 -0400
-Message-ID: <CAFUnj5PeQ-FefK+ja0BtwHZFF0QyJdN9imZQESOj+tRjHSmvow@mail.gmail.com>
-Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, Shakeel Butt <shakeel.butt@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20240618-exclusive-gup-v1-0-30472a19c5d1@quicinc.com>
+ <20240712232937.2861788-1-ackerleytng@google.com> <ZpaZtPKrXolEduZH@google.com>
+ <20240716160842.GD1482543@nvidia.com>
+Message-ID: <ZpavP3K_xAMiu4kE@google.com>
+Subject: Re: [PATCH RFC 0/5] mm/gup: Introduce exclusive GUP pinning
+From: Sean Christopherson <seanjc@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, quic_eberman@quicinc.com, 
+	akpm@linux-foundation.org, david@redhat.com, kvm@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, maz@kernel.org, 
+	pbonzini@redhat.com, shuah@kernel.org, tabba@google.com, willy@infradead.org, 
+	vannapurve@google.com, hch@infradead.org, rientjes@google.com, 
+	jhubbard@nvidia.com, qperret@google.com, smostafa@google.com, fvdl@google.com, 
+	hughd@google.com
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Jul 16, 2024 at 1:01=E2=80=AFPM Roman Gushchin <roman.gushchin@linu=
-x.dev> wrote:
->
-> On Tue, Jul 16, 2024 at 06:44:11AM -1000, Tejun Heo wrote:
-> > Hello,
-> >
-> > On Tue, Jul 16, 2024 at 03:48:17PM +0200, Michal Hocko wrote:
-> > ...
-> >
-> > The removal of resets was intentional. The problem was that it wasn't c=
-lear
-> > who owned those counters and there's no way of telling who reset what w=
-hen.
-> > It was easy to accidentally end up with multiple entities that think th=
-ey
-> > can get timed measurement by resetting.
-> >
-> > So, in general, I don't think this is a great idea. There are shortcomi=
-ngs
-> > to how memory.peak behaves in that its meaningfulness quickly declines =
-over
-> > time. This is expected and the rationale behind adding memory.peak, IIR=
-C,
-> > was that it was difficult to tell the memory usage of a short-lived cgr=
-oup.
-> >
-> > If we want to allow peak measurement of time periods, I wonder whether =
-we
-> > could do something similar to pressure triggers - ie. let users registe=
-r
-> > watchers so that each user can define their own watch periods. This is =
-more
-> > involved but more useful and less error-inducing than adding reset to a
-> > single counter.
->
-> It's definitely a better user interface and I totally agree with you rega=
-rding
-> the shortcomings of the proposed interface with a global reset. But if yo=
-u let
-> users to register a (potentially large) number of watchers, it might be q=
-uite
-> bad for the overall performance, isn't it? To mitigate it, we'll need to =
-reduce
-> the accuracy of peak values. And then the question is why not just poll i=
-t
-> periodically from userspace?
+On Tue, Jul 16, 2024, Jason Gunthorpe wrote:
+> On Tue, Jul 16, 2024 at 09:03:00AM -0700, Sean Christopherson wrote:
+> 
+> > > + To support huge pages, guest_memfd will take ownership of the hugepages, and
+> > >   provide interested parties (userspace, KVM, iommu) with pages to be used.
+> > >   + guest_memfd will track usage of (sub)pages, for both private and shared
+> > >     memory
+> > >   + Pages will be broken into smaller (probably 4K) chunks at creation time to
+> > >     simplify implementation (as opposed to splitting at runtime when private to
+> > >     shared conversion is requested by the guest)
+> > 
+> > FWIW, I doubt we'll ever release a version with mmap()+guest_memfd support that
+> > shatters pages at creation.  I can see it being an intermediate step, e.g. to
+> > prove correctness and provide a bisection point, but shattering hugepages at
+> > creation would effectively make hugepage support useless.
+> 
+> Why? If the private memory retains its contiguity seperately but the
+> struct pages are removed from the vmemmap, what is the downside?
 
-FWIW, as a stop-gap, we did implement periodic polling from userspace for
-the system that motivated this change, but that is unlikely to catch
-memory-usage
-spikes that have shorter timescales than the polling interval. For
-now, we're keeping
-it on cgroups v1, but that's looking like a long-term untenable position.
+Oooh, you're talking about shattering only the host userspace mappings.  Now I
+understand why there was a bit of a disconnect, I was thinking you (hand-wavy
+everyone) were saying that KVM would immediately shatter its own mappings too.
 
+> As I understand it the point is to give a large contiguous range to
+> the private world and use only 4k pages to give the hypervisor world
+> access to limited amounts of the memory.
+> 
+> Is there a reason that not having the shared memory elevated to higher
+> contiguity a deal breaker?
 
-Thanks,
-
-
---=20
-David Finkel
-Senior Principal Software Engineer, Core Services
+Nope.  I'm sure someone will ask for it sooner than later, but definitely not a
+must have.
 
