@@ -1,71 +1,72 @@
-Return-Path: <linux-kselftest+bounces-13818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13819-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C1293340F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 00:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB2AE933412
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 00:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39A401F23DF3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 22:01:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80E281F23F39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 22:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35AA46F2F8;
-	Tue, 16 Jul 2024 22:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F867405A;
+	Tue, 16 Jul 2024 22:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HQdn3nir"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YPmLbW6N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A580E1DFDE
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 22:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B46E1860
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 22:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721167283; cv=none; b=Vtwwy+/piOMTY6mzgCh6/zcaelw0+FV1Zw/seoS+J/7c+dpG+45+OnqpeNqRTk9g5YSU1DOZr1ZJx7y4iBSfhLSZgQfQp3K8zb0L2e4GVatP9VjjH+6F0n64VnQkg3YBLL/fzJkBzaOTpUnlPao+jEsGpagXHxDCLeT51nzGzk8=
+	t=1721167549; cv=none; b=nF/7K0OL/aOiHq7O44ojh7AgFyCA4i4K3RZ4piyGK7nEKxF9rkCjPAxP65IpsxBjEJaa0nT8CzfFuf28+9oe6CvLSW0tfqJIQ70U4BYES1I03N33pFIYOLnULdkNcXxm8+El57viTMP4JbMbzx6eUik7k6msaeRCdcaJnJ6D2is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721167283; c=relaxed/simple;
-	bh=HLsso6sPpwAqcJD+ovzh5+MRcgBp2g+CSGjySevHyUU=;
+	s=arc-20240116; t=1721167549; c=relaxed/simple;
+	bh=CkJucEGBKi1vFXk+FISBw52fe94XEUxPABdSrJGtnik=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mLg537SuBAlBfU2RmXjE/WmlpnSMy5AW+NopEFAvYX4qqfGOBMZKBUHe6hfzNtL3Bj6w5SsujoL3/UcibXFEmbCZd+Q9WHI/wU5H0h1YVfm06DLWJr7jKM4mt+ybQ+BDdZ+s5m59AGJbrFe376doXmJIBVUinvsCfJtyxj7ta5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HQdn3nir; arc=none smtp.client-ip=209.85.166.44
+	 In-Reply-To:Content-Type; b=bCaXsKN/RU20SYm86V7jOMFRVzshW59POudN/p/1IiD0Rh46teS71PDoqGpV3VdK8e5pZK6UoYyGWSySMFgQkJV8KeULwek/jnjIg5+fQLtjwFnU7EtGRLfrixIxfFDd8O2G/FEdjoupaiVrM4v/DVdhZ+FyxQqYlWcr5VdEI/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YPmLbW6N; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-8084f783737so734839f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 15:01:21 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7fb3529622dso1328339f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 15:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1721167281; x=1721772081; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1721167547; x=1721772347; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x5PSRoU/ZGPblxfU6VHJxaVA+2xtD5DSTjqNF2ZXUTU=;
-        b=HQdn3nirBSjN4dma3Uhtk5G4O6gEFR/HHrolN1wM7M+AuqqXrVBVhmIZtys3bRGBN6
-         TitX0qWAyPYsC/laPb9Mw4nORHaF2XanmblZ26O4LVyvHGxoYq+hNg8x9+KQlyjKYtEM
-         ccMrl+QbWPuqYCeiltqAtM/LlgIokphiJMEkA=
+        bh=nTy42Fs8+Jr95ikyca40F3ZZbw68C7koXGwHU5+AQvI=;
+        b=YPmLbW6Nidm326ajsTyBNUfVf0nQQmO2D4fjVqbxDFjBdNkaJHFyE0qW+/Yzyyea/V
+         gWbOA5KO20Pglw1+b/z1LWF5O1/gdehIyrbSCvnESKe09vuYwmfsQHeq92sHBxzY73Cx
+         pwQwSmb+WRE1X6G62NqjLIQtvmaOS6fYdeftE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721167281; x=1721772081;
+        d=1e100.net; s=20230601; t=1721167547; x=1721772347;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x5PSRoU/ZGPblxfU6VHJxaVA+2xtD5DSTjqNF2ZXUTU=;
-        b=AgzjoDW0WxNZhEOsmR9AMn6LRnq5nDOukziLled4KaEiwzm9pPRuaw2JHd4I0+fU0b
-         mbSev1Ld4R9XS3lNRqSO57zZA8vWXzvHaN0gj9THCwv4iZtxaFZJJjvg6f5y02O29Su5
-         beCv11xNnnjncWTNdwB3lzUTaXOcYxpKgwnA/M0Zqh8U0yi7u9mJz+VfV0JZUJBJjU4M
-         8HHVClwnx9Y3itfrUk40C6ONHX1RDP12QpbT05ai4T4IOKe3j3sE1OZmJRvchjaRFUAD
-         aNPNpcD/qMSqVF0SDughQQtcUldjqeWmYWAh3SSXvc9PMTFvOoke1KAsRp5EUjcHvVPc
-         i8hA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1ioSxxEmOV8aiXQSxxEljGWLx0v0aMuc6cEgf+8N+EMuB299LdAGT8a52FbxNG2rv3wQof5d6pkZY3MvQ8B4qwUANYCzZtLgPqY4W3dLg
-X-Gm-Message-State: AOJu0YxUjfjL8cvHWdA6ylacCrnRzQhdU0glWe5d3wEc6ioL44ZKf5HN
-	Qfs4wuOHPw4JlFu4SCKY+pawfGJfP5kg0kVYCwPdbOoUzkUqi8W/j7FpR/6Xov4=
-X-Google-Smtp-Source: AGHT+IHcHBUREm0r2e2Ncbofi5LeKrZTXUCyGAPYMl85VtPnN8mq+O9egmVzjIyLGJqKAfAKB1BY9A==
-X-Received: by 2002:a5e:c916:0:b0:80a:4582:be31 with SMTP id ca18e2360f4ac-816c5698730mr48773639f.3.1721167280736;
-        Tue, 16 Jul 2024 15:01:20 -0700 (PDT)
+        bh=nTy42Fs8+Jr95ikyca40F3ZZbw68C7koXGwHU5+AQvI=;
+        b=MxymMtAyKMX4N1Y/8cCjCYJcZsEugIFjoZtb+jwuxnGtMfz5+Bdy6P+9x5Z7sNvryv
+         RUi1+yqo3s597k12l1etg6HK8Rkx1D4azPzzARZfqlOxMfxlF4zBKXBh9vHHlYGsOh4m
+         rLrW7BzaQcFpQAEXraIwtfAcEouRiWcdu3lzZlzRuI7SsSpfNsyF+93NbMqczbZ5HN9B
+         5OZet8agAFJA5M3p+W8hz5/UYoyGbM0XT166/JURLi0gnr9XAu0rDBSj6TWPnKCAo2oh
+         WAKBGq7H3VqF8wlEicn8voGMfN6noagJF2XRFDdC7za19trsKV3ripFifYdW8/+inegA
+         lxNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbrIb71FSSMGYVJkB+2cT0Xoj8P1PUju61WwrGvPLmEQUdtdvIoMfbVGdMbvwzMAGmP8JF1TXtR+vYCEjPHZrFP4tgD40Py+JSEK63L0x2
+X-Gm-Message-State: AOJu0YyL/rYz18XwjWMZIJm0zzQgHD/SFKz1TeSNDCDX8tSY/5vGIziE
+	D4PERTpV5GDs2+gyfZjjAUQSYoxyp6GZs489dYaT2CdtlvxhOUHzJQhpqjC4X9MIN2zYgVrg8pm
+	V
+X-Google-Smtp-Source: AGHT+IE2IqcYbobmy7qTVhbdZ3wHj43JwoI1DCRUg7A9WkyucXMp8aVsR4PxvOlGGhZEtgFjK7AWYw==
+X-Received: by 2002:a05:6e02:1ca5:b0:383:297a:bdfb with SMTP id e9e14a558f8ab-3950caf0331mr6268715ab.2.1721167547604;
+        Tue, 16 Jul 2024 15:05:47 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-816c18b9397sm18021739f.17.2024.07.16.15.01.20
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3950b6ad7bbsm2002345ab.42.2024.07.16.15.05.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jul 2024 15:01:20 -0700 (PDT)
-Message-ID: <11c8d108-8635-4c57-b76a-8dc4a9c908af@linuxfoundation.org>
-Date: Tue, 16 Jul 2024 16:01:19 -0600
+        Tue, 16 Jul 2024 15:05:47 -0700 (PDT)
+Message-ID: <4fe7c1f5-e2bd-41ed-8302-876d2eb73a50@linuxfoundation.org>
+Date: Tue, 16 Jul 2024 16:05:46 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,35 +74,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests: x86: vdso_restorer: Return correct exit
- statuses
+Subject: Re: [PATCH v2 0/4] selftest: x86: conform tests to TAP format output
 To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Shuah Khan <shuah@kernel.org>
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Cc: kernel@collabora.com, "Chang S . Bae" <chang.seok.bae@intel.com>,
  Binbin Wu <binbin.wu@linux.intel.com>, Ingo Molnar <mingo@kernel.org>,
  "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240712073045.110014-1-usama.anjum@collabora.com>
- <20240712073045.110014-2-usama.anjum@collabora.com>
+References: <20240712084625.297249-1-usama.anjum@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240712073045.110014-2-usama.anjum@collabora.com>
+In-Reply-To: <20240712084625.297249-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/12/24 01:30, Muhammad Usama Anjum wrote:
-> Return correct exit status, KSFT_SKIP if the pre-conditions aren't met.
-> Return KSFT_FAIL if error occurs. Use ksft_finished() which will
-> compmare the total planned tests with passed tests to return the exit
-> value.
+On 7/12/24 02:46, Muhammad Usama Anjum wrote:
+> In this series, 4 tests are being conformed to TAP.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Changes since v1:
+> - Correct the description of patches with what improvements they are
+>    bringing and why they are required
+> 
+> Muhammad Usama Anjum (4):
+>    selftests: x86: check_initial_reg_state: remove manual counting and
+>      increase maintainability
+>    selftests: x86: corrupt_xstate_header: remove manual counting and
+>      increase maintainability
+>    selftests: x86: fsgsbase_restore: remove manual counting and increase
+>      maintainability
+>    selftests: x86: entry_from_vm86: remove manual counting and increase
+>      maintainability
+> 
+>   .../selftests/x86/check_initial_reg_state.c   |  24 ++--
+>   .../selftests/x86/corrupt_xstate_header.c     |  30 +++--
+>   tools/testing/selftests/x86/entry_from_vm86.c | 109 ++++++++--------
+>   .../testing/selftests/x86/fsgsbase_restore.c  | 117 +++++++++---------
+>   4 files changed, 139 insertions(+), 141 deletions(-)
+> 
 
-Same comment - here. Include before and after output to show
-how this change improves the report.
+Please check the submitting patches document on writing change logs.
+The change logs in this series are bullet items without complete
+sentences. I would like to see before and after output for the
+changes you are making.
 
 thanks,
 -- Shuah
-
 
