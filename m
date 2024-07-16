@@ -1,92 +1,92 @@
-Return-Path: <linux-kselftest+bounces-13810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3AD993326C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 21:48:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8171B93327A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 21:54:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF6302844C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 19:48:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B313F1C22EDC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 19:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB9228DBC;
-	Tue, 16 Jul 2024 19:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A943D0D5;
+	Tue, 16 Jul 2024 19:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="foyC+9I1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jlMw2hd0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975074687;
-	Tue, 16 Jul 2024 19:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C1B28DD0;
+	Tue, 16 Jul 2024 19:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721159296; cv=none; b=HOcyLjdMzHQwNMiaMux2f6fQWT3RbWJm7FUoPK4TaRtcI2PZaDUcgDntScAc6y5HhgoUOhPZKe3cXxOWPJtF/s7hHht21hxcSHgynGv23v8PwzH4IrdxRQ9ivPH3eu9nICK00heSnDS41y0F56/+nRyfpYNiz+SuuRsoCKAidds=
+	t=1721159641; cv=none; b=FFL4BWmw/mR8gsQ198NlIqcc4W6BK06nySy+tK3vv2dY7lyrwWpQNWON56bKSXmlm2zLFx9zunE54hYrpRPX67W4QM7M9SAgsga6js9qwvJh9t5C0MN/BuwZHZ6XhABawCBrPoyYz9QKPhVWMHd70w8njxPKK8j+IV6AfiaEWDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721159296; c=relaxed/simple;
-	bh=Q83+376KHj5JmvZQJf4BDt8MUL2fSbIl3w4WSky1kuM=;
+	s=arc-20240116; t=1721159641; c=relaxed/simple;
+	bh=vbcUatTQLinZ8Fv4tinWHiuvojXCKcsLM0i8nhNT4AU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4jCc+/k0fUj4mStE9DEcID3Hm9Bpkav5YVqij+n+qsrVjNLG2waB5WB3zprR19hHAa1uto3rY/7QSDfjFsCApEz5bDDDr2MVDWUnsTmWRooBByzWPB6l7PIA/UIiK6jkdBJx0TEUMRsznr/MDOGlcs98eTe4krOqI5Km9XWuto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=foyC+9I1; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fa8rCa7TZKzzkklAU9iBbkfuIqlDj2QgRG3nJFYaXAMa72lPtdAVjH938+/1swwHtmJTjki1Z+ftOMKs3/K7RDOgnvc5W0/bBijnihLOc/uDM32Phie7fsiOMHbHPbAAVeQrM6gktnnc81F0krN9jZpcUPSz4+2wP3kaGaQPQU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jlMw2hd0; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fb3b7d0d56so32971925ad.1;
-        Tue, 16 Jul 2024 12:48:14 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-70af8128081so4044524b3a.1;
+        Tue, 16 Jul 2024 12:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721159294; x=1721764094; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721159640; x=1721764440; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=afKFF0MqOKII6px42Zfqj+kP7vnjeE8h4vRzd8rEIWY=;
-        b=foyC+9I1DCgMd/nXlO/kJwt/6wus6PcVRzPThyjcBzyKfcQdgP+MW/XHPQCzpPFjAw
-         miXAFAskqtifhhxqXwTOa9kjd/2JBhvZ+LvTRix3PQvYrUoMOO7WO74P2GqOpOzBoegJ
-         gIiE9Si/W9QxZeFg+MHor3uuBZQA8F12G/A+rKUex+c+pTciUWF6tqBWoZJEFZTDSwQy
-         BZ64HNHwYswaNHp2u1y4Jhqlp2ku5Cj1uz7Pc1qqsbTgW/OKQZxgSyV6ilMYVHd9kyPv
-         VkdhDIRJZxWij7dROHxP0uWYBGmu4FI/bsLo0OPv2k4KVrHin5XoAdYKim9F2rlN0mTv
-         vavw==
+        bh=trHVS38r80yv12O1rHCGnBDY8VUPQgUXPZhLTpyH52U=;
+        b=jlMw2hd0areBoEgmwb0etVXW9wSjjVW2Jz4HPQh0ptKxeUdODgt67hzt1yoEzbXNZX
+         7W5NR9HurLXO3YF7v1w1pX15kK87Db099xe09QpAItTLhQQnO/HBJm6ZDGV0an0rbQz7
+         +EJtMGmY+AxClMWIbwh1hdTQWZE6dmOvWHwEJX3nJKDoZLHT7utpylNLqMtjeZjsy6+7
+         m+YMgNfVozDLoQHDRMENn56h/Juz2pZRgs+GhvYGZQy3JtPykuybtncx8KmqtoyOL8Nw
+         SbRs/7TD8HFsfRCsknNW5LTSaN6uTcSSor82H1h2DuFYWfTGerU9tnVC/Gqgf/cWjN8I
+         zibQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721159294; x=1721764094;
+        d=1e100.net; s=20230601; t=1721159640; x=1721764440;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=afKFF0MqOKII6px42Zfqj+kP7vnjeE8h4vRzd8rEIWY=;
-        b=qjz99zS+nuoCwqLriLmwBgqjGLxqLjIsf/69lZy662AQXZSXo7wj83A2cfzYseMOXB
-         kisHu29pIiO65QV8voySQ3WOs/wLKc6KdAyqSg6lhotEEFCspI+6AZgH8Kw7boL39mFo
-         8PE8hJwxnxJ++orjbRCV1imCSuWkfQOQxY4zo6TNwqsNAeE33dmdB02A7nu9n7Gl8DND
-         EHOv6uNVwjOi2LYrkVAsrGokcIA5VQAuokKnnnWnL2vNI4VXI4BvL7qQXuMponuR8kfA
-         /+VeUAUQ8MnnhwJv60gMTKlFNvhMa8YLsO1vm+7Kr0vvG3Sscm2j08lGnjaCGdLjy2+J
-         j7tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVk9gsecUCx5rlP39Xs5ArsONCT0qeYCdxs+qt+qUF7E956WHHUb0BUaCv5/r+VwpgbiyvUxsxt7+NNidwG5KlAQ4eg5eA0mZqATDG1/9SUuqciIt0d4xCwPpI02np8cL2V61OHcTUBHsU2u9G2UmX5obdjR82TWBxyyAPs3znOIQZ5Kg==
-X-Gm-Message-State: AOJu0YyLeCiyfZUJr4xTTLbf8uHE3dVP/VcLAm5IZpJqMCFvVtQVyGnh
-	3Kb86sfVgvPVSU+hlpLCAj8KJVBfzZgmREymymWoi8He7ldDwMsx
-X-Google-Smtp-Source: AGHT+IFZ+3eBSrn8MmZv7XoeGhU1YbpdzqQrQM5X3Nv7c207QpLA42+Ma7V5iHZbJeYh8qf2cFhkhA==
-X-Received: by 2002:a17:903:41c3:b0:1fb:9b91:d7db with SMTP id d9443c01a7336-1fc3d941907mr26937265ad.19.1721159293721;
-        Tue, 16 Jul 2024 12:48:13 -0700 (PDT)
+        bh=trHVS38r80yv12O1rHCGnBDY8VUPQgUXPZhLTpyH52U=;
+        b=kufpP46WcYvIfASnKaHZ0/txWeE0BIniH49MoNO+nNLOiVXc02CsiP5biQ2NwD0l8i
+         tA3Z0XSP6hNovf6qQxk0H5M6giss8e9ZdysvHxlvZ3Yb7wSJYr0aOomT3uIN8bw/YxuJ
+         wVdFHz8jaqCMYizQRHt3322gqmNZAvmYhBhWzTlHIy6Os6VngCEu13B/8Pba4772fB5o
+         01NqMZ+cpcjJo6fK3NjX66FTXjl2TjbyjQn790aG4aLu4uIqAuMPxJXhHSCsL2sq6z3r
+         uPfZZjXZDe5SEVgIvIPV9Ch7z34MIA7afZKRaEE4izLRkMLfP5IwR2WbR9nM09CYHjE1
+         UlXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVD29GYHEfodDF6TA+3gYQ54+L0KNK0Lxgc6tlGfSWy/xhg5d9UHh1IeGNXap0Cj/sdEK4Az8iGrcG+NHC1QTnH/UBilEwRP1qzmOAm2DucQYw0nM1AqFSlcLB9VxfHAqC3TuJu1zsrCiHQnVqC70amIoaHnbfHlDaNdVE6/r4pBrdMqQ==
+X-Gm-Message-State: AOJu0Yy/RrausKr+W/Pq61DVelAt2GE2n6EMLTuHghaKMlzSBH20bIGy
+	SLudwfSbvJxa+CY23dsEfKqrX6AAXfOeAX2uZ1+22+Ea0TUJwdfn
+X-Google-Smtp-Source: AGHT+IHmRwDHFqb7YkRcFIioTkfaqe3efTv5oVOWhxzSALptn2WaXr/+/MZscuMGo9/0wLUWYwomQA==
+X-Received: by 2002:a05:6a00:2e06:b0:708:11f:d153 with SMTP id d2e1a72fcca58-70c1756e298mr3782891b3a.0.1721159639548;
+        Tue, 16 Jul 2024 12:53:59 -0700 (PDT)
 Received: from localhost (dhcp-141-239-149-160.hawaiiantel.net. [141.239.149.160])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bbbf792sm62127375ad.96.2024.07.16.12.48.13
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ec7ecb2sm6709689b3a.103.2024.07.16.12.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 12:48:13 -0700 (PDT)
+        Tue, 16 Jul 2024 12:53:59 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date: Tue, 16 Jul 2024 09:48:11 -1000
+Date: Tue, 16 Jul 2024 09:53:57 -1000
 From: Tejun Heo <tj@kernel.org>
-To: David Finkel <davidf@vimeo.com>
-Cc: Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Michal Hocko <mhocko@suse.com>, David Finkel <davidf@vimeo.com>,
+	Muchun Song <muchun.song@linux.dev>,
 	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com,
 	Jonathan Corbet <corbet@lwn.net>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
 	Shakeel Butt <shakeelb@google.com>, Shuah Khan <shuah@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-Message-ID: <ZpbOezMVYkYdQV_s@slm.duckdns.org>
+Message-ID: <ZpbP1TV_MBaoWG0o@slm.duckdns.org>
 References: <20240715203625.1462309-1-davidf@vimeo.com>
  <20240715203625.1462309-2-davidf@vimeo.com>
  <ZpZ6IZL482XZT1fU@tiehlicka>
  <ZpajW9BKCFcCCTr-@slm.duckdns.org>
- <CAFUnj5M9CTYPcEM3=4i4rTfiU4sY4Qq8V1DXHJ00YYD2xFBvew@mail.gmail.com>
+ <ZpanW41dQ8DimbA3@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,65 +95,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFUnj5M9CTYPcEM3=4i4rTfiU4sY4Qq8V1DXHJ00YYD2xFBvew@mail.gmail.com>
+In-Reply-To: <ZpanW41dQ8DimbA3@google.com>
 
 Hello,
 
-On Tue, Jul 16, 2024 at 01:10:14PM -0400, David Finkel wrote:
-> > Swap still has bad reps but there's nothing drastically worse about it than
-> > page cache. ie. If you're under memory pressure, you get thrashing one way
-> > or another. If there's no swap, the system is just memlocking anon memory
-> > even when they are a lot colder than page cache, so I'm skeptical that no
-> > swap + mostly anon + kernel OOM kills is a good strategy in general
-> > especially given that the system behavior is not very predictable under OOM
-> > conditions.
+On Tue, Jul 16, 2024 at 05:01:15PM +0000, Roman Gushchin wrote:
+> > If we want to allow peak measurement of time periods, I wonder whether we
+> > could do something similar to pressure triggers - ie. let users register
+> > watchers so that each user can define their own watch periods. This is more
+> > involved but more useful and less error-inducing than adding reset to a
+> > single counter.
 > 
-> The reason we need peak memory information is to let us schedule work in a
-> way that we generally avoid OOM conditions. For the workloads I work on,
-> we generally have very little in the page-cache, since the data isn't
-> stored locally most of the time, but streamed from other storage/database
-> systems. For those cases, demand-paging will cause large variations in
-> servicing time, and we'd rather restart the process than have
-> unpredictable latency. The same is true for the batch/queue-work system I
-> wrote this patch to support. We keep very little data on the local disk,
-> so the page cache is relatively small.
+> It's definitely a better user interface and I totally agree with you regarding
+> the shortcomings of the proposed interface with a global reset. But if you let
+> users to register a (potentially large) number of watchers, it might be quite
+> bad for the overall performance, isn't it? To mitigate it, we'll need to reduce
+> the accuracy of peak values. And then the question is why not just poll it
+> periodically from userspace?
 
-You can detect these conditions more reliably and *earlier* using PSI
-triggers with swap enabled than hard allocations and OOM kills. Then, you
-can take whatever decision you want to take including killing the job
-without worrying about the whole system severely suffering. You can even do
-things like freezing the cgroup and taking backtraces and collecting other
-debug info to better understand why the memory usage is blowing up.
-
-There are of course multiple ways to go about things but I think it's useful
-to note that hard alloc based on peak usage + OOM kills likely isn't the
-best way here.
-
-...
-> I appreciate the ownership issues with the current resetting interface in
-> the other locations. However, this peak RSS data is not used by all that
-> many applications (as evidenced by the fact that the memory.peak file was
-> only added a bit over a year ago). I think there are enough cases where
-> ownership is enforced externally that mirroring the existing interface to
-> cgroup2 is sufficient.
-
-It's fairly new addition and its utility is limited, so it's not that widely
-used. Adding reset makes it more useful but in a way which can be
-deterimental in the long term.
-
-> I do think a more stateful interface would be nice, but I don't know
-> whether I have enough knowledge of memcg to implement that in a reasonable
-> amount of time.
-
-Right, this probably isn't trivial.
-
-> Ownership aside, I think being able to reset the high watermark of a
-> process makes it significantly more useful. Creating new cgroups and
-> moving processes around is significantly heavier-weight.
-
-Yeah, the setup / teardown cost can be non-trivial for short lived cgroups.
-I agree that having some way of measuring peak in different time intervals
-can be useful.
+I haven't thought in detail but it's the same problem that PSI triggers
+have, right? PSI seems to have found a reasonable trade-off across accuracy,
+overhead and usage restrictions? Maybe peak usage isn't as widely useful and
+it doesn't justify to engineer something as sophisticated. I don't know.
 
 Thanks.
 
