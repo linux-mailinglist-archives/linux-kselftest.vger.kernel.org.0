@@ -1,206 +1,182 @@
-Return-Path: <linux-kselftest+bounces-13761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35280931E1E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 02:46:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CCCB931F44
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 05:27:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB16C1F22776
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 00:46:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 088B6282841
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 03:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A1F3D8E;
-	Tue, 16 Jul 2024 00:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="GPlCRVLS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB35411725;
+	Tue, 16 Jul 2024 03:27:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D93E12B95
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 00:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB95101CA;
+	Tue, 16 Jul 2024 03:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721090774; cv=none; b=ntGVOGxeEv2vvF9fQFWBEZy5LR4z7JA2WGSiBkbN4elBCpP4LUpinsGHfxb8SIPnjg7dwIaBoKJuZSE2C8PSEn1So3okNkO2HGMb6rEzAVJt1T+s1h6+l1vlItnVjZpQk+Qb+mpXqelB01l1vl9eQ09saUsvB733slgxz/GFR44=
+	t=1721100466; cv=none; b=VLJ9P4RrFwXfHDDFViySXO3QuYcbH66+3mHY9KAwmj6q2yXaepT0Clw2d8KroriCG3kXZ/LXkUmMMeCMg5SDc53weLkbVUXH4aEbNr4G087/Z/mSvnSyilZo0GfTTUOP6FGhqDKIIX24mxQ1AbNYuI42BWj7cmo93cEWeYHi3Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721090774; c=relaxed/simple;
-	bh=4uM0FvLy5udE+HfWQP/w0Px9dpx3wbZvNKZHLMQ7a2k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SAHMEVv0Pp3S+H7zh4+S+34tT4WCuEv+LU2r0rtCl/SATbdWkJ3dsGCvPLThJGwWtrrJkPFsLvpYpGs+YtGKsdIx1j5dDflLJPHr84V4uIvH9zF57atEQYwdtlgIea8O64V2sBvEso9Ayre+gPASS88B4H7BIIs31eoRkjd4axE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=GPlCRVLS; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-65f852c82fcso23645597b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jul 2024 17:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1721090770; x=1721695570; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TD66OtDeh2iGxjhj1zv4qHDsUsV2aL1QtkjuvW+JSWU=;
-        b=GPlCRVLSwC8ZDuocFpWUxrpS/MC7SXRJMG3zqnk0dKCx2OxlSR4a4V1zV+5kM9fNvw
-         07rDG7Qy8rqKKZvmZIv8bOUFH1FdY2t8Su6lt5TFYKGfJu52aM4bbEonLefF+IJ9E9kd
-         Q9uiswVmaBNx7T/5UgKp5VArNL9weQFafAcA+j8XIlh3xzE/ZMW2KbsDMCUHPe1R5xaV
-         3R45Jh2pe+q7TWWAQ6c1sSAKdk6iumh59x0tQ2UPSkqDokOd1quAV2RCD144E3WldSO8
-         2l8BvyuCzOzFsuYG2WBPSfLYN6OyDZ1TUlOAz3ppUOMiZKCAKBvQfwtjZA1vbKn75TPv
-         aPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721090770; x=1721695570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TD66OtDeh2iGxjhj1zv4qHDsUsV2aL1QtkjuvW+JSWU=;
-        b=gXhgdA7vIuVU8p3H3/vjVQJfRzKYOqGVN8lEX0R82LoNL/CimbjdrtIKHlanPXlDyC
-         2TPdwtfLzon67Y43X+KI5jzgwjk3oZILMTgxyXk0ddLYeHxfXytiROZmps6BlGvnuK4N
-         XcKi92daqDd7RYmD+IlX/HrFqrl1V6T8oNkHIdcB0MYIsMeaeEIfKSxuQ5d2ZmrXubDx
-         EvN39oCbeLLO42pH1YlXnGTdUkOCFxBbZxG9pIo8JwYIoVXk2fc8pSB/sOBd5fSN6IoT
-         1oCp0CSUofkipVrNa8Ia8H87qK0VheOSgPrvFEX+z4ejt7MKBJBi40Hu9DmO2zikpzJt
-         Nbxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtbkwQqKsws5hOlM9yirBcqOUD2SrIBvylIgx8vdlO3xdBsN6R5lkp87IhzT73aXtkjckTyLM4D0T6WHVGA2G57h7NFMbK2Nj+9H/YYVD/
-X-Gm-Message-State: AOJu0YxSbcbTkvcYmxXqkwYioEX2VJUXzQOkEzwqfiuMbIOWiuAxYuRM
-	hY4/oPyyEkiyE2++lvrgNjPxx200hUm51UWwDBHSGE6MUxlKDofuT2Ekw7uema6limPMzSGYfM8
-	pGJzRCQMiXCnRbmnTHuWyh5n+K5jGt8LaetI7Mw==
-X-Google-Smtp-Source: AGHT+IH2/Rko98brgCuBjHJl2Gx5ElpjIF+OOpCL1/BI2lJd+gA1z6MJ0fwOhu2NUVrUxOY5J6MQlr1Xw34lVNgzmNs=
-X-Received: by 2002:a81:7c06:0:b0:64a:5f5a:b38c with SMTP id
- 00721157ae682-66381bbc211mr7303107b3.26.1721090770201; Mon, 15 Jul 2024
- 17:46:10 -0700 (PDT)
+	s=arc-20240116; t=1721100466; c=relaxed/simple;
+	bh=D/khzkVTSnAQ7t3Ylwl2d9BOVcG3hflEnBWLEB1zIXE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=fxdTUZ5/jR9qnf5ZUaAiveDMKbm3Fusx9Eo0x0mYxrBhG1RqF2XIMJ4FRxpCyvbedFX5KZF26P1YvhcasRlcQKLIzz5z+ON5ojXkTYfB4aaifh1M8DoicbYimPjVT6RVWvkprZleJycuNS9r7NcEDDwEcMlRiYLFnnCpJ4kZ3Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WNPXM1b4fzxWSj;
+	Tue, 16 Jul 2024 11:22:59 +0800 (CST)
+Received: from dggpeml500023.china.huawei.com (unknown [7.185.36.114])
+	by mail.maildlp.com (Postfix) with ESMTPS id A5411180064;
+	Tue, 16 Jul 2024 11:27:40 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 16 Jul 2024 11:27:40 +0800
+Message-ID: <cb0efc16-6df2-72b7-47ea-ce524d428cc1@huawei.com>
+Date: Tue, 16 Jul 2024 11:27:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240715221126.487345-2-vadorovsky@gmail.com>
-In-Reply-To: <20240715221126.487345-2-vadorovsky@gmail.com>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Mon, 15 Jul 2024 19:45:59 -0500
-Message-ID: <CALNs47t=YQX+UP_ekq_Ue=BrA4JscDbU1qNDoKFar3yUbOSZ5g@mail.gmail.com>
-Subject: Re: [PATCH v3] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-To: Michal Rostecki <vadorovsky@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Manmohan Shukla <manmshuk@gmail.com>, Valentin Obst <kernel@valentinobst.de>, 
-	Asahi Lina <lina@asahilina.net>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Charalampos Mitrodimas <charmitro@posteo.net>, 
-	Ben Gooding <ben.gooding.dev@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v5 2/5] cgroup/pids: Make event counters hierarchical
+Content-Language: en-US
+From: xiujianfeng <xiujianfeng@huawei.com>
+To: =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+	<cgroups@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, Johannes
+ Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<shuah@kernel.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>
+References: <20240521092130.7883-1-mkoutny@suse.com>
+ <20240521092130.7883-3-mkoutny@suse.com>
+ <f124ce60-196e-2392-c4a9-11cdcacf9927@huawei.com>
+In-Reply-To: <f124ce60-196e-2392-c4a9-11cdcacf9927@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
 
-On Mon, Jul 15, 2024 at 5:14=E2=80=AFPM Michal Rostecki <vadorovsky@gmail.c=
-om> wrote:
+Hi,
 
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 0ba77276ae7e..c08f9dddaa6f 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
+Friendly ping, more comment as below.
+
+On 2024/7/3 14:59, xiujianfeng wrote:
+> 
+> 
+> On 2024/5/21 17:21, Michal Koutný wrote:
+>> The pids.events file should honor the hierarchy, so make the events
+>> propagate from their origin up to the root on the unified hierarchy. The
+>> legacy behavior remains non-hierarchical.
+>>
+>> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+>> --
 > [...]
->              // SAFETY: FFI call without safety requirements.
->              let kunit_test =3D unsafe { $crate::bindings::kunit_get_curr=
-ent_test() };
-> @@ -71,11 +71,11 @@ macro_rules! kunit_assert {
->                  //
->                  // This mimics KUnit's failed assertion format.
->                  $crate::kunit::err(format_args!(
-> -                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
-> +                    "    # {:?}: ASSERTION FAILED at {FILE:?}:{LINE:?}\n=
-",
->                      $name
->                  ));
->                  $crate::kunit::err(format_args!(
-> -                    "    Expected {CONDITION} to be true, but is false\n=
-"
-> +                    "    Expected {CONDITION:?} to be true, but is false=
-\n"
->                  ));
+>> diff --git a/kernel/cgroup/pids.c b/kernel/cgroup/pids.c
+>> index a557f5c8300b..c09b744d548c 100644
+>> --- a/kernel/cgroup/pids.c
+>> +++ b/kernel/cgroup/pids.c
+>> @@ -238,6 +238,34 @@ static void pids_cancel_attach(struct cgroup_taskset *tset)
+>>  	}
+>>  }
+>>  
+>> +static void pids_event(struct pids_cgroup *pids_forking,
+>> +		       struct pids_cgroup *pids_over_limit)
+>> +{
+>> +	struct pids_cgroup *p = pids_forking;
+>> +	bool limit = false;
+>> +
+>> +	for (; parent_pids(p); p = parent_pids(p)) {
+>> +		/* Only log the first time limit is hit. */
+>> +		if (atomic64_inc_return(&p->events[PIDCG_FORKFAIL]) == 1) {
+>> +			pr_info("cgroup: fork rejected by pids controller in ");
+>> +			pr_cont_cgroup_path(p->css.cgroup);
+>> +			pr_cont("\n");
+>> +		}
+>> +		cgroup_file_notify(&p->events_file);
+>> +
+>> +		if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+>> +		    cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
+>> +			break;
+>> +
+>> +		if (p == pids_over_limit)
+>> +			limit = true;
+>> +		if (limit)
+>> +			atomic64_inc(&p->events[PIDCG_MAX]);
+>> +
+>> +		cgroup_file_notify(&p->events_file);
+> 
+> Hi Michal,
+> 
+> I have doubts about this code. To better illustrate the problem, I am
+> posting the final code here.
+> 
+> static void pids_event(struct pids_cgroup *pids_forking,
+>                        struct pids_cgroup *pids_over_limit)
+> {
+> ...
+>         cgroup_file_notify(&p->events_local_file);
+>         if (!cgroup_subsys_on_dfl(pids_cgrp_subsys) ||
+>             cgrp_dfl_root.flags & CGRP_ROOT_PIDS_LOCAL_EVENTS)
+>                 return;
+> 
+>         for (; parent_pids(p); p = parent_pids(p)) {
+>                 if (p == pids_over_limit) {
+>                         limit = true;
+>                         atomic64_inc(&p->events_local[PIDCG_MAX]);
+>                         cgroup_file_notify(&p->events_local_file);
+>                 }
+>                 if (limit)
+>                         atomic64_inc(&p->events[PIDCG_MAX]);
+> 
+>                 cgroup_file_notify(&p->events_file);
+>         }
+> }
+> 
+> Consider this scenario: there are 4 groups A, B, C,and D. The
+> relationships are as follows, the latter is the child of the former:
+> 
+> root->A->B->C->D
+> 
+> Then the user is polling on C.pids.events. When a process in D forks and
+> fails due to B.max restrictions(pids_forking is D, and pids_over_limit
+> is B), the user is awakened. However, when the user reads C.pids.events,
+> he will find that the content has not changed. because the 'limit' is
+> set to true started from B, and C.pids.events shows as below:
+> 
+> seq_printf(sf, "max %lld\n", (s64)atomic64_read(&events[PIDCG_MAX]));
+> 
+> Wouldn't this behavior confuse the user? Should the code to be changed
+> to this?
+> 
+> if (limit) {
+>       atomic64_inc(&p->events[PIDCG_MAX]);
+>       cgroup_file_notify(&p->events_file);
+> }
+>
 
-These aren't exactly the same: the existing `Display` impl will print
-the string (hexifying invalid characters), but this will add `" ... "`
-around it.
+or should the for loop be changed to the following?
 
-In Rust's libraries, string `Path` and `OsStr` both have a
-`.display()` method that returns a wrapper type that does implement
-`fmt::Display`, which can then be printed (see [1]). We could do
-something similar here, via a `CStrExt` trait that goes in the prelude
-and provides `.display(&self)`.
+atomic64_inc(&pids_over_limit->events_local[PIDCG_MAX]);
+cgroup_file_notify(&pids_over_limit->events_local_file);
 
-Rust itself could actually use something here too - if you're up for
-it, feel free to propose an implementation via ACP (that's just an
-issue template at [2]). It would probably be pretty similar to the
-recent `OsStr` one. Of course it will be a while before we can use it
-in the kernel, but it wouldn't hurt to get the ball rolling.
+for (p = pids_over_limit; parent_pids(p); p = parent_pids(p)) {
+    atomic64_inc(&pt->events[PIDCG_MAX]);
+    cgroup_file_notify(&p->events_file);
+}
 
-[1]: https://doc.rust-lang.org/std/path/struct.Path.html#method.display
-[2]: https://github.com/rust-lang/libs-team/issues
+The current behaviour is quite different from other subsys, such as
+memcg, that make me confused, maybe I am missing something.
 
->  /// Creates a new [`CStr`] from a string literal.
->  ///
-> -/// The string literal should not contain any `NUL` bytes.
-> +/// Usually, defining C-string literals directly should be preffered, bu=
-t this
-> +/// macro is helpful in situations when C-string literals are hard or
-> +/// impossible to use, for example:
-> +///
-> +/// - When working with macros, which already return a Rust string liter=
-al
-> +///   (e.g. `stringify!`).
-> +/// - When building macros, where we want to take a Rust string literal =
-as an
-> +///   argument (for caller's convenience), but still use it as a C-strin=
-g
-> +///   internally.
-> +///
-
-s/preffered/prefered
-
-"when C-string literals are hard or impossible to use" doesn't sound
-quite right - I think it is more common that you're just hiding an
-implementation detail (string type) from the user of a macro. Maybe
-something like:
-
-    This isn't needed when C-string literals (`c"hello"` syntax) can be
-    used directly, but can be used when a C-string version of a standard st=
-ring
-    literal is required (often when working with macros).
-
-> +/// The string should not contain any `NUL` bytes.
->  ///
->  /// # Examples
->  ///
->  /// ```
-> +/// # use core::ffi::CStr;
->  /// # use kernel::c_str;
-> -/// # use kernel::str::CStr;
-> -/// const MY_CSTR: &CStr =3D c_str!("My awesome CStr!");
-> +/// const MY_CSTR: &CStr =3D c_str!(stringify!(5));
->  /// ```
->  #[macro_export]
->  macro_rules! c_str {
->      ($str:expr) =3D> {{
->          const S: &str =3D concat!($str, "\0");
-> -        const C: &$crate::str::CStr =3D match $crate::str::CStr::from_by=
-tes_with_nul(S.as_bytes()) {
-> +        const C: &core::ffi::CStr =3D match core::ffi::CStr::from_bytes_=
-with_nul(S.as_bytes()) {
->              Ok(v) =3D> v,
->              Err(_) =3D> panic!("string contains interior NUL"),
->          };
-
-Thanks for this, will be a nice bit of code cleanup.
-
-- Trevor
-
-(also, v2 and v3 are appearing in different threads on lore (as they
-should), but they're in the same thread as v1 in my email client - any
-idea if there is a reason for this?)
+it's appreciated if anyone could respond.
 
