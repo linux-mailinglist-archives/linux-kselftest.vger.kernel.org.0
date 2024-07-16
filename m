@@ -1,162 +1,199 @@
-Return-Path: <linux-kselftest+bounces-13770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AD37932334
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 11:45:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E90393235A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 11:49:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E09871F237E9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 09:45:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C258AB23647
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2024 09:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7FA197A91;
-	Tue, 16 Jul 2024 09:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0CC198A0A;
+	Tue, 16 Jul 2024 09:49:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF40F197A88;
-	Tue, 16 Jul 2024 09:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B0715EA6;
+	Tue, 16 Jul 2024 09:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721123067; cv=none; b=uGq9GMZ5MZaVcTr20rT6OXUDGcrlDF8ytDy0I5SucF/2ghwmWgdCYObWJiu8DvziDEI8AmlY6hFM70sfoqxUIycVQc3Pn2d1ekC/8omakDXaaYK0qRQcP5bj8DlbmgDqIdwpYil8jZ/eXKfEsON/ZTRTLJXOt3+xjNC4ZGFR5nc=
+	t=1721123349; cv=none; b=TDMeeOtQFKGy3K+TWY4R2XtpJkK9x9M/yVEhY269Tv17tm4jRm3XcedpRqeJnf9tN4JKLYbC16PX+etBT7Rrt8pP6z4nzsv0S9cKfeE+8F/0z90/N3CsqaVwM+UGHWJGopDofnkSvPQ2RB00zZWeAzVj9dg55SWRXjKOOLcYz+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721123067; c=relaxed/simple;
-	bh=bs72eONWEzNKg/aAcLJtG+8QJSvVUqqVXO7myIepjMg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e2WMyryFnWLn52sKEnqIn0nI98ZtmXUtPbHfZR3ZyBESx5AfnJRUYNW80p7+GQHuW5LhvI2bD/N6gZo0wppzrVbvVSTmWhKNFDlxJmZdYl+lV+mI7aJC7oA7XMJYJ+7HGJmUQ+DNnA5R5D1dbzAaYyQOced/AprwGhG88j09bXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 810DF1063;
-	Tue, 16 Jul 2024 02:44:49 -0700 (PDT)
-Received: from [10.162.43.23] (e116581.arm.com [10.162.43.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 081243F762;
-	Tue, 16 Jul 2024 02:44:19 -0700 (PDT)
-Message-ID: <4d5758b8-b1ef-4c6d-8fda-2a7c2d48d975@arm.com>
-Date: Tue, 16 Jul 2024 15:14:16 +0530
+	s=arc-20240116; t=1721123349; c=relaxed/simple;
+	bh=8UvQU7I9knuWhkpzd9TO9Fs/k8V16zg/peOwYTNUXUo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QgKtUNrQkAIttaPf4CLx9xeMyBzEp3hDIy+Re/5bhz3wCnaMozLSB9j5z5blrCaVutbkryl6V967eQIYMXPy0n6VwrhzNePIaKVQtZOjz/7wA31OelixlrAq9gAyJB48IFlimke2+RKqUY1Ersnq9Tnmhc9sy4hzgQyNmpWGR7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e057bdc936fso5240665276.1;
+        Tue, 16 Jul 2024 02:49:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721123345; x=1721728145;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pRQTvYVjx0Y6w3qpoyzLPKWPbAyGp8ArajcCwsaEB18=;
+        b=vvxaKZ692zESgqP/WvRtkSb4pea3vkbR134MeYOFaxvD1pHKdE5d0n1zBuK1wUFk1d
+         SOEeIyvUfC1l5MdMOA7h4C6jau9yxt0Tw2zpLDMxh8TytP3FHGVvfGQsAdExIvt6dZic
+         9SNHiBjzQc3LdWm8ME2tVL7FeU8/L9fE9gBpmQH0nYlOqBe0TC1/Oslk77CUvO1zHY3E
+         OliidOAORXzeHiHD4HBCy8S7n9h0eefMj8c4CsXTZtQf1tCTuWaSAzLqvrUkOmhidCon
+         aKr8q25hL0eCw4eWjMD+ytKIsoGQBUN/e6pt5nFXzfe+yzFtFOy3t7Ea2tFk5LTRMWqZ
+         pIcg==
+X-Forwarded-Encrypted: i=1; AJvYcCXd7wVgKxW2I36bxri0IaAadBU16HAjtZcV3Exeunj4vPQwkvueCnDZ3q7UgWi7jmp2AY0bYi3m2XU22hHXeKIXd4IAAfSFZETH3kAQ6/jV+7wLNhbenaABxwe5Ha0jVW2+21jaE/v0QspZJTwbuZMRH4TcIOv/WeP+G5KUNHf8Hi++YUjUz8rgBAS43BVTdkIQTAQYXLZGtS0UW2nG173D+UB4sGhH9VqOwoW/O2zcnSNdBrbYf3orO14z2WY04Q==
+X-Gm-Message-State: AOJu0Yz9bUvCziP77YdPGk0nJ6V6DqXRwO2Iihjb3r8cTbsgUm2CKiOM
+	Ol7/BE4uPOYJNi/ONlku8LDGTf9KQMf/mYm1CTKqYwnRRfy+0eefXEWIYgBM
+X-Google-Smtp-Source: AGHT+IHDOwQCXxlWls2E2WxUggo4e7W62NofTFzO/4waHMBDxD1Zf7wxldMc/f+Fl559sgNJpfnelg==
+X-Received: by 2002:a25:84c6:0:b0:dff:4a3:2df4 with SMTP id 3f1490d57ef6-e05d56e718dmr1732478276.31.1721123344902;
+        Tue, 16 Jul 2024 02:49:04 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e05a4695bc9sm1175809276.36.2024.07.16.02.49.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jul 2024 02:49:04 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e057bdc936fso5240607276.1;
+        Tue, 16 Jul 2024 02:49:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXgDyR8h2fuF4Bem3aMKDcoht3tPwUfIDktipVKZT16ilBXlxTqMOBwzJ/pEV6KpHQKrfz21fzGuM9fLLUPt69g2xJpOTkw/chjkTRGOs25MgFH+EL/3R6F0SDV7oTq8IYxBAUi0dim5ICHZy+YXoyFDXMfKTGDdxXVyX5KGw2nXDLVSyQBtZNfovbmdUc4Idw7+lktHg2UcSel+VLB0s5DZTDv6XsJPlStgej5l6zLyBdESnqSGI2agW5PSX+PLw==
+X-Received: by 2002:a0d:de04:0:b0:63b:f8cb:9281 with SMTP id
+ 00721157ae682-663817d8a34mr15909167b3.41.1721123342440; Tue, 16 Jul 2024
+ 02:49:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] Add test to distinguish between thread's signal
- mask and ucontext_t
-To: shuah@kernel.org, oleg@redhat.com
-Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
- ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
- Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
- aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240627035215.1527279-1-dev.jain@arm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20240627035215.1527279-1-dev.jain@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240710201246.1802189-1-sboyd@kernel.org> <20240710201246.1802189-2-sboyd@kernel.org>
+In-Reply-To: <20240710201246.1802189-2-sboyd@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 16 Jul 2024 11:48:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV56nezM9cj1bVo4+gqi0OPvKjktu7i4Ov9ZKeyNkoiOg@mail.gmail.com>
+Message-ID: <CAMuHMdV56nezM9cj1bVo4+gqi0OPvKjktu7i4Ov9ZKeyNkoiOg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/8] of/platform: Allow overlays to create platform
+ devices from the root node
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, patches@lists.linux.dev, 
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Maxime Ripard <maxime@cerno.tech>, Peter Rosin <peda@axentia.se>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Linux I2C <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Stephen,
 
-On 6/27/24 09:22, Dev Jain wrote:
-> This patch series is motivated by the following observation:
+On Wed, Jul 10, 2024 at 10:14=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wr=
+ote:
+> We'd like to apply overlays to the root node in KUnit so we can test
+> platform devices created as children of the root node.
 >
-> Raise a signal, jump to signal handler. The ucontext_t structure dumped
-> by kernel to userspace has a uc_sigmask field having the mask of blocked
-> signals. If you run a fresh minimalistic program doing this, this field
-> is empty, even if you block some signals while registering the handler
-> with sigaction().
+> On some architectures (powerpc), the root node isn't marked with
+> OF_POPULATED_BUS. If an overlay tries to modify the root node on these
+> platforms it will fail, while on other platforms, such as ARM, it will
+> succeed. This is because the root node is marked with OF_POPULATED_BUS
+> by of_platform_default_populate_init() calling
+> of_platform_default_populate() with NULL as the first argument.
 >
-> Here is what the man-pages have to say:
+> Loosen the requirement here so that platform devices can be created for
+> nodes created as children of the root node via DT overlays even if the
+> platform bus wasn't populated for the root node.
 >
-> sigaction(2): "sa_mask specifies a mask of signals which should be blocked
-> (i.e., added to the signal mask of the thread in which the signal handler
-> is invoked) during execution of the signal handler. In addition, the
-> signal which triggered the handler will be blocked, unless the SA_NODEFER
-> flag is used."
->
-> signal(7): Under "Execution of signal handlers", (1.3) implies:
->
-> "The thread's current signal mask is accessible via the ucontext_t
-> object that is pointed to by the third argument of the signal handler."
->
-> But, (1.4) states:
->
-> "Any signals specified in act->sa_mask when registering the handler with
-> sigprocmask(2) are added to the thread's signal mask.  The signal being
-> delivered is also added to the signal mask, unless SA_NODEFER was
-> specified when registering the handler.  These signals are thus blocked
-> while the handler executes."
->
-> There clearly is no distinction being made in the man pages between
-> "Thread's signal mask" and ucontext_t; this logically should imply
-> that a signal blocked by populating struct sigaction should be visible
-> in ucontext_t.
->
-> Here is what the kernel code does (for Aarch64):
->
-> do_signal() -> handle_signal() -> sigmask_to_save(), which returns
-> &current->blocked, is passed to setup_rt_frame() -> setup_sigframe() ->
-> __copy_to_user(). Hence, &current->blocked is copied to ucontext_t
-> exposed to userspace. Returning back to handle_signal(),
-> signal_setup_done() -> signal_delivered() -> sigorsets() and
-> set_current_blocked() are responsible for using information from
-> struct ksignal ksig, which was populated through the sigaction()
-> system call in kernel/signal.c:
-> copy_from_user(&new_sa.sa, act, sizeof(new_sa.sa)),
-> to update &current->blocked; hence, the set of blocked signals for the
-> current thread is updated AFTER the kernel dumps ucontext_t to
-> userspace.
->
-> Assuming that the above is indeed the intended behaviour, because it
-> semantically makes sense, since the signals blocked using sigaction()
-> remain blocked only till the execution of the handler, and not in the
-> context present before jumping to the handler (but nothing can be
-> confirmed from the man-pages), the series introduces a test for
-> mangling with uc_sigmask. I will send a separate series to fix the
-> man-pages.
->
-> The proposed selftest has been tested out on Aarch32, Aarch64 and x86_64.
->
-> v3->v4:
->   - Allocate sigsets as automatic variables to avoid malloc()
->
-> v2->v3:
->   - ucontext describes current state -> ucontext describes interrupted context
->   - Add a comment for blockage of USR2 even after return from handler
->   - Describe blockage of signals in a better way
->
-> v1->v2:
->   - Replace all occurrences of SIGPIPE with SIGSEGV
->   - Fixed a mismatch between code comment and ksft log
->   - Add a testcase: Raise the same signal again; it must not be queued
->   - Remove unneeded <assert.h>, <unistd.h>
->   - Give a detailed test description in the comments; also describe the
->     exact meaning of delivered and blocked
->   - Handle errors for all libc functions/syscalls
->   - Mention tests in Makefile and .gitignore in alphabetical order
->
-> v1:
->   - https://lore.kernel.org/all/20240607122319.768640-1-dev.jain@arm.com/
->
-> Dev Jain (2):
->    selftests: Rename sigaltstack to generic signal
->    selftests: Add a test mangling with uc_sigmask
->
->   tools/testing/selftests/Makefile              |   2 +-
->   .../{sigaltstack => signal}/.gitignore        |   3 +-
->   .../{sigaltstack => signal}/Makefile          |   3 +-
->   .../current_stack_pointer.h                   |   0
->   .../selftests/signal/mangle_uc_sigmask.c      | 186 ++++++++++++++++++
->   .../sas.c => signal/sigaltstack.c}            |   0
->   6 files changed, 191 insertions(+), 3 deletions(-)
->   rename tools/testing/selftests/{sigaltstack => signal}/.gitignore (57%)
->   rename tools/testing/selftests/{sigaltstack => signal}/Makefile (53%)
->   rename tools/testing/selftests/{sigaltstack => signal}/current_stack_pointer.h (100%)
->   create mode 100644 tools/testing/selftests/signal/mangle_uc_sigmask.c
->   rename tools/testing/selftests/{sigaltstack/sas.c => signal/sigaltstack.c} (100%)
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 
-If everything is fine, can this patchset be pulled? Thanks.
+Thanks for your patch, which is now commit 98290f295fbcf18f
+("of/platform: Allow overlays to create platform devices from the
+root node") in clk/clk-next.
 
+This causes i2c-demux-pinctrl to fail on the Koelsch development board:
+
+        i2c-demux-pinctrl i2c-mux1: failed to setup demux-adapter 0 (-19)
+        i2c-demux-pinctrl i2c-mux2: failed to setup demux-adapter 0 (-19)
+        i2c-demux-pinctrl i2c-mux3: failed to setup demux-adapter 0 (-19)
+        i2c-demux-pinctrl i2c-mux2: Failed to create device link
+(0x180) with e6ef0000.video
+        i2c-demux-pinctrl i2c-mux2: Failed to create device link
+(0x180) with e6ef1000.video
+        i2c-demux-pinctrl i2c-mux2: Failed to create device link
+(0x180) with hdmi-in
+        i2c-demux-pinctrl i2c-mux2: Failed to create device link
+(0x180) with hdmi-out
+
+and anything relying on I2C connected to these muxes fails, too.
+
+Also, loading the 25LC040 DT overlay[1] on Ebisu using the out-of-tree
+of-configfs now fails, too.
+
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -732,11 +732,14 @@ static int of_platform_notify(struct notifier_block=
+ *nb,
+>         struct of_reconfig_data *rd =3D arg;
+>         struct platform_device *pdev_parent, *pdev;
+>         bool children_left;
+> +       struct device_node *parent;
 >
+>         switch (of_reconfig_get_state_change(action, rd)) {
+>         case OF_RECONFIG_CHANGE_ADD:
+> -               /* verify that the parent is a bus */
+> -               if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS)=
+)
+> +               parent =3D rd->dn->parent;
+> +               /* verify that the parent is a bus (or the root node) */
+> +               if (!of_node_is_root(parent) &&
+
+Parent =3D /soc, so this returns early. Hence of_changeset_apply() [2]
+didn't add the I2C mux bus, causing of_get_i2c_adapter_by_node() [3]
+to fail.
+
+> +                   of_node_check_flag(parent, OF_POPULATED_BUS))
+
+Oh, you inverted the check for of_node_check_flag(); was that
+intentional?  Re-adding the "!" fixes all issues for me.
+
+>                         return NOTIFY_OK;       /* not for us */
+>
+>                 /* already populated? (driver using of_populate manually)=
+ */
+> @@ -749,7 +752,7 @@ static int of_platform_notify(struct notifier_block *=
+nb,
+>                  */
+>                 rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 /* pdev_parent may be NULL when no bus platform device */
+> -               pdev_parent =3D of_find_device_by_node(rd->dn->parent);
+> +               pdev_parent =3D of_find_device_by_node(parent);
+>                 pdev =3D of_platform_device_create(rd->dn, NULL,
+>                                 pdev_parent ? &pdev_parent->dev : NULL);
+>                 platform_device_put(pdev_parent);
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.g=
+it/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.dtso=
+?h=3Dtopic/renesas-overlays
+[2] https://elixir.bootlin.com/linux/latest/source/drivers/i2c/muxes/i2c-de=
+mux-pinctrl.c#L60
+[3] https://elixir.bootlin.com/linux/latest/source/drivers/i2c/muxes/i2c-de=
+mux-pinctrl.c#L64
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
