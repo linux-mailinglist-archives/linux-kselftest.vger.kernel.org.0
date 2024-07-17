@@ -1,62 +1,89 @@
-Return-Path: <linux-kselftest+bounces-13842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EB809340C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 18:49:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5022934128
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 19:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FA411C21824
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 16:49:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FE5D284C1B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 17:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04067181CF2;
-	Wed, 17 Jul 2024 16:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B6A1822C2;
+	Wed, 17 Jul 2024 17:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gsmw6VHV"
+	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="OBTpYwvE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD74C17E8FA;
-	Wed, 17 Jul 2024 16:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5CE3FB1B
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2024 17:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721234951; cv=none; b=kbdlpIOr9lg24IxZsilU15bg3R1rLPJbo2Wf5vMUVPdL6SOIpaxMrXttXO+/VaSt6R9N1B/rhiWo5z5azA6oBm0aPkJaX0CYa+RUaMfMF1qV2Nwhvgmxg6K5SoVE8qhjPrEDf2MQwuQThBnSnPQGTi1BbbMpNYR3Iqzg7EzneHk=
+	t=1721235857; cv=none; b=XIn0wH7WLn0RYabLE0pOVp5qInYRJY0mkJWQLH6RYiYn08gPEN6e9gnfgAV9k5Mq4Vi/sM4eOesL+WxJ2JSloH0ehUW2NcgGT+smUycMkeskW7gGK4rmDF6RAricUv0LpsC3fAgNFnSgPSf6VOzgyW9anTHuq9oyiqdyvQD8BA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721234951; c=relaxed/simple;
-	bh=/GcYn2xIOIxtMHa2a538mtKlhzi2C+ABgdKiJAb2UUQ=;
+	s=arc-20240116; t=1721235857; c=relaxed/simple;
+	bh=mrS2oiESaegLvEzkRpferI0fA006AnGF1b7o4wPWsKM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rRnyYCZnW9IKiMY7lbFzJ24xfN0t+3HL9LFFZ1IhfYiNFoUx1TSQRJrRyG5xUOJUHmo76BECBFG2j28WwzGjB1tgatw1U5Kjffm18uxHWbjGVTbTu7LZ/cd/EsT30N/02R3IYDkv0PkvAzkq7pc/gtKCOr5gxffkMiykoQtT58M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gsmw6VHV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E9DC2BD10;
-	Wed, 17 Jul 2024 16:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721234951;
-	bh=/GcYn2xIOIxtMHa2a538mtKlhzi2C+ABgdKiJAb2UUQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gsmw6VHVyAfb9umtgvpXXnze76ZyOluV6/YdVo9a5bPgHdj20MuhLiOEQguZ1FcJG
-	 t+Hv3eqfsUEs3C2d0iC4oz9hUQJGxnPt3isA/QVfONZIwi3cnX+DMgLZxYd85dk9Gf
-	 fBc2vwOXGiFTkZNZefEVk6j2LFb4LH6HzELPjGo6viiZ9qWHKdsLZulY/uugu8b7Vl
-	 t6GiHFBjYotHSbRuJi7mPkHI/EgG3vtHt/Mii4I8rFmGmlWoxyyObZwnlxLO+lledq
-	 UQHXVD6MxVjNMDsVbyzMWPcDb9RCsFLn9pnz5gC3zpAjpOzP0ky0yk4h3z32bNa+JI
-	 eTNHHdwlbco+A==
-Date: Wed, 17 Jul 2024 09:49:10 -0700
-From: Kees Cook <kees@kernel.org>
-To: David Gow <davidgow@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: KUnit file naming conventions (was Re: [GIT PULL] execve updates
- for v6.11-rc1)
-Message-ID: <202407170944.FFC1A804@keescook>
-References: <202407150921.BD2B798C6A@keescook>
- <CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com>
- <202407161505.A5AE57869@keescook>
- <CABVgOS=pUdWb6NDHszuwb1HYws4a1-b1UmN=i8U_ED7HbDT0mg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ibJ5Islcb3OqyXBUyh2AiQIByoMPX0t59k06t+dNlBB2c7rcyuTeyC0OHoWAh8CeFV1ykSp24Koy+jYA9eAcmiE6XWh1GP+G1vejKm7WTo8kpHrC++rGfR0NgZziyZQHHzrWf4wRoQ2MJXs2ioTQD/SEuuYzM796JkIX2RfpB3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=OBTpYwvE; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6b5db7936b3so39852796d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2024 10:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1721235853; x=1721840653; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRUnGmde0gGroE3rQQ9XsC/MMS7y6d0VThMieKRFaBg=;
+        b=OBTpYwvE9jJp03AZsY2Q1y1Mw2t99iLXjUYaoo6XXB/LLl8RdxsN1mJkVCmQarPV8O
+         Fix4hym+0EHDcnTNn33iCKbb7mqGFFsN2sza+zJNQp+RrAbqSQM+eFrDLBY+MbiGXIv7
+         oWJED627fIT6GUNAyRZLTN1vqik5qzqt8VJpJr9PyL6WGOjP5Cg6zdLe9p4Ss2+pnLqJ
+         jNWfBIKlh4STUqx+c5pTArtiwvQ4KTImdYHDhQjpxOPxktvxFz8EmtraVkXmuN0jg+UD
+         GRG9ybrmqNv9sKp7eBCVKfgSSz/k9UTY3VcOZbocwbE5V4kffX4Nmda6hzfm6JMwaG6y
+         848w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721235853; x=1721840653;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iRUnGmde0gGroE3rQQ9XsC/MMS7y6d0VThMieKRFaBg=;
+        b=fO7X1Vni9NwNKi487uyyxoj6f4rbL6zPQH3vKDIxDRrKC8uejt4vHegoTyNNwQYOma
+         xQP5smdUzYamp4QLOIFI3oMpfMmnuZ8zNgU0NY0M6cs+UCe1ZXKpQ0X15kDHlQMlTGNy
+         ZWw7xqMaX1eU+MexLS9VjzkoefHz6y54VFLBPJgsG3FNeF5dCtOC22iz7UORl3r40u/V
+         88IuaLhUb2eFbp/KbCnsQQvaMadpQGMKqAv6CFR1tmbt9+yPQVyMCDqebayyoI+xvfee
+         TpZCp4M3BKGoPdM91Lok3XoUNzgR+dRfGEh9OIZqmI2Z7pwB9bCQ/lt8U6k48/t/7VBc
+         TqHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqknOra3iIDbJYh5/7uDFWig8yaeQXcKAqWG3B3PD8Xs3lVvi4mG8DO2ISrmMtTCVi1FexbXudd0UW5e3ZfBi+kdC+VrkaP7nLIMATZUE+
+X-Gm-Message-State: AOJu0YxQG4x8AAZRFLUHzz0zI11UaCiDz/zRt1iVeMKDcwISBXJ5fik2
+	PRA2LTOFsk5kFn/b596wF3sZUE7VvS+/hiU97uBEDUC03Q+BtdCcBXw2Wev1qBU=
+X-Google-Smtp-Source: AGHT+IFWhIiuqTrPrLgEKk9yyoBUOyaQC4cIo3mPC9fwvmoBNcNRFbthBE/KZxwdgchUpEIo5TEs+A==
+X-Received: by 2002:a05:6214:5198:b0:6b5:6a1:f89a with SMTP id 6a1803df08f44-6b78caf6152mr37393066d6.2.1721235853523;
+        Wed, 17 Jul 2024 10:04:13 -0700 (PDT)
+Received: from localhost ([2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b79c4f68f7sm143776d6.40.2024.07.17.10.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jul 2024 10:04:13 -0700 (PDT)
+Date: Wed, 17 Jul 2024 13:04:08 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: Tejun Heo <tj@kernel.org>
+Cc: Michal Hocko <mhocko@suse.com>, David Finkel <davidf@vimeo.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeelb@google.com>, Shuah Khan <shuah@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
+Message-ID: <20240717170408.GC1321673@cmpxchg.org>
+References: <20240715203625.1462309-1-davidf@vimeo.com>
+ <20240715203625.1462309-2-davidf@vimeo.com>
+ <ZpZ6IZL482XZT1fU@tiehlicka>
+ <ZpajW9BKCFcCCTr-@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,111 +92,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOS=pUdWb6NDHszuwb1HYws4a1-b1UmN=i8U_ED7HbDT0mg@mail.gmail.com>
+In-Reply-To: <ZpajW9BKCFcCCTr-@slm.duckdns.org>
 
-On Wed, Jul 17, 2024 at 02:28:15PM +0800, David Gow wrote:
-> On Wed, 17 Jul 2024 at 11:53, Kees Cook <kees@kernel.org> wrote:
-> >
-> > On Tue, Jul 16, 2024 at 01:10:41PM -0700, Linus Torvalds wrote:
-> > > On Mon, 15 Jul 2024 at 09:21, Kees Cook <kees@kernel.org> wrote:
-> > > >
-> > > >  fs/exec.c                                   |  49 ++++++++--
-> > > >  fs/exec_test.c                              | 141 ++++++++++++++++++++++++++++
-> > >
-> > > I've pulled this, but *PLEASE* don't do this.
-> > >
-> > > This screws up my workflow of just using tab-completion for filenames.
-> > > As a result, I absolutely abhor anybody who uses the same base-name
-> > > for different things.
-> > >
-> > > No, this is not the first time it happens, and it won't be the last.
-> > > And we had that same horrific pattern for fs/binfmt_elf_test.c from
-> > > before, and I didn't notice because it's not a core file to me, and I
-> > > seldom actually edit it.
-> > >
-> > > I would suggest that people use the patterns from lib/, which is
-> > > admittedly a bit schizophrenic in that you can either use
-> > > "lib/kunit/*.c" (probably preferred) or "lib/test_xyz.c".
-> > >
-> > > (Other subsystems use a "tests" subdirectory, so we do have a lot of
-> > > different ways to deal with this).
-> > >
-> > > Any of those models will keep the unit testing parts clearly separate,
-> > > and not mess up basic command line workflows.
-> > >
-> > > But do *not* use this "*_test.c" naming model. It's the worst of all
-> > > possible worlds.
-> > >
-> > > Please?
-> >
-> > Oh, sure, no problem! I have no attachment to this convention at all;
-> > I was trying to follow the Kunit docs:
-> > https://docs.kernel.org/dev-tools/kunit/style.html#test-file-and-module-names
-> >
-> > If I look at the existing naming, it's pretty scattered:
-> >
-> > $ git grep '^static struct kunit_suite\b' | cut -d: -f1 | sort -u
-> >
-> > /test/*          7
-> > /tests/*        47
-> > *-test.[ch]     27
-> > *_test.[ch]     27
-> > test-*.c         1
-> > test_*.c        10
-> > *-kunit.c        1
-> > *_kunit.c       17
-> > kunit-*.c        2
-> > kunit_*.c        1
-> >
-> > Should we go with "put it all under a 'tests' subdirectory" ?
+On Tue, Jul 16, 2024 at 06:44:11AM -1000, Tejun Heo wrote:
+> Hello,
 > 
-> I think that's probably best overall. I still think it isn't quite as
-> elegant as the suffix, but I'm happy to sacrifice theoretical elegance
-> for a practical reason like this.
-
-Okay, I will send a follow-up patch to rename things.
-
-> > So for fs/exec_test.c and fs/binfmt_elf_test.c, perhaps fs/tests/exec.c
-> > and fs/tests/binfmt_elf.c respectively?
+> On Tue, Jul 16, 2024 at 03:48:17PM +0200, Michal Hocko wrote:
+> ...
+> > > This behavior is particularly useful for work scheduling systems that
+> > > need to track memory usage of worker processes/cgroups per-work-item.
+> > > Since memory can't be squeezed like CPU can (the OOM-killer has
+> > > opinions), these systems need to track the peak memory usage to compute
+> > > system/container fullness when binpacking workitems.
 > 
-> We might want to use both the directory and the suffix, e.g.
-> fs/tests/exec_test.c, because:
-> - it makes sure the module name contains 'test', so it's obvious that
-> it's a test and it is less likely to conflict.
-> - this matches what drm is doing, and they've got the most tests thus far; and
-> - we won't be renaming the file, just moving it, so it's less likely
-> to cause friction with workflows, etc.
+> Swap still has bad reps but there's nothing drastically worse about it than
+> page cache. ie. If you're under memory pressure, you get thrashing one way
+> or another. If there's no swap, the system is just memlocking anon memory
+> even when they are a lot colder than page cache, so I'm skeptical that no
+> swap + mostly anon + kernel OOM kills is a good strategy in general
+> especially given that the system behavior is not very predictable under OOM
+> conditions.
 > 
-> On the other hand, it has few disadvantages:
-> - we end up with the same prefix issue with module names (e.g., for
-> those who have tab completion for modprobe);
-> - the module name can be changed in the Makefile anyway; and
-> - it's ugly.
+> > As mentioned down the email thread, I consider usefulness of peak value
+> > rather limited. It is misleading when memory is reclaimed. But
+> > fundamentally I do not oppose to unifying the write behavior to reset
+> > values.
 > 
-> I'm leaning towards tolerating the ugliness and keeping _test suffixes
-> on the files, at least for existing tests, but could be persuaded
-> otherwise. I'd even grow to accept a test_ prefix if I had to, though
-> that'd make my tab completion terribly boring.
-
-I'd been using _test for #included files, and _kunit for kunit modules,
-but perhaps this isn't a needed distinction?
-
-> > And for the lib/*_kunit.c files, use lib/tests/*.c ?
+> The removal of resets was intentional. The problem was that it wasn't clear
+> who owned those counters and there's no way of telling who reset what when.
+> It was easy to accidentally end up with multiple entities that think they
+> can get timed measurement by resetting.
 > 
-> Sounds good to me. I'd rather not put them in lib/kunit unless they're
-> actively testing KUnit itself (which, under this scheme, would want to
-> be in lib/kunit/tests).
-
-Right -- I didn't want to confuse things between kunit itself and kunit
-tests, so I too prefer the "tests" directory name.
-
-> > Then we can update the docs, etc.
+> So, in general, I don't think this is a great idea. There are shortcomings
+> to how memory.peak behaves in that its meaningfulness quickly declines over
+> time. This is expected and the rationale behind adding memory.peak, IIRC,
+> was that it was difficult to tell the memory usage of a short-lived cgroup.
 > 
-> Even if we don't rename existing tests, we'll probably want to update
-> these just to avoid making the problem worse.
+> If we want to allow peak measurement of time periods, I wonder whether we
+> could do something similar to pressure triggers - ie. let users register
+> watchers so that each user can define their own watch periods. This is more
+> involved but more useful and less error-inducing than adding reset to a
+> single counter.
+> 
+> Johannes, what do you think?
 
-Sounds good.
+I'm also not a fan of the ability to reset globally.
 
--- 
-Kees Cook
+I seem to remember a scheme we discussed some time ago to do local
+state tracking without having the overhead in the page counter
+fastpath. The new data that needs to be tracked is a pc->local_peak
+(in the page_counter) and an fd->peak (in the watcher's file state).
+
+1. Usage peak is tracked in pc->watermark, and now also in pc->local_peak.
+
+2. Somebody opens the memory.peak. Initialize fd->peak = -1.
+
+3. If they write, set fd->peak = pc->local_peak = usage.
+
+4. Usage grows.
+
+5. They read(). A conventional reader has fd->peak == -1, so we return
+   pc->watermark. If the fd has been written to, return max(fd->peak, pc->local_peak).
+
+6. Usage drops.
+
+7. New watcher opens and writes. Bring up all existing watchers'
+   fd->peak (that aren't -1) to pc->local_peak *iff* latter is bigger.
+   Then set the new fd->peak = pc->local_peak = current usage as in 3.
+
+8. See 5. again for read() from each watcher.
+
+This way all fd's can arbitrarily start tracking new local peaks with
+write(). The operation in the charging fast path is cheap. The write()
+is O(existing_watchers), which seems reasonable. It's fully backward
+compatible with conventional open() + read() users.
 
