@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-13850-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2B049343BA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 23:16:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C73593441B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 23:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C93171C21FC9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 21:16:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE8E5B23B8B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 21:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A907B184124;
-	Wed, 17 Jul 2024 21:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D65C18A92D;
+	Wed, 17 Jul 2024 21:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="m1jF9nTT"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="E5gEKTl6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BCE1CD26;
-	Wed, 17 Jul 2024 21:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3CD18F2DD;
+	Wed, 17 Jul 2024 21:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721251014; cv=fail; b=EbEGxPP0C9FLUhjO8ocnQ4dmZi+7zetDtAbcPz5uPeK/bL7H1M/DbP5p/tkjzNytpmcTpkIEHTxXtgUByEGY8+dcaIdHzcut1E/oI4bEA3EKVb2waPvCBPUHw5jArhp87scTwcNU5RHq4AjzqZcQuXnSKdSZWswe7ZBxE3Xulvw=
+	t=1721252682; cv=fail; b=j/9Oi1OE0iXGQ9bDRgeVyh/9W8bOWVuOqb9g8oAH0LyA0XJquwwAt++Hb4LxhyDCWZgBGCCfjSH/eiI1ZFT/JJbo5lDcYpW5n2WJroSFwE4hhyaf3w0dYs29HhVJiR0fuyLj/E3PJeD2cBbU26z3N7kh754YgZKp/6Q5brv+OSs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721251014; c=relaxed/simple;
-	bh=c2Y5+izUQNZ/22R9H3XP3aYUHoYtanVZKkJ7mfpYW2o=;
+	s=arc-20240116; t=1721252682; c=relaxed/simple;
+	bh=y3TI4OEzU2WQ62UQSspbzJuwEVkhusYiu1GN8Ws1boM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TPjyH8JJX1JuuMMhUqrZgxdaCMWBzRgN0sv3gA6vIjrsIsU2v2vakG5iRowflxUb0W2/z2rzDPsNFuo4e0FciVveG8BcTyuR/h1E/aPru0HfH4nSApE1+ZQ0ZpLIn9eJkFM1Gf5gz0QbfQfpcbUXJpIKK+FWVxij8jtsss2N5XE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=m1jF9nTT; arc=fail smtp.client-ip=40.107.220.48
+	 In-Reply-To:Content-Type; b=SpP1vcjGdEfa67X5llg/anAkc0tAqtGaj+ac7XuuHFBZorB+YMhf9+uz9fQi8uyApgnnBbbEX/T+ky0r46XpUxAFXEVlxCdLwIs4Q6VbNOaDHGIKBScKaaL0xuvtTRZyWOwfpotLqe2NwA9fFjEvjdixyVZMdnSxt5Jx96CtL5s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=E5gEKTl6; arc=fail smtp.client-ip=40.107.237.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=npikMYvo+ikB4hkY9QsxjzU6KOvpOCV/S8obucdHuPieskVhLfWihF7gtBYQABOuNuMJfqolHIjGasR89JmP6Sl4A8yzKSomTlQV40dYgLnWaX/8tyLvoMfAdIbp+iHM0pnUZZa00mfH9UohUppcOcjW+ixXeUnZPHFy6+mSpbsnhpk6T6G4go987kOoKLUZwclNAEkNN/sw12ETcF0dlDr9QdWx8qqyicR+ekMglZ1kgHSlSKAlHihRlhB234glrf18pezW8oSHJ0ceV2Pjh+/+ja+U7wbrnegpDy2q3ORfWdBwUyYRL3HVm91d88a2Ve+RLafXwbii7kboFr0d0w==
+ b=Tbmp1jpETIcfRtDuPPtSgSOE7Jl5LOS0NyJ7lzOaPEqkQYny3TTi3Bb4KdRrp+3gUx7cB6ivGPIS8yHBldLuNkO5fvHtiD6gus+2HdEZO5cXjNV3LT5WC+7GFYVKt+fD8WRtgjRSK72ePKf+LSpvjWAqN7NoPrYK9ZwHl1ieud4dDxnTYpbWsK0jxKTJtWYXu7g5MrLYXFgXE4Q0+pBMwFxslCo40jqw16sgcccNGVzsEtsLTccNqGqu6qil5aHOsuWeFc3D27D3hRsA0nckGUGnd22eDIR68RDpjK7zjsGyYOYrX6KqiALF5CDJG4U8MOhdgAEWnifpnhIHi1hHFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wFTxA26qxX0LEsqL2b/GEilvfnN7opf8orVNozHUTvs=;
- b=LwnQHcwVlFxSZS88/tlNk3t0WPTtG/prgHLSlsY+wjIsSdAevXneB4WA9WJdzRNTn+kZ08w8Z7xs++0CKJTixF303pmuBlrNWbdSNkxPY+2jUgGBquCm+SKek9eFP+QFw7h44iHjpYOnfBtngAplCUg0QzFTkajcxjjvyNs5U8jFPoNb+IB4vefPpEloJq7OLnJhAaRlFu43OOKZ0p9bN/PA07ikhBLnNdTtIcmh5wG54pPnMlE0bAVUDlB/IU7/colu1AvpCk+rKDv2thVi9WMXf3JqXD7BFdm9BnFFheDvtd0ZPk0n6fXkS98C4xu0wl6G6owl+ms7/LbFSpZjcQ==
+ bh=y4hTQdtmX1b9JC/f9Onhh1BVoVF8W1Feq3PcSOgsUXA=;
+ b=MVWePSle9wr2NVv3aU0HQ8CrUIkS4Moqwj+M4WOaOCrhlbvcZyHHmrxngb4bbVEhy52tLosDTFQMBs8fMuRgueYGl6PuJ41CT84EI5b6vqCDsZzocP23jpJnBav73Gaa/47c9+7z+6g4auitXupPup4TU9+BOPoj4/m8Is8s3spf0/Kx22XGrHGRsdmI+8ooFkd9ZfTOvosqD0kIENFrQp0k/7MUfUT+Ijyd4pxcWz3BjUXta6dsWkogIONrzY9pifQ2+1PRT7ZpxL0Z3iwLEiAQd7bOZ93M8uu8DadqEoNWA61v4Ls6P0Qh17rX1mjP5+1+oN5z4RfrPDEiL4guqQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=collabora.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wFTxA26qxX0LEsqL2b/GEilvfnN7opf8orVNozHUTvs=;
- b=m1jF9nTTWaorLf46Fd7O6/cWu4X19EmLvo1zt5dSYHjmsFg4Sw231L0tweCWuy010eQ/8YbZfbg2b4KAU/BSzH92txofpjPmY5BBktzychvTbLyoMJp/Ty1GULWfIt9uFyv5FGRxJrZGAdQ38FOh6t6hiTFqZoM5Q8xn1cKZ4ZMovBbmQ+THNA3wzmUyi3t9g0IvSNaXIDU61uvev6xpGG1r9QNxb0OX7bFdvC1AUN0mgj0uTL92KoEhJOcT36N8BJ0Xqv9kJtY4cgQhN03cARfW38iw+ZF9RUQbIsKS32R9PT0WeJr/I+490ds2M/FiL12WkbPoaPCMbr758MXwxQ==
-Received: from PH7PR17CA0049.namprd17.prod.outlook.com (2603:10b6:510:325::26)
- by SN7PR12MB6767.namprd12.prod.outlook.com (2603:10b6:806:269::8) with
+ bh=y4hTQdtmX1b9JC/f9Onhh1BVoVF8W1Feq3PcSOgsUXA=;
+ b=E5gEKTl6kwhF7u/LrV+fhGdiZpV7Dm8cr7x4a5K6JzHY3sTbMNq+mjv6IgJUWJvv2IciL0g0XELX01UgaqS27oovbgggxIxoGVkPI3V8/TqQTBuimfKQJvDnevSP24UeSA+o1rRWfqt9dLxWCnV+zvryl3SYo3BSzty5kuy3XeV+niLO17f0Fmqvas4vFdvZ5meZqaNQ80cwXBeOH5UIvAE3hIEMTUxEdo5/GJgP1zHqdECTmMPZxkHUD0Yf9t7MsIRN8h9Pn6nOh2Q2ivvA/dhISaq3N4Gizj7a/AZsqLqnfhy975RtYvfL0FCnU9ZAhVwDwfESF4Q7Zbm/p2cLgw==
+Received: from MW4PR03CA0078.namprd03.prod.outlook.com (2603:10b6:303:b6::23)
+ by SJ2PR12MB9161.namprd12.prod.outlook.com (2603:10b6:a03:566::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.22; Wed, 17 Jul
- 2024 21:16:48 +0000
-Received: from SN1PEPF000397B3.namprd05.prod.outlook.com
- (2603:10b6:510:325:cafe::50) by PH7PR17CA0049.outlook.office365.com
- (2603:10b6:510:325::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.15 via Frontend
- Transport; Wed, 17 Jul 2024 21:16:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Wed, 17 Jul
+ 2024 21:44:33 +0000
+Received: from SJ1PEPF000023DA.namprd21.prod.outlook.com
+ (2603:10b6:303:b6:cafe::e7) by MW4PR03CA0078.outlook.office365.com
+ (2603:10b6:303:b6::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.28 via Frontend
+ Transport; Wed, 17 Jul 2024 21:44:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF000397B3.mail.protection.outlook.com (10.167.248.57) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ1PEPF000023DA.mail.protection.outlook.com (10.167.244.75) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7784.11 via Frontend Transport; Wed, 17 Jul 2024 21:16:48 +0000
+ 15.20.7784.5 via Frontend Transport; Wed, 17 Jul 2024 21:44:32 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 17 Jul
- 2024 14:16:32 -0700
+ 2024 14:44:18 -0700
 Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 17 Jul
- 2024 14:16:31 -0700
-Message-ID: <a5005f1e-5bbc-49f2-bd1f-4c4878b98d26@nvidia.com>
-Date: Wed, 17 Jul 2024 14:16:30 -0700
+ 2024 14:44:17 -0700
+Message-ID: <5d31907f-1ba0-49ad-968d-52991d3268b3@nvidia.com>
+Date: Wed, 17 Jul 2024 14:44:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,149 +84,139 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: KUnit: Update filename best practices
-To: Kees Cook <kees@kernel.org>, David Gow <davidgow@google.com>
-CC: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>,
-	Jonathan Corbet <corbet@lwn.net>, Linus Torvalds
-	<torvalds@linux-foundation.org>, <linux-kselftest@vger.kernel.org>,
-	<kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-References: <20240717210047.work.412-kees@kernel.org>
+Subject: Re: Converting kselftest test modules to kunit
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>, David Gow
+	<davidgow@google.com>
+CC: Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "open
+ list : KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, "open
+ list" <linux-kernel@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+	"kernel@collabora.com" <kernel@collabora.com>
+References: <327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com>
+ <CABVgOSmD6j2OK1WXXcO+fTRN7PSpMFph8BT3Unko0c+Bv+3bjA@mail.gmail.com>
+ <2a5b0ce2-cb82-4a23-bca6-f402cc13627e@collabora.com>
 Content-Language: en-US
 From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240717210047.work.412-kees@kernel.org>
+In-Reply-To: <2a5b0ce2-cb82-4a23-bca6-f402cc13627e@collabora.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000397B3:EE_|SN7PR12MB6767:EE_
-X-MS-Office365-Filtering-Correlation-Id: d9113c80-0376-4134-50be-08dca6a5c50f
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023DA:EE_|SJ2PR12MB9161:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f720cd3-3ba8-47cd-7b4c-08dca6a9a525
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|7416014|1800799024;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?N28yRFZuWnJWOU94d1l1TkYyNzlkaXhCc1VqbnlxVkM0N3M0SHRMTzdpUlhQ?=
- =?utf-8?B?WXc0amNjY1hXMUhlcHFjdWJTcUNkSVdRZFdSN25YVDYrc2JuRnRjNG5NTXE5?=
- =?utf-8?B?VnVkcThkWkhaeFo0d3lJYmQ5TTJtcEdjNWZqM3JuZ2ZjbWQxcE1YYXhRalFh?=
- =?utf-8?B?TkZmWEU5RDh4Nys4UG1aN2lQREJGaTdFanpiNE5CR0NhRUg4SXlSQ21SMk9S?=
- =?utf-8?B?VENnWVMyUnA2WlJVRWtWeHYrYjZ3cUZNWjQwUnczYmE0TmtKWlprY0tVb1ZW?=
- =?utf-8?B?YUo3c05rVjkzMm9XaEFaRTluZUFDZ3RFTTYrMWg2MklkNjMvOGVxVk1FNVAx?=
- =?utf-8?B?Z3dyWEFYRU5kbkJXVVpFaXBOVldkdFVnRGZkYTA3Mi9Mb291UmxvenNTRTE4?=
- =?utf-8?B?NGdRYU9Qc3dra2drTUoyUWNzMDZKWnhTN0xjRExqcUg3TFF4QmtMcjVOV2da?=
- =?utf-8?B?dndSRVNUOGJYc1lYVHJ0aGYraVJBZi9nSGlRY1I1NXpSS29JUGFtRjN0d1pq?=
- =?utf-8?B?WlpLS2prS2NrM2hpY3dxUTZjMUZCdjB3V1FSYzlPLzVZOEMrQVlKcU1qUTF1?=
- =?utf-8?B?NTRWa3VHakVQN1VHcEtiQ0EzV05yQ1ZRdHFQa2ZTVXZjdHl3ZFQxVU9sMERk?=
- =?utf-8?B?dG1QcnhUTE9mYlR1ZUptd2VUTWZnd1ZmMCtEa2RwM3BObmJ1T1JuL3A5YTNT?=
- =?utf-8?B?QW5pS1h6amZLZXplMk9GMmI5R1AvTjFaQis4cmlsNHhmL2VWREhvOG15dWlp?=
- =?utf-8?B?SVN6eTlBYXBscUlONWFFWXAwSGJoN2cyY3Uzd3F0U3UwRXkxcW9iVjFMVHdZ?=
- =?utf-8?B?MENwTGp4RzhwMHlzMHNScHlkRGVPUlVwenlBb0JzYXRpejJxTFlqVWpmUVY1?=
- =?utf-8?B?L0dqSXdCNUxNczNpc0x1dW1relE2T0NvOXBjVm9ySlRaeXR6TWg5WStIN1Mv?=
- =?utf-8?B?a0NRa0pteVdVVC9xMTNUb1JvZTVhRnNvK1UxRGNvY2pkZEY1T3VyODJDZXRS?=
- =?utf-8?B?OWxuakFJUVMrSVRRZXJ1MkxkRC94M2JUdUw2clNrRXJlVFZVSEd4NGdxTktk?=
- =?utf-8?B?dmZXc09zTEI5b2JXdEMwbWNRakJrb3phK3A5UmpMWmJZRnl0eGJ5bHp5VGZu?=
- =?utf-8?B?RVZsQnZ2MFI0b3AxUWQ4c1B0UWJmayszdU5SbjFRTStGSTBXQzZIc3hzT25C?=
- =?utf-8?B?bTFJTXJiLzZacXZOWU8rOTA5QzhmOG1aQUh6V29OZGVzcGlVd3FaM015RjJW?=
- =?utf-8?B?OHNmbWozVE5KMTYyamRpWGdjd1lpZzBNTGo4Vm9ZSW5IVEEzdjdFMm1lZ2dY?=
- =?utf-8?B?R3NOU1RUMGFtSGQ2VlFFZnVUMnc4Z0c2NVUrQW9WOG5OM1hGWk5tQ3hZUjAr?=
- =?utf-8?B?Z21aZUxkSXBabHhMZVNTQmQwNittU1hQcGFBQTNNNHhucnFLbkhHMEtyOTln?=
- =?utf-8?B?YW96b0t0RzFUZUJIWGE1SUNDWktRNmhEb05tZFlhbjRwM2J6M1VuU3hYbFlQ?=
- =?utf-8?B?VmZuT1ZSS1JkOUlJWXpxUnJPUS9TVFFqVWsySk9wQVh4Qlk1ZDY3WWc3VkNE?=
- =?utf-8?B?Rm1SQ3hWMUljN3EvNTFQVnlNZis5bEMveXZranNUV3djMWpwaUh5VDBrYVhi?=
- =?utf-8?B?QTBtUEV2eXJkdENqTzBJc2RSNDBacnQwcjFXMlhXZzU1ZWxaOXd2OU14QU1I?=
- =?utf-8?B?NjFpaGF1Z0NDVTQ1eFB0eU10OUNRekpaaDlHODNJQXpSRTJRdTlRc1lNenMw?=
- =?utf-8?B?NGhQaGlYQ2t1cWVBVUthNzFPS3A1SnJCVlIxWStSNUtwRjY5M2pUdExJNUMw?=
- =?utf-8?B?c1gxNzZ1RmpkeTZTaVRvYlZ3d21jMUo4WmtBRTF3SVU0VU1UWVhUcHpQai9H?=
- =?utf-8?B?Y2ZaZkpDRytiSDNSR20ySlBKbXF0Ym0xbE9tU0VDL0h4UGxTUS9SNVF5dHBy?=
- =?utf-8?Q?AkkwON0jtcOllnXiphfq7boo+FcJG4F0?=
+	=?utf-8?B?ZmVOUGtpKzdjVDMyblA1aXlwUE8xSHZvSnRONk1QSWRURzZZSGpnSlFXM1Rh?=
+ =?utf-8?B?NmYyQnFtZ1p4UFBqME1EUkRqM2t4RnR2MHFVQUoxK3h5cmdpUWpqZTZjYlJQ?=
+ =?utf-8?B?RUJGMUM1SklCeDNwWlZBalJ1YVRNWmFOa2l0bUVEZmprYkQ3R0wwU0NNZ2Zm?=
+ =?utf-8?B?TzFFdW41Nm9VYloyRG1qM3kzUlBiTDFGbk01WUp4NHdiUlZhS2t2eXh1QlZk?=
+ =?utf-8?B?RnlFZytCVitUYkp1VE82TnVoSXBSYUZ2TjNoVko2MjJtL2ZyTnlJeGxNVzV4?=
+ =?utf-8?B?RUdhbU1VbnlqTDcxcVJXcU9uWSs4QVpqRGp5Wk8wUFczTEVHM2pKdGRsU3Rl?=
+ =?utf-8?B?a1dKcTNmaHl0TmJFRkZ5OEVIU2RxOHFvdmRXSUFnSUdNSDhsRTVnSHVhbFZP?=
+ =?utf-8?B?c3NVWTdJYk1UYzdxV2NIQU1zYWNRSmtTQlljUzNWVWlDYlo3SitRa08rNGYr?=
+ =?utf-8?B?elVwYUpMTDJ0TXluOXRtMVpUaUZxcmM2RGtWWGtGR2hoNHkwQWRDSGFqck9L?=
+ =?utf-8?B?dG5pNU1HSGZ2MGNBaXRkWnJxSldoUUtsc1QwV09qVTdmOHVIVDhIMExBbGZZ?=
+ =?utf-8?B?ZnFEVU5BZGtSejNydzNhTTZTaXdyRi9YNGU4VzhHdG0yZFlFWVFwS1V2SUFZ?=
+ =?utf-8?B?UXRHeXg4OTFqRmJpWlozSnNnVEdxaEJNOXAvY2l5QmN0bk1jbkN4WVJ1eU5Q?=
+ =?utf-8?B?Q0hGMHdyOEtESUFyd3ZvRUNJeGlaeDZRTnVwa1Y3M1RVa3U5Ym9zQkt3RDEv?=
+ =?utf-8?B?UGpRNHpPOGtQejUrcmxaS0tRN0k5UzhDQUtQUTNBZkVHUUkyRUNoQzVXd0Qw?=
+ =?utf-8?B?VkVrcGd4T0tIOUNxOEc1dXA2dkg4ZURiRFNXaFFRcTRuV3h0VWp4Z2lUakVX?=
+ =?utf-8?B?ek5SUUN4NzlJNnB0ZjJiMGdGTXlpdTBJTWliZHRiM3lQTjQ2WXdBYSswaVVB?=
+ =?utf-8?B?UmkwOHhLY1ZBL1BHVXFIeDNGOEdnSnByek9SSkN3MURKMU9UUFgzYkJEMTFL?=
+ =?utf-8?B?UWhnMmtqbTgyM285VVpkNVF5Wm1md0FlYVlldUFjakZ0YXN3bFV4TEtVdDBi?=
+ =?utf-8?B?UGtjWVl0a1YzUmhyZ3plYmRYR2MyVitPM0tyUEVjV1JuRythSlV4azFDVUx6?=
+ =?utf-8?B?VXRLUmNmQ09ERVZzMDhFYTB4YTdndTJjMXd5UVRpeDRwL3YweEhYcEkrNkND?=
+ =?utf-8?B?ZloxTUwzMTN0TDhKS2FNZmt2eUExWWtrc3JKU3cwbHp2QU9VM05oZGZkRTlM?=
+ =?utf-8?B?ZWlKR1ZLUlkyd2FranhwV0dWUGVLTVRha0cyQnhiM1Q0QnVGV05nSUkzRlIy?=
+ =?utf-8?B?d093SHJpZFV4dEhPRGtMQW9VRk5YWERSUDUzUjFsUTlnQ0k4SFFnOEZnNXZV?=
+ =?utf-8?B?UTdYSi95WWczaXhLbkgwZHIySjIvVGtnektwc3BZOHNubHhEYk4rZnJJdU1I?=
+ =?utf-8?B?MWVTS0FoTWFXQmNqNWpIbnZsTmFOdjVMWFNoVFMvNEdGS2pvVkx5L29MSFpo?=
+ =?utf-8?B?QzRNYTBDSlFVSDFYK0Y0cUxOMURkaEZzUDVybnhzSk1OWi9RUjR0R1NTWW5I?=
+ =?utf-8?B?a1pNZmluWmcraTdYVDRTT0YyOWJQUGF4U01aYUZhRHpHWXFpeHB2WGhHT2or?=
+ =?utf-8?B?QVE4bDAySEF2SzlZc0I5a01XakNYZXN3LzBybHgyY1NCNjR1bEtyS2tNYjIy?=
+ =?utf-8?B?b09Ia1l2UndwMG1HSkZwZzVzdlJ0dTZRUVhOdjI2YVdrQy80Mk1DZ3AzSUFv?=
+ =?utf-8?B?cDVKSGZyMjh5QmZlS2toem8wcW94MDYyaUNycHIvbmxYbXdIem45dkJsVlRO?=
+ =?utf-8?B?RHRyRVQ5VVdZRE1DVEtrTWZQelZDaUp3d3l3UVBDbllya213K01vdHJPUFpL?=
+ =?utf-8?B?Y0Z0RzQwSU9ROStKUTN0L0kwOHZMblEwMVREUldwNkh4UVN5M2NjSFJKUHJJ?=
+ =?utf-8?Q?2go6N6qkQPGbI4OIRExiWfKTOnwSDSls?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(7416014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:16:48.4291
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:44:32.9836
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9113c80-0376-4134-50be-08dca6a5c50f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f720cd3-3ba8-47cd-7b4c-08dca6a9a525
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000397B3.namprd05.prod.outlook.com
+	SJ1PEPF000023DA.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6767
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9161
 
-On 7/17/24 2:00 PM, Kees Cook wrote:
-> Based on feedback from Linus[1], change the suggested file naming for
-> KUnit tests.
+On 7/17/24 3:47 AM, Muhammad Usama Anjum wrote:
+> Hi David,
 > 
-> Link: https://lore.kernel.org/lkml/CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com/ [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: David Gow <davidgow@google.com>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: Rae Moar <rmoar@google.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-doc@vger.kernel.org
-> ---
->   Documentation/dev-tools/kunit/style.rst | 21 +++++++++++++--------
->   1 file changed, 13 insertions(+), 8 deletions(-)
+> On 7/16/24 12:33 PM, David Gow wrote:
+>> On Mon, 15 Jul 2024 at 18:09, Muhammad Usama Anjum
+>> <usama.anjum@collabora.com> wrote:
+>>>
+>>> Hi Kees and All,
+>>>
+>>> There are several tests in kselftest subsystem which load modules to tests
+>>> the internals of the kernel. Most of these test modules are just loaded by
+>>> the kselftest, their status isn't read and reported to the user logs. Hence
+>>> they don't provide benefit of executing those tests.
+>>>
+>>> I've found patches from Kees where he has been converting such kselftests
+>>> to kunit tests [1]. The probable motivation is to move tests output of
+>>> kselftest subsystem which only triggers tests without correctly reporting
+>>> the results. On the other hand, kunit is there to test the kernel's
+>>> internal functions which can't be done by userspace.
+>>>
+>>> Kselftest:      Test user facing APIs from userspace
+>>> Kunit:          Test kernel's internal functions from kernelspace
+>>
+>> Yes: this is how we'd like to split things up. There are still a few
+
+Me too. It works.
+
+>> cases where you might want to use kselftest to test something other
+>> than a user-facing API (if you needed to set up some complicated
+>> userspace structures, etc), or cases where KUnit might be used to test
+>> something other than individual pieces of functionality, but that
+>> categorisation is a good start.
+> Yeah, makes sense. It is helpful to find out what others think. I'll be
+> back with changes.
 > 
-> diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-tools/kunit/style.rst
-> index b6d0d7359f00..761dee3f89ca 100644
-> --- a/Documentation/dev-tools/kunit/style.rst
-> +++ b/Documentation/dev-tools/kunit/style.rst
-> @@ -188,15 +188,20 @@ For example, a Kconfig entry might look like:
->   Test File and Module Names
->   ==========================
->   
-> -KUnit tests can often be compiled as a module. These modules should be named
-> -after the test suite, followed by ``_test``. If this is likely to conflict with
-> -non-KUnit tests, the suffix ``_kunit`` can also be used.
-> -
-> -The easiest way of achieving this is to name the file containing the test suite
-> -``<suite>_test.c`` (or, as above, ``<suite>_kunit.c``). This file should be
-> -placed next to the code under test.
-> +Whether a KUnit test is compiled as a separate module or via an
-> +``#include`` in a core kernel source file, the files should be named
-> +after the test suite, followed by ``_test``, and live in a ``tests``
 
-I read the previous discussion in the other thread and thought about it.
-And ran some kunit tests on baremetal. Delightful! I love this approach.
+At some point we could connect up the two systems, without really
+changing any of the guidelines...much. One way to do that would
+be to add a tiny bit of kselftest support for easily launching
+a kunit baremetal testing, and then reading the results (which
+are right there in sysfs) back to user space.
 
-However! It is rather distinct and not just any old test module. Kunit
-has clear conventions and behavior.
+So it would look like a kselftest, but it could run any kernel-based
+tests it needs via kunit.
 
-As such, I have quickly become convinced that distinct naming is
-required here. So I'd like to suggest going with the the suffix:
+And the two systems can still be used independently.
 
-     _kunit
+>>
+>> The Documentation/dev-tools/testing-overview.rst page has a more
+>> detailed look at when to use which test framework (which basically
+>> just repeats those rules):
+>> https://docs.kernel.org/dev-tools/testing-overview.html
 
-...unconditionally. After all, sometimes you'll end up with that
-anyway, so clearly, the _test suffix isn't strictly required.
+Yes, a nice example of up-to-date documentation there. And it's
+very clear.
 
-And given that we are putting these in tests/ , a _test suffix is
-redundant.
-
-Yes?
-
-> +subdirectory to avoid conflicting with regular modules or the core kernel
-> +source file names (e.g. for tab-completion). If this would conflict with
-> +non-KUnit tests, the suffix ``_kunit`` can be used instead.
-> +
-> +So for the common case, name the file containing the test suite
-> +``tests/<suite>_test.c`` (or, if needed, ``tests/<suite>_kunit.c``). The
-> +``tests`` directory should be placed at the same level as the
-> +code under test. For example, tests for ``lib/string.c`` live in
-> +``lib/tests/string_test.c``.
->   
->   If the suite name contains some or all of the name of the test's parent
->   directory, it may make sense to modify the source filename to reduce redundancy.
-> -For example, a ``foo_firmware`` suite could be in the ``foo/firmware_test.c``
-> +For example, a ``foo_firmware`` suite could be in the ``tests/foo/firmware_test.c``
->   file.
+>>
+>> Cheers,
+>> -- David
+> 
 
 thanks,
 -- 
