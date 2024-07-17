@@ -1,193 +1,268 @@
-Return-Path: <linux-kselftest+bounces-13848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13849-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6EB9343AB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 23:12:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B55809343B3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 23:14:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14902837CC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 21:11:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D96161C220CC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 21:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165745B05E;
-	Wed, 17 Jul 2024 21:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED5E185E75;
+	Wed, 17 Jul 2024 21:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="D3O8gmRL"
+	dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b="ayGYkAje"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865052262B;
-	Wed, 17 Jul 2024 21:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721250716; cv=fail; b=eqNPYLey6Qr08Gk/gM6EZWwAfzCyizIY2Orh+NOzTHK07pLRQRyDmchkWiacK5HKPm1N4xYxtclLCoTPAai+KAYX6rHGxPoWH29EzA5WzGLWgbmkbmdPeLEvfydwItdzvFbtvq0flc+lDckUbgBVw+yLEl/fdXyOOkfzgUccqeY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721250716; c=relaxed/simple;
-	bh=e9jfuFk4D5mkCI8v62NrF7r16TlV4vaFvwKtFeoH0ek=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=boUK3xn6Fg/td5Lv3bStnRTKxhCsjlPEqcauowGG1gNIRKvlcVT2+vkXrfiwP4E/0cDzwESJcverb47lQyaLKx/8irbskzN0aJBsVJnldVgohVdNZ01ZDyH2Ngt9+KcWcfqMXyFe1lsqNx9Yaj3zI9o7UxkIk9aIlZ1maFp9K30=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=D3O8gmRL; arc=fail smtp.client-ip=40.107.92.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c796Qac30CUtKny3rLptVg6JBr+vO6t7kmu++B4t5H9kqhFhz1BX9ck2wBq+BmgsJVL33XEACnbrc2AVx6jqCOGYwfLUwlI/9d1sjzV7z0moKr9OoXfeiiamow8bkFi5GVVyUpuB2qznVUVivdMJUcJRblYtiqNr/v7IrydbmWUpwV2O1MyLBEdLBgrAcOfGkMM5z+QATrjwcNQ8bYXSrCsIj6lHAXpwaH7M283XqI/dvB09I/VYhdtN2y/k091xyhn6RK7oRZM3/YXzqhIkILaWhfb6uq5e+/QywS/bnfQ9OS/xttKiFtIBFJ2gF6o7hK2bG/WcXw5fKgUeyzx0uA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4/Uef5r8u1YU89dc+r9g4BeCFAoFTn2he76ej+4GxVY=;
- b=HcLWq/FftNe7/0Pvzq4hpvxorwx/oAD+2hlOonY1PBunkktNl1PhCXTSBzpBLW5sz27vt5mQmEG+GN+pkW3MRUJJmA9DW/w5eSmIdf2OgOErsek9V9In1QEgrfUMNpJbSRLhKwBXrUo1v7b7ed1175qCLTC9kR54KHbWHBLk1d7FQ7b6HwrljfloyqI7VTg5Y7TOMLny2cr1DDfjjRGjNskkSc6piQPqQfmdgAvel+5yyEacLkvIOIaeJpxVT8M4SKlrLp9ZPPOxzTliTydNy+WU4iWCZiv5mJpGL3u5xLVnEG1KmzOCHXL+8Ukga4JUgGeMNuRrLlI+Y+tiWhw/og==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4/Uef5r8u1YU89dc+r9g4BeCFAoFTn2he76ej+4GxVY=;
- b=D3O8gmRL1H72IB1RYyoWDmgjm//OoN618/lDBTH21If2ReWB25HczwlqV/RQ52WIl4wyElacb0WaBHZChZPvAGdymskf9sc98l8lGvIPGAvu7Muyv+9cMss1SsOGOGPtZvB60YWQn2WxwkB9fPI9H7BJ+wLHC3iG/5GPN00zniBgOHaVp09IlNdWf/a7B24IbHq94gKpHq+Bh9Ax6s/nBmWyapuJTX9L1U2DLslFIIQGSFfna7psAcnJ4GB+ca6NHBA0d9xMxvL7Ei0IPnQZOL/L0fpFUwOvJJspEpQXKu7Ok3I740b06bVm/nf0mcsix8nFqL1aZ0GE1bXJF9u5qA==
-Received: from MN2PR08CA0006.namprd08.prod.outlook.com (2603:10b6:208:239::11)
- by MN0PR12MB5906.namprd12.prod.outlook.com (2603:10b6:208:37a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Wed, 17 Jul
- 2024 21:11:51 +0000
-Received: from BN2PEPF00004FBB.namprd04.prod.outlook.com
- (2603:10b6:208:239:cafe::58) by MN2PR08CA0006.outlook.office365.com
- (2603:10b6:208:239::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.16 via Frontend
- Transport; Wed, 17 Jul 2024 21:11:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN2PEPF00004FBB.mail.protection.outlook.com (10.167.243.181) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7784.11 via Frontend Transport; Wed, 17 Jul 2024 21:11:50 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 17 Jul
- 2024 14:11:35 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 17 Jul
- 2024 14:11:34 -0700
-Message-ID: <81c79e52-4e77-45c8-bc42-00b5d096d6d9@nvidia.com>
-Date: Wed, 17 Jul 2024 14:11:33 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4001850A0
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2024 21:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721250841; cv=none; b=ou051g0PjMx+bypgh6em8eCwR4tmQtw1c4et8xdKKsg9dVBWjYnfKE22sVaMBYrwzgBUFrLiD3sELFneFTyduW7VmqYXDPn7hlCxFOJnevU78vhAvaGG+NZwQ4tZUso6zHM9KcdZOqlp47xNHmpaUDQ2jdcRaq6HpMhVDpJl6Ao=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721250841; c=relaxed/simple;
+	bh=JkU4klHktphurufRlUTdyDTeLTt6/HE8rdePKvAFCqo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RYyzBqz6pXK/Ek52rexm6ybZHdfkPU8Ongn1ajuLoc7lFDzo5LuV60A+2a3pocV6RbpnqtKi443Gk4dc9GGXXvvvkmQLlw0ksuSZsFZ5Z1OpcWzC72CJrJ34gm89l5SES+6WQN7p2xS3/4LfXW3ZgmS/Jp2eK2ReTe0eFKHRT1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=fail smtp.mailfrom=vimeo.com; dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b=ayGYkAje; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=vimeo.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70b0d0fefe3so65778b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2024 14:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vimeo.com; s=google; t=1721250839; x=1721855639; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K/0JM5dLFFD4LF1dsWbX1JlSJvSEH5yTSYQQKpq7BAo=;
+        b=ayGYkAjeboexBSGku8WC5EwA+F9ihvjQw56tS5O/P0idKuiznok++oNV2Qd6Mhmv3E
+         Wi0yfycCc03Xs/EfrtaRYHKTBew4uLnR4FEtWCAh4Ia7QIWbvPCBaLtAfBPRN0zwXpYN
+         1ON64vArm2hH7oOnklFC98FS0Y6kSvl3sh9wI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721250839; x=1721855639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K/0JM5dLFFD4LF1dsWbX1JlSJvSEH5yTSYQQKpq7BAo=;
+        b=UX/AWj7ulLDQY0ug6KeVGzizQhVPjF6y5dYXejwEbJbMjHxbO2eMvGlliQGsIP7a5Q
+         oetrCI9YaT/XHxa0Gv/zA/HeMLfUcDUaBFVFeeQMeETfI3A0ExUCeLckGzhbclz37+sm
+         GH7jD/1zYi993+3CZ0d6BCGKQwwqJnzDdhOJObrrgkTG3UYj6hbirUgH2ykfC7iKASCp
+         EPuYv/YtZ1N0h9K7KmPScHPLDmlgNu6reD4t8K9lRirmWpzInmvWgJObX3LbVWeefFL4
+         cluitobT5wxqzXWEJmASOzsxQMw1oGfCsRkiPbEMSrlNTe0OtRmWYSyQINJe7pPTj5DQ
+         IvFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiKNUMeWyQfhrs1Ts8spWOPjhuTqyLaTkVDNytMfJBbiL3J+YTwddd6ZG1d1GK/syjNYimaCaMXRnrKAe9YFUR+p71tliKni4WTa1Ah/gu
+X-Gm-Message-State: AOJu0YwdsVi22qyQhSxlQB9XEn9E28pb3pxY91dZkNBmVho3FHw+2aMf
+	s/eKcxzBP00LI3uZHbPUK+Q28NooZpF6LI/t4NRi6NIRSXbJ8/wh5ORkbYF+rcUcQmWEAZDianQ
+	ZBJaWaV6k4INwAkUwoaAkJkegRCNDnwgFK+7U7odAgSpKMwad4hw=
+X-Google-Smtp-Source: AGHT+IGxH/WHmAcJpGEJZcvrvdSJnI8QejnDNGq+5KD9M1pb0aI5cslGuiI7fRDd2gbrzdU64Q7pro0QCqIfKTD9Rd0=
+X-Received: by 2002:aa7:9301:0:b0:70b:18f:45dd with SMTP id
+ d2e1a72fcca58-70ce4f3ed7amr2644993b3a.32.1721250839049; Wed, 17 Jul 2024
+ 14:13:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Converting kselftest test modules to kunit
-To: Kees Cook <kees@kernel.org>
-CC: Muhammad Usama Anjum <usama.anjum@collabora.com>, Shuah Khan
-	<shuah@kernel.org>, <davidgow@google.com>, "open list : KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-	"kernel@collabora.com" <kernel@collabora.com>
-References: <327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com>
- <202407150936.C32FE24CA@keescook>
- <8412a936-b202-4313-b5b4-ce6e72a3392f@collabora.com>
- <202407161005.CACE2E355@keescook>
- <11359c6a-9863-4ffd-8fe4-04b777c72c9f@nvidia.com>
- <202407161124.8DF2E794AF@keescook>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <202407161124.8DF2E794AF@keescook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBB:EE_|MN0PR12MB5906:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b315c90-707e-4e54-6bb3-08dca6a513a2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ck9ObEl1Qm94M0EvejVmZVlZc3Y1Z2kvM1paaG41eDZZYVd0N0p0V0Vic2hQ?=
- =?utf-8?B?Tm00MGJNa21HWkZPWDFyazlPUFpPRzMyTDhXMVM4U3B6U21TYVE1eUpWOG9p?=
- =?utf-8?B?ZldOUEx3OElmSGgyRE5kNDcraW44ODVpSU5MVnlwNVFyVHEvTjNjMFRZaVli?=
- =?utf-8?B?OEYrVUR2OVZ0dVBuQyt5UldaMkFpcXl6L3oyNzhqcGpVWXo0WnZ3SmFVOFBB?=
- =?utf-8?B?QzV1MXZ6b2JwTU5vb3RkZWQ5Q2cwSzl5WEFaT2c2Q3pSQ1RhdkgwSEFuZStW?=
- =?utf-8?B?TXQzUHJnUEw3YUJESDlTaHJWcy9JTHYxd0s5VXNzT2RCbzYzTytJRFpwNUFp?=
- =?utf-8?B?b05PYS9QMlIvenc0eTJOc0xzK01oTGpYNTJuZTk4SkRiQXBScUphTTd4VHFn?=
- =?utf-8?B?bmdNeG1yMmFvM21zb0hDVTdJSXhWOVVJSkZFSm9ORnd3Z2k3Vkc5eDVsUnE5?=
- =?utf-8?B?cHd3K2U3bTdKU0dzRE1XUlpENW1GeHgzcHpKR0VnTlZNcStaT1U4S0JFU1pO?=
- =?utf-8?B?bkxQY3B3QVdXRnBhNG9BOWNkSDA1N25Kc1QyQ3g0c2NkT05vdER2Q0E1VXRG?=
- =?utf-8?B?WUZHNXBTYXlDL2xvMUUrN0M5ZVJGaWszVzlPL2VPeXQ0Z0oxMUNpcG9KcFFp?=
- =?utf-8?B?WTk4SDNSSzE4c1E0aDByUXI3Z2xKSjRRUE9NVzVBUHo0MUF2dU1uQ21NK2NC?=
- =?utf-8?B?MUM3NmRhenRsNUlMTEpSZmVBdmoxM3laWDZEeVRhTEZ2Y0ZCNHVaMmI1d2Fs?=
- =?utf-8?B?RDY2QlhkSkdZU0dNRFZSRVRzWWg4am15Vi9RbHdRaHlSa0Y0ZnRvbE9EVWgv?=
- =?utf-8?B?Ynl2U1BpMnZmV2piWURwYXZMSjZDZldLSGx2RkEzZnBsR1ZGbjBMZWtHT0hF?=
- =?utf-8?B?elpCK1ZwVzdUL2hnemNyaVJyaEo3cmtMcnkzYmxxckl4NUlPb3AwQ0JvTml2?=
- =?utf-8?B?WmhrdnpxNCtoQW90Qm1Gc3NqR3RvUVdrYnBqcGQ5TVErTDRkK3JSa0ZsZ2pG?=
- =?utf-8?B?UWoyWnFSd1FSWW9zR2pHY1NOWk10c3NZczRKRmFKaEs3RjNrcEhrQ3NHSjhY?=
- =?utf-8?B?UWMyK2lkTXMyMmphMkZ1NVYreTZEd1J3OUNRZjJrTnNpazkzeFdiSE9mdkZZ?=
- =?utf-8?B?QW0rbEE3MklKci9nRmdmTWhKK0NpcHdtNTd1T0t0cVpHVTJOdWRjU2pySno4?=
- =?utf-8?B?dGg5cG5LaDVQV2pPS0JhY1k1cU1GSmQ0RE9vMXdwYysweDNHT3JHd2ptS3F1?=
- =?utf-8?B?TUIxRkZQdUw2WVBZMTRiNWRZd2diSzV6QnNYQVUyamlwdEdQUjZ2YVlyMU0r?=
- =?utf-8?B?RjRXaGc0NHhld1czZS9zMDNqaHhpakhjOWdvcjJTS2VyL2YxMGNXWmd6NDcv?=
- =?utf-8?B?bk91U0h6blk5Z2lMWlB2aEJiRTkwM1FjTGRkTEpSVjFwSlhYL1RkcTZMdHFM?=
- =?utf-8?B?Qk1jRmdVUjRVVk50UFp6czRZMk1IRW4xZnl2NmZWSjg5NlByamdDT3lyQVB2?=
- =?utf-8?B?VFRuZkFKMmtHdklXOTJpUjhhcDh6a0FROXYrT244c0QyWWJ5TXNNVm94ejgx?=
- =?utf-8?B?T2RjVC9FbkJUWVZ1QTNrN0FxcmJYQ2Jyc0lvRjQ5NEVtZDhoS1R3cUp1VlB1?=
- =?utf-8?B?bW1HaEZNUERZZVNBY2R2VnRlOVQzNXFTcC9sckNNWUY3TVN2aXhZQjRoZlZE?=
- =?utf-8?B?clVKMC9WQ3puTDJ3YlFTTjhidVJac1hURkxUUHlGbHJpWWhzMm1iUm9QTzQw?=
- =?utf-8?B?VXVLTDNnNEJMTWkwL0JBZWRQOGtoU2NiUlhNaW81Y0JrRER2OGptL3d3b2Ev?=
- =?utf-8?B?Y2JodktQUTZKaFdtRWZ1cndLUDBDQTUwS1VwUkNjTmlBT2EwRnJlL0JhNVBQ?=
- =?utf-8?B?VUQ4MUZlQ2UybERRWllZdDFVaU1WV2RZT09zVUhpZlA4YUI0MGdETGRzaWgw?=
- =?utf-8?Q?0qI9cKPCXl7ej2JDW+2z743fn1l1zJlr?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 21:11:50.7431
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b315c90-707e-4e54-6bb3-08dca6a513a2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF00004FBB.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5906
+References: <20240715203625.1462309-1-davidf@vimeo.com> <20240715203625.1462309-2-davidf@vimeo.com>
+ <ZpZ6IZL482XZT1fU@tiehlicka> <ZpajW9BKCFcCCTr-@slm.duckdns.org>
+ <20240717170408.GC1321673@cmpxchg.org> <CAFUnj5OA0KaC54M9vd8W+NZJwz5Jw25u-BStO=Bi2An=98Ruwg@mail.gmail.com>
+ <20240717204453.GD1321673@cmpxchg.org>
+In-Reply-To: <20240717204453.GD1321673@cmpxchg.org>
+From: David Finkel <davidf@vimeo.com>
+Date: Wed, 17 Jul 2024 17:13:47 -0400
+Message-ID: <CAFUnj5OGJtR0wqOZVUh8QQ3gaw4gmatsEN1LcBdcwN_wx-LUug@mail.gmail.com>
+Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
+To: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com, 
+	Jonathan Corbet <corbet@lwn.net>, Roman Gushchin <roman.gushchin@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, Shakeel Butt <shakeel.butt@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/16/24 11:26 AM, Kees Cook wrote:
-> On Tue, Jul 16, 2024 at 11:04:06AM -0700, John Hubbard wrote:
->> This is a classic case of testing a kernel API via ioctl into the
->> kernel, so I think it meets your criteria for moving to KUnit.
->> Having said that, I must now go try out KUnit in a bit more depth
->> before I'm sure that this will work out. But it should.
-> 
-> I've found the docs really helpful:
-> https://docs.kernel.org/dev-tools/kunit/
-> 
-> Searching for *_kunit.c will also give a lot of examples. And the kunit
-> folks are really responsive to questions, helping guide finding solutions
-> to novel testing needs, etc. :)
-> 
+On Wed, Jul 17, 2024 at 4:44=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
+> wrote:
+>
+> On Wed, Jul 17, 2024 at 04:14:07PM -0400, David Finkel wrote:
+> > On Wed, Jul 17, 2024 at 1:04=E2=80=AFPM Johannes Weiner <hannes@cmpxchg=
+.org> wrote:
+> > >
+> > > On Tue, Jul 16, 2024 at 06:44:11AM -1000, Tejun Heo wrote:
+> > > > Hello,
+> > > >
+> > > > On Tue, Jul 16, 2024 at 03:48:17PM +0200, Michal Hocko wrote:
+> > > > ...
+> > > > > > This behavior is particularly useful for work scheduling system=
+s that
+> > > > > > need to track memory usage of worker processes/cgroups per-work=
+-item.
+> > > > > > Since memory can't be squeezed like CPU can (the OOM-killer has
+> > > > > > opinions), these systems need to track the peak memory usage to=
+ compute
+> > > > > > system/container fullness when binpacking workitems.
+> > > >
+> > > > Swap still has bad reps but there's nothing drastically worse about=
+ it than
+> > > > page cache. ie. If you're under memory pressure, you get thrashing =
+one way
+> > > > or another. If there's no swap, the system is just memlocking anon =
+memory
+> > > > even when they are a lot colder than page cache, so I'm skeptical t=
+hat no
+> > > > swap + mostly anon + kernel OOM kills is a good strategy in general
+> > > > especially given that the system behavior is not very predictable u=
+nder OOM
+> > > > conditions.
+> > > >
+> > > > > As mentioned down the email thread, I consider usefulness of peak=
+ value
+> > > > > rather limited. It is misleading when memory is reclaimed. But
+> > > > > fundamentally I do not oppose to unifying the write behavior to r=
+eset
+> > > > > values.
+> > > >
+> > > > The removal of resets was intentional. The problem was that it wasn=
+'t clear
+> > > > who owned those counters and there's no way of telling who reset wh=
+at when.
+> > > > It was easy to accidentally end up with multiple entities that thin=
+k they
+> > > > can get timed measurement by resetting.
+> > > >
+> > > > So, in general, I don't think this is a great idea. There are short=
+comings
+> > > > to how memory.peak behaves in that its meaningfulness quickly decli=
+nes over
+> > > > time. This is expected and the rationale behind adding memory.peak,=
+ IIRC,
+> > > > was that it was difficult to tell the memory usage of a short-lived=
+ cgroup.
+> > > >
+> > > > If we want to allow peak measurement of time periods, I wonder whet=
+her we
+> > > > could do something similar to pressure triggers - ie. let users reg=
+ister
+> > > > watchers so that each user can define their own watch periods. This=
+ is more
+> > > > involved but more useful and less error-inducing than adding reset =
+to a
+> > > > single counter.
+> > > >
+> > > > Johannes, what do you think?
+> > >
+> > > I'm also not a fan of the ability to reset globally.
+> > >
+> > > I seem to remember a scheme we discussed some time ago to do local
+> > > state tracking without having the overhead in the page counter
+> > > fastpath. The new data that needs to be tracked is a pc->local_peak
+> > > (in the page_counter) and an fd->peak (in the watcher's file state).
+> > >
+> > > 1. Usage peak is tracked in pc->watermark, and now also in pc->local_=
+peak.
+> > >
+> > > 2. Somebody opens the memory.peak. Initialize fd->peak =3D -1.
+> > >
+> > > 3. If they write, set fd->peak =3D pc->local_peak =3D usage.
+> > >
+> > > 4. Usage grows.
+> > >
+> > > 5. They read(). A conventional reader has fd->peak =3D=3D -1, so we r=
+eturn
+> > >    pc->watermark. If the fd has been written to, return max(fd->peak,=
+ pc->local_peak).
+> > >
+> > > 6. Usage drops.
+> > >
+> > > 7. New watcher opens and writes. Bring up all existing watchers'
+> > >    fd->peak (that aren't -1) to pc->local_peak *iff* latter is bigger=
+.
+> > >    Then set the new fd->peak =3D pc->local_peak =3D current usage as =
+in 3.
+> > >
+> > > 8. See 5. again for read() from each watcher.
+> > >
+> > > This way all fd's can arbitrarily start tracking new local peaks with
+> > > write(). The operation in the charging fast path is cheap. The write(=
+)
+> > > is O(existing_watchers), which seems reasonable. It's fully backward
+> > > compatible with conventional open() + read() users.
+> >
+> > That scheme seems viable, but it's a lot more work to implement and mai=
+ntain
+> > than a simple global reset.
+> >
+> > Since that scheme maintains a separate pc->local_peak, it's not mutuall=
+y
+> > exclusive with implementing a global reset now. (as long as we reserve =
+a
+> > way to distinguish the different kinds of writes).
+> >
+> > As discussed on other sub-threads, this might be too niche to be worth
+> > the significant complexity of avoiding a global reset. (especially when
+> > users would likely be moving from cgroups v1 which does have a global r=
+eset)
+>
+> The problem is that once global resetting is allowed, it makes the
+> number reported in memory.peak unreliable for everyone. You just don't
+> know, and can't tell, if somebody wrote to it recently. It's not too
+> much of a leap to say this breaks the existing interface contract.
 
-OK, yes very helpful. I guess I've got some unique biases, because I
-found it extremely odd to put so much emphasis on the arch=UM, as
-opposed to loading a kunit kernel module on baremetal and running
-tests there. I mean, yes, VMs or user mode Linux have their place,
-but baremetal testing is really important (and in many cases, the
-only way).
+It does make it hard to tell when it was reset, however, it also allows som=
+e
+very powerful commandline interactions that aren't possible if you need to
+keep a persistent fd open.
 
-Anyway, this confirms for me that kunit should work perfectly for
-converting mm/gup_test.
+I have run things in cgroups to measure peak memory and CPU-time for
+things that have subprocesses. If I needed to keep a persistent fd open
+in order to reset the high watermark, it would have been far less useful.
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+Honestly, I don't see a ton of value in tracking the peak memory if I
+can't reset it.
+It's not my use-case, but, there are a lot of cases where process-startup u=
+ses
+a lot more memory than the steady-state, so the sysadmin might want to
+measure that startup peak and any later peaks separately.
 
+In my use-case, I do have a long-lived process managing the cgroups
+for its workers, so I could keep an fd around and reset it as necessary.
+However, I do sometimes shell into the relevant k8s container and poke
+at the cgroups with a shell, and having to dup that managing processes'
+FD somehow to check the high watermark while debugging would be
+rather annoying. (although definitely not a dealbreaker)
+
+>
+> You have to decide whether the above is worth implementing. But my
+> take is that the downsides of the simpler solution outweigh its
+> benefits.
+
+There are a few parts to my reticence to implement something
+more complicated.
+ 1) Correctly cleaning up when one of those FDs gets closed can
+     be subtle
+ 2) It's a lot of code, in some very sensitive portions of the kernel,
+     so I'd need to test that code a lot more than I do for slapping
+     a new entrypoint on the existing watermark reset of the
+     page_counter.
+ 3) For various reasons, the relevant workload runs on
+     Google Kubernetes Engine with their Container Optimised OS.
+     If the patch is simple enough, I can request that Google
+     cherry-pick the relevant commit, so we don't have to wait
+     over a year for the next LTS kernel to roll out before we
+     can switch to cgroups v2.
+
+It would be a nice personal challenge to implement the solution
+you suggest, but it's definitely not something I'd knock out in the
+next couple days.
+
+Thanks,
+--=20
+David Finkel
+Senior Principal Software Engineer, Core Services
 
