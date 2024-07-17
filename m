@@ -1,178 +1,129 @@
-Return-Path: <linux-kselftest+bounces-13824-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13825-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A20933543
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 04:05:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572E99335E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 05:53:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D495B20F8A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 02:05:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E5EC1F23A3D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2024 03:53:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC3117FF;
-	Wed, 17 Jul 2024 02:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C43C47494;
+	Wed, 17 Jul 2024 03:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AtNEV0IK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWelCD8k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A1D442F
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2024 02:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B969D51A;
+	Wed, 17 Jul 2024 03:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721181910; cv=none; b=DyAnbm88Up4hs0lZmHPJNq0cgXn0Sg2PsWFuVOEaluedZnA9+K6HBzYRNfmPJSYWlZf8IezNO4p5yBCdRhLe1c5SxHB3KZIG0iG7U81wssMJQLDHciVMdSwtVtwmG/WptUHzUqqnC6YWhO876jWUO2euphHxyqRqrd7Get15efI=
+	t=1721188418; cv=none; b=SR6hVZ+MVrHHPFRd1mT/f8y/MS3V5TAKpSA6BI/G1BiUu2M0Tqm2RBA8MGkbjgpnV+EOifmnRdiPtLGSNsVB750K9dyDwg3UFTulNbEefsCjT1otaXTDj1/Kyw6SiC3UVoFuJWe5e85Klxcim1GQK/Wu49Dz5kXOZYFQt5D2vrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721181910; c=relaxed/simple;
-	bh=2aijUZqRvbSMAZJItNF8/iGr6po/mjEBfQUPAwaBiSk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Vf6ElFuae0vRNzuL8TK16eNk+A7dQu6mxVSF0tXdSadZSi4YoBFgF4kMXwNjFoQyjyWjzTxWG/gvUOPCO3daZNPLUk7bdU4yN4cK9RNp6txy/tTrSnwX/dUZ8hzwCnyC1MPTcPe79ApWxAymj9f6k7Tz0XpURMClbjEaVwGNbUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AtNEV0IK; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-70b702be5e4so3317402b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2024 19:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721181908; x=1721786708; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8QRegxtd6+FgIkF6diGK9DWIR0YDnVslVz04u7ogUM=;
-        b=AtNEV0IKLNnfPx69+ffB+qmfk5Hu4GcwLj2b+r0/qr2Ivu1egHGr6BE7n3SPIleqT5
-         /Qo8y0qzPWNZJqMkhmPrVidF2ECqHCv+KVZXNnzJ6x3OsrWyKQ9hP8ys5BbiEFjbrVFi
-         xQzr4x+4XhE1STulSctGkDaM19KD57Fl8SoCgnySkijfy7+AZWISQYrcTykQI4Si6Bh9
-         CErAAFQBH8EuBe7KZqSqUsADk4gTW/Krp/G/+67K1wfUbZVFVL4zV5WtuXMR6rwYvUca
-         TtXI6GMJ6oyasb5HP6ETXN2BVsYIjgUgnxrzgrRS+z/yVOJvIrVSJB1tjgKRatQcUHYg
-         0PHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721181908; x=1721786708;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8QRegxtd6+FgIkF6diGK9DWIR0YDnVslVz04u7ogUM=;
-        b=nR31+gvkVNRkiVLNfrmUslFNYYVKjFHsxRsaGmW8gaZZJCPbEYzjYCJqeXzLXxlGwY
-         19kEYx5s7elshyNJv3C/ATPRlnWBoTdYdV5cNcp3E4dEaG91m2hZ5FucdbPB7/S17oTo
-         prwtk5v+z1fzzYElOSaHrnB0luIRUg9WDKwZ8NUsf931sLUvn6GErWEQVAKoI0wM8OyY
-         /jMwVh0t2n6VgldxPssYlEVb001+1n2isS/G3phrXdl1UIlEP6cDReQrnRcMqraA9NP0
-         Lnoo7oy6uKfgbgd+yFb/15N0f7nQT1jOnoT4e6wHQkkYL8tzk5BRB2PShhvbz4b9m8be
-         Ngpw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2SeMws6jmXIDr0aFNYlGiQJZ2HGXp2vi8ZHEHaSaV7tFa8igqBiAwbWkJUEPU0yZyN0YV4HNQiY4xyEA1qK66o0POj0CQ10y9xg5OXUNQ
-X-Gm-Message-State: AOJu0Yzn82d/AhAX6UeW7cvGLCcm9goc2enE2bRLq31bbUXwFT28TIGU
-	S1ed4QUh+CJsp4EXQbNX6i3glsepxThRPRuyAcrhclqI6DFhzkMdylhMKEbQb28=
-X-Google-Smtp-Source: AGHT+IE2KzNPcTth+gMo267NV2Jd+oHot7f6l6m3xb5YAhTJAAFsLZacsEiGAChpR0B8dRp+Zw50zg==
-X-Received: by 2002:a05:6a21:710a:b0:1c2:8e3f:a49 with SMTP id adf61e73a8af0-1c3fdcc006fmr450858637.3.1721181907982;
-        Tue, 16 Jul 2024 19:05:07 -0700 (PDT)
-Received: from localhost ([2804:14d:7e39:8470:4ae3:bddc:48f7:36a0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2caedbf733esm7067534a91.20.2024.07.16.19.05.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 19:05:07 -0700 (PDT)
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
- <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
- <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
- <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
- Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
- Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
-  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
- <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
- Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
-  Albert Ou <aou@eecs.berkeley.edu>,  Florian Weimer <fweimer@redhat.com>,
-  Christian Brauner <brauner@kernel.org>,  Ross Burton
- <ross.burton@arm.com>,  linux-arm-kernel@lists.infradead.org,
-  linux-doc@vger.kernel.org,  kvmarm@lists.linux.dev,
-  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 20/39] arm64/gcs: Ensure that new threads have a GCS
-In-Reply-To: <20240625-arm64-gcs-v9-20-0f634469b8f0@kernel.org> (Mark Brown's
-	message of "Tue, 25 Jun 2024 15:57:48 +0100")
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
-	<20240625-arm64-gcs-v9-20-0f634469b8f0@kernel.org>
-Date: Tue, 16 Jul 2024 23:05:04 -0300
-Message-ID: <87bk2wu627.fsf@linaro.org>
+	s=arc-20240116; t=1721188418; c=relaxed/simple;
+	bh=UX5Few9lIWfE7jJZCw+YlLNkyj0syCCjowl2Opf4AV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kuw7Omk8+MIcHRJjkqQ2rFreH80uMhvytHfF0UNIJR1PKfQGKhOVnHP7Xki+MbXB+mH97w6e0m57X9zbt282rs9+2GJ7lfK8/oOu/QHB7rma6O98VqYL38CPQt1etRSbH4E0gjGPZv2m4NgNaOqIctc+Xnm+0bh0lXrmUwK9fkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWelCD8k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260AEC4AF0C;
+	Wed, 17 Jul 2024 03:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721188418;
+	bh=UX5Few9lIWfE7jJZCw+YlLNkyj0syCCjowl2Opf4AV8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FWelCD8kS4J6SJVOqkBVmaiAiYk2WK1RWvrSOo2wz+vrCPzqSyjoPGIV2ZwLGXS9Q
+	 Y01t7mkMfvUoaN0FyB5mKT+36GnKTPc5zBT0g8FapKGVa0uvL3YanJuuED9Hry9Q2B
+	 bH00piMf21T66Ny4VkXy8E+MnnnsRbxbyl5GBr6D0q6sehYRZh3hlKfL4iqg/PWL9p
+	 NdCjXkYzRUw792dmIiDnF7IwwdI6fKYspihLFoxJl71Od0l57Ent/37Ugc3AUmCH+f
+	 3UropW6JGK9xc76kPmFx81khuBicnRoWWv3IwP/EYcCIBrl/BZoW9noHmeOhg/dCrk
+	 71P7M2rkzBVJQ==
+Date: Tue, 16 Jul 2024 20:53:37 -0700
+From: Kees Cook <kees@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: KUnit file naming conventions (was Re: [GIT PULL] execve updates for
+ v6.11-rc1)
+Message-ID: <202407161505.A5AE57869@keescook>
+References: <202407150921.BD2B798C6A@keescook>
+ <CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com>
 
-Mark Brown <broonie@kernel.org> writes:
+On Tue, Jul 16, 2024 at 01:10:41PM -0700, Linus Torvalds wrote:
+> On Mon, 15 Jul 2024 at 09:21, Kees Cook <kees@kernel.org> wrote:
+> >
+> >  fs/exec.c                                   |  49 ++++++++--
+> >  fs/exec_test.c                              | 141 ++++++++++++++++++++++++++++
+> 
+> I've pulled this, but *PLEASE* don't do this.
+> 
+> This screws up my workflow of just using tab-completion for filenames.
+> As a result, I absolutely abhor anybody who uses the same base-name
+> for different things.
+> 
+> No, this is not the first time it happens, and it won't be the last.
+> And we had that same horrific pattern for fs/binfmt_elf_test.c from
+> before, and I didn't notice because it's not a core file to me, and I
+> seldom actually edit it.
+> 
+> I would suggest that people use the patterns from lib/, which is
+> admittedly a bit schizophrenic in that you can either use
+> "lib/kunit/*.c" (probably preferred) or "lib/test_xyz.c".
+> 
+> (Other subsystems use a "tests" subdirectory, so we do have a lot of
+> different ways to deal with this).
+> 
+> Any of those models will keep the unit testing parts clearly separate,
+> and not mess up basic command line workflows.
+> 
+> But do *not* use this "*_test.c" naming model. It's the worst of all
+> possible worlds.
+> 
+> Please?
 
-> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-> index b0a67efc522b..4a3ce8e3bdfb 100644
-> --- a/arch/arm64/mm/gcs.c
-> +++ b/arch/arm64/mm/gcs.c
-> @@ -8,6 +8,139 @@
->  #include <asm/cpufeature.h>
->  #include <asm/page.h>
->  
-> +static unsigned long alloc_gcs(unsigned long addr, unsigned long size,
-> +			       unsigned long token_offset, bool set_res_tok)
+Oh, sure, no problem! I have no attachment to this convention at all;
+I was trying to follow the Kunit docs:
+https://docs.kernel.org/dev-tools/kunit/style.html#test-file-and-module-names
 
-The token_offset and set_res_tok arguments aren't used in this function,
-so they can be removed.
+If I look at the existing naming, it's pretty scattered:
 
-> +{
-> +	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-> +	struct mm_struct *mm = current->mm;
-> +	unsigned long mapped_addr, unused;
-> +
-> +	if (addr)
-> +		flags |= MAP_FIXED_NOREPLACE;
-> +
-> +	mmap_write_lock(mm);
-> +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ | PROT_WRITE, flags,
-> +			      VM_SHADOW_STACK, 0, &unused, NULL);
-> +	mmap_write_unlock(mm);
-> +
-> +	return mapped_addr;
-> +}
-> +
-> +static unsigned long gcs_size(unsigned long size)
-> +{
-> +	if (size)
-> +		return PAGE_ALIGN(size);
-> +
-> +	/* Allocate RLIMIT_STACK/2 with limits of PAGE_SIZE..2G */
-> +	size = PAGE_ALIGN(min_t(unsigned long long,
-> +				rlimit(RLIMIT_STACK) / 2, SZ_2G));
-> +	return max(PAGE_SIZE, size);
-> +}
-> +
-> +static bool gcs_consume_token(struct mm_struct *mm, unsigned long user_addr)
-> +{
-> +	u64 expected = GCS_CAP(user_addr);
-> +	u64 val;
-> +	int ret;
-> +
-> +	/* This should really be an atomic cpmxchg.  It is not. */
+$ git grep '^static struct kunit_suite\b' | cut -d: -f1 | sort -u
 
-s/cpmxchg/cmpxchg/
+/test/*		 7
+/tests/*	47
+*-test.[ch]	27
+*_test.[ch]	27
+test-*.c	 1
+test_*.c	10
+*-kunit.c	 1
+*_kunit.c	17
+kunit-*.c	 2
+kunit_*.c	 1
 
-The same typo is also in arch/x86/kernel/shstk.c, from the "fork:
-Support shadow stacks in clone3()" patch series.
+Should we go with "put it all under a 'tests' subdirectory" ?
 
-> +	ret = access_remote_vm(mm, user_addr, &val, sizeof(val),
-> +			       FOLL_FORCE);
-> +	if (ret != sizeof(val))
-> +		return false;
-> +
-> +	if (val != expected)
-> +		return false;
-> +
-> +	val = 0;
-> +	ret = access_remote_vm(mm, user_addr, &val, sizeof(val),
-> +			       FOLL_FORCE | FOLL_WRITE);
-> +	if (ret != sizeof(val))
-> +		return false;
-> +
-> +	return true;
-> +}
+So for fs/exec_test.c and fs/binfmt_elf_test.c, perhaps fs/tests/exec.c
+and fs/tests/binfmt_elf.c respectively?
+
+And for the lib/*_kunit.c files, use lib/tests/*.c ?
+
+Then we can update the docs, etc.
 
 -- 
-Thiago
+Kees Cook
 
