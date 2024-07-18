@@ -1,114 +1,109 @@
-Return-Path: <linux-kselftest+bounces-13857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5299934642
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 04:22:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD2993469F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 05:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45A7EB21852
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 02:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 036C01F22AF5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 03:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E29A1BDDB;
-	Thu, 18 Jul 2024 02:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFEA20DE8;
+	Thu, 18 Jul 2024 03:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Chm9TWFn"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="nE/UNPqc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE4F1FB5
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 02:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E0518EBF;
+	Thu, 18 Jul 2024 03:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721269345; cv=none; b=j17Ie0MsgAOxsQ3/4QhlV2aO5kkA5+DQTURp6/0FFkWW7bUWARJq48bOB5WG5Caaq7sRSQZ1ubOKURrZzIOi5MfbwAU6tBTalpSTgRqSw+NF6oyFv6CYJ1c+i8xM/XTVghx+xLCs2L9Bkjbg7fJaVTgGRJYQfcz7+GKeXlv2IUg=
+	t=1721272265; cv=none; b=ASOwA3DKpaBPAU+YvdwFMwAXdmtvs02i+MiI4zrMPd/6A/fd+tamWX53U88L8dzSUGG52Sd5mccuaCcHgv0lA7abPneFZt3K/kmiN0etkjuPK08NS9O1otcylRv/hxCbmZsNr6b29wIZn2PLw9/4flQgbU5rz/kYAdhAZ1G/cmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721269345; c=relaxed/simple;
-	bh=dREXj+0w+CFnbqC/KdsZ8rUAi8ch+xarvadXOl5uRj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NGOjaWuwOgxKk3rVie6eMpxmSvz9ZpFufC9MidfZ9043DmpZxNsCWcGdYDhZ9TzoWNFEqDvIAt2XnsssyHIr9+MU+Ml5n7gqCoENtx1FMGDUYr6PRBTshC6eGp7Kf0tl9VvN9usnUvdHE/xf4UMBgbUVfChgrmLQXe1vv7Mb0IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Chm9TWFn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721269342;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=op/3tKtTGqIBuOoiHm9+X+k3cZHvHECwan0paq2e89w=;
-	b=Chm9TWFnSeh87nTyiEwgYyK7Rcy/Hlm43RBRNw3xOuYMy7ExDUu4fd2N3S/2u9QJzCnJDN
-	QGWkbh4QzMQ226xx574PBRuX8YH6LPsZq85cjrPTOOu6hVvfnmqZoIuop1cYqvRo29Wkth
-	Mv7/RoWfBnguqYLiaaTfhuxi/QLBHxg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-471-8WNXbSF4NHyNwiJs-RVBGw-1; Wed,
- 17 Jul 2024 22:22:16 -0400
-X-MC-Unique: 8WNXbSF4NHyNwiJs-RVBGw-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C5BA1955D56;
-	Thu, 18 Jul 2024 02:22:13 +0000 (UTC)
-Received: from [10.22.16.209] (unknown [10.22.16.209])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9E4E319560B2;
-	Thu, 18 Jul 2024 02:22:09 +0000 (UTC)
-Message-ID: <0addf17f-1dc8-40f1-970a-9a3d44b14d71@redhat.com>
-Date: Wed, 17 Jul 2024 22:22:08 -0400
+	s=arc-20240116; t=1721272265; c=relaxed/simple;
+	bh=pD2xubbTa4c6T4WNzg1CAB+MEyajjEmWSQtRqNVNtnE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WgaoRdFAbacWjT3oUrUh1GzCNp8KBn/GJUYiamN+PuGHlchP+W7PWAWzYgAxcz+D5qPu7fxRMp3G+Jw7/Ufb6AyY9MTpv08EkGBD+XAH4f4WGzGCrgsry6YZvV7cZ3mwSmdyaal0Ohq5BU7JnFILhtsMxirN/4iaHyz2Dhi3K58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=nE/UNPqc; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1721272252; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=tgQJsXXJZtuIafpHz+x3BoFD/+zTuz5fz+02sw/hJ+s=;
+	b=nE/UNPqcycmdXT0rTg5+4+pY9uCjw7ilYuhx3shAHDYBWjbnDBr3Z9bW9UdG43r6yATJ/bBzhcPITyPT9HlFQ+5IHuGHPOaHs2AAiFtYJgQ/PCIoRcc4CdmHcQSE59LKYBHF8X0sJwqUi4N7npmuE0m18tghrb5LaerzZesvfRo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067111;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0WAmhdTk_1721272240;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0WAmhdTk_1721272240)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Jul 2024 11:10:52 +0800
+From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To: akpm@linux-foundation.org
+Cc: shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] selftests/mm: mseal, self_elf: Fix warning comparing pointer to 0
+Date: Thu, 18 Jul 2024 11:10:39 +0800
+Message-Id: <20240718031039.69861-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: Tejun Heo <tj@kernel.org>
-Cc: David Finkel <davidf@vimeo.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com,
- Jonathan Corbet <corbet@lwn.net>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shuah Khan <shuah@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Shakeel Butt <shakeel.butt@linux.dev>
-References: <20240715203625.1462309-1-davidf@vimeo.com>
- <20240715203625.1462309-2-davidf@vimeo.com> <ZpZ6IZL482XZT1fU@tiehlicka>
- <ZpajW9BKCFcCCTr-@slm.duckdns.org> <20240717170408.GC1321673@cmpxchg.org>
- <CAFUnj5OA0KaC54M9vd8W+NZJwz5Jw25u-BStO=Bi2An=98Ruwg@mail.gmail.com>
- <20240717204453.GD1321673@cmpxchg.org>
- <CAFUnj5OGJtR0wqOZVUh8QQ3gaw4gmatsEN1LcBdcwN_wx-LUug@mail.gmail.com>
- <85a67b00-9ae7-42a1-87e0-19b5563b9a0f@redhat.com>
- <Zphu4SDGCJ-IExnf@slm.duckdns.org>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <Zphu4SDGCJ-IExnf@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
 
+Avoid pointer type value compared with 0 to make code clear.
 
-On 7/17/24 21:24, Tejun Heo wrote:
-> On Wed, Jul 17, 2024 at 07:48:40PM -0400, Waiman Long wrote:
-> ...
->> How about letting .peak shows two numbers? The first one is the peak since
->> the creation of the cgroup and cannot be reset. The second one is a local
->> maximum that can be reset to 0. We just to keep track of one more counter
->> that should be simple enough to implement.
-> What Johannes suggested seems to hit all the marks - it's efficient and
-> relatively simple, the overhead is only on the users of the facility, and
-> flexible in a straightforward manner. I have a hard time buying the argument
-> that it's more difficult to use - the benefit to cost ratio seems pretty
-> clear. Given that, I'm not sure why we'd want to add something fishy that
-> can lead to longterm problems.
+./tools/testing/selftests/mm/mseal_test.c:486:27-28: WARNING comparing pointer to 0.
+./tools/testing/selftests/mm/mseal_test.c:1399:29-30: WARNING comparing pointer to 0.
 
-On second thought, it is a change in the user interface that may break 
-existing apps that use the peak file. So it is probably better to go 
-with Johannes' suggestion.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=9552
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ tools/testing/selftests/mm/mseal_test.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Thanks,
-Longman
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+index a818f010de47..50a5b9b9399e 100644
+--- a/tools/testing/selftests/mm/mseal_test.c
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -481,9 +481,8 @@ static void test_seal_zero_address(void)
+ 	int prot;
+ 
+ 	/* use mmap to change protection. */
+-	ptr = sys_mmap(0, size, PROT_NONE,
+-			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+-	FAIL_TEST_IF_FALSE(ptr == 0);
++	ptr = sys_mmap(0, size, PROT_NONE, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
++	FAIL_TEST_IF_FALSE(!ptr);
+ 
+ 	size = get_vma_size(ptr, &prot);
+ 	FAIL_TEST_IF_FALSE(size == 4 * page_size);
+@@ -1390,13 +1389,12 @@ static void test_seal_mremap_move_fixed_zero(bool seal)
+ 	/*
+ 	 * MREMAP_FIXED can move the mapping to zero address
+ 	 */
+-	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED,
+-			0);
++	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED, 0);
+ 	if (seal) {
+ 		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
+ 		FAIL_TEST_IF_FALSE(errno == EPERM);
+ 	} else {
+-		FAIL_TEST_IF_FALSE(ret2 == 0);
++		FAIL_TEST_IF_FALSE(!ret2);
+ 
+ 	}
+ 
+-- 
+2.32.0.3.g01195cf9f
 
 
