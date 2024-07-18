@@ -1,60 +1,61 @@
-Return-Path: <linux-kselftest+bounces-13880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C063934CCB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 13:53:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43BA934CCE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 13:53:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8C321C221A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 11:52:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31F281F22DA7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 11:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA6813AA39;
-	Thu, 18 Jul 2024 11:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A3B013AD12;
+	Thu, 18 Jul 2024 11:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="a+So2oUq"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="jLQsHj7h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2079.outbound.protection.outlook.com [40.107.117.79])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2050.outbound.protection.outlook.com [40.107.215.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524CD136E0E;
-	Thu, 18 Jul 2024 11:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3CC136E0E;
+	Thu, 18 Jul 2024 11:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721303575; cv=fail; b=uhUP6H4bqX5LFHMkewORulWBfc7yLpq8/kRB10xLIOJm5aFd2SiixAz8N8EAwG10UowdUjnfRpEgh1kaqcP5/pDE690K8PSs3qsn/T1vTqJmmM0SVQ6DO/Gb/Y5PBKLjuh84XGQC1L15FeGp8tDeQtcdovDNEKzh7QkEMwnNolM=
+	t=1721303588; cv=fail; b=n2+gtBIikeaiVpTVSXJqSpoJMb6fXFcFES8oXd+RTDerN6xr7MDV6XZHrHRLP9IqoPtylkN8p/8jzRiMk1uu3Sre3HNxSU7OGc/yr9P5Q0ATs9seZrb+aE4qrv/M9ASI5RiKdc/jOHH31fSvCkU4sYRjguAWAplJh6dV+JFzW+M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721303575; c=relaxed/simple;
-	bh=eHF6/4PpFNp4+Ytu2RUUYDEmdNd3PRPOAHvI6lEONzA=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Cjhv5R51/GVItcQs4W9EitLzvMtv2Dddo/HXdWBpY9IU/IkDnTj/PH4aepY6XUytsm+nOsAD5rzZ9oWokZgI/0VxYCF+TFAQnwzupErkWArgKgy831vbXEA/hPwewU3yypUj/hoEmmqcZ0n+M3x1CkhBBu5RJG+l6CUKpRsVld4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=a+So2oUq; arc=fail smtp.client-ip=40.107.117.79
+	s=arc-20240116; t=1721303588; c=relaxed/simple;
+	bh=AmacMSQYZ1CIgXDwF6411MztTDsZbl53fFoYAh/Uh50=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ONucHUaYaXLM39i2YrQkQgAiwj15jIcPkTFXPaGTsZNn6KNTSSp8Fk5IVCDTdeaTL9DlHUiAoGENpiWdQtOO7sW+3+lnuMuN5MGZRI3da4NgiwLpV60piOnwoo+UuGTNSLbV4ZdX0VzB+t/OMqmTa04RAaY5p0kDfuSBYkXTfmU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=jLQsHj7h; arc=fail smtp.client-ip=40.107.215.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SqVMGxLSJJYrLQvh4H6oKRobDZrXksWhF7uVcrz/5Ci7wnEljljpy+hjrdoiFD62lDOYAPbRV0MsjSZ/TsiVJxYClNOWgcB8I2q/WQM+V21o/oxmFBeHVihHbn9RbTc5f3c6tTvqv2HO9Q5JxfZysgRJ3Ogk1eWf7Zz8CHmUsn1S3oJldVvccRuqFkJiTVkQjEXqYtHTHrCOhxFIpMGB11w8anuS34ZDoU5VzAqhDnySbNvPt/erZZaG3zt62hKnvSd7eS/BSKqNyd9gQqUQzkf91TwXLtZ8ORUlBTz743ZWEAUQZLWzmDekWD5HnjQTZTzNVKPh/+T31nBbBBiybQ==
+ b=xtX7tUQM50yQanyG/rM8tta4MDJGa5iIQKlLkmlyInC1SePEU7EG3DPI/TA31sLODfdBbbwo4VHSNvFU3+MIPCc/vyECmlPn81sw5E2H1in5TY0etnvxOna7D8zK9AVAL64HXju2lFynNdJh1KfPA0FkKXlO1eA3WT/JB+8tGimPTrLNKvhQuaW3CfWLo2Qsd01Y9BIs8wyu1qhncV6Y1ufz7RJuJLsXCp5B5TIc0+6eqV0tZI4BGtjFGAey5OArhnTeBcyrlLxAOMupcx7Vhokg1oUXlUZ2ErNUKvelSd8LjPe75sDEh09yYpcE8bWi2IYfLjf479IhXJePsK1dSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fd0D1j0pvwiapwFT7O2WVjM0l0tN3Qkme4DfvHEl/X8=;
- b=VA0NXHFEAJStqizIPejUaYaGlAby61mK/L562ePrUyun6LyEf0LGpviNyh8OJgAjdzM7lAbqBv4/BXHBfmbs9EqtxqwH+iE22JPnR6wiHfo2LWNm49FcnwfT+mj/4wd6W2DdOBlZyD/YLh1WU6Khbx30rbig5Dxwa+lviciFkwAZ2xLXDhXb+7+HmvsTnuo/40O8c/SAE1Bo81t1aUL19EnWXV1lAxXT2+wdlimBNst0vSncKVZ1oStM/y/RMkFtKSpZC1EL1JLHZqSs6V1jaMruM+L9NqpAzDhqIZAkpJJPI99Ww7ekW8Jd7o0aIzBPToqDa5qhYO7wSF25yosuYQ==
+ bh=XMgfvdG1IZifbSPrt7P8WxcsOKbDbgQXUspwl0xYOhY=;
+ b=RFv6qdvagVXv1S+L7X9RMP/Esf/AP97lq4o/yqdsY7Bj3x2uOkJV1GBT819GeI1UGdgu64kZ0LZhQd2qa9hp94UWs/8wvQ0tihTQnpvzW+pgkcVWltzXPQ4361VfJ1NUZU9eM6X+ycJpXZse2/M/h/rYsdgyQjBrHR1Z1/PGa6unDR0924vmSlTuciNkEHV3epJGGiuBZTussUxjrTSR2vDMRc32Awuw355Xd6IHVNuVIefNNVEaUWgwHUK+81B2YF19WlEdZ/0SZcJL3Zq5haK8qROZrMcGQI1LgQBHexcKIucHUxLA4jm586QEASnmdpLDkGGXq2xvsQUOICFIRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fd0D1j0pvwiapwFT7O2WVjM0l0tN3Qkme4DfvHEl/X8=;
- b=a+So2oUqdSCk1Sn9N+A8+epH6DJPw63ZWX1sTq7dLTlVppnCuU/A/STRVmlBIlBh0M989pyddBnCQe5va4aWWmNtrhuY4rYtu5ZOqWT7u6RSzsbHW4tjdrbyN3yymxaD2xAQQK77LLBX5gJ2axBfZSCswVX++KafX8B1dveMG2zwdFKjZ/mHHbf9adkSRcpAL355Gl3TccuUWbcMs0TAUYoy5k28DjZYOu4kJ/Qvc90pZjTNU22UrXTO5lYJvTl135k1jaPa1+Thw88QQe4H2w9/pJ/Oackr8cKbz+I6EwM5yK7UeN98BBdumqFj/GpUjC9S/7njWDz19Md/u4Z0hA==
+ bh=XMgfvdG1IZifbSPrt7P8WxcsOKbDbgQXUspwl0xYOhY=;
+ b=jLQsHj7h/GlU9EkqV5lU+DK9dWM2pXukFU5foaOLIuC8Z085Xh5OIc91cvyU53USlZN0HEkG8KZuCpjhWsyh4dYmn1wZAUIQeAg21FBJDgcD1jatpwwN3Nfk7Vl7RVnoFodGAFx7p32kah77Cps7Hte46YMB5qRNi/cJq5MhAcd3Hp+yBbhPEJSX1yatXbCyry2W2a1yJAlt22/7LOfMcw+7wHDK7861SFvo8oz/HYsApksDaiMK7QvNVTRLf5hd1B8UVpu5QNxHw2Z8Zxzv/OOgxwhRnf39kbKxckcklv4K145aV5yvDZQ+bXj5L79xmFniUScnirZy33v3DeW6/w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEYPR06MB5913.apcprd06.prod.outlook.com (2603:1096:101:da::16)
  by TYUPR06MB6219.apcprd06.prod.outlook.com (2603:1096:400:352::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.16; Thu, 18 Jul
- 2024 11:52:50 +0000
+ 2024 11:53:02 +0000
 Received: from SEYPR06MB5913.apcprd06.prod.outlook.com
  ([fe80::f049:a716:8200:c4a1]) by SEYPR06MB5913.apcprd06.prod.outlook.com
  ([fe80::f049:a716:8200:c4a1%4]) with mapi id 15.20.7784.016; Thu, 18 Jul 2024
- 11:52:50 +0000
+ 11:53:02 +0000
 From: Lin Yikai <yikai.lin@vivo.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -80,10 +81,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Cc: opensource.kernel@vivo.com
-Subject: [PATCH bpf-next v1 0/3] add bpf_file_d_path helper and selftests
-Date: Thu, 18 Jul 2024 19:51:42 +0800
-Message-Id: <20240718115153.1967859-1-yikai.lin@vivo.com>
+Subject: [PATCH bpf-next v1 1/3] bpf: Add bpf_file_d_path helper
+Date: Thu, 18 Jul 2024 19:51:43 +0800
+Message-Id: <20240718115153.1967859-2-yikai.lin@vivo.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240718115153.1967859-1-yikai.lin@vivo.com>
+References: <20240718115153.1967859-1-yikai.lin@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2P153CA0033.APCP153.PROD.OUTLOOK.COM
@@ -97,136 +100,222 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SEYPR06MB5913:EE_|TYUPR06MB6219:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a30d8fe-66d1-4fa4-efde-08dca7202604
+X-MS-Office365-Filtering-Correlation-Id: 615feb20-b6cb-4ab8-8f10-08dca7202d7b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|52116014|1800799024|366016|7416014|376014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?k2yipnE34Bd9KtNQC2Uj5hjX/iMLqrFglAqSULgr0mXacIgmosc4z+jfj18d?=
- =?us-ascii?Q?2FH0H5oyjJwpOH3nKK0P6BaIPIwiyzKHH5EB93ZElDFaciwDAI5jezFAruNa?=
- =?us-ascii?Q?KVXiaB68gIrhnhDeWTy/QAc5PMkExm6iul48/yTe7dTcVcEq+mskKdyGtJ6j?=
- =?us-ascii?Q?qAWDaCt3S0nfkr2txdzWxzysx6DA3tJMrSiX4yAI/zbyO6gidR2UDCFS3Guu?=
- =?us-ascii?Q?xUle/rAD0r6sIkEZ9flk1nw6BEjrpzz6DEhlSZ1ETx/yTl1U3Y/2W40BNsaF?=
- =?us-ascii?Q?aHWWzj/uvw2Cw8+TvYjHIxuLRbBCmd4dZvK7O9/t8GPm6KvssB5Q19VlHPLX?=
- =?us-ascii?Q?cyLM/evGoyU2zpM/0bXPXXpYng9+FXMnYB+zGDVtuxSxdj6tLYILNszjV2ri?=
- =?us-ascii?Q?D2QxL1ay0FCBb56t1dZQ3SCU8fH5/B7IGGR/b+gRTXJaa1gmcYUYKPGEVP5R?=
- =?us-ascii?Q?SbT9vLuJf2UA/7wxRUi9IEzueJOv4OFQknfddjrFXtFD32nqeuzrYC/NeNZ7?=
- =?us-ascii?Q?Oprh1Y7fXuP3RU8QlDt0L4R/Ls4UTAHlQpMZZmiAHs6Qwb2T/Ku8uT4zyFv7?=
- =?us-ascii?Q?pUT22BkNu6VszXr6IUMu7ypDjGi5ll49rN0h7GDWuPoqgyF5lYCX02p9wkM3?=
- =?us-ascii?Q?gIkXPVTxCCuL1v9vN6Q/7gHQfxGYZJzv6G9ihIwxZC8oqLZb9F+QkqubaNF9?=
- =?us-ascii?Q?pl6MYJAxIcEWKk8Eexya7cbq4A/tn1aK2amSoLgRDtgG3xozrs0EAhUUDtTr?=
- =?us-ascii?Q?ix38+h/hYrsqT4A8kBjwS9kTX3esecOprdU/pN+8vVrUIHV1hzvtAHqUMOB0?=
- =?us-ascii?Q?Cx2FCjJGqqcki9xmIWLF08jI4VmF1oxdw0YUWLUqLI8GJP7FbRzoamP2zkSQ?=
- =?us-ascii?Q?yNZNKiGUflldUwYUMn2+nZ0v2cA2LyUIYV8yOvWAFmWva2kLBsYgIxd8rTgZ?=
- =?us-ascii?Q?w1uOv/G6V14ayTWB8SlhxfC6Hraw8XU7GceelWpZzs877ol9Ip3WnEP2kha3?=
- =?us-ascii?Q?+CAhyGz0IgsPPhj/SceYDIrL7lA0Z96+XNtB72AAYbxlKLAbR2gK+9tHgv5c?=
- =?us-ascii?Q?/68VMZaE+4hQR5q5oy3yGNqdwuEnmWkr22rVaJLbnEgJTTNh7oF+XRqgGClT?=
- =?us-ascii?Q?KE4X9tyh2sBjw4bNrJ46XD7oHla9Fv+M6auinPfNIN7GicY5Jl22YcCienOB?=
- =?us-ascii?Q?tSsRuknSriIS0pdoNU2VeXMn0L77B9FaTzjeArI2De1lImzCFAnYgXERB6N6?=
- =?us-ascii?Q?S6yWqNAiMfs0TnNeTMTTrct68snFqFIk6sDtq3FrUOlBORaISmQKh+GCkypt?=
- =?us-ascii?Q?xeXg/wwIBgRbA+JDCnUqUT29yegpezhFeTtTg7VMc1QHwpUqV9UG+vxwvEpC?=
- =?us-ascii?Q?TLV8DJnIilr9OnQ5tI4TQr3cWE24xTlz0Nz7d2Y/dXVs+gBtzgl3UIv1sR0O?=
- =?us-ascii?Q?sm6eGrxNHkc=3D?=
+	=?us-ascii?Q?eH3bll8Q1auprBq9UcTe8xtc2M000lp4VLch3iOwskJTW9MsFrrbHJUFRMzO?=
+ =?us-ascii?Q?GrdOV1S1DAhj65Lgo9D1SqNwcL/JdDAtvoOJKp49QqGgOYssJOgJE7UgsHgY?=
+ =?us-ascii?Q?6WB0p1vDqGxMsg/v4C2BK3BpLfwicpLS4/Wc6Yd9j76Im37leE62aR91O3Il?=
+ =?us-ascii?Q?rp/sBxXjO4GQ9VemiAKfD/LwAXQXc4sb6WcUF1cxd2BJmV2OOyxrfvKC8BwI?=
+ =?us-ascii?Q?f7iHO4C3ZFPgDbxCExTJyrDP6o8PtfQvgGTZPL94Z2WqOJHSqnxelKG1eD1h?=
+ =?us-ascii?Q?uDZdxKysZAB7b90poK4HrpcN42QxwRXGuECkaaiLqAX5jSssEvz9TihIbw0M?=
+ =?us-ascii?Q?A/yywMYefX0LevWRXOiulPfmiwmENqlhBejQbyLhSiLqPqRHF1UcSCxvsVjJ?=
+ =?us-ascii?Q?KuW8v1rTFn0pp3NPFcsYKlAS+84YPGMgYKwPkhjUxGb1D6+xY1Uay1ZD2Zt7?=
+ =?us-ascii?Q?l8Dyf/QNUBJ3zHsyABUK32Sfn03PGUnfk01944YgwFRv1EPIUBxcsGvyWHlT?=
+ =?us-ascii?Q?2xUHBQowLcOx1lhVbnigydbLL1HpYeFkbPAqhhQmf1xgBCXmaYtxm/Ik/i/a?=
+ =?us-ascii?Q?YD4YTMgpFSMgK1T9IQSTXOrG9z8irX3rKooX4XRCZh7XgtLTwSoxccSF28mv?=
+ =?us-ascii?Q?nwylf9f6lNuZ0dlMNOMU5bG1HurKrJ4sUNApD4uq4nGfnKuBeXu/ak/EBHI4?=
+ =?us-ascii?Q?cxExAthG/S0SeelVMYF2YIrpD0KnISRYFfbSav8US/JpICfgltLCz0BTraKg?=
+ =?us-ascii?Q?4C5Tn/NemeMT0ZG1Ev7MvI+c7xcNEtm4QFheX67UtJmOMbyQ67EXGM3HHUwQ?=
+ =?us-ascii?Q?5aiqfyI59/OXw6P7edK1z+cP4JlS1CKLIOK0ckwFvZpYSb0HcdClvVxa717b?=
+ =?us-ascii?Q?XomWmeLpa1FBR3poVm2kdco+bYO4aDam+R84VwgyMVzlRkk/AaxSxiV0FZBd?=
+ =?us-ascii?Q?gnjzRQcurVZvhjF1s6HV69ZNb7+MReSmSCvjVIfu5L+0WkEp5PTMa20e5KIt?=
+ =?us-ascii?Q?PtkFfP7YbjEgFENgcOA6VKQHxQN3CLWemq/VHeEsei3czKkK+UBXhq/NvZ4w?=
+ =?us-ascii?Q?pC4ISrSA3Sc8JnO2Od+XrTtg0eEeZXvfW/8+JaV+W2zBDeTGeLVVmi65tIC2?=
+ =?us-ascii?Q?kNf2+YxCX6XxszEAVmoozBI5kbwV6RHJmWHAqy4WWlONP0R0suQkKdbldIj7?=
+ =?us-ascii?Q?yQaWvUN2jKAGZvsLm3SBaygAstx+KnZlFZTKsvePOwC/POnDl/K7dxcfO7FL?=
+ =?us-ascii?Q?PNnvvSv+tfL2r9MhLxymtFtl5F/N6QrpxglVToO3WU7bUSuoMRbbb0N1sZft?=
+ =?us-ascii?Q?UQFOb0tI6oVsnlWKIwgPbikW+RXKnoSdvBj8zDrsgDb7TFIA7uOV+T/7NNw+?=
+ =?us-ascii?Q?63X3VoajjcuOSBS3qEpBkx/VRthd38C/f/+kJprnUtqp/Mxsa80j4b88OOkv?=
+ =?us-ascii?Q?V+we/DwfV7U=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR06MB5913.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(1800799024)(366016)(7416014)(376014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4n1epBWuxDiZKLI1amL6OmMQvMvmkoN5Z0YNh9dbnOd4znpqgyYHmZiVy1BL?=
- =?us-ascii?Q?xgEHm44cCBZhK7Jp0Y3aAEPNepta36m1clHBSEaIIe8skNDYl3/MEF343kJ4?=
- =?us-ascii?Q?U0mgiTCIMCzIspg8J5lfi9PC+6Jv6y+e8tqi1WLEMdfeEh5RRF+1uUtM/4WY?=
- =?us-ascii?Q?94bp8ZwlGo20H8EkmTHVG4PLYUBtVAXywWaUDq7cUceKn48PUWVy9f0zRnog?=
- =?us-ascii?Q?z7jkgrkiV7Ffi3kPubajkmPwl7ud1yHmEd07KvyT2gpEfXlj95BQLhhDo0TO?=
- =?us-ascii?Q?16oBqHZqEzr1WC2LAb7UeF8EvghJ6xObL8tWtroH5x1nrpzKZLnUGJ+6FBzD?=
- =?us-ascii?Q?E/CL6BMFFiZuYMP0tstCVO4fT1k1fxdgOp1dnzLmMH+U5T9hNOQAdsxs0JGK?=
- =?us-ascii?Q?Y8IK0pOny7oAYNAvdlaScAWSjg+8JFuAG4m3hEL06oM8jDK15cgMdw9luZ0n?=
- =?us-ascii?Q?y7/Y1MwM1vhllwScLf0//xcj13Q82q3lEmXyfIS+9ucbJ2At/z7IR0avUZs9?=
- =?us-ascii?Q?JZfmMegmf9Gb+73nYiLejm08SS9jL/4ENBqsBWEQLPbTCzpE3wgQr0Wrt2gJ?=
- =?us-ascii?Q?tv7kyxTkX/euS6+MeytcYKKt+9I9mUTG13XmrSIFEnMHEjVOTj+zJxdN9rk2?=
- =?us-ascii?Q?bbZ3iTCRMQxaK7B/q07sUSJsd/vm3GQMXeq0MW9QJ+GtSvLD+fhZL6M9wKmN?=
- =?us-ascii?Q?Y8XYO/e4vuMkMYLh2N2wwYOEocY2Lh0YyjXdPfG/O2AV5ygbJzYsW/ux3DKG?=
- =?us-ascii?Q?86soLSKRwsCfvVl/KedRBSefn2fUif3BnugXw+OLwno/xNCNJdmn4j7mcUz/?=
- =?us-ascii?Q?Ip1mvvrxKZsVhtLNSpuN6IBqiwEfXP9fO5+yK8I/dkRQ5l65gRN1M6o+s8hX?=
- =?us-ascii?Q?VucYrdgyI5cH7YwYfNMF0WWyy8TxTAQpL8pD5xfY54J8fYRVTaPD6Lr6YIB5?=
- =?us-ascii?Q?fLkdQ/08/4dJL79Xzs142xS/6c/L56vZ2JEuGFFieUy3+1KRf6KsIS0Z+UpG?=
- =?us-ascii?Q?00Fpw2Qc9Q5Pcvi9h7dUbbEQD65YiHBW1SZ8ryXZZQMCHuX2Sq4O6vjJddzU?=
- =?us-ascii?Q?Qg3QVNBFtLJu8q6+MXqc7BJWVScPXIWuN1l3OJs8mFdQIOVZ8Wu8QAxW1tHu?=
- =?us-ascii?Q?gPX0v1FjpAB6JUfpOma+G+vHAkZnts+t9aEMuSyNEVzUIYZsMScs2fy3P9DI?=
- =?us-ascii?Q?nxl2V8PlvYq8HLNb4sYC19v03nqZrvY4o9I9vZAPAqcAf+xc2A//B/qjJfe/?=
- =?us-ascii?Q?h6HyoSTuB1PjEs6w6NyxEWPefSpNjiGvtCnbQJoTpthta/5MMSOYEkou4Fsa?=
- =?us-ascii?Q?e2QsVrvxHMKzsOJronGK47VyCyShp/weTJx+1IwCN2qlUeLoLXsaj7ZUgCvu?=
- =?us-ascii?Q?cMBq4cs1ZAR77IVPT0f86PU0MQEImgWttvpKQ/kTNHA+dd6Z8iKOWlDfQLzJ?=
- =?us-ascii?Q?S+86vK5qXMZIXxvd7lzKKUOYE0UHs3aEVt80Or6weY2rIug0TyJiTQ3NZKK6?=
- =?us-ascii?Q?QUD6ey4n1WdOPqtOjZq9/coiySaft99DyYn1aZ47sW5FbF1WUdv6hR/J4Wwf?=
- =?us-ascii?Q?NhKoNe+uP9NaCEfqG/lFPxW25/UkoW3Rt2Td+Gf9?=
+	=?us-ascii?Q?5gTDV2GkMRoHKd5WV4kaY0vKV0/KDIbY1Z7XyV4ijsQSw5uS/aEl11ifV9Q0?=
+ =?us-ascii?Q?9H+5+xqL9h17QPEqL/OinfHM692M0JPcaQRMTrFUfP9ZSHlUVIphQiwRkl3L?=
+ =?us-ascii?Q?F2qkVyVgXOdGV8ezhdd/U+9SJ2lxepidV8IMZ6pJp5lIrIgpM8BJsQqee+sa?=
+ =?us-ascii?Q?QvuvLyKGYtF7nEu9NLVoIbR8AHGVso0G3xw8kr7bO9fom3WUqXEt9Na+/oFK?=
+ =?us-ascii?Q?CQ0XdDzv+vborO1gqfuUVy8NMKddszbfFmNqHj3q5L0HWaAtGoN40jVNWAA+?=
+ =?us-ascii?Q?Pyr9A9NXrMZPg4iO3NYLn7b01c7WDx0PG9wG7SocMkGNo9PkbrBjWZA73Frb?=
+ =?us-ascii?Q?X9G1h/PJBIrviZCN6XSg3jNU9Z3s5G3CZQwNgRdBKVX3RubsmaqZ38KK9BPe?=
+ =?us-ascii?Q?OGN1Vp/V0b32cMSl8lKDmPNli51dHa6NhweXEKl3oG1SXNOAM2K1hopQz0A9?=
+ =?us-ascii?Q?zboe+aHMZoFtukliOWvOnNgsuO/igxi6DeshrQJIf8EmBDvv4uyGV7XLtLls?=
+ =?us-ascii?Q?Qxx1jwhw51ginrnITEtcbONxwA3WFJXttL/fhySGWKsqZLiqrgpMzSNDq+l3?=
+ =?us-ascii?Q?mtyfytibE0f9jGe63jc5SnXxQjlR++ZOoHIwHsqUVPhfshTcdloDcnYYV3fz?=
+ =?us-ascii?Q?cyuBUMVeIeWa2FqYN6wVZqQuvdcXeN55q2LyuxA5BadMl4CrGxES4xGPS+2D?=
+ =?us-ascii?Q?zE4ekCEyfSSbQ4YFekQ+IHKNtzIqcMGCAV6Wm7DB1ANW9n7ZS8Wnuy6i+WR7?=
+ =?us-ascii?Q?77sI48+VSe9KufDQRpVU3B6hj66x89N/dycYLI+ksnkbUHance8XGbOzoT5u?=
+ =?us-ascii?Q?0dbkpJMDy2RLMcCI5sfsqvkfMRdOqdOZQMvO5v7vJUMHa/qo4TPn5GWgCK0O?=
+ =?us-ascii?Q?gLCTdCAP/xgBxrwororoePx8YdqKVbY9AsNx9tDEH8x/gpjquAqDMT97zYPG?=
+ =?us-ascii?Q?FC1JHNFKvmpbCygDUoIrnD43ubVCwhFKJWLJZgLTk60GL0QZJocsm2Ie4iVi?=
+ =?us-ascii?Q?EBt7NOB4LwQmiy0G38FNZyQCWRIHgzSYhnuVrgv1K1GYoYvH3W1tD7Nu06Yy?=
+ =?us-ascii?Q?7/zelq77amtf2ta66ZAkUP15AyMG1xARfSms2wVu4Gr/Gck29lGqIsjmDBZe?=
+ =?us-ascii?Q?JJhZYC8pBSKKJOgJqpd7jGfpGskVxbTe5+LmMt8unCHN5FpwiXh01wEPdtcl?=
+ =?us-ascii?Q?HcU1jx6W2V8VG3NyevBlZ4ARHE87786ZV40pTr4gXLf6ydCEIfT/pUADUnSr?=
+ =?us-ascii?Q?SR3nBQ2teRj7W5g6mS4k7fuvM4Ygqco0Q6GZmgrHqKkl/BBa1K0VJrVxPhxg?=
+ =?us-ascii?Q?zwGxTM+ga/U6WUWR2tsvfhpXm8E/E5clA0NKvTwb71bmbKzJdlHv+odpxuOt?=
+ =?us-ascii?Q?+IlR3puV4xikh+4gDozfMWAQmVRrTb7lsixhrHw0UyLQCQiyL4ffeF+ThL/g?=
+ =?us-ascii?Q?BIOWupHkKGTi0MlfjZAd71bcN298+bdjwSECMsKfffACEW9o+/Js+xyk8jX6?=
+ =?us-ascii?Q?bqX+obCSMRY/GlHFnPDCOYDTooD5pFnYDCV72zkb7Dp0p13Sq7IIZuo4Ytor?=
+ =?us-ascii?Q?sbvDXSzvl+gLzcTbgMqScOX3QV3uA8cFmjnkTRrt?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a30d8fe-66d1-4fa4-efde-08dca7202604
+X-MS-Exchange-CrossTenant-Network-Message-Id: 615feb20-b6cb-4ab8-8f10-08dca7202d7b
 X-MS-Exchange-CrossTenant-AuthSource: SEYPR06MB5913.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2024 11:52:50.0232
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2024 11:53:02.5436
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Po2sKaPW6B0gc3398SurCAfbPatU1LVV3BtSyP0xQc1RYAKwbDu3s6wUjAeSC7xULJV4FvH1TqnLRBHyuNFVfA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: yisgghx2IDcYeLsEYefNgLNN3K8/RSjUwHWCooWqWNH6IjyYSBtz/wzhm0Q0To6UkcMUY2GAokW3oxFD/n2nBA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6219
 
-v1:
- - patch 2:
-   - [1/2] add bpf_file_d_path helper
-   - [2/2] add selftest to it
+Add the "bpf_file_d_path" helper function
+to retrieve the path from a struct file object.
+But there is no need to include vmlinux.h
+or reference the definition of struct file.
 
-Hi, we are looking to add the "bpf_file_d_path" helper, 
-used to retrieve the path from a struct file object.
-	bpf_file_d_path(void *file, char *dst, u32 size);
-	
-It's worth noting that the "file" parameter is defined as "void*" type.
+Additionally, update the bpf.h tools uapi header.
 
-* Our problems *
-Previously, we encountered issues 
-on some user-space operating systems(OS):
+Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
+---
+ include/uapi/linux/bpf.h       | 20 ++++++++++++++++++++
+ kernel/trace/bpf_trace.c       | 34 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 20 ++++++++++++++++++++
+ 3 files changed, 74 insertions(+)
 
-1.Difficulty using vmlinux.h
-(1) The OS lacks support for bpftool.
-We can not use:
-"bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h".
-Bpftool need a separate complex cross-compilation environment to build.
-
-(2) Many duplicate definitions between OS and vmlinux.h.
-
-(3) The vmlinux.h size is large (2.8MB on arm64/Android), 
-causing increased ebpf prog size and user space consumption.
-
-2.The "struct file" has many internal variables and definitions,
-and maybe change along with Linux version iterations,
-making it hard to copy it to OS.
-
-
-* Benefits of this commit *
-1.There is no need to include vmlinux.h or redefine "struct file".
-
-For example, with bpf on kprobe, 
-we can directly pass param "(void*)PT_REGS_PARM1(pt_regs)"
-to "bpf_file_d_path" helper in order to retrieve the path.
-
-
-Appreciate your review and assistance. Thank you.
-Yikai
-
-
-Lin Yikai (2):
-  bpf: Add bpf_file_d_path helper
-  selftests/bpf:Adding test for bpf_file_d_path helper
-
- include/uapi/linux/bpf.h                      |  20 +++
- kernel/trace/bpf_trace.c                      |  34 ++++++
- tools/include/uapi/linux/bpf.h                |  20 +++
- .../selftests/bpf/prog_tests/file_d_path.c    | 115 ++++++++++++++++++
- .../selftests/bpf/progs/test_file_d_path.c    |  32 +++++
- 5 files changed, 221 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/file_d_path.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_file_d_path.c
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 35bcf52dbc65..7e5cec61a877 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5792,6 +5792,25 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf_local_storage cannot be found.
++ *
++ * long bpf_file_d_path(void *file, char *dst, u32 size)
++ *	Description
++ *		Return full path for the given *file* object.
++ *
++ *		In order to solve issues where certain eBPF programs can not include
++ *		the definition of struct file or vmlinux.h
++ *		due to their complexity and conflicts on some operating system,
++ *		the variable *file* here is declared as type void*
++ *		instead of the traditional struct file*.
++ *		It will be forcibly converted into type struct file* later.
++ *
++ *		If the path is larger than *size*, then only *size*
++ *		bytes will be copied to *dst*
++ *
++ *	Return
++ *		On success, the strictly positive length of the string,
++ *		including the trailing NULL character. On error, a negative
++ *		value.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -6006,6 +6025,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(file_d_path, 212, ##ctx)			\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index cd098846e251..70fde7f20e97 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1257,6 +1257,38 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
+ 
++BPF_CALL_3(bpf_file_d_path, void *, file, char*, dst, u32, size)
++{
++	long len;
++	struct file copy;
++	char *ptr;
++
++	if (!size)
++		return 0;
++
++	len = copy_from_kernel_nofault(&copy, (struct file *)file, sizeof(struct file));
++	if (len < 0)
++		return len;
++
++	ptr = d_path(&(copy.f_path), dst, size);
++	if (IS_ERR(ptr)) {
++		len = PTR_ERR(ptr);
++	} else {
++		len = dst + size - ptr;
++		memmove(dst, ptr, len);
++	}
++	return len;
++}
++
++const struct bpf_func_proto bpf_file_d_path_proto = {
++	.func		= bpf_file_d_path,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_ANYTHING,
++	.arg2_type	= ARG_PTR_TO_MEM,
++	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++};
++
+ #ifdef CONFIG_KEYS
+ __bpf_kfunc_start_defs();
+ 
+@@ -1629,6 +1661,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_find_vma_proto;
+ 	case BPF_FUNC_trace_vprintk:
+ 		return bpf_get_trace_vprintk_proto();
++	case BPF_FUNC_file_d_path:
++		return &bpf_file_d_path_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id, prog);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 35bcf52dbc65..7e5cec61a877 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5792,6 +5792,25 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf_local_storage cannot be found.
++ *
++ * long bpf_file_d_path(void *file, char *dst, u32 size)
++ *	Description
++ *		Return full path for the given *file* object.
++ *
++ *		In order to solve issues where certain eBPF programs can not include
++ *		the definition of struct file or vmlinux.h
++ *		due to their complexity and conflicts on some operating system,
++ *		the variable *file* here is declared as type void*
++ *		instead of the traditional struct file*.
++ *		It will be forcibly converted into type struct file* later.
++ *
++ *		If the path is larger than *size*, then only *size*
++ *		bytes will be copied to *dst*
++ *
++ *	Return
++ *		On success, the strictly positive length of the string,
++ *		including the trailing NULL character. On error, a negative
++ *		value.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -6006,6 +6025,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(file_d_path, 212, ##ctx)			\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
 -- 
 2.34.1
 
