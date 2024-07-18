@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E9B9352A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 23:05:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9CF9352AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 23:05:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 114A01F21F75
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 21:05:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08C43281606
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 21:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA242144D23;
-	Thu, 18 Jul 2024 21:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E0B145B21;
+	Thu, 18 Jul 2024 21:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QP16DWVT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tKU9tb3L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7408D6D1B4;
-	Thu, 18 Jul 2024 21:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84889145B18;
+	Thu, 18 Jul 2024 21:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721336715; cv=none; b=moTS6Iz8zy2RRucV+XofSdksAoC1iV6Q7KiIENeJ5w5c4IA47xkkfjIUtCLEqZkseJhgYbzeiR8Kq9X+yh4gYfkwmpYCHAxUUOBOIl5AOZr3GBhS5xcvimk/mgEX+OdnD/sp8d4J+WlwTitFVMm0hnUdwnbar69o6Ix17Oho0SA=
+	t=1721336716; cv=none; b=l1gayMlIrDAxeRrTQyhuhZRkqvA3EuSD8aldWHdqPcLW9OCJ77SOAJmuwC32Ns2rUcNUs0SGYcpDcQgaDJvDF2J6UaxZ+OXfGk9BI69JYVe3q709TgNgMAiZkwETJCREQORy6r5gwvMThe5qU/hHMnvPvOAwhvisa5//YByE77I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721336715; c=relaxed/simple;
-	bh=PO02rmFqHqgoBXFKeUaHJvY3pt1RCkay+OgeJuX3Akk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YbZqOsySmhmXLt9X8RudIb5JL3kVo2eu8OwTXJhvc4mys5NyoGc5P4OOqb5T0uAit9XzJwNs3PbKU+SPFq46I0f3pXX4xrJ3L8acmHumOucnOHVP8wrbchzKIzCgWv+ppgvTPV/X2FlultoFsQd1Azxj6UONAwK+LgOEjGIXWdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QP16DWVT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BEFC116B1;
-	Thu, 18 Jul 2024 21:05:13 +0000 (UTC)
+	s=arc-20240116; t=1721336716; c=relaxed/simple;
+	bh=h2oJwQU0/OEuEguNkW78XbvG5WSjlncX73XA6xoFusY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X5KI4e8ZNgLnAG4zjR3y8aCTsZp+U1FpEhD44HNyxYUkFdwxtJFi+ME5Oy5pLWjs3X+HYVZK/pDvylBSKMnO9GWaexVu22F5AIqYZTzEjsIu2P2+XK9x1wMHuLXVxuZVuNlLZGt7c1p59VjENyco/ulOy4t1BAYYnMsH0Pe70v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tKU9tb3L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2510BC4AF10;
+	Thu, 18 Jul 2024 21:05:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721336715;
-	bh=PO02rmFqHqgoBXFKeUaHJvY3pt1RCkay+OgeJuX3Akk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QP16DWVTglL5iZ9FEBglslsl0kf3//vhQO+gJBwF4PnMi/fXQZcXd/o7EhTFin9Uk
-	 bEm8JKvY23E45pJV2hZYC7t6+UaDigTrq6Kt4HdXzEa1FCvasPqpsCKkjqzM0jBtRM
-	 FdTQqFkvDV7qGLn7pHOa6jD62JgWODt88NQpTM5SOLDlOUl5wIFiLZp2VmJoB6Nlvz
-	 FmYzVp7Yflg1Lu3D+T0h1QlsmjI0bYWV7BTdwb9tHzVH8QMseYhzzWCg9Pmbrge0aB
-	 J02HDsyTjeZf8P/POPNtR5I5g9z9I7ShTUs2e7ayJlw1QTiqN37o8UxN/aGfZGo9bA
-	 xDHLC8d2I49Nw==
+	s=k20201202; t=1721336716;
+	bh=h2oJwQU0/OEuEguNkW78XbvG5WSjlncX73XA6xoFusY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tKU9tb3LsEO8gMpunAfGrIh7xJrlGzJhcrb1p2+ePoURYORsAfCicT79iir9fk8qm
+	 t9SuPV7XTp+QJXNustkT1nLw6gf6AK8soeFPy6SGlltpKPEX2hYPXPh/rX28Sd3zGV
+	 6T1KAn9VwHeevi6JNHkA8Auo9M075XHX2JPbb/irCjppOFfvcMHCPJWlCt+Zs4n2FJ
+	 DuuYXdxXU494VlJK3GqkhVisCHJeRY2a78ccVIpajTSv+gmBXn0L6hXZJREmjncrdc
+	 d8P3DmFSmycEFtmuGMRE7ZBKGumnjOBDAP1u8braEyAynvCRvvAZLOO+5w0lBLNAIn
+	 n3UsEEYgvlaYA==
 From: Stephen Boyd <sboyd@kernel.org>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>
@@ -62,10 +63,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Conor Dooley <conor+dt@kernel.org>,
 	Maxime Ripard <maxime@cerno.tech>,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v8 0/8] clk: Add kunit tests for fixed rate and parent data
-Date: Thu, 18 Jul 2024 14:04:59 -0700
-Message-ID: <20240718210513.3801024-1-sboyd@kernel.org>
+Subject: [PATCH v8 1/8] of/platform: Allow overlays to create platform devices from the root node
+Date: Thu, 18 Jul 2024 14:05:00 -0700
+Message-ID: <20240718210513.3801024-2-sboyd@kernel.org>
 X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
+In-Reply-To: <20240718210513.3801024-1-sboyd@kernel.org>
+References: <20240718210513.3801024-1-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,137 +77,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series adds unit tests for the clk fixed rate basic type and
-the clk registration functions that use struct clk_parent_data. To get
-there, we add support for loading device tree overlays onto the live DTB
-along with probing platform drivers to bind to device nodes in the
-overlays. With this series, we're able to exercise some of the code in
-the common clk framework that uses devicetree lookups to find parents
-and the fixed rate clk code that scans device tree directly and creates
-clks. Please review.
+We'd like to apply overlays to the root node in KUnit so we can test
+platform devices created as children of the root node.
 
-I Cced everyone to all the patches so they get the full context. I'm
-hoping I can take the whole pile through the clk tree as they all build
-upon each other. Or the DT part can be merged through the DT tree to
-reduce the dependencies.
+On some architectures (powerpc), the root node isn't marked with
+OF_POPULATED_BUS. If an overlay tries to modify the root node on these
+platforms it will fail, while on other platforms, such as ARM, it will
+succeed. This is because the root node is marked with OF_POPULATED_BUS
+by of_platform_default_populate_init() calling
+of_platform_default_populate() with NULL as the first argument.
 
-Changes from v7: https://lore.kernel.org/r/20240710201246.1802189-1-sboyd@kernel.org
- * Support modular builds properly by compiling overlay with tests into
-   one .ko
- * Fold in thinko fix from Geert to DT overlay application patch
- * Export device_is_bound() to fix module build
- * Add more module license and description
+Loosen the requirement here so that platform devices can be created for
+nodes created as children of the root node via DT overlays even if the
+platform bus wasn't populated for the root node.
 
-Changes from v6: https://lore.kernel.org/r/20240706045454.215701-1-sboyd@kernel.org
- * Fix kasan error in platform test by fixing the condition to check for
-   correct free callback
- * Add module descriptions to new modules
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+[sboyd@kernel.org: Folded in condition fix]
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/of/platform.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Changes from v5: https://lore.kernel.org/r/20240603223811.3815762-1-sboyd@kernel.org
- * Pick up reviewed-by tags
- * Drop test vendor prefix bindings as dtschema allows anything now
- * Use of_node_put_kunit() more to plug some reference leaks
- * Select DTC config to avoid compile fails because of missing dtc
- * Don't skip for OF_OVERLAY in overlay tests because they depend on it
-
-Changes from v4: https://lore.kernel.org/r/20240422232404.213174-1-sboyd@kernel.org
- * Picked up reviewed-by tags
- * Check for non-NULL device pointers before calling put_device()
- * Fix CFI issues with kunit actions
- * Introduce platform_device_prepare_wait_for_probe() helper to wait for
-   a platform device to probe
- * Move platform code to lib/kunit and rename functions to have kunit
-   prefix
- * Fix issue with platform wrappers messing up reference counting
-   because they used kunit actions
- * New patch to populate overlay devices on root node for powerpc
- * Make fixed-rate binding generic single clk consumer binding
-
-Changes from v3: https://lore.kernel.org/r/20230327222159.3509818-1-sboyd@kernel.org
- * No longer depend on Frank's series[1] because it was merged upstream[2]
- * Use kunit_add_action_or_reset() to shorten code
- * Skip tests properly when CONFIG_OF_OVERLAY isn't set
-
-Changes from v2: https://lore.kernel.org/r/20230315183729.2376178-1-sboyd@kernel.org
- * Overlays don't depend on __symbols__ node
- * Depend on Frank's always create root node if CONFIG_OF series[1]
- * Added kernel-doc to KUnit API doc
- * Fixed some kernel-doc on functions
- * More test cases for fixed rate clk
-
-Changes from v1: https://lore.kernel.org/r/20230302013822.1808711-1-sboyd@kernel.org
- * Don't depend on UML, use unittest data approach to attach nodes
- * Introduce overlay loading API for KUnit
- * Move platform_device KUnit code to drivers/base/test
- * Use #define macros for constants shared between unit tests and
-   overlays
- * Settle on "test" as a vendor prefix
- * Make KUnit wrappers have "_kunit" postfix
-
-[1] https://lore.kernel.org/r/20230317053415.2254616-1-frowand.list@gmail.com
-[2] https://lore.kernel.org/r/20240308195737.GA1174908-robh@kernel.org
-
-Stephen Boyd (8):
-  of/platform: Allow overlays to create platform devices from the root
-    node
-  of: Add test managed wrappers for of_overlay_apply()/of_node_put()
-  dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
-  of: Add a KUnit test for overlays and test managed APIs
-  platform: Add test managed platform_device/driver APIs
-  clk: Add test managed clk provider/consumer APIs
-  clk: Add KUnit tests for clk fixed rate basic type
-  clk: Add KUnit tests for clks registered with struct clk_parent_data
-
- Documentation/dev-tools/kunit/api/clk.rst     |  10 +
- Documentation/dev-tools/kunit/api/index.rst   |  21 +
- Documentation/dev-tools/kunit/api/of.rst      |  13 +
- .../dev-tools/kunit/api/platformdevice.rst    |  10 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- drivers/base/dd.c                             |   1 +
- drivers/clk/.kunitconfig                      |   2 +
- drivers/clk/Kconfig                           |  11 +
- drivers/clk/Makefile                          |  11 +-
- drivers/clk/clk-fixed-rate_test.c             | 380 +++++++++++++++
- drivers/clk/clk-fixed-rate_test.h             |   8 +
- drivers/clk/clk_kunit_helpers.c               | 207 ++++++++
- drivers/clk/clk_parent_data_test.h            |  10 +
- drivers/clk/clk_test.c                        | 453 +++++++++++++++++-
- drivers/clk/kunit_clk_fixed_rate_test.dtso    |  19 +
- drivers/clk/kunit_clk_parent_data_test.dtso   |  28 ++
- drivers/of/.kunitconfig                       |   1 +
- drivers/of/Kconfig                            |  10 +
- drivers/of/Makefile                           |   3 +
- drivers/of/kunit_overlay_test.dtso            |   9 +
- drivers/of/of_kunit_helpers.c                 |  77 +++
- drivers/of/overlay_test.c                     | 115 +++++
- drivers/of/platform.c                         |   9 +-
- include/kunit/clk.h                           |  28 ++
- include/kunit/of.h                            | 115 +++++
- include/kunit/platform_device.h               |  20 +
- lib/kunit/Makefile                            |   4 +-
- lib/kunit/platform-test.c                     | 224 +++++++++
- lib/kunit/platform.c                          | 302 ++++++++++++
- 29 files changed, 2097 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/dev-tools/kunit/api/clk.rst
- create mode 100644 Documentation/dev-tools/kunit/api/of.rst
- create mode 100644 Documentation/dev-tools/kunit/api/platformdevice.rst
- create mode 100644 drivers/clk/clk-fixed-rate_test.c
- create mode 100644 drivers/clk/clk-fixed-rate_test.h
- create mode 100644 drivers/clk/clk_kunit_helpers.c
- create mode 100644 drivers/clk/clk_parent_data_test.h
- create mode 100644 drivers/clk/kunit_clk_fixed_rate_test.dtso
- create mode 100644 drivers/clk/kunit_clk_parent_data_test.dtso
- create mode 100644 drivers/of/kunit_overlay_test.dtso
- create mode 100644 drivers/of/of_kunit_helpers.c
- create mode 100644 drivers/of/overlay_test.c
- create mode 100644 include/kunit/clk.h
- create mode 100644 include/kunit/of.h
- create mode 100644 include/kunit/platform_device.h
- create mode 100644 lib/kunit/platform-test.c
- create mode 100644 lib/kunit/platform.c
-
-
-base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 389d4ea6bfc1..86be4dfb9323 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -732,11 +732,14 @@ static int of_platform_notify(struct notifier_block *nb,
+ 	struct of_reconfig_data *rd = arg;
+ 	struct platform_device *pdev_parent, *pdev;
+ 	bool children_left;
++	struct device_node *parent;
+ 
+ 	switch (of_reconfig_get_state_change(action, rd)) {
+ 	case OF_RECONFIG_CHANGE_ADD:
+-		/* verify that the parent is a bus */
+-		if (!of_node_check_flag(rd->dn->parent, OF_POPULATED_BUS))
++		parent = rd->dn->parent;
++		/* verify that the parent is a bus (or the root node) */
++		if (!of_node_is_root(parent) &&
++		    !of_node_check_flag(parent, OF_POPULATED_BUS))
+ 			return NOTIFY_OK;	/* not for us */
+ 
+ 		/* already populated? (driver using of_populate manually) */
+@@ -749,7 +752,7 @@ static int of_platform_notify(struct notifier_block *nb,
+ 		 */
+ 		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		/* pdev_parent may be NULL when no bus platform device */
+-		pdev_parent = of_find_device_by_node(rd->dn->parent);
++		pdev_parent = of_find_device_by_node(parent);
+ 		pdev = of_platform_device_create(rd->dn, NULL,
+ 				pdev_parent ? &pdev_parent->dev : NULL);
+ 		platform_device_put(pdev_parent);
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
