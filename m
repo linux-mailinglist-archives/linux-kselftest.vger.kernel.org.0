@@ -1,118 +1,141 @@
-Return-Path: <linux-kselftest+bounces-13889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF0F293507E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 18:16:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BFBF93512C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 19:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0B721C210DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 16:16:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13BF41F22CCC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 17:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6617C144D10;
-	Thu, 18 Jul 2024 16:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360641459FC;
+	Thu, 18 Jul 2024 17:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rLlYu6gW"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fOiAXBC/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B2B7D3EF;
-	Thu, 18 Jul 2024 16:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EF61459F7
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 17:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721319409; cv=none; b=JAqNzo7/1U8sdMF3sGE7XX1bS2aum1ul4YXPemq6gTjp/G3Gwg1aeMHEar3f09EOcRGPBtlAhVtw3RFqSAGfaMKjiRRrWRO2mcjM62R33QsAAA+5Pdge4D5WQm1M36DxouYPL3o2q5F4HBDP7ojsn7Hcn5GrZMoYnKFm7RJzWwI=
+	t=1721323030; cv=none; b=Gya6AT+WTslECE/+kdZArjX1R+CONAc9RVQs5nXDExwrcn2RnCYBH9k6rIguL1i4iKTM2mD8sRZ1+lBPwNT/jsHgCFdMBnc5OeFSksmfj4xiMpfxkFCDgBiaHVsKaMMqSMHBwz9mNqGJZ2VQtlnF9KX2kFUD6O1CcIneQvef8os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721319409; c=relaxed/simple;
-	bh=gKUCbuXhzgw1JXGUEH5JtAqhnI1xtcOjVYOUIZ4L7WU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pEstMmC6/U3LwNcsSp2//MhG81Uum2CM2eY5ZZHjkC9YtMT7qZUDxaBdN5Yh/RXwbbp8kaf5AWqOjyOXGQORy756UPHJ3l/kmbd8GKsM8rUQ4EY2a5sytcSIbUuCJ0QCS5QQOr6Pk4yylUQLUid9L4h2P6cvBhddMkIdeu3eGUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rLlYu6gW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46843C116B1;
-	Thu, 18 Jul 2024 16:16:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721319408;
-	bh=gKUCbuXhzgw1JXGUEH5JtAqhnI1xtcOjVYOUIZ4L7WU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rLlYu6gWOogx7mLKzNfrMoEn5IliXebJuEhDM/YqrOAs0xiiQi6bBzH51WVhr0QJY
-	 Zmz8pj28Y+tUuZFCcQ+CeaKHFWqQNypCAdrLOte91CySDjbvX/rzhyyR3se0bq2LpP
-	 g6RJw1flOPNxSa3KhVH6/l82V95VuqoX1PB6yBPMkusoTfwHjtJOhkTDhpZqR17bH7
-	 f6Um9jZ/myfqy9kdeb1SYQci7ZstuknJvs14kGvO4JNq1TXB+SqRUsXdc42IdtRGlO
-	 15WGVzA8vf4KSb71viIsgiMbNYYY2atS0TtJSRYErrbyAqLJXfywco361yELivTB6A
-	 OHz65cHYteddQ==
-Date: Thu, 18 Jul 2024 17:16:39 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 35/39] kselftest/arm64: Add a GCS test program built
- with the system libc
-Message-ID: <a1ee93ab-2168-4228-a4e8-eab02c046bd3@sirena.org.uk>
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
- <20240625-arm64-gcs-v9-35-0f634469b8f0@kernel.org>
- <87plray8we.fsf@linaro.org>
+	s=arc-20240116; t=1721323030; c=relaxed/simple;
+	bh=rI4frp63Jxnsj31MWHYAeYEx6wRJkL13+FH1JRSRuiQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K2DVNY0WjF3gUJ3qBaTiAwyImfL60bpIlkmj+rpu/XleDB7joS1eHBHo6zsGa3I8KygKvOVke3kVtp8mLuwYor4RF5Gy8tdpJiIwulvKGOTamVWq7RLwa1JfHINXubiqtgglydNVT3AI0QLLGQqt1YMm5jdCtAmwthub6jDTVpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fOiAXBC/; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: yikai.lin@vivo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1721323026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C/vJB6s3AXh8HptKIgTma6VmUjB5HKeVFmr7SdBDgZU=;
+	b=fOiAXBC/kyz2LAaqNNHfG2fOAtNGuc5Ww5UfjpbSDyxyvaa7HOdLqQS0u7B0g6c0WbPuvv
+	+YIdQVsJS7dQX41is49dTAVl5/js2A9ZDEQoZj6qzrYFXq9dJ5t91aphMRNlxswUfTBMcD
+	or0l2TE/2+d7INfy8cRveItONpPrP4g=
+X-Envelope-To: ast@kernel.org
+X-Envelope-To: daniel@iogearbox.net
+X-Envelope-To: andrii@kernel.org
+X-Envelope-To: eddyz87@gmail.com
+X-Envelope-To: song@kernel.org
+X-Envelope-To: yonghong.song@linux.dev
+X-Envelope-To: john.fastabend@gmail.com
+X-Envelope-To: kpsingh@kernel.org
+X-Envelope-To: sdf@fomichev.me
+X-Envelope-To: haoluo@google.com
+X-Envelope-To: jolsa@kernel.org
+X-Envelope-To: mattbobrowski@google.com
+X-Envelope-To: rostedt@goodmis.org
+X-Envelope-To: mhiramat@kernel.org
+X-Envelope-To: mathieu.desnoyers@efficios.com
+X-Envelope-To: mykolal@fb.com
+X-Envelope-To: shuah@kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: linux-trace-kernel@vger.kernel.org
+X-Envelope-To: linux-kselftest@vger.kernel.org
+X-Envelope-To: opensource.kernel@vivo.com
+Message-ID: <9642ad1d-e227-417e-a9ff-b69b2cb2d0d9@linux.dev>
+Date: Thu, 18 Jul 2024 10:16:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4iOkZ0TI53vzajDb"
-Content-Disposition: inline
-In-Reply-To: <87plray8we.fsf@linaro.org>
-X-Cookie: For off-road use only.
+Subject: Re: [PATCH bpf-next v1 0/3] add bpf_file_d_path helper and selftests
+To: Lin Yikai <yikai.lin@vivo.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ opensource.kernel@vivo.com
+References: <20240718115153.1967859-1-yikai.lin@vivo.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240718115153.1967859-1-yikai.lin@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
+On 7/18/24 4:51 AM, Lin Yikai wrote:
+> v1:
+>   - patch 2:
+>     - [1/2] add bpf_file_d_path helper
+>     - [2/2] add selftest to it
+> 
+> Hi, we are looking to add the "bpf_file_d_path" helper,
+> used to retrieve the path from a struct file object.
+> 	bpf_file_d_path(void *file, char *dst, u32 size);
+> 	
+> It's worth noting that the "file" parameter is defined as "void*" type.
+> 
+> * Our problems *
+> Previously, we encountered issues
+> on some user-space operating systems(OS):
+> 
+> 1.Difficulty using vmlinux.h
+> (1) The OS lacks support for bpftool.
+> We can not use:
+> "bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h".
+> Bpftool need a separate complex cross-compilation environment to build.
+> 
+> (2) Many duplicate definitions between OS and vmlinux.h.
+> 
+> (3) The vmlinux.h size is large (2.8MB on arm64/Android),
+> causing increased ebpf prog size and user space consumption.
 
---4iOkZ0TI53vzajDb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The compiled bpf prog size is increased by 2.8MB because it included vmlinux.h?
 
-On Thu, Jul 18, 2024 at 01:14:41PM -0300, Thiago Jung Bauermann wrote:
+> 
+> 2.The "struct file" has many internal variables and definitions,
+> and maybe change along with Linux version iterations,
+> making it hard to copy it to OS.
 
-> In my FVP VM, this test gets a GCS SIGSEGV before running the first test:
+If vmlinux.h is not convenience in your use case, you can try to define "struct 
+file" with __attribute__((preserve_access_index)) and the libbpf will adjust the 
+bpf prog against the running kernel.
 
-Do you have THP enabled?  That still doesn't work (I'm expecting it to
-be fixed with -rc1).
+There was a discussion a year ago about bpf helpers freeze. No new helper can be 
+added since then. The same goes for this one.
 
---4iOkZ0TI53vzajDb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaZP+YACgkQJNaLcl1U
-h9BR6Qf9GiojqUKYh+SyKawuW3opLEJKR/7zCB196w+/g9gnE5g1RbTQ8JPI1tlR
-c3GGKFe6YZzDvo2XPzwWRcb5+xqPig7ZFkM5EdMMUcaFklfX2xTqhSAOMjkvaMFx
-bj1ELRnstQmWoibVbFHPk3iI3g4INItNqTua4YSyW1efyShyruDItI6rMORwMoAX
-JYEYM5K6aNhh56OcSwX9ZKjF8KIA3UPTWCi/Dt9KcX45bEmxR/tc8qi/YIvhIPG1
-swvurAIyaqJ8PLR6B7dO9nYj2WReVR1yjql8sZHw1i0lHeSB4bd7hXP0R+XgYU2T
-MjO/IPnJGt/92ViI0r5HvZeqZf7KKg==
-=OYr2
------END PGP SIGNATURE-----
-
---4iOkZ0TI53vzajDb--
+pw-bot: cr
 
