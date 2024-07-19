@@ -1,132 +1,130 @@
-Return-Path: <linux-kselftest+bounces-13909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CE57937144
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jul 2024 01:48:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A56793722D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jul 2024 04:08:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AFACB21C20
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2024 23:48:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 255FD1F21F01
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jul 2024 02:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A0D14658B;
-	Thu, 18 Jul 2024 23:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406B1B667;
+	Fri, 19 Jul 2024 02:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p1SzmEo7"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Fb+oEyI1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCAD7CF30
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 23:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1807848E
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Jul 2024 02:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721346475; cv=none; b=s25B05aWzv4IBYvr7tShR7A7H2UL0tVnRIw/UvPRwyjpjEmv2nKnFz8Sfk0yqmiwqYt9iDPYYpItglZYhH0Rp/UjrxD43djeOlQAWqsoASHdXk78+93TCENZ5eWohDb1yVlhqAMKimKR7PmBrl8O6g/lLoMQsfjOVNfr7MbMwTw=
+	t=1721354884; cv=none; b=l50Pyt+VNkbxvYAx9pnJCsmoeFXXUun4qrxAfAwJh/ucAkI3SKH11ycObxeCVRaw3yQ6Ln7LG9tGZwbo3cBMW6d9J0Xzp1cTqpaOYniZhWzyqF7w+qX06MsLMqe2HSdaNTx/6g9hAjufX8PcaI8teqkXBQf6RpTw1HwEzCudHU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721346475; c=relaxed/simple;
-	bh=47h5NGaRPMcJoe2hZvUn4CFZamjTK9bMbPmVK25pOdo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J/wFIJh8z+FeuxBRmdbBgaHP/+dE6MyJatnDOX/VJs9HV0AXKSDzQlObSb0USItdTW9f4hgXldrkyqOX1E9aKP1SndWmujafZk1ly1plK+SNjKW2d1xU/nhd6s4V7OpTzPQew4hAMjc9H3ZHzoX2DSI/QfAoi7kTB5mWUPIT09g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p1SzmEo7; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7039e4a4a03so746194a34.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 16:47:53 -0700 (PDT)
+	s=arc-20240116; t=1721354884; c=relaxed/simple;
+	bh=q1GvNezgH341Zylsv1zLw1qihz6L+mDOT/lLwblP/PQ=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=ozUr03c94m1Seq62uQw1UDILHnceGD/yOB/milzUbDcW4/FgCRS77cm2Hy5Mtc1Jz8SZXzdbRPuvSOmG2VYUoaRdjT2KC4+1enyNkY795Ch70E/T2AGEZurGy6AMGgGtuGjUCQdhL9DoxzAn4qTGJTGKnGRpFal1YVGwNVuBu+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Fb+oEyI1; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-79f18509e76so55918885a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2024 19:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721346473; x=1721951273; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wG4uwlbaV+J8vLwBombRfMb1OG6U151ykySFE5AhqQ=;
-        b=p1SzmEo7q+9PQ8c7QhAIMu4kWat9zb4ARwGe8tXv7Rj81Wl7ET8BbeYzmoH762ehT/
-         6mmcU7U9v5R7aW3hfehy99o7tKzBClOemAe/NvB7g5V7xJABdy4jCvkU16qhvNylF2Ht
-         /VyZmzk+ez8Vb6qh9XKbWsJYMA5RDD6RUMK97lAeyvwkpwdjCH8l1DistobtAlsusBq2
-         g94rt+Qfh3iYrweQbTLYC2pRuxvZbARMoUGGgvS2nP+DjU5pW8c2OyY1d/A9xH0pic4h
-         4XgvPBSI9ej04EMaW/+eDnSi72wwMGucCWXKD0tiO4P8K9IM1U4WYZ/cGwMbMbu3Lj6h
-         grAg==
+        d=paul-moore.com; s=google; t=1721354880; x=1721959680; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YN0F7LIerr4cOX46aig6AMcwfRaF/WeNOJ4mdmcIzMM=;
+        b=Fb+oEyI1QiZ7CBhJpNqYPr2cWJnHrXGy+S3NPRerxT+S6x5wBku7pW8JSnLLbgXbbz
+         9/DiSc2DNp9TFDQeYK0YZuaVb/T9joah1RHjqodWoAqPuCc9zyMl8DXQla3EBLDRIolI
+         2Un815nffuUEg/vRa0/WSUjYbnVoeA2LIe998RzweHzlDgJe9SV7n/xCrWp5K0xSo68w
+         fxI+D+JfZhAM1NVwiyj3pbCxGTXRsFvgf7tzRgrKczEGqmIOVjZJFyKi5ewUiZnxA0EY
+         ZmemRTZ3rurD9W08lmA6P/1tB8YYuCrdwxVZ4VawTyfUGtP7wkAkMidcDX0snlyOs4kv
+         MCbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721346473; x=1721951273;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wG4uwlbaV+J8vLwBombRfMb1OG6U151ykySFE5AhqQ=;
-        b=sgwUaRhDRFMWpEpqIxFqKrmUn5BhYYVratLzzlNRT/H2AFX1MXE6bnBjWjl9psIVyi
-         gyx0NioC3+KuTNy+LBwCb+QTWCuLxcizfbZJKR3p0Y4r3tdO7o5no1oTaWbMONOGaORf
-         3SikGRDKYmUC4vtKiUwaHYNBALX/wR2P69Eh04X0yGPmVX4HR0Gy9wH5YSjyOgFOvL1o
-         Jqcuiayd8YDnwggqp2pviho7rJOwlGBqda8iCsagVXmcguWBAl4lQsPFLoxtQ6Svq04Y
-         F8mEDn/V7kgiVbcqidy0JRgax+WxkKAakZq5yp4r4gLxmtgnLHbPtxoNFhz4Bea9BkVM
-         LOTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/sQflQ8FkUHOJGcQlS6knqhlSDTCb8XqxxPCZvABcYWy23lXH5J+IMEhzTcGXU0SuUOa4Qv1qg3YgY3NpHjEGQPuG5Qpoxbnm7Ltlqocz
-X-Gm-Message-State: AOJu0YyLw9NLV7bWyd5mVBPlnHgZ44W6MeqVRBX/2FTrbsVx47gH8MbF
-	xQ9K2foFVGNEEI6ggBV7GHIPB7nKt6wc+OuiDY2D0qU1FVHA4zcXKbY2xCBkkc8=
-X-Google-Smtp-Source: AGHT+IGb5vwrvVRNc/Zru+u1tWaF5JoGONpNCNR6gfjZnBju8QrPRuYrwnUehHVlBaNSMasi1A3gpw==
-X-Received: by 2002:a05:6830:700b:b0:702:1ea0:cfbb with SMTP id 46e09a7af769-708e37a48b4mr8654473a34.18.1721346472747;
-        Thu, 18 Jul 2024 16:47:52 -0700 (PDT)
-Received: from localhost ([2804:14d:7e39:8470:15c8:3512:f33c:2f80])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-79db5690a65sm142926a12.16.2024.07.18.16.47.51
+        d=1e100.net; s=20230601; t=1721354880; x=1721959680;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YN0F7LIerr4cOX46aig6AMcwfRaF/WeNOJ4mdmcIzMM=;
+        b=ntnnE2OKKxS6sHKKZuBRcP03bI7SvIpJj2h/DxZrw6PdiX1LgHw8ez0CqEY1tLiCsg
+         +k38CK9obLf3UOrhoLizOBC5CfpV2bQiud7f6R3zZrgPMqNmz6/uVt7WcR/LrsSHj+mI
+         Twm6f56NBctV6701hYWkyKtC7PKP/jiKgiDiXnIpY1bGZln2rYPN3U1WRzYlmbOf4tqh
+         VMhY54aTrAOZEvn4akCHEGPmh/pCXQENYs+/YjiCan6JS/pUOoTqFQNJnmIzHw1Yf4C9
+         HcClVsS2llqMca2W7hu1zFypgBGVH2yub+uN7kLtcEsV7uI/800ghmPH9UByXjPAwhqK
+         +y8A==
+X-Forwarded-Encrypted: i=1; AJvYcCW9rVtM2lyaeZjChTRwwl5MUuCZHYLDCuSpnNbKiyNoHzOJMbNfozDh0PJWlJFCF5AvdBN58Y2YMialHL5920B6y0FPRXNFLFV+f8m7tjWT
+X-Gm-Message-State: AOJu0Yx11pt3xeSCeEwDzPSv5+VCHjG4v+YFih41VgKrmcR/FJCCMPVd
+	vlyUU4Zzz4gKKcDuGwSKg1f+vtXmaK1lEOIpvEorBiD0SP6yBTlhIW4n6T6n9Q==
+X-Google-Smtp-Source: AGHT+IEJE9bHW4MkqmVWTJe4nMZnX+ZemFrNsydAipO8flZxWwZcYvxCDwNTgld7OQbeKd7vnKjGpw==
+X-Received: by 2002:a05:620a:4725:b0:79d:61e3:97f5 with SMTP id af79cd13be357-7a1874412dcmr781338685a.10.1721354880438;
+        Thu, 18 Jul 2024 19:08:00 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a198fbfba7sm21203885a.53.2024.07.18.19.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 16:47:52 -0700 (PDT)
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
- <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
- <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
- <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
- Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
- Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
-  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
- <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
- Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
-  Albert Ou <aou@eecs.berkeley.edu>,  Florian Weimer <fweimer@redhat.com>,
-  Christian Brauner <brauner@kernel.org>,  Ross Burton
- <ross.burton@arm.com>,  linux-arm-kernel@lists.infradead.org,
-  linux-doc@vger.kernel.org,  kvmarm@lists.linux.dev,
-  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 38/39] kselftest/arm64: Add a GCS stress test
-In-Reply-To: <875xt2xojp.fsf@linaro.org> (Thiago Jung Bauermann's message of
-	"Thu, 18 Jul 2024 20:34:18 -0300")
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
-	<20240625-arm64-gcs-v9-38-0f634469b8f0@kernel.org>
-	<875xt2xojp.fsf@linaro.org>
-Date: Thu, 18 Jul 2024 20:47:49 -0300
-Message-ID: <871q3qxnx6.fsf@linaro.org>
+        Thu, 18 Jul 2024 19:08:00 -0700 (PDT)
+Date: Thu, 18 Jul 2024 22:07:59 -0400
+Message-ID: <075e4eb5185cbc5156136240d56b6d0d@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
+Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org, apparmor@lists.ubuntu.com, selinux@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Brendan Jackman <jackmanb@chromium.org>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Khadija Kamran <kamrankhadijadj@gmail.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Kees Cook <keescook@chromium.org>, John Johansen <john.johansen@canonical.com>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH v4 1/20] lsm: Refactor return value of LSM hook  vm_enough_memory
+References: <20240711111908.3817636-2-xukuohai@huaweicloud.com>
+In-Reply-To: <20240711111908.3817636-2-xukuohai@huaweicloud.com>
 
-Thiago Jung Bauermann <thiago.bauermann@linaro.org> writes:
+On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+> 
+> To be consistent with most LSM hooks, convert the return value of
+> hook vm_enough_memory to 0 or a negative error code.
+> 
+> Before:
+> - Hook vm_enough_memory returns 1 if permission is granted, 0 if not.
+> - LSM_RET_DEFAULT(vm_enough_memory_mm) is 1.
+> 
+> After:
+> - Hook vm_enough_memory reutrns 0 if permission is granted, negative
+>   error code if not.
+> - LSM_RET_DEFAULT(vm_enough_memory_mm) is 0.
+> 
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  2 +-
+>  include/linux/security.h      |  2 +-
+>  security/commoncap.c          | 11 +++--------
+>  security/security.c           | 11 +++++------
+>  security/selinux/hooks.c      | 15 ++++-----------
+>  5 files changed, 14 insertions(+), 27 deletions(-)
 
-> # # Finishing up...
-> # # Thread-4030 exited with error code 255
-> # not ok 1 Thread-4030
-> # # Thread-4031 exited with error code 255
-> # not ok 2 Thread-4031
-> # # Thread-4032 exited with error code 255
-> # not ok 3 Thread-4032
-> # # Thread-4033 exited with error code 255
-> # not ok 4 Thread-4033
-> # # Thread-4034 exited with error code 255
-> # not ok 5 Thread-4034
-> # # Thread-4035 exited with error code 255
-> # not ok 6 Thread-4035
-> # # Thread-4036 exited with error code 255
-> # not ok 7 Thread-4036
-> # # Thread-4037 exited with error code 255
-> # not ok 8 Thread-4037
-> # # Thread-4038 exited with error code 255
-> # not ok 9 Thread-4038
-> # # Totals: pass:0 fail:9 xfail:0 xpass:0 skip:0 error:0
-> ok 1 selftests: arm64: gcs-stress
+A nice improvement, thank you!
 
-Also, Shouldn't the test report "not ok" at the end considering that
-there were fails?
--- 
-Thiago
+--
+paul-moore.com
 
