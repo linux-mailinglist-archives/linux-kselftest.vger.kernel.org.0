@@ -1,167 +1,130 @@
-Return-Path: <linux-kselftest+bounces-13964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C18E938111
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 13:41:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1F5B938232
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 18:55:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BDD9B212AC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 11:40:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D5911F216D6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 16:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066A512C460;
-	Sat, 20 Jul 2024 11:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DCC1487DD;
+	Sat, 20 Jul 2024 16:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cu3DYg3J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MF5xzDDC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3340127E3A;
-	Sat, 20 Jul 2024 11:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8AF1E481;
+	Sat, 20 Jul 2024 16:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721475657; cv=none; b=O7SGNdMzXaQQ7+qB4g4zBhSXV0C2ZooPy+S9VVq5RcEAAphGg6JoptWkim/jcSpaRGD+Mos8BS0Zcj48Pb0SDD2oRLin4lfjxiyM6QdQWOmYW9A94SU0YqXx+AYJ61ZHGYDQ38++TgRwa3sLRLX8YCwJek8tkb1fLr+pR9sUfDA=
+	t=1721494491; cv=none; b=PDFCTbaAEFcBDioWkXpvYzY7aIvUW2rRBjMdrLHlRDxWzVnFoQehaZP6x6EXvmYcdHnBdgl3nkEgE+6tAoLxFEW72XxKINGHT0EKiylL2Aov5uZYZ/QzlSP9lWApGT2b1pcqexfEd+J+JhaiUep0fLWsJV1RiGf6Iucnj7P5Eiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721475657; c=relaxed/simple;
-	bh=bgfaanFUHt1fg5aKtQXT1YN7plxOQcDy48h6Pqa0jEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fCDMwYNG+Y9BX9Lng/1Jt+zfi8ZnfpbTgbDmZRgAfnzFEAQylSSehwPLWNyS8QbCNM8CWioLx8Rc23UoN2Sex7u1ZslWbK5RVzbMus1PWhiMFUo/X07lN6IvropTUTwekSZYzXqVw4h/yb6el1RBl6Fnul3QWKqXB9I1wFKo4I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cu3DYg3J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E02C4AF09;
-	Sat, 20 Jul 2024 11:40:53 +0000 (UTC)
+	s=arc-20240116; t=1721494491; c=relaxed/simple;
+	bh=0fk7KXJgdWQwlGKxQxqidUKlJ+05k9Mh8dJZvLqYVW4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QE/HbnyfnSc2C8aA8p4UBl86E/frcCjLN0J86bnRdJ+m+YyYB8gwjQt3uhdVVa5fNlVZnxoVO5rrp8Hu9e1VcN4wTkldgNfpLgreQdiAe0o/8t/6mUhKzTW8kwNRher6qMBUIrvSL99MIaPVtLc7kxPfOUrnBUCqCnbbgMSEhaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MF5xzDDC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FAEC4AF0E;
+	Sat, 20 Jul 2024 16:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721475657;
-	bh=bgfaanFUHt1fg5aKtQXT1YN7plxOQcDy48h6Pqa0jEU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Cu3DYg3J89FuBmIpUb+8sFpVUUb0V2EvA1QVQDUAdfvTGhjG+PQ8IC1lttdHWrUn8
-	 eKp6D095FIZQ3tYUTY0L19ZEAkTaO/U7jfwLPPF2uYnJkkN/naKWrWDNl+T+dLN+PT
-	 NBVna/1NY8RBKid494PgAnDrb2drIy1ppiZl+y5D9EiM5T+gzjh7zNglSRNJx9qUwE
-	 3sWsoKftDd9aXh6LvpshOLXSfEGIZChD8M8BuAVqqhVKGep5Xvc4cnmVzNFoxRvgAs
-	 RmBcrBqSeLwMQDxV318PAzEfTXFDFjbS7paUQ8zNYOv/qIfRIynbzq9cPTb7BLjPi7
-	 6O3NELUe32Zrw==
-From: Geliang Tang <geliang@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Drop __start_server in network_helpers
-Date: Sat, 20 Jul 2024 19:40:06 +0800
-Message-ID: <31399df7cb957b7c233e79963b0aa0dc4278d273.1721475357.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1721475357.git.tanggeliang@kylinos.cn>
-References: <cover.1721475357.git.tanggeliang@kylinos.cn>
+	s=k20201202; t=1721494491;
+	bh=0fk7KXJgdWQwlGKxQxqidUKlJ+05k9Mh8dJZvLqYVW4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MF5xzDDCPkE0nx+jeh0dtTqk/hE1+DfJeW8E5HxhC88Jktm2yCoF7tbMmuKNyvueJ
+	 XsWhUJqTWW2XIFGcSDQN9gvO4b4+gPVvQhfzXOao5nB1oT8+CiFWy1HOxdNDouifBJ
+	 W153RPHfVKEgDDzmZzmX8fjH6HSI06YHsezyqvvaj7TapQAVmD0wektpXqxBFLx0i9
+	 zW8r+DqmsxBm8SP4MDp6Z/J8jPrLKFgkop9YLOUnqEz2lfrpOwnkl19HXvazFemGA8
+	 Ha2YstgqmJ0sM1BWIJxJQ67oq79t2GL75qTogf5ZgaSNZ7AqmSBm7XbVYnmqX/OfSq
+	 x7LFQYl7KjBkA==
+From: Kees Cook <kees@kernel.org>
+To: David Gow <davidgow@google.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <rmoar@google.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2] Documentation: KUnit: Update filename best practices
+Date: Sat, 20 Jul 2024 09:54:45 -0700
+Message-Id: <20240720165441.it.320-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2804; i=kees@kernel.org; h=from:subject:message-id; bh=0fk7KXJgdWQwlGKxQxqidUKlJ+05k9Mh8dJZvLqYVW4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmm+vUHND5tIObdZT01gSwxbAVlJ0GL/6uV0k5h hwGEQTM8ZSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZpvr1AAKCRCJcvTf3G3A Ju7wD/9kzfOMxcJkYF3W8uzaMNovwrY1AV46Tajm946YnUH10f/RGf37PAHvOpEWSWtSfffvuNI 8sIXadYOHXgJRJja36uRaEPXyCjuRN+HdkyVBXRCLiLDwR0UCQ7l0/j0jI9ak6EjN5Ml7+xzuuz AsVEXKp/SgcCL4uYec2ElI8T3vqAhTmlnOMezYovLr/BpZxtZDCyC0bk96R9l2YMUvqoyP/JMUr 4OWEOvj/s53v0Z1OOa8Q+5/KZ411s7v9yA+JB7Bp75fhpQU67UsNI4EM4hHSYmvafLwuovlFIPs 7+zElpMpZIocLqOob6LmTTk30mLGw7PyC9edSNV4hKxa3XacksbP9LdO/c7xFI4JRramu37MhDZ erST4YpQHAXJaIJQyMrPDvm0pmLCfpeVDyVguGDWt8gk+S29S8HZqN6KwcXbFy/GRCokl669SJK Cxh+NrC/Fll3QJb30SvMaD3vyMAZxl3C4N5P1JcwwLjPQl9tvB4OQTu7QfL7B3g2ZohsCZLhMVT lAaLzmwQ3+IYC4vfVk/UMfHlfMOUZWhdRDwjNhALR7A1agEHM6HO+4oT2ZmP0fC9hdh392iHTNM qihcV1KBwGAe15ahbhhOCPCiZwR1gSCsI8TaN6HlDPzz6tSen31djgxAbKVr6+UBCnTSJB/wCZ1 SaZGkpHm4R+sg
+ fw==
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Based on feedback from Linus[1] and follow-up discussions, change the
+suggested file naming for KUnit tests.
 
-The helper start_server_addr() is a wrapper of __start_server(), the
-only difference between them is __start_server() accepts a sockaddr type
-address parameter, but start_server_addr() accepts a sockaddr_storage one.
-
-This patch drops __start_server(), and updates the callers to invoke
-start_server_addr() instead.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Link: https://lore.kernel.org/lkml/CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com/ [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 26 +++++++------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+Cc: David Gow <davidgow@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Rae Moar <rmoar@google.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-hardening@vger.kernel.org
+---
+ Documentation/dev-tools/kunit/style.rst | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 9c98a60cf1e2..a3f0a49fb26f 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -80,12 +80,15 @@ int settimeo(int fd, int timeout_ms)
+diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-tools/kunit/style.rst
+index b6d0d7359f00..1538835cd0e2 100644
+--- a/Documentation/dev-tools/kunit/style.rst
++++ b/Documentation/dev-tools/kunit/style.rst
+@@ -188,15 +188,20 @@ For example, a Kconfig entry might look like:
+ Test File and Module Names
+ ==========================
  
- #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
- 
--static int __start_server(int type, const struct sockaddr *addr, socklen_t addrlen,
--			  const struct network_helper_opts *opts)
-+int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
-+		      const struct network_helper_opts *opts)
- {
- 	int fd;
- 
--	fd = socket(addr->sa_family, type, opts->proto);
-+	if (!opts)
-+		opts = &default_opts;
+-KUnit tests can often be compiled as a module. These modules should be named
+-after the test suite, followed by ``_test``. If this is likely to conflict with
+-non-KUnit tests, the suffix ``_kunit`` can also be used.
+-
+-The easiest way of achieving this is to name the file containing the test suite
+-``<suite>_test.c`` (or, as above, ``<suite>_kunit.c``). This file should be
+-placed next to the code under test.
++Whether a KUnit test is compiled as a separate module or via an
++``#include`` in a core kernel source file, the file should be named
++after the test suite, followed by ``_kunit``, and live in a ``tests``
++subdirectory to avoid conflicting with regular modules (e.g. if "foobar"
++is the core module, then "foobar_kunit" is the KUnit test module) or the
++core kernel source file names (e.g. for tab-completion). Many existing
++tests use a ``_test`` suffix, but this is considered deprecated.
 +
-+	fd = socket(addr->ss_family, type, opts->proto);
- 	if (fd < 0) {
- 		log_err("Failed to create server socket");
- 		return -1;
-@@ -100,7 +103,7 @@ static int __start_server(int type, const struct sockaddr *addr, socklen_t addrl
- 		goto error_close;
- 	}
++So for the common case, name the file containing the test suite
++``tests/<suite>_kunit.c``. The ``tests`` directory should be placed at
++the same level as the code under test. For example, tests for
++``lib/string.c`` live in ``lib/tests/string_kunit.c``.
  
--	if (bind(fd, addr, addrlen) < 0) {
-+	if (bind(fd, (struct sockaddr *)addr, addrlen) < 0) {
- 		log_err("Failed to bind socket");
- 		goto error_close;
- 	}
-@@ -131,7 +134,7 @@ int start_server_str(int family, int type, const char *addr_str, __u16 port,
- 	if (make_sockaddr(family, addr_str, port, &addr, &addrlen))
- 		return -1;
- 
--	return __start_server(type, (struct sockaddr *)&addr, addrlen, opts);
-+	return start_server_addr(type, &addr, addrlen, opts);
- }
- 
- int start_server(int family, int type, const char *addr_str, __u16 port,
-@@ -173,7 +176,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 	if (!fds)
- 		return NULL;
- 
--	fds[0] = __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
-+	fds[0] = start_server_addr(type, &addr, addrlen, &opts);
- 	if (fds[0] == -1)
- 		goto close_fds;
- 	nr_fds = 1;
-@@ -182,7 +185,7 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 		goto close_fds;
- 
- 	for (; nr_fds < nr_listens; nr_fds++) {
--		fds[nr_fds] = __start_server(type, (struct sockaddr *)&addr, addrlen, &opts);
-+		fds[nr_fds] = start_server_addr(type, &addr, addrlen, &opts);
- 		if (fds[nr_fds] == -1)
- 			goto close_fds;
- 	}
-@@ -194,15 +197,6 @@ int *start_reuseport_server(int family, int type, const char *addr_str,
- 	return NULL;
- }
- 
--int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t len,
--		      const struct network_helper_opts *opts)
--{
--	if (!opts)
--		opts = &default_opts;
--
--	return __start_server(type, (struct sockaddr *)addr, len, opts);
--}
--
- void free_fds(int *fds, unsigned int nr_close_fds)
- {
- 	if (fds) {
+ If the suite name contains some or all of the name of the test's parent
+-directory, it may make sense to modify the source filename to reduce redundancy.
+-For example, a ``foo_firmware`` suite could be in the ``foo/firmware_test.c``
+-file.
++directory, it may make sense to modify the source filename to reduce
++redundancy. For example, a ``foo_firmware`` suite could be in the
++``tests/foo/firmware_kunit.c`` file.
 -- 
-2.43.0
+2.34.1
 
 
