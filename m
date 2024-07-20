@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-13954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8C0938051
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 11:29:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50435938055
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 11:30:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24C4F1F221ED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 09:29:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CF80282B22
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 09:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403995C5F3;
-	Sat, 20 Jul 2024 09:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2B174079;
+	Sat, 20 Jul 2024 09:30:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAEE347C2;
-	Sat, 20 Jul 2024 09:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B462E62B;
+	Sat, 20 Jul 2024 09:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721467781; cv=none; b=INZEjYGDeYtACZbTM4wNEvzVNIahIC6vGFuBxK57QbTgX4jhkG9U+s7mvaltr6LrKBZu7AW9tsiWprTatREzH1P6V9iJUjz+zV68LXlE/QrLqEjKl81Z5t3FJ7O2IiQ+U8eV2qMlHKVwATgTWV12Jm0mU01ij8/i1de4k5SYfMs=
+	t=1721467814; cv=none; b=I9X383AqR3JnSA7NfHYUXF7GPlaWlq77bh/U8K6W8QoNsPXfMWaDjk7bbzlZ8htjTd7MhUtmUXANwgghMi23WX1NCEFYWID1zF33fHY7uCsjG1Zy9kE7/bvVm6gLo0d2c8tDGrm8amnuEDiQ16laru0Fp8WFhKhG6a3FF+KugPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721467781; c=relaxed/simple;
-	bh=ImJu2kr6Sa+AFoKakrryDbwu4/ESuESy/ttRqviesqM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=STWjeB5BqYpHmoAgEPUFdx0OfODpqOb4Gn2980icJQn1CJ/5yT8qDtkexqOtHZvc+WYQxyZFYzMkxYTR1rTd9yTRDWItaH8plO8/n2w29b8hxYk5IsFIexMMoqjAW3Lif9NFqcKrTVmwGGq7ygHAW/W5mWLCGf6b7lr+HC4mtEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WR1TJ1M7hz4f3jdl;
-	Sat, 20 Jul 2024 17:29:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 614E01A058E;
-	Sat, 20 Jul 2024 17:29:36 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP1 (Coremail) with SMTP id cCh0CgCHc3VOg5tmPCSIAg--.40166S4;
-	Sat, 20 Jul 2024 17:29:35 +0800 (CST)
-Message-ID: <b371cb67-6fa4-499d-b572-496c6938d86d@huaweicloud.com>
-Date: Sat, 20 Jul 2024 17:29:35 +0800
+	s=arc-20240116; t=1721467814; c=relaxed/simple;
+	bh=vaPk98FKiT6+DjJv2mYeSusUwjvOO5yghYlf6m+IbaI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F6VxEHl7Qj/Zu9r6BZhlhL5O3JB95uo2/jf6XO659OEU5zcPlAhraVU7SIOHeSW615eykUre0AXroiyTp1WlL7kJ7tCGukkoHlOZyzavv7y0df2M20NwINrKvEZDyCfgN383NEP2qgkWwfVe0OmoV4833E2koLQFkvKB5bTXWQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WR1S52DBzzdjX4;
+	Sat, 20 Jul 2024 17:28:21 +0800 (CST)
+Received: from kwepemd100012.china.huawei.com (unknown [7.221.188.214])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7244014037E;
+	Sat, 20 Jul 2024 17:30:06 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemd100012.china.huawei.com (7.221.188.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Sat, 20 Jul 2024 17:30:05 +0800
+Message-ID: <fdc0c2f0-a16d-4534-90d9-696000871044@huawei.com>
+Date: Sat, 20 Jul 2024 17:30:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,132 +48,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/20] lsm: Refactor return value of LSM hook
- inode_copy_up_xattr
+Subject: Re: [PATCH v4 6/20] lsm: Refactor return value of LSM hook
+ getselfattr
 Content-Language: en-US
-To: Paul Moore <paul@paul-moore.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>,
- Brendan Jackman <jackmanb@chromium.org>, James Morris <jmorris@namei.org>,
- "Serge E . Hallyn" <serge@hallyn.com>,
- Khadija Kamran <kamrankhadijadj@gmail.com>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>,
- John Johansen <john.johansen@canonical.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Shung-Hsi Yu <shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Trond Myklebust <trond.myklebust@hammerspace.com>,
- Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>
-References: <20240711111908.3817636-6-xukuohai@huaweicloud.com>
- <3a8d55e0d41a35a1a3c5d3590240d16b@paul-moore.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <3a8d55e0d41a35a1a3c5d3590240d16b@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Paul Moore <paul@paul-moore.com>, Xu Kuohai <xukuohai@huaweicloud.com>,
+	<bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-integrity@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
+	<selinux@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>, Brendan Jackman
+	<jackmanb@chromium.org>, James Morris <jmorris@namei.org>, "Serge E . Hallyn"
+	<serge@hallyn.com>, Khadija Kamran <kamrankhadijadj@gmail.com>, Casey
+ Schaufler <casey@schaufler-ca.com>, Ondrej Mosnacek <omosnace@redhat.com>,
+	Kees Cook <keescook@chromium.org>, John Johansen
+	<john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>, Shung-Hsi Yu
+	<shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>, Alexander Viro
+	<viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Trond
+ Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker
+	<anna@kernel.org>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Stephen Smalley
+	<stephen.smalley.work@gmail.com>
+References: <20240711111908.3817636-7-xukuohai@huaweicloud.com>
+ <6e79c031aa6c223df552726ac6537d44@paul-moore.com>
+From: Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <6e79c031aa6c223df552726ac6537d44@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgCHc3VOg5tmPCSIAg--.40166S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF15Wr1ftF1kGF4xKF15Arb_yoW5XF4rpF
-	4UKa10qrn5tFyUZryxXF17Wws29ayfGFy5G39Ivw13Aa95ZF1fKryayr1IgF45WryxJF4v
-	qanF93ZxC3Z0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Wr
-	v_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
-	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0dO
-	z3UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd100012.china.huawei.com (7.221.188.214)
 
 On 7/19/2024 10:08 AM, Paul Moore wrote:
 > On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
 >>
 >> To be consistent with most LSM hooks, convert the return value of
->> hook inode_copy_up_xattr to 0 or a negative error code.
+>> hook getselfattr to 0 or a negative error code.
 >>
 >> Before:
->> - Hook inode_copy_up_xattr returns 0 when accepting xattr, 1 when
->>    discarding xattr, -EOPNOTSUPP if it does not know xattr, or any
->>    other negative error code otherwise.
+>> - Hook getselfattr returns number of attributes found on success
+>>    or a negative error code on failure.
 >>
 >> After:
->> - Hook inode_copy_up_xattr returns 0 when accepting xattr, *-ECANCELED*
->>    when discarding xattr, -EOPNOTSUPP if it does not know xattr, or
->>    any other negative error code otherwise.
+>> - Hook getselfattr returns 0 on success or a negative error code
+>>    on failure. An output parameter @nattr is introduced to hold
+>>    the number of attributes found on success.
 >>
 >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 >> ---
->>   fs/overlayfs/copy_up.c            |  6 +++---
->>   security/integrity/evm/evm_main.c |  2 +-
->>   security/security.c               | 12 ++++++------
->>   security/selinux/hooks.c          |  4 ++--
->>   security/smack/smack_lsm.c        |  6 +++---
->>   5 files changed, 15 insertions(+), 15 deletions(-)
+>>   include/linux/lsm_hook_defs.h |  2 +-
+>>   include/linux/security.h      |  5 +++--
+>>   security/apparmor/lsm.c       |  5 +++--
+>>   security/lsm_syscalls.c       |  6 +++++-
+>>   security/security.c           | 18 +++++++++++-------
+>>   security/selinux/hooks.c      | 13 +++++++++----
+>>   security/smack/smack_lsm.c    | 13 +++++++++----
+>>   7 files changed, 41 insertions(+), 21 deletions(-)
 > 
-> ...
-> 
->> diff --git a/security/security.c b/security/security.c
->> index 26eea8f4cd74..12215ca286af 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -2675,18 +2675,18 @@ EXPORT_SYMBOL(security_inode_copy_up);
->>    * lower layer to the union/overlay layer.   The caller is responsible for
->>    * reading and writing the xattrs, this hook is merely a filter.
->>    *
->> - * Return: Returns 0 to accept the xattr, 1 to discard the xattr, -EOPNOTSUPP
->> - *         if the security module does not know about attribute, or a negative
->> - *         error code to abort the copy up.
->> + * Return: Returns 0 to accept the xattr, -ECANCELED to discard the xattr,
->> + *         -EOPNOTSUPP if the security module does not know about attribute,
->> + *         or a negative error code to abort the copy up.
->>    */
->>   int security_inode_copy_up_xattr(struct dentry *src, const char *name)
->>   {
->>   	int rc;
->>   
->>   	/*
->> -	 * The implementation can return 0 (accept the xattr), 1 (discard the
->> -	 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
->> -	 * any other error code in case of an error.
->> +	 * The implementation can return 0 (accept the xattr), -ECANCELED
->> +	 * (discard the xattr), -EOPNOTSUPP if it does not know anything
->> +	 *  about the xattr or any other error code in case of an error.
->>   	 */
-> 
-> Updating the comment here is good, but considering that we also discuss
-> the return value in the function header comment, I think it might be
-> better to just remove this comment entirely and leave the function header
-> comment as the single source.  Duplicated comments/docs tend to fall out
-> of sync and create confusion.
+> The getselfattr hook is different from the majority of the other LSM
+> hooks as getselfattr is used as part of lsm_get_self_attr(2) syscall and
+> not by other subsystems within the kernel.  Let's leave it as-is for now
+> as it is sufficiently special case that a deviation is okay.
 >
 
-OK, will do
+Got it, thanks
 
->>   	rc = call_int_hook(inode_copy_up_xattr, src, name);
->>   	if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
-> 
-> 
 > --
 > paul-moore.com
+> 
 > 
 
 
