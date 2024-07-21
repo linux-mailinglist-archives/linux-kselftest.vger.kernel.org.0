@@ -1,152 +1,122 @@
-Return-Path: <linux-kselftest+bounces-13968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 570BF938266
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 20:12:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8163E9383D2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 09:51:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E824FB215AE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2024 18:12:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B3CE1F2142D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 07:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6401487E1;
-	Sat, 20 Jul 2024 18:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1A58C0B;
+	Sun, 21 Jul 2024 07:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AB84Dxvy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhp2lDr6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382107462;
-	Sat, 20 Jul 2024 18:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FC28BE5;
+	Sun, 21 Jul 2024 07:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721499135; cv=none; b=Wjf+Dwb8byvtoAiKr5To46jc0OKwnrvewVM1mxuQTN8W9QemNxOCuiGuPzL04B8oIEJ/ggZlYpnfn9dfsMjo0KXobn7iX3yHOAz2wC9eBEzoCT5fY8poqm38LDY5rXH42DUBQLum4Qg222WZ+fRnmqsjXapPKxocVt/ki0NBJXY=
+	t=1721548288; cv=none; b=nNABgxI5exUlqPLVzwgD75+A/AoYZ7cfeCwVirP8TaAdmQPXw7KT1dyowan/CgLddlaoteN7+7zFn1+cW2lqDAvHcQCTPZFGXUwWR8LxSCS4qvDlbB84rwi+G+NPiXTWu1MF/l+0/NZGAEI3npun9J6p2kCGDnvwvIqz7ClgMGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721499135; c=relaxed/simple;
-	bh=xvGkl/Q5RZm1OHzjC1CEvaV9TM/ddsiXIvui9kZdAxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BrD7yhSI1NJK+oMZLyXTfYxaYqZIPCNafYB4p114k7jbjTOCsHhn9/1GVycH+rvhK99e6Vzck2mNNOY+TS8epAX915O7ht+fg3Ql1OD+NzNLgmUJ4B9kgzk6b5T5orf0vyLmV1o9azm8XOnrrVAv0ko3mGcV/vHBm/7z9D0Vt90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AB84Dxvy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC4EDC2BD10;
-	Sat, 20 Jul 2024 18:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721499134;
-	bh=xvGkl/Q5RZm1OHzjC1CEvaV9TM/ddsiXIvui9kZdAxA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AB84DxvybDZU1PPp2G3mtE1hLs6HalMqgJQo3syRQHPW0Y9ZIBZbxd5UBGB+EO+fV
-	 bLWmVNVu510YlPs+0CmS5T54l3N1yjyJLZqdJCwcgetS1l6xcaQ1xh1u50sLiyWUqW
-	 SJrkzgli6EDFqXuw37oCKl2Z1asL+623EADegqDWmdnahmHjqUlj2pMx5ZSPFg8B9d
-	 eNrA6GFh1Cek1YPtzejqdgyDUzODIyz0mBLoMRJM9jlpzEqlhJcRJg1ibl8Kmgc2oZ
-	 mx/bZnh8Wr6U6OLO3Dd89t9vGKO64J2UdA7LLTJ4GxuJF21VEh1UZFlB8E6xcG2bf+
-	 5UryfthWGMyJw==
-Date: Sat, 20 Jul 2024 11:12:14 -0700
-From: Kees Cook <kees@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: David Gow <davidgow@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: KUnit: Update filename best practices
-Message-ID: <202407201111.C5DE72A11C@keescook>
-References: <20240720165441.it.320-kees@kernel.org>
- <c9613b11-5751-400f-ae83-4590d4593ab4@nvidia.com>
+	s=arc-20240116; t=1721548288; c=relaxed/simple;
+	bh=W7r0foFN4YETCnmjLVaIoiRWPsZ6QFDBo5GGtDjY4w4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gAgZjPhZuo1+2CB2Jb72yMi74Odk7rGbrp83qMPfyHdWMBO48fkvALZSXTN42r/4E0VCnaIM+lb+90plYW/jT08id6NEEm5fqsaC6sab33TdUrJw4SsKhuo4QqMJoEgonnBJe5HJcn6a0jpg1FPIBQkRtDYnxefsgEl/qc+v2GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhp2lDr6; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70af81e8439so1789772b3a.0;
+        Sun, 21 Jul 2024 00:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721548285; x=1722153085; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nr+m7W0mIba3WYETKiUFqBDDcPusJbv1sLo7YRpeyqk=;
+        b=hhp2lDr61BT5UpG2yM2NZsED7bYR8RBf5nAXsGIrLLBGpJSA9ipAtG9VsiGVNF4nHr
+         qbbZ5Nrk9W2VFFysSR0xjAniy9xh+UrXGepRLCfxB2ZCmU5Y9WMCuL9gnOBkbjKWJ7yc
+         LdnGLqehlcYi4AXj32Ry271+sNxLTKN2m4T6aQvAUFF/A8UFkE4XSB3LCjtmzds2DXRD
+         1hGI0PDZmSmQDp/MOXyMtd2r2mBf0908PL0x4wAa7jO3kT8AAtMrZu602+9RPJliyQnL
+         hw4UwcP+r5No7GCqPfR3NvTgRM8jZiiy07G7jgQdQ2FqUILafwMD1pduLGGskObq5D+M
+         pg3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721548285; x=1722153085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nr+m7W0mIba3WYETKiUFqBDDcPusJbv1sLo7YRpeyqk=;
+        b=tbCjoVyuuW6V47QgtlFNQ7Xkr6D5xlTe4W3Xs/Cz1Pnf9RwecTReM38o780PJHfv/+
+         u4izAJr7SVcotdm/oJ7NqRc0xwJAu2GZpcmWH79LhFn7SQ4pWWpazAjRHqjU1SkvvCW7
+         g+CFLmWycUwvrMZVKsQ3d3cDSFnn8uR0OuRwpJGJSu20h7jIQRAfQ9/Q3sg1E1+sngp4
+         gLbjya3c63s1JTMcwjdsNn+RxYsPHBX6SiCF8iFzgVNaT68NFepWmbjRSBVgKdImuWj/
+         Xzvy4Emo/I9jBwQW9+XXU2O0cZ9Q88QP0qIs9D158kwqrx/Af9uHQIe1rEhhzOsklvWL
+         VBcA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8xd8pBt+1mW6kijK7mTTK12Is5Px/M/M+YHIIN4Ba8wjw6a9P24RcyEqWBDOSPkm9RsXg4Teg/FgHydtTG+EGOF4qIN1S1Y1ZbheIC78h
+X-Gm-Message-State: AOJu0YxH+liBlLZSt7RmGE0as7jt19lXefkdVDI7m8uZmv1eRf0pDiCv
+	35jCBGqT/uMwLLGVzYfONq2kP5FDp2QD6M0Mcc9MczQs1c6eJlOhWFMXq7XE
+X-Google-Smtp-Source: AGHT+IEyukavIBmFBaZUZuTljKkuGAnJgIqRyyFOpSnrR3Aik4xtRqEtalC/kxnrL/0gvIu5Kp8Qzw==
+X-Received: by 2002:a05:6a21:9997:b0:1c0:e728:a99e with SMTP id adf61e73a8af0-1c4228cd990mr6340938637.26.1721548284988;
+        Sun, 21 Jul 2024 00:51:24 -0700 (PDT)
+Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cb77504952sm5760591a91.40.2024.07.21.00.51.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jul 2024 00:51:24 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Tony Ambardar <tony.ambardar@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v1 0/2] selftests/bpf: Add support for MIPS systems
+Date: Sun, 21 Jul 2024 00:50:54 -0700
+Message-Id: <cover.1721541467.git.tony.ambardar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9613b11-5751-400f-ae83-4590d4593ab4@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 20, 2024 at 10:59:10AM -0700, John Hubbard wrote:
-> On 7/20/24 9:54 AM, Kees Cook wrote:
-> > Based on feedback from Linus[1] and follow-up discussions, change the
-> > suggested file naming for KUnit tests.
-> > 
-> > Link: https://lore.kernel.org/lkml/CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com/ [1]
-> > Signed-off-by: Kees Cook <kees@kernel.org>
-> > ---
-> > Cc: David Gow <davidgow@google.com>
-> > Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> > Cc: Rae Moar <rmoar@google.com>
-> > Cc: John Hubbard <jhubbard@nvidia.com>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: kunit-dev@googlegroups.com
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-hardening@vger.kernel.org
-> > ---
-> >   Documentation/dev-tools/kunit/style.rst | 25 +++++++++++++++----------
-> >   1 file changed, 15 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-tools/kunit/style.rst
-> > index b6d0d7359f00..1538835cd0e2 100644
-> > --- a/Documentation/dev-tools/kunit/style.rst
-> > +++ b/Documentation/dev-tools/kunit/style.rst
-> > @@ -188,15 +188,20 @@ For example, a Kconfig entry might look like:
-> >   Test File and Module Names
-> >   ==========================
-> > -KUnit tests can often be compiled as a module. These modules should be named
-> > -after the test suite, followed by ``_test``. If this is likely to conflict with
-> > -non-KUnit tests, the suffix ``_kunit`` can also be used.
-> > -
-> > -The easiest way of achieving this is to name the file containing the test suite
-> > -``<suite>_test.c`` (or, as above, ``<suite>_kunit.c``). This file should be
-> > -placed next to the code under test.
-> > +Whether a KUnit test is compiled as a separate module or via an
-> > +``#include`` in a core kernel source file, the file should be named
-> > +after the test suite, followed by ``_kunit``, and live in a ``tests``
-> > +subdirectory to avoid conflicting with regular modules (e.g. if "foobar"
-> > +is the core module, then "foobar_kunit" is the KUnit test module) or the
-> > +core kernel source file names (e.g. for tab-completion). Many existing
-> > +tests use a ``_test`` suffix, but this is considered deprecated.
-> 
-> For this paragraph, may I suggest this wording below? It attempts to
-> explain the _kunit a bit (without leaving anything behind that would need
-> to be changed later, if/when people rename things from _test.c to _kunit.c),
-> as well as fixing up the sentence structure slightly:
-> 
-> 
-> Whether a KUnit test is compiled as a separate module or via an
-> ``#include`` in a core kernel source file, the file should be named
-> after the test suite, followed by ``_kunit``, and live in a ``tests``
-> subdirectory. This is to avoid conflicting with regular modules (e.g. if
-> "foobar" is the core module, then "foobar_kunit" is the KUnit test
-> module) or with the core kernel source file names (e.g. for
-> tab-completion). The ``_kunit`` suffix was chosen over the older (and
-> now deprecated) ``_test`` suffix, because KUnit behavior is sufficiently
-> distinct that it is worth identifying at file name level.
+Hello,
 
-Sure! I like that.
+This series includes two fixes to support builds targeting MIPS systems.
+The patches have been tested both with the kernel-patches/bpf CI and
+locally using mips64el-gcc/musl-libc and QEMU with an OpenWrt rootfs.
 
-> > +
-> > +So for the common case, name the file containing the test suite
-> > +``tests/<suite>_kunit.c``. The ``tests`` directory should be placed at
-> > +the same level as the code under test. For example, tests for
-> > +``lib/string.c`` live in ``lib/tests/string_kunit.c``.
-> >   If the suite name contains some or all of the name of the test's parent
-> > -directory, it may make sense to modify the source filename to reduce redundancy.
-> > -For example, a ``foo_firmware`` suite could be in the ``foo/firmware_test.c``
-> > -file.
-> > +directory, it may make sense to modify the source filename to reduce
-> > +redundancy. For example, a ``foo_firmware`` suite could be in the
-> > +``tests/foo/firmware_kunit.c`` file.
-> 
-> Whether you use that wording or not, this looks good, so:
-> 
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Patch 1 adds support for MIPS system includes when compiling BPF.
+Patch 2 fixes a MIPS GOT issue when linking uprobe_multi.
 
-Thanks!
+Feedback and suggestions for improvement are welcome!
+
+Thanks,
+Tony
+
+Tony Ambardar (2):
+  selftests/bpf: Add missing system defines for mips
+  selftests/bpf: Fix error linking uprobe_multi on mips
+
+ tools/testing/selftests/bpf/Makefile | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 -- 
-Kees Cook
+2.34.1
+
 
