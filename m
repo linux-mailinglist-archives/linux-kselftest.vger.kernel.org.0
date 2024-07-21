@@ -1,53 +1,54 @@
-Return-Path: <linux-kselftest+bounces-13976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F86D9385EE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 21:33:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACBF99385F3
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 21:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 671DC1C206A8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 19:33:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4162BB20DA8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jul 2024 19:33:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5869E16A954;
-	Sun, 21 Jul 2024 19:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FB316B3AC;
+	Sun, 21 Jul 2024 19:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SfonLoqH"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ka3Y07O5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3D0322E;
-	Sun, 21 Jul 2024 19:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEC166301;
+	Sun, 21 Jul 2024 19:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721590403; cv=none; b=oL0VTX57kmINGv0p/uOxsFXb/cjAvBh1QwjG1wnbHurOndt0lMfS+QRVUeE+ZQSPLF1UEuymvIifRrujnlcXzp8PmjBtJo5NSc2SW/xkoheLqicvCTr3p7teY78zEnFAnAapIx0g2xGKtsuj4LnjF/XGuHBE5BBiYbcsr3KqQA0=
+	t=1721590404; cv=none; b=j8SIGq0KHoDdBmcBPsbg7/qgeD9XDc+TxEXppbp6FtfcC2Wj6Hz7dXJxD6akPDLftlXWu32ZI96RQC2wbhWiFHaJHePxeIkEflG5GeBJpQopjZLF0tuCUlli4MToN+qghaLK2xYtMe7ipP22hk4W8HXbc0RwbIi1vuBvfVqad6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721590403; c=relaxed/simple;
-	bh=AoT/Uut9stibicIDKBPjE/MdgHvySYO/zLsb99YiRDs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IgwG5KdY/qKSL9eUjlF1WTW5rkyfhJfDvLRJPsZ0GlDdSZ2Gu1pp9bCJ+4ix46FddtsKAyNTB6ulJaoZebCAc5icNmOTn4eCmE0MFlLV1YDhP2wEpAjbLyMwtVyQW/rRnk6PPnSl2h/9SFsqgLGVD60md11tbvYhsFIAj4Tb3rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SfonLoqH; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1721590404; c=relaxed/simple;
+	bh=iAo487ia/wp3XezejlFMYb+izrM0mct6oShgF6NffGU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DI/LzS+GM0Clk9qUaG0/KiJaVZj5d90FXhZOR8MfT7kD34roBpmQYVK2e6WVjrJ0h8CkE+Jcd+tj8AmcNzaci9aolYt7etfuviCAcy05Rli03rw5Pmt63DB/XXKDxmJ9/RHzNLGy8Pm5FO+AzrTcXJflaPg+fLzGEu6dljF26oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ka3Y07O5; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 97D3DE0003;
-	Sun, 21 Jul 2024 19:33:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FA1EE0002;
+	Sun, 21 Jul 2024 19:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1721590392;
+	t=1721590393;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZQFTzEsP7Kp/6et5R0JPxrZOQS09vVWQIIZprfMMn4g=;
-	b=SfonLoqHpUyoc7NI2/IpdNwWXebVrXILbM9wifHduS4ZsY9zaUOTlJA1jmbJi6aWx0cDzG
-	+8nAjsRS8zbPSahyReUumG+LJaiJ6yV+ylPlK3O2HXi3x48gjAZAf72eIY6+zSqgdbwcGE
-	I+atMstAk+3kK8MplwpTQ4B1dxDrofNhGrgM4Soe9ZM+ZljWTHRzn6Nd9sLl+HMyVXfbYW
-	EzX2zf9VTr8+vEHkZxW1KrrjB0ebtpE6SO/uPZyLQ8AdaGLmAtrWimF9WiLCZkO4BuGxFI
-	puLkbPu1IQfJfzAUEZDFzf77Dkf2x4bEHarrbZGCeST8m8iPKP19rvRv15BrHw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DsUX943pSWyx64jeqbX92/+5qMtvxBsUvtsU2xaH1MQ=;
+	b=Ka3Y07O5CEay6bu5kGkLiKyAj3u6aVX9/R0IHgcFwJ1i2WHms1vWBqM8ImoJzJU/u8XqHj
+	8BrfePTBs8f/68qwtdgh/ectnFvLSOtq/ut6VwL0hZv6/PBegfKqRgY/X9aEoIQSn69pnC
+	/DBPl33IotFrxheA6bEhhYjXEErpB2c4M11QU2BX5ChcW7t9KBBAPDxvQ9DLSUqV5Npjor
+	COjBqiOhbcyhofbm82XhmT6LfirHB2QDPVCt5+ZjAPqUgAvhtdlSRMCxGj87SQgDaePpJ2
+	flp8HTDSEZUR0/Lf/g8+mJHEny+ZB89JiP5GPJ1g1X1bKs/ddF+APCrEKR2R/w==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH v4 0/2] selftests/bpf: convert test_xdp_veth to test_progs
- framework
-Date: Sun, 21 Jul 2024 21:33:02 +0200
-Message-Id: <20240721-convert_test_xdp_veth-v4-0-23bdba21b2f9@bootlin.com>
+Date: Sun, 21 Jul 2024 21:33:03 +0200
+Subject: [PATCH v4 1/2] selftests/bpf: update xdp_redirect_map prog
+ sections for libbpf
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,10 +57,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAG5inWYC/3XN0QrCIBTG8VcZXmccdc6tq94jYkx31oSaQ0UWs
- XfPgqCIXf4/OL/zIAG9xUAOxYN4TDZYN+UodwUxYzddkNo+N+HAS1AMqHFTQh/biCG2Sz+3CeN
- IoTQG5CClVD3Jt7PHwS5v93TOPdoQnb+/3yT2Wj8i2xATo0Drqu6M0dApro7auXi10964G3mZi
- X87csvh2Skr3oCu+VD1/N8R30615YjsKA1M1A0Ko8Wvs67rE0tSm2RMAQAA
+Message-Id: <20240721-convert_test_xdp_veth-v4-1-23bdba21b2f9@bootlin.com>
+References: <20240721-convert_test_xdp_veth-v4-0-23bdba21b2f9@bootlin.com>
+In-Reply-To: <20240721-convert_test_xdp_veth-v4-0-23bdba21b2f9@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
@@ -79,51 +79,48 @@ Cc: ebpf@linuxfoundation.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
 X-Mailer: b4 0.13.0
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello everyone,
+xdp_redirect_map.c is a bpf program used by test_xdp_veth.sh, which is not
+handled by the generic test runner (test_progs). To allow converting this
+test to test_progs, the corresponding program must be updated to allow
+handling it through skeletons generated by bpftool and libbpf.
 
-this small series is a first step in a larger effort aiming to help improve
-eBPF selftests and the testing coverage in CI. It focuses for now on
-test_xdp_veth.sh, a small test which is not integrated yet in test_progs.
-The series is mostly about a rewrite of test_xdp_veth.sh to make it able to
-run under test_progs, relying on libbpf to manipulate bpf programs involved
-in the test.
+Update programs section names to allow to manipulate those with libbpf.
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
-Changes in v4:
-- add missing netns_close in an error path during programs attach
-- Link to v3: https://lore.kernel.org/r/20240716-convert_test_xdp_veth-v3-0-7b01389e3cb3@bootlin.com
+ tools/testing/selftests/bpf/progs/xdp_redirect_map.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Changes in v3:
-- Fix doc style in the new test
-- Collect acked-by tags
-- Link to v2: https://lore.kernel.org/r/20240715-convert_test_xdp_veth-v2-0-46290b82f6d2@bootlin.com
+diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c b/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
+index d037262c8937..682dda8dabbc 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
++++ b/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
+@@ -10,19 +10,19 @@ struct {
+ 	__uint(value_size, sizeof(int));
+ } tx_port SEC(".maps");
+ 
+-SEC("redirect_map_0")
++SEC("xdp")
+ int xdp_redirect_map_0(struct xdp_md *xdp)
+ {
+ 	return bpf_redirect_map(&tx_port, 0, 0);
+ }
+ 
+-SEC("redirect_map_1")
++SEC("xdp")
+ int xdp_redirect_map_1(struct xdp_md *xdp)
+ {
+ 	return bpf_redirect_map(&tx_port, 1, 0);
+ }
+ 
+-SEC("redirect_map_2")
++SEC("xdp")
+ int xdp_redirect_map_2(struct xdp_md *xdp)
+ {
+ 	return bpf_redirect_map(&tx_port, 2, 0);
 
-Changes in v2:
-- fix many formatting issues raised by checkpatch
-- use static namespaces instead of random ones
-- use SYS_NOFAIL instead of snprintf() + system ()
-- squashed the new test addition patch and the old test removal patch
-- Link to v1: https://lore.kernel.org/r/20240711-convert_test_xdp_veth-v1-0-868accb0a727@bootlin.com
-
----
-Alexis Lothoré (eBPF Foundation) (2):
-      selftests/bpf: update xdp_redirect_map prog sections for libbpf
-      selftests/bpf: integrate test_xdp_veth into test_progs
-
- tools/testing/selftests/bpf/Makefile               |   1 -
- .../selftests/bpf/prog_tests/test_xdp_veth.c       | 213 +++++++++++++++++++++
- .../testing/selftests/bpf/progs/xdp_redirect_map.c |   6 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh       | 121 ------------
- 4 files changed, 216 insertions(+), 125 deletions(-)
----
-base-commit: 4837cbaa1365cdb213b58577197c5b10f6e2aa81
-change-id: 20240710-convert_test_xdp_veth-04cc05f5557d
-
-Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.45.2
 
 
