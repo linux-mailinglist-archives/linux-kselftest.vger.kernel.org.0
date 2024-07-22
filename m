@@ -1,229 +1,127 @@
-Return-Path: <linux-kselftest+bounces-14000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2BD9393D4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 20:47:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37CB59393E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 20:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC4CE2819F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 18:47:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67DF71C2152D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 18:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C2F116F29A;
-	Mon, 22 Jul 2024 18:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FAE16FF5A;
+	Mon, 22 Jul 2024 18:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ogialzVN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KspQ6jkn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4766616E88C
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 18:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B12A16EBF0;
+	Mon, 22 Jul 2024 18:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721674055; cv=none; b=XvHjIWtBhqqJF9uuGx3mxpPKdfGrzqtswQYqXMklQ6iwztk8Wj/6Ka8qLXosgFQF2ToLqI6XJ0yA2HDH3Y9lTpe/TNh3kY9N3zmIGpUv4QRWAQJDP+0/Gn4XwtoeK8noqVn4LyaeNj4ZUkf4kVfDPqc/1hIp+wclgI/LWKDIi0U=
+	t=1721674341; cv=none; b=k9823zUV3y/2LTa8vskwvvjr3apbJaGyhsTm3zPcPunRkwhfwp+auBOhOP/B6raLetz0lMgo+qvk0EUw8Vqyq9CcGILnnLCHiPeW6Br3bdyymUorm2OnszrYdJFJJBeLe8ITcKiBPFZ1E43NRErxaLsY8WZIHUxCLedZKwEj6bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721674055; c=relaxed/simple;
-	bh=asA28J//MR/tZw5E77Yd89aREdVKDUWw1npsUkxp9pc=;
+	s=arc-20240116; t=1721674341; c=relaxed/simple;
+	bh=9CIc1XlRDVqSX70HnPwHx+wFrc7kTfy/vxozkOgco1w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gbNTW5jdnMBn4SV5EMAn2ouEB4Hg0U/+PLFkz7+P215l3YeWgDOAawMiP8ryUDkm9dlnhV9gkinJwwA4fe89byFyyZFR/ZoqdnF2FPD1Br6SyCozoLIwzL3UsnmpvxyYICWjOyPdkS9JXFLtykSIcen3f6//FGGfkYOH/9zGrrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ogialzVN; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-8036ce66134so181590139f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 11:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1721674051; x=1722278851; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OzTRfDaexdJXU/NKu+dqGzHLJmOKAxsba4iUWApjtBs=;
-        b=ogialzVNR6iKRPGZpusW/yYSZ8rOLkIEhAeG4vlJySRgYIT62Q7rMfuI/9/XGXJQ1Z
-         2TBlR2odsrfqMJhxOi4B0+lH0NYjjQuO/ykAZLJXvRH1wooDCsjjQISBJEvzXgDgbUcx
-         VWLFJ+BPI4voMyrliBzfPiGs7fgQciODdBFl4Ai+awG8xfzjejnQgVjWnzradQAr6Nbo
-         ev2mMm1PeA1lc71KcurutiosCp4ze1Yw7qFqPdHrPUdAl+RMwEsINkyie6HHHcb+UuRz
-         OCUy6gbrll0F4Mlbj1SKkTFl5vykvtkXAIDTv8OnFvd2xVdPZdJSHt39BTT41EWyZYgM
-         tw7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721674051; x=1722278851;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OzTRfDaexdJXU/NKu+dqGzHLJmOKAxsba4iUWApjtBs=;
-        b=YKKjRzpn/Z2SH0us07kqZY3AuhKGcADTghtb5N3M0w3i7FriPILw56cveaaWGAMaE3
-         krAYwxvyXuDwdgxCYaF+OdExkgfLMG+81rnOaXFV2zP9OMYrGYrjgM8q34VDQ6r0b4YO
-         BAV2jDIPtV2e2J2anQ6TcMd7nerYiB93gijHJzXnCWXTSo1HzNGIoHkZAdvbh62KHry9
-         uSVSPXCMmvUrcsUPkUvhrOcuysSKduYl9/AZrsQj1H04l7uFAGdHtbgDhkznbXkyPDeg
-         9SU75GzBABjZPja4ltBlRu7O/PkNWXB2qG5AA81+VGJD7WAAb6Xc4WeVbnf3wRvqrHN0
-         PiJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcKDWFQuFtJbbt8MpkP9mNrwlBADy5kT3v+CexI1OMDEkxlsbQcg5WQa6HhKNLWfMYBDhC6bfv12qJLsQ311pLi/O0Xos260OZTmTno1NC
-X-Gm-Message-State: AOJu0YwiOh03Z8chNa/d+S1uP0jBWfZ1dNLrb56xJa0AWT5BInqd5wmW
-	xpUi0L/XD4f6f5/d6ZADhz9IMHfU9HoW/GmLdYGzUm6MKuB2T4Zbxyh8Pb0EAEk=
-X-Google-Smtp-Source: AGHT+IFOuPIoea3HTs+tbRyLXH40CUhD1wo+gozLPHK8gHW5C0xpq+X2GQXcdlWAxPs41NzeH0m9PA==
-X-Received: by 2002:a05:6602:48d:b0:804:2b28:75db with SMTP id ca18e2360f4ac-81ea3b3a2cfmr103988639f.10.1721674051211;
-        Mon, 22 Jul 2024 11:47:31 -0700 (PDT)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-819abb08682sm258753339f.1.2024.07.22.11.47.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 11:47:30 -0700 (PDT)
-Date: Mon, 22 Jul 2024 13:47:29 -0500
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Samuel Holland <samuel.holland@sifive.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>, Andy Chiu <andy.chiu@sifive.com>, 
-	Jessica Clarke <jrtc27@jrtc27.com>, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 12/13] selftests: riscv: Fix vector tests
-Message-ID: <20240722-0940cd64c0d8bb03f2427022@orel>
-References: <20240719-xtheadvector-v5-0-4b485fc7d55f@rivosinc.com>
- <20240719-xtheadvector-v5-12-4b485fc7d55f@rivosinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ruzaqM+pKNAeXQ/7Hpi62ZNWz3vy2abua71vA4YFCznbUSqBUzKHV65MsQAh6OkYyGzVx5KZrje4hm3iElN9fQkLrqcCC3eBrb+oqE6V2/0HJJn6ofAkZwuYQYCiCIxKVIZWwQkithEuvu8hCoK/Dtsg6d2rcpfvD3/YvP6OH+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KspQ6jkn; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1721674333;
+	bh=9CIc1XlRDVqSX70HnPwHx+wFrc7kTfy/vxozkOgco1w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KspQ6jknwz3pawGMvQYRgqB2lNBo2zLNNN0v9QI95Rf4DUMPbXySO3nc2PlSHufzm
+	 kwA7fscMtVhi82YW9ZqFP8qaZU+giRdMmYi/ZW7OvWIMKyNUrg3NOI3+Iq4CO2z+iK
+	 4D8bo1QCC5Y7t9KmZ4a5qd6vgdlJ1nlH7kUBfc5IiVIgGRbbUTV7lKEsptC62VgjdX
+	 wH9oSHFdpqmDvhjGupNL4AciHOWxJI3JczClgEg/Im4BBvv8I0nDugL1+tL/vdSd/A
+	 PGVW5HZSBEV5TWOeT/RCT2g3ea1oJhxCLUkmil/fNP8tcBjvWUALYuxvxkc6tv2GHe
+	 R14Xu8cMkGuZw==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2844337806B3;
+	Mon, 22 Jul 2024 18:52:10 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:51:58 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Laura Nao <laura.nao@collabora.com>, shuah@kernel.org,
+	gregkh@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH] selftests: ksft: Track skipped tests when finishing the
+ test suite
+Message-ID: <b558e9dd-3c09-44a2-923d-afe7bc2a7e97@notapiano>
+References: <20240722154319.619944-1-laura.nao@collabora.com>
+ <0fe1b57e-4557-4020-878a-7eec13a2fdb1@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240719-xtheadvector-v5-12-4b485fc7d55f@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fe1b57e-4557-4020-878a-7eec13a2fdb1@linuxfoundation.org>
 
-On Fri, Jul 19, 2024 at 09:19:07AM GMT, Charlie Jenkins wrote:
-> Overhaul the riscv vector tests to use kselftest_harness to help the
-> test cases correctly report the results and decouple the individual test
-> cases from each other. With this refactoring, only run the test cases is
-> vector is reported and properly report the test case as skipped
-> otherwise. The v_initval_nolibc test was previously not checking if
-> vector was supported and used a function (malloc) which invalidates
-> the state of the vector registers.
+On Mon, Jul 22, 2024 at 11:32:35AM -0600, Shuah Khan wrote:
+> On 7/22/24 09:43, Laura Nao wrote:
+> > Consider skipped tests in addition to passed tests when evaluating the
+> > overall result of the test suite in the finished() helper.
+> > 
+> > Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> > ---
+> >   tools/testing/selftests/kselftest/ksft.py | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
+> > index cd89fb2bc10e..bf215790a89d 100644
+> > --- a/tools/testing/selftests/kselftest/ksft.py
+> > +++ b/tools/testing/selftests/kselftest/ksft.py
+> > @@ -70,7 +70,7 @@ def test_result(condition, description=""):
+> >   def finished():
+> > -    if ksft_cnt["pass"] == ksft_num_tests:
+> > +    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
 > 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  tools/testing/selftests/riscv/abi/ptrace           | Bin 0 -> 759368 bytes
->  tools/testing/selftests/riscv/vector/.gitignore    |   3 +-
->  tools/testing/selftests/riscv/vector/Makefile      |  17 +-
->  .../selftests/riscv/vector/v_exec_initval_nolibc.c |  84 +++++++
->  tools/testing/selftests/riscv/vector/v_helpers.c   |  56 +++++
->  tools/testing/selftests/riscv/vector/v_helpers.h   |   5 +
->  tools/testing/selftests/riscv/vector/v_initval.c   |  16 ++
->  .../selftests/riscv/vector/v_initval_nolibc.c      |  68 ------
->  .../testing/selftests/riscv/vector/vstate_prctl.c  | 266 ++++++++++++---------
->  9 files changed, 324 insertions(+), 191 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/riscv/abi/ptrace b/tools/testing/selftests/riscv/abi/ptrace
-> new file mode 100755
-> index 000000000000..2b03e77b4dcf
-> Binary files /dev/null and b/tools/testing/selftests/riscv/abi/ptrace differ
-> diff --git a/tools/testing/selftests/riscv/vector/.gitignore b/tools/testing/selftests/riscv/vector/.gitignore
-> index 9ae7964491d5..7d9c87cd0649 100644
-> --- a/tools/testing/selftests/riscv/vector/.gitignore
-> +++ b/tools/testing/selftests/riscv/vector/.gitignore
-> @@ -1,3 +1,4 @@
->  vstate_exec_nolibc
->  vstate_prctl
-> -v_initval_nolibc
-> +v_initval
-> +v_exec_initval_nolibc
-> diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
-> index bfff0ff4f3be..995746359477 100644
-> --- a/tools/testing/selftests/riscv/vector/Makefile
-> +++ b/tools/testing/selftests/riscv/vector/Makefile
-> @@ -2,18 +2,27 @@
->  # Copyright (C) 2021 ARM Limited
->  # Originally tools/testing/arm64/abi/Makefile
->  
-> -TEST_GEN_PROGS := vstate_prctl v_initval_nolibc
-> -TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc
-> +TEST_GEN_PROGS := v_initval vstate_prctl
-> +TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc sys_hwprobe.o v_helpers.o
->  
->  include ../../lib.mk
->  
-> -$(OUTPUT)/vstate_prctl: vstate_prctl.c ../hwprobe/sys_hwprobe.S
-> +$(OUTPUT)/sys_hwprobe.o: ../hwprobe/sys_hwprobe.S
-> +	$(CC) -static -c -o$@ $(CFLAGS) $^
-> +
-> +$(OUTPUT)/v_helpers.o: v_helpers.c
-> +	$(CC) -static -c -o$@ $(CFLAGS) $^
-> +
-> +$(OUTPUT)/vstate_prctl: vstate_prctl.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
->  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
->  
->  $(OUTPUT)/vstate_exec_nolibc: vstate_exec_nolibc.c
->  	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
->  		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
->  
-> -$(OUTPUT)/v_initval_nolibc: v_initval_nolibc.c
-> +$(OUTPUT)/v_initval: v_initval.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
-> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> +
-> +$(OUTPUT)/v_exec_initval_nolibc: v_exec_initval_nolibc.c
->  	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
->  		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
-> diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-> new file mode 100644
-> index 000000000000..74b13806baf0
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-> @@ -0,0 +1,84 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Get values of vector registers as soon as the program starts to test if
-> + * is properly cleaning the values before starting a new program. Vector
-> + * registers are caller saved, so no function calls may happen before reading
-> + * the values. To further ensure consistency, this file is compiled without
-> + * libc and without auto-vectorization.
-> + *
-> + * To be "clean" all values must be either all ones or all zeroes.
-> + */
-> +
-> +#define __stringify_1(x...)	#x
-> +#define __stringify(x...)	__stringify_1(x)
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	char prev_value = 0, value;
-> +	unsigned long vl;
-> +	int first = 1;
-> +
-> +	asm volatile (
-> +		".option push\n\t"
-> +		".option arch, +v\n\t"
-> +		"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
-> +		".option pop\n\t"
-> +		: [vl] "=r" (vl)
-> +	);
-> +
-> +#define CHECK_VECTOR_REGISTER(register) ({					\
-> +	for (int i = 0; i < vl; i++) {						\
-> +		asm volatile (							\
-> +			".option push\n\t"					\
-> +			".option arch, +v\n\t"					\
-> +			"vmv.x.s %0, " __stringify(register) "\n\t"		\
-> +			"vsrl.vi " __stringify(register) ", " __stringify(register) ", 8\n\t" \
-> +			".option pop\n\t"					\
-> +			: "=r" (value));					\
-> +		if (first) {							\
-> +			first = 0;						\
-> +		} else if (value != prev_value || !(value == 0x00 || value == 0xff)) { \
-> +			printf("Register " __stringify(register) " values not clean! value: %u\n", value);	\
-> +			exit(-1);						\
+> Please don't. Counting skips in pass or fail isn't accurate
+> reporting. skips need to be reported as skips.
 
-I think we should ensure all tests in tools/testing/selftests/riscv/ use
-TAP output, exiting with ksft_finished(), or at least exit with 0 for
-success. For example, vstate_exec_nolibc exits with 2 for success since
-it exits with the return value of prctl(PR_RISCV_V_GET_CONTROL). And
-vstate_prctl.c exits with several different negative values, which means
-it'll exit with several different values around 255. To figure what went
-wrong, one will have to convert those exit codes to the original negative
-values in order to look them up. Having these types of inconsistent exit
-values complicates QA.
+Hi Shuah,
+
+this won't change the skip count, just allow a test suite that has a mix of pass
+and skip results to exit with code 0. That's the same behavior as the C
+ksft_finished() helper in kselftest.h:
+
+#define ksft_finished()			\
+	ksft_exit(ksft_plan ==		\
+		  ksft_cnt.ksft_pass +	\
+		  ksft_cnt.ksft_xfail +	\
+		  ksft_cnt.ksft_xskip)
+
+It was my oversight to not do the same in the python helper.
+
+Laura,
+
+I consider this fixing an incorrect behavior, so I'd add this tag:
+
+Fixes: dacf1d7a78bf ("kselftest: Add test to verify probe of devices from discoverable buses")
+
+I think the message is good as is, but maybe it could have mentioned that this
+matches the behavior of the C helper, just to make the point above clearer.
+
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+And just a note for the maintainers, this patch depends on "kselftest: Move ksft
+helper module to common directory"
+https://lore.kernel.org/all/20240705-dev-err-log-selftest-v2-2-163b9cd7b3c1@collabora.com/
+which was picked through the usb tree but is queued for 6.11-rc1.
 
 Thanks,
-drew
+Nícolas
 
