@@ -1,123 +1,259 @@
-Return-Path: <linux-kselftest+bounces-14003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F8F939474
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 21:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B31E8939541
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 23:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C75901C20F06
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 19:47:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D70701C2171E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 21:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F888171094;
-	Mon, 22 Jul 2024 19:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6366538DD2;
+	Mon, 22 Jul 2024 21:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BdQtOpLC"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PHlu6V+Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0855A170836
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 19:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE1345007
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 21:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721677652; cv=none; b=CB1Ip90LTKjsPT3Z5taz/4q+owaVWSAb2A+egcfXdxTRCNvS8UTcZBO7YjV2d3+pymwsTXUto2jH+9R5i/jt2nZ/jcWeacRb5VOpM5X2+wz8mYilK4xXKL+8GisZbFitmH+FXYkOU5Zt6XVqOEQPFPSbLl+lr5wgBhuRcFvick4=
+	t=1721682891; cv=none; b=NBbEfhWVhNzG8NQljokgzYtkHzesu1o8G8qVHLjV8ZnCF12PtArLbqeCtVWcYhB3uZExJEphTRJgHBYOxRw+6Ib/U1legIS4ovwnCAy6s66vVV6Jl1j7opqwO0e9lrl1WVMlTOb9p5dasFGKCJpz/y1XakbZFGgNMuj0E2fnw9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721677652; c=relaxed/simple;
-	bh=lxD+x4M5ZuRIs5SmkXUd3G0EwqlJokSJsLs34BG1Yj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PtHDfC2OWOMLCeEh10ejFQVV5uvHgNRorQjSoG4ucI/qgUcgsskdD8AyiWDGvwD6deluTv9T4H+0IXoiS9ynqqCLJSN9XaEgNDyV505PRyTx2r5MTAw0BOsdQOLaMDd6EGFQ+iiU7uj8+m4vq2GjAd1PKPLDXfYzSRGwTQN0B4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BdQtOpLC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721677650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4iHghnHlTR8qrrh0D9KWKWiFHRcAr406QMFW8Evv2TA=;
-	b=BdQtOpLCJcQFTVkVwMoBwIJnIEofO/CXJ6OmcZ5utC2gbgCv9iGLvjbXDpEiDANSok3xhb
-	az4XDksCk2X0fazGodEKlXcJx5z9CWNDtcvnwJUW0gW7eNd7uBR0uL9nijCFwWeMrwR9vf
-	qmhdUh/360TSpUYW+G02XHF7pXat1kw=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-245-BrAfaY91NDyFN1Rm5wFZKQ-1; Mon,
- 22 Jul 2024 15:47:26 -0400
-X-MC-Unique: BrAfaY91NDyFN1Rm5wFZKQ-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A9D81955BD0;
-	Mon, 22 Jul 2024 19:47:23 +0000 (UTC)
-Received: from [10.22.17.2] (unknown [10.22.17.2])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8BA171955D44;
-	Mon, 22 Jul 2024 19:47:18 +0000 (UTC)
-Message-ID: <9abf7f84-c103-4280-825c-b382edb9b8fe@redhat.com>
-Date: Mon, 22 Jul 2024 15:47:17 -0400
+	s=arc-20240116; t=1721682891; c=relaxed/simple;
+	bh=1lagUwf3RC7JZReX5Mnpd7A0gWXy3u+C9i+YHhmoyxc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MdYLYb0KHRO3Xr5GvRrjR01Ov9P/huy/zjVP9cJIrHuSB7FRIUgv/p5mDSpulLRcxZwm1pi6Nf+1ufxZX2pWaC5bXjujmyJhgLVPJTXTLfa3JW5qb7Nz7QcRmVTHjp9YcrM2YZzhum0tc0F9Puu29GQ2fx7WNvHbPMYiCLcOwzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PHlu6V+Y; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fd66cddd07so748295ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 14:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721682889; x=1722287689; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=re4a/549teXfpxRZzb1IT6fF6eSAFMvkPvsA5nTBSEI=;
+        b=PHlu6V+Y1tSVP4PYEI+aO1Y5Vhvotnse984CQjdRHMQmysJnhxRkkpTU4Ma3NA+xAZ
+         XLCt/MIBou5dG4gsbvB0+RqFYiXwsuI5Lt7NC6j3co0V+i0SCmC+AGJn2JQar49XPQ4L
+         h4xyARp8Ja2IQBQGlXlO4oUfKbd8sRNsj2XqcVtmfJGYEKVZZ5OY+v5RdXg/zd/ulsQf
+         wIyGr3MtHBh6LnOU1EXiQzRdz5PQrMlwgTIlHhRPQSVNDhdmrCF8M/DX4gmEgBQxd+zU
+         gE5KdMaGu6kuEzwNwt7+1guX3B37fVCWVeIq7jbvJHMUn+o6AJ9EsjRx4BFdoYcqwlxF
+         rFvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721682889; x=1722287689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=re4a/549teXfpxRZzb1IT6fF6eSAFMvkPvsA5nTBSEI=;
+        b=khZIJmtzgW+BnafLsQ8WpdMijXfC4Uvce2Qen9jrsuAwsYJ3kbvBQZKNJSMbB8HQPv
+         HURMaS2nbAXeEltju9pQVRYq1VWPHXJ+tqjYab39xi47CgZqC0m4KZjNTBRSuh8SziHQ
+         jZDeKQs7+8tCItg/Lee0xB7No5367nHCXS3IK6m6MvhOyd2PJJuDPmJjIgagEGhCWav0
+         /zyAiZ0er/tDcFwq0tCmNzoeYNwRPyL6rgH10aUU+f+1a6+YnOhJD+NKn9UJ7yvmoSXf
+         5PnoCbGSYlwPJvxp3VNaxb0GzBkZCy5t5cZnO6tsGcwpeNQp5vd5UA8x9uYriXL2NS3s
+         mWlg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/C14uPcfMzwKNuEc4HC1Glhtp54TdzAuNU/wiJm/it/ebn1MuDCvXcB7ySbecVhAGAXIZajQEt0bwgD71/NHLrWm9Xe/3R5kN6vYY5zC+
+X-Gm-Message-State: AOJu0YzgnxkrpUKTFEud9ihPE1F9jOyzKrsV+KOzgIN6/UgDmLVYMUGP
+	OcAw13s8/NcGZpRKmjSsK75lG7SZHMeSEecVvAIhAGufXxKgShUGKFMukBbT/54=
+X-Google-Smtp-Source: AGHT+IHNGpumvDD95UYgz2v1+PPZ4GlU1XFvLWIOWNaPJpQc9m08TfGb1igAHvmYgQ6MZbrThHXc8A==
+X-Received: by 2002:a17:902:db02:b0:1fb:4b87:6e9d with SMTP id d9443c01a7336-1fdb5f6b95fmr9284455ad.42.1721682888632;
+        Mon, 22 Jul 2024 14:14:48 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f485bd1sm59363665ad.275.2024.07.22.14.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jul 2024 14:14:48 -0700 (PDT)
+Date: Mon, 22 Jul 2024 14:14:44 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 12/13] selftests: riscv: Fix vector tests
+Message-ID: <Zp7LxAWkDQMQhVLq@ghost>
+References: <20240719-xtheadvector-v5-0-4b485fc7d55f@rivosinc.com>
+ <20240719-xtheadvector-v5-12-4b485fc7d55f@rivosinc.com>
+ <20240722-0940cd64c0d8bb03f2427022@orel>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: David Finkel <davidf@vimeo.com>, Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com,
- Jonathan Corbet <corbet@lwn.net>, Michal Hocko <mhocko@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Zefan Li <lizefan.x@bytedance.com>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20240722151713.2724855-1-davidf@vimeo.com>
- <20240722151713.2724855-2-davidf@vimeo.com> <Zp6jSoB14boeGhWH@google.com>
- <CAFUnj5MF4nKq0B7aWWyBpK3b5EZh7W4+xAmeg5SMwpd7gHptsA@mail.gmail.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <CAFUnj5MF4nKq0B7aWWyBpK3b5EZh7W4+xAmeg5SMwpd7gHptsA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240722-0940cd64c0d8bb03f2427022@orel>
 
-On 7/22/24 15:30, David Finkel wrote:
->>> diff --git a/mm/page_counter.c b/mm/page_counter.c
->>> index db20d6452b71..40d5f4990218 100644
->>> --- a/mm/page_counter.c
->>> +++ b/mm/page_counter.c
->>> @@ -82,6 +82,8 @@ void page_counter_charge(struct page_counter *counter, unsigned long nr_pages)
->>>                 */
->>>                if (new > READ_ONCE(c->watermark))
->>>                        WRITE_ONCE(c->watermark, new);
->>> +             if (new > READ_ONCE(c->local_watermark))
->>> +                     WRITE_ONCE(c->local_watermark, new);
->> Hm, can't we have a single comparison on the hot path?
->> Also, we read and write c->local_watermark speculatively here, Idk if it's still
->> acceptable with an ability to reset watermarks "locally". Maybe it is, but
->> it definitely deserves at least a comment with an explanation.
-> Unfortunately, since the two watermarks may be reset at different
-> times I don't think we
-> can consolidate.
-> e.g. I think that if the usage peaked, dropped down a bit and then was
-> going back
-> up again when the "local_watermark" was reset, we'll continue only
-> bumping local_watermark,
-> but we don't want to touch "watermark" until we hit that watermark again.
-If we make page_counter_reset_watermark() reset the local_watermark as well,
-we can guarantee "local_watermark <= watermark" and wrap one check inside
-the other.
+On Mon, Jul 22, 2024 at 01:47:29PM -0500, Andrew Jones wrote:
+> On Fri, Jul 19, 2024 at 09:19:07AM GMT, Charlie Jenkins wrote:
+> > Overhaul the riscv vector tests to use kselftest_harness to help the
+> > test cases correctly report the results and decouple the individual test
+> > cases from each other. With this refactoring, only run the test cases is
+> > vector is reported and properly report the test case as skipped
+> > otherwise. The v_initval_nolibc test was previously not checking if
+> > vector was supported and used a function (malloc) which invalidates
+> > the state of the vector registers.
+> > 
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  tools/testing/selftests/riscv/abi/ptrace           | Bin 0 -> 759368 bytes
+> >  tools/testing/selftests/riscv/vector/.gitignore    |   3 +-
+> >  tools/testing/selftests/riscv/vector/Makefile      |  17 +-
+> >  .../selftests/riscv/vector/v_exec_initval_nolibc.c |  84 +++++++
+> >  tools/testing/selftests/riscv/vector/v_helpers.c   |  56 +++++
+> >  tools/testing/selftests/riscv/vector/v_helpers.h   |   5 +
+> >  tools/testing/selftests/riscv/vector/v_initval.c   |  16 ++
+> >  .../selftests/riscv/vector/v_initval_nolibc.c      |  68 ------
+> >  .../testing/selftests/riscv/vector/vstate_prctl.c  | 266 ++++++++++++---------
+> >  9 files changed, 324 insertions(+), 191 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/riscv/abi/ptrace b/tools/testing/selftests/riscv/abi/ptrace
+> > new file mode 100755
+> > index 000000000000..2b03e77b4dcf
+> > Binary files /dev/null and b/tools/testing/selftests/riscv/abi/ptrace differ
+> > diff --git a/tools/testing/selftests/riscv/vector/.gitignore b/tools/testing/selftests/riscv/vector/.gitignore
+> > index 9ae7964491d5..7d9c87cd0649 100644
+> > --- a/tools/testing/selftests/riscv/vector/.gitignore
+> > +++ b/tools/testing/selftests/riscv/vector/.gitignore
+> > @@ -1,3 +1,4 @@
+> >  vstate_exec_nolibc
+> >  vstate_prctl
+> > -v_initval_nolibc
+> > +v_initval
+> > +v_exec_initval_nolibc
+> > diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
+> > index bfff0ff4f3be..995746359477 100644
+> > --- a/tools/testing/selftests/riscv/vector/Makefile
+> > +++ b/tools/testing/selftests/riscv/vector/Makefile
+> > @@ -2,18 +2,27 @@
+> >  # Copyright (C) 2021 ARM Limited
+> >  # Originally tools/testing/arm64/abi/Makefile
+> >  
+> > -TEST_GEN_PROGS := vstate_prctl v_initval_nolibc
+> > -TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc
+> > +TEST_GEN_PROGS := v_initval vstate_prctl
+> > +TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc sys_hwprobe.o v_helpers.o
+> >  
+> >  include ../../lib.mk
+> >  
+> > -$(OUTPUT)/vstate_prctl: vstate_prctl.c ../hwprobe/sys_hwprobe.S
+> > +$(OUTPUT)/sys_hwprobe.o: ../hwprobe/sys_hwprobe.S
+> > +	$(CC) -static -c -o$@ $(CFLAGS) $^
+> > +
+> > +$(OUTPUT)/v_helpers.o: v_helpers.c
+> > +	$(CC) -static -c -o$@ $(CFLAGS) $^
+> > +
+> > +$(OUTPUT)/vstate_prctl: vstate_prctl.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
+> >  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+> >  
+> >  $(OUTPUT)/vstate_exec_nolibc: vstate_exec_nolibc.c
+> >  	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
+> >  		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
+> >  
+> > -$(OUTPUT)/v_initval_nolibc: v_initval_nolibc.c
+> > +$(OUTPUT)/v_initval: v_initval.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
+> > +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+> > +
+> > +$(OUTPUT)/v_exec_initval_nolibc: v_exec_initval_nolibc.c
+> >  	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
+> >  		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
+> > diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
+> > new file mode 100644
+> > index 000000000000..74b13806baf0
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
+> > @@ -0,0 +1,84 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Get values of vector registers as soon as the program starts to test if
+> > + * is properly cleaning the values before starting a new program. Vector
+> > + * registers are caller saved, so no function calls may happen before reading
+> > + * the values. To further ensure consistency, this file is compiled without
+> > + * libc and without auto-vectorization.
+> > + *
+> > + * To be "clean" all values must be either all ones or all zeroes.
+> > + */
+> > +
+> > +#define __stringify_1(x...)	#x
+> > +#define __stringify(x...)	__stringify_1(x)
+> > +
+> > +int main(int argc, char **argv)
+> > +{
+> > +	char prev_value = 0, value;
+> > +	unsigned long vl;
+> > +	int first = 1;
+> > +
+> > +	asm volatile (
+> > +		".option push\n\t"
+> > +		".option arch, +v\n\t"
+> > +		"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
+> > +		".option pop\n\t"
+> > +		: [vl] "=r" (vl)
+> > +	);
+> > +
+> > +#define CHECK_VECTOR_REGISTER(register) ({					\
+> > +	for (int i = 0; i < vl; i++) {						\
+> > +		asm volatile (							\
+> > +			".option push\n\t"					\
+> > +			".option arch, +v\n\t"					\
+> > +			"vmv.x.s %0, " __stringify(register) "\n\t"		\
+> > +			"vsrl.vi " __stringify(register) ", " __stringify(register) ", 8\n\t" \
+> > +			".option pop\n\t"					\
+> > +			: "=r" (value));					\
+> > +		if (first) {							\
+> > +			first = 0;						\
+> > +		} else if (value != prev_value || !(value == 0x00 || value == 0xff)) { \
+> > +			printf("Register " __stringify(register) " values not clean! value: %u\n", value);	\
+> > +			exit(-1);						\
+> 
+> I think we should ensure all tests in tools/testing/selftests/riscv/ use
+> TAP output, exiting with ksft_finished(), or at least exit with 0 for
+> success. For example, vstate_exec_nolibc exits with 2 for success since
+> it exits with the return value of prctl(PR_RISCV_V_GET_CONTROL). And
+> vstate_prctl.c exits with several different negative values, which means
+> it'll exit with several different values around 255. To figure what went
+> wrong, one will have to convert those exit codes to the original negative
+> values in order to look them up. Having these types of inconsistent exit
+> values complicates QA.
+> 
+> Thanks,
+> drew
 
-         if (new > READ_ONCE(c->local_watermark)) {
-                 WRITE_ONCE(c->local_watermark, new);
-                 if (new > READ_ONCE(c->watermark))
-                         WRITE_ONCE(c->watermark, new);
-         }
+I do not follow. I am using the kselftest_harness
+(tools/testing/selftests/kselftest_harness.h) that does output using the
+TAP format. vstate_exec_nolibc is not a test in itself but is a helper.
+The Makefile for the vector tests describes this as:
 
-Cheers,
-Longman
+TEST_GEN_PROGS := v_initval vstate_prctl
+
+If you run the riscv collection of tests with:
+
+$ ./run_kselftest.sh --collection riscv
+
+You will see that the only vector test cases are v_initval and
+vstate_prctl, which both output as expected in TAP format.
+
+I do see that I messed up the return type of the is_vector_supported()
+function, I had meant to change that to a bool from an int since
+RISCV_HWPROBE_EXT_ZVE32X is greater than 32 bits. I will send a new
+version.
+
+- Charlie
 
 
