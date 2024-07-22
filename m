@@ -1,138 +1,94 @@
-Return-Path: <linux-kselftest+bounces-13994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-13995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47D6293919F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 17:19:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 449F09391F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 17:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78A611C20E47
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 15:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDAAE28209D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 15:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2316B16DECF;
-	Mon, 22 Jul 2024 15:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A468716E868;
+	Mon, 22 Jul 2024 15:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b="GFMYAJJL"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Z24rXTCn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B6216D4EF
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 15:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18681C2FD;
+	Mon, 22 Jul 2024 15:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721661541; cv=none; b=rhGbm6aSTXjunYoMf/eBBz/kxtHXrS2W+0V2Z+DNyDBacXpA2rOsrzJHakz4cuMDDl4WQQ8lWaY3WPpSZZoglBJuT7rM5ERoUzb4644gPGDDpMwQQy/vtey4LMS0ZukUu/TFK66otmQOdP8KblOgE4FsCccX711rGtGls9bRjZU=
+	t=1721662993; cv=none; b=HFuYlXrA7HDDY0TCY5GdyJuN12hjA2W4LOoi6Oge1xWoeggzU5oDJ44CxsHw1zaQAHMk6W0S1V4z6a1SAwtUOkS9ucA1G3/Dk6DwcXTpujTWs6hhoP2Z6HHHUX/hXJSVnGRbQOhA3rBdNSegA/gOCxzg3E+Eg0pIEGxyAgzIqU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721661541; c=relaxed/simple;
-	bh=tKK9/3I13MvhyzlrlIeNEK5w1H/w6SfkKGofIH4mavE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OkXpmstFnJO4pRSOnW00VGH4adn3y8XI99wBLWBKJurNEGE3qwjTm7jIyUPZPYuPIUtnDUKJg6pLnJfAx9HdP/4sn8K6DmDHXdfqVirX7fKHlcG4GmKjxMCt10LQIy/9Bo9SDdLDOYH6HnehBu7mSnvEvhINe+ZoC3OmNgSRKrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=fail smtp.mailfrom=vimeo.com; dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b=GFMYAJJL; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=vimeo.com
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5ce74defe41so2377410eaf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 08:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vimeo.com; s=google; t=1721661538; x=1722266338; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tKK9/3I13MvhyzlrlIeNEK5w1H/w6SfkKGofIH4mavE=;
-        b=GFMYAJJLKx1eyRTdfIm/1R0tSHAaQCvQ6HNwwKm+0gbeaCYa56vrIVm2bh6X0nmPzY
-         MaR3kLjNepI6MXD3ONsPhE/bZyLrYxCeEkf2MJ1yOe3ZRkwTQnKyy3I4atydNdhTfdDZ
-         aWKNv5LZWcxV/gC8Z/5+GksMiIBlI8KiY/Y5A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721661538; x=1722266338;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tKK9/3I13MvhyzlrlIeNEK5w1H/w6SfkKGofIH4mavE=;
-        b=cnae/ZOjz688phQm5bMeUx9xS40OEioV3U/No18xq3w0y4xE0HWexUK8w5+Mnvqz9E
-         tKrch/7lYgy8roKUfySuuchqXaepDLEmYQAY1UWUSEVMSVXJCZJwby4QAN3sf72kNtAu
-         bdknNgqMOUGYAEBas0e0/o9hQC5Ld9MyhkcRCRvcS2aFjAa3HNHU0J6jxyD+mAmlXY5W
-         iT4ecWR9ApkpX7O+hPo9nsckx0Aa752NEvgubrOdel5Qv9XZRmuQ2UQbvViJJ6EuCRbg
-         dbKmh7Bv+qKaK9XBb0GQmOkTcyVzoJMy/vsJRpt16/hLiS7Oj5GbFETdBfZBP7Ihadqu
-         BAvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJmh5jEwlVSZlD2XKP1BUs6RqOIx12h05i75jKTRuNShpgne91jJjhpWNmGHIaK68p2O7PdeZfbL+7tIJ5nNXvhxH3BcybRtKIUOxjQAqc
-X-Gm-Message-State: AOJu0Yx9z9zj89wOvJ0yun/8wPUsf4to0jdg42IdIC9IVxbEIWZDP1zf
-	ZLZS6KltGysRmm+GDVYGcJs3ijflXdMRstx7O4ziuIPP5K/FXA4EgHn+2SRqQhmIBiGMyHe2TX8
-	/2vBpfpeFlvduBhzI6JbYAAGKzemGzRb3CJklrg==
-X-Google-Smtp-Source: AGHT+IH5LDxowoDamLUYoLl291IngnNdCcTq6/3wHFVuWdTaH42FkypxLhePVVQznXZrboSlC/zmNdEhr4+x0rPlRJ0=
-X-Received: by 2002:a05:6870:1715:b0:25e:1ced:744 with SMTP id
- 586e51a60fabf-263c7612bb6mr6127529fac.47.1721661538646; Mon, 22 Jul 2024
- 08:18:58 -0700 (PDT)
+	s=arc-20240116; t=1721662993; c=relaxed/simple;
+	bh=h5POLGJfSGRMecB42sEXFpKK5KqVX/3/GyAAIx32zhg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ehKbX+j9JgjfsSGiKS0do7FiymXgYWePsV9LG7RbJsHvRv1VGNnWlRGoYnicRn6gLCHePX6NpT17M1r3pD17BuYq/35cD1vElQQhWqqkPzeTY0QS+MwiKiB/1HNloyFSj1J1xZS/5n40PqEMiOXek6uKrRxvzB4Jmo4KI6Ae15M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Z24rXTCn; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1721662990;
+	bh=h5POLGJfSGRMecB42sEXFpKK5KqVX/3/GyAAIx32zhg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Z24rXTCnL95yb0j2+DFd4hiUatl+PAK16iy0+4EawqMklI4tYiMBiPEltxyfOJBBC
+	 ooQsQ9Nk+HdyXx4GNn/EMh142yVLrLO3y5vDW7WOA+CtcGxtCiJP+Z2hZmH7boFBqA
+	 uQ370pHT6kjYS52q24yVr7gci0Cm5Nu1CmLF5KyKqiqfmCU1ZinCPC6/GCPNx9rcKN
+	 rEgPbDrYLNarZHeS5wsw52r1RGP3sGRgOJlniCm1qe1PDzJLEbvhn1N+cGQKx/fnQX
+	 B7zJutzLNQNIsv9uRXgeYa9pTwBQyRxnhM1iGV6SdlOZJ1qunE7Q9fcWBwh5KKUHSP
+	 DIQfGxsJMh3rQ==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 48B2B37800DE;
+	Mon, 22 Jul 2024 15:43:09 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: shuah@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	nfraprado@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH] selftests: ksft: Track skipped tests when finishing the test suite
+Date: Mon, 22 Jul 2024 17:43:19 +0200
+Message-Id: <20240722154319.619944-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240715203625.1462309-1-davidf@vimeo.com> <20240715203625.1462309-2-davidf@vimeo.com>
- <ZpZ6IZL482XZT1fU@tiehlicka> <ZpajW9BKCFcCCTr-@slm.duckdns.org>
- <20240717170408.GC1321673@cmpxchg.org> <CAFUnj5OkHp3fYjByCnXJQ51rog93DsimSoc1qxcU7UyKw-nFrw@mail.gmail.com>
- <fcb8f0ec-59ff-4f79-82dd-7eaf2530aef3@redhat.com>
-In-Reply-To: <fcb8f0ec-59ff-4f79-82dd-7eaf2530aef3@redhat.com>
-From: David Finkel <davidf@vimeo.com>
-Date: Mon, 22 Jul 2024 11:18:47 -0400
-Message-ID: <CAFUnj5MsGdswXbvy6neGzDsD=9=CuTCcezrkz0ofFsJedydUag@mail.gmail.com>
-Subject: Re: [PATCH] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Tejun Heo <tj@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	core-services@vimeo.com, Jonathan Corbet <corbet@lwn.net>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, Shakeel Butt <shakeel.butt@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 18, 2024 at 11:23=E2=80=AFPM Waiman Long <longman@redhat.com> w=
-rote:
->
->
-> On 7/18/24 17:49, David Finkel wrote:
-> > I spent some time today attempting to implement this.
-> > Here's a branch on github that compiles, and I think is close to what y=
-ou
-> > described, but is definitely still a WIP:
-> >
-> > https://github.com/torvalds/linux/compare/master...dfinkel:linux:memcg2=
-_memory_peak_fd_session
-> >
-> > Since there seems to be significant agreement that this approach is bet=
-ter
-> > long-term as a kernel interface, if that continues, I can factor out so=
-me of
-> > the changes so it supports both memory.peak and memory.swap.peak,
-> > fix the tests, and clean up any style issues tomorrow.
-> >
-> > Also, If there are opinions on whether the cgroup_lock is a reasonable =
-way
-> > of handling this synchronization, or if I should add a more appropriate=
- spinlock
-> > or mutex onto either the pagecounter or the memcg, I'm all ears.
->
-> cgroup_lock() should only be used by the cgroup core code, though there
-> are exceptions.
->
-> You may or may not need lock protection depending on what data you want
-> to protect and if there is any chance that concurrent race may screw
-> thing up. If lock protection is really needed, add your own lock to
-> protect the data. Since your critical sections seem to be pretty short,
-> a regular spinlock will be enough.
+Consider skipped tests in addition to passed tests when evaluating the
+overall result of the test suite in the finished() helper.
 
-Thanks, using cgroup_lock() created a deadlock, and using a spinlock
-resolved that.
+Signed-off-by: Laura Nao <laura.nao@collabora.com>
+---
+ tools/testing/selftests/kselftest/ksft.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Cheers,
-> Longman
->
+diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
+index cd89fb2bc10e..bf215790a89d 100644
+--- a/tools/testing/selftests/kselftest/ksft.py
++++ b/tools/testing/selftests/kselftest/ksft.py
+@@ -70,7 +70,7 @@ def test_result(condition, description=""):
+ 
+ 
+ def finished():
+-    if ksft_cnt["pass"] == ksft_num_tests:
++    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+         exit_code = KSFT_PASS
+     else:
+         exit_code = KSFT_FAIL
+-- 
+2.30.2
 
-
---=20
-David Finkel
-Senior Principal Software Engineer, Core Services
 
