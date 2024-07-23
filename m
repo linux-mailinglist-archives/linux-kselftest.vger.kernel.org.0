@@ -1,177 +1,202 @@
-Return-Path: <linux-kselftest+bounces-14063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14068-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B56D6939DA9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 11:27:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DACE1939DE8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 11:33:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17E68B223CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 09:27:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F00F1F23131
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 09:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FFB15278E;
-	Tue, 23 Jul 2024 09:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9390214E2E1;
+	Tue, 23 Jul 2024 09:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TUQGSc5T"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pG2Ql5Of"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C5215252C
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 09:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD1F14D432;
+	Tue, 23 Jul 2024 09:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721726655; cv=none; b=SwxkTo6IlpzCAlkiOkfCwFoFoGUnGO8e9LDgn5r2x46w70bimTDQESmuAxDNpwXSpegaQv+CrjicxbTYAwepnmkg/l1fpoGmFFhpvaPjJ1fUcuJAj8nR/QG9RkvWzdMihR1z6JXpn1GvvkaYKVrmLaoayEc+yVwBKkTaHdOFL5s=
+	t=1721727132; cv=none; b=BXagHfniaSXkxODJrrYyIKNsUtsyrjBbep7SXGPAsSbWE54wqt4a7HxtXaHL5hOtDL+lPXjb1REW4e21Dderse2qfXRrvWRDzZH46IlqJnueVANqsU3ndloLo++uw1DA0z9maEiaoQaSlr3VzwL6jVR/BIZMLfRKNsLKbN7IdVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721726655; c=relaxed/simple;
-	bh=Yncer6iw6PhfpuYRJqGAfWtYlWU0gZdo6+GNkPi9OG8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LU6LGrhYy2z+fXAe++1FdzrtKxWWBDcSNoBjzgESp12FzjVu4p4SSFID/ATIDl+Rl9GhX+LapRLuT1uKoorObWw1sBQ6LfLkTi0X8DxSxb1skvGPMwnuT0FPTfziP9cIDmk324fz5zQ7yv1CFFF5+9s3utV1Rtf/Y6dXF7ORQPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TUQGSc5T; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721726652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=di3b6+JsOF88ta+JmszT4sf4RN4aT8grE7boITm/z88=;
-	b=TUQGSc5TZ45gg05R0VAejsFz+jnac7vTah/6oF/tL62Ov/h9iwAWnY8utcrN7XF0FbhJNA
-	UvlCwUIyWbH0Wq+i2d5vbdeJK/KzIXWJ7j3R+oKUPpM5O4R/xEsxrh6E9dDcn7X3PBXY3I
-	A3YWyftUgwtMpwGfsuuZSsLMuyuh3OA=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-47-ZNc-ANkFNHy2KlV9trn7Sw-1; Tue, 23 Jul 2024 05:24:10 -0400
-X-MC-Unique: ZNc-ANkFNHy2KlV9trn7Sw-1
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2ee88b1c3e9so7377861fa.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 02:24:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721726649; x=1722331449;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=di3b6+JsOF88ta+JmszT4sf4RN4aT8grE7boITm/z88=;
-        b=QxUtDOw1GYthwGPQCvAVVMwtHD3c+PXmlhM2tdVBTdTK7wPklQf2+KBLmASgfW0Lc8
-         UK90w1yY6p673uYjMKIJSt1b6AdX5I4uZ1xIEOi3JEIcFcVnpYRLKqf18fUR3pHYOBA+
-         ZpWDpwnFfhx+qbt9Rj14KgRqs5a6FJc+SG7aQv9coE0/OwTATswhhogbwS0oqEdMeswF
-         bx4V9Dt+RXvbYhxIGfyoFiWMBsFEKGwuyUjHWsG89SPgbt4MOH68fiyYMlJsO87XdPuw
-         lqCl0WeajaDGz1AXhrxw2Ud7M0ESKJUxw/7tFdo+tXDO/2xPOOc7Yx1Zs3QiN8IBdzxI
-         /dqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHf1qQeNyGARY6jCUdsB1kU6u2pHg56veP0liaMmzh5gYTe0osIQhu3SDNUDrcApXydMjJtZyXgHympF8mzvyE5Y0huCF9jgz14hdaPvRS
-X-Gm-Message-State: AOJu0Ywzm+vQHisGy6zno5khxBRdW5v368Roe49M8AfafM6QEwC41wWV
-	k8u6QJetDk1pv4evSefrG7J6Pv9B6onh63/noWNgXKOwRaqwPatygXbYv9RpWbk6+wxIQnusfkd
-	+7uE87tmMxK9Qdiqm0p5snRjxS1uoDavYTS1Kv6f1+EKsC2ckg+C4VBt1uE9QHVFZew==
-X-Received: by 2002:a2e:9357:0:b0:2ef:1c03:73e6 with SMTP id 38308e7fff4ca-2ef1c0374aemr31782141fa.5.1721726648767;
-        Tue, 23 Jul 2024 02:24:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFJWuDgcUZs1POGKMrOCZ33+7BgDR786BaYJXF0A6bQ28l60Nv/FdFgs8F4ROQIQKbxoHgZfA==
-X-Received: by 2002:a2e:9357:0:b0:2ef:1c03:73e6 with SMTP id 38308e7fff4ca-2ef1c0374aemr31782081fa.5.1721726648322;
-        Tue, 23 Jul 2024 02:24:08 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:173f:4f10::f71? ([2a0d:3344:173f:4f10::f71])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3687868480csm10896053f8f.13.2024.07.23.02.24.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jul 2024 02:24:07 -0700 (PDT)
-Message-ID: <416ebc12-50a1-48e5-a17f-8999f3b460cd@redhat.com>
-Date: Tue, 23 Jul 2024 11:24:06 +0200
+	s=arc-20240116; t=1721727132; c=relaxed/simple;
+	bh=f5smg5nLrkQWVYhKiY3CHFpG9kgHIiwO0tc7vK1+Gog=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EXLw/j0QvgBK96DChqkuBpclsBOZrVrXl/oaLn8SM3mGpgE4wBSuVDqz0gJ0iNmA4PxShz8JbjjLvBhzSf9qe6nNCjqlTQKuR92ti02WpO2vBe6FPoHyCxr05ovghL7FtlrTL27mTxS2Xo4DjDPnQkWnC9MG8+Ak2rtel1iaXto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pG2Ql5Of; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46N8QHjJ027710;
+	Tue, 23 Jul 2024 09:32:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=mTiORae4fO3QnxSZi64LA/mdHe
+	QAXFMdnrahKk2VS0E=; b=pG2Ql5Of8BOtlVwbgfig/5P21w6N0nt0kfMkDVrVQX
+	O1JJe8Vt4sJlsxJq2GMWR8Fvu0EhA0hdGQ4nKLBQyQwvscRO6hf/GkXKRJbMA2Nu
+	EnLjdo2ZrYGKxLagJ0F4nk7uyISPYA4Rui8rTKuk+5BDxsDXfQQskVVqbxymF6xF
+	KBRSGDVfgPHECuYLrCjGoYtqvclK1dZ5aXvQ6bwWKoMGwFqOFjLsudWhdws5+lSn
+	jLXe7IayaCsB/YjMpxj0CXOjGMqOMjrX8Kf9oXo/SFxTfRVcHWxQD+MLWZ4q3DpN
+	8sJHs1eqwHmtW5xfzOk8YNd5i+M/jiMGIZicw4OE0JPw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40hwma1dyh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jul 2024 09:32:01 +0000 (GMT)
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46N9TNi6021421;
+	Tue, 23 Jul 2024 09:32:00 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40hwma1dye-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jul 2024 09:32:00 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46N5kdYQ005776;
+	Tue, 23 Jul 2024 09:31:59 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40gy2p9ntt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jul 2024 09:31:59 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46N9VsWf56230254
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 23 Jul 2024 09:31:56 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1359D2004E;
+	Tue, 23 Jul 2024 09:31:54 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 740CE20049;
+	Tue, 23 Jul 2024 09:31:53 +0000 (GMT)
+Received: from darkmoore.ibmuc.com (unknown [9.171.28.84])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 23 Jul 2024 09:31:53 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Subject: [PATCH v2 00/10] selftests: kvm: s390: Add s390x ucontrol selftests
+Date: Tue, 23 Jul 2024 11:31:16 +0200
+Message-ID: <20240723093126.285319-1-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: forwarding: skip if kernel not support
- setting bridge fdb learning limit
-To: Nikolay Aleksandrov <razor@blackwall.org>,
- Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Johannes Nixdorf <jnixdorf-oss@avm.de>,
- linux-kselftest@vger.kernel.org
-References: <20240723082252.2703100-1-liuhangbin@gmail.com>
- <d5dc8f31-26ed-488c-9d63-a96b95609814@blackwall.org>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <d5dc8f31-26ed-488c-9d63-a96b95609814@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4b9AZbJQh6fag_PntW3vvL9hySAgwnHZ
+X-Proofpoint-GUID: ESRV06PVpZHFbXE2WyLtIsuFsuxHdQAv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-22_18,2024-07-23_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ bulkscore=0 spamscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=623 adultscore=0 priorityscore=1501 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407230065
+
+This patch series adds a selftest suite to validate the s390x
+architecture specific ucontrol KVM interface.
+
+When creating a VM on s390x it is possible to create it as userspace
+controlled VM or in short ucontrol VM.
+These VMs delegates the management of the VM to userspace instead
+of handling most events within the kernel. Consequently the userspace
+has to manage interrupts, memory allocation etc.
+
+Before this patch set this functionality lacks any public test cases.
+It is desirable to add test cases for this interface to be able to
+reduce the risk of breaking changes in the future.
+
+In order to provision a ucontrol VM the kernel needs to be compiled with
+the CONFIG_KVM_S390_UCONTROL enabled. The users with sys_admin capability
+can then create a new ucontrol VM providing the KVM_VM_S390_UCONTROL
+parameter to the KVM_CREATE_VM ioctl.
+
+The kernels existing selftest helper functions can only be partially be
+reused for these tests.
+
+The test cases cover existing special handling of ucontrol VMs within the
+implementation and basic VM creation and handling cases:
+* Reject setting HPAGE when VM is ucontrol
+* Assert KVM_GET_DIRTY_LOG is rejected
+* Assert KVM_S390_VM_MEM_LIMIT_SIZE is rejected
+* Assert state of initial SIE flags setup by the kernel
+* Run simple program in VM with and without DAT
+* Assert KVM_EXIT_S390_UCONTROL exit on not mapped memory access
+* Assert functionality of storage keys in ucontrol VM
+
+Running the test cases requires sys_admin capabilities to start the
+ucontrol VM.
+This can be achieved by running as root or with a command like:
+
+    sudo setpriv --reuid nobody --inh-caps -all,+sys_admin \
+      --ambient-caps -all,+sys_admin --bounding-set -all,+sys_admin \
+      ./ucontrol_test
+
+The patch set does also contain some code cleanup / consolidation of
+architecture specific defines that are now used in multiple test cases.
+
+---
+
+V1 -> V2:
+- add ucontrol to s390 debug config (new patch)
+- PATCH 2: changed atomic_t to __u32 (thanks Claudio)
+- PATCH 4: reformatted comment in FIXTURE_SETUP(uc_kvm)
+- PATCH 5: refactored to display 8 byte blocks + more internal reuse
+           (thanks Claudio)
+- PATCH 7: make use of more declarative defines instead of magic values
+- PATCH 8: make use of more declarative defines instead of magic values
+           (thanks Claudio)
+- PATCH 9: add reference to fix verified by the test case
 
 
+Christoph Schlameuss (10):
+  selftests: kvm: s390: Define page sizes in shared header
+  selftests: kvm: s390: Add kvm_s390_sie_block definition for userspace
+    tests
+  selftests: kvm: s390: Add s390x ucontrol test suite with hpage test
+  selftests: kvm: s390: Add test fixture and simple VM setup tests
+  selftests: kvm: s390: Add debug print functions
+  selftests: kvm: s390: Add VM run test case
+  selftests: kvm: s390: Add uc_map_unmap VM test case
+  selftests: kvm: s390: Add uc_skey VM test case
+  selftests: kvm: s390: Verify reject memory region operations for
+    ucontrol VMs
+  s390: Enable KVM_S390_UCONTROL config in debug_defconfig
 
-On 7/23/24 10:30, Nikolay Aleksandrov wrote:
-> On 23/07/2024 11:22, Hangbin Liu wrote:
->> If the testing kernel doesn't support setting fdb_max_learned or show
->> fdb_n_learned, just skip it. Or we will get errors like
->>
->> ./bridge_fdb_learning_limit.sh: line 218: [: null: integer expression expected
->> ./bridge_fdb_learning_limit.sh: line 225: [: null: integer expression expected
->>
->> Fixes: 6f84090333bb ("selftests: forwarding: bridge_fdb_learning_limit: Add a new selftest")
->> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
->> ---
->>   .../forwarding/bridge_fdb_learning_limit.sh    | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
->> index 0760a34b7114..a21b7085da2e 100755
->> --- a/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
->> +++ b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
->> @@ -178,6 +178,22 @@ fdb_del()
->>   	check_err $? "Failed to remove a FDB entry of type ${type}"
->>   }
->>   
->> +check_fdb_n_learned_support()
->> +{
->> +	if ! ip link help bridge 2>&1 | grep -q "fdb_max_learned"; then
->> +		echo "SKIP: iproute2 too old, missing bridge max learned support"
->> +		exit $ksft_skip
->> +	fi
->> +
->> +	ip link add dev br0 type bridge
->> +	local learned=$(fdb_get_n_learned)
->> +	ip link del dev br0
->> +	if [ "$learned" == "null" ]; then
->> +		echo "SKIP: kernel too old; bridge fdb_n_learned feature not supported."
->> +		exit $ksft_skip
->> +	fi
->> +}
->> +
->>   check_accounting_one_type()
->>   {
->>   	local type=$1 is_counted=$2 overrides_learned=$3
->> @@ -274,6 +290,8 @@ check_limit()
->>   	done
->>   }
->>   
->> +check_fdb_n_learned_support
->> +
->>   trap cleanup EXIT
->>   
->>   setup_prepare
-> 
-> Isn't the selftest supposed to be added after the feature was included?
-> 
-> I don't understand why this one is special, we should have the same
-> issue with all new features.
+ arch/s390/Kconfig.debug                       |   3 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/s390x/debug_print.h |  69 ++
+ .../selftests/kvm/include/s390x/processor.h   |   5 +
+ .../testing/selftests/kvm/include/s390x/sie.h | 240 +++++++
+ .../selftests/kvm/lib/s390x/processor.c       |  10 +-
+ tools/testing/selftests/kvm/s390x/cmma_test.c |   7 +-
+ tools/testing/selftests/kvm/s390x/config      |   2 +
+ .../testing/selftests/kvm/s390x/debug_test.c  |   4 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |   4 +-
+ tools/testing/selftests/kvm/s390x/tprot.c     |   5 +-
+ .../selftests/kvm/s390x/ucontrol_test.c       | 614 ++++++++++++++++++
+ 13 files changed, 949 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/debug_print.h
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/sie.h
+ create mode 100644 tools/testing/selftests/kvm/s390x/config
+ create mode 100644 tools/testing/selftests/kvm/s390x/ucontrol_test.c
 
-I must admit I was surprised when I learned the fact, but the stable 
-team routinely runs up2date upstream self-tests on top of stable/older 
-kernels:
 
-https://lore.kernel.org/mptcp/ZAHLYvOPEYghRcJ1@kroah.com/
-
-The expected self-test design is to probe the tested feature and skip if 
-not available in the running kernel. The self-test should not break when 
-run on an older kernel not offering such feature.
-
-I understand some (most?) of the self-tests do not cope with the above 
-perfectly, but we can improve ;).
-
-Thanks,
-
-Paolo
-
+base-commit: 66ebbdfdeb093e097399b1883390079cd4c3022b
+-- 
+2.45.2
 
 
