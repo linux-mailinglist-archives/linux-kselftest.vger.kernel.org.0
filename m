@@ -1,502 +1,272 @@
-Return-Path: <linux-kselftest+bounces-14094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14095-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B466593A7C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 21:46:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B380493A7DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 21:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDBA11C2256D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 19:46:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DC8E284462
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 19:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE6B1419A9;
-	Tue, 23 Jul 2024 19:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2FD146A9A;
+	Tue, 23 Jul 2024 19:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b="WMC34r1I"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jyAvZC5I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2530713DDA8
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 19:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC06B1428F9
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 19:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721763971; cv=none; b=XwkMVBtM3+mbkKlpYxSruH/rmEuPi+PezajkHNzFbaCeMtxs/UiBaPshSxM3dqLZ8i/EoPuNVknUbst5tdyCQsKLtkH1WHS+9u3+1OtuoBAkIyz4YP0d+qQWnxK0lBdjyBBPPcDlYeWBKH6kKnazZJkFoonuzbEWTzBHgr4oe+A=
+	t=1721764552; cv=none; b=lv9bxuvEXcLel5za1ZB2vWzOSmP4M14et4DoHHyOsfJr3Bv1kNBEcI3icRTxDtPjERsAGyqxfszcsL6hEnhX1l8yzNEsGXT8EPUeVWBzP1/z+K0PFPjbZnE6dA5h81CtbgjG6zL7qEiwijbCVJKpGAj5FHymTrvhty3B6tpJc94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721763971; c=relaxed/simple;
-	bh=zQo/BeU7ZJmDX2rVmM+YZ046rRWbyUPe9g152Ch5+yM=;
+	s=arc-20240116; t=1721764552; c=relaxed/simple;
+	bh=N/VSqw2RCaG6rK52saYhgy4CiAO1VKN8Pn9v0JbVZx0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cUC4V0QhlQWtRx0fDIDdj3bGW/R3HZfvo64zSkB0vNxdRXOfxNydKUIlQqlDTZRahvXxZcJcrorRaN+5u9wIJmqZND32NaSSn8ylFQkYeZQgr7HOUtPF+82gGvNld9an0U07KV6VAZ/u4WSsPWPjRxasK7NB0tP6EjFBa8Iu6UE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=fail smtp.mailfrom=vimeo.com; dkim=pass (1024-bit key) header.d=vimeo.com header.i=@vimeo.com header.b=WMC34r1I; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=vimeo.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-70d199fb3dfso2327149b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 12:46:09 -0700 (PDT)
+	 To:Cc:Content-Type; b=lVvkbMQgrCc0zqDZYc00qQpL/ERIO5GvglkW4Ezdr2e0+3TlvHQk0mUu8zZ+/m9+WTPbz8MAZzYs5OvIsIsuoIj2LRn0HADYIR+5/Dtdl9m4kHQL/LbYYyr9tOfLxRurcxXvDUXKfnBAHwNt1s6uZUxZ5LrZkLBAjjScfS1WXas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jyAvZC5I; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso3304114276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 12:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vimeo.com; s=google; t=1721763968; x=1722368768; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1721764549; x=1722369349; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i/qoSrcKP2dKBbT3yRh61Zf7itz7zeZaJ4QLe4Dv+Zw=;
-        b=WMC34r1Iz89fVFmMdTSJqCgbPFd/DHUOlQ02OKVoudAtZKXWTumtXjhp0erd3rIMbU
-         9ZnMwr7LRou5seMsoNInJqq7dyadRoN40h+yBXgKdDANuE5PlUdoYz8V4LZSbSW+2BHf
-         zriPhcPFQCz9eZYfP7Wv5xPkzaA4oN+/TvGu8=
+        bh=AE6e5fzPeKFIlBMmG5gJlxWybIkbfxBFCodCMXGx1jQ=;
+        b=jyAvZC5II/8jS5GrwWV/OMSe6jDIqq99mrfbXhHfmnhuc+NUKYqEIa6+x+IcOPTGvX
+         9DCi6jx3ori/nBWph05tJtqg/VZHFtZPSLylopBtwbGkQveZOp1ASBnxLOOqto29/g3/
+         f57ukFazOQ3NtTl8JLU71AAsQG3j2nGPV2aqTpHUWmeut28MiSi5cRY8jIBv/twxP0jV
+         xmq/jvxlNqwI4oWn6u9ESXcKc76TQJFg/ALVisxarLo/uiVPDUQpuY+6H4MQWAU6cCm6
+         9+QRTy7CWTFKj6Q9a0rsaL4YPwuzTfwOB8Hqh8WK/j7LE4Jx6FwNmcCDZeCgfGol3jCS
+         psCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721763968; x=1722368768;
+        d=1e100.net; s=20230601; t=1721764549; x=1722369349;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i/qoSrcKP2dKBbT3yRh61Zf7itz7zeZaJ4QLe4Dv+Zw=;
-        b=sRYxeF/n3ZaOclSEgsh/f+e2NIkm5s4opBKoRN9z7YnTOFiGAH7A4twwWQPEWehcX3
-         BzZccbtdRr0ed8FYKqfr16RhqwRO5tqJ9pF3ZfvYf90ny2wpFlGd7ehYtE7v3VaYSDgS
-         nxnvpF+4fPF4v+QafhCkl96ExwAiz5fY0TGcr3tuXPSGEU5GpE+9hMr5rLVgIbKqLnkh
-         5cvvhzQ0KQSS2Ms9NKSe8SasY9NCGuQc1rXZlkFQxM3Gbf/bdrCHkqnvEE10Mr4t5zdX
-         x0s1TCpC0NGsVQJ38gIMun19qMBzugz0RN3rDe7acdnvHhYW0zYcuK4N2ZkjbcpIuZQA
-         VkiA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTkSUDVogy1uEv/6Slwcm9emTFxWw32h4U7QYCaWV4u5+/zu/0YXVnWzP5HSat4TencMp2p86V6o6UqIo3+DyzY3GyfC95omFuOkhNbtrU
-X-Gm-Message-State: AOJu0Ywg9mTfHSP591SEAem12CqPB2G5wp69b0XYiFmHP/HhqUgl0RSb
-	uPEfB9iWfqkNKkB3w/1GlOynX/AY0NCqMM1kP6aLkS/DxhK/WMdUwRFa+u5BhFhP7shHyNsKZY0
-	h5UweAhkafCfTiuwrodXACN52oWloMFfcpHv/dH+M67l/IGJ4UKc=
-X-Google-Smtp-Source: AGHT+IEL5HyNzk2uLVja41grpBiyNCgiZgj+hAvvGWH7WBHjgfqSzSjxEemxHymWX1H5Bts7KKJ+pel+MKfPys146d4=
-X-Received: by 2002:a05:6a00:2d09:b0:70b:260:3e2c with SMTP id
- d2e1a72fcca58-70e9dba5e39mr50315b3a.28.1721763968300; Tue, 23 Jul 2024
- 12:46:08 -0700 (PDT)
+        bh=AE6e5fzPeKFIlBMmG5gJlxWybIkbfxBFCodCMXGx1jQ=;
+        b=SFtZLb13vQcejcTnyETqI5c/hDWyuEjwVcsdNmVElcgMFXMW6OavEGd9zx8XS4Q8EG
+         6CxQYJWh4nPhsZiiOuOML9FmNxRWxAVIwVwEw2vN1lwnZPNenCP5OcvW0LvDHY8kNT+b
+         X+g10tQIYxEJWusHBIk6JyB/FnZcNoLN03DI9NzbOYCiaKmgPFhcyFQ5pDLDAOOD7oH5
+         n9U2AqWvdO+mMyL5RDU+4gpPBtljAFChxtFhB8Xx7CgPU3kQm0DVcjLKK3DDaULzpSg9
+         idb72jcQJ7UrzDhLqeV1O1H18NMhH5tEaC8AeQuHp9iPcxyWFXzzVbCqa5gxjS4vRw6j
+         UlmA==
+X-Gm-Message-State: AOJu0Yybz+UiuHf+uO5VPubXtdwrkOI+OFvqbMwXWuC6RHhMz4wan3AA
+	NsglVk/1IBy/q73QaYuTAt14MDGIolrV0Eew9Wvy2jP1SOach1qbNdGiwvD0FhYMxLlLPKwt8uB
+	Kn6KKP/8zZYpvSJ1+42Cjdsx0JvJES76OFvNV
+X-Google-Smtp-Source: AGHT+IFVIQx8k5pKeQbxna0tg4qcoy/15wSfpoaLxbaPj5khP8+jMjSrXVK0+kifV00saP01V2Gg6z43TEQy033MIoY=
+X-Received: by 2002:a05:6902:2d05:b0:e03:a70d:c12e with SMTP id
+ 3f1490d57ef6-e087017fdd3mr13368632276.15.1721764549380; Tue, 23 Jul 2024
+ 12:55:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240722235554.2911971-1-davidf@vimeo.com> <20240722235554.2911971-2-davidf@vimeo.com>
- <20240723142950.GA389003@cmpxchg.org>
-In-Reply-To: <20240723142950.GA389003@cmpxchg.org>
-From: David Finkel <davidf@vimeo.com>
-Date: Tue, 23 Jul 2024 15:45:57 -0400
-Message-ID: <CAFUnj5NSEpEUOi2CF6Y78ryv9ZS7+FG9qF4o1vCaLFX3KE9LAA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm, memcg: cg2 memory{.swap,}.peak write handlers
-To: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	core-services@vimeo.com, Jonathan Corbet <corbet@lwn.net>, Michal Hocko <mhocko@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, Waiman Long <longman@redhat.com>
+References: <20231212204647.2170650-1-sagis@google.com> <20231212204647.2170650-2-sagis@google.com>
+ <516247d2-7ba8-4b3e-8325-8c6dd89b929e@linux.intel.com>
+In-Reply-To: <516247d2-7ba8-4b3e-8325-8c6dd89b929e@linux.intel.com>
+From: Sagi Shahar <sagis@google.com>
+Date: Tue, 23 Jul 2024 14:55:37 -0500
+Message-ID: <CAAhR5DH9UJ+fFbePPbKsdUiyk63dhE6-f-uazu-s60dPe_Rfrg@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 01/29] KVM: selftests: Add function to allow
+ one-to-one GVA to GPA mappings
+To: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Ryan Afranji <afranji@google.com>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>, 
+	Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Johannes,
-
-Thanks for the thorough review!
-
-I'll send a rebased version addressing your comments in a moment.
-
-On Tue, Jul 23, 2024 at 10:29=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
-g> wrote:
+On Tue, Feb 20, 2024 at 7:43=E2=80=AFPM Binbin Wu <binbin.wu@linux.intel.co=
+m> wrote:
 >
-> Hi David,
 >
-> thanks for pursuing this! A couple of comments below.
 >
-> On Mon, Jul 22, 2024 at 07:55:53PM -0400, David Finkel wrote:
-> > @@ -1322,11 +1322,16 @@ PAGE_SIZE multiple when read back.
-> >       reclaim induced by memory.reclaim.
+> On 12/13/2023 4:46 AM, Sagi Shahar wrote:
+> > From: Ackerley Tng <ackerleytng@google.com>
 > >
-> >    memory.peak
-> > -     A read-only single value file which exists on non-root
-> > -     cgroups.
-> > +     A read-write single value file which exists on non-root cgroups.
-> > +
-> > +     The max memory usage recorded for the cgroup and its descendants =
-since
-> > +     either the creation of the cgroup or the most recent reset for th=
-at FD.
+> > One-to-one GVA to GPA mappings can be used in the guest to set up boot
+> > sequences during which paging is enabled, hence requiring a transition
+> > from using physical to virtual addresses in consecutive instructions.
 > >
-> > -     The max memory usage recorded for the cgroup and its
-> > -     descendants since the creation of the cgroup.
-> > +     A write of the string "reset" to this file resets it to the
-> > +     current memory usage for subsequent reads through the same
-> > +     file descriptor.
-> > +     Attempts to write any other non-empty string will return EINVAL
-> > +     (modulo leading and trailing whitespace).
->
-> Why not allow any write to reset? This makes it harder to use, and I'm
-> not sure accidental writes are a likely mistake to make.
-
-Accepting any string is a rather wide interface, and since actually empty w=
-rites
-get dropped before this handler is invoked, I think allowing any write
-is more confusing.
-
-I figured that a narrower interface is a better starting point, as
-long as it's correctly
-documented.
-
-We can always widen it to all writes later, but we can't go the other way.
-
->
-> > diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> > index 2150ca60394b..7001ed74e339 100644
-> > --- a/include/linux/cgroup.h
-> > +++ b/include/linux/cgroup.h
-> > @@ -12,6 +12,7 @@
-> >  #include <linux/sched.h>
-> >  #include <linux/cpumask.h>
-> >  #include <linux/nodemask.h>
-> > +#include <linux/list.h>
-> >  #include <linux/rculist.h>
-> >  #include <linux/cgroupstats.h>
-> >  #include <linux/fs.h>
-> > @@ -855,4 +856,11 @@ static inline void cgroup_bpf_put(struct cgroup *c=
-grp) {}
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > Signed-off-by: Ryan Afranji <afranji@google.com>
+> > Signed-off-by: Sagi Shahar <sagis@google.com>
+> > ---
+> >   .../selftests/kvm/include/kvm_util_base.h     |  2 +
+> >   tools/testing/selftests/kvm/lib/kvm_util.c    | 63 ++++++++++++++++--=
+-
+> >   2 files changed, 55 insertions(+), 10 deletions(-)
 > >
-> >  struct cgroup *task_get_cgroup1(struct task_struct *tsk, int hierarchy=
-_id);
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tool=
+s/testing/selftests/kvm/include/kvm_util_base.h
+> > index 1426e88ebdc7..c2e5c5f25dfc 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -564,6 +564,8 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t=
+ sz, vm_vaddr_t vaddr_min);
+> >   vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t =
+vaddr_min,
+> >                           enum kvm_mem_region_type type);
+> >   vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vad=
+dr_t vaddr_min);
+> > +vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz,
+> > +                            vm_vaddr_t vaddr_min, uint32_t data_memslo=
+t);
+> >   vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+> >   vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
+> >                                enum kvm_mem_region_type type);
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing=
+/selftests/kvm/lib/kvm_util.c
+> > index febc63d7a46b..4f1ae0f1eef0 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -1388,17 +1388,37 @@ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *v=
+m, size_t sz,
+> >       return pgidx_start * vm->page_size;
+> >   }
 > >
-> > +struct memcg_peak_mem_ctx {
-> > +     long                            local_watermark;
-> > +     struct list_head                peers;
-> > +};
->
-> Since this is generic cgroup code, and can be conceivably used by
-> other controllers, let's keep the naming generic as well. How about:
->
-> struct cgroup_of_peak {
->         long                    value;
->         struct list_head        list;
-> };
->
-> cgroup-defs.h would be a better place for it.
-That is much less jarring.
-
->
-> > +struct memcg_peak_mem_ctx *memcg_extract_peak_mem_ctx(struct kernfs_op=
-en_file *of);
->
-> of_peak()
->
-> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> > index 030d34e9d117..cbc390234605 100644
-> > --- a/include/linux/memcontrol.h
-> > +++ b/include/linux/memcontrol.h
-> > @@ -198,6 +198,11 @@ struct mem_cgroup {
-> >       struct page_counter kmem;               /* v1 only */
-> >       struct page_counter tcpmem;             /* v1 only */
+> > +/*
+> > + * VM Virtual Address Allocate Shared/Encrypted
+> > + *
+> > + * Input Args:
+> > + *   vm - Virtual Machine
+> > + *   sz - Size in bytes
+> > + *   vaddr_min - Minimum starting virtual address
+> > + *   paddr_min - Minimum starting physical address
+> > + *   data_memslot - memslot number to allocate in
+> > + *   encrypt - Whether the region should be handled as encrypted
+> > + *
+> > + * Output Args: None
+> > + *
+> > + * Return:
+> > + *   Starting guest virtual address
+> > + *
+> > + * Allocates at least sz bytes within the virtual address space of the=
+ vm
+> > + * given by vm.  The allocated bytes are mapped to a virtual address >=
+=3D
+> > + * the address given by vaddr_min.  Note that each allocation uses a
+> > + * a unique set of pages, with the minimum real allocation being at le=
+ast
+> > + * a page.
+> > + */
+> >   static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
+> > -                                  vm_vaddr_t vaddr_min,
+> > -                                  enum kvm_mem_region_type type,
+> > -                                  bool encrypt)
+> > +                                  vm_vaddr_t vaddr_min, vm_paddr_t pad=
+dr_min,
+> > +                                  uint32_t data_memslot, bool encrypt)
+> >   {
+> >       uint64_t pages =3D (sz >> vm->page_shift) + ((sz % vm->page_size)=
+ !=3D 0);
 > >
-> > +     /* lists of memcg peak watching contexts on swap and memory */
-> > +     struct list_head peak_memory_local_watermark_watchers;
-> > +     struct list_head peak_swap_local_watermark_watchers;
-> > +     spinlock_t swap_memory_peak_watchers_lock;
->
-> These names are too long. How about:
->
->         /* Registered local usage peak watchers */
->         struct list_head        memory_peaks;
->         struct list_head        swap_peaks;
->         spinlock_t              peaks_lock;
->
-That's much better.
-(sometimes when I'm unsure about a name, I default to a terrible, long name
-with way too much information)
-
-> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.=
-h
-> > index 8cd858d912c4..06bb84218960 100644
-> > --- a/include/linux/page_counter.h
-> > +++ b/include/linux/page_counter.h
-> > @@ -26,6 +26,7 @@ struct page_counter {
-> >       atomic_long_t children_low_usage;
+> >       virt_pgd_alloc(vm);
+> > -     vm_paddr_t paddr =3D _vm_phy_pages_alloc(vm, pages,
+> > -                                           KVM_UTIL_MIN_PFN * vm->page=
+_size,
+> > -                                           vm->memslots[type], encrypt=
+);
+> > +     vm_paddr_t paddr =3D _vm_phy_pages_alloc(vm, pages, paddr_min,
+> > +                                            data_memslot, encrypt);
 > >
-> >       unsigned long watermark;
-> > +     unsigned long local_watermark; /* track min of fd-local resets */
-> >       unsigned long failcnt;
+> >       /*
+> >        * Find an unused range of virtual page addresses of at least
+> > @@ -1408,8 +1428,7 @@ static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_v=
+m *vm, size_t sz,
 > >
-> >       /* Keep all the read most fields in a separete cacheline. */
-> > @@ -78,7 +79,15 @@ int page_counter_memparse(const char *buf, const cha=
-r *max,
+> >       /* Map the virtual pages. */
+> >       for (vm_vaddr_t vaddr =3D vaddr_start; pages > 0;
+> > -             pages--, vaddr +=3D vm->page_size, paddr +=3D vm->page_si=
+ze) {
+> > -
+> > +          pages--, vaddr +=3D vm->page_size, paddr +=3D vm->page_size)=
+ {
+> >               virt_pg_map(vm, vaddr, paddr);
 > >
-> >  static inline void page_counter_reset_watermark(struct page_counter *c=
-ounter)
-> >  {
-> > -     counter->watermark =3D page_counter_read(counter);
-> > +     unsigned long cur =3D page_counter_read(counter);
->
-> cur -> usage
-That's a better name.
-
->
-> > @@ -6907,12 +6912,109 @@ static u64 memory_current_read(struct cgroup_s=
-ubsys_state *css,
-> >       return (u64)page_counter_read(&memcg->memory) * PAGE_SIZE;
-> >  }
-> >
-> > -static u64 memory_peak_read(struct cgroup_subsys_state *css,
-> > -                         struct cftype *cft)
-> > +inline int swap_memory_peak_show(
-> > +     struct seq_file *sf, void *v, bool swap_cg)
-> >  {
->
-> Leave inlining to the compiler. Just static int.
->
-> The name can be simply peak_show().
-
-Oh, right, I forgot that since this is local to the translation-unit
-it doesn't need to be globally unique.
-
->
-> Customary coding style is to line wrap at the last parameter that
-> fits. Don't wrap if the line fits within 80 cols.
->
-> static int peak_show(struct seq_file *sf, void *v, ...,
->                      ...)
-> {
->         ...
-> }
->
-Oh yeah, I forgot to move those back to one line when I got rid of the
-callback args
-while addressing Roman's comments.
-Thanks for pointing that out.
-
-> > +     struct cgroup_subsys_state *css =3D seq_css(sf);
-> >       struct mem_cgroup *memcg =3D mem_cgroup_from_css(css);
-> > +     struct page_counter *pc;
-> > +     struct kernfs_open_file *of =3D sf->private;
-> > +     struct memcg_peak_mem_ctx *ctx =3D memcg_extract_peak_mem_ctx(of)=
+> >               sparsebit_set(vm->vpages_mapped, vaddr >> vm->page_shift)=
 ;
-> > +     s64 fd_peak =3D ctx->local_watermark;
+> > @@ -1421,12 +1440,16 @@ static vm_vaddr_t ____vm_vaddr_alloc(struct kvm=
+_vm *vm, size_t sz,
+> >   vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t =
+vaddr_min,
+> >                           enum kvm_mem_region_type type)
+> >   {
+> > -     return ____vm_vaddr_alloc(vm, sz, vaddr_min, type, vm->protected)=
+;
+> > +     return ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> > +                               KVM_UTIL_MIN_PFN * vm->page_size,
+> > +                               vm->memslots[type], vm->protected);
+> >   }
 > >
-> > -     return (u64)memcg->memory.watermark * PAGE_SIZE;
-> > +     if (swap_cg)
-> > +             pc =3D &memcg->swap;
-> > +     else
-> > +             pc =3D &memcg->memory;
+> >   vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vad=
+dr_t vaddr_min)
+> >   {
+> > -     return ____vm_vaddr_alloc(vm, sz, vaddr_min, MEM_REGION_TEST_DATA=
+, false);
+> > +     return ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> > +                               KVM_UTIL_MIN_PFN * vm->page_size,
+> > +                               vm->memslots[MEM_REGION_TEST_DATA], fal=
+se);
+> >   }
+> >
+> >   /*
+> > @@ -1453,6 +1476,26 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, siz=
+e_t sz, vm_vaddr_t vaddr_min)
+> >       return __vm_vaddr_alloc(vm, sz, vaddr_min, MEM_REGION_TEST_DATA);
+> >   }
+> >
+> > +/**
+> > + * Allocate memory in @vm of size @sz in memslot with id @data_memslot=
+,
+> > + * beginning with the desired address of @vaddr_min.
+> > + *
+> > + * If there isn't enough memory at @vaddr_min, find the next possible =
+address
+> > + * that can meet the requested size in the given memslot.
+> > + *
+> > + * Return the address where the memory is allocated.
+> > + */
+> > +vm_vaddr_t vm_vaddr_alloc_1to1(struct kvm_vm *vm, size_t sz,
+> > +                            vm_vaddr_t vaddr_min, uint32_t data_memslo=
+t)
+> > +{
+> > +     vm_vaddr_t gva =3D ____vm_vaddr_alloc(vm, sz, vaddr_min,
+> > +                                         (vm_paddr_t)vaddr_min, data_m=
+emslot,
+> > +                                         vm->protected);
+> > +     TEST_ASSERT_EQ(gva, addr_gva2gpa(vm, gva));
+>
+> How can this be guaranteed?
+> For ____vm_vaddr_alloc(), generically there is no enforcement about the
+> identity of virtual and physical address.
+
+The problem is that if the allocation won't be 1-to-1 the tests won't
+work. So we figured it's better to fail early.
+The way this is used in practice generally guarantees that the mapping
+can be 1-to-1 since we create these mappings at an early stage.
+>
 > > +
-> > +     if (fd_peak =3D=3D -1) {
-> > +             seq_printf(sf, "%llu\n", (u64)pc->watermark * PAGE_SIZE);
-> > +             return 0;
-> > +     }
-> > +
-> > +     s64 pc_peak =3D pc->local_watermark;
-> > +     s64 wm =3D fd_peak > pc_peak ? fd_peak : pc_peak;
-> > +
-> > +     seq_printf(sf, "%lld\n", wm * PAGE_SIZE);
-> > +     return 0;
+> > +     return gva;
 > > +}
->
-> As per Roman's feedback, don't mix decls and code.
-
-Sorry, that one slipped through. (I've now fixed my syntax highlighting
-to recognize s64 as a type)
-
->
-> You can simplify it by extracting css and memcg in the callers, then
-> pass the right struct page counter *pc directly.
->
-> That should eliminate most local variables as well.
->
-> static int peak_show(struct seq_file *sf, void *v, struct page_counter *p=
-c)
-> {
->         struct cgroup_of_peak *ofp =3D of_peak(sf->private);
->         u64 peak;
->
->         /* User wants global or local peak? */
->         if (ofp->value =3D=3D -1)
->                 peak =3D pc->watermark;
->         else
->                 peak =3D max(ofp->value, pc->local_watermark);
->
->         seq_printf(sf, "%lld\n", peak * PAGE_SIZE);
-> }
->
-> > +static int memory_peak_show(struct seq_file *sf, void *v)
-> > +{
-> > +     return swap_memory_peak_show(sf, v, false);
->
-> And then do:
->
->         struct mem_cgroup *memcg =3D mem_cgroup_from_css(seq_css(sf));
->
->         return peak_show(sf, v, &memcg->memory);
->
-> Then do the same with ... &memcg->swap.
-That is much cleaner!
-Thanks!
->
-> > +inline ssize_t swap_memory_peak_write(
-> > +     struct kernfs_open_file *of,
-> > +     char *buf, size_t nbytes, loff_t off, bool swap_cg)
-> > +{
->
-> Same feedback as above. Please don't inline explicitly (unless it
-> really is measurably a performance improvement in a critical path),
-> and stick to surrounding coding style.
->
-> Here too, pass page_counter directly and save the branches.
->
-> > +     unsigned long cur;
-> > +     struct memcg_peak_mem_ctx *peer_ctx;
-> > +     struct mem_cgroup *memcg =3D mem_cgroup_from_css(of_css(of));
-> > +     struct memcg_peak_mem_ctx *ctx =3D memcg_extract_peak_mem_ctx(of)=
-;
-> > +     struct page_counter *pc;
-> > +     struct list_head *watchers, *pos;
 > > +
-> > +     buf =3D strstrip(buf);
-> > +     /* Only allow "reset" to keep the API clear */
-> > +     if (strcmp(buf, "reset"))
-> > +             return -EINVAL;
-> > +
-> > +     if (swap_cg) {
-> > +             pc =3D &memcg->swap;
-> > +             watchers =3D &memcg->peak_swap_local_watermark_watchers;
-> > +     } else {
-> > +             pc =3D &memcg->memory;
-> > +             watchers =3D &memcg->peak_memory_local_watermark_watchers=
-;
-> > +     }
-> > +
-> > +     spin_lock(&memcg->swap_memory_peak_watchers_lock);
-> > +
-> > +     page_counter_reset_local_watermark(pc);
-> > +     cur =3D pc->local_watermark;
-> > +
-> > +     list_for_each(pos, watchers) {
+> >   /*
+> >    * VM Virtual Address Allocate Pages
+> >    *
 >
->         list_for_each_entry()
-Oh, I missed that one. Thanks!
-
 >
-> > +             peer_ctx =3D list_entry(pos, typeof(*ctx), peers);
-> > +             if (cur > peer_ctx->local_watermark)
-> > +                     peer_ctx->local_watermark =3D cur;
-> > +     }
->
-> I don't think this is quite right. local_peak could be higher than the
-> current usage when a new watcher shows up. The other watchers should
-> retain the higher local_peak, not the current usage.
-
-Since we have to iterate over the list entries while holding the spinlock,
-I think we avoid that kind of mismatch by keeping the assignments
-inside that critical section as well. (and eliminate a few other races)
-
-As-is, we get a snapshot value of the current usage and use that for
-the rest of the function while holding the lock, so, those fd-local
-watermarks will only change by assignments in this function.
-
-On the other hand, pc->local_watermark may keep increasing, but that's fine=
-.
-
->
-> > +
-> > +     if (ctx->local_watermark =3D=3D -1)
-> > +             /* only append to the list if we're not already there */
-> > +             list_add_tail(&ctx->peers, watchers);
-> > +
-> > +     ctx->local_watermark =3D cur;
->
-> This makes me think that page_counter_reset_local_watermark() is not a
-> good helper. It obscures what's going on. Try without it.
->
-> AFAICS the list ordering doesn't matter, so keep it simple and use a
-> plain list_add().
->
->         /*
->          * A new local peak is being tracked in pc->local_watermark.
->          * Save current local peak in all watchers.
->          */
->         list_for_each_entry(pos, ...)
->                 if (pc->local_watermark > pos->value)
->                         pos->value =3D pc->local_watermark;
->
->         pc->local_watermark =3D page_counter_read(pc);
->
->         /* Initital write, register watcher */
->         if (ofp->value =3D=3D -1)
->                 list_add()
->
->         ofp->value =3D pc->local_watermark;
->
-> > diff --git a/mm/page_counter.c b/mm/page_counter.c
-> > index db20d6452b71..724d31508664 100644
-> > --- a/mm/page_counter.c
-> > +++ b/mm/page_counter.c
-> > @@ -79,9 +79,22 @@ void page_counter_charge(struct page_counter *counte=
-r, unsigned long nr_pages)
-> >               /*
-> >                * This is indeed racy, but we can live with some
-> >                * inaccuracy in the watermark.
-> > +              *
-> > +              * Notably, we have two watermarks to allow for both a gl=
-obally
-> > +              * visible peak and one that can be reset at a smaller sc=
-ope.
-> > +              *
-> > +              * Since we reset both watermarks when the global reset o=
-ccurs,
-> > +              * we can guarantee that watermark >=3D local_watermark, =
-so we
-> > +              * don't need to do both comparisons every time.
-> > +              *
-> > +              * On systems with branch predictors, the inner condition=
- should
-> > +              * be almost free.
-> >                */
-> > -             if (new > READ_ONCE(c->watermark))
-> > -                     WRITE_ONCE(c->watermark, new);
-> > +             if (new > READ_ONCE(c->local_watermark)) {
-> > +                     WRITE_ONCE(c->local_watermark, new);
-> > +                     if (new > READ_ONCE(c->watermark))
-> > +                             WRITE_ONCE(c->watermark, new);
-> > +             }
-> >       }
-> >  }
-> >
-> > @@ -131,10 +144,23 @@ bool page_counter_try_charge(struct page_counter =
-*counter,
-> >               propagate_protected_usage(c, new);
-> >               /*
-> >                * Just like with failcnt, we can live with some
-> > -              * inaccuracy in the watermark.
-> > +              * inaccuracy in the watermarks.
-> > +              *
-> > +              * Notably, we have two watermarks to allow for both a gl=
-obally
-> > +              * visible peak and one that can be reset at a smaller sc=
-ope.
-> > +              *
-> > +              * Since we reset both watermarks when the global reset o=
-ccurs,
-> > +              * we can guarantee that watermark >=3D local_watermark, =
-so we
-> > +              * don't need to do both comparisons every time.
-> > +              *
-> > +              * On systems with branch predictors, the inner condition=
- should
-> > +              * be almost free.
->
->                 /* See comment in page_counter_charge() */
-Even better!
->
-> > diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testi=
-ng/selftests/cgroup/cgroup_util.c
-> > index 432db923bced..1e2d46636a0c 100644
-> > --- a/tools/testing/selftests/cgroup/cgroup_util.c
-> > +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-> > @@ -141,6 +141,16 @@ long cg_read_long(const char *cgroup, const char *=
-control)
-> >       return atol(buf);
-> >  }
->
-> This should be in patch #2.
-:facepalm: that's what I get for trying to split this and send it out
-at the end of the day.
-
-
-
---=20
-David Finkel
-Senior Principal Software Engineer, Core Services
 
