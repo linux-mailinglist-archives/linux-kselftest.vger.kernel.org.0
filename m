@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-14085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60CBA93A40C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 17:55:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F9993A436
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 18:18:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F34B3B21704
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 15:55:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32D50B21C1E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 16:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C0415747F;
-	Tue, 23 Jul 2024 15:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF552157A7C;
+	Tue, 23 Jul 2024 16:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dKrFPClq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="INgrZ5G3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385FE156F5D
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 15:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CA7155A47
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 16:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721750118; cv=none; b=FQRY54FEB5C7xfR7FJMEz15mgsAMGvMMQeGJovQPA6363ODPfPlO13N6T53v9D9DD3lO0O3/a0qdMgs6hf1X+b2FkmUH0Mh2YflVI2IM585BFSXqwcWF7FZqrjHLrUgLh/WZ90pIFLAkVCSCUt0GNZJGllY1ulhu74QKGyliLPo=
+	t=1721751476; cv=none; b=rmX6EEIkAaCDuSgViFpgq8zD8JQbBmm9dHP4a7d0gqUN1AumkQiELuM0Y9k/55wrWPaZGo1qI6MhYPuOEXvpP0AIOOsUIbWjPmPbc7UvfmZSYYGE9WdrKcF63ZfLnHYP8B/vw7icSQnho0iT5GQkYGMP8+R2vKq8h+TMG2fiv6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721750118; c=relaxed/simple;
-	bh=pKgz77waICa546rfGgU6tjUnrgO9VIGblXenGg93D5U=;
+	s=arc-20240116; t=1721751476; c=relaxed/simple;
+	bh=pRoaIDicTrBMV9Y8Wv8cr1leg4UK4r11oJkILZ4HRMU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uLNg7+nwC90KOKiqd7s/mopOw1L54SvTmrLW81sZKBpAP7J39+7cjdWN4Bfq5jXZZAPhqLo5hE6JDISomes39QbYJtjtS8buWeDuFhhvnwHouHJ460/sizbD24f+IRLDc+0jaq+Uv39I5i0GejWrDJtGYBsZbsMlIRrPhGuYDnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dKrFPClq; arc=none smtp.client-ip=209.85.166.46
+	 In-Reply-To:Content-Type; b=i+2kxmGR0DARu2g4+2PmwdzTsIQuSiIiXV0s0cG+JOkNT/qjoj6YR9VqwDpFHzunddzeOj7tjpk6CltVKE7c2Ss1jqIjT/3bc9BwSHPGOaOM5oBW/9PMrN5R+WSAS69jDffWmTt8w1ggLtm8BHu0M/Vz/B5FvwuG+90Zm8TmNb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=INgrZ5G3; arc=none smtp.client-ip=209.85.166.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-8084f783737so31492339f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 08:55:17 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-8045e14c32bso28839439f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jul 2024 09:17:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1721750116; x=1722354916; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1721751473; x=1722356273; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lg1BsDoFTVJYikAOrp8+ys3hLPaS+7BQa4llRdXSLUA=;
-        b=dKrFPClqg0C1za62cMZAEPTk6u1uSifz7yjGAEMmRKdeSvdHH0FTwT56FKm6lOtN29
-         b3FT42j7gxjHmiVp0y1vU/9HUsYciq2Ao3N/Cxg9p+64lZMDKpYLj55uz8R/2J6VatJi
-         NJ0rU+FzJPupZM0kAztJzwIf9WwgZR/++wNjU=
+        bh=WckdgsdVKcnunHrXHx3KQ06hIGXGwaXg2AXB5/rozpI=;
+        b=INgrZ5G3MlqZPolW3fZmc/ZD8lCzUs19XEKaW3sLba54zG6u+NZL/LOlGoky5nTiXi
+         BEpx6C3Mns+v9WNkksY5Rwb0u0H5YQxVbmQc+dNM8Gf99NcZ5W0ugmQ5tKT4iT//Bzkk
+         oi78Xto9/eajIXQRWUX+kXOtGnb0WZ7y9cpPU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721750116; x=1722354916;
+        d=1e100.net; s=20230601; t=1721751473; x=1722356273;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lg1BsDoFTVJYikAOrp8+ys3hLPaS+7BQa4llRdXSLUA=;
-        b=rIPZRZIW3oh+Ird75j9iLsbPs7u1SUEUOZCtIhz8x3p+R6haidNwD95JIlcVmM4pME
-         pTbPgKOXwutmR/odo0ugOUSJMV4mJ4XHCZfFX1wglOchPLCg0XK/msHQFNsiLdTmhWEw
-         oKt7bhbnqIev/kFJ1vuPYEws3uEmGGvWm+J9jfwMaVLqAMvrtotqkolxbtNidU+Qkt4f
-         KskxlKciAKwqLr9c4K8URXwyhdcXZojLIxECc3xR21zl0g5llzvgPB1P6bOBQpYSQuwf
-         wzqrRqZKa5co0Yyh6THCOp0uSQVdscbabO/33tXGHTvoOq47OOgW7ZGKtag2new6OFFC
-         EAfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1P2ibz2N1tQUWyo7vAPYrZEclttR7Zft67lfJVLpvmQSWY/SpY+Kit4rp3sG2ynV5N637NXkuvCPB3ShOcIwquJlYIemP6o9XDzE2BF0c
-X-Gm-Message-State: AOJu0Yy9v2qf6YytmdvTEj2uH5WXzkw9E99SCbqpnUBXM4GNSyR9oH4o
-	tjZh9bUXSg4IRMPWfUL4+8xNkKIR3vFVcPNmSjx3223BAdDiGvjfSFQ51etVyeA=
-X-Google-Smtp-Source: AGHT+IH3jhqVl6/DZ+4DZmo8QwwuG+XqV7XSC40U/FhKoPqCMXQg5gRdnLSL4oPL6QjiMiA5bL2Wzw==
-X-Received: by 2002:a05:6602:2543:b0:7f3:d3ed:1ca3 with SMTP id ca18e2360f4ac-81aa4ccdb27mr693914339f.1.1721750116383;
-        Tue, 23 Jul 2024 08:55:16 -0700 (PDT)
+        bh=WckdgsdVKcnunHrXHx3KQ06hIGXGwaXg2AXB5/rozpI=;
+        b=EpkDIm5iTMmW9oup2y9eDdpx/6kWbEu/JfEIU96s8mUrv4Vu6HdyktzluM+WmXYoe7
+         pl6hAMnu6gz43FNNkK7p6v8COvDN5K1oaAeIW3vfj8U4qLLbaH/rCEixgW7XkO9zz9fz
+         2dx00TZt3RD7axDCjOmzkpBXBmP27EFexHS0yFSMsPWpmPVGy5eMAyhjK4fr7FjB14uc
+         2bi2NlOfZBBOwgTTZ80d4u+Wn+RaZ026dkZ+wIOg2WdQulbBviBhWcoaH/kXSUMQlSvA
+         V/lQhCLjNdu48RRs8jbUmm3HxEli0yTd7gyAirtsaQnhCqk7lAAb5tx4rTDT2BpSw6zQ
+         tFWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLsRgfR4+3Ve+VXH12y/ilxlTy5uP5HARhOI2FNAP2lDRsFePo9KQmGyGVY7ZPXDKYFpeQY1OKh3OLx1BTJfGHo6LgncyKsg0pwbLIHAae
+X-Gm-Message-State: AOJu0YwvqnpxXGNFyQMiwonLANuMutzEfwyV9xo+VVoa6gJpMeAyF3D5
+	Bg2gx7BYRCjRP5SfE6CQGHZ28zcnsbPlnZNH/yD4WEO/P/GJoeuJ/7uSUmVci0A=
+X-Google-Smtp-Source: AGHT+IHBJf66ztYfZNCfxnbGx4Z5m41bRmi5L58frY1Jq39oLN0lrAUqTLUc3qwaGE+1ZaBYXDKjOA==
+X-Received: by 2002:a5e:c746:0:b0:7eb:2c45:4688 with SMTP id ca18e2360f4ac-81aa70732d9mr633081739f.2.1721751472896;
+        Tue, 23 Jul 2024 09:17:52 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-819aba13e14sm314871639f.2.2024.07.23.08.55.15
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c276c03bb6sm447490173.93.2024.07.23.09.17.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jul 2024 08:55:15 -0700 (PDT)
-Message-ID: <2ee0f5df-9a9e-4625-ab09-b21596a0685f@linuxfoundation.org>
-Date: Tue, 23 Jul 2024 09:55:15 -0600
+        Tue, 23 Jul 2024 09:17:52 -0700 (PDT)
+Message-ID: <9009f4df-ca7e-4961-97e4-446afc4e87d2@linuxfoundation.org>
+Date: Tue, 23 Jul 2024 10:17:51 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,81 +73,82 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] selftests: Add a test mangling with uc_sigmask
-To: Dev Jain <dev.jain@arm.com>, Oleg Nesterov <oleg@redhat.com>
-Cc: shuah@kernel.org, mingo@kernel.org, tglx@linutronix.de,
- mark.rutland@arm.com, ryan.roberts@arm.com, broonie@kernel.org,
- suzuki.poulose@arm.com, Anshuman.Khandual@arm.com,
- DeepakKumar.Mishra@arm.com, aneesh.kumar@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH] selftests: ksft: Track skipped tests when finishing the
+ test suite
+To: Laura Nao <laura.nao@collabora.com>, shuah@kernel.org,
+ nfraprado@collabora.com
+Cc: gregkh@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@collabora.com,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240627035215.1527279-1-dev.jain@arm.com>
- <20240627035215.1527279-3-dev.jain@arm.com>
- <20240630151808.GA13321@redhat.com>
- <09370b2d-2b52-4133-8e0d-83e66b801ff8@arm.com>
- <abd97c85-c9d9-43c9-b0c2-36f6f0e442e0@linuxfoundation.org>
- <01e41c46-255a-419a-9b72-485a2798205f@arm.com>
+References: <20240722154319.619944-1-laura.nao@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <01e41c46-255a-419a-9b72-485a2798205f@arm.com>
+In-Reply-To: <20240722154319.619944-1-laura.nao@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/22/24 22:30, Dev Jain wrote:
+On 7/22/24 09:43, Laura Nao wrote:
+> Consider skipped tests in addition to passed tests when evaluating the
+> overall result of the test suite in the finished() helper.
 > 
-> On 7/22/24 20:28, Shuah Khan wrote:
->> On 7/15/24 05:49, Dev Jain wrote:
->>>
->>> On 6/30/24 20:48, Oleg Nesterov wrote:
->>>> I see nothing wrong, but perhaps this test can be simplified?
->>>> Feel free to ignore.
->>>>
->>>> Say,
->>>>
->>>> On 06/27, Dev Jain wrote:
->>>>> +void handler_usr(int signo, siginfo_t *info, void *uc)
->>>>> +{
->>>>> +    int ret;
->>>>> +
->>>>> +    /*
->>>>> +     * Break out of infinite recursion caused by raise(SIGUSR1) invoked
->>>>> +     * from inside the handler
->>>>> +     */
->>>>> +    ++cnt;
->>>>> +    if (cnt > 1)
->>>>> +        return;
->>>>> +
->>>>> +    ksft_print_msg("In handler_usr\n");
->>
->> This message isn't very useful. Why do you need this message?
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> ---
+>   tools/testing/selftests/kselftest/ksft.py | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-> There isn't any specific use; I am just showing the progress
-> 
-> of the test. If you think this is just waste output....
+> diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
+> index cd89fb2bc10e..bf215790a89d 100644
+> --- a/tools/testing/selftests/kselftest/ksft.py
+> +++ b/tools/testing/selftests/kselftest/ksft.py
+> @@ -70,7 +70,7 @@ def test_result(condition, description=""):
+>   
+>   
+>   def finished():
+> -    if ksft_cnt["pass"] == ksft_num_tests:
+> +    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+>           exit_code = KSFT_PASS
 
-Showing progress will not be useful unless it is also giving useful
-information to the user. It doesn't look like it in this case.
+Laura and Nícolas,
 
-You can drop this message.
+I saw both your emails explaining how this fixes the problem in
+a previous patch.
 
-> 
->>
->>>>> +
->>>>> +    /* SEGV blocked during handler execution, delivered on return */
->>>>> +    if (raise(SIGSEGV))
->>>>> +        ksft_exit_fail_perror("raise");>>> +
->>>>> +    ksft_print_msg("SEGV bypassed successfully\n");
->>>> You could simply do sigprocmask(SIG_SETMASK, NULL, &oldset) and check if
->>>> SIGSEGV is blocked in oldset. SIG_SETMASK has no effect if newset == NULL.
->>>>
->>>
->>> IMHO, isn't raising the signal, and the process not terminating, a stricter test? I have already included your described approach in
->>> the last testcase; so, the test includes both ways: raising the
->>> signal -> process not terminating, and checking blockage with sigprocmask().
->>
+However looks like you haven't see my response about the implications
+of the exit_code = KSFT_PASS when tests are skipped.
+
+if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+>           exit_code = KSFT_PASS
+
+Let me reiterate in case you missed it:
+
+There is a reason why you don't want to mark all tests passed
+when there are several skips.Skips are an indication that
+there are several tests and/or test cases that couldn't not
+be run because of unmet dependencies. This condition needs
+to be investigated to see if there are any config options
+that could be enabled to get a better coverage.
+
+Including skips to determine pass gives a false sense security
+that all is well when it isn't.
+
+So it is incorrect to set the exit code to KSFT_PASS when there
+are skipped tests.
+
++    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+
+
+>       else:
+>           exit_code = KSFT_FAIL
+
+The logic here seems to not take into account when you have a
+conditions where you have a mixed results of passed tests,
+skipped tests, and failed tests.
+
+Please revisit and figure out how to address this and report
+the status correctly.
 
 thanks,
 -- Shuah
+
 
 
