@@ -1,70 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDEC939955
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:55:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24090939957
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2A62B2129F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:55:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D70832821DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E7D13C8F6;
-	Tue, 23 Jul 2024 05:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E2313D248;
+	Tue, 23 Jul 2024 05:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJtHRTpi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XgWwTqvw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5B3634;
-	Tue, 23 Jul 2024 05:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF02413C8F5;
+	Tue, 23 Jul 2024 05:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721714120; cv=none; b=l3yoV8FlylgLHsgmxGfiddFna0sX1X51mdxNjTthlWUEY/4BvbtZBqcbT9IAIv7Iq0RKv/Vd7T++D8i7cmOtOFeZXM/j7NfzkI9G3B3um8r26+0c9TzZIhPO3ZD6U19EsqWULLdp88hjf/pKgUoR9/1PMEORAy1NCqimHRfuLbo=
+	t=1721714127; cv=none; b=YHN2dQJnFKIFT5+YwCCFjLUHVgO2gqZDBNUGh6Vl8wFK7bEcEh7cwYk7pfnRZ96bLn74UkflOZhcCHKa2hjRZP/5L3d7Ly1rGOpgn6LenDC73pncxMj0J+sb92TIgWLljMMLodSA1ICaZId31zKqLuM/noS4FwQZxj5jrka5C3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721714120; c=relaxed/simple;
-	bh=LltZaSxZPypj0abxlQYbcXU8K33RkNUTwpbp/j8indE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eRkZyMu4kbwX/9n9NDcj6LMUMuLwrMq4Q75aHrM+sYxORUdgtYuy90r/XeSxJQtRbkf7rtSy8s+yb+HriAjXEQpm2A+S+Fu7N0aN5QNlyLugBLwo6edUGUvZCtf2oaz1mAs/sEOmzK4iOL5/Qu2prMoQMeVyZKoB5WssTLffaOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJtHRTpi; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1721714127; c=relaxed/simple;
+	bh=EOFGGSh/CdGTM4ZTodj/tKVj4mXB22If1uqXT2K79bE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=foD6cW1BFcxHZspZSbD9PmfRJt35SlgEzR7SPhJluvFotGBtu6FcrO0942lhYm/bRfy/4Cif5ecVCN12qPQYXvYwL+CpgdAXXffjKWasCvna9q9DAJcAG3vd279TFgR+vZtq+EYo666ojpmU+kOm9XB1P6ATbUjlKHn6dVAX1Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XgWwTqvw; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7a0b2924e52so174815a12.2;
-        Mon, 22 Jul 2024 22:55:19 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fc569440e1so3174975ad.3;
+        Mon, 22 Jul 2024 22:55:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721714118; x=1722318918; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mY6MkAWc7AG4OLoWCVmbO7Hx39wXhHZpS7O+C+mUVLg=;
-        b=nJtHRTpilEFXZpDYwOCcpYli/rJpzykEbVmQEA5yRJlYGDnMEDOrohnZxU6mFILW3O
-         XBdLNRba5LHszl9xsbdHuVd3gjj7uXkFhbB+ciHmlJ7JOdwizreIncZS9IM2EYmeBJK8
-         bkqJ3TtPOA7Y+H29PnhD47qreC2S5Bxawb6k12dXdXaczv945YE0pn6PvsrG6s3/wpmS
-         5pfguLK6racSs1vsiM4fO9C+3BwGAbDEHtz7ob3TSj9MyH8trSL6yMlCUyJa3PQ3Pi1w
-         PajID475MhoUSeG6pjcpXtWW+PQhV0I9RWd6Pr/KYOqTbY4LzsPKm+KBVGeCrtexIjPu
-         6V5Q==
+        d=gmail.com; s=20230601; t=1721714125; x=1722318925; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CGYS1rUXoOuTM3rprISjfGYQaW5ybagqy7kbkfRMNRo=;
+        b=XgWwTqvwjwQAbgT+NWeeZ/kbWanhlxXuB/8p6WDp80FCiQqcFgCAP0y5ePVZ6SK0JP
+         psxAP0eHLf9RMdGCVgLxQPRRfQW96FB5LiTDc6v04K201XLQWtguD13UHD6TCJJjz0QD
+         AmBSldh2ZhVKhAL/1/TmvCi7XUM72gM1P15sBqqBAljgBqKJXvME55BFrtQCzRhsCFod
+         /9uBIZme9WJ4yO6RKC/OUk8SsxhDqgTTulkdGrHTwOAjWx1K59y4pfvR2kR/22Voba92
+         TRKGduKOfMcLSkmrB/ktIsqPjJ31EQKJAEW1sctiaUJ/pvUpKj2+VG/jWPfEbe0lMjaU
+         IQcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721714118; x=1722318918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mY6MkAWc7AG4OLoWCVmbO7Hx39wXhHZpS7O+C+mUVLg=;
-        b=icWO0Usk36shxGsjsytdfwhnsxi4WGjI9EzLiM66buEP7rOhpxLRHnXcdzmUlqkPW5
-         gLfHZbknOEMdxO8r/qvt1aaA+0f3Vh7IBtJtotIQX3iqVeteW1uI2kI7gohDj4noIKbH
-         ugLo+BPlty1BmtsN2tqX5c1tLY2DQq5Za3+tTTXaW/5zovj7R3ZFFumHpqtk654FXYWi
-         0gXRomBMH1qY3+idwrBtXrt17oo3FBGsSOL2ibs8r+vIXuXXh07s28pmXyZwbRcevrF7
-         LGUZwMR6s1WCZR5h92drl6jxdcUGbrKB3mfBgiT70Xi3lfVKW673I4euKdZ0ic2MwmAR
-         H5Zg==
-X-Forwarded-Encrypted: i=1; AJvYcCVyUCBTy44XkV9a9FoyYxqj6sRiYWOcjQmL0EcBUXp45lCo71UwiQfbJ27bZxX4tKjLr4H1rV+ZGvvtRLPusnpf8U5gQydwOkkJvfnyal2i
-X-Gm-Message-State: AOJu0YzzsaBhQnmrnGW+NYS64DpSTh1bUS50TCkJSJD4XssxgD7CvVTR
-	8WHU3/fe9fz85sP/owJNL5yqXsR8/yjpow8W7KhV1sd17Ojn1keCXN0KoPqU
-X-Google-Smtp-Source: AGHT+IGGxY0/QyqFk2cCukn2OmfOVXyrPh0w4Oepzn9XCbLjwzxPbkNSEoIwb2WkCUTZEaGVszJr2g==
-X-Received: by 2002:a17:902:fb44:b0:1fd:5fa0:e99b with SMTP id d9443c01a7336-1fd7462ba11mr50135365ad.57.1721714118453;
-        Mon, 22 Jul 2024 22:55:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721714125; x=1722318925;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CGYS1rUXoOuTM3rprISjfGYQaW5ybagqy7kbkfRMNRo=;
+        b=CcA2QpJE8MotKq8/BfXoLjxvH9Vqp+K2X0S+ix4VEtrxAv2uYy56qw349n+cE0s+lq
+         6Uu2sxiuPohzUB7YVFvUHmE3Ap/S+/0/uscNV7gZoe/S1+PRpanfyQqqUklHwAku9K5V
+         9RghuwClsO7gyh8+3GrlihNr/9fXHirkvsQomrrWpxtb67EvHHGquRMEYyYKkSFfZ8nJ
+         p0H2tjZsALV2EbuSdTI9JTV9R0VvVwJEPNbfJuCPjH5xFAF8jWIGcetSd34PMIUMm5kP
+         Ul+Yc+B5ZeJGdoTPMR76n7NxEClKe4trhW54Q+7FpXVQTcxzNjvViOK5jp3ISgCmGO3I
+         4A6A==
+X-Forwarded-Encrypted: i=1; AJvYcCWIEgkx5fiiq0mavXaEGwA+6kBM6+PbvaqAJfeiCOl1EfX0U635lcDhg3T+uk397RxcO20PNsqFG9chGuaFHu8+keK6mn17Bk8oJOEHBEnz
+X-Gm-Message-State: AOJu0YzQwmyRVEx4Q1BBBTXtO33KiA8m/LKfE7B2xcKMg9QB22sZMq4T
+	AEaYUTYg9sIag4VEBwuF2lfjSoaSDs5SmeyMJIr2/2df6hu/gEA/IkRyFyB3
+X-Google-Smtp-Source: AGHT+IESBtppoiIyhYC2rcRc3ZayKUecAkckQmZIDFYC7ueHmYcIQEf0do88QBzuMPAmV3oaoBAMuQ==
+X-Received: by 2002:a17:902:e88f:b0:1f6:93a0:9a45 with SMTP id d9443c01a7336-1fdb5f9feb7mr17418495ad.36.1721714124778;
+        Mon, 22 Jul 2024 22:55:24 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.55.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.55.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 22:55:17 -0700 (PDT)
+        Mon, 22 Jul 2024 22:55:24 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -95,10 +97,12 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Yan Zhai <yan@cloudflare.com>,
 	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
 	YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH bpf-next v1 00/19] selftests/bpf: Improve libc portability / musl support (part 1)
-Date: Mon, 22 Jul 2024 22:54:27 -0700
-Message-Id: <cover.1721713597.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 01/19] selftests/bpf: Use pid_t consistently in test_progs.c
+Date: Mon, 22 Jul 2024 22:54:28 -0700
+Message-Id: <c6447da51a94babc1931711a43e2ceecb135c93d.1721713597.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1721713597.git.tony.ambardar@gmail.com>
+References: <cover.1721713597.git.tony.ambardar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -107,67 +111,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello all,
+Use pid_t rather than __pid_t when allocating memory for 'worker_pids' in
+'struct test_env', as this is its declared type and also avoids compile
+errors seen building against musl libc on mipsel64:
 
-This series includes the bulk of libc-related compile fixes accumulated to
-support systems using musl, with smaller numbers to follow. These patches
-are simple and straightforward, and the series has been tested with the
-kernel-patches/bpf CI and locally using mips64el-gcc/musl-libc and QEMU
-with an OpenWrt rootfs.
+  test_progs.c:1738:49: error: '__pid_t' undeclared (first use in this function); did you mean 'pid_t'?
+   1738 |                 env.worker_pids = calloc(sizeof(__pid_t), env.workers);
+        |                                                 ^~~~~~~
+        |                                                 pid_t
+  test_progs.c:1738:49: note: each undeclared identifier is reported only once for each function it appears in
 
-The patches address a few general categories of libc portability issues:
+Fixes: 91b2c0afd00c ("selftests/bpf: Add parallelism to test_progs")
+Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+---
+ tools/testing/selftests/bpf/test_progs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- - missing, redundant or incorrect include headers
- - disabled GNU header extensions (i.e. missing #define _GNU_SOURCE)
- - issues with types and casting
-
-Feedback and suggestions for improvement are welcome!
-
-Thanks,
-Tony
-
-Tony Ambardar (19):
-  selftests/bpf: Use pid_t consistently in test_progs.c
-  selftests/bpf: Fix compile error from rlim_t in sk_storage_map.c
-  selftests/bpf: Fix error compiling bpf_iter_setsockopt.c with musl
-    libc
-  selftests/bpf: Drop unneeded include in unpriv_helpers.c
-  selftests/bpf: Drop unneeded include in sk_lookup.c
-  selftests/bpf: Drop unneeded include in flow_dissector.c
-  selftests/bpf: Fix missing ARRAY_SIZE() definition in bench.c
-  selftests/bpf: Fix missing UINT_MAX definitions in benchmarks
-  selftests/bpf: Fix missing BUILD_BUG_ON() declaration
-  selftests/bpf: Fix include of <sys/fcntl.h>
-  selftests/bpf: Fix compiling parse_tcp_hdr_opt.c with musl-libc
-  selftests/bpf: Fix compiling kfree_skb.c with musl-libc
-  selftests/bpf: Fix compiling flow_dissector.c with musl-libc
-  selftests/bpf: Fix compiling tcp_rtt.c with musl-libc
-  selftests/bpf: Fix compiling core_reloc.c with musl-libc
-  selftests/bpf: Fix errors compiling lwt_redirect.c with musl libc
-  selftests/bpf: Fix errors compiling decap_sanity.c with musl libc
-  selftests/bpf: Fix errors compiling crypto_sanity.c with musl libc
-  selftests/bpf: Fix errors compiling cg_storage_multi.h with musl libc
-
- tools/testing/selftests/bpf/bench.c                          | 1 +
- tools/testing/selftests/bpf/bench.h                          | 1 +
- tools/testing/selftests/bpf/map_tests/sk_storage_map.c       | 2 +-
- tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/core_reloc.c          | 1 +
- tools/testing/selftests/bpf/prog_tests/crypto_sanity.c       | 1 -
- tools/testing/selftests/bpf/prog_tests/decap_sanity.c        | 1 -
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c      | 2 +-
- tools/testing/selftests/bpf/prog_tests/kfree_skb.c           | 1 +
- tools/testing/selftests/bpf/prog_tests/lwt_redirect.c        | 1 -
- tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/parse_tcp_hdr_opt.c   | 1 +
- tools/testing/selftests/bpf/prog_tests/sk_lookup.c           | 1 -
- tools/testing/selftests/bpf/prog_tests/tcp_rtt.c             | 1 +
- tools/testing/selftests/bpf/prog_tests/user_ringbuf.c        | 1 +
- tools/testing/selftests/bpf/progs/cg_storage_multi.h         | 2 --
- tools/testing/selftests/bpf/test_progs.c                     | 2 +-
- tools/testing/selftests/bpf/unpriv_helpers.c                 | 1 -
- 18 files changed, 12 insertions(+), 12 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 1677f6f1eaae..091b49bf671a 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1738,7 +1738,7 @@ int main(int argc, char **argv)
+ 	/* launch workers if requested */
+ 	env.worker_id = -1; /* main process */
+ 	if (env.workers) {
+-		env.worker_pids = calloc(sizeof(__pid_t), env.workers);
++		env.worker_pids = calloc(sizeof(pid_t), env.workers);
+ 		env.worker_socks = calloc(sizeof(int), env.workers);
+ 		if (env.debug)
+ 			fprintf(stdout, "Launching %d workers.\n", env.workers);
 -- 
 2.34.1
 
