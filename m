@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A378939975
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:56:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8066E939977
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:56:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA26F281F63
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:56:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36824282A8E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA8313D521;
-	Tue, 23 Jul 2024 05:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CADE13D24E;
+	Tue, 23 Jul 2024 05:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBvXf343"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iPzwlvAW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5842513D538;
-	Tue, 23 Jul 2024 05:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD3C13D538;
+	Tue, 23 Jul 2024 05:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721714164; cv=none; b=sI+v1S9fzf6pvdvQ6ni9bWX+QiXXKgZl0BN19Xh0+dwya86NbgjZtnIuoyUDpP8xS+Lc/KXi1mA98fnD6yDXKQKCp00mscs0jAqcBqIOwV84JzPJbGoi0ioMQqzPRyPrMD04JLGGyTT3SKOE76GaWQhvXys8Ov/SbrUCBAfty5w=
+	t=1721714167; cv=none; b=rrJApyCq8aFWG8AdXEgVDcyUPVSADHYulQRNclkXuYFU0FP/RLjyGiPMDJTek7gEtJ4CX+ttzsN7gYiHad7p4f0mQ6zkxdkOcoqdzROV3WalxDxo8B3h6TzeqA0rk51OP869m6Tn2D9OCbCZvqcYJEDlZGgt7CW4F2MoLUCfvkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721714164; c=relaxed/simple;
-	bh=PEm7/5+4mqPKqerOKkFbUuEAWS2RUAn2jW2HlBO/l8o=;
+	s=arc-20240116; t=1721714167; c=relaxed/simple;
+	bh=iyYPpn+hXqyZjmPQO9B6qx+fPPrlP1Ik7gugpemYUw0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gMFI6pCnQITSLEl4xuB0ohOyIw5icsTEiJUUKXEYWA1Z5ENFOMPD4oXHL3K6O4xy+/TKkAigc0k23FdnImNX3wiWFq7aEDrkD1yQ8Eloym4BuZyx/TTnXaC3eO8sZXNsKixFlnBwO+54fBKeSFm1bRlImbb1QI88zMkBld0Xxzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FBvXf343; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=TSuQ4nmShKJAzghU2pjkzVG6oyetveGear+xavs9vrKOpsJ1mLFSJ3LP/3T6YQf68sgY64HgKAeJFF/mbsp0619L3/YoTBXkjY5wMjBtVeVZ8tgZ679/FvrwgVxcSnCy4MuIKDF8ZO1Ddk5DF7Z+OFVKi8BdCEu6ga64oUf/4lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iPzwlvAW; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fb3b7d0d3aso1641535ad.2;
-        Mon, 22 Jul 2024 22:56:03 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fc5239faebso2168345ad.1;
+        Mon, 22 Jul 2024 22:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721714162; x=1722318962; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721714165; x=1722318965; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=enQn2il/q/jEk1kd4P2wJtha1mIWED0XiYGsCh0GBbw=;
-        b=FBvXf343V12BTONXQTf1Svumoy8JE3yFJ05vaefFenke7mNlr96EwuUR9m6pbQWEUs
-         zD1Y8+HaIy/eVXskBa39ybvp/kqZVXk52o0dwp4G0V6Aof+PZDYGmDdPZh6LALARAq95
-         zybreqJptgWHCOxg/Tt6u+gD8KciuUVv0KULX1q596k52L9ShZQfS6Y04APCZrJIzK1o
-         WyiD8TFQ3Fy4AXr2ySUpVx7knDD0zfCNaVhqLp6l6FeLgZNR6w4xx3gDe9Y4/AsSuWch
-         an1JEl/UlEPiX4063lltnoKCSET5jvaWbzSNJtL+CkB2LJurIl1gXMI2EVdV+korNG6H
-         g2bw==
+        bh=y7Poq16VwrjI6K5TQu0XyFE0O+HO7fJqUE55lzfibYQ=;
+        b=iPzwlvAWkYBp/8Zk8zaoDa6MJIvImZI46SyLbsmJqH13DX/ty5BLJXBtuyhd6hzJVf
+         fJPEZ5g9SDkPlY/+o8yOpZpnd/qjLEbBQOEah0seyoRP/C9zC8i9oJyVtJpLT30FpgNU
+         IxVuKGia+SlvusxqISTo8UHRP7CetOytwTbfv19uGkxWy5Ssb6HIpaRDlPZsXmUJV42c
+         oyiHEyvi3fwrL6dlfmipjI0xJMq7BPoj+4XSREAqSG4mgzAmngNrL+8IXliaYf22mYBL
+         IizNbIKcu5D+D/A6b//bEZopKNRXyswAMI9oCL5y4GPWhFfkBJV5/yqwTWxEBeE43Cr4
+         dqfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721714162; x=1722318962;
+        d=1e100.net; s=20230601; t=1721714165; x=1722318965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=enQn2il/q/jEk1kd4P2wJtha1mIWED0XiYGsCh0GBbw=;
-        b=BW9YJs1dGAT53w0N+pbrAU75LMTDWejAtzZ2vjcu3XQYHRcjjDsvrReek7N1ubW3R2
-         q7e6dYo1p/tyiGozMnSuTpSkykBoZ1zQt1DrAevhjD/Cf4dFeQSXhJY/7SaABDgfl6TK
-         IJn3F8qoAM3q623JWGn0V9H5ZBLnG2eunvd5t8evLsJH9LyMRtb72Qv4xPjmS9/4m0N3
-         td7OunpKBBdJTDqzz7hioMzN3WjtDSGa2SIPymPlRL7QYGxYMjN6lwZqVwj5Kg7T+nHn
-         4HpZnbS52At9SaPUOMab9+uI5ZXDdJp9RCcOFiWe4canWhdKgNBi65RrPfN/Ig+0KJTz
-         gvGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCeoKVT7+96zHodsYFbGEiq5TrbTSv2uC8U/j8HcbhN36y+SajlsxUapDhdFnZRGdIoPY2y4vt1QXfEGWjzD32joHzm8+PAVeTHO+s2wrF
-X-Gm-Message-State: AOJu0YwUoEEOVnPd4Rv0plmnFuCY0cZ2th/EkiAl69MIBqpne+u+P3HE
-	KDg9fre763QTO8yms9q130uN9EzVwHL5iyc1T43KGQx2EjVnkm8XcVgC1Kda
-X-Google-Smtp-Source: AGHT+IFkt6KxaWnQEzpKj1LsldI+1aAW9WIGIWZth1nj7k40+kpKUYibE7dYdXKTHUmq0E06BXSB1g==
-X-Received: by 2002:a17:902:d48f:b0:1fb:3b89:b130 with SMTP id d9443c01a7336-1fd74552854mr91174305ad.19.1721714162524;
-        Mon, 22 Jul 2024 22:56:02 -0700 (PDT)
+        bh=y7Poq16VwrjI6K5TQu0XyFE0O+HO7fJqUE55lzfibYQ=;
+        b=bSuuLMKKb69ME/bw8trg7jkSckqj6aDBKhOd4RalkdAtRZGbQc+6ZMaNRo9XjPyaHQ
+         GcFah2EhLXeGEVq5t1boBK0ys3M9CyFppocRQmy7zzoeMePALj6v+h+VjcLjBmFpIeZb
+         F5uq2glYaLM2DD2modJ9T5IECAH5c5BvmMCeGUaZScGYeYhXzazQjyYzqwgkwHf9MDSS
+         khEeTVuhfdADFe4jwPFHFioRmPTpeR2t5u5Im6UEQW8db6pkM1YA6UKzuZpcdyPy9TKo
+         OYmrroMJFtqtTZ94shNSLDJmUqWBvAZfKQT+ZCpO4ZOD908WKMgNO88vqNMb+2aIEHUe
+         Hm7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU2v3k/7hnzeKwXGcbiXo58XuMoyTYIy28jYaAJsFG+wZaEQSBMzuXmHmwpooYFyVenNadhd47h6u30AJxxDHGCOvRFXncxHV8MhWSSj30Z
+X-Gm-Message-State: AOJu0YxBr8/fiHc8jx2Ee1R/Szrzg3pW37dBPui2pnSMNin8P5dNyRS2
+	mp4N5iIh1M1az/J+siOKyXkyZ5ABs5/GiDIgX2nNYI6VaZDBux5tE3Hot9j0
+X-Google-Smtp-Source: AGHT+IHX8nDGUYAR1rrFPblUOqoY6qc03OpITbzbp6hgcUAkvpDy51TQ2F6RLswuRwt2fqOMih3QLw==
+X-Received: by 2002:a17:903:22cb:b0:1fa:a89:fd1a with SMTP id d9443c01a7336-1fd7452553dmr65970615ad.10.1721714164941;
+        Mon, 22 Jul 2024 22:56:04 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.56.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 22:56:02 -0700 (PDT)
+        Mon, 22 Jul 2024 22:56:04 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -97,9 +97,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Yan Zhai <yan@cloudflare.com>,
 	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
 	YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH bpf-next v1 15/19] selftests/bpf: Fix compiling core_reloc.c with musl-libc
-Date: Mon, 22 Jul 2024 22:54:42 -0700
-Message-Id: <11c3af75a7eb6bcb7ad9acfae6a6f470c572eb82.1721713597.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 16/19] selftests/bpf: Fix errors compiling lwt_redirect.c with musl libc
+Date: Mon, 22 Jul 2024 22:54:43 -0700
+Message-Id: <3869dda876d5206d2f8d4dd67331c739ceb0c7f8.1721713597.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1721713597.git.tony.ambardar@gmail.com>
 References: <cover.1721713597.git.tony.ambardar@gmail.com>
@@ -111,34 +111,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The type 'loff_t' is a GNU extension and not exposed by the musl 'fcntl.h'
-header unless _GNU_SOURCE is defined. Add this definition to fix errors
-seen compiling for mips64el/musl-libc:
+Remove a redundant include of '<linux/icmp.h>' which is already provided in
+'lwt_helpers.h'. This avoids errors seen compiling for mips64el/musl-libc:
 
-  In file included from tools/testing/selftests/bpf/prog_tests/core_reloc.c:4:
-  ./bpf_testmod/bpf_testmod.h:10:9: error: unknown type name 'loff_t'
-     10 |         loff_t off;
-        |         ^~~~~~
-  ./bpf_testmod/bpf_testmod.h:16:9: error: unknown type name 'loff_t'
-     16 |         loff_t off;
-        |         ^~~~~~
+  In file included from .../arpa/inet.h:9,
+                   from lwt_redirect.c:51:
+  .../netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
+     23 | struct in6_addr {
+        |        ^~~~~~~~
+  In file included from .../linux/icmp.h:24,
+                   from lwt_redirect.c:50:
+  .../linux/in6.h:33:8: note: originally defined here
+     33 | struct in6_addr {
+        |        ^~~~~~~~
+  .../netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in6'
+     34 | struct sockaddr_in6 {
+        |        ^~~~~~~~~~~~
+  .../linux/in6.h:50:8: note: originally defined here
+     50 | struct sockaddr_in6 {
+        |        ^~~~~~~~~~~~
+  .../netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
+     42 | struct ipv6_mreq {
+        |        ^~~~~~~~~
+  .../linux/in6.h:60:8: note: originally defined here
+     60 | struct ipv6_mreq {
+        |        ^~~~~~~~~
 
-Fixes: 6bcd39d366b6 ("selftests/bpf: Add CO-RE relocs selftest relying on kernel module BTF")
+Fixes: 43a7c3ef8a15 ("selftests/bpf: Add lwt_xmit tests for BPF_REDIRECT")
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/core_reloc.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/prog_tests/lwt_redirect.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 47f42e680105..26019313e1fc 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
- #include <test_progs.h>
- #include "progs/core_reloc_types.h"
- #include "bpf_testmod/bpf_testmod.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
+index 835a1d756c16..b6e8d822e8e9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
+@@ -47,7 +47,6 @@
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
+ #include <linux/if_tun.h>
+-#include <linux/icmp.h>
+ #include <arpa/inet.h>
+ #include <unistd.h>
+ #include <errno.h>
 -- 
 2.34.1
 
