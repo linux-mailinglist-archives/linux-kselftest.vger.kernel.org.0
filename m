@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0253C939967
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:56:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87048939969
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 07:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F7A0B2144C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:56:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EB951F22876
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 05:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1514113D511;
-	Tue, 23 Jul 2024 05:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE0813D60F;
+	Tue, 23 Jul 2024 05:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lyTUeAP0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gI6SNWHd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F63367;
-	Tue, 23 Jul 2024 05:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0941367;
+	Tue, 23 Jul 2024 05:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721714150; cv=none; b=FIugZ+aONrq1ofJsG9M+tnUrv6vLvZ/wwPXe7Qm7UqaDrCPStXXkaclTG6vkAxYXuEm4IhyWMn4VoWYhsNYJONvzU41VlhgKGYU4Mf7XL9iujj4s1PuiUVpNAVMs5Ko0roUkV4LXQcT4HDuabr1uWofgAT00I7fiI0Ejgaxo/DE=
+	t=1721714152; cv=none; b=Y4HUjX5ZPsZPbAsK96B9nN5FiI2HWba/9yrMq7HXx5Id121K/itmDUVslw61JCB53QKTZTiAC9j5dWStt6VXekDMcybTTddf38KFpYx+5JcJxiE+Z8wwG0yGVqfLtvZWd+2jbX790wYO4tzIh2LPi7dT8PswnT4ijmBli4pogOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721714150; c=relaxed/simple;
-	bh=2ssllKaNronxEnB4vH8yEfLpTO61CTJZ1bgpHM3sayk=;
+	s=arc-20240116; t=1721714152; c=relaxed/simple;
+	bh=Fvulvh0wRi63KXe+ClPk5X6wqiVaG05JHCmmwEQZS7M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qu64fJcWfaRiTO5kepGLuA/9BOrgEeMsmoSDLTe14VCWtp64enUVSFwTUXFz9PhcEL4DU6dyv7mb5DhqHTNxjn8eZFHga8IjlZWYKfw9v+gTf0CQk7G6KLw71HXwKda/OQhTDPFXnzYFy22Ljg+YV4y/qQsBGc4VtoT4N6ef9LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lyTUeAP0; arc=none smtp.client-ip=209.85.215.174
+	 MIME-Version; b=J4pWeGn7oixBe4cuXgRhU97BmB3ahcVypID5YSFhO0q77qJVcabpeOfz3J/T4roW9qIjq9tUEjxMojES+tJ7AH+WnvPEONXy3e/sgji9gMReXNmw+VslLPYc/9zKM8x2ekJYtdr0Z9gqh2s6zNcxzdaYpjJqJBZcZjC1Q0RMo2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gI6SNWHd; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-79b530ba612so2696105a12.2;
-        Mon, 22 Jul 2024 22:55:48 -0700 (PDT)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-70b2421471aso172024a12.0;
+        Mon, 22 Jul 2024 22:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721714148; x=1722318948; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721714150; x=1722318950; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8mRv7fxGm8wGDSLiyp9Dtkgu4XAwa13vX4fcz6gE0zE=;
-        b=lyTUeAP0mjrC7uPOS9Oo5YL7WYizmqquF7omZ7wUETpo4fvJC+O3GQZBgo0mQhGdqS
-         koJa/uNfS5v/hQv1nsYF6tV0ZiI0G0AJs9YdUcq10Tub+wUhGGgb7UJ46zaIaeVmxbgj
-         nZM68bULxHtQvHOCqOJlLHeprEMpGKG77ApyqFqGAx1bPN5sLfOA+0Sb0JX8bxnaOMTw
-         BN+j0iiJiKhyuI7qUj9G4KErkx3/72evoRjVPVipDiO80iLISmtAHKhQ/wxNY8An0YqY
-         Oi4Qd4sQQ5w3Ckr3AQiV8H3+w17L42xwfn9lCogs1wbckT1Cf8jVYnSbe3aa4N8pkcaF
-         4DCg==
+        bh=PvN2vCmbbitXVsoz1GgGcqMKTbCHMV5QXlZU28fpyGQ=;
+        b=gI6SNWHd3gQvyGJrDgNCAZB7P5UU70nuzIAKvOsjuL9jiejWBRH/rzYYX8HUqfXc3y
+         VYQpqJbNawXZCTATOpIXuGb7AMgnqXVAUIl8an7ANEmh8+WYwVZUWl3Bx6G3JEGOY0uz
+         YUoidFoTnMUz83YCWd29CsYHgsykUz0zQL1kIs1kLhZ8iBRdXTT+cB0a9Bw9S/t1N6Os
+         x818YLq889V0ITfbbKCNMzJxqDBTQ1V/AfT68qC4LbKN76rY5lNs5nxqv0tFAAAG7PN4
+         TQ0KpdHfPhaeJSRoK4wGzvOgRvrzD7iiFgmIVkY1iAKbL5WDxWPIkE+gVV84uUWTkmiB
+         csWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721714148; x=1722318948;
+        d=1e100.net; s=20230601; t=1721714150; x=1722318950;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8mRv7fxGm8wGDSLiyp9Dtkgu4XAwa13vX4fcz6gE0zE=;
-        b=WuXO1OWoj9jazJWNwbjAbLlCAP6rc3IHERmWmoH91NV/yZz7YzhEDzMntmtqPeRk7I
-         bjv3Yjjy3yErB3SExgYXUtiYIh4oOoEOcSOhTggTAHqNVILddSmC6U4O3RnkiR0h0W8n
-         enjdnLcZn25HqlJ6Y15N5eZ5X1aHBePhjV3Ue3PVEr+XiurkuI1rPxurJBbvtJXyQZt9
-         +QVgXHMGpAcQyQ2UOOlhMjtIbw49tHSj8XjBFBYxbts1YoWs7tWZVreyGi1g8XgD2CFU
-         eEQvAQnP0iJTutQXkM2DtOuqGwZZBqK0fg7fQTaUyU6zLtQ/4jqJfFVCGhWbtGu5B0vm
-         GXQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkjjLexLX29naDHxYWSWRo7/QaiI5po/BCDb9HYfFw6m8rj3+oOUl4tCPp8a6NMEwheoHhbRJnbOwk8vfEL1qxcb+vknqOcJMoYmf3HNSZ
-X-Gm-Message-State: AOJu0YxtUwol++rESWve9PVoQBtSFoWImjF5HBGI+t0qUdr9WmmU9NKQ
-	+OqQgOL4h1JN3vxeLxC25AdDl3LBhOFF09/UsuRxiSTKWgtTzoZADA77RpqM
-X-Google-Smtp-Source: AGHT+IG2S8c7/eMss/LSzkOz87mSAGlZD/oxADnlBRju4cY9AXwPSj4cmDsB7hN2rwmE7jCr3epcYw==
-X-Received: by 2002:a05:6a20:72aa:b0:1c0:f080:ed51 with SMTP id adf61e73a8af0-1c42285defcmr9651578637.2.1721714147871;
-        Mon, 22 Jul 2024 22:55:47 -0700 (PDT)
+        bh=PvN2vCmbbitXVsoz1GgGcqMKTbCHMV5QXlZU28fpyGQ=;
+        b=do5EawlawwDxEOS7q8Pe+x/+LuAa6jJvoilR70Z5UaObmlym60cfOODfdTwl7RoaLe
+         r5giZMkNH+YsfccmeZwMWh7FXBq7wUvlJmw7eTuTTGdS0Uv8oMI0LgS5U5onf9TfTVZN
+         wyKktZOS5kruWCZDY9LzWidQDh9rT7onjRWcnoNgJTULYPltyS1CIWm3YUtpKHa02IbM
+         J4Ui5R4x/m9uKoucdnwJ5A5vLiqQCJTAmWOqcJAWQ1wEts6SoZnCoI7fOs1xUhoWBrLI
+         3qelRcMY4Px+oZwyw2T1KrrAdR85RZgl5gV9gFa1+qz9/rwv6Hv2Rn5xILnyYsdsUafP
+         kPsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7GiLDA6fM3pdtVJy4UIEk+vPhZHSJRUIRd+tl1rv+SSmAzSLo7R/2zkqSnLbyWHm5Hnfz6b6ltSwbVJkEg7gIVBWTnfafylto4F9FkyyP
+X-Gm-Message-State: AOJu0YwbuzAUQfi9lVV6WpOrWdDTOU6FUPkBEGPoOelNUNZ28JPblEqc
+	ETCl+QK/eXbFCXeZH7/9FtQAMSnhR2WzmOYHYdlwBagt6DrVqpqdbKa7hJCl
+X-Google-Smtp-Source: AGHT+IH1b5r88+ekB7/iB+JZSSWMelEkDkH5IJbqwABrSZGDBCRuhCkjgIu0nu70oG7wzvDil6r2FQ==
+X-Received: by 2002:a17:902:e74d:b0:1fb:4f2e:8b7c with SMTP id d9443c01a7336-1fd74533ff5mr81345125ad.7.1721714149922;
+        Mon, 22 Jul 2024 22:55:49 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.55.46
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f469df5sm65724685ad.254.2024.07.22.22.55.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 22:55:47 -0700 (PDT)
+        Mon, 22 Jul 2024 22:55:49 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -97,9 +97,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Yan Zhai <yan@cloudflare.com>,
 	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
 	YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH bpf-next v1 08/19] selftests/bpf: Fix missing UINT_MAX definitions in benchmarks
-Date: Mon, 22 Jul 2024 22:54:35 -0700
-Message-Id: <8f64a9d9fcff40a7fca090a65a68a9b62a468e16.1721713597.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 09/19] selftests/bpf: Fix missing BUILD_BUG_ON() declaration
+Date: Mon, 22 Jul 2024 22:54:36 -0700
+Message-Id: <b28575f9221ec54871c46a2e87612bb4bbf46ccd.1721713597.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1721713597.git.tony.ambardar@gmail.com>
 References: <cover.1721713597.git.tony.ambardar@gmail.com>
@@ -111,39 +111,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Include <limits.h> in 'bench.h' to provide a UINT_MAX definition and avoid
-multiple compile errors against mips64el/musl-libc like:
+Explicitly include '<linux/build_bug.h>' to fix errors seen compiling with
+gcc targeting mips64el/musl-libc:
 
-  benchs/bench_local_storage.c: In function 'parse_arg':
-  benchs/bench_local_storage.c:40:38: error: 'UINT_MAX' undeclared (first use in this function)
-     40 |                 if (ret < 1 || ret > UINT_MAX) {
-        |                                      ^~~~~~~~
-  benchs/bench_local_storage.c:11:1: note: 'UINT_MAX' is defined in header '<limits.h>'; did you forget to '#include <limits.h>'?
-     10 | #include <test_btf.h>
-    +++ |+#include <limits.h>
-     11 |
+  user_ringbuf.c: In function 'test_user_ringbuf_loop':
+  user_ringbuf.c:426:9: error: implicit declaration of function 'BUILD_BUG_ON' [-Werror=implicit-function-declaration]
+    426 |         BUILD_BUG_ON(total_samples <= c_max_entries);
+        |         ^~~~~~~~~~~~
+  cc1: all warnings being treated as errors
 
-seen with bench_local_storage.c, bench_local_storage_rcu_tasks_trace.c, and
-bench_bpf_hashmap_lookup.c.
-
-Fixes: 73087489250d ("selftests/bpf: Add benchmark for local_storage get")
+Fixes: e5a9df51c746 ("selftests/bpf: Add selftests validating the user ringbuf")
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/testing/selftests/bpf/bench.h | 1 +
+ tools/testing/selftests/bpf/prog_tests/user_ringbuf.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/bench.h b/tools/testing/selftests/bpf/bench.h
-index 68180d8f8558..005c401b3e22 100644
---- a/tools/testing/selftests/bpf/bench.h
-+++ b/tools/testing/selftests/bpf/bench.h
-@@ -10,6 +10,7 @@
- #include <math.h>
- #include <time.h>
- #include <sys/syscall.h>
-+#include <limits.h>
- 
- struct cpu_set {
- 	bool *cpus;
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+index e51721df14fc..dfff6feac12c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+@@ -4,6 +4,7 @@
+ #define _GNU_SOURCE
+ #include <linux/compiler.h>
+ #include <linux/ring_buffer.h>
++#include <linux/build_bug.h>
+ #include <pthread.h>
+ #include <stdio.h>
+ #include <stdlib.h>
 -- 
 2.34.1
 
