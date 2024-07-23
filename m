@@ -1,251 +1,135 @@
-Return-Path: <linux-kselftest+bounces-14078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4565B939EBE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 12:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 50B37939F80
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 13:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D95A1C21874
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 10:29:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82A5A1C22058
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 11:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A907314E2C0;
-	Tue, 23 Jul 2024 10:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B7014F9D4;
+	Tue, 23 Jul 2024 11:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BiT79zMI"
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="BbSmMJiB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F348B14C5A4;
-	Tue, 23 Jul 2024 10:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6135314F9CB;
+	Tue, 23 Jul 2024 11:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721730538; cv=none; b=a0jgGFsWJTExklou4vEqwiwaCsTMgysDXPYqvWfHAgIdt9BLcRO5BGjzzKdXi0ZMtHk8lsbGDtY8Qd7oILgR0+H5f8RGlujjJ9aqgHKBKpCP8HzyFkAcn+bH3fbG54+unZ+mZ4TZ7fhzrf7d62GEQiQkmPSMzC0CJyrt18BImds=
+	t=1721733229; cv=none; b=Ed+CW8p76tG7k2JopQKu/5rAXUl5ZNe42NtfmZP7GNbaPdj31iVFczLRl7CNmHl9Yw7fUn1p+ZMcgoaS4OwDw0+hkMwBNVsDJX8n/woKk5JjWAQqtM8QVW117qTNglPBYdn/qpRPoiKKJL1cg4v3edVdEXW7rBHVTVcyozH2P8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721730538; c=relaxed/simple;
-	bh=NMKTzAxYtED7lsK+4pQXB99GoVnYcbnAPWwlvySACH8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iX+/i0HCyre7yR2TPQ0X/msUUKUYaQuztH3y4cd+mXOn+GZ6t5UROs7wOB1R/wi5SvJ6A9bwL5f/SXAy8lzX7zjjA0r1Fg/1j/2Bd//IRDTv8BrDMSJTcikytlMTFXdKCgN/ocKbUfopDScTgUzCOsoZG3eW/ZPGJPDepP1wHek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BiT79zMI; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-66108213e88so53080687b3.1;
-        Tue, 23 Jul 2024 03:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721730536; x=1722335336; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1A9IFWbYCk8Y3UmFUkrvkC/KXCME07HqnuVMqN+IZFQ=;
-        b=BiT79zMIJdfmUfQ2zbxNGgX8tk2enpYvvDIS6ZHj/GcedN4Y5Q2EpNDBCLeZdk8vOt
-         zFOySNlzOlBQWpgmZ+cuedKMl6y+6oGIzl7MWOjjfdznG/siyDfzOdupm+p1efbgG75t
-         IV2hJH6clR1soUPd1de/XJvi2LErLnMdJlghBHYFf5yF5D3E0eKfYkgy/Px7Zgbky0dF
-         3kJMsQoJZHrGLdm0SBplsLRIpDxoz2sOZL0jJYUGPcV5GDoiLu+DZnkDOjFCGirGhGAH
-         sQbYfRNpnNIyzMxwT9bv/85+QS367612P+GGUgS/vpweMddzdoE3NpS+1UlRmfAlUV/v
-         knXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721730536; x=1722335336;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1A9IFWbYCk8Y3UmFUkrvkC/KXCME07HqnuVMqN+IZFQ=;
-        b=EsgIaqjnKs1UURtkAx9DLGBSDOF8SHLLZJRqsBgMQgDNnTFvNiD8oxiGZr9A9bSV0H
-         UDODtb248/l6I04xjXom3MUDKF7GSs9o/c3sjET3i6ugrTlf0xHCGtz/40tUz33ohR3O
-         frCpuNMynggI1IAEC4BjvZw9UdD0NRTGDhOcmwywQ+FQr/MomNS493jQn61EMw3bMb/p
-         yjE86w9CHTd9Grcv7sSYEtUH/OARktmlHFOeZco9VMHnajzOtSgfnB8zBjj6F39zmgkS
-         ymAzfBMyKpdjdghK9hAFTSWrm/go3RiVXkeWrI3jH4fagMVdb+BewKh1G6F72XLg2RUR
-         bU6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVJDwrLF/zb6BTnIWzvUKPfc8HXJwIYhaNogomrNvLKqlIzHSIiS7qS/mmjARdLfge5QNZFlDIhk9gfgZedCU2PNvh4M67SEtbN1ELQjaABclsqe1RBCH0r945JV8IvVABDyfzlcMogKc3C3i6H
-X-Gm-Message-State: AOJu0YxmDi13Ga0+V7qBZJXQXG4LKLdmA7zeez6LZ4Guy0G2v1k+Dxu1
-	DudaTQM78U53vCjo/T5ukxlNXNOspH3Og6EggzGt6wPdSvYjAWFm8Yul8YPv
-X-Google-Smtp-Source: AGHT+IGEOsaXBKy9PASLfOHFdNFWCjaIIDmZYq1VkEvZMDWvqI1THwT6GaIWbH/anRHo2wVGB27baQ==
-X-Received: by 2002:a05:690c:3301:b0:64b:2a73:f050 with SMTP id 00721157ae682-66ad8ec4979mr99195527b3.23.1721730535902;
-        Tue, 23 Jul 2024 03:28:55 -0700 (PDT)
-Received: from [127.0.1.1] ([2607:fea8:bad7:5400:b8b3:54ee:8692:b1f9])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b968f85975sm28039526d6.16.2024.07.23.03.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jul 2024 03:28:55 -0700 (PDT)
-From: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-Date: Tue, 23 Jul 2024 06:28:43 -0400
-Subject: [PATCH v3] selftest: acct: Add selftest for the acct() syscall
+	s=arc-20240116; t=1721733229; c=relaxed/simple;
+	bh=lzL84Xklp4nXKsyWvGSuKKibFi7JFlcWQN/GOSlmaYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/uwKxxzM0MzUjXTGlaHzvD++nAwWLwGnDPXXv3fh9FuJajmxRxKSBwBrNRl1STT69UF3bmOC0XeTr1C9aCFwhxJwk8nDV4vhwyT5bsR4B+rcskV8YvAKaFgpLdtcU/qUn/uBWkZUmNqG66kAkEOJJyyF42Y30RaLpVu6aVFI9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=BbSmMJiB; arc=none smtp.client-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1721733222; bh=lzL84Xklp4nXKsyWvGSuKKibFi7JFlcWQN/GOSlmaYQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BbSmMJiBFrCPWR57sb/+Mv/+zV3Eq7EnclVOQhPJLnmu6Ep3IGwTxsdnEOQqrh+mB
+	 D70eq1OSesQ6a8xkltNUnBP8mjEjnGDNnTz8u3SDNSyG8NlQCdg4keKunzZHkoSUdS
+	 5uTKH43lp6rttj+VZpV8cFrIK7AFMdwxY7BiME/Q=
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Tue, 23 Jul 2024 13:13:42 +0200 (CEST)
+Received: from localhost (unknown [172.17.88.63])
+	by mail-auth.avm.de (Postfix) with ESMTPSA id 119A480825;
+	Tue, 23 Jul 2024 13:13:42 +0200 (CEST)
+Date: Tue, 23 Jul 2024 13:13:42 +0200
+From: Johannes Nixdorf <jnixdorf-oss@avm.de>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net] selftests: forwarding: skip if kernel not support
+ setting bridge fdb learning limit
+Message-ID: <Zp-QZjrSYsPJ6ig0@u-jnixdorf.ads.avm.de>
+References: <20240723082252.2703100-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240723-kselftest-acct-syscall-v3-1-16f332498a9e@gmail.com>
-X-B4-Tracking: v=1; b=H4sIANqFn2YC/4XNTQ7CIBCG4as0rMXAoFRdeQ/jgp9pS6StAUJsm
- t5d2lU3xuX7JfPMTCIGh5HcqpkEzC66cSghDhUxnRpapM6WJsDgxCQAfUX0TcKYqDIm0ThFo7y
- nYK+sqaWUmiMpx++Ajfts8ONZunMxjWHa/mS+rn/JzCmnFmqmzxovVtT3tlfOH83Yk5XMsGME+
- 8lAYbRgWiMoeTV2zyzL8gWM4CG3AwEAAA==
-To: Shuah Khan <shuah@kernel.org>
-Cc: javiercarrascocruz@gmail.com, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-X-Mailer: b4 0.14-dev-0bd45
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721730534; l=4199;
- i=abdulrasaqolawani@gmail.com; s=20240613; h=from:subject:message-id;
- bh=NMKTzAxYtED7lsK+4pQXB99GoVnYcbnAPWwlvySACH8=;
- b=LDbIC61Q5DV3J1RHCyS+FbVpW5yvC5tza0NByoRSt0U3R5nD50mxGklEY5C9A6cD/gsNjBXbU
- c4VYrPWZP/iAfsWSIHVUJvapAJjnYxx5o86DqvYGtegR7GAjuD4UWdF
-X-Developer-Key: i=abdulrasaqolawani@gmail.com; a=ed25519;
- pk=cUqfinPW5pkopFB8ShBc0ZTNgYvSW5ZTa8aLIFPGp/w=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240723082252.2703100-1-liuhangbin@gmail.com>
+X-purgate-ID: 149429::1721733222-A575580C-F0E48092/0/0
+X-purgate-type: clean
+X-purgate-size: 2190
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 
-The acct() system call enables or disables process accounting.
-If accounting is turned on, records for each terminating process
-are appended to a specified filename as it terminates. An argument of NULL
-causes accounting to be turned off.
+On Tue, Jul 23, 2024 at 04:22:52PM +0800, Hangbin Liu wrote:
+> If the testing kernel doesn't support setting fdb_max_learned or show
+> fdb_n_learned, just skip it. Or we will get errors like
+> 
+> ./bridge_fdb_learning_limit.sh: line 218: [: null: integer expression expected
+> ./bridge_fdb_learning_limit.sh: line 225: [: null: integer expression expected
+> 
+> Fixes: 6f84090333bb ("selftests: forwarding: bridge_fdb_learning_limit: Add a new selftest")
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+>  .../forwarding/bridge_fdb_learning_limit.sh    | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
+> index 0760a34b7114..a21b7085da2e 100755
+> --- a/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
+> +++ b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
+> @@ -178,6 +178,22 @@ fdb_del()
+>  	check_err $? "Failed to remove a FDB entry of type ${type}"
+>  }
+>  
+> +check_fdb_n_learned_support()
+> +{
+> +	if ! ip link help bridge 2>&1 | grep -q "fdb_max_learned"; then
+> +		echo "SKIP: iproute2 too old, missing bridge max learned support"
+> +		exit $ksft_skip
+> +	fi
+> +
+> +	ip link add dev br0 type bridge
+> +	local learned=$(fdb_get_n_learned)
+> +	ip link del dev br0
+> +	if [ "$learned" == "null" ]; then
+> +		echo "SKIP: kernel too old; bridge fdb_n_learned feature not supported."
+> +		exit $ksft_skip
+> +	fi
+> +}
+> +
+>  check_accounting_one_type()
+>  {
+>  	local type=$1 is_counted=$2 overrides_learned=$3
+> @@ -274,6 +290,8 @@ check_limit()
+>  	done
+>  }
+>  
+> +check_fdb_n_learned_support
+> +
+>  trap cleanup EXIT
+>  
+>  setup_prepare
+> -- 
+> 2.45.0
 
-This patch will add a test for the acct() syscall.
+Thanks for the fix. I also assumed that it's fine to depend on new
+features after trying to find out how those feature tests are usually
+done from the surrounding tests and their history.
 
-Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
----
-Changes in v3:
-- Add geteuid to check if test is ran as root.
-- Simplify error conditions for acct function.
-- Remove unecessary messages.
-- Add more informative messages. 
-- Update commit message.
-- Add error test case for file creation failure.
-- Link to v2: https://lore.kernel.org/r/20240630-kselftest-acct-syscall-v2-1-b30bbe2a69cd@gmail.com
+The code looks right to me, and seems to behave as expected when feeding
+it data with and without fdb_n_learned.
 
-Changes in v2:
-Add testcases to test error conditions.
-Add kselftest function for reporting results.
-
-- Link to v1: https://lore.kernel.org/r/20240622-kselftest-acct-syscall-v1-1-d270b5be8d37@gmail.com
----
- tools/testing/selftests/Makefile            |  1 +
- tools/testing/selftests/acct/.gitignore     |  3 ++
- tools/testing/selftests/acct/Makefile       |  4 ++
- tools/testing/selftests/acct/acct_syscall.c | 78 +++++++++++++++++++++++++++++
- 4 files changed, 86 insertions(+)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9039f3709aff..45a58ef5ad92 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+TARGETS += acct
- TARGETS += alsa
- TARGETS += amd-pstate
- TARGETS += arm64
-diff --git a/tools/testing/selftests/acct/.gitignore b/tools/testing/selftests/acct/.gitignore
-new file mode 100644
-index 000000000000..7e78aac19038
---- /dev/null
-+++ b/tools/testing/selftests/acct/.gitignore
-@@ -0,0 +1,3 @@
-+acct_syscall
-+config
-+process_log
-\ No newline at end of file
-diff --git a/tools/testing/selftests/acct/Makefile b/tools/testing/selftests/acct/Makefile
-new file mode 100644
-index 000000000000..ff3e238c5634
---- /dev/null
-+++ b/tools/testing/selftests/acct/Makefile
-@@ -0,0 +1,4 @@
-+TEST_GEN_PROGS := acct_syscall
-+CFLAGS += -Wall
-+
-+include ../lib.mk
-\ No newline at end of file
-diff --git a/tools/testing/selftests/acct/acct_syscall.c b/tools/testing/selftests/acct/acct_syscall.c
-new file mode 100644
-index 000000000000..e44e8fe1f4a3
---- /dev/null
-+++ b/tools/testing/selftests/acct/acct_syscall.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* kselftest for acct() system call
-+ *  The acct() system call enables or disables process accounting.
-+ */
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <string.h>
-+#include <sys/wait.h>
-+
-+#include "../kselftest.h"
-+
-+int main(void)
-+{
-+	char filename[] = "process_log";
-+	FILE *fp;
-+	pid_t child_pid;
-+	int sz;
-+
-+	// Setting up kselftest framework
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	// Check if test is run a root
-+	if (geteuid()) {
-+		ksft_test_result_skip("This test needs root to run!\n");
-+		return 1;
-+	}
-+
-+	// Create file to log closed processes
-+	fp = fopen(filename, "w");
-+
-+	if (!fp) {
-+		ksft_test_result_error("%s.\n", strerror(errno));
-+		ksft_finished();
-+		return 1;
-+	}
-+
-+	acct(filename);
-+
-+	// Handle error conditions
-+	if (errno) {
-+		ksft_test_result_error("%s.\n", strerror(errno));
-+		fclose(fp);
-+		ksft_finished();
-+		return 1;
-+	}
-+
-+	// Create child process and wait for it to terminate.
-+
-+	child_pid = fork();
-+
-+	if (child_pid < 0) {
-+		ksft_test_result_error("Creating a child process to log failed\n");
-+		acct(NULL);
-+		return 1;
-+	} else if (child_pid > 0) {
-+		wait(NULL);
-+		fseek(fp, 0L, SEEK_END);
-+		sz = ftell(fp);
-+
-+		acct(NULL);
-+
-+		if (sz <= 0) {
-+			ksft_test_result_fail("Terminated child process not logged\n");
-+			ksft_exit_fail();
-+			return 1;
-+		}
-+
-+		ksft_test_result_pass("Successfully logged terminated process.\n");
-+		fclose(fp);
-+		ksft_exit_pass();
-+		return 0;
-+	}
-+
-+	return 1;
-+}
-
----
-base-commit: 50736169ecc8387247fe6a00932852ce7b057083
-change-id: 20240622-kselftest-acct-syscall-2d90f7666b1e
-
-Best regards,
--- 
-Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-
+Reviewed-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
 
