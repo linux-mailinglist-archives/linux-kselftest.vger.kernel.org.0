@@ -1,400 +1,143 @@
-Return-Path: <linux-kselftest+bounces-14028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE974939732
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 01:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDA6A93974C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 02:04:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 251A2B21773
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2024 23:56:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DB9EB21791
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2024 00:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC936F065;
-	Mon, 22 Jul 2024 23:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C15017E;
+	Tue, 23 Jul 2024 00:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b="mW2RcOUT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNRYgwoA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m35-116.mailgun.net (m35-116.mailgun.net [69.72.35.116])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5583417BCD
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2024 23:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.72.35.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE23F7F;
+	Tue, 23 Jul 2024 00:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721692566; cv=none; b=DkOybTvWAJK867eCxssVxyC9aqRBw4ETsq2rZtpMGwLWQfZYqyP08yj1fuQND92iVKJ2LvmaT+jjkaZAI+aLRH9Nm0z//Ol3wVS7DG5QnhL1lQmB/yOA9ArKGuojA3EzJRSnq0cHAVI8P1AaXqyiE1JGdI6tvvC79Q7uToI0eeI=
+	t=1721693063; cv=none; b=drHt6/RCVk6N8AMBrWRltmKfha1BYWG6QcgSvqyFcBKwGKvrFwMsvPLxAXIqIXZBjg8CnJWf3G+q2Bpes5MkI7eitYQDpg+AaMDpI7GyZebtYYRk7jvmWopziEJgzZh1QaF/7IwdwREqqUV42fDjxLtdKI4/XuRz7IFhwv6jzFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721692566; c=relaxed/simple;
-	bh=6GukmY2DH3ygHdcgnQd3B2WmUABS5Dr4uUFWBFkRTM4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JRlmycnhtJmbkg8pFKhJI0LaXRrSI9+6NcOPZaQ/dlM3wPdTnM9DtbiC0b4rCW1RIqRsPvp3yE1RINoEe+P0ssplZ8igf0YsdnWka06+88VR2gqWuZBj0SYeORqzwtQdLN6Lerfv4XF/XyU+mi7Vp78I6YfUYQYLtP2jxEvlijo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=pass smtp.mailfrom=relay.vimeo.com; dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b=mW2RcOUT; arc=none smtp.client-ip=69.72.35.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=relay.vimeo.com
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=relay.vimeo.com; q=dns/txt; s=mailo; t=1721692563; x=1721699763;
- h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
- bh=jsjLPBYavQVdLclCa8kvxT1KA4iDIPKvM8j0Os5u/Ok=;
- b=mW2RcOUTekC6+zlsQxf5PNpBammJ20zPMXM1CY50whaMgR2iHUaZ5WqCD3LXwju8vzZDT+botemCA7A24sqxle1JE/j4g9DMB4llB4KE22R0onwUmLgy0l8yIvxghYwFoAqsqoY4FHnaXzf1i1Jkn2x5rg3l2rjovP0MKokKGcM=
-X-Mailgun-Sending-Ip: 69.72.35.116
-X-Mailgun-Sid: WyI5MTQwZiIsImxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmciLCI5ZDJhMWMiXQ==
-Received: from smtp.vimeo.com (215.71.185.35.bc.googleusercontent.com [35.185.71.215])
- by 59065f94d682 with SMTP id 669ef193c143980835d4fc05 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Jul 2024 23:56:03 GMT
-Sender: davidf=vimeo.com@relay.vimeo.com
-Received: from nutau (gke-sre-us-east1-main-7f6ba6de-fx1q.c.vimeo-core.internal [10.56.27.207])
-	by smtp.vimeo.com (Postfix) with ESMTP id B860C64D5F;
-	Mon, 22 Jul 2024 23:56:02 +0000 (UTC)
-Received: by nutau (Postfix, from userid 1001)
-	id 88E78B4117E; Mon, 22 Jul 2024 19:56:02 -0400 (EDT)
-From: David Finkel <davidf@vimeo.com>
-To: Muchun Song <muchun.song@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: core-services@vimeo.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michal Hocko <mhocko@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	David Finkel <davidf@vimeo.com>
-Subject: [PATCH 2/2] mm, memcg: cg2 memory{.swap,}.peak write tests
-Date: Mon, 22 Jul 2024 19:55:54 -0400
-Message-Id: <20240722235554.2911971-3-davidf@vimeo.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240722235554.2911971-1-davidf@vimeo.com>
-References: <20240722235554.2911971-1-davidf@vimeo.com>
+	s=arc-20240116; t=1721693063; c=relaxed/simple;
+	bh=VvRxWkZDKba1ZQzK0XhCPOea3laGnp4jZ03MeHhgXgM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XAOzP3h3YMRIMIt/WV9Sk7wKTWiuTI8Jn3PpZDKpuPEEiI8SS0smLOGe4N+vPO0aa78aDe+5YMcPY/jwk3ehGHwtLrnwc9d5KjDrGPinxwKRZNM+Q4F4kKUVewnBk/+HJPm9CIW213p91pgo08eHxCJS/q2+VPLAlVwuXb91pVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bNRYgwoA; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7fb93b2e2a3so207044939f.1;
+        Mon, 22 Jul 2024 17:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721693061; x=1722297861; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pblNY37B3GkIzZ/iXPjQUQTaEGaFlChZVStll9RVqMc=;
+        b=bNRYgwoA0r8o1Ey5OVfftgQtG6D2FyirFC7kNvHSs+vuYkn5blZH1x9/0m018W906s
+         y0mwV49qV/MkgustP4+gnz/8ZxX4LyKe6rMbbEJCZR6wQfz2o+Fgx6PgymdCWSflB0hV
+         9KnSOiTdOxLYGpfYQzgCY74JXhUNaS1BgSz9EcI1OPplbcCHswbmKOZAXPpQi56qPQ1R
+         ZqJfj9K8qsYfODB2VUWPO7GCWmFgOeIguSZxfzfAq1Nl+d/KKQi5CMpZH6MQAEMhzfit
+         07vKeyQbZ3ETPunA1+Qq2tXcvQooB6Ww8XsplFAo8JbIbgxDeOzDpKGbNOgGewHmfYJA
+         YxAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721693061; x=1722297861;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pblNY37B3GkIzZ/iXPjQUQTaEGaFlChZVStll9RVqMc=;
+        b=PVXRvaPRB+//axuaUIlRqXV8BBn+JSWkAf3dfz4oj0Y4AKZ9GX1Ti3aWj50m39If8/
+         RMho0iDcftJFyPn0mGPDOOshxByeuqGhgIw6Y+Oz9ECU3c1/bLb3PyYPBSYxHbCg6MJd
+         m+E+vRYwBwlsadzvvtal+EdKN6nbW1EmOOwL3FEMAiyUbah69KijtsyNuwFbs1TrBPPN
+         ccJK7jBsC7GrzYLWgiHeIO0dS9GpyTKxQu+7b8nlqWqyDX7059tKd/1NgM3N7ZtM06uy
+         FuTxzc0McXg+UNe3d/TG/+lvifUKSpO/9U3TU8iY/ljSMTKZiuj4pRNluzlI/1Aa9vZN
+         TOuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdrda5E30UKLWOyytS3aD8y5xH2LBeAyg0ZANzt0uEJjBlnkHmDGP1NHIl39cM40USLEfn6W3kZ/JntFuhHweosoJfEEssepjpcQ8bYdox
+X-Gm-Message-State: AOJu0YwC424HGGKIaukMKaEUHrFBWiBHJ/hGlcWRb96IKm5pDsOD3A22
+	sZvbRYdmX5h8OXHQTS8t07XWaPIrhrRuf9KUgy5kHjgNftz/mpI+
+X-Google-Smtp-Source: AGHT+IEQFCLq6iXcdk+TXUvTT3O9QmVVYwAwFHaJhOpdBGgRnhvI4hqoKELlk0TsQtqlH6VJKDx22w==
+X-Received: by 2002:a05:6602:1490:b0:7f9:f363:2d44 with SMTP id ca18e2360f4ac-81b3580f60fmr1070578239f.16.1721693060671;
+        Mon, 22 Jul 2024 17:04:20 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70d2ee1440fsm1760938b3a.135.2024.07.22.17.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jul 2024 17:04:20 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Mon, 22 Jul 2024 17:04:18 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH bpf-next v1 2/2] selftests/bpf: Fix error linking
+ uprobe_multi on mips
+Message-ID: <Zp7zgvhrt2/5LpbI@kodidev-ubuntu>
+References: <cover.1721541467.git.tony.ambardar@gmail.com>
+ <7eeb1a1a9910b30782adba9eb5cc47c6ce075223.1721541467.git.tony.ambardar@gmail.com>
+ <CAEf4BzY0rt56Zu2J2FOkzB1WuXtjDMgLuApqsKWnxnzbBQ1eKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzY0rt56Zu2J2FOkzB1WuXtjDMgLuApqsKWnxnzbBQ1eKA@mail.gmail.com>
 
-Extend two existing tests to cover extracting memory usage through the
-newly mutable memory.peak and memory.swap.peak handlers.
+On Mon, Jul 22, 2024 at 02:22:53PM -0700, Andrii Nakryiko wrote:
+> On Sun, Jul 21, 2024 at 12:51 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 
-In particular, make sure to exercise adding and removing watchers with
-overlapping lifetimes so the less-trivial logic gets tested.
+[...]
 
-Signed-off-by: David Finkel <davidf@vimeo.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 227 +++++++++++++++++-
- 1 file changed, 219 insertions(+), 8 deletions(-)
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -784,9 +784,12 @@ $(OUTPUT)/veristat: $(OUTPUT)/veristat.o
+> >         $(call msg,BINARY,,$@)
+> >         $(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+> >
+> > +# Linking uprobe_multi can fail due to relocation overflows on mips.
+> > +uprobe_multi.c-CFLAGS := $(if $(filter mips, $(ARCH)),-mxgot)
+> > +
+> >  $(OUTPUT)/uprobe_multi: uprobe_multi.c
+> >         $(call msg,BINARY,,$@)
+> > -       $(Q)$(CC) $(CFLAGS) -O0 $(LDFLAGS) $^ $(LDLIBS) -o $@
+> > +       $(Q)$(CC) $(CFLAGS) $($<-CFLAGS) -O0 $(LDFLAGS) $^ $(LDLIBS) -o $@
+> 
+> this $($<-CFLAGS) approach is fragile, non-obvious and will break. But
+> there is also no need for this, see:
+> 
+> $(OUTPUT)/bench: LDLIBS += -lm
+> 
+> make allows to override envvars on a per-target basis, so all you
+> should need is:
+> 
+> 
+> $(OUTPUT)/uprobe_multi: CFLAGS += $(if $(filter mips, $(ARCH)),-mxgot)
+> $(OUTPUT)/uprobe_multi: uprobe_multi.c
+>    ... the rest is the same with no change whatsoever ...
+> 
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 41ae8047b889..768f3e6c21af 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -161,12 +161,12 @@ static int alloc_pagecache_50M_check(const char *cgroup, void *arg)
- /*
-  * This test create a memory cgroup, allocates
-  * some anonymous memory and some pagecache
-- * and check memory.current and some memory.stat values.
-+ * and checks memory.current, memory.peak, and some memory.stat values.
-  */
--static int test_memcg_current(const char *root)
-+static int test_memcg_current_peak(const char *root)
- {
- 	int ret = KSFT_FAIL;
--	long current;
-+	long current, peak, peak_reset;
- 	char *memcg;
- 
- 	memcg = cg_name(root, "memcg_test");
-@@ -180,15 +180,109 @@ static int test_memcg_current(const char *root)
- 	if (current != 0)
- 		goto cleanup;
- 
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak != 0)
-+		goto cleanup;
-+
- 	if (cg_run(memcg, alloc_anon_50M_check, NULL))
- 		goto cleanup;
- 
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak < MB(50))
-+		goto cleanup;
-+
-+	/*
-+	 * We'll open a few FDs for the same memory.peak file to exercise the free-path
-+	 * We need at least three to be closed in a different order than writes occurred to test
-+	 * the linked-list handling.
-+	 */
-+	int peak_fd = cg_open(memcg, "memory.peak", O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (peak_fd == -1)
-+		goto cleanup;
-+
-+	bool fd2_closed = false, fd3_closed = false, fd4_closed = false;
-+	int peak_fd2 = cg_open(memcg, "memory.peak", O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (peak_fd2 == -1)
-+		goto cleanup;
-+
-+	int peak_fd3 = cg_open(memcg, "memory.peak", O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (peak_fd3 == -1)
-+		goto cleanup;
-+
-+	static const char reset_string[] = "reset\n";
-+
-+	peak_reset = write(peak_fd, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	peak_reset = write(peak_fd2, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	peak_reset = write(peak_fd3, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	/* Make sure a completely independent read isn't affected by our  FD-local reset above*/
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak < MB(50))
-+		goto cleanup;
-+
-+	fd2_closed = true;
-+	if (close(peak_fd2))
-+		goto cleanup;
-+
-+	int peak_fd4 = cg_open(memcg, "memory.peak", O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (peak_fd4 == -1)
-+		goto cleanup;
-+
-+	peak_reset = write(peak_fd4, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(peak_fd);
-+	if (peak > MB(30) || peak < 0)
-+		goto cleanup;
-+
- 	if (cg_run(memcg, alloc_pagecache_50M_check, NULL))
- 		goto cleanup;
- 
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak < MB(50))
-+		goto cleanup;
-+
-+	/* Make sure everything is back to normal */
-+	peak = cg_read_long_fd(peak_fd);
-+	if (peak < MB(50))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(peak_fd4);
-+	if (peak < MB(50))
-+		goto cleanup;
-+
-+	fd3_closed = true;
-+	if (close(peak_fd3))
-+		goto cleanup;
-+
-+	fd4_closed = true;
-+	if (close(peak_fd4))
-+		goto cleanup;
-+
-+
- 	ret = KSFT_PASS;
- 
- cleanup:
-+	close(peak_fd);
-+	if (!fd2_closed)
-+		close(peak_fd2);
-+	if (!fd3_closed)
-+		close(peak_fd3);
-+	if (!fd4_closed)
-+		close(peak_fd4);
- 	cg_destroy(memcg);
- 	free(memcg);
- 
-@@ -817,13 +911,16 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
- 
- /*
-  * This test checks that memory.swap.max limits the amount of
-- * anonymous memory which can be swapped out.
-+ * anonymous memory which can be swapped out. Additionally, it verifies that
-+ * memory.swap.peak reflects the high watermark and can be reset.
-  */
--static int test_memcg_swap_max(const char *root)
-+static int test_memcg_swap_max_peak(const char *root)
- {
- 	int ret = KSFT_FAIL;
- 	char *memcg;
--	long max;
-+	long max, peak;
-+
-+	static const char reset_string[] = "reset\n";
- 
- 	if (!is_swap_enabled())
- 		return KSFT_SKIP;
-@@ -840,6 +937,45 @@ static int test_memcg_swap_max(const char *root)
- 		goto cleanup;
- 	}
- 
-+	int swap_peak_fd = cg_open(memcg, "memory.swap.peak",
-+				   O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (swap_peak_fd == -1)
-+		goto cleanup;
-+
-+	int mem_peak_fd = cg_open(memcg, "memory.peak", O_RDWR | O_APPEND | O_CLOEXEC);
-+
-+	if (mem_peak_fd == -1)
-+		goto cleanup;
-+
-+	if (cg_read_long(memcg, "memory.swap.peak"))
-+		goto cleanup;
-+
-+	if (cg_read_long_fd(swap_peak_fd))
-+		goto cleanup;
-+
-+	/* switch the swap and mem fds into local-peak tracking mode*/
-+	int peak_reset = write(swap_peak_fd, reset_string, sizeof(reset_string));
-+
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	if (cg_read_long_fd(swap_peak_fd))
-+		goto cleanup;
-+
-+	if (cg_read_long(memcg, "memory.peak"))
-+		goto cleanup;
-+
-+	if (cg_read_long_fd(mem_peak_fd))
-+		goto cleanup;
-+
-+	peak_reset = write(mem_peak_fd, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	if (cg_read_long_fd(mem_peak_fd))
-+		goto cleanup;
-+
- 	if (cg_read_strcmp(memcg, "memory.max", "max\n"))
- 		goto cleanup;
- 
-@@ -862,6 +998,61 @@ static int test_memcg_swap_max(const char *root)
- 	if (cg_read_key_long(memcg, "memory.events", "oom_kill ") != 1)
- 		goto cleanup;
- 
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long(memcg, "memory.swap.peak");
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(mem_peak_fd);
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(swap_peak_fd);
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	/*
-+	 * open, reset and close the peak swap on another FD to make sure
-+	 * multiple extant fds don't corrupt the linked-list
-+	 */
-+	peak_reset = cg_write(memcg, "memory.swap.peak", (char *)reset_string);
-+	if (peak_reset)
-+		goto cleanup;
-+
-+	peak_reset = cg_write(memcg, "memory.peak", (char *)reset_string);
-+	if (peak_reset)
-+		goto cleanup;
-+
-+	/* actually reset on the fds */
-+	peak_reset = write(swap_peak_fd, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	peak_reset = write(mem_peak_fd, reset_string, sizeof(reset_string));
-+	if (peak_reset != sizeof(reset_string))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(swap_peak_fd);
-+	if (peak > MB(10))
-+		goto cleanup;
-+
-+	/*
-+	 * The cgroup is now empty, but there may be a page or two associated
-+	 * with the open FD accounted to it.
-+	 */
-+	peak = cg_read_long_fd(mem_peak_fd);
-+	if (peak > MB(1))
-+		goto cleanup;
-+
-+	if (cg_read_long(memcg, "memory.peak") < MB(29))
-+		goto cleanup;
-+
-+	if (cg_read_long(memcg, "memory.swap.peak") < MB(29))
-+		goto cleanup;
-+
- 	if (cg_run(memcg, alloc_anon_50M_check_swap, (void *)MB(30)))
- 		goto cleanup;
- 
-@@ -869,9 +1060,29 @@ static int test_memcg_swap_max(const char *root)
- 	if (max <= 0)
- 		goto cleanup;
- 
-+	peak = cg_read_long(memcg, "memory.peak");
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long(memcg, "memory.swap.peak");
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(mem_peak_fd);
-+	if (peak < MB(29))
-+		goto cleanup;
-+
-+	peak = cg_read_long_fd(swap_peak_fd);
-+	if (peak < MB(19))
-+		goto cleanup;
-+
- 	ret = KSFT_PASS;
- 
- cleanup:
-+	if (close(mem_peak_fd))
-+		ret = KSFT_FAIL;
-+	if (close(swap_peak_fd))
-+		ret = KSFT_FAIL;
- 	cg_destroy(memcg);
- 	free(memcg);
- 
-@@ -1295,7 +1506,7 @@ struct memcg_test {
- 	const char *name;
- } tests[] = {
- 	T(test_memcg_subtree_control),
--	T(test_memcg_current),
-+	T(test_memcg_current_peak),
- 	T(test_memcg_min),
- 	T(test_memcg_low),
- 	T(test_memcg_high),
-@@ -1303,7 +1514,7 @@ struct memcg_test {
- 	T(test_memcg_max),
- 	T(test_memcg_reclaim),
- 	T(test_memcg_oom_events),
--	T(test_memcg_swap_max),
-+	T(test_memcg_swap_max_peak),
- 	T(test_memcg_sock),
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
--- 
-2.40.1
+Great suggestion, thanks for pointing that out! I'll update and send v2.
 
+> >
+> >  EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)                      \
+> >         prog_tests/tests.h map_tests/tests.h verifier/tests.h           \
+> > --
+> > 2.34.1
+> >
 
