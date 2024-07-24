@@ -1,116 +1,538 @@
-Return-Path: <linux-kselftest+bounces-14184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F5CF93B899
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 23:36:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23DF693B8BF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 23:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0DA9B2453B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 21:36:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41ECE1C211B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 21:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0658813BAEE;
-	Wed, 24 Jul 2024 21:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E2F13BC11;
+	Wed, 24 Jul 2024 21:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eHs+PuLO"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="r5J+uoIP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA7B139D05
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2024 21:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8431B134DE;
+	Wed, 24 Jul 2024 21:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721857005; cv=none; b=T+1TD/pShNVgi2T1ApUhh0DkSOhUfxP2+lpnUJVxN9XNbAc0Airpqxzctoe56S2iJC+WHATChADiAP/2OLZdjzj1Y3oyRLM5wypl0z4L1Tzhq5OIWg7MG1sJiqVaqLrhkXLqeBXzYqLLCcjobI2kkirRZkCeD7/TNzhvTMluNcg=
+	t=1721857249; cv=none; b=E2w22v1p2FTCtqk0cbO6VUTsmEMwy6FEQedV4rkGd0lhOU8Bs5owEm7cc7T2aVhhlEC7R/Lx8eLsM7gEFFno3Jfra+4mpDceu1AMhIxFvGe209lLL2jxXlSoaJ8k1GPGCR8hp50Ge5UGxTgNVRyVBoYds8GmzxrVzQiM54L43as=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721857005; c=relaxed/simple;
-	bh=UvVOjl0/12oevUPYIpBpoCCzogDnOIpBlZFeYgpr5qg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nyAOHrE7prgOoliT2SXJ/c+sNl+kTOpH/XsyZvTnRHrRMhXo+cLbEtS8/uAzjOWeNbW6xF6m6HEJZh2tzEP0PgeYG5xGIIyqvd2ACwnB/OJAkXvNQs1o+IXDlVdf8NxUhMaFSJPNk6xnu7Mw1AWqo8ThE43UbhSRHEVpJz7QUtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eHs+PuLO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721857002;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2y89PNctEzPUc+h76+bt1W01RrcAjwiLgSR3Gn3y5wY=;
-	b=eHs+PuLO0zwChi7Xab7cbbEYvjCHfmM0SNgHEfRDbH/8caZ3ZDi3R9WYR0rxQ97LCbOpFQ
-	owW8j7aVsz6U198jl/flms9AgfIVWVBCuSIj90goHFztWQYY/tVe16ZtGpUkn33ZVlR83m
-	KqsB015prRC2HhDUSRHSdMqhZTOMZsA=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-524-JaGloUhgMZy4TKbLi4QpzA-1; Wed,
- 24 Jul 2024 17:36:37 -0400
-X-MC-Unique: JaGloUhgMZy4TKbLi4QpzA-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	s=arc-20240116; t=1721857249; c=relaxed/simple;
+	bh=KLkBXKWN3Xo1+VCP4LbzIF5m/qy0hXW32uXWVmTNOzU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hJJzXGn9G+V5spTfWs0h8DHHCaDCkB60pmD2KjMjMawNEHs79Rh7CUr1TyazvhKsHRLshiw97KtYiI8hRCZYfUVvAkuiV+7B/dYHHh+Ysw+laiiR2oHwbyFyAs3TZwpeD+4vDmTx2KC8PmrhuLudcHt7SGuE8+midcWuT7l79KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=r5J+uoIP; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1721857245;
+	bh=KLkBXKWN3Xo1+VCP4LbzIF5m/qy0hXW32uXWVmTNOzU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=r5J+uoIPWdJQ2kfk+IUSRhy0/1Zfky+jo56/S2Ti3y+4csBlV3yO5bliZF/v864ka
+	 DklXwTf03RUPoxwW0QQoffbpd3XWCyMrkt6HvUic3QrN9NuJhrp5aDGSB0RVLuzQ5y
+	 gurb/KQHxIvKwDdZWB8g8RXxdxpF1wFMpn5q/4fwcxTq3GPSs1QaW/ZPF7FQUMk8of
+	 0AVPRn35uNjUUXzbhoAoffT0egTruafMMqBmq5JbB6v09yCXhD6M0p1gmZG6rax6Mu
+	 2jlgR8UK290mShkqpQoqpUUPf/mc+H3J3vVG26O6ETdx/df/mrektR8f/sI4lCOW4X
+	 PhNJrEtwHEPZQ==
+Received: from [192.168.1.251] (zone.collabora.co.uk [167.235.23.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AB1301955D42;
-	Wed, 24 Jul 2024 21:36:35 +0000 (UTC)
-Received: from h1.redhat.com (unknown [10.22.33.84])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D210E1955F40;
-	Wed, 24 Jul 2024 21:36:32 +0000 (UTC)
-From: Nico Pache <npache@redhat.com>
-To: linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: akpm@linux-foundation.org,
-	shuah@kernel.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	stable@kernel.org,
-	Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2] selftests: mm: add s390 to ARCH check
-Date: Wed, 24 Jul 2024 15:35:17 -0600
-Message-ID: <20240724213517.23918-1-npache@redhat.com>
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EDD4E3780520;
+	Wed, 24 Jul 2024 21:40:42 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Date: Wed, 24 Jul 2024 17:40:00 -0400
+Subject: [PATCH RFC] kselftest: devices: Add test to detect missing devices
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <20240724-kselftest-dev-exist-v1-1-9bc21aa761b5@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAK90oWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDcyMT3ezi1Jy0ktTiEt2U1DLd1IpMICspyTApOc3CwsTM1EQJqLOgKDU
+ tswJsarRSkJuzUmxtLQDLQt8LagAAAA==
+To: Shuah Khan <shuah@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Bird, Tim" <Tim.Bird@sony.com>, Laura Nao <laura.nao@collabora.com>, 
+ Saravana Kannan <saravanak@google.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ kernel@collabora.com, kernelci@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.14.0
 
-commit 0518dbe97fe6 ("selftests/mm: fix cross compilation with LLVM")
-changed the env variable for the architecture from MACHINE to ARCH.
+Introduce a new test to identify regressions causing devices to go
+missing on the system.
 
-This is preventing 3 required TEST_GEN_FILES from being included when
-cross compiling s390x and errors when trying to run the test suite.
-This is due to the ARCH variable already being set and the arch folder
-name being s390.
+For each bus and class on the system the test checks the number of
+devices present against a reference file, which needs to have been
+generated by the program at a previous point on a known-good kernel, and
+if there are missing devices they are reported.
 
-Add "s390" to the filtered list to cover this case and have the 3 files
-included in the build.
-
-Fixes: 0518dbe97fe6 ("selftests/mm: fix cross compilation with LLVM")
-Cc: stable@kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Nico Pache <npache@redhat.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- tools/testing/selftests/mm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 901e0d07765b..7b8a5def54a1 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -110,7 +110,7 @@ endif
- 
- endif
- 
--ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64))
-+ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
- TEST_GEN_FILES += va_high_addr_switch
- TEST_GEN_FILES += virtual_address_range
- TEST_GEN_FILES += write_to_hugetlbfs
+Key points about this test:
+* Goal: Identify regressions causing devices to go missing on the system
+* Focus:
+  * Ease of maintenance: the reference file is generated programatically
+  * Minimum of false-positives: the script makes as few assumptions as possible
+    about the stability of device identifiers to ensure renames/refactors don't
+    trigger false-positives
+* How it works: For each bus and class on the system the test checks the number
+  of devices present against a reference file, which needs to have been
+  generated by the program at a previous point on a known-good kernel, and if
+  there are missing devices they are reported.
+* Comparison to other tests: It might be possible(*) to replace the discoverable
+  devices test [1] with this. The benefits of this test is that it's easier
+  to setup and maintain and has wider coverage of devices.
+
+Additional detail:
+* Having more devices on the running system than the reference does not cause a
+  failure, but a warning is printed in that case to suggest that the reference
+  be updated.
+* Missing devices are detected per bus/class based on the number of devices.
+  When the test fails, the known metadata for each of the expected and detected
+  devices is printed and some simple similitarity comparison is done to suggest
+  the devices that are the most likely to be missing.
+* The proposed place to store the generated reference files is the
+  'platform-test-parameters' repository in KernelCI [2].
+
+Example output: This is an example of a failing test case when one of the two
+devices in the nvmem bus went missing:
+
+  # Missing devices for subsystem 'nvmem': 1 (Expected 2, found 1)
+  # =================
+  # Devices expected:
+  #
+  #   uevent:
+  #     OF_NAME=efuse
+  #     OF_FULLNAME=/soc/efuse@11c10000
+  #     OF_COMPATIBLE_0=mediatek,mt8195-efuse
+  #     OF_COMPATIBLE_1=mediatek,efuse
+  #     OF_COMPATIBLE_N=2
+  #
+  #   uevent:
+  #     OF_NAME=flash
+  #     OF_FULLNAME=/soc/spi@1132c000/flash@0
+  #     OF_COMPATIBLE_0=jedec,spi-nor
+  #     OF_COMPATIBLE_N=1
+  #
+  # -----------------
+  # Devices found:
+  #
+  #   uevent:
+  #     OF_NAME=efuse
+  #     OF_FULLNAME=/soc/efuse@11c10000
+  #     OF_COMPATIBLE_0=mediatek,mt8195-efuse
+  #     OF_COMPATIBLE_1=mediatek,efuse
+  #     OF_COMPATIBLE_N=2
+  #
+  # -----------------
+  # Devices missing (best guess):
+  #
+  #   uevent:
+  #     OF_NAME=flash
+  #     OF_FULLNAME=/soc/spi@1132c000/flash@0
+  #     OF_COMPATIBLE_0=jedec,spi-nor
+  #     OF_COMPATIBLE_N=1
+  #
+  # =================
+  not ok 19 bus.nvmem
+
+Example of how the data for these devices is encoded in the reference file:
+
+  bus:
+  ...
+    nvmem:
+      count: 2
+      devices:
+      - info:
+          uevent: 'OF_NAME=efuse
+  
+            OF_FULLNAME=/soc/efuse@11c10000
+  
+            OF_COMPATIBLE_0=mediatek,mt8195-efuse
+  
+            OF_COMPATIBLE_1=mediatek,efuse
+  
+            OF_COMPATIBLE_N=2
+  
+            '
+      - info:
+          uevent: 'OF_NAME=flash
+  
+            OF_FULLNAME=/soc/spi@1132c000/flash@0
+  
+            OF_COMPATIBLE_0=jedec,spi-nor
+  
+            OF_COMPATIBLE_N=1
+  
+            '
+
+(Full reference file: http://0x0.st/Xp60.yaml;)
+
+Caveat: Relying only on the count of devices in a subsystem makes the test
+susceptible to false-negatives eg. if a device goes missing and another in the
+same subsystem is added the count will be the same so this regression won't be
+reported. In order to avoid this we may include properties that must match
+individual devices, but we must be very careful (and it's why I haven't done it)
+since matching against properties that aren't guaranteed to be stable will
+introduce false-positives (ie. detecting false regressions) due to eventual
+renames.
+
+Some things to improve in the near future / gather feedback on:
+* (*): Currently this test only checks for the existence of devices. We could
+  extend it to also encode into the reference which devices are bound to drivers
+  to be able to completely replace the discoverable devices probe kselftest [1].
+* Expanding identifying properties: Currently the properties that are stored
+  (when present) in the reference for each device to be used for identification
+  in the result output are uevent, device/uevent, firmware_node/uevent and name.
+  Suggestions of others properties to add are welcome.
+* Adding more filtering to reduce noise:
+  * Ignoring buses/classes: Currently the devlink class is ignored by the test
+    since it seems like a kernel internal detail that userspace doesn't actually
+    care about. We should add others that are similar.
+  * Ignoring non-devices: There can be entries in /sys/class/ that aren't
+    devices. For now we're filtering down to only symlinks, but there might be a
+    better way.
+* As mentioned in the caveat section above we may want to add actual matching
+  of devices based on properties to avoid false-negatives if we identify
+  suitable properties.
+* It would be nice to have an option in the program to compare a newer reference
+  to an older one to make it easier for the user to see the differences and
+  decide if the new reference is ok.
+* Since the reference file is not supposed to be manually edited, JSON might be
+  a better choice than YAML since it is included in the python standard library.
+
+Let me know your thoughts.
+
+Thanks,
+Nícolas
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/devices/probe/test_discoverable_devices.py?id=0debb20c5c812f8750c20c3406bc94a1e8ea4742
+[2] https://github.com/kernelci/platform-test-parameters
+---
+ tools/testing/selftests/Makefile               |   1 +
+ tools/testing/selftests/devices/exist/Makefile |   3 +
+ tools/testing/selftests/devices/exist/exist.py | 268 +++++++++++++++++++++++++
+ 3 files changed, 272 insertions(+)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index bc8fe9e8f7f2..9c49b5ec5bef 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -14,6 +14,7 @@ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += damon
+ TARGETS += devices/error_logs
++TARGETS += devices/exist
+ TARGETS += devices/probe
+ TARGETS += dmabuf-heaps
+ TARGETS += drivers/dma-buf
+diff --git a/tools/testing/selftests/devices/exist/Makefile b/tools/testing/selftests/devices/exist/Makefile
+new file mode 100644
+index 000000000000..3075cac32092
+--- /dev/null
++++ b/tools/testing/selftests/devices/exist/Makefile
+@@ -0,0 +1,3 @@
++TEST_PROGS := exist.py
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/devices/exist/exist.py b/tools/testing/selftests/devices/exist/exist.py
+new file mode 100755
+index 000000000000..8241b2fabc8e
+--- /dev/null
++++ b/tools/testing/selftests/devices/exist/exist.py
+@@ -0,0 +1,268 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (c) 2024 Collabora Ltd
++
++# * Goal: Identify regressions causing devices to go missing on the system
++# * Focus:
++#   * Ease of maintenance: the reference file is generated programatically
++#   * Minimum of false-positives: the script makes as few assumptions as
++#     possible about the stability of device identifiers to ensure
++#     renames/refactors don't trigger false-positives
++# * How it works: For each bus and class on the system the test checks the
++#   number of devices present against a reference file, which needs to have been
++#   generated by the program at a previous point on a known-good kernel, and if
++#   there are missing devices they are reported.
++
++import os
++import sys
++import argparse
++
++import yaml
++
++# Allow ksft module to be imported from different directory
++this_dir = os.path.dirname(os.path.realpath(__file__))
++sys.path.append(os.path.join(this_dir, "../../kselftest/"))
++
++import ksft
++
++
++def generate_devs_obj():
++    obj = {}
++
++    device_sources = [
++        {
++            "base_dir": "/sys/class",
++            "add_path": "",
++            "key_name": "class",
++            "ignored": ["devlink"],
++        },
++        {
++            "base_dir": "/sys/bus",
++            "add_path": "devices",
++            "key_name": "bus",
++            "ignored": [],
++        },
++    ]
++
++    properties = sorted(["uevent", "device/uevent", "firmware_node/uevent", "name"])
++
++    for source in device_sources:
++        source_subsystems = {}
++        for subsystem in sorted(os.listdir(source["base_dir"])):
++            if subsystem in source["ignored"]:
++                continue
++
++            devs_path = os.path.join(source["base_dir"], subsystem, source["add_path"])
++            dev_dirs = [dev for dev in os.scandir(devs_path) if dev.is_symlink()]
++            devs_data = []
++            for dev_dir in dev_dirs:
++                dev_path = os.path.join(devs_path, dev_dir)
++                dev_data = {"info": {}}
++                for prop in properties:
++                    if os.path.isfile(os.path.join(dev_path, prop)):
++                        with open(os.path.join(dev_path, prop)) as f:
++                            dev_data["info"][prop] = f.read()
++                devs_data.append(dev_data)
++            if len(dev_dirs):
++                source_subsystems[subsystem] = {
++                    "count": len(dev_dirs),
++                    "devices": devs_data,
++                }
++        obj[source["key_name"]] = source_subsystems
++
++    return obj
++
++
++def commented(s):
++    return s.replace("\n", "\n# ")
++
++
++def indented(s, n):
++    return " " * n + s.replace("\n", "\n" + " " * n)
++
++
++def stripped(s):
++    return s.strip("\n")
++
++
++def devices_difference(dev1, dev2):
++    difference = 0
++
++    for prop in dev1["info"].keys():
++        for l1, l2 in zip(
++            dev1["info"].get(prop, "").split("\n"),
++            dev2["info"].get(prop, "").split("\n"),
++        ):
++            if l1 != l2:
++                difference += 1
++    return difference
++
++
++def guess_missing_devices(cur_devs_subsystem, ref_devs_subsystem):
++    # Detect what devices on the current system are the most similar to devices
++    # on the reference one by one until the leftovers are the most dissimilar
++    # devices and therefore most likely the missing ones.
++    found_count = cur_devs_subsystem["count"]
++    expected_count = ref_devs_subsystem["count"]
++    missing_count = found_count - expected_count
++
++    diffs = []
++    for cur_d in cur_devs_subsystem["devices"]:
++        for ref_d in ref_devs_subsystem["devices"]:
++            diffs.append((devices_difference(cur_d, ref_d), cur_d, ref_d))
++
++    diffs.sort(key=lambda x: x[0])
++
++    assigned_ref_devs = []
++    assigned_cur_devs = []
++    for diff in diffs:
++        if len(assigned_ref_devs) >= expected_count - missing_count:
++            break
++        if diff[1] in assigned_cur_devs or diff[2] in assigned_ref_devs:
++            continue
++        assigned_cur_devs.append(diff[1])
++        assigned_ref_devs.append(diff[2])
++
++    missing_devices = []
++    for d in ref_devs_subsystem["devices"]:
++        if d not in assigned_ref_devs:
++            missing_devices.append(d)
++
++    return missing_devices
++
++
++def dump_devices_info(cur_devs_subsystem, ref_devs_subsystem):
++    def dump_device_info(dev):
++        for name, val in dev["info"].items():
++            ksft.print_msg(indented(name + ":", 2))
++            val = stripped(val)
++            if val:
++                ksft.print_msg(commented(indented(val, 4)))
++        ksft.print_msg("")
++
++    ksft.print_msg("=================")
++    ksft.print_msg("Devices expected:")
++    ksft.print_msg("")
++    for d in ref_devs_subsystem["devices"]:
++        dump_device_info(d)
++    ksft.print_msg("-----------------")
++    ksft.print_msg("Devices found:")
++    ksft.print_msg("")
++    for d in cur_devs_subsystem["devices"]:
++        dump_device_info(d)
++    ksft.print_msg("-----------------")
++    ksft.print_msg("Devices missing (best guess):")
++    ksft.print_msg("")
++    missing_devices = guess_missing_devices(cur_devs_subsystem, ref_devs_subsystem)
++    for d in missing_devices:
++        dump_device_info(d)
++    ksft.print_msg("=================")
++
++
++def run_test(ref_filename):
++    ksft.print_msg(f"Using reference file: {ref_filename}")
++
++    with open(ref_filename) as f:
++        ref_devs_obj = yaml.safe_load(f)
++
++    num_tests = 0
++    for dev_source in ref_devs_obj.values():
++        num_tests += len(dev_source)
++    ksft.set_plan(num_tests)
++
++    cur_devs_obj = generate_devs_obj()
++
++    reference_outdated = False
++
++    for source, ref_devs_source_obj in ref_devs_obj.items():
++        for subsystem, ref_devs_subsystem_obj in ref_devs_source_obj.items():
++            test_name = f"{source}.{subsystem}"
++            if not (
++                cur_devs_obj.get(source) and cur_devs_obj.get(source).get(subsystem)
++            ):
++                ksft.print_msg(f"Device subsystem '{subsystem}' missing")
++                ksft.test_result_fail(test_name)
++                continue
++            cur_devs_subsystem_obj = cur_devs_obj[source][subsystem]
++
++            found_count = cur_devs_subsystem_obj["count"]
++            expected_count = ref_devs_subsystem_obj["count"]
++            if found_count < expected_count:
++                ksft.print_msg(
++                    f"Missing devices for subsystem '{subsystem}': {expected_count - found_count} (Expected {expected_count}, found {found_count})"
++                )
++                dump_devices_info(cur_devs_subsystem_obj, ref_devs_subsystem_obj)
++                ksft.test_result_fail(test_name)
++            else:
++                ksft.test_result_pass(test_name)
++                if found_count > expected_count:
++                    reference_outdated = True
++
++        if len(cur_devs_obj[source]) > len(ref_devs_source_obj):
++            reference_outdated = True
++
++    if reference_outdated:
++        ksft.print_msg(
++            "Warning: The current system contains more devices and/or subsystems than the reference. Updating the reference is recommended."
++        )
++
++
++def get_possible_ref_filenames():
++    filenames = []
++
++    dt_board_compatible_file = "/proc/device-tree/compatible"
++    if os.path.exists(dt_board_compatible_file):
++        with open(dt_board_compatible_file) as f:
++            for line in f:
++                compatibles = [compat for compat in line.split("\0") if compat]
++                filenames.extend(compatibles)
++    else:
++        dmi_id_dir = "/sys/devices/virtual/dmi/id"
++        vendor_dmi_file = os.path.join(dmi_id_dir, "sys_vendor")
++        product_dmi_file = os.path.join(dmi_id_dir, "product_name")
++
++        with open(vendor_dmi_file) as f:
++            vendor = f.read().replace("\n", "")
++        with open(product_dmi_file) as f:
++            product = f.read().replace("\n", "")
++
++        filenames = [vendor + "," + product]
++
++    return filenames
++
++
++def get_ref_filename(ref_dir):
++    chosen_ref_filename = ""
++    full_ref_paths = [os.path.join(ref_dir, f + ".yaml") for f in get_possible_ref_filenames()]
++    for path in full_ref_paths:
++        if os.path.exists(path):
++            chosen_ref_filename = path
++            break
++
++    if not chosen_ref_filename:
++        tried_paths = ",".join(["'" + p + "'" for p in full_ref_paths])
++        ksft.print_msg(f"No matching reference file found (tried {tried_paths})")
++        ksft.exit_fail()
++
++    return chosen_ref_filename
++
++
++parser = argparse.ArgumentParser()
++parser.add_argument(
++    "--reference-dir", default=".", help="Directory containing the reference files"
++)
++parser.add_argument("--generate-reference", action="store_true", help="Generate a reference file with the devices on the running system")
++args = parser.parse_args()
++
++if args.generate_reference:
++    print(f"# Kernel version: {os.uname().release}")
++    print(yaml.dump(generate_devs_obj()))
++    sys.exit(0)
++
++ksft.print_header()
++
++ref_filename = get_ref_filename(args.reference_dir)
++
++run_test(ref_filename)
++
++ksft.finished()
+
+---
+base-commit: 73399b58e5e5a1b28a04baf42e321cfcfc663c2f
+change-id: 20240724-kselftest-dev-exist-bb1bcf884654
+
+Best regards,
 -- 
-2.45.2
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
