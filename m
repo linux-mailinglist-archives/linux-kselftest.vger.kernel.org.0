@@ -1,218 +1,170 @@
-Return-Path: <linux-kselftest+bounces-14151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D21B493B276
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 16:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A542E93B2B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 16:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55EA81F22845
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 14:11:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26DDB1F2307E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 14:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEE51591F3;
-	Wed, 24 Jul 2024 14:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E45D1581F8;
+	Wed, 24 Jul 2024 14:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYGJd4Mw"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fPLOfPS/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1528A613D;
-	Wed, 24 Jul 2024 14:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EDB4C6D;
+	Wed, 24 Jul 2024 14:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721830313; cv=none; b=iF0ROX+ZoiXBNUXo6Ba4GR6zCU7263721jE3jUhoqnBFf1tFZc1h7iIF0dv9EvY2Roy2+blMF+D1xn/gAGtR+IzFA7hFoAEoWLOBdYGe9fS9d27FtTRnU4pyLTysT45oWL9rJGygEIrPFEp1lprk1hqTRgoWNzpz3SduIe0EQX0=
+	t=1721831490; cv=none; b=niFgrsfQcNZyNYlT2jhahIoIIqrO3aR1huvrSpWW/9+W1FZnPvcXOHvy47A+S0jTRaIgsBGwKV+76nLyi5EjQOI8L+GwkDkz5mhj4zcC/Ru0d52YicEU6AOcXazmOqGU6kfco3yFxZUARffb13639L5V+fiyGrb+8hiG15UXoQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721830313; c=relaxed/simple;
-	bh=2VH/lDRbPN4RINJJZ5hFdT7nrCTOneMqyfk6RFrnmxk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lgoo3/JnMxNTshqbxaduYG0KswXtAHk6yBTqh+KBCK96CpMvO/mvgHUwieEMwKwh7rxYQjJnmL4WSnNAsJbP8gNq86eEgHZCFd9VUN13hqTvDjejdbux7aTGEzKRhNY5jcLddABqvjG/PyeoGoAFVLPW2dejRixTaDA2HsWUk7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYGJd4Mw; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-595856e2336so1710012a12.1;
-        Wed, 24 Jul 2024 07:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721830310; x=1722435110; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lgUOovEPki3yBEx+HU/YvZISoKa1Q0srqrZyf9xBznA=;
-        b=XYGJd4MwHTywVVp5oBH5bu9spsUAnyZ/+z/oKlLODDDYYF4jgqpGMBbuYUFm3JBMYS
-         ZV3WcaXSMqY2ZiTCJhH65MGWnci/GTJNFPtK54l0s8azXmxDNi2Y168cKO7B8i4NeGD4
-         N7RQtXbXdAnr8b0xGf6+Aa3GHkor083omgSYeIOq4Jgl7hTtmwnoJ26YfRAcQoiDXUXS
-         PFEEXRZgZSp7LfRTV2rt6JzW9Yku8TiF02f0vvPgdORWtVd+ftmSTl5LJv3sFHtoxqbx
-         ZfRqWh4i49Zw0p0iI8/f8fLmH1hAakwutKwbDplEhl88fmZ6jzmU+jd7Y+sEOCaGaYbB
-         O3QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721830310; x=1722435110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lgUOovEPki3yBEx+HU/YvZISoKa1Q0srqrZyf9xBznA=;
-        b=sb1Jxx94I+43CwNESYbToMm3YcCf9fdUbh+7nBE7hPsqdri8H5Rx6zhINkQThIHxpG
-         bbd5ToJqYY+BQ8fpFRzOkeH0ow41GaGB1jlwO4ogpy8C7k6vz6qDFbPJPLHuSO6GC6P8
-         8l+1fP+qah4XCV2xxB10xOjSbF/35d6Dl4WwfJtCcFcnm9uGHi6vOwLSszIM3zCWimPx
-         IywRpQxNUtWNI2295sWRNynHlrZzcluIJsmfnEGGcH61SpU3AgOemOREyzHn0/b/RzHN
-         mp/cxYHX0Ai9O9j8rlCgrRBF3oLokHySRi27xNp5DZsUKQeWSY3vdPh3B7gQf5enZ5KW
-         fJ4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVDgNCrU1umi43UTA6baTrl4Dk2yGds24bxpjjrktLeEbVZjwoh2QoM8twuNjO8X7GMHsNO/JOK5sFZIeXqc7fYoySk7tD5WtJmpfJxWUg9PkNAOIOanKbmTM0ArYTvgW7D1CJ7CQb02LCFdmtN73SJPNh/LCVg2Z/Y4jmvQyacYH9zMDB461g3gVSM/nIMQnyZBm7l7Fr1ysOgw0ZwyJ7c/ngaIahlXC0yCn1T/A4oNWVQ6ECxWwziPRYToqIvrIQjCBO9js87P57mJnSzdqmswf+5sSzRLL2M0Bq9fmaUTuabejpahy+2XJbwi+cRV5LOft0UOUfam58CwIT+vR8/GAkKW0M/ZPyk/aEMFEeTfJMzxiXUFyClwnEZidCS6dyz+lCM5gxGseKIGc3H4YQtW15pk780a0nwAe5E/Nn7PClCsHKiqgZcKjrIjdt++K+wHXe+6m/3ITlfmdBqupMPZ36JohqX+HzRM6Zjiw==
-X-Gm-Message-State: AOJu0Yyg98PnVgrqEgFP+TaVBItjZhrkDJjTX6jWOmucoUd8F0FRZoQw
-	dKRHS3v9W3LtMqwUa5caIO7EmBr982dkQAXTq+NNZ3Uli+3nEksmUuT11SJe4NA/52DtUEZ654t
-	YHWZmXeZofrlFsB0TY5BefXhgw58=
-X-Google-Smtp-Source: AGHT+IG/1TrYzfuz6s4kFpxFSpAieWqNsCB9Wez//cHoFLQxMdVPOa+ue/JHVhn9Ez2PRYWu7hG701fjzbR8kwC+GR4=
-X-Received: by 2002:a05:6402:2788:b0:58c:77b4:404b with SMTP id
- 4fb4d7f45d1cf-5ab1b167270mr2342309a12.15.1721830310221; Wed, 24 Jul 2024
- 07:11:50 -0700 (PDT)
+	s=arc-20240116; t=1721831490; c=relaxed/simple;
+	bh=hYOR4rqs7WSDSzXBrnCsM6gq7rm4gZYHWXtXeeKLULk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tQRkFbGVFJsDHlSi0zsdU42rdAtP0LB9vS/tBEA6fwAB41j7PQByNebd8BLxVa5uUCSt9mnnBEPjS9aJ3EWXDmzPiGHAyxjYs5rk4C0fz83/T58o6tsJZwcPp91pxk9YCZvSg5THf1H0xh0tB+cGtOUT2xgHX8PX641DEaevnNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fPLOfPS/; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46ODvS1E021163;
+	Wed, 24 Jul 2024 14:31:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=e
+	gjEsxTuOR8TX4m0C5pbslVsAhqpijmwabQmVEh7Wnw=; b=fPLOfPS/ZXqnopmwR
+	DjPm4z5a9c9jZ/vFUJmJ6+uaAIrFw90kC9NiRcXXdnulOVfmkATbmg5IvVNlzFcB
+	vUDj314uSFiG4dS/GabRnizQ99tIKPY7FZYiyrEbJgr4TczqrM5Vzp+5oNPuxHQq
+	Dq1VJ6BRJL/ETe1jEU93xnZvZQQ2Mev6JQSvWRTXpfnLg3R52As2boj1mmM/IbdP
+	idktdA0ezP78bLbklBUDvGtzBxz8M0q1kmdtQFZIGNZBgoMt4lnD/MkQj4GwKq2F
+	GveFA7xqwjMNkMZ+BOlMnEiqkHxJSx4FeoVJWogm43Bq5yu7y3zs0cmyYt3jl6Cs
+	LcJIA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jyvvrhks-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jul 2024 14:31:17 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46OEVG9g017727;
+	Wed, 24 Jul 2024 14:31:16 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jyvvrhkk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jul 2024 14:31:16 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46OENrc0005818;
+	Wed, 24 Jul 2024 14:31:15 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40gy2pfyes-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jul 2024 14:31:15 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46OEV9aA17498540
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 24 Jul 2024 14:31:11 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AE55C2004B;
+	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4DC6F2004E;
+	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
+Received: from [9.179.14.90] (unknown [9.179.14.90])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
+Message-ID: <34cbaade-ed71-4f5c-89f1-1c0a645517ea@linux.ibm.com>
+Date: Wed, 24 Jul 2024 16:31:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628003253.1694510-1-almasrymina@google.com>
- <20240628003253.1694510-4-almasrymina@google.com> <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
- <CAHS8izNS5jZjPfc-sARbHV7mzqzH+UhHfAtCTKRRTfSAdhY4Cw@mail.gmail.com>
- <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com> <CAHS8izMTGgZ+4fOKegUDLqAoxrdVEb+nqjQEt8bP0WLBV=FfrQ@mail.gmail.com>
-In-Reply-To: <CAHS8izMTGgZ+4fOKegUDLqAoxrdVEb+nqjQEt8bP0WLBV=FfrQ@mail.gmail.com>
-From: Taehee Yoo <ap420073@gmail.com>
-Date: Wed, 24 Jul 2024 23:11:38 +0900
-Message-ID: <CAMArcTUC2q-SEcc4FP8Rnz8goroXj52FWThX4O4C2R1uPW_VHQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/10] selftests: kvm: s390: Define page sizes in
+ shared header
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+References: <20240723093126.285319-1-schlameuss@linux.ibm.com>
+ <20240723093126.285319-2-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ xsFNBFubpD4BEADX0uhkRhkj2AVn7kI4IuPY3A8xKat0ihuPDXbynUC77mNox7yvK3X5QBO6
+ qLqYr+qrG3buymJJRD9xkp4mqgasHdB5WR9MhXWKH08EvtvAMkEJLnqxgbqf8td3pCQ2cEpv
+ 15mH49iKSmlTcJ+PvJpGZcq/jE42u9/0YFHhozm8GfQdb9SOI/wBSsOqcXcLTUeAvbdqSBZe
+ zuMRBivJQQI1esD9HuADmxdE7c4AeMlap9MvxvUtWk4ZJ/1Z3swMVCGzZb2Xg/9jZpLsyQzb
+ lDbbTlEeyBACeED7DYLZI3d0SFKeJZ1SUyMmSOcr9zeSh4S4h4w8xgDDGmeDVygBQZa1HaoL
+ Esb8Y4avOYIgYDhgkCh0nol7XQ5i/yKLtnNThubAcxNyryw1xSstnKlxPRoxtqTsxMAiSekk
+ 0m3WJwvwd1s878HrQNK0orWd8BzzlSswzjNfQYLF466JOjHPWFOok9pzRs+ucrs6MUwDJj0S
+ cITWU9Rxb04XyigY4XmZ8dywaxwi2ZVTEg+MD+sPmRrTw+5F+sU83cUstuymF3w1GmyofgsU
+ Z+/ldjToHnq21MNa1wx0lCEipCCyE/8K9B9bg9pUwy5lfx7yORP3JuAUfCYb8DVSHWBPHKNj
+ HTOLb2g2UT65AjZEQE95U2AY9iYm5usMqaWD39pAHfhC09/7NQARAQABzSVKYW5vc2NoIEZy
+ YW5rIDxmcmFua2phQGxpbnV4LmlibS5jb20+wsF3BBMBCAAhBQJbm6Q+AhsjBQsJCAcCBhUI
+ CQoLAgQWAgMBAh4BAheAAAoJEONU5rjiOLn4p9gQALjkdj5euJVI2nNT3/IAxAhQSmRhPEt0
+ AmnCYnuTcHRWPujNr5kqgtyER9+EMQ0ZkX44JU2q7OWxTdSNSAN/5Z7qmOR9JySvDOf4d3mS
+ bMB5zxL9d8SbnSs1uW96H9ZBTlTQnmLfsiM9TetAjSrR8nUmjGhe2YUhJLR1v1LguME+YseT
+ eXnLzIzqqpu311/eYiiIGcmaOjPCE+vFjcXL5oLnGUE73qSYiujwhfPCCUK0850o1fUAYq5p
+ CNBCoKT4OddZR+0itKc/cT6NwEDwdokeg0+rAhxb4Rv5oFO70lziBplEjOxu3dqgIKbHbjza
+ EXTb+mr7VI9O4tTdqrwJo2q9zLqqOfDBi7NDvZFLzaCewhbdEpDYVu6/WxprAY94hY3F4trT
+ rQMHJKQENtF6ZTQc9fcT5I3gAmP+OEvDE5hcTALpWm6Z6SzxO7gEYCnF+qGXqp8sJVrweMub
+ UscyLqHoqdZC2UG4LQ1OJ97nzDpIRe0g6oJ9ZIYHKmfw5jjwH6rASTld5MFWajWdNsqK15k/
+ RZnHAGICKVIBOBsq26m4EsBlfCdt3b/6emuBjUXR1pyjHMz2awWzCq6/6OWs5eANZ0sdosNq
+ dq2v0ULYTazJz2rlCXV89qRa7ukkNwdBSZNEwsD4eEMicj1LSrqWDZMAALw50L4jxaMD7lPL
+ jJbazsFNBFubpD4BEADAcUTRqXF/aY53OSH7IwIK9lFKxIm0IoFkOEh7LMfp7FGzaP7ANrZd
+ cIzhZi38xyOkcaFY+npGEWvko7rlIAn0JpBO4x3hfhmhBD/WSY8LQIFQNNjEm3vzrMo7b9Jb
+ JAqQxfbURY3Dql3GUzeWTG9uaJ00u+EEPlY8zcVShDltIl5PLih20e8xgTnNzx5c110lQSu0
+ iZv2lAE6DM+2bJQTsMSYiwKlwTuv9LI9Chnoo6+tsN55NqyMxYqJgElk3VzlTXSr3+rtSCwf
+ tq2cinETbzxc1XuhIX6pu/aCGnNfuEkM34b7G1D6CPzDMqokNFbyoO6DQ1+fW6c5gctXg/lZ
+ 602iEl4C4rgcr3+EpfoPUWzKeM8JXv5Kpq4YDxhvbitr8Dm8gr38+UKFZKlWLlwhQ56r/zAU
+ v6LIsm11GmFs2/cmgD1bqBTNHHcTWwWtRTLgmnqJbVisMJuYJt4KNPqphTWsPY8SEtbufIlY
+ HXOJ2lqUzOReTrie2u0qcSvGAbSfec9apTFl2Xko/ddqPcZMpKhBiXmY8tJzSPk3+G4tqur4
+ 6TYAm5ouitJsgAR61Cu7s+PNuq/pTLDhK+6/Njmc94NGBcRA4qTuysEGE79vYWP2oIAU4Fv6
+ gqaWHZ4MEI2XTqH8wiwzPdCQPYsSE0fXWiYu7ObeErT6iLSTZGx4rQARAQABwsFfBBgBCAAJ
+ BQJbm6Q+AhsMAAoJEONU5rjiOLn4DDEP/RuyckW65SZcPG4cMfNgWxZF8rVjeVl/9PBfy01K
+ 8R0hajU40bWtXSMiby7j0/dMjz99jN6L+AJHJvrLz4qYRzn2Ys843W+RfXj62Zde4YNBE5SL
+ jJweRCbMWKaJLj6499fctxTyeb9+AMLQS4yRSwHuAZLmAb5AyCW1gBcTWZb8ON5BmWnRqeGm
+ IgC1EvCnHy++aBnHTn0m+zV89BhTLTUal35tcjUFwluBY39R2ux/HNlBO1GY3Z+WYXhBvq7q
+ katThLjaQSmnOrMhzqYmdShP1leFTVbzXUUIYv/GbynO/YrL2gaQpaP1bEUEi8lUAfXJbEWG
+ dnHFkciryi092E8/9j89DJg4mmZqOau7TtUxjRMlBcIliXkzSLUk+QvD4LK1kWievJse4mte
+ FBdkWHfP4BH/+8DxapRcG1UAheSnSRQ5LiO50annOB7oXF+vgKIaie2TBfZxQNGAs3RQ+bga
+ DchCqFm5adiSP5+OT4NjkKUeGpBe/aRyQSle/RropTgCi85pje/juYEn2P9UAgkfBJrOHvQ9
+ Z+2Sva8FRd61NJLkCJ4LFumRn9wQlX2icFbi8UDV3do0hXJRRYTWCxrHscMhkrFWLhYiPF4i
+ phX7UNdOWBQ90qpHyAxHmDazdo27gEjfvsgYMdveKknEOTEb5phwxWgg7BcIDoJf9UMC
+In-Reply-To: <20240723093126.285319-2-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: w5SsdMtSIb6wRaLbbDPoIniazXJ3eDoy
+X-Proofpoint-ORIG-GUID: IMBMEVx9iHxkd-YT330S0KumGqDxrKqT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-24_13,2024-07-24_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ spamscore=0 mlxlogscore=729 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2407240106
 
-On Wed, Jul 24, 2024 at 6:49=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> On Tue, Jul 9, 2024 at 8:37=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wr=
-ote:
-> ...
-> > Reproducer:
-> > ./ncdevmem -f <interface name> -l -p 5201 -v 7 -t 0 -q 2 &
-> > sleep 10
-> > modprobe -rv bnxt_en
-> > killall ncdevmem
-> >
-> > I think it's a devmemTCP core bug so this issue would be reproduced
-> > with other drivers.
->
-> Sorry for the late reply. I was out at netdev.
->
-> I'm also having trouble reproducing this, not because the bug doesn't
-> exist, but quirks with my test setup that I need to figure out. AFAICT
-> this diff should fix the issue. If you have time to confirm, let me
-> know if it doesn't work for you. It should apply on top of v16:
->
-> commit 795b8ff01906d ("fix for release issue")
-> Author: Mina Almasry <almasrymina@google.com>
-> Date:   Tue Jul 23 00:18:23 2024 +0000
->
->     fix for release issue
->
->     Change-Id: Ib45a0aa6cba2918db5f7ba535414ffa860911fa4
->
->
->
-> diff --git a/include/net/devmem.h b/include/net/devmem.h
-> index 51b25ba193c96..df52526bb516a 100644
-> --- a/include/net/devmem.h
-> +++ b/include/net/devmem.h
-> @@ -68,6 +68,9 @@ net_devmem_bind_dmabuf(struct net_device *dev,
-> unsigned int dmabuf_fd);
->  void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)=
-;
->  int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
->                                     struct net_devmem_dmabuf_binding *bin=
-ding);
-> +
-> +void dev_dmabuf_uninstall(struct net_device *dev);
-> +
->  struct net_iov *
->  net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding);
->  void net_devmem_free_dmabuf(struct net_iov *ppiov);
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5882ddc3f8592..7be084e4936e4 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -11320,6 +11320,7 @@ void unregister_netdevice_many_notify(struct
-> list_head *head,
->                 dev_tcx_uninstall(dev);
->                 dev_xdp_uninstall(dev);
->                 bpf_dev_bound_netdev_unregister(dev);
-> +               dev_dmabuf_uninstall(dev);
->
->                 netdev_offload_xstats_disable_all(dev);
->
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> index e75057ecfa6de..227bcb1070ec0 100644
-> --- a/net/core/devmem.c
-> +++ b/net/core/devmem.c
-> @@ -362,4 +362,20 @@ bool mp_dmabuf_devmem_release_page(struct
-> page_pool *pool, netmem_ref netmem)
->         return false;
->  }
->
-> +void dev_dmabuf_uninstall(struct net_device *dev)
-> +{
-> +       unsigned int i, count =3D dev->num_rx_queues;
-> +       struct net_devmem_dmabuf_binding *binding;
-> +       struct netdev_rx_queue *rxq;
-> +       unsigned long xa_idx;
-> +
-> +       for (i =3D 0; i < count; i++) {
-> +               binding =3D dev->_rx[i].mp_params.mp_priv;
-> +               if (binding)
-> +                       xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
-> +                               if (rxq =3D=3D &dev->_rx[i])
-> +                                       xa_erase(&binding->bound_rxqs, xa=
-_idx);
-> +       }
-> +}
-> +
->  #endif
->
+On 7/23/24 11:31, Christoph Schlameuss wrote:
+> Multiple test cases need page size and shift definitions.
+> By moving the definitions to a single architecture specific header we
+> limit the repetition.
+> 
+> Make use of PAGE_SIZE, PAGE_SHIFT and PAGE_MASK defines in existing
+> code.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-I tested this patch and it works well.
-Thanks a lot for this work!
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Thanks a lot!
-Taehee Yoo
-
-> --
-> Thanks,
-> Mina
 
