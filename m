@@ -1,65 +1,69 @@
-Return-Path: <linux-kselftest+bounces-14131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11EF593AB6C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 04:54:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB47593AB7F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 05:12:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAE4E1F21CF8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 02:54:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC6D41C220F5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 03:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB831AAC4;
-	Wed, 24 Jul 2024 02:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D1F1B949;
+	Wed, 24 Jul 2024 03:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RX+wJUDM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFgz5CxT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6074B1C6B5;
-	Wed, 24 Jul 2024 02:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEFA4A00;
+	Wed, 24 Jul 2024 03:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721789667; cv=none; b=pw84kR6qAufvm5yt6jN+ZtXmPQpRIKrBdPs3fViAYKKFjFXta/5zNzujUFlWVtybScFeWt7Ccb2sLrG4fYyu9cShYeZwiVBONYju2H4yOBfKkhNelHIeTDCWmifolPzMy6tJf+EHDBvrJGqO2hkW3Ejv0uyW4w33sdg4XclFGWE=
+	t=1721790718; cv=none; b=Vztcd+yjda5sjqf4MzaBOynvRFW3+iIB7SG3FHQvIKrGt/+GhzZyfhiwdBII8pTqtf4zXeBBZxBLidwTXpD5Kk20MV4ijoELGckvavbbURQUo4FpQsrjnFKWytoYHECYmIHrolb21DVIXcx9r9BQe9bjS9toKvqqzcah4zv4/MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721789667; c=relaxed/simple;
-	bh=x/yzJVpvpb4rotAjoFgGucJ1QFSq8j2iS59QZYKAbws=;
+	s=arc-20240116; t=1721790718; c=relaxed/simple;
+	bh=xBQQ+3v2oIdApkY8+W2lFxFlm/BFXJ38AszSVrnGplg=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GI3OLC919csWOTiakZHdvkiNihZxsYZ1ThfCmQ+fYD+Vkv2CyZGQP2iHbhyBiynYMFC9tJZHVaY3uyMSfh4N9fa6n4zTxxwD9WrgX4GkcluVmv31qDdQS4HTMgH9sMfGNS+dm0BAL4iNH+TZvn3eyf6qPQUZTzTjTU1QCqpDcZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RX+wJUDM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5695DC4AF0A;
-	Wed, 24 Jul 2024 02:54:19 +0000 (UTC)
+	 Content-Type:MIME-Version; b=dvqZwhi+TewXqWQseUJPen2B9HNzDCiillfD4hTe5MNUQIGdtEOCtT/22P+03zOOWAPSdpArRHyfoBjg3StGjyAQFwzpO5Y4KHdJKJAzqfqPD/3avDW3QQFNGO3kmKiNeg/p/1BFxwb1yJcq2SjMm2NoiMh45ta9sL3VMGzZDjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFgz5CxT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9788C4AF09;
+	Wed, 24 Jul 2024 03:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721789665;
-	bh=x/yzJVpvpb4rotAjoFgGucJ1QFSq8j2iS59QZYKAbws=;
+	s=k20201202; t=1721790718;
+	bh=xBQQ+3v2oIdApkY8+W2lFxFlm/BFXJ38AszSVrnGplg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=RX+wJUDMeOcKmoYLgL1k9CIBtVVyFkMpZPtg4mVAPTXUxVn46ciphw5UuPoxS6vY/
-	 Uk3kYuVhUQztTov5KhQ0tuUW4BxEeAGK2tguNhA9bRfEFfKD1Lx+35F34G+KGntohq
-	 lXjnEP3+nKQRXDFiwThqb3g7mN83n/d8llg+FDlcGkL6ovB9bND4FhJE5cl8IsZW+J
-	 6P3jEGR3dYHh6hosykWFRz7Cb1TpX0Q8Gt9GK6CCluJvdCaOJ+SPq/Pi9S3yi5hIER
-	 s5OuP5LfqaK3gBP+CJJ1K1C66cuNY4jlaOr7GaNJo6qRY5W8PPWDdgpXst7p+lae20
-	 EBHH7w7zqufJw==
-Message-ID: <31ec8bfa0189ae049da2c71a72ef8071d0ff94b2.camel@kernel.org>
-Subject: Re: [PATCH bpf-next 00/15] use network helpers, part 11
+	b=lFgz5CxTCtfnBqNKmCSUv9mK4FI6+zY0Rr1Mu4ued0D6phlHz3al9zUzXMctYpUHr
+	 nacol1/2MpVNMldFOWZfYQB2cOvU9RlQ08UgOisiM+cDzUnsbH2GZ/APjG3z4PqzFL
+	 yv+N2oi35pKvmG1CVUkUabzoinNGeynAHHXM11R6c0k1gc58ohK0v//2M9ZvwYLbhw
+	 BsHo3QllVjyIRmh0FEoRgx82gN0XfDeT+ltsX7lkG3PvsT3hA/modjrJPXhOprbi4P
+	 BuQpXUP1PQliPzFAeBjOMaT0ckR7JOUEr0VPHfem6j4ndXOktvt5ICn7TU9oJLFcrc
+	 val+y7JpqvLIg==
+Message-ID: <e7959c4c3b8972ad830050300a97dbbb16144c9a.camel@kernel.org>
+Subject: Re: [PATCH bpf-next v1 03/19] selftests/bpf: Fix error compiling
+ bpf_iter_setsockopt.c with musl libc
 From: Geliang Tang <geliang@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  Geliang Tang
- <tanggeliang@kylinos.cn>, bpf <bpf@vger.kernel.org>, "open list:KERNEL
- SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Date: Wed, 24 Jul 2024 10:54:15 +0800
-In-Reply-To: <CAADnVQ+22+nWeVK0no2xgX0mmY7eFnZrfW6xFv+6oqKx-e83sw@mail.gmail.com>
-References: <cover.1721771340.git.tanggeliang@kylinos.cn>
-	 <CAADnVQKHHy92a62vRue44asXqw=OoWwyzg0_g0sbgaK+xbP6Xg@mail.gmail.com>
-	 <4b1aace7d5dcc0dbc348df568f12d6aba1fa9ddb.camel@kernel.org>
-	 <CAADnVQ+22+nWeVK0no2xgX0mmY7eFnZrfW6xFv+6oqKx-e83sw@mail.gmail.com>
+To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, Yucong Sun <sunyucong@gmail.com>,  Eric Dumazet
+ <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.co.jp>, Jakub
+ Sitnicki <jakub@cloudflare.com>, Dave Marchevsky <davemarchevsky@fb.com>,
+ David Vernet <void@manifault.com>, Carlos Neira <cneirabustos@gmail.com>,
+ Joanne Koong <joannelkoong@gmail.com>, Petar Penkov <ppenkov@google.com>,
+ Willem de Bruijn <willemb@google.com>, Yan Zhai <yan@cloudflare.com>, Vadim
+ Fedorenko <vadim.fedorenko@linux.dev>, YiFei Zhu <zhuyifei@google.com>
+Date: Wed, 24 Jul 2024 11:11:41 +0800
+In-Reply-To: <f41def0f17b27a23b1709080e4e3f37f4cc11ca9.1721713597.git.tony.ambardar@gmail.com>
+References: <cover.1721713597.git.tony.ambardar@gmail.com>
+	 <f41def0f17b27a23b1709080e4e3f37f4cc11ca9.1721713597.git.tony.ambardar@gmail.com>
 Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
  keydata=mQINBGWKTg4BEAC/Subk93zbjSYPahLCGMgjylhY/s/R2ebALGJFp13MPZ9qWlbVC8O+X
  lU/4reZtYKQ715MWe5CwJGPyTACILENuXY0FyVyjp/jl2u6XYnpuhw1ugHMLNJ5vbuwkc1I29nNe8
@@ -122,47 +126,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-07-23 at 19:43 -0700, Alexei Starovoitov wrote:
-> On Tue, Jul 23, 2024 at 7:07 PM Geliang Tang <geliang@kernel.org>
-> wrote:
-> > 
-> > Hi Alexei,
-> > 
-> > On Tue, 2024-07-23 at 17:04 -0700, Alexei Starovoitov wrote:
-> > > I strongly suggest you invest just as much time
-> > > in reviewing other people's patches as sending yours
-> > > or they will all be automatically rejected.
-> > 
-> > Thanks for your reminder. I didn't know that our community has such
-> > a
-> > rule. I will try to reduce the number of iterations of my patches
-> > and
-> > the number of my emails sent to our community.
+On Mon, 2024-07-22 at 22:54 -0700, Tony Ambardar wrote:
+> Existing code calls getsockname() with a 'struct sockaddr_in6 *'
+> argument
+> where a 'struct sockaddr *' argument is declared, yielding compile
+> errors
+> when building for mips64el/musl-libc:
 > 
-> Every patch submission has a cost. A reviewer and/or maintainer
-> has to process it. You're sending way more than average,
-> hence depleting the time reviewer/maintainers can spend on other
-> submissions. This is not ok.
+>   bpf_iter_setsockopt.c: In function 'get_local_port':
+>   bpf_iter_setsockopt.c:98:30: error: passing argument 2 of
+> 'getsockname' from incompatible pointer type [-Werror=incompatible-
+> pointer-types]
+>      98 |         if (!getsockname(fd, &addr, &addrlen))
+>         |                              ^~~~~
+>         |                              |
+>         |                              struct sockaddr_in6 *
+>   In file included from .../netinet/in.h:10,
+>                    from .../arpa/inet.h:9,
+>                    from ./test_progs.h:17,
+>                    from bpf_iter_setsockopt.c:5:
+>   .../sys/socket.h:391:23: note: expected 'struct sockaddr *
+> restrict' but argument is of type 'struct sockaddr_in6 *'
+>     391 | int getsockname (int, struct sockaddr *__restrict,
+> socklen_t *__restrict);
+>         |                       ^
+>   cc1: all warnings being treated as errors
 > 
-> > I am very willing to review other people's patches, but I am only
-> > familiar with "BPF [SELFTESTS]" module. If possible, I would like
-> > to
-> > add myself (Geliang Tang <geliang@kernel.org>) as a reviewer of
-> > this
-> > module in MAINTAINERS so that I can receive emails of new patches
-> > for
-> > reviewing. Or please add this for me.
+> This compiled under glibc only because the argument is declared to be
+> a
+> "funky" transparent union which includes both types above. Explicitly
+> cast
+> the argument to allow compiling for both musl and glibc.
 > 
-> That's not how it works. Anyone can subscribe to bpf@vger and
-> start reviewing patches.
-> After some time when developers and maintainers see that
-> a person commenting on the patches actually adding value
-> then they will get recognized with R: or M: in the MAINTAINERS file.
+> Fixes: eed92afdd14c ("bpf: selftest: Test batching and
+> bpf_(get|set)sockopt in bpf tcp iter")
+> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git
+> a/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
+> b/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
+> index b52ff8ce34db..35363b104dd2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
+> @@ -95,7 +95,7 @@ static unsigned short get_local_port(int fd)
+>  	struct sockaddr_in6 addr;
+>  	socklen_t addrlen = sizeof(addr);
+>  
+> -	if (!getsockname(fd, &addr, &addrlen))
+> +	if (!getsockname(fd, (struct sockaddr *) &addr, &addrlen))
 
-Got it, thanks for your explanation.
+nit: Generally, a space is not required when casting:
 
--Geliang
+	(struct sockaddr *)&addr
+	
+	not
 
-> 
+	(struct sockaddr *) &addr.
+
+See here:
+
+$ grep -r "struct sockaddr \*) \&"
+tools/testing/selftests/bpf/prog_tests | wc -l
+1
+$ grep -r "struct sockaddr \*)\&"
+tools/testing/selftests/bpf/prog_tests | wc -l
+33
+
+Except this, LGTM.
+
+Acked-by: Geliang Tang <geliang@kernel.org>
+
+>  		return ntohs(addr.sin6_port);
+>  
+>  	return 0;
 
 
