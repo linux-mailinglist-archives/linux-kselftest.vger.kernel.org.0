@@ -1,206 +1,217 @@
-Return-Path: <linux-kselftest+bounces-14132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB47593AB7F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 05:12:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C15B593ABA6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 05:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC6D41C220F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 03:12:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CB52B227E3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 03:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D1F1B949;
-	Wed, 24 Jul 2024 03:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0093420322;
+	Wed, 24 Jul 2024 03:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFgz5CxT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IhrLQxbm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEFA4A00;
-	Wed, 24 Jul 2024 03:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8091C6A1;
+	Wed, 24 Jul 2024 03:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721790718; cv=none; b=Vztcd+yjda5sjqf4MzaBOynvRFW3+iIB7SG3FHQvIKrGt/+GhzZyfhiwdBII8pTqtf4zXeBBZxBLidwTXpD5Kk20MV4ijoELGckvavbbURQUo4FpQsrjnFKWytoYHECYmIHrolb21DVIXcx9r9BQe9bjS9toKvqqzcah4zv4/MU=
+	t=1721792944; cv=none; b=fok6lP7kRf5WEhvHPT99u7KUuSBs18+RJzJ0qQ3Xn+n/xpcNGVTslq4L4Y7zpdcydB+ZpPa8Ag8oSmFPmPOM8VkNlP3P0iMYFLz+TJ4ekvJCISAlq0XfwsgFXc1r9D/l2ppEeLzMyc/QsrpVIK9csnvqH5Pqbg3oEWzcCr3rH3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721790718; c=relaxed/simple;
-	bh=xBQQ+3v2oIdApkY8+W2lFxFlm/BFXJ38AszSVrnGplg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dvqZwhi+TewXqWQseUJPen2B9HNzDCiillfD4hTe5MNUQIGdtEOCtT/22P+03zOOWAPSdpArRHyfoBjg3StGjyAQFwzpO5Y4KHdJKJAzqfqPD/3avDW3QQFNGO3kmKiNeg/p/1BFxwb1yJcq2SjMm2NoiMh45ta9sL3VMGzZDjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFgz5CxT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9788C4AF09;
-	Wed, 24 Jul 2024 03:11:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721790718;
-	bh=xBQQ+3v2oIdApkY8+W2lFxFlm/BFXJ38AszSVrnGplg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=lFgz5CxTCtfnBqNKmCSUv9mK4FI6+zY0Rr1Mu4ued0D6phlHz3al9zUzXMctYpUHr
-	 nacol1/2MpVNMldFOWZfYQB2cOvU9RlQ08UgOisiM+cDzUnsbH2GZ/APjG3z4PqzFL
-	 yv+N2oi35pKvmG1CVUkUabzoinNGeynAHHXM11R6c0k1gc58ohK0v//2M9ZvwYLbhw
-	 BsHo3QllVjyIRmh0FEoRgx82gN0XfDeT+ltsX7lkG3PvsT3hA/modjrJPXhOprbi4P
-	 BuQpXUP1PQliPzFAeBjOMaT0ckR7JOUEr0VPHfem6j4ndXOktvt5ICn7TU9oJLFcrc
-	 val+y7JpqvLIg==
-Message-ID: <e7959c4c3b8972ad830050300a97dbbb16144c9a.camel@kernel.org>
-Subject: Re: [PATCH bpf-next v1 03/19] selftests/bpf: Fix error compiling
- bpf_iter_setsockopt.c with musl libc
-From: Geliang Tang <geliang@kernel.org>
-To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,  Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>, Yucong Sun <sunyucong@gmail.com>,  Eric Dumazet
- <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.co.jp>, Jakub
- Sitnicki <jakub@cloudflare.com>, Dave Marchevsky <davemarchevsky@fb.com>,
- David Vernet <void@manifault.com>, Carlos Neira <cneirabustos@gmail.com>,
- Joanne Koong <joannelkoong@gmail.com>, Petar Penkov <ppenkov@google.com>,
- Willem de Bruijn <willemb@google.com>, Yan Zhai <yan@cloudflare.com>, Vadim
- Fedorenko <vadim.fedorenko@linux.dev>, YiFei Zhu <zhuyifei@google.com>
-Date: Wed, 24 Jul 2024 11:11:41 +0800
-In-Reply-To: <f41def0f17b27a23b1709080e4e3f37f4cc11ca9.1721713597.git.tony.ambardar@gmail.com>
-References: <cover.1721713597.git.tony.ambardar@gmail.com>
-	 <f41def0f17b27a23b1709080e4e3f37f4cc11ca9.1721713597.git.tony.ambardar@gmail.com>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- TO0tfEdfAX7IENcV87h2yAFBZkaA==
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0-1build2 
+	s=arc-20240116; t=1721792944; c=relaxed/simple;
+	bh=NKrj4Xe15h7P+/8akw56axN+QjFD9WXReSS4RVzKxwI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b3rnYzlCy7oA5eGTGsdO4qhS3yKxlk/fX1R9K8GN5QDLsS8ors21RKu+kA1us9Cz0TTWSUQriIlrgfsg7juLnTbBg/hExMa7HfUL22WrdzeWLFAI6jnNDOVm2GueQPrcwZC7BSGnNJ+/ywsEPb91LzuJFcDv5q1+vfy/RLPveFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IhrLQxbm; arc=none smtp.client-ip=209.85.222.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-8205ceff95cso1935220241.1;
+        Tue, 23 Jul 2024 20:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721792942; x=1722397742; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WIIzMgLof7Cy8pOJkAUdfmjOzPX18xl1X4zt9wdck1I=;
+        b=IhrLQxbmIVQzPVfwxoStvcX6ZdR1XNXYlnmjixBvVR9aVm6qKqkL4UFN3pHWh7WKRm
+         SUn994Ry4JRPoiGsSbnvHRkyiC8f2l68n+BgL6SGhMO2g/qeLqypXAkZoziTapyfifYd
+         IrE5P+PmA6OM9tX6yKK6t0ynTPcjVooFtZg2WKquSITJvkFz2X1VCeoMKU1FbhEa7x4R
+         uRWH3Gm0V5O6RcvIcdbj3L0W98ty1ojB9gMd92UyZQk7XqBrDB9BuWrUxREVnUF5aYgf
+         RDjzkcYGXHbPE6nwkacrEkkegYanyH/5cIwEFQAHXVbT44btGo8RFs5JHXD75ZONQZ4O
+         Z8LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721792942; x=1722397742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WIIzMgLof7Cy8pOJkAUdfmjOzPX18xl1X4zt9wdck1I=;
+        b=EKOJcnOJT3fnKRY7cNHo1C9bCcQsnYC+Njt8n4MPAfAvgHAYv7S/kcKUhm29dBSJtZ
+         wbM5pNC4WNEfxusZdiQqCYIFEYFXGYYKIa5YQ2Fd9p4jxK/TZ1sN0usbUAhtJNtTK61r
+         mJPtOX7SZqqJOAYO9AedF/VwVjICC/hAAYsb5atjnsyNLuwn8Lv5kFkC/U+ndlEz/qEq
+         I7nzJuZMACe2e4FIBZTViecTU1HPoGxKr99yE3rKMO9NUWPS7nvop+umI5pzjbY3ukAk
+         cGEkI+bqZfPLvekBxT3phdPAqCwNgcts3ZKVvMNq2bSZSvdJi0CyDpXCJ9l7ALiaYbep
+         qbtA==
+X-Forwarded-Encrypted: i=1; AJvYcCURPmq+Btqmr2RhKE/tPxIpd8VGTPOulOWL3PuXWp//IufMqogLUqvERi0vwp3kIwa4792+7xjBvhoWkn7UT6XkaixdXoIRmM041zfAPLgqPABpp5cjoLinJ+FI/vjMv0IDHoYhbE8h
+X-Gm-Message-State: AOJu0YwiK0JmcrB3OUdq71nn2HWLxqmvtWFfvBNuK71yGzM63Ihge4Sj
+	4sfroxhbwnwkwIJcAz0pad5o1WxyaoZu2TitYyHrPHu0Idw5hwpHMZ8zg0opsfBVNn3Ieaodr2M
+	JlJiAL+isgmSFK/8Ey48NBsXZDNo=
+X-Google-Smtp-Source: AGHT+IFDvtbe82NNASQ0oM9M0v5+nZcAsCCLz1k3PmRjYQzgoGqz5vUMO4HDkw4dQsjBUNVozxiQ1PzitWivbSxe5zU=
+X-Received: by 2002:a05:6102:158b:b0:493:c631:5eda with SMTP id
+ ada2fe7eead31-493c63160d9mr769729137.9.1721792941922; Tue, 23 Jul 2024
+ 20:49:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240723223109.2196886-1-kuba@kernel.org>
+In-Reply-To: <20240723223109.2196886-1-kuba@kernel.org>
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date: Tue, 23 Jul 2024 23:48:24 -0400
+Message-ID: <CAF=yD-LJ+-S4gC9EVo6ijJTGjR6KfPMNPrpxoffgoQBFpo8GNQ@mail.gmail.com>
+Subject: Re: [PATCH net] virtio: fix GSO with frames unaligned to size
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, mst@redhat.com, jasowang@redhat.com, 
+	xuanzhuo@linux.alibaba.com, eperezma@redhat.com, shuah@kernel.org, 
+	arefev@swemel.ru, virtualization@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2024-07-22 at 22:54 -0700, Tony Ambardar wrote:
-> Existing code calls getsockname() with a 'struct sockaddr_in6 *'
-> argument
-> where a 'struct sockaddr *' argument is declared, yielding compile
-> errors
-> when building for mips64el/musl-libc:
-> 
->   bpf_iter_setsockopt.c: In function 'get_local_port':
->   bpf_iter_setsockopt.c:98:30: error: passing argument 2 of
-> 'getsockname' from incompatible pointer type [-Werror=incompatible-
-> pointer-types]
->      98 |         if (!getsockname(fd, &addr, &addrlen))
->         |                              ^~~~~
->         |                              |
->         |                              struct sockaddr_in6 *
->   In file included from .../netinet/in.h:10,
->                    from .../arpa/inet.h:9,
->                    from ./test_progs.h:17,
->                    from bpf_iter_setsockopt.c:5:
->   .../sys/socket.h:391:23: note: expected 'struct sockaddr *
-> restrict' but argument is of type 'struct sockaddr_in6 *'
->     391 | int getsockname (int, struct sockaddr *__restrict,
-> socklen_t *__restrict);
->         |                       ^
->   cc1: all warnings being treated as errors
-> 
-> This compiled under glibc only because the argument is declared to be
-> a
-> "funky" transparent union which includes both types above. Explicitly
-> cast
-> the argument to allow compiling for both musl and glibc.
-> 
-> Fixes: eed92afdd14c ("bpf: selftest: Test batching and
-> bpf_(get|set)sockopt in bpf tcp iter")
-> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git
-> a/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
-> b/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
-> index b52ff8ce34db..35363b104dd2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter_setsockopt.c
-> @@ -95,7 +95,7 @@ static unsigned short get_local_port(int fd)
->  	struct sockaddr_in6 addr;
->  	socklen_t addrlen = sizeof(addr);
->  
-> -	if (!getsockname(fd, &addr, &addrlen))
-> +	if (!getsockname(fd, (struct sockaddr *) &addr, &addrlen))
+On Tue, Jul 23, 2024 at 3:31=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> The commit under fixes added a questionable check to
+> virtio_net_hdr_to_skb(). I'm guessing the check was supposed
+> to protect from csum offset being outside of a segment
+> (especially if len is not multiple of segment size).
+>
+> The condition can't be right, tho, as it breaks previously
+> working sending of GSO frames with only one segment
+> (i.e. when gso_size <=3D len we silently ignore the GSO
+> request and send a single non-GSO frame).
+>
+> Fix the logic and move it to the GSO part.
 
-nit: Generally, a space is not required when casting:
+I missed the previous patch. Should we revert that and create a new
+fix against the original issue?
 
-	(struct sockaddr *)&addr
-	
-	not
+Normally the checksum start + offset should always be in the header,
+so not even part of gso_size. So needed need not be related to
+gso_size.
 
-	(struct sockaddr *) &addr.
+The exception to this is UDP fragmentation offload, I suppose. As
+there the network and transport headers are part of the UFO payload.
 
-See here:
+But even for the normal TSO and USO cases we cannot verify in
+virtio_net_hdr_to_skb that the csum_start + csum_off passed from
+userspace are really pointing into the transport header.
 
-$ grep -r "struct sockaddr \*) \&"
-tools/testing/selftests/bpf/prog_tests | wc -l
-1
-$ grep -r "struct sockaddr \*)\&"
-tools/testing/selftests/bpf/prog_tests | wc -l
-33
+For SKB_GSO_UDP_L4 I added a minimal check that csum_off must be
+offsetof(struct udphdr, check). We can arguably tighten these csum_off
+for all requests, as only UDP and TCP offsets are valid. But no such
+simple check exists for csum_start. This requires full packet parsing,
+which we don't do until skb_gso_segment.
 
-Except this, LGTM.
+One option may be to test csum_start in tcp_gso_segment and
+udp_gso_fragment and fail segmentation when it points not where
+expected.
 
-Acked-by: Geliang Tang <geliang@kernel.org>
+Btw, do we have a better idea what exact packet triggered this
+WARN_ON_ONCE in skb_checksum_help? Usually, more interesting than the
+skb_dump of the segment that reached the WARN is the skb_dump at the
+time of virtio_net_hdr_to_skb, along with the vnet_hdr.
 
->  		return ntohs(addr.sin6_port);
->  
->  	return 0;
+> This has been caught by net/tap and net/psock_send.sh tests.
 
+That's very nice!
+
+> Fixes: e269d79c7d35 ("net: missing check virtio")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+> +               if (csum_needed) {
+> +                       unsigned int p_rem, p_size;
+> +
+> +                       p_size =3D gso_size;
+> +                       p_rem =3D (skb->len - nh_off) % gso_size;
+> +                       if (p_rem)
+> +                               p_size =3D p_rem;
+> +
+> +                       /* Make sure csum still within packet after GSO *=
+/
+> +                       if (p_size + nh_off < csum_needed)
+> +                               return -EINVAL;
+> +               }
+> +
+
+A check could even go in the below branch.
+
+The warning apparently was not that csum_needed is outside the segment
+entirely, but that the segment is non-linear and csum_start points in
+the non-linear part (offset >=3D skb_headlen(skb)).
+
+I don't think we should be playing SKBFL_SHARED_FRAG tricks to trigger
+linearization, to be clear.
+
+We also cannot just silence the WARN and trust that the stack detects
+these bad packets and drops them (as ip_do_fragment does), as they
+might end up not in ip_do_fragment, but in a device ndo_start_xmit.
+
+>                 /* Too small packets are not really GSO ones. */
+>                 if (skb->len - nh_off > gso_size) {
+>                         shinfo->gso_size =3D gso_size;
+> diff --git a/tools/testing/selftests/net/tap.c b/tools/testing/selftests/=
+net/tap.c
+> index 247c3b3ac1c9..8527d51449cf 100644
+> --- a/tools/testing/selftests/net/tap.c
+> +++ b/tools/testing/selftests/net/tap.c
+> @@ -418,6 +418,36 @@ TEST_F(tap, test_packet_valid_udp_csum)
+>         ASSERT_EQ(ret, off);
+>  }
+>
+> +TEST_F(tap, test_packet_invalid_udp_gso_csum)
+> +{
+> +       uint8_t pkt[TEST_PACKET_SZ];
+> +       uint16_t payload;
+> +       size_t off;
+> +       int ret;
+> +       int i;
+> +
+> +       payload =3D ETH_DATA_LEN - sizeof(struct iphdr) - sizeof(struct u=
+dphdr);
+> +
+> +       memset(pkt, 0, sizeof(pkt));
+> +       off =3D build_test_packet_valid_udp_gso(pkt, payload);
+> +
+> +       for (i =3D -16; i < 16; i++) {
+> +               ret =3D write(self->fd, pkt, off + i);
+> +
+> +               if (i <=3D 0 ||
+> +                   i > __builtin_offsetof(struct udphdr, check) + 1) {
+> +                       EXPECT_EQ(ret, off + i)
+> +                               TH_LOG("mismatch with offset: %d (%zd)",
+> +                                      i, off + i);
+> +               } else {
+> +                       EXPECT_EQ(ret, -1)
+> +                               TH_LOG("mismatch with offset: %d (%zd)",
+> +                                      i, off + i);
+> +                       EXPECT_EQ(errno, 22);
+> +               }
+> +       }
+> +}
+> +
+>  TEST_F(tap, test_packet_crash_tap_invalid_eth_proto)
+>  {
+>         uint8_t pkt[TEST_PACKET_SZ];
+> --
+> 2.45.2
+>
 
