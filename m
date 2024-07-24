@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-14152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A542E93B2B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 16:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 408BE93B2D1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 16:40:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26DDB1F2307E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 14:31:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B532C1F22127
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 14:40:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E45D1581F8;
-	Wed, 24 Jul 2024 14:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBC215ADA0;
+	Wed, 24 Jul 2024 14:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fPLOfPS/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kPRahdMT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EDB4C6D;
-	Wed, 24 Jul 2024 14:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686A715AD90;
+	Wed, 24 Jul 2024 14:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721831490; cv=none; b=niFgrsfQcNZyNYlT2jhahIoIIqrO3aR1huvrSpWW/9+W1FZnPvcXOHvy47A+S0jTRaIgsBGwKV+76nLyi5EjQOI8L+GwkDkz5mhj4zcC/Ru0d52YicEU6AOcXazmOqGU6kfco3yFxZUARffb13639L5V+fiyGrb+8hiG15UXoQQ=
+	t=1721831988; cv=none; b=YmdXS6Bbg2Dg1TQ0PdLXwHIZjcDQampVkqPtZwSAmzE3W7FCtBH2KPnY47gkpYlazb9nFxcmAg3JAa4KlwNsewSS20G7R14OeDRkxQ+Sl3/AgwuNASTe/hS6NlvvWmpqXXYik/KaZSqLGQsOOIS/hCkx0pV4BjQ2ZTr2B+Vw5ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721831490; c=relaxed/simple;
-	bh=hYOR4rqs7WSDSzXBrnCsM6gq7rm4gZYHWXtXeeKLULk=;
+	s=arc-20240116; t=1721831988; c=relaxed/simple;
+	bh=78f0lJKKvO/IpvoZmyGhMyt+XNdudtRjWESPaU8EW/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQRkFbGVFJsDHlSi0zsdU42rdAtP0LB9vS/tBEA6fwAB41j7PQByNebd8BLxVa5uUCSt9mnnBEPjS9aJ3EWXDmzPiGHAyxjYs5rk4C0fz83/T58o6tsJZwcPp91pxk9YCZvSg5THf1H0xh0tB+cGtOUT2xgHX8PX641DEaevnNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fPLOfPS/; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=O3GBy4xkBnkeJ7NmRCUYNNT/ug5hqzEKYtfKn3MqVJaGoqCj7H1k3JqVmXaRkXmS5a8WLHyk2GimaGKPcaZYNuD+zPjesD03Jaw7Rsc+eT2H0zpLuPsH5ooBrfC+oHoJ2rwr/QGbKSbBHXLCdjEbv0xi+oqPue8LkwpbJPbcBkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kPRahdMT; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46ODvS1E021163;
-	Wed, 24 Jul 2024 14:31:18 GMT
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46ODSg2d009197;
+	Wed, 24 Jul 2024 14:39:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=e
-	gjEsxTuOR8TX4m0C5pbslVsAhqpijmwabQmVEh7Wnw=; b=fPLOfPS/ZXqnopmwR
-	DjPm4z5a9c9jZ/vFUJmJ6+uaAIrFw90kC9NiRcXXdnulOVfmkATbmg5IvVNlzFcB
-	vUDj314uSFiG4dS/GabRnizQ99tIKPY7FZYiyrEbJgr4TczqrM5Vzp+5oNPuxHQq
-	Dq1VJ6BRJL/ETe1jEU93xnZvZQQ2Mev6JQSvWRTXpfnLg3R52As2boj1mmM/IbdP
-	idktdA0ezP78bLbklBUDvGtzBxz8M0q1kmdtQFZIGNZBgoMt4lnD/MkQj4GwKq2F
-	GveFA7xqwjMNkMZ+BOlMnEiqkHxJSx4FeoVJWogm43Bq5yu7y3zs0cmyYt3jl6Cs
-	LcJIA==
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=C
+	PbUnxscJkH2Bsb/3YaTuJwzCGRAPRTZYJ6mAVqHxA8=; b=kPRahdMTxX/u/WhLT
+	cYO9mJD24pCfJOC3EC7lrDgmha2zfwA8+DgJgpMTAzPDAQEgpxcChiLzRDHcnVPU
+	Pfn7IVPiAOwA4FdE9vaGxCxmpIgZjYb9M+qwEHcZkqmAdNONa1m0y4eBfqcXHZ8N
+	43K7ASX/YcQSP83bGODeX3F4XBY9Y2iTIwz7oHN1f1+l8iIwGCXymmdVA/Zwc3DJ
+	LnB4PTOShZmoCpCsVr25HJKiXfjG08IfDBPikj/Z2KvC9xApWBgJEVsqIMcm619J
+	155m4x5REDzkuAnXH1dBdOTknvVaLscggdOz6m/f2UBWenFEwZ94gzmBdNsDwrpA
+	+Xxmw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jyvvrhks-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jxjr0rjq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 14:31:17 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46OEVG9g017727;
-	Wed, 24 Jul 2024 14:31:16 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jyvvrhkk-1
+	Wed, 24 Jul 2024 14:39:35 +0000 (GMT)
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46OEdZFQ030534;
+	Wed, 24 Jul 2024 14:39:35 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40jxjr0rjk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 14:31:16 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46OENrc0005818;
-	Wed, 24 Jul 2024 14:31:15 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40gy2pfyes-1
+	Wed, 24 Jul 2024 14:39:35 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46ODKQ1h007084;
+	Wed, 24 Jul 2024 14:39:34 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 40gx72r6py-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 14:31:15 +0000
+	Wed, 24 Jul 2024 14:39:34 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46OEV9aA17498540
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46OEdTQX51577288
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Jul 2024 14:31:11 GMT
+	Wed, 24 Jul 2024 14:39:31 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AE55C2004B;
-	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1BDCD20040;
+	Wed, 24 Jul 2024 14:39:29 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4DC6F2004E;
-	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 7CAEF20043;
+	Wed, 24 Jul 2024 14:39:28 +0000 (GMT)
 Received: from [9.179.14.90] (unknown [9.179.14.90])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 24 Jul 2024 14:31:09 +0000 (GMT)
-Message-ID: <34cbaade-ed71-4f5c-89f1-1c0a645517ea@linux.ibm.com>
-Date: Wed, 24 Jul 2024 16:31:09 +0200
+	Wed, 24 Jul 2024 14:39:28 +0000 (GMT)
+Message-ID: <8ce4cef5-1516-4e49-be2a-a185848fd639@linux.ibm.com>
+Date: Wed, 24 Jul 2024 16:39:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,8 +84,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/10] selftests: kvm: s390: Define page sizes in
- shared header
+Subject: Re: [PATCH v2 02/10] selftests: kvm: s390: Add kvm_s390_sie_block
+ definition for userspace tests
 To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
 Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -94,7 +94,7 @@ Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         David Hildenbrand <david@redhat.com>,
         Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 References: <20240723093126.285319-1-schlameuss@linux.ibm.com>
- <20240723093126.285319-2-schlameuss@linux.ibm.com>
+ <20240723093126.285319-3-schlameuss@linux.ibm.com>
 Content-Language: en-US
 From: Janosch Frank <frankja@linux.ibm.com>
 Autocrypt: addr=frankja@linux.ibm.com; keydata=
@@ -139,32 +139,40 @@ Autocrypt: addr=frankja@linux.ibm.com; keydata=
  DchCqFm5adiSP5+OT4NjkKUeGpBe/aRyQSle/RropTgCi85pje/juYEn2P9UAgkfBJrOHvQ9
  Z+2Sva8FRd61NJLkCJ4LFumRn9wQlX2icFbi8UDV3do0hXJRRYTWCxrHscMhkrFWLhYiPF4i
  phX7UNdOWBQ90qpHyAxHmDazdo27gEjfvsgYMdveKknEOTEb5phwxWgg7BcIDoJf9UMC
-In-Reply-To: <20240723093126.285319-2-schlameuss@linux.ibm.com>
+In-Reply-To: <20240723093126.285319-3-schlameuss@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: w5SsdMtSIb6wRaLbbDPoIniazXJ3eDoy
-X-Proofpoint-ORIG-GUID: IMBMEVx9iHxkd-YT330S0KumGqDxrKqT
+X-Proofpoint-ORIG-GUID: 8W-4wbhcXqw28yrstJ9spkY9gvLFpd5F
+X-Proofpoint-GUID: QONHiVziaGMtbZV2HMnDEXIrNTUXYiyp
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-24_13,2024-07-24_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- suspectscore=0 phishscore=0 priorityscore=1501 mlxscore=0 adultscore=0
- spamscore=0 mlxlogscore=729 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2407240106
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 mlxlogscore=714 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407240106
 
 On 7/23/24 11:31, Christoph Schlameuss wrote:
-> Multiple test cases need page size and shift definitions.
-> By moving the definitions to a single architecture specific header we
-> limit the repetition.
+> Subsequent tests do require direct manipulation of the SIE instruction.
+> This commit introduces the SIE definition for the selftests.
+
+AFAIK ucontrol doesn't allow to manipulate the instruction, it allows 
+manipulation of the *SIE control block* that's handed over as an operand 
+to SIE.
+
+
 > 
-> Make use of PAGE_SIZE, PAGE_SHIFT and PAGE_MASK defines in existing
-> code.
+> There are already definitions of this within the kernel.
+> This differs in two ways.
+> * This is the first definition of this in userspace.
+> * This does not require atomicity for the flags.
+> 
+> With the userspace definition of the SIE block layout now being present
+> we can reuse the values in other tests where applicable.
 > 
 > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
+Code looks fine though.
 
