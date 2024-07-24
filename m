@@ -1,524 +1,231 @@
-Return-Path: <linux-kselftest+bounces-14178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02F2E93B779
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 21:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F3A693B7AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 21:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68F81B24584
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 19:17:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCB1DB245D5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 19:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7596517334F;
-	Wed, 24 Jul 2024 19:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1C416C6AC;
+	Wed, 24 Jul 2024 19:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="axCysORr"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H6J9pa23"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503BB172BD8
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2024 19:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D8515ECEA
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2024 19:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721848471; cv=none; b=ejWVkm1wwfLEPz6lfAon41nun3dqbCQvJX7pwly/+/n+ty5boRd7WlgpZfbq/pIn5GR6KsIl/bH/ZkPTMiwHhUBvVtzDkcBupBC51W6PcRGQA8ZxDVPRie5wstDsSl/7tFDVAIG+dTSSJdFpsl697pL0uflVngKxgiNwO8cqQ44=
+	t=1721850478; cv=none; b=az3ktWL7TEviH6CAE2SwVnmSAC1f7C0+liNHj5EITZPZgDEGmNSIbeOIVv7FwamnvOTNrxl20t8PITbBMWjVj/BwH5WcewN2fpUlGkLTsBzeC4PayOfyYGm+rCNKXkEf1N5GfYzCz9EXqntyyl22Ju1ruM9fV2h7AZnG7qTsiT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721848471; c=relaxed/simple;
-	bh=9w7dBpv+20Zqh2hfnY2iaYlSIT6IIR7L7F4Z0i1nJ5w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HCnD5+nTMxptGiBlPZxL5Ne2Dk2hNzMpYD/O0hkaCjwnUZhBAzX1J19hk3e8coNT6g8DguRPYf6/xbpX5ZXF/7h+ggveiigxcKPeOb6U7LBSTb1+FBucMfrlnS58r+UV8f66TstSVblSFWEra1Zb35PIBGC2hiZO/dzjSmgX/Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=axCysORr; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cb682fb0cdso116428a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2024 12:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721848469; x=1722453269; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9n2f4kq3fPmLVWerTpucYYwN/E7TPJTN4fKyHj2upcE=;
-        b=axCysORrCoHkiBaKFKc8MTSUyst2WFdqFYnUxTZB5Y634RbP5KTb2CU6aZGQrWsUDa
-         e+PdEZMqCuxtjZYkMYnMsn7HClqm8rZBEW+5t0GlPdl9jVsQYZB/rcQNUXUudkEyTSSp
-         m1OeGA5YPHH4UpQ1yzrYvTRswFl86D6MRqdap96IvAhQIIUzENUPQJ4KIe+MZUk26nBe
-         b6uyUxkO+wU9h02uTa87D6jTsHxl8vfnDK3sfaWrcKyp43ojbYQuu7xQc9DocvYV/JQI
-         gcdqxSPCClx037kQHEbTR9BVZUqnpPGSFXio/k343uRGxqfO+zxNwpfCx+6PNTTMTCO6
-         HwxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721848469; x=1722453269;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9n2f4kq3fPmLVWerTpucYYwN/E7TPJTN4fKyHj2upcE=;
-        b=Sps2qaFeGEiwQjG5fg3MbCvH02oMkTpMBnMMUxgMulTNS019znjReJxpGahrGs3xzy
-         /OAf/2e6Uz/YRliLe6TbeAEN/kb4tCpQP31QM+v1if/Rmm+M+Q2T3liXN3pFg8lSmWde
-         vXJ4UOyjZPs681ueHpWUlK+FFE5bkKrzlMnZ5VdkFy6O7EReU3PFRIaJ5+nq4umWnIh2
-         dL3tZ0uGhuZ1fceugdQmdZpV9fire7Ka+oMOscgoW/V63J0woOEicPYVg+Hy3O//UZXD
-         CwFlG/3CuJcDJJJAtSbP/X805rivZzSKbUDXqy23qrIrUe+4j3xlqDYJNLB5cr7k/QHi
-         5czg==
-X-Forwarded-Encrypted: i=1; AJvYcCWD+SZfsfEjcFXFn6wl/yAtQTzqX2AHdua52Ldugt5BEb0gZd7kA7MNfx6ribVgMO/xZG660pgw15pJ+/oDtRDid2NBwMTb3BsfnHfMjOyi
-X-Gm-Message-State: AOJu0YwgWBBUBJV9HIQ1CQfNRumUe1bV+gm698rVlRvGwaRLYBinroXv
-	+xe3HHLHI89knS0xu85J4soFjz17QOEmk3Itb8g1TTvheFOUKcTWZyYUnicRzw0=
-X-Google-Smtp-Source: AGHT+IEZ2eSQz9/NkyDTRtS2JLM/PD44YW3y91s1dByPYA2nrfdLSOUMecEljdqwJPMe+E0Ah2wvng==
-X-Received: by 2002:a17:90a:de98:b0:2c9:69cc:3a6f with SMTP id 98e67ed59e1d1-2cf238faad3mr492871a91.31.1721848468746;
-        Wed, 24 Jul 2024 12:14:28 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdb73edecesm2022359a91.32.2024.07.24.12.14.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jul 2024 12:14:28 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Wed, 24 Jul 2024 12:14:04 -0700
-Subject: [PATCH v7 13/13] selftests: riscv: Support xtheadvector in vector
- tests
+	s=arc-20240116; t=1721850478; c=relaxed/simple;
+	bh=k6FwyC2TQEGHr4zuRg4goZTUWzjhVQKmKTKmITDQEuY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HNIShXouvZFMByVfo7PaJpiuc+FlOScn0c4XsrHp5HXdSw+DsNgyUgns/Yn/Dd1TFILYir2NcEXC/MdicHCA8VbRIlwCz06FH7OVmlbsiPpfg3dJtSDr2o9qRtsqGx/N9E1eUKwpnwh1LOABnOKhlIJZGoh52P6/G8HCuvRg3o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H6J9pa23; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <cdba9d7c-e5da-4e3b-a121-1fad4f517917@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1721850474;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7YaV2tZ+kfBixAFIS2ceMaaoLIfoRysDRpw3nqa337M=;
+	b=H6J9pa23EkrNXfqC0xApI0RyKxu3miq3uV7DzOQGSNSV7SWO2lx9NE5PrF0cwhsltlKcCX
+	ILRrjOrHKRSUw3tauG2LEDDI+sMz1Nz75/fBcJqzV6Tl8j3brE7qyjUtN5PBaFPL/3YzGL
+	FUbs4B6XKawy/H/PHczYnnYl/fx63+U=
+Date: Wed, 24 Jul 2024 12:47:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240724-xtheadvector-v7-13-b741910ada3e@rivosinc.com>
-References: <20240724-xtheadvector-v7-0-b741910ada3e@rivosinc.com>
-In-Reply-To: <20240724-xtheadvector-v7-0-b741910ada3e@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
- Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>, 
- Andy Chiu <andy.chiu@sifive.com>, Jessica Clarke <jrtc27@jrtc27.com>, 
- Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721848437; l=13279;
- i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=9w7dBpv+20Zqh2hfnY2iaYlSIT6IIR7L7F4Z0i1nJ5w=;
- b=zp4rJJzPPCLuQpXDIQ2CmSZF36miPWkAOnsPCKR7+26zriWTWY3uuz3GOOAIg4gaa9qiQOVQd
- hEf4ts7hoiGCFYOrbkIO5vaL0wSDcYOUiO+5qvNJILgqK0kPiBX3PM8
-X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
- pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Add mptcp pm_nl_ctl link
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Geliang Tang <tanggeliang@kylinos.cn>,
+ mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+References: <20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-0-ebdc2d494049@kernel.org>
+ <20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-2-ebdc2d494049@kernel.org>
+ <08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org>
+ <90e916e8-ec4e-447b-8ee6-eb247f3a72ad@linux.dev>
+ <ab8112e6-ea7b-4b36-b395-049214e1608d@kernel.org>
+ <780ed38257480940def86947b2ee354f298e890b.camel@kernel.org>
+ <684fd6c2-ad54-4479-8a6a-ab3270e558a7@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <684fd6c2-ad54-4479-8a6a-ab3270e558a7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Extend existing vector tests to be compatible with the xtheadvector
-instructions.
+On 7/24/24 1:24 AM, Matthieu Baerts wrote:
+> Hi Geliang,
+> 
+> Thank you for your reply!
+> 
+> On 24/07/2024 09:42, Geliang Tang wrote:
+>> Hi Matt,
+>>
+>> On Sat, 2024-07-06 at 02:25 +0200, Matthieu Baerts wrote:
+>>> Hi Martin,
+>>>
+>>> Thank you for your reply!
+>>>
+>>> On 06/07/2024 01:10, Martin KaFai Lau wrote:
+>>>> On 7/4/24 3:48 AM, Matthieu Baerts wrote:
+>>>>>> diff --git a/tools/testing/selftests/bpf/Makefile
+>>>>>> b/tools/testing/
+>>>>>> selftests/bpf/Makefile
+>>>>>> index e0b3887b3d2d..204269d0b5b8 100644
+>>>>>> --- a/tools/testing/selftests/bpf/Makefile
+>>>>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>>>>> @@ -144,7 +144,7 @@ TEST_GEN_PROGS_EXTENDED =
+>>>>>> test_skb_cgroup_id_user \
+>>>>>>        flow_dissector_load test_flow_dissector
+>>>>>> test_tcp_check_syncookie_user \
+>>>>>>        test_lirc_mode2_user xdping test_cpp runqslower bench
+>>>>>> bpf_testmod.ko \
+>>>>>>        xskxceiver xdp_redirect_multi xdp_synproxy veristat
+>>>>>> xdp_hw_metadata \
+>>>>>> -    xdp_features bpf_test_no_cfi.ko
+>>>>>> +    xdp_features bpf_test_no_cfi.ko mptcp_pm_nl_ctl
+>>>>> On the BPF CI, we have such errors:
+>>>>>
+>>>>>      mptcp_pm_nl_ctl.c:20:10: fatal error: 'linux/mptcp.h' file
+>>>>> not found
+>>>>>        20 | #include "linux/mptcp.h"
+>>>>>           |          ^~~~~~~~~~~~~~~
+>>>>>
+>>>>> On my side, I don't have any issue, because the compiler uses the
+>>>>> mptcp.h file from the system: /usr/include/linux/mptcp.h
+>>>>>
+>>>>> I suppose that's not OK on the BPF CI, as it looks like it
+>>>>> doesn't have
+>>>>> this file there, probably because it still uses Ubuntu 20.04 as
+>>>>> base,
+>>>>> which doesn't include this file in the linux-libc-dev package.
+>>>>>
+>>>>> When I look at how this 'mptcp_pm_nl_ctl' tool -- and all the
+>>>>> other
+>>>>> programs from that list -- is compiled (V=1), I see that the
+>>>>> following
+>>>>> "-I" options are given:
+>>>>>
+>>>>>     -I${PWD}/tools/testing/selftests/bpf
+>>>>>     -I${BUILD}//tools/include
+>>>>>     -I${BUILD}/include/generated
+>>>>>     -I${PWD}/tools/lib
+>>>>>     -I${PWD}/tools/include
+>>>>>     -I${PWD}/tools/include/uapi
+>>>>>     -I${BUILD}/
+>>>>>
+>>>>> It will then not look at -I${PWD}/usr/include or the directory
+>>>>> generated
+>>>>> with:
+>>>>>
+>>>>>     make headers_install INSTALL_HDR_PATH=(...)
+>>>>
+>>>> It sounds like the tools/testing/selftests/net/mptcp/Makefile is
+>>>> looking
+>>>> at this include path, so it works?
+>>>
+>>> Yes it does work.
+>>>
+>>>> iiu the bpf/Makefile correctly, it has the bpftool "make" compiled
+>>>> and
+>>>> installed at tools/testing/selftests/bpf/tools/sbin/. May be
+>>>> directly
+>>>> compile the pm_nl_ctl by "make tools/testing/selftests/net/mptcp/"?
+>>>
+>>> That could be an alternative, I didn't know it would be OK to add
+>>> such
+>>> dependence, good idea.
+>>>
+>>>>> I guess that's why people have duplicated files in
+>>>>> 'tools/include/uapi',
+>>>>> but I also understood from Jakub that it is not a good idea to
+>>>>> continue
+>>>>> to do so.
+>>>>>
+>>>>> What would be the best solution to avoid a copy? A symlink still
+>>>>> looks
+>>>>> like a workaround.
+>>>>>
+>>>>> In the other selftests, KHDR_INCLUDES is used to be able to
+>>>>> include the
+>>>>> path containing the UAPI headers. So if someone built the headers
+>>>>> in a
+>>>>
+>>>> Meaning KHDR_INCLUDES should be used and -
+>>>> I${PWD}/tools/include/uapi can
+>>>> be retired?
+>>>
+>>> That's the idea, yes, for "userspace programs". I mean: for BPF
+>>> programs
+>>> requiring vmlinux.h (BPF_CFLAGS), I guess you will still need the
+>>> bpf.h
+>>> file from tools/include/uapi, no?
+>>>
+>>>> I haven't looked into the details. I quickly tried but it
+>>>> fails in my environment.
+>>>
+>>> Do you not have issues because some files have something like:
+>>>
+>>>    #include <uapi/linux/(...).h>
+>>>
+>>> On my side, I had a working version using this patch:
+>>>
+>>>> diff --git a/tools/testing/selftests/bpf/Makefile
+>>>> b/tools/testing/selftests/bpf/Makefile
+>>>> index 7c5827d20c2e..112f14d40852 100644
+>>>> --- a/tools/testing/selftests/bpf/Makefile
+>>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>>> @@ -37,7 +37,7 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic            \
+>>>>            -Wall -Werror -fno-omit-frame-pointer                  \
+>>>>            $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)             \
+>>>>            -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)   \
+>>>> -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+>>>> +         -I$(TOOLSINCDIR) $(KHDR_INCLUDES) -I$(OUTPUT)
+>>>>   LDFLAGS += $(SAN_LDFLAGS)
+>>>>   LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
+>>>>   
+>>>
+>>> But only after having removed these extra 'uapi/':
+>>>
+>>>    $ git grep -l '<uapi/' -- tools/testing/selftests/bpf | \
+>>>      xargs sed -i 's|#include <uapi/|#include <|g'
+>>>
+>>> Is it not OK for you like that?
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- .../selftests/riscv/vector/v_exec_initval_nolibc.c | 23 ++++--
- tools/testing/selftests/riscv/vector/v_helpers.c   | 17 +++-
- tools/testing/selftests/riscv/vector/v_helpers.h   |  4 +-
- tools/testing/selftests/riscv/vector/v_initval.c   | 12 ++-
- .../selftests/riscv/vector/vstate_exec_nolibc.c    | 20 +++--
- .../testing/selftests/riscv/vector/vstate_prctl.c  | 91 ++++++++++++++--------
- 6 files changed, 115 insertions(+), 52 deletions(-)
+I tried and it works for me with the above changes. The other $(APIDIR) usages 
+in the Makefile can be replaced also?
 
-diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-index 74b13806baf0..6f40c2acc0c2 100644
---- a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-@@ -18,13 +18,22 @@ int main(int argc, char **argv)
- 	unsigned long vl;
- 	int first = 1;
- 
--	asm volatile (
--		".option push\n\t"
--		".option arch, +v\n\t"
--		"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
--		".option pop\n\t"
--		: [vl] "=r" (vl)
--	);
-+	if (argc > 2 && strcmp(argv[2], "x"))
-+		asm volatile (
-+			// 0 | zimm[10:0] | rs1 | 1 1 1 | rd |1010111| vsetvli
-+			// vsetvli	t4, x0, e8, m1, d1
-+			".4byte		0b00000000000000000111111011010111\n\t"
-+			"mv		%[vl], t4\n\t"
-+			: [vl] "=r" (vl) : : "t4"
-+		);
-+	else
-+		asm volatile (
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vsetvli	%[vl], x0, e8, m1, ta, ma\n\t"
-+			".option pop\n\t"
-+			: [vl] "=r" (vl)
-+		);
- 
- #define CHECK_VECTOR_REGISTER(register) ({					\
- 	for (int i = 0; i < vl; i++) {						\
-diff --git a/tools/testing/selftests/riscv/vector/v_helpers.c b/tools/testing/selftests/riscv/vector/v_helpers.c
-index d50f4dfbf9e5..01a8799dcb78 100644
---- a/tools/testing/selftests/riscv/vector/v_helpers.c
-+++ b/tools/testing/selftests/riscv/vector/v_helpers.c
-@@ -1,12 +1,22 @@
- // SPDX-License-Identifier: GPL-2.0-only
- 
- #include "../hwprobe/hwprobe.h"
-+#include <asm/vendor/thead.h>
- #include <stdbool.h>
- #include <stdlib.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <sys/wait.h>
- 
-+bool is_xtheadvector_supported(void)
-+{
-+	struct riscv_hwprobe pair;
-+
-+	pair.key = RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0;
-+	riscv_hwprobe(&pair, 1, 0, NULL, 0);
-+	return pair.value & RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR;
-+}
-+
- bool is_vector_supported(void)
- {
- 	struct riscv_hwprobe pair;
-@@ -16,9 +26,9 @@ bool is_vector_supported(void)
- 	return pair.value & RISCV_HWPROBE_EXT_ZVE32X;
- }
- 
--int launch_test(char *next_program, int test_inherit)
-+int launch_test(char *next_program, int test_inherit, int xtheadvector)
- {
--	char *exec_argv[3], *exec_envp[1];
-+	char *exec_argv[4], *exec_envp[1];
- 	int rc, pid, status;
- 
- 	pid = fork();
-@@ -30,7 +40,8 @@ int launch_test(char *next_program, int test_inherit)
- 	if (!pid) {
- 		exec_argv[0] = next_program;
- 		exec_argv[1] = test_inherit != 0 ? "x" : NULL;
--		exec_argv[2] = NULL;
-+		exec_argv[2] = xtheadvector != 0 ? "x" : NULL;
-+		exec_argv[3] = NULL;
- 		exec_envp[0] = NULL;
- 		/* launch the program again to check inherit */
- 		rc = execve(next_program, exec_argv, exec_envp);
-diff --git a/tools/testing/selftests/riscv/vector/v_helpers.h b/tools/testing/selftests/riscv/vector/v_helpers.h
-index faeeeb625b6e..763cddfe26da 100644
---- a/tools/testing/selftests/riscv/vector/v_helpers.h
-+++ b/tools/testing/selftests/riscv/vector/v_helpers.h
-@@ -1,6 +1,8 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- #include <stdbool.h>
- 
-+bool is_xtheadvector_supported(void);
-+
- bool is_vector_supported(void);
- 
--int launch_test(char *next_program, int test_inherit);
-+int launch_test(char *next_program, int test_inherit, int xtheadvector);
-diff --git a/tools/testing/selftests/riscv/vector/v_initval.c b/tools/testing/selftests/riscv/vector/v_initval.c
-index f38b5797fa31..be9e1d18ad29 100644
---- a/tools/testing/selftests/riscv/vector/v_initval.c
-+++ b/tools/testing/selftests/riscv/vector/v_initval.c
-@@ -7,10 +7,16 @@
- 
- TEST(v_initval)
- {
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	int xtheadvector = 0;
- 
--	ASSERT_EQ(0, launch_test(NEXT_PROGRAM, 0));
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
-+
-+	ASSERT_EQ(0, launch_test(NEXT_PROGRAM, 0, xtheadvector));
- }
- 
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-index 1f9969bed235..7b7d6f21acb4 100644
---- a/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c
-@@ -6,13 +6,16 @@
- 
- int main(int argc, char **argv)
- {
--	int rc, pid, status, test_inherit = 0;
-+	int rc, pid, status, test_inherit = 0, xtheadvector = 0;
- 	long ctrl, ctrl_c;
- 	char *exec_argv[2], *exec_envp[2];
- 
--	if (argc > 1)
-+	if (argc > 1 && strcmp(argv[1], "x"))
- 		test_inherit = 1;
- 
-+	if (argc > 2 && strcmp(argv[2], "x"))
-+		xtheadvector = 1;
-+
- 	ctrl = my_syscall1(__NR_prctl, PR_RISCV_V_GET_CONTROL);
- 	if (ctrl < 0) {
- 		puts("PR_RISCV_V_GET_CONTROL is not supported\n");
-@@ -53,11 +56,14 @@ int main(int argc, char **argv)
- 				puts("child's vstate_ctrl not equal to parent's\n");
- 				exit(-1);
- 			}
--			asm volatile (".option push\n\t"
--				      ".option arch, +v\n\t"
--				      "vsetvli x0, x0, e32, m8, ta, ma\n\t"
--				      ".option pop\n\t"
--				      );
-+			if (xtheadvector)
-+				asm volatile (".4byte	0x00007ed7");
-+			else
-+				asm volatile (".option push\n\t"
-+					".option arch, +v\n\t"
-+					"vsetvli x0, x0, e32, m8, ta, ma\n\t"
-+					".option pop\n\t"
-+					);
- 			exit(ctrl);
- 		}
- 	}
-diff --git a/tools/testing/selftests/riscv/vector/vstate_prctl.c b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-index 850a0caa226e..3d79f266cc65 100644
---- a/tools/testing/selftests/riscv/vector/vstate_prctl.c
-+++ b/tools/testing/selftests/riscv/vector/vstate_prctl.c
-@@ -11,7 +11,7 @@
- 
- #define NEXT_PROGRAM "./vstate_exec_nolibc"
- 
--int test_and_compare_child(long provided, long expected, int inherit)
-+int test_and_compare_child(long provided, long expected, int inherit, int xtheadvector)
- {
- 	int rc;
- 
-@@ -21,7 +21,7 @@ int test_and_compare_child(long provided, long expected, int inherit)
- 		       provided, rc);
- 		return -1;
- 	}
--	rc = launch_test(NEXT_PROGRAM, inherit);
-+	rc = launch_test(NEXT_PROGRAM, inherit, xtheadvector);
- 	if (rc != expected) {
- 		printf("Test failed, check %d != %ld\n", rc,  expected);
- 		return -2;
-@@ -36,7 +36,7 @@ TEST(get_control_no_v)
- {
- 	long rc;
- 
--	if (is_vector_supported())
-+	if (is_vector_supported() || is_xtheadvector_supported())
- 		SKIP(return, "Test expects vector to be not supported");
- 
- 	rc = prctl(PR_RISCV_V_GET_CONTROL);
-@@ -48,7 +48,7 @@ TEST(set_control_no_v)
- {
- 	long rc;
- 
--	if (is_vector_supported())
-+	if (is_vector_supported() || is_xtheadvector_supported())
- 		SKIP(return, "Test expects vector to be not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, PR_RISCV_V_VSTATE_CTRL_ON);
-@@ -61,12 +61,12 @@ TEST(vstate_on_current)
- 	long flag;
- 	long rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON;
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, flag);
--	EXPECT_EQ(0, rc) TH_LOG("Enabling V for current should always success");
-+	EXPECT_EQ(0, rc) TH_LOG("Enabling V for current should always succeed");
- }
- 
- TEST(vstate_off_eperm)
-@@ -74,99 +74,128 @@ TEST(vstate_off_eperm)
- 	long flag;
- 	long rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF;
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, flag);
--	EXPECT_EQ(EPERM, errno) TH_LOG("Disabling current's V alive must fail with EPERM(%d)", errno);
--	EXPECT_EQ(-1, rc) TH_LOG("Disabling current's V alive must fail with EPERM(%d)", errno);
-+	EXPECT_EQ(EPERM, errno) TH_LOG("Disabling V in current thread with V enabled must fail with EPERM(%d)", errno);
-+	EXPECT_EQ(-1, rc) TH_LOG("Disabling V in current thread with V enabled must fail with EPERM(%d)", errno);
- }
- 
- TEST(vstate_on_no_nesting)
- {
- 	long flag;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_ON, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_ON, 0, xtheadvector));
- }
- 
- TEST(vstate_off_nesting)
- {
- 	long flag;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn off next's vector explicitly and test */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_OFF, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, PR_RISCV_V_VSTATE_CTRL_OFF, 1, xtheadvector));
- }
- 
- TEST(vstate_on_inherit_no_nesting)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test no inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_ON;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0, xtheadvector));
- }
- 
- TEST(vstate_on_inherit)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn on next's vector explicitly and test inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_ON << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_ON;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1, xtheadvector));
- }
- 
- TEST(vstate_off_inherit_no_nesting)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
--
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 	/* Turn off next's vector explicitly and test no inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_OFF;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 0, xtheadvector));
- }
- 
- TEST(vstate_off_inherit)
- {
- 	long flag, expected;
-+	int xtheadvector = 0;
- 
--	if (!is_vector_supported())
--		SKIP(return, "Vector not supported");
-+	if (!is_vector_supported()) {
-+		if (is_xtheadvector_supported())
-+			xtheadvector = 1;
-+		else
-+			SKIP(return, "Vector not supported");
-+	}
- 
- 	/* Turn off next's vector explicitly and test inherit */
- 	flag = PR_RISCV_V_VSTATE_CTRL_OFF << PR_RISCV_V_VSTATE_CTRL_NEXT_SHIFT;
- 	flag |= PR_RISCV_V_VSTATE_CTRL_INHERIT;
- 	expected = flag | PR_RISCV_V_VSTATE_CTRL_OFF;
- 
--	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1));
-+	EXPECT_EQ(0, test_and_compare_child(flag, expected, 1, xtheadvector));
- }
- 
- /* arguments should fail with EINVAL */
-@@ -174,7 +203,7 @@ TEST(inval_set_control_1)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0xff0);
-@@ -187,7 +216,7 @@ TEST(inval_set_control_2)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0x3);
-@@ -200,7 +229,7 @@ TEST(inval_set_control_3)
- {
- 	int rc;
- 
--	if (!is_vector_supported())
-+	if (!is_vector_supported() && !is_xtheadvector_supported())
- 		SKIP(return, "Vector not supported");
- 
- 	rc = prctl(PR_RISCV_V_SET_CONTROL, 0xc);
+Matt, do you want to post a patch and see how does it go with the bpf CI?
 
--- 
-2.44.0
+[ Sorry for the late reply. ]
+
+>>>
+>>> Note that I built the selftests using KHDR_INCLUDES=-
+>>> I$INSTALL_HDR_PATH.
 
 
