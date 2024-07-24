@@ -1,69 +1,71 @@
-Return-Path: <linux-kselftest+bounces-14139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF0193ACF8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 09:08:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE50393AD4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 09:42:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D05851F23662
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 07:08:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9341D280EC1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2024 07:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D864D8C1;
-	Wed, 24 Jul 2024 07:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 843B47602D;
+	Wed, 24 Jul 2024 07:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lG4K8EOM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkJYZZug"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA14E4C84;
-	Wed, 24 Jul 2024 07:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DED33D97A;
+	Wed, 24 Jul 2024 07:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721804927; cv=none; b=i1SIvGRCpDrVA47r7MBGS/YS/wVK/fqPTKJoiC/Mrn/YW3kLUAsUeUyWhZ+tCV56V1mM0FPLQf3VA9+GY0uBWjSDEc0O5IgW2Evnw+MEfXXpmXXmAX25dwShIEf4yLSHPhN4cC1JBGE1nZ4vP0LbF/Vt2pnBrTZuNRgPxS6KaRQ=
+	t=1721806934; cv=none; b=Gkkp3UjqCYQl6Oea4b30YNL1dHD7451Tke0pyfu50f5m8n8kLxTQtbMuGivCg2ZiVwLzRTbM85hTdIzucAYm3YwFuoY5M+r3QptR5PxCoeffVQTfRDOgerq2iYPRzO6W3OfUEBq+FfR4vXuPYW5mGMJ73/LPAHSbtE8/0ZBjI9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721804927; c=relaxed/simple;
-	bh=2PnDFY9MZ51zqP1efOCCIr96nPmcLKIya3dYshW8wh0=;
+	s=arc-20240116; t=1721806934; c=relaxed/simple;
+	bh=qIRmIsGfOifbd0F+slj35U+RDiwKrNFSa5amWJn8fiM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dXLCZBgeFwzCDmFh+vvhahBdbEfqJsfNetnqWorEBdMLqN/725nrv2zGL9S5Cb+U98ljexpUXWms4JevYuoSEpzzTmIl542bjxhTpNEGwBpSev2MSx6qBd/TTIbww54AyrKEskpmnCr9+9fNKC8sez4Vpq3fSpNUAiQPL5m2V4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lG4K8EOM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD4C32782;
-	Wed, 24 Jul 2024 07:08:38 +0000 (UTC)
+	 Content-Type:MIME-Version; b=spBnj9pUqLAF8ItwLF9syb6J9OiofcwKp8/qwmKKLR7ErOYzkgd6jqRpp+7VMDRBKgf5OFM75/mdirFV42LTZ96/buE1SIhBgyT5j42Ox0ri9FbGS0DSWK2HL+P79R2upgu1KWhTChJe3HEuXDURuE3W/6DSnVUC0+aHy3meAS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkJYZZug; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A365CC32782;
+	Wed, 24 Jul 2024 07:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721804926;
-	bh=2PnDFY9MZ51zqP1efOCCIr96nPmcLKIya3dYshW8wh0=;
+	s=k20201202; t=1721806933;
+	bh=qIRmIsGfOifbd0F+slj35U+RDiwKrNFSa5amWJn8fiM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=lG4K8EOMTucqHOuJ5UvSN4fyaT8mTJ9ZrsO7QlvqGSavJqMCGi5tVgmehyB8hBhUR
-	 ui2IK3+juYNZcR8smdJYEzB/gOIlC2c/4vER29L9PLA8cjdZNKrCYmaMNLQpmiGosE
-	 Syl3HIAstaKTvFzSKjICjTvu9Kk/9YL21CyX6HV3FWthnCjBBsbC+VFXpz4cXJAkef
-	 aPoCMTCnbbn3yzhT9gveU2ZUhLNVfQbhDWEGO234jx8qgvZ/8r9uvRgJFOYt7c/Shf
-	 MG1CIKW15sVnmNaJMlDWHY3VHq7oS7gc1PGFDi/z2K1JXDpKNs3NJeJ8Y2cgFbejRX
-	 SuQqXXLfG4cVA==
-Message-ID: <948240d0866b93ddc60fe084bca74253c99306ff.camel@kernel.org>
-Subject: Re: [PATCH bpf-next v1 07/19] selftests/bpf: Fix missing
- ARRAY_SIZE() definition in bench.c
+	b=TkJYZZugd0NUf8tJQyAImQPkUnqngbiiuQv8mHcfTnt8nqgXA8jCOtKi4Isq7KjWO
+	 oSCGBhbFS3M341CPzDzX03RCniqueIawKgoG6CnGIpFjGdzGaZgoj45V7Ccpqffcfp
+	 +zWMVdEDIXnp+lh0a1qT0IqGfeDXihurY42IIYU1JsCfVG7fwy4cy+BtX/HFoEaKs7
+	 k7moWY4mk9Y6yZV74xLTWaSMqQdqkx08TSuHEzMB/TsDl0RjlIK+iDVhJBU+yjHwAh
+	 fql6mKrZhg36UGS1eWBR26v2zOaTs6VQ9xwLA2wxEQG5Sd/+H6vST724MiUrWNp8xi
+	 TbYobkUQ36yeQ==
+Message-ID: <780ed38257480940def86947b2ee354f298e890b.camel@kernel.org>
+Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Add mptcp pm_nl_ctl link
 From: Geliang Tang <geliang@kernel.org>
-To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,  Song Liu
+To: Matthieu Baerts <matttbe@kernel.org>, Martin KaFai Lau
+	 <martin.lau@linux.dev>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Song Liu
  <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
  <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>, Yucong Sun <sunyucong@gmail.com>,  Eric Dumazet
- <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.co.jp>, Jakub
- Sitnicki <jakub@cloudflare.com>, Dave Marchevsky <davemarchevsky@fb.com>,
- David Vernet <void@manifault.com>, Carlos Neira <cneirabustos@gmail.com>,
- Joanne Koong <joannelkoong@gmail.com>, Petar Penkov <ppenkov@google.com>,
- Willem de Bruijn <willemb@google.com>, Yan Zhai <yan@cloudflare.com>, Vadim
- Fedorenko <vadim.fedorenko@linux.dev>, YiFei Zhu <zhuyifei@google.com>
-Date: Wed, 24 Jul 2024 15:08:31 +0800
-In-Reply-To: <bc4dde77dfcd17a825d8f28f72f3292341966810.1721713597.git.tony.ambardar@gmail.com>
-References: <cover.1721713597.git.tony.ambardar@gmail.com>
-	 <bc4dde77dfcd17a825d8f28f72f3292341966810.1721713597.git.tony.ambardar@gmail.com>
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
+ <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Geliang Tang <tanggeliang@kylinos.cn>, 
+ mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Shuah Khan
+ <shuah@kernel.org>
+Date: Wed, 24 Jul 2024 15:42:01 +0800
+In-Reply-To: <ab8112e6-ea7b-4b36-b395-049214e1608d@kernel.org>
+References: 
+	<20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-0-ebdc2d494049@kernel.org>
+	 <20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-2-ebdc2d494049@kernel.org>
+	 <08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org>
+	 <90e916e8-ec4e-447b-8ee6-eb247f3a72ad@linux.dev>
+	 <ab8112e6-ea7b-4b36-b395-049214e1608d@kernel.org>
 Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
  keydata=mQINBGWKTg4BEAC/Subk93zbjSYPahLCGMgjylhY/s/R2ebALGJFp13MPZ9qWlbVC8O+X
  lU/4reZtYKQ715MWe5CwJGPyTACILENuXY0FyVyjp/jl2u6XYnpuhw1ugHMLNJ5vbuwkc1I29nNe8
@@ -126,43 +128,168 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-07-22 at 22:54 -0700, Tony Ambardar wrote:
-> Add a "bpf_util.h" include to avoid the following error seen
-> compiling for
-> mips64el with musl libc:
-> 
->   bench.c: In function 'find_benchmark':
->   bench.c:590:25: error: implicit declaration of function
-> 'ARRAY_SIZE' [-Werror=implicit-function-declaration]
->     590 |         for (i = 0; i < ARRAY_SIZE(benchs); i++) {
->         |                         ^~~~~~~~~~
->   cc1: all warnings being treated as errors
+Hi Matt,
 
-I'm curious why this error doesn't occur on other platforms. ARRAY_SIZE
-is actually defined in linux/kernel.h (tools/include/linux/kernel.h). I
-think you should find out why this file is not included on your
-platform.
+On Sat, 2024-07-06 at 02:25 +0200, Matthieu Baerts wrote:
+> Hi Martin,
+> 
+> Thank you for your reply!
+> 
+> On 06/07/2024 01:10, Martin KaFai Lau wrote:
+> > On 7/4/24 3:48 AM, Matthieu Baerts wrote:
+> > > > diff --git a/tools/testing/selftests/bpf/Makefile
+> > > > b/tools/testing/
+> > > > selftests/bpf/Makefile
+> > > > index e0b3887b3d2d..204269d0b5b8 100644
+> > > > --- a/tools/testing/selftests/bpf/Makefile
+> > > > +++ b/tools/testing/selftests/bpf/Makefile
+> > > > @@ -144,7 +144,7 @@ TEST_GEN_PROGS_EXTENDED =
+> > > > test_skb_cgroup_id_user \
+> > > >       flow_dissector_load test_flow_dissector
+> > > > test_tcp_check_syncookie_user \
+> > > >       test_lirc_mode2_user xdping test_cpp runqslower bench
+> > > > bpf_testmod.ko \
+> > > >       xskxceiver xdp_redirect_multi xdp_synproxy veristat
+> > > > xdp_hw_metadata \
+> > > > -    xdp_features bpf_test_no_cfi.ko
+> > > > +    xdp_features bpf_test_no_cfi.ko mptcp_pm_nl_ctl
+> > > On the BPF CI, we have such errors:
+> > > 
+> > >     mptcp_pm_nl_ctl.c:20:10: fatal error: 'linux/mptcp.h' file
+> > > not found
+> > >       20 | #include "linux/mptcp.h"
+> > >          |          ^~~~~~~~~~~~~~~
+> > > 
+> > > On my side, I don't have any issue, because the compiler uses the
+> > > mptcp.h file from the system: /usr/include/linux/mptcp.h
+> > > 
+> > > I suppose that's not OK on the BPF CI, as it looks like it
+> > > doesn't have
+> > > this file there, probably because it still uses Ubuntu 20.04 as
+> > > base,
+> > > which doesn't include this file in the linux-libc-dev package.
+> > > 
+> > > When I look at how this 'mptcp_pm_nl_ctl' tool -- and all the
+> > > other
+> > > programs from that list -- is compiled (V=1), I see that the
+> > > following
+> > > "-I" options are given:
+> > > 
+> > >    -I${PWD}/tools/testing/selftests/bpf
+> > >    -I${BUILD}//tools/include
+> > >    -I${BUILD}/include/generated
+> > >    -I${PWD}/tools/lib
+> > >    -I${PWD}/tools/include
+> > >    -I${PWD}/tools/include/uapi
+> > >    -I${BUILD}/
+> > > 
+> > > It will then not look at -I${PWD}/usr/include or the directory
+> > > generated
+> > > with:
+> > > 
+> > >    make headers_install INSTALL_HDR_PATH=(...)
+> > 
+> > It sounds like the tools/testing/selftests/net/mptcp/Makefile is
+> > looking
+> > at this include path, so it works?
+> 
+> Yes it does work.
+> 
+> > iiu the bpf/Makefile correctly, it has the bpftool "make" compiled
+> > and
+> > installed at tools/testing/selftests/bpf/tools/sbin/. May be
+> > directly
+> > compile the pm_nl_ctl by "make tools/testing/selftests/net/mptcp/"?
+> 
+> That could be an alternative, I didn't know it would be OK to add
+> such
+> dependence, good idea.
+> 
+> > > I guess that's why people have duplicated files in
+> > > 'tools/include/uapi',
+> > > but I also understood from Jakub that it is not a good idea to
+> > > continue
+> > > to do so.
+> > > 
+> > > What would be the best solution to avoid a copy? A symlink still
+> > > looks
+> > > like a workaround.
+> > > 
+> > > In the other selftests, KHDR_INCLUDES is used to be able to
+> > > include the
+> > > path containing the UAPI headers. So if someone built the headers
+> > > in a
+> > 
+> > Meaning KHDR_INCLUDES should be used and -
+> > I${PWD}/tools/include/uapi can
+> > be retired?
+> 
+> That's the idea, yes, for "userspace programs". I mean: for BPF
+> programs
+> requiring vmlinux.h (BPF_CFLAGS), I guess you will still need the
+> bpf.h
+> file from tools/include/uapi, no?
+> 
+> > I haven't looked into the details. I quickly tried but it
+> > fails in my environment.
+> 
+> Do you not have issues because some files have something like:
+> 
+>   #include <uapi/linux/(...).h>
+> 
+> On my side, I had a working version using this patch:
+> 
+> > diff --git a/tools/testing/selftests/bpf/Makefile
+> > b/tools/testing/selftests/bpf/Makefile
+> > index 7c5827d20c2e..112f14d40852 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -37,7 +37,7 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic            \
+> >           -Wall -Werror -fno-omit-frame-pointer                  \
+> >           $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)             \
+> >           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)   \
+> > -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+> > +         -I$(TOOLSINCDIR) $(KHDR_INCLUDES) -I$(OUTPUT)
+> >  LDFLAGS += $(SAN_LDFLAGS)
+> >  LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
+> >  
+> 
+> But only after having removed these extra 'uapi/':
+> 
+>   $ git grep -l '<uapi/' -- tools/testing/selftests/bpf | \
+>     xargs sed -i 's|#include <uapi/|#include <|g'
+> 
+> Is it not OK for you like that?
+> 
+> Note that I built the selftests using KHDR_INCLUDES=-
+> I$INSTALL_HDR_PATH.
+
+Do you need me to do anything here? This patchset seems to have been
+waiting for several months.
+
+Another option is to roll back to v2, not add this mptcp_pm_nl_ctl
+tool, and continue to use "ip mptcp". I remember mentioning in the
+comments of v2 that BPF CI systems will also be upgraded to new Ubuntu
+system and iproute2 in the future. At this time now we can make a check
+for "ip mptcp" and only run this test on systems that support "ip
+mptcp", and skip the test with test__skip() for systems that do not
+support it, so that CI can also pass.
+
+WDYT?
+
+Thanks,
+-Geliang
 
 > 
-> Fixes: 8e7c2a023ac0 ("selftests/bpf: Add benchmark runner
-> infrastructure")
-> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> ---
->  tools/testing/selftests/bpf/bench.c | 1 +
->  1 file changed, 1 insertion(+)
+> > > seperated directory -- INSTALL_HDR_PATH=(...) -- KHDR_INCLUDES
+> > > can be
+> > > overridden to look there, instead of ${KERNEL_SRC}/usr/include.
+> > > Would it
+> > > be OK to do that? Would it work for the CI without extra changes?
+> > > Or do
+> > > you still prefer a copy/symlink to 'tools/include/uapi' instead?
 > 
-> diff --git a/tools/testing/selftests/bpf/bench.c
-> b/tools/testing/selftests/bpf/bench.c
-> index 627b74ae041b..90dc3aca32bd 100644
-> --- a/tools/testing/selftests/bpf/bench.c
-> +++ b/tools/testing/selftests/bpf/bench.c
-> @@ -10,6 +10,7 @@
->  #include <sys/sysinfo.h>
->  #include <signal.h>
->  #include "bench.h"
-> +#include "bpf_util.h"
->  #include "testing_helpers.h"
->  
->  struct env env = {
+> Cheers,
+> Matt
 
 
