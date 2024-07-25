@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-14247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A7F993C957
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 22:09:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5645693C96D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 22:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C674E28200B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 20:09:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB681B20EC8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 20:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8799876036;
-	Thu, 25 Jul 2024 20:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02B36BFCA;
+	Thu, 25 Jul 2024 20:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iU+DwArH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O7grvwRe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6920211711;
-	Thu, 25 Jul 2024 20:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE943224;
+	Thu, 25 Jul 2024 20:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721938182; cv=none; b=STA24xxQ8JLURhGWbzLcqdusmHheambgkSXgQTmlWCcToeWoViy+Y3zxwVzRwLA1dWdapLOUyULHn/ULypBYOfoM8q1IrPuJk/+pZqGJ1ytwWDhf23lnnvBkAOHbkwwH1jjMln1SpOhLiW/vQAhH+Mr9KEZqYNPFo+Zqh9wEjas=
+	t=1721938705; cv=none; b=rAeGu1TUNUn3/gWKG92nqRxeJxrBM25Qu2t+DbbEar5J8U5LKtbXKVWO4COH6/Ml+SIizdnVMrz2SU5ZMy0SulLVP6dFKZrXjT7X1qQ5FLHVDYa3WRnXQ/DMsohZwzMdNiMj/ek7dY5sqSQLFR1qieROXkxvbfmLgsxm2CHNs7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721938182; c=relaxed/simple;
-	bh=VPziO8mEhGzn726UbCSc+TCV2Yiq+ssTJcD3MLV7t8Y=;
+	s=arc-20240116; t=1721938705; c=relaxed/simple;
+	bh=bSIjH707A8TRz7ht8RMiy+R1DHqrwESTmUpegyYO3IE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f/zaP7zIaC/SUXtxXhewYnaQZfDdxaHAdmEgS5VL6KYzfYVieU6wJpU6mv6RRu/2x/NlCSlbfmF8Totpv0YFhiNomhWykFRb21dzmLha4Ln2UXXyeN4k1TAFAxqTecdqqEqGRztvrdfUAI1bbj2d+t0yyL4NUA0xpzsDHPBjkQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iU+DwArH; arc=none smtp.client-ip=209.85.208.50
+	 To:Cc:Content-Type; b=XWudBA1bVyWCszsdhV4OIqxxUUtbrDUL4GZwWxuQKzofUJgiWVOodxPoY+ZF+xl5h9JYHYIjyMyCqyPg9FIcUfaO0jEikSSbLnG8eWSnFYB7AfK1i01obezQ2aqJdAqOG0ls3nCQiPclpr1RSYoHz4fTFufL4QQQup49cYo1NS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O7grvwRe; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5a167b9df7eso1859882a12.3;
-        Thu, 25 Jul 2024 13:09:40 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7ac469e4c4so168815866b.0;
+        Thu, 25 Jul 2024 13:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721938179; x=1722542979; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721938702; x=1722543502; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FCKlI/GWAeCRE4lJ3t0pMeCjIhjkcftFDxOfrprZe7c=;
-        b=iU+DwArHtJMUn/hrZaQL87Z8WTiPoPkiackFXVlwKzNUWR9xJ29upMbx5PriC50m0o
-         YBCSaz29mnx5xzrp6HL4Ms63BsnhndCCev8ToDXhYQWgKVJ8P95BoWCHQKvEOPo8vUsM
-         A4aOUf1Nkg3U1+VO6Bi1P8b6PpWtGZSrHKt02GAYrAdrjED/AOKeO060SjAVxduEe4Sh
-         ALbPKe3pzSA78YvwLLYQI9TYKRT+U/0vIiuTDaE5/UolZCaj5UoXT64iCWpOLns0DeNC
-         MoAlqWi8/NJiGOMeqhZwkDcti1tQCWjgBq/nXW3+1b/rPeO9IgfaxbhWCPkZDypqoyS8
-         G4pw==
+        bh=zZ1iJo8QC4U6/UUapxlEeYZXRBnRy4gllZzXWq6Grnc=;
+        b=O7grvwRey7UJxh0cONubnvRk9lAnWE9rlrwaVGkhFtkIxLhpdP0aBURTLTYV8lNaoT
+         dJxGeIvHCdV+OG++lS2AFuvsGpwteTPppNEStGhpOo3TU82TdW4wTZXnfbWX+mf8u4Gj
+         ooobK6KkRSKxY+TcU5F0modzkoHIPkfMUznjB6FUAO/MgoNbH3NnJ+uu38H5gMYoOX2T
+         e/Ve/Jn+8qTt8cmHZ+1pYIwzYtu7ieiTpwqLanGox4jV63+UEnERLzkP/c2uhcYlWzGG
+         /N1TK6HUDQBGYd6ZGt/3sjSvxKYe7rfy4adAvcZh1wGElSYRil/EQTFJkbnkhUxV3dlV
+         +CIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721938179; x=1722542979;
+        d=1e100.net; s=20230601; t=1721938702; x=1722543502;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FCKlI/GWAeCRE4lJ3t0pMeCjIhjkcftFDxOfrprZe7c=;
-        b=um9X9a4fq6HfmJ/5cE3Pmt1/RzUyiMgKNCUkpc1DVoA+NqdcP7lfbrBQvwnSxkSY/n
-         whjZyZqzq5kgJTcVed+0yQqNQJ2Ehvny3qmTuq+inGwLN92gtWTndOgGpJ+ohKHQ/VbE
-         KA9AeULf9jTr4jxxTxQ4h6BKU17wq4Z78runCcUaiTv+88sqYHQbQ0vIKSwos0xFldOJ
-         Xp7K5QStmnbq077lvyI/TDadlm5nYcdbwKwDEZzJtrp05Axzps7pKVowOyjOlfoI8xi+
-         meNQyfsR1MOxHaHdNzI/GVFNZTTvfqK6IUWbbrltKBdKGwpTbjSDR+N4J7qGN57rrL7m
-         AlSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHZZKbjhGtoCMWLu+DsVK/5W4jwwqw+0/DqT8eLTnc56JoaiNh46Am3Vc5M98K7sfWXJjla2A8FpUlbetfuQwDTD+jzxQIXRkvwx8fkqebqDA7CB5qgd3Kk+oDY9Ra8Qt0njbqlwSw
-X-Gm-Message-State: AOJu0YzO1b65mNF+HtaTH7IDN2Du2c+s6Uothtdcild9wCHMx5nC6sP9
-	CTjyaNMcpVJeutM0J+FZVlFBUvCVD9i4972N81NUtDszkg4o8USg7u0PS8bdcEZYY9Y3heBIA8+
-	JKIBoqT1F+C56SMI8N1WCt7w7gfA=
-X-Google-Smtp-Source: AGHT+IEuJKdMSByanA+5ZVKD+IS3VA37sPTZqmxRUuhzqJ6s3UxeMZjten0Pq2l9EAInLY404dLMJr2tF2vvrpMn7t0=
-X-Received: by 2002:a17:906:ee82:b0:a77:cf9d:f49b with SMTP id
- a640c23a62f3a-a7ac52e10f2mr295796366b.54.1721938178512; Thu, 25 Jul 2024
- 13:09:38 -0700 (PDT)
+        bh=zZ1iJo8QC4U6/UUapxlEeYZXRBnRy4gllZzXWq6Grnc=;
+        b=a4hfnz+jYyoQ5XvewPC9noUrEVfqzDwCBYps7GQGQHT/1H27iU4a4YLJOuRr21Fam+
+         Z02VD0JTAbDAcJxpJbGdAXMnPssRm3EoNmfoc9gpqZGNhPYokKVMnEKeE5tdjDU2eNBW
+         Mv9QYR+5xNYsS17LwpenPWnufGFksMlQmGxzc6Ok2Xoy3lLuNR7jtIMhUeMh8aXFjVaw
+         40BbX5BbWOr6HZPfGqRYY79oMZ5FUqAMMwBxdxzpK8POjghVg/EZrZXeodG/g/LF4/Hp
+         WhU+UHJAjgfC6uZ5KEqqcuylz6DL2hSmAkUtQ6XvXKwOfItv1eKwWGUwf6pgxL+JoOgm
+         Jk7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXighuybQqkHeH036XII6pEscJ91BQdF0GCpN2CN9qc6sd86gIp1nd8ijkPqHpjTNtbefEmLy24QhvmVu0EkVQILXg0FpzVdwpjAt+fscJHsf8PNWXOyTYMUJwfx4XzAto5i2PfcJd/
+X-Gm-Message-State: AOJu0YwFqk6cm1KHqq1weRKQ/NlhtuA/R3aVzpMsvPKDu1gigZ/epesF
+	h0cJ2t5vyzkVx7tykV/xOwQwFajDxi3ACsbdnqGqMAilRKjQR4oDYuAYPjIOxe7qg4xdtwms4Sf
+	4BkEx6AuhZxdkwe40SRydHDMTsvI=
+X-Google-Smtp-Source: AGHT+IHNM1ouleZKCEZhe9ddtB0zwIOUIS12UcKlbJi6EoTXQFE1/jAyeHKE80PPD7lnq2EIDcd27h8RZ7XL9XvtNcw=
+X-Received: by 2002:a17:907:6d13:b0:a7a:acae:3419 with SMTP id
+ a640c23a62f3a-a7ab3162321mr669091666b.28.1721938702090; Thu, 25 Jul 2024
+ 13:18:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1721903630.git.tony.ambardar@gmail.com> <b488b997e1b966f6d35a2767da738fc9a44023a8.1721903630.git.tony.ambardar@gmail.com>
-In-Reply-To: <b488b997e1b966f6d35a2767da738fc9a44023a8.1721903630.git.tony.ambardar@gmail.com>
+References: <cover.1721903630.git.tony.ambardar@gmail.com> <b57266bcc9f47ffda1fc5e55933afbf2c1ce1d58.1721903630.git.tony.ambardar@gmail.com>
+In-Reply-To: <b57266bcc9f47ffda1fc5e55933afbf2c1ce1d58.1721903630.git.tony.ambardar@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 25 Jul 2024 13:09:24 -0700
-Message-ID: <CAEf4Bzbb3hPzKN2-wEg24JNMaJsUDiwpx9=xjvOK7TnAaSk4wQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 2/8] selftests/bpf: Fix arg parsing in
- veristat, test_progs
+Date: Thu, 25 Jul 2024 13:18:04 -0700
+Message-ID: <CAEf4BzZO_G59KS4iBj0XVasKYidFMeBJ4wTrSP+J28HNFgdgmw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/8] selftests/bpf: Fix order-of-include
+ compile errors in lwt_reroute.c
 To: Tony Ambardar <tony.ambardar@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -98,96 +98,141 @@ com> wrote:
 >
 > From: Tony Ambardar <tony.ambardar@gmail.com>
 >
-> Current code parses arguments with strtok_r() using a construct like
+> Fix redefinition errors seen compiling lwt_reroute.c for mips64el/musl-li=
+bc
+> by adjusting the order of includes in lwt_helpers.h. The ordering require=
+d
+> is:
+> <net/if.h>  -->  <arpa/inet.h> (from "test_progs.h")  -->  <linux/icmp.h>=
+.
 >
->     char *state =3D NULL;
->     while ((next =3D strtok_r(state ? NULL : input, ",", &state))) {
->         ...
->     }
+> Because of the complexity and large number of includes, ordering appears =
+to
+> be fragile however. Previously, with "test_progs.h" at the end of this
+> sequence, compiling with GCC 12.3 for mips64el/musl-libc yields errors:
 >
-> where logic assumes the 'state' var can distinguish between first and
-> subsequent strtok_r() calls, and adjusts parameters accordingly. However,
-> 'state' is strictly internal context for strtok_r() and no such assumptio=
-ns
-> are supported in the man page. Moreover, the exact behaviour of 'state'
-> depends on the libc implementation, making the above code fragile.
+> In file included from .../include/arpa/inet.h:9,
+>                  from ./test_progs.h:18,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:11,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> .../include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
+>    23 | struct in6_addr {
+>       |        ^~~~~~~~
+> In file included from .../include/linux/icmp.h:24,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:9:
+> .../include/linux/in6.h:33:8: note: originally defined here
+>    33 | struct in6_addr {
+>       |        ^~~~~~~~
+> .../include/netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in=
+6'
+>    34 | struct sockaddr_in6 {
+>       |        ^~~~~~~~~~~~
+> .../include/linux/in6.h:50:8: note: originally defined here
+>    50 | struct sockaddr_in6 {
+>       |        ^~~~~~~~~~~~
+> .../include/netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
+>    42 | struct ipv6_mreq {
+>       |        ^~~~~~~~~
+> .../include/linux/in6.h:60:8: note: originally defined here
+>    60 | struct ipv6_mreq {
+>       |        ^~~~~~~~~
 >
-> Indeed, invoking "./test_progs -t <test_name>" on mips64el/musl will hang=
-,
-> with the above code in an infinite loop.
+> Similarly, with "test_progs.h" at the beginning of this sequence, compili=
+ng
+> with GCC 12.3 for x86_64 using glibc would fail like this:
 >
-> Similarly, we see strange behaviour running 'veristat' on mips64el/musl:
+> In file included from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:8,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> /usr/include/linux/if.h:83:9: error: redeclaration of enumerator =E2=80=
+=98IFF_UP=E2=80=99
+>    83 |         IFF_UP                          =3D 1<<0,  /* sysfs */
+>       |         ^~~~~~
+> /usr/include/net/if.h:44:5: note: previous definition of =E2=80=98IFF_UP=
+=E2=80=99 with type =E2=80=98enum <anonymous>=E2=80=99
+>    44 |     IFF_UP =3D 0x1,               /* Interface is up.  */
+>       |     ^~~~~~
+> /usr/include/linux/if.h:84:9: error: redeclaration of enumerator =E2=80=
+=98IFF_BROADCAST=E2=80=99
+>    84 |         IFF_BROADCAST                   =3D 1<<1,  /* __volatile_=
+_ */
+>       |         ^~~~~~~~~~~~~
+> /usr/include/net/if.h:46:5: note: previous definition of =E2=80=98IFF_BRO=
+ADCAST=E2=80=99 with type =E2=80=98enum <anonymous>=E2=80=99
+>    46 |     IFF_BROADCAST =3D 0x2,        /* Broadcast address valid.  */
+>       |     ^~~~~~~~~~~~~
 >
->     $ ./veristat -e file,prog,verdict,insns -C two-ok add-failure
->     Can't specify more than 9 stats
+> ...
 >
-> Rewrite code using a 'for' loop without logic dependent on var 'state', t=
-he
-> same approach already used in cgroup_helpers.c.
+> In file included from /usr/include/linux/icmp.h:23,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:10,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> /usr/include/linux/if.h:194:8: error: redefinition of =E2=80=98struct ifm=
+ap=E2=80=99
+>   194 | struct ifmap {
+>       |        ^~~~~
+> In file included from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:8,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> /usr/include/net/if.h:111:8: note: originally defined here
+>   111 | struct ifmap
+>       |        ^~~~~
+> In file included from /usr/include/linux/icmp.h:23,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:10,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> /usr/include/linux/if.h:232:8: error: redefinition of =E2=80=98struct ifr=
+eq=E2=80=99
+>   232 | struct ifreq {
+>       |        ^~~~~
+> In file included from tools/testing/selftests/bpf/prog_tests/lwt_helpers.=
+h:8,
+>                  from tools/testing/selftests/bpf/prog_tests/lwt_reroute.=
+c:52:
+> /usr/include/net/if.h:126:8: note: originally defined here
+>   126 | struct ifreq
+>       |        ^~~~~
 >
-> Fixes: 61ddff373ffa ("selftests/bpf: Improve by-name subtest selection lo=
-gic in prog_tests")
-> Fixes: 394169b079b5 ("selftests/bpf: add comparison mode to veristat")
-> Fixes: c8bc5e050976 ("selftests/bpf: Add veristat tool for mass-verifying=
- BPF object files")
+> Fixes: 43a7c3ef8a15 ("selftests/bpf: Add lwt_xmit tests for BPF_REDIRECT"=
+)
 > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 > ---
->  tools/testing/selftests/bpf/testing_helpers.c | 2 +-
->  tools/testing/selftests/bpf/veristat.c        | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/bpf/prog_tests/lwt_helpers.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
-g/selftests/bpf/testing_helpers.c
-> index ac7c66f4fc7b..2a73b72feb18 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> @@ -227,7 +227,7 @@ int parse_test_list(const char *s,
->         if (!input)
->                 return -ENOMEM;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools=
+/testing/selftests/bpf/prog_tests/lwt_helpers.h
+> index fb1eb8c67361..8e5e28af03c5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+> @@ -6,10 +6,9 @@
+>  #include <time.h>
+>  #include <net/if.h>
+>  #include <linux/if_tun.h>
+> +#include "test_progs.h" /* between <net/if.h> and <linux/icmp.h> or erro=
+rs */
+
+Now we'll be papering over the real issue. Can you see if you can
+untangle this mess and ensure that we consistently use either net/if.h
+or linux/if.h headers?
+
+pw-bot: cr
+
+>  #include <linux/icmp.h>
 >
-> -       while ((test_spec =3D strtok_r(state ? NULL : input, ",", &state)=
-)) {
-> +       for (test_spec =3D strtok_r(input, ",", &state); test_spec; test_=
-spec =3D strtok_r(NULL, ",", &state)) {
-
-oh, this is so long and verbose, let's just add a counter and use that
-to determine whether to pass NULL or input, ok?
-
->                 err =3D insert_test(set, test_spec, is_glob_pattern);
->                 if (err)
->                         break;
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
-ests/bpf/veristat.c
-> index 11ec1190d582..6808679827ac 100644
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-> @@ -791,7 +791,7 @@ static int parse_stats(const char *stats_str, struct =
-stat_specs *specs)
->         if (!input)
->                 return -ENOMEM;
->
-> -       while ((next =3D strtok_r(state ? NULL : input, ",", &state))) {
-> +       for (next =3D strtok_r(input, ",", &state); next; next =3D strtok=
-_r(NULL, ",", &state)) {
-
-ditto, let's not duplicate strtok_r() calls
-
->                 err =3D parse_stat(next, specs);
->                 if (err) {
->                         free(input);
-> @@ -1513,7 +1513,7 @@ static int parse_stats_csv(const char *filename, st=
-ruct stat_specs *specs,
->                         *stat_cntp +=3D 1;
->                 }
->
-> -               while ((next =3D strtok_r(state ? NULL : input, ",\n", &s=
-tate))) {
-> +               for (next =3D strtok_r(input, ",\n", &state); next; next =
-=3D strtok_r(NULL, ",\n", &state)) {
->                         if (header) {
->                                 /* for the first line, set up spec stats =
-*/
->                                 err =3D parse_stat(next, specs);
+> -#include "test_progs.h"
+> -
+>  #define log_err(MSG, ...) \
+>         fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
+>                 __FILE__, __LINE__, strerror(errno), ##__VA_ARGS__)
 > --
 > 2.34.1
 >
