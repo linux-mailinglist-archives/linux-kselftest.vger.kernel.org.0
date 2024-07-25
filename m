@@ -1,115 +1,151 @@
-Return-Path: <linux-kselftest+bounces-14243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B70893C6D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 17:52:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE5D293C83B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 20:19:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0600F284422
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 15:52:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3735E1F217F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 18:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CBCF19D8BF;
-	Thu, 25 Jul 2024 15:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E717721350;
+	Thu, 25 Jul 2024 18:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N6ihvnkY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4jz3CDYg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4783118028
-	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2024 15:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836C91F959
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2024 18:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721922745; cv=none; b=CH+p8JRse0RLahO8339uWzOTsSh5uI3pTpghvIcfIHAO1cWNr8AAX7HueW/tkMoBgHH/NX7duFpCPHoYCFzVOcrWD+qBKPWne38RV4vevV45cezfJ//WWBRc4Ma84vJLVhmLwcQxi0SGukl3r817pAkdW1nuMBAAxM0w4Uf4zSU=
+	t=1721931570; cv=none; b=HCWvcLNeVEerYXu3TZaJQr1uKZ3Hwb2lhG0G6HkE/8rYkSWW2XIddgKBYNTAlYfbt0V7RsibRMCtPt6e0tM6TzJqRFUK6lZ4a4L8TgyH1GujD77BGw1YD2JCCLhtH0sdKFttla/uqqmdh4y2EGILdsKhLZdmglU1/Xj6qsCNpY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721922745; c=relaxed/simple;
-	bh=mo7q2/uoC4GEhq90NIoOuGRylVoOtZelBxC1FagUlWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n99W5eYBDZYZxNgyoGpvGiDYIdrjqyyvaOkZucE6bbuLoQadCDEzA0UhtxAOZMf8lU2r7OphJ/6YOqakmC7UebSTMjN6Zlml82byhInz118dOu81ZJqFISJvVJI9xIU4mS56lVZJoYsWQ64nVaeoESZ+i6zuIDd6qp1OuKvBORI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N6ihvnkY; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-810ca166fd4so2370239f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2024 08:52:23 -0700 (PDT)
+	s=arc-20240116; t=1721931570; c=relaxed/simple;
+	bh=Ue5vF5Ixtm0O1c2YnWtk0OGg5UItE1cxouPFbqUWkBs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=UrYzTC0zaopRq7zSYb/pWIf9PcK2XY1QYZF0KMyBxYnLQ2kQ6C3fbM1rMYrbB1vQXysuwjHERLpRefopeqxtp+NwOQv9lgz6vCQkXNxbXeV7CJFyCL9sW6J4qrDJaKrscZEaX7ChvvqfX4bk+Bpmz6aUohEndcqr04Xm64+IoVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4jz3CDYg; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1fc5acc1b96so12218645ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2024 11:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1721922742; x=1722527542; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S/JqN+pHcExrSb356L3vtrB44/14O6YEZAAfNBlaK60=;
-        b=N6ihvnkY4Am59VPON1UN6LEMi24lWBE5RJJWPIFDlYZSFK1Yb8TrB9RAk+si5NwnEm
-         TYfv71WxMUFC2K+/Sj52QIrktwCao72aJXxaJr9wJcXF+ywVXGtT6gd1kTEUTmK8dKXr
-         GxStFdjaGWjyT5sZqAxe3Kl3CRRofwxvT43Yc=
+        d=google.com; s=20230601; t=1721931569; x=1722536369; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+cWinSd71QUFpeng6pkfteDp9R+YDOSFKPyk/5CKIQ=;
+        b=4jz3CDYgnbX66UdDS5vj6bDN9m1+8C6pvFDrGymgpok0XBtnjzpBxKJ1p5706qSGI9
+         ZiGnksugtzi5psMDaKn3yQEX4tsMe/c3ganC401oIcJjoMvXvt0LWakHkd9puCGRtI/r
+         Mrw4l5fh9BYfW/NopviizdjgFGS2GkG/MbAoRgSUJ7xV/G7mnxsOKWmSEFsaWUm8I+Ao
+         A7Y+txGrX4pCdqjXO4JjBXRdDKql786IIH9GZ8eMgxpnA/kkBuCSCj4PhLqUxh7SzxXh
+         3HAT3DkjPd3o/pLocircC1SpjoLDTjqCp3juBOEJyq0yV4LnJ4QFqxxc/TdJcUSwm0Gq
+         NVvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721922742; x=1722527542;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/JqN+pHcExrSb356L3vtrB44/14O6YEZAAfNBlaK60=;
-        b=SmicKZErOt9Ss3v5Pxu+uoW1NE9rTpB6w1zMK3h047LmkdIoiIiW2VZFaKJAaiDpjz
-         IM7UZqsQLNO1nqpz9wMsiRO2/Tn8nFH2FlkFMRZgYzMCIbTs3Iup8CglMWuo+4ZUqG0Q
-         dep1rNRtDFn8X2G+niriiLTEy8EG3Gov4ANg1jE5iBzVDxd5yrclLZOZcid/i0zfdkxZ
-         OQnT9EPbbxHL2fFZ3JypSNDWbBI8oHXkWa+a25HNHrUopfXI8bfj4BajhlkSqIHfYF68
-         5dbrsSXtCU8MYJj7ctfKzTTX3iCXedvSXob0D1xmN2HppQmJZZuaUgIZTSIl6+nn6byv
-         6iEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNfoDmvcMnNkussa7LZ34TQM9irXMZoAPQxKsrmOF7JT91KPPTwiW2WOvuaIqsWKqK0WY6As25Z9aw4lKzozo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrQKlVitG0dtMqgwDq7gBpdtV3x6O9Fyfi37xyaIVoqcK48P8i
-	t8n8t7rbDbPcl14wXQU+MgoJQZfrJW3j9UUyVnrlgYC2G0IbIcNY27+48eDCg0M=
-X-Google-Smtp-Source: AGHT+IEqVp/oG+/InFGTAhbwWhUAvE4/fcFF2CC3JSSKpBgRYqaeQfyRqJFHexKt4gYsGUq+GQmjdA==
-X-Received: by 2002:a5e:df47:0:b0:7f3:9dd3:15b2 with SMTP id ca18e2360f4ac-81f7cf031bbmr207094739f.0.1721922742449;
-        Thu, 25 Jul 2024 08:52:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fa43ec2sm392272173.11.2024.07.25.08.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jul 2024 08:52:22 -0700 (PDT)
-Message-ID: <5339a20c-86e4-4829-bad2-2b998c184523@linuxfoundation.org>
-Date: Thu, 25 Jul 2024 09:52:21 -0600
+        d=1e100.net; s=20230601; t=1721931569; x=1722536369;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+cWinSd71QUFpeng6pkfteDp9R+YDOSFKPyk/5CKIQ=;
+        b=OxXaysbKFirePvDzsvk+eMBydmWyepChsNCIFCgr+ubcyYx1UOUqJoNSWC8adVwmD7
+         GTIr1Gp/03c/6cq74z2/11Qc0IBfT1erFAAdGMWz/H8npmOtNr3Mzg3If2eBLUfwrv8o
+         s8x4uAsNYCqCA0lhk+wReNfoKMuVq3W/edkY5+Ks+8XdIi6S8xTpL1bKd3rhS8hZ44EF
+         +GI0R3keFGYnIzj//4APtC5R0R/2a0NXjsLxfx0RLyUGxPlaWb8LUdiMKUq4azfF9OQC
+         x5GGrljy/nD4Ecp9+6CKr5kxuWAbucq3o7QfTpWXK+qbM+eZmopUeAhtRcKy4mp5r8WN
+         nlLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXk45gesXn8QyQ4vPBUL3LK6/hMB3eVi3gHYiK6cqtYfOKFmZgOt9JSwre5tCWipssJO42BsqUDH+Jp+U9ut719Usd0NXnmL9jFh1E4tJvl
+X-Gm-Message-State: AOJu0YzTd9c6WPv4MRUmeg4AeR8HEnz1TAPETlxroG0hqyT1mLLi2tNz
+	qh0amEprH9tMugV2K8ZcMNyRANRoJEUj8Bv4ZjDcKg09wAEwO8VfpdKPMtB2Dna0XfwdEJAocH1
+	sDMiUXtVJqqB4m8JXUiZh8w==
+X-Google-Smtp-Source: AGHT+IEq0/Qf2aH7olYk0jZU1lYwwK43xAQuSUsE/EQnG/wMgzk9gQAK1/L4A02IBfsH1aseVKWvPS3Vq/ZyFeT5Zw==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a17:903:1ce:b0:1fa:acf0:72d6 with SMTP
+ id d9443c01a7336-1fed909f356mr1844455ad.3.1721931568714; Thu, 25 Jul 2024
+ 11:19:28 -0700 (PDT)
+Date: Thu, 25 Jul 2024 18:19:27 +0000
+In-Reply-To: <diqzo76myc5x.fsf@ackerleytng-ctop.c.googlers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] kselftest: cpufreq: Add RTC wakeup alarm
-To: Viresh Kumar <viresh.kumar@linaro.org>,
- Shreeya Patel <shreeya.patel@collabora.com>
-Cc: rafael@kernel.org, shuah@kernel.org, linux-pm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240715192634.19272-1-shreeya.patel@collabora.com>
- <20240725035742.uahab5uf2kmv476g@vireshk-i7>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240725035742.uahab5uf2kmv476g@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <diqzo76myc5x.fsf@ackerleytng-ctop.c.googlers.com>
+Message-ID: <diqzzfq55o7k.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v5 07/29] KVM: selftests: TDX: Update
+ load_td_memory_region for VM memory backed by guest memfd
+From: Ackerley Tng <ackerleytng@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: sagis@google.com, linux-kselftest@vger.kernel.org, afranji@google.com, 
+	erdemaktas@google.com, isaku.yamahata@intel.com, seanjc@google.com, 
+	pbonzini@redhat.com, shuah@kernel.org, pgonda@google.com, haibo1.xu@intel.com, 
+	chao.p.peng@linux.intel.com, vannapurve@google.com, runanwang@google.com, 
+	vipinsh@google.com, jmattson@google.com, dmatlack@google.com, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/24/24 21:57, Viresh Kumar wrote:
-> On 16-07-24, 00:56, Shreeya Patel wrote:
->> Add RTC wakeup alarm for devices to resume after specific time interval.
->> This improvement in the test will help in enabling this test
->> in the CI systems and will eliminate the need of manual intervention
->> for resuming back the devices after suspend/hibernation.
->>
->> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
->> ---
->>
->> Changes in v2
->>    - Use rtcwake utility instead of sysfs for setting up
->> a RTC wakeup alarm
->>
->>   tools/testing/selftests/cpufreq/cpufreq.sh | 15 +++++++++++++++
->>   tools/testing/selftests/cpufreq/main.sh    | 13 ++++++++++++-
->>   2 files changed, 27 insertions(+), 1 deletion(-)
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
+Ackerley Tng <ackerleytng@google.com> writes:
 
-Thank you. I will apply this once merge window closes.
 
-thanks,
--- Shuah
+> Yan Zhao <yan.y.zhao@intel.com> writes:
+>
+>> On Tue, Dec 12, 2023 at 12:46:22PM -0800, Sagi Shahar wrote:
+>>> From: Ackerley Tng <ackerleytng@google.com>
+>>> 
+>>> If guest memory is backed by restricted memfd
+>>> 
+>>> + UPM is being used, hence encrypted memory region has to be
+>>>   registered
+>>> + Can avoid making a copy of guest memory before getting TDX to
+>>>   initialize the memory region
+>>> 
+>>> <snip>
+>>
+>> For memslot 0, 1, 2, when guest_memfd != -1,
+>> is it possible to also munmap(mmap_start, mmap_size) after finish loading?
+>>
+>
+> Thank you for your review!
+>
+> Did you mean "possible" as in whether it is "correct" to do munmap() for
+> the rest of the earlier memslots containing non-test-code?
+>
+> It is correct because the munmap() just deallocates memory that was
+> recently allocated in mmap() in this same change. The memory set up for
+> the VM is not affected.
+>
+> <snip>
+>
+> If we are not using guest_memfd (region->region.guest_memfd == -1), then
+> we need to make the source and destination address different by copying
+> the contents at the source address somewhere else for the call to
+> tdx_init_mem_region(). That is what the mmap() is doing. This temporary
+> buffer then needs to be freed, hence the munmap(). Without this copying,
+> the destination address for the ioctl's copy would be the same as the
+> source address, since those very same pages are provided in the memslot
+> for this memory region.
+>
+
+Update on this:
+
+Since TDX requires the use of guest_memfd, this patch will be simplified
+in the next revision.
+
+The checks for region->region.guest_memfd != -1 will be removed, and
+there will be no need to do any mmap() or munmap(), so those will be
+removed as well.
+
+> If we are using guest_memfd, then the destination address for the
+> ioctl's copy will be taken from the guest_memfd, which is already
+> different from the source address, hence we can skip the copying.
+>
+
+>>>  }
+>>>  
+>>> -- 
+>>> 2.43.0.472.g3155946c3a-goog
+>>> 
+>>> 
 
