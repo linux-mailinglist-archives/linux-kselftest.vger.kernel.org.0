@@ -1,70 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012C493BFFF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 12:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A2493C009
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 12:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0A27281C95
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 10:37:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 029E6281D03
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 10:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7962198E80;
-	Thu, 25 Jul 2024 10:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1530198E74;
+	Thu, 25 Jul 2024 10:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cA+z7EcX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d2lL6Qwr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710E7198E74;
-	Thu, 25 Jul 2024 10:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFA214D457;
+	Thu, 25 Jul 2024 10:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721903837; cv=none; b=uTRfueFH30SsFhLn9CauzpqFhRe7npUCKQfFamIcwjpdhoWkhF1+VlApZj246r71Nsk5uynG8BY2w3m6klYLCiETahTPFnI5WLOtUYGzXzjci04ThieoHHD/zoJBklOOJQe+A939rgpg7VYqy8aigXtRzQpgyN16dvoGaQn6NN8=
+	t=1721903953; cv=none; b=dM3XfyWtsIhQUH7eevki37xRbe8IvtkA++9dlbWQ7jk2bdEX2chfO7SmSMuIV6b5+GpIYdNAWEp1NUHPzoKiu4uCbh9B0nrHSz9AQtU2KZq+LkY3u5e9UHZc/Cn+hC7JdkAFDJPq/z9x8amTw0BHIJs9NeQnCOyKEDLcQB9/hwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721903837; c=relaxed/simple;
-	bh=ciBgnFEAoV4vmAcZRIq08sujnM0GCX6tER42tCyt4Ro=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Bg9VqwihSyebI97uyXlhJ3LvdAZgmoHTr+smIJcyo7PLYcbWbbBq+rlrf0oiyiDbmQ6dz5bk+2TYbtj/n4X0j6sYEGOQiS+VX4i5l8CIWbRkbzPDD0AzpcisZS2zDD02W+ka/9SsuF5f2fGpP3kwYxZB1gkSCm/OMTWOimoX09k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cA+z7EcX; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1721903953; c=relaxed/simple;
+	bh=FhhULHJSRQRfqOkOSBVfyHqLgWbWh8s2Lych3idzotM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Sv9W3hP8VorFMoxtCqSeEG083hqjqgSH2K2ekh829iOTqbX+uqXXZpFCrN8TOMz4PxrMEXjUjq/YzevM+mGO8MKj9N/ftqNZoIE0dKoP0rV5+qsiZvnuT45IsiO1wCjfOkqr6m/ehSe2O9oPGsdBpudOCV30YSaOOq2uh2XUqZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d2lL6Qwr; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fc6a017abdso5663235ad.0;
-        Thu, 25 Jul 2024 03:37:16 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1fd9e6189d5so6498795ad.3;
+        Thu, 25 Jul 2024 03:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721903835; x=1722508635; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dcmXaeoVwRZCEPr5EVJy1EUry7VOrM2uGGRBKo55OWA=;
-        b=cA+z7EcXgJr9OCjsgetzgVeLW2Fc+MKPbNm3/0Q/95Zi9HFakwyt5+hrTiLu70jfqx
-         GfqFw6J3LC9lTHeJW1D4erM9vlzCugSFO0UR+TKIqiuS+83ItPi5KQNg/gUZrkWqaSgB
-         Ssl/cvdeopXEYHg72yQztlstw4VJE3XfUZDw6/wy+AadqEaIUSFxf49j/yqQTALuJ5Ip
-         GPCTQ8FOZ0bqh98Vk1RQAMBDw/ry+Bo5r48WPp3tKPZz/QCkH5WupKF4NVClQ7caESq6
-         GT6xCJ4GfEXQ8JWzIftXxyN3EJU42nNpGC2igNih0WS/hO/YvKTnq//3fTpKitO4u2te
-         RIZw==
+        d=gmail.com; s=20230601; t=1721903952; x=1722508752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ghp88PrF1o/2mzcoM7JfrRTyuYzOPJ40TUi0UK8SVqA=;
+        b=d2lL6Qwrcr6Bu+xuhiByTGZ72SwEHoxl5hR4pzOlcimEGeovCxVFxc91TVhVeeazkd
+         PEP0raLrCxaVm6G4OvggGAT22+hVbVXxoPsGcN+QXGUjqGjYI4W48+qdLlkDVy7t5qhh
+         QaJ0EYWedLbVraBp3Hk7nByvJqGNl1MXs2m647dd81IZQ/ejzevpc4uulWUVnKfXJgRG
+         Dktf/F8ZYO8r5tNqVO3ECX5hKyFDfAVggErKY3qVZ9bIeyJYxPpsT//+nWYnwdTgCYyB
+         TUKuesq0eyo6SewdDhDIk0o1ZyvlzJGe7XIj66ganUujgdSy2XnJmub2qnPFDPQhxH6L
+         1Lmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721903835; x=1722508635;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dcmXaeoVwRZCEPr5EVJy1EUry7VOrM2uGGRBKo55OWA=;
-        b=UPzrbH+xMPf+M59Ig9oFk5j6akeVHsTAxXfmjbZWF286n4tp5rBh1mGuqgw5GVDvlC
-         qQA/T/+LoJKtrfQaIyOXoovAwrIQdoN239+olIhOrkxCgQ6yMhzcNn79Cc4LSrzlX3It
-         tY+LYR+QJLxuFZr7bm6PmBNnNf8nmSR+H2Z+tNOS8WKYIJut34hH6PFYg9TYchTQs8gm
-         NigTEBxp9JGfAJzEWIFO4r9morsmBnTP2uqjTJl1fB+52sQZnhB16BbqeXfXa98U2kXs
-         1Oh5x3w8iAhvN7I8Z5xz2PSoAjHDLsEpoUqi0iL9V3stIpsnCEjg3yRmpu3o9LjIlYvf
-         Tj5g==
-X-Forwarded-Encrypted: i=1; AJvYcCVpkhu8wJ/YXSEaELz3Gx9v+wc9dOml0SsuEhP+NYEgqb/BlyfKikLBf0EwTB1AISt3rZrMFf792Y6DQsSVZjHbyfLbtXGASWTMWuDPUwAwnen4XyoPq3tAbG0VPJhfzTrLmRPzKYQp
-X-Gm-Message-State: AOJu0YyksndqbPJKiFKG0TBpwJOLAv/ldMfq9kkedZz98oko0espATRi
-	oUpZnHTyXLrC5LzbypU8aZXwdbgtGppKXsU1lMalEJWfzOcVi78lNmvUEUB6
-X-Google-Smtp-Source: AGHT+IEEFC3yDkVPzWhHEyRfUsRlqSyS3hswUTjlsR5e/yy9jVch0oRdD4eOgvhbS8Cq94N2WLro2w==
-X-Received: by 2002:a17:902:e5cf:b0:1fd:a1e9:29a9 with SMTP id d9443c01a7336-1fed92f389emr17492485ad.47.1721903835139;
-        Thu, 25 Jul 2024 03:37:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721903952; x=1722508752;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ghp88PrF1o/2mzcoM7JfrRTyuYzOPJ40TUi0UK8SVqA=;
+        b=iaKvdVqOLJkjzDS0iUEIQnpOs5xmSDWJZdeyZG/7Z/fmTH6pt8PEY3pEqk8Ua3Nrb7
+         SCKHu7oG2dmOT/9pHtxyc+kQFXYJtaXeVsUXAzmqo002z94sl6Fy3qIOEnd90S7IF59e
+         Qt85UJo9qbj38LrbJ9b0ECIsQR4BqCmy2nsCdpueP0JmBkuufKmpltSRx5l3XS/H08GF
+         1IYgzNWBvJ4BhaTwhRvnfxFvRZtTSiSjcxz7q2RWDurM5IQ3E9AkRRXEY1g/hC4E3x0G
+         LwLhbUeEjTThd3LDAgG62ucjIkWz6UgNF8RfG5ktr3qe/s5/SG3mnhbxGxtCVZ/EwYI5
+         zk2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWwxknLXr8kCZ+s2ShnGLumdZdZ0ZV/M6gjEcRH7eZFyU27dqj22NPscOnnUEMaVNs6z85ZJL5mGelHLmkAfAkp7GyXBC2rWI1sfZf2Novngg/MFgK0ZXJ1X5Drhbs6TpNlQGrJnSqZ
+X-Gm-Message-State: AOJu0Yzl192NToem0SqnfayoUtRd1QbSjw3vrqtQA+xD2PMgWtbmxLoB
+	WpdOP/BBHGB/k5F81uTGxiriruhU/Cp0CNzsH+SvELl/KH+t56DB6o13KVYi
+X-Google-Smtp-Source: AGHT+IHIy/VccFzu/PejmYfYrlXyVUe0mollB6ADsyNs+yD+o6XPQfOPVqoASrMH/7qtfhA6eLZ3Ww==
+X-Received: by 2002:a17:903:228a:b0:1fd:6848:bc2d with SMTP id d9443c01a7336-1fed9257af7mr13548175ad.20.1721903951607;
+        Thu, 25 Jul 2024 03:39:11 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f78491sm10991075ad.244.2024.07.25.03.37.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f78491sm10991075ad.244.2024.07.25.03.39.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jul 2024 03:37:14 -0700 (PDT)
+        Thu, 25 Jul 2024 03:39:11 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <itugrok@yahoo.com>
 To: bpf@vger.kernel.org
@@ -91,65 +93,95 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Yan Zhai <yan@cloudflare.com>
-Subject: [PATCH bpf-next v1 0/8] selftests/bpf: Improve libc portability / musl support (part 2)
-Date: Thu, 25 Jul 2024 03:35:52 -0700
-Message-Id: <cover.1721903630.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 1/8] selftests/bpf: Use portable POSIX basename()
+Date: Thu, 25 Jul 2024 03:35:53 -0700
+Message-Id: <570a059b3db60199028e0a36896be0f1b472b9cf.1721903630.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1721903630.git.tony.ambardar@gmail.com>
+References: <cover.1721903630.git.tony.ambardar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Tony Ambardar <tony.ambardar@gmail.com>
 
-Hello all,
+Use the POSIX version of basename() to allow compilation against non-gnu
+libc (e.g. musl). Include <libgen.h> ahead of <string.h> to enable using
+functions from the latter while preferring POSIX over GNU basename().
 
-This is part 2 of a series of fixes for libc-related issues encountered
-building for musl-based systems. The series has been tested with the
-kernel-patches/bpf CI and locally using mips64el-gcc/musl-libc and QEMU
-with an OpenWrt rootfs.
+In veristat.c, rely on strdupa() to avoid basename() altering the passed
+"const char" argument. This is not needed in xskxceiver.c since the arg
+is mutable and the program exits immediately after usage.
 
-The patches cover a few areas of portability issues:
+Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+---
+ tools/testing/selftests/bpf/veristat.c   | 8 +++++---
+ tools/testing/selftests/bpf/xskxceiver.c | 1 +
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
- - improper libc usage (strtok_r(), reserved identifiers)
- - gcc compile errors (include header ordering, sequence-point errors)
- - POSIX vs GNU basename()
- - missing GNU extensions (<execinfo.h>, C++ <stdbool.h>)
- - Y2038 and setsockopt() / SO_TIMESTAMPNS_NEW
-
-Feedback and suggestions are appreciated!
-
-Thanks,
-Tony
-
-
-
-Tony Ambardar (8):
-  selftests/bpf: Use portable POSIX basename()
-  selftests/bpf: Fix arg parsing in veristat, test_progs
-  selftests/bpf: Fix error compiling test_lru_map.c
-  selftests/bpf: Fix C++ compile error from missing _Bool type
-  selftests/bpf: Fix order-of-include compile errors in lwt_reroute.c
-  selftests/bpf: Fix compile if backtrace support missing in libc
-  selftests/bpf: Fix using stdout, stderr as struct field names
-  selftests/bpf: Fix error compiling tc_redirect.c with musl libc
-
- .../selftests/bpf/prog_tests/lwt_helpers.h    |  3 +-
- .../selftests/bpf/prog_tests/reg_bounds.c     |  2 +-
- .../selftests/bpf/prog_tests/tc_redirect.c    | 12 +--
- tools/testing/selftests/bpf/test_cpp.cpp      |  4 +
- tools/testing/selftests/bpf/test_lru_map.c    |  3 +-
- tools/testing/selftests/bpf/test_progs.c      | 75 ++++++++++---------
- tools/testing/selftests/bpf/test_progs.h      |  8 +-
- tools/testing/selftests/bpf/testing_helpers.c |  2 +-
- tools/testing/selftests/bpf/veristat.c        | 12 +--
- tools/testing/selftests/bpf/xskxceiver.c      |  1 +
- 10 files changed, 68 insertions(+), 54 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index b2854238d4a0..11ec1190d582 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+ #define _GNU_SOURCE
+ #include <argp.h>
++#include <libgen.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include <sched.h>
+@@ -988,8 +989,8 @@ static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog, const ch
+ 
+ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf_program *prog)
+ {
++	const char *base_filename = basename(strdupa(filename));
+ 	const char *prog_name = bpf_program__name(prog);
+-	const char *base_filename = basename(filename);
+ 	char *buf;
+ 	int buf_sz, log_level;
+ 	struct verif_stats *stats;
+@@ -1056,13 +1057,14 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 
+ static int process_obj(const char *filename)
+ {
++	const char *base_filename = basename(strdupa(filename));
+ 	struct bpf_object *obj = NULL, *tobj;
+ 	struct bpf_program *prog, *tprog, *lprog;
+ 	libbpf_print_fn_t old_libbpf_print_fn;
+ 	LIBBPF_OPTS(bpf_object_open_opts, opts);
+ 	int err = 0, prog_cnt = 0;
+ 
+-	if (!should_process_file_prog(basename(filename), NULL)) {
++	if (!should_process_file_prog(base_filename, NULL)) {
+ 		if (env.verbose)
+ 			printf("Skipping '%s' due to filters...\n", filename);
+ 		env.files_skipped++;
+@@ -1076,7 +1078,7 @@ static int process_obj(const char *filename)
+ 	}
+ 
+ 	if (!env.quiet && env.out_fmt == RESFMT_TABLE)
+-		printf("Processing '%s'...\n", basename(filename));
++		printf("Processing '%s'...\n", base_filename);
+ 
+ 	old_libbpf_print_fn = libbpf_set_print(libbpf_print_fn);
+ 	obj = bpf_object__open_file(filename, &opts);
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index 8144fd145237..92af633faea8 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -90,6 +90,7 @@
+ #include <signal.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <libgen.h>
+ #include <string.h>
+ #include <stddef.h>
+ #include <sys/mman.h>
 -- 
 2.34.1
 
