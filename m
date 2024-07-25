@@ -1,137 +1,146 @@
-Return-Path: <linux-kselftest+bounces-14189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD53193B9B3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 02:00:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34EA293B9CE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 02:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E551B23C72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 00:00:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6B01F22513
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 00:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3114A1C;
-	Thu, 25 Jul 2024 00:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E1A17C2;
+	Thu, 25 Jul 2024 00:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbWgHY9V"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xicpiue/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100976AB9;
-	Thu, 25 Jul 2024 00:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E994A4C74;
+	Thu, 25 Jul 2024 00:28:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721865639; cv=none; b=XKcTaYIZj9mZHTsNxJYtnLi6179Zc/l2IbtQZTnjNnkc/YTCiMg3gCqVU2CFZUE0w4CKdKdGgl08rBDDeYPJTb+tMlrbro4LcX6LkFHgqQekMBYeIMQO2mU2jIZybwmkT8BGx9QcunHT2tvGLk0v2MVucPUBi0yS8b7F647r3LE=
+	t=1721867337; cv=none; b=LqjgwvwUOZhWEjKdPkQLp8+z5/4QOpjljXa7fYEkEBf0EM6IKMIgfj1v72f1avrqhQ26sKEoFu3i2Dnvo5uZyuf+DfjDSWftPm8GRYIxRHlC5kIGMlBFPVPzUUm5UGIAyV9Pz/d/SxJKrbk7INVAqgPgK2Vs2Q/uHoJ7NrXMrTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721865639; c=relaxed/simple;
-	bh=kSbuh94a5bX0nbzJoyMesJr2Y5ZvwRKjV5p3eaiu6sA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=haJmw6Zn98pI0gVoPsCpcqSmNEv/AdBDHx9BMHEjh/Rj5XLAIJ0AaZzVqcvelmjrU65fk4yyAggG1uRpWIDQ45kg6iygj7kdJN/s76A8Phw8uv0rLUVV6zLFANKdYyb67WJzfuY60UWrbyzMnDWBVhR9dujcCFoh2/UL0lHFEHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbWgHY9V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E93DC32782;
-	Thu, 25 Jul 2024 00:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721865638;
-	bh=kSbuh94a5bX0nbzJoyMesJr2Y5ZvwRKjV5p3eaiu6sA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YbWgHY9Vsx0Pbt82RgjBSGoqfk0IKTA0PPNYFqwtqEeRK4GpdsFAWG1L22peBfqBE
-	 fnP04aYg1sqw0UnlPWG7F6fxP5//GvItRomIlUsyTXvL6rpvBkCfcYoU+kbF9iqvir
-	 rTNf9WLhliBuMHKM4MmpvjAtJflMQx7CCutiqy3x2YdLSnY3krfCHjbjW37zfvinmb
-	 fVut/SAANFmYXReDDP7lunhOEdKjfiGjPRxrJD3uXIHvay1rGut4cLtnl1ARM7PSL2
-	 qYAKT5RiFQ1u06dDc0XLNQgC3K325ZOotF/1Q0FlH5W4VxveaB5NmEZ8O5C617la6s
-	 8YWB+hN6doqMQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78E76C43445;
-	Thu, 25 Jul 2024 00:00:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721867337; c=relaxed/simple;
+	bh=JkRKP3Mdk1VobjdH3nzRIMyVgesirQABoN3SOhqDUJs=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q8jJkUQtU2YoEtrE1rEQR5dNhNmIAcQp894eEt4NnEcJg1vPlA31QqX+IugglLiVCsMC10sqsfjlvps8Q1aI1HnkYavniIYO3U1dw6GmA7KcL8zA5l/a/Llhy95cJ40GB1ZjQAvcKaif2Ktpz1nDZdD5qmHw4v715T/bdGASgJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xicpiue/; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70d1cbbeeaeso301915b3a.0;
+        Wed, 24 Jul 2024 17:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721867335; x=1722472135; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PmMNOgAp88bPv4E0FsOEIwTxi2FrufOzMRY/0z3SpRQ=;
+        b=Xicpiue/bOxSBy4jPIcBXjfJw2xS3AGby+4DMzubVavkcvM4glTpEpxS2ibYlw527/
+         UglcvUHEZ68O3E0VbDDBCgw3FGTS9G4S2WwHqnL4EUxg5D0p3dfiLdDbJxsu5NaO8/qF
+         m9LY6oqW8e6HbRcF9dzLymPNXYTeQ7ygQK4TMfQlXx1BGh15vvrenINaTJDshT598Xwo
+         9hMBBYQV+bYMv7xArZvfp5rVf+8+IH2Z5/wy0r/+XprzD8d+/vop/1qtFa4G+tRI2Yn+
+         oJX1D7V+QB4OZ2GcIc3xkWkFCX5Gl+DHNyKrDxbWTDdg6vbz2fs6WKATFwjHNH7/bRHX
+         RckA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721867335; x=1722472135;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PmMNOgAp88bPv4E0FsOEIwTxi2FrufOzMRY/0z3SpRQ=;
+        b=YVyv41TbXPOaO7PelkqaQniVM5Q9uErkhZ0XkX4V0Qw9tWNEPR5I2GG5HgnQSX5u5o
+         q6Iv3MdAGaLfnX/iINQ9YVU8Glh/sMx4+K0Pbvt+WNLd72ZTIfGDoJbKdsx1hZ8t+tcF
+         vYKFCFmT8gATp19DPwuAMwZXQiZCE5vpsfaoCILjueRw2gASLULZfyENFYmC2lqLIJgq
+         YPo2vdkRa27chCCizE/wuaoPzVM1VymCtcXkjJ6etfoTVLGHzVOTBl1TxKSP5pSxTP+r
+         yEF2O0FMASMt4jDkjN3BlphMUgjLzcbYw1Ic6QRzQeKxJlOpp1QMjd+PpsZItoIZdeuo
+         jRjg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6ZKNYvyyAmrD5CGRz4b8jjQpeMsNHwNrRPSqGBz0tX5TXh27RoqlWBAkjuslMn0dPuGrtalEcV+CEt6WfGxyBCaB/fqtWX9/F6m+GrVje
+X-Gm-Message-State: AOJu0YxC7cVqD8ZWZT1q+3qMF+hZaZ3oKhat6VjdY9LJqbwbG1urxaa6
+	DUsut5PW840M4WYXhFCG2c0sXrGfp6sW3awDwsp7Pd+H24tGZxu/
+X-Google-Smtp-Source: AGHT+IGxrJqhwp9lOs+gmE4RlQUlh0tmFgwDAgfRLt8LJnNDC0aj2VErDsuRFSSkYmt8c4HvvUjyVg==
+X-Received: by 2002:a05:6a20:2455:b0:1c4:2134:dd52 with SMTP id adf61e73a8af0-1c47b116f02mr252202637.3.1721867335091;
+        Wed, 24 Jul 2024 17:28:55 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f1fb90sm1753565ad.182.2024.07.24.17.28.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jul 2024 17:28:54 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Wed, 24 Jul 2024 17:28:52 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>, Yucong Sun <sunyucong@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	David Vernet <void@manifault.com>,
+	Carlos Neira <cneirabustos@gmail.com>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Yan Zhai <yan@cloudflare.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	YiFei Zhu <zhuyifei@google.com>, Geliang Tang <geliang@kernel.org>
+Subject: Re: [PATCH bpf-next v1 00/19] selftests/bpf: Improve libc
+ portability / musl support (part 1)
+Message-ID: <ZqGcRGTo8xQxZy4r@kodidev-ubuntu>
+References: <cover.1721713597.git.tony.ambardar@gmail.com>
+ <CAEf4BzYaOVDitzcY+j=vpAqeNC+KZXk9pcTVht=npCmnPpoKmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1 00/19] selftests/bpf: Improve libc portability /
- musl support (part 1)
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172186563849.27258.13005531127342303614.git-patchwork-notify@kernel.org>
-Date: Thu, 25 Jul 2024 00:00:38 +0000
-References: <cover.1721713597.git.tony.ambardar@gmail.com>
-In-Reply-To: <cover.1721713597.git.tony.ambardar@gmail.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
- sunyucong@gmail.com, edumazet@google.com, kuniyu@amazon.co.jp,
- jakub@cloudflare.com, davemarchevsky@fb.com, void@manifault.com,
- cneirabustos@gmail.com, joannelkoong@gmail.com, ppenkov@google.com,
- willemb@google.com, yan@cloudflare.com, vadim.fedorenko@linux.dev,
- zhuyifei@google.com
+In-Reply-To: <CAEf4BzYaOVDitzcY+j=vpAqeNC+KZXk9pcTVht=npCmnPpoKmQ@mail.gmail.com>
 
-Hello:
+Hi Andrii,
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Mon, 22 Jul 2024 22:54:27 -0700 you wrote:
-> Hello all,
+On Wed, Jul 24, 2024 at 04:52:57PM -0700, Andrii Nakryiko wrote:
+> On Mon, Jul 22, 2024 at 10:55 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+[...]
+> >
+> > Tony Ambardar (19):
+> >   selftests/bpf: Use pid_t consistently in test_progs.c
+> >   selftests/bpf: Fix compile error from rlim_t in sk_storage_map.c
+> >   selftests/bpf: Fix error compiling bpf_iter_setsockopt.c with musl
+> >     libc
+> >   selftests/bpf: Drop unneeded include in unpriv_helpers.c
+> >   selftests/bpf: Drop unneeded include in sk_lookup.c
+> >   selftests/bpf: Drop unneeded include in flow_dissector.c
 > 
-> This series includes the bulk of libc-related compile fixes accumulated to
-> support systems using musl, with smaller numbers to follow. These patches
-> are simple and straightforward, and the series has been tested with the
-> kernel-patches/bpf CI and locally using mips64el-gcc/musl-libc and QEMU
-> with an OpenWrt rootfs.
+> I squashed the above three patches into one, as they are the same kind
+> of fix with the same reasoning. The rest at least have a specific
+> error example, so I didn't touch them.
 > 
-> [...]
+> But generally speaking, I think it's fair to combine the same kind of
+> fixes across a few files (for the future).
 
-Here is the summary with links:
-  - [bpf-next,v1,01/19] selftests/bpf: Use pid_t consistently in test_progs.c
-    https://git.kernel.org/bpf/bpf-next/c/afd8169d2724
-  - [bpf-next,v1,02/19] selftests/bpf: Fix compile error from rlim_t in sk_storage_map.c
-    https://git.kernel.org/bpf/bpf-next/c/bb3b965ee3a0
-  - [bpf-next,v1,03/19] selftests/bpf: Fix error compiling bpf_iter_setsockopt.c with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/6c3a808171a2
-  - [bpf-next,v1,04/19] selftests/bpf: Drop unneeded include in unpriv_helpers.c
-    https://git.kernel.org/bpf/bpf-next/c/80fd6c991e95
-  - [bpf-next,v1,05/19] selftests/bpf: Drop unneeded include in sk_lookup.c
-    (no matching commit)
-  - [bpf-next,v1,06/19] selftests/bpf: Drop unneeded include in flow_dissector.c
-    (no matching commit)
-  - [bpf-next,v1,07/19] selftests/bpf: Fix missing ARRAY_SIZE() definition in bench.c
-    https://git.kernel.org/bpf/bpf-next/c/9dc46fdb679b
-  - [bpf-next,v1,08/19] selftests/bpf: Fix missing UINT_MAX definitions in benchmarks
-    https://git.kernel.org/bpf/bpf-next/c/6898506ee0ae
-  - [bpf-next,v1,09/19] selftests/bpf: Fix missing BUILD_BUG_ON() declaration
-    https://git.kernel.org/bpf/bpf-next/c/b855ef609329
-  - [bpf-next,v1,10/19] selftests/bpf: Fix include of <sys/fcntl.h>
-    https://git.kernel.org/bpf/bpf-next/c/f9d6628b2f54
-  - [bpf-next,v1,11/19] selftests/bpf: Fix compiling parse_tcp_hdr_opt.c with musl-libc
-    https://git.kernel.org/bpf/bpf-next/c/81c60e36c31b
-  - [bpf-next,v1,12/19] selftests/bpf: Fix compiling kfree_skb.c with musl-libc
-    https://git.kernel.org/bpf/bpf-next/c/787a2e4f1b9e
-  - [bpf-next,v1,13/19] selftests/bpf: Fix compiling flow_dissector.c with musl-libc
-    https://git.kernel.org/bpf/bpf-next/c/c2e6d8c605ac
-  - [bpf-next,v1,14/19] selftests/bpf: Fix compiling tcp_rtt.c with musl-libc
-    https://git.kernel.org/bpf/bpf-next/c/2a6a6956f616
-  - [bpf-next,v1,15/19] selftests/bpf: Fix compiling core_reloc.c with musl-libc
-    https://git.kernel.org/bpf/bpf-next/c/231c5446bfbc
-  - [bpf-next,v1,16/19] selftests/bpf: Fix errors compiling lwt_redirect.c with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/7ce34ba2b21a
-  - [bpf-next,v1,17/19] selftests/bpf: Fix errors compiling decap_sanity.c with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/352d541fae2d
-  - [bpf-next,v1,18/19] selftests/bpf: Fix errors compiling crypto_sanity.c with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/a88580ba22aa
-  - [bpf-next,v1,19/19] selftests/bpf: Fix errors compiling cg_storage_multi.h with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/56b0ab53657b
+Thanks for clarifying this and reviewing. My concern earlier was that
+squashing "Fixes:" tags could hinder backporting. Is that a non-issue?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Applied to bpf-next, thanks.
+> 
 
+And thanks to Geliang Tang, YiFei Zhu, and Vadim Fedorenko for their
+feedback.
 
+Cheers,
+Tony Ambardar
+
+[...]
 
