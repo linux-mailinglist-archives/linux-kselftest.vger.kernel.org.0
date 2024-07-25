@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-14249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1AEC93C97C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 22:23:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1993793C983
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 22:27:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45F3F1F21A80
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 20:23:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6F42281BA8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 20:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BCA757F3;
-	Thu, 25 Jul 2024 20:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D464C78676;
+	Thu, 25 Jul 2024 20:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9rgBZMY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ae+9tJiR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6644C7B;
-	Thu, 25 Jul 2024 20:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446043CF5E;
+	Thu, 25 Jul 2024 20:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721938975; cv=none; b=UCn0E3DcMwuqwQK5Cik7jc9W/3r5QH4Oid8U8I2kf8oOyi0PoqyhYYVrzJpIWTOpfgUjHgCUUrS0zw3dznXwbKI63McYs8dy13EAq/w6GeqS59XUE+jC3xaxLeOgaQBt/HMQzMfnU13qfXo+KeO7wEm2njjJf6L2Rf8BsF2qLuw=
+	t=1721939243; cv=none; b=c9A8oG4oeeCkjGz695QF569/q8SZ7zru61b/msaMw1HWNKI6dT9Nvf+R75OLsACnLMckIa2UcNKr6gN0LdsmlbaBCbcD4ZcG7gqDRTHh9iqgqOXxMtTAccpsN51LzSk+6QG1qNRv0cscXz9bG86jCWbyQI1YL9e63juudFX2ft0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721938975; c=relaxed/simple;
-	bh=KgPkVCYtUGieLNbWNWi5wAxbvfggcceRqL5Zsa58GOU=;
+	s=arc-20240116; t=1721939243; c=relaxed/simple;
+	bh=rIhpQcHLexoU70NqZ5sOXp9YztY0XGAmkJr7EX7Zec0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BW4yPdxil+OkLBwJfMWviYUkdO7zDfMcODQC9tIIvBUJn0m9gxuVvHlhvyp5LjW+aRvdUFgOwX3quSRQXmXg/x6HuCvlgOoaEv3149J8mAs41PUtu4HmmKloOqm15+kZNs1Od8pvP1BcZUWFpCTdewoSTz7J9cpXlWHepOGIMEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9rgBZMY; arc=none smtp.client-ip=209.85.218.47
+	 To:Cc:Content-Type; b=rdL7B6v9711rQBIxi5IbFO8G6gkY+EFdt046T05MOxKEy3WxX1iuanxbEavHLg5q/lfzwYWWOhAVw3Ju5XKWg2sRKPk7rXO7/zX5135K/kfX3YtPVYu+wS9xnzJlcerTDhUSzYmQeBogogcxbgLeNX1M1ZWC03jJfo09nX+z7D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ae+9tJiR; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a7aada2358fso165494266b.0;
-        Thu, 25 Jul 2024 13:22:54 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5a3458bf7cfso1749735a12.0;
+        Thu, 25 Jul 2024 13:27:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721938973; x=1722543773; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721939241; x=1722544041; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2dSRZDThVfM2lJBp2TPiybCMAfJriDNXBT2O0tOt140=;
-        b=X9rgBZMYdkp/o73Wi9upGBCEGgswFeJNOo3KTHAuhCOkxGjvzYKWxZCUdVqY+laYRx
-         Ltq9WxxrobV5C6yyhyo1GYZw9tfW3ebgGakZZMi/UexGjBeAVrGiFGICOCrgCqwciQWr
-         EnJOK52l5YhfehBZEGwA1sY4k4zPU5neAeXkdQYN7QaFxV891v72JqWY+swOt8COc6N2
-         QB0YwgxG/x1AU9x+wCFGOsowYzxVmxVBsFgKGD8XzkZrv3JPH95R0SzI4E5yl1hfCfiG
-         jnJ7LTFTJLq19TPtxcz1ssosnhLqt+na98ELT09xon4cXyfpGonxYzzBpHkb+IYYzl0m
-         aT3w==
+        bh=rb8R8eLBfLQ4PUNDUO5vUKAo7AQFDp2s++IGNkKCcOU=;
+        b=ae+9tJiRkkj62a7svvO+rXa5DaDX/1KEbj6sgYv4YviET/tw1nAf706w+eGRZxCrhX
+         tuRZgI9P4E8KgtDmPdp7Mgr1IOEJWHSQknR9PLdsAXBWiaQWJtEC638UU2sC1A0koRVS
+         nTgyQd4kzA1DtMbC7VsRaT1wibxS4jbi8tuET+UYvjGONjMocR+sLE2qaKQVljNrDlEk
+         FjvKcBijJmVnH+8oQYxOEBTiRjGALVp3sd0P7eveuNLLEYhrY+zT5rKIdzbYHs7ft+Wn
+         15ErJMo4N2Wv2jYVAi1Eo7q4Ge44rAU9Eh/jY+2/et5uGgaiAMQ6rw/njJLbFVeIdZEe
+         1MWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721938973; x=1722543773;
+        d=1e100.net; s=20230601; t=1721939241; x=1722544041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2dSRZDThVfM2lJBp2TPiybCMAfJriDNXBT2O0tOt140=;
-        b=f7uJXlTBgnYl2saIzD2T/ROTk6kZek3eoqDgtoE9JjJLOKjEPLSDNpVW29Y42ZpI8t
-         mPL3EBjuRCKQfKs6tJ3XHZmE0sXJ8cXfLRjOF2qKX/LmZKKpR+X05rEiRguap5j+3h8i
-         tQEa/acTXH313lBAs7IPWDGD/8If6rwvyR3Muq2pLTewtygom5kYRTX8HLCo2iGCi4OJ
-         dnxbU+WBFbB1NoV3xQVw+WHkH8UO14c0suk4yp34kH9hqYnkB+JR+UDw6OFpXRG/WNn4
-         T2nQrD5CG/SclSb35+JpppszHl+J5rpm8FTCt6XRin9AE6151MoTqdtxuhUqx8SH0Mbe
-         +q6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsppkLuplAeoYn53yDW+IPwYan0oDYwyjqvl/dAQ4ciqrTP+PE9rOaDAuVx0/bB6vlfwBQ/YIAlfxJ/5JfdjsVmEZrmBSuHJFpIWltP8gFWJRchZQ0YR9kuB3vJySvZjj0cQGW8AKY
-X-Gm-Message-State: AOJu0YzdWpLl6Z98L9zmG36QgMqzd7vzMSgXWFZSqU3marJD2igSYmzm
-	UlfIHUzl/RHai5927Qadt8ZVJyNziGQV7SoxCVQM2cu4iVYBbF9ivAOS0O5fv+E8QKlu8dZdLBa
-	vypn8wRt913N5M36E+SnDc2Cr9So=
-X-Google-Smtp-Source: AGHT+IFUFcp9jHwtKXl649dnDmJ2ewK4+2LrgKVulaalof7ghyT4F8l1pO+0c4/p1Fdn0eXekhHzZf3YS0wKRF4GLvo=
-X-Received: by 2002:a17:907:1c16:b0:a72:7ede:4d12 with SMTP id
- a640c23a62f3a-a7ac4483a9emr452930066b.5.1721938972497; Thu, 25 Jul 2024
- 13:22:52 -0700 (PDT)
+        bh=rb8R8eLBfLQ4PUNDUO5vUKAo7AQFDp2s++IGNkKCcOU=;
+        b=fx/wanWJ/KXEfyQDCj7pemQ96itlS6rWpm6RfsHomApNEN+44RX0Y0r20BpTtwgSO5
+         t0IaKfnJJAmwABEWDFCjGXbv0bYt3ep7/16oM4HdSukjfIQBFf5oQ3K9RNcvI8AobpU/
+         ZCK1jGG2UWEmyQCsJiQc+jkO2/kW2TeWqKuy29uVH4z6kDvvq+sAoh/rzcpSVMsNZaU0
+         H20UgONAkOXGPf3wwIe89PqMANEIiLzYkLOBZ0BcNgSzJWywQ0EoFpcA6b0Iz9EMSG2/
+         mChW9h2a27imloBXPwU/69ux1OgB8glXSQGY6edvS0HOfniXXmKcIzvdD6n9PH86YXxd
+         tRCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUYa7SZQ/PRMHi2sDE/FZqRTgvj3kmVCZG2qX6xZ442NIoys3cPZnG5MFlH7zUxcuiPUOo7BFRqShbPtf2jmqU8NgxU5x+NSQ5ishzzMIgyR+uFcQONWY5VZ1B5Hk6X4Fi7OV3Q+Rn5
+X-Gm-Message-State: AOJu0YzXAGktiObayagt2ywNFliecEbe76TX+C0JwmwOY2AZulPCB8Mh
+	PJCbx2PaM+I7uFKPNFzj8Nzkmc2IiWj4fUVIF/6HiAxRDaShDz2vkF222gSHeeUzNZkpbnb3P9X
+	moa61pcbP6D/RYb0j+Vhekxng++8=
+X-Google-Smtp-Source: AGHT+IHy0L9fRJnYe/XWQ2G3znrbvTEGOOqdD/yftu7hGD3FQIOewEjpOrlI1k//aSVXc/6tZg4DbEx80E2UNXjLfxo=
+X-Received: by 2002:a17:907:a46:b0:a77:b054:ba7d with SMTP id
+ a640c23a62f3a-a7acb92ebe2mr168245066b.46.1721939240288; Thu, 25 Jul 2024
+ 13:27:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1721903630.git.tony.ambardar@gmail.com> <472c94bd42cda20154a26ef384b73488abf026c0.1721903630.git.tony.ambardar@gmail.com>
-In-Reply-To: <472c94bd42cda20154a26ef384b73488abf026c0.1721903630.git.tony.ambardar@gmail.com>
+References: <cover.1721903630.git.tony.ambardar@gmail.com> <847a5b798f24e81b9dec4e8d9eb3eb1e602a909e.1721903630.git.tony.ambardar@gmail.com>
+In-Reply-To: <847a5b798f24e81b9dec4e8d9eb3eb1e602a909e.1721903630.git.tony.ambardar@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 25 Jul 2024 13:22:37 -0700
-Message-ID: <CAEf4Bza_y15T4gU=Kiu2d+RbWpxEzrLe6T71bCpK383xHD8JMg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 6/8] selftests/bpf: Fix compile if backtrace
- support missing in libc
+Date: Thu, 25 Jul 2024 13:27:03 -0700
+Message-ID: <CAEf4BzauQQgWfc8eKsWF+Fr-j--oY6tJAM2+ZfAPHP7JJqZ6Zg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 7/8] selftests/bpf: Fix using stdout, stderr
+ as struct field names
 To: Tony Ambardar <tony.ambardar@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -98,73 +98,46 @@ com> wrote:
 >
 > From: Tony Ambardar <tony.ambardar@gmail.com>
 >
-> Use backtrace functions only with glibc and otherwise provide stubs in
-> test_progs.c. This avoids compile errors (e.g. with musl libc) like:
+> Typically stdin, stdout, stderr are treated as reserved identifiers under
+> ISO/ANSI C, and a libc implementation is free to define these as macros.
+
+Ok, wow that. Do you have a pointer to where in the standard it is
+said that stdin/stdout/stderr is some sort of reserved identifier that
+can't be used as a field name?
+
+
+I really don't like these underscored field names. If we have to
+rename, I'd prefer something like env.saved_stdout instead of
+env._stdout. But I'd prefer even more if musl wasn't doing this macro
+definition, of course...
+
+> This is the case in musl libc and results in compile errors when these
+> names are reused as struct fields, as with 'struct test_env' and related
+> usage in test_progs.[ch] and reg_bounds.c.
 >
->   test_progs.c:13:10: fatal error: execinfo.h: No such file or directory
->      13 | #include <execinfo.h> /* backtrace */
->         |          ^~~~~~~~~~~~
->   test_progs.c: In function 'crash_handler':
->   test_progs.c:1034:14: error: implicit declaration of function 'backtrac=
-e' [-Werror=3Dimplicit-function-declaration]
->    1034 |         sz =3D backtrace(bt, ARRAY_SIZE(bt));
->         |              ^~~~~~~~~
->   test_progs.c:1045:9: error: implicit declaration of function 'backtrace=
-_symbols_fd' [-Werror=3Dimplicit-function-declaration]
->    1045 |         backtrace_symbols_fd(bt, sz, STDERR_FILENO);
->         |         ^~~~~~~~~~~~~~~~~~~~
+> Rename the fields to _stdout and _stderr to avoid many errors seen buildi=
+ng
+> against musl, e.g.:
 >
-> Fixes: 9fb156bb82a3 ("selftests/bpf: Print backtrace on SIGSEGV in test_p=
-rogs")
+>   In file included from test_progs.h:6,
+>                    from test_progs.c:5:
+>   test_progs.c: In function 'print_test_result':
+>   test_progs.c:237:21: error: expected identifier before '(' token
+>     237 |         fprintf(env.stdout, "#%-*d %s:", TEST_NUM_WIDTH, test->=
+test_num, test->test_name);
+>         |                     ^~~~~~
+>   test_progs.c:237:9: error: too few arguments to function 'fprintf'
+>     237 |         fprintf(env.stdout, "#%-*d %s:", TEST_NUM_WIDTH, test->=
+test_num, test->test_name);
+>         |         ^~~~~~~
+>
 > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 > ---
->  tools/testing/selftests/bpf/test_progs.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  .../selftests/bpf/prog_tests/reg_bounds.c     |  2 +-
+>  tools/testing/selftests/bpf/test_progs.c      | 66 +++++++++----------
+>  tools/testing/selftests/bpf/test_progs.h      |  8 +--
+>  3 files changed, 38 insertions(+), 38 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-> index 60c5ec0f6abf..f6cfc6a8e8f0 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -10,7 +10,6 @@
->  #include <sched.h>
->  #include <signal.h>
->  #include <string.h>
-> -#include <execinfo.h> /* backtrace */
->  #include <sys/sysinfo.h> /* get_nprocs */
->  #include <netinet/in.h>
->  #include <sys/select.h>
-> @@ -19,6 +18,14 @@
->  #include <bpf/btf.h>
->  #include "json_writer.h"
->
-> +#ifdef __GLIBC__
-> +#include <execinfo.h> /* backtrace */
-> +#else
-> +#define backtrace(...) (0)
-> +#define backtrace_symbols_fd(bt, sz, fd) \
-> +       dprintf(fd, "<backtrace not supported>\n", bt, sz)
-> +#endif
 
-First, let's define backtrace() and backtrace_symbols_fd() as proper
-functions, not a macro?
-
-And second, what if we then make those functions __weak, so they
-provide default implementations if libc doesn't provide those
-functions?
-
-This parts seems unavoidable, though:
-
-#ifdef __GLIBC__
-#include <execinfo.h>
-#endif
-
-
-> +
->  static bool verbose(void)
->  {
->         return env.verbosity > VERBOSE_NONE;
-> --
-> 2.34.1
->
+[...]
 
