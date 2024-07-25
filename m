@@ -1,189 +1,138 @@
-Return-Path: <linux-kselftest+bounces-14194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401FC93BAFB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 04:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A270893BB2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 05:23:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAB5B1F22222
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 02:52:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3050A1F217F3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 03:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3304610A2A;
-	Thu, 25 Jul 2024 02:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1B6171B6;
+	Thu, 25 Jul 2024 03:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IdVH8AWN"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="Uxqy9V8a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955DC101D4;
-	Thu, 25 Jul 2024 02:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55AA11CA9
+	for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2024 03:23:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721875958; cv=none; b=ohux/3g+xmyI92xg2lzqjPmgQvDkSPm5iPcFbEMKVJKtW5ESif6Br67RV7vkW/khQO2ve6lO8HQic2p6kWYfbE4/ArLNWrgvivg6pFW120LfjgyMTTXLHdE+2gae0bJyrHFzfoNbPc/M97V9Tv7h+TSwHdrAMq3fifhlgT20ETI=
+	t=1721877810; cv=none; b=AuFSnt4R2KMSL7QqwFYKxV58Phw1tfPwVZOEAKy1IuH9tN38w1jVGrTSFNweW++oR2BtOq250+h2ncXWdRyAuB7Uol7kw108kcN+4IjINCOkOsXd5r5yusK2ulIP5WuvxtmqGzOFBa4TGNldVDoy1LbB/SNAz1kLurcEdUtxXqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721875958; c=relaxed/simple;
-	bh=gwcQ2eDQDyEe+mNpwBlNsxSv1lMLn+Pspw/FQPhKKCk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=k5Jzqx0ZE9BV6hTu3+UCPT6tkk9nH7aCpvKycHRtDGIlDJagN8v3HDhcBUOUDcmctBRr0xpeRDJhspFozr4V/FRJO1yF5UJ/fB0/xFbM7XcxYbGjgFsBly2zfp2B75d7HxDKUCUfh+hrCjeoAYd4IRNXEz6LMJl05PS1jk0aDy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IdVH8AWN; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7a1d42da3e9so24459485a.1;
-        Wed, 24 Jul 2024 19:52:36 -0700 (PDT)
+	s=arc-20240116; t=1721877810; c=relaxed/simple;
+	bh=ng3MSPKtyG9OgXEeYkmn4fozuvxnAGYk3aAAFBmLre8=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=hye4poGg5PzAxHzt6rWh4AUNb2VLEQLk7BifNYUv2Z8/EFPPAANTYQ28T8W7eIBg3YblrYe2cmgtypZDGHmnk3BpTqBr4B3Udb2Y5bzOp/1CLs9nTSHQuJuL95aqty0Gp+OK456o0XlVlP53ofWcdO9Wo1Lg6WDKWYIIYlf4QwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=Uxqy9V8a; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1fdd6d81812so3603835ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2024 20:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721875955; x=1722480755; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qBUiRZivIy2H5zWQlKFTeSB2D5HGesM5Zhywj8P0csU=;
-        b=IdVH8AWNKHx/X72DoDYBhbpPVVZIP6lzauxf9mVhCw2CHsS8PBa68/mS+IuOqd59OJ
-         mW8M0BfqoNk9wH00MzbWNqbGfz+JlxGwLxmz3LwgZd1Ga1fqR4wk2UC6qljtI/0V9pTl
-         CIRydwd6JxoGh6cVzDWgUmmV3+e4kyyoykuEJPjAnW8Wn8h0+4SOeFGSDm0Td54v+NM4
-         wYGpJpnDuJ2S3GFCPJLLwhrpH3USO9H3Q5khB4WeS/FzUfXEk5S1XiAvc7bdzDc5nhgb
-         b9AaL6wsuKfTa+0HTtzI8leGdSWs7RDsOMq1TcLlOHEm4GWUhIHQQ+pbUOWA16ayB6xx
-         6qlQ==
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1721877808; x=1722482608; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xTE8k4Xtav3leE527QlrLLpsREQH2LrAwQwbgSK195c=;
+        b=Uxqy9V8aLqywuAgM8c43hfJpe/QjEo7atB0AU+tZ/Du14ff0owTNQcZIEtonxHzXP+
+         B6NMmxiiFeGswXbijT//BiGoW3wpYfVQ3eIeo/Nlv4b+4vCDa1YRCorqvEo3mtav5ihV
+         m9vMwONLD9RV9AAxFKrXBzPJz6RbvVUmfVz7w9tUKz/ty8sd5QQx6NczN1eQoXKrNwFz
+         cKjImrndafFw+J9rILhYWezK2SY5oh9QRb8ALARX4zX2i07/QrXlNar1WVj6C8xGjFML
+         pi8U1EddjPAbme6eV0f0EYpAheSJ8/xcnVV+rw8T+qQoZ4lDYBvJjkluZVOIEem+8UYJ
+         o4FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721875955; x=1722480755;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qBUiRZivIy2H5zWQlKFTeSB2D5HGesM5Zhywj8P0csU=;
-        b=kVDBYmQVp/Axm/+TeNNcZsgAu4ZTM5LjYMvTWPRuAypzRD/QmuOwaGhdv2kOvxiER5
-         YPGmt2NW87hJUevwLvrAJFMwGoZq8ud7N8erTXSVY8qDUynbrhJiAx2MNzx7hvKDj24M
-         ePTKyJZiyKt9fOSygFPpqyz/nGvKZYtg/s45oA47It5wsGeOVCU98tQHhnMECwNRw1mM
-         Bd9OZN8UVfME3RXYR8rLNwS2B046lP+MOumA4L0ZJGPy1SRldFhSSwBJD7hynfnC1+po
-         1A5RSWKoC+OyxHuvmUoRs15t/qPM6Uonq1eVRnjLW6cufyTCEoYO2tF+DXF6b/uPRhPu
-         4qOg==
-X-Forwarded-Encrypted: i=1; AJvYcCW0Ll9+6+F/y2wbtH1xd1jNLe6qebcX8Enz9Mkz3QjMLURLsc2+i9BQq7T2pS+0oV5TBARtA7fUfLl+2Hzv0wnpUlAIcxda20NMJ7Iw++MUt9pmNujy+sBHf3FhcXqLeGoYYG/UBSEV
-X-Gm-Message-State: AOJu0Yz8A6+5DZ/lG0pe4rU2gghsTFpBdlUMzkqB+DUzphGFLNSc0AT2
-	anXwz3q03ylJ3BOlvNT6DCeKKC+449LYuySt0t/59d2ofqFzaCOr
-X-Google-Smtp-Source: AGHT+IGuImde7YJHP17/nZcN1EhWUNyyzyCAZDedr1Njwnn/3CgIugsY94osKjrca7Lik8w+UBazcg==
-X-Received: by 2002:a05:620a:178f:b0:7a1:d948:b939 with SMTP id af79cd13be357-7a1d948b981mr22344585a.14.1721875955305;
-        Wed, 24 Jul 2024 19:52:35 -0700 (PDT)
-Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44fe8172229sm2099071cf.47.2024.07.24.19.52.34
+        d=1e100.net; s=20230601; t=1721877808; x=1722482608;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xTE8k4Xtav3leE527QlrLLpsREQH2LrAwQwbgSK195c=;
+        b=fBCoRo3LkK5Pn0JZ8mvCBTOIcbou6GA+D1U5v02hDa/w08erBfUaeYw2SxwMci4YXa
+         Z99W/mlMDY50lpkp3zR/KZGE/0QUZJd2480Jrv5wKl9qWmgSMabCyfL7nZBogZzACriF
+         y7wNn0Wc58zeLjSDhGK1HJJBZjLdGELMZAB5RPdUYY0N7xL6O1d/snRDagGZepG9Wnlz
+         fL+38ACZ/TC+HGKrnPvJWJXqz0ajG9+zWAi7f83Bmor+N3aRF4OVCP679OnEHyOwy2DD
+         CoP4Vk0fr6+oqnluBcfj74cAw4GE8+ZoMVF3F2+GKEMwU3GAt9KgF3cidoaB1Ala30pk
+         JFnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWD6hKbK5gazFHNDlEP9Tdbjhg8kDoM3r6byDmFobmudEADyrYQdyOhjb/+wt/wdCWqnFOtptOanrGAT7nNf/dPrRozSzo00bxyZxEAP56
+X-Gm-Message-State: AOJu0YzBFjzQPpCkXhC4AkIyC9JHQu8C/V9gUTzbcz76lCrB1xsQYAIL
+	XVWeOkNcUyACzNCB5zmRXwwSQJKDmgRqx7ACpuH+kBpzlyinW8WYeDTRrSFr20s=
+X-Google-Smtp-Source: AGHT+IGKdmVEgqPrldLhr2mxPHSbU8xFGw3cUdaIe+udwlpFod7DeQVhk2V4YNFDZRSHwo5qxGrUnQ==
+X-Received: by 2002:a17:902:f68d:b0:1fb:8e98:4452 with SMTP id d9443c01a7336-1fed9262e28mr7130605ad.15.1721877807944;
+        Wed, 24 Jul 2024 20:23:27 -0700 (PDT)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7ee5734sm3134035ad.135.2024.07.24.20.23.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jul 2024 19:52:34 -0700 (PDT)
-Date: Wed, 24 Jul 2024 22:52:34 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- mst@redhat.com, 
- jasowang@redhat.com, 
- xuanzhuo@linux.alibaba.com, 
- eperezma@redhat.com, 
- shuah@kernel.org, 
- arefev@swemel.ru, 
- virtualization@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, 
- Alexander Duyck <alexander.duyck@gmail.com>
-Message-ID: <66a1bdf2955b5_85410294a0@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240724074123.614feaa4@kernel.org>
-References: <20240723223109.2196886-1-kuba@kernel.org>
- <CAF=yD-LJ+-S4gC9EVo6ijJTGjR6KfPMNPrpxoffgoQBFpo8GNQ@mail.gmail.com>
- <20240724074123.614feaa4@kernel.org>
-Subject: Re: [PATCH net] virtio: fix GSO with frames unaligned to size
+        Wed, 24 Jul 2024 20:23:27 -0700 (PDT)
+Date: Wed, 24 Jul 2024 20:23:27 -0700 (PDT)
+X-Google-Original-Date: Wed, 24 Jul 2024 20:23:25 PDT (-0700)
+Subject:     Re: [PATCH v7 09/13] riscv: vector: Support xtheadvector save/restore
+In-Reply-To: <20240724-xtheadvector-v7-9-b741910ada3e@rivosinc.com>
+CC: Conor Dooley <conor@kernel.org>, robh@kernel.org, krzk+dt@kernel.org,
+  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, jszhang@kernel.org, wens@csie.org,
+  jernej.skrabec@gmail.com, samuel@sholland.org, samuel.holland@sifive.com, corbet@lwn.net,
+  shuah@kernel.org, guoren@kernel.org, Evan Green <evan@rivosinc.com>, andy.chiu@sifive.com,
+  jrtc27@jrtc27.com, ajones@ventanamicro.com, linux-riscv@lists.infradead.org,
+  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>,
+  Conor Dooley <conor.dooley@microchip.com>
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Message-ID: <mhng-28424e23-c9b4-407e-97d8-9dbb09101781@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> On Tue, 23 Jul 2024 23:48:24 -0400 Willem de Bruijn wrote:
-> > On Tue, Jul 23, 2024 at 3:31=E2=80=AFPM Jakub Kicinski <kuba@kernel.o=
-rg> wrote:
-> > > The commit under fixes added a questionable check to
-> > > virtio_net_hdr_to_skb(). I'm guessing the check was supposed
-> > > to protect from csum offset being outside of a segment
-> > > (especially if len is not multiple of segment size).
-> > >
-> > > The condition can't be right, tho, as it breaks previously
-> > > working sending of GSO frames with only one segment
-> > > (i.e. when gso_size <=3D len we silently ignore the GSO
-> > > request and send a single non-GSO frame).
-> > >
-> > > Fix the logic and move it to the GSO part.  =
+On Wed, 24 Jul 2024 12:14:00 PDT (-0700), Charlie Jenkins wrote:
+> Use alternatives to add support for xtheadvector vector save/restore
+> routines.
+>
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-> > =
+b4 isn't applying this, either on top of your last patch set or rc1 -- 
+the base commit in the header isn't a hash I have, so I'm not sure where 
+it's mean to apply to.
 
-> > I missed the previous patch. Should we revert that and create a new
-> > fix against the original issue?
-> =
+Also...
 
-> We can, no strong preference.
-> =
+> ---
+>  arch/riscv/include/asm/csr.h           |   6 +
+>  arch/riscv/include/asm/switch_to.h     |   2 +-
+>  arch/riscv/include/asm/vector.h        | 225 +++++++++++++++++++++++++--------
+>  arch/riscv/kernel/cpufeature.c         |   5 +-
+>  arch/riscv/kernel/kernel_mode_vector.c |   8 +-
+>  arch/riscv/kernel/process.c            |   4 +-
+>  arch/riscv/kernel/signal.c             |   6 +-
+>  arch/riscv/kernel/vector.c             |  12 +-
+>  8 files changed, 198 insertions(+), 70 deletions(-)
 
-> > Normally the checksum start + offset should always be in the header,
-> > so not even part of gso_size. So needed need not be related to
-> > gso_size.
-> > =
+[...]
 
-> > The exception to this is UDP fragmentation offload, I suppose. As
-> > there the network and transport headers are part of the UFO payload.
-> > =
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index bf25215bad24..cb48092fdc5d 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -845,10 +845,7 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
+>  			riscv_isa_set_ext(ext, source_isa);
+>  		}
+>
+> -<<<<<<< HEAD
+>  		riscv_resolve_isa(source_isa, isainfo->isa, &this_hwcap, isa2hwcap);
+> -=======
+> ->>>>>>> 0f260ac829ca (riscv: Extend cpufeature.c to detect vendor extensions)
+>  		riscv_fill_cpu_vendor_ext(cpu_node, cpu);
+>
+>  		of_node_put(cpu_node);
 
-> > But even for the normal TSO and USO cases we cannot verify in
-> > virtio_net_hdr_to_skb that the csum_start + csum_off passed from
-> > userspace are really pointing into the transport header.
-> > =
-
-> > For SKB_GSO_UDP_L4 I added a minimal check that csum_off must be
-> > offsetof(struct udphdr, check). We can arguably tighten these csum_of=
-f
-> > for all requests, as only UDP and TCP offsets are valid. But no such
-> > simple check exists for csum_start. This requires full packet parsing=
-,
-> > which we don't do until skb_gso_segment.
-> > =
-
-> > One option may be to test csum_start in tcp_gso_segment and
-> > udp_gso_fragment and fail segmentation when it points not where
-> > expected.
-> =
-
-> That should work, I think.
-> Should we still check the segment boundaries, tho?
-> A bit worrying to have packets floating around the stack with clearly
-> broken csum offset. At the same time maybe the modulo isn't free..
-
-If we catch all cases during segmentation, then it's safe too.
-
-Since these packets get SKB_GSO_DODGY, no risk of passing bad
-packets anywhere else.
-
-We also defer other correctness checks to segmentation already,
-because else we end up building a second parsing stage here.
-
-But overall I also prefer checking at the gate. So either way.
- =
-
-> > Btw, do we have a better idea what exact packet triggered this
-> > WARN_ON_ONCE in skb_checksum_help? Usually, more interesting than the=
-
-> > skb_dump of the segment that reached the WARN is the skb_dump at the
-> > time of virtio_net_hdr_to_skb, along with the vnet_hdr.
-> =
-
-> I don't have any extra info, beyond what's in the commit message :(
-> Note that the syzbot report says 6.7, too.
-> Denis, can you comment? Do you have a repro?
-
-Yes, please share if there is a repro. The original report did credit
-syzkaller.
-
-Else I might have to look into building one..
-
-
+This chunk isn't applying, and it's got a conflict marker in there.  So 
+I think that means something's gone off the rails?
 
