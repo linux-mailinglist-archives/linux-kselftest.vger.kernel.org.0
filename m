@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089A793C00D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 12:39:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B23E593C010
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 12:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C2D91C219B9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 10:39:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D53171C2152F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 10:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452C81990BA;
-	Thu, 25 Jul 2024 10:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F9D4198E9E;
+	Thu, 25 Jul 2024 10:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juWPshJA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iwf0swFr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F8F14D457;
-	Thu, 25 Jul 2024 10:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1790E198E80;
+	Thu, 25 Jul 2024 10:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721903959; cv=none; b=iVff/yybWXGUr/fW8zR1oGWRLW+UB7Hvz67f65T9eGD178Bb6nF/2SExkk2XgP26Q4wr3QHCCZ0syDIy8u9qDvPgHMlxR4Xu3wgMN25oz7j5MLbnedAi3FABrZRWAC2s7tDH+uzRAN/sXkiIZ13l4DWkUYUB3CXZl331xkn76hY=
+	t=1721903963; cv=none; b=CknqxZy0IHBN8RFPba+Lj2uGjTBAgsIaqtOYQ+0kL00LFbTMIVvdv7RI71+tDWjcCa4VPi2G7I5CNUgjtOpemeP+VpABMOUSyew5d4a0FvUKH/LfTyj64kC+MLJ+nYRuZoCbpjSvgpUwT7ppJkPnM5jleqrvSxVbofgbrX5FbU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721903959; c=relaxed/simple;
-	bh=spduKz3MG08ysTbjR+T3/W9hmuI0dpTQAjF2pWukz6U=;
+	s=arc-20240116; t=1721903963; c=relaxed/simple;
+	bh=b2eopH9P05jws6B3FttawjClEaNYLSZjTY6eEAmx1IY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BkmJyF1MmDQbHLLHH0Fcc45E+ohjeqrO8TAJkmfhp0unC7KBx1MCQOezT498CtF5p2Df6JHSYH8eZ3EklBEWBr62XP6wQK7+fzwjzW2dgOjYj+exwch7MRdk87ZkG4PnYeyxfQ18UB2VeTsHP3NUtHBQ6ZjTN5HQ8u0DrRurZIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juWPshJA; arc=none smtp.client-ip=209.85.215.178
+	 MIME-Version; b=p/XfDLkNGstZJUWZexlfFZYP+ZzvAIUFM4v4icnjIsYQQQu5zTDEUYTK46IWCEXeBaWorI26RdjRB7cSyKdfAmEND1YxRo0virTiicFvx2BuxJ5RBHIEIgCVgaU2zx//FNrDSDvIbPL0s9Sx6kowLsYxpDWkIxkGoTnHxG7/o5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iwf0swFr; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7a0b2924e52so510127a12.2;
-        Thu, 25 Jul 2024 03:39:17 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1fd640a6454so7096035ad.3;
+        Thu, 25 Jul 2024 03:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721903956; x=1722508756; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721903961; x=1722508761; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LWKiNJXsPoK3DXrf/1mQJ65mXagc2GxO27bBCQyvS1E=;
-        b=juWPshJApTno6/8/owTwwkzziBNyuzCjvFSWtWyonHoDqBwwyABR2FHW3L3HLqz1xE
-         zzhQcvxz+Ydi//SOWhsGdUUnnpH1JilRzULk2G4JR7DvRvB8kMt7s2gbxqZTBSOIY8FO
-         0pwxra3UTpzR+oULlX/6S+Y0S7KMN4xRMSvkZV//rMe6g72LXcuA5FQGOTCDrvgAwz46
-         gVhytqw55CC573a5iQgg4nq2gipvxxrewaZhsvZtxd/FcKKuqZ9l2iArsdrexOgyqrzE
-         g1aZ6nbj/dBFqln1UdYwLY9VEY1FxjdpdYvpVShlKu7SRB0cfw+JmuvejcjNMySFb/IX
-         ZYCw==
+        bh=aPj4UrGFYxLYkSohWfAYYA0VUXQB0pTvzNeY+UOm5uo=;
+        b=Iwf0swFrInIzC1KLglwfm8fvdeEv553HT4OGyWs/6Lkd48VUiu7sRQKqud8a1UhYXy
+         +1KFON+sxKD5VwKpO+TD3FYkxUMjO13/NvQ2YjJIRJ4H56/B4OVv9A6kZsIBzQZ3AtUq
+         iX/8ZfruqBDv1ecULtiMGxGRg39ontQvjPE0GRyD7ENHi6tFriwDg/rss1/3odQJ4fqn
+         ImOf9GDYnO7PIRnQcmlMy/tzXY+ZRYVvzpfRlBnlgNWy8F48rMebp3o1LqtreKjRbd6N
+         4csEuCk2ilJn1uWCaaAHiuTPdHouuzN4V8uTOacU6gUeXewqTpb2WDTxPjri91Jm4lNs
+         +aMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721903956; x=1722508756;
+        d=1e100.net; s=20230601; t=1721903961; x=1722508761;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LWKiNJXsPoK3DXrf/1mQJ65mXagc2GxO27bBCQyvS1E=;
-        b=YtyioW1aaGrbMPNjZdSPQ79xVAOZbqcZ0cCpIboG1ozaup80WM8Sz8G5d0tPCBr3NE
-         sySUqKgOEx594FhHBmVKmvRUViV7ZEspFe/7pNRjjCx3CEXL/uAMOia/Gg4QCUIqfzVK
-         P1QDsq88YsoIoD5uUh7cHn4gOOmqB8WoC57s7gNjVXBqGJw5gtlDjuqlP8ikfHlwYyNB
-         Bawdm+UT/ptUna+GytbX2FWqFvnvhIp+RmPOpcizo0NUqMbJsQ4WT9fOgUglX+e7ncNf
-         B7gHlb7Bj236wbSwFn/Xdd4dVWP5DEYayJ+AYk9diCOgovgsf/6xs66f3AKQR59NB4hH
-         FfIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUT4lCTQD6UXlCVZbUeteOJ22fFMtrX9J0Z+3qCSaAD7zwhvyBcxGhWO4V2xBEAUE6X5pqIy73cCBiyVj4FpFPKwyqmZXPYu/BneDzP6vQcTAuMuiBwC/hu50LXIFkfP8EzGZwlp41j
-X-Gm-Message-State: AOJu0YyG+So+CIEjNwI4HOTspfcE4r3Jz5OWcpJOSmMDWBPbar3EkvJ9
-	fYYammfC31ql0pU/Q5eXW53tVV31j141TF5gUImlX2QuVFj1S7p28Ki19zxQ
-X-Google-Smtp-Source: AGHT+IHPgjFCpbUHKZfZG8MIHeQRMA2ox/NTTKbs4wYPznMHuq5r+zlurWLe2r2hANNpk7Ca03CVYQ==
-X-Received: by 2002:a05:6a20:3d87:b0:1c2:8cf4:7656 with SMTP id adf61e73a8af0-1c4727aad6dmr3324941637.10.1721903956411;
-        Thu, 25 Jul 2024 03:39:16 -0700 (PDT)
+        bh=aPj4UrGFYxLYkSohWfAYYA0VUXQB0pTvzNeY+UOm5uo=;
+        b=tlaZ5kYbbROmVOqQzQoXYMHd8kI9uc3/AUYT+aHFMUqDlm78HxVPxrzHYELtGOkyEo
+         FwDjQrXog/NHAZJRdN3Zkp5osH14PP50kpFwLEqZsQkum6eyHKGUb7+XlBZI/46TQoWj
+         SRkxSxWI+CoRzN4Dq4a+3kXW/7WLqJBB0otUjYEuJJ3PewokgX4WVP2R+kdjvUc+qFxT
+         K6/+Qq+Ld7Mf7Vg+577VQHvpczFbELPeaQBJx64+hZLk/V7gRYwwQ+eT3FdlFuq7SBKM
+         3nQxLjrz7PU6oCpadiSnxzxk3oeDw1AB9qQLhB8B6T9DvhK3gl+7FLt8LIiUNkkNv4YN
+         Ib/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXeVKOhDjAgXQ21b+LrWhGXLZJQc56BNRD35Y+y7wafVW5J397XfUCOOgXy6+aX4wKwnInnOXAJGGwU6uJ9VEWqDlxunSBKy2Pv2kCRlac9l2i52SHe/Ar60L36MZ0843Q7FIXDVXp7
+X-Gm-Message-State: AOJu0YxMCQBP/0rxpX5Zoluj1DIPVif5jbIys7emxZACss1wiUXjYdQD
+	Jxx8d979B+NMgRchEx7b5gCuEe1IYawpGvpHhgsLezKxsvIXi98A0ckeMDC2
+X-Google-Smtp-Source: AGHT+IFomPSqd48Y8JT/fht4rfbWgYahdQgdWbH5Bbu1k5axGHfLIFiOdBetRUJKvS3XBZ/mJjp6Lg==
+X-Received: by 2002:a17:903:41c8:b0:1fc:6a81:c5a1 with SMTP id d9443c01a7336-1fed35360demr29712495ad.12.1721903961235;
+        Thu, 25 Jul 2024 03:39:21 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f78491sm10991075ad.244.2024.07.25.03.39.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f78491sm10991075ad.244.2024.07.25.03.39.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jul 2024 03:39:16 -0700 (PDT)
+        Thu, 25 Jul 2024 03:39:21 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <itugrok@yahoo.com>
 To: bpf@vger.kernel.org
@@ -93,9 +93,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Yan Zhai <yan@cloudflare.com>
-Subject: [PATCH bpf-next v1 2/8] selftests/bpf: Fix arg parsing in veristat, test_progs
-Date: Thu, 25 Jul 2024 03:35:54 -0700
-Message-Id: <b488b997e1b966f6d35a2767da738fc9a44023a8.1721903630.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 3/8] selftests/bpf: Fix error compiling test_lru_map.c
+Date: Thu, 25 Jul 2024 03:35:55 -0700
+Message-Id: <13890669483d34ef1c89a3c79b726f6dba442bf9.1721903630.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1721903630.git.tony.ambardar@gmail.com>
 References: <cover.1721903630.git.tony.ambardar@gmail.com>
@@ -109,74 +109,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Tony Ambardar <tony.ambardar@gmail.com>
 
-Current code parses arguments with strtok_r() using a construct like
+Although the post-increment in macro 'CPU_SET(next++, &cpuset)' seems safe,
+the sequencing can raise compile errors, so move the increment outside the
+macro. This avoids an error seen using gcc 12.3.0 for mips64el/musl-libc:
 
-    char *state = NULL;
-    while ((next = strtok_r(state ? NULL : input, ",", &state))) {
-        ...
-    }
+  In file included from test_lru_map.c:11:
+  test_lru_map.c: In function 'sched_next_online':
+  test_lru_map.c:129:29: error: operation on 'next' may be undefined [-Werror=sequence-point]
+    129 |                 CPU_SET(next++, &cpuset);
+        |                             ^
+  cc1: all warnings being treated as errors
 
-where logic assumes the 'state' var can distinguish between first and
-subsequent strtok_r() calls, and adjusts parameters accordingly. However,
-'state' is strictly internal context for strtok_r() and no such assumptions
-are supported in the man page. Moreover, the exact behaviour of 'state'
-depends on the libc implementation, making the above code fragile.
-
-Indeed, invoking "./test_progs -t <test_name>" on mips64el/musl will hang,
-with the above code in an infinite loop.
-
-Similarly, we see strange behaviour running 'veristat' on mips64el/musl:
-
-    $ ./veristat -e file,prog,verdict,insns -C two-ok add-failure
-    Can't specify more than 9 stats
-
-Rewrite code using a 'for' loop without logic dependent on var 'state', the
-same approach already used in cgroup_helpers.c.
-
-Fixes: 61ddff373ffa ("selftests/bpf: Improve by-name subtest selection logic in prog_tests")
-Fixes: 394169b079b5 ("selftests/bpf: add comparison mode to veristat")
-Fixes: c8bc5e050976 ("selftests/bpf: Add veristat tool for mass-verifying BPF object files")
+Fixes: 3fbfadce6012 ("bpf: Fix test_lru_sanity5() in test_lru_map.c")
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/testing/selftests/bpf/testing_helpers.c | 2 +-
- tools/testing/selftests/bpf/veristat.c        | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_lru_map.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index ac7c66f4fc7b..2a73b72feb18 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -227,7 +227,7 @@ int parse_test_list(const char *s,
- 	if (!input)
- 		return -ENOMEM;
+diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
+index 4d0650cfb5cd..fda7589c5023 100644
+--- a/tools/testing/selftests/bpf/test_lru_map.c
++++ b/tools/testing/selftests/bpf/test_lru_map.c
+@@ -126,7 +126,8 @@ static int sched_next_online(int pid, int *next_to_try)
  
--	while ((test_spec = strtok_r(state ? NULL : input, ",", &state))) {
-+	for (test_spec = strtok_r(input, ",", &state); test_spec; test_spec = strtok_r(NULL, ",", &state)) {
- 		err = insert_test(set, test_spec, is_glob_pattern);
- 		if (err)
+ 	while (next < nr_cpus) {
+ 		CPU_ZERO(&cpuset);
+-		CPU_SET(next++, &cpuset);
++		CPU_SET(next, &cpuset);
++		next++;
+ 		if (!sched_setaffinity(pid, sizeof(cpuset), &cpuset)) {
+ 			ret = 0;
  			break;
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 11ec1190d582..6808679827ac 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -791,7 +791,7 @@ static int parse_stats(const char *stats_str, struct stat_specs *specs)
- 	if (!input)
- 		return -ENOMEM;
- 
--	while ((next = strtok_r(state ? NULL : input, ",", &state))) {
-+	for (next = strtok_r(input, ",", &state); next; next = strtok_r(NULL, ",", &state)) {
- 		err = parse_stat(next, specs);
- 		if (err) {
- 			free(input);
-@@ -1513,7 +1513,7 @@ static int parse_stats_csv(const char *filename, struct stat_specs *specs,
- 			*stat_cntp += 1;
- 		}
- 
--		while ((next = strtok_r(state ? NULL : input, ",\n", &state))) {
-+		for (next = strtok_r(input, ",\n", &state); next; next = strtok_r(NULL, ",\n", &state)) {
- 			if (header) {
- 				/* for the first line, set up spec stats */
- 				err = parse_stat(next, specs);
 -- 
 2.34.1
 
