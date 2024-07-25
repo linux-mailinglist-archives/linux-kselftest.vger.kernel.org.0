@@ -1,108 +1,162 @@
-Return-Path: <linux-kselftest+bounces-14234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3378293C361
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 15:53:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 436E893C3B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 16:07:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64CA11C216D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 13:53:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1A3628109D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2024 14:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0216619D07A;
-	Thu, 25 Jul 2024 13:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2869919B3D7;
+	Thu, 25 Jul 2024 14:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="k/o2ryKA"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="obWMSMoS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50CB19B5A6;
-	Thu, 25 Jul 2024 13:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA93A1103;
+	Thu, 25 Jul 2024 14:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721915557; cv=none; b=MICRCl56nJNt3lpVVOrliK3Yr5809ZHj7fHkeb0qjU0xCzUf4wHZIZN7a7O2cmwDG9iZc45KtKU/hfmROSiJz0kRnIleIleiIJfUQrb32EByTt11ofKHvFDLHKmJTe9bIXrCnj3b49Cui1U0eCZDYdLea87Zy2gkIWGUTLlZ5OE=
+	t=1721916439; cv=none; b=Ev0qD1m11fAZ0pgUe/bV49RTeI0tz0xJDuRh/jfZfhPNrMg89BV75XlU89wwtxyVs4uiFASJNaShUjy6ihRDf+mima1IfX1wuacnq8czANUtT9f7Y4Oj8S3Ti98W725mrIbj8NKwpf4c6LpuODjMyQ2IN4y6dmABRKuQ6BNixAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721915557; c=relaxed/simple;
-	bh=oeXA+JJTnK0Era8Y+Pw0D02FHnvmm599KsmhRAvwHJI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Xj6UoNVNczT+gKlZPexIRmKkXPDUxXCZLOkeUA9PO9j+S1FkpubUNQLreUj+3qzaIEaEk+qOOX71jp0sjiMtxwEYu2rAYTW1PuMkZpoGnU9yVGUbWlTfi5+EGh4KW/XAltAXGMIFvyg9HfnQNajv8G4IRMCk8CmlqLG9T1cLvNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=k/o2ryKA; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A9D822000B;
-	Thu, 25 Jul 2024 13:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1721915553;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=82Al0sPEZdS4t7rN57VPIR42+MxT3sjYqEuVz/Qs2Xc=;
-	b=k/o2ryKAmKDcaGvTD+5k8DYKdLqF58lv32hu5Nl5xm4TtQPFad+kszn5JoXfpjYtMtIKqM
-	RMebd23Prd1+HvBMukIm+/busPZU3MHpRNW2yKgoVFAD7zHtNxIKpfJif56gWd0GhlooO2
-	87l8OL40bSkVPhYbqPqXSJZPmkyV4sPsFSlOqR41gvo/Rnb3Wfr3VfYmzUI+nE68jBPMGA
-	GOtY3UZ89MNgMT7BQ86Loq7yEczv5qanofS/p6davYTlJT4FEB8sjX7Xm3NYjbcrvT0xhH
-	MIyd4HWx+d+x2jLqNE4FADzV0wxxTkoYRzLbgChQNTEaN7jlKeiPuSwKjIrm0g==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 25 Jul 2024 15:51:11 +0200
-Subject: [PATCH 3/3] selftests/bpf: add wrong type test to cgroup dev
+	s=arc-20240116; t=1721916439; c=relaxed/simple;
+	bh=RrUV0rnY6L0RR7kMOYx7W25Z4hmAlntxRNkHgN+IvFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zwi2t5p1pOniU/pJFcc4WR/OXermL4emkM5fqu0pJcvLsuUXFXgukhYAGAK7D46KtLZe3Q8ETGHbUd8vREpMbidWwU2rw47DvR3ycja+foyoUib5tkFJWy4xED9j2F3vhTrvGk2K7FesdqRCooi3Ln48R6EqDSDxzZxXaaXLXyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=obWMSMoS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46PA0CKJ017844;
+	Thu, 25 Jul 2024 14:07:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
+	:from:to:cc:subject:message-id:in-reply-to:references
+	:mime-version:content-type:content-transfer-encoding; s=pp1; bh=
+	UjrPEkrro1wdlirrl/2L0PO16h/JF1/s+Kd8J9Umj5g=; b=obWMSMoSmqdmQZBq
+	8Byf4OCgompK8sllYi/I8YVCKr2QyiPalgPglZOZhm8uAnu4TDNzEV7Ry53QKP7z
+	sfGNlhxXBiCeJj8GTenytLVbr/As22aTjONtPLxhSu7xrvR+B5+K+uNOGuBJQjkX
+	+Qm3UEvPiBOrOSJ0vVa5lnB9ZnZwrIrUK4o6UKKpmoH6UDn7Gk5qBtrm9FKMmfYY
+	sqVQLfGbwx8UcsdlQVlHKG/wovvdAOJvUAv20i6OpKAvMcLXUyarj4WyfT95wnLh
+	CiS9TBfj92NLtWK4MNAQ1/WKzSPbGZ8GeHjo5ezbeQOR1qU4kPDz4Ema82pD7aL6
+	ez43XQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40kmj3rhs8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jul 2024 14:07:12 +0000 (GMT)
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46PE7Bul018898;
+	Thu, 25 Jul 2024 14:07:11 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40kmj3rhs5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jul 2024 14:07:11 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46PDtBJX009111;
+	Thu, 25 Jul 2024 14:07:10 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 40gt93pw77-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jul 2024 14:07:10 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46PE74FM55902502
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 25 Jul 2024 14:07:06 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B9D6D2005A;
+	Thu, 25 Jul 2024 14:07:04 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C09620040;
+	Thu, 25 Jul 2024 14:07:04 +0000 (GMT)
+Received: from darkmoore (unknown [9.179.29.251])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Thu, 25 Jul 2024 14:07:04 +0000 (GMT)
+Date: Thu, 25 Jul 2024 16:07:01 +0200
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: Janosch Frank <frankja@linux.ibm.com>
+Cc: kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah
+ Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand
+ <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Subject: Re: [PATCH v2 06/10] selftests: kvm: s390: Add VM run test case
+Message-ID: <20240725160701.569e54c5.schlameuss@linux.ibm.com>
+In-Reply-To: <755de81f-f6ca-48a4-84dc-ecdc93ccf049@linux.ibm.com>
+References: <20240723093126.285319-1-schlameuss@linux.ibm.com>
+	<20240723093126.285319-7-schlameuss@linux.ibm.com>
+	<755de81f-f6ca-48a4-84dc-ecdc93ccf049@linux.ibm.com>
+Organization: IBM
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240725-convert_dev_cgroup-v1-3-2c8cbd487c44@bootlin.com>
-References: <20240725-convert_dev_cgroup-v1-0-2c8cbd487c44@bootlin.com>
-In-Reply-To: <20240725-convert_dev_cgroup-v1-0-2c8cbd487c44@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.13.0
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YGVN4Jhde_VQbqpwh-c6YBawPa-m7XH5
+X-Proofpoint-GUID: dUiHWEbepmayXZLqOmvsr13Oq8v6Wpd0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-25_12,2024-07-25_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407250095
 
-Current cgroup_dev test mostly tests that device operation is accepted or
-refused base on passed major/minor (and so, any operation performed during
-test involves only char device)
+On Thu, 25 Jul 2024 14:03:12 +0200
+Janosch Frank <frankja@linux.ibm.com> wrote:
 
-Add a small subtest ensuring that the device type passed to bpf program
-allows it to take decisions as well.
+> On 7/23/24 11:31, Christoph Schlameuss wrote:
+> > Add test case running code interacting with registers within a
+> > ucontrol VM.
+> > 
+> > * Add uc_gprs test case
+> > 
+> > The test uses the same VM setup using the fixture and debug macros
+> > introduced in earlier patches in this series.
+> > 
+> > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+> > ---
+> >   .../selftests/kvm/s390x/ucontrol_test.c       | 132 ++++++++++++++++++
+> >   1 file changed, 132 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> > index 527c431a9758..c98d5a3a315b 100644
+> > --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> > +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> > @@ -43,6 +43,23 @@ void require_ucontrol_admin(void)
+> >   	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_UCONTROL));
+> >   }
+> >   
+> > +/* Test program setting some registers and looping */
+> > +extern char test_gprs_pgm[];
+> > +asm("test_gprs_pgm:\n"
+> > +	"xgr	%r0, %r0\n"
+> > +	"lgfi	%r1,1\n"  
+> [...]
+> 
+> Naming something PGM for handling anything else than Program Exceptions 
+> is not recommendable. PGM has been a stable name on s390 for code 
+> related to PGM exceptions
+> 
+> When first reading this I expected to find some kind of exception code.
+> 
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/prog_tests/cgroup_dev.c | 3 +++
- 1 file changed, 3 insertions(+)
+Ok, I get it now. Previously I was thinking only "test_pgm" was the
+hangup. But I do understand now.
+I will rename these here and in the other patches to "test_xxx_asm" to
+hopefully reduce the confusion.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-index 5112b99213ad..f0b6e5d9604b 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-@@ -101,6 +101,9 @@ void test_cgroup_dev(void)
- 	if (test__start_subtest("allow-mknod"))
- 		test_mknod("/dev/test_dev_cgroup_null", S_IFCHR, 1, 3, 0);
- 
-+	if (test__start_subtest("deny-mknod-wrong-type"))
-+		test_mknod("/dev/test_dev_cgroup_null_block", S_IFBLK, 1, 3, 1);
-+
- 	if (test__start_subtest("allow-read"))
- 		test_read("/dev/urandom", 0);
- 
-
--- 
-2.45.2
-
+Christoph
 
